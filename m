@@ -2,248 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650516E3EE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 07:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE286E3EED
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 07:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjDQFdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 01:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
+        id S229822AbjDQFec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 01:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDQFdq (ORCPT
+        with ESMTP id S229652AbjDQFe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 01:33:46 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD351BC0;
-        Sun, 16 Apr 2023 22:33:42 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-552ae3e2cbeso34244107b3.13;
-        Sun, 16 Apr 2023 22:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681709621; x=1684301621;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Bd4dQc1FpkwZYZhwWOOHutAGKXr41UyMWvG9J+VrOtw=;
-        b=W6jp2+VPSJ6XcDqc5ekEGiUOC2rSj1xTbO//rViw8zv+ifG0ENU6HRF1+inx9rfILD
-         2QSMiGwHhuLnsMcw0LceQ2wC81mDW4AXJnOl0DeOUWVi7xI0ywt/76IOC+mzlW1SKUvn
-         Zx7VCJJS0KWYkY0nmTZrlanGg0EFZiEq8ELmQtGm+BXLa85p7D16XKdPlfv1J5Hr30CJ
-         MQ0P0HRjxd44UFXnyTbj1EqIa5XYFvyUeIWV6b9GyZ/U0ROnasJZ1Qij9SgMqjqgnpPk
-         Qw6AdpgzidNWnE88iwwfG30Mp8unilJInkIjQf14rY++RrCtFyVkekbdcNDXTUFTsae7
-         pOmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681709621; x=1684301621;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Bd4dQc1FpkwZYZhwWOOHutAGKXr41UyMWvG9J+VrOtw=;
-        b=VHx924Gjgu3jhyENULKp2WQ+O9FFpWzjYfBGAz78eSEKDtRuswiRFTbWAi7PQ9OpTc
-         xrr0s4iscszWBvj5DFBvrgUbv/S5qdqnN8ne/cPj8zpZS9j1/juuIeXhkQVnkE0FLOxE
-         SKlxNS3d1wgHEsVelgGspcIqpnlE9ukYxPgvO58xViqvwBvNxM4m23ps6PclI2sAqxmP
-         JyVfeVPUmODBPpWAOIfcHdS0aBY+8zPQxEQOf8rbC4ZwFr5+kTVW1jI2YhuZFkllv3yK
-         MWWAW/gf2xYt1Nzw3HLrqCihTYk3mP87/mFeK4GqKca8vgUSkt7nuGaH3k3ls3qQED6Y
-         gPmw==
-X-Gm-Message-State: AAQBX9dM6T3tFe+rxXj4gJHFK7xu2drbE8u8clPrzKiSWyY3hLd7Hmcr
-        e0/wQCdaNEbQDZEqi5uemeu0Sox0742qMiuMDok=
-X-Google-Smtp-Source: AKy350Yk9Tv6HCQzCayejAyB1Fw5PAEanr1+f9Eco4+j6qhmF0bsQjcV7x90pm8V8B42ayqutlvCzlq0RJupVaa8d8c=
-X-Received: by 2002:a05:690c:706:b0:545:5f92:f7ee with SMTP id
- bs6-20020a05690c070600b005455f92f7eemr9153411ywb.2.1681709621205; Sun, 16 Apr
- 2023 22:33:41 -0700 (PDT)
+        Mon, 17 Apr 2023 01:34:29 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5A8212F;
+        Sun, 16 Apr 2023 22:34:23 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33H47Fk6010753;
+        Mon, 17 Apr 2023 05:34:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=0cwRhtA6ZuctV5zzxJgO5tpv4VIFRXFeL+rOLiyTj1s=;
+ b=Sct7ZHC0XNDvPqdf3aWRMBx707acSOCAjZzJWhhWt8GkQHZ/nv96hmZPgEZAEe6Bhfjy
+ khbn2OObwz0+Djr0WQMwWjUuMx7eaN1487vu9p2Wr+p0kwFyHwYqoClc/uFqtBVxF99T
+ Tu4UdY+nKCJc9cesCqghRkca+1Vm5wffaOkT4qMX2a1FD9sHps6ItjzfNntLgNuOkG8t
+ Lnk+GIk/IClclu+4L4zAtVulpp9RgEMzEZFvO7pIjXfhwxjVoJHZvv+Ik0eaggqzWrou
+ N/95NvF/jX7OBbFaBOW70l7Ghugqsr6AtwJzNV4FABHr0QKLGHQ3tzNzFJaCh9kuXIAu Kg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pymnf2n6e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 05:34:20 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33H5YJOl028373
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Apr 2023 05:34:19 GMT
+Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Sun, 16 Apr 2023 22:34:13 -0700
+From:   Devi Priya <quic_devipriy@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
+        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
+Subject: [PATCH V2 0/4] Incremental patches on minimal boot support
+Date:   Mon, 17 Apr 2023 11:03:51 +0530
+Message-ID: <20230417053355.25691-1-quic_devipriy@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20230415150542.2368179-1-noltari@gmail.com> <87leitxj4k.fsf@toke.dk>
- <a7895e73-70a3-450d-64f9-8256c9470d25@gmail.com> <03a74fbb-dd77-6283-0b08-6a9145a2f4f6@gmail.com>
- <874jpgxfs7.fsf@toke.dk> <8caecebf-bd88-dffe-7749-b79b7ea61cc7@gmail.com> <871qkjxztc.fsf@toke.dk>
-In-Reply-To: <871qkjxztc.fsf@toke.dk>
-From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
-Date:   Mon, 17 Apr 2023 07:33:30 +0200
-Message-ID: <CAKR-sGdcaYTzzcG6yLkor20d0qWamMAv6g-fb8M5b4tsZHadRA@mail.gmail.com>
-Subject: Re: [PATCH] ath9k: fix calibration data endianness
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>
-Cc:     Christian Lamparter <chunkeey@gmail.com>, f.fainelli@gmail.com,
-        jonas.gorski@gmail.com, nbd@nbd.name, kvalo@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: v3r8vzuiB8QTuTrIwVLgnBs11-7X10KY
+X-Proofpoint-ORIG-GUID: v3r8vzuiB8QTuTrIwVLgnBs11-7X10KY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-17_02,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ mlxscore=0 malwarescore=0 bulkscore=0 clxscore=1015 impostorscore=0
+ priorityscore=1501 spamscore=0 lowpriorityscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304170050
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Toke,
+Patchset V9 of the series: Add minimal boot support for IPQ9574 has been
+merged and is available in linux-next/master.
+V12 being the latest revision posted in the series, the delta between
+revisions V9 and V12 is posted as a separate series as suggested by 
+Bjorn to avoid possible confusions.
 
-El dom, 16 abr 2023 a las 23:49, Toke H=C3=B8iland-J=C3=B8rgensen
-(<toke@toke.dk>) escribi=C3=B3:
->
-> Christian Lamparter <chunkeey@gmail.com> writes:
->
-> > On 4/16/23 12:50, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> >> Christian Lamparter <chunkeey@gmail.com> writes:
-> >>
-> >>> On 4/15/23 18:02, Christian Lamparter wrote:
-> >>>> Hi,
-> >>>>
-> >>>> On 4/15/23 17:25, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> >>>>> =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com> writes:
-> >>>>>
-> >>>>>> BCM63xx (Big Endian MIPS) devices store the calibration data in MT=
-D
-> >>>>>> partitions but it needs to be swapped in order to work, otherwise =
-it fails:
-> >>>>>> ath9k 0000:00:01.0: enabling device (0000 -> 0002)
-> >>>>>> ath: phy0: Ignoring endianness difference in EEPROM magic bytes.
-> >>>>>> ath: phy0: Bad EEPROM VER 0x0001 or REV 0x00e0
-> >>>>>> ath: phy0: Unable to initialize hardware; initialization status: -=
-22
-> >>>>>> ath9k 0000:00:01.0: Failed to initialize device
-> >>>>>> ath9k: probe of 0000:00:01.0 failed with error -22
-> >>>>>
-> >>>>> How does this affect other platforms? Why was the NO_EEP_SWAP flag =
-set
-> >>>>> in the first place? Christian, care to comment on this?
-> >>>>
-> >>>> I knew this would come up. I've written what I know and remember in =
-the
-> >>>> pull-request/buglink.
-> >>>>
-> >>>> Maybe this can be added to the commit?
-> >>>> Link: https://github.com/openwrt/openwrt/pull/12365
-> >>>>
-> >>>> | From what I remember, the ah->ah_flags |=3D AH_NO_EEP_SWAP; was co=
-pied verbatim from ath9k_of_init's request_eeprom.
-> >>>>
-> >>>> Since the existing request_firmware eeprom fetcher code set the flag=
-,
-> >>>> the nvmem code had to do it too.
-> >>>>
-> >>>> In theory, I don't think that not setting the AH_NO_EEP_SWAP flag wi=
-ll cause havoc.
-> >>>> I don't know if there are devices out there, which have a swapped ma=
-gic (which is
-> >>>> used to detect the endianess), but the caldata is in the correct end=
-iannes (or
-> >>>> vice versa - Magic is correct, but data needs swapping).
-> >>>>
-> >>>> I can run tests with it on a Netzgear WNDR3700v2 (AR7161+2xAR9220)
-> >>>> and FritzBox 7360v2 (Lantiq XWAY+AR9220). (But these worked fine.
-> >>>> So I don't expect there to be a new issue there).
-> >>>
-> >>> Nope! This is a classic self-own!... Well at least, this now gets doc=
-umented!
-> >>>
-> >>> Here are my findings. Please excuse the overlong lines.
-> >>>
-> >>> ## The good news / AVM FritzBox 7360v2 ##
-> >>>
-> >>> The good news: The AVM FritzBox 7360v2 worked the same as before.
-> >>
-> >> [...]
-> >>
-> >>> ## The not so good news / Netgear WNDR3700v2 ##
-> >>>
-> >>> But not the Netgar WNDR3700v2. One WiFi (The 2.4G, reported itself no=
-w as the 5G @0000:00:11.0 -
-> >>> doesn't really work now), and the real 5G WiFi (@0000:00:12.0) failed=
- with:
-> >>> "phy1: Bad EEPROM VER 0x0001 or REV 0x06e0"
-> >>
-> >> [...]
-> >>
-> >> Alright, so IIUC, we have a situation where some devices only work
-> >> *with* the flag, and some devices only work *without* the flag? So we'=
-ll
-> >> need some kind of platform-specific setting? Could we put this in the
-> >> device trees, or is there a better solution?
-> >
-> > Depends. From what I gather, ath9k calls this "need_swap". Thing is,
-> > the flag in the EEPROM is called "AR5416_EEPMISC_BIG_ENDIAN". In the
-> > official documentation about the AR9170 Base EEPROM (has the same base
-> > structure as AR5008 up to AR92xx) this is specified as:
-> >
-> > "Only bit 0 is defined as Big Endian. This bit should be written as 1
-> > when the structure is interpreted in big Endian byte ordering. This bit
-> > must be reviewed before any larger than byte parameters can be interpre=
-ted."
-> >
-> > It makes sense that on a Big-Endian MIPS device (like the Netgear WNDR3=
-700v2),
-> > the  caldata should be in "Big-Endian" too... so no swapping is necessa=
-ry.
-> >
-> > Looking in ath9k's eeprom.c function ath9k_hw_nvram_swap_data() that de=
-als
-> > with this eepmisc flag:
-> >
-> > |       if (ah->eep_ops->get_eepmisc(ah) & AR5416_EEPMISC_BIG_ENDIAN) {
-> > |               *swap_needed =3D true;
-> > |               ath_dbg(common, EEPROM,
-> > |                       "Big Endian EEPROM detected according to EEPMIS=
-C register.\n");
-> > |       } else {
-> > |               *swap_needed =3D false;
-> > |       }
-> >
-> > This doesn't take into consideration that swapping is not needed if
-> > the data is in big endian format on a big endian device. So, this
-> > could be changed so that the *swap_needed is only true if the flag and
-> > device endiannes disagrees?
-> >
-> > That said, Martin and Felix have written their reasons in the cover let=
-ter
-> > and patches for why the code is what it is:
-> > <https://ath9k-devel.ath9k.narkive.com/2q5A6nu0/patch-0-5-ath9k-eeprom-=
-swapping-improvements>
-> >
-> > Toke, What's your take on this? Having something similar like the
-> > check_endian bool... but for OF? Or more logic that can somehow
-> > figure out if it's big or little endian.
->
-> Digging into that old thread, it seems we are re-hashing a lot of the
-> old discussion when those patches went in. Basically, the code you
-> quoted above is correct because the commit that introduced it sets all
-> fields to be __le16 and __le32 types and reads them using the
-> leXX_to_cpu() macros.
->
-> The code *further up* in that function is what is enabled by Alvaro's
-> patch. Which is a different type of swapping (where the whole eeprom is
-> swab16()'ed, not just the actual multi-byte data fields in them).
-> However, in OpenWrt the in-driver code to do this is not used; instead,
-> a hotplug script applies the swapping before the device is seen by the
-> driver, as described in this commit[0]. Martin indeed mentions that this
-> is a device-specific thing, so the driver can't actually do the right
-> thing without some outside feature flag[1]. The commit[0] also indicates
-> that there used used to exist a device-tree binding in the out-of-tree
-> device trees used in OpenWrt to do the unconditional swab16().
->
-> The code in [0] still exists in OpenWrt today, albeit in a somewhat
-> modified form[2]. I guess the question then boils down to, =C3=81lvaro, c=
-an
-> your issue be resolved by a pre-processing step similar to that which is
-> done in [2]? Or do we need the device tree flag after all?
+This series adds the delta changes between revisions V9 and V12.
 
-TBH, yes, it can be solved by a pre-processing step similar to what's
-done in [2], but then having added nvmem support would make no sense
-at all for those devices that need swapping, since it's unusable
-without the flag.
-So, in my opinion the flag should be added in order to be able to use
-it without pre-processing the calibration data and to take advantage
-of nvmem support.
-I will send the v2 patch and even if it's not accepted I think I will
-add it as a downstream patch on OpenWrt...
+V9 can be found at:
+https://lore.kernel.org/linux-arm-msm/20230316072940.29137-1-quic_devipriy@quicinc.com/
 
->
-> -Toke
->
-> [0] https://git.openwrt.org/?p=3Dopenwrt/openwrt.git;a=3Dcommitdiff;h=3Da=
-fa37092663d00aa0abf8c61943d9a1b5558b144
-> [1] https://narkive.com/2q5A6nu0.34
-> [2] https://git.openwrt.org/?p=3Dopenwrt/openwrt.git;a=3Dblob;f=3Dtarget/=
-linux/lantiq/xway/base-files/etc/hotplug.d/firmware/12-ath9k-eeprom;h=3D98b=
-b9af6947a298775ff7fa26ac6501c57df8378;hb=3DHEAD
+V12 can be found at:
+https://lore.kernel.org/linux-arm-msm/20230410135948.11970-1-quic_devipriy@quicinc.com/
 
-Best regards,
-=C3=81lvaro.
+Changes in V2:
+	- Updated the subject & commit message of [PATCH V2 1/4]
+	- No changes were made to any other patches
+
+Changes in V1:
+	- The Delta between V9 & V12 is added to the change log of
+	  the respective patches for quick reference
+
+Devi Priya (4):
+  dt-bindings: clock: qcom,ipq9574-gcc: Drop bias_pll_ubi_nc_clk input
+  clk: qcom: gcc-ipq9574: Drop bias_pll_ubi_nc_clk & add const to
+    clk_init_data
+  arm64: dts: qcom: ipq9574: Drop bias_pll_ubi_nc_clk & update intc node
+  arm64: dts: qcom: ipq9574: rename al02-c7 dts to rdp433
+
+ .../bindings/clock/qcom,ipq9574-gcc.yaml      |   3 +-
+ arch/arm64/boot/dts/qcom/Makefile             |   2 +-
+ ...ipq9574-al02-c7.dts => ipq9574-rdp433.dts} |   2 +-
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         |  13 +-
+ drivers/clk/qcom/gcc-ipq9574.c                | 475 +++++++++---------
+ 5 files changed, 232 insertions(+), 263 deletions(-)
+ rename arch/arm64/boot/dts/qcom/{ipq9574-al02-c7.dts => ipq9574-rdp433.dts} (97%)
+
+-- 
+2.17.1
+
