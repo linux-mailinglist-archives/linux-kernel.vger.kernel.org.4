@@ -2,110 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2E86E408A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4D66E40C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjDQHRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 03:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34170 "EHLO
+        id S229547AbjDQHYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 03:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbjDQHRp (ORCPT
+        with ESMTP id S229500AbjDQHYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 03:17:45 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F7540FA
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:17:38 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2a8ba5f1d6bso9669301fa.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:17:38 -0700 (PDT)
+        Mon, 17 Apr 2023 03:24:10 -0400
+X-Greylist: delayed 668 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 00:24:07 PDT
+Received: from mail.distrito09d21.saludzona5.gob.ec (mail.distrito09d21.saludzona5.gob.ec [190.214.49.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23C5E4E
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 00:24:07 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.distrito09d21.saludzona5.gob.ec (Postfix) with ESMTP id 6A871DEB9E9;
+        Mon, 17 Apr 2023 02:18:34 -0500 (-05)
+Received: from mail.distrito09d21.saludzona5.gob.ec ([127.0.0.1])
+        by localhost (mail.distrito09d21.saludzona5.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Je81GdEGGyEl; Mon, 17 Apr 2023 02:18:34 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.distrito09d21.saludzona5.gob.ec (Postfix) with ESMTP id E258FDEBA02;
+        Mon, 17 Apr 2023 02:18:33 -0500 (-05)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.distrito09d21.saludzona5.gob.ec E258FDEBA02
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681715857; x=1684307857;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3OR5eT9VnzB8iC9lmd78WCiWUCSzoPnYyNJk6lQC8Oc=;
-        b=B8e0BXhwU4lqGmdezCmNtposCPWNDQsrr5U8BuPRXI99DeyUt/CICr5FjRWWtD0ZCO
-         B6sVXpU3n4W1y1ijhh5Gp62WWoOcJGcAwUEW5n1ukLr4y/b8aryEHiiBRoi2lMGiry8v
-         jZ/RWKOzasftEEE6rzZXV/Gli/JmCNAA1bM0/+oocvjobrpWOrE63+sls3P+4MT6tncn
-         m8G/VfCfVW9aIahT4Qrn5TzJnZ6K70gLv7swFTUQ8KZ3k4tRYuBPUPjTEJpr2foOUqUV
-         7Ruicx7/gIqumpoDrQNpmLpPWV29pULliByxrxgRYNOu1gbg9UaEn8T70T2WGbazG5LP
-         lwlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681715857; x=1684307857;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3OR5eT9VnzB8iC9lmd78WCiWUCSzoPnYyNJk6lQC8Oc=;
-        b=BAQRq7o/s9HxGxA1O/UVTz7TtVIEzhDijwUX/Zyr01aPR37M6/nRuBIjkQmpSdSoOb
-         rYqd0dzUKlcNLAhW1o62Fx5KgWuF+AMwA8meddeOCMu6LCRZhx3NzVaf+NGjDnvH1u0o
-         UNgFMkfV3wEIuaQgDR44V6EOXyl72hNaV44AwnOm0E2Lvr1f8Y1KF+XE4nJsWAcWGV5U
-         OiIS6LHiF/UrCO9RG3eH3/8wZVSAlQ7ImM5MXO8w4bjeYoyY2ZOu6kEi+sARsaJOA3pm
-         jbM44EfodTgjKpmYdb7P2BrkySIGL8zZRrd55f4ifqmzZxVchvA6ygrgW7h20Ci9x4Gt
-         n8JQ==
-X-Gm-Message-State: AAQBX9cEsv6fOBpCStRB/evB4VOS2hiUufKoGpw4QO5XCRwPoT9ljeMz
-        0fOIXnJKBPS5D4EUBd5t2cDUtr0TyQLUchHsu2M=
-X-Google-Smtp-Source: AKy350ab+wKkL8gb4ltrCcM9tnhiEY2HkIoaBTwD+PoQh+qh2OILwYOXIQ3SdEWHJwapl/UE+lfJ2A==
-X-Received: by 2002:a19:ad02:0:b0:4db:3a92:2c85 with SMTP id t2-20020a19ad02000000b004db3a922c85mr1157217lfc.67.1681715857157;
-        Mon, 17 Apr 2023 00:17:37 -0700 (PDT)
-Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
-        by smtp.gmail.com with ESMTPSA id u6-20020ac251c6000000b004d85f2acd8esm1948698lfm.295.2023.04.17.00.17.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 00:17:36 -0700 (PDT)
-Message-ID: <0e5cf9e6-bfcb-ff79-d94c-97c46735e12b@linaro.org>
-Date:   Mon, 17 Apr 2023 09:17:35 +0200
+        d=distrito09d21.saludzona5.gob.ec;
+        s=B3F564AE-DCCF-11EA-A8CE-DCDEBBF83439; t=1681715914;
+        bh=Dcs2PdQd+rhHCVw1keoJ9FS9PUCMRPAIMppoLwfJVdU=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=M26sp4QfK19uDNrZEFUCz3HV7W5mJTyvjUIooVW5f7vdWWd/v4OMgSmn6s5gTyZ6w
+         Bc0NBHAS8Aka4kvNNAatCOdOLXM63Vo0K2ImYFVLpUvmFEGgZI8XzvuFZzlJ6EAnZR
+         ZNiwP6k5gqe6gFh840Unzos0cj8DJNKd7SITZC5/XWYqpzK//eHdXQmtiUJp9LCbj/
+         T7P1/jtdvuYdx6tlKxESuidesVZEcCSQDDOmXu7X/rC4KG+RNJnXcBEBXkLFMaA4DP
+         fjgdngjfTkMXfa3JTeNv+8OGXrzfy0q0sm0SjRGTo0QByvZKISkDYQt8rOQkv714Kb
+         4Wk3uyFM3Kr9g==
+X-Virus-Scanned: amavisd-new at distrito09d21.saludzona5.gob.ec
+Received: from mail.distrito09d21.saludzona5.gob.ec ([127.0.0.1])
+        by localhost (mail.distrito09d21.saludzona5.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id sIFH6o7OeoJC; Mon, 17 Apr 2023 02:18:33 -0500 (-05)
+Received: from [23.172.112.93] (unknown [23.172.112.93])
+        by mail.distrito09d21.saludzona5.gob.ec (Postfix) with ESMTPSA id 956BFDEB9EC;
+        Mon, 17 Apr 2023 02:18:31 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp: correct GIC child node
- name
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230416151311.346596-1-krzysztof.kozlowski@linaro.org>
- <20230416151311.346596-4-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230416151311.346596-4-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Atenci=C3=B3n_usuario_de_cuenta_de_correo_electr=C3=B3nico?=
+To:     Recipients <hernan.suarez@distrito09d21.saludzona5.gob.ec>
+From:   "@ZIMBRA" <hernan.suarez@distrito09d21.saludzona5.gob.ec>
+Date:   Mon, 17 Apr 2023 00:18:09 -0700
+Reply-To: webmasterzimbra1@gmail.com
+Message-Id: <20230417071831.956BFDEB9EC@mail.distrito09d21.saludzona5.gob.ec>
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Atenci=F3n usuario de cuenta de correo electr=F3nico,
+
+Este mensaje proviene de su Centro de administraci=F3n de cuentas Webmail y=
+ red. Estamos en el proceso de actualizar todos nuestros servidores de corr=
+eo electr=F3nico como parte de nuestros esfuerzos en curso para proporciona=
+r el mejor servicio de correo web posible. Tambi=E9n eliminamos todas las c=
+uentas no utilizadas para crear m=E1s espacio para registros de cuentas nue=
+vas.
+
+Para asegurarse de que no experimenta interrupciones del servicio o posible=
+ desactivaci=F3n de su cuenta de correo electr=F3nico, debe responder a est=
+e mensaje confirmando inmediatamente los detalles de su cuenta de correo el=
+ectr=F3nico a continuaci=F3n para confirmaci=F3n e identificaci=F3n.
+
+Confirme los detalles de su cuenta a continuaci=F3n.
+_____________________________________
+1. Nombre y apellido:
+2. Email completo de acceso:
+3. Nombre de usuario:
+4. Contrase=F1a:
+5. Vuelva a escribir la contrase=F1a:
+_____________________________________
+
+De lo contrario, su cuenta de correo electr=F3nico puede desactivarse autom=
+=E1ticamente de nuestro servidor de correo electr=F3nico / base de datos de=
+ correo electr=F3nico. Para poder actualizar su cuenta de correo electr=F3n=
+ico, responda a este mensaje.
+
+Gracias por su comprensi=F3n, le deseamos un d=EDa agradable por delante.
 
 
-On 16.04.2023 17:13, Krzysztof Kozlowski wrote:
-> GIC child node is supposed to be named msi-controller:
-> 
->   sa8295p-adp.dtb: interrupt-controller@17a00000: gic-its@17a40000: False schema does not allow
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 6d3780a75024..5532bf8af211 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -3907,7 +3907,7 @@ intc: interrupt-controller@17a00000 {
->  			#size-cells = <2>;
->  			ranges;
->  
-> -			gic-its@17a40000 {
-> +			msi-controller@17a40000 {
->  				compatible = "arm,gic-v3-its";
->  				reg = <0 0x17a40000 0 0x20000>;
->  				msi-controller;
+Administrador,
+Webmail y Centro de administraci=F3n de cuentas de red.
