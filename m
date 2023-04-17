@@ -2,95 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95B96E557E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 01:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 720366E5584
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 01:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjDQX4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 19:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
+        id S230249AbjDQX54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 19:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjDQX4f (ORCPT
+        with ESMTP id S229521AbjDQX5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 19:56:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9125A358C;
-        Mon, 17 Apr 2023 16:56:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2284262B2E;
-        Mon, 17 Apr 2023 23:56:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED88C433D2;
-        Mon, 17 Apr 2023 23:56:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681775793;
-        bh=PGgTtILCYnLtdEs+1dge80PZEeOVNXxB1Mp2goVVWBU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=U/iWFNH+L08ZbmtVqtvGe3vwYUVDrmI+tTXOJr/M9nBRnClsCRrhcBQtu1pD7Nn9D
-         0xjHrND9YWAVXp983k6ublL//L60Aib3NsfXWPDalH1AeyS2wTSeOPKZSyziCG87HP
-         g7ekDdlntegrEj3qTUb2WGLA2Wpb+Kmnj+83knvyGinUKzy1YXmDmU3HvZPUEI13U1
-         R/g/CgTmloJt0PGKcSmrAgZeKh480w2YxwYcXPIaBzimLzwgeGtiesCaneGtejzRMz
-         v3OYBI8SC4y9J/QX6ZFQ0PPbRUCft2BueTrwCUH4ymKPAYvbp01Z7EGzUbSEIiA7VF
-         UrnqD1lKXRRXQ==
-Message-ID: <473b7647-58ee-9a4c-b910-f22f778a058e@kernel.org>
-Date:   Tue, 18 Apr 2023 08:56:29 +0900
+        Mon, 17 Apr 2023 19:57:54 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516AB4EE6;
+        Mon, 17 Apr 2023 16:57:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=sZOpuzwL6J8z7LygT/lrP8vyUSOBcCMAz7NoAyrs1kU=; b=Ee20hJURHEVAoTTC/8x7O7fp3b
+        UO/bnjw1kqg4RQqqW8HrT68+C5UH4ESCCort/Sc5iXO1YjZr6VB/hXeDrQgJ44sh1gtuwSgiPEQYm
+        w4vOweemlxuNTHeRJv55tnHHV9TBQy2x8UajYA7Q07KZpNYjRd5Hkhdzgh3kn2r9WFWRQYu8nXSB7
+        az6zEXgBh6Ll4XHx9zlzk2NZkGnWSJB9aWPEBDIyyt+JLZtn0CEZogWKE97EtpDCsfmNcsbIbMHtz
+        j+h7P5zTL4gi26INE+t7T0EMagw1zD2xcvMVxZXqvoJrbPzh6V7k5oAbtRDtbBAhAX0h1G/Soe2Xw
+        h6IVas5w==;
+Received: from [191.17.235.153] (helo=[192.168.1.111])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1poYil-003jfR-K3; Tue, 18 Apr 2023 01:57:19 +0200
+Message-ID: <2ee0c706-a97b-a881-4116-dec4d163ded7@igalia.com>
+Date:   Mon, 17 Apr 2023 20:56:34 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 09/11] PCI: rockchip: Use u32 variable to access 32-bit
- registers
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] selftests/futex: Fix pthread_create() error handling
 Content-Language: en-US
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
-        alberto.dassatti@heig-vd.ch
-Cc:     xxm@rock-chips.com, stable@vger.kernel.org,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Arnaud Ferraris <arnaud.ferraris@collabora.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        Hugh Cole-Baker <sigmaris@gmail.com>,
-        linux-pci@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+To:     tavianator@tavianator.com
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230417092631.347976-1-rick.wertenbroek@gmail.com>
- <20230417092631.347976-10-rick.wertenbroek@gmail.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20230417092631.347976-10-rick.wertenbroek@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <42a8405a78936a3ec96bbd0c6b5d983291faf646.1681766292.git.tavianator@tavianator.com>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <42a8405a78936a3ec96bbd0c6b5d983291faf646.1681766292.git.tavianator@tavianator.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/17/23 18:26, Rick Wertenbroek wrote:
-> Previously u16 variables were used to access 32-bit registers, this
-> resulted in not all of the data being read from the registers. Also
-> the left shift of more than 16-bits would result in moving data out
-> of the variable. Use u32 variables to access 32-bit registers
+Em 17/04/2023 18:28, tavianator@tavianator.com escreveu:
+> From: Tavian Barnes <tavianator@tavianator.com>
 > 
-> Fixes: cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
-> Tested-by: Damien Le Moal <dlemoal@kernel.org>
+> The pthread APIs return error codes, rather than setting errno.
+> 
+> Signed-off-by: Tavian Barnes <tavianator@tavianator.com>
 
-Looks good.
-
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
-
-
+Reviewed-by: André Almeida <andrealmeid@igalia.com>
