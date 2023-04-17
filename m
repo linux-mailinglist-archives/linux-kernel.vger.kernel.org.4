@@ -2,153 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 721146E5103
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219466E5106
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjDQTdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
+        id S230120AbjDQTeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjDQTdm (ORCPT
+        with ESMTP id S229531AbjDQTeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:33:42 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2041.outbound.protection.outlook.com [40.107.94.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B4FB0;
-        Mon, 17 Apr 2023 12:33:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GVkL7xCz652gsGeoUHQ7DHPDwUhK0q48lAco3jS+ckGIzZrQz0sQMscw/Ek1jrQNSWp/3jTw/Nxn3eQohcWprz68priRHtpjoyqHtTUnHxfdytMQpd4ogbF0+9uN8DpeQftWUcqN4gtGbnPR/3mdQ/8ix7rQHMZim6gGeP3Ni3Q2y4zwZQ03bpRpjIVkXVQJLhJj/Mnxssmr6s689rGWG4/NzzuaeMLY2lFLn0HQ3wE5hwZ1Adt7CACLaU972ZjYeJLoVVeDnUZLSPh90aemQ3EQe2SciLsuimSfO0HUM+f4wGRF4a4UOWjJHJOjRoQWJ3qW9EUKVz/MgDwnlgpEGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W+6re1kEHGJhIXITcIFg3cg5K0+FUzt/erZ1M3kTwek=;
- b=U8UNxuJjiVMhH+ZCUUPpvB0rp3SIIEDxjJx7owulziEREn1xgoOdnTKlFr5sCdc/4Uau9EfxR5GnczS7XcBTwRz005WgpZ86ZhqPLu6uAJgBc5DO9LCWmEJJ2fbdSZZrmXokDPaEnieYTe0N92tZRl+npjeZhqu7vUDvt4cHxcLyhDsATOMIki/mFmr3lG5XW3frKI/YjXqsx5BbKwMEL7zy5FgODk//hAn46vFIeYg0+rWHJyuDqEsszBbm/CBHT979vLvUXapYomDEHb5hESrfhyLgMZ30g3Leo25hPDCc40US7xhitKnN8P6rrXWOVOEmdGNU44QIYTejdBOOtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W+6re1kEHGJhIXITcIFg3cg5K0+FUzt/erZ1M3kTwek=;
- b=c5p3R0mW1g8wU+xXWtkqz6pPrhpkLIhOWkGEXjfyZiqlWKC1K9FaJnTPdNs2eWfqX20g6IilCIXUkLVYJp8cK7ljqiwO1plfA6h2BXG6dXRE8ORXExlSySjDqWZ1qqP7KC+RD41WWJ4l+Ve2zQ/iGjBax2dt99ohRFJV9RVYY1CqL7vNJrmfVP0FnI2AwIGMPTtWjMIrh6tkGkNq+AlRaeQfqm2AtEC+V3T9bmkJRQCU6RxpYYuZIhxNqx5bJxnRI3G7XUZKUjN9gR5bDnYziIupnHISSHI/Tu2az/nT5qRGgiU+u0u+NDlKNwVO+Bf85JVr3R8UcYzITgmWvAX3kw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB2743.namprd12.prod.outlook.com (2603:10b6:a03:61::28)
- by CH3PR12MB8188.namprd12.prod.outlook.com (2603:10b6:610:120::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Mon, 17 Apr
- 2023 19:33:39 +0000
-Received: from BYAPR12MB2743.namprd12.prod.outlook.com
- ([fe80::f6e3:c3af:67f9:91e9]) by BYAPR12MB2743.namprd12.prod.outlook.com
- ([fe80::f6e3:c3af:67f9:91e9%7]) with mapi id 15.20.6298.030; Mon, 17 Apr 2023
- 19:33:39 +0000
-From:   Rahul Rameshbabu <rrameshbabu@nvidia.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] HID: shield: Initial driver implementation with
- Thunderstrike support
-References: <20230417182909.33833-1-rrameshbabu@nvidia.com>
-        <20230417182909.33833-2-rrameshbabu@nvidia.com>
-        <1a754a3e-2a2b-07d5-c94a-0373a1677e4e@infradead.org>
-Date:   Mon, 17 Apr 2023 12:33:29 -0700
-In-Reply-To: <1a754a3e-2a2b-07d5-c94a-0373a1677e4e@infradead.org> (Randy
-        Dunlap's message of "Mon, 17 Apr 2023 12:20:51 -0700")
-Message-ID: <87leiqb8xi.fsf@nvidia.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-Content-Type: text/plain
-X-ClientProxiedBy: BY5PR13CA0009.namprd13.prod.outlook.com
- (2603:10b6:a03:180::22) To BYAPR12MB2743.namprd12.prod.outlook.com
- (2603:10b6:a03:61::28)
+        Mon, 17 Apr 2023 15:34:21 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B227B0;
+        Mon, 17 Apr 2023 12:34:19 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4ec9ccab8bbso1681485e87.2;
+        Mon, 17 Apr 2023 12:34:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681760057; x=1684352057;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sKiq+dfuXxPCK65ueY2+8jxQZPAaLr20iv5vBFv5en0=;
+        b=C6aw+GVwQET2J1ZEfk4Q8nLuh/6vhQTrRuVW5iu1BIEEmygMMkbKtg3XrDY35BaOZJ
+         chpQYoE4YQ8J7xBdH6Fcrzzz22KnyAaNl//HYV3YINJwPWMjYq1JUkMX3G937LWvqjD9
+         kLVdVULHTwrD+zEm81we1xaJoMJheFM4RmPCwvpcBM0f5K2DUcypFLQwb0RV/2jnfdQn
+         hOM4pcts/YfwJaIu0BGS4bTgGFrEr3rfDoRuZwreHXpWtndDk3/y9Bl1uOuKh2Tm5rKr
+         xXVLC2hRH+QsaSRxnr+kwkF4b5yCZcCP7uYxTH5XWtkVMIUnBoiGnn+YYTfEnYoxa9BP
+         777A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681760057; x=1684352057;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sKiq+dfuXxPCK65ueY2+8jxQZPAaLr20iv5vBFv5en0=;
+        b=bhUghQY9ukuHQBsjWn3jTY8FRkcyM7nKuAb61wtqbfL1G+hbEcFNqY0KIAEW5Nr6Ng
+         I2UOeAIjgpJBby55fKDdoupf5YsnF6wZ6AKehgTsB7l5OudkpSkr8clP8P7LfRS876UR
+         /tr76sbjO73y+7GjXnrSQDg03l0H25OuH2TU+jAbOdLq/LYUDZaF2jWWuErzDmDwVLGm
+         JyoFa44s7gG0o9QdSg/xq7DRUC+4fcMbESEEE84VzGxsqOpRBrH6SPAbm1AhquL+lF/Y
+         46ZXpf4BGcXLUg52VWIwqL6I4ABj8iskga2yKRZy1kPhdthMrftIBejrdXF8OaINlDr3
+         3YMQ==
+X-Gm-Message-State: AAQBX9cJbfd9pRX6NaKmASKbAUQq2+EMExMSJL05784LOEswALF3GHN5
+        DBcMXUhQa06Oi1qXQ1bwfZw=
+X-Google-Smtp-Source: AKy350ZkyNHR2oFlkL9WwKW5766PuujupxXOjD0QVEY13Pd3xfBEoQNQdSdo9h44QAH9s3x1abbjQw==
+X-Received: by 2002:ac2:44b4:0:b0:4ed:bf01:3ff3 with SMTP id c20-20020ac244b4000000b004edbf013ff3mr1770405lfm.43.1681760057607;
+        Mon, 17 Apr 2023 12:34:17 -0700 (PDT)
+Received: from eg ([2a01:799:1727:1d00:276c:c908:5e5e:3b0a])
+        by smtp.gmail.com with ESMTPSA id q11-20020ac2514b000000b004eb0eafaa02sm2118861lfd.243.2023.04.17.12.34.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 12:34:17 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 21:34:15 +0200
+From:   Espen Grindhaug <espen.grindhaug@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] libbpf: Improve version handling when attaching uprobe
+Message-ID: <ZD2fNzhzFRHmywRv@eg>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB2743:EE_|CH3PR12MB8188:EE_
-X-MS-Office365-Filtering-Correlation-Id: 71df493e-9b26-47a7-dac1-08db3f7aa4be
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vIwvzqvrtTSeC7tMJH1wmtkSTJjW11gHanpCB4FW2ZnKq6EKikrpMW1cBfMKkzYQEqwImjQ9e9rLhhtqZjeQ+cv4xrasUUQDD51e+X4BZtAanZlgXe2rOkiOB4NF5per05oFKHuwyVh2T+pYq+m1hatHs0IlBDfL6D5uTZH5l4fx6bwQ0UwJf8ebxzUcYLMH65xf39YbOp/EpsL2ldsZfWn8xw+gA3QyP7E+f9kZ9eCDJpQ5WUmzgh5YaYX37n/aAI6pHFLspumZoWrbXh1vEAYRSms9igzLnUP8GwhwcQGnxEfgvl3xQ9Xh932ffy1dDOsBbqIqTKAS7OgTreXiAFVFp0JV80w1ALZz9lNOhAZeDqPmr1RmJ8CLVJHwcQntzDfmibRC0EDaxqZszP/UwpDH5FvkuSUk5qbJwWG6bOmwYws93BilNS8BfBvOvZz5/MtV6Uh7YYaYKNiWZJMzgxd+OJrsGMKyHRlBjD+hQzt8Nvsa2SfDXJt6tl83SL+dc/+0DCRJzaDw3FFBktFLeHxd/MCq8eL94ATp7Wmfy6Vd1Q/7bzpHDPIpmAJS9aH8
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2743.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(346002)(396003)(376002)(39860400002)(451199021)(6916009)(4326008)(54906003)(316002)(66946007)(66476007)(66556008)(6486002)(6666004)(478600001)(8936002)(41300700001)(5660300002)(8676002)(2906002)(86362001)(36756003)(38100700002)(2616005)(6512007)(26005)(186003)(6506007)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vJkJ8/aS3rOQYWkftDEmQA46dYwGRMIOTaocqvmygqA0EEfZWX0Ez8IIS4Vv?=
- =?us-ascii?Q?WBDaollysoL+WCJqh0wHwiuS7XqtuxAR0lvdDEiCDjdZe5vz/CHIzeuXBOAn?=
- =?us-ascii?Q?Q1jHOOkHSo/jwdbPO8J3cMobII7mDfNdbO/gnzGrcww1oc4IjIYUWORCsVYi?=
- =?us-ascii?Q?yhpparZp0k/iTd54j0W2Z5M8z6tMfwsMmNLImxHeI9Ac5L1Gm7HsMxZG02a0?=
- =?us-ascii?Q?uPPsa/hivR9fwwf3iF2IY546eIOu7Slb0AdHykl3967mihJ4ximBZvNTcd6f?=
- =?us-ascii?Q?Eg+Cae7dc++JZjxtmb5j6RABZQoJvDJC6vnMcIwiMGZMEQc8Gb0YFgd9lfuA?=
- =?us-ascii?Q?72DABhfITh67rTESOsWq3Hv2lXcqGE2i20vpYtzwG40qJZCuAZ4WERJWD/gq?=
- =?us-ascii?Q?DBN0uD/asl8ZFyMVZ9OR9N+JItqydi3b4TwFc+l4dOH0TZ5gM8cIBXvLsFKi?=
- =?us-ascii?Q?hZ6GDd38RTlbUWBTOQdByWas3+ZUj1Fi7B8nZrKWIV/Pkck6THw1qPvJ8OoQ?=
- =?us-ascii?Q?4yFCHJRIMvThacwuDygZ8eCi3G0GMs4vhWapAehls4QffpeRyy9t2aEoQlvJ?=
- =?us-ascii?Q?EMkw7I9z/qtyL9QDAq/wdxkU4GInjx6DboOS/rRrTJL89LHP80FsW9QiskNE?=
- =?us-ascii?Q?iw2h/1ATdDr9lbvc0jVIDX9nx0kPsXIPaF7mxX/6ewuRinlziQojLcyAp6tT?=
- =?us-ascii?Q?3VpOzLylZSysAqu5n42G8hY12wuu05YGDFv2gbGwIF5HgBhgRn+IH72tBplO?=
- =?us-ascii?Q?fgd2zzszQtuSLD0kg9vZE4bsXuxZHgjebWperEyDAnV5OujgAWIA2PN57CFS?=
- =?us-ascii?Q?1Z6neB2rpKFhDFemye61+/dJnjMLaWQwSUu+4YP2nCJRKOQ+JyGbQHDzCBEU?=
- =?us-ascii?Q?XS4pRJ+DooM/8VIkp29UFCx2Sfliy87GjRrXhpc+ybxEb0oWwv6ihOq9URid?=
- =?us-ascii?Q?CpnTPhApM0lQncjK4GhsmHk5tGl4qSBw3OzRNrzJMVUBmHO7/QBMv918bEWQ?=
- =?us-ascii?Q?cSlV311ag012gBq7d9zahMWghEYxuF/lQRp1S0enLkInMETgrbN05NIhcNze?=
- =?us-ascii?Q?RAADBS9s3v3JAjWozkrv1gH62Za4Eo/Pfops+shILBSKuhUFw7+F0tQKvDfj?=
- =?us-ascii?Q?kNkQ7OAjwrHFHtcA1e1DopKhZy6y3StyqRphwQfAfGEo/33e2Izgu8F7fkAI?=
- =?us-ascii?Q?C7WzbKfpL04u5iqdsWt5MSdGzBpjzn761b6ZBf+6VLcn21Za9EYBXHP57Ks3?=
- =?us-ascii?Q?PY59QdzhRDnXGVZR5yVU7PRCsswpzMXi6eJKUk/ilGF2ctSVzAJbWKRO7YRr?=
- =?us-ascii?Q?GeNOQvVOHKlC71kRigWvd5QZfAp9scAGgFwbz/O5j2Gj81TjybxShnlTBZns?=
- =?us-ascii?Q?BWD8r1XDgbAO+ZbOnCmhYhdBuTyqY8nVH/KOHAWEs4iaOyh7Q7ti/hSkAkXI?=
- =?us-ascii?Q?UTz34ZMmNRMzeN2H9POB00KMN0lK1O3ibY4j1rgZl5jAxyT7+3nJhJ0tbNWc?=
- =?us-ascii?Q?rMzYXhOOj+iJdT/VXlwtDqFd6NT8u5JVG99yRVpjbwjTRRaluP5fnEOYio5t?=
- =?us-ascii?Q?lFQVTBSTG+Yn3wL28s5VscRjjy/WScPhmT6GQnQgN2omjhgT23YW4eVUfrsL?=
- =?us-ascii?Q?yg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71df493e-9b26-47a7-dac1-08db3f7aa4be
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2743.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 19:33:38.7077
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kIW5KhFJ2PkGSeYanIVEzc7P2qk5AIp2yWmTTk9E7HZmzcAc9fGurNWapSPq9WDd94n5f3T2f+dVaMDmEbinBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8188
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
+This change fixes the handling of versions in elf_find_func_offset.
+In the previous implementation, we incorrectly assumed that the
+version information would be present in the string found in the
+string table.
 
-Thanks for the feedback. You are correct about the styling issue in my
-patch. I will fix this. I do want to bring to attention that there seem
-to be a couple of kernel config options in the Kconfig file for the hid
-subsystem that currently violate the styling rules.
+We now look up the correct version string in the version symbol
+table before constructing the full name and then comparing.
 
-It probably would make sense to have a clean-up patch for this issue
-overall (separate from this patch, which I will correct in my next
-version).
+This patch adds support for both name@version and name@@version to
+match output of the various elf parsers.
 
--- Rahul Rameshbabu
+Signed-off-by: Espen Grindhaug <espen.grindhaug@gmail.com>
+---
+ tools/lib/bpf/libbpf.c | 148 +++++++++++++++++++++++++++++++++++------
+ 1 file changed, 129 insertions(+), 19 deletions(-)
 
-On Mon, 17 Apr, 2023 12:20:51 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
-> According to Documentation/process/coding-style.rst, Kconfig help text should
-> be indented by 2 spaces after the "help" line:
->
-> 10) Kconfig configuration files
-> -------------------------------
->
-> For all of the Kconfig* configuration files throughout the source tree,
-> the indentation is somewhat different.  Lines under a ``config`` definition
-> are indented with one tab, while help text is indented an additional two
-> spaces.  Example::
->
->   config AUDIT
-> 	bool "Auditing support"
-> 	depends on NET
-> 	help
-> 	  Enable auditing infrastructure that can be used with another
-> 	  kernel subsystem, such as SELinux (which requires this for
-> 	  logging of avc messages output).  Does not do system-call
-> 	  auditing without CONFIG_AUDITSYSCALL.
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 49cd304ae3bc..ef5e11ce6241 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -10620,31 +10620,94 @@ static int perf_event_uprobe_open_legacy(const char *probe_name, bool retprobe,
+ }
+ 
+ /* Return next ELF section of sh_type after scn, or first of that type if scn is NULL. */
+-static Elf_Scn *elf_find_next_scn_by_type(Elf *elf, int sh_type, Elf_Scn *scn)
++static Elf_Scn *elf_find_next_scn_by_type(Elf *elf, int sh_type, Elf_Scn *scn, size_t *idx)
+ {
+ 	while ((scn = elf_nextscn(elf, scn)) != NULL) {
+ 		GElf_Shdr sh;
+ 
+ 		if (!gelf_getshdr(scn, &sh))
+ 			continue;
+-		if (sh.sh_type == sh_type)
++		if (sh.sh_type == sh_type) {
++			if (idx)
++				*idx = sh.sh_link;
+ 			return scn;
++		}
++	}
++	return NULL;
++}
++
++static Elf_Data *elf_find_data_by_type(Elf *elf, int sh_type, size_t *idx)
++{
++	Elf_Scn *scn = elf_find_next_scn_by_type(elf, sh_type, NULL, idx);
++
++	if (scn)
++		return elf_getdata(scn, NULL);
++
++	return NULL;
++}
++
++static Elf64_Verdef *elf_verdef_by_offset(Elf_Data *data, size_t offset)
++{
++	if (offset + sizeof(Elf64_Verdef) > data->d_size)
++		return NULL;
++
++	return (Elf64_Verdef *)((char *) data->d_buf + offset);
++}
++
++static Elf64_Versym *elf_versym_by_idx(Elf_Data *data, size_t idx)
++{
++	if (idx >= data->d_size / sizeof(Elf64_Versym))
++		return NULL;
++
++	return (Elf64_Versym *)(data->d_buf + idx * sizeof(Elf64_Versym));
++}
++
++static Elf64_Verdaux *elf_verdaux_by_offset(Elf_Data *data, size_t offset)
++{
++	if (offset + sizeof(Elf64_Verdaux) > data->d_size)
++		return NULL;
++
++	return (Elf64_Verdaux *)((char *) data->d_buf + offset);
++}
++
++#define ELF_VERSYM_HIDDEN 0x8000
++#define ELF_VERSYM_IDX_MASK 0x7fff
++
++static Elf64_Verdaux *elf_get_verdaux_by_versym(Elf_Data *verdef_data, Elf64_Versym *versym)
++{
++	size_t offset = 0;
++
++	while (offset + sizeof(Elf64_Verdef) <= verdef_data->d_size) {
++		Elf64_Verdef *verdef = elf_verdef_by_offset(verdef_data, offset);
++
++		if (!verdef)
++			break;
++
++		if (verdef->vd_ndx == (*versym & ELF_VERSYM_IDX_MASK))
++			return elf_verdaux_by_offset(verdef_data, offset + verdef->vd_aux);
++
++		if (verdef->vd_next == 0)
++			break;
++
++		offset += verdef->vd_next;
+ 	}
+ 	return NULL;
+ }
+ 
+ /* Find offset of function name in the provided ELF object. "binary_path" is
+  * the path to the ELF binary represented by "elf", and only used for error
+- * reporting matters. "name" matches symbol name or name@@LIB for library
+- * functions.
++ * reporting matters. "name" matches symbol name, name@LIB or name@@LIB for
++ * library functions.
+  */
+ static long elf_find_func_offset(Elf *elf, const char *binary_path, const char *name)
+ {
+ 	int i, sh_types[2] = { SHT_DYNSYM, SHT_SYMTAB };
+ 	bool is_shared_lib, is_name_qualified;
+ 	long ret = -ENOENT;
+-	size_t name_len;
+ 	GElf_Ehdr ehdr;
++	Elf_Data *versym_data = NULL;
++	Elf_Data *verdef_data = NULL;
++	size_t verdef_stridx = 0;
+ 
+ 	if (!gelf_getehdr(elf, &ehdr)) {
+ 		pr_warn("elf: failed to get ehdr from %s: %s\n", binary_path, elf_errmsg(-1));
+@@ -10654,9 +10717,12 @@ static long elf_find_func_offset(Elf *elf, const char *binary_path, const char *
+ 	/* for shared lib case, we do not need to calculate relative offset */
+ 	is_shared_lib = ehdr.e_type == ET_DYN;
+ 
+-	name_len = strlen(name);
+-	/* Does name specify "@@LIB"? */
+-	is_name_qualified = strstr(name, "@@") != NULL;
++	/* Does name specify "@@LIB" or "@LIB"? */
++	is_name_qualified = strstr(name, "@") != NULL;
++
++	/* Extract version definition and version symbol table */
++	versym_data = elf_find_data_by_type(elf, SHT_GNU_versym, NULL);
++	verdef_data = elf_find_data_by_type(elf, SHT_GNU_verdef, &verdef_stridx);
+ 
+ 	/* Search SHT_DYNSYM, SHT_SYMTAB for symbol. This search order is used because if
+ 	 * a binary is stripped, it may only have SHT_DYNSYM, and a fully-statically
+@@ -10671,10 +10737,10 @@ static long elf_find_func_offset(Elf *elf, const char *binary_path, const char *
+ 		const char *sname;
+ 		GElf_Shdr sh;
+ 
+-		scn = elf_find_next_scn_by_type(elf, sh_types[i], NULL);
++		scn = elf_find_next_scn_by_type(elf, sh_types[i], NULL, NULL);
+ 		if (!scn) {
+ 			pr_debug("elf: failed to find symbol table ELF sections in '%s'\n",
+-				 binary_path);
++				binary_path);
+ 			continue;
+ 		}
+ 		if (!gelf_getshdr(scn, &sh))
+@@ -10705,16 +10771,60 @@ static long elf_find_func_offset(Elf *elf, const char *binary_path, const char *
+ 			if (!sname)
+ 				continue;
+ 
+-			curr_bind = GELF_ST_BIND(sym.st_info);
++			if (is_name_qualified) {
++				Elf64_Versym *versym;
++				Elf64_Verdaux *verdaux;
++				int res;
++				char full_name[256];
+ 
+-			/* User can specify func, func@@LIB or func@@LIB_VERSION. */
+-			if (strncmp(sname, name, name_len) != 0)
+-				continue;
+-			/* ...but we don't want a search for "foo" to match 'foo2" also, so any
+-			 * additional characters in sname should be of the form "@@LIB".
+-			 */
+-			if (!is_name_qualified && sname[name_len] != '\0' && sname[name_len] != '@')
+-				continue;
++				/* check that name at least starts with sname before building
++				 * the full name
++				 */
++				if (strncmp(name, sname, strlen(sname)) != 0)
++					continue;
++
++				if (!versym_data || !verdef_data) {
++					pr_warn("elf: failed to find version definition or version symbol table in '%s'\n",
++						binary_path);
++					break;
++				}
++
++				versym = elf_versym_by_idx(versym_data, idx);
++				if (!versym) {
++					pr_warn("elf: failed to lookup versym for '%s' in '%s'\n",
++						sname, binary_path);
++					continue;
++				}
++
++				verdaux = elf_get_verdaux_by_versym(verdef_data, versym);
++				if (!verdaux) {
++					pr_warn("elf: failed to lookup verdaux for '%s' in '%s'\n",
++						sname, binary_path);
++					continue;
++				}
++
++				res = snprintf(full_name, sizeof(full_name),
++					       (*versym & ELF_VERSYM_HIDDEN) ? "%s@%s" :
++								    "%s@@%s",
++					       sname,
++					       elf_strptr(elf, verdef_stridx,
++							  verdaux->vda_name));
++
++				if (res < 0 || res >= sizeof(full_name)) {
++					pr_warn("elf: failed to build full name for '%s' in '%s'\n",
++						sname, binary_path);
++					continue;
++				}
++
++				if (strcmp(full_name, name) != 0)
++					continue;
++			} else {
++				/* If name is not qualified, we want to match the symbol name */
++				if (strcmp(sname, name) != 0)
++					continue;
++			}
++
++			curr_bind = GELF_ST_BIND(sym.st_info);
+ 
+ 			if (ret >= 0) {
+ 				/* handle multiple matches */
+-- 
+2.34.1
+
