@@ -2,182 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8057A6E462A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3551F6E4672
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 13:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjDQLQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 07:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
+        id S230454AbjDQL3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 07:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjDQLQW (ORCPT
+        with ESMTP id S230171AbjDQL3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 07:16:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD8A171A
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:15:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37F9461A98
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:13:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA362C433EF;
-        Mon, 17 Apr 2023 11:13:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681730026;
-        bh=hL3HemzQu0W+VoN6r7QGvyo5bFw22rSL5CO9yDPgTQI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=FEU5PakWUXFe+jipb6I7mWm+415nA23wFN31d2OVyokyCIewMuA76TMpnHs4xEvEJ
-         pxOR9E2OIZAK0cTcHOZ/QzhEOkrXBvjRHS6o6tBRuIiE1xdK1NFZR7kRvA9n+LPkzP
-         ATumsY5Cadgh8XKFRLRpivlMvhO2kO7ElciBOO1C8UX3l/GcJc94MSh/WovAq/WKY3
-         8bxH17OfJ/Y2ZqNu22CnYv1dss9wolyfR0OQvWoNuJe3ETijKY3yQgwfnM3+39guaW
-         qfRCd7dw5sp0tKPwIdzELsvkN5WDKZb6jlWr/AarvA5pmcBMrTVyf2rLOkxco252NG
-         StPR0dvOujjLw==
-Message-ID: <308cc38532a8cc3f3ce45d26ee71570df26b3288.camel@kernel.org>
-Subject: Re: [PATCH] drm: make drm_dp_add_payload_part2 gracefully handle
- NULL state pointer
-From:   Jeff Layton <jlayton@kernel.org>
-To:     "Lin, Wayne" <Wayne.Lin@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Alex Deucher <alexdeucher@gmail.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Date:   Mon, 17 Apr 2023 07:13:44 -0400
-In-Reply-To: <CO6PR12MB548998DE5E97B8EA9EB92AA6FC9C9@CO6PR12MB5489.namprd12.prod.outlook.com>
-References: <20230413111254.22458-1-jlayton@kernel.org>
-         <87edooarpq.fsf@intel.com>
-         <CADnq5_PVnYMSiKO77+cfg_V-tDKYkVJYN3qGNb1vhQO3QtXskA@mail.gmail.com>
-         <CO6PR12MB5489044012B2A96639470F38FC999@CO6PR12MB5489.namprd12.prod.outlook.com>
-         <4d8479f20ef30866fcf73f3602f1237376110764.camel@kernel.org>
-         <878reug394.fsf@intel.com>
-         <7a1b00f02b125bd65824b18ea09509efe3cf777d.camel@redhat.com>
-         <874jpegao0.fsf@intel.com>
-         <b99732f7c0dd968c0702ae7629695e8fb9cb573f.camel@kernel.org>
-         <87leiqer8g.fsf@intel.com>
-         <CO6PR12MB548998DE5E97B8EA9EB92AA6FC9C9@CO6PR12MB5489.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Mon, 17 Apr 2023 07:29:30 -0400
+Received: from outbound-smtp51.blacknight.com (outbound-smtp51.blacknight.com [46.22.136.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1E4272A
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 04:28:36 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp51.blacknight.com (Postfix) with ESMTPS id 2B1A6FA943
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:13:54 +0100 (IST)
+Received: (qmail 19061 invoked from network); 17 Apr 2023 11:13:54 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 17 Apr 2023 11:13:54 -0000
+Date:   Mon, 17 Apr 2023 12:13:52 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Wen Yang <wenyang.linux@foxmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        William Lam <william.lam@bytedance.com>,
+        Fu Wei <wefu@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: compaction: optimize compact_memory to comply with
+ the admin-guide
+Message-ID: <20230417111352.v26slrcmz4qo3tnn@techsingularity.net>
+References: <tencent_FD958236269FD3A7996FFCF29E9BAA4EA809@qq.com>
+ <20230411134801.a4aadef5aba0f51e0d44bb7a@linux-foundation.org>
+ <tencent_C3E900CCD37EF2CF49553BD4AC4120932B08@qq.com>
+ <tencent_100BD2639951FD669FA1AA40A89983202709@qq.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <tencent_100BD2639951FD669FA1AA40A89983202709@qq.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-04-17 at 10:58 +0000, Lin, Wayne wrote:
-> [AMD Official Use Only - General]
->=20
->=20
->=20
-> > -----Original Message-----
-> > From: Jani Nikula <jani.nikula@linux.intel.com>
-> > Sent: Monday, April 17, 2023 6:30 PM
-> > To: Jeff Layton <jlayton@kernel.org>; Lyude Paul <lyude@redhat.com>; Li=
-n,
-> > Wayne <Wayne.Lin@amd.com>; Alex Deucher <alexdeucher@gmail.com>
-> > Cc: David Airlie <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>;
-> > Deucher, Alexander <Alexander.Deucher@amd.com>; linux-
-> > kernel@vger.kernel.org; dri-devel@lists.freedesktop.org
-> > Subject: Re: [PATCH] drm: make drm_dp_add_payload_part2 gracefully
-> > handle NULL state pointer
-> >=20
-> > On Mon, 17 Apr 2023, Jeff Layton <jlayton@kernel.org> wrote:
-> > > On Mon, 2023-04-17 at 11:44 +0300, Jani Nikula wrote:
-> > > > On Fri, 14 Apr 2023, Lyude Paul <lyude@redhat.com> wrote:
-> > > > > On Fri, 2023-04-14 at 13:35 +0300, Jani Nikula wrote:
-> > > > > > On Fri, 14 Apr 2023, Jeff Layton <jlayton@kernel.org> wrote:
-> > > > > > > On Fri, 2023-04-14 at 04:40 +0000, Lin, Wayne wrote:
-> > > > > > > > [Public]
-> > > > > > > >=20
-> > > > > > > > Hi Jeff,
-> > > > > > > >=20
-> > > > > > > > Thanks. I might need more information to understand why we
-> > > > > > > > can't retrieve the drm atomic state. Also , "Failed to crea=
-te
-> > > > > > > > MST payload for port" indicates error while configuring DPC=
-D
-> > > > > > > > payload ID table. Could you help to provide log with KMS +
-> > ATOMIC + DP debug on please? Thanks in advance!
-> > > > > > > >=20
-> > > > > > > > Regards,
-> > > > > > > > Wayne
-> > > > > > > >=20
-> > > > > > >=20
-> > > > > > > Possibly. I'm not that familiar with display driver debugging=
-.
-> > > > > > > Can you send me some directions on how to crank up that sort =
-of
-> > debug logging?
-> > > > > > >=20
-> > > > > > > Note that this problem is _very_ intermittent too: I went abo=
-ut
-> > > > > > > 2 weeks between crashes, and then I got 3 in one day. I'd
-> > > > > > > rather not run with a lot of debug logging for a long time if
-> > > > > > > that's what this is going to require, as this is my main work=
-station.
-> > > > > > >=20
-> > > > > > > The last time I got this log message, my proposed patch did
-> > > > > > > prevent the box from oopsing, so I'd really like to see it go
-> > > > > > > in unless it's just categorically wrong for the caller to pas=
-s
-> > > > > > > down a NULL state pointer to drm_dp_add_payload_part2.
-> > > > > >=20
-> > > > > > Cc: Lyude.
-> > > > > >=20
-> > > > > > Looks like the state parameter was added in commit 4d07b0bc4034
-> > > > > > ("drm/display/dp_mst: Move all payload info into the atomic
-> > > > > > state") and its only use is to get at state->dev for debug logg=
-ing.
-> > > > > >=20
-> > > > > > What's the plan for the parameter? Surely something more than
-> > > > > > that! :)
-> > > > >=20
-> > > > > I don't think there was any plan for that, or at least I certainl=
-y
-> > > > > don't even remember adding that D:. It must totally have been by
-> > > > > mistake and snuck by review, if that's the only thing that we're
-> > > > > using it for I'd say it's definitely fine to just drop it entirel=
-y
-> > > >=20
-> > > > I guess we could use two patches then, first replace state->dev wit=
-h
-> > > > mgr->dev as something that can be backported as needed, and second
-> > > > mgr->drop
-> > > > the state parameter altogether.
-> > > >=20
-> > > > Jeff, up for it? At least the first one?
-> > > >=20
-> > > >=20
-> > > > BR,
-> > > > Jani.
-> > > >=20
-> > >=20
-> > > Sure. I'm happy to test patches if you send them along.
-> >=20
-> > I was hoping to lure you into sending patches. ;)
-> >=20
-> > Anyway, I'm not working on this.
-> >=20
-> >=20
-> Hi Jeff,
->=20
-> I probably know the root cause.=20
-> But it doesn't need to use the state in the end, I will just rely on the =
-patch=20
-> that Jani suggested to fix it. I can help to provide the patch later : )
->=20
->=20
+On Sun, Apr 16, 2023 at 01:42:44AM +0800, Wen Yang wrote:
+> 
+> ??? 2023/4/13 00:54, Wen Yang ??????:
+> > 
+> > ??? 2023/4/12 04:48, Andrew Morton ??????:
+> > > On Wed, 12 Apr 2023 02:24:26 +0800 wenyang.linux@foxmail.com wrote:
+> > > 
+> > > > For the /proc/sys/vm/compact_memory file, the admin-guide states:
+> > > > When 1 is written to the file, all zones are compacted such that free
+> > > > memory is available in contiguous blocks where possible. This can be
+> > > > important for example in the allocation of huge pages although
+> > > > processes
+> > > > will also directly compact memory as required
+> > > > 
+> > > > But it was not strictly followed, writing any value would cause all
+> > > > zones to be compacted. In some critical scenarios, some applications
+> > > > operating it, such as echo 0, have caused serious problems.
+> > > Really?  You mean someone actually did this and didn't observe the
+> > > effect during their testing?
+> > 
+> > Thanks for your reply.
+> > 
+> > Since /proc/sys/vm/compact_memory has been well documented for over a
+> > decade:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/admin-guide/sysctl/vm.rst#n109
+> > 
+> > 
+> > it is believed that only writing 1 will trigger trigger all zones to be
+> > compacted.
+> > 
+> > Especially for those who write applications, they may only focus on
+> > documentation and generally do not read kernel code.  Moreover, such
+> > problems are not easily detected through testing on low pressure
+> > machines.
+> > 
+> > Writing any meaningful or meaningless values will trigger it and affect
+> > the entire server:
+> > 
+> > # echo 1 > /proc/sys/vm/compact_memory
+> > # echo 0 > /proc/sys/vm/compact_memory
+> > # echo dead > /proc/sys/vm/compact_memory
+> > # echo "hello world" > /proc/sys/vm/compact_memory
+> > 
+> > The implementation of this high-risk operation may require following the
+> > admin-guides.
+> > 
+> > -- 
+> > 
+> > Best wishes,
+> > 
+> > Wen
+> > 
+> > 
+> Hello, do you think it's better to optimize the sysctl_compaction_handler
+> code or update the admin-guide document?
+> 
 
-Sounds good. If you want to send me a patch to solve the root cause,
-I'll put it in the kernel with the other one I'm testing.
+Enforce the 1 on the unlikely chance that the sysctl handler is ever
+extended to do something different and expects a bitmask. The original
+intent intent of the sysctl was debugging -- demonstrating a contiguous
+allocation failure when aggressive compaction should have succeeded. Later
+some machines dedicated to batch jobs used the compaction sysctl to compact
+memory before a new job started to reduce startup latencies.
 
-Thanks,
---=20
-Jeff Layton <jlayton@kernel.org>
+Drop the justification "In some critical scenarios, some applications
+operating it, such as echo 0, have caused serious problems." from the
+changelog. I cannot imagine a sane "critical scenario" where an application
+running as root is writing expected garbage to proc or sysfs files and
+then surprised when something unexpected happens.
+
+-- 
+Mel Gorman
+SUSE Labs
