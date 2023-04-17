@@ -2,114 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2666E4D9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 663DA6E4D8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 17:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbjDQPtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 11:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
+        id S231362AbjDQPrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 11:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbjDQPsp (ORCPT
+        with ESMTP id S229485AbjDQPrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 11:48:45 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C753CC09;
-        Mon, 17 Apr 2023 08:48:19 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id o2so26125750plg.4;
-        Mon, 17 Apr 2023 08:48:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681746498; x=1684338498;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hzwNPovO934/64aRBZe++yk+dNmk1JTc3kyHlCW2thM=;
-        b=EtvJ8wzzGeIKNvCSRVQyBRs0///s9z59xSvbgIBRPTP1pfha9sUxogoFUVO0c0db+g
-         M0COUsSWzkRLMZ+BDmNpjNjihYBldeUy7CY+ea/XG6e5FC5qNvtB+ZpwGFQXDIXu8NmX
-         64xY4XB80LHkLvy+SfsRjM+m/8d1gweexpJpB3NblaNolg9oxMkQfNwiF+8FvZ8JM2zW
-         HDzq/NK8MLfgTR9LMciv9ceCAK9TtdmoA4kd/QYe1ZddwdaGqEjucKQNjx8tgVFk6+DH
-         mHGoEyEqZrq9qahzLy0G/E8FMAHx6sLdPtSlzL4L4nx8V2W6JapPUI1wGfB4yMUNmmHB
-         XrYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681746498; x=1684338498;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hzwNPovO934/64aRBZe++yk+dNmk1JTc3kyHlCW2thM=;
-        b=fzEs6b4m7P0M3A8Qfym+mkaSXOol0fiXFsSzY8rWOdvI7T6C7HJnWy6QDAf1gaxnNx
-         /GpRfbTS7QIX2STu8Szb1YBn5NXzwZSavVLxNHimwbVnwi+S1/0zQw8UwByXoQFgsfoj
-         f5Xo3c78+3H0HufoEmUIt6To9HGk4JGT2C5/KItcxkmTbr/kk7BwLfEcpK2aUfbW85uA
-         Ph7HaNRmodLNlPHXJHse4UE+Hkhc3APC/tbIBrUsQaGfLCw9V8HHGlCJA5KEBTIw93Ag
-         oaa3Dk1+VUWQULC8PCRN5qcmzvU8xJULtHAXQxAheEqaJxRGHM/D36nSHySzVskwZfpz
-         pc+A==
-X-Gm-Message-State: AAQBX9fuEF4wEvFvB/ovbpfLu08RuOPTtD97KuCZ1hoBDwqZp+8ZGIlO
-        acWMsaaI6tjTqyknuqeBA10=
-X-Google-Smtp-Source: AKy350Ztle8natRSMegaDwypqIor50+pRLxLEDw9RI/thoOaMOAwGj0hmhhdVjUJTgHAFxDO1bxoCQ==
-X-Received: by 2002:a17:902:eac2:b0:1a1:b440:3773 with SMTP id p2-20020a170902eac200b001a1b4403773mr12088320pld.27.1681746497891;
-        Mon, 17 Apr 2023 08:48:17 -0700 (PDT)
-Received: from vultr.guest ([2401:c080:3800:263c:5400:4ff:fe66:d27f])
-        by smtp.gmail.com with ESMTPSA id jj17-20020a170903049100b001a6b308fcaesm4437513plb.153.2023.04.17.08.48.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 08:48:17 -0700 (PDT)
-From:   Yafang Shao <laoar.shao@gmail.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org
-Cc:     bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next 6/6] bpf: Remove some denied functions from the btf id deny list
-Date:   Mon, 17 Apr 2023 15:47:37 +0000
-Message-Id: <20230417154737.12740-7-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230417154737.12740-1-laoar.shao@gmail.com>
-References: <20230417154737.12740-1-laoar.shao@gmail.com>
+        Mon, 17 Apr 2023 11:47:48 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F415AB0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 08:47:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AD26A1F6E6;
+        Mon, 17 Apr 2023 15:47:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681746465; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gWaGp6h7eG3pYrSv/bO1HCdBjKN4Xw+BSEvICpcpi/4=;
+        b=mvLhMZoWbebI8r+gQzEh+wSPI224Hxq7CWXkL7UiY/2/4m1jRLfToM2I+gR0NPHlCJ6yM6
+        mc0h/mdJGLUX+3JelZWTphsq01tQ28KugME+WPN2Va8dbm5iBj7UK/avtPPkjAcpV9G4rm
+        RHizf00Skiwqjr+CdRzc34OYMtMiofc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681746465;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gWaGp6h7eG3pYrSv/bO1HCdBjKN4Xw+BSEvICpcpi/4=;
+        b=PSseswosx2QxDS48lOus2B6NdL8l+v1ajQBpJCOwg2w54gDmKeakceEmmP4FF2EMFq5jYF
+        T9MdNipSW4OndPCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 84E0D13319;
+        Mon, 17 Apr 2023 15:47:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uxDYHyFqPWSrPwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 17 Apr 2023 15:47:45 +0000
+Message-ID: <24a0219d-b0a1-8b81-ff98-2fff107650c3@suse.cz>
+Date:   Mon, 17 Apr 2023 17:47:45 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] mm: Fixed incorrect comment for _kmem_cache_create
+ function
+Content-Language: en-US
+To:     zhaoxinchao <ChrisXinchao@outlook.com>, bagasdotme@gmail.com
+Cc:     akpm@linux-foundation.org, cl@linux.com, iamjoonsoo.kim@lge.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        penberg@kernel.org, rientjes@google.com
+References: <ZDQXl2wMk271w3xy@debian.me>
+ <DM6PR22MB183653311FF3549B7D473020C59A9@DM6PR22MB1836.namprd22.prod.outlook.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <DM6PR22MB183653311FF3549B7D473020C59A9@DM6PR22MB1836.namprd22.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the generic tracing recursion prevention mechanism applied, it is
-safe to trace migrate_{disable,enable} and preempt_count_{sub,add}. So
-we can remove them from the deny list.
-However we can't remove rcu_read_unlock_strict and
-__rcu_read_{lock,unlock}, because they are used in rcu_read_unlock() or
-rcu_read_lock().
+On 4/11/23 11:13, zhaoxinchao wrote:
+> From: zhaoxinchao <chrisxinchao@outlook.com>
+> 
+> Actually __kmem_cache_create() returns a status :
+> 0 is success
+> nonezero are failed.
+> 
+> This function has three return positions. In addition to successfully
+> return 0, the first failed position will return - E2BIG, and the second
+> position will return nonzero value for setup_cpu_cache function failure.
+> 
+> Signed-off-by: zhaoxinchao <chrisxinchao@outlook.com>
+> ---
+>  mm/slab.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/slab.c b/mm/slab.c
+> index edbe722fb..399daa4d0 100644
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -1893,7 +1893,12 @@ static bool set_on_slab_cache(struct kmem_cache *cachep,
+>   * @cachep: cache management descriptor
+>   * @flags: SLAB flags
+>   *
+> - * Returns a ptr to the cache on success, NULL on failure.
+> + * Returns zero on success, nonzero on failure.
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
----
- kernel/bpf/verifier.c | 8 --------
- 1 file changed, 8 deletions(-)
+OK.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 83fb94f..40f6b2c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -18634,17 +18634,9 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 
- BTF_SET_START(btf_id_deny)
- BTF_ID_UNUSED
--#ifdef CONFIG_SMP
--BTF_ID(func, migrate_disable)
--BTF_ID(func, migrate_enable)
--#endif
- #if !defined CONFIG_PREEMPT_RCU && !defined CONFIG_TINY_RCU
- BTF_ID(func, rcu_read_unlock_strict)
- #endif
--#if defined(CONFIG_DEBUG_PREEMPT) || defined(CONFIG_TRACE_PREEMPT_TOGGLE)
--BTF_ID(func, preempt_count_add)
--BTF_ID(func, preempt_count_sub)
--#endif
- #ifdef CONFIG_PREEMPT_RCU
- BTF_ID(func, __rcu_read_lock)
- BTF_ID(func, __rcu_read_unlock)
--- 
-1.8.3.1
+> + * This function has three return positions.
+> + * In addition to successfully return 0, the
+> + * first failed position will return - E2BIG,
+> + * and the second position will return nonzero
+> + * value for setup_cpu_cache function failure.
 
+I don't think we need to be so specific here, so we can drop this block.
+
+>   * Cannot be called within an int, but can be interrupted.
+>   * The @ctor is run when new pages are allocated by the cache.
+>   *
+
+You missed that there's also:
+
+ * Return: a pointer to the created cache or %NULL in case of error
+ */
+int __kmem_cache_create(struct kmem_cache *cachep, slab_flags_t flags)
+
+I guess we can drop the first mention of returns and fix up this one.
+Also I'd make this a non-kerneldoc comment (/* instead of /**) as
+it's for a SLAB-specific internal implementation only. Only
+kmem_cache_create() is meant as an API.
