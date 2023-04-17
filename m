@@ -2,96 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8600B6E4142
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6919A6E4152
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjDQHhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 03:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
+        id S230175AbjDQHjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 03:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbjDQHhW (ORCPT
+        with ESMTP id S231214AbjDQHiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 03:37:22 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F195273;
-        Mon, 17 Apr 2023 00:36:52 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33H7al2K051967;
-        Mon, 17 Apr 2023 02:36:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681717007;
-        bh=l7ffDMMwPqAVTwsIwTWk9VVAZG/DLY6FJ3yFqfZ/gxI=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=m8IGM+xizhmBm9zXbcjpvZOwGSnGvrhzjjP5NOxgF13kgGyWkab3fcvWUcmyqP55T
-         IyJxMpzXfL+RZAX8PverSKIbhvJ2Ae7q2U2shve+zhRORTU+gKu4c+ESCi5r5JobeK
-         OE+uu1etHQX82dMgbgr972mk6VzbKS5H4o3Zc3gs=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33H7aleJ065929
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 17 Apr 2023 02:36:47 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 17
- Apr 2023 02:36:46 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 17 Apr 2023 02:36:46 -0500
-Received: from [172.24.145.7] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33H7ahoc086172;
-        Mon, 17 Apr 2023 02:36:44 -0500
-Message-ID: <bb8378f0-31cf-0880-9849-37d747f761d1@ti.com>
-Date:   Mon, 17 Apr 2023 13:06:43 +0530
+        Mon, 17 Apr 2023 03:38:54 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D951B525C;
+        Mon, 17 Apr 2023 00:38:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 53B2C21A3D;
+        Mon, 17 Apr 2023 07:37:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681717063; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3w8ZyhKSUCHQYqIG32tqYuuJnDNxaXTVQggusp/+GOc=;
+        b=FSNHYP0e1N/1O21SR61SdobJRwQUe/xR/QsGmyhBrzM3xQ9/FqLwkxXkORxQN3bPPepVvC
+        J1AJE4vC95OYz9443C58v7MQnRLUKXQ9f+JVSbGagwIxrFIZl66nsCBIWd0BpRiHdw+A/Z
+        BggQEkAKglbqgPoTFhbrqFUgWHIAdzs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681717063;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3w8ZyhKSUCHQYqIG32tqYuuJnDNxaXTVQggusp/+GOc=;
+        b=InpvAvPhIJbDcKWUuYK6TRVNdy9BaqeoAVEyr3zLiU0ZyYIRJ1A/+0gB/YuJNZValGrWhk
+        +iHsclhRxLILHaAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B5DC61390E;
+        Mon, 17 Apr 2023 07:37:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 5jMCK0b3PGQjJQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 17 Apr 2023 07:37:42 +0000
+Message-ID: <e75d5d1d-8c0c-15a5-0030-27c3ed458519@suse.cz>
+Date:   Mon, 17 Apr 2023 09:37:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 3/5] arm64: dts: ti: k3-j784s4: Add WIZ and SERDES PHY
- nodes
+ Thunderbird/102.9.0
+Subject: Re: [PATCHv9 00/14] mm, x86/cc: Implement support for unaccepted
+ memory
 Content-Language: en-US
-To:     Vignesh Raghavendra <vigneshr@ti.com>, <nm@ti.com>, <afd@ti.com>
-CC:     <s-vadapalli@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230414151553.339599-1-j-choudhary@ti.com>
- <20230414151553.339599-4-j-choudhary@ti.com>
- <db7daf64-6f1e-0053-1042-306f2058d1fb@ti.com>
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-In-Reply-To: <db7daf64-6f1e-0053-1042-306f2058d1fb@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
+ <2e0da486-71e4-cfeb-1578-68f1c8c43d33@suse.cz>
+ <20230416191940.ex7ao43pmrjhru2p@box.shutemov.name>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230416191940.ex7ao43pmrjhru2p@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 17/04/23 10:10, Vignesh Raghavendra wrote:
+On 4/16/23 21:19, Kirill A. Shutemov wrote:
+> On Mon, Apr 03, 2023 at 04:42:54PM +0200, Vlastimil Babka wrote:
+>> Hmm yeah it can be noisy. Did you try to only count events that have
+>> fragmenting=1 and/or MIGRATE_MOVABLE as fallback_migratetype? As those are
+>> the really bad events.
 > 
+> I finally got around to retest it.
 > 
-> On 14/04/23 20:45, Jayesh Choudhary wrote:
->> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
->> index aef6f53ae8ac..b1445b7c2aa8 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
->> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
->> @@ -301,3 +301,7 @@ &main_cpsw1_port1 {
->>   	phy-mode = "rgmii-rxid";
->>   	phy-handle = <&main_phy0>;
->>   };
->> +
->> +&serdes_refclk {
->> +	clock-frequency = <100000000>;
->> +};
+> 		total	fragmenting	movable	fragmenting&&movable
+> base-1:		957	583		353	0
+> base-2:		2715	2343		359	0
+> base-3:		2033	1669		353	0
+> patched-1:	1325	929		371	0
+> patched-2:	2844	2451		371	0
+> patched-3:	1304	917		361	0
 > 
-> Can we move this to 5/5 along with rest of -evm.dts changes?
+> fragmenting=1 is defined as fallback_order<pageblock_order which is most
+> of them.
+> 
+> Patched kernel showed slightly elevated movable(fallback_migratetype=1)
+> cases. Is it critical?
 
-Sure. Will move it to last patch in next revision.
+Maybe it's still not statistically significant anyway, also not as cricical
+as fragmenting&movable.
 
-Thanks.
+> There's no allocations that is fragmenting and movable. Hm.
+
+It probably means your test wasn't stressfull enough to inflict a mix of
+rapid movable an unmovable allocations when memory is nearly full. But at
+that point the memory is all accepted, so we don't need such scenario. The
+important thing is that this kind of events didn't start happening during
+the gradual memory accepting phase.
+
