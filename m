@@ -2,123 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457486E41E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0A86E41F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjDQICQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
+        id S230288AbjDQIDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 04:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjDQIBt (ORCPT
+        with ESMTP id S230241AbjDQIDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:01:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DAC46AB;
-        Mon, 17 Apr 2023 01:01:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8194761408;
-        Mon, 17 Apr 2023 08:01:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDF9EC433EF;
-        Mon, 17 Apr 2023 08:01:30 +0000 (UTC)
-Message-ID: <0341924c-7f0a-28aa-eeae-f7de69ab36d8@xs4all.nl>
-Date:   Mon, 17 Apr 2023 10:01:29 +0200
+        Mon, 17 Apr 2023 04:03:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10821BF
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681718585;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k+xDztrP5K0atvexPe7AsFD1VGHJO8wE5vvIvghj6Aw=;
+        b=Ezh6BP2m2PciQmIp36YmcZ3B1M2NYFTy+UHKk/QJ/SP4fgGJrAVIN5j3KR7xpOLWr82zn+
+        5cYSLO260uWlv8oYotCke8Rqo/8n6pr16Bk7LZi6nVTaR1SSKp68rdpHLC6km/uzzIZz4R
+        V85Hq9/YIcsh/Uvs+sPdNvaMTSZrMV8=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-168-vIz1huk9NSCOdDykrZYPeA-1; Mon, 17 Apr 2023 04:03:03 -0400
+X-MC-Unique: vIz1huk9NSCOdDykrZYPeA-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-2efbab2cbe8so319769f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:03:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681718582; x=1684310582;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k+xDztrP5K0atvexPe7AsFD1VGHJO8wE5vvIvghj6Aw=;
+        b=dF4X2d8bDwVskfil6CfcjFfa10bdhtXzO+01JlXE4wgruS0R9i1lyra8j9qCsgA3Ju
+         eRwkNFu9Ul0FjsYTi9Z3p//ixcl90XTRed7DMTssXg4JYppSj+VyL+qgqHrRlBmOsa4X
+         FDFDcGZvbp9ldX0PB16/FpeDe4lNYuWF5D7F8qa92H0B0LztWfoK6a1FrPI/rLW4hzsF
+         ly5NC1Ma8lyCTuJm4f5U/hZMWbSjy83IANGgJZAXqCFFNkB6zdkQwxpdTUtSb+IRZLsI
+         p8UPwisrUYNNljPyi0xOck2358j0zWSn3Z3jRe6sNM5NLPi1/dLjxicLD1atVZxZyQYM
+         /ubQ==
+X-Gm-Message-State: AAQBX9ffevKcaT6+BQ/Ziipr63LS3I+DqFD1vqXXhLEUKKmb11WySwkk
+        dri2LB7pffcwSEmkeyunDXS/vkIR1SSekkVOwJa4AloTpxdOro3oXehJYMpzf3NoofF0XMMU8oI
+        ISWb6tSPy4RsZmm14L7gdJH6P
+X-Received: by 2002:adf:fa4a:0:b0:2ce:fd37:938c with SMTP id y10-20020adffa4a000000b002cefd37938cmr4246118wrr.50.1681718582463;
+        Mon, 17 Apr 2023 01:03:02 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YE4uFxV+bAUN+xrFK6nXNSGjCTnPBk85Csxmz3uAjeiolmxCGm7Fm9/ZEZFEUhZZ8oXqyKvQ==
+X-Received: by 2002:adf:fa4a:0:b0:2ce:fd37:938c with SMTP id y10-20020adffa4a000000b002cefd37938cmr4246100wrr.50.1681718582077;
+        Mon, 17 Apr 2023 01:03:02 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c700:fc00:db07:68a9:6af5:ecdf? (p200300cbc700fc00db0768a96af5ecdf.dip0.t-ipconnect.de. [2003:cb:c700:fc00:db07:68a9:6af5:ecdf])
+        by smtp.gmail.com with ESMTPSA id c8-20020a5d63c8000000b002f4c2ea66absm9877045wrw.85.2023.04.17.01.03.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 01:03:01 -0700 (PDT)
+Message-ID: <d4c13cbe-cb47-9b6f-8a61-c9689f020114@redhat.com>
+Date:   Mon, 17 Apr 2023 10:03:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] media: mediatek: vcodec: Move a variable assignment
- behind condition checks in vdec_vp9_slice_single_decode()
+ Thunderbird/102.9.1
+To:     yang.yang29@zte.com.cn, akpm@linux-foundation.org
+Cc:     imbrenda@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com,
+        xu.xin16@zte.com.cn, Stefan Roesch <shr@devkernel.io>
+References: <202304131346489021903@zte.com.cn>
 Content-Language: en-US
-To:     Markus Elfring <Markus.Elfring@web.de>,
-        kernel-janitors@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mingjia Zhang <mingjia.zhang@mediatek.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>
-References: <40c60719-4bfe-b1a4-ead7-724b84637f55@web.de>
- <1a11455f-ab57-dce0-1677-6beb8492a257@web.de>
- <b98dcc94-13f3-a6cb-f5bd-f1f8644d87d1@web.de>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <b98dcc94-13f3-a6cb-f5bd-f1f8644d87d1@web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v7 0/6] ksm: support tracking KSM-placed zero-pages
+In-Reply-To: <202304131346489021903@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2023 20:30, Markus Elfring wrote:
-> Date: Fri, 14 Apr 2023 20:07:01 +0200
+On 13.04.23 07:46, yang.yang29@zte.com.cn wrote:
+> From: xu xin <xu.xin16@zte.com.cn>
 > 
-> The address of a data structure member was determined before
-> a corresponding null pointer check in the implementation of
-> the function “vdec_vp9_slice_single_decode”.
+> The core idea of this patch set is to enable users to perceive the number
+> of any pages merged by KSM, regardless of whether use_zero_page switch has
+> been turned on, so that users can know how much free memory increase is
+> really due to their madvise(MERGEABLE) actions. But the problem is, when
+> enabling use_zero_pages, all empty pages will be merged with kernel zero
+> pages instead of with each other as use_zero_pages is disabled, and then
+> these zero-pages are no longer monitored by KSM.
 > 
-> Thus avoid the risk for undefined behaviour by moving the assignment
-> for the variable “pfc” behind some condition checks.
+> The motivations to do this is seen at:
+> https://lore.kernel.org/lkml/202302100915227721315@zte.com.cn/
 > 
-> This issue was detected by using the Coccinelle software.
+> In one word, we hope to implement the support for KSM-placed zero pages
+> tracking without affecting the feature of use_zero_pages, so that app
+> developer can also benefit from knowing the actual KSM profit by getting
+> KSM-placed zero pages to optimize applications eventually when
+> /sys/kernel/mm/ksm/use_zero_pages is enabled.
 > 
-> Fixes: b0f407c19648ae9110c932c91d6e1b9381ec0aeb ("media: mediatek: vcodec: add vp9 decoder driver for mt8186")
 
-Not a fix, it was never broken.
+Thanks for the update!
 
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> ---
->  .../media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c  | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> the patch uses pte_mkdirty (related with architecture) to mark KSM-placed
+> zero pages. Some architecture(like sparc64) treat R/O dirty PTEs as
+> writable, which will break KSM pages state (wrprotect) and affect
+
+With [1] that should be resolved and we should be able to enable it 
+unconditionally.
+
+Further, ideally this should get based on [2], such that we can include 
+the zeropages in the ksm and per-mm profit calculation.
+
+Last but not least, I realized that we also have to handle the case when 
+khugepaged replaces a shared zeropage by a THP. I think that should be 
+easy by adjusting the counters in the the is_zero_pfn() handling in 
+mm/khugepaged.c:__collapse_huge_page_copy().
+
+> the KSM functionality. For safety, we restrict this feature only to the
+> tested and known-working architechtures (ARM, ARM64, and X86) fow now.
 > 
-> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> index cf16cf2807f0..22b27f7b57bf 100644
-> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> @@ -1990,7 +1990,7 @@ static int vdec_vp9_slice_single_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
->  					struct vdec_fb *fb, bool *res_chg)
->  {
->  	struct vdec_vp9_slice_instance *instance = h_vdec;
-
-Just drop these lines instead:
-
-        if (!instance || !instance->ctx)
-                return -EINVAL;
-
-That can never happen.
-
-Regards,
-
-	Hans
-
-> -	struct vdec_vp9_slice_pfc *pfc = &instance->sc_pfc;
-> +	struct vdec_vp9_slice_pfc *pfc;
->  	struct vdec_vp9_slice_vsi *vsi;
->  	struct mtk_vcodec_ctx *ctx;
->  	int ret;
-> @@ -2007,6 +2007,7 @@ static int vdec_vp9_slice_single_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
->  	if (!fb)
->  		return -EBUSY;
+> Change log
+> ----------
+> v6->v7:
+> This is an all-newed version which is different from v6 which relys on KSM's
+> rmap_item. The patch series don't rely on rmap_item but pte_dirty, so the
+> general handling of tracking KSM-placed zero-pages is simplified a lot.
 > 
-> +	pfc = &instance->sc_pfc;
->  	vsi = &pfc->vsi;
-> 
->  	ret = vdec_vp9_slice_setup_single(instance, bs, fb, pfc);
-> --
-> 2.40.0
-> 
+> For safety, we restrict this feature only to the tested and known-working
+> architechtures (ARM, ARM64, and X86) fow now.
+
+Yeah, with [1] this can be further simplified.
+
+
+I'll be on vacation starting on Thursday for ~1.5 weeks, not sure if I 
+get to review before that. But it's unlikely that we'll make the 
+upcoming merge windows, so I guess we still have time (especially, for 
+[1] and [2] to land)
+
+
+[1] https://lkml.kernel.org/r/20230411142512.438404-4-david@redhat.com
+[2] https://lkml.kernel.org/r/20230413233115.1878303-1-shr@devkernel.io
+
+-- 
+Thanks,
+
+David / dhildenb
 
