@@ -2,84 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052D56E3EA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 06:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62AA86E3E7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 06:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjDQEu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 00:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
+        id S229682AbjDQEfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 00:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjDQEuy (ORCPT
+        with ESMTP id S229461AbjDQEfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 00:50:54 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A166930CF;
-        Sun, 16 Apr 2023 21:50:52 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33H4mVql012485;
-        Mon, 17 Apr 2023 04:50:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=4RmQFL5U0JeOtmh5MfyrMmpzlM43CpOrwVrcnDdeCF4=;
- b=KDKy42Se3jWOQwbvqcnxU9k1EYDvpqB8yt1M2QktLNYyqTHYhvW2LB1vIuGipFWghhD1
- W0qCdZeG4aGTIBlgweXjCuVG88fElDFV5cxI0yuLRycAqHAF55gGtlM5TT1ZRiFVgOQF
- iWjDPdkD6xhhcRvmkueqsKA+JB8KH6Yc3ulJO8FO02lk0yqWxhtpaojMawIX3eUa+coT
- 2EZR3gQwA2Gzx7MzMTJNR7DLYPP+klvY7gSFZqSY6OEAp0D1S2bzYPhmIeLHstuDoaz2
- oS+sPKf7Hhkj4liJDyAY4LTbXeIuhK0sY5ZEUyVRmJLAObBVTDwidWGDuLNmzsqd8F53 mQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pymnf2k9p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 04:50:32 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33H4oVXL025564
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 04:50:31 GMT
-Received: from [10.216.30.175] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 16 Apr
- 2023 21:50:25 -0700
-Message-ID: <abbc41e4-08dc-04e9-4c05-0bd1994405b7@quicinc.com>
-Date:   Mon, 17 Apr 2023 10:20:21 +0530
+        Mon, 17 Apr 2023 00:35:14 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CB21BF0;
+        Sun, 16 Apr 2023 21:35:12 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Q0DdP6HvMzSrTf;
+        Mon, 17 Apr 2023 12:31:05 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 17 Apr 2023 12:35:04 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     Miaohe Lin <linmiaohe@huawei.com>, <linux-kernel@vger.kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH v2] mm: hwpoison: coredump: support recovery from dump_user_range()
+Date:   Mon, 17 Apr 2023 12:53:23 +0800
+Message-ID: <20230417045323.11054-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH V3 0/9] Add minimal boot support for IPQ5018
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <ulf.hansson@linaro.org>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <p.zabel@pengutronix.de>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <1681468167-11689-1-git-send-email-quic_srichara@quicinc.com>
- <de891705-bce9-7610-340d-b4bc284dfaca@linaro.org>
-From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
-In-Reply-To: <de891705-bce9-7610-340d-b4bc284dfaca@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _KTBngNGr2rSc1lkvP1_pYnpPJbD8qlN
-X-Proofpoint-ORIG-GUID: _KTBngNGr2rSc1lkvP1_pYnpPJbD8qlN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-17_02,2023-04-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=758 adultscore=0
- mlxscore=0 malwarescore=0 bulkscore=0 clxscore=1011 impostorscore=0
- priorityscore=1501 spamscore=0 lowpriorityscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304170043
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,25 +52,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krysztof,
+The dump_user_range() is used to copy the user page to a coredump file,
+but if a hardware memory error occurred during copy, which called from
+__kernel_write_iter() in dump_user_range(), it crashes,
 
-On 4/16/2023 2:37 PM, Krzysztof Kozlowski wrote:
-> On 14/04/2023 12:29, Sricharan Ramabadhran wrote:
->> The IPQ5018 is Qualcomm's 802.11ax SoC for Routers,
->> Gateways and Access Points.
->>
->> This series adds minimal board boot support for ipq5018-mp03.1-c2 board.
->>
->> [v3]
->> 	Fixed all comments for clocks, schema fixes
->>          Picked up Reviewed-by from Bjorn for pinctrl driver
-> 
-> Didn't you just ignore all the tags you got? I was already acking and
-> reviewing a lot of these...
-> 
+  CPU: 112 PID: 7014 Comm: mca-recover Not tainted 6.3.0-rc2 #425
+ 
+  pc : __memcpy+0x110/0x260
+  lr : _copy_from_iter+0x3bc/0x4c8
+  ...
+  Call trace:
+   __memcpy+0x110/0x260
+   copy_page_from_iter+0xcc/0x130
+   pipe_write+0x164/0x6d8
+   __kernel_write_iter+0x9c/0x210
+   dump_user_range+0xc8/0x1d8
+   elf_core_dump+0x308/0x368
+   do_coredump+0x2e8/0xa40
+   get_signal+0x59c/0x788
+   do_signal+0x118/0x1f8
+   do_notify_resume+0xf0/0x280
+   el0_da+0x130/0x138
+   el0t_64_sync_handler+0x68/0xc0
+   el0t_64_sync+0x188/0x190
 
-   While i got review comments for V2, only one tag from
-   Bjorn (reviewed-by) for the pinctrl driver. That one i picked.
+Generally, the '->write_iter' of file ops will use copy_page_from_iter()
+and copy_page_from_iter_atomic(), change memcpy() to copy_mc_to_kernel()
+in both of them to handle #MC during source read, which stop coredump
+processing and kill the task instead of kernel panic, but the source
+address may not always a user address, so introduce a new copy_mc flag in
+struct iov_iter{} to indicate that the iter could do a safe memory copy,
+also introduce the helpers to set/cleck the flag, for now, it's only
+used in coredump's dump_user_range(), but it could expand to any other
+scenarios to fix the similar issue.
 
-Regards,
-  Sricharan
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc: Tong Tiangen <tongtiangen@huawei.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+v2:
+- move the helper functions under pre-existing CONFIG_ARCH_HAS_COPY_MC
+- reposition the copy_mc in struct iov_iter for easy merge, suggested
+  by Andrew Morton
+- drop unnecessary clear flag helper
+- fix checkpatch warning
+ fs/coredump.c       |  1 +
+ include/linux/uio.h | 16 ++++++++++++++++
+ lib/iov_iter.c      | 17 +++++++++++++++--
+ 3 files changed, 32 insertions(+), 2 deletions(-)
+
+diff --git a/fs/coredump.c b/fs/coredump.c
+index 5df1e6e1eb2b..ece7badf701b 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -882,6 +882,7 @@ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
+ 	pos = file->f_pos;
+ 	bvec_set_page(&bvec, page, PAGE_SIZE, 0);
+ 	iov_iter_bvec(&iter, ITER_SOURCE, &bvec, 1, PAGE_SIZE);
++	iov_iter_set_copy_mc(&iter);
+ 	n = __kernel_write_iter(cprm->file, &iter, &pos);
+ 	if (n != PAGE_SIZE)
+ 		return 0;
+diff --git a/include/linux/uio.h b/include/linux/uio.h
+index c459e1d5772b..aa3a4c6ba585 100644
+--- a/include/linux/uio.h
++++ b/include/linux/uio.h
+@@ -40,6 +40,7 @@ struct iov_iter_state {
+ 
+ struct iov_iter {
+ 	u8 iter_type;
++	bool copy_mc;
+ 	bool nofault;
+ 	bool data_source;
+ 	bool user_backed;
+@@ -241,8 +242,22 @@ size_t _copy_from_iter_flushcache(void *addr, size_t bytes, struct iov_iter *i);
+ 
+ #ifdef CONFIG_ARCH_HAS_COPY_MC
+ size_t _copy_mc_to_iter(const void *addr, size_t bytes, struct iov_iter *i);
++static inline void iov_iter_set_copy_mc(struct iov_iter *i)
++{
++	i->copy_mc = true;
++}
++
++static inline bool iov_iter_is_copy_mc(const struct iov_iter *i)
++{
++	return i->copy_mc;
++}
+ #else
+ #define _copy_mc_to_iter _copy_to_iter
++static inline void iov_iter_set_copy_mc(struct iov_iter *i) { }
++static inline bool iov_iter_is_copy_mc(const struct iov_iter *i)
++{
++	return false;
++}
+ #endif
+ 
+ size_t iov_iter_zero(size_t bytes, struct iov_iter *);
+@@ -357,6 +372,7 @@ static inline void iov_iter_ubuf(struct iov_iter *i, unsigned int direction,
+ 	WARN_ON(direction & ~(READ | WRITE));
+ 	*i = (struct iov_iter) {
+ 		.iter_type = ITER_UBUF,
++		.copy_mc = false,
+ 		.user_backed = true,
+ 		.data_source = direction,
+ 		.ubuf = buf,
+diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+index 08587feb94cc..7b9d8419fee7 100644
+--- a/lib/iov_iter.c
++++ b/lib/iov_iter.c
+@@ -288,6 +288,7 @@ void iov_iter_init(struct iov_iter *i, unsigned int direction,
+ 	WARN_ON(direction & ~(READ | WRITE));
+ 	*i = (struct iov_iter) {
+ 		.iter_type = ITER_IOVEC,
++		.copy_mc = false,
+ 		.nofault = false,
+ 		.user_backed = true,
+ 		.data_source = direction,
+@@ -371,6 +372,14 @@ size_t _copy_mc_to_iter(const void *addr, size_t bytes, struct iov_iter *i)
+ EXPORT_SYMBOL_GPL(_copy_mc_to_iter);
+ #endif /* CONFIG_ARCH_HAS_COPY_MC */
+ 
++static void *memcpy_from_iter(struct iov_iter *i, void *to, const void *from,
++				 size_t size)
++{
++	if (iov_iter_is_copy_mc(i))
++		return (void *)copy_mc_to_kernel(to, from, size);
++	return memcpy(to, from, size);
++}
++
+ size_t _copy_from_iter(void *addr, size_t bytes, struct iov_iter *i)
+ {
+ 	if (WARN_ON_ONCE(!i->data_source))
+@@ -380,7 +389,7 @@ size_t _copy_from_iter(void *addr, size_t bytes, struct iov_iter *i)
+ 		might_fault();
+ 	iterate_and_advance(i, bytes, base, len, off,
+ 		copyin(addr + off, base, len),
+-		memcpy(addr + off, base, len)
++		memcpy_from_iter(i, addr + off, base, len)
+ 	)
+ 
+ 	return bytes;
+@@ -571,7 +580,7 @@ size_t copy_page_from_iter_atomic(struct page *page, unsigned offset, size_t byt
+ 	}
+ 	iterate_and_advance(i, bytes, base, len, off,
+ 		copyin(p + off, base, len),
+-		memcpy(p + off, base, len)
++		memcpy_from_iter(i, p + off, base, len)
+ 	)
+ 	kunmap_atomic(kaddr);
+ 	return bytes;
+@@ -704,6 +713,7 @@ void iov_iter_kvec(struct iov_iter *i, unsigned int direction,
+ 	WARN_ON(direction & ~(READ | WRITE));
+ 	*i = (struct iov_iter){
+ 		.iter_type = ITER_KVEC,
++		.copy_mc = false,
+ 		.data_source = direction,
+ 		.kvec = kvec,
+ 		.nr_segs = nr_segs,
+@@ -720,6 +730,7 @@ void iov_iter_bvec(struct iov_iter *i, unsigned int direction,
+ 	WARN_ON(direction & ~(READ | WRITE));
+ 	*i = (struct iov_iter){
+ 		.iter_type = ITER_BVEC,
++		.copy_mc = false,
+ 		.data_source = direction,
+ 		.bvec = bvec,
+ 		.nr_segs = nr_segs,
+@@ -748,6 +759,7 @@ void iov_iter_xarray(struct iov_iter *i, unsigned int direction,
+ 	BUG_ON(direction & ~1);
+ 	*i = (struct iov_iter) {
+ 		.iter_type = ITER_XARRAY,
++		.copy_mc = false,
+ 		.data_source = direction,
+ 		.xarray = xarray,
+ 		.xarray_start = start,
+@@ -771,6 +783,7 @@ void iov_iter_discard(struct iov_iter *i, unsigned int direction, size_t count)
+ 	BUG_ON(direction != READ);
+ 	*i = (struct iov_iter){
+ 		.iter_type = ITER_DISCARD,
++		.copy_mc = false,
+ 		.data_source = false,
+ 		.count = count,
+ 		.iov_offset = 0
+-- 
+2.35.3
+
