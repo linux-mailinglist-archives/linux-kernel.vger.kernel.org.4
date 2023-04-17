@@ -2,285 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719BD6E43A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12AF6E43AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjDQJ0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 05:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
+        id S230265AbjDQJ1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 05:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjDQJ0F (ORCPT
+        with ESMTP id S229806AbjDQJ07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 05:26:05 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16E41BF0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 02:25:58 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id w11so25419477pjh.5
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 02:25:58 -0700 (PDT)
+        Mon, 17 Apr 2023 05:26:59 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904381FC4;
+        Mon, 17 Apr 2023 02:26:57 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id xd13so28442340ejb.4;
+        Mon, 17 Apr 2023 02:26:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tweaklogic.com; s=google; t=1681723558; x=1684315558;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2czyE9WdHDvL4dOLTbMOwqoAekdPTD1iyN/OQRcFav4=;
-        b=V1IPYWMHDeKtyzr4EL97xCKLfCGO8rvaOcR1gIabIL2RDv7pAgNrAIhKZuvRE42QKK
-         ze+FRd04X/Q9g8mZ1D6B+3p3LLVbUscBLi5pYc+KpB1qIlEYqzJ9oo7Fj1sRa8PrDcML
-         +1HYnEkn52F6chYeKQsityAFQAvZWaH99g0k78XfdxuvvgmpQeCwMDCidNCdTbYm+Kqg
-         l4RhP3YjUvVh21/AUUwuG8VMP43YauRoaoD1vjP058ITTcX9uK2BIgQhsUDPMYxa9TQI
-         PXSXemVsy0HQnlMYPTUFe2aHzH9lc1H8z7ZyIGQTXV3RTpTNzsncKak3AsAhrR61g1sg
-         x0bA==
+        d=gmail.com; s=20221208; t=1681723616; x=1684315616;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GgCw//wDvbx+WHQXCgHXP4sMRKkYPpVNMBWp099ZGTU=;
+        b=Fk2TvID3SiqSNHiNj3rAw8c+6vScwEOKKS6hLG0XrAjLUw30gELaiBLS/hky9Xoolq
+         J1YHC1O4NT7jfgDJeudcAerVtKIeBfxddVna5R7msA9ccdrzkRkbs2lU4x83+7GGC1Vi
+         34myUzsYMvH/4Szqze0wvQpZ//cQhtOxzQnSewBTQ2trF8AoVhcCERAdo8cUBB9D8AY6
+         B24jm+UtxrTgpal3auMW9aIgfGKMt7Go7PEsfyEITwj5U0rcHKcsubKdXFVoJiPP5UVH
+         Em2digoSzbU/LJoNw2ewbgArYvmjWwjaQAvNS1hsw3w0Yy09lGnrwVntZ6FRncjeBoXE
+         0JoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681723558; x=1684315558;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2czyE9WdHDvL4dOLTbMOwqoAekdPTD1iyN/OQRcFav4=;
-        b=NdL3jn5vYejgRFvbLTO6V+JeRupMBxEDPGFQqoA3HjtEnKRgtPxsTdfBikRHVgkzNp
-         tgoigeDQ4KOCywC/oDD2jzPXCx9GSDFpfY3FsYjOdJX/QNMzZ0DvW5xbbTW4wiTKPjxh
-         fOOxAoAFRrKpm4Y81TC4LN9gtpjsxH69ONewAmAQa8I1tewDViJvxu2NQF5SqcoZGMiy
-         OPFjrl27P1dSlrVu5Ulsb048qIKw7AYLIXRF9jXxUOndXU1L5F6acSUFZZ79ioa4dF92
-         9K0AXfDgABBAm5g2q9ltCfMoCe7IUzmfpZyYBqsWN6KYz3/ltY6JGYouIamnPivpnn8q
-         hLQA==
-X-Gm-Message-State: AAQBX9fuZ4UxnmzyfTUGfA582Uq116dyapGuV5dTgCyHxksn84O6T4Qa
-        cl0ki7E3SN49EKRc0gqnCWG7SvhkwWGgijx8rcICgw==
-X-Google-Smtp-Source: AKy350abjt1oO2o/FTwFOijvNIvyOzmZ8d7LBJTtPdwtVjL+7TT8T+v5j9EQGWutj6pJ4cPKvyHRmw==
-X-Received: by 2002:a05:6a20:a028:b0:d9:7a97:a7b9 with SMTP id p40-20020a056a20a02800b000d97a97a7b9mr20348493pzj.6.1681723558220;
-        Mon, 17 Apr 2023 02:25:58 -0700 (PDT)
-Received: from [10.240.2.163] ([124.148.245.238])
-        by smtp.gmail.com with ESMTPSA id c9-20020a631c09000000b00514256c05c2sm6678548pgc.7.2023.04.17.02.25.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 02:25:57 -0700 (PDT)
-Message-ID: <3c9bd414-29dd-6e9e-5e6b-8dba27d730bc@tweaklogic.com>
-Date:   Mon, 17 Apr 2023 17:25:50 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH 2/2] iio: light: Add support for APDS9306 Light Sensor
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
+        d=1e100.net; s=20221208; t=1681723616; x=1684315616;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GgCw//wDvbx+WHQXCgHXP4sMRKkYPpVNMBWp099ZGTU=;
+        b=OZphLxV6e4iw73fGU+12xQ3nCPuyXEn5ecBIiwRRbBJamB/zYvsD33rEnn5A62Fp+G
+         xfWPkajNrtC2tgfmF5dNsQHubHkwtT3gD0cinxQlHzJ9fC+Scsp39Imd5HUkn1Yg5bqW
+         ZJ50gMyNk5FZi/PSvA2XZSlpfRilpn6ZslnziqJIsKT0sF18XX9shBa2IC7JVpPdhNN7
+         ED4042CJOkaKa37cCykE2z4gWXLhzwKYQFyjNErMA71zKvLGDtwo/5SVwYz8DaW4DUQt
+         aCzLBP8HNBj2SpVWF3j5seKiJKXo8in7a991IauDi3ueM8iFjlJm1ogGIeXaKfaPYYuI
+         8PFA==
+X-Gm-Message-State: AAQBX9fuqDyUDh17tko3Yl7U2m/ZIxIBpUn5idebHsOCwH033ejznW27
+        fTt91CNWGm2iRdSJwCLPbq4=
+X-Google-Smtp-Source: AKy350YyFT2cN//d4D4ogxeZPO6UNqiV6weD/ibu/NLaa4eyxCr4cfcSPdLCsVXGI0y/nRjcBasRew==
+X-Received: by 2002:a17:906:c210:b0:94f:956:b3f7 with SMTP id d16-20020a170906c21000b0094f0956b3f7mr5725161ejz.2.1681723615728;
+        Mon, 17 Apr 2023 02:26:55 -0700 (PDT)
+Received: from A13PC04R.einet.ad.eivd.ch ([193.134.219.72])
+        by smtp.googlemail.com with ESMTPSA id p20-20020a170906615400b0094aa087578csm6398596ejl.171.2023.04.17.02.26.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 02:26:55 -0700 (PDT)
+From:   Rick Wertenbroek <rick.wertenbroek@gmail.com>
+To:     alberto.dassatti@heig-vd.ch
+Cc:     xxm@rock-chips.com, Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-References: <20230411011203.5013-1-subhajit.ghosh@tweaklogic.com>
- <20230411011203.5013-3-subhajit.ghosh@tweaklogic.com>
- <20230415183543.6d5e3392@jic23-huawei>
-Content-Language: en-US
-From:   Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>
-In-Reply-To: <20230415183543.6d5e3392@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Arnaud Ferraris <arnaud.ferraris@collabora.com>,
+        Hugh Cole-Baker <sigmaris@gmail.com>,
+        linux-pci@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 00/11] PCI: rockchip: Fix RK3399 PCIe endpoint controller driver
+Date:   Mon, 17 Apr 2023 11:26:18 +0200
+Message-Id: <20230417092631.347976-1-rick.wertenbroek@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you Jonathan for the review.
-Answering only to the Big questions.
->>
->> Software reset feature is not implemented as it causes I2C bus error,
->> the I2C bus driver throws an ugly error message.
-> 
-> That's unfortunate and perhaps something we should consider fixing
-> at the i2c layer.  Could you point to where it happens?
-> 
-> We have a lot of drivers where reset causes an error (Ack missing normally
-> due to simple state machines in the devices).
+This is a series of patches that fixes the PCIe endpoint controller driver
+for the Rockchip RK3399 SoC. The driver was introduced in commit
+cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
+The original driver had issues and would not allow for the RK3399 to
+operate in PCIe endpoint mode correctly. This patch series fixes that so
+that the PCIe core controller of the RK3399 SoC can now act as a PCIe
+endpoint. This is v4 of the patch series and addresses the comments received
+during the review of the v3 [1]. The changes to the v3 are minor and none of
+them change the logic of the driver.
 
-Below function which cause the error:
-regmap_field_write(data->reg_sw_reset, 1);
-regmap_write(data->regmap, APDS9306_MAIN_CTRL, 0x10);
-i2c_smbus_write_byte_data(data->client, APDS9306_MAIN_CTRL, 0x10);
+Thank you in advance for reviewing this patch series and hopefully
+getting this merged. Having a functional PCIe endpoint controller
+driver for the RK3399 would allow to develop further PCIe endpoint
+functions through the Linux PCIe endpoint framework using this SoC.
 
-Error messages:
-[ 3340.426180] stm32f7-i2c 40012000.i2c: <stm32f7_i2c_isr_error>: Bus error accessing addr 0x52
-[ 3340.433880] stm32f7-i2c 40012000.i2c: Trying to recover bus
+[1] https://lore.kernel.org/linux-pci/20230404082426.3880812-1-rick.wertenbroek@gmail.com/
 
-The function which gets called:
-https://elixir.bootlin.com/linux/latest/source/drivers/i2c/busses/i2c-stm32f7.c#L1622
+Summary of changes to V3 :
 
-There is an errata associated with I2C for STM32MP157C (Section 2.19.2, Pg 35):
-https://www.st.com/resource/en/errata_sheet/es0438-stm32mp151x3x7x-device-errata-stmicroelectronics.pdf
-It speaks about - "Spurious bus error detection in master mode". But I
-don't think it has got anything to do with our case.
+* Set the fields in the standard order in the dtsi and removed unnecessary
+  change in associated documentation, thanks to Krzysztof for pointing this out.
+* Added comment to explain how MSI-X capabilities advertisement was removed.
+* Changed Damien Le Moal <damien.lemoal@opensource.wdc.com> address to his
+  kernel.org address Damien Le Moal <dlemoal@kernel.org> in tags.
+* [minor] Simplified code where a power of 2 was applied followed by a ilog2
+  operation.
+* [minor] Small code changes, replaced constant variable by macro, split
+  remaining long lines.
 
-I use STM32MP157C-DK2 board as my reference device.
-The Reference manual to the STM32MP157C:
-https://www.st.com/resource/en/reference_manual/DM00327659.pdf
+Summary of changes to V2 :
 
-stm32f7_i2c_isr_error() handler gets called because a control bit is set
-ERRIE which enables interrupts from the I2C controller for Buss errors,
-Arbitration losses, Overrun/Underrun PEC error, Timeout, etc.
+* Fix issue with memory mapping from PCIe space to physical space
+  There was a small mistake with the number of bits passed from the AXI
+  physical address to the PCIe space address.
+* Disable the advertisement of MSI-X capabilities by the endpoint
+  According to the technical reference manual the controller cannot
+  generate MSI-X, so the controller should not advertise this capability.
+* Add the alignment value to the endpoint attributes.
+* [minor] Clean code (line length, variable names, small refactorings).
+  As pointed out by reviews on the V2.
+* [minor] Fix error in variable name.
+* [minor] Remove a patch that introduced unnecessary late parameter checks.
 
-I am not sure about other chips.
-A possible way to mitigate these kind of issues would be to pass a flag
-from upper layers to the i2c bus driver (I2C_SMBUS_REPORT_ERR_OFF or
-something on those lines). The drivers can then implement in
-struct i2c_algorithm in smbus_xfer() function where they can check for
-the flag and disable error checking.
+General problem statement and overview of the patch series :
 
-I don't have in depth knowledge on this subject so excuse my lack
-of understanding.
+Problem: The Rockchip RK3399 PCIe endpoint controller driver introduced in
+commit cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe
+controller") did not work.
 
-> 
->>
->> Could not locate the Lux calculations from datasheet, only exporting
->> raw values.
-> 
-> Ah. That's annoying as userspace is generally not able to do much with
-> the raw values.  Any other known code supporting this device that you
-> can raid for info?
-> 
-> If not, then this ist he best we can do.
-> 
-This device is similar to LTRF216A.
-If I use the calculation in ltrf216a then I would have to verify them
-with Lux meter and controlled light source or ltrf216a.
-This will be bit difficult for me at this moment.
+Summary of problems with the driver :
 
->>
->> Reading of the Status register clears the Data Ready and the Interrupt
->> Status flags. It makes it tricky to read oneshot values together with
->> interrupts enabled as the IRQ handler clears the status on receipt
->> of an interrupt signal.
->>   
->> Not checking the status in IRQ handler will make the interrupt line
->> unsharable and it does not reset the interrupt line if the Interrupt
->> status flag is not cleared.
-> 
-> Definitely need to check it but I'm not sure I follow why you can't
-> use it for both purposes with a slightly complex interrupt handler design.
-> Maybe the code makes it clear what the issue is here.
-Answers are in below comment.
+* Missing dtsi entry
+* Could not update Device ID (DID)
+* The endpoint could not be configured by a host computer because the
+  endpoint kept sending Configuration Request Retry Status (CRS) messages
+* The kernel would sometimes hang on probe due to access to registers in
+  a clock domain of which the PLLs were not locked
+* The memory window mapping and address translation mechanism had
+  conflicting mappings and did not follow the technical reference manual
+  as to how the address translation should be done
+* Legacy IRQs were not generated by the endpoint
+* Message Signaled interrupts (MSI) were not generated by the endpoint
+* MSI-X capabilities were advertised but the controller cannot generate
+  them according to the technical reference manual
 
->> +
->> +static int apds9306_read_data(struct apds9306_data *data, int *val, int reg)
->> +{
->> +	struct device *dev = &data->client->dev;
->> +	int ret, delay, status, int_en;
->> +	int retries = 4;
->> +	u8 buff[3];
->> +
->> +	ret = apds9306_runtime_power(data, 1);
->> +	if (ret)
->> +		return ret;
->> +
->> +	/*
->> +	 * Whichever is greater - integration time period or
->> +	 * sampling period.
->> +	 */
->> +	delay = max(apds9306_intg_time[data->intg_time_idx][1],
->> +			apds9306_repeat_rate_period[data->repeat_rate_idx]);
->> +
->> +	/*
->> +	 * If interrupts are enabled then Status resistor cannot be
->> +	 * relied upon as all the status bits are cleared by the
->> +	 * interrupt handler in case of an event.
-> 
-> Ah.  I was assuming sane hardware (always an error :) that would issue
-> an interrupt on the data being ready.  I think we can make this work
-> but it is ugly.  Add some flags to the state structure. Then whenever
-> you read this register, set whether the two status flags are set of not.
-> Thus in the interrupt handler you can tell if this got there first and
-> here you can tell if the interrupt handler got their first.
-If I have a flag in the state structure for this, then a timestamp would
-also be required or may be just a timestamp.
+The problems have been addressed and validated through tests (see below).
 
-> 
-> One messy corner.  A status read resets the interrupt line, potentially before
-> we saw the interrupt. Oh goody - normally this silliness only happens as
-> a result of complex interrupt migration or errata. However it is understood
-> what to do about it.
-> 
-> If you see the interrupt status flag here, you have no way of knowing
-> if the interrupt line was high for long enough that the interrupt controller
-> saw it.  As such your only option is to assume it didn't and inject an extra
-> one.  Given a passing of the threshold could in theory have been noisy enough
-> to trigger two actual interrupts very close together userspace should be fine
-> with the extra event - we probably just wasted some cycles doing something twice.
-> 
-> The annoying bit will be testing as these races will be somewhat rare.
+Summary of patches :
 
-As per my understanding the Status register has - "Observer effect"
+This patch series is composed of 11 patches that do the following :
+1) Remove writes to unused registers in the PCIe core register space.
+   The registers that were written to is marked "unused" and read
+   only in the technical reference manual of the RK3399 SoC.
+2) Write PCI Device ID (DID) to correct register, the DID was written to
+   a read only register and therefore would not update the DID.
+3) Assert PCI Configuration Enable bit after probe so that it would stop
+   sending Configuration Request Retry Status (CRS) messages to the
+   host once configured, without this the host would retry until
+   timeout and cancel the PCI configuration.
+4) Add poll and timeout to wait for PHY PLLs to be locked, this
+   is the only patch that also applies to the root complex function
+   of the PCIe core controller, without this the kernel would
+   sometimes access registers in the PHY PLL clock domain when the PLLs
+   were not yet locked and the system would hang. This was hackily solved
+   in other non mainline patches (e.g., in armbian) with a "msleep()"
+   that was added after PHY PLL configuration but without realizing
+   why it was needed. A poll with timeout seems like a sane approach.
+5) Add dtsi entry for RK3399 PCIe endpoint core. The new entry is
+   in "disabled" status by default, so unless it is explicitly enabled
+   it will not conflict with the PCIe root complex controller entry.
+   Developers that will enable it would know that the root complex function
+   then must be disabled, this can be done in the board level DTS.
+6) Update the RK3399 example in the documentation to a valid one.
+7) Fix legacy IRQ generation for RK3399 PCIe endpoint core, the legacy IRQs
+   were not sent by the device because their generation did not follow the
+   instructions in the technical reference manual. They now work.
+8) Fix window mapping and address translation for endpoint. The window
+   mapping and address translation did not follow the technical reference
+   manual and a single memory region was used which resulted in conflicting
+   address translations for memory allocated in that region. The current
+   patch allows to allocate up to 32 memory windows with 1MB pages.
+9) Use u32 variable to access 32-bit registers, u16 variables were used to
+   access and manipulate data of 32-bit registers, this would lead to
+   overflows e.g., when left shifting more than 16 bits.
+10) Don't advertise MSI-X in PCIe capabilities because according to the TRM
+    the controller is not capable of generating them.
+11) Set address alignment for the endpoint mode.
 
-The Status register has got 3 bits - Power On Status, ALS Interrupt
-and ALS Data.
-A single read of the register clears all three bits.
+Validation on real hardware:
 
-In case of an interrupt event, the interrupt line is held low (Active) by the
-device till the Status register is read. As this is an edge triggered interrupt,
-we stop receiving interrupts till we read the status register.
-This is why it is good to acknowledge the interrupt by reading the Status register
-in the ISR.
+This patch series has been tested by me with kernels 6.0.19, 6.1.21-24,
+and 5.19 on real hardware, a FriendlyElec NanoPC-T4 RK3399 based single
+computer board connected to a host computer through PCIe x1 and x4. The
+driver was also tested by Damien Le Moal <damien.lemoal@opensource.wdc.com>
+on a Pine Rockpro64 board [2,3].
 
-Reading the Status register in the ISR inadvertently clears the "ALS Data" bit
-as well.
+[2] https://lore.kernel.org/linux-pci/20230330085357.2653599-1-damien.lemoal@opensource.wdc.com/
+[3] https://lore.kernel.org/linux-pci/29a5ccc3-d2c8-b844-a333-28bc20657942@fastmail.com/
 
-What you are asking is to have a read flag in the static struct and a timestamp
-flag may be. In the isr, we check the flag and if the timestamp is within one
-integration period, if yes, we don't read the Status register any more from the
-isr.
-And in this function we read the Status register and update the read flag and
-the timestamp with current time.
+The PCIe endpoint test function driver was loaded on the SoC and the PCIe
+endpoint test driver was loaded on the host computer. The following tests were
+executed through this setup :
 
-Not sure if my understanding is correct but I will try the above.
+* enumeration of the PCIe endpoint device (lspci)
+  lspci -vvv
+* validation of PCI header and capabilities
+  setpci and lspci -xxxx
+* device was recognized by host computer dans PCIe endpoint test driver
+  was loaded
+  lspci -v states "Kernel modules: pci_endpoint_test"
+* tested the BARs 0-5
+  sudo /usr/bin/pcitest -b 0
+  ...
+  sudo /usr/bin/pcitest -b 5
+* tested legacy interrupt through the test driver
+  sudo /usr/bin/pcitest -i 0
+  sudo /usr/bin/pcitest -l
+* tested MSI interrupt through the test driver
+  sudo /usr/bin/pcitest -i 1
+  sudo /usr/bin/pcitest -m 1
+* tested read/write to and from host through the test driver with checksum
+  sudo /usr/bin/pcitest -r -s 1024
+  sudo /usr/bin/pcitest -w -s 1024
+* tested read/write with DMA enabled (all read/write tests also did IRQ)
+  sudo /usr/bin/pcitest -r -d -s 8192
+  sudo /usr/bin/pcitest -w -d -s 8192
+* tested larged transfers e.g., 100kB with and without DMA
 
-> 
->> +	 */
->> +	ret = regmap_field_read(data->regfield_int_en, &int_en);
->> +	if (ret) {
->> +		dev_err(dev, "read interrupt status failed: %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	if (!int_en) {
->> +		while (retries--) {
->> +			ret = regmap_read(data->regmap, APDS9306_MAIN_STATUS,
->> +					&status);
->> +			if (ret) {
->> +				dev_err(dev, "read status failed: %d\n", ret);
->> +				return ret;
->> +			}
->> +			if (status & APDS9306_ALS_DATA_STAT_MASK)
->> +				break;
->> +			/*
->> +			 * In case of continuous one-shot read from userspace,
->> +			 * new data is available after sampling period.
->> +			 * Delays are in the range of 25ms to 2secs.
->> +			 */
->> +			fsleep(delay);
->> +		}
->> +	} else
->> +		fsleep(delay);
->> +
->> +	if (!retries)
->> +		return -EBUSY;
->> +
->> +	ret = regmap_bulk_read(data->regmap, reg, buff, sizeof(buff));
->> +	if (ret) {
->> +		dev_err(&data->client->dev, "read data failed\n");
->> +		return ret;
->> +	}
->> +
->> +	*val = get_unaligned_le24(&buff[0]);
->> +
->> +	ret = apds9306_runtime_power(data, 0);
->> +	if (ret)
->> +		return ret;
->> +
->> +	return ret;
->> +}
->> +
+Commands used on the SoC to launch the endpoint function (configfs) :
 
-Regards,
-Subhajit Ghosh
+modprobe -i pci-epf-test
+mkdir -p /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0
+echo 0xb500 > /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0/deviceid
+echo 0x104c > /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0/vendorid
+echo 16 > /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0/msi_interrupts 
+ln -s /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0 \
+/sys/kernel/config/pci_ep/controllers/fd000000.pcie-ep/
+echo 1 > /sys/kernel/config/pci_ep/controllers/fd000000.pcie-ep/start
+
+Note: to enable the endpoint controller on the board the file :
+arch/arm64/boot/dts/rockchip/rk3399-nanopc-t4.dts
+Was edited to set the status of &pcie0 to "disabled" and &pcie0_ep
+to "okay". This is not submitted as a patch because most users
+will use the PCIe core controller in host (root complex) mode
+rather than endpoint mode.
+
+I have tested and confirmed all functionality required for the
+endpoint with the test driver and tools. With the initial driver commit
+cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
+the device would not even be enumerated by the host computer (mainly because
+of CRS messages being sent back to the root complex) and tests would not pass
+(driver would not even be loaded because DID was not set correctly)
+and then only the BAR test would pass. Now all tests pass as stated above.
+
+Best regards
+Rick
+
+Damien Le Moal (1):
+  PCI: rockchip: Set address alignment for endpoint mode
+
+Rick Wertenbroek (10):
+  PCI: rockchip: Remove writes to unused registers
+  PCI: rockchip: Write PCI Device ID to correct register
+  PCI: rockchip: Assert PCI Configuration Enable bit after probe
+  PCI: rockchip: Add poll and timeout to wait for PHY PLLs to be locked
+  arm64: dts: rockchip: Add dtsi entry for RK3399 PCIe endpoint core
+  dt-bindings: PCI: Update the RK3399 example to a valid one
+  PCI: rockchip: Fix legacy IRQ generation for RK3399 PCIe endpoint core
+  PCI: rockchip: Fix window mapping and address translation for endpoint
+  PCI: rockchip: Use u32 variable to access 32-bit registers
+  PCI: rockchip: Don't advertise MSI-X in PCIe capabilities
+
+ .../bindings/pci/rockchip,rk3399-pcie-ep.yaml |   4 +-
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi      |  27 +++
+ drivers/pci/controller/pcie-rockchip-ep.c     | 221 ++++++++----------
+ drivers/pci/controller/pcie-rockchip.c        |  17 ++
+ drivers/pci/controller/pcie-rockchip.h        |  49 ++--
+ 5 files changed, 181 insertions(+), 137 deletions(-)
+
+-- 
+2.25.1
+
