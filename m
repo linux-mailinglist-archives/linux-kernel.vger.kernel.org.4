@@ -2,104 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11936E4154
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8600B6E4142
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 09:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjDQHj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 03:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
+        id S230301AbjDQHhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 03:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjDQHi4 (ORCPT
+        with ESMTP id S230393AbjDQHhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 03:38:56 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3558859C7;
-        Mon, 17 Apr 2023 00:38:11 -0700 (PDT)
-X-UUID: bd923bd8dcf211eda9a90f0bb45854f4-20230417
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=q+ABx1STEgOXZowtjVk3rExY+Av/YQbVV+a0Hk0pFvA=;
-        b=LG0nNgdDpH1KjPA93azRShxvxkpczbedpdq3GS9qctDdFKp5YXYqs1U8lVYDaje1EdiMYjqQmTsGgXlKZ0LUL3X+F2o4cBDSpXDE0duB4bRZVbj5R1fKS2Um02AgO/N2Nmrq3P4h4NXmPGDAs3QzvgnBMiGgm5If81JbNkSSl4A=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:6cff931c-734b-4f1f-b8aa-6a2f92f8d223,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.22,REQID:6cff931c-734b-4f1f-b8aa-6a2f92f8d223,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:120426c,CLOUDID:3d4233eb-db6f-41fe-8b83-13fe7ed1ef52,B
-        ulkID:230417153745BYH8ULLQ,BulkQuantity:0,Recheck:0,SF:48|38|29|28|17|19,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: bd923bd8dcf211eda9a90f0bb45854f4-20230417
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1657595400; Mon, 17 Apr 2023 15:37:43 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Mon, 17 Apr 2023 15:37:42 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Mon, 17 Apr 2023 15:37:41 +0800
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Yong Wu <yong.wu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <iommu@lists.linux.dev>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <mingyuan.ma@mediatek.com>,
-        <yf.wang@mediatek.com>, <jianjiao.zeng@mediatek.com>,
-        <chengci.xu@mediatek.com>
-Subject: [PATCH v10 7/7] MAINTAINERS: iommu/mediatek: Update the header file name
-Date:   Mon, 17 Apr 2023 15:36:06 +0800
-Message-ID: <20230417073606.25729-8-yong.wu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230417073606.25729-1-yong.wu@mediatek.com>
-References: <20230417073606.25729-1-yong.wu@mediatek.com>
+        Mon, 17 Apr 2023 03:37:22 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F195273;
+        Mon, 17 Apr 2023 00:36:52 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33H7al2K051967;
+        Mon, 17 Apr 2023 02:36:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681717007;
+        bh=l7ffDMMwPqAVTwsIwTWk9VVAZG/DLY6FJ3yFqfZ/gxI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=m8IGM+xizhmBm9zXbcjpvZOwGSnGvrhzjjP5NOxgF13kgGyWkab3fcvWUcmyqP55T
+         IyJxMpzXfL+RZAX8PverSKIbhvJ2Ae7q2U2shve+zhRORTU+gKu4c+ESCi5r5JobeK
+         OE+uu1etHQX82dMgbgr972mk6VzbKS5H4o3Zc3gs=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33H7aleJ065929
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 17 Apr 2023 02:36:47 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 17
+ Apr 2023 02:36:46 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 17 Apr 2023 02:36:46 -0500
+Received: from [172.24.145.7] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33H7ahoc086172;
+        Mon, 17 Apr 2023 02:36:44 -0500
+Message-ID: <bb8378f0-31cf-0880-9849-37d747f761d1@ti.com>
+Date:   Mon, 17 Apr 2023 13:06:43 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 3/5] arm64: dts: ti: k3-j784s4: Add WIZ and SERDES PHY
+ nodes
+Content-Language: en-US
+To:     Vignesh Raghavendra <vigneshr@ti.com>, <nm@ti.com>, <afd@ti.com>
+CC:     <s-vadapalli@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230414151553.339599-1-j-choudhary@ti.com>
+ <20230414151553.339599-4-j-choudhary@ti.com>
+ <db7daf64-6f1e-0053-1042-306f2058d1fb@ti.com>
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+In-Reply-To: <db7daf64-6f1e-0053-1042-306f2058d1fb@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We add the prefix "mediatek," for the lastest ports header file name,
-For example, include/dt-bindings/memory/mediatek,mt8188-memory-port.h.
-Update the entry from "mt*" to "m*".
 
-Signed-off-by: Yong Wu <yong.wu@mediatek.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d8ebab595b2a..833d32c356ef 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13056,7 +13056,7 @@ L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
- S:	Supported
- F:	Documentation/devicetree/bindings/iommu/mediatek*
- F:	drivers/iommu/mtk_iommu*
--F:	include/dt-bindings/memory/mt*-port.h
-+F:	include/dt-bindings/memory/m*-port.h
- 
- MEDIATEK JPEG DRIVER
- M:	Bin Liu <bin.liu@mediatek.com>
--- 
-2.25.1
+On 17/04/23 10:10, Vignesh Raghavendra wrote:
+> 
+> 
+> On 14/04/23 20:45, Jayesh Choudhary wrote:
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+>> index aef6f53ae8ac..b1445b7c2aa8 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+>> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+>> @@ -301,3 +301,7 @@ &main_cpsw1_port1 {
+>>   	phy-mode = "rgmii-rxid";
+>>   	phy-handle = <&main_phy0>;
+>>   };
+>> +
+>> +&serdes_refclk {
+>> +	clock-frequency = <100000000>;
+>> +};
+> 
+> Can we move this to 5/5 along with rest of -evm.dts changes?
 
+Sure. Will move it to last patch in next revision.
+
+Thanks.
