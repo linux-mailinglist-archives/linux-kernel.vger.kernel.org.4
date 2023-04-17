@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C126E45AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F716E45B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjDQKuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 06:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
+        id S230361AbjDQKu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 06:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjDQKun (ORCPT
+        with ESMTP id S230245AbjDQKuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 06:50:43 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD581737;
-        Mon, 17 Apr 2023 03:49:59 -0700 (PDT)
+        Mon, 17 Apr 2023 06:50:44 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316C07EE5;
+        Mon, 17 Apr 2023 03:50:01 -0700 (PDT)
 Date:   Mon, 17 Apr 2023 10:46:47 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681728408;
+        s=2020; t=1681728407;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DMJ+cbokOctSN0U6wHjIbInp6iX43XTC0mQ1d+BTzbg=;
-        b=wDEBJ6VcRx9pzel12ZIixHs/KB1eWrkf43cuXt9PWu5MCrr5ghBXbYwOxQCfUJzcuA0j9w
-        dKbkr4AP+P/r/i4yMPN9iGpSDQo/6T7T4YMOgq6KAdGMrQ5aD3xNGXU7BmS9Zzcuv3cgu0
-        f9MbQ4rgOStO3DKmL5kHQgyDS74XHVTlkm1AqZz3LR9agZc8C0CgitLmVQ/WEvfeFTPuCg
-        QEH1/qEZD/yI+4fB8t4uSAWHL3LSPTCkcyxnGhFqaDPv0CbqfUm4I045er6mQqUDUcJrkG
-        /8Z8ukx0EjZ990Qs696iYtpM0QP5mTt49QM1vdTsj8NtzMUAsdjoMCXSAQV1YA==
+        bh=mq/umlOxqawASo910s5i5eyYf8oTyR6gQPtYMDwyGS8=;
+        b=KFCJVJhqW9awGCcjEMZv3lcM416afrADALl6h892MqEo9Otsaetn64NW6axKRf1iwq9t7r
+        +q5b8DpkO4KWr+3Z8dXW1Yq9Neqr1+pR6KqlEvsm0euSM7OIioTwvgyw+0t2I5wNfW6g6V
+        cCi/eYhhsNoZbmxpBxOoJ8/eNrKyF1YXB9JiLax8zJjHH9/Gd9bNcTuNBw1P50X27u+IiS
+        Kdf7BXTKZaO1llRWJvdNrbgkWQ3hOCNWMRWwqbaOHjAfbReU3l13BwZbZSpbdRy8ngW8ju
+        IIyW1UE7LpT1EDxLia+u8HonxCGzd1TlhiO5EEPn9v6pM/4/eFssuT8rkhnEkg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681728408;
+        s=2020e; t=1681728407;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DMJ+cbokOctSN0U6wHjIbInp6iX43XTC0mQ1d+BTzbg=;
-        b=k3HrFrko+wBbrv4Q8F85qGSgG/3MzFL4ifc9hj5VvwMqkdlmAc3vbphhS5sM9C8I+VtPE/
-        xHLgMa/a+GStpcCQ==
+        bh=mq/umlOxqawASo910s5i5eyYf8oTyR6gQPtYMDwyGS8=;
+        b=xLD1xzroqwzLJWnLOJ8pprXlgNOhoSQr7xfq0NNXgYc9k/mLs7r3zOoDGoaSdd19luh+pL
+        PbohuRCr+IqNSUBQ==
 From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/core] x86/head: Mark *_start_kernel() __noreturn
+Subject: [tip: objtool/core] arm64/cpu: Mark cpu_park_loop() and friends __noreturn
 Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <c2525f96b88be98ee027ee0291d58003036d4120.1681342859.git.jpoimboe@kernel.org>
-References: <c2525f96b88be98ee027ee0291d58003036d4120.1681342859.git.jpoimboe@kernel.org>
+In-Reply-To: <55787d3193ea3e295ccbb097abfab0a10ae49d45.1681342859.git.jpoimboe@kernel.org>
+References: <55787d3193ea3e295ccbb097abfab0a10ae49d45.1681342859.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-Message-ID: <168172840758.404.8391667372410527352.tip-bot2@tip-bot2>
+Message-ID: <168172840728.404.16097273612224314980.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,92 +67,146 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/core branch of tip:
 
-Commit-ID:     4208d2d79837ef70f260d6170e3ac7fd6fde7788
-Gitweb:        https://git.kernel.org/tip/4208d2d79837ef70f260d6170e3ac7fd6fde7788
+Commit-ID:     5ab6876c7843db5fe8bef691c5fdb92518b12070
+Gitweb:        https://git.kernel.org/tip/5ab6876c7843db5fe8bef691c5fdb92518b12070
 Author:        Josh Poimboeuf <jpoimboe@kernel.org>
-AuthorDate:    Wed, 12 Apr 2023 16:49:33 -07:00
+AuthorDate:    Wed, 12 Apr 2023 16:49:34 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Fri, 14 Apr 2023 17:31:24 +02:00
 
-x86/head: Mark *_start_kernel() __noreturn
+arm64/cpu: Mark cpu_park_loop() and friends __noreturn
 
-Now that start_kernel() is __noreturn, mark its chain of callers
-__noreturn.
+In preparation for marking panic_smp_self_stop() __noreturn across the
+kernel, first mark the arm64 implementation of cpu_park_loop() and
+related functions __noreturn.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/c2525f96b88be98ee027ee0291d58003036d4120.1681342859.git.jpoimboe@kernel.org
+Link: https://lore.kernel.org/r/55787d3193ea3e295ccbb097abfab0a10ae49d45.1681342859.git.jpoimboe@kernel.org
 ---
- arch/x86/include/asm/setup.h | 6 +++---
- arch/x86/kernel/head32.c     | 2 +-
- arch/x86/kernel/head64.c     | 4 ++--
- tools/objtool/check.c        | 2 ++
- 4 files changed, 8 insertions(+), 6 deletions(-)
+ arch/arm64/include/asm/exception.h | 4 ++--
+ arch/arm64/include/asm/smp.h       | 6 +++---
+ arch/arm64/kernel/entry-common.c   | 2 +-
+ arch/arm64/kernel/smp.c            | 8 +++++---
+ arch/arm64/kernel/traps.c          | 3 +--
+ 5 files changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/include/asm/setup.h b/arch/x86/include/asm/setup.h
-index f37cbff..f349562 100644
---- a/arch/x86/include/asm/setup.h
-+++ b/arch/x86/include/asm/setup.h
-@@ -125,11 +125,11 @@ void clear_bss(void);
- 
- #ifdef __i386__
- 
--asmlinkage void __init i386_start_kernel(void);
-+asmlinkage void __init __noreturn i386_start_kernel(void);
- 
- #else
--asmlinkage void __init x86_64_start_kernel(char *real_mode);
--asmlinkage void __init x86_64_start_reservations(char *real_mode_data);
-+asmlinkage void __init __noreturn x86_64_start_kernel(char *real_mode);
-+asmlinkage void __init __noreturn x86_64_start_reservations(char *real_mode_data);
- 
- #endif /* __i386__ */
- #endif /* _SETUP */
-diff --git a/arch/x86/kernel/head32.c b/arch/x86/kernel/head32.c
-index ec6fefb..10c27b4 100644
---- a/arch/x86/kernel/head32.c
-+++ b/arch/x86/kernel/head32.c
-@@ -29,7 +29,7 @@ static void __init i386_default_early_setup(void)
- 	x86_init.mpparse.setup_ioapic_ids = setup_ioapic_ids_from_mpc;
+diff --git a/arch/arm64/include/asm/exception.h b/arch/arm64/include/asm/exception.h
+index 92963f9..e73af70 100644
+--- a/arch/arm64/include/asm/exception.h
++++ b/arch/arm64/include/asm/exception.h
+@@ -31,7 +31,7 @@ static inline unsigned long disr_to_esr(u64 disr)
+ 	return esr;
  }
  
--asmlinkage __visible void __init i386_start_kernel(void)
-+asmlinkage __visible void __init __noreturn i386_start_kernel(void)
+-asmlinkage void handle_bad_stack(struct pt_regs *regs);
++asmlinkage void __noreturn handle_bad_stack(struct pt_regs *regs);
+ 
+ asmlinkage void el1t_64_sync_handler(struct pt_regs *regs);
+ asmlinkage void el1t_64_irq_handler(struct pt_regs *regs);
+@@ -80,5 +80,5 @@ void do_el1_fpac(struct pt_regs *regs, unsigned long esr);
+ void do_serror(struct pt_regs *regs, unsigned long esr);
+ void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags);
+ 
+-void panic_bad_stack(struct pt_regs *regs, unsigned long esr, unsigned long far);
++void __noreturn panic_bad_stack(struct pt_regs *regs, unsigned long esr, unsigned long far);
+ #endif	/* __ASM_EXCEPTION_H */
+diff --git a/arch/arm64/include/asm/smp.h b/arch/arm64/include/asm/smp.h
+index 5733a31..07f4ea1 100644
+--- a/arch/arm64/include/asm/smp.h
++++ b/arch/arm64/include/asm/smp.h
+@@ -101,9 +101,9 @@ extern int __cpu_disable(void);
+ 
+ extern void __cpu_die(unsigned int cpu);
+ extern void __noreturn cpu_die(void);
+-extern void cpu_die_early(void);
++extern void __noreturn cpu_die_early(void);
+ 
+-static inline void cpu_park_loop(void)
++static inline void __noreturn cpu_park_loop(void)
  {
- 	/* Make sure IDT is set up before any exception happens */
- 	idt_setup_early_handler();
-diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index 387e4b1..49f7629 100644
---- a/arch/x86/kernel/head64.c
-+++ b/arch/x86/kernel/head64.c
-@@ -471,7 +471,7 @@ static void __init copy_bootdata(char *real_mode_data)
- 	sme_unmap_bootdata(real_mode_data);
+ 	for (;;) {
+ 		wfe();
+@@ -123,7 +123,7 @@ static inline void update_cpu_boot_status(int val)
+  * which calls for a kernel panic. Update the boot status and park the calling
+  * CPU.
+  */
+-static inline void cpu_panic_kernel(void)
++static inline void __noreturn cpu_panic_kernel(void)
+ {
+ 	update_cpu_boot_status(CPU_PANIC_KERNEL);
+ 	cpu_park_loop();
+diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
+index cce1167..3af3c01 100644
+--- a/arch/arm64/kernel/entry-common.c
++++ b/arch/arm64/kernel/entry-common.c
+@@ -840,7 +840,7 @@ UNHANDLED(el0t, 32, error)
+ #endif /* CONFIG_COMPAT */
+ 
+ #ifdef CONFIG_VMAP_STACK
+-asmlinkage void noinstr handle_bad_stack(struct pt_regs *regs)
++asmlinkage void noinstr __noreturn handle_bad_stack(struct pt_regs *regs)
+ {
+ 	unsigned long esr = read_sysreg(esr_el1);
+ 	unsigned long far = read_sysreg(far_el1);
+diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+index d5d09a1..07d156f 100644
+--- a/arch/arm64/kernel/smp.c
++++ b/arch/arm64/kernel/smp.c
+@@ -398,7 +398,7 @@ static void __cpu_try_die(int cpu)
+  * Kill the calling secondary CPU, early in bringup before it is turned
+  * online.
+  */
+-void cpu_die_early(void)
++void __noreturn cpu_die_early(void)
+ {
+ 	int cpu = smp_processor_id();
+ 
+@@ -816,7 +816,7 @@ void arch_irq_work_raise(void)
+ }
+ #endif
+ 
+-static void local_cpu_stop(void)
++static void __noreturn local_cpu_stop(void)
+ {
+ 	set_cpu_online(smp_processor_id(), false);
+ 
+@@ -839,7 +839,7 @@ void panic_smp_self_stop(void)
+ static atomic_t waiting_for_crash_ipi = ATOMIC_INIT(0);
+ #endif
+ 
+-static void ipi_cpu_crash_stop(unsigned int cpu, struct pt_regs *regs)
++static void __noreturn ipi_cpu_crash_stop(unsigned int cpu, struct pt_regs *regs)
+ {
+ #ifdef CONFIG_KEXEC_CORE
+ 	crash_save_cpu(regs, cpu);
+@@ -854,6 +854,8 @@ static void ipi_cpu_crash_stop(unsigned int cpu, struct pt_regs *regs)
+ 
+ 	/* just in case */
+ 	cpu_park_loop();
++#else
++	BUG();
+ #endif
  }
  
--asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data)
-+asmlinkage __visible void __init __noreturn x86_64_start_kernel(char * real_mode_data)
+diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+index 4a79ba1..4bb1b8f 100644
+--- a/arch/arm64/kernel/traps.c
++++ b/arch/arm64/kernel/traps.c
+@@ -863,7 +863,7 @@ void bad_el0_sync(struct pt_regs *regs, int reason, unsigned long esr)
+ DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)], overflow_stack)
+ 	__aligned(16);
+ 
+-void panic_bad_stack(struct pt_regs *regs, unsigned long esr, unsigned long far)
++void __noreturn panic_bad_stack(struct pt_regs *regs, unsigned long esr, unsigned long far)
  {
- 	/*
- 	 * Build-time sanity checks on the kernel image and module
-@@ -537,7 +537,7 @@ asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data)
- 	x86_64_start_reservations(real_mode_data);
+ 	unsigned long tsk_stk = (unsigned long)current->stack;
+ 	unsigned long irq_stk = (unsigned long)this_cpu_read(irq_stack_ptr);
+@@ -905,7 +905,6 @@ void __noreturn arm64_serror_panic(struct pt_regs *regs, unsigned long esr)
+ 	nmi_panic(regs, "Asynchronous SError Interrupt");
+ 
+ 	cpu_park_loop();
+-	unreachable();
  }
  
--void __init x86_64_start_reservations(char *real_mode_data)
-+void __init __noreturn x86_64_start_reservations(char *real_mode_data)
- {
- 	/* version is always not zero if it is copied */
- 	if (!boot_params.hdr.version)
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 9aaad9d..a436bc1 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -225,6 +225,8 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
- 		"start_kernel",
- 		"stop_this_cpu",
- 		"usercopy_abort",
-+		"x86_64_start_kernel",
-+		"x86_64_start_reservations",
- 		"xen_cpu_bringup_again",
- 		"xen_start_kernel",
- 	};
+ bool arm64_is_fatal_ras_serror(struct pt_regs *regs, unsigned long esr)
