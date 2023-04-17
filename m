@@ -2,164 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EBE6E4FB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B9E6E4FBC
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 19:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjDQRyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 13:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
+        id S230374AbjDQR4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 13:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbjDQRyi (ORCPT
+        with ESMTP id S230003AbjDQR4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 13:54:38 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE266E97;
-        Mon, 17 Apr 2023 10:54:36 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id r184so10901553ybc.1;
-        Mon, 17 Apr 2023 10:54:36 -0700 (PDT)
+        Mon, 17 Apr 2023 13:56:01 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A196A7C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:56:00 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4ec816c9b62so1576244e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 10:56:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681754075; x=1684346075;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oyR8W7v3COTYLNobCuykJJtDSCMEC7xmskW6emUW3jY=;
-        b=BvJ3B4oBQxTmyVZLNr0yv6+R9zNTpbS4Q+bz8Up5LfmkIHQTvNxDu+WLqlKqaMBR9d
-         2lQsUZjBM7phenPFqMqU6lDVX/6rb3ix6cVg7TM0HQzYm50ay0uklXvxww1yz24klY9Z
-         G1SKy6xVM32F9mgaesrv9rmgMBJ/T1Zh5AH5dXccZ9LBnRFojKjrvoOzHsEicQUJguy1
-         7LcPPNUSUIIhI15fqkOXlqkeQpZHL9t7qVFHpFt/RWf+O7KQMpmLyydyRbjMcAqUCsRu
-         69rAZwrxZprnC/g6Kx1IFBUDA+jGvPlnJ2L6DYZBdj5Zd3dPoWl7RcmaLRsCc3Jsstv8
-         HJ9Q==
+        d=linaro.org; s=google; t=1681754158; x=1684346158;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BKDmMoGXfJU4fYQc4SgnFhXeKOqYUlPRJlTeeGghjx8=;
+        b=e71iFc9OvZScNGlXJc4d2BWw8WUA4B4a/x6KjylMvisNQRju5rfTmHoGAERKFeFwZn
+         b4b0AbtBHn2fF+dHWmUNI1BZTCo5/CmZ66WbPGiXQtxT73ZIVfY5t5YekrFLga2kz/Sx
+         Lch22J7ZYA8bXnLl0pd3/aYY7YbPUVk7U4xLG+54MITzuTcTKozirc0bHF+/t2IQVC9j
+         RK86hfbSOLwowXUWoY3kne/x2Q8caGQC8G7bz5mYIVdjlPY4k8OTvZSmCH7YICPy34Nj
+         raofRJ/fDGk6ovfpJyr4qj0CJmI3pGyapnUZ13Ngc5mF2vTe67ThfiR3cFk6PCSfIq3Z
+         Crtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681754075; x=1684346075;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oyR8W7v3COTYLNobCuykJJtDSCMEC7xmskW6emUW3jY=;
-        b=XCFUlbKik6reNn3VKGWyXzpap3kw/nStomBTrFqzin8n6u85XgNxU8dO2tEKepS6SA
-         A8pvZBVZXN1AegmAoCMJBBTpTRWnQVGkVg55iAsJ9fySJMbI9kKlN693PqhImvEBDf7D
-         Mg2oy3Oetpif2U6RISg/SC4BwkKfAMttFEcIAS9oID83RAv/GpjxSpKMgDAP9acAvz32
-         irEu9RjP80Fr/GZkMFLQwT/0IdzMFjS00sAJxRAImIG0nFa1cQ/FKIUAaoGi9IEFRcVO
-         Z54fh0S/nyPpzpTY+SOyFbAKanQn5vbkxmFJp8Ia9811qo8F04NbJlUtPUxg8LxPKKb2
-         EMQw==
-X-Gm-Message-State: AAQBX9cl9v0ESmHSeRHlvjaFJA5k4VvSydzErA26aCZAh3Pjp8iYqmlY
-        WYMUqTVon2oZM9QB/63HK/yO+sBs851XLsARTqQ=
-X-Google-Smtp-Source: AKy350aVcCPZirKE4e29h+YR180S7kRdUycNhPLL1rAIzCXyCib+3TlzUD9p5cdFIFr0nJmeRynje/8Rtgczf6uHy+s=
-X-Received: by 2002:a25:cb97:0:b0:b8b:f597:f3e5 with SMTP id
- b145-20020a25cb97000000b00b8bf597f3e5mr10181400ybg.9.1681754075318; Mon, 17
- Apr 2023 10:54:35 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681754158; x=1684346158;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BKDmMoGXfJU4fYQc4SgnFhXeKOqYUlPRJlTeeGghjx8=;
+        b=Mmu7umOIxkpjKftF4HcL3MM8rhz54owiyAMp3C7c1far4c5TgJmZnfX0fgyqfrmu5p
+         /fBg5PjbMUrSCXGs0GLFdA+DGr15WrZw9MNPwpvKD7LtdtT4njdFLadM/AcCP/cyo6Kh
+         4FLGPl5pGAj+4OyUPpkNQyiuPtYjWUHtJNBYSqHkDobJauMJSY5ChSPHIr46qw0UDqIn
+         aKn8ugvcwx8PGcibpAlIsEKiXo9RkkWTLxTR1s5SgKPu5mt+49IK9eU7jsfDTQ8eiG53
+         GvmEx+vQfxO8Iv1moyn/Kr0P0Nnxf7vLuHFZcgoMZCnoaGRUaxuOMw0dLjd0ISq2RbP1
+         EBdA==
+X-Gm-Message-State: AAQBX9chlmADxM/ZZfBlht3y0u1KJ2FwV1GQi0NhylfljNoq20fVABPY
+        L/cShdyqESYrWA8ma4wh6AlQjA==
+X-Google-Smtp-Source: AKy350ZOy7SA3V/n3VNMo4APMIyDC2YUvIH1K4sUn3ZXx3m0oJ7cyPxlvpT9oHIMKvhOqVnn/3edoQ==
+X-Received: by 2002:ac2:4105:0:b0:4e8:3f35:6844 with SMTP id b5-20020ac24105000000b004e83f356844mr1847583lfi.19.1681754158663;
+        Mon, 17 Apr 2023 10:55:58 -0700 (PDT)
+Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
+        by smtp.gmail.com with ESMTPSA id u21-20020ac25195000000b004cb45148027sm2111190lfi.203.2023.04.17.10.55.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 10:55:58 -0700 (PDT)
+Message-ID: <e7d15873-a6b7-9a64-f164-7df64585dcfb@linaro.org>
+Date:   Mon, 17 Apr 2023 19:55:56 +0200
 MIME-Version: 1.0
-References: <20230417053509.4808-1-noltari@gmail.com> <20230417053509.4808-3-noltari@gmail.com>
- <87wn2ax3sq.fsf@toke.dk>
-In-Reply-To: <87wn2ax3sq.fsf@toke.dk>
-From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
-Date:   Mon, 17 Apr 2023 19:54:24 +0200
-Message-ID: <CAKR-sGftiGWf86uE2QwbpjJ+H7oyM6=AsFpHaxFBviJBrdueBg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] ath9k: of_init: add endian check
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>
-Cc:     f.fainelli@gmail.com, jonas.gorski@gmail.com, nbd@nbd.name,
-        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, chunkeey@gmail.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sa8775p: pmic: add the sdam_0
+ node
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Parikshit Pareek <quic_ppareek@quicinc.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230417145536.414490-1-brgl@bgdev.pl>
+ <20230417145536.414490-4-brgl@bgdev.pl>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230417145536.414490-4-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-El lun, 17 abr 2023 a las 11:21, Toke H=C3=B8iland-J=C3=B8rgensen
-(<toke@toke.dk>) escribi=C3=B3:
->
-> =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com> writes:
->
-> > BCM63xx (Big Endian MIPS) devices store the calibration data in MTD
-> > partitions but it needs to be swapped in order to work, otherwise it fa=
-ils:
-> > ath9k 0000:00:01.0: enabling device (0000 -> 0002)
-> > ath: phy0: Ignoring endianness difference in EEPROM magic bytes.
-> > ath: phy0: Bad EEPROM VER 0x0001 or REV 0x00e0
-> > ath: phy0: Unable to initialize hardware; initialization status: -22
-> > ath9k 0000:00:01.0: Failed to initialize device
-> > ath9k: probe of 0000:00:01.0 failed with error -22
-> >
-> > For compatibility with current devices the AH_NO_EEP_SWAP flag will be
-> > activated only when qca,endian-check isn't present in the device tree.
-> > This is because some devices have the magic values swapped but not the =
-actual
-> > EEPROM data, so activating the flag for those devices will break them.
-> >
-> > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
-> > ---
-> >  drivers/net/wireless/ath/ath9k/init.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/net/wireless/ath/ath9k/init.c b/drivers/net/wirele=
-ss/ath/ath9k/init.c
-> > index 4f00400c7ffb..abde953aec61 100644
-> > --- a/drivers/net/wireless/ath/ath9k/init.c
-> > +++ b/drivers/net/wireless/ath/ath9k/init.c
-> > @@ -615,7 +615,6 @@ static int ath9k_nvmem_request_eeprom(struct ath_so=
-ftc *sc)
-> >
-> >       ah->nvmem_blob_len =3D len;
-> >       ah->ah_flags &=3D ~AH_USE_EEPROM;
-> > -     ah->ah_flags |=3D AH_NO_EEP_SWAP;
-> >
-> >       return 0;
-> >  }
-> > @@ -688,9 +687,11 @@ static int ath9k_of_init(struct ath_softc *sc)
-> >                       return ret;
-> >
-> >               ah->ah_flags &=3D ~AH_USE_EEPROM;
-> > -             ah->ah_flags |=3D AH_NO_EEP_SWAP;
-> >       }
-> >
-> > +     if (!of_property_read_bool(np, "qca,endian-check"))
-> > +             ah->ah_flags |=3D AH_NO_EEP_SWAP;
-> > +
->
-> So I'm not sure just setting (or not) this flag actually leads to
-> consistent behaviour. The code in ath9k_hw_nvram_swap_data() that reacts
-> to this flag does an endianness check before swapping, and the behaviour
-> of this check depends on the CPU endianness. However, the byte swapping
-> you're after here also swaps u8 members of the eeprom, so it's not
-> really a data endianness swap, and I don't think it should depend on the
-> endianness of the CPU?
->
-> So at least conceptually, the magic byte check in
-> ath9k_hw_nvram_swap_data() is wrong; instead the byteswap check should
-> just be checking against the little-endian version of the firmware
-> (i.e., 0xa55a; I think that's what your device has, right?). However,
-> since we're setting an explicit per-device property anyway (in the
-> device tree), maybe it's better to just have that be an "eeprom needs
-> swapping" flag and do the swap unconditionally if it's set? I think that
-> would address Krzysztof's comment as well ("needs swapping" is a
-> hardware property, "do the check" is not).
 
-Yes, you're right, it's probably better to introduce a new and more
-clear flag that swaps the content inconditionally.
 
->
-> Now, the question becomes whether the "check" code path is actually used
-> for anything today? The old mail thread I quoted in the other thread
-> seems to indicate it's not, but it's not quite clear from the code
-> whether there's currently any way to call into
-> ath9k_hw_nvram_swap_data() without the NO_EEP_SWAP flag being set?
+On 17.04.2023 16:55, Bartosz Golaszewski wrote:
+> From: Parikshit Pareek <quic_ppareek@quicinc.com>
+> 
+> Introduce sdam_0 node, which is to be used via nvmem for power on
+> reasons during reboot. Add supported PoN reaons supported via sdam_0
+> node.
+> 
+> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-It's only used when endian_check is enabled in ath9k_platform_data:
-https://github.com/torvalds/linux/blob/6a8f57ae2eb07ab39a6f0ccad60c76074305=
-1026/drivers/net/wireless/ath/ath9k/init.c#L645
-We're currently using it on OpenWrt for bmips:
-https://github.com/Noltari/openwrt/blob/457549665fcb93667453ef48c50bf43eddd=
-776ef/target/linux/bmips/files/arch/mips/bmips/ath9k-fixup.c#L198-L199
-
->
-> WDYT?
->
-> -Toke
+Konrad
+>  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> index 5abdc239d3a6..3c3b6287cd27 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> @@ -88,6 +88,14 @@ trip1 {
+>  			};
+>  		};
+>  	};
+> +
+> +	reboot-mode {
+> +		compatible = "nvmem-reboot-mode";
+> +		nvmem-cells = <&reboot_reason>;
+> +		nvmem-cell-names = "reboot-mode";
+> +		mode-recovery = <0x01>;
+> +		mode-bootloader = <0x02>;
+> +	};
+>  };
+>  
+>  &spmi_bus {
+> @@ -133,6 +141,19 @@ pmm8654au_0_gpios: gpio@8800 {
+>  			interrupt-controller;
+>  			#interrupt-cells = <2>;
+>  		};
+> +
+> +		pmm8654au_0_sdam_0: nvram@7100 {
+> +			compatible = "qcom,spmi-sdam";
+> +			reg = <0x7100>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0 0x7100 0x100>;
+> +
+> +			reboot_reason: reboot-reason@48 {
+> +				reg = <0x48 0x1>;
+> +				bits = <1 7>;
+> +			};
+> +		};
+>  	};
+>  
+>  	pmm8654au_1: pmic@2 {
