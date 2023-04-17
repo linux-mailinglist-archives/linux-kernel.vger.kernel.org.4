@@ -2,163 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F5A6E50CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6076E50D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjDQT0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
+        id S230490AbjDQT0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjDQTZ7 (ORCPT
+        with ESMTP id S229531AbjDQT0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:25:59 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF1E4ECA
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:25:57 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54be7584b28so361083037b3.16
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:25:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681759557; x=1684351557;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=SXudyeJ/Cf8/L3rur43uuTWwi+2mrCWXl6MOmXE+mSM=;
-        b=rQDKQl9K0v4uhRr1ziEwpXOTAKKrLhUvSE6jNAZAHgj/2Zyh5/9gE5FzIWiR8ii5wK
-         dSmZoVARdmz+EAfLi+thJjqnn//w48INpmm2zFqS6zs8i8InU8XIOgDHY8c5XPHv2aZr
-         /7ZXNDX74WAi6heqXRHqZ36vmKROgF8EZrtzOE/BTFEJTX6/sKTzcsRoUtenMR4Pdeje
-         v3C3qramZ8e8neBgcbkvUVIA5ghWVnnXd41tUJyLZPqxJSnnQTiu5SwWpQAH/eY+ss4a
-         lTHdexOT/WbK1HYMPAQmbsB0d3GLQoDhgWKMpfnG5xTqqXa/NHGlYMOSkSx6X56azY2b
-         f8PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681759557; x=1684351557;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SXudyeJ/Cf8/L3rur43uuTWwi+2mrCWXl6MOmXE+mSM=;
-        b=fY3UFdHFP6iyxq0CW0AMPyDSkpgXHBFn+FkXC7zzUMalhak8vDlHXCjaztfR3ThePr
-         kpSd5nZTAH/PIQ+QfDCw57EIacu/kJx7ptPix4d3r+k8ldVl5t7PLYkLJk/Gwjb3hrO3
-         B3MJAf5BuDlv2bRdHFtSopckIBD8dbuNG05j3nLCwlJ7JcbYHmIAPuFG68aRsAE/kvmG
-         jEvnmSliqCJvaO0+WxsCos6pM9R/S0tnRN7K0MQvG9loPlKBGM7trgkNLbXyMUoBk3/d
-         ZeSvPLFN/THo2LZ89i+lBJAZfG+H/f9dz+umYwu/L0z2rQOAwRMshKuD2izNBLlzT1vv
-         QhwA==
-X-Gm-Message-State: AAQBX9e9/jD9dcJlfuvP49+AW1WcCASYmYHTpKU8HEHagW3osweYmObJ
-        aw1AzYuaTmD0bK8q/4gsQQGF3ezaSRNk
-X-Google-Smtp-Source: AKy350axqLr5/aptfTTOZfKVP35oXDiOhVWyisXf+vfqQI8tQhZy3EwoF57xWjk89OFBHizuQdy/v9EcQRrK
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:d607:b4c5:5ac0:b831])
- (user=irogers job=sendgmr) by 2002:a25:d44a:0:b0:b77:676c:773c with SMTP id
- m71-20020a25d44a000000b00b77676c773cmr10297154ybf.2.1681759557123; Mon, 17
- Apr 2023 12:25:57 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 12:25:46 -0700
-Message-Id: <20230417192546.99923-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Subject: [PATCH v1] perf build: Don't compile demangle-cxx.cpp if not necessary
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Qi Liu <liuqi115@huawei.com>, Leo Yan <leo.yan@linaro.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 17 Apr 2023 15:26:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B386576A8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:26:22 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1poUUJ-0004Fg-PX; Mon, 17 Apr 2023 21:26:07 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id BC3631B175F;
+        Mon, 17 Apr 2023 19:26:04 +0000 (UTC)
+Date:   Mon, 17 Apr 2023 21:26:04 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Judith Mendez <jm@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Davis <afd@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Schuyler Patton <spatton@ti.com>
+Subject: Re: [RFC PATCH 5/5] can: m_can: Add hrtimer to generate software
+ interrupt
+Message-ID: <20230417-unsafe-porridge-0b712d137530-mkl@pengutronix.de>
+References: <20230413223051.24455-1-jm@ti.com>
+ <20230413223051.24455-6-jm@ti.com>
+ <20230414-bounding-guidance-262dffacd05c-mkl@pengutronix.de>
+ <4a6c66eb-2ccf-fc42-a6fc-9f411861fcef@hartkopp.net>
+ <20230416-failing-washbasin-e4fa5caea267-mkl@pengutronix.de>
+ <f58e8dce-898c-8797-5293-1001c9a75381@hartkopp.net>
+ <20230417-taking-relieving-f2c8532864c0-mkl@pengutronix.de>
+ <25806ec7-64c5-3421-aea1-c0d431e3f27f@hartkopp.net>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="clk4ct7erfqsly7j"
+Content-Disposition: inline
+In-Reply-To: <25806ec7-64c5-3421-aea1-c0d431e3f27f@hartkopp.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-demangle-cxx.cpp requires a C++ compiler, but feature checks may fail
-because of the absence of this. Add a CONFIG_CXX_DEMANGLE so that the
-source isn't built if not supported. Copy libbfd and cplus demangle
-variants to a weak symbol-elf.c version so they aren't dependent on
-C++. These variants are only built with the build option
-BUILD_NONDISTRO=1.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.config   |  1 +
- tools/perf/util/Build        |  2 +-
- tools/perf/util/symbol-elf.c | 27 +++++++++++++++++++++++++++
- 3 files changed, 29 insertions(+), 1 deletion(-)
+--clk4ct7erfqsly7j
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 71442c54c25f..5f0f24b56f50 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -923,6 +923,7 @@ ifndef NO_DEMANGLE
-     EXTLIBS += -lstdc++
-     CFLAGS += -DHAVE_CXA_DEMANGLE_SUPPORT
-     CXXFLAGS += -DHAVE_CXA_DEMANGLE_SUPPORT
-+    $(call detected,CONFIG_CXX_DEMANGLE)
-   endif
-   ifdef BUILD_NONDISTRO
-     ifeq ($(filter -liberty,$(EXTLIBS)),)
-diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-index bd18fe5f2719..f9df1df1eec0 100644
---- a/tools/perf/util/Build
-+++ b/tools/perf/util/Build
-@@ -214,7 +214,7 @@ perf-$(CONFIG_ZSTD) += zstd.o
- 
- perf-$(CONFIG_LIBCAP) += cap.o
- 
--perf-y += demangle-cxx.o
-+perf-$(CONFIG_CXX_DEMANGLE) += demangle-cxx.o
- perf-y += demangle-ocaml.o
- perf-y += demangle-java.o
- perf-y += demangle-rust.o
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index 35724f6a84fa..cd08bdb9824f 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -31,6 +31,13 @@
- #include <bfd.h>
- #endif
- 
-+#if defined(HAVE_LIBBFD_SUPPORT) || defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
-+#ifndef DMGL_PARAMS
-+#define DMGL_PARAMS     (1 << 0)  /* Include function args */
-+#define DMGL_ANSI       (1 << 1)  /* Include const, volatile, etc */
-+#endif
-+#endif
-+
- #ifndef EM_AARCH64
- #define EM_AARCH64	183  /* ARM 64 bit */
- #endif
-@@ -271,6 +278,26 @@ static bool want_demangle(bool is_kernel_sym)
- 	return is_kernel_sym ? symbol_conf.demangle_kernel : symbol_conf.demangle;
- }
- 
-+/*
-+ * Demangle C++ function signature, typically replaced by demangle-cxx.cpp
-+ * version.
-+ */
-+__weak char *cxx_demangle_sym(const char *str __maybe_unused, bool params __maybe_unused,
-+			      bool modifiers __maybe_unused)
-+{
-+#ifdef HAVE_LIBBFD_SUPPORT
-+	int flags = (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_ANSI : 0);
-+
-+	return bfd_demangle(NULL, str, flags);
-+#elif defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
-+	int flags = (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_ANSI : 0);
-+
-+	return cplus_demangle(str, flags);
-+#else
-+	return NULL;
-+#endif
-+}
-+
- static char *demangle_sym(struct dso *dso, int kmodule, const char *elf_name)
- {
- 	char *demangled = NULL;
--- 
-2.40.0.634.g4ca3ef3211-goog
+On 17.04.2023 19:34:03, Oliver Hartkopp wrote:
+> On 17.04.23 09:26, Marc Kleine-Budde wrote:
+> > On 16.04.2023 21:46:40, Oliver Hartkopp wrote:
+> > > > I had the 5ms that are actually used in the code in mind. But this =
+is a
+> > > > good calculation.
+> > >=20
+> > > @Judith: Can you acknowledge the value calculation?
+> > >=20
+> > > > > The "shortest" 11 bit CAN ID CAN frame is a Classical CAN frame w=
+ith DLC =3D 0
+> > > > > and 1 Mbit/s (arbitration) bitrate. This should be 48 bits @1Mbit=
+ =3D> ~50
+> > > > > usecs
+> > > > >=20
+> > > > > So it should be something about
+> > > > >=20
+> > > > >       50 usecs * (FIFO queue len - 2)
+> > > >=20
+> > > > Where does the "2" come from?
+> > >=20
+> > > I thought about handling the FIFO earlier than it gets completely "fu=
+ll".
+> > >=20
+> > > The fetching routine would need some time too and the hrtimer could a=
+lso
+> > > jitter to some extend.
+> >=20
+> > I was assuming something like this.
+> >=20
+> > I would argue that the polling time should be:
+> >=20
+> >      50 =C2=B5s * FIFO length - IRQ overhead.
+> >=20
+> > The max IRQ overhead depends on your SoC and kernel configuration.
+>=20
+> I just tried an educated guess to prevent the FIFO to be filled up
+> completely. How can you estimate the "IRQ overhead"? And how do you catch
+> the CAN frames that are received while the IRQ is handled?
 
+We're talking about polling, better call it "overhead" or "latency from
+timer expiration until FIFO has at least one frame room". This value
+depends on your system.
+
+It depends on many, many factors, SoC, Kernel configuration (preempt RT,
+powersaving, frequency scaling, system load. In your example it's 100
+=C2=B5s. I wanted to say there's an overhead (or latency) and we need enough
+space in the FIFO, to cover it.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--clk4ct7erfqsly7j
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQ9nUkACgkQvlAcSiqK
+BOixwwf/S6gpZAbZI0gDLqq59QAhT0OVgjq9E8jQRb6b3SM430nhVX/oOlfIXRCJ
+mz76H1v+b1fURaOi+VZC5zoVb5MF8WhJtBEAWa2IbLNGA1A/6UMtQ466nbNCXPYP
+dFBo+MfWZrkcSayCEYuWdwiPPHJSkOtNeZnjRDwMm2uPF1CeSrQlS5Fbi0GNJy//
+7hVBMN7Jm4qlCQxCC3jHRm0Gtc8qWz5n1v2DyxokjtT4jMo9Iwni6wnPB9ni5JHT
+SldeHxtqHDcc4i83eUxhZzsYD6WDV+J7VAkARfnJBcDnFX8qCznvU5eOjBMU3qgr
+IIraJi0ns1cH/zWAc/yyMoaL+/vn9A==
+=PGh8
+-----END PGP SIGNATURE-----
+
+--clk4ct7erfqsly7j--
