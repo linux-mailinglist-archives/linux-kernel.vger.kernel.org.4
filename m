@@ -2,131 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425246E4AFB
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 401296E4AED
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjDQOKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S231221AbjDQOIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjDQOKl (ORCPT
+        with ESMTP id S229750AbjDQOIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:10:41 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399255BBD;
-        Mon, 17 Apr 2023 07:10:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681740633; x=1713276633;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YXao0Y1mlgkXgxIiX0P3t1OzKW+v0FkIvOH0kfXVX2Y=;
-  b=UgPpwqXUQhOtRQn7XGzIIIRxXemLUyIwMnJ0Xzs2rIbdzKck+jPeAT0u
-   u2A2OHO7HAiJaLnqrFhxh+le/tBUysxk/EfUslJx81mDgj5o0gNATNRuy
-   TJBfqLBV7x74F192c4V2jlWtezRrIexwTbUpdsWd+QxzpN1Aw8qZBPw6c
-   yL97M5pb5X38cW2p0dr4w+CjKdLqHdbzXBHgoDk1DcbGcYFnLa0L7INhv
-   IpAjysprbQvKkIq7H420EXEcDAeU3d4Qim/4SK7HLbQQW6bbqeMX6RjL5
-   n1d5lu32FFvdE3u9cSWPbLRGrBPk0i3nYWXryLR02fFt0ViI9Lsmst+Gi
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="344898568"
-X-IronPort-AV: E=Sophos;i="5.99,204,1677571200"; 
-   d="scan'208";a="344898568"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 07:06:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="640965833"
-X-IronPort-AV: E=Sophos;i="5.99,204,1677571200"; 
-   d="scan'208";a="640965833"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 17 Apr 2023 07:06:52 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1poPVG-000cQH-2A;
-        Mon, 17 Apr 2023 14:06:46 +0000
-Date:   Mon, 17 Apr 2023 22:06:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Yacoub <markyacoub@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Mark Yacoub <markyacoub@chromium.org>,
-        intel-gfx@lists.freedesktop.org, dianders@chromium.org,
-        dri-devel@lists.freedesktop.org,
-        Stephen Boyd <swboyd@chromium.org>, seanpaul@chromium.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Intel-gfx] [PATCH v9 10/10] drm/msm: Implement HDCP 1.x using
- the new drm HDCP helpers
-Message-ID: <202304172130.pXI8PgGX-lkp@intel.com>
-References: <20230411192134.508113-11-markyacoub@google.com>
+        Mon, 17 Apr 2023 10:08:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149B81FDE
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:07:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681740418;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x3k70U2wqMYkVPZDRioWTe3Rvp0nYCtXWyD8EZYgUNA=;
+        b=NAYPZr7NSoQpIvXJdZvMz59zi+gZoJ+u16ZA8hUWQALCE/LVP2dVsm60shnXKKWgbFfET1
+        GQJ9ZWR5qX0Wnx+hXeOYjKsYg61jQcYLJkzZDHvviap5hvYRP1iQr+lqoDfjdNyqQNQyA/
+        RPyvbfNbBVUBMLAYrrWmvAhtnFm+DZ0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-121-mlfIU9LYMH6A2Uv9mJgbMw-1; Mon, 17 Apr 2023 10:06:50 -0400
+X-MC-Unique: mlfIU9LYMH6A2Uv9mJgbMw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 64CCD8828C1;
+        Mon, 17 Apr 2023 14:06:49 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 022D5492B0D;
+        Mon, 17 Apr 2023 14:06:47 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <1551344.1681739138@warthog.procyon.org.uk>
+References: <1551344.1681739138@warthog.procyon.org.uk> <e8bc6158-86b2-18e5-efea-c165e2a3f196@kernel.dk> <20230413182542.1133335-1-broonie@kernel.org> <0c6b661c-f7ff-cf12-b7f0-00b6b2f1317b@amd.com> <3c4b9025-2667-ca8c-7427-502068b8168e@amd.com>
+Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
+        Ayush Jain <ayush.jain3@amd.com>, broonie@kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Santosh.Shukla@amd.com, Kalpana.Shetty@amd.com,
+        Narasimhan V <Narasimhan.V@amd.com>, sfr@canb.auug.org.au
+Subject: Re: linux-next: Tree for Apr 13
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411192134.508113-11-markyacoub@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1558439.1681740407.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 17 Apr 2023 15:06:47 +0100
+Message-ID: <1558440.1681740407@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+David Howells <dhowells@redhat.com> wrote:
 
-kernel test robot noticed the following build errors:
+> The problem might be summed up by the following snippet:
+> =
 
-[auto build test ERROR on drm-intel/for-linux-next-fixes]
-[also build test ERROR on linus/master v6.3-rc7]
-[cannot apply to drm-tip/drm-tip drm-misc/drm-misc-next drm-intel/for-linux-next drm/drm-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 	openat(AT_FDCWD, "/dev/loop0", O_RDONLY) =3D 3
+> 	newfstatat(3, "", {st_mode=3DS_IFBLK|0660, st_rdev=3Dmakedev(0x7, 0), .=
+..}, AT_EMPTY_PATH) =3D 0
+> 	splice(3, NULL, 1, NULL, 1048576, 0)    =3D 0
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Yacoub/drm-hdcp-Add-drm_hdcp_atomic_check/20230412-032412
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next-fixes
-patch link:    https://lore.kernel.org/r/20230411192134.508113-11-markyacoub%40google.com
-patch subject: [Intel-gfx] [PATCH v9 10/10] drm/msm: Implement HDCP 1.x using the new drm HDCP helpers
-config: loongarch-randconfig-r015-20230417 (https://download.01.org/0day-ci/archive/20230417/202304172130.pXI8PgGX-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/93651da28f1a578d2edab2d2b47d9935145d675f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mark-Yacoub/drm-hdcp-Add-drm_hdcp_atomic_check/20230412-032412
-        git checkout 93651da28f1a578d2edab2d2b47d9935145d675f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/gpu/drm/msm/
+Ah.  In filemap_splice_read():
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304172130.pXI8PgGX-lkp@intel.com/
+	do {
+		cond_resched();
 
-All errors (new ones prefixed by >>):
+		if (*ppos >=3D i_size_read(file_inode(in)))
+			break;
 
->> drivers/gpu/drm/msm/msm_atomic.c:12:10: fatal error: dp_drm.h: No such file or directory
-      12 | #include "dp_drm.h"
-         |          ^~~~~~~~~~
-   compilation terminated.
+but i_size_read(file_inode(in)) for a blockdev returns 0, it would seem.  =
+What
+should I use instead?
 
+David
 
-vim +12 drivers/gpu/drm/msm/msm_atomic.c
-
-    11	
-  > 12	#include "dp_drm.h"
-    13	#include "msm_atomic_trace.h"
-    14	#include "msm_drv.h"
-    15	#include "msm_gem.h"
-    16	#include "msm_kms.h"
-    17	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
