@@ -2,150 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA9A6E446A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 11:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D81886E45C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 12:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbjDQJtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 05:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
+        id S231174AbjDQKwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 06:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbjDQJsD (ORCPT
+        with ESMTP id S230245AbjDQKwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 05:48:03 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04E8F30C1;
-        Mon, 17 Apr 2023 02:47:26 -0700 (PDT)
-Received: from loongson.cn (unknown [10.2.5.185])
-        by gateway (Coremail) with SMTP id _____8AxEk6UFT1kAuQdAA--.34794S3;
-        Mon, 17 Apr 2023 17:47:00 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.185])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxtryKFT1kyagqAA--.47974S30;
-        Mon, 17 Apr 2023 17:47:00 +0800 (CST)
-From:   Tianrui Zhao <zhaotianrui@loongson.cn>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>, zhaotianrui@loongson.cn
-Subject: [PATCH v7 28/30] LoongArch: KVM: Implement probe virtualization when loongarch cpu init
-Date:   Mon, 17 Apr 2023 17:46:47 +0800
-Message-Id: <20230417094649.874671-29-zhaotianrui@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230417094649.874671-1-zhaotianrui@loongson.cn>
-References: <20230417094649.874671-1-zhaotianrui@loongson.cn>
+        Mon, 17 Apr 2023 06:52:06 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9318699;
+        Mon, 17 Apr 2023 03:51:06 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1poLUs-0000V0-CC; Mon, 17 Apr 2023 11:50:06 +0200
+Message-ID: <afa92c35-b17a-49de-ac4c-6d60237a2dca@leemhuis.info>
+Date:   Mon, 17 Apr 2023 11:50:05 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxtryKFT1kyagqAA--.47974S30
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Zw1fCFWfZw1DGr1DXw1UWrg_yoW8tFyDpr
-        W2vFW3trWUKr92ga93Gr1agrnxtFWkKa129F47ta1fAr4Ut3W5Xwn3C34UCFs7Zw4xAryr
-        Xrn7A3WvqF1DX3JanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b4AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6x
-        kF7I0E14v26F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
-        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6c
-        x26rWlOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r12
-        6r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWDJVCq3wCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAI
-        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr1j6F4UJwCI42IY6I8E87Iv6x
-        kF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7xRiTKZJUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [regression] Bug 217286 - ath11k:deny assoc request, Invalid
+ supported ch width and ext nss combination
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     P Praneesh <quic_ppranees@quicinc.com>
+Cc:     ath11k <ath11k@lists.infradead.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        Kalle Valo <kvalo@kernel.org>,
+        Jouni Malinen <jouni@codeaurora.org>, Jouni Malinen <j@w1.fi>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+          Linux regressions mailing list 
+          <regressions@lists.linux.dev>
+References: <ed31b6fe-e73d-34af-445b-81c5c644d615@leemhuis.info>
+ <f84c39ed-b8d8-7d0c-0eff-c90feaf5ab4f@leemhuis.info>
+In-Reply-To: <f84c39ed-b8d8-7d0c-0eff-c90feaf5ab4f@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1681728666;9bab99fe;
+X-HE-SMSGID: 1poLUs-0000V0-CC
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement probe virtualization when loongarch cpu init, including guest
-gid info, guest fpu info, etc.
+[resending with the current email addresses for P Praneesh and Jouni
+Malinen; didn't find one on lore for Ganesh Sesetti, and Sathishkumar
+Muruganandam]
 
-Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
----
- arch/loongarch/kernel/cpu-probe.c | 53 +++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+Please see quoted text below, as there is a kernel regression that is
+caused by a patch you authored or passed on.
 
-diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
-index 3a3fce2d7846..9c3483d9a131 100644
---- a/arch/loongarch/kernel/cpu-probe.c
-+++ b/arch/loongarch/kernel/cpu-probe.c
-@@ -176,6 +176,57 @@ static void cpu_probe_common(struct cpuinfo_loongarch *c)
- 	}
- }
- 
-+static inline void cpu_probe_guestinfo(struct cpuinfo_loongarch *c)
-+{
-+	unsigned long guestinfo;
-+
-+	guestinfo = read_csr_gstat();
-+	if (guestinfo & CSR_GSTAT_GIDBIT) {
-+		c->options |= LOONGARCH_CPU_GUESTID;
-+		write_csr_gstat(0);
-+	}
-+}
-+
-+static inline void cpu_probe_lvz(struct cpuinfo_loongarch *c)
-+{
-+	unsigned long gcfg, gprcfg1;
-+
-+	cpu_probe_guestinfo(c);
-+
-+	c->guest.options |= LOONGARCH_CPU_FPU;
-+	c->guest.options_dyn |= LOONGARCH_CPU_FPU;
-+	c->guest.options_dyn |= LOONGARCH_CPU_PMP;
-+
-+	c->guest.ases |= LOONGARCH_CPU_LSX;
-+	c->guest.ases_dyn |= LOONGARCH_CPU_LSX;
-+	gprcfg1 = read_gcsr_prcfg1();
-+	c->guest.kscratch_mask = GENMASK((gprcfg1 & CSR_CONF1_KSNUM) - 1, 0);
-+
-+	gcfg = read_csr_gcfg();
-+	if (gcfg & CSR_GCFG_MATP_GUEST)
-+		c->guest_cfg |= BIT(0);
-+	if (gcfg & CSR_GCFG_MATP_ROOT)
-+		c->guest_cfg |= BIT(1);
-+	if (gcfg & CSR_GCFG_MATP_NEST)
-+		c->guest_cfg |= BIT(2);
-+	if (gcfg & CSR_GCFG_SITP)
-+		c->guest_cfg |= BIT(6);
-+	if (gcfg & CSR_GCFG_TITP)
-+		c->guest_cfg |= BIT(8);
-+	if (gcfg & CSR_GCFG_TOEP)
-+		c->guest_cfg |= BIT(10);
-+	if (gcfg & CSR_GCFG_TOPP)
-+		c->guest_cfg |= BIT(12);
-+	if (gcfg & CSR_GCFG_TORUP)
-+		c->guest_cfg |= BIT(14);
-+	if (gcfg & CSR_GCFG_GCIP_ALL)
-+		c->guest_cfg |= BIT(16);
-+	if (gcfg & CSR_GCFG_GCIP_HIT)
-+		c->guest_cfg |= BIT(17);
-+	if (gcfg & CSR_GCFG_GCIP_SECURE)
-+		c->guest_cfg |= BIT(18);
-+}
-+
- #define MAX_NAME_LEN	32
- #define VENDOR_OFFSET	0
- #define CPUNAME_OFFSET	9
-@@ -289,6 +340,8 @@ void cpu_probe(void)
- 	if (cpu == 0)
- 		__ua_limit = ~((1ull << cpu_vabits) - 1);
- #endif
-+	if (cpu_has_lvz)
-+		cpu_probe_lvz(c);
- 
- 	cpu_report();
- }
--- 
-2.31.1
-
+On 17.04.23 11:33, Thorsten Leemhuis wrote:
+> On 08.04.23 13:52, Linux regression tracking (Thorsten Leemhuis) wrote:
+>> Hi, Thorsten here, the Linux kernel's regression tracker.
+>>
+>> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+>> kernel developers don't keep an eye on it, I decided to forward it by mail.
+>>
+>> Note, you have to use bugzilla to reach the reporter, as I sadly[1] can
+>> not CCed them in mails like this.
+>>
+>> Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217286 :
+>>
+>>> Built and installed v6.2 kernel (with ath11k_pci) on arm64 hardware
+>>> running Ubuntu22.04. Hardware has both Atheros QCN9074 module and Intel
+>>> AX210 module. Running each (separately) in station mode and try to
+>>> connect to Synology router with WiFi Access Point based on QCN9074.
+>>> AX210 has no problem connecting to AP but Atheros is successfully
+>>> authenticating but association is rejected by AP with this error message:
+>>>
+>>>
+>>> wlan: [0:I:ANY] [UNSPECIFIED] vap-0(wlan100): [04:f0:21:a1:7c:3e]deny assoc request, Invalid supported ch width and ext nss combination
+>>>
+>>> Please note that when running v5.15.5 kernel (with ath11k_pci), I am
+>>> able to connect to the same AP without problems.
+>>>
+>>> Detailed logs follow:
+>>> [...]
+>>
+>> See the ticket for more details.
+> 
+> FWIW, the reporter bisected the regression down to
+> 
+> 552d6fd2f2 ("ath11k: add support for 80P80 and 160 MHz bandwidth")
+> 
+> Authored by P Praneesh, Ganesh Sesetti, and Sathishkumar Muruganandam,.
+> all of which I added to the list of recipients (just like Jouni Malinen,
+> who handled the patch). Could one of you please look into this?
+> 
+> While at it, let me update the tracking status:
+> 
+> #regzbot introduced: 552d6fd2f2
+> #regzbot ignore-activity
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
+> 
+> 
