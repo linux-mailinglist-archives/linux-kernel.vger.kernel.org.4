@@ -2,95 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1294E6E50B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCFF6E50B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 21:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbjDQTQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 15:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
+        id S230416AbjDQTQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 15:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbjDQTP7 (ORCPT
+        with ESMTP id S230393AbjDQTQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:15:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F99940E1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:15:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 170F36208F
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 19:15:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75103C433D2;
-        Mon, 17 Apr 2023 19:15:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681758957;
-        bh=3pjer+RGMILMz18g1Tf5vlj2E6yHnERNJKjfP9RlMZQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P71Uwm3OV9bNItKXU+tAYmFshPVvY4lQzMfChiVKoKQbqxnxcEbNn6amFMSanMuaL
-         HGgGWtX0E2oEKL1POmtRWv0crAZDTtyk3OtHm9LPwSL3I3PIx1kCqU9LstG0t22PSC
-         zp0eFMcUz0c6vAWXenaBoOLcR6ig5XGTetQtvDLGRpH/0g2tmQdbb/xWCrUUy5khCT
-         3z4okM/GsAc1JEHVYLeFVhfpR62k1tz2GbLjLOT4KEIOsdaE2Nuv/rD9/kdm6M77tx
-         jlg0JZjAYKt5bLmZMdgGwN7yMSwCV9Bzvh+c16WueNqQZRbS2wEjdGtAHQBh1XT1C4
-         fk7gnZ3f+5GhQ==
-Date:   Mon, 17 Apr 2023 20:15:50 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Liliang Ye <yll@hust.edu.cn>
-Cc:     Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        hust-os-kernel-patches@googlegroups.com,
-        Dan Carpenter <error27@gmail.com>,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
+        Mon, 17 Apr 2023 15:16:24 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4690140F0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:16:22 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id b5-20020a253405000000b00b8f66e29f5cso9397005yba.21
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 12:16:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681758981; x=1684350981;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3ncZxqb5WFyPe1+ZpQ8PZQt8gt8+1KXsaLpvOssElGw=;
+        b=ztrYx909wU0E4C4fpIxazR3iU1/doAqQTn/It7I5XO5RP/H9ZYXyuhKdBCToffXuA4
+         9ymN8fyVDotr5xXEsIlQKbUlszwHgxz60FNw04gzVNpruLyyx64PubrHWVLlZpqpBhvh
+         vKWEH9YJ0YOLYMGo4iFU65zKtP7q7UZnp+uz9t4BR4N/9FBLehmWY0SIc5VhHkip24G5
+         K1m5AlClUhPs9NQEruZr7RLnkYdxG6AQA5cbku/1KRM6FGgQmeipGncM5ftAnohmLBxq
+         maaJarYp0xwTDMAFLUo1WRHPRRXtnFqiq3K5A0R+O1k2UroqEOBdn4ZYqcx+PaU9ygpP
+         MwIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681758981; x=1684350981;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3ncZxqb5WFyPe1+ZpQ8PZQt8gt8+1KXsaLpvOssElGw=;
+        b=bUs0KWTWN9rjmZhkXB46HhpHjq42Sd4u+99QUBRpUlDimMqAlvHF7a3UsAYlN2Ny44
+         eRtfCZzq+kxI4s1S2rQPwyqHtOKQGk97guN/zVwuqJhX+z3INgfcY5UWRIH0AirGFCEG
+         MHQCVQgGbwgrI46xsD64g3VVU6atWZcLtqfMhkJsiRb2kmt08O9PGuOpAg59Y16MaW5p
+         jiEXuac8fxduPZeUJAqa0HJriiej/qVWnkuCViL8dZUga7cmKxEWt+0YtLVp753LM64x
+         htrBy2TlnzrhGEaE2Is01yswC2c0+XOtaQiO6KkPxp4gRZNHMLOJE6RRfqVIwDle/aFq
+         tjJA==
+X-Gm-Message-State: AAQBX9dkYPtmvLGLY/pYEC/x4DRks6rYh2F0dZ+HmdAMBAS40P73prrr
+        eMdcOVOoYz9VTOVpqOtAVjMRFlmDzOc=
+X-Google-Smtp-Source: AKy350a2dsem8ucyiGhUFVn2DtBy6lBFc/RqNb+Jfev6KtVWLDED5ErUcWhYM9l9XcC5/F95P0TGKweWO+0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:e0c5:0:b0:b75:8ac3:d5d9 with SMTP id
+ x188-20020a25e0c5000000b00b758ac3d5d9mr10290256ybg.3.1681758981543; Mon, 17
+ Apr 2023 12:16:21 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 12:16:20 -0700
+In-Reply-To: <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
+Mime-Version: 1.0
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <ZD1oevE8iHsi66T2@google.com> <658018f9-581c-7786-795a-85227c712be0@redhat.com>
+ <ZD12htq6dWg0tg2e@google.com> <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
+Message-ID: <ZD2bBB00eKP6F8kz@google.com>
+Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
+ KVM: mm: fd-based approach for supporting KVM)
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        tabba@google.com, Michael Roth <michael.roth@amd.com>,
+        wei.w.wang@intel.com, Mike Rapoport <rppt@kernel.org>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] ASoC: fsl_mqs: call pm_runtime_disable() on error
- path
-Message-ID: <591e902d-afb9-4b2b-baa0-910b6d74e4e7@sirena.org.uk>
-References: <20230403152737.17671-1-yll@hust.edu.cn>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9F6xcT18d9sN4CTo"
-Content-Disposition: inline
-In-Reply-To: <20230403152737.17671-1-yll@hust.edu.cn>
-X-Cookie: I'm having an emotional outburst!!
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 17, 2023, David Hildenbrand wrote:
+> On 17.04.23 18:40, Sean Christopherson wrote:
+> > On Mon, Apr 17, 2023, David Hildenbrand wrote:
+> > > On 17.04.23 17:40, Sean Christopherson wrote:
+> > > > I want to start referring to the code/patches by its syscall/implementation name
+> > > > instead of "UPM", as "UPM" is (a) very KVM centric, (b) refers to the broader effort
+> > > > and not just the non-KVM code, and (c) will likely be confusing for future reviewers
+> > > > since there's nothing in the code that mentions "UPM" in any way.
+> > > > 
+> > > > But typing out restrictedmem is quite tedious, and git grep shows that "rmem" is
+> > > > already used to refer to "reserved memory".
+> > > > 
+> > > > Renaming the syscall to "guardedmem"...
+> > > 
+> > > restrictedmem, guardedmem, ... all fairly "suboptimal" if you'd ask me ...
+> > 
+> > I'm definitely open to other suggestions, but I suspect it's going to be difficult
+> > to be more precise than something like "guarded".
+> 
+> Guardedmem is just as bad as restrictedmem IMHO, sorry.
+> 
+> 
+> Restricted: what's restricted? how does the restriction manifest? secretmem
+> also has it's restrictions/limitations (pinning), why does that one not fall
+> under the same category?
+> 
+> Make a stranger guess what "restrictedmem" is and I can guarantee that it
+> has nothing to do with the concept we're introducing here.
+> 
+> 
+> Guarded: what's guarded? From whom? For which purpose? How does the
+> "guarding" manifest?
 
---9F6xcT18d9sN4CTo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I completely agree that "guarded" lacks precision, but as above, I've pretty much
+given up hope of being super precise.  I actually like "restricted", I just don't
+like that I can't shorten the name.
 
-On Mon, Apr 03, 2023 at 11:27:37PM +0800, Liliang Ye wrote:
-> pm_runtime_disable was missed in cleanup operation, which corresponds to
-> the earlier call to pm_runtime_enable.
+Hmm, maybe that won't be a huge problem in practice.  I can't say I've ever heard
+any use "rmem" in verbale or written communication, it's primarily just "rmem" in
+code that we can't use, and I don't mind having to use restrictedmem for the namespace.
+So maybe we can use "rmem", just not in code?
 
-This doesn't apply against current code, please check and resend.
+Or, we could pretend we're pirates and call it arrrmem!, which is definitely going
+to be how I refer to it in my internal dialogue if we keep "restricted" :-)
 
---9F6xcT18d9sN4CTo
-Content-Type: application/pgp-signature; name="signature.asc"
+> Again, make a stranger guess what "guardedmem" is and I can guarantee that
+> it has nothing to do with the concept we're introducing here.
+> 
+> If, at all, the guess might be "guarded storage" [1] on s390x, which, of
+> course, has nothing to do with the concept here.
 
------BEGIN PGP SIGNATURE-----
+Oof, and guarded storage is even documented in Documentation/virt/kvm/api.rst.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ9muYACgkQJNaLcl1U
-h9BMUAf+PnW18wz6sGANQlExJIeon2TwYOrrp9RHa2hkx65i/UJjI36L50t3jcg9
-vZngy/COz43Es/GqsNfNBntqHgL66yH332vDc/17NXKRpf0jYb7oR6UO5D7WQPCt
-cb/+PO4zE7sPIwDuOlemNGL8iqnV9ya6oXDPYJfmU0njYGJVClEkw9Th8iqu7dOA
-dUOmGg6/Bdop+lAzX3S0W3EcocCHqHAJT3fXXcbttqLeP01KC4DOCnik29oBmMAp
-t6lHdlgrDglj/HCq1u7LsZmoQG8GEtg1mdo43qNx3m1glwm3XehOmSZNh7G55qL6
-BiL4K4amqeutEfx/23OAKiY3T2tuoA==
-=Hr0m
------END PGP SIGNATURE-----
+> (storage on s390x is just the dinosaur slang for memory)
+> 
+> 
+> Often, if we fail to find a good name, the concept is either unclear or not
+> well defined.
+> 
+> So what are the characteristics we want to generalize under that new name?
+> We want to have an fd, that
+> 
+> (a) cannot be mapped into user space (mmap)
+> (b) cannot be accessed using ordinary system calls (read/write)
+> (c) can still be managed like other fds (fallocate, future NUMA
+>     policies?)
+> (d) can be consumed by some special entities that are allowed to
+>     read/write/map.
+> 
+> So the fd content is inaccessible using the ordinary POSIX syscalls. It's
+> only accessible by special entities (e.g., KVM).
+> 
+> Most probably I am forgetting something. But maybe that will help to find a
+> more expressive name. Maybe :)
 
---9F6xcT18d9sN4CTo--
+Hidden/Concealed/etc - Too close to secretmem, suffers the "hidden from whom" problem,
+and depending on the use case, the memory may not actually be concealed from the
+user that controls the VMM.
+
+Restricted - "rmem" collides with "reserved memory" in code.
+
+Guarded - Conflicts with s390's "guarded storage", has the "from whom" problem.
+
+Inaccessible - Many of the same problems as "hidden".
+
+Unmappable - Doesn't cover things like read/write, and is wrong in the sense that
+the memory is still mappable, just not via mmap().
+
+Secured - I'm not getting anywhere near this one :-)
