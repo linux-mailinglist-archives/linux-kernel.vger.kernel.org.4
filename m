@@ -2,72 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DA76E3E38
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 05:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292BB6E3E4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 05:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjDQDfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Apr 2023 23:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
+        id S230146AbjDQDjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Apr 2023 23:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbjDQDef (ORCPT
+        with ESMTP id S230152AbjDQDjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Apr 2023 23:34:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA1F3C01
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 20:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681702323;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ot4mAzk1dD+VO6IKPj86pu2eAQn+6tiF/RKoyglMHgI=;
-        b=UZnWxHo4sA0NIvSoynBwRyocZ9WTNn0L+0gJhDsPIytg6ct6IaFMbqV7LgsrU+yeN9tfac
-        kNZvTxP6Bc0YwKAOfF+x6M2Iy6sD3O+vDfIXP61wyNMq2UJ9Bq6wNUKP7xr9Zd8fbKb6qG
-        Fku+CpW9zRYXlt42HxtrkEO9As6VJOs=
-Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
- [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-168-Ka8-8ubdMpK90UOnqr3OEQ-1; Sun, 16 Apr 2023 23:32:02 -0400
-X-MC-Unique: Ka8-8ubdMpK90UOnqr3OEQ-1
-Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-1878ffe6eddso6164018fac.13
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Apr 2023 20:32:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681702321; x=1684294321;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ot4mAzk1dD+VO6IKPj86pu2eAQn+6tiF/RKoyglMHgI=;
-        b=aB9cpDRdyenh+d3pJeAti2BedhAg+7d5PK6gngQdLWnUU7hgYAlj7otWQJ/uPCc7n6
-         CFfeq7DukP+moS4lsDN+hKuMMSapC0bb+0anTbCv/ASew+MrrEuLX64OuXzz6ou2ugKp
-         S1162elNLwJVULa+YZzVlDRD3y8+hchO1YZk0adTL2HPZx1wHitS3KDtD+srTlbc15In
-         4BCdUeTgUEfDLvG/08D2/Gl4f09JxEBMH0B5Osep1Ni8LuYrJwQJJ1bz/7R+sNGaw87c
-         O+9EHsS/OgZlnfVZhtiMbGZrQWNngpMkEWA1xeLWixnSNBRX5ZTVOu5ErseTabrXBaoy
-         rF+w==
-X-Gm-Message-State: AAQBX9c4LdvMgeHCfQjL0b62LkghpGWu4Wj3Nr2ES0O4RStl2ikiit1d
-        /ddE4DaAYeHaTVM4ymBhh4WfNtnMXgYKjARj+RG01trFmYn6+xZSlinoUUep4RjQyQpxA9AykU0
-        FW2KQ8+iN3oeC1oWCS+XWLJfIAyoPBueP0eS0lmdu7aIkqXm6/GA=
-X-Received: by 2002:a05:6870:b605:b0:184:5497:53e6 with SMTP id cm5-20020a056870b60500b00184549753e6mr4511733oab.3.1681702321610;
-        Sun, 16 Apr 2023 20:32:01 -0700 (PDT)
-X-Google-Smtp-Source: AKy350a1OSW7Q3WyPX8YhgEEOJFU2G0q8lgnrVvLOt3ciyV8fmwl1u54r2QQlagOxp9oJTR/pFZt15KWbVevkS6IVh0=
-X-Received: by 2002:a05:6870:b605:b0:184:5497:53e6 with SMTP id
- cm5-20020a056870b60500b00184549753e6mr4511728oab.3.1681702321435; Sun, 16 Apr
- 2023 20:32:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230415021959.197891-1-lulu@redhat.com>
-In-Reply-To: <20230415021959.197891-1-lulu@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 17 Apr 2023 11:31:50 +0800
-Message-ID: <CACGkMEtu=Xiqc1JJrRVZ40dGsP8su_USq3ZJAWKgb4QaA4F5xw@mail.gmail.com>
-Subject: Re: [PATCH v2] vhost_vdpa: fix unmap process in no-batch mode
-To:     Cindy Lu <lulu@redhat.com>
-Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Sun, 16 Apr 2023 23:39:05 -0400
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67E77ABB;
+        Sun, 16 Apr 2023 20:36:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VgBuM4g_1681702569;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgBuM4g_1681702569)
+          by smtp.aliyun-inc.com;
+          Mon, 17 Apr 2023 11:36:09 +0800
+Message-ID: <1681702472.8904283-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH net] virtio-net: reject small vring sizes
+Date:   Mon, 17 Apr 2023 11:34:32 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alvaro Karsz <alvaro.karsz@solid-run.com>, mst@redhat.com,
+        jasowang@redhat.com
+References: <20230416074607.292616-1-alvaro.karsz@solid-run.com>
+In-Reply-To: <20230416074607.292616-1-alvaro.karsz@solid-run.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,61 +41,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 15, 2023 at 10:20=E2=80=AFAM Cindy Lu <lulu@redhat.com> wrote:
+On Sun, 16 Apr 2023 10:46:07 +0300, Alvaro Karsz <alvaro.karsz@solid-run.com> wrote:
+> Check vring size and fail probe if a transmit/receive vring size is
+> smaller than MAX_SKB_FRAGS + 2.
 >
-> While using the no-batch mode with vIOMMU enabled
-> Qemu will call a large memory to unmap. Much larger than the memory
-> mapped to the kernel. The iotlb is NULL in the kernel and will return fai=
-l.
-
-This patch looks good but I don't understand the above. I think it's
-better to explain why such large unmap will lead to this error:
-
-Is it a batched unmap or a [0, ULONG_MAX] map? How could we end up the NULL=
-?
-
-> Which causes failure.
-> To fix this, we will not remove the AS while the iotlb->nmaps is 0.
-> This will free in the vhost_vdpa_clean
+> At the moment, any vring size is accepted. This is problematic because
+> it may result in attempting to transmit a packet with more fragments
+> than there are descriptors in the ring.
 >
-> Signed-off-by: Cindy Lu <lulu@redhat.com>
+> Furthermore, it leads to an immediate bug:
+>
+> The condition: (sq->vq->num_free >= 2 + MAX_SKB_FRAGS) in
+> virtnet_poll_cleantx and virtnet_poll_tx always evaluates to false,
+> so netif_tx_wake_queue is not called, leading to TX timeouts.
+>
+> Signed-off-by: Alvaro Karsz <alvaro.karsz@solid-run.com>
+> ---
+>  drivers/net/virtio_net.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 2396c28c012..59676252c5c 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -3745,6 +3745,26 @@ static int init_vqs(struct virtnet_info *vi)
+>  	return ret;
+>  }
+>
+> +static int virtnet_validate_vqs(struct virtnet_info *vi)
+> +{
+> +	u32 i, min_size = roundup_pow_of_two(MAX_SKB_FRAGS + 2);
+> +
+> +	/* Transmit/Receive vring size must be at least MAX_SKB_FRAGS + 2
+> +	 * (fragments + linear part + virtio header)
+> +	 */
+> +	for (i = 0; i < vi->max_queue_pairs; i++) {
+> +		if (virtqueue_get_vring_size(vi->sq[i].vq) < min_size ||
+> +		    virtqueue_get_vring_size(vi->rq[i].vq) < min_size) {
+> +			dev_warn(&vi->vdev->dev,
+> +				 "Transmit/Receive virtqueue vring size must be at least %u\n",
+> +				 min_size);
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  #ifdef CONFIG_SYSFS
+>  static ssize_t mergeable_rx_buffer_size_show(struct netdev_rx_queue *queue,
+>  		char *buf)
+> @@ -4056,6 +4076,10 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	if (err)
+>  		goto free;
+>
+> +	err = virtnet_validate_vqs(vi);
+> +	if (err)
+> +		goto free_vqs;
+> +
 
-Do we need a fix tag and does it need to go for -stable?
+I wonder whether is better moving this to virtnet_find_vqs?
 
 Thanks
 
-> ---
->  drivers/vhost/vdpa.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
->
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index 7be9d9d8f01c..74c7d1f978b7 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -851,11 +851,7 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
->                 if (!v->in_batch)
->                         ops->set_map(vdpa, asid, iotlb);
->         }
-> -       /* If we are in the middle of batch processing, delay the free
-> -        * of AS until BATCH_END.
-> -        */
-> -       if (!v->in_batch && !iotlb->nmaps)
-> -               vhost_vdpa_remove_as(v, asid);
-> +
->  }
->
->  static int vhost_vdpa_va_map(struct vhost_vdpa *v,
-> @@ -1112,8 +1108,6 @@ static int vhost_vdpa_process_iotlb_msg(struct vhos=
-t_dev *dev, u32 asid,
->                 if (v->in_batch && ops->set_map)
->                         ops->set_map(vdpa, asid, iotlb);
->                 v->in_batch =3D false;
-> -               if (!iotlb->nmaps)
-> -                       vhost_vdpa_remove_as(v, asid);
->                 break;
->         default:
->                 r =3D -EINVAL;
+>  #ifdef CONFIG_SYSFS
+>  	if (vi->mergeable_rx_bufs)
+>  		dev->sysfs_rx_queue_group = &virtio_net_mrg_rx_group;
 > --
-> 2.34.3
+> 2.34.1
 >
-
