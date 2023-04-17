@@ -2,113 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD786E4225
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED7A6E422E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbjDQIIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
+        id S229556AbjDQIJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 04:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbjDQIIc (ORCPT
+        with ESMTP id S229478AbjDQIJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:08:32 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8562046AF
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:08:30 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id xd13so27920644ejb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:08:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681718909; x=1684310909;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rQJ7WRIROJNRsBKAyL6TG+aWODJFqJnhKcD+H/twEi8=;
-        b=bSJcdRynVCuoM2KupKqejM2B0WGsVcO+G+R1IZPtHYiKv5q+Tg/90CGkMQZLSk71Eb
-         zRhUVdPVREPE/cxpLa7L44K7M6yPqvRvcN1Wk4EyCTg4kRm+2BnTRfho5Ia3Cz8VMMQT
-         MfO/lzrxMdFETdzqdsQHYhOJ7cXBhWe+86UWcjpRyXYaibcrK3ke/TppDXQO6Z6qiy4q
-         zaiPcj2MvF86Y/79ieKtWu65cTdeDZ6ifJswxoNGM0RtuFxkUDrLxACRgAjAfYWWtg7R
-         ozQZwWI5lSzBD2qcv2wYTHhzsVRX7N0DVR7+ugJg0d8CTXV28Xx/Y+ijMKnVP/xjNOuT
-         46YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681718909; x=1684310909;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rQJ7WRIROJNRsBKAyL6TG+aWODJFqJnhKcD+H/twEi8=;
-        b=OyfZklPMnn1yGfTXggRHgg477cn2RlsAF6Y8dqeF2QR3Fna6ZujnoVdmwMldxsNK+T
-         IDb/DksATqQ/JH7/T+7Tgo2uU9h+EGN4mEgJnBf4rcJ7UB8/Ay9khyts3ZH2mE3duLtn
-         0n5az4IwNjdf1eu29TwJiEAOoOEj4C+PlQ20UW4f/f8w7LkYQOGmtLJVJZANMeeh/Hr3
-         IFDRGLKs+48RFWiljKk++GCfiaVhgsvFl8u+kQAgy2VmKnGLtRYsFGujjCa+qOqRpq2a
-         if490/meoLcTUkmIhS22rbUP6LLBddXpi4k7yLFVniGYmM7O4vmrrx70OGc7r6Hlzqig
-         YlAw==
-X-Gm-Message-State: AAQBX9cfaNgRJNDOYzNwqDPo77cxEbBWogG1qMHy14VYwKpOM/3M2l1i
-        ISObz+lyBFXj/EA6yn6cbvlu4ssFGXK5NBpZd5A=
-X-Google-Smtp-Source: AKy350aAVVKQWnFf41usawThl6KubR7Da4LuMEHW3fDT7WFbzF6LSQRy3LfjSzPLj0Zj0ouY8cDqpA==
-X-Received: by 2002:a17:906:abd2:b0:930:f953:962c with SMTP id kq18-20020a170906abd200b00930f953962cmr6268495ejb.1.1681718909007;
-        Mon, 17 Apr 2023 01:08:29 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:b0ac:4d3b:966c:b33d])
-        by smtp.gmail.com with ESMTPSA id v25-20020a170906381900b0094f3f222d34sm2338984ejc.56.2023.04.17.01.08.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 01:08:28 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 1/4] arm64: dts: qcom: sm8150: drop incorrect serial properties
-Date:   Mon, 17 Apr 2023 10:08:15 +0200
-Message-Id: <20230417080818.28398-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 17 Apr 2023 04:09:05 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47AD9527C;
+        Mon, 17 Apr 2023 01:08:52 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:58916.227953132
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id 24C8B1002DD;
+        Mon, 17 Apr 2023 16:08:49 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-bkw2h with ESMTP id 17d70599d5ee46a997f18cc8ddf504cf for tzimmermann@suse.de;
+        Mon, 17 Apr 2023 16:08:51 CST
+X-Transaction-ID: 17d70599d5ee46a997f18cc8ddf504cf
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <df49dc72-3165-8e50-e36d-61d311c311a9@189.cn>
+Date:   Mon, 17 Apr 2023 16:08:48 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] drm/fbdev-generic: prohibit potential out-of-bounds
+ access
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Li Yi <liyi@loongson.cn>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230413180622.1014016-1-15330273260@189.cn>
+ <fccc494f-0e52-5fdf-0e40-acc29177c73c@suse.de>
+ <32a1510e-d38a-ffb6-8e8d-026f8b3aa17a@189.cn>
+ <fab85750-dcb7-0eeb-cabc-8fcfcc84b11c@suse.de>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <fab85750-dcb7-0eeb-cabc-8fcfcc84b11c@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop incorrect and unused serial properties - address/size-cells and
-reg-names:
+Hi,
 
-  sa8155p-adp.dtb: geniqup@ac0000: serial@a84000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'reg-names' were unexpected)
+On 2023/4/17 15:29, Thomas Zimmermann wrote:
+> Hi
+>
+> Am 14.04.23 um 12:58 schrieb Sui Jingfeng:
+>> Hi,
+>>
+>> On 2023/4/14 03:16, Thomas Zimmermann wrote:
+>>> Hi,
+>>>
+>>> thanks for the patch. This is effectively a revert of commit 
+>>> 8fbc9af55de0 ("drm/fbdev-generic: Set screen size to size of GEM 
+>>> buffer"). Please add a Fixes tag.
+>>>
+>>> Am 13.04.23 um 20:06 schrieb Sui Jingfeng:
+>>>> From: Sui Jingfeng <suijingfeng@loongson.cn>
+>>>>
+>>>> The crazy fbdev test of IGT may write after EOF, which lead to 
+>>>> out-of-bound
+>>>
+>>> Please drop 'crazy'. :)
+>>
+>> This is OK.
+>>
+>> By using the world 'crazy',
+>>
+>> I meant that the test is very good and maybe it is written by 
+>> professional  peoples
+>>
+>> with the guidance by  experienced  engineer. So that even the corner 
+>> get tested.
+>>
+>>
+>>>
+>>>> access for the drm drivers using fbdev-generic. For example, run 
+>>>> fbdev test
+>>>> on a x86-64+ast2400 platform with 1680x1050 resolution will cause 
+>>>> the linux
+>>>> kernel hang with following call trace:
+>>>>
+>>>>    Oops: 0000 [#1] PREEMPT SMP PTI
+>>>>    [IGT] fbdev: starting subtest eof
+>>>>    Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
+>>>>    [IGT] fbdev: starting subtest nullptr
+>>>>
+>>>>    RIP: 0010:memcpy_erms+0xa/0x20
+>>>>    RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
+>>>>    RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
+>>>>    RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
+>>>>    RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
+>>>>    R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
+>>>>    R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
+>>>>    FS:  0000000000000000(0000) GS:ffff895257380000(0000) 
+>>>> knlGS:0000000000000000
+>>>>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>>    CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
+>>>>    Call Trace:
+>>>>     <TASK>
+>>>>     ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
+>>>>     drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
+>>>>     process_one_work+0x21f/0x430
+>>>>     worker_thread+0x4e/0x3c0
+>>>>     ? __pfx_worker_thread+0x10/0x10
+>>>>     kthread+0xf4/0x120
+>>>>     ? __pfx_kthread+0x10/0x10
+>>>>     ret_from_fork+0x2c/0x50
+>>>>     </TASK>
+>>>>    CR2: ffffa17d40e0b000
+>>>>    ---[ end trace 0000000000000000 ]---
+>>>>
+>>>> The indirect reason is drm_fb_helper_memory_range_to_clip() 
+>>>> generate damage
+>>>> rectangles which partially or completely go out of the active 
+>>>> display area.
+>>>> The second of argument 'off' is passing from the user-space, this 
+>>>> will lead
+>>>> to the out-of-bound if it is large than (fb_height + 1) * 
+>>>> fb_pitches; while
+>>>> DIV_ROUND_UP() may also controbute to error by 1.
+>>>>
+>>>> This patch will add code to restrict the damage rect computed go 
+>>>> beyond of
+>>>> the last line of the framebuffer.
+>>>>
+>>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>>>> ---
+>>>>   drivers/gpu/drm/drm_fb_helper.c     | 16 ++++++++++++----
+>>>>   drivers/gpu/drm/drm_fbdev_generic.c |  2 +-
+>>>>   2 files changed, 13 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/drm_fb_helper.c 
+>>>> b/drivers/gpu/drm/drm_fb_helper.c
+>>>> index 64458982be40..6bb1b8b27d7a 100644
+>>>> --- a/drivers/gpu/drm/drm_fb_helper.c
+>>>> +++ b/drivers/gpu/drm/drm_fb_helper.c
+>>>> @@ -641,19 +641,27 @@ static void drm_fb_helper_damage(struct 
+>>>> drm_fb_helper *helper, u32 x, u32 y,
+>>>>   static void drm_fb_helper_memory_range_to_clip(struct fb_info 
+>>>> *info, off_t off, size_t len,
+>>>>                              struct drm_rect *clip)
+>>>>   {
+>>>> +    u32 line_length = info->fix.line_length;
+>>>> +    u32 fb_height = info->var.yres;
+>>>>       off_t end = off + len;
+>>>>       u32 x1 = 0;
+>>>> -    u32 y1 = off / info->fix.line_length;
+>>>> +    u32 y1 = off / line_length;
+>>>>       u32 x2 = info->var.xres;
+>>>> -    u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
+>>>> +    u32 y2 = DIV_ROUND_UP(end, line_length);
+>>>> +
+>>>> +    /* Don't allow any of them beyond the bottom bound of display 
+>>>> area */
+>>>> +    if (y1 > fb_height)
+>>>> +        y1 = fb_height;
+>>>> +    if (y2 > fb_height)
+>>>> +        y2 = fb_height;
+>>>>         if ((y2 - y1) == 1) {
+>>>>           /*
+>>>>            * We've only written to a single scanline. Try to reduce
+>>>>            * the number of horizontal pixels that need an update.
+>>>>            */
+>>>> -        off_t bit_off = (off % info->fix.line_length) * 8;
+>>>> -        off_t bit_end = (end % info->fix.line_length) * 8;
+>>>> +        off_t bit_off = (off % line_length) * 8;
+>>>> +        off_t bit_end = (end % line_length) * 8;
+>>>
+>>> Please scratch all these changes. The current code should work as 
+>>> intended. Only the generic fbdev emulation uses this code and it 
+>>> should really be moved there at some point.
+>>
+>>
+>> Are you meant  that we should remove all these changes in 
+>> drivers/gpu/drm/drm_fb_helper.c ?
+>
+> As Daniel mentioned, there's the discussion in the other thread. I 
+> don't want to reopen it here. Just to summarize: I'm not convinced 
+> that this should be DRM code because it can be shared with other fbdev 
+> drivers.
+>
+> [...]
+>
+>>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c 
+>>>> b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>> index 8e5148bf40bb..b057cfbba938 100644
+>>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
+>>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>> @@ -94,7 +94,7 @@ static int 
+>>>> drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
+>>>>       fb_helper->buffer = buffer;
+>>>>       fb_helper->fb = buffer->fb;
+>>>>   -    screen_size = buffer->gem->size;
+>>>> +    screen_size = sizes->surface_height * buffer->fb->pitches[0];
+>
+> This has been bothering me over the weekend. And I think it's because 
+> what we want the screen_size to be heigth * pitch,  but the mmap'ed 
+> memory is still at page granularity. Therefore...
+>
+Yeah, this bug is not that simple as it seems,  I will drop the 
+controversy part, leave it there, it may need more time to rethink about 
+it.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks for reviewing, don't be so tired...
 
----
-
-Changes since v1:
-1. Add Rb tag.
----
- arch/arm64/boot/dts/qcom/sm8150.dtsi | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index 27dcda0d4288..3846f5e0f656 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -1362,14 +1362,11 @@ spi9: spi@a84000 {
- 			uart9: serial@a84000 {
- 				compatible = "qcom,geni-uart";
- 				reg = <0x0 0x00a84000 0x0 0x4000>;
--				reg-names = "se";
- 				clocks = <&gcc GCC_QUPV3_WRAP1_S1_CLK>;
- 				clock-names = "se";
- 				pinctrl-0 = <&qup_uart9_default>;
- 				pinctrl-names = "default";
- 				interrupts = <GIC_SPI 354 IRQ_TYPE_LEVEL_HIGH>;
--				#address-cells = <1>;
--				#size-cells = <0>;
- 				status = "disabled";
- 			};
- 
--- 
-2.34.1
-
+> [...]
+>>>
+>>>>       screen_buffer = vzalloc(screen_size);
+>
+> ... this line should explicitly allocate multiples of pages. Something 
+> like
+>
+>     /* allocate page-size multiples for mmap */
+>     vzalloc(PAGE_ALIGN(screen_size))
+>
+> It has not been a bug so far because vzalloc() always returns full 
+> pages IIRC. It's still worth fixing.
+>
+> Best regards
+> Thomas
+>
+>
+>>>>       if (!screen_buffer) {
+>>>>           ret = -ENOMEM;
+>>>
+>
