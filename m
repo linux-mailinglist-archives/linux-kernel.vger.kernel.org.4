@@ -2,159 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EFA86E4FF5
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 20:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697AA6E4FF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 20:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjDQSLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 14:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
+        id S230403AbjDQSNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 14:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjDQSLv (ORCPT
+        with ESMTP id S229614AbjDQSNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 14:11:51 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2057.outbound.protection.outlook.com [40.107.96.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E28FF;
-        Mon, 17 Apr 2023 11:11:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q0ewRoiknnlgkOXjbnpS9dvyw1gFhwyG3/rSly+Kf+RlUT606HqWVsIFE2gQ0mzwfczmSC6oL4ssQXeXll+/gDLsr+9PLJcc64neeLHJvOVTTiz6GJoUkE0rFcksaSB2q4Jz/YAGO+u9BeH5tuGhpKDgfZ1Figc6w55GAGmDL/6UPT/1krycbOpLWERF6mCenDtfcV3OcoP0/s2OgUN4GMXQJAegukJXJPv0Ff/KcN3UVGSRSR1cFy+59Slse94zBIPps2vBWol3THciM2TvVlfezj2aY0luedUF5iPX0M5D+yN2aqrxyTxlVxjhUQV825Xh4TgfQreoRxfKPHc9lA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FVPFlkCWGbx2AUI+Aq7ZHWQcyKexNy/PYpt15ANVKgY=;
- b=PlC+wSGIbNkKX7btB3Xdj08k7FjYoMMDCXzLYyvUoj4J++BAU0EqaKTAK68NgHX1pDhMRkSnHAqmUYrdPDX19iylShAjEL+YUK/8E+TiE5pRexqx+UBo/j+MGGAOexdlWtXnZGRvR5VmviQfaXhFn6pQMHa1JOWq3VpaFXXeAvqmDt0qc695Up4VuQhUgZC2srNw8moWjcbOlSphe1hVL8qd2U101XUALdxWDE+cKDIHQ9EkHYfL3fAwZBwHDU76rwgtpigCglkCVjtLirisIeGmNwbyalE7V7/Qz1zfDI3CXhtA1cxwBP4q4nQyq87mQnU7O7+j5QtKSqvaLdRqRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=nbd.name smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FVPFlkCWGbx2AUI+Aq7ZHWQcyKexNy/PYpt15ANVKgY=;
- b=RoY3taR1T4JXRKg9v3GBe54lzZdfeVfALN9KSWfZ0GiWHfnjI0EUVmozBR+Bl/sDXh80EBSfQkaVquNcIe008zdvKXVl97s1eoq1FZxMMU6Z3ai7pCi4KxeNTyhTzR8L9ZjYon1tVzM553n1p4HRcsdin7zPxfy2rgFeARgsM/g=
-Received: from MW4PR03CA0308.namprd03.prod.outlook.com (2603:10b6:303:dd::13)
- by MW5PR12MB5652.namprd12.prod.outlook.com (2603:10b6:303:1a0::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Mon, 17 Apr
- 2023 18:11:46 +0000
-Received: from CO1NAM11FT083.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:dd:cafe::77) by MW4PR03CA0308.outlook.office365.com
- (2603:10b6:303:dd::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.46 via Frontend
- Transport; Mon, 17 Apr 2023 18:11:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT083.mail.protection.outlook.com (10.13.174.92) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6319.20 via Frontend Transport; Mon, 17 Apr 2023 18:11:46 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 17 Apr
- 2023 13:11:44 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Felix Fietkau <nbd@nbd.name>, Ryder Lee <ryder.lee@mediatek.com>,
-        "Lorenzo Bianconi" <lorenzo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Anson Tsao <anson.tsao@amd.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v2] wifi: mt76: mt7921e: Set memory space enable in PCI_COMMAND if unset
-Date:   Mon, 17 Apr 2023 13:11:30 -0500
-Message-ID: <20230417181130.4445-2-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230417181130.4445-1-mario.limonciello@amd.com>
-References: <20230417181130.4445-1-mario.limonciello@amd.com>
+        Mon, 17 Apr 2023 14:13:43 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B6AB8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:13:42 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id m14so9479496ybk.4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 11:13:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681755221; x=1684347221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0G1smqROhOJ7yr3iTxiSLEp4+jC82RLUqqOubQo5XMc=;
+        b=3zXxcRHvFsY90TE/85r+bo0YJZ1ZhLfPehoMAZIOD15bfhqlzIoAnkXy6vHLOLn+kf
+         AxMg/O/8d7EH3bzxBsCJhqZniFjbb6ZMhfhiixsevNeFC8hYapBgWufdJwdkPHfInu2F
+         5sQ9AxhS6qngkqP35esEoVFHziw03k+cRXoKWtDHYrIJHkI4H9z+kkeRrwfQ8SmtU0YH
+         j0W7EPNMiJpiWQlGlFrMRnMLhBRhwnq6WOZPY6owN4BasFb3vvLVzC6W+B0yC+RHd7uk
+         jFL0a+gB/rjg2a7bNahnafQquY5cMoIErdOkNowXfLynT1OTPOvtIDLvuI1H+oevnguS
+         IaJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681755221; x=1684347221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0G1smqROhOJ7yr3iTxiSLEp4+jC82RLUqqOubQo5XMc=;
+        b=WCWooayePABPGB+AaOpWalZnfuehQX1n5Nd4Jn7Y9f2xqHMUOWMCYlSfAE2dUf2VPn
+         GK0VCiT20VgFEnxWfBClJI1EGzaFpsKOhIUeEy1XBQjDutuTiLUbv4ndm6Kcb+fdzq5b
+         2Z9vl5/o2evLKnVhP8Ww7xQCm6RT1mmI1peOb5CEC36wx7/+FYapufdjh0bX7EM2qLq3
+         yJHyNGoXxH1p0BNmOYwG5jCsvzucBdN8DR1XgmsOddOIe5sp5bC6SQUUrVD9yHZTq8w0
+         FM4zMu3kpns5KoR5DsRy+bwdO706S1qgXjc+dyCnZPKRwcNwRyOliPLI2DNG9tLxdtqe
+         F62g==
+X-Gm-Message-State: AAQBX9fpHECSkcortBPkfFbMTjDzHwCRt/bCBso5Q3Qwc9CI8bVYFjq6
+        jlDn5nB1jh4sTYSs3i3+hRWM7EGgQfam8XCNbtBfhQ==
+X-Google-Smtp-Source: AKy350bDZ4WatiA5Nyoyd1jAdec3Qs4mNUq6ylrXJpjMIGbzKLIBKh63kQLpakuVcIRtXj2ByKVVm4djzx1xsu8gEp8=
+X-Received: by 2002:a25:7411:0:b0:b8f:6d23:3c7a with SMTP id
+ p17-20020a257411000000b00b8f6d233c7amr7880662ybc.12.1681755220792; Mon, 17
+ Apr 2023 11:13:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT083:EE_|MW5PR12MB5652:EE_
-X-MS-Office365-Filtering-Correlation-Id: febcff06-71e2-45d8-5390-08db3f6f350d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2aHYYuvZ7Z3lsceNoAGAruipanXIiJqfKoo5OZ9MlNH83bY8ZejsrPxEoQ5EYvADML45cbkLxt3bgh1BueCjjWVsK3bdclyuuuZGvNzAXfGgFy2n5s1OmI/XgghppHBbAfNV8HecYJDFrKMGQJlYzTJENXQweV/qrqHwl+Dd0G64enT0yGVDNU002opCygTs7QKmyw6esmLGX3upmJba0BEuiT3qRL60i1IxgIAeXM73yRSaQRijM4sqtdPwJ04ppON6MHRbAryfpsuw5jHL1VBKdHSGU8Jtv2PAoTKsK8nC9fpaVrVq48gHiwbLW4W4Wxlf8b63GkqAapVS4pjULqb1OheFiecDd5ZLGbRzdjYkyyqedxlJL61p6zqaqDMlcxkaA+5sSR/fHj473RyKImUgpH5GilmWgClKHzZmAgWkprbdR6yTbdVfYiMpBaNlmfHFn27xbZKEUVPrO7C0tsgqjYejVbng7NMbCP/D+o3yuXAUzL5ZZXxUrzdoHqXwKnRz52BMjiEP2fTS38NpxbcChCpXmKyzoKYzJlzBYtj/xKIWo+1i2yEDcbjHMYYyA1+kET40rUFstslL6dUJos5YgcN2gRneYECzYwsafQ4aFcwRClB/8rdcB5YnQB18QFxVXuAtsANGsIk6BKF8d3ItGBZB2CTKuwpVlIscYr7R1HWl454L7Yo0mdzuCDUlvbwtIKDwNDwIW2eFbCDO1VZJRM2QF58xS5j8khqHWSo=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(346002)(396003)(136003)(451199021)(46966006)(40470700004)(36840700001)(110136005)(336012)(426003)(26005)(1076003)(54906003)(40480700001)(47076005)(186003)(83380400001)(2616005)(16526019)(36860700001)(40460700003)(7696005)(5660300002)(478600001)(41300700001)(6666004)(82310400005)(316002)(8676002)(82740400003)(356005)(8936002)(86362001)(81166007)(70206006)(70586007)(36756003)(4326008)(2906002)(7416002)(44832011)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 18:11:46.5324
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: febcff06-71e2-45d8-5390-08db3f6f350d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT083.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5652
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230414180043.1839745-1-surenb@google.com> <ZDmetaUdmlEz/W8Q@casper.infradead.org>
+ <87sfczuxkc.fsf@nvidia.com>
+In-Reply-To: <87sfczuxkc.fsf@nvidia.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 17 Apr 2023 11:13:29 -0700
+Message-ID: <CAJuCfpEV1OiM423bykYQTxDC1=bQAqhAwd5fiKYifsk=seP6yw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mm: handle swap page faults if the faulting page can
+ be locked
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
+        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the BIOS has been configured for Fast Boot, systems with mt7921e
-have non-functional wifi.  Turning on Fast boot caused both bus master
-enable and memory space enable bits in PCI_COMMAND not to get configured.
+On Sun, Apr 16, 2023 at 6:06=E2=80=AFPM Alistair Popple <apopple@nvidia.com=
+> wrote:
+>
+>
+> Matthew Wilcox <willy@infradead.org> writes:
+>
+> > On Fri, Apr 14, 2023 at 11:00:43AM -0700, Suren Baghdasaryan wrote:
+> >> When page fault is handled under VMA lock protection, all swap page
+> >> faults are retried with mmap_lock because folio_lock_or_retry
+> >> implementation has to drop and reacquire mmap_lock if folio could
+> >> not be immediately locked.
+> >> Instead of retrying all swapped page faults, retry only when folio
+> >> locking fails.
+> >
+> > Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> >
+> > Let's just review what can now be handled under the VMA lock instead of
+> > the mmap_lock, in case somebody knows better than me that it's not safe=
+.
+> >
+> >  - We can call migration_entry_wait().  This will wait for PG_locked to
+> >    become clear (in migration_entry_wait_on_locked()).  As previously
+> >    discussed offline, I think this is safe to do while holding the VMA
+> >    locked.
+>
+> Do we even need to be holding the VMA locked while in
+> migration_entry_wait()? My understanding is we're just waiting for
+> PG_locked to be cleared so we can return with a reasonable chance the
+> migration entry is gone. If for example it has been unmapped or
+> protections downgraded we will simply refault.
 
-The mt7921 driver already sets bus master enable, but explicitly check
-and set memory access enable as well to fix this problem.
+If we drop VMA lock before migration_entry_wait() then we would need
+to lock_vma_under_rcu again after the wait. In which case it might be
+simpler to retry the fault with some special return code to indicate
+that VMA lock is not held anymore and we want to retry without taking
+mmap_lock. I think it's similar to the last options Matthew suggested
+earlier. In which case we can reuse the same retry mechanism for both
+cases, here and in __folio_lock_or_retry.
 
-Tested-by: Anson Tsao <anson.tsao@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Acked-by: Sean Wang <sean.wang@mediatek.com>
----
-v1->v2:
- * Pick up tag from Sean
- drivers/net/wireless/mediatek/mt76/mt7921/pci.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+>
+> >  - We can call remove_device_exclusive_entry().  That calls
+> >    folio_lock_or_retry(), which will fail if it can't get the VMA lock.
+>
+> Looks ok to me.
+>
+> >  - We can call pgmap->ops->migrate_to_ram().  Perhaps somebody familiar
+> >    with Nouveau and amdkfd could comment on how safe this is?
+>
+> Currently this won't work because drives assume mmap_lock is held during
+> pgmap->ops->migrate_to_ram(). Primarily this is because
+> migrate_vma_setup()/migrate_vma_pages() is used to handle the fault and
+> that asserts mmap_lock is taken in walk_page_range() and also
+> migrate_vma_insert_page().
+>
+> So I don't think we can call that case without mmap_lock.
+>
+> At a glance it seems it should be relatively easy to move to using
+> lock_vma_under_rcu(). Drivers will need updating as well though because
+> migrate_vma_setup() is called outside of fault handling paths so drivers
+> will currently take mmap_lock rather than vma lock when looking up the
+> vma. See for example nouveau_svmm_bind().
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/pci.c b/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-index 5c23c827abe47..41be108e1d5a1 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-@@ -263,6 +263,7 @@ static int mt7921_pci_probe(struct pci_dev *pdev,
- 	struct mt76_dev *mdev;
- 	u8 features;
- 	int ret;
-+	u16 cmd;
- 
- 	ret = pcim_enable_device(pdev);
- 	if (ret)
-@@ -272,6 +273,11 @@ static int mt7921_pci_probe(struct pci_dev *pdev,
- 	if (ret)
- 		return ret;
- 
-+	pci_read_config_word(pdev, PCI_COMMAND, &cmd);
-+	if (!(cmd & PCI_COMMAND_MEMORY)) {
-+		cmd |= PCI_COMMAND_MEMORY;
-+		pci_write_config_word(pdev, PCI_COMMAND, cmd);
-+	}
- 	pci_set_master(pdev);
- 
- 	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
--- 
-2.25.1
+Thanks for the pointers, Alistair! It does look like we need to be
+more careful with the migrate_to_ram() path. For now I can fallback to
+retrying with mmap_lock for this case, like with do with all cases
+today. Afterwards this path can be made ready for working under VMA
+lock and we can remove that retry. Does that sound good?
 
+>
+> >  - I believe we can't call handle_pte_marker() because we exclude UFFD
+> >    VMAs earlier.
+> >  - We can call swap_readpage() if we allocate a new folio.  I haven't
+> >    traced through all this code to tell if it's OK.
+> >
+> > So ... I believe this is all OK, but we're definitely now willing to
+> > wait for I/O from the swap device while holding the VMA lock when we
+> > weren't before.  And maybe we should make a bigger deal of it in the
+> > changelog.
+> >
+> > And maybe we shouldn't just be failing the folio_lock_or_retry(),
+> > maybe we should be waiting for the folio lock with the VMA locked.
+>
