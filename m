@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001C76E425F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1A46E426B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbjDQIR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:17:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35382 "EHLO
+        id S230311AbjDQIVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 04:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjDQIRw (ORCPT
+        with ESMTP id S229652AbjDQIVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:17:52 -0400
-Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765F526B2;
-        Mon, 17 Apr 2023 01:17:51 -0700 (PDT)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id E7D8610006B; Mon, 17 Apr 2023 09:17:48 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-        t=1681719468; bh=7vrhf8jHivfnFCYmFG2HbdBI1KmJjq7kYoSAnAQyO6E=;
-        h=Date:From:To:Subject:From;
-        b=jnAgdxobsyQiBO+mf1lTUJ1l5zVhvTjnfE96jSjMen+Ig9xVjqbgI/Ubnlck59ZXp
-         vzKJEYsWBTXyQrm5bN3Xnvl6okOHiX7XO9BPX1staWHeOTQ0DSyu2PX0FU1KgyG5qg
-         d/qAe9ZCVFPKSMmKRObAIK2YwGHRDOkJEjYRSZ99Y2RwPSExY+DdGi3S4KNP4EyOC+
-         nbytIPrORFxBMRkD81whgTUHLjBTzLCZXXPC55rw8iSf2kuRwfQBntSnREQqQxTxkN
-         5hMMWES2xojiQ2CKHMZ0U+GKLRwcjOLzhK7eJpEgd7fejBMwz4CFDAzBTY+3SVv99s
-         OvK3PIULkQP9A==
-Date:   Mon, 17 Apr 2023 09:17:48 +0100
-From:   Sean Young <sean@mess.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v2] bpf: lirc program type should not require SYS_CAP_ADMIN
-Message-ID: <ZD0ArKpwnDBJZsrE@gofer.mess.org>
+        Mon, 17 Apr 2023 04:21:17 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9031626B2;
+        Mon, 17 Apr 2023 01:21:14 -0700 (PDT)
+Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Q0Kfh0JT7z17T1m;
+        Mon, 17 Apr 2023 16:17:32 +0800 (CST)
+Received: from [10.67.101.126] (10.67.101.126) by
+ dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 17 Apr 2023 16:18:33 +0800
+Message-ID: <d873df36-44d3-b98e-7e34-db6446292f32@huawei.com>
+Date:   Mon, 17 Apr 2023 16:18:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] scsi: libsas: set tf to normal in
+ sas_ata_device_link_abort()
+Content-Language: en-CA
+To:     Jason Yan <yanaijie@huawei.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <john.g.garry@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
+        <kangfenglong@huawei.com>
+References: <20230407035618.25123-1-yangxingui@huawei.com>
+ <d00b38ce-99a8-208b-cdad-714bb3dbf60b@huawei.com>
+From:   yangxingui <yangxingui@huawei.com>
+In-Reply-To: <d00b38ce-99a8-208b-cdad-714bb3dbf60b@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.101.126]
+X-ClientProxiedBy: dggpemm500014.china.huawei.com (7.185.36.153) To
+ dggpemm500012.china.huawei.com (7.185.36.89)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,38 +54,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make it possible to load lirc program type with just CAP_BPF. There is
-nothing exceptional about lirc programs that means they require
-SYS_CAP_ADMIN.
+Hi Jason
 
-In order to attach or detach a lirc program type you need permission to
-open /dev/lirc0; if you have permission to do that, you can alter all
-sorts of lirc receiving options. Changing the IR protocol decoder is no
-different.
+On 2023/4/14 15:36, Jason Yan wrote:
+> On 2023/4/7 11:56, Xingui Yang wrote:
+>> If the disk returns UNC for more than five times within a short 
+>> period, the
+>> number of retry times for other I/Os may reach scmd->allowed, and the
+>> default error "Illegal Request" is returned for other I/Os, as follows:
+>>
+>> [  273.801770] hisi_sas_v3_hw 0000:b4:02.0: erroneous completion disk 
+>> err dev id=2 sas_addr=0x5000000000000605 CQ hdr: 0x400903 0x20103 0x0 
+>> 0x80470000
+>> [  273.875286] sas: Enter sas_scsi_recover_host busy: 30 failed: 30
+>> [  273.879895] sas: trying to find task 0x00000000d9cfc893
+>> [  273.879896] sas: sas_scsi_find_task: aborting task 0x00000000d9cfc893
+>> [  273.880054] sas: sas_scsi_find_task: task 0x00000000d9cfc893 is done
+>> [  273.880055] sas: sas_eh_handle_sas_errors: task 0x00000000d9cfc893 
+>> is done
+>> [  273.880236] ata6.00: failed command: READ FPDMA QUEUED
+>> [  273.880238] ata6.00: cmd 60/08:00:59:27:00/00:00:00:00:00/40 tag 22 
+>> ncq dma 4096 in
+>>                          res 41/04:00:20:00:00/00:00:00:00:00/00 Emask 
+>> 0x1 (device error)
+>> [  273.880239] ata6.00: status: { DRDY ERR }
+>> [  273.880240] ata6.00: error: { ABRT }
+>> [  273.880241] ata6.00: failed command: READ FPDMA QUEUED
+>> [  273.880243] ata6.00: cmd 60/90:00:d1:26:00/00:00:00:00:00/40 tag 23 
+>> ncq dma 73728 in
+>>                          res 41/40:90:10:27:00/00:00:00:00:00/00 Emask 
+>> 0x409 (media error) <F>
+>> [  273.880245] ata6.00: status: { DRDY ERR }
+>> [  273.880246] ata6.00: error: { UNC }
+>> [  273.880247] ata6.00: failed command: READ FPDMA QUEUED
+>> [  273.880249] ata6.00: cmd 60/08:00:19:27:00/00:00:00:00:00/40 tag 24 
+>> ncq dma 4096 in
+>>                          res 41/04:00:20:00:00/00:00:00:00:00/00 Emask 
+>> 0x1 (device error)
+>> [  273.880250] ata6.00: status: { DRDY ERR }
+>> [  273.880251] ata6.00: error: { ABRT }
+>> [  274.199477] scmd->retries: 3, scmd->allowed: 5
+>> [  274.199478] scmd->retries: 3, scmd->allowed: 5
+>> [  274.199479] scmd->retries: 3, scmd->allowed: 5
+>> [  274.199481] scmd->retries: 3, scmd->allowed: 5
+>> [  274.199482] scmd->retries: 3, scmd->allowed: 5
+>> [  274.199483] scmd->retries: 2, scmd->allowed: 5
+>> [  274.199484] scmd->retries: 3, scmd->allowed: 5
+>> [  274.199485] scmd->retries: 3, scmd->allowed: 5
+>> [  274.199486] scmd->retries: 5, scmd->allowed: 5
+>> [  274.199487] scmd->retries: 2, scmd->allowed: 5
+>> [  274.199488] scmd->retries: 2, scmd->allowed: 5
+>> [  274.199524] sd 6:0:1:0: [sdb] tag#258 FAILED Result: 
+>> hostbyte=DID_OK driverbyte=DRIVER_SENSE
+>> [  274.199527] sd 6:0:1:0: [sdb] tag#258 Sense Key : Illegal Request 
+>> [current]
+>> [  274.199530] sd 6:0:1:0: [sdb] tag#258 Add. Sense: Unaligned write 
+>> command
+>> [  274.199532] sd 6:0:1:0: [sdb] tag#258 CDB: Read(10) 28 00 00 00 27 
+>> 59 00 00 08 00
+>> [  274.199535] print_req_error: I/O error, dev sdb, sector 10073
+>> [  274.199573] sd 6:0:1:0: [sdb] tag#259 FAILED Result: 
+>> hostbyte=DID_OK driverbyte=DRIVER_SENSE
+>> [  274.199574] sd 6:0:1:0: [sdb] tag#259 Sense Key : Medium Error 
+>> [current]
+>> [  274.199576] sd 6:0:1:0: [sdb] tag#259 Add. Sense: Unrecovered read 
+>> error - auto reallocate failed
+>> [  274.199578] sd 6:0:1:0: [sdb] tag#259 CDB: Read(10) 28 00 00 00 26 
+>> d1 00 00 90 00
+>> [  274.199579] print_req_error: I/O error, dev sdb, sector 10000
+>> [  274.199608] ata6: EH complete
+>> [  274.199615] sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 30 
+>> tries: 1
+>>
+>> As mentioned in ata_eh_qc_retry(), if qc->err_mask is zero then increment
+>> scmd->allowed. So set tf to normal may be better.
+> 
+> Hi Xingui,
+> 
+> If we increase scmd->allowed every time, and the device returns UNC for 
+> too many times, will the other IO pending for too long and cause 
+> hungtask? And also the runtime check in scsi_cmd_runtime_exceeced() will 
+> not trigger since cmd->allowed is extended.
+> 
+Thank you for your reply. In scenarios similar to UNC error, where a 
+disk returns an error through D2H or SDB, no error is reported for other 
+I/Os in the disk. In this case, AHCI will increase the number of retry 
+times for other I/Os, and AHCI may face similar problems you say, but 
+default failures may not be very good for users.
 
-Right now on a typical distribution /dev/lirc devices are only
-read/write by root. Ideally we would make them group read/write like
-other devices so that local users can use them without becoming root.
+In addition, for commands with pass through type, other I/Os are 
+immediately returned with default errors and are not retried, but AHCI 
+only report one single error I/O.
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- kernel/bpf/syscall.c | 1 -
- 1 file changed, 1 deletion(-)
+Thanks,
+Xingui
 
-v2: improved commit message
-
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 6d575505f89c..822ebc742a6a 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2463,7 +2463,6 @@ static bool is_net_admin_prog_type(enum bpf_prog_type prog_type)
- 	case BPF_PROG_TYPE_LWT_SEG6LOCAL:
- 	case BPF_PROG_TYPE_SK_SKB:
- 	case BPF_PROG_TYPE_SK_MSG:
--	case BPF_PROG_TYPE_LIRC_MODE2:
- 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
- 	case BPF_PROG_TYPE_CGROUP_DEVICE:
- 	case BPF_PROG_TYPE_CGROUP_SOCK:
--- 
-2.39.2
-
+> Thanks,
+> Jason
+> 
+>>
+>> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+>> ---
+>>   drivers/scsi/libsas/sas_ata.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/scsi/libsas/sas_ata.c 
+>> b/drivers/scsi/libsas/sas_ata.c
+>> index 77714a495cbb..f5047e8dcb59 100644
+>> --- a/drivers/scsi/libsas/sas_ata.c
+>> +++ b/drivers/scsi/libsas/sas_ata.c
+>> @@ -949,8 +949,8 @@ void sas_ata_device_link_abort(struct 
+>> domain_device *device, bool force_reset)
+>>       unsigned long flags;
+>>       spin_lock_irqsave(ap->lock, flags);
+>> -    device->sata_dev.fis[2] = ATA_ERR | ATA_DRDY; /* tf status */
+>> -    device->sata_dev.fis[3] = ATA_ABORTED; /* tf error */
+>> +    device->sata_dev.fis[2] = ATA_DRDY; /* tf status */
+>> +    device->sata_dev.fis[3] = 0;        /* tf error */
+>>       link->eh_info.err_mask |= AC_ERR_DEV;
+>>       if (force_reset)
+>>
+> .
