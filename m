@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41B26E423B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F39286E423C
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 10:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjDQIJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 04:09:58 -0400
+        id S230272AbjDQIKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 04:10:01 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjDQIJ4 (ORCPT
+        with ESMTP id S229946AbjDQIJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 17 Apr 2023 04:09:56 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15A03A99
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:09:53 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a5so5305645ejb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:09:53 -0700 (PDT)
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8719E49D5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:09:55 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id ud9so61642704ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 01:09:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681718992; x=1684310992;
+        d=linaro.org; s=google; t=1681718994; x=1684310994;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SF10OB5S6d78EpPJ2qGhdqhZ1znjtUNINpikwJ8DHFI=;
-        b=uI3PRwroiSLQiiSn5k/CvxrE5xshoCGVIt3Gyy2EVATTNdk4ouVHs54+jvl0wynqOQ
-         4uKw9QKWZKkU/tXvXJVhR5i1eIdyhN60OPzuQnvZTYU303WwwOFTZF14u3BQTEeG0FWb
-         iA5e95ntrlTsbD1xJlbpv3nbfX9Co+1Iry9NQN+utESmG5pnPhLO5lJK0UvFYpzq0pDe
-         PBR1XigHuqKSi4252ud34XReCffqnudFEvBbb+gTnYJCayE50xxbNEq9nIE7rcM3tJgN
-         9zDGHwT8tWUFidFgnuMrdDI8TpOECGpaGl+cxwMIH7X0NihGntAjEcRxZ+2Ntp6k+BYo
-         TJQw==
+        bh=eB6SW7Euj55s9d4nUZtZWO0Bk1+ooxqocEtVUxCmzck=;
+        b=xEF8yexVoxI0DjKLEMIIiJP3BP8/jFyqdKdVYenrQPVCR1PBm23kkw2uMMJNhiCLMx
+         goS48Uknlm1/GTAXMoVZmmcPeoYYHqOmnS0vZFu2KRQlqFy3Nc7lyBPuxmvEFv0dJ/SO
+         +bL5b7FbZ97wA9h3NBdwYdhyTwwUtKPRl4zKL0bv8In/ZHz2XLT937mkEla71UdRmdJg
+         qrJIaHhnVkLDJp3CRZdnIrWfAhd4YAislpr6LU1O2+FF5tQkUGgUtINj+V4cKJCbsZl6
+         6yyzz5v06xc56BgMg8fgfgZoKlf8S/YH5uD6PJwdVeI9DFeOQO5hywLv+KMouaU/aiVA
+         Xmfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681718992; x=1684310992;
+        d=1e100.net; s=20221208; t=1681718994; x=1684310994;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SF10OB5S6d78EpPJ2qGhdqhZ1znjtUNINpikwJ8DHFI=;
-        b=iAx+U9OyNkLvE0qCyAnU72UfpOyaWQNgnjbFjVOUgtjJ6laISqMvsQVT01Ajj0tjJc
-         q+X0kFR30+mcqCjO+88onvZhPBObWGpVYZyExYkAZ2BY5Cdji68w2xMhjbY+KjE+Rzom
-         xmOT2FiGnZHwLv9WIjYNGOaO7uEaQrcdru/CDXVlOYK4270UZNaR/8+oRfqxFrq/pCOP
-         rXuW02MRY7/bKqyWVptlXZATn2skXZ4YEn5Pi6psyRIvy/szTL0dSmBzLjMZP8ltJrk5
-         ENdJXX6eYsyCPMLA6j9YmwFfdqY2ClBbzzpBPd97CGO/wdWX0moUywNb9nuYKC6YZDGU
-         MxfQ==
-X-Gm-Message-State: AAQBX9dJ6R+i0JCdGyeLJriskyzFEJued3G5cUNzY1TOdRS6/CBhooOf
-        d5Gfeu4ac7GOkLSmETdXVFZBGg==
-X-Google-Smtp-Source: AKy350agwT9WuW+BITUjnPaALRKbriFu6A0yl/usZql7Pj90Ah6fKsLvipXfrNLgWzwY5AOeQOdlZg==
-X-Received: by 2002:a17:906:3e1b:b0:94d:69e0:6098 with SMTP id k27-20020a1709063e1b00b0094d69e06098mr7682450eji.45.1681718992511;
-        Mon, 17 Apr 2023 01:09:52 -0700 (PDT)
+        bh=eB6SW7Euj55s9d4nUZtZWO0Bk1+ooxqocEtVUxCmzck=;
+        b=UGQ3FSiDL+X8tuw3+p4jYOkJR/FRSfOXHQdeAPMYWRg6Q3B1XYCCWOZrMb8v+M1UZU
+         5fwQDeahPlNjoqMKOaCzNFY++prv8vDRs+A7Jf17QUSD4wZfE/8OTBsV5uWwfyBqfTeZ
+         e4E4Xuvo+LJfvtrJ8afj87Y8Xhlp+ld4v0N6Mjc3y8/lWQs1iuvvdmsx5ZWJF1tcchL1
+         Qh/KLktHkyDTgGlfsWwHIBjinyauvXUO0XZE1IRuUvKE2MnF4sqE83Z0P1nrGrPUwMUO
+         pSAH1fxkX87R4av8Lkkgurlh5vkEzpEhh8MYMvoYURBw1lSoGtZNLooPaHEDg8cAW0rp
+         6BTw==
+X-Gm-Message-State: AAQBX9f6pZnXiN2rHO5J0U0mINr5OQj0+IgGMM+6n1LI6pKrSZzZ5xQS
+        wwdN64RafJBl+sPV2FHIB8au+w==
+X-Google-Smtp-Source: AKy350anHPqQ10fQx3NsI3POV1UAZ5LfsHWMvHnmmjQhLRiJGKI4rAfJjP5JTqUHfoCRKRcH+xDebA==
+X-Received: by 2002:a17:906:3ac7:b0:94a:5819:5a24 with SMTP id z7-20020a1709063ac700b0094a58195a24mr7430375ejd.18.1681718993749;
+        Mon, 17 Apr 2023 01:09:53 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:b0ac:4d3b:966c:b33d])
-        by smtp.gmail.com with ESMTPSA id y16-20020a1709064b1000b0094f7da9f1besm988179eju.61.2023.04.17.01.09.51
+        by smtp.gmail.com with ESMTPSA id y16-20020a1709064b1000b0094f7da9f1besm988179eju.61.2023.04.17.01.09.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 01:09:52 -0700 (PDT)
+        Mon, 17 Apr 2023 01:09:53 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 2/4] arm64: dts: qcom: sm8150: add missing qcom,smmu-500 fallback
-Date:   Mon, 17 Apr 2023 10:09:37 +0200
-Message-Id: <20230417080939.28648-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 3/4] arm64: dts: qcom: sm8150: drop snps,dw-pcie fallback compatible
+Date:   Mon, 17 Apr 2023 10:09:38 +0200
+Message-Id: <20230417080939.28648-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230417080818.28398-1-krzysztof.kozlowski@linaro.org>
 References: <20230417080818.28398-1-krzysztof.kozlowski@linaro.org>
@@ -77,33 +77,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 6c84bbd103d8 ("dt-bindings: arm-smmu: Add generic
-qcom,smmu-500 bindings") the SMMU is supposed to use qcom,smmu-500
-compatible fallback.
+Qualcomm PCI express root complex does not use snps,dw-pcie fallback:
 
+  ['qcom,pcie-sm8150', 'snps,dw-pcie'] is too long
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 ---
 
 Changes since v1:
-1. Correct compatible and commit msg (Konrad).
+1. Add Rb tag.
 ---
- arch/arm64/boot/dts/qcom/sm8150.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/sm8150.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index 3846f5e0f656..25085621ef49 100644
+index 25085621ef49..a7f7bbfefa5b 100644
 --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -3983,7 +3983,7 @@ spmi_bus: spmi@c440000 {
+@@ -1823,7 +1823,7 @@ dma@10a2000 {
  		};
  
- 		apps_smmu: iommu@15000000 {
--			compatible = "qcom,sm8150-smmu-500", "arm,mmu-500";
-+			compatible = "qcom,sm8150-smmu-500", "qcom,smmu-500", "arm,mmu-500";
- 			reg = <0 0x15000000 0 0x100000>;
- 			#iommu-cells = <2>;
- 			#global-interrupts = <1>;
+ 		pcie0: pci@1c00000 {
+-			compatible = "qcom,pcie-sm8150", "snps,dw-pcie";
++			compatible = "qcom,pcie-sm8150";
+ 			reg = <0 0x01c00000 0 0x3000>,
+ 			      <0 0x60000000 0 0xf1d>,
+ 			      <0 0x60000f20 0 0xa8>,
+@@ -1918,7 +1918,7 @@ pcie0_lane: phy@1c06200 {
+ 		};
+ 
+ 		pcie1: pci@1c08000 {
+-			compatible = "qcom,pcie-sm8150", "snps,dw-pcie";
++			compatible = "qcom,pcie-sm8150";
+ 			reg = <0 0x01c08000 0 0x3000>,
+ 			      <0 0x40000000 0 0xf1d>,
+ 			      <0 0x40000f20 0 0xa8>,
 -- 
 2.34.1
 
