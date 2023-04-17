@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83946E4A21
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2932D6E4A22
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 15:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjDQNlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 09:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39166 "EHLO
+        id S230492AbjDQNlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 09:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbjDQNk6 (ORCPT
+        with ESMTP id S230496AbjDQNlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 09:40:58 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDED1FEE
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 06:40:56 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id u13so25962976ybu.5
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 06:40:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681738856; x=1684330856;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AgAeLT4BnWajcrqgoxcZh6tBPEYk/HGw1hDR98TYQNY=;
-        b=y1iADw5/4l0GfEHMttoKUqmjvN/6WGWR6y1yacGKFhv6dEwtxK5UlSKuOBmiB9ntQA
-         VZImwCo78aJ+bU25ULXPfUFN9rlhqZMmXXSXX1Abg+AM7PUa+l8ytWnfHq4Tl+sNohtV
-         5XhY+g6W2SIGTgv/A0S4Gj1BhaSUhLji4ckmH62BrpglTOWSYyi+KWblM07W8W2BpOqp
-         UC77q1KPzRU9XtxtpwZnxmUGwP4nAUDOX3N+n/5sT+Bero7AjN5lXPLWfiHER72tS3qs
-         BwE9Ugdc01qZM2Z5ucaN8rcAEvjeqlXwsFSsnq1a9/9MLM/ehEd6Ib+fSawRa2NA8M6B
-         CCQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681738856; x=1684330856;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AgAeLT4BnWajcrqgoxcZh6tBPEYk/HGw1hDR98TYQNY=;
-        b=E33PU6rz+OMljCZ2kSSu16OnATrT9JWONZhcj8ShC/NDMvL+36refF8niBpB1aibby
-         +L4JOIh5ekYmLI6QA//XXbyOiYWpJTdjZQO9/PHU2Yb+s5ujMKBVL+jKGBnm2dM+bgs6
-         NmC3r5aVkfj2xf4QO0hEjHNNxY1HQ15a1+HNSRBMDuT0Y6psxZ+1c5VPWDmO0dvJG6WV
-         B3bLV0Hm6hJ5Q8XxtsEuppZgrKQQvkZy3ccSGhGfALyM+20UOxvqvJwDEcc61nkxez1i
-         b/ijU6ntgoXA78TcRtnXCKmrSvnO8TgmJnHl8tuS8gHPyAwLp0OCOWPMMT7+FO1sjfdY
-         lwLA==
-X-Gm-Message-State: AAQBX9f46bK8tNc7a2t66TaFMY5F9XVk+yhwGQaeLvuB1HHTE0pNHbYU
-        mfgwPNmTdxQL+QJl8ADYZ77Hmw==
-X-Google-Smtp-Source: AKy350Yn/WGkz+8XCLIJPJ4xLrb26M3kCR3KHvopTRvYYcyYXmn8nKhwNcfwxE39cjWp65B6BhD7pQ==
-X-Received: by 2002:a25:1d09:0:b0:b8f:54c1:37f5 with SMTP id d9-20020a251d09000000b00b8f54c137f5mr14290018ybd.35.1681738855803;
-        Mon, 17 Apr 2023 06:40:55 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id a6-20020a259386000000b00b923b9e0a82sm1284432ybm.45.2023.04.17.06.40.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 06:40:55 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 09:40:52 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>, stable@vger.kernel.org
-Subject: Re: [RESEND PATCH 5.15 v3 5/5] counter: 104-quad-8: Fix race
- condition between FLAG and CNTR reads
-Message-ID: <ZD1MZO3KpRmuzy42@fedora>
-References: <20230411155220.9754-1-william.gray@linaro.org>
- <20230411155220.9754-5-william.gray@linaro.org>
+        Mon, 17 Apr 2023 09:41:11 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA16C72A4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 06:41:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681738868; x=1713274868;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8ioEVi0PkJBP6SHdN0OIps0cag5EDrbnKnbBrHndp9Q=;
+  b=OPmgP+8b+hYA8kO2MetnpZCJvslK4nmVtYGDHRKXyMpv5CD8Pjo2LjAa
+   oCz5SoGZJ8usA3ng47EqcWjljATbLWSqp2gRLiE0LFE+fPC4Yh5xO8L3c
+   XY2yDGYbNLfbFYThW8uzGaQtIaDW6rW3QKkU46ksrJU8Cn5FqPKLRKdtI
+   chX3GD2o7tQEyrWSOA1hTd4RoAIiq8htKF3Lc8UsWsWDOtHwDzEYkV6rB
+   630Y6CXnNXxDF46k64itLJpZzzV3iCL+vjI4gbGWuZZJmqRa9ngR80s1n
+   lJBaEw+oLz6LxcmehEh3iFzGxIa0S9CeBOiSA6vjHUG04P1lYO83fWPjV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="329061848"
+X-IronPort-AV: E=Sophos;i="5.99,204,1677571200"; 
+   d="scan'208";a="329061848"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 06:41:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="759952618"
+X-IronPort-AV: E=Sophos;i="5.99,204,1677571200"; 
+   d="scan'208";a="759952618"
+Received: from macharje-mobl.amr.corp.intel.com (HELO [10.209.71.14]) ([10.209.71.14])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 06:41:06 -0700
+Message-ID: <a7bf05bf-1253-ef9e-bbe0-47bb391ebbb4@linux.intel.com>
+Date:   Mon, 17 Apr 2023 06:41:06 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vYFH3cBku7yaeL9d"
-Content-Disposition: inline
-In-Reply-To: <20230411155220.9754-5-william.gray@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/6] perf: Support branch events logging
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Liang, Kan" <kan.liang@linux.intel.com>, mingo@redhat.com,
+        acme@kernel.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, eranian@google.com
+References: <20230414103832.GD83892@hirez.programming.kicks-ass.net>
+ <1d62b865-5d31-ec36-99e0-785844f79199@linux.intel.com>
+ <20230414145324.GB761523@hirez.programming.kicks-ass.net>
+ <803927bb-6f74-5c09-3c18-2fd5f423287b@linux.intel.com>
+ <20230414160945.GC761523@hirez.programming.kicks-ass.net>
+ <085fa11e-ea07-c148-1b32-8a09007ee12b@linux.intel.com>
+ <20230414192407.GA778423@hirez.programming.kicks-ass.net>
+ <2428e6a2-9578-1e1d-bdef-ffcc87301503@linux.intel.com>
+ <20230414220106.GC778423@hirez.programming.kicks-ass.net>
+ <d53d4df7-d0b8-2fbc-4912-f89686b5d931@linux.intel.com>
+ <20230417115516.GM83892@hirez.programming.kicks-ass.net>
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <20230417115516.GM83892@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,111 +78,17 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---vYFH3cBku7yaeL9d
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 4/17/2023 4:55 AM, Peter Zijlstra wrote:
+>
+>> to create groups. I thought one of the basic ideas of perf was to be able to
+>> abstract those things.
+> Yeah, the abstraction at hand is a group.
 
-On Tue, Apr 11, 2023 at 11:52:20AM -0400, William Breathitt Gray wrote:
-> commit 4aa3b75c74603c3374877d5fd18ad9cc3a9a62ed upstream.
->=20
-> The Counter (CNTR) register is 24 bits wide, but we can have an
-> effective 25-bit count value by setting bit 24 to the XOR of the Borrow
-> flag and Carry flag. The flags can be read from the FLAG register, but a
-> race condition exists: the Borrow flag and Carry flag are instantaneous
-> and could change by the time the count value is read from the CNTR
-> register.
->=20
-> Since the race condition could result in an incorrect 25-bit count
-> value, remove support for 25-bit count values from this driver.
->=20
-> Fixes: 28e5d3bb0325 ("iio: 104-quad-8: Add IIO support for the ACCES 104-=
-QUAD-8")
-> Cc: <stable@vger.kernel.org> # 5.15.x
-> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
-> ---
->  drivers/counter/104-quad-8.c | 18 +++---------------
->  1 file changed, 3 insertions(+), 15 deletions(-)
->=20
-> diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
-> index 0caa60537b..643aae0c9f 100644
-> --- a/drivers/counter/104-quad-8.c
-> +++ b/drivers/counter/104-quad-8.c
-> @@ -61,10 +61,6 @@ struct quad8 {
->  #define QUAD8_REG_CHAN_OP 0x11
->  #define QUAD8_REG_INDEX_INPUT_LEVELS 0x16
->  #define QUAD8_DIFF_ENCODER_CABLE_STATUS 0x17
-> -/* Borrow Toggle flip-flop */
-> -#define QUAD8_FLAG_BT BIT(0)
-> -/* Carry Toggle flip-flop */
-> -#define QUAD8_FLAG_CT BIT(1)
->  /* Error flag */
->  #define QUAD8_FLAG_E BIT(4)
->  /* Up/Down flag */
-> @@ -121,17 +117,9 @@ static int quad8_count_read(struct counter_device *c=
-ounter,
->  {
->  	struct quad8 *const priv =3D counter->priv;
->  	const int base_offset =3D priv->base + 2 * count->id;
-> -	unsigned int flags;
-> -	unsigned int borrow;
-> -	unsigned int carry;
->  	int i;
-> =20
-> -	flags =3D inb(base_offset + 1);
-> -	borrow =3D flags & QUAD8_FLAG_BT;
-> -	carry =3D !!(flags & QUAD8_FLAG_CT);
-> -
-> -	/* Borrow XOR Carry effectively doubles count range */
-> -	*val =3D (unsigned long)(borrow ^ carry) << 24;
-> +	*val =3D 0;
-> =20
->  	mutex_lock(&priv->lock);
-> =20
-> @@ -699,8 +687,8 @@ static ssize_t quad8_count_ceiling_read(struct counte=
-r_device *counter,
-> =20
->  	mutex_unlock(&priv->lock);
-> =20
-> -	/* By default 0x1FFFFFF (25 bits unsigned) is maximum count */
-> -	return sprintf(buf, "33554431\n");
-> +	/* By default 0xFFFFFF (24 bits unsigned) is maximum count */
-> +	return sprintf(buf, "16777215\n");
->  }
-> =20
->  static ssize_t quad8_count_ceiling_write(struct counter_device *counter,
->=20
-> base-commit: d86dfc4d95cd218246b10ca7adf22c8626547599
-> --=20
-> 2.39.2
+Okay then if we add perf record metrics and want to support this feature 
+we'll need to replicate
 
-Greg,
+the kernel scheduler in the user tools
 
-This patch will no longer apply to 5.15.x when the "counter: Internalize
-sysfs interface code" patch in the stable-queue tree is merged [0].
-However, I believe the 6.1 backport [1] will apply instead at that
-point. What is the best way to handle this situation? Should I resend
-the 6.1 backport with the stable list Cc tag adjusted for 5.15.x, or are
-you able to apply the 6.1 backport patch directly to the 5.15.x tree?
+-Andi
 
-Thanks,
 
-William Breathitt Gray
-
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git=
-/tree/queue-5.15/counter-internalize-sysfs-interface-code.patch
-[1] https://lore.kernel.org/all/20230412082840.822017654@linuxfoundation.or=
-g/
-
---vYFH3cBku7yaeL9d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZD1MZAAKCRC1SFbKvhIj
-Kw3aAP9gXLzMdyqUoa0eraz/ltqJ+WGxU7DoCqlMykA7tZvRJgD+JPK60SzhmFHh
-aU0QBgt38/+j3aXUlMCE87k7TYQW4gI=
-=T28Y
------END PGP SIGNATURE-----
-
---vYFH3cBku7yaeL9d--
