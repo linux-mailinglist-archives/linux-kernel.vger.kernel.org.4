@@ -2,137 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5676E4C1F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C43F6E4C2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Apr 2023 16:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjDQO4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 10:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        id S230015AbjDQO6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 10:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbjDQO4W (ORCPT
+        with ESMTP id S229485AbjDQO6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:56:22 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85165AD0B
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:55:55 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f177cb2c6cso112835e9.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:55:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1681743343; x=1684335343;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vVLpu463weUnMVF2zbdwbH3MNpH2/6HWhiak2FggVPg=;
-        b=D7o3l3xcWWlfo+EXUnDR08gc9zaDZak181rwXLSSGGskUajUsAkBRcBC76KHtJIX8g
-         NfcOJzAZlMKZ0GUfmsJP6dtOtpP02blCi8coTZr5ZdEBmJ4KDyfzIrys7zygH2rgWCu9
-         N7M0j3rY/XNH8cgh16sAb0AVsjJSZPdViJ1AIR/YM8foAEQV40hqTbr8MbotN+Hm/yN4
-         4TeSuCUnwTMg55dxWMt+UyCDWfXdbjqB+r+w9iVju830bGcDHc5MGVQ9ybFw/m9Z0XFd
-         LsyVc90FWbKgS/byLEGEohsfH2VzMolRPDMADoq4Ej64KsbLT3W/HAgDj5xzACtZZzPe
-         y1Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681743343; x=1684335343;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vVLpu463weUnMVF2zbdwbH3MNpH2/6HWhiak2FggVPg=;
-        b=hfuEVFXQ2oqmKBWal1m4ilhpTcerWdzHflRaKuLLiCslXMtdnIy43netyZZf+qnJ1q
-         /oLK5LT86wSpktlnO8hWLI6wOQm5ThXJGX7ATzEwoSQuMlndo2rBwKpPuOh9MZCK9hdI
-         Eo2emS6q7A7s61RfM4QocGjC0NFi7THcIpovYBbw6FBo1pVzlHBAdvatGBu2OFgeuYzt
-         QKXWsga0auNsc/LLGUVdwqkjrHMOm+mXpl/QeCqFakR0h6fCVwSu+TIeLUKuvoubbfvM
-         glMkGz3EITHhaQQrVCqBvf3ITv9a3mH9UbXMoLRgLTqqpjqjC8OTj9UAKaEbsgLq1xza
-         rOrg==
-X-Gm-Message-State: AAQBX9eV8EVEqzMTYa1+Vhtt9CrMvIHvT0/2Uj8ZRudWO633ixlDF6VP
-        luvYsRBd4/djkMwYTXxmmQsu5g==
-X-Google-Smtp-Source: AKy350ZTjkqzUgTQGHGrJ9JuARTqLhAJbKksuC56qgRgq3evGrn857zKaOJqn9OLamzUI4n7teZ4bA==
-X-Received: by 2002:adf:e8c1:0:b0:2ef:1c8c:1113 with SMTP id k1-20020adfe8c1000000b002ef1c8c1113mr5931168wrn.9.1681743343288;
-        Mon, 17 Apr 2023 07:55:43 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:374a:ffae:fd26:4893])
-        by smtp.gmail.com with ESMTPSA id j15-20020a5d564f000000b002f7780eee10sm7998301wrw.59.2023.04.17.07.55.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 07:55:42 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Parikshit Pareek <quic_ppareek@quicinc.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v2 3/3] arm64: dts: qcom: sa8775p: pmic: add the sdam_0 node
-Date:   Mon, 17 Apr 2023 16:55:36 +0200
-Message-Id: <20230417145536.414490-4-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230417145536.414490-1-brgl@bgdev.pl>
-References: <20230417145536.414490-1-brgl@bgdev.pl>
+        Mon, 17 Apr 2023 10:58:42 -0400
+Received: from exchange.fintech.ru (exchange.fintech.ru [195.54.195.159])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E854ABBAC
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 07:58:22 -0700 (PDT)
+Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
+ (195.54.195.159) with Microsoft SMTP Server (TLS) id 14.3.498.0; Mon, 17 Apr
+ 2023 17:58:06 +0300
+Received: from [192.168.211.128] (10.0.253.138) by Ex16-01.fintech.ru
+ (10.0.10.18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Mon, 17 Apr
+ 2023 17:58:06 +0300
+Message-ID: <04cce0d9-33b7-b6d5-e75e-581e3fdad530@fintech.ru>
+Date:   Mon, 17 Apr 2023 07:58:00 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] drm/ttm: fix null-ptr-deref in radeon_ttm_tt_populate()
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+CC:     "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jerome Glisse <jglisse@redhat.com>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>
+References: <20230417143431.58858-1-n.zhandarovich@fintech.ru>
+ <fc9d282d-e1ac-b99f-7ba0-77bb9c52cca4@amd.com>
+Content-Language: en-US
+From:   Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+In-Reply-To: <fc9d282d-e1ac-b99f-7ba0-77bb9c52cca4@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.0.253.138]
+X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
+ (10.0.10.18)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Parikshit Pareek <quic_ppareek@quicinc.com>
 
-Introduce sdam_0 node, which is to be used via nvmem for power on
-reasons during reboot. Add supported PoN reaons supported via sdam_0
-node.
 
-Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+On 4/17/23 07:42, Christian König wrote:
+> 
+> 
+> Am 17.04.23 um 16:34 schrieb Nikita Zhandarovich:
+>> Currently, drm_prime_sg_to_page_addr_arrays() dereferences 'gtt->ttm'
+>> without ensuring that 'gtt' (and therefore 'gtt->tmm') is not NULL.
+>>
+>> Fix this by testing 'gtt' for NULL value before dereferencing.
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with static
+>> analysis tool SVACE.
+>>
+>> Fixes: 40f5cf996991 ("drm/radeon: add PRIME support (v2)")
+>> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+>> ---
+>>   drivers/gpu/drm/radeon/radeon_ttm.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/radeon/radeon_ttm.c
+>> b/drivers/gpu/drm/radeon/radeon_ttm.c
+>> index 1e8e287e113c..33d01c3bdee4 100644
+>> --- a/drivers/gpu/drm/radeon/radeon_ttm.c
+>> +++ b/drivers/gpu/drm/radeon/radeon_ttm.c
+>> @@ -553,7 +553,7 @@ static int radeon_ttm_tt_populate(struct
+>> ttm_device *bdev,
+>>           return 0;
+>>       }
+>>   -    if (slave && ttm->sg) {
+>> +    if (gtt && slave && ttm->sg) {
+> 
+> The gtt variable is derived from the ttm variable and so never NULL
+> here. The only case when this can be NULL is for AGP and IIRC we don't
+> support DMA-buf in this case.
+> 
+>>           drm_prime_sg_to_dma_addr_array(ttm->sg, gtt->ttm.dma_address,
+> 
+> Just use ttm->dma_addresses instead of gtt->ttm.dma_address here to make
+> your automated checker happy.
+> 
+> Regards,
+> Christian.
+> 
+>>                              ttm->num_pages);
+>>           return 0;
+> 
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-index 5abdc239d3a6..3c3b6287cd27 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-@@ -88,6 +88,14 @@ trip1 {
- 			};
- 		};
- 	};
-+
-+	reboot-mode {
-+		compatible = "nvmem-reboot-mode";
-+		nvmem-cells = <&reboot_reason>;
-+		nvmem-cell-names = "reboot-mode";
-+		mode-recovery = <0x01>;
-+		mode-bootloader = <0x02>;
-+	};
- };
- 
- &spmi_bus {
-@@ -133,6 +141,19 @@ pmm8654au_0_gpios: gpio@8800 {
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
- 		};
-+
-+		pmm8654au_0_sdam_0: nvram@7100 {
-+			compatible = "qcom,spmi-sdam";
-+			reg = <0x7100>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0x7100 0x100>;
-+
-+			reboot_reason: reboot-reason@48 {
-+				reg = <0x48 0x1>;
-+				bits = <1 7>;
-+			};
-+		};
- 	};
- 
- 	pmm8654au_1: pmic@2 {
--- 
-2.37.2
+Thank you for your reply, you are absolutely right.
+Apologies for wasting your time.
 
+Nikita
