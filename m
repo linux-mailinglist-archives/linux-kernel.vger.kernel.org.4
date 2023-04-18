@@ -2,98 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A796E6084
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F126E608C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbjDRL6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 07:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
+        id S231646AbjDRMB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 08:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbjDRLz4 (ORCPT
+        with ESMTP id S230384AbjDRL7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 07:55:56 -0400
-Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4419EC9;
-        Tue, 18 Apr 2023 04:54:12 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id C075C2014A;
-        Tue, 18 Apr 2023 13:54:10 +0200 (CEST)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id AVlKHqG3c8RX; Tue, 18 Apr 2023 13:54:10 +0200 (CEST)
-Received: from begin.home (apoitiers-658-1-118-253.w92-162.abo.wanadoo.fr [92.162.65.253])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 6C9052013E;
-        Tue, 18 Apr 2023 13:54:10 +0200 (CEST)
-Received: from samy by begin.home with local (Exim 4.96)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1pojuT-00Bypv-39;
-        Tue, 18 Apr 2023 13:54:09 +0200
-Date:   Tue, 18 Apr 2023 13:54:09 +0200
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     James Chapman <jchapman@katalix.com>, tparkin@katalix.com,
-        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, corbet@lwn.net, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PPPoL2TP: Add more code snippets
-Message-ID: <20230418115409.aqsqi6pa4s4nhwgs@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Guillaume Nault <gnault@redhat.com>,
-        James Chapman <jchapman@katalix.com>, tparkin@katalix.com,
-        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, corbet@lwn.net, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230416220704.xqk4q6uwjbujnqpv@begin>
- <ZD5V+z+cBaXvPbQa@debian>
- <20230418085323.h6xij7w6d2o4kxxi@begin>
- <ZD5dqwPblo4FOex1@debian>
- <20230418091148.hh3b52zceacduex6@begin>
- <ZD5uU8Wrz4cTSwqP@debian>
- <20230418103140.cps6csryl2xhrazz@begin>
- <ZD5+MouUk8YFVOX3@debian>
+        Tue, 18 Apr 2023 07:59:49 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E3D83D4;
+        Tue, 18 Apr 2023 04:56:41 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id o9-20020a05600c510900b003f17012276fso3970803wms.4;
+        Tue, 18 Apr 2023 04:56:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681819000; x=1684411000;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T9oSeZGJaO3G9BEkK1S2Mgd4sINffRf+WgKyKKehfmI=;
+        b=EXHJXEGXy79uUSSwalxffycq7KWxOyLGcigWWbEvbe4A/tHuCrJx3bi9fyVr30xbvt
+         2ohr0yYvurqh89V5/02Q1Lxqa1lcYhqwJT9gY2OkB9rEfs9TqLQHFDOXD5xueuIZKLIi
+         0enhdobg6t6Pn+69lbxkw5PDTNIKBWJC2ntey0mtiKfSW2kKhayCaxskZc6WC/vPvrhO
+         bC1syUexCP1omtV1npNjjcM6CzulU+hIVBIJEb6WXUrn9tqFidigErpnMAl0gPt0EZ8e
+         vjD7hAefkxeTGZK7t8fEssZ0/C8eTQFa8cG8kZc3cSanJT3q9kEr34rQ5C6FT2zXaJ4j
+         khRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681819000; x=1684411000;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T9oSeZGJaO3G9BEkK1S2Mgd4sINffRf+WgKyKKehfmI=;
+        b=BqlCc2Jnr8JrwVfLfs3xUtFGDcGJZP90sViwaHXghBABSAPG3w9yxgJjeN6Zws1jJs
+         9tDTAuxWeRH4x9cJU8EtaNL26EIVGqYqpX1AVq0oLUWYJGFtfmylAy7L9ZlQhTS6gYLU
+         ctIAB2YOFGjSoU9sRml9i/3doC3ccP+B1SUgNrFh9J7TtszrIR0u8ApTztCbzm5urDsP
+         NeRFHXSa0n7Lbq3TFMXpZ/qV83g7Yf4zpDERVg6Mg28fh6I+M8MqLR4jQ05ObfmtiTsr
+         r3Osc7tOk/9OO7ihIHF0Fvgz1KB94L3jZ2ewAoHL/patqzXE5/Qola8ZkHclaaWE/144
+         ZYwQ==
+X-Gm-Message-State: AAQBX9duWhOPzwOfzGC3Q76dqUMQQwu7gC9Bez3bMeIZDgs5JtkMd1ik
+        s5KGjCVk8uDfJKXVsOUtVCk=
+X-Google-Smtp-Source: AKy350bbx0bJ/4L8a44U/aCtvaM2RV9kN1tMXWOPsHUuu0HTywAsjz+gzSejmnkzvEnhtHbDS3+jEw==
+X-Received: by 2002:a05:600c:b47:b0:3f1:6cdf:93ac with SMTP id k7-20020a05600c0b4700b003f16cdf93acmr7012569wmr.17.1681819000111;
+        Tue, 18 Apr 2023 04:56:40 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id v3-20020a1cf703000000b003f04646838esm14855802wmh.39.2023.04.18.04.56.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 04:56:39 -0700 (PDT)
+Message-ID: <1e55328e-aaa2-78e3-ddc8-c2717f6283f5@gmail.com>
+Date:   Tue, 18 Apr 2023 13:56:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZD5+MouUk8YFVOX3@debian>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 01/27] dt-bindings: pwm: Add compatible for MediaTek
+ MT6795
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jassisinghbrar@gmail.com, chunfeng.yun@mediatek.com,
+        vkoul@kernel.org, kishon@kernel.org, thierry.reding@gmail.com,
+        chunkuang.hu@kernel.org, ck.hu@mediatek.com,
+        jitao.shi@mediatek.com, xinlei.lee@mediatek.com,
+        houlong.wei@mediatek.com, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
+        kernel@collabora.com, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
+ <20230412112739.160376-2-angelogioacchino.delregno@collabora.com>
+ <20230414054345.ip3ug53ivr3elbpy@pengutronix.de>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230414054345.ip3ug53ivr3elbpy@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guillaume Nault, le mar. 18 avril 2023 13:25:38 +0200, a ecrit:
-> As I said in my previous reply, a simple L2TP example that goes until PPP
-> channel and unit creation is fine. But any more advanced use of the PPP
-> API should be documented in the PPP documentation.
 
-When it's really advanced, yes. But here it's just about tunnel
-bridging, which is a very common L2TP thing to do.
 
-> I mean, these files document the API of their corresponding modules,
-> their scope should be limitted to that (the PPP and L2TP layers are
-> really different).
+On 14/04/2023 07:43, Uwe Kleine-König wrote:
+> Hello,
+> 
+> On Wed, Apr 12, 2023 at 01:27:13PM +0200, AngeloGioacchino Del Regno wrote:
+>> Add a compatible string for MediaTek Helio X10 MT6795's display PWM
+>> block: this is the same as MT8173.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
+> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> 
+> I assume this patch will go in together with the other patches in this
+> series via an ARM tree? (I.e. not via pwm.)
+> 
 
-I wouldn't call
+That's totally fine, I'll take this patch through my tree once everything is ready.
 
-+        ret = ioctl(ppp_chan_fd, PPPIOCBRIDGECHAN, &chindx2);
-+        close(ppp_chan_fd);
-+        if (ret < 0)
-+                return -errno;
-
-documentation...
-
-> That shouldn't preclude anyone from describing how to combine L2TP, PPP
-> and others to cover more advanced use cases. It's just better done in a
-> different file.
-
-A more complete example, yes. I don't plan on taking time to do it.
-
-Samuel
+Regards,
+Matthias
