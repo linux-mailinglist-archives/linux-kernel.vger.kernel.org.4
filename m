@@ -2,165 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC2F6E65AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DEFA6E65AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232386AbjDRNRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 09:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S231881AbjDRNS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 09:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbjDRNRD (ORCPT
+        with ESMTP id S230376AbjDRNSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 09:17:03 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2123.outbound.protection.outlook.com [40.107.20.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F2B1544C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 06:17:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OEm3LruTNFex/C0g5wCM7Qz3rpav8DhvFeWr35d0zdXPMIJBf5zD3fmUzjTEe2C9btY8zvcRSlbbwiowxWr7clmEV+EBGFSaemcP7KJuHCb+0mxRNUnx2iBYR+co7WpL6MZzqxcZhzB+eFJmMHFiCBk04WauIowlae3ZQ7bi3LTjzPtCJWjCT5la7LjZw2lRLiLmhsbvDaWiB0rVfiUIb4VVNQaSa0lhw4bctF+BfM3TpK0X9hsXlFg4N6v06aQU9sppt3r8WEzc81UH3RHtlyx44Y9shwN94DLSuO+w6MrG8HzRSXbplQLOkwqba5+4BEqrV55geh7KJSQ9C4ZIrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WY8WJqNKGSW4kML86ZJerx8H6J5lUuiAj5m36V2lcSU=;
- b=Q7jqlaVijTACCQYXAKKlav3dAu31exIt/EwDydZw1rqL8nKAkY6C2bP87i7O3bgq9Q8iYQYwqU4GSC3RHcTVLQJmGIxvKvapJmSSH7b8xbc4ql3Nq5cRqplf1cCLj9Eq1TQScRi2txpuTf8yFIWlxhte+JACRmIfFzm1utZ/JFIzj/Zh+14PRgKClRIlXlLSISBbNAVM+erqr3Aqo7WVNkhC63ROjfyrfoW4S+XqaEH0/J1mernA35k01b/Gzc3LD54sW2qakjjWtbicLTRaVnCOrV0+PafhOMJYQZXjauM6WK5i122CkM5di5GPfdZ4dVfc6VIFVZtVyUzWlXxi0w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
- dkim=pass header.d=kontron.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
- s=selector2-mysnt-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WY8WJqNKGSW4kML86ZJerx8H6J5lUuiAj5m36V2lcSU=;
- b=ANENs6n/3UULgyorh/IpLCKXWsGCA6MH+q6RXxPN3Rs9NApVlUf0LSYW1TAlAC4A5AMgtkQ7jrmBMwLcIqg+WbI1SFvZ8HLTn43tCJVR24yeFjc1wNqBtuiGGPBku1O+oGzAylYv+HvVfLDaPqmMU1L5dz6Wvbmue8HVxj+nyxM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kontron.de;
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
- by PAXPR10MB5613.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:243::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.17; Tue, 18 Apr
- 2023 13:16:58 +0000
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::7ec3:9d2c:15ac:e1af]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::7ec3:9d2c:15ac:e1af%3]) with mapi id 15.20.6319.019; Tue, 18 Apr 2023
- 13:16:57 +0000
-Message-ID: <cdd90ba1-e9bd-e622-d7f3-de5d762cc2c6@kontron.de>
-Date:   Tue, 18 Apr 2023 15:16:53 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH 3/3] drm: bridge: samsung-dsim: Remove init quirk for
- Exynos
-Content-Language: en-US, de-DE
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Frieder Schrempf <frieder@fris.de>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        dri-devel@lists.freedesktop.org, Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Marek Vasut <marex@denx.de>
-References: <CGME20230418104305eucas1p145a8fa1560520ebe430590abdeabb66e@eucas1p1.samsung.com>
- <20230418104256.878017-1-frieder@fris.de>
- <0c4f2703-8810-fe0f-76aa-cc6250aea74a@samsung.com>
-From:   Frieder Schrempf <frieder.schrempf@kontron.de>
-In-Reply-To: <0c4f2703-8810-fe0f-76aa-cc6250aea74a@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-X-ClientProxiedBy: BE1P281CA0097.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:79::18) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:263::10)
+        Tue, 18 Apr 2023 09:18:25 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6801113F90
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 06:18:24 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5144043d9d1so2030466a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 06:18:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681823904; x=1684415904;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bY3H0W2+yGUzRgmNYp2BkoKOa+V40Y6M2DaohWXcmZc=;
+        b=OYSWgnnR3fS66p99KdwyGJ5aJ+WMh+j6yqM5Ps3Lk4FjD59cbRrqJRwTJCWXshnrZb
+         QIo+1Z/Zm/NE4t8hjZsOmvujQkQ/T6KaY+kkdsQ/AYGZR4IJZilIyRJN90FTqPlHvwzZ
+         6DYTAv+RTiNgTQTEBL/INUYEPz++67VOyDiSd5ku3Qz+AUip+dIkVgEDBMQOHFaAowZ5
+         1QCLuJyeB6rSMuPICbl2f8zeRpAQOTeo0r1+6E1huF/cSioQv+e5RjcuXLE81F0bpdK5
+         uDK1S+sDY13+rbbgi/3cW04eKRj0zOZF0Tig74DDKF5TqUV3ApkzAHdKrl7iYSFHSX+Z
+         eAbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681823904; x=1684415904;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bY3H0W2+yGUzRgmNYp2BkoKOa+V40Y6M2DaohWXcmZc=;
+        b=IxfKILSCI1tXMQicluFAfq4C8tCHEAD+y8C3MorkH6AraFS3z1iGwHhqCFdUvuaktu
+         sQUMuTCqnT4oRN3OaILpTK3WzV22z9DlXCsx+xAzLhjLzdwnT8yccaZIuZgwfCfQMBdf
+         9UcQ1wkZFVR/7GVjNCk46poOO3DRO2NPaoqNJp6afpSWHTsiXG40cnHKFFKGzf2XzWEX
+         LPT7oub81PFkCvlBw2Yu+Hi+PRSzevEzK1MDauefsLENSjB8l7MpMf+znyL4SXP+/HYO
+         TdNQ0c6pDOAYw3V1f36lsRR/dEtst3UUOilO3x5nZz9JEAc9+w8ghkY72g67R/aueN2g
+         ZQGA==
+X-Gm-Message-State: AAQBX9f/oOdM8L2RuyiB3bH7fDfuIwrFyCZO94g3ZT/wZO12Mz94awPD
+        WvvZSM25AGqRq8jpn63eALlX8yyq5v/gD9ZABGU=
+X-Google-Smtp-Source: AKy350Yi01vddmY2TYAhPaO8MVbnocFKSLapmfGjb3odpIaJueF5ZMSXNZHsLn1vyLNXl/zhm1HMiXcJ0C/bdK2gzZU=
+X-Received: by 2002:a63:384f:0:b0:513:faf5:e430 with SMTP id
+ h15-20020a63384f000000b00513faf5e430mr616050pgn.9.1681823903726; Tue, 18 Apr
+ 2023 06:18:23 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|PAXPR10MB5613:EE_
-X-MS-Office365-Filtering-Correlation-Id: af4ed314-4b93-49c7-b031-08db400f2fa6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: br39/exmtdZ1mVtDHdsDku8oOrj0HgDrX+KREzoyP86GIpc6rEC6JrFoUOgwJURy6UP5hDIXmnWwHhnWUxnaQX1C1HAvK/tgsikrLoIrJv009D0V3EhHkI0Qc3U+QyEsl+6w8eJGWWEw0r7e8aTcZqyqFLdYHsE6O7C2zH7NPm3po54QHt+lwswYFZnrdcniTEUlUB2+7W5Al/qok9VTapBJDMJCzDs1v2CEkxP82OstBOiOswgb4AyGm9oL0wPgAaKLEOO1IEWVTm10r08hLaQyFPYurVCCwRkkBJ8f6aLCX0eGMnWu8TgaOA5/wtZCm8czJRHyoRkTqD0k1taisLB/0fYuIpzardjwQD8IiPvBUqAuYaEyc0rerSVVGpmE8WirNNBPH44b6HGUyBDSjjygY9cEbCHS//QIuj5jEsXkn2psVJhpfyvH55ylqDVn5D/WzfBIcxqJbQAtFWrKZboyqPEBLmvDrMYZf1HAoRPC0BrFhDojuEn2DKJIe/T/J3dn2UtWlPExh8w7W4LBXR7W9M8y96BbpXilkUE1MmS+2QpNee10dsqZKvAw968JuoZaa3wmTEYdNZ1PWEcdlISQwVmGPcgyYZyZ/Ly8kvv8gB4zTFC/3jlAmvcG7JITvO2g1FnIcrmza92YLmRKLcZTysVdkV1HS3e6p69GIKE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(39860400002)(346002)(136003)(366004)(451199021)(66946007)(66556008)(66476007)(4326008)(478600001)(316002)(8936002)(44832011)(110136005)(8676002)(5660300002)(54906003)(7416002)(921005)(41300700001)(38100700002)(186003)(53546011)(2616005)(6486002)(6666004)(45080400002)(6506007)(6512007)(26005)(966005)(31696002)(2906002)(36756003)(86362001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzd0THJEbEpxRHl2TU5TSlhUU3N4N2VLNHc0ZEc0SGFNdU1VKzNCRmZXWFpt?=
- =?utf-8?B?Y2Z2anpxM2dYZlROMGhQNW1CU20xZUdFWndaa1dPSlZjTFdBai8vK0hyQ0tE?=
- =?utf-8?B?ZzZuY1VONEw2Rkg4blFtUTBieXFWQ1pLSktodmY0RjFyTFkrQkZFd3licG9p?=
- =?utf-8?B?dkI2WTRTcW04bkJaSnNsK3lLanRpWUNBR3UyMVRhL1NRRUQxdzB1UWI4OUxs?=
- =?utf-8?B?SEtINEl3VmZpNGtQbHEyVERhd3d0V2E4emo4cHdJUmN0ZHQvQnJBYTFFck5t?=
- =?utf-8?B?ajMwTjQyaGlwZ3B0U0gyRE9rMTE1dlJ3aE9xQWo1bDg4bGNPQS9tNEtQaUFx?=
- =?utf-8?B?eGpnYjJuOHI4TU1kRktHRUUydHQrcjlEdEs4b0RCU05TY2dCQ0pMYzJVTXRn?=
- =?utf-8?B?Y2JBNXlhQTJDRGcreG5CeFNPYUFQK2Q2Vlp0MjFRc0J1Rm1wZ3hnRnp2OFBO?=
- =?utf-8?B?TFBQR2dycUZtc1NKQXhFc0d4MkYvejI5Si9QZ1pyNnEwdlkzTElzT1cwQUxN?=
- =?utf-8?B?ZlFsWWVkZVE1QWNSN2pYMTAzVFdibnhtZ21CRVlKYjRiME5iL0QrNkliYUtL?=
- =?utf-8?B?QnpRUldkbXhQZjhNdXhIelNiVjI2bUJNTStKQkZwWVRuSnhKeDdSOE90Q3Nn?=
- =?utf-8?B?Q0tuYnptUkF1SVMwcU1jVUpHZFJBeGU2ZjZwSlR1U1VZbjBtcGsxK0h0akxt?=
- =?utf-8?B?TGZhTlRoN0JlcEczVk5BMVk1aitoSVRGOXhnVUhUdGIvTCs3djZaWXFERWJJ?=
- =?utf-8?B?SjJKczlxcEVuUXBKNDF2bWtIVjVGa2diSXBna0hLalYycXVsZXh2akMxRUVX?=
- =?utf-8?B?bG84d2dvZ1U3djB5c0hObm50MG1sV1dmZ3NJZHd5aHhudTJ0L0JJYVE4NkQ2?=
- =?utf-8?B?empuTmpwZEk0RzdXUVozTDdCMEx3blZuUGoyVGRhZGdBSzQrQmJMNm9ENXJC?=
- =?utf-8?B?YnpMUE00cUZUZnFTVFhKMnRWMzRzdGdVNWJoRURaMjZ0VnVra0hjTGxCVGdt?=
- =?utf-8?B?eHJxd282bjBFcHlRaXg1NkI1LzBEYThTVWZxSE16V0lUd1plQUJjSWVyeTcx?=
- =?utf-8?B?ODAraW1yRHRGU05mOWcxcGdROE4zR0ZxUlVWdHdlT3dZNkIxN2pYd0ZPZXk0?=
- =?utf-8?B?NzVaK0hZVVcrWS8xWklVRy9MejRScjVGdjlrMDVFelhOMGpNMFpNZ0pQNklJ?=
- =?utf-8?B?b2Nucy9WeFNkdjRqZUVFQlBFY1cwM3NwWUM0alZ6bkE0a1BpUExZNU1CUmE4?=
- =?utf-8?B?b2dHRW5qS2FxclBUckwvV0h0YjdaTDNTRTgrTktHcHpPVDRpYys4eVBYT0pE?=
- =?utf-8?B?cTJVbnEzd3YxL1FibFB1N3ZDK3lMRGFXSFdJNkN5UHJ0QlNzNkVmd0pqTmE0?=
- =?utf-8?B?YjE2UURqeVdLMTBIT05sTkk4U1R3OTN1amtkbDRTOFdYS2F4emNoc2hpeDZ2?=
- =?utf-8?B?Z0tIZHZsNG9BbEdXTFROV2NNOFdTM2VYS3pIVDVzNVRSQTNaYVNyS3hSWDdD?=
- =?utf-8?B?ZndYcFpmRFJocU43SGpLODlpU2pDeHIyNWxUY0FFYjVrTzJvZUNRWVRrR2li?=
- =?utf-8?B?SFl1SmhHakJNMHh1bWFWWW5GRE1GVDE1RFBqZ0tpSXdoVWsyWkZEc2x3VjlC?=
- =?utf-8?B?L3d0eUwydFBQNEpDOUNBbk9XRjMraUtWV0NPWFlVNHAyWUw0eGdodzFuTkw5?=
- =?utf-8?B?bTk5NTBqSFlPK1poR3BTNEVUU0I5VjlyekNWRDJMNHQ2NE0yN3JDZ0J1Umgx?=
- =?utf-8?B?OTJldU9wd2w5TVhxRUJWM21XRFhkVVkyenhVUVo3OUc5eDFka05ZY3NOaFBV?=
- =?utf-8?B?RDFGeXQ3NDgvNDFpN1hCREV1YnAzM2JpOFd1K0lWZ2NsQVN3M0IwZStBMmp1?=
- =?utf-8?B?M2p1RW1HejhmRDdjRG5VS2VTMXFQTTRpM252dmdzVkllSGpnenF4aHdZT1JF?=
- =?utf-8?B?cVhzL25NZmYvMi95Zlp0L2h6WlBHOXVoT2t0Rzh4MlRoanRnVzlKU080SFBQ?=
- =?utf-8?B?cWtBRVpyY0tQdTRzL0hhMUE4UkM2d1BlZmlaQVBKWWJLOEFUSUV0QTJGQUps?=
- =?utf-8?B?NGhycThmWFAvdzExalJ4enRUN0swcmE0d3F1VldXSlFIREpuQk1UU2pwTzZJ?=
- =?utf-8?B?SGRwUTFMNC9VQkZNVWI5QVNhOHVZVTRQUG41M2lua0YrckpwTmlpOWV5WWsw?=
- =?utf-8?B?V1E9PQ==?=
-X-OriginatorOrg: kontron.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: af4ed314-4b93-49c7-b031-08db400f2fa6
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 13:16:57.3021
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EZ9LrpXXZU4ntfIuKUDjVmxteCDEu2m0o9+YMP+yftXFaybllzI/Yk8so6WATXjlX0XMuL+ctPjvpNa4SB+NgiyeOxme1gpfeVFNZav990Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR10MB5613
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230312145305.1908607-1-zyytlz.wz@163.com> <CANDhNCr=hdhKS4c+U=+W1ONHDWv6BrwL5TovGjs0G2G+Reqc9g@mail.gmail.com>
+ <CAJedcCyJnV+KnFF5h+2-0W1R4uaUxUxXFUH3Q9HGYh-5F5LmBQ@mail.gmail.com>
+ <CAJedcCyERP0-9DNgeKmS3C9Soqq590PteEorr_bxKzNanht=TQ@mail.gmail.com>
+ <CAMSo37Vfr0DOqN+1XjH0o3pOY=BaHnSFkUbnZPOdMQ3TbfoAKg@mail.gmail.com>
+ <CAJedcCzm3MqYe3QGT7V4sMmDsVHbjVSnEc2NXWPMGVZL=a_cBA@mail.gmail.com>
+ <2023041308-nerd-dry-98a6@gregkh> <CAJedcCyeM2a79i0=ffKwdKfnQayo7svhTTEth2ka6K9np0Ztiw@mail.gmail.com>
+ <2023041308-unvisited-slinky-a56f@gregkh> <CAJedcCxzGbUSj0nh4xYp8P2zhYSM31CGi2fGE+9VJt7mkg6h4g@mail.gmail.com>
+ <CAMSo37V3vgjzgM_3Toy2HGwVuFcTw9DfVKDnVNaD-j4UJtOPvg@mail.gmail.com>
+In-Reply-To: <CAMSo37V3vgjzgM_3Toy2HGwVuFcTw9DfVKDnVNaD-j4UJtOPvg@mail.gmail.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Tue, 18 Apr 2023 21:18:13 +0800
+Message-ID: <CAJedcCwow9sTEzZpiqmmcEDZ0XFLauA_tVBTJf5MfpadC1M+cQ@mail.gmail.com>
+Subject: Re: [PATCH] misc: hisi_hikey_usb: Fix use after free bug in
+ hisi_hikey_usb_remove due to race condition
+To:     Yongqin Liu <yongqin.liu@linaro.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        John Stultz <jstultz@google.com>,
+        Zheng Wang <zyytlz.wz@163.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
+        alex000young@gmail.com, Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.04.23 15:12, Marek Szyprowski wrote:
-> On 18.04.2023 12:42, Frieder Schrempf wrote:
->> From: Frieder Schrempf <frieder.schrempf@kontron.de>
->>
->> Assuming that with the init flow fixed to meet the documentation at
->> [1] and the pre_enable_prev_first flag set in downstream bridge/panel
->> drivers which require it, we can use the default flow for Exynos as
->> already done for i.MX8M.
->>
->> [1] https://docs.kernel.org/gpu/drm-kms-helpers.html#mipi-dsi-bridge-operation
->>
->> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
->> ---
->> I have no idea if my assumptions are correct and if this works at all.
->> There's a very good chance it doesn't...
-> 
-> Unfortunately this change breaks all Exynos boards with DSI panels. I've 
-> check all 4 panels that are in mainline and none worked.
+Yongqin Liu <yongqin.liu@linaro.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=8818=E6=
+=97=A5=E5=91=A8=E4=BA=8C 01:31=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hi, Zheng
+>
+> Sorry for the late reply.
+>
+> I tested this change with Android build based on the ACK
+> android-mainline branch.
+> The hisi_hikey_usb module could not be removed with error like this:
+>     console:/ # rmmod -f hisi_hikey_usb
+>     rmmod: failed to unload hisi_hikey_usb: Try again
+>     1|console:/ #
+> Sorry I am not able to reproduce any problem without this commit,
+> but I do not see any problem with this change applied either.
+>
+> If there is any specific things you want to check, please feel free let m=
+e know
+>
 
-Ok, thanks for testing anyway!
+Hi Yongqin,
 
-As already mentioned this was rather a shot in the dark, as I didn't
-even bother trying to fully understand what's going on on the Exynos side.
+Thanks for your testing. I have no more questions about the issue.
 
-For now I will just remove this patch from the series in the next iteration.
+Best regards,
+Zheng
+
+> Thanks,
+> Yongqin Liu
+>
+>
+> On Fri, 14 Apr 2023 at 00:46, Zheng Hacker <hackerzheng666@gmail.com> wro=
+te:
+> >
+> > Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=8813=
+=E6=97=A5=E5=91=A8=E5=9B=9B 23:56=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > On Thu, Apr 13, 2023 at 11:35:17PM +0800, Zheng Hacker wrote:
+> > > > Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=
+=8813=E6=97=A5=E5=91=A8=E5=9B=9B 20:48=E5=86=99=E9=81=93=EF=BC=9A
+> > > > >
+> > > > > On Thu, Apr 13, 2023 at 07:12:07PM +0800, Zheng Hacker wrote:
+> > > > > > Yongqin Liu <yongqin.liu@linaro.org> =E4=BA=8E2023=E5=B9=B44=E6=
+=9C=8813=E6=97=A5=E5=91=A8=E5=9B=9B 18:55=E5=86=99=E9=81=93=EF=BC=9A
+> > > > > > >
+> > > > > > > Hi, Zheng
+> > > > > > >
+> > > > > > > On Thu, 13 Apr 2023 at 16:08, Zheng Hacker <hackerzheng666@gm=
+ail.com> wrote:
+> > > > > > > >
+> > > > > > > > Friendly ping about the bug.
+> > > > > > >
+> > > > > > > Sorry, wasn't aware of this message before,
+> > > > > > >
+> > > > > > > Could you please help share the instructions to reproduce the=
+ problem
+> > > > > > > this change fixes?
+> > > > > > >
+> > > > > >
+> > > > > > Hi Yongqin,
+> > > > > >
+> > > > > > Thanks for your reply. This bug is found by static analysis. Th=
+ere is no PoC.
+> > > > > >
+> > > > > > >From my personal experience, triggering race condition bugs st=
+ably in
+> > > > > > the kernel needs some tricks.
+> > > > > > For example, you can insert some sleep-time code to slow down t=
+he
+> > > > > > thread until the related object is freed.
+> > > > > > Besides, you can use gdb to control the time window. Also, ther=
+e are
+> > > > > > some other tricks as [1] said.
+> > > > > >
+> > > > > > As for the reproduction, this attack vector requires that the a=
+ttacker
+> > > > > > can physically access the device.
+> > > > > > When he/she unplugs the usb, the remove function is triggered, =
+and if
+> > > > > > the set callback is invoked, there might be a race condition.
+> > > > >
+> > > > > How does the removal of the USB device trigger a platform device
+> > > > > removal?
+> > > >
+> > > > Sorry I made a mistake. The USB device usually calls disconnect
+> > > > callback when it's unpluged.
+> > >
+> > > Yes, but you are changing the platform device disconnect, not the USB
+> > > device disconnect.
+> > >
+> > > > What I want to express here is When the driver-related device(here
+> > > > it's USB GPIO Hub) was removed, the remove function is triggered.
+> > >
+> > > And is this a patform device on a USB device?  If so, that's a bigger
+> > > problem that we need to fix as that is not allowed.
+> >
+> > No this is not a platform  device on a USB device.
+> >
+> > >
+> > > But in looking at the code, it does not seem to be that at all, this =
+is
+> > > just a "normal" platform device.  So how can it ever be removed from =
+the
+> > > system?  (and no, unloading the driver doesn't count, that can never
+> > > happen on a normal machine.)
+> > >
+> >
+> > Yes, I finally figured out your meaning. I know it's hard to unplug
+> > the platform device
+> > directly. All I want to express is that it's a theoretical method
+> > except  rmmod. I think it's better to fix the bug. But if the
+> > developers think it's practically impossible, I think there's no need
+> > to take further action.
+> >
+> > Sorry for wasting your time and thanks for your explanation.
+> >
+> > Best regards,
+> > Zheng
+> >
+> > > thanks,
+> > >
+> > > greg k-h
+>
+>
+>
+> --
+> Best Regards,
+> Yongqin Liu
+> ---------------------------------------------------------------
+> #mailing list
+> linaro-android@lists.linaro.org
+> http://lists.linaro.org/mailman/listinfo/linaro-android
