@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12A76E6C8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 21:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACEE96E6C8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 21:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbjDRTCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 15:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
+        id S232741AbjDRTCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 15:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232450AbjDRTBx (ORCPT
+        with ESMTP id S232239AbjDRTBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 15:01:53 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE75293D7
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:01:52 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-5141c742deeso1368213a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:01:52 -0700 (PDT)
+        Tue, 18 Apr 2023 15:01:55 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB4EAF1E
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:01:54 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-246f13f35f1so1304791a91.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:01:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681844512; x=1684436512;
+        d=google.com; s=20221208; t=1681844513; x=1684436513;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UH6ww4Tz5A/eOvsrLoChrvszKblTPJdXQlcphIuhfCY=;
-        b=Xb4iQzwLgZfPoUAQ/odJ+uLwMle0vkgg1CXXGcy+pK4IK8a5OITSiML3yjC9GIz+vt
-         LglJZm9VtSDzqZ6zL1EqEt//YrAIc9qzOjQ/2tZ4x7oofiN/UKfvvGMnN2CUSveDqTp6
-         Y6qUOHeSTK7H8HaHkL7feME9f5tZs7Y8DwZU6DYL0318AK3qh4mgcbWpHQbX5KhiyX+O
-         zYQQab4w/e+OfN5yF2Ok8eJA52iD/AwanOcagy49gu4uAoAf92SvPd5gx2lk/YadQ7fC
-         sd9r05XEGj/lROATNCbm98AqauIDaEJBDeHgduuZza0Maqm4SQX/vyacsb0iuiGK5KI8
-         Rfpw==
+        bh=Q705pkA7pRJMTNZuDFlVqTXdHPjT6mc0BG+foW8FYi0=;
+        b=GqaVpB2zVNhyjotwG0yVhTUD2FgvGT2em4z75cUO2Etv9n/147+YOqB1E8CyE4fiv3
+         JEf8JAbdkea0iZPmSHSc15ndLOJ2IkC4Sj6HeYSJdQpMsdA78+IA0GK/IKQA0r9nncfo
+         bXcfgRJkYIJuIlbUNqa2N8hn3g3CWMlgBLhbNelz093pW51MxIt4CGWlAhGz2OtZX43h
+         TcjF0s+XJQYHIgn75hlKWOQhCzDd3pN5zXhBXhWHoqrc2U9lC+qvgvrQeyD4dAmbJHrE
+         LP1INYSdOeVG/U2wmrnEflyUDg8+aZwcaTznM3pehyzxkLgbWsyrxgPH5e78ZwEaBeSA
+         hAqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681844512; x=1684436512;
+        d=1e100.net; s=20221208; t=1681844513; x=1684436513;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UH6ww4Tz5A/eOvsrLoChrvszKblTPJdXQlcphIuhfCY=;
-        b=SSnRLX4hZpbPxt263YCj5XuV3pKwIBiR3xRBgSJHfZHr5pKBnnwQtDpii4Va4/ar8y
-         3DgrPwuu4VeuDddS62l7OlPFLa2U3tEnEh6TVoFamSfGujTfT+xrKPtcPl3SNdS9XMAz
-         QGbEweASgxkcVfGufqdjY/+gasODvNFyV2A+XwDJkCBfGfW26z5h9pfgCSmiuOH4WwKa
-         Tw3qVkg4TLshkoyNkylIvMrEK1KjQbG6xHf2l9ovdYTDDcH41ggtK2t9g6ssL44/7BK4
-         LPr+5YrCu2ArJGp1EycZ65SNMqptBLNqUF3NaGTKhHbiRQiaFdaXRQEm3/W51uU3f172
-         Rwjg==
-X-Gm-Message-State: AAQBX9d41vPavmmD/ifFlo0cL2p4Yk23tgIbzDn4bwtzBc+Oek8C/bdx
-        w5FwmsGta+pZcr2gL+PY+8sufNR3zOfgcg==
-X-Google-Smtp-Source: AKy350ahkWDCnkHAXgrxGxUl6RpviSG7+x8JdALBBOytT5BOZjwni8q2AuHP4V6HGxWCWoOKQscHCQMWeoHPkw==
+        bh=Q705pkA7pRJMTNZuDFlVqTXdHPjT6mc0BG+foW8FYi0=;
+        b=BYD0WAHFAPesJN8pZuRa22IY8xckS2O7H6E1aM01lAggT8ozQmlDAiQfqSicP+vteY
+         RrZbbSL6WkWbjj5L3bAF3cVBOvwIryp+23C3oRkz+p3Se2oeN/bhjiRo5ZCcbNohFiHK
+         TD3vxRUbMDCPQ2WLGdCdYvOv8xwsjuwpo41VEBJevshnJgKcEECmQNS9YppUNUvjLaIx
+         /hkLyCLGNEPqu7/RmFkT7FPdY4M/W2Wy1mYSgXsLIx7WlX4GOhvo1CFib8dYUsZRCR3c
+         6ePYovS8aNBKoBOsosGTWSk6GnVmB85UhXweEJk06cDZ96MCyQOhp6hya1rBnDAntISf
+         OG9w==
+X-Gm-Message-State: AAQBX9fI8fBBQ0cIjwfh+TF9VMlh8m3L1LQ9JszYBu9kmIc9Ynv/ZewU
+        MnLDsExTN02/LYZk6M/nfItU8mtXELHR+g==
+X-Google-Smtp-Source: AKy350ZW8H2ie7PJ0xF/7HLOgOBlt+IodZxdPo3Cfwds2kbkKdjUEWeiqhOD74s3vqCqGAqiKyXioEQv/u4PSQ==
 X-Received: from pranav-first.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:390b])
- (user=pranavpp job=sendgmr) by 2002:a63:502:0:b0:520:6a0f:da2a with SMTP id
- 2-20020a630502000000b005206a0fda2amr89585pgf.8.1681844512153; Tue, 18 Apr
- 2023 12:01:52 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 19:00:58 +0000
+ (user=pranavpp job=sendgmr) by 2002:a17:90a:3182:b0:247:11e6:f6ff with SMTP
+ id j2-20020a17090a318200b0024711e6f6ffmr260224pjb.3.1681844513734; Tue, 18
+ Apr 2023 12:01:53 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 19:00:59 +0000
 In-Reply-To: <20230418190101.696345-1-pranavpp@google.com>
 Mime-Version: 1.0
 References: <20230418190101.696345-1-pranavpp@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230418190101.696345-4-pranavpp@google.com>
-Subject: [PATCH 3/6] scsi: pm80xx: Print port_id in HW events
+Message-ID: <20230418190101.696345-5-pranavpp@google.com>
+Subject: [PATCH 4/6] scsi: pm80xx: Log phy_id and port_id in the device
+ registration request
 From:   Pranav Prasad <pranavpp@google.com>
 To:     Jack Wang <jinpu.wang@cloud.ionos.com>,
         "James E . J . Bottomley" <jejb@linux.ibm.com>,
@@ -64,7 +65,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,167 +74,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Akshat Jain <akshatzen@google.com>
 
-Log port_id and phy_id along with the PHY_UP event.
+Print phy_id and port_id sent as part of device registration
+request.
 
 Signed-off-by: Akshat Jain <akshatzen@google.com>
 Signed-off-by: Pranav Prasad <pranavpp@google.com>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 58 ++++++++++++++++++--------------
- 1 file changed, 33 insertions(+), 25 deletions(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 61c1bf3d98a0..c5bf65d0ad14 100644
+index c5bf65d0ad14..8571f6222eb8 100644
 --- a/drivers/scsi/pm8001/pm80xx_hwi.c
 +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -3426,30 +3426,35 @@ static int mpi_hw_event(struct pm8001_hba_info *pm8001_ha, void *piomb)
+@@ -4756,6 +4756,9 @@ static int pm80xx_chip_reg_dev_req(struct pm8001_hba_info *pm8001_ha,
+ 	memcpy(payload.sas_addr, pm8001_dev->sas_device->sas_addr,
+ 		SAS_ADDR_SIZE);
  
- 	case HW_EVENT_SAS_PHY_UP:
- 		pm8001_dbg(pm8001_ha, EVENT,
--			   "HW_EVENT_SAS_PHY_UP phyid:%#x\n", phy_id);
-+			   "HW_EVENT_SAS_PHY_UP phyid:%#x port_id:%#x\n",
-+			   phy_id, port_id);
- 		hw_event_sas_phy_up(pm8001_ha, piomb);
- 		break;
- 	case HW_EVENT_SATA_PHY_UP:
- 		pm8001_dbg(pm8001_ha, EVENT,
--			   "HW_EVENT_SATA_PHY_UP phyid:%#x\n", phy_id);
-+			   "HW_EVENT_SATA_PHY_UP phyid:%#x port_id:%#x\n",
-+			   phy_id, port_id);
- 		hw_event_sata_phy_up(pm8001_ha, piomb);
- 		break;
- 	case HW_EVENT_SATA_SPINUP_HOLD:
- 		pm8001_dbg(pm8001_ha, EVENT,
--			   "HW_EVENT_SATA_SPINUP_HOLD phyid:%#x\n", phy_id);
-+			   "HW_EVENT_SATA_SPINUP_HOLD phyid:%#x port_id:%#x\n",
-+			   phy_id, port_id);
- 		sas_notify_phy_event(&phy->sas_phy, PHYE_SPINUP_HOLD,
- 			GFP_ATOMIC);
- 		break;
- 	case HW_EVENT_PHY_DOWN:
--		pm8001_dbg(pm8001_ha, EVENT, "HW_EVENT_PHY_DOWN phyid:%#x\n",
--			   phy_id);
-+		pm8001_dbg(pm8001_ha, EVENT,
-+			   "HW_EVENT_PHY_DOWN phyid:%#x port_id:%#x\n",
-+			   phy_id, port_id);
- 		hw_event_phy_down(pm8001_ha, piomb);
- 		phy->phy_attached = 0;
- 		phy->phy_state = PHY_LINK_DISABLE;
- 		break;
- 	case HW_EVENT_PORT_INVALID:
- 		pm8001_dbg(pm8001_ha, EVENT,
--			   "HW_EVENT_PORT_INVALID phyid:%#x\n", phy_id);
-+			   "HW_EVENT_PORT_INVALID phyid:%#x port_id:%#x\n",
-+			   phy_id, port_id);
- 		sas_phy_disconnected(sas_phy);
- 		phy->phy_attached = 0;
- 		sas_notify_port_event(sas_phy, PORTE_LINK_RESET_ERR,
-@@ -3468,8 +3473,9 @@ static int mpi_hw_event(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 			GFP_ATOMIC);
- 		break;
- 	case HW_EVENT_PHY_ERROR:
--		pm8001_dbg(pm8001_ha, EVENT, "HW_EVENT_PHY_ERROR phyid:%#x\n",
--			   phy_id);
-+		pm8001_dbg(pm8001_ha, EVENT,
-+			   "HW_EVENT_PHY_ERROR phyid:%#x port_id:%#x\n",
-+			   phy_id, port_id);
- 		sas_phy_disconnected(&phy->sas_phy);
- 		phy->phy_attached = 0;
- 		sas_notify_phy_event(&phy->sas_phy, PHYE_OOB_ERROR, GFP_ATOMIC);
-@@ -3484,31 +3490,31 @@ static int mpi_hw_event(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 		break;
- 	case HW_EVENT_LINK_ERR_INVALID_DWORD:
- 		pm8001_dbg(pm8001_ha, EVENT,
--			   "HW_EVENT_LINK_ERR_INVALID_DWORD phyid:%#x\n",
--			   phy_id);
-+			   "HW_EVENT_LINK_ERR_INVALID_DWORD phyid:%#x port_id:%#x\n",
-+			   phy_id, port_id);
- 		pm80xx_hw_event_ack_req(pm8001_ha, 0,
- 			HW_EVENT_LINK_ERR_INVALID_DWORD, port_id, phy_id, 0, 0);
- 		break;
- 	case HW_EVENT_LINK_ERR_DISPARITY_ERROR:
- 		pm8001_dbg(pm8001_ha, EVENT,
--			   "HW_EVENT_LINK_ERR_DISPARITY_ERROR phyid:%#x\n",
--			   phy_id);
-+			   "HW_EVENT_LINK_ERR_DISPARITY_ERROR phyid:%#x port_id:%#x\n",
-+			   phy_id, port_id);
- 		pm80xx_hw_event_ack_req(pm8001_ha, 0,
- 			HW_EVENT_LINK_ERR_DISPARITY_ERROR,
- 			port_id, phy_id, 0, 0);
- 		break;
- 	case HW_EVENT_LINK_ERR_CODE_VIOLATION:
- 		pm8001_dbg(pm8001_ha, EVENT,
--			   "HW_EVENT_LINK_ERR_CODE_VIOLATION phyid:%#x\n",
--			   phy_id);
-+			   "HW_EVENT_LINK_ERR_CODE_VIOLATION phyid:%#x port_id:%#x\n",
-+			   phy_id, port_id);
- 		pm80xx_hw_event_ack_req(pm8001_ha, 0,
- 			HW_EVENT_LINK_ERR_CODE_VIOLATION,
- 			port_id, phy_id, 0, 0);
- 		break;
- 	case HW_EVENT_LINK_ERR_LOSS_OF_DWORD_SYNCH:
- 		pm8001_dbg(pm8001_ha, EVENT,
--			   "HW_EVENT_LINK_ERR_LOSS_OF_DWORD_SYNCH phyid:%#x\n",
--			   phy_id);
-+			   "HW_EVENT_LINK_ERR_LOSS_OF_DWORD_SYNCH phyid:%#x port_id:%#x\n",
-+			   phy_id, port_id);
- 		pm80xx_hw_event_ack_req(pm8001_ha, 0,
- 			HW_EVENT_LINK_ERR_LOSS_OF_DWORD_SYNCH,
- 			port_id, phy_id, 0, 0);
-@@ -3527,7 +3533,8 @@ static int mpi_hw_event(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 		break;
- 	case HW_EVENT_INBOUND_CRC_ERROR:
- 		pm8001_dbg(pm8001_ha, EVENT,
--			   "HW_EVENT_INBOUND_CRC_ERROR phyid:%#x\n", phy_id);
-+			   "HW_EVENT_INBOUND_CRC_ERROR phyid:%#x port_id:%#x\n",
-+			   phy_id, port_id);
- 		pm80xx_hw_event_ack_req(pm8001_ha, 0,
- 			HW_EVENT_INBOUND_CRC_ERROR,
- 			port_id, phy_id, 0, 0);
-@@ -3547,8 +3554,8 @@ static int mpi_hw_event(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 		break;
- 	case HW_EVENT_LINK_ERR_PHY_RESET_FAILED:
- 		pm8001_dbg(pm8001_ha, EVENT,
--			   "HW_EVENT_LINK_ERR_PHY_RESET_FAILED phyid:%#x\n",
--			   phy_id);
-+			   "HW_EVENT_LINK_ERR_PHY_RESET_FAILED phyid:%#x port_id:%#x\n",
-+			   phy_id, port_id);
- 		pm80xx_hw_event_ack_req(pm8001_ha, 0,
- 			HW_EVENT_LINK_ERR_PHY_RESET_FAILED,
- 			port_id, phy_id, 0, 0);
-@@ -3559,8 +3566,8 @@ static int mpi_hw_event(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 		break;
- 	case HW_EVENT_PORT_RESET_TIMER_TMO:
- 		pm8001_dbg(pm8001_ha, EVENT,
--			   "HW_EVENT_PORT_RESET_TIMER_TMO phyid:%#x\n",
--			   phy_id);
-+			   "HW_EVENT_PORT_RESET_TIMER_TMO phyid:%#x port_id:%#x\n",
-+			   phy_id, port_id);
- 		if (!pm8001_ha->phy[phy_id].reset_completion) {
- 			pm80xx_hw_event_ack_req(pm8001_ha, 0, HW_EVENT_PHY_DOWN,
- 				port_id, phy_id, 0, 0);
-@@ -3578,8 +3585,8 @@ static int mpi_hw_event(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 		break;
- 	case HW_EVENT_PORT_RECOVERY_TIMER_TMO:
- 		pm8001_dbg(pm8001_ha, EVENT,
--			   "HW_EVENT_PORT_RECOVERY_TIMER_TMO phyid:%#x\n",
--			   phy_id);
-+			   "HW_EVENT_PORT_RECOVERY_TIMER_TMO phyid:%#x port_id:%#x\n",
-+			   phy_id, port_id);
- 		pm80xx_hw_event_ack_req(pm8001_ha, 0,
- 			HW_EVENT_PORT_RECOVERY_TIMER_TMO,
- 			port_id, phy_id, 0, 0);
-@@ -3613,8 +3620,9 @@ static int mpi_hw_event(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 		pm8001_dbg(pm8001_ha, MSG, "EVENT_BROADCAST_ASYNCH_EVENT\n");
- 		break;
- 	default:
--		pm8001_dbg(pm8001_ha, DEVIO, "Unknown event type 0x%x\n",
--			   eventType);
-+		pm8001_dbg(pm8001_ha, DEVIO,
-+			   "Unknown event portid:%d phyid:%d event:0x%x status:0x%x\n",
-+			   port_id, phy_id, eventType, status);
- 		break;
- 	}
- 	return 0;
++	pm8001_dbg(pm8001_ha, INIT,
++		   "register device req phy_id 0x%x port_id 0x%x\n", phy_id,
++		   (port->port_id & 0xFF));
+ 	rc = pm8001_mpi_build_cmd(pm8001_ha, 0, opc, &payload,
+ 			sizeof(payload), 0);
+ 	if (rc)
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
