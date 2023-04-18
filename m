@@ -2,173 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C51186E69BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 210826E69BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbjDRQlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 12:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
+        id S232139AbjDRQmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 12:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjDRQlo (ORCPT
+        with ESMTP id S229791AbjDRQmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 12:41:44 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2086.outbound.protection.outlook.com [40.107.92.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6DA173B;
-        Tue, 18 Apr 2023 09:41:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nrHjcsy6Dc2oeraZ8/9GTvzaUDbL3e2MwqwMS2S40YDv4PNSqjF9grZ5bcCNFDk/ML0rE6dARW7tMxnMVJjg6dzHQG+2R4sDqxz2bUlkpoRr1g4Zfs5YdAx/tiwwtNIXHmt9bxaogLV/ZrxEXrXokzFsZJxuRQFzVUm2IcrjzP08gmleCp7cELLA8KvZMclH3Kb+aOEMsRPVS5Vghwib87QjDTFCsuhieq2XXJvDzbsQMy+mJq/LVsUViKH4eoC0THQSnFIfpZbPpa1XsCT0uTxhY5L+LW5VZJAkLAK8B4XgjsBX35r4Y72dlRMGrAsUSb6fdXQRx2HA9mTR5ON2Mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MIB7cLlSOpW183kab9NWhCcYssc0nmeivPrf4oR9pV4=;
- b=oQ0M1rebzx2jj+oPGtSZeMprUsO7yOSz+qt1klxXbEkDImIuh2RTIXQK1TLMWi0whepnySyi+ACHi/wuYdNkmSqBU44Ig6/76Bc9zkLo3+XiOg3Z5URLwOwQmX7Z5TYcW/3NyXEuEUkkokRMwDW0LjYshET2BagXSGtVepRHATtEQmcChGrhGizlTEjfVFXUI6R5PnwU7ppbT8uHL6i5zhu5LOvYvhH8wXshPfK54ohqHeTuWxKMjCbd56xFwaCCngvd0YIDCicg6/jZPxX6E5gqgz6ISBbHGCYqkQAa89F3i+QzjXsjGWMqUFyuatJzFDjqEjJ5HcsrL5cp8vJzLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MIB7cLlSOpW183kab9NWhCcYssc0nmeivPrf4oR9pV4=;
- b=cAnlyPLsie4WDYkOCL1gocaV8ibNEQc+ZVKx4RDxsT9C2hW21Gut6eZRWOdN55qLGpIq/bFBPUxj0bog3SwYBA6P4T5HO8IwpwP+wf3YnAOOYW7e2RPRUVCpTUz3RZZyEfxfeVK9FiX6wuzAxOuMFFOPU5KboXIfHd4TtzfOtls=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by IA1PR12MB7758.namprd12.prod.outlook.com (2603:10b6:208:421::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Tue, 18 Apr
- 2023 16:41:38 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::b911:e5f7:65a1:5ea2]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::b911:e5f7:65a1:5ea2%5]) with mapi id 15.20.6298.045; Tue, 18 Apr 2023
- 16:41:38 +0000
-Message-ID: <a5d0c575-ba4f-1120-c7ee-bc37e8d40402@amd.com>
-Date:   Tue, 18 Apr 2023 12:41:17 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH] x86/mce: Check that memory address is usable for recovery
-To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>
-Cc:     yazen.ghannam@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        patches@lists.linux.dev
-References: <20230322005131.174499-1-tony.luck@intel.com>
-X-Mozilla-News-Host: news://nntp.lore.kernel.org
-Content-Language: en-US
-In-Reply-To: <20230322005131.174499-1-tony.luck@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN9P221CA0013.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:408:10a::6) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        Tue, 18 Apr 2023 12:42:05 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2F35FD2;
+        Tue, 18 Apr 2023 09:42:04 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-517bdc9e81dso1023966a12.1;
+        Tue, 18 Apr 2023 09:42:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681836124; x=1684428124;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DBjYteFlARZI3kpDkoIEAMndmdFS6IARwATkjleA/Es=;
+        b=JIG4s2/Hoz7mreVcQSsElvHacUy2Z3ED/XO7zoHI+ged7p3//5YqorUh5OBG99ioWI
+         fp7Px+9ZoAV5VRQ9vVQc7AoL/QPWmX/4RC16l29E4CoMSQwzSTy483z9Wkc1KHrguw1g
+         dQ4V8yhvMerKCokRhUuS2Ys0KcCZ8NEbqnBSqnwCCTrDPNqVOuraHOoAstBMcEgLfJUV
+         ZsT5FPg/zySNjh4Kf35grdglzNJhd90uDq289EvTKyLIQ/xzKPkdNhfLncrPq6O2TnK3
+         4NK9n90BlXKQsIU7Jy1G7YfOqdSNOr2PFpnVPaVlfjHhI+J6cTWQgeOitoOT15rtbqQ4
+         s2NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681836124; x=1684428124;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DBjYteFlARZI3kpDkoIEAMndmdFS6IARwATkjleA/Es=;
+        b=Hmo51lo3PbjqpLr/zA6+8yYAfmUB89YeZQomsjroJn9aDWWw/uymvZ4DZWDoBibMGI
+         mlFV1kPiIcH/a0P6lhArtjAENY/kYVXlmn5aQV+CefpMJKURzg2GMJZJVPyymDcbVlM5
+         L//GMjO3aZumA2oeI2Zyd7wqzuirowy1nMiIhHULLUQ1bWxRsPIgwah2qzqxP2OPu774
+         AZWFF2XNaK1BXCOkR8oC+fAmMvweBdmY3Q4Rn9n3gsQ6pmypz3yhdurs7ABmuUxbLQI1
+         +kgTcYt/hQ00ZNh4fFZWGkr8LuW1EIPNlTQXv4Pmq+siA9XkJQUSTnTJNGDJkoIgqm6N
+         LaSA==
+X-Gm-Message-State: AAQBX9fRX/FnNOUPI5NMhV/UJdZydIQKpHdt1ufnF1kBb2XKSPJ973Rf
+        yWvVHUQkLwP/RQFrYqs809w=
+X-Google-Smtp-Source: AKy350YcV6j1lv6XmhOfSNAWDYy73WgCv1F7VXKe1uo1OIl8xC2iEX9Ihpu2om1pKqDrFlg/8Z0cbA==
+X-Received: by 2002:a17:903:2291:b0:1a6:6d9f:2fc9 with SMTP id b17-20020a170903229100b001a66d9f2fc9mr3187958plh.30.1681836124194;
+        Tue, 18 Apr 2023 09:42:04 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
+        by smtp.gmail.com with ESMTPSA id c9-20020a170902848900b0019a7ef5e9a8sm5445534plo.82.2023.04.18.09.42.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 09:42:03 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/msm/atomic: Don't try async if crtc not active
+Date:   Tue, 18 Apr 2023 09:41:58 -0700
+Message-Id: <20230418164158.549873-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|IA1PR12MB7758:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1e6a044b-8c9a-4e9d-1009-08db402bc772
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sme5RZ+249/BEMtJt2UoMakJy/eCBc15mCQ7V+lro3jps2QE5U6TxQR2MVeeM/4ktdxK90vbdH89rEgdTbddhc0eD39pUyAAv/xmboMsSK4kVTTxFa8+Mq69GkZV3SXamfou8eW1rbZnj/WU50p+4SVQYcdo+gZaGG3GkQyfEtSgq5yJH3E008QTPev9LL5gR2nzLtTQ1PYiTiPlsLGV2LmoU3bK2Bm84UNGdLxXED/R2Du2VLZhU3Qk3QSFGMuJ+MJtyJM4VtYUeL3CGkK5zuQUiDQFwaKlB2Zamrc8jb1djZKY9B30VKaBIcTPhtsoGUNVJbBXOkO40f2i18HT8XLqaGpQ6yZP56sNQLkEI5a4StJ+lV8VZhbEtSyHsxg1nkEElL5Vs9W59zT0+QmKQTcTgR2F7uiCQIAzkGoL26Wn+fkQibWDptvMVvb62ctjsYqtNib2h0zzg0KXOzCeJXybc5iXTN1CFVRRCwloCRXxGqhugrD8kV67ZmztdCiQY0FT6OM4jHoBgPQsXAOUjSIBsO7cuTGjsF2kXv9h/MbJP+jNzj5ZjEtIMkCqd5N3wy7P8oHYTkYruyvzMVe7GJLywOvCtFhTTJtztMWqp4PDnwD89juFMjYTJK2mYFLUt5bmt4L4fv8CiwRCAktGEw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(396003)(136003)(376002)(346002)(451199021)(110136005)(31686004)(53546011)(6506007)(6512007)(26005)(186003)(83380400001)(2616005)(6486002)(966005)(5660300002)(478600001)(38100700002)(41300700001)(6666004)(8676002)(316002)(8936002)(86362001)(31696002)(66946007)(36756003)(66556008)(2906002)(4326008)(66476007)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dTF1SURFMk1rc1dwYnJETWtVSjZySW9qYWdqb0s4ekZxVkx1WUlBUXpXajZv?=
- =?utf-8?B?dHpXWlBOWFBuRGVHbUpQS1E3QkVzVjhrM3RDdVR2TWR6bWpDUjhjTGRRSmhi?=
- =?utf-8?B?UkloYWFZLzQwNm54S09hNCs4QXQxQ25CejZieFZZbGtJVitzd1N3ZU41VzNG?=
- =?utf-8?B?aVFZS2dsOUpFU2hldDBkRkJpSjY3VVRIdGdla1Bsc01OYUNuSWhJSkJZNmcv?=
- =?utf-8?B?NDZDM2dpaHRqZ09CTHVQVlRCR2hXUE4yV3IxeUcyM3M0c0RlNkhOamZqUHRy?=
- =?utf-8?B?SitzU1ZDaW5vakJUNGZ6b3EydHNkSmFmWWhVNFhQTzU1ZlAxMjVZZTdQODRa?=
- =?utf-8?B?TEtIcWFHT2xaV3dMbk1DejVuRDdMWjg1bmJaQnpoeWpYS1FPZ0lLd0FZc2Qr?=
- =?utf-8?B?RERvRUpmTXR6a0lhSVRRSVJacm52aU5MVitlMnNnaDJiaWsxUlowMTcwSUhy?=
- =?utf-8?B?N3kxQmt1eXpCZnVyVTVsYlM1RitXcmhsNEFFQlR0Z3Z2c3VqQWRxWE45b1Rj?=
- =?utf-8?B?SDdTekZpWGcwRCtxYW0yNEhsWUxDUHB2NXpJTDlaZW41MW9BRmJKK1FBQzBI?=
- =?utf-8?B?VHorRmg0Q2RFQjVjeVk2WXRPd1ViOFNMRzZwZDJkVlE3K3owZGNXMkxyNm1N?=
- =?utf-8?B?UWljenhMVkdsb1IwZlA5SWxZYmNMSDErMDNVOVNGYlRycHVxYm8xSW5wRk9E?=
- =?utf-8?B?VzhiUm0zbmlqTVg2OUppek51b2wxVjZjcTV5WE9uUFVjS1kreG1nSy9BOTBu?=
- =?utf-8?B?SEo0MlB3TlQ4T0VHVStaUkxaVFRqN1A5WlVFMXpsekh5N0dZNzFZUG5zN1Bl?=
- =?utf-8?B?N05wbXFiMWZPVHlES0pJdVpsbFhURXRTa0FCQUwrRkdodWJZcE5aQ3RHT2RM?=
- =?utf-8?B?SlViZmRjNmh6OE4wNXdQQXQ5MFlzK1dZOHhpVUhFVUV4VlVIN2JwTFFnMTJq?=
- =?utf-8?B?VjF6V3VPU0RXSnEySk5HZDIvVmtQeUxqMWxPT2t3NGFmSnlPWDc1TXo5N3RO?=
- =?utf-8?B?SnlhUlQxcTFMdm9RUVdWQkJLbGpmditJMVUvV1NWaGJwN1pjWHB0QXo5bGhi?=
- =?utf-8?B?R3FQOFNqelRxQkxZU1RreFo4Y01DVjFMdTJpcW1WTFNweUpnbGI4N2d2TWR3?=
- =?utf-8?B?Znh2VHRrMXF4VWdFcmV3QXdLd1lNSmE2ZHM4MVdVdVg5V1cvL0RKbXpYSDJV?=
- =?utf-8?B?SUcvSXlUbjJicTd4cit3THEzV3N1MmFvQkhvOGI1RzdnWnVacWxEM2xjWHpG?=
- =?utf-8?B?eXNzTUZaQTg1dDdBVWpMTUw4UmFJU3F6Rk9BcEpmaTNqMVVDWWdKb01qZXhB?=
- =?utf-8?B?SHEzSXVaVWZqa0w2d2loRmVoZGpqK05VTjl2dUtNeVU2N3hvVnJGUEx6aGFO?=
- =?utf-8?B?dHVCeVpxcFh0Q1FzZW5RdTRSTHdqTGNCWWdCc0dyaTlFSjBnbFBPc010WDRs?=
- =?utf-8?B?YzNnak5waTRHS2R5Qyt0cE5FempKTjZqbjdob1EzWk84OEhERHdnRWdMVVdn?=
- =?utf-8?B?eWVmTmlydkl5Nkd3bjJjbFlLQk5xa2VHRjFkbXMxU0N4OGo2MCs3bkZ3anpm?=
- =?utf-8?B?UkYrck14bHI1ZlEzMENYVmgxVEw5cTh5ZGxqbE5ZL0dGSjg1bzhQOFAwc0Ft?=
- =?utf-8?B?ZUlMckpKM25KN0c4RElRNHRyNzdPZWc0Q2hBNVJ4WmRzRkM0eldvbVVBaU9O?=
- =?utf-8?B?b3YwWCswUVhPaFZ4WFp5Q3RlQWFlcld5bGVOSUNIek1RaUlTVEdQN28xemtm?=
- =?utf-8?B?aHI3U0k1MEpOc3BUSTdrL1B0SGZvbDFoM3ZLaERhaTB0NGdaWExicmNBL1ZQ?=
- =?utf-8?B?T1lsTU50ZkI1Snp5MnRsdDlYVmx3K0Y4SjU1MTVuNXMydlNSRmZ3ZHNuVnFo?=
- =?utf-8?B?cnZnZkRZV3EyMGE1enNsVTdyc0ZUcFJVVnVVUWVMT1h5WnBjejQzSGxXVWNn?=
- =?utf-8?B?SE92T3Iwd3FXblQ1dDFCL1FOaTZGNS9EcjYvQ0JDVlhHdDlXUGN2Yy9pbVpr?=
- =?utf-8?B?L3lBK2taMk1tNXQwOW83Z0RSd0E2WnA0dzBFWTJmeDIzOUtIcmtUaUpQcVJE?=
- =?utf-8?B?WW1abythc3ZIYldzaEZCd2FXQWtRaHF1Q1c5Ni9BZ1ltK2h3NVZtbkJ3a0Qw?=
- =?utf-8?Q?VrnAsyqOb/Kzauh1ntkA0DW1H?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e6a044b-8c9a-4e9d-1009-08db402bc772
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 16:41:38.0343
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fMUSmYtTBbI7GJqtGBOIufIs6xd7pty+TdNYtX3AId2C23qm8sBccNYlAVi7Gaz9mgpfc40VmADXbeaCYrl/sw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7758
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/23 20:51, Tony Luck wrote:
-> uc_decode_notifier() includes a check that "struct mce"
-> contains a valid address for recovery. But the machine
-> check recovery code does not include a similar check.
-> 
-> Use mce_usable_address() to check that there is a valid
-> address.
-> 
-> Signed-off-by: Tony Luck <tony.luck@intel.com>
-> ---
->  arch/x86/kernel/cpu/mce/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 2eec60f50057..fa28b3f7d945 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -1533,7 +1533,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
->  		/* If this triggers there is no way to recover. Die hard. */
->  		BUG_ON(!on_thread_stack() || !user_mode(regs));
->  
-> -		if (kill_current_task)
-> +		if (kill_current_task || !mce_usable_address(&m))
->  			queue_task_work(&m, msg, kill_me_now);
->  		else
->  			queue_task_work(&m, msg, kill_me_maybe);
+From: Rob Clark <robdclark@chromium.org>
 
-I think it should be like this:
+For a similar reason as commit f2c7ca890182 ("drm/atomic-helper: Don't
+set deadline for modesets"), we need the crtc to be already active in
+order to compute a target vblank time for an async commit.  Otherwise
+we get this splat reminding us that we are doing it wrong:
 
-	if (mce_usable_address(&m))
-		queue_task_work(&m, msg, kill_me_maybe);
-	else
-		queue_task_work(&m, msg, kill_me_now);
+   ------------[ cut here ]------------
+   msm_dpu ae01000.mdp: drm_WARN_ON_ONCE(drm_drv_uses_atomic_modeset(dev))
+   WARNING: CPU: 7 PID: 1923 at drivers/gpu/drm/drm_vblank.c:728 drm_crtc_vblank_helper_get_vblank_timestamp_internal+0x148/0x370
+   Modules linked in: snd_seq_dummy snd_seq snd_seq_device bridge stp llc tun vhost_vsock vhost vhost_iotlb vmw_vsock_virtio_transport_common vsock uinput rfcomm algif_hash algif_skcipher af_alg veth venus_dec venus_enc cros_ec_typec typec qcom_spmi_temp_alarm qcom_spmi_adc_tm5 qcom_spmi_adc5 xt_cgroup qcom_vadc_common qcom_stats hci_uart btqca xt_MASQUERADE venus_core 8021q coresight_tmc coresight_funnel coresight_etm4x coresight_replicator snd_soc_lpass_sc7180 coresight snd_soc_sc7180 ip6table_nat fuse ath10k_snoc ath10k_core ath mac80211 iio_trig_sysfs bluetooth cfg80211 cros_ec_sensors cros_ec_sensors_core ecdh_generic industrialio_triggered_buffer ecc kfifo_buf cros_ec_sensorhub r8153_ecm cdc_ether usbnet r8152 mii lzo_rle lzo_compress zram hid_vivaldi hid_google_hammer hid_vivaldi_common joydev
+   CPU: 7 PID: 1923 Comm: DrmThread Not tainted 5.15.107-18853-g3be267609a0b-dirty #16 a1ffc1a66e79c21c3536d8c9a42e819236e39714
+   Hardware name: Google Wormdingler rev1+ BOE panel board (DT)
+   pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+   pc : drm_crtc_vblank_helper_get_vblank_timestamp_internal+0x148/0x370
+   lr : drm_crtc_vblank_helper_get_vblank_timestamp_internal+0x144/0x370
+   sp : ffffffc012e2b800
+   x29: ffffffc012e2b840 x28: ffffff8083676094 x27: ffffffc012e2bb28
+   x26: ffffff8084539800 x25: 0000000000000000 x24: ffffff8083676000
+   x23: ffffffd3c8cdc5a0 x22: ffffff80845b9d00 x21: ffffffc012e2b8b4
+   x20: ffffffc012e2b910 x19: 0000000000000001 x18: 0000000000000000
+   x17: 0000000000000000 x16: 0000000000000010 x15: ffffffd3c8451a88
+   x14: 0000000000000003 x13: 0000000000000004 x12: 0000000000000001
+   x11: c0000000ffffdfff x10: ffffffd3c973ef58 x9 : 8ea3526b3cc95900
+   x8 : 8ea3526b3cc95900 x7 : 0000000000000000 x6 : 000000000000003a
+   x5 : ffffffd3c99676cd x4 : 0000000000000000 x3 : ffffffc012e2b4b8
+   x2 : ffffffc012e2b4c0 x1 : 00000000ffffdfff x0 : 0000000000000000
+   Call trace:
+    drm_crtc_vblank_helper_get_vblank_timestamp_internal+0x148/0x370
+    drm_crtc_vblank_helper_get_vblank_timestamp+0x20/0x30
+    drm_crtc_get_last_vbltimestamp+0x68/0xb0
+    drm_crtc_next_vblank_start+0x5c/0xa8
+    msm_atomic_commit_tail+0x264/0x664
+    commit_tail+0xac/0x160
+    drm_atomic_helper_commit+0x160/0x168
+    drm_atomic_commit+0xfc/0x128
+    drm_atomic_helper_disable_plane+0x8c/0x110
+    __setplane_atomic+0x10c/0x138
+    drm_mode_cursor_common+0x3a8/0x410
+    drm_mode_cursor_ioctl+0x48/0x70
+    drm_ioctl_kernel+0xe0/0x158
+    drm_ioctl+0x25c/0x4d8
+    __arm64_sys_ioctl+0x98/0xd0
+    invoke_syscall+0x4c/0x100
+    el0_svc_common+0x98/0x104
+    do_el0_svc+0x30/0x90
+    el0_svc+0x20/0x50
+    el0t_64_sync_handler+0x78/0x108
+    el0t_64_sync+0x1a4/0x1a8
+   ---[ end trace a0f587e1ab9589e8 ]---
 
-A usable address should always go through memory_failure() so that the page is
-marked as poison. If !RIPV, then memory_failure() will get the MF_MUST_KILL
-flag and try to kill all processes after the page is poisoned.
+Fixes: 52ff0d3073d2 ("drm/msm/atomic: Switch to vblank_start helper")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/msm/msm_atomic.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I had a similar patch a while back:
-https://lore.kernel.org/linux-edac/20210504174712.27675-3-Yazen.Ghannam@amd.com/
+diff --git a/drivers/gpu/drm/msm/msm_atomic.c b/drivers/gpu/drm/msm/msm_atomic.c
+index c5e71c05f038..3871a6f2d8e1 100644
+--- a/drivers/gpu/drm/msm/msm_atomic.c
++++ b/drivers/gpu/drm/msm/msm_atomic.c
+@@ -155,6 +155,8 @@ static bool can_do_async(struct drm_atomic_state *state,
+ 	for_each_new_crtc_in_state(state, crtc, crtc_state, i) {
+ 		if (drm_atomic_crtc_needs_modeset(crtc_state))
+ 			return false;
++		if (!crtc_state->active)
++			return false;
+ 		if (++num_crtcs > 1)
+ 			return false;
+ 		*async_crtc = crtc;
+-- 
+2.39.2
 
-We could also get rid of kill_me_now() like you had suggested.
-
-Thanks,
-Yazen
