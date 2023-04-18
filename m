@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 751716E6CCD
+	by mail.lfdr.de (Postfix) with ESMTP id 20A776E6CCC
 	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 21:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232829AbjDRTOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 15:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
+        id S232932AbjDRTOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 15:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232852AbjDRTOD (ORCPT
+        with ESMTP id S232861AbjDRTOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 18 Apr 2023 15:14:03 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C291027A
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:13:33 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id a23so25544231qtj.8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:13:33 -0700 (PDT)
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8CFBB8A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:13:35 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id gb12so27467599qtb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:13:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1681845213; x=1684437213;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1681845214; x=1684437214;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VKzxWkw9Wp7aX3AQonPLuV4v1F6kfO1MbtWYkZecR34=;
-        b=fnKaIHJG7NChil0OqR30RHO2yD9ilNfbfzz+l5UrDoOhQMcIjn9Z7u0gwD85iPVAp0
-         tffEBcyMY2FouSlHJNy6srGCvt5E9IDj4dJBVKRE6XA/ar/BC0EWMcwavJ9D8HNRuvlG
-         Qdrqep2d7P+SpC95Rfj9aYd53ubAphhsP8E2gw2I9iDczVYbpjshQr8hBgBoVIb0a4N3
-         k6mQGeB1gv6RgDAMcI2tUgO6k3f+/MPwwLRAHp5lTK9eH/oa31Gg7tq6UC02MZCEJxJ0
-         CZVghku4DrrkzUssr6FthK28bwb1ynE8SrIKpU9sP12KWUg87rBmxhFx+GjHDJFIysNI
-         WwlQ==
+        bh=fvrO/1+4yglcd2Jvs04tq1hDUyEyh2m1Sh3LN7l5OG8=;
+        b=YCxaymFjTOB/xEVxOKn/iRYET7rdfjWPu3AZDYJ5KtaGsEjeOO2z8QOjdpBzKiI+fh
+         zq/KjeYnjCaxkKVGYNcD9mghxgZwPN5syoeQUj2HsktOmS7F69bhZq+UdMOlukwdy6mr
+         zhoMS/Tx7lhyB4yQTexZo6hq18nMIH/j4LR8HxWWTAFstqWcBJC/+aaBnM/4R2GA77/e
+         eaZxJoD9eYoQfHGUVsharCxWu8P9awFx8F/6/oFYKGnqiIiwRsnchL6XPeWp9ufx15vN
+         it9IVwB25jyUUFrrcgBYhumIpZbTgM/FEDmcZyOcdKC+L06MuZYxfBEyLL+xGpVRPQMZ
+         aekw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681845213; x=1684437213;
+        d=1e100.net; s=20221208; t=1681845214; x=1684437214;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VKzxWkw9Wp7aX3AQonPLuV4v1F6kfO1MbtWYkZecR34=;
-        b=VvieWOPiBSKHuSrqB0h+IoVE09JZVQ4+tEOhFQ4L4beIchTpQRb3eWzni78limmrvk
-         Cn6lDbjzFFgTOoKupv22kXB9sOn7HOz6RkLduSs0oLF2T5bLT/d3EIxX0wP4f2qEs0JG
-         4fR+3wQKx8uvoZTu+hkXWsVfttjg2hBpBrZbMr+HpdTLFsLaY28koNAvxiJ8T8DQy0Zk
-         76OkTT6TWjORbTrFpuUpTN50wy1s8Wa2BpxpCb0BMsIQNxzJwwB5mxjjSfe9PqVoULHy
-         do9xpKZ9I2uuK4ditaXOy6LNML3RvYfnWg9/88LXJhjqx9mysEjwJRDJEr/WrC7isBgt
-         og8g==
-X-Gm-Message-State: AAQBX9cq8xtWc6+bohukx+Xwt2rLTYhmNIgJiIdakbwt7/aQGTF594yA
-        D4xgWeVmf1nKwxc7J9bd4u59kA==
-X-Google-Smtp-Source: AKy350YRTIp6emLy7bR9ZUZa/RhO/Obyaw6AxSNUEm8mzOLj17NAjGHuS3AbcjQstxdD3Htg+F7UQg==
-X-Received: by 2002:a05:622a:4d1:b0:3ef:3d3f:17a2 with SMTP id q17-20020a05622a04d100b003ef3d3f17a2mr1327574qtx.68.1681845213072;
-        Tue, 18 Apr 2023 12:13:33 -0700 (PDT)
+        bh=fvrO/1+4yglcd2Jvs04tq1hDUyEyh2m1Sh3LN7l5OG8=;
+        b=UO3EGx4YHvhTZAmSwdCeeEiwWKGwh+jd2ZP6iuYxKnaJF7DZcCGIOfqWujqkZoifcf
+         CW9bszHuGILq/d3kT0uPHM+HBZxKPT7yY8BGxa0JHlWMjIViERoTBgMUREJLbRxti7Jk
+         PWZ7cf6ZAIl1gnFtvxsJLGRk0W2QuJ7vAL1+7ZnHiVAQQt9BBXOguVa8iT3pDSgqGpnY
+         xjhDF8IPtq2U6JFP7Z5BeUFDAPbKfibo8he8jnBzGmJeG4OY4rwoc7fQ7D7rR0oJKJbL
+         u9dAdDpwdcIJbfqwQQrC/dpgo9RKxkZZMLbIDJFZDJ6f9oJSY/tnV81oqFBm2BMPhZBM
+         S3rQ==
+X-Gm-Message-State: AAQBX9cJUUe77mI2MvHurnZ2HMH6H1J3sAogsV4X+HSYoXX1tnwusgki
+        A3c5iTvrtYx4B3bge8111POKe7GXt7zAbcBLF8U=
+X-Google-Smtp-Source: AKy350b8I9apZCXgd3Fc463SUtxO97BghAjCQl+N88Qns+QuGdCqUDlXOuuktIWM1UP9lMqTVC8ihw==
+X-Received: by 2002:ac8:4e93:0:b0:3ef:3880:9db6 with SMTP id 19-20020ac84e93000000b003ef38809db6mr1674175qtp.6.1681845214206;
+        Tue, 18 Apr 2023 12:13:34 -0700 (PDT)
 Received: from localhost ([2620:10d:c091:400::5:e646])
-        by smtp.gmail.com with ESMTPSA id y30-20020a05620a09de00b0074683c45f6csm4141283qky.1.2023.04.18.12.13.32
+        by smtp.gmail.com with ESMTPSA id f17-20020a05622a1a1100b003ef415f0184sm39541qtb.69.2023.04.18.12.13.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 12:13:32 -0700 (PDT)
+        Tue, 18 Apr 2023 12:13:33 -0700 (PDT)
 From:   Johannes Weiner <hannes@cmpxchg.org>
 To:     linux-mm@kvack.org
 Cc:     Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
@@ -57,9 +57,9 @@ Cc:     Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
         Vlastimil Babka <vbabka@suse.cz>,
         David Rientjes <rientjes@google.com>,
         linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: [RFC PATCH 12/26] mm: page_alloc: per-migratetype free counts
-Date:   Tue, 18 Apr 2023 15:12:59 -0400
-Message-Id: <20230418191313.268131-13-hannes@cmpxchg.org>
+Subject: [RFC PATCH 13/26] mm: compaction: remove compaction result helpers
+Date:   Tue, 18 Apr 2023 15:13:00 -0400
+Message-Id: <20230418191313.268131-14-hannes@cmpxchg.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230418191313.268131-1-hannes@cmpxchg.org>
 References: <20230418191313.268131-1-hannes@cmpxchg.org>
@@ -74,120 +74,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Increase visibility into the defragmentation behavior by tracking and
-reporting per-migratetype free counters.
-
-Subsequent patches will also use those counters to make more targeted
-reclaim/compaction decisions.
+I found myself repeatedly looking up the implementation of these
+helpers while working on the code, which suggests they are not a
+helpful abstraction. Inline them.
 
 Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 ---
- include/linux/mmzone.h |  5 +++++
- mm/page_alloc.c        | 29 +++++++++++++++++++++++++----
- mm/vmstat.c            |  5 +++++
- 3 files changed, 35 insertions(+), 4 deletions(-)
+ include/linux/compaction.h     | 92 ----------------------------------
+ include/trace/events/mmflags.h |  4 +-
+ mm/page_alloc.c                | 30 ++++++-----
+ 3 files changed, 19 insertions(+), 107 deletions(-)
 
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 20542e5a0a43..d1083ab81998 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -139,6 +139,11 @@ enum numa_stat_item {
- enum zone_stat_item {
- 	/* First 128 byte cacheline (assuming 64 bit words) */
- 	NR_FREE_PAGES,
-+	NR_FREE_UNMOVABLE,
-+	NR_FREE_MOVABLE,
-+	NR_FREE_RECLAIMABLE,
-+	NR_FREE_HIGHATOMIC,
-+	NR_FREE_FREE,
- 	NR_ZONE_LRU_BASE, /* Used only for compaction and reclaim retry */
- 	NR_ZONE_INACTIVE_ANON = NR_ZONE_LRU_BASE,
- 	NR_ZONE_ACTIVE_ANON,
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 44da23625f51..5f2a0037bed1 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -959,8 +959,12 @@ static inline void account_freepages(struct page *page, struct zone *zone,
+diff --git a/include/linux/compaction.h b/include/linux/compaction.h
+index 06eeb2e25833..7635e220215a 100644
+--- a/include/linux/compaction.h
++++ b/include/linux/compaction.h
+@@ -103,78 +103,6 @@ extern enum compact_result compaction_suitable(struct zone *zone, int order,
+ extern void compaction_defer_reset(struct zone *zone, int order,
+ 				bool alloc_success);
  
- 	__mod_zone_page_state(zone, NR_FREE_PAGES, nr_pages);
+-/* Compaction has made some progress and retrying makes sense */
+-static inline bool compaction_made_progress(enum compact_result result)
+-{
+-	/*
+-	 * Even though this might sound confusing this in fact tells us
+-	 * that the compaction successfully isolated and migrated some
+-	 * pageblocks.
+-	 */
+-	if (result == COMPACT_SUCCESS)
+-		return true;
+-
+-	return false;
+-}
+-
+-/* Compaction has failed and it doesn't make much sense to keep retrying. */
+-static inline bool compaction_failed(enum compact_result result)
+-{
+-	/* All zones were scanned completely and still not result. */
+-	if (result == COMPACT_COMPLETE)
+-		return true;
+-
+-	return false;
+-}
+-
+-/* Compaction needs reclaim to be performed first, so it can continue. */
+-static inline bool compaction_needs_reclaim(enum compact_result result)
+-{
+-	/*
+-	 * Compaction backed off due to watermark checks for order-0
+-	 * so the regular reclaim has to try harder and reclaim something.
+-	 */
+-	if (result == COMPACT_SKIPPED)
+-		return true;
+-
+-	return false;
+-}
+-
+-/*
+- * Compaction has backed off for some reason after doing some work or none
+- * at all. It might be throttling or lock contention. Retrying might be still
+- * worthwhile, but with a higher priority if allowed.
+- */
+-static inline bool compaction_withdrawn(enum compact_result result)
+-{
+-	/*
+-	 * If compaction is deferred for high-order allocations, it is
+-	 * because sync compaction recently failed. If this is the case
+-	 * and the caller requested a THP allocation, we do not want
+-	 * to heavily disrupt the system, so we fail the allocation
+-	 * instead of entering direct reclaim.
+-	 */
+-	if (result == COMPACT_DEFERRED)
+-		return true;
+-
+-	/*
+-	 * If compaction in async mode encounters contention or blocks higher
+-	 * priority task we back off early rather than cause stalls.
+-	 */
+-	if (result == COMPACT_CONTENDED)
+-		return true;
+-
+-	/*
+-	 * Page scanners have met but we haven't scanned full zones so this
+-	 * is a back off in fact.
+-	 */
+-	if (result == COMPACT_PARTIAL_SKIPPED)
+-		return true;
+-
+-	return false;
+-}
+-
+-
+ bool compaction_zonelist_suitable(struct alloc_context *ac, int order,
+ 					int alloc_flags);
  
--	if (is_migrate_cma(migratetype))
-+	if (migratetype <= MIGRATE_FREE)
-+		__mod_zone_page_state(zone, NR_FREE_UNMOVABLE + migratetype, nr_pages);
-+	else if (is_migrate_cma(migratetype))
- 		__mod_zone_page_state(zone, NR_FREE_CMA_PAGES, nr_pages);
-+	else
-+		VM_WARN_ONCE(1, "unexpected migratetype %d\n", migratetype);
+@@ -193,26 +121,6 @@ static inline enum compact_result compaction_suitable(struct zone *zone, int ord
+ 	return COMPACT_SKIPPED;
  }
  
- /* Used for pages not on another list */
-@@ -6175,7 +6179,9 @@ void __show_free_areas(unsigned int filter, nodemask_t *nodemask, int max_zone_i
- 		" mapped:%lu shmem:%lu pagetables:%lu\n"
- 		" sec_pagetables:%lu bounce:%lu\n"
- 		" kernel_misc_reclaimable:%lu\n"
--		" free:%lu free_pcp:%lu free_cma:%lu\n",
-+		" free:%lu free_unmovable:%lu free_movable:%lu\n"
-+		" free_reclaimable:%lu free_highatomic:%lu free_free:%lu\n"
-+		" free_cma:%lu free_pcp:%lu\n",
- 		global_node_page_state(NR_ACTIVE_ANON),
- 		global_node_page_state(NR_INACTIVE_ANON),
- 		global_node_page_state(NR_ISOLATED_ANON),
-@@ -6194,8 +6200,13 @@ void __show_free_areas(unsigned int filter, nodemask_t *nodemask, int max_zone_i
- 		global_zone_page_state(NR_BOUNCE),
- 		global_node_page_state(NR_KERNEL_MISC_RECLAIMABLE),
- 		global_zone_page_state(NR_FREE_PAGES),
--		free_pcp,
--		global_zone_page_state(NR_FREE_CMA_PAGES));
-+		global_zone_page_state(NR_FREE_UNMOVABLE),
-+		global_zone_page_state(NR_FREE_MOVABLE),
-+		global_zone_page_state(NR_FREE_RECLAIMABLE),
-+		global_zone_page_state(NR_FREE_HIGHATOMIC),
-+		global_zone_page_state(NR_FREE_FREE),
-+		global_zone_page_state(NR_FREE_CMA_PAGES),
-+		free_pcp);
+-static inline bool compaction_made_progress(enum compact_result result)
+-{
+-	return false;
+-}
+-
+-static inline bool compaction_failed(enum compact_result result)
+-{
+-	return false;
+-}
+-
+-static inline bool compaction_needs_reclaim(enum compact_result result)
+-{
+-	return false;
+-}
+-
+-static inline bool compaction_withdrawn(enum compact_result result)
+-{
+-	return true;
+-}
+-
+ static inline void kcompactd_run(int nid)
+ {
+ }
+diff --git a/include/trace/events/mmflags.h b/include/trace/events/mmflags.h
+index 412b5a46374c..47bfeca4cf02 100644
+--- a/include/trace/events/mmflags.h
++++ b/include/trace/events/mmflags.h
+@@ -222,8 +222,8 @@ IF_HAVE_VM_SOFTDIRTY(VM_SOFTDIRTY,	"softdirty"	)		\
+ #define compact_result_to_feedback(result)	\
+ ({						\
+ 	enum compact_result __result = result;	\
+-	(compaction_failed(__result)) ? COMPACTION_FAILED : \
+-		(compaction_withdrawn(__result)) ? COMPACTION_WITHDRAWN : COMPACTION_PROGRESS; \
++	(__result == COMPACT_COMPLETE) ? COMPACTION_FAILED : \
++		(__result == COMPACT_SUCCESS) ? COMPACTION_PROGRESS : COMPACTION_WITHDRAWN; \
+ })
  
- 	for_each_online_pgdat(pgdat) {
- 		if (show_mem_node_skip(filter, pgdat->node_id, nodemask))
-@@ -6273,6 +6284,11 @@ void __show_free_areas(unsigned int filter, nodemask_t *nodemask, int max_zone_i
- 		printk(KERN_CONT
- 			"%s"
- 			" free:%lukB"
-+			" free_unmovable:%lukB"
-+			" free_movable:%lukB"
-+			" free_reclaimable:%lukB"
-+			" free_highatomic:%lukB"
-+			" free_free:%lukB"
- 			" boost:%lukB"
- 			" min:%lukB"
- 			" low:%lukB"
-@@ -6294,6 +6310,11 @@ void __show_free_areas(unsigned int filter, nodemask_t *nodemask, int max_zone_i
- 			"\n",
- 			zone->name,
- 			K(zone_page_state(zone, NR_FREE_PAGES)),
-+			K(zone_page_state(zone, NR_FREE_UNMOVABLE)),
-+			K(zone_page_state(zone, NR_FREE_MOVABLE)),
-+			K(zone_page_state(zone, NR_FREE_RECLAIMABLE)),
-+			K(zone_page_state(zone, NR_FREE_HIGHATOMIC)),
-+			K(zone_page_state(zone, NR_FREE_FREE)),
- 			K(zone->watermark_boost),
- 			K(min_wmark_pages(zone)),
- 			K(low_wmark_pages(zone)),
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index 1ea6a5ce1c41..c8b8e6e259da 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -1168,6 +1168,11 @@ int fragmentation_index(struct zone *zone, unsigned int order)
- const char * const vmstat_text[] = {
- 	/* enum zone_stat_item counters */
- 	"nr_free_pages",
-+	"nr_free_unmovable",
-+	"nr_free_movable",
-+	"nr_free_reclaimable",
-+	"nr_free_highatomic",
-+	"nr_free_free",
- 	"nr_zone_inactive_anon",
- 	"nr_zone_active_anon",
- 	"nr_zone_inactive_file",
+ #define COMPACTION_FEEDBACK		\
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 5f2a0037bed1..c3b7dc479936 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -4620,35 +4620,39 @@ should_compact_retry(struct alloc_context *ac, int order, int alloc_flags,
+ 	if (fatal_signal_pending(current))
+ 		return false;
+ 
+-	if (compaction_made_progress(compact_result))
++	/*
++	 * Compaction managed to coalesce some page blocks, but the
++	 * allocation failed presumably due to a race. Retry some.
++	 */
++	if (compact_result == COMPACT_SUCCESS)
+ 		(*compaction_retries)++;
+ 
+ 	/*
+-	 * compaction considers all the zone as desperately out of memory
+-	 * so it doesn't really make much sense to retry except when the
++	 * All zones were scanned completely and still no result. It
++	 * doesn't really make much sense to retry except when the
+ 	 * failure could be caused by insufficient priority
+ 	 */
+-	if (compaction_failed(compact_result))
++	if (compact_result == COMPACT_COMPLETE)
+ 		goto check_priority;
+ 
+ 	/*
+-	 * compaction was skipped because there are not enough order-0 pages
+-	 * to work with, so we retry only if it looks like reclaim can help.
++	 * Compaction was skipped due to a lack of free order-0
++	 * migration targets. Continue if reclaim can help.
+ 	 */
+-	if (compaction_needs_reclaim(compact_result)) {
++	if (compact_result == COMPACT_SKIPPED) {
+ 		ret = compaction_zonelist_suitable(ac, order, alloc_flags);
+ 		goto out;
+ 	}
+ 
+ 	/*
+-	 * make sure the compaction wasn't deferred or didn't bail out early
+-	 * due to locks contention before we declare that we should give up.
+-	 * But the next retry should use a higher priority if allowed, so
+-	 * we don't just keep bailing out endlessly.
++	 * If compaction backed due to being deferred, due to
++	 * contended locks in async mode, or due to scanners meeting
++	 * after a partial scan, retry with increased priority.
+ 	 */
+-	if (compaction_withdrawn(compact_result)) {
++	if (compact_result == COMPACT_DEFERRED ||
++	    compact_result == COMPACT_CONTENDED ||
++	    compact_result == COMPACT_PARTIAL_SKIPPED)
+ 		goto check_priority;
+-	}
+ 
+ 	/*
+ 	 * !costly requests are much more important than __GFP_RETRY_MAYFAIL
 -- 
 2.39.2
 
