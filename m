@@ -2,173 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FBC6E5FE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A04CF6E5FAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbjDRLcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 07:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S231153AbjDRLTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 07:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbjDRLcf (ORCPT
+        with ESMTP id S229564AbjDRLTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 07:32:35 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA10861AB;
-        Tue, 18 Apr 2023 04:32:33 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 046FD5FD7C;
-        Tue, 18 Apr 2023 14:16:26 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1681816586;
-        bh=lYTwixrqbd9SStEuaH+MOse4j7UjK4ooo6t7FaqVmeA=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=Svh2dtABfLv0A4s8N8XedVQorPjq21MkbnzYzqGr0rE7B7n9umg+kH5gWc/yfHSxG
-         I6if+KKBejBAY8kxAT35VX8E6ePwaDSYCg9APOXYUTEcf+YTGq+sTMsW1m535JjJJZ
-         maO427TZfHXgh0eMipZMNELzwSsHvujFt9J6lbj8/lmYIsses3X6j8hyVgIzfEGY7w
-         KHroZFMv6imEBXB138tczGBWFym21BusY/Irq0Fl/7qA5FDUxrUYztnLs7qwN5pLfP
-         YAfl2lJeIKU0+N0tenqO5E9AidpMhA92sNKKaEeQ2alWPsyl02QvJSCU8DdA0PRhqw
-         Osjt1945IdDHA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 18 Apr 2023 14:16:25 +0300 (MSK)
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <neil.armstrong@linaro.org>,
-        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>, <mturquette@baylibre.com>,
-        <vkoul@kernel.org>, <kishon@kernel.org>, <hminas@synopsys.com>,
-        <Thinh.Nguyen@synopsys.com>
-CC:     <yue.wang@amlogic.com>, <hanjie.lin@amlogic.com>,
-        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: [PATCH v2 5/5] arm64: dts: meson: a1: support USB controller in OTG mode
-Date:   Tue, 18 Apr 2023 14:16:12 +0300
-Message-ID: <20230418111612.19479-6-ddrokosov@sberdevices.ru>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20230418111612.19479-1-ddrokosov@sberdevices.ru>
-References: <20230418111612.19479-1-ddrokosov@sberdevices.ru>
+        Tue, 18 Apr 2023 07:19:39 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDC24C29;
+        Tue, 18 Apr 2023 04:19:05 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.80.61) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 18 Apr
+ 2023 14:17:16 +0300
+Subject: Re: [PATCH] usb: phy: phy-tahvo: fix memory leak in tahvo_usb_probe()
+To:     Li Yang <lidaxian@hust.edu.cn>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     Dongliang Mu <dzm91@hust.edu.cn>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230418090758.18756-1-lidaxian@hust.edu.cn>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <96c7edf5-e1cc-03f6-ee52-ef373ae9d820@omp.ru>
+Date:   Tue, 18 Apr 2023 14:17:15 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/18 05:44:00 #21123121
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230418090758.18756-1-lidaxian@hust.edu.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.80.61]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 04/18/2023 10:57:34
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 176790 [Apr 18 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 509 509 b12bcaa7ba85624b485f2b6b92324b70964a1c65
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;31.173.80.61:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.80.61
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 04/18/2023 11:00:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 4/18/2023 7:17:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Amlogic A1 SoC family has USB2.0 controller based on dwc2 and dwc3
-heads. It supports otg/host/peripheral modes.
+Hello!
 
-Signed-off-by: Yue Wang <yue.wang@amlogic.com>
-Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
----
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 59 +++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+On 4/18/23 12:07 PM, Li Yang wrote:
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-index ae7d39cff07a..02af0aac6780 100644
---- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-@@ -8,6 +8,8 @@
- #include <dt-bindings/gpio/meson-a1-gpio.h>
- #include <dt-bindings/clock/amlogic,a1-pll-clkc.h>
- #include <dt-bindings/clock/amlogic,a1-clkc.h>
-+#include <dt-bindings/power/meson-a1-power.h>
-+#include <dt-bindings/reset/amlogic,meson-a1-reset.h>
- 
- / {
- 	compatible = "amlogic,a1";
-@@ -169,6 +171,17 @@ gpio_intc: interrupt-controller@0440 {
- 				amlogic,channel-interrupts =
- 					<49 50 51 52 53 54 55 56>;
- 			};
-+
-+			usb2_phy1: phy@4000 {
-+				compatible = "amlogic,a1-usb2-phy";
-+				clocks = <&clkc CLKID_USB_PHY_IN>;
-+				clock-names = "xtal";
-+				reg = <0x0 0x4000 0x0 0x60>;
-+				resets = <&reset RESET_USBPHY>;
-+				reset-names = "phy";
-+				#phy-cells = <0>;
-+				power-domains = <&pwrc PWRC_USB_ID>;
-+			};
- 		};
- 
- 		gic: interrupt-controller@ff901000 {
-@@ -192,6 +205,52 @@ spifc: spi@fd000400 {
- 			#size-cells = <0>;
- 			status = "disabled";
- 		};
-+
-+		usb: usb@fe004400 {
-+			status = "disabled";
-+			compatible = "amlogic,meson-a1-usb-ctrl";
-+			reg = <0x0 0xfe004400 0x0 0xa0>;
-+			interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+
-+			clocks = <&clkc CLKID_USB_CTRL>,
-+				 <&clkc CLKID_USB_BUS>,
-+				 <&clkc CLKID_USB_CTRL_IN>;
-+			clock-names = "usb_ctrl", "usb_bus", "xtal_usb_ctrl";
-+			resets = <&reset RESET_USBCTRL>;
-+			reset-name = "usb_ctrl";
-+
-+			dr_mode = "otg";
-+
-+			phys = <&usb2_phy1>;
-+			phy-names = "usb2-phy1";
-+
-+			dwc2: usb@ff500000 {
-+				compatible = "amlogic,meson-a1-usb", "snps,dwc2";
-+				reg = <0x0 0xff500000 0x0 0x40000>;
-+				interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
-+				phys = <&usb2_phy1>;
-+				phy-names = "usb2_phy";
-+				clocks = <&clkc CLKID_USB_PHY>;
-+				clock-names = "otg";
-+				dr_mode = "peripheral";
-+				g-rx-fifo-size = <192>;
-+				g-np-tx-fifo-size = <128>;
-+				g-tx-fifo-size = <128 128 16 16 16>;
-+			};
-+
-+			dwc3: usb@ff400000 {
-+				compatible = "snps,dwc3";
-+				reg = <0x0 0xff400000 0x0 0x100000>;
-+				interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
-+				dr_mode = "host";
-+				snps,dis_u2_susphy_quirk;
-+				snps,quirk-frame-length-adjustment = <0x20>;
-+				snps,parkmode-disable-ss-quirk;
-+			};
-+		};
- 	};
- 
- 	timer {
--- 
-2.36.0
+> Smatch reports:
+> drivers/usb/phy/phy-tahvo.c: tahvo_usb_probe()
+> warn: missing unwind goto?
+> 
+> After geting irq, if ret < 0, it will return without error handling to
+> free memory.
+> Just add error handling to fix this problem.
 
+   Oops, I'm sorry for missing that one...
+
+> Fixes: 0d45a1373e66 ("usb: phy: tahvo: add IRQ check")
+> Signed-off-by: Li Yang <lidaxian@hust.edu.cn>
+> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+> ---
+> The issue is found by static analysis, and the patch remains untest.
+> ---
+>  drivers/usb/phy/phy-tahvo.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/phy/phy-tahvo.c b/drivers/usb/phy/phy-tahvo.c
+> index f2d2cc586c5b..184a5f3d7473 100644
+> --- a/drivers/usb/phy/phy-tahvo.c
+> +++ b/drivers/usb/phy/phy-tahvo.c
+> @@ -390,8 +390,11 @@ static int tahvo_usb_probe(struct platform_device *pdev)
+>  	dev_set_drvdata(&pdev->dev, tu);
+>  
+>  	tu->irq = ret = platform_get_irq(pdev, 0);
+> -	if (ret < 0)
+> -		return ret;
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "could not get irq: %d\n",
+> +				ret);
+
+   Adding the error message needs another patch, strictly speaking...
+
+> +		goto err_remove_phy;
+> +	}
+>  	ret = request_threaded_irq(tu->irq, NULL, tahvo_usb_vbus_interrupt,
+>  				   IRQF_ONESHOT,
+>  				   "tahvo-vbus", tu);
+
+MBR, Sergey
