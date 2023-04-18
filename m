@@ -2,73 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FC46E58D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 07:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 440DB6E55A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 02:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjDRF6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 01:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S230149AbjDRAOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 20:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjDRF6J (ORCPT
+        with ESMTP id S230211AbjDRAOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 01:58:09 -0400
-Received: from mail.peterfykh.hu (mail.peterfykh.hu [84.206.67.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E52D2125;
-        Mon, 17 Apr 2023 22:58:07 -0700 (PDT)
-Received: from mail.peterfykh.hu (localhost [127.0.0.1])
-        by mail.peterfykh.hu (Postfix) with ESMTP id 8F18311E6;
-        Tue, 18 Apr 2023 02:14:12 +0200 (CEST)
+        Mon, 17 Apr 2023 20:14:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F90B40EF;
+        Mon, 17 Apr 2023 17:14:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0852D625AD;
+        Tue, 18 Apr 2023 00:14:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51A31C433EF;
+        Tue, 18 Apr 2023 00:14:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681776889;
+        bh=hCnAMgracnaMWnyimoPLYpmDd+TChHfuJQ/Cc2RYEOQ=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=fvOfJr+Tr1PEclqHfq4GKHtrP0oL60L8GpqkMQ6umKWd7ejucFxregZcYig52mMui
+         Ue7inDUYRiuegsTeoRuItwCKFB1LaoRbGxIKTNBpJVUs94AvDUYjHiL7pt5vdsckF7
+         saKk0sZKlot5MjvIjaY1scLfhaLHxOWuz059K2JtE3ov/Um9Q4TYWiW9PbEatRPVLT
+         LaqTyVkGmYFWGxSeFMW1vj7gcQsmLhgeQRyD3kAxT0EWoPcwgmd3RRaNuShbJvZ0zO
+         1FngLk3e4FJAdCVnSHlbR0HtZqPet9FRpDqw9DaKUTrSa6g5etEOdePpCEs0njboO4
+         lpHHympB0H2ZA==
+Message-ID: <4dc69da7d894621817e74697fccf36a1.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Tue, 18 Apr 2023 08:14:12 +0800
-From:   MK <sebeszet@peterfykh.hu>
-To:     undisclosed-recipients:;
-Subject: Hej solsken
-Reply-To: marion.K08@bahnhof.se
-Mail-Reply-To: marion.K08@bahnhof.se
-Message-ID: <9d3cb3085bfa7ac93ebcac2888523668@peterfykh.hu>
-X-Sender: sebeszet@peterfykh.hu
-User-Agent: Roundcube Webmail/1.2.3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peterfykh.hu; s=mail; t=1681776871; bh=rjWk/3zdLXe64niL8uU1nP5CiZEC9jbtDaiK6Toynio=; h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Subject:Reply-To:Message-ID; b=CsGsfmipRMwDSqg9eEniq+bsdGMKjeqWuxzouC/n5iYKj176rQGUZcRJ3UCLckV1dlm2xoerG/TU335l054HaV3FYE3+P/G6+NRX4/VaHO0CWPtUsfEDksPwaHT35fRTwh3LfI00mB9zK8IQ2qFmDo+sPP25yV61/NSwWmEwTAU=
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAAXyoMOuNx_3eJyPHt4TYOtpzh0U5opWBPgEEeXF7izw==pNFQ@mail.gmail.com>
+References: <20230414181302.986271-1-mmyangfl@gmail.com> <20230414181302.986271-2-mmyangfl@gmail.com> <20230417204934.GA3334964-robh@kernel.org> <CAAXyoMOuNx_3eJyPHt4TYOtpzh0U5opWBPgEEeXF7izw==pNFQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: clock: Add reg-clock-controller
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Rob Herring <robh@kernel.org>, Yangfl <mmyangfl@gmail.com>
+Date:   Mon, 17 Apr 2023 17:14:47 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hej min kära,
+Quoting Yangfl (2023-04-17 14:39:23)
+> Rob Herring <robh@kernel.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=8818=E6=97=A5=
+=E5=91=A8=E4=BA=8C 04:49=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > On Sat, Apr 15, 2023 at 02:12:59AM +0800, David Yang wrote:
+> > > Add DT bindings documentation for reg-clock-controller, collection of
+> > > basic clocks common to many platforms.
+> > >
+> > > Signed-off-by: David Yang <mmyangfl@gmail.com>
+> > > ---
+> > >  .../bindings/clock/reg-clock-controller.yaml  | 245 ++++++++++++++++=
+++
+> > >  1 file changed, 245 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/clock/reg-clock=
+-controller.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/clock/reg-clock-contro=
+ller.yaml b/Documentation/devicetree/bindings/clock/reg-clock-controller.ya=
+ml
+> > > new file mode 100644
+> > > index 000000000000..a6a7e0b05821
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/clock/reg-clock-controller.ya=
+ml
+> > > @@ -0,0 +1,245 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/clock/reg-clock-controller.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Simple straight-forward register-based clocks
+> >
+> > 'simple' means extended one property at a time with little foresight. In
+> > the end, 'simple' bindings are never simple. s/simple/generic/ as well.
+> >
+> > When we first started the clock binding, we had exactly this. There's
+> > still bindings for at least some of it. It turned out to be a bad
+> > idea because it was difficult to get correct and complete. So this
+> > binding is exactly what we don't want.
+> >
+> > Rob
+>=20
+> Thanks. So in the next version v2, clock-controller are made merely
+> container of clocks. The real jobs are done by sub clock nodes, so
+> that clocks, with or without hardware-specific clock types
+> "compatible", can be declared independently and individually as dt
+> nodes, instead of hardware clock "controllers" with quite arbitrary
+> clock identifiers listed under include/dt-bindings/clock/.
 
-Jag är ledsen att jag stör dig och inkräktar på din integritet. Jag är 
-singel, ensam och i behov av en omtänksam, kärleksfull och romantisk 
-följeslagare.
-
-Jag är en hemlig beundrare och skulle vilja utforska möjligheten att 
-lära mig mer om varandra. Jag vet att det är konstigt att kontakta dig 
-på det här sättet och jag hoppas att du kan förlåta mig. Jag är en blyg 
-person och det är det enda sättet jag vet att jag kan få din 
-uppmärksamhet. Jag vill bara veta vad du tycker och min avsikt är inte 
-att förolämpa dig.
-Jag hoppas att vi kan vara vänner om det är vad du vill, även om jag 
-vill vara mer än bara en vän. Jag vet att du har några frågor att ställa 
-och jag hoppas att jag kan tillfredsställa en del av din nyfikenhet med 
-några svar.
-
-Jag tror på talesättet att "för världen är du bara en person, men för 
-någon speciell är du världen". Allt jag vill ha är kärlek, romantisk 
-omsorg och uppmärksamhet från en speciell följeslagare som jag hoppas 
-skulle vara du.
-
-Jag hoppas att detta meddelande kommer att bli början på en långsiktig 
-kommunikation mellan oss, skicka bara ett svar på detta meddelande, det 
-kommer att göra mig glad.
-
-
-Puss och kram,
-
-Marion.
+No. Write actual drivers and actual bindings for real devices.
