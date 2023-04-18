@@ -2,273 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6C96E6731
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4787E6E6736
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjDRObg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 10:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
+        id S231623AbjDROc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 10:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjDRObe (ORCPT
+        with ESMTP id S231384AbjDROcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 10:31:34 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC46F211B;
-        Tue, 18 Apr 2023 07:31:32 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1879fc89f5eso310325fac.0;
-        Tue, 18 Apr 2023 07:31:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681828292; x=1684420292;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l5ACrXrGwITOLTD4dccqngzAY+kQ6PuMFiv2tu/9e90=;
-        b=HDG3wPhsu14GZOZbzagsY1x1sk+Kdmr/rua4nDTIL8VZWi1SnNdirRCkg6AlOpaFbe
-         kNr6Qg5EZOw8DLgOy9r+OeJGmlf2hnoObFtzRb1Dz+NHhR/kNK7A+uGgvePxyWeMx9cN
-         E6MwLh1CqXcsJ+3TZD9v46gyQe4ryV6kPOvatzk28DkgTb1+kQ1A7cQtxHxl5KDh4XhS
-         kbThLZR6nIDd3JGBm1tlH8lADFcb25tRDludRZ11Hb4iTGmMoU6n6n9VFnlM+kmlQcHw
-         1IoSssNRoPqOYk1UyyP0FKA41CjUoyzaDPzSAJfP+To3lDYRuXVXHe+PwUzRJr56D40t
-         lNTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681828292; x=1684420292;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l5ACrXrGwITOLTD4dccqngzAY+kQ6PuMFiv2tu/9e90=;
-        b=fOJZG5BD1CZy8GPCqy/9ogPpt1JHMoJCAONC+uoo9NJfruIFRY3iVl07LnbxABhfVp
-         0N0e9i64Itgq/On0ZkgKNTl+lojSA298V+UtqvL1yXz9lD2uY2BYKy5mpg4wlt8tUT6R
-         2Bo22EH6lj12ymoP0gj4d0ovDhmZTG2Qoxcz1wXsd58osUTQk0wiEf/GzM9ByjTyUIHT
-         cYbzKDOEgtO20PbQKX1lrA3aTQijH162ecPzhSLLeV7BMR6KAusV9JvbOOOhxMD9CbbN
-         fXaKqulqOs3CVNVZPeRJ/b6bL1DhrsB8UVUrSdG/Df1W7ThzEfL86bx9HMkS4Nk9JTyk
-         kk1w==
-X-Gm-Message-State: AAQBX9elif39kjYf/9H5o4kqIwWfNqPJ8xBR6vEDIeCR3ANxZV4C9Vl1
-        5YJLSRbi4H/Kw3wUk8AOrxQ/0Ir0kyq7xtvu+GY=
-X-Google-Smtp-Source: AKy350aAs+nlCTwr3Bx+LCW+MDhg5c40W8a2nTsaDwXoGoGkBI0MbdGRg43BSQC/ynXheSqyV4A8zoqCX5LyHngHTDo=
-X-Received: by 2002:a05:6870:11cf:b0:184:2097:e64f with SMTP id
- 15-20020a05687011cf00b001842097e64fmr1140305oav.5.1681828291977; Tue, 18 Apr
- 2023 07:31:31 -0700 (PDT)
+        Tue, 18 Apr 2023 10:32:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4504413F8F
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 07:31:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681828297;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Obc8o7+Jc2/xwzIMnjHntcd92yYzpwyuQHbYi3m2V4g=;
+        b=gBE/jNRMTBVX7TaIAmVeObUB6kaHr1z/bvgPE6Tq1ttFup8l5ZpJNVogf3dI/dafeQ9oY5
+        jZ9sJV5F5w2OXBdtxjaS00FA55+BLOqgPdsaqIyhWVjs+7WUibXQbO0YYLpdtNPdOADPS2
+        Njrt04Es7F+zotx7qwJ0VjmjbNHS8uE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-118-JXl42fi3NSi0HJY4UsjPfQ-1; Tue, 18 Apr 2023 10:31:34 -0400
+X-MC-Unique: JXl42fi3NSi0HJY4UsjPfQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5E43D88B7AA;
+        Tue, 18 Apr 2023 14:31:29 +0000 (UTC)
+Received: from [10.22.34.98] (unknown [10.22.34.98])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 44BD540C6E70;
+        Tue, 18 Apr 2023 14:31:27 +0000 (UTC)
+Message-ID: <eda74c03-bde2-bb51-2b0d-df2097215696@redhat.com>
+Date:   Tue, 18 Apr 2023 10:31:27 -0400
 MIME-Version: 1.0
-References: <20230417201215.448099-1-robdclark@gmail.com> <20230417201215.448099-3-robdclark@gmail.com>
- <58977051-197b-f1f0-c795-9037e70d7a91@linux.intel.com> <ZD5WLMRNibbRkGQO@phenom.ffwll.local>
-In-Reply-To: <ZD5WLMRNibbRkGQO@phenom.ffwll.local>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 18 Apr 2023 07:31:21 -0700
-Message-ID: <CAF6AEGugcuV08G_pxjUGvhTbp8DFFG4ws3=oiP5PpbRf=SJdhQ@mail.gmail.com>
-Subject: Re: [RFC 2/3] drm/msm: Rework get_comm_cmdline() helper
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <freedreno@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/6] sched/deadline: cpuset: Rework DEADLINE bandwidth
+ restoration
+Content-Language: en-US
+To:     Qais Yousef <qyousef@layalina.io>,
+        Juri Lelli <juri.lelli@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hao Luo <haoluo@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+References: <20230329125558.255239-1-juri.lelli@redhat.com>
+ <20230418141127.zbvsf7lwk27zvipt@airbuntu>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230418141127.zbvsf7lwk27zvipt@airbuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 1:34=E2=80=AFAM Daniel Vetter <daniel@ffwll.ch> wro=
-te:
->
-> On Tue, Apr 18, 2023 at 09:27:49AM +0100, Tvrtko Ursulin wrote:
-> >
-> > On 17/04/2023 21:12, Rob Clark wrote:
-> > > From: Rob Clark <robdclark@chromium.org>
-> > >
-> > > Make it work in terms of ctx so that it can be re-used for fdinfo.
-> > >
-> > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > ---
-> > >   drivers/gpu/drm/msm/adreno/adreno_gpu.c |  4 ++--
-> > >   drivers/gpu/drm/msm/msm_drv.c           |  2 ++
-> > >   drivers/gpu/drm/msm/msm_gpu.c           | 13 ++++++-------
-> > >   drivers/gpu/drm/msm/msm_gpu.h           | 12 ++++++++++--
-> > >   drivers/gpu/drm/msm/msm_submitqueue.c   |  1 +
-> > >   5 files changed, 21 insertions(+), 11 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/dr=
-m/msm/adreno/adreno_gpu.c
-> > > index bb38e728864d..43c4e1fea83f 100644
-> > > --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> > > +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> > > @@ -412,7 +412,7 @@ int adreno_set_param(struct msm_gpu *gpu, struct =
-msm_file_private *ctx,
-> > >             /* Ensure string is null terminated: */
-> > >             str[len] =3D '\0';
-> > > -           mutex_lock(&gpu->lock);
-> > > +           mutex_lock(&ctx->lock);
-> > >             if (param =3D=3D MSM_PARAM_COMM) {
-> > >                     paramp =3D &ctx->comm;
-> > > @@ -423,7 +423,7 @@ int adreno_set_param(struct msm_gpu *gpu, struct =
-msm_file_private *ctx,
-> > >             kfree(*paramp);
-> > >             *paramp =3D str;
-> > > -           mutex_unlock(&gpu->lock);
-> > > +           mutex_unlock(&ctx->lock);
-> > >             return 0;
-> > >     }
-> > > diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_=
-drv.c
-> > > index 3d73b98d6a9c..ca0e89e46e13 100644
-> > > --- a/drivers/gpu/drm/msm/msm_drv.c
-> > > +++ b/drivers/gpu/drm/msm/msm_drv.c
-> > > @@ -581,6 +581,8 @@ static int context_init(struct drm_device *dev, s=
-truct drm_file *file)
-> > >     rwlock_init(&ctx->queuelock);
-> > >     kref_init(&ctx->ref);
-> > > +   ctx->pid =3D get_pid(task_pid(current));
-> >
-> > Would it simplify things for msm if DRM core had an up to date file->pi=
-d as
-> > proposed in
-> > https://patchwork.freedesktop.org/patch/526752/?series=3D109902&rev=3D4=
- ? It
-> > gets updated if ioctl issuer is different than fd opener and this being
-> > context_init here reminded me of it. Maybe you wouldn't have to track t=
-he
-> > pid in msm?
+On 4/18/23 10:11, Qais Yousef wrote:
+> On 03/29/23 14:55, Juri Lelli wrote:
+>> Qais reported [1] that iterating over all tasks when rebuilding root
+>> domains for finding out which ones are DEADLINE and need their bandwidth
+>> correctly restored on such root domains can be a costly operation (10+
+>> ms delays on suspend-resume). He proposed we skip rebuilding root
+>> domains for certain operations, but that approach seemed arch specific
+>> and possibly prone to errors, as paths that ultimately trigger a rebuild
+>> might be quite convoluted (thanks Qais for spending time on this!).
+>>
+>> To fix the problem
+>>
+>>   01/06 - Rename functions deadline with DEADLINE accounting (cleanup
+>>           suggested by Qais) - no functional change
+>>   02/06 - Bring back cpuset_mutex (so that we have write access to cpusets
+>>           from scheduler operations - and we also fix some problems
+>>           associated to percpu_cpuset_rwsem)
+>>   03/06 - Keep track of the number of DEADLINE tasks belonging to each cpuset
+>>   04/06 - Create DL BW alloc, free & check overflow interface for bulk
+>>           bandwidth allocation/removal - no functional change
+>>   05/06 - Fix bandwidth allocation handling for cgroup operation
+>>           involving multiple tasks
+>>   06/06 - Use this information to only perform the costly iteration if
+>>           DEADLINE tasks are actually present in the cpuset for which a
+>>           corresponding root domain is being rebuilt
+>>
+>> With respect to the RFC posting [2]
+>>
+>>   1 - rename DEADLINE bandwidth accounting functions - Qais
+>>   2 - call inc/dec_dl_tasks_cs from switched_{to,from}_dl - Qais
+>>   3 - fix DEADLINE bandwidth allocation with multiple tasks - Waiman,
+>>       contributed by Dietmar
+>>
+>> This set is also available from
+>>
+>> https://github.com/jlelli/linux.git deadline/rework-cpusets
+> Is this just waiting to be picked up or still there's something to be addressed
+> still?
 
-The problem is that we also need this for gpu devcore dumps, which
-could happen after the drm_file is closed.  The ctx can outlive the
-file.
+There are some changes to cpuset code recently and so I believe that 
+this patch series may need to be refreshed to reconcile the changes.
 
-But the ctx->pid has the same problem as the existing file->pid when
-it comes to Xorg.. hopefully over time that problem just goes away.  I
-guess I could do a similar dance to your patch to update the pid
-whenever (for ex) a submitqueue is created.
+Thanks,
+Longman
 
-> Can we go one step further and let the drm fdinfo stuff print these new
-> additions? Consistency across drivers and all that.
-
-Hmm, I guess I could _also_ store the overridden comm/cmdline in
-drm_file.  I still need to track it in ctx (msm_file_private) because
-I could need it after the file is closed.
-
-Maybe it could be useful to have a gl extension to let the app set a
-name on the context so that this is useful beyond native-ctx (ie.
-maybe it would be nice to see that "chrome: lwn.net" is using less gpu
-memory than "chrome: phoronix.com", etc)
-
-BR,
--R
-
-> Also for a generic trigger I think any driver ioctl is good enough (we
-> only really need to avoid the auth dance when you're not on a render
-> node).
-> -Daniel
->
-> >
-> > Regards,
-> >
-> > Tvrtko
-> >
-> > > +   mutex_init(&ctx->lock);
-> > >     msm_submitqueue_init(dev, ctx);
-> > >     ctx->aspace =3D msm_gpu_create_private_address_space(priv->gpu, c=
-urrent);
-> > > diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_=
-gpu.c
-> > > index c403912d13ab..f0f4f845c32d 100644
-> > > --- a/drivers/gpu/drm/msm/msm_gpu.c
-> > > +++ b/drivers/gpu/drm/msm/msm_gpu.c
-> > > @@ -327,18 +327,17 @@ find_submit(struct msm_ringbuffer *ring, uint32=
-_t fence)
-> > >   static void retire_submits(struct msm_gpu *gpu);
-> > > -static void get_comm_cmdline(struct msm_gem_submit *submit, char **c=
-omm, char **cmd)
-> > > +static void get_comm_cmdline(struct msm_file_private *ctx, char **co=
-mm, char **cmd)
-> > >   {
-> > > -   struct msm_file_private *ctx =3D submit->queue->ctx;
-> > >     struct task_struct *task;
-> > > -   WARN_ON(!mutex_is_locked(&submit->gpu->lock));
-> > > -
-> > >     /* Note that kstrdup will return NULL if argument is NULL: */
-> > > +   mutex_lock(&ctx->lock);
-> > >     *comm =3D kstrdup(ctx->comm, GFP_KERNEL);
-> > >     *cmd  =3D kstrdup(ctx->cmdline, GFP_KERNEL);
-> > > +   mutex_unlock(&ctx->lock);
-> > > -   task =3D get_pid_task(submit->pid, PIDTYPE_PID);
-> > > +   task =3D get_pid_task(ctx->pid, PIDTYPE_PID);
-> > >     if (!task)
-> > >             return;
-> > > @@ -372,7 +371,7 @@ static void recover_worker(struct kthread_work *w=
-ork)
-> > >             if (submit->aspace)
-> > >                     submit->aspace->faults++;
-> > > -           get_comm_cmdline(submit, &comm, &cmd);
-> > > +           get_comm_cmdline(submit->queue->ctx, &comm, &cmd);
-> > >             if (comm && cmd) {
-> > >                     DRM_DEV_ERROR(dev->dev, "%s: offending task: %s (=
-%s)\n",
-> > > @@ -460,7 +459,7 @@ static void fault_worker(struct kthread_work *wor=
-k)
-> > >             goto resume_smmu;
-> > >     if (submit) {
-> > > -           get_comm_cmdline(submit, &comm, &cmd);
-> > > +           get_comm_cmdline(submit->queue->ctx, &comm, &cmd);
-> > >             /*
-> > >              * When we get GPU iova faults, we can get 1000s of them,
-> > > diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_=
-gpu.h
-> > > index 7a4fa1b8655b..b2023a42116b 100644
-> > > --- a/drivers/gpu/drm/msm/msm_gpu.h
-> > > +++ b/drivers/gpu/drm/msm/msm_gpu.h
-> > > @@ -377,17 +377,25 @@ struct msm_file_private {
-> > >      */
-> > >     int sysprof;
-> > > +   /** @pid: Process that opened this file. */
-> > > +   struct pid *pid;
-> > > +
-> > > +   /**
-> > > +    * lock: Protects comm and cmdline
-> > > +    */
-> > > +   struct mutex lock;
-> > > +
-> > >     /**
-> > >      * comm: Overridden task comm, see MSM_PARAM_COMM
-> > >      *
-> > > -    * Accessed under msm_gpu::lock
-> > > +    * Accessed under msm_file_private::lock
-> > >      */
-> > >     char *comm;
-> > >     /**
-> > >      * cmdline: Overridden task cmdline, see MSM_PARAM_CMDLINE
-> > >      *
-> > > -    * Accessed under msm_gpu::lock
-> > > +    * Accessed under msm_file_private::lock
-> > >      */
-> > >     char *cmdline;
-> > > diff --git a/drivers/gpu/drm/msm/msm_submitqueue.c b/drivers/gpu/drm/=
-msm/msm_submitqueue.c
-> > > index 0e803125a325..0444ba04fa06 100644
-> > > --- a/drivers/gpu/drm/msm/msm_submitqueue.c
-> > > +++ b/drivers/gpu/drm/msm/msm_submitqueue.c
-> > > @@ -61,6 +61,7 @@ void __msm_file_private_destroy(struct kref *kref)
-> > >     }
-> > >     msm_gem_address_space_put(ctx->aspace);
-> > > +   put_pid(ctx->pid);
-> > >     kfree(ctx->comm);
-> > >     kfree(ctx->cmdline);
-> > >     kfree(ctx);
->
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
