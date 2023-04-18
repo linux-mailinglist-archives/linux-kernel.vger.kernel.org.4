@@ -2,122 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F506E5C4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 104196E5C4B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjDRIjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
+        id S229958AbjDRIjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbjDRIji (ORCPT
+        with ESMTP id S231243AbjDRIjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:39:38 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654664EE9
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:39:12 -0700 (PDT)
-Received: from dggpemm500011.china.huawei.com (unknown [7.185.36.110])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q0y332TYczsRFq;
-        Tue, 18 Apr 2023 16:37:19 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpemm500011.china.huawei.com
- (7.185.36.110) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 18 Apr
- 2023 16:38:48 +0800
-From:   Li Lingfeng <lilingfeng3@huawei.com>
-To:     <dm-devel@redhat.com>
-CC:     <agk@redhat.com>, <snitzer@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <houtao1@huawei.com>,
-        <yi.zhang@huawei.com>, <yukuai3@huawei.com>,
-        <lilingfeng3@huawei.com>
-Subject: [PATCH -next] dm: don't lock fs when the map is NULL in process of resume
-Date:   Tue, 18 Apr 2023 16:38:04 +0800
-Message-ID: <20230418083804.2548437-1-lilingfeng3@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 18 Apr 2023 04:39:36 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655DC72B9;
+        Tue, 18 Apr 2023 01:39:12 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33I50ujp014943;
+        Tue, 18 Apr 2023 03:38:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=QIGOwCnoD9saG41Ua74ZCdSTXr1oUGK7HY9sOWvvMSg=;
+ b=O1uzvMyS9wYrgoEollZhxJd4gzViZuXEz/l01QmpxK3VoVfzGVW1rxKEc707uiqAhk4B
+ bhrD0UFfP9l0WRNLgHDD1PDwl7krW/dOLXz2fLKfXf9ahKzLoYgrU2FxQsvRnGDV2xn0
+ dcFLk2ZCzS7yzjds5gjDC0Le8xNaIGhTEQKBk4ypaBcxdLsuPd7QPgr5v8dGQ7cXQ6O7
+ DzSjMrXZT9pksHxG0yDZKS8XO7PEP7E3655AXlwMQSHHb16a/FA3bQNelerU9x09Z7el
+ nnfglIRePSH/bEzlV3sZECNOmu+m7eONvowFawZUvcL58XETDtR3+Q144hVhEejYnEUU 1Q== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pyrbpwuk1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 03:38:31 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 18 Apr
+ 2023 03:38:30 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 18 Apr 2023 03:38:30 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E959445D;
+        Tue, 18 Apr 2023 08:38:29 +0000 (UTC)
+Date:   Tue, 18 Apr 2023 08:38:29 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Saalim Quadri <danascape@gmail.com>
+CC:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <daniel.baluta@gmail.com>,
+        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: dt-bindings: wm8728: Convert to dtschema
+Message-ID: <20230418083829.GA68926@ediswmail.ad.cirrus.com>
+References: <20230417204323.137681-1-danascape@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500011.china.huawei.com (7.185.36.110)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230417204323.137681-1-danascape@gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: 1_gKeb4A7u8aGsCnr1sCts4zPnKAP3QN
+X-Proofpoint-ORIG-GUID: 1_gKeb4A7u8aGsCnr1sCts4zPnKAP3QN
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit fa247089de99 ("dm: requeue IO if mapping table not yet available")
-added a detection of whether the mapping table is available in the IO
-submission process. If the mapping table is unavailable, it returns
-BLK_STS_RESOURCE and requeues the IO.
-This can lead to the following deadlock problem:
+On Mon, Apr 17, 2023 at 08:43:23PM +0000, Saalim Quadri wrote:
+> Convert the WM8728 audio CODEC bindings to DT schema
+> 
+> Signed-off-by: Saalim Quadri <danascape@gmail.com>
+> ---
 
-dm create                                      mount
-ioctl(DM_DEV_CREATE_CMD)
-ioctl(DM_TABLE_LOAD_CMD)
-                               do_mount
-                                vfs_get_tree
-                                 ext4_get_tree
-                                  get_tree_bdev
-                                   sget_fc
-                                    alloc_super
-                                     // got &s->s_umount
-                                     down_write_nested(&s->s_umount, ...);
-                                   ext4_fill_super
-                                    ext4_load_super
-                                     ext4_read_bh
-                                      submit_bio
-                                      // submit and wait io end
-ioctl(DM_DEV_SUSPEND_CMD)
-dev_suspend
- do_resume
-  dm_suspend
-   __dm_suspend
-    lock_fs
-     freeze_bdev
-      get_active_super
-       grab_super
-        // wait for &s->s_umount
-        down_write(&s->s_umount);
-  dm_swap_table
-   __bind
-    // set md->map(can't get here)
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-IO will be continuously requeued while holding the lock since mapping
-table is null. At the same time, mapping table won't be set since the
-lock is not available.
-Like request-based DM, bio-based DM also has the same problem.
-
-It's not proper to just abort IO if the mapping table not available.
-So clear DM_SKIP_LOCKFS_FLAG when the mapping table is NULL.
-
-Fixes: fa247089de99 ("dm: requeue IO if mapping table not yet available")
-Signed-off-by: Li Lingfeng <lilingfeng3@huawei.com>
----
- drivers/md/dm-ioctl.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
-index 50a1259294d1..48e5554e3b69 100644
---- a/drivers/md/dm-ioctl.c
-+++ b/drivers/md/dm-ioctl.c
-@@ -1168,10 +1168,14 @@ static int do_resume(struct dm_ioctl *param)
- 	/* Do we need to load a new map ? */
- 	if (new_map) {
- 		sector_t old_size, new_size;
-+		int srcu_idx;
- 
-+		old_map = dm_get_live_table(md, &srcu_idx);
- 		/* Suspend if it isn't already suspended */
--		if (param->flags & DM_SKIP_LOCKFS_FLAG)
-+		if ((param->flags & DM_SKIP_LOCKFS_FLAG) || !old_map)
- 			suspend_flags &= ~DM_SUSPEND_LOCKFS_FLAG;
-+		dm_put_live_table(md, srcu_idx);
-+
- 		if (param->flags & DM_NOFLUSH_FLAG)
- 			suspend_flags |= DM_SUSPEND_NOFLUSH_FLAG;
- 		if (!dm_suspended_md(md))
--- 
-2.31.1
-
+Thanks,
+Charles
