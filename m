@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E98E26E6792
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B066E6791
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232156AbjDROxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 10:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
+        id S231888AbjDROxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 10:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbjDROxg (ORCPT
+        with ESMTP id S231194AbjDROxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 10:53:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9E7AD2A;
-        Tue, 18 Apr 2023 07:53:34 -0700 (PDT)
+        Tue, 18 Apr 2023 10:53:34 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE2FAD2A;
+        Tue, 18 Apr 2023 07:53:31 -0700 (PDT)
 Date:   Tue, 18 Apr 2023 14:53:29 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681829610;
+        s=2020; t=1681829609;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=85JUodLV7EWbfM40Ibp7CaeedStOFvRsNIpu1aewYc8=;
-        b=I6icHYbzw2mps60pQHWVw8tMzY4WON367lA/CRcH0QySPd+rrEVIed/4wd7Yc1tsBWzRxL
-        xKCMr9U/Zl5jRMBXwPt+0IpQ508Gue3JQJUDTCNR8ysPOl40bmVVr6CDWBGq8jQaJp1L3/
-        I1MoOBK2YLX/ptTo1NB4S2WfL0X+ZX13NSCNvvp5qEa3RP/vDdOyrdYDHYbpoxILB/TVKa
-        UfSRDWEwpCuXoci9euzX0c1R9Q7crrENG39dk5hlEvQAqE0dPdbidkaXjCu8lWhsQSunKt
-        1bVujyqJ30KJNk3as8NAPspKRc6/93wF5lA6Je4F0q0Sk8ew6N5bimjDA23M4Q==
+        bh=idUFnLwc9DEicaszUNU0vcf7I7imSGPqvv4DdMdr8TA=;
+        b=mV2CO4dmI6IEPEdsbfIHwEROgvvjDutm5oXeKCuSPCD9nBdriYVBIblnu8rharWNHnmYE3
+        Su6JU9JBwoVt7M/vgEvJ1eeifnzT4eVXJDPHsApMx2NsfbGPlpxY33spA9AEYWHQXAPII+
+        kNoM9ZI/JTYPT0xqR0x89TiqGEVWMY39pv3Ax+oZZr7E4Nw+xhgiyg70te8bzcKULMMtoo
+        2P0qKQvGs6Mx++zDWeIDYfMHMvX6BwdaGPU37rjZF22gwDK37JVhKnjceg9IICs+LLWp0T
+        YnROErOEHr5TBIfFqYMgQhSi/UXJU+HgGV3/PXtL4EiqMwdLJIrOgGxJ+GSkyQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681829610;
+        s=2020e; t=1681829609;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=85JUodLV7EWbfM40Ibp7CaeedStOFvRsNIpu1aewYc8=;
-        b=EL6BD7hTdtHDDXqVWIt5OcTVTDYsvmgYWYYGKoN/sVXsEaFr309AGyLA28k0cN9JMgWOrQ
-        ojYe89l3gYH+59Cg==
+        bh=idUFnLwc9DEicaszUNU0vcf7I7imSGPqvv4DdMdr8TA=;
+        b=hejqBdWfk07hDMeXqdHKjDzZ6XFbBu7X9RWV8G29DlTc6xy2gSs28kwXyMhmYtywx2g2cS
+        oeRKITnDX1iPs7CA==
 From:   "tip-bot2 for Frederic Weisbecker" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] timers/nohz: Protect idle/iowait sleep time under seqcount
-Cc:     Yu Liao <liaoyu15@huawei.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
+Subject: [tip: timers/core] timers/nohz: Add a comment about broken iowait
+ counter update race
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230222144649.624380-4-frederic@kernel.org>
-References: <20230222144649.624380-4-frederic@kernel.org>
+In-Reply-To: <20230222144649.624380-5-frederic@kernel.org>
+References: <20230222144649.624380-5-frederic@kernel.org>
 MIME-Version: 1.0
-Message-ID: <168182960967.404.10362810597852537883.tip-bot2@tip-bot2>
+Message-ID: <168182960920.404.6558173122716747219.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,113 +69,80 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     620a30fa0bd14878891b22bf2261e6ed4587c2b4
-Gitweb:        https://git.kernel.org/tip/620a30fa0bd14878891b22bf2261e6ed4587c2b4
+Commit-ID:     ead70b75237371c735a481a9843b411cfbb18404
+Gitweb:        https://git.kernel.org/tip/ead70b75237371c735a481a9843b411cfbb18404
 Author:        Frederic Weisbecker <frederic@kernel.org>
-AuthorDate:    Wed, 22 Feb 2023 15:46:44 +01:00
+AuthorDate:    Wed, 22 Feb 2023 15:46:45 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Tue, 18 Apr 2023 16:35:12 +02:00
 
-timers/nohz: Protect idle/iowait sleep time under seqcount
+timers/nohz: Add a comment about broken iowait counter update race
 
-Reading idle/IO sleep time (eg: from /proc/stat) can race with idle exit
-updates because the state machine handling the stats is not atomic and
-requires a coherent read batch.
+The per-cpu iowait task counter is incremented locally upon sleeping.
+But since the task can be woken to (and by) another CPU, the counter may
+then be decremented remotely. This is the source of a race involving
+readers VS writer of idle/iowait sleeptime.
 
-As a result reading the sleep time may report irrelevant or backward
-values.
+The following scenario shows an example where a /proc/stat reader
+observes a pending sleep time as IO whereas that pending sleep time
+later eventually gets accounted as non-IO.
 
-Fix this with protecting the simple state machine within a seqcount.
-This is expected to be cheap enough not to add measurable performance
-impact on the idle path.
+    CPU 0                       CPU  1                    CPU 2
+    -----                       -----                     ------
+    //io_schedule() TASK A
+    current->in_iowait = 1
+    rq(0)->nr_iowait++
+    //switch to idle
+                        // READ /proc/stat
+                        // See nr_iowait_cpu(0) == 1
+                        return ts->iowait_sleeptime +
+                               ktime_sub(ktime_get(), ts->idle_entrytime)
 
-Note this only fixes reader VS writer condition partitially. A race
-remains that involves remote updates of the CPU iowait task counter. It
-can hardly be fixed.
+                                                          //try_to_wake_up(TASK A)
+                                                          rq(0)->nr_iowait--
+    //idle exit
+    // See nr_iowait_cpu(0) == 0
+    ts->idle_sleeptime += ktime_sub(ktime_get(), ts->idle_entrytime)
 
-Reported-by: Yu Liao <liaoyu15@huawei.com>
+As a result subsequent reads on /proc/stat may expose backward progress.
+
+This is unfortunately hardly fixable. Just add a comment about that
+condition.
+
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20230222144649.624380-4-frederic@kernel.org
+Link: https://lore.kernel.org/r/20230222144649.624380-5-frederic@kernel.org
 
 ---
- kernel/time/tick-sched.c | 22 ++++++++++++++++------
- kernel/time/tick-sched.h |  1 +
- 2 files changed, 17 insertions(+), 6 deletions(-)
+ kernel/time/tick-sched.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index 9058b9e..90d9b7b 100644
+index 90d9b7b..edd6e9f 100644
 --- a/kernel/time/tick-sched.c
 +++ b/kernel/time/tick-sched.c
-@@ -646,6 +646,7 @@ static void tick_nohz_stop_idle(struct tick_sched *ts, ktime_t now)
- 
- 	delta = ktime_sub(now, ts->idle_entrytime);
- 
-+	write_seqcount_begin(&ts->idle_sleeptime_seq);
- 	if (nr_iowait_cpu(smp_processor_id()) > 0)
- 		ts->iowait_sleeptime = ktime_add(ts->iowait_sleeptime, delta);
- 	else
-@@ -653,14 +654,18 @@ static void tick_nohz_stop_idle(struct tick_sched *ts, ktime_t now)
- 
- 	ts->idle_entrytime = now;
- 	ts->idle_active = 0;
-+	write_seqcount_end(&ts->idle_sleeptime_seq);
- 
- 	sched_clock_idle_wakeup_event();
- }
- 
- static void tick_nohz_start_idle(struct tick_sched *ts)
- {
-+	write_seqcount_begin(&ts->idle_sleeptime_seq);
- 	ts->idle_entrytime = ktime_get();
- 	ts->idle_active = 1;
-+	write_seqcount_end(&ts->idle_sleeptime_seq);
-+
- 	sched_clock_idle_sleep_event();
- }
- 
-@@ -668,6 +673,7 @@ static u64 get_cpu_sleep_time_us(struct tick_sched *ts, ktime_t *sleeptime,
- 				 bool compute_delta, u64 *last_update_time)
- {
- 	ktime_t now, idle;
-+	unsigned int seq;
- 
- 	if (!tick_nohz_active)
- 		return -1;
-@@ -676,13 +682,17 @@ static u64 get_cpu_sleep_time_us(struct tick_sched *ts, ktime_t *sleeptime,
- 	if (last_update_time)
- 		*last_update_time = ktime_to_us(now);
- 
--	if (ts->idle_active && compute_delta) {
--		ktime_t delta = ktime_sub(now, ts->idle_entrytime);
-+	do {
-+		seq = read_seqcount_begin(&ts->idle_sleeptime_seq);
- 
--		idle = ktime_add(*sleeptime, delta);
--	} else {
--		idle = *sleeptime;
--	}
-+		if (ts->idle_active && compute_delta) {
-+			ktime_t delta = ktime_sub(now, ts->idle_entrytime);
-+
-+			idle = ktime_add(*sleeptime, delta);
-+		} else {
-+			idle = *sleeptime;
-+		}
-+	} while (read_seqcount_retry(&ts->idle_sleeptime_seq, seq));
- 
- 	return ktime_to_us(idle);
- 
-diff --git a/kernel/time/tick-sched.h b/kernel/time/tick-sched.h
-index c666325..5ed5a9d 100644
---- a/kernel/time/tick-sched.h
-+++ b/kernel/time/tick-sched.h
-@@ -75,6 +75,7 @@ struct tick_sched {
- 	ktime_t				idle_waketime;
- 
- 	/* Idle entry */
-+	seqcount_t			idle_sleeptime_seq;
- 	ktime_t				idle_entrytime;
- 
- 	/* Tick stop */
+@@ -705,7 +705,10 @@ static u64 get_cpu_sleep_time_us(struct tick_sched *ts, ktime_t *sleeptime,
+  * counters if NULL.
+  *
+  * Return the cumulative idle time (since boot) for a given
+- * CPU, in microseconds.
++ * CPU, in microseconds. Note this is partially broken due to
++ * the counter of iowait tasks that can be remotely updated without
++ * any synchronization. Therefore it is possible to observe backward
++ * values within two consecutive reads.
+  *
+  * This time is measured via accounting rather than sampling,
+  * and is as accurate as ktime_get() is.
+@@ -728,7 +731,10 @@ EXPORT_SYMBOL_GPL(get_cpu_idle_time_us);
+  * counters if NULL.
+  *
+  * Return the cumulative iowait time (since boot) for a given
+- * CPU, in microseconds.
++ * CPU, in microseconds. Note this is partially broken due to
++ * the counter of iowait tasks that can be remotely updated without
++ * any synchronization. Therefore it is possible to observe backward
++ * values within two consecutive reads.
+  *
+  * This time is measured via accounting rather than sampling,
+  * and is as accurate as ktime_get() is.
