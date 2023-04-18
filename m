@@ -2,95 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C5F6E59FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE096E59FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbjDRG6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 02:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
+        id S231214AbjDRG6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 02:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbjDRG6g (ORCPT
+        with ESMTP id S229882AbjDRG6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 02:58:36 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82815C4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:58:34 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9505214c47fso48085766b.1
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:58:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681801113; x=1684393113;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=l2UcFBjQLaNzIK5GKlQDmzU8n4/TMWCbFZ8UL957GS0=;
-        b=DRxbbh3CbNMVnJSuArXrVsKACeq+lK4JmAkFYm5PHsn5BDB306szUoyxakPua/w+qO
-         ibu3xOu73S/0j4tvvQhxcXgy3TkLwFdVo6+ETCsiPMu3JEgKUaEeJAZVjXiId+GnZ4cQ
-         ZF5poLLTvQ+DVSERXxu7v5x7SE6AY61a24Bot7FLYskRWaBGx0L4u/ja37EbJ/s990dG
-         EdvMIXAxyNX8zJw8+LHMWo96/sflo9DCCYrrF1U3/sRgszadwxH+i/nGR9BKQ5q+59sC
-         UDTMwvi5Da/8RNxrMwW8bbfUD21JSi6iYQpdx0AOBHS1lkAQu6XmFna3lgdLkvxnFLdp
-         UILw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681801113; x=1684393113;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l2UcFBjQLaNzIK5GKlQDmzU8n4/TMWCbFZ8UL957GS0=;
-        b=LjDtzwgz9BmAa5Ep1XAXvYeAvvdiE0iYlotWMmr6cRPdD5cSCqduwXUhZunDbT5Kkw
-         DtwIDjSO8tGzpcxOZ8HPEM231rsQxU9FhxM59aYexv72gcbRixYScpykJAkxrDpT1oC9
-         dbA2Nh002l6mDSjb9vVXjCJIlb4PMm5gt3jnaJ42KI4UtTdVrtd0W2qdhKAJvgfqBGZ9
-         At6bnBrtOrMrovKbBmgSAe/lMKRq9O0mYZDqFhwg3PRzRsLuOf9Ieu6hEtNUux6GrRUJ
-         NJAhcGqI6U6xwka6iLKmENNz5Z0F88f6B046Y3xLIjj/oDtcmi0M+Wo3TyFZAsn7evDx
-         vavQ==
-X-Gm-Message-State: AAQBX9e7Enpnl2yLCaJVlchi+4YFSYLJ5kN0wbDS3smp4kYcvE/uuuYU
-        bVjyrs2Cw/h/mKnKkHqMWNozv5n1+Rsn73o95QdXKA==
-X-Google-Smtp-Source: AKy350b9Xzjko8vvPWxHtLxh286C7kaU/ob46ldBnLSrm6ougidBgb7T/eT5enlIIB04KGHHYyq9Xg==
-X-Received: by 2002:a50:fa8b:0:b0:506:6c24:c83 with SMTP id w11-20020a50fa8b000000b005066c240c83mr1386434edr.29.1681801112806;
-        Mon, 17 Apr 2023 23:58:32 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
-        by smtp.gmail.com with ESMTPSA id q1-20020aa7d441000000b0050499afe96bsm6691692edr.10.2023.04.17.23.58.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 23:58:32 -0700 (PDT)
-Message-ID: <d12255a0-4bd8-6c2e-4b99-113132426bb4@linaro.org>
-Date:   Tue, 18 Apr 2023 08:58:31 +0200
+        Tue, 18 Apr 2023 02:58:37 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA38FCD;
+        Mon, 17 Apr 2023 23:58:35 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681801114;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7JrvTFx0WVeMY9cJy762Xh8k6ZgcD547tgSMeBaRvfE=;
+        b=Et6llJLqBk0yfoU12mOHK72SfYQgEWu+q48gtjbOp01/oW1pWwNWzYkMj3rsubBi7GEzq5
+        mPT5IZDLQl4QKMdJBFAIqKyeL5/EHZMZmHN21initZgWfHDK9dVyf4svi0aLfhUnyeDqQK
+        I3vYRVmGWdTJWrOGtNsTNLH4myxFa9B/Cic2FVRJKblYIYu57zyU8GZBAWAfanD+weXHiR
+        ms33Y/xbIFrXQYi8r9H5uTRDm8lfMric1/URavwJ7tQwqLrW0R7pwMbi7rSmGj07t3TRXL
+        qWncTgcrXxLCvAZcnDKbYXnQQ7HAmFlnUm/wlHJLSqR024Ajk5DxDVTQi7RWeg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681801114;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7JrvTFx0WVeMY9cJy762Xh8k6ZgcD547tgSMeBaRvfE=;
+        b=2IDo3vCdzNc6EWeefm49U4euIaA6bLjlIhlJmFMjsR5vvqBpGyDNOwFnUfvXHrOiAPFmV7
+        jCwlVmV4XYpFQwCw==
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+In-Reply-To: <bd5a6a93-def1-9248-2258-c3d3b40071ef@molgen.mpg.de>
+References: <20230414225551.858160935@linutronix.de>
+ <8247ce4d-15b7-03b2-0c9b-74f8cd6cad50@molgen.mpg.de> <87wn2a4la5.ffs@tglx>
+ <bd5a6a93-def1-9248-2258-c3d3b40071ef@molgen.mpg.de>
+Date:   Tue, 18 Apr 2023 08:58:32 +0200
+Message-ID: <87ttxd4qxz.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3] dt-bindings: watchdog: alphascale-asm9260: convert to
- DT schema
-To:     Om Parikh <hack3r-0m@proton.me>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230418051446.24288-1-hack3r-0m@proton.me>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230418051446.24288-1-hack3r-0m@proton.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/04/2023 07:16, Om Parikh wrote:
-> Makes alphascale-asm9260 dt bindings adhere to the dt json-schema
-> by replacing txt file with yaml file.
-> 
-> Signed-off-by: Om Parikh <hack3r-0m@proton.me>
-> ---
+Paul!
+
+On Mon, Apr 17 2023 at 19:40, Paul Menzel wrote:
+> Am 17.04.23 um 16:48 schrieb Thomas Gleixner:
+>
+>> On Mon, Apr 17 2023 at 13:19, Paul Menzel wrote:
+>>> Am 15.04.23 um 01:44 schrieb Thomas Gleixner:
+>>> [    0.258193] smpboot: CPU0: AMD A6-6400K APU with Radeon(tm) HD
+>>> Graphics (family: 0x15, model: 0x13, stepping: 0x1)
+>>> [=E2=80=A6]
+>>> [    0.259329] smp: Bringing up secondary CPUs ...
+>>> [    0.259527] x86: Booting SMP configuration:
+>>> [    0.259528] .... node  #0, CPUs:      #1
+>>> [    0.261007] After schedule_preempt_disabled
+>>> [   10.260990] CPU1 failed to report alive state
+>>=20
+>> Weird. CPU1 fails to come up and report that it has reached the
+>> synchronization point.
+>>=20
+>> Does it work when you add cpuhp.parallel=3Doff on the kernel command lin=
+e?
+>
+> Yes, the ten seconds delay is gone with `cpuhp.parallel=3Doff`.
+>
+> There was a patch set in the past, that worked on that device. I think=20
+> up to v4 it did *not* work at all and hung [1]. I need some days to=20
+> collect the results again.
+
+Can you please apply the patch below on top of the pile remove the
+command line option again?
+
+Thanks,
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        tglx
+---
+ kernel/cpu.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-Best regards,
-Krzysztof
-
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -1777,6 +1777,7 @@ static void __init cpuhp_bringup_mask(co
+ 			 */
+ 			WARN_ON(cpuhp_invoke_callback_range(false, cpu, st, CPUHP_OFFLINE));
+ 		}
++		msleep(20);
+ 	}
+ }
+=20
