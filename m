@@ -2,136 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608916E6FC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 01:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3C06E6FD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 01:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbjDRXAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 19:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
+        id S231158AbjDRXLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 19:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjDRXAi (ORCPT
+        with ESMTP id S229637AbjDRXLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 19:00:38 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791BE6A44;
-        Tue, 18 Apr 2023 16:00:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681858837; x=1713394837;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=fykUQ6tOFpliVc9yTRFVWqzndLzgQbjRZBsWfW5WetA=;
-  b=aNmFmyk0S+6sfGronDnFn7p24Xh7ir7MyQMSMWKU9FtWXynhGPDjNASk
-   nxkL5SXpDiQ+h/1LD/5WKyIirG/ssZytpV5x/x2fvZcFdATWEZnE4NLnS
-   2vS258+UbmGOY5a+4V03FLqxL1Q9GIyf7z5Xc4AC91DxsqJpY244vLWor
-   v4yOPEFOsdmQOpTS9TeW4jam+nvKYu3v3nrpyiRUuxo5pIguUt+/cAZUD
-   CfXUdFDFsvotf32P5ywhlAiee6jH3Iba5cx7CYBeChpte2fDn602GNLX/
-   9p6SjkUpQKINRPzfgcFRkQGdfhsDetPKC+yL+eLDk3E0VHuIilrS1DNKM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="342790579"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="342790579"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 16:00:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="802707078"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="802707078"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 16:00:36 -0700
-Date:   Tue, 18 Apr 2023 16:04:50 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v4 3/7] iommu: Support allocation of global PASIDs
- outside SVA
-Message-ID: <20230418160450.4ea7fb7d@jacob-builder>
-In-Reply-To: <a1a82bc0-9a7a-5363-cda8-a0226eff0073@linux.intel.com>
-References: <20230407180554.2784285-1-jacob.jun.pan@linux.intel.com>
-        <20230407180554.2784285-4-jacob.jun.pan@linux.intel.com>
-        <BN9PR11MB5276D09F18BA65AD074777948C9A9@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <5882ee52-9657-250d-0474-13edffa7b6b9@linux.intel.com>
-        <20230417094629.59fcfde6@jacob-builder>
-        <a1a82bc0-9a7a-5363-cda8-a0226eff0073@linux.intel.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 18 Apr 2023 19:11:19 -0400
+Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39A17A80
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 16:11:18 -0700 (PDT)
+Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
+        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 74C1680479A3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:11:18 +0000 (UTC)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id C677C10047D7A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:11:17 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id ouTlph03K4NB1ouTlpEdFB; Tue, 18 Apr 2023 23:11:17 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=Ab90o1bG c=1 sm=1 tr=0 ts=643f2395
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=dKHAf1wccvYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=15JE0JZEoYPnltLmip+zJ+BHZ1cSXeCus0zKkgweIrE=; b=FkmFzTTfnBv886xngZr07BpC6N
+        AfPdwk2Fc4z/y+RQyI/cULHR9B5+otSM1qVviBDCqrmc2yIYXdnP/qyANq1JLvouDgnRScRFo9rtl
+        +LxbgF/Kp1fy7dqP1blo2+ZNbXPa9Q+LzRSJ66MSbox69vi9FCaq3L1gjyxCLz5L7jR8/H7huuedh
+        1G6w+Icz8koE2sSC7pq6b9/BxSoa0n3hAM4VDI8mV1vjELOIk7pjiw/GJjMt5aG4cXc+q6/nPwW1w
+        5jQaJR5i1F7XNtTiDRp8de2p9tX+8h+opRQYUHkAiwjUaugeKOVznetJ3BPIVzXFd9mS9dsqvADRl
+        xrdI9Hnw==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:35232 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pouTk-0017Ud-Sl;
+        Tue, 18 Apr 2023 17:11:16 -0600
+Subject: Re: [PATCH 6.2 000/139] 6.2.12-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230418120313.725598495@linuxfoundation.org>
+In-Reply-To: <20230418120313.725598495@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <73a1a589-3f30-6888-4f11-dfe6cf69247f@w6rz.net>
+Date:   Tue, 18 Apr 2023 16:11:14 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pouTk-0017Ud-Sl
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:35232
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolu,
+On 4/18/23 5:21 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.12 release.
+> There are 139 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.12-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On Tue, 18 Apr 2023 10:06:12 +0800, Baolu Lu <baolu.lu@linux.intel.com>
-wrote:
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-> On 4/18/23 12:46 AM, Jacob Pan wrote:
-> > On Wed, 12 Apr 2023 09:37:48 +0800, Baolu Lu<baolu.lu@linux.intel.com>
-> > wrote:
-> >   
-> >> On 4/11/23 4:02 PM, Tian, Kevin wrote:  
-> >>>> From: Jacob Pan<jacob.jun.pan@linux.intel.com>
-> >>>> Sent: Saturday, April 8, 2023 2:06 AM
-> >>>> @@ -28,8 +26,8 @@ static int iommu_sva_alloc_pasid(struct mm_struct
-> >>>> *mm, ioasid_t min, ioasid_t ma
-> >>>>    		goto out;
-> >>>>    	}
-> >>>>
-> >>>> -	ret = ida_alloc_range(&iommu_global_pasid_ida, min, max,
-> >>>> GFP_KERNEL);
-> >>>> -	if (ret < min)
-> >>>> +	ret = iommu_alloc_global_pasid(min, max);  
-> >>> I wonder whether this can take a device pointer so
-> >>> dev->iommu->max_pasids is enforced inside the alloc function.  
-> >> Agreed. Instead of using the open code, it looks better to have a
-> >> helper like dev_iommu_max_pasids().  
-> > yes, probably export dev_iommu_get_max_pasids(dev)?
-> > 
-> > But if I understood Kevin correctly, he's also suggesting that the
-> > interface should be changed to iommu_alloc_global_pasid(dev), my
-> > concern is that how do we use this function to reserve RID_PASID which
-> > is not specific to a device?  
-> 
-> Probably we can introduce a counterpart dev->iommu->min_pasids, so that
-> there's no need to reserve the RID_PASID. At present, we can set it to 1
-> in the core as ARM/AMD/Intel all treat PASID 0 as a special pasid.
-> 
-> In the future, if VT-d supports using arbitrary number as RID_PASID for
-> any specific device, we can call iommu_alloc_global_pasid() for that
-> device.
-> 
-> The device drivers don't know and don't need to know the range of viable
-> PASIDs, so the @min, @max parameters seem to be unreasonable.
-Sure, that is reasonable. Another question is whether global PASID
-allocation is always for a single device, if not I prefer to keep the
-current iommu_alloc_global_pasid() and add a wrapper
-iommu_alloc_global_pasid_dev(dev) to extract the @min, @max. OK?
+Tested-by: Ron Economos <re@w6rz.net>
 
-
-Thanks,
-
-Jacob
