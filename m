@@ -2,203 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D49366E6BE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDD26E6BE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbjDRSQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
+        id S231314AbjDRSQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjDRSQO (ORCPT
+        with ESMTP id S229813AbjDRSQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:16:14 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE9C30E0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:16:12 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f04275b2bdso66865e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:16:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681841771; x=1684433771;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Uzk00VVwAMnUgl8nqdf7G+u1lGlONN9yY2/sgJWoENw=;
-        b=nVANayyNWQEEcixXLqV58hlA44rj6vtMwQer5ALpXD+J7VO5ysQutiY7HHiuVoz8F+
-         yORfLruneACibPMnxRaVgKWwcMZVcMD9oFIhFI67ivS4lcNI+4TRMk9rtITgyWkXMNNd
-         PlCuhCVu8rfB3QxBCZQCgaDOC1FDvoVj1H5R5FnFIc1PqdCrK/uiOqLTVShiSQ7M170d
-         VEdup8js/MK8j0kVW+RDn+EEyfkMLCIX7k1ylHxCZlM1YJnlk7+R1enDl3Iq+wHyzLDa
-         deRchW644KPY6XyWgOy4AczDdGW3MUgxI3c4nJ7bH6UddtzrMLoK7+huqXWBBoG+hvlf
-         zj4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681841771; x=1684433771;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Uzk00VVwAMnUgl8nqdf7G+u1lGlONN9yY2/sgJWoENw=;
-        b=Er6w6ljT5N6clo76HEBlZJn2u6fMH3/mKxoZ936UkR4LBRPZnHaYgK/5+UJ4Ws4Rbw
-         ii0Ljb8qGMPHDlqp8STZFGFlWC3KMXL0IVfldvAn+3EXJNVpNW1fqUERHRi9u/aeTnNZ
-         n9miH/qCWaM99mlTPa9EAw2nFYmg6+3qB19Q1KxpFaX9YJHDFo45BsjUCQeGWsOP85fq
-         RiOoZFd8c6t6/QFBd276NBfmlz35J3Wo+PykXq9+ERZrniqB2nwE88D9kB83w5CW9J01
-         oCdHFhDbuv00KjuzHOcsSKB4eSxyVANinpPovg7g4Iiy5VN8B7cg5+MT/jy2YdiLc08l
-         /GLw==
-X-Gm-Message-State: AAQBX9ertWLCPnACm/y+hutkiEEBIuasPKoAWKXJTSWGlYWdvpTOliUj
-        UlZUkquH8i+S4WjUrAPGhAaTfWWtiop9/uZU2aZM9g==
-X-Google-Smtp-Source: AKy350YlrlOxmvzog0f3D5uEtE7OfRYpZXxq6H5LRCHAsI0piErrBw4HBLPgJ3F/vVAjjDRqNTs1wro+Od2+A+R7Nms=
-X-Received: by 2002:a05:600c:22c8:b0:3f1:758c:dd23 with SMTP id
- 8-20020a05600c22c800b003f1758cdd23mr10353wmg.7.1681841770657; Tue, 18 Apr
- 2023 11:16:10 -0700 (PDT)
+        Tue, 18 Apr 2023 14:16:52 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 405DC4ECB;
+        Tue, 18 Apr 2023 11:16:50 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:36206.1084606344
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id A4080100567;
+        Wed, 19 Apr 2023 02:16:45 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id ce235540f5fb4e348657788457610f7a for maarten.lankhorst@linux.intel.com;
+        Wed, 19 Apr 2023 02:16:48 CST
+X-Transaction-ID: ce235540f5fb4e348657788457610f7a
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <86a8b262-cbf2-b75f-9972-491f557edf74@189.cn>
+Date:   Wed, 19 Apr 2023 02:16:45 +0800
 MIME-Version: 1.0
-References: <20230413161725.195417-1-alexghiti@rivosinc.com>
- <CAOnJCU+72PV1=o1c_TpogkmBT36278BneVWEMr1=tqX0CZi+ag@mail.gmail.com>
- <aadca595b4a24e36932ba41e61f4e263@AcuMS.aculab.com> <CAOnJCUJ7mY+fh9VqE4dRntnVAEAc26=NnOCPUqkXk6ky__cUZQ@mail.gmail.com>
-In-Reply-To: <CAOnJCUJ7mY+fh9VqE4dRntnVAEAc26=NnOCPUqkXk6ky__cUZQ@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 18 Apr 2023 11:15:56 -0700
-Message-ID: <CAP-5=fUYJEecmhQVuvbM4ZoDP_Hj=2RKOgR4cKepU072Uy3xyw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] riscv: Allow userspace to directly access perf counters
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        paranlee <p4ranlee@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3] drm/fbdev-generic: prohibit potential out-of-bounds
+ access
+From:   Sui Jingfeng <15330273260@189.cn>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Li Yi <liyi@loongson.cn>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230417113219.1354078-1-suijingfeng@loongson.cn>
+ <ZD5Vgx9Txaiz7Bun@phenom.ffwll.local>
+ <139c9398-488d-df19-9ae2-2b4b47ef64f4@189.cn>
+Content-Language: en-US
+In-Reply-To: <139c9398-488d-df19-9ae2-2b4b47ef64f4@189.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 9:43=E2=80=AFAM Atish Patra <atishp@atishpatra.org>=
- wrote:
->
-> On Fri, Apr 14, 2023 at 2:40=E2=80=AFAM David Laight <David.Laight@aculab=
-.com> wrote:
-> >
-> > From: Atish Patra
-> > > Sent: 13 April 2023 20:18
-> > >
-> > > On Thu, Apr 13, 2023 at 9:47=E2=80=AFPM Alexandre Ghiti <alexghiti@ri=
-vosinc.com> wrote:
-> > > >
-> > > > riscv used to allow direct access to cycle/time/instret counters,
-> > > > bypassing the perf framework, this patchset intends to allow the us=
-er to
-> > > > mmap any counter when accessed through perf. But we can't break the
-> > > > existing behaviour so we introduce a sysctl perf_user_access like a=
-rm64
-> > > > does, which defaults to the legacy mode described above.
-> > > >
-> > >
-> > > It would be good provide additional direction for user space packages=
-:
-> > >
-> > > The legacy behavior is supported for now in order to avoid breaking
-> > > existing software.
-> > > However, reading counters directly without perf interaction may
-> > > provide incorrect values which
-> > > the userspace software must avoid. We are hoping that the user space
-> > > packages which
-> > > read the cycle/instret directly, will move to the proper interface
-> > > eventually if they actually need it.
-> > > Most of the users are supposed to read "time" instead of "cycle" if
-> > > they intend to read timestamps.
-> >
-> > If you are trying to measure the performance of short code
-> > fragments then you need pretty much raw access directly to
-> > the cycle/clock count register.
-> >
-> > I've done this on x86 to compare the actual cycle times
-> > of different implementations of the IP checksum loop
-> > (and compare them to the theoretical limit).
-> > The perf framework just added far too much latency,
-> > only directly reading the cpu registers gave anything
-> > like reliable (and consistent) answers.
-> >
->
-> This series allows direct access to the counters once configured
-> through the perf.
-> Earlier the cycle/instret counters are directly exposed to the
-> userspace without kernel/perf frameworking knowing
-> when/which user space application is reading it. That has security implic=
-ations.
->
-> With this series applied, the user space application just needs to
-> configure the event (cycle/instret) through perf syscall.
-> Once configured, the userspace application can find out the counter
-> information from the mmap & directly
-> read the counter. There is no latency while reading the counters.
->
-> This mechanism allows stop/clear the counters when the requesting task
-> is not running. It also takes care of context switching
-> which may result in invalid values as you mentioned below. This is
-> nothing new and all other arch (x86, ARM64) allow user space
-> counter read through the same mechanism.
->
-> Here is the relevant upstream discussion:
-> https://lore.kernel.org/lkml/Y7wLa7I2hlz3rKw%2F@hirez.programming.kicks-a=
-ss.net/T/
->
-> ARM64:
-> https://docs.kernel.org/arm64/perf.html?highlight=3Dperf_user_access#perf=
--userspace-pmu-hardware-counter-access
->
-> example usage in x86:
-> https://github.com/andikleen/pmu-tools/blob/master/jevents/rdpmc.c
+Hi,
 
-The canonical implementation of this should be:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
-ls/lib/perf/mmap.c#n400
-which is updated in these patches but the tests are not:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
-ls/perf/tests/mmap-basic.c#n287
-Which appears to be an oversight. The tests display some differences
-between x86 and aarch64 that have assumed userspace hardware counter
-access, and everything else that it is assumed don't.
+On 2023/4/19 01:52, Sui Jingfeng wrote:
+> Hi,
+>
+> On 2023/4/18 16:32, Daniel Vetter wrote:
+>> On Mon, Apr 17, 2023 at 07:32:19PM +0800, Sui Jingfeng wrote:
+>>> The fbdev test of IGT may write after EOF, which lead to out-of-bound
+>>> access for the drm drivers using fbdev-generic. For example, on a x86
+>>> + aspeed bmc card platform, with a 1680x1050 resolution display, 
+>>> running
+>>> fbdev test if IGT will cause the linux kernel hang with the following
+>>> call trace:
+>>>
+>>>    Oops: 0000 [#1] PREEMPT SMP PTI
+>>>    [IGT] fbdev: starting subtest eof
+>>>    Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
+>>>    [IGT] fbdev: starting subtest nullptr
+>>>
+>>>    RIP: 0010:memcpy_erms+0xa/0x20
+>>>    RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
+>>>    RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
+>>>    RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
+>>>    RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
+>>>    R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
+>>>    R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
+>>>    FS:  0000000000000000(0000) GS:ffff895257380000(0000) 
+>>> knlGS:0000000000000000
+>>>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>    CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
+>>>    Call Trace:
+>>>     <TASK>
+>>>     ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
+>>>     drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
+>>>     process_one_work+0x21f/0x430
+>>>     worker_thread+0x4e/0x3c0
+>>>     ? __pfx_worker_thread+0x10/0x10
+>>>     kthread+0xf4/0x120
+>>>     ? __pfx_kthread+0x10/0x10
+>>>     ret_from_fork+0x2c/0x50
+>>>     </TASK>
+>>>    CR2: ffffa17d40e0b000
+>>>    ---[ end trace 0000000000000000 ]---
+>>>
+>>> The direct reason is that damage rectange computed by
+>>> drm_fb_helper_memory_range_to_clip() does not guaranteed to be 
+>>> in-bound.
+>>> It is already results in workaround code populate to elsewhere. Another
+>>> reason is that exposing a larger buffer size than the actual needed 
+>>> help
+>>> to trigger this bug intrinsic in drm_fb_helper_memory_range_to_clip().
+>>>
+>>> Others fbdev emulation solutions write to the GEM buffer directly, they
+>>> won't reproduce this bug because the .fb_dirty function callback do not
+>>> being hooked, so no chance is given to 
+>>> drm_fb_helper_memory_range_to_clip()
+>>> to generate a out-of-bound when drm_fb_helper_sys_write() is called.
+>>>
+>>> This patch break the trigger condition of this bug by shrinking the 
+>>> shadow
+>>> buffer size to sizes->surface_height * buffer->fb->pitches[0].
+>>>
+>>> Fixes: '8fbc9af55de0 ("drm/fbdev-generic: Set screen size to size of 
+>>> GEM
+>>> buffer")'
+>>>
+>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>>> ---
+>>>   drivers/gpu/drm/drm_fbdev_generic.c | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c 
+>>> b/drivers/gpu/drm/drm_fbdev_generic.c
+>>> index 8e5148bf40bb..b057cfbba938 100644
+>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
+>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
+>>> @@ -94,7 +94,7 @@ static int 
+>>> drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
+>>>       fb_helper->buffer = buffer;
+>>>       fb_helper->fb = buffer->fb;
+>>>   -    screen_size = buffer->gem->size;
+>>> +    screen_size = sizes->surface_height * buffer->fb->pitches[0];
+>> So I read core some more and stumbled over drm_fb_helper_deferred_io().
+>> Which has all the code and comments about this, including limiting.
+>>
+>> I think it would be clearer if we fix the issue there, instead of 
+>> passing
+>> limits around in obscure places that then again get broken?
+>
+> No, it is more obscure doing that way...
+>
+>
+> As the size of the shadow screen buffer will be exposed to userspace.
+>
+> The size 'helper->fb->height * helper->fb->pitches[0]' is a 
+> exactly(best) fit,
+>
+> You are guaranteed to waste at lease one byte by increasing one byte,
+>
+> and can not store all pixels by decreasing one byte (In the case where 
+> `helper->fb->pitches[0] = helper->fb->width * 4`).
+>
+> It implicitly tell the userspace do not go beyond that boundary.
+>
+> although userspace program can still choose to write  after EOF,
+>
+> But it is for test purpose, to test the kernel if it can return a 
+> -EFBIG or not.
+>
+>> The thing is,
+>> Thomas both authored the limit checks in drm_fb_helper_deferred_io() and
+>> the patch which broken them again, so clearly this isn't very 
+>> obvious. I'm
+>> thinking of something like this:
+>>
+>>
+>> diff --git a/drivers/gpu/drm/drm_fb_helper.c 
+>> b/drivers/gpu/drm/drm_fb_helper.c
+>> index ef4eb8b12766..726dab67c359 100644
+>> --- a/drivers/gpu/drm/drm_fb_helper.c
+>> +++ b/drivers/gpu/drm/drm_fb_helper.c
+>> @@ -697,10 +697,7 @@ void drm_fb_helper_deferred_io(struct fb_info 
+>> *info, struct list_head *pagerefli
+>>        * of the screen and account for non-existing scanlines. Hence,
+>>        * keep the covered memory area within the screen buffer.
+>>        */
+>> -    if (info->screen_size)
+>> -        total_size = info->screen_size;
+>> -    else
+>> -        total_size = info->fix.smem_len;
+>> +    total_size = helper->fb->height * helper->fb->pitches[0];
+>
+> This is just to mitigate the mistakes already has been made,
+>
+> because it  do not do a good splitting between the *clip* part and the 
+> *damage update* part.
+>
+> An ideal clipping do not obscure its updating backend with a 
+> out-of-bound damage rectangle.
+>
+> Why did the drm_fb_helper_memory_range_to_clip() can not do a good job 
+> in all case
+>
+> to pass its backend a always meaningful damage rect ?
+>
+>>       max_off = min(max_off, total_size);
+>>         if (min_off < max_off) {
+>>
+>>
+>> I think that would make it utmost clear on what we're doing and why.
+>> Otherwise we're just going to re-create the same bug again, like we've
+>> done already :-)
+>
+> No, we create no bugs, we fix one.
+>
+> Thanks.
+>
+But honestly I do not have strong feel toward this, I just type what I'm 
+understand without seeing you resend a V3.
 
-Thanks,
-Ian
+It's OK in overall,  I will help to test this tomorrow.  :-)
 
-> > Clearly process switches (especially cpu migrations) cause
-> > problems, but they are obviously invalid values and can
-> > be ignored.
-> >
-> > So while a lot of uses may be 'happy' with the values the
-> > perf framework gives, sometimes you do need to directly
-> > read the relevant registers.
-> >
-> >         David
-> >
-> > -
-> > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, M=
-K1 1PT, UK
-> > Registration No: 1397386 (Wales)
->
->
->
-> --
-> Regards,
-> Atish
+>> -Daniel
+>>
+>>>       screen_buffer = vzalloc(screen_size);
+>>>       if (!screen_buffer) {
+>>>           ret = -ENOMEM;
+>>> -- 
+>>> 2.25.1
+>>>
