@@ -2,147 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771AD6E696F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335AC6E6971
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbjDRQZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 12:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
+        id S232442AbjDRQ0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 12:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbjDRQZy (ORCPT
+        with ESMTP id S232432AbjDRQ0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 12:25:54 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413EEA5E2;
-        Tue, 18 Apr 2023 09:25:53 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id u3so22707876ejj.12;
-        Tue, 18 Apr 2023 09:25:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681835151; x=1684427151;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MvjA55Gc3aWxcMuhy2Rkbkg3pMI9os2W61bZ2H26VU4=;
-        b=n2VCFbIATWDM5hKDcLG6t9AjZbOeQBV8c3ZWryvHrbp+i4WaWaiG5FQmfdJkSLcfMy
-         6EhhPS6XuzIhFbCZO/XFBdOwZt5bMNGXKx7K+jMevW4FD1SZc49zgXod5xvjFsR9lFbf
-         5AmfiUtNKwLE+vVTY+8vL2+46RoMwZvZJGq/FuOMwIw4ZA9SG5ywDupoNzmVu6YwCXFh
-         FIgy7CewOyOp+2zx7sEBhLORyzQdVcUyC/nrIRw6yHsfKZuX4XVeZ+Xo3WZh//xkzP59
-         WMDwsI1BvdxjvJtY2BhM9voKMv2ZkCnKARz1v42CesSn0BkP44hjr7SzS9XguujZ/StS
-         9RWg==
+        Tue, 18 Apr 2023 12:26:00 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33E6C66C;
+        Tue, 18 Apr 2023 09:25:59 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1879fc89f5eso377646fac.0;
+        Tue, 18 Apr 2023 09:25:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681835151; x=1684427151;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MvjA55Gc3aWxcMuhy2Rkbkg3pMI9os2W61bZ2H26VU4=;
-        b=lAw0gJIA6pTPgpuUyBcK1+jAUlf/1Fv0+9qUHNI7OsSCF1casxhwVLnHMutHB7L8OR
-         Rxl9/Fn2voujeoYLPiR0K6j7BIqGoixBi+AOCCI/3ug16YS04oxsw1GC7OPnlUsyH6Su
-         9qTNcJ6lv2qZfC+B6W5PPM3ax7KJd+ocYjU5tVFb+7w+ekhAq8D2BmNSO63vTDMVYYve
-         BKFGtlDJQDsNdpi97iQrx0sve4dPeDlp9YdbsvnzYV32R5KasTcUpO3jNj+9TA0NT5/c
-         jwZye27P7S3ALrZnvtLeJKOlay6k9vN0wy2warJZR+31xd9mu5/2sTc0dwbJEjYAezgZ
-         +6qA==
-X-Gm-Message-State: AAQBX9eqp6cQONyfl6CXcqwHistYwKgdegBrbbeq8dCnZrwW93OcSxYJ
-        cSYAhFdwhRb89czcqPh/V/B59N1G7zQ=
-X-Google-Smtp-Source: AKy350ZkVJISWnhpVGG5sxLQynoSO5sv0d/saS2NkhXaBr9KUvKPUlk6p98b5jA4/zBZPllKnbDT3Q==
-X-Received: by 2002:a17:907:86ac:b0:953:24dd:9ddb with SMTP id qa44-20020a17090786ac00b0095324dd9ddbmr2252006ejc.13.1681835151380;
-        Tue, 18 Apr 2023 09:25:51 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:310::26ef? ([2620:10d:c092:600::2:5697])
-        by smtp.gmail.com with ESMTPSA id k13-20020a17090632cd00b0094e96e46cc0sm8216153ejk.69.2023.04.18.09.25.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 09:25:51 -0700 (PDT)
-Message-ID: <c19b3651-624b-f60e-3e63-fe9fadc6981f@gmail.com>
-Date:   Tue, 18 Apr 2023 17:25:08 +0100
+        d=1e100.net; s=20221208; t=1681835159; x=1684427159;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GALPTZ5rs1mIduJF7Jl53u7XfsfluO0jc0nwk+zxYao=;
+        b=j6SEneBD+X+GuvYYcjRcNenjkeOA+gD5OAymFYCEd1AwbCoD3vFAG0m2lEbe02wsSz
+         2HtLhPCSarVQ89EVK1kLePe7q/rR8xDmlD3Y8Ybi70i+jA8O47B/hjTsn1CiwV8OfPdQ
+         JgCnrzmPF9P7gjYGDr7/I8rCUF/w2CfUqgy4XspIRe8g/J041P2Rv0f50Grk1WDyB/Rs
+         2zlZ4Oyhb9KY43AvV0d40aQMNNdAjNgjZUjWrr7TMHzLCCiqqvuZbjPv5c5MdWEComgB
+         tizuyvrS7WdoqegAntF1Va2BPYNX1u7j/SIAHh5bkooqHmTHKGjZiuo9wRa1h8Y1ehfO
+         pLdg==
+X-Gm-Message-State: AAQBX9cydhk2iknBKVKTWgiMTgSvtGbZpm0snQHB51B55fCuIrO5LJyY
+        XPNYGqvtxpvtCuTsEEmpFw==
+X-Google-Smtp-Source: AKy350aqiwGvkm3PEtoK/oiOYt0ohBeRtozgRcDrXi5U4KbApLSinkvRa0UgAiJEnhzYkN4LUDI3oQ==
+X-Received: by 2002:a05:6871:149:b0:169:dcba:1ec9 with SMTP id z9-20020a056871014900b00169dcba1ec9mr1623622oab.41.1681835158903;
+        Tue, 18 Apr 2023 09:25:58 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r204-20020a4a37d5000000b00541fbbbcd31sm1737771oor.5.2023.04.18.09.25.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 09:25:58 -0700 (PDT)
+Received: (nullmailer pid 1808654 invoked by uid 1000);
+        Tue, 18 Apr 2023 16:25:57 -0000
+Date:   Tue, 18 Apr 2023 11:25:57 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: Use of_property_read_bool() for boolean properties
+Message-ID: <20230418162557.GD1764573-robh@kernel.org>
+References: <20230310144734.1546587-1-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 5/7] io_uring: rsrc: use FOLL_SAME_FILE on
- pin_user_pages()
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
-References: <cover.1681508038.git.lstoakes@gmail.com>
- <17357dec04b32593b71e4fdf3c30a346020acf98.1681508038.git.lstoakes@gmail.com>
- <ZD1CAvXee5E5456e@nvidia.com>
-Content-Language: en-US
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <ZD1CAvXee5E5456e@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310144734.1546587-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/17/23 13:56, Jason Gunthorpe wrote:
-> On Sat, Apr 15, 2023 at 12:27:45AM +0100, Lorenzo Stoakes wrote:
->> Commit edd478269640 ("io_uring/rsrc: disallow multi-source reg buffers")
->> prevents io_pin_pages() from pinning pages spanning multiple VMAs with
->> permitted characteristics (anon/huge), requiring that all VMAs share the
->> same vm_file.
+On Fri, Mar 10, 2023 at 08:47:33AM -0600, Rob Herring wrote:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties.
+> Convert reading boolean properties to to of_property_read_bool().
 > 
-> That commmit doesn't really explain why io_uring is doing such a weird
-> thing.
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  sound/ppc/tumbler.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Ping!
+
 > 
-> What exactly is the problem with mixing struct pages from different
-> files and why of all the GUP users does only io_uring need to care
-> about this?
-
-Simply because it doesn't seem sane to mix and register buffers of
-different "nature" as one. It's not a huge deal for currently allowed
-types, e.g. mixing normal and huge anon pages, but it's rather a matter
-of time before it gets extended, and then I'll certainly become a
-problem. We've been asked just recently to allow registering bufs
-provided mapped by some specific driver, or there might be DMA mapped
-memory in the future.
-
-Rejecting based on vmas might be too conservative, I agree and am all
-for if someone can help to make it right.
-
-
-> If there is no justification then lets revert that commit instead.
+> diff --git a/sound/ppc/tumbler.c b/sound/ppc/tumbler.c
+> index 6c882873b344..12f1e10db1c4 100644
+> --- a/sound/ppc/tumbler.c
+> +++ b/sound/ppc/tumbler.c
+> @@ -1361,7 +1361,7 @@ int snd_pmac_tumbler_init(struct snd_pmac *chip)
+>  
+>  	for_each_child_of_node(chip->node, np) {
+>  		if (of_node_name_eq(np, "sound")) {
+> -			if (of_get_property(np, "has-anded-reset", NULL))
+> +			if (of_property_read_bool(np, "has-anded-reset"))
+>  				mix->anded_reset = 1;
+>  			if (of_property_present(np, "layout-id"))
+>  				mix->reset_on_sleep = 0;
+> -- 
+> 2.39.2
 > 
->>   		/* don't support file backed memory */
->> -		for (i = 0; i < nr_pages; i++) {
->> -			if (vmas[i]->vm_file != file) {
->> -				ret = -EINVAL;
->> -				break;
->> -			}
->> -			if (!file)
->> -				continue;
->> -			if (!vma_is_shmem(vmas[i]) && !is_file_hugepages(file)) {
->> -				ret = -EOPNOTSUPP;
->> -				break;
->> -			}
->> -		}
->> +		file = vma->vm_file;
->> +		if (file && !vma_is_shmem(vma) && !is_file_hugepages(file))
->> +			ret = -EOPNOTSUPP;
->> +
-> 
-> Also, why is it doing this?
-
-There were problems with filesystem mappings, I believe.
-Jens may remember what it was.
-
-
-> All GUP users don't work entirely right for any fops implementation
-> that assumes write protect is unconditionally possible. eg most
-> filesystems.
-> 
-> We've been ignoring blocking it because it is an ABI break and it does
-> sort of work in some cases.
-> 
-> I'd rather see something like FOLL_ALLOW_BROKEN_FILE_MAPPINGS than
-> io_uring open coding this kind of stuff.
-
--- 
-Pavel Begunkov
