@@ -2,89 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5A96E6D73
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 22:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C29DD6E6D79
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 22:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232642AbjDRUZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 16:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
+        id S232681AbjDRU0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 16:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbjDRUZp (ORCPT
+        with ESMTP id S230187AbjDRU0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 16:25:45 -0400
-Received: from st43p00im-zteg10071901.me.com (st43p00im-zteg10071901.me.com [17.58.63.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CF36A4E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:25:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1681849539; bh=5yMNkG+u5q3+ofdusgRob/P+SEqiawyHY5sUYJmY4o4=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=XZe7YIkOYZcOwvr6pRDkBxsvTuFzax8UD98w+Ci2Hdk7U/8li+Sw+8HutS8lYeMz2
-         xMcNiTsPieyj1BaGYUH7/5ud0a/+OFdBe6uq7lha7xYaQNS4lx00/4NIeBPt8OEQSu
-         LGduVjGBPYWQ6VosKwXEiX6jBA5IB86a2ZbGgLT59OWWSD+ApUOtc2w5QSeCsQ+zpy
-         rUATLH3x/ak3NCclXyTFIqZv20mGm8APl8tuW/0jzLcuTuW2vZ0FN1WCpctQgRveMb
-         kLX4rDlYcJYt9hosiyx4zaYl2Yi2ayAjk7Tear3/xchocxFVt/xYhgApzFEvzPWaxD
-         wz0L0BcuYYtxg==
-Received: from imac101 (st43p00im-dlb-asmtp-mailmevip.me.com [17.42.251.41])
-        by st43p00im-zteg10071901.me.com (Postfix) with ESMTPSA id E8043840C1E;
-        Tue, 18 Apr 2023 20:25:38 +0000 (UTC)
-Date:   Tue, 18 Apr 2023 22:25:35 +0200
-From:   Alain Volmat <avolmat@me.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>
-Subject: Re: [PATCH v3 0/2] dt-bindings: sti: updates for STi platform
-Message-ID: <ZD78vycteFErVHsj@imac101>
-Mail-Followup-To: Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>
-References: <20230213185633.15187-1-avolmat@me.com>
+        Tue, 18 Apr 2023 16:26:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34960B759;
+        Tue, 18 Apr 2023 13:26:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4FB762CC2;
+        Tue, 18 Apr 2023 20:26:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D46C433EF;
+        Tue, 18 Apr 2023 20:26:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681849585;
+        bh=1WjHlIcHtPNjZY/Sewerb1tSQrMe01/xeT4UdqgsLl0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=IH+5grsdebNkBYsU/+25BrWNDiWGllDG9h12eODx09CRTMyI8Ok9DNDH7iByDzYvc
+         ngGh0AFGpUt+L6WanOW8dyeaqqz6yb8T/LXShpI0AOKAjbybuouy0po9RLxwtXE/z5
+         +uVo9z8ZEWBkLx4kB4eN6UwEHwmDn76wL4TZFzRJRrKsku0ll2YUScO3gYbCHPzDMg
+         U4vx6tf449ettYyfGw3AEUSbh5H37hJDH4Xxr+gHAkEWhS35rbilaLfdZ/NlwfBgvJ
+         sXP7RQlZPOtndOTkDrFPYlO2wDA+3PV9JLcfSGtafWHldYcWmbDFgLU4WxpQn47ZV4
+         9u6tAtmbjNlPQ==
+Date:   Tue, 18 Apr 2023 15:26:23 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Ben Greear <greearb@candelatech.com>
+Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        bjorn@helgaas.com, LKML <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org, Stefan Roese <sr@denx.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Yao Hongbo <yaohongbo@linux.alibaba.com>,
+        Naveen Naidu <naveennaidu479@gmail.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pci@vger.kernel.org,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 5.4 182/389] PCI/portdrv: Dont disable AER reporting in
+ get_port_device_capability()
+Message-ID: <20230418202623.GA151923@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230213185633.15187-1-avolmat@me.com>
-X-Proofpoint-ORIG-GUID: v16IIltn34eO3REYHMg0rBi3Lk2rvs4Y
-X-Proofpoint-GUID: v16IIltn34eO3REYHMg0rBi3Lk2rvs4Y
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.816,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-17=5F04:2020-02-14=5F02,2022-01-17=5F04,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=671 clxscore=1015
- spamscore=0 malwarescore=0 adultscore=0 bulkscore=0 suspectscore=0
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2304180169
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7e068d1a-101e-b3b6-9f8f-f2208433cc29@candelatech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Tue, Apr 18, 2023 at 11:18:58AM -0700, Ben Greear wrote:
+> The CC list in this email is huge, and the dmesg is also large.  I'm going to send the file directly to Bjorn.
+> Please let me know if anyone wants to see it, or if I should just reply-all and paste it in...
 
-gentle reminder, could you consider this serie of dt-bindings updates
-for the STi platform.
+Thanks, I got the dmesg log and attached it to this bugzilla:
+https://bugzilla.kernel.org/show_bug.cgi?id=217352
 
-Alain
+I tried to match the earlydump up with the lspci from
+https://lore.kernel.org/r/4ff1397e-1d78-bc59-f577-e69024c4c4f3@candelatech.com
+but it doesn't seem to match.  Could they be from different systems or
+different configs?
 
-On Mon, Feb 13, 2023 at 07:56:29PM +0100, Alain Volmat wrote:
-> Update the sti.yaml file with addition of board information and
-> removal of no more supported STiH415/STiH416
-> Add the st,sti-syscon.yaml binding file for STi platform syscon
-> 
-> Alain Volmat (2):
->   dt-bindings: soc: sti: add STi platform syscon
->   dt-bindings: arm: sti: add STi boards and remove stih415/stih416
-> 
->  .../devicetree/bindings/arm/sti.yaml          | 25 ++++++----
->  .../bindings/soc/sti/st,sti-syscon.yaml       | 46 +++++++++++++++++++
->  2 files changed, 62 insertions(+), 9 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/soc/sti/st,sti-syscon.yaml
-> 
-> -- 
-> 2.34.1
-> 
+Could I trouble you to collect the "sudo lspci -vvxxx" output to match
+the pci=earlydump log?  (Or just collect both from the same system)
+
+Bjorn
