@@ -2,94 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67ECB6E592C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E210C6E5930
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjDRGNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 02:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
+        id S230036AbjDRGPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 02:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjDRGNb (ORCPT
+        with ESMTP id S229619AbjDRGPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 02:13:31 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E3D30E4;
-        Mon, 17 Apr 2023 23:13:29 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6EEC65C00E7;
-        Tue, 18 Apr 2023 02:13:27 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 18 Apr 2023 02:13:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1681798407; x=1681884807; bh=vV
-        QVLPH2v1chK7qtJeJorbitAX0W4SVoNNo6OCYXC4s=; b=P8p0bnQGiKs6wqOa/y
-        wztbmeR0RMbxFN2ebNm5L6Gj7FMoR7pUsRDseNGt5mLiAH6lpPRFFHzDPmpH9uPJ
-        gYlE2Td3MDS2lmeMb5Xcr9+Vx0bDV0myGaxTsg3U3xaUcfeOXNmSaVBhYj9vw/aT
-        +2V2V/aV9LcIm+RXn/haUGXvAAIFPPFa3H78M/CaQV83qPxtQNA3U/MeY+YrLR7h
-        XShVUukKNWy/WdxmRYMNisuDveWdGyD1cb/MmbDIhKqe7zZxnXhP/P2kja/6sk4T
-        xAG7rC1MFsIDAJsot3Ba7wOmYIZbbhMCdRZlTq/BHjzOuQ1+SYLcFMP0+lyd8Q4W
-        8L7Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681798407; x=1681884807; bh=vVQVLPH2v1chK
-        7qtJeJorbitAX0W4SVoNNo6OCYXC4s=; b=gHwbOtyV3nWJEhxLwIbQ3Vfx8560z
-        O6qH5q9eSRFY0Qy3t4zwLFuT6x8RCcwMeuUsvyYHgm7JlCDSmK6twLgZppMrBC9l
-        jH0ZIXksFCGnoB4xuiehH+e0icmbKmgVbiTRZWzlFS1YGK4bVl6rgAUQuLMuxXVH
-        8EqokWjQ15vmEeLWg3p4AmUvh4iDxys/bTx9DiEdrJ89NhmJBkcQqWb2abdGwGkA
-        65styWvwNtr1+vcVO5DAO+xyKPtwK1MwlCtQKufVQ6iPzZtbZQpel2mttJa6J34c
-        FmjPgDw+GgR9YKD3vWQ08Qc6Im45aLSJZuox5uwow53ocr5O1HI/t5GgA==
-X-ME-Sender: <xms:BjU-ZHOe8SxV6t3r0WXeFa_nIehSTb6OQfLVe5jD2kQrdv9kRXIR9g>
-    <xme:BjU-ZB_lNUuEBlqN-cGni-lHFm6twG1Ah39ivIgtA2Hxhq5p4gcxXdNe7T3BLFvOc
-    pvzR2-fe1TIyD3gWBY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeljedguddtjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:BjU-ZGTAwIMpcWg02_zVyUX_pLRanaHrLmmh68PYGw6r_348tK--lQ>
-    <xmx:BjU-ZLsu_54U_WOGGkx6gDhuuJMo1cYRJOryaql1zQZ6_k3zqtqreQ>
-    <xmx:BjU-ZPerSnFQquTW_btxT4LOx7oDZAgAncWYWgtY_cdkkCqHmsbOdA>
-    <xmx:BzU-ZN0o_MDM2nwEugn_xuQiscp9X8WG7TYdPEupvULiZIVk-ckC9A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D4E16B60086; Tue, 18 Apr 2023 02:13:26 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
-Mime-Version: 1.0
-Message-Id: <e4d7ceaa-ec0a-4ab0-9ad5-f0ecf9d263a9@app.fastmail.com>
-In-Reply-To: <20230418032031.GA4703@pendragon.ideasonboard.com>
-References: <20230417223738.1811110-1-arnd@kernel.org>
- <20230418032031.GA4703@pendragon.ideasonboard.com>
-Date:   Tue, 18 Apr 2023 08:13:05 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "laurent.pinchart" <laurent.pinchart@ideasonboard.com>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Shawn Guo" <shawnguo@kernel.org>,
-        "Sascha Hauer" <s.hauer@pengutronix.de>,
-        "Christian Hemp" <c.hemp@phytec.de>,
-        "Dong Aisheng" <aisheng.dong@nxp.com>,
-        "Stefan Riedmueller" <s.riedmueller@phytec.de>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        "Fabio Estevam" <festevam@gmail.com>,
-        "NXP Linux Team" <linux-imx@nxp.com>,
-        "Jacopo Mondi" <jacopo.mondi@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: nxp: imx8-isi: fix buiding on 32-bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        Tue, 18 Apr 2023 02:15:43 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2073.outbound.protection.outlook.com [40.107.220.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EA3137;
+        Mon, 17 Apr 2023 23:15:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UXF+DT7LypABhyS5GqRG11dcQ5QXWrRDjVGPQtYJJ2gPDwxV7MX2kXKme/JT5aN1q2HwIVdJY1OSTmJbhQxjywDGw70sSxz9TXtMs05C107rY+lIAgT2mzvcIkpz4oNQrvb9IWcHS49w3tr0tV7OTnpZr5AZ/sYU7y52ExKQ/ohs4o5+pQqHZZumQ/EcQ0Uz29v6CjuseL4dSm8rudaR3st4fsbD7F1q7KdfUgMmvm/efYJ+rgiEISXBhPvNLliOlqzStBSab2doMDncdtK2ZXbwjQNtAkeeyVXQwBEG07Afy3Z5hr6IOCJ8oJos3B0JHsikr1UlO49sqW+6Hdg96Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lQXgmfZDfQKpstIGGoseI32fv0USjOeWtZ+0gohidXk=;
+ b=iL8WOZhLJESAwEp4LDNSlmEeZ46yyPzDAZbyY8Rt55UgWuuh3QiG/RK4fLOrL6JuHHdg3Vtv5T1El3VNQLcxLWaqWNwsnbjT2zbnTTarUSEtu+hIYn8UVi8ofAMdDAraa2Qt26VsiD4yG7aLeofI5A1R+8udoQZm/WzbumfGYLRbaVfQJGB1VY0ifGaAPu218zbtES6TLNtJ0Gfw0oZg3R6B2Go/p809LjOdihRYZhF0RBuGk6cPKRZd0RXsNxmloEjoI5CaGP+eEffVeqmSVYxSiOnwA1qlWbMQT+xOHAL1sQkqot1qAha6jkqO5btkmRujF5J6SYSPDnZAOheTqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lQXgmfZDfQKpstIGGoseI32fv0USjOeWtZ+0gohidXk=;
+ b=psgCks8pqt6MeHs9cJuUQLuNpPKOKEaTGsOYPKxmWdtn5jsqJ4Ig+lwo+RwqPpyQDGK+9mSryjpbhxaN6rxW3wzQ9ii3rGnti+MwvZY+cgqFMoio84pQ/TpPstVNMwUDPYBRqHvRdEfxhs/CTxjYTzUSBr4KiEnb++UcvFeAN0+tvceGmI9tpUcE6uCEvqNoJd59ye0kPDmm5ymxMPBF0j/UQIG6AjA7Nry7rFj3Egf4b2dn+RQvQ2MseDmzt/qBAkneXqoxsPfiPjz7qIIBY3Z5OcOhOu6NRozeuXM9FdcSnaq51/dkS75OSv9OdZu3Jljubn5uAA1sP59RsLzLDA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by CY8PR12MB7337.namprd12.prod.outlook.com (2603:10b6:930:53::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
+ 2023 06:15:39 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::66d8:40d2:14ed:7697]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::66d8:40d2:14ed:7697%5]) with mapi id 15.20.6298.045; Tue, 18 Apr 2023
+ 06:15:39 +0000
+Date:   Tue, 18 Apr 2023 09:15:33 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+Cc:     mlxsw@nvidia.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        Natalia Petrova <n.petrova@fintech.ru>
+Subject: Re: [PATCH net] mlxfw: fix null-ptr-deref in mlxfw_mfa2_tlv_next()
+Message-ID: <ZD41hW/SVdNNqKRW@shredder>
+References: <20230417120718.52325-1-n.zhandarovich@fintech.ru>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230417120718.52325-1-n.zhandarovich@fintech.ru>
+X-ClientProxiedBy: VI1P195CA0088.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:802:59::41) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|CY8PR12MB7337:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c67b31d-7091-4b80-2b30-08db3fd454ac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4+0tvEwr/tgIeaugOveR+ixxFKUThQK6Wj6R58tyBHJOxDNFseIOOpkoh/+zDwGs+GFbKcPo1PH3+baNL8Ks9zL1c8/repuOQeG1sm2ckdiajI7V6QDb7GwUV4e8ptpjoOkzadfGlcADqGnMEjL9kRtyzVpNn3UOAEXMIFWgqzcAKSgkCMusqWlz83W1/DF6jzQkNw5rHv2H7SYDapgg64CXNmjobk8cs5grjY99koKmBw3QGw0d88lm9YPtNxe5AOsTpeGyTeBbwkDyJxZvh36bzAPeM6OU16uz9SWKvaKJoiCVpc8e85HhQPy2ZW16efqIM0uw2D3s23kgK00kQ5rHnhnpz8a1ZT1NrsK0coPHQY5PddHZebcpVmbUsHS/Jjp2gI36W/wAmFE29cU4JF6TWjPPZ7zQW/MV0HEIevMqbadsCuR0Hce1nrZwQAMI+FRNJE3erY3QYaa5IJyXCRjVdXb0iWWsYSmTCa917uYbb0Dr4TPHV0CWik3eHkEFea3j0ZvgSY/dmkrS0WYfhRwE9P/EKmk4B7jKZz2SnlTkngtMs9yM9eTwF+zXsRjI
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(396003)(366004)(136003)(346002)(376002)(39860400002)(451199021)(5660300002)(86362001)(33716001)(6512007)(83380400001)(186003)(9686003)(26005)(6506007)(38100700002)(8676002)(8936002)(478600001)(54906003)(6486002)(6666004)(316002)(41300700001)(66476007)(66556008)(4326008)(6916009)(66946007)(2906002)(4744005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/plU99jFizc+PIE1+cKvcs+KiWQp961vyqKTWxWPcQawdy54+ArG5wLPIxra?=
+ =?us-ascii?Q?vhRQ2YZcBKbEMPgW28fQumj8M5Ky25mZA4YrVw+EWPXOnc3AMZeoVwrhWSRs?=
+ =?us-ascii?Q?7G1v5/cw62VEdMDpOMwVe/HrYhl3ZnAkZJOineQiwYwNgi85rxCGhx9PvMSQ?=
+ =?us-ascii?Q?C3EjhcvnSwXEGtVlk2Frvq51AAHBU7qteBwpfhuHMgsYZnfqBp4nENHzbhWO?=
+ =?us-ascii?Q?A+JRQce/kwY2O8vm0NNbDWhgNOZ/2FRdhiYJMMFE+ob1jFjz0N+PN+11AWzg?=
+ =?us-ascii?Q?XAGnc/GxmCM+oLSDSvPH0NkWXR6f1QZopYmKuaZSDVr3pQXVJ8lAB4PsfxRp?=
+ =?us-ascii?Q?LTRdnZl9Z3D+Ge4RvJGl9K1f2B5yxj/EPMWjW+8eOl6LrVJeoHU0rosnkn8d?=
+ =?us-ascii?Q?cbb0k2YsEEOFJISiBM8uRpfvuTCGFfklaavOR++NtrVHH+cIKT5y909tw0kL?=
+ =?us-ascii?Q?tfznh/BFehFVQBtuRqmF7h3csJb6UNtbRN/jlI6DRpJS7vBAxt3RR9Pf1Cjt?=
+ =?us-ascii?Q?LN5LmY07PSW01+z848/K2Dv2J7+LDip9rBZaChwDMbBQWejh/5QiwRX+21xn?=
+ =?us-ascii?Q?tP3XOrvN8AUEMN/7tjzlTUv/U/ck84wNA9bI2pirC+z/0bds4b7RK0yE2Gde?=
+ =?us-ascii?Q?HFt/AqFQHDTbLR+QElkccfchfteVyDI+BdSoWh1i6dN4gahsfuL755r0Nyxx?=
+ =?us-ascii?Q?ypsqtSvyhiK+0g9gNN6cTmgZaDJlCrvuaSZnYpt4Pv5WrgbAqga5esX+7DaX?=
+ =?us-ascii?Q?UY81FiyH2L9GOKp+viWXsuUag9/fP2C1QfmnzR0qQOydljf8sXhXiY0LUiq3?=
+ =?us-ascii?Q?skhyXOKnRoAtmwjTv8Cvwgkd5E6FFtvoOZ9gQ/8172vPr3dN3IeXFjKhh7xs?=
+ =?us-ascii?Q?tFNUNAAU/DAg04x2IchSN/dLDUcW3F68tuVDh3HSwuTCcvPNcFLvmyL32RVq?=
+ =?us-ascii?Q?8qn0p2+p3/JnusGEUUmcUT3R9qNcTVQiNYJxjn97I9riEoCfDm3W2JthTJqj?=
+ =?us-ascii?Q?2zdt7fUA7sOfFw1vkefF8kuCA6BJJXkTScLtFCur5crQjNez3cJMR1OjWhw7?=
+ =?us-ascii?Q?BzUOGaK7JIPb4WusMamvzoC627NkHSUnmBUQNalv8h6qehGY2CE5XWzLr9x3?=
+ =?us-ascii?Q?kNNl1h+76ERt2IXmpJQ7EdZfonSUo29OeJQGUDrH8jcs+jCmSoBFa9g7ujEZ?=
+ =?us-ascii?Q?pyBWfqag2R8bvTfNQdlkumyja1Wy/2Z/what9mjFSqcvR1KjpC0ydP/VXD3r?=
+ =?us-ascii?Q?5IBBCd0/UmM2vy4zES0cqbBnwhVglQzZHHXDLLqmaFNUoL+Mde15Gx7AtjmH?=
+ =?us-ascii?Q?U2x137R1lxR/WCqnGVQJK8XJhRtmNi8C4+xVBzH/5fpN7IWZyCt/odw5ykcT?=
+ =?us-ascii?Q?J5al/drlyAls5JNVjvLEMRHOMz7WTzAQHv2kbRE6IH1+aleYnv2dJRI4/ziM?=
+ =?us-ascii?Q?Lv9bzZmUdAYON5/Dm7/+54K5lCW6mUsNGT56qaTSKXEABhdHCP1LmNF/0zOm?=
+ =?us-ascii?Q?Td1h6Ze4J4EFX54IPENeA0bZhUtgpcf0ulw4CcZLJLntUmyq1K5TegWwKzLr?=
+ =?us-ascii?Q?wZmimsswzRG7X3NJAsSq7sWl2PRlEqCBoUhNJNX/?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c67b31d-7091-4b80-2b30-08db3fd454ac
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 06:15:39.5260
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NZak4cl5XtRV6kAxmGqISfmdM+ZN/aLpL82aFljGmtB4XHgEs7DbVkR2m7CsIKIFyk1Pxa5h0Mey5Pb6mvm/1w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7337
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,39 +118,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023, at 05:20, Laurent Pinchart wrote:
-> On Tue, Apr 18, 2023 at 12:37:27AM +0200, Arnd Bergmann wrote:
->> drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c:55:24: error: right shift count >= width of type [-Werror=shift-count-overflow]
->> 
->> But this is best avoided by using the lower_32_bits()/upper_32_bits()
->> helpers.
->
-> I've submitted a patch yesterday that uses #ifdef, but I like this one
-> better. One could argue that it leads to dead code on 32-bit platforms,
-> but the ISI is only present in 64-bit SoCs, so that's not an issue.
+On Mon, Apr 17, 2023 at 05:07:18AM -0700, Nikita Zhandarovich wrote:
+> Function mlxfw_mfa2_tlv_multi_get() returns NULL if 'tlv' in
+> question does not pass checks in mlxfw_mfa2_tlv_payload_get(). This
+> behaviour may lead to NULL pointer dereference in 'multi->total_len'.
+> Fix this issue by testing mlxfw_mfa2_tlv_multi_get()'s return value
+> against NULL.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with static
+> analysis tool SVACE.
+> 
+> Fixes: 410ed13cae39 ("Add the mlxfw module for Mellanox firmware flash process")
+> Co-developed-by: Natalia Petrova <n.petrova@fintech.ru>
+> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
 
-I think there are actually some people using 32-bit kernels on imx8,
-but they tend to do it for the wrong reasons, and I'm not worried
-about wasting a few bytes in those setups.
-
-My first draft kept an IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT) inside
-each of the three if(), but I dropped that for readability.
-
->>  	if (buf_id == MXC_ISI_BUF1) {
->> -		mxc_isi_write(pipe, CHNL_OUT_BUF1_ADDR_Y, dma_addrs[0]);
->> -		mxc_isi_write(pipe, CHNL_OUT_BUF1_ADDR_U, dma_addrs[1]);
->> -		mxc_isi_write(pipe, CHNL_OUT_BUF1_ADDR_V, dma_addrs[2]);
->> -#if CONFIG_ARCH_DMA_ADDR_T_64BIT
->> +		mxc_isi_write(pipe, CHNL_OUT_BUF1_ADDR_Y,
->> +			lower_32_bits(dma_addrs[0]));
->
-> Could you please align this with the ( ? I can also do so in my tree,
-> but I expect Mauro to pick this patch directly from the list, so a v2
-> would make it easier. You can then add my
->
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-Ok, I sent that out now, but now I see I forgot to add your
-Reviewed-by.
-
-     Arnd
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
