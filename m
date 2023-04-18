@@ -2,138 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117766E68BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADC16E68BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232434AbjDRP4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 11:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
+        id S231895AbjDRP4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 11:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbjDRP4h (ORCPT
+        with ESMTP id S230094AbjDRP4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:56:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4FECC00
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681833352;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bu2WXyCBFn70BrFOAHD2w7CCSZ5K+Kah1HWaszqXR7M=;
-        b=JTuPOcXQh518fSbRLym8JHR86xWfD2zXJlJsIMd/IYhWlazoIJRop4xrrg/G/BXPCgNBUo
-        3Z4gqBxFo1Ngruih+WUulkY5I/29ktSSp5iYq0enbiVq+Yt9M8wOcGUI63KdoAg91K4NpN
-        gPhVbY0spu8+Gpm6VVReLASh1Cbl9pI=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-209-ftZy9QJ0OTSzjntg34nKBg-1; Tue, 18 Apr 2023 11:55:51 -0400
-X-MC-Unique: ftZy9QJ0OTSzjntg34nKBg-1
-Received: by mail-wm1-f70.google.com with SMTP id p4-20020a05600c468400b003f140953152so5251959wmo.7
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:55:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681833350; x=1684425350;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bu2WXyCBFn70BrFOAHD2w7CCSZ5K+Kah1HWaszqXR7M=;
-        b=fgnbkimUIR4ogfpta900NboMT98fGFbq44RWl7yYgBidVl94drRLvAMdpzr6fDPths
-         Cpwg8V8egVhxm+UDKUKAZ0hbp4O4R6kz5aOhQZW7IyQJ48nWTxr2NmGICWwCPIKJLE2u
-         K37kdN9AO6YHeuA8K5clYRp3r+ghvPOOQSy6BgDNPggZDQrFgnXLd+zio4kiDdeouXyS
-         6nxxNXBizbFxMR/Yr1lrM8vdNYvDEe5yVmLjUXaVUivQBtICs1r9Xjb69Zns/bp5iOq/
-         0RTmyP0agU2zIgGYh9UhoniOIVnfEHmZiunkaTxs2Riqo4dnb6F0FYN2tG945wn2O4cv
-         ddcw==
-X-Gm-Message-State: AAQBX9fHq478ekIi5yOxMsP/7B4oVCepnXNcO6xGG1qroot2Fv0cy0SS
-        i7j4fWZOkTPZZnirauMLbaia+zforO5DaeQMjc8CSHj7ct4Q5UZD7uVB3LATWuMo5W26WCHJN+P
-        9PdVQLTumnYLWDBusdkHdVJqS
-X-Received: by 2002:a7b:c7cb:0:b0:3f1:72e2:5d13 with SMTP id z11-20020a7bc7cb000000b003f172e25d13mr5852122wmk.16.1681833350225;
-        Tue, 18 Apr 2023 08:55:50 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z1j/eqSrGsLGiAtdPfeIYhyQjZeuM76uEuc4151AByxVjGqnHN1YQGTPrOF+yr1m2bfY1Bnw==
-X-Received: by 2002:a7b:c7cb:0:b0:3f1:72e2:5d13 with SMTP id z11-20020a7bc7cb000000b003f172e25d13mr5852102wmk.16.1681833349870;
-        Tue, 18 Apr 2023 08:55:49 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c715:3f00:7545:deb6:f2f4:27ef? (p200300cbc7153f007545deb6f2f427ef.dip0.t-ipconnect.de. [2003:cb:c715:3f00:7545:deb6:f2f4:27ef])
-        by smtp.gmail.com with ESMTPSA id q9-20020a1ce909000000b003ee20b4b2dasm15205166wmc.46.2023.04.18.08.55.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 08:55:49 -0700 (PDT)
-Message-ID: <7fabe6ee-ba8f-6c48-c9f7-90982e2e258c@redhat.com>
-Date:   Tue, 18 Apr 2023 17:55:48 +0200
+        Tue, 18 Apr 2023 11:56:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A98AE6C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:56:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9E586360F
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 15:56:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B6CC4339C;
+        Tue, 18 Apr 2023 15:56:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681833360;
+        bh=XhwoNE3hOdeXm3s+cs5zqqi+93Su9LmADaKSVChDM2I=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=PfQ9eUr/S32fmXcHSFrwvsb934TYobydU7TP+e6wnQ2EolewCWl5IA9dTA5wx1qMt
+         shR08XyFA2QhXj9FIYt3zbg3KZFAhkswTdnStiypaKQxJx03lE7V4Du9eCUC735T+0
+         E0pJe4GexJYeSRDZU+1jMUT9kOZhsxI8fz8g5X916YnkjQF+aOZDRppBjwqysQvtBC
+         4kISwa+gwDQJYF7wKpU1TBqmTiwT3xKNqNrJR2f1rFfmpBj2Ya6BrkYAK95bOZl+4F
+         k+KsAqvPphboEDB7l32GNBcuMu702NoURj9KofWQyVpvvr1xKi0xJXJrniFbasLGfi
+         LttiF0fswNytA==
+Date:   Tue, 18 Apr 2023 08:55:58 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [PATCH v2] f2fs: remove power-of-two limitation fo zoned device
+Message-ID: <ZD69jto/SFPycuHm@google.com>
+References: <20230418004049.3262659-1-jaegeuk@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
- pin_user_pages()
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org
-References: <cover.1681831798.git.lstoakes@gmail.com>
- <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418004049.3262659-1-jaegeuk@kernel.org>
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.04.23 17:49, Lorenzo Stoakes wrote:
-> We are shortly to remove pin_user_pages(), and instead perform the required
-> VMA checks ourselves. In most cases there will be a single VMA so this
-> should caues no undue impact on an already slow path.
-> 
-> Doing this eliminates the one instance of vmas being used by
-> pin_user_pages().
-> 
-> Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> ---
->   io_uring/rsrc.c | 55 ++++++++++++++++++++++++++++---------------------
->   1 file changed, 31 insertions(+), 24 deletions(-)
-> 
-> diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-> index 7a43aed8e395..3a927df9d913 100644
-> --- a/io_uring/rsrc.c
-> +++ b/io_uring/rsrc.c
-> @@ -1138,12 +1138,37 @@ static int io_buffer_account_pin(struct io_ring_ctx *ctx, struct page **pages,
->   	return ret;
->   }
->   
-> +static int check_vmas_locked(unsigned long addr, unsigned long len)
+In f2fs, there's no reason to force po2.
 
-TBH, the whole "_locked" suffix is a bit confusing.
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
 
-I was wondering why you'd want to check whether the VMAs are locked ...
+ Change log from v1:
+  - fix udiv
 
-> +{
-> +	struct file *file;
-> +	VMA_ITERATOR(vmi, current->mm, addr);
-> +	struct vm_area_struct *vma = vma_next(&vmi);
-> +	unsigned long end = addr + len;
-> +
-> +	if (WARN_ON_ONCE(!vma))
-> +		return -EINVAL;
-> +
-> +	file = vma->vm_file;
-> +	if (file && !is_file_hugepages(file))
-> +		return -EOPNOTSUPP;
+ fs/f2fs/f2fs.h    | 3 +--
+ fs/f2fs/gc.c      | 4 ++--
+ fs/f2fs/segment.c | 2 +-
+ fs/f2fs/super.c   | 8 ++------
+ 4 files changed, 6 insertions(+), 11 deletions(-)
 
-You'd now be rejecting vma_is_shmem() here, no?
-
-
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 6cae94d51821..d8cb1dc09f9f 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -1523,7 +1523,6 @@ struct f2fs_sb_info {
+ 
+ #ifdef CONFIG_BLK_DEV_ZONED
+ 	unsigned int blocks_per_blkz;		/* F2FS blocks per zone */
+-	unsigned int log_blocks_per_blkz;	/* log2 F2FS blocks per zone */
+ #endif
+ 
+ 	/* for node-related operations */
+@@ -4377,7 +4376,7 @@ F2FS_FEATURE_FUNCS(readonly, RO);
+ static inline bool f2fs_blkz_is_seq(struct f2fs_sb_info *sbi, int devi,
+ 				    block_t blkaddr)
+ {
+-	unsigned int zno = blkaddr >> sbi->log_blocks_per_blkz;
++	unsigned int zno = blkaddr / sbi->blocks_per_blkz;
+ 
+ 	return test_bit(zno, FDEV(devi).blkz_seq);
+ }
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index a6a0dc471b74..61c5f9d26018 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -2093,8 +2093,8 @@ static void update_fs_metadata(struct f2fs_sb_info *sbi, int secs)
+ 		FDEV(last_dev).end_blk =
+ 				(long long)FDEV(last_dev).end_blk + blks;
+ #ifdef CONFIG_BLK_DEV_ZONED
+-		FDEV(last_dev).nr_blkz = (int)FDEV(last_dev).nr_blkz +
+-					(int)(blks >> sbi->log_blocks_per_blkz);
++		FDEV(last_dev).nr_blkz = FDEV(last_dev).nr_blkz +
++					div_u64(blks, sbi->blocks_per_blkz);
+ #endif
+ 	}
+ }
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index c35476b3c075..641bd8cc54da 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -2075,7 +2075,7 @@ void f2fs_clear_prefree_segments(struct f2fs_sb_info *sbi,
+ 
+ 		if (force && start >= cpc->trim_start &&
+ 					(end - 1) <= cpc->trim_end)
+-				continue;
++			continue;
+ 
+ 		/* Should cover 2MB zoned device for zone-based reset */
+ 		if (!f2fs_sb_has_blkzoned(sbi) &&
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index 4e53b1100b84..9f15b03037db 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -3806,12 +3806,8 @@ static int init_blkz_info(struct f2fs_sb_info *sbi, int devi)
+ 				SECTOR_TO_BLOCK(zone_sectors))
+ 		return -EINVAL;
+ 	sbi->blocks_per_blkz = SECTOR_TO_BLOCK(zone_sectors);
+-	if (sbi->log_blocks_per_blkz && sbi->log_blocks_per_blkz !=
+-				__ilog2_u32(sbi->blocks_per_blkz))
+-		return -EINVAL;
+-	sbi->log_blocks_per_blkz = __ilog2_u32(sbi->blocks_per_blkz);
+-	FDEV(devi).nr_blkz = SECTOR_TO_BLOCK(nr_sectors) >>
+-					sbi->log_blocks_per_blkz;
++	FDEV(devi).nr_blkz = div_u64(SECTOR_TO_BLOCK(nr_sectors),
++					sbi->blocks_per_blkz);
+ 	if (nr_sectors & (zone_sectors - 1))
+ 		FDEV(devi).nr_blkz++;
+ 
 -- 
-Thanks,
-
-David / dhildenb
+2.40.0.634.g4ca3ef3211-goog
 
