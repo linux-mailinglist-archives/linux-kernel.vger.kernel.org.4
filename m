@@ -2,77 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 939D66E6AB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D7C6E6ABF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbjDRRPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 13:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
+        id S231897AbjDRRQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 13:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbjDRRPS (ORCPT
+        with ESMTP id S230070AbjDRRQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 13:15:18 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A5D1258F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:14:38 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id a10so14524292ljr.5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:14:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681838075; x=1684430075;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6cf1rCGBfFsm7IF2+Dyi3Wvezc5h9U/VnOfZVSR23P0=;
-        b=gowjJ1xsZFbFsEd1QHrmKC/KvgzOkJwsqYXeITFP2diqAtzycD6P63Zdr5mLyqg4OR
-         7Lhcp5dkobsHkmtEt3bzRoI4l9skBxLBrSzPGTmYX6qDWUu/kXkGuqnzwuTkW00Mzer5
-         1ZvCW4dvhP5YH/M2NUIkHC9h1uzWDVoAxCKbXrPcC6wEc9bbfyP2zlojdsMzLqGvBfqd
-         qY76cw8NX6IxX1Q+tBT/g8Jk2o4ZIAeCC6MOEW4aT0S+sgyd4+9U6rxS23O07Z2ACzWF
-         RWAGJ8NyFVS9ArT00ogfykYlxIB92MNOOHe3gqY+3uO7QO+LwzPTv/epP0g67Lkid2oH
-         JYYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681838075; x=1684430075;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6cf1rCGBfFsm7IF2+Dyi3Wvezc5h9U/VnOfZVSR23P0=;
-        b=dv+qgCTPvFuADbJz4v376cpFJr8lDWgH3R5AADSH3M8YC/Hpse0k9qsErCSWBykujI
-         MBf3F485QJjGtYXtuY9HYYwi395+3uRs3QI1CI363ibVzNDJg12ZU2HVZzLoU6Dslpai
-         O7HXx5tZnk+gVXdZJxb5L+yHUeci4j8MuwAwVI6MaBbemlRcs7BXKWn5MMhn04+7bEJG
-         GiA+/iNCVid5jRMz7sAPqGke85S9tgFUL3XzutnB8n339HwijtMnHO7F3xyGGFGVnV5O
-         XguS31PT+lks96gHyIREiv22ULf2i8pZJTVWiwq+0NQ3ZXTreLhX6WlLENKOoB5LGn1U
-         YJPA==
-X-Gm-Message-State: AAQBX9dXWgz2Uhydyo69UXJ3tD/ylqvhP0K+OeWh2U/EXTJN2n7Y4DPN
-        ExacCPBQqsTL1a7BeHwNPL1n7BtR5RBkupStVRs4Pw==
-X-Google-Smtp-Source: AKy350YANFo7McMyTwZbFijRpweMJain1zZv12KJ7Z9pVpf6BezffThdnp6xFsMVipm2gHZQCtBFkOHIKBNQ6Dx12a0=
-X-Received: by 2002:a2e:994f:0:b0:2a8:b1e3:8979 with SMTP id
- r15-20020a2e994f000000b002a8b1e38979mr1064705ljj.7.1681838075093; Tue, 18 Apr
- 2023 10:14:35 -0700 (PDT)
+        Tue, 18 Apr 2023 13:16:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BACD13C06
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:15:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681838137;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=914MbDCapASQxkK9BuyG9zv/qlx7fwHmIuJzggClNB8=;
+        b=YfUDg95rEqPqVXorOmWHQ9LrAR976TPtw2mpe6ij83xxr4PJPiWzjf7EbH9Ccp/Cz5NRdD
+        vGsM4tjoCPyso+VDzfXeSMSUlkCH8iB5vOfROfqm8MotK4Hyj3X4wLMbF90Gm5xY0/4n53
+        jYYp3r4NIadfyDSYN7sRl5ekXZ5uO4Y=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-497-YKyY_ucKP2uNreI52tG6sw-1; Tue, 18 Apr 2023 13:15:31 -0400
+X-MC-Unique: YKyY_ucKP2uNreI52tG6sw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7696E101A551;
+        Tue, 18 Apr 2023 17:15:28 +0000 (UTC)
+Received: from localhost.localdomain.com (unknown [10.22.10.203])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3C23540C20FA;
+        Tue, 18 Apr 2023 17:15:27 +0000 (UTC)
+From:   Nico Pache <npache@redhat.com>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     matthew.auld@intel.com, arunpravin.paneerselvam@amd.com,
+        arthurgrillo@riseup.net, davidgow@google.com, javierm@redhat.com,
+        christian.koenig@amd.com, mairacanal@riseup.net, daniel@ffwll.ch,
+        airlied@gmail.com, ddutile@redhat.com, kunit-dev@googlegroups.com
+Subject: [PATCH] kunit: drm: make DRM buddy test compatible with other pages sizes
+Date:   Tue, 18 Apr 2023 11:15:24 -0600
+Message-Id: <20230418171524.274386-1-npache@redhat.com>
 MIME-Version: 1.0
-References: <20230407201921.2703758-1-sagis@google.com> <20230407201921.2703758-2-sagis@google.com>
- <20230417223611.00004aee.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230417223611.00004aee.zhi.wang.linux@gmail.com>
-From:   Sagi Shahar <sagis@google.com>
-Date:   Tue, 18 Apr 2023 10:14:22 -0700
-Message-ID: <CAAhR5DHLk2c+-ziSSHLjygFv7ceWw0+4a00FXioLfmRJe09o1w@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/5] KVM: Split tdp_mmu_pages to private and shared lists
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,98 +59,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 12:37=E2=80=AFPM Zhi Wang <zhi.wang.linux@gmail.com=
-> wrote:
->
-> On Fri,  7 Apr 2023 20:19:17 +0000
-> Sagi Shahar <sagis@google.com> wrote:
->
-> This patch is actually adding a separate counter for accounting private
-> tdp mmu page not really introducing a new tdp_mmu_pages list for private
-> pages. I guess better refine the tittle to reflect what this patch
-> is doing.
+The DRM buddy test uses a fixed 12 bit shift to covert from pages to 
+bytes. This number is then used to confirm that (chunk_size < PAGE_SIZE)
+which can lead to a failing drm_buddy_init on systems with PAGE_SIZE > 4k.
 
-Thanks for catching this. tdp_mmu_pages actually used to be a list of
-pages when I first developed this code but was replaced with a counter
-in https://lore.kernel.org/all/20221019165618.927057-6-seanjc@google.com/
+Fixes: 92937f170d3f ("drm/selftests: add drm buddy alloc range testcase")
+Signed-off-by: Nico Pache <npache@redhat.com>
+---
+ drivers/gpu/drm/tests/drm_buddy_test.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->
-> > tdp_mmu_pages holds all the active pages used by the mmu. When we
-> > transfer the state during intra-host migration we need to transfer the
-> > private pages but not the shared ones.
-> >
-> Maybe explain a little bit about how the shared one is processed. Guess
-> one sentence is enough.
+diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
+index 09ee6f6af896..a62b2690d3c2 100644
+--- a/drivers/gpu/drm/tests/drm_buddy_test.c
++++ b/drivers/gpu/drm/tests/drm_buddy_test.c
+@@ -318,8 +318,8 @@ static void mm_config(u64 *size, u64 *chunk_size)
+ 	s &= -ms;
+ 
+ 	/* Convert from pages to bytes */
+-	*chunk_size = (u64)ms << 12;
+-	*size = (u64)s << 12;
++	*chunk_size = (u64)ms << PAGE_SHIFT;
++	*size = (u64)s << PAGE_SHIFT;
+ }
+ 
+ static void drm_test_buddy_alloc_pathological(struct kunit *test)
+-- 
+2.39.2
 
-How about:
-tdp_mmu_pages holds all the active pages used by the mmu. When we
-transfer the state during intra-host migration we need to transfer the
-private pages but not the shared ones. The shared pages are going to
-be re-faulted as needed on the destination, but that approach doesn't
-work for private pages which stores information in the secure EPT.
-
-> > Keeping them in separate counters makes this transfer more efficient.
-> >
-> > Signed-off-by: Sagi Shahar <sagis@google.com>
-> > ---
-> >  arch/x86/include/asm/kvm_host.h |  5 ++++-
-> >  arch/x86/kvm/mmu/tdp_mmu.c      | 11 +++++++++--
-> >  2 files changed, 13 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm=
-_host.h
-> > index ae377eec81987..5ed70cd9d74bf 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1426,9 +1426,12 @@ struct kvm_arch {
-> >       struct task_struct *nx_huge_page_recovery_thread;
-> >
-> >  #ifdef CONFIG_X86_64
-> > -     /* The number of TDP MMU pages across all roots. */
-> > +     /* The number of non-private TDP MMU pages across all roots. */
-> >       atomic64_t tdp_mmu_pages;
-> >
-> > +     /* Same as tdp_mmu_pages but only for private pages. */
-> > +     atomic64_t tdp_private_mmu_pages;
-> > +
-> >       /*
-> >        * List of struct kvm_mmu_pages being used as roots.
-> >        * All struct kvm_mmu_pages in the list should have
-> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > index 58a236a69ec72..327dee4f6170e 100644
-> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > @@ -44,6 +44,7 @@ void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm)
-> >       destroy_workqueue(kvm->arch.tdp_mmu_zap_wq);
-> >
-> >       WARN_ON(atomic64_read(&kvm->arch.tdp_mmu_pages));
-> > +     WARN_ON(atomic64_read(&kvm->arch.tdp_private_mmu_pages));
-> >       WARN_ON(!list_empty(&kvm->arch.tdp_mmu_roots));
-> >
-> >       /*
-> > @@ -373,13 +374,19 @@ static void handle_changed_spte_dirty_log(struct =
-kvm *kvm, int as_id, gfn_t gfn,
-> >  static void tdp_account_mmu_page(struct kvm *kvm, struct kvm_mmu_page =
-*sp)
-> >  {
-> >       kvm_account_pgtable_pages((void *)sp->spt, +1);
-> > -     atomic64_inc(&kvm->arch.tdp_mmu_pages);
-> > +     if (is_private_sp(sp))
-> > +             atomic64_inc(&kvm->arch.tdp_private_mmu_pages);
-> > +     else
-> > +             atomic64_inc(&kvm->arch.tdp_mmu_pages);
-> >  }
-> >
-> >  static void tdp_unaccount_mmu_page(struct kvm *kvm, struct kvm_mmu_pag=
-e *sp)
-> >  {
-> >       kvm_account_pgtable_pages((void *)sp->spt, -1);
-> > -     atomic64_dec(&kvm->arch.tdp_mmu_pages);
-> > +     if (is_private_sp(sp))
-> > +             atomic64_dec(&kvm->arch.tdp_private_mmu_pages);
-> > +     else
-> > +             atomic64_dec(&kvm->arch.tdp_mmu_pages);
-> >  }
-> >
-> >  /**
->
