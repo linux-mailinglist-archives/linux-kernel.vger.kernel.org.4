@@ -2,113 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2D36E688C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07176E68A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbjDRPrV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 11:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
+        id S232413AbjDRPtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 11:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjDRPrT (ORCPT
+        with ESMTP id S232381AbjDRPtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:47:19 -0400
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9969B6A78;
-        Tue, 18 Apr 2023 08:47:18 -0700 (PDT)
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-94a342f4c8eso123189466b.0;
-        Tue, 18 Apr 2023 08:47:18 -0700 (PDT)
+        Tue, 18 Apr 2023 11:49:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D09B59FE
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:48:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681832925;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qqPRrw2+zSmyahOYz/37SL2zwwweMprO4z8JxQYe+LE=;
+        b=GZiVafajAEdOp6d2bFg0U1ysaaF73N+JkOjXDad/Qebjb5ufrWrEBOCY+lbSXQIoHOpfcv
+        b+mBwUrNv5Jo76sHJs48yA7OEIEsDNWYHRUvpaAsu63RZlwqAqF4tjMqsjfII4b0QXHJWB
+        KfANThbEbZEw3WnLEvea1LdLeqr8+qY=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-211-eUqtgIdeM8OkK-I54hStGA-1; Tue, 18 Apr 2023 11:48:44 -0400
+X-MC-Unique: eUqtgIdeM8OkK-I54hStGA-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-74cf009f476so62340685a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:48:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681832837; x=1684424837;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/C5xzvKXqZCUa27kLtUoyGZHoFI/e2eInwPXH6CQKpg=;
-        b=GF8/a8V3xSJ+OKGlN/dIVkefG2Q6gJSjp1AQrwz2Fs+QeHeDqnf4btM+spe3bocixx
-         yezFRJMUBgymyxJOyGsYDliA12ptp9WvXkfSp3Sf8pB2iLG6hxFRKxZ9evnphNkmrwOm
-         dQx+lqrNaPP7m9fOx9/LijHI5s+9HJQfEZnrvM+XqOPTwp2cVcESoFz5/Mx/CAR9wVyx
-         70NKjLEgQIwlTqF0BwYH1w2e4wSowX6UZzI4iGD1IEC2GQHO67X0LToISJ3QgO5AISFh
-         yzxPBb2BCHYLW/I4XBjN2RmC+4Hr4UNOaTyEbCnl1YOiXCNxuYn7Doa9CyS2vPvzXM+3
-         +8Xg==
-X-Gm-Message-State: AAQBX9eSea+GVfvKl5LGlbZlYZ4oDiYfOyRarFiCBRHcGJorHKB2GB+T
-        b3vpNFZivIQ1kRCK83MIqJ7eEHe9NkaZAMQZZAw=
-X-Google-Smtp-Source: AKy350bR1pRIrCDZkJlL+PMiZMWZJeYK2qJ+XLvLIYMJTyiImERuWcqTTASca8hy0sWmGrAGieeqdZl5XqmIPznM90w=
-X-Received: by 2002:a17:906:7a45:b0:94e:9235:d77e with SMTP id
- i5-20020a1709067a4500b0094e9235d77emr11000217ejo.3.1681832837131; Tue, 18 Apr
- 2023 08:47:17 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681832924; x=1684424924;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qqPRrw2+zSmyahOYz/37SL2zwwweMprO4z8JxQYe+LE=;
+        b=YzXtE3cscB5ic/00F+mGqCH4pmVmA7Mhv7SulsWKP8mItYJrHGydXgap9DBHqS2phr
+         djCP8sf/W20pwSGHxDx41w6FAZwfUg6L8PqBZIVY8G+Y/5nNWzUJf8Jj/f+9y001O8nI
+         ruxUCaJz9W5z/UaRv/kVGLopijrWQJry9R/ASxJuofIyYxYkAoFxjExjdr+ykV/s5srl
+         ujlxfcTmCaWlKpEGAkB69H5RgLeqzOtrkV4q5JNCc+zsG/vIxvAE3is0aJIrXiml1KHR
+         qeYwidaNJJzc454WvCSB/CUOSpGhDOYdfW9g+RjDBFACQSapboX+sn+Kv+omKT0CGZiI
+         pU7Q==
+X-Gm-Message-State: AAQBX9cIqkLcdvoN2G0G9rZCU+5XKlj3ZF6EejNrvDb1ng31i1LcansL
+        Knw34/UlwvanlPiJTpuZ5q9vneu+xsCxD40xFoPGgvIXzORbQvFyVuDahM4NV+iNghlDX4u2ycf
+        HMlSf0LoZB9IsMwA88gVbYVW5
+X-Received: by 2002:a05:6214:5181:b0:5de:5da:b873 with SMTP id kl1-20020a056214518100b005de05dab873mr22697919qvb.3.1681832923918;
+        Tue, 18 Apr 2023 08:48:43 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YNOb3z9I5nInHqqyrQsFa0YSW2bNcN7wow/yrgl8Xif7zErfnzKfmvZG+Rm6NiIdERqUitlg==
+X-Received: by 2002:a05:6214:5181:b0:5de:5da:b873 with SMTP id kl1-20020a056214518100b005de05dab873mr22697900qvb.3.1681832923655;
+        Tue, 18 Apr 2023 08:48:43 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id kr24-20020a0562142b9800b005eee320b5d7sm3739002qvb.63.2023.04.18.08.48.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 08:48:43 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 11:48:41 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
+        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 1/1] mm: do not increment pgfault stats when page
+ fault handler retries
+Message-ID: <ZD672ewd4j/1v2IQ@x1n>
+References: <20230415000818.1955007-1-surenb@google.com>
+ <ZD25bBPbZYSb7grA@x1n>
+ <CAJuCfpHf06cr2d277DXQUtBto_0bVgK3ykMHLYRgZXgnot=e4w@mail.gmail.com>
+ <ZD61DLJNilUeDCnC@x1n>
+ <ZD64C3R6BzqpSfYX@casper.infradead.org>
 MIME-Version: 1.0
-References: <20230418113459.12860-1-sumitg@nvidia.com> <20230418113459.12860-2-sumitg@nvidia.com>
- <CAJZ5v0iMcVZMd3YpEC++BZzCwOM2ocYQuK98tm9gQq0fjO41gg@mail.gmail.com> <05feec0c-c94a-a0e7-3636-1927f6621cb9@nvidia.com>
-In-Reply-To: <05feec0c-c94a-a0e7-3636-1927f6621cb9@nvidia.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 18 Apr 2023 17:47:06 +0200
-Message-ID: <CAJZ5v0hU1rDrkqHzKG=NiFmSNh+-8gQWLWOXsMKrhg8BOO1V_g@mail.gmail.com>
-Subject: Re: [Patch 1/6] cpufreq: use correct unit when verify cur freq
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, viresh.kumar@linaro.org,
-        ionela.voinescu@arm.com, mark.rutland@arm.com,
-        sudeep.holla@arm.com, lpieralisi@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, treding@nvidia.com,
-        jonathanh@nvidia.com, vsethi@nvidia.com, sdonthineni@nvidia.com,
-        sanjayc@nvidia.com, ksitaraman@nvidia.com, bbasu@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZD64C3R6BzqpSfYX@casper.infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 3:32 PM Sumit Gupta <sumitg@nvidia.com> wrote:
->
->
->
-> On 18/04/23 18:27, Rafael J. Wysocki wrote:
-> > External email: Use caution opening links or attachments
-> >
-> >
-> > On Tue, Apr 18, 2023 at 1:35 PM Sumit Gupta <sumitg@nvidia.com> wrote:
-> >>
-> >> From: Sanjay Chandrashekara <sanjayc@nvidia.com>
-> >>
-> >> cpufreq_verify_current_freq checks if the frequency returned by
-> >> the hardware has a slight delta with the valid frequency value
-> >> last set and returns "policy->cur" if the delta is within "1 MHz".
-> >> In the comparison, "policy->cur" is in "kHz" but it's compared
-> >> against HZ_PER_MHZ. So, the comparison range becomes "1 GHz".
-> >> Fix this by comparing against KHZ_PER_MHZ instead of HZ_PER_MHZ.
-> >>
-> >> Fixes: f55ae08c8987 ("cpufreq: Avoid unnecessary frequency updates due to mismatch")
-> >> Signed-off-by: Sanjay Chandrashekara <sanjayc@nvidia.com>
-> >> [ sumit gupta: Commit message update ]
-> >> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> >> ---
-> >>   drivers/cpufreq/cpufreq.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> >> index 8b0509f89f1b..6b52ebe5a890 100644
-> >> --- a/drivers/cpufreq/cpufreq.c
-> >> +++ b/drivers/cpufreq/cpufreq.c
-> >> @@ -1732,7 +1732,7 @@ static unsigned int cpufreq_verify_current_freq(struct cpufreq_policy *policy, b
-> >>                   * MHz. In such cases it is better to avoid getting into
-> >>                   * unnecessary frequency updates.
-> >>                   */
-> >> -               if (abs(policy->cur - new_freq) < HZ_PER_MHZ)
-> >> +               if (abs(policy->cur - new_freq) < KHZ_PER_MHZ)
-> >>                          return policy->cur;
-> >>
-> >>                  cpufreq_out_of_sync(policy, new_freq);
-> >> --
-> >
-> > So this is a fix that can be applied separately from the rest of the
-> > series, isn't it?
->
-> Yes.
+On Tue, Apr 18, 2023 at 04:32:27PM +0100, Matthew Wilcox wrote:
+> ... when we called clone()?  A thread by definition has a reference to
+> its own mm.
 
-So applied as 6.4 material.
+Ah yes.. thanks!
+
+-- 
+Peter Xu
+
