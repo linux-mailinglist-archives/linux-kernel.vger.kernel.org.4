@@ -2,106 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418846E6C58
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB366E6C5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbjDRSpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
+        id S232637AbjDRSqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjDRSpA (ORCPT
+        with ESMTP id S229564AbjDRSqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:45:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BE7C67A
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:44:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C8F163819
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 18:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB90C4339B;
-        Tue, 18 Apr 2023 18:44:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681843497;
-        bh=VTJaQ+xSNEjvC73iIJnvJAGbN1KdAIOE9HBhu+8VB7M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iwinOfDo013AYR1eTqfKRbf8QgIMvXjWV1uDAsJK/6//hApF3lFOjUP0j95Ovb+k+
-         KIYph9qZmZLqfiV4GQgCD9C1MWQz7KVPVpt8bxaXsPkMZXFnAQI/a6tKpZCEvjlKKd
-         t5V0J/ED7u16H24IxG7q7+Nd0tOlG1+4kbLipuquPawMQqDAVmB1T3Ty7WYRwHARkG
-         7Gn39ingpfNH3D5FvVevL23BxGJKeJcOhJxGEoKz9cFwYHcdtLKFyHQL0gQ1Rk8W9P
-         CjJEqODbuj2wUXGPUhkmqkU724mW8kkrL7vBPDFDc7PzNe7yNRlR/MAI76ljvJDr2I
-         Di1fvwMgo9NnA==
-Date:   Tue, 18 Apr 2023 11:44:55 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Simon Horman <horms@kernel.org>
-Cc:     Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] soc: ti: pruss: Avoid cast to incompatible function type
-Message-ID: <20230418184455.GC2635379@dev-arch.thelio-3990X>
-References: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
+        Tue, 18 Apr 2023 14:46:23 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332E5BB82;
+        Tue, 18 Apr 2023 11:46:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=nB52nxujZdKTDJqU+NXGOBB2vkb1FAhhHGmtI1+SM4A=; b=a1381ug+O3Nh4vISHBwlSJpgdM
+        m4klJEBpaJu1lnWDaq8Xlc2VsXzkdTSb/tyopbUPR/HR3oaAUUlosR2wd1hf03TrJ7grjaoPTB20m
+        fEQvdBmFyZ7utVjbtR9Omn//3YPanCK9Z6HRhL+mQTfK1pqPS4yIagW0k1zvQdvxOkxgC6RjQtlXP
+        nHfHcCcbLqIgP+2uiFukGr4RPWezPs8AUd20L+8ER5BI0pVz4wvZEooGatFfCaxnew448u4AZjStu
+        vbarBCpSUKjaKUtkVTh0IKCM14l8vZyNsfFoyt5INwPcuadT9LXNpyEVhrCQ0ECRnu+zuVhyQQ5p2
+        XSyg2dsQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1poqLF-00374O-0h;
+        Tue, 18 Apr 2023 18:46:13 +0000
+Date:   Tue, 18 Apr 2023 11:46:13 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "keescook@chromium.org" <keescook@chromium.org>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "prarit@redhat.com" <prarit@redhat.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "song@kernel.org" <song@kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "jim.cromie@gmail.com" <jim.cromie@gmail.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "jbaron@akamai.com" <jbaron@akamai.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "petr.pavlu@suse.com" <petr.pavlu@suse.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "Hocko, Michal" <mhocko@suse.com>,
+        "dave@stgolabs.net" <dave@stgolabs.net>
+Subject: Re: [RFC 2/2] kread: avoid duplicates
+Message-ID: <ZD7ldcZoWfeN7poU@bombadil.infradead.org>
+References: <20230414052840.1994456-1-mcgrof@kernel.org>
+ <20230414052840.1994456-3-mcgrof@kernel.org>
+ <ZDuP3OCzN3x4NxRZ@infradead.org>
+ <ZDuYmPB5oqKQLcQd@bombadil.infradead.org>
+ <be5182b65384f6a7667c239134037649a468033d.camel@intel.com>
+ <ZD3DYqYE4DOiJQaS@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZD3DYqYE4DOiJQaS@bombadil.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 01:41:48PM +0200, Simon Horman wrote:
-> Rather than casting clk_unregister_mux to an incompatible function
-> type provide a trivial wrapper with the correct signature for the
-> use-case.
+On Mon, Apr 17, 2023 at 03:08:34PM -0700, Luis Chamberlain wrote:
+> On Mon, Apr 17, 2023 at 05:33:49PM +0000, Edgecombe, Rick P wrote:
+> > On Sat, 2023-04-15 at 23:41 -0700, Luis Chamberlain wrote:
+> > > On Sat, Apr 15, 2023 at 11:04:12PM -0700, Christoph Hellwig wrote:
+> > > > On Thu, Apr 13, 2023 at 10:28:40PM -0700, Luis Chamberlain wrote:
+> > > > > With this we run into 0 wasted virtual memory bytes.
+> > > > 
+> > > > Avoid what duplicates?
+> > > 
+> > > David Hildenbrand had reported that with over 400 CPUs vmap space
+> > > runs out and it seems it was related to module loading. I took a
+> > > look and confirmed it. Module loading ends up requiring in the
+> > > worst case 3 vmalloc allocations, so typically at least twice
+> > > the size of the module size and in the worst case just add
+> > > the decompressed module size:
+> > > 
+> > > a) initial kernel_read*() call
+> > > b) optional module decompression
+> > > c) the actual module data copy we will keep
+> > > 
+> > > Duplicate module requests that come from userspace end up being
+> > > thrown
+> > > in the trash bin, as only one module will be allocated.  Although
+> > > there
+> > > are checks for a module prior to requesting a module udev still
+> > > doesn't
+> > > do the best of a job to avoid that and so we end up with tons of
+> > > duplicate module requests. We're talking about gigabytes of vmalloc
+> > > bytes just lost because of this for large systems and megabytes for
+> > > average systems. So for example with just 255 CPUs we can loose about
+> > > 13.58 GiB, and for 8 CPUs about 226.53 MiB.
+> > > 
+> > > I have patches to curtail 1/2 of that space by doing a check in
+> > > kernel
+> > > before we do the allocation in c) if the module is already present.
+> > > For
+> > > a) it is harder because userspace just passes a file descriptor. But
+> > > since we can get the file path without the vmalloc this RFC suggest
+> > > maybe we can add a new kernel_read*() for module loading where it
+> > > makes
+> > > sense to have only one read happen at a time.
+> > 
+> > I'm wondering how difficult it would be to just try to remove the
+> > vmallocs in (a) and (b) and operate on a list of pages.
 > 
-> Reported by clang-16 with W=1:
-> 
->  drivers/soc/ti/pruss.c:158:38: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->          ret = devm_add_action_or_reset(dev, (void(*)(void *))clk_unregister_mux,
-> 
-> No functional change intended.
-> Compile tested only.
-> 
-> Signed-off-by: Simon Horman <horms@kernel.org>
+> Yes I think it's worth long term to do that, if possible with seq reads.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+OK here's what I suggest we do then:
 
-> ---
->  drivers/soc/ti/pruss.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
-> index 6882c86b3ce5..e68441bd7b30 100644
-> --- a/drivers/soc/ti/pruss.c
-> +++ b/drivers/soc/ti/pruss.c
-> @@ -38,6 +38,11 @@ static void pruss_of_free_clk_provider(void *data)
->  	of_node_put(clk_mux_np);
->  }
->  
-> +static void pruss_clk_unregister_mux(void *data)
-> +{
-> +	clk_unregister_mux(data);
-> +}
-> +
->  static int pruss_clk_mux_setup(struct pruss *pruss, struct clk *clk_mux,
->  			       char *mux_name, struct device_node *clks_np)
->  {
-> @@ -93,8 +98,7 @@ static int pruss_clk_mux_setup(struct pruss *pruss, struct clk *clk_mux,
->  		goto put_clk_mux_np;
->  	}
->  
-> -	ret = devm_add_action_or_reset(dev, (void(*)(void *))clk_unregister_mux,
-> -				       clk_mux);
-> +	ret = devm_add_action_or_reset(dev, pruss_clk_unregister_mux, clk_mux);
->  	if (ret) {
->  		dev_err(dev, "failed to add clkmux unregister action %d", ret);
->  		goto put_clk_mux_np;
-> 
+I'll resubmit the first patch which allows us to prove / disprove if
+module-autoloading is the culprit. With that in place folks can debug
+their setup and verify how udev is to blame.
+
+I'll drop the second kernel_read*() patch / effort and punt this as a
+userspace problem as this is also not extremely pressing.
+
+Long term should evaluate how we can avoid vmalloc for the kread and
+module decompression.
+
+If this really becomes a pressing issue we can revisit if we want an in
+kernel solution, but at this point that likely would be systems with
+over 400-500 CPUs with KASAN enabled. Without KASAN the issue should
+eventually trigger if you're enablig modules but its hard to say at what
+point you'd hit this issue.
+
+  Luis
