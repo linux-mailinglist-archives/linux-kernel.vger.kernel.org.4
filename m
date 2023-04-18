@@ -2,96 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E355E6E693E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8066E6942
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbjDRQUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 12:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
+        id S231166AbjDRQVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 12:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbjDRQUF (ORCPT
+        with ESMTP id S229750AbjDRQVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 12:20:05 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F44C678
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:19:48 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id vc20so19706596ejc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:19:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681834787; x=1684426787;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iZB3of5nwzmdnHO4GEgYjYDmRaGa0m+b36yS3CIvEJQ=;
-        b=QpMngbEiGVZF0XZTmI6+TLl5AjJ8gUT9SUW4BuazUb6FBKKxEZEn6imFv9pxIQWRti
-         imv9R4dOmONMg1eay7z6kg+vJT8OE4KNYgqF/ClzkG20YuDnPoufxqM8Wx7yBd8T+8T/
-         D7GLBwd7ueqfvfokaaPV8WT/+REVECvNVCR1waX7eeeQxMytofeoA1Hms6M1MQikNw+K
-         Dlnrxe8kYNN8hSEjX7Cq36u09qoFJZ8uqctRHzgnr5ZZSVqD7sWS5iBAfW4tGpdnEMeJ
-         LZ9cgJKtd3jizs3OZf8J8HmYk++8jB2cxQfBQE8dnkpe5imBA1O6u3gCnOGfRGX/Wa8W
-         SycQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681834787; x=1684426787;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iZB3of5nwzmdnHO4GEgYjYDmRaGa0m+b36yS3CIvEJQ=;
-        b=a1vLcISPDWPq+/sPYKLydnGRnIwlKaiDw8IN08pxJBnN1onbcpB7bNDKuZYa85aiaB
-         It0B0yYfB+7CtYG1SqpONQhNiddVoZteGGJ6c5RQq6YOsTboOGHkHT5CRLviIPlCH5Od
-         CM5arzXMOSbM5QAD36jmMOQ+t/pPNBDDSJcNcPXAVI5s5NvH1U21J26XKHvojDE6IYyw
-         Nft7hWk8NtnDP/CtER+XNXxYVcBbXITIDot0g+30+cXwl2nkdj4ntUF9dKOIfG3LyxhJ
-         mCJC0mvrODJvCweDQgT7KAwq+KMDAkhKWtwEypnEOyzjd1Xv+gkN2zlt7BxOBWUnwn7R
-         3QIg==
-X-Gm-Message-State: AAQBX9du45dtR53+uZecm8u6iQhBkOPTiFJ8DQf9brWUz4itQGAd4D06
-        /YuFS2wAQmZfoo+ytIlyZQM4Dw==
-X-Google-Smtp-Source: AKy350aiZFhGitVDEerbV9PnSTaboFy4MuHQj/BaI+bPDBGfN+fxdgSfFOtqdnMeV1evU8B1s7GsGA==
-X-Received: by 2002:a17:906:3844:b0:94e:e0b7:96d6 with SMTP id w4-20020a170906384400b0094ee0b796d6mr11862141ejc.14.1681834786931;
-        Tue, 18 Apr 2023 09:19:46 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
-        by smtp.gmail.com with ESMTPSA id e5-20020a17090681c500b0094f7092c231sm3392246ejx.6.2023.04.18.09.19.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 09:19:46 -0700 (PDT)
-Message-ID: <992e4e50-f074-6f2b-22f9-fc39e76c8eb1@linaro.org>
-Date:   Tue, 18 Apr 2023 18:19:45 +0200
+        Tue, 18 Apr 2023 12:21:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAED13C38;
+        Tue, 18 Apr 2023 09:21:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64DB86366A;
+        Tue, 18 Apr 2023 16:21:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0379C433EF;
+        Tue, 18 Apr 2023 16:21:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681834878;
+        bh=4euNAmgm9FS8d6VwrBA6cQTwZjT2IJjY+8n8hbkSGpE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=e0WOScVPcE7a0ZNf8vvYDaCDczzgU1XUYxV7eCcuZSE6L02OWa089SDr60QJLIo+a
+         mNU7MB/1IHUXpK52zqG3n7Hv2txlxoOwQXXHS7wI5ZK8qJaxQTn3RtWjwWhPBSy5zN
+         oCgWti4guTp22n9jfTNgC3PQ/opekhb6F6JjGZ+afAsoRWktKLcUwN5NVnyBIY/gqo
+         IoXHgRcUFDl+ErJCMLfHI3Olpxa7HOnTZQiwUQUcjdLUcdXfyOB1vP7MT4i8V14RUM
+         BNU5PxtdqNCDga6WGKtTTCPROeE3/cUPX/dwFSsnACc6r+cY6nRLvuAxJWNtrvyuyW
+         ftHIHXE3DfLWg==
+From:   Mark Brown <broonie@kernel.org>
+To:     lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, daniel.baluta@gmail.com,
+        Saalim Quadri <danascape@gmail.com>
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230417204323.137681-1-danascape@gmail.com>
+References: <20230417204323.137681-1-danascape@gmail.com>
+Subject: Re: [PATCH] ASoC: dt-bindings: wm8728: Convert to dtschema
+Message-Id: <168183487655.87933.6597506413439051128.b4-ty@kernel.org>
+Date:   Tue, 18 Apr 2023 17:21:16 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 1/2] dt-bindings: soc: qcom: Add RPM Master stats
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>
-References: <20230405-topic-master_stats-v4-0-4217362fcc79@linaro.org>
- <20230405-topic-master_stats-v4-1-4217362fcc79@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230405-topic-master_stats-v4-1-4217362fcc79@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/04/2023 19:37, Konrad Dybcio wrote:
-> The RPM MSG RAM contains per-RPM-master (e.g. APPS, ADSP etc.) sleep
-> statistics. They let one assess which core is actively preventing the
-> system from entering a true low-power mode.
+On Mon, 17 Apr 2023 20:43:23 +0000, Saalim Quadri wrote:
+> Convert the WM8728 audio CODEC bindings to DT schema
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
+> 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Applied to
 
-Best regards,
-Krzysztof
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: dt-bindings: wm8728: Convert to dtschema
+      commit: 3da9d149eb9f51560163bb0c13a245fd0ba74c6e
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
