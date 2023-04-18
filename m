@@ -2,51 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4E06E591C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5DD6E5922
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjDRGJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 02:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
+        id S230170AbjDRGKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 02:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjDRGJI (ORCPT
+        with ESMTP id S229632AbjDRGJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 02:09:08 -0400
+        Tue, 18 Apr 2023 02:09:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3574D2D4C;
-        Mon, 17 Apr 2023 23:09:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA35468E
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:09:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6EB362506;
-        Tue, 18 Apr 2023 06:09:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83323C433EF;
-        Tue, 18 Apr 2023 06:09:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88A61616FD
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 06:09:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F432C433D2;
+        Tue, 18 Apr 2023 06:09:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681798146;
-        bh=p8pWr5UG6WYTMI0mc7sS/B5Wj1Ni/0+4yMQqEWzlJTo=;
+        s=korg; t=1681798197;
+        bh=4ZkApvugcZU8+OzPj66QCEvINcz6Rwtaf4yAgfpReEo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yh0ZNY+3HuTvUV5eJLLMd5phEvw/m2/wtZnwhb0D3xEBEj5IBs8VHzZ8gFtMG4f2Q
-         REexeg59dRpl1AUNrJtgT0eJ6CczJT3l3bbai79NMBk1bje3nJq07EkFz1qG4nMvrx
-         odsH/9DGGd0Ro+8YAMInCmtuYCWjsIHPIjY0AmxY=
-Date:   Tue, 18 Apr 2023 08:09:02 +0200
+        b=ddQ0hm5o0cm62yfrEGgFMMF03zuf3Kj3Fc2GSAF8ToK0M9jVRJyDM+rZm7/cfNMv6
+         tYG9DhRxOVzRypYCCCcI3yVnj8ljV7GDOlpZ9+UmpaL1vbfg+iFmKiXW+MCceTQAjC
+         Z/ME8LtGglMH+UbZkTmJBI63JJGZ3KtdbqO6+16I=
+Date:   Tue, 18 Apr 2023 08:09:53 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     =?utf-8?B?5a6L6ZSQ?= <songrui.771@bytedance.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [External] Re: [PATCH] libbpf: correct the macro KERNEL_VERSION
- for old kernel
-Message-ID: <ZD4z_pS3fur-owIT@kroah.com>
-References: <20230417084449.99848-1-songrui.771@bytedance.com>
- <ZD09abW0YyHU3Snt@kroah.com>
- <CAAz4JzKB7kMi=fRZYSG=b4km-xA2gdBF32TFxU-ubqaaTs+_Hw@mail.gmail.com>
+To:     Yu Hao <yhao016@ucr.edu>
+Cc:     jirislaby@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: BUG: sleeping function called from invalid context in
+ __might_resched
+Message-ID: <ZD40MfJ1kzJuPD1l@kroah.com>
+References: <CA+UBctCZok5FSQ=LPRA+A-jocW=L8FuMVZ_7MNqhh483P5yN8A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAz4JzKB7kMi=fRZYSG=b4km-xA2gdBF32TFxU-ubqaaTs+_Hw@mail.gmail.com>
+In-Reply-To: <CA+UBctCZok5FSQ=LPRA+A-jocW=L8FuMVZ_7MNqhh483P5yN8A@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -57,83 +51,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 10:44:47PM -0700, 宋锐 wrote:
-> > > The introduced header file linux/version.h in libbpf_probes.c may have a
-> > > wrong macro KERNEL_VERSION for calculating LINUX_VERSION_CODE in some old
-> > > kernel (Debian9, 10). Below is a version info example from Debian 10.
-> > >
-> > > release: 4.19.0-22-amd64
-> > > version: #1 SMP Debian 4.19.260-1 (2022-09-29)
-> > >
-> > > The macro KERNEL_VERSION is defined to (((a) << 16) + ((b) << 8)) + (c)),
-> > > which a, b, and c stand for major, minor and patch version. So in example here,
-> > > the major is 4, minor is 19, patch is 260, the LINUX_VERSION(4, 19, 260) which
-> > > is 267268 should be matched to LINUX_VERSION_CODE. However, the KERNEL_VERSION_CODE
-> > > in linux/version.h is defined to 267263.
-> > >
-> > > I noticed that the macro KERNEL_VERSION in linux/version.h of some new kernel is
-> > > defined to (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c))). And
-> > > KERNEL_VERSION(4, 19, 260) is equal to 267263 which is the right LINUX_VERSION_CODE.
-> > >
-> > > The mismatched LINUX_VERSION_CODE which will cause failing to load kprobe BPF
-> > > programs in the version check of BPF syscall.
-> > >
-> > > The return value of get_kernel_version in libbpf_probes.c should be matched to
-> > > LINUX_VERSION_CODE by correcting the macro KERNEL_VERSION.
-> > >
-> > > Signed-off-by: songrui.771 <songrui.771@bytedance.com>
-> >
-> > This needs to be your name, not your email alias (do you use ".771" as a
-> > name to sign things with?)
+On Mon, Apr 17, 2023 at 08:44:30PM -0700, Yu Hao wrote:
+> Hello,
 > 
-> Thanks for your reminding. I will change it.
-> >
-> > > ---
-> > >  tools/lib/bpf/libbpf_probes.c | 10 +++++++---
-> > >  1 file changed, 7 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-> > > index 4f3bc968ff8e..5b22a880c7e7 100644
-> > > --- a/tools/lib/bpf/libbpf_probes.c
-> > > +++ b/tools/lib/bpf/libbpf_probes.c
-> > > @@ -18,6 +18,10 @@
-> > >  #include "libbpf.h"
-> > >  #include "libbpf_internal.h"
-> > >
-> > > +#ifndef LIBBPF_KERNEL_VERSION
-> > > +#define LIBBPF_KERNEL_VERSION(a, b, c) (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c)))
-> > > +#endif
-> >
-> > What is wrong with using the KERNEL_VERSION() macro, it should be fixed
-> > to work properly here, right?  Did we not get this resolved in the
-> > main portion of the kernel already?
+> We found the following issue using syzkaller on Linux v6.2.0.
+> A similar bug was found in function `n_hdlc_tty_wakeup` before.
+> (https://groups.google.com/g/syzkaller-bugs/c/XAyZCUO-eAY/m/Lpj5SzDNAwAJ)
+> Now it is found in a different caller `gsmld_write`.
+> It needs to fix the bug in `gsmld_write` again.
 > 
-> The KERNEL_VERSION() macro from linux/version.h is wrong in some old
-> kernel(Debian 9, 10) that we would like to support. As you said, the
-> problem was resolved in the newer kernel. Here is the difference:
-
-But the kernels you want to "support" all have older kernel versions and
-so you do not need the change to the macro as they are not running newer
-kernel versions with an increased minor version number.
-
-So on those systems, building will work just fine, if not, then that's a
-Debian bug and they should fix it in their kernel packages.
-
-> linux/version.h
-> in older kernel: #define KERNEL_VERSION(a, b, c) (((a) << 16) + ((b)
-> << 8)) + (c)))
-> in newer kernel: #define KERNEL_VERSION(a, b, c) KERNEL_VERSION(a, b,
-> c) (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c)))
+> The full report including the C reproducer:
+> https://gist.github.com/ZHYfeng/eb410de5d7aec253d8c83cf34e628d6a
 > 
-> Using the KERNEL_VERSION macro in the older kernel returns the kern
-> version  which is  mismatched to the LINUX_VERSION_CODE that will
-> cause failing to load the BPF kprobe program.
-> 
-> In my opinion, it is a more generic solution that corrects the
-> KERNEL_VERSION() macro in libbpf to support some old kernel.
+> The brief report is below:
 
-The KERNEL_VERSION() macro comes from the kernel you are building
-against.  And so that should match that kernel only.
+Please submit a patch to resolve the issue, otherwise this will just end
+up going on the huge other pile of syzbot-reported issues that we slowly
+dig ourselves through...
 
 thanks,
 
