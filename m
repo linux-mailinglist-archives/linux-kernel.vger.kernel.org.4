@@ -2,130 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4787E6E6736
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DDA6E673A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbjDROc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 10:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        id S231786AbjDROdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 10:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbjDROcZ (ORCPT
+        with ESMTP id S231384AbjDROdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 10:32:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4504413F8F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 07:31:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681828297;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Obc8o7+Jc2/xwzIMnjHntcd92yYzpwyuQHbYi3m2V4g=;
-        b=gBE/jNRMTBVX7TaIAmVeObUB6kaHr1z/bvgPE6Tq1ttFup8l5ZpJNVogf3dI/dafeQ9oY5
-        jZ9sJV5F5w2OXBdtxjaS00FA55+BLOqgPdsaqIyhWVjs+7WUibXQbO0YYLpdtNPdOADPS2
-        Njrt04Es7F+zotx7qwJ0VjmjbNHS8uE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-118-JXl42fi3NSi0HJY4UsjPfQ-1; Tue, 18 Apr 2023 10:31:34 -0400
-X-MC-Unique: JXl42fi3NSi0HJY4UsjPfQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 18 Apr 2023 10:33:14 -0400
+Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADED83FC;
+        Tue, 18 Apr 2023 07:33:13 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by sonata.ens-lyon.org (Postfix) with ESMTP id C82DA2018B;
+        Tue, 18 Apr 2023 16:33:11 +0200 (CEST)
+Received: from sonata.ens-lyon.org ([127.0.0.1])
+        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ggrempUKGqz6; Tue, 18 Apr 2023 16:33:11 +0200 (CEST)
+Received: from begin (unknown [109.190.253.11])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5E43D88B7AA;
-        Tue, 18 Apr 2023 14:31:29 +0000 (UTC)
-Received: from [10.22.34.98] (unknown [10.22.34.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 44BD540C6E70;
-        Tue, 18 Apr 2023 14:31:27 +0000 (UTC)
-Message-ID: <eda74c03-bde2-bb51-2b0d-df2097215696@redhat.com>
-Date:   Tue, 18 Apr 2023 10:31:27 -0400
+        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 95A4520181;
+        Tue, 18 Apr 2023 16:33:11 +0200 (CEST)
+Received: from samy by begin with local (Exim 4.96)
+        (envelope-from <samuel.thibault@ens-lyon.org>)
+        id 1pomOJ-00C9qp-0h;
+        Tue, 18 Apr 2023 16:33:07 +0200
+Date:   Tue, 18 Apr 2023 16:33:07 +0200
+From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
+To:     James Chapman <jchapman@katalix.com>, tparkin@katalix.com,
+        edumazet@google.com
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        corbet@lwn.net, netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCHv2] PPPoL2TP: Add more code snippets
+Message-ID: <20230418143307.hth4yjkopy5se4md@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        James Chapman <jchapman@katalix.com>, tparkin@katalix.com,
+        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwn.net, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 0/6] sched/deadline: cpuset: Rework DEADLINE bandwidth
- restoration
-Content-Language: en-US
-To:     Qais Yousef <qyousef@layalina.io>,
-        Juri Lelli <juri.lelli@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <20230329125558.255239-1-juri.lelli@redhat.com>
- <20230418141127.zbvsf7lwk27zvipt@airbuntu>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230418141127.zbvsf7lwk27zvipt@airbuntu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: NeoMutt/20170609 (1.8.3)
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/18/23 10:11, Qais Yousef wrote:
-> On 03/29/23 14:55, Juri Lelli wrote:
->> Qais reported [1] that iterating over all tasks when rebuilding root
->> domains for finding out which ones are DEADLINE and need their bandwidth
->> correctly restored on such root domains can be a costly operation (10+
->> ms delays on suspend-resume). He proposed we skip rebuilding root
->> domains for certain operations, but that approach seemed arch specific
->> and possibly prone to errors, as paths that ultimately trigger a rebuild
->> might be quite convoluted (thanks Qais for spending time on this!).
->>
->> To fix the problem
->>
->>   01/06 - Rename functions deadline with DEADLINE accounting (cleanup
->>           suggested by Qais) - no functional change
->>   02/06 - Bring back cpuset_mutex (so that we have write access to cpusets
->>           from scheduler operations - and we also fix some problems
->>           associated to percpu_cpuset_rwsem)
->>   03/06 - Keep track of the number of DEADLINE tasks belonging to each cpuset
->>   04/06 - Create DL BW alloc, free & check overflow interface for bulk
->>           bandwidth allocation/removal - no functional change
->>   05/06 - Fix bandwidth allocation handling for cgroup operation
->>           involving multiple tasks
->>   06/06 - Use this information to only perform the costly iteration if
->>           DEADLINE tasks are actually present in the cpuset for which a
->>           corresponding root domain is being rebuilt
->>
->> With respect to the RFC posting [2]
->>
->>   1 - rename DEADLINE bandwidth accounting functions - Qais
->>   2 - call inc/dec_dl_tasks_cs from switched_{to,from}_dl - Qais
->>   3 - fix DEADLINE bandwidth allocation with multiple tasks - Waiman,
->>       contributed by Dietmar
->>
->> This set is also available from
->>
->> https://github.com/jlelli/linux.git deadline/rework-cpusets
-> Is this just waiting to be picked up or still there's something to be addressed
-> still?
+The existing documentation was not telling that one has to create a PPP
+channel and a PPP interface to get PPPoL2TP data offloading working.
 
-There are some changes to cpuset code recently and so I believe that 
-this patch series may need to be refreshed to reconcile the changes.
+Also, tunnel switching was not mentioned, so that people were thinking
+it was not supported, while it actually is.
 
-Thanks,
-Longman
+Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
 
+---
+Difference from v1:
+- follow kernel coding style
+- check for failures
+- also mention netlink and ip for configuring the link
+- fix bridging channels
+
+ Documentation/networking/l2tp.rst |   97 ++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 93 insertions(+), 4 deletions(-)
+
+--- a/Documentation/networking/l2tp.rst
++++ b/Documentation/networking/l2tp.rst
+@@ -387,11 +387,16 @@ Sample userspace code:
+   - Create session PPPoX data socket::
+ 
+         struct sockaddr_pppol2tp sax;
+-        int fd;
++        int session_fd;
++        int ret;
+ 
+         /* Note, the tunnel socket must be bound already, else it
+          * will not be ready
+          */
++        session_fd = socket(AF_PPPOX, SOCK_DGRAM, PX_PROTO_OL2TP);
++        if (session_fd < 0)
++                return -errno;
++
+         sax.sa_family = AF_PPPOX;
+         sax.sa_protocol = PX_PROTO_OL2TP;
+         sax.pppol2tp.fd = tunnel_fd;
+@@ -406,11 +411,95 @@ Sample userspace code:
+         /* session_fd is the fd of the session's PPPoL2TP socket.
+          * tunnel_fd is the fd of the tunnel UDP / L2TPIP socket.
+          */
+-        fd = connect(session_fd, (struct sockaddr *)&sax, sizeof(sax));
+-        if (fd < 0 ) {
++        ret = connect(session_fd, (struct sockaddr *)&sax, sizeof(sax));
++        if (ret < 0 ) {
++                close(session_fd);
++                return -errno;
++        }
++
++        return session_fd;
++
++L2TP control packets will still be available for read on `tunnel_fd`.
++
++  - Create PPP channel::
++
++        int chindx;
++        int ppp_chan_fd;
++
++        ret = ioctl(session_fd, PPPIOCGCHAN, &chindx);
++        if (ret < 0)
++                return -errno;
++
++        ppp_chan_fd = open("/dev/ppp", O_RDWR);
++        if (ppp_chan_fd < 0)
++                return -errno;
++
++        ret = ioctl(ppp_chan_fd, PPPIOCATTCHAN, &chindx);
++        if (ret < 0) {
++                close(ppp_chan_fd);
+                 return -errno;
+         }
+-        return 0;
++
++        return ppp_chan_fd;
++
++Non-data PPP frames will be available for read on `ppp_chan_fd`.
++
++  - Create PPP interface::
++
++        int ppp_if_fd;
++        int ifunit = -1;
++
++        ppp_if_fd = open("/dev/ppp", O_RDWR);
++        if (ppp_chan_fd < 0)
++                return -errno;
++
++        ret = ioctl(ppp_if_fd, PPPIOCNEWUNIT, &ifunit);
++        if (ret < 0) {
++                close(ppp_if_fd);
++                return -errno;
++        }
++
++        ret = ioctl(ppp_chan_fd, PPPIOCCONNECT, ifunit);
++        if (ret < 0) {
++                close(ppp_if_fd);
++                return -errno;
++        }
++
++        return ppp_chan_fd;
++
++The ppp<ifunit> interface can then be configured as usual with netlink's
++RTM_NEWLINK, RTM_NEWADDR, RTM_NEWROUTE, or ioctl's SIOCSIFMTU, SIOCSIFADDR,
++SIOCSIFDSTADDR, SIOCSIFNETMASK, SIOCSIFFLAGS, or with the `ip` command.
++
++  - L2TP session bridging (also called L2TP tunnel switching or L2TP multihop)
++is supported by bridging the ppp channels of the two L2TP sessions to be
++bridged::
++
++        int chindx1;
++        int chindx2;
++        int ppp_chan_fd;
++
++        ret = ioctl(session_fd1, PPPIOCGCHAN, &chindx1);
++        if (ret < 0)
++                return -errno;
++
++        ret = ioctl(session_fd2, PPPIOCGCHAN, &chind2x);
++        if (ret < 0)
++                return -errno;
++
++        ppp_chan_fd = open("/dev/ppp", O_RDWR);
++        ret = ioctl(ppp_chan_fd, PPPIOCATTCHAN, &chindx1);
++        if (ret < 0) {
++                close(ppp_chan_fd);
++                return -errno;
++        }
++
++        ret = ioctl(ppp_chan_fd, PPPIOCBRIDGECHAN, &chindx2);
++        close(ppp_chan_fd);
++        if (ret < 0)
++                return -errno;
++
++See more details for the PPP side in ppp_generic.rst.
+ 
+ Old L2TPv2-only API
+ -------------------
