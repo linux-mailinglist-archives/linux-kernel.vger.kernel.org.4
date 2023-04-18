@@ -2,766 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588706E5978
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B7B6E595A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjDRGeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 02:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
+        id S230393AbjDRGWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 02:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjDRGd6 (ORCPT
+        with ESMTP id S230493AbjDRGWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 02:33:58 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on20601.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8b::601])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013CFF9;
-        Mon, 17 Apr 2023 23:33:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HGeGhpLTbnf9wQOwiWcjVlAp1HCERcD8LIq++2tPHDxKXV2TXwbw8zEh1pSh6VTAsgOZfvfbjIiBPEt1hk/7tYIlaa/OTH0D5WS3SMeGey20qsmiLMEjTqmSG7qOh34YyU+hrwfDb0+fofK0pDKPpKenFsr7HQfrZ3ZSX2GLf9n5KE25qUkanhEgt8tF8W40XVxEA4d5rgbu9HCJIxPWhmaw42M+y+AThhMsHYV80urJvHoyO3Tzmx/6T4CjElw/Ijk/+FCcLCF4SOunbtu6QgrmR3HcYcszDTrtVXdRvvRPUlnmVL2XICqrQIC1qTChPIrMqqxSC2jJCEMwa/fIyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9zWw+ynn4LwyZZWthVca1VjZ0ZClw+I/gEdS8oGd3x0=;
- b=cvkhsF7ThJCaXtgeScWZGpGwPkymXMZPl2zzyQ4KcHQAW7RiFfoF/nK8FAhB6a5Cl+Ezd729o8i/wJfRNN6JsYpA0/z2BMO1klolZw9J8N4cCen72O4eQCdjnklQwTwA06qbUhzIy+vWUhQv60GjkoD1KVkAShJDKZSH7pbV1vWgN35vKfT5lITYjZN7fP6BHgvjVlYvw+BrzYH/eFAt1WjjD7L+HkW8bg8mjoxIkzH7T/u/TVBv7vOy7ks48UO+by/V2HinTj76Oh6UkSxSVwa8pWeC+7lzB8CA7YMp3TU7+T2UeduRyAjNngOW6EcPkYugGy1YC8a7Z3/95+l6Dg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9zWw+ynn4LwyZZWthVca1VjZ0ZClw+I/gEdS8oGd3x0=;
- b=pKxZmWOtskhNwZtClbkO7v5/VBNRKmESjESvkYykjrNmpZmxekjH0RUlym7NuypFuJuN8MkdpSTqjzCHswF6DjTtTAdvYLyIaFtDKPiFHwwmESkLyvdB65RrnVOEVmS64c5y2q3KeJGnW9FDOc/s2omMZtqo5KVuLfAj+u3kjxj+DbEBRse2iMXXbtqABZasSL8BOlGmOc8jYlC9KFK/KOfLEJowS7JdRFaBp96PNlTEYKy68lEpCseuoL5o54VPHx4Q+xCfqkxeILyHcHtYzkcegc/XSgGLhGAqDXkKv4ZtCZh85p06Fi9pAQ/5WCxsf6Dp5IR8U1WkCl2COOTZZQ==
-Received: from DM6PR03CA0054.namprd03.prod.outlook.com (2603:10b6:5:100::31)
- by IA1PR12MB6067.namprd12.prod.outlook.com (2603:10b6:208:3ed::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
- 2023 06:33:52 +0000
-Received: from DM6NAM11FT056.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:100:cafe::fe) by DM6PR03CA0054.outlook.office365.com
- (2603:10b6:5:100::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.47 via Frontend
- Transport; Tue, 18 Apr 2023 06:33:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT056.mail.protection.outlook.com (10.13.173.99) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6319.20 via Frontend Transport; Tue, 18 Apr 2023 06:33:52 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 17 Apr 2023
- 23:33:43 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 17 Apr
- 2023 23:33:41 -0700
-Received: from msst-build.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Mon, 17 Apr 2023 23:33:40 -0700
-From:   Besar Wicaksono <bwicaksono@nvidia.com>
-To:     <suzuki.poulose@arm.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <mark.rutland@arm.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <treding@nvidia.com>, <jonathanh@nvidia.com>, <vsethi@nvidia.com>,
-        <rwiley@nvidia.com>, <efunsten@nvidia.com>,
-        "Besar Wicaksono" <bwicaksono@nvidia.com>
-Subject: [PATCH v2] perf: arm_cspmu: Separate Arm and vendor module
-Date:   Tue, 18 Apr 2023 01:20:30 -0500
-Message-ID: <20230418062030.45620-1-bwicaksono@nvidia.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 18 Apr 2023 02:22:18 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8E96E93;
+        Mon, 17 Apr 2023 23:21:52 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 71F05320095A;
+        Tue, 18 Apr 2023 02:21:46 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 18 Apr 2023 02:21:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1681798906; x=1681885306; bh=YT
+        A83JB8NZJ0cEtw5geG3dWiLcQH0r4iV18W0+fd9HQ=; b=7j8LPbe6kwjAN3vbit
+        veOsBwtLXEmetjTSRB3ZRSy6acPEpMIAyWSKzvA9BsNBBrUlxxJsJe2u79dY6ZLU
+        QAosfOdJHlIsy9twndZFnOUdzocQ88055EP6+F0i1T48JmT+8Wv/KhEsEsxW+vUm
+        lOgGAyC3wyrh+GB2iNLzcr8CCUMUs33JcqUidcJk+ded6nQa2eMXpkoW86SztTh4
+        UTiebyOXtcyP8P78MZS8mpcVyKO5GLx4OawBpX7nZs7W9WiIN77A1Jc2k6aQ80zX
+        i/PDp1MpoElyPEii3yRb8Z6gdI4nha3ljSElGkUHH3iWq4WWos8nEyV5X2U6lLIx
+        5C/Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681798906; x=1681885306; bh=YTA83JB8NZJ0c
+        Etw5geG3dWiLcQH0r4iV18W0+fd9HQ=; b=ev5PtLbM9gGh8iCgRRNgHueYAxEEQ
+        tS5uwEmqncZ1rsQp8h4JGI7wC6g8lFK4OBwpMqbjO/op8jZWGk5sLlC3F88zA0Bh
+        8dCCmX7AAySYnRXBWt5DXCDbkbreNjXZdSoH1MVFwV3Ifgvig0QEmMO30Enlc2oA
+        SMJ+FVnL2L0CuZjQsNavPkfqS0YeF4hN+Fv3Fh3XqnUyYAJwoaY5l1PSrQJeFy87
+        YP/Nem4aGSYge7MD4Zkemhvp4DEJK95dt8IoQ/3JCacVic1LLg3dA2GOVYLFVBD9
+        aiptO2l+B2F+tjt/PNGVtKJVu1l0+KTXdZBPCqM1bMxJuOr2161Iis9WQ==
+X-ME-Sender: <xms:-TY-ZKtLnRfxm0QdulcXmHBNdx3Z_NnccWv6ZQNrVotdkqofParMGQ>
+    <xme:-TY-ZPf1jrOENeWoqPQ2tB9X0Jz3r00WenkjkCu0e1YYXI_hA_KyCTkVNK72b5SyZ
+    4VW66Rn2T1eyw>
+X-ME-Received: <xmr:-TY-ZFz87s3y-k0OKUp79XL5gw3FS9WVp1-5GbeVWjllcHVNnPLlXsS30A6FXshTR9tfTBDqi6fXrNDbS8BBilKaeb6Vrd_1yYnuGw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeljedguddtlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
+    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
+    grhhdrtghomh
+X-ME-Proxy: <xmx:-TY-ZFOHLxedCocud62sRdy39vG3TP_uGtQXUwFfxZJtIGqJWyVXBQ>
+    <xmx:-TY-ZK_0mInvjfmi4TkDyGyMIpe2UjGUhagSOxdyfkdmAAUicHUd5w>
+    <xmx:-TY-ZNUEMNatTmS_ZHDubcAh1kO1weHyldo5UFgsjQUl4OtDJicV1g>
+    <xmx:-jY-ZL0QcjH5gd0HkypDCImFyboIJm9alm-WxqNdVxbySJOFoZK4lg>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 18 Apr 2023 02:21:44 -0400 (EDT)
+Date:   Tue, 18 Apr 2023 08:21:41 +0200
+From:   Greg KH <greg@kroah.com>
+To:     broonie@kernel.org
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Joerg Roedel <jroedel@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the driver-core tree with the iommu
+ tree
+Message-ID: <ZD429c4kpvU0AF9v@kroah.com>
+References: <20230417160920.3387706-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT056:EE_|IA1PR12MB6067:EE_
-X-MS-Office365-Filtering-Correlation-Id: 53e418b0-e130-4d1e-b4d9-08db3fd6e099
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UeBsVDWz9R1wgV3Xn7YnOzn0kGcu/i6SOFVWLfvEQu2hFgdEyeRXpqnCl8dFd4OvfCLCCBg8feRoaD0BeA4+6Rm+vqHzcUVDw1eMYWaRvLZtuRZWEOHSp2KQzWaHX5GVWYLP5kbVR+Lrtj8WTJraKdgPK0hWrF+IFnSkLDHOMJSqsH8ABpzW8uz2afxRBlJeGI/NAsKmjUw5QbK0A6ZTc2ZqdKK4D/vgb3fbRhyBRcGM7/kVGjKptVzKtXjB8jd9A/anv5DTvaixzsB/S6ziA8u++z/6JfXycAOO9gPfpHhXKGH6G7Kd6/T1Tz26rDnoCXVzU0YrbeYFoKmoOBSADS8jlLABEKiBtE0ObCs4atVGKi6cW9xyGvUEfO/P/zGXPPCWO9mBN2Tm2jVb82WaJEVlJnOwOrKx8XuSgZYbah/WoBw4+gH72s50WJEr167dXgZC5CvFSLHc5dQjpOzOqBdI+Ue6sx4G8gwdqTJkmPX5ErjGBLJvQ3cLxNMISPW+qLUjA8aF/h7Cd9L8KHA4kF2UsiunV+qcpgbP66SYxZ5c85jZ+6oxnhR8nhnoeYV2uBiD8a0pSsUsVxMKFXGEPl6xMB8XBAlIuXIrxovTC1kWaouMrJ0w2M5DG4xSWZ7uamrEek2oDr+6Tlqn+PqhmcrKp1NcowNVPRSC3vmDU5j3MyTHo6XZz9doJNcVwzzD9WlmHgV1FShpumMfQiPJh1J0A+Ufl6W71j3fJZK7yYG0npk/t2VCHnMTYQ0aEd0mPO0WOF7ioYi+KseUx81hX9TOidxJkW4fTyquFWGo6Jc=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(39860400002)(346002)(451199021)(46966006)(36840700001)(40470700004)(36756003)(4326008)(110136005)(54906003)(316002)(70586007)(70206006)(7696005)(478600001)(6666004)(41300700001)(5660300002)(82310400005)(8676002)(8936002)(40480700001)(30864003)(2906002)(34020700004)(82740400003)(86362001)(356005)(426003)(2616005)(336012)(107886003)(40460700003)(1076003)(26005)(186003)(36860700001)(47076005)(83380400001)(7636003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 06:33:52.5215
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53e418b0-e130-4d1e-b4d9-08db3fd6e099
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT056.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6067
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230417160920.3387706-1-broonie@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Arm Coresight PMU driver consists of main standard code and vendor
-backend code. Both are currently built as a single module.
-This patch adds vendor registration API to separate the two to
-keep things modular. Vendor module shall register to the main
-module on loading and trigger device reprobe.
+On Mon, Apr 17, 2023 at 05:09:20PM +0100, broonie@kernel.org wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the driver-core tree got a conflict in:
+> 
+>   include/linux/iommu.h
+> 
+> between commit:
+> 
+>   f7f9c054a227a ("iommu: Remove iommu_group_get_by_id()")
+> 
+> from the iommu tree and commit:
+> 
+>   b18d0a0f92a8f ("iommu: make the pointer to struct bus_type constant")
+> 
+> from the driver-core tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> diff --cc include/linux/iommu.h
+> index ad238d6e4677b,0fd4e6734d5b2..0000000000000
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@@ -455,11 -455,12 +455,11 @@@ static inline const struct iommu_ops *d
+>   	return dev->iommu->iommu_dev->ops;
+>   }
+>   
+> - extern int bus_iommu_probe(struct bus_type *bus);
+> - extern bool iommu_present(struct bus_type *bus);
+> + extern int bus_iommu_probe(const struct bus_type *bus);
+> + extern bool iommu_present(const struct bus_type *bus);
+>   extern bool device_iommu_capable(struct device *dev, enum iommu_cap cap);
+>   extern bool iommu_group_has_isolated_msi(struct iommu_group *group);
+> - extern struct iommu_domain *iommu_domain_alloc(struct bus_type *bus);
+> + extern struct iommu_domain *iommu_domain_alloc(const struct bus_type *bus);
+>  -extern struct iommu_group *iommu_group_get_by_id(int id);
+>   extern void iommu_domain_free(struct iommu_domain *domain);
+>   extern int iommu_attach_device(struct iommu_domain *domain,
+>   			       struct device *dev);
 
-Signed-off-by: Besar Wicaksono <bwicaksono@nvidia.com>
----
+Merge looks good to me, thanks!
 
-Changes from v1:
- * Added separate Kconfig entry for nvidia backend
- * Added lock to protect accesses to the lists
- * Added support for matching subset devices from a vendor
- * Added state tracking to avoid reprobe when a device is in use
-v1: ttps://lore.kernel.org/linux-arm-kernel/20230403163905.20354-1-bwicaksono@nvidia.com/T/#u
-
----
- drivers/perf/arm_cspmu/Kconfig        |   9 +-
- drivers/perf/arm_cspmu/Makefile       |   6 +-
- drivers/perf/arm_cspmu/arm_cspmu.c    | 280 +++++++++++++++++++++++---
- drivers/perf/arm_cspmu/arm_cspmu.h    |  32 ++-
- drivers/perf/arm_cspmu/nvidia_cspmu.c |  39 +++-
- drivers/perf/arm_cspmu/nvidia_cspmu.h |  17 --
- 6 files changed, 325 insertions(+), 58 deletions(-)
- delete mode 100644 drivers/perf/arm_cspmu/nvidia_cspmu.h
-
-diff --git a/drivers/perf/arm_cspmu/Kconfig b/drivers/perf/arm_cspmu/Kconfig
-index 0b316fe69a45..8ce7b45a0075 100644
---- a/drivers/perf/arm_cspmu/Kconfig
-+++ b/drivers/perf/arm_cspmu/Kconfig
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- #
--# Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-+# Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
- 
- config ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU
- 	tristate "ARM Coresight Architecture PMU"
-@@ -11,3 +11,10 @@ config ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU
- 	  based on ARM CoreSight PMU architecture. Note that this PMU
- 	  architecture does not have relationship with the ARM CoreSight
- 	  Self-Hosted Tracing.
-+
-+config NVIDIA_CORESIGHT_PMU_ARCH_SYSTEM_PMU
-+	tristate "NVIDIA Coresight Architecture PMU"
-+	depends on ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU
-+	help
-+	  Provides NVIDIA specific attributes for performance monitoring unit
-+	  (PMU) devices based on ARM CoreSight PMU architecture.
-diff --git a/drivers/perf/arm_cspmu/Makefile b/drivers/perf/arm_cspmu/Makefile
-index fedb17df982d..f8ae22411d59 100644
---- a/drivers/perf/arm_cspmu/Makefile
-+++ b/drivers/perf/arm_cspmu/Makefile
-@@ -1,6 +1,6 @@
--# Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-+# Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
- #
- # SPDX-License-Identifier: GPL-2.0
- 
--obj-$(CONFIG_ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU) += arm_cspmu_module.o
--arm_cspmu_module-y := arm_cspmu.o nvidia_cspmu.o
-+obj-$(CONFIG_ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU) += arm_cspmu.o
-+obj-$(CONFIG_NVIDIA_CORESIGHT_PMU_ARCH_SYSTEM_PMU) += nvidia_cspmu.o
-diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
-index e31302ab7e37..c55ea2b74454 100644
---- a/drivers/perf/arm_cspmu/arm_cspmu.c
-+++ b/drivers/perf/arm_cspmu/arm_cspmu.c
-@@ -16,7 +16,7 @@
-  * The user should refer to the vendor technical documentation to get details
-  * about the supported events.
-  *
-- * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-+ * Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-  *
-  */
- 
-@@ -25,13 +25,14 @@
- #include <linux/ctype.h>
- #include <linux/interrupt.h>
- #include <linux/io-64-nonatomic-lo-hi.h>
-+#include <linux/list.h>
- #include <linux/module.h>
-+#include <linux/mutex.h>
- #include <linux/perf_event.h>
- #include <linux/platform_device.h>
- #include <acpi/processor.h>
- 
- #include "arm_cspmu.h"
--#include "nvidia_cspmu.h"
- 
- #define PMUNAME "arm_cspmu"
- #define DRVNAME "arm-cs-arch-pmu"
-@@ -117,11 +118,52 @@
-  */
- #define HILOHI_MAX_POLL	1000
- 
--/* JEDEC-assigned JEP106 identification code */
--#define ARM_CSPMU_IMPL_ID_NVIDIA		0x36B
--
- static unsigned long arm_cspmu_cpuhp_state;
- 
-+/* List of Coresight PMU instances in the system. */
-+static LIST_HEAD(arm_cspmus);
-+
-+/* List of registered vendor backends. */
-+static LIST_HEAD(arm_cspmu_impls);
-+
-+static DEFINE_MUTEX(arm_cspmu_lock);
-+
-+/*
-+ * State of the generic driver.
-+ * 0 => registering backend.
-+ * 1 => ready to use.
-+ * 2 or more => in use.
-+ */
-+#define ARM_CSPMU_STATE_REG	0
-+#define ARM_CSPMU_STATE_READY	1
-+static atomic_t arm_cspmu_state;
-+
-+static void arm_cspmu_state_ready(void)
-+{
-+	atomic_set(&arm_cspmu_state, ARM_CSPMU_STATE_READY);
-+}
-+
-+static bool try_arm_cspmu_state_reg(void)
-+{
-+	const int old = ARM_CSPMU_STATE_READY;
-+	const int new = ARM_CSPMU_STATE_REG;
-+
-+	return atomic_cmpxchg(&arm_cspmu_state, old, new) == old;
-+}
-+
-+static bool try_arm_cspmu_state_get(void)
-+{
-+	return atomic_inc_not_zero(&arm_cspmu_state);
-+}
-+
-+static void arm_cspmu_state_put(void)
-+{
-+	int ret;
-+
-+	ret = atomic_dec_if_positive(&arm_cspmu_state);
-+	WARN_ON(ret < 0);
-+}
-+
- /*
-  * In CoreSight PMU architecture, all of the MMIO registers are 32-bit except
-  * counter register. The counter register can be implemented as 32-bit or 64-bit
-@@ -380,26 +422,161 @@ static struct attribute_group arm_cspmu_cpumask_attr_group = {
- };
- 
- struct impl_match {
--	u32 pmiidr;
--	u32 mask;
--	int (*impl_init_ops)(struct arm_cspmu *cspmu);
-+	struct list_head next;
-+	struct arm_cspmu_impl_param param;
- };
- 
--static const struct impl_match impl_match[] = {
--	{
--	  .pmiidr = ARM_CSPMU_IMPL_ID_NVIDIA,
--	  .mask = ARM_CSPMU_PMIIDR_IMPLEMENTER,
--	  .impl_init_ops = nv_cspmu_init_ops
--	},
--	{}
--};
-+static struct arm_cspmu_impl_param to_impl_param(const struct arm_cspmu *cspmu)
-+{
-+	struct arm_cspmu_impl_param ret = {0};
-+	u32 pmiidr = cspmu->impl.pmiidr;
-+
-+	ret.impl_id = FIELD_GET(ARM_CSPMU_PMIIDR_IMPLEMENTER, pmiidr);
-+	ret.pvr = FIELD_GET(ARM_CSPMU_PMIIDR_PVR, pmiidr);
-+	ret.pvr_mask = GENMASK(31, 0);
-+
-+	return ret;
-+}
-+
-+static bool impl_param_match(const struct arm_cspmu_impl_param *A,
-+			     const struct arm_cspmu_impl_param *B)
-+{
-+	/*
-+	 * Match criteria:
-+	 * - Implementer id should match.
-+	 * - A's device id is within B's range, or vice versa. This allows
-+	 *   vendor to register backend for a range of devices.
-+	 */
-+	if ((A->impl_id == B->impl_id) &&
-+	    (((A->pvr & A->pvr_mask) == (B->pvr & A->pvr_mask)) ||
-+	     ((A->pvr & B->pvr_mask) == (B->pvr & B->pvr_mask))))
-+		return true;
-+
-+	return false;
-+}
-+
-+static struct impl_match *impl_match_find(
-+	const struct arm_cspmu_impl_param *impl_param)
-+{
-+	struct impl_match *impl_match;
-+
-+	list_for_each_entry(impl_match, &arm_cspmu_impls, next) {
-+		if (impl_param_match(impl_param, &impl_match->param))
-+			return impl_match;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int arm_cspmu_impl_reprobe(
-+	const struct arm_cspmu_impl_param *impl_param)
-+{
-+	struct arm_cspmu *cspmu, *temp;
-+	LIST_HEAD(reprobe_list);
-+	int ret = 0;
-+
-+	mutex_lock(&arm_cspmu_lock);
-+
-+	/* Move the matching devices to temp list to avoid recursive lock. */
-+	list_for_each_entry_safe(cspmu, temp, &arm_cspmus, next) {
-+		struct arm_cspmu_impl_param match_param = to_impl_param(cspmu);
-+
-+		if (impl_param_match(impl_param, &match_param))
-+			list_move(&cspmu->next, &reprobe_list);
-+	}
-+
-+	mutex_unlock(&arm_cspmu_lock);
-+
-+	/* Reprobe the devices. */
-+	list_for_each_entry_safe(cspmu, temp, &reprobe_list, next) {
-+		ret = device_reprobe(cspmu->dev);
-+		if (ret) {
-+			pr_err("arm_cspmu fail reprobe err: %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+int arm_cspmu_impl_register(const struct arm_cspmu_impl_param *impl_param)
-+{
-+	struct impl_match *match;
-+	int ret = 0;
-+
-+	if (!try_arm_cspmu_state_reg()) {
-+		pr_err("arm_cspmu reg failed, device(s) is in use\n");
-+		return -EBUSY;
-+	}
-+
-+	mutex_lock(&arm_cspmu_lock);
-+
-+	match = impl_match_find(impl_param);
-+	if (match) {
-+		pr_err("arm_cspmu reg failed, impl: 0x%x, pvr: 0x%x, pvr_mask: 0x%x already exists\n",
-+			match->param.impl_id, match->param.pvr,
-+			match->param.pvr_mask);
-+		mutex_unlock(&arm_cspmu_lock);
-+		arm_cspmu_state_ready();
-+		return -EINVAL;
-+	}
-+
-+	match = kzalloc(sizeof(struct impl_match), GFP_KERNEL);
-+	if (!match) {
-+		mutex_unlock(&arm_cspmu_lock);
-+		arm_cspmu_state_ready();
-+		return -ENOMEM;
-+	}
-+
-+	memcpy(&match->param, impl_param, sizeof(match->param));
-+	list_add(&match->next, &arm_cspmu_impls);
-+
-+	mutex_unlock(&arm_cspmu_lock);
-+
-+	/* Replace generic backend with vendor implementation. */
-+	ret = arm_cspmu_impl_reprobe(impl_param);
-+
-+	if (ret)
-+		arm_cspmu_impl_unregister(impl_param);
-+
-+	arm_cspmu_state_ready();
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(arm_cspmu_impl_register);
-+
-+void arm_cspmu_impl_unregister(const struct arm_cspmu_impl_param *impl_param)
-+{
-+	struct impl_match *match;
-+
-+	mutex_lock(&arm_cspmu_lock);
-+
-+	match = impl_match_find(impl_param);
-+	if (!match) {
-+		pr_err("arm_cspmu unreg failed, unable to find impl: 0x%x, pvr: 0x%x, pvr_mask: 0x%x\n",
-+			impl_param->impl_id, impl_param->pvr,
-+			impl_param->pvr_mask);
-+		mutex_unlock(&arm_cspmu_lock);
-+		return;
-+	}
-+
-+	list_del(&match->next);
-+	kfree(match);
-+
-+	mutex_unlock(&arm_cspmu_lock);
-+
-+	/* Re-attach devices to standard driver. */
-+	arm_cspmu_impl_reprobe(impl_param);
-+}
-+EXPORT_SYMBOL_GPL(arm_cspmu_impl_unregister);
- 
- static int arm_cspmu_init_impl_ops(struct arm_cspmu *cspmu)
- {
--	int ret;
-+	int ret = 0;
- 	struct acpi_apmt_node *apmt_node = cspmu->apmt_node;
- 	struct arm_cspmu_impl_ops *impl_ops = &cspmu->impl.ops;
--	const struct impl_match *match = impl_match;
-+	struct arm_cspmu_impl_param match_param = {0};
-+	const struct impl_match *match;
- 
- 	/*
- 	 * Get PMU implementer and product id from APMT node.
-@@ -410,19 +587,23 @@ static int arm_cspmu_init_impl_ops(struct arm_cspmu *cspmu)
- 		(apmt_node->impl_id) ? apmt_node->impl_id :
- 				       readl(cspmu->base0 + PMIIDR);
- 
--	/* Find implementer specific attribute ops. */
--	for (; match->pmiidr; match++) {
--		const u32 mask = match->mask;
-+	cspmu->impl.module = THIS_MODULE;
- 
--		if ((match->pmiidr & mask) == (cspmu->impl.pmiidr & mask)) {
--			ret = match->impl_init_ops(cspmu);
--			if (ret)
--				return ret;
-+	mutex_lock(&arm_cspmu_lock);
- 
--			break;
--		}
-+	/* Find implementer specific attribute ops. */
-+	match_param = to_impl_param(cspmu);
-+	match = impl_match_find(&match_param);
-+	if (match) {
-+		cspmu->impl.module = match->param.module;
-+		ret = match->param.impl_init_ops(cspmu);
- 	}
- 
-+	mutex_unlock(&arm_cspmu_lock);
-+
-+	if (ret)
-+		return ret;
-+
- 	/* Use default callbacks if implementer doesn't provide one. */
- 	CHECK_DEFAULT_IMPL_OPS(impl_ops, get_event_attrs);
- 	CHECK_DEFAULT_IMPL_OPS(impl_ops, get_format_attrs);
-@@ -639,6 +820,11 @@ static int arm_cspmu_event_init(struct perf_event *event)
- 	struct arm_cspmu *cspmu;
- 	struct hw_perf_event *hwc = &event->hw;
- 
-+	if (!try_arm_cspmu_state_get()) {
-+		pr_err("arm_cspmu event_init fail: driver is reprobing\n");
-+		return -EBUSY;
-+	}
-+
- 	cspmu = to_arm_cspmu(event->pmu);
- 
- 	/*
-@@ -648,12 +834,14 @@ static int arm_cspmu_event_init(struct perf_event *event)
- 	if (is_sampling_event(event)) {
- 		dev_dbg(cspmu->pmu.dev,
- 			"Can't support sampling events\n");
-+		arm_cspmu_state_put();
- 		return -EOPNOTSUPP;
- 	}
- 
- 	if (event->cpu < 0 || event->attach_state & PERF_ATTACH_TASK) {
- 		dev_dbg(cspmu->pmu.dev,
- 			"Can't support per-task counters\n");
-+		arm_cspmu_state_put();
- 		return -EINVAL;
- 	}
- 
-@@ -664,16 +852,21 @@ static int arm_cspmu_event_init(struct perf_event *event)
- 	if (!cpumask_test_cpu(event->cpu, &cspmu->associated_cpus)) {
- 		dev_dbg(cspmu->pmu.dev,
- 			"Requested cpu is not associated with the PMU\n");
-+		arm_cspmu_state_put();
- 		return -EINVAL;
- 	}
- 
- 	/* Enforce the current active CPU to handle the events in this PMU. */
- 	event->cpu = cpumask_first(&cspmu->active_cpu);
--	if (event->cpu >= nr_cpu_ids)
-+	if (event->cpu >= nr_cpu_ids) {
-+		arm_cspmu_state_put();
- 		return -EINVAL;
-+	}
- 
--	if (!arm_cspmu_validate_group(event))
-+	if (!arm_cspmu_validate_group(event)) {
-+		arm_cspmu_state_put();
- 		return -EINVAL;
-+	}
- 
- 	/*
- 	 * The logical counter id is tracked with hw_perf_event.extra_reg.idx.
-@@ -686,6 +879,8 @@ static int arm_cspmu_event_init(struct perf_event *event)
- 	hwc->extra_reg.idx = -1;
- 	hwc->config = cspmu->impl.ops.event_type(event);
- 
-+	arm_cspmu_state_put();
-+
- 	return 0;
- }
- 
-@@ -864,13 +1059,22 @@ static int arm_cspmu_add(struct perf_event *event, int flags)
- 	struct hw_perf_event *hwc = &event->hw;
- 	int idx;
- 
-+	if (!try_arm_cspmu_state_get()) {
-+		pr_err("arm_cspmu event_init fail: driver is reprobing\n");
-+		return -EBUSY;
-+	}
-+
- 	if (WARN_ON_ONCE(!cpumask_test_cpu(smp_processor_id(),
--					   &cspmu->associated_cpus)))
-+					   &cspmu->associated_cpus))) {
-+		arm_cspmu_state_put();
- 		return -ENOENT;
-+	}
- 
- 	idx = arm_cspmu_get_event_idx(hw_events, event);
--	if (idx < 0)
-+	if (idx < 0) {
-+		arm_cspmu_state_put();
- 		return idx;
-+	}
- 
- 	hw_events->events[idx] = event;
- 	hwc->idx = to_phys_idx(cspmu, idx);
-@@ -900,6 +1104,8 @@ static void arm_cspmu_del(struct perf_event *event, int flags)
- 	clear_bit(idx, hw_events->used_ctrs);
- 
- 	perf_event_update_userpage(event);
-+
-+	arm_cspmu_state_put();
- }
- 
- static void arm_cspmu_read(struct perf_event *event)
-@@ -1154,7 +1360,7 @@ static int arm_cspmu_register_pmu(struct arm_cspmu *cspmu)
- 
- 	cspmu->pmu = (struct pmu){
- 		.task_ctx_nr	= perf_invalid_context,
--		.module		= THIS_MODULE,
-+		.module		= cspmu->impl.module,
- 		.pmu_enable	= arm_cspmu_enable,
- 		.pmu_disable	= arm_cspmu_disable,
- 		.event_init	= arm_cspmu_event_init,
-@@ -1205,6 +1411,10 @@ static int arm_cspmu_device_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	mutex_lock(&arm_cspmu_lock);
-+	list_add(&cspmu->next, &arm_cspmus);
-+	mutex_unlock(&arm_cspmu_lock);
-+
- 	return 0;
- }
- 
-@@ -1212,6 +1422,10 @@ static int arm_cspmu_device_remove(struct platform_device *pdev)
- {
- 	struct arm_cspmu *cspmu = platform_get_drvdata(pdev);
- 
-+	mutex_lock(&arm_cspmu_lock);
-+	list_del(&cspmu->next);
-+	mutex_unlock(&arm_cspmu_lock);
-+
- 	perf_pmu_unregister(&cspmu->pmu);
- 	cpuhp_state_remove_instance(arm_cspmu_cpuhp_state, &cspmu->cpuhp_node);
- 
-@@ -1281,6 +1495,8 @@ static int __init arm_cspmu_init(void)
- {
- 	int ret;
- 
-+	arm_cspmu_state_ready();
-+
- 	ret = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN,
- 					"perf/arm/cspmu:online",
- 					arm_cspmu_cpu_online,
-diff --git a/drivers/perf/arm_cspmu/arm_cspmu.h b/drivers/perf/arm_cspmu/arm_cspmu.h
-index 51323b175a4a..cf3458d9fc63 100644
---- a/drivers/perf/arm_cspmu/arm_cspmu.h
-+++ b/drivers/perf/arm_cspmu/arm_cspmu.h
-@@ -1,7 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0
-  *
-  * ARM CoreSight Architecture PMU driver.
-- * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-+ * Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-  *
-  */
- 
-@@ -68,7 +68,10 @@
- 
- /* PMIIDR register field */
- #define ARM_CSPMU_PMIIDR_IMPLEMENTER	GENMASK(11, 0)
-+#define ARM_CSPMU_PMIIDR_REVISION	GENMASK(15, 12)
-+#define ARM_CSPMU_PMIIDR_VARIANT	GENMASK(19, 16)
- #define ARM_CSPMU_PMIIDR_PRODUCTID	GENMASK(31, 20)
-+#define ARM_CSPMU_PMIIDR_PVR		GENMASK(31, 12)
- 
- struct arm_cspmu;
- 
-@@ -107,15 +110,36 @@ struct arm_cspmu_impl_ops {
- 					 struct attribute *attr, int unused);
- };
- 
-+/* Vendor/implementer registration parameter. */
-+struct arm_cspmu_impl_param {
-+	/* JEDEC assigned implementer id of the vendor. */
-+	u32 impl_id;
-+	/*
-+	 * The pvr value and mask describes the device ids covered by the
-+	 * vendor backend. pvr contains the pattern of acceptable product,
-+	 * variant, and revision bits from device's PMIIDR. pvr_mask contains
-+	 * the relevant bits when comparing pvr. 0 value on the mask means any
-+	 * pvr value is supported.
-+	 */
-+	u32 pvr;
-+	u32 pvr_mask;
-+	/* Backend module. */
-+	struct module *module;
-+	/* Callback to vendor backend to init arm_cspmu_impl::ops. */
-+	int (*impl_init_ops)(struct arm_cspmu *cspmu);
-+};
-+
- /* Vendor/implementer descriptor. */
- struct arm_cspmu_impl {
- 	u32 pmiidr;
- 	struct arm_cspmu_impl_ops ops;
-+	struct module *module;
- 	void *ctx;
- };
- 
- /* Coresight PMU descriptor. */
- struct arm_cspmu {
-+	struct list_head next;
- 	struct pmu pmu;
- 	struct device *dev;
- 	struct acpi_apmt_node *apmt_node;
-@@ -148,4 +172,10 @@ ssize_t arm_cspmu_sysfs_format_show(struct device *dev,
- 				    struct device_attribute *attr,
- 				    char *buf);
- 
-+/* Register vendor backend. */
-+int arm_cspmu_impl_register(const struct arm_cspmu_impl_param *impl_param);
-+
-+/* Unregister vendor backend. */
-+void arm_cspmu_impl_unregister(const struct arm_cspmu_impl_param *impl_param);
-+
- #endif /* __ARM_CSPMU_H__ */
-diff --git a/drivers/perf/arm_cspmu/nvidia_cspmu.c b/drivers/perf/arm_cspmu/nvidia_cspmu.c
-index 72ef80caa3c8..c179849ca893 100644
---- a/drivers/perf/arm_cspmu/nvidia_cspmu.c
-+++ b/drivers/perf/arm_cspmu/nvidia_cspmu.c
-@@ -1,14 +1,18 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-+ * Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-  *
-  */
- 
- /* Support for NVIDIA specific attributes. */
- 
-+#include <linux/module.h>
- #include <linux/topology.h>
- 
--#include "nvidia_cspmu.h"
-+#include "arm_cspmu.h"
-+
-+/* JEDEC-assigned JEP106 identification code */
-+#define ARM_CSPMU_IMPL_ID_NVIDIA     0x36B
- 
- #define NV_PCIE_PORT_COUNT           10ULL
- #define NV_PCIE_FILTER_ID_MASK       GENMASK_ULL(NV_PCIE_PORT_COUNT - 1, 0)
-@@ -351,7 +355,7 @@ static char *nv_cspmu_format_name(const struct arm_cspmu *cspmu,
- 	return name;
- }
- 
--int nv_cspmu_init_ops(struct arm_cspmu *cspmu)
-+static int nv_cspmu_init_ops(struct arm_cspmu *cspmu)
- {
- 	u32 prodid;
- 	struct nv_cspmu_ctx *ctx;
-@@ -395,6 +399,33 @@ int nv_cspmu_init_ops(struct arm_cspmu *cspmu)
- 
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(nv_cspmu_init_ops);
-+
-+/* Match all NVIDIA Coresight PMU devices */
-+static const struct arm_cspmu_impl_param nv_cspmu_param = {
-+	.module		= THIS_MODULE,
-+	.impl_id	= ARM_CSPMU_IMPL_ID_NVIDIA,
-+	.pvr		= 0,
-+	.pvr_mask	= 0,
-+	.impl_init_ops	= nv_cspmu_init_ops
-+};
-+
-+static int __init nvidia_cspmu_init(void)
-+{
-+	int ret;
-+
-+	ret = arm_cspmu_impl_register(&nv_cspmu_param);
-+	if (ret)
-+		pr_err("nvidia_cspmu backend registration error: %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static void __exit nvidia_cspmu_exit(void)
-+{
-+	arm_cspmu_impl_unregister(&nv_cspmu_param);
-+}
-+
-+module_init(nvidia_cspmu_init);
-+module_exit(nvidia_cspmu_exit);
- 
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/perf/arm_cspmu/nvidia_cspmu.h b/drivers/perf/arm_cspmu/nvidia_cspmu.h
-deleted file mode 100644
-index 71e18f0dc50b..000000000000
---- a/drivers/perf/arm_cspmu/nvidia_cspmu.h
-+++ /dev/null
-@@ -1,17 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0
-- *
-- * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-- *
-- */
--
--/* Support for NVIDIA specific attributes. */
--
--#ifndef __NVIDIA_CSPMU_H__
--#define __NVIDIA_CSPMU_H__
--
--#include "arm_cspmu.h"
--
--/* Allocate NVIDIA descriptor. */
--int nv_cspmu_init_ops(struct arm_cspmu *cspmu);
--
--#endif /* __NVIDIA_CSPMU_H__ */
-
-base-commit: 73f2c2a7e1d2b31fdd5faa6dfa151c437a6c0a5a
-prerequisite-patch-id: fb691dc01d87597bcbaa4d352073304287c20f73
--- 
-2.17.1
-
+greg k-h
