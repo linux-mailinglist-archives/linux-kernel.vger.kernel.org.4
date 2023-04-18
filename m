@@ -2,107 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CDE6E6E22
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0EF6E6E24
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232854AbjDRV0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
+        id S230153AbjDRV1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjDRV0o (ORCPT
+        with ESMTP id S231352AbjDRV1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:26:44 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E139779
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:26:43 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-7606d7ca422so20050939f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:26:43 -0700 (PDT)
+        Tue, 18 Apr 2023 17:27:38 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94309B47A;
+        Tue, 18 Apr 2023 14:27:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1681853202; x=1684445202;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5aYlPNSrwMSPih/Iug9fotKivvMNK1l/gBB6zZEMqg4=;
-        b=Au3zxZZMxkQk6R2qMv5e7MPRGJ47vJZO6YOb782cgLRSFq+BNkL+MoybuAfq1oXcDW
-         zJE4BD33vPL24PipOOhLxaxKrO8RId3XgIJ4cYV+W5d4WNjekbJmBMdkC9ciWLm0Gdk4
-         rKuYnI06M5kEfCJCCXcLZu2kmEDNj5XmPWKUU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681853202; x=1684445202;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5aYlPNSrwMSPih/Iug9fotKivvMNK1l/gBB6zZEMqg4=;
-        b=KVVe5e8JJ2+Z6BnQ2KQZIIbXUq+d442wqe+DNrA1m3mfhVfvitZ+O6QKEhaS3colck
-         9diiQgz650pxkCXmVFKr/m5UtnE6aM1o4zqri8rZEVAGYw0ycct3QV+yVwcowDQSdBLX
-         HuhidGzzgTj18/3FwvoXqI2zHHi0R4rgZzBbf4Me9TmrOk2FBTtKYz/yDqwDTNIcKUGf
-         i/I0vZx2FCkO5xU5SMIsxcqxfsYAwM9bf7DXm7htKno3nM+K70514HrskwcVbjob+9DW
-         +C+GwDNZOEorU8KbzirwpUJ+dlFna+Yxy+CZ0tP0vqgRPv+tl4NHnVLcEMNqmBsrMU5+
-         3lOw==
-X-Gm-Message-State: AAQBX9fPUgVpgRboNsG8gOB+A6UF06f0B6yzFflHpRLf+EdNt5L3Ic69
-        TmXIKVO4HwM99H/kDWbZdTKmpg==
-X-Google-Smtp-Source: AKy350ZzaX/hCp9X1YLLSj5lTWXJAeuU0i2KxZICu/wiYEz9CT5zgQxUN0cq+h/za6i6gq+ShyOmUA==
-X-Received: by 2002:a92:c5b0:0:b0:32a:d06a:356e with SMTP id r16-20020a92c5b0000000b0032ad06a356emr7351486ilt.1.1681853202546;
-        Tue, 18 Apr 2023 14:26:42 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id az30-20020a056638419e00b0040f9ed959e3sm2551448jab.13.2023.04.18.14.26.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 14:26:42 -0700 (PDT)
-Message-ID: <deb9c419-bf63-f1b4-1714-5ab31d3a0db6@linuxfoundation.org>
-Date:   Tue, 18 Apr 2023 15:26:41 -0600
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1681853240; x=1713389240;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=mPAtd9FvdcYW8PHV7v552N7qJEi+dhgg4FhQAL2516s=;
+  b=hq8XU58WPNuz49sgV9Y401qAq5hPSwC2sWFqD+KwVMzq/AgVAuCxhE3m
+   o0ySnDFc/a1qMCuNcXdffGHLVm4BN3fMjbOJaCirJvvSqsFg7lYax9dva
+   zd5sftnlyWDLjMwHR6lgS3XhSWSJaaOo8wbHU5LoTejljX6FL8yx9tyCi
+   w=;
+X-IronPort-AV: E=Sophos;i="5.99,207,1677542400"; 
+   d="scan'208";a="321952178"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-366646a6.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 21:27:16 +0000
+Received: from EX19MTAUWC001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-m6i4x-366646a6.us-east-1.amazon.com (Postfix) with ESMTPS id 52C54A80F9;
+        Tue, 18 Apr 2023 21:27:15 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Tue, 18 Apr 2023 21:27:01 +0000
+Received: from 88665a182662.ant.amazon.com (10.106.101.27) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 18 Apr 2023 21:26:59 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <bspencer@blackberry.com>
+CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <kuniyu@amazon.com>
+Subject: Re: netlink getsockopt() sets only one byte?
+Date:   Tue, 18 Apr 2023 14:26:51 -0700
+Message-ID: <20230418212651.10035-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <ZD7VkNWFfp22kTDt@datsun.rim.net>
+References: <ZD7VkNWFfp22kTDt@datsun.rim.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 5.15 00/91] 5.15.108-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230418120305.520719816@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230418120305.520719816@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.106.101.27]
+X-ClientProxiedBy: EX19D042UWB001.ant.amazon.com (10.13.139.160) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/18/23 06:21, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.108 release.
-> There are 91 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+From:   Brad Spencer <bspencer@blackberry.com>
+Date:   Tue, 18 Apr 2023 14:38:24 -0300
+> Calling getsockopt() on a netlink socket with SOL_NETLINK options that
+> use type int only sets the first byte of the int value but returns an
+> optlen equal to sizeof(int), at least on x86_64.
 > 
-> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
-> Anything received after that time might be too late.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.108-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
+> The detailed description:
 > 
-> thanks,
-> 
-> greg k-h
-> 
+> It looks like netlink_getsockopt() calls put_user() with a char*
+> pointer, and I think that causes it to copy only one byte from the val
+> result, despite len being sizeof(int).
 
-Compiled and booted on my test system. No dmesg regressions.
+Right, we need to use copy_to_user() like udp_lib_getsockopt()
+or cast optval as done in NETLINK_LIST_MEMBERSHIPS.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+---8<---
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index 1db4742e443d..780f3e6496be 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -1742,7 +1742,7 @@ static int netlink_getsockopt(struct socket *sock, int level, int optname,
+ {
+ 	struct sock *sk = sock->sk;
+ 	struct netlink_sock *nlk = nlk_sk(sk);
+-	int len, val, err;
++	int len, val, err = 0;
+ 
+ 	if (level != SOL_NETLINK)
+ 		return -ENOPROTOOPT;
+@@ -1753,35 +1753,23 @@ static int netlink_getsockopt(struct socket *sock, int level, int optname,
+ 		return -EINVAL;
+ 
+ 	switch (optname) {
+-	case NETLINK_PKTINFO:
++	case NETLINK_LIST_MEMBERSHIPS:
++		break;
++	default:
+ 		if (len < sizeof(int))
+ 			return -EINVAL;
+ 		len = sizeof(int);
++	}
++
++	switch (optname) {
++	case NETLINK_PKTINFO:
+ 		val = nlk->flags & NETLINK_F_RECV_PKTINFO ? 1 : 0;
+-		if (put_user(len, optlen) ||
+-		    put_user(val, optval))
+-			return -EFAULT;
+-		err = 0;
+ 		break;
+ 	case NETLINK_BROADCAST_ERROR:
+-		if (len < sizeof(int))
+-			return -EINVAL;
+-		len = sizeof(int);
+ 		val = nlk->flags & NETLINK_F_BROADCAST_SEND_ERROR ? 1 : 0;
+-		if (put_user(len, optlen) ||
+-		    put_user(val, optval))
+-			return -EFAULT;
+-		err = 0;
+ 		break;
+ 	case NETLINK_NO_ENOBUFS:
+-		if (len < sizeof(int))
+-			return -EINVAL;
+-		len = sizeof(int);
+ 		val = nlk->flags & NETLINK_F_RECV_NO_ENOBUFS ? 1 : 0;
+-		if (put_user(len, optlen) ||
+-		    put_user(val, optval))
+-			return -EFAULT;
+-		err = 0;
+ 		break;
+ 	case NETLINK_LIST_MEMBERSHIPS: {
+ 		int pos, idx, shift;
+@@ -1796,6 +1784,7 @@ static int netlink_getsockopt(struct socket *sock, int level, int optname,
+ 			shift = (pos % sizeof(unsigned long)) * 8;
+ 			if (put_user((u32)(nlk->groups[idx] >> shift),
+ 				     (u32 __user *)(optval + pos))) {
++				netlink_unlock_table();
+ 				err = -EFAULT;
+ 				break;
+ 			}
+@@ -1803,39 +1792,25 @@ static int netlink_getsockopt(struct socket *sock, int level, int optname,
+ 		if (put_user(ALIGN(nlk->ngroups / 8, sizeof(u32)), optlen))
+ 			err = -EFAULT;
+ 		netlink_unlock_table();
+-		break;
++		return err;
+ 	}
+ 	case NETLINK_CAP_ACK:
+-		if (len < sizeof(int))
+-			return -EINVAL;
+-		len = sizeof(int);
+ 		val = nlk->flags & NETLINK_F_CAP_ACK ? 1 : 0;
+-		if (put_user(len, optlen) ||
+-		    put_user(val, optval))
+-			return -EFAULT;
+-		err = 0;
+ 		break;
+ 	case NETLINK_EXT_ACK:
+-		if (len < sizeof(int))
+-			return -EINVAL;
+-		len = sizeof(int);
+ 		val = nlk->flags & NETLINK_F_EXT_ACK ? 1 : 0;
+-		if (put_user(len, optlen) || put_user(val, optval))
+-			return -EFAULT;
+-		err = 0;
+ 		break;
+ 	case NETLINK_GET_STRICT_CHK:
+-		if (len < sizeof(int))
+-			return -EINVAL;
+-		len = sizeof(int);
+ 		val = nlk->flags & NETLINK_F_STRICT_CHK ? 1 : 0;
+-		if (put_user(len, optlen) || put_user(val, optval))
+-			return -EFAULT;
+-		err = 0;
+ 		break;
+ 	default:
+-		err = -ENOPROTOOPT;
++		return -ENOPROTOOPT;
+ 	}
++
++	if (put_user(len, optlen) ||
++	    copy_to_user(optval, &val, len))
++		return -EFAULT;
++
+ 	return err;
+ }
+ 
+---8<---
 
-Note - I didn't see any build errors.
 
-thanks,
--- Shuah
+> 
+> Is this the expected behaviour?  The returned size is 4, after all,
+> and other int-sized socket options (outside of netlink) like
+> SO_REUSEADDR set all bytes of the int.
+> 
+> Programs that do not expect this behaviour and do not initialize the
+> value to some known bit pattern are likely to misinterpret the result,
+> especially when checking to see if the value is or isn't zero.
+> 
+> Attached is a short program that demonstrates the issue on Arch Linux
+> with the 6.3.0-rc6 mainline kernel on x86_64, and also with the same
+> Arch Linux userland on 6.2.10-arch1-1.  I've seen the same behaviour
+> on older Debian and Ubuntu kernels.
+> 
+>     gcc -Wall -o prog prog.c
+>     
+> Show only the first byte being written to when the setting is `0`:
+> 
+>     $ ./progboot
+>     SOL_SOCKET SO_REUSEADDR:
+>     size=4 value=0x0
+>     SOL_NETLINK NETLINK_NO_ENOBUFS:
+>     size=4 value=0xdeadbe00
+>     prog: prog.c:39: tryOption: Assertion `value == 0' failed.
+>     Aborted (core dumped)
+> 
+> Workaround by initializing to zero:
+> 
+>     $ ./prog workaround
+>     SOL_SOCKET SO_REUSEADDR:
+>     size=4 value=0x0
+>     SOL_NETLINK NETLINK_NO_ENOBUFS:
+>     size=4 value=0x0
+> 
+> Show only the first byte being written to when the setting is `1`:
+> 
+>     $ SET_FIRST=yes ./prog
+>     SOL_SOCKET SO_REUSEADDR:
+>     size=4 value=0x1
+>     SOL_NETLINK NETLINK_NO_ENOBUFS:
+>     size=4 value=0xdeadbe01
+>     prog: prog.c:35: tryOption: Assertion `value == 1' failed.
+>     Aborted (core dumped)
+> 
+> Workaround by initializing to zero:
+> 
+>     $ SET_FIRST=yes ./prog workaround
+>     SOL_SOCKET SO_REUSEADDR:
+>     size=4 value=0x1
+>     SOL_NETLINK NETLINK_NO_ENOBUFS:
+>     size=4 value=0x1
+> 
+> 
+> Demonstration program:
+> 
+> #include <asm/types.h>
+> #include <assert.h>
+> #include <linux/netlink.h>
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <sys/socket.h>
+> #include <sys/socket.h>
+> #include <unistd.h>
+> 
+> static void tryOption(const int fd,
+>                       const int level,
+>                       const int optname,
+>                       const int workaround,
+>                       const int setFirst)
+> {
+>   assert(fd != -1);
+>   
+>   // Setting it to 1 gives similar results.
+>   if(setFirst)
+>   {
+>     int value = 1;
+>     assert(!setsockopt(fd, level, optname, &value, sizeof(value)));
+>   }
+> 
+>   // Get the option.
+>   {
+>     int value = workaround ? 0 : 0xdeadbeef;
+>     socklen_t size = sizeof(value);
+> 
+>     // Only the first byte of `value` is written to!
+>     assert(!getsockopt(fd, level, optname, &value, &size));
+>     printf("size=%u value=0x%x\n", size, value);
+>     if(setFirst)
+>     {
+>       assert(value == 1);
+>     }
+>     else
+>     {
+>       assert(value == 0);
+>     }
+> 
+>     // But it always reports a 4 byte option size.
+>     assert(size == sizeof(int));
+>   }
+> 
+>   close(fd);
+> }
+> 
+> int
+> main(int argc, char** argv)
+> {
+>   // If any argument is supplied, apply a workaround.
+>   const int workaround = argc > 1;
+> 
+>   // If $SET_FIRST is set to anything, set the option to 1 first.
+>   const int setFirst = getenv("SET_FIRST") != NULL;
+> 
+>   // Other int options set all bytes of the int.
+>   printf("SOL_SOCKET SO_REUSEADDR:\n");
+>   tryOption(
+>     socket(AF_INET, SOCK_STREAM, 0),
+>     SOL_SOCKET,
+>     SO_REUSEADDR,
+>     workaround,
+>     setFirst);
+> 
+>   // Netlink int socket options do not set all bytes of the int.
+>   printf("SOL_NETLINK NETLINK_NO_ENOBUFS:\n");
+>   tryOption(
+>     socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE),
+>     SOL_NETLINK,
+>     NETLINK_NO_ENOBUFS,
+>     workaround,
+>     setFirst);
+> }
