@@ -2,149 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210826E69BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA146E69C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbjDRQmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 12:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        id S232394AbjDRQmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 12:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjDRQmF (ORCPT
+        with ESMTP id S232185AbjDRQm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 12:42:05 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2F35FD2;
-        Tue, 18 Apr 2023 09:42:04 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-517bdc9e81dso1023966a12.1;
-        Tue, 18 Apr 2023 09:42:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681836124; x=1684428124;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DBjYteFlARZI3kpDkoIEAMndmdFS6IARwATkjleA/Es=;
-        b=JIG4s2/Hoz7mreVcQSsElvHacUy2Z3ED/XO7zoHI+ged7p3//5YqorUh5OBG99ioWI
-         fp7Px+9ZoAV5VRQ9vVQc7AoL/QPWmX/4RC16l29E4CoMSQwzSTy483z9Wkc1KHrguw1g
-         dQ4V8yhvMerKCokRhUuS2Ys0KcCZ8NEbqnBSqnwCCTrDPNqVOuraHOoAstBMcEgLfJUV
-         ZsT5FPg/zySNjh4Kf35grdglzNJhd90uDq289EvTKyLIQ/xzKPkdNhfLncrPq6O2TnK3
-         4NK9n90BlXKQsIU7Jy1G7YfOqdSNOr2PFpnVPaVlfjHhI+J6cTWQgeOitoOT15rtbqQ4
-         s2NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681836124; x=1684428124;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DBjYteFlARZI3kpDkoIEAMndmdFS6IARwATkjleA/Es=;
-        b=Hmo51lo3PbjqpLr/zA6+8yYAfmUB89YeZQomsjroJn9aDWWw/uymvZ4DZWDoBibMGI
-         mlFV1kPiIcH/a0P6lhArtjAENY/kYVXlmn5aQV+CefpMJKURzg2GMJZJVPyymDcbVlM5
-         L//GMjO3aZumA2oeI2Zyd7wqzuirowy1nMiIhHULLUQ1bWxRsPIgwah2qzqxP2OPu774
-         AZWFF2XNaK1BXCOkR8oC+fAmMvweBdmY3Q4Rn9n3gsQ6pmypz3yhdurs7ABmuUxbLQI1
-         +kgTcYt/hQ00ZNh4fFZWGkr8LuW1EIPNlTQXv4Pmq+siA9XkJQUSTnTJNGDJkoIgqm6N
-         LaSA==
-X-Gm-Message-State: AAQBX9fRX/FnNOUPI5NMhV/UJdZydIQKpHdt1ufnF1kBb2XKSPJ973Rf
-        yWvVHUQkLwP/RQFrYqs809w=
-X-Google-Smtp-Source: AKy350YcV6j1lv6XmhOfSNAWDYy73WgCv1F7VXKe1uo1OIl8xC2iEX9Ihpu2om1pKqDrFlg/8Z0cbA==
-X-Received: by 2002:a17:903:2291:b0:1a6:6d9f:2fc9 with SMTP id b17-20020a170903229100b001a66d9f2fc9mr3187958plh.30.1681836124194;
-        Tue, 18 Apr 2023 09:42:04 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id c9-20020a170902848900b0019a7ef5e9a8sm5445534plo.82.2023.04.18.09.42.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 09:42:03 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm/atomic: Don't try async if crtc not active
-Date:   Tue, 18 Apr 2023 09:41:58 -0700
-Message-Id: <20230418164158.549873-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 18 Apr 2023 12:42:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D1A810E0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:42:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8D72911FB;
+        Tue, 18 Apr 2023 09:43:09 -0700 (PDT)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 80F633F5A1;
+        Tue, 18 Apr 2023 09:42:24 -0700 (PDT)
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     akpm@linux-foundation.org, andreyknvl@google.com,
+        dvyukov@google.com, elver@google.com, glider@google.com,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        mark.rutland@arm.com, ryabinin.a.a@gmail.com
+Subject: [PATCH] kasan: hw_tags: avoid invalid virt_to_page()
+Date:   Tue, 18 Apr 2023 17:42:12 +0100
+Message-Id: <20230418164212.1775741-1-mark.rutland@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+When booting with 'kasan.vmalloc=off', a kernel configured with support
+for KASAN_HW_TAGS will explode at boot time due to bogus use of
+virt_to_page() on a vmalloc adddress. With CONFIG_DEBUG_VIRTUAL selected
+this will be reported explicitly, and with or without
+CONFIG_DEBUG_VIRTUAL the kernel will dereference a bogus address:
 
-For a similar reason as commit f2c7ca890182 ("drm/atomic-helper: Don't
-set deadline for modesets"), we need the crtc to be already active in
-order to compute a target vblank time for an async commit.  Otherwise
-we get this splat reminding us that we are doing it wrong:
+| ------------[ cut here ]------------
+| virt_to_phys used for non-linear address: (____ptrval____) (0xffff800008000000)
+| WARNING: CPU: 0 PID: 0 at arch/arm64/mm/physaddr.c:15 __virt_to_phys+0x78/0x80
+| Modules linked in:
+| CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-rc3-00073-g83865133300d-dirty #4
+| Hardware name: linux,dummy-virt (DT)
+| pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+| pc : __virt_to_phys+0x78/0x80
+| lr : __virt_to_phys+0x78/0x80
+| sp : ffffcd076afd3c80
+| x29: ffffcd076afd3c80 x28: 0068000000000f07 x27: ffff800008000000
+| x26: fffffbfff0000000 x25: fffffbffff000000 x24: ff00000000000000
+| x23: ffffcd076ad3c000 x22: fffffc0000000000 x21: ffff800008000000
+| x20: ffff800008004000 x19: ffff800008000000 x18: ffff800008004000
+| x17: 666678302820295f x16: ffffffffffffffff x15: 0000000000000004
+| x14: ffffcd076b009e88 x13: 0000000000000fff x12: 0000000000000003
+| x11: 00000000ffffefff x10: c0000000ffffefff x9 : 0000000000000000
+| x8 : 0000000000000000 x7 : 205d303030303030 x6 : 302e30202020205b
+| x5 : ffffcd076b41d63f x4 : ffffcd076afd3827 x3 : 0000000000000000
+| x2 : 0000000000000000 x1 : ffffcd076afd3a30 x0 : 000000000000004f
+| Call trace:
+|  __virt_to_phys+0x78/0x80
+|  __kasan_unpoison_vmalloc+0xd4/0x478
+|  __vmalloc_node_range+0x77c/0x7b8
+|  __vmalloc_node+0x54/0x64
+|  init_IRQ+0x94/0xc8
+|  start_kernel+0x194/0x420
+|  __primary_switched+0xbc/0xc4
+| ---[ end trace 0000000000000000 ]---
+| Unable to handle kernel paging request at virtual address 03fffacbe27b8000
+| Mem abort info:
+|   ESR = 0x0000000096000004
+|   EC = 0x25: DABT (current EL), IL = 32 bits
+|   SET = 0, FnV = 0
+|   EA = 0, S1PTW = 0
+|   FSC = 0x04: level 0 translation fault
+| Data abort info:
+|   ISV = 0, ISS = 0x00000004
+|   CM = 0, WnR = 0
+| swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000041bc5000
+| [03fffacbe27b8000] pgd=0000000000000000, p4d=0000000000000000
+| Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+| Modules linked in:
+| CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W          6.3.0-rc3-00073-g83865133300d-dirty #4
+| Hardware name: linux,dummy-virt (DT)
+| pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+| pc : __kasan_unpoison_vmalloc+0xe4/0x478
+| lr : __kasan_unpoison_vmalloc+0xd4/0x478
+| sp : ffffcd076afd3ca0
+| x29: ffffcd076afd3ca0 x28: 0068000000000f07 x27: ffff800008000000
+| x26: 0000000000000000 x25: 03fffacbe27b8000 x24: ff00000000000000
+| x23: ffffcd076ad3c000 x22: fffffc0000000000 x21: ffff800008000000
+| x20: ffff800008004000 x19: ffff800008000000 x18: ffff800008004000
+| x17: 666678302820295f x16: ffffffffffffffff x15: 0000000000000004
+| x14: ffffcd076b009e88 x13: 0000000000000fff x12: 0000000000000001
+| x11: 0000800008000000 x10: ffff800008000000 x9 : ffffb2f8dee00000
+| x8 : 000ffffb2f8dee00 x7 : 205d303030303030 x6 : 302e30202020205b
+| x5 : ffffcd076b41d63f x4 : ffffcd076afd3827 x3 : 0000000000000000
+| x2 : 0000000000000000 x1 : ffffcd076afd3a30 x0 : ffffb2f8dee00000
+| Call trace:
+|  __kasan_unpoison_vmalloc+0xe4/0x478
+|  __vmalloc_node_range+0x77c/0x7b8
+|  __vmalloc_node+0x54/0x64
+|  init_IRQ+0x94/0xc8
+|  start_kernel+0x194/0x420
+|  __primary_switched+0xbc/0xc4
+| Code: d34cfc08 aa1f03fa 8b081b39 d503201f (f9400328)
+| ---[ end trace 0000000000000000 ]---
+| Kernel panic - not syncing: Attempted to kill the idle task!
 
-   ------------[ cut here ]------------
-   msm_dpu ae01000.mdp: drm_WARN_ON_ONCE(drm_drv_uses_atomic_modeset(dev))
-   WARNING: CPU: 7 PID: 1923 at drivers/gpu/drm/drm_vblank.c:728 drm_crtc_vblank_helper_get_vblank_timestamp_internal+0x148/0x370
-   Modules linked in: snd_seq_dummy snd_seq snd_seq_device bridge stp llc tun vhost_vsock vhost vhost_iotlb vmw_vsock_virtio_transport_common vsock uinput rfcomm algif_hash algif_skcipher af_alg veth venus_dec venus_enc cros_ec_typec typec qcom_spmi_temp_alarm qcom_spmi_adc_tm5 qcom_spmi_adc5 xt_cgroup qcom_vadc_common qcom_stats hci_uart btqca xt_MASQUERADE venus_core 8021q coresight_tmc coresight_funnel coresight_etm4x coresight_replicator snd_soc_lpass_sc7180 coresight snd_soc_sc7180 ip6table_nat fuse ath10k_snoc ath10k_core ath mac80211 iio_trig_sysfs bluetooth cfg80211 cros_ec_sensors cros_ec_sensors_core ecdh_generic industrialio_triggered_buffer ecc kfifo_buf cros_ec_sensorhub r8153_ecm cdc_ether usbnet r8152 mii lzo_rle lzo_compress zram hid_vivaldi hid_google_hammer hid_vivaldi_common joydev
-   CPU: 7 PID: 1923 Comm: DrmThread Not tainted 5.15.107-18853-g3be267609a0b-dirty #16 a1ffc1a66e79c21c3536d8c9a42e819236e39714
-   Hardware name: Google Wormdingler rev1+ BOE panel board (DT)
-   pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-   pc : drm_crtc_vblank_helper_get_vblank_timestamp_internal+0x148/0x370
-   lr : drm_crtc_vblank_helper_get_vblank_timestamp_internal+0x144/0x370
-   sp : ffffffc012e2b800
-   x29: ffffffc012e2b840 x28: ffffff8083676094 x27: ffffffc012e2bb28
-   x26: ffffff8084539800 x25: 0000000000000000 x24: ffffff8083676000
-   x23: ffffffd3c8cdc5a0 x22: ffffff80845b9d00 x21: ffffffc012e2b8b4
-   x20: ffffffc012e2b910 x19: 0000000000000001 x18: 0000000000000000
-   x17: 0000000000000000 x16: 0000000000000010 x15: ffffffd3c8451a88
-   x14: 0000000000000003 x13: 0000000000000004 x12: 0000000000000001
-   x11: c0000000ffffdfff x10: ffffffd3c973ef58 x9 : 8ea3526b3cc95900
-   x8 : 8ea3526b3cc95900 x7 : 0000000000000000 x6 : 000000000000003a
-   x5 : ffffffd3c99676cd x4 : 0000000000000000 x3 : ffffffc012e2b4b8
-   x2 : ffffffc012e2b4c0 x1 : 00000000ffffdfff x0 : 0000000000000000
-   Call trace:
-    drm_crtc_vblank_helper_get_vblank_timestamp_internal+0x148/0x370
-    drm_crtc_vblank_helper_get_vblank_timestamp+0x20/0x30
-    drm_crtc_get_last_vbltimestamp+0x68/0xb0
-    drm_crtc_next_vblank_start+0x5c/0xa8
-    msm_atomic_commit_tail+0x264/0x664
-    commit_tail+0xac/0x160
-    drm_atomic_helper_commit+0x160/0x168
-    drm_atomic_commit+0xfc/0x128
-    drm_atomic_helper_disable_plane+0x8c/0x110
-    __setplane_atomic+0x10c/0x138
-    drm_mode_cursor_common+0x3a8/0x410
-    drm_mode_cursor_ioctl+0x48/0x70
-    drm_ioctl_kernel+0xe0/0x158
-    drm_ioctl+0x25c/0x4d8
-    __arm64_sys_ioctl+0x98/0xd0
-    invoke_syscall+0x4c/0x100
-    el0_svc_common+0x98/0x104
-    do_el0_svc+0x30/0x90
-    el0_svc+0x20/0x50
-    el0t_64_sync_handler+0x78/0x108
-    el0t_64_sync+0x1a4/0x1a8
-   ---[ end trace a0f587e1ab9589e8 ]---
+This is because init_vmalloc_pages() erroneously calls virt_to_page() on
+a vmalloc address, while virt_to_page() is only valid for addresses in
+the linear/direct map. Since init_vmalloc_pages() expects virtual
+addresses in the vmalloc range, it must use vmalloc_to_page() rather
+than virt_to_page().
 
-Fixes: 52ff0d3073d2 ("drm/msm/atomic: Switch to vblank_start helper")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+We call init_vmalloc_pages() from __kasan_unpoison_vmalloc(), where we
+check !is_vmalloc_or_module_addr(), suggesting that we might encounter a
+non-vmalloc address. Luckily, this never happens. By design, we only
+call __kasan_unpoison_vmalloc() on pointers in the vmalloc area, and I
+have verified that we don't violate that expectation. Given that,
+is_vmalloc_or_module_addr() must always be true for any legitimate
+argument to __kasan_unpoison_vmalloc().
+
+Correct init_vmalloc_pages() to use vmalloc_to_page(), and remove the
+redundant and misleading use of is_vmalloc_or_module_addr() in
+__kasan_unpoison_vmalloc().
+
+Fixes: 6c2f761dad7851d8 ("kasan: fix zeroing vmalloc memory with HW_TAGS")
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Potapenko <glider@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andrey Konovalov <andreyknvl@google.com>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Marco Elver <elver@google.com>
+Cc: kasan-dev@googlegroups.com
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-mm@kvack.org
 ---
- drivers/gpu/drm/msm/msm_atomic.c | 2 ++
- 1 file changed, 2 insertions(+)
+ mm/kasan/hw_tags.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/msm_atomic.c b/drivers/gpu/drm/msm/msm_atomic.c
-index c5e71c05f038..3871a6f2d8e1 100644
---- a/drivers/gpu/drm/msm/msm_atomic.c
-+++ b/drivers/gpu/drm/msm/msm_atomic.c
-@@ -155,6 +155,8 @@ static bool can_do_async(struct drm_atomic_state *state,
- 	for_each_new_crtc_in_state(state, crtc, crtc_state, i) {
- 		if (drm_atomic_crtc_needs_modeset(crtc_state))
- 			return false;
-+		if (!crtc_state->active)
-+			return false;
- 		if (++num_crtcs > 1)
- 			return false;
- 		*async_crtc = crtc;
+diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
+index d1bcb0205327a..2f7ec2e1718ad 100644
+--- a/mm/kasan/hw_tags.c
++++ b/mm/kasan/hw_tags.c
+@@ -285,7 +285,7 @@ static void init_vmalloc_pages(const void *start, unsigned long size)
+ 	const void *addr;
+ 
+ 	for (addr = start; addr < start + size; addr += PAGE_SIZE) {
+-		struct page *page = virt_to_page(addr);
++		struct page *page = vmalloc_to_page(addr);
+ 
+ 		clear_highpage_kasan_tagged(page);
+ 	}
+@@ -297,7 +297,7 @@ void *__kasan_unpoison_vmalloc(const void *start, unsigned long size,
+ 	u8 tag;
+ 	unsigned long redzone_start, redzone_size;
+ 
+-	if (!kasan_vmalloc_enabled() || !is_vmalloc_or_module_addr(start)) {
++	if (!kasan_vmalloc_enabled()) {
+ 		if (flags & KASAN_VMALLOC_INIT)
+ 			init_vmalloc_pages(start, size);
+ 		return (void *)start;
 -- 
-2.39.2
+2.30.2
 
