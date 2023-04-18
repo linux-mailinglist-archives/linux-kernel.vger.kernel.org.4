@@ -2,104 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609966E6DF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B51756E6DFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjDRVUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
+        id S232769AbjDRVVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbjDRVUH (ORCPT
+        with ESMTP id S232657AbjDRVVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:20:07 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31694486
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:20:05 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id DC9982C0533;
-        Wed, 19 Apr 2023 09:20:02 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1681852802;
-        bh=x3alwfNlBzfwbZU57e4dV0T0LMpuH29WAw4zSK/aQEs=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=VJ6+kckm30bjQHWv+Q0VSx9mID/fpv778oeUfJlMxUG/0CIfl014QFUvBmb3flN3x
-         azlZLBaaQ0ZN8XjU7IXDVLsi8qqUNtFNH8YYYodhXltYxxoQKByCKHBTnHrPQePJfp
-         ejKhJGSCNQakSYG76E90tHPtnJ11Wyi6vNvDanJoKHNaoYsS/vPcRdgu6xfB6zW1Di
-         M0uSq0E/iMBcZt2+T0WhXwJGUxa7FXKovpYvDx+m7llHEWMyh+Dqgpqui0mR5Ht2xk
-         SKzhyozPYa/R5irCAkrbJh5gIZ0VkPyzZrBBoArJBKJ0wcnhXFwMlzx7tB6hWKsgj/
-         T6tjr41Ijfsgw==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B643f09820001>; Wed, 19 Apr 2023 09:20:02 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.26; Wed, 19 Apr 2023 09:20:02 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
- SMTP Server (TLS) id 15.0.1497.48; Wed, 19 Apr 2023 09:20:02 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.026; Wed, 19 Apr 2023 09:20:02 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     =?utf-8?B?TWFyaXVzeiBCaWHFgm/FhGN6eWs=?= <manio@skyboo.net>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: hwmon: (adt7475) Add support for inverting pwm output
-Thread-Topic: hwmon: (adt7475) Add support for inverting pwm output
-Thread-Index: AQHZceXWdXchU+yVXUm4m0tN5Sjguq8wv1sAgAAKwIA=
-Date:   Tue, 18 Apr 2023 21:20:02 +0000
-Message-ID: <52e26a67-9131-2dc0-40cb-db5c07370027@alliedtelesis.co.nz>
-References: <20230418110623.vk6kettnjondulri@skyboo.net>
- <e398560f-f8d1-afbc-4aae-ab3cf2555e8e@alliedtelesis.co.nz>
-In-Reply-To: <e398560f-f8d1-afbc-4aae-ab3cf2555e8e@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A1C4F17850891D4B9F2E6621A96860AB@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Tue, 18 Apr 2023 17:21:09 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE095B8B
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:21:08 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-54fc337a650so224193847b3.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:21:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681852867; x=1684444867;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qWdLrM8P5tKlvuJeK/CWoUbY/57OR2hY93j5YcDXvNw=;
+        b=rIRTptJwMR9RNS5QlyMl2+kc/TA94WPxxo3f17+iyobEdC0e4rGfCX48D58F9wRJ6F
+         si1gyr55NBY4UOviXN1eiHhiQaxYaHuCE5ioCUOVyPjoa+XkSyUu9t8L8sKz7wWAYekm
+         zUYRulerwJQcUyMI4D+11I2DEmWz4gCwDJOkEc7MKuDG+DfQ7y0+dsiRfgCNNXmsyJKN
+         FfZEw0TtwsR66InOJ0KmbpMkRLVFOFAg4qhbyP4RBveRx3xAkk8RGmBURRUscz64s/1u
+         B2dmhngysNOAXtqHSsnNtwNy33v9E1TaHdNjoCQdIFR/tZbAX3SUBDDThd7CqDADtK7e
+         iavg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681852867; x=1684444867;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qWdLrM8P5tKlvuJeK/CWoUbY/57OR2hY93j5YcDXvNw=;
+        b=kFF80Qzx/EK52wCuZkoPdUXY+Zoip0B4960ciifkYO3akJa2yCo5gVaI2mx3APqx5l
+         E/066w4ltizuEtbXC5sXt7lV/U97nkaMjHZQ8EHaF10Ozob3H0QNPOqHbVA76VqlAFOa
+         8xR8IW0mpCZmUUakK5OMiwcHS8Jy9m/i94D6Ba+NH1qnlGw1CdrGB6SQtexvrvgAhAGE
+         TzURrzjsy3uOGuatZi4p/U6QhBDwWTqYbXuI9bLHPLj/KXISE+Xk8s05GefMt9KXQCNw
+         6NiCuThQ77OalaTNQIu+m6zeENb5idQzpQomc6x+S71kcHFuBNQygh6LYgR9utlC4mrh
+         s37w==
+X-Gm-Message-State: AAQBX9c1pwK9HY5fukU6Pa/N4VXuqNR0czG3w3KY04+ycTUwJ0cHjKGQ
+        Uo6syqTOpAsErA2kozkesZbsig==
+X-Google-Smtp-Source: AKy350aPT69etndT9Y5DXnIKWAPOkeuFizCReXExgc8GViiHUiiYdlDYCcOditcCtgaKdDHGXYA48Q==
+X-Received: by 2002:a0d:d597:0:b0:54e:f0d1:e3e5 with SMTP id x145-20020a0dd597000000b0054ef0d1e3e5mr1346873ywd.24.1681852867289;
+        Tue, 18 Apr 2023 14:21:07 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id l15-20020a81700f000000b0054629ed8300sm4054543ywc.80.2023.04.18.14.21.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 14:21:06 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 14:20:55 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Luis Chamberlain <mcgrof@kernel.org>
+cc:     Hugh Dickins <hughd@google.com>, akpm@linux-foundation.org,
+        willy@infradead.org, brauner@kernel.org, linux-mm@kvack.org,
+        p.raghav@samsung.com, da.gomez@samsung.com,
+        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
+        keescook@chromium.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v2 4/6] shmem: skip page split if we're not reclaiming
+In-Reply-To: <ZD8HdxbwhUUGvmNC@bombadil.infradead.org>
+Message-ID: <8afe1f7f-31a2-4fc0-1fbd-f9ba8a116fe3@google.com>
+References: <20230309230545.2930737-1-mcgrof@kernel.org> <20230309230545.2930737-5-mcgrof@kernel.org> <cfaac1a4-20c6-bdd6-ff68-981e9a8858e@google.com> <ZD8HdxbwhUUGvmNC@bombadil.infradead.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=VfuJw2h9 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=dKHAf1wccvYA:10 a=rPQhiZsA37OnAWj8wpIA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAxOS8wNC8yMyAwODo0MSwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4gSGkgTWFyaXVzLA0K
-Pg0KPiArY2MgbGludXgtaHdtb24sIGxrbWwNCj4NCj4gT24gMTgvMDQvMjMgMjM6MDYsIE1hcml1
-c3ogQmlhxYJvxYRjenlrIHdyb3RlOg0KPj4gSGkgQ2hyaXMsDQo+PiBJIGRpc2NvdmVyZWQgYnkg
-YWNjaWRlbnQgdGhhdCBteSBkbWVzZyBpcyB0ZWxsaW5nIG1lOg0KPj4gW01vbiBBcHIgMTcgMTk6
-MDg6NTkgMjAyM10gYWR0NzQ3NSAxOS0wMDJlOiBFcnJvciBjb25maWd1cmluZyBwd20gDQo+PiBw
-b2xhcml0eQ0KPj4gW01vbiBBcHIgMTcgMTk6MDg6NTkgMjAyM10gYWR0NzQ3NSAxOS0wMDJlOiBB
-RFQ3NDczIGRldmljZSwgcmV2aXNpb24gMQ0KPj4NCj4+IG1vdGhlcmJvYXJkOg0KPj4gRE1JOiBT
-eXN0ZW0gbWFudWZhY3R1cmVyIFN5c3RlbSBQcm9kdWN0IE5hbWUvTTRBNzg1VEQtViBFVk8sIEJJ
-T1MgDQo+PiAyMTA1wqDCoMKgIDA3LzIzLzIwMTANCj4+DQo+PiBJcyB0aGlzIHNvbWV0aGluZyBp
-IG5lZWQgdG8gYmUgYWZyYWlkLCBvciBpdCdzIG5vdGhpbmcgc2VyaW91cz8NCj4NCj4gSXQncyBw
-cm9iYWJseSBoYXJtbGVzcywgdW5sZXNzIHlvdXIgYm9hcmQgaXMgaW50ZW50aW9uYWxseSBzZXR0
-aW5nIHRoZSANCj4gcHdtLWFjdGl2ZS1zdGF0ZSAod2hpY2ggSSBzdXNwZWN0IGl0IHdvbid0IGJl
-IGFzIHlvdXIgQklPUyBpcyBwcm9iYWJseSANCj4gdGFraW5nIGNhcmUgb2YgdGhhdCBpZiByZXF1
-aXJlZCkuIEkgc3VzcGVjdCBpdCdzIG1vcmUgYSBjYXNlIG9mIHRoZSANCj4gY29kZSBub3QgaGFu
-ZGxpbmcgdGhlIGFic2VuY2Ugb2YgYSBkZXZpY2UgdHJlZSB3aGljaCB0aGUgY2hlY2sgZm9yIA0K
-PiAtRUlOVkFMIHdhcyBzdXBwb3NlZCB0byBkZWFsIHdpdGguIFRoZXJlJ3MgYW4gb3V0c2lkZSBj
-aGFuY2UgdGhhdCANCj4gdGhlcmUgaXMgYSBwcm9ibGVtIG9uIHRoZSBJMkMgYnVzIGJ1dCB0aGF0
-IHdvdWxkIHJlcXVpcmUgeW91ciBwbGF0Zm9ybSANCj4gdG8gYmUgYWN0aXZlbHkgdXNpbmcgdGhl
-IHB3bSBwb2xhcml0eSBmZWF0dXJlIHZpYSBhIGRldmljZSB0cmVlIA0KPiAodW5saWtlbHkgb3V0
-c2lkZSBvZiBlbWJlZGRlZCBkZXZpY2VzKS4NCj4NCj4gSSB0aGluayBpdCdkIHN0aWxsIGJlIGEg
-Z29vZCBpZGVhIHRvIHNxdWFzaCB0aGUgZXJyYW50IHdhcm5pbmcgc28gDQo+IGdlbnVpbmUgZXJy
-b3JzIGFyZSBjYXVnaHQuIEknbGwgc2VlIGlmIEkgY2FuIHByb3Zva2UgdGhlIGlzc3VlIG9uIA0K
-PiBkZXZpY2VzIEkgaGF2ZSBhY2Nlc3MgdG8uIEFyZSB5b3UgaW4gYSBwb3NpdGlvbiB0byB0cnkg
-YSBwYXRjaCBpZiBJIA0KPiBjb21lIHVwIHdpdGggb25lPw0KQWggSSB0aGluayBJIHNlZSB0aGUg
-cHJvYmxlbS4gT24gcGxhdGZvcm1zIHdpdGhvdXQgZGV2aWNlIHRyZWUgc3VwcG9ydCANCnRoZSBv
-Zl9wcm9wZXJ0eV9yZWFkXyooKSBmdW5jdGlvbnMgcmV0dXJuIC1FTk9TWVMgc28gSSBuZWVkIHRv
-IGRlYWwgd2l0aCANCnRoYXQgZXJyb3IgY29kZSBhcyB3ZWxsIGFzIC1FSU5WQUwu
+On Tue, 18 Apr 2023, Luis Chamberlain wrote:
+> On Mon, Apr 17, 2023 at 09:41:41PM -0700, Hugh Dickins wrote:
+> > On Thu, 9 Mar 2023, Luis Chamberlain wrote:
+> > 
+> > > +	if (WARN_ON_ONCE(info->flags & VM_LOCKED))
+> > > +		goto redirty;
+> > 
+> > Well, okay, I don't mind that.  But shall we take bets on how soon syzbot
+> > (hope it's not watching) will try flipping SHM_LOCK on while swapping out
+> > pages from a SHM segment, and hit that warning?  Perhaps I'm wrong, but I
+> > don't think any serialization prevents that.
+> 
+> I though that may be the case. Would such serialization be welcomed?
+
+Absolutely not!  We don't insert slowdowns just to avoid warnings,
+unless the warning is of something that really matters.  This one
+does not matter, the situation is correctly handled, so the warning
+would be better reverted.  Though I personally don't mind you leaving
+it in until the first report of it arrives.
+
+Hugh
