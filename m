@@ -2,229 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70326E6A91
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B88C6E6A97
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbjDRRHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 13:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S232358AbjDRRI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 13:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232467AbjDRRHf (ORCPT
+        with ESMTP id S232463AbjDRRIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 13:07:35 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3107EFA;
-        Tue, 18 Apr 2023 10:07:32 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33I6rTIG010692;
-        Tue, 18 Apr 2023 17:07:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=PNvIebMKg0s6WLeOM4MrOoRQKx0Az7eGDCsVUpNExw4=;
- b=nCJh/Lfkn9VFSeDJj2flIYMMZzbWlJFeki1VGmYoqBGbJDK0bMvZFwym32apw30uDe+T
- SfUSFjapG3yJTQAKCpTdnohVNMth82PeBFEV7duDM/mIRTBefUf2Krbgmof5zzrEzUrD
- SQSulhPp2DrNyO9qKcqAy6L0MLNoSgnrplOqkmv/EobKv8hIoTXtrXiOeOvaQQclQnTl
- 7v4+W0CptnMGpqV4WxrLd0yABFvq6TsMNKhX/Tbm5mlLsNPGGGtMn2eF5y9zzds6dek4
- 3aa6h0OZ+T8tz6BZJX1dCv1zMWjGtPbMDn0bIkX0G8+dDMy6Hzj9sLsU7u/UDePNEvfU mg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1nr5hj9w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 17:07:19 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33IH7JgJ009939
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 17:07:19 GMT
-Received: from [10.110.100.39] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 18 Apr
- 2023 10:07:18 -0700
-Message-ID: <12846dc1-38b6-892a-3189-25db866fa38e@quicinc.com>
-Date:   Tue, 18 Apr 2023 10:07:17 -0700
+        Tue, 18 Apr 2023 13:08:42 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBF035BE
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:08:39 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id u3so23037915ejj.12
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681837718; x=1684429718;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pa0596FLGoKuck4TwQ+3+R91cz83Mb/ak2URkKOAZDw=;
+        b=xt2O5Y+tVv532NiCjYg/SDb4kiK90IX1EQWKX/pEx85YjHjZMrutu0YGHeosz4HQ1p
+         Rj1JNoDV1JVR6oWP/dpKZ6IIY8CDRyiXvzCN5h7FDF445QYpTfYYTeiOWmvIlBkVrBdm
+         LoefvfHw0MfbWp4OUTBf7gbNrbiRy5fC1/Kx0QSPxpE/HnBWufwwinfzVguyDg19UaZ3
+         +Sk7fDC2K6LMrUKrZAeYksQkNqTeGaRdrtgiXdfTb87S54LTYjzLc6oygjNK/kH/Am7W
+         7KMgPo1VQzvAB27G0oGrB93j/o0c01VjJyWlKTxQaZ1eKLDzkwxMooS/BonyeOoNq07I
+         wiNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681837718; x=1684429718;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pa0596FLGoKuck4TwQ+3+R91cz83Mb/ak2URkKOAZDw=;
+        b=GLC2GNghfF6aNY23aInyCPzNUd5qcGfn6UonTf+rR0NGh2iE0pmuW07uRQ67gJi5yN
+         bfkCzXQZVKQmjiCcCy3e8+p8AbqqtBwF+i5SwuiEFV92bCfTYyEqyixxJ6Mes3J5caAV
+         XNs5MHDs/twd5eTWnX/viU/NYzeX0ljGFkgNOdLYLX/GKmfWsAnlJ4QInHxcA6UsPono
+         b6g3h/1BZ5ysHa2vlxtyxn72b1NiTl6zH/OBg38zcIYm92vKR2yj8zp5MjT5vPWNCxhe
+         Hg2DpCBjP6Win2yKeW2fi8ovRM4V2WjkCjgWY2oykN0wIgpPYxQLXCCe1Px56SR0HXmu
+         hrFA==
+X-Gm-Message-State: AAQBX9fh+p3MYizRsVj5IQb3e6S+y71trgzhZ+K7TFQJhFkUdK+0Ly8l
+        L35eMu3warG6mqq4E9990/abkw==
+X-Google-Smtp-Source: AKy350bPHMJPXFQ656yxTVuavRDq9+h8S5I8N9qcl8CcAPHYqdb8NUtjU1vzSDCDHSbTX2gwwW40+A==
+X-Received: by 2002:a17:906:b242:b0:931:cd1b:3c0 with SMTP id ce2-20020a170906b24200b00931cd1b03c0mr9594973ejb.3.1681837718100;
+        Tue, 18 Apr 2023 10:08:38 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
+        by smtp.gmail.com with ESMTPSA id j25-20020a1709062a1900b0094f614e43d0sm3812770eje.8.2023.04.18.10.08.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 10:08:37 -0700 (PDT)
+Message-ID: <a00202fc-434b-0350-de02-39870fd96da9@linaro.org>
+Date:   Tue, 18 Apr 2023 19:08:36 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3 2/2] firmware: arm_scmi: Augment SMC/HVC to allow
- optional parameter
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-CC:     <cristian.marussi@arm.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230409181918.29270-1-quic_nkela@quicinc.com>
- <20230417174401.19563-1-quic_nkela@quicinc.com>
- <20230417174401.19563-3-quic_nkela@quicinc.com>
- <02b34c80-f37e-deee-29cd-de7db902797d@gmail.com>
- <20230418095846.4lkncoa4beeih2hj@bogus>
- <d05b26ff-1c49-69eb-7146-8f7cef7e1ddb@quicinc.com>
- <40e91346-19d7-c0b4-7fcc-d5a2081fe8dd@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1 5/9] dt-bindings: gpio: Add HPE GXP GPIO
 Content-Language: en-US
-From:   Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <40e91346-19d7-c0b4-7fcc-d5a2081fe8dd@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fjR5bTmHqKjnDAWCnrKSETB_i2QVL_vA
-X-Proofpoint-ORIG-GUID: fjR5bTmHqKjnDAWCnrKSETB_i2QVL_vA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-18_12,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 spamscore=0 suspectscore=0 impostorscore=0 phishscore=0
- mlxlogscore=999 clxscore=1015 priorityscore=1501 mlxscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304180143
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+To:     nick.hawkins@hpe.com, verdun@hpe.com, linus.walleij@linaro.org,
+        brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jdelvare@suse.com,
+        linux@roeck-us.net, linux@armlinux.org.uk,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230418152824.110823-1-nick.hawkins@hpe.com>
+ <20230418152824.110823-6-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230418152824.110823-6-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 18/04/2023 17:28, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> Provide access to the registers and interrupts for GPIO. The GPIO
+> will have two driver instances: One for host, the other for CPLD.
 
-On 4/18/2023 9:33 AM, Florian Fainelli wrote:
-> On 4/18/23 07:20, Nikunj Kela wrote:
->>
->> On 4/18/2023 2:58 AM, Sudeep Holla wrote:
->>> On Mon, Apr 17, 2023 at 11:01:13AM -0700, Florian Fainelli wrote:
->>>> On 4/17/23 10:44, Nikunj Kela wrote:
->>>>> This patch add support for passing shmem channel address as parameter
->>>>> in smc/hvc call. This patch is useful when multiple scmi instances 
->>>>> are
->>>>> using same smc-id and firmware needs to distiguish among the 
->>>>> instances.
->>>> Typo: distinguish.
->>>>
->>>> It really would have been a lot clearer and made a whole lot more 
->>>> sense to
->>>> encode a VM ID/channel number within some of the SMCCC parameters, 
->>>> possibly
->>>> as part of the function ID itself.
->>>>
->>> Yes I was about to suggest this but then remembered one main reason 
->>> I have
->>> been given in the past against that:
->>> If the system launches high number of VMs then that means loads of FID
->>> needs to be reserved for SCMI and the hypervisor needs to support it.
->>> Basically it is not scalable which I agree but not sure if such large
->>> number of VMs are used in reality with SCMI. But I agree with the 
->>> technical
->>> reasoning.
->>>
->>> The other reason why I preferred the shmem address itself instead of 
->>> some
->>> custom VM ID/channel number is that it can easily becomes vendor 
->>> specific
->>> for no real good reason and then we need to add support for each such
->>> different parameters. Nikunj suggested getting them from DT which I 
->>> really
->>> don't like if the sole reason is just to identify the channel. We don't
->>> have standard SCMI SMC/HVC but allowing such deviations with params 
->>> from
->>> DT will just explode with various combinations for silly/no reason.
->>>
->> Would you be ok to pass the smc/hvc parameters via kernel parameters 
->> in commandline? If so, I can implement that. I just wanted to keep 
->> everything in one place hence suggested using DTB node.
->
-> Command line arguments seem a bit unnecessary here and it would force 
-> you to invent a scheme to control per SCMI device/instance parameters.
->
-Agreed!
->>
->>> [...]
->>>
->>>>> @@ -137,6 +144,8 @@ static int smc_chan_setup(struct 
->>>>> scmi_chan_info *cinfo, struct device *dev,
->>>>>        if (ret < 0)
->>>>>            return ret;
->>>>> +    if (of_device_is_compatible(dev->of_node, "arm,scmi-smc-param"))
->>>>> +        scmi_info->param = res.start;
->>>> There is not even a check that this is going to be part of the 
->>>> kernel's view
->>>> of memory, that seems a bit brittle and possibly a security hole, 
->>>> too. Your
->>>> hypervisor presumably needs to have carved out some amount of 
->>>> memory in
->>>> order for the messages to be written to/read from, and so would the VM
->>>> kernel, so eventually we should have a 'reserved-memory' entry of 
->>>> some sort,
->>>> no?
->>>>
->>> Not disagreeing here. Just checking if my understanding is correct 
->>> or not.
->>> IIUC, we need reserved-memory if it is part of the memory presented 
->>> to the
->>> OS right ? You don't need that if it is dedicated memory like part 
->>> of SRAM
->>> or something similar.
->> We are not using reserved-memory node. Instead using sram-mmio to 
->> carve out shmem for scmi instances.
->
-> OK, that works too.
->
->>>>>        /*
->>>>>         * If there is an interrupt named "a2p", then the service and
->>>>>         * completion of a message is signaled by an interrupt 
->>>>> rather than by
->>>>> @@ -156,6 +165,7 @@ static int smc_chan_setup(struct 
->>>>> scmi_chan_info *cinfo, struct device *dev,
->>>>>        }
->>>>>        scmi_info->func_id = func_id;
->>>>> +    scmi_info->is_smc64 = ARM_SMCCC_IS_64(func_id);
->>>>>        scmi_info->cinfo = cinfo;
->>>>>        smc_channel_lock_init(scmi_info);
->>>>>        cinfo->transport_info = scmi_info;
->>>>> @@ -188,7 +198,20 @@ static int smc_send_message(struct 
->>>>> scmi_chan_info *cinfo,
->>>>>        shmem_tx_prepare(scmi_info->shmem, xfer, cinfo);
->>>>> -    arm_smccc_1_1_invoke(scmi_info->func_id, 0, 0, 0, 0, 0, 0, 0, 
->>>>> &res);
->>>>> +#ifdef CONFIG_ARM64
->>>>> +    /*
->>>>> +     * if SMC32 convention is used, pass 64 bit address in
->>>>> +     * two parameters
->>>>> +     */
->>>>> +    if (!scmi_info->is_smc64)
->>>> There is no need for scmi_info to store is_smc64, just check the 
->>>> func_id
->>>> here and declare is_smc64 as a local variable to the function.
->>>>
->>> +1
->> ACK!
->>>> Also, another way to approach this would be to encode the 
->>>> parameters region
->>>> in 4KB units such that event on a 32-bit system with LPAE you are 
->>>> guaranteed
->>>> to fit the region into a 32-bit unsigned long. AFAIR virtualization 
->>>> and LPAE
->>>> are indistinguishable on real CPUs?
->>>>
->>> Agree with the idea. But can a single 4kB be used for multiple shmem 
->>> across
->>> VMs ? IIUC the hypervisor can deal with that, so I prefer it if it 
->>> is possible
->>> practically.
->> We have multiple VMs and each VM has multiple instances. We will have 
->> quite a few domains and I am not sure if single page will suffice.
->
-> I did not make myself clear enough, you can encode an offset into the 
-> shared memory area, and however big that shared memory area will be, 
-> that offset can be in a 4KB size. So for instance if you have your 
-> MMIO SRAM at 0x8000_0000, the first VM can use 0x8000_0ffff, the 
-> second VM can use 0x8000_1000 to 0x8000_1fff and so on and so forth.
->
-> Even if you need more than 4KB per VM, you can put that information 
-> into the two additional parameters you pass through the SMC/HVC call.
+Are these different devices? What does it mean here "instance"? What are
+the differences?
 
-Okay. I will float another version, first parameter of smc/hvc call will 
-be pfn and second the offset!
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> ---
+>  .../bindings/gpio/hpe,gxp-gpio.yaml           | 137 ++++++++++++++++++
+>  1 file changed, 137 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml b/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
+> new file mode 100644
+> index 000000000000..1cf4cff26d5f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
+> @@ -0,0 +1,137 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/hpe,gxp-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: HPE GXP gpio controllers
+
+s/gpio/GPIO/
+
+> +
+> +maintainers:
+> +  - Nick Hawkins <nick.hawkins@hpe.com>
+> +
+> +description:
+> +  Interruptable GPIO drivers for the HPE GXP that covers multiple interfaces.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+
+Drop oneOf.
+
+> +      - items:
+
+And items. You do not have here multiple choices and items.
+
+> +          - enum:
+> +              - hpe,gxp-gpio
+> +              - hpe,gxp-gpio-pl
+> +
+> +  reg:
+> +    minItems: 3
+> +    maxItems: 6
+> +
+> +  reg-names:
+> +    minItems: 3
+> +    maxItems: 6
+> +
+> +  gpio-controller: true
+> +
+> +  '#gpio-cells':
+> +    const: 2
+> +
+> +  gpio-line-names:
+> +    minItems: 1
+> +    maxItems: 300
+
+Hm, shouldn't line-names match all GPIOs? If someone provides just one
+name, how do you know for which GPIO is it?
+
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - gpio-controller
+> +  - "#gpio-cells"
+
+Use consistent quotes. Either ' or "
+
+> +
+> +additionalProperties: false
+
+Put it after allOf: block.
+
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - hpe,gxp-gpio
+> +    then:
+> +      properties:
+> +        reg:
+> +          items:
+> +            - description: CSM
+> +            - description: fn2 virtual button
+> +            - description: fn2 system status
+> +            - description: vuhc status
+> +            - description: external virtual button
+
+I have doubts you describe actual one GPIO controller...
+
+> +        reg-names:
+> +          items:
+> +            - const: csm
+> +            - const: fn2-vbtn
+> +            - const: fn2-stat
+> +            - const: vuhc
+> +            - const: vbtn
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - hpe,gxp-gpio-pl
+> +    then:
+> +      properties:
+> +        reg:
+> +          items:
+> +            - description: Programmable logic led
+> +            - description: Programmable logic health led
+> +            - description: Programmable logic interrupt interface
+> +        reg-names:
+> +          items:
+> +            - const: pl-led
+> +            - const: pl-health
+> +            - const: pl-int
+> +
+> +examples:
+> +  - |
+> +        gpio@0 {
+
+Weird indentation. Use 4 spaces for example indentation.
+
+> +          compatible = "hpe,gxp-gpio";
+> +          reg = <0x0 0x400>, <0x200046 0x1>, <0x200070 0x08>, <0x400064 0x80>, <0x5100030f 0x1>;
+> +          reg-names = "csm", "fn2-vbtn", "fn2-stat", "vuhc", "vbtn";
+> +          gpio-controller;
+> +          #gpio-cells = <2>;
+> +          interrupt-parent = <&vic0>;
+> +          interrupts = <10>;
+> +          gpio-line-names =
+> +          "IOP_LED1", "IOP_LED2", "IOP_LED3", "IOP_LED4", "IOP_LED5", "IOP_LED6", "IOP_LED7", "IOP_LED8",
+
+Broken indentation and unnecessary line break before.
+
+> +          "FAN1_INST", "FAN2_INST", "FAN3_INST", "FAN4_INST", "FAN5_INST", "FAN6_INST", "FAN7_INST",
+> +          "FAN8_INST", "FAN1_FAIL", "FAN2_FAIL", "FAN3_FAIL", "FAN4_FAIL", "FAN5_FAIL", "FAN6_FAIL",
+> +          "FAN7_FAIL", "FAN8_FAIL", "FAN1_ID", "FAN2_ID", "FAN3_ID", "FAN4_ID", "FAN5_ID", "FAN6_ID",
+> +          "FAN7_ID", "FAN8_ID", "IDENTIFY", "HEALTH_RED", "HEALTH_AMBER", "POWER_BUTTON", "UID_PRESS",
+> +          "SLP", "NMI_BUTTON", "RESET_BUTTON", "SIO_S5", "SO_ON_CONTROL", "PSU1_INST", "PSU2_INST",
+> +          "PSU3_INST", "PSU4_INST", "PSU5_INST", "PSU6_INST", "PSU7_INST", "PSU8_INST", "PSU1_AC",
+> +          "PSU2_AC", "PSU3_AC", "PSU4_AC", "PSU5_AC", "PSU6_AC", "PSU7_AC", "PSU8_AC", "PSU1_DC",
+> +          "PSU2_DC", "PSU3_DC", "PSU4_DC", "PSU5_DC", "PSU6_DC", "PSU7_DC", "PSU8_DC", "", "", "", "",
+> +          "", "", "", "", "", "", "", "", "", "";
+> +        };
+> +
+
+
+Best regards,
+Krzysztof
 
