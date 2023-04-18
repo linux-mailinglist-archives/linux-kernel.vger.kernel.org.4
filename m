@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1496E6AB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800746E6AB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbjDRROU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 13:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53950 "EHLO
+        id S232333AbjDRROQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 13:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbjDRRNs (ORCPT
+        with ESMTP id S231472AbjDRRNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 13:13:48 -0400
+        Tue, 18 Apr 2023 13:13:50 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4AF55BE;
-        Tue, 18 Apr 2023 10:13:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530D37EFA;
+        Tue, 18 Apr 2023 10:13:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681838026; x=1713374026;
+  t=1681838028; x=1713374028;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=9YFHjmYFzkdk9xAaWavc4jSA7IgsJAZ8KXMJSIrPnjo=;
-  b=h9/Ri5kEyfCi9UKu3wrbrh5GOuEVE3Vru6H1chhfs+/tA3c9fpwQomBU
-   DaLcrofLaZxEUwJ6GrOhTkx/Nl3h+yCFK7ngZZ8JSr1vmWBCMMBoQKFHY
-   st/uLVHd4S0KAVSxCILym18a2lNH1BASzKIc6K/wRoKue3UOWWC1A8v8N
-   inToA7FiDOIDzZc54QYmkcWIkLABHxgTe35YRX42xV8eHWlSOBP9jZDBU
-   4WfkONaLdD77/D/tW77IcymAbNMbzj38CN3aPET/h+GnfaaCnNqwXkZkH
-   hi07pC5qFUhEJjb0EHysWuNBqcZWzfxN62HkUHokl4jrFtyMzcxh/x5HP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="347084257"
+  bh=pcz0xuzvKFQ972qMSTpd7/yWgsuX10hbC8u9kalTPD0=;
+  b=IwQ/hJMppyMnHxeUvh7grFbRXFCS86jEOTQNiLED3JyU/qBM2y/xbz/P
+   I7a+87akASOS8ZIUdC9GCm27cH1V0v9x7uIWSlon2rObpJtFScuOiyrv1
+   PBBckS2eLQ5nRWABd5Rc7j53+9k+0AoahWUobEbxmbTO9R639oT2iAO1o
+   c+nTi6+cVC7hAjgPNFCbwHXiat4pLFjj0Ri7RkC4Kk2+X1XzmFdHXnhrG
+   mlX1o+pzUILeU6x8Rb5olp1cy5r05aSyrF6igKQYUCFTLlguhoD395dk8
+   ibZU35N7xk4k8ypjc7nsPJGS0esPQFgr7gTO2dOTHft0aZuri4NXTnHSA
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="347084264"
 X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="347084257"
+   d="scan'208";a="347084264"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 10:13:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="755762656"
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="755762661"
 X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="755762656"
+   d="scan'208";a="755762661"
 Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga008.fm.intel.com with ESMTP; 18 Apr 2023 10:13:43 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 18 Apr 2023 10:13:44 -0700
 From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 To:     hdegoede@redhat.com, markgross@kernel.org
 Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Zhang Rui <rui.zhang@intel.com>,
         Wendy Wang <wendy.wang@intel.com>
-Subject: [PATCH v2 1/3] platform/x86/intel-uncore-freq: Uncore frequency control via TPMI
-Date:   Tue, 18 Apr 2023 10:13:38 -0700
-Message-Id: <20230418171340.681662-2-srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v2 2/3] platform/x86/intel-uncore-freq: Support for cluster level controls
+Date:   Tue, 18 Apr 2023 10:13:39 -0700
+Message-Id: <20230418171340.681662-3-srinivas.pandruvada@linux.intel.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230418171340.681662-1-srinivas.pandruvada@linux.intel.com>
 References: <20230418171340.681662-1-srinivas.pandruvada@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -64,425 +65,326 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement support of uncore frequency control via TPMI (Topology Aware
-Register and PM Capsule Interface). This driver provides the similar
-functionality as the current uncore frequency driver using MSRs.
+An SoC can contain multiple power domains with individual or collection
+of mesh partitions. This partition is called fabric cluster.
 
-The hardware interface to read/write is basically substitution of MSR
-0x620 and 0x621. There are specific MMIO offset and bits to get/set
-minimum and maximum uncore ratio, similar to MSRs.
+Certain type of meshes will need to run at the same frequency, they will
+be placed in the same fabric cluster. Benefit of fabric cluster is that
+it offers a scalable mechanism to deal with partitioned fabrics in a SoC.
 
-The scope of the uncore MSRs is package/die. But new generation of CPUs
-have more granular control at a cluster level. Each package/die can have
-multiple power domains, which further can have multiple clusters. The
-TPMI interface allows control at cluster level.
+The current sysfs interface supports control at package and die level.
+This interface is not enough to support more granular control at
+fabric cluster level.
 
-The primary use case for uncore sysfs is to set maximum and minimum
-uncore frequency to reduce power consumption or latency. The current
-uncore sysfs control is per package/die. This is enough for the majority
-of users as workload will move to different power domains as it moves
-between different CPUs.
+SoCs with the support of TPMI (Topology Aware Register and PM Capsule
+Interface), can have multiple power domains. Each power domain can
+contain one or more fabric clusters.
 
-The current uncore sysfs provides controls at package/die level. When
-user sets maximum/minimum limits, the driver sets the same limits to
-each cluster.
+To support such granular controls, enhance uncore common to optionally
+create new directories to provide controls at fabric cluster level. It
+is also important to have flexibility to change granularity for future
+version of SoCs. If the directory name contains scope like:
+"package_*_die_*_power_domain_*_cluster_*", then this is not expandable.
 
-Here number of power domains = number of resources in this aux device.
-There are offsets and bits to discover number of clusters and offset for
-each cluster level controls.
+The cpufreq policies also have different scopes. There the scope of the
+policy (affected_cpus) specified by attributes inside each policy.
+So, follow the same model for uncore frequency scaling sysfs as:
+"sys/devices/system/cpu/cpufreq/policy*"
 
-The TPMI documentation can be downloaded from:
-https://github.com/intel/tpmi_power_management
+Allow client drivers to optionally support granular control for each
+fabric cluster. Here, the directory name will be "uncore" suffixed with
+an unique instance number. For example: uncore00, uncore01 etc.
+Attributes in the directory identify package id, power domain and
+fabric cluster id. This interface is expandable even if some new level
+of granularity is introduced. A new sysfs attribute can identify new
+level.
+
+For compatibility with the existing sysfs and provide easy way to set
+limits for each fabric cluster in the package/die, the existing control
+at package/die levels are still provided. For majority of users, this is
+an easy approach.
+
+For example: On a single package/die system, with three power domains
+and one fabric cluster per power domain:
+
+$tree -L 2 /sys/devices/system/cpu/intel_uncore_frequency/
+/sys/devices/system/cpu/intel_uncore_frequency/
+├── package_00_die_00
+│   ├── current_freq_khz
+│   ├── initial_max_freq_khz
+│   ├── initial_min_freq_khz
+│   ├── max_freq_khz
+│   └── min_freq_khz
+├── uncore00
+│   ├── current_freq_khz
+│   ├── domain_id
+│   ├── fabric_cluster_id
+│   ├── initial_max_freq_khz
+│   ├── initial_min_freq_khz
+│   ├── max_freq_khz
+│   ├── min_freq_khz
+│   └── package_id
+├── uncore01
+│   ├── current_freq_khz
+│   ├── domain_id
+│   ├── fabric_cluster_id
+│   ├── initial_max_freq_khz
+│   ├── initial_min_freq_khz
+│   ├── max_freq_khz
+│   ├── min_freq_khz
+│   └── package_id
+└── uncore02
+    ├── current_freq_khz
+    ├── domain_id
+    ├── fabric_cluster_id
+    ├── initial_max_freq_khz
+    ├── initial_min_freq_khz
+    ├── max_freq_khz
+    ├── min_freq_khz
+    └── package_id
+
+The attribute for cluster id is "fabric_cluster_id" instead of just
+"cluster_id" is to avoid confusion with usage of term clusters in
+other part of the Linux kernel.
 
 Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Reviewed-by: Zhang Rui <rui.zhang@intel.com>
 Tested-by: Wendy Wang <wendy.wang@intel.com>
 ---
-v2
-- Changed mmio to u8* (Hans)
-- Not setting pd_info->uncore_base to NULL (Hans)
-- Handling failure of devm_kcalloc() (Hans)
-- Merged init/remove to probe/remove functions (Rui)
-- Log when platform is NULL (Rui)
+New patch with this series.
 
- .../x86/intel/uncore-frequency/Kconfig        |   4 +
- .../x86/intel/uncore-frequency/Makefile       |   2 +
- .../uncore-frequency/uncore-frequency-tpmi.c  | 338 ++++++++++++++++++
- 3 files changed, 344 insertions(+)
- create mode 100644 drivers/platform/x86/intel/uncore-frequency/uncore-frequency-tpmi.c
+ .../pm/intel_uncore_frequency_scaling.rst     | 57 ++++++++++++++++++-
+ .../uncore-frequency-common.c                 | 51 ++++++++++++++++-
+ .../uncore-frequency-common.h                 | 16 +++++-
+ .../intel/uncore-frequency/uncore-frequency.c |  1 +
+ 4 files changed, 121 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/platform/x86/intel/uncore-frequency/Kconfig b/drivers/platform/x86/intel/uncore-frequency/Kconfig
-index 21b209124916..a56d55056927 100644
---- a/drivers/platform/x86/intel/uncore-frequency/Kconfig
-+++ b/drivers/platform/x86/intel/uncore-frequency/Kconfig
-@@ -6,9 +6,13 @@
- menu "Intel Uncore Frequency Control"
- 	depends on X86_64 || COMPILE_TEST
+diff --git a/Documentation/admin-guide/pm/intel_uncore_frequency_scaling.rst b/Documentation/admin-guide/pm/intel_uncore_frequency_scaling.rst
+index 09169d935835..5ab3440e6cee 100644
+--- a/Documentation/admin-guide/pm/intel_uncore_frequency_scaling.rst
++++ b/Documentation/admin-guide/pm/intel_uncore_frequency_scaling.rst
+@@ -5,7 +5,7 @@
+ Intel Uncore Frequency Scaling
+ ==============================
  
-+config INTEL_UNCORE_FREQ_CONTROL_TPMI
-+	tristate
+-:Copyright: |copy| 2022 Intel Corporation
++:Copyright: |copy| 2022-2023 Intel Corporation
+ 
+ :Author: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+ 
+@@ -58,3 +58,58 @@ Each package_*_die_* contains the following attributes:
+ 
+ ``current_freq_khz``
+ 	This attribute is used to get the current uncore frequency.
 +
- config INTEL_UNCORE_FREQ_CONTROL
- 	tristate "Intel Uncore frequency control driver"
- 	depends on X86_64
-+	select INTEL_UNCORE_FREQ_CONTROL_TPMI if INTEL_TPMI
- 	help
- 	  This driver allows control of Uncore frequency limits on
- 	  supported server platforms.
-diff --git a/drivers/platform/x86/intel/uncore-frequency/Makefile b/drivers/platform/x86/intel/uncore-frequency/Makefile
-index e0f7968e8285..08ff57492b28 100644
---- a/drivers/platform/x86/intel/uncore-frequency/Makefile
-+++ b/drivers/platform/x86/intel/uncore-frequency/Makefile
-@@ -7,3 +7,5 @@ obj-$(CONFIG_INTEL_UNCORE_FREQ_CONTROL)	+= intel-uncore-frequency.o
- intel-uncore-frequency-y		:= uncore-frequency.o
- obj-$(CONFIG_INTEL_UNCORE_FREQ_CONTROL)	+= intel-uncore-frequency-common.o
- intel-uncore-frequency-common-y		:= uncore-frequency-common.o
-+obj-$(CONFIG_INTEL_UNCORE_FREQ_CONTROL_TPMI)	+= intel-uncore-frequency-tpmi.o
-+intel-uncore-frequency-tpmi-y		:= uncore-frequency-tpmi.o
-diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-tpmi.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-tpmi.c
-new file mode 100644
-index 000000000000..5e454e9dd4a7
---- /dev/null
-+++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-tpmi.c
-@@ -0,0 +1,338 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * uncore-frquency-tpmi: Uncore frequency scaling using TPMI
-+ *
-+ * Copyright (c) 2023, Intel Corporation.
-+ * All Rights Reserved.
-+ *
-+ * The hardware interface to read/write is basically substitution of
-+ * MSR 0x620 and 0x621.
-+ * There are specific MMIO offset and bits to get/set minimum and
-+ * maximum uncore ratio, similar to MSRs.
-+ * The scope of the uncore MSRs was package scope. But TPMI allows
-+ * new gen CPUs to have multiple uncore controls at uncore-cluster
-+ * level. Each package can have multiple power domains which further
-+ * can have multiple clusters.
-+ * Here number of power domains = number of resources in this aux
-+ * device. There are offsets and bits to discover number of clusters
-+ * and offset for each cluster level controls.
-+ *
-+ */
++SoCs with TPMI (Topology Aware Register and PM Capsule Interface)
++-----------------------------------------------------------------
 +
-+#include <linux/auxiliary_bus.h>
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/intel_tpmi.h>
++An SoC can contain multiple power domains with individual or collection
++of mesh partitions. This partition is called fabric cluster.
 +
-+#include "uncore-frequency-common.h"
++Certain type of meshes will need to run at the same frequency, they will
++be placed in the same fabric cluster. Benefit of fabric cluster is that it
++offers a scalable mechanism to deal with partitioned fabrics in a SoC.
 +
-+#define	UNCORE_HEADER_VERSION		1
-+#define UNCORE_HEADER_INDEX		0
-+#define UNCORE_FABRIC_CLUSTER_OFFSET	8
++The current sysfs interface supports controls at package and die level.
++This interface is not enough to support more granular control at
++fabric cluster level.
 +
-+/* status + control + adv_ctl1 + adv_ctl2 */
-+#define UNCORE_FABRIC_CLUSTER_SIZE	(4 * 8)
++SoCs with the support of TPMI (Topology Aware Register and PM Capsule
++Interface), can have multiple power domains. Each power domain can
++contain one or more fabric clusters.
 +
-+#define UNCORE_STATUS_INDEX		0
-+#define UNCORE_CONTROL_INDEX		8
++To represent controls at fabric cluster level in addition to the
++controls at package and die level (like systems without TPMI
++support), sysfs is enhanced. This granular interface is presented in the
++sysfs with directories names prefixed with "uncore". For example:
++uncore00, uncore01 etc.
 +
-+#define UNCORE_FREQ_KHZ_MULTIPLIER	100000
++The scope of control is specified by attributes "package_id", "domain_id"
++and "fabric_cluster_id" in the directory.
 +
-+struct tpmi_uncore_struct;
++Attributes in each directory:
 +
-+/* Information for each cluster */
-+struct tpmi_uncore_cluster_info {
-+	u8 __iomem *cluster_base;
-+	struct uncore_data uncore_data;
-+	struct tpmi_uncore_struct *uncore_root;
-+};
++``domain_id``
++	This attribute is used to get the power domain id of this instance.
 +
-+/* Information for each power domain */
-+struct tpmi_uncore_power_domain_info {
-+	u8 __iomem *uncore_base;
-+	int ufs_header_ver;
-+	int cluster_count;
-+	struct tpmi_uncore_cluster_info *cluster_infos;
-+};
++``fabric_cluster_id``
++	This attribute is used to get the fabric cluster id of this instance.
 +
-+/* Information for all power domains in a package */
-+struct tpmi_uncore_struct {
-+	int power_domain_count;
-+	struct tpmi_uncore_power_domain_info *pd_info;
-+	struct tpmi_uncore_cluster_info root_cluster;
-+};
++``package_id``
++	This attribute is used to get the package id of this instance.
 +
-+#define UNCORE_GENMASK_MIN_RATIO	GENMASK_ULL(21, 15)
-+#define UNCORE_GENMASK_MAX_RATIO	GENMASK_ULL(14, 8)
++The other attributes are same as presented at package_*_die_* level.
 +
-+/* Helper function to read MMIO offset for max/min control frequency */
-+static void read_control_freq(struct tpmi_uncore_cluster_info *cluster_info,
-+			     unsigned int *min, unsigned int *max)
++In most of current use cases, the "max_freq_khz" and "min_freq_khz"
++is updated at "package_*_die_*" level. This model will be still supported
++with the following approach:
++
++When user uses controls at "package_*_die_*" level, then every fabric
++cluster is affected in that package and die. For example: user changes
++"max_freq_khz" in the package_00_die_00, then "max_freq_khz" for uncore*
++directory with the same package id will be updated. In this case user can
++still update "max_freq_khz" at each uncore* level, which is more restrictive.
++Similarly, user can update "min_freq_khz" at "package_*_die_*" level
++to apply at each uncore* level.
++
++Support for "current_freq_khz" is available only at each fabric cluster
++level (i.e., in uncore* directory).
+diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
+index fa8f14c925ec..b86e65a8ffdc 100644
+--- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
++++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
+@@ -16,11 +16,34 @@ static struct kobject *uncore_root_kobj;
+ /* uncore instance count */
+ static int uncore_instance_count;
+ 
++static DEFINE_IDA(intel_uncore_ida);
++
+ /* callbacks for actual HW read/write */
+ static int (*uncore_read)(struct uncore_data *data, unsigned int *min, unsigned int *max);
+ static int (*uncore_write)(struct uncore_data *data, unsigned int input, unsigned int min_max);
+ static int (*uncore_read_freq)(struct uncore_data *data, unsigned int *freq);
+ 
++static ssize_t show_domain_id(struct device *dev, struct device_attribute *attr, char *buf)
 +{
-+	u64 control;
++	struct uncore_data *data = container_of(attr, struct uncore_data, domain_id_dev_attr);
 +
-+	control = readq(cluster_info->cluster_base + UNCORE_CONTROL_INDEX);
-+	*max = FIELD_GET(UNCORE_GENMASK_MAX_RATIO, control) * UNCORE_FREQ_KHZ_MULTIPLIER;
-+	*min = FIELD_GET(UNCORE_GENMASK_MIN_RATIO, control) * UNCORE_FREQ_KHZ_MULTIPLIER;
++	return sprintf(buf, "%u\n", data->domain_id);
 +}
 +
-+#define UNCORE_MAX_RATIO	0x7F
-+
-+/* Callback for sysfs read for max/min frequencies. Called under mutex locks */
-+static int uncore_read_control_freq(struct uncore_data *data, unsigned int *min,
-+				    unsigned int *max)
++static ssize_t show_fabric_cluster_id(struct device *dev, struct device_attribute *attr, char *buf)
 +{
-+	struct tpmi_uncore_cluster_info *cluster_info;
-+	struct tpmi_uncore_struct *uncore_root;
-+	int i, _min = 0, _max = 0;
++	struct uncore_data *data = container_of(attr, struct uncore_data, fabric_cluster_id_dev_attr);
 +
-+	cluster_info = container_of(data, struct tpmi_uncore_cluster_info, uncore_data);
-+	uncore_root = cluster_info->uncore_root;
++	return sprintf(buf, "%u\n", data->cluster_id);
++}
 +
-+	*min = UNCORE_MAX_RATIO * UNCORE_FREQ_KHZ_MULTIPLIER;
-+	*max = 0;
++static ssize_t show_package_id(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct uncore_data *data = container_of(attr, struct uncore_data, package_id_dev_attr);
 +
-+	/*
-+	 * Get the max/min by looking at each cluster. Get the lowest
-+	 * min and highest max.
-+	 */
-+	for (i = 0; i < uncore_root->power_domain_count; ++i) {
-+		int j;
++	return sprintf(buf, "%u\n", data->package_id);
++}
 +
-+		for (j = 0; j < uncore_root->pd_info[i].cluster_count; ++j) {
-+			read_control_freq(&uncore_root->pd_info[i].cluster_infos[j],
-+					  &_min, &_max);
-+			if (*min > _min)
-+				*min = _min;
-+			if (*max < _max)
-+				*max = _max;
-+		}
+ static ssize_t show_min_max_freq_khz(struct uncore_data *data,
+ 				      char *buf, int min_max)
+ {
+@@ -161,6 +184,15 @@ static int create_attr_group(struct uncore_data *data, char *name)
+ 	init_attribute_ro(initial_max_freq_khz);
+ 	init_attribute_root_ro(current_freq_khz);
+ 
++	if (data->domain_id != UNCORE_DOMAIN_ID_INVALID) {
++		init_attribute_root_ro(domain_id);
++		data->uncore_attrs[index++] = &data->domain_id_dev_attr.attr;
++		init_attribute_root_ro(fabric_cluster_id);
++		data->uncore_attrs[index++] = &data->fabric_cluster_id_dev_attr.attr;
++		init_attribute_root_ro(package_id);
++		data->uncore_attrs[index++] = &data->package_id_dev_attr.attr;
 +	}
 +
-+	return 0;
-+}
+ 	data->uncore_attrs[index++] = &data->max_freq_khz_dev_attr.attr;
+ 	data->uncore_attrs[index++] = &data->min_freq_khz_dev_attr.attr;
+ 	data->uncore_attrs[index++] = &data->initial_min_freq_khz_dev_attr.attr;
+@@ -191,12 +223,24 @@ int uncore_freq_add_entry(struct uncore_data *data, int cpu)
+ 		goto uncore_unlock;
+ 	}
+ 
+-	sprintf(data->name, "package_%02d_die_%02d", data->package_id, data->die_id);
++	if (data->domain_id != UNCORE_DOMAIN_ID_INVALID) {
++		ret = ida_alloc(&intel_uncore_ida, GFP_KERNEL);
++		if (ret < 0)
++			goto uncore_unlock;
 +
-+/* Helper function to write MMIO offset for max/min control frequency */
-+static void write_control_freq(struct tpmi_uncore_cluster_info *cluster_info, unsigned int input,
-+			      unsigned int min_max)
-+{
-+	u64 control;
-+
-+	control = readq(cluster_info->cluster_base + UNCORE_CONTROL_INDEX);
-+
-+	if (min_max) {
-+		control &= ~UNCORE_GENMASK_MAX_RATIO;
-+		control |= FIELD_PREP(UNCORE_GENMASK_MAX_RATIO, input);
++		data->instance_id = ret;
++		sprintf(data->name, "uncore%02d", ret);
 +	} else {
-+		control &= ~UNCORE_GENMASK_MIN_RATIO;
-+		control |= FIELD_PREP(UNCORE_GENMASK_MIN_RATIO, input);
++		sprintf(data->name, "package_%02d_die_%02d", data->package_id, data->die_id);
 +	}
+ 
+ 	uncore_read(data, &data->initial_min_freq_khz, &data->initial_max_freq_khz);
+ 
+ 	ret = create_attr_group(data, data->name);
+-	if (!ret) {
++	if (ret) {
++		if (data->domain_id != UNCORE_DOMAIN_ID_INVALID)
++			ida_free(&intel_uncore_ida, data->instance_id);
++	} else {
+ 		data->control_cpu = cpu;
+ 		data->valid = true;
+ 	}
+@@ -214,6 +258,9 @@ void uncore_freq_remove_die_entry(struct uncore_data *data)
+ 	delete_attr_group(data, data->name);
+ 	data->control_cpu = -1;
+ 	data->valid = false;
++	if (data->domain_id != UNCORE_DOMAIN_ID_INVALID)
++		ida_free(&intel_uncore_ida, data->instance_id);
 +
-+	writeq(control, (cluster_info->cluster_base + UNCORE_CONTROL_INDEX));
-+}
+ 	mutex_unlock(&uncore_lock);
+ }
+ EXPORT_SYMBOL_NS_GPL(uncore_freq_remove_die_entry, INTEL_UNCORE_FREQUENCY);
+diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.h b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.h
+index f5dcfa2fb285..7afb69977c7e 100644
+--- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.h
++++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.h
+@@ -21,6 +21,9 @@
+  * @valid:		Mark the data valid/invalid
+  * @package_id:	Package id for this instance
+  * @die_id:		Die id for this instance
++ * @domain_id:		Power domain id for this instance
++ * @cluster_id:		cluster id in a domain
++ * @instance_id:	Unique instance id to append to directory name
+  * @name:		Sysfs entry name for this instance
+  * @uncore_attr_group:	Attribute group storage
+  * @max_freq_khz_dev_attr: Storage for device attribute max_freq_khz
+@@ -28,6 +31,9 @@
+  * @initial_max_freq_khz_dev_attr: Storage for device attribute initial_max_freq_khz
+  * @initial_min_freq_khz_dev_attr: Storage for device attribute initial_min_freq_khz
+  * @current_freq_khz_dev_attr: Storage for device attribute current_freq_khz
++ * @domain_id_dev_attr: Storage for device attribute domain_id
++ * @fabric_cluster_id_dev_attr: Storage for device attribute fabric_cluster_id
++ * @package_id_dev_attr: Storage for device attribute package_id
+  * @uncore_attrs:	Attribute storage for group creation
+  *
+  * This structure is used to encapsulate all data related to uncore sysfs
+@@ -41,6 +47,9 @@ struct uncore_data {
+ 	bool valid;
+ 	int package_id;
+ 	int die_id;
++	int domain_id;
++	int cluster_id;
++	int instance_id;
+ 	char name[32];
+ 
+ 	struct attribute_group uncore_attr_group;
+@@ -49,9 +58,14 @@ struct uncore_data {
+ 	struct device_attribute initial_max_freq_khz_dev_attr;
+ 	struct device_attribute initial_min_freq_khz_dev_attr;
+ 	struct device_attribute current_freq_khz_dev_attr;
+-	struct attribute *uncore_attrs[6];
++	struct device_attribute domain_id_dev_attr;
++	struct device_attribute fabric_cluster_id_dev_attr;
++	struct device_attribute package_id_dev_attr;
++	struct attribute *uncore_attrs[9];
+ };
+ 
++#define UNCORE_DOMAIN_ID_INVALID	-1
 +
-+/* Callback for sysfs write for max/min frequencies. Called under mutex locks */
-+static int uncore_write_control_freq(struct uncore_data *data, unsigned int input,
-+				     unsigned int min_max)
-+{
-+	struct tpmi_uncore_cluster_info *cluster_info;
-+	struct tpmi_uncore_struct *uncore_root;
-+	int i;
-+
-+	input /= UNCORE_FREQ_KHZ_MULTIPLIER;
-+	if (!input || input > UNCORE_MAX_RATIO)
-+		return -EINVAL;
-+
-+	cluster_info = container_of(data, struct tpmi_uncore_cluster_info, uncore_data);
-+	uncore_root = cluster_info->uncore_root;
-+
-+	/* Update each cluster in a package */
-+	for (i = 0; i < uncore_root->power_domain_count; ++i) {
-+		int j;
-+
-+		for (j = 0; j < uncore_root->pd_info[i].cluster_count; ++j)
-+			write_control_freq(&uncore_root->pd_info[i].cluster_infos[j],
-+					   input, min_max);
-+	}
-+
-+	return 0;
-+}
-+
-+/* Callback for sysfs read for the current uncore frequency. Called under mutex locks */
-+static int uncore_read_freq(struct uncore_data *data, unsigned int *freq)
-+{
-+	return -ENODATA;
-+}
-+
-+#define UNCORE_GENMASK_VERSION			GENMASK_ULL(7, 0)
-+#define UNCORE_LOCAL_FABRIC_CLUSTER_ID_MASK	GENMASK_ULL(15, 8)
-+#define UNCORE_CLUSTER_OFF_MASK			GENMASK_ULL(7, 0)
-+#define UNCORE_MAX_CLUSTER_PER_DOMAIN		8
-+
-+static int uncore_probe(struct auxiliary_device *auxdev, const struct auxiliary_device_id *id)
-+{
-+	struct intel_tpmi_plat_info *plat_info;
-+	struct tpmi_uncore_struct *tpmi_uncore;
-+	int ret, i, pkg = 0;
-+	int num_resources;
-+
-+	/* Get number of power domains, which is equal to number of resources */
-+	num_resources = tpmi_get_resource_count(auxdev);
-+	if (!num_resources)
-+		return -EINVAL;
-+
-+	/* Register callbacks to uncore core */
-+	ret = uncore_freq_common_init(uncore_read_control_freq, uncore_write_control_freq,
-+				      uncore_read_freq);
-+	if (ret)
-+		return ret;
-+
-+	/* Allocate uncore instance per package */
-+	tpmi_uncore = devm_kzalloc(&auxdev->dev, sizeof(*tpmi_uncore), GFP_KERNEL);
-+	if (!tpmi_uncore) {
-+		ret = -ENOMEM;
-+		goto err_rem_common;
-+	}
-+
-+	/* Allocate memory for all power domains in a package */
-+	tpmi_uncore->pd_info = devm_kcalloc(&auxdev->dev, num_resources,
-+					    sizeof(*tpmi_uncore->pd_info),
-+					    GFP_KERNEL);
-+	if (!tpmi_uncore->pd_info) {
-+		ret = -ENOMEM;
-+		goto err_rem_common;
-+	}
-+
-+	tpmi_uncore->power_domain_count = num_resources;
-+
-+	/* Get the package ID from the TPMI core */
-+	plat_info = tpmi_get_platform_data(auxdev);
-+	if (plat_info)
-+		pkg = plat_info->package_id;
-+	else
-+		dev_info(&auxdev->dev, "Platform information is NULL\n");
-+
-+	for (i = 0; i < num_resources; ++i) {
-+		struct tpmi_uncore_power_domain_info *pd_info;
-+		struct resource *res;
-+		u64 cluster_offset;
-+		u8 cluster_mask;
-+		int mask, j;
-+		u64 header;
-+
-+		res = tpmi_get_resource_at_index(auxdev, i);
-+		if (!res)
-+			continue;
-+
-+		pd_info = &tpmi_uncore->pd_info[i];
-+
-+		pd_info->uncore_base = devm_ioremap_resource(&auxdev->dev, res);
-+		if (IS_ERR(pd_info->uncore_base)) {
-+			ret = PTR_ERR(pd_info->uncore_base);
-+			goto err_rem_common;
-+		}
-+
-+		/* Check for version and skip this resource if there is mismatch */
-+		header = readq(pd_info->uncore_base);
-+		pd_info->ufs_header_ver = header & UNCORE_GENMASK_VERSION;
-+		if (pd_info->ufs_header_ver != UNCORE_HEADER_VERSION) {
-+			dev_info(&auxdev->dev, "Uncore: Unsupported version:%d\n",
-+				pd_info->ufs_header_ver);
-+			continue;
-+		}
-+
-+		/* Get Cluster ID Mask */
-+		cluster_mask = FIELD_GET(UNCORE_LOCAL_FABRIC_CLUSTER_ID_MASK, header);
-+		if (!cluster_mask) {
-+			dev_info(&auxdev->dev, "Uncore: Invalid cluster mask:%x\n", cluster_mask);
-+			continue;
-+		}
-+
-+		/* Find out number of clusters in this resource */
-+		mask = 0x01;
-+		for (j = 0; j < UNCORE_MAX_CLUSTER_PER_DOMAIN; ++j) {
-+			if (cluster_mask & mask)
-+				pd_info->cluster_count++;
-+			mask <<= 1;
-+		}
-+
-+		pd_info->cluster_infos = devm_kcalloc(&auxdev->dev, pd_info->cluster_count,
-+						      sizeof(struct tpmi_uncore_cluster_info),
-+						      GFP_KERNEL);
-+		if (!pd_info->cluster_infos) {
-+			ret = -ENOMEM;
-+			goto err_rem_common;
-+		}
-+		/*
-+		 * Each byte in the register point to status and control
-+		 * registers belonging to cluster id 0-8.
-+		 */
-+		cluster_offset = readq(pd_info->uncore_base +
-+					UNCORE_FABRIC_CLUSTER_OFFSET);
-+
-+		for (j = 0; j < pd_info->cluster_count; ++j) {
-+			struct tpmi_uncore_cluster_info *cluster_info;
-+
-+			/* Get the offset for this cluster */
-+			mask = (cluster_offset & UNCORE_CLUSTER_OFF_MASK);
-+			/* Offset in QWORD, so change to bytes */
-+			mask <<= 3;
-+
-+			cluster_info = &pd_info->cluster_infos[j];
-+
-+			cluster_info->cluster_base = pd_info->uncore_base + mask;
-+
-+			cluster_info->uncore_data.package_id = pkg;
-+			/* There are no dies like Cascade Lake */
-+			cluster_info->uncore_data.die_id = 0;
-+
-+			/* Point to next cluster offset */
-+			cluster_offset >>= UNCORE_MAX_CLUSTER_PER_DOMAIN;
-+		}
-+	}
-+
-+	auxiliary_set_drvdata(auxdev, tpmi_uncore);
-+
-+	tpmi_uncore->root_cluster.uncore_root = tpmi_uncore;
-+	tpmi_uncore->root_cluster.uncore_data.package_id = pkg;
-+	ret = uncore_freq_add_entry(&tpmi_uncore->root_cluster.uncore_data, 0);
-+	if (ret)
-+		goto err_rem_common;
-+
-+	return 0;
-+
-+err_rem_common:
-+	uncore_freq_common_exit();
-+
-+	return ret;
-+}
-+
-+static void uncore_remove(struct auxiliary_device *auxdev)
-+{
-+	struct tpmi_uncore_struct *tpmi_uncore = auxiliary_get_drvdata(auxdev);
-+
-+	uncore_freq_remove_die_entry(&tpmi_uncore->root_cluster.uncore_data);
-+
-+	uncore_freq_common_exit();
-+}
-+
-+static const struct auxiliary_device_id intel_uncore_id_table[] = {
-+	{ .name = "intel_vsec.tpmi-uncore" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(auxiliary, intel_uncore_id_table);
-+
-+static struct auxiliary_driver intel_uncore_aux_driver = {
-+	.id_table       = intel_uncore_id_table,
-+	.remove         = uncore_remove,
-+	.probe          = uncore_probe,
-+};
-+
-+module_auxiliary_driver(intel_uncore_aux_driver);
-+
-+MODULE_IMPORT_NS(INTEL_TPMI);
-+MODULE_IMPORT_NS(INTEL_UNCORE_FREQUENCY);
-+MODULE_DESCRIPTION("Intel TPMI UFS Driver");
-+MODULE_LICENSE("GPL");
+ int uncore_freq_common_init(int (*read_control_freq)(struct uncore_data *data, unsigned int *min, unsigned int *max),
+ 			     int (*write_control_freq)(struct uncore_data *data, unsigned int input, unsigned int min_max),
+ 			     int (*uncore_read_freq)(struct uncore_data *data, unsigned int *freq));
+diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
+index 00ac7e381441..0ea13c5fbba8 100644
+--- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
++++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
+@@ -136,6 +136,7 @@ static int uncore_event_cpu_online(unsigned int cpu)
+ 
+ 	data->package_id = topology_physical_package_id(cpu);
+ 	data->die_id = topology_die_id(cpu);
++	data->domain_id = UNCORE_DOMAIN_ID_INVALID;
+ 
+ 	return uncore_freq_add_entry(data, cpu);
+ }
 -- 
 2.38.1
 
