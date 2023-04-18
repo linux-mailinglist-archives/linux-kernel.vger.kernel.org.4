@@ -2,138 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEED26E6E86
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA336E6E8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbjDRVpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
+        id S232163AbjDRVq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233069AbjDRVpS (ORCPT
+        with ESMTP id S233074AbjDRVqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:45:18 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4117C67B;
-        Tue, 18 Apr 2023 14:45:09 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6a5f7341850so897082a34.2;
-        Tue, 18 Apr 2023 14:45:09 -0700 (PDT)
+        Tue, 18 Apr 2023 17:46:21 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1184C671
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:45:51 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id vc20so21866136ejc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:45:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1681854349; x=1684446349;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+7fzjxjpSJQbGFahxPhwqauiqYw82JYBD81Vlaf8aNg=;
+        b=n8JnoZPj6nSoiMjCWqD+A8FQGaFm947tubfOwN8d6KbUhPu8/lp5EjJBguCkCuMVKK
+         6ApNVzzAcgaLkuwqGRDQdM3KbXBZymURm+HdMHGVhVVhJl910gYm+lnnHchTCIHPsPt3
+         z1q4QR0zF/wcKHG2FL4TEsFtMCCpYZTAKIcks=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681854309; x=1684446309;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IKpSiwDvkIJ4Ee0IkVP1leE3m81/FJq1JLmHBimQnb0=;
-        b=TKF/oxjFo7VGn1l6+rfU88F0yYz9724S2sED0nqM8XVvr4DEbuOheVkxCoxJgjwIOd
-         /tmBd2+Kr4oTBdn3zLef2wjsDRLnn4+hHEJ6kmKYaFgk912hKEjIgdSKY+PkGSEUwx+6
-         W36T/ZaBgmbCvV5MLE3VkpbLKM7JGViDxHBefbuqzi4DCD3eNX/KTwx5rS6YHUEG+xqp
-         39Nnn9TSmjR+5rpn4G4fzLeP0NgYJDT72jyE+7W5ZbKmO4bE4XW3t0jSqFxqgd4XDYeF
-         sxzmkQoUATK4MAlAylUOMD7wnY0ebKy7vo9ylTZQD3NTPbFS4ljwNIG6cFn8oyLQqSjl
-         WTrA==
-X-Gm-Message-State: AAQBX9ccAJnk3IM+j7fe0DRSZurUz6nQgHveEN+9sSRXP1TuO1Hxa862
-        UOWnIUS1XrG2KDUNPWJ8Mw==
-X-Google-Smtp-Source: AKy350YOCKZIn8qwH+HZXgrE3U7IfJnx4tOh/Ek/I9oSrTeZ/BLeqYlOwRESU5x2BXf1lvF6X1eWUA==
-X-Received: by 2002:a05:6871:8a1:b0:177:b208:af7c with SMTP id r33-20020a05687108a100b00177b208af7cmr1978130oaq.54.1681854309097;
-        Tue, 18 Apr 2023 14:45:09 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r4-20020a056870414400b0017ae909afe8sm6086325oad.34.2023.04.18.14.45.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 14:45:08 -0700 (PDT)
-Received: (nullmailer pid 2383368 invoked by uid 1000);
-        Tue, 18 Apr 2023 21:45:07 -0000
-Date:   Tue, 18 Apr 2023 16:45:07 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Artur Weber <aweber.kernel@gmail.com>
-Cc:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@gmail.com,
-        daniel@ffwll.ch, krzysztof.kozlowski+dt@linaro.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH 1/3] dt-bindings: panel: Add Samsung S6D7AA0 LCD
- controller bindings
-Message-ID: <20230418214507.GA2380126-robh@kernel.org>
-References: <20230416100139.13741-1-aweber.kernel@gmail.com>
- <20230416100139.13741-2-aweber.kernel@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230416100139.13741-2-aweber.kernel@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1681854349; x=1684446349;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+7fzjxjpSJQbGFahxPhwqauiqYw82JYBD81Vlaf8aNg=;
+        b=IkB8r2Nb+L5Ug9ILsLdlPU3S/MlPX/qV0gk7VP2et7VKpkInLhk16XRgZ3MME60ffu
+         RI5QXDNKC8Tc6JM0Lgg4S87HD5Oq2gdxnl+GMbLU3aJsg/BPpWin0W+BIW4OOpuJ2jkI
+         lvHIUqCOUxL9FR7kTLPe7fzcQWhOnbeBTBlCZmLuhrzHTEKg1qF5cBe6i7eNd9CWBVI6
+         Mous7a5XSqKqmmiWet7pNkJEM7VPL/VaxbLeQiqiAKvtwD6f0m10bODj3O/3jsS/vs80
+         8UGLvTA9BIUJPLl7dBi1FV2/OrBgCDpxtAkO/I2zNtC1rsqmp2jcbI2FpoySDvfaZ03P
+         K+Og==
+X-Gm-Message-State: AAQBX9fTX5s7pQJpdhiKTZe4L/W1af+gt0kpwl99stla3gps50HNQh8U
+        kXkXZu162XkUNVFyvB5VlN2NRw==
+X-Google-Smtp-Source: AKy350ZNFPKryyLDsksUkZk8sVrSowPL//l4P852yJIGScZucnixJVGJkKBnDd29l9yMxe0VpNomlg==
+X-Received: by 2002:a17:906:564e:b0:94e:ec0f:455 with SMTP id v14-20020a170906564e00b0094eec0f0455mr11836365ejr.54.1681854349299;
+        Tue, 18 Apr 2023 14:45:49 -0700 (PDT)
+Received: from smtpclient.apple ([206.0.75.9])
+        by smtp.gmail.com with ESMTPSA id se12-20020a170906ce4c00b0094ecd76eda9sm7499896ejb.182.2023.04.18.14.45.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 14:45:48 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: clangd cannot handle tree_nocb.h
+Date:   Tue, 18 Apr 2023 23:45:37 +0200
+Message-Id: <F76FA81E-C173-418E-B44D-359850A0723A@joelfernandes.org>
+References: <20230418210321.GA3648938@google.com>
+Cc:     rcu@vger.kernel.org, nathan@kernel.org, trix@redhat.com,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        paulmck@kernel.org
+In-Reply-To: <20230418210321.GA3648938@google.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>, revest@google.com
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 12:01:37PM +0200, Artur Weber wrote:
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> ---
->  .../display/panel/samsung,s6d7aa0.yaml        | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml b/Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
-> new file mode 100644
-> index 000000000000..969cef7738b8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/panel/samsung,s6d7aa0.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Samsung S6D7AA0 MIPI-DSI LCD panel controller
-> +
-> +maintainers:
-> +  - Artur Weber <aweber.kernel@gmail.com>
-> +
-> +allOf:
-> +  - $ref: panel-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: samsung,s6d7aa0-lsl080al02
-> +
-> +  reg: true
-> +  reset-gpios: true
-> +  backlight: true
-> +
-> +  enable-supply:
-> +    description: Enable supply
+Adding Florent as well since Nick added him to the other thread.
 
-If there's only a single supply, then why not use panel-simple-dsi.yaml?
+Thanks.
 
-> +
-> +required:
-> +  - compatible
-> +  - reset-gpios
-> +  - enable-supply
-> +  - backlight
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    dsi {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        panel@0 {
-> +            compatible = "samsung,s6d7aa0-lsl080al02";
-> +            reg = <0>;
-> +            enable-supply = <&lcd_enable_supply>;
-> +            reset-gpios = <&gpf0 4 GPIO_ACTIVE_LOW>;
-> +            backlight = <&backlight>;
-> +        };
-> +    };
-> +
-> +...
-> -- 
-> 2.40.0
-> 
+> On Apr 18, 2023, at 11:03 PM, Joel Fernandes <joel@joelfernandes.org> wrot=
+e:
+>=20
+> =EF=BB=BFHi Nick,
+>=20
+>> On Tue, Apr 18, 2023 at 01:46:40PM -0700, Nick Desaulniers wrote:
+>>> On Tue, Apr 18, 2023 at 1:36=E2=80=AFPM Joel Fernandes <joel@joelfernand=
+es.org> wrote:
+>>>=20
+>>> On Fri, Apr 14, 2023 at 03:47:51PM -0700, Nick Desaulniers wrote:
+>>>> On Thu, Apr 13, 2023 at 5:53=E2=80=AFPM Joel Fernandes <joel@joelfernan=
+des.org> wrote:
+>>>>>=20
+>>>>> Hello!
+>>>>>=20
+>>>>> I have been trying to get clangd working properly with tree_nocb.h. cl=
+angd
+>>>>> trips quite badly when trying to build tree_nocb.h to generate ASTs.
+>>>>=20
+>>>> Hi Joel,
+>>>> Thanks for the report.  What are you using clangd for? I'll bet
+>>>> something interesting.
+>>>=20
+>>> Thanks for the response and sorry for the late reply. I am at the OSPM
+>>> conference. I use vim and vscode with clangd. In vim, YCM uses it to
+>>> highlight compiler errors live while editing, I am pretty happy with it s=
+o
+>>> far and has been a huge time saver. Enough that now I want to use it for=
+
+>>> everything...
+>>=20
+>> Cool! I use vim, can you share more info about your set up for this?
+>> I'll have to try it.
+>=20
+> This is how I installed YCM:
+>=20
+> # Install YouCompleteMe for vim
+> # cd ~/.vim/bundle
+> # git clone https://github.com/Valloric/YouCompleteMe.git
+> # cd YouCompleteMe/
+> # git submodule update --init --recursive
+> # python3 install.py --clang-completer
+>=20
+> Then install and run bear in the kernel sources to generate
+> compile_compands.json:
+> bear -- make -j99 CC=3Dclang
+>=20
+> However, there's also the script:
+> scripts/clang-tools/gen_compile_commands.py
+>=20
+> This generates the .json from an existing build. Thank God because we can
+> probably make this generate better .json files which may make clangd bette=
+r.
+>=20
+> You don't need YCM to reproduce the issue though if you just use vscode wi=
+th
+> the clangd plugin.
+>=20
+>>> I first came across clangd when developing Chrome userspace code which i=
+s C++
+>>> :). In Chrome, ninja builds can be made to output compile_commands.json.=
+
+>>> However, now I noticed the support in the kernel and was like, wow I nee=
+d to
+>>> try it. Further, YCM seems to work much better with it than without :)
+>>>=20
+>>>> I've never used it myself, so I don't know where to even begin with
+>>>> how to reproduce the issue.
+>>>=20
+>>> Ah ok. :). When I ran get_maintainer on the script, your name popped up a=
+nd
+>>> someone also suggested that you're the goto person for clang on the kern=
+el
+>>> (which I kind of already knew ;)
+>>=20
+>> You've cc'ed the right set of folks.  We might not have the expertise
+>> related to clangd specifically, but we can point you in the right
+>> direction.
+>=20
+> Sure, thanks! And thanks for CC'ing the right folks.
+>=20
+>>>> It might be worth filing a bug upstream at
+>>>> https://github.com/llvm/llvm-project/issues
+>>>> or internally under the component
+>>>> Language Platforms > C++ > Clang > Tools > Clangd
+>>>> with detailed steps to reproduce (and what the observed error actually
+>>>> is). Feel free to cc me, though I don't know the first thing about
+>>>> clangd.
+>>>=20
+>>> Ok I will consider doing this if needed. One thing I do observe is lack o=
+f
+>>> good support for header files and it is a known clangd issue [1].
+>>>=20
+>>> However, the fixes I was proposing can purely be done in the kernel itse=
+lf
+>>> since all it'd require is generating compile_compands.json with the -D<m=
+acro>
+>>> and editing files to keep clangd happy. I guess one question is, how wel=
+come
+>>> would such changes to header files be since they're for tooling and isn'=
+t
+>>> code that will be compiled outside of clangd.
+>>=20
+>> Specifically your patch sites some log print that doesn't look
+>> indicative of a failure:
+>> https://github.com/llvm/llvm-project/blob/53430bfd5c9d0074dd6de06dccea366=
+e1d40bce4/clang-tools-extra/clangd/TUScheduler.cpp#L903-L906
+>> so something else is going on here. Just trying to make sure we root caus=
+e this.
+>>=20
+>=20
+> Right, so clangd's log does not show failure, the failure is when it displ=
+ays
+> in the code editor that your code has compiler errors when in fact it does=
+
+> not.
+>=20
+> So if you open up tree_nocb.h in vscode, for example, you'll see squiggles=
+
+> saying 'undefined reference to rcu_data', etc. That makes clangd stop work=
+ing
+> at the error. Sorry to not make the failure mode clear earlier.
+>=20
+> thanks,
+>=20
+> - Joel
+>=20
