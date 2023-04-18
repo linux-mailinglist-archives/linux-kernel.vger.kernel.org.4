@@ -2,531 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E5D6E5DE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5548E6E5E32
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjDRJuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S229756AbjDRKGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 06:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjDRJuS (ORCPT
+        with ESMTP id S229597AbjDRKGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:50:18 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C4710D9;
-        Tue, 18 Apr 2023 02:50:13 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 615B724E1F2;
-        Tue, 18 Apr 2023 17:50:11 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 18 Apr
- 2023 17:50:11 +0800
-Received: from [192.168.120.57] (171.223.208.138) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 18 Apr
- 2023 17:50:10 +0800
-Message-ID: <52107b3c-1d5a-183a-7634-f1ded6e84aaa@starfivetech.com>
-Date:   Tue, 18 Apr 2023 17:50:09 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [RESEND v3 2/2] pwm: starfive: Add PWM driver support
-To:     Thierry Reding <thierry.reding@gmail.com>
-CC:     <devicetree@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hal Feng <hal.feng@starfivetech.com>
-References: <20230321055228.105945-1-william.qiu@starfivetech.com>
- <20230321055228.105945-3-william.qiu@starfivetech.com>
- <ZC7U3MzdUX_TcA75@orome>
+        Tue, 18 Apr 2023 06:06:42 -0400
+X-Greylist: delayed 939 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Apr 2023 03:06:41 PDT
+Received: from refb01.tmes.trendmicro.eu (refb01.tmes.trendmicro.eu [18.185.115.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CFE3AA0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:06:41 -0700 (PDT)
+Received: from 104.47.7.176_.trendmicro.com (unknown [172.21.19.81])
+        by refb01.tmes.trendmicro.eu (Postfix) with ESMTPS id DB58A10352838
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:51:02 +0000 (UTC)
+Received: from 104.47.7.176_.trendmicro.com (unknown [172.21.196.187])
+        by repost01.tmes.trendmicro.eu (Postfix) with SMTP id E315E100004F3;
+        Tue, 18 Apr 2023 09:51:00 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1681811460.212000
+X-TM-MAIL-UUID: 8e2a42c2-f2a4-4d8f-b0d3-14cb9322d518
+Received: from DEU01-BE0-obe.outbound.protection.outlook.com (unknown [104.47.7.176])
+        by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 33FAE10000411;
+        Tue, 18 Apr 2023 09:51:00 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cJQ5W5R7sG4qvngqK/XRAYHhdDaMTKNv0jUXMDxofCujX6E4yuNyDmDekeQ9MelIJqLXssDP0yqkg/xPuVFzvfWulWSI1+FTbM2puThd4JVK4tjilcmDXUNCvwc6cMlmew4OOURhzjjk+7xPdJZE/5NhaoE9rV6YYhCX1A1VHQFADxDJ8BA4jeWUgxeFd5EmzyWlCuGcj55YjK82TDgYyiEYQdXX+OwX7LmXmjms8z3qjtPIBfbIVxZl+WObgfnHLulsmqihEpquolIqxcdmFmV6W9z4a6TQlGgQ3BwCMzOcb+5pK5UN1eF6sWcf1cQ4FcQc9ZcX1hBiiZGwe1UCOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hq/DrkI6mAt5UT22sxBbIujmVrLT0K/fZtqIUId3C44=;
+ b=clCgfQn+TWk0u/Xmcnn71js10dQJZ9UtFsQ1IQ0lF7Fj100RMfCqnLZpJqbLnYEPUfWoIYR9OMrEOXHcs8s11rgmtiScCUMpYSL0gPW22aASlTUqIKQtzp1mT+r4sLsSjWgAMTw8/Gy90GVJsWt1UP8UvONPWXUiGXu1wjFuj8O/2q3KUle+xnD7tzq8TtjwpxmWvsxFs8Xb2X6IqtyTcRxm36wsh7tqkQ2vMAoLaZ7n+RIl4z8Dq/WBaYR2+hOA9c/d9FtkN3VV9IjCi0EqnPUBdCcNUcRjmKKLZ0kxK/04szNfr88idRPnKqE6snGZ+GJ2Sq6UNRqDDe7fTI/FjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=opensynergy.com; dmarc=pass action=none
+ header.from=opensynergy.com; dkim=pass header.d=opensynergy.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=opensynergy.com;
+Message-ID: <9786872e-1063-e1ff-dc0d-6be5952a1826@opensynergy.com>
+Date:   Tue, 18 Apr 2023 11:50:56 +0200
+Subject: Re: [virtio-dev] Re: [RFC PATCH 1/1] can: virtio: Initial virtio CAN
+ driver.
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Harald Mommer <harald.mommer@opensynergy.com>,
+        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
+        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>,
+        stratos-dev@op-lists.linaro.org,
+        Matti Moell <Matti.Moell@opensynergy.com>
+References: <20220825134449.18803-1-harald.mommer@opensynergy.com>
+ <20220827093909.ag3zi7k525k4zuqq@pengutronix.de>
+ <40e3d678-b840-e780-c1da-367000724f69@opensynergy.com>
+ <c2c0ba34-2985-21ea-0809-b96a3aa5e401@siemens.com>
+ <36bb910c-4874-409b-ac71-d141cd1d8ecb@app.fastmail.com>
+ <c20ee6cf-2aae-25ef-e97f-0e7fc3f9c5b6@opensynergy.com>
+ <20230414-scariness-disrupt-5ec9cc82b20c-mkl@pengutronix.de>
 Content-Language: en-US
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <ZC7U3MzdUX_TcA75@orome>
-Content-Type: text/plain; charset="UTF-8"
+From:   Harald Mommer <hmo@opensynergy.com>
+In-Reply-To: <20230414-scariness-disrupt-5ec9cc82b20c-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: BE1P281CA0141.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:7c::13) To FR2P281MB1608.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:8b::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: FR2P281MB1608:EE_|BE1P281MB2888:EE_
+X-MS-Office365-Filtering-Correlation-Id: c2c66dce-76ce-4f6a-6a64-08db3ff2692f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: c4bUo2iyS6CqYIhVOyltIGnHGhxnwG8Tbx6LJsg4x5HPnPcV3XlU8ZMBjTb+gRf7zWG/8NN4h23Nvd2FxjIqey29Sk6E0tge8m+mBf1hpU+EBOyyA1rtJpPw1f83Lg73XxUuUiqP6VWiQFed7MEYVpFrFQpg8S/4KGPDFmWMcBzaQfcbs62Khtkbs/S3dAo+92Bb7BRvmDsuOGpavs85KiPH0JmF0RFrBXNveFwdb7ih7PgaSURRtq7vdmwGkLHlAAZ0MbJFUbqQvwKQuOgU5RnpBuSWYNm+L1QWyY5lUCr17LZ83d/GLADp0Qo1YjzDeipA4kghEHLVVvAN3TFxuNiTSp/2m2tvilBHwLMEBJERlaVIg/GAXh8gqboiqzRIwRZ88486ngHHzg0kGu6ThnQTxmlYOzsxBbVFmk7u0ZhrJZj6jSuczCqcEqeeT5+0gB1+3lFcGmSaw+YHWV1Ye/YNm0htcsmuP7M9PPGfULKyYgIO6DwN5ZZXCNbGXIW4VcBcGPc/Gl9/fkLAaZQj6u9YSRYBxxugW1g3VETe+NhEacHSmEOEvNowjYIcHHWR
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:FR2P281MB1608.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(136003)(346002)(39840400004)(376002)(451199021)(7416002)(5660300002)(2616005)(107886003)(31696002)(6636002)(83380400001)(186003)(53546011)(26005)(38100700002)(8676002)(8936002)(478600001)(54906003)(42186006)(110136005)(316002)(41300700001)(36756003)(66476007)(66556008)(4326008)(66946007)(31686004)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R2pKcXZsMWdZVGVSbjRJQll0UWNnVFpNQ3VlT1J1RFh3L1VFOVVLQmlYa3ZG?=
+ =?utf-8?B?cDNZRkV2NThvaXFmTVN5aEszTEZ1SjZwcFNBSm5tQS8zaUtIZzRPeHYyUUpP?=
+ =?utf-8?B?eDlqWUFoT0wxRGF6eWN4cXU3VGtHNkNyaGtXQi9SQnFiWnNqcGRpTEUxbmJQ?=
+ =?utf-8?B?N2I1RkUrRi9ta0NmMkJxNDdteWtVV1BDU3JIbzZ6bUZxdHExd1VwNU41MEFz?=
+ =?utf-8?B?dVNEbk1CVnhONndsMnRRQmcyTGNXaEVYRGpnOTdvOHRpZnAweTV2Yms2MDND?=
+ =?utf-8?B?eWc0Yk5pbEF5VFFBWnhtbnUySnZENWxJampDUlg2dlFGK3V3YjQzaTg0YU1h?=
+ =?utf-8?B?aTNBV1Vmc3Rtb0k5dmRyZTZOSDl2WUVaYUs0a1RreFpBL2toNkEyc21Fb0Q2?=
+ =?utf-8?B?SkJvWTVvS21SclR6VWl0QWlhejdac3d2dG9zalJXSHlwMFdxbVFGaDhZeHRm?=
+ =?utf-8?B?QXh1NWRob1VBUmlVelRjempSQXhtVGZ3L3daRGh3YXE0R0I3MjNPcnpaWnlW?=
+ =?utf-8?B?dHdJZnVlNXBpK0JvYjFJQmtxSUJrVHUrell1NTNodCtsL09FSDNDZnRYODIz?=
+ =?utf-8?B?UFE1ekczZlVLVllSVklVOFEwY09IZ3hsb1JUZ3ViWXoybU5tWEY5b3NoUkhn?=
+ =?utf-8?B?OHY3SCtOWXZjcUYxUGtuTTBHSGtMSUx3T2VQRGRzM3pUMEJWV2FaZi9nTlk1?=
+ =?utf-8?B?N0hSY09VWVUzTFlieENBRFA0dmZadUFnZGpJeFdBYVNUejViTk1RQ2xvZlRn?=
+ =?utf-8?B?VkxsaGhWWmlKMWFSbDZIZjRkQkcxY2tjUjl4NTU0WXNjRnJ2QytQdmFGMkdm?=
+ =?utf-8?B?WnlFMlFoT0FRRXlTdm9jK28yclA0T1FWYkQyUFNMdy85b05CQVFNLzFZdllL?=
+ =?utf-8?B?ZkwyeDZFa2dwYnorTytpcU43WFd5N2QyQlp3NURqSGp1RVN4eXplS0hxeWdn?=
+ =?utf-8?B?MlhlOWIvcS9ubW1hVjdiSVJoRjlhNUVkV3g5STdvWi9XZnd3MDFPeGd5dFVr?=
+ =?utf-8?B?YU5Pb1c5UGNwTDFXZ29LcGVtNVhyc2Qva2NweVd0NnFOcW9TbExVN0JXMk11?=
+ =?utf-8?B?emR5R0l5QlBVbmNmOVJiUFFtcDZNYWhnQ0c4TGhzbWtvRE9iL1JKb2hWMGZ0?=
+ =?utf-8?B?ZUZVMXFUaStockdtQTZwdjVrV0NYaUQwTW9QRGZmeUM3bTlReEFuaVRGTVd5?=
+ =?utf-8?B?cnExWVFjbkV1YlNza3FKNlBnSzhaR0crOHdVUUhTQzNyc3VSUFJYN0lGeGtO?=
+ =?utf-8?B?UTFHMzRlZGZYZGZrMDd0M1M5UnF4UDA0NE9RYzZ2RGhFZ2VBV2tUNEh6dE1t?=
+ =?utf-8?B?MkVBK1FyaEFKYW92c0xUVnFQNm1sTFJybHVkWU16bzFURWJzWUxhd3Q1NEU5?=
+ =?utf-8?B?R2VlOUlhc3ZUbFAxY3RlZnhJU3J0S0hoU0s1Q3pVcHRFVnhSUXArd0xYb2k0?=
+ =?utf-8?B?UEUwTFBjZlNqc3JqbCtTSDZzVGdpNjFucmtJODNHQXN4ZHpjWmU1ZmRZUk4y?=
+ =?utf-8?B?QjVQNDcxcEJHU1pxeXg4VFUyV1NYcXQzNFBHTVBKY0NhcFIwajVpVC9obzgw?=
+ =?utf-8?B?VEhzWEgxTVhoTHhZZU11ZHJZVkd4UnFWUkxjaVIxcWt2UU5rSkNJQ3p1LzdO?=
+ =?utf-8?B?WUlMajlyRVRMV3ZpTHErNStoK0hjQUR2azQ4eHJpR0hHTTBJamh2Q0lQcU4y?=
+ =?utf-8?B?WVl1MkJXY0g3TEVuc01CL05kbTd4QVdsclhsYUJ5czh2YTJKY3lPb2VJYktl?=
+ =?utf-8?B?YloxRXh6QzlFd3R5VTVQZmZZeU1FTjFIRGJmTVpvTGdiaWVvQnM5cFJIQzRL?=
+ =?utf-8?B?NWwxQVk4dE5TQUhucjNIamFpeVVkWjdwdWsySEpERU50M1NFNzlLcDB4NFhr?=
+ =?utf-8?B?MzE2MDRCcnBTckNzdHlRNGZPZVYvenVpZ0RJL3VJaVNQdllORFA0c1JqWDJj?=
+ =?utf-8?B?d3Z1Z1ZIL29XRjdqcUhPRkZJSG1FTlJ1UGlPbThBbFNFS3hQYTBQVGlUZlE2?=
+ =?utf-8?B?a0xnaCtTbS92U0J2SktrNHZyLzg5WlEySUN0WmF2QnVTcTlITWJNMGc5Z1N2?=
+ =?utf-8?B?aEpUSEYxUFJPK21obGRXVFJ1ZEg0ZmdidUdPRDBKQ3R3MTVxbzJ5Qzl4L1J5?=
+ =?utf-8?Q?17/Kl0CTNwxH6bkWJ03aG2MIn?=
+X-OriginatorOrg: opensynergy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2c66dce-76ce-4f6a-6a64-08db3ff2692f
+X-MS-Exchange-CrossTenant-AuthSource: FR2P281MB1608.DEUP281.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 09:50:58.4807
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cvB16lw7BnkyhBvAtVpWlWEpFZejbtq2H92QUQ4YF0g4+znk9PhqfIyoVfWq4gjsDM26aTQfYhV3BowiRCR92w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BE1P281MB2888
+X-TM-AS-ERS: 104.47.7.176-0.0.0.0
+X-TMASE-Version: StarCloud-1.3-9.1.1006-27572.007
+X-TMASE-Result: 10--16.985200-4.000000
+X-TMASE-MatchedRID: VfovoVrt/oaMcUzJS3sH3RFbgtHjUWLy3AJrtcannra9V4YavKxf4w7O
+        3jV2jCDBG04xakpCTBlf4cur8LkD6a0QkrnHPFMssDpn40N9M3lNLPQl0QAltD+B/tp8itBT8Jg
+        qp/3e7hdFFrjTpX9jDOPfMxADOGUTVZTAgBT1WR5uq3SU2oCL/jWBEYnpSn2FctZudseHPS3+jr
+        zvGANth24AMi4V1HIgJJzhqHiEM5a5rzEqaXlmze0/o+/4D7DzlY0Q2YEHU95GMe+tDjQ3Fhlis
+        v9ewQRTgtPnkZJDmxa5cURAloITPk1+zyfzlN7ygxsfzkNRlfLdB/CxWTRRuyUIayx+Skid
+X-TMASE-XGENCLOUD: b5ea57cb-ce47-4195-be72-c69dee01fa43-0-0-200-0
+X-TM-Deliver-Signature: 46CAC44A36CDDCA982E41BB76054CA30
+X-TM-Addin-Auth: p+C6GD1P/9IBWxCLkxfohIU0jFB/o/kxOo8O3fsrvNaOFsmj6XluFLmBQR/
+        W3impy0r4XXubh3Vc+8XtJ+/Eiz+rbCYZGWSkutUxoZr9JiGQvYYqkiyu9IGT9S7X6bhp1qkR7Y
+        ZZRTFRPd57o3Cu6tsJVQn7kSbCMvHr86N/4T9gE16q6B0BqDNlS80FFynvLwTut6LLNhJozchaz
+        H7aBGB7YIyq8yPNivkDn+w4nH91zZXHDr+7bwBXAoKtsViPtK48bDYOAXAKB4lhC9a2FH3C7nl5
+        AubZPTxC1ObP9lo=.y4Ybx/wbvK5T52r7+UuZVUPBCPosx3IPdy6J85i1rX8XtBqmOcNbaevxjn
+        dIyrvLrPivRQPIkOLxzsKECyjaQKZ80YYuNZfgUC4rxXynZ4OkJD0bDHA9Xg4xB89uVyCIiMc3Y
+        K04LLcToHgb0n2TSNP8fFiPSTs7TjMnkCVg0Oa0soqxX0fCsBkYJNJymlrbWtgdU7zTHnxoOvVG
+        i3mMcZGL72X3V0sSAn1AzNdVWIJT/wzz6X7aQcV4+ItFSCYawnSZ3Iv4seF/5igqDOiMHQK6Wxg
+        6KMaF/lRklaGxUmKXOO89fgwQYfb+l/5gwWBtIE8lTCmxPuPUHXkYRY37Sg==
+X-TM-Addin-ProductCode: EMS
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
+        s=TM-DKIM-20210503141657; t=1681811460;
+        bh=kvG63K202b/TVgtzMSWWRauTxmljjHzzVGoHIee9Zg8=; l=1708;
+        h=Date:To:From;
+        b=MdmgptXPouKJF2bKkpYmte4KaZoc77GsCq/YDU2NORVzXPpIsa+zVyF5uWQmOdQHD
+         ejIgbgf3qLN36pzECCwi08lWWXnbvZz7PY7bCLQa0jR86Aqs86UFHAzDJJAVjnKQm7
+         nvfrfnOV14qocCKStMv74Fd6Wb84Hh7Oo+VMSMsFtSH2MBSXHPQNfMUNZ9wZ6UkoVo
+         7xAXZuyUDLe/bbTUgx/4QSzjJ55aC92PzpqZbDhcBdzmR2yJsa/Lhmq/S86lC6b0SK
+         I7Eb2/Ebims04AS9qUoKnkfYRRCKPNKkJ0VXgAb6U8zDmlM0su4c9PhMtBiGZ7J8re
+         z13OzKdTebnfA==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+there is now an implementation of the device for qemu internally under 
+review.
 
-On 2023/4/6 22:19, Thierry Reding wrote:
-> On Tue, Mar 21, 2023 at 01:52:28PM +0800, William Qiu wrote:
->> Add Pulse Width Modulation driver support for StarFive
->> JH7110 soc.
-> 
-> s/soc/SoC/
-> 
-Will update.
->> 
->> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
->> ---
->>  MAINTAINERS                    |   7 +
->>  drivers/pwm/Kconfig            |  10 ++
->>  drivers/pwm/Makefile           |   1 +
->>  drivers/pwm/pwm-starfive-ptc.c | 245 +++++++++++++++++++++++++++++++++
->>  4 files changed, 263 insertions(+)
->>  create mode 100644 drivers/pwm/pwm-starfive-ptc.c
->> 
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index ac151975d0d3..efe1811f9501 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19929,6 +19929,13 @@ F:	drivers/pinctrl/starfive/pinctrl-starfive-jh71*
->>  F:	include/dt-bindings/pinctrl/pinctrl-starfive-jh7100.h
->>  F:	include/dt-bindings/pinctrl/starfive,jh7110-pinctrl.h
->> 
->> +STARFIVE JH71X0 PWM DRIVERS
->> +M:	William Qiu <william.qiu@starfivetech.com>
->> +M:	Hal Feng <hal.feng@starfivetech.com>
->> +S:	Supported
->> +F:	Documentation/devicetree/bindings/pwm/starfive,jh7110-pwm.yaml
->> +F:	drivers/pwm/pwm-starfive-ptc.c
->> +
->>  STARFIVE JH71X0 RESET CONTROLLER DRIVERS
->>  M:	Emil Renner Berthing <kernel@esmil.dk>
->>  M:	Hal Feng <hal.feng@starfivetech.com>
->> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
->> index dae023d783a2..2307a0099994 100644
->> --- a/drivers/pwm/Kconfig
->> +++ b/drivers/pwm/Kconfig
->> @@ -536,6 +536,16 @@ config PWM_SPRD
->>  	  To compile this driver as a module, choose M here: the module
->>  	  will be called pwm-sprd.
->> 
->> +config PWM_STARFIVE_PTC
->> +	tristate "StarFive PWM PTC support"
->> +	depends on OF
->> +	depends on COMMON_CLK
-> 
-> You probably want HAS_IOMEM here as well, otherwise this will likely
-> fail to build on some architectures.
+The paperwork with the company lawyer to publish source code has also 
+been done.
+
+At the same time we changed the driver and the specification draft also, 
+especially the bus off indication is now done by a config space bit 
+instead of having a dedicated indication queue. Minor updates to some 
+other structures. This means what we have will match an updated driver 
+and specification version not yet sent out. Also to be done so that 
+people can play around.
+
+So an open source qemu device is in the work and we are close to publish 
+this in our public github repository but until now nothing has been 
+pushed yet to github.
+
+Regards
+Harald
+
+On 14.04.23 21:20, Marc Kleine-Budde wrote:
+> On 03.02.2023 16:02:04, Harald Mommer wrote:
+>> we had here at OpenSynergy an internal discussion about an open source
+>> virtio-can device implementation.
+>>
+>> The outcome of this is now that an open source virtio-can device is to be
+>> developed.
+>>
+>> It has not yet been decided whether the open source device implementation
+>> will be done using qemu or kvmtool (or something else?). Negative or
+>> positive feedback for or against one of those is likely to influence the
+>> decision what will be used as basis for the development. Using kvmtool may
+>> be easier to do for me (to be investigated in detail) but on the other hand
+>> we have some people around in the team who have the knowledge to support
+>> with qemu.
+> It there some code available yet? We as Pengutronix will be on our
+> yearly techweek soon and I want to look into the VirtIO CAN stuff.
 >
-Will update.
->> +	help
->> +	  Generic PWM framework driver for StarFive SoCs.
->> +
->> +	  To compile this driver as a module, choose M here: the module
->> +	  will be called pwm-starfive-ptc.
->> +
->>  config PWM_STI
->>  	tristate "STiH4xx PWM support"
->>  	depends on ARCH_STI || COMPILE_TEST
->> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
->> index 7bf1a29f02b8..577f69904baa 100644
->> --- a/drivers/pwm/Makefile
->> +++ b/drivers/pwm/Makefile
->> @@ -49,6 +49,7 @@ obj-$(CONFIG_PWM_SIFIVE)	+= pwm-sifive.o
->>  obj-$(CONFIG_PWM_SL28CPLD)	+= pwm-sl28cpld.o
->>  obj-$(CONFIG_PWM_SPEAR)		+= pwm-spear.o
->>  obj-$(CONFIG_PWM_SPRD)		+= pwm-sprd.o
->> +obj-$(CONFIG_PWM_STARFIVE_PTC)	+= pwm-starfive-ptc.o
->>  obj-$(CONFIG_PWM_STI)		+= pwm-sti.o
->>  obj-$(CONFIG_PWM_STM32)		+= pwm-stm32.o
->>  obj-$(CONFIG_PWM_STM32_LP)	+= pwm-stm32-lp.o
->> diff --git a/drivers/pwm/pwm-starfive-ptc.c b/drivers/pwm/pwm-starfive-ptc.c
->> new file mode 100644
->> index 000000000000..239df796d240
->> --- /dev/null
->> +++ b/drivers/pwm/pwm-starfive-ptc.c
->> @@ -0,0 +1,245 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * PWM driver for the StarFive JH7110 SoC
->> + *
->> + * Copyright (C) 2018 StarFive Technology Co., Ltd.
->> + */
->> +
->> +#include <dt-bindings/pwm/pwm.h>
-> 
-> You don't use anything from this, nor should you. Just drop it.
-> 
-Will drop.
->> +#include <linux/module.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/pwm.h>
->> +#include <linux/slab.h>
->> +#include <linux/clk.h>
->> +#include <linux/reset.h>
->> +#include <linux/io.h>
-> 
-> These should be in alphabetic order.
-> 
-Will update.
->> +
->> +/* how many parameters can be transferred to ptc */
->> +#define OF_PWM_N_CELLS			3
-> 
-> You use this exactly once, so this definition is useless.
-> 
-Will drop.
->> +
->> +/* PTC Register offsets */
->> +#define REG_RPTC_CNTR			0x0
->> +#define REG_RPTC_HRC			0x4
->> +#define REG_RPTC_LRC			0x8
->> +#define REG_RPTC_CTRL			0xC
-> 
-> These seem to have been replaced by the REG_PTC_RPTC_* definitions
-> below. Pick one and drop the other.
-> 
-Will drop one of it.
->> +/* Bit for PWM clock */
->> +#define BIT_PWM_CLOCK_EN		31
->> +
->> +/* Bit for clock gen soft reset */
->> +#define BIT_CLK_GEN_SOFT_RESET		13
-> 
-> These two bit definitions seem to be completely unused.
-> 
-Will drop.
->> +
->> +#define NS_PER_SECOND			1000000000
-> 
-> Use the standard NSEC_PER_SEC.
-> 
-Will drop.
->> +
->> +/*
->> + * Access PTC register (cntr hrc lrc and ctrl),
->> + * need to replace PWM_BASE_ADDR
->> + */
->> +#define REG_PTC_BASE_ADDR_SUB(base, N)	\
->> +((base) + (((N) > 3) ? (((N) % 4) * 0x10 + (1 << 15)) : ((N) * 0x10)))
->> +#define REG_PTC_RPTC_CNTR(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N))
->> +#define REG_PTC_RPTC_HRC(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0x4)
->> +#define REG_PTC_RPTC_LRC(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0x8)
->> +#define REG_PTC_RPTC_CTRL(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0xC)
->> +
->> +/* PTC_RPTC_CTRL */
->> +#define PTC_EN      BIT(0)
->> +#define PTC_ECLK    BIT(1)
->> +#define PTC_NEC     BIT(2)
->> +#define PTC_OE      BIT(3)
->> +#define PTC_SIGNLE  BIT(4)
->> +#define PTC_INTE    BIT(5)
->> +#define PTC_INT     BIT(6)
->> +#define PTC_CNTRRST BIT(7)
->> +#define PTC_CAPTE   BIT(8)
->> +
->> +struct starfive_pwm_ptc_device {
->> +	struct pwm_chip		chip;
->> +	struct clk		*clk;
->> +	struct reset_control	*rst;
->> +	void __iomem		*regs;
->> +	int			irq;
->> +	unsigned int		approx_freq;/*pwm apb clock frequency*/
-> 
-> No need for aligning these with tabs. Single space is enough for each of
-> these.
-> 
-> Also, you're dealing with potentially large numbers here, so best to
-> make the approx_freq unsigned long or perhaps even u64.
-> 
-Will update.
->> +};
->> +
->> +static inline
->> +struct starfive_pwm_ptc_device *chip_to_starfive_ptc(struct pwm_chip *c)
->> +{
->> +	return container_of(c, struct starfive_pwm_ptc_device, chip);
->> +}
->> +
->> +static int starfive_pwm_ptc_get_state(struct pwm_chip *chip,
->> +				       struct pwm_device *dev,
->> +				       struct pwm_state *state)
->> +{
->> +	struct starfive_pwm_ptc_device *pwm = chip_to_starfive_ptc(chip);
->> +	u32 data_lrc, data_hrc;
->> +	u32 pwm_clk_ns = 0;
->> +
->> +	data_lrc = ioread32(REG_PTC_RPTC_LRC(pwm->regs, dev->hwpwm));
->> +	data_hrc = ioread32(REG_PTC_RPTC_HRC(pwm->regs, dev->hwpwm));
-> 
-> Why ioread32()? It doesn't look like this is getting used in some sort
-> of I/O port setup, so you probably want readl()/writel() instead.
-> 
-Will fix.
->> +
->> +	pwm_clk_ns = NS_PER_SECOND / pwm->approx_freq;
->> +
->> +	state->period = data_lrc * pwm_clk_ns;
->> +	state->duty_cycle = data_hrc * pwm_clk_ns;
-> 
-> Again, you want data_lrc, data_hrc and pwm_clk_ns to be unsigned long
-> or u64 to avoid overflow.
-> 
-Will fix.
->> +	state->polarity = PWM_POLARITY_NORMAL;
->> +	state->enabled = 1;
-> 
-> So these cannot be turned off? You seem to emulate enabled = false by
-> setting duty cycle to 0 in starfive_pwm_ptc_apply(), so it's probably
-> best to mirror that here.
-> 
-Will update.
->> +
->> +	return 0;
->> +}
->> +
->> +static int starfive_pwm_ptc_apply(struct pwm_chip *chip,
->> +				  struct pwm_device *dev,
->> +				  struct pwm_state *state)
->> +{
->> +	struct starfive_pwm_ptc_device *pwm = chip_to_starfive_ptc(chip);
->> +	u32 data_hrc = 0;
->> +	u32 data_lrc = 0;
->> +	u32 period_data = 0;
->> +	u32 duty_data = 0;
-> 
-> Some of these can be condensed into a single line.
-> 
-Will update.
->> +	s64 multi = pwm->approx_freq;
->> +	s64 div = NS_PER_SECOND;
-> 
-> NSEC_PER_SEC
-> 
-Will update.
->> +	void __iomem *reg_addr;
->> +
->> +	if (state->duty_cycle > state->period)
->> +		state->duty_cycle = state->period;
->> +
->> +	while (multi % 10 == 0 && div % 10 == 0 && multi > 0 && div > 0) {
->> +		multi /= 10;
->> +		div /= 10;
->> +	}
->> +
->> +	period_data = (u32)(state->period * multi / div);
-> 
-> You're doing 64-bit multiplications and divisions here, which will
-> likely trigger a build error on some platforms (typically 32-bit ARM).
-> You should look using at the various helpers in linux/math64.h.
-> 
-Will update.
->> +	if (abs(period_data * div / multi - state->period)
->> +	    > abs((period_data + 1) * div / multi - state->period) ||
->> +	    (state->period > 0 && period_data == 0))
->> +		period_data += 1;
-> 
-> We typically write this as period_data++;
-> 
-Will fix.
->> +
->> +	if (state->enabled) {
->> +		duty_data = (u32)(state->duty_cycle * multi / div);
->> +		if (abs(duty_data * div / multi - state->duty_cycle)
->> +			> abs((duty_data + 1) * div / multi - state->duty_cycle) ||
->> +			(state->duty_cycle > 0 && duty_data == 0))
->> +			duty_data += 1;
-> 
-> Same here. You may also want to create temporary variables for those
-> abs() parameters (or the result) to make this a bit more readable.
-> 
->> +	} else {
->> +		duty_data = 0;
->> +	}
->> +
->> +	if (state->polarity == PWM_POLARITY_NORMAL)
->> +		data_hrc = period_data - duty_data;
->> +	else
->> +		data_hrc = duty_data;
-> 
-> That's not how we do polarity inversion. If you need period - duty for
-> normal polarity, that probably indicates that your PWM supports inverse
-> polarity natively. Furthermore the above seems to only consider the
-> output power when reversing polarity, which is not correct. If you need
-> this for the likes of pwm-fan, then you should look at inverting the
-> polarity in those drivers.
-> 
-In JH7110 SoC, the PWM support inverse polarity natively, so I want to ask
-how to achieve polarity inversion.
->> +
->> +	data_lrc = period_data;
->> +
->> +	reg_addr = REG_PTC_RPTC_HRC(pwm->regs, dev->hwpwm);
->> +	iowrite32(data_hrc, reg_addr);
->> +
->> +	reg_addr = REG_PTC_RPTC_LRC(pwm->regs, dev->hwpwm);
->> +	iowrite32(data_lrc, reg_addr);
->> +
->> +	reg_addr = REG_PTC_RPTC_CNTR(pwm->regs, dev->hwpwm);
->> +	iowrite32(0, reg_addr);
->> +
->> +	reg_addr = REG_PTC_RPTC_CTRL(pwm->regs, dev->hwpwm);
->> +	iowrite32(PTC_EN | PTC_OE, reg_addr);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct pwm_ops starfive_pwm_ptc_ops = {
->> +	.get_state	= starfive_pwm_ptc_get_state,
->> +	.apply		= (void *)starfive_pwm_ptc_apply,
-> 
-> Why do you need to cast this? Also, drop the extra padding.
-> 
-Will fix and drop the extra padding.
->> +	.owner		= THIS_MODULE,
->> +};
->> +
->> +static int starfive_pwm_ptc_probe(struct platform_device *pdev)
->> +{
->> +	struct device *dev = &pdev->dev;
->> +	struct starfive_pwm_ptc_device *pwm;
->> +	struct pwm_chip *chip;
->> +	int ret;
->> +
->> +	pwm = devm_kzalloc(dev, sizeof(*pwm), GFP_KERNEL);
->> +	if (!pwm)
->> +		return -ENOMEM;
->> +
->> +	chip = &pwm->chip;
->> +	chip->dev = dev;
->> +	chip->ops = &starfive_pwm_ptc_ops;
->> +	chip->npwm = 8;
->> +
->> +	chip->of_pwm_n_cells = OF_PWM_N_CELLS;
-> 
-> Simply use the literal "3" here. It's sufficiently clear from the
-> context what this means, so it's not a "magic" value or anything.
-> 
-Will update.
->> +	chip->base = -1;
-> 
-> This is no longer needed.
-> 
-Will drop
->> +
->> +	pwm->regs = devm_platform_ioremap_resource(pdev, 0);
->> +	if (IS_ERR(pwm->regs))
->> +		return dev_err_probe(dev, PTR_ERR(pwm->regs),
->> +					"Unable to map IO resources\n");
-> 
-> The string on the second line should be aligned with "dev" from the
-> first line. Same for the errors below.
+> regards,
+> Marc
 >
-Will fix.
- 
->> +
->> +	pwm->clk = devm_clk_get(dev, NULL);
->> +	if (IS_ERR(pwm->clk))
->> +		return dev_err_probe(dev, PTR_ERR(pwm->clk),
->> +					"Unable to get pwm clock\n");
->> +
->> +	pwm->rst = devm_reset_control_get_exclusive(dev, NULL);
->> +	if (IS_ERR(pwm->rst))
->> +		return dev_err_probe(dev, PTR_ERR(pwm->rst),
->> +					"Unable to get pwm reset\n");
->> +
->> +	ret = clk_prepare_enable(pwm->clk);
->> +	if (ret) {
->> +		dev_err(dev,
->> +			"Failed to enable pwm clock, %d\n", ret);
-> 
-> s/pwm/PWM/ in the strings above. And why not use dev_err_probe() here as
-> well?
-> 
-Will update. I think, in this case is doing "enable", not probe, so dev_err()
-is a better fit.
->> +		return ret;
->> +	}
->> +
->> +	reset_control_deassert(pwm->rst);
->> +
->> +	pwm->approx_freq = (unsigned int)clk_get_rate(pwm->clk);
-> 
-> Drop the cast. It's not needed.
-> 
-Will drop.
->> +	if (!pwm->approx_freq)
->> +		dev_err(dev, "get pwm apb clock rate failed.\n");
-> 
-> Don't you want to make this fatal? If not, you'll end up dividing by
-> zero in ->get_state(). Also, you may want to reword the error message to
-> be more in line with the others in this function. Perhaps something
-> like:
-> 
-> 	dev_err(dev, "failed to get APB clock rate\n");
-> 
-Will update.
->> +
->> +	ret = devm_pwmchip_add(dev, chip);
->> +	if (ret < 0) {
->> +		dev_err(dev, "cannot register PTC: %d\n", ret);
->> +		clk_disable_unprepare(pwm->clk);
-> 
-> Maybe reset_control_assert() here as well?
-> 
-Will add.
->> +		return ret;
->> +	}
->> +
->> +	platform_set_drvdata(pdev, pwm);
->> +
->> +	return 0;
->> +}
->> +
->> +static int starfive_pwm_ptc_remove(struct platform_device *dev)
->> +{
->> +	struct starfive_pwm_ptc_device *pwm = platform_get_drvdata(dev);
->> +	struct pwm_chip *chip = &pwm->chip;
->> +
->> +	pwmchip_remove(chip);
-> 
-> No need for the temporary variable, you can pass &pwm->chip directly to
-> pwmchip_remove().
-> 
->> +
->> +	return 0;
->> +}
-> 
-> You may want to use the ->remove_new() callback instead since the error
-> code return is misleading.
-> 
-> Although, I just noticed that you use devm_pwmchip_add(), so there
-> should be no need for the remove callback at all.
-> 
-Will drop remove callback.
-Thanks for taking time to review this patch series and giving useful suggestions.
-
-Best regards,
-William
-> Thierry
-> 
->> +
->> +static const struct of_device_id starfive_pwm_ptc_of_match[] = {
->> +	{ .compatible = "starfive,jh7110-pwm" },
->> +	{},
->> +};
->> +MODULE_DEVICE_TABLE(of, starfive_pwm_ptc_of_match);
->> +
->> +static struct platform_driver starfive_pwm_ptc_driver = {
->> +	.probe = starfive_pwm_ptc_probe,
->> +	.remove = starfive_pwm_ptc_remove,
->> +	.driver = {
->> +		.name = "pwm-starfive-ptc",
->> +		.of_match_table = starfive_pwm_ptc_of_match,
->> +	},
->> +};
->> +module_platform_driver(starfive_pwm_ptc_driver);
->> +
->> +MODULE_AUTHOR("Jenny Zhang <jenny.zhang@starfivetech.com>");
->> +MODULE_AUTHOR("Hal Feng <hal.feng@starfivetech.com>");
->> +MODULE_DESCRIPTION("StarFive PWM PTC driver");
->> +MODULE_LICENSE("GPL");
->> --
->> 2.34.1
->> 
