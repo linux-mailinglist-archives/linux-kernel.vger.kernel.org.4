@@ -2,93 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B066E5DEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7586E5DF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbjDRJyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
+        id S230249AbjDRJzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbjDRJyF (ORCPT
+        with ESMTP id S230053AbjDRJzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:54:05 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091E87686;
-        Tue, 18 Apr 2023 02:54:00 -0700 (PDT)
-Received: from localhost (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 88EF56603244;
-        Tue, 18 Apr 2023 10:53:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681811639;
-        bh=v003HEWWtLqoOjeAVr+uR6+doRjgZBOm8N/Wl6TsWrw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TjbuKj8nXuULJILdNs+8F8G72jRvHDa4gO8zPUEU4rNlkRP5bnjsjhtOBPlr76fMc
-         yMSTMxxVK/CIGaetvbDHjEWFgI7l6c9JiiwEC8c4rHbBTZlpDvXbeCh5WVUGRlR5MJ
-         wmpkyybFd/mzdQTKaKblAtIVfUSHQ/8G1TPW1wn6Vlg5eY66WTKNYRea5b5wh6ND4h
-         zoRR4YGZlWF058tGkiNtBGhj3sDC/FFK5B1CXFcWeyH1KMxzSDofOtqcjtdbX9ab26
-         vmBlgLJih51IN8F0ipl/cvfOWQzCa+pLD5foqHjFBJt0cri1QOy5UubQM61k3pyCuZ
-         Jc5e4/JN/0tdA==
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Tue, 18 Apr 2023 05:55:05 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499566195
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:54:51 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-504efe702d5so4401531a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:54:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681811690; x=1684403690;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2XjTw2b21Lrfk4Jj+V6+6PBPJM9Xvx/rp1PjUa4gW2g=;
+        b=PlTVbNDBEYUnR+2Y6PfJVtcYCczUn6Ca3dFuBncv4GXwgOmqtytA4fs28OTeWM4bsi
+         OS7QrnQH1b2vjIE72icuKzcpmJFOseNqLoSXZa12NOGqUkcrdFuaxFnFcg4Du1wpRfal
+         lca47bv8Mt7LBSSPs5Fr7c+RZ5PJx2XWoXdBVuIXQHWjPKRqm3z+OFgYuAlHm6PnJvlR
+         Y3lyID1XKdRBSd6vHlzn/ntqwltwmDwpMNdTt9OBbHVFz2PJIj+e3ZMtUs7wU1rOx2r0
+         XpB07nyyJfMShpJfpsx8Jh9VIi115BHRbvIg+Va21QjlNlkQBIS23un1c4Gj86aeqdf0
+         quMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681811690; x=1684403690;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2XjTw2b21Lrfk4Jj+V6+6PBPJM9Xvx/rp1PjUa4gW2g=;
+        b=fdKWN9RDGEHqGzzx3rrxp3rv1zYDFj7MDtQqMb93e751rHPvyITjUfoOEK1i+FemMX
+         8omCHVOGjH5wQvcNhaHJPxQuS70aASBw13vXXGBXSbsi13UcjJQp1PyTNjr9Ya6jSQvu
+         7EOdpDFhdVcsyKVfEUudGtR6F3RRpTX2wrsft0Vojb1aCGhPo7fRQ0ZoCBBCKphn7E/q
+         rTNB2ebZwl+AsNZ/v2hu8JLtYnXJJLwJq5I6Uk/9QAS0ggSY0/I2pJvlv46aaCwNFYWR
+         pJQ0Cea/Xpo272zgxgFPXrpkHNaOswhOTiP/Jg40hJHE/Gi9CTpn8vrTxAqs88++Bs9N
+         Bj/w==
+X-Gm-Message-State: AAQBX9fxCGMBIiT1wsmaGebNCVlnvy2EnWd8BlErJqc0xd6MHBKp9SsY
+        V3cYR6zcEgtGVRJO7EjUm0eM9Q==
+X-Google-Smtp-Source: AKy350ZoxJAY3osQymk/xjYIDkdSjS0BzSqPxS/Lm+86HDfHKVxW1WWwARUG2qSTrkpHqDsjf2Kytg==
+X-Received: by 2002:a05:6402:748:b0:506:ae87:a36a with SMTP id p8-20020a056402074800b00506ae87a36amr1867913edy.14.1681811690360;
+        Tue, 18 Apr 2023 02:54:50 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
+        by smtp.gmail.com with ESMTPSA id o4-20020a509b04000000b00504d04c939fsm7076578edi.59.2023.04.18.02.54.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 02:54:49 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sugar Zhang <sugar.zhang@rock-chips.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Kever Yang <kever.yang@rock-chips.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH 3/3] arm64: dts: rockchip: Add rk3588 timer
-Date:   Tue, 18 Apr 2023 12:53:44 +0300
-Message-Id: <20230418095344.274025-4-cristian.ciocaltea@collabora.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230418095344.274025-1-cristian.ciocaltea@collabora.com>
-References: <20230418095344.274025-1-cristian.ciocaltea@collabora.com>
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 0/7] soundwire: qcom: add support for SM8550 (Soundwire v2.0.0)
+Date:   Tue, 18 Apr 2023 11:54:40 +0200
+Message-Id: <20230418095447.577001-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DT node for Rockchip RK3588/RK3588S SoC timer.
+Hi,
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
----
- arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Changes since v2:
+1. Use uint16 for qcom,ports-sinterval.
+   DTS will be fixed in separate patchset.
+2. Add tags.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-index 657c019d27fa..acd89a55374a 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-@@ -1400,6 +1400,14 @@ i2c5: i2c@fead0000 {
- 		status = "disabled";
- 	};
- 
-+	rktimer: timer@feae0000 {
-+		compatible = "rockchip,rk3588-timer", "rockchip,rk3288-timer";
-+		reg = <0x0 0xfeae0000 0x0 0x20>;
-+		clocks = <&cru PCLK_BUSTIMER0>, <&cru CLK_BUSTIMER0>;
-+		clock-names = "pclk", "timer";
-+		interrupts = <GIC_SPI 289 IRQ_TYPE_LEVEL_HIGH 0>;
-+	};
-+
- 	wdt: watchdog@feaf0000 {
- 		compatible = "rockchip,rk3588-wdt", "snps,dw-wdt";
- 		reg = <0x0 0xfeaf0000 0x0 0x100>;
+Changes since v1:
+1. Patch 1: Increase maxItems to 16 for port-related properties.
+2. Re-order patch 1 and 2.
+3. Patch 3: Drop unneeded semicolon.
+4. Patch 5: Fix lang typo in subject.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (7):
+  dt-bindings: soundwire: qcom: add Qualcomm Soundwire v2.0.0
+  dt-bindings: soundwire: qcom: add 16-bit sample interval
+  soundwire: qcom: allow 16-bit sample interval for ports
+  soundwire: qcom: use consistently 'ctrl' as state variable name
+  soundwire: qcom: prepare for handling different register layouts
+  soundwire: qcom: add support for v2.0.0 controller
+  soundwire: qcom: use tabs for indentation in defines
+
+ .../bindings/soundwire/qcom,soundwire.yaml    |  39 +-
+ drivers/soundwire/qcom.c                      | 387 ++++++++++++------
+ 2 files changed, 287 insertions(+), 139 deletions(-)
+
 -- 
-2.40.0
+2.34.1
 
