@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302BA6E6CE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 21:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7492C6E6CE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 21:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjDRTWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 15:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
+        id S231646AbjDRTWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 15:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbjDRTWP (ORCPT
+        with ESMTP id S232431AbjDRTW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 15:22:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9784C6E8E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:21:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681845655;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=aai1WHo4fg1sxKcLX3kD4BGAw1PP+pR+m3nWfdfcZTU=;
-        b=IMwuRS40DczLIM+KnKHkEzEMNf3N2WP7SWT89gE9LH4TkZ68SyB3Jf8nTXSfYhKWV/JlpG
-        +DpwaJA2Iz5gp4qL7LJ/FNDwOCdgzmD+xBEAms4pVAxdwt10TwOOjwTp/8LzR0XFU8XLrb
-        erSFX51A7rmNbw9DG5sRWuAoBPSiNTQ=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-659-2-WgsqY8PMun0uX8Ye7KGg-1; Tue, 18 Apr 2023 15:20:54 -0400
-X-MC-Unique: 2-WgsqY8PMun0uX8Ye7KGg-1
-Received: by mail-qt1-f200.google.com with SMTP id 13-20020ac8590d000000b003eaf7aca024so9377252qty.22
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:20:54 -0700 (PDT)
+        Tue, 18 Apr 2023 15:22:27 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDDB1721;
+        Tue, 18 Apr 2023 12:22:25 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id fw30so23188114ejc.5;
+        Tue, 18 Apr 2023 12:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681845744; x=1684437744;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MVAYFkU4mZduYsk7XhlvO4PjGSkxPXxfIXo1XXy+AEs=;
+        b=VHSLJh7a0+mKe8SJNR4lwJZ0ByLipyZYp6jzwW0N879wOMzn9Tn0xL/cbZMxu+DSV5
+         4ZF/OeV7jpVoTkqQNSRHhdQYDDswnLXGcgX7/vqMsTosqbF6RETV7WUjoq8M5LbsZKm+
+         ChbTa16747d2uH6di9ad2XsnFy87gzxUEHQ4wDWQHbx3bssEPWh+W2LPRfY+jpnn6NXz
+         rtnw62vhRqFklBkDZ6JS34otGmzZn/zJ7Rva0SWp/79WuCPEYWI7ZD9Wqv9UPwgadeoO
+         Mklj2jOVUkshn1TX4W1mYOgdM6ZR0ra5MR7nkISGaJlwU7CW9YNYNtyu37tZahbdM6Ir
+         gJEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681845654; x=1684437654;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aai1WHo4fg1sxKcLX3kD4BGAw1PP+pR+m3nWfdfcZTU=;
-        b=bnY13i+WQqnoj9We3VcaRXiTF0ZN7yiXU4x6ZClA1siBvrIwoBFiCDXGjM7rwhkpqX
-         8km5TZynEGH8xei7xeGrXEuYetuKpIHGJwzXKNKjcL6+qUin4Hj+mIgFt5qh5Tzrpppx
-         6SGUDy7+iwOBeRZlqUlSPkx/duL13/31sXQHvfyYGTQsIoYzDPAoNvp/Z4xztidZoH5P
-         ZsLjvWzgJn6pMoAJJPPibEZ7FpJ3R8dJ+/GoeYKVxQRdiUynaOG2tGKiu/kNogOpBy8k
-         vEq+cy8fh/8nG9RoKpywjanyGP7YgQZuhkmTFk5Id3r1AWYREykAzRZK+UrnQQa7Gazx
-         qNDQ==
-X-Gm-Message-State: AAQBX9e4K3KFO5vpSAa8CIdMhzXnx+/ToVbG33hn3JQNbe0iE1r0EWJc
-        POh2lolCvp0YJwKPpIYi6QnJEY+zYtj/DeTIBPZhhtaLTkgQra5G/yE3/Unm38VKgbPEcwEC8ZY
-        gnxEdaSQ5EVpbEOsMydcKq1QL
-X-Received: by 2002:a05:6214:410:b0:56c:13cc:d21f with SMTP id z16-20020a056214041000b0056c13ccd21fmr25855301qvx.50.1681845654141;
-        Tue, 18 Apr 2023 12:20:54 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZFUZ7JQR9xbohdXv2IbnkoRfbUviweblbnyFfC0N6wmvnsGUN3xBE3c2IZkXBZ0ZSdmAywfQ==
-X-Received: by 2002:a05:6214:410:b0:56c:13cc:d21f with SMTP id z16-20020a056214041000b0056c13ccd21fmr25855272qvx.50.1681845653894;
-        Tue, 18 Apr 2023 12:20:53 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id 7-20020a370c07000000b0074df3f7e14esm1709609qkm.67.2023.04.18.12.20.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 12:20:53 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     quic_jhugo@quicinc.com, ogabbay@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, jacek.lawrynowicz@linux.intel.com,
-        quic_carlv@quicinc.com, stanislaw.gruszka@linux.intel.com,
-        quic_pkanojiy@quicinc.com
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] accel/qaic: initialize ret variable to 0
-Date:   Tue, 18 Apr 2023 15:20:46 -0400
-Message-Id: <20230418192046.3235870-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        d=1e100.net; s=20221208; t=1681845744; x=1684437744;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MVAYFkU4mZduYsk7XhlvO4PjGSkxPXxfIXo1XXy+AEs=;
+        b=ixRnIVnGrlhWrz2kXPoznvqM6MLlZm1/ov8MQo8D/Dl8Av8s4cnoGJmeogpo7gM6NV
+         PhGWCgNGS0z+kJYdnlKybhsow5bsrn9b4cClYrgBASTphVXCYLf7pqKz6K3QE2VDWnBk
+         6uZo6D7CHCXWZmxtw0lVBhbfZIWBDgocRaXezGPaBkH5k3/lb86oqqrUaoYCrMVG8y0z
+         Qvhb9pAfrvwARMtyiwSNBguBCjHdF5toodqAJkuXdXn18y3e/3wmFiaxs37AX43/Mlpk
+         /U/yUj6UGvSI8Hj9Vf/OOvRmK58MY6L7TmoR01e5uvzzJ8WNMIP9S5PvpgrJtnfBWzsW
+         x4/g==
+X-Gm-Message-State: AAQBX9cV5hmfCBakEX1+Etc/c/vtkBwzmYBnbd57R8y250VfM91jIWLV
+        mmSfwOA1MHGbWxLJq1+1ve9Rl23FXeaB/PM7AUFlSePHcPI=
+X-Google-Smtp-Source: AKy350YAbd1xtzBLNooSy7Q7R7XUCCs+WEyWb5S82P/Ez2u3mb+sD7/nEsuSWPBB2lXyd28OFJ8kCMKGff7hYfa98LY=
+X-Received: by 2002:a17:906:4a82:b0:94f:cee:56f2 with SMTP id
+ x2-20020a1709064a8200b0094f0cee56f2mr11285413eju.4.1681845744201; Tue, 18 Apr
+ 2023 12:22:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230310144710.1543139-1-robh@kernel.org> <20230418162500.GC1764573-robh@kernel.org>
+ <CABb+yY3Y8oZYG1y8zfTCC8g7=T0HQp3G3N_iECudo1gduYpy-A@mail.gmail.com> <CAL_Jsq+Oxj4ZDMyS_jOXiZEL2p=mYGr4MOGxiLen1ThRVE5cMw@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+Oxj4ZDMyS_jOXiZEL2p=mYGr4MOGxiLen1ThRVE5cMw@mail.gmail.com>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Tue, 18 Apr 2023 14:22:12 -0500
+Message-ID: <CABb+yY2owfFY_6UucBeGfP66jBMrSBPKRBzenMHgoGm25Jw2fg@mail.gmail.com>
+Subject: Re: [PATCH] mailbox: Use of_property_read_bool() for boolean properties
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,34 +69,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang static analysis reports
-drivers/accel/qaic/qaic_data.c:610:2: warning: Undefined or garbage
-  value returned to caller [core.uninitialized.UndefReturn]
-        return ret;
-        ^~~~~~~~~~
+On Tue, Apr 18, 2023 at 2:06=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
+:
+>
+> On Tue, Apr 18, 2023 at 11:36=E2=80=AFAM Jassi Brar <jassisinghbrar@gmail=
+.com> wrote:
+> >
+> > On Tue, Apr 18, 2023 at 11:25=E2=80=AFAM Rob Herring <robh@kernel.org> =
+wrote:
+> > >
+> > > On Fri, Mar 10, 2023 at 08:47:10AM -0600, Rob Herring wrote:
+> > > > It is preferred to use typed property access functions (i.e.
+> > > > of_property_read_<type> functions) rather than low-level
+> > > > of_get_property/of_find_property functions for reading properties.
+> > > > Convert reading boolean properties to to of_property_read_bool().
+> > > >
+> > > > Signed-off-by: Rob Herring <robh@kernel.org>
+> > > > ---
+> > > >  drivers/mailbox/hi6220-mailbox.c | 5 +----
+> > > >  drivers/mailbox/omap-mailbox.c   | 3 +--
+> > > >  2 files changed, 2 insertions(+), 6 deletions(-)
+> > >
+> > > Ping!
+> > >
+> > Pong :)
+> >
+> > I don't usually reply back that it looks good and will pick for the
+> > merge window. I just do that. So yes, it is not overlooked.
+>
+> Okay. No reply nor applying it in over a month is not a great
+> experience for submitters.
+>
+I sense that. I may be wrong, but I feel any form of ack from a
+maintainer demotivates others from looking critically at the
+submission. I have seen revisions asked after many weeks of
+submission. So my idea is to let a patch roast in public glare.  Maybe
+I should reply after 2-3weeks.
 
-The ret variable is only set some of the time but is always returned.
-So initialize ret to 0.
-
-Fixes: ff13be830333 ("accel/qaic: Add datapath")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/accel/qaic/qaic_data.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/accel/qaic/qaic_data.c b/drivers/accel/qaic/qaic_data.c
-index c0a574cd1b35..b46a16fb3080 100644
---- a/drivers/accel/qaic/qaic_data.c
-+++ b/drivers/accel/qaic/qaic_data.c
-@@ -591,7 +591,7 @@ static int qaic_gem_object_mmap(struct drm_gem_object *obj, struct vm_area_struc
- 	struct qaic_bo *bo = to_qaic_bo(obj);
- 	unsigned long offset = 0;
- 	struct scatterlist *sg;
--	int ret;
-+	int ret = 0;
- 
- 	if (obj->import_attach)
- 		return -EINVAL;
--- 
-2.27.0
-
+-j
