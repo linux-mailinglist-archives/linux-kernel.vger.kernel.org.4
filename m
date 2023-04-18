@@ -2,99 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160B76E5B07
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389606E5B0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbjDRH4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 03:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
+        id S231251AbjDRH4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 03:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjDRHzo (ORCPT
+        with ESMTP id S231231AbjDRH4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 03:55:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802D1D1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 00:55:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681804499;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BCAhk+W7sMp2p6+6pAt7CGf86Hk7/vnhZegbeBcxjBg=;
-        b=WTTm0pHYYyV7/bHktuq37TGs+LteF2zvCKtesgERQ6UCy9yAqkUXTgfjgcReszZ0Ek73Vb
-        yXE/id7aGWEbkRwwH7a5k5mvwOzc3A53yWLRTBPwBb09WUJj3xHRsAkwPHPyT4j/Y3amsO
-        vOr9oJY6vGeRLjTnCRdJr5b68OoDc3k=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-651-wCF1NxXeMH-AQM42Tli63w-1; Tue, 18 Apr 2023 03:54:54 -0400
-X-MC-Unique: wCF1NxXeMH-AQM42Tli63w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3D63C85C6E2;
-        Tue, 18 Apr 2023 07:54:54 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.90])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 28792C15BA0;
-        Tue, 18 Apr 2023 07:54:52 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Tue, 18 Apr 2023 09:54:44 +0200 (CEST)
-Date:   Tue, 18 Apr 2023 09:54:42 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Alejandro Colomar <alx.manpages@gmail.com>
-Cc:     Sergei Zhirikov <sfzhi@yahoo.com>, linux-man@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Checking for support of ptrace(PTRACE_SEIZE,...) on older kernels
-Message-ID: <20230418075442.GA19412@redhat.com>
-References: <997950238.3486335.1681414225118.ref@mail.yahoo.com>
- <997950238.3486335.1681414225118@mail.yahoo.com>
- <0d95a96b-dd49-db45-ab3c-1d9cee51381d@gmail.com>
- <20230417115009.GA906@redhat.com>
- <88991b38-26f5-e060-3a29-5f17c5fc85df@gmail.com>
+        Tue, 18 Apr 2023 03:56:16 -0400
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439B8448C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 00:56:09 -0700 (PDT)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 33I7cx4T087017;
+        Tue, 18 Apr 2023 15:38:59 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from [192.168.2.115] (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 18 Apr
+ 2023 15:55:15 +0800
+Message-ID: <cb81a63f-72b5-def7-e2de-f74087b87bfb@aspeedtech.com>
+Date:   Tue, 18 Apr 2023 15:55:15 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <88991b38-26f5-e060-3a29-5f17c5fc85df@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] drm/ast: Fix ARM compatibility
+To:     Thomas Zimmermann <tzimmermann@suse.de>, <airlied@redhat.com>,
+        <airlied@gmail.com>, <daniel@ffwll.ch>
+CC:     <giantl@nvidia.com>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>
+References: <20230302021905.2777-1-jammy_huang@aspeedtech.com>
+ <d72b0fd9-844e-a422-45b6-261d73dbad18@aspeedtech.com>
+ <24987cff-02e4-aa4a-449f-fd48accf7365@suse.de>
+ <c5fb047b-ed55-be1f-56ae-3b21b1d1dd29@aspeedtech.com>
+ <45255d15-6149-adbc-6b26-22e9d03634f3@suse.de>
+Content-Language: en-US
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+In-Reply-To: <45255d15-6149-adbc-6b26-22e9d03634f3@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 33I7cx4T087017
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alejandro,
+Hi Thomas,
 
-On 04/17, Alejandro Colomar wrote:
+Thanks for you reminder. The comment you mentioned is added in 2014 for 
+AST2400 rev 0x20, which means MMIO is not enable by default before that 
+revision. I will send another patch to handle it.
+
+
+On 2023/4/18 下午 03:24, Thomas Zimmermann wrote:
+> Hi
 >
-> On 4/17/23 13:50, Oleg Nesterov wrote:
-> > Well, from https://man7.org/linux/man-pages/man2/ptrace.2.html
-> >
-> >        ESRCH  The specified process does not exist, or is not currently
-> >               being traced by the caller, or is not stopped (for
-> >               requests that require a stopped tracee).
-> >
-> > so if the kernel doesn't support PTRACE_SEIZE then ptrace(PTRACE_SEIZE)
-> > should fail with -ESRCH as documented.
-> >
-> > Perhaps this part
-> >
-> >        EIO    request is invalid, or ...
-> >
-> > can be improvef a bit to explain that this happens if the target is already
-> > traced by us and stopped.
+> Am 18.04.23 um 03:23 schrieb Jammy Huang:
+>> Hi Thomas,
+>>
+>> The Intel(x86) CPUs have a separate address space for "IO", but the 
+>> ARM architecture only has "memory", so all IO devices are accessed as 
+>> if they were memory. Which means ARM does not support isolated IO. 
+>> Here is a related discussion on ARM's forum.
+>>
+>> https://community.arm.com/support-forums/f/architectures-and-processors-forum/52046/how-to-read-write-an-i-o-port-in-aarch64 
+>>
+>>
+>> Thus, we want to adapt MMIO only after this patch.
 >
-> I'm not sure if it's necessary.  When several errors happen at the same time,
-> there's usually no documentation about which takes precedence, with few
-> exceptions.
-
-Yes, agreed.
-
-I just tried to understand where did this ESRCH/EIO confusion come from.
-
-Oleg.
+> What I mean is that there's a comment that says "assume the chip has 
+> MMIO enabled by default (rev 0x20 and higher)". We also support revs 
+> before 0x20. What happens to them?
+>
+> Best regards
+> Thomas
+>
+>>
+>> On 2023/4/17 下午 07:51, Thomas Zimmermann wrote:
+>>> Hi
+>>>
+>>> Am 07.04.23 um 04:09 schrieb Jammy Huang:
+>>>> Hi Thomas,
+>>>>
+>>>> Could you help review this patch??
+>>>>
+>>>> We met some problem on nvidia's ARM platfrom and need this patch to 
+>>>> fix it.
+>>>>
+>>>> On 2023/3/2 上午 10:19, Jammy Huang wrote:
+>>>>> ARM architecture only has 'memory', so all devices are accessed by 
+>>>>> MMIO.
+>>>>>
+>>>>> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+>>>>> ---
+>>>>>   drivers/gpu/drm/ast/ast_main.c | 17 +----------------
+>>>>>   1 file changed, 1 insertion(+), 16 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/ast/ast_main.c 
+>>>>> b/drivers/gpu/drm/ast/ast_main.c
+>>>>> index 794ffd4a29c5..f86d01e9f024 100644
+>>>>> --- a/drivers/gpu/drm/ast/ast_main.c
+>>>>> +++ b/drivers/gpu/drm/ast/ast_main.c
+>>>>> @@ -424,22 +424,7 @@ struct ast_device *ast_device_create(const 
+>>>>> struct drm_driver *drv,
+>>>>>       if (!ast->regs)
+>>>>>           return ERR_PTR(-EIO);
+>>>>> -    /*
+>>>>> -     * If we don't have IO space at all, use MMIO now and
+>>>>> -     * assume the chip has MMIO enabled by default (rev 0x20
+>>>>> -     * and higher).
+>>>>> -     */
+>>>>> -    if (!(pci_resource_flags(pdev, 2) & IORESOURCE_IO)) {
+>>>>> -        drm_info(dev, "platform has no IO space, trying MMIO\n");
+>>>>> -        ast->ioregs = ast->regs + AST_IO_MM_OFFSET;
+>>>>> -    }
+>>>>> -
+>>>>> -    /* "map" IO regs if the above hasn't done so already */
+>>>>> -    if (!ast->ioregs) {
+>>>>> -        ast->ioregs = pcim_iomap(pdev, 2, 0);
+>>>
+>>> What happens on systems that use this branch?
+>>>
+>>> Best regards
+>>> Thomas
+>>>
+>>>>> -        if (!ast->ioregs)
+>>>>> -            return ERR_PTR(-EIO);
+>>>>> -    }
+>>>>> +    ast->ioregs = ast->regs + AST_IO_MM_OFFSET;
+>>>>>       ast_detect_chip(dev, &need_post);
+>>>>>
+>>>>> base-commit: 254986e324add8a30d0019c6da59f81adc8b565f
+>>>>
+>>>
+>> -- 
+>> Best Regards
+>> Jammy
+>>
+>
+-- 
+Best Regards
+Jammy
 
