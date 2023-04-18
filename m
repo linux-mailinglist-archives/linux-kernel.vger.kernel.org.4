@@ -2,173 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA556E5BFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F9D6E5C26
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjDRI22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
+        id S231172AbjDRIfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjDRI2Z (ORCPT
+        with ESMTP id S230364AbjDRIfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:28:25 -0400
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Apr 2023 01:28:17 PDT
-Received: from gfmail1.glenfly.com (gfmail1.glenfly.com [113.31.180.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B718198D
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:28:17 -0700 (PDT)
-X-ASG-Debug-ID: 1681806494-196b4b1510c5340001-xx1T2L
-Received: from GFSHEXCH03.glenfly.com (GFSHEXCH03.glenfly.com [10.5.250.53]) by gfmail1.glenfly.com with ESMTP id qgUtTmPEwuFAgQEY; Tue, 18 Apr 2023 16:28:14 +0800 (CST)
-X-Barracuda-Envelope-From: ReaperLiOC@glenfly.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.5.250.53
-Received: from sqa-PC.glenfly.com (10.30.16.40) by GFSHEXCH03.glenfly.com
- (10.5.250.53) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 18 Apr
- 2023 16:28:34 +0800
-From:   reaperli <reaperlioc@glenfly.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.5.250.53
-To:     <perex@perex.cz>, <tiwai@suse.com>
-CC:     <linux-kernel@vger.kernel.org>, jasontao <jasontao@glenfly.com>,
-        reaperli <reaperlioc@glenfly.com>
-Subject: [PATCH] ALSA: hda: Glenfly: add HD Audio PCI IDs and HDMI Codec Vendor IDs.
-Date:   Tue, 18 Apr 2023 16:33:12 +0800
-X-ASG-Orig-Subj: [PATCH] ALSA: hda: Glenfly: add HD Audio PCI IDs and HDMI Codec Vendor IDs.
-Message-ID: <20230418083312.5208-1-reaperlioc@glenfly.com>
-X-Mailer: git-send-email 2.20.1
+        Tue, 18 Apr 2023 04:35:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0207EFC
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681806851;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rv7GgXtXE5BwsWMierc+FyeJxK2YpNxYqQW013L/+7M=;
+        b=drLh909BPNjahjto+qKA+tz0ULFsWTYhIoqw79+aMM+XLn2E4XSo/GYl7Mj7L79PGWWsSs
+        /3ktgQJMgw0WAeaGxPvzHJN6FUbicIcchB14YHNfEZhvfhA5PLdX1gpgPD4JcAD2kvKbe/
+        2V5RsI/MZys5iDTF/xxk5uJ374WEWuA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-316-WtixZ95ROMmTUbYAZ0pntQ-1; Tue, 18 Apr 2023 04:34:08 -0400
+X-MC-Unique: WtixZ95ROMmTUbYAZ0pntQ-1
+Received: by mail-wm1-f71.google.com with SMTP id l20-20020a05600c4f1400b003f0a04fe9b9so6130536wmq.7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:34:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681806847; x=1684398847;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rv7GgXtXE5BwsWMierc+FyeJxK2YpNxYqQW013L/+7M=;
+        b=RBb+svMJHNaSyOiKIhLArLAf4v1yNl+Xyz/knD5KSizWRzO+AChC0oeb1oESduYEzW
+         c+l2RLHCx/lz7foCrRlgW5Dpch4FO1BkAsV53Gg42wruWcJNV3IZQy2T3H077bCZi/RQ
+         sn7NPxg8v8/5aFd6RzDjlon3c8Mm/kZzUxjnRyEkhzH6PJZkZmyMd1xA1a72LpEX43JN
+         YM5+0MV0X+lRADmnCNsE/CbABIeCuEc1+/tHcXTo8BWn+G/gH77SyAlS/182Tr3/aQB8
+         vvOM5/8YVA344Z+ARjffZeso9pGnIMAZCY09/8Bza+WBPvzUJ58G2Rzspu1bTi87gumy
+         rjjg==
+X-Gm-Message-State: AAQBX9dikTjQPVoCTB/dGy/eUYBG/5KUFqDNH1Rybhuqe2PKUEZe1azQ
+        /WPy7dik1gkBJmErLgDS6o6/z9mz+Kfm/P3NNDO1GbqH1IbLTgFUW+AUUxuMjbRHorvZGsd2BWL
+        waVKefOkKMfgaqPjcwPxwJyykFS8uHNx3
+X-Received: by 2002:a1c:cc05:0:b0:3ef:d8c6:4bc0 with SMTP id h5-20020a1ccc05000000b003efd8c64bc0mr12024308wmb.40.1681806847534;
+        Tue, 18 Apr 2023 01:34:07 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZAnXaPSvYcMlsYfwVlVoREfFWc5IGmWbn2t4pTzfp2bAd1gmhgH/3mQQN/vZnl6zfILt9UWw==
+X-Received: by 2002:a1c:cc05:0:b0:3ef:d8c6:4bc0 with SMTP id h5-20020a1ccc05000000b003efd8c64bc0mr12024293wmb.40.1681806847207;
+        Tue, 18 Apr 2023 01:34:07 -0700 (PDT)
+Received: from debian ([92.62.32.42])
+        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0a4700b003ef4cd057f5sm18266803wmq.4.2023.04.18.01.34.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 01:34:06 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 10:34:03 +0200
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        James Chapman <jchapman@katalix.com>, tparkin@katalix.com,
+        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwn.net, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PPPoL2TP: Add more code snippets
+Message-ID: <ZD5V+z+cBaXvPbQa@debian>
+References: <20230416220704.xqk4q6uwjbujnqpv@begin>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.30.16.40]
-X-ClientProxiedBy: GFSHEXCH02.glenfly.com (10.5.250.52) To
- GFSHEXCH03.glenfly.com (10.5.250.53)
-X-Barracuda-Connect: GFSHEXCH03.glenfly.com[10.5.250.53]
-X-Barracuda-Start-Time: 1681806494
-X-Barracuda-URL: https://10.5.252.51:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at glenfly.com
-X-Barracuda-Scan-Msg-Size: 3834
-X-Barracuda-Bayes: SPAM GLOBAL 1.0000 1.0000 4.3430
-X-Barracuda-Spam-Score: 4.34
-X-Barracuda-Spam-Status: No, SCORE=4.34 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107580
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230416220704.xqk4q6uwjbujnqpv@begin>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: jasontao <jasontao@glenfly.com>
+On Mon, Apr 17, 2023 at 12:07:04AM +0200, Samuel Thibault wrote:
+> The existing documentation was not telling that one has to create a PPP
+> channel and a PPP interface to get PPPoL2TP data offloading working.
+> 
+> Also, tunnel switching was not described, so that people were thinking
+> it was not supported, while it actually is.
+> 
+> Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+> 
+> ---
+>  Documentation/networking/l2tp.rst |   59 ++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 56 insertions(+), 3 deletions(-)
+> 
+> --- a/Documentation/networking/l2tp.rst
+> +++ b/Documentation/networking/l2tp.rst
+> @@ -387,11 +387,12 @@ Sample userspace code:
+>    - Create session PPPoX data socket::
+>  
+>          struct sockaddr_pppol2tp sax;
+> -        int fd;
+> +        int ret;
+>  
+>          /* Note, the tunnel socket must be bound already, else it
+>           * will not be ready
+>           */
+> +        int session_fd = socket(AF_PPPOX, SOCK_DGRAM, PX_PROTO_OL2TP);
 
-Add a set of HD Audio PCI IDS, and the HDMI codec vendor IDs for
-Glenfly Arise.
+Please declare session_fd with the other variables.
+Also, check the return value of the socket() call.
 
-Signed-off-by: jasontao <jasontao@glenfly.com>
-Signed-off-by: reaperli <reaperlioc@glenfly.com>
----
- sound/pci/hda/hda_intel.c  | 14 ++++++++++++++
- sound/pci/hda/patch_hdmi.c | 18 ++++++++++++++++++
- 2 files changed, 32 insertions(+)
+>          sax.sa_family = AF_PPPOX;
+>          sax.sa_protocol = PX_PROTO_OL2TP;
+>          sax.pppol2tp.fd = tunnel_fd;
+> @@ -406,12 +407,64 @@ Sample userspace code:
+>          /* session_fd is the fd of the session's PPPoL2TP socket.
+>           * tunnel_fd is the fd of the tunnel UDP / L2TPIP socket.
+>           */
+> -        fd = connect(session_fd, (struct sockaddr *)&sax, sizeof(sax));
+> -        if (fd < 0 ) {
+> +        ret = connect(session_fd, (struct sockaddr *)&sax, sizeof(sax));
+> +        if (ret < 0 ) {
 
-diff --git a/sound/pci/hda/hda_intel.c b/sound/pci/hda/hda_intel.c
-index 77a592f21..6c4a559d9 100644
---- a/sound/pci/hda/hda_intel.c
-+++ b/sound/pci/hda/hda_intel.c
-@@ -227,6 +227,7 @@ enum {
- 	AZX_DRIVER_ATI,
- 	AZX_DRIVER_ATIHDMI,
- 	AZX_DRIVER_ATIHDMI_NS,
-+	AZX_DRIVER_GFHDMI,
- 	AZX_DRIVER_VIA,
- 	AZX_DRIVER_SIS,
- 	AZX_DRIVER_ULI,
-@@ -349,6 +350,7 @@ static const char * const driver_short_names[] = {
- 	[AZX_DRIVER_ATI] = "HDA ATI SB",
- 	[AZX_DRIVER_ATIHDMI] = "HDA ATI HDMI",
- 	[AZX_DRIVER_ATIHDMI_NS] = "HDA ATI HDMI",
-+	[AZX_DRIVER_GFHDMI] = "HDA GF HDMI",
- 	[AZX_DRIVER_VIA] = "HDA VIA VT82xx",
- 	[AZX_DRIVER_SIS] = "HDA SIS966",
- 	[AZX_DRIVER_ULI] = "HDA ULI M5461",
-@@ -1743,6 +1745,8 @@ static int default_bdl_pos_adj(struct azx *chip)
- 	}
- 
- 	switch (chip->driver_type) {
-+	case AZX_DRIVER_GFHDMI:
-+		return 128;
- 	case AZX_DRIVER_ICH:
- 	case AZX_DRIVER_PCH:
- 		return 1;
-@@ -1859,6 +1863,9 @@ static int azx_first_init(struct azx *chip)
- 	}
- #endif
- 
-+	if (chip->driver_type == AZX_DRIVER_GFHDMI)
-+		bus->polling_mode = 1;
-+
- 	err = pcim_iomap_regions(pci, 1 << 0, "ICH HD audio");
- 	if (err < 0)
- 		return err;
-@@ -1959,6 +1966,7 @@ static int azx_first_init(struct azx *chip)
- 			chip->playback_streams = ATIHDMI_NUM_PLAYBACK;
- 			chip->capture_streams = ATIHDMI_NUM_CAPTURE;
- 			break;
-+		case AZX_DRIVER_GFHDMI:
- 		case AZX_DRIVER_GENERIC:
- 		default:
- 			chip->playback_streams = ICH6_NUM_PLAYBACK;
-@@ -2724,6 +2732,12 @@ static const struct pci_device_id azx_ids[] = {
- 	{ PCI_DEVICE(0x1002, 0xab38),
- 	  .driver_data = AZX_DRIVER_ATIHDMI_NS | AZX_DCAPS_PRESET_ATI_HDMI_NS |
- 	  AZX_DCAPS_PM_RUNTIME },
-+	/* GLENFLY */
-+	{ PCI_DEVICE(0x6766, PCI_ANY_ID),
-+	  .class = PCI_CLASS_MULTIMEDIA_HD_AUDIO << 8,
-+	  .class_mask = 0xffffff,
-+	  .driver_data = AZX_DRIVER_GFHDMI | AZX_DCAPS_POSFIX_LPIB |
-+	  AZX_DCAPS_NO_MSI | AZX_DCAPS_NO_64BIT },
- 	/* VIA VT8251/VT8237A */
- 	{ PCI_DEVICE(0x1106, 0x3288), .driver_data = AZX_DRIVER_VIA },
- 	/* VIA GFX VT7122/VX900 */
-diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
-index 4ffa3a59f..e51c610a2 100644
---- a/sound/pci/hda/patch_hdmi.c
-+++ b/sound/pci/hda/patch_hdmi.c
-@@ -4489,6 +4489,18 @@ static int patch_via_hdmi(struct hda_codec *codec)
- 	return patch_simple_hdmi(codec, VIAHDMI_CVT_NID, VIAHDMI_PIN_NID);
- }
- 
-+static int patch_gf_hdmi(struct hda_codec *codec)
-+{
-+	int err;
-+
-+	err = patch_generic_hdmi(codec);
-+	if (err)
-+		return err;
-+
-+	codec->no_sticky_stream = 1;
-+	return 0;
-+}
-+
- /*
-  * patch entries
-  */
-@@ -4579,6 +4591,12 @@ HDA_CODEC_ENTRY(0x10de009f, "GPU 9f HDMI/DP",	patch_nvhdmi),
- HDA_CODEC_ENTRY(0x10de00a0, "GPU a0 HDMI/DP",	patch_nvhdmi),
- HDA_CODEC_ENTRY(0x10de8001, "MCP73 HDMI",	patch_nvhdmi_2ch),
- HDA_CODEC_ENTRY(0x10de8067, "MCP67/68 HDMI",	patch_nvhdmi_2ch),
-+HDA_CODEC_ENTRY(0x67663d82, "Arise 82 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d83, "Arise 83 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d84, "Arise 84 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d85, "Arise 85 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d86, "Arise 86 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d87, "Arise 87 HDMI/DP",	patch_gf_hdmi),
- HDA_CODEC_ENTRY(0x11069f80, "VX900 HDMI/DP",	patch_via_hdmi),
- HDA_CODEC_ENTRY(0x11069f81, "VX900 HDMI/DP",	patch_via_hdmi),
- HDA_CODEC_ENTRY(0x11069f84, "VX11 HDMI/DP",	patch_generic_hdmi),
--- 
-2.20.1
+Now you also need to close session_fd.
+
+>                  return -errno;
+>          }
+>          return 0;
+>  
+> +  - Create PPP channel::
+> +
+> +        int chindx;
+> +        ret = ioctl(session_fd, PPPIOCGCHAN, &chindx);
+> +        if (ret < 0)
+> +                return -errno;
+> +
+> +        int ppp_chan_fd = open("/dev/ppp", O_RDWR);
+> +
+> +        ret = ioctl(ppp_chan_fd, PPPIOCATTCHAN, &chindx);
+> +        if (ret < 0)
+> +                return -errno;
+> +
+> +Non-data PPP frames will be available for read on `ppp_chan_fd`.
+> +
+> +  - Create PPP interface::
+> +
+> +        int ppp_if_fd = open("/dev/ppp", O_RDWR);
+
+Check for errors please.
+
+> +
+> +        int ifunit;
+
+Also, keep kernel style formatting:
+  * All variable declarations in one block (ordered from longest to
+    shortest line).
+  * New line between variable declarations and code.
+
+> +        ret = ioctl(ppp_if_fd, PPPIOCNEWUNIT, &ifunit);
+
+You need to initialise ifunit first.
+Use -1 to let the kernel pick a free unit index.
+
+> +        if (ret < 0)
+> +                return -errno;
+> +
+> +        ret = ioctl(ppp_chan_fd, PPPIOCCONNECT, ifunit);
+> +        if (ret < 0)
+> +                return -errno;
+> +
+> +The ppp<ifunit> interface can then be configured as usual with SIOCSIFMTU,
+> +SIOCSIFADDR, SIOCSIFDSTADDR, SIOCSIFNETMASK, and activated by setting IFF_UP
+> +with SIOCSIFFLAGS
+> +
+> +  - Tunnel switching is supported by bridging channels::
+
+This is a PPP feature not an L2TP one. PPPIOCBRIDGECHAN's description
+belongs to Documentation/networking/ppp_generic.rst, where it's already
+documented. If documentation needs to be improved, that should be done
+there.
+
+If necessary, you can link to ppp_generic.rst here.
+
+Also, calling this feature 'tunnel switching' is misleading. Switching
+happens between L2TP sessions (or more generally between any PPP
+transports), not between L2TP tunnels (which are just L2TP session
+multiplexers).
 
