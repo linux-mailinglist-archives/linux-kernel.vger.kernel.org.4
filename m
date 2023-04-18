@@ -2,102 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 256F96E67B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C0C6E67B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbjDRPAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 11:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57326 "EHLO
+        id S231995AbjDRPBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 11:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjDRPAW (ORCPT
+        with ESMTP id S230493AbjDRPB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:00:22 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB61797;
-        Tue, 18 Apr 2023 08:00:21 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id fl25-20020a05600c0b9900b003f17b89ddfbso678604wmb.2;
-        Tue, 18 Apr 2023 08:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681830020; x=1684422020;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0sLNEn4tBiA7Lkr9LNv5/UOC0rrF3XRNRmsS5gVdI9k=;
-        b=sImgZb1wcOoQgjNgCvJtfJlnGv2KUSccaVn8vuk+DKUNMXDz5u8gM7IwEVmH4EqxEP
-         I59BYxMb/1tGKNV27f5bgVgWINug3yBDTvjZFBa8rkQUTG4sPb42bvR5D33QtLz9pFsL
-         ioTZTnyGFeBIDrfurqt5bt7OPoYHzKVTfAyj+z+cDmN1nxkwxZ68T4dHX11Hdv5VaLLQ
-         sqeRIhJkg3mI1CfQtC5bStKYu1Vwcw/XzE5DZ3lRmI09KyRRfD1Z2dfsXhNb91L81YBY
-         8XtpmDrkC4d4zk6R8d/zskRUU+3y/v62hH67SOIsB4WJ6J6KhW07ynVGtTdLqpQWBnTm
-         +U1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681830020; x=1684422020;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0sLNEn4tBiA7Lkr9LNv5/UOC0rrF3XRNRmsS5gVdI9k=;
-        b=apRSuPj4Dwch27mpVYAUOINKuHSlnLtQ3E4t4WsjCcqbDeWI0STE/wGSqc6YHUVnOl
-         2bLKU4ZnAbFrAFEoIruyGm01TF372NOrEsz+jiBmuQwsoO7fbj2zYv+QqI3N3ld5zLHD
-         z5jTHLcB0XpxdQKzRBYOlIKK8Q1jU/6Jmw90adh6spZxJpQfZnE/d3i2QkCpQid6GiaS
-         VqcEXZYrTL4KkFxVrHpxTBMdVzEt851ZKpwQsNrWBVTqjuY8TDKoe2mCtcRBswHfjYnc
-         jVj9GoLoNO6n6H7b6gpVtcKG9WCV+ykYUCNg5AbwoS0A/01cDY26qtiBbf/0IAX/2Tie
-         hTBA==
-X-Gm-Message-State: AAQBX9drwUGfCRZqicUWac9tZpTRFUQ93P7BzdrC+c7SCivAR9/wQ6iT
-        q/WuYv0uGFKl2SrV2el74F0=
-X-Google-Smtp-Source: AKy350ZeeEfRz/61M2eIo6oFMHMHMc4ozqTmwr70hcLoN4Y/jtiuwghQgqPcULSL3FXlozxnZ7zcyA==
-X-Received: by 2002:a7b:c40c:0:b0:3ee:5519:fae1 with SMTP id k12-20020a7bc40c000000b003ee5519fae1mr14216520wmi.12.1681830020331;
-        Tue, 18 Apr 2023 08:00:20 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id f16-20020a05600c155000b003f177cda5ebsm3160137wmg.33.2023.04.18.08.00.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 08:00:19 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] rv: remove redundant assignment to variable retval
-Date:   Tue, 18 Apr 2023 16:00:18 +0100
-Message-Id: <20230418150018.3123753-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 18 Apr 2023 11:01:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EF6397
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:01:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C6C1D168F;
+        Tue, 18 Apr 2023 08:02:10 -0700 (PDT)
+Received: from [10.1.27.157] (C02CF1NRLVDN.cambridge.arm.com [10.1.27.157])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E6FC83F5A1;
+        Tue, 18 Apr 2023 08:01:25 -0700 (PDT)
+Message-ID: <be20272f-caed-303b-7c48-c84c585a9cb7@arm.com>
+Date:   Tue, 18 Apr 2023 16:01:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH v3 00/60] arm64: Add support for LPA2 at stage1 and WXN
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Kees Cook <keescook@chromium.org>
+References: <20230307140522.2311461-1-ardb@kernel.org>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230307140522.2311461-1-ardb@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable retval is being assigned a value that is never read, it is
-being re-assigned a new value in both paths of a following if statement.
-Remove the assignment.
+On 07/03/2023 14:04, Ard Biesheuvel wrote:
+> This is a followup to [0], which was a lot smaller. Thanks to Ryan for
+> feedback and review. This series is independent from Ryan's work on
+> adding support for LPA2 to KVM - the only potential source of conflict
+> should be the patch "arm64: kvm: Limit HYP VA and host S2 range to 48
+> bits when LPA2 is in effect", which could simply be dropped in favour of
+> the KVM changes to make it support LPA2.
+> 
+> The first ~15 patches of this series rework how the kernel VA space is
+> organized, so that the vmemmap region does not take up more space than
+> necessary, and so that most of it can be reclaimed when running a build
+> capable of 52-bit virtual addressing on hardware that is not. This is
+> needed because the vmemmap region will take up a substantial part of the
+> upper VA region that it shares with the kernel, modules and
+> vmalloc/vmap mappings once we enable LPA2 with 4k pages.
+> 
+> The next ~30 patches rework the early init code, reimplementing most of
+> the page table and relocation handling in C code. There are several
+> reasons why this is beneficial:
+> - we generally prefer C code over asm for these things, and the macros
+>   that currently exist in head.S for creating the kernel pages tables
+>   are a good example why;
+> - we no longer need to create the kernel mapping in two passes, which
+>   means we can remove the logic that copies parts of the fixmap and the
+>   KAsan shadow from one set of page tables to the other; this is
+>   especially advantageous for KAsan with LPA2, which needs more
+>   elaborate shadow handling across multiple levels, since the KAsan
+>   region cannot be placed on exact pgd_t bouundaries in that case;
+> - we can read the ID registers and parse command line overrides before
+>   creating the page tables, which simplifies the LPA2 case, as flicking
+>   the global TCR_EL1.DS bit at a later stage would require elaborate
+>   repainting of all page table descriptors, some of which with the MMU
+>   disabled;
+> - we can use more elaborate logic to create the mappings, which means we
+>   can use more precise mappings for code and data sections even when
+>   using 2 MiB granularity, and this is a prerequisite for running with
+>   WXN.
+> 
+> As part of the ID map changes, we decouple the ID map size from the
+> kernel VA size, and switch to a 48-bit VA map for all configurations.
+> 
+> The next 18 patches rework the existing LVA support as a CPU feature,
+> which simplifies some code and gets rid of the vabits_actual variable.
+> Then, LPA2 support is implemented in the same vein. This requires adding
+> support for 5 level paging as well, given that LPA2 introduces a new
+> paging level '-1' when using 4k pages.
 
-Cleans up clang-scan warning:
-kernel/trace/rv/rv.c:293:2: warning: Value stored to 'retval' is never read [deadcode.DeadStores]
-        retval = count;
+I still don't see any changes for TLBI, which I raised in the first round, and
+which I think you need when enabling LPA2. I have 2 patches, which I think are
+appropriate; one covers the non-range tlbi routines (and is part of my KVM
+series) and the other covers the rage-based routines (this would need a bit of
+fix up to use your lpa2_is_enabled()). At [1] and [2] respectively.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- kernel/trace/rv/rv.c | 2 --
- 1 file changed, 2 deletions(-)
+[1] https://lore.kernel.org/kvmarm/20230306195438.1557851-2-ryan.roberts@arm.com/
+[2]
+https://gitlab.arm.com/linux-arm/linux-rr/-/commit/38628decb785aea42a349a857b9f8a65a19e9c2b
 
-diff --git a/kernel/trace/rv/rv.c b/kernel/trace/rv/rv.c
-index 7e9061828c24..2f68e93fff0b 100644
---- a/kernel/trace/rv/rv.c
-+++ b/kernel/trace/rv/rv.c
-@@ -290,8 +290,6 @@ static ssize_t monitor_enable_write_data(struct file *filp, const char __user *u
- 	if (retval)
- 		return retval;
- 
--	retval = count;
--
- 	mutex_lock(&rv_interface_lock);
- 
- 	if (val)
--- 
-2.30.2
+Thanks,
+Ryan
+
 
