@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5366E5667
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 03:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AC36E566C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 03:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjDRB13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 21:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
+        id S229887AbjDRB1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 21:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjDRB11 (ORCPT
+        with ESMTP id S229654AbjDRB12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 21:27:27 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F79D4EE9;
-        Mon, 17 Apr 2023 18:27:25 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33I1RIUt038979;
+        Mon, 17 Apr 2023 21:27:28 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25944EE9;
+        Mon, 17 Apr 2023 18:27:27 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33I1RIQJ007810;
         Mon, 17 Apr 2023 20:27:18 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1681781238;
-        bh=bd1V+OA6abQ2J2wCLc1orzV2wqMWVk4jslQIZs2biu0=;
+        bh=TsXFNL8IPfth9ttsUQ9vdqbO66ADP402gwtf84VwYYU=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=NTMjX+Ff1IXFdqd+domIz77Z802KzzK4llL+oL03XLZ5RDKcdgurbrohz+s6ITerr
-         FiqHvtguNrjTvuljJ3JQMI0LomC57u2ewU9kqgJF59qwaByjYxiCJjCgOOdWxyfWYs
-         auuc3eiD7jWKcZmZq+j2Fhu9/xunAIq0NkW4og8Q=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33I1RIxc107372
+        b=K4dwopCiVSKpT2UzNZO0PqVNpLmvWxGHzqQkpQTe/3vk3w8r8nbiKvPYSGHw0Ijzp
+         fn4sSo+pYDz7mbcLV3vQ35j8+GJzfPSlpoxCCpuv75M+/2Br/9B7BT6eq9oNQlakRA
+         p6/Cu5tDZJ23ultpr/HXumjj5a2b3TuCD/DPi64I=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33I1RIns070422
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Mon, 17 Apr 2023 20:27:18 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 17
  Apr 2023 20:27:18 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
  Frontend Transport; Mon, 17 Apr 2023 20:27:18 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33I1RIwd041847;
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33I1RI7C081370;
         Mon, 17 Apr 2023 20:27:18 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -48,9 +48,9 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>,
         Bryan Brattlof <bb@ti.com>
-Subject: [PATCH 2/3] arm64: dts: ti: k3-am62a: Add watchdog nodes
-Date:   Mon, 17 Apr 2023 20:27:16 -0500
-Message-ID: <20230418012717.1230882-3-nm@ti.com>
+Subject: [PATCH 3/3] arm64: dts: ti: k3-am62a7-evm: Describe main_uart1 and wkup_uart
+Date:   Mon, 17 Apr 2023 20:27:17 -0500
+Message-ID: <20230418012717.1230882-4-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230418012717.1230882-1-nm@ti.com>
 References: <20230418012717.1230882-1-nm@ti.com>
@@ -68,113 +68,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add nodes for watchdogs:
-- 5 in main domain
-- 1 in MCU domain
-- 1 in wakeup domain
+wkup_uart and main_uart1 on this platform is used by tifs and DM
+firmwares. Describe them for completeness including the pinmux.
 
 Signed-off-by: Nishanth Menon <nm@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-am62a-main.dtsi   | 45 +++++++++++++++++++++
- arch/arm64/boot/dts/ti/k3-am62a-mcu.dtsi    | 11 +++++
- arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi | 11 +++++
- 3 files changed, 67 insertions(+)
+ arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 36 +++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi
-index 59d1199e43c9..e43e64451bc1 100644
---- a/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi
-@@ -697,6 +697,51 @@ main_mcan0: can@20701000 {
- 		status = "disabled";
+diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+index f6a67f072dca..8f0589f4921e 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
++++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+@@ -17,7 +17,9 @@ / {
+ 	model = "Texas Instruments AM62A7 SK";
+ 
+ 	aliases {
++		serial0 = &wkup_uart0;
+ 		serial2 = &main_uart0;
++		serial3 = &main_uart1;
+ 		mmc1 = &sdhci1;
  	};
  
-+	main_rti0: watchdog@e000000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e000000 0x00 0x100>;
-+		clocks = <&k3_clks 125 0>;
-+		power-domains = <&k3_pds 125 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 125 0>;
-+		assigned-clock-parents = <&k3_clks 125 2>;
-+	};
-+
-+	main_rti1: watchdog@e010000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e010000 0x00 0x100>;
-+		clocks = <&k3_clks 126 0>;
-+		power-domains = <&k3_pds 126 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 126 0>;
-+		assigned-clock-parents = <&k3_clks 126 2>;
-+	};
-+
-+	main_rti2: watchdog@e020000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e020000 0x00 0x100>;
-+		clocks = <&k3_clks 127 0>;
-+		power-domains = <&k3_pds 127 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 127 0>;
-+		assigned-clock-parents = <&k3_clks 127 2>;
-+	};
-+
-+	main_rti3: watchdog@e030000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e030000 0x00 0x100>;
-+		clocks = <&k3_clks 128 0>;
-+		power-domains = <&k3_pds 128 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 128 0>;
-+		assigned-clock-parents = <&k3_clks 128 2>;
-+	};
-+
-+	main_rti4: watchdog@e040000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e040000 0x00 0x100>;
-+		clocks = <&k3_clks 205 0>;
-+		power-domains = <&k3_pds 205 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 205 0>;
-+		assigned-clock-parents = <&k3_clks 205 2>;
-+	};
-+
- 	epwm0: pwm@23000000 {
- 		compatible = "ti,am64-epwm", "ti,am3352-ehrpwm";
- 		#pwm-cells = <3>;
-diff --git a/arch/arm64/boot/dts/ti/k3-am62a-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am62a-mcu.dtsi
-index 50c94a55fe85..04599762c2b7 100644
---- a/arch/arm64/boot/dts/ti/k3-am62a-mcu.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62a-mcu.dtsi
-@@ -132,4 +132,15 @@ mcu_gpio0: gpio@4201000 {
- 		clock-names = "gpio";
- 		status = "disabled";
+@@ -114,6 +116,24 @@ led-0 {
  	};
-+
-+	mcu_rti0: watchdog@4880000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x04880000 0x00 0x100>;
-+		clocks = <&k3_clks 131 0>;
-+		power-domains = <&k3_pds 131 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 131 0>;
-+		assigned-clock-parents = <&k3_clks 131 2>;
-+		/* Tightly coupled to M4F */
-+		status = "reserved";
-+	};
  };
-diff --git a/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi
-index 81d984414fd4..d848eb24b552 100644
---- a/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi
-@@ -51,4 +51,15 @@ wkup_rtc0: rtc@2b1f0000 {
- 		wakeup-source;
- 		status = "disabled";
- 	};
-+
-+	wkup_rti0: watchdog@2b000000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x2b000000 0x00 0x100>;
-+		clocks = <&k3_clks 132 0>;
-+		power-domains = <&k3_pds 132 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 132 0>;
-+		assigned-clock-parents = <&k3_clks 132 2>;
-+		/* Used by DM firmware */
-+		status = "reserved";
+ 
++&mcu_pmx0 {
++	wkup_uart0_pins_default: wkup-uart0-pins-default {
++		pinctrl-single,pins = <
++			AM62X_MCU_IOPAD(0x02c, PIN_INPUT, 0)	/* (C6) WKUP_UART0_CTSn */
++			AM62X_MCU_IOPAD(0x030, PIN_OUTPUT, 0)	/* (A4) WKUP_UART0_RTSn */
++			AM62X_MCU_IOPAD(0x024, PIN_INPUT, 0)	/* (B4) WKUP_UART0_RXD */
++			AM62X_MCU_IOPAD(0x028, PIN_OUTPUT, 0)	/* (C5) WKUP_UART0_TXD */
++		>;
 +	};
++};
++
++/* WKUP UART0 is used for DM firmware logs */
++&wkup_uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&wkup_uart0_pins_default>;
++	status = "reserved";
++};
++
+ &main_pmx0 {
+ 	main_uart0_pins_default: main-uart0-pins-default {
+ 		pinctrl-single,pins = <
+@@ -122,6 +142,15 @@ AM62AX_IOPAD(0x1cc, PIN_OUTPUT, 0) /* (E14) UART0_TXD */
+ 		>;
+ 	};
+ 
++	main_uart1_pins_default: main-uart1-pins-default {
++		pinctrl-single,pins = <
++			AM62X_IOPAD(0x194, PIN_INPUT, 2)	/* (B19) MCASP0_AXR3.UART1_CTSn */
++			AM62X_IOPAD(0x198, PIN_OUTPUT, 2)	/* (A19) MCASP0_AXR2.UART1_RTSn */
++			AM62X_IOPAD(0x1ac, PIN_INPUT, 2)	/* (E19) MCASP0_AFSR.UART1_RXD */
++			AM62X_IOPAD(0x1b0, PIN_OUTPUT, 2)	/* (A20) MCASP0_ACLKR.UART1_TXD */
++		>;
++	};
++
+ 	main_i2c0_pins_default: main-i2c0-pins-default {
+ 		pinctrl-single,pins = <
+ 			AM62AX_IOPAD(0x1e0, PIN_INPUT_PULLUP, 0) /* (B16) I2C0_SCL */
+@@ -254,6 +283,13 @@ &main_uart0 {
+ 	pinctrl-0 = <&main_uart0_pins_default>;
+ };
+ 
++/* Main UART1 is used for TIFS firmware logs */
++&main_uart1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_uart1_pins_default>;
++	status = "reserved";
++};
++
+ &usbss1 {
+ 	status = "okay";
  };
 -- 
 2.40.0
