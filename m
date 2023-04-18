@@ -2,107 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7D46E5EC6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB8D6E5ECE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjDRKa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 06:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
+        id S230333AbjDRKba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 06:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbjDRKaV (ORCPT
+        with ESMTP id S230286AbjDRKb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 06:30:21 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15BAE42;
-        Tue, 18 Apr 2023 03:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=GmYJUEoN9b1IwEvqvj4hq5F8JH7LR4eoxY0r0IUp4is=; b=X71a/vVuffGAtOdLbnSUqd6k3a
-        CmuDnVNRx3tLh+8p0Cc1CEG/1AZNjTZC3/xyNctLyPBm5R9JIogHiPeg5XdqvovLQVXsrBrmlJkg/
-        J4+BuYbICNAgw2iiLrP3m1bb727tDsJjDqaUf3ijb0eP8dt2h/bOOmnIkXN/asfAQCT008rDCMQyU
-        HGYVBZcVslhwSmnElfwkiC28UrjCV/jyHlTpX0vjQiCI3SttJa76PBK63yrCB0XPPNlugA+nlRPxj
-        3BGnUYUVsBlzAHhZPfuaLCc0HQjOXEGPP1Si3BIIeaFZ8fQaeGnOSUP6DQ2KJXKfoCFVIowBxXMie
-        idMc3ldQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1poibD-000R43-1G;
-        Tue, 18 Apr 2023 10:30:11 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E9A2D300237;
-        Tue, 18 Apr 2023 12:30:10 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C6E732C541614; Tue, 18 Apr 2023 12:30:10 +0200 (CEST)
-Date:   Tue, 18 Apr 2023 12:30:10 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     John Stultz <jstultz@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Tim Murray <timmurray@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>, kernel-team@android.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] locking/rwsem: Add __always_inline annotation to
- __down_read_common()
-Message-ID: <20230418103010.GY4253@hirez.programming.kicks-ass.net>
-References: <20230412023839.2869114-1-jstultz@google.com>
- <20230412035905.3184199-1-jstultz@google.com>
- <20230417111949.GJ83892@hirez.programming.kicks-ass.net>
- <CANDhNCp2WEAMjK1DUVKCen05-EdwVBYZxxLSP3ZSZvRh1ayAhQ@mail.gmail.com>
+        Tue, 18 Apr 2023 06:31:28 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004726A65
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:31:19 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-63b46186c03so2347405b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:31:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20221208.gappssmtp.com; s=20221208; t=1681813879; x=1684405879;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vTXdY5NuBVVPgEbeE3bHL/Qnxc0lVVP6ZRYfwYnz1ac=;
+        b=wGWlYWS1etvSoTQUet4lObRX9RWt9eN7hVdv/B0GnhqYqwypMHz2jioeZxu0/wiV6t
+         lhZKuhp7IZ8KKVFJO5Ja3u4uRmNoUk0UGqDcG7PJ+6dCJRvv3JC++wsDQZywXygCGg/a
+         E/p4k+BU1gIUvsZddckIzwaqZQaJ3V8o1lakTKR6r5tqb5JbiqNQWaOPLZd/O0nSyfsT
+         1wydQGBCAOgnyM56ehWnNoXysNPPeyEdENHgmXKoL10sb1jJ74f/ngXMwvsGpCN+uImT
+         c0ur12HhIt0U+frEZzjkQ8qaqZhZavMOTiyHruP5cJe/E1EIJLk6EWJd1HEdNf5sk8gS
+         hQKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681813879; x=1684405879;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vTXdY5NuBVVPgEbeE3bHL/Qnxc0lVVP6ZRYfwYnz1ac=;
+        b=OYpShQc0Tob9McFN/ZUyA6K0yhBOSCYqIfZlBzSGTyyu49qR4CVZnvE71cYcMITvh0
+         oQlpfRvFv124qq9h+E4PTiJehOyse6ueqUpfTxY0UZzCasKDywmoLdSCJQqZAmbCxZLs
+         VtOEgWwTCuG/6S6LSKNWqp4wNN73KN7fxt4ebqZJSUFQbiNavKKwKpTG0PI2Wv9h6ws9
+         WeAoqGJbbXCrJpEFe+L8AaIQHHFeWgbyMDfEu+c788dUkTrHyDjhZe4jeXxi0l5OE0Sg
+         1izgvnZiS84Y7HcB4d7ChPHiI+bltJ4OtY3T1RrlAFOnNJcb1A2DmBBDONhgi5PzjtH/
+         xR7w==
+X-Gm-Message-State: AAQBX9dfNWQaADUUrea0+QGah5Dn5lwI45APkXys29bHcsx3z9fnLPkd
+        V4lukXPrgCq8WBogo5Ee7+Q5rA==
+X-Google-Smtp-Source: AKy350Zi63/seSKnnXtoC1hx5JGZfJDFrYlHZz7PvnC5IGwEnfPHrlVk3AwQkCWZmpadURE4ezzECw==
+X-Received: by 2002:a05:6a00:ace:b0:63d:3c9d:2c9 with SMTP id c14-20020a056a000ace00b0063d3c9d02c9mr1425230pfl.3.1681813879315;
+        Tue, 18 Apr 2023 03:31:19 -0700 (PDT)
+Received: from [10.16.161.199] (napt.igel.co.jp. [219.106.231.132])
+        by smtp.gmail.com with ESMTPSA id f6-20020aa782c6000000b0062dbafced27sm9092959pfn.27.2023.04.18.03.31.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 03:31:18 -0700 (PDT)
+Message-ID: <7680d6cd-163d-8648-33da-c3d7d2e2fa3d@igel.co.jp>
+Date:   Tue, 18 Apr 2023 19:31:13 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [EXT] [RFC PATCH 0/3] Introduce a PCIe endpoint virtio console
+Content-Language: en-US
+To:     Frank Li <frank.li@nxp.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, Jon Mason <jdmason@kudzu.us>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>
+References: <20230414123903.896914-1-mie@igel.co.jp>
+ <AM6PR04MB483871ADC2BA657BBF3A5A4588999@AM6PR04MB4838.eurprd04.prod.outlook.com>
+ <9e9acbf6-3486-56d3-c15a-c3d67557c2a9@igel.co.jp>
+ <AM6PR04MB483893F2A017B54AE29474A9889C9@AM6PR04MB4838.eurprd04.prod.outlook.com>
+From:   Shunsuke Mie <mie@igel.co.jp>
+In-Reply-To: <AM6PR04MB483893F2A017B54AE29474A9889C9@AM6PR04MB4838.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANDhNCp2WEAMjK1DUVKCen05-EdwVBYZxxLSP3ZSZvRh1ayAhQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 06:22:14PM +0200, John Stultz wrote:
-> On Mon, Apr 17, 2023 at 1:19 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Wed, Apr 12, 2023 at 03:59:05AM +0000, John Stultz wrote:
-> > > Apparently despite it being marked inline, the compiler
-> > > may not inline __down_read_common() which makes it difficult
-> > > to identify the cause of lock contention, as the blocked
-> > > function will always be listed as __down_read_common().
-> > >
-> > > So this patch adds __always_inline annotation to the
-> > > function to force it to be inlines so the calling function
-> > > will be listed.
-> >
-> > I'm a wee bit confused; what are you looking at? Wchan?
-> 
-> Apologies! Yes, traceevent data via wchan, sorry I didn't make that clear.
 
-No worries; good addition to the v3 Changelog ;-)
+On 2023/04/18 0:19, Frank Li wrote:
+>
+>> -----Original Message-----
+>> From: Shunsuke Mie <mie@igel.co.jp>
+>> Sent: Sunday, April 16, 2023 9:12 PM
+>> To: Frank Li <frank.li@nxp.com>; Lorenzo Pieralisi <lpieralisi@kernel.org>
+>> Cc: Krzysztof Wilczyński <kw@linux.com>; Manivannan Sadhasivam
+>> <mani@kernel.org>; Kishon Vijay Abraham I <kishon@kernel.org>; Bjorn
+>> Helgaas <bhelgaas@google.com>; Michael S. Tsirkin <mst@redhat.com>;
+>> Jason Wang <jasowang@redhat.com>; Jon Mason <jdmason@kudzu.us>;
+>> Randy Dunlap <rdunlap@infradead.org>; Ren Zhijie
+>> <renzhijie2@huawei.com>; linux-kernel@vger.kernel.org; linux-
+>> pci@vger.kernel.org; virtualization@lists.linux-foundation.org
+>> Subject: Re: [EXT] [RFC PATCH 0/3] Introduce a PCIe endpoint virtio console
+>>
+>> Caution: EXT Email
+>>
+>> On 2023/04/14 23:39, Frank Li wrote:
+>>>> -----Original Message-----
+>>>> From: Shunsuke Mie <mie@igel.co.jp>
+>>>> Sent: Friday, April 14, 2023 7:39 AM
+>>>> To: Lorenzo Pieralisi <lpieralisi@kernel.org>
+>>>> Cc: Krzysztof Wilczyński <kw@linux.com>; Manivannan Sadhasivam
+>>>> <mani@kernel.org>; Kishon Vijay Abraham I <kishon@kernel.org>; Bjorn
+>>>> Helgaas <bhelgaas@google.com>; Michael S. Tsirkin <mst@redhat.com>;
+>>>> Jason Wang <jasowang@redhat.com>; Shunsuke Mie <mie@igel.co.jp>;
+>>>> Frank Li <frank.li@nxp.com>; Jon Mason <jdmason@kudzu.us>; Randy
+>>>> Dunlap <rdunlap@infradead.org>; Ren Zhijie <renzhijie2@huawei.com>;
+>>>> linux-kernel@vger.kernel.org; linux-pci@vger.kernel.org;
+>>>> virtualization@lists.linux-foundation.org
+>>>> Subject: [EXT] [RFC PATCH 0/3] Introduce a PCIe endpoint virtio console
+>>>>
+>>>> Caution: EXT Email
+>>>>
+>>>> PCIe endpoint framework provides APIs to implement PCIe endpoint
+>>>> function.
+>>>> This framework allows defining various PCIe endpoint function behaviors
+>> in
+>>>> software. This patch extend the framework for virtio pci device. The
+>>>> virtio is defined to communicate guest on virtual machine and host side.
+>>>> Advantage of the virtio is the efficiency of data transfer and the
+>> conciseness
+>>>> of implementation device using software. It also be applied to PCIe
+>>>> endpoint function.
+>>>>
+>>>> We designed and implemented a PCIe EP virtio console function driver
+>> using
+>>>> the extended PCIe endpoint framework for virtio. It can be communicate
+>>>> host and endpoint over virtio as console.
+>>>>
+>>>> An architecture of the function driver is following:
+>>>>
+>>>>    ┌────────────┐         ┌────────────
+>> ──
+>>>> ────────┬────────────┐
+>>>>    │virtio      │         │                      │virtio      │
+>>>>    │console drv │         ├───────────────┐      │
+>> console
+>>>> drv │
+>>>>    ├────────────┤         │(virtio console│      ├───
+>> ──
+>>>> ───────┤
+>>>>    │ virtio bus │         │ device)       │◄────►│ virtio bus │
+>>>>    ├────────────┤         ├---------------┤      └────
+>> ──
+>>>> ──────┤
+>>>>    │            │         │ pci ep virtio │                   │
+>>>>    │  pci bus   │         │  console drv  │                   │
+>>>>    │            │  pcie   ├───────────────┤                   │
+>>>>    │            │ ◄─────► │  pci ep Bus   │                   │
+>>>>    └────────────┘         └────────────
+>> ──
+>>>> ─┴───────────────────┘
+>>>>      PCIe Root              PCIe Endpoint
+>>>>
+>>> [Frank Li] Some basic question,
+>>> I see you call register_virtio_device at epf_vcon_setup_vdev,
+>>> Why call it as virtio console?  I suppose it should be virtiobus directly?
+>> I'm sorry I didn't understand your question. What do you mean the
+>> virtiobus directly?
+> I go through your code again.  I think I understand why you need pci-epf-vcon.c.
+> Actually,  my means is like virtio_mmio_probe.
+>
+> vm_dev->vdev.id.device = readl(vm_dev->base + VIRTIO_MMIO_DEVICE_ID);
+> vm_dev->vdev.id.vendor = readl(vm_dev->base + VIRTIO_MMIO_VENDOR_ID);
+>
+> I am not sure that if VIRTIO_MMIO_VENDOR_ID and VIRTIO_MMIO_DEVICE_ID
+> reuse PCI's vendor ID and Device ID.  If yes, you can directly get such information
+> from epf.  If no,  a customer field can been added at epf driver.
+>
+> So you needn't write pci-epf-vcon  and pci-epf-vnet .....
+>
+> Of cause it will be wonderful if directly use virtio_mmio_probe by dynmatic create platform
+> Devices.  It may have some difficult because pci memory map requirement.
+I think that some fields are shared between the vdev and epf device.
+However, we need to implement device emulation because each virtio device
+has its specific set of tasks. For example, the virtio-net device has a
+control queue, and the driver can request MAC filters, VLANs, and other
+settings via this queue. These requests have to be processed by the virtio
+device that we are implementing in pci-epf-vnet.
 
-> > What is stopping
-> > the compiler from now handing you
-> > __down_read{,_interruptible,_killable}() instead? Is that fine?
-> 
-> No, we want to make the blocked calling function, rather than the
-> locking functions, visible in the tracepoints captured. That said, the
-> other __down_read* functions seem to be properly inlined in practice
-> (Waiman's theory as to why sounds convincing to me).
+The simplest virtio-console device doesn’t have these tasks, but the other
+virtio devices requireprocessing them.
 
-Right, but we should not rely on the compiler heuristics for correctness
-:-)
+That's why the current pci-epf-virtio design requires a specific
+implementation for each virtio device.
 
-> If you'd like I can add those as well to be always_inline, as well so
-> it's more consistent?
+Is this what you meant?
 
-Yes please. I'm not sure I care much about the whole 'inline __sched' vs
-'__always_inline' thing, but I do feel it should all be consistently
-applied.
+>
+>>> Previous you use virtio-net, why change to virtio-console here?  Does it
+>> matter?
+>>
+>> No, it doesn't. Just I'd like to break down the changes into smaller
+>> steps to make it easier to review and merge the changes.
+>>
+>> As a first step, I propose adding a simplest virtio function driver with
+>> the extension defined in pci-epf-virtio.{h,c}.
+>>
+>>> All virtio-XXX should work?
+>> Yes, the extension is designed to use any type of virtio device.
+>>> You removed EDMA support this version?
+>> I planed the support will be added with epf virtio-net patches.
+>>>> Introduced driver is `pci ep virtio console drv` in the figure. It works
+>>>> as ep function for PCIe root and virtual virtio console device for PCIe
+>>>> endpoint. Each side of virtio console driver has virtqueue, and
+>>>> introduced driver transfers data on the virtqueue to each other. A data
+>>>> on root tx queue is transfered to endpoint rx queue and vice versa.
+>>>>
+>>>> This patchset is depend follwing patches which are under discussion.
+>>>>
+>>>> - [RFC PATCH 0/3] Deal with alignment restriction on EP side
+>>>> link:
+>>>>
+>> https://lore.k/
+>> %2F&data=05%7C01%7Cfrank.li%40nxp.com%7Cff59a16f88c643913e3908db3
+>> ee91ca8%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63817294315
+>> 3821831%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV
+>> 2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=hTB
+>> 5UDaJoJfta9ohMG%2BrxCVJY34ANn10iSLP9iCHX3M%3D&reserved=0
+>>>> ernel.org%2Flinux-pci%2F20230113090350.1103494-1-
+>>>>
+>> mie%40igel.co.jp%2F&data=05%7C01%7CFrank.Li%40nxp.com%7Cea6513dbf
+>> 4084b80ced208db3ce54133%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7
+>> C0%7C638170727558800720%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4w
+>> LjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C
+>>>> %7C%7C&sdata=jYgy%2Bxk84ZXZRVfqm0GCXoRnCTLMrX4zTfV%2Bs5Mm
+>> svo
+>>>> %3D&reserved=0
+>>>> - [RFC PATCH v2 0/7] Introduce a vringh accessor for IO memory
+>>>> link:
+>>>>
+>> https://lore.k/
+>> %2F&data=05%7C01%7Cfrank.li%40nxp.com%7Cff59a16f88c643913e3908db3
+>> ee91ca8%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63817294315
+>> 3821831%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV
+>> 2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=hTB
+>> 5UDaJoJfta9ohMG%2BrxCVJY34ANn10iSLP9iCHX3M%3D&reserved=0
+>>>> ernel.org%2Fvirtualization%2F20230202090934.549556-1-
+>>>>
+>> mie%40igel.co.jp%2F&data=05%7C01%7CFrank.Li%40nxp.com%7Cea6513dbf
+>> 4084b80ced208db3ce54133%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7
+>> C0%7C638170727558800720%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4w
+>> LjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C
+>>>> %7C%7C&sdata=K4El76GSAGtsWkNBXJK5%2Fn7flCN20eEMZpZYTX2WIZ0
+>> %3
+>>>> D&reserved=0
+>>>>
+>>>> First of this patchset is introduce a helper function to realize pci
+>>>> virtio function using PCIe endpoint framework. The second one is adding
+>>>> a missing definition for virtio pci header. The last one is for PCIe
+>>>> endpoint virtio console driver.
+>>>>
+>>>> This is tested on linux-20230406 and RCar S4 board as PCIe endpoint.
+>>>>
+>>>> Shunsuke Mie (3):
+>>>>     PCI: endpoint: introduce a helper to implement pci ep virtio function
+>>>>     virtio_pci: add a definition of queue flag in ISR
+>>>>     PCI: endpoint: Add EP function driver to provide virtio-console
+>>>>       functionality
+>>>>
+>>>>    drivers/pci/endpoint/functions/Kconfig        |  19 +
+>>>>    drivers/pci/endpoint/functions/Makefile       |   2 +
+>>>>    drivers/pci/endpoint/functions/pci-epf-vcon.c | 554
+>> ++++++++++++++++++
+>>>>    .../pci/endpoint/functions/pci-epf-virtio.c   | 469 +++++++++++++++
+>>>>    .../pci/endpoint/functions/pci-epf-virtio.h   | 123 ++++
+>>>>    include/uapi/linux/virtio_pci.h               |   3 +
+>>>>    6 files changed, 1170 insertions(+)
+>>>>    create mode 100644 drivers/pci/endpoint/functions/pci-epf-vcon.c
+>>>>    create mode 100644 drivers/pci/endpoint/functions/pci-epf-virtio.c
+>>>>    create mode 100644 drivers/pci/endpoint/functions/pci-epf-virtio.h
+>>>>
+>>>> --
+>>>> 2.25.1
