@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2CCD6E6CC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 21:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092D96E6CC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 21:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232909AbjDRTOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 15:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
+        id S232927AbjDRTOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 15:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbjDRTNt (ORCPT
+        with ESMTP id S232653AbjDRTNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 15:13:49 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BCAAD2F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:13:28 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id op30so18258741qvb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:13:28 -0700 (PDT)
+        Tue, 18 Apr 2023 15:13:53 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D89C67A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:13:29 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id oo30so15744241qvb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:13:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1681845207; x=1684437207;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1681845208; x=1684437208;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=13UUYwnQDW8sv6Z5U/gfNQWUn2NaHbpFqCKtGCMsvrI=;
-        b=KYPCQZ61APdNYs9D70nl3yomvGcC38mIMM4ac/0Jxqh0MQrsikJDyqz8kNAKqw9iC1
-         1bmnq4F1MqaGWpFLA8ADTd1KOLEiSxDVYMfswSH15y4crGrkoG6QG/Dr8TRu4HNJqULs
-         3ondml+qKSu04IkF3zQ8fUI8BpomkXLoFtEZTlNb5W8qR5dw6PS9O8KDT/9Kxlz6inFB
-         Zoapu1IejZKECDPcQcl9q/KpgYWJmZLUxb2uAQzBruh9kz4IWlq+6bWZCm5vzL8tOPu8
-         21csNAuzKAdA/rLnXVEEXuAuDwsTm2WP87lOxN6ifFsa6PFpUcCMCZg4Et1TQULauXd7
-         sXdw==
+        bh=+Fg7akH6DcyqQI9O6hhnfSSKo6TLLXotHGx/ELhTsVs=;
+        b=duezlBdfFiEByRb2UhLuZ0Hbbz17B9Qr/emODLH8mZ2CGMjptqHGa11W+QzdSjQ/7F
+         NrpNC/GaqkJEOfmZT8IQhhmClT+39ZedrNCcu8ABafH+q5j+YOBKEgdjdxPGtGKwAbo+
+         P2TEzDioWeN451luG7HEJwPMt/rOzqsoER6GOlwhz2qDDjhKRGqWoYpeyDSp91a0bKPf
+         25r1qZ+NsVNcaUBJQLFKjSOaPj15VqfhoKvKXLa7AyFqKWsmjO1Nkx11EK8FkuJho1GV
+         PlZj02YYGkSrKmCNJW7AgCuXuYglqYWYf5+G3gp8PSNESKrtKbSuyF4B4khcnFe0QCvs
+         SdMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681845207; x=1684437207;
+        d=1e100.net; s=20221208; t=1681845208; x=1684437208;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=13UUYwnQDW8sv6Z5U/gfNQWUn2NaHbpFqCKtGCMsvrI=;
-        b=bgVPfgiBLM40POG/QOadjZxIFJ7Hfm9xKwTemnmgYawprJcBm7ElfD2N4Xc15Pjg6C
-         jjKro0OW/V+Cwk5VqIze65MUIbnLEcVs6XuJYEka5ODSr5j7rIelDsxvODbTFsusxuHd
-         +++W60DiugVNuU0iJvYmTW5nHA2GoyZFJ+LD6nwFpm9OqEp4LJ4+veWXwNiaEIu9JJwz
-         V6r/CChZn1nyyBF3LdMbt8tiYZFf09jNOHbs3ynLepiAKUMkT3C8k4COZRG6MQXU5jTT
-         ef4FrGUtSK4N5f8apIKioV5xnAsS0RHLO6fZglrvantc8MkWNRc1YgbqkuO3NzNeXHVG
-         Ymzg==
-X-Gm-Message-State: AAQBX9fHBp11ESJl+YenteUM3eRZRgDhpsLNRTgOxhdcyR/cPGbELmiV
-        MVvvUAq3X35eQ1ujt0rzSFxqPQ==
-X-Google-Smtp-Source: AKy350bRhkIUr8N7okrlgh3Hwo07F/vQhkNz4v1tFl3I8eV2V83V9lNwfkKYujFHpq4QwdXTdItkPw==
-X-Received: by 2002:ad4:5946:0:b0:5ef:9b22:dc88 with SMTP id eo6-20020ad45946000000b005ef9b22dc88mr5188244qvb.0.1681845207300;
-        Tue, 18 Apr 2023 12:13:27 -0700 (PDT)
+        bh=+Fg7akH6DcyqQI9O6hhnfSSKo6TLLXotHGx/ELhTsVs=;
+        b=egV5nnUsJlZ9RFvsWQVswQn0i+d8wpt00UMCRE15Yed4SZ3qNNP2yC7Qblz4tmnKUD
+         lug33365g4PGqhta1/Dt+I2au1CxWaPnnGqTsaqWAu30BJOFckt7HiKl7HwWjG0iaRYv
+         5j4C0GLxqrfiD4YlXTkVIuZ8H8CHoIjueeOhqjWv4UQCzq06+VVzV4Uzvtw6WNVFmly9
+         w6/I7PZT8iEQQUwlJCX9Jp+Dwz+gaMUo0fEpuAoMgsYqPRIuRuTjg5apOiDR0sMoqHSu
+         PZcDZAOW86u7NNBOv6zULIesbjpMOzUy2reg9jNnFXzIiLu/tCmA/iyWhyovT2oAuTJ2
+         2KqA==
+X-Gm-Message-State: AAQBX9d6LIqj59EBejqt5to21lVDnfJ5I/hXCrtQiIziwUapx5eIiX6j
+        E/h8gQC5I0papJ7zfCp/pQidkg==
+X-Google-Smtp-Source: AKy350aBP+4ihxJVgdmom0s8xvFh5tp4l/UPrJZnbm1VerN0bSQuYJNYtHePgve1c8xb8nyNL5IrOA==
+X-Received: by 2002:a05:6214:252a:b0:5ef:8004:e0b4 with SMTP id gg10-20020a056214252a00b005ef8004e0b4mr11443725qvb.48.1681845208456;
+        Tue, 18 Apr 2023 12:13:28 -0700 (PDT)
 Received: from localhost ([2620:10d:c091:400::5:e646])
-        by smtp.gmail.com with ESMTPSA id db3-20020a056214170300b005e5b30eef24sm3907199qvb.56.2023.04.18.12.13.26
+        by smtp.gmail.com with ESMTPSA id c2-20020a0ceb42000000b005dd8b9345e3sm3924742qvq.123.2023.04.18.12.13.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 12:13:26 -0700 (PDT)
+        Tue, 18 Apr 2023 12:13:28 -0700 (PDT)
 From:   Johannes Weiner <hannes@cmpxchg.org>
 To:     linux-mm@kvack.org
 Cc:     Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
@@ -57,9 +57,9 @@ Cc:     Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
         Vlastimil Babka <vbabka@suse.cz>,
         David Rientjes <rientjes@google.com>,
         linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: [RFC PATCH 07/26] mm: page_alloc: move capture_control to the page allocator
-Date:   Tue, 18 Apr 2023 15:12:54 -0400
-Message-Id: <20230418191313.268131-8-hannes@cmpxchg.org>
+Subject: [RFC PATCH 08/26] mm: page_alloc: claim blocks during compaction capturing
+Date:   Tue, 18 Apr 2023 15:12:55 -0400
+Message-Id: <20230418191313.268131-9-hannes@cmpxchg.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230418191313.268131-1-hannes@cmpxchg.org>
 References: <20230418191313.268131-1-hannes@cmpxchg.org>
@@ -74,179 +74,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compaction capturing is really a component of the page allocator.
-Later patches will also disconnect allocation request size from the
-compaction size, so move the setup of the capturing parameters to the
-"request domain", i.e. the page allocator. No functional change.
+When capturing a whole block, update the migratetype accordingly. For
+example, a THP allocation might capture an unmovable block. If the THP
+gets split and partially freed later, the remainder should group up
+with movable allocations.
 
 Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 ---
- include/linux/compaction.h |  3 ++-
- mm/compaction.c            | 33 ++++++++++-----------------------
- mm/page_alloc.c            | 25 ++++++++++++++++++++++---
- 3 files changed, 34 insertions(+), 27 deletions(-)
+ mm/internal.h   |  1 +
+ mm/page_alloc.c | 42 ++++++++++++++++++++++++------------------
+ 2 files changed, 25 insertions(+), 18 deletions(-)
 
-diff --git a/include/linux/compaction.h b/include/linux/compaction.h
-index 52a9ff65faee..06eeb2e25833 100644
---- a/include/linux/compaction.h
-+++ b/include/linux/compaction.h
-@@ -56,6 +56,7 @@ enum compact_result {
+diff --git a/mm/internal.h b/mm/internal.h
+index 024affd4e4b5..39f65a463631 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -432,6 +432,7 @@ struct compact_control {
+  */
+ struct capture_control {
+ 	struct compact_control *cc;
++	int migratetype;
+ 	struct page *page;
  };
  
- struct alloc_context; /* in mm/internal.h */
-+struct capture_control; /* in mm/internal.h */
- 
- /*
-  * Number of free order-0 pages that should be available above given watermark
-@@ -94,7 +95,7 @@ extern int fragmentation_index(struct zone *zone, unsigned int order);
- extern enum compact_result try_to_compact_pages(gfp_t gfp_mask,
- 		unsigned int order, unsigned int alloc_flags,
- 		const struct alloc_context *ac, enum compact_priority prio,
--		struct page **page);
-+		struct capture_control *capc);
- extern void reset_isolation_suitable(pg_data_t *pgdat);
- extern enum compact_result compaction_suitable(struct zone *zone, int order,
- 		unsigned int alloc_flags, int highest_zoneidx);
-diff --git a/mm/compaction.c b/mm/compaction.c
-index 84db84e8fd3a..a2280001eea3 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -2510,7 +2510,7 @@ compact_zone(struct compact_control *cc, struct capture_control *capc)
- static enum compact_result compact_zone_order(struct zone *zone, int order,
- 		gfp_t gfp_mask, enum compact_priority prio,
- 		unsigned int alloc_flags, int highest_zoneidx,
--		struct page **capture)
-+		struct capture_control *capc)
- {
- 	enum compact_result ret;
- 	struct compact_control cc = {
-@@ -2527,38 +2527,25 @@ static enum compact_result compact_zone_order(struct zone *zone, int order,
- 		.ignore_skip_hint = (prio == MIN_COMPACT_PRIORITY),
- 		.ignore_block_suitable = (prio == MIN_COMPACT_PRIORITY)
- 	};
--	struct capture_control capc = {
--		.cc = &cc,
--		.page = NULL,
--	};
- 
--	/*
--	 * Make sure the structs are really initialized before we expose the
--	 * capture control, in case we are interrupted and the interrupt handler
--	 * frees a page.
--	 */
-+	/* See the comment in __alloc_pages_direct_compact() */
- 	barrier();
--	WRITE_ONCE(current->capture_control, &capc);
-+	WRITE_ONCE(capc->cc, &cc);
- 
--	ret = compact_zone(&cc, &capc);
-+	ret = compact_zone(&cc, capc);
-+
-+	WRITE_ONCE(capc->cc, NULL);
- 
- 	VM_BUG_ON(!list_empty(&cc.freepages));
- 	VM_BUG_ON(!list_empty(&cc.migratepages));
- 
--	/*
--	 * Make sure we hide capture control first before we read the captured
--	 * page pointer, otherwise an interrupt could free and capture a page
--	 * and we would leak it.
--	 */
--	WRITE_ONCE(current->capture_control, NULL);
--	*capture = READ_ONCE(capc.page);
- 	/*
- 	 * Technically, it is also possible that compaction is skipped but
- 	 * the page is still captured out of luck(IRQ came and freed the page).
- 	 * Returning COMPACT_SUCCESS in such cases helps in properly accounting
- 	 * the COMPACT[STALL|FAIL] when compaction is skipped.
- 	 */
--	if (*capture)
-+	if (capc->page)
- 		ret = COMPACT_SUCCESS;
- 
- 	return ret;
-@@ -2573,13 +2560,13 @@ int sysctl_extfrag_threshold = 500;
-  * @alloc_flags: The allocation flags of the current allocation
-  * @ac: The context of current allocation
-  * @prio: Determines how hard direct compaction should try to succeed
-- * @capture: Pointer to free page created by compaction will be stored here
-+ * @capc: The context for capturing pages during freeing
-  *
-  * This is the main entry point for direct page compaction.
-  */
- enum compact_result try_to_compact_pages(gfp_t gfp_mask, unsigned int order,
- 		unsigned int alloc_flags, const struct alloc_context *ac,
--		enum compact_priority prio, struct page **capture)
-+		enum compact_priority prio, struct capture_control *capc)
- {
- 	int may_perform_io = (__force int)(gfp_mask & __GFP_IO);
- 	struct zoneref *z;
-@@ -2607,7 +2594,7 @@ enum compact_result try_to_compact_pages(gfp_t gfp_mask, unsigned int order,
- 		}
- 
- 		status = compact_zone_order(zone, order, gfp_mask, prio,
--				alloc_flags, ac->highest_zoneidx, capture);
-+				alloc_flags, ac->highest_zoneidx, capc);
- 		rc = max(status, rc);
- 
- 		/* The allocation should succeed, stop compacting */
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index b9366c002334..4d20513c83be 100644
+index 4d20513c83be..8e5996f8b4b4 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
-@@ -944,7 +944,7 @@ static inline struct capture_control *task_capc(struct zone *zone)
- {
- 	struct capture_control *capc = current->capture_control;
+@@ -615,6 +615,17 @@ void set_pageblock_migratetype(struct page *page, int migratetype)
+ 				page_to_pfn(page), MIGRATETYPE_MASK);
+ }
  
--	return unlikely(capc) &&
-+	return unlikely(capc && capc->cc) &&
- 		!(current->flags & PF_KTHREAD) &&
- 		!capc->page &&
- 		capc->cc->zone == zone ? capc : NULL;
-@@ -4480,22 +4480,41 @@ __alloc_pages_direct_compact(gfp_t gfp_mask, unsigned int order,
- 	struct page *page = NULL;
++static void change_pageblock_range(struct page *pageblock_page,
++					int start_order, int migratetype)
++{
++	int nr_pageblocks = 1 << (start_order - pageblock_order);
++
++	while (nr_pageblocks--) {
++		set_pageblock_migratetype(pageblock_page, migratetype);
++		pageblock_page += pageblock_nr_pages;
++	}
++}
++
+ #ifdef CONFIG_DEBUG_VM
+ static int page_outside_zone_boundaries(struct zone *zone, struct page *page)
+ {
+@@ -962,14 +973,19 @@ compaction_capture(struct capture_control *capc, struct page *page,
+ 	    is_migrate_isolate(migratetype))
+ 		return false;
+ 
+-	/*
+-	 * Do not let lower order allocations pollute a movable pageblock.
+-	 * This might let an unmovable request use a reclaimable pageblock
+-	 * and vice-versa but no more than normal fallback logic which can
+-	 * have trouble finding a high-order free page.
+-	 */
+-	if (order < pageblock_order && migratetype == MIGRATE_MOVABLE)
++	if (order >= pageblock_order) {
++		migratetype = capc->migratetype;
++		change_pageblock_range(page, order, migratetype);
++	} else if (migratetype == MIGRATE_MOVABLE) {
++		/*
++		 * Do not let lower order allocations pollute a
++		 * movable pageblock.  This might let an unmovable
++		 * request use a reclaimable pageblock and vice-versa
++		 * but no more than normal fallback logic which can
++		 * have trouble finding a high-order free page.
++		 */
+ 		return false;
++	}
+ 
+ 	capc->page = page;
+ 	return true;
+@@ -2674,17 +2690,6 @@ int move_freepages_block(struct zone *zone, struct page *page,
+ 			      old_mt, new_mt, num_movable);
+ }
+ 
+-static void change_pageblock_range(struct page *pageblock_page,
+-					int start_order, int migratetype)
+-{
+-	int nr_pageblocks = 1 << (start_order - pageblock_order);
+-
+-	while (nr_pageblocks--) {
+-		set_pageblock_migratetype(pageblock_page, migratetype);
+-		pageblock_page += pageblock_nr_pages;
+-	}
+-}
+-
+ /*
+  * When we are falling back to another migratetype during allocation, try to
+  * steal extra free pages from the same pageblocks to satisfy further
+@@ -4481,6 +4486,7 @@ __alloc_pages_direct_compact(gfp_t gfp_mask, unsigned int order,
  	unsigned long pflags;
  	unsigned int noreclaim_flag;
-+	struct capture_control capc = {
-+		.page = NULL,
-+	};
+ 	struct capture_control capc = {
++		.migratetype = ac->migratetype,
+ 		.page = NULL,
+ 	};
  
- 	if (!order)
- 		return NULL;
- 
-+	/*
-+	 * Make sure the structs are really initialized before we expose the
-+	 * capture control, in case we are interrupted and the interrupt handler
-+	 * frees a page.
-+	 */
-+	barrier();
-+	WRITE_ONCE(current->capture_control, &capc);
-+
- 	psi_memstall_enter(&pflags);
- 	delayacct_compact_start();
- 	noreclaim_flag = memalloc_noreclaim_save();
- 
- 	*compact_result = try_to_compact_pages(gfp_mask, order, alloc_flags, ac,
--								prio, &page);
-+					       prio, &capc);
- 
- 	memalloc_noreclaim_restore(noreclaim_flag);
- 	psi_memstall_leave(&pflags);
- 	delayacct_compact_end();
- 
--	if (*compact_result == COMPACT_SKIPPED)
-+	/*
-+	 * Make sure we hide capture control first before we read the captured
-+	 * page pointer, otherwise an interrupt could free and capture a page
-+	 * and we would leak it.
-+	 */
-+	WRITE_ONCE(current->capture_control, NULL);
-+	page = READ_ONCE(capc.page);
-+
-+	if (!page && *compact_result == COMPACT_SKIPPED)
- 		return NULL;
- 	/*
- 	 * At least in one zone compaction wasn't deferred or skipped, so let's
 -- 
 2.39.2
 
