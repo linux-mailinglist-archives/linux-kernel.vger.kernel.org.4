@@ -2,275 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4420F6E7001
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 01:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1406E7005
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 01:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231924AbjDRXkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 19:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S231270AbjDRXoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 19:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbjDRXk2 (ORCPT
+        with ESMTP id S229750AbjDRXom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 19:40:28 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6928714448
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 16:38:34 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-63b54d92622so1673034b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 16:38:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681861114; x=1684453114;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KZZcbhEIXep3CsDuGt1XX4NDaxpUgfaEfLEdZFPghSQ=;
-        b=hm9bDIHJQIeAjh+0Wi4XwWxk5FEWf9SU2iifaVaFm2SHEQi+MfvRomA6hNFQPypblO
-         ajskHfJ21yXbKIgYGAkYYUqP0Ygv5283TmzvvXkvGPLvNGcY8IspXO87zRQLxoMgm7+A
-         44LeeK44/TjVVWr4ejNfVV1NjMwkMAjVBZwnQccmKfvNgc/rCXeLfUDkrNJrLDo+aM/k
-         5pFpnDDsiw5EE9Dzm//Lga2qY9q3z+kEsegm3Xv/EsUZ8FyYGeSCyJOZ49dURNwlnL2q
-         Y5lq2y1JVNHacWD2DjdNMHYSACvPNhgvLrByCLzQkYOtXAP0CIMW0LotNLXFCHIJamQv
-         WJuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681861114; x=1684453114;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KZZcbhEIXep3CsDuGt1XX4NDaxpUgfaEfLEdZFPghSQ=;
-        b=GzAm39EKCMAxgGjKgsk6p75KgsUMjjAN4BKEOMdZ/lRi+LYl6ocOSZsmn3zM3v9y/z
-         1JKoLT92lNpDgk819a990sKChqb7C0HS40b1oPyyvkWx7hv7bJuiBRPH6rPT6us9KeGO
-         E2md+0uQvmX50JxtR7+qiI9RJ5fxnow3X3j77r76TYSoL6fndg8QS0XGyuiZv7rP63pO
-         zjK5ZVJh+iEnt+v0mbVcfajUolYmTgDIb5w2ozRaRL7Ypwc7jHgiPHqqdp6VNR/XeOYp
-         kSm5ofg8WaBq6tsJp6DvCvd1gcxJyigSsCGgAK3Lfp+ciRCGjmDg2qD99Gjia1AQbyS5
-         vBpg==
-X-Gm-Message-State: AAQBX9dODoNW6wUL9SMFDUgogRUGgx2m0KiGi8gB+dbmf4oV1oPBI97T
-        G0kJ4Y7fGB9zgHuDPEq80j68Y8HjAqWOfd7TIA==
-X-Google-Smtp-Source: AKy350Y4yrZy3jVvN3wQp7+RZBqQNJ9wdfC4ADrLjc4RYHgu0a5KoOvNA6U3D5YLtIMfO6ES8yW87Yjz2s2FcMbRug==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a17:903:41c5:b0:19a:7bd4:5b0d with
- SMTP id u5-20020a17090341c500b0019a7bd45b0dmr1394106ple.8.1681861113900; Tue,
- 18 Apr 2023 16:38:33 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 23:38:32 +0000
-In-Reply-To: <ZDnAuGKrCO2wgjlG@google.com> (message from Sean Christopherson
- on Fri, 14 Apr 2023 14:08:08 -0700)
-Mime-Version: 1.0
-Message-ID: <diqz354w92x3.fsf@ackerleytng-cloudtop.c.googlers.com>
-Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     chao.p.peng@linux.intel.com, xiaoyao.li@intel.com,
-        isaku.yamahata@gmail.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, pbonzini@redhat.com, corbet@lwn.net,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, arnd@arndb.de, naoya.horiguchi@nec.com,
-        linmiaohe@huawei.com, x86@kernel.org, hpa@zytor.com,
-        hughd@google.com, jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, shuah@kernel.org, rppt@kernel.org,
-        steven.price@arm.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
-        vannapurve@google.com, yu.c.zhang@linux.intel.com,
-        kirill.shutemov@linux.intel.com, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, qperret@google.com, tabba@google.com,
-        michael.roth@amd.com, mhocko@suse.com, wei.w.wang@intel.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        Tue, 18 Apr 2023 19:44:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC73C1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 16:43:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681861434;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=95IpKdJ2kg9KlzNkeT0HkrK8mW9zXchxjdpYGfWrZng=;
+        b=OOf5sSQjgWhmtS6iuDEFTCVRp2CXyMNxhaeM2NWBJKbHqfr0+axdEKHtnX1RobZciAZ/1I
+        B+6/rIp9c0PVsFsjgo5dWmtbRCKaCEhRXK72Pg+P4Bc/JtQfmZeIPqPUGZZ/kCwCTHrPOz
+        jxZdoShGF8sezoaNlx1qr4GVrmw9Tx4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-219-ECWknCGRNTmLuL68kXq2gw-1; Tue, 18 Apr 2023 19:43:51 -0400
+X-MC-Unique: ECWknCGRNTmLuL68kXq2gw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9991A800047;
+        Tue, 18 Apr 2023 23:43:50 +0000 (UTC)
+Received: from [10.22.16.74] (unknown [10.22.16.74])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1897F5AB7A;
+        Tue, 18 Apr 2023 23:43:49 +0000 (UTC)
+Message-ID: <e3f9c399a6ef26a145a9fcc53201bbd98d9428ee.camel@redhat.com>
+Subject: Re: [PATCH] locking/rtmutex: Flush the plug before entering the
+ slowpath.
+From:   Crystal Wood <swood@redhat.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Cc:     John Keeping <john@metanate.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Date:   Tue, 18 Apr 2023 18:43:48 -0500
+In-Reply-To: <20230418151838.jNcnnDqL@linutronix.de>
+References: <20230322162719.wYG1N0hh@linutronix.de>
+         <20230418151838.jNcnnDqL@linutronix.de>
+Organization: Red Hat
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+On Tue, 2023-04-18 at 17:18 +0200, Sebastian Andrzej Siewior wrote:
+> On 2023-03-22 17:27:21 [+0100], To Thomas Gleixner wrote:
+> > blk_flush_plug() is invoked on schedule() to flush out the IO progress
+> > that has been made so far so that it is globally visible. This is
+> > important to avoid deadlocks because a lock owner can wait for IO.
+> > Therefore the IO must be first flushed before a thread can block on a
+> > lock.
+> >=20
+> > The plug flush routine can acquire a sleeping lock which is contended.
+> > Blocking on a lock requires an assignment to task_struct::pi_blocked_on=
+.
+> > If blk_flush_plug() is invoked from the slow path on schedule() then th=
+e
+> > variable is already set and will be overwritten by the lock in
+> > blk_flush_plug().
+> > Therefore it is needed to invoke blk_flush_plug() (and block on
+> > potential locks in the process) before the blocking on the actual lock.
+> >=20
+> > Invoke blk_flush_plug() before blocking on a sleeping lock. The
+> > PREEMPT_RT only sleeping locks (spinlock_t and rwlock_t) are excluded
+> > because their slow path does not invoke blk_flush_plug().
+> >=20
+> > Fixes: e17ba59b7e8e1 ("locking/rtmutex: Guard regular sleeping locks
+> > specific functions")
+> > Reported-by: Crystal Wood <swood@redhat.com>
+> > Link:
+> > https://lore.kernel.org/4b4ab374d3e24e6ea8df5cadc4297619a6d945af.camel@=
+redhat.com
+> > Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+>=20
+> polite ping.
 
-> On Tue, Mar 28, 2023, Chao Peng wrote:
->> On Fri, Mar 24, 2023 at 10:29:25AM +0800, Xiaoyao Li wrote:
->> > On 3/24/2023 10:10 AM, Chao Peng wrote:
->> > > On Wed, Mar 22, 2023 at 05:41:31PM -0700, Isaku Yamahata wrote:
->> > > > On Wed, Mar 08, 2023 at 03:40:26PM +0800,
->> > > > Chao Peng <chao.p.peng@linux.intel.com> wrote:
->> > > >
->> > > > > On Wed, Mar 08, 2023 at 12:13:24AM +0000, Ackerley Tng wrote:
->> > > > > > Chao Peng <chao.p.peng@linux.intel.com> writes:
->> > > > > >
->> > > > > > > On Sat, Jan 14, 2023 at 12:01:01AM +0000, Sean  
->> Christopherson wrote:
->> > > > > > > > On Fri, Dec 02, 2022, Chao Peng wrote:
->> > > > > > > +static bool kvm_check_rmem_offset_alignment(u64 offset, u64  
->> gpa)
->> > > > > > > +{
->> > > > > > > +	if (!offset)
->> > > > > > > +		return true;
->> > > > > > > +	if (!gpa)
->> > > > > > > +		return false;
->> > > > > > > +
->> > > > > > > +	return !!(count_trailing_zeros(offset) >=  
->> count_trailing_zeros(gpa));
->> > > >
->> > > > This check doesn't work expected. For example, offset = 2GB,  
->> gpa=4GB
->> > > > this check fails.
->> > >
->> > > This case is expected to fail as Sean initially suggested[*]:
->> > >    I would rather reject memslot if the gfn has lesser alignment than
->> > >    the offset. I'm totally ok with this approach _if_ there's a use  
->> case.
->> > >    Until such a use case presents itself, I would rather be  
->> conservative
->> > >    from a uAPI perspective.
->> > >
->> > > I understand that we put tighter restriction on this but if you see  
->> such
->> > > restriction is really a big issue for real usage, instead of a
->> > > theoretical problem, then we can loosen the check here. But at that  
->> time
->> > > below code is kind of x86 specific and may need improve.
->> > >
->> > > BTW, in latest code, I replaced count_trailing_zeros() with fls64():
->> > >    return !!(fls64(offset) >= fls64(gpa));
->> >
->> > wouldn't it be !!(ffs64(offset) <= ffs64(gpa)) ?
+Sorry, got distracted.  It does appear to make the asserts go away but I ra=
+n
+into other possibly related stalls when running rteval -- but if I remove
+both the asserts and your patch it hangs in a different way, so I need to
+investigate some more.
 
->> As the function document explains, here we want to return true when
->> ALIGNMENT(offset) >= ALIGNMENT(gpa), so '>=' is what we need.
+-Crystal
 
->> It's worthy clarifying that in Sean's original suggestion he actually
->> mentioned the opposite. He said 'reject memslot if the gfn has lesser
->> alignment than the offset', but I wonder this is his purpose, since
->> if ALIGNMENT(offset) < ALIGNMENT(gpa), we wouldn't be possible to map
->> the page as largepage. Consider we have below config:
-
->>    gpa=2M, offset=1M
-
->> In this case KVM tries to map gpa at 2M as 2M hugepage but the physical
->> page at the offset(1M) in private_fd cannot provide the 2M page due to
->> misalignment.
-
->> But as we discussed in the off-list thread, here we do find a real use
->> case indicating this check is too strict. i.e. QEMU immediately fails
->> when launch a guest > 2G memory. For this case QEMU splits guest memory
->> space into two slots:
-
->>    Slot#1(ram_below_4G): gpa=0x0, offset=0x0, size=2G
->>    Slot#2(ram_above_4G): gpa=4G,  offset=2G,  size=totalsize-2G
-
->> This strict alignment check fails for slot#2 because offset(2G) has less
->> alignment than gpa(4G). To allow this, one solution can revert to my
->> previous change in kvm_alloc_memslot_metadata() to disallow hugepage
->> only when the offset/gpa are not aligned to related page size.
-
->> Sean, How do you think?
-
-> I agree, a pure alignment check is too restrictive, and not really what I  
-> intended
-> despite past me literally saying that's what I wanted :-)  I think I may  
-> have also
-> inverted the "less alignment" statement, but luckily I believe that ends  
-> up being
-> a moot point.
-
-> The goal is to avoid having to juggle scenarios where KVM wants to create  
-> a hugepage,
-> but restrictedmem can't provide one because of a misaligned file offset.   
-> I think
-> the rule we want is that the offset must be aligned to the largest page  
-> size allowed
-> by the memslot _size_.  E.g. on x86, if the memslot size is >=1GiB then  
-> the offset
-> must be 1GiB or beter, ditto for >=2MiB and >=4KiB (ignoring that 4KiB is  
-> already a
-> requirement).
-
-> We could loosen that to say the largest size allowed by the memslot, but  
-> I don't
-> think that's worth the effort unless it's trivially easy to implement in  
-> code,
-> e.g. KVM could technically allow a 4KiB aligned offset if the memslot is  
-> 2MiB
-> sized but only 4KiB aligned on the GPA.  I doubt there's a real use case  
-> for such
-> a memslot, so I want to disallow that unless it's super easy to implement.
-
-Checking my understanding here about why we need this alignment check:
-
-When KVM requests a page from restrictedmem, KVM will provide an offset
-into the file in terms of 4K pages.
-
-When shmem is configured to use hugepages, shmem_get_folio() will round
-the requested offset down to the nearest hugepage-aligned boundary in
-shmem_alloc_hugefolio().
-
-Example of problematic configuration provided to
-KVM_SET_USER_MEMORY_REGION2:
-
-+ shmem configured to use 1GB pages
-+ restrictedmem_offset provided to KVM_SET_USER_MEMORY_REGION2: 0x4000
-+ memory_size provided in KVM_SET_USER_MEMORY_REGION2: 1GB
-+ KVM requests offset (pgoff_t) 0x8, which translates to offset 0x8000
-
-restrictedmem_get_page() and shmem_get_folio() returns the page for
-offset 0x0 in the file, since rounding down 0x8000 to the nearest 1GB is
-0x0. This is allocating outside the range that KVM is supposed to use,
-since the parameters provided in KVM_SET_USER_MEMORY_REGION2 is only
-supposed to be offset 0x4000 to (0x4000 + 1GB = 0x40004000) in the file.
-
-IIUC shmem will actually just round down (0x4000 rounded down to nearest
-1GB will be 0x0) and allocate without checking bounds, so if offset 0x0
-to 0x4000 in the file were supposed to be used by something else, there
-might be issues.
-
-Hence, this alignment check ensures that rounding down of any offsets
-provided by KVM (based on page size configured in the backing file
-provided) to restrictedmem_get_page() must not go below the offset
-provided to KVM_SET_USER_MEMORY_REGION2.
-
-Enforcing alignment of restrictedmem_offset based on the currently-set
-page size in the backing file (i.e. shmem) may not be effective, since
-the size of the pages in the backing file can be adjusted to a larger
-size after KVM_SET_USER_MEMORY_REGION2 succeeds. With that, we may still
-end up allocating outside the range that KVM was provided with.
-
-Hence, to be safe, we should check alignment to the max page size across
-all backing filesystems, so the constraint is
-
-     rounding down restrictedmem_offset to
-     min(max page size across all backing filesystems,
-         max page size that fits in memory_size) == restrictedmem_offset
-
-which is the same check as
-
-     restrictedmem_offset must be aligned to min(max page size across all
-     backing filesystems, max page size that fits in memory_size)
-
-which can safely reduce to
-
-     restrictedmem_offset must be aligned to max page size that fits in
-     memory_size
-
-since "max page size that fits in memory_size" is probably <= to "max
-page size across all backing filesystems", and if it's larger, it'll
-just be a tighter constraint.
-
-If the above understanding is correct:
-
-+ We must enforce this in the KVM_SET_USER_MEMORY_REGION2 handler, since
-   IIUC shmem will just round down and allocate without checking bounds.
-
-     + I think this is okay because holes in the restrictedmem file (in
-       terms of offset) made to accommodate this constraint don't cost us
-       anything anyway(?) Are they just arbitrary offsets in a file? In
-       our case, this file is usually a new and empty file.
-
-     + In the case of migration of a restrictedmem file between two KVM
-       VMs, this constraint would cause a problem is if the largest
-       possible page size on the destination machine is larger than that
-       of the source machine. In that case, we might have to move the
-       data in the file to a different offset (a separate problem).
-
-+ On this note, it seems like there is no check for when the range is
-   smaller than the allocated page? Like if the range provided is 4KB in
-   size, but shmem is then configured to use a 1GB page, will we end up
-   allocating past the end of the range?
