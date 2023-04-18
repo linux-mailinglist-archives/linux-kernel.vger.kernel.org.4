@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E00C6E5DED
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B066E5DEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjDRJyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
+        id S231166AbjDRJyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbjDRJx7 (ORCPT
+        with ESMTP id S231305AbjDRJyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:53:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BDD2D64;
-        Tue, 18 Apr 2023 02:53:57 -0700 (PDT)
+        Tue, 18 Apr 2023 05:54:05 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091E87686;
+        Tue, 18 Apr 2023 02:54:00 -0700 (PDT)
 Received: from localhost (unknown [188.27.34.213])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 44D886603242;
-        Tue, 18 Apr 2023 10:53:56 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 88EF56603244;
+        Tue, 18 Apr 2023 10:53:59 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681811636;
-        bh=QAKXSHNeG9DCJb6ZMUd7iXClPcNDJLQxuEo4vhchV8k=;
+        s=mail; t=1681811639;
+        bh=v003HEWWtLqoOjeAVr+uR6+doRjgZBOm8N/Wl6TsWrw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A2R7uPX6DTLm0bATJ4mkkXme7TGZj5FY/IR/qz3idT4+br+VA5WObUbiohGLQ2QeX
-         UdEWfLbUqYrQpAYXy92f7FcpooBvBgh4/Gnzb5/HnX2HGPhQXU1eptTdGZEsM0FTKs
-         u5K99MghfSrLgUykhepfG66BfWo6PWzrmAPE+ocidVzgb086mUgFnpzb5UsOoQ0qqg
-         uhvElN8v2hmEsjyCk6T96DQN//zoSFZCVPIf+0inL7T7vqjG0BVTMfFS8nofjbCBon
-         17yjkU6zQaGpZY0ACseBX/QBE+k+Juz+HU8Y5W+mXd2+ISSHb7TKdiEbOuWNIp0Jlh
-         clt330Iwl641A==
+        b=TjbuKj8nXuULJILdNs+8F8G72jRvHDa4gO8zPUEU4rNlkRP5bnjsjhtOBPlr76fMc
+         yMSTMxxVK/CIGaetvbDHjEWFgI7l6c9JiiwEC8c4rHbBTZlpDvXbeCh5WVUGRlR5MJ
+         wmpkyybFd/mzdQTKaKblAtIVfUSHQ/8G1TPW1wn6Vlg5eY66WTKNYRea5b5wh6ND4h
+         zoRR4YGZlWF058tGkiNtBGhj3sDC/FFK5B1CXFcWeyH1KMxzSDofOtqcjtdbX9ab26
+         vmBlgLJih51IN8F0ipl/cvfOWQzCa+pLD5foqHjFBJt0cri1QOy5UubQM61k3pyCuZ
+         Jc5e4/JN/0tdA==
 From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -45,9 +45,9 @@ To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH 2/3] dt-bindings: timer: rockchip: Add rk3588 compatible
-Date:   Tue, 18 Apr 2023 12:53:43 +0300
-Message-Id: <20230418095344.274025-3-cristian.ciocaltea@collabora.com>
+Subject: [PATCH 3/3] arm64: dts: rockchip: Add rk3588 timer
+Date:   Tue, 18 Apr 2023 12:53:44 +0300
+Message-Id: <20230418095344.274025-4-cristian.ciocaltea@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230418095344.274025-1-cristian.ciocaltea@collabora.com>
 References: <20230418095344.274025-1-cristian.ciocaltea@collabora.com>
@@ -63,25 +63,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible string for Rockchip RK3588 timer.
+Add DT node for Rockchip RK3588/RK3588S SoC timer.
 
 Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 ---
- Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml b/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
-index 2bdb6e6bdb21..19e56b7577a0 100644
---- a/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
-+++ b/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
-@@ -24,6 +24,7 @@ properties:
-               - rockchip,rk3228-timer
-               - rockchip,rk3229-timer
-               - rockchip,rk3368-timer
-+              - rockchip,rk3588-timer
-               - rockchip,px30-timer
-           - const: rockchip,rk3288-timer
-   reg:
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+index 657c019d27fa..acd89a55374a 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+@@ -1400,6 +1400,14 @@ i2c5: i2c@fead0000 {
+ 		status = "disabled";
+ 	};
+ 
++	rktimer: timer@feae0000 {
++		compatible = "rockchip,rk3588-timer", "rockchip,rk3288-timer";
++		reg = <0x0 0xfeae0000 0x0 0x20>;
++		clocks = <&cru PCLK_BUSTIMER0>, <&cru CLK_BUSTIMER0>;
++		clock-names = "pclk", "timer";
++		interrupts = <GIC_SPI 289 IRQ_TYPE_LEVEL_HIGH 0>;
++	};
++
+ 	wdt: watchdog@feaf0000 {
+ 		compatible = "rockchip,rk3588-wdt", "snps,dw-wdt";
+ 		reg = <0x0 0xfeaf0000 0x0 0x100>;
 -- 
 2.40.0
 
