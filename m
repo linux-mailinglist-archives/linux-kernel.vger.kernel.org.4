@@ -2,94 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49206E60B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E8D6E60B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbjDRMI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 08:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
+        id S231529AbjDRMJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 08:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbjDRMIg (ORCPT
+        with ESMTP id S231135AbjDRMIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 08:08:36 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20192B75A;
-        Tue, 18 Apr 2023 05:06:39 -0700 (PDT)
-Received: from localhost (unknown [188.27.34.213])
+        Tue, 18 Apr 2023 08:08:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD01B75F
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:06:56 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pok6b-0004Ph-Q3; Tue, 18 Apr 2023 14:06:41 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C125E660320E;
-        Tue, 18 Apr 2023 13:06:37 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681819598;
-        bh=TQcB5X4iZIViJGyWOJ/d+KxnISkUh4MekvbHwYmTdXk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oFDWMnpZdoO3UisFSu/SMZB0jfMFuAlpH18h+bsJa8M+zrtPMfDOCYA6Whd8lcZTY
-         rRPbnp2pBY1oFfAtEi52kGJnz3moIECfOzNLDViBcUfevkKAIQCy1TLUYxw6SGwsnq
-         IFsMYYrSIy50dnRLUZoGxhbcWukNgm3/mDGe+lkKVlrWlgeo0i1asK6Se+NHdOYkMz
-         QG8aT1X/GC36M9hz+E+s0qmIVwt7pdecBa2NACIskLnH67ITi1RcsqkLcDPwxLmZCv
-         KLV8M13KYk/fo0TLTrHz9kbBmzYQ9UvItdZTtYnb0OkoFs9wv1sYjyqGDyclq9LF5b
-         2jlEX/8tWz6SQ==
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sugar Zhang <sugar.zhang@rock-chips.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Johan Jonker <jbx6244@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH v2 3/3] arm64: dts: rockchip: Add rk3588 timer
-Date:   Tue, 18 Apr 2023 15:06:24 +0300
-Message-Id: <20230418120624.284551-4-cristian.ciocaltea@collabora.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230418120624.284551-1-cristian.ciocaltea@collabora.com>
-References: <20230418120624.284551-1-cristian.ciocaltea@collabora.com>
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B607A1B218A;
+        Tue, 18 Apr 2023 12:06:39 +0000 (UTC)
+Date:   Tue, 18 Apr 2023 14:06:39 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Harald Mommer <hmo@opensynergy.com>
+Cc:     Mikhail Golubev <Mikhail.Golubev@opensynergy.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Harald Mommer <harald.mommer@opensynergy.com>,
+        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
+        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>,
+        stratos-dev@op-lists.linaro.org,
+        Matti Moell <Matti.Moell@opensynergy.com>
+Subject: Re: [virtio-dev] Re: [RFC PATCH 1/1] can: virtio: Initial virtio CAN
+ driver.
+Message-ID: <20230418-pull-negligee-f253a3c8e7db-mkl@pengutronix.de>
+References: <20220825134449.18803-1-harald.mommer@opensynergy.com>
+ <20220827093909.ag3zi7k525k4zuqq@pengutronix.de>
+ <40e3d678-b840-e780-c1da-367000724f69@opensynergy.com>
+ <c2c0ba34-2985-21ea-0809-b96a3aa5e401@siemens.com>
+ <36bb910c-4874-409b-ac71-d141cd1d8ecb@app.fastmail.com>
+ <c20ee6cf-2aae-25ef-e97f-0e7fc3f9c5b6@opensynergy.com>
+ <20230414-scariness-disrupt-5ec9cc82b20c-mkl@pengutronix.de>
+ <9786872e-1063-e1ff-dc0d-6be5952a1826@opensynergy.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qbejfhwai7v6uczb"
+Content-Disposition: inline
+In-Reply-To: <9786872e-1063-e1ff-dc0d-6be5952a1826@opensynergy.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DT node for Rockchip RK3588/RK3588S SoC timer.
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
----
- arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+--qbejfhwai7v6uczb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-index 657c019d27fa..767084a1ec43 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-@@ -1400,6 +1400,14 @@ i2c5: i2c@fead0000 {
- 		status = "disabled";
- 	};
- 
-+	timer0: timer@feae0000 {
-+		compatible = "rockchip,rk3588-timer", "rockchip,rk3288-timer";
-+		reg = <0x0 0xfeae0000 0x0 0x20>;
-+		interrupts = <GIC_SPI 289 IRQ_TYPE_LEVEL_HIGH 0>;
-+		clocks = <&cru PCLK_BUSTIMER0>, <&cru CLK_BUSTIMER0>;
-+		clock-names = "pclk", "timer";
-+	};
-+
- 	wdt: watchdog@feaf0000 {
- 		compatible = "rockchip,rk3588-wdt", "snps,dw-wdt";
- 		reg = <0x0 0xfeaf0000 0x0 0x100>;
--- 
-2.40.0
+On 18.04.2023 11:50:56, Harald Mommer wrote:
+> there is now an implementation of the device for qemu internally under
+> review.
 
+Great news!
+
+> The paperwork with the company lawyer to publish source code has also been
+> done.
+
+This was probably more work than the actual coding :)
+
+> At the same time we changed the driver and the specification draft also,
+> especially the bus off indication is now done by a config space bit inste=
+ad
+> of having a dedicated indication queue. Minor updates to some other
+> structures. This means what we have will match an updated driver and
+> specification version not yet sent out. Also to be done so that people can
+> play around.
+
+Looking forward to see the code.
+
+> So an open source qemu device is in the work and we are close to publish
+> this in our public github repository but until now nothing has been pushed
+> yet to github.
+
+Next week is our yearly hacking week. Some working qemu and Linux
+drivers would be excellent.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--qbejfhwai7v6uczb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQ+h8wACgkQvlAcSiqK
+BOiFFgf/XM5nIh2LYk0Iu4Ns08EGdD12H+7cz4mwTAm26MgLjkcJGG5bEMD4AZ6e
+OnrKmz+c7hsBk0h+BwF18phQqH3prdje2vnKaczvjD4iNnpId57mCu2hNWP05NhP
+x46zraLhQwcy3qS5qpki9gWAV4oMzSAFBhZpV2qp4wwy0HMc2MQhefzJgCa1HxVg
+emwNT/3vuf38IslMUlSqZGsnKhCvOajZVTcyo1hpo5DSVf3J0aYWXNRJj/bGaHS3
+3KNXmRQjvCCRi5u8VJyYIEp3FGMK6cGtWiNMX+TkIRH6uO/PK9yjLcz/N+1RJbzH
+uTR79ceo/ekik35HjzYGnUCxgmtmpw==
+=LT/a
+-----END PGP SIGNATURE-----
+
+--qbejfhwai7v6uczb--
