@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E5F6E5979
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085496E596E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjDRGeM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 02:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
+        id S230357AbjDRGaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 02:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjDRGeG (ORCPT
+        with ESMTP id S229454AbjDRGaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 02:34:06 -0400
-Received: from baldur.buserror.net (baldur.buserror.net [165.227.176.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D4640C6
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:34:04 -0700 (PDT)
-Received: from [2601:447:c680:c050::4033]
-        by baldur.buserror.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <oss@buserror.net>)
-        id 1poeqP-00AZE6-WD; Tue, 18 Apr 2023 01:29:38 -0500
-Message-ID: <497c92b50103a4ba3469cd41edbd967ee9bfb291.camel@buserror.net>
-From:   Crystal Wood <oss@buserror.net>
-To:     Sean Anderson <sean.anderson@seco.com>,
-        Li Yang <leoyang.li@nxp.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Camelia Groza <camelia.groza@nxp.com>,
-        linux-kernel@vger.kernel.org, Roy Pledge <roy.pledge@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Madalin Bucur <madalin.bucur@nxp.com>
-Date:   Tue, 18 Apr 2023 01:29:36 -0500
-In-Reply-To: <3b707d1c-1120-274f-6cd6-b3283a334563@seco.com>
-References: <20230404145557.2356894-1-sean.anderson@seco.com>
-         <20230404145557.2356894-2-sean.anderson@seco.com>
-         <48dacc58c7c04ba8a005d8edd56744c8455f007e.camel@buserror.net>
-         <d4737c45-2bbf-d364-9768-20baa46f6af4@seco.com>
-         <3b707d1c-1120-274f-6cd6-b3283a334563@seco.com>
-Organization: Red Hat
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Tue, 18 Apr 2023 02:30:09 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937B6119;
+        Mon, 17 Apr 2023 23:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681799406; x=1713335406;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nDNhe3Tsv85RglO2DALJKYqrP8C4vKN59/PeHUPKaHU=;
+  b=Yxq8hxop4lvETvYPt0/uyzQy5WJP5K/NlMuA2b+nr8RU9RfoTz1+AVRB
+   QebcQaH/K5jFwfCCsKwxJMtTpW95Q7dS/z8uXhYj4aAt0bs3hLbgFS/8d
+   nGy0uErt8Mf5mRIINn626TbB7bQ2KuqIoHQXR6E8lRqYU3nm558R7Vvkx
+   5Ab/nJaS/snEz8gJ4BRtPOceS9BFvKRCjMNZePsKvVhS5BTWWos1zjesn
+   TTryVgqcGZWxzc0fFjHQBC8qdJc4/8iXfzYsxkrSlil/9QWpKJFHd1xw0
+   U82KaPNTOjnbBgwYPnW9wxKn+Ed17v8xmJ3zp+KzXxj+X2nZKfk/0ZpBn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="325429177"
+X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
+   d="scan'208";a="325429177"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 23:30:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="721416375"
+X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
+   d="scan'208";a="721416375"
+Received: from choiwony-mobl.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.32.90])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 23:30:03 -0700
+Message-ID: <d6a66fd3-b70a-3649-e13e-b3bd891de853@intel.com>
+Date:   Tue, 18 Apr 2023 09:29:59 +0300
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2601:447:c680:c050::4033
-X-SA-Exim-Rcpt-To: sean.anderson@seco.com, leoyang.li@nxp.com, linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com, camelia.groza@nxp.com, linux-kernel@vger.kernel.org, roy.pledge@nxp.com, davem@davemloft.net, madalin.bucur@nxp.com
-X-SA-Exim-Mail-From: oss@buserror.net
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH RFC 1/5] perf: Add ioctl to emit sideband events
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230414082300.34798-1-adrian.hunter@intel.com>
+ <20230414082300.34798-2-adrian.hunter@intel.com>
+ <20230417105727.GG83892@hirez.programming.kicks-ass.net>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230417105727.GG83892@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH v3 2/2] soc: fsl: qbman: Use raw spinlock for cgr_lock
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on baldur.buserror.net)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-04-11 at 11:09 -0400, Sean Anderson wrote:
-> Hi Crystal,
+On 17/04/23 13:57, Peter Zijlstra wrote:
+> On Fri, Apr 14, 2023 at 11:22:56AM +0300, Adrian Hunter wrote:
+>> perf tools currently read /proc to get this information, but that
+>> races with changes made by the kernel.
+>>
+>> Add an ioctl to output status-only sideband events for a currently
+>> active event on the current CPU. Using timestamps, these status-only
+>> sideband events will be correctly ordered with respect to "real"
+>> sideband events.
+>>
+>> The assumption is a user will:
+>> 	- open and enable a dummy event to track sideband events
+>> 	- call the new ioctl to get sideband information for currently
+>> 	  running processes as needed
+>> 	- enable the remaining selected events
+>>
+>> The initial sideband events to be supported will be: fork, namespaces, comm
+>> and mmap.
+>>
+>> Add a new misc flag PERF_RECORD_MISC_STATUS_ONLY to differentiate "real"
+>> sideband events from status-only sideband events.
+>>
+>> The limitation that the event must be active is significant. The ioctl
+>> caller must either:
+>> 	i)  For a CPU context, set CPU affinity to the correct CPU.
+>> 	    Note, obviously that would not need to be done for system-wide
+>> 	    tracing on all CPUs. It would also only need to be done for the
+>> 	    period of tracing when the ioctl is to be used.
+>> 	ii) Use an event opened for the current process on all CPUs.
+>> 	    Note, if such an additional event is needed, it would also use
+>> 	    additional memory from the user's perf_event_mlock_kb /
+>> 	    RLIMIT_MEMLOCK limit.
 > 
-> On 4/4/23 12:04, Sean Anderson wrote:
-> > On 4/4/23 11:33, Crystal Wood wrote:
-> > > On Tue, 2023-04-04 at 10:55 -0400, Sean Anderson wrote:
-> > > 
-> > > > @@ -1456,11 +1456,11 @@ static void tqm_congestion_task(struct
-> > > > work_struct
-> > > > *work)
-> > > >         union qm_mc_result *mcr;
-> > > >         struct qman_cgr *cgr;
-> > > >  
-> > > > -       spin_lock_irq(&p->cgr_lock);
-> > > > +       raw_spin_lock_irq(&p->cgr_lock);
-> > > >         qm_mc_start(&p->p);
-> > > >         qm_mc_commit(&p->p, QM_MCC_VERB_QUERYCONGESTION);
-> > > >         if (!qm_mc_result_timeout(&p->p, &mcr)) {
-> > > > -               spin_unlock_irq(&p->cgr_lock);
-> > > > +               raw_spin_unlock_irq(&p->cgr_lock);
-> > > 
-> > > qm_mc_result_timeout() spins with a timeout of 10 ms which is very
-> > > inappropriate for a raw lock.  What is the actual expected upper bound?
-> > 
-> > Hm, maybe we can move this qm_mc stuff outside cgr_lock? In most other
-> > places they're called without cgr_lock, which implies that its usage
-> > here is meant to synchronize against some other function.
-> 
-> Do you have any suggestions here? I think this should really be handled
-> in a follow-up patch. If you think this code is waiting too long in a raw
-> spinlock, the existing code can wait just as long with IRQs disabled.
-> This patch doesn't change existing system responsiveness.
+> Why would a single per-task event not work? I see nothing in the code
+> that would require a per-task-per-cpu setup. Or am I just having trouble
+> reading again?
 
-Well, AFAICT it expands the situations in which it happens from configuration
-codepaths to stuff like congestion handling.  The proper fix would probably be
-to use some mechanism other than smp_call_function_single() to run code on the
-target cpu so that it can run with irqs enabled (or get confirmation that the
-actual worst case is short enough), but barring that I guess at least
-acknowledge the situation in a comment?
-
--Crystal
+Sorry, "all CPUS" should have been "cpu=-1"
 
