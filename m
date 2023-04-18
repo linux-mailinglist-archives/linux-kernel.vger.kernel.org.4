@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4CC6E6E62
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BFD06E6E65
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233052AbjDRViB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
+        id S233062AbjDRViJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233023AbjDRVh5 (ORCPT
+        with ESMTP id S233035AbjDRVh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 18 Apr 2023 17:37:57 -0400
 Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7A18A4D;
-        Tue, 18 Apr 2023 14:37:55 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33ILbjTj036042;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D909E;
+        Tue, 18 Apr 2023 14:37:56 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33ILbjiV036046;
         Tue, 18 Apr 2023 16:37:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1681853865;
-        bh=sLaNV8fezbRXCWqw5rAAZ2wLpsYCidOJ/fG6OwrDeLM=;
+        bh=WmKL8P5aPN5GIi8oRcJUtk9WrZwThAOkNiFBb+fivNs=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=PYcytaYlmMAPMmodM7oE4D2IuxLVqTuH+wF7fjFr+Ew+cIBeBzwnoGkzsTdgIXain
-         aiiq02wP1z/+p8WIgrM2PP+y1vkMYcAI2Qo+1fG0NZGd5Mr5bkHSd+coyZe8lj+Ma6
-         24MVhhOCGyrtm0/Xi7dF5RLSKk6RzxOelBdqUFJQ=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33ILbjcH121455
+        b=a5lHLV/EtW3KSckaU6CO070MsG6aV4de6kueIs5fXTJuv1WcXBeOKo1yBfuOMcKPT
+         z3vYexAkff3b+RN/AgsbTC6UQfhK04+1tFfoiRBriERIK8vZBEeSz9TNjTRhcudary
+         F0ywH2BhLIqTyUmHUwDPlAgKQrGEHH9S6bXV1cQ4=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33ILbjft083339
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Tue, 18 Apr 2023 16:37:45 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 18
  Apr 2023 16:37:45 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
  Frontend Transport; Tue, 18 Apr 2023 16:37:45 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33ILbjwH035497;
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33ILbju9009648;
         Tue, 18 Apr 2023 16:37:45 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -47,9 +47,9 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>
-Subject: [PATCH 1/4] arm64: dts: ti: k3-am62x-sk-common: Drop extra EoL
-Date:   Tue, 18 Apr 2023 16:37:37 -0500
-Message-ID: <20230418213740.153519-2-nm@ti.com>
+Subject: [PATCH 2/4] arm64: dts: ti: k3-am62x-sk-common: Describe main_uart1 and wkup_uart
+Date:   Tue, 18 Apr 2023 16:37:38 -0500
+Message-ID: <20230418213740.153519-3-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230418213740.153519-1-nm@ti.com>
 References: <20230418213740.153519-1-nm@ti.com>
@@ -67,25 +67,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop an extra EoL
+wkup_uart and main_uart1 on this platform is used by tifs and DM
+firmwares. Describe them for completeness including the pinmux.
 
 Signed-off-by: Nishanth Menon <nm@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ .../arm64/boot/dts/ti/k3-am62x-sk-common.dtsi | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi b/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
-index 976f8303c84f..9036af82894b 100644
+index 9036af82894b..dc76529f7aa1 100644
 --- a/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
 +++ b/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
-@@ -32,7 +32,6 @@ memory@80000000 {
- 		device_type = "memory";
- 		/* 2G RAM */
- 		reg = <0x00000000 0x80000000 0x00000000 0x80000000>;
--
+@@ -126,6 +126,15 @@ AM62X_IOPAD(0x1cc, PIN_OUTPUT, 0) /* (E14/E11) UART0_TXD */
+ 		>;
  	};
  
- 	reserved-memory {
++	main_uart1_pins_default: main-uart1-pins-default {
++		pinctrl-single,pins = <
++			AM62X_IOPAD(0x194, PIN_INPUT, 2) /* (B19/B18) MCASP0_AXR3.UART1_CTSn */
++			AM62X_IOPAD(0x198, PIN_OUTPUT, 2) /* (A19/B17) MCASP0_AXR2.UART1_RTSn */
++			AM62X_IOPAD(0x1ac, PIN_INPUT, 2) /* (E19/D15) MCASP0_AFSR.UART1_RXD */
++			AM62X_IOPAD(0x1b0, PIN_OUTPUT, 2) /* (A20/D16) MCASP0_ACLKR.UART1_TXD */
++		>;
++	};
++
+ 	main_i2c0_pins_default: main-i2c0-pins-default {
+ 		pinctrl-single,pins = <
+ 			AM62X_IOPAD(0x1e0, PIN_INPUT_PULLUP, 0) /* (B16/E12) I2C0_SCL */
+@@ -220,9 +229,22 @@ AM62X_IOPAD(0x084, PIN_INPUT, 2) /* (L23) GPMC0_ADVN_ALE.MCASP1_AXR2 */
+ 	};
+ };
+ 
++&mcu_pmx0 {
++	wkup_uart0_pins_default: wkup-uart0-pins-default {
++		pinctrl-single,pins = <
++			AM62X_MCU_IOPAD(0x02c, PIN_INPUT, 0) /* (C6/A7) WKUP_UART0_CTSn */
++			AM62X_MCU_IOPAD(0x030, PIN_OUTPUT, 0) /* (A4/B4) WKUP_UART0_RTSn */
++			AM62X_MCU_IOPAD(0x024, PIN_INPUT, 0) /* (B4/B5) WKUP_UART0_RXD */
++			AM62X_MCU_IOPAD(0x028, PIN_OUTPUT, 0) /* (C5/C6) WKUP_UART0_TXD */
++		>;
++	};
++};
++
+ &wkup_uart0 {
+ 	/* WKUP UART0 is used by DM firmware */
+ 	status = "reserved";
++	pinctrl-names = "default";
++	pinctrl-0 = <&wkup_uart0_pins_default>;
+ };
+ 
+ &main_uart0 {
+@@ -234,6 +256,8 @@ &main_uart0 {
+ &main_uart1 {
+ 	/* Main UART1 is used by TIFS firmware */
+ 	status = "reserved";
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_uart1_pins_default>;
+ };
+ 
+ &main_i2c0 {
 -- 
 2.40.0
 
