@@ -2,35 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF206E6A0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 442D86E6A0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbjDRQo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 12:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
+        id S232678AbjDRQoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 12:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232611AbjDRQoR (ORCPT
+        with ESMTP id S232616AbjDRQoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 12:44:17 -0400
+        Tue, 18 Apr 2023 12:44:18 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885FB46B9;
-        Tue, 18 Apr 2023 09:44:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9210061BA;
+        Tue, 18 Apr 2023 09:44:16 -0700 (PDT)
 Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id C2B92CA700;
-        Tue, 18 Apr 2023 16:43:43 +0000 (UTC)
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 1796FCAB0E;
+        Tue, 18 Apr 2023 16:43:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1681836224; bh=EZNvsJaGqI15hVmiKHgA/+7Bi1oXLhHkx00K1B0Jbu0=;
+        t=1681836224; bh=XV03liIFdzm84RLgEGuEQsAaPXKV3OiKBtrrr/U4Fxs=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=x7CkWvNLVXqQP/qw7aGXRR6b5DyDgEIMGnw3chQf9kh2PBNObaGg6WwPfdTbuNNDQ
-         DqwfyjR3JawYPHmu2WfV3qxRKF+QzvA8IHWzA6Xa11vNCkJdJA3uyKxJ4gYlJOvZRC
-         8vVXMBgKmOCU6hBrdkDFEU61Jk9VSiICDJzZ+a7o=
+        b=PJqMvZiw2T15SsZgBT6ZQuOAb0jXCbhM8lZwipXMjHnUT992YnCreGU852wTZK1Zx
+         oKMf1hxmV8SCr+D/1V9436PeCP2GtXQg7AQgurMYvs0FBP2bZ7Js23T7Z+SlhnClNG
+         /z5jtxjoUP8Ys+iS+4dkcVXcrEMeo/MjS0j0WG8c=
 From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Tue, 18 Apr 2023 18:43:20 +0200
-Subject: [PATCH v2 4/8] leds: qcom-lpg: Add support for PMI632 LPG
+Date:   Tue, 18 Apr 2023 18:43:21 +0200
+Subject: [PATCH v2 5/8] dt-bindings: mfd: qcom-spmi-pmic: Add PMI632
+ compatible
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230414-pmi632-v2-4-98bafa909c36@z3ntu.xyz>
+Message-Id: <20230414-pmi632-v2-5-98bafa909c36@z3ntu.xyz>
 References: <20230414-pmi632-v2-0-98bafa909c36@z3ntu.xyz>
 In-Reply-To: <20230414-pmi632-v2-0-98bafa909c36@z3ntu.xyz>
 To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -48,22 +49,23 @@ To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
 Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-leds@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-doc@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
+        linux-doc@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1865; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=EZNvsJaGqI15hVmiKHgA/+7Bi1oXLhHkx00K1B0Jbu0=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkPsi5PovavgvOe36uGVHJ9jKT8cH/ZKTKo1/kQ
- pVLfgx/5H2JAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZD7IuQAKCRBy2EO4nU3X
- Vvn4EADV1UQr1t6ADhJU+xkF790x06twg+ISisFYA5kPrZRT+cArRKWl80LMlxLpYJurJ6ZqmN0
- bZ82Ej7RgNGhdQPCxzHrnQkMo1GCAnUuxfjPJOnf+AkHeQyRR/yThzvOLkW2btT3KEGPkihhvVA
- yvl6VmSGpkNiwLKAnws5Niqnq1I1wL7jGo+QRuOhSk7FlCgUAckdP4aeFqX3u3qx3zNj7BAkqp/
- DcjgJx0cu/m3emNy+JKrZbZNuVwOZ5EIsYpy0niCtcjho5kyoiYIqCQfWR11K1Wm+urPbGSm9G2
- tq/TrNJSgUUK3fawqte11AQWUqBpKWocITGCofrOS15kxwVnniMWYPZ45cNTd5M8o1SBaR+KqV/
- wJ7WdfgABIRpqco6zTMr5yLzQW4Ka7S/ywNKoOjIv962gZv6YZC4JohqO0b06LjyEuCeHkYiLWd
- s0fMmvXY7CyafClWWmKltPnrJlpbBwMLd/HBpmgdag2+OYN8iDtu3cOjQ27ubMeeHCIUgbqr4ia
- HqdVbb6ANHlIysbGik39Qr2kP0aVUlYbEcG9/ChLV4SHe2bbq5l/RMQnjZnTKHS7+nYVXesqDQc
- L1r7pVT0CdmgVL7YEheQdm9L9c8AecXHL+YMvkjFCGfWe2+hvmfShf3ZiYdqQVPWb+FqXbUTHX7
- ZaFEBx5Wg/UIetg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=858; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=XV03liIFdzm84RLgEGuEQsAaPXKV3OiKBtrrr/U4Fxs=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkPsi61IDWXg7B/k3RdNQJUEt9k5IZsJ6QSILTI
+ HIUJ9eAAeCJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZD7IugAKCRBy2EO4nU3X
+ VkjKEACJ7n6LVGtIzMkS5SM6uS2zZgTVbhzsNcQdiIbgWQh2EJjXeg+ZMbTghPxC4ekW+hLjDkO
+ MiUrjqt1AdmxE/YAhllWZVYUm20a40dsfDjbGXPICo7wRC0O7fIhbWvfPaFkFtE3Frv5KoeJ+Ln
+ D+4Du88rQSjhBvpVt7BN7hN5Q7+/DN9BZyhmYyVVXs9uqCSL99e4po/WLePo/L9bThK1pgUUnLk
+ t5KFUxGGuhkcVF580gdAOdmiMCPPfJP9ghKFueQXq6rVqyk7lkCRmnZ+46TVEWIPGDy30I/GFHG
+ jcV00tIb3Jvw73yZL/PpKCXHN0FQHkorMEKKiIkK3xYKuj+/EZ6Em3IziebFzTW6CxgK0uaGClO
+ OWRM6tWVNa6l8MNQUWrww9iWZQSNVtgbGGGkQO9cGrD1pQwhg51UrHgqPliq0/nEhQ5PasSH8Bg
+ M3NchvBVxdEM+8RatP20pibgw97Jr81pgNJ/fi4yyrQQlQu0gO0qlw8RxFMtzLyDxGVFdKTSBI/
+ DiKiPpeBOhAWWKgNJuLBisSXGWJbqt5ht7mMkQSPtbwPIpGpriLRf5VWdEBecz7bmJab6zkOIQ1
+ py61suEzWDmJeoywLL2Wxe/yPRZA7+N+DR8VNb8v7JzD3iO/g8XD3jfYdUPD+vemJzkQGMW2ihp
+ h9iaMsCugLeyVCw==
 X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
  fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,53 +78,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PMI632 PMIC contains 5 PWM channels, 3 of which can be used for
-LEDs.
-
-For the LED pattern it doesn't have LUT like other PMICs but uses SDAM
-instead. This is not currently implemented in the driver but since LPG
-works fine without it, add support for the PMIC now.
+Document support for the pmi632, often found with the sdm632 SoC.
 
 Acked-by: Pavel Machek <pavel@ucw.cz>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- drivers/leds/rgb/leds-qcom-lpg.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
-index 67f48f222109..51763ecb8c1e 100644
---- a/drivers/leds/rgb/leds-qcom-lpg.c
-+++ b/drivers/leds/rgb/leds-qcom-lpg.c
-@@ -1353,6 +1353,20 @@ static const struct lpg_data pm8994_lpg_data = {
- 	},
- };
- 
-+/* PMI632 uses SDAM instead of LUT for pattern */
-+static const struct lpg_data pmi632_lpg_data = {
-+	.triled_base = 0xd000,
-+
-+	.num_channels = 5,
-+	.channels = (const struct lpg_channel_data[]) {
-+		{ .base = 0xb300, .triled_mask = BIT(7) },
-+		{ .base = 0xb400, .triled_mask = BIT(6) },
-+		{ .base = 0xb500, .triled_mask = BIT(5) },
-+		{ .base = 0xb600 },
-+		{ .base = 0xb700 },
-+	},
-+};
-+
- static const struct lpg_data pmi8994_lpg_data = {
- 	.lut_base = 0xb000,
- 	.lut_size = 24,
-@@ -1436,6 +1450,7 @@ static const struct of_device_id lpg_of_table[] = {
- 	{ .compatible = "qcom,pm8916-pwm", .data = &pm8916_pwm_data },
- 	{ .compatible = "qcom,pm8941-lpg", .data = &pm8941_lpg_data },
- 	{ .compatible = "qcom,pm8994-lpg", .data = &pm8994_lpg_data },
-+	{ .compatible = "qcom,pmi632-lpg", .data = &pmi632_lpg_data },
- 	{ .compatible = "qcom,pmi8994-lpg", .data = &pmi8994_lpg_data },
- 	{ .compatible = "qcom,pmi8998-lpg", .data = &pmi8998_lpg_data },
- 	{ .compatible = "qcom,pmc8180c-lpg", .data = &pm8150l_lpg_data },
+diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+index 84620ebc1efe..09e7195c622b 100644
+--- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
++++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+@@ -71,6 +71,7 @@ properties:
+           - qcom,pm8998
+           - qcom,pma8084
+           - qcom,pmd9635
++          - qcom,pmi632
+           - qcom,pmi8950
+           - qcom,pmi8962
+           - qcom,pmi8994
 
 -- 
 2.40.0
