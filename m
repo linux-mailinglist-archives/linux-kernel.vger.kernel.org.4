@@ -2,101 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C48E6E66FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6149C6E670B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbjDROUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 10:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
+        id S232392AbjDROVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 10:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbjDROUb (ORCPT
+        with ESMTP id S232399AbjDROVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 10:20:31 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64246198C;
-        Tue, 18 Apr 2023 07:20:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=2rFeFzYOGnZAxGCUkkdnfhhQ2rhay3tjONhb7PwAihY=; b=Rm/1kTLv9/O9KFmi/ZHaOivpFx
-        ap2fSEMjaAjYT9btLD5lFPtFuOByXQNVu3l1aWRLVIf/0RJkZ5KWa+JQd6FNxCm/dKxyEEAbNBMXC
-        chwgFpbSc+fSx42hHkFHeJz3K5jVfzOWGX5q7qiz0iXqwpxVJHT5MbqBp5ij2xDcybIGcbjkyMOmx
-        p4u4K8Lf3wBLS7mrw2ZzPlxDXp8JD5oeoTbYedFA/broQV9x4AbmukLsu+B+LkX0jJCKAX35Rm9Sj
-        YyGvZ02//WwK2yM4TuPPALWN04L+YQjWbFl8/3aMDLVeeSQVcrqnlT3ie6nG3MXbARXVj0GojhbgT
-        MPFv24Zw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pomC3-002Paf-0O;
-        Tue, 18 Apr 2023 14:20:27 +0000
-Message-ID: <c72c3140-0beb-22fc-1231-785f454c3fc8@infradead.org>
-Date:   Tue, 18 Apr 2023 07:20:25 -0700
+        Tue, 18 Apr 2023 10:21:25 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DD313FB0;
+        Tue, 18 Apr 2023 07:21:13 -0700 (PDT)
+Received: from jupiter.universe (unknown [91.248.213.255])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 592C9660320E;
+        Tue, 18 Apr 2023 15:21:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681827671;
+        bh=ll23Gil5LaleEG/Y/J2yGHu05FB8zSy5xWoGgPJ7WLU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RKWtWzfVtiuLDbkEEiMwaqtjxGFX+pL93U8HTPp38zbBsq5v9fP12PoPCIEgGwgCI
+         WF0an6ib9Vip/4hhBI4DlHma92HbJkZpiI7uIOLHyrqQqkllnZ2YfhoGNJGToB3vWK
+         FB2o4QOSpgkXkdJ6dWgbECKCDaV0XWp2Kxd8akOrdPjXVlk5ltF9LBwODpIqWW/JsE
+         OtPGr8LW/tlQzihEDK4IAkoRrj9gqKELkYbro1emErzXixKRayusjPJ7UQkBBwtQKJ
+         vshV4MNT6soQVDtfQAgBLKW9u/g1bDGWJRZjz02Piyn2JDd6n+YQN6Pi9m903OWZBy
+         nk6pjGdM5ZVCw==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id 85AB2480072; Tue, 18 Apr 2023 16:21:09 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Marc Zyngier <maz@kernel.org>, Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peng Fan <peng.fan@nxp.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        XiaoDong Huang <derrick.huang@rock-chips.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH v4 0/2] Add Rockchip RK3588 GIC ITS support
+Date:   Tue, 18 Apr 2023 16:21:07 +0200
+Message-Id: <20230418142109.49762-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] module: stats: fix invalid_mod_bytes typo
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230418071758.3163529-1-arnd@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230418071758.3163529-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+
+This adds GIC ITS support to Rockchip RK3588, which is affected
+by an integration issue effectively breaking shareability support.
+PCIe2 support will follow in its own series.
+
+Changelog:
+ * Changes since PATCHv3
+  - https://lore.kernel.org/lkml/20230417214035.101190-1-sebastian.reichel@collabora.com/
+  - Add RB from AngeloGioacchino Del Regno
+  - Update patch description
+  - Update Kconfig description
+  - rename flags from BROKEN_SHAREABILITY to FORCE_NON_SHAREABLE
+ * Changes since PATCHv2
+  - https://lore.kernel.org/lkml/20230417150038.51698-1-sebastian.reichel@collabora.com/
+  - apply changes requested by Marc Zyngier
+ * PATCHv1
+  - https://lore.kernel.org/lkml/20230227151847.207922-1-lucas.tanure@collabora.com/
+  - uses of_dma_is_coherent() instead of providing errata info from kernel
+ * RFCv1
+  - https://lore.kernel.org/lkml/20230310080518.78054-1-lucas.tanure@collabora.com/
+  - uses 0x0201743b IIDR for quirk detection and misses errata #
+
+Greetings,
+
+-- Sebastian
 
 
-On 4/18/23 00:17, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> This was caught by randconfig builds but does not show up in
-> build testing without CONFIG_MODULE_DECOMPRESS:
-> 
-> kernel/module/stats.c: In function 'mod_stat_bump_invalid':
-> kernel/module/stats.c:229:42: error: 'invalid_mod_byte' undeclared (first use in this function); did you mean 'invalid_mod_bytes'?
->   229 |   atomic_long_add(info->compressed_len, &invalid_mod_byte);
->       |                                          ^~~~~~~~~~~~~~~~
->       |                                          invalid_mod_bytes
-> 
-> Fixes: 0d4ab68ce983 ("module: add debug stats to help identify memory pressure")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Sebastian Reichel (2):
+  irqchip/gic-v3: Add Rockchip 3588001 erratum workaround
+  arm64: dts: rockchip: rk3588: add GIC ITS support
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> ---
-> This was probably already reported, sending the fix just in case everyone
-> else else missed it so far.
-> ---
->  kernel/module/stats.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/module/stats.c b/kernel/module/stats.c
-> index cdcd60695399..32959ec9581f 100644
-> --- a/kernel/module/stats.c
-> +++ b/kernel/module/stats.c
-> @@ -226,7 +226,7 @@ void mod_stat_bump_invalid(struct load_info *info, int flags)
->  	atomic_inc(&failed_load_modules);
->  #if defined(CONFIG_MODULE_DECOMPRESS)
->  	if (flags & MODULE_INIT_COMPRESSED_FILE)
-> -		atomic_long_add(info->compressed_len, &invalid_mod_byte);
-> +		atomic_long_add(info->compressed_len, &invalid_mod_bytes);
->  #endif
->  }
->  
+ Documentation/arm64/silicon-errata.rst    |  3 ++
+ arch/arm64/Kconfig                        | 10 +++++++
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 17 +++++++++++
+ drivers/irqchip/irq-gic-v3-its.c          | 35 +++++++++++++++++++++++
+ 4 files changed, 65 insertions(+)
 
 -- 
-~Randy
+2.39.2
+
