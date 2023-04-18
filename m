@@ -2,115 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BB96E67D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1DF6E67DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjDRPJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 11:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
+        id S229984AbjDRPPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 11:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbjDRPJb (ORCPT
+        with ESMTP id S229564AbjDRPP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:09:31 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D9A3C2B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:09:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=8yOGpdRF4UCqqQfqFDrE2rgMF8gNHIdalLte7kmTZ4E=; b=C+Z2qKczB8op70IFq+kz0Og7Ak
-        Cb1CZeP4mu8+k7nhUnyW9Ts7AjzlKFrscW2HrctkFvS0ljy/ATzznsvfE+yCVF0uEr02pFqZIzb+B
-        +jSpdzagz36KlmjEIzuY7wDVcKXwb97SUlLq+cPSfRM6mVz4cFw5EV/klQHikKPxuVFMYKdpxafRK
-        8rSRw4TCkWq8osMhX3LD9T3HVIcDkQu8psQeXNZ3EoWqHD8jGOGI/jdtuzoy1nk4V7CIhhuhVR02r
-        lCvqWH7XXkK+BY5VkFK/NxWPRLoOaK1MVuPjFRsYEUcI/7+X4CKXdvbnsw4ST9qAaLX94qIk2VVIQ
-        4h1Qsx9A==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pomx0-00COUG-Cx; Tue, 18 Apr 2023 15:08:58 +0000
-Date:   Tue, 18 Apr 2023 16:08:58 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Peter Xu <peterx@redhat.com>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
-        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v2 1/1] mm: do not increment pgfault stats when page
- fault handler retries
-Message-ID: <ZD6yirD6Ob+1xG32@casper.infradead.org>
-References: <20230415000818.1955007-1-surenb@google.com>
- <ZD2gsbN2K66oXT69@x1n>
- <ZD3Nk0u+nxOT4snZ@casper.infradead.org>
- <CAJuCfpFPziNK65qpzd5dEYSnoE-94UHAsM-CX080VTTJC5ZZKA@mail.gmail.com>
- <ZD6oVgIi/yY1+t1L@casper.infradead.org>
- <CAJuCfpFJ0owZELS2COukb0rHCOpqNMW-x9vVonkhknReZb=Zsg@mail.gmail.com>
+        Tue, 18 Apr 2023 11:15:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CEFAF17
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:14:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681830881;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uEbLiIoDuJvtlF8aE44HZGzs1BH3gYE48UCaK8yzhWk=;
+        b=XpQQxR9J9MM1BrrOxyHgk2Kh5rliwoG9NNURxMOrVCdnagSCBb8JNk/eDd1itXyjGkDcKr
+        CnLYcGuQGRYUW5+51sZR0qfFxIcCue1D1/E+Fx9ORr6GKIc7zxSK1sc+I6mzy67ZQgnupo
+        syXJKWDphzYoqyw+6ypzpp9TEO+0Rus=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-102-FVzIqMigP-eBeHQuQImJLg-1; Tue, 18 Apr 2023 11:14:40 -0400
+X-MC-Unique: FVzIqMigP-eBeHQuQImJLg-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-74d96c33de9so59662185a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:14:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681830879; x=1684422879;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uEbLiIoDuJvtlF8aE44HZGzs1BH3gYE48UCaK8yzhWk=;
+        b=N6vZTzW5P5x5Q9FMMPxNd+JkS7h103XGp5EMgtsvjQ3NoutpKXSvw+BiD7tASbA6L9
+         4gj3Fjn38iESJiZUfH5NjvGK+UnRPuwvbuuqaONt28CshAddFXjuSTsZn20YZFE58LF+
+         yh5xDANdAFFzRJ2azvpP3dR+n7meLWes7oW5TqUoOQZcUHMQUWx0a8Rt4t/26nlV7FH6
+         JWf4lyyLsRAHomp/IikRiB4riol/kpeFLFrwNzCp0rLezuiGRv9yoJbzjzv8KegiAYIv
+         q+FbOAdrZLVXRgFteKXrDnvqINNkGxXpsT7mEvdU8m5F0MjZnBHeCb4ZW/KKdFADg+1N
+         66vA==
+X-Gm-Message-State: AAQBX9dI/Zd7yCANu9y5FWSFHdo78HGo5+Xz1DM6fjTY6FwoTI/T2G1I
+        +zu6MGbCu0uCAtWC8kOxs5CzeawGjO2uhy77ki8GVsRDUvl8JfE3sA8KlsQLkDuylt24sen+dfu
+        TQu9N7v12iguu3NhJaW3ZRPsw
+X-Received: by 2002:a05:6214:5083:b0:5df:4d41:9560 with SMTP id kk3-20020a056214508300b005df4d419560mr22254099qvb.0.1681830879175;
+        Tue, 18 Apr 2023 08:14:39 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YD3hvqu4HP1QYUapVVZAP70gpGlHotyWRVct/+loHGkFxeWCZKiFOvGtf3pTAp4HTKgbicLw==
+X-Received: by 2002:a05:6214:5083:b0:5df:4d41:9560 with SMTP id kk3-20020a056214508300b005df4d419560mr22254071qvb.0.1681830878851;
+        Tue, 18 Apr 2023 08:14:38 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id mf10-20020a0562145d8a00b005dd8b9345d2sm3730109qvb.106.2023.04.18.08.14.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 08:14:37 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 11:14:36 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mika =?utf-8?B?UGVudHRpbMOk?= <mpenttil@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        linux-stable <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 2/6] mm/hugetlb: Fix uffd-wp bit lost when unsharing
+ happens
+Message-ID: <ZD6z3Af9LKO7pvN+@x1n>
+References: <20230417195317.898696-1-peterx@redhat.com>
+ <20230417195317.898696-3-peterx@redhat.com>
+ <20230417164822.d1f5d162115c53aab4c85e85@linux-foundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpFJ0owZELS2COukb0rHCOpqNMW-x9vVonkhknReZb=Zsg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230417164822.d1f5d162115c53aab4c85e85@linux-foundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 07:54:01AM -0700, Suren Baghdasaryan wrote:
-> On Tue, Apr 18, 2023 at 7:25 AM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Mon, Apr 17, 2023 at 04:17:45PM -0700, Suren Baghdasaryan wrote:
-> > > On Mon, Apr 17, 2023 at 3:52 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > > >
-> > > > On Mon, Apr 17, 2023 at 03:40:33PM -0400, Peter Xu wrote:
-> > > > > >     /*
-> > > > > > -    * We don't do accounting for some specific faults:
-> > > > > > -    *
-> > > > > > -    * - Unsuccessful faults (e.g. when the address wasn't valid).  That
-> > > > > > -    *   includes arch_vma_access_permitted() failing before reaching here.
-> > > > > > -    *   So this is not a "this many hardware page faults" counter.  We
-> > > > > > -    *   should use the hw profiling for that.
-> > > > > > -    *
-> > > > > > -    * - Incomplete faults (VM_FAULT_RETRY).  They will only be counted
-> > > > > > -    *   once they're completed.
-> > > > > > +    * Do not account for incomplete faults (VM_FAULT_RETRY). They will be
-> > > > > > +    * counted upon completion.
-> > > > > >      */
-> > > > > > -   if (ret & (VM_FAULT_ERROR | VM_FAULT_RETRY))
-> > > > > > +   if (ret & VM_FAULT_RETRY)
-> > > > > > +           return;
-> > > > > > +
-> > > > > > +   /* Register both successful and failed faults in PGFAULT counters. */
-> > > > > > +   count_vm_event(PGFAULT);
-> > > > > > +   count_memcg_event_mm(mm, PGFAULT);
-> > > > >
-> > > > > Is there reason on why vm events accountings need to be explicitly
-> > > > > different from perf events right below on handling ERROR?
-> > > >
-> > > > I think so.  ERROR is quite different from RETRY.  If we are, for
-> > > > example, handling a SIGSEGV (perhaps a GC language?) that should be
-> > > > accounted.  If we can't handle a page fault right now, and need to
-> > > > retry within the kernel, that should not be accounted.
-> > >
-> > > IIUC, the question was about the differences in vm vs perf accounting
-> > > for errors, not the difference between ERROR and RETRY cases. Matthew,
-> > > are you answering the right question or did I misunderstand your
-> > > answer?
-> >
-> > Maybe I'm misunderstanding what you're proposing.  I thought the
-> > proposal was to make neither ERROR nor RETRY increment the counters,
-> > but if the proposal is to make ERROR increment the perf counters
-> > instead, then that's cool with me.
-> 
-> Oh, I think now I understand your answer. You were not highlighting
-> the difference between the who but objecting to the proposal of not
-> counting both ERROR and RETRY. Am I on the same page now?
+Hi, Andrew,
 
-I think so.  Let's see your patch and then we can be sure we're talking
-about the same thing ;-)
+On Mon, Apr 17, 2023 at 04:48:22PM -0700, Andrew Morton wrote:
+> On Mon, 17 Apr 2023 15:53:13 -0400 Peter Xu <peterx@redhat.com> wrote:
+> 
+> > When we try to unshare a pinned page for a private hugetlb, uffd-wp bit can
+> > get lost during unsharing.  Fix it by carrying it over.
+> > 
+> > This should be very rare, only if an unsharing happened on a private
+> > hugetlb page with uffd-wp protected (e.g. in a child which shares the same
+> > page with parent with UFFD_FEATURE_EVENT_FORK enabled).
+> 
+> What are the user-visible consequences of the bug?
+
+When above condition met, one can lose uffd-wp bit on the privately mapped
+hugetlb page.  It allows the page to be writable even if it should still be
+wr-protected.  I assume it can mean data loss.
+
+However it's very hard to trigger. When I wrote the reproducer (provided in
+the last patch) I needed to use the newest gup_test cmd introduced by David
+to trigger it because I don't even know another way to do a proper RO
+longerm pin.
+
+Besides that, it needs a bunch of other conditions all met:
+
+        (1) hugetlb being mapped privately,
+        (2) userfaultfd registered with WP and EVENT_FORK,
+        (3) the user app fork()s, then,
+        (4) RO longterm pin onto a wr-protected anonymous page.
+
+If it's not impossible to hit in production I'd say extremely rare.
+
+> 
+> > Cc: linux-stable <stable@vger.kernel.org>
+> 
+> When proposing a backport, it's better to present the patch as a
+> standalone thing, against current -linus.  I'll then queue it in
+> mm-hotfixes and shall send it upstream during this -rc cycle.
+> 
+> As presented, this patch won't go upstream until after 6.3 is released,
+> and as it comes later in time, more backporting effort might be needed.
+> 
+> I can rework things if this fix is reasonably urgent (the "user-visible
+> consequences" info is the guide).  If not urgent, we can leave things
+> as they are.
+
+IMHO it's not urgent so suitable for mm-unstable (current base of this set;
+sorry if I forgot to mention it explicitly).  I'll post (and remember to
+post) patches on top of mm-stable if they're urgent, or e.g. bugs
+introduced in current release.
+
+I copied stable for the pure logic of fixing a bug in old kernels.  The
+consequence of hitting the bug is very bad but chance to hit is very low.
+
+Thanks,
+
+-- 
+Peter Xu
+
