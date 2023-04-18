@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8066E6942
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE346E6943
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbjDRQVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 12:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34038 "EHLO
+        id S231710AbjDRQV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 12:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjDRQVU (ORCPT
+        with ESMTP id S231169AbjDRQVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 12:21:20 -0400
+        Tue, 18 Apr 2023 12:21:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAED13C38;
-        Tue, 18 Apr 2023 09:21:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC0B3C38;
+        Tue, 18 Apr 2023 09:21:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64DB86366A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC9C76364E;
+        Tue, 18 Apr 2023 16:21:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CB76C4339C;
         Tue, 18 Apr 2023 16:21:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0379C433EF;
-        Tue, 18 Apr 2023 16:21:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681834878;
-        bh=4euNAmgm9FS8d6VwrBA6cQTwZjT2IJjY+8n8hbkSGpE=;
+        s=k20201202; t=1681834881;
+        bh=ap6Q5odoQ4rNoTfPJqKCKCL+ukarr6XYL6tmAzzw7Qw=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=e0WOScVPcE7a0ZNf8vvYDaCDczzgU1XUYxV7eCcuZSE6L02OWa089SDr60QJLIo+a
-         mNU7MB/1IHUXpK52zqG3n7Hv2txlxoOwQXXHS7wI5ZK8qJaxQTn3RtWjwWhPBSy5zN
-         oCgWti4guTp22n9jfTNgC3PQ/opekhb6F6JjGZ+afAsoRWktKLcUwN5NVnyBIY/gqo
-         IoXHgRcUFDl+ErJCMLfHI3Olpxa7HOnTZQiwUQUcjdLUcdXfyOB1vP7MT4i8V14RUM
-         BNU5PxtdqNCDga6WGKtTTCPROeE3/cUPX/dwFSsnACc6r+cY6nRLvuAxJWNtrvyuyW
-         ftHIHXE3DfLWg==
+        b=MrFuEiWQY5pEd6wb4KR1+TS3E3VXN4mi6xoxWF1ods9t1Mg/FK1Og11IWCNOFPIIw
+         c1OrFuxGXfWdR9Qc752L7Ete4iHhYkaDZPDclXzWrjkPqPIbl3HTpPVorMEfWF/m9P
+         B3z3cie4yBQSOGkt8f4D21Euykk4rqB0A2pa5pI4Gi1ab04i2Frm+HbcPgoeAh09T9
+         e48IEmR4HvUXjpjEHaXS7jxZCqi5bmdNNC+xb59EG1B3nR3+gppahy/+U0nW2QYXVB
+         OffyKv8UyCCbjdWxnEdAWJAFOOs0BGd6d57Zd2+zl2DMHAi+RBDoyDiOAtKtYmdvYw
+         6UOF3m/W48MIg==
 From:   Mark Brown <broonie@kernel.org>
 To:     lgirdwood@gmail.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, daniel.baluta@gmail.com,
         Saalim Quadri <danascape@gmail.com>
 Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230417204323.137681-1-danascape@gmail.com>
-References: <20230417204323.137681-1-danascape@gmail.com>
-Subject: Re: [PATCH] ASoC: dt-bindings: wm8728: Convert to dtschema
-Message-Id: <168183487655.87933.6597506413439051128.b4-ty@kernel.org>
-Date:   Tue, 18 Apr 2023 17:21:16 +0100
+In-Reply-To: <20230417212400.161796-1-danascape@gmail.com>
+References: <20230417212400.161796-1-danascape@gmail.com>
+Subject: Re: [PATCH] ASoC: dt-bindings: wm8737: Convert to dtschema
+Message-Id: <168183487901.87933.8631683727283438800.b4-ty@kernel.org>
+Date:   Tue, 18 Apr 2023 17:21:19 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -57,8 +57,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023 20:43:23 +0000, Saalim Quadri wrote:
-> Convert the WM8728 audio CODEC bindings to DT schema
+On Mon, 17 Apr 2023 21:24:00 +0000, Saalim Quadri wrote:
+> Convert the WM8737 audio CODEC bindings to DT schema
 > 
 > 
 
@@ -68,8 +68,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: dt-bindings: wm8728: Convert to dtschema
-      commit: 3da9d149eb9f51560163bb0c13a245fd0ba74c6e
+[1/1] ASoC: dt-bindings: wm8737: Convert to dtschema
+      commit: c341b5681fa074faa596fbb0fa0fc256b7e2301a
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
