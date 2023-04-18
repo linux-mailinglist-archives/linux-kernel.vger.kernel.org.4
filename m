@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3588E6E6E67
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4CC6E6E62
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233059AbjDRViG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
+        id S233052AbjDRViB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233026AbjDRVh5 (ORCPT
+        with ESMTP id S233023AbjDRVh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 18 Apr 2023 17:37:57 -0400
 Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB82CCE;
-        Tue, 18 Apr 2023 14:37:56 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33ILbjFl036038;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7A18A4D;
+        Tue, 18 Apr 2023 14:37:55 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33ILbjTj036042;
         Tue, 18 Apr 2023 16:37:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1681853865;
-        bh=+5T1cgVD+6vlVdPmFZXeko/SbvSRaJlD1F3nvltuPx8=;
-        h=From:To:CC:Subject:Date;
-        b=v4yTvmm+V89iXocAL3OKXrC0OKJIegEsWfWYBNtVcRFfrEX6RVmU4xLmQnRqaUM2t
-         YXWr3UUxlcBNofTdL5xJMopms1fANCQcpbzPuEyLiVPUG/2MEaf2G02OdT0l+A+yYQ
-         i1x2xCU0zAOD/c4LgfXRThAV+7yJRBqaQ8Mcv9fQ=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33ILbjCN019355
+        bh=sLaNV8fezbRXCWqw5rAAZ2wLpsYCidOJ/fG6OwrDeLM=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=PYcytaYlmMAPMmodM7oE4D2IuxLVqTuH+wF7fjFr+Ew+cIBeBzwnoGkzsTdgIXain
+         aiiq02wP1z/+p8WIgrM2PP+y1vkMYcAI2Qo+1fG0NZGd5Mr5bkHSd+coyZe8lj+Ma6
+         24MVhhOCGyrtm0/Xi7dF5RLSKk6RzxOelBdqUFJQ=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33ILbjcH121455
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Tue, 18 Apr 2023 16:37:45 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 18
  Apr 2023 16:37:45 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
  Frontend Transport; Tue, 18 Apr 2023 16:37:45 -0500
 Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33ILbjec041274;
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33ILbjwH035497;
         Tue, 18 Apr 2023 16:37:45 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -47,10 +47,12 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>
-Subject: [PATCH 0/4] arm64: dts: ti: k3-am62x-sk-common: Cleanups and minor additions
-Date:   Tue, 18 Apr 2023 16:37:36 -0500
-Message-ID: <20230418213740.153519-1-nm@ti.com>
+Subject: [PATCH 1/4] arm64: dts: ti: k3-am62x-sk-common: Drop extra EoL
+Date:   Tue, 18 Apr 2023 16:37:37 -0500
+Message-ID: <20230418213740.153519-2-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230418213740.153519-1-nm@ti.com>
+References: <20230418213740.153519-1-nm@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -65,26 +67,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Drop an extra EoL
 
-Hi,
+Signed-off-by: Nishanth Menon <nm@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
-This is a result of looking to cleanup u-boot and realizing there are
-pieces missing in kernel that need to be pushed out.
-
-So, minor cleanups and adding a few missing pieces.
-
-Bootlog: https://gist.github.com/nmenon/5e18c8d02c13cf00db649b6f01971d99
-
-Nishanth Menon (4):
-  arm64: dts: ti: k3-am62x-sk-common: Drop extra EoL
-  arm64: dts: ti: k3-am62x-sk-common: Describe main_uart1 and wkup_uart
-  arm64: dts: ti: k3-am62x-sk-common: Add eeprom
-  arm64: dts: ti: k3-am62x-sk-common: Improve documentation of
-    mcasp1_pins
-
- .../arm64/boot/dts/ti/k3-am62x-sk-common.dtsi | 39 ++++++++++++++++---
- 1 file changed, 34 insertions(+), 5 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi b/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
+index 976f8303c84f..9036af82894b 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
+@@ -32,7 +32,6 @@ memory@80000000 {
+ 		device_type = "memory";
+ 		/* 2G RAM */
+ 		reg = <0x00000000 0x80000000 0x00000000 0x80000000>;
+-
+ 	};
+ 
+ 	reserved-memory {
 -- 
 2.40.0
 
