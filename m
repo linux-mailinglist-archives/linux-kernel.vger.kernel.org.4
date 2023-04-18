@@ -2,1521 +2,766 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696456E5958
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 588706E5978
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjDRGVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 02:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
+        id S230218AbjDRGeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 02:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbjDRGVd (ORCPT
+        with ESMTP id S229454AbjDRGd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 02:21:33 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35342729E;
-        Mon, 17 Apr 2023 23:21:08 -0700 (PDT)
-Received: from localhost.localdomain (unknown [39.37.187.173])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3C5FF6603242;
-        Tue, 18 Apr 2023 07:20:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681798866;
-        bh=WbmLkE2Can5kzugSStMtJf9LvuctWb1xgbbzEiHfBU8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ixf9wxNXv23tDduTcdpLekL+M4pOfp8fs8EA8Btu5Tax/z6A0o2WNJkUkbH8Ez66Q
-         8rqaena3B3WCXgOrnsCjcP5s87n+mn1JnW2yegZ1sGgeN/GsQ6RpA83zXOXfYiLV2M
-         Yuexd+PHMoYbIubmRk8NcDCHHCEsxGmUT8LnQAEqukRrboyiy7hh9B3ufSnlMG820/
-         xzhBB0HJ2Pw0+oHM+G1taX7i3zI1M7875LNR6hxaPL/AL9+QhEh83vDvGhryKccTpH
-         FUoS8ip3t08Wea4UVqqQY43m/ww6wwIxD22EW762eXNjQIxB20auxjsIj78Lo4YdKw
-         dy9YUX+xfYCIA==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: [PATCH v14 5/5] selftests: mm: add pagemap ioctl tests
-Date:   Tue, 18 Apr 2023 11:20:08 +0500
-Message-Id: <20230418062008.1434826-6-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230418062008.1434826-1-usama.anjum@collabora.com>
-References: <20230418062008.1434826-1-usama.anjum@collabora.com>
+        Tue, 18 Apr 2023 02:33:58 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on20601.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8b::601])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013CFF9;
+        Mon, 17 Apr 2023 23:33:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HGeGhpLTbnf9wQOwiWcjVlAp1HCERcD8LIq++2tPHDxKXV2TXwbw8zEh1pSh6VTAsgOZfvfbjIiBPEt1hk/7tYIlaa/OTH0D5WS3SMeGey20qsmiLMEjTqmSG7qOh34YyU+hrwfDb0+fofK0pDKPpKenFsr7HQfrZ3ZSX2GLf9n5KE25qUkanhEgt8tF8W40XVxEA4d5rgbu9HCJIxPWhmaw42M+y+AThhMsHYV80urJvHoyO3Tzmx/6T4CjElw/Ijk/+FCcLCF4SOunbtu6QgrmR3HcYcszDTrtVXdRvvRPUlnmVL2XICqrQIC1qTChPIrMqqxSC2jJCEMwa/fIyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9zWw+ynn4LwyZZWthVca1VjZ0ZClw+I/gEdS8oGd3x0=;
+ b=cvkhsF7ThJCaXtgeScWZGpGwPkymXMZPl2zzyQ4KcHQAW7RiFfoF/nK8FAhB6a5Cl+Ezd729o8i/wJfRNN6JsYpA0/z2BMO1klolZw9J8N4cCen72O4eQCdjnklQwTwA06qbUhzIy+vWUhQv60GjkoD1KVkAShJDKZSH7pbV1vWgN35vKfT5lITYjZN7fP6BHgvjVlYvw+BrzYH/eFAt1WjjD7L+HkW8bg8mjoxIkzH7T/u/TVBv7vOy7ks48UO+by/V2HinTj76Oh6UkSxSVwa8pWeC+7lzB8CA7YMp3TU7+T2UeduRyAjNngOW6EcPkYugGy1YC8a7Z3/95+l6Dg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9zWw+ynn4LwyZZWthVca1VjZ0ZClw+I/gEdS8oGd3x0=;
+ b=pKxZmWOtskhNwZtClbkO7v5/VBNRKmESjESvkYykjrNmpZmxekjH0RUlym7NuypFuJuN8MkdpSTqjzCHswF6DjTtTAdvYLyIaFtDKPiFHwwmESkLyvdB65RrnVOEVmS64c5y2q3KeJGnW9FDOc/s2omMZtqo5KVuLfAj+u3kjxj+DbEBRse2iMXXbtqABZasSL8BOlGmOc8jYlC9KFK/KOfLEJowS7JdRFaBp96PNlTEYKy68lEpCseuoL5o54VPHx4Q+xCfqkxeILyHcHtYzkcegc/XSgGLhGAqDXkKv4ZtCZh85p06Fi9pAQ/5WCxsf6Dp5IR8U1WkCl2COOTZZQ==
+Received: from DM6PR03CA0054.namprd03.prod.outlook.com (2603:10b6:5:100::31)
+ by IA1PR12MB6067.namprd12.prod.outlook.com (2603:10b6:208:3ed::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
+ 2023 06:33:52 +0000
+Received: from DM6NAM11FT056.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:100:cafe::fe) by DM6PR03CA0054.outlook.office365.com
+ (2603:10b6:5:100::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.47 via Frontend
+ Transport; Tue, 18 Apr 2023 06:33:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT056.mail.protection.outlook.com (10.13.173.99) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.20 via Frontend Transport; Tue, 18 Apr 2023 06:33:52 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 17 Apr 2023
+ 23:33:43 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 17 Apr
+ 2023 23:33:41 -0700
+Received: from msst-build.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Mon, 17 Apr 2023 23:33:40 -0700
+From:   Besar Wicaksono <bwicaksono@nvidia.com>
+To:     <suzuki.poulose@arm.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <mark.rutland@arm.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <treding@nvidia.com>, <jonathanh@nvidia.com>, <vsethi@nvidia.com>,
+        <rwiley@nvidia.com>, <efunsten@nvidia.com>,
+        "Besar Wicaksono" <bwicaksono@nvidia.com>
+Subject: [PATCH v2] perf: arm_cspmu: Separate Arm and vendor module
+Date:   Tue, 18 Apr 2023 01:20:30 -0500
+Message-ID: <20230418062030.45620-1-bwicaksono@nvidia.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT056:EE_|IA1PR12MB6067:EE_
+X-MS-Office365-Filtering-Correlation-Id: 53e418b0-e130-4d1e-b4d9-08db3fd6e099
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UeBsVDWz9R1wgV3Xn7YnOzn0kGcu/i6SOFVWLfvEQu2hFgdEyeRXpqnCl8dFd4OvfCLCCBg8feRoaD0BeA4+6Rm+vqHzcUVDw1eMYWaRvLZtuRZWEOHSp2KQzWaHX5GVWYLP5kbVR+Lrtj8WTJraKdgPK0hWrF+IFnSkLDHOMJSqsH8ABpzW8uz2afxRBlJeGI/NAsKmjUw5QbK0A6ZTc2ZqdKK4D/vgb3fbRhyBRcGM7/kVGjKptVzKtXjB8jd9A/anv5DTvaixzsB/S6ziA8u++z/6JfXycAOO9gPfpHhXKGH6G7Kd6/T1Tz26rDnoCXVzU0YrbeYFoKmoOBSADS8jlLABEKiBtE0ObCs4atVGKi6cW9xyGvUEfO/P/zGXPPCWO9mBN2Tm2jVb82WaJEVlJnOwOrKx8XuSgZYbah/WoBw4+gH72s50WJEr167dXgZC5CvFSLHc5dQjpOzOqBdI+Ue6sx4G8gwdqTJkmPX5ErjGBLJvQ3cLxNMISPW+qLUjA8aF/h7Cd9L8KHA4kF2UsiunV+qcpgbP66SYxZ5c85jZ+6oxnhR8nhnoeYV2uBiD8a0pSsUsVxMKFXGEPl6xMB8XBAlIuXIrxovTC1kWaouMrJ0w2M5DG4xSWZ7uamrEek2oDr+6Tlqn+PqhmcrKp1NcowNVPRSC3vmDU5j3MyTHo6XZz9doJNcVwzzD9WlmHgV1FShpumMfQiPJh1J0A+Ufl6W71j3fJZK7yYG0npk/t2VCHnMTYQ0aEd0mPO0WOF7ioYi+KseUx81hX9TOidxJkW4fTyquFWGo6Jc=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(39860400002)(346002)(451199021)(46966006)(36840700001)(40470700004)(36756003)(4326008)(110136005)(54906003)(316002)(70586007)(70206006)(7696005)(478600001)(6666004)(41300700001)(5660300002)(82310400005)(8676002)(8936002)(40480700001)(30864003)(2906002)(34020700004)(82740400003)(86362001)(356005)(426003)(2616005)(336012)(107886003)(40460700003)(1076003)(26005)(186003)(36860700001)(47076005)(83380400001)(7636003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 06:33:52.5215
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53e418b0-e130-4d1e-b4d9-08db3fd6e099
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT056.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6067
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pagemap ioctl tests. Add several different types of tests to judge
-the correction of the interface.
+Arm Coresight PMU driver consists of main standard code and vendor
+backend code. Both are currently built as a single module.
+This patch adds vendor registration API to separate the two to
+keep things modular. Vendor module shall register to the main
+module on loading and trigger device reprobe.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Signed-off-by: Besar Wicaksono <bwicaksono@nvidia.com>
 ---
-Changes in v13:
-- Update tests and rebase Makefile
 
-Changes in v12:
-- Updates and add more memory type tests
+Changes from v1:
+ * Added separate Kconfig entry for nvidia backend
+ * Added lock to protect accesses to the lists
+ * Added support for matching subset devices from a vendor
+ * Added state tracking to avoid reprobe when a device is in use
+v1: ttps://lore.kernel.org/linux-arm-kernel/20230403163905.20354-1-bwicaksono@nvidia.com/T/#u
 
-Changes in v11:
-- Rebase on top of next-20230216 and update tests
-
-Chages in v7:
-- Add and update all test cases
-
-Changes in v6:
-- Rename variables
-
-Changes in v4:
-- Updated all the tests to conform to new IOCTL
-
-Changes in v3:
-- Add another test to do sanity of flags
-
-Changes in v2:
-- Update the tests to use the ioctl interface instead of syscall
-
-selftests
 ---
- tools/testing/selftests/mm/.gitignore      |    1 +
- tools/testing/selftests/mm/Makefile        |    3 +-
- tools/testing/selftests/mm/config          |    1 +
- tools/testing/selftests/mm/pagemap_ioctl.c | 1326 ++++++++++++++++++++
- tools/testing/selftests/mm/run_vmtests.sh  |    4 +
- 5 files changed, 1334 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/mm/pagemap_ioctl.c
- mode change 100644 => 100755 tools/testing/selftests/mm/run_vmtests.sh
+ drivers/perf/arm_cspmu/Kconfig        |   9 +-
+ drivers/perf/arm_cspmu/Makefile       |   6 +-
+ drivers/perf/arm_cspmu/arm_cspmu.c    | 280 +++++++++++++++++++++++---
+ drivers/perf/arm_cspmu/arm_cspmu.h    |  32 ++-
+ drivers/perf/arm_cspmu/nvidia_cspmu.c |  39 +++-
+ drivers/perf/arm_cspmu/nvidia_cspmu.h |  17 --
+ 6 files changed, 325 insertions(+), 58 deletions(-)
+ delete mode 100644 drivers/perf/arm_cspmu/nvidia_cspmu.h
 
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index 8917455f4f51..f1a06f842d55 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -17,6 +17,7 @@ mremap_dontunmap
- mremap_test
- on-fault-limit
- transhuge-stress
-+pagemap_ioctl
- protection_keys
- protection_keys_32
- protection_keys_64
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index dda8598bf5ef..f28c10c3dc8b 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -30,7 +30,7 @@ MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/p
- MAKEFLAGS += --no-builtin-rules
+diff --git a/drivers/perf/arm_cspmu/Kconfig b/drivers/perf/arm_cspmu/Kconfig
+index 0b316fe69a45..8ce7b45a0075 100644
+--- a/drivers/perf/arm_cspmu/Kconfig
++++ b/drivers/perf/arm_cspmu/Kconfig
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ #
+-# Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
++# Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
  
- CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
--LDLIBS = -lrt -lpthread
-+LDLIBS = -lrt -lpthread -lm
+ config ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU
+ 	tristate "ARM Coresight Architecture PMU"
+@@ -11,3 +11,10 @@ config ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU
+ 	  based on ARM CoreSight PMU architecture. Note that this PMU
+ 	  architecture does not have relationship with the ARM CoreSight
+ 	  Self-Hosted Tracing.
++
++config NVIDIA_CORESIGHT_PMU_ARCH_SYSTEM_PMU
++	tristate "NVIDIA Coresight Architecture PMU"
++	depends on ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU
++	help
++	  Provides NVIDIA specific attributes for performance monitoring unit
++	  (PMU) devices based on ARM CoreSight PMU architecture.
+diff --git a/drivers/perf/arm_cspmu/Makefile b/drivers/perf/arm_cspmu/Makefile
+index fedb17df982d..f8ae22411d59 100644
+--- a/drivers/perf/arm_cspmu/Makefile
++++ b/drivers/perf/arm_cspmu/Makefile
+@@ -1,6 +1,6 @@
+-# Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
++# Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ #
+ # SPDX-License-Identifier: GPL-2.0
  
- TEST_GEN_PROGS = cow
- TEST_GEN_PROGS += compaction_test
-@@ -55,6 +55,7 @@ TEST_GEN_PROGS += mrelease_test
- TEST_GEN_PROGS += mremap_dontunmap
- TEST_GEN_PROGS += mremap_test
- TEST_GEN_PROGS += on-fault-limit
-+TEST_GEN_PROGS += pagemap_ioctl
- TEST_GEN_PROGS += thuge-gen
- TEST_GEN_PROGS += transhuge-stress
- TEST_GEN_PROGS += uffd-stress
-diff --git a/tools/testing/selftests/mm/config b/tools/testing/selftests/mm/config
-index be087c4bc396..4309916f629e 100644
---- a/tools/testing/selftests/mm/config
-+++ b/tools/testing/selftests/mm/config
-@@ -1,5 +1,6 @@
- CONFIG_SYSVIPC=y
- CONFIG_USERFAULTFD=y
-+CONFIG_PTE_MARKER_UFFD_WP=y
- CONFIG_TEST_VMALLOC=m
- CONFIG_DEVICE_PRIVATE=y
- CONFIG_TEST_HMM=m
-diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-new file mode 100644
-index 000000000000..deee7c618d6b
---- /dev/null
-+++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -0,0 +1,1326 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <fcntl.h>
-+#include <string.h>
-+#include <sys/mman.h>
-+#include <errno.h>
-+#include <malloc.h>
-+#include "vm_util.h"
-+#include "../kselftest.h"
-+#include <linux/types.h>
-+#include <linux/memfd.h>
-+#include <linux/userfaultfd.h>
-+#include <linux/fs.h>
-+#include <sys/ioctl.h>
-+#include <sys/stat.h>
-+#include <math.h>
-+#include <asm/unistd.h>
-+#include <pthread.h>
-+#include <sys/resource.h>
-+#include <assert.h>
-+#include <sys/ipc.h>
-+#include <sys/shm.h>
+-obj-$(CONFIG_ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU) += arm_cspmu_module.o
+-arm_cspmu_module-y := arm_cspmu.o nvidia_cspmu.o
++obj-$(CONFIG_ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU) += arm_cspmu.o
++obj-$(CONFIG_NVIDIA_CORESIGHT_PMU_ARCH_SYSTEM_PMU) += nvidia_cspmu.o
+diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
+index e31302ab7e37..c55ea2b74454 100644
+--- a/drivers/perf/arm_cspmu/arm_cspmu.c
++++ b/drivers/perf/arm_cspmu/arm_cspmu.c
+@@ -16,7 +16,7 @@
+  * The user should refer to the vendor technical documentation to get details
+  * about the supported events.
+  *
+- * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
++ * Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  *
+  */
+ 
+@@ -25,13 +25,14 @@
+ #include <linux/ctype.h>
+ #include <linux/interrupt.h>
+ #include <linux/io-64-nonatomic-lo-hi.h>
++#include <linux/list.h>
+ #include <linux/module.h>
++#include <linux/mutex.h>
+ #include <linux/perf_event.h>
+ #include <linux/platform_device.h>
+ #include <acpi/processor.h>
+ 
+ #include "arm_cspmu.h"
+-#include "nvidia_cspmu.h"
+ 
+ #define PMUNAME "arm_cspmu"
+ #define DRVNAME "arm-cs-arch-pmu"
+@@ -117,11 +118,52 @@
+  */
+ #define HILOHI_MAX_POLL	1000
+ 
+-/* JEDEC-assigned JEP106 identification code */
+-#define ARM_CSPMU_IMPL_ID_NVIDIA		0x36B
+-
+ static unsigned long arm_cspmu_cpuhp_state;
+ 
++/* List of Coresight PMU instances in the system. */
++static LIST_HEAD(arm_cspmus);
 +
-+#define PAGEMAP_BITS_ALL		(PAGE_IS_WRITTEN | PAGE_IS_FILE |	\
-+					 PAGE_IS_PRESENT | PAGE_IS_SWAPPED)
-+#define PAGEMAP_NON_WRITTEN_BITS	(PAGE_IS_FILE |	PAGE_IS_PRESENT |	\
-+					 PAGE_IS_SWAPPED)
++/* List of registered vendor backends. */
++static LIST_HEAD(arm_cspmu_impls);
 +
-+#define TEST_ITERATIONS 10
-+#define PAGEMAP "/proc/self/pagemap"
-+int pagemap_fd;
-+int uffd;
-+int page_size;
-+int hpage_size;
++static DEFINE_MUTEX(arm_cspmu_lock);
 +
-+static long pagemap_ioctl(void *start, int len, void *vec, int vec_len, int flag,
-+			  int max_pages, long required_mask, long anyof_mask, long excluded_mask,
-+			  long return_mask)
++/*
++ * State of the generic driver.
++ * 0 => registering backend.
++ * 1 => ready to use.
++ * 2 or more => in use.
++ */
++#define ARM_CSPMU_STATE_REG	0
++#define ARM_CSPMU_STATE_READY	1
++static atomic_t arm_cspmu_state;
++
++static void arm_cspmu_state_ready(void)
 +{
-+	struct pm_scan_arg arg;
-+
-+	arg.start = (uintptr_t)start;
-+	arg.len = len;
-+	arg.vec = (uintptr_t)vec;
-+	arg.vec_len = vec_len;
-+	arg.flags = flag;
-+	arg.size = sizeof(struct pm_scan_arg);
-+	arg.max_pages = max_pages;
-+	arg.required_mask = required_mask;
-+	arg.anyof_mask = anyof_mask;
-+	arg.excluded_mask = excluded_mask;
-+	arg.return_mask = return_mask;
-+
-+	return ioctl(pagemap_fd, PAGEMAP_SCAN, &arg);
++	atomic_set(&arm_cspmu_state, ARM_CSPMU_STATE_READY);
 +}
 +
-+int init_uffd(void)
++static bool try_arm_cspmu_state_reg(void)
 +{
-+	struct uffdio_api uffdio_api;
++	const int old = ARM_CSPMU_STATE_READY;
++	const int new = ARM_CSPMU_STATE_REG;
 +
-+	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
-+	if (uffd == -1)
-+		ksft_exit_fail_msg("uffd syscall failed\n");
-+
-+	uffdio_api.api = UFFD_API;
-+	uffdio_api.features = UFFD_FEATURE_WP_UNPOPULATED | UFFD_FEATURE_WP_ASYNC |
-+			      UFFD_FEATURE_WP_HUGETLBFS_SHMEM;
-+	if (ioctl(uffd, UFFDIO_API, &uffdio_api))
-+		ksft_exit_fail_msg("UFFDIO_API\n");
-+
-+	if (!(uffdio_api.api & UFFDIO_REGISTER_MODE_WP) ||
-+	    !(uffdio_api.features & UFFD_FEATURE_WP_UNPOPULATED) ||
-+	    !(uffdio_api.features & UFFD_FEATURE_WP_ASYNC) ||
-+	    !(uffdio_api.features & UFFD_FEATURE_WP_HUGETLBFS_SHMEM))
-+		ksft_exit_fail_msg("UFFDIO_API error %llu\n", uffdio_api.api);
-+
-+	return 0;
++	return atomic_cmpxchg(&arm_cspmu_state, old, new) == old;
 +}
 +
-+int wp_init(void *lpBaseAddress, int dwRegionSize)
++static bool try_arm_cspmu_state_get(void)
 +{
-+	struct uffdio_register uffdio_register;
-+	struct uffdio_writeprotect wp;
-+
-+	uffdio_register.range.start = (unsigned long)lpBaseAddress;
-+	uffdio_register.range.len = dwRegionSize;
-+	uffdio_register.mode = UFFDIO_REGISTER_MODE_WP;
-+	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
-+		ksft_exit_fail_msg("ioctl(UFFDIO_REGISTER) %d %s\n", errno, strerror(errno));
-+
-+	if (!(uffdio_register.ioctls & UFFDIO_WRITEPROTECT))
-+		ksft_exit_fail_msg("ioctl set is incorrect\n");
-+
-+	wp.range.start = (unsigned long)lpBaseAddress;
-+	wp.range.len = dwRegionSize;
-+	wp.mode = UFFDIO_WRITEPROTECT_MODE_WP;
-+
-+	if (ioctl(uffd, UFFDIO_WRITEPROTECT, &wp))
-+		ksft_exit_fail_msg("ioctl(UFFDIO_WRITEPROTECT)\n");
-+
-+	return 0;
++	return atomic_inc_not_zero(&arm_cspmu_state);
 +}
 +
-+int wp_free(void *lpBaseAddress, int dwRegionSize)
-+{
-+	struct uffdio_register uffdio_register;
-+
-+	uffdio_register.range.start = (unsigned long)lpBaseAddress;
-+	uffdio_register.range.len = dwRegionSize;
-+	uffdio_register.mode = UFFDIO_REGISTER_MODE_WP;
-+	if (ioctl(uffd, UFFDIO_UNREGISTER, &uffdio_register.range))
-+		ksft_exit_fail_msg("ioctl unregister failure\n");
-+	return 0;
-+}
-+
-+int wp_addr_range(void *lpBaseAddress, int dwRegionSize)
-+{
-+	struct uffdio_writeprotect wp;
-+
-+	wp.range.start = (unsigned long)lpBaseAddress;
-+	wp.range.len = dwRegionSize;
-+	wp.mode = UFFDIO_WRITEPROTECT_MODE_WP;
-+
-+	if (ioctl(uffd, UFFDIO_WRITEPROTECT, &wp))
-+		ksft_exit_fail_msg("ioctl(UFFDIO_WRITEPROTECT)\n");
-+
-+	return 0;
-+}
-+
-+void *gethugetlb_mem(int size, int *shmid)
-+{
-+	char *mem;
-+
-+	if (shmid) {
-+		*shmid = shmget(2, size, SHM_HUGETLB | IPC_CREAT | SHM_R | SHM_W);
-+		if (*shmid < 0)
-+			return NULL;
-+
-+		mem = shmat(*shmid, 0, 0);
-+		if (mem == (char *)-1) {
-+			shmctl(*shmid, IPC_RMID, NULL);
-+			ksft_exit_fail_msg("Shared memory attach failure\n");
-+		}
-+	} else {
-+		mem = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+			   MAP_ANONYMOUS | MAP_HUGETLB | MAP_PRIVATE, -1, 0);
-+		if (mem == MAP_FAILED)
-+			return NULL;
-+	}
-+
-+	return mem;
-+}
-+
-+int userfaultfd_tests(void)
-+{
-+	int mem_size, vec_size, written, num_pages = 16;
-+	char *mem, *vec;
-+
-+	mem_size = num_pages * page_size;
-+	mem = mmap(NULL, mem_size, PROT_NONE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+
-+	wp_init(mem, mem_size);
-+
-+	/* Change protection of pages differently */
-+	mprotect(mem, mem_size/8, PROT_READ|PROT_WRITE);
-+	mprotect(mem + 1 * mem_size/8, mem_size/8, PROT_READ);
-+	mprotect(mem + 2 * mem_size/8, mem_size/8, PROT_READ|PROT_WRITE);
-+	mprotect(mem + 3 * mem_size/8, mem_size/8, PROT_READ);
-+	mprotect(mem + 4 * mem_size/8, mem_size/8, PROT_READ|PROT_WRITE);
-+	mprotect(mem + 5 * mem_size/8, mem_size/8, PROT_NONE);
-+	mprotect(mem + 6 * mem_size/8, mem_size/8, PROT_READ|PROT_WRITE);
-+	mprotect(mem + 7 * mem_size/8, mem_size/8, PROT_READ);
-+
-+	wp_addr_range(mem + (mem_size/16), mem_size - 2 * (mem_size/8));
-+	wp_addr_range(mem, mem_size);
-+
-+	vec_size = mem_size/page_size;
-+	vec = malloc(sizeof(struct page_region) * vec_size);
-+
-+	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_OP_GET | PM_SCAN_OP_WP,
-+				vec_size - 2, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (written < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", written, errno, strerror(errno));
-+
-+	ksft_test_result(written == 0, "%s all new pages must not be written (dirty)\n", __func__);
-+
-+	wp_free(mem, mem_size);
-+	munmap(mem, mem_size);
-+	free(vec);
-+	return 0;
-+}
-+
-+int sanity_tests_sd(void)
-+{
-+	char *mem, *m[2];
-+	int mem_size, vec_size, ret, ret2, ret3, i, num_pages = 10;
-+	struct page_region *vec, *vec2;
-+
-+	vec_size = 100;
-+	mem_size = num_pages * page_size;
-+
-+	vec = malloc(sizeof(struct page_region) * vec_size);
-+	if (!vec)
-+		ksft_exit_fail_msg("error nomem\n");
-+
-+	vec2 = malloc(sizeof(struct page_region) * vec_size);
-+	if (!vec2)
-+		ksft_exit_fail_msg("error nomem\n");
-+
-+	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+
-+	wp_init(mem, mem_size);
-+	wp_addr_range(mem, mem_size);
-+
-+	/* 1. wrong operation */
-+	ksft_test_result(pagemap_ioctl(mem, 0, vec, vec_size, PM_SCAN_OP_GET,
-+				       0, PAGEMAP_BITS_ALL, 0, 0, PAGEMAP_BITS_ALL) < 0,
-+			 "%s memory size must be valid\n", __func__);
-+
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, NULL, vec_size, PM_SCAN_OP_GET,
-+				       0, PAGEMAP_BITS_ALL, 0, 0, PAGEMAP_BITS_ALL) < 0,
-+			 "%s output buffer must be specified\n", __func__);
-+
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, 0, PM_SCAN_OP_GET,
-+				       0, PAGEMAP_BITS_ALL, 0, 0, PAGEMAP_BITS_ALL) < 0,
-+			 "%s output buffer size must be valid\n", __func__);
-+
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, -1,
-+				       0, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN) < 0,
-+			 "%s wrong flag specified\n", __func__);
-+
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_WP,
-+				       0, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN) < 0,
-+			 "%s PM_SCAN_OP_WP cannot be used without PM_SCAN_OP_GET\n", __func__);
-+
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size,
-+				       PM_SCAN_OP_GET | PM_SCAN_OP_WP | 0xFF,
-+				       0, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN) < 0,
-+			 "%s flag has extra bits specified\n", __func__);
-+
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET,
-+				       0, 0, 0, 0, PAGE_IS_WRITTEN) < 0,
-+			 "%s no selection mask is specified\n", __func__);
-+
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET,
-+				       0, PAGE_IS_WRITTEN, PAGE_IS_WRITTEN, 0, 0) < 0,
-+			 "%s no return mask is specified\n", __func__);
-+
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET,
-+				       0, PAGE_IS_WRITTEN, 0, 0, 0x1000) < 0,
-+			 "%s wrong return mask specified\n", __func__);
-+
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET | PM_SCAN_OP_WP,
-+				       0, 0xFFF, PAGE_IS_WRITTEN, 0, PAGE_IS_WRITTEN) < 0,
-+			 "%s mixture of correct and wrong flag\n", __func__);
-+
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET | PM_SCAN_OP_WP,
-+				       0, 0, 0, PAGEMAP_BITS_ALL, PAGE_IS_WRITTEN) < 0,
-+			 "%s PAGEMAP_BITS_ALL cannot be specified with PM_SCAN_OP_WP\n", __func__);
-+
-+	/* 2. Clear area with larger vec size */
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET | PM_SCAN_OP_WP, 0,
-+			    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	ksft_test_result(ret >= 0, "%s Clear area with larger vec size\n", __func__);
-+
-+	/* 3. Repeated pattern of written and non-written pages */
-+	for (i = 0; i < mem_size; i += 2 * page_size)
-+		mem[i]++;
-+
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET, 0, PAGE_IS_WRITTEN, 0,
-+			    0, PAGE_IS_WRITTEN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ksft_test_result(ret == mem_size/(page_size * 2),
-+			 "%s Repeated pattern of written and non-written pages\n", __func__);
-+
-+	/* 4. Repeated pattern of written and non-written pages in parts */
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET | PM_SCAN_OP_WP,
-+			    num_pages/2 - 2, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ret2 = pagemap_ioctl(mem, mem_size, vec, 2, PM_SCAN_OP_GET, 0, PAGE_IS_WRITTEN, 0, 0,
-+			     PAGE_IS_WRITTEN);
-+	if (ret2 < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret2, errno, strerror(errno));
-+
-+	ret3 = pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET | PM_SCAN_OP_WP,
-+			     0, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (ret3 < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret3, errno, strerror(errno));
-+
-+	ksft_test_result((ret + ret3) == num_pages/2 && ret2 == 2,
-+			 "%s Repeated pattern of written and non-written pages in parts\n",
-+			 __func__);
-+
-+	/* 5. only get 2 dirty pages and clear them as well */
-+	vec_size = mem_size/page_size;
-+	memset(mem, -1, mem_size);
-+
-+	/* get and clear second and third pages */
-+	ret = pagemap_ioctl(mem + page_size, 2 * page_size, vec, 1, PM_SCAN_OP_GET | PM_SCAN_OP_WP,
-+			    2, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ret2 = pagemap_ioctl(mem, mem_size, vec2, vec_size, PM_SCAN_OP_GET, 0,
-+			      PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (ret2 < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret2, errno, strerror(errno));
-+
-+	ksft_test_result(ret == 1 && vec[0].len == 2 &&
-+			 vec[0].start == (uintptr_t)(mem + page_size) &&
-+			 ret2 == 2 && vec2[0].len == 1 && vec2[0].start == (uintptr_t)mem &&
-+			 vec2[1].len == vec_size - 3 &&
-+			 vec2[1].start == (uintptr_t)(mem + 3 * page_size),
-+			 "%s only get 2 written pages and clear them as well\n", __func__);
-+
-+	wp_free(mem, mem_size);
-+	munmap(mem, mem_size);
-+
-+	/* 6. Two regions */
-+	m[0] = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (m[0] == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+	m[1] = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (m[1] == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+
-+	wp_init(m[0], mem_size);
-+	wp_init(m[1], mem_size);
-+	wp_addr_range(m[0], mem_size);
-+	wp_addr_range(m[1], mem_size);
-+
-+	memset(m[0], 'a', mem_size);
-+	memset(m[1], 'b', mem_size);
-+
-+	wp_addr_range(m[0], mem_size);
-+
-+	ret = pagemap_ioctl(m[1], mem_size, vec, 1, PM_SCAN_OP_GET, 0, PAGE_IS_WRITTEN, 0, 0,
-+			    PAGE_IS_WRITTEN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ksft_test_result(ret == 1 && vec[0].len == mem_size/page_size,
-+			 "%s Two regions\n", __func__);
-+
-+	wp_free(m[0], mem_size);
-+	wp_free(m[1], mem_size);
-+	munmap(m[0], mem_size);
-+	munmap(m[1], mem_size);
-+
-+	free(vec);
-+	free(vec2);
-+	return 0;
-+}
-+
-+int base_tests(char *prefix, char *mem, int mem_size, int skip)
-+{
-+	int vec_size, written;
-+	struct page_region *vec, *vec2;
-+
-+	if (skip) {
-+		ksft_test_result_skip("%s all new pages must not be written (dirty)\n", prefix);
-+		ksft_test_result_skip("%s all pages must be written (dirty)\n", prefix);
-+		ksft_test_result_skip("%s all pages dirty other than first and the last one\n",
-+				      prefix);
-+		ksft_test_result_skip("%s PM_SCAN_OP_WP\n", prefix);
-+		ksft_test_result_skip("%s only middle page dirty\n", prefix);
-+		ksft_test_result_skip("%s only two middle pages dirty\n", prefix);
-+		return 0;
-+	}
-+
-+	vec_size = mem_size/page_size;
-+	vec = malloc(sizeof(struct page_region) * vec_size);
-+	vec2 = malloc(sizeof(struct page_region) * vec_size);
-+
-+	/* 1. all new pages must be not be written (dirty) */
-+	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_OP_GET | PM_SCAN_OP_WP, vec_size - 2,
-+			      PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (written < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", written, errno, strerror(errno));
-+
-+	ksft_test_result(written == 0, "%s all new pages must not be written (dirty)\n", prefix);
-+
-+	/* 2. all pages must be written */
-+	memset(mem, -1, mem_size);
-+
-+	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_OP_GET, 0, PAGE_IS_WRITTEN, 0, 0,
-+			      PAGE_IS_WRITTEN);
-+	if (written < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", written, errno, strerror(errno));
-+
-+	ksft_test_result(written == 1 && vec[0].len == mem_size/page_size,
-+			 "%s all pages must be written (dirty)\n", prefix);
-+
-+	/* 3. all pages dirty other than first and the last one */
-+	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_OP_GET | PM_SCAN_OP_WP, 0,
-+				PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (written < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", written, errno, strerror(errno));
-+
-+	memset(mem + page_size, 0, mem_size - (2 * page_size));
-+
-+	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_OP_GET | PM_SCAN_OP_WP, 0,
-+				PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (written < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", written, errno, strerror(errno));
-+
-+	ksft_test_result(written == 1 && vec[0].len >= vec_size - 2 && vec[0].len <= vec_size,
-+			 "%s all pages dirty other than first and the last one\n", prefix);
-+
-+	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_OP_GET, 0,
-+				PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (written < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", written, errno, strerror(errno));
-+
-+	ksft_test_result(written == 0,
-+			 "%s PM_SCAN_OP_WP\n", prefix);
-+
-+	/* 4. only middle page dirty */
-+	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_OP_GET | PM_SCAN_OP_WP, 0,
-+				PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (written < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", written, errno, strerror(errno));
-+
-+	mem[vec_size/2 * page_size]++;
-+
-+	written = pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET, 0, PAGE_IS_WRITTEN,
-+				0, 0, PAGE_IS_WRITTEN);
-+	if (written < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", written, errno, strerror(errno));
-+
-+	ksft_test_result(written == 1 && vec[0].len >= 1,
-+			 "%s only middle page dirty\n", prefix);
-+
-+	/* 5. only two middle pages dirty and walk over only middle pages */
-+	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_OP_GET | PM_SCAN_OP_WP, 0,
-+				PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (written < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", written, errno, strerror(errno));
-+
-+	mem[vec_size/2 * page_size]++;
-+	mem[(vec_size/2 + 1) * page_size]++;
-+
-+	written = pagemap_ioctl(&mem[vec_size/2 * page_size], 2 * page_size, vec, 1, PM_SCAN_OP_GET,
-+				0, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (written < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", written, errno, strerror(errno));
-+
-+	ksft_test_result(written == 1 && vec[0].start == (uintptr_t)(&mem[vec_size/2 * page_size])
-+			 && vec[0].len == 2,
-+			 "%s only two middle pages dirty\n", prefix);
-+
-+	free(vec);
-+	free(vec2);
-+	return 0;
-+}
-+
-+void *gethugepage(int map_size)
++static void arm_cspmu_state_put(void)
 +{
 +	int ret;
-+	char *map;
 +
-+	map = memalign(hpage_size, map_size);
-+	if (!map)
-+		ksft_exit_fail_msg("memalign failed %d %s\n", errno, strerror(errno));
-+
-+	ret = madvise(map, map_size, MADV_HUGEPAGE);
-+	if (ret)
-+		return NULL;
-+
-+	memset(map, 0, map_size);
-+
-+	return map;
++	ret = atomic_dec_if_positive(&arm_cspmu_state);
++	WARN_ON(ret < 0);
 +}
 +
-+int hpage_unit_tests(void)
+ /*
+  * In CoreSight PMU architecture, all of the MMIO registers are 32-bit except
+  * counter register. The counter register can be implemented as 32-bit or 64-bit
+@@ -380,26 +422,161 @@ static struct attribute_group arm_cspmu_cpumask_attr_group = {
+ };
+ 
+ struct impl_match {
+-	u32 pmiidr;
+-	u32 mask;
+-	int (*impl_init_ops)(struct arm_cspmu *cspmu);
++	struct list_head next;
++	struct arm_cspmu_impl_param param;
+ };
+ 
+-static const struct impl_match impl_match[] = {
+-	{
+-	  .pmiidr = ARM_CSPMU_IMPL_ID_NVIDIA,
+-	  .mask = ARM_CSPMU_PMIIDR_IMPLEMENTER,
+-	  .impl_init_ops = nv_cspmu_init_ops
+-	},
+-	{}
+-};
++static struct arm_cspmu_impl_param to_impl_param(const struct arm_cspmu *cspmu)
 +{
-+	char *map;
-+	int ret, ret2;
-+	size_t num_pages = 10;
-+	int map_size = hpage_size * num_pages;
-+	int vec_size = map_size/page_size;
-+	struct page_region *vec, *vec2;
++	struct arm_cspmu_impl_param ret = {0};
++	u32 pmiidr = cspmu->impl.pmiidr;
 +
-+	vec = malloc(sizeof(struct page_region) * vec_size);
-+	vec2 = malloc(sizeof(struct page_region) * vec_size);
-+	if (!vec || !vec2)
-+		ksft_exit_fail_msg("malloc failed\n");
++	ret.impl_id = FIELD_GET(ARM_CSPMU_PMIIDR_IMPLEMENTER, pmiidr);
++	ret.pvr = FIELD_GET(ARM_CSPMU_PMIIDR_PVR, pmiidr);
++	ret.pvr_mask = GENMASK(31, 0);
 +
-+	map = gethugepage(map_size);
-+	if (map) {
-+		wp_init(map, map_size);
-+		wp_addr_range(map, map_size);
-+
-+		/* 1. all new huge page must not be written (dirty) */
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, PM_SCAN_OP_GET | PM_SCAN_OP_WP, 0,
-+				    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 0, "%s all new huge page must not be written (dirty)\n",
-+				 __func__);
-+
-+		/* 2. all the huge page must not be written */
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+				    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 0, "%s all the huge page must not be written\n", __func__);
-+
-+		/* 3. all the huge page must be written and clear dirty as well */
-+		memset(map, -1, map_size);
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, PM_SCAN_OP_GET | PM_SCAN_OP_WP,
-+				    0, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 1 && vec[0].start == (uintptr_t)map &&
-+				 vec[0].len == vec_size && vec[0].bitmap == PAGE_IS_WRITTEN,
-+				 "%s all the huge page must be written and clear\n", __func__);
-+
-+		/* 4. only middle page written */
-+		wp_free(map, map_size);
-+		free(map);
-+		map = gethugepage(map_size);
-+		wp_init(map, map_size);
-+		wp_addr_range(map, map_size);
-+		map[vec_size/2 * page_size]++;
-+
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+				    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 1 && vec[0].len > 0,
-+				 "%s only middle page written\n", __func__);
-+
-+		wp_free(map, map_size);
-+		free(map);
-+	} else {
-+		ksft_test_result_skip("%s all new huge page must be written\n", __func__);
-+		ksft_test_result_skip("%s all the huge page must not be written\n", __func__);
-+		ksft_test_result_skip("%s all the huge page must be written and clear\n", __func__);
-+		ksft_test_result_skip("%s only middle page written\n", __func__);
-+	}
-+
-+	/* 5. clear first half of huge page */
-+	map = gethugepage(map_size);
-+	if (map) {
-+		wp_init(map, map_size);
-+		wp_addr_range(map, map_size);
-+
-+		memset(map, 0, map_size);
-+
-+		wp_addr_range(map, map_size/2);
-+
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+				    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 1 && vec[0].len == vec_size/2 &&
-+				 vec[0].start == (uintptr_t)(map + map_size/2),
-+				 "%s clear first half of huge page\n", __func__);
-+		wp_free(map, map_size);
-+		free(map);
-+	} else {
-+		ksft_test_result_skip("%s clear first half of huge page\n", __func__);
-+	}
-+
-+	/* 6. clear first half of huge page with limited buffer */
-+	map = gethugepage(map_size);
-+	if (map) {
-+		wp_init(map, map_size);
-+		wp_addr_range(map, map_size);
-+
-+		memset(map, 0, map_size);
-+
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, PM_SCAN_OP_GET | PM_SCAN_OP_WP,
-+				    vec_size/2, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+				    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 1 && vec[0].len == vec_size/2 &&
-+				 vec[0].start == (uintptr_t)(map + map_size/2),
-+				 "%s clear first half of huge page with limited buffer\n",
-+				 __func__);
-+		wp_free(map, map_size);
-+		free(map);
-+	} else {
-+		ksft_test_result_skip("%s clear first half of huge page with limited buffer\n",
-+				      __func__);
-+	}
-+
-+	/* 7. clear second half of huge page */
-+	map = gethugepage(map_size);
-+	if (map) {
-+		wp_init(map, map_size);
-+		wp_addr_range(map, map_size);
-+
-+		memset(map, -1, map_size);
-+
-+		ret = pagemap_ioctl(map + map_size/2, map_size/2, vec, vec_size,
-+				    PM_SCAN_OP_GET | PM_SCAN_OP_WP, vec_size/2, PAGE_IS_WRITTEN, 0,
-+				    0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+				    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 1 && vec[0].len == vec_size/2,
-+				 "%s clear second half huge page\n", __func__);
-+		wp_free(map, map_size);
-+		free(map);
-+	} else {
-+		ksft_test_result_skip("%s clear second half huge page\n", __func__);
-+	}
-+
-+	/* 8. get half huge page */
-+	map = gethugepage(map_size);
-+	if (map) {
-+		wp_init(map, map_size);
-+		wp_addr_range(map, map_size);
-+
-+		memset(map, -1, map_size);
-+		usleep(100);
-+
-+		ret = pagemap_ioctl(map, map_size, vec, 1, PM_SCAN_OP_GET | PM_SCAN_OP_WP,
-+				    hpage_size/(2*page_size), PAGE_IS_WRITTEN, 0, 0,
-+				    PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 1 && vec[0].len == hpage_size/(2*page_size),
-+				 "%s get half huge page\n", __func__);
-+
-+		ret2 = pagemap_ioctl(map, map_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+				    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret2 < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret2, errno, strerror(errno));
-+
-+		ksft_test_result(ret2 == 1 && vec[0].len == (map_size - hpage_size/2)/page_size,
-+				 "%s get half huge page\n", __func__);
-+
-+		wp_free(map, map_size);
-+		free(map);
-+	} else {
-+		ksft_test_result_skip("%s get half huge page\n", __func__);
-+		ksft_test_result_skip("%s get half huge page\n", __func__);
-+	}
-+
-+	free(vec);
-+	free(vec2);
-+	return 0;
++	return ret;
 +}
 +
-+int unmapped_region_tests(void)
++static bool impl_param_match(const struct arm_cspmu_impl_param *A,
++			     const struct arm_cspmu_impl_param *B)
 +{
-+	void *start = (void *)0x10000000;
-+	int written, len = 0x00040000;
-+	int vec_size = len / page_size;
-+	struct page_region *vec = malloc(sizeof(struct page_region) * vec_size);
++	/*
++	 * Match criteria:
++	 * - Implementer id should match.
++	 * - A's device id is within B's range, or vice versa. This allows
++	 *   vendor to register backend for a range of devices.
++	 */
++	if ((A->impl_id == B->impl_id) &&
++	    (((A->pvr & A->pvr_mask) == (B->pvr & A->pvr_mask)) ||
++	     ((A->pvr & B->pvr_mask) == (B->pvr & B->pvr_mask))))
++		return true;
 +
-+	/* 1. Get written pages */
-+	written = pagemap_ioctl(start, len, vec, vec_size, PM_SCAN_OP_GET, 0,
-+			      PAGEMAP_NON_WRITTEN_BITS, 0, 0, PAGEMAP_NON_WRITTEN_BITS);
-+	if (written < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", written, errno, strerror(errno));
-+
-+	ksft_test_result(written >= 0, "%s Get status of pages\n", __func__);
-+
-+	free(vec);
-+	return 0;
++	return false;
 +}
 +
-+static void test_simple(void)
++static struct impl_match *impl_match_find(
++	const struct arm_cspmu_impl_param *impl_param)
 +{
-+	int i;
-+	char *map;
-+	struct page_region vec;
-+
-+	map = aligned_alloc(page_size, page_size);
-+	if (!map)
-+		ksft_exit_fail_msg("aligned_alloc failed\n");
-+
-+	wp_init(map, page_size);
-+	wp_addr_range(map, page_size);
-+
-+	for (i = 0 ; i < TEST_ITERATIONS; i++) {
-+		if (pagemap_ioctl(map, page_size, &vec, 1, PM_SCAN_OP_GET, 0,
-+				  PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN) == 1) {
-+			ksft_print_msg("written bit was 1, but should be 0 (i=%d)\n", i);
-+			break;
-+		}
-+
-+		wp_addr_range(map, page_size);
-+		/* Write something to the page to get the written bit enabled on the page */
-+		map[0]++;
-+
-+		if (pagemap_ioctl(map, page_size, &vec, 1, PM_SCAN_OP_GET, 0,
-+				  PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN) == 0) {
-+			ksft_print_msg("written bit was 0, but should be 1 (i=%d)\n", i);
-+			break;
-+		}
-+
-+		wp_addr_range(map, page_size);
-+	}
-+	wp_free(map, page_size);
-+	free(map);
-+
-+	ksft_test_result(i == TEST_ITERATIONS, "Test %s\n", __func__);
-+}
-+
-+int sanity_tests(void)
-+{
-+	int mem_size, vec_size, ret, fd, i, buf_size;
-+	struct page_region *vec;
-+	char *mem, *fmem;
-+	struct stat sbuf;
-+
-+	/* 1. wrong operation */
-+	mem_size = 10 * page_size;
-+	vec_size = mem_size / page_size;
-+
-+	vec = malloc(sizeof(struct page_region) * vec_size);
-+	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED || vec == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+
-+	wp_init(mem, mem_size);
-+	wp_addr_range(mem, mem_size);
-+
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size,
-+				       PM_SCAN_OP_GET | PM_SCAN_OP_WP, 0, PAGEMAP_BITS_ALL, 0, 0,
-+				       PAGEMAP_BITS_ALL) < 0,
-+			 "%s clear op can only be specified with PAGE_IS_WRITTEN\n", __func__);
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+				       PAGEMAP_BITS_ALL, 0, 0, PAGEMAP_BITS_ALL) >= 0,
-+			 "%s required_mask specified\n", __func__);
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+				       0, PAGEMAP_BITS_ALL, 0, PAGEMAP_BITS_ALL) >= 0,
-+			 "%s anyof_mask specified\n", __func__);
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+				       0, 0, PAGEMAP_BITS_ALL, PAGEMAP_BITS_ALL) >= 0,
-+			 "%s excluded_mask specified\n", __func__);
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+				       PAGEMAP_BITS_ALL, PAGEMAP_BITS_ALL, 0,
-+				       PAGEMAP_BITS_ALL) >= 0,
-+			 "%s required_mask and anyof_mask specified\n", __func__);
-+	wp_free(mem, mem_size);
-+	munmap(mem, mem_size);
-+
-+	/* 2. Get sd and present pages with anyof_mask */
-+	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+	wp_init(mem, mem_size);
-+	wp_addr_range(mem, mem_size);
-+
-+	memset(mem, 0, mem_size);
-+
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+			    0, PAGEMAP_BITS_ALL, 0, PAGEMAP_BITS_ALL);
-+	ksft_test_result(ret >= 0 && vec[0].start == (uintptr_t)mem && vec[0].len == vec_size &&
-+			 vec[0].bitmap == (PAGE_IS_WRITTEN | PAGE_IS_PRESENT),
-+			 "%s Get sd and present pages with anyof_mask\n", __func__);
-+
-+	/* 3. Get sd and present pages with required_mask */
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+			    PAGEMAP_BITS_ALL, 0, 0, PAGEMAP_BITS_ALL);
-+	ksft_test_result(ret >= 0 && vec[0].start == (uintptr_t)mem && vec[0].len == vec_size &&
-+			 vec[0].bitmap == (PAGE_IS_WRITTEN | PAGE_IS_PRESENT),
-+			 "%s Get all the pages with required_mask\n", __func__);
-+
-+	/* 4. Get sd and present pages with required_mask and anyof_mask */
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+			    PAGE_IS_WRITTEN, PAGE_IS_PRESENT, 0, PAGEMAP_BITS_ALL);
-+	ksft_test_result(ret >= 0 && vec[0].start == (uintptr_t)mem && vec[0].len == vec_size &&
-+			 vec[0].bitmap == (PAGE_IS_WRITTEN | PAGE_IS_PRESENT),
-+			 "%s Get sd and present pages with required_mask and anyof_mask\n",
-+			 __func__);
-+
-+	/* 5. Don't get sd pages */
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+			    0, 0, PAGE_IS_WRITTEN, PAGEMAP_BITS_ALL);
-+	ksft_test_result(ret == 0, "%s Don't get sd pages\n", __func__);
-+
-+	/* 6. Don't get present pages */
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+			    0, 0, PAGE_IS_PRESENT, PAGEMAP_BITS_ALL);
-+	ksft_test_result(ret == 0, "%s Don't get present pages\n", __func__);
-+
-+	wp_free(mem, mem_size);
-+	munmap(mem, mem_size);
-+
-+	/* 8. Find written present pages with return mask */
-+	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+	wp_init(mem, mem_size);
-+	wp_addr_range(mem, mem_size);
-+
-+	memset(mem, 0, mem_size);
-+
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+			    0, PAGEMAP_BITS_ALL, 0, PAGE_IS_WRITTEN);
-+	ksft_test_result(ret >= 0 && vec[0].start == (uintptr_t)mem && vec[0].len == vec_size &&
-+			 vec[0].bitmap == PAGE_IS_WRITTEN,
-+			 "%s Find written present pages with return mask\n", __func__);
-+	wp_free(mem, mem_size);
-+	munmap(mem, mem_size);
-+
-+	/* 9. Memory mapped file */
-+	fd = open(__FILE__, O_RDONLY);
-+	if (fd < 0)
-+		ksft_exit_fail_msg("%s Memory mapped file\n");
-+
-+	ret = stat(__FILE__, &sbuf);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	fmem = mmap(NULL, sbuf.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
-+	if (fmem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem %ld %s\n", errno, strerror(errno));
-+
-+	ret = pagemap_ioctl(fmem, sbuf.st_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+			    0, PAGEMAP_NON_WRITTEN_BITS, 0, PAGEMAP_NON_WRITTEN_BITS);
-+
-+	ksft_test_result(ret >= 0 && vec[0].start == (uintptr_t)fmem &&
-+			 vec[0].len == ceilf((float)sbuf.st_size/page_size) &&
-+			 vec[0].bitmap == PAGE_IS_FILE,
-+			 "%s Memory mapped file\n", __func__);
-+
-+	munmap(fmem, sbuf.st_size);
-+	close(fd);
-+
-+	/* 10. Create and read/write to a memory mapped file*/
-+	buf_size = page_size * 10;
-+
-+	fd = open(__FILE__".tmp2", O_RDWR | O_CREAT, 0777);
-+	if (fd < 0)
-+		ksft_exit_fail_msg("Create and read/write to a memory mapped file: %s\n",
-+				   strerror(errno));
-+
-+	for (i = 0; i < buf_size; i++)
-+		if (write(fd, "c", 1) < 0)
-+			ksft_exit_fail_msg("Create and read/write to a memory mapped file\n");
-+
-+	fmem = mmap(NULL, buf_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
-+	if (fmem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem %ld %s\n", errno, strerror(errno));
-+
-+	wp_init(fmem, buf_size);
-+	wp_addr_range(fmem, buf_size);
-+
-+	for (i = 0; i < buf_size; i++)
-+		fmem[i] = i;
-+
-+	ret = pagemap_ioctl(fmem, buf_size, vec, vec_size, PM_SCAN_OP_GET, 0,
-+			    PAGE_IS_WRITTEN | PAGE_IS_FILE, PAGE_IS_PRESENT | PAGE_IS_SWAPPED, 0,
-+			    PAGEMAP_BITS_ALL);
-+
-+	ksft_test_result(ret >= 0 && vec[0].start == (uintptr_t)fmem &&
-+			 vec[0].len == (buf_size/page_size) &&
-+			 (vec[0].bitmap | PAGE_IS_WRITTEN) && (vec[0].bitmap | PAGE_IS_FILE),
-+			 "%s Read/write to private memory mapped file\n", __func__);
-+
-+	wp_free(fmem, buf_size);
-+	munmap(fmem, buf_size);
-+	close(fd);
-+
-+	free(vec);
-+	return 0;
-+}
-+
-+int mprotect_tests(void)
-+{
-+	int ret;
-+	char *mem, *mem2;
-+	struct page_region vec;
-+	int pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
-+
-+	if (pagemap_fd < 0) {
-+		fprintf(stderr, "open() failed\n");
-+		exit(1);
-+	}
-+
-+	/* 1. Map two pages */
-+	mem = mmap(0, 2 * page_size, PROT_READ|PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+	wp_init(mem, 2 * page_size);
-+	wp_addr_range(mem, 2 * page_size);
-+
-+	/* Populate both pages. */
-+	memset(mem, 1, 2 * page_size);
-+
-+	ret = pagemap_ioctl(mem, 2 * page_size, &vec, 1, PM_SCAN_OP_GET, 0, PAGE_IS_WRITTEN,
-+			    0, 0, PAGE_IS_WRITTEN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ksft_test_result(ret == 1 && vec.len == 2, "%s Both pages written\n", __func__);
-+
-+	/* 2. Start tracking */
-+	wp_addr_range(mem, 2 * page_size);
-+
-+	ksft_test_result(pagemap_ioctl(mem, 2 * page_size, &vec, 1, PM_SCAN_OP_GET, 0,
-+				       PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN) == 0,
-+			 "%s Both pages are not written (dirty)\n", __func__);
-+
-+	/* 3. Remap the second page */
-+	mem2 = mmap(mem + page_size, page_size, PROT_READ|PROT_WRITE,
-+		    MAP_PRIVATE|MAP_ANON|MAP_FIXED, -1, 0);
-+	if (mem2 == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+	wp_init(mem2, page_size);
-+	wp_addr_range(mem2, page_size);
-+
-+	/* Protect + unprotect. */
-+	mprotect(mem, page_size, PROT_NONE);
-+	mprotect(mem, 2 * page_size, PROT_READ);
-+	mprotect(mem, 2 * page_size, PROT_READ|PROT_WRITE);
-+
-+	/* Modify both pages. */
-+	memset(mem, 2, 2 * page_size);
-+
-+	/* Protect + unprotect. */
-+	mprotect(mem, page_size, PROT_NONE);
-+	mprotect(mem, page_size, PROT_READ);
-+	mprotect(mem, page_size, PROT_READ|PROT_WRITE);
-+
-+	ret = pagemap_ioctl(mem, 2 * page_size, &vec, 1, PM_SCAN_OP_GET, 0, PAGE_IS_WRITTEN,
-+			    0, 0, PAGE_IS_WRITTEN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ksft_test_result(ret == 1 && vec.len == 2,
-+			 "%s Both pages written after remap and mprotect\n", __func__);
-+
-+	/* 4. Clear and make the pages written */
-+	wp_addr_range(mem, 2 * page_size);
-+
-+	memset(mem, 'A', 2 * page_size);
-+
-+	ret = pagemap_ioctl(mem, 2 * page_size, &vec, 1, PM_SCAN_OP_GET, 0, PAGE_IS_WRITTEN,
-+			    0, 0, PAGE_IS_WRITTEN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ksft_test_result(ret == 1 && vec.len == 2,
-+			 "%s Clear and make the pages written\n", __func__);
-+
-+	wp_free(mem, 2 * page_size);
-+	munmap(mem, 2 * page_size);
-+	return 0;
-+}
-+
-+/* transact test */
-+static const unsigned int nthreads = 6, pages_per_thread = 32, access_per_thread = 8;
-+static pthread_barrier_t start_barrier, end_barrier;
-+static unsigned int extra_thread_faults;
-+static unsigned int iter_count = 1000;
-+static volatile int finish;
-+
-+static ssize_t get_dirty_pages_reset(char *mem, unsigned int count,
-+				     int reset, int page_size)
-+{
-+	struct pm_scan_arg arg = {0};
-+	struct page_region rgns[256];
-+	int i, j, cnt, ret;
-+
-+	arg.size = sizeof(struct pm_scan_arg);
-+	arg.start = (uintptr_t)mem;
-+	arg.max_pages = count;
-+	arg.len = count * page_size;
-+	arg.vec = (uintptr_t)rgns;
-+	arg.vec_len = sizeof(rgns) / sizeof(*rgns);
-+	arg.flags = PM_SCAN_OP_GET;
-+	if (reset)
-+		arg.flags |= PM_SCAN_OP_WP;
-+	arg.required_mask = PAGE_IS_WRITTEN;
-+	arg.return_mask = PAGE_IS_WRITTEN;
-+
-+	ret = ioctl(pagemap_fd, PAGEMAP_SCAN, &arg);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("ioctl failed\n");
-+
-+	cnt = 0;
-+	for (i = 0; i < ret; ++i) {
-+		if (rgns[i].bitmap != PAGE_IS_WRITTEN)
-+			ksft_exit_fail_msg("wrong bitmap\n");
-+
-+		for (j = 0; j < rgns[i].len; ++j)
-+			cnt++;
-+	}
-+
-+	return cnt;
-+}
-+
-+void *thread_proc(void *mem)
-+{
-+	int *m = mem;
-+	long curr_faults, faults;
-+	struct rusage r;
-+	unsigned int i;
-+	int ret;
-+
-+	if (getrusage(RUSAGE_THREAD, &r))
-+		ksft_exit_fail_msg("getrusage\n");
-+
-+	curr_faults = r.ru_minflt;
-+
-+	while (!finish) {
-+		ret = pthread_barrier_wait(&start_barrier);
-+		if (ret && ret != PTHREAD_BARRIER_SERIAL_THREAD)
-+			ksft_exit_fail_msg("pthread_barrier_wait\n");
-+
-+		for (i = 0; i < access_per_thread; ++i)
-+			__atomic_add_fetch(m + i * (0x1000 / sizeof(*m)), 1, __ATOMIC_SEQ_CST);
-+
-+		ret = pthread_barrier_wait(&end_barrier);
-+		if (ret && ret != PTHREAD_BARRIER_SERIAL_THREAD)
-+			ksft_exit_fail_msg("pthread_barrier_wait\n");
-+
-+		if (getrusage(RUSAGE_THREAD, &r))
-+			ksft_exit_fail_msg("getrusage\n");
-+
-+		faults = r.ru_minflt - curr_faults;
-+		if (faults < access_per_thread)
-+			ksft_exit_fail_msg("faults < access_per_thread");
-+
-+		__atomic_add_fetch(&extra_thread_faults, faults - access_per_thread,
-+				   __ATOMIC_SEQ_CST);
-+		curr_faults = r.ru_minflt;
++	struct impl_match *impl_match;
++
++	list_for_each_entry(impl_match, &arm_cspmu_impls, next) {
++		if (impl_param_match(impl_param, &impl_match->param))
++			return impl_match;
 +	}
 +
 +	return NULL;
 +}
 +
-+static void transact_test(int page_size)
++static int arm_cspmu_impl_reprobe(
++	const struct arm_cspmu_impl_param *impl_param)
 +{
-+	unsigned int i, count, extra_pages;
-+	pthread_t th;
-+	char *mem;
-+	int ret, c;
++	struct arm_cspmu *cspmu, *temp;
++	LIST_HEAD(reprobe_list);
++	int ret = 0;
 +
-+	if (pthread_barrier_init(&start_barrier, NULL, nthreads + 1))
-+		ksft_exit_fail_msg("pthread_barrier_init\n");
++	mutex_lock(&arm_cspmu_lock);
 +
-+	if (pthread_barrier_init(&end_barrier, NULL, nthreads + 1))
-+		ksft_exit_fail_msg("pthread_barrier_init\n");
++	/* Move the matching devices to temp list to avoid recursive lock. */
++	list_for_each_entry_safe(cspmu, temp, &arm_cspmus, next) {
++		struct arm_cspmu_impl_param match_param = to_impl_param(cspmu);
 +
-+	mem = mmap(NULL, 0x1000 * nthreads * pages_per_thread, PROT_READ | PROT_WRITE,
-+		   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("Error mmap %s.\n", strerror(errno));
++		if (impl_param_match(impl_param, &match_param))
++			list_move(&cspmu->next, &reprobe_list);
++	}
 +
-+	wp_init(mem, 0x1000 * nthreads * pages_per_thread);
-+	wp_addr_range(mem, 0x1000 * nthreads * pages_per_thread);
++	mutex_unlock(&arm_cspmu_lock);
 +
-+	memset(mem, 0, 0x1000 * nthreads * pages_per_thread);
-+
-+	count = get_dirty_pages_reset(mem, nthreads * pages_per_thread, 1, page_size);
-+	ksft_test_result(count > 0, "%s count %d\n", __func__, count);
-+	count = get_dirty_pages_reset(mem, nthreads * pages_per_thread, 1, page_size);
-+	ksft_test_result(count == 0, "%s count %d\n", __func__, count);
-+
-+	finish = 0;
-+	for (i = 0; i < nthreads; ++i)
-+		pthread_create(&th, NULL, thread_proc, mem + 0x1000 * i * pages_per_thread);
-+
-+	extra_pages = 0;
-+	for (i = 0; i < iter_count; ++i) {
-+		count = 0;
-+
-+		ret = pthread_barrier_wait(&start_barrier);
-+		if (ret && ret != PTHREAD_BARRIER_SERIAL_THREAD)
-+			ksft_exit_fail_msg("pthread_barrier_wait\n");
-+
-+		count = get_dirty_pages_reset(mem, nthreads * pages_per_thread, 1,
-+					      page_size);
-+
-+		ret = pthread_barrier_wait(&end_barrier);
-+		if (ret && ret != PTHREAD_BARRIER_SERIAL_THREAD)
-+			ksft_exit_fail_msg("pthread_barrier_wait\n");
-+
-+		if (count > nthreads * access_per_thread)
-+			ksft_exit_fail_msg("Too big count %d expected %d, iter %d\n",
-+					   count, nthreads * access_per_thread, i);
-+
-+		c = get_dirty_pages_reset(mem, nthreads * pages_per_thread, 1, page_size);
-+		count += c;
-+
-+		if (c > nthreads * access_per_thread) {
-+			ksft_test_result_fail(" %s count > nthreads\n", __func__);
-+			return;
-+		}
-+
-+		if (count != nthreads * access_per_thread) {
-+			/*
-+			 * The purpose of the test is to make sure that no page updates are lost
-+			 * when the page updates and read-resetting soft dirty flags are performed
-+			 * in parallel. However, it is possible that the application will get the
-+			 * soft dirty flags twice on the two consecutive read-resets. This seems
-+			 * unavoidable as soft dirty flag is handled in software through page faults
-+			 * in kernel. While the updating the flags is supposed to be synchronized
-+			 * between page fault handling and read-reset, it is possible that
-+			 * read-reset happens after page fault PTE update but before the application
-+			 * re-executes write instruction. So read-reset gets the flag, clears write
-+			 * access and application gets page fault again for the same write.
-+			 */
-+			if (count < nthreads * access_per_thread) {
-+				ksft_test_result_fail("Lost update, iter %d, %d vs %d.\n", i, count,
-+						      nthreads * access_per_thread);
-+				return;
-+			}
-+
-+			extra_pages += count - nthreads * access_per_thread;
++	/* Reprobe the devices. */
++	list_for_each_entry_safe(cspmu, temp, &reprobe_list, next) {
++		ret = device_reprobe(cspmu->dev);
++		if (ret) {
++			pr_err("arm_cspmu fail reprobe err: %d\n", ret);
++			return ret;
 +		}
 +	}
 +
-+	pthread_barrier_wait(&start_barrier);
-+	finish = 1;
-+	pthread_barrier_wait(&end_barrier);
-+
-+	ksft_test_result_pass("%s Extra pages %u (%.1lf%%), extra thread faults %d.\n", __func__,
-+			      extra_pages,
-+			      100.0 * extra_pages / (iter_count * nthreads * access_per_thread),
-+			      extra_thread_faults);
++	return 0;
 +}
 +
-+int main(void)
++int arm_cspmu_impl_register(const struct arm_cspmu_impl_param *impl_param)
 +{
-+	int mem_size, shmid, buf_size, fd, i, ret;
-+	char *mem, *map, *fmem;
-+	struct stat sbuf;
++	struct impl_match *match;
++	int ret = 0;
 +
-+	ksft_print_header();
-+	ksft_set_plan(90);
++	if (!try_arm_cspmu_state_reg()) {
++		pr_err("arm_cspmu reg failed, device(s) is in use\n");
++		return -EBUSY;
++	}
 +
-+	page_size = getpagesize();
-+	hpage_size = read_pmd_pagesize();
++	mutex_lock(&arm_cspmu_lock);
 +
-+	pagemap_fd = open(PAGEMAP, O_RDWR);
-+	if (pagemap_fd < 0)
++	match = impl_match_find(impl_param);
++	if (match) {
++		pr_err("arm_cspmu reg failed, impl: 0x%x, pvr: 0x%x, pvr_mask: 0x%x already exists\n",
++			match->param.impl_id, match->param.pvr,
++			match->param.pvr_mask);
++		mutex_unlock(&arm_cspmu_lock);
++		arm_cspmu_state_ready();
 +		return -EINVAL;
-+
-+	if (init_uffd())
-+		ksft_exit_fail_msg("uffd init failed\n");
-+
-+	/*
-+	 * Written (dirty) PTE bit tests
-+	 */
-+
-+	/* 1. Sanity testing */
-+	sanity_tests_sd();
-+
-+	/* 2. Normal page testing */
-+	mem_size = 10 * page_size;
-+	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+	wp_init(mem, mem_size);
-+	wp_addr_range(mem, mem_size);
-+
-+	base_tests("Page testing:", mem, mem_size, 0);
-+
-+	wp_free(mem, mem_size);
-+	munmap(mem, mem_size);
-+
-+	/* 3. Large page testing */
-+	mem_size = 512 * 10 * page_size;
-+	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+	wp_init(mem, mem_size);
-+	wp_addr_range(mem, mem_size);
-+
-+	base_tests("Large Page testing:", mem, mem_size, 0);
-+
-+	wp_free(mem, mem_size);
-+	munmap(mem, mem_size);
-+
-+	/* 4. Huge page testing */
-+	map = gethugepage(hpage_size);
-+	if (map) {
-+		wp_init(map, hpage_size);
-+		wp_addr_range(map, hpage_size);
-+		base_tests("Huge page testing:", map, hpage_size, 0);
-+		wp_free(map, hpage_size);
-+		free(map);
-+	} else {
-+		base_tests("Huge page testing:", NULL, 0, 1);
 +	}
 +
-+	/* 5. Hugetlb page testing */
-+	mem_size = 2*1024*1024;
-+	mem = gethugetlb_mem(mem_size, &shmid);
-+	if (mem) {
-+		wp_init(mem, mem_size);
-+		wp_addr_range(mem, mem_size);
-+
-+		base_tests("Hugetlb shmem testing:", mem, mem_size, 0);
-+
-+		wp_free(mem, mem_size);
-+		shmctl(shmid, IPC_RMID, NULL);
-+	} else {
-+		base_tests("Hugetlb shmem testing:", NULL, 0, 1);
++	match = kzalloc(sizeof(struct impl_match), GFP_KERNEL);
++	if (!match) {
++		mutex_unlock(&arm_cspmu_lock);
++		arm_cspmu_state_ready();
++		return -ENOMEM;
 +	}
 +
-+	/* 6. Hugetlb page testing */
-+	mem = gethugetlb_mem(mem_size, NULL);
-+	if (mem) {
-+		wp_init(mem, mem_size);
-+		wp_addr_range(mem, mem_size);
++	memcpy(&match->param, impl_param, sizeof(match->param));
++	list_add(&match->next, &arm_cspmu_impls);
 +
-+		base_tests("Hugetlb mem testing:", mem, mem_size, 0);
++	mutex_unlock(&arm_cspmu_lock);
 +
-+		wp_free(mem, mem_size);
-+	} else {
-+		base_tests("Hugetlb mem testing:", NULL, 0, 1);
-+	}
++	/* Replace generic backend with vendor implementation. */
++	ret = arm_cspmu_impl_reprobe(impl_param);
 +
-+	/* 7. file memory testing */
-+	buf_size = page_size * 10;
++	if (ret)
++		arm_cspmu_impl_unregister(impl_param);
 +
-+	fd = open(__FILE__".tmp0", O_RDWR | O_CREAT, 0777);
-+	if (fd < 0)
-+		ksft_exit_fail_msg("Create and read/write to a memory mapped file: %s\n",
-+				   strerror(errno));
++	arm_cspmu_state_ready();
 +
-+	for (i = 0; i < buf_size; i++)
-+		if (write(fd, "c", 1) < 0)
-+			ksft_exit_fail_msg("Create and read/write to a memory mapped file\n");
-+
-+	ret = stat(__FILE__".tmp0", &sbuf);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	fmem = mmap(NULL, sbuf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
-+	if (fmem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem %ld %s\n", errno, strerror(errno));
-+
-+	wp_init(fmem, sbuf.st_size);
-+	wp_addr_range(fmem, sbuf.st_size);
-+
-+	base_tests("File memory testing:", fmem, sbuf.st_size, 0);
-+
-+	wp_free(fmem, sbuf.st_size);
-+	munmap(fmem, sbuf.st_size);
-+	close(fd);
-+
-+	/* 8. file memory testing */
-+	buf_size = page_size * 10;
-+
-+	fd = memfd_create(__FILE__".tmp00", MFD_NOEXEC_SEAL);
-+	if (fd < 0)
-+		ksft_exit_fail_msg("Create and read/write to a memory mapped file: %s\n",
-+				   strerror(errno));
-+
-+	if (ftruncate(fd, buf_size))
-+		ksft_exit_fail_msg("Error ftruncate\n");
-+
-+	for (i = 0; i < buf_size; i++)
-+		if (write(fd, "c", 1) < 0)
-+			ksft_exit_fail_msg("Create and read/write to a memory mapped file\n");
-+
-+	fmem = mmap(NULL, buf_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
-+	if (fmem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem %ld %s\n", errno, strerror(errno));
-+
-+	wp_init(fmem, buf_size);
-+	wp_addr_range(fmem, buf_size);
-+
-+	base_tests("File anonymous memory testing:", fmem, buf_size, 0);
-+
-+	wp_free(fmem, buf_size);
-+	munmap(fmem, buf_size);
-+	close(fd);
-+
-+	/* 9. Huge page tests */
-+	hpage_unit_tests();
-+
-+	/* 10. Iterative test */
-+	test_simple();
-+
-+	/* 11. Mprotect test */
-+	mprotect_tests();
-+
-+	/* 12. Transact test */
-+	transact_test(page_size);
-+
-+	/*
-+	 * Other PTE bit tests
-+	 */
-+
-+	/* 1. Sanity testing */
-+	sanity_tests();
-+
-+	/* 2. Unmapped address test */
-+	unmapped_region_tests();
-+
-+	/* 3. Userfaultfd tests */
-+	userfaultfd_tests();
-+
-+	close(pagemap_fd);
-+	return ksft_exit_pass();
++	return ret;
 +}
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-old mode 100644
-new mode 100755
-index eb25f238f5b8..fa77c8af2b0c
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -53,6 +53,8 @@ separated by spaces:
- 	memory protection key tests
- - soft_dirty
- 	test soft dirty page bit semantics
-+- pagemap
-+	test pagemap_scan IOCTL
- - cow
- 	test copy-on-write semantics
- example: ./run_vmtests.sh -t "hmm mmap ksm"
-@@ -282,6 +284,8 @@ fi
- 
- CATEGORY="soft_dirty" run_test ./soft-dirty
- 
-+CATEGORY="pagemap" run_test ./pagemap_ioctl
++EXPORT_SYMBOL_GPL(arm_cspmu_impl_register);
 +
- # COW tests
- CATEGORY="cow" run_test ./cow
++void arm_cspmu_impl_unregister(const struct arm_cspmu_impl_param *impl_param)
++{
++	struct impl_match *match;
++
++	mutex_lock(&arm_cspmu_lock);
++
++	match = impl_match_find(impl_param);
++	if (!match) {
++		pr_err("arm_cspmu unreg failed, unable to find impl: 0x%x, pvr: 0x%x, pvr_mask: 0x%x\n",
++			impl_param->impl_id, impl_param->pvr,
++			impl_param->pvr_mask);
++		mutex_unlock(&arm_cspmu_lock);
++		return;
++	}
++
++	list_del(&match->next);
++	kfree(match);
++
++	mutex_unlock(&arm_cspmu_lock);
++
++	/* Re-attach devices to standard driver. */
++	arm_cspmu_impl_reprobe(impl_param);
++}
++EXPORT_SYMBOL_GPL(arm_cspmu_impl_unregister);
  
+ static int arm_cspmu_init_impl_ops(struct arm_cspmu *cspmu)
+ {
+-	int ret;
++	int ret = 0;
+ 	struct acpi_apmt_node *apmt_node = cspmu->apmt_node;
+ 	struct arm_cspmu_impl_ops *impl_ops = &cspmu->impl.ops;
+-	const struct impl_match *match = impl_match;
++	struct arm_cspmu_impl_param match_param = {0};
++	const struct impl_match *match;
+ 
+ 	/*
+ 	 * Get PMU implementer and product id from APMT node.
+@@ -410,19 +587,23 @@ static int arm_cspmu_init_impl_ops(struct arm_cspmu *cspmu)
+ 		(apmt_node->impl_id) ? apmt_node->impl_id :
+ 				       readl(cspmu->base0 + PMIIDR);
+ 
+-	/* Find implementer specific attribute ops. */
+-	for (; match->pmiidr; match++) {
+-		const u32 mask = match->mask;
++	cspmu->impl.module = THIS_MODULE;
+ 
+-		if ((match->pmiidr & mask) == (cspmu->impl.pmiidr & mask)) {
+-			ret = match->impl_init_ops(cspmu);
+-			if (ret)
+-				return ret;
++	mutex_lock(&arm_cspmu_lock);
+ 
+-			break;
+-		}
++	/* Find implementer specific attribute ops. */
++	match_param = to_impl_param(cspmu);
++	match = impl_match_find(&match_param);
++	if (match) {
++		cspmu->impl.module = match->param.module;
++		ret = match->param.impl_init_ops(cspmu);
+ 	}
+ 
++	mutex_unlock(&arm_cspmu_lock);
++
++	if (ret)
++		return ret;
++
+ 	/* Use default callbacks if implementer doesn't provide one. */
+ 	CHECK_DEFAULT_IMPL_OPS(impl_ops, get_event_attrs);
+ 	CHECK_DEFAULT_IMPL_OPS(impl_ops, get_format_attrs);
+@@ -639,6 +820,11 @@ static int arm_cspmu_event_init(struct perf_event *event)
+ 	struct arm_cspmu *cspmu;
+ 	struct hw_perf_event *hwc = &event->hw;
+ 
++	if (!try_arm_cspmu_state_get()) {
++		pr_err("arm_cspmu event_init fail: driver is reprobing\n");
++		return -EBUSY;
++	}
++
+ 	cspmu = to_arm_cspmu(event->pmu);
+ 
+ 	/*
+@@ -648,12 +834,14 @@ static int arm_cspmu_event_init(struct perf_event *event)
+ 	if (is_sampling_event(event)) {
+ 		dev_dbg(cspmu->pmu.dev,
+ 			"Can't support sampling events\n");
++		arm_cspmu_state_put();
+ 		return -EOPNOTSUPP;
+ 	}
+ 
+ 	if (event->cpu < 0 || event->attach_state & PERF_ATTACH_TASK) {
+ 		dev_dbg(cspmu->pmu.dev,
+ 			"Can't support per-task counters\n");
++		arm_cspmu_state_put();
+ 		return -EINVAL;
+ 	}
+ 
+@@ -664,16 +852,21 @@ static int arm_cspmu_event_init(struct perf_event *event)
+ 	if (!cpumask_test_cpu(event->cpu, &cspmu->associated_cpus)) {
+ 		dev_dbg(cspmu->pmu.dev,
+ 			"Requested cpu is not associated with the PMU\n");
++		arm_cspmu_state_put();
+ 		return -EINVAL;
+ 	}
+ 
+ 	/* Enforce the current active CPU to handle the events in this PMU. */
+ 	event->cpu = cpumask_first(&cspmu->active_cpu);
+-	if (event->cpu >= nr_cpu_ids)
++	if (event->cpu >= nr_cpu_ids) {
++		arm_cspmu_state_put();
+ 		return -EINVAL;
++	}
+ 
+-	if (!arm_cspmu_validate_group(event))
++	if (!arm_cspmu_validate_group(event)) {
++		arm_cspmu_state_put();
+ 		return -EINVAL;
++	}
+ 
+ 	/*
+ 	 * The logical counter id is tracked with hw_perf_event.extra_reg.idx.
+@@ -686,6 +879,8 @@ static int arm_cspmu_event_init(struct perf_event *event)
+ 	hwc->extra_reg.idx = -1;
+ 	hwc->config = cspmu->impl.ops.event_type(event);
+ 
++	arm_cspmu_state_put();
++
+ 	return 0;
+ }
+ 
+@@ -864,13 +1059,22 @@ static int arm_cspmu_add(struct perf_event *event, int flags)
+ 	struct hw_perf_event *hwc = &event->hw;
+ 	int idx;
+ 
++	if (!try_arm_cspmu_state_get()) {
++		pr_err("arm_cspmu event_init fail: driver is reprobing\n");
++		return -EBUSY;
++	}
++
+ 	if (WARN_ON_ONCE(!cpumask_test_cpu(smp_processor_id(),
+-					   &cspmu->associated_cpus)))
++					   &cspmu->associated_cpus))) {
++		arm_cspmu_state_put();
+ 		return -ENOENT;
++	}
+ 
+ 	idx = arm_cspmu_get_event_idx(hw_events, event);
+-	if (idx < 0)
++	if (idx < 0) {
++		arm_cspmu_state_put();
+ 		return idx;
++	}
+ 
+ 	hw_events->events[idx] = event;
+ 	hwc->idx = to_phys_idx(cspmu, idx);
+@@ -900,6 +1104,8 @@ static void arm_cspmu_del(struct perf_event *event, int flags)
+ 	clear_bit(idx, hw_events->used_ctrs);
+ 
+ 	perf_event_update_userpage(event);
++
++	arm_cspmu_state_put();
+ }
+ 
+ static void arm_cspmu_read(struct perf_event *event)
+@@ -1154,7 +1360,7 @@ static int arm_cspmu_register_pmu(struct arm_cspmu *cspmu)
+ 
+ 	cspmu->pmu = (struct pmu){
+ 		.task_ctx_nr	= perf_invalid_context,
+-		.module		= THIS_MODULE,
++		.module		= cspmu->impl.module,
+ 		.pmu_enable	= arm_cspmu_enable,
+ 		.pmu_disable	= arm_cspmu_disable,
+ 		.event_init	= arm_cspmu_event_init,
+@@ -1205,6 +1411,10 @@ static int arm_cspmu_device_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	mutex_lock(&arm_cspmu_lock);
++	list_add(&cspmu->next, &arm_cspmus);
++	mutex_unlock(&arm_cspmu_lock);
++
+ 	return 0;
+ }
+ 
+@@ -1212,6 +1422,10 @@ static int arm_cspmu_device_remove(struct platform_device *pdev)
+ {
+ 	struct arm_cspmu *cspmu = platform_get_drvdata(pdev);
+ 
++	mutex_lock(&arm_cspmu_lock);
++	list_del(&cspmu->next);
++	mutex_unlock(&arm_cspmu_lock);
++
+ 	perf_pmu_unregister(&cspmu->pmu);
+ 	cpuhp_state_remove_instance(arm_cspmu_cpuhp_state, &cspmu->cpuhp_node);
+ 
+@@ -1281,6 +1495,8 @@ static int __init arm_cspmu_init(void)
+ {
+ 	int ret;
+ 
++	arm_cspmu_state_ready();
++
+ 	ret = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN,
+ 					"perf/arm/cspmu:online",
+ 					arm_cspmu_cpu_online,
+diff --git a/drivers/perf/arm_cspmu/arm_cspmu.h b/drivers/perf/arm_cspmu/arm_cspmu.h
+index 51323b175a4a..cf3458d9fc63 100644
+--- a/drivers/perf/arm_cspmu/arm_cspmu.h
++++ b/drivers/perf/arm_cspmu/arm_cspmu.h
+@@ -1,7 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0
+  *
+  * ARM CoreSight Architecture PMU driver.
+- * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
++ * Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  *
+  */
+ 
+@@ -68,7 +68,10 @@
+ 
+ /* PMIIDR register field */
+ #define ARM_CSPMU_PMIIDR_IMPLEMENTER	GENMASK(11, 0)
++#define ARM_CSPMU_PMIIDR_REVISION	GENMASK(15, 12)
++#define ARM_CSPMU_PMIIDR_VARIANT	GENMASK(19, 16)
+ #define ARM_CSPMU_PMIIDR_PRODUCTID	GENMASK(31, 20)
++#define ARM_CSPMU_PMIIDR_PVR		GENMASK(31, 12)
+ 
+ struct arm_cspmu;
+ 
+@@ -107,15 +110,36 @@ struct arm_cspmu_impl_ops {
+ 					 struct attribute *attr, int unused);
+ };
+ 
++/* Vendor/implementer registration parameter. */
++struct arm_cspmu_impl_param {
++	/* JEDEC assigned implementer id of the vendor. */
++	u32 impl_id;
++	/*
++	 * The pvr value and mask describes the device ids covered by the
++	 * vendor backend. pvr contains the pattern of acceptable product,
++	 * variant, and revision bits from device's PMIIDR. pvr_mask contains
++	 * the relevant bits when comparing pvr. 0 value on the mask means any
++	 * pvr value is supported.
++	 */
++	u32 pvr;
++	u32 pvr_mask;
++	/* Backend module. */
++	struct module *module;
++	/* Callback to vendor backend to init arm_cspmu_impl::ops. */
++	int (*impl_init_ops)(struct arm_cspmu *cspmu);
++};
++
+ /* Vendor/implementer descriptor. */
+ struct arm_cspmu_impl {
+ 	u32 pmiidr;
+ 	struct arm_cspmu_impl_ops ops;
++	struct module *module;
+ 	void *ctx;
+ };
+ 
+ /* Coresight PMU descriptor. */
+ struct arm_cspmu {
++	struct list_head next;
+ 	struct pmu pmu;
+ 	struct device *dev;
+ 	struct acpi_apmt_node *apmt_node;
+@@ -148,4 +172,10 @@ ssize_t arm_cspmu_sysfs_format_show(struct device *dev,
+ 				    struct device_attribute *attr,
+ 				    char *buf);
+ 
++/* Register vendor backend. */
++int arm_cspmu_impl_register(const struct arm_cspmu_impl_param *impl_param);
++
++/* Unregister vendor backend. */
++void arm_cspmu_impl_unregister(const struct arm_cspmu_impl_param *impl_param);
++
+ #endif /* __ARM_CSPMU_H__ */
+diff --git a/drivers/perf/arm_cspmu/nvidia_cspmu.c b/drivers/perf/arm_cspmu/nvidia_cspmu.c
+index 72ef80caa3c8..c179849ca893 100644
+--- a/drivers/perf/arm_cspmu/nvidia_cspmu.c
++++ b/drivers/perf/arm_cspmu/nvidia_cspmu.c
+@@ -1,14 +1,18 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
++ * Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  *
+  */
+ 
+ /* Support for NVIDIA specific attributes. */
+ 
++#include <linux/module.h>
+ #include <linux/topology.h>
+ 
+-#include "nvidia_cspmu.h"
++#include "arm_cspmu.h"
++
++/* JEDEC-assigned JEP106 identification code */
++#define ARM_CSPMU_IMPL_ID_NVIDIA     0x36B
+ 
+ #define NV_PCIE_PORT_COUNT           10ULL
+ #define NV_PCIE_FILTER_ID_MASK       GENMASK_ULL(NV_PCIE_PORT_COUNT - 1, 0)
+@@ -351,7 +355,7 @@ static char *nv_cspmu_format_name(const struct arm_cspmu *cspmu,
+ 	return name;
+ }
+ 
+-int nv_cspmu_init_ops(struct arm_cspmu *cspmu)
++static int nv_cspmu_init_ops(struct arm_cspmu *cspmu)
+ {
+ 	u32 prodid;
+ 	struct nv_cspmu_ctx *ctx;
+@@ -395,6 +399,33 @@ int nv_cspmu_init_ops(struct arm_cspmu *cspmu)
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(nv_cspmu_init_ops);
++
++/* Match all NVIDIA Coresight PMU devices */
++static const struct arm_cspmu_impl_param nv_cspmu_param = {
++	.module		= THIS_MODULE,
++	.impl_id	= ARM_CSPMU_IMPL_ID_NVIDIA,
++	.pvr		= 0,
++	.pvr_mask	= 0,
++	.impl_init_ops	= nv_cspmu_init_ops
++};
++
++static int __init nvidia_cspmu_init(void)
++{
++	int ret;
++
++	ret = arm_cspmu_impl_register(&nv_cspmu_param);
++	if (ret)
++		pr_err("nvidia_cspmu backend registration error: %d\n", ret);
++
++	return ret;
++}
++
++static void __exit nvidia_cspmu_exit(void)
++{
++	arm_cspmu_impl_unregister(&nv_cspmu_param);
++}
++
++module_init(nvidia_cspmu_init);
++module_exit(nvidia_cspmu_exit);
+ 
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/perf/arm_cspmu/nvidia_cspmu.h b/drivers/perf/arm_cspmu/nvidia_cspmu.h
+deleted file mode 100644
+index 71e18f0dc50b..000000000000
+--- a/drivers/perf/arm_cspmu/nvidia_cspmu.h
++++ /dev/null
+@@ -1,17 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0
+- *
+- * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+- *
+- */
+-
+-/* Support for NVIDIA specific attributes. */
+-
+-#ifndef __NVIDIA_CSPMU_H__
+-#define __NVIDIA_CSPMU_H__
+-
+-#include "arm_cspmu.h"
+-
+-/* Allocate NVIDIA descriptor. */
+-int nv_cspmu_init_ops(struct arm_cspmu *cspmu);
+-
+-#endif /* __NVIDIA_CSPMU_H__ */
+
+base-commit: 73f2c2a7e1d2b31fdd5faa6dfa151c437a6c0a5a
+prerequisite-patch-id: fb691dc01d87597bcbaa4d352073304287c20f73
 -- 
-2.39.2
+2.17.1
 
