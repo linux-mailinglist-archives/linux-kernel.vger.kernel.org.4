@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CB96E6DCD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8246E6DCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232756AbjDRVDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S232810AbjDRVD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbjDRVDI (ORCPT
+        with ESMTP id S232773AbjDRVDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:03:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABFB7ED6;
-        Tue, 18 Apr 2023 14:03:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC73662C35;
-        Tue, 18 Apr 2023 21:03:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 155EEC433EF;
-        Tue, 18 Apr 2023 21:03:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681851786;
-        bh=wUDQT7v4d9CA1v22EaRJl1H3C9V5twleJc7yXsj1qDA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=d5Uz3AqaD26Yv+nr9cFaoJzGbvLA3JqeJLNEPT8wSh1eb6X6EvRFOZ1SKuGjyCYpx
-         eH2HpI20aWdUaPs3W5D/b6IG/WZzl6KwS/RFlYyRmrj2rU8u8rhD2yi+B+D2Asy1aG
-         QZzpLc0Q40QmOcm3NtyQ0h0gD2NQ5jFUlsl5BFNaodBkqBr1SPZwgBdjChL8Vl6K7q
-         VzDjHXH+ceP1GDR16/ib2INaiLJASQIi75eyNC3TBuwxzV7EIo15vKo9ljsrRpjMPA
-         0kVyQPK6wtnK0kOGYyaRSwpiVK5b41MoX34NS0IlllNjSRS+UpeVDKG7EhBSgiUjHy
-         8RPrv8vYiZQzA==
-Date:   Tue, 18 Apr 2023 16:03:04 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] PCI: Use of_property_present() for testing DT property
- presence
-Message-ID: <20230418210304.GA158193@bhelgaas>
+        Tue, 18 Apr 2023 17:03:25 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0E386B6
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:03:23 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id z1so20271194qti.5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:03:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1681851803; x=1684443803;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FNglwINUCAt3ccJJLEBkDRXVmh5q8gNpnI9SQ7Ogt5M=;
+        b=RY9JXHbv9rd5w05TShsS2SJI+2H8HVRVwHe3oiSLlLehgGwOC8Zy4sgi43ailu9J0U
+         LDxh6tNlr1l7dfdVd196B11QxWbTFSH0BWFwZU8paOlCPiVJYskmirZ0IPRm/2C9AXHA
+         BF2Ms72rsrPnW4WjsIqt1vC0mfPJQZ/tXILUs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681851803; x=1684443803;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FNglwINUCAt3ccJJLEBkDRXVmh5q8gNpnI9SQ7Ogt5M=;
+        b=H5psrnwrDj2CgTgsfqLA4fkUbVRxjF3tDCsf34yFQDOH6dR/PXpS4HpAAfplh7Nvn5
+         H1QF0MBlPOzG6pVworM+5g8/7xLka8qXKFNrK/VlE2wyZHZdE6cyNOTQv3AfZUYamZ6p
+         +DEmtp3Wf6w4l3FHDYmLtrpXMGPjrVs13V0zd3sV2A+OYTmcWyG+36mRJWHtJOzkJyfL
+         VMaUm89lqv2GqWSrSKVhJxNynlgRSUksMPXpwNkYfA/w4uYkONxUaTkT8w3cyZ9dpS3g
+         Bq1k/ujKgQCUEA2VUpdjiaaLqGPcDWIMdOOcOAQ/R2NschgU9aHix7vmwGLiU/S8hjSX
+         U+UA==
+X-Gm-Message-State: AAQBX9fdKAWuskEYt6csqbHBi8aS61krLMRMEm0sGDvJ58nMs8vO7qxA
+        5nYHt193H6mofoDNTd7aEWOMuA==
+X-Google-Smtp-Source: AKy350aiunplJiCaf2PviZ0YofiOv/IlFis7nCJ/CUiB4SbkEn25Zy6/Pnck783zpuJMk93zOa+1JQ==
+X-Received: by 2002:a05:622a:108:b0:3e8:d461:fae3 with SMTP id u8-20020a05622a010800b003e8d461fae3mr2111387qtw.55.1681851802595;
+        Tue, 18 Apr 2023 14:03:22 -0700 (PDT)
+Received: from localhost (55.87.194.35.bc.googleusercontent.com. [35.194.87.55])
+        by smtp.gmail.com with ESMTPSA id i1-20020ac813c1000000b003ef13aa5b0bsm2121861qtj.82.2023.04.18.14.03.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 14:03:22 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 21:03:21 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     rcu@vger.kernel.org, nathan@kernel.org, trix@redhat.com,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        paulmck@kernel.org
+Subject: Re: clangd cannot handle tree_nocb.h
+Message-ID: <20230418210321.GA3648938@google.com>
+References: <20230414005309.GA2198310@google.com>
+ <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
+ <20230418203611.GA3640630@google.com>
+ <CAKwvOdnxCJo-FoPfcNw=SBum6yRXOY7_meT8T6gsjV3c3FFm5A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230310144719.1544443-1-robh@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdnxCJo-FoPfcNw=SBum6yRXOY7_meT8T6gsjV3c3FFm5A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,101 +74,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 08:47:19AM -0600, Rob Herring wrote:
-> It is preferred to use typed property access functions (i.e.
-> of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties. As
-> part of this, convert of_get_property/of_find_property calls to the
-> recently added of_property_present() helper when we just want to test
-> for presence of a property and nothing more.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Hi Nick,
 
-Applied with AngeloGioacchino's reviewed-by to pci/enumeration for
-v6.4, thanks!
+On Tue, Apr 18, 2023 at 01:46:40PM -0700, Nick Desaulniers wrote:
+> On Tue, Apr 18, 2023 at 1:36 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> >
+> > On Fri, Apr 14, 2023 at 03:47:51PM -0700, Nick Desaulniers wrote:
+> > > On Thu, Apr 13, 2023 at 5:53 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> > > >
+> > > > Hello!
+> > > >
+> > > > I have been trying to get clangd working properly with tree_nocb.h. clangd
+> > > > trips quite badly when trying to build tree_nocb.h to generate ASTs.
+> > >
+> > > Hi Joel,
+> > > Thanks for the report.  What are you using clangd for? I'll bet
+> > > something interesting.
+> >
+> > Thanks for the response and sorry for the late reply. I am at the OSPM
+> > conference. I use vim and vscode with clangd. In vim, YCM uses it to
+> > highlight compiler errors live while editing, I am pretty happy with it so
+> > far and has been a huge time saver. Enough that now I want to use it for
+> > everything...
+> 
+> Cool! I use vim, can you share more info about your set up for this?
+> I'll have to try it.
 
-> ---
->  drivers/pci/controller/pci-tegra.c     | 4 ++--
->  drivers/pci/controller/pcie-mediatek.c | 2 +-
->  drivers/pci/hotplug/rpaphp_core.c      | 4 ++--
->  drivers/pci/of.c                       | 2 +-
->  4 files changed, 6 insertions(+), 6 deletions(-)
+This is how I installed YCM:
+
+# Install YouCompleteMe for vim
+# cd ~/.vim/bundle
+# git clone https://github.com/Valloric/YouCompleteMe.git
+# cd YouCompleteMe/
+# git submodule update --init --recursive
+# python3 install.py --clang-completer
+
+Then install and run bear in the kernel sources to generate
+compile_compands.json:
+bear -- make -j99 CC=clang
+
+However, there's also the script:
+scripts/clang-tools/gen_compile_commands.py
+
+This generates the .json from an existing build. Thank God because we can
+probably make this generate better .json files which may make clangd better.
+
+You don't need YCM to reproduce the issue though if you just use vscode with
+the clangd plugin.
+
+> > I first came across clangd when developing Chrome userspace code which is C++
+> > :). In Chrome, ninja builds can be made to output compile_commands.json.
+> > However, now I noticed the support in the kernel and was like, wow I need to
+> > try it. Further, YCM seems to work much better with it than without :)
+> >
+> > > I've never used it myself, so I don't know where to even begin with
+> > > how to reproduce the issue.
+> >
+> > Ah ok. :). When I ran get_maintainer on the script, your name popped up and
+> > someone also suggested that you're the goto person for clang on the kernel
+> > (which I kind of already knew ;)
 > 
-> diff --git a/drivers/pci/controller/pci-tegra.c b/drivers/pci/controller/pci-tegra.c
-> index 74c109f14ff0..79630885b9c8 100644
-> --- a/drivers/pci/controller/pci-tegra.c
-> +++ b/drivers/pci/controller/pci-tegra.c
-> @@ -1375,7 +1375,7 @@ static int tegra_pcie_phys_get(struct tegra_pcie *pcie)
->  	struct tegra_pcie_port *port;
->  	int err;
->  
-> -	if (!soc->has_gen2 || of_find_property(np, "phys", NULL) != NULL)
-> +	if (!soc->has_gen2 || of_property_present(np, "phys"))
->  		return tegra_pcie_phys_get_legacy(pcie);
->  
->  	list_for_each_entry(port, &pcie->ports, list) {
-> @@ -1944,7 +1944,7 @@ static bool of_regulator_bulk_available(struct device_node *np,
->  	for (i = 0; i < num_supplies; i++) {
->  		snprintf(property, 32, "%s-supply", supplies[i].supply);
->  
-> -		if (of_find_property(np, property, NULL) == NULL)
-> +		if (!of_property_present(np, property))
->  			return false;
->  	}
->  
-> diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
-> index ae5ad05ddc1d..31de7a29192c 100644
-> --- a/drivers/pci/controller/pcie-mediatek.c
-> +++ b/drivers/pci/controller/pcie-mediatek.c
-> @@ -643,7 +643,7 @@ static int mtk_pcie_setup_irq(struct mtk_pcie_port *port,
->  		return err;
->  	}
->  
-> -	if (of_find_property(dev->of_node, "interrupt-names", NULL))
-> +	if (of_property_present(dev->of_node, "interrupt-names"))
->  		port->irq = platform_get_irq_byname(pdev, "pcie_irq");
->  	else
->  		port->irq = platform_get_irq(pdev, port->slot);
-> diff --git a/drivers/pci/hotplug/rpaphp_core.c b/drivers/pci/hotplug/rpaphp_core.c
-> index 491986197c47..2316de0fd198 100644
-> --- a/drivers/pci/hotplug/rpaphp_core.c
-> +++ b/drivers/pci/hotplug/rpaphp_core.c
-> @@ -278,7 +278,7 @@ int rpaphp_check_drc_props(struct device_node *dn, char *drc_name,
->  		return -EINVAL;
->  	}
->  
-> -	if (of_find_property(dn->parent, "ibm,drc-info", NULL))
-> +	if (of_property_present(dn->parent, "ibm,drc-info"))
->  		return rpaphp_check_drc_props_v2(dn, drc_name, drc_type,
->  						be32_to_cpu(*my_index));
->  	else
-> @@ -440,7 +440,7 @@ int rpaphp_add_slot(struct device_node *dn)
->  	if (!of_node_name_eq(dn, "pci"))
->  		return 0;
->  
-> -	if (of_find_property(dn, "ibm,drc-info", NULL))
-> +	if (of_property_present(dn, "ibm,drc-info"))
->  		return rpaphp_drc_info_add_slot(dn);
->  	else
->  		return rpaphp_drc_add_slot(dn);
-> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-> index 196834ed44fe..e085f2eca372 100644
-> --- a/drivers/pci/of.c
-> +++ b/drivers/pci/of.c
-> @@ -447,7 +447,7 @@ static int of_irq_parse_pci(const struct pci_dev *pdev, struct of_phandle_args *
->  		return -ENODEV;
->  
->  	/* Local interrupt-map in the device node? Use it! */
-> -	if (of_get_property(dn, "interrupt-map", NULL)) {
-> +	if (of_property_present(dn, "interrupt-map")) {
->  		pin = pci_swizzle_interrupt_pin(pdev, pin);
->  		ppnode = dn;
->  	}
-> -- 
-> 2.39.2
+> You've cc'ed the right set of folks.  We might not have the expertise
+> related to clangd specifically, but we can point you in the right
+> direction.
+
+Sure, thanks! And thanks for CC'ing the right folks.
+
+> > > It might be worth filing a bug upstream at
+> > > https://github.com/llvm/llvm-project/issues
+> > > or internally under the component
+> > > Language Platforms > C++ > Clang > Tools > Clangd
+> > > with detailed steps to reproduce (and what the observed error actually
+> > > is). Feel free to cc me, though I don't know the first thing about
+> > > clangd.
+> >
+> > Ok I will consider doing this if needed. One thing I do observe is lack of
+> > good support for header files and it is a known clangd issue [1].
+> >
+> > However, the fixes I was proposing can purely be done in the kernel itself
+> > since all it'd require is generating compile_compands.json with the -D<macro>
+> > and editing files to keep clangd happy. I guess one question is, how welcome
+> > would such changes to header files be since they're for tooling and isn't
+> > code that will be compiled outside of clangd.
 > 
+> Specifically your patch sites some log print that doesn't look
+> indicative of a failure:
+> https://github.com/llvm/llvm-project/blob/53430bfd5c9d0074dd6de06dccea366e1d40bce4/clang-tools-extra/clangd/TUScheduler.cpp#L903-L906
+> so something else is going on here. Just trying to make sure we root cause this.
 > 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+Right, so clangd's log does not show failure, the failure is when it displays
+in the code editor that your code has compiler errors when in fact it does
+not.
+
+So if you open up tree_nocb.h in vscode, for example, you'll see squiggles
+saying 'undefined reference to rcu_data', etc. That makes clangd stop working
+at the error. Sorry to not make the failure mode clear earlier.
+
+thanks,
+
+ - Joel
+
