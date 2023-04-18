@@ -2,189 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7799E6E57C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 05:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9816E57C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 05:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjDRDNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 23:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
+        id S229838AbjDRDPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 23:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjDRDNO (ORCPT
+        with ESMTP id S229619AbjDRDPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 23:13:14 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2069.outbound.protection.outlook.com [40.107.113.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B163595;
-        Mon, 17 Apr 2023 20:13:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bw22XDPvCaxljH9Cmb7/c8NZqziaFFjDa2goBZ8q/cxLAg1j7jTntb3BMlQXiSm4GDu18otFDj9p05rszXiLz/obBuWi1isoy46V7mh5Rsrj4snD/vSwLvgFxzuaIbfcxoU1WD6d/860k8CwHREzbzkltq2g7EgVUI1AL77fO4AxV/lHGMsPiB2gD+vjbcrgmERV7Jtf3e4somfiHONJ92YyPh8WVBskryXafgn9O2tKVCrY+OwVqCbfFeldqMrA5mJS6bYDIs3ENJyZye1YkfQP6OMEOH7E2KDDaOROSNuvjwfAAcTyNv6ZMgbDZ5t0q83g1N8bwA/pqa57AmTPTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+q7cU4B1tMDYkJWqm40q8PY5Op4S2XqTEMtpFoYiAls=;
- b=NJq0uffZDI2pihvZxNApI29myi/lglMm+PcGXRqPT0kEyo6aygmFVVDHMla3o/mnSvsH20C4tXtrQ1WiPvjhoU5ib8AdcdAIp/DhUkiWDImB/SRO0Uq7dbKk+AYqdnLw15YqZpWxO+aB1EFuJGJj0tAZJ7B6c0DwA0wK5rJ1s6NOhCBumzGQg7lIhmKBhsUqguOvuP1/0zm2/UVaC5TPHrVSsEy4QtQrC/smWd49/aJow8cFblkevcf5P2KwjuWHqBe4Sr4RmbDHW1Fue+4LxO2TxXmaCGgwPx9IycAezisY7l2gwAKgjtd0437PlVIV3qE+bwALgXMpwBulJrDZag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
- header.d=nec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+q7cU4B1tMDYkJWqm40q8PY5Op4S2XqTEMtpFoYiAls=;
- b=RBXFjyA3C8W03N6z8v+hK5kJjnWiHkk6CpxP/YuQcgwC9zq/eVPQ36wesM+DaBXP+1pMUBtRlYPWm5Q1F/TC7byCaMxKY8Lkx39Q9Uv4wG9AkI1y9+Bzbz96Esl8oA68BueJ4YUXMXDxBujYcMmvRfRymo91UYIN4pX2Gffq2w8=
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
- by TY3PR01MB10384.jpnprd01.prod.outlook.com (2603:1096:400:250::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
- 2023 03:13:10 +0000
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::22a3:7e89:cc26:15c8]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::22a3:7e89:cc26:15c8%7]) with mapi id 15.20.6298.045; Tue, 18 Apr 2023
- 03:13:10 +0000
-From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-CC:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH v2] mm: hwpoison: coredump: support recovery from
- dump_user_range()
-Thread-Topic: [PATCH v2] mm: hwpoison: coredump: support recovery from
- dump_user_range()
-Thread-Index: AQHZcaO0la0PeSJsOESJfU1UoYMpbA==
-Date:   Tue, 18 Apr 2023 03:13:10 +0000
-Message-ID: <20230418031243.GA2845864@hori.linux.bs1.fc.nec.co.jp>
-References: <20230417045323.11054-1-wangkefeng.wang@huawei.com>
-In-Reply-To: <20230417045323.11054-1-wangkefeng.wang@huawei.com>
-Accept-Language: ja-JP, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nec.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYWPR01MB8591:EE_|TY3PR01MB10384:EE_
-x-ms-office365-filtering-correlation-id: a8c100a1-2604-4bad-20ff-08db3fbad6b3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5alKqzi1o7J2g2CUhNvcPdunFN47IFLDq0ZN450kS0MMt9DnmRoh7OnOWCJf2RX4SSu7Oll6r3ysZsjOdxhfce6DBY6uE4UEW8wVccelVhqU3XCFKsdE3ScO0pzXrXaxAbpMrmtbcJfONMutJa9wxB2tePiYsgu7qKTtboKiTqN0d+thfiy6y0zehy3L+MlTDqwM2XfWKiONHBuWC39ss5/8aGlDGGvYPnsus0TktxYJHqlrABrxjBAo565nPQUHhQJ56nXTg/YLcVGoXlsMMiKQClAujnwxpOSE2QQa1/uK+2dHvZ7Ti7oSqr8ST2nqb1t3ODgQVdlb0j/jAKaSx9rH1/b99+F1sjJALaxjxZNZG/7I6GL9KVanLNkeRephfGPj7M+1HA3+IQAHGpk8dquqQHHJavITE9s9Y5zxnMF4SbCNsiqYXeL8zxiGz9Rh7TNfY3gSj5Abq+QNUOXsyPKLXZoF98LennJ6/ylG+E6bm4yxBnz144MspwLq+l1SLlXJ/IRIUIXCAWubbrTZPg/8FomFRfOT62u52WtdKhCdKTWeflP2yBIDYf7/M67KYIy5x0SQIrilFy9qsfYMw1hJrGiF++jR+QRj1eXnNNSbd6ltudHFO5rpkuSyOR9P
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(376002)(39860400002)(396003)(451199021)(38100700002)(8936002)(8676002)(122000001)(38070700005)(5660300002)(7416002)(2906002)(85182001)(33656002)(86362001)(478600001)(6486002)(71200400001)(54906003)(186003)(9686003)(6512007)(1076003)(66946007)(6506007)(76116006)(66476007)(66446008)(26005)(41300700001)(82960400001)(316002)(83380400001)(6916009)(4326008)(64756008)(66556008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cHhpaVUvN0JiUmhCM3cyU3BBWDVScVV0eFVYdy9iVURxZ1M5aWlpQ0JUSUd4?=
- =?utf-8?B?VnNFUms2TW8yVUJ5K1J3VGNWUmVlRlRIYXhIR1FyMFFUMWFZZG9aR1l2UHB1?=
- =?utf-8?B?WW81N2dMWXlmUGJJSitjZnBza0FueVllTGFVUWNXaUJwRzZ0YTdNbTloRlFj?=
- =?utf-8?B?dVJLcUw5a0s4L011VUlHMWdGeDhteldGcWNmOCtKSzE4OU1hcXRpNGZvU1Fy?=
- =?utf-8?B?K1gyZmZybSttUTRlQVdIZHNiZTFXL3hWR2x0ZjNqVDFsalZDZjh4OXU5dFhE?=
- =?utf-8?B?SlZ4SWt0NlZCdmdqSnRMQmFXcGttSzZtWmRXVTRRbnMwTjhCSHVhWU4rSnY5?=
- =?utf-8?B?cENmaFNVU0YyRHRXU1FJd0lEWFN3cjhuL3JMd2dXaGkvVEYzdDh0RWtKYVo2?=
- =?utf-8?B?NjBVVkVodURaNDJMTXhORzl6RVVnL0k3YVltd3JPekJnUnAyS2NTdml6M2Nz?=
- =?utf-8?B?WnZrV3QrdGY1RzBsa2FCN1FlR2ZhQi9PNFhpNFZvU3c2Qnc1Qmlkblg0YXBD?=
- =?utf-8?B?TnhYVWEvdUUvMUVnc2xrcEF1Y1lwbHlMWEVidkM0OFBoemRCaFNBcGZyM2FC?=
- =?utf-8?B?akpjVDYxdDhrcnljSWxJbzVjWURzbVo5UWJXNnQ1dFFONVM1YzRKbzhNWWo3?=
- =?utf-8?B?OXhhdGRYSitVcEh4NDFlQVdxZElZbWFrckx0YUpWazJCYVlkYjY2MmprdDI5?=
- =?utf-8?B?RzRVTXFtUEVJeHdnOVZBRk5pUDVLajkzYjFQbVNXRnRnRlUrNVo5dmNKanBS?=
- =?utf-8?B?K1BMMy9Ub0VHV214dWVqTERmOUhaWHA4bGdLMlEwK21zOXJlRnRpYWZaZlVJ?=
- =?utf-8?B?eFQ1Z2JobVRhb09zeWlTaXZhUERwVEhza3Q5YVBxRkRpSE15dVhYY0JUMURM?=
- =?utf-8?B?SDVWSS85ZW1kRWFDVkNzZzdJMEdCa2c4OXBnNkhsd2dIU2ZIb0tCZGRqUmd4?=
- =?utf-8?B?RUpEc1VtZzR1RlFaNWtvS1NCY1kwamdOS1J3KzJqUjhQaklHU2cwaW5kOCtV?=
- =?utf-8?B?Q2VYN1NQMEozUEdxSytFZGwzdU9nVU15bFdZb2FEZStvUjZqWFpwaGxzV0ZY?=
- =?utf-8?B?ZElQc2NPMml0c1A2VDRxQ0FlSERNR3IzVlB1aEZvUE5vTzFidTJGMXdTZnk0?=
- =?utf-8?B?N05ySzlQQWdzQW1Bamo3WWJjMm5VRmswQklnVHBWc0hLQUthdDRmN0JuaU9l?=
- =?utf-8?B?WlRLR0M0bmR6blBzYWdkRWNrc0hGNjJRNDdpcDc5MlVENnlvNkFnU1JEbTFn?=
- =?utf-8?B?Z3dRT2dKYWp6TFU3WW43Y1ZVQkRzM3RsNHlvVWxlQ2paWFdIYXFZbDdGTmds?=
- =?utf-8?B?cE5pejVBaUdkdFZrMHorREN6SHpCQnVweWJBQWJwa0VNU2hkN3BqWVZwa2sr?=
- =?utf-8?B?cmZHTlRYU1gyRkNmTHFQSC9oQzA0T1c4L3V1OFVqN0tUQlVDeDg5K2NaMnNo?=
- =?utf-8?B?ZGpTM3JlYkdkUERHTng2djZRUE9hTEs2WGhyM000WkIwaFNrNy9BNHFuRnlZ?=
- =?utf-8?B?ZHZpamEzSWh6ckFJZjNvMEVGeVpyOXpmNE1WU083L0s2TTdtZStRcDQxdzB2?=
- =?utf-8?B?bEpPM2pZTEd3dDFhbHdzdUZ0ekhCd1BsS3JXY2RSZU10ODVxNXoyc2dCa2pu?=
- =?utf-8?B?RytyU3o5K0FxMXB1OWt4a2I0bStrdGtYSEdLODd5V2JEMFhiR2s3TUxhcEZz?=
- =?utf-8?B?MTFwd3Q1akVXa2lOdUZLQ2RxcHNZb0NpbHhlUncwNWJvVzArRFNGQWtXTFYz?=
- =?utf-8?B?R3J5TjhVWXJrdWc2T3o5NkFTNWJvZWZBSGttMytuRFRKZWFub3pKdGpyd1pz?=
- =?utf-8?B?anc3RVRnUkpmL2gvdzNZMWpGem80UWUzdzJ4OUcyeUpJK0JuWlROYUhZU2l6?=
- =?utf-8?B?YVBqQVIvVHdiNzlyUk4vc0Nad2FpUFFPQTlib0FYVVg3OGJDNGNpdmhnbVhn?=
- =?utf-8?B?YjducGJBQjFteXBGYTRHMnl0TWswS2g4NFhDd29USVFQRmlHQ0g5Qm1FV3dM?=
- =?utf-8?B?ZGlCWEpFcWtlbUVUN2tZcnBVUHhwV3JPMnhUYkNzZ0lobU5qMmhPNUZ1ZzhX?=
- =?utf-8?B?eWZUaWpZVHpBZlNDajh2WDdxUEJncm45cThsZ3VZeUQ3N3M0UHU5cDNWZjdR?=
- =?utf-8?B?eitHR2RZQVZmMWxVVWpwczQyQWhhUmhOWmZ1RksrbWtVUWFGYzBpN2R2ZVpu?=
- =?utf-8?B?akE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <30A01079343871419B8B0DF6B1A7FC89@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 17 Apr 2023 23:15:19 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734B43595;
+        Mon, 17 Apr 2023 20:15:15 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [7.221.188.120])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q0pq65qq2zncGG;
+        Tue, 18 Apr 2023 11:11:30 +0800 (CST)
+Received: from M910t (10.110.54.157) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 18 Apr
+ 2023 11:14:39 +0800
+Date:   Tue, 18 Apr 2023 11:14:23 +0800
+From:   Changbin Du <changbin.du@huawei.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+CC:     Changbin Du <changbin.du@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Hui Wang <hw.huiwang@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH v4 2/2] perf: script: add new output field 'dsoff' to
+ print dso offset
+Message-ID: <20230418031423.k4muoccyqyzuc2ss@M910t>
+References: <20230414032547.2767909-1-changbin.du@huawei.com>
+ <20230414032547.2767909-3-changbin.du@huawei.com>
+ <7f629f24-d98a-8a7d-e464-46b0237adf96@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8c100a1-2604-4bad-20ff-08db3fbad6b3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2023 03:13:10.1528
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uEZx7SuTHOg3W9BsQJILgk92mXHVF43xCoEZfR75349nBfa/KVIdasqf7/mBnB9Cuj096wccSeyHSUGqkilYuA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB10384
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <7f629f24-d98a-8a7d-e464-46b0237adf96@intel.com>
+X-Originating-IP: [10.110.54.157]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCBBcHIgMTcsIDIwMjMgYXQgMTI6NTM6MjNQTSArMDgwMCwgS2VmZW5nIFdhbmcgd3Jv
-dGU6DQo+IFRoZSBkdW1wX3VzZXJfcmFuZ2UoKSBpcyB1c2VkIHRvIGNvcHkgdGhlIHVzZXIgcGFn
-ZSB0byBhIGNvcmVkdW1wIGZpbGUsDQo+IGJ1dCBpZiBhIGhhcmR3YXJlIG1lbW9yeSBlcnJvciBv
-Y2N1cnJlZCBkdXJpbmcgY29weSwgd2hpY2ggY2FsbGVkIGZyb20NCj4gX19rZXJuZWxfd3JpdGVf
-aXRlcigpIGluIGR1bXBfdXNlcl9yYW5nZSgpLCBpdCBjcmFzaGVzLA0KPiANCj4gICBDUFU6IDEx
-MiBQSUQ6IDcwMTQgQ29tbTogbWNhLXJlY292ZXIgTm90IHRhaW50ZWQgNi4zLjAtcmMyICM0MjUN
-Cj4gIA0KPiAgIHBjIDogX19tZW1jcHkrMHgxMTAvMHgyNjANCj4gICBsciA6IF9jb3B5X2Zyb21f
-aXRlcisweDNiYy8weDRjOA0KPiAgIC4uLg0KPiAgIENhbGwgdHJhY2U6DQo+ICAgIF9fbWVtY3B5
-KzB4MTEwLzB4MjYwDQo+ICAgIGNvcHlfcGFnZV9mcm9tX2l0ZXIrMHhjYy8weDEzMA0KPiAgICBw
-aXBlX3dyaXRlKzB4MTY0LzB4NmQ4DQo+ICAgIF9fa2VybmVsX3dyaXRlX2l0ZXIrMHg5Yy8weDIx
-MA0KPiAgICBkdW1wX3VzZXJfcmFuZ2UrMHhjOC8weDFkOA0KPiAgICBlbGZfY29yZV9kdW1wKzB4
-MzA4LzB4MzY4DQo+ICAgIGRvX2NvcmVkdW1wKzB4MmU4LzB4YTQwDQo+ICAgIGdldF9zaWduYWwr
-MHg1OWMvMHg3ODgNCj4gICAgZG9fc2lnbmFsKzB4MTE4LzB4MWY4DQo+ICAgIGRvX25vdGlmeV9y
-ZXN1bWUrMHhmMC8weDI4MA0KPiAgICBlbDBfZGErMHgxMzAvMHgxMzgNCj4gICAgZWwwdF82NF9z
-eW5jX2hhbmRsZXIrMHg2OC8weGMwDQo+ICAgIGVsMHRfNjRfc3luYysweDE4OC8weDE5MA0KPiAN
-Cj4gR2VuZXJhbGx5LCB0aGUgJy0+d3JpdGVfaXRlcicgb2YgZmlsZSBvcHMgd2lsbCB1c2UgY29w
-eV9wYWdlX2Zyb21faXRlcigpDQo+IGFuZCBjb3B5X3BhZ2VfZnJvbV9pdGVyX2F0b21pYygpLCBj
-aGFuZ2UgbWVtY3B5KCkgdG8gY29weV9tY190b19rZXJuZWwoKQ0KPiBpbiBib3RoIG9mIHRoZW0g
-dG8gaGFuZGxlICNNQyBkdXJpbmcgc291cmNlIHJlYWQsIHdoaWNoIHN0b3AgY29yZWR1bXANCj4g
-cHJvY2Vzc2luZyBhbmQga2lsbCB0aGUgdGFzayBpbnN0ZWFkIG9mIGtlcm5lbCBwYW5pYywgYnV0
-IHRoZSBzb3VyY2UNCj4gYWRkcmVzcyBtYXkgbm90IGFsd2F5cyBhIHVzZXIgYWRkcmVzcywgc28g
-aW50cm9kdWNlIGEgbmV3IGNvcHlfbWMgZmxhZyBpbg0KPiBzdHJ1Y3QgaW92X2l0ZXJ7fSB0byBp
-bmRpY2F0ZSB0aGF0IHRoZSBpdGVyIGNvdWxkIGRvIGEgc2FmZSBtZW1vcnkgY29weSwNCj4gYWxz
-byBpbnRyb2R1Y2UgdGhlIGhlbHBlcnMgdG8gc2V0L2NsZWNrIHRoZSBmbGFnLCBmb3Igbm93LCBp
-dCdzIG9ubHkNCj4gdXNlZCBpbiBjb3JlZHVtcCdzIGR1bXBfdXNlcl9yYW5nZSgpLCBidXQgaXQg
-Y291bGQgZXhwYW5kIHRvIGFueSBvdGhlcg0KPiBzY2VuYXJpb3MgdG8gZml4IHRoZSBzaW1pbGFy
-IGlzc3VlLg0KPiANCj4gQ2M6IEFsZXhhbmRlciBWaXJvIDx2aXJvQHplbml2LmxpbnV4Lm9yZy51
-az4NCj4gQ2M6IENocmlzdGlhbiBCcmF1bmVyIDxicmF1bmVyQGtlcm5lbC5vcmc+DQo+IENjOiBN
-aWFvaGUgTGluIDxsaW5taWFvaGVAaHVhd2VpLmNvbT4NCj4gQ2M6IE5hb3lhIEhvcmlndWNoaSA8
-bmFveWEuaG9yaWd1Y2hpQG5lYy5jb20+DQo+IENjOiBUb25nIFRpYW5nZW4gPHRvbmd0aWFuZ2Vu
-QGh1YXdlaS5jb20+DQo+IENjOiBKZW5zIEF4Ym9lIDxheGJvZUBrZXJuZWwuZGs+DQo+IFNpZ25l
-ZC1vZmYtYnk6IEtlZmVuZyBXYW5nIDx3YW5na2VmZW5nLndhbmdAaHVhd2VpLmNvbT4NCj4gLS0t
-DQo+IHYyOg0KPiAtIG1vdmUgdGhlIGhlbHBlciBmdW5jdGlvbnMgdW5kZXIgcHJlLWV4aXN0aW5n
-IENPTkZJR19BUkNIX0hBU19DT1BZX01DDQo+IC0gcmVwb3NpdGlvbiB0aGUgY29weV9tYyBpbiBz
-dHJ1Y3QgaW92X2l0ZXIgZm9yIGVhc3kgbWVyZ2UsIHN1Z2dlc3RlZA0KPiAgIGJ5IEFuZHJldyBN
-b3J0b24NCj4gLSBkcm9wIHVubmVjZXNzYXJ5IGNsZWFyIGZsYWcgaGVscGVyDQo+IC0gZml4IGNo
-ZWNrcGF0Y2ggd2FybmluZw0KPiAgZnMvY29yZWR1bXAuYyAgICAgICB8ICAxICsNCj4gIGluY2x1
-ZGUvbGludXgvdWlvLmggfCAxNiArKysrKysrKysrKysrKysrDQo+ICBsaWIvaW92X2l0ZXIuYyAg
-ICAgIHwgMTcgKysrKysrKysrKysrKysrLS0NCj4gIDMgZmlsZXMgY2hhbmdlZCwgMzIgaW5zZXJ0
-aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4gDQouLi4NCj4gQEAgLTM3MSw2ICszNzIsMTQgQEAg
-c2l6ZV90IF9jb3B5X21jX3RvX2l0ZXIoY29uc3Qgdm9pZCAqYWRkciwgc2l6ZV90IGJ5dGVzLCBz
-dHJ1Y3QgaW92X2l0ZXIgKmkpDQo+ICBFWFBPUlRfU1lNQk9MX0dQTChfY29weV9tY190b19pdGVy
-KTsNCj4gICNlbmRpZiAvKiBDT05GSUdfQVJDSF9IQVNfQ09QWV9NQyAqLw0KPiAgDQo+ICtzdGF0
-aWMgdm9pZCAqbWVtY3B5X2Zyb21faXRlcihzdHJ1Y3QgaW92X2l0ZXIgKmksIHZvaWQgKnRvLCBj
-b25zdCB2b2lkICpmcm9tLA0KPiArCQkJCSBzaXplX3Qgc2l6ZSkNCj4gK3sNCj4gKwlpZiAoaW92
-X2l0ZXJfaXNfY29weV9tYyhpKSkNCj4gKwkJcmV0dXJuICh2b2lkICopY29weV9tY190b19rZXJu
-ZWwodG8sIGZyb20sIHNpemUpOw0KDQpJcyBpdCBoZWxwZnVsIHRvIGNhbGwgbWVtb3J5X2ZhaWx1
-cmVfcXVldWUoKSBpZiBjb3B5X21jX3RvX2tlcm5lbCgpIGZhaWxzDQpkdWUgdG8gYSBtZW1vcnkg
-ZXJyb3I/DQoNClRoYW5rcywNCk5hb3lhIEhvcmlndWNoaQ0KDQo+ICsJcmV0dXJuIG1lbWNweSh0
-bywgZnJvbSwgc2l6ZSk7DQo+ICt9DQo+ICsNCj4gIHNpemVfdCBfY29weV9mcm9tX2l0ZXIodm9p
-ZCAqYWRkciwgc2l6ZV90IGJ5dGVzLCBzdHJ1Y3QgaW92X2l0ZXIgKmkpDQo+ICB7DQo+ICAJaWYg
-KFdBUk5fT05fT05DRSghaS0+ZGF0YV9zb3VyY2UpKQ==
+On Mon, Apr 17, 2023 at 08:40:37AM +0300, Adrian Hunter wrote:
+> On 14/04/23 06:25, Changbin Du wrote:
+> > This adds a new 'dsoff' field to print dso offset for resolved symbols,
+> > and the offset is appended to dso name.
+> > 
+> > Default output:
+> > $ perf script
+> >        ls 2695501 3011030.487017:     500000 cycles:      152cc73ef4b5 get_common_indices.constprop.0+0x155 (/usr/lib/x86_64-linux-gnu/ld-2.31.so)
+> >        ls 2695501 3011030.487018:     500000 cycles:  ffffffff99045b3e [unknown] ([unknown])
+> >        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968e107 [unknown] ([unknown])
+> >        ls 2695501 3011030.487018:     500000 cycles:  ffffffffc1f54afb [unknown] ([unknown])
+> >        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968382f [unknown] ([unknown])
+> >        ls 2695501 3011030.487019:     500000 cycles:  ffffffff99e00094 [unknown] ([unknown])
+> >        ls 2695501 3011030.487019:     500000 cycles:      152cc718a8d0 __errno_location@plt+0x0 (/usr/lib/x86_64-linux-gnu/libselinux.so.1)
+> > 
+> > Display 'dsoff' field:
+> > $ perf script -F +dsoff
+> >        ls 2695501 3011030.487017:     500000 cycles:      152cc73ef4b5 get_common_indices.constprop.0+0x155 (/usr/lib/x86_64-linux-gnu/ld-2.31.so+0x1c4b5)
+> >        ls 2695501 3011030.487018:     500000 cycles:  ffffffff99045b3e [unknown] ([unknown])
+> >        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968e107 [unknown] ([unknown])
+> >        ls 2695501 3011030.487018:     500000 cycles:  ffffffffc1f54afb [unknown] ([unknown])
+> >        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968382f [unknown] ([unknown])
+> >        ls 2695501 3011030.487019:     500000 cycles:  ffffffff99e00094 [unknown] ([unknown])
+> >        ls 2695501 3011030.487019:     500000 cycles:      152cc718a8d0 __errno_location@plt+0x0 (/usr/lib/x86_64-linux-gnu/libselinux.so.1+0x68d0)
+> >        ls 2695501 3011030.487019:     500000 cycles:  ffffffff992a6db0 [unknown] ([unknown])
+> > 
+> > Signed-off-by: Changbin Du <changbin.du@huawei.com>
+> 
+> Looks good, but patches do not apply to:
+> 
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf-tools-next
+> 
+> Note the use of map__dso(map) now.
+>
+I will rebase to perf-tools-next.
+
+> Also the repeated dso printing code:
+> 
+> 	printed += fprintf(fp, "(");
+> 	printed += map__fprintf_dsoname(map, fp);
+> 	if (PRINT_FIELD(DSOFF) && map && map__dso(map))
+> 		printed += fprintf(fp, "+0x%" PRIx64, alf.addr);
+> 	printed += fprintf(fp, ")");
+> 
+> is begging to be replaced by a helper function e.g.
+> 
+> 	if (PRINT_FIELD(DSO))
+> 		map__fprintf_dsoname_dsoff(map, PRINT_FIELD(DSOFF), addr, fp);
+> 
+> Perhaps another patch for that.
+> 
+ok, will add another patch for this helper function.
+
+> Also see comment further below.
+> 
+> > ---
+> >  tools/perf/Documentation/perf-script.txt |  2 +-
+> >  tools/perf/builtin-script.c              | 25 +++++++++++++++++++++++-
+> >  tools/perf/util/evsel_fprintf.c          |  6 ++++++
+> >  tools/perf/util/evsel_fprintf.h          |  1 +
+> >  4 files changed, 32 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/tools/perf/Documentation/perf-script.txt b/tools/perf/Documentation/perf-script.txt
+> > index 68e37de5fae4..20a1558c555f 100644
+> > --- a/tools/perf/Documentation/perf-script.txt
+> > +++ b/tools/perf/Documentation/perf-script.txt
+> > @@ -130,7 +130,7 @@ OPTIONS
+> >  -F::
+> >  --fields::
+> >          Comma separated list of fields to print. Options are:
+> > -        comm, tid, pid, time, cpu, event, trace, ip, sym, dso, addr, symoff,
+> > +        comm, tid, pid, time, cpu, event, trace, ip, sym, dso, dsoff, addr, symoff,
+> >          srcline, period, iregs, uregs, brstack, brstacksym, flags, bpf-output,
+> >          brstackinsn, brstackinsnlen, brstackoff, callindent, insn, insnlen, synth,
+> >          phys_addr, metric, misc, srccode, ipc, data_page_size, code_page_size, ins_lat,
+> > diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> > index 69394ac0a20d..95dd6d650c21 100644
+> > --- a/tools/perf/builtin-script.c
+> > +++ b/tools/perf/builtin-script.c
+> > @@ -130,6 +130,7 @@ enum perf_output_field {
+> >  	PERF_OUTPUT_BRSTACKINSNLEN  = 1ULL << 36,
+> >  	PERF_OUTPUT_MACHINE_PID     = 1ULL << 37,
+> >  	PERF_OUTPUT_VCPU            = 1ULL << 38,
+> > +	PERF_OUTPUT_DSOFF           = 1ULL << 39,
+> >  };
+> >  
+> >  struct perf_script {
+> > @@ -171,6 +172,7 @@ struct output_option {
+> >  	{.str = "ip",    .field = PERF_OUTPUT_IP},
+> >  	{.str = "sym",   .field = PERF_OUTPUT_SYM},
+> >  	{.str = "dso",   .field = PERF_OUTPUT_DSO},
+> > +	{.str = "dsoff", .field = PERF_OUTPUT_DSOFF},
+> >  	{.str = "addr",  .field = PERF_OUTPUT_ADDR},
+> >  	{.str = "symoff", .field = PERF_OUTPUT_SYMOFFSET},
+> >  	{.str = "srcline", .field = PERF_OUTPUT_SRCLINE},
+> > @@ -559,6 +561,9 @@ static void set_print_ip_opts(struct perf_event_attr *attr)
+> >  	if (PRINT_FIELD(DSO))
+> >  		output[type].print_ip_opts |= EVSEL__PRINT_DSO;
+> >  
+> > +	if (PRINT_FIELD(DSOFF))
+> > +		output[type].print_ip_opts |= EVSEL__PRINT_DSOFF;
+> > +
+> >  	if (PRINT_FIELD(SYMOFFSET))
+> >  		output[type].print_ip_opts |= EVSEL__PRINT_SYMOFFSET;
+> >  
+> > @@ -612,6 +617,10 @@ static int perf_session__check_output_opt(struct perf_session *session)
+> >  		if (evsel == NULL)
+> >  			continue;
+> >  
+> > +		/* 'dsoff' implys 'dso' field */
+> > +		if (output[j].fields & PERF_OUTPUT_DSOFF)
+> > +			output[j].fields |= PERF_OUTPUT_DSO;
+> > +
+> >  		set_print_ip_opts(&evsel->core.attr);
+> >  		tod |= output[j].fields & PERF_OUTPUT_TOD;
+> >  	}
+> > @@ -916,6 +925,8 @@ static int perf_sample__fprintf_brstack(struct perf_sample *sample,
+> >  		if (PRINT_FIELD(DSO)) {
+> >  			printed += fprintf(fp, "(");
+> >  			printed += map__fprintf_dsoname(alf.map, fp);
+> > +			if (PRINT_FIELD(DSOFF) && alf.map && alf.map->dso)
+> > +				printed += fprintf(fp, "+0x%lx", alf.addr);
+> 
+> Here and elsewhere, addr is a u64 so you
+> need to use PRIx64 e.g.
+> 
+fixed, thanks!
+
+> 	printed += fprintf(fp, "+0x%" PRIx64, alf.addr);
+> 
+> >  			printed += fprintf(fp, ")");
+> >  		}
+> >  
+> > @@ -923,6 +934,8 @@ static int perf_sample__fprintf_brstack(struct perf_sample *sample,
+> >  		if (PRINT_FIELD(DSO)) {
+> >  			printed += fprintf(fp, "(");
+> >  			printed += map__fprintf_dsoname(alt.map, fp);
+> > +			if (PRINT_FIELD(DSOFF) && alt.map && alt.map->dso)
+> > +				printed += fprintf(fp, "+0x%lx", alt.addr);
+> >  			printed += fprintf(fp, ")");
+> >  		}
+> >  
+> > @@ -959,6 +972,8 @@ static int perf_sample__fprintf_brstacksym(struct perf_sample *sample,
+> >  		if (PRINT_FIELD(DSO)) {
+> >  			printed += fprintf(fp, "(");
+> >  			printed += map__fprintf_dsoname(alf.map, fp);
+> > +			if (PRINT_FIELD(DSOFF) && alf.map && alf.map->dso)
+> > +				printed += fprintf(fp, "+0x%lx", alf.addr);
+> >  			printed += fprintf(fp, ")");
+> >  		}
+> >  		printed += fprintf(fp, "%c", '/');
+> > @@ -966,6 +981,8 @@ static int perf_sample__fprintf_brstacksym(struct perf_sample *sample,
+> >  		if (PRINT_FIELD(DSO)) {
+> >  			printed += fprintf(fp, "(");
+> >  			printed += map__fprintf_dsoname(alt.map, fp);
+> > +			if (PRINT_FIELD(DSOFF) && alt.map && alt.map->dso)
+> > +				printed += fprintf(fp, "+0x%lx", alt.addr);
+> >  			printed += fprintf(fp, ")");
+> >  		}
+> >  		printed += print_bstack_flags(fp, entries + i);
+> > @@ -1006,12 +1023,16 @@ static int perf_sample__fprintf_brstackoff(struct perf_sample *sample,
+> >  		if (PRINT_FIELD(DSO)) {
+> >  			printed += fprintf(fp, "(");
+> >  			printed += map__fprintf_dsoname(alf.map, fp);
+> > +			if (PRINT_FIELD(DSOFF) && alf.map && alf.map->dso)
+> > +				printed += fprintf(fp, "+0x%lx", alf.addr);
+> >  			printed += fprintf(fp, ")");
+> >  		}
+> >  		printed += fprintf(fp, "/0x%"PRIx64, to);
+> >  		if (PRINT_FIELD(DSO)) {
+> >  			printed += fprintf(fp, "(");
+> >  			printed += map__fprintf_dsoname(alt.map, fp);
+> > +			if (PRINT_FIELD(DSOFF) && alt.map && alt.map->dso)
+> > +				printed += fprintf(fp, "+0x%lx", alt.addr);
+> >  			printed += fprintf(fp, ")");
+> >  		}
+> >  		printed += print_bstack_flags(fp, entries + i);
+> > @@ -1378,6 +1399,8 @@ static int perf_sample__fprintf_addr(struct perf_sample *sample,
+> >  	if (PRINT_FIELD(DSO)) {
+> >  		printed += fprintf(fp, " (");
+> >  		printed += map__fprintf_dsoname(al.map, fp);
+> > +		if (PRINT_FIELD(DSOFF) && al.map && al.map->dso)
+> > +			printed += fprintf(fp, "+0x%lx", al.addr);
+> >  		printed += fprintf(fp, ")");
+> >  	}
+> >  out:
+> > @@ -3851,7 +3874,7 @@ int cmd_script(int argc, const char **argv)
+> >  		     "comma separated output fields prepend with 'type:'. "
+> >  		     "+field to add and -field to remove."
+> >  		     "Valid types: hw,sw,trace,raw,synth. "
+> > -		     "Fields: comm,tid,pid,time,cpu,event,trace,ip,sym,dso,"
+> > +		     "Fields: comm,tid,pid,time,cpu,event,trace,ip,sym,dso,dsoff"
+> >  		     "addr,symoff,srcline,period,iregs,uregs,brstack,"
+> >  		     "brstacksym,flags,data_src,weight,bpf-output,brstackinsn,"
+> >  		     "brstackinsnlen,brstackoff,callindent,insn,insnlen,synth,"
+> > diff --git a/tools/perf/util/evsel_fprintf.c b/tools/perf/util/evsel_fprintf.c
+> > index 1fb8044d402e..ae8333772c76 100644
+> > --- a/tools/perf/util/evsel_fprintf.c
+> > +++ b/tools/perf/util/evsel_fprintf.c
+> > @@ -116,6 +116,7 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+> >  	int print_ip = print_opts & EVSEL__PRINT_IP;
+> >  	int print_sym = print_opts & EVSEL__PRINT_SYM;
+> >  	int print_dso = print_opts & EVSEL__PRINT_DSO;
+> > +	int print_dsoff = print_opts & EVSEL__PRINT_DSOFF;
+> >  	int print_symoffset = print_opts & EVSEL__PRINT_SYMOFFSET;
+> >  	int print_oneline = print_opts & EVSEL__PRINT_ONELINE;
+> >  	int print_srcline = print_opts & EVSEL__PRINT_SRCLINE;
+> > @@ -174,6 +175,8 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+> >  			if (print_dso && (!sym || !sym->inlined)) {
+> >  				printed += fprintf(fp, " (");
+> >  				printed += map__fprintf_dsoname(map, fp);
+> > +				if (print_dsoff && map && map->dso)
+> > +					printed += fprintf(fp, "+0x%lx", addr);
+> >  				printed += fprintf(fp, ")");
+> >  			}
+> >  
+> > @@ -209,6 +212,7 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
+> >  	int print_ip = print_opts & EVSEL__PRINT_IP;
+> >  	int print_sym = print_opts & EVSEL__PRINT_SYM;
+> >  	int print_dso = print_opts & EVSEL__PRINT_DSO;
+> > +	int print_dsoff = print_opts & EVSEL__PRINT_DSOFF;
+> >  	int print_symoffset = print_opts & EVSEL__PRINT_SYMOFFSET;
+> >  	int print_srcline = print_opts & EVSEL__PRINT_SRCLINE;
+> >  	int print_unknown_as_addr = print_opts & EVSEL__PRINT_UNKNOWN_AS_ADDR;
+> > @@ -237,6 +241,8 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
+> >  		if (print_dso) {
+> >  			printed += fprintf(fp, " (");
+> >  			printed += map__fprintf_dsoname(al->map, fp);
+> > +			if (print_dsoff && al->map && al->map->dso)
+> > +				printed += fprintf(fp, "+0x%lx", al->addr);
+> >  			printed += fprintf(fp, ")");
+> >  		}
+> >  
+> > diff --git a/tools/perf/util/evsel_fprintf.h b/tools/perf/util/evsel_fprintf.h
+> > index 3093d096c29f..c8a9fac2f2dd 100644
+> > --- a/tools/perf/util/evsel_fprintf.h
+> > +++ b/tools/perf/util/evsel_fprintf.h
+> > @@ -26,6 +26,7 @@ int evsel__fprintf(struct evsel *evsel, struct perf_attr_details *details, FILE
+> >  #define EVSEL__PRINT_UNKNOWN_AS_ADDR	(1<<6)
+> >  #define EVSEL__PRINT_CALLCHAIN_ARROW	(1<<7)
+> >  #define EVSEL__PRINT_SKIP_IGNORED	(1<<8)
+> > +#define EVSEL__PRINT_DSOFF		(1<<9)
+> >  
+> >  struct addr_location;
+> >  struct perf_event_attr;
+> 
+
+-- 
+Cheers,
+Changbin Du
