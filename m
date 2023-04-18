@@ -2,140 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275B26E6E10
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1946E6E13
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbjDRVXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
+        id S231373AbjDRVZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbjDRVXW (ORCPT
+        with ESMTP id S232474AbjDRVZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:23:22 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A3F975D;
-        Tue, 18 Apr 2023 14:23:13 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-18777914805so6246609fac.1;
-        Tue, 18 Apr 2023 14:23:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681852993; x=1684444993;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RKdLQJ2WfynsAnQi4i43G4jU69vCcdQQMLvbvIaqAHQ=;
-        b=Bc8CAtMCCN0AZEbfK6a92mOCH8/sWYSBNUEDMEJcUNpVW6zreSXfuiZqFn70c/CPcl
-         Itp3vCYUlNvv18yesmOtmOZ3U+bz43E/MW2xzPSzeDTbpZBawup0zGNn39Xklnb3ixGh
-         HTuISBi9f6JYe7zY7oVHuC6J2a8z0F4Xyi6ftIJsa+yDzpl3XoJratlCsFl4CdyKwEtN
-         jV0WWWY7gaDKIerXJ321cV12/A/JVjnNqBx1q2CX980TR79P1NrTZL4Qzl/aiklszcyZ
-         loTm0ng5cuLRvtSjlcGxi6AA+2WCatqmAuYHe97degxfYf6W9/361UNw33zze2RhvcAJ
-         8iuA==
-X-Gm-Message-State: AAQBX9eV3cxz5U/VM4XFnypHTLv7maJ0UrGG+VoI0aGTrudvvXNYQwxV
-        eDmKiqL+nyXkfQeECIbg1Q==
-X-Google-Smtp-Source: AKy350bdmvWWvs8e3IniLnnX6QWq/ARMeVjy2OYmobsGssJEfW0Lm1T3KwueQwpXlw4Lj4ZiKOdsBA==
-X-Received: by 2002:aca:c256:0:b0:38e:3d5a:abb5 with SMTP id s83-20020acac256000000b0038e3d5aabb5mr114233oif.9.1681852991281;
-        Tue, 18 Apr 2023 14:23:11 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e190-20020a4a55c7000000b0054542d3219asm3883392oob.11.2023.04.18.14.23.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 14:23:10 -0700 (PDT)
-Received: (nullmailer pid 2358722 invoked by uid 1000);
-        Tue, 18 Apr 2023 21:23:08 -0000
-Date:   Tue, 18 Apr 2023 16:23:08 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     =?UTF-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
-        linux-arm-kernel@lists.infradead.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-arm-msm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        linux-renesas-soc@vger.kernel.org,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Julius Werner <jwerner@chromium.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Jamie Iles <jamie@jamieiles.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Evan Benn <evanbenn@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-amlogic@lists.infradead.org,
-        Sander Vanheule <sander@svanheule.net>,
-        Justin Chen <justinpopo6@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        Shawn Guo <shawnguo@kernel.org>, Fu Wei <fu.wei@linaro.org>,
-        linux-watchdog@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 1/6] dt-bindings: watchdog: drop duplicated GPIO watchdog
- bindings
-Message-ID: <168185298846.2358657.13423905325582795303.robh@kernel.org>
-References: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
+        Tue, 18 Apr 2023 17:25:01 -0400
+Received: from sonic307-54.consmr.mail.ir2.yahoo.com (sonic307-54.consmr.mail.ir2.yahoo.com [87.248.110.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC43A5FE
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:24:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1681853093; bh=gdU7qqet/Ydr3tXK9bfNbFkuWA+0NWpwqLXc4xK5Tow=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=VndfbIWGjeTGZv/9fny8Qspxcnl89QCJ1tVeVzp+5pZGGNqZ7B8fGyrpsT0XarhkHFHCez8L55sbf9uLoQHtn+WgeyqzypoSpGNMOdcLEJh57gI7IEFc5JSvolnPtbZI45xbz9/3IoJtn6L7gvLrPe/U29H7B5IpDd+xbl1pz6oFnhgVd+8lgYpUXjvln0ryTV6TEjJQMPUo/Op1RK7a4DQpcjtKINm5c9I2lHzm6L8ufiod2lLg7mc5LTv6hfgTo/JPcfLJgpsReiLnDn2FxmlsILuqihD9bnoKpBur6edwDcWpfD96tuuQIqix/kJdNTybV4hviia6NTlmtudUfQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681853093; bh=gYQxMuH/eHVu0WTkSRf2eXxd22ZMm6D+vJVurJ6Oobs=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=WsQyUsh9qviSwoEP73Bw7L3rpE1oPDqqchnRU7CYexWeFbZrGcHeFJlr3Hv9DfJRMcohL4gCrNuWzrvKedAiQShRQOvznT989E8Zx3PPR6U/C53z2OwuW2nW8ro8/87boIv4AYjEJwzfbel3xSQlS3DUabydYAVvRYLIOkMqMNOmAbDFNc/GTTimPhbwiScjpqpwgdWThY8hHFSxS18aLrUudlTzUdKk+zWXokeeG3nH3F1YZ7/y5tLJtzNTgvfBcJAiXvGvKI0vHx8RrjpnzKb9iXt9on/abHeweD0bihkb8JJPUZ37gz/cH23+LUROhqkWC2G0YFeQIvvEO3HC1w==
+X-YMail-OSG: AAOw1xUVM1kBgtadGQ1pt5_ztt8tI9OXA96HYvxTh5lYgGD6oOgv6rknNpLFZek
+ bIwbiy442xM10Hsb4ZxuTtz7N0mycF1u9WMN0t9lR0vNO9ZxXJly8htydY2NH5bOrjfDkEEz_Ci2
+ hH6e2i.mT7xyAlpibz4ome6crIM_6cqKp1yr6mchi3PEDHwT8YDwLBRWU91Kz645As0vY7LevkpN
+ YWEuTcTJUiNhakjVlfnmEQNDb8Pj7poguWC632jKMxzz6P5ecJoRqc7Ujc10WBwVhUGWohwEkJ4V
+ umsVa9qKsH9h5CNSgjTm.cc4sQn2yW6VyNgfH4amwfuqcJrakQkrmCQ8lqKj2MpGFX99u8ndvRan
+ V.pbAHnEgQxo__RPGP9bSzWw2s5renDAnLtNSlRQ4a5I4JdAlBwtKOMPXESz8leydO5z8yOlS2Nf
+ MzKhgg0pWP6EHE4u_Jl9pyKdoIbZMYr94TK5t8NGwgy.SmmaJyVm8pC4jLrvz5StG7uf29WgF2mP
+ odK44TAB8YhxsxNfGyEsPn76Ck4ZF6j0JEmb46gkj3m.y8t0zRy1Phxq6mBF.PuvKk9vGRyhCYuG
+ BTdsOz7l_vpbVQWLe5s9XXXf.qCvHKAIQrlZFEFzCawYY994neNYy95e7ly3bPoDq4JYaymDqfZd
+ arfW458Q48X5KnpnnZiuCZ8XxIUVQ0q.OXY1lMNtzTwPfQnp88LgQGc8a.UOFEvEoZ6xZ6UW9USE
+ FC46bv4qhu9eLvYKQdQQzICogbyxPS1tdBWyWwln2PpgomOyuqdV6NHZd1ImBVGUwsDvDwBweEzd
+ BuQw2iBz0nKB8DTS6NO8.AFpbOz_xoFmXbtFdkWX.GCbd8sxtp.nJM76SsYLC.1uklJuEJHpDThe
+ wLWRstSrmrdlUVLsjj5wh6Sybbf0ulaS1fI86npAqF8CFltUUFt0TdRkEjFMX65HrBgWDdhzYZq.
+ trzPrJB3hBqsKeP.97_0nuHvmb1woPYOA_sp12OGYulndTFUo4lNt7klDn_2UUcJC2YPzXfIbqCt
+ FCVa5LowS0eCYALlQuQafU1AzT0dMITwgtjfAOdVpyvQeDRdqD1WEz2mD4TVhy9nL6H5K5WdLz8A
+ M9_urPpHzV9enNkajSLZ1ueBszgFxHEKLoqQSv5Ziasv6hAWFseP3g.xkTndoNnBaxMXCp.MeJCz
+ nZvnFz4_hywbQZSbmgaf8vIZkhbFxeip42xPIr.GfZYVCy5EVny40efjnRdJoQXCh.tyzJCmKxVe
+ 5.1KxXSr0bWkcTj0eZ88PHcLA2Hu6CIT3D5y.7epkz0vE3vA.5.UasuK_htf7tOQJQgANXC5S1YY
+ miVBikkU7M7tpwjDI.WwQK5ucmPPiDVjzTfWD_bejH5zmInh_bWZw_EP9WRh6PkqkHKlirrhibVH
+ IEUWHAOUtLtKpV7uq1FGuLHfztiJHmDFWO5rVf28.t1ixAsczMyRf0tgCZ5ZKdmJE4LvKjmxLw1I
+ tIufarPiSHGPmaFnkbUaXJ2yBPY6LIchBZ0aO6YsX4BMCeatT8HZP8enMn9rMEsDcTDVF0atsnvp
+ 9unC4D0ZeFWP31gsBDAIneQBt6LVMsEGjWmH4vFS1ZX5xWxa9xMrLG7tAcc3r1mScTUyeDc41FGH
+ 5IGU7o8T.xFkOqQB13zgUAsL6BeNfvMHP4ApAuGWfwHRcB4RdpGw0ZLpPNyguETbfVYxGIGnEz21
+ .QAT4PIMNH6Dx7H8oPRgW8n3PUOVYpOl4Mwo01E.fmp.e07EtkwYjRXpvn3J67bsn_XYT_hRyBx9
+ xNdxqL3yiIYaz7eAD4vyXY352FBnDlIFtoMaqfyms0lwl3ZEsmIyd8WvMYT14u.cWC5jVrXVztHa
+ RlScZqMzTE7.X_8RExy7vleVLRNLziJgqzuJpAEJekW16K403QxVi70SvnP2dJ_zlY2DIVmiolot
+ JgfENXf5Cmio6pLsZu8..GZIXvbTMmLx8tZicYuclDOcreLbjW4gC.lNsQYwgdL.5w637XSp3hdN
+ MIKRVt9ik06_oqR6ShSnfkVx931xD1N7RySdYVLDXKU5a.gmi3D_SceKS3SOeungnNEcW6mYcJIK
+ RbmlW9rzeUxbdyElRFqD8F.lldxS9uuv6HakIGFvV9U2GoMlKb6CScmkGLT5Mj4K62Kf2VkUoTUZ
+ IZwZSG0tGdGLUWpFnSGaG_.thSpZU7Z2WCxVlYVONEcnQlgKRFAKrI3EodGO.Gq3dBH7bsZFpHHi
+ xnITIbFeCsxjPMBrKHXlK0JpYKJwgiKQcjyD3xnjbvhwcrDY1mj.ZU50qKBxu1kRp6YOHuuji7aU
+ A6PQ5KcuOpFf0gSGnKj45CC9OZngCZFPq
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: 96fd7f1b-8654-4342-bdf4-fbff36d6f360
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ir2.yahoo.com with HTTP; Tue, 18 Apr 2023 21:24:53 +0000
+Received: by hermes--production-ir2-74cd8fc864-j696l (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 00cb710563690d82660d89732d517195;
+          Tue, 18 Apr 2023 21:24:52 +0000 (UTC)
+Message-ID: <e6cc8658-fe93-c2c0-603e-093cdafb3cca@rocketmail.com>
+Date:   Tue, 18 Apr 2023 23:24:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 5/9] regulator: rt5033: Change regulator names to
+ lowercase
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <cover.1681646904.git.jahau@rocketmail.com>
+ <d4218947e354aee45589acb1060ce41727a26750.1681646904.git.jahau@rocketmail.com>
+ <19ceb0f6-1225-c8cb-1469-3d657e66d171@linaro.org>
+Content-Language: en-US
+From:   Jakob Hauser <jahau@rocketmail.com>
+In-Reply-To: <19ceb0f6-1225-c8cb-1469-3d657e66d171@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21365 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof,
 
-On Sat, 15 Apr 2023 11:51:07 +0200, Krzysztof Kozlowski wrote:
-> Two conversions to DT schema of GPIO watchdog binding happened and came
-> through different trees.  Merge them into one:
-> 1. Combine maintainers,
-> 2. Use more descriptive property descriptions and constraints from
->    gpio-wdt.yaml,
-> 3. Switch to unevaluatedProperties:false, to allow generic watchdog
->    properties.
+On 16.04.23 20:32, Krzysztof Kozlowski wrote:
+> On 16/04/2023 14:44, Jakob Hauser wrote:
+>> Lowercase is preferred for node names.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/watchdog/gpio-wdt.yaml           | 55 -------------------
->  .../bindings/watchdog/linux,wdt-gpio.yaml     | 17 +++++-
->  2 files changed, 15 insertions(+), 57 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.yaml
-> 
+> This will break all existing users. In-tree and out-of-tree. Where is
+> the binding update?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+In my reply to Rob's comments in v1 I was pointing out that this will 
+affect an existing driver. There was no reaction.
 
+As far as I can see, there is no in-tree usage yet. Though I can't tell 
+about out-of-tree usage. Although if there is, adding the rt5033-charger 
+driver might already causes the need for changes.
+
+Well, to stay on the safe side, I'll drop this patch in v3 and will 
+change the bindings (patch 9) back to uppercase.
+
+Kind regards,
+Jakob
