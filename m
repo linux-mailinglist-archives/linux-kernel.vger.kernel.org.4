@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1F86E5C0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C5F6E5C03
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbjDRIb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
+        id S230429AbjDRIbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231203AbjDRIbQ (ORCPT
+        with ESMTP id S229498AbjDRIbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:31:16 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A014EC3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:31:10 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id l31-20020a05600c1d1f00b003f1718d89b2so3431697wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:31:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681806669; x=1684398669;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dxd4s2C5sMKfjUufqyKegiNsjshtUcEOvXHcUf8vktQ=;
-        b=rQhdsjfVrvCeOAYpxDOsF1But51g+urZZc1NTbbOXKX45dY9SiXOio7uIAoVH5f7En
-         /83VoIYgx1Zn+JyiYGBkkSJYbXLfzAeCnSngc1wLwN7TioZ4Da0TloLC6qwqTucHwUWq
-         4BgXQF57/fROxpulXp968tI+JAGoX3NJg9TVjtTAb2bzxOGXS/RRyevHcAAoXOstq7iZ
-         eZTK6K5iMrhwDBNw+/G7gr9kfjC1x3prD1yNsrMpDIjZ03MANPVeHdEqwYkJcQBKPfmr
-         kgfkLZ7gqQ8w/b+OpLrVJF+tf+SwrDA337b+pMZOOw7oT0uSAmkLk/RTZhq0hPzLVZ1w
-         MOQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681806669; x=1684398669;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Dxd4s2C5sMKfjUufqyKegiNsjshtUcEOvXHcUf8vktQ=;
-        b=GG5G45Gfl7aoK2xGKrqPKWOJSlWco2IwdNRiGDJkj9uJXLVHqNBIQ4Mi7OXgw1NUL5
-         rI3CSYkTxPErCQFL14Rcy4JQCW1pT+Gmv9tfwfpqpKIXiDFe1wGsr6uuC17T8VR+LwFh
-         wOI//VvUtYNppKcls7Rbtsg0kfDGB3xwiXIAHnKwh8k5UFQaoZe7fMy1BkPGRbNklxZG
-         NW621MOVaIfrW7+bc4cZy6nB+ion+Sy5GeJd/hc28bFKI7HVYLatQllqsaz8j0/qJasw
-         pMrOrn8N2U/bPTHVOg3p0kqzECXPq3JUNz8y1BIdbVtLpMdeKA24NcagMi4cQyji3Ay/
-         MeRA==
-X-Gm-Message-State: AAQBX9elRJOVF+AcpZkp+4ZRY/1xKK7AH5vlccymYgCC6tVSY1UBVAjO
-        /au71EqaS7jX50Jcv3EkW5IgDg==
-X-Google-Smtp-Source: AKy350aD6rwNgLE5Xe+x6fNCr5L+7fPbeEjOgKxDuQpJX130OXB24T3V8Ezo7RNwTZ3vxg2nxpjAUw==
-X-Received: by 2002:a1c:790f:0:b0:3f1:72e3:576b with SMTP id l15-20020a1c790f000000b003f172e3576bmr5701930wme.26.1681806669232;
-        Tue, 18 Apr 2023 01:31:09 -0700 (PDT)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:c25b:18d5:815a:e12b])
-        by smtp.gmail.com with ESMTPSA id l37-20020a05600c1d2500b003f1738d0d13sm1805978wms.1.2023.04.18.01.31.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 01:31:08 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thierry.reding@gmail.com
-Subject: [PATCH v1 3/3] thermal/core: Move the thermal zone structure to the private core header
-Date:   Tue, 18 Apr 2023 10:30:55 +0200
-Message-Id: <20230418083055.3611721-4-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230418083055.3611721-1-daniel.lezcano@linaro.org>
-References: <20230418083055.3611721-1-daniel.lezcano@linaro.org>
+        Tue, 18 Apr 2023 04:31:06 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BE2E63;
+        Tue, 18 Apr 2023 01:31:04 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 4D9B085AEC;
+        Tue, 18 Apr 2023 10:31:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1681806662;
+        bh=NER7E2tIy4C9f7YN78pLwyujIq9Yo6zWQEwmdMaeBDA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=I6eVjHo4vpZiCrxLUgi7n+p+dKPGuhcgJWLCstM5xs3PigsNjAhpryGV6rOLeEt4n
+         VVLOe8qBaeKICa1SFxitaY7sk2YMlNtuy7CaqPxU91n7mbiORqgEeKZK4Fn+106ij6
+         v8d7iNSLu4Dqfxmn9BWc3BwN2aapyUYG1lJPqiARIVprDH/B4slbnUJzEmIBH7RD9h
+         kPbmqAxWJYKnHukinQE8LyBhiYyM1X79Fk4/XVWVXdkI3lhQDMY8FV2Dn+DMfVmqXQ
+         Lvno3k5PRx1NMcu9mkR8fCxMXeggCVc4lGIgF8wtmA91wBzvZ1CD7j9cykWIbTF6Zn
+         KwRSsgDb0TxoQ==
+Message-ID: <56085a0f-02f7-6f45-f351-1f9ee612b748@denx.de>
+Date:   Tue, 18 Apr 2023 10:30:59 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/6] drm: bridge: samsung-dsim: Fetch pll-clock-frequency
+ automatically
+Content-Language: en-US
+To:     Adam Ford <aford173@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, m.szyprowski@samsung.com,
+        aford@beaconembedded.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230415104104.5537-1-aford173@gmail.com>
+ <20230415104104.5537-3-aford173@gmail.com>
+ <7eed74e8-9f67-a410-3cec-f61a6db85238@denx.de>
+ <CAHCN7xKw26TQ=t75TEDbEkA0mb9rnEwNW=7ei1=WFBZjiJMf=g@mail.gmail.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <CAHCN7xKw26TQ=t75TEDbEkA0mb9rnEwNW=7ei1=WFBZjiJMf=g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,191 +79,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code in the different drivers have been sanitized and they no
-longer access the thermal zone structure internals. This one is just a
-pointer passed around to the thermal core code as a handler.
+On 4/18/23 04:29, Adam Ford wrote:
+> On Sun, Apr 16, 2023 at 5:08 PM Marek Vasut <marex@denx.de> wrote:
+>>
+>> On 4/15/23 12:41, Adam Ford wrote:
+>>> Fetch the clock rate of "sclk_mipi" (or "pll_clk") instead of
+>>> having an entry in the device tree for samsung,pll-clock-frequency.
+>>>
+>>> Signed-off-by: Adam Ford <aford173@gmail.com>
+>>> ---
+>>>    drivers/gpu/drm/bridge/samsung-dsim.c | 12 ++++++------
+>>>    1 file changed, 6 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
+>>> index 9fec32b44e05..73f0c3fbbdf5 100644
+>>> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
+>>> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+>>> @@ -1744,11 +1744,6 @@ static int samsung_dsim_parse_dt(struct samsung_dsim *dsi)
+>>>        struct device_node *node = dev->of_node;
+>>>        int ret;
+>>>
+>>> -     ret = samsung_dsim_of_read_u32(node, "samsung,pll-clock-frequency",
+>>> -                                    &dsi->pll_clk_rate);
+>>> -     if (ret < 0)
+>>> -             return ret;
+>>> -
+>>>        ret = samsung_dsim_of_read_u32(node, "samsung,burst-clock-frequency",
+>>>                                       &dsi->burst_clk_rate);
+>>>        if (ret < 0)
+>>
+>> Does this break compatibility with old samsung DTs ?
+> 
+> My goal here was to declutter the device tree stuff and fetch data
+> automatically if possible. What if I changed this to make them
+> optional?  If they exist, we can use them, if they don't exist, we
+> could read the clock rate.  Would that be acceptable?
 
-Move the structure definition to the private core code header to
-self-encapsulate the core code.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/thermal_core.h | 75 ++++++++++++++++++++++++++++++++++
- include/linux/thermal.h        | 75 ----------------------------------
- 2 files changed, 75 insertions(+), 75 deletions(-)
-
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index feb02c48beba..e55d1eaa8bdb 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -18,6 +18,81 @@
- #warning This header can only be included by the thermal core code
- #endif
- 
-+/**
-+ * struct thermal_zone_device - structure for a thermal zone
-+ * @id:		unique id number for each thermal zone
-+ * @type:	the thermal zone device type
-+ * @device:	&struct device for this thermal zone
-+ * @trip_temp_attrs:	attributes for trip points for sysfs: trip temperature
-+ * @trip_type_attrs:	attributes for trip points for sysfs: trip type
-+ * @trip_hyst_attrs:	attributes for trip points for sysfs: trip hysteresis
-+ * @mode:		current mode of this thermal zone
-+ * @devdata:	private pointer for device private data
-+ * @trips:	an array of struct thermal_trip
-+ * @num_trips:	number of trip points the thermal zone supports
-+ * @trips_disabled;	bitmap for disabled trips
-+ * @passive_delay_jiffies: number of jiffies to wait between polls when
-+ *			performing passive cooling.
-+ * @polling_delay_jiffies: number of jiffies to wait between polls when
-+ *			checking whether trip points have been crossed (0 for
-+ *			interrupt driven systems)
-+ * @temperature:	current temperature.  This is only for core code,
-+ *			drivers should use thermal_zone_get_temp() to get the
-+ *			current temperature
-+ * @last_temperature:	previous temperature read
-+ * @emul_temperature:	emulated temperature when using CONFIG_THERMAL_EMULATION
-+ * @passive:		1 if you've crossed a passive trip point, 0 otherwise.
-+ * @prev_low_trip:	the low current temperature if you've crossed a passive
-+			trip point.
-+ * @prev_high_trip:	the above current temperature if you've crossed a
-+			passive trip point.
-+ * @need_update:	if equals 1, thermal_zone_device_update needs to be invoked.
-+ * @ops:	operations this &thermal_zone_device supports
-+ * @tzp:	thermal zone parameters
-+ * @governor:	pointer to the governor for this thermal zone
-+ * @governor_data:	private pointer for governor data
-+ * @thermal_instances:	list of &struct thermal_instance of this thermal zone
-+ * @ida:	&struct ida to generate unique id for this zone's cooling
-+ *		devices
-+ * @lock:	lock to protect thermal_instances list
-+ * @node:	node in thermal_tz_list (in thermal_core.c)
-+ * @poll_queue:	delayed work for polling
-+ * @notify_event: Last notification event
-+ */
-+struct thermal_zone_device {
-+	int id;
-+	char type[THERMAL_NAME_LENGTH];
-+	struct device device;
-+	struct attribute_group trips_attribute_group;
-+	struct thermal_attr *trip_temp_attrs;
-+	struct thermal_attr *trip_type_attrs;
-+	struct thermal_attr *trip_hyst_attrs;
-+	enum thermal_device_mode mode;
-+	void *devdata;
-+	struct thermal_trip *trips;
-+	int num_trips;
-+	unsigned long trips_disabled;	/* bitmap for disabled trips */
-+	unsigned long passive_delay_jiffies;
-+	unsigned long polling_delay_jiffies;
-+	int temperature;
-+	int last_temperature;
-+	int emul_temperature;
-+	int passive;
-+	int prev_low_trip;
-+	int prev_high_trip;
-+	atomic_t need_update;
-+	struct thermal_zone_device_ops *ops;
-+	struct thermal_zone_params *tzp;
-+	struct thermal_governor *governor;
-+	void *governor_data;
-+	struct list_head thermal_instances;
-+	struct ida ida;
-+	struct mutex lock;
-+	struct list_head node;
-+	struct delayed_work poll_queue;
-+	enum thermal_notify_event notify_event;
-+};
-+
- /* Default Thermal Governor */
- #if defined(CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE)
- #define DEFAULT_THERMAL_GOVERNOR       "step_wise"
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 87837094d549..3e8bedb21755 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -112,81 +112,6 @@ struct thermal_cooling_device {
- 	struct list_head node;
- };
- 
--/**
-- * struct thermal_zone_device - structure for a thermal zone
-- * @id:		unique id number for each thermal zone
-- * @type:	the thermal zone device type
-- * @device:	&struct device for this thermal zone
-- * @trip_temp_attrs:	attributes for trip points for sysfs: trip temperature
-- * @trip_type_attrs:	attributes for trip points for sysfs: trip type
-- * @trip_hyst_attrs:	attributes for trip points for sysfs: trip hysteresis
-- * @mode:		current mode of this thermal zone
-- * @devdata:	private pointer for device private data
-- * @trips:	an array of struct thermal_trip
-- * @num_trips:	number of trip points the thermal zone supports
-- * @trips_disabled;	bitmap for disabled trips
-- * @passive_delay_jiffies: number of jiffies to wait between polls when
-- *			performing passive cooling.
-- * @polling_delay_jiffies: number of jiffies to wait between polls when
-- *			checking whether trip points have been crossed (0 for
-- *			interrupt driven systems)
-- * @temperature:	current temperature.  This is only for core code,
-- *			drivers should use thermal_zone_get_temp() to get the
-- *			current temperature
-- * @last_temperature:	previous temperature read
-- * @emul_temperature:	emulated temperature when using CONFIG_THERMAL_EMULATION
-- * @passive:		1 if you've crossed a passive trip point, 0 otherwise.
-- * @prev_low_trip:	the low current temperature if you've crossed a passive
--			trip point.
-- * @prev_high_trip:	the above current temperature if you've crossed a
--			passive trip point.
-- * @need_update:	if equals 1, thermal_zone_device_update needs to be invoked.
-- * @ops:	operations this &thermal_zone_device supports
-- * @tzp:	thermal zone parameters
-- * @governor:	pointer to the governor for this thermal zone
-- * @governor_data:	private pointer for governor data
-- * @thermal_instances:	list of &struct thermal_instance of this thermal zone
-- * @ida:	&struct ida to generate unique id for this zone's cooling
-- *		devices
-- * @lock:	lock to protect thermal_instances list
-- * @node:	node in thermal_tz_list (in thermal_core.c)
-- * @poll_queue:	delayed work for polling
-- * @notify_event: Last notification event
-- */
--struct thermal_zone_device {
--	int id;
--	char type[THERMAL_NAME_LENGTH];
--	struct device device;
--	struct attribute_group trips_attribute_group;
--	struct thermal_attr *trip_temp_attrs;
--	struct thermal_attr *trip_type_attrs;
--	struct thermal_attr *trip_hyst_attrs;
--	enum thermal_device_mode mode;
--	void *devdata;
--	struct thermal_trip *trips;
--	int num_trips;
--	unsigned long trips_disabled;	/* bitmap for disabled trips */
--	unsigned long passive_delay_jiffies;
--	unsigned long polling_delay_jiffies;
--	int temperature;
--	int last_temperature;
--	int emul_temperature;
--	int passive;
--	int prev_low_trip;
--	int prev_high_trip;
--	atomic_t need_update;
--	struct thermal_zone_device_ops *ops;
--	struct thermal_zone_params *tzp;
--	struct thermal_governor *governor;
--	void *governor_data;
--	struct list_head thermal_instances;
--	struct ida ida;
--	struct mutex lock;
--	struct list_head node;
--	struct delayed_work poll_queue;
--	enum thermal_notify_event notify_event;
--};
--
- /**
-  * struct thermal_governor - structure that holds thermal governor information
-  * @name:	name of the governor
--- 
-2.34.1
-
+If you do not see any potential problem with ignoring the DT property 
+altogether, that would be better of course, but I think you cannot do 
+that with old DTs, so you should retain backward compatibility fallback, 
+yes. What do you think ?
