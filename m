@@ -2,107 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB726E5F28
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8C16E5F25
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjDRKtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 06:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
+        id S231210AbjDRKtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 06:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbjDRKtl (ORCPT
+        with ESMTP id S230350AbjDRKta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 06:49:41 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D2640EF;
-        Tue, 18 Apr 2023 03:49:39 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-63b5312bd4fso9253183b3a.0;
-        Tue, 18 Apr 2023 03:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681814979; x=1684406979;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ne4t7JiMf2N7K31rdXpJp0mlGHlHnFrvUNu2fRDvLr4=;
-        b=a/Mbnb8QKjZmJQtYsJu30n/UFZjrScTDmSj5Zl+/b1XAoq3xiyMAsGLs1GrgQd7TVc
-         O9yzN4Dhq+qohee4RwTms9qIfgLX8ACBXq7hWFE4cN9FEVQqxM3Id/1YsHPPLhJfdMp1
-         h7PfxFmLV/kjcdPZO1viP/2MuxtikWUrxsHY1nGVN0T8h2SgczEA4lKh7H4cGh5Nnr3G
-         fDVxCWRvmAAUGjQBQxcQZqlW2ANZlnEbjp/nKbmxVJBlM89Kq2rZzlkCuQ0/bvaIpoYp
-         kqIxYp+jgbwTsexOvC/eP6Y3vx+UZW7HGNud+egIXIA7xg/U8Qz7k1pjwIETSDd95Y3b
-         TYWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681814979; x=1684406979;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ne4t7JiMf2N7K31rdXpJp0mlGHlHnFrvUNu2fRDvLr4=;
-        b=dhDF81QrNYj1kfo7OiTUQWcYl/ncKGZpy1y8rXxE6vxsE98ePwbO4LZXKgMYN+u3E4
-         RLkueumbkynb7K+SE7euqtceKt+fsH4Bu00Yb64svpdOfF1JyYM0zNDVBhpYBftiOjKO
-         314HiZFeioWJ4kr03QhoZDt6Hj1wFqlwfz2AiGKJVDBDpdlnMhp1m02X2R29wN84jcLZ
-         fIyVjMOp/3z4gHZdzpJCbzTJnwjcWVEMbEWvX1SmDRE8XT8Qm8fpzIsTNf0suEpMl2lO
-         74IeGX4jNzQdNKOe3/fafjG6tLyhXM7Mk//Yd+hTIg/TbBh7m8PLaizWEW4/4uz4UkPe
-         8pHQ==
-X-Gm-Message-State: AAQBX9cC8M0udV7ixbKdati9kwZIlwkZFx1JHAFG8pPqOGNo+jCqmmNy
-        sDguLyzLX4fRvijyfz0g904=
-X-Google-Smtp-Source: AKy350ZWy7S+tSm+v0XcGgZFxoC/P0j3rCfmmRSifXG/3fZo6/qCuS98Vs2vvGPecQUUg7fraCJ52w==
-X-Received: by 2002:a17:90b:18d:b0:246:fbf2:7e6e with SMTP id t13-20020a17090b018d00b00246fbf27e6emr1902590pjs.14.1681814979023;
-        Tue, 18 Apr 2023 03:49:39 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.8])
-        by smtp.gmail.com with ESMTPSA id gz2-20020a17090b0ec200b002473d046e23sm6906437pjb.3.2023.04.18.03.49.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 03:49:38 -0700 (PDT)
-From:   alexjlzheng@gmail.com
-X-Google-Original-From: alexjlzheng@tencent.com
-To:     seanjc@google.com
-Cc:     pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinliang Zheng <alexjlzheng@tencent.com>
-Subject: [PATCH 2/2] KVM: x86: Adjust return value of pic_poll_read()
-Date:   Tue, 18 Apr 2023 18:47:45 +0800
-Message-Id: <20230418104743.842683-3-alexjlzheng@tencent.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230418104743.842683-1-alexjlzheng@tencent.com>
-References: <20230418104743.842683-1-alexjlzheng@tencent.com>
+        Tue, 18 Apr 2023 06:49:30 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46258E49;
+        Tue, 18 Apr 2023 03:49:28 -0700 (PDT)
+Received: from u202112136$hust.edu.cn ( [10.11.70.171] ) by
+ ajax-webmail-app1 (Coremail) ; Tue, 18 Apr 2023 18:48:29 +0800 (GMT+08:00)
+X-Originating-IP: [10.11.70.171]
+Date:   Tue, 18 Apr 2023 18:48:29 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5p2O6Ziz?= <u202112136@hust.edu.cn>
+To:     "greg kroah-hartman" <gregkh@linuxfoundation.org>
+Cc:     "felipe balbi" <balbi@kernel.org>,
+        "sergey shtylyov" <s.shtylyov@omp.ru>,
+        "dongliang mu" <dzm91@hust.edu.cn>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        hust-os-kernel-patches@googlegroups.com
+Subject: Re: Re: [PATCH] usb: phy: phy-tahvo: fix memory leak in
+ tahvo_usb_probe()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
+ Copyright (c) 2002-2023 www.mailtech.cn hust
+In-Reply-To: <2023041832-parakeet-claim-b458@gregkh>
+References: <20230418090758.18756-1-lidaxian@hust.edu.cn>
+ <2023041832-parakeet-claim-b458@gregkh>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <7aadd2ae.3f01f.18793faf0c3.Coremail.u202112136@hust.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID: FgEQrACnuAl9dT5kFb34Ag--.41571W
+X-CM-SenderInfo: rxsqjiirsrjlo6kx23oohg3hdfq/1tbiAQsFE17Em5GfHwAAsM
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinliang Zheng <alexjlzheng@tencent.com>
-
-Returning 0x07 raises ambiguity when no interrupt is in pic_poll_read().
-Although it will not cause a functional exception (Bit 7 is 0 means no
-interrupt), it will easily make developers mistakenly think that a
-spurious interrupt (IRQ 7) has been returned.
-
-Return 0x00 instread of 0x07.
-
-Signed-off-by: Jinliang Zheng <alexjlzheng@tencent.com>
----
- arch/x86/kvm/i8259.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kvm/i8259.c b/arch/x86/kvm/i8259.c
-index 861872e2641a..57978ad8311c 100644
---- a/arch/x86/kvm/i8259.c
-+++ b/arch/x86/kvm/i8259.c
-@@ -414,7 +414,8 @@ static u32 pic_poll_read(struct kvm_kpic_state *s, u32 addr1)
- 		/* Bit 7 is 1, means there's an interrupt */
- 		ret |= 0x80;
- 	} else {
--		ret = 0x07;
-+		/* Bit 7 is 0, means there's no interrupt */
-+		ret = 0x00;
- 		pic_update_irq(s->pics_state);
- 	}
- 
--- 
-2.31.1
-
+CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiR3JlZyBLcm9haC1IYXJ0
+bWFuIiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+Cj4gU2VudCBUaW1lOiAyMDIzLTA0LTE4
+IDE3OjE5OjEyIChUdWVzZGF5KQo+IFRvOiAiTGkgWWFuZyIgPGxpZGF4aWFuQGh1c3QuZWR1LmNu
+Pgo+IENjOiAiRmVsaXBlIEJhbGJpIiA8YmFsYmlAa2VybmVsLm9yZz4sICJTZXJnZXkgU2h0eWx5
+b3YiIDxzLnNodHlseW92QG9tcC5ydT4sICJEb25nbGlhbmcgTXUiIDxkem05MUBodXN0LmVkdS5j
+bj4sIGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmcsIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5v
+cmcKPiBTdWJqZWN0OiBSZTogW1BBVENIXSB1c2I6IHBoeTogcGh5LXRhaHZvOiBmaXggbWVtb3J5
+IGxlYWsgaW4gdGFodm9fdXNiX3Byb2JlKCkKPiAKPiBPbiBUdWUsIEFwciAxOCwgMjAyMyBhdCAw
+NTowNzo1N1BNICswODAwLCBMaSBZYW5nIHdyb3RlOgo+ID4gU21hdGNoIHJlcG9ydHM6Cj4gPiBk
+cml2ZXJzL3VzYi9waHkvcGh5LXRhaHZvLmM6IHRhaHZvX3VzYl9wcm9iZSgpCj4gPiB3YXJuOiBt
+aXNzaW5nIHVud2luZCBnb3RvPwo+ID4gCj4gPiBBZnRlciBnZXRpbmcgaXJxLCBpZiByZXQgPCAw
+LCBpdCB3aWxsIHJldHVybiB3aXRob3V0IGVycm9yIGhhbmRsaW5nIHRvCj4gPiBmcmVlIG1lbW9y
+eS4KPiA+IEp1c3QgYWRkIGVycm9yIGhhbmRsaW5nIHRvIGZpeCB0aGlzIHByb2JsZW0uCj4gPiAK
+PiA+IEZpeGVzOiAwZDQ1YTEzNzNlNjYgKCJ1c2I6IHBoeTogdGFodm86IGFkZCBJUlEgY2hlY2si
+KQo+ID4gU2lnbmVkLW9mZi1ieTogTGkgWWFuZyA8bGlkYXhpYW5AaHVzdC5lZHUuY24+Cj4gPiBS
+ZXZpZXdlZC1ieTogRG9uZ2xpYW5nIE11IDxkem05MUBodXN0LmVkdS5jbj4KPiA+IC0tLQo+ID4g
+VGhlIGlzc3VlIGlzIGZvdW5kIGJ5IHN0YXRpYyBhbmFseXNpcywgYW5kIHRoZSBwYXRjaCByZW1h
+aW5zIHVudGVzdC4KPiA+IC0tLQo+ID4gIGRyaXZlcnMvdXNiL3BoeS9waHktdGFodm8uYyB8IDcg
+KysrKystLQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25z
+KC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9waHkvcGh5LXRhaHZvLmMgYi9k
+cml2ZXJzL3VzYi9waHkvcGh5LXRhaHZvLmMKPiA+IGluZGV4IGYyZDJjYzU4NmM1Yi4uMTg0YTVm
+M2Q3NDczIDEwMDY0NAo+ID4gLS0tIGEvZHJpdmVycy91c2IvcGh5L3BoeS10YWh2by5jCj4gPiAr
+KysgYi9kcml2ZXJzL3VzYi9waHkvcGh5LXRhaHZvLmMKPiA+IEBAIC0zOTAsOCArMzkwLDExIEBA
+IHN0YXRpYyBpbnQgdGFodm9fdXNiX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYp
+Cj4gPiAgCWRldl9zZXRfZHJ2ZGF0YSgmcGRldi0+ZGV2LCB0dSk7Cj4gPiAgCj4gPiAgCXR1LT5p
+cnEgPSByZXQgPSBwbGF0Zm9ybV9nZXRfaXJxKHBkZXYsIDApOwo+ID4gLQlpZiAocmV0IDwgMCkK
+PiA+IC0JCXJldHVybiByZXQ7Cj4gPiArCWlmIChyZXQgPCAwKSB7Cj4gPiArCQlkZXZfZXJyKCZw
+ZGV2LT5kZXYsICJjb3VsZCBub3QgZ2V0IGlycTogJWRcbiIsCj4gPiArCQkJCXJldCk7Cj4gCj4g
+V2h5IHByaW50IHRoaXMgb3V0PyAgQW5kIHdoeSB0aGUgb2RkIGxpbmUtd3JhcHBpbmc/Cj4gCj4g
+dGhhbmtzLAo+IAo+IGdyZWcgay1oCkZvciB0aGUgZmlyc3QgcXVlc3Rpb24sIEkgYW0ganVzdCBl
+bXVsYXRpbmcgdGhlIGNvZGluZyBzdHlsZSBvZiB0aGUgb3JpZ2luYWwgYXV0aG9yIHdobyBvdXRw
+dXRzIGNvcnJlc3BvbmRpbmcgaW5mb3JtYXRpb24gYWZ0ZXIgZWFjaCBlcnJvci4gSWYgdGhlcmUg
+aXMgYW55dGhpbmcgdW5yZWFzb25hYmxlIGFib3V0IGRvaW5nIHNvLCBwbGVhc2UgbGV0IG1lIGtu
+b3cuIEFzIGZvciB0aGUgc2Vjb25kIHF1ZXN0aW9uLCBpdCdzIG15IG1pc3Rha2UgYW5kIEkgd2ls
+bCBjb3JyZWN0IGl0IGltbWVkaWF0ZWx5LgoKcmVncmFkcywKTGkgWWFuZw==
