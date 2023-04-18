@@ -2,192 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287526E68B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55CAB6E68B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232383AbjDRPwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 11:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
+        id S232267AbjDRPzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 11:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbjDRPws (ORCPT
+        with ESMTP id S232448AbjDRPyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:52:48 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C265C678
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:52:17 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f04275b2bdso56965e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681833127; x=1684425127;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a8AJaTAL1L9nuKjca6IxxV5WvVoR66rW4VK9cQe2Its=;
-        b=tTcxcgjXlPWgzp12LZaqONOFzAR3OnpA3nO76yp8jFzJbuUPTK1q2eltwV+GHv5njp
-         KXbQKIVukbWVhlHPwNqFX3EpwW8Tck5Jw2F3sR3tcJp/dxBi5hffPf3hzyAUDNwJbv5a
-         bGTmLxVmrDQTO+SH4kA6abnLsm2AqrSzesC1K6DqG9cWa33EKt2cCePnIMEd7q2tf2qL
-         BjBiC4N4095m6+jS5w/Cfp60CN2bLsALrREmHoCvn3n9BciNxeVxk3my1D4+NZG0U0uP
-         OzooP8ZfIAEM0jqIHqKKBCcamDbtMWs2q3/+3PAWSmlKbv/dJUXNiYd3YDToa9v1wvm6
-         02xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681833127; x=1684425127;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a8AJaTAL1L9nuKjca6IxxV5WvVoR66rW4VK9cQe2Its=;
-        b=l0vzbqpecVpWY1q54yD7dtby7H26vhpkeRtOgSZ5cE6PkK13jqq6inB65AMIz2Wsxv
-         TRNGG5Ulrt2kmERyfl24jtiNRkrcNGkjqg6MGvzvf/qkWNxwS2YKb97Xn9z7KjhCULSF
-         bMYiCeH5uzNy+UjEJ4roB081zJ0TP8DR4l7sfBuN2X0L8txOwUY+WSBfAnoXwhU3J5Yu
-         OZviPR8GTyiw1dsJLYCCKcb/bvOZNB3paOjYmGHGPsli018GKnmoh2gFVU+8W3Qqycv5
-         BxUJUVMT/wKI9kG+0SlqwJeM9RJlqeLD9NQN8mtYyX1DakK2UXhbVRKDKUx5mS0F8Xw2
-         UXXg==
-X-Gm-Message-State: AAQBX9cZQ4Bz3/v9yMO81ifSt+YgREEcl9DLHmDJADHhbt07/sE23StH
-        gZPmZ1WVRhA8ARJlu0kmTQKXsVlX1FvwyCNT9KUQcg==
-X-Google-Smtp-Source: AKy350ZpV2IOebxfwF+HpsSE5r6eITnamp/nMwc0jszxYZEFirHdz3lgJ7MEkiCa9WdNhzir5KAOB4hulRMOuRJfOes=
-X-Received: by 2002:a05:600c:19cc:b0:3f1:758c:dd23 with SMTP id
- u12-20020a05600c19cc00b003f1758cdd23mr170026wmq.7.1681833127265; Tue, 18 Apr
- 2023 08:52:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230414082300.34798-1-adrian.hunter@intel.com>
- <20230417110221.GH83892@hirez.programming.kicks-ass.net> <89733d35-0b71-615f-4fb8-55183585c67a@intel.com>
- <d7d6cbc8-1f5f-d0f4-6656-f0cc8ab3a118@intel.com>
-In-Reply-To: <d7d6cbc8-1f5f-d0f4-6656-f0cc8ab3a118@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 18 Apr 2023 08:51:52 -0700
-Message-ID: <CAP-5=fWjyvsFuQhPNQyoa1ExTo4yggKRrmaksuatwU29v0uNXA@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/5] perf: Add ioctl to emit sideband events
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 18 Apr 2023 11:54:51 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2091.outbound.protection.outlook.com [40.107.114.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A51198;
+        Tue, 18 Apr 2023 08:54:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UvDduDzQv0LSnX2QZZFOnsZrbwNFs2K/7xa0hEPv+/Q/poO9S+yTd4MGO/ooFFrwR8YZFFiIkyynFwmW6bxY0ZKFQORgmmf6YTfnPd6t6Ma68BOzSLHjz1aDtpz9XfNypk+bInoGJeUlCyRZ9My3AxWpBhjuqCVaDFjjB2KVzLUGL+B4zPUqQK6mmESgU15obe4b+fgrP+JCu3UvZsE6+UGUNClIlxnHMTKIHCisN5rpB7mGP27IDVLiD5msokxgZbYAROaK3WnyJqmZFpEZDwEZVjWEdFwskoGeTplC6fYoYzK6laO++rzS7e59TwU+4MHG7wt0cEMSe+v6mk2w4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SvLg20BYLx+MZRFKa5oLqd+kaMiQK2IUOAhlLFDKoFg=;
+ b=jmPXUjLl5GRetWOc3gT+az48sSjjI21q5udUklWakgrj5jsS9IHM4GkQT4nT56jSvxCFKdM95Ql8fxAkLGvfvJkmujaEE/cds7BDhmuYnPgZXLnTvyCyeAJkRWOJpAWeVzoqkhbZl85QoBCUR0tBRhoBqav53i6gua68zgUVFxpO+SYXfPgd3aPB1t1GzQthFjUabf+ABgHJ1zwS1RjdMMvH4XWhRNjImrFhMDKyu7ulp23tjdk8452Uujm6UxENA+OETEt4zPHV4VcDF3lCBV+u775fhn3AbJGimTjzA3CDmAZ1DgVm6iI+beOFvit/VJlSQ4b8yx8pnynlmxnqCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SvLg20BYLx+MZRFKa5oLqd+kaMiQK2IUOAhlLFDKoFg=;
+ b=QsNmEpNhyUgOqgBO6L2K7tEHuYxNECJ6aSPlHh8AQ4NPNx/lsqCZ1libA5N6+i3RhZFiFXgNH9T1SE1rZ8KbgGTZmEi3nh1h2nnLN2Y8WZ8b+EFlAwT17tsBWXQLNlRuBiCk4xlJC124UOOrOkFhdLyI8k5UQc0RyY/Kxn3tChA=
+Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com (2603:1096:404:dd::14)
+ by OS0PR01MB6084.jpnprd01.prod.outlook.com (2603:1096:604:c8::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.20; Tue, 18 Apr
+ 2023 15:54:47 +0000
+Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com
+ ([fe80::8b5:5f09:5a0f:370]) by TY2PR01MB3788.jpnprd01.prod.outlook.com
+ ([fe80::8b5:5f09:5a0f:370%6]) with mapi id 15.20.6298.045; Tue, 18 Apr 2023
+ 15:54:47 +0000
+From:   Chris Paterson <Chris.Paterson2@renesas.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "patches@kernelci.org" <patches@kernelci.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        "pavel@denx.de" <pavel@denx.de>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
+        "srw@sladewatkins.net" <srw@sladewatkins.net>,
+        "rwarsow@gmx.de" <rwarsow@gmx.de>
+Subject: RE: [PATCH 4.19 00/57] 4.19.281-rc1 review
+Thread-Topic: [PATCH 4.19 00/57] 4.19.281-rc1 review
+Thread-Index: AQHZcfEP0yR6yM9PZ0+kqds0ygpReq8xOAyg
+Date:   Tue, 18 Apr 2023 15:54:47 +0000
+Message-ID: <TY2PR01MB37886533D5588F90113190ECB79D9@TY2PR01MB3788.jpnprd01.prod.outlook.com>
+References: <20230418120258.713853188@linuxfoundation.org>
+In-Reply-To: <20230418120258.713853188@linuxfoundation.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY2PR01MB3788:EE_|OS0PR01MB6084:EE_
+x-ms-office365-filtering-correlation-id: b4624305-e943-4be1-48d0-08db40253c29
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nVNt2kTv8vzC/YYpsw5O/quPfRpCVNJNBAVqP7RnnoGSQ+Q2dyC+1rw+isPxQ2WKzyi8H2c9uNc3obYWCXFe7T1ZC0fnhV9LTZkyHssS7+QEKK1Q8G4Msou8fexH+t8y+Fq9gemYA9Im19NHslVWXEsf+rCW6daty8PH5zfOBeWX7hDRZSTqTydNjJnlZrTDW8oV+t8tT/tVKy+JWEiG59cJVjm14QFLLvyCv4mG6vzNf+j9aky2d4RyGqs20mWhw5+3PaaOZzYXQLUiH4MEcmOb38JLNDml83JNdikfgrkwIKNW1/+31aFYr403r9V3bkkeRpzLc3YLFOMljGJmjZDszeC1XlEbwvVJzks8aEptKHLP5EPFWjXCbSM2RGJKlqJTA5Y9i4apnRaV+6BL67+0HhRSruBmWF+23ds1BSYmpYn73RLnDO/fuG68pG5QRLyAzGsgh6+SX3WqmREYTKT3d9qORI+SsZ4qtsNY7G7jxY6DptP1gvdDCv4ny5oIofU00dRPMabUN1PrUcouDwEF2ryFkVnyCF2N6aoDWHIQm6wyJIRSJE21gytx+2fMWaULFPWz8NVe3u2pt4xP3hWi12MAqCeIvKJLrAlE86drPEnN4p90ZBOy5CdaAHn0IF0/EBe6s5SeUWEkrJN55Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3788.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(366004)(396003)(346002)(376002)(451199021)(54906003)(110136005)(4326008)(316002)(76116006)(66946007)(66556008)(66476007)(64756008)(66446008)(966005)(186003)(478600001)(7696005)(71200400001)(55016003)(8936002)(5660300002)(41300700001)(8676002)(52536014)(7416002)(2906002)(4744005)(122000001)(86362001)(33656002)(38070700005)(38100700002)(26005)(6506007)(9686003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-4?Q?KsoDCEqrxeCRlvvHemoLtMDCurV93SavtRAShJCORqyOOfmdfnszUs5Oaq?=
+ =?iso-8859-4?Q?HLy+6jId/n49znf7b1f6mhgmJCtVp9GfUiY5vmr3PxROFKl0wVb43Z5Zji?=
+ =?iso-8859-4?Q?CR1hp/FZDY2cVmYQUMGCCWZnClwChwwoDOP02O54NbUo5OhAsJtGUceXtt?=
+ =?iso-8859-4?Q?CbReE4ZdQhFjq+97oG65aXBBijLipBmW5FO33KQgYNFZO9coLEsqFsMigN?=
+ =?iso-8859-4?Q?eRL8C0ooPcuEcSRm7nxEbzCbPXiqCnp0FPJT58w5oEjriNliA5a3PvKaR4?=
+ =?iso-8859-4?Q?nh/NTlcmjw8ovsYZrNx8VQB3rC0lJndgEVjAslGppsH9G81iWBFAs4SaLk?=
+ =?iso-8859-4?Q?sBzXhezZhq4HqkUScZUS3z2wc0mM9f3NAV4j25FEP56q5E7eIC9Iy85ukT?=
+ =?iso-8859-4?Q?rKsJag3W6jdvye48pZJeQ4roc4cxsmb9pecntUElftLJw+Sl5It2f0VBji?=
+ =?iso-8859-4?Q?aH6lWdhCAO++2Bk9CcmWNEdpA8ip8eb46LRjlczFmOOGZckCwDr7Wyh2fq?=
+ =?iso-8859-4?Q?jt8/lckN16aDr0/I0GqeVlCDah69kdr/lz1I4GO2405GT1rhP5vhlTvFLT?=
+ =?iso-8859-4?Q?RnWlgGZeOcWLQsB7Y3jkuF++QyAwj8skuVwhB721Wc9sU/Ujy+z4jWVXkp?=
+ =?iso-8859-4?Q?N+4Uhql3R6WbVzLFWoXU1XTLy5JVeJj0a2GEBaBvQoe9wRpEZ6i3VuJ19p?=
+ =?iso-8859-4?Q?usvvfNE5bZ6ZFmZIbSyNP6kdxy1atADZ7JkkUQ0dSPjbN42e1YjC7LHt8L?=
+ =?iso-8859-4?Q?QAKm8FioofQpg+5cYR5yuhzFELR4IYO2/H+spI4fpTKv2uNSeq/HNdqAvu?=
+ =?iso-8859-4?Q?kU3binJeHu5PTxeq+jEDCXOkITzImgIertgVXvjUNvxK84sMc948cWiDKQ?=
+ =?iso-8859-4?Q?yafdfkbLKQ73e9CDN7bAZ0Ov5hRseQHPzSeBimG0dmVmfkcquPO1c6dRDr?=
+ =?iso-8859-4?Q?PZx9qRtDB3zw8r9hRvBkmb3/dV7rsTBJwrx0zpdmiRk3Kijt/wqTFaF91D?=
+ =?iso-8859-4?Q?NMuf92k4ckH2e6mRC0jD2/dE2dnmBDoIfl9JKUcXagU0HP5TvAmj3hG95q?=
+ =?iso-8859-4?Q?hbHAk0kiJiPbv7kA58s561MChIPp9bKeF5aiClG6vXMuB6X0qup+qjY8Tg?=
+ =?iso-8859-4?Q?7g4M7WP+jwssrhA0yjE5tQ5a1OF/FgRjP0BoNX/GCYL0HthiLGtDECJ2cX?=
+ =?iso-8859-4?Q?I31IHyN2GEB35GjYc2372h9XdGuXQN4kfG6mOcMV8a1YA8qLDLVPf/zOme?=
+ =?iso-8859-4?Q?wdA1qW+686GDk6mg3LRkRyVTKENq+xfyGi607skR+XJxAK2YUPNNFX9nEF?=
+ =?iso-8859-4?Q?bNOX6lG4ZxjyOhOVeewGfntN7lT0hkaVBuK6bBI5mKSSEP3h2JNLdhM3po?=
+ =?iso-8859-4?Q?a4b876FDg7hjt0ijKgi+4Mhh/mpH43j5pDb+f9+S2RToWrcvW5t6DKjZpd?=
+ =?iso-8859-4?Q?gc6mVcqc9WvUuHMnaIyCbI2Bk5/sP551G8e2vvGRu+j8eZzx+AIBG/EkfS?=
+ =?iso-8859-4?Q?kfiQSoWNCf3mkvTV6jwVeKQ2BojLaPc0TejYEkyOYU8q0mr7Zb5KJTTxGt?=
+ =?iso-8859-4?Q?WikJgQHg3UsadtRo2Z4X1OwxFDmg+V5wvOAkyIQ5l9PUqC6z5WEilaKCCU?=
+ =?iso-8859-4?Q?qbNimoRzffKA2qtVXjD/9uQwdPczUCLJRznmsGeGvPsKlpQTlrn5zPgA?=
+ =?iso-8859-4?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-4"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3788.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4624305-e943-4be1-48d0-08db40253c29
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2023 15:54:47.0310
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: DWB3kBAwiAkllv8kbiOe2LPIjSoGwVcL5gfy7ceJ8VdEc81MBdfNP1+y5b3QaivflzjvPMI+fDuwzbHYo8t2CN3l6CNQv3mhdfWKZ2/fCXo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS0PR01MB6084
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 6:36=E2=80=AFAM Adrian Hunter <adrian.hunter@intel.=
-com> wrote:
->
-> On 18/04/23 09:18, Adrian Hunter wrote:
-> > On 17/04/23 14:02, Peter Zijlstra wrote:
-> >> On Fri, Apr 14, 2023 at 11:22:55AM +0300, Adrian Hunter wrote:
-> >>> Hi
-> >>>
-> >>> Here is a stab at adding an ioctl for sideband events.
-> >>>
-> >>> This is to overcome races when reading the same information
-> >>> from /proc.
-> >>
-> >> What races? Are you talking about reading old state in /proc the kerne=
-l
-> >> delivering a sideband event for the new state, and then you writing th=
-e
-> >> old state out?
-> >>
-> >> Surely that's something perf tool can fix without kernel changes?
-> >
-> > Yes, and it was a bit of a brain fart not to realise that.
-> >
-> > There may still be corner cases, where different kinds of events are
-> > interdependent, perhaps NAMESPACES events vs MMAP events could
-> > have ordering issues.
-> >
-> > Putting that aside, the ioctl may be quicker than reading from
-> > /proc.  I could get some numbers and see what people think.
-> >
->
-> Here's a result with a quick hack to use the ioctl but without
-> handling the buffer becoming full (hence the -m4M)
->
-> # ps -e | wc -l
-> 1171
-> # perf.old stat -- perf.old record -o old.data --namespaces -a true
-> [ perf record: Woken up 1 times to write data ]
-> [ perf record: Captured and wrote 1.095 MB old.data (100 samples) ]
->
->  Performance counter stats for 'perf.old record -o old.data --namespaces =
--a true':
->
->             498.15 msec task-clock                       #    0.987 CPUs =
-utilized
->                126      context-switches                 #  252.935 /sec
->                 64      cpu-migrations                   #  128.475 /sec
->               4396      page-faults                      #    8.825 K/sec
->         1927096347      cycles                           #    3.868 GHz
->         4563059399      instructions                     #    2.37  insn =
-per cycle
->          914232559      branches                         #    1.835 G/sec
->            6618052      branch-misses                    #    0.72% of al=
-l branches
->         9633787105      slots                            #   19.339 G/sec
->         4394300990      topdown-retiring                 #     38.8% Reti=
-ring
->         3693815286      topdown-bad-spec                 #     32.6% Bad =
-Speculation
->         1692356927      topdown-fe-bound                 #     14.9% Fron=
-tend Bound
->         1544151518      topdown-be-bound                 #     13.6% Back=
-end Bound
->
->        0.504636742 seconds time elapsed
->
->        0.158237000 seconds user
->        0.340625000 seconds sys
->
-> # perf.old stat -- perf.new record -o new.data -m4M --namespaces -a true
-> [ perf record: Woken up 1 times to write data ]
-> [ perf record: Captured and wrote 1.095 MB new.data (103 samples) ]
->
->  Performance counter stats for 'perf.new record -o new.data -m4M --namesp=
-aces -a true':
->
->             386.61 msec task-clock                       #    0.988 CPUs =
-utilized
->                100      context-switches                 #  258.658 /sec
->                 65      cpu-migrations                   #  168.128 /sec
->               4935      page-faults                      #   12.765 K/sec
->         1495905137      cycles                           #    3.869 GHz
->         3647660473      instructions                     #    2.44  insn =
-per cycle
->          735822370      branches                         #    1.903 G/sec
->            5765668      branch-misses                    #    0.78% of al=
-l branches
->         7477722620      slots                            #   19.342 G/sec
->         3415835954      topdown-retiring                 #     39.5% Reti=
-ring
->         2748625759      topdown-bad-spec                 #     31.8% Bad =
-Speculation
->         1221594670      topdown-fe-bound                 #     14.1% Fron=
-tend Bound
->         1256150733      topdown-be-bound                 #     14.5% Back=
-end Bound
->
->        0.391472763 seconds time elapsed
->
->        0.141207000 seconds user
->        0.246277000 seconds sys
->
-> # ls -lh old.data
-> -rw------- 1 root root 1.2M Apr 18 13:19 old.data
-> # ls -lh new.data
-> -rw------- 1 root root 1.2M Apr 18 13:19 new.data
-> #
+Hello Greg,
 
-Cool, so the headline is a ~20% or 1billion instruction reduction in
-perf startup overhead?
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: Tuesday, April 18, 2023 1:21 PM
+>=20
+> This is the start of the stable review cycle for the 4.19.281 release.
+> There are 57 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
+> Anything received after that time might be too late.
 
-Thanks,
-Ian
+CIP configurations built and booted with Linux 4.19.281-rc1 (cc0a9b81697f):
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
+40768979
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
+ux-4.19.y
+
+Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
+
+Kind regards, Chris
