@@ -2,107 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104336E5FE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338E06E60E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjDRLcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 07:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42974 "EHLO
+        id S231516AbjDRMMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 08:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbjDRLca (ORCPT
+        with ESMTP id S231361AbjDRMMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 07:32:30 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFBD4215
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:32:28 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f178da21b2so6064605e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:32:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1681817547; x=1684409547;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SH6qJUfWL9zJ79gRC7zWLV6OUPZJsPitBsnwEKwZJzc=;
-        b=dYUwrH3cwlb/VxM7YYjAPDY7d/PWsWZ/ahEUtKV2iEx7AIXgFCrrdTZXOwllrCJKk4
-         srvp+L2cb/LktGtpfu5JSBX4pUGDwDShUHIN6jCGJTax2V2m5sO22+0vljXw4Iq/w6gS
-         37D5Br1I1D8fcOgYJbpfgwUXQUHIkJR1uXMqHp3HyBOylbE5VJaBcF6OAfP34b/tQqgc
-         96kCNRXyfTxcMfuE4BxW1kTgICp/XQljEdZ376ffZd3ERJc22tW7BlkXvm0lk6axHOm6
-         49Aeeh50xLWdUPqeSyqwi3O10KWRFvU1MD2Baya16XDu9Z9diOwGvkXNmCbFKY/i4+df
-         0qiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681817547; x=1684409547;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SH6qJUfWL9zJ79gRC7zWLV6OUPZJsPitBsnwEKwZJzc=;
-        b=QKnhMXOuPC94UW78n4YBU2213ZZkp36inHPqPNvnoyfNtxiyUABT/Ww+FmyepbqcyD
-         SzRy3Fp0lc9cCr1oytH+xSS9vf/8/fLhf2e63GGdkxc8FIWoXTYLAYXDz04DDrfSzI6b
-         bGFAjztPmqQsVWyiVnQpa1WvX81LOYXcgqXFp+dvL8crcebwuVpwYqEOEbuzdNtRHpih
-         BoPmCfUsBFMUXssWLzajBhCdrq4vwGaOgUW6WQkvcmruj1LcyYMOm0nzpJd/hpNJVIG8
-         lbHX7E5Hu3L8J6oLcNXcYwKLJx6/a+TF4O8/mqD2Q60kpHCApzkQiYYhbKHHNx2BAojc
-         NMmA==
-X-Gm-Message-State: AAQBX9dBzGoMTQMIDXVKY/CjwKs91n6hxGrnpm+NxEZ8ueD9Z+8oTXB1
-        0w2xTFOz9RcbdU822rvAH5N2uA==
-X-Google-Smtp-Source: AKy350aMjaf6xGbP/S2Z5Z9i+emE+iz2bk11Y03Ha/+prgGlprwQ0eo2pRL8eH3nq2LMMAa+9bdzxg==
-X-Received: by 2002:a5d:688e:0:b0:2f8:f775:c885 with SMTP id h14-20020a5d688e000000b002f8f775c885mr1543151wru.6.1681817547289;
-        Tue, 18 Apr 2023 04:32:27 -0700 (PDT)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id z18-20020adfd0d2000000b002da75c5e143sm12901633wrh.29.2023.04.18.04.32.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 04:32:27 -0700 (PDT)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] hwmon: (max6639) Add compatible string
-Date:   Tue, 18 Apr 2023 13:32:17 +0200
-Message-Id: <20230418113217.781524-2-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230418113217.781524-1-Naresh.Solanki@9elements.com>
-References: <20230418113217.781524-1-Naresh.Solanki@9elements.com>
-MIME-Version: 1.0
+        Tue, 18 Apr 2023 08:12:01 -0400
+X-Greylist: delayed 1171 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Apr 2023 05:11:56 PDT
+Received: from mail.thorsis.com (mail.thorsis.com [92.198.35.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829E1F0;
+        Tue, 18 Apr 2023 05:11:56 -0700 (PDT)
+Received: from adahl by ada.ifak-system.com with local (Exim 4.94.2)
+        (envelope-from <ada@thorsis.com>)
+        id 1pojb0-000n1K-HF; Tue, 18 Apr 2023 13:34:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=default;
+        t=1681817701;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:content-transfer-encoding:content-transfer-encoding;
+        bh=58ms7/okwJXKsuNO79X1bSKGgHUauO/LsUGYVyTun4g=;
+        b=KTImcDeqQrl8npJhreOf0KKYuGeY6ctB5hN/8kC95LQaVz3JNxMqVTL+nmXBnGZP+qlhb/
+        LTvhg/yOpF80/qold+fqd6UZHUwQdoscP1jhou145nwDdYA1d0rGkDHZpFc4z9kGi10/SI
+        acOy7JVIsInnb6dFHRr14DgYvVXiIAFxpfSm1Sqf1mF+pqzvcjS3TT0P19UFhh3bzgesJg
+        xNL2xsN27sY76muPE6WfmVrjkNcu9xBEi+TxI1NEuSJxapD0lHflnJ0MByIXA4TxQWvTHa
+        vXeVAOGVN0TkQ/fHXnm4R0cAwDdSTn06gUGscCBycNng1E0PTEYvVg+SsiRAIA==
+From:   Alexander Dahl <ada@thorsis.com>
+To:     linux-doc@vger.kernel.org, linux-leds@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Fabio Baltieri <fabio.baltieri@gmail.com>
+Subject: [PATCH] docs: leds: ledtrig-oneshot: Fix spelling mistake
+Date:   Tue, 18 Apr 2023 13:34:02 +0200
+Message-Id: <20230418113402.188391-1-ada@thorsis.com>
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use maxim,max6639 as compatible string for the driver.
+It's no comparision, but a "first this, then that" situation.
 
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+Signed-off-by: Alexander Dahl <ada@thorsis.com>
 ---
- drivers/hwmon/max6639.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/leds/ledtrig-oneshot.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
-index 9b895402c80d..ada410bfb7b6 100644
---- a/drivers/hwmon/max6639.c
-+++ b/drivers/hwmon/max6639.c
-@@ -618,11 +618,17 @@ MODULE_DEVICE_TABLE(i2c, max6639_id);
+diff --git a/Documentation/leds/ledtrig-oneshot.rst b/Documentation/leds/ledtrig-oneshot.rst
+index 69fa3ea1d554..e044d69e9c0f 100644
+--- a/Documentation/leds/ledtrig-oneshot.rst
++++ b/Documentation/leds/ledtrig-oneshot.rst
+@@ -5,7 +5,7 @@ One-shot LED Trigger
+ This is a LED trigger useful for signaling the user of an event where there are
+ no clear trap points to put standard led-on and led-off settings.  Using this
+ trigger, the application needs only to signal the trigger when an event has
+-happened, than the trigger turns the LED on and than keeps it off for a
++happened, then the trigger turns the LED on and then keeps it off for a
+ specified amount of time.
  
- static DEFINE_SIMPLE_DEV_PM_OPS(max6639_pm_ops, max6639_suspend, max6639_resume);
- 
-+static const struct of_device_id max6639_of_match[] = {
-+	{ .compatible = "maxim,max6639", },
-+	{ },
-+};
-+
- static struct i2c_driver max6639_driver = {
- 	.class = I2C_CLASS_HWMON,
- 	.driver = {
- 		   .name = "max6639",
- 		   .pm = pm_sleep_ptr(&max6639_pm_ops),
-+		   .of_match_table = max6639_of_match,
- 		   },
- 	.probe_new = max6639_probe,
- 	.id_table = max6639_id,
+ This trigger is meant to be usable both for sporadic and dense events.  In the
+
+base-commit: 6a8f57ae2eb07ab39a6f0ccad60c760743051026
 -- 
-2.39.1
+2.30.2
 
