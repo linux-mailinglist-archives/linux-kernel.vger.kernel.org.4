@@ -2,84 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82EE66E5663
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 03:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B476E566A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 03:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjDRBZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 21:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44476 "EHLO
+        id S229896AbjDRB1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 21:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbjDRBYx (ORCPT
+        with ESMTP id S229655AbjDRB12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 21:24:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2988F46A8;
-        Mon, 17 Apr 2023 18:24:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD23962B8C;
-        Tue, 18 Apr 2023 01:24:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0851CC433EF;
-        Tue, 18 Apr 2023 01:24:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681781091;
-        bh=32K0Q1HerQG3csJxlpFXO/0Ud2VIwzHH5+OXkXOd0/U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HOF+vm+sF4UcDMoaPWRO321Tj0buTOVFxEOsOk49qppbLCqvQoFqhbW8dFAwYobgj
-         unEcgvnMNVectQ6qFCjDLIZNdjGzBAo8o1UFmAz3Sdf9DoEBFyM1YST3QSnSBTUCp3
-         Sxgl5s9bW/SrjnoRWJcTtof5FjR8izX28SnNc/s9M3R1mpZ5qdsSv5uEAhTpOPh5cu
-         M8ajK9Q7Tn4nR4ocPDoktgyBC5dijh0at4zF0C1yDS8FsrnUSnFb3ApPq6GeY3ytNM
-         Fg93i/N5zvMUjOk3F255vIAT2/FS/Vi1V6J4R29r6Xr+mIiJSuGw28LnSqnbQqzlty
-         vm8UZDYaMZ+oA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 87605403B5; Mon, 17 Apr 2023 22:24:48 -0300 (-03)
-Date:   Mon, 17 Apr 2023 22:24:48 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Hagen Paul Pfeifer <hagen@jauu.net>
-Cc:     Colin Ian King <colin.i.king@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Petar Gligoric <petar.gligoric@rohde-schwarz.com>,
-        linux-perf-users@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] perf script: task-analyzer: Fix spelling mistake
- "miliseconds" -> "millseconds"
-Message-ID: <ZD3xYFRrdjEdzQJC@kernel.org>
-References: <20230417174826.52963-1-colin.i.king@gmail.com>
- <20230417182707.bgvx2os4bbihjamb@ic1101>
+        Mon, 17 Apr 2023 21:27:28 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B1C2D79;
+        Mon, 17 Apr 2023 18:27:27 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33I1RIg5007800;
+        Mon, 17 Apr 2023 20:27:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681781238;
+        bh=Of7HHWk/aqFbkXN6zZ3p7OKc+toNQyjl37HgSMUNRu4=;
+        h=From:To:CC:Subject:Date;
+        b=YW2g0ZwrHSncy8Um1PA0HQ8T1r0bsoPtvhO07AxAkEeA52WV+rUsT+a8Ya5ZkwOMk
+         hKa3gl6sP+9Tl/27jS4eL/Og1aFAZSo1/BjthKL018lgg9KOEYl3cBVkFsjJMgNvJa
+         ZZd41WsHiD+bcqDSLfNNMqq9wTOr7iox2bqnDL8U=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33I1RIuk115910
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 17 Apr 2023 20:27:18 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 17
+ Apr 2023 20:27:18 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 17 Apr 2023 20:27:18 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33I1RItK041844;
+        Mon, 17 Apr 2023 20:27:18 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Bryan Brattlof <bb@ti.com>
+Subject: [PATCH 0/3] arm64: dts: ti: k3-am62a: Add timers, wdt and fixup
+Date:   Mon, 17 Apr 2023 20:27:14 -0500
+Message-ID: <20230418012717.1230882-1-nm@ti.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230417182707.bgvx2os4bbihjamb@ic1101>
-X-Url:  http://acmel.wordpress.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Apr 17, 2023 at 08:27:07PM +0200, Hagen Paul Pfeifer escreveu:
-> * Colin Ian King | 2023-04-17 18:48:26 [+0100]:
-> 
-> >There is a spelling mistake in the help for the --ms option. Fix it.
-> >
-> >Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> 
-> Good catch - thank you Colin!
-> 
-> Acked-by: Hagen Paul Pfeifer <hagen@jauu.net>
+Hi,
 
-Thanks, applied, and fixed the subject line typo.
+This is a series that adds wdt, timers to am62ax support, and adds the
+missing description for uart1 and wkup_uart that is used by firmware.
 
-- Arnaldo
+Nishanth Menon (3):
+  arm64: dts: ti: k3-am62a: Add general purpose timers
+  arm64: dts: ti: k3-am62a: Add watchdog nodes
+  arm64: dts: ti: k3-am62a7-evm: Describe main_uart1 and wkup_uart
+
+ arch/arm64/boot/dts/ti/k3-am62a-main.dtsi   | 141 ++++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-am62a-mcu.dtsi    |  56 ++++++++
+ arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi |  11 ++
+ arch/arm64/boot/dts/ti/k3-am62a7-sk.dts     |  36 +++++
+ 4 files changed, 244 insertions(+)
+
+-- 
+2.40.0
+
