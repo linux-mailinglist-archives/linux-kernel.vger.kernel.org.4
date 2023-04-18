@@ -2,97 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151576E5BD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5115E6E5BD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbjDRIPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57862 "EHLO
+        id S230455AbjDRIPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbjDRIPE (ORCPT
+        with ESMTP id S231197AbjDRIPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:15:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635E959DF
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:14:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681805646;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EGmsPhYqXkM4h3lS3j2J6rFOa5Kg9NoDZ6FuRnesr/A=;
-        b=W90lRjQxYEpiDrx5JATs8+kR23fUdb3FhlWFcTC4RT/GC3YfKdI+ecn6RgBTpI97QwrXm/
-        ZTjZGXp2EaPDmqf2wIz4IWS2iW6EvH7HwsX5v7rvoOK3juchKWV2HMfvwjQ052EuDZTxV3
-        rBGiIh2jNAZqeHZyoE/v8M8alnDq/BA=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-464-XVVcjkegNzuXuf6bgCfLkQ-1; Tue, 18 Apr 2023 04:14:05 -0400
-X-MC-Unique: XVVcjkegNzuXuf6bgCfLkQ-1
-Received: by mail-wr1-f70.google.com with SMTP id d21-20020adfa415000000b002f68de99106so1925618wra.19
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:14:04 -0700 (PDT)
+        Tue, 18 Apr 2023 04:15:20 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6AD6EA1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:15:15 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-54fc337a650so196122837b3.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:15:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681805715; x=1684397715;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ga90w5aZN7pc1fzGiYERoAYWb3VLnRbaSw6+nc26HoQ=;
+        b=k1+6UORUVvsISmZWX2L3FYvL2kHbjH+EVBIZSZO+7TsML2E6p9om+X6RJLVOasf0Ek
+         TYn42uj75ExhcaVZgeQIvkodRprNCucMHW/JEP+kmATJ/wK3nfw2vwhKQUxJ5Qu9/P/D
+         moVpRaa1zQoLzKWOYPbX3PnIIBXl2n68FiC6cEQo6UYUabLb5ZKlDyCkWiwUpRWsnJku
+         wXrNhGlUtQaBdEdm4vB7dps955jX/3dmjFk0MwyS42FwHgG1tEMLpHh0JK0hJ9NrIMe4
+         LpYShVSA2ggN5KvIw4DmLRPrkyujFhzNfiCE+70+Wx0WPgJwlw6Y9KGZJWP4B1QvAmxJ
+         iXMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681805644; x=1684397644;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EGmsPhYqXkM4h3lS3j2J6rFOa5Kg9NoDZ6FuRnesr/A=;
-        b=ZXoKlCGbsF5q6PLHFIRtjHj9F/35hJROEy1sRxGGsL2T4W/Eebet4vWj9RlWdSax3c
-         utbcBj+ayRKEwIodJT0Yaq9pzEBmgQKozlPeLQfUfjBFJ/LQmBOC0s2h4LS0mf6xKUJV
-         t16bPtIHm2oPm7GDqN8Iom7k5Tqj62z+2/Xpu93ofodpg3NQkQCQW+BpYguoLk4EGxDj
-         hP4Q+qztVs42hOktN4A4iGUKvBIn9jou/6PhVLkOqB2UQVB2tI2SJoTj+JmKdBXKuK35
-         /5THSZv3TWWu4XWlfOT3uDmV4hO3GmixsMCJaM/J1e2cnBeAU2kUdo93o4rUGwo9UrD0
-         y3FQ==
-X-Gm-Message-State: AAQBX9cF9xvQ3QNKTchRRmdKGNGEL/SQqBYYR5/CQzcmmlCtaOi6J0Ux
-        AuxY28Hedn+iFYzc+x+FQutfFoXlsxEl2gBL+BpLbwhB2HT1MV5NG/Ni95hLW+Fq9Rvcs5YwQLj
-        X3fpEBE90u+MgpyslS2y8tzPd
-X-Received: by 2002:a7b:cc94:0:b0:3f0:5beb:6f0 with SMTP id p20-20020a7bcc94000000b003f05beb06f0mr12966600wma.18.1681805644137;
-        Tue, 18 Apr 2023 01:14:04 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aA7v1tMPmHJ6euPAD3upj/mGQ0RZG5O7DSucBbGroxI9JcIp3kDKJehA+p1y5A4FmxtBeLPQ==
-X-Received: by 2002:a7b:cc94:0:b0:3f0:5beb:6f0 with SMTP id p20-20020a7bcc94000000b003f05beb06f0mr12966578wma.18.1681805643836;
-        Tue, 18 Apr 2023 01:14:03 -0700 (PDT)
-Received: from debian ([92.62.32.42])
-        by smtp.gmail.com with ESMTPSA id q25-20020a05600c331900b003f17b91c3adsm90863wmp.28.2023.04.18.01.14.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 01:14:03 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 10:14:00 +0200
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        James Chapman <jchapman@katalix.com>, tparkin@katalix.com,
-        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, corbet@lwn.net, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PPPoL2TP: Add more code snippets
-Message-ID: <ZD5RSOrpUusamkQv@debian>
-References: <20230416220704.xqk4q6uwjbujnqpv@begin>
- <ZDx2IUYTmLSdzU6D@codewreck.org>
+        d=1e100.net; s=20221208; t=1681805715; x=1684397715;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ga90w5aZN7pc1fzGiYERoAYWb3VLnRbaSw6+nc26HoQ=;
+        b=EppU12bAFje6SaYUvr/MHc+kRB/Zx9zodn0bfIJobwHcUE5JvEgZ2Z5G7qIcU8zn0G
+         8DLRBvzD8HDutY1makZ5EeGOxMKsTTBV26vVPtKbnCsyIIRDMYewssYWZuxCpgzVNvEb
+         dKtkqQIHJj3CRo+QVSjexWExUGO/3cLWsQHNqOUwik3RkmNH2TueBHTaqYYKUwC0cUXg
+         skAc7BPH1fZiKOlX1ogv2rRIHB0y78jNq078DNkr305Dkk2ZE2JHYjDBcIa9LZ8RJipl
+         CDaapvVgm3j590p8W1L24dVy/ZowaTQJyrGKhX3Pvm4sGFpX/4ghc1mbLCQy5Y8NcE3k
+         iZ0g==
+X-Gm-Message-State: AAQBX9cPCf7uvFx2jVjPQ/M6ftUAkMjgbK8vd5vHt3rSK4eC8hckzPPh
+        WMKLcB39wWvgs+LHV9JNCR4KmJOvAiWP0YVS4s3s9g==
+X-Google-Smtp-Source: AKy350YXLmM0Icx5pytx/kZZhmhbncZwO68Jo/boiD4hprALFyUqooXiKYsSX+9rHvlBLSIEOFpWPKaqi9MkqNMbR30=
+X-Received: by 2002:a81:7c06:0:b0:552:c425:829a with SMTP id
+ x6-20020a817c06000000b00552c425829amr7718381ywc.49.1681805714901; Tue, 18 Apr
+ 2023 01:15:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZDx2IUYTmLSdzU6D@codewreck.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230414055502.23920-1-quic_mkshah@quicinc.com> <20230414055502.23920-2-quic_mkshah@quicinc.com>
+In-Reply-To: <20230414055502.23920-2-quic_mkshah@quicinc.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 18 Apr 2023 10:14:39 +0200
+Message-ID: <CAPDyKFqJySWVSkNd=fZ20j7RY-qz+HAcuxaYSHxnYYG2HR68mg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] cpuidle: dt_idle_genpd: Add helper function to
+ remove genpd topology
+To:     Maulik Shah <quic_mkshah@quicinc.com>
+Cc:     andersson@kernel.org, dianders@chromium.org, swboyd@chromium.org,
+        wingers@google.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        sudeep.holla@arm.com, jwerner@chromium.org, quic_lsrao@quicinc.com,
+        quic_rjendra@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 07:26:41AM +0900, Dominique Martinet wrote:
-> Samuel Thibault wrote on Mon, Apr 17, 2023 at 12:07:04AM +0200:
-> (That somewhat makes it sounds like the "new" netlink interface cannot
-> be used (e.g. ip command); although I guess sommeone implementing this
-> would be more likely to use the ioctls than not so having the names can
-> be a timesaver?)
+On Fri, 14 Apr 2023 at 07:55, Maulik Shah <quic_mkshah@quicinc.com> wrote:
+>
+> Genpd parent and child domain topology created using dt_idle_pd_init_topology()
+> needs to be removed during error cases.
+>
+> Add new helper function dt_idle_pd_remove_topology() for same.
 
-I don't understand what you mean by 'the "new" netlink interface'. You
-can create a PPP interface either with the PPPIOCNEWUNIT ioctl or with
-netlink. But no matter how you create it, you need a /dev/ppp file
-descriptor associated to the PPP network device. Other than that, and
-no matter how you create them, PPP network devices can be used and
-configured like any other network interface. You absolutely can use
-"ip link" to manage you ppp interfaces.
+Except for the missing s-o-b line, this looks good to me.
 
+Reviewed-by: Ulf Hanssson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
+> ---
+>  drivers/cpuidle/dt_idle_genpd.c | 24 ++++++++++++++++++++++++
+>  drivers/cpuidle/dt_idle_genpd.h |  7 +++++++
+>  2 files changed, 31 insertions(+)
+>
+> diff --git a/drivers/cpuidle/dt_idle_genpd.c b/drivers/cpuidle/dt_idle_genpd.c
+> index b37165514d4e..1af63c189039 100644
+> --- a/drivers/cpuidle/dt_idle_genpd.c
+> +++ b/drivers/cpuidle/dt_idle_genpd.c
+> @@ -152,6 +152,30 @@ int dt_idle_pd_init_topology(struct device_node *np)
+>         return 0;
+>  }
+>
+> +int dt_idle_pd_remove_topology(struct device_node *np)
+> +{
+> +       struct device_node *node;
+> +       struct of_phandle_args child, parent;
+> +       int ret;
+> +
+> +       for_each_child_of_node(np, node) {
+> +               if (of_parse_phandle_with_args(node, "power-domains",
+> +                                       "#power-domain-cells", 0, &parent))
+> +                       continue;
+> +
+> +               child.np = node;
+> +               child.args_count = 0;
+> +               ret = of_genpd_remove_subdomain(&parent, &child);
+> +               of_node_put(parent.np);
+> +               if (ret) {
+> +                       of_node_put(node);
+> +                       return ret;
+> +               }
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  struct device *dt_idle_attach_cpu(int cpu, const char *name)
+>  {
+>         struct device *dev;
+> diff --git a/drivers/cpuidle/dt_idle_genpd.h b/drivers/cpuidle/dt_idle_genpd.h
+> index a95483d08a02..3be1f70f55b5 100644
+> --- a/drivers/cpuidle/dt_idle_genpd.h
+> +++ b/drivers/cpuidle/dt_idle_genpd.h
+> @@ -14,6 +14,8 @@ struct generic_pm_domain *dt_idle_pd_alloc(struct device_node *np,
+>
+>  int dt_idle_pd_init_topology(struct device_node *np);
+>
+> +int dt_idle_pd_remove_topology(struct device_node *np);
+> +
+>  struct device *dt_idle_attach_cpu(int cpu, const char *name);
+>
+>  void dt_idle_detach_cpu(struct device *dev);
+> @@ -36,6 +38,11 @@ static inline int dt_idle_pd_init_topology(struct device_node *np)
+>         return 0;
+>  }
+>
+> +static inline int dt_idle_pd_remove_topology(struct device_node *np)
+> +{
+> +       return 0;
+> +}
+> +
+>  static inline struct device *dt_idle_attach_cpu(int cpu, const char *name)
+>  {
+>         return NULL;
+> --
+> 2.17.1
+>
