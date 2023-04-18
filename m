@@ -2,76 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25986E60E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445696E60D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbjDRMMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 08:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42800 "EHLO
+        id S230094AbjDRMMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 08:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbjDRMLk (ORCPT
+        with ESMTP id S231616AbjDRMLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 08:11:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80070B777
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:10:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681819804;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=pK6/Jsd6qCRDUY6MLyVVq/KSoYjj907IkYNaHbXLumg=;
-        b=QQlez4UUZh9NUbk911CSATh/AARVsF7zaJ0FkDwAIPEDx7WYeie0B7zmlxwgOju77xYStz
-        jjHndk2reTZAcUZWoXfqJFw6QZlaA19dPFEVmBGQzDY5s9GJj1AmXZB0EWXkFBzdID9+EE
-        S40ICitbN50EIbVoxmMc3xcuBmyVgvU=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-641-_lFIKsezOTqZ4RLVN6U24A-1; Tue, 18 Apr 2023 08:10:03 -0400
-X-MC-Unique: _lFIKsezOTqZ4RLVN6U24A-1
-Received: by mail-qv1-f70.google.com with SMTP id o14-20020a0cc38e000000b005e62747d93aso15297609qvi.11
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:10:02 -0700 (PDT)
+        Tue, 18 Apr 2023 08:11:34 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EEA4ED5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:10:59 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2a8aea2a654so20357211fa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681819858; x=1684411858;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0FtC68OU05WVvDMbJdinmshqebJEKgAhn9ch5Qe5aNc=;
+        b=oN7I222L001U6oDBsNQ2Z5r5KMJbnqkErXI/QjKJVbO1yn6F2htBlGooLVIismVzr4
+         76hsQ7fTvy4NDCgh0MHFz/ICYDD5yItQVx81xQSvk1CWKeetqH8y/SkstCtfzOk/0Ws2
+         Sce66q4FtaDOnTjf/JjfBGU0bmAVSrgFbOI2RpXjNFkcxbSZ39sGEsYbepqaqf2YzA/4
+         qtnOE7Xuh6bXp3/Xn0GS1Ala/5ncj0F57JpNd/YfN/yQE2Mxw2A0J5FkZqE+dVyEFRnU
+         G1HSUStT84NrTD/wJQIoFegZuFrzmIB9VapwNIumIDpMUlWIGpMJ0S3UmgdVLQBAJMsb
+         xPSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681819801; x=1684411801;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1681819858; x=1684411858;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pK6/Jsd6qCRDUY6MLyVVq/KSoYjj907IkYNaHbXLumg=;
-        b=bEGFHXzcpolNK2YeGuq2QLl24o3PBgxygsAhuXT4tXnNVV2d1Ra6s3ASc3VODvS2Sq
-         XpwrFAtvMxset5MqY3ATt7G6bwAPThWt/f4x8TlhjgSGB+VllZdusEfTaTIZGIS6V5qq
-         Kr9kyzRxhnLZ8vewbCs0ZrMjT3sxQm9m7JYZGWYIie6C73/ILZ0rqBbdpAEZEwLvK+uR
-         LtMZh/I5ZoUZsJcbYAISqvgUzKheBLSOhNdTztuKTXOsu7XXzR+OcIsBM2w+Q/oHrTnv
-         P6r+9JgmlqffdBc4OR773xNkPFaP9GrG0VpjlMzrWAWXiAs73waqg6u1zEIb2Mmdakxd
-         ODSg==
-X-Gm-Message-State: AAQBX9dHIHiqt8lj8AR94BQKfeD3Yyf2MjEMXpqPiBKpW+ZMMozZqDhU
-        mtIRu8W6fICciQf431huFdNubxtPIHHQceDNpHQ0cCrtCsjJL33LWBbR4Mpq0UrCXt0wtQFHhra
-        xLRUxXAlplrSg+0ckrfEea4fT
-X-Received: by 2002:a05:622a:100d:b0:3ef:3824:b8b0 with SMTP id d13-20020a05622a100d00b003ef3824b8b0mr4901524qte.5.1681819801602;
-        Tue, 18 Apr 2023 05:10:01 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bOLcjSKxSHpofNzJcaPxLEh2nUi7FC1BrTGAF/mAedpATg6zJUv4zkRCxYqhwooGe4UgjcQw==
-X-Received: by 2002:a05:622a:100d:b0:3ef:3824:b8b0 with SMTP id d13-20020a05622a100d00b003ef3824b8b0mr4901483qte.5.1681819801322;
-        Tue, 18 Apr 2023 05:10:01 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id p129-20020a374287000000b007339c5114a9sm3875322qka.103.2023.04.18.05.10.00
+        bh=0FtC68OU05WVvDMbJdinmshqebJEKgAhn9ch5Qe5aNc=;
+        b=bc7oI9MbnhwvFJ6G99O71rt7lYRsqUMzivbVZWzRiTFOpyALjygUVW7EKtWvOCMvEA
+         fGMB3O7cUm/CadTNqWtSjIOCO9rahpSQ7kNgAeyFevUIN/5EfUjHyMEKEU+FbK1bQjlD
+         7YyiY2hj4eDTc4oTsPlWCPqhS828H5rsejBnHiBTAlvZRdvXycvI/0/opir8H+ZrkB98
+         gPcbzQMV/e5le/f0lCTQDrx9yNPl4UMTUhwEQHocpf45hkk2e3EkcFpXBWZVa2bsNVX0
+         s1/fQckAj+Jq/uclp+Fcg1dixtPUpx1CUuLBhz9VdevOmTe5KJW85tS6nkxKxnS53ytk
+         zGFg==
+X-Gm-Message-State: AAQBX9ez4YYMB/tCs/OGNkuNfWqZQRMbQ5iNYZEaXIVIDzIuuo947Lxh
+        xBCZrEiS+G/PEoccZe7STQsY0A==
+X-Google-Smtp-Source: AKy350b1R8Gw9qWShitOCt9kHDGW8yxwVJp7S7FeWgH2XL+i6oh7hdrksmu3Eu1fsIACNW9o0RcwZg==
+X-Received: by 2002:a05:6512:946:b0:4cc:7282:702b with SMTP id u6-20020a056512094600b004cc7282702bmr2915977lft.2.1681819858155;
+        Tue, 18 Apr 2023 05:10:58 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id q17-20020a19a411000000b004d86808fd33sm2365895lfc.15.2023.04.18.05.10.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 05:10:01 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, nathan@kernel.org, ndesaulniers@google.com,
-        CTLIN0@nuvoton.com, luca.ceresoli@bootlin.com, peda@axentia.se,
-        javierm@redhat.com, u.kleine-koenig@pengutronix.de,
-        ckeepax@opensource.cirrus.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] ASoC: nau8825: fix bounds check for adc_delay
-Date:   Tue, 18 Apr 2023 08:09:55 -0400
-Message-Id: <20230418120955.3230705-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 18 Apr 2023 05:10:57 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v2 0/5] MDSS reg bus interconnect
+Date:   Tue, 18 Apr 2023 14:10:55 +0200
+Message-Id: <20230417-topic-dpu_regbus-v2-0-91a66d04898e@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAM+IPmQC/32NQQqDMBAAvyJ7bkoSrWJP/UeRksRVFyQJG5UW8
+ e9NfUCPMzDMDgmZMMG92IFxo0TBZ9CXAtxk/IiC+sygpS5lpRqxhEhO9HF9MY52TcJY11amaWR
+ 705AzaxIKy8a7KYd+necsI+NA7/Pz7DJPlJbAn3O7qZ/9c9iUkELWg+2dqqvSycdM3nC4Bh6hO
+ 47jC+z6B/rGAAAA
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681819856; l=1588;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=9T+oPpgA4/nGeRlxxYT3UQzjlTmn8RNRP+pFgS35nLA=;
+ b=XjbFOQMabHazQLE042ggp/Qsi6Htq0N/t8+YpKAeT+K76r5ZaYtdmBUHabs5aYEel2Pn+xJfsea8
+ xG5lbEfjCv97dAhRoRjnauhXPCsCcfnkcYAN63wmEQL6lNH9N9D7
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,33 +91,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang build reports
-sound/soc/codecs/nau8825.c:2826:31: error: overlapping comparisons
-  always evaluate to false [-Werror,-Wtautological-overlap-compare]
-        if (nau8825->adc_delay < 125 && nau8825->adc_delay > 500)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+v1 -> v2:
+- Fix "Mbps" -> "MBps" [5/5]
+- Add an interconnects: entry in dt-bindings (and not only -names..) [1/5]
 
-This is a bug, a logical-or should have been used.
+v1: https://lore.kernel.org/r/20230417-topic-dpu_regbus-v1-0-06fbdc1643c0@linaro.org
 
-Fixes: fc0b096c9291 ("ASoC: nau8825: Add delay control for input path")
-Signed-off-by: Tom Rix <trix@redhat.com>
+Apart from the already handled data bus (MAS_MDP_Pn<->DDR), there's
+another path that needs to be handled to ensure MDSS functions properly,
+namely the "reg bus", a.k.a the CPU-MDSS interconnect.
+
+Gating that path may have a variety of effects.. from none to otherwise
+inexplicable DSI timeouts..
+
+This series tries to address the lack of that.
+
+Example path:
+
+interconnects = <&bimc MASTER_AMPSS_M0 0 &config_noc SLAVE_DISPLAY_CFG 0>;
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- sound/soc/codecs/nau8825.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Konrad Dybcio (5):
+      dt-bindings: display/msm: Add reg bus interconnect
+      drm/msm/dpu1: Rename path references to mdp_path
+      drm/msm/mdss: Rename path references to mdp_path
+      drm/msm/mdss: Handle the reg bus ICC path
+      drm/msm/dpu1: Handle the reg bus ICC path
 
-diff --git a/sound/soc/codecs/nau8825.c b/sound/soc/codecs/nau8825.c
-index c4389f5fe603..f4eb999761a4 100644
---- a/sound/soc/codecs/nau8825.c
-+++ b/sound/soc/codecs/nau8825.c
-@@ -2823,7 +2823,7 @@ static int nau8825_read_device_properties(struct device *dev,
- 	ret = device_property_read_u32(dev, "nuvoton,adc-delay-ms", &nau8825->adc_delay);
- 	if (ret)
- 		nau8825->adc_delay = 125;
--	if (nau8825->adc_delay < 125 && nau8825->adc_delay > 500)
-+	if (nau8825->adc_delay < 125 || nau8825->adc_delay > 500)
- 		dev_warn(dev, "Please set the suitable delay time!\n");
- 
- 	nau8825->mclk = devm_clk_get(dev, "mclk");
+ .../bindings/display/msm/mdss-common.yaml          |  2 ++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c      | 10 +++----
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            | 34 ++++++++++++++++-----
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h            |  5 ++--
+ drivers/gpu/drm/msm/msm_mdss.c                     | 35 ++++++++++++++--------
+ 5 files changed, 58 insertions(+), 28 deletions(-)
+---
+base-commit: 4aa1da8d99724f6c0b762b58a71cee7c5e2e109b
+change-id: 20230417-topic-dpu_regbus-abc94a770952
+
+Best regards,
 -- 
-2.27.0
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
