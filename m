@@ -2,247 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53A66E6B72
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 534446E6B73
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbjDRRw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 13:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
+        id S232385AbjDRRwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 13:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbjDRRw0 (ORCPT
+        with ESMTP id S231160AbjDRRwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 13:52:26 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A44146C6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:52:01 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id q21so1925449ljp.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:52:01 -0700 (PDT)
+        Tue, 18 Apr 2023 13:52:36 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A74C10E0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:52:11 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id hg12so13256115pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:52:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681840320; x=1684432320;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FKNxG97GrIEEiIU9hmrlsAR8zaruxYbVfl+hgQMLqTc=;
-        b=KcvZV9tGqSgN90wGyLz2hZXBbd+x0ZUH539ReWM4VKSoOpbQMeLPmDMZ9f8mSxI14l
-         tP/3oJGjreUuKybE12anK2UlGKTgHGVZQcS1Z4nCnNvWPpxtIy7jgdIfYj7j2dPGotaa
-         QSyS3DyMZtbP+MEOWtFKTQyUlazIB54oQzqs6kQIHD9AjcuCo9/AOfFeRx+GLDbk3rFJ
-         sdUV++tLjLN8k28r+xlODHMlP0INnO/WYqSkK3aZEi2MuljVg+P0rzOaNc3g91fPAZw9
-         2iMRZGje0GoL+CYEcfYADZJ2IOE7R1hBRlMyhGazvrMPxPlEsNepUsfPzijf8FSDwwQI
-         OG3Q==
+        d=gmail.com; s=20221208; t=1681840330; x=1684432330;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ecJfBqabO7lqZzAX7J4vFKzXJzBbVDV46eKIKNvjRGA=;
+        b=UuRVKbYHNO2+ypBmSsydrxG8hH0RsWKq/LU/ZHKXV3YRapO0ysKFvJSkROA9g7vm9B
+         kLFt2FJPSyJKCbQOci0pY9obi5lV3WhsPGxGZCQOvGTRpPXXNfeJ+YiKMsoWUFYfYVVC
+         brzT+MNq4jqVKJ0DhI5dCPneI/MVeL9HK+9+VVuccBxTEIyGtwUDbxfQFDizQEXMSGHS
+         CC3WtzHnHWxWEoebWLZ+Squf20SfvvP28iI3yEsj8IvyblGco7JE/OvflzMQMJddtIWS
+         VK92b2mxVVLsDvnzBJjk+35Ap9aTyT4X8bk/cmStc14JO8egcGxG0gNu7bYh+C/DLGPx
+         LLrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681840320; x=1684432320;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FKNxG97GrIEEiIU9hmrlsAR8zaruxYbVfl+hgQMLqTc=;
-        b=LGdc05/qXaSsObPWWIc2sX0qle24EOePyScSbHqoX0pYfUlNy+VoGjPf87igLKQ7og
-         M7CdLE8sCCtocXrdtdRmZCVihwhWig1eJeFWUYjH3+zKBpWZ3/qS4SKg2d8UR4VLbTGR
-         8y+bqy9RuOXa+QFyvj2AcVpNTr45+52h7DWTcjeiMrbrBmAHmJg832qT1epHWiGffW+F
-         6/8tAtOKS6W6IEGxv8vWh6ApA9QMvSTT5rArmsSQhWwIcX2KSAa4C8xOs4WySVIilRRZ
-         sUKumMNfoaHL+9LRRR9imzdtTAnY7kBn0aCp/xKumZ6P+omCISrzwjjEf88ShR0jynLs
-         8LqA==
-X-Gm-Message-State: AAQBX9e70gI7y/xhDGYvr0dX3gw2XDQu77Nv7JfS3f9V4ZjsacMKSxlB
-        RBNe5BGSJbEF23UchhtNBowUhGBs8LxKUxk2GYpV9A==
-X-Google-Smtp-Source: AKy350Z3ey2Whb3TRJUexHVM2ElfLev9jvmBSmFc/maYn4JiGBruRF47hsCPdID/nGmnmTen0+DbmIS6rwHvhQE9Q7c=
-X-Received: by 2002:a2e:9087:0:b0:298:b337:c11f with SMTP id
- l7-20020a2e9087000000b00298b337c11fmr1116723ljg.7.1681840319947; Tue, 18 Apr
- 2023 10:51:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681840330; x=1684432330;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ecJfBqabO7lqZzAX7J4vFKzXJzBbVDV46eKIKNvjRGA=;
+        b=T1EK1LQE5c9zw2kD+05Zfu1GocXvgxq9U2JA5Trbibmn53U/KaivnTx1bkbgZJMK+X
+         y4kNKv2NuaL8jQglw3Nw1gnJIT05RiK82qE/wnii+hm+SS8+vrYTgzNusxRkBgP6Z5SS
+         DnMmXiUFjdzGlklW16ysRXXVsDn0mVWceOtELecSnu0YlTa8W2m/E25okNmf0prSXBEh
+         sD7ZLmx0Zn+P6mObiZQlhYygtqiqWjjNuLRxLNl+qL/37PqhBt2GbE9m6MQILrX1sqo9
+         fp34tjwZZyMxwEbg8Feucb5DmOcn1gqzx7tatBfoMoG73Hzgs7vxEV1ZmIWG329Csh5p
+         DW1g==
+X-Gm-Message-State: AAQBX9dw+PDuMfb+sO3H7hlmSSyPXsnh4ynMDKVI7FawYXQIjmS1Ty10
+        lW+V5RaLs4YEqRFC38brWZGA0taqXKM=
+X-Google-Smtp-Source: AKy350bRDp0Yo5TSKicloGZlgruDCfWjNghh4tbzOOhERT6f6BCtJkiJzdsOxSs6PKdY33rl8XzJIQ==
+X-Received: by 2002:a05:6a20:a110:b0:ef:8b50:56b7 with SMTP id q16-20020a056a20a11000b000ef8b5056b7mr470860pzk.60.1681840330484;
+        Tue, 18 Apr 2023 10:52:10 -0700 (PDT)
+Received: from daehojeong-desktop.mtv.corp.google.com ([2620:15c:211:201:e22b:bd7c:4df6:1ae0])
+        by smtp.gmail.com with ESMTPSA id w3-20020a17090ac98300b00227223c58ecsm8881772pjt.42.2023.04.18.10.52.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 10:52:10 -0700 (PDT)
+From:   Daeho Jeong <daeho43@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
+Cc:     Daeho Jeong <daehojeong@google.com>
+Subject: [PATCH] f2fs: use cow inode data when updating atomic write
+Date:   Tue, 18 Apr 2023 10:52:06 -0700
+Message-ID: <20230418175206.3282328-1-daeho43@gmail.com>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
 MIME-Version: 1.0
-References: <20230407201921.2703758-1-sagis@google.com> <20230407201921.2703758-4-sagis@google.com>
- <20230418151110.00001354.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230418151110.00001354.zhi.wang.linux@gmail.com>
-From:   Sagi Shahar <sagis@google.com>
-Date:   Tue, 18 Apr 2023 10:51:48 -0700
-Message-ID: <CAAhR5DF4opiZQXD6T0c0BQctEDjTQDeK4Zn8kvkPy3_gRns+8Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/5] KVM: TDX: Add base implementation for tdx_vm_move_enc_context_from
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 5:12=E2=80=AFAM Zhi Wang <zhi.wang.linux@gmail.com>=
- wrote:
->
-> On Fri,  7 Apr 2023 20:19:19 +0000
-> Sagi Shahar <sagis@google.com> wrote:
->
-> What was the status of the src VM when calling the vm_move_enc_context_fr=
-om?
-> Is it still active like common live migration or it has been paused?
->
+From: Daeho Jeong <daehojeong@google.com>
 
-Yes the source VM is still active like in the live migration case.
-You can also see that we check that the source VM is finalized when we
-call tdx_guest before migrating the state.
+Need to use cow inode data content instead of the one in the original
+inode, when we try to write the already updated atomic write files.
 
-> > This should mostly match the logic in sev_vm_move_enc_context_from.
-> >
-> > Signed-off-by: Sagi Shahar <sagis@google.com>
-> > ---
-> >  arch/x86/kvm/vmx/main.c    | 10 +++++++
-> >  arch/x86/kvm/vmx/tdx.c     | 56 ++++++++++++++++++++++++++++++++++++++
-> >  arch/x86/kvm/vmx/tdx.h     |  2 ++
-> >  arch/x86/kvm/vmx/x86_ops.h |  5 ++++
-> >  4 files changed, 73 insertions(+)
-> >
-> > diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> > index 5b64fe5404958..9d5d0ac465bf6 100644
-> > --- a/arch/x86/kvm/vmx/main.c
-> > +++ b/arch/x86/kvm/vmx/main.c
-> > @@ -979,6 +979,14 @@ static int vt_vcpu_mem_enc_ioctl(struct kvm_vcpu *=
-vcpu, void __user *argp)
-> >       return tdx_vcpu_ioctl(vcpu, argp);
-> >  }
-> >
-> > +static int vt_move_enc_context_from(struct kvm *kvm, unsigned int sour=
-ce_fd)
-> > +{
-> > +     if (!is_td(kvm))
-> > +             return -ENOTTY;
-> > +
-> > +     return tdx_vm_move_enc_context_from(kvm, source_fd);
-> > +}
-> > +
-> >  #define VMX_REQUIRED_APICV_INHIBITS                 \
-> >  (                                                   \
-> >         BIT(APICV_INHIBIT_REASON_DISABLE)|           \
-> > @@ -1141,6 +1149,8 @@ struct kvm_x86_ops vt_x86_ops __initdata =3D {
-> >       .dev_mem_enc_ioctl =3D tdx_dev_ioctl,
-> >       .mem_enc_ioctl =3D vt_mem_enc_ioctl,
-> >       .vcpu_mem_enc_ioctl =3D vt_vcpu_mem_enc_ioctl,
-> > +
-> > +     .vm_move_enc_context_from =3D vt_move_enc_context_from,
-> >  };
-> >
-> >  struct kvm_x86_init_ops vt_init_ops __initdata =3D {
-> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> > index 8af7e4e81c860..0999a6d827c99 100644
-> > --- a/arch/x86/kvm/vmx/tdx.c
-> > +++ b/arch/x86/kvm/vmx/tdx.c
-> > @@ -2826,3 +2826,59 @@ int __init tdx_init(void)
-> >               INIT_LIST_HEAD(&per_cpu(associated_tdvcpus, cpu));
-> >       return 0;
-> >  }
-> > +
-> > +static __always_inline bool tdx_guest(struct kvm *kvm)
-> > +{
-> > +     struct kvm_tdx *tdx_kvm =3D to_kvm_tdx(kvm);
-> > +
-> > +     return tdx_kvm->finalized;
-> > +}
->         return is_td_finalized()?
-> > +
-> > +static int tdx_migrate_from(struct kvm *dst, struct kvm *src)
-> > +{
-> > +     return -EINVAL;
-> > +}
-> > +
-> > +int tdx_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_=
-fd)
-> > +{
-> > +     struct kvm_tdx *dst_tdx =3D to_kvm_tdx(kvm);
-> > +     struct file *src_kvm_file;
-> > +     struct kvm_tdx *src_tdx;
-> > +     struct kvm *src_kvm;
-> > +     int ret;
-> > +
-> > +     src_kvm_file =3D fget(source_fd);
-> > +     if (!file_is_kvm(src_kvm_file)) {
-> > +             ret =3D -EBADF;
-> > +             goto out_fput;
-> > +     }
-> > +     src_kvm =3D src_kvm_file->private_data;
-> > +     src_tdx =3D to_kvm_tdx(src_kvm);
-> > +
-> > +     ret =3D pre_move_enc_context_from(kvm, src_kvm,
-> > +                                     &dst_tdx->migration_in_progress,
-> > +                                     &src_tdx->migration_in_progress);
-> > +     if (ret)
-> > +             goto out_fput;
-> > +
-> > +     if (tdx_guest(kvm) || !tdx_guest(src_kvm)) {
-> > +             ret =3D -EINVAL;
-> > +             goto out_post;
-> > +     }
-> > +
-> > +     ret =3D tdx_migrate_from(kvm, src_kvm);
-> > +     if (ret)
-> > +             goto out_post;
-> > +
-> > +     kvm_vm_dead(src_kvm);
-> > +     ret =3D 0;
-> > +
-> > +out_post:
-> > +     post_move_enc_context_from(kvm, src_kvm,
-> > +                              &dst_tdx->migration_in_progress,
-> > +                              &src_tdx->migration_in_progress);
-> > +out_fput:
-> > +     if (src_kvm_file)
-> > +             fput(src_kvm_file);
-> > +     return ret;
-> > +}
-> > diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
-> > index 71818c5001862..21b7e710be1fd 100644
-> > --- a/arch/x86/kvm/vmx/tdx.h
-> > +++ b/arch/x86/kvm/vmx/tdx.h
-> > @@ -24,6 +24,8 @@ struct kvm_tdx {
-> >       atomic_t tdh_mem_track;
-> >
-> >       u64 tsc_offset;
-> > +
-> > +     atomic_t migration_in_progress;
-> >  };
-> >
-> >  union tdx_exit_reason {
-> > diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-> > index d049e0c72ed0c..275f5d75e9bf1 100644
-> > --- a/arch/x86/kvm/vmx/x86_ops.h
-> > +++ b/arch/x86/kvm/vmx/x86_ops.h
-> > @@ -187,6 +187,8 @@ int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __us=
-er *argp);
-> >  void tdx_flush_tlb(struct kvm_vcpu *vcpu);
-> >  int tdx_sept_tlb_remote_flush(struct kvm *kvm);
-> >  void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_=
-level);
-> > +
-> > +int tdx_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_=
-fd);
-> >  #else
-> >  static inline int tdx_init(void) { return 0; };
-> >  static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { re=
-turn -ENOSYS; }
-> > @@ -241,6 +243,9 @@ static inline int tdx_vcpu_ioctl(struct kvm_vcpu *v=
-cpu, void __user *argp) { ret
-> >  static inline void tdx_flush_tlb(struct kvm_vcpu *vcpu) {}
-> >  static inline int tdx_sept_tlb_remote_flush(struct kvm *kvm) { return =
-0; }
-> >  static inline void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_=
-hpa, int root_level) {}
-> > +
-> > +static inline int tdx_vm_move_enc_context_from(struct kvm *kvm, u
-> > +                                            nsigned int source_fd) { r=
-eturn -EOPNOTSUPP; }
-> >  #endif
-> >
-> >  #if defined(CONFIG_INTEL_TDX_HOST) && defined(CONFIG_KVM_SMM)
->
+Signed-off-by: Daeho Jeong <daehojeong@google.com>
+---
+ fs/f2fs/data.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 8df225014304..7165b1202f53 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -3491,7 +3491,7 @@ static int __reserve_data_block(struct inode *inode, pgoff_t index,
+ 
+ static int prepare_atomic_write_begin(struct f2fs_sb_info *sbi,
+ 			struct page *page, loff_t pos, unsigned int len,
+-			block_t *blk_addr, bool *node_changed)
++			block_t *blk_addr, bool *node_changed, bool *use_cow)
+ {
+ 	struct inode *inode = page->mapping->host;
+ 	struct inode *cow_inode = F2FS_I(inode)->cow_inode;
+@@ -3505,10 +3505,12 @@ static int prepare_atomic_write_begin(struct f2fs_sb_info *sbi,
+ 
+ 	/* Look for the block in COW inode first */
+ 	err = __find_data_block(cow_inode, index, blk_addr);
+-	if (err)
++	if (err) {
+ 		return err;
+-	else if (*blk_addr != NULL_ADDR)
++	} else if (*blk_addr != NULL_ADDR) {
++		*use_cow = true;
+ 		return 0;
++	}
+ 
+ 	if (is_inode_flag_set(inode, FI_ATOMIC_REPLACE))
+ 		goto reserve_block;
+@@ -3538,6 +3540,7 @@ static int f2fs_write_begin(struct file *file, struct address_space *mapping,
+ 	struct page *page = NULL;
+ 	pgoff_t index = ((unsigned long long) pos) >> PAGE_SHIFT;
+ 	bool need_balance = false;
++	bool use_cow = false;
+ 	block_t blkaddr = NULL_ADDR;
+ 	int err = 0;
+ 
+@@ -3597,7 +3600,7 @@ static int f2fs_write_begin(struct file *file, struct address_space *mapping,
+ 
+ 	if (f2fs_is_atomic_file(inode))
+ 		err = prepare_atomic_write_begin(sbi, page, pos, len,
+-					&blkaddr, &need_balance);
++					&blkaddr, &need_balance, &use_cow);
+ 	else
+ 		err = prepare_write_begin(sbi, page, pos, len,
+ 					&blkaddr, &need_balance);
+@@ -3637,7 +3640,9 @@ static int f2fs_write_begin(struct file *file, struct address_space *mapping,
+ 			f2fs_handle_error(sbi, ERROR_INVALID_BLKADDR);
+ 			goto fail;
+ 		}
+-		err = f2fs_submit_page_read(inode, page, blkaddr, 0, true);
++		err = f2fs_submit_page_read(use_cow ?
++				F2FS_I(inode)->cow_inode : inode, page,
++				blkaddr, 0, true);
+ 		if (err)
+ 			goto fail;
+ 
+-- 
+2.40.0.634.g4ca3ef3211-goog
+
