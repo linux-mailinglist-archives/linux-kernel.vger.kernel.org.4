@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52186E6F2C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1244D6E6F39
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232719AbjDRWNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 18:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
+        id S232807AbjDRWNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 18:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233199AbjDRWMm (ORCPT
+        with ESMTP id S233247AbjDRWN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 18:12:42 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AE06EA5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 15:12:35 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1a66b9bd893so22336025ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 15:12:35 -0700 (PDT)
+        Tue, 18 Apr 2023 18:13:28 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B652876A7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 15:13:17 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-94f1a6e66c9so253274066b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 15:13:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681855955; x=1684447955;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1681855996; x=1684447996;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DJ+yGPB/3GoY7peOyZ+CblNlWIiKQ+IujQrkD9HaThI=;
-        b=JCDbU/1Bhcl2YTj6lbZ8vWIJJgUX2ZBx7G1LvK9zy76LTAJd32O6W7BwyOtGTnXIPY
-         4fTpOYl3vnOuO33PE9j8K486WzNAqN1s15u5FrvCJvsazYo2SrKcYSyD9AF0Yn+alco0
-         ukXRsiqT0/g2OCfSlkCDQQe7njZVTqrULBWrs=
+        bh=c4OoVgdT/JlPTUOnnCefJPrx31VmWBmg4aQ12vOZz6M=;
+        b=VkQ5BIVsAXz8qHPqE1AbuokqcbbwIl019gwdrrvhI6RBdb9tqky4QNBDqa3aZeXugA
+         +bEXjiLfvYEU9oxVFYmKuIqNANetO2Xc/hXAsFKPBVHK/w9TYhg4fQ0+2Xlw30OJ/7dy
+         xAgKsO3NyV3Exdxh9y8Qh6gW7aKQ3gBsAOm1A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681855955; x=1684447955;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1681855996; x=1684447996;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DJ+yGPB/3GoY7peOyZ+CblNlWIiKQ+IujQrkD9HaThI=;
-        b=P7tjizlHk2lthcOvz28AJ6UU0DV8CVuEw9yCm9XTZcOmnr6A1O3nCtYfrC2g01QBkq
-         Fms32j/w4/RcRNIAW+qiXyptHIZVk0feGE1ZBGy1c6WwFyU8cLPE3iQjOJaLHyrpSr32
-         kcXX19bKQMJ+Umu9WSYYhajcvG1GVFTv3hAh2gyjecZr2X8XQFLs9hHdkw8D0uwMu2Be
-         5EYkjqW/+7Px7Fn1qnkhpijEva2Y/CMhH+Za4unJL+51wJIOiqR56NGEjSFmNk2CwHef
-         liB2yQUqEAhq52+afuvHCS3xax2XbuX5srDWTqn2b9Jb6MSP1U5Ptz/lOJVBJwt2thJ3
-         6Y2Q==
-X-Gm-Message-State: AAQBX9ekI3bv3pCCS+45NAuodbqAR8wkcbtCCOJnWRm82yPut9HSmAvB
-        2INnVJp4xgFh651nyVEv/BOp9w==
-X-Google-Smtp-Source: AKy350bdGW8lcpNwvg5/Io7seNtW+tP5EWMmhIyDjAkmWhtkJNkd0WaYZiBs0G+Q7zXofrJZlCjQtg==
-X-Received: by 2002:a17:903:11cc:b0:1a6:4541:73c with SMTP id q12-20020a17090311cc00b001a64541073cmr3738421plh.33.1681855955208;
-        Tue, 18 Apr 2023 15:12:35 -0700 (PDT)
-Received: from sarthakkukreti-glaptop.corp.google.com ([2620:15c:9d:200:e38b:ca5e:3203:48d3])
-        by smtp.gmail.com with ESMTPSA id x1-20020a1709029a4100b001a687c505e9sm9911892plv.237.2023.04.18.15.12.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 15:12:34 -0700 (PDT)
+        bh=c4OoVgdT/JlPTUOnnCefJPrx31VmWBmg4aQ12vOZz6M=;
+        b=WV/QXfgz7jFpxh1/7MoEfIpg9QvtnMlmFKuqCealkce+WGuaiAh58/oOLjbZsf5o5I
+         7AusJ7fLyzYE7+03aHU8oGebRaC2jMbPY4y1fof6cy8aehrVogpjlqM6D5PGM7REkLlR
+         iz8BYDQRpIS4H+XqK9XSpMkh6LfwHok7jWWIW61uDzWc9XZJcdWQTXjiBtppEM9KSzvU
+         wwcKcb09kOZrZak1OnY7SFYFgOFT21h2LCNnAzpzMa33oTgqqoVWeD9MLAprQ9g7da1y
+         w/kzrVglaEbrN6Nm9xH0ljAHj8bjRnjEJP5bu4HmqS7fw92SKAGZMbfVoK7K+XySF3gE
+         CbSA==
+X-Gm-Message-State: AAQBX9fTt8HALywGGNc1532r+N0A92yyeUXbCT/0XaByd7K2UCAtWB/U
+        k8zxodBF58KxpAW4iwcZT9WrDwtIK/lO/3UPzIb4oQ==
+X-Google-Smtp-Source: AKy350Y3bvX3JFwVJANUTwkv3nMR2zJzD8QH+3bT9woan5yhK8iPldbNIWULJmdbNY5X/QXA1kt+tT6oy+VLe4ukAzM=
+X-Received: by 2002:aa7:c405:0:b0:4fa:6767:817b with SMTP id
+ j5-20020aa7c405000000b004fa6767817bmr3543467edq.41.1681855996087; Tue, 18 Apr
+ 2023 15:13:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221229071647.437095-1-sarthakkukreti@chromium.org>
+ <20230414000219.92640-1-sarthakkukreti@chromium.org> <20230414000219.92640-2-sarthakkukreti@chromium.org>
+ <ZD2DcvyHdNmkdwr1@bfoster>
+In-Reply-To: <ZD2DcvyHdNmkdwr1@bfoster>
 From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
-To:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
+Date:   Tue, 18 Apr 2023 15:13:05 -0700
+Message-ID: <CAG9=OMO0Wdo_k_jDzL95FdrtuQHjzgX2asKN21GYcpEcpkknfA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] block: Introduce provisioning primitives
+To:     Brian Foster <bfoster@redhat.com>
+Cc:     sarthakkukreti@google.com, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>,
         "Michael S. Tsirkin" <mst@redhat.com>,
         Jason Wang <jasowang@redhat.com>,
         Stefan Hajnoczi <stefanha@redhat.com>,
         Alasdair Kergon <agk@redhat.com>,
         Mike Snitzer <snitzer@kernel.org>,
         Christoph Hellwig <hch@infradead.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Theodore Ts'o <tytso@mit.edu>,
+        "Theodore Ts'o" <tytso@mit.edu>,
         Andreas Dilger <adilger.kernel@dilger.ca>,
         Bart Van Assche <bvanassche@google.com>,
         Daniil Lunev <dlunev@google.com>,
         "Darrick J. Wong" <djwong@kernel.org>
-Subject: [PATCH v4 4/4] loop: Add support for provision requests
-Date:   Tue, 18 Apr 2023 15:12:07 -0700
-Message-ID: <20230418221207.244685-5-sarthakkukreti@chromium.org>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-In-Reply-To: <20230418221207.244685-1-sarthakkukreti@chromium.org>
-References: <20230414000219.92640-1-sarthakkukreti@chromium.org>
- <20230418221207.244685-1-sarthakkukreti@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -83,107 +81,210 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for provision requests to loopback devices.
-Loop devices will configure provision support based on
-whether the underlying block device/file can support
-the provision request and upon receiving a provision bio,
-will map it to the backing device/storage. For loop devices
-over files, a REQ_OP_PROVISION request will translate to
-an fallocate mode 0 call on the backing file.
+On Mon, Apr 17, 2023 at 10:33=E2=80=AFAM Brian Foster <bfoster@redhat.com> =
+wrote:
+>
+> On Thu, Apr 13, 2023 at 05:02:17PM -0700, Sarthak Kukreti wrote:
+> > Introduce block request REQ_OP_PROVISION. The intent of this request
+> > is to request underlying storage to preallocate disk space for the give=
+n
+> > block range. Block devices that support this capability will export
+> > a provision limit within their request queues.
+> >
+> > This patch also adds the capability to call fallocate() in mode 0
+> > on block devices, which will send REQ_OP_PROVISION to the block
+> > device for the specified range,
+> >
+> > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> > ---
+> >  block/blk-core.c          |  5 ++++
+> >  block/blk-lib.c           | 53 +++++++++++++++++++++++++++++++++++++++
+> >  block/blk-merge.c         | 18 +++++++++++++
+> >  block/blk-settings.c      | 19 ++++++++++++++
+> >  block/blk-sysfs.c         |  8 ++++++
+> >  block/bounce.c            |  1 +
+> >  block/fops.c              | 14 ++++++++---
+> >  include/linux/bio.h       |  6 +++--
+> >  include/linux/blk_types.h |  5 +++-
+> >  include/linux/blkdev.h    | 16 ++++++++++++
+> >  10 files changed, 138 insertions(+), 7 deletions(-)
+> >
+> ...
+> > diff --git a/block/fops.c b/block/fops.c
+> > index d2e6be4e3d1c..f82da2fb8af0 100644
+> > --- a/block/fops.c
+> > +++ b/block/fops.c
+> > @@ -625,7 +625,7 @@ static long blkdev_fallocate(struct file *file, int=
+ mode, loff_t start,
+> >       int error;
+> >
+> >       /* Fail if we don't recognize the flags. */
+> > -     if (mode & ~BLKDEV_FALLOC_FL_SUPPORTED)
+> > +     if (mode !=3D 0 && mode & ~BLKDEV_FALLOC_FL_SUPPORTED)
+> >               return -EOPNOTSUPP;
+> >
+> >       /* Don't go off the end of the device. */
+> > @@ -649,11 +649,17 @@ static long blkdev_fallocate(struct file *file, i=
+nt mode, loff_t start,
+> >       filemap_invalidate_lock(inode->i_mapping);
+> >
+> >       /* Invalidate the page cache, including dirty pages. */
+> > -     error =3D truncate_bdev_range(bdev, file->f_mode, start, end);
+> > -     if (error)
+> > -             goto fail;
+> > +     if (mode !=3D 0) {
+> > +             error =3D truncate_bdev_range(bdev, file->f_mode, start, =
+end);
+> > +             if (error)
+> > +                     goto fail;
+> > +     }
+> >
+> >       switch (mode) {
+> > +     case 0:
+> > +             error =3D blkdev_issue_provision(bdev, start >> SECTOR_SH=
+IFT,
+> > +                                            len >> SECTOR_SHIFT, GFP_K=
+ERNEL);
+> > +             break;
+>
+> I would think we'd want to support any combination of
+> FALLOC_FL_KEEP_SIZE and FALLOC_FL_UNSHARE_RANGE..? All of the other
+> commands support the former modifier, for one. It also looks like if
+> somebody attempts to invoke with mode =3D=3D FALLOC_FL_KEEP_SIZE, even wi=
+th
+> the current upstream code that would perform the bdev truncate before
+> returning -EOPNOTSUPP. That seems like a bit of an unfortunate side
+> effect to me.
+>
+Added a separate flag set to decide whether we should truncate or not.
 
-Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
----
- drivers/block/loop.c | 42 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+> WRT to unshare, if the PROVISION request is always going to imply an
+> unshare (which seems reasonable to me), there's probably no reason to
+> -EOPNOTSUPP if a caller explicitly passes UNSHARE_RANGE.
+>
+Added handling in v4.
 
-diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index bc31bb7072a2..13c4b4f8b9c1 100644
---- a/drivers/block/loop.c
-+++ b/drivers/block/loop.c
-@@ -327,6 +327,24 @@ static int lo_fallocate(struct loop_device *lo, struct request *rq, loff_t pos,
- 	return ret;
- }
- 
-+static int lo_req_provision(struct loop_device *lo, struct request *rq, loff_t pos)
-+{
-+	struct file *file = lo->lo_backing_file;
-+	struct request_queue *q = lo->lo_queue;
-+	int ret;
-+
-+	if (!q->limits.max_provision_sectors) {
-+		ret = -EOPNOTSUPP;
-+		goto out;
-+	}
-+
-+	ret = file->f_op->fallocate(file, 0, pos, blk_rq_bytes(rq));
-+	if (unlikely(ret && ret != -EINVAL && ret != -EOPNOTSUPP))
-+		ret = -EIO;
-+ out:
-+	return ret;
-+}
-+
- static int lo_req_flush(struct loop_device *lo, struct request *rq)
- {
- 	int ret = vfs_fsync(lo->lo_backing_file, 0);
-@@ -488,6 +506,8 @@ static int do_req_filebacked(struct loop_device *lo, struct request *rq)
- 				FALLOC_FL_PUNCH_HOLE);
- 	case REQ_OP_DISCARD:
- 		return lo_fallocate(lo, rq, pos, FALLOC_FL_PUNCH_HOLE);
-+	case REQ_OP_PROVISION:
-+		return lo_req_provision(lo, rq, pos);
- 	case REQ_OP_WRITE:
- 		if (cmd->use_aio)
- 			return lo_rw_aio(lo, cmd, pos, ITER_SOURCE);
-@@ -754,6 +774,25 @@ static void loop_sysfs_exit(struct loop_device *lo)
- 				   &loop_attribute_group);
- }
- 
-+static void loop_config_provision(struct loop_device *lo)
-+{
-+	struct file *file = lo->lo_backing_file;
-+	struct inode *inode = file->f_mapping->host;
-+
-+	/*
-+	 * If the backing device is a block device, mirror its provisioning
-+	 * capability.
-+	 */
-+	if (S_ISBLK(inode->i_mode)) {
-+		blk_queue_max_provision_sectors(lo->lo_queue,
-+			bdev_max_provision_sectors(I_BDEV(inode)));
-+	} else if (file->f_op->fallocate) {
-+		blk_queue_max_provision_sectors(lo->lo_queue, UINT_MAX >> 9);
-+	} else {
-+		blk_queue_max_provision_sectors(lo->lo_queue, 0);
-+	}
-+}
-+
- static void loop_config_discard(struct loop_device *lo)
- {
- 	struct file *file = lo->lo_backing_file;
-@@ -1092,6 +1131,7 @@ static int loop_configure(struct loop_device *lo, fmode_t mode,
- 	blk_queue_io_min(lo->lo_queue, bsize);
- 
- 	loop_config_discard(lo);
-+	loop_config_provision(lo);
- 	loop_update_rotational(lo);
- 	loop_update_dio(lo);
- 	loop_sysfs_init(lo);
-@@ -1304,6 +1344,7 @@ loop_set_status(struct loop_device *lo, const struct loop_info64 *info)
- 	}
- 
- 	loop_config_discard(lo);
-+	loop_config_provision(lo);
- 
- 	/* update dio if lo_offset or transfer is changed */
- 	__loop_update_dio(lo, lo->use_dio);
-@@ -1830,6 +1871,7 @@ static blk_status_t loop_queue_rq(struct blk_mq_hw_ctx *hctx,
- 	case REQ_OP_FLUSH:
- 	case REQ_OP_DISCARD:
- 	case REQ_OP_WRITE_ZEROES:
-+	case REQ_OP_PROVISION:
- 		cmd->use_aio = false;
- 		break;
- 	default:
--- 
-2.40.0.634.g4ca3ef3211-goog
+Thanks!
 
+Sarthak
+
+> Brian
+>
+> >       case FALLOC_FL_ZERO_RANGE:
+> >       case FALLOC_FL_ZERO_RANGE | FALLOC_FL_KEEP_SIZE:
+> >               error =3D blkdev_issue_zeroout(bdev, start >> SECTOR_SHIF=
+T,
+> > diff --git a/include/linux/bio.h b/include/linux/bio.h
+> > index d766be7152e1..9820b3b039f2 100644
+> > --- a/include/linux/bio.h
+> > +++ b/include/linux/bio.h
+> > @@ -57,7 +57,8 @@ static inline bool bio_has_data(struct bio *bio)
+> >           bio->bi_iter.bi_size &&
+> >           bio_op(bio) !=3D REQ_OP_DISCARD &&
+> >           bio_op(bio) !=3D REQ_OP_SECURE_ERASE &&
+> > -         bio_op(bio) !=3D REQ_OP_WRITE_ZEROES)
+> > +         bio_op(bio) !=3D REQ_OP_WRITE_ZEROES &&
+> > +         bio_op(bio) !=3D REQ_OP_PROVISION)
+> >               return true;
+> >
+> >       return false;
+> > @@ -67,7 +68,8 @@ static inline bool bio_no_advance_iter(const struct b=
+io *bio)
+> >  {
+> >       return bio_op(bio) =3D=3D REQ_OP_DISCARD ||
+> >              bio_op(bio) =3D=3D REQ_OP_SECURE_ERASE ||
+> > -            bio_op(bio) =3D=3D REQ_OP_WRITE_ZEROES;
+> > +            bio_op(bio) =3D=3D REQ_OP_WRITE_ZEROES ||
+> > +            bio_op(bio) =3D=3D REQ_OP_PROVISION;
+> >  }
+> >
+> >  static inline void *bio_data(struct bio *bio)
+> > diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+> > index 99be590f952f..27bdf88f541c 100644
+> > --- a/include/linux/blk_types.h
+> > +++ b/include/linux/blk_types.h
+> > @@ -385,7 +385,10 @@ enum req_op {
+> >       REQ_OP_DRV_IN           =3D (__force blk_opf_t)34,
+> >       REQ_OP_DRV_OUT          =3D (__force blk_opf_t)35,
+> >
+> > -     REQ_OP_LAST             =3D (__force blk_opf_t)36,
+> > +     /* request device to provision block */
+> > +     REQ_OP_PROVISION        =3D (__force blk_opf_t)37,
+> > +
+> > +     REQ_OP_LAST             =3D (__force blk_opf_t)38,
+> >  };
+> >
+> >  enum req_flag_bits {
+> > diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+> > index 941304f17492..239e2f418b6e 100644
+> > --- a/include/linux/blkdev.h
+> > +++ b/include/linux/blkdev.h
+> > @@ -303,6 +303,7 @@ struct queue_limits {
+> >       unsigned int            discard_granularity;
+> >       unsigned int            discard_alignment;
+> >       unsigned int            zone_write_granularity;
+> > +     unsigned int            max_provision_sectors;
+> >
+> >       unsigned short          max_segments;
+> >       unsigned short          max_integrity_segments;
+> > @@ -921,6 +922,8 @@ extern void blk_queue_max_discard_sectors(struct re=
+quest_queue *q,
+> >               unsigned int max_discard_sectors);
+> >  extern void blk_queue_max_write_zeroes_sectors(struct request_queue *q=
+,
+> >               unsigned int max_write_same_sectors);
+> > +extern void blk_queue_max_provision_sectors(struct request_queue *q,
+> > +             unsigned int max_provision_sectors);
+> >  extern void blk_queue_logical_block_size(struct request_queue *, unsig=
+ned int);
+> >  extern void blk_queue_max_zone_append_sectors(struct request_queue *q,
+> >               unsigned int max_zone_append_sectors);
+> > @@ -1060,6 +1063,9 @@ int __blkdev_issue_discard(struct block_device *b=
+dev, sector_t sector,
+> >  int blkdev_issue_secure_erase(struct block_device *bdev, sector_t sect=
+or,
+> >               sector_t nr_sects, gfp_t gfp);
+> >
+> > +extern int blkdev_issue_provision(struct block_device *bdev, sector_t =
+sector,
+> > +             sector_t nr_sects, gfp_t gfp_mask);
+> > +
+> >  #define BLKDEV_ZERO_NOUNMAP  (1 << 0)  /* do not free blocks */
+> >  #define BLKDEV_ZERO_NOFALLBACK       (1 << 1)  /* don't write explicit=
+ zeroes */
+> >
+> > @@ -1139,6 +1145,11 @@ static inline unsigned short queue_max_discard_s=
+egments(const struct request_que
+> >       return q->limits.max_discard_segments;
+> >  }
+> >
+> > +static inline unsigned short queue_max_provision_sectors(const struct =
+request_queue *q)
+> > +{
+> > +     return q->limits.max_provision_sectors;
+> > +}
+> > +
+> >  static inline unsigned int queue_max_segment_size(const struct request=
+_queue *q)
+> >  {
+> >       return q->limits.max_segment_size;
+> > @@ -1281,6 +1292,11 @@ static inline bool bdev_nowait(struct block_devi=
+ce *bdev)
+> >       return test_bit(QUEUE_FLAG_NOWAIT, &bdev_get_queue(bdev)->queue_f=
+lags);
+> >  }
+> >
+> > +static inline unsigned int bdev_max_provision_sectors(struct block_dev=
+ice *bdev)
+> > +{
+> > +     return bdev_get_queue(bdev)->limits.max_provision_sectors;
+> > +}
+> > +
+> >  static inline enum blk_zoned_model bdev_zoned_model(struct block_devic=
+e *bdev)
+> >  {
+> >       return blk_queue_zoned_model(bdev_get_queue(bdev));
+> > --
+> > 2.40.0.634.g4ca3ef3211-goog
+> >
+>
