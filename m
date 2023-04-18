@@ -2,156 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C656E6EAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76ED56E6EAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233170AbjDRVwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39796 "EHLO
+        id S233148AbjDRVvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232864AbjDRVwG (ORCPT
+        with ESMTP id S233147AbjDRVvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:52:06 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085D49ED2;
-        Tue, 18 Apr 2023 14:51:59 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33ILOi1M031252;
-        Tue, 18 Apr 2023 21:51:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=3HsRrfr6uEi597nAEVxngP/P+gdrt96xB0IUuG8Lktk=;
- b=hstE+GG4ITf7i1MOoBBRMo+fKsYmx/TVMd1EZtkF/lUJzduUkyXldmMEN/Id2gtjaO+H
- 9T0/VqNIk5cEJKPLeEbZpWWq9kj/mwBZLhlupPanPet5CAznkQE/48XyxY1gFjW1tTUF
- 1s/HJuYeSrI1+1gRhcoeqGqfZcxKUp614lqeqGYTWXnSSwnwteWBjCoVSiOGDcLGEGg9
- JujpoY7CPhNm6X/pOZS+qVtW8ely1t6lzK5lH7cTH3acL36ByH9yXJWVtHiIDDwoIgYM
- 9GX3MBT8xea2erTL0WowMgxNpomU6A+e8xKFtjQ8e19BdQQAxhmc5KHRb9HjUFz2xM4U aA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1v2ahbw9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 21:51:48 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33ILpQPm006302
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 21:51:26 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 18 Apr
- 2023 14:51:24 -0700
-Message-ID: <3f27c84f-f8b0-bddf-cdd5-952c9576c6c3@quicinc.com>
-Date:   Tue, 18 Apr 2023 15:51:23 -0600
+        Tue, 18 Apr 2023 17:51:41 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B96DB77F
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:51:37 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-54f6a796bd0so361703577b3.12
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:51:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1681854696; x=1684446696;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/bS8u4Ikaa66x0dKQnSLt0T4EeOHh6siINt+8q3mYgU=;
+        b=IdxfrzEVF8ipu50M2fzMmApVqbzs075jgqFvZZk+Y848LHNEwZCPGF+1SQOSbkG4ey
+         qp1Lsgl5M4XP5pSbD/9ieXUTVd8nSKeUyCNTKspOmox35763C1ytOFJFy3xoSghxC8n4
+         /+niRJbaLy0rannApLFjjdDoNhx+rNA/3qk6o9K6OcNMUgZdJBfLVfjYw+mbdYLwwxHR
+         L2WDiWz7D4YIrJNrUexffNPQNAEouDp9fDsNWXzbSW308ZVYpMEr4WhPdMN6bOXx+NMz
+         GQcPdoELy1/bIRv/B2MOmHj4hq0307NJMgBVyu2NKAfqEna1c1ykVD0A33kqbq6R4NPm
+         Do4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681854696; x=1684446696;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/bS8u4Ikaa66x0dKQnSLt0T4EeOHh6siINt+8q3mYgU=;
+        b=KzH0zdqJc7jyqwkW9iuPsTGFA+BGdRwr1/o4z8C6W6BGgmH4rRQu7pPyYZWiGpshlm
+         dLwvDl9Qz0mb0XZFR8hd1LEHN1aRSkMC9J1WjhFqJu0EiT3YsfPNIgdMRotwD73E8CTS
+         t61eP5Xd61WwGKH5MwHsB5idN+pm5zvQgIyywcUi/srCZiwcx8nLQT80oPWm033j44zn
+         mK9u289FBfeQlVC4OxADJPGypj/RZE6UmbEZT/5Hu/WefGb+KxceUN5TB3F3rQmwHsxx
+         wtAwFmTBX1SZSQzVQfBzePwp8/OPzg2+zISO04JxtDaLzOpaKEDou7LLl03IjMVemOdD
+         xbzQ==
+X-Gm-Message-State: AAQBX9eFzw16Kdreq1OFZc3008aXrLRVJvMjL7q5KVzdgETtdJpKNnuC
+        /mepFZ5+PDTB3N43y85kGk0P3vluykqXWxhkUKPO
+X-Google-Smtp-Source: AKy350ZRdPRJ9oxB33BDZoE/ufCet87zltLytIuCHu6OWmcg2NMuRUpNuAmwjaKBcG+3qtcDhM+k/geOuScTrsaGDzI=
+X-Received: by 2002:a81:d302:0:b0:54f:69a4:151e with SMTP id
+ y2-20020a81d302000000b0054f69a4151emr721790ywi.8.1681854694933; Tue, 18 Apr
+ 2023 14:51:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] accel/qaic: initialize ret variable to 0
-Content-Language: en-US
-To:     Nick Desaulniers <ndesaulniers@google.com>
-CC:     Tom Rix <trix@redhat.com>, <ogabbay@kernel.org>,
-        <nathan@kernel.org>, <jacek.lawrynowicz@linux.intel.com>,
-        <quic_carlv@quicinc.com>, <stanislaw.gruszka@linux.intel.com>,
-        <quic_pkanojiy@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-References: <20230418192046.3235870-1-trix@redhat.com>
- <fe7da2c1-904e-ee4f-9a6c-443049c214b7@quicinc.com>
- <CAKwvOdmFGVPddi98yt22i+U+3aow+dwhxKgdJ45h3n1i-n3bzw@mail.gmail.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <CAKwvOdmFGVPddi98yt22i+U+3aow+dwhxKgdJ45h3n1i-n3bzw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: tAIzabtbEnlqnjwMTzlJetoLznbSrvbL
-X-Proofpoint-ORIG-GUID: tAIzabtbEnlqnjwMTzlJetoLznbSrvbL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-18_15,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 bulkscore=0 suspectscore=0 spamscore=0 phishscore=0
- clxscore=1015 impostorscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304180182
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230411155921.14716-1-casey@schaufler-ca.com> <20230411155921.14716-8-casey@schaufler-ca.com>
+In-Reply-To: <20230411155921.14716-8-casey@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 18 Apr 2023 17:51:24 -0400
+Message-ID: <CAHC9VhTX-JnS11Ywfwf2aTvh1J3KBdsfCp3k1C=8WyLcgRNDig@mail.gmail.com>
+Subject: Re: [PATCH v8 07/11] LSM: Helpers for attribute names and filling an lsm_ctx
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     linux-security-module@vger.kernel.org, jmorris@namei.org,
+        keescook@chromium.org, john.johansen@canonical.com,
+        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        mic@digikod.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/18/2023 2:48 PM, Nick Desaulniers wrote:
-> On Tue, Apr 18, 2023 at 1:46 PM Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
->>
->> On 4/18/2023 1:20 PM, Tom Rix wrote:
->>> clang static analysis reports
->>> drivers/accel/qaic/qaic_data.c:610:2: warning: Undefined or garbage
->>>     value returned to caller [core.uninitialized.UndefReturn]
->>>           return ret;
->>>           ^~~~~~~~~~
->>>
->>> The ret variable is only set some of the time but is always returned.
->>> So initialize ret to 0.
->>
->> This does not appear to be entirely accurate to me.
->>
->> Do you know what analysis Clang is doing?  Is it limited to the function
->> itself?
->>
->> remap_pfn_range, which initializes ret, will always run at-least once.
-> 
-> What happens if the loop body is never executed, say if `bo->sgt->sgl` is NULL?
+On Tue, Apr 11, 2023 at 12:02=E2=80=AFPM Casey Schaufler <casey@schaufler-c=
+a.com> wrote:
+>
+> Add lsm_name_to_attr(), which translates a text string to a
+> LSM_ATTR value if one is available.
+>
+> Add lsm_fill_user_ctx(), which fills a struct lsm_ctx, including
+> the trailing attribute value. The .len value is padded to a multiple
+> of the size of the structure for alignment.
+>
+> All are used in module specific components of LSM system calls.
+>
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> ---
+>  include/linux/security.h | 13 +++++++++++
+>  security/lsm_syscalls.c  | 24 ++++++++++++++++++++
+>  security/security.c      | 48 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 85 insertions(+)
 
-qaic_gem_object_mmap() doesn't get called unless a valid GEM object is 
-provided by userspace.  For userspace to get a valid GEM object, it has 
-to go through qaic_create_bo_ioctl().  qaic_create_bo_ioctl() will not 
-return a valid GEM object unless sgt is allocated and initialized.
+...
 
-The loop body will execute at-least once.  The if body will execute 
-at-least once.  remap_pfn_range() will run at-least once.  Therefore, 
-ret is always initialized.
+> diff --git a/security/lsm_syscalls.c b/security/lsm_syscalls.c
+> index 6efbe244d304..67106f642422 100644
+> --- a/security/lsm_syscalls.c
+> +++ b/security/lsm_syscalls.c
+> @@ -17,6 +17,30 @@
+>  #include <linux/lsm_hooks.h>
+>  #include <uapi/linux/lsm.h>
+>
+> +/**
+> + * lsm_name_to_attr - map an LSM attribute name to its ID
+> + * @name: name of the attribute
+> + *
+> + * Returns the LSM attribute value associated with @name, or 0 if
+> + * there is no mapping.
+> + */
+> +u64 lsm_name_to_attr(const char *name)
+> +{
+> +       if (!strcmp(name, "current"))
+> +               return LSM_ATTR_CURRENT;
+> +       if (!strcmp(name, "exec"))
+> +               return LSM_ATTR_EXEC;
+> +       if (!strcmp(name, "fscreate"))
+> +               return LSM_ATTR_FSCREATE;
+> +       if (!strcmp(name, "keycreate"))
+> +               return LSM_ATTR_KEYCREATE;
+> +       if (!strcmp(name, "prev"))
+> +               return LSM_ATTR_PREV;
+> +       if (!strcmp(name, "sockcreate"))
+> +               return LSM_ATTR_SOCKCREATE;
+> +       return 0;
+> +}
 
-This is how the code is intended to operate, and how it appears to be 
-implemented from what I see.  Unless I'm missing something.
+Thank you :)
 
-I can see how Clang might not be able to infer these things, but I don't 
-believe the code is broken.  I feel that the commit text is unclear and 
-suggests that the code is infact, broken.
+>  /**
+>   * sys_lsm_set_self_attr - Set current task's security module attribute
+>   * @attr: which attribute to set
+> diff --git a/security/security.c b/security/security.c
+> index bfe9a1a426b2..453f3ff591ec 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -752,6 +752,54 @@ static int lsm_superblock_alloc(struct super_block *=
+sb)
+>         return 0;
+>  }
+>
+> +/**
+> + * lsm_fill_user_ctx - Fill a user space lsm_ctx structure
+> + * @ctx: an LSM context to be filled
+> + * @context: the new context value
+> + * @context_size: the size of the new context value
+> + * @id: LSM id
+> + * @flags: LSM defined flags
+> + *
+> + * Fill all of the fields in a user space lsm_ctx structure.
+> + * Caller is assumed to have verified that @ctx has enough space
+> + * for @context.
+> + *
+> + * The total length is padded to an integral number of lsm_ctx.
 
-Userspace should not call mmap() in a critical path thus I don't see a 
-true performance concern here.  So while my understanding of the coding 
-style is that redundant initialization of variables are to be avoided, I 
-think we can say that this is not redundant because it silences a 
-warning (because Clang is limited).
+Considering that lsm_ctx is variable length I'm not sure that makes a
+lot of sense, how about we pad the total length so that the @ctx entry
+is a multiple of 64-bits?  If needed we can always change this later
+as the lsm_ctx struct is inherently variable in length and userspace
+will need to deal with the buffer regardless of alignment.
 
->> Feels more accurate to say that Clang cannot detect that ret will be
->> initialized, and we want to quiet the warning from the false positive.
->>
->>> Fixes: ff13be830333 ("accel/qaic: Add datapath")
->>> Signed-off-by: Tom Rix <trix@redhat.com>
->>> ---
->>>    drivers/accel/qaic/qaic_data.c | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/accel/qaic/qaic_data.c b/drivers/accel/qaic/qaic_data.c
->>> index c0a574cd1b35..b46a16fb3080 100644
->>> --- a/drivers/accel/qaic/qaic_data.c
->>> +++ b/drivers/accel/qaic/qaic_data.c
->>> @@ -591,7 +591,7 @@ static int qaic_gem_object_mmap(struct drm_gem_object *obj, struct vm_area_struc
->>>        struct qaic_bo *bo = to_qaic_bo(obj);
->>>        unsigned long offset = 0;
->>>        struct scatterlist *sg;
->>> -     int ret;
->>> +     int ret = 0;
->>>
->>>        if (obj->import_attach)
->>>                return -EINVAL;
->>
-> 
-> 
+> + * Returns 0 on success, -EFAULT on a copyout error.
+> + */
+> +int lsm_fill_user_ctx(struct lsm_ctx __user *ctx, void *context,
+> +                     size_t context_size, u64 id, u64 flags)
+> +{
+> +       struct lsm_ctx *lctx;
+> +       size_t locallen;
+> +       u8 *composite;
+> +       int rc =3D 0;
+> +
+> +       locallen =3D sizeof(*ctx);
+> +       if (context_size)
+> +               locallen +=3D sizeof(*ctx) * ((context_size / sizeof(*ctx=
+)) + 1);
 
+It seems cleaner to use the kernel's ALIGN() macro:
+
+  /* ensure the lsm_ctx length is a multiple of 64-bits */
+  locallen =3D ALIGN(sizeof(*ctx) + context_size, 8);
+  lctx =3D kzalloc(locallen, GFP_KERNEL)
+  if (!lctx)
+    return -ENOMEM;
+
+> +       composite =3D kzalloc(locallen, GFP_KERNEL);
+> +       if (composite =3D=3D NULL)
+> +               return -ENOMEM;
+> +
+> +       lctx =3D (struct lsm_ctx *)composite;
+> +       lctx->id =3D id;
+> +       lctx->flags =3D flags;
+> +       lctx->ctx_len =3D context_size;
+> +       lctx->len =3D locallen;
+> +
+> +       memcpy(composite + sizeof(*lctx), context, context_size);
+
+Is there a problem with doing `memcpy(lctx->ctx, context,
+context_size)` in place of the memcpy above?  That is easier to read
+and we can get rid of @composite.
+
+> +       if (copy_to_user(ctx, composite, locallen))
+> +               rc =3D -EFAULT;
+> +
+> +       kfree(composite);
+> +
+> +       return rc;
+> +}
+
+I understand Micka=C3=ABl asked you to do a single copy_to_user(), but I'm
+not sure it is worth it if we have to add a temporary buffer
+allocation like that.  How about something like below (v7 with some
+tweaks/padding)?  You could be a bit more clever with the memset if
+you want, I was just typing this up quickly ...
+
+int lsm_fill_user_ctx(...)
+{
+  struct lsm_ctx lctx;
+
+  /* ensure the lctx length is a multiple of 64-bits */
+  lctx.len =3D ALIGN(sizeof(lctx) + context_size, 8);
+
+  lctx.id =3D id;
+  lctx.flags =3D flags;
+  lctx.ctx_len =3D context_size;
+
+  memset(ctx, 0, lctx.len);
+  if (copy_to_user(ctx, &lctx, sizeof(lctx))
+    return -EFAULT;
+  if (copy_to_user(&ctx[1], context, context_size)
+    return -EFAULT;
+
+  return 0;
+}
+
+--
+paul-moore.com
