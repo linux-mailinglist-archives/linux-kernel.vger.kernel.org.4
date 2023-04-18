@@ -2,103 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562DA6E5C43
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4EA46E5C2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbjDRIhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
+        id S231379AbjDRIgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbjDRIh0 (ORCPT
+        with ESMTP id S231367AbjDRIgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:37:26 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A8876A0;
-        Tue, 18 Apr 2023 01:36:56 -0700 (PDT)
-X-UUID: 264099faddc411eda9a90f0bb45854f4-20230418
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Z3KYhpR7iezgc+p/HsJAhbAKno3UBwH6W6pY8rrBZwg=;
-        b=JQV+wPXyRPxYrLTZS7CWkB76/By23pMKQ3y1ketgVvMgHHrnlUVG4aC5IAj2fjvzPofcVp+bN3KLtJP/2i79naE1imp6KSRC1d4OI+fWxgSWW2lvPeQE0dGvrfIMVyxmpTXiGaZ8z8/UmP3coIDfDQ5RbxqPo4g8czuibhkHxBg=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:07e13ed3-1480-4ff3-b73a-8724f88c699e,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.22,REQID:07e13ed3-1480-4ff3-b73a-8724f88c699e,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:120426c,CLOUDID:970058eb-db6f-41fe-8b83-13fe7ed1ef52,B
-        ulkID:230418163646A7UGOZ7M,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 264099faddc411eda9a90f0bb45854f4-20230418
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1390489620; Tue, 18 Apr 2023 16:36:44 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Tue, 18 Apr 2023 16:36:43 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Tue, 18 Apr 2023 16:36:42 +0800
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Yong Wu <yong.wu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <iommu@lists.linux.dev>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <mingyuan.ma@mediatek.com>,
-        <yf.wang@mediatek.com>, <jianjiao.zeng@mediatek.com>,
-        <chengci.xu@mediatek.com>
-Subject: [PATCH v11 7/7] MAINTAINERS: iommu/mediatek: Update the header file name
-Date:   Tue, 18 Apr 2023 16:35:14 +0800
-Message-ID: <20230418083514.4379-8-yong.wu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230418083514.4379-1-yong.wu@mediatek.com>
-References: <20230418083514.4379-1-yong.wu@mediatek.com>
+        Tue, 18 Apr 2023 04:36:05 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EF57A91
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:35:55 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f167d0cbb7so5614165e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:35:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1681806953; x=1684398953;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JZfMIf6u2tlZmg4ytV/RdzlZiQTZycAHSYhPqTETFDk=;
+        b=AtH7SlgZznmpIhtRcbYWvzjRwhwYiDcaGCXHsyrlVtfMKNEUgXd//CR8T7s9VHs9co
+         wIIiCpC5EXMXAPVzbvJpBaqlsVvCZExTRXbkJqyC5ff1XFzg1BFz/9bIY8mhYG04fZjD
+         1swtlQei9mCVpTXwIEAkAr1HSpnuQ4UhW8i1k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681806953; x=1684398953;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JZfMIf6u2tlZmg4ytV/RdzlZiQTZycAHSYhPqTETFDk=;
+        b=Qb8JQXE1vJBaORetiwfW+Y5rACrhakeemid48pcif2MZIPlvyYQR55zEpnN1X25PDq
+         Zcb5ni6uF21pBjEYBf0dPmiVbc4oU9C4tCl6Q8bwhSmkmPSi+0Fi/gvKf7E4Vh4Auovs
+         sxLCzyxlSBUuAFlRXNLpjAUCxDuQVlPkH3iGD9CzxvwC1bxMI3qNHGRu8KnNdlZAWBqi
+         QWpdeQkE2bifzsHdXnmzXwSwt6y9jtnfOhfX6z14IJU51/npcDIMgvjBxmJzdc0yFUbg
+         AhRwAmB7uSER5feDqQZgAxjFil2JGZ5AEdnOBBihlGtUhHP5HWFC9jyeSQrldg3R+Vd/
+         3p3g==
+X-Gm-Message-State: AAQBX9d2J89C1MDrglKtc64c4gU7dU2JikKu5lUjePHwqAVSPES/dnBJ
+        PZstvAtLblDs+hXL07KoTfoOBQ==
+X-Google-Smtp-Source: AKy350baNsjdpiDs8wIYqCjrn145jmIxJrw1PWocYcVGuMonwKXArSOSkN30FZe2g02CXjtvgmQoIQ==
+X-Received: by 2002:a05:600c:3d18:b0:3f1:7490:e595 with SMTP id bh24-20020a05600c3d1800b003f17490e595mr3714170wmb.2.1681806953655;
+        Tue, 18 Apr 2023 01:35:53 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id l12-20020a1c790c000000b003f179fc6d8esm1146495wme.44.2023.04.18.01.35.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 01:35:53 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 10:35:51 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Patrick McLean <chutzpah@gentoo.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-ide@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dave Airlie <airlied@redhat.com>
+Subject: Re: [PATCH 1/2] gpu: Move ASPEED vendor ID definition to pci_ids.h
+Message-ID: <ZD5WZ+HYGBV3g7SL@phenom.ffwll.local>
+Mail-Followup-To: Patrick McLean <chutzpah@gentoo.org>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-ide@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dave Airlie <airlied@redhat.com>
+References: <20230418011720.3900090-1-chutzpah@gentoo.org>
+ <20230418011720.3900090-2-chutzpah@gentoo.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418011720.3900090-2-chutzpah@gentoo.org>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We add the prefix "mediatek," for the lastest ports header file name,
-For example, include/dt-bindings/memory/mediatek,mt8188-memory-port.h.
-Add a new entry for this.
+On Mon, Apr 17, 2023 at 06:17:19PM -0700, Patrick McLean wrote:
+> Currently the ASPEED PCI vendor ID is defined in drivers/gpu/drm/ast/ast_drv.c,
+> move that to include/linux/pci_ids.h with all the rest of the PCI vendor ID
+> definitions. Rename the definition to follow the format that the other
+> definitions follow.
+> 
+> Signed-off-by: Patrick McLean <chutzpah@gentoo.org>
 
-Signed-off-by: Yong Wu <yong.wu@mediatek.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d8ebab595b2a..fdab5d6d51b5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13056,6 +13056,7 @@ L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
- S:	Supported
- F:	Documentation/devicetree/bindings/iommu/mediatek*
- F:	drivers/iommu/mtk_iommu*
-+F:	include/dt-bindings/memory/mediatek,mt*-port.h
- F:	include/dt-bindings/memory/mt*-port.h
- 
- MEDIATEK JPEG DRIVER
+for merging through whatever tree this series lands through.
+-Daniel
+
+> ---
+>  drivers/gpu/drm/ast/ast_drv.c | 4 +---
+>  include/linux/pci_ids.h       | 2 ++
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
+> index d78852c7cf5b..232e797793b6 100644
+> --- a/drivers/gpu/drm/ast/ast_drv.c
+> +++ b/drivers/gpu/drm/ast/ast_drv.c
+> @@ -70,12 +70,10 @@ static const struct drm_driver ast_driver = {
+>   * PCI driver
+>   */
+>  
+> -#define PCI_VENDOR_ASPEED 0x1a03
+> -
+>  #define AST_VGA_DEVICE(id, info) {		\
+>  	.class = PCI_BASE_CLASS_DISPLAY << 16,	\
+>  	.class_mask = 0xff0000,			\
+> -	.vendor = PCI_VENDOR_ASPEED,			\
+> +	.vendor = PCI_VENDOR_ID_ASPEED,			\
+>  	.device = id,				\
+>  	.subvendor = PCI_ANY_ID,		\
+>  	.subdevice = PCI_ANY_ID,		\
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index 45c3d62e616d..6634741aea80 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -815,6 +815,8 @@
+>  #define PCI_VENDOR_ID_ASUSTEK		0x1043
+>  #define PCI_DEVICE_ID_ASUSTEK_0675	0x0675
+>  
+> +#define PCI_VENDOR_ID_ASPEED		0x1a03
+> +
+>  #define PCI_VENDOR_ID_DPT		0x1044
+>  #define PCI_DEVICE_ID_DPT		0xa400
+>  
+> -- 
+> 2.40.0
+> 
+
 -- 
-2.25.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
