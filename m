@@ -2,139 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DFB06E57E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 05:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 159DF6E57DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 05:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjDRDjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 23:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
+        id S230045AbjDRDh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 23:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjDRDiz (ORCPT
+        with ESMTP id S229662AbjDRDhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 23:38:55 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2135.outbound.protection.outlook.com [40.107.117.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889CC3A82;
-        Mon, 17 Apr 2023 20:38:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RDb13+fJXBAm+fQ4i1Zm2nwOJoMcAQcKqJSe+sRcSTwpoH7B+IacJcVk9DnD+EsK7OwrBXNz9jyaxqcvwIpd+MNU89lmwsnzLpWs9ou2kybH61YiZEhw+M2cHdvTim9lEnTqRh5LXn2RKmdI/GDO4QkU3yzbuGI6cfwUCRaJvAYCrJdV6Fm6NbBBW7irr4UOENLMOsaEHKrLNPKeZbuuaVfrbzYewsrgElF0MlXLKQyZmbBAH+w7HgcqABYYTQCTine9q2bBVII7ITeYJrjaGKkpCVCp/gAW0uxXhGcNW0Y5TEz2U31XJIxAQlaazHb53R0itUe2MFETKy2mIbbpLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vaICu54u62j1McdteOTRVQLSttCW7IxKd8j2FraQSzk=;
- b=l6MBPPO6T6GnD74aq5JQKale+v0R6ee7g9suQQpMHziljOejSynS4szK089JGuubnbc1HpWoGIv2hgRSy0pONo9zu/XbfxFEllvjJNWPkx6VsEaYp82WV39CLUw64VcDOMueyruRFtFCAjqrQBlp6QeD6hP2TDgLtGREJl4p/Yxr6TFF9bmsv10htBQtBV+pplJwQVIhgVe6+hSRcpWcXRXnyIhrREjoyyyns1hl17bNxHWwuHKDV+sIvnk/INjiFJAqk+W79m8j572xfuoDCkH+7bqQCixA0tuOUtjRe8cSnE+VlgVeLWmkwalZ3ELIR5fkM03yT1ABoGy3/NdKiQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vaICu54u62j1McdteOTRVQLSttCW7IxKd8j2FraQSzk=;
- b=gELDYoAKbqaK9oyNXdUXxz9Rq8sTJrpe34hqmHe4CscTuQgdLs1HToYsP52qXymF1gWu2jtifplaMtvmXViD8HMe4kyMLrIHBTqONZC6mVj5jufQNsNWyyBphznohZIsB/ej3Bgvxj2hw4yjrLAm0v91TVeUKd8x8lVZZl0ZqOO3G1lc1WfJRyFkev5CVEZW3Dd4KQ+8tnNZhPpAmnzyTrg5EB36V8Q6E96gUPdy1UR9iW4OxXcmCJSNxFZJOcScgj9XvlqFhM2tnlDzU97zw22aSald4cttjldqQt0afenDtb5VfypgHDXraI430mLDWSPIdcit96GWYCL4mChXwA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB2997.apcprd06.prod.outlook.com (2603:1096:4:72::17) by
- SEZPR06MB5413.apcprd06.prod.outlook.com (2603:1096:101:64::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6298.30; Tue, 18 Apr 2023 03:38:49 +0000
-Received: from SG2PR06MB2997.apcprd06.prod.outlook.com
- ([fe80::e95a:e2d8:251e:9434]) by SG2PR06MB2997.apcprd06.prod.outlook.com
- ([fe80::e95a:e2d8:251e:9434%5]) with mapi id 15.20.6298.045; Tue, 18 Apr 2023
- 03:38:49 +0000
-From:   Chenggang Wang <wangchenggang@vivo.com>
-To:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Chenggang Wang <wangchenggang@vivo.com>
-Subject: [PATCH] thermal/drivers/cpuidle_cooling: Delete unmatched comments
-Date:   Tue, 18 Apr 2023 11:38:28 +0800
-Message-Id: <1681789108-28130-1-git-send-email-wangchenggang@vivo.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: SI2P153CA0014.APCP153.PROD.OUTLOOK.COM (2603:1096:4:140::6)
- To SG2PR06MB2997.apcprd06.prod.outlook.com (2603:1096:4:72::17)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PR06MB2997:EE_|SEZPR06MB5413:EE_
-X-MS-Office365-Filtering-Correlation-Id: c89037cd-b00f-4f7e-f0b8-08db3fbe6c06
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Hre+NvBL4AbyVucbVBczl0OuQ2EWG7W3u1ovfbJH5LBvgQhtp3mx/jrs10tTGfSHB2XZIbg1FznjfLs0EkKeap1S0usFztPD+9uN+vhHG2kbeZZp9ryVltkcXWSCtsUJv7+eRhaIP63mTL9BBh2yxiSwG+A5SDE/OmikqMMkbxWLVlqgnyIwRG37sCQDMyJ3obRqtZtuO4mNly+50JgZ/G8byEpGvp86Hoe9bi9c6l0BbOkW4e7JQHKfJeOY+XWj62eUP968qfKjeBMa8OksuTqCfpLs5mgZX/ffSn7If8yoN/wt/VG1mVJIPCKTJwFvHXbVGsg7qoC/XrBy7knJU+0p4op6PSzJAwXwYFJe3HifD6TtINsNUIFpkzXkV/Zj+03Pj3jhw50DjlbVa/spCjQp1PbLO1PeqSXd8LykHxtgU6OfmsWivaCE73jMdUbGRndxwwuHShCtIzy69sg3vBkxBIrRihBV5r052EcVM2IPAWBeSpLmkGPMes7bNA0/F7q2lY3TiCflTZ0ACC0gQ4gSS+lQik5kK9slITJ9Jgzh+YnBnu8ClwY/ehvLEGatKOYt8qZTDwH1dSp3bNxpnyQ8CTZTMfALdsg0VpQSaHGPLDicjf0G5ey3C/MNenNF
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB2997.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(376002)(39860400002)(366004)(451199021)(5660300002)(4744005)(52116002)(6486002)(66556008)(66476007)(2906002)(66946007)(4326008)(36756003)(86362001)(8936002)(41300700001)(38350700002)(6666004)(38100700002)(478600001)(316002)(8676002)(110136005)(6512007)(26005)(6506007)(2616005)(107886003)(186003)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ofmPD/l/krzpCLeRaBA/hr7EA6ohFyyCezOnTNt1dpsUlU9h4pgr0NL1OtjN?=
- =?us-ascii?Q?8ojteOTqSJArFZZN1pmEaawrHGBFIOEoxdQYxqfcIif3eIlI4zQBgtYrqHAx?=
- =?us-ascii?Q?OIT156QBLJE1uWSvxGQ3t2ZomG2eIrstxt49xap0tSo2COGTKJdzrJbbUJ5y?=
- =?us-ascii?Q?KGlrAh/ZfgzjDfpk/1RShGFx/kkVW3up5A739d++RIeB43HsnZa0G3wS4VGB?=
- =?us-ascii?Q?exZIuY2VBt5XzjLIXgIZSKkYEtofLiVcIq5l6+M/WmRyWUs7MOIHyXRrGcUH?=
- =?us-ascii?Q?KyDLxI9WlMQBbL9NegMvI7BVn3sQJM0Q1d2+jgDl7D7/ibaYHTAx5RZWyWdU?=
- =?us-ascii?Q?sCGsgPWzuVnqK5MVwkfRsOiMUk7byPyMyAWIzc1c1V8zfm5XDmTpvXCDXZEQ?=
- =?us-ascii?Q?UTS3cY0jg8Z4cSXdpumj4/4xlCqQxc6CVtWlTJUlXKklfL9a0cXpy7/Oa5Eg?=
- =?us-ascii?Q?EwT0QqaO7D76TPvhIwjg09dyTWbsSKsy03/HLIA5vKSmwfeHi+CluOjFWth1?=
- =?us-ascii?Q?aLTY43DIXGmnz9NrEmEvjFUhZGOsIkDVZY29i33wIK9MvONTcN9hatafrx/U?=
- =?us-ascii?Q?uGblanThieOM7JFVaCleV9X7i9UOwUriYSSdZ3sCBbEX8fR5kaZa0PngE7P7?=
- =?us-ascii?Q?Ef9mbPblRlaOnV/jkUN5YIaGBbz0EhMFJ8lrC3Yl5b2nwtjj0TUOxnMtVSgk?=
- =?us-ascii?Q?cXquw/vmKqsvm1MrmhmtQRIDl5twJz+OOOKvTldehFIBL1EoYlZ6SnvX6D5q?=
- =?us-ascii?Q?ZB6Ad42UsXaZprpl2PXwJCzBX56fvP+074AarqpPYnFS5PdgZDB3btxYKLBO?=
- =?us-ascii?Q?YAqyocKmqbK4AjKAEb2/dzo9axD6jV2cfpsgAMf7/TvujXv8jZ9bYhyakYgU?=
- =?us-ascii?Q?+PiAlStpTYd7B8x+iV1URl1aQ6lvs9fNi4tKef/6/ZHP3HrO5bkG3W0YwmBH?=
- =?us-ascii?Q?Ag7S0zBgbhjCIBadbagtN9WVytOc8VrAc4jIY+Zodg2vMPdE9J8aDQWJnqEJ?=
- =?us-ascii?Q?5Au1ycHACu3MnuOzMt2RsmybKIT+YmjUIbT83mwiITDUzpFJwI+VhyrJ8Unm?=
- =?us-ascii?Q?YB21o3MNffJe0kRCPmH0VGIqBCE87BOBrlZhGJ27WKkcSSXf4/lVRwxsYz2r?=
- =?us-ascii?Q?cWn4jpRttYJjrh8KP6r9xBKolulltLuo0Y721bqgBL2X1nRnGcpgYzfGsjRE?=
- =?us-ascii?Q?tDM00/ozTl8O6WphD6XojbHt532Cv5/es5c9E+HucX/sIrkx6W3ao4mjX03+?=
- =?us-ascii?Q?p+MeYcXm5F0n4F4gEYLTuwVtW9CeOwtwPp9ub/ugbdXnmJH1zXXuXOk3Emip?=
- =?us-ascii?Q?yTOstuc/b+/2MJkuZShLjxmHKugopYoznhGXgbZaz9E148arqyK/YNIlSiL+?=
- =?us-ascii?Q?DOlWMeyqkNZlQfvbSAwM+zTOk2QEwv2eRvlk+SV7KOe9O3ChjgpRqpcZD/yn?=
- =?us-ascii?Q?uH9bQEgeT/tnzYZPB4BOUcCzg7ujLYUwpE98kKNwrqZHj5AS2tHfjTQjAh3e?=
- =?us-ascii?Q?V3G7PJMppnBJWwvZvE0f0rmy8viTCBJUeOIKx3ftJBIkTr4LBC6YTEj0weNb?=
- =?us-ascii?Q?l9dFU9p6ZfTbtWOo+kPFbsI6AWy5jkdua6V/6SXa?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c89037cd-b00f-4f7e-f0b8-08db3fbe6c06
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB2997.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 03:38:49.4219
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Y66fzi2WMUHjvDAilsTcAYZiBBMapiVJ54o2VRVGXkvGMQSnp/dWW9PqwuH/mshH5PSECrQCM+160aNLA5g7Rg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5413
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 17 Apr 2023 23:37:53 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D70EE
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 20:37:52 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1a686260adcso17669995ad.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 20:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=smartx-com.20221208.gappssmtp.com; s=20221208; t=1681789072; x=1684381072;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8R9fWFJhveC/Tr0RG2k1o1szZvo2X4mY6UFtCHNecA4=;
+        b=TiBaw0C02hiWWWnFfMJGa8x8t4qCby25ACAe4YTvnv6zis2gvWgwgtZDhLkEml71yJ
+         0u66HGnVAbXOCcGFcf1vzcSIf6m0cwx5qxv2q7sf7aQxpwF9Q5Zj3GneQP/Ux+YT3U85
+         bf7CEuHjj1Va3XXJMEroA6De1hq7jshxC6mklyeu9Tqk0yRI1KX/c/bUJkYYhaBFgfQK
+         PNA8oohB7ohZ0WrQNjTyzzNbGER3vvrmU+RucR7Bao0i6TJc+/Uv6wePJr3kzabQzfDM
+         c/KEeSQ2Dv5gYSvC7eKtemVukFk4JZ7mb5DyVi++DpRCobkYzjcBH9tvT9VX/yBzWwNB
+         zExg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681789072; x=1684381072;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8R9fWFJhveC/Tr0RG2k1o1szZvo2X4mY6UFtCHNecA4=;
+        b=QwmjjAhj5rl5dtzQ2Bvgrl2Vli2xbOuSGFrA82VqLtfqryyLqU9BDpT9EAjg31ZHxE
+         AKrXtncxtMOUnEk7BPkDC0niPkGP+Pb7FL2BgZdKhBgZB/LIS5jgn70hZmb1NPEhrrXa
+         ASaeI9QmbpSYu2/h1IQPq0WtPWjNBiyCm4VFsu6/FTWvB+wuvd0Eon5uq+wzx1WT671W
+         wk0RZMp0xmAj113iAnqqtIlo8qpWzpRlaZIdH8UBE92l83BLcxIiUw1XYPrhOplO7p2c
+         x9k8A8dkE+rXW7AFUQAH6PhoQoPf4gDtp/46RCM9cpxkNVDzhDYJNO5SGgOLjshsyts2
+         x9dA==
+X-Gm-Message-State: AAQBX9cToX5PRU7rzTN4nQXW6SpEt8DoPj9lH5J7/4U3os11vap80p5m
+        ATX76MxwPykiwOjbowqyPFtZGA==
+X-Google-Smtp-Source: AKy350a1DgwXpeNPHmKni7wCqPet2VBfggUBSuCDkIxFKwsEcN77o8gWXf/QAaRY1a9AKQSHYEleFA==
+X-Received: by 2002:a17:903:1208:b0:19c:fc41:2dfd with SMTP id l8-20020a170903120800b0019cfc412dfdmr871408plh.29.1681789071554;
+        Mon, 17 Apr 2023 20:37:51 -0700 (PDT)
+Received: from smtpclient.apple ([47.75.78.161])
+        by smtp.gmail.com with ESMTPSA id jw18-20020a170903279200b001a6d4ffc760sm3074921plb.244.2023.04.17.20.37.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 17 Apr 2023 20:37:51 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH] nvme/tcp: Add support to set the tcp worker cpu affinity
+From:   Li Feng <fengli@smartx.com>
+In-Reply-To: <7f553d34-9ada-426c-4847-c7cd1aba64a8@grimberg.me>
+Date:   Tue, 18 Apr 2023 11:39:49 +0800
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E23A9D5C-35CF-412C-AE35-37389242BC71@smartx.com>
+References: <20230413062339.2454616-1-fengli@smartx.com>
+ <20230413063317.2455680-1-fengli@smartx.com>
+ <7f553d34-9ada-426c-4847-c7cd1aba64a8@grimberg.me>
+To:     Sagi Grimberg <sagi@grimberg.me>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function no longer returns a value, synchronize the comments.
+Hi Sagi,
 
-Signed-off-by: wangchenggang@vivo.com
----
- drivers/thermal/cpuidle_cooling.c | 3 ---
- 1 file changed, 3 deletions(-)
+> 2023=E5=B9=B44=E6=9C=8817=E6=97=A5 =E4=B8=8B=E5=8D=889:45=EF=BC=8CSagi =
+Grimberg <sagi@grimberg.me> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> Hey Li,
+>=20
+>> The default worker affinity policy is using all online cpus, e.g. =
+from 0
+>> to N-1. However, some cpus are busy for other jobs, then the nvme-tcp =
+will
+>> have a bad performance.
+>> This patch adds a module parameter to set the cpu affinity for the =
+nvme-tcp
+>> socket worker threads.  The parameter is a comma separated list of =
+CPU
+>> numbers.  The list is parsed and the resulting cpumask is used to set =
+the
+>> affinity of the socket worker threads.  If the list is empty or the
+>> parsing fails, the default affinity is used.
+>=20
+> I can see how this may benefit a specific set of workloads, but I have =
+a
+> few issues with this.
+>=20
+> - This is exposing a user interface for something that is really
+> internal to the driver.
+>=20
+> - This is something that can be misleading and could be tricky to get
+> right, my concern is that this would only benefit a very niche case.
+Our storage products needs this feature~
+If the user doesn=E2=80=99t know what this is, they can keep it default, =
+so I thinks this is
+not unacceptable.
+>=20
+> - If the setting should exist, it should not be global.
+V2 has fixed it.
+>=20
+> - I prefer not to introduce new modparams.
+>=20
+> - I'd prefer to find a way to support your use-case without =
+introducing
+> a config knob for it.
+>=20
+I=E2=80=99m looking forward to it.
+=20
+> - It is not backed by performance improvements, but more importantly
+> does not cover any potential regressions in key metrics (bw/iops/lat)
+> or lack there of.
 
-diff --git a/drivers/thermal/cpuidle_cooling.c b/drivers/thermal/cpuidle_cooling.c
-index 4f41102..7779739 100644
---- a/drivers/thermal/cpuidle_cooling.c
-+++ b/drivers/thermal/cpuidle_cooling.c
-@@ -236,9 +236,6 @@ static int __cpuidle_cooling_register(struct device_node *np,
-  *
-  * This function is in charge of creating a cooling device per cpuidle
-  * driver and register it to the thermal framework.
-- *
-- * Return: zero on success, or negative value corresponding to the
-- * error detected in the underlying subsystems.
-  */
- void cpuidle_cooling_register(struct cpuidle_driver *drv)
- {
--- 
-2.7.4
+I can do more tests if needed.
+
+Thanks,
+Feng Li
 
