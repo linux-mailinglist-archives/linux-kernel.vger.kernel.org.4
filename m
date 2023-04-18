@@ -2,114 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0E66E6B36
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD936E691D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbjDRRif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 13:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
+        id S231558AbjDRQO1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 12:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbjDRRid (ORCPT
+        with ESMTP id S229984AbjDRQO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 13:38:33 -0400
-X-Greylist: delayed 1800 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Apr 2023 10:38:29 PDT
-Received: from bues.ch (bues.ch [IPv6:2a01:138:9005::1:4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC63F3C0E;
-        Tue, 18 Apr 2023 10:38:29 -0700 (PDT)
-Received: by bues.ch with esmtpsa (Exim 4.94.2)
-        (envelope-from <m@bues.ch>)
-        id 1ponwS-001CPg-VD; Tue, 18 Apr 2023 18:12:26 +0200
-Date:   Tue, 18 Apr 2023 18:12:04 +0200
-From:   Michael =?UTF-8?B?QsO8c2No?= <m@bues.ch>
-To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        <linux-wireless@vger.kernel.org>, <b43-dev@lists.infradead.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lvc-project@linuxtesting.org>,
-        Natalia Petrova <n.petrova@fintech.ru>
-Subject: Re: [PATCH v2] b43legacy: Add checking for null for
- ssb_get_devtypedata(dev)
-Message-ID: <20230418181204.473e7898@barney>
-In-Reply-To: <20230418142918.70510-1-n.zhandarovich@fintech.ru>
-References: <20230418142918.70510-1-n.zhandarovich@fintech.ru>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Tue, 18 Apr 2023 12:14:26 -0400
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64E38A4F;
+        Tue, 18 Apr 2023 09:14:21 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2a8bbea12d7so20087491fa.3;
+        Tue, 18 Apr 2023 09:14:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681834459; x=1684426459;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=edzK7u79JqM+7LhPBFR+z+4eZJTEqnBnyOWxqayzfUI=;
+        b=EReeCXHKx1aTsXZqjFcWudONc0P0bjLFKUIeAqY1Tfm97KjVFV5fG0WRlzrOU9XV17
+         5HDzAhNDq7Mb0Yf9lzy0SPZNF+otGl1mWBVoVBHk9FmCcc9pGg42Qxw/yU3jiH9f4hNM
+         9hpU8ETn9mIPtO/Yf1gdfF7OQFI8WAdQ/nfBmRmj68Q5eUGBX3OsvV43Lhxmve/zqCOO
+         xocvJb7i5WD3VeHmX+Xje09BWAecVR4xcRWtVIs20dyCAGzKKFCMHlBRYE7TDl4GqWyI
+         Eg8WKLMSHtEIgxIvyM6+KIyTMRE698UR2Wm4jYpH1vmaWY8g+YxcJtKxZRoi0yOvbtCt
+         ipgQ==
+X-Gm-Message-State: AAQBX9e6UZ9pcw/vbrS7hza0tMYQpjCi0nIX1iH9hjH9DTgVsWD2XS/P
+        91wfYtjwMVX2Li21TNvG3EHVg+TpHQ3pKKkR
+X-Google-Smtp-Source: AKy350Z/zwZVo7ajnKsgaHXgBS3gBKqd2fLfcrymV0zfU0Yp+TE3UdLaOGQiwNlBOTztY54Dnq1GbQ==
+X-Received: by 2002:ac2:5ec6:0:b0:4eb:4002:a5ca with SMTP id d6-20020ac25ec6000000b004eb4002a5camr2931215lfq.66.1681834459478;
+        Tue, 18 Apr 2023 09:14:19 -0700 (PDT)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
+        by smtp.gmail.com with ESMTPSA id c17-20020ac24151000000b004eb554a1711sm2409704lfi.51.2023.04.18.09.14.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 09:14:18 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4ec8133c698so10733929e87.0;
+        Tue, 18 Apr 2023 09:14:18 -0700 (PDT)
+X-Received: by 2002:ac2:51a2:0:b0:4ed:d542:6f65 with SMTP id
+ f2-20020ac251a2000000b004edd5426f65mr397608lfk.5.1681834458048; Tue, 18 Apr
+ 2023 09:14:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3AByzQCFCjpBABSpZxJ8d0Q";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230418155153.222214-1-glaubitz@physik.fu-berlin.de>
+In-Reply-To: <20230418155153.222214-1-glaubitz@physik.fu-berlin.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 18 Apr 2023 18:14:04 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWpTu3NXt-Y-Xh9SS=mQsL9Wm4=XNe6pKGd+WB2Ef5Fow@mail.gmail.com>
+Message-ID: <CAMuHMdWpTu3NXt-Y-Xh9SS=mQsL9Wm4=XNe6pKGd+WB2Ef5Fow@mail.gmail.com>
+Subject: Re: [PATCH] sh: pci: Remove unused variable in SH-7786 PCI Express code
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/3AByzQCFCjpBABSpZxJ8d0Q
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Hi Adrian,
 
-On Tue, 18 Apr 2023 07:29:18 -0700
-Nikita Zhandarovich <n.zhandarovich@fintech.ru> wrote:
+Thanks for your patch!
 
-> Since second call of ssb_get_devtypedata() may fail as well as the
-> first one, the NULL return value in 'wl' will be later dereferenced in
-> calls to b43legacy_one_core_attach() and schedule_work().
+On Tue, Apr 18, 2023 at 5:59 PM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
+> Addresses the following warning when building sdk7786_defconfig:
+>
+> arch/sh/drivers/pci/pcie-sh7786.c:34:22: warning: 'dma_pfn_offset' defined but not used [-Wunused-variable]
+>    34 | static unsigned long dma_pfn_offset;
+>       |                      ^~~~~~~~~~~~~~
+>
+> Fixes: e0d072782c73 ("dma-mapping: introduce DMA range map, supplanting dma_pfn_offset")
+>
 
-No, the second call can't fail, because b43legacy_wireless_init() will
-always initialize it before returning 0.
+Please no blank line between tags and SoB.
 
-> a/drivers/net/wireless/broadcom/b43legacy/main.c +++
-> b/drivers/net/wireless/broadcom/b43legacy/main.c @@ -3857,7 +3857,11
-> @@ static int b43legacy_probe(struct ssb_device *dev, if (err)
->  			goto out;
->  		wl =3D ssb_get_devtypedata(dev);
-> -		B43legacy_WARN_ON(!wl);
-> +		if (!wl) {
-> +			B43legacy_WARN_ON(!wl);
-> +			err =3D -ENODEV;
-> +			goto out;
+> Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 
-And the 'goto out' would be the wrong error recovery path, too.
+For the actual patch contents:
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-> +		}
->  	}
->  	err =3D b43legacy_one_core_attach(dev, wl);
->  	if (err)
+Gr{oetje,eeting}s,
 
+                        Geert
 
-Nack.
-Please drop this patch. The code is correct as-is.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
---=20
-Michael B=C3=BCsch
-https://bues.ch/
-
---Sig_/3AByzQCFCjpBABSpZxJ8d0Q
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEihRzkKVZOnT2ipsS9TK+HZCNiw4FAmQ+wVQACgkQ9TK+HZCN
-iw7NzQ/9Ggyc5BtRToTBofdZbjnH/R/WeFz+RxXwxYLinJkQ/Cq6ilPkvqwf7w+y
-6HltbMZ3xDd2+wqG9PGKwTqNy0on4Ja92nBZ+rh4zyIfOb8ng3/i6dkNkzd67QAc
-vPzBblo2UMf8IUyJMhUGixGNNAZ+QK2iosPETZyG6Kk/UOVbkc1Ht2/Gxo67S2mK
-rxezpiS253ECGpfkz7dFvooCwga2UmejgY3C547dcvmNTvvLh9xYFe99f1PtQc7m
-IphZn5VLXOx1ptjVSzm2DE7pQjNdU0VaeGOjolmGtyBoWC2DqgqKEuDDgxkGhs2y
-ZBLp8adRdGaZyU0Vp88xZJJtMXLrl2hvRqM29rSCRIve5FUjRkDovBbRsaVoogsy
-1SHYuKwpY97j+PW8eZgsJ4L13cDsSZUYGcRG0l9rrq3B8K02VFEnAlFN/D0WXdRY
-HKILvc3xjo+8MmM01gXeTfLan7i3PiTvi03cxM88Inh0zMQ1zV1w+eaXYR8VDpmF
-grhBA94GsbeulgkNL19Lj7HQOmJ74QRWF+r2HhgwOlEOy7bqYKkM4Ht1Op4Sx85j
-FpgQzjuGo9cVAZTVdr5JBPfI7Yd+1WJZm92HlR9iII9JFhrrDA19u11zTuBy6j/n
-g6Y7bIyJiTmBD8trj8nRno2QVB75qevcQFBu/yOVXCwd68hzxlg=
-=OX2A
------END PGP SIGNATURE-----
-
---Sig_/3AByzQCFCjpBABSpZxJ8d0Q--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
