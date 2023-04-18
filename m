@@ -2,76 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FCB6E686A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865116E686E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbjDRPkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 11:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        id S231815AbjDRPmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 11:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjDRPkj (ORCPT
+        with ESMTP id S230399AbjDRPmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:40:39 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B492E8A5B;
-        Tue, 18 Apr 2023 08:40:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=EaV6BCKY1eHprx658JRQYuaDaXxztmLKpGEqHHbfQes=; b=j/uxjMv+w5mKyDnpSN7EqIg0RH
-        fLFpt2aQ4PUPPtGMGRkkgrtFTuVF014Y/WG1g/b7O05IZOY6DYiZasAwCOrLvTdmM6SPFdyL98WU8
-        qRDfQh9y77R7cZtb7Y6EaQll606VG/ONrnhK0zZa6H5nfuQmnbtFHnilwNHw551148cfBj83tjyos
-        aj4ni3a2jExlg8VB6EsXxd9oYmZkeufBwPHLhQcvYVhZSWjyoz5GWriZbTZ/J0Hzj3b4SxyaL/JGN
-        j6Ah7mz5w420WdCjWXGQbGujigK7hbXI1dVasr5mTj1GXuwF2+qxlAaTUAHICOeFh6mf83TNmWTSj
-        TWQfGhTw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ponRc-002erH-2B;
-        Tue, 18 Apr 2023 15:40:36 +0000
-Date:   Tue, 18 Apr 2023 08:40:36 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: stats: fix invalid_mod_bytes typo
-Message-ID: <ZD659BcowP46i6Sr@bombadil.infradead.org>
-References: <20230418071758.3163529-1-arnd@kernel.org>
+        Tue, 18 Apr 2023 11:42:08 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCE093C8
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:42:07 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-32b27bf4499so217555ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:42:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1681832527; x=1684424527;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ws+tP+/n1Nzk7cpc3aqJ9f/a7UKxs5QX5O6zzTT+5Ag=;
+        b=bfeOU2Hi5TQwfcpc4Frb2kZOPe/H5iVpkGnkyNAciLB0yb8BHanqFopr/P6vyuhVxw
+         k9xnp7ICZ4+QDTeSlFNDUu76XLb47UXQSq+E3Dez7tZ3T/sqliYbd0VSktHhCE25xa6z
+         yH1yYuItt1HBhf7BQeyT8q6DwYlBu+Zng8j4w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681832527; x=1684424527;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ws+tP+/n1Nzk7cpc3aqJ9f/a7UKxs5QX5O6zzTT+5Ag=;
+        b=iKYci+lyvXuEWPPT9NwF+WD603F1wVg3br0et4hTWAcoiKP+9MXF3QTPPvp70PMSHT
+         6+hTaAoyB5XbHwM7PHYQm6WBbv2kQVGURCDb+uajkpgo/bn+tGj4SseYZ2LyLF+nEKL9
+         08DxCeA/Grw7WBK79ERhpZ6TO85vBcH119XR54yq1PuGKiHgr9YbN+K1icr72jO0A0xE
+         iwRcN19GM52XCzEgyLpYR9hZaFwpcDD7spE3dVL/CQG+HbwiWSQXYB/nG/5kum98g8Iv
+         i8W8BZt39sVyM+9/wpTQnl5ec6K2vT8aHpmB19HN0p3SXFCY4v7Yk6D85Z3F715bKOtt
+         ukUQ==
+X-Gm-Message-State: AAQBX9fYBbj3AoZgM0KmdevinoRYTKv756uQxkvgzuy1BwLKqRYGQySF
+        bbWNi5LB6VfsJw6Jpal6sv26JQ==
+X-Google-Smtp-Source: AKy350arBx9RQyGaTymwP+zoBEZlGrhbOsSZ7wlA+l0fWtg/EHdWVGiwgJDxZ275ckxQEJdVjuqJ0w==
+X-Received: by 2002:a05:6e02:1308:b0:32a:d83e:491e with SMTP id g8-20020a056e02130800b0032ad83e491emr6439122ilr.0.1681832526832;
+        Tue, 18 Apr 2023 08:42:06 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id r2-20020a92c502000000b00322fd960361sm3883370ilg.53.2023.04.18.08.42.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 08:42:06 -0700 (PDT)
+Message-ID: <dd604e20-1daf-5778-0408-956b27a1b640@linuxfoundation.org>
+Date:   Tue, 18 Apr 2023 09:42:05 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418071758.3163529-1-arnd@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4] cpupower:Fix resource leaks in sysfs_get_enabled()
+Content-Language: en-US
+To:     Hao Zeng <zenghao@kylinos.cn>
+Cc:     trenn@suse.com, shuah@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230418013056.995478-1-zenghao@kylinos.cn>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230418013056.995478-1-zenghao@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 09:17:51AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 4/17/23 19:30, Hao Zeng wrote:
+> The sysfs_get_enabled() opened file processor not closed,
+> may cause a file handle leak.
+> Putting error handling and resource cleanup code together
+> makes the code easy to maintain and read.
+> Removed the unnecessary else if branch from the original
+> function, as it should return an error in cases other than '0'.
 > 
-> This was caught by randconfig builds but does not show up in
-> build testing without CONFIG_MODULE_DECOMPRESS:
-> 
-> kernel/module/stats.c: In function 'mod_stat_bump_invalid':
-> kernel/module/stats.c:229:42: error: 'invalid_mod_byte' undeclared (first use in this function); did you mean 'invalid_mod_bytes'?
->   229 |   atomic_long_add(info->compressed_len, &invalid_mod_byte);
->       |                                          ^~~~~~~~~~~~~~~~
->       |                                          invalid_mod_bytes
-> 
-> Fixes: 0d4ab68ce983 ("module: add debug stats to help identify memory pressure")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
+> Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
 > ---
-> This was probably already reported, sending the fix just in case everyone
-> else else missed it so far.
+>   tools/power/cpupower/lib/powercap.c | 23 ++++++++++++++++-------
+>   1 file changed, 16 insertions(+), 7 deletions(-)
+> 
 
-Oh it was a decompression ifdef, that's why I didn't catch it! But also
-I guess 0-day isn't running tests with it enabled either!
+Thank you.
 
-Thanks! Applied and pushed!
+Applied to
+git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git cpupower
+branch for Linux 6.4-rc1
 
-  Luis
+thanks,
+-- Shuah
