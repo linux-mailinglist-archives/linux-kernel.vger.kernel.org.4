@@ -2,87 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543F86E66D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2966E66D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbjDROMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 10:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50868 "EHLO
+        id S232250AbjDROMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 10:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbjDROMa (ORCPT
+        with ESMTP id S232178AbjDROMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 18 Apr 2023 10:12:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 372BD146E7;
-        Tue, 18 Apr 2023 07:12:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 468C12F4;
-        Tue, 18 Apr 2023 07:13:02 -0700 (PDT)
-Received: from e127643.broadband (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E7B9B3F587;
-        Tue, 18 Apr 2023 07:12:15 -0700 (PDT)
-From:   James Clark <james.clark@arm.com>
-To:     linux-perf-users@vger.kernel.org, acme@kernel.org
-Cc:     James Clark <james.clark@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] perf: cs-etm: Fix segfault in dso lookup
-Date:   Tue, 18 Apr 2023 15:12:03 +0100
-Message-Id: <20230418141203.673465-1-james.clark@arm.com>
-X-Mailer: git-send-email 2.34.1
+X-Greylist: delayed 102 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Apr 2023 07:12:18 PDT
+Received: from out203-205-251-82.mail.qq.com (out203-205-251-82.mail.qq.com [203.205.251.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BD8146C5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 07:12:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1681827136;
+        bh=axE0K9rAJNbZPTHu/N9msVmec+hFbIqczZ1zdflcDhE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=Mpzshv91FLzUhE4r1ZjPjrCK1N0UnKbCQf6xL8GHe6pX4Sjc7FSSgDI0OMITxO8cN
+         Eg/Rh2eOIXNevGwm6pdxQPGZpa0XVXooaTHNVSvVqRZj334Jg/w5qS7ZuUD4JGyZR8
+         StxaXaWrVTrXTeX+1h4BZWz/aFAgeoeUt6VX46bk=
+Received: from [192.168.31.3] ([106.92.97.36])
+        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+        id 30EA7CEC; Tue, 18 Apr 2023 22:12:14 +0800
+X-QQ-mid: xmsmtpt1681827134tm6lhrvj3
+Message-ID: <tencent_D7FC79B0CA961A24A8651221FD8439C5EF05@qq.com>
+X-QQ-XMAILINFO: OKkKo7I1HxIeELuN70hYUcmLAIJT70aL9IYz/YbMJwDVzOH8qGwu/oeUScQiyu
+         p+5tJRVphUagZm1aBfSzVOZY9fccZSXGoLNALdHJwHSxX7H2s62wGPsdM51QO4rW0g3K7C4ibbIb
+         gMhUbLpTSwuZ3LZvEqohFuCSBY3XnxJyT0DejX3V2Asv0wD9IsDF9QRWoL4Ntbm5lYomCfbNeHXU
+         gq44BcPJ4JuIZcuEhsbl6+Qjw67K3Ar+QPUdONyMQdhLHqYvMwzWbCz59VlDNOwNPMpn+QgQEbCV
+         CVhWicwX0ApGCCi5mQo6SynTtX5ZOpxXAXk/ox3vg8ZXpXukymmmgzDIJI3dM1EWQtL0ARr7bHoj
+         oXHz8HwyXK6w+pmuHkfuZdfvoJ7/NF6sLbqKza+vQbRoVl2W6vfMUgu5F6pyZxqSIo9eCAwHOpOc
+         cInP1XMdWviUyAp6OejPwCQcicdKJPYmqdCEW/zxt+rsr6XgQ6E1mYJ/5L33ynsOUu/k0NIzVqpN
+         zMXKgh8r+vKO8I8wfn1scRe6fZhTWsjGQ1dH7qMp6An5JSccf6TuWZMssvYqikg7vBZcGR5xplT7
+         FtNr9Y7TG7bB84/R8+to/rYlM+N8/g9szZ97CiritKPShkeUNoCLmoXVzR7iD5d0pwuRTmoME18f
+         k+ndn8ZJAlF5/KuNIA58UYDagA0k9rjZRO1WOkFrBB32VEMUNYRejZg5pnM+MOnHrNW+PwqkD5Gc
+         3jOEdrwg9qjwlcHyiSGh94xNSqtVRbygvh+VjLogtgiYtGNc3X06S8MwFLPY74P8PZZcvOIGwkn2
+         c7OvfbZnBLIuSP3D4G73cvJcQmr8H9Dc95kJdb2oZ09WHWf5OZVkQOFKvP1eZHRclCbh4tWmbNyh
+         3ycN/Ke2ueb/Vpi5foORzxJmQfafQ4qsLQ76bqQ40I2uNYrG+iZokvb8AW51U+NOO4ElSU5xxExF
+         89EfCHosupjaWSFtSmpbG0xmCWnJgK2tvI2fQqtzP+Yn3oHU2LlTV0Fi3vlxUQoWSOAQdccUs=
+X-OQ-MSGID: <a0ab975d-a686-b28b-8e3d-056d8e2886a8@foxmail.com>
+Date:   Tue, 18 Apr 2023 22:12:14 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH] eventfd: support delayed wakeup for non-semaphore eventfd
+ to reduce cpu utilization
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Fu Wei <wefu@redhat.com>,
+        linux-kernel@vger.kernel.org
+References: <20230417000711.1100-1-hdanton@sina.com>
+From:   Wen Yang <wenyang.linux@foxmail.com>
+In-Reply-To: <20230417000711.1100-1-hdanton@sina.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-map__dso() is called before thread__find_map() which always results in a
-null pointer dereference. Fix it by finding first, then checking if it
-exists.
 
-Fixes: 63df0e4bc368 ("perf map: Add accessor for dso")
-Signed-off-by: James Clark <james.clark@arm.com>
----
- tools/perf/util/cs-etm.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+在 2023/4/17 08:07, Hillf Danton 写道:
+> On 16 Apr 2023 19:31:55 +0800 Wen Yang <wenyang.linux@foxmail.com>
+>> For the NON SEMAPHORE eventfd, if it's counter has a nonzero value,
+>> then a read(2) returns 8 bytes containing that value, and the counter's
+>> value is reset to zero. Therefore, in the NON SEMAPHORE scenario,
+>> N event_writes vs ONE event_read is possible.
+>>
+>> However, the current implementation wakes up the read thread immediately
+>> in eventfd_write so that the cpu utilization increases unnecessarily.
+>>
+>> By adding a configurable delay after eventfd_write, these unnecessary
+>> wakeup operations are avoided, thereby reducing cpu utilization.
+> If the EPOLLOUT wakeup in eventfd_read() breaks, feel free to specify it
+> in the commit message after updating the comment below.
+> 	/*
+> 	 * Every time that a write(2) is performed on an eventfd, the
+> 	 * value of the __u64 being written is added to "count" and a
+> 	 * wakeup is performed on "wqh". A read(2) will return the "count"
+> 	 * value to userspace, and will reset "count" to zero. The kernel
+> 	 * side eventfd_signal() also, adds to the "count" counter and
+> 	 * issue a wakeup.
+> 	 */
 
-diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-index 103865968700..8dd81ddd9e4e 100644
---- a/tools/perf/util/cs-etm.c
-+++ b/tools/perf/util/cs-etm.c
-@@ -885,9 +885,11 @@ static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
- 		thread = etmq->etm->unknown_thread;
- 	}
- 
--	dso = map__dso(al.map);
-+	if (!thread__find_map(thread, cpumode, address, &al))
-+		return 0;
- 
--	if (!thread__find_map(thread, cpumode, address, &al) || !dso)
-+	dso = map__dso(al.map);
-+	if (!dso)
- 		return 0;
- 
- 	if (dso->data.status == DSO_DATA_STATUS_ERROR &&
--- 
-2.34.1
+Thanks
+
+We will modify it according to your suggestion and then send v2 later.
+
+--
+
+Best wishes,
+
+Wen
+
+
+
 
