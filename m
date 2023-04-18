@@ -2,114 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5D66E5C77
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771836E5C84
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbjDRIt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
+        id S230290AbjDRIv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbjDRItN (ORCPT
+        with ESMTP id S230023AbjDRIvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:49:13 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EC9729D
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:49:11 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 18 Apr 2023 04:51:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AC559FA
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:50:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681807837;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1WwxFs09OLlUItADw/QKnx4w5DftEkyjXgAu+IIu1zg=;
+        b=SIQtI2kbULB5P4SLBvc+Mmcp9gdZllblQSs4sqYdEkaHQ8te8IDZgfH1XxQeywiPd61aHP
+        TrMYIZUENcWetpArb+NFg1vJxn4dSUSt/xhvrWAK2eFZHb6DByjTys7XtHtqXzR9Qe5AzV
+        Q3Uf3t6+Ll9Eh4x8e5O7LJqvwh5Vwk8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-lXK-dijyMHW-PykYl1MBOQ-1; Tue, 18 Apr 2023 04:50:34 -0400
+X-MC-Unique: lXK-dijyMHW-PykYl1MBOQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 241251F8D6;
-        Tue, 18 Apr 2023 08:49:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681807750; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OdpDt1qkZG6MWw4pdMSS30gS0YhqisBt2YCmnRtJFd8=;
-        b=OdlEYI99R5tMwN2hUOSjr69Dzueny6AoTtHDOf8zwFNFxi0y2cNBf4kcNe5zoCUr7Yv4yd
-        eJzQQRO/BeUrFN5KHSH0iTBQCvZT1vDMCBx0BmmeZyZd7fqiAdZbmvsVch26EBojpYlgLH
-        vK8M4mD9mSBYZrTjVZ09TR5/ZAcdI8I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681807750;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OdpDt1qkZG6MWw4pdMSS30gS0YhqisBt2YCmnRtJFd8=;
-        b=Dc+Rnzzg0bqVRxn51oSwcGf5Tt1rAMAgUFTcts9o821kJ5EAOszam9cHWYocAqOqY6A/xF
-        FsHz/vadqJykUEDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0C469139EC;
-        Tue, 18 Apr 2023 08:49:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id AmlGAoZZPmRDEgAAMHmgww
-        (envelope-from <iivanov@suse.de>); Tue, 18 Apr 2023 08:49:10 +0000
-Date:   Tue, 18 Apr 2023 11:49:09 +0300
-From:   "Ivan T. Ivanov" <iivanov@suse.de>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tim Gover <tim.gover@raspberrypi.com>
-Subject: Re: [PATCH v2 2/2] ARM: dts: Add nvmem node for BCM2711 bootloader
- public key
-Message-ID: <pdwhmblhzpo6dkpxs2d3p3vbmew2xivqspycezfngwigpf4doe@vgphotcelnsl>
-References: <20230413085206.149730-1-iivanov@suse.de>
- <20230413085206.149730-3-iivanov@suse.de>
- <9b03551a-278d-16dc-08ed-1ef0f89dc79c@i2se.com>
- <duuhz5pju4q7lnvzwndcnruqwqzbwy4jhrfn42vov2rfct4i7c@qh55cifhoud7>
- <9de62851-73a6-0070-4e64-94b6614c11fd@i2se.com>
- <CAAvKZ64KyXJ2QPjRnj3i-8AKh7jGCUw=HNi76XG-a9K-+_JiYQ@mail.gmail.com>
- <02a4ebb4-7652-fb1f-ae56-920648470c67@i2se.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 86AFA3815F6D;
+        Tue, 18 Apr 2023 08:50:33 +0000 (UTC)
+Received: from dell-r430-03.lab.eng.brq2.redhat.com (dell-r430-03.lab.eng.brq2.redhat.com [10.37.153.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 811DF40C6E6E;
+        Tue, 18 Apr 2023 08:50:32 +0000 (UTC)
+From:   Igor Mammedov <imammedo@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     mst@redhat.com, rafael@kernel.org, lenb@kernel.org,
+        bhelgaas@google.com, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: [PATCH] pci: acpiphp: try to reassign resources on bridge if necessary
+Date:   Tue, 18 Apr 2023 10:50:30 +0200
+Message-Id: <20230418085030.2154918-1-imammedo@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <02a4ebb4-7652-fb1f-ae56-920648470c67@i2se.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+When using ACPI PCI hotplug, hotplugging a device with
+large BARs may fail if bridge windows programmed by
+firmware are not large enough.
 
-On 04-16 15:11, Stefan Wahren wrote:
-> > > > 
-> > > > Or I can drop the new compatible string altogether? It looks like
-> > > > only alias is strictly required?! Tim Gover is this correct?
-> > > 
-> > > i cannot speak for the firmware side, but i think we should try to keep
-> > > it compatible with the vendor DTB here.
-> > > 
-> > 
-> > The firmware doesn't look at the compatible string. It locates the
-> > nodes to update using the 'blconfig' and 'blpubkey' aliases. Userspace
-> > scripts (including the documentation example) should also use these
-> > aliases.
-> > Therefore, I don't think it matters if the compatible strings is
-> > modified, but I won't pretend to know what the correct DT style is
-> > here :)
+Reproducer:
+  $ qemu-kvm -monitor stdio -M q35  -m 4G \
+      -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=on \
+      -device id=rp1,pcie-root-port,bus=pcie.0,chassis=4 \
+      disk_image
 
-Ok. Perhaps Stefan have a point and will be better if we keep things 
-in sync between vendor DTS and upstream one.
+ wait till linux guest boots, then hotplug device
+   (qemu) device_add qxl,bus=rp1
 
-> 
-> okay, regardless of the compatible string the patch must be send to the DT
-> maintainers and the devicetree mailing list otherwise they don't have any
-> chance to review.
-> 
+ hotplug on guest side fails with:
+   pci 0000:01:00.0: [1b36:0100] type 00 class 0x038000
+   pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x03ffffff]
+   pci 0000:01:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
+   pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x00001fff]
+   pci 0000:01:00.0: reg 0x1c: [io  0x0000-0x001f]
+   pci 0000:01:00.0: BAR 0: no space for [mem size 0x04000000]
+   pci 0000:01:00.0: BAR 0: failed to assign [mem size 0x04000000]
+   pci 0000:01:00.0: BAR 1: no space for [mem size 0x04000000]
+   pci 0000:01:00.0: BAR 1: failed to assign [mem size 0x04000000]
+   pci 0000:01:00.0: BAR 2: assigned [mem 0xfe800000-0xfe801fff]
+   pci 0000:01:00.0: BAR 3: assigned [io  0x1000-0x101f]
+   qxl 0000:01:00.0: enabling device (0000 -> 0003)
+   Unable to create vram_mapping
+   qxl: probe of 0000:01:00.0 failed with error -12
 
-Sure, my fault. I just used list of recipients from the initial patch.  
+However when using native PCIe hotplug
+  '-global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off'
+it works fine, since kernel attempts to reassign unused resources.
+Use the same machinery as native PCIe hotplug to (re)assign resources.
 
-Regards,
-Ivan
+Signed-off-by: Igor Mammedov <imammedo@redhat.com>
+---
+tested in QEMU with Q35 machine on PCIE root port and also
+with nested conventional bridge attached to root port.
+---
+ drivers/pci/hotplug/acpiphp_glue.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pci/hotplug/acpiphp_glue.c b/drivers/pci/hotplug/acpiphp_glue.c
+index 5b1f271c6034..9aebde28a92f 100644
+--- a/drivers/pci/hotplug/acpiphp_glue.c
++++ b/drivers/pci/hotplug/acpiphp_glue.c
+@@ -517,7 +517,7 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
+ 				}
+ 			}
+ 		}
+-		__pci_bus_assign_resources(bus, &add_list, NULL);
++		pci_assign_unassigned_bridge_resources(bus->self);
+ 	}
+ 
+ 	acpiphp_sanitize_bus(bus);
+-- 
+2.39.1
 
