@@ -2,147 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21606E60E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0775C6E60EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjDRMNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 08:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
+        id S231268AbjDRMNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 08:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjDRMMu (ORCPT
+        with ESMTP id S231691AbjDRMNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 08:12:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1C265A9
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:11:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681819918;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JkJh/B/i3KU/KW7H270nTjye9dmLNKxDnAlmOJnN0vY=;
-        b=IaoEA9elVLy0W4DM2MEgCs85+U7t36gnmR5UyneBO7JpkvdFA2GyRoqIhG+zBubIbLbC2Q
-        jt0NmOrLQTYqdSvAMWp91SvxQnIt7S69IP9OO35JFCx9OIfNdIJagPMtYcU4JWe7tZUK5f
-        IcnwH2hjf5LMfOa5j2VukQ1fvdGD6wQ=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-155-qZ8UvZgZM1G1_16Ww5gV5A-1; Tue, 18 Apr 2023 08:11:55 -0400
-X-MC-Unique: qZ8UvZgZM1G1_16Ww5gV5A-1
-Received: by mail-wr1-f69.google.com with SMTP id e10-20020adfa44a000000b002f6c0c4884fso1788842wra.11
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:11:55 -0700 (PDT)
+        Tue, 18 Apr 2023 08:13:38 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052DAAD15
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:13:17 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-760f29073b4so43146539f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:13:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681819996; x=1684411996;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3C41xG4p1BHPpadBDL6pJd1psfwz5yd3WchMAQj7wTI=;
+        b=Jyi6R/m83VokG9frSymybQC2AFMBTwvKU6IH5SFWbNjoMUuihDbL0fvrWRHM6fEqgd
+         I2k47/ZF5tI1vrJWYWIykz1ylPVltQkexdvlSPDZYCgJnZzCaMTDv7BxcRoGrWxVeAzB
+         HDEKS/SmuA/bzYbFywmTHTLYu8W2uNraQzCUNzjqcdhps8XlbmuhEWVF3zrVq5oHHMaC
+         +SI/TmqjkiRknqu/hej1YElkV7TId33p5MBVP/dLCVBDfuW/ppoMS6k9YE+/lVByu+gu
+         S+ge3LbP56WzvGvqntgCTFsEfFQPT0BnuVAhHl3ukFLSOdNN02OFZZkKWZ+k5KMAcq6r
+         rDrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681819914; x=1684411914;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JkJh/B/i3KU/KW7H270nTjye9dmLNKxDnAlmOJnN0vY=;
-        b=GdSJjKLEIx2dtfzycUDol+cxstv7/03iFrNItri2MQ6zJ61hZ+c1dFZ1fDSZsVQyW9
-         zgIkAr4peO1kjyfe1ayimT6Gflm3VqOxQORZfqB1IypT72Js8M8/aDghXvb+XLH6ymBT
-         V2Zxw1ilWoCrsCd6zpqBsMrD/AiG2tU7hOudL6ugDWiPUjcGddL6F/HYy3yPo1BBp5IW
-         7BxT2m0loU6igaS2qT4jxBk8N6BvckBZY8DKoYdOSFUDkmSsYx11XfcjREREG/E2lOGH
-         +2YklWe6Pjjx1iSWpYRslN2ePVO48qb8WWHBeLxByluqmAbxgmhQvmffA3RpNJOTenaC
-         9AyA==
-X-Gm-Message-State: AAQBX9dnzDYen+po2JTjXtwknfu6EvqF1bU0D4to80OlZHZR5nxtSigW
-        IfDp9EAbfSTa4KTcLgEwAecdoyHWsToGACtLWLAySE+PPNLEjI5D40UFXQOX+kKewL5bQBCitTd
-        /Nt/5jWezsBjWiH20wfTWu/IG
-X-Received: by 2002:a05:600c:2212:b0:3ed:711c:e8fe with SMTP id z18-20020a05600c221200b003ed711ce8femr14686233wml.2.1681819914709;
-        Tue, 18 Apr 2023 05:11:54 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b65iCGtMf2oVoLYMy41tFWkUlUkLBuyvo6vU/7asGqIjHXB/GjSqEJ1yCvOz3n6/Bz0bD6nQ==
-X-Received: by 2002:a05:600c:2212:b0:3ed:711c:e8fe with SMTP id z18-20020a05600c221200b003ed711ce8femr14686210wml.2.1681819914409;
-        Tue, 18 Apr 2023 05:11:54 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id u15-20020a05600c19cf00b003ede3f5c81fsm18542538wmq.41.2023.04.18.05.11.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 05:11:54 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Jarrah Gosbell <kernel@undef.tools>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martijn Braam <martijn@brixit.nl>, Ondrej Jirman <megi@xff.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH] arm64: dts: rockchip: Change serial baud rate for
- Pinephone Pro to 1.5 MB
-In-Reply-To: <3999080.iIbC2pHGDl@diego>
-References: <20230403175937.2842085-1-javierm@redhat.com>
- <3738011.44csPzL39Z@diego>
- <CAMdYzYqT=vVZxFK=P6xYDAht_KWk3CTsTtruPAbGqx1K9EcJsQ@mail.gmail.com>
- <3999080.iIbC2pHGDl@diego>
-Date:   Tue, 18 Apr 2023 14:11:53 +0200
-Message-ID: <87h6tdie46.fsf@minerva.mail-host-address-is-not-set>
+        d=1e100.net; s=20221208; t=1681819996; x=1684411996;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3C41xG4p1BHPpadBDL6pJd1psfwz5yd3WchMAQj7wTI=;
+        b=UDrUWtsdBsbdYY4PWxh1nPZNyKIYkR4S+h9xmscJOBHwiM8gy6TwWXufLnOrXsHlGn
+         1SN9ss6ltYVFkxE9JtanLkcHJ9NL/3C51oWKUn7BFxJmxSiD5Fbp+/QwpJYdUnzZb8rf
+         Q+aPK0J0RHZyShCjlMuT92P72S2S9NDJ7dlZD9uLVN0Q6/glT22MALoYE0/tfESSun22
+         nHywkeUj6vxNe6ltrI+v9YcqQX5X+4kQ7qpa/FKFJmgWsRUuAVFG6vZtDmXnPbycIf/m
+         ycYxV22wU6QjSuGhTqsGqLX3DESX6zxBB0P9tTt/tUdeUzxtCKbcZe9XQdClk+c4B00x
+         Dn3Q==
+X-Gm-Message-State: AAQBX9cuad1dtORhOmF61KvKzVjEATS7PvjjpicUAsa5vhabwQRX1kPA
+        S/eEaay8E3pi/4xGJM/zFyf4FIbATomBWz8yK+i33Q==
+X-Google-Smtp-Source: AKy350ZfZvWa02fGm9TNYBrnOE+KkUawW1Q+TjXvWWE0Le8UwLNHTJEKGZCr3PzZ4WA37tJhHE1QeuNMJWiiACAZIic=
+X-Received: by 2002:a6b:6e06:0:b0:762:7e58:8d38 with SMTP id
+ d6-20020a6b6e06000000b007627e588d38mr1759080ioh.10.1681819995595; Tue, 18 Apr
+ 2023 05:13:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230224085942.1791837-1-elver@google.com> <ZDgOSp30Ec00u8wP@arm.com>
+In-Reply-To: <ZDgOSp30Ec00u8wP@arm.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 18 Apr 2023 14:12:39 +0200
+Message-ID: <CANpmjNMNNc8yizJE8T1+Xrg1rGm+EbBuqybF9j1YE9miqdtasA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/4] kasan: Emit different calls for instrumentable memintrinsics
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jakub Jelinek <jakub@redhat.com>,
+        linux-toolchains@vger.kernel.org,
+        Alexander Potapenko <glider@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-kbuild@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Heiko St=C3=BCbner <heiko@sntech.de> writes:
-
-Hello Heiko,
-
-> Hi Peter,
+On Thu, 13 Apr 2023 at 16:14, Catalin Marinas <catalin.marinas@arm.com> wrote:
 >
-> Am Dienstag, 4. April 2023, 14:52:02 CEST schrieb Peter Geis:
->> On Tue, Apr 4, 2023 at 3:55=E2=80=AFAM Heiko St=C3=BCbner <heiko@sntech.=
-de> wrote:
->> >
->> > Hi,
->> >
->> > Am Montag, 3. April 2023, 19:59:37 CEST schrieb Javier Martinez Canill=
-as:
->> > > This baud rate is set for the device by mainline u-boot and is also =
-what
->> > > is set in the Pinebook Pro Device Tree, which is a device similar to=
- the
->> > > PinePhone Pro but with a different form factor.
->> > >
->> > > Otherwise, the baud rate of the firmware and Linux don't match by de=
-fault
->> > > and a 'console=3DttyS2,1500000n8' kernel command line parameter is r=
-equired
->> > > to have proper output for both.
->> >
->> > The interesting question is always if this will break someone else's s=
-etup.
->> > I've never really understood the strange setting of 1.5MBps, but on the
->> > other hand it _is_ a reality on most boards.
+> Hi Marco,
 >
->> The 1.5M baud is default because the clock structure on rockchip
->> devices does not allow a clean 115200 baud. By attempting to force
->> 115200, it will always be slightly off (either low or high depending
->> on how the driver decided to round). If this actually causes any
->> problems is the subject of much debate.
+> On Fri, Feb 24, 2023 at 09:59:39AM +0100, Marco Elver wrote:
+> > Clang 15 provides an option to prefix memcpy/memset/memmove calls with
+> > __asan_/__hwasan_ in instrumented functions: https://reviews.llvm.org/D122724
+> >
+> > GCC will add support in future:
+> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108777
+> >
+> > Use it to regain KASAN instrumentation of memcpy/memset/memmove on
+> > architectures that require noinstr to be really free from instrumented
+> > mem*() functions (all GENERIC_ENTRY architectures).
+> >
+> > Fixes: 69d4c0d32186 ("entry, kasan, x86: Disallow overriding mem*() functions")
+> > Signed-off-by: Marco Elver <elver@google.com>
+> > Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+> > Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> [...]
+> > diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
+> > index b9e94c5e7097..fa9f836f8039 100644
+> > --- a/scripts/Makefile.kasan
+> > +++ b/scripts/Makefile.kasan
+> > @@ -38,6 +38,11 @@ endif
+> >
+> >  CFLAGS_KASAN += $(call cc-param,asan-stack=$(stack_enable))
+> >
+> > +# Instrument memcpy/memset/memmove calls by using instrumented __asan_mem*()
+> > +# instead. With compilers that don't support this option, compiler-inserted
+> > +# memintrinsics won't be checked by KASAN on GENERIC_ENTRY architectures.
+> > +CFLAGS_KASAN += $(call cc-param,asan-kernel-mem-intrinsic-prefix=1)
+> > +
+> >  endif # CONFIG_KASAN_GENERIC
+> >
+> >  ifdef CONFIG_KASAN_SW_TAGS
+> > @@ -54,6 +59,9 @@ CFLAGS_KASAN := -fsanitize=kernel-hwaddress \
+> >               $(call cc-param,hwasan-inline-all-checks=0) \
+> >               $(instrumentation_flags)
+> >
+> > +# Instrument memcpy/memset/memmove calls by using instrumented __hwasan_mem*().
+> > +CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
 >
-> thanks so much for this piece of clock-detail. As I wrote, I never really
-> understood the why _before_ but also never cared that much to dive
-> into it and find out.
+> This patch breaks the arm64 kernel builds with KASAN_SW_TAGS enabled and
+> clang prior to version 15. Those prior clang versions don't like the
+> '-mllvm -hwasan-kernel-mem-intrinsic-prefix=1' option, end up printing
+> the help text instead of generating the object.
 >
-> So your explanation closes one knowledge gap in my head.
+> Do we need some combination of cc-option and cc-param? Or at least
+> disable this instrumentation if earlier clang versions are used.
 >
-> Thanks a lot :-)
+> It's already in mainline as commit
+> 51287dcb00cc715c27bf6a6b4dbd431621c5b65a.
 
-Did you make a decision about this? I guess the clock explanation is yet
-another argument in favour of switching the PPP to a 1.5 Mbps baud rate ?
+Arnd posted a patch, but the reason why a workaround is needed is
+quite unfortunate:
+https://lore.kernel.org/all/CANpmjNMwYosrvqh4ogDO8rgn+SeDHM2b-shD21wTypm_6MMe=g@mail.gmail.com/
 
---=20
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Clang apparently interprets unknown options that start with "-h..",
+i.e. "-mllvm -h..." as a request to print help text, which has exit
+code 0. So this is only a problem for hwasan options.
