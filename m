@@ -2,132 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C576E6E1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CDE6E6E22
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232956AbjDRV0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
+        id S232854AbjDRV0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjDRVZ6 (ORCPT
+        with ESMTP id S229978AbjDRV0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:25:58 -0400
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA62CAD2A;
-        Tue, 18 Apr 2023 14:25:56 -0700 (PDT)
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6a437526b7cso736408a34.1;
-        Tue, 18 Apr 2023 14:25:56 -0700 (PDT)
+        Tue, 18 Apr 2023 17:26:44 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E139779
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:26:43 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-7606d7ca422so20050939f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1681853202; x=1684445202;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5aYlPNSrwMSPih/Iug9fotKivvMNK1l/gBB6zZEMqg4=;
+        b=Au3zxZZMxkQk6R2qMv5e7MPRGJ47vJZO6YOb782cgLRSFq+BNkL+MoybuAfq1oXcDW
+         zJE4BD33vPL24PipOOhLxaxKrO8RId3XgIJ4cYV+W5d4WNjekbJmBMdkC9ciWLm0Gdk4
+         rKuYnI06M5kEfCJCCXcLZu2kmEDNj5XmPWKUU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681853156; x=1684445156;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t1y++hWxszbxdwjn4XHYGat0BkERR+aOKZ06U2V4Qsw=;
-        b=k90FYBV9gsqgdwoLmJmBHpp66eE1t6rY3To6AMTiSJAm1hj1suStxAPBlfrJw66ogL
-         wOvSKbrf0qexGxJYS+FcAo0Uq3gi8gq/5AptIfjHSxlmVUBF1POSTt3Zup9VpvYLEm6M
-         M7eDeDmBi+1Xg34SS0ByetxU130FekcGEy1gAKhrl96PBGKyFCmLDCl+MiSxHP8kOzUw
-         WQoEOisv4V93jHlHaJBYrUQbdAeu7GNfwwxROhCSbzXDKetscfSQIqGS4M9ySFOkFoQO
-         Z30wN4KOyV7DeaYblswvhzkQF6eNeQ6a1hi0fryyrGZLHnoj3anuTtTRTLUAQ2qONooj
-         WIlQ==
-X-Gm-Message-State: AAQBX9eBtdpzBIS/tXa/jcKlR0z0hgfz4cV5kiJjTCWEDsRZaQXm0SHG
-        Y/vT1HD0uHsjSYMc4qVEbA==
-X-Google-Smtp-Source: AKy350a/OTdllCATjmGezPT1m6bdviDcFkCirlifvfPn2ydSCEej4nyQRiMWdgkdCNUBPOZoo/lCZA==
-X-Received: by 2002:a05:6870:b14d:b0:184:8536:ce54 with SMTP id a13-20020a056870b14d00b001848536ce54mr1896652oal.28.1681853156080;
-        Tue, 18 Apr 2023 14:25:56 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e6-20020a056870944600b0017fea9c156esm6023892oal.18.2023.04.18.14.25.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 14:25:55 -0700 (PDT)
-Received: (nullmailer pid 2362107 invoked by uid 1000);
-        Tue, 18 Apr 2023 21:25:53 -0000
-Date:   Tue, 18 Apr 2023 16:25:53 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        =?UTF-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        devicetree@vger.kernel.org, Sander Vanheule <sander@svanheule.net>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Evan Benn <evanbenn@chromium.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-renesas-soc@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Julius Werner <jwerner@chromium.org>,
-        Jamie Iles <jamie@jamieiles.com>,
-        linux-mediatek@lists.infradead.org,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-watchdog@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Shawn Guo <shawnguo@kernel.org>, Fu Wei <fu.wei@linaro.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH 3/6] dt-bindings: watchdog: arm,sp805: drop unneeded
- minItems
-Message-ID: <168185315346.2362046.17065820066385103041.robh@kernel.org>
-References: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
- <20230415095112.51257-3-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20221208; t=1681853202; x=1684445202;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5aYlPNSrwMSPih/Iug9fotKivvMNK1l/gBB6zZEMqg4=;
+        b=KVVe5e8JJ2+Z6BnQ2KQZIIbXUq+d442wqe+DNrA1m3mfhVfvitZ+O6QKEhaS3colck
+         9diiQgz650pxkCXmVFKr/m5UtnE6aM1o4zqri8rZEVAGYw0ycct3QV+yVwcowDQSdBLX
+         HuhidGzzgTj18/3FwvoXqI2zHHi0R4rgZzBbf4Me9TmrOk2FBTtKYz/yDqwDTNIcKUGf
+         i/I0vZx2FCkO5xU5SMIsxcqxfsYAwM9bf7DXm7htKno3nM+K70514HrskwcVbjob+9DW
+         +C+GwDNZOEorU8KbzirwpUJ+dlFna+Yxy+CZ0tP0vqgRPv+tl4NHnVLcEMNqmBsrMU5+
+         3lOw==
+X-Gm-Message-State: AAQBX9fPUgVpgRboNsG8gOB+A6UF06f0B6yzFflHpRLf+EdNt5L3Ic69
+        TmXIKVO4HwM99H/kDWbZdTKmpg==
+X-Google-Smtp-Source: AKy350ZzaX/hCp9X1YLLSj5lTWXJAeuU0i2KxZICu/wiYEz9CT5zgQxUN0cq+h/za6i6gq+ShyOmUA==
+X-Received: by 2002:a92:c5b0:0:b0:32a:d06a:356e with SMTP id r16-20020a92c5b0000000b0032ad06a356emr7351486ilt.1.1681853202546;
+        Tue, 18 Apr 2023 14:26:42 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id az30-20020a056638419e00b0040f9ed959e3sm2551448jab.13.2023.04.18.14.26.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 14:26:42 -0700 (PDT)
+Message-ID: <deb9c419-bf63-f1b4-1714-5ab31d3a0db6@linuxfoundation.org>
+Date:   Tue, 18 Apr 2023 15:26:41 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230415095112.51257-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 5.15 00/91] 5.15.108-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230418120305.520719816@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230418120305.520719816@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Sat, 15 Apr 2023 11:51:09 +0200, Krzysztof Kozlowski wrote:
-> There is no need to specify minItems when they are equal to maxItems,
-> because it is implied by maxItems.
+On 4/18/23 06:21, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.108 release.
+> There are 91 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/watchdog/arm,sp805.yaml | 1 -
->  1 file changed, 1 deletion(-)
+> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.108-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Compiled and booted on my test system. No dmesg regressions.
 
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+Note - I didn't see any build errors.
+
+thanks,
+-- Shuah
