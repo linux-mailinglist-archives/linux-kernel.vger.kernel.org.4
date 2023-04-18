@@ -2,171 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8E36E6992
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 272316E6997
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbjDRQak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 12:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
+        id S232537AbjDRQbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 12:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbjDRQad (ORCPT
+        with ESMTP id S232547AbjDRQbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 12:30:33 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51BDBB8A;
-        Tue, 18 Apr 2023 09:30:30 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33IFWfCS000444;
-        Tue, 18 Apr 2023 16:30:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=wZ0rGPFPTFGz8DAl++2R27HZq3ugJ227uzKZXB7lr2s=;
- b=oAgEKkam8iIy0SBLTCCqi/g4cGCx/5Pd7zkOJS0lEdT1N8gLg8OWJKMtEM+y2oNjJcsg
- kJyIL1v1e/uwxYPT828KImPfJq/cfsNLU8VkA+LZDNXpHj6FWckQt5oVwaaDas/HaHGa
- v0Nwbc8O4to/lgPJNfyqAuQaDYU1p1i2829F8pi8VofQEoSuGgG9OT1B9/cYJPWS0HT8
- SQMY4tRJeo8OyAf9mdHaeY0cZal0eR1OIV89J3fRVyWqwKxC3Y9Zo1oQyCIgRmnG8qk5
- n8gN81qZ3ZKKYJmpAbxorxdeEAxqszJTC7UdShnLkN4nWMsiHgFKMtIkTokkmZZ3ueJm iA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1wxk053d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 16:30:25 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33IGUOSa029617
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 16:30:24 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 18 Apr 2023 09:30:23 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Chris Lew <quic_clew@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] rpmsg: glink: Consolidate TX_DATA and TX_DATA_CONT
-Date:   Tue, 18 Apr 2023 09:30:18 -0700
-Message-ID: <20230418163018.785524-3-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230418163018.785524-1-quic_bjorande@quicinc.com>
-References: <20230418163018.785524-1-quic_bjorande@quicinc.com>
+        Tue, 18 Apr 2023 12:31:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7178BC66A;
+        Tue, 18 Apr 2023 09:31:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08DB6613FB;
+        Tue, 18 Apr 2023 16:31:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 343AEC433EF;
+        Tue, 18 Apr 2023 16:31:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681835476;
+        bh=EnkGpZ0KT5wQZ3p6H2OsLu3RjSBEBA8xTMop2/9F6P0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=uWDfL7nwvc14b7pg1yK7n42vedIfE0SYdtcDNvIetym7pJWbeEKYA1swuoQld8PLa
+         cZUN2TplBTd/RJhOgdN34Lc1mmOLlplg/GSsedT8yPf8obqFjvBGN/ChiXdGSDDU+B
+         MBbXPtnT3QNrA+1pzuC+fgwr40r0+VPQx4BaKHaqt6/JM/Q30nQf8iCSBr3KoKxnbC
+         VKG6vRCZaFxq8Ut/B7cag6K482wnhOoZcF28l9cAJYTi7ctxbFLMkTcLQp5hTgk8P+
+         gt9aDQrEEF+WljFnSgQt01dF0fEAM784lCnZGN0OjAxPcbjxUNtQ993Kla3svfop7q
+         xrYh6crrxLqXw==
+Date:   Tue, 18 Apr 2023 11:31:14 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Igor Mammedov <imammedo@redhat.com>, linux-kernel@vger.kernel.org,
+        mst@redhat.com, lenb@kernel.org, bhelgaas@google.com,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH] pci: acpiphp: try to reassign resources on bridge if
+ necessary
+Message-ID: <20230418163114.GA134491@bhelgaas>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: o7YpuMgtmsAqu8SSaZrygnUkZGomf_7T
-X-Proofpoint-ORIG-GUID: o7YpuMgtmsAqu8SSaZrygnUkZGomf_7T
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-18_11,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- mlxlogscore=999 bulkscore=0 impostorscore=0 lowpriorityscore=0 spamscore=0
- priorityscore=1501 clxscore=1015 suspectscore=0 mlxscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304180137
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAJZ5v0gWKwOiACmK9=ru5W15Kydv6JqKJ8d4ngzKC7jqAjjcpQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than duplicating most of the code for constructing the initial
-TX_DATA and subsequent TX_DATA_CONT packets, roll them into a single
-loop.
+[+cc Mika, who made previous changes in this area]
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
+On Tue, Apr 18, 2023 at 05:38:15PM +0200, Rafael J. Wysocki wrote:
+> On Tue, Apr 18, 2023 at 4:17 PM Igor Mammedov <imammedo@redhat.com> wrote:
+> > On Tue, 18 Apr 2023 14:55:29 +0200
+> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> > > On Tue, Apr 18, 2023 at 10:50 AM Igor Mammedov <imammedo@redhat.com> wrote:
+> > > >
+> > > > When using ACPI PCI hotplug, hotplugging a device with
+> > > > large BARs may fail if bridge windows programmed by
+> > > > firmware are not large enough.
+> > > >
+> > > > Reproducer:
+> > > >   $ qemu-kvm -monitor stdio -M q35  -m 4G \
+> > > >       -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=on \
+> > > >       -device id=rp1,pcie-root-port,bus=pcie.0,chassis=4 \
+> > > >       disk_image
+> > > >
+> > > >  wait till linux guest boots, then hotplug device
+> > > >    (qemu) device_add qxl,bus=rp1
+> > > >
+> > > >  hotplug on guest side fails with:
+> > > >    pci 0000:01:00.0: [1b36:0100] type 00 class 0x038000
+> > > >    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x03ffffff]
+> > > >    pci 0000:01:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
+> > > >    pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x00001fff]
+> > > >    pci 0000:01:00.0: reg 0x1c: [io  0x0000-0x001f]
+> > > >    pci 0000:01:00.0: BAR 0: no space for [mem size 0x04000000]
+> > > >    pci 0000:01:00.0: BAR 0: failed to assign [mem size 0x04000000]
+> > > >    pci 0000:01:00.0: BAR 1: no space for [mem size 0x04000000]
+> > > >    pci 0000:01:00.0: BAR 1: failed to assign [mem size 0x04000000]
+> > > >    pci 0000:01:00.0: BAR 2: assigned [mem 0xfe800000-0xfe801fff]
+> > > >    pci 0000:01:00.0: BAR 3: assigned [io  0x1000-0x101f]
+> > > >    qxl 0000:01:00.0: enabling device (0000 -> 0003)
+> > > >    Unable to create vram_mapping
+> > > >    qxl: probe of 0000:01:00.0 failed with error -12
+> > > >
+> > > > However when using native PCIe hotplug
+> > > >   '-global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off'
+> > > > it works fine, since kernel attempts to reassign unused resources.
+> > > > Use the same machinery as native PCIe hotplug to (re)assign resources.
 
-Changes since v1:
-- Reduced unnecessary complexity in the chunking condition
+Thanks for the nice reproducer and logs!
 
- drivers/rpmsg/qcom_glink_native.c | 46 +++++++++----------------------
- 1 file changed, 13 insertions(+), 33 deletions(-)
+> > > > Signed-off-by: Igor Mammedov <imammedo@redhat.com>
+> > >
+> > > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > or please let me know if you want me to pick this up.
+> >
+> > It would be nice if you could pick it up.
+> 
+> OK, I'll do that unless Bjorn tells me that he prefers to take it via
+> the PCI tree.
 
-diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-index 62634d020d13..7e6fad4e02f8 100644
---- a/drivers/rpmsg/qcom_glink_native.c
-+++ b/drivers/rpmsg/qcom_glink_native.c
-@@ -1309,7 +1309,7 @@ static int __qcom_glink_send(struct glink_channel *channel,
- 	int ret;
- 	unsigned long flags;
- 	int chunk_size = len;
--	int left_size = 0;
-+	size_t offset = 0;
- 
- 	if (!glink->intentless) {
- 		while (!intent) {
-@@ -1343,49 +1343,29 @@ static int __qcom_glink_send(struct glink_channel *channel,
- 		iid = intent->id;
- 	}
- 
--	if (wait && chunk_size > SZ_8K) {
--		chunk_size = SZ_8K;
--		left_size = len - chunk_size;
--	}
--	req.msg.cmd = cpu_to_le16(GLINK_CMD_TX_DATA);
--	req.msg.param1 = cpu_to_le16(channel->lcid);
--	req.msg.param2 = cpu_to_le32(iid);
--	req.chunk_size = cpu_to_le32(chunk_size);
--	req.left_size = cpu_to_le32(left_size);
--
--	ret = qcom_glink_tx(glink, &req, sizeof(req), data, chunk_size, wait);
--
--	/* Mark intent available if we failed */
--	if (ret) {
--		if (intent)
--			intent->in_use = false;
--		return ret;
--	}
--
--	while (left_size > 0) {
--		data = (void *)((char *)data + chunk_size);
--		chunk_size = left_size;
--		if (chunk_size > SZ_8K)
-+	while (offset < len) {
-+		chunk_size = len - offset;
-+		if (chunk_size > SZ_8K && wait)
- 			chunk_size = SZ_8K;
--		left_size -= chunk_size;
- 
--		req.msg.cmd = cpu_to_le16(GLINK_CMD_TX_DATA_CONT);
-+		req.msg.cmd = cpu_to_le16(offset == 0 ? GLINK_CMD_TX_DATA : GLINK_CMD_TX_DATA_CONT);
- 		req.msg.param1 = cpu_to_le16(channel->lcid);
- 		req.msg.param2 = cpu_to_le32(iid);
- 		req.chunk_size = cpu_to_le32(chunk_size);
--		req.left_size = cpu_to_le32(left_size);
-+		req.left_size = cpu_to_le32(len - offset - chunk_size);
- 
--		ret = qcom_glink_tx(glink, &req, sizeof(req), data,
--				    chunk_size, wait);
--
--		/* Mark intent available if we failed */
-+		ret = qcom_glink_tx(glink, &req, sizeof(req), data + offset, chunk_size, wait);
- 		if (ret) {
-+			/* Mark intent available if we failed */
- 			if (intent)
- 				intent->in_use = false;
--			break;
-+			return ret;
- 		}
-+
-+		offset += chunk_size;
- 	}
--	return ret;
-+
-+	return 0;
- }
- 
- static int qcom_glink_send(struct rpmsg_endpoint *ept, void *data, int len)
--- 
-2.25.1
+It's OK with me if you pick this up, but please update the subject to
+use the style of previous commits, e.g.,
 
+  PCI: acpiphp: Reassign resources on bridge if necessary
+
+Previous changes involving pci_assign_unassigned_bridge_resources() in
+enable_slot() (these are from Mika, so I cc'd him in case he wants to
+comment):
+
+  84c8b58ed3ad ("ACPI / hotplug / PCI: Don't scan bridges managed by native hotplug")
+  77adf9355304 ("ACPI / hotplug / PCI: Allocate resources directly under the non-hotplug bridge")
+
+> > > > ---
+> > > > tested in QEMU with Q35 machine on PCIE root port and also
+> > > > with nested conventional bridge attached to root port.
+> > > > ---
+> > > >  drivers/pci/hotplug/acpiphp_glue.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/pci/hotplug/acpiphp_glue.c b/drivers/pci/hotplug/acpiphp_glue.c
+> > > > index 5b1f271c6034..9aebde28a92f 100644
+> > > > --- a/drivers/pci/hotplug/acpiphp_glue.c
+> > > > +++ b/drivers/pci/hotplug/acpiphp_glue.c
+> > > > @@ -517,7 +517,7 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
+
+Previous context:
+
+                                             __pci_bus_size_bridges(dev->subordinate,
+                                                                    &add_list);
+
+> > > >                                 }
+> > > >                         }
+> > > >                 }
+> > > > -               __pci_bus_assign_resources(bus, &add_list, NULL);
+> > > > +               pci_assign_unassigned_bridge_resources(bus->self);
+
+"add_list" is now used only for __pci_bus_size_bridges(), which
+*looks* unnecessary unless there's some obscure side-effect of that
+path when that parameter is non-NULL.
+
+If "add_list" is unnecessary, you would probably use
+pci_bus_size_bridges() above instead of __pci_bus_size_bridges().
+
+After this patch, we have:
+
+  if (bridge && bus->self && hotplug_is_native(bus->self)) {
+    for_each_pci_bridge(dev, bus)
+      acpiphp_native_scan_bridge(dev);
+  } else {
+    ...
+    pci_assign_unassigned_bridge_resources(bus->self);
+  }
+
+We do not do pci_assign_unassigned_bridge_resources() in the "then"
+part of the "if".  Per the comment, that case may be used for adding
+Thunderbolt controllers.  Is there a reason we do not want
+pci_assign_unassigned_bridge_resources() in that path, or should it be
+in both cases?
+
+> > > >         }
+> > > >
+> > > >         acpiphp_sanitize_bus(bus);
