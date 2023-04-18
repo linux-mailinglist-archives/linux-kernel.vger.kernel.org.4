@@ -2,139 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5096E6D34
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 22:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8D26E6D39
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 22:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232226AbjDRUBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 16:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
+        id S232492AbjDRUCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 16:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjDRUA6 (ORCPT
+        with ESMTP id S232315AbjDRUCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 16:00:58 -0400
-Received: from mx4.securetransport.de (mx4.securetransport.de [178.254.6.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1936855B9
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:00:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1681848010;
-        bh=C8n+u6LGHwZMhPF+YX4nvzfsQzvMFbR9EYTHpXERbIQ=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=J+GFblxL10crjZMM+rtTPaZRh3AysPVwW+jcdL/f1vDj9sjFe16oxOK6FYXgT3iik
-         KnYKoExg6AILFRGeHqSonN6F3qjX7Kkrk1mRez8OK048Tr+Trc1yEm/L6WEIiFaJvP
-         dwQ6NsN+xAFlAZfy0KxayXAOtCvBXUmq0ck8Q/g5lwhD2mQBRjhKbmausdlw6eM5Qg
-         wAzgWiAcDv6sqJ4y4v1Ti+8YsSj/61B9BcpWO7gW3VfrUuvpIcKtQGCpMiQ3tenFiZ
-         T0xwtO77djIl/miGtYGkNgt777d/k1yiERxEfvURpV3IyT7RuyiSE5jIQkwfIPutG5
-         DMKa+24s0Vcvw==
-X-secureTransport-forwarded: yes
-From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Complaints-To: abuse@cubewerk.de
-To:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Support Opensource <support.opensource@diasemi.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Marek Vasut <marex@denx.de>,
-        kernel <kernel@dh-electronics.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Subject: RE: [PATCH V4 3/3] regulator: da9062: Make the use of IRQ optional
-Thread-Topic: [PATCH V4 3/3] regulator: da9062: Make the use of IRQ optional
-Thread-Index: AQHZUmi9/xwYP1tNtkugFXddhctvjq8xtZQA
-Date:   Tue, 18 Apr 2023 20:00:03 +0000
-Message-ID: <bb6f5cf8afd54836959ebfb0455b81dc@dh-electronics.com>
-References: <20230309092254.56279-1-cniedermaier@dh-electronics.com>
- <20230309092254.56279-3-cniedermaier@dh-electronics.com>
-In-Reply-To: <20230309092254.56279-3-cniedermaier@dh-electronics.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 18 Apr 2023 16:02:09 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DCB44A6
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:02:07 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50671ef0c48so664942a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:02:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681848124; x=1684440124;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HsFVuXE61PbLw9YtM+jxEDcHooXCuW3K6esrr2BCHUs=;
+        b=RJSd8ztUkMXfjKj2IFMPJud3LXOVWy9ZT+F1FDzl/BveJrXCo7/SuFeiZtjIEV6v1l
+         JLvipWe+etghOYMPkO1N4WGyAsDjtyY8zagft20AJAomxd5uYUtpBfVExN5sCgCewMcL
+         WPhPxa0i3pN/23Dmj2tqxL3Z2xZdfrpkcreZte53NtKrhNSqhfoZic2eIn0KuRsfk8mg
+         ks+vQlGhdXKNOrUoF/EgWy6EOKzIlAKGqxCGeM9vn+Iu93/vVeHpW7yGx6TpxbzfBa8y
+         SZTpEZ3ohNPRjz3VUjM0rRPCW79jPnsSPHhLYi5EWDmgjfsCpIz7lbWcp3uuwvkQVv3v
+         UAqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681848124; x=1684440124;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HsFVuXE61PbLw9YtM+jxEDcHooXCuW3K6esrr2BCHUs=;
+        b=TZGlbFI0HuIhzBdK4OtHgrebkCzLE6zgw7lXQzoLvAERGqTEwbBmq3LMJMMob8oqmh
+         C+6XcEV+ANmW864Sx5BG8neSj+kx/QO7ZNKUxKs1H/Gi7QXxhwzvLc1pBGgmIZuZhILh
+         CyadBRNstV6HjGt1Ug/5VJXCRVCmXIhphA3K9CbccG0KcDHVTGpTTiB8baQ7UVuxGFyd
+         Sxt2GYStbJ3m55nZDo+YC32umgxj3JnzX+vTFHsO1GKVxISg8tPC/LUhsTIWpjAj9LI2
+         6A6GNIEuXVUhPXfFfqarGlR/epNnY2UO4zQ3dBRUMMQNd9PMwZV7EfmHihczOab2oLVv
+         y9HQ==
+X-Gm-Message-State: AAQBX9dgHL8ZsuokcVZsiGtSeM8oItOL7X5OxoRVxbzVyaqWQkmbq/0y
+        uuJ/MWTRjDSJFx+A7Q4Y9I4=
+X-Google-Smtp-Source: AKy350ZwNs3E8lPGplBIvyWZE2u91zV7h78+pgwfvhHLpZndxunn86Wb3edvlIvy4Il+7UWVtUYaOg==
+X-Received: by 2002:a17:906:19c:b0:94f:66af:b1f7 with SMTP id 28-20020a170906019c00b0094f66afb1f7mr7316763ejb.1.1681848124259;
+        Tue, 18 Apr 2023 13:02:04 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id ay18-20020a056402203200b0050504648fc4sm7394370edb.80.2023.04.18.13.02.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 13:02:03 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 22:02:01 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] staging: rtl8192e: Fix W_DISABLE# does not work after
+ stop/start
+Message-ID: <20230418200201.GA17398@matrix-ESPRIMO-P710>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Niedermaier [mailto:cniedermaier@dh-electronics.com]
-Sent: Thursday, March 9, 2023 10:23 AM
-> This patch makes the use of IRQ optional to make the DA9061/62 usable
-> for designs that don't have the IRQ pin connected, because the regulator
-> is usable without IRQ.
->=20
-> Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Reviewed-by: Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202303082246.GuLdPL0t-lkp@int=
-el.com/
-> ---
-> Cc: Support Opensource <support.opensource@diasemi.com>
-> Cc: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Marek Vasut <marex@denx.de>
-> Cc: kernel@dh-electronics.com
-> Cc: linux-kernel@vger.kernel.org
-> To: linux-arm-kernel@lists.infradead.org
-> ---
-> V2: - Rebase on current next 20230209
->     - Add Reviewed-by and Acked-by tags
-> V3: - Rebase on current next 20230307
-> v4: - Rebase on current next 20230309
->     - Fix a missing variable change reported by kernel test robot
-> ---
->  drivers/regulator/da9062-regulator.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/regulator/da9062-regulator.c b/drivers/regulator/da9=
-062-regulator.c
-> index 1a6324001027..ae7955afce86 100644
-> --- a/drivers/regulator/da9062-regulator.c
-> +++ b/drivers/regulator/da9062-regulator.c
-> @@ -924,7 +924,7 @@ static int da9062_regulator_probe(struct platform_dev=
-ice *pdev)
->  	struct da9062_regulator *regl;
->  	struct regulator_config config =3D { };
->  	const struct da9062_regulator_info *rinfo;
-> -	int irq, n, ret;
-> +	int n, ret;
->  	int max_regulators;
->=20
->  	switch (chip->chip_type) {
-> @@ -1012,12 +1012,11 @@ static int da9062_regulator_probe(struct platform=
-_device *pdev)
->  	}
->=20
->  	/* LDOs overcurrent event support */
-> -	irq =3D platform_get_irq_byname(pdev, "LDO_LIM");
-> -	if (irq < 0)
-> -		return irq;
-> -	regulators->irq_ldo_lim =3D irq;
-> +	regulators->irq_ldo_lim =3D platform_get_irq_byname_optional(pdev, "LDO=
-_LIM");
-> +	if (regulators->irq_ldo_lim < 0)
-> +		return 0;
->=20
-> -	ret =3D devm_request_threaded_irq(&pdev->dev, irq,
-> +	ret =3D devm_request_threaded_irq(&pdev->dev, regulators->irq_ldo_lim,
->  					NULL, da9062_ldo_lim_event,
->  					IRQF_TRIGGER_LOW | IRQF_ONESHOT,
->  					"LDO_LIM", regulators);
+When loading the driver for rtl8192e, the W_DISABLE# switch is working as
+intended. But when the WLAN is turned off in software and then turned on
+again the W_DISABLE# does not work anymore. Reason for this is that in
+the function _rtl92e_dm_check_rf_ctrl_gpio() the bfirst_after_down is
+checked and returned when true. bfirst_after_down is set true when
+switching the WLAN off in software. But it is not set to false again
+when WLAN is turned on again.
 
-Hi,
+Add bfirst_after_down = false in _rtl92e_sta_up to reset bit and fix
+above described bug.
 
-In V3 of this patch the kernel test robot found an issue. A fix is
-important, because otherwise the normal path with IRQ could have
-problems. So I fixed it in V4. Any comments or is it OK how I fixed it?
+Fixes: 94a799425eee ("From: wlanfae <wlanfae@realtek.com> [PATCH 1/8] rtl8192e: Import new version of driver from realtek")
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+---
+v1->v2: Added Fixes Tag
+v2->v3: Changed Fixes Tag from https to git commit id
 
+Tested with rtl8192e (WLL6130-D99)
+Transferred this patch over wlan connection of rtl8192e
+---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards
-Christoph
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index 4cf84b5666a7..27040d1e3230 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -645,6 +645,7 @@ static int _rtl92e_sta_up(struct net_device *dev, bool is_silent_reset)
+ 	else
+ 		netif_wake_queue(dev);
+ 
++	priv->bfirst_after_down = false;
+ 	return 0;
+ }
+ 
+-- 
+2.40.0
 
