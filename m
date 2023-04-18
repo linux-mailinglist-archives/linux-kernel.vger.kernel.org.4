@@ -2,108 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6746E6C4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9396E6C57
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbjDRSmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
+        id S232657AbjDRSop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbjDRSms (ORCPT
+        with ESMTP id S232608AbjDRSom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:42:48 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBB693D7;
-        Tue, 18 Apr 2023 11:42:48 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6a5da18f7f5so501679a34.1;
-        Tue, 18 Apr 2023 11:42:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681843367; x=1684435367;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Tue, 18 Apr 2023 14:44:42 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A4E93D7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:44:40 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b57c49c4cso2123015b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:44:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681843480; x=1684435480;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eX9q8gX+UiR7CnmbV0JhOILFmnfK5QRyHCsxTtqP7h8=;
-        b=VoVJcBwAdrh4JPJBimftOmym+mEnRCVosHaVtm8Q1utNpkb4nU5xK3ktgJNAwnDNqp
-         6/IueRXmbWyHc1KLWcZUeOUn+8ILnKGDt9l2YNsQUh/hKmZwPEb/pC2NfDM7OAjY7mqk
-         fWF0OlEkID7Bq1VWAtMoBe14yvYLk7ccqtkee2EepBMom9glJDO9426mKqZ/nnJWXRXm
-         skOWyW4fOYZQ06dPYxvWyr//0VVALY0bl8WXIiNoBA4HoBBGVtnafpkSw8KI0w3Nc2+v
-         n/p79wGtP0bZNQUDS8N5mUspb5hrfkPeFE0wfa4JS4tCZNGhx11Q+zTwtSSW5J3k/CV4
-         9JEA==
-X-Gm-Message-State: AAQBX9fdb+IH40U8UR+ZlaGRxPvO7Z5B3+a38R0de2eS/utPQGm03zj4
-        cz78Uy+acNyJh0AsjjScxw==
-X-Google-Smtp-Source: AKy350YkFGdSrcH78VWgdiZeex/IhpEM1/tIWlB0tUde/R1j0VFPBv9n0B3D5YWlYqCkIfq6XkKf9A==
-X-Received: by 2002:a9d:7454:0:b0:6a3:2513:c452 with SMTP id p20-20020a9d7454000000b006a32513c452mr1455755otk.23.1681843367361;
-        Tue, 18 Apr 2023 11:42:47 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c7-20020a9d6847000000b0069f0794861asm5786365oto.63.2023.04.18.11.42.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 11:42:46 -0700 (PDT)
-Received: (nullmailer pid 2105101 invoked by uid 1000);
-        Tue, 18 Apr 2023 18:42:46 -0000
-Date:   Tue, 18 Apr 2023 13:42:46 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Changhuang Liang <changhuang.liang@starfivetech.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jack Zhu <jack.zhu@starfivetech.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 1/3] dt-bindings: phy: Add starfive,jh7110-dphy-rx
-Message-ID: <20230418184246.GA2103246-robh@kernel.org>
-References: <20230412084540.295411-1-changhuang.liang@starfivetech.com>
- <20230412084540.295411-2-changhuang.liang@starfivetech.com>
- <8dd0dc63-e0df-8764-f756-da032d9d671c@linaro.org>
- <eb47b7c7-bdbb-92d9-ba39-604ce487f297@starfivetech.com>
- <f6a4fb28-d635-4d99-44bb-d929cb41eef2@linaro.org>
- <b34a8d59-34e4-8358-9d2b-367f4707ca7c@starfivetech.com>
- <f0d82428-aaa5-3dd4-bc29-f1057fe749bc@linaro.org>
+        bh=/h0Ye4YzfuTyVJhc3KWw9FhoYxdOlS0tgXzf1S8Y6JY=;
+        b=hwr4DfGlA0LVFdLW955zFp7mTAHAENcrEHsi6IwXYBYqhH5DmANidRKqkGi/i4e6Z5
+         mQpOvJYJup+h6qXClSv+sncQdafdVcwTQH8HqTiwZ63gZOrFVOLgP2iv6DSHeFNcmhZf
+         J4ItVEF7/OPio/GHJS3thEifa2RDAmJKdin63BzsME6o7Xaqk0Bwr68waO+IGxSxPDEZ
+         OHPWWAUT443n7YLma2AAKHk5DVl8I6/202vfBbucgg26uvKcsqhBNe38ChlO0N2UPRFW
+         q8fH0Tkjoiqu5yPrfp2IAg2a3uVELg4ZJnRh5+XYvndU40DEQEQrE5lehVLU0p+VOp32
+         5mWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681843480; x=1684435480;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/h0Ye4YzfuTyVJhc3KWw9FhoYxdOlS0tgXzf1S8Y6JY=;
+        b=EiUgL4M2yiVlBN964FkABH8a+a699DOxOyfnE5Er4gdTdwdu/iv3aF6XRwxiHJOguT
+         F70Y6A0fZMhYt3kQOlnccqlvfzKYkJCNI7x2TzlhM+RYyGUJZRx0r257rLxujcIA4WXJ
+         06nvhomS+yVPfgVK2SvXclad+iiJrOI9WzGg2V/48UJ1MACWmQcQKVLEiQN1i81XrTrc
+         /lHf4vwNzN5lHOWeVjm8eb3Vf0+kss5hq18XelCtq9/PpFlDS6WskV8YAG47eRjKV9aU
+         sQwg+giRKtwIVtRyvm4h3uVmYSP1QOmA+FXthyrRcUJaguh8KFgjMrzpyZq9YvpWV5fj
+         hxpw==
+X-Gm-Message-State: AAQBX9cDAyMIAzIgoHU2Z4cHwo2/Lz1FVPnjlagRWm8qw3UprAn9U1SP
+        RVZr0skVd8xaoY3uWl8hp5sNSgEAntqLqHzXRC4Z1Q==
+X-Google-Smtp-Source: AKy350YmXyurrrdutX3TxFOkZkZRSQwtF8YI9jpYLN30ZWVx/yRDmwS1d5gzSB8AfjG6MGZpUIMnfzIKD84qWtJarOY=
+X-Received: by 2002:a17:902:eccf:b0:1a6:9671:253e with SMTP id
+ a15-20020a170902eccf00b001a69671253emr3279751plh.47.1681843479724; Tue, 18
+ Apr 2023 11:44:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f0d82428-aaa5-3dd4-bc29-f1057fe749bc@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
+In-Reply-To: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 18 Apr 2023 11:44:28 -0700
+Message-ID: <CAKwvOdnj7rNeh0YeX2NPcbkoJBnRwXb9Dt0SF9mHaMKYVLjCjw@mail.gmail.com>
+Subject: Re: [PATCH] soc: ti: pruss: Avoid cast to incompatible function type
+To:     Simon Horman <horms@kernel.org>
+Cc:     Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 10:41:23AM +0200, Krzysztof Kozlowski wrote:
-> On 13/04/2023 04:34, Changhuang Liang wrote:
-> >>>>> +  lane_maps:
-> >>>>
-> >>>> Why did this appear? Underscores are not allowed. It looks like you
-> >>>> re-implement some standard property.
-> >>>>
-> >>>
-> >>> Will change to lane-maps.
-> >>> Yes, according to Vinod advice, lane mapping table use device tree
-> >>> to parse makes sense.
-> >>
-> >> Hm, I have a feeling that I saw such property, so you should dig into
-> >> existing and in-flight bindings.
-> >>
-> >> Best regards,
-> >> Krzysztof
-> >>
-> > 
-> > A standard property? Like "clocks" or "resets"?
-> 
-> Like lane-polarities now submitted to one MIPI.
-> 
+On Tue, Apr 18, 2023 at 4:41=E2=80=AFAM Simon Horman <horms@kernel.org> wro=
+te:
+>
+> Rather than casting clk_unregister_mux to an incompatible function
+> type provide a trivial wrapper with the correct signature for the
+> use-case.
+>
+> Reported by clang-16 with W=3D1:
+>
+>  drivers/soc/ti/pruss.c:158:38: error: cast from 'void (*)(struct clk *)'=
+ to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wca=
+st-function-type-strict]
+>          ret =3D devm_add_action_or_reset(dev, (void(*)(void *))clk_unreg=
+ister_mux,
+>
+> No functional change intended.
+> Compile tested only.
 
-data-lanes perhaps?
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Rob
+Here's some more suspects to look at, if you have cycles:
+drivers/base/devres.c:734:int __devm_add_action(struct device *dev,
+void (*action)(void *), void *data, const char *name)
+drivers/i2c/busses/i2c-mchp-pci1xxxx.c:1159: ret =3D
+devm_add_action(dev, (void (*)(void *))pci1xxxx_i2c_shutdown, i2c);
+drivers/soc/ti/pruss.c:96: ret =3D devm_add_action_or_reset(dev,
+(void(*)(void *))clk_unregister_mux,
+drivers/mmc/host/meson-mx-sdhc-mmc.c:791: ret =3D
+devm_add_action_or_reset(dev, (void(*)(void *))mmc_free_host,
+drivers/pci/controller/pcie-microchip-host.c:866:
+devm_add_action_or_reset(dev, (void (*) (void
+*))clk_disable_unprepare,
+
+>
+> Signed-off-by: Simon Horman <horms@kernel.org>
+> ---
+>  drivers/soc/ti/pruss.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+> index 6882c86b3ce5..e68441bd7b30 100644
+> --- a/drivers/soc/ti/pruss.c
+> +++ b/drivers/soc/ti/pruss.c
+> @@ -38,6 +38,11 @@ static void pruss_of_free_clk_provider(void *data)
+>         of_node_put(clk_mux_np);
+>  }
+>
+> +static void pruss_clk_unregister_mux(void *data)
+> +{
+> +       clk_unregister_mux(data);
+> +}
+> +
+>  static int pruss_clk_mux_setup(struct pruss *pruss, struct clk *clk_mux,
+>                                char *mux_name, struct device_node *clks_n=
+p)
+>  {
+> @@ -93,8 +98,7 @@ static int pruss_clk_mux_setup(struct pruss *pruss, str=
+uct clk *clk_mux,
+>                 goto put_clk_mux_np;
+>         }
+>
+> -       ret =3D devm_add_action_or_reset(dev, (void(*)(void *))clk_unregi=
+ster_mux,
+> -                                      clk_mux);
+> +       ret =3D devm_add_action_or_reset(dev, pruss_clk_unregister_mux, c=
+lk_mux);
+>         if (ret) {
+>                 dev_err(dev, "failed to add clkmux unregister action %d",=
+ ret);
+>                 goto put_clk_mux_np;
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
