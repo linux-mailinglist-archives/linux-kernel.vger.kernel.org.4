@@ -2,77 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E224B6E5D64
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2A26E5D6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbjDRJaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
+        id S229849AbjDRJba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbjDRJ3s (ORCPT
+        with ESMTP id S229635AbjDRJb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:29:48 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D135595
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:29:46 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 5B5DF9E3;
-        Tue, 18 Apr 2023 11:29:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1681810185;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NayrR68KcLRy+l3mJSHMh2mevUq9FSM3tf3pOAeKAqY=;
-        b=p0n/c2lUevHY4Rw1cblUVNGasItTK6jdIGDkq2NlqWhIutLX+HulTKtcpgog3eWfey6mIS
-        FwsIWy6AD3eXbkFIdmZ1EDvddqX9Hp5LG4E1Aru6pRh96tM7vLIa+7Bo18ytk3h+sjbykd
-        VYX1a/nhmZwsJUN4p3fsJcQnQw96RvxHAyZdqauoOLYUKNhSVfGwqlWU8paWOQcTnaMeJX
-        G2zC9+MU0HOa8uvNYmh7aZe1or1Wl+XdCm7q+TPRY7aI+ro8GzeL+MSqiDjRBDzzLVGSqZ
-        SNLoyq3sLeEnFRyJoWzL4zbQig+pEm9agck7ZNtnXFu/6eKGX5fuBDxTzzAF9w==
+        Tue, 18 Apr 2023 05:31:27 -0400
+Received: from mta-65-227.siemens.flowmailer.net (mta-65-227.siemens.flowmailer.net [185.136.65.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4666F59CC
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:31:23 -0700 (PDT)
+Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 202304180931194b406a5dffd5c3211e
+        for <linux-kernel@vger.kernel.org>;
+        Tue, 18 Apr 2023 11:31:19 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=florian.bezdeka@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=CqK3hsqP4ZsT3ZUY+isIcg9eKHACr0lAiNG1+JRla6g=;
+ b=qgSvw768XrHXL9zjoF5Fi+WBoNdMdWHl324bLBiS9wq1u4tQkr2ulODt4ZPNSvEiHuxy2w
+ RKE2yu8Sb8Bi5ojr66/Z5zlRmyQQ9lRmWdbz4qoWuBo9sjNznGinj7y4/74qtLGJqMnle6KC
+ e1VTaI9CzcGE4fniV7kl20klcOhV8=;
+Message-ID: <98a4831de6c2ae4a3eb8d29dcd114a6e96c34f94.camel@siemens.com>
+Subject: Re: [PATCH net v3 1/1] igc: read before write to SRRCTL register
+From:   Florian Bezdeka <florian.bezdeka@siemens.com>
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        Song Yoong Siang <yoong.siang.song@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Vedang Patel <vedang.patel@intel.com>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        Andre Guedes <andre.guedes@intel.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        David Laight <David.Laight@ACULAB.COM>
+Cc:     brouer@redhat.com, intel-wired-lan@lists.osuosl.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, xdp-hints@xdp-project.net,
+        stable@vger.kernel.org
+Date:   Tue, 18 Apr 2023 11:31:16 +0200
+In-Reply-To: <e7b9cb2c-1c18-7354-8d33-a924b5ae1d5b@redhat.com>
+References: <20230414154902.2950535-1-yoong.siang.song@intel.com>
+         <934a4204-1920-f5e1-bcde-89429554d0d6@redhat.com>
+         <e7b9cb2c-1c18-7354-8d33-a924b5ae1d5b@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Date:   Tue, 18 Apr 2023 11:29:45 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     tkuw584924@gmail.com, Takahiro.Kuwano@infineon.com,
-        pratyush@kernel.org, bacem.daassi@infineon.com,
-        miquel.raynal@bootlin.com, richard@nod.at,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: spi-nor: spansion: Rename method to
- cypress_nor_get_page_size
-In-Reply-To: <20230405060456.48986-1-tudor.ambarus@linaro.org>
-References: <20230405060456.48986-1-tudor.ambarus@linaro.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <736b881c4dd3d0fb0522ab0d385798f5@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-68982:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-04-05 08:04, schrieb Tudor Ambarus:
-> The method queries SPINOR_REG_CYPRESS_CFR3V to determine the page size.
-> Rename the method accordingly, s/set/get.
+On Mon, 2023-04-17 at 16:24 +0200, Jesper Dangaard Brouer wrote:
+> On 14/04/2023 22.05, Jesper Dangaard Brouer wrote:
+> > =20
+> > On 14/04/2023 17.49, Song Yoong Siang wrote:
+> > > igc_configure_rx_ring() function will be called as part of XDP progra=
+m
+> > > setup. If Rx hardware timestamp is enabled prio to XDP program setup,
+> > > this timestamp enablement will be overwritten when buffer size is
+> > > written into SRRCTL register.
+> > >=20
+> > > Thus, this commit read the register value before write to SRRCTL
+> > > register. This commit is tested by using xdp_hw_metadata bpf selftest
+> > > tool. The tool enables Rx hardware timestamp and then attach XDP prog=
+ram
+> > > to igc driver. It will display hardware timestamp of UDP packet with
+> > > port number 9092. Below are detail of test steps and results.
+> > >=20
+> [...]
+> > >=20
+> > > Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
+> > > Cc: <stable@vger.kernel.org> # 5.14+
+> > > Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+> > > Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
+> > > Reviewed-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> > > ---
+> >=20
+> > LGTM, thank for the adjustments :-)
+> >=20
+> > Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> >=20
+>=20
+> Tested-by: Jesper Dangaard Brouer <brouer@redhat.com>
+>=20
+> I can confirm that this patch fix the issue I experienced with igc.
+>=20
+> This patch clearly fixes a bug in igc when writing the SRRCTL register.
+> (as bit 30 in register is "Timestamp Received Packet" which got cleared=
+=20
+> before).
+>=20
+> Florian might have found another bug around RX timestamps, but this
+> patch should be safe and sane to apply as is.
 
-I'm not sure about this one. There is also a
-cypress_nor_set_addr_mode_nbytes() which queries the flash and
-set the params->addr_nbytes and params->addr_mode_nbytes.
+After a closer look I'm quite sure now that this patch should fix my
+issue as well. The register will be overwritten when setting up a
+XSK_POOL as well:
 
-cypress_nor_set_page_size() also queries the flash and set
-params->page_size.
+igc_bpf
+  igc_xdp_setup_pool
+    igc_enable_rx_ring
+      igc_configure_rx_ring
+        wr32(IGC_SRRCTL)
 
-Secondly, if this function is called get_page_size() I'd assume it
-doesn't modify anything. But thats not true.
+I already removed the BPF loading (which is the use case that the patch
+description mentions) from my setup to limit the search scope. If you
+like you could extend the patch description, but I'm fine with it.
 
--michael
+Thanks a lot for all the support / ideas! Highly appreciated!
+
+Florian
+
+>=20
+> > > v2 -> v3: Refactor SRRCTL definitions to more human readable definiti=
+ons
+> > > v1 -> v2: Fix indention
+> > > ---
+> > > =C2=A0 drivers/net/ethernet/intel/igc/igc_base.h | 11 ++++++++---
+> > > =C2=A0 drivers/net/ethernet/intel/igc/igc_main.c |=C2=A0 7 +++++--
+> > > =C2=A0 2 files changed, 13 insertions(+), 5 deletions(-)
+>=20
+
