@@ -2,102 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E3F6E6BBA
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 386966E6BBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbjDRSJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
+        id S229838AbjDRSJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjDRSJE (ORCPT
+        with ESMTP id S231262AbjDRSJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:09:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6594D1FE4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:09:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E76666377A
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 18:09:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76ADFC433EF;
-        Tue, 18 Apr 2023 18:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681841342;
-        bh=CXOYtsBMCLdNP3Hr98JNrBWJGbiewjsk+S8BD+mS85w=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Tyfty+zDc4kXnAqvKvkA+n/AjbVCGCJBktGil2MiU6a0E5K6uiIoQeHuwZ3G2a+YV
-         0tCsrYa34bWNk15dIF7wN5ifK/RYwBbT3HrKArO92aHxTfxYoYYsSP+HeRSVYbmSe8
-         zaOehVV8miW7CzrAVgYnmXT3D1POfyF8xHiz6WreZ0ERE3oV7sOzWPdZFVYmFSpzT8
-         /Ccn3xLl9O2WOYjuQMDrPJImxp2BiQRDe7IkGVMW2ojR0hjOpR6YNpCEgt1qPTS/zz
-         hnK2pXUrtHV+B0ZFqecFpmw9YNvst6r4dX6kRQ2oaRVW7WC10/kGvXbe2HWnelnwl2
-         mzfj2bw5a+G6g==
-From:   Mark Brown <broonie@kernel.org>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-In-Reply-To: <20230418144309.1100721-1-rf@opensource.cirrus.com>
-References: <20230418144309.1100721-1-rf@opensource.cirrus.com>
-Subject: Re: [PATCH 0/4] ASoC: cs35l56: Updates for B0 silicon
-Message-Id: <168184134118.119808.12469329412185790363.b4-ty@kernel.org>
-Date:   Tue, 18 Apr 2023 19:09:01 +0100
+        Tue, 18 Apr 2023 14:09:55 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EB626BC
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:09:53 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id kx14so7775607pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:09:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681841393; x=1684433393;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MvYJv9dOjy+UuDbqsW2nTRdYTEQVKFBOOB3qhqiqwVk=;
+        b=IaEdy0EjS+dkJyFf7jEB4cf+UKn6AFvwFyjTjHw9CYyMSQssUj66B1D7Nv4FoN8khO
+         jDzkieXoE9rcTy+iawdFz7ljwwZtZRaSm/S5I1BYNwt3rvpq5uUMww1FxmzB2D5lnp/X
+         yLveUunsgUNSDDXaN/suDvGvkeYn7hMdkp6Jukj3pg6//mURtP+3393OQ/JYXsUW2jYK
+         L3gJZMxHX6vjfUQFvB4fMxyKHeSZBL8Z9iW7jldxmPqEJ2zXgOvD7H2g7nKDfd/BqmvO
+         OZppDJt+Cg3YIAs7nUL64499E4XldMaDSLpRAQFNYhwqBmbhXqH7TrcCidZ8Y6UYGxLm
+         Q+6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681841393; x=1684433393;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MvYJv9dOjy+UuDbqsW2nTRdYTEQVKFBOOB3qhqiqwVk=;
+        b=SIh3QJ+pTSjH4Z2OGSOYVZZx7J7yCyY7oXiqax59MVRySV8R0Rn2olNqPupqSPXR1s
+         Y9QjjuGVEHZxOmlYE2Ukhnf9/YSst+A1VwuJr5qDjzFHCmrON2PkgTfqbLDLxgJzUyUa
+         TXfeEbaK3pF/uk6/ppX08MALQO+0k2d5EtQ3njvv6/c+bb5a2vH0E/pnXBMiz8ovEGgC
+         R3HmLpmbhjm07SJamcETKMfi0XrdDAhcIw9Qh6qSJu3V+r3ui/XS9jTQNGdbb+E4j3ce
+         BrkMyiM65sdtDXBwaa4TJV3FfsvLuWHjEizDwVYEna8xZOLa6sgfFwYiMVNLMXG1Z1BZ
+         YX2g==
+X-Gm-Message-State: AAQBX9dgDEVh4JKEWjsd8qV1W8dE7AGect71Ci/YHAFXOrQ55DlpoC3l
+        eW7Yogni1oILlw0wIqJRyyxLkIbrGZHx2rsgbJXNHA==
+X-Google-Smtp-Source: AKy350YWJtgptpWdJFruXeLGCxuNU4bvvRi4laL/0AlgGBB5Ic+fMqnQZtaErwzhGEYzDKQdJzhSYAdpzn0Dqwy8UVc=
+X-Received: by 2002:a05:6a20:8422:b0:db:4fae:ad15 with SMTP id
+ c34-20020a056a20842200b000db4faead15mr598370pzd.42.1681841392775; Tue, 18 Apr
+ 2023 11:09:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230407191904.gonna.522-kees@kernel.org> <20230407192717.636137-6-keescook@chromium.org>
+In-Reply-To: <20230407192717.636137-6-keescook@chromium.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 18 Apr 2023 11:09:41 -0700
+Message-ID: <CAKwvOdk+CT6S6LjLb2aRVsMSgnsyHRcoT-yyifNTW8vVVwTA-A@mail.gmail.com>
+Subject: Re: [PATCH v2 06/10] fortify: strcat: Move definition to use
+ fortified strlcat()
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-hardening@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Puyou Lu <puyou.lu@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Yury Norov <yury.norov@gmail.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        Eric Biggers <ebiggers@google.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Apr 2023 15:43:05 +0100, Richard Fitzgerald wrote:
-> These patches make some small changes to align with the B0
-> silicon revision.
-> 
-> Richard Fitzgerald (4):
->   ASoC: cs35l56: Update comment on masking of EINT20 interrupts
->   ASoC: cs35l56: Remove SDW1 TX5 and TX6
->   ASoC: cs35l56: Remove SDW2RX1 mixer source
->   ASoC: cs35l56: Rename mixer source defines for SoundWire DP1
-> 
-> [...]
+On Fri, Apr 7, 2023 at 12:27=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> Move the definition of fortified strcat() to after strlcat() to use it
+> for bounds checking.
+>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/linux/fortify-string.h | 53 +++++++++++++++++-----------------
+>  1 file changed, 26 insertions(+), 27 deletions(-)
+>
+> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-strin=
+g.h
+> index 8cf17ef81905..ab058d092817 100644
+> --- a/include/linux/fortify-string.h
+> +++ b/include/linux/fortify-string.h
+> @@ -151,33 +151,6 @@ char *strncpy(char * const POS p, const char *q, __k=
+ernel_size_t size)
+>         return __underlying_strncpy(p, q, size);
+>  }
+>
+> -/**
+> - * strcat - Append a string to an existing string
+> - *
+> - * @p: pointer to NUL-terminated string to append to
+> - * @q: pointer to NUL-terminated source string to append from
+> - *
+> - * Do not use this function. While FORTIFY_SOURCE tries to avoid
+> - * read and write overflows, this is only possible when the
+> - * destination buffer size is known to the compiler. Prefer
+> - * building the string with formatting, via scnprintf() or similar.
+> - * At the very least, use strncat().
+> - *
+> - * Returns @p.
+> - *
+> - */
+> -__FORTIFY_INLINE __diagnose_as(__builtin_strcat, 1, 2)
+> -char *strcat(char * const POS p, const char *q)
+> -{
+> -       const size_t p_size =3D __member_size(p);
+> -
+> -       if (p_size =3D=3D SIZE_MAX)
+> -               return __underlying_strcat(p, q);
+> -       if (strlcat(p, q, p_size) >=3D p_size)
+> -               fortify_panic(__func__);
+> -       return p;
+> -}
+> -
+>  extern __kernel_size_t __real_strnlen(const char *, __kernel_size_t) __R=
+ENAME(strnlen);
+>  /**
+>   * strnlen - Return bounded count of characters in a NUL-terminated stri=
+ng
+> @@ -435,6 +408,32 @@ size_t strlcat(char * const POS p, const char * cons=
+t POS q, size_t avail)
+>         return wanted;
+>  }
+>
+> +/* Defined after fortified strlcat() to reuse it. */
 
-Applied to
+I don't follow; the previous location was already defined in terms of
+calls to strlcat.  Why is this patch necessary?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Could this be fixed in 5/10
+https://lore.kernel.org/linux-hardening/20230407192717.636137-5-keescook@ch=
+romium.org/
+by just putting strlcat in the expected place in the first place?
 
-Thanks!
+> +/**
+> + * strcat - Append a string to an existing string
+> + *
+> + * @p: pointer to NUL-terminated string to append to
+> + * @q: pointer to NUL-terminated source string to append from
+> + *
+> + * Do not use this function. While FORTIFY_SOURCE tries to avoid
+> + * read and write overflows, this is only possible when the
+> + * destination buffer size is known to the compiler. Prefer
+> + * building the string with formatting, via scnprintf() or similar.
+> + * At the very least, use strncat().
+> + *
+> + * Returns @p.
+> + *
+> + */
+> +__FORTIFY_INLINE __diagnose_as(__builtin_strcat, 1, 2)
+> +char *strcat(char * const POS p, const char *q)
+> +{
+> +       const size_t p_size =3D __member_size(p);
+> +
 
-[1/4] ASoC: cs35l56: Update comment on masking of EINT20 interrupts
-      commit: 16e5fc8ae793947d7dd0de63c7a613798f75c237
-[2/4] ASoC: cs35l56: Remove SDW1 TX5 and TX6
-      commit: 5ab28c78a125a724684958f4caf8210127d3f528
-[3/4] ASoC: cs35l56: Remove SDW2RX1 mixer source
-      commit: d3a4efb334e5f6cbb3f2741fa07a873a2a78b016
-[4/4] ASoC: cs35l56: Rename mixer source defines for SoundWire DP1
-      commit: d29a966b72fb370128096393961f2c456ff24e3d
+This drops the `p_size =3D=3D SIZE_MAX` guard.  Might it be faster at
+runtime to dispatch to __underlying_strcat rather than __real_strlcat
+in such cases?
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+What's the convention for __underlying_ vs __real_ prefixes in
+include/linux/fortify-string.h?
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> +       if (strlcat(p, q, p_size) >=3D p_size)
+> +               fortify_panic(__func__);
+> +       return p;
+> +}
+> +
+>  /**
+>   * strncat - Append a string to an existing string
+>   *
+> --
+> 2.34.1
+>
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
+--=20
 Thanks,
-Mark
-
+~Nick Desaulniers
