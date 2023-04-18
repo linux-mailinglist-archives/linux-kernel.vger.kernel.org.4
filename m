@@ -2,111 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3886E5D13
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3C06E5D1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjDRJLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
+        id S229750AbjDRJNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjDRJLv (ORCPT
+        with ESMTP id S230189AbjDRJNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:11:51 -0400
-Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF6B10E0;
-        Tue, 18 Apr 2023 02:11:50 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id 175AE20180;
-        Tue, 18 Apr 2023 11:11:49 +0200 (CEST)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bKQ3-A0V8pgX; Tue, 18 Apr 2023 11:11:48 +0200 (CEST)
-Received: from begin.home (apoitiers-658-1-118-253.w92-162.abo.wanadoo.fr [92.162.65.253])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id B380620177;
-        Tue, 18 Apr 2023 11:11:48 +0200 (CEST)
-Received: from samy by begin.home with local (Exim 4.96)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1pohNM-00BMWM-0m;
-        Tue, 18 Apr 2023 11:11:48 +0200
-Date:   Tue, 18 Apr 2023 11:11:48 +0200
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     James Chapman <jchapman@katalix.com>, tparkin@katalix.com,
-        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, corbet@lwn.net, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PPPoL2TP: Add more code snippets
-Message-ID: <20230418091148.hh3b52zceacduex6@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Guillaume Nault <gnault@redhat.com>,
-        James Chapman <jchapman@katalix.com>, tparkin@katalix.com,
-        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, corbet@lwn.net, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230416220704.xqk4q6uwjbujnqpv@begin>
- <ZD5V+z+cBaXvPbQa@debian>
- <20230418085323.h6xij7w6d2o4kxxi@begin>
- <ZD5dqwPblo4FOex1@debian>
+        Tue, 18 Apr 2023 05:13:20 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834C24EEE
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:13:18 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-63b5fca48bcso1554674b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:13:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681809198; x=1684401198;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xbleKyCRtEj4mzfFg8I15iJYzLocd2tmdYnO3kTlaTM=;
+        b=mAR79v7Tn0gnysG30TB5j3Pp0X26z8pZv0JEzF+Tqkz49IEzlC+s0Yyv7WXhbv4yYq
+         F+TDUy6I52Y5dNVvbGC7sgkiB70fCfGKJlCoZViRHiaAbukG2YT+GJkxE/GlePzswAmj
+         DNwAMDwz5K8+vf+eK6BFlJCdxRf3BnXXBPMLVkGlDfyZLZ8bW09Og+LrCRbjDjweZatT
+         rrOygmPKKhxnJxCNahihy09XwykQM7h3R76R9LF6A5lVDUcVPX8gCWWpWo69b+hpjABp
+         7kgpJntY9UpqB8kDuD8Gz/rE5x9ChJESOIYcBuBskXljHfr7c/GgsMLtudPLTw8IB1e4
+         ApOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681809198; x=1684401198;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xbleKyCRtEj4mzfFg8I15iJYzLocd2tmdYnO3kTlaTM=;
+        b=cgNNDDFvnSinbWW6aX1e/GaQwhGxAeZRUXhPYTiyRCEYMLpMM77UiaUZmgGrXJKDL7
+         VLOCELFCaZAkqoyToj1lvmke8q2FdIaWZ3oMy+dh/RUfmb/RxeWZki0nM94geudB3iK1
+         fn8cOplUw2bVs1N1X7GQw+2ERxWiQV8OBaw9qrZgL2xqpjm4uRDTA2VCymX5KZpnwAx7
+         8FX6gPV8jLZmxIywwWYM8/H72kHzZaE1r9MQxt/xiSj7QYfYQ1PyeNaMyZX3WImMhuix
+         WAFkLWxuxxlAbCZwR2MyfwCjIwYF++DsiudY4AWsjtK9oZjMtkf8Dzuc6ONIgPYBRcwt
+         /Y3w==
+X-Gm-Message-State: AAQBX9dkFJXLiJegLqDRJSv+zcDlocMXYQrCDMYDL+lZezM47eQY9Z6i
+        61rlIlLf9ItmKqeuHaY7IPXxZA==
+X-Google-Smtp-Source: AKy350btit3r+ik6rSegfaTgfcFeOECknK0pFDr3Uu7rl6nEAw1H+XBYxFE0VoXAoRGBuSsBsAHVLA==
+X-Received: by 2002:a17:902:8e82:b0:1a6:9762:6eee with SMTP id bg2-20020a1709028e8200b001a697626eeemr1390525plb.40.1681809197881;
+        Tue, 18 Apr 2023 02:13:17 -0700 (PDT)
+Received: from localhost ([122.172.85.8])
+        by smtp.gmail.com with ESMTPSA id w11-20020a170902d70b00b001a66bf1406bsm9129056ply.144.2023.04.18.02.13.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 02:13:17 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 14:43:15 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
+        dmitry.osipenko@collabora.com, rafael@kernel.org,
+        jonathanh@nvidia.com, robh+dt@kernel.org, lpieralisi@kernel.org,
+        helgaas@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
+        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
+        ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v6 6/9] cpufreq: tegra194: add OPP support and set
+ bandwidth
+Message-ID: <20230418091315.bxh4hp6g3vekdi2r@vireshk-i7>
+References: <20230411110002.19824-1-sumitg@nvidia.com>
+ <20230411110002.19824-7-sumitg@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZD5dqwPblo4FOex1@debian>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230411110002.19824-7-sumitg@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guillaume Nault, le mar. 18 avril 2023 11:06:51 +0200, a ecrit:
-> On Tue, Apr 18, 2023 at 10:53:23AM +0200, Samuel Thibault wrote:
-> > Guillaume Nault, le mar. 18 avril 2023 10:34:03 +0200, a ecrit:
-> > > On Mon, Apr 17, 2023 at 12:07:04AM +0200, Samuel Thibault wrote:
-> > > >          sax.sa_family = AF_PPPOX;
-> > > >          sax.sa_protocol = PX_PROTO_OL2TP;
-> > > >          sax.pppol2tp.fd = tunnel_fd;
-> > > > @@ -406,12 +407,64 @@ Sample userspace code:
-> > > >          /* session_fd is the fd of the session's PPPoL2TP socket.
-> > > >           * tunnel_fd is the fd of the tunnel UDP / L2TPIP socket.
-> > > >           */
-> > > > -        fd = connect(session_fd, (struct sockaddr *)&sax, sizeof(sax));
-> > > > -        if (fd < 0 ) {
-> > > > +        ret = connect(session_fd, (struct sockaddr *)&sax, sizeof(sax));
-> > > > +        if (ret < 0 ) {
-> > > 
-> > > Now you also need to close session_fd.
-> > 
-> > ? No, we need it for PPPIOCGCHAN, and also PPPIOCGL2TPSTATS.
+On 11-04-23, 16:29, Sumit Gupta wrote:
+> Add support to use OPP table from DT in Tegra194 cpufreq driver.
+> Tegra SoC's receive the frequency lookup table (LUT) from BPMP-FW.
+> Cross check the OPP's present in DT against the LUT from BPMP-FW
+> and enable only those DT OPP's which are present in LUT also.
 > 
-> connect() failed. You can't do anything with this socket.
-
-Ah, you were talking about the failure case, ok.
-
-> > > > +The ppp<ifunit> interface can then be configured as usual with SIOCSIFMTU,
-> > > > +SIOCSIFADDR, SIOCSIFDSTADDR, SIOCSIFNETMASK, and activated by setting IFF_UP
-> > > > +with SIOCSIFFLAGS
-> > > > +
-> > > > +  - Tunnel switching is supported by bridging channels::
-> > > 
-> > > This is a PPP feature not an L2TP one.
-> > > 
-> > > PPPIOCBRIDGECHAN's description
-> > > belongs to Documentation/networking/ppp_generic.rst, where it's already
-> > > documented.
-> > 
-> > Yes but that's hard to find out when you're looking from the L2TP end.
+> The OPP table in DT has CPU Frequency to bandwidth mapping where
+> the bandwidth value is per MC channel. DRAM bandwidth depends on the
+> number of MC channels which can vary as per the boot configuration.
+> This per channel bandwidth from OPP table will be later converted by
+> MC driver to final bandwidth value by multiplying with number of
+> channels before sending the request to BPMP-FW.
 > 
-> That's why I proposed linking to ppp_generic.rst.
+> If OPP table is not present in DT, then use the LUT from BPMP-FW
+> directy as the CPU frequency table and not do the DRAM frequency
+> scaling which is same as the current behavior.
+> 
+> Now, as the CPU Frequency table is being controlling through OPP
+> table in DT. Keeping fewer entries in the table will create less
+> frequency steps and can help to scale fast to high frequencies
+> when required.
+> 
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  drivers/cpufreq/tegra194-cpufreq.c | 156 ++++++++++++++++++++++++++---
+>  1 file changed, 143 insertions(+), 13 deletions(-)
 
-Yes, but it's still not obvious to L2TP people that it's a ppp channel
-that you have to bridge. Really, having that 20-line snippet available
-would have saved me some head-scratching time.
+Can this be applied independently of the rest of the series ?
 
-Samuel
+-- 
+viresh
