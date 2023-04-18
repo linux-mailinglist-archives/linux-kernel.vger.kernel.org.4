@@ -2,82 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB2E6E5DBA
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9786E5DBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjDRJm7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 05:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
+        id S230384AbjDRJoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231325AbjDRJmS (ORCPT
+        with ESMTP id S229862AbjDRJnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:42:18 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AA62107;
-        Tue, 18 Apr 2023 02:42:10 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pohqe-003U8u-HX; Tue, 18 Apr 2023 11:42:04 +0200
-Received: from p5b13a017.dip0.t-ipconnect.de ([91.19.160.23] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pohqe-0022J9-9Z; Tue, 18 Apr 2023 11:42:04 +0200
-Message-ID: <d341bd38a304b4ca9b703073a658f312b1fa6657.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH RESEND] sh: sq: Use the bitmap API when applicable
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-sh@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 18 Apr 2023 11:42:03 +0200
-In-Reply-To: <837e9f5e-ca8d-4c93-9a89-d7bdb9bb0240@kili.mountain>
-References: <071e9f32c19a007f4922903282c9121898641400.1681671848.git.christophe.jaillet@wanadoo.fr>
-         <b5fea49d68e1e2a702b0050f73582526e205cfa2.camel@physik.fu-berlin.de>
-         <14788dbc-c2a6-4d1d-8ae3-1be53b0daf17@kili.mountain>
-         <837e9f5e-ca8d-4c93-9a89-d7bdb9bb0240@kili.mountain>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.0 
+        Tue, 18 Apr 2023 05:43:43 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C316A59
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:43:37 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <j.zink@pengutronix.de>)
+        id 1pohry-0000pw-4o; Tue, 18 Apr 2023 11:43:26 +0200
+Message-ID: <67d283f3-d0db-5fc0-79e9-e7531d591aab@pengutronix.de>
+Date:   Tue, 18 Apr 2023 11:42:58 +0200
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 91.19.160.23
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: phy: imx8mq-usb: add phy tuning
+ properties
+Content-Language: en-US, de-DE
+From:   Johannes Zink <j.zink@pengutronix.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     kishon@kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, festevam@gmail.com,
+        s.hauer@pengutronix.de, vkoul@kernel.org, haibo.chen@nxp.com,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-imx@nxp.com, kernel@pengutronix.de,
+        linux-phy@lists.infradead.org, shawnguo@kernel.org,
+        linux-arm-kernel@lists.infradead.org, jun.li@nxp.com
+References: <20230405112118.1256151-1-j.zink@pengutronix.de>
+ <20230405112118.1256151-2-j.zink@pengutronix.de>
+ <5398cbe0-c681-5dd7-0b3e-3a586cc4915f@linaro.org>
+ <3f7257ee36dc44f162a87281c8279fd5bad91dea.camel@pengutronix.de>
+ <95b4afd4-c93e-628b-fd22-6fcbc1d1234e@linaro.org>
+ <b394b456540943b1022a7b093bf369924fca0566.camel@pengutronix.de>
+ <20230412133921.GA2017891-robh@kernel.org>
+ <6953b608-973f-c603-f852-edf7ba183e64@pengutronix.de>
+In-Reply-To: <6953b608-973f-c603-f852-edf7ba183e64@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: j.zink@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan!
+Hi Rob, hi Krzysztof,
 
-On Tue, 2023-04-18 at 12:39 +0300, Dan Carpenter wrote:
-> On Tue, Apr 18, 2023 at 10:30:01AM +0300, Dan Carpenter wrote:
-> > I have some unpublished Smatch stuff which tries to track "variable x
-> > is in terms of bit units or byte units etc."  I will try to make a
-> > static checker rule for this.
+On 4/12/23 16:32, Johannes Zink wrote:
+> Hi Rob,
 > 
-> Attached.  It prints a warning like this:
+> On 4/12/23 15:39, Rob Herring wrote:
+>> On Tue, Apr 11, 2023 at 04:22:37PM +0200, Johannes Zink wrote:
+>>> Hi Krzystof,
+>>>
+>>> thank you for your explanations. As I'm still quite new to writing
+>>> bindings, I still have some questions:
+>>>
+>>> On Fri, 2023-04-07 at 11:03 +0200, Krzysztof Kozlowski wrote:
+>>>> On 05/04/2023 14:14, Johannes Zink wrote:
+>>>>> Hi Krysztof,
+>>>>>
+>>>>> thanks for your review, please find my questions below.
+>>>>>
+>>>>> On Wed, 2023-04-05 at 13:51 +0200, Krzysztof Kozlowski wrote:
+>>>>>> [snip]
+>>>>>>>         A phandle to the regulator for USB VBUS.
+>>>>>>> +  fsl,phy-tx-vref-tune:
+>>>>>>> +    description:
+>>>>>>> +      HS DC Voltage level adjustment
+>>>>>>
+>>>>>> "Level" in what units?
+>>>>>>
+>>>>>
+>>>>> The datasheet just shows percent, ranging from -6 to +24%, in 2%
+>>>>> increments. What unit would you suggest?
+>>>>
+>>>> percent
+>>>> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
+>>>
+>>> I am still a bit confused how to use this properly. How can I restrict
+>>> the values to multiples of 2 in order to avoid illegal values?
+>>>
+>>> At the moment the only thing I could come up with is something like
+>>>
+>>> fsl,phy-tx-vref-tune-percent:
+>>>    description: |
+>>>      Adjusts the high-speed DC level voltage
+>>>    $ref: /schemas/types.yaml#/definitions/int32
+>>
+>> Note that with standard unit suffixes, you don't need a type.
+>>
+>>>    minimum: -6
+>>>    maximum: 24
+>>>    default: 0
+>>>
+>>> Does something like this work? I am not quite sure if I am on the right
+>>> track here, especially as this requires a signed int, of which I have
+>>> not seen many examples so far.
+>>
+>> We'd have to change the type for -percent to signed. That's possible,
+>> but for vendor specific properties there's not much advantage to use
+>> standard units instead of just using the register values directly.
+>>
 > 
-> drivers/net/ethernet/broadcom/cnic.c:667 cnic_init_id_tbl() warn: allocating units of longs instead of bytes 'test_var'
+> I don't have any objections to that, this is pretty much what I sent in 
+> my v1 patch <20230405112118.1256151-2-j.zink@pengutronix.de>, but 
+> Krzysztof requested to change the vendor specific properties to use 
+> property-units.
 > 
-> I'll test it out tonight.
+> Would something along the lines of the st,trim-hs-current on 
+> Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml be 
+> acceptable (i.e. use an enum and annotate the meaning of the values in 
+> the description)?
+> 
+> I will, nevertheless, try to make the descriptions a bit more verbose in 
+> my v2 (wherever the datasheet gives me proper informations), as 
+> Krzysztof requested.
 
-Nice job, thanks for creating this very handy script!
+gentle ping - any opinions on this? Shall I just send a V2 along the 
+lines of the phy-stm32-usbphy.c?
 
-Adrian
+Best regards
+Johannes
+
+> 
+> Best regards
+> Johannes
+> 
+>> Rob
+>>
+> 
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Pengutronix e.K.                | Johannes Zink                  |
+Steuerwalder Str. 21            | https://www.pengutronix.de/    |
+31137 Hildesheim, Germany       | Phone: +49-5121-206917-0       |
+Amtsgericht Hildesheim, HRA 2686| Fax:   +49-5121-206917-5555    |
+
