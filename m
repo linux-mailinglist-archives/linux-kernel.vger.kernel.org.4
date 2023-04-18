@@ -2,83 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F8F6E6D81
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 22:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFAD6E6D85
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 22:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbjDRUaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 16:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
+        id S231646AbjDRUgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 16:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbjDRUad (ORCPT
+        with ESMTP id S230202AbjDRUgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 16:30:33 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57771A275
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:30:31 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-517bfdf55c3so1158707a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:30:31 -0700 (PDT)
+        Tue, 18 Apr 2023 16:36:16 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB45C9ED9
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:36:13 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id gb12so27749650qtb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:36:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google; t=1681849831; x=1684441831;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=758KJFnubLFSsZj7NLSbl2wQ+MQOeQGEXb82zXsrHA8=;
-        b=JKWc07Hsa1AIwKVKIMzXI4sw331w8kX1TDKqtQB//KSPOSUQN+tk39Ofo87lgk87cs
-         A++4AkL4VO7Zo172B6EmKiVr7FrbMePdElPSloCsouI2E/r/+XOY/fDC60aCptlCrI9z
-         Pj+V02e4O7mTkISl5wP8rj3Y1EWU2fzkx9GVY=
+        d=joelfernandes.org; s=google; t=1681850173; x=1684442173;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zb5oGrl4JjIvT1aq7E8aKQwDzSKWDYgsCqiEnJYeKrU=;
+        b=VDVEcSalZCQ/nQUEWR3rxtHo1TM3Evb7f69OLiWAnFX63oGNxKeyoPPLHjSUoZM4iE
+         pt81IDLvIdP//qmZ/pau7vj+Ev+KbstX/vIU/igzKH8019XOB0jalG9lfO1LwUayTtXo
+         rdjrEeO/jxtZLpFkRel4f8SgqGTdT8kg+njFM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681849831; x=1684441831;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=758KJFnubLFSsZj7NLSbl2wQ+MQOeQGEXb82zXsrHA8=;
-        b=PERDbCODNC9FPzQF0J/apfVXmyx5YMFjumlXgnbiyDK4EfwIzm2PODFFeFyoh0Wzbn
-         LyUxdYHXHx/C8ryhT3BA3snduiJ32bctDYNEbAFgXcBlon5Z7UgujDUZFSj9/j3jfhXq
-         RaartYQCHd7vhgga+IwYAJtZUwWLuvvkOyElckHo5LbxUC0T2yVO0abso9d9tkxfY64a
-         XezSexBM0IveEuiDbf6e7pGLal9OAiObseXi0oipDw1RzyDzjcYy+DWC5oGUq4d+82oP
-         gnSWOPsCWBJXKdxFNTphrOYOUiKCa6ajAYEqB78uk6w+wZ5hdyEoLDz/b0TDr0gutNa4
-         7pEQ==
-X-Gm-Message-State: AAQBX9evMGTlNmSBweJ4t9cRA9V58KwcsKrCS53RUDNdSVcLMWnCOB0R
-        i+wBO8q/rVxRJ2PudbqYKqYn1puwGz8eIRuhE78G
-X-Google-Smtp-Source: AKy350ZIg+M7FnY7uohsy0MLIS1rdUP3e5Y8mF0C/rJh0Ab5JDC3yj3RoFOx5gy5nC7akfL3LOBt0QioDaAyr1DFD3g=
-X-Received: by 2002:a17:90a:4706:b0:23d:1121:f211 with SMTP id
- h6-20020a17090a470600b0023d1121f211mr293761pjg.5.1681849830738; Tue, 18 Apr
- 2023 13:30:30 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681850173; x=1684442173;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zb5oGrl4JjIvT1aq7E8aKQwDzSKWDYgsCqiEnJYeKrU=;
+        b=MShiKnYws07FBlwaiUKABbYaoICopOH5mB6JlK33pt4k3rUullpEUhY6RFECz4pTx/
+         ZCRHRvZiMWn8GBhW8iiGcK2dJBCYjYvV5tIvZ06ck9V9irzpGnAQpAqo3iE9SF0nvlXi
+         7tfk+F9v0DZCZVjK+jRgTHbuEX/lK4QmYj2WdsoYEBG7sR8il/Hbq/zumvo5K2+tiqEa
+         PfYDPp33hFQeaXbt0WkXnE9b4AS/x/X4PsmjVtVrUgYlNDT/GX8xi37PCeUinCK8Z83I
+         zgDqla2SdlM6z0J2dXHQ27bP9B6YPtFz3NKe6kqUXyR1VZXBgSGrBeThZoMxeugKX07b
+         eCnw==
+X-Gm-Message-State: AAQBX9flA21O4BX6hVXUTmdsGSBS21QJGtITp8EW6EwZBN+fZzB0+ymp
+        cD0hEYKFJZiSUicwu1m8v1MvvA==
+X-Google-Smtp-Source: AKy350YEIjV6EPfbO2RYZySHSVrGUNFVSRiCc0nQEO4SDy03ISls+oUqrpO7lv/I3pZG9ExW+iJ8mA==
+X-Received: by 2002:ac8:5756:0:b0:3ef:3f4b:31b8 with SMTP id 22-20020ac85756000000b003ef3f4b31b8mr2176931qtx.7.1681850172894;
+        Tue, 18 Apr 2023 13:36:12 -0700 (PDT)
+Received: from localhost (55.87.194.35.bc.googleusercontent.com. [35.194.87.55])
+        by smtp.gmail.com with ESMTPSA id q12-20020a05620a0c8c00b0074df7f62c83sm1429455qki.49.2023.04.18.13.36.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 13:36:12 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 20:36:11 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     rcu@vger.kernel.org, nathan@kernel.org, trix@redhat.com,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        paulmck@kernel.org
+Subject: Re: clangd cannot handle tree_nocb.h
+Message-ID: <20230418203611.GA3640630@google.com>
+References: <20230414005309.GA2198310@google.com>
+ <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230413161725.195417-1-alexghiti@rivosinc.com>
- <CAOnJCU+72PV1=o1c_TpogkmBT36278BneVWEMr1=tqX0CZi+ag@mail.gmail.com>
- <aadca595b4a24e36932ba41e61f4e263@AcuMS.aculab.com> <CAOnJCUJ7mY+fh9VqE4dRntnVAEAc26=NnOCPUqkXk6ky__cUZQ@mail.gmail.com>
- <CAP-5=fUYJEecmhQVuvbM4ZoDP_Hj=2RKOgR4cKepU072Uy3xyw@mail.gmail.com>
-In-Reply-To: <CAP-5=fUYJEecmhQVuvbM4ZoDP_Hj=2RKOgR4cKepU072Uy3xyw@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Wed, 19 Apr 2023 02:00:18 +0530
-Message-ID: <CAOnJCULJfSN79MzAwhCrbVzG1rYyrPB3OraFmoZFBxuRCwq01w@mail.gmail.com>
-Subject: Re: [PATCH 0/4] riscv: Allow userspace to directly access perf counters
-To:     Ian Rogers <irogers@google.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        paranlee <p4ranlee@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -89,132 +72,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 11:46=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
-ote:
->
-> On Tue, Apr 18, 2023 at 9:43=E2=80=AFAM Atish Patra <atishp@atishpatra.or=
-g> wrote:
+On Fri, Apr 14, 2023 at 03:47:51PM -0700, Nick Desaulniers wrote:
+> On Thu, Apr 13, 2023 at 5:53 PM Joel Fernandes <joel@joelfernandes.org> wrote:
 > >
-> > On Fri, Apr 14, 2023 at 2:40=E2=80=AFAM David Laight <David.Laight@acul=
-ab.com> wrote:
-> > >
-> > > From: Atish Patra
-> > > > Sent: 13 April 2023 20:18
-> > > >
-> > > > On Thu, Apr 13, 2023 at 9:47=E2=80=AFPM Alexandre Ghiti <alexghiti@=
-rivosinc.com> wrote:
-> > > > >
-> > > > > riscv used to allow direct access to cycle/time/instret counters,
-> > > > > bypassing the perf framework, this patchset intends to allow the =
-user to
-> > > > > mmap any counter when accessed through perf. But we can't break t=
-he
-> > > > > existing behaviour so we introduce a sysctl perf_user_access like=
- arm64
-> > > > > does, which defaults to the legacy mode described above.
-> > > > >
-> > > >
-> > > > It would be good provide additional direction for user space packag=
-es:
-> > > >
-> > > > The legacy behavior is supported for now in order to avoid breaking
-> > > > existing software.
-> > > > However, reading counters directly without perf interaction may
-> > > > provide incorrect values which
-> > > > the userspace software must avoid. We are hoping that the user spac=
-e
-> > > > packages which
-> > > > read the cycle/instret directly, will move to the proper interface
-> > > > eventually if they actually need it.
-> > > > Most of the users are supposed to read "time" instead of "cycle" if
-> > > > they intend to read timestamps.
-> > >
-> > > If you are trying to measure the performance of short code
-> > > fragments then you need pretty much raw access directly to
-> > > the cycle/clock count register.
-> > >
-> > > I've done this on x86 to compare the actual cycle times
-> > > of different implementations of the IP checksum loop
-> > > (and compare them to the theoretical limit).
-> > > The perf framework just added far too much latency,
-> > > only directly reading the cpu registers gave anything
-> > > like reliable (and consistent) answers.
-> > >
+> > Hello!
 > >
-> > This series allows direct access to the counters once configured
-> > through the perf.
-> > Earlier the cycle/instret counters are directly exposed to the
-> > userspace without kernel/perf frameworking knowing
-> > when/which user space application is reading it. That has security impl=
-ications.
-> >
-> > With this series applied, the user space application just needs to
-> > configure the event (cycle/instret) through perf syscall.
-> > Once configured, the userspace application can find out the counter
-> > information from the mmap & directly
-> > read the counter. There is no latency while reading the counters.
-> >
-> > This mechanism allows stop/clear the counters when the requesting task
-> > is not running. It also takes care of context switching
-> > which may result in invalid values as you mentioned below. This is
-> > nothing new and all other arch (x86, ARM64) allow user space
-> > counter read through the same mechanism.
-> >
-> > Here is the relevant upstream discussion:
-> > https://lore.kernel.org/lkml/Y7wLa7I2hlz3rKw%2F@hirez.programming.kicks=
--ass.net/T/
-> >
-> > ARM64:
-> > https://docs.kernel.org/arm64/perf.html?highlight=3Dperf_user_access#pe=
-rf-userspace-pmu-hardware-counter-access
-> >
-> > example usage in x86:
-> > https://github.com/andikleen/pmu-tools/blob/master/jevents/rdpmc.c
->
-> The canonical implementation of this should be:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/t=
-ools/lib/perf/mmap.c#n400
+> > I have been trying to get clangd working properly with tree_nocb.h. clangd
+> > trips quite badly when trying to build tree_nocb.h to generate ASTs.
+> 
+> Hi Joel,
+> Thanks for the report.  What are you using clangd for? I'll bet
+> something interesting.
 
-Thanks for sharing the libperf implementation.
+Thanks for the response and sorry for the late reply. I am at the OSPM
+conference. I use vim and vscode with clangd. In vim, YCM uses it to
+highlight compiler errors live while editing, I am pretty happy with it so
+far and has been a huge time saver. Enough that now I want to use it for
+everything...
 
-> which is updated in these patches but the tests are not:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/t=
-ools/perf/tests/mmap-basic.c#n287
-> Which appears to be an oversight. The tests display some differences
+I first came across clangd when developing Chrome userspace code which is C++
+:). In Chrome, ninja builds can be made to output compile_commands.json.
+However, now I noticed the support in the kernel and was like, wow I need to
+try it. Further, YCM seems to work much better with it than without :)
 
-Yes. It's an oversight. We should make sure that perf mmap tests pass
-for RISC-V as well.
+> I've never used it myself, so I don't know where to even begin with
+> how to reproduce the issue.
 
+Ah ok. :). When I ran get_maintainer on the script, your name popped up and
+someone also suggested that you're the goto person for clang on the kernel
+(which I kind of already knew ;)
 
-> between x86 and aarch64 that have assumed userspace hardware counter
-> access, and everything else that it is assumed don't.
->
-> Thanks,
-> Ian
->
-> > > Clearly process switches (especially cpu migrations) cause
-> > > problems, but they are obviously invalid values and can
-> > > be ignored.
-> > >
-> > > So while a lot of uses may be 'happy' with the values the
-> > > perf framework gives, sometimes you do need to directly
-> > > read the relevant registers.
-> > >
-> > >         David
-> > >
-> > > -
-> > > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes,=
- MK1 1PT, UK
-> > > Registration No: 1397386 (Wales)
-> >
-> >
-> >
-> > --
-> > Regards,
-> > Atish
+> It might be worth filing a bug upstream at
+> https://github.com/llvm/llvm-project/issues
+> or internally under the component
+> Language Platforms > C++ > Clang > Tools > Clangd
+> with detailed steps to reproduce (and what the observed error actually
+> is). Feel free to cc me, though I don't know the first thing about
+> clangd.
 
+Ok I will consider doing this if needed. One thing I do observe is lack of
+good support for header files and it is a known clangd issue [1].
 
+However, the fixes I was proposing can purely be done in the kernel itself
+since all it'd require is generating compile_compands.json with the -D<macro>
+and editing files to keep clangd happy. I guess one question is, how welcome
+would such changes to header files be since they're for tooling and isn't
+code that will be compiled outside of clangd.
 
---
-Regards,
-Atish
+(Linked issue may not directly related to what I'm saying)
+[1] https://discourse.llvm.org/t/header-file-heuristics-issue/1749
+
+Thanks.
+
