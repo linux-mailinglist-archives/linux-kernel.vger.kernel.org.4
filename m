@@ -2,163 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4226E6BF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E0F6E6BFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbjDRSTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
+        id S232640AbjDRSUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjDRSTp (ORCPT
+        with ESMTP id S229813AbjDRSTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:19:45 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2054.outbound.protection.outlook.com [40.107.220.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC2DA275;
-        Tue, 18 Apr 2023 11:19:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Lor0i7ImnS4+Ek6Xzju++M8EvFCd+pk+w5DWcsC0KUe+sBp/ddXWnB3QgBr/CGGTYuPvQpQRAdFJXfN10Hek8eoUKZO1gV2g3VlGsC2uMnJXbdOXKYmPsTbsEj0n+x0qlkl/AUrvp0EcPQJHmJYbxNJ+Z3W8bNOZGpXN2ZJyR/KcIREylGVjKfIRQIrvI2pAtUw8/fyuzEeBfTP2lIw/BwEaBqq5HEmjbAKDer4Yvm3ArEJR8t8dHzQv/L64Qe3W5SSbTfYPLLQseivLmC2yvg1SsnDjy7HI/dqJE80Z2/+lWKOn03geIhNyu+7bNIGsA5G2iaP5R8lO962x0ZKmeg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CvqByypyVghRcI3Q2F4RqA4mNUFUBVQn9jHqXyOjJDs=;
- b=ERW6OjCbH799uuDE+mB7eca+09GLOmsPmAj6+IB7IZ8r2kgV8iwvZDP8KVs7r53PHs0G5T2pkdn4hQt++DH7xJdPr6uD1FIGyexxoPB4V9vVyEPeJQrV9dax+PCBmAegYYPuj9zDzas1xxW5HedvmsGHF1B8OwkvsHSGE7AlRvobCKuEaHcVYxXr9d9nYf1Osbw/T9wzfjomTrQqiWdNakLUg70bT7+z1O9COLxzM94fdJc37+NxG1VkSA4V6zCzOgrYj1qYcPiTJZ8L5WRjXy8VDb9zTrVvAr4jH9qP4PqZmRY+BY5qDYVqsfSJ04CDDdvpU/1xdB3nKN51sDFw5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CvqByypyVghRcI3Q2F4RqA4mNUFUBVQn9jHqXyOjJDs=;
- b=Mo0RJzt9T0o9hBrSJmzACPG0HeJ8HkHtdzp83Q1Qkky3JrzpPB3/lctvdpdb+EGrKyE6uMXF/Jnoij7GDQcD0Zy7+Rk2yi6ixMy31HfKsb2pk3FQlw1zCxHCllyYBy3chCT6snH0J6V4D4jrByH/UuzmmZf49e+XwoaAPGqF9rRhHAbUGOd2Q33nLqXEuKkasIG2KQ9+HXaaqx6dHGCgwHGGggDlPRGQ0wGpKKtCB2iIoDdpTc9KblWInq76742TsxYkJfskPK7LUM7ZrlyzCAy9rTpJKlgffRX/h3GcV1WvS+1tZFJbAPRm9CPeiMw0NdTHf64sQfmR6psp6q6tNQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN0PR12MB5859.namprd12.prod.outlook.com (2603:10b6:208:37a::17)
- by CH2PR12MB4263.namprd12.prod.outlook.com (2603:10b6:610:a6::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
- 2023 18:19:34 +0000
-Received: from MN0PR12MB5859.namprd12.prod.outlook.com
- ([fe80::94b9:a372:438d:94a2]) by MN0PR12MB5859.namprd12.prod.outlook.com
- ([fe80::94b9:a372:438d:94a2%6]) with mapi id 15.20.6298.045; Tue, 18 Apr 2023
- 18:19:33 +0000
-Date:   Tue, 18 Apr 2023 15:19:32 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
-Subject: Re: [PATCH 5/7] io_uring: rsrc: use FOLL_SAME_FILE on
- pin_user_pages()
-Message-ID: <ZD7fNMR9Tyjph/QS@nvidia.com>
-References: <cover.1681508038.git.lstoakes@gmail.com>
- <17357dec04b32593b71e4fdf3c30a346020acf98.1681508038.git.lstoakes@gmail.com>
- <ZD1CAvXee5E5456e@nvidia.com>
- <c19b3651-624b-f60e-3e63-fe9fadc6981f@gmail.com>
- <ZD7HGbdBt1XqIDX/@nvidia.com>
- <61ded378-51a8-1dcb-b631-fda1903248a9@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61ded378-51a8-1dcb-b631-fda1903248a9@gmail.com>
-X-ClientProxiedBy: MN2PR19CA0068.namprd19.prod.outlook.com
- (2603:10b6:208:19b::45) To MN0PR12MB5859.namprd12.prod.outlook.com
- (2603:10b6:208:37a::17)
+        Tue, 18 Apr 2023 14:19:54 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFA9B443;
+        Tue, 18 Apr 2023 11:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681841992; x=1713377992;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=EaJ5gfiiuj5YHjbWBVe3EzL2utzaW26I67s3AkAOJeo=;
+  b=Ht42/zAj90pvF4D1tK6uR35QGL7NYj/Wpq3Aeu3KXgTD6QvR5hLpp0JX
+   1V4Gu9wf6FSa2NYen+ZDu+TW9vOA1FmRSQKD0bdFbX1kVmvjKs0T1TGuX
+   mEjE/oeLkyfwES6uQg3ZX6IIOwoelO5UhxhG5SotEAopMy/R6zM5gFK6h
+   jaPBI1JG+jEhw0XBfdZFDGc9PLz5JfJPAviRJ5VBfhDsFmOPHho8EufOA
+   VLFv1YdvgpHukoc2iuVyi1YazarkvRTdO9UW+ri7ITCbv/GAnHsIhloSI
+   KjXucIcRXUVWe1kstk3ibpDGjbhpF8jfJfC8lEg4UwxS7QzXujwnEhkS6
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="348009325"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="348009325"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 11:19:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="815308054"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="815308054"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga004.jf.intel.com with ESMTP; 18 Apr 2023 11:19:51 -0700
+Received: from [10.209.125.134] (kliang2-mobl1.ccr.corp.intel.com [10.209.125.134])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 70B63580C9A;
+        Tue, 18 Apr 2023 11:19:50 -0700 (PDT)
+Message-ID: <99150cb1-fe50-97cf-ad80-cceb9194eb9a@linux.intel.com>
+Date:   Tue, 18 Apr 2023 14:19:49 -0400
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB5859:EE_|CH2PR12MB4263:EE_
-X-MS-Office365-Filtering-Correlation-Id: 218b4217-573f-40f1-5f1e-08db403975cd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HSiZZq1IvOLESz00YY9RLEGOIHaSg8mM6pbM5LAIfqyEivTOFPq+kgtcELYOXWkBiruc6ymJcBFfPrhLJx0Z7Zru1Ccw0t4teLUnCdyzpaeWvOrDiLlJtPIXUb1HMwdtunGrUFh2Y8UJJ469avD251B4QA7KWZA5DSjPhiphzpd4swJP4iDnCU0iT3BSlPk2ktgxEpnAPO0+mVueuZB/6UYeYSk7MIfnSBhU+WCg4iroDcetLamR/fKnIE/PhvPz0p09nCOXELtrV0EvRSgT3XqlkrCXem/G8DTrF6i0XSt5F5Ssthdex8FMdR/sUND4OfV8FC7rhHpnPMpEGmvvdjTpxXdv2c9tGSNSOBTT3QtDLQGl55qXsoJiHCHuqMTx/S1GWTcM62naMcAZ6imrOfyd/YHIym/ToZl2/hM/bWDb5r4o+BV8ZS+mKlnxsMsmAg8inZ/56cgnuPxSMIsmwxcqhQTcdoLIXJSU+/t2WffI6SbBZeNiwoTWJDz0frCFXHDQ+8ZgwIi+oTdlW+vhWyqzqNhYF6xMX4eKQiDgDvB8ANLEiDpZfzWwuUJDaawR
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5859.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(136003)(39860400002)(346002)(396003)(451199021)(2616005)(53546011)(54906003)(6512007)(26005)(6506007)(478600001)(66946007)(66556008)(66476007)(316002)(6486002)(186003)(6916009)(4326008)(8936002)(8676002)(41300700001)(2906002)(5660300002)(36756003)(38100700002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8mczCMQ3POpfcZXv1SZyNMcl/E3k4ReZcslLPtGUQ1mVRhuLVuGIzmggkp4/?=
- =?us-ascii?Q?GjpGdPBiuKrirPKPVKpo3KsycEYyecBmpVl+D0Z3oIRJfBbCKVQLHZb4bSsi?=
- =?us-ascii?Q?92GvSXzsuo7MZqWM7h1uHD46dt4XhyPGaNu51V3hyYwo+0vF/IyV/75Joy5B?=
- =?us-ascii?Q?q2eLUgNCNZmND61KyZklGxxmukuPpr2JZQdp+aD0vk/6Q/TZRjSskS+Sdw+R?=
- =?us-ascii?Q?drfHTWW5LHwGXmsQMKf/zaJskxOVwImtJZz1F52qUV0rMGxnnA0kSeI4jx1u?=
- =?us-ascii?Q?tWBWGGhZCgLOcEkKahB08AfT51AU2z51FQuErMrRG7ck89G+IUsPbRrOBw3C?=
- =?us-ascii?Q?utC5OeFZRtUtZEW4YpwzLMkabhpaA98oXJ0Dg3M7h5SvRKlimOPmaCTCLCQ/?=
- =?us-ascii?Q?DSAdKSzXfZew+2VMjJZiq0hDTLUmbyZi4PINrMeQiBCfNemGkp5p7hDI0WAe?=
- =?us-ascii?Q?+ZK951LehnVRnHatmiWwLGtCLb2FJ2DABe7Dd0ek5WI6gOOUy5+/2n7rx73s?=
- =?us-ascii?Q?MreonZEKByc4iAPaaugvefBv1b97juUK7svqW/psk99KPPJ5jay4YSkE7h3A?=
- =?us-ascii?Q?2bsJFx6+8ukP6B1u+5Va/tiMVP/tL2PEKMf3aMstfW9Ft49RtO/kiZMg4NnP?=
- =?us-ascii?Q?uBE6qJu6vrA7MbRYZmHFO/5MaPbwkCMha690FZO4liaMOFP+l6C9XX9Vc1w6?=
- =?us-ascii?Q?LP7NDr4277+tkcVd7lVH4wJmHXiFeFZkZzliGC1mhUsBPOME0XqOPLJ+Fbe+?=
- =?us-ascii?Q?yxOBr7t3jGwdK4ywE3mWWJPPg1J0JlP7Paxn3dx965WMtffOKgd6xkuq7g3K?=
- =?us-ascii?Q?/hmgmifmbm07kSDvLQ+uSZJV/gjVUaWv4NbENtBxXx30BGCnsqMH+wp0+J+g?=
- =?us-ascii?Q?sAQm+c5meHVhZ/4uAnVr4o8HCdV72DUjrrammtHzkQ9HkoPd6fGIdx0fzCTq?=
- =?us-ascii?Q?1SoqJO01XZ18IERuaa9tM0l6XV4RMiApcBz8vFw2b/RzSLBopCOArKEIkX/O?=
- =?us-ascii?Q?vzgTYutCt9ibd+jmS3SwdBguNO5Sh/mqT5F840ij/bvEzABxi1+g1GlxxZJv?=
- =?us-ascii?Q?YJRKtUc/t+qnBlvXuBG1sPwpSz13jd8qFo5FDWoiO0gGl6ZTPHx9/E5/ZjqB?=
- =?us-ascii?Q?LMjyBiMM6hAlskFDeG+C4XBQg9cHRqEAdd+KqgCGZddaUU9LtHz6tKpQV5H9?=
- =?us-ascii?Q?6in3FOjpwqC1jvuXMyvhqqOZYrd2E2qKdtqVCzp32INOyoL3CpecVRR4Uw81?=
- =?us-ascii?Q?YuI+k6PIFXPknWcaXyAOvZrYyu/scNwP3h5GVDUUqivEupuBEbPyw+Z4xTJu?=
- =?us-ascii?Q?VlDa1HLBI9HY0acn5cyHtvaoUfTM/s8EUrolngyqfCK2qy/fPj2pAZzRIKVS?=
- =?us-ascii?Q?uCQR/1UBh6fLQLn5lYGg0X37BRLpXNxxF99DmXlMlZr+AW9WK1FAQ6JCDMVf?=
- =?us-ascii?Q?gGBpVooumpWS7B+nmne6OwNA2Px9w+K8eUZEn3y2vBjwGCnj9sPs5k4U67xh?=
- =?us-ascii?Q?4pl2yH0dU3KzPgHZl9SzbKpBJUhs9Zy5g0R0T2w6jYrFC+iOin++jxMD0ZPp?=
- =?us-ascii?Q?FcAThAvDMJiTnhZ98vKwidxlP+RnlwVjbxF8czeP?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 218b4217-573f-40f1-5f1e-08db403975cd
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5859.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 18:19:33.8451
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zxjNrSMfPeiVVbj8S7TfUa/sB/Nu2/sS25+x8ztod+IBVpe49NtHjqXGJjpxE14M
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4263
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] perf stat: Introduce skippable evsels
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230414051922.3625666-1-irogers@google.com>
+ <56ac61a0-ccf0-210e-e429-11062a07b8bf@linux.intel.com>
+ <CAP-5=fXz1vw48A2tWgcNDSZsnvnOO7_jA+py3p_Khi_igz0hJw@mail.gmail.com>
+ <5031f492-9734-be75-3283-5961771d87c8@linux.intel.com>
+ <CAP-5=fW2aAijt8tqydszQHQFmsfeQO2S0hb7Z27RtXxG4Zmm-w@mail.gmail.com>
+ <ce92dd1b-23f6-ea52-a47d-fccc24fa20ea@linux.intel.com>
+ <CAP-5=fWRy4NEqhB6-b98+m7SV5=oyBOMVuOHwmvKZCJuXcsQEg@mail.gmail.com>
+ <d1fe801a-22d0-1f9b-b127-227b21635bd5@linux.intel.com>
+ <CAP-5=fXCmKAUn24r0YYHaO63mabZCXae-hAT2WCtk+YYmvS9xg@mail.gmail.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <CAP-5=fXCmKAUn24r0YYHaO63mabZCXae-hAT2WCtk+YYmvS9xg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 06:25:24PM +0100, Pavel Begunkov wrote:
-> On 4/18/23 17:36, Jason Gunthorpe wrote:
-> > On Tue, Apr 18, 2023 at 05:25:08PM +0100, Pavel Begunkov wrote:
-> > > On 4/17/23 13:56, Jason Gunthorpe wrote:
-> > > > On Sat, Apr 15, 2023 at 12:27:45AM +0100, Lorenzo Stoakes wrote:
-> > > > > Commit edd478269640 ("io_uring/rsrc: disallow multi-source reg buffers")
-> > > > > prevents io_pin_pages() from pinning pages spanning multiple VMAs with
-> > > > > permitted characteristics (anon/huge), requiring that all VMAs share the
-> > > > > same vm_file.
-> > > > 
-> > > > That commmit doesn't really explain why io_uring is doing such a weird
-> > > > thing.
-> > > > 
-> > > > What exactly is the problem with mixing struct pages from different
-> > > > files and why of all the GUP users does only io_uring need to care
-> > > > about this?
-> > > 
-> > > Simply because it doesn't seem sane to mix and register buffers of
-> > > different "nature" as one.
-> > 
-> > That is not a good reason. Once things are converted to struct pages
-> > they don't need to care about their "nature"
+
+
+On 2023-04-18 11:43 a.m., Ian Rogers wrote:
+> On Tue, Apr 18, 2023 at 6:03 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
+>>
+>>
+>>
+>> On 2023-04-17 2:13 p.m., Ian Rogers wrote:
+>>> The json TopdownL1 is enabled if present unconditionally for perf stat
+>>> default. Enabling it on Skylake has multiplexing as TopdownL1 on
+>>> Skylake has multiplexing unrelated to this change - at least on the
+>>> machine I was testing on. We can remove the metric group TopdownL1 on
+>>> Skylake so that we don't enable it by default, there is still the
+>>> group TmaL1. To me, disabling TopdownL1 seems less desirable than
+>>> running with multiplexing - previously to get into topdown analysis
+>>> there has to be knowledge that "perf stat -M TopdownL1" is the way to
+>>> do this.
+>>
+>> To be honest, I don't think it's a good idea to remove the TopdownL1. We
+>> cannot remove it just because the new way cannot handle it. The perf
+>> stat default works well until 6.3-rc7. It's a regression issue of the
+>> current perf-tools-next.
 > 
-> Arguing purely about uapi, I do think it is. Even though it can be
-> passed down and a page is a page, Frankenstein's Monster mixing anon
-> pages, pages for io_uring queues, device shared memory, and what not
-> else doesn't seem right for uapi. I see keeping buffers as a single
-> entity in opposite to a set of random pages beneficial for the future.
+> I'm not so clear it is a regression to consistently add TopdownL1 for
+> all architectures supporting it. 
 
-Again, it is not up to io_uring to make this choice. We have GUP as
-part of our uAPI all over the place, GUP decides how it works, not
-random different ideas all over the place.
 
-We don't have these kinds of restrictions for O_DIRECT, for instance.
+Breaking the perf stat default is a regression.
 
-There should be consistency in the uAPI across everything.
+The reason we once added the TopdownL1 for ICL and later platform is
+that it doesn't break the original design (a *clean* output).
 
-Jason
+> The assertion is that because
+> TopdownL1 has multiplexing and multiplexing is global then we've
+> lowered the accuracy of other metrics, but the only other hardware
+> metrics in the default output pre-Icelake are IPC and branch miss
+> rate. Having TopdownL1 is a way of drilling into performance issues,
+> while IPC and branch miss rate are putting your finger in the air to
+> see which way the wind is blowing. Perhaps we should drop these if
+> TopdownL1 is present.
+> 
+>> But I'm OK to add some flags with the metrics to assist the perf tool to
+>> specially handle the case if you prefer to modify the event list.
+> 
+> We've already removed thresholds from the default output, we could
+> remove groups.
+> 
+>>>
+>>> This doesn't relate to this change which is about making it so that
+>>> failing to set up TopdownL1 doesn't cause an early exit. The reason I
+>>> showed TigerLake output was that on TigerLake the skip/fallback
+>>> approach works while Skylake just needs the events disabled/skipped
+>>> unless it has sufficient permissions. Note the :u on the events in:
+>>
+>> The perf_event_open() should be good to detect the insufficient
+>> permission, but it doesn't work to detect an existing of an event.
+>> That's because the kernel only checks the features not specific events.
+>> It's not a reliable way to rely on the output of the perf_event_open() here.
+> 
+> I'm unclear why not as not having perf_event_open fail seems like a
+> kernel bug. I can see there is little motivation to fix this on older
+> architectures like Skylake.
+
+Updating kernel may not be an option here. Because
+- There is no issue with the existing perf tool until 6.3-rc7. It
+doesn't sound like a defect of the kernel.
+- The kernel for the SKL has been there for many years. It's impossible
+to change all the kernels to support a new requirement from the perf tool.
+
+> We do attempt to workaround it with the
+> errata flags on the metrics introduced here:
+> https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py#L1296
+>
+If so, I would still suggest to check the slots and topdown events in
+sysfs and decide whether to append the TopdownL1 to perf stat default.
+
+So we probably need a ARCH specific is_event_available(), before
+appending the events.
+
+
+>>>> From your test result in the v2 description, we can see that there is no
+>>>> TopdownL1, which is good and expected. However, there is a (48.99%) with
+>>>> cycles:u event, which implies multiplexing. Could you please check
+>>>> what's the problem here?
+>>>> Also, if it's because of the backgroud, all the events should be
+>>>> multiplexing. But it looks like only cycle:u has multiplexing. Other
+>>>> events, instructions:u, branches:u and branch-misses:u work without
+>>>> multiplexing. That's very strange.
+>>> I wasn't able to reproduce it and suspect it was a transient thing. I
+>>> think there are multiplexing things to look into, 2 events on a fixed
+>>> counter on Icelake+ will trigger multiplexing on all counters, and
+>>> Skylake's 3 fixed and 4 generic should fit TopdownL1.
+>>
+>> Just found a cascade lake. With this patch + the current
+>> perf-tools-next, partial of the TopdownL1 and multiplexing can still be
+>> observed.
+>>
+>> $ sudo ./perf stat true
+>>
+>>  Performance counter stats for 'true':
+>>
+>>               2.91 msec task-clock                       #    0.316 CPUs
+>> utilized
+>>                  0      context-switches                 #    0.000 /sec
+>>                  0      cpu-migrations                   #    0.000 /sec
+>>                 45      page-faults                      #   15.474 K/sec
+>>          2,819,972      cycles                           #    0.970 GHz
+>>                        (60.14%)
+>>          5,391,406      instructions                     #    1.91  insn
+>> per cycle
+>>          1,068,575      branches                         #  367.442 M/sec
+>>              8,455      branch-misses                    #    0.79% of
+>> all branches
+>>             70,283      CPU_CLK_UNHALTED.REF_XCLK        #   24.168
+>> M/sec
+>>             48,806      INT_MISC.RECOVERY_CYCLES_ANY     #   16.783
+>> M/sec                       (39.86%)
+>>
+>>        0.009204517 seconds time elapsed
+>>
+>>        0.000000000 seconds user
+>>        0.009614000 seconds sys
+> 
+> The issue here is that 'true' ran very quickly and so we skipped the
+> output of the events with 0 counts, no metrics were computed due to
+> the zero counts. Cascade lake has the same TopdownL1 multiplexing
+> issues as Skylake.
+> 
+
+I tried other benchmark. I can still observe the multiplexing. But my
+remote machine just crashed. I'm asking the tech support. So I cannot do
+more tests.
+
+Thanks,
+Kan
