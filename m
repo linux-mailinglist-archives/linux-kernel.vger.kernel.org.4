@@ -2,213 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CF56E6B7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FE66E6B7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbjDRRxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 13:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34988 "EHLO
+        id S230526AbjDRRzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 13:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjDRRxm (ORCPT
+        with ESMTP id S231398AbjDRRzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 13:53:42 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00C82B45C;
-        Tue, 18 Apr 2023 10:53:19 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:60578.14262665
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 26EED10029E;
-        Wed, 19 Apr 2023 01:52:54 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-bkw2h with ESMTP id 935c87ab8f034503ae1f63aa208276ed for maarten.lankhorst@linux.intel.com;
-        Wed, 19 Apr 2023 01:52:57 CST
-X-Transaction-ID: 935c87ab8f034503ae1f63aa208276ed
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <139c9398-488d-df19-9ae2-2b4b47ef64f4@189.cn>
-Date:   Wed, 19 Apr 2023 01:52:53 +0800
+        Tue, 18 Apr 2023 13:55:11 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A4EC672;
+        Tue, 18 Apr 2023 10:55:08 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6a5f852002dso601792a34.3;
+        Tue, 18 Apr 2023 10:55:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681840507; x=1684432507;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aAimH9MZlv+g+G8GpQ4zpWQoJtVrlg5Iosr9QYS4Nak=;
+        b=GEtHRkiFLsoyus0dymVrSv9xDthO/vNz7lH2eu+4OqFmvFojo8Xs3fVoDZE+Ot7XUR
+         Zyhrz8GmX+0aE21MdnmuH1+GhXMVYAQ2JZHGnWp/w0TOSBoE6Uf8iOrUo2+Tmy6rcCXW
+         k3y4Gjm8bA864KmWP+uUi8EuWWmdr0slWhu12WqjYgQ2cnkkpPx1j0sUsKdr0ouQf99a
+         bsosowGKBJx4trdVAnNolgiF+93N3ZHJ2qPEaSFBqYMTYmjvu5AcWu/+Du9gumOBUJJ+
+         kia64Jno37NmimwDSJ5X3CvYFkUkulyuf4N686bpNJkANFhAtniZPCS/V17a95PhyR79
+         JckA==
+X-Gm-Message-State: AAQBX9d8XW94RgdmnK+FhvCMaqvPywcvzBJG5T4qpXLuoqLYmEuN+mEY
+        jOMBVEALp+aHpNpKlZ7pIg==
+X-Google-Smtp-Source: AKy350b+0Slg4uWLcLoeXxGzP5rqrZkZWwU3anJysWfDccBq3R0Kzv3/OD8DE87GSBVKt/ynFMiNjQ==
+X-Received: by 2002:a05:6830:1e3c:b0:6a1:535f:b095 with SMTP id t28-20020a0568301e3c00b006a1535fb095mr1507786otr.18.1681840507309;
+        Tue, 18 Apr 2023 10:55:07 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p9-20020a056830130900b00684152e9ff2sm553219otq.0.2023.04.18.10.55.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 10:55:06 -0700 (PDT)
+Received: (nullmailer pid 2044769 invoked by uid 1000);
+        Tue, 18 Apr 2023 17:55:05 -0000
+Date:   Tue, 18 Apr 2023 12:55:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2] dt-bindings: interrupt-controller: qcom-pdc: add
+ compatible for sa8775p
+Message-ID: <20230418175505.GA2044093-robh@kernel.org>
+References: <20230417094635.302344-1-brgl@bgdev.pl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3] drm/fbdev-generic: prohibit potential out-of-bounds
- access
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Li Yi <liyi@loongson.cn>,
-        Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-References: <20230417113219.1354078-1-suijingfeng@loongson.cn>
- <ZD5Vgx9Txaiz7Bun@phenom.ffwll.local>
-Content-Language: en-US
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <ZD5Vgx9Txaiz7Bun@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230417094635.302344-1-brgl@bgdev.pl>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Apr 17, 2023 at 11:46:35AM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> Add a compatible for the Power Domain Controller on SA8775p platforms.
+> Increase the number of PDC pin mappings.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> v1 -> v2:
+> - increase maxItems to a value that covers all other users of this schema and
+>   leaves some margin on top of that
 
-On 2023/4/18 16:32, Daniel Vetter wrote:
-> On Mon, Apr 17, 2023 at 07:32:19PM +0800, Sui Jingfeng wrote:
->> The fbdev test of IGT may write after EOF, which lead to out-of-bound
->> access for the drm drivers using fbdev-generic. For example, on a x86
->> + aspeed bmc card platform, with a 1680x1050 resolution display, running
->> fbdev test if IGT will cause the linux kernel hang with the following
->> call trace:
->>
->>    Oops: 0000 [#1] PREEMPT SMP PTI
->>    [IGT] fbdev: starting subtest eof
->>    Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
->>    [IGT] fbdev: starting subtest nullptr
->>
->>    RIP: 0010:memcpy_erms+0xa/0x20
->>    RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
->>    RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
->>    RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
->>    RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
->>    R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
->>    R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
->>    FS:  0000000000000000(0000) GS:ffff895257380000(0000) knlGS:0000000000000000
->>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>    CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
->>    Call Trace:
->>     <TASK>
->>     ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
->>     drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
->>     process_one_work+0x21f/0x430
->>     worker_thread+0x4e/0x3c0
->>     ? __pfx_worker_thread+0x10/0x10
->>     kthread+0xf4/0x120
->>     ? __pfx_kthread+0x10/0x10
->>     ret_from_fork+0x2c/0x50
->>     </TASK>
->>    CR2: ffffa17d40e0b000
->>    ---[ end trace 0000000000000000 ]---
->>
->> The direct reason is that damage rectange computed by
->> drm_fb_helper_memory_range_to_clip() does not guaranteed to be in-bound.
->> It is already results in workaround code populate to elsewhere. Another
->> reason is that exposing a larger buffer size than the actual needed help
->> to trigger this bug intrinsic in drm_fb_helper_memory_range_to_clip().
->>
->> Others fbdev emulation solutions write to the GEM buffer directly, they
->> won't reproduce this bug because the .fb_dirty function callback do not
->> being hooked, so no chance is given to drm_fb_helper_memory_range_to_clip()
->> to generate a out-of-bound when drm_fb_helper_sys_write() is called.
->>
->> This patch break the trigger condition of this bug by shrinking the shadow
->> buffer size to sizes->surface_height * buffer->fb->pitches[0].
->>
->> Fixes: '8fbc9af55de0 ("drm/fbdev-generic: Set screen size to size of GEM
->> buffer")'
->>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
->>   drivers/gpu/drm/drm_fbdev_generic.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c b/drivers/gpu/drm/drm_fbdev_generic.c
->> index 8e5148bf40bb..b057cfbba938 100644
->> --- a/drivers/gpu/drm/drm_fbdev_generic.c
->> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
->> @@ -94,7 +94,7 @@ static int drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
->>   	fb_helper->buffer = buffer;
->>   	fb_helper->fb = buffer->fb;
->>   
->> -	screen_size = buffer->gem->size;
->> +	screen_size = sizes->surface_height * buffer->fb->pitches[0];
-> So I read core some more and stumbled over drm_fb_helper_deferred_io().
-> Which has all the code and comments about this, including limiting.
->
-> I think it would be clearer if we fix the issue there, instead of passing
-> limits around in obscure places that then again get broken?
-
-No, it is more obscure doing that way...
-
-
-As the size of the shadow screen buffer will be exposed to userspace.
-
-The size 'helper->fb->height * helper->fb->pitches[0]' is a 
-exactly(best) fit,
-
-You are guaranteed to waste at lease one byte by increasing one byte,
-
-and can not store all pixels by decreasing one byte (In the case where 
-`helper->fb->pitches[0] = helper->fb->width * 4`).
-
-It implicitly tell the userspace do not go beyond that boundary.
-
-although userspace program can still choose to write  after EOF,
-
-But it is for test purpose, to test the kernel if it can return a -EFBIG 
-or not.
-
-> The thing is,
-> Thomas both authored the limit checks in drm_fb_helper_deferred_io() and
-> the patch which broken them again, so clearly this isn't very obvious. I'm
-> thinking of something like this:
->
->
-> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-> index ef4eb8b12766..726dab67c359 100644
-> --- a/drivers/gpu/drm/drm_fb_helper.c
-> +++ b/drivers/gpu/drm/drm_fb_helper.c
-> @@ -697,10 +697,7 @@ void drm_fb_helper_deferred_io(struct fb_info *info, struct list_head *pagerefli
->   	 * of the screen and account for non-existing scanlines. Hence,
->   	 * keep the covered memory area within the screen buffer.
->   	 */
-> -	if (info->screen_size)
-> -		total_size = info->screen_size;
-> -	else
-> -		total_size = info->fix.smem_len;
-> +	total_size = helper->fb->height * helper->fb->pitches[0];
-
-This is just to mitigate the mistakes already has been made,
-
-because it  do not do a good splitting between the *clip* part and the 
-*damage update* part.
-
-An ideal clipping do not obscure its updating backend with a 
-out-of-bound damage rectangle.
-
-Why did the drm_fb_helper_memory_range_to_clip() can not do a good job 
-in all case
-
-to pass its backend a always meaningful damage rect ?
-
->   	max_off = min(max_off, total_size);
->   
->   	if (min_off < max_off) {
->
->
-> I think that would make it utmost clear on what we're doing and why.
-> Otherwise we're just going to re-create the same bug again, like we've
-> done already :-)
-
-No, we create no bugs, we fix one.
-
-Thanks.
-
-> -Daniel
->
->>   	screen_buffer = vzalloc(screen_size);
->>   	if (!screen_buffer) {
->>   		ret = -ENOMEM;
->> -- 
->> 2.25.1
->>
+Looks like v4 to me... Anyways, it's applied.
