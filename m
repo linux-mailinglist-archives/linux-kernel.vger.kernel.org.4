@@ -2,87 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F01E6E6E41
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D8C6E6E42
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232831AbjDRVb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
+        id S232827AbjDRVdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbjDRVb1 (ORCPT
+        with ESMTP id S232608AbjDRVdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:31:27 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE7E1024C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:31:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=cK6WZTCqxBa6ulq6LX+4lU7vuWA3n6M3EQUmCRHWpYg=; b=NPbEVuM/gB2VHB7LlJAfo3Fvnq
-        Q94MvKr/Mjw1VVA5m0mr0SDBIKwDmayD4OX+U2blHmcTrhBjX0JK0K/CKpAd4L594ptFESoihQ++Q
-        zKnN0osw36CLv0LWXd3TYsO2h85VQCXjJs96/jf2e1l95aWYKUMQQ2gNhBsW9fR1UtSHIEOHPtupB
-        qN3pyOtizpgPvK++8LlAzcnFMEH3mcbbTdJobh9Xf5d8UtircxI5INvR9EWBvxyu7AQwjH2wyG74f
-        V6JaJOGV+OWVLom9tgE5GzVvlmaMjTG7D6hovQFrAgjcxGoORSqffonxycqoN4EAlriCLFIZXeWJB
-        XVIX4O4g==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1posug-003OEO-1k;
-        Tue, 18 Apr 2023 21:30:58 +0000
-Message-ID: <5db6179d-985b-c08c-fad2-d7fbb2d40e4d@infradead.org>
-Date:   Tue, 18 Apr 2023 14:30:55 -0700
+        Tue, 18 Apr 2023 17:33:05 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDAB619E
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:33:02 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id o7so26794615qvs.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:33:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681853582; x=1684445582;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FcixbIsW3kO64h6Jtj5sJY2E9ztLhq82+LQGVeq96m8=;
+        b=Bo+E65McpPUkfTcdsLjjvqZGTnnSQ3UhZBzsqSL08u9okmiZEkO7j2ytFJs1GOkVFz
+         lIlHUjHqgdGA5nhzdNRr8bGUvZtDyBHASYAl0m+9cVp37NzrTTKuuRde7CNIgLPTai19
+         3oRc9lf4CalM9wuFZlYDJU/57dQwOVy6Vl1ztAF/CE8x8bmc6OJH5zB6wdRq3FqUTJAX
+         h0+XBPEDpOOzR6GevFP7vwpL2VZ5QbskHesty9eWEmiKXr2vAoHumpU1KL84gmfN8qVZ
+         XqXdCrXwkIqG/9LM+xRYaVigtWSOZFB2mBi2VvloIf/8nnyTTrxKXVGAaPwtoplSUAoQ
+         aViQ==
+X-Gm-Message-State: AAQBX9djx7s35t9IrHEpwukaPJOmJx6OqE+lBbusBy/cmxX3jMZMKfJo
+        jRwuSmPV0SbXngO80xQ+yYQ=
+X-Google-Smtp-Source: AKy350bEq70ceFE7+W1TpymqrSVvydtzlM1MkpbnuWmZgo0ndiXdLjyliZhRp3htjRDp6fJxK0qN3g==
+X-Received: by 2002:a05:6214:1304:b0:5e8:63ae:a9a9 with SMTP id pn4-20020a056214130400b005e863aea9a9mr29773327qvb.47.1681853581644;
+        Tue, 18 Apr 2023 14:33:01 -0700 (PDT)
+Received: from Belldandy-Slimbook.tail03774.ts.net ([32.221.209.96])
+        by smtp.gmail.com with ESMTPSA id u5-20020a05620a454500b0074debbb36b1sm2008309qkp.69.2023.04.18.14.33.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 14:33:01 -0700 (PDT)
+From:   Neal Gompa <neal@gompa.dev>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Sterba <dsterba@suse.com>, David Sterba <dsterba@suse.cz>,
+        linux-kernel@vger.kernel.org, Rafael Wysocki <rafael@kernel.org>,
+        Chris Mason <clm@meta.com>, Boris Burkov <boris@bur.io>,
+        regressions@leemhuis.info, regressions@lists.linux.dev,
+        Neal Gompa <neal@gompa.dev>
+Subject: Re: Linux regressions report for mainline [2023-04-16]
+Date:   Tue, 18 Apr 2023 17:32:28 -0400
+Message-Id: <20230418213228.1273218-1-neal@gompa.dev>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <CAHk-=wjL7GG9s9Y2+u2725M+Ru=bUXnzOnXRwoSktY0fVdhhzw@mail.gmail.com>
+References: <CAHk-=wjL7GG9s9Y2+u2725M+Ru=bUXnzOnXRwoSktY0fVdhhzw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 6/6] shmem: add support to ignore swap
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Hugh Dickins <hughd@google.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, brauner@kernel.org,
-        linux-mm@kvack.org, p.raghav@samsung.com, da.gomez@samsung.com,
-        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
-        keescook@chromium.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230309230545.2930737-1-mcgrof@kernel.org>
- <20230309230545.2930737-7-mcgrof@kernel.org>
- <79eae9fe-7818-a65c-89c6-138b55d609a@google.com>
- <ZD8J+I6uCqfp31sv@bombadil.infradead.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <ZD8J+I6uCqfp31sv@bombadil.infradead.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus and David,
 
+I'm the guy that sort of kickstarted this whole thing a year ago.
+From my perspective in Fedora-land, we've been running automatic
+weekly fstrim on every Fedora system for three years now[1] and
+have not received any complaints about SSDs pushing daises from
+that.
 
-On 4/18/23 14:22, Luis Chamberlain wrote:
-> On Mon, Apr 17, 2023 at 10:50:59PM -0700, Hugh Dickins wrote:
->> You'll be sending a manpage update to Alejandro in due course, I think.
-> 
-> Sure thing! Just need a git tree. I can send the updates as we reach
-> a consensus on where to store / share huge page shmem updates.
-> 
->   Luis
+When we started discussing btrfs discard=async within Fedora
+two years ago[2], I started soliciting feedback and information
+from the Btrfs developers I was regularly working with at the time.
 
-From the latest man-page announcement:
+Last year, I had a face-to-face with Chris Mason and we discussed
+the idea in depth and decided to go for this, based on both Fedora's
+data with consumer disks and Facebook's data with their datacenters.
 
+The only real surprise we had was the so-called "discard storm",
+which Boris Burkov made adjustments to resolve a couple weeks ago[3].
 
-	man-pages-6.04 - manual pages for GNU/Linux
+With all that context in mind, I'm not sure we really should be panicking
+about having async discard enabled, since it's the same operation
+that the fstrim timer was doing before, just queued by btrfs itself instead.
 
-The release tarball is already available at <kernel.org>.
+So personally, I would prefer *not* to revert the new default.
 
-Tarball download:
-	<https://mirrors.edge.kernel.org/pub/linux/docs/man-pages/>
-Git repository:
-	<https://git.kernel.org/cgit/docs/man-pages/man-pages.git/>
+Thanks in advance and best regards,
+Neal
+
+[1]: https://fedoraproject.org/wiki/Changes/EnableFSTrimTimer
+[2]: https://pagure.io/fedora-btrfs/project/issue/6
+[3]: https://lore.kernel.org/linux-btrfs/cover.1680723651.git.boris@bur.io/T/#t
+
 
 -- 
-~Randy
+真実はいつも一つ！/ Always, there's only one truth!
