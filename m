@@ -2,119 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C566E6F03
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 160756E6F05
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232965AbjDRWBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 18:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43688 "EHLO
+        id S233109AbjDRWBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 18:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232462AbjDRWBI (ORCPT
+        with ESMTP id S232462AbjDRWB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 18:01:08 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB19109;
-        Tue, 18 Apr 2023 15:01:07 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-38e04d1b2b4so566309b6e.3;
-        Tue, 18 Apr 2023 15:01:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681855266; x=1684447266;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kUZCWdrMpmE98XPzyUWaFXep+TFtMG1Cry/8zBfjR0s=;
-        b=XpTHaG9vlO4Ryps/X4s1au6kw3UUX7cg3pRiMMGWDBFtGcaKnALIrc4K7gKhBUPAgp
-         GkdvIJeWUvb+2OookwT0eO2QYM0LlDsM9liHRElX2GFtp15ZEKOP5183RPRGE94Ws/uH
-         WU1avi8t9UOlwNOW2K0dVzNMaR7OTsrHUtyQlL9xLP/BXc5LY0mH/CoB7pXmJIMCNfSz
-         YJ/t18goriSeq0n2UkFi6VXTjXu4moGLuvvY/JcBz8+84Xzg7BnyOqp10EC4kXD5GTs3
-         Sx6bVx5WLdVt8YdvpzlcBQt20g7TzOYpM4EvVUKxKIXuY1vgdH6s2n1ZB+LosBd/GNo2
-         VRKw==
-X-Gm-Message-State: AAQBX9d/EMnqqYJBFrwVjxLfUVxE5t26MPGFqHB8ec+XaQYonxZxd1/l
-        g3i09vJcJp1bUJq+id4B1w==
-X-Google-Smtp-Source: AKy350bRDGYoUZLL6UJSFAz/QGM86RSeA9S9WXw1mapesHioxAxgjrNaBWUK+XbvQYlQk51Aa60Nmg==
-X-Received: by 2002:a54:4f12:0:b0:389:1fcb:f327 with SMTP id e18-20020a544f12000000b003891fcbf327mr2042229oiy.26.1681855266449;
-        Tue, 18 Apr 2023 15:01:06 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l83-20020acabb56000000b00383ef58c15bsm6344895oif.28.2023.04.18.15.01.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 15:01:05 -0700 (PDT)
-Received: (nullmailer pid 2401434 invoked by uid 1000);
-        Tue, 18 Apr 2023 22:01:04 -0000
-Date:   Tue, 18 Apr 2023 17:01:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Artur Weber <aweber.kernel@gmail.com>
-Cc:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@gmail.com,
-        daniel@ffwll.ch, krzysztof.kozlowski+dt@linaro.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v3 1/3] dt-bindings: display: panel: Add Samsung S6D7AA0
- LCD panel controller
-Message-ID: <20230418220104.GA2387740-robh@kernel.org>
-References: <20230416131632.31673-1-aweber.kernel@gmail.com>
- <20230416131632.31673-2-aweber.kernel@gmail.com>
+        Tue, 18 Apr 2023 18:01:27 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E833A7AB9
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 15:01:23 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 68E092C0488;
+        Wed, 19 Apr 2023 10:01:21 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1681855281;
+        bh=S3c26+We7SLfEufJw5LOQrCdEaM4ZuM9Y3l58UPipjY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FKryFQebAl3UN9necF5ABvtT1V8Nn5sQStNVCyQGCB1R0VKj41BCTb+RgxiJ7CQqK
+         BVPWX7TRnVp1WOBH///xbajpiMTZXZfEVQ3sGsV6zlQSwXyIXrUQkLh6/+4SxrS0Pm
+         1AkjMfHx9OJX3wTsFGd/dkUe0nYpFYF+affpNw1jqhw//6jgajCBKHS4M0uNY5ITeL
+         E0/1AGXGCfUC/j1BXTvC27wFlzJTStJqQx5CwFoiSwGCtIyBY/Zqia/CfrvMY23L8B
+         gblbzshAVT8oatyBTfTRg0XrM+RnD0NuEtpS2CfFywzrw+IAj/KYQYh8f4nLtECTns
+         /645R7YiTp+ew==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B643f13310000>; Wed, 19 Apr 2023 10:01:21 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id 2342213EDC3;
+        Wed, 19 Apr 2023 10:01:21 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 1FE02283BBF; Wed, 19 Apr 2023 10:01:21 +1200 (NZST)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     jdelvare@suse.com, linux@roeck-us.net, manio@skyboo.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] hwmon: (adt7475) Handle DT unaware platforms
+Date:   Wed, 19 Apr 2023 10:01:09 +1200
+Message-Id: <20230418220109.787907-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230416131632.31673-2-aweber.kernel@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=VfuJw2h9 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=dKHAf1wccvYA:10 a=GF2wAtdHAAAA:8 a=QpOaOSl7_tIurUvRHyEA:9 a=QEXdDO2ut3YA:10 a=Vv19E3DM6UNVh-gFiZZL:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 03:16:30PM +0200, Artur Weber wrote:
-> Add bindings for the S6D7AA0 LCD panel controller, including the
-> S6D7AA0-LSL080AL02 panel used in the Samsung Galaxy Tab 3 8.0 family
-> of tablets.
-> 
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> ---
-> Changed in v2:
->  - Updated commit message
->  - Applied suggestions from Krzysztof Kozlowski
-> Changed in v3:
->  - Correctly applied suggestions
-> ---
->  .../display/panel/samsung,s6d7aa0.yaml        | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml b/Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
-> new file mode 100644
-> index 000000000000..079e2b3a9eaf
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/panel/samsung,s6d7aa0.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Samsung S6D7AA0 MIPI-DSI LCD panel controller
-> +
-> +maintainers:
-> +  - Artur Weber <aweber.kernel@gmail.com>
-> +
-> +allOf:
-> +  - $ref: panel-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: samsung,s6d7aa0-lsl080al02
-> +
-> +  reg: true
-> +  reset-gpios: true
-> +  backlight: true
-> +
-> +  enable-supply:
-> +    description: Enable supply
+Configuring the pwm polarity via the adi,pwm-active-state property is an
+optional feature. On DT aware platforms of_property_read_u32_array()
+returns -EINVAL when the property is absent this is checked for and the
+driver probe continues without issue.
 
-Comments on v1 apply here.
+On DT unaware platfroms of_property_read_u32_array() returns -ENOSYS
+which caused the driver probe to dev_warn(). Update the code to deal
+with -ENOSYS so that the dev_warn() only occurs when there is a genuine
+issue.
 
-Rob
+Fixes: 86da28eed4fb ("hwmon: (adt7475) Add support for inverting pwm outp=
+ut")
+Reported-by: Mariusz Bia=C5=82o=C5=84czyk <manio@skyboo.net>
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
+ drivers/hwmon/adt7475.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+index 6e4c92b500b8..af906eee480e 100644
+--- a/drivers/hwmon/adt7475.c
++++ b/drivers/hwmon/adt7475.c
+@@ -1607,6 +1607,13 @@ static int adt7475_set_pwm_polarity(struct i2c_cli=
+ent *client)
+ 	ret =3D of_property_read_u32_array(client->dev.of_node,
+ 					 "adi,pwm-active-state", states,
+ 					 ARRAY_SIZE(states));
++	/*
++	 * -EINVAL indicates that the property is absent, -ENOSYS indicates
++	 * that the platform lacks DT awareness. Neither of these are errors
++	 * for the optional pwm polarity support.
++	 */
++	if (ret =3D=3D -EINVAL || ret =3D=3D -ENOSYS)
++		return 0;
+ 	if (ret)
+ 		return ret;
+=20
+@@ -1741,7 +1748,7 @@ static int adt7475_probe(struct i2c_client *client)
+ 		adt7475_read_pwm(client, i);
+=20
+ 	ret =3D adt7475_set_pwm_polarity(client);
+-	if (ret && ret !=3D -EINVAL)
++	if (ret)
+ 		dev_warn(&client->dev, "Error configuring pwm polarity\n");
+=20
+ 	/* Start monitoring */
+--=20
+2.40.0
+
