@@ -2,73 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776D26E5ABB
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BA56E5ABD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbjDRHqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 03:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
+        id S230094AbjDRHqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 03:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230466AbjDRHqj (ORCPT
+        with ESMTP id S230440AbjDRHqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 03:46:39 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15728A8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 00:46:38 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id dm2so70924826ejc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 00:46:38 -0700 (PDT)
+        Tue, 18 Apr 2023 03:46:48 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8CC59E4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 00:46:45 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1a67bcde3a7so21348115ad.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 00:46:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681803996; x=1684395996;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VSTh/SJop5c2Us/dQwQInLvSKG2b28WOhmpUgImXSN4=;
-        b=JIXcMkwqYs0HXlx9VovWlfO/IO9++uYT98RcF6INoHP4EgPbfvGOPQK1wUAQELPIdB
-         W5T7j/au9BAmdU7nOY6jxXvLUxudGbK1t1mOIpCUqZRqqnzCUwe2ix1fZ9h7oXecqx+r
-         PyJKJspYUymwBkNi7sFxN0azJce4VLjL0qv2hLFOauSfxPl5bOIguOqqj+0sWIW7s3qx
-         HqN3ScBUfGn9fW4WGfbxWWhkGmHcR5o/US0p2E5zTGOoGQXMVn+jna9bK+zN6Qh9rUAl
-         K5mxSbz9fS89h4O1enbZ+FldagCVrl9P7cAvtfb9NI2aB7WETL6ND2nVlMSBtEl0Qz6Z
-         /ycg==
+        d=chromium.org; s=google; t=1681804005; x=1684396005;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=h22ktkGMKWxVcxcaUxYu0h0WFMmYisG3d/tdFq9yk7c=;
+        b=nAKwtwifeDZqZJY91VY4uctqfDAWvCJ8kPEnIdBPWP7nOCP+19w2A8evcSTy4aTXiK
+         yj/dq6QyuaZW3oa0iB99dQ/GA/I0wivzBZA7HK4zAMwgfQe6ThDPlUrdvS+cWRz6iUjg
+         rqUhYmna5js5NTsmoWbHHlyW2mNrCOezZspQY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681803996; x=1684395996;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VSTh/SJop5c2Us/dQwQInLvSKG2b28WOhmpUgImXSN4=;
-        b=kFruY4n3tqcQ3ql3qZPkkoNKxbP+J32hUC83OByEDdU0cD/imXJgUR0bfRssmNIQu8
-         rIY0N9D6rIJyJZWmaT5iqdHGIudz/PKQ2+YxF5QCKOh/iRClYwP62AN571qDLVPlhyBU
-         USvPlXM1vT9IWVrbnWM29XPSUdDXc570z7I/5kZ+WvaPOHN6HFYhSMoXr9ubsQ0rzfBf
-         /8bvqtezb/DFHs5eCMgcwloA1/SMvsIsV1dkorHtt1z7deQemTmsRJdJ++9I97CuF0iz
-         YwujsgeTjTvlLNUFqED/vCeDQCjTOSw5pury92U48wMZZbFfHeSQbbrZxWB7PUcKmT4i
-         g9tw==
-X-Gm-Message-State: AAQBX9cywXBXYmD00zKy2KiKdak6Qf2QOJw7mnnya0vfa7nSjO2YvITz
-        SLaeQPF7XuqcSQsARy1vqrSPZg==
-X-Google-Smtp-Source: AKy350aFbYeUj+m3sjqAo982f1YulOZ6YRhgeEz5UQC+6oQsPQ9qMNORKSSgrLdCZEKgnbCvHw3jVg==
-X-Received: by 2002:a17:907:2d09:b0:94f:444c:fc25 with SMTP id gs9-20020a1709072d0900b0094f444cfc25mr8326449ejc.12.1681803996664;
-        Tue, 18 Apr 2023 00:46:36 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
-        by smtp.gmail.com with ESMTPSA id sa39-20020a1709076d2700b0094f410225c7sm3731993ejc.169.2023.04.18.00.46.35
+        d=1e100.net; s=20221208; t=1681804005; x=1684396005;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h22ktkGMKWxVcxcaUxYu0h0WFMmYisG3d/tdFq9yk7c=;
+        b=P8MW09XrLIsDdHi9/G8wLritk/+Wc5Vot3W6goTlBqf6xoIhm2MNzpILHhJEcUjR+p
+         BQ3mB6q1hb/r0HDIbWdskSBssbrmJZqHAuWu96/QvDZcMfIhB+LZ9jgbk5i0onoHC+v/
+         ySPpDzEqYm28//9q9m4z07Pv0ZzcTRLlSIcYfVTXt7asyAyFTx1xzFanOi3b1jYvBb06
+         wwxVA3cdQqrY/TerZhntyyuMZQ7N/LDWPcj2pu7nE/6BnRDDrGhgIC4eGooMYakyWEZr
+         +rXnVr391zoxTlaSjVprA7F44EC5LC7GeOlMA59C0O1ZyMyLFzzAaYGrBkJnUe41OJ/w
+         fmIA==
+X-Gm-Message-State: AAQBX9f3tGLeNAZGFKKUByP+A20AkZwUMe1o3/iA8RWeopXH4oDc1P+k
+        xuFBI3tXUPvgDRH6Ji/UQ5J3Tg==
+X-Google-Smtp-Source: AKy350YFjlSoPtsG95YiTUTNXmobFnXqxgrHOGzKKvaX5shNTFdX8nzsZ5QynhdG42owAFdYVfNIsw==
+X-Received: by 2002:a17:903:1c3:b0:1a2:a8d0:838e with SMTP id e3-20020a17090301c300b001a2a8d0838emr1507684plh.61.1681804004787;
+        Tue, 18 Apr 2023 00:46:44 -0700 (PDT)
+Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:7e0d:abfb:57cb:cdfa])
+        by smtp.gmail.com with ESMTPSA id v21-20020a1709028d9500b001a527761c31sm8956975plo.79.2023.04.18.00.46.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 00:46:36 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 4/4] ASoC: codecs: wcd938x: Simplify with dev_err_probe
-Date:   Tue, 18 Apr 2023 09:46:30 +0200
-Message-Id: <20230418074630.8681-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230418074630.8681-1-krzysztof.kozlowski@linaro.org>
-References: <20230418074630.8681-1-krzysztof.kozlowski@linaro.org>
+        Tue, 18 Apr 2023 00:46:44 -0700 (PDT)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yosry Ahmed <yosryahmed@google.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCHv3] zsmalloc: allow only one active pool compaction context
+Date:   Tue, 18 Apr 2023 16:46:39 +0900
+Message-ID: <20230418074639.1903197-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,70 +67,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace dev_err() in probe() path with dev_err_probe() to:
-1. Make code a bit simpler and easier to read,
-2. Do not print messages on deferred probe.
+zsmalloc pool can be compacted concurrently by many contexts,
+e.g.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ cc1 handle_mm_fault()
+      do_anonymous_page()
+       __alloc_pages_slowpath()
+        try_to_free_pages()
+         do_try_to_free_pages(
+          lru_gen_shrink_node()
+           shrink_slab()
+            do_shrink_slab()
+             zs_shrinker_scan()
+              zs_compact()
 
+Pool compaction is currently (basically) single-threaded as
+it is performed under pool->lock. Having multiple compaction
+threads results in unnecessary contention, as each thread
+competes for pool->lock. This, in turn, affects all zsmalloc
+operations such as zs_malloc(), zs_map_object(), zs_free(), etc.
+
+Introduce the pool->compaction_in_progress atomic variable,
+which ensures that only one compaction context can run at a
+time. This reduces overall pool->lock contention in (corner)
+cases when many contexts attempt to shrink zspool simultaneously.
+
+Fixes: c0547d0b6a4b ("zsmalloc: consolidate zs_pool's migrate_lock and size_class's locks")
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
+ mm/zsmalloc.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Changes in v2:
-1. Re-write commit msg.
----
- sound/soc/codecs/wcd938x.c | 27 ++++++++++-----------------
- 1 file changed, 10 insertions(+), 17 deletions(-)
-
-diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
-index f033f79ed238..11b264a63b04 100644
---- a/sound/soc/codecs/wcd938x.c
-+++ b/sound/soc/codecs/wcd938x.c
-@@ -4235,18 +4235,15 @@ static int wcd938x_populate_dt_data(struct wcd938x_priv *wcd938x, struct device
- 	int ret;
+diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+index cc81dfba05a0..44ddaf5d601e 100644
+--- a/mm/zsmalloc.c
++++ b/mm/zsmalloc.c
+@@ -264,6 +264,7 @@ struct zs_pool {
+ 	struct work_struct free_work;
+ #endif
+ 	spinlock_t lock;
++	atomic_t compaction_in_progress;
+ };
  
- 	wcd938x->reset_gpio = of_get_named_gpio(dev->of_node, "reset-gpios", 0);
--	if (wcd938x->reset_gpio < 0) {
--		dev_err(dev, "Failed to get reset gpio: err = %d\n",
--			wcd938x->reset_gpio);
--		return wcd938x->reset_gpio;
--	}
-+	if (wcd938x->reset_gpio < 0)
-+		return dev_err_probe(dev, wcd938x->reset_gpio,
-+				     "Failed to get reset gpio\n");
+ struct zspage {
+@@ -2274,6 +2275,15 @@ unsigned long zs_compact(struct zs_pool *pool)
+ 	struct size_class *class;
+ 	unsigned long pages_freed = 0;
  
- 	wcd938x->us_euro_gpio = devm_gpiod_get_optional(dev, "us-euro",
- 						GPIOD_OUT_LOW);
--	if (IS_ERR(wcd938x->us_euro_gpio)) {
--		dev_err(dev, "us-euro swap Control GPIO not found\n");
--		return PTR_ERR(wcd938x->us_euro_gpio);
--	}
-+	if (IS_ERR(wcd938x->us_euro_gpio))
-+		return dev_err_probe(dev, PTR_ERR(wcd938x->us_euro_gpio),
-+				     "us-euro swap Control GPIO not found\n");
++	/*
++	 * Pool compaction is performed under pool->lock so it is basically
++	 * single-threaded. Having more than one thread in __zs_compact()
++	 * will increase pool->lock contention, which will impact other
++	 * zsmalloc operations that need pool->lock.
++	 */
++	if (atomic_xchg(&pool->compaction_in_progress, 1))
++		return 0;
++
+ 	for (i = ZS_SIZE_CLASSES - 1; i >= 0; i--) {
+ 		class = pool->size_class[i];
+ 		if (class->index != i)
+@@ -2281,6 +2291,7 @@ unsigned long zs_compact(struct zs_pool *pool)
+ 		pages_freed += __zs_compact(pool, class);
+ 	}
+ 	atomic_long_add(pages_freed, &pool->stats.pages_compacted);
++	atomic_set(&pool->compaction_in_progress, 0);
  
- 	cfg->swap_gnd_mic = wcd938x_swap_gnd_mic;
+ 	return pages_freed;
+ }
+@@ -2388,6 +2399,7 @@ struct zs_pool *zs_create_pool(const char *name)
  
-@@ -4256,16 +4253,12 @@ static int wcd938x_populate_dt_data(struct wcd938x_priv *wcd938x, struct device
- 	wcd938x->supplies[3].supply = "vdd-mic-bias";
+ 	init_deferred_free(pool);
+ 	spin_lock_init(&pool->lock);
++	atomic_set(&pool->compaction_in_progress, 0);
  
- 	ret = regulator_bulk_get(dev, WCD938X_MAX_SUPPLY, wcd938x->supplies);
--	if (ret) {
--		dev_err(dev, "Failed to get supplies: err = %d\n", ret);
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to get supplies\n");
- 
- 	ret = regulator_bulk_enable(WCD938X_MAX_SUPPLY, wcd938x->supplies);
--	if (ret) {
--		dev_err(dev, "Failed to enable supplies: err = %d\n", ret);
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to enable supplies\n");
- 
- 	wcd938x_dt_parse_micbias_info(dev, wcd938x);
- 
+ 	pool->name = kstrdup(name, GFP_KERNEL);
+ 	if (!pool->name)
 -- 
-2.34.1
+2.40.0.634.g4ca3ef3211-goog
 
