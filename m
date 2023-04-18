@@ -2,119 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A846E6E65E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0FD6E65DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231816AbjDRN3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 09:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
+        id S231547AbjDRN1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 09:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjDRN3U (ORCPT
+        with ESMTP id S231327AbjDRN1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 09:29:20 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABF81444C;
-        Tue, 18 Apr 2023 06:29:15 -0700 (PDT)
-Received: from localhost.localdomain ([172.16.0.254])
-        (user=d202180596@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33IDQtWh013039-33IDQtWi013039
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Tue, 18 Apr 2023 21:26:55 +0800
-From:   Shuai Jiang <d202180596@hust.edu.cn>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Ivan T. Ivanov" <iivanov@mm-sol.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Austin Christ <austinwc@codeaurora.org>,
-        Naveen Kaje <nkaje@codeaurora.org>,
-        Sricharan R <sricharan@codeaurora.org>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Shuai Jiang <d202180596@hust.edu.cn>,
-        Andy Gross <agross@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: qup: Add missing unwind goto in qup_i2c_probe()
-Date:   Tue, 18 Apr 2023 21:26:42 +0800
-Message-Id: <20230418132642.16668-1-d202180596@hust.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-FEAS-AUTH-USER: d202180596@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 18 Apr 2023 09:27:33 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C47714444;
+        Tue, 18 Apr 2023 06:27:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1681824453; x=1713360453;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=h3pmULgxsGgcQmyEbQYZ4K3bPzzzsFUw346+3srF8A0=;
+  b=NTIYGC8ZDg1Kmy8qRm/HQVl4xJDhdZvNm93sdZ/+ptj9gGEfKVUnucyA
+   x8dgBi+1yWJL7p0/++wNmVAbourbeS70MLgsn9upTjLB039esV7JmuYa9
+   sTVr4N4f7rymEG2Gp3hNZN3lYkooQUB0C8oy+NJaeD0CCouDq+4iIygaC
+   wHvcoF89jmhARgloGB9vcnvqOaqHI0lNab9ilLAt93kwjlAGBgHVOcMcZ
+   usk7pz1J/5XRqFBATtgSq/p8Vx9Cvy6nbekXOvBlWWa7ftA+uV29Mnnyp
+   2UPPzDP9uRHpJOlM8cKPUHKIyLQMwpS7CpNk2SYW4fXxv3ILMcflJDmNK
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,207,1677567600"; 
+   d="asc'?scan'208";a="207069346"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Apr 2023 06:27:31 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 18 Apr 2023 06:27:27 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 18 Apr 2023 06:27:25 -0700
+Date:   Tue, 18 Apr 2023 14:27:09 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     Thierry Reding <thierry.reding@gmail.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v16 1/2] pwm: add microchip soft ip corePWM driver
+Message-ID: <20230418-octagon-epilepsy-4d8516f91145@wendy>
+References: <20230411-wizard-cautious-3c048db6b4d2@wendy>
+ <20230411-bronzing-crust-d302408a1259@wendy>
+ <20230411105547.ypkktubgfx4jfen3@pengutronix.de>
+ <20230411-ligament-wagon-6c8cacb966e8@wendy>
+ <20230411162554.4tl2z2tcbfg5hb7e@pengutronix.de>
+ <20230418-armhole-cartwheel-cee37778a840@wendy>
+ <20230418130837.zfueixeuxrallhtc@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="FFx3KsBRxu5dYLgW"
+Content-Disposition: inline
+In-Reply-To: <20230418130837.zfueixeuxrallhtc@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch Warns:
-	drivers/i2c/busses/i2c-qup.c:1784 qup_i2c_probe()
-	warn: missing unwind goto?
+--FFx3KsBRxu5dYLgW
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The goto label "fail_runtime" and "fail" will disable qup->pclk, 
-but here qup->pclk failed to obtain, in order to be consistent, 
-change the direct return to goto label "fail_dma".
+On Tue, Apr 18, 2023 at 03:08:37PM +0200, Uwe Kleine-K=C3=B6nig wrote:
+> On Tue, Apr 18, 2023 at 12:27:33PM +0100, Conor Dooley wrote:
+> > On Tue, Apr 11, 2023 at 06:25:54PM +0200, Uwe Kleine-K=C3=B6nig wrote:
 
-Fixes: 10c5a8425968 ("i2c: qup: New bus driver for the Qualcomm QUP I2C controller")
-Fixes: 515da746983b ("i2c: qup: add ACPI support")
-Signed-off-by: Shuai Jiang <d202180596@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-The issue is found by static analysis and remains untested.
----
- drivers/i2c/busses/i2c-qup.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-qup.c b/drivers/i2c/busses/i2c-qup.c
-index 2e153f2f71b6..78682388e02e 100644
---- a/drivers/i2c/busses/i2c-qup.c
-+++ b/drivers/i2c/busses/i2c-qup.c
-@@ -1752,16 +1752,21 @@ static int qup_i2c_probe(struct platform_device *pdev)
- 	if (!clk_freq || clk_freq > I2C_MAX_FAST_MODE_PLUS_FREQ) {
- 		dev_err(qup->dev, "clock frequency not supported %d\n",
- 			clk_freq);
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto fail_dma;
- 	}
- 
- 	qup->base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(qup->base))
--		return PTR_ERR(qup->base);
-+	if (IS_ERR(qup->base)) {
-+		ret = PTR_ERR(qup->base);
-+		goto fail_dma;
-+	}
- 
- 	qup->irq = platform_get_irq(pdev, 0);
--	if (qup->irq < 0)
--		return qup->irq;
-+	if (qup->irq < 0) {
-+		ret = qup->irq;
-+		goto fail_dma;
-+	}
- 
- 	if (has_acpi_companion(qup->dev)) {
- 		ret = device_property_read_u32(qup->dev,
-@@ -1775,13 +1780,15 @@ static int qup_i2c_probe(struct platform_device *pdev)
- 		qup->clk = devm_clk_get(qup->dev, "core");
- 		if (IS_ERR(qup->clk)) {
- 			dev_err(qup->dev, "Could not get core clock\n");
--			return PTR_ERR(qup->clk);
-+			ret = PTR_ERR(qup->clk);
-+			goto fail_dma;
- 		}
- 
- 		qup->pclk = devm_clk_get(qup->dev, "iface");
- 		if (IS_ERR(qup->pclk)) {
- 			dev_err(qup->dev, "Could not get iface clock\n");
--			return PTR_ERR(qup->pclk);
-+			ret = PTR_ERR(qup->pclk);
-+			goto fail_dma;
- 		}
- 		qup_i2c_enable_clocks(qup);
- 		src_clk_freq = clk_get_rate(qup->clk);
--- 
-2.25.1
+> I don't understand what you wanna say here. If tmp =3D 256 my suggestion
+> is to pick prescale =3D 0 and period_steps =3D 254. Then
+>=20
+> 	 (prescale + 1) * (period_steps + 1) =E2=89=A4 tmp
+>=20
+> and period_steps is big enough to ensure a a finegrained choice for the
+> duty_cycle.
+>=20
+> > That's then gonna give us one of the broken configurations from the
+> > limitations.
+> >=20
+> > tmp =3D 257
+> >=20
+> > *prescale =3D 257 // (254 + 1) - 1
+> >           =E2=89=88 0
+> >=20
+> > *prescale =3D 257 // (prescale + 1) - 1
+> >           =3D 257 / (0 + 1) - 1
+> > 	  =3D 256
+> > 	  =3D 0 (registers are 8-bit)
+>=20
+> I think you mean s/prescale/period_steps/ in the second part, but that's
+> not what I meant. I meant to suggest:
 
+I did, yeah!
+
+> 	*prescale =3D tmp / (MCHPCOREPWM_PERIOD_STEPS_MAX + 1) - 1
+> 	period_steps =3D MCHPCOREPWM_PERIOD_STEPS_MAX =3D 254
+>=20
+> > I'm quite obviously missing something that you may think is obvious
+> > here, but is not immediately clear to me.
+>=20
+> That would be an explanation, yes. :-)
+
+Right, it makes a lot more sense now. Definitely was not clear to me
+that that was what you were suggesting.
+I'm not sure that disallowing tmp < 255 is something I want to do
+though, as this is mainly used as a "soft" IP core in the FPGA fabric,
+the clock provided to it may not be particularly high.
+Probably not the end of the world though, once added to the limitations.
+
+The implemented period is also going to be quite a ways off with this
+method (compared to the method I have been using until now) - although
+it is of course far simpler.
+You're the PWM expert and are suggesting it, so maybe I should just shut
+up and go do it...
+
+--FFx3KsBRxu5dYLgW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZD6arQAKCRB4tDGHoIJi
+0jl7AP9Ls13dfGN0ABcy+W/U0p3z6cT9QynfIh7jhcaBycLNvwEAsdfE/cj9Szpd
+Tt229kUYqmnCZQVkwDtsIEp56dGU6g4=
+=olu/
+-----END PGP SIGNATURE-----
+
+--FFx3KsBRxu5dYLgW--
