@@ -2,103 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A49C6E5596
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 02:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 591EB6E559C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 02:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbjDRAIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 20:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        id S230364AbjDRAIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 20:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjDRAIP (ORCPT
+        with ESMTP id S229951AbjDRAIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 20:08:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241ED2D50;
-        Mon, 17 Apr 2023 17:08:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B52C0624BA;
-        Tue, 18 Apr 2023 00:08:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4C6C433EF;
-        Tue, 18 Apr 2023 00:08:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681776494;
-        bh=Yb0irSBXw7t2Gz7uoAYA8W4twG36M0KbteVS8Ot9JOs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KlF3IPnltglebQejcAINn7CSFumTAN+uisU/H+Bbs0gW17oebxb0pU1sU9gNzm596
-         coAoF+pB2346rN0wcSHNsTT1iLUjv5a+p3WBH6rN5RiHaoTb76YWD6bOxsGF8VeG9j
-         6x4JweJ4m2tIEKO6jqzszRPAv2c62s7A2eWte5nLoppkfmQejBtezaBG2K2nr4JbgR
-         j0lZc0HMN77xyKsElGgYT1/rJwzMk6n8WANIt4jyZfQ6JlbvL+yMsitZZHBbHpi5Tl
-         oFOThGjyczHD41tg0Nocp1cus+paF+r1mIDiAuRHk2ryi5owPuC/IbP5+ZVY9gWX/Y
-         7Mdh1GYRuGHMQ==
-Date:   Mon, 17 Apr 2023 17:08:13 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     dchinner@redhat.com, linux-xfs@vger.kernel.org,
+        Mon, 17 Apr 2023 20:08:41 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8735040EF;
+        Mon, 17 Apr 2023 17:08:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=FEdUc157Sz3I3x+pFwkIqG3LmyaJdiYFvCux+cUd77A=; b=IpXULwBQadAZY+XGAms0Ci/8Oa
+        Wl4aCWzghCYP6o4XAG6R5pizk2y828NnegHqj+XPwaQju0mwlPPa4dHOtXS+y3SUviDPiJ5shs0Du
+        7Md6LnDxilJiSuHWsJSKQCs0BKpwksEWg54QUXsXo+PwXsdmb9yrZ4nOJ6qDtESiYSTI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1poYtL-00AY7v-Iv; Tue, 18 Apr 2023 02:08:15 +0200
+Date:   Tue, 18 Apr 2023 02:08:15 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Shmuel Hazan <shmuel.h@siklu.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Marcin Wojtas <mw@semihalf.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        horatiu.vultur@microchip.com, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] xfs: scrub: remove duplicate include headers
-Message-ID: <20230418000813.GB360889@frogsfrogsfrogs>
-References: <202304171613075788124@zte.com.cn>
+Subject: Re: [PATCH 1/3] net: mvpp2: tai: add refcount for ptp worker
+Message-ID: <2315ea01-650b-4eb0-afc9-f3f9880c0736@lunn.ch>
+References: <20230417160151.1617256-1-shmuel.h@siklu.com>
+ <20230417160151.1617256-2-shmuel.h@siklu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202304171613075788124@zte.com.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230417160151.1617256-2-shmuel.h@siklu.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 04:13:07PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+On Mon, Apr 17, 2023 at 07:01:49PM +0300, Shmuel Hazan wrote:
+> In some configurations, a single TAI can be responsible for multiple
+> mvpp2 interfaces. However, the mvpp2 driver will call mvpp22_tai_stop
+> and mvpp22_tai_start per interface RX timestamp disable/enable.
 > 
-> xfs_trans_resv.h and xfs_mount.h are included more than once.
+> As a result, disabling timestamping for one interface would stop the
+> worker and corrupt the other interface's RX timestamps.
 > 
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
-> ---
->  fs/xfs/scrub/health.c   | 2 --
->  fs/xfs/scrub/refcount.c | 2 --
->  2 files changed, 4 deletions(-)
-> 
-> diff --git a/fs/xfs/scrub/health.c b/fs/xfs/scrub/health.c
-> index d2b2a1cb6533..66e99b0f6049 100644
-> --- a/fs/xfs/scrub/health.c
-> +++ b/fs/xfs/scrub/health.c
-> @@ -7,8 +7,6 @@
->  #include "xfs_fs.h"
->  #include "xfs_shared.h"
->  #include "xfs_format.h"
-> -#include "xfs_trans_resv.h"
-> -#include "xfs_mount.h"
->  #include "xfs_btree.h"
->  #include "xfs_trans_resv.h"
->  #include "xfs_mount.h"
+> This commit solves the issue by introducing a simpler ref count for each
+> TAI instance.
 
-The convention (AFAICT) for include order is xfs_trans_resv -> xfs_mount
--> xfs_btree.h...
+This is version 2, so you should add that to the subject line.  You
+should also indicate what changed since the previous version.
 
-> diff --git a/fs/xfs/scrub/refcount.c b/fs/xfs/scrub/refcount.c
-> index ed5eb367ce49..04d216261f36 100644
-> --- a/fs/xfs/scrub/refcount.c
-> +++ b/fs/xfs/scrub/refcount.c
+Please read https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
 
-Please check the list before sending duplicate diffs.
+You have added Fixes: tags, so you think this is a fix for stable? You
+then should indicate this on the Subject line.
+ 
+> Fixes: ce3497e2072e ("net: mvpp2: ptp: add support for receive timestamping")
+> Signed-off-by: Shmuel Hazan <shmuel.h@siklu.com>
 
---D
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-> @@ -7,8 +7,6 @@
->  #include "xfs_fs.h"
->  #include "xfs_shared.h"
->  #include "xfs_format.h"
-> -#include "xfs_trans_resv.h"
-> -#include "xfs_mount.h"
->  #include "xfs_btree.h"
->  #include "xfs_rmap.h"
->  #include "xfs_refcount.h"
-> -- 
-> 2.25.1
+    Andrew
