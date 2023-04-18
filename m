@@ -2,140 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE096E59FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A79E6E5A00
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjDRG6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 02:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        id S230481AbjDRHC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 03:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjDRG6h (ORCPT
+        with ESMTP id S229824AbjDRHC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 02:58:37 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA38FCD;
-        Mon, 17 Apr 2023 23:58:35 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681801114;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7JrvTFx0WVeMY9cJy762Xh8k6ZgcD547tgSMeBaRvfE=;
-        b=Et6llJLqBk0yfoU12mOHK72SfYQgEWu+q48gtjbOp01/oW1pWwNWzYkMj3rsubBi7GEzq5
-        mPT5IZDLQl4QKMdJBFAIqKyeL5/EHZMZmHN21initZgWfHDK9dVyf4svi0aLfhUnyeDqQK
-        I3vYRVmGWdTJWrOGtNsTNLH4myxFa9B/Cic2FVRJKblYIYu57zyU8GZBAWAfanD+weXHiR
-        ms33Y/xbIFrXQYi8r9H5uTRDm8lfMric1/URavwJ7tQwqLrW0R7pwMbi7rSmGj07t3TRXL
-        qWncTgcrXxLCvAZcnDKbYXnQQ7HAmFlnUm/wlHJLSqR024Ajk5DxDVTQi7RWeg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681801114;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7JrvTFx0WVeMY9cJy762Xh8k6ZgcD547tgSMeBaRvfE=;
-        b=2IDo3vCdzNc6EWeefm49U4euIaA6bLjlIhlJmFMjsR5vvqBpGyDNOwFnUfvXHrOiAPFmV7
-        jCwlVmV4XYpFQwCw==
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>
-Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-In-Reply-To: <bd5a6a93-def1-9248-2258-c3d3b40071ef@molgen.mpg.de>
-References: <20230414225551.858160935@linutronix.de>
- <8247ce4d-15b7-03b2-0c9b-74f8cd6cad50@molgen.mpg.de> <87wn2a4la5.ffs@tglx>
- <bd5a6a93-def1-9248-2258-c3d3b40071ef@molgen.mpg.de>
-Date:   Tue, 18 Apr 2023 08:58:32 +0200
-Message-ID: <87ttxd4qxz.ffs@tglx>
+        Tue, 18 Apr 2023 03:02:26 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE88E6D;
+        Tue, 18 Apr 2023 00:02:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681801345; x=1713337345;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XDMMYnwrW9rxbRKHePPmZPoLDgMsc+ClYkDz3avdfdY=;
+  b=VH/lGvezwBFJa1KmVq573W0CCtrV7gagM6PYlPvFmUSN3rapbqxoEjRx
+   AbLkLLUwIPeFH0Rjsmjkw5jcy3G4XgZpzwM5Ai8p6Xlg9I6V/AwjEDFBD
+   gYcI67i9CUp/HOvlLXmE7zFpiwxdxs4BVtFxdf4T1rHTdG2Zr+EiiXz2H
+   l/UQUyJQCl4mc2AFAGKtFrzoB6f0vQ+HD1/Il3sbbr3mCdTFs1GrW5reu
+   dDHmlB1j72UCFvebKg61mX3cVYEz+u2jVygAfHt75mCpsVsWyDfeQB336
+   Bvj0C1g1ZUkkrgwH513qz0osw9gm77EUBRBv5jMuD7MHKIn4LuWVZKdKq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="407991347"
+X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
+   d="scan'208";a="407991347"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 00:02:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="690976864"
+X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
+   d="scan'208";a="690976864"
+Received: from ubuntu.bj.intel.com ([10.238.155.108])
+  by orsmga002.jf.intel.com with ESMTP; 18 Apr 2023 00:02:22 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     urezki@gmail.com, paulmck@kernel.org, frederic@kernel.org,
+        joel@joelfernandes.org, qiang1.zhang@intel.com
+Cc:     qiang.zhang1211@gmail.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] rcu/kvfree: Make drain_page_cache() call return directly if cache is disabled
+Date:   Tue, 18 Apr 2023 15:02:59 +0800
+Message-Id: <20230418070259.1353785-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paul!
+If the rcu_min_cached_objs is set to zero at boot params, the
+krcp->page_cache_work will not be triggered to fill page cache,
+and the put_cached_bnode() also does not fill page cache, this
+also means the krcp->bkvcache is always empty, so not need to
+acquire unnecessary krcp->lock to get page from krcp->bkvcache,
+this commit therefore make drain_page_cache() return directly if
+the rcu_min_cached_objs is zero.
 
-On Mon, Apr 17 2023 at 19:40, Paul Menzel wrote:
-> Am 17.04.23 um 16:48 schrieb Thomas Gleixner:
->
->> On Mon, Apr 17 2023 at 13:19, Paul Menzel wrote:
->>> Am 15.04.23 um 01:44 schrieb Thomas Gleixner:
->>> [    0.258193] smpboot: CPU0: AMD A6-6400K APU with Radeon(tm) HD
->>> Graphics (family: 0x15, model: 0x13, stepping: 0x1)
->>> [=E2=80=A6]
->>> [    0.259329] smp: Bringing up secondary CPUs ...
->>> [    0.259527] x86: Booting SMP configuration:
->>> [    0.259528] .... node  #0, CPUs:      #1
->>> [    0.261007] After schedule_preempt_disabled
->>> [   10.260990] CPU1 failed to report alive state
->>=20
->> Weird. CPU1 fails to come up and report that it has reached the
->> synchronization point.
->>=20
->> Does it work when you add cpuhp.parallel=3Doff on the kernel command lin=
-e?
->
-> Yes, the ten seconds delay is gone with `cpuhp.parallel=3Doff`.
->
-> There was a patch set in the past, that worked on that device. I think=20
-> up to v4 it did *not* work at all and hung [1]. I need some days to=20
-> collect the results again.
-
-Can you please apply the patch below on top of the pile remove the
-command line option again?
-
-Thanks,
-
-
-        tglx
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 ---
- kernel/cpu.c |    1 +
- 1 file changed, 1 insertion(+)
+ kernel/rcu/tree.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1777,6 +1777,7 @@ static void __init cpuhp_bringup_mask(co
- 			 */
- 			WARN_ON(cpuhp_invoke_callback_range(false, cpu, st, CPUHP_OFFLINE));
- 		}
-+		msleep(20);
- 	}
- }
-=20
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index c8ba2be026fa..ce995fc1c644 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -2924,6 +2924,9 @@ drain_page_cache(struct kfree_rcu_cpu *krcp)
+ 	struct llist_node *page_list, *pos, *n;
+ 	int freed = 0;
+ 
++	if (rcu_min_cached_objs)
++		return 0;
++
+ 	raw_spin_lock_irqsave(&krcp->lock, flags);
+ 	page_list = llist_del_all(&krcp->bkvcache);
+ 	WRITE_ONCE(krcp->nr_bkv_objs, 0);
+-- 
+2.32.0
+
