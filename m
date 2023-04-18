@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30916E685B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 311376E6860
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbjDRPgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 11:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
+        id S231478AbjDRPgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 11:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbjDRPgE (ORCPT
+        with ESMTP id S231367AbjDRPgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:36:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1873314440;
-        Tue, 18 Apr 2023 08:35:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98FB662EA0;
-        Tue, 18 Apr 2023 15:34:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 775E4C433D2;
-        Tue, 18 Apr 2023 15:34:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681832079;
-        bh=0qFKzUehbJ2vWu8bH2o2ePqZ/8AeK7d2HGLZjQsJIGg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=syMEZX6Z3GN6cpyq3Bz785LlFF+rS9iBRAeM7KS6cF+hUm5Egl1tKOV7lexf/qfsx
-         /RpsIrjWFSDFCDk8vpYs1zqHDOrkKmvOUPRGGjbZei34As9J7nAv+e1M85juV5hVNI
-         QiJB/nYRzYE6lnB3sj+oxsD/6F7rPAhDiPlXfMTQ=
-Date:   Tue, 18 Apr 2023 17:34:36 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Subject: Re: [PATCH 5.10 000/124] 5.10.178-rc1 review
-Message-ID: <2023041819-canyon-unarmored-38c6@gregkh>
-References: <20230418120309.539243408@linuxfoundation.org>
- <CA+G9fYsA+CzsxVYgQEN3c2pOV6F+1EOqY1vQrhj8yt1t-EYs7g@mail.gmail.com>
+        Tue, 18 Apr 2023 11:36:33 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC2946BA;
+        Tue, 18 Apr 2023 08:36:10 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id n43-20020a05600c502b00b003f17466a9c1so58422wmr.2;
+        Tue, 18 Apr 2023 08:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681832169; x=1684424169;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LkJVegcK4RPCubdgAGwJFimoe2y53+6saI3D05sGsLI=;
+        b=H+69oanFfCKcrI2xj4bC576D35a2NUqQk8XzSkv2ciEMm4d1bBj9fR5+fHThPQpfC6
+         +y6DbXC3zQAcFQcFpjL8V76kPv2aiTyyUrh5RlG0UHPBnHQ11hY6Kgy7SfkPJGMK9dB5
+         09z5BEFDpc5Mxq1FY6OFaxZKXquZlG3aQN1RLvwK3hLrwcadA697EDBPYs8PUOxL5exj
+         eiJu5eSEUPfI69PyD/wsYu3Adjy9jdbDN4wmODLYe1QdaKArJ/MEC5plIs9o74rzb5wX
+         Ehw6LGlXsY2F54ZTsgw7yid215g5GgoFq2w1TqqSa/WHC/SqjiNus3RELSzXpoVWT7dS
+         4rdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681832169; x=1684424169;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LkJVegcK4RPCubdgAGwJFimoe2y53+6saI3D05sGsLI=;
+        b=f9/rW7iQtByPhp6xL4zijHiHSmY+6U02cG0U/QVo+yOChmDI7V146JU1OU57sQ8Dxw
+         ubC/MdbfPLdRHKXyAQBA/lcKaMKaRAuQFcAb+Vw7BDsQkLziDKWvpV+IXGezYCr9SSEV
+         lrlXNl6vLu40NgZjcrdc0BE0QndzcHmpOvFN+hj+F6NB3/QCYT5J2CI4kbBYVh/HvEkL
+         iafWtE2FBc61YT7fzsFUGbHeB8bsXIBGV7VL7QhHqEsPAyH2jmDeEt7t5GD3EH53/7rh
+         mH5tIwbMxlf7/aXRGnVrxKpVPtXqCuzptiItOCuK07pCohpdSsC+6l5/Bfi+lUIbubDa
+         rvyQ==
+X-Gm-Message-State: AAQBX9el3pZxmILPjmpJlW4RRtE/evI2d+hVXbPaD45IbuEYEPHaw/UX
+        smZJy8mJP2MyX3oe4i+cBW8Wd949cYunRA==
+X-Google-Smtp-Source: AKy350ZVp3fSqaY94ZPunCrFUD3kVEZ6PAQGitpq8zuWnC2Mb9fhEsm7VFomjBqsoPCs2KmOqCKj6Q==
+X-Received: by 2002:a7b:c44a:0:b0:3eb:42fc:fb30 with SMTP id l10-20020a7bc44a000000b003eb42fcfb30mr14538454wmi.32.1681832168560;
+        Tue, 18 Apr 2023 08:36:08 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id d16-20020a5d6dd0000000b002d6f285c0a2sm13385333wrz.42.2023.04.18.08.36.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 08:36:07 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Anton Altaparmakov <anton@tuxera.com>,
+        linux-ntfs-dev@lists.sourceforge.net
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ntfs: remove redundant initialization to pointer cb_sb_start
+Date:   Tue, 18 Apr 2023 16:36:07 +0100
+Message-Id: <20230418153607.3125704-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYsA+CzsxVYgQEN3c2pOV6F+1EOqY1vQrhj8yt1t-EYs7g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,46 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 08:38:47PM +0530, Naresh Kamboju wrote:
-> On Tue, 18 Apr 2023 at 18:03, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 5.10.178 release.
-> > There are 124 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.178-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> Following build errors noticed on 5.15 and 5.10.,
-> 
-> 
-> > Waiman Long <longman@redhat.com>
-> >     cgroup/cpuset: Change references of cpuset_mutex to cpuset_rwsem
->
+The pointer cb_sb_start is being initialized with a value that is never
+read, it is being re-assigned the same value later on when it is first
+being used. The initialization is redundant and can be removed.
 
-That's a documentation patch, it can not:
+Cleans up clang scan build warning:
+fs/ntfs/compress.c:164:6: warning: Value stored to 'cb_sb_start' during its initialization is never read [deadcode.DeadStores]
+        u8 *cb_sb_start = cb;   /* Beginning of the current sb in the cb. */
 
-> kernel/cgroup/cpuset.c: In function 'cpuset_can_fork':
-> kernel/cgroup/cpuset.c:2941:30: error: 'cgroup_mutex' undeclared
-> (first use in this function); did you mean 'cgroup_put'?
->  2941 |         lockdep_assert_held(&cgroup_mutex);
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/ntfs/compress.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cause this.
+diff --git a/fs/ntfs/compress.c b/fs/ntfs/compress.c
+index f9cb180b6f6b..761aaa0195d6 100644
+--- a/fs/ntfs/compress.c
++++ b/fs/ntfs/compress.c
+@@ -161,7 +161,7 @@ static int ntfs_decompress(struct page *dest_pages[], int completed_pages[],
+ 	 */
+ 	u8 *cb_end = cb_start + cb_size; /* End of cb. */
+ 	u8 *cb = cb_start;	/* Current position in cb. */
+-	u8 *cb_sb_start = cb;	/* Beginning of the current sb in the cb. */
++	u8 *cb_sb_start;	/* Beginning of the current sb in the cb. */
+ 	u8 *cb_sb_end;		/* End of current sb / beginning of next sb. */
+ 
+ 	/* Variables for uncompressed data / destination. */
+-- 
+2.30.2
 
-What arch is failing here?  This builds for x86.
-
-thanks,
-
-greg k-h
