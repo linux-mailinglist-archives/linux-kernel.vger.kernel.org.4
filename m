@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2326E6081
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A796E6084
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjDRL56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 07:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S231642AbjDRL6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 07:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjDRLzv (ORCPT
+        with ESMTP id S231485AbjDRLz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 07:55:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23729742;
-        Tue, 18 Apr 2023 04:54:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 18 Apr 2023 07:55:56 -0400
+Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4419EC9;
+        Tue, 18 Apr 2023 04:54:12 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by sonata.ens-lyon.org (Postfix) with ESMTP id C075C2014A;
+        Tue, 18 Apr 2023 13:54:10 +0200 (CEST)
+Received: from sonata.ens-lyon.org ([127.0.0.1])
+        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id AVlKHqG3c8RX; Tue, 18 Apr 2023 13:54:10 +0200 (CEST)
+Received: from begin.home (apoitiers-658-1-118-253.w92-162.abo.wanadoo.fr [92.162.65.253])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AFDA625F0;
-        Tue, 18 Apr 2023 11:54:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F21D8C433A1;
-        Tue, 18 Apr 2023 11:54:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681818846;
-        bh=AXG/C2BTZBum1dQyk9xGMcX+JvRAly8xQcU58qub2TY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=YWm19zFa301nIsz39oDFn59dpZkUCH2MAVqlW5HDdaX1rAdGSRB1o1hw8xpyfUcxk
-         X9anxNHN9gXA711KO6QVbkC9vMQMmrEWLPfg0SpYzrhLQpuxuk8Bg+/XgY+V8O/PDX
-         3PAGR0NoOWjjFH4zYUdlavCcVT0IVvyXbuj4WOZMM4X7384z7GeQjLXcfkDp5IVA0v
-         cL5b7JyDHDBPPv7XW4tJDJsijvZAtKItqU2bI2OzA69vUdtHjcmS/I5PoG/PEXLzgf
-         lwtKNF5/+RRFRs4mUP+TEyi5xupeCBi1Zz4Y9Z65SKbw4disf506aJnBYryW1r3JVR
-         YgXncspNH3AwA==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Aleksandr Nogikh <nogikh@google.com>, pulehui@huawei.com,
-        bpf@vger.kernel.org
-Cc:     linux-riscv@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: Re: arch/riscv/net/bpf_jit_comp64.c build error
-In-Reply-To: <CANp29Y6YqPbE9Y3iQEaTwD_YAQBvsxxRE=0COVYy=gBP-USvkg@mail.gmail.com>
-References: <CANp29Y6YqPbE9Y3iQEaTwD_YAQBvsxxRE=0COVYy=gBP-USvkg@mail.gmail.com>
-Date:   Tue, 18 Apr 2023 13:54:03 +0200
-Message-ID: <871qkh9zj8.fsf@all.your.base.are.belong.to.us>
+        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 6C9052013E;
+        Tue, 18 Apr 2023 13:54:10 +0200 (CEST)
+Received: from samy by begin.home with local (Exim 4.96)
+        (envelope-from <samuel.thibault@ens-lyon.org>)
+        id 1pojuT-00Bypv-39;
+        Tue, 18 Apr 2023 13:54:09 +0200
+Date:   Tue, 18 Apr 2023 13:54:09 +0200
+From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     James Chapman <jchapman@katalix.com>, tparkin@katalix.com,
+        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwn.net, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PPPoL2TP: Add more code snippets
+Message-ID: <20230418115409.aqsqi6pa4s4nhwgs@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Guillaume Nault <gnault@redhat.com>,
+        James Chapman <jchapman@katalix.com>, tparkin@katalix.com,
+        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwn.net, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230416220704.xqk4q6uwjbujnqpv@begin>
+ <ZD5V+z+cBaXvPbQa@debian>
+ <20230418085323.h6xij7w6d2o4kxxi@begin>
+ <ZD5dqwPblo4FOex1@debian>
+ <20230418091148.hh3b52zceacduex6@begin>
+ <ZD5uU8Wrz4cTSwqP@debian>
+ <20230418103140.cps6csryl2xhrazz@begin>
+ <ZD5+MouUk8YFVOX3@debian>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZD5+MouUk8YFVOX3@debian>
+Organization: I am not organized
+User-Agent: NeoMutt/20170609 (1.8.3)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,39 +69,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aleksandr Nogikh <nogikh@google.com> writes:
+Guillaume Nault, le mar. 18 avril 2023 13:25:38 +0200, a ecrit:
+> As I said in my previous reply, a simple L2TP example that goes until PPP
+> channel and unit creation is fine. But any more advanced use of the PPP
+> API should be documented in the PPP documentation.
 
-> Hi Pu Lehui,
->
-> I'm writing to you regarding your following patch.
->
-> Author: Pu Lehui <pulehui@huawei.com>
-> Date:   Wed Feb 15 21:52:04 2023 +0800
->
->     riscv, bpf: Add bpf_arch_text_poke support for RV64
->
-> When trying to compile the "fixes" branch of the
-> "git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git" tree,
-> syzbot gets the following error:
->
-> arch/riscv/net/bpf_jit_comp64.c: In function 'bpf_arch_text_poke':
-> arch/riscv/net/bpf_jit_comp64.c:691:9: error: implicit declaration of
-> function 'patch_text'; did you mean 'path_get'?
-> [-Werror=3Dimplicit-function-declaration]
->   691 |   ret =3D patch_text(ip, new_insns, ninsns);
->       |         ^~~~~~~~~~
->       |         path_get
->
-> FWIW the compiler is riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1
-> 20210110, GNU ld (GNU Binutils for Debian) 2.35.2.
->
-> Could you please take a look?
+When it's really advanced, yes. But here it's just about tunnel
+bridging, which is a very common L2TP thing to do.
 
-Randy sent a fix for this [1], which went in via the BPF tree. Pull in
-commit 2d311f480b52 ("riscv, bpf: Fix patch_text implicit declaration").
+> I mean, these files document the API of their corresponding modules,
+> their scope should be limitted to that (the PPP and L2TP layers are
+> really different).
 
+I wouldn't call
 
-Bj=C3=B6rn
++        ret = ioctl(ppp_chan_fd, PPPIOCBRIDGECHAN, &chindx2);
++        close(ppp_chan_fd);
++        if (ret < 0)
++                return -errno;
 
-[1] https://lore.kernel.org/linux-riscv/20230227072016.14618-1-rdunlap@infr=
-adead.org/
+documentation...
+
+> That shouldn't preclude anyone from describing how to combine L2TP, PPP
+> and others to cover more advanced use cases. It's just better done in a
+> different file.
+
+A more complete example, yes. I don't plan on taking time to do it.
+
+Samuel
