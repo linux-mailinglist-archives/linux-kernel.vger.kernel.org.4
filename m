@@ -2,90 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3FD06E5D29
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964456E5D2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjDRJQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
+        id S230400AbjDRJR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjDRJQt (ORCPT
+        with ESMTP id S229655AbjDRJRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:16:49 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CAB4ED0;
-        Tue, 18 Apr 2023 02:16:48 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33I6uWt6020701;
-        Tue, 18 Apr 2023 09:16:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=qcppdkim1;
- bh=r73f9qKNQpo8uwsqv0DYvzXxN3vjBzWK0D2/T4vnD+A=;
- b=jiamxwjHAiq0Q5Nv/38NjIEG93ujyQuMs/26Jf2TIO+LDnjwwwi0aCU6dHnkMUd50VKF
- oYg7q1WiPgHPK4TVUluAUHC/Rdf3DYeU8ZRaNH6tzzC47jM2BspHXWiZTmbVcz8Rcx0J
- a8wC6qOZOpXtip/XupTvvvehWCiHliYY5bDrJ33UgM64iuOy+apsCgws7CtoSnJPSHGr
- UZHCdMJf7fuCdFoZOmsFf4UmIDNpbam/PD1okPEi+eIi82r1TRoM4qB3cEgWAsnbNNBC
- ku8a4lJ/+tN8bhbb8emDFsuKOFW3yyeElnB1RukeRjq0nR2OZOGvq0z1K+su0tp5xms9 9A== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1bvkseca-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 09:16:45 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33I9Ghb9003618
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 09:16:44 GMT
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 18 Apr 2023 02:16:43 -0700
-Received: from nalasex01b.na.qualcomm.com ([fe80::27dd:ab4b:a3c:3d0a]) by
- nalasex01b.na.qualcomm.com ([fe80::27dd:ab4b:a3c:3d0a%12]) with mapi id
- 15.02.0986.042; Tue, 18 Apr 2023 02:16:43 -0700
-From:   "Tim Jiang (QUIC)" <quic_tjiang@quicinc.com>
-To:     "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>
-CC:     "marcel@holtmann.org" <marcel@holtmann.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "Balakrishna Godavarthi (QUIC)" <quic_bgodavar@quicinc.com>,
-        "Hemant Gupta (QUIC)" <quic_hemantg@quicinc.com>,
-        "mka@chromium.org" <mka@chromium.org>
-Subject: RE: [PATCH v2] Bluetooth: btusb: Add WCN6855 devcoredump support
-Thread-Topic: [PATCH v2] Bluetooth: btusb: Add WCN6855 devcoredump support
-Thread-Index: AQHZbdNSzRZimAa7YESiLSr50VCixK8rwqCAgAMeQQCAAmHlgP//ixIggAB3BoD//4sm0A==
-Date:   Tue, 18 Apr 2023 09:16:43 +0000
-Message-ID: <11d65b0864b142ffb92255318ce70c45@quicinc.com>
-References: <20230413064344.18714-1-quic_tjiang@quicinc.com>
- <CAA8EJpoc4nn+Wr131-o=YQoDeL0t7aj9hC=8NNnJa3SeHwgJ-w@mail.gmail.com>
- <934c32ef9427464a9d0b898b843df6ab@quicinc.com>
- <CAA8EJpqz9o9CtAnXRE86kw-cfL=_d-c5BDAXwQLSJAyZRy_fEg@mail.gmail.com>
- <a908e04e9b7d4b97bc6b5ee3c713e71f@quicinc.com>
- <CAA8EJprztGdP0yqV=O6P2tn4i0+iQ4rfBVY2x-3_93o3C0c-Nw@mail.gmail.com>
-In-Reply-To: <CAA8EJprztGdP0yqV=O6P2tn4i0+iQ4rfBVY2x-3_93o3C0c-Nw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.45.109.133]
-Content-Type: text/plain; charset="utf-8"
+        Tue, 18 Apr 2023 05:17:24 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAD5D3C2A;
+        Tue, 18 Apr 2023 02:17:22 -0700 (PDT)
+Received: from u202112136$hust.edu.cn ( [10.21.196.175] ) by
+ ajax-webmail-app1 (Coremail) ; Tue, 18 Apr 2023 17:17:00 +0800 (GMT+08:00)
+X-Originating-IP: [10.21.196.175]
+Date:   Tue, 18 Apr 2023 17:17:00 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5p2O6Ziz?= <u202112136@hust.edu.cn>
+To:     "greg kroah-hartman" <gregkh@linuxfoundation.org>,
+        "felipe balbi" <balbi@kernel.org>,
+        "sergey shtylyov" <s.shtylyov@omp.ru>
+Cc:     "dongliang mu" <dzm91@hust.edu.cn>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        hust-os-kernel-patches@googlegroups.com
+Subject: Re: [PATCH] usb: phy: phy-tahvo: fix memory leak in
+ tahvo_usb_probe()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
+ Copyright (c) 2002-2023 www.mailtech.cn hust
+In-Reply-To: <20230418090758.18756-1-lidaxian@hust.edu.cn>
+References: <20230418090758.18756-1-lidaxian@hust.edu.cn>
 Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: WIFQ9xLVxJ4laRU546pZEKd2oQMXwkcA
-X-Proofpoint-ORIG-GUID: WIFQ9xLVxJ4laRU546pZEKd2oQMXwkcA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-18_05,2023-04-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 mlxlogscore=775 impostorscore=0 malwarescore=0 adultscore=0
- lowpriorityscore=0 bulkscore=0 suspectscore=0 clxscore=1015 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304180079
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Message-ID: <63953090.3ef41.18793a73009.Coremail.u202112136@hust.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID: FgEQrAB3xwgMYD5kSw33Ag--.40058W
+X-CM-SenderInfo: rxsqjiirsrjlo6kx23oohg3hdfq/1tbiAQoFE17Em5GXpQACs9
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,27 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgRG1pdHJ5Og0KDQo+ID4gT24gVGh1LCAxMyBBcHIgMjAyMyBhdCAwOTo0NCwgVGltIEppYW5n
-IDxxdWljX3RqaWFuZ0BxdWljaW5jLmNvbT4gd3JvdGU6DQo+ID4gPg0KPiA+ID4gV0NONjg1NSB3
-aWxsIHJlcG9ydCBtZW1kdW1wIHZpYSBBQ0wgZGF0YSBvciBIQ0kgZXZlbnQgd2hlbiBpdCBnZXQg
-DQo+ID4gPiBjcmFzaGVkLCBzbyB3ZSBjb2xsZWN0IG1lbWR1bXAgdG8gZGVidWcgZmlybXdhcmUu
-DQo+ID4NCj4gPiBJcyBpdCBhcHBsaWNhYmxlIG9ubHkgdG8gd2NuNjg1NSBvciB0byBzb21lIG9m
-IGVhcmxpZXIgY2hpcHMgdG9vPw0KPiA+ICBbVGltXSAgQWxzbyBhcHBsaWNhYmxlIHRvIGVhcmxp
-ZXIgY2hpcHMgLCBidXQgY3VycmVudGx5IGdvb2dsZSBvbmx5IA0KPiA+IHJlcXVpcmUgdXMgdG8g
-c3VwcG9ydCB3Y242ODU1DQo+DQo+IFNpbmNlIHVwc3RyZWFtIGlzIG5vdCBhIGdvb2dsZSBrZXJu
-ZWwsIHBsZWFzZSBlbmFibGUgdGhpcyBmZWF0dXJlIGZvciBhbGwgcmVsZXZhbnQgY2hpcHNldHMu
-DQo+IFtUaW1dIGFncmVlZCAsIGJ1dCB0aGUgdGl0bGUgb2YgdGhpcyBnZXJyaXQgdW5jaGFuZ2Vk
-LCAgSSByYWlzZSBhIG5ldyBnZXJyaXQgZm9yIG90aGVyIHJlbGV2YW50IGNoaXBzZXRzICwgaXMg
-T0s/DQoNClRoZXJlIGlzIG5vIGdlcnJpdCBoZXJlLg0KDQpBbHNvLCBpcyB0aGVyZSBhbnkgY2hh
-bmNlIHlvdSBjYW4gZml4IHlvdXIgZW1haWwgY2xpZW50IHRvIHN0b3AgcHV0dGluZyBvbGQgaGVh
-ZGVycyBhdCB0aGUgdG9wIG9mIHRoZSBlbWFpbD8NCltUaW1dIHNvcnJ5IGZvciBjb25mdXNpb24s
-IEkgbWVhbiBJIHdpbGwgcmFpc2UgYW5vdGhlciBuZXcgY2hhbmdlIGZvciBvdGhlciByZWxldmFu
-dCBjaGlwc2V0LCBpcyBPSyA/IA0KIGFuZCBJIHVzZSBvZmZpY2UgMzY1IHRvIHJlcGx5IHlvdXIg
-ZW1haWwgd2hpY2ggd2lsbCBhZGRpbmcgb2xkIGhlYWRlcnMgYXV0b21hdGljYWxseSAsIHVubGVz
-cyBJIGRlbGV0ZSB0aGUgb2xkIGhlYWRlcnMgbWFudWFsbHksIHRoYW5rIHlvdS4NCg0KPg0KPiA+
-DQo+ID4gPg0KPiA+ID4gU2lnbmVkLW9mZi1ieTogVGltIEppYW5nIDxxdWljX3RqaWFuZ0BxdWlj
-aW5jLmNvbT4NCj4gPiA+IC0tLQ0KPiA+ID4gIGRyaXZlcnMvYmx1ZXRvb3RoL2J0dXNiLmMgfCAy
-MjINCj4gPiA+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ID4gPiAg
-MSBmaWxlIGNoYW5nZWQsIDIyMiBpbnNlcnRpb25zKCspDQo+DQo+DQo+DQo+DQo+IC0tDQo+IFdp
-dGggYmVzdCB3aXNoZXMNCj4gRG1pdHJ5DQoNCg0KDQotLQ0KV2l0aCBiZXN0IHdpc2hlcw0KRG1p
-dHJ5DQo=
+CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiTGkgWWFuZyIgPGxpZGF4
+aWFuQGh1c3QuZWR1LmNuPgo+IFNlbnQgVGltZTogMjAyMy0wNC0xOCAxNzowNzo1NyAoVHVlc2Rh
+eSkKPiBUbzogIkdyZWcgS3JvYWgtSGFydG1hbiIgPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3Jn
+PiwgIkZlbGlwZSBCYWxiaSIgPGJhbGJpQGtlcm5lbC5vcmc+LCAiU2VyZ2V5IFNodHlseW92IiA8
+cy5zaHR5bHlvdkBvbXAucnU+Cj4gQ2M6ICJMaSBZYW5nIiA8bGlkYXhpYW5AaHVzdC5lZHUuY24+
+LCAiRG9uZ2xpYW5nIE11IiA8ZHptOTFAaHVzdC5lZHUuY24+LCBsaW51eC11c2JAdmdlci5rZXJu
+ZWwub3JnLCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnCj4gU3ViamVjdDogW1BBVENIXSB1
+c2I6IHBoeTogcGh5LXRhaHZvOiBmaXggbWVtb3J5IGxlYWsgaW4gdGFodm9fdXNiX3Byb2JlKCkK
+PiAKPiBTbWF0Y2ggcmVwb3J0czoKPiBkcml2ZXJzL3VzYi9waHkvcGh5LXRhaHZvLmM6IHRhaHZv
+X3VzYl9wcm9iZSgpCj4gd2FybjogbWlzc2luZyB1bndpbmQgZ290bz8KPiAKPiBBZnRlciBnZXRp
+bmcgaXJxLCBpZiByZXQgPCAwLCBpdCB3aWxsIHJldHVybiB3aXRob3V0IGVycm9yIGhhbmRsaW5n
+IHRvCj4gZnJlZSBtZW1vcnkuCj4gSnVzdCBhZGQgZXJyb3IgaGFuZGxpbmcgdG8gZml4IHRoaXMg
+cHJvYmxlbS4KPiAKPiBGaXhlczogMGQ0NWExMzczZTY2ICgidXNiOiBwaHk6IHRhaHZvOiBhZGQg
+SVJRIGNoZWNrIikKPiBTaWduZWQtb2ZmLWJ5OiBMaSBZYW5nIDxsaWRheGlhbkBodXN0LmVkdS5j
+bj4KPiBSZXZpZXdlZC1ieTogRG9uZ2xpYW5nIE11IDxkem05MUBodXN0LmVkdS5jbj4KPiAtLS0K
+PiBUaGUgaXNzdWUgaXMgZm91bmQgYnkgc3RhdGljIGFuYWx5c2lzLCBhbmQgdGhlIHBhdGNoIHJl
+bWFpbnMgdW50ZXN0Lgo+IC0tLQo+ICBkcml2ZXJzL3VzYi9waHkvcGh5LXRhaHZvLmMgfCA3ICsr
+KysrLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkK
+PiAKPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvcGh5L3BoeS10YWh2by5jIGIvZHJpdmVycy91
+c2IvcGh5L3BoeS10YWh2by5jCj4gaW5kZXggZjJkMmNjNTg2YzViLi4xODRhNWYzZDc0NzMgMTAw
+NjQ0Cj4gLS0tIGEvZHJpdmVycy91c2IvcGh5L3BoeS10YWh2by5jCj4gKysrIGIvZHJpdmVycy91
+c2IvcGh5L3BoeS10YWh2by5jCj4gQEAgLTM5MCw4ICszOTAsMTEgQEAgc3RhdGljIGludCB0YWh2
+b191c2JfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPiAgCWRldl9zZXRfZHJ2
+ZGF0YSgmcGRldi0+ZGV2LCB0dSk7Cj4gIAo+ICAJdHUtPmlycSA9IHJldCA9IHBsYXRmb3JtX2dl
+dF9pcnEocGRldiwgMCk7Cj4gLQlpZiAocmV0IDwgMCkKPiAtCQlyZXR1cm4gcmV0Owo+ICsJaWYg
+KHJldCA8IDApIHsKPiArCQlkZXZfZXJyKCZwZGV2LT5kZXYsICJjb3VsZCBub3QgZ2V0IGlycTog
+JWRcbiIsCj4gKwkJCQlyZXQpOwo+ICsJCWdvdG8gZXJyX3JlbW92ZV9waHk7Cj4gKwl9Cj4gIAly
+ZXQgPSByZXF1ZXN0X3RocmVhZGVkX2lycSh0dS0+aXJxLCBOVUxMLCB0YWh2b191c2JfdmJ1c19p
+bnRlcnJ1cHQsCj4gIAkJCQkgICBJUlFGX09ORVNIT1QsCj4gIAkJCQkgICAidGFodm8tdmJ1cyIs
+IHR1KTsKPiAtLSAKPiAyLjM0LjEKY2MgaHVzdC1vcy1rZXJuZWwtcGF0Y2hlc0Bnb29nbGVncm91
+cHMuY29t
