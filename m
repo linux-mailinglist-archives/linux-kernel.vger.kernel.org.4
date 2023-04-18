@@ -2,124 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58DC6E6DF7
+	by mail.lfdr.de (Postfix) with ESMTP id 609966E6DF6
 	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbjDRVUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
+        id S229818AbjDRVUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbjDRVUL (ORCPT
+        with ESMTP id S231171AbjDRVUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:20:11 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0834903B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:20:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3Km/vnh/sBC4DQYO69Q00ljyDReo/R1BeGSdOPULOKw=; b=1L14NJ+lXlSRxbmu5FayimPVss
-        bavZ6XsrainBIv/5bbMp3rBuUpTS3nQl+23Ul819ig5kO7uZAjLFcxDNOL0tNvLePvbwUuCG3pPTR
-        4b1IIK8sejumG/QXJ1HuwBqTUUV/NaxX/YGGbqDkbk0zRph/UfJ6IlC8kk9s4IZE5fTfrdlTponOK
-        qOX7dWJyeft5qvMgd1rlX2Npl/Y0nyX4gWgL2NZo56NopoNeGgdfOVJQzHFpwbx/dFYbYGuh+tp7Z
-        FbccCeJ2adPHUoMzGKF4bY/db598SuCcpN0MslTePYUdyT+VFw/8RbXQEQJiKsWikTVsJ89d/IDLS
-        h1pGV9KQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1posk5-003MpZ-21;
-        Tue, 18 Apr 2023 21:20:01 +0000
-Date:   Tue, 18 Apr 2023 14:20:01 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, brauner@kernel.org,
-        linux-mm@kvack.org, p.raghav@samsung.com, da.gomez@samsung.com,
-        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
-        keescook@chromium.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v2 5/6] shmem: update documentation
-Message-ID: <ZD8JgfphE+HWCGve@bombadil.infradead.org>
-References: <20230309230545.2930737-1-mcgrof@kernel.org>
- <20230309230545.2930737-6-mcgrof@kernel.org>
- <a4afef5c-27e4-5e67-9771-374132db61f8@google.com>
+        Tue, 18 Apr 2023 17:20:07 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31694486
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:20:05 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id DC9982C0533;
+        Wed, 19 Apr 2023 09:20:02 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1681852802;
+        bh=x3alwfNlBzfwbZU57e4dV0T0LMpuH29WAw4zSK/aQEs=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=VJ6+kckm30bjQHWv+Q0VSx9mID/fpv778oeUfJlMxUG/0CIfl014QFUvBmb3flN3x
+         azlZLBaaQ0ZN8XjU7IXDVLsi8qqUNtFNH8YYYodhXltYxxoQKByCKHBTnHrPQePJfp
+         ejKhJGSCNQakSYG76E90tHPtnJ11Wyi6vNvDanJoKHNaoYsS/vPcRdgu6xfB6zW1Di
+         M0uSq0E/iMBcZt2+T0WhXwJGUxa7FXKovpYvDx+m7llHEWMyh+Dqgpqui0mR5Ht2xk
+         SKzhyozPYa/R5irCAkrbJh5gIZ0VkPyzZrBBoArJBKJ0wcnhXFwMlzx7tB6hWKsgj/
+         T6tjr41Ijfsgw==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B643f09820001>; Wed, 19 Apr 2023 09:20:02 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.26; Wed, 19 Apr 2023 09:20:02 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
+ SMTP Server (TLS) id 15.0.1497.48; Wed, 19 Apr 2023 09:20:02 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.026; Wed, 19 Apr 2023 09:20:02 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     =?utf-8?B?TWFyaXVzeiBCaWHFgm/FhGN6eWs=?= <manio@skyboo.net>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: hwmon: (adt7475) Add support for inverting pwm output
+Thread-Topic: hwmon: (adt7475) Add support for inverting pwm output
+Thread-Index: AQHZceXWdXchU+yVXUm4m0tN5Sjguq8wv1sAgAAKwIA=
+Date:   Tue, 18 Apr 2023 21:20:02 +0000
+Message-ID: <52e26a67-9131-2dc0-40cb-db5c07370027@alliedtelesis.co.nz>
+References: <20230418110623.vk6kettnjondulri@skyboo.net>
+ <e398560f-f8d1-afbc-4aae-ab3cf2555e8e@alliedtelesis.co.nz>
+In-Reply-To: <e398560f-f8d1-afbc-4aae-ab3cf2555e8e@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.33.22.30]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A1C4F17850891D4B9F2E6621A96860AB@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a4afef5c-27e4-5e67-9771-374132db61f8@google.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=VfuJw2h9 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=dKHAf1wccvYA:10 a=rPQhiZsA37OnAWj8wpIA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 10:29:59PM -0700, Hugh Dickins wrote:
-> On Thu, 9 Mar 2023, Luis Chamberlain wrote:
-> 
-> > Update the docs to reflect a bit better why some folks prefer tmpfs
-> > over ramfs and clarify a bit more about the difference between brd
-> > ramdisks.
-> > 
-> > While at it, add THP docs for tmpfs, both the mount options and the
-> > sysfs file.
-> 
-> Okay: the original canonical reference for THP options on tmpfs has
-> been Documentation/admin-guide/mm/transhuge.rst.  You're right that
-> they would be helpful here too: IIRC (but I might well be confusing
-> with our Google tree) we used to have them documented in both places,
-> but grew tired of keeping the two in synch.  You're volunteering to
-> do so! so please check now that they tell the same story.
-
-Hehe. Sure, we should just make one point to the other. Which one should
-be the authoritive source?
-
-> But nowadays, "man 5 tmpfs" is much more important (and that might
-> give you a hint for what needs to be done after this series goes into
-> 6.4-rc - and I wonder if there are tmpfs manpage updates needed from
-> Christian for idmapped too? or already taken care of?).
-
-Sure, what's the man page git tree to use? I can do that once these
-documents are settled as well. I'll send fixes.
-
-> There's a little detail we do need you to remove, indicated below.
-> 
-> > +======  ============================================================
-> > +huge=0  never: disables huge pages for the mount
-> > +huge=1  always: enables huge pages for the mount
-> > +huge=2  within_size: only allocate huge pages if the page will be
-> > +        fully within i_size, also respect fadvise()/madvise() hints.
-> > +huge=3  advise: only allocate huge pages if requested with
-> > +        fadvise()/madvise()
-> 
-> You're taking the source too literally there.  Minor point is that there
-> is no fadvise() for this, to date anyway.  Major point is: have you tried
-> mounting tmpfs with huge=0 etc?  I did propose "huge=0" and "huge=1" years
-> ago, but those "never" went in, it's "always" been the named options.
-> Please remove those misleading numbers, it's "huge=never" etc.
-
-Will do.
-
-> > +==  ============================================================
-> > +-1  deny: disables huge on shm_mnt and all mounts, for
-> > +    emergency use
-> > +-2  force: enables huge on shm_mnt and all mounts, w/o needing
-> > +    option, for testing
-> 
-> Likewise here, please delete the invalid "-1" and "-2" notations,
-> -1 and -2 are just #defines for use in the kernel source.
-
-ok!
-
-> And the description above is not quite accurate: it is very hard to
-> describe shmem_enabled, partly because it combines two different things.
-> It's partly the "huge=" mount option for any "internal mount", those
-> things like SysV SHM and memfd and i915 and shared-anonymous: the shmem
-> which has no user-visible mount to hold the option.  But also these
-> "deny" and "force" overrides affecting *all* internal and visible mounts.
-
-I see thanks.
-
-  Luis
+DQpPbiAxOS8wNC8yMyAwODo0MSwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4gSGkgTWFyaXVzLA0K
+Pg0KPiArY2MgbGludXgtaHdtb24sIGxrbWwNCj4NCj4gT24gMTgvMDQvMjMgMjM6MDYsIE1hcml1
+c3ogQmlhxYJvxYRjenlrIHdyb3RlOg0KPj4gSGkgQ2hyaXMsDQo+PiBJIGRpc2NvdmVyZWQgYnkg
+YWNjaWRlbnQgdGhhdCBteSBkbWVzZyBpcyB0ZWxsaW5nIG1lOg0KPj4gW01vbiBBcHIgMTcgMTk6
+MDg6NTkgMjAyM10gYWR0NzQ3NSAxOS0wMDJlOiBFcnJvciBjb25maWd1cmluZyBwd20gDQo+PiBw
+b2xhcml0eQ0KPj4gW01vbiBBcHIgMTcgMTk6MDg6NTkgMjAyM10gYWR0NzQ3NSAxOS0wMDJlOiBB
+RFQ3NDczIGRldmljZSwgcmV2aXNpb24gMQ0KPj4NCj4+IG1vdGhlcmJvYXJkOg0KPj4gRE1JOiBT
+eXN0ZW0gbWFudWZhY3R1cmVyIFN5c3RlbSBQcm9kdWN0IE5hbWUvTTRBNzg1VEQtViBFVk8sIEJJ
+T1MgDQo+PiAyMTA1wqDCoMKgIDA3LzIzLzIwMTANCj4+DQo+PiBJcyB0aGlzIHNvbWV0aGluZyBp
+IG5lZWQgdG8gYmUgYWZyYWlkLCBvciBpdCdzIG5vdGhpbmcgc2VyaW91cz8NCj4NCj4gSXQncyBw
+cm9iYWJseSBoYXJtbGVzcywgdW5sZXNzIHlvdXIgYm9hcmQgaXMgaW50ZW50aW9uYWxseSBzZXR0
+aW5nIHRoZSANCj4gcHdtLWFjdGl2ZS1zdGF0ZSAod2hpY2ggSSBzdXNwZWN0IGl0IHdvbid0IGJl
+IGFzIHlvdXIgQklPUyBpcyBwcm9iYWJseSANCj4gdGFraW5nIGNhcmUgb2YgdGhhdCBpZiByZXF1
+aXJlZCkuIEkgc3VzcGVjdCBpdCdzIG1vcmUgYSBjYXNlIG9mIHRoZSANCj4gY29kZSBub3QgaGFu
+ZGxpbmcgdGhlIGFic2VuY2Ugb2YgYSBkZXZpY2UgdHJlZSB3aGljaCB0aGUgY2hlY2sgZm9yIA0K
+PiAtRUlOVkFMIHdhcyBzdXBwb3NlZCB0byBkZWFsIHdpdGguIFRoZXJlJ3MgYW4gb3V0c2lkZSBj
+aGFuY2UgdGhhdCANCj4gdGhlcmUgaXMgYSBwcm9ibGVtIG9uIHRoZSBJMkMgYnVzIGJ1dCB0aGF0
+IHdvdWxkIHJlcXVpcmUgeW91ciBwbGF0Zm9ybSANCj4gdG8gYmUgYWN0aXZlbHkgdXNpbmcgdGhl
+IHB3bSBwb2xhcml0eSBmZWF0dXJlIHZpYSBhIGRldmljZSB0cmVlIA0KPiAodW5saWtlbHkgb3V0
+c2lkZSBvZiBlbWJlZGRlZCBkZXZpY2VzKS4NCj4NCj4gSSB0aGluayBpdCdkIHN0aWxsIGJlIGEg
+Z29vZCBpZGVhIHRvIHNxdWFzaCB0aGUgZXJyYW50IHdhcm5pbmcgc28gDQo+IGdlbnVpbmUgZXJy
+b3JzIGFyZSBjYXVnaHQuIEknbGwgc2VlIGlmIEkgY2FuIHByb3Zva2UgdGhlIGlzc3VlIG9uIA0K
+PiBkZXZpY2VzIEkgaGF2ZSBhY2Nlc3MgdG8uIEFyZSB5b3UgaW4gYSBwb3NpdGlvbiB0byB0cnkg
+YSBwYXRjaCBpZiBJIA0KPiBjb21lIHVwIHdpdGggb25lPw0KQWggSSB0aGluayBJIHNlZSB0aGUg
+cHJvYmxlbS4gT24gcGxhdGZvcm1zIHdpdGhvdXQgZGV2aWNlIHRyZWUgc3VwcG9ydCANCnRoZSBv
+Zl9wcm9wZXJ0eV9yZWFkXyooKSBmdW5jdGlvbnMgcmV0dXJuIC1FTk9TWVMgc28gSSBuZWVkIHRv
+IGRlYWwgd2l0aCANCnRoYXQgZXJyb3IgY29kZSBhcyB3ZWxsIGFzIC1FSU5WQUwu
