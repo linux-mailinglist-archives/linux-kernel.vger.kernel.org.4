@@ -2,152 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FCE6E6A59
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 233366E6A5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232284AbjDRQ7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 12:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
+        id S232342AbjDRQ76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 12:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbjDRQ7s (ORCPT
+        with ESMTP id S232533AbjDRQ7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 18 Apr 2023 12:59:48 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D53AB455
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:59:20 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1a50cb65c92so26452355ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:59:20 -0700 (PDT)
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50123AF11
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:59:18 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-54fbee98814so217955497b3.8
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:59:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681837160; x=1684429160;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6+Cu265ve+v/mYTevQG7B1gRVZEieX1Qo5P1wD9Qx14=;
-        b=XKJ57OQqx/2PUHBsVuJiKQWKGxI0zf38e+uy5+3VzxmqWT5D9CoR9d/c3NX3CPvdvm
-         tsgZ6wXl9/jMJbsaEYrw+C5mAR0OeNteAq7KXdnzEKsYopxMIY0VbeAXnjWrgKmmQLvy
-         g2J7T3XZsbWjZKBQL8Hn4B+80abDhZ8JayM+E=
+        d=linaro.org; s=google; t=1681837157; x=1684429157;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=I5BoHjzh5rBSSzb7StjjnexOes7wzu8euGACPMkr2GY=;
+        b=eqYD/URwhX35iRgJ4a3HVzl+qMfvJwvdjIneaPqGpXpDHjiknMlVgH+VtguSmUe5bJ
+         KO/Qbz9VpY2sgqP0kqRaeV23WiY7FAu+hw/w+x+GvzixUOLekfwDsQVsLLQF8rNK4eMy
+         7TpRROLXR4dOFkFUvVPeqRufzp8aHV8B+CV0C3Un0cIbvoTHDXqwCRmMXEQVMNRtBDXY
+         m1JZkfBLubEFxxIKibzPCJKJrqM0mE/5fpjRwXMb1fHyrfmtcrGydJzoXhSNkARvbMAv
+         VizaMBgmKG9bBtGG6iDQyAOtwO4WyIlfp6R+Xc/jPl8vkgFppk6AOcuR/3T8Km1QLU4z
+         pbMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681837160; x=1684429160;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1681837157; x=1684429157;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6+Cu265ve+v/mYTevQG7B1gRVZEieX1Qo5P1wD9Qx14=;
-        b=erQASUG9Z4NpVDDWsUIrPKGBhZ4/7PwNoGvOBGrnBacTISWJH6rb8I64iZvEFg3t0y
-         Hj/6z0oDjU/+So9aaZzCE/qbvVI1cQvTGf6Jr3c7rNqPWbP2YOXpho8nX/BNgeyTfPy/
-         13p+6LTkWgjkm2QU9fWPflLvW+e89R8d7R4HtSJjepp4U3RP8DmzqC5nMZbW+pl/n2iD
-         x0e4hz7+u6IrT8ln6YNSMoetbDhZ2KPTAdyHlLjkD0qcm6Hqg7l0rcPh4s98XGrxHJ+M
-         ldi3GFst0LCb864zt90CrZuRvPh4Oj21LB6g8UxigW6hSDasTJEjnqhgqEuliQ91vyOr
-         uGsg==
-X-Gm-Message-State: AAQBX9dneL8St09t4w3/LEti1lbMozWmixPKEnenL6tzp6puwNo1tzTK
-        GO9S8vVkGXfEGthGAfcEeIu3SA==
-X-Google-Smtp-Source: AKy350ZOEbHETwSEaZ9aaPXnM/w14ni5nkHS+Z3blNn8sd9VN/rBzsneJLLLBdUDfsOIvzVqBV9T7A==
-X-Received: by 2002:a17:903:280d:b0:1a5:31f2:9036 with SMTP id kp13-20020a170903280d00b001a531f29036mr2645410plb.11.1681837159865;
-        Tue, 18 Apr 2023 09:59:19 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:15a7:1899:efc0:f521])
-        by smtp.gmail.com with ESMTPSA id b6-20020a170902bd4600b001a216d44440sm9829786plx.200.2023.04.18.09.59.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 09:59:19 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Yu Zhao <yuzhao@google.com>, Ying <ying.huang@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [RFC PATCH] mm, compaction: kcompactd work shouldn't count towards memory PSI
-Date:   Tue, 18 Apr 2023 09:58:54 -0700
-Message-ID: <20230418095852.RFC.1.I53bf7f0c7d48fe7af13c5dd3ad581d3bcfd9d1bd@changeid>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+        bh=I5BoHjzh5rBSSzb7StjjnexOes7wzu8euGACPMkr2GY=;
+        b=ej69UJvoOaqKmuNxr5nQ9lpynO3+Ip2rPOGEoWKTZfrz9SGxETFT2KWPFs5flBRpnj
+         WXEHCDh7CSTCb5Gy4w4jmG5ars3Xy/i71pryqp/9hDfW9e87euyk9zc1MKjNoAjC3WJD
+         Tmz42jNoOQFxbJnWoKukpsFEq8kHWOeQsNDUtAsjNiYQs6dhLtnhE3+Z6IWbib8ulhFY
+         ZSLpbfW2VCjcA1lPj6JRWmB523ghC3UteDj0oTpMSvRkHvfRIdZdxenT+jjxdYOZmV/H
+         sxhIBq4S/mIO3UKWpio+4nHZlsto9jLiYH4RHm/4nMoBX5ZzPMnOENzoHirHHQovUaLn
+         Qikg==
+X-Gm-Message-State: AAQBX9dG/27uEvg8CydZO4cdlSC3ytCtz23eGJxZHEMMIHl2crCyCLeC
+        S2y64buSBDzvLUvdThWckAQ6o26CQqm1s+F9nB8s2w==
+X-Google-Smtp-Source: AKy350bzQ33cg8zJDJunRtI4zCoYkJITmUbI173QhQIbng9/cAwK0hVcTy57kk+qR5iL3unAXMdwlZ8T2DrdhrWHXjU=
+X-Received: by 2002:a81:83d2:0:b0:54f:6f65:f242 with SMTP id
+ t201-20020a8183d2000000b0054f6f65f242mr635574ywf.13.1681837157452; Tue, 18
+ Apr 2023 09:59:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20230413064344.18714-1-quic_tjiang@quicinc.com>
+ <CAA8EJpoc4nn+Wr131-o=YQoDeL0t7aj9hC=8NNnJa3SeHwgJ-w@mail.gmail.com>
+ <934c32ef9427464a9d0b898b843df6ab@quicinc.com> <CAA8EJpqz9o9CtAnXRE86kw-cfL=_d-c5BDAXwQLSJAyZRy_fEg@mail.gmail.com>
+ <a908e04e9b7d4b97bc6b5ee3c713e71f@quicinc.com> <CAA8EJprztGdP0yqV=O6P2tn4i0+iQ4rfBVY2x-3_93o3C0c-Nw@mail.gmail.com>
+ <11d65b0864b142ffb92255318ce70c45@quicinc.com>
+In-Reply-To: <11d65b0864b142ffb92255318ce70c45@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 18 Apr 2023 19:59:06 +0300
+Message-ID: <CAA8EJpog4Oqzz8MWvwwYAzH91zy=UwskhTjF7ZO5or3citA9kw@mail.gmail.com>
+Subject: Re: [PATCH v2] Bluetooth: btusb: Add WCN6855 devcoredump support
+To:     "Tim Jiang (QUIC)" <quic_tjiang@quicinc.com>
+Cc:     "marcel@holtmann.org" <marcel@holtmann.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "Balakrishna Godavarthi (QUIC)" <quic_bgodavar@quicinc.com>,
+        "Hemant Gupta (QUIC)" <quic_hemantg@quicinc.com>,
+        "mka@chromium.org" <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the main kcompactd thread is doing compaction then it's always
-proactive compaction. This is a little confusing because kcompactd has
-two phases and one of them is called the "proactive" phase.
-Specifically:
-* Phase 1 (the "non-proactive" phase): we've been told by someone else
-  that it would be a good idea to try to compact memory.
-* Phase 2 (the "proactive" phase): we analyze memory fragmentation
-  ourselves and compact if it looks fragmented.
+On Tue, 18 Apr 2023 at 12:16, Tim Jiang (QUIC) <quic_tjiang@quicinc.com> wrote:
+>
+> Hi Dmitry:
+>
+> > > On Thu, 13 Apr 2023 at 09:44, Tim Jiang <quic_tjiang@quicinc.com> wrote:
+> > > >
+> > > > WCN6855 will report memdump via ACL data or HCI event when it get
+> > > > crashed, so we collect memdump to debug firmware.
+> > >
+> > > Is it applicable only to wcn6855 or to some of earlier chips too?
+> > >  [Tim]  Also applicable to earlier chips , but currently google only
+> > > require us to support wcn6855
+> >
+> > Since upstream is not a google kernel, please enable this feature for all relevant chipsets.
+> > [Tim] agreed , but the title of this gerrit unchanged,  I raise a new gerrit for other relevant chipsets , is OK?
+>
+> There is no gerrit here.
+>
+> Also, is there any chance you can fix your email client to stop putting old headers at the top of the email?
+> [Tim] sorry for confusion, I mean I will raise another new change for other relevant chipset, is OK ?
 
-From the context of kcompactd, the above naming makes sense. However,
-from the context of the kernel as a whole both phases are "proactive"
-because in both cases we're trying compact memory ahead of time and
-we're not actually blocking (stalling) any task who is trying to use
-memory.
+I'd suggest using a single patch.
 
-Specifically, if any task is actually blocked needing memory to be
-compacted then it will be in direct reclaim. That won't block waiting
-on kcompactd task but instead call try_to_compact_pages() directly.
-The caller of that direct compaction, __alloc_pages_direct_compact(),
-already marks itself as counting towards PSI.
+>  and I use office 365 to reply your email which will adding old headers automatically , unless I delete the old headers manually, thank you.
+>
+> >
+> > >
+> > > >
+> > > > Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
+> > > > ---
+> > > >  drivers/bluetooth/btusb.c | 222
+> > > > ++++++++++++++++++++++++++++++++++++++
+> > > >  1 file changed, 222 insertions(+)
+> >
+> >
+> >
+> >
+> > --
+> > With best wishes
+> > Dmitry
+>
+>
+>
+> --
+> With best wishes
+> Dmitry
 
-Sanity checking by looking at this from another perspective, we can
-look at all the people who explicitly ask kcompactd to do a reclaim by
-calling wakeup_kcompactd(). That leads us to 3 places in vmscan.c.
-Those are all requests from kswapd, which is also a "proactive"
-mechanism in the kernel (tasks aren't blocked waiting for it).
 
-Fixes: eb414681d5a0 ("psi: pressure stall information for CPU, memory, and IO")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-I stumbled upon this while researching for a different patch [1].
-Although both the other patch and this one affect kcompactd, they are
-otherwise unrelated. It can be noted that ${SUBJECT} patch was created
-solely by code inspection. I don't have any specific test cases that
-are made better by it, the code just didn't seem quite right to me.
 
-My knowledge of the memory subsystem is shaky at best, so please take
-this patch with a grain of salt. If you're a memory system expert and
-this patch looks totally misguided to you then it probably is. ;-)
-
-[1] https://lore.kernel.org/r/20230413182313.RFC.1.Ia86ccac02a303154a0b8bc60567e7a95d34c96d3@changeid
-
- mm/compaction.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/mm/compaction.c b/mm/compaction.c
-index 5a9501e0ae01..5a8d78b506e4 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -22,7 +22,6 @@
- #include <linux/kthread.h>
- #include <linux/freezer.h>
- #include <linux/page_owner.h>
--#include <linux/psi.h>
- #include "internal.h"
- 
- #ifdef CONFIG_COMPACTION
-@@ -2954,8 +2953,6 @@ static int kcompactd(void *p)
- 	pgdat->kcompactd_highest_zoneidx = pgdat->nr_zones - 1;
- 
- 	while (!kthread_should_stop()) {
--		unsigned long pflags;
--
- 		/*
- 		 * Avoid the unnecessary wakeup for proactive compaction
- 		 * when it is disabled.
-@@ -2967,9 +2964,8 @@ static int kcompactd(void *p)
- 			kcompactd_work_requested(pgdat), timeout) &&
- 			!pgdat->proactive_compact_trigger) {
- 
--			psi_memstall_enter(&pflags);
- 			kcompactd_do_work(pgdat);
--			psi_memstall_leave(&pflags);
-+
- 			/*
- 			 * Reset the timeout value. The defer timeout from
- 			 * proactive compaction is lost here but that is fine
 -- 
-2.40.0.634.g4ca3ef3211-goog
-
+With best wishes
+Dmitry
