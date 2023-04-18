@@ -2,147 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441946E6902
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB5F6E690B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjDRQKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 12:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
+        id S231488AbjDRQLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 12:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjDRQKV (ORCPT
+        with ESMTP id S231186AbjDRQL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 12:10:21 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9FEE67
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:10:20 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id fw30so21790596ejc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:10:20 -0700 (PDT)
+        Tue, 18 Apr 2023 12:11:29 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAC710D3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:11:27 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id q23so65103396ejz.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:11:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681834218; x=1684426218;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1681834286; x=1684426286;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=J61Na07hGCkQ1KuLYjiBLVLpdGvMenY/upJoZnjMSn0=;
-        b=saJh1JDYpAps5A8IvRMIbctMsx/rRsHIvpac2Q5NdTMLsGtHp1WJusAdGQACvdrhhe
-         updya1CADurvN4f69bSK0keoZj+ZwXgV/OoTdVowutfo6WzgvCRUpMkAC3bwy2EPGcii
-         4QFPQnbWgCp3gj/g5X9sKkvIazTdQ/p/pDf7k4ORAG7sGgagbvHCj8q5B1FZ3r6lKWcO
-         NNIN9cD+cKnFKTvZqZm9DiLcL6jcL/mg4NoJt5n68USEWFFufTdaXpBdgMP9PIDf/uCy
-         r7moKlv8EPkpj2a7PXuTJsbzfplYVC7NK56EgYV6rIXUjEnXRH6eSxVQIOA/6SIBAGMz
-         VNzw==
+        bh=Qzlup9m14Hkt7XbevRQcpzW+iiwUkbXn1QlFhZAj2MQ=;
+        b=M9ILneZdnP7r4k/FrXPDHowXoYkrh0Tu8aKNawLfSSwpmI2w9x2L47mRDnF9PjaAgO
+         NXIZsCxkjrEjvv9Nj21yfu3ZwoWV6Ip/YTtTUFEano8JTJbmLWhMn2rpOp5TVEFolEP0
+         o7WHXispvnevfRn48LOp/qtGizqz2do9+Ya+ZCRGoTd0Wu3ocnmVrQherb+7cnnzKWKh
+         KpMhikR3LFA9DJexYpNA3gM0ZqfubbPaPIc9WVlpdKOYo+l5T4ZeVF3wYsXdE08TCZic
+         6kUTKq367XMj4rXr5oI2F+Tz9rR4zSI/3sYslxqYu2HMlQH4fH4JNY8vdWPDOP8IU5ji
+         rddw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681834218; x=1684426218;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1681834286; x=1684426286;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J61Na07hGCkQ1KuLYjiBLVLpdGvMenY/upJoZnjMSn0=;
-        b=OWbqSSoRPCSmCLiAshKDT82perdnoD3mzPzQzgDhqr5gcMh986Q6baE9QdMnbQLxDM
-         JCYNBfI1O2K6i9H8KVuTKgPeM/6iCDAzZUo0e7F1sDYujl4pNQsFwnFp+uKNsUaS48Ux
-         qh0b2QuehflBH39OnaFPdf6d7Ix3ZaDHFsqAtyPXO6jE45yfU2o7blYsy6GBwZj10qmL
-         YDVQzBDpFfgAh35BCD8kG/dn2XO2bobDG22XnXkXhO9Ytiu6eZNHVLsx4tt96GWKsJNN
-         Oq3VicVEyp3BwKYxjCnpcrVy+09vz7oieDPS8Dmy+moGktVJRo1Pjw0kyzx+wHn9LE3i
-         /LZg==
-X-Gm-Message-State: AAQBX9eGtuBD9E09ptehyZoQWFr9f1CsJ9HePeHsrESrXuDFDhIiI/kl
-        bqjH7ITGsk39kVlFDbd3dU0WIw==
-X-Google-Smtp-Source: AKy350YCjKqxq98DjI5ho6miiDb3QwnGD3Ctdpyy172e5x8e2GthnxvlV/UnS3C0q4HnyZh6sr1Q/A==
-X-Received: by 2002:a17:906:505:b0:94a:7450:9e2e with SMTP id j5-20020a170906050500b0094a74509e2emr11340754eja.32.1681834218578;
-        Tue, 18 Apr 2023 09:10:18 -0700 (PDT)
+        bh=Qzlup9m14Hkt7XbevRQcpzW+iiwUkbXn1QlFhZAj2MQ=;
+        b=Zc4XQuClOsgmEFfPEK9QRD/eZ8reJfkv8fX32vxLwuBBFkhI4wJYCXRe/BvKTvXTUN
+         bbKMT8/Y6uEpQ9oSdY1IIHuk15eRRFEL2d6V6Mqura1A+0ksI509sIltp+ET8Dtw7mBD
+         Y/t9NFklOLVW5qYHk2vZ9xfBVBXMjFN67dIu/pcw7RTnG/JZ+FsG4v5eIWhWVbJdx5EE
+         sUIf1QUr4J8GtW0cvwpih4QXOxIqnCJdUwoQSGyRJJB24vNDKudf9fEz3t8AmT84ir+/
+         pwp/ZE3ClrGSyLaBNOxY5+HteLv9F5JOmeeEAalZlJZDQVxWTULQMayZ0lyGsMAipPR0
+         4tig==
+X-Gm-Message-State: AAQBX9dap4b4gHpWfz7K/+X9UNuGfx+7Ie69rb+2xWZK1nHyw9ZDw3vE
+        wDHfenK1Dhm3Z4cIvtvZ388mpA==
+X-Google-Smtp-Source: AKy350Zi+EWKvmUkS0nisEPCIt5eZ+u94MN+YHhmWvbS2hs01swFIkPSocb9MZr64PZnlcdfpjLzsg==
+X-Received: by 2002:a17:906:3e88:b0:94a:92e8:932c with SMTP id a8-20020a1709063e8800b0094a92e8932cmr9223798ejj.41.1681834286011;
+        Tue, 18 Apr 2023 09:11:26 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
-        by smtp.gmail.com with ESMTPSA id wf7-20020a170907d68700b0094f71500bfesm3342722ejc.4.2023.04.18.09.10.17
+        by smtp.gmail.com with ESMTPSA id v15-20020a17090606cf00b0095336e8e012sm346590ejb.176.2023.04.18.09.11.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 09:10:18 -0700 (PDT)
-Message-ID: <eb6bfe2e-1e44-bfb5-01b9-bbf53eba6501@linaro.org>
-Date:   Tue, 18 Apr 2023 18:10:16 +0200
+        Tue, 18 Apr 2023 09:11:25 -0700 (PDT)
+Message-ID: <8c400c55-fa4a-2300-23b3-01322c76f51e@linaro.org>
+Date:   Tue, 18 Apr 2023 18:11:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 1/3] dt-bindings: misc: esm: Add ESM support for TI K3
- devices
+Subject: Re: [PATCH v2 1/4] dt-bindings: mfd: x-powers,axp152: Document the
+ AXP15060 variant
 Content-Language: en-US
-To:     Neha Malcom Francis <n-francis@ti.com>, u-boot@lists.denx.de,
+To:     Shengyu Qu <wiagn233@outlook.com>, lee@kernel.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     nm@ti.com, vigneshr@ti.com, u-kumar1@ti.com
-References: <20230414105225.194195-1-n-francis@ti.com>
- <20230414105225.194195-2-n-francis@ti.com>
- <40498f71-d0cd-e7af-6515-c60a8d1edce8@linaro.org>
- <d4a017e6-6df4-fc50-49c4-12c53719b7c0@ti.com>
+        wens@csie.org, lgirdwood@gmail.com, broonie@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230417090537.6052-1-wiagn233@outlook.com>
+ <TY3P286MB2611439E0FA49C224D639062989C9@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d4a017e6-6df4-fc50-49c4-12c53719b7c0@ti.com>
+In-Reply-To: <TY3P286MB2611439E0FA49C224D639062989C9@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/04/2023 10:56, Neha Malcom Francis wrote:
-> Hi Krzysztof
+On 17/04/2023 11:05, Shengyu Qu wrote:
+> The X-Powers AXP15060 is a PMIC seen on Starfive Visionfive 2 board. Add
+> relative compatible item and CPUSLDO support for it.
 > 
-> On 14/04/23 17:10, Krzysztof Kozlowski wrote:
->> On 14/04/2023 12:52, Neha Malcom Francis wrote:
->>> Document the binding for TI K3 ESM (Error Signaling Module) block.
->>>
->>> Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
->>> ---
->>>   .../devicetree/bindings/misc/esm-k3.yaml      | 54 +++++++++++++++++++
->>>   1 file changed, 54 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/misc/esm-k3.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/misc/esm-k3.yaml b/Documentation/devicetree/bindings/misc/esm-k3.yaml
->>> new file mode 100644
->>> index 000000000000..5e637add3b0e
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/misc/esm-k3.yaml
->>
->> Filename matching compatible. Missing vendor prefix and device name.
->>
->>> @@ -0,0 +1,54 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +# Copyright (C) 2022 Texas Instruments Incorporated
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/misc/esm-k3.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Texas Instruments K3 ESM Binding
->>
->> Drop: Binding
->>
->>> +
->>> +maintainers:
->>> +  - Neha Malcom Francis <n-francis@ti.com>
->>> +
->>> +description: |
->>> +  The ESM (Error Signaling Module) is an IP block on TI K3 devices
->>> +  that allows handling of safety events somewhat similar to what interrupt
->>> +  controller would do. The safety signals have their separate paths within
->>> +  the SoC, and they are handld by the ESM, which routes them to the proper
->>
->> typo: handled
->>
->>> +  destination, which can be system reset, interrupt controller, etc. In the
->>> +  simplest configuration the signals are just routed to reset the SoC.
->>
->> There is no proper bindings directory for ESM? Misc is discouraged.
->>
+> Changes since v1:
+> - Move cpusldo before drivevbus (Krzysztof Kozlowski)
 > 
-> There is no other directory I see fit for a block like ESM; it could 
-> either remain in misc/ or maybe create a directory error/ for all error 
-> signaling and correction mechanisms? I see misc/xlnx,sd-fec.txt that 
-> could also go in error/
-> 
-> What do you think is fit?
 
-I don't know. Maybe it is something like hwmon? Or maybe along with
-xlnx,sd-fec, tmr-inject and tmr-manager should be moved to some "fault"
-directory for all fault-management-and-handling hardware?
+Changelog usually goes after ---, especially for such trivial stuff.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+---
+
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you do not know the process, here is a short
+explanation:
+
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tools like b4 can help
+here. However, there's no need to repost patches *only* to add the tags.
+The upstream maintainer will do that for acks received on the version
+they apply.
+
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
 
 Best regards,
 Krzysztof
