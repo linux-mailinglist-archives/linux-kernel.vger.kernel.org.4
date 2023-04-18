@@ -2,398 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495596E5A18
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD44D6E5A1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjDRHHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 03:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
+        id S230384AbjDRHJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 03:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjDRHHP (ORCPT
+        with ESMTP id S229958AbjDRHJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 03:07:15 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B621BD8;
-        Tue, 18 Apr 2023 00:07:13 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id l13so4021009uan.10;
-        Tue, 18 Apr 2023 00:07:13 -0700 (PDT)
+        Tue, 18 Apr 2023 03:09:37 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995EB1FE5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 00:09:33 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id c9so31758667ejz.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 00:09:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681801632; x=1684393632;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s7ZW/gOUz1TfjQd0engsaKAOByMz9LYkFneVgfgL8vc=;
-        b=kHLaeb6Xb2mntzAOoexF7TQ8JWdtS1234mUnKb/4KvlSSSGIZuRxbbAlNcYIUMsSyN
-         HnaOsO0RAp6vIHGGZnBy5Y6LbG/8VF9G4hrH1aUoiPqpKDWHi9m54++FWYpkuRf9AP3j
-         xyJ7PGUE2R4VEp/ggE6eSwFksQ5GA6qBp6nRrt+tQ2VMmwJytpUuVa27mnzjHx+cWLrj
-         DjIE+zrTtG7p8gPsPTuDvj8P65Ej7jrhHivj+mmxc9umuXZLBcty5LlHPDknAe2TR+LE
-         TF0nmRBLW4Ct5DeC367ldJvVCi3jvDJgqrTrC6Uim9LDjVHDLLk9UJsBJKyi5tiow93d
-         sY6w==
+        d=linaro.org; s=google; t=1681801772; x=1684393772;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dqMfJus3L0V4CyqoNejxJugqIJ1uzJrSENoG5X9s2es=;
+        b=kFY3dQGNsxc32413uTKo3YYtXO1uo0wqJ9v3pELM+0DKD0eFCTHEgXAQE38mHy1TTL
+         zC1iVLEJXjk6xMfzWygTXPCavXcmH/0dfY2bgNZ7r5F5vxzMAUPLPsW2HqAGOAMx/rpX
+         tIUOkORAfvCNOQnADkn3PCcTq2jzvntvhonX3ihrkb0BBP+adrSp+V+SmXRrFi+blHJv
+         4nfgiqq49/6NpKbjA2wQORNFAze4GyWB02a+1IxGURXBJoFxmYAjl5hemtgRL01NW3b3
+         eTDs1TAiKjSptXmbxJM3cXtFAhz07CepQufWWWvsfHD7a3098RaAMNtYpBgrQdQWzUxU
+         ObMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681801632; x=1684393632;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s7ZW/gOUz1TfjQd0engsaKAOByMz9LYkFneVgfgL8vc=;
-        b=GURkJ9dNrK/hFAPSKPLK59Pkp8ijSH3N7xNQt05stY5Q95G/PrYRCEJevcAF9fUVEI
-         QJdSkd0+Mjwg8wZRUb9iOtOuHQY1qRVzLvAWsmDSP1BLIeH2Ncerneeb7glPeJvBwWN/
-         ryY9C5PySgT7aMSf8TfVt1bL8RmKhYdkcq/3pqvEUxN1DoS7pqHUNpOql+hurZ1ZRME4
-         mf69gU7COmbeYzcEex4WubnGMxN83Hh6CiCqBWtwQKIyzDj/z8+7BR2N+B9vEvH+vnCt
-         NOXpKLVlLkuri6T6P/qeob7PhEhH/CCmNxRIvz0mxvZY9qyH/NBJQtSKFzDAcaqjgfc7
-         Qn3g==
-X-Gm-Message-State: AAQBX9ePmUTVufLohHvg2Ndx6SXrlzPe5Mw7y6LU7KB9Xj3DW6jTIMgx
-        3CznBjBA+WClSjN46HAcOuDcReF6PTzAoSwxkEI=
-X-Google-Smtp-Source: AKy350ZGzlRJR3YTiilAY+jH5iJuFIKwjWeyOonJOyluEFJEEhUO94ycz0pwDuVeauMwTZmoTi8KEwhl07fJ/zys1TI=
-X-Received: by 2002:a1f:e445:0:b0:43b:ead4:669e with SMTP id
- b66-20020a1fe445000000b0043bead4669emr4857690vkh.16.1681801631593; Tue, 18
- Apr 2023 00:07:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681801772; x=1684393772;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dqMfJus3L0V4CyqoNejxJugqIJ1uzJrSENoG5X9s2es=;
+        b=MmflkLnaH18fpK1uh1f+iUutl3liOsmD+o7+oUtmdqCfcW2RyX84vXogJGmOvf4v4c
+         8q3x8PqnieWMV2+f9AQp7c4LFCbrwijr+WTUeayZwWSGfmvZAFPc5Cec/kTPPirPN9Si
+         tJOngTQf86f4Vpxity+esDhXeloO8iW25XNzdGYaz62P0UZkgDoP2rS05tjIRnvfJQ4T
+         zrUu59bQabPmVRSJuEwpzG4X5gIuZCU5fCOJybaVhSnBqQJ/x6OK1jxmbXsL89edztBu
+         9wgdrRFgW6skVwdEDi+hAKVY0z0pGoN7haut1kuj+colP3UZbevLXZU0c+lYMjv21sgu
+         0c9Q==
+X-Gm-Message-State: AAQBX9cpZEyAAGy9++NVHnbOa1MRFzH0+lAC20zYHGqlMeWqtdpwfyKW
+        4QZf9LrS7P95MJht9mGBOaOqEg==
+X-Google-Smtp-Source: AKy350ZGZ/VpT5OUrMXdnOaMJ4x+Z8GPooB3COD1bqfek+cE8WIKQde6hNPA3G9felheu0+s90+oHg==
+X-Received: by 2002:a17:906:73d3:b0:94f:80d6:b825 with SMTP id n19-20020a17090673d300b0094f80d6b825mr4972685ejl.19.1681801772040;
+        Tue, 18 Apr 2023 00:09:32 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
+        by smtp.gmail.com with ESMTPSA id gx18-20020a1709068a5200b0094f16a3ea9csm4768239ejc.117.2023.04.18.00.09.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 00:09:31 -0700 (PDT)
+Message-ID: <1e1fb90a-43c0-3b0a-ab7a-8ca3ce8b02ed@linaro.org>
+Date:   Tue, 18 Apr 2023 09:09:30 +0200
 MIME-Version: 1.0
-References: <CACsaVZJGPux1yhrMWnq+7nt3Zz5wZ6zEo2+S2pf=4czpYLFyjg@mail.gmail.com>
- <748833a7-290e-e028-7367-d3795466f5fd@gmx.com>
-In-Reply-To: <748833a7-290e-e028-7367-d3795466f5fd@gmx.com>
-From:   Kyle Sanderson <kyle.leet@gmail.com>
-Date:   Tue, 18 Apr 2023 00:07:00 -0700
-Message-ID: <CACsaVZKtrJ52OhjoLJWRBjT_CXw6zi_voP1mwLhQk0-wqgo2fw@mail.gmail.com>
-Subject: Re: btrfs induced data loss (on xfs) - 5.19.0-38-generic
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     linux-btrfs@vger.kernel.org,
-        Linux-Kernal <linux-kernel@vger.kernel.org>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 4/6] dt-bindings: power: supply: add MAX77659 charger
+ binding
+Content-Language: en-US
+To:     "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>
+References: <20221220132250.19383-1-Zeynep.Arslanbenzer@analog.com>
+ <20221220132250.19383-5-Zeynep.Arslanbenzer@analog.com>
+ <5ba4295f-1197-913c-b1eb-a23798c3badf@linaro.org>
+ <MN2PR03MB5197E655DE2EAACAEA2316578B9C9@MN2PR03MB5197.namprd03.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <MN2PR03MB5197E655DE2EAACAEA2316578B9C9@MN2PR03MB5197.namprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 1:42=E2=80=AFAM Qu Wenruo <quwenruo.btrfs@gmx.com> =
-wrote:
-> And talking about the "100% utilization", did you mean a single CPU core
-> is fully utilized by some btrfs thread?
+On 17/04/2023 23:43, Arslanbenzer, Zeynep wrote:
+>> On 20/12/2022 14:22, Zeynep Arslanbenzer wrote:
+>>> This patch adds device tree binding documentation for MAX77659 charger.
+>>
+>> Do not use "This commit/patch".
+>> https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst*L95__;>Iw!!A3Ni8CS0y2Y!-AnHmIThbB5Q88_dFdveEmsXlsfflRXDabf6RVE5ySRusMxP24NEfAr8RCsu26LTvoaIIMvEDr2YxDECrGlMwR8-ywvoR62rXB0W$ 
+>>
+>>>
+>>> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>>
+>>> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>>
+>>> ---
+>>>  .../power/supply/adi,max77659-charger.yaml    | 42 +++++++++++++++++++
+>>>  MAINTAINERS                                   |  1 +
+>>>  2 files changed, 43 insertions(+)
+>>>  create mode 100644 
+>>> Documentation/devicetree/bindings/power/supply/adi,max77659-charger.ya
+>>> ml
+>>>
+>>> diff --git 
+>>> a/Documentation/devicetree/bindings/power/supply/adi,max77659-charger.
+>>> yaml 
+>>> b/Documentation/devicetree/bindings/power/supply/adi,max77659-charger.
+>>> yaml
+>>> new file mode 100644
+>>> index 000000000000..24f8b5a2bd84
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/power/supply/adi,max77659-char
+>>> +++ ger.yaml
+>>> @@ -0,0 +1,42 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause %YAML 1.2
+>>> +---
+>>> +$id: 
+>>> +https://urldefense.com/v3/__http://devicetree.org/schemas/power/suppl
+>>> +y/adi,max77659-charger.yaml*__;Iw!!A3Ni8CS0y2Y!-AnHmIThbB5Q88_dFdveEm
+>>> +sXlsfflRXDabf6RVE5ySRusMxP24NEfAr8RCsu26LTvoaIIMvEDr2YxDECrGlMwR8-ywv
+>>> +oR5rKUR11$
+>>> +$schema: 
+>>> +https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.y
+>>> +aml*__;Iw!!A3Ni8CS0y2Y!-AnHmIThbB5Q88_dFdveEmsXlsfflRXDabf6RVE5ySRusM
+>>> +xP24NEfAr8RCsu26LTvoaIIMvEDr2YxDECrGlMwR8-ywvoRy_yWWBS$
+>>> +
+>>> +title: Battery charger for MAX77659 PMIC from ADI.
+>>
+>> Drop full stop.
+>>
+>>> +
+>>> +maintainers:
+>>> +  - Nurettin Bolucu <Nurettin.Bolucu@analog.com>>
+>>> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>>
+>>> +
+>>> +description: |
+>>> +  This module is part of the MAX77659 MFD device. For more details
+>>> +  see Documentation/devicetree/bindings/mfd/adi,max77659.yaml.
+>>> +
+>>> +  The charger is represented as a sub-node of the PMIC node on the device tree.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: adi,max77659-charger
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  adi,fast-charge-timer:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description: Fast-charge safety timer value (in hours).
+>>
+>> No, use suffixes for common units.
+> 
+> Hi Krzysztof,
+> 
+> Thank you for your review. The possible register values of the fast charge safety timer are described in the datasheet as follows. I was undecided about using the common unit, second, as it may affect the comprehensibility of the code. Of course, I can use second as the common unit if you think it's more appropriate.
 
-No, iostat reporting the disk is at "100%" utilization.
+This is quite common property, so I do not understand why this one
+driver should have it written differently. I understand that parsing
+0/1/2/3 is easier for the machine than 0/3/5/7 but it is not easier for
+humans.
 
-> If so, it looks like qgroup is involved.
-> Did you just recently deleted one or more snapshots? If so, it's almost
-> certain qgroup is the cause of the 100% CPU utilization.
+> 
+> 0b00 = Timer disabled 
+> 0b01 = 3 hours 
+> 0b10 = 5 hours 
+> 0b11 = 7 hours
+> 
+>>
+>>> +
+>>> +  adi,fast-charge-microamp:
+>>> +    description: Fast-charge constant current value.
+>>
+>>> +
+>>> +  adi,topoff-timer:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description: Top-Off timer value (in minutes).
+>>
+>> No, use suffixes for common units.
+> 
+> Similar case:
+> 
+> 0b000 = 0 minutes 
+> 0b001 = 5 minutes 
+> 0b010 = 10 minutes 
+> 0b011 = 15 minutes 
+> 0b100 = 20 minutes 
+> 0b101 = 25 minutes 
+> 0b110 = 30 minutes 
+> 0b111 = 35 minutes
 
-No, I used to run snapraid-btrfs (uses snapper) but both projects are
-effectively orphaned. There's no snapshots left, but I used to run
-zygo/bees also on these disks but that also has basic problems
-(specifically mlock' on GBs of data when it's sitting completely idle
-for hours at a time). bees was not running when this happened (or for
-the duration of the uptime of the machine).
+Come on, this is easy to parse. Divide by 5 and where is the code
+complexity?
 
-> In that case, you can disable quota for that btrfs (permanently), or use
-> newer kernel which has a sysfs interface:
->
->    /sys/fs/btrfs/<UUID>/qgroups/drop_subtree_threshold
+Best regards,
+Krzysztof
 
-Thank you, I'll give it a go after the reboot here. I don't think I
-have quotas enabled but I did look at it at one point (I remember
-toggling on then off).
-
-> If you write some value like 3 into that file, btrfs would automatically
-> avoid such long CPU usage caused by large snapshot dropping.
->
-> But talking about the XFS corruption, I'm not sure how btrfs can lead to
-> problems in XFS...
-
-All I/O seemed to be dead on the box.
-
-I tried to remove the same data again and the task hung... this time I
-was able to interrupt the removal and the box recovered.
-
-[92798.210656] INFO: task sync:1282043 blocked for more than 120 seconds.
-[92798.210683]       Not tainted 5.19.0-38-generic #39~22.04.1-Ubuntu
-[92798.210707] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-disables this message.
-[92798.210735] task:sync            state:D stack:    0 pid:1282043
-ppid:1281934 flags:0x00004002
-[92798.210739] Call Trace:
-[92798.210741]  <TASK>
-[92798.210743]  __schedule+0x257/0x5d0
-[92798.210747]  schedule+0x68/0x110
-[92798.210750]  wait_current_trans+0xde/0x140 [btrfs]
-[92798.210820]  ? destroy_sched_domains_rcu+0x40/0x40
-[92798.210824]  start_transaction+0x34d/0x5f0 [btrfs]
-[92798.210895]  btrfs_attach_transaction_barrier+0x23/0x70 [btrfs]
-[92798.210966]  btrfs_sync_fs+0x4a/0x1c0 [btrfs]
-[92798.211029]  ? vfs_fsync_range+0xa0/0xa0
-[92798.211033]  sync_fs_one_sb+0x26/0x40
-[92798.211037]  iterate_supers+0x9e/0x110
-[92798.211041]  ksys_sync+0x62/0xb0
-[92798.211045]  __do_sys_sync+0xe/0x20
-[92798.211049]  do_syscall_64+0x59/0x90
-[92798.211052]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[92798.211057] RIP: 0033:0x7fd08471babb
-[92798.211059] RSP: 002b:00007ffd344545f8 EFLAGS: 00000246 ORIG_RAX:
-00000000000000a2
-[92798.211063] RAX: ffffffffffffffda RBX: 00007ffd344547d8 RCX: 00007fd0847=
-1babb
-[92798.211065] RDX: 00007fd084821101 RSI: 00007ffd344547d8 RDI: 00007fd0847=
-d9e29
-[92798.211067] RBP: 0000000000000001 R08: 0000000000000001 R09: 00000000000=
-00000
-[92798.211069] R10: 0000556ba8b21e40 R11: 0000000000000246 R12: 0000556ba8a=
-cebc0
-[92798.211071] R13: 0000556ba8acc19f R14: 00007fd08481942c R15: 0000556ba8a=
-cc034
-[92798.211075]  </TASK>
-
-Kyle.
-
-On Mon, Apr 17, 2023 at 1:42=E2=80=AFAM Qu Wenruo <quwenruo.btrfs@gmx.com> =
-wrote:
->
->
->
-> On 2023/4/17 13:20, Kyle Sanderson wrote:
-> > The single btrfs disk was at 100% utilization and a wa of 50~, reading
-> > back at around 2MB/s. df and similar would simply freeze. Leading up
-> > to this I removed around 2T of data from a single btrfs disk. I
-> > managed to get most of the services shutdown and disks unmounted, but
-> > when the system came back up I had to use xfs_repair (for the first
-> > time in a very long time) to boot into my system. I likely should have
-> > just pulled the power...
->
-> I didn't see any obvious btrfs related work involved in the call trace.
-> Thus I believe it's not really hanging in a waiting status.
->
-> And talking about the "100% utilization", did you mean a single CPU core
-> is fully utilized by some btrfs thread?
->
-> If so, it looks like qgroup is involved.
-> Did you just recently deleted one or more snapshots? If so, it's almost
-> certain qgroup is the cause of the 100% CPU utilization.
->
-> In that case, you can disable quota for that btrfs (permanently), or use
-> newer kernel which has a sysfs interface:
->
->    /sys/fs/btrfs/<UUID>/qgroups/drop_subtree_threshold
->
-> If you write some value like 3 into that file, btrfs would automatically
-> avoid such long CPU usage caused by large snapshot dropping.
->
-> But talking about the XFS corruption, I'm not sure how btrfs can lead to
-> problems in XFS...
->
-> Thanks,
-> Qu
-> >
-> > [1147997.255020] INFO: task happywriter:3425205 blocked for more than
-> > 120 seconds.
-> > [1147997.255088]       Not tainted 5.19.0-38-generic #39~22.04.1-Ubuntu
-> > [1147997.255114] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-> > disables this message.
-> > [1147997.255144] task:happywriter state:D stack:    0 pid:3425205
-> > ppid:557021 flags:0x00004000
-> > [1147997.255151] Call Trace:
-> > [1147997.255155]  <TASK>
-> > [1147997.255160]  __schedule+0x257/0x5d0
-> > [1147997.255169]  ? __schedule+0x25f/0x5d0
-> > [1147997.255173]  schedule+0x68/0x110
-> > [1147997.255176]  rwsem_down_write_slowpath+0x2ee/0x5a0
-> > [1147997.255180]  ? check_heap_object+0x100/0x1e0
-> > [1147997.255185]  down_write+0x4f/0x70
-> > [1147997.255189]  do_unlinkat+0x12b/0x2d0
-> > [1147997.255194]  __x64_sys_unlink+0x42/0x70
-> > [1147997.255197]  ? syscall_exit_to_user_mode+0x2a/0x50
-> > [1147997.255201]  do_syscall_64+0x59/0x90
-> > [1147997.255204]  ? do_syscall_64+0x69/0x90
-> > [1147997.255207]  ? sysvec_call_function_single+0x4e/0xb0
-> > [1147997.255211]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > [1147997.255216] RIP: 0033:0x1202a57
-> > [1147997.255220] RSP: 002b:00007fe467ffd4c8 EFLAGS: 00000246 ORIG_RAX:
-> > 0000000000000057
-> > [1147997.255224] RAX: ffffffffffffffda RBX: 00007fe3a4e94d28 RCX:
-> > 0000000001202a57
-> > [1147997.255226] RDX: 0000000000000000 RSI: 0000000000000000 RDI:
-> > 00007fe450054b60
-> > [1147997.255228] RBP: 00007fe450054b60 R08: 0000000000000000 R09:
-> > 00000000000000e8
-> > [1147997.255231] R10: 0000000000000001 R11: 0000000000000246 R12:
-> > 00007fe467ffd5b0
-> > [1147997.255233] R13: 00007fe467ffd5f0 R14: 00007fe467ffd5e0 R15:
-> > 00007fe3a4e94d28
-> > [1147997.255239]  </TASK>
-> > [1148118.087966] INFO: task happywriter:3425205 blocked for more than
-> > 241 seconds.
-> > [1148118.088022]       Not tainted 5.19.0-38-generic #39~22.04.1-Ubuntu
-> > [1148118.088048] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-> > disables this message.
-> > [1148118.088077] task:happywriter state:D stack:    0 pid:3425205
-> > ppid:557021 flags:0x00004000
-> > [1148118.088083] Call Trace:
-> > [1148118.088087]  <TASK>
-> > [1148118.088093]  __schedule+0x257/0x5d0
-> > [1148118.088101]  ? __schedule+0x25f/0x5d0
-> > [1148118.088105]  schedule+0x68/0x110
-> > [1148118.088108]  rwsem_down_write_slowpath+0x2ee/0x5a0
-> > [1148118.088113]  ? check_heap_object+0x100/0x1e0
-> > [1148118.088118]  down_write+0x4f/0x70
-> > [1148118.088121]  do_unlinkat+0x12b/0x2d0
-> > [1148118.088126]  __x64_sys_unlink+0x42/0x70
-> > [1148118.088129]  ? syscall_exit_to_user_mode+0x2a/0x50
-> > [1148118.088133]  do_syscall_64+0x59/0x90
-> > [1148118.088136]  ? do_syscall_64+0x69/0x90
-> > [1148118.088139]  ? sysvec_call_function_single+0x4e/0xb0
-> > [1148118.088142]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > [1148118.088148] RIP: 0033:0x1202a57
-> > [1148118.088151] RSP: 002b:00007fe467ffd4c8 EFLAGS: 00000246 ORIG_RAX:
-> > 0000000000000057
-> > [1148118.088155] RAX: ffffffffffffffda RBX: 00007fe3a4e94d28 RCX:
-> > 0000000001202a57
-> > [1148118.088158] RDX: 0000000000000000 RSI: 0000000000000000 RDI:
-> > 00007fe450054b60
-> > [1148118.088160] RBP: 00007fe450054b60 R08: 0000000000000000 R09:
-> > 00000000000000e8
-> > [1148118.088162] R10: 0000000000000001 R11: 0000000000000246 R12:
-> > 00007fe467ffd5b0
-> > [1148118.088164] R13: 00007fe467ffd5f0 R14: 00007fe467ffd5e0 R15:
-> > 00007fe3a4e94d28
-> > [1148118.088170]  </TASK>
-> > [1148238.912688] INFO: task kcompactd0:70 blocked for more than 120 sec=
-onds.
-> > [1148238.912741]       Not tainted 5.19.0-38-generic #39~22.04.1-Ubuntu
-> > [1148238.912767] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-> > disables this message.
-> > [1148238.912796] task:kcompactd0      state:D stack:    0 pid:   70
-> > ppid:     2 flags:0x00004000
-> > [1148238.912803] Call Trace:
-> > [1148238.912806]  <TASK>
-> > [1148238.912812]  __schedule+0x257/0x5d0
-> > [1148238.912821]  schedule+0x68/0x110
-> > [1148238.912824]  io_schedule+0x46/0x80
-> > [1148238.912827]  folio_wait_bit_common+0x14c/0x3a0
-> > [1148238.912833]  ? filemap_invalidate_unlock_two+0x50/0x50
-> > [1148238.912838]  __folio_lock+0x17/0x30
-> > [1148238.912842]  __unmap_and_move.constprop.0+0x39c/0x640
-> > [1148238.912847]  ? free_unref_page+0xe3/0x190
-> > [1148238.912852]  ? move_freelist_tail+0xe0/0xe0
-> > [1148238.912855]  ? move_freelist_tail+0xe0/0xe0
-> > [1148238.912858]  unmap_and_move+0x7d/0x4e0
-> > [1148238.912862]  migrate_pages+0x3b8/0x770
-> > [1148238.912867]  ? move_freelist_tail+0xe0/0xe0
-> > [1148238.912870]  ? isolate_freepages+0x2f0/0x2f0
-> > [1148238.912874]  compact_zone+0x2ca/0x620
-> > [1148238.912878]  proactive_compact_node+0x8a/0xe0
-> > [1148238.912883]  kcompactd+0x21c/0x4e0
-> > [1148238.912886]  ? destroy_sched_domains_rcu+0x40/0x40
-> > [1148238.912892]  ? kcompactd_do_work+0x240/0x240
-> > [1148238.912896]  kthread+0xeb/0x120
-> > [1148238.912900]  ? kthread_complete_and_exit+0x20/0x20
-> > [1148238.912904]  ret_from_fork+0x1f/0x30
-> > [1148238.912911]  </TASK>
-> > [1148238.913163] INFO: task happywriter:3425205 blocked for more than
-> > 362 seconds.
-> > [1148238.913195]       Not tainted 5.19.0-38-generic #39~22.04.1-Ubuntu
-> > [1148238.913220] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-> > disables this message.
-> > [1148238.913250] task:happywriter state:D stack:    0 pid:3425205
-> > ppid:557021 flags:0x00004000
-> > [1148238.913254] Call Trace:
-> > [1148238.913256]  <TASK>
-> > [1148238.913259]  __schedule+0x257/0x5d0
-> > [1148238.913264]  ? __schedule+0x25f/0x5d0
-> > [1148238.913267]  schedule+0x68/0x110
-> > [1148238.913270]  rwsem_down_write_slowpath+0x2ee/0x5a0
-> > [1148238.913276]  ? check_heap_object+0x100/0x1e0
-> > [1148238.913280]  down_write+0x4f/0x70
-> > [1148238.913284]  do_unlinkat+0x12b/0x2d0
-> > [1148238.913288]  __x64_sys_unlink+0x42/0x70
-> > [1148238.913292]  ? syscall_exit_to_user_mode+0x2a/0x50
-> > [1148238.913296]  do_syscall_64+0x59/0x90
-> > [1148238.913299]  ? do_syscall_64+0x69/0x90
-> > [1148238.913301]  ? sysvec_call_function_single+0x4e/0xb0
-> > [1148238.913305]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > [1148238.913310] RIP: 0033:0x1202a57
-> > [1148238.913315] RSP: 002b:00007fe467ffd4c8 EFLAGS: 00000246 ORIG_RAX:
-> > 0000000000000057
-> > [1148238.913319] RAX: ffffffffffffffda RBX: 00007fe3a4e94d28 RCX:
-> > 0000000001202a57
-> > [1148238.913321] RDX: 0000000000000000 RSI: 0000000000000000 RDI:
-> > 00007fe450054b60
-> > [1148238.913323] RBP: 00007fe450054b60 R08: 0000000000000000 R09:
-> > 00000000000000e8
-> > [1148238.913325] R10: 0000000000000001 R11: 0000000000000246 R12:
-> > 00007fe467ffd5b0
-> > [1148238.913328] R13: 00007fe467ffd5f0 R14: 00007fe467ffd5e0 R15:
-> > 00007fe3a4e94d28
-> > [1148238.913333]  </TASK>
-> > [1148238.913429] INFO: task kworker/u16:20:3402199 blocked for more
-> > than 120 seconds.
-> > [1148238.913459]       Not tainted 5.19.0-38-generic #39~22.04.1-Ubuntu
-> > [1148238.913496] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-> > disables this message.
-> > [1148238.913527] task:kworker/u16:20  state:D stack:    0 pid:3402199
-> > ppid:     2 flags:0x00004000
-> > [1148238.913533] Workqueue: events_unbound io_ring_exit_work
-> > [1148238.913539] Call Trace:
-> > [1148238.913541]  <TASK>
-> > [1148238.913544]  __schedule+0x257/0x5d0
-> > [1148238.913548]  schedule+0x68/0x110
-> > [1148238.913551]  schedule_timeout+0x122/0x160
-> > [1148238.913556]  __wait_for_common+0x8f/0x190
-> > [1148238.913559]  ? usleep_range_state+0xa0/0xa0
-> > [1148238.913564]  wait_for_completion+0x24/0x40
-> > [1148238.913567]  io_ring_exit_work+0x186/0x1e9
-> > [1148238.913571]  ? io_uring_del_tctx_node+0xbf/0xbf
-> > [1148238.913576]  process_one_work+0x21c/0x400
-> > [1148238.913579]  worker_thread+0x50/0x3f0
-> > [1148238.913583]  ? rescuer_thread+0x3a0/0x3a0
-> > [1148238.913586]  kthread+0xeb/0x120
-> > [1148238.913590]  ? kthread_complete_and_exit+0x20/0x20
-> > [1148238.913594]  ret_from_fork+0x1f/0x30
-> > [1148238.913600]  </TASK>
-> > [1148238.913607] INFO: task stat:3434604 blocked for more than 120 seco=
-nds.
-> > [1148238.913633]       Not tainted 5.19.0-38-generic #39~22.04.1-Ubuntu
-> > [1148238.913658] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-> > disables this message.
-> > [1148238.913687] task:stat            state:D stack:    0 pid:3434604
-> > ppid:3396625 flags:0x00004004
-> > [1148238.913691] Call Trace:
-> > [1148238.913693]  <TASK>
-> > [1148238.913695]  __schedule+0x257/0x5d0
-> > [1148238.913699]  schedule+0x68/0x110
-> > [1148238.913703]  request_wait_answer+0x13f/0x220
-> > [1148238.913708]  ? destroy_sched_domains_rcu+0x40/0x40
-> > [1148238.913713]  fuse_simple_request+0x1bb/0x370
-> > [1148238.913717]  fuse_do_getattr+0xda/0x320
-> > [1148238.913720]  ? try_to_unlazy+0x5b/0xd0
-> > [1148238.913726]  fuse_update_get_attr+0xb3/0xf0
-> > [1148238.913730]  fuse_getattr+0x87/0xd0
-> > [1148238.913733]  vfs_getattr_nosec+0xba/0x100
-> > [1148238.913737]  vfs_statx+0xa9/0x140
-> > [1148238.913741]  vfs_fstatat+0x59/0x80
-> > [1148238.913744]  __do_sys_newlstat+0x38/0x80
-> > [1148238.913750]  __x64_sys_newlstat+0x16/0x20
-> > [1148238.913753]  do_syscall_64+0x59/0x90
-> > [1148238.913757]  ? handle_mm_fault+0xba/0x2a0
-> > [1148238.913761]  ? exit_to_user_mode_prepare+0xaf/0xd0
-> > [1148238.913765]  ? irqentry_exit_to_user_mode+0x9/0x20
-> > [1148238.913769]  ? irqentry_exit+0x43/0x50
-> > [1148238.913772]  ? exc_page_fault+0x92/0x1b0
-> > [1148238.913776]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > [1148238.913780] RIP: 0033:0x7fa76960d6ea
-> > [1148238.913783] RSP: 002b:00007ffe6d011878 EFLAGS: 00000246 ORIG_RAX:
-> > 0000000000000006
-> > [1148238.913787] RAX: ffffffffffffffda RBX: 0000000000000001 RCX:
-> > 00007fa76960d6ea
-> > [1148238.913789] RDX: 00007ffe6d011890 RSI: 00007ffe6d011890 RDI:
-> > 00007ffe6d01290b
-> > [1148238.913791] RBP: 00007ffe6d011a70 R08: 0000000000000001 R09:
-> > 0000000000000000
-> > [1148238.913793] R10: fffffffffffff3ce R11: 0000000000000246 R12:
-> > 0000000000000000
-> > [1148238.913795] R13: 000055feff0d2960 R14: 00007ffe6d011a68 R15:
-> > 00007ffe6d01290b
-> > [1148238.913800]  </TASK>
