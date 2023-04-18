@@ -2,98 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834356E6E90
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C9F6E6E94
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbjDRVrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34676 "EHLO
+        id S233095AbjDRVsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbjDRVr1 (ORCPT
+        with ESMTP id S231171AbjDRVsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:47:27 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43CA65AC
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:47:17 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-18777914805so6349758fac.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:47:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google; t=1681854436; x=1684446436;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VfZlw8AlHMxVsS3tiMBAvH71RDRSOAAoNTnFWBIvtwY=;
-        b=Md/5OB4ZHkMeXPiXDoQ3mKe5o9xdDBIf7ZW33imyrQ1i778qqYLcYBiG3njZNyfsbd
-         wK0xtH108mTALoDQma+YkiMjhwo3HHa0TuTwhdoyK0o2pwm/KpL/0yqW9c88x8PFGLTU
-         0kly5TX0D0WvS81iEzSTZ8NenHqqUH7xqfys8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681854436; x=1684446436;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VfZlw8AlHMxVsS3tiMBAvH71RDRSOAAoNTnFWBIvtwY=;
-        b=KZKOhuPPy6xFieEbT/+yjuRW+gdUY0eiw+AXqMa1ZXb9FdgSpr0aVvxURUAHdHhE3Z
-         IeKrFl5L2r5xL7RIVaBrWqrHu83oKHuJfBoYynOovXQfxVoct8K1YzbKDcn0d0BZlMXf
-         SsfMFhzaRrfk08KA16xVUHs1WG9Ff/C5k8S5juXIMtxbCVaR6ifmByfml9xV6uNyt680
-         wEvgLI3i9qSWxvu07qaDm0cENCwcrVggjWJf4wMLfXUMx6rQXIH/NxQtUGIQ+pSmGMH4
-         OJ1ACVGbB52kwWod1SALxzlvtl7iFWdhL0MHTaw4z9M0kCUm0arrW1nrG1Jt/A5doYgE
-         KyMw==
-X-Gm-Message-State: AAQBX9dUR4JRLo0BXtOMJBYW3kHB3KgN/VzqxItOkoIneIGwyNG2Ideq
-        mKA5wzq6levodZSPuZfdxg+FMw==
-X-Google-Smtp-Source: AKy350bvwxZIoP1TokwhqCpLgUkLtNzYMkJUALfJwFX186XZ4vsH3m7WlpcgTtoJidMsj/eG06rbIg==
-X-Received: by 2002:aca:3cd7:0:b0:38d:9dba:6a5a with SMTP id j206-20020aca3cd7000000b0038d9dba6a5amr175603oia.15.1681854436620;
-        Tue, 18 Apr 2023 14:47:16 -0700 (PDT)
-Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id k206-20020acabad7000000b0038934c5b400sm6300453oif.25.2023.04.18.14.47.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 14:47:16 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Tue, 18 Apr 2023 16:47:14 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.2 000/139] 6.2.12-rc1 review
-Message-ID: <ZD8P4gAi03rLRNJA@fedora64.linuxtx.org>
-References: <20230418120313.725598495@linuxfoundation.org>
+        Tue, 18 Apr 2023 17:48:09 -0400
+Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B257CAD13
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:47:50 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id otAtpDm3iuZFDotAtp5a56; Tue, 18 Apr 2023 23:47:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+        s=t20230301; t=1681854468;
+        bh=cZSjVGZIUlYLIpCjOhOc0/Sg4X8Jz8GjKGH9/AcwNB8=;
+        h=From:To:Cc:Subject:Date;
+        b=Q6sEsKrhFoWuQ2stk0aG1FI8wza6+Ha+g2auGJtsu7dzre1BbLJ1BwVUEsdiO3oy8
+         hkFnkBWD81hqEJSpcCf/Y3FELHW2dvuqNhnVLBXIJhGCPv1tNlPHMLFh/4Oq7n5oDE
+         9Qou5ArgKmLeqQEbtYU4G2HEZLKNBL2GWvX8TjEQeUkcpHgiHOzRVj5ldEWdQUMjM6
+         yBVUKNq/3KNbqsbG2n0sayi81o6SuZ+XjpaYKr4yiyrUgA5sFgS3ZogzycHVDT2TpO
+         MSqgqgujgmvJ5yGgz9f4CS6HMJRxRg2z6gtQvBnEkLiOfyjiQdFItvFhgOs+U4O/18
+         iF95AxOOP6wgA==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 18 Apr 2023 23:47:48 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: [PATCH 1/2] KVM: arm64: Slightly optimize flush_context()
+Date:   Tue, 18 Apr 2023 23:47:37 +0200
+Message-Id: <97bf2743f3a302b3066aced02218b9da60690dd3.1681854412.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418120313.725598495@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 02:21:05PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.12 release.
-> There are 139 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.12-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+bitmap_zero() is faster than bitmap_clear(), so use it to save a few
+cycles.
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ arch/arm64/kvm/vmid.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+diff --git a/arch/arm64/kvm/vmid.c b/arch/arm64/kvm/vmid.c
+index 08978d0672e7..bbf0677cfefa 100644
+--- a/arch/arm64/kvm/vmid.c
++++ b/arch/arm64/kvm/vmid.c
+@@ -47,7 +47,7 @@ static void flush_context(void)
+ 	int cpu;
+ 	u64 vmid;
+ 
+-	bitmap_clear(vmid_map, 0, NUM_USER_VMIDS);
++	bitmap_zero(vmid_map, NUM_USER_VMIDS);
+ 
+ 	for_each_possible_cpu(cpu) {
+ 		vmid = atomic64_xchg_relaxed(&per_cpu(active_vmids, cpu), 0);
+-- 
+2.34.1
+
