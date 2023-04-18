@@ -2,79 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A99A6E6F76
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD086E6F87
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232742AbjDRWjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 18:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
+        id S232772AbjDRWlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 18:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232681AbjDRWji (ORCPT
+        with ESMTP id S232796AbjDRWlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 18:39:38 -0400
+        Tue, 18 Apr 2023 18:41:13 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2D39014
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 15:38:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB78A248
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 15:40:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681857527;
+        s=mimecast20190719; t=1681857615;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nt4NAlgjVn3bwVtb59HBkHnV8fhtHInS8+cCLwzW3Oo=;
-        b=eplRB4EYd/BRVjPcXlKnIAmoU8v/IJ+6xjqeul0/TKtSP1b0uErY34i3/0cPcUYw/dvhll
-        JOFBL4SyTn+1omPMUqHD1hgc60+fPXUTEU1u4VqLuYiP2EiZVkMjZ+fOPTsfCPrvUg6jgi
-        8rv7LeW1lA3uQ2eG1IxkSrUuucgqfpM=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-449-z_2VSFFHPHOtmDLQ5vpnfg-1; Tue, 18 Apr 2023 18:38:45 -0400
-X-MC-Unique: z_2VSFFHPHOtmDLQ5vpnfg-1
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-760da06b86aso189465739f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 15:38:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681857525; x=1684449525;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nt4NAlgjVn3bwVtb59HBkHnV8fhtHInS8+cCLwzW3Oo=;
-        b=RxIBNnle6Ie8uqjT3BTCWQoCb/prEIqvHhYDOPz48IYv697HnUosK73YexfjHbiuWf
-         jrL6ezdXC6qseP4ihYn57y/b5KqIF4R52cc9X6WjuPQJc15hz6v39SnxXLbGFJKk/tJO
-         y4zjnKibC6kuWR6BF7lq3aIMYOG3RnXYbY7LKQIweSQpUJ9xqcm2NudT2TT9r4tX3lde
-         ZSkOs3SjsojA6StLUDXcCo+zykRcB+IXEC1C+ZrWhHJ5gKN1fFINeO26y9wBU/QYILds
-         YaZNNFKsLlNxsjahmBpotuZLbD3/g6UtGvH5V4AmR4UsoqOouWs0Aijz1yifKfhwfoqB
-         NubA==
-X-Gm-Message-State: AAQBX9c9dV5HXv31JbjdMmrsYjUNfcfx+opEHXjpjMUE0NWKvHx1xDvA
-        HsUVJbruUa06eE8nR8AChXIVpoy9iA3aDX4WFakE3yNEKRCNzrrzm41Nbzu1peBu0D1etewNh7L
-        04mhVwAblNzPIt1GnMPi0s0Gt
-X-Received: by 2002:a5d:80d6:0:b0:760:e9b6:e6da with SMTP id h22-20020a5d80d6000000b00760e9b6e6damr3037664ior.1.1681857525016;
-        Tue, 18 Apr 2023 15:38:45 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YI7seWtoBWPqYjT1RzndFBvuqrDODhMJ9id2vYXvKT4+TRs/PoewlgjvRH85jDeChhXC2tOQ==
-X-Received: by 2002:a5d:80d6:0:b0:760:e9b6:e6da with SMTP id h22-20020a5d80d6000000b00760e9b6e6damr3037642ior.1.1681857524746;
-        Tue, 18 Apr 2023 15:38:44 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id x6-20020a5d9906000000b007079249a9d1sm4275565iol.34.2023.04.18.15.38.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 15:38:44 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 16:38:43 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     jgg@nvidia.com, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        tglx@linutronix.de, darwi@linutronix.de, kvm@vger.kernel.org,
-        dave.jiang@intel.com, jing2.liu@intel.com, ashok.raj@intel.com,
-        fenghua.yu@intel.com, tom.zanussi@linux.intel.com,
+         content-transfer-encoding:content-transfer-encoding;
+        bh=88WLzUQfui8MOyB5NEFokobl+41u8GpMubwgrVgH7UQ=;
+        b=Q+iR+24ow2YPAm1IAEbJ4CibZ8O8viGtSzMVHo8qtqS/8EthsMQGdJqP30PbuV1K869Q7z
+        weQaiiOs3PIYmVL5VUL1DrZ3Hy95a8x1KHFtyg2lCn2UG0brYrfYruiOvc2MnoSW1/hv4G
+        wa23QBRzJ9TqxnuPHaDmsZL4QlKTWAs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-463-ld5D_CZpP5eRYdorAN4ycA-1; Tue, 18 Apr 2023 18:40:09 -0400
+X-MC-Unique: ld5D_CZpP5eRYdorAN4ycA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 290F3101A531;
+        Tue, 18 Apr 2023 22:40:09 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EE26540BC798;
+        Tue, 18 Apr 2023 22:40:07 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     Steve French <smfrench@gmail.com>
+cc:     dhowells@redhat.com, Paulo Alcantara <pc@manguebit.com>,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        Long Li <longli@microsoft.com>,
+        Enzo Matsumiya <ematsumiya@suse.de>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 10/10] vfio/pci: Clear VFIO_IRQ_INFO_NORESIZE for
- MSI-X
-Message-ID: <20230418163843.7b4c0366.alex.williamson@redhat.com>
-In-Reply-To: <6c057618833a180da2147bffadb98e07cb73e045.1681837892.git.reinette.chatre@intel.com>
-References: <cover.1681837892.git.reinette.chatre@intel.com>
-        <6c057618833a180da2147bffadb98e07cb73e045.1681837892.git.reinette.chatre@intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+Subject: [PATCH] cifs: Fix unbuffered read
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 18 Apr 2023 23:40:07 +0100
+Message-ID: <1692048.1681857607@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -85,61 +68,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Apr 2023 10:29:21 -0700
-Reinette Chatre <reinette.chatre@intel.com> wrote:
 
-> Dynamic MSI-X is supported. Clear VFIO_IRQ_INFO_NORESIZE
-> to provide guidance to user space.
-> 
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> ---
-> Changes since V2:
-> - Use new vdev->has_dyn_msix property instead of calling
->   pci_msix_can_alloc_dyn() directly. (Alex)
-> 
-> Changes since RFC V1:
-> - Only advertise VFIO_IRQ_INFO_NORESIZE for MSI-X devices that
->   can actually support dynamic allocation. (Alex)
-> 
->  drivers/vfio/pci/vfio_pci_core.c | 4 +++-
->  include/uapi/linux/vfio.h        | 3 +++
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-> index a3635a8e54c8..4050ad3388c2 100644
-> --- a/drivers/vfio/pci/vfio_pci_core.c
-> +++ b/drivers/vfio/pci/vfio_pci_core.c
-> @@ -1114,7 +1114,9 @@ static int vfio_pci_ioctl_get_irq_info(struct vfio_pci_core_device *vdev,
->  	if (info.index == VFIO_PCI_INTX_IRQ_INDEX)
->  		info.flags |=
->  			(VFIO_IRQ_INFO_MASKABLE | VFIO_IRQ_INFO_AUTOMASKED);
-> -	else
-> +	else if ((info.index != VFIO_PCI_MSIX_IRQ_INDEX) ||
-> +		 (info.index == VFIO_PCI_MSIX_IRQ_INDEX &&
-> +		  !vdev->has_dyn_msix))
+If read() is done in an unbuffered manner, such that, say,
+cifs_strict_readv() goes through cifs_user_readv() and thence
+__cifs_readv(), it doesn't recognise the EOF and keeps indicating to
+userspace that it returning full buffers of data.
 
-Isn't this the same as:
+This is due to ctx->iter being advanced in cifs_send_async_read() as the
+buffer is split up amongst a number of rdata objects.  The iterator count
+is then used in collect_uncached_read_data() in the non-DIO case to set the
+total length read - and thus the return value of sys_read().  But since the
+iterator normally gets used up completely during splitting, ctx->total_len
+gets overridden to the full amount.
 
-	(info.index != VFIO_PCI_MSIX_IRQ_INDEX || !vdev->has_dyn_msix)
+However, prior to that in collect_uncached_read_data(), we've gone through
+the list of rdatas and added up the amount of data we actually received
+(which we then throw away).
 
-Thanks,
-Alex
+Fix this by removing the bit that overrides the amount read in the non-DIO
+case and just going with the total added up in the aforementioned loop.
 
->  		info.flags |= VFIO_IRQ_INFO_NORESIZE;
->  
->  	return copy_to_user(arg, &info, minsz) ? -EFAULT : 0;
-> diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
-> index 0552e8dcf0cb..1a36134cae5c 100644
-> --- a/include/uapi/linux/vfio.h
-> +++ b/include/uapi/linux/vfio.h
-> @@ -511,6 +511,9 @@ struct vfio_region_info_cap_nvlink2_lnkspd {
->   * then add and unmask vectors, it's up to userspace to make the decision
->   * whether to allocate the maximum supported number of vectors or tear
->   * down setup and incrementally increase the vectors as each is enabled.
-> + * Absence of the NORESIZE flag indicates that vectors can be enabled
-> + * and disabled dynamically without impacting other vectors within the
-> + * index.
->   */
->  struct vfio_irq_info {
->  	__u32	argsz;
+This was observed by mounting a cifs share with multiple channels, e.g.:
+
+	mount //192.168.6.1/test /test/ -o user=3Dshares,pass=3D...,max_channels=
+=3D6
+
+and then reading a 1MiB file on the share:
+
+	strace cat /xfstest.test/1M  >/dev/null
+
+Through strace, the same data can be seen being read again and again.
+=20=20=20=20
+Fixes: d08089f649a0 ("cifs: Change the I/O paths to use an iterator rather =
+than a page list")
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Steve French <smfrench@gmail.com>
+cc: Paulo Alcantara <pc@manguebit.com>
+cc: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+cc: Long Li <longli@microsoft.com>
+cc: Enzo Matsumiya <ematsumiya@suse.de>
+cc: Shyam Prasad N <nspmangalore@gmail.com>
+cc: Rohith Surabattula <rohiths.msft@gmail.com>
+cc: Jeff Layton <jlayton@kernel.org>
+cc: linux-cifs@vger.kernel.org
+---
+ fs/cifs/file.c |    4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+index 321f9b7c84c9..f8877dc91cc5 100644
+--- a/fs/cifs/file.c
++++ b/fs/cifs/file.c
+@@ -4010,7 +4010,6 @@ static void
+ collect_uncached_read_data(struct cifs_aio_ctx *ctx)
+ {
+ 	struct cifs_readdata *rdata, *tmp;
+-	struct iov_iter *to =3D &ctx->iter;
+ 	struct cifs_sb_info *cifs_sb;
+ 	int rc;
+=20
+@@ -4076,9 +4075,6 @@ collect_uncached_read_data(struct cifs_aio_ctx *ctx)
+ 		kref_put(&rdata->refcount, cifs_readdata_release);
+ 	}
+=20
+-	if (!ctx->direct_io)
+-		ctx->total_len =3D ctx->len - iov_iter_count(to);
+-
+ 	/* mask nodata case */
+ 	if (rc =3D=3D -ENODATA)
+ 		rc =3D 0;
 
