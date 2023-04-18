@@ -2,87 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BAA56E60E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 618ED6E60E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbjDRMM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 08:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
+        id S230459AbjDRMMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 08:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231680AbjDRMLk (ORCPT
+        with ESMTP id S231429AbjDRMMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 08:11:40 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE0E7EEB
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:11:07 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4edb9039a4cso2063565e87.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:11:06 -0700 (PDT)
+        Tue, 18 Apr 2023 08:12:12 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D71AC2;
+        Tue, 18 Apr 2023 05:12:09 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4edc51644b6so186422e87.1;
+        Tue, 18 Apr 2023 05:12:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681819865; x=1684411865;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jK7H3+ErS03Ewzys5ptfYi+3TCq3sJWDKGWiaxXPxVc=;
-        b=fuHWc+pU6kSJ5B8ILg4cxboqaKg4YG4zzH+6szvYhrPIEcDw4trMLqi08eXiaM5Gkf
-         4RQaBvCm/cvtj7QAiqHndJHs1DkkQ9rMq2qm+yoTBS8AJdGFkTyndwfOxGXf//6wdsyO
-         kZW103oYYampkvOOTH33ac6xyyGemNBb2+RhXJe4rgIRdLBjZ83bpwBsIb4ikNmGvK2K
-         6UnAbgQJdzHYWJC3RS3uFVwzg56p6BGs6cAiR2F6Mf7FFVmvDb1Blg80pTKDGbfnPZnN
-         jvLrrgB9IdOweZLM57gORL1VfoEZoaRNKwQr7J/y/UYvhBtYDCHJ5Qtksulr2LnpxGf+
-         xaYA==
+        d=gmail.com; s=20221208; t=1681819928; x=1684411928;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mZ8h+ndNTMIUG24ZQra7ng8ybLcIsdGEtKK7j7YDL08=;
+        b=DKG7EoCL8NbIwiEwC+Lab7Xdwm2o97Neo76N3IGb26fW83u795UP5NMTO80T0ICgzN
+         ygEdvInUIeyZqpapnLOj7pNQdqbn8Y+4cAi133gWIN2yUOCADMiOp01k0dqyd8X6G4/X
+         BNExSm/Qo8XydT6ZKW6ALf+499GSWLNClo02sFM8haVtc6eRNOc6ohJ6R2TZmQ8iIemM
+         x7qOo8+aUrc7ePtnzj1Qgg/4vbnAtE0vZhNqqmSKY9A2PhEDUdHd5iLT7ItPw+gdijMC
+         cSB4rTPlr1H+mB7v/iVdrlcN02/mFrOPShKz93m71KyMBMXfes4XioT+WgSPjyOBjyri
+         Ps8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681819865; x=1684411865;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1681819928; x=1684411928;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jK7H3+ErS03Ewzys5ptfYi+3TCq3sJWDKGWiaxXPxVc=;
-        b=hVefQR9zZvY9e8W9eABIWPJmY166U41AA+y5M96HjbCASTGI/g0TlRn8/wg5jEbOnH
-         TK3aXWNGhag8Fl2DuQYnhB0ROYmN8Fsd6cwtZqbHIxl1icYU08XoPTYTdKjYCCCU+HR+
-         K/8SGBRrUIX0DAZpOW1sfSuMmKvMIScbpTjSPauAB3fA9mWUhqn1EFY8Vn3aR75Xpa2t
-         aMLi595/nHQssqIqjQiKru7dnhqeilJx1lNN11DcwUDlWThAyJW7zgWUb8RCEeyEtBrI
-         QV1LQ93tll3Xz+K8OG6GyBEE98Zn5xAm4UrBE4wamnSufpuHYEgO20rL3xkyteB5Glmf
-         5L6A==
-X-Gm-Message-State: AAQBX9fvN64quwIbhArTkLRcoXrd/NUUTHWva/eH1H078Qq+hRzny9Ca
-        5fcMfw/L4O4PaJU7/WeNXqAZaA==
-X-Google-Smtp-Source: AKy350aWumsOXwDHQ/uYnZksZvKsIYQklkw41JcEKfVA2ot7VlI5J1+K4X9e8gNvBxNHCMWbjY7cmQ==
-X-Received: by 2002:ac2:43bb:0:b0:4ed:c3a1:752a with SMTP id t27-20020ac243bb000000b004edc3a1752amr1958180lfl.45.1681819865345;
-        Tue, 18 Apr 2023 05:11:05 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id q17-20020a19a411000000b004d86808fd33sm2365895lfc.15.2023.04.18.05.11.04
+        bh=mZ8h+ndNTMIUG24ZQra7ng8ybLcIsdGEtKK7j7YDL08=;
+        b=l9MC7XlUzVXE+5z2wa98WB0uSH3kM9gKJFF9wMRsMcrbgJjwEpVNje2F+nf7GEA/sk
+         sndeg0CNR3oJYts7xPjiyF9Nyr7xQK3nviV3jSktrvmkP6PsM8PzGcJ1F/C9w6DkCLpb
+         RIOwHSyyYL+xHBc4ZY71N/TRp4tEWRmllSN9XjxktW4eRX0Z8piSjnoAPI4mT9xY3WUb
+         1h7+RSXwx9qK2NhtkRALGIdNgkdkVR/71VIUoTYhtw4OTVxhSLrSOb0EWIbZDhCIl3k9
+         CmcdxDMU+QmBSLvaAmTJwDvnLOkeM1hRko68Bkjfn1NpvkoHHpV9Y/6hBIo13ObUUT47
+         r10A==
+X-Gm-Message-State: AAQBX9c2yZULcwNQ3iD8bPiSu8RfMjHD/+gXjzMViMQ4qJDmmr47VXN4
+        hjcQ6RCsL4JUrxMdAX50E4IeMlgGE+Q=
+X-Google-Smtp-Source: AKy350b3PoLPnK9MS/gcU1l56xGcDit7YsnJDAt4tbpHAyV9FER72oyh/Yro8rt/I8/TwzU/wx6mEQ==
+X-Received: by 2002:ac2:55a9:0:b0:4ec:9f36:9b63 with SMTP id y9-20020ac255a9000000b004ec9f369b63mr2793811lfg.5.1681819927548;
+        Tue, 18 Apr 2023 05:12:07 -0700 (PDT)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id o10-20020a05651238aa00b004cb43c9bf9asm2365908lft.208.2023.04.18.05.12.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 05:11:05 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 18 Apr 2023 14:11:00 +0200
-Subject: [PATCH v2 5/5] drm/msm/dpu1: Handle the reg bus ICC path
+        Tue, 18 Apr 2023 05:12:07 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 15:11:10 +0300
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Sagi Shahar <sagis@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [RFC PATCH 3/5] KVM: TDX: Add base implementation for
+ tdx_vm_move_enc_context_from
+Message-ID: <20230418151110.00001354.zhi.wang.linux@gmail.com>
+In-Reply-To: <20230407201921.2703758-4-sagis@google.com>
+References: <20230407201921.2703758-1-sagis@google.com>
+        <20230407201921.2703758-4-sagis@google.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230417-topic-dpu_regbus-v2-5-91a66d04898e@linaro.org>
-References: <20230417-topic-dpu_regbus-v2-0-91a66d04898e@linaro.org>
-In-Reply-To: <20230417-topic-dpu_regbus-v2-0-91a66d04898e@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681819856; l=3473;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=xOdy2dn+gE2SKrybPYSqoFq4IriT0JQjTQ+e3Ay5cn0=;
- b=h9ntcpkRQz9/aOBujWPi2GBuMqSjHjzJl4e3f8Ec2wwZlXLEV4LprmN69VRjW49s9bxj9Fi/LWe0
- LEWJnLoPDtmj5vBJezWgfnSaCTM6RowO4Lqti71GkxnGl0OFOQI+
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,106 +84,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Apart from the already handled data bus (MAS_MDP_Pn<->DDR), there's
-another path that needs to be handled to ensure MDSS functions properly,
-namely the "reg bus", a.k.a the CPU-MDSS interconnect.
+On Fri,  7 Apr 2023 20:19:19 +0000
+Sagi Shahar <sagis@google.com> wrote:
 
-Gating that path may have a variety of effects.. from none to otherwise
-inexplicable DSI timeouts..
+What was the status of the src VM when calling the vm_move_enc_context_from?
+Is it still active like common live migration or it has been paused?
 
-On the DPU side, we need to keep the bus alive. The vendor driver
-kickstarts it to max (300Mbps) throughput on first commit, but in
-exchange for some battery life in rare DPU-enabled-panel-disabled
-usecases, we can request it at DPU init and gate it at suspend.
-
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 22 ++++++++++++++++++++--
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h |  1 +
- 2 files changed, 21 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index dd6c1c40ab9e..5e1ed338114d 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -384,15 +384,17 @@ static int dpu_kms_global_obj_init(struct dpu_kms *dpu_kms)
- 	return 0;
- }
- 
--static int dpu_kms_parse_data_bus_icc_path(struct dpu_kms *dpu_kms)
-+static int dpu_kms_parse_icc_paths(struct dpu_kms *dpu_kms)
- {
- 	struct icc_path *path0;
- 	struct icc_path *path1;
-+	struct icc_path *reg_bus_path;
- 	struct drm_device *dev = dpu_kms->dev;
- 	struct device *dpu_dev = dev->dev;
- 
- 	path0 = msm_icc_get(dpu_dev, "mdp0-mem");
- 	path1 = msm_icc_get(dpu_dev, "mdp1-mem");
-+	reg_bus_path = msm_icc_get(dpu_dev, "cpu-cfg");
- 
- 	if (IS_ERR_OR_NULL(path0))
- 		return PTR_ERR_OR_ZERO(path0);
-@@ -404,6 +406,10 @@ static int dpu_kms_parse_data_bus_icc_path(struct dpu_kms *dpu_kms)
- 		dpu_kms->mdp_path[1] = path1;
- 		dpu_kms->num_mdp_paths++;
- 	}
-+
-+	if (!IS_ERR_OR_NULL(reg_bus_path))
-+		dpu_kms->reg_bus_path = reg_bus_path;
-+
- 	return 0;
- }
- 
-@@ -1039,7 +1045,7 @@ static int dpu_kms_hw_init(struct msm_kms *kms)
- 		DPU_DEBUG("REG_DMA is not defined");
- 	}
- 
--	dpu_kms_parse_data_bus_icc_path(dpu_kms);
-+	dpu_kms_parse_icc_paths(dpu_kms);
- 
- 	rc = pm_runtime_resume_and_get(&dpu_kms->pdev->dev);
- 	if (rc < 0)
-@@ -1241,6 +1247,9 @@ static int __maybe_unused dpu_runtime_suspend(struct device *dev)
- 	for (i = 0; i < dpu_kms->num_mdp_paths; i++)
- 		icc_set_bw(dpu_kms->mdp_path[i], 0, 0);
- 
-+	if (dpu_kms->reg_bus_path)
-+		icc_set_bw(dpu_kms->reg_bus_path, 0, 0);
-+
- 	return 0;
- }
- 
-@@ -1261,6 +1270,15 @@ static int __maybe_unused dpu_runtime_resume(struct device *dev)
- 		return rc;
- 	}
- 
-+	/*
-+	 * The vendor driver supports setting 76.8 / 150 / 300 MBps on this
-+	 * path, but it seems to go for the highest level when display output
-+	 * is enabled and zero otherwise. For simplicity, we can assume that
-+	 * DPU being enabled and running implies that.
-+	 */
-+	if (dpu_kms->reg_bus_path)
-+		icc_set_bw(dpu_kms->reg_bus_path, 0, MBps_to_icc(300));
-+
- 	dpu_vbif_init_memtypes(dpu_kms);
- 
- 	drm_for_each_encoder(encoder, ddev)
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
-index d5d9bec90705..c332381d58c4 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
-@@ -111,6 +111,7 @@ struct dpu_kms {
- 	atomic_t bandwidth_ref;
- 	struct icc_path *mdp_path[2];
- 	u32 num_mdp_paths;
-+	struct icc_path *reg_bus_path;
- };
- 
- struct vsync_info {
-
--- 
-2.40.0
+> This should mostly match the logic in sev_vm_move_enc_context_from.
+> 
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> ---
+>  arch/x86/kvm/vmx/main.c    | 10 +++++++
+>  arch/x86/kvm/vmx/tdx.c     | 56 ++++++++++++++++++++++++++++++++++++++
+>  arch/x86/kvm/vmx/tdx.h     |  2 ++
+>  arch/x86/kvm/vmx/x86_ops.h |  5 ++++
+>  4 files changed, 73 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> index 5b64fe5404958..9d5d0ac465bf6 100644
+> --- a/arch/x86/kvm/vmx/main.c
+> +++ b/arch/x86/kvm/vmx/main.c
+> @@ -979,6 +979,14 @@ static int vt_vcpu_mem_enc_ioctl(struct kvm_vcpu *vcpu, void __user *argp)
+>  	return tdx_vcpu_ioctl(vcpu, argp);
+>  }
+>  
+> +static int vt_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+> +{
+> +	if (!is_td(kvm))
+> +		return -ENOTTY;
+> +
+> +	return tdx_vm_move_enc_context_from(kvm, source_fd);
+> +}
+> +
+>  #define VMX_REQUIRED_APICV_INHIBITS		       \
+>  (						       \
+>         BIT(APICV_INHIBIT_REASON_DISABLE)|	       \
+> @@ -1141,6 +1149,8 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+>  	.dev_mem_enc_ioctl = tdx_dev_ioctl,
+>  	.mem_enc_ioctl = vt_mem_enc_ioctl,
+>  	.vcpu_mem_enc_ioctl = vt_vcpu_mem_enc_ioctl,
+> +
+> +	.vm_move_enc_context_from = vt_move_enc_context_from,
+>  };
+>  
+>  struct kvm_x86_init_ops vt_init_ops __initdata = {
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index 8af7e4e81c860..0999a6d827c99 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -2826,3 +2826,59 @@ int __init tdx_init(void)
+>  		INIT_LIST_HEAD(&per_cpu(associated_tdvcpus, cpu));
+>  	return 0;
+>  }
+> +
+> +static __always_inline bool tdx_guest(struct kvm *kvm)
+> +{
+> +	struct kvm_tdx *tdx_kvm = to_kvm_tdx(kvm);
+> +
+> +	return tdx_kvm->finalized;
+> +}
+        return is_td_finalized()?
+> +
+> +static int tdx_migrate_from(struct kvm *dst, struct kvm *src)
+> +{
+> +	return -EINVAL;
+> +}
+> +
+> +int tdx_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+> +{
+> +	struct kvm_tdx *dst_tdx = to_kvm_tdx(kvm);
+> +	struct file *src_kvm_file;
+> +	struct kvm_tdx *src_tdx;
+> +	struct kvm *src_kvm;
+> +	int ret;
+> +
+> +	src_kvm_file = fget(source_fd);
+> +	if (!file_is_kvm(src_kvm_file)) {
+> +		ret = -EBADF;
+> +		goto out_fput;
+> +	}
+> +	src_kvm = src_kvm_file->private_data;
+> +	src_tdx = to_kvm_tdx(src_kvm);
+> +
+> +	ret = pre_move_enc_context_from(kvm, src_kvm,
+> +					&dst_tdx->migration_in_progress,
+> +					&src_tdx->migration_in_progress);
+> +	if (ret)
+> +		goto out_fput;
+> +
+> +	if (tdx_guest(kvm) || !tdx_guest(src_kvm)) {
+> +		ret = -EINVAL;
+> +		goto out_post;
+> +	}
+> +
+> +	ret = tdx_migrate_from(kvm, src_kvm);
+> +	if (ret)
+> +		goto out_post;
+> +
+> +	kvm_vm_dead(src_kvm);
+> +	ret = 0;
+> +
+> +out_post:
+> +	post_move_enc_context_from(kvm, src_kvm,
+> +				 &dst_tdx->migration_in_progress,
+> +				 &src_tdx->migration_in_progress);
+> +out_fput:
+> +	if (src_kvm_file)
+> +		fput(src_kvm_file);
+> +	return ret;
+> +}
+> diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
+> index 71818c5001862..21b7e710be1fd 100644
+> --- a/arch/x86/kvm/vmx/tdx.h
+> +++ b/arch/x86/kvm/vmx/tdx.h
+> @@ -24,6 +24,8 @@ struct kvm_tdx {
+>  	atomic_t tdh_mem_track;
+>  
+>  	u64 tsc_offset;
+> +
+> +	atomic_t migration_in_progress;
+>  };
+>  
+>  union tdx_exit_reason {
+> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
+> index d049e0c72ed0c..275f5d75e9bf1 100644
+> --- a/arch/x86/kvm/vmx/x86_ops.h
+> +++ b/arch/x86/kvm/vmx/x86_ops.h
+> @@ -187,6 +187,8 @@ int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp);
+>  void tdx_flush_tlb(struct kvm_vcpu *vcpu);
+>  int tdx_sept_tlb_remote_flush(struct kvm *kvm);
+>  void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level);
+> +
+> +int tdx_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd);
+>  #else
+>  static inline int tdx_init(void) { return 0; };
+>  static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -ENOSYS; }
+> @@ -241,6 +243,9 @@ static inline int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { ret
+>  static inline void tdx_flush_tlb(struct kvm_vcpu *vcpu) {}
+>  static inline int tdx_sept_tlb_remote_flush(struct kvm *kvm) { return 0; }
+>  static inline void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level) {}
+> +
+> +static inline int tdx_vm_move_enc_context_from(struct kvm *kvm, u
+> +					       nsigned int source_fd) { return -EOPNOTSUPP; }
+>  #endif
+>  
+>  #if defined(CONFIG_INTEL_TDX_HOST) && defined(CONFIG_KVM_SMM)
 
