@@ -2,57 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F3D6E6DD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CB96E6DCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbjDRVGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
+        id S232756AbjDRVDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232842AbjDRVFv (ORCPT
+        with ESMTP id S230408AbjDRVDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:05:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077EE9029
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:05:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681851909;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=laHOqnD3W3CUxia0m/O9KtMK5N8jzZS3g0NpgnSfrrc=;
-        b=FTct92Fg2Ahd5+cIvCfHONsQNDea30QG1wjqRk2gOcRW7YgRfCCkBbizV+cCRQjudwWZx1
-        bxbFq0pLNKLWcSEBTA9RuHBcBb4CFZsbjEBmwaPiTzQ8Hq1rq2CbAWfjtHia7zqHx5RNf0
-        Y5mdcYHAt3SshFoTA91ZXEpwbywOtYQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-403-7qqHD665M82NvQjDcbQGIg-1; Tue, 18 Apr 2023 17:05:05 -0400
-X-MC-Unique: 7qqHD665M82NvQjDcbQGIg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 18 Apr 2023 17:03:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABFB7ED6;
+        Tue, 18 Apr 2023 14:03:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A60F811E7C;
-        Tue, 18 Apr 2023 21:05:05 +0000 (UTC)
-Received: from llong.com (unknown [10.22.34.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A57F920239E0;
-        Tue, 18 Apr 2023 21:05:04 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Joe Mario <jmario@redhat.com>,
-        Barry Marson <bmarson@redhat.com>,
-        Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH] mm/mmap: Map MAP_STACK to VM_STACK
-Date:   Tue, 18 Apr 2023 17:02:30 -0400
-Message-Id: <20230418210230.3495922-1-longman@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC73662C35;
+        Tue, 18 Apr 2023 21:03:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 155EEC433EF;
+        Tue, 18 Apr 2023 21:03:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681851786;
+        bh=wUDQT7v4d9CA1v22EaRJl1H3C9V5twleJc7yXsj1qDA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=d5Uz3AqaD26Yv+nr9cFaoJzGbvLA3JqeJLNEPT8wSh1eb6X6EvRFOZ1SKuGjyCYpx
+         eH2HpI20aWdUaPs3W5D/b6IG/WZzl6KwS/RFlYyRmrj2rU8u8rhD2yi+B+D2Asy1aG
+         QZzpLc0Q40QmOcm3NtyQ0h0gD2NQ5jFUlsl5BFNaodBkqBr1SPZwgBdjChL8Vl6K7q
+         VzDjHXH+ceP1GDR16/ib2INaiLJASQIi75eyNC3TBuwxzV7EIo15vKo9ljsrRpjMPA
+         0kVyQPK6wtnK0kOGYyaRSwpiVK5b41MoX34NS0IlllNjSRS+UpeVDKG7EhBSgiUjHy
+         8RPrv8vYiZQzA==
+Date:   Tue, 18 Apr 2023 16:03:04 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] PCI: Use of_property_present() for testing DT property
+ presence
+Message-ID: <20230418210304.GA158193@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310144719.1544443-1-robh@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,50 +70,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One of the flags of mmap(2) is MAP_STACK to request a memory segment
-suitable for a process or thread stack. The kernel currently ignores
-this flags. Glibc uses MAP_STACK when mmapping a thread stack. However,
-selinux has an execstack check in selinux_file_mprotect() which disallows
-a stack VMA to be made executable.
+On Fri, Mar 10, 2023 at 08:47:19AM -0600, Rob Herring wrote:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties. As
+> part of this, convert of_get_property/of_find_property calls to the
+> recently added of_property_present() helper when we just want to test
+> for presence of a property and nothing more.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Since MAP_STACK is a noop, it is possible for a stack VMA to be merged
-with an adjacent anonymous VMA. With that merging, using mprotect(2)
-to change a part of the merged anonymous VMA to make it executable may
-fail. This can lead to sporadic failure of applications that need to
-make those changes.
+Applied with AngeloGioacchino's reviewed-by to pci/enumeration for
+v6.4, thanks!
 
-One possible fix is to make sure that a stack VMA will not be merged
-with a non-stack anonymous VMA. That requires a vm flag that can be
-used to distinguish a stack VMA from a regular anonymous VMA. One
-can add a new dummy vm flag for that purpose. However, there is only
-1 bit left in the lower 32 bits of vm_flags. Another alternative is
-to use an existing vm flag. VM_STACK (= VM_GROWSDOWN for most arches)
-can certainly be used for this purpose. The downside is that it is a
-slight change in existing behavior.
-
-Making a stack VMA growable by default certainly fits the need of a
-process or thread stack. This patch now maps MAP_STACK to VM_STACK to
-prevent unwanted merging with adjacent non-stack VMAs and make the VMA
-more suitable for being used as a stack.
-
-Reported-by: Joe Mario <jmario@redhat.com>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- include/linux/mman.h | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/include/linux/mman.h b/include/linux/mman.h
-index cee1e4b566d8..4b621d30ace9 100644
---- a/include/linux/mman.h
-+++ b/include/linux/mman.h
-@@ -152,6 +152,7 @@ calc_vm_flag_bits(unsigned long flags)
- 	return _calc_vm_trans(flags, MAP_GROWSDOWN,  VM_GROWSDOWN ) |
- 	       _calc_vm_trans(flags, MAP_LOCKED,     VM_LOCKED    ) |
- 	       _calc_vm_trans(flags, MAP_SYNC,	     VM_SYNC      ) |
-+	       _calc_vm_trans(flags, MAP_STACK,	     VM_STACK     ) |
- 	       arch_calc_vm_flag_bits(flags);
- }
- 
--- 
-2.31.1
-
+> ---
+>  drivers/pci/controller/pci-tegra.c     | 4 ++--
+>  drivers/pci/controller/pcie-mediatek.c | 2 +-
+>  drivers/pci/hotplug/rpaphp_core.c      | 4 ++--
+>  drivers/pci/of.c                       | 2 +-
+>  4 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-tegra.c b/drivers/pci/controller/pci-tegra.c
+> index 74c109f14ff0..79630885b9c8 100644
+> --- a/drivers/pci/controller/pci-tegra.c
+> +++ b/drivers/pci/controller/pci-tegra.c
+> @@ -1375,7 +1375,7 @@ static int tegra_pcie_phys_get(struct tegra_pcie *pcie)
+>  	struct tegra_pcie_port *port;
+>  	int err;
+>  
+> -	if (!soc->has_gen2 || of_find_property(np, "phys", NULL) != NULL)
+> +	if (!soc->has_gen2 || of_property_present(np, "phys"))
+>  		return tegra_pcie_phys_get_legacy(pcie);
+>  
+>  	list_for_each_entry(port, &pcie->ports, list) {
+> @@ -1944,7 +1944,7 @@ static bool of_regulator_bulk_available(struct device_node *np,
+>  	for (i = 0; i < num_supplies; i++) {
+>  		snprintf(property, 32, "%s-supply", supplies[i].supply);
+>  
+> -		if (of_find_property(np, property, NULL) == NULL)
+> +		if (!of_property_present(np, property))
+>  			return false;
+>  	}
+>  
+> diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
+> index ae5ad05ddc1d..31de7a29192c 100644
+> --- a/drivers/pci/controller/pcie-mediatek.c
+> +++ b/drivers/pci/controller/pcie-mediatek.c
+> @@ -643,7 +643,7 @@ static int mtk_pcie_setup_irq(struct mtk_pcie_port *port,
+>  		return err;
+>  	}
+>  
+> -	if (of_find_property(dev->of_node, "interrupt-names", NULL))
+> +	if (of_property_present(dev->of_node, "interrupt-names"))
+>  		port->irq = platform_get_irq_byname(pdev, "pcie_irq");
+>  	else
+>  		port->irq = platform_get_irq(pdev, port->slot);
+> diff --git a/drivers/pci/hotplug/rpaphp_core.c b/drivers/pci/hotplug/rpaphp_core.c
+> index 491986197c47..2316de0fd198 100644
+> --- a/drivers/pci/hotplug/rpaphp_core.c
+> +++ b/drivers/pci/hotplug/rpaphp_core.c
+> @@ -278,7 +278,7 @@ int rpaphp_check_drc_props(struct device_node *dn, char *drc_name,
+>  		return -EINVAL;
+>  	}
+>  
+> -	if (of_find_property(dn->parent, "ibm,drc-info", NULL))
+> +	if (of_property_present(dn->parent, "ibm,drc-info"))
+>  		return rpaphp_check_drc_props_v2(dn, drc_name, drc_type,
+>  						be32_to_cpu(*my_index));
+>  	else
+> @@ -440,7 +440,7 @@ int rpaphp_add_slot(struct device_node *dn)
+>  	if (!of_node_name_eq(dn, "pci"))
+>  		return 0;
+>  
+> -	if (of_find_property(dn, "ibm,drc-info", NULL))
+> +	if (of_property_present(dn, "ibm,drc-info"))
+>  		return rpaphp_drc_info_add_slot(dn);
+>  	else
+>  		return rpaphp_drc_add_slot(dn);
+> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> index 196834ed44fe..e085f2eca372 100644
+> --- a/drivers/pci/of.c
+> +++ b/drivers/pci/of.c
+> @@ -447,7 +447,7 @@ static int of_irq_parse_pci(const struct pci_dev *pdev, struct of_phandle_args *
+>  		return -ENODEV;
+>  
+>  	/* Local interrupt-map in the device node? Use it! */
+> -	if (of_get_property(dn, "interrupt-map", NULL)) {
+> +	if (of_property_present(dn, "interrupt-map")) {
+>  		pin = pci_swizzle_interrupt_pin(pdev, pin);
+>  		ppnode = dn;
+>  	}
+> -- 
+> 2.39.2
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
