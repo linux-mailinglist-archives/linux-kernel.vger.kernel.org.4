@@ -2,50 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C066E6F1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476466E6F21
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233073AbjDRWIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 18:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46982 "EHLO
+        id S232605AbjDRWM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 18:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbjDRWI3 (ORCPT
+        with ESMTP id S231522AbjDRWM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 18:08:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A1F269F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 15:08:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FA1A615CD
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:08:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ED60C433D2;
-        Tue, 18 Apr 2023 22:08:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1681855707;
-        bh=A8qCPR0691ECOrXmuz6X4xvdj4xXQbRWYqn0vXEFJrI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=L9qKdnuaAkHDdGDGC7hXjBWiX9KmdmBTUh1GRDLQHPGN553w+QtJFPUC5VbEX5Zmc
-         81wR2O0zW6CUSFEnMdGnQ4RGveVxBJvFoOHv0SXFwkaOv/ULg+gtc4bxjFtu4vdSVj
-         rmqV+cndvX5R43kZJQyqA005bl/FJtu/0m6zpoRI=
-Date:   Tue, 18 Apr 2023 15:08:26 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     elver@google.com, ryabinin.a.a@gmail.com, glider@google.com,
-        andreyknvl@gmail.com, dvyukov@google.com,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] kasan: Fix lockdep report invalid wait context
-Message-Id: <20230418150826.ae36090243b21f21f3265792@linux-foundation.org>
-In-Reply-To: <20230327120019.1027640-1-qiang1.zhang@intel.com>
-References: <20230327120019.1027640-1-qiang1.zhang@intel.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        Tue, 18 Apr 2023 18:12:27 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9644C22
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 15:12:25 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b73203e0aso12044543b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 15:12:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681855945; x=1684447945;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M9E1BqVFDy2BflXM1cADV/r0z5lqbfjda2/59Vcchgo=;
+        b=Jo2yZxMkavhQ+MIAWBAeaGvPx0841bfH+j3qe8ft2FVaBlD2M+g06nJxwzd4Zj8OhU
+         aocEc0zcAa6buJ+qL58yK2xIUsZb6kk5U+exUHEGcheHngx1crSLSJcO6CEii5k9vgXn
+         OzYeWwCd2m7wkq1AhQ8Iq1FSzjMpNrDWZcKHQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681855945; x=1684447945;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M9E1BqVFDy2BflXM1cADV/r0z5lqbfjda2/59Vcchgo=;
+        b=BjWWKWvbxA8b5JPd1UCqNF3kJdweyQuyFscL75s4t44OsM9N6q6vo1GEm3oj5P3JlK
+         4Lv3+M6m4lXXGRkej8ocoKkC3gm47of1Ty0CdugJXK8dq8gPY+SRvDXgyj5pz2wZZcZI
+         PM6VlM1g+DLs2zzsZRNg+Lo03YscHDJpnmulIRtajQj2fzjcrryV4l55uMIiVrxf3xnD
+         hoPL8gs+V8buE/yxJGOU3bHMnpnqKniKqhEkMyOyO7tL8+UjCcbpKqgn87LNroR5TE2v
+         IAmrqcYCJVtyBOjbGSx1GETCNerluoeTh4rq6vuOKSPC+/3YCY55A6Vk1bOv8BZcyvu8
+         KZEw==
+X-Gm-Message-State: AAQBX9eh/ptwyDhek/UVrHNP5yuch5yjufNSXQF4FBuYf82tNC/10OJD
+        qJexHg1rh2fw+U/oJ2ZdW/FUZw==
+X-Google-Smtp-Source: AKy350br4lmpBQ9IqBERy8QWvPvh8nF+TV+5IMWinZQGy/0x1eapXdYeTnP5vhm7GN1Hj1rvRlU8RQ==
+X-Received: by 2002:a17:902:d2cb:b0:1a6:3def:5ff6 with SMTP id n11-20020a170902d2cb00b001a63def5ff6mr314888plc.4.1681855944989;
+        Tue, 18 Apr 2023 15:12:24 -0700 (PDT)
+Received: from sarthakkukreti-glaptop.corp.google.com ([2620:15c:9d:200:e38b:ca5e:3203:48d3])
+        by smtp.gmail.com with ESMTPSA id x1-20020a1709029a4100b001a687c505e9sm9911892plv.237.2023.04.18.15.12.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 15:12:24 -0700 (PDT)
+From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
+To:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>,
+        Daniil Lunev <dlunev@google.com>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Subject: [PATCH v4 0/4] Introduce provisioning primitives for thinly provisioned storage
+Date:   Tue, 18 Apr 2023 15:12:03 -0700
+Message-ID: <20230418221207.244685-1-sarthakkukreti@chromium.org>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+In-Reply-To: <20230414000219.92640-1-sarthakkukreti@chromium.org>
+References: <20230414000219.92640-1-sarthakkukreti@chromium.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,17 +82,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Mar 2023 20:00:19 +0800 Zqiang <qiang1.zhang@intel.com> wrote:
+Hi,
 
-> For kernels built with the following options and booting
-> 
-> CONFIG_SLUB=y
-> CONFIG_DEBUG_LOCKDEP=y
-> CONFIG_PROVE_LOCKING=y
-> CONFIG_PROVE_RAW_LOCK_NESTING=y
-> 
-> [    0.523115] [ BUG: Invalid wait context ]
+This patch series is revision 4 of introducing a new mechanism to pass through provision requests on stacked thinly provisioned storage devices. See [1] for original cover letter.
 
-Could we please get some reviewer input on this change?
+[1] https://lore.kernel.org/lkml/ZDnMl8A1B1+Tfn5S@redhat.com/T/#md4f20113c2242755747ae069f84be720a6751012
 
-Thanks.
+Changelog:
+
+V4:
+- Fix UNSHARE and KEEP_SIZE handling in blkdev_fallocate.
+- Split dm-thin support into a separate patch.
+- Remove ranged provision request handling and adjust io hints to handle provisioning one block at a time.
+- Add missing provision_supported for dm targets.
+
+V3:
+- Drop FALLOC_FL_PROVISION and use mode == 0 for provision requests.
+- Drop fs-specific patches; will be sent out in a follow up series.
+- Fix missing shared block handling for thin snapshots.
+
+V2:
+- Fix stacked limit handling.
+- Enable provision request handling in dm-snapshot
+- Don't call truncate_bdev_range if blkdev_fallocate() is called with
+  FALLOC_FL_PROVISION.
+- Clarify semantics of FALLOC_FL_PROVISION and why it needs to be a separate flag
+  (as opposed to overloading mode == 0).
+
+
+Sarthak Kukreti (4):
+  block: Introduce provisioning primitives
+  dm: Add block provisioning support
+  dm-thin: Add REQ_OP_PROVISION support
+  loop: Add support for provision requests
+
+ block/blk-core.c              |  5 +++
+ block/blk-lib.c               | 53 +++++++++++++++++++++++++
+ block/blk-merge.c             | 18 +++++++++
+ block/blk-settings.c          | 19 +++++++++
+ block/blk-sysfs.c             |  8 ++++
+ block/bounce.c                |  1 +
+ block/fops.c                  | 25 +++++++++---
+ drivers/block/loop.c          | 42 ++++++++++++++++++++
+ drivers/md/dm-crypt.c         |  5 ++-
+ drivers/md/dm-linear.c        |  2 +
+ drivers/md/dm-snap.c          |  8 ++++
+ drivers/md/dm-table.c         | 23 +++++++++++
+ drivers/md/dm-thin.c          | 73 ++++++++++++++++++++++++++++++++---
+ drivers/md/dm.c               |  6 +++
+ include/linux/bio.h           |  6 ++-
+ include/linux/blk_types.h     |  5 ++-
+ include/linux/blkdev.h        | 16 ++++++++
+ include/linux/device-mapper.h | 17 ++++++++
+ 18 files changed, 317 insertions(+), 15 deletions(-)
+
+-- 
+2.40.0.634.g4ca3ef3211-goog
+
