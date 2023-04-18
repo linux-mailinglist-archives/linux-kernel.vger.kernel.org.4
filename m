@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B1B6E5EF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C806E5EF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjDRKgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 06:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
+        id S230350AbjDRKg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 06:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjDRKgr (ORCPT
+        with ESMTP id S230208AbjDRKgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 06:36:47 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF127A7;
-        Tue, 18 Apr 2023 03:36:44 -0700 (PDT)
+        Tue, 18 Apr 2023 06:36:53 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F3419B5;
+        Tue, 18 Apr 2023 03:36:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1681814205;
-  x=1713350205;
-  h=from:subject:date:message-id:mime-version:
-   content-transfer-encoding:to:cc;
-  bh=coqwpijeiqIBAys1HvjoElvJo5Gg/9m0lv9UmN1dsX0=;
-  b=o5D/kijdCdypDQ0fmQGYI2x07mFAFaIT+v+9tsYRzXlUrBIFeGZnsYEG
-   3YxZ2cIVpGfQrNKIAmxE8SpJw7CplaC2uLHOtcsyphiB0SoRUFlCzjcHa
-   gfBeBZ58ablSF7cIuXlva51PlI3nlkyCghgddzFQ+Nj1DMcozBK858/Yo
-   WGgy3XnQ4fLf2EISV3ehPIhz8V6vYwRK7y4lQ3bTSpDgfn8gQqzbMX7DS
-   yFJjGwt9LTgbbLBsY3j/M/FpL84QSaS7wINEMCrwbYVZZPfkmOqDWYiQi
-   Qd28LTaeTK6jTgZtUZvuStqu4in7CJBmesXsV2QcH1A2OYZUh+XxD92fT
+  d=axis.com; q=dns/txt; s=axis-central1; t=1681814211;
+  x=1713350211;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=a2pl3b3ZSbPe57NFlqGvBCFa/lR+C4jfxwmRWlYT6JE=;
+  b=awLJkYU7eITpa+QG1R8Rl7ajCoIcV0DPx3Hg0+pe1xPu/+1OKCC4LO7A
+   ccM+S+42hs9RGcNehUvk5VNxaEDfp/qCtb/nz/ADGLXf3/7gAyJ2+cwzd
+   nf7j9bNYc5ot35YbXrTo3TX9CGJx7KZYQ7TIgOnu2EIQ67sDwdxmbiHf7
+   5ybyJdXpqRXRYVPnjkZYRtWPkAXemt3hT9zs6/jFq5J3jV7LrTVolUWpO
+   RPIvxE2I4SFZ6y5k2omtqTuxIgVcFtgAXJdaJhGhqIKsfEJplKz7nKRPd
+   CDqism9WQvxTYn9khXZOZyMSVVqTpOGG9OkpPoNGlSSJCZhnxPOoNkDMO
    g==;
 From:   Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
-Subject: [PATCH v2 0/2] Support for Texas Instruments OPT4001 Ambient Light
- Sensor
-Date:   Tue, 18 Apr 2023 12:36:25 +0200
-Message-ID: <20230323-add-opt4001-driver-v2-0-0bae0398669d@axis.com>
+Date:   Tue, 18 Apr 2023 12:36:26 +0200
+Subject: [PATCH v2 1/2] dt-bindings: Document TI OPT4001 light sensor
+ bindings
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAKpyPmQC/32NSw7CMAwFr4Kyxiifgggr7oG6cBJDvehHThUVV
- b07aQ/Act7TaFaVSZiyepxWJVQ48zhUsOeTih0OHwJOlZXV1mlnHWBKME5zo7WBJFxIwPvgEdP
- NO+NVFQNmgiA4xG5Xe8wzyX5MQm9ejtqrrdxxnkf5HvFi9vVvpxjQYJqrSTGaEO/4xIXzJY69a
- rdt+wHDSiTczAAAAA==
+Message-ID: <20230323-add-opt4001-driver-v2-1-0bae0398669d@axis.com>
+References: <20230323-add-opt4001-driver-v2-0-0bae0398669d@axis.com>
+In-Reply-To: <20230323-add-opt4001-driver-v2-0-0bae0398669d@axis.com>
 To:     Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,51 +57,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds support for Texas Instruments OPT4001 Ambient light sensor.
-
-The light sensor has a i2c interface and supports continuous, oneshot and
-interruptdriven measurements and has configurable conversion time and range.
-
-This driver uses the sensors continuous mode so it always has a updated light
-value available. The conversion time which is
- (integration time + time to set registers) which is used to configure
-integration time through sysfs. The chip also has a configurable light
-range which this driver sets to Auto where the chip chooses range itself
-depending on previously read values.
-
-Since the OPT4001 has different constants used to calculate lux values
-depeding on packaging of the chip but uses the same device id, two compatible
-string are used depending on the packaging, these are "ti,opt4001-picostar"
-and "ti,opt4001-sot-5x3".
+Add devicetree bindings for opt4001 ambient light sensor.
 
 Signed-off-by: Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
 ---
-Changes in v2:
-- Added text about differences of sot-5x3 and picostar
-- Added irq and regulator to devicetree bindings
-- Added regulator support to driver
-- Switched from using .remove to devm_action_or_reset
-- Removed own mutex and reenabled regmaps
-- Updated name in sysfs
-- Added i2c_device_id
-- Rename package_const to chip_info
-- Link to v1: https://lore.kernel.org/r/20230323-add-opt4001-driver-v1-0-1451dcc1bc8a@axis.com
+ .../devicetree/bindings/iio/light/ti,opt4001.yaml  | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
----
-Stefan Windfeldt-Prytz (2):
-      dt-bindings: Document TI OPT4001 light sensor bindings
-      iio: light: Add support for TI OPT4001 light sensor
+diff --git a/Documentation/devicetree/bindings/iio/light/ti,opt4001.yaml b/Documentation/devicetree/bindings/iio/light/ti,opt4001.yaml
+new file mode 100644
+index 000000000000..43fd1a992aea
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/light/ti,opt4001.yaml
+@@ -0,0 +1,69 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/light/ti,opt4001.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments OPT4001 Ambient Light Sensor
++
++maintainers:
++  - Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
++
++description: |
++  Ambient light sensor with an i2c interface.
++  Last part of compatible is for the packaging used.
++  Picostar is a 4 pinned SMT and sot-5x3 is a 8 pinned SOT.
++  Only sot-5x3 has an interrupt pin.
++  https://www.ti.com/lit/gpn/opt4001
++
++properties:
++  compatible:
++    enum:
++      - ti,opt4001-picostar
++      - ti,opt4001-sot-5x3
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  vdd-supply:
++    description: Regulator that provides power to the sensor
++
++required:
++  - compatible
++  - reg
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: ti,opt4001-sot-5x3
++    then:
++      properties:
++        interrupts:
++          maxItems: 1
++    else:
++      properties:
++        interrupts: false
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        light-sensor@44 {
++            compatible = "ti,opt4001-sot-5x3";
++            reg = <0x44>;
++            vdd-supply = <&vdd_reg>;
++            interrupt-parent = <&gpio1>;
++            interrupts = <28 IRQ_TYPE_EDGE_FALLING>;
++        };
++    };
++...
 
- .../devicetree/bindings/iio/light/ti,opt4001.yaml  |  69 +++
- drivers/iio/light/Kconfig                          |  11 +
- drivers/iio/light/Makefile                         |   1 +
- drivers/iio/light/opt4001.c                        | 490 +++++++++++++++++++++
- 4 files changed, 571 insertions(+)
----
-base-commit: 60c5238813fdfbe167eb579d58172106916b8db0
-change-id: 20230323-add-opt4001-driver-99b9aad69319
-
-Best regards,
 -- 
-Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
+2.30.2
 
