@@ -2,102 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1566E6326
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C55436E63A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbjDRMiP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 08:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S231872AbjDRMmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 08:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbjDRMiK (ORCPT
+        with ESMTP id S231874AbjDRMmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 08:38:10 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8C513867;
-        Tue, 18 Apr 2023 05:38:01 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 1921824E31D;
-        Tue, 18 Apr 2023 20:38:00 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 18 Apr
- 2023 20:37:59 +0800
-Received: from ubuntu.localdomain (113.72.144.253) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 18 Apr
- 2023 20:37:59 +0800
-From:   Hal Feng <hal.feng@starfivetech.com>
-To:     <linux-clk@vger.kernel.org>, <oe-kbuild-all@lists.linux.dev>,
-        <linux-mm@kvack.org>
-CC:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        "Paul Gazzillo" <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 1/1] clk: starfive: Fix RESET_STARFIVE_JH7110 can't be selected in a specified case
-Date:   Tue, 18 Apr 2023 20:37:56 +0800
-Message-ID: <20230418123756.62495-2-hal.feng@starfivetech.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230418123756.62495-1-hal.feng@starfivetech.com>
-References: <20230418123756.62495-1-hal.feng@starfivetech.com>
+        Tue, 18 Apr 2023 08:42:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E94D14440
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:41:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E40C63329
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:41:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C55C4339B;
+        Tue, 18 Apr 2023 12:41:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681821715;
+        bh=N0aVjDEryHvsJG1EaYORnjTrCWS41XOE62Wonr7Z8Uw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W5qaWaULjN6RRE5/LWN8qHwUEtdLd5gJDhMD+QYU8gScK53VFJwhFcXKAu8u/LdNj
+         g3y6mbgI4WfAkWv3lWJ8fwgtqQngM6eg/+DVyRE9cBt5nO14FLa3V19aEpm54G3U+R
+         TrKrX2pSngYRla8jomeaolBsoDvtmErHub2NgaAGnCC7JVa/NpdC3sODEoXhdWtIRu
+         kxD34u8DRG/XMR6/MvGgIvf+0vLNNNKS4FpUZ/cYTyD7GkhyqTfT2+HfQO6JSLk2bk
+         tSz6s8FHmHu9xjpEtQwShal70z8SC8RgZm0dFcnsoxYoypyrJDRqjM1MLJtP2Kw7nR
+         DZAuGEsYOXugw==
+Date:   Tue, 18 Apr 2023 13:41:49 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Quentin Perret <qperret@google.com>, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Andrew Walbran <qwandor@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH 03/12] KVM: arm64: Block unsafe FF-A calls from the host
+Message-ID: <20230418124147.GA32435@willie-the-truck>
+References: <20221116170335.2341003-1-qperret@google.com>
+ <20221116170335.2341003-4-qperret@google.com>
+ <Y3UgoIlukWSrT1WY@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [113.72.144.253]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3UgoIlukWSrT1WY@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When (ARCH_STARFIVE [=n] && COMPILE_TEST [=y] && RESET_CONTROLLER [=n]),
-RESET_STARFIVE_JH7110 can't be selected by CLK_STARFIVE_JH7110_SYS
-and CLK_STARFIVE_JH7110_AON.
+On Wed, Nov 16, 2022 at 05:40:48PM +0000, Oliver Upton wrote:
+> On Wed, Nov 16, 2022 at 05:03:26PM +0000, Quentin Perret wrote:
+> > From: Will Deacon <will@kernel.org>
+> > 
+> > When KVM is initialised in protected mode, we must take care to filter
+> > certain FFA calls from the host kernel so that the integrity of guest
+> > and hypervisor memory is maintained and is not made available to the
+> > secure world.
+> > 
+> > As a first step, intercept and block all memory-related FF-A SMC calls
+> > from the host to EL3. This puts the framework in place for handling them
+> > properly.
+> 
+> Shouldn't FFA_FEATURES interception actually precede this patch? At this
+> point in the series we're outright lying about the supported features to
+> the host.
 
-Add a condition `if RESET_CONTROLLER` to fix it. Also, delete redundant
-selected options of CLK_STARFIVE_JH7110_AON because these options are
-already selected by the dependency.
+FF-A is in a pretty sorry state after this patch as we block all the memory
+transactions, but I take your point that we should be consistent and not
+advertise the features that we're blocking.
 
-Fixes: edab7204afe5 ("clk: starfive: Add StarFive JH7110 system clock driver")
-Fixes: b2ab3c94f41f ("clk: starfive: Add StarFive JH7110 always-on clock driver")
-Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
----
- drivers/clk/starfive/Kconfig | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+I'll return FFA_RET_NOT_SUPPORTED for all FFA_FEATURES calls until the
+interception patch comes in later and does something smarter.
 
-diff --git a/drivers/clk/starfive/Kconfig b/drivers/clk/starfive/Kconfig
-index 71c1148ee5f6..5d2333106f13 100644
---- a/drivers/clk/starfive/Kconfig
-+++ b/drivers/clk/starfive/Kconfig
-@@ -26,7 +26,7 @@ config CLK_STARFIVE_JH7110_SYS
- 	depends on ARCH_STARFIVE || COMPILE_TEST
- 	select AUXILIARY_BUS
- 	select CLK_STARFIVE_JH71X0
--	select RESET_STARFIVE_JH7110
-+	select RESET_STARFIVE_JH7110 if RESET_CONTROLLER
- 	default ARCH_STARFIVE
- 	help
- 	  Say yes here to support the system clock controller on the
-@@ -35,9 +35,6 @@ config CLK_STARFIVE_JH7110_SYS
- config CLK_STARFIVE_JH7110_AON
- 	tristate "StarFive JH7110 always-on clock support"
- 	depends on CLK_STARFIVE_JH7110_SYS
--	select AUXILIARY_BUS
--	select CLK_STARFIVE_JH71X0
--	select RESET_STARFIVE_JH7110
- 	default m if ARCH_STARFIVE
- 	help
- 	  Say yes here to support the always-on clock controller on the
--- 
-2.38.1
-
+Will
