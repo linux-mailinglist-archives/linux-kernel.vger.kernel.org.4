@@ -2,52 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98386E5DC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256296E5DCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbjDRJpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
+        id S231319AbjDRJpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbjDRJoj (ORCPT
+        with ESMTP id S231294AbjDRJpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:44:39 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9307EE2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:44:27 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-32b532ee15bso40429605ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:44:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681811067; x=1684403067;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KHfJZwvrmg+gCW9psW/lopSjTm5+PKBoNst03YMYF1k=;
-        b=ezliz0unkQYrTF+M6idr/9dQrTi5sm+6JmW2PjXu2twIUBMFxXOwNkVCMMQUCs6gSi
-         0RnDLalye8iC1azPFaLHXBEQRiBQxjRX28959Hv9MYg8tQhmOw7a0rprVGjrf/CQQmf0
-         2HgCjE+ngrprealWEuxvpLbr139R2nTLUGIRjImhxEgQjikBtFGeHWsGjJNN34HTwFFS
-         PwtL81vXbhszJtzPRUhkj9GGK30u0//N0EYEs/A8KvUPiIfOVBM5b8J/fu7qioEwbCBR
-         xlS/yRJ2+ECfs8CqmTxBWdC9ST5yBEQcnFaIEJ1BUc4ifVqaEKgM3HtChFJPsKDj+6M1
-         1g2A==
-X-Gm-Message-State: AAQBX9cm+A9wAeS1Peb4wnpUtC0KsfbK+XKinLMWqExOACcmgLl1pzxC
-        2v9hY3l8EQVuwo6T0xn1hKUzRMhmYWkQRjp96hlUKhoExT1x
-X-Google-Smtp-Source: AKy350Z37i3+T7LZ5GhdT/rbZ3tH7qJhbKjDZ2cO2TECPZ+LeTXQ7YuHtNRD3I3fQfAuGUv1Umht6tbqpUKzN0udzYu4IcLQGqTd
-MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2352:b0:760:ea29:2594 with SMTP id
- r18-20020a056602235200b00760ea292594mr1842841iot.0.1681811066896; Tue, 18 Apr
- 2023 02:44:26 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 02:44:26 -0700
-In-Reply-To: <20230418092148.1294-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000038ca8205f9992718@google.com>
-Subject: Re: [syzbot] [net?] KASAN: slab-use-after-free Write in mini_qdisc_pair_swap
-From:   syzbot <syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        Tue, 18 Apr 2023 05:45:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F7A6E8E
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:44:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0F1641F8D5;
+        Tue, 18 Apr 2023 09:44:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681811095; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=h2DNN9uAK/0LGB1yyCJ/gV0l/zgtfRP7lir/w0VgvNg=;
+        b=Ku6jUIEIO0ZX3eA0cnLitm2O8jPO64lxUk9wh5NVhpKkU8SbTT8Bi2xMrs2oxfoi42kE81
+        Qd+CI0ZZ0lpw4gBuJZci0SbzEBTK5XctP/WLP3CiqPH1PbFLCin1lW5CwV9eMd6HtkyyNe
+        pSlZ9Ir4YaehH1nC0KUhUE5vptqp7L8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681811095;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=h2DNN9uAK/0LGB1yyCJ/gV0l/zgtfRP7lir/w0VgvNg=;
+        b=e2L9IOmppkEfnZkYo7lT7LLPkg651ZsvqGufKr+7UH8HFQJizvGOwJtsDQGQkj8kiJ4Fmv
+        6MZhWl0BqAy9SpDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DA00F13581;
+        Tue, 18 Apr 2023 09:44:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kkF4NJZmPmSfMgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 18 Apr 2023 09:44:54 +0000
+Date:   Tue, 18 Apr 2023 11:44:53 +0200
+Message-ID: <87leip4j8q.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     reaperli <reaperlioc@glenfly.com>
+Cc:     <perex@perex.cz>, <tiwai@suse.com>, <linux-kernel@vger.kernel.org>,
+        jasontao <jasontao@glenfly.com>, alsa-devel@alsa-project.org
+Subject: Re: [PATCH] ALSA: hda: Glenfly: add HD Audio PCI IDs and HDMI Codec Vendor IDs.
+In-Reply-To: <20230418083312.5208-1-reaperlioc@glenfly.com>
+References: <20230418083312.5208-1-reaperlioc@glenfly.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,20 +69,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, 18 Apr 2023 10:33:12 +0200,
+reaperli wrote:
+> 
+> From: jasontao <jasontao@glenfly.com>
+> 
+> Add a set of HD Audio PCI IDS, and the HDMI codec vendor IDs for
+> Glenfly Arise.
+> 
+> Signed-off-by: jasontao <jasontao@glenfly.com>
+> Signed-off-by: reaperli <reaperlioc@glenfly.com>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+The patch looks OK now, but could you submit to alsa-devel ML at the
+next time?
 
-Reported-and-tested-by: syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com
+About details in the patch:
 
-Tested on:
+> @@ -1743,6 +1745,8 @@ static int default_bdl_pos_adj(struct azx *chip)
+>  	}
+>  
+>  	switch (chip->driver_type) {
+> +	case AZX_DRIVER_GFHDMI:
+> +		return 128;
 
-commit:         fff5a5e7 Merge tag 'for-linus' of git://git.armlinux.o..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=1658d89fc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ea09b0836073ee4
-dashboard link: https://syzkaller.appspot.com/bug?extid=b53a9c0d1ea4ad62da8b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=10d7cd5bc80000
+So this looks pretty high in comparison with other chips.
+It means that the actual position is much behind the reported
+position.  Due to a large FIFO?  Or what reason?
 
-Note: testing is done by a robot and is best-effort only.
+> @@ -1859,6 +1863,9 @@ static int azx_first_init(struct azx *chip)
+>  	}
+>  #endif
+>  
+> +	if (chip->driver_type == AZX_DRIVER_GFHDMI)
+> +		bus->polling_mode = 1;
+
+This looks odd, too.  Doesn't the hardware give any interrupt back
+upon the CORB/RIRB response?
+
+> --- a/sound/pci/hda/patch_hdmi.c
+> +++ b/sound/pci/hda/patch_hdmi.c
+> @@ -4489,6 +4489,18 @@ static int patch_via_hdmi(struct hda_codec *codec)
+>  	return patch_simple_hdmi(codec, VIAHDMI_CVT_NID, VIAHDMI_PIN_NID);
+>  }
+>  
+> +static int patch_gf_hdmi(struct hda_codec *codec)
+> +{
+> +	int err;
+> +
+> +	err = patch_generic_hdmi(codec);
+> +	if (err)
+> +		return err;
+> +
+> +	codec->no_sticky_stream = 1;
+
+This hack is needed for what reason?
+
+
+thanks,
+
+Takashi
