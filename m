@@ -2,83 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEE06E5AFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2D36E5AFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjDRHw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 03:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
+        id S230305AbjDRHxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 03:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjDRHwW (ORCPT
+        with ESMTP id S231183AbjDRHxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 03:52:22 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F362CE44;
-        Tue, 18 Apr 2023 00:52:02 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6a42e7c5c1cso278737a34.1;
-        Tue, 18 Apr 2023 00:52:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681804318; x=1684396318;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5XKhV+MHr8awDXVQkhnmJAIOVO3SkBSAcDrv3qZeqRM=;
-        b=rrkaalIeM9kzkvkcOzG9Cmmyv7VvFDvJKRqUG7Q3CftIrvvz2WwXHtRrLix0+a8hFE
-         yCgJjUa5UNYL+Mt7eRS1xwHDxbMEtzGO9m8qTfpwIMpeFb5ConrK88WZWNkz0GrK3ydM
-         Pda0Rq0N3W9xkkTS/7mXn5ELspTCAQjAqgzE+rUgh8Y/VHcDy6DOneeHsHyj5xy0TURO
-         ess8N0k7sIfnISioHvoFzKJ5y/gbEt5HXw2+dsFWzQEhvVdHWUuWM7Mp3ejzEofHKz5N
-         s7FMD645r+DSiXJJLQN0c7GU5liY2co+Hi+L8os9E99RNCEuxWvOIuzb3nmeI/DIe7g9
-         YOpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681804318; x=1684396318;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5XKhV+MHr8awDXVQkhnmJAIOVO3SkBSAcDrv3qZeqRM=;
-        b=Kj9QUtZ9T8Zb2nGV9HXg1KPFAus4Hqn4JLeMDX++DRex8CzPZoYKSSxEUj6sKDOrA+
-         sfkxesJojeH0XUtiKCsXunS0wU//aS60RMIb7H3Rp7E6iNVCSbHRfbL+618V1esyLSbL
-         Z8TaXIKTKUfhaiwYH023+TrXZ9ICauaxddVAG9TTsrxB3scTogvHStMMmcDhzEAyPZEF
-         GB3bWVMsltKE27g6hrXfkWgpLkl0edNo7eL/4uOQFmxUVDDGiTR1/IDX/KgqVUMz2G1e
-         VGl3wu5tpv2DRKAYPe1ZJv0i1uOj8qmeZT/K4EO/XWRfmGP9S9cHn3oaYzvnyfLkbBPQ
-         EfaA==
-X-Gm-Message-State: AAQBX9dbVR90Y5IdQGdnJe+cU1MDYJ6ZGPSUOb67bDNICQ6jUHQ+wFNU
-        sdw17YcefrPcSVNr+foxZiySBHhfZdax5R6F1do=
-X-Google-Smtp-Source: AKy350Zf3sU1nYlYoPeOkzMHw/dQgTtJBMd+Y2Opy7BQqFfpE+zvN8yJAMYfsfPRC6Nae8Yrf/jpNP/3BUrfesjrWtA=
-X-Received: by 2002:a05:6830:1486:b0:6a4:3385:7a6f with SMTP id
- s6-20020a056830148600b006a433857a6fmr412331otq.4.1681804317971; Tue, 18 Apr
- 2023 00:51:57 -0700 (PDT)
+        Tue, 18 Apr 2023 03:53:46 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A4A3C2B;
+        Tue, 18 Apr 2023 00:53:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681804423; x=1713340423;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i++sEAsVzkt15x7T7vaSa5jKWy1+6C/e5XxSTsSMv+U=;
+  b=Qw/m9IQAptH5XOMlUQeu7x2BXw94i0aCY3/c6fQ0kE4XnjeyxBs/RByK
+   Vpk+wFC93/XH/lArXKW4AY21nFV5JsA2N0AOfIV+P90j3VtrNZo4VoA/k
+   VN0piarWNwqGZMT0X3fNEgK2WrBDo5RlhG9ROw/me7EJuKK21u9ptKfNO
+   udUxKqiZn7vVt34AshsvE2c0nRdPNFMFiC+pz8ENSxqon8Lg9iia2CNl4
+   RYg+8760Nm3tVJKm1OvN0N1j3RtcI5Fx44RHdFt/0YfBXYT4/ilcRQNAr
+   daSj2MNMowVu47rD0zodLbUNvsw7WjGsGX7gAd6KKo/F11+ZhG+soPjsL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="345101336"
+X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
+   d="scan'208";a="345101336"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 00:53:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="834777348"
+X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
+   d="scan'208";a="834777348"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 18 Apr 2023 00:53:26 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pog9V-000d7X-21;
+        Tue, 18 Apr 2023 07:53:25 +0000
+Date:   Tue, 18 Apr 2023 15:52:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH 2/7] dmaengine: ste_dma40: Get LCPA SRAM from SRAM node
+Message-ID: <202304181505.5iKHmSYn-lkp@intel.com>
+References: <20230417-ux500-dma40-cleanup-v1-2-b26324956e47@linaro.org>
 MIME-Version: 1.0
-References: <20230417092631.347976-1-rick.wertenbroek@gmail.com> <ea29e339-6f61-5bbb-7290-03df629d5b11@kernel.org>
-In-Reply-To: <ea29e339-6f61-5bbb-7290-03df629d5b11@kernel.org>
-From:   Rick Wertenbroek <rick.wertenbroek@gmail.com>
-Date:   Tue, 18 Apr 2023 09:51:21 +0200
-Message-ID: <CAAEEuhpj4TZNrPEPn7LuGOHHoYt1FbCEGH1d9g+8iKMeoBA+=Q@mail.gmail.com>
-Subject: Re: [PATCH v4 00/11] PCI: rockchip: Fix RK3399 PCIe endpoint
- controller driver
-To:     Damien Le Moal <dlemoal@kernel.org>
-Cc:     alberto.dassatti@heig-vd.ch, xxm@rock-chips.com,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        Arnaud Ferraris <arnaud.ferraris@collabora.com>,
-        Hugh Cole-Baker <sigmaris@gmail.com>,
-        linux-pci@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230417-ux500-dma40-cleanup-v1-2-b26324956e47@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,79 +70,302 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 2:09=E2=80=AFAM Damien Le Moal <dlemoal@kernel.org>=
- wrote:
->
-> On 4/17/23 18:26, Rick Wertenbroek wrote:
-> > This is a series of patches that fixes the PCIe endpoint controller dri=
-ver
-> > for the Rockchip RK3399 SoC. The driver was introduced in commit
-> > cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controlle=
-r")
-> > The original driver had issues and would not allow for the RK3399 to
-> > operate in PCIe endpoint mode correctly. This patch series fixes that s=
-o
-> > that the PCIe core controller of the RK3399 SoC can now act as a PCIe
-> > endpoint. This is v4 of the patch series and addresses the comments rec=
-eived
-> > during the review of the v3 [1]. The changes to the v3 are minor and no=
-ne of
-> > them change the logic of the driver.
-> >
-> > Thank you in advance for reviewing this patch series and hopefully
-> > getting this merged. Having a functional PCIe endpoint controller
-> > driver for the RK3399 would allow to develop further PCIe endpoint
-> > functions through the Linux PCIe endpoint framework using this SoC.
-> >
-> > [1] https://lore.kernel.org/linux-pci/20230404082426.3880812-1-rick.wer=
-tenbroek@gmail.com/
-> >
-> > Summary of changes to V3 :
-> >
-> > * Set the fields in the standard order in the dtsi and removed unnecess=
-ary
-> >   change in associated documentation, thanks to Krzysztof for pointing =
-this out.
-> > * Added comment to explain how MSI-X capabilities advertisement was rem=
-oved.
-> > * Changed Damien Le Moal <damien.lemoal@opensource.wdc.com> address to =
-his
-> >   kernel.org address Damien Le Moal <dlemoal@kernel.org> in tags.
-> > * [minor] Simplified code where a power of 2 was applied followed by a =
-ilog2
-> >   operation.
-> > * [minor] Small code changes, replaced constant variable by macro, spli=
-t
-> >   remaining long lines.
->
-> I retested this series, all good. So my Tested-by tag stands.
->
-> Lorenzo, Krzysztof, Bjorn,
->
-> Let's please get this series queued for 6.4 ASAP as otherwise the rockchi=
-p EP
-> controller is unusable.
->
-> Also please note that working with Rick off-list, we found out that more =
-fixes
-> are in fact needed for the PCI address mapping (ATU programming) on top o=
-f this
-> series. But the problems detected are subtle and harder to trigger. The f=
-ixes
-> needed involve changes to the EPC core API so we are still working on the=
- best
-> way to do that. We'll work on another series on top of this one for addre=
-ssing
-> these issues.
->
->
+Hi Linus,
 
-Thank you Damien for taking the time testing and reviewing this, it is
-highly appreciated.
-I just sent a v5 [1] addressing your comments and added the tags.
+kernel test robot noticed the following build warnings:
 
-Best regards,
-Rick
+[auto build test WARNING on fe15c26ee26efa11741a7b632e9f23b01aca4cc6]
 
-[1] https://lore.kernel.org/linux-pci/20230418074700.1083505-1-rick.wertenb=
-roek@gmail.com/
+url:    https://github.com/intel-lab-lkp/linux/commits/Linus-Walleij/dt-bindings-dma-dma40-Prefer-to-pass-sram-through-phandle/20230417-160001
+base:   fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+patch link:    https://lore.kernel.org/r/20230417-ux500-dma40-cleanup-v1-2-b26324956e47%40linaro.org
+patch subject: [PATCH 2/7] dmaengine: ste_dma40: Get LCPA SRAM from SRAM node
+config: arm-randconfig-c024-20230417 (https://download.01.org/0day-ci/archive/20230418/202304181505.5iKHmSYn-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/168b5818186247983ec0f99554e13c3aaa9383bb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Linus-Walleij/dt-bindings-dma-dma40-Prefer-to-pass-sram-through-phandle/20230417-160001
+        git checkout 168b5818186247983ec0f99554e13c3aaa9383bb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304181505.5iKHmSYn-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/device.h:15,
+                    from include/linux/dma-mapping.h:7,
+                    from drivers/dma/ste_dma40.c:9:
+   drivers/dma/ste_dma40.c: In function 'd40_probe':
+   drivers/dma/ste_dma40.c:3555:30: warning: format '%x' expects argument of type 'unsigned int', but argument 3 has type 'dma_addr_t' {aka 'long long unsigned int'} [-Wformat=]
+    3555 |         dev_info(&pdev->dev, "found LCPA SRAM at 0x%08x, size 0x%08x\n",
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
+     150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                          ^~~~~~~
+   drivers/dma/ste_dma40.c:3555:9: note: in expansion of macro 'dev_info'
+    3555 |         dev_info(&pdev->dev, "found LCPA SRAM at 0x%08x, size 0x%08x\n",
+         |         ^~~~~~~~
+   drivers/dma/ste_dma40.c:3555:55: note: format string is defined here
+    3555 |         dev_info(&pdev->dev, "found LCPA SRAM at 0x%08x, size 0x%08x\n",
+         |                                                    ~~~^
+         |                                                       |
+         |                                                       unsigned int
+         |                                                    %08llx
+>> drivers/dma/ste_dma40.c:3555:30: warning: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
+    3555 |         dev_info(&pdev->dev, "found LCPA SRAM at 0x%08x, size 0x%08x\n",
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
+     150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                          ^~~~~~~
+   drivers/dma/ste_dma40.c:3555:9: note: in expansion of macro 'dev_info'
+    3555 |         dev_info(&pdev->dev, "found LCPA SRAM at 0x%08x, size 0x%08x\n",
+         |         ^~~~~~~~
+   drivers/dma/ste_dma40.c:3555:68: note: format string is defined here
+    3555 |         dev_info(&pdev->dev, "found LCPA SRAM at 0x%08x, size 0x%08x\n",
+         |                                                                 ~~~^
+         |                                                                    |
+         |                                                                    unsigned int
+         |                                                                 %08llx
+   drivers/dma/ste_dma40.c:3562:26: warning: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'dma_addr_t' {aka 'long long unsigned int'} [-Wformat=]
+    3562 |                          "[%s] Mismatch LCPA dma 0x%x, def %08x\n",
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:146:61: note: in expansion of macro 'dev_fmt'
+     146 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                             ^~~~~~~
+   drivers/dma/ste_dma40.c:3561:17: note: in expansion of macro 'dev_warn'
+    3561 |                 dev_warn(&pdev->dev,
+         |                 ^~~~~~~~
+   drivers/dma/ste_dma40.c:3562:63: note: format string is defined here
+    3562 |                          "[%s] Mismatch LCPA dma 0x%x, def %08x\n",
+         |                                                            ~~~^
+         |                                                               |
+         |                                                               unsigned int
+         |                                                            %08llx
+
+
+vim +3555 drivers/dma/ste_dma40.c
+
+  3505	
+  3506	static int __init d40_probe(struct platform_device *pdev)
+  3507	{
+  3508		struct stedma40_platform_data *plat_data = dev_get_platdata(&pdev->dev);
+  3509		struct device_node *np = pdev->dev.of_node;
+  3510		struct device_node *np_lcpa;
+  3511		int ret = -ENOENT;
+  3512		struct d40_base *base;
+  3513		struct resource *res;
+  3514		struct resource res_lcpa;
+  3515		int num_reserved_chans;
+  3516		u32 val;
+  3517	
+  3518		if (!plat_data) {
+  3519			if (np) {
+  3520				if (d40_of_probe(pdev, np)) {
+  3521					ret = -ENOMEM;
+  3522					goto report_failure;
+  3523				}
+  3524			} else {
+  3525				d40_err(&pdev->dev, "No pdata or Device Tree provided\n");
+  3526				goto report_failure;
+  3527			}
+  3528		}
+  3529	
+  3530		base = d40_hw_detect_init(pdev);
+  3531		if (!base)
+  3532			goto report_failure;
+  3533	
+  3534		num_reserved_chans = d40_phy_res_init(base);
+  3535	
+  3536		platform_set_drvdata(pdev, base);
+  3537	
+  3538		spin_lock_init(&base->interrupt_lock);
+  3539		spin_lock_init(&base->execmd_lock);
+  3540	
+  3541		/* Get IO for logical channel parameter address (LCPA) */
+  3542		np_lcpa = of_parse_phandle(np, "sram", 0);
+  3543		if (!np_lcpa) {
+  3544			dev_err(&pdev->dev, "no LCPA SRAM node\n");
+  3545			goto report_failure;
+  3546		}
+  3547		/* This is no device so read the address directly from the node */
+  3548		ret = of_address_to_resource(np_lcpa, 0, &res_lcpa);
+  3549		if (ret) {
+  3550			dev_err(&pdev->dev, "no LCPA SRAM resource\n");
+  3551			goto report_failure;
+  3552		}
+  3553		base->lcpa_size = resource_size(&res_lcpa);
+  3554		base->phy_lcpa = res_lcpa.start;
+> 3555		dev_info(&pdev->dev, "found LCPA SRAM at 0x%08x, size 0x%08x\n",
+  3556			 base->phy_lcpa, base->lcpa_size);
+  3557	
+  3558		/* We make use of ESRAM memory for this. */
+  3559		val = readl(base->virtbase + D40_DREG_LCPA);
+  3560		if (base->phy_lcpa != val && val != 0) {
+  3561			dev_warn(&pdev->dev,
+  3562				 "[%s] Mismatch LCPA dma 0x%x, def %08x\n",
+  3563				 __func__, val, base->phy_lcpa);
+  3564		} else
+  3565			writel(base->phy_lcpa, base->virtbase + D40_DREG_LCPA);
+  3566	
+  3567		base->lcpa_base = ioremap(base->phy_lcpa, base->lcpa_size);
+  3568		if (!base->lcpa_base) {
+  3569			ret = -ENOMEM;
+  3570			d40_err(&pdev->dev, "Failed to ioremap LCPA region\n");
+  3571			goto release_base;
+  3572		}
+  3573		/* If lcla has to be located in ESRAM we don't need to allocate */
+  3574		if (base->plat_data->use_esram_lcla) {
+  3575			res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+  3576								"lcla_esram");
+  3577			if (!res) {
+  3578				ret = -ENOENT;
+  3579				d40_err(&pdev->dev,
+  3580					"No \"lcla_esram\" memory resource\n");
+  3581				goto destroy_cache;
+  3582			}
+  3583			base->lcla_pool.base = ioremap(res->start,
+  3584							resource_size(res));
+  3585			if (!base->lcla_pool.base) {
+  3586				ret = -ENOMEM;
+  3587				d40_err(&pdev->dev, "Failed to ioremap LCLA region\n");
+  3588				goto destroy_cache;
+  3589			}
+  3590			writel(res->start, base->virtbase + D40_DREG_LCLA);
+  3591	
+  3592		} else {
+  3593			ret = d40_lcla_allocate(base);
+  3594			if (ret) {
+  3595				d40_err(&pdev->dev, "Failed to allocate LCLA area\n");
+  3596				goto destroy_cache;
+  3597			}
+  3598		}
+  3599	
+  3600		spin_lock_init(&base->lcla_pool.lock);
+  3601	
+  3602		base->irq = platform_get_irq(pdev, 0);
+  3603	
+  3604		ret = request_irq(base->irq, d40_handle_interrupt, 0, D40_NAME, base);
+  3605		if (ret) {
+  3606			d40_err(&pdev->dev, "No IRQ defined\n");
+  3607			goto destroy_cache;
+  3608		}
+  3609	
+  3610		if (base->plat_data->use_esram_lcla) {
+  3611	
+  3612			base->lcpa_regulator = regulator_get(base->dev, "lcla_esram");
+  3613			if (IS_ERR(base->lcpa_regulator)) {
+  3614				d40_err(&pdev->dev, "Failed to get lcpa_regulator\n");
+  3615				ret = PTR_ERR(base->lcpa_regulator);
+  3616				base->lcpa_regulator = NULL;
+  3617				goto destroy_cache;
+  3618			}
+  3619	
+  3620			ret = regulator_enable(base->lcpa_regulator);
+  3621			if (ret) {
+  3622				d40_err(&pdev->dev,
+  3623					"Failed to enable lcpa_regulator\n");
+  3624				regulator_put(base->lcpa_regulator);
+  3625				base->lcpa_regulator = NULL;
+  3626				goto destroy_cache;
+  3627			}
+  3628		}
+  3629	
+  3630		writel_relaxed(D40_DREG_GCC_ENABLE_ALL, base->virtbase + D40_DREG_GCC);
+  3631	
+  3632		pm_runtime_irq_safe(base->dev);
+  3633		pm_runtime_set_autosuspend_delay(base->dev, DMA40_AUTOSUSPEND_DELAY);
+  3634		pm_runtime_use_autosuspend(base->dev);
+  3635		pm_runtime_mark_last_busy(base->dev);
+  3636		pm_runtime_set_active(base->dev);
+  3637		pm_runtime_enable(base->dev);
+  3638	
+  3639		ret = d40_dmaengine_init(base, num_reserved_chans);
+  3640		if (ret)
+  3641			goto destroy_cache;
+  3642	
+  3643		ret = dma_set_max_seg_size(base->dev, STEDMA40_MAX_SEG_SIZE);
+  3644		if (ret) {
+  3645			d40_err(&pdev->dev, "Failed to set dma max seg size\n");
+  3646			goto destroy_cache;
+  3647		}
+  3648	
+  3649		d40_hw_init(base);
+  3650	
+  3651		if (np) {
+  3652			ret = of_dma_controller_register(np, d40_xlate, NULL);
+  3653			if (ret)
+  3654				dev_err(&pdev->dev,
+  3655					"could not register of_dma_controller\n");
+  3656		}
+  3657	
+  3658		dev_info(base->dev, "initialized\n");
+  3659		return 0;
+  3660	 destroy_cache:
+  3661		kmem_cache_destroy(base->desc_slab);
+  3662		if (base->virtbase)
+  3663			iounmap(base->virtbase);
+  3664	
+  3665		if (base->lcla_pool.base && base->plat_data->use_esram_lcla) {
+  3666			iounmap(base->lcla_pool.base);
+  3667			base->lcla_pool.base = NULL;
+  3668		}
+  3669	
+  3670		if (base->lcla_pool.dma_addr)
+  3671			dma_unmap_single(base->dev, base->lcla_pool.dma_addr,
+  3672					 SZ_1K * base->num_phy_chans,
+  3673					 DMA_TO_DEVICE);
+  3674	
+  3675		if (!base->lcla_pool.base_unaligned && base->lcla_pool.base)
+  3676			free_pages((unsigned long)base->lcla_pool.base,
+  3677				   base->lcla_pool.pages);
+  3678	
+  3679		kfree(base->lcla_pool.base_unaligned);
+  3680	
+  3681		if (base->lcpa_base)
+  3682			iounmap(base->lcpa_base);
+  3683	
+  3684	release_base:
+  3685		if (base->phy_start)
+  3686			release_mem_region(base->phy_start,
+  3687					   base->phy_size);
+  3688		if (base->clk) {
+  3689			clk_disable_unprepare(base->clk);
+  3690			clk_put(base->clk);
+  3691		}
+  3692	
+  3693		if (base->lcpa_regulator) {
+  3694			regulator_disable(base->lcpa_regulator);
+  3695			regulator_put(base->lcpa_regulator);
+  3696		}
+  3697	
+  3698		kfree(base->lcla_pool.alloc_map);
+  3699		kfree(base->lookup_log_chans);
+  3700		kfree(base->lookup_phy_chans);
+  3701		kfree(base->phy_res);
+  3702		kfree(base);
+  3703	 report_failure:
+  3704		d40_err(&pdev->dev, "probe failed\n");
+  3705		return ret;
+  3706	}
+  3707	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
