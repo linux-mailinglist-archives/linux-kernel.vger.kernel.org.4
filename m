@@ -2,233 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53DB76E5E53
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3336E5E52
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbjDRKLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 06:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjDRKLJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230420AbjDRKLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 18 Apr 2023 06:11:09 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A176A4E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:10:39 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-7606df33c42so50705739f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:10:39 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230231AbjDRKLG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Apr 2023 06:11:06 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1B57EFD
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:10:23 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id q21so256591ljp.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:10:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681812639; x=1684404639;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=galNuw/biFG4LXA5HDGOsFD5DzMSzVWuBOk2kSXMjaQ=;
-        b=q6JfMBnuReWJl6/1zXE1nYutbcRaaaEXv9F9KYqOh9WNYwM5cV8dnLrLMS+ab/Rmg4
-         R6MjOR4zcSFzibYpW9dVsQ5kjBb7ktKYbFqhAPu/RKUPlBBSk4cTBOyhTeyUzVFL4MMC
-         iGd2gKTsXoA+auZkAJ0G3MGxsjD+fpQNdJoNd8fMZn2IQCueMK08vv3be4hFgzNDFkEO
-         OUPZsBH6fnKrKkLAZXkZCemQUFhVLHF5q5v50gfyX72O23eEv0eiITQjTqHWhaWQGtjx
-         8zL7/u4WJ9DGqs3nuQ8ujsdMTpTL6JW0sQvb3pHJErvJJkQeLrWfh/R4g1536x28rmMI
-         4hWA==
+        d=linaro.org; s=google; t=1681812622; x=1684404622;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UXA7IdH6OnmIg4dHeihhBVhSOUFUULrLJzUMC4zJSkE=;
+        b=S1EqyM2bhUI/MpHfz9cdN+dN5X18qxer6sd7/Yay6PaBl0qjv70HRKYD7KYwR7etYF
+         1vIRBJ4mHwI31SPHf8vj6eEbCGw7G2Ri0UyYMzyvo8MSYhMYOMDtFo7fNGHrK4FbXYr3
+         n5tz+/6TD//u2/POqi6787YQ34NlydfvPNBcTLO48HTQlRWTV38LVlFc31rVaukcX5TX
+         n3ITAvgfSWkE6bwRFAUA3q8ZxhE090CZkq9Jeq/B6flvHbpz57fwCKY4hlzQmGcjQotS
+         ox4l5MeFHiKdBny6AaH7u/jeO0ogy3gelR8TPVrWWRBrFprIOHhR8FAzMh9FpMNjmvDR
+         4NAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681812639; x=1684404639;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=galNuw/biFG4LXA5HDGOsFD5DzMSzVWuBOk2kSXMjaQ=;
-        b=Sp+QHy6/YFixX0sCAM5TI4wwE+9BkK7zMbhTm6qzSmC4Cc1IVL0eHxLAPyQipyfjsN
-         I+SPegtFIWrlXjvx1RreKmYoUvpbV3is7XpMMebN89HMnYtzwqnL9wOIVQxgbjvoW1vz
-         oJUpL2VbWa330ESR5OKVM24ZCq6WogvcDcYbRCx8oqj6oVfjjb/DlL9G5PbUAfopwu7m
-         lU/xQea9SxOcwyMbzC5JwCnAhT9lqQKHRIVeJEnzfHa/Gcf8h00BzcjM7UcYEo9Tk1hq
-         9L+E0hDJRMYzg4X3lMHUdZhi2XpHA1bkjiYEAsMVOP81m8TZnlyVOMf33qYbGNEbVoGq
-         FroA==
-X-Gm-Message-State: AAQBX9ewAJ5CB8qDTe3pKB9ueG1x7+NBgtYfURaFJ40gj9AXHrZEL4Qa
-        6AOE+zKd1ASta84ofOX8Ma4uCtkbNdLR3BkywBbiMA==
-X-Google-Smtp-Source: AKy350YVy3JmfQcviI31LBq4X5LNVqsne/W6d19FhvX/nKVWXNgZd5NpWsZ4AsaUF6j81qIqnDHEcwqg1ATjJVoXzj4=
-X-Received: by 2002:a6b:7210:0:b0:75d:b1:b718 with SMTP id n16-20020a6b7210000000b0075d00b1b718mr1205992ioc.9.1681812639142;
- Tue, 18 Apr 2023 03:10:39 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681812622; x=1684404622;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UXA7IdH6OnmIg4dHeihhBVhSOUFUULrLJzUMC4zJSkE=;
+        b=D2e2minraWMmuWeRi5IJJGRoY8xvtHO78GRpxPVJUMXKEm4YxuaY3iaejxe8rYhMjH
+         /uLWzZNSpeohoCoWeBedyBIC0Z58zbFaOfDw8XBKK0vG8d5Aw9qqW4RUtFiZCK4dGSFY
+         Df0HbgZOExcD8va+e4eiqMbD4VtmsgmOCQSuR1swFgIYQ4OfFsOjVMr1KiME4o5iR2fd
+         BJo/UUwqTOmRi0I7cwBLyPGL5IY6Rc2l4AZHiG0Fm51/0gZWjYOF/Tkboem1UZRY4y4Y
+         xvEd/4pCE0OhCaZkxOZDwrTAoAzKxXme9Rjky42Ff7rJ2HJ1CKSAoT8C0ooReXp8Mwsk
+         mOsg==
+X-Gm-Message-State: AAQBX9dEY4BG49k3q7vB7BG2gjqXkN45cswOtbad5Rj/5XNHSNdzoI8N
+        XSz893+MV/X8lEkYATORrNbOww==
+X-Google-Smtp-Source: AKy350b+EZLC54YBdhnK8Qcxhhtkwyp2iBSktRYLNRnit+ipp8TAThYMwu8PI5N+Sp20tV4Ys/lePA==
+X-Received: by 2002:a2e:9117:0:b0:2a6:15c7:1926 with SMTP id m23-20020a2e9117000000b002a615c71926mr665207ljg.3.1681812621746;
+        Tue, 18 Apr 2023 03:10:21 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id c22-20020a197616000000b004eb3b84d2a1sm2312523lff.114.2023.04.18.03.10.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 03:10:21 -0700 (PDT)
+Message-ID: <e6eeb6ca-fdac-a2a0-bf7e-54cd8f13cc9e@linaro.org>
+Date:   Tue, 18 Apr 2023 12:10:20 +0200
 MIME-Version: 1.0
-References: <20230413131223.4135168-1-glider@google.com>
-In-Reply-To: <20230413131223.4135168-1-glider@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 18 Apr 2023 12:10:02 +0200
-Message-ID: <CANpmjNMd-p6ejwsMugOM84mkqcuLrXpNg1EUJTYRUsEtV1swpQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] mm: kmsan: handle alloc failures in kmsan_vmap_pages_range_noflush()
-To:     Alexander Potapenko <glider@google.com>
-Cc:     urezki@gmail.com, hch@infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, dvyukov@google.com,
-        kasan-dev@googlegroups.com,
-        Dipanjan Das <mail.dipanjan.das@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] arm64: dts: qcom: sm8550: use uint16 for Soundwire
+ interval
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230418095734.669858-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230418095734.669858-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Apr 2023 at 15:12, Alexander Potapenko <glider@google.com> wrote:
->
-> As reported by Dipanjan Das, when KMSAN is used together with kernel
-> fault injection (or, generally, even without the latter), calls to
-> kcalloc() or __vmap_pages_range_noflush() may fail, leaving the
-> metadata mappings for the virtual mapping in an inconsistent state.
-> When these metadata mappings are accessed later, the kernel crashes.
->
-> To address the problem, we return a non-zero error code from
-> kmsan_vmap_pages_range_noflush() in the case of any allocation/mapping
-> failure inside it, and make vmap_pages_range_noflush() return an error
-> if KMSAN fails to allocate the metadata.
->
-> This patch also removes KMSAN_WARN_ON() from vmap_pages_range_noflush(),
-> as these allocation failures are not fatal anymore.
->
-> Reported-by: Dipanjan Das <mail.dipanjan.das@gmail.com>
-> Link: https://lore.kernel.org/linux-mm/CANX2M5ZRrRA64k0hOif02TjmY9kbbO2aCBPyq79es34RXZ=cAw@mail.gmail.com/
-> Fixes: b073d7f8aee4 ("mm: kmsan: maintain KMSAN metadata for page operations")
-> Signed-off-by: Alexander Potapenko <glider@google.com>
 
-Reviewed-by: Marco Elver <elver@google.com>
 
-Looks reasonable, thanks.
-
+On 18.04.2023 11:57, Krzysztof Kozlowski wrote:
+> The Soundwire bindings changed during review, after the SM8550 DTS
+> Soundwire nodes were merged.  Switch to uint16 for Soundwire
+> qcom,ports-sinterval property, to match with current bindings.
+> 
+> Fixes: 61b006389bb7 ("arm64: dts: qcom: sm8550: add Soundwire controllers")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
 > ---
-> v2:
->  -- return 0 from the inline version of kmsan_vmap_pages_range_noflush()
->     (spotted by kernel test robot <lkp@intel.com>)
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+> 
+> Fix for v6.4-rc1.
+> 
+> Bindings v3 (with uint16):
+> https://lore.kernel.org/linux-arm-msm/20230418095447.577001-1-krzysztof.kozlowski@linaro.org/T/#md34302ec02eebdbe3e4defef79a40b32a7e621b8
 > ---
->  include/linux/kmsan.h | 20 +++++++++++---------
->  mm/kmsan/shadow.c     | 27 ++++++++++++++++++---------
->  mm/vmalloc.c          |  6 +++++-
->  3 files changed, 34 insertions(+), 19 deletions(-)
->
-> diff --git a/include/linux/kmsan.h b/include/linux/kmsan.h
-> index e38ae3c346184..c7ff3aefc5a13 100644
-> --- a/include/linux/kmsan.h
-> +++ b/include/linux/kmsan.h
-> @@ -134,11 +134,12 @@ void kmsan_kfree_large(const void *ptr);
->   * @page_shift:        page_shift passed to vmap_range_noflush().
->   *
->   * KMSAN maps shadow and origin pages of @pages into contiguous ranges in
-> - * vmalloc metadata address range.
-> + * vmalloc metadata address range. Returns 0 on success, callers must check
-> + * for non-zero return value.
->   */
-> -void kmsan_vmap_pages_range_noflush(unsigned long start, unsigned long end,
-> -                                   pgprot_t prot, struct page **pages,
-> -                                   unsigned int page_shift);
-> +int kmsan_vmap_pages_range_noflush(unsigned long start, unsigned long end,
-> +                                  pgprot_t prot, struct page **pages,
-> +                                  unsigned int page_shift);
->
->  /**
->   * kmsan_vunmap_kernel_range_noflush() - Notify KMSAN about a vunmap.
-> @@ -281,12 +282,13 @@ static inline void kmsan_kfree_large(const void *ptr)
->  {
->  }
->
-> -static inline void kmsan_vmap_pages_range_noflush(unsigned long start,
-> -                                                 unsigned long end,
-> -                                                 pgprot_t prot,
-> -                                                 struct page **pages,
-> -                                                 unsigned int page_shift)
-> +static inline int kmsan_vmap_pages_range_noflush(unsigned long start,
-> +                                                unsigned long end,
-> +                                                pgprot_t prot,
-> +                                                struct page **pages,
-> +                                                unsigned int page_shift)
->  {
-> +       return 0;
->  }
->
->  static inline void kmsan_vunmap_range_noflush(unsigned long start,
-> diff --git a/mm/kmsan/shadow.c b/mm/kmsan/shadow.c
-> index a787c04e9583c..b8bb95eea5e3d 100644
-> --- a/mm/kmsan/shadow.c
-> +++ b/mm/kmsan/shadow.c
-> @@ -216,27 +216,29 @@ void kmsan_free_page(struct page *page, unsigned int order)
->         kmsan_leave_runtime();
->  }
->
-> -void kmsan_vmap_pages_range_noflush(unsigned long start, unsigned long end,
-> -                                   pgprot_t prot, struct page **pages,
-> -                                   unsigned int page_shift)
-> +int kmsan_vmap_pages_range_noflush(unsigned long start, unsigned long end,
-> +                                  pgprot_t prot, struct page **pages,
-> +                                  unsigned int page_shift)
->  {
->         unsigned long shadow_start, origin_start, shadow_end, origin_end;
->         struct page **s_pages, **o_pages;
-> -       int nr, mapped;
-> +       int nr, mapped, err = 0;
->
->         if (!kmsan_enabled)
-> -               return;
-> +               return 0;
->
->         shadow_start = vmalloc_meta((void *)start, KMSAN_META_SHADOW);
->         shadow_end = vmalloc_meta((void *)end, KMSAN_META_SHADOW);
->         if (!shadow_start)
-> -               return;
-> +               return 0;
->
->         nr = (end - start) / PAGE_SIZE;
->         s_pages = kcalloc(nr, sizeof(*s_pages), GFP_KERNEL);
->         o_pages = kcalloc(nr, sizeof(*o_pages), GFP_KERNEL);
-> -       if (!s_pages || !o_pages)
-> +       if (!s_pages || !o_pages) {
-> +               err = -ENOMEM;
->                 goto ret;
-> +       }
->         for (int i = 0; i < nr; i++) {
->                 s_pages[i] = shadow_page_for(pages[i]);
->                 o_pages[i] = origin_page_for(pages[i]);
-> @@ -249,10 +251,16 @@ void kmsan_vmap_pages_range_noflush(unsigned long start, unsigned long end,
->         kmsan_enter_runtime();
->         mapped = __vmap_pages_range_noflush(shadow_start, shadow_end, prot,
->                                             s_pages, page_shift);
-> -       KMSAN_WARN_ON(mapped);
-> +       if (mapped) {
-> +               err = mapped;
-> +               goto ret;
-> +       }
->         mapped = __vmap_pages_range_noflush(origin_start, origin_end, prot,
->                                             o_pages, page_shift);
-> -       KMSAN_WARN_ON(mapped);
-> +       if (mapped) {
-> +               err = mapped;
-> +               goto ret;
-> +       }
->         kmsan_leave_runtime();
->         flush_tlb_kernel_range(shadow_start, shadow_end);
->         flush_tlb_kernel_range(origin_start, origin_end);
-> @@ -262,6 +270,7 @@ void kmsan_vmap_pages_range_noflush(unsigned long start, unsigned long end,
->  ret:
->         kfree(s_pages);
->         kfree(o_pages);
-> +       return err;
->  }
->
->  /* Allocate metadata for pages allocated at boot time. */
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index a50072066221a..1355d95cce1ca 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -605,7 +605,11 @@ int __vmap_pages_range_noflush(unsigned long addr, unsigned long end,
->  int vmap_pages_range_noflush(unsigned long addr, unsigned long end,
->                 pgprot_t prot, struct page **pages, unsigned int page_shift)
->  {
-> -       kmsan_vmap_pages_range_noflush(addr, end, prot, pages, page_shift);
-> +       int ret = kmsan_vmap_pages_range_noflush(addr, end, prot, pages,
-> +                                                page_shift);
-> +
-> +       if (ret)
-> +               return ret;
->         return __vmap_pages_range_noflush(addr, end, prot, pages, page_shift);
->  }
->
-> --
-> 2.40.0.577.gac1e443424-goog
->
+>  arch/arm64/boot/dts/qcom/sm8550.dtsi | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> index 6e9bad8f6f33..80a01ff3ee30 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> @@ -2022,7 +2022,7 @@ swr3: soundwire-controller@6ab0000 {
+>  			qcom,din-ports = <4>;
+>  			qcom,dout-ports = <9>;
+>  
+> -			qcom,ports-sinterval =		<0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x18f 0xff 0xff 0x0f 0x0f 0xff 0x31f>;
+> +			qcom,ports-sinterval =		/bits/ 16 <0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x18f 0xff 0xff 0x0f 0x0f 0xff 0x31f>;
+>  			qcom,ports-offset1 =		/bits/ 8 <0x01 0x03 0x05 0x02 0x04 0x15 0x00 0xff 0xff 0x06 0x0d 0xff 0x00>;
+>  			qcom,ports-offset2 =		/bits/ 8 <0xff 0x07 0x1f 0xff 0x07 0x1f 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
+>  			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x0f>;
+> @@ -2068,7 +2068,7 @@ swr1: soundwire-controller@6ad0000 {
+>  			qcom,din-ports = <0>;
+>  			qcom,dout-ports = <10>;
+>  
+> -			qcom,ports-sinterval =		<0x03 0x3f 0x1f 0x07 0x00 0x18f 0xff 0xff 0xff 0xff>;
+> +			qcom,ports-sinterval =		/bits/ 16 <0x03 0x3f 0x1f 0x07 0x00 0x18f 0xff 0xff 0xff 0xff>;
+>  			qcom,ports-offset1 =		/bits/ 8 <0x00 0x00 0x0b 0x01 0x00 0x00 0xff 0xff 0xff 0xff>;
+>  			qcom,ports-offset2 =		/bits/ 8 <0x00 0x00 0x0b 0x00 0x00 0x00 0xff 0xff 0xff 0xff>;
+>  			qcom,ports-hstart =		/bits/ 8 <0xff 0x03 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff>;
+> @@ -2133,7 +2133,7 @@ swr0: soundwire-controller@6b10000 {
+>  			qcom,din-ports = <4>;
+>  			qcom,dout-ports = <9>;
+>  
+> -			qcom,ports-sinterval =		<0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x18f 0xff 0xff 0x0f 0x0f 0xff 0x31f>;
+> +			qcom,ports-sinterval =		/bits/ 16 <0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x18f 0xff 0xff 0x0f 0x0f 0xff 0x31f>;
+>  			qcom,ports-offset1 =		/bits/ 8 <0x01 0x03 0x05 0x02 0x04 0x15 0x00 0xff 0xff 0x06 0x0d 0xff 0x00>;
+>  			qcom,ports-offset2 =		/bits/ 8 <0xff 0x07 0x1f 0xff 0x07 0x1f 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
+>  			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x0f>;
