@@ -2,94 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382806E5E63
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD336E5E66
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjDRKOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 06:14:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
+        id S231135AbjDRKO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 06:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjDRKOO (ORCPT
+        with ESMTP id S230519AbjDRKOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 06:14:14 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60E913ABF;
-        Tue, 18 Apr 2023 03:14:13 -0700 (PDT)
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 6899C8106;
-        Tue, 18 Apr 2023 10:14:11 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] serial: 8250: Reinit port->pm on port specific driver unbind
-Date:   Tue, 18 Apr 2023 13:14:06 +0300
-Message-Id: <20230418101407.12403-1-tony@atomide.com>
-X-Mailer: git-send-email 2.40.0
+        Tue, 18 Apr 2023 06:14:25 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FD761BA;
+        Tue, 18 Apr 2023 03:14:23 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id iw7-20020a05600c54c700b003f16fce55b5so3686851wmb.0;
+        Tue, 18 Apr 2023 03:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681812862; x=1684404862;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6/3RvuoENvVjgHRExFiuQ0Bq7U8av4NBMU/9hcNgIOs=;
+        b=PEy7rz9DT15QaF2r9PolfhQ+KjfwZgUVBcfsopQdfLEI6FU1r8I+O6E9vj6E485wUx
+         wgAUUyL63Q10/fGhADdZDWGJXurWLc6zJPS5dmuPrK2LmYW3smMt6HIV71F75HyPB5Ls
+         kG+KLmITvb4mu6HAweNr4SdAPbFyhBwlJEU6vdmXUmfM/pQ1EB9IAC8BDi5+EOjS/f2v
+         Z9RhbZ89CEJquOh9IdtMKdQ1uAzyH+amKRGne/AcYsWW6m6386k6RZ/rfb0Mc3c1P4Wz
+         Xl/TGN7DmnsnsOHBA44oYSoG+wCsw5VauxSDSt1f63oeIzxfiym7ihSJK3KowKl6ewFh
+         pKWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681812862; x=1684404862;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6/3RvuoENvVjgHRExFiuQ0Bq7U8av4NBMU/9hcNgIOs=;
+        b=W2wqRPDcFU6ezjk8ifizHpr85uP+7aVIE/rRJXiZPcYb6kvKyaO6qkZFx9vS2P01qu
+         sC0/PsNrj43Dv+F0OYcVLr6uPPnA2MEPlibh0nRThmz7HJp1NUa6OXoo5NWXvBzQlamD
+         ecbeE3px1iVYTOz5rs9DAdS0f0EByf6F4U1o/vYAbfAh/lPQArygmE42ylDtzj10cL38
+         rbMTIWEuXWGNytn4sHkUDEQrncaE7E70CJFP7upZJDnARKIsTCnic4Xjl/W5aF5xid7v
+         oc42ewyoGOnp9b4JTcd5De3v8KTUxqdXP9uelooNhcs+4gNw7F6jbPBvFyMrUw8NjKY6
+         eMgw==
+X-Gm-Message-State: AAQBX9dF4C80BWHfXFYQvPWO2CRCJPSsbDY5sX1scrfqiKFRiXX2p5XM
+        4zIHFP03b/1ykKJZrYMxgsk=
+X-Google-Smtp-Source: AKy350b8WjUK1A7Q+TOJfcGd4IZNOAtcoIMXAMsp7nuBFBdAMPMlIvr9mc7aseZLOg+hjfpT+nYDbQ==
+X-Received: by 2002:a7b:cd93:0:b0:3f1:6434:43bf with SMTP id y19-20020a7bcd93000000b003f1643443bfmr8311588wmj.17.1681812861969;
+        Tue, 18 Apr 2023 03:14:21 -0700 (PDT)
+Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.googlemail.com with ESMTPSA id fc12-20020a05600c524c00b003f0a0315ce4sm17407725wmb.47.2023.04.18.03.14.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 03:14:21 -0700 (PDT)
+Message-ID: <530b12f1-b0d2-1183-c9a9-0f5f9d6e178d@gmail.com>
+Date:   Tue, 18 Apr 2023 11:14:20 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] kselftest: vDSO: Fix accumulation of uninitialized ret
+ when CLOCK_REALTIME is undefined
+Content-Language: en-US
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230417104743.30018-1-colin.i.king@gmail.com>
+ <20487c94-7f81-cbf5-7136-c7f266eaf60d@arm.com>
+From:   "Colin King (gmail)" <colin.i.king@gmail.com>
+In-Reply-To: <20487c94-7f81-cbf5-7136-c7f266eaf60d@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we unbind a serial port hardware specific 8250 driver, the generic
-serial8250 driver takes over the port. After that we see an oops about 10
-seconds later. This can produce the following at least on some TI SoCs:
+On 18/04/2023 11:10, Vincenzo Frascino wrote:
+> Hi Colin,
+> 
+> On 4/17/23 11:47, Colin Ian King wrote:
+>> In the unlikely case that CLOCK_REALTIME is not defined, variable ret is
+>> not initialized and further accumulation of return values to ret can leave
+>> ret in an undefined state. Fix this by initialized ret to zero and changing
+>> the assignment of ret to an accumulation for the CLOCK_REALTIME case.
+>>
+> 
+> I was wondering how did you find this.
 
-Unhandled fault: imprecise external abort (0x1406)
-Internal error: : 1406 [#1] SMP ARM
+I used cppcheck --force --enable=all, this examines the #if defined() paths.
 
-Turns out that we may still have the serial port hardware specific driver
-port->pm in use, and serial8250_pm() tries to call it after the port
-specific driver is gone:
+> 
+> Apart that:
+> 
+> Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> 
+>> Fixes: 03f55c7952c9 ("kselftest: Extend vDSO selftest to clock_getres")
+>> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+>> ---
+>>   tools/testing/selftests/vDSO/vdso_test_clock_getres.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/vDSO/vdso_test_clock_getres.c b/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
+>> index 15dcee16ff72..38d46a8bf7cb 100644
+>> --- a/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
+>> +++ b/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
+>> @@ -84,12 +84,12 @@ static inline int vdso_test_clock(unsigned int clock_id)
+>>   
+>>   int main(int argc, char **argv)
+>>   {
+>> -	int ret;
+>> +	int ret = 0;
+>>   
+>>   #if _POSIX_TIMERS > 0
+>>   
+>>   #ifdef CLOCK_REALTIME
+>> -	ret = vdso_test_clock(CLOCK_REALTIME);
+>> +	ret += vdso_test_clock(CLOCK_REALTIME);
+>>   #endif
+>>   
+>>   #ifdef CLOCK_BOOTTIME
+> 
 
-serial8250_pm [8250_base] from uart_change_pm+0x54/0x8c [serial_base]
-uart_change_pm [serial_base] from uart_hangup+0x154/0x198 [serial_base]
-uart_hangup [serial_base] from __tty_hangup.part.0+0x328/0x37c
-__tty_hangup.part.0 from disassociate_ctty+0x154/0x20c
-disassociate_ctty from do_exit+0x744/0xaac
-do_exit from do_group_exit+0x40/0x8c
-do_group_exit from __wake_up_parent+0x0/0x1c
-
-Let's fix the issue by calling serial8250_set_defaults() in
-serial8250_unregister_port(). This will set the port back to using
-the serial8250 default functions, and sets the port->pm to point to
-serial8250_pm.
-
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
-
-Changes since v1:
-
-- Call serial8250_init_port() instead of just clearing port->pm
-
-- Updated patch subject line a bit
-
----
- drivers/tty/serial/8250/8250_core.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
---- a/drivers/tty/serial/8250/8250_core.c
-+++ b/drivers/tty/serial/8250/8250_core.c
-@@ -1158,6 +1158,7 @@ void serial8250_unregister_port(int line)
- 		uart->port.type = PORT_UNKNOWN;
- 		uart->port.dev = &serial8250_isa_devs->dev;
- 		uart->capabilities = 0;
-+		serial8250_init_port(uart);
- 		serial8250_apply_quirks(uart);
- 		uart_add_one_port(&serial8250_reg, &uart->port);
- 	} else {
--- 
-2.40.0
