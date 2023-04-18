@@ -2,154 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F5A6E60A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CC16E60A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbjDRMI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 08:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S231261AbjDRMHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 08:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbjDRMIG (ORCPT
+        with ESMTP id S231387AbjDRMH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 08:08:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E46CC1B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:58:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681819135;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ic+G8JxkY030ztDDxrSVr0gIWS+MILOdZNy5BfZjtHQ=;
-        b=ATx0Ah/Icikd2b0ThTNn6hIqlIZ+y0ZX/uNRpW+t3oXPfS6xO1cXOr53O7iL/yVD1KvGH1
-        S2b0qE+RfwbizcSQUGuS8P4HQmeSUOnLWR/2LRgYb8kICNN2KhGvum26j35GgCbms+szG3
-        E3j8MuAGl5DeBpo59MJrfmchoDyFucg=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-584-YUV7Dt8BNdGXz_oOqz59ZA-1; Tue, 18 Apr 2023 07:58:52 -0400
-X-MC-Unique: YUV7Dt8BNdGXz_oOqz59ZA-1
-Received: by mail-wm1-f70.google.com with SMTP id fl8-20020a05600c0b8800b003f16fe94249so4147009wmb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:58:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681819131; x=1684411131;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Tue, 18 Apr 2023 08:07:29 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D251D30C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:59:40 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id j15so7722491ybl.10
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:59:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681819179; x=1684411179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ic+G8JxkY030ztDDxrSVr0gIWS+MILOdZNy5BfZjtHQ=;
-        b=Qp/TG8s2Xh4uTk2qcwcvOGocfwFHaK+b+hdkDJSpsaThb3zkyJz43mykyzpCmpVeFi
-         4KeNYCWA/zPAD/yolsAq1QWbMaD1f01sfNkYQxRKkAK+tloP0mVea/657Y6IevypTY6w
-         ugbCxNfGUtyTB9n/sJzle3XqiqgaR0MMJFPx+qWH+00pEw9Fc05asDaXSy7rTYg36c0S
-         QEkHxSlrVhyh0pR4bxJZ7oCOqPS64kMjwOoXdQn2F5RPy0lOe5rQNO47ptNY2PR93+J8
-         2EJD5F/Giu3ekdrJDikG9r32+l6zX9ylY8/YnTAVBs4ocg6WUEE87C+/wPJSxE8pG0K4
-         j3nw==
-X-Gm-Message-State: AAQBX9cS5tFsV15jfoLvQSc6BNbpHWtiKdt7x/S6h2tYRqTyCqm/IbEZ
-        2qJ3cp6FHfyqLzpn4YqxSqPuOWJRLpd0SSzDpkB+96ZEBli0xilIbh0EwNeqFulkVaX3yOLVh6h
-        67IlMFq1XInxidkmd/7uuEapW
-X-Received: by 2002:a7b:cb07:0:b0:3f0:5519:9049 with SMTP id u7-20020a7bcb07000000b003f055199049mr13710172wmj.8.1681819131390;
-        Tue, 18 Apr 2023 04:58:51 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YYPfT3gB+38KJa3OuGZh4qKj+97YG3AusxGQ1ufp+BlxDKePtvpPOBSG270xYpIPQ/XjAu0Q==
-X-Received: by 2002:a7b:cb07:0:b0:3f0:5519:9049 with SMTP id u7-20020a7bcb07000000b003f055199049mr13710144wmj.8.1681819131056;
-        Tue, 18 Apr 2023 04:58:51 -0700 (PDT)
-Received: from localhost ([37.160.130.245])
-        by smtp.gmail.com with ESMTPSA id m4-20020a05600c4f4400b003f0ae957fcesm12903095wmq.42.2023.04.18.04.58.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 04:58:50 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 13:58:46 +0200
-From:   Andrea Claudi <aclaudi@redhat.com>
-To:     Abhijeet Rastogi <abhijeet.1989@gmail.com>
-Cc:     Julian Anastasov <ja@ssi.bg>, Simon Horman <horms@verge.net.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ipvs: change ip_vs_conn_tab_bits range to [8,31]
-Message-ID: <ZD6F9l2yE0i42YE5@renaissance-vector>
-References: <20230412-increase_ipvs_conn_tab_bits-v1-1-60a4f9f4c8f2@gmail.com>
- <d2519ce3-e49b-a544-b79d-42905f4a2a9a@ssi.bg>
- <CACXxYfxLU0jWmq0W7YxX=44XFCGvgMX2HwTFUUHCUMjO28g5BA@mail.gmail.com>
+        bh=nKarR15sfw1awM7pqcVsw1KDbYwpKozLtjgjIH1o72I=;
+        b=r/phZTqOrWnxyivYlg1AWe7h0UEItmvToCXsuM/mOXo5a0Jskm5GT5UWvh+xw+Y9go
+         w/eXst8R3yAd4hYFm7jNohMjFcK6yed5eBK+EymvJo8PPVAFmayAxWg8I2BAi1WVxaDt
+         MktHbnuCggmQL/99ZyGZ6hZ8iD6YEyJI+cYChToGt6c2kE0fCM6TMso25rZEuhJJD/zE
+         SJkIuNcnQD+XF9qrLfOSO8ScKUn/UUPQP+OutDQ1oAcTSOdeUMDbByZ741ocvaxmAYQ8
+         iHJwXeeST0keS+hryF3CefcnNlq7QP+7IxNnmsXVF3qJegMfzdwySkl8yvu2IKHnODZZ
+         Oozg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681819179; x=1684411179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nKarR15sfw1awM7pqcVsw1KDbYwpKozLtjgjIH1o72I=;
+        b=DFuCD2PN6AcvzJsv2omNgFhMkFTg/ZsHSmoYRaMBrGHKzfOAZhUxSUmlPf23ijQHTs
+         uEryyDHF9NsaTLtCP6iH3HuHwemPYpSD7ZtxwvOfLP0XJ+UWvYrX1Ooxd7jq6WZj6IVH
+         7mYqJU6Vl2jeHF7UWfpUUnjCBX72wvcIjLf3Ttqy/gM4Qr4yuMYZZTgR30vtval+i/Fl
+         gT4W/Y9oGhNj0CBvht+Jq6y013VcyFMc6ayvbo3JkRhsoyDPKMXuPN21/0bYpSp6uJ6o
+         AiwuUzHQvFFGfRYw9XBeBkcalqMeHQX6jRSR1KpoCdqTUtIvJw8eVXlOckF6sLIeoSc7
+         zx1A==
+X-Gm-Message-State: AAQBX9cNbJCkDQUNyXaaXbDSAZK2jR9yAeXoTn0VbEnxM5XGAn+h+nDI
+        KCwTaa1pC7HvvK5vRr3mS3piZ6/eAlJcKncwtP5x
+X-Google-Smtp-Source: AKy350aVc+pG5cSnZqGh7Qb5dDcC3+DcWDbHP9mXq9/DGKpXF1IooBVsoWyMCoTNA55rvEdPo4GFVpJ6cU0gHcMb7BM=
+X-Received: by 2002:a25:df41:0:b0:b8b:eea7:525e with SMTP id
+ w62-20020a25df41000000b00b8beea7525emr12045327ybg.5.1681819179231; Tue, 18
+ Apr 2023 04:59:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACXxYfxLU0jWmq0W7YxX=44XFCGvgMX2HwTFUUHCUMjO28g5BA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230412023839.2869114-1-jstultz@google.com> <20230412035905.3184199-1-jstultz@google.com>
+ <20230417111949.GJ83892@hirez.programming.kicks-ass.net> <CANDhNCp2WEAMjK1DUVKCen05-EdwVBYZxxLSP3ZSZvRh1ayAhQ@mail.gmail.com>
+ <20230418103010.GY4253@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230418103010.GY4253@hirez.programming.kicks-ass.net>
+From:   John Stultz <jstultz@google.com>
+Date:   Tue, 18 Apr 2023 13:59:27 +0200
+Message-ID: <CANDhNCoG7Or+o04gB=aCU2MmFD6kM6jGu-2w3QALWXLDBhyuUw@mail.gmail.com>
+Subject: Re: [PATCH v2] locking/rwsem: Add __always_inline annotation to __down_read_common()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Tim Murray <timmurray@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>, kernel-team@android.com,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 06:58:06PM -0700, Abhijeet Rastogi wrote:
-> Hi Simon, Andrea and Julian,
-> 
-> I really appreciate you taking the time to respond to my patch. Some follow up
-> questions that I'll appreciate a response for.
-> 
-> @Simon Horman
-> >In any case, I think this patch is an improvement on the current situation.
-> 
-> +1 to this. I wanted to add that, we're not changing the defaults
-> here, the default still stays at 2^12. If a kernel user changes the
-> default, they probably already know what the limitations are, so I
-> personally don't think it is a big concern.
-> 
-> @Andrea Claudi
-> >for the record, RHEL ships with CONFIG_IP_VS_TAB_BITS set to 12 as
-> default.
-> 
-> Sorry, I should have been clearer. RHEL ships with the same default,
-> yes, but it doesn't have the range check, at least, on the version I'm
-> using right now (3.10.0-1160.62.1.el7.x86_64).
-> 
-> On this version, I'm able to load with bit size 30, 31 gives me error
-> regarding allocating memory (64GB host) and anything beyond 31 is
-> mysteriously switched to a lower number. The following dmesg on my
-> host confirms that the bitsize 30 worked, which is not possible
-> without a patch on the current kernel version.
-> 
-> "[Fri Apr 14 01:14:51 2023] IPVS: Connection hash table configured (size=1073741
-> 824, memory=16777216Kbytes)"
+On Tue, Apr 18, 2023 at 12:30=E2=80=AFPM Peter Zijlstra <peterz@infradead.o=
+rg> wrote:
+>
+> On Mon, Apr 17, 2023 at 06:22:14PM +0200, John Stultz wrote:
+> > On Mon, Apr 17, 2023 at 1:19=E2=80=AFPM Peter Zijlstra <peterz@infradea=
+d.org> wrote:
+> > >
+> > > On Wed, Apr 12, 2023 at 03:59:05AM +0000, John Stultz wrote:
+> > > > Apparently despite it being marked inline, the compiler
+> > > > may not inline __down_read_common() which makes it difficult
+> > > > to identify the cause of lock contention, as the blocked
+> > > > function will always be listed as __down_read_common().
+> > > >
+> > > > So this patch adds __always_inline annotation to the
+> > > > function to force it to be inlines so the calling function
+> > > > will be listed.
+> > >
+> > > I'm a wee bit confused; what are you looking at? Wchan?
+> >
+> > Apologies! Yes, traceevent data via wchan, sorry I didn't make that cle=
+ar.
+>
+> No worries; good addition to the v3 Changelog ;-)
+>
+> > > What is stopping
+> > > the compiler from now handing you
+> > > __down_read{,_interruptible,_killable}() instead? Is that fine?
+> >
+> > No, we want to make the blocked calling function, rather than the
+> > locking functions, visible in the tracepoints captured. That said, the
+> > other __down_read* functions seem to be properly inlined in practice
+> > (Waiman's theory as to why sounds convincing to me).
+>
+> Right, but we should not rely on the compiler heuristics for correctness
+> :-)
+>
+> > If you'd like I can add those as well to be always_inline, as well so
+> > it's more consistent?
+>
+> Yes please. I'm not sure I care much about the whole 'inline __sched' vs
+> '__always_inline' thing, but I do feel it should all be consistently
+> applied.
 
-I see. This makes sense to me as RHEL 7 does not include the range
-check, while RHEL 8 and RHEL 9 both includes it.
+Sounds good. I'll respin with this.
 
-The reason why any number beyond 31 results in a lower number is to be
-searched in gcc implementation. IIRC shifting an int by more than 31 or
-less than 0 results in an undefined behaviour, according to the C
-standard.
-
-> 
-> @Julian Anastasov,
-> >This is not a limit of number of connections. I prefer
-> not to allow value above 24 without adding checks for the
-> available memory,
-> 
-> Interesting that you brought up that number 24, that is exactly what
-> we use in production today. One IPVS node is able to handle spikes of
-> 10M active connections without issues. This patch idea originated as
-> my company is migrating from the ancient RHEL version to a somewhat
-> newer CentOS (5.* kernel) and noticed that we were unable to load the
-> ip_vs kernel module with anything greater than 20 bits. Another
-> motivation for kernel upgrade is utilizing maglev to reduce table size
-> but that's out of context in this discussion.
-> 
-> My request is, can we increase the range from 20 to something larger?
-> If 31 seems a bit excessive, maybe, we can settle for something like
-> [8,30] or even lower. With conn_tab_bits=30, it allocates 16GB at
-> initialization time, it is not entirely absurd by today's standards.
-> 
-> I can revise my patch to a lower range as you guys see fit.
-> 
-> --
-> Cheers,
-> Abhijeet (https://abhi.host)
-> 
-
+Thanks so much for the review!
+-john
