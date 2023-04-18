@@ -2,126 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A662E6E55F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 02:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E49D96E55FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 02:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjDRAlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 20:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
+        id S229685AbjDRAoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 20:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjDRAle (ORCPT
+        with ESMTP id S229479AbjDRAog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 20:41:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4912A35BC
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 17:41:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D704F62B72
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 00:41:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 234A7C433D2;
-        Tue, 18 Apr 2023 00:41:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1681778492;
-        bh=NDF5RERKBTV++O0srQwGL0/bYyfwjsDkNiG58kuLKlc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hACjk0Lz/j0DG53leFvmdfDdqQ9KUp4Z+Ou4HeMOjYhjmJaq90aSNKRNeNAJPjdEt
-         BfuhYxYq3M/RoK8yHTLT6df+Ac33RHjUfyRsk+Y93zn/p7UNb6nGz9JbYJdTjPSPb7
-         oxK4AIfBe0d656niLEsHioESG2gO8srcSZjwzibc=
-Date:   Mon, 17 Apr 2023 17:41:31 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Minchan Kim <minchan@kernel.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCHv2] zsmalloc: allow only one active pool compaction
- context
-Message-Id: <20230417174131.44de959204814209ef73e53e@linux-foundation.org>
-In-Reply-To: <20230417135420.1836741-1-senozhatsky@chromium.org>
-References: <20230417135420.1836741-1-senozhatsky@chromium.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 17 Apr 2023 20:44:36 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B98040C8;
+        Mon, 17 Apr 2023 17:44:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=bnsZiXNLzJijyULrYUfO4S0JPXhMB76tF9V0ZZt95Js=; b=0GAPn7bZVQv4/DPi6zGxw/KEc3
+        K+1xb2+q7sfPCPkDhvlrnxShzp28zKIyVwfuzYxj+OixV7+oV9iWh3g6qEVxUQDkSi0kfsVcgJc4N
+        oUvD1wMtzNDOOvEX1xtfxAEEPUOR9JuvHXP+OnHaLd0A44Nl9uMnDenha53ERENnbprM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1poZSK-00AYGP-Ne; Tue, 18 Apr 2023 02:44:24 +0200
+Date:   Tue, 18 Apr 2023 02:44:24 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Shmuel Hazan <shmuel.h@siklu.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Marcin Wojtas <mw@semihalf.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        horatiu.vultur@microchip.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] net: mvpp2: tai: add refcount for ptp worker
+Message-ID: <cab62ad6-c495-48f3-91c8-5c27c43582ba@lunn.ch>
+References: <20230417170741.1714310-1-shmuel.h@siklu.com>
+ <20230417170741.1714310-2-shmuel.h@siklu.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230417170741.1714310-2-shmuel.h@siklu.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023 22:54:20 +0900 Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
-
-> zsmalloc pool can be compacted concurrently by many contexts,
-> e.g.
+On Mon, Apr 17, 2023 at 08:07:39PM +0300, Shmuel Hazan wrote:
+> In some configurations, a single TAI can be responsible for multiple
+> mvpp2 interfaces. However, the mvpp2 driver will call mvpp22_tai_stop
+> and mvpp22_tai_start per interface RX timestamp disable/enable.
 > 
->  cc1 handle_mm_fault()
->       do_anonymous_page()
->        __alloc_pages_slowpath()
->         try_to_free_pages()
->          do_try_to_free_pages(
->           lru_gen_shrink_node()
->            shrink_slab()
->             do_shrink_slab()
->              zs_shrinker_scan()
->               zs_compact()
+> As a result, disabling timestamping for one interface would stop the
+> worker and corrupt the other interface's RX timestamps.
 > 
-> This creates unnecessary contention as all those processes
-> compete for access to the same classes. A single compaction
-> process is enough. Moreover contention that is created by
-> multiple compaction processes impact other zsmalloc functions,
-> e.g. zs_malloc(), since zsmalloc uses "global" pool->lock to
-> synchronize access to pool.
+> This commit solves the issue by introducing a simpler ref count for each
+> TAI instance.
 > 
-> Introduce pool compaction mutex and permit only one compaction
-> context at a time. This reduces overall pool->lock contention.
-
-That isn't what the patch does!  Perhaps an earlier version used a mutex?
-
-> /proc/lock-stat after make -j$((`nproc`+1)) linux kernel for
-> &pool->lock#3:
+> Fixes: ce3497e2072e ("net: mvpp2: ptp: add support for receive timestamping")
+> Signed-off-by: Shmuel Hazan <shmuel.h@siklu.com>
+> ---
+>  .../net/ethernet/marvell/mvpp2/mvpp2_tai.c    | 30 ++++++++++++++++---
+>  1 file changed, 26 insertions(+), 4 deletions(-)
 > 
->                 Base           Patched
-> ------------------------------------------
-> con-bounces     2035730        1540066
-> contentions     2343871        1774348
-> waittime-min    0.10           0.10
-> waittime-max    4004216.24     2745.22
-> waittime-total  101334168.29   67865414.91
-> waittime-avg    43.23          38.25
-> acq-bounces     2895765        2186745
-> acquisitions    6247686        5136943
-> holdtime-min    0.07           0.07
-> holdtime-max    2605507.97     482439.16
-> holdtime-total  9998599.59     5107151.01
-> holdtime-avg    1.60           0.99
-> 
-> Test run time:
-> Base
-> 2775.15user 1709.13system 2:13.82elapsed 3350%CPU
-> 
-> Patched
-> 2608.25user 1439.03system 2:03.63elapsed 3273%CPU
-> 
-> ...
->
-> @@ -2274,6 +2275,9 @@ unsigned long zs_compact(struct zs_pool *pool)
->  	struct size_class *class;
->  	unsigned long pages_freed = 0;
+> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_tai.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_tai.c
+> index 95862aff49f1..2e3d43b1bac1 100644
+> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_tai.c
+> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_tai.c
+> @@ -61,6 +61,7 @@ struct mvpp2_tai {
+>  	u64 period;		// nanosecond period in 32.32 fixed point
+>  	/* This timestamp is updated every two seconds */
+>  	struct timespec64 stamp;
+> +	u16 poll_worker_refcount;
+>  };
 >  
-> +	if (atomic_xchg(&pool->compaction_in_progress, 1))
-> +		return 0;
+>  static void mvpp2_tai_modify(void __iomem *reg, u32 mask, u32 set)
+> @@ -368,18 +369,39 @@ void mvpp22_tai_tstamp(struct mvpp2_tai *tai, u32 tstamp,
+>  	hwtstamp->hwtstamp = timespec64_to_ktime(ts);
+>  }
+>  
+> +static void mvpp22_tai_start_unlocked(struct mvpp2_tai *tai)
+> +{
+> +	tai->poll_worker_refcount++;
+> +	if (tai->poll_worker_refcount > 1)
+> +		return;
 > +
+> +	ptp_schedule_worker(tai->ptp_clock, 0);
 
-A code comment might be appropriate here.
+So the old code used to have delay here, not 0. And delay would be
+returned by mvpp22_tai_aux_work() and have a value of 2000ms. So this
+is a clear change in behaviour. Why is it O.K. not to delay for 2
+seconds?  Should you actually still have the delay, pass it as a
+parameter into this function?
 
-Is the spin_is_contended() test in __zs_compact() still relevant?
-
-And....  single-threading the operation seems a pretty sad way of
-addressing a contention issue.  zs_compact() is fairly computationally
-expensive - surely a large machine would like to be able to
-concurrently run many instances of zs_compact()?
+     Andrew
