@@ -2,175 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068156E681D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD616E6855
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232286AbjDRPai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 11:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
+        id S230493AbjDRPda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 11:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231635AbjDRPaf (ORCPT
+        with ESMTP id S230377AbjDRPd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:30:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB03A257
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:29:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681831746;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d+AIWczdbQmYcywSh4w8GvqvVINNbh2DvrncyfYADn8=;
-        b=R0/AC+qWnLKKnSZT0XIv9wX6XiEG8qMQX9QEVq+v8MbSKHI9QiooTHPRXqILRzmFYyiF9m
-        NBwX8kePFfH9wkd9n//ma4NqXb/HkkccOcdrWWbx2dfiC7mcTjpmzlpK3X7Shjx6Z/1snM
-        SokdkfrUHuqxUoACx7MuOiP6ic1QFXk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-42-Je6gkD7QPgStNU4pQnR1yQ-1; Tue, 18 Apr 2023 11:29:03 -0400
-X-MC-Unique: Je6gkD7QPgStNU4pQnR1yQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D3CDF8996F7;
-        Tue, 18 Apr 2023 15:29:02 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.194.149])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3F63F14171B8;
-        Tue, 18 Apr 2023 15:29:00 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stefan Roesch <shr@devkernel.io>,
-        Rik van Riel <riel@surriel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v1 3/3] mm/ksm: move disabling KSM from s390/gmap code to KSM code
-Date:   Tue, 18 Apr 2023 17:28:49 +0200
-Message-Id: <20230418152849.505124-4-david@redhat.com>
-In-Reply-To: <20230418152849.505124-1-david@redhat.com>
-References: <20230418051342.1919757-1-shr@devkernel.io>
- <20230418152849.505124-1-david@redhat.com>
+        Tue, 18 Apr 2023 11:33:27 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB32B15464
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:32:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=V7/9YRdvpUWFsXQviScvn8PuAX8GmByqNXRyVJ4I/AY=; b=WlAVA2OjOzVTDkW8+aCtJciaho
+        lqdKYfqeZAufjQz1Xnq9HPX8lCtz3K6qeOwHwZDp28164W5YJIIOEU4r5LyQPzNSGsvQnPyC1+9Kp
+        cD5M3g+r66zzNEDk9Obk63OL/f/UPipC5qzKBQH+R7yqlGbWGdXXtdtULiuoK8kiUHh9kBDo/FD4I
+        dgcGkhnDDA6fjnaIFbkzCN1jH820wZAGoGj8ar1Zuzrd4d13bJyMEzMUlcobwvOdv0f+mD3HxyNk9
+        Hq1GXLx6PnVqAw9F8wT0PRbyMiCmJkwCjTboFhTGWzkbi9EnmrF0lG+axsPXnVJjt8QMAVB9cnsAk
+        tnviWRPA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ponJj-00CPTZ-KO; Tue, 18 Apr 2023 15:32:27 +0000
+Date:   Tue, 18 Apr 2023 16:32:27 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
+        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 1/1] mm: do not increment pgfault stats when page
+ fault handler retries
+Message-ID: <ZD64C3R6BzqpSfYX@casper.infradead.org>
+References: <20230415000818.1955007-1-surenb@google.com>
+ <ZD25bBPbZYSb7grA@x1n>
+ <CAJuCfpHf06cr2d277DXQUtBto_0bVgK3ykMHLYRgZXgnot=e4w@mail.gmail.com>
+ <ZD61DLJNilUeDCnC@x1n>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZD61DLJNilUeDCnC@x1n>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's factor out actual disabling of KSM. The existing
-"mm->def_flags &= ~VM_MERGEABLE;" was essentially a NOP and can be dropped,
-because def_flags should never include VM_MERGEABLE. Note that we don't
-currently prevent re-enabling KSM.
+On Tue, Apr 18, 2023 at 11:19:40AM -0400, Peter Xu wrote:
+> On Mon, Apr 17, 2023 at 03:47:57PM -0700, Suren Baghdasaryan wrote:
+> > On Mon, Apr 17, 2023 at 2:26 PM Peter Xu <peterx@redhat.com> wrote:
+> > >
+> > > On Fri, Apr 14, 2023 at 05:08:18PM -0700, Suren Baghdasaryan wrote:
+> > > > @@ -5223,8 +5230,8 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+> > > >               if (task_in_memcg_oom(current) && !(ret & VM_FAULT_OOM))
+> > > >                       mem_cgroup_oom_synchronize(false);
+> > > >       }
+> > > > -
+> > > > -     mm_account_fault(regs, address, flags, ret);
+> > > > +out:
+> > > > +     mm_account_fault(mm, regs, address, flags, ret);
+> > >
+> > > Ah, one more question.. can this cached mm race with a destroying mm (just
+> > > like the vma race we wanted to avoid)?  Still a question only applies to
+> > > COMPLETE case when mmap read lock can be released.  Thanks,
+> > 
+> > I believe that is impossible because whoever is calling the page fault
+> > handler has stabilized the mm by getting a refcount.
+> 
+> Do you have a hint on where that refcount is taken?
 
-This should now be faster in case KSM was never enabled, because we only
-conditionally iterate all VMAs. Further, it certainly looks cleaner.
+... when we called clone()?  A thread by definition has a reference to
+its own mm.
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- arch/s390/mm/gmap.c | 20 +-------------------
- include/linux/ksm.h |  6 ++++++
- mm/ksm.c            | 11 +++++++++++
- 3 files changed, 18 insertions(+), 19 deletions(-)
-
-diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
-index 0949811761e6..dfe905c7bd8e 100644
---- a/arch/s390/mm/gmap.c
-+++ b/arch/s390/mm/gmap.c
-@@ -2585,30 +2585,12 @@ EXPORT_SYMBOL_GPL(s390_enable_sie);
- 
- int gmap_mark_unmergeable(void)
- {
--	struct mm_struct *mm = current->mm;
--	struct vm_area_struct *vma;
--	unsigned long vm_flags;
--	int ret;
--	VMA_ITERATOR(vmi, mm, 0);
--
- 	/*
- 	 * Make sure to disable KSM (if enabled for the whole process or
- 	 * individual VMAs). Note that nothing currently hinders user space
- 	 * from re-enabling it.
- 	 */
--	clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
--
--	for_each_vma(vmi, vma) {
--		/* Copy vm_flags to avoid partial modifications in ksm_madvise */
--		vm_flags = vma->vm_flags;
--		ret = ksm_madvise(vma, vma->vm_start, vma->vm_end,
--				  MADV_UNMERGEABLE, &vm_flags);
--		if (ret)
--			return ret;
--		vm_flags_reset(vma, vm_flags);
--	}
--	mm->def_flags &= ~VM_MERGEABLE;
--	return 0;
-+	return ksm_disable(current->mm);
- }
- EXPORT_SYMBOL_GPL(gmap_mark_unmergeable);
- 
-diff --git a/include/linux/ksm.h b/include/linux/ksm.h
-index 7108bc65dc2a..b3d8b7849e18 100644
---- a/include/linux/ksm.h
-+++ b/include/linux/ksm.h
-@@ -22,6 +22,7 @@ int ksm_madvise(struct vm_area_struct *vma, unsigned long start,
- void ksm_add_vma(struct vm_area_struct *vma);
- int ksm_enable_merge_any(struct mm_struct *mm);
- int ksm_disable_merge_any(struct mm_struct *mm);
-+int ksm_disable(struct mm_struct *mm);
- 
- int __ksm_enter(struct mm_struct *mm);
- void __ksm_exit(struct mm_struct *mm);
-@@ -75,6 +76,11 @@ static inline void ksm_add_vma(struct vm_area_struct *vma)
- {
- }
- 
-+static inline int ksm_disable(struct mm_struct *mm)
-+{
-+	return 0;
-+}
-+
- static inline int ksm_fork(struct mm_struct *mm, struct mm_struct *oldmm)
- {
- 	return 0;
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 813f7fbc1832..208311cbb019 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -2616,6 +2616,17 @@ int ksm_disable_merge_any(struct mm_struct *mm)
- 	return 0;
- }
- 
-+int ksm_disable(struct mm_struct *mm)
-+{
-+	mmap_assert_write_locked(mm);
-+
-+	if (!test_bit(MMF_VM_MERGEABLE, &mm->flags))
-+		return 0;
-+	if (test_bit(MMF_VM_MERGE_ANY, &mm->flags))
-+		return ksm_disable_merge_any(mm);
-+	return ksm_del_vmas(mm);
-+}
-+
- int ksm_madvise(struct vm_area_struct *vma, unsigned long start,
- 		unsigned long end, int advice, unsigned long *vm_flags)
- {
--- 
-2.39.2
-
+> Btw, it's definitely not a question sololy for this patch but a more common
+> question to the page fault path.  It's just that when I wanted to look for
+> any refcount boost (which I also expect to have somewhere) I didn't really
+> see that in current path (e.g. do_user_addr_fault() for x86_64).
+> 
+> I also had a quick look on do_exit() but I also didn't see where do we
+> e.g. wait for all the threads to stop before recycles a mm.
+> 
+> I had a feeling that I must have missed something, but just want to make
+> sure it's the case.
+> 
+> -- 
+> Peter Xu
+> 
