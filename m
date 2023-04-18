@@ -2,244 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B996E5C21
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DDC6E5C29
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjDRIfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
+        id S230359AbjDRIfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjDRIe5 (ORCPT
+        with ESMTP id S230364AbjDRIfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:34:57 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D178F273C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:34:55 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f17b5552e9so195805e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:34:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1681806894; x=1684398894;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fK3y0BUQpGH7irvo8NU0fynJnPut9qQ7xlfoCq4CYng=;
-        b=gu1Jw5Z+VkRdweBK6KngJhdDB6l0cbDx53nX/TFfWMHLBAxDzS4iiwlhVoYR2WfLG8
-         BO8ZxxDSiYGuOUbSxOY9eBe0m1WZw7Ady93EXQop79Ezst8xg2i36ulaVH6lVGELc/A6
-         tbWqGXG4mPfSxgfd/BXLIBwym6jER/1MprzWc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681806894; x=1684398894;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fK3y0BUQpGH7irvo8NU0fynJnPut9qQ7xlfoCq4CYng=;
-        b=TExzsqNcz4tdZTbhejetkW0pNi7xYXaH/uCs9Ei1BVmIfjG5WXRPsULtBHqEXRlqGH
-         /4iKCT4I20qr9bqpnXhwC+zXvx2glv6dZ7iEeZcfvzTduxpcm3E1dbotSxEfOKMK+CTo
-         SWYqj30gXBSL3liFDxDshzYS1stqgdwvWl6NPefKJXfdjbdM9dkAy4JfVLi8RIgwOqyS
-         J+Y0MjQKAVn6iXO7PpOHdQ880ZJX5fWqqdq8JxgSqDrKWg4P0Aced075tzF80zcjCbzr
-         8wBIQWyd3w/8rqh1yFuAoVo7ysF0KhqL+TbWCNju7jpXVis7v9CLmEa60reCy31ED+cS
-         uluw==
-X-Gm-Message-State: AAQBX9dveMzb91oIVdc+M6bX3o4I+hvAKy0SCLvohXJocxsZjcUWxUTG
-        rEpWYhp9muybKlkpoEg5MKhpOg==
-X-Google-Smtp-Source: AKy350Zb/Pmk6fjTuOI1X1TU5gGYDQL8J50cM0uidBzPbaCHSu3IUJ7zuzjH7UgjDGJDOY0mLfD57w==
-X-Received: by 2002:a05:600c:6025:b0:3f1:75a5:a369 with SMTP id az37-20020a05600c602500b003f175a5a369mr3356980wmb.3.1681806894329;
-        Tue, 18 Apr 2023 01:34:54 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id s16-20020a05600c319000b003f17122587bsm7222453wmp.36.2023.04.18.01.34.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 01:34:53 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 10:34:52 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <freedreno@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC 2/3] drm/msm: Rework get_comm_cmdline() helper
-Message-ID: <ZD5WLMRNibbRkGQO@phenom.ffwll.local>
-Mail-Followup-To: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" <linux-arm-msm@vger.kernel.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" <freedreno@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230417201215.448099-1-robdclark@gmail.com>
- <20230417201215.448099-3-robdclark@gmail.com>
- <58977051-197b-f1f0-c795-9037e70d7a91@linux.intel.com>
+        Tue, 18 Apr 2023 04:35:40 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC011BFD;
+        Tue, 18 Apr 2023 01:35:27 -0700 (PDT)
+X-UUID: f3c6410addc311edb6b9f13eb10bd0fe-20230418
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=qbg0mnbwR6twTu3H/yDUm3cuc5CKQs07i1Hp6wm5VKU=;
+        b=qauMBK4mbYJ41PxUyL7UnkC9WSRXzZ+hYSdiWiMvQm4j4yTPZKqKUyH+jkvpcxf+uA5YE2R2VHhpEzLUVTjOaZWJV2T2B2UUWGmUUUtE8AhrgrGN8le/9moaJpCk1BjXsYBfjMS0sFnOOWxedOU9iOJQhyqv6pQSe8YC4nUQBqU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:dccee0eb-c8ab-4bb6-9a41-d392bfeb1e67,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:120426c,CLOUDID:062eb6a1-8fcb-430b-954a-ba3f00fa94a5,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: f3c6410addc311edb6b9f13eb10bd0fe-20230418
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 470080237; Tue, 18 Apr 2023 16:35:19 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Tue, 18 Apr 2023 16:35:18 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Tue, 18 Apr 2023 16:35:17 +0800
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <iommu@lists.linux.dev>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <mingyuan.ma@mediatek.com>,
+        <yf.wang@mediatek.com>, <jianjiao.zeng@mediatek.com>,
+        <chengci.xu@mediatek.com>
+Subject: [PATCH v11 0/7] MT8188 IOMMU SUPPORT
+Date:   Tue, 18 Apr 2023 16:35:07 +0800
+Message-ID: <20230418083514.4379-1-yong.wu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <58977051-197b-f1f0-c795-9037e70d7a91@linux.intel.com>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 09:27:49AM +0100, Tvrtko Ursulin wrote:
-> 
-> On 17/04/2023 21:12, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
-> > 
-> > Make it work in terms of ctx so that it can be re-used for fdinfo.
-> > 
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >   drivers/gpu/drm/msm/adreno/adreno_gpu.c |  4 ++--
-> >   drivers/gpu/drm/msm/msm_drv.c           |  2 ++
-> >   drivers/gpu/drm/msm/msm_gpu.c           | 13 ++++++-------
-> >   drivers/gpu/drm/msm/msm_gpu.h           | 12 ++++++++++--
-> >   drivers/gpu/drm/msm/msm_submitqueue.c   |  1 +
-> >   5 files changed, 21 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> > index bb38e728864d..43c4e1fea83f 100644
-> > --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> > +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> > @@ -412,7 +412,7 @@ int adreno_set_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
-> >   		/* Ensure string is null terminated: */
-> >   		str[len] = '\0';
-> > -		mutex_lock(&gpu->lock);
-> > +		mutex_lock(&ctx->lock);
-> >   		if (param == MSM_PARAM_COMM) {
-> >   			paramp = &ctx->comm;
-> > @@ -423,7 +423,7 @@ int adreno_set_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
-> >   		kfree(*paramp);
-> >   		*paramp = str;
-> > -		mutex_unlock(&gpu->lock);
-> > +		mutex_unlock(&ctx->lock);
-> >   		return 0;
-> >   	}
-> > diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-> > index 3d73b98d6a9c..ca0e89e46e13 100644
-> > --- a/drivers/gpu/drm/msm/msm_drv.c
-> > +++ b/drivers/gpu/drm/msm/msm_drv.c
-> > @@ -581,6 +581,8 @@ static int context_init(struct drm_device *dev, struct drm_file *file)
-> >   	rwlock_init(&ctx->queuelock);
-> >   	kref_init(&ctx->ref);
-> > +	ctx->pid = get_pid(task_pid(current));
-> 
-> Would it simplify things for msm if DRM core had an up to date file->pid as
-> proposed in
-> https://patchwork.freedesktop.org/patch/526752/?series=109902&rev=4 ? It
-> gets updated if ioctl issuer is different than fd opener and this being
-> context_init here reminded me of it. Maybe you wouldn't have to track the
-> pid in msm?
+MT8188 have 3 IOMMU HWs. 2 IOMMU HW is for multimedia, and 1 IOMMU HW
+is for infra-master, like PCIe.
 
-Can we go one step further and let the drm fdinfo stuff print these new
-additions? Consistency across drivers and all that.
+About the 2 MM IOMMU HW, the connection could be something like this:
 
-Also for a generic trigger I think any driver ioctl is good enough (we
-only really need to avoid the auth dance when you're not on a render
-node).
--Daniel
+        IOMMU(VDO)          IOMMU(VPP)
+           |                   |
+      SMI_COMMON(VDO)      SMI_COMMON(VPP)
+      ---------------     ----------------
+      |      |   ...      |      |     ...
+    larb0 larb2  ...    larb1 larb3    ...
 
-> 
-> Regards,
-> 
-> Tvrtko
-> 
-> > +	mutex_init(&ctx->lock);
-> >   	msm_submitqueue_init(dev, ctx);
-> >   	ctx->aspace = msm_gpu_create_private_address_space(priv->gpu, current);
-> > diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-> > index c403912d13ab..f0f4f845c32d 100644
-> > --- a/drivers/gpu/drm/msm/msm_gpu.c
-> > +++ b/drivers/gpu/drm/msm/msm_gpu.c
-> > @@ -327,18 +327,17 @@ find_submit(struct msm_ringbuffer *ring, uint32_t fence)
-> >   static void retire_submits(struct msm_gpu *gpu);
-> > -static void get_comm_cmdline(struct msm_gem_submit *submit, char **comm, char **cmd)
-> > +static void get_comm_cmdline(struct msm_file_private *ctx, char **comm, char **cmd)
-> >   {
-> > -	struct msm_file_private *ctx = submit->queue->ctx;
-> >   	struct task_struct *task;
-> > -	WARN_ON(!mutex_is_locked(&submit->gpu->lock));
-> > -
-> >   	/* Note that kstrdup will return NULL if argument is NULL: */
-> > +	mutex_lock(&ctx->lock);
-> >   	*comm = kstrdup(ctx->comm, GFP_KERNEL);
-> >   	*cmd  = kstrdup(ctx->cmdline, GFP_KERNEL);
-> > +	mutex_unlock(&ctx->lock);
-> > -	task = get_pid_task(submit->pid, PIDTYPE_PID);
-> > +	task = get_pid_task(ctx->pid, PIDTYPE_PID);
-> >   	if (!task)
-> >   		return;
-> > @@ -372,7 +371,7 @@ static void recover_worker(struct kthread_work *work)
-> >   		if (submit->aspace)
-> >   			submit->aspace->faults++;
-> > -		get_comm_cmdline(submit, &comm, &cmd);
-> > +		get_comm_cmdline(submit->queue->ctx, &comm, &cmd);
-> >   		if (comm && cmd) {
-> >   			DRM_DEV_ERROR(dev->dev, "%s: offending task: %s (%s)\n",
-> > @@ -460,7 +459,7 @@ static void fault_worker(struct kthread_work *work)
-> >   		goto resume_smmu;
-> >   	if (submit) {
-> > -		get_comm_cmdline(submit, &comm, &cmd);
-> > +		get_comm_cmdline(submit->queue->ctx, &comm, &cmd);
-> >   		/*
-> >   		 * When we get GPU iova faults, we can get 1000s of them,
-> > diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-> > index 7a4fa1b8655b..b2023a42116b 100644
-> > --- a/drivers/gpu/drm/msm/msm_gpu.h
-> > +++ b/drivers/gpu/drm/msm/msm_gpu.h
-> > @@ -377,17 +377,25 @@ struct msm_file_private {
-> >   	 */
-> >   	int sysprof;
-> > +	/** @pid: Process that opened this file. */
-> > +	struct pid *pid;
-> > +
-> > +	/**
-> > +	 * lock: Protects comm and cmdline
-> > +	 */
-> > +	struct mutex lock;
-> > +
-> >   	/**
-> >   	 * comm: Overridden task comm, see MSM_PARAM_COMM
-> >   	 *
-> > -	 * Accessed under msm_gpu::lock
-> > +	 * Accessed under msm_file_private::lock
-> >   	 */
-> >   	char *comm;
-> >   	/**
-> >   	 * cmdline: Overridden task cmdline, see MSM_PARAM_CMDLINE
-> >   	 *
-> > -	 * Accessed under msm_gpu::lock
-> > +	 * Accessed under msm_file_private::lock
-> >   	 */
-> >   	char *cmdline;
-> > diff --git a/drivers/gpu/drm/msm/msm_submitqueue.c b/drivers/gpu/drm/msm/msm_submitqueue.c
-> > index 0e803125a325..0444ba04fa06 100644
-> > --- a/drivers/gpu/drm/msm/msm_submitqueue.c
-> > +++ b/drivers/gpu/drm/msm/msm_submitqueue.c
-> > @@ -61,6 +61,7 @@ void __msm_file_private_destroy(struct kref *kref)
-> >   	}
-> >   	msm_gem_address_space_put(ctx->aspace);
-> > +	put_pid(ctx->pid);
-> >   	kfree(ctx->comm);
-> >   	kfree(ctx->cmdline);
-> >   	kfree(ctx);
+INFRA IOMMU does not have SMI, the master connects to IOMMU directly.
+
+Although multiple banks supported in MT8188, we only use one of them,
+which means PCIe is put in bank0 of INFRA IOMMU.
+
+So we have two pgtable for MT8188, specifically, these two MM IOMMU HW
+share a pgtable while INFRA IOMMU HW use a independent pgtable.
+
+Another change is that we add some SMC command for INFRA master to 
+enable/disable INFRA IOMMU in ATF considering security concerns.
+
+We also adjust the flow of mtk_iommu_config to reduce indention.
+
+change in v11:
+  - Just add a new entry in MAINTAINERS from AngeloGioacchino.
+
+change in v10:
+  https://lore.kernel.org/linux-mediatek/20230417073606.25729-1-yong.wu@mediatek.com/
+  - Add a Fixes tag for [2/7].
+  - Rebase on mtk-iommu-dma-range-v7:
+    https://lore.kernel.org/linux-mediatek/20230411093144.2690-1-yong.wu@mediatek.com/
+
+change since v9:
+  https://lore.kernel.org/linux-mediatek/20230317085541.20447-1-yong.wu@mediatek.com/
+  - Move the patch about setting set_dma_mask out from this patchset.
+  - Add a MAINTAINER patch since the header file was added a prefix "mediatek,"
+
+change since v8:
+    https://lore.kernel.org/linux-mediatek/20230307080555.14399-1-yong.wu@mediatek.com/
+  - Base on v6.3-rc1 and mtk-iommu-dma-range-v5:
+    https://lore.kernel.org/linux-mediatek/20230307023507.13306-1-yong.wu@mediatek.com/
+  - Add a new patch set_dma_mask about since mt8188 support the PA of pgtable 35bits.
+
+changes since v7:
+    https://lore.kernel.org/linux-mediatek/20230216053322.11596-1-yong.wu@mediatek.com/
+  - Base on mtk-iommu-dma-range-v4:
+    https://lore.kernel.org/linux-mediatek/20230215062544.8677-1-yong.wu@mediatek.com/
+  - Add a new patch for two IOMMU share pagetable issue.
+  - Add a new patch for adding iova_region_larb_msk for mt8188.
+  - Add the comment in the dt-binding header file about larb index.
+    This is for readable when updating the iova_region_larb_msk.
+    
+    Since there is something wrong for chengci's mail account when sending
+    to devicetree mail list, we don't know why. I help send this patchset.
+    https://lore.kernel.org/linux-mediatek/5a916595-12ee-92e6-d380-84146dd75218@linaro.org/
+
+changes since v6:
+    https://lore.kernel.org/linux-mediatek/20221223101439.494-1-chengci.xu@mediatek.com/
+  - base on tag: next-20221220.
+  - update commit message of patch[2/4].
+
+changes since v5:
+  - base on tag: next-20221205.
+  - add flag PGTABLE_PA_35_EN for all IOMMU in MT8188.
+  - modify the type of "portid_msk" from "u32" to "unsigned long".
+
+changes since v4:
+  - base on tag: next-20221018.
+  - add patch[2/4] to reduce indention by adjust mtk_iommu_config flow.
+
+changes since v3:
+  - base on tag: next-20220916.
+  - use license "GPL-2.0-only OR BSD-2-Clause" in bingings head file.
+  - drop redundant "portid" assignment when configure infra master.
+  - reduce indentation by using "else if" when config infra master.
+  - update probe flow about "pericfg" for CFG_IFA_MASTER_IN_ATF.
+  - drop unused "pericfg_comp_str" in mt8188_data_infra.
+  - drop words like "This commit/patch".
+
+changes since v2:
+  - base on tag: next-20220831.
+  - rename "mt8188-memory-port.h" to "mediatek,mt8188-memory-port.h".
+  - use dual-license in "mediatek,mt8188-memory-port.h"
+  - remove unnecessary "()" when define SMI_LARB_ID
+
+changes since v1:
+  - base on tag: next-20220803.
+  - adds MT8188 IOMMU support.
+
+Chengci.Xu (5):
+  dt-bindings: mediatek: mt8188: Add binding for MM & INFRA IOMMU
+  iommu/mediatek: Fix two IOMMU share pagetable issue
+  iommu/mediatek: Adjust mtk_iommu_config flow
+  iommu/mediatek: Add enable IOMMU SMC command for INFRA masters
+  iommu/mediatek: Add MT8188 IOMMU Support
+
+Yong Wu (2):
+  iommu/mediatek: mt8188: Add iova_region_larb_msk
+  MAINTAINERS: iommu/mediatek: Update the header file name
+
+ .../bindings/iommu/mediatek,iommu.yaml        |  12 +-
+ MAINTAINERS                                   |   1 +
+ drivers/iommu/mtk_iommu.c                     | 151 ++++--
+ .../memory/mediatek,mt8188-memory-port.h      | 489 ++++++++++++++++++
+ include/soc/mediatek/smi.h                    |   1 +
+ 5 files changed, 622 insertions(+), 32 deletions(-)
+ create mode 100644 include/dt-bindings/memory/mediatek,mt8188-memory-port.h
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.18.0
+
+
