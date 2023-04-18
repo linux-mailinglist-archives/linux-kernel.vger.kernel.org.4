@@ -2,161 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCEB86E5EA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAA56E5EA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbjDRKXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 06:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
+        id S231194AbjDRKXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 06:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231288AbjDRKXH (ORCPT
+        with ESMTP id S231168AbjDRKXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 06:23:07 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2066.outbound.protection.outlook.com [40.107.237.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A983C02;
-        Tue, 18 Apr 2023 03:22:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JnU38xYUdjqDbG0/lvg8EOZYN8psb40rT6Wqs7aZL8ugvloqA/orck9/8Dmb3OKgFwPh0WllPijCJK2PKSYfy6IerQwoLXcjbSciTHuDvGkXHqcEjE5OgRoMMIw7buFEAZKIdk6J2gS4Re32ylv4BWbrjTI7jYKIS+4spREOSlAm1NrnkMZ3chcrPRPG1Qy5vx7PXVzSOw6GJbFoTqupLKzbaeLMI6i0AFtqs0mpvpAZqstAcOvP4RlsyMy2r5TJEoQklL9yidn/zN6yMJccUCmmItYJitDwH1SEzC7fYL/uyaI6qHGLwdM4qNHLif3r6kW0ff26yBjWB4hU8+ZhHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kSMWIp5QxTb1MANdUanUII7y/nc/B5lDWJcB/FevO9M=;
- b=eY5Q7v5sSxVpU/m9QWWUx3nS7rKRByAPh1trbxojCP0wEa+vhlKV+kRl+bR+6vbclo4GxM2ZZZILF/f14JEH4D825p5qeQcwwAgHeuuxWL4j9zR/YBuoTY7njQma85WhQ6tRHCYpnRFSb18nuHL3VQN5awgC3xomMpLbPYqxr3XpWxEDhJ/R+9RxWNBFTn/uZ3jeXHuAolotrmiU6nqmykCQ0z4BGl71p6HmhGlr9E0oa0zmSljxIlKlDh5AIVWH+7Ky57IxZHxe2rfRLJeMHm/rgrRxs3I6v7UV8NaEhYUHMxL6jcTEguOMuioswhevEyCdJnZaMYCa/NCyOlEt3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kSMWIp5QxTb1MANdUanUII7y/nc/B5lDWJcB/FevO9M=;
- b=XXK+7c1tO5BBEQOvFNHG4UPg+nMHJaeQ+50xXG5Yk+pe5mDxf/lvqudJnMnrVUJlEaJ7u7a0KzHKFiWdW1/bnbjOK9LtxYxExwZ5YDCneCX1UCNTvtztO1O6AqSAypYb5I4b4b7xQ0sDiDaqT7ywOaxR7nmder6WMNVvwb9zLWSXcrGJv5oKKLetoQDbPrk/N+YCvc/p4xG3e7qIm6HZy8JdRFH1c853/dab4EBk2ghyucvk0dkYPuoZAxm9aOqQ2hngclM7agBwglNUyXbw/KjbUcgj1muPoLsDtcD6GVRPfgxr80h4p0a3ZWY8JhXiSNBUECl7Z6DDR55sS7sc8w==
-Received: from BN9PR03CA0229.namprd03.prod.outlook.com (2603:10b6:408:f8::24)
- by DM6PR12MB4942.namprd12.prod.outlook.com (2603:10b6:5:1be::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
- 2023 10:22:11 +0000
-Received: from BN8NAM11FT043.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f8:cafe::e6) by BN9PR03CA0229.outlook.office365.com
- (2603:10b6:408:f8::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.47 via Frontend
- Transport; Tue, 18 Apr 2023 10:22:11 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT043.mail.protection.outlook.com (10.13.177.218) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6319.20 via Frontend Transport; Tue, 18 Apr 2023 10:22:11 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 18 Apr 2023
- 03:21:57 -0700
-Received: from [10.41.21.79] (10.126.231.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 18 Apr
- 2023 03:21:52 -0700
-Message-ID: <71e45a06-6b02-6b29-b9d9-0c34ff508b64@nvidia.com>
-Date:   Tue, 18 Apr 2023 15:51:49 +0530
+        Tue, 18 Apr 2023 06:23:16 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0A947A91
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:22:28 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3410C168F;
+        Tue, 18 Apr 2023 03:23:12 -0700 (PDT)
+Received: from [10.1.27.157] (C02CF1NRLVDN.cambridge.arm.com [10.1.27.157])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 560503F587;
+        Tue, 18 Apr 2023 03:22:27 -0700 (PDT)
+Message-ID: <73a89872-092e-4794-3956-71afe653dae0@arm.com>
+Date:   Tue, 18 Apr 2023 11:22:25 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [Patch v6 6/9] cpufreq: tegra194: add OPP support and set
- bandwidth
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH v3 35/60] arm64: mm: Use 48-bit virtual addressing for the
+ permanent ID map
 Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <treding@nvidia.com>, <krzysztof.kozlowski@linaro.org>,
-        <dmitry.osipenko@collabora.com>, <rafael@kernel.org>,
-        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
-        <lpieralisi@kernel.org>, <helgaas@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <mmaddireddy@nvidia.com>,
-        <kw@linux.com>, <bhelgaas@google.com>, <vidyas@nvidia.com>,
-        <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>, <ishah@nvidia.com>,
-        <bbasu@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>
-References: <20230411110002.19824-1-sumitg@nvidia.com>
- <20230411110002.19824-7-sumitg@nvidia.com>
- <20230418091315.bxh4hp6g3vekdi2r@vireshk-i7>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <20230418091315.bxh4hp6g3vekdi2r@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Kees Cook <keescook@chromium.org>
+References: <20230307140522.2311461-1-ardb@kernel.org>
+ <20230307140522.2311461-36-ardb@kernel.org>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230307140522.2311461-36-ardb@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.37]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT043:EE_|DM6PR12MB4942:EE_
-X-MS-Office365-Filtering-Correlation-Id: 844a4177-1932-41bf-12ea-08db3ff6c5bc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: s6xW2psMOPbG/PcFmqYdQzuxYru0E+erRcjxxYHklaDE0UuNUv64PBMmiOQ1DyhnMcElofL29pCValeVT50xGXcReJH5eyjOV9Mw8R4RyU4Ld29zG4yBr+XchKQ8eSZ/XiVN6a9AsjuzreZIeCFcrhqnG94HE7i6PQ6P5SAxtI3/ySGH1EsvhF5iykE7RAFVeazAq8CF89ktwh1gTG4m+Aq6tcvk95C8YP9/b2K5AkboDF7naAPOPEFida467kDElnHNnLL3UgEsLx9k+c0zDhCGwZgFbk4YtfkCzGe2NnHFXDCIkvVZurXzLbK+B6gFVj23TKvTrunY3zG8w8e8nChjB8nF42GCgwNJe6M6nQ7lgPrwRTAO2IKMJBSq+M+WyLvukFDusxEI4QCx8+PoMWtAr+g/Eg1YVmG7My8BmTaQIDY36W6f7OxsTPXTU4JstOrpydtWMNsoavtMIoNbyXurhdDzLFAwVovzdb6/ZULekP3ECC7s/b1kc577Rk65xbUlD6ibT6AblTk2d6EfAHNpsAr5vu7GgRYBTELgWVPBdu8kSvhxPonNWce0h2yZHQqJ1jMSPXTf8FJwJoNeZltDbiowlmQ78DA0Cn5pSBj8303WX+ACafSgjqG/r6k7I4+2nm8bcs9H+bYMgMJ3PkVn3YDCFRIFzbZsgNxAierQdsUpivenQKIPAWWlxJMv0fqjQ3uwJ1qnTS0xjLIMN7cbyX/Qe5OpGERlUd6emhrVO00XpKw9HHe35xSMET/GBYMECS09BA14fAWo79ooidIT6FLp8hV6lC6tLAu7GO16W3YUkRjb3vwGBvslCNfa
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(376002)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(7416002)(5660300002)(86362001)(2616005)(426003)(336012)(82310400005)(107886003)(31696002)(47076005)(83380400001)(16526019)(186003)(53546011)(356005)(82740400003)(26005)(7636003)(40480700001)(36860700001)(8676002)(34020700004)(8936002)(478600001)(16576012)(54906003)(6666004)(316002)(41300700001)(40460700003)(36756003)(4326008)(6916009)(70586007)(70206006)(31686004)(2906002)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 10:22:11.2811
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 844a4177-1932-41bf-12ea-08db3ff6c5bc
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT043.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4942
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 18/04/23 14:43, Viresh Kumar wrote:
-> External email: Use caution opening links or attachments
+On 07/03/2023 14:04, Ard Biesheuvel wrote:
+> Even though we support loading kernels anywhere in 48-bit addressable
+> physical memory, we create the ID maps based on the number of levels
+> that we happened to configure for the kernel VA and user VA spaces.
 > 
+> The reason for this is that the PGD/PUD/PMD based classification of
+> translation levels, along with the associated folding when the number of
+> levels is less than 5, does not permit creating a page table hierarchy
+> of a set number of levels. This means that, for instance, on 39-bit VA
+> kernels we need to configure an additional level above PGD level on the
+> fly, and 36-bit VA kernels still only support 47-bit virtual addressing
+> with this trick applied.
 > 
-> On 11-04-23, 16:29, Sumit Gupta wrote:
->> Add support to use OPP table from DT in Tegra194 cpufreq driver.
->> Tegra SoC's receive the frequency lookup table (LUT) from BPMP-FW.
->> Cross check the OPP's present in DT against the LUT from BPMP-FW
->> and enable only those DT OPP's which are present in LUT also.
->>
->> The OPP table in DT has CPU Frequency to bandwidth mapping where
->> the bandwidth value is per MC channel. DRAM bandwidth depends on the
->> number of MC channels which can vary as per the boot configuration.
->> This per channel bandwidth from OPP table will be later converted by
->> MC driver to final bandwidth value by multiplying with number of
->> channels before sending the request to BPMP-FW.
->>
->> If OPP table is not present in DT, then use the LUT from BPMP-FW
->> directy as the CPU frequency table and not do the DRAM frequency
->> scaling which is same as the current behavior.
->>
->> Now, as the CPU Frequency table is being controlling through OPP
->> table in DT. Keeping fewer entries in the table will create less
->> frequency steps and can help to scale fast to high frequencies
->> when required.
->>
->> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
->> ---
->>   drivers/cpufreq/tegra194-cpufreq.c | 156 ++++++++++++++++++++++++++---
->>   1 file changed, 143 insertions(+), 13 deletions(-)
+> Now that we have a separate helper to populate page table hierarchies
+> that does not define the levels in terms of PUDS/PMDS/etc at all, let's
+> reuse it to create the permanent ID map with a fixed VA size of 48 bits.
 > 
-> Can this be applied independently of the rest of the series ?
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  arch/arm64/include/asm/kernel-pgtable.h |  2 ++
+>  arch/arm64/kernel/head.S                |  5 +++
+>  arch/arm64/kvm/mmu.c                    | 15 +++------
+>  arch/arm64/mm/mmu.c                     | 32 +++++++++++---------
+>  arch/arm64/mm/proc.S                    |  9 ++----
+>  5 files changed, 31 insertions(+), 32 deletions(-)
 > 
-> --
-> viresh
+> diff --git a/arch/arm64/include/asm/kernel-pgtable.h b/arch/arm64/include/asm/kernel-pgtable.h
+> index 50b5c145358a5d8e..2a2c80ffe59e5307 100644
+> --- a/arch/arm64/include/asm/kernel-pgtable.h
+> +++ b/arch/arm64/include/asm/kernel-pgtable.h
+> @@ -35,6 +35,8 @@
+>  #define SWAPPER_PGTABLE_LEVELS	(CONFIG_PGTABLE_LEVELS)
+>  #endif
+>  
+> +#define IDMAP_LEVELS		ARM64_HW_PGTABLE_LEVELS(48)
+> +#define IDMAP_ROOT_LEVEL	(4 - IDMAP_LEVELS)
+>  
+>  /*
+>   * If KASLR is enabled, then an offset K is added to the kernel address
+> diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
+> index e45fd99e8ab4272a..fc6a4076d826b728 100644
+> --- a/arch/arm64/kernel/head.S
+> +++ b/arch/arm64/kernel/head.S
+> @@ -727,6 +727,11 @@ SYM_FUNC_START_LOCAL(__no_granule_support)
+>  SYM_FUNC_END(__no_granule_support)
+>  
+>  SYM_FUNC_START_LOCAL(__primary_switch)
+> +	mrs		x1, tcr_el1
+> +	mov		x2, #64 - VA_BITS
+> +	tcr_set_t0sz	x1, x2
+> +	msr		tcr_el1, x1
+> +
+>  	adrp	x1, reserved_pg_dir
+>  	adrp	x2, init_idmap_pg_dir
+>  	bl	__enable_mmu
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index 7113587222ffe8e1..d64be7b5f6692e8b 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -1687,16 +1687,9 @@ int __init kvm_mmu_init(u32 *hyp_va_bits)
+>  	BUG_ON((hyp_idmap_start ^ (hyp_idmap_end - 1)) & PAGE_MASK);
+>  
+>  	/*
+> -	 * The ID map may be configured to use an extended virtual address
+> -	 * range. This is only the case if system RAM is out of range for the
+> -	 * currently configured page size and VA_BITS_MIN, in which case we will
+> -	 * also need the extended virtual range for the HYP ID map, or we won't
+> -	 * be able to enable the EL2 MMU.
+> -	 *
+> -	 * However, in some cases the ID map may be configured for fewer than
+> -	 * the number of VA bits used by the regular kernel stage 1. This
+> -	 * happens when VA_BITS=52 and the kernel image is placed in PA space
+> -	 * below 48 bits.
+> +	 * The ID map is always configured for 48 bits of translation, which
+> +	 * may be fewer than the number of VA bits used by the regular kernel
+> +	 * stage 1, when VA_BITS=52.
+>  	 *
+>  	 * At EL2, there is only one TTBR register, and we can't switch between
+>  	 * translation tables *and* update TCR_EL2.T0SZ at the same time. Bottom
+> @@ -1707,7 +1700,7 @@ int __init kvm_mmu_init(u32 *hyp_va_bits)
+>  	 * 1 VA bits to assure that the hypervisor can both ID map its code page
+>  	 * and map any kernel memory.
+>  	 */
+> -	idmap_bits = 64 - ((idmap_t0sz & TCR_T0SZ_MASK) >> TCR_T0SZ_OFFSET);
+> +	idmap_bits = 48;
+>  	kernel_bits = vabits_actual;
+>  	*hyp_va_bits = max(idmap_bits, kernel_bits);
 
-Yes, this can be applied independently.
+This effectively means that the hypervisor always uses at least 48 VA bits.
+Previously, I think it would have been 39 for (e.g.) Android builds? Does this
+have any performance implications for pKVM?
 
-Thank you,
-Sumit Gupta
+>  
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index 81e1420d2cc13246..a59433ae4f5f8d02 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -762,22 +762,21 @@ static void __init map_kernel(pgd_t *pgdp)
+>  	kasan_copy_shadow(pgdp);
+>  }
+>  
+> +void __pi_map_range(u64 *pgd, u64 start, u64 end, u64 pa, pgprot_t prot,
+> +		    int level, pte_t *tbl, bool may_use_cont, u64 va_offset);
+> +
+> +static u8 idmap_ptes[IDMAP_LEVELS - 1][PAGE_SIZE] __aligned(PAGE_SIZE) __ro_after_init,
+> +	  kpti_ptes[IDMAP_LEVELS - 1][PAGE_SIZE] __aligned(PAGE_SIZE) __ro_after_init;
+
+I see this new storage introduced, but I don't see you removing the storage for
+the old method (I have a vague memory of it being defined in the linker script)?
+
+> +
+>  static void __init create_idmap(void)
+>  {
+>  	u64 start = __pa_symbol(__idmap_text_start);
+> -	u64 size = __pa_symbol(__idmap_text_end) - start;
+> -	pgd_t *pgd = idmap_pg_dir;
+> -	u64 pgd_phys;
+> -
+> -	/* check if we need an additional level of translation */
+> -	if (VA_BITS < 48 && idmap_t0sz < (64 - VA_BITS_MIN)) {
+> -		pgd_phys = early_pgtable_alloc(PAGE_SHIFT);
+> -		set_pgd(&idmap_pg_dir[start >> VA_BITS],
+> -			__pgd(pgd_phys | P4D_TYPE_TABLE));
+> -		pgd = __va(pgd_phys);
+> -	}
+> -	__create_pgd_mapping(pgd, start, start, size, PAGE_KERNEL_ROX,
+> -			     early_pgtable_alloc, 0);
+> +	u64 end   = __pa_symbol(__idmap_text_end);
+> +	u64 ptep  = __pa_symbol(idmap_ptes);
+> +
+> +	__pi_map_range(&ptep, start, end, start, PAGE_KERNEL_ROX,
+> +		       IDMAP_ROOT_LEVEL, (pte_t *)idmap_pg_dir, false,
+> +		       __phys_to_virt(ptep) - ptep);
+>  
+>  	if (IS_ENABLED(CONFIG_UNMAP_KERNEL_AT_EL0)) {
+>  		extern u32 __idmap_kpti_flag;
+> @@ -787,8 +786,10 @@ static void __init create_idmap(void)
+>  		 * The KPTI G-to-nG conversion code needs a read-write mapping
+>  		 * of its synchronization flag in the ID map.
+>  		 */
+> -		__create_pgd_mapping(pgd, pa, pa, sizeof(u32), PAGE_KERNEL,
+> -				     early_pgtable_alloc, 0);
+> +		ptep = __pa_symbol(kpti_ptes);
+> +		__pi_map_range(&ptep, pa, pa + sizeof(u32), pa, PAGE_KERNEL,
+> +			       IDMAP_ROOT_LEVEL, (pte_t *)idmap_pg_dir, false,
+> +			       __phys_to_virt(ptep) - ptep);
+>  	}
+>  }
+>  
+> @@ -813,6 +814,7 @@ void __init paging_init(void)
+>  	memblock_allow_resize();
+>  
+>  	create_idmap();
+> +	idmap_t0sz = TCR_T0SZ(48);
+>  }
+>  
+>  #ifdef CONFIG_MEMORY_HOTPLUG
+> diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
+> index 82e88f4521737c0e..c7129b21bfd5191f 100644
+> --- a/arch/arm64/mm/proc.S
+> +++ b/arch/arm64/mm/proc.S
+> @@ -422,9 +422,9 @@ SYM_FUNC_START(__cpu_setup)
+>  	mair	.req	x17
+>  	tcr	.req	x16
+>  	mov_q	mair, MAIR_EL1_SET
+> -	mov_q	tcr, TCR_TxSZ(VA_BITS) | TCR_CACHE_FLAGS | TCR_SMP_FLAGS | \
+> -			TCR_TG_FLAGS | TCR_KASLR_FLAGS | TCR_ASID16 | \
+> -			TCR_TBI0 | TCR_A1 | TCR_KASAN_SW_FLAGS | TCR_MTE_FLAGS
+> +	mov_q	tcr, TCR_T0SZ(48) | TCR_T1SZ(VA_BITS) | TCR_CACHE_FLAGS | \
+> +		     TCR_SMP_FLAGS | TCR_TG_FLAGS | TCR_KASLR_FLAGS | TCR_ASID16 | \
+> +		     TCR_TBI0 | TCR_A1 | TCR_KASAN_SW_FLAGS | TCR_MTE_FLAGS
+
+You're hardcoding 48 in 3 places in this patch. I wonder if an IDMAP_VA_BITS
+macro might help here?
+
+>  
+>  	tcr_clear_errata_bits tcr, x9, x5
+>  
+> @@ -432,10 +432,7 @@ SYM_FUNC_START(__cpu_setup)
+>  	sub		x9, xzr, x0
+>  	add		x9, x9, #64
+>  	tcr_set_t1sz	tcr, x9
+> -#else
+> -	idmap_get_t0sz	x9
+>  #endif
+> -	tcr_set_t0sz	tcr, x9
+>  
+>  	/*
+>  	 * Set the IPS bits in TCR_EL1.
+
