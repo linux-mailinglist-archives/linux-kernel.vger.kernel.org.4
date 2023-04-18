@@ -2,235 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23106E65C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 115066E65CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232404AbjDRNXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 09:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
+        id S232416AbjDRNYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 09:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbjDRNXs (ORCPT
+        with ESMTP id S232405AbjDRNYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 09:23:48 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2048.outbound.protection.outlook.com [40.107.92.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AAA146FE
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 06:23:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NA7GNOuCyft/U5Cqpv10J0TWYRp+coblBw1InNnmm3KmpE5D9BxP73aRO6S4G8UFfhduzJlIEl3S9kh5cqht04lm/7bjjODMkbmsNZYfq76S1QyMBk4XHVcLfPY/MUiAljVNfbyZsm7kDeLv6rHw21UUW/n2Ppb2qi1/5amMpdx0DG7qR5+TOu0i6ldFR+kgHYs6YP0vdCq9ifXsQ4fg39tBBu16eWOSjd7VjBmNfPNQuThNIrkb3FsFD2TG7duMR4Cn75zMQTxgbBO9wpLbu/k1vrd27OLmOzSgpCaDa+/lCbEmv4pOFG8k5HDmBefQyEpHDyn07cjWhzC8/jkUyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5LB4u0ZFMlCuRry/qIo2Ekyu/ocs9kFL2LdgkAPPzOw=;
- b=V/kCz5IWSMy7XJ7xd/tamkoKh6FR4PSsqHg18r7P6zHcm3THtg4oMts1IW7xQG24J6W1hpDXoMyxzoFKCYf0Wdtq/xK9GJvN5rc/3nr0iz5YX7UvGnjaBiwxEa22RUGg3M5H6bwPUY5pkSB0oazZ82OkMjFE+VtDT/MZ/EGXRpJ1E5XYT0+ViHmIt2yXv+bf+nTuc7qp8dd5Xd68BBysXbjZJUglYHbw9oAJvN6o8Y3Jn27Pf9ezssEdA84uRgyl47QJGWsR1XM59lXH+DoJ3N6Gw3U3X/yg1ymrXYaUZu3XTbbtc+B5kX+d0gdcV+2M3PHMniFk/26LOgs9pYzDQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5LB4u0ZFMlCuRry/qIo2Ekyu/ocs9kFL2LdgkAPPzOw=;
- b=2eN1kV60epYPF+Q3N9Unxr6qPwDKtafq30GI3tIHCkf9PRVbgounc36ehPStf8ZypWPs7QJG8gmmbrpxusBjTBP0nS3edFTvfwi0a0K0NYGZTk/3vXQy7Ssage2lUCUK+RZkD8jXA3qdq8HyrMhrPKnmrAS0BFUMVBZNgKurJEk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CH0PR12MB5284.namprd12.prod.outlook.com (2603:10b6:610:d7::13)
- by MN0PR12MB5739.namprd12.prod.outlook.com (2603:10b6:208:372::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
- 2023 13:23:41 +0000
-Received: from CH0PR12MB5284.namprd12.prod.outlook.com
- ([fe80::3e54:627b:ceee:ed2b]) by CH0PR12MB5284.namprd12.prod.outlook.com
- ([fe80::3e54:627b:ceee:ed2b%4]) with mapi id 15.20.6298.045; Tue, 18 Apr 2023
- 13:23:41 +0000
-Subject: Re: [PATCH] [v2] drm/amd/display: fix is_timing_changed() prototype
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Wayne Lin <Wayne.Lin@amd.com>, hersen wu <hersenxs.wu@amd.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Alan Liu <HaoPing.Liu@amd.com>,
-        Wenjing Liu <wenjing.liu@amd.com>, Jun Lei <Jun.Lei@amd.com>,
-        Alex Hung <alex.hung@amd.com>,
-        Mario Kleiner <mario.kleiner.de@gmail.com>,
-        Aric Cyr <Aric.Cyr@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Alvin Lee <Alvin.Lee2@amd.com>,
-        Jasdeep Dhillon <jdhillon@amd.com>,
-        Roman Li <roman.li@amd.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230417220827.3481168-1-arnd@kernel.org>
-From:   Aurabindo Pillai <aurabindo.pillai@amd.com>
-Message-ID: <3f4c2aae-40bf-3fc4-1af7-430809fab12e@amd.com>
-Date:   Tue, 18 Apr 2023 09:23:36 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-In-Reply-To: <20230417220827.3481168-1-arnd@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT1P288CA0029.CANP288.PROD.OUTLOOK.COM (2603:10b6:b01::42)
- To CH0PR12MB5284.namprd12.prod.outlook.com (2603:10b6:610:d7::13)
+        Tue, 18 Apr 2023 09:24:22 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A1FCC29;
+        Tue, 18 Apr 2023 06:24:21 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-2478485fd76so669685a91.2;
+        Tue, 18 Apr 2023 06:24:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681824260; x=1684416260;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4HGNOxFx7vNcnwQpD4qcW6bD8mczrYVsDoBGv26cM5o=;
+        b=CoB825mb02L8FJB386fL18bU4xiWK6A3o9+x8bha2nHO9bPvbk2FY9GZ4cgxm3eS9m
+         +dCyoSXZxnJVEU9XXbyPZ0CvODbICJFR7H8S/3V3tcSaqsG2erlXkCg/8LOat3yQ5Cmy
+         ow0SHZF9oHyip5yTT96Nb1GHBVcrQMqtb+G5fwOQ1hN9W1iwrzqLiWCdveJ29bWBAfrH
+         rTTOMAyO6/lC7RZA4Qqt/FV8tW/BFbNp3IrnD9DGPdwUJ9ciCk2rbJLPNXVRroaTMLjk
+         d9Mzpjw1LSbgdByF1wHhFR7d5Bl+5E0fAeNRT8+C365BT4Ngks1m8ogDZ8T0DGP7PEI3
+         y5ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681824260; x=1684416260;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4HGNOxFx7vNcnwQpD4qcW6bD8mczrYVsDoBGv26cM5o=;
+        b=i0i50+hYPf+AuQZ29OanbQAuOdBJL0IrQ3kygm43fGCKKdgIpUaS4LpyfYu9Nf3pMN
+         Z0pO5VABsbOjibbkjXh/RJN9OuDmuGZYawuZTY6r1jSKoKaAgL4ow55cwoSiZ1NC0ugR
+         dlAaR7Etqa1Q81EcJGzawWA7F39vgu73BfuZKsZxx2hxQx6c3h9UB9coqL+1GbZ59gNX
+         PR7MZvo674s7pgpi4JWhxBqppIez2K7k4r/gjloOgKXeQZeOpzeNoNfifRnRccVLk9LR
+         PtEtJEZ1vBZcb3YxW3htBdwbr5qcNjJb+5O/Kestz3i4h7KnjlqrW+n1v4hmMicRYJhq
+         72bg==
+X-Gm-Message-State: AAQBX9cHWoZ5cwMyDRYbZQIl0ApLyKNXlRqxvrsCOF/GmiweSouUkKzj
+        SQznGBN1ycmLpKGKb38icfQ=
+X-Google-Smtp-Source: AKy350ZLL1oJFDGCCHvw2aL2WbBa+CGtEBJoLXcoCEzWy2r21Yi5mC4xGmO23hq7DCnaEX81Xk+yEg==
+X-Received: by 2002:a17:90a:28c6:b0:23f:1159:c0db with SMTP id f64-20020a17090a28c600b0023f1159c0dbmr1992710pjd.26.1681824260326;
+        Tue, 18 Apr 2023 06:24:20 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id w24-20020a17090aaf9800b0023d0c2f39f2sm10392418pjq.19.2023.04.18.06.24.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 06:24:19 -0700 (PDT)
+Message-ID: <03e7fd98-0df0-f191-4739-8a87726478c0@gmail.com>
+Date:   Tue, 18 Apr 2023 21:24:07 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5284:EE_|MN0PR12MB5739:EE_
-X-MS-Office365-Filtering-Correlation-Id: b6d25318-3111-4691-35b2-08db4010201a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8VwIo/4GsT8ZSC0i9N6gaao8ZTV8FSml3VdtyrhfZxAE3jBp8rZ90cZ0RxMz82iZQFfs5pbBRDhN3v/5BEY0YG2TaBzHK15sqUVQV9WXUxA39M/uMP1xiLvEXJCyxK5Op+N+Pdznz32UAgJ17JkDvnoJvMsZHpHoXZvV5x2h5894EbYKzVa3sAzzDERAriABQwaBAm3ktqd4PuJL0POMuyOkxAbc7H4lEhk4H2UGNsmPOxzeFuG7y1Xv4i49wvlq7smaZDMhoSzsPx3haKPJBGpcMsK8o9cirNSErbbEsAOigfzw5ZydI6w5vw4/3Q6s/CmhE5Al2MZLUaDZCYn3l0SmMcs0gMaJAIONHcs96yTil/KDUjOo/hWfn1hF5A1a/Hby/w7djyzvzzDrHXvSFNfizXNmKWzgS7n7DuFoFD4Ged7HlhooypoUtyTMr6JiP/8pUxH98xcReoHhqum+qmDh7MGB3A4wPeVGm7KYuiOmVxvvJQKIr2FCRcbVnr5CN6rQ4A0pcuL5yyXhkn/11XQuOkQ/l9Qm03eX+F/Ozc0XnapDn5zOmFb+rZfXTUXKwufJ1Y2hLInycf+uDYwR1bFarg89QLDCyMjGit4FuerEvK3UUFsJB4LPrAZJf4qxpBWWWv1SAMLBX0NleL6dbA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5284.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(366004)(376002)(346002)(396003)(451199021)(6666004)(6486002)(86362001)(478600001)(31696002)(110136005)(36756003)(2616005)(83380400001)(26005)(6506007)(6512007)(186003)(53546011)(38100700002)(316002)(4326008)(66556008)(66476007)(66946007)(2906002)(8676002)(5660300002)(8936002)(44832011)(31686004)(41300700001)(54906003)(6636002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OS9tVW54UWkyUzNaZGpKZXFlai9vcUJmcGVLdVNrZFNTVXpjSXQxdVFCZVVu?=
- =?utf-8?B?MTk1U2FKVXF6K1NIdmgzRS9vd3lubDRxWUJtWllSMkJQUEtPR1pKV0RQbkt0?=
- =?utf-8?B?NjdTbHBEU2d2ZmRvSnl5U1EzYkxONFpWK2ZHdndMUDZSSDN4eGMxRTFqdW5a?=
- =?utf-8?B?RnR4bjdvZFgxT21BRGx5ZlB4UUZ3RmlWUjFlSGkwSnJMd2VqN0RWLzVnd01P?=
- =?utf-8?B?aG5ncUliZThJS0R3UDJFYmMvL1huTXFzM2thZHgxOFlJalE5UitsaDdaVURU?=
- =?utf-8?B?WmtwMmZNOHN3cXJHdVkwYnhGSjVaWWsvNDBzQVN2U0dvbUdmVFR3c3ZYbU1j?=
- =?utf-8?B?Nk5xWk1IODZGQ1VhanFZbzhwVEFkYUpvWVh5UVVEQ21TWHFPWU5obEc4dEVX?=
- =?utf-8?B?NWZITUdkOU9hQ3pBOUtiUDB0RWJxVU5zc3JuVlpESnZnY1F1TlFtL2IwNnN4?=
- =?utf-8?B?ZUs0d3puK2VSTFF2TFJNd0ErR05ISkJsYVRLMFhPdC83dkNMcU02aHc3enZs?=
- =?utf-8?B?S1J6ME5FWHo0UG9mZkxQQzhuOEdESTlwTW1mOXNUV1pqT2k2dWVwc0RydmxE?=
- =?utf-8?B?cU1HUzBFcXR3QVNiRHp6R01xYVhIei9jRnlxTzJCWVdqY1lTZWdUbG5pVm5V?=
- =?utf-8?B?VjlxLzhtNkRYcWVjYU1iMnRNWVJlbFQ3SkNhc1JZQkVWQUdzVjVNZnM2M3h1?=
- =?utf-8?B?eFlpQnZ1dmhXNGZhTVczMXZiZmErUDJBbUZMQVlGeU1qUHNQYWhHREZXSk1t?=
- =?utf-8?B?dTdBQWwva1BqUXNkSWRzZXJkeHgveTV3VCtuSm5MVVVYcWRtYWM0VmFBcmor?=
- =?utf-8?B?cmh0VFpkdG1IL1BsQ2ZtaU9EQnNjbUNYRTVMRnZLMTB5cFpJTE9hT2R0a1dP?=
- =?utf-8?B?SDdMYmJPZUQvT0Vibms4b3VlSHRUN3ROQTdQOXN1TkRxeG96NXQ0YXdYT0RM?=
- =?utf-8?B?WlhXazdsSHNCK2xhK084OEUxdlVQMzlSdHdqRXBtUEVuSGNaalhmdHJoUThP?=
- =?utf-8?B?allSY2JrTmhTTytxU2RFY2VUV0MrQnpRS1ErWjFBanhDVGZxcTk2U0ZRWkY2?=
- =?utf-8?B?UVR5cmJvS09ySFhpakU1dkRUbFBvbGp5VEtGNlBRcFNiWllXczJ3TDZDR1RC?=
- =?utf-8?B?RmZNWHhFYVc4cU5rTjZuY2psSnJka3B2emMvMFNtUCsrOTdrMHM0aEhIVnFX?=
- =?utf-8?B?WjJKZUNoUXUwVE9SV21qN091QlNBMW9tYjNUdS9aN090VWlJY2R3anhZZmJi?=
- =?utf-8?B?SHRvL01uYkh4cHl1NHRNbHo5QVVrcHI4TnRKd3I3ZXo4bjJ1Mm9GMFRubE44?=
- =?utf-8?B?UWNWQzJITVpFVVJmamYzU2pwejhLZHQwSVFHU2t4aWtaalFwekM0Z09kd2Ry?=
- =?utf-8?B?aDlzRFdQSnpzTkdINHFvQXBoNFE0MmZJUkJZQUhwaTNCMEFsZXhIS2VQdHYv?=
- =?utf-8?B?em02bDdpV2dEbno0dlJpNXpkb0tqNDVZSmcvWXFjODJKTzVGcGpadG1RYWhJ?=
- =?utf-8?B?bm1KT2pLSFlwY0U2VjZ2V2k5cmdIRTd4N1U3dXJHZE9wWWdjMnU2SERpK2tB?=
- =?utf-8?B?S2R0YmJ3NExGWHArVm15S2RNZklvREx0R25USkFmN2ZjeTVQTjBidE90K040?=
- =?utf-8?B?aFVhWXkwQlJ0elEwQmZQZHUwZDlyOW9BajJCODdISGlDWEpWQzYxdWFTazNz?=
- =?utf-8?B?QWRJdGM4SWxtSG9hUXBobHlnSGVVeDZ2RnVpRFlXNUMyajFXckNwd0JFL2p1?=
- =?utf-8?B?ZlpKTW5uTHVhd0Nuand2bGdkZXYwajNOMU9NUzJxMEhiYjljMXl1czlnVllT?=
- =?utf-8?B?NFlXVnB0R2xiOU81NzJGNCtPNkVHV2xEbTAyQ3hSUkxHUE5UTG5kNlZ1eHo2?=
- =?utf-8?B?WDVHd1FDdjg2eWRzNERSalRoaEdZcVU5VWZLcXRucUt4V1VSbG1xcHJNUWNH?=
- =?utf-8?B?Z2gxZWJVRDhkcjhTOE9yZklUdHdueXVtZ0JLVDVMQXZSZEMvcnYrVTJWNFFx?=
- =?utf-8?B?UktIQXNaQlBTT0xGd1RkSENNdWNycGN3YjJBQkFWVXNRRks5NnFJT0V2NW4r?=
- =?utf-8?B?SWluWlhXa1FaQ3NUdm4vb2VlT0RsYXQvV3JsV3FKT1hkYjhsdkY0SXVmVCsw?=
- =?utf-8?Q?jMteYsi0eHcQMCg4dMwhL/vWX?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6d25318-3111-4691-35b2-08db4010201a
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5284.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 13:23:40.8817
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l3/+9KrCSe3D3NQu1Au8R7v+AfgxVd9vjxrjvkzVJadBSQ5xGuI8jwjn8FXwyP/sqrIyRMKpBmiX5XD+6S1kvQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5739
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Tianyu Lan <ltykernel@gmail.com>
+Subject: Re: [RFC PATCH V4 08/17] x86/hyperv: Initialize cpu and memory for
+ sev-snp enlightened guest
+To:     Dave Hansen <dave.hansen@intel.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com,
+        venu.busireddy@oracle.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
+Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arch@vger.kernel.org
+References: <20230403174406.4180472-1-ltykernel@gmail.com>
+ <20230403174406.4180472-9-ltykernel@gmail.com>
+ <8ef9b06b-33b5-c785-8aec-0fd765c91911@intel.com>
+In-Reply-To: <8ef9b06b-33b5-c785-8aec-0fd765c91911@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/12/2023 11:53 PM, Dave Hansen wrote:
+>>   
+>> +static u32 processor_count;
+>> +
+>> +static __init void hv_snp_get_smp_config(unsigned int early)
+>> +{
+>> +	if (!early) {
+>> +		while (num_processors < processor_count) {
+>> +			early_per_cpu(x86_cpu_to_apicid, num_processors) = num_processors;
+>> +			early_per_cpu(x86_bios_cpu_apicid, num_processors) = num_processors;
+>> +			physid_set(num_processors, phys_cpu_present_map);
+>> +			set_cpu_possible(num_processors, true);
+>> +			set_cpu_present(num_processors, true);
+>> +			num_processors++;
+>> +		}
+>> +	}
+>> +}
+> Folks, please minimize indentation:
+> 
+> 	if (early)
+> 		return;
+> 
+> It would also be nice to see*some*  explanation in the changelog or
+> comments about why it's best and correct to just do nothing if early==1.
+> 
+> Also, this_consumes_  data from hv_sev_init_mem_and_cpu().  It would
+> make more sense to me to have them ordered the other way.
+> hv_sev_init_mem_and_cpu() first, this second.
 
+Hi Dave
+	Thanks for your review. Good suggestion! Will update in the next
+verison.
 
-On 4/17/2023 6:07 PM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Three functions in the amdgpu display driver cause -Wmissing-prototype
-> warnings:
+>>   u64 hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_size)
+>>   {
+>>   	union hv_ghcb *hv_ghcb;
+>> @@ -356,6 +377,63 @@ static bool hv_is_private_mmio(u64 addr)
+>>   	return false;
+>>   }
+>>   
+>> +__init void hv_sev_init_mem_and_cpu(void)
+>> +{
+>> +	struct memory_map_entry *entry;
+>> +	struct e820_entry *e820_entry;
+>> +	u64 e820_end;
+>> +	u64 ram_end;
+>> +	u64 page;
+>> +
+>> +	/*
+>> +	 * Hyper-V enlightened snp guest boots kernel
+>> +	 * directly without bootloader and so roms,
+>> +	 * bios regions and reserve resources are not
+>> +	 * available. Set these callback to NULL.
+>> +	 */
+>> +	x86_platform.legacy.reserve_bios_regions = 0;
+>> +	x86_init.resources.probe_roms = x86_init_noop;
+>> +	x86_init.resources.reserve_resources = x86_init_noop;
+>> +	x86_init.mpparse.find_smp_config = x86_init_noop;
+>> +	x86_init.mpparse.get_smp_config = hv_snp_get_smp_config;
+> This is one of those places that vertical alignment adds clarity:
 > 
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_resource.c:1858:6: error: no previous prototype for 'is_timing_changed' [-Werror=missing-prototypes]
-> 
-> is_timing_changed() is actually meant to be a global symbol, but needs
-> a proper name and prototype.
-> 
-> Fixes: 17ce8a6907f7 ("drm/amd/display: Add dsc pre-validation in atomic check")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c | 5 ++---
->   drivers/gpu/drm/amd/display/dc/core/dc_resource.c           | 6 +++---
->   drivers/gpu/drm/amd/display/dc/dc.h                         | 3 +++
->   3 files changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> index 994ba426ca66..442511061178 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> @@ -45,8 +45,7 @@
->   #endif
->   
->   #include "dc/dcn20/dcn20_resource.h"
-> -bool is_timing_changed(struct dc_stream_state *cur_stream,
-> -		       struct dc_stream_state *new_stream);
-> +
->   #define PEAK_FACTOR_X1000 1006
->   
->   static ssize_t dm_dp_aux_transfer(struct drm_dp_aux *aux,
-> @@ -1417,7 +1416,7 @@ int pre_validate_dsc(struct drm_atomic_state *state,
->   		struct dc_stream_state *stream = dm_state->context->streams[i];
->   
->   		if (local_dc_state->streams[i] &&
-> -		    is_timing_changed(stream, local_dc_state->streams[i])) {
-> +		    dc_is_timing_changed(stream, local_dc_state->streams[i])) {
->   			DRM_INFO_ONCE("crtc[%d] needs mode_changed\n", i);
->   		} else {
->   			int ind = find_crtc_index_in_state_by_stream(state, stream);
-> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_resource.c b/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
-> index 85d54bfb595c..344533623cb9 100644
-> --- a/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
-> +++ b/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
-> @@ -1855,7 +1855,7 @@ bool dc_add_all_planes_for_stream(
->   	return add_all_planes_for_stream(dc, stream, &set, 1, context);
->   }
->   
-> -bool is_timing_changed(struct dc_stream_state *cur_stream,
-> +bool dc_is_timing_changed(struct dc_stream_state *cur_stream,
->   		       struct dc_stream_state *new_stream)
->   {
->   	if (cur_stream == NULL)
-> @@ -1880,7 +1880,7 @@ static bool are_stream_backends_same(
->   	if (stream_a == NULL || stream_b == NULL)
->   		return false;
->   
-> -	if (is_timing_changed(stream_a, stream_b))
-> +	if (dc_is_timing_changed(stream_a, stream_b))
->   		return false;
->   
->   	if (stream_a->signal != stream_b->signal)
-> @@ -3505,7 +3505,7 @@ bool pipe_need_reprogram(
->   	if (pipe_ctx_old->stream_res.stream_enc != pipe_ctx->stream_res.stream_enc)
->   		return true;
->   
-> -	if (is_timing_changed(pipe_ctx_old->stream, pipe_ctx->stream))
-> +	if (dc_is_timing_changed(pipe_ctx_old->stream, pipe_ctx->stream))
->   		return true;
->   
->   	if (pipe_ctx_old->stream->dpms_off != pipe_ctx->stream->dpms_off)
-> diff --git a/drivers/gpu/drm/amd/display/dc/dc.h b/drivers/gpu/drm/amd/display/dc/dc.h
-> index 23ee63b98dcd..e7ab6cb3769b 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dc.h
-> +++ b/drivers/gpu/drm/amd/display/dc/dc.h
-> @@ -2225,4 +2225,7 @@ void dc_process_dmub_dpia_hpd_int_enable(const struct dc *dc,
->   /* Disable acc mode Interfaces */
->   void dc_disable_accelerated_mode(struct dc *dc);
->   
-> +bool dc_is_timing_changed(struct dc_stream_state *cur_stream,
-> +		       struct dc_stream_state *new_stream);
-> +
->   #endif /* DC_INTERFACE_H_ */
+>> +	x86_init.resources.probe_roms	     = x86_init_noop;
+>> +	x86_init.resources.reserve_resources = x86_init_noop;
+>> +	x86_init.mpparse.find_smp_config     = x86_init_noop;
+>> +	x86_init.mpparse.get_smp_config      = hv_snp_get_smp_config;
+> See? 3 noops and only one actual implemented function.  Clear as day now.
 > 
 
+Yes, this looks better. Will update.
 
-Reviewed-by: Aurabindo Pillai <aurabindo.pillai@amd.com>
+>> +	/*> +	 * Hyper-V SEV-SNP enlightened guest doesn't support ioapic
+>> +	 * and legacy APIC page read/write. Switch to hv apic here.
+>> +	 */
+>> +	disable_ioapic_support();
+> Do these systems have X86_FEATURE_APIC set?  Why is this needed in
+> addition to the architectural enumeration that already exists?
+>
+
+X86_FEATURE_APIC is still set. Hyper-V provides parav-virtualized local
+apic interface to replace APIC page opeartion. In the SEV-SNP guest.
+
+> Is there any other place in the kernel that has this one-off disabling
+> of the APIC?
+
+In current kernel code, ioapic support still may be disabled when there 
+is no MP table or ACPI MADT configuration. Please see 
+__apic_intr_mode_select() and disable_smp() for detial where ioapic is 
+disabled.
+
+> 
+>> +	/* Read processor number and memory layout. */
+>> +	processor_count = *(u32 *)__va(EN_SEV_SNP_PROCESSOR_INFO_ADDR);
+>> +	entry = (struct memory_map_entry *)(__va(EN_SEV_SNP_PROCESSOR_INFO_ADDR)
+>> +			+ sizeof(struct memory_map_entry));
+> Ick.
+> 
+> There are a lot of ways to do this.  But, this is an awfully ugly way.
+> 
+> struct snp_processor_info {
+> 	u32 processor_count;
+> 	struct memory_map_entry[] entries;
+> }
+> 
+> struct snp_processor_info *snp_pi =
+> 				__va(EN_SEV_SNP_PROCESSOR_INFO_ADDR);
+> processor_count = snp_pi->processor_count;
+> 
+> Then, have your for() loop through snp_pi->entries;
+> 
+> Actually, I'm not_quite_  sure that processor_count and entries are next
+> to each other.  But, either way, I do think a struct makes sense.
+
+Agree. Will update.
+
+> 
+> Also, what guarantees that EN_SEV_SNP_PROCESSOR_INFO_ADDR is mapped?
+> It's up above 8MB which I don't remember off the top of my head as being
+> a special address.
+
+This EN_SEV_SNP_PROCESSOR_INFO_ADDR is specified by hypervisor tool.
+Hypervisor populates mem and cpu info to the page in the memory and 
+kernel may access it via adding PHYS_OFFSET_OFFSET directly.
+
+> 
+>> +	/*
+>> +	 * E820 table in the memory just describes memory for
+>> +	 * kernel, ACPI table, cmdline, boot params and ramdisk.
+>> +	 * Hyper-V popoulates the rest memory layout in the EN_SEV_
+>> +	 * SNP_PROCESSOR_INFO_ADDR.
+>> +	 */
+> Really?  That is not very cool.  We need a better explanation of why
+> there was no way to use the decades-old e820 or EFI memory map and why
+> this needs to be a special snowflake.
+
+Agree. There should be a comment to describe that there is no virtual 
+Bios in the guest and hypervisor boots Linux kernel directly. So kernel 
+needs to populdate e820 tables which should be prepared by virtual Bios.
+
+> 
+>> +	for (; entry->numpages != 0; entry++) {
+>> +		e820_entry = &e820_table->entries[
+>> +				e820_table->nr_entries - 1];
+>> +		e820_end = e820_entry->addr + e820_entry->size;
+>> +		ram_end = (entry->starting_gpn +
+>> +			   entry->numpages) * PAGE_SIZE;
+>> +
+>> +		if (e820_end < entry->starting_gpn * PAGE_SIZE)
+>> +			e820_end = entry->starting_gpn * PAGE_SIZE;
+>> +
+>> +		if (e820_end < ram_end) {
+>> +			pr_info("Hyper-V: add e820 entry [mem %#018Lx-%#018Lx]\n", e820_end, ram_end - 1);
+>> +			e820__range_add(e820_end, ram_end - e820_end,
+>> +					E820_TYPE_RAM);
+>> +			for (page = e820_end; page < ram_end; page += PAGE_SIZE)
+>> +				pvalidate((unsigned long)__va(page), RMP_PG_SIZE_4K, true);
+>> +		}
+>> +	}
+>> +}
+> Oh, is this just about having a pre-accepted area and a non-accepted
+> area?  Is this basically another one-off implementation of unaccepted
+> memory ... that doesn't use the EFI standard?
+
+No, there is no virtual EFI firmware inside VM and so kernel gets mem 
+and vcpu info directly from Hyper-V.
