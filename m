@@ -2,110 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05386E6DBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 22:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AF86E6DC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 22:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjDRUyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 16:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
+        id S231753AbjDRU4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 16:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbjDRUyB (ORCPT
+        with ESMTP id S229838AbjDRU4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 16:54:01 -0400
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3A47EE3;
-        Tue, 18 Apr 2023 13:53:28 -0700 (PDT)
-Received: by mail-oo1-f44.google.com with SMTP id bg38-20020a056820082600b005421db6ed5bso2644561oob.12;
-        Tue, 18 Apr 2023 13:53:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681851200; x=1684443200;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h7OwgyFYxvUdy54LeDh4J8bkZyrATaQx+kfaOB/n8Aw=;
-        b=FK63sBy4zdasy/Ps2y+60WEZfHnIIzEURceGffBNME8hFq1HCEK9eAn7e3qqUS+K0M
-         5PDbgXQTw9BtVoUFC40j8gTaZmVNv4XmeZmjP6Fo6nle6/soqXfggDQsCzZzxNz69ej1
-         zwDbKFEBaNCbmkk6fEr00gJbxAhB/ZRUf0zIyLYZsiqYPKfG+1sOGApBZCZZE0uSt3Oa
-         a2THQUHvydYPzRUs9GBtkw2fBg00xRy95phSnzMUpExC4tyeR63McWKimvnlCDi8MjBb
-         Q0a4uy3/XKGy0axAqAf318X/t/zh04CNDkzGstD3dXJr5FOuZ1+rM+NPlOo2g72KdflW
-         bi1g==
-X-Gm-Message-State: AAQBX9ckjTCfrlQb3tZYM40IBaj8/d4Y8pCSgHXoKYM7GfeI7s6z5R8J
-        2PrYFqKtDnNtOs5TfFBgYA==
-X-Google-Smtp-Source: AKy350b/EDQ8ntn392NFJwpfJRHYL6UKPciQC7U7cGvat7A1qfFG6PLLKiTz+v/L8nLz3JGXjYYDtw==
-X-Received: by 2002:a4a:410a:0:b0:542:59fb:949e with SMTP id x10-20020a4a410a000000b0054259fb949emr6393003ooa.2.1681851200085;
-        Tue, 18 Apr 2023 13:53:20 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m21-20020a056870a41500b0017b21991355sm6045739oal.20.2023.04.18.13.53.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 13:53:19 -0700 (PDT)
-Received: (nullmailer pid 2322029 invoked by uid 1000);
-        Tue, 18 Apr 2023 20:53:18 -0000
-Date:   Tue, 18 Apr 2023 15:53:18 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-stm32@st-md-mailman.stormreply.com,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH] dt-bindings: display: mediatek: simplify compatibles
- syntax
-Message-ID: <168185119638.2321910.8021835045798003240.robh@kernel.org>
-References: <20230414083311.12197-1-krzysztof.kozlowski@linaro.org>
+        Tue, 18 Apr 2023 16:56:10 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0592C1700
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:56:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1gVMuS9EKtGcIRrRl/Odp4GU0naBD6jze+OHwpW6A+8=; b=12T/Pu5st14xkjhJxseP7HyJJC
+        uAkjyI+P74hc0pziwUyn3cAHKkFtqsCiYzrMUrhyl3izViy2JyzRUAHK7xsJQ+2ASaSOcoqmxksgv
+        EOGaDch53zorEiLXa1X2eY2BoaTQUd8mWYV2MXvPD3uMl5CZ2Fg+42Kdlzv9o9wNES7CmOtATM4Zl
+        ZIkrwPlGz0kUg++EFgBS45SdSpX72eDWEZUzEEfz9uVJwdxDB6zDUHpZYpYg+WLrmKNYN6MiIH9N4
+        6E/oc2eXe0IqXgwv6YkzVMIcNkVNYkMpinIqHtNYSd9RnYwMDUG6G/QXm4BnNyxDNh9FibthM99up
+        zjfedfNg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1posMo-003L56-0A;
+        Tue, 18 Apr 2023 20:55:58 +0000
+Date:   Tue, 18 Apr 2023 13:55:58 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, brauner@kernel.org,
+        linux-mm@kvack.org, p.raghav@samsung.com, da.gomez@samsung.com,
+        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
+        keescook@chromium.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] tmpfs: add the option to disable swap
+Message-ID: <ZD8D3kdVALbWvgYU@bombadil.infradead.org>
+References: <20230309230545.2930737-1-mcgrof@kernel.org>
+ <3382819f-4a4-8622-5642-78c03ecfb878@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230414083311.12197-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <3382819f-4a4-8622-5642-78c03ecfb878@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 17, 2023 at 09:31:20PM -0700, Hugh Dickins wrote:
+> On Thu, 9 Mar 2023, Luis Chamberlain wrote:
+> 
+> > I'm doing this work as part of future experimentation with tmpfs and the
+> > page cache, but given a common complaint found about tmpfs is the
+> > innability to work without the page cache I figured this might be useful
+> > to others. It turns out it is -- at least Christian Brauner indicates
+> > systemd uses ramfs for a few use-cases because they don't want to use
+> > swap and so having this option would let them move over to using tmpfs
+> > for those small use cases, see systemd-creds(1).
+> 
+> Thanks for your thorough work on tmpfs "noswap": seems well-received
+> by quite a few others, that's good.
+> 
+> I've just a few comments on later patches (I don't understand why you
+> went into those little rearrangements at the start of shmem_writepage(),
+> but they seem harmless so I don't object),
 
-On Fri, 14 Apr 2023 10:33:11 +0200, Krzysztof Kozlowski wrote:
-> Lists (items) with one item should be just enum because it is shorter,
-> simpler and does not confuse, if one wants to add new entry with a
-> fallback.  Convert all of them to enums.  OTOH, leave unused "oneOf"
-> entries in anticipation of further growth of the entire binding.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Cc: angelogioacchino.delregno@collabora.com
-> ---
->  .../bindings/display/mediatek/mediatek,ccorr.yaml   |  7 +++----
->  .../bindings/display/mediatek/mediatek,color.yaml   | 10 ++++------
->  .../bindings/display/mediatek/mediatek,dither.yaml  |  4 ++--
->  .../bindings/display/mediatek/mediatek,dsc.yaml     |  4 ++--
->  .../bindings/display/mediatek/mediatek,gamma.yaml   |  7 +++----
->  .../bindings/display/mediatek/mediatek,merge.yaml   |  7 +++----
->  .../bindings/display/mediatek/mediatek,od.yaml      |  7 +++----
->  .../bindings/display/mediatek/mediatek,ovl-2l.yaml  |  7 +++----
->  .../bindings/display/mediatek/mediatek,ovl.yaml     | 13 +++++--------
->  .../display/mediatek/mediatek,postmask.yaml         |  4 ++--
->  .../bindings/display/mediatek/mediatek,rdma.yaml    | 13 +++++--------
->  .../bindings/display/mediatek/mediatek,split.yaml   |  4 ++--
->  .../bindings/display/mediatek/mediatek,ufoe.yaml    |  4 ++--
->  .../bindings/display/mediatek/mediatek,wdma.yaml    |  4 ++--
->  14 files changed, 41 insertions(+), 54 deletions(-)
-> 
+Because the devil is in the details as you noted too!
 
-Applied, thanks!
+> but wanted to ask here:
+> 
+> You say "a common complaint about tmpfs is the inability to work without
+> the page cache".  Ehh?
 
+That was a mistake! s/page cache/swap.
+
+  Luis
