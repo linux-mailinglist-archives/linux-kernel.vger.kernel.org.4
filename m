@@ -2,64 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A898C6E6F5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E14D6E6F61
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbjDRW3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 18:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55762 "EHLO
+        id S232279AbjDRWaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 18:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjDRW3Q (ORCPT
+        with ESMTP id S232420AbjDRW3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 18:29:16 -0400
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D48E5C;
-        Tue, 18 Apr 2023 15:29:13 -0700 (PDT)
-Received: by mail-oo1-f54.google.com with SMTP id b8-20020a056820134800b00546f139ded4so885252oow.11;
-        Tue, 18 Apr 2023 15:29:13 -0700 (PDT)
+        Tue, 18 Apr 2023 18:29:53 -0400
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2099D35A3;
+        Tue, 18 Apr 2023 15:29:52 -0700 (PDT)
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6a5f765d5b8so613457a34.3;
+        Tue, 18 Apr 2023 15:29:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681856953; x=1684448953;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=db9PMHM/Qn98GSD4/ys+i9eCeTPLiGiM+3j8knhblLE=;
-        b=DdH8u6TvdO59BNIvUCFbWbncMUqsXqhRFZ23+8IeqpHePPhS5IPU6w+XJj5xrOCEAW
-         +Yx5Er/DGLV6D98efek9SGdb8dnsQS/81dKGxrjUrla8MtIUzWRBGNivYw4mdUhbKIet
-         BeQQQAdpB5yYn6twMzVjfNnbnMtXhyh29Am2Pwt53tVWbOk8UHqAcEpH2Z89Bj4sD0Zc
-         9MXferTKqzYYMWiWPJZYg/piEUuJwnOhx1nusOGRhj9bScb7UOeZf6gko4pVx5qn9f+S
-         gM7H1LqZLlDUg/6mvqx+amRTWiIRANxy8yxWCVxHhX2BCy+d3g4xHN7mjoQJeJskRtam
-         MZvA==
-X-Gm-Message-State: AAQBX9fLbsQ95Kn+UC0RxpHH7dU7WyRicl2Mho9RCYZ3cz6fMZjW99rF
-        WyOqVBWLnXi0OLH07hQyJA==
-X-Google-Smtp-Source: AKy350bAeSIuzj8yPGX5PIb4p4EJBNSdItbfFSe5fZAkxlfdQzq90VsiHCw3NU3aEUKFTKJ/jOnUzA==
-X-Received: by 2002:a4a:33c3:0:b0:541:b514:77eb with SMTP id q186-20020a4a33c3000000b00541b51477ebmr3108899ooq.2.1681856952661;
-        Tue, 18 Apr 2023 15:29:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681856991; x=1684448991;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IrmDFMV+ByWwft8Vdv6h3adx/3/XUUc95kI+OilyKT8=;
+        b=Jr7yKa6qFgf9fTJA1+l7uRd6u95JxDEuolU8g8949kjAN9pPNlMRjVGGZlsDH0PCNN
+         8MtKbMg4txDB8zfoBxPFrYM9yAR4+Cs19rJ1haq7OxG0YX3zDGnUFRQzQ1m084xjO/zj
+         v6Dr7WYhlCzK1DuzLxDlQBcQqORVHBLTdLoq0TMsq7zXe9iNriVONAxfOpZfhTqckT+y
+         KTDXaj2RsZDCqg7X3uGmJewqHVeclt+scR12WA5eK17v5iZsU8+9Exd1oE+vdShz2FvK
+         wPyUNe2HhnjqefRRJFHpRoZvxh7tEDena+lO1+l5ICpBYTnnEjs4JKx8vaDwPO822NMH
+         NM3g==
+X-Gm-Message-State: AAQBX9c9sG3qhG9g2VzpYHkUz9ExgR3TuETMVDYzWTYuVxTVhKH9A7QS
+        Jp1Jx1m+bpnAA2gY/UigAVSzTdAsFg==
+X-Google-Smtp-Source: AKy350ZNJODwIqGkJ5sG/17OBGRNxMmBa91BltKwVlK1NWnfPu6nrcHAX+Hxtp3Q9SF1r4NaiL27Vw==
+X-Received: by 2002:a9d:6350:0:b0:6a4:390f:cd61 with SMTP id y16-20020a9d6350000000b006a4390fcd61mr1858161otk.0.1681856991282;
+        Tue, 18 Apr 2023 15:29:51 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z137-20020a4a498f000000b00545b549c2f1sm3687486ooa.22.2023.04.18.15.29.11
+        by smtp.gmail.com with ESMTPSA id d16-20020a056830005000b0068bd922a244sm6134585otp.20.2023.04.18.15.29.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 15:29:12 -0700 (PDT)
-Received: (nullmailer pid 2442808 invoked by uid 1000);
-        Tue, 18 Apr 2023 22:29:11 -0000
-Date:   Tue, 18 Apr 2023 17:29:11 -0500
+        Tue, 18 Apr 2023 15:29:50 -0700 (PDT)
+Received: (nullmailer pid 2443692 invoked by uid 1000);
+        Tue, 18 Apr 2023 22:29:50 -0000
+Date:   Tue, 18 Apr 2023 17:29:50 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Yangfl <mmyangfl@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-clk@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] clk: Add basic register clock controller
-Message-ID: <20230418222911.GA2439926-robh@kernel.org>
-References: <20230416194624.1258860-1-mmyangfl@gmail.com>
- <81ed4e15-19ea-34d9-3e05-d1195b2cdd57@linaro.org>
- <CAAXyoMPShMwVjckmYRxStv=t=_GiNmqdLVUUjuxvVLdvp+-4Rw@mail.gmail.com>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        Matti Vaittinen <mazziesaccount@gmail.com>, pavel@ucw.cz,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: leds: Add ROHM BD2606MVV LED
+Message-ID: <168185698973.2443640.10846609870028128019.robh@kernel.org>
+References: <20230416211550.903240-1-andreas@kemnade.info>
+ <20230416211550.903240-2-andreas@kemnade.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAXyoMPShMwVjckmYRxStv=t=_GiNmqdLVUUjuxvVLdvp+-4Rw@mail.gmail.com>
+In-Reply-To: <20230416211550.903240-2-andreas@kemnade.info>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -71,32 +66,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 02:16:28AM +0800, Yangfl wrote:
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 于2023年4月17日周一 14:27写道：
-> >
-> > On 16/04/2023 21:46, David Yang wrote:
-> > > These clocks were provided in `include/linux/clk-provider.h`, but lacks DT
-> > > bindings. Add DT bindings for them.
-> > >
-> > > v2: split clock controller and its clocks
-> >
-> > I gave you several comments on v1 and this vague changelog entry
-> > suggests you ignored all of it.
-> >
-> > Implement feedback and respond to each one that you ack it or disagree
-> > with it.
-> >
-> >
-> > Best regards,
-> > Krzysztof
-> >
-> 
-> All issues have been addressed in v3 patch. I omitted details in
-> changelog to reduce redundancy. If that is not the proper way to make
-> response in dt maillist, please let me know.
-> 
-> Responses for each comments in v1 and v2 have been sent against original email.
 
-Go look at v1 replies. This series is a hard no.
+On Sun, 16 Apr 2023 23:15:49 +0200, Andreas Kemnade wrote:
+> Document ROHM BD2606MVV LED driver devicetree bindings.
+> 
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> ---
+>  .../bindings/leds/rohm,bd2606mvv.yaml         | 81 +++++++++++++++++++
+>  1 file changed, 81 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/leds/rohm,bd2606mvv.yaml
+> 
 
-Rob
+Reviewed-by: Rob Herring <robh@kernel.org>
+
