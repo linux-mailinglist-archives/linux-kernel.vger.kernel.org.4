@@ -2,132 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908A96E5C53
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A7A6E5C58
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbjDRIlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        id S231296AbjDRImq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbjDRIlE (ORCPT
+        with ESMTP id S230508AbjDRImp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:41:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF0B1FCA;
-        Tue, 18 Apr 2023 01:41:01 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681807259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZcloEN6PHwdxX+wR7PTxsLZ5R7H2GaplG8eadvwcPdo=;
-        b=YSKoMebO1SMgoiijw3sT6dUmL/DeC/wEBV7I8b1z9zceTKQGSQcXYB/YeSo0ccQDTS56AJ
-        nhdRaDZ0NwXgH8hEOLQ/dTVz+deZ2fOLHnFZiiQisU0IHpMqNc6BSUUtDUgjhVk1lqhuiZ
-        hUb1G4MomabLXGs1y5CDoqcnpdFFKWDNC8+YA3UX2Tbl5n22OpF5WIiJBUlmrHKqBerKx2
-        wlWzIAPgOX14nhVpRxuNgRbo/aKsOKfHG6jdAiFfsWbGz9WdOu4gVRxQNpL5YEqBPaHGvU
-        oTthGjE00T8jwQcWEiZWH5/TiAxdRfJ1M3JoIe2bb3crK0Gl32O2LSnNFxiq6g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681807259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZcloEN6PHwdxX+wR7PTxsLZ5R7H2GaplG8eadvwcPdo=;
-        b=rNfKPYcxDWHHNemvWuh/rsGPuG8dn/TolEBJI+1ZiBhvXwc9cXh+Pw7pgY4xNT8GFDtc33
-        j+rvG82H6UitkyAQ==
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>
-Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-In-Reply-To: <87ttxd4qxz.ffs@tglx>
-References: <20230414225551.858160935@linutronix.de>
- <8247ce4d-15b7-03b2-0c9b-74f8cd6cad50@molgen.mpg.de> <87wn2a4la5.ffs@tglx>
- <bd5a6a93-def1-9248-2258-c3d3b40071ef@molgen.mpg.de> <87ttxd4qxz.ffs@tglx>
-Date:   Tue, 18 Apr 2023 10:40:57 +0200
-Message-ID: <87r0sh4m7a.ffs@tglx>
+        Tue, 18 Apr 2023 04:42:45 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1DAC35B5;
+        Tue, 18 Apr 2023 01:42:42 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4edc114c716so1596786e87.1;
+        Tue, 18 Apr 2023 01:42:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681807361; x=1684399361;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vZP3AuFdp9sJnd/O9xcelaM7FQ5mQWFrmOkCIZBKH8Y=;
+        b=BZOTCcYRi2KQXa/OMkwpGHEb8mS9p5qTpd1Oslp3AhCVA8nYtOZzm1Bxmpw6xYPmC/
+         WhCym8+zvTQPCzLqv1J9SsMOzVQ+JYuYpWKyAFt0MDrgOm5J4N53d7Kvqx77y77J+Mb+
+         qUPVKjrFwgtcBqp50Dx33Fqr6r31DF4MrpxEwcreeusNt5mji3HqghhjwjE/Xp2AJQYL
+         9Xqlr0fDmodytwpIGwRlMqwdvtRiLZviyfkYcvTW1nEi1RdrSwVBzFQUNWwwdZys8ytc
+         dVlsSGgZG/kKwk30fPkKkvpEh4gP+eRZ2AcHJ1Z5J0nPKeaxitQBuoaYMgyPBqEcgBcX
+         MHTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681807361; x=1684399361;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vZP3AuFdp9sJnd/O9xcelaM7FQ5mQWFrmOkCIZBKH8Y=;
+        b=l5OclgZZLaRqqFwbwiey6iRf2kgV7uTXk+HQz67mfUjb1L9mJDy14nq7aoOeUqUaow
+         Og3tR1rXxiyaAcDrmIGTXof5dnfQZp/u7GqwzHkL6IcC0V4WAOxwXjQakkzrz/7JRyVm
+         YuBhNf/Ng780E+D6JtnVy/f1dnuN8k8n4y43humTpLfdO+/2sJzUNUSDggmDS6jY5+s7
+         hZzae5BBtz1ykTBrNppWhQ2eTHssUABiQ3R9vQgu6vAu1em0V5as3+fJSqseXyuoH/D7
+         pHk03Buot/WL2PT4PuK6+L0pDykjQ3pBc/+Rfxh26v2S4dHS5dDRl2+JacB5lI6Jdj/5
+         g5hA==
+X-Gm-Message-State: AAQBX9e0HuplwuIbAvwTPq7YXyGcaanjMDhVxijk69HOLwTAieV6Dxg0
+        2hXHMWvUzn+0YyPIGB2w2Tk=
+X-Google-Smtp-Source: AKy350a+xZVvLTmP6/Y5+OGaMEfqTgQkdT3vuvtTRZnDkbwP8XdO40ROnyHEweOAjchfMRz0Jyg+Sw==
+X-Received: by 2002:ac2:53b3:0:b0:4e8:a0a3:e242 with SMTP id j19-20020ac253b3000000b004e8a0a3e242mr2196845lfh.7.1681807360756;
+        Tue, 18 Apr 2023 01:42:40 -0700 (PDT)
+Received: from [192.168.1.103] ([31.173.80.61])
+        by smtp.gmail.com with ESMTPSA id s9-20020ac25fa9000000b004ec83bc3e2dsm2295419lfe.42.2023.04.18.01.42.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 01:42:40 -0700 (PDT)
+Subject: Re: [PATCH 2/2] ata: libata-core: Apply ATI NCQ horkage to ASPEED as
+ well
+To:     Patrick McLean <chutzpah@gentoo.org>, linux-kernel@vger.kernel.org
+Cc:     linux-ide@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org, Dave Airlie <airlied@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org
+References: <20230418011720.3900090-1-chutzpah@gentoo.org>
+ <20230418011720.3900090-3-chutzpah@gentoo.org>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <e71d0891-371e-d267-879d-47b736bb12c9@gmail.com>
+Date:   Tue, 18 Apr 2023 11:42:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <20230418011720.3900090-3-chutzpah@gentoo.org>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18 2023 at 08:58, Thomas Gleixner wrote:
-> On Mon, Apr 17 2023 at 19:40, Paul Menzel wrote:
->> Am 17.04.23 um 16:48 schrieb Thomas Gleixner:
->>
->>> On Mon, Apr 17 2023 at 13:19, Paul Menzel wrote:
->>>> Am 15.04.23 um 01:44 schrieb Thomas Gleixner:
->>>> [    0.258193] smpboot: CPU0: AMD A6-6400K APU with Radeon(tm) HD
->>>> Graphics (family: 0x15, model: 0x13, stepping: 0x1)
->>>> [=E2=80=A6]
->>>> [    0.259329] smp: Bringing up secondary CPUs ...
->>>> [    0.259527] x86: Booting SMP configuration:
->>>> [    0.259528] .... node  #0, CPUs:      #1
->>>> [    0.261007] After schedule_preempt_disabled
->>>> [   10.260990] CPU1 failed to report alive state
->>>=20
->>> Weird. CPU1 fails to come up and report that it has reached the
->>> synchronization point.
->>>=20
->>> Does it work when you add cpuhp.parallel=3Doff on the kernel command li=
-ne?
->>
->> Yes, the ten seconds delay is gone with `cpuhp.parallel=3Doff`.
->>
->> There was a patch set in the past, that worked on that device. I think=20
->> up to v4 it did *not* work at all and hung [1]. I need some days to=20
->> collect the results again.
->
-> Can you please apply the patch below on top of the pile remove the
-> command line option again?
+Hello!
 
-Bah. That patch does not make any sense at all. Not enough coffee.
+On 4/18/23 4:17 AM, Patrick McLean wrote:
 
-Can you please provide the output of cpuid?
+> We have some machines with ASPEED SATA controllers, and are seeing the same NCQ
+> issues that ATI controllers (I am not sure if it's a rebranded ATI controller,
+> or they both have some faulty implementation). This NCQ breakage is consistent
+> across a few different types of drives.
+> 
+> Instead of maintaining a list of drives that are broken with ASPEED controllers
+> as well as ATI, let's just treat ASPEED controllers like ATI ones, and disable
+> NCQ on drives that have ATA_HORKAGE_NO_NCQ_ON_ATI set on them.
+> 
+> We have been running this patch on several machines for over a week now without
+> reproducing an issue that was happening almost daily before.
+> 
+> Signed-off-by: Patrick McLean <chutzpah@gentoo.org>
+> ---
+>  drivers/ata/libata-core.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+> index 14c17c3bda4e..051492e8e9f9 100644
+> --- a/drivers/ata/libata-core.c
+> +++ b/drivers/ata/libata-core.c
+> @@ -2219,7 +2219,8 @@ static int ata_dev_config_ncq(struct ata_device *dev,
+>  	}
+>  
+>  	if (dev->horkage & ATA_HORKAGE_NO_NCQ_ON_ATI &&
+> -	    ata_dev_check_adapter(dev, PCI_VENDOR_ID_ATI)) {
+> +	    (ata_dev_check_adapter(dev, PCI_VENDOR_ID_ATI) ||
+> +		ata_dev_check_adapter(dev, PCI_VENDOR_ID_ASPEED))) {
 
-Thanks,
+   Please align the start of this line with the start of the above
+line, so that it doesn't needlessly blend with the below line.
 
-        tglx
+>  		snprintf(desc, desc_sz, "NCQ (not used)");
+>  		return 0;
+>  	}
 
-
-
-
+MBR, Sergey
