@@ -2,72 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA0B6E5B16
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508D56E5B1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbjDRH7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 03:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
+        id S231307AbjDRIAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbjDRH7a (ORCPT
+        with ESMTP id S229962AbjDRIAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 03:59:30 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC94448C;
-        Tue, 18 Apr 2023 00:59:29 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-63b4960b015so1573354b3a.3;
-        Tue, 18 Apr 2023 00:59:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681804769; x=1684396769;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QDfon1gvE7DljOrP9PcEY/wSYyOf+N0g48rT8yKE6XQ=;
-        b=F67g6HzGDMW1BQVjjJN+sKIj0bnh80m2DCcVyl0iEF0kj421fPANM7/ox1F/uH0xzo
-         aHHZCAK/KgZLAjXJ9OW1MDwPsFWlBgsDFaNmyxQ7DCT1kr3s4eujLihoaqv8LpWzGNOD
-         fDkxOCXrjlnxtci+q3WaxlUnN4xDSuUSK2ix5YqcB5hW7Fjtn3NqEk/9vZgcWI6mYPpw
-         +XFQbo0179MXOrfjud+45UagLBG5KN/PmoUlvdzC0SeLo5JrmfyREoUr68Q61q7wxwvW
-         67sDC9U3GOFSWE7hCKXuwJmDR8PmrJ/9Z7iUGBwCJuq4WB93r1kjtJGCtGiswswP/aH6
-         /Ilw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681804769; x=1684396769;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QDfon1gvE7DljOrP9PcEY/wSYyOf+N0g48rT8yKE6XQ=;
-        b=GOeW3McCwuS9A1tB1FrtcV5oVsBn/xwdZjChQu7YRpm6exUGNYukyHy3os1OXyqy6e
-         y6JFSRK37g0Jde0CQ1qspNmjPYsVhu/BX1vKOzJL3TXjPiYUeIwAvuw6YJarBAqIdZLQ
-         qBli4CQjY2FhwyopbswcTaN3whD5nu+Akjq1YxwdI1pCpNb5sKw4HfxfkQlAYPPzv6mm
-         a2zy42L6V8zh+yP0n2lqB+GgdOA3sBhrZ13xKvPezaY5mlqCzWgCWYm1s8Wy+lFbOixZ
-         yhGUkkggz6jM3mBoVL5Q7GZeg6BMHl1Q2Vq3GA5FkTeMydFITW4cYHFM+lQK1B/Xm4MN
-         1Lww==
-X-Gm-Message-State: AAQBX9cj6rpYOElUJsBB3Q5+HhDc3yPNZJ6zGpcjyHTom4zk0M0j7IAn
-        aWJpd6B3xScYc/oKPPr6E6yWi6isBelvFg==
-X-Google-Smtp-Source: AKy350by4NJsNnk65HQe14xnYwaFxrcyt/YD1dpvTfXLPiQ8LlMsIl4Tofq96QaRitZW6I0tPsyaDw==
-X-Received: by 2002:a17:902:c106:b0:1a6:cb66:681f with SMTP id 6-20020a170902c10600b001a6cb66681fmr1140670pli.46.1681804768891;
-        Tue, 18 Apr 2023 00:59:28 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id jl4-20020a170903134400b001a52abb3be3sm8969480plb.201.2023.04.18.00.59.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 00:59:28 -0700 (PDT)
-From:   alexjlzheng@gmail.com
-X-Google-Original-From: alexjlzheng@tencent.com
-To:     seanjc@google.com
-Cc:     alexjlzheng@gmail.com, alexjlzheng@tencent.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        pbonzini@redhat.com, tglx@linutronix.de, x86@kernel.org
-Subject: Re: [PATCH v2] KVM: x86: Fix poll command
-Date:   Tue, 18 Apr 2023 15:59:23 +0800
-Message-Id: <20230418075923.752113-1-alexjlzheng@tencent.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <ZD15KFZO9J33Eodj@google.com>
-References: <ZD15KFZO9J33Eodj@google.com>
+        Tue, 18 Apr 2023 04:00:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D4BC5;
+        Tue, 18 Apr 2023 01:00:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05900628D9;
+        Tue, 18 Apr 2023 08:00:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A44DC433D2;
+        Tue, 18 Apr 2023 08:00:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681804804;
+        bh=s60CVmIII2Y0/UiFhD2Gk75AqSi4Ndp6RwEByH1gFpc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SOzUZ4nk0TBp9MMijNlh6Pbw55PQVlaLmg8Bg+4JlUXrqtNE7D8WceZkiP6RMXwpp
+         HysXBOvRm6VLgLv9OCK4+m6XYX5bVZeXG5vB6QVADoswsOzhjsdApsPSjWOhSbtZf4
+         2T3o2C10uyGZt1VpWV0yuDqQIR/jLRQoUEwGGu+vSFTjapVMt2uKRCE3wNXzqjmYmL
+         iXQFE0F0MlVZNcZS83Puc41mNJVOtHon8/c70Q6U4aO5TcX2malrU/OdQzpZXKrqdG
+         +y3SupcJFs7zWKwd+60uwjHYv7oEuA/I0H3DmO85CvygO3Mh6eltx7+cdkDFJDTLg8
+         w3sYs1fhdgHmQ==
+Message-ID: <ff7547c1-450d-7dea-1c11-e55dc77cae76@kernel.org>
+Date:   Tue, 18 Apr 2023 17:00:01 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] ata: libata-core: Apply ATI NCQ horkage to ASPEED as
+ well
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>,
+        Patrick McLean <chutzpah@gentoo.org>
+Cc:     linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Dave Airlie <airlied@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org
+References: <20230418011720.3900090-1-chutzpah@gentoo.org>
+ <20230418011720.3900090-3-chutzpah@gentoo.org>
+ <ZD4pg7EMgGU2yjLM@infradead.org>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <ZD4pg7EMgGU2yjLM@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,62 +65,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023, Sean Christopherson <seanjc@google.com> wrote:
-> On Sat, Apr 15, 2023, alexjlzheng@gmail.com wrote:
-> > On Fri, 14 Apr 2023, Sean Christopherson <seanjc@google.com> wrote:
-> > > On Thu, Apr 13, 2023, alexjlzheng@gmail.com wrote:
-> > > > Fix the implementation of pic_poll_read():
-> > > > 1. Set Bit 7 when there is an interrupt
-> > > > 2. Return 0 when there is no interrupt
-> > > 
-> > > I don't think #2 is justified.  The spec says:
-> > > 
-> > >   The interrupt requests are ordered in priority from 0 through 7 (0 highest).
-> > 
-> > This is only true when don't use rotation for priority or just reset the 8259a.
-> > It's prossible to change priorities, i.e. Specific Rotation Mode or Automatic
-> > Rotation Mode.
-> > 
-> > > 
-> > > I.e. the current code enumerates the _lowest_ priority when there is no interrupt,
-> > > which seems more correct than reporting the highest priority possible.
-> > 
-> > The practice and interpretation of returning to the lowest priority interrupt
-> > when there are no active interrupts in the PIC doesn't seem reasonable, as far as I
-> > understand. For #2, in my opinion, the correct interpretation of the current code
-> > may be that a spurious interrupt is returned(IRQ 7 is used for that according to
-> > the 8259 hardware manual).
-> > 
-> > For #2, the main purpose of returning 0 is to set Bit 7 of the return value to 0
-> > to indicate that there is no interrupt.
+On 4/18/23 14:24, Christoph Hellwig wrote:
+> On Mon, Apr 17, 2023 at 06:17:20PM -0700, Patrick McLean wrote:
+>> We have some machines with ASPEED SATA controllers, and are seeing the same NCQ
+>> issues that ATI controllers (I am not sure if it's a rebranded ATI controller,
+>> or they both have some faulty implementation). This NCQ breakage is consistent
+>> across a few different types of drives.
+>>
+>> Instead of maintaining a list of drives that are broken with ASPEED controllers
 > 
-> Is there an actual real world chunk of guest code that is broken by KVM's behavior
-> for the "no interrupt" case?  Because if not, my strong preference is to leave the
-> code as-is.
-> 
-> I have no objection to setting bit 7 when there is an interrupt, as that behavior
-> is explicitly called out and KVM is clearly in the wrong.
+> Are these ASPEED controllers all the same or a wide variety?
+> Quirking all controllers from the same vendor seems like an overly
+> broad approach to me.
 
-Very happy that we have reached a consensus on #1.
-
-> 
-> But for the "no interrupt" case, there are a lot of "mays" and "seems" in both of
-> our responses, i.e. it's not obvious that the current code is outright wrong, nor
-> that it is correct either.  Given the lack of clarity, unless there's a guest that's
-> actually broken by KVM's current implementation, I see no benefit to changing KVM's
-> behavior, only the potential for breaking existing KVM guests.
-
-For #2, neither returning 0 nor 7 will affect the behavior of interrupt handling in
-the guest os. Because their Bit 7 are all 0, the guest os will interpret them as no
-interrupt. However, keeping it as it is (return 7) will reduce the readability of
-the pic_poll_read() code. When developers compare the code in kvm_pic_read_irq(),
-they may think that what is returned in #2 is a spurious interrupt, but this is not.
-
-> 
-> And if the "no interrupt" case really does need to be fixed, please split it to
-> a separate patch.
-
-For the reasons above, I suggest fix #2. I will split it to a separate patch.
-
-Thank you.
-Jinliang Zheng
+Indeed. If you checked only one adapter model from ASPEED, then all that is
+needed is define it with "board_ahci_noncq" in drivers/ata/ahci.c (see
+ahci_pci_tbl array). NCQ support will be turned off for that particular adapter
+with that.
