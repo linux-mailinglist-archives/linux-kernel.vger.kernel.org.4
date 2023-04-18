@@ -2,53 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4019A6E6FA9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FF86E6FB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjDRWwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 18:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
+        id S230376AbjDRW6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 18:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjDRWwU (ORCPT
+        with ESMTP id S229906AbjDRW6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 18:52:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1BD1FFE;
-        Tue, 18 Apr 2023 15:52:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FF4F62C8F;
-        Tue, 18 Apr 2023 22:52:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF57C433EF;
-        Tue, 18 Apr 2023 22:52:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681858336;
-        bh=de+HR91aylZyjaPhYykVk5+9J82pw/GilutzW+IbEZA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=a9k6pUklOiFdFWtJKWwtr3E5csuPk8CJsxJV2jv14DpS0shBJK4sLGqGwlYtxoatw
-         SRlz/b90fX46Qj96NsUT2Do7/DkaOFOJmpTnxbKqxIXcgQXz0Y3dvhIajF7d4IawPZ
-         tUb3dvRd2eoyThZRlNpl8CO7SdU7GuqopSIC1vjKf0M2+nEcUWkK23pxSODPBdiVuY
-         7pFL8+CywdVSHXKzFsrICNjUzSujPHrr3PL+dfjFGMzdiHoouiqSZ4/z34EdR5jBdf
-         SRAULUzq9r3/DvbaJlWZqWlOkBwnd7mpoRFLaXbmSUfC+V7Q3I3x9B+cknZg9DE1lQ
-         DHVj7YzZgljNw==
-Date:   Tue, 18 Apr 2023 15:52:15 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Gencen Gan <gangecen@hust.edu.cn>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: amd: Fix link leak when verifying config failed
-Message-ID: <20230418155215.24e7e140@kernel.org>
-In-Reply-To: <20230417144750.3976715-1-gangecen@hust.edu.cn>
-References: <20230417144750.3976715-1-gangecen@hust.edu.cn>
+        Tue, 18 Apr 2023 18:58:09 -0400
+Received: from smtp.gentoo.org (mail.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C12072B4;
+        Tue, 18 Apr 2023 15:58:08 -0700 (PDT)
+From:   Patrick McLean <chutzpah@gentoo.org>
+To:     Dave Airlie <airlied@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVER FOR AST SERVER
+        GRAPHICS CHIPS), linux-kernel@vger.kernel.org (open list),
+        linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM)
+Cc:     Patrick McLean <chutzpah@gentoo.org>
+Subject: [PATCH] PCI: Add ASPEED vendor ID
+Date:   Tue, 18 Apr 2023 15:57:57 -0700
+Message-Id: <20230418225757.1361301-1-chutzpah@gentoo.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,33 +40,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023 22:47:50 +0800 Gencen Gan wrote:
-> From: Gecen Gan <gangecen@hust.edu.cn>
-> 
-> After failing to verify configuration, it returns directly without 
-> releasing link, which may cause memory leak.
-> 
-> Signed-off-by: Gecen Gan <gangecen@hust.edu.cn>
-> ---
->  drivers/net/ethernet/amd/nmclan_cs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/amd/nmclan_cs.c b/drivers/net/ethernet/amd/nmclan_cs.c
-> index 823a329a921f..0dd391c84c13 100644
-> --- a/drivers/net/ethernet/amd/nmclan_cs.c
-> +++ b/drivers/net/ethernet/amd/nmclan_cs.c
-> @@ -651,7 +651,7 @@ static int nmclan_config(struct pcmcia_device *link)
->   } else {
->       pr_notice("mace id not found: %x %x should be 0x40 0x?9\n",
->  	  sig[0], sig[1]);
-> -     return -ENODEV;
-> +     goto failed;
->     }
->   }
+Currently the ASPEED PCI vendor ID is defined in
+drivers/gpu/drm/ast/ast_drv.c, move that to include/linux/pci_ids.h
+with all the rest of the PCI vendor ID definitions. Rename the definition
+to follow the format that the other definitions follow.
 
-The patch looks whitespace-damaged, it doesn't apply cleanly.
-AFAICT there is one space missing in the indentation.
-Probably your email server is doing something funny to it.
+Signed-off-by: Patrick McLean <chutzpah@gentoo.org>
+---
+ drivers/gpu/drm/ast/ast_drv.c | 4 +---
+ include/linux/pci_ids.h       | 2 ++
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
---
-pw-bot: cr
+diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
+index d78852c7cf5b..232e797793b6 100644
+--- a/drivers/gpu/drm/ast/ast_drv.c
++++ b/drivers/gpu/drm/ast/ast_drv.c
+@@ -70,12 +70,10 @@ static const struct drm_driver ast_driver = {
+  * PCI driver
+  */
+ 
+-#define PCI_VENDOR_ASPEED 0x1a03
+-
+ #define AST_VGA_DEVICE(id, info) {		\
+ 	.class = PCI_BASE_CLASS_DISPLAY << 16,	\
+ 	.class_mask = 0xff0000,			\
+-	.vendor = PCI_VENDOR_ASPEED,			\
++	.vendor = PCI_VENDOR_ID_ASPEED,			\
+ 	.device = id,				\
+ 	.subvendor = PCI_ANY_ID,		\
+ 	.subdevice = PCI_ANY_ID,		\
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index 45c3d62e616d..40e04e88ca5a 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -2553,6 +2553,8 @@
+ #define PCI_DEVICE_ID_NETRONOME_NFP3800_VF	0x3803
+ #define PCI_DEVICE_ID_NETRONOME_NFP6000_VF	0x6003
+ 
++#define PCI_VENDOR_ID_ASPEED		0x1a03
++
+ #define PCI_VENDOR_ID_QMI		0x1a32
+ 
+ #define PCI_VENDOR_ID_AZWAVE		0x1a3b
+-- 
+2.40.0
+
