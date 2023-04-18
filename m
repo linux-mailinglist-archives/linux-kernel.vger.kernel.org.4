@@ -2,181 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CB56E5985
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 985216E5987
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjDRGi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 02:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
+        id S230416AbjDRGkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 02:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjDRGiz (ORCPT
+        with ESMTP id S229655AbjDRGkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 02:38:55 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E711A7
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:38:31 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id me15so7496279qvb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:38:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681799910; x=1684391910;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:references
-         :in-reply-to:mime-version:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2YxCMCoI/kAx0ckzmXQbM3Vjb4R3V2PpBz3elfSnUog=;
-        b=WrW1n/Ts3oxys6+jw7I3YC2Gh86xeRqAkUmoq7rFeH2NiOMjPVvcZVZ1hEFv8ElqLr
-         HI+a0bo7eCxoB4kyDxVth7Rv3T1yrw0OAU8gdirSCdX8jgErHiUT73il+jys4JLQNpH3
-         Mt6+cnViFmZnPT8AgWoqtH3n5SIIYOPZ4amEHnNHrzBA0ZMFJxPqhbJ7wFrh6bNZw/ja
-         js5jkOaxEG7lz5W7x8SrpeTgBJB3cIysPGjJxtrUO9FAm/VwG/OEBYXdKvPzNnG8wV8r
-         5ZIXB6qP5ZzYzXxWxuHdlSi/puEnqqt0vKikQD/iu4fJrGLey7RsGONHU3T+8fhUagSm
-         VSJA==
+        Tue, 18 Apr 2023 02:40:07 -0400
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3DF138
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:40:05 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id fw30so17651978ejc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:40:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681799910; x=1684391910;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:references
-         :in-reply-to:mime-version:from:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2YxCMCoI/kAx0ckzmXQbM3Vjb4R3V2PpBz3elfSnUog=;
-        b=XLxAOk57gwwJOca5jYJyeLwYtUXNk6FsT50x/MFMQ59IcVcQx6f52j7Yr4rrqnNXt2
-         mswGL496yunCILRqNwstOkjPnzEAEwRkcK8nXiYZn4FDhFbyikhiGs52mkEpEI7WGlE1
-         NwmO7nefn80NtgB8GlOpr3jE+YAKDFxchRolGwr8+S/1gttsiT7/PkuYRvVXfRVeGXqa
-         SOQ6SoJ4LPwXavGWWsS8IpgxGfzFhSuj3r49OozE/aZPykz4fDJsq/kZYohGIaz+C5vW
-         KWFoVmFolgzxxaj+MkFLaIAKwjdhexDeFbHDanRPEmIVy/XQa4w63NVyb6S76p3439xV
-         Jjug==
-X-Gm-Message-State: AAQBX9dnDlXkMVnwj2SMdlTGSwex3MfVBqfm9x/wuxfXGJ2mAtZv7/1P
-        m4pXsfaNSYxrRRXxUdfU4hcc7gh0U/Zduc+hs4inmdp93Gey/3s=
-X-Google-Smtp-Source: AKy350Ye7GFqtQD//0IAm6vyvh3nZDrp0hAaS7yYMrEfy14+2qdMezLiEXI5eSwB2iicD9bxy3OZTtOXFluAQQuwxHg=
-X-Received: by 2002:a05:6214:c89:b0:5ef:4254:d6f0 with SMTP id
- r9-20020a0562140c8900b005ef4254d6f0mr21206763qvr.36.1681799910109; Mon, 17
- Apr 2023 23:38:30 -0700 (PDT)
-Received: from 44278815321 named unknown by gmailapi.google.com with HTTPREST;
- Mon, 17 Apr 2023 23:38:29 -0700
-From:   =?UTF-8?B?5a6L6ZSQ?= <songrui.771@bytedance.com>
-Mime-Version: 1.0
-In-Reply-To: <ZD4z_pS3fur-owIT@kroah.com>
-References: <20230417084449.99848-1-songrui.771@bytedance.com>
- <ZD09abW0YyHU3Snt@kroah.com> <CAAz4JzKB7kMi=fRZYSG=b4km-xA2gdBF32TFxU-ubqaaTs+_Hw@mail.gmail.com>
- <ZD4z_pS3fur-owIT@kroah.com>
-Date:   Mon, 17 Apr 2023 23:38:29 -0700
-Message-ID: <CAAz4JzL24ibnrfW_Vz0mvr5ZVszdH_gT7URO2KDuW2WDvBERkg@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH] libbpf: correct the macro KERNEL_VERSION
- for old kernel
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        d=1e100.net; s=20221208; t=1681800004; x=1684392004;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uTdwnxfwvIfrsUC5dnONRMBXOk9zTo/BEfi7gockUjU=;
+        b=iJiL2oNJ7ETBtr9nuMK/zvyyFbWtFBjdAfFqk/g7yQUNEEYjS+Rg/mHgSvHAWeixdV
+         KcDniolO7cD8vTyG3Eb1LZ1UnxP8w4KkePBVCywWue7E6BBnGidiYf78+rMfGvWXcxHe
+         ajcgVDcDEL6TH7TgeqbftO9dhI+OcVangwMeoOs8yGypXZW+LIPxA3kMt7SYnbgandBp
+         ZsG36RQhDor03iWYZAQqz1ibOFkcLLoz56Aad5smN128H2I8W84Ep6UY/JB7TwFFG0UZ
+         QsCLfl56qk0Gpb1KfygC9BV4ih14sUA3c4kFiUKJZf2fvliXMGNSOC8sSZ99aS6Vf7Lm
+         1bRg==
+X-Gm-Message-State: AAQBX9fUQCnWavoLuOgQpuUSt2P9vnlhljNM3wJCw4WpHn4VYQOMuzzd
+        2ZQbKI+sP9eYmQhZyq1t4ZQAL1ne4NA=
+X-Google-Smtp-Source: AKy350aZceeo2NIOgQlBylMkt8QjF7LSlhUi0Fh0XyOQEk1TlO8af5FAUWQVleYV1ugdYvGlo6b5Sg==
+X-Received: by 2002:a17:907:91d5:b0:94f:39b4:e32c with SMTP id h21-20020a17090791d500b0094f39b4e32cmr6894519ejz.43.1681800003922;
+        Mon, 17 Apr 2023 23:40:03 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:59? ([2a0b:e7c0:0:107::aaaa:59])
+        by smtp.gmail.com with ESMTPSA id g17-20020a170906349100b0094eeea5c649sm5793536ejb.114.2023.04.17.23.40.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 23:40:03 -0700 (PDT)
+Message-ID: <97fd3a9a-1fe6-658f-5fee-8541abccb300@kernel.org>
+Date:   Tue, 18 Apr 2023 08:40:02 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] ACPI: video: Add backlight=native DMI quirk for Lenovo
+ Ideapad Z470
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+References: <20230417104817.30254-1-jirislaby@kernel.org>
+ <CAJZ5v0iYRxGLWgiTD5ouWLy84YN4ddnVshCNgiYJMbLdpK_ZRA@mail.gmail.com>
+ <ab900b77-5e8f-4a4f-7e0f-c3358b784c01@redhat.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <ab900b77-5e8f-4a4f-7e0f-c3358b784c01@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > > The introduced header file linux/version.h in libbpf_probes.c may h=
-ave a
-> > > > wrong macro KERNEL_VERSION for calculating LINUX_VERSION_CODE in so=
-me old
-> > > > kernel (Debian9, 10). Below is a version info example from Debian 1=
-0.
-> > > >
-> > > > release: 4.19.0-22-amd64
-> > > > version: #1 SMP Debian 4.19.260-1 (2022-09-29)
-> > > >
-> > > > The macro KERNEL_VERSION is defined to (((a) << 16) + ((b) << 8)) +=
- (c)),
-> > > > which a, b, and c stand for major, minor and patch version. So in e=
-xample here,
-> > > > the major is 4, minor is 19, patch is 260, the LINUX_VERSION(4, 19,=
- 260) which
-> > > > is 267268 should be matched to LINUX_VERSION_CODE. However, the KER=
-NEL_VERSION_CODE
-> > > > in linux/version.h is defined to 267263.
-> > > >
-> > > > I noticed that the macro KERNEL_VERSION in linux/version.h of some =
-new kernel is
-> > > > defined to (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c))). An=
-d
-> > > > KERNEL_VERSION(4, 19, 260) is equal to 267263 which is the right LI=
-NUX_VERSION_CODE.
-> > > >
-> > > > The mismatched LINUX_VERSION_CODE which will cause failing to load =
-kprobe BPF
-> > > > programs in the version check of BPF syscall.
-> > > >
-> > > > The return value of get_kernel_version in libbpf_probes.c should be=
- matched to
-> > > > LINUX_VERSION_CODE by correcting the macro KERNEL_VERSION.
-> > > >
-> > > > Signed-off-by: songrui.771 <songrui.771@bytedance.com>
-> > >
-> > > This needs to be your name, not your email alias (do you use ".771" a=
-s a
-> > > name to sign things with?)
-> >
-> > Thanks for your reminding. I will change it.
-> > >
-> > > > ---
-> > > >=C2=A0 tools/lib/bpf/libbpf_probes.c | 10 +++++++---
-> > > >=C2=A0 1 file changed, 7 insertions(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_p=
-robes.c
-> > > > index 4f3bc968ff8e..5b22a880c7e7 100644
-> > > > --- a/tools/lib/bpf/libbpf_probes.c
-> > > > +++ b/tools/lib/bpf/libbpf_probes.c
-> > > > @@ -18,6 +18,10 @@
-> > > >=C2=A0 #include "libbpf.h"
-> > > >=C2=A0 #include "libbpf_internal.h"
-> > > >
-> > > > +#ifndef LIBBPF_KERNEL_VERSION
-> > > > +#define LIBBPF_KERNEL_VERSION(a, b, c) (((a) << 16) + ((b) << 8) +=
- ((c) > 255 ? 255 : (c)))
-> > > > +#endif
-> > >
-> > > What is wrong with using the KERNEL_VERSION() macro, it should be fix=
-ed
-> > > to work properly here, right?=C2=A0 Did we not get this resolved in t=
-he
-> > > main portion of the kernel already?
-> >
-> > The KERNEL_VERSION() macro from linux/version.h is wrong in some old
-> > kernel(Debian 9, 10) that we would like to support. As you said, the
-> > problem was resolved in the newer kernel. Here is the difference:
->
-> But the kernels you want to "support" all have older kernel versions and
-> so you do not need the change to the macro as they are not running newer
-> kernel versions with an increased minor version number.
->
-> So on those systems, building will work just fine, if not, then that's a
-> Debian bug and they should fix it in their kernel packages.
+On 17. 04. 23, 15:09, Hans de Goede wrote:
+> Hi,
+> 
+> On 4/17/23 13:40, Rafael J. Wysocki wrote:
+>> On Mon, Apr 17, 2023 at 12:48 PM Jiri Slaby (SUSE) <jirislaby@kernel.org> wrote:
+>>>
+>>> From: Hans de Goede <hdegoede@redhat.com>
+>>>
+>>> The Lenovo Ideapad Z470 predates Windows 8, so it defaults to using
+>>> acpi_video for backlight control. But this is not functional on this
+>>> model.
+>>>
+>>> Add a DMI quirk to use the native backlight interface which works.
+>>>
+>>> Link: https://bugzilla.suse.com/show_bug.cgi?id=1208724
+>>> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+>>> Cc: Hans de Goede <hdegoede@redhat.com>
+>>> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>
+>> Hans, can you please give your S-o-b for this one?
+> 
+> Hmm, I do not believe that I wrote this patch
+> (also see the suse bugzilla link in the comment it adds) ?
+> 
+> I guess it started as a copy of my "ACPI: video: Add
+> backlight=native DMI quirk for Acer Aspire 3830TG" patch
+> and that is why I was kept as the author ?
+> 
+> Anyways I'm fine with me being the author, or with Jiri
+> being the author. Pick a tag depending on the answer:
 
-> > linux/version.h
-> > in older kernel: #define KERNEL_VERSION(a, b, c) (((a) << 16) + ((b)
-> > << 8)) + (c)))
-> > in newer kernel: #define KERNEL_VERSION(a, b, c) KERNEL_VERSION(a, b,
-> > c) (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c)))
-> >
-> > Using the KERNEL_VERSION macro in the older kernel returns the kern
-> > version=C2=A0 which is=C2=A0 mismatched to the LINUX_VERSION_CODE that =
-will
-> > cause failing to load the BPF kprobe program.
-> >
-> > In my opinion, it is a more generic solution that corrects the
-> > KERNEL_VERSION() macro in libbpf to support some old kernel.
->
-> The KERNEL_VERSION() macro comes from the kernel you are building
-> against.=C2=A0 And so that should match that kernel only.
+Huh, sorry. I forgot to --reset-author. Let me fix this mess up.
 
-Thanks again for your reply. You're absolutely right. This bug exists
-on many older kernels(Debian9, 10, CentOS 7). It's not a kernel bug,
-but the=C2=A0 kernel release package bug. I will correct the
-KERNEL_VERSION() macro in header file linux/kernel.h provided by
-kernel package to make things right.
+Thanks.
 
-Thanks
-Best
-Jerry Song
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+> 
+> 
+> 
+> 
+>>
+>>> ---
+>>>   drivers/acpi/video_detect.c | 9 +++++++++
+>>>   1 file changed, 9 insertions(+)
+>>>
+>>> diff --git a/drivers/acpi/video_detect.c b/drivers/acpi/video_detect.c
+>>> index 69ef2d9710c2..af5cea005f54 100644
+>>> --- a/drivers/acpi/video_detect.c
+>>> +++ b/drivers/acpi/video_detect.c
+>>> @@ -459,6 +459,15 @@ static const struct dmi_system_id video_detect_dmi_table[] = {
+>>>                  DMI_MATCH(DMI_BOARD_NAME, "Lenovo IdeaPad S405"),
+>>>                  },
+>>>          },
+>>> +       {
+>>> +        /* https://bugzilla.suse.com/show_bug.cgi?id=1208724 */
+>>> +        .callback = video_detect_force_native,
+>>> +        /* Lenovo Ideapad Z470 */
+>>> +        .matches = {
+>>> +               DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>>> +               DMI_MATCH(DMI_PRODUCT_VERSION, "IdeaPad Z470"),
+>>> +               },
+>>> +       },
+>>>          {
+>>>           /* https://bugzilla.redhat.com/show_bug.cgi?id=1187004 */
+>>>           .callback = video_detect_force_native,
+>>> --
+>>> 2.40.0
+>>>
+>>
+> 
+
+-- 
+js
+
