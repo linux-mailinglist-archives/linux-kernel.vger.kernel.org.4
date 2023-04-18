@@ -2,178 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6F46E6DE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0446E6DE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232874AbjDRVHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
+        id S232849AbjDRVLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232842AbjDRVHr (ORCPT
+        with ESMTP id S232396AbjDRVLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:07:47 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14BCA253;
-        Tue, 18 Apr 2023 14:07:40 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33IKuoov001291;
-        Tue, 18 Apr 2023 21:07:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=2XAxNl4hzVW/qth3lmjEC9szXVLjhO+e60yVfkNNEfw=;
- b=DX5c4YQOXvTke4GSbXaZK47NiYxw1oew0B//qKtS0h8dBDEe9iH7CptofRN9yR2X6zaK
- paFfuuPn1QMUrLh6tiXFNxzOXbK5UjU85iIXC3Vz4W0hOuPdLcWGa9x4IYyrukruIDt3
- gfZAw1hfvIh49qd2McdtOYOmLnbnZpjKQCJe2bOhxTq1dmgRcTrpZrh1dV/DRp+cSLTd
- bIxheBAldmoTjiVy5g6lfR8LEnELRc2erJRt5fVWvKvCmHXWf+83kXOmLfXHUJ0/26fA
- NVdpm01q83Z6brAI7BBWnGvXnNFkVBpGxCp/ETxAEc0/VGo0yIpF5PC4UkhHDG+WfnYw mg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1v2ah9va-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 21:07:32 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33IL7V9v012444
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 21:07:31 GMT
-Received: from [192.168.142.6] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 18 Apr
- 2023 14:07:30 -0700
-Subject: Re: [PATCH v2 2/2] rpmsg: glink: Consolidate TX_DATA and TX_DATA_CONT
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230418163018.785524-1-quic_bjorande@quicinc.com>
- <20230418163018.785524-3-quic_bjorande@quicinc.com>
-From:   Chris Lew <quic_clew@quicinc.com>
-Message-ID: <7ab6ad8b-2403-abba-08b5-028ecc18f12c@quicinc.com>
-Date:   Tue, 18 Apr 2023 14:07:29 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 18 Apr 2023 17:11:30 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D706912F
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:11:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Hop1fEe65zKGXXNu/5+0Rw5BriX00BK5FU++RoHMVYA=; b=42V5GM4Q6rHtbzuNp4c3GaIPb8
+        R16wQPo6gWN510hi8DmyS9t0kCnaxgnkYHjPVGrBZqyEjKmbvnT9l9IntqHs/Qg9IxSnO6AlyEC4V
+        hTY481MQwzMcu2Z8sAunravYKfHWfj3FwcVcI3+uT/c6DSoPjVnCbLw7EWo4hm7loD6iCkcH4cMEL
+        K1+aYzX8K/20Ijw+Zqz2OzZ+7dq6P+TL/yUoddlCey298ckQfhDcz2jZbJTnQFCz+gbP1DgmmAFgq
+        FSx+nOpjQajMXBpV7SPsq46Q6BCCAnpmQNUZ+u15Vu4y1FY05AwGVhdQ4WqgIQzPfOIqGhL5zsVU/
+        botzBmug==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1posbf-003MGN-2s;
+        Tue, 18 Apr 2023 21:11:19 +0000
+Date:   Tue, 18 Apr 2023 14:11:19 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, brauner@kernel.org,
+        linux-mm@kvack.org, p.raghav@samsung.com, da.gomez@samsung.com,
+        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
+        keescook@chromium.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v2 4/6] shmem: skip page split if we're not reclaiming
+Message-ID: <ZD8HdxbwhUUGvmNC@bombadil.infradead.org>
+References: <20230309230545.2930737-1-mcgrof@kernel.org>
+ <20230309230545.2930737-5-mcgrof@kernel.org>
+ <cfaac1a4-20c6-bdd6-ff68-981e9a8858e@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20230418163018.785524-3-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: nKQhWyWGqcBeUO8-DpRlcBb2vazc1o1z
-X-Proofpoint-ORIG-GUID: nKQhWyWGqcBeUO8-DpRlcBb2vazc1o1z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-18_15,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 bulkscore=0 suspectscore=0 spamscore=0 phishscore=0
- clxscore=1011 impostorscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304180175
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cfaac1a4-20c6-bdd6-ff68-981e9a8858e@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/18/2023 9:30 AM, Bjorn Andersson wrote:
-> Rather than duplicating most of the code for constructing the initial
-> TX_DATA and subsequent TX_DATA_CONT packets, roll them into a single
-> loop.
+On Mon, Apr 17, 2023 at 09:41:41PM -0700, Hugh Dickins wrote:
+> On Thu, 9 Mar 2023, Luis Chamberlain wrote:
 > 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
+> > In theory when info->flags & VM_LOCKED we should not be getting
+> > shem_writepage() called so we should be verifying this with a
+> > WARN_ON_ONCE(). Since we should not be swapping then best to ensure
+> > we also don't do the folio split earlier too. So just move the check
+> > early to avoid folio splits in case its a dubious call.
+> > 
+> > We also have a similar early bail when !total_swap_pages so just move
+> > that earlier to avoid the possible folio split in the same situation.
+> > 
+> > Acked-by: David Hildenbrand <david@redhat.com>
+> > Reviewed-by: Christian Brauner <brauner@kernel.org>
+> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> > ---
+> >  mm/shmem.c | 10 ++++++----
+> >  1 file changed, 6 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/mm/shmem.c b/mm/shmem.c
+> > index 68e9970baf1e..dfd995da77b4 100644
+> > --- a/mm/shmem.c
+> > +++ b/mm/shmem.c
+> > @@ -1350,6 +1350,12 @@ static int shmem_writepage(struct page *page, struct writeback_control *wbc)
+> >  	if (WARN_ON_ONCE(!wbc->for_reclaim))
+> >  		goto redirty;
+> >  
+> > +	if (WARN_ON_ONCE(info->flags & VM_LOCKED))
+> > +		goto redirty;
 > 
-> Changes since v1:
-> - Reduced unnecessary complexity in the chunking condition
->
+> Well, okay, I don't mind that.  But shall we take bets on how soon syzbot
+> (hope it's not watching) will try flipping SHM_LOCK on while swapping out
+> pages from a SHM segment, and hit that warning?  Perhaps I'm wrong, but I
+> don't think any serialization prevents that.
 
-Reviewed-by: Chris Lew <quic_clew@quicinc.com>
+I though that may be the case. Would such serialization be welcomed?
 
->   drivers/rpmsg/qcom_glink_native.c | 46 +++++++++----------------------
->   1 file changed, 13 insertions(+), 33 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-> index 62634d020d13..7e6fad4e02f8 100644
-> --- a/drivers/rpmsg/qcom_glink_native.c
-> +++ b/drivers/rpmsg/qcom_glink_native.c
-> @@ -1309,7 +1309,7 @@ static int __qcom_glink_send(struct glink_channel *channel,
->   	int ret;
->   	unsigned long flags;
->   	int chunk_size = len;
-> -	int left_size = 0;
-> +	size_t offset = 0;
->   
->   	if (!glink->intentless) {
->   		while (!intent) {
-> @@ -1343,49 +1343,29 @@ static int __qcom_glink_send(struct glink_channel *channel,
->   		iid = intent->id;
->   	}
->   
-> -	if (wait && chunk_size > SZ_8K) {
-> -		chunk_size = SZ_8K;
-> -		left_size = len - chunk_size;
-> -	}
-> -	req.msg.cmd = cpu_to_le16(GLINK_CMD_TX_DATA);
-> -	req.msg.param1 = cpu_to_le16(channel->lcid);
-> -	req.msg.param2 = cpu_to_le32(iid);
-> -	req.chunk_size = cpu_to_le32(chunk_size);
-> -	req.left_size = cpu_to_le32(left_size);
-> -
-> -	ret = qcom_glink_tx(glink, &req, sizeof(req), data, chunk_size, wait);
-> -
-> -	/* Mark intent available if we failed */
-> -	if (ret) {
-> -		if (intent)
-> -			intent->in_use = false;
-> -		return ret;
-> -	}
-> -
-> -	while (left_size > 0) {
-> -		data = (void *)((char *)data + chunk_size);
-> -		chunk_size = left_size;
-> -		if (chunk_size > SZ_8K)
-> +	while (offset < len) {
-> +		chunk_size = len - offset;
-> +		if (chunk_size > SZ_8K && wait)
->   			chunk_size = SZ_8K;
-> -		left_size -= chunk_size;
->   
-> -		req.msg.cmd = cpu_to_le16(GLINK_CMD_TX_DATA_CONT);
-> +		req.msg.cmd = cpu_to_le16(offset == 0 ? GLINK_CMD_TX_DATA : GLINK_CMD_TX_DATA_CONT);
->   		req.msg.param1 = cpu_to_le16(channel->lcid);
->   		req.msg.param2 = cpu_to_le32(iid);
->   		req.chunk_size = cpu_to_le32(chunk_size);
-> -		req.left_size = cpu_to_le32(left_size);
-> +		req.left_size = cpu_to_le32(len - offset - chunk_size);
->   
-> -		ret = qcom_glink_tx(glink, &req, sizeof(req), data,
-> -				    chunk_size, wait);
-> -
-> -		/* Mark intent available if we failed */
-> +		ret = qcom_glink_tx(glink, &req, sizeof(req), data + offset, chunk_size, wait);
->   		if (ret) {
-> +			/* Mark intent available if we failed */
->   			if (intent)
->   				intent->in_use = false;
-> -			break;
-> +			return ret;
->   		}
-> +
-> +		offset += chunk_size;
->   	}
-> -	return ret;
-> +
-> +	return 0;
->   }
->   
->   static int qcom_glink_send(struct rpmsg_endpoint *ept, void *data, int len)
-> 
+  Luis
