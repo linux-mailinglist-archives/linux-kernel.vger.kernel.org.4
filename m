@@ -2,225 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2156E5D0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB7A6E5D0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbjDRJK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        id S229610AbjDRJKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbjDRJKy (ORCPT
+        with ESMTP id S230168AbjDRJK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:10:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FCD270E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:10:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681809010;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qPLTBWziW54XeikbDl+0QUpnupwILDaS5ozbTyxV5Ec=;
-        b=MweQ2K7V6PscW0QRL9/4CCNG15Ld72lol9xg4GoPmfuOeFxSRq+5hvXS775CwdhBIfCnBi
-        eqtAA081l4ZJJEGybLSJ+/h6ezZ6by2HI6+3w7MLCTDfqnFm8AWFziWOG+/okTwpPP0G6B
-        7xVVKGD7FiVQEn7uwmbattgculX7c7M=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-489-za87GBawPXKUfbFDZEScJA-1; Tue, 18 Apr 2023 05:10:09 -0400
-X-MC-Unique: za87GBawPXKUfbFDZEScJA-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f16ef3be6eso10872815e9.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:10:09 -0700 (PDT)
+        Tue, 18 Apr 2023 05:10:29 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEB610E0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:10:26 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-54fa9da5e5bso248723087b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:10:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681809026; x=1684401026;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sIdLuh0YsEXFhwNIbAtHDqpsY5fap9VloDpWQIFGF4U=;
+        b=HosxURX3ChbwZKNn4YKQtISwq82SPHNlHvU8+KQZ1TEkHlYSdwkEaq5scPHbCl4xfi
+         Bn9K+Aq8rHGOFtRfFAX/W/jNlA4OEbM3RcKWpfeQg49Tz04TjDhfAAagcTbiN+7QbE12
+         axNbUDmR2CwEh2pfVHCZQOC5/sIrtY5ksZBXHQR6EXNAdOAE2jENQNQs2Nfg4u/QCLBf
+         DV3HRBDBozCNC6QdYCLkYPYNkIm23y7gtAivT3NTsN50XOwrR+dWwGY9guId5dwq7gWx
+         M75rPtPkAmpBcGdTABTXYhOzWmb3V/ic1+DCAo0lrFzBgv3XDlIqoLHtxpL9C6jIImma
+         izPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681809008; x=1684401008;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1681809026; x=1684401026;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qPLTBWziW54XeikbDl+0QUpnupwILDaS5ozbTyxV5Ec=;
-        b=NngoiLJm+5HKIqMVqLbe63tsZvSpbcb56eiqxJyiO2daPRXWdqbVA1FFZ1kmm5Nnni
-         cG2qmxrQE0UaYZfnmnSPKDwPYGKtPAg2F6E1bJfHO1VAl2nRQKlsFr7FIVoVkrzOJYl+
-         4mTpgG+IsBoJmO3+33cE6aGUht9+AaNg48tCwFTA6qTzaDq8hua6Ek9X+HTR8vewcucR
-         svrPk2kBGNiUqVhIyRoRseDMAIsrxO5KO/Js7LwNysK9KLno7Z421bfNvqozm/q07SSg
-         ICuzGmRIIRFMFZCk4igARIlV4JTr0oAeTpY0KamSbVR6dXWTlCZPOwN2w9wnzI8yc1Jg
-         N/PA==
-X-Gm-Message-State: AAQBX9dtRDmRxLDRMsuoREuz2A2TdJFh6hQ9sXVQpvTcoltsPnN5TS0h
-        BTXv5FXN/i3i68SDQZ83uMNHGAfHTQwUaTa4vVNiWd+QgRt99vn7MFbjzlspAYze1PIWOqEPVz8
-        T/OD3ulDvIljq7ejQ5LAbB/rB
-X-Received: by 2002:adf:efd0:0:b0:2fb:a3e:7cb0 with SMTP id i16-20020adfefd0000000b002fb0a3e7cb0mr1412664wrp.10.1681809008277;
-        Tue, 18 Apr 2023 02:10:08 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Y591UUv+uvg/KcIQng72+DOj5dcz7mSRlPB7N77Z7/Ew1OowyC7+ph90pes+Y6Fhy5y0I/qA==
-X-Received: by 2002:adf:efd0:0:b0:2fb:a3e:7cb0 with SMTP id i16-20020adfefd0000000b002fb0a3e7cb0mr1412631wrp.10.1681809007822;
-        Tue, 18 Apr 2023 02:10:07 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c715:3f00:7545:deb6:f2f4:27ef? (p200300cbc7153f007545deb6f2f427ef.dip0.t-ipconnect.de. [2003:cb:c715:3f00:7545:deb6:f2f4:27ef])
-        by smtp.gmail.com with ESMTPSA id m4-20020a05600c4f4400b003f0ae957fcesm12432177wmq.42.2023.04.18.02.10.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 02:10:07 -0700 (PDT)
-Message-ID: <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
-Date:   Tue, 18 Apr 2023 11:10:05 +0200
+        bh=sIdLuh0YsEXFhwNIbAtHDqpsY5fap9VloDpWQIFGF4U=;
+        b=XMZ0+d7KRtA0ILJwyY0CrWj538yIYRvlP+Fep9A6hp/umq90dX5O3v5dVxCEX2M0HI
+         6XimZs8QvK9xfh25c3S4c+6YUhkevvPs2rnDtn+AfQPmL7VL3HnaXZT9Zi4f33GxAs20
+         OuabaUuiXcBn5jw5URmf8HbLz4V8ZZGl5hvkVYOw10eM09QF6TyGfHeity7bIw5nXWeA
+         w7KwMK34rDj8CQgZgJrnU5UnHmFmj9GSNOV/Kb29NocLDNGAC26blATqsJVqUYHi2hNc
+         yTOf6S//MYgJmBQXfYacPf0OMj/VHUn+s26R2SO/SSZ899XqROMYOesKe5xJUt+v0dlC
+         +y0Q==
+X-Gm-Message-State: AAQBX9f0fxo0TgEztejsBvkDv3KLFetGPZDrCNHHvrKUDGeayHm8YwcO
+        J47UoYDN8zK4eP6rTV76KGm5BGeaw8YRPhOZI5k4FA==
+X-Google-Smtp-Source: AKy350baYiQUbT4k6ozDbpWs1GqPpRg4luYmX8oNyF2aGUcFzmagNtslM3QDJSesiOtxgceK3fvS/HN1TDH2ygSBaB8=
+X-Received: by 2002:a81:4f09:0:b0:541:66e8:d4da with SMTP id
+ d9-20020a814f09000000b0054166e8d4damr16184276ywb.29.1681809026050; Tue, 18
+ Apr 2023 02:10:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        tabba@google.com, Michael Roth <michael.roth@amd.com>,
-        wei.w.wang@intel.com, Mike Rapoport <rppt@kernel.org>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <ZD1oevE8iHsi66T2@google.com>
- <658018f9-581c-7786-795a-85227c712be0@redhat.com>
- <ZD12htq6dWg0tg2e@google.com>
- <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
- <ZD2bBB00eKP6F8kz@google.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
- KVM: mm: fd-based approach for supporting KVM)
-In-Reply-To: <ZD2bBB00eKP6F8kz@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230413064344.18714-1-quic_tjiang@quicinc.com>
+ <CAA8EJpoc4nn+Wr131-o=YQoDeL0t7aj9hC=8NNnJa3SeHwgJ-w@mail.gmail.com>
+ <934c32ef9427464a9d0b898b843df6ab@quicinc.com> <CAA8EJpqz9o9CtAnXRE86kw-cfL=_d-c5BDAXwQLSJAyZRy_fEg@mail.gmail.com>
+ <a908e04e9b7d4b97bc6b5ee3c713e71f@quicinc.com>
+In-Reply-To: <a908e04e9b7d4b97bc6b5ee3c713e71f@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 18 Apr 2023 12:10:15 +0300
+Message-ID: <CAA8EJprztGdP0yqV=O6P2tn4i0+iQ4rfBVY2x-3_93o3C0c-Nw@mail.gmail.com>
+Subject: Re: [PATCH v2] Bluetooth: btusb: Add WCN6855 devcoredump support
+To:     "Tim Jiang (QUIC)" <quic_tjiang@quicinc.com>
+Cc:     "marcel@holtmann.org" <marcel@holtmann.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "Balakrishna Godavarthi (QUIC)" <quic_bgodavar@quicinc.com>,
+        "Hemant Gupta (QUIC)" <quic_hemantg@quicinc.com>,
+        "mka@chromium.org" <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.04.23 21:16, Sean Christopherson wrote:
-> On Mon, Apr 17, 2023, David Hildenbrand wrote:
->> On 17.04.23 18:40, Sean Christopherson wrote:
->>> On Mon, Apr 17, 2023, David Hildenbrand wrote:
->>>> On 17.04.23 17:40, Sean Christopherson wrote:
->>>>> I want to start referring to the code/patches by its syscall/implementation name
->>>>> instead of "UPM", as "UPM" is (a) very KVM centric, (b) refers to the broader effort
->>>>> and not just the non-KVM code, and (c) will likely be confusing for future reviewers
->>>>> since there's nothing in the code that mentions "UPM" in any way.
->>>>>
->>>>> But typing out restrictedmem is quite tedious, and git grep shows that "rmem" is
->>>>> already used to refer to "reserved memory".
->>>>>
->>>>> Renaming the syscall to "guardedmem"...
->>>>
->>>> restrictedmem, guardedmem, ... all fairly "suboptimal" if you'd ask me ...
->>>
->>> I'm definitely open to other suggestions, but I suspect it's going to be difficult
->>> to be more precise than something like "guarded".
->>
->> Guardedmem is just as bad as restrictedmem IMHO, sorry.
->>
->>
->> Restricted: what's restricted? how does the restriction manifest? secretmem
->> also has it's restrictions/limitations (pinning), why does that one not fall
->> under the same category?
->>
->> Make a stranger guess what "restrictedmem" is and I can guarantee that it
->> has nothing to do with the concept we're introducing here.
->>
->>
->> Guarded: what's guarded? From whom? For which purpose? How does the
->> "guarding" manifest?
-> 
-> I completely agree that "guarded" lacks precision, but as above, I've pretty much
-> given up hope of being super precise.  I actually like "restricted", I just don't
-> like that I can't shorten the name.
-> 
-> Hmm, maybe that won't be a huge problem in practice.  I can't say I've ever heard
-> any use "rmem" in verbale or written communication, it's primarily just "rmem" in
-> code that we can't use, and I don't mind having to use restrictedmem for the namespace.
-> So maybe we can use "rmem", just not in code?
-> 
-> Or, we could pretend we're pirates and call it arrrmem!, which is definitely going
-> to be how I refer to it in my internal dialogue if we keep "restricted" :-)
+On Tue, 18 Apr 2023 at 12:07, Tim Jiang (QUIC) <quic_tjiang@quicinc.com> wrote:
+>
+> Hi Dmitry:
+>
+> -----Original Message-----
+> From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Sent: Tuesday, April 18, 2023 5:03 PM
+> To: Tim Jiang (QUIC) <quic_tjiang@quicinc.com>
+> Cc: marcel@holtmann.org; linux-kernel@vger.kernel.org; linux-bluetooth@vger.kernel.org; linux-arm-msm@vger.kernel.org; Balakrishna Godavarthi (QUIC) <quic_bgodavar@quicinc.com>; Hemant Gupta (QUIC) <quic_hemantg@quicinc.com>; mka@chromium.org
+> Subject: Re: [PATCH v2] Bluetooth: btusb: Add WCN6855 devcoredump support
+>
+> On Tue, 18 Apr 2023 at 04:02, Tim Jiang (QUIC) <quic_tjiang@quicinc.com> wrote:
+> >
+> > Hi Dmitry:
+> >
+> > -----Original Message-----
+> > From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Sent: Saturday, April 15, 2023 5:03 AM
+> > To: Tim Jiang (QUIC) <quic_tjiang@quicinc.com>
+> > Cc: marcel@holtmann.org; linux-kernel@vger.kernel.org;
+> > linux-bluetooth@vger.kernel.org; linux-arm-msm@vger.kernel.org;
+> > Balakrishna Godavarthi (QUIC) <quic_bgodavar@quicinc.com>; Hemant
+> > Gupta (QUIC) <quic_hemantg@quicinc.com>; mka@chromium.org
+> > Subject: Re: [PATCH v2] Bluetooth: btusb: Add WCN6855 devcoredump
+> > support
+> >
+> > On Thu, 13 Apr 2023 at 09:44, Tim Jiang <quic_tjiang@quicinc.com> wrote:
+> > >
+> > > WCN6855 will report memdump via ACL data or HCI event when it get
+> > > crashed, so we collect memdump to debug firmware.
+> >
+> > Is it applicable only to wcn6855 or to some of earlier chips too?
+> >  [Tim]  Also applicable to earlier chips , but currently google only
+> > require us to support wcn6855
+>
+> Since upstream is not a google kernel, please enable this feature for all relevant chipsets.
+> [Tim] agreed , but the title of this gerrit unchanged,  I raise a new gerrit for other relevant chipsets , is OK?
 
-:)
+There is no gerrit here.
 
-> 
->> Again, make a stranger guess what "guardedmem" is and I can guarantee that
->> it has nothing to do with the concept we're introducing here.
->>
->> If, at all, the guess might be "guarded storage" [1] on s390x, which, of
->> course, has nothing to do with the concept here.
-> 
-> Oof, and guarded storage is even documented in Documentation/virt/kvm/api.rst.
-> 
->> (storage on s390x is just the dinosaur slang for memory)
->>
->>
->> Often, if we fail to find a good name, the concept is either unclear or not
->> well defined.
->>
->> So what are the characteristics we want to generalize under that new name?
->> We want to have an fd, that
->>
->> (a) cannot be mapped into user space (mmap)
->> (b) cannot be accessed using ordinary system calls (read/write)
->> (c) can still be managed like other fds (fallocate, future NUMA
->>      policies?)
->> (d) can be consumed by some special entities that are allowed to
->>      read/write/map.
->>
->> So the fd content is inaccessible using the ordinary POSIX syscalls. It's
->> only accessible by special entities (e.g., KVM).
->>
->> Most probably I am forgetting something. But maybe that will help to find a
->> more expressive name. Maybe :)
-> 
-> Hidden/Concealed/etc - Too close to secretmem, suffers the "hidden from whom" problem,
-> and depending on the use case, the memory may not actually be concealed from the
-> user that controls the VMM.
-> 
-> Restricted - "rmem" collides with "reserved memory" in code.
-> 
-> Guarded - Conflicts with s390's "guarded storage", has the "from whom" problem.
-> 
-> Inaccessible - Many of the same problems as "hidden".
-> 
-> Unmappable - Doesn't cover things like read/write, and is wrong in the sense that
-> the memory is still mappable, just not via mmap().
-> 
-> Secured - I'm not getting anywhere near this one :-)
+Also, is there any chance you can fix your email client to stop
+putting old headers at the top of the email?
 
-The think about "secretmem" that I kind-of like (a little) is that it 
-explains what it's used for: storing secrets. We don't call it 
-"unmapped" memory because we unmap it from the directmap or "unpinnable" 
-memory or "inaccessible" memory ... or even "restricted" because it has 
-restrictions ... how the secrets are protected is kind of an 
-implementation detail.
+>
+> >
+> > >
+> > > Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
+> > > ---
+> > >  drivers/bluetooth/btusb.c | 222
+> > > ++++++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 222 insertions(+)
+>
+>
+>
+>
+> --
+> With best wishes
+> Dmitry
 
-So instead of describing *why*/*how* restrictedmem is the weird kid 
-(restricted/guarded/hidden/restricted/inaccessible/ ...), maybe rather 
-describe what it's used for?
 
-I know, I know, "there are other use cases where it will be used outside 
-of VM context". I really don't care. "memfd_vm" / "vm_mem" would be sooo 
-(feel free to add some more o's here) much easier to get. It's a special 
-fd to be used to back VM memory. Depending on the VM type 
-(encrypted/protected/whatever), restrictions might apply (not able to 
-mmap, not able to read/write ...). For example, there really is no need 
-to disallow mmap/read/write when using that memory to back a simple VM 
-where all we want to do is avoid user-space page tables.
 
 -- 
-Thanks,
-
-David / dhildenb
-
+With best wishes
+Dmitry
