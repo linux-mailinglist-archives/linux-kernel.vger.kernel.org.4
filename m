@@ -2,52 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDE06E5BB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 976626E5BB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjDRIKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
+        id S231474AbjDRIKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbjDRIJz (ORCPT
+        with ESMTP id S231390AbjDRIKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:09:55 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318907A99;
-        Tue, 18 Apr 2023 01:09:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1681805303;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8DTc/oRJhMEBa33wB3TaMgkNKc15dOmlHK8alGfdcJk=;
-        b=i2y5XYqQS4KdTNNlpdITBztyfUED78n/aM0a3L19IR0dztlNgHD4h8kG3hHLJb6PE4BHyh
-        BHoN5d/SlAU8cwhrU+rUiz49RLxT/CSXxujr6Onaz2R1d5d35D14IgL/OTfA4/HlL3/KGZ
-        wp5ZiCeGY69eCgNlIg3o3Qf0vNWzzVk=
-Message-ID: <1f63ffced9ed18309401af9a885310e1715b6538.camel@crapouillou.net>
-Subject: Re: [PATCH v3 03/11] iio: buffer-dma: Get rid of outgoing queue
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Date:   Tue, 18 Apr 2023 10:08:21 +0200
-In-Reply-To: <20230416152422.477ecf67@jic23-huawei>
-References: <20230403154800.215924-1-paul@crapouillou.net>
-         <20230403154800.215924-4-paul@crapouillou.net>
-         <20230416152422.477ecf67@jic23-huawei>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        Tue, 18 Apr 2023 04:10:16 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890E659DF;
+        Tue, 18 Apr 2023 01:09:52 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 012765C01D1;
+        Tue, 18 Apr 2023 04:09:30 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 18 Apr 2023 04:09:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1681805369; x=1681891769; bh=Ta
+        bM1MA8pfDpJqUW/8/8Nla77e3Xl6HsgEhF5ucRElE=; b=eb7EZBPlYZE2OiqG9e
+        WUImhRfufcrSeTZPK10L3dlJTKkoiNEzpeSS+/ge/oeU7cBj6jrrhH48mL6LnhFz
+        aWx/SVtjUBVaC581wMk9i3BNQhdBZdkWuxTXP8G+stMluOy9lzRSroV2MWQX2MFS
+        TN5NCWma8b2ar2pvf0KtceKEL+OKFAlaHfGS+i0xYKrOQcCOQ+YXQiAz134gNPom
+        ri3ARwap2AJMMOqm3hiZV29d41Ai34/6QRLNOocl8BqAEShJ0iJndOszjKxKKccW
+        +k5jzQ0E2tAeotcoEph06ndZYy5G7XLIpkX7lcmQ/+YR5u/hLRRqXQQrBLLvR8a1
+        YjQg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681805369; x=1681891769; bh=TabM1MA8pfDpJ
+        qUW/8/8Nla77e3Xl6HsgEhF5ucRElE=; b=Nvyki73Xx9xnirN1avv9olW4xcW/B
+        WyuJE2HzPPRz0Quw00Vn4TJzXZM+gjp6fb8185Hu6oYy+FbHSTNoalrPYHl2RCkS
+        ZXAA5ncDUyss3kenlV0eUtAFasPLUBwxj+AZyaGjr4S8A0d9lpxNlkryElUd3cJL
+        K9Nj6bbIL8X0P9hVWAoKflm3pgmUzjzN+u4P6VImJUHgxJ/6rdfdE0sJ+5d3Vd+o
+        X50k5c8wPDlVO7uvSmi7r1k+eNue3OxAAOadw1ByBirNnAdgjuRydqrbm46F1gSK
+        0lfEGCjuRmrNCv9aO5rliZp3ZmuVQ8J6jSeRHmgU747jubGfGviLlh0mQ==
+X-ME-Sender: <xms:OVA-ZMefecNW_VYTfJm47H3EX67QaMbhn7tiuJvRmoSNRJD3wjFRYA>
+    <xme:OVA-ZOPtv6Up0Pqo3Faqy4zpeqrH8zOg5-4vLNvGXqP2xkiE1_gou2OF-zSJnqYUh
+    HORjGlXuRwBwmz6qf8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdelkecutefuodetggdotefrodftvfcurf
+    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeetffen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggv
+X-ME-Proxy: <xmx:OVA-ZNiTFiFOIUYKo3_EK-wusPItkVL6MQlHBB0Lwq_2ZRnL82oncg>
+    <xmx:OVA-ZB9vdD9LDQXWjwKtkQ5MYA9S5Ix-tvvx306sHJsF_-WUreoUtQ>
+    <xmx:OVA-ZIvuQC9MYwdE-kqFXBZzA0gXCvK5Ydc1F94BpMhfFpBEyBTXcQ>
+    <xmx:OVA-ZIE9Xo2smsOMuFglDo3yrVYiQdocg-0z1enNazrPBD3_-CsxIA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 402A6B60086; Tue, 18 Apr 2023 04:09:29 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
+Mime-Version: 1.0
+Message-Id: <6b5f7b17-6365-4791-b6e9-8505acb476f7@app.fastmail.com>
+In-Reply-To: <695e9f88-5a79-7ca4-645f-047b78495a80@xs4all.nl>
+References: <20230418071605.2971866-1-arnd@kernel.org>
+ <695e9f88-5a79-7ca4-645f-047b78495a80@xs4all.nl>
+Date:   Tue, 18 Apr 2023 10:09:08 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Hans Verkuil" <hverkuil@xs4all.nl>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "laurent.pinchart" <laurent.pinchart@ideasonboard.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "Shawn Guo" <shawnguo@kernel.org>,
+        "Sascha Hauer" <s.hauer@pengutronix.de>,
+        "Dong Aisheng" <aisheng.dong@nxp.com>,
+        "Guoniu Zhou" <guoniu.zhou@nxp.com>,
+        "Stefan Riedmueller" <s.riedmueller@phytec.de>
+Cc:     "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        "Fabio Estevam" <festevam@gmail.com>,
+        "NXP Linux Team" <linux-imx@nxp.com>,
+        "Christian Hemp" <c.hemp@phytec.de>,
+        "Jacopo Mondi" <jacopo@jmondi.org>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: nxp: ignore unused suspend operations
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,59 +98,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+On Tue, Apr 18, 2023, at 10:04, Hans Verkuil wrote:
+> On 18/04/2023 09:15, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> gcc warns about some functions being unused when CONFIG_PM is
+>> disabled:
+>
+> ???
+>
+> The Kconfig has a:
+>
+>         depends on HAS_DMA && PM
+>
+> So how can this be compiled with CONFIG_PM not set?
+>
+> Am I missing something?
 
-Le dimanche 16 avril 2023 =C3=A0 15:24 +0100, Jonathan Cameron a =C3=A9crit=
-=C2=A0:
-> On Mon,=C2=A0 3 Apr 2023 17:47:52 +0200
-> Paul Cercueil <paul@crapouillou.net> wrote:
->=20
-> > The buffer-dma code was using two queues, incoming and outgoing, to
-> > manage the state of the blocks in use.
-> >=20
-> > While this totally works, it adds some complexity to the code,
-> > especially since the code only manages 2 blocks. It is much easier
-> > to
-> > just check each block's state manually, and keep a counter for the
-> > next
-> > block to dequeue.
-> >=20
-> > Since the new DMABUF based API wouldn't use the outgoing queue
-> > anyway,
-> > getting rid of it now makes the upcoming changes simpler.
-> >=20
-> > With this change, the IIO_BLOCK_STATE_DEQUEUED is now useless, and
-> > can
-> > be removed.
-> >=20
-> > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> >=20
-> > ---
-> > v2: - Only remove the outgoing queue, and keep the incoming queue,
-> > as we
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 want the buffer to start streaming data =
-as soon as it is
-> > enabled.
-> > =C2=A0=C2=A0=C2=A0 - Remove IIO_BLOCK_STATE_DEQUEUED, since it is now f=
-unctionally
-> > the
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 same as IIO_BLOCK_STATE_DONE.
->=20
-> I'm not that familiar with this code, but with my understanding this
-> makes
-> sense.=C2=A0=C2=A0 I think it is independent of the earlier patches and i=
-s a
-> useful
-> change in it's own right.=C2=A0 As such, does it make sense to pick this
-> up
-> ahead of the rest of the series? I'm assuming that discussion on the
-> rest will take a while.=C2=A0 No great rush as too late for the coming
-> merge
-> window anyway.
+My mistake, the warning only shows up when CONFIG_PM_SLEEP is
+disabled.
 
-Actually, you can pick patches 3 to 6 (when all have been acked). They
-add write support for buffer-dma implementations; which is a dependency
-for the rest of the patchset, but they can live on their own.
-
-Cheers,
--Paul
+     Arnd
