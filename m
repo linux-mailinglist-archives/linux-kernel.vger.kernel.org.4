@@ -2,149 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB366E6C5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780B36E6C60
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232637AbjDRSqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
+        id S231384AbjDRSrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjDRSqX (ORCPT
+        with ESMTP id S231168AbjDRSrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:46:23 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332E5BB82;
-        Tue, 18 Apr 2023 11:46:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=nB52nxujZdKTDJqU+NXGOBB2vkb1FAhhHGmtI1+SM4A=; b=a1381ug+O3Nh4vISHBwlSJpgdM
-        m4klJEBpaJu1lnWDaq8Xlc2VsXzkdTSb/tyopbUPR/HR3oaAUUlosR2wd1hf03TrJ7grjaoPTB20m
-        fEQvdBmFyZ7utVjbtR9Omn//3YPanCK9Z6HRhL+mQTfK1pqPS4yIagW0k1zvQdvxOkxgC6RjQtlXP
-        nHfHcCcbLqIgP+2uiFukGr4RPWezPs8AUd20L+8ER5BI0pVz4wvZEooGatFfCaxnew448u4AZjStu
-        vbarBCpSUKjaKUtkVTh0IKCM14l8vZyNsfFoyt5INwPcuadT9LXNpyEVhrCQ0ECRnu+zuVhyQQ5p2
-        XSyg2dsQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1poqLF-00374O-0h;
-        Tue, 18 Apr 2023 18:46:13 +0000
-Date:   Tue, 18 Apr 2023 11:46:13 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "keescook@chromium.org" <keescook@chromium.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "prarit@redhat.com" <prarit@redhat.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "song@kernel.org" <song@kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "jim.cromie@gmail.com" <jim.cromie@gmail.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "jbaron@akamai.com" <jbaron@akamai.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "petr.pavlu@suse.com" <petr.pavlu@suse.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "Hocko, Michal" <mhocko@suse.com>,
-        "dave@stgolabs.net" <dave@stgolabs.net>
-Subject: Re: [RFC 2/2] kread: avoid duplicates
-Message-ID: <ZD7ldcZoWfeN7poU@bombadil.infradead.org>
-References: <20230414052840.1994456-1-mcgrof@kernel.org>
- <20230414052840.1994456-3-mcgrof@kernel.org>
- <ZDuP3OCzN3x4NxRZ@infradead.org>
- <ZDuYmPB5oqKQLcQd@bombadil.infradead.org>
- <be5182b65384f6a7667c239134037649a468033d.camel@intel.com>
- <ZD3DYqYE4DOiJQaS@bombadil.infradead.org>
+        Tue, 18 Apr 2023 14:47:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020FF2694
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:46:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681843580;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BB7vJoU3HrrLNxTi8Xk72x9Aag8/v7/whz+Iy4S1B8Q=;
+        b=LXhFFRg/NVCzPkYdOh1yK9Ophktn4fgdMyxYo0QnFRerKYP31w83TpZnNx+yW4fgOo5DK1
+        IfB1O98ECxqAqBDwig6sX7o6KRaHu+cntczFftZS5+oIGpZRiBfTXzTsbWEHktipd5LkY0
+        zhqL33YXNCeWUk4lXEkcpl+wbDS34Zw=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-543-LtQTkdBIO7C4mUIZ7IzFuA-1; Tue, 18 Apr 2023 14:46:18 -0400
+X-MC-Unique: LtQTkdBIO7C4mUIZ7IzFuA-1
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3ecd50d9db9so4601141cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:46:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681843578; x=1684435578;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BB7vJoU3HrrLNxTi8Xk72x9Aag8/v7/whz+Iy4S1B8Q=;
+        b=PQk2G6Fu0nVKZgB3rUnzVMxmhAfdUJ5WOyohS+XWQaWPYe/Y8rUivhxnhwMpP7K9QJ
+         0U0D89DsPBB9Stli9QtkyYyKHVNz95BBATRSMJlUm7R77AQrRcGY4kidplj+RlAv0YaE
+         xUaM0B04a9lX7OruFJ7yWzFMf5g3C49CW1cJsCM7qCtaWIKN96gTEMNfyXg+hx66r12h
+         fkjwAb6VTo/PIfciygDWhzQZD1FZHE5IsvjtCx0ZQnngpDUGW9FJ3aEymzQ7o/KZwb4U
+         CoEWyZh+nA2KgItxbB7WAfRtUkIeCDHk7AgplafWlmOkLEzmkN9tm/6RH75GbeBkTzk8
+         Ws3w==
+X-Gm-Message-State: AAQBX9ciSlWmlK3NgtZ6SVcoej+OCC19CPckceE/a8QATm/jFyX7iltW
+        nXcME7BMoKHXuZM1W4+DRtL+NjCwPPpyC6dfTwZ094qCMGVpTGzVrEp43LXjqntSVdkp/uWSuyo
+        XVRuFMc85DsoEnhTFWUXbXCpt
+X-Received: by 2002:a05:622a:1352:b0:3ef:37fa:e1d6 with SMTP id w18-20020a05622a135200b003ef37fae1d6mr7109281qtk.2.1681843578060;
+        Tue, 18 Apr 2023 11:46:18 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aaYkIPSXh56iejgXsondxtvJiaCp+DeLUdNdH+yalmk8s8oiHwbrbN5wEHL54x9K9oqF0MMA==
+X-Received: by 2002:a05:622a:1352:b0:3ef:37fa:e1d6 with SMTP id w18-20020a05622a135200b003ef37fae1d6mr7109253qtk.2.1681843577799;
+        Tue, 18 Apr 2023 11:46:17 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id l5-20020a05620a210500b0074cf009f443sm2553280qkl.85.2023.04.18.11.46.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 11:46:17 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 14:46:15 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
+        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 1/1] mm: do not increment pgfault stats when page
+ fault handler retries
+Message-ID: <ZD7ld4Iffdmv5Q8f@x1n>
+References: <20230415000818.1955007-1-surenb@google.com>
+ <ZD25bBPbZYSb7grA@x1n>
+ <CAJuCfpHf06cr2d277DXQUtBto_0bVgK3ykMHLYRgZXgnot=e4w@mail.gmail.com>
+ <ZD61DLJNilUeDCnC@x1n>
+ <ZD64C3R6BzqpSfYX@casper.infradead.org>
+ <ZD672ewd4j/1v2IQ@x1n>
+ <CAJuCfpGuF_kKXMSx2bHNC7FprOfqbCp+cfdsoct9sN=1+wqtAQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZD3DYqYE4DOiJQaS@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJuCfpGuF_kKXMSx2bHNC7FprOfqbCp+cfdsoct9sN=1+wqtAQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 03:08:34PM -0700, Luis Chamberlain wrote:
-> On Mon, Apr 17, 2023 at 05:33:49PM +0000, Edgecombe, Rick P wrote:
-> > On Sat, 2023-04-15 at 23:41 -0700, Luis Chamberlain wrote:
-> > > On Sat, Apr 15, 2023 at 11:04:12PM -0700, Christoph Hellwig wrote:
-> > > > On Thu, Apr 13, 2023 at 10:28:40PM -0700, Luis Chamberlain wrote:
-> > > > > With this we run into 0 wasted virtual memory bytes.
-> > > > 
-> > > > Avoid what duplicates?
-> > > 
-> > > David Hildenbrand had reported that with over 400 CPUs vmap space
-> > > runs out and it seems it was related to module loading. I took a
-> > > look and confirmed it. Module loading ends up requiring in the
-> > > worst case 3 vmalloc allocations, so typically at least twice
-> > > the size of the module size and in the worst case just add
-> > > the decompressed module size:
-> > > 
-> > > a) initial kernel_read*() call
-> > > b) optional module decompression
-> > > c) the actual module data copy we will keep
-> > > 
-> > > Duplicate module requests that come from userspace end up being
-> > > thrown
-> > > in the trash bin, as only one module will be allocated.  Although
-> > > there
-> > > are checks for a module prior to requesting a module udev still
-> > > doesn't
-> > > do the best of a job to avoid that and so we end up with tons of
-> > > duplicate module requests. We're talking about gigabytes of vmalloc
-> > > bytes just lost because of this for large systems and megabytes for
-> > > average systems. So for example with just 255 CPUs we can loose about
-> > > 13.58 GiB, and for 8 CPUs about 226.53 MiB.
-> > > 
-> > > I have patches to curtail 1/2 of that space by doing a check in
-> > > kernel
-> > > before we do the allocation in c) if the module is already present.
-> > > For
-> > > a) it is harder because userspace just passes a file descriptor. But
-> > > since we can get the file path without the vmalloc this RFC suggest
-> > > maybe we can add a new kernel_read*() for module loading where it
-> > > makes
-> > > sense to have only one read happen at a time.
-> > 
-> > I'm wondering how difficult it would be to just try to remove the
-> > vmallocs in (a) and (b) and operate on a list of pages.
+On Tue, Apr 18, 2023 at 09:45:52AM -0700, Suren Baghdasaryan wrote:
+> On Tue, Apr 18, 2023 at 8:48â€¯AM Peter Xu <peterx@redhat.com> wrote:
+> >
+> > On Tue, Apr 18, 2023 at 04:32:27PM +0100, Matthew Wilcox wrote:
+> > > ... when we called clone()?  A thread by definition has a reference to
+> > > its own mm.
+> >
+> > Ah yes.. thanks!
 > 
-> Yes I think it's worth long term to do that, if possible with seq reads.
+> re: I also had a quick look on do_exit() but I also didn't see where
+> do we e.g. wait for all the threads to stop before recycles a mm.
+> 
+> We recycle mm after all refcounts are dropped in the exit path:
+>   do_exit
+>     exit_mm
+>       mmput(if !mm->mm_users)
+>         mmdrop(if !mm->mm_count)
+>           free_mm
 
-OK here's what I suggest we do then:
+I assume Matthew means when the task_struct is created with part of
+kernel_clone().
 
-I'll resubmit the first patch which allows us to prove / disprove if
-module-autoloading is the culprit. With that in place folks can debug
-their setup and verify how udev is to blame.
+copy_mm() has:
 
-I'll drop the second kernel_read*() patch / effort and punt this as a
-userspace problem as this is also not extremely pressing.
+	if (clone_flags & CLONE_VM) {
+		mmget(oldmm);
+		mm = oldmm;
+	} else {
+		mm = dup_mm(tsk, current->mm);
+		if (!mm)
+			return -ENOMEM;
+	}
 
-Long term should evaluate how we can avoid vmalloc for the kread and
-module decompression.
+If CLONE_VM, we'll mmget() on the existing mm. If !CLONE_VM, we'll just
+create a new one with reference held.  For the latter, I think that hides
+in mm_init() where it'll just set it to 1:
 
-If this really becomes a pressing issue we can revisit if we want an in
-kernel solution, but at this point that likely would be systems with
-over 400-500 CPUs with KASAN enabled. Without KASAN the issue should
-eventually trigger if you're enablig modules but its hard to say at what
-point you'd hit this issue.
+	atomic_set(&mm->mm_users, 1);
 
-  Luis
+With mm_users>0, do_exit() will leave the mm_struct* alone since mmput()
+will still be called but not the final step on mmdrop().
+
+Thanks,
+
+-- 
+Peter Xu
+
