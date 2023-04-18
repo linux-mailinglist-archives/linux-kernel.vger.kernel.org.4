@@ -2,231 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF2B6E5969
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E5F6E5979
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjDRG2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 02:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
+        id S229734AbjDRGeM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 02:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjDRG2x (ORCPT
+        with ESMTP id S230093AbjDRGeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 02:28:53 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1950119;
-        Mon, 17 Apr 2023 23:28:51 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4edc0fb9cd0so190129e87.0;
-        Mon, 17 Apr 2023 23:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681799330; x=1684391330;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZOdz4WwFvClDdEK2CHpChDMbb40phaDol5nwMNd725k=;
-        b=oscPqOm/ZpiUKyu7rda8U7ifmN0+hWBhp3LUTAtlMCmzHuTdo60fKpvZpRsDKJPibu
-         jwBvTL3Evr2xYfT6jWBFkrTKaweJhMlzAQhS2l57au3IeUA4TEEzBAPUqBv0ibCi0nMk
-         Kik7lP/FzGLr2qe6pgjtqXBPUbDsLkfyappIZSv7cIpoylMHzLYwSaI9abjdfs8iDLyM
-         xlbs+YKvwQ+GcuoDjp2j52QwX3GMImBMN757RBI4lH+qqi4bw2lft7W9xM/AUvrzRAyo
-         xcl6egOat5HDvf7y4OHhv4hIDaizKYZ9JP26Ik9n/yxS4l/GQg391KGjuUqe40wERxiO
-         K8Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681799330; x=1684391330;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZOdz4WwFvClDdEK2CHpChDMbb40phaDol5nwMNd725k=;
-        b=auQ4hVO91wbNcF2DKdBdQuHeuSYLPLqHzT0/eKZvu77SKZtLgXCiADIBjfga1Bvkpb
-         bSyB+rG6MlnRjWniko0DxRm68xcdz+zJ4IfiJvmJAVBeZ/zctslhJA5RPOhzH2027AaD
-         fAdbb1uicdy5KTUPDmAYJ2ejB3XJFglEkvuV9c8PxnFqsrBhimSg8Qh/tE+8WoZY/hq/
-         rC4YpXoZzkJNgARzWQDlt3fXq8wpZHMjneTonATF2AF2rHGNjW6KI+edFwO9I/Lw7Z0J
-         wX4e4/7ZvJNf9ohcqwssWMdtiLlg6o9c9okB5NB7min2NWL/pWW+AScFbGktJW7zSnV+
-         d1Ng==
-X-Gm-Message-State: AAQBX9eKmGlGIUErCtUI28JTq+JCUgkrDotwEN5bYgp0JwSDtA8X0+Np
-        Tk4RaPW5zYJBQyjqI/Zihwg=
-X-Google-Smtp-Source: AKy350bPMj9HUy7PDo/KsiNeiuDSqJaWUlCDiikfgjX9ts0d42qo+U1eLtrmwd36a7V5PnV/pcLHWg==
-X-Received: by 2002:a05:651c:2111:b0:29d:6dd5:d712 with SMTP id a17-20020a05651c211100b0029d6dd5d712mr4630608ljq.2.1681799329701;
-        Mon, 17 Apr 2023 23:28:49 -0700 (PDT)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id 2-20020a2eb282000000b00298a8527806sm2459825ljx.93.2023.04.17.23.28.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 23:28:49 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 09:28:30 +0300
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Sagi Shahar <sagis@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [RFC PATCH 3/5] KVM: TDX: Add base implementation for
- tdx_vm_move_enc_context_from
-Message-ID: <20230418092830.00001bff.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230407201921.2703758-4-sagis@google.com>
-References: <20230407201921.2703758-1-sagis@google.com>
-        <20230407201921.2703758-4-sagis@google.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Tue, 18 Apr 2023 02:34:06 -0400
+Received: from baldur.buserror.net (baldur.buserror.net [165.227.176.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D4640C6
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:34:04 -0700 (PDT)
+Received: from [2601:447:c680:c050::4033]
+        by baldur.buserror.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <oss@buserror.net>)
+        id 1poeqP-00AZE6-WD; Tue, 18 Apr 2023 01:29:38 -0500
+Message-ID: <497c92b50103a4ba3469cd41edbd967ee9bfb291.camel@buserror.net>
+From:   Crystal Wood <oss@buserror.net>
+To:     Sean Anderson <sean.anderson@seco.com>,
+        Li Yang <leoyang.li@nxp.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Camelia Groza <camelia.groza@nxp.com>,
+        linux-kernel@vger.kernel.org, Roy Pledge <roy.pledge@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Madalin Bucur <madalin.bucur@nxp.com>
+Date:   Tue, 18 Apr 2023 01:29:36 -0500
+In-Reply-To: <3b707d1c-1120-274f-6cd6-b3283a334563@seco.com>
+References: <20230404145557.2356894-1-sean.anderson@seco.com>
+         <20230404145557.2356894-2-sean.anderson@seco.com>
+         <48dacc58c7c04ba8a005d8edd56744c8455f007e.camel@buserror.net>
+         <d4737c45-2bbf-d364-9768-20baa46f6af4@seco.com>
+         <3b707d1c-1120-274f-6cd6-b3283a334563@seco.com>
+Organization: Red Hat
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2601:447:c680:c050::4033
+X-SA-Exim-Rcpt-To: sean.anderson@seco.com, leoyang.li@nxp.com, linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com, camelia.groza@nxp.com, linux-kernel@vger.kernel.org, roy.pledge@nxp.com, davem@davemloft.net, madalin.bucur@nxp.com
+X-SA-Exim-Mail-From: oss@buserror.net
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v3 2/2] soc: fsl: qbman: Use raw spinlock for cgr_lock
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on baldur.buserror.net)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  7 Apr 2023 20:19:19 +0000
-Sagi Shahar <sagis@google.com> wrote:
-
-Is there any reaon that TDX doesn't need .vm_copy_enc_context_from? Or it is
-going to be deprecated? The patch comments needs to be refined according to
-Sean's KVM x86 maintainer book.
-
-> This should mostly match the logic in sev_vm_move_enc_context_from.
+On Tue, 2023-04-11 at 11:09 -0400, Sean Anderson wrote:
+> Hi Crystal,
 > 
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> ---
->  arch/x86/kvm/vmx/main.c    | 10 +++++++
->  arch/x86/kvm/vmx/tdx.c     | 56 ++++++++++++++++++++++++++++++++++++++
->  arch/x86/kvm/vmx/tdx.h     |  2 ++
->  arch/x86/kvm/vmx/x86_ops.h |  5 ++++
->  4 files changed, 73 insertions(+)
+> On 4/4/23 12:04, Sean Anderson wrote:
+> > On 4/4/23 11:33, Crystal Wood wrote:
+> > > On Tue, 2023-04-04 at 10:55 -0400, Sean Anderson wrote:
+> > > 
+> > > > @@ -1456,11 +1456,11 @@ static void tqm_congestion_task(struct
+> > > > work_struct
+> > > > *work)
+> > > >         union qm_mc_result *mcr;
+> > > >         struct qman_cgr *cgr;
+> > > >  
+> > > > -       spin_lock_irq(&p->cgr_lock);
+> > > > +       raw_spin_lock_irq(&p->cgr_lock);
+> > > >         qm_mc_start(&p->p);
+> > > >         qm_mc_commit(&p->p, QM_MCC_VERB_QUERYCONGESTION);
+> > > >         if (!qm_mc_result_timeout(&p->p, &mcr)) {
+> > > > -               spin_unlock_irq(&p->cgr_lock);
+> > > > +               raw_spin_unlock_irq(&p->cgr_lock);
+> > > 
+> > > qm_mc_result_timeout() spins with a timeout of 10 ms which is very
+> > > inappropriate for a raw lock.  What is the actual expected upper bound?
+> > 
+> > Hm, maybe we can move this qm_mc stuff outside cgr_lock? In most other
+> > places they're called without cgr_lock, which implies that its usage
+> > here is meant to synchronize against some other function.
 > 
-> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> index 5b64fe5404958..9d5d0ac465bf6 100644
-> --- a/arch/x86/kvm/vmx/main.c
-> +++ b/arch/x86/kvm/vmx/main.c
-> @@ -979,6 +979,14 @@ static int vt_vcpu_mem_enc_ioctl(struct kvm_vcpu *vcpu, void __user *argp)
->  	return tdx_vcpu_ioctl(vcpu, argp);
->  }
->  
-> +static int vt_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
-> +{
-> +	if (!is_td(kvm))
-> +		return -ENOTTY;
-> +
-> +	return tdx_vm_move_enc_context_from(kvm, source_fd);
-> +}
-> +
->  #define VMX_REQUIRED_APICV_INHIBITS		       \
->  (						       \
->         BIT(APICV_INHIBIT_REASON_DISABLE)|	       \
-> @@ -1141,6 +1149,8 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
->  	.dev_mem_enc_ioctl = tdx_dev_ioctl,
->  	.mem_enc_ioctl = vt_mem_enc_ioctl,
->  	.vcpu_mem_enc_ioctl = vt_vcpu_mem_enc_ioctl,
-> +
-> +	.vm_move_enc_context_from = vt_move_enc_context_from,
->  };
->  
->  struct kvm_x86_init_ops vt_init_ops __initdata = {
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index 8af7e4e81c860..0999a6d827c99 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -2826,3 +2826,59 @@ int __init tdx_init(void)
->  		INIT_LIST_HEAD(&per_cpu(associated_tdvcpus, cpu));
->  	return 0;
->  }
-> +
-> +static __always_inline bool tdx_guest(struct kvm *kvm)
-> +{
-> +	struct kvm_tdx *tdx_kvm = to_kvm_tdx(kvm);
-> +
-> +	return tdx_kvm->finalized;
-> +}
-> +
-> +static int tdx_migrate_from(struct kvm *dst, struct kvm *src)
-> +{
-> +	return -EINVAL;
-> +}
-> +
-> +int tdx_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
-> +{
-> +	struct kvm_tdx *dst_tdx = to_kvm_tdx(kvm);
-> +	struct file *src_kvm_file;
-> +	struct kvm_tdx *src_tdx;
-> +	struct kvm *src_kvm;
-> +	int ret;
-> +
-> +	src_kvm_file = fget(source_fd);
-> +	if (!file_is_kvm(src_kvm_file)) {
-> +		ret = -EBADF;
-> +		goto out_fput;
-> +	}
-> +	src_kvm = src_kvm_file->private_data;
-> +	src_tdx = to_kvm_tdx(src_kvm);
-> +
-> +	ret = pre_move_enc_context_from(kvm, src_kvm,
-> +					&dst_tdx->migration_in_progress,
-> +					&src_tdx->migration_in_progress);
-> +	if (ret)
-> +		goto out_fput;
-> +
-> +	if (tdx_guest(kvm) || !tdx_guest(src_kvm)) {
-> +		ret = -EINVAL;
-> +		goto out_post;
-> +	}
-> +
-> +	ret = tdx_migrate_from(kvm, src_kvm);
-> +	if (ret)
-> +		goto out_post;
-> +
-> +	kvm_vm_dead(src_kvm);
-> +	ret = 0;
-> +
-> +out_post:
-> +	post_move_enc_context_from(kvm, src_kvm,
-> +				 &dst_tdx->migration_in_progress,
-> +				 &src_tdx->migration_in_progress);
-> +out_fput:
-> +	if (src_kvm_file)
-> +		fput(src_kvm_file);
-> +	return ret;
-> +}
-> diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
-> index 71818c5001862..21b7e710be1fd 100644
-> --- a/arch/x86/kvm/vmx/tdx.h
-> +++ b/arch/x86/kvm/vmx/tdx.h
-> @@ -24,6 +24,8 @@ struct kvm_tdx {
->  	atomic_t tdh_mem_track;
->  
->  	u64 tsc_offset;
-> +
-> +	atomic_t migration_in_progress;
->  };
->  
->  union tdx_exit_reason {
-> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-> index d049e0c72ed0c..275f5d75e9bf1 100644
-> --- a/arch/x86/kvm/vmx/x86_ops.h
-> +++ b/arch/x86/kvm/vmx/x86_ops.h
-> @@ -187,6 +187,8 @@ int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp);
->  void tdx_flush_tlb(struct kvm_vcpu *vcpu);
->  int tdx_sept_tlb_remote_flush(struct kvm *kvm);
->  void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level);
-> +
-> +int tdx_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd);
->  #else
->  static inline int tdx_init(void) { return 0; };
->  static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -ENOSYS; }
-> @@ -241,6 +243,9 @@ static inline int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { ret
->  static inline void tdx_flush_tlb(struct kvm_vcpu *vcpu) {}
->  static inline int tdx_sept_tlb_remote_flush(struct kvm *kvm) { return 0; }
->  static inline void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level) {}
-> +
-> +static inline int tdx_vm_move_enc_context_from(struct kvm *kvm, u
-> +					       nsigned int source_fd) { return -EOPNOTSUPP; }
->  #endif
->  
->  #if defined(CONFIG_INTEL_TDX_HOST) && defined(CONFIG_KVM_SMM)
+> Do you have any suggestions here? I think this should really be handled
+> in a follow-up patch. If you think this code is waiting too long in a raw
+> spinlock, the existing code can wait just as long with IRQs disabled.
+> This patch doesn't change existing system responsiveness.
+
+Well, AFAICT it expands the situations in which it happens from configuration
+codepaths to stuff like congestion handling.  The proper fix would probably be
+to use some mechanism other than smp_call_function_single() to run code on the
+target cpu so that it can run with irqs enabled (or get confirmation that the
+actual worst case is short enough), but barring that I guess at least
+acknowledge the situation in a comment?
+
+-Crystal
 
