@@ -2,154 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C06A6E6C19
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DE46E6C1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232684AbjDRSax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57132 "EHLO
+        id S232686AbjDRSc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232604AbjDRSav (ORCPT
+        with ESMTP id S232149AbjDRScy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:30:51 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE389031;
-        Tue, 18 Apr 2023 11:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Y/wE/R9Dcq9B6NYciIuhBA/N45s6bRLmpBHThTjOxQg=; b=jc0q0X/Stu0gCYHzxjw2YLMSYK
-        g+4WCw/KVSVM7FtcywTLV3RGc6XplWnEgKfSo1u2tqgex5fiqgYrAgUQ7yeeveB70AXx3fWbE9wS0
-        T6EdB8GrRaz7IhwZ7cl23Z1grJoRtjp96PL8oV63XpK/YTv/FWlwuH4KCE/iljkVQZEkEL+eBMDxC
-        IhSL0b8zBkUVqVFgqg7N+saruwD3wcr0/6rswZ+fGmL6Y7YoFwZp6NIy1V/+aMxMyz3nOnZLORiv3
-        hhkyTmjiFTwA/qjEub0if7Bj/1PwzybfOo1akaTMPztJAYfzrwYTHL9mSop0tEsiUt+vRVOHTZOdg
-        VcXV7aeA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1poq68-0034Zx-1b;
-        Tue, 18 Apr 2023 18:30:36 +0000
-Date:   Tue, 18 Apr 2023 11:30:36 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, david@redhat.com,
-        patches@lists.linux.dev, linux-modules@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
-        prarit@redhat.com, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org
-Subject: Re: [PATCH v3 3/4] module: add debug stats to help identify memory
- pressure
-Message-ID: <ZD7hzIvJxFNDnzpU@bombadil.infradead.org>
-References: <20230414050836.1984746-1-mcgrof@kernel.org>
- <20230414050836.1984746-4-mcgrof@kernel.org>
- <6110982a-bb68-c88b-6fd1-24d2c49d9fd7@suse.com>
+        Tue, 18 Apr 2023 14:32:54 -0400
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EA659FE;
+        Tue, 18 Apr 2023 11:32:53 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id he13so21000890wmb.2;
+        Tue, 18 Apr 2023 11:32:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681842772; x=1684434772;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=38LQJYPWUqk2wm2FrKkjM2roC+rzVyedYiQ0NaT9neg=;
+        b=bn80a51UNOU9X3oxGpV3gMt8BgvgDLRkVyZThki4n4q09veFIasQ9/gP5kS4cvvrBQ
+         djZ+T7K6n7x56lK84xSBW6otzO/pTHS5JDHwjRPM1XGhYJbkpRtcTWS37fZPCu/Uooh5
+         CghFm9coYIWT8SCI6/zrEUjEWgUjUe+r9wZ8atHNSRTIRviA5C8IC6V7frR5gB17HxnY
+         1an4c9hsJGIo5gbA6+eWQSfI3tFbr/k+kWPHYvtbx51Mfagm7isXOl/J/43xWBtPtDmK
+         1aqUwowq4wXZ9CRjX7G9OLdwspFDaoyoMg2XUj74MQZ76t0QQDCx1lzxKfustZGw2q6+
+         kBXQ==
+X-Gm-Message-State: AAQBX9dx/2hiZF9T0xW80dCL/oaTTTPMnOfz1BzGZCYmLty2MJy7rSyx
+        U9u+j+avVaPLLgGLPdB2CV5QQW3V0lMj4Q==
+X-Google-Smtp-Source: AKy350Z2klkrkHGSTZin2XZE1doQmXIcxeHcXQuTn8gy15VXTc5xFj/K/Z7yXUb3r6k/PiKKqNW4Rw==
+X-Received: by 2002:a05:600c:3797:b0:3f1:7a18:942e with SMTP id o23-20020a05600c379700b003f17a18942emr2198775wmr.6.1681842771727;
+        Tue, 18 Apr 2023 11:32:51 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id f24-20020a7bcd18000000b003f09a9151c1sm15719667wmj.30.2023.04.18.11.32.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 11:32:50 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 18:32:47 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "longli@linuxonhyperv.com" <longli@linuxonhyperv.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Long Li <longli@microsoft.com>
+Subject: Re: [PATCH v2] Drivers: hv: move panic report code from vmbus to hv
+ early init code
+Message-ID: <ZD7iT/+Uil3jTuNO@liuwe-devbox-debian-v2>
+References: <1681435612-19282-1-git-send-email-longli@linuxonhyperv.com>
+ <BYAPR21MB1688377B56A9A844EAABEEDAD79E9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <ZD2dxHaq8NDzpfYw@liuwe-devbox-debian-v2>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6110982a-bb68-c88b-6fd1-24d2c49d9fd7@suse.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZD2dxHaq8NDzpfYw@liuwe-devbox-debian-v2>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 01:18:14PM +0200, Petr Pavlu wrote:
-> On 4/14/23 07:08, Luis Chamberlain wrote:
-
-<-- Petr's spell checking -->
-
-> Note that there are plenty of other typos in the added comments and
-> documentation. Please review them with a spell checker.
-
-Yes I am terrible at that, I've now integrated a spell checker into
-my workflow. Fixed all these, thanks.
-
-> > @@ -2500,6 +2503,18 @@ static noinline int do_init_module(struct module *mod)
-> >  {
-> >  	int ret = 0;
-> >  	struct mod_initfree *freeinit;
-> > +#if defined(CONFIG_MODULE_STATS)
-> > +	unsigned int text_size = 0, total_size = 0;
-> > +
-> > +	for_each_mod_mem_type(type) {
-> > +		const struct module_memory *mod_mem = &mod->mem[type];
-> > +		if (mod_mem->size) {
-> > +			total_size += mod_mem->size;
-> > +			if (type == MOD_TEXT || type == MOD_INIT_TEXT)
-> > +				text_size += mod->mem[type].size;
+On Mon, Apr 17, 2023 at 07:28:04PM +0000, Wei Liu wrote:
+> On Sat, Apr 15, 2023 at 06:16:11PM +0000, Michael Kelley (LINUX) wrote:
+> > From: longli@linuxonhyperv.com <longli@linuxonhyperv.com> Sent: Thursday, April 13, 2023 6:27 PM
+> > > 
+> > > The panic reporting code was added in commit 81b18bce48af
+> > > ("Drivers: HV: Send one page worth of kmsg dump over Hyper-V during panic")
+> > > 
+> > > It was added to the vmbus driver. The panic reporting has no dependence
+> > > on vmbus, and can be enabled at an earlier boot time when Hyper-V is
+> > > initialized.
+> > > 
+> > > This patch moves the panic reporting code out of vmbus. There is no
+> > > functionality changes. During moving, also refactored some cleanup
+> > > functions into hv_kmsg_dump_unregister(), and removed unused function
+> > > hv_alloc_hyperv_page().
+> > > 
+> > > Signed-off-by: Long Li <longli@microsoft.com>
+> > > ---
+> > > 
+> > > Change log v2:
+> > > 1. Check on hv_is_isolation_supported() before reporting crash dump
+> > > 2. Remove hyperv_report_reg(), inline the check condition instead
+> > > 3. Remove the test NULL on hv_panic_page when freeing it
+> > > 
+> > >  drivers/hv/hv.c                |  36 ------
+> > >  drivers/hv/hv_common.c         | 229 +++++++++++++++++++++++++++++++++
+> > >  drivers/hv/vmbus_drv.c         | 199 ----------------------------
+> > >  include/asm-generic/mshyperv.h |   1 -
+> > >  4 files changed, 229 insertions(+), 236 deletions(-)
+> > 
+> > Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 > 
-> 'text_size += mod_mem->size;' would be simpler.
+> Applied to hyperv-next. Thanks.
 
-Sure.
+This broke allmodconfig. I've removed it from the tree. Please fix and
+resend.
 
-> > +extern struct dentry *mod_debugfs_root;
-> 
-> Files kernel/module/stats.c and kernel/module/tracking.c both add this extern
-> declaration. Can it be moved to kernel/module/internal.h?
-
-Sure.
-
-> > +#if defined(CONFIG_MODULE_DECOMPRESS)
-> > +	if (flags & MODULE_INIT_COMPRESSED_FILE)
-> > +		atomic_long_add(info->compressed_len, &invalid_mod_byte);
-> 
-> Variable invalid_mod_byte is not declared, should be invalid_mod_bytes.
-
-Arnd already sent a fix for that, thanks.
-
-> > +int try_add_failed_module(const char *name, size_t len, enum fail_dup_mod_reason reason)
-> 
-> Function try_add_failed_module() is only called from
-> module_patient_check_exists() which always passes in a NUL-terminated string.
-> The len parameter could be then dropped and the comparison in
-> try_add_failed_module() could simply use strcmp().
-
-Sure, did that.
-
-> Indentation in try_add_failed_module() uses spaces instead of tabs in a few
-> places.
-
-Fixed.
-
-> > +	size = MAX_PREAMBLE + min((unsigned int)(floads + fbecoming) * MAX_BYTES_PER_MOD,
-> > +			  (unsigned int) MAX_FAILED_MOD_PRINT * MAX_BYTES_PER_MOD);
-> 
-> Using
-> 'size = MAX_PREAMBLE + min((unsigned int)(floads + fbecoming), (unsigned int)MAX_FAILED_MOD_PRINT) * MAX_BYTES_PER_MOD;'
-> is a bit simpler and avoids any theoretical overflow of
-> '(floads + fbecoming) * MAX_BYTES_PER_MOD'.
-
-Sure.
-
-> > +	len += scnprintf(buf + len, size - len, "%25s\t%15s\t%25s\n",
-> > +			 "module-name", "How-many-times", "Reason");
-> 
-> "module-name" -> "Module-name"
-
-OK sure.
-
-> Function module_stats_init() requires mod_debugfs_root being initialized which
-> is done in module_debugfs_init(). Both functions are recorded to be called via
-> module_init(). Just to make sure, is their ordering guaranteed in some way?
-
-Link order takes care of that and main.o goes first.
-
-> mod_debugfs_root is initialized in module_debugfs_init() only if
-> CONFIG_MODULE_DEBUG is set. However, my reading is that feature
-> CONFIG_MODULE_UNLOAD_TAINT_TRACKING is orthogonal to it and doesn't require
-> CONFIG_MODULE_DEBUG, so it looks this change breaks this tracking?
-
-Ah yes We need a bool CONFIG_MODULE_DEBUGFS which is selected by those
-that need it. Added.
-
-  Luis
+Thanks,
+Wei.
