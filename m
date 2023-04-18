@@ -2,85 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7ADC6E6B50
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:44:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E166E6B5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjDRRog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 13:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
+        id S231488AbjDRRsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 13:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjDRRof (ORCPT
+        with ESMTP id S229564AbjDRRr7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 13:44:35 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFA87AAC
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:44:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681839874; x=1713375874;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P6qbNqbkC5sAe3IO2jo5u4p0ONmYkpo1JHbsKLgdse4=;
-  b=edsTB8wfcgcXgaRRmJvnWkTamnW+oVD8najDca/uuelN2auOPPetBcY/
-   RzJp66h5ob1Hoc3I+Hs/AIXs8744wmMI0pvSLEd4P4uS3i1QjIG83lzUE
-   pnkDhcRNfKION0zc+SzR59Z1ZlqcIAgZLevTm7kafvkc2WWLH1fHaZWda
-   uX0QewWIc83RwDbem8jL3prmzA1pb8PHYabBZShJkiBLTwlGzbaobGElF
-   eEBH0IhHNtUZms2zHTYnHIcMFs48/ttaQnWuSWVJC7lIrbORxKhbRW1cW
-   zen5jq6kkcvnWuNsGxrH/M7Qo5FSyEv2QMTUJQSTTmyyBKtraDqpo9CYt
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="410471698"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="410471698"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 10:44:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="668650554"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="668650554"
-Received: from ashfaqur-mobl1.ger.corp.intel.com (HELO intel.com) ([10.251.213.178])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 10:44:29 -0700
-Date:   Tue, 18 Apr 2023 19:44:05 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Andi Shyti <andi.shyti@linux.intel.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Daniil Dulov <d.dulov@aladdin.ru>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        lvc-project@linuxtesting.org, David Airlie <airlied@linux.ie>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oak Zeng <oak.zeng@intel.com>,
-        Christian =?iso-8859-15?Q?K=F6nig?= <christian.koenig@amd.com>
-Subject: Re: [PATCH] drm/amdkfd: Fix potential deallocation of previously
- deallocated memory.
-Message-ID: <ZD7W5aaslOXLg707@ashyti-mobl2.lan>
-References: <20230418065521.453001-1-d.dulov@aladdin.ru>
- <ZD5ZFoEk92MNQpqD@ashyti-mobl2.lan>
- <d41669a1-9e18-defb-d0cc-d43d7be7d23e@kernel.org>
- <ZD7MgL619KVYKeTV@ashyti-mobl2.lan>
+        Tue, 18 Apr 2023 13:47:59 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E28F2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:47:57 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2a8a77f2e6fso22117441fa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:47:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681840076; x=1684432076;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v7VHOL3a4oNcSicrpU2wfqbXD01GJZHRcgPEysQrHBM=;
+        b=GNHSp2I09Zl9LB7eHbx0aGHUh6j+bHxHCQBbKwtzBWyzo2N11Jsm726VXDHHJSDn3v
+         sMONNacQwy4KU3tqw3rhhtFJKNXjYVpEtf7gUMS+KeQXJftXBOy5GAy0AYktN/IJpdeK
+         LM4zML8fpO9dG/kpJuSAvlPJRp4hEUxj1mXNktm2Eq6DZnhRZxL+K32qrnNCepTYL94K
+         c4TkDSZOe/g0QN2t5UFVVTPXDPQTiknB8OH7X0iJphWg1+M2eAyklkwuZ2KOG82ehPOq
+         lS5r9oHb9wffj9OdlbHJCSSYiqeqQe8UHRJGfLSvY4oPtYBBfqL4fYa0JdYgPLsZ05mi
+         LdLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681840076; x=1684432076;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v7VHOL3a4oNcSicrpU2wfqbXD01GJZHRcgPEysQrHBM=;
+        b=Mv0DB3Gl7ysdMeUenFXCPcICKMfzDL+raqAYqIuGSFCO+Che0OYTd6R7Xt79/5CNoG
+         UAO1gbKp//VGnTtrQ/CG6CUEyuXIYGTxjwa6mRQTWpbJpw6YCl+yvg0+CP6/2gmLH1JU
+         Ws+Wg2vEf47kgNiWeR4yO+8Xdi6hN00tTuVCylUfli297DmxeS+N3zQGjmeY6OrGDvJG
+         eg3qGt4ljp2uSKBfSYjXceijxhf1DZ6sl2Jqws7oK5iEO3QqTzY9UuaOBfLJ7dhR+Zyl
+         8kxZ+VvzQOH73Zj7yPv7aihe/EDw0532FYu+fvhxSkyVnReKzgzgwOhUBWo4wIb0fCsk
+         aEMw==
+X-Gm-Message-State: AAQBX9fo8BYDj8Qj0lNCc2LRSoYG29KCs88GvSzKw61e6EQrXyH+NV7O
+        0FQ56ets/XooYX0+4sAOhOA+XuFTCYeuOFSZMKShow==
+X-Google-Smtp-Source: AKy350bNqaOsyaRvGcKKCm/o8W3yzMR1UZvLTRhVbBxbRfe+NIbLPArG46ZFrQ8IfE30X0M+uvZtDukKkr1LXEzQtIU=
+X-Received: by 2002:ac2:5296:0:b0:4eb:f3d:94bf with SMTP id
+ q22-20020ac25296000000b004eb0f3d94bfmr3406470lfm.9.1681840075852; Tue, 18 Apr
+ 2023 10:47:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZD7MgL619KVYKeTV@ashyti-mobl2.lan>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230407201921.2703758-1-sagis@google.com> <20230407201921.2703758-4-sagis@google.com>
+ <20230418092830.00001bff.zhi.wang.linux@gmail.com>
+In-Reply-To: <20230418092830.00001bff.zhi.wang.linux@gmail.com>
+From:   Sagi Shahar <sagis@google.com>
+Date:   Tue, 18 Apr 2023 10:47:44 -0700
+Message-ID: <CAAhR5DFfgyGx9H-m4LE_L3zNmQZRyvmiWMYS1_sHxJihm3f0KA@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/5] KVM: TDX: Add base implementation for tdx_vm_move_enc_context_from
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Daniil will you look into this?
+On Mon, Apr 17, 2023 at 11:28=E2=80=AFPM Zhi Wang <zhi.wang.linux@gmail.com=
+> wrote:
+>
+> On Fri,  7 Apr 2023 20:19:19 +0000
+> Sagi Shahar <sagis@google.com> wrote:
+>
+> Is there any reaon that TDX doesn't need .vm_copy_enc_context_from? Or it=
+ is
+> going to be deprecated? The patch comments needs to be refined according =
+to
+> Sean's KVM x86 maintainer book.
 
-and, because this is a bug fix, if you do want to send a real
-fix, plase add to the commit message:
+To clarify, there are 2 types of migrations. live migration (between
+different hosts) and intra-host (between kvm instances in the same
+host) migration. This patchset deals with intra-host migration and
+doesn't add support for live migration.
 
-Fixes: d1f8f0d17d40 ("drm/amdkfd: Move non-sdma mqd allocation out of init_mqd")
-Cc: Oak Zeng <oak.zeng@intel.com>
-Cc: <stable@vger.kernel.org> # v5.3+
+vm_copy_enc_context_from is currently used for setting up the
+migration helper for SEV live migration and therefore it is currently
+not needed in this patcheset.
 
-Andi
-
-PS: please note that Oak's e-mail has changed.
+>
+> > This should mostly match the logic in sev_vm_move_enc_context_from.
+> >
+> > Signed-off-by: Sagi Shahar <sagis@google.com>
+> > ---
+> >  arch/x86/kvm/vmx/main.c    | 10 +++++++
+> >  arch/x86/kvm/vmx/tdx.c     | 56 ++++++++++++++++++++++++++++++++++++++
+> >  arch/x86/kvm/vmx/tdx.h     |  2 ++
+> >  arch/x86/kvm/vmx/x86_ops.h |  5 ++++
+> >  4 files changed, 73 insertions(+)
+> >
+> > diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> > index 5b64fe5404958..9d5d0ac465bf6 100644
+> > --- a/arch/x86/kvm/vmx/main.c
+> > +++ b/arch/x86/kvm/vmx/main.c
+> > @@ -979,6 +979,14 @@ static int vt_vcpu_mem_enc_ioctl(struct kvm_vcpu *=
+vcpu, void __user *argp)
+> >       return tdx_vcpu_ioctl(vcpu, argp);
+> >  }
+> >
+> > +static int vt_move_enc_context_from(struct kvm *kvm, unsigned int sour=
+ce_fd)
+> > +{
+> > +     if (!is_td(kvm))
+> > +             return -ENOTTY;
+> > +
+> > +     return tdx_vm_move_enc_context_from(kvm, source_fd);
+> > +}
+> > +
+> >  #define VMX_REQUIRED_APICV_INHIBITS                 \
+> >  (                                                   \
+> >         BIT(APICV_INHIBIT_REASON_DISABLE)|           \
+> > @@ -1141,6 +1149,8 @@ struct kvm_x86_ops vt_x86_ops __initdata =3D {
+> >       .dev_mem_enc_ioctl =3D tdx_dev_ioctl,
+> >       .mem_enc_ioctl =3D vt_mem_enc_ioctl,
+> >       .vcpu_mem_enc_ioctl =3D vt_vcpu_mem_enc_ioctl,
+> > +
+> > +     .vm_move_enc_context_from =3D vt_move_enc_context_from,
+> >  };
+> >
+> >  struct kvm_x86_init_ops vt_init_ops __initdata =3D {
+> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> > index 8af7e4e81c860..0999a6d827c99 100644
+> > --- a/arch/x86/kvm/vmx/tdx.c
+> > +++ b/arch/x86/kvm/vmx/tdx.c
+> > @@ -2826,3 +2826,59 @@ int __init tdx_init(void)
+> >               INIT_LIST_HEAD(&per_cpu(associated_tdvcpus, cpu));
+> >       return 0;
+> >  }
+> > +
+> > +static __always_inline bool tdx_guest(struct kvm *kvm)
+> > +{
+> > +     struct kvm_tdx *tdx_kvm =3D to_kvm_tdx(kvm);
+> > +
+> > +     return tdx_kvm->finalized;
+> > +}
+> > +
+> > +static int tdx_migrate_from(struct kvm *dst, struct kvm *src)
+> > +{
+> > +     return -EINVAL;
+> > +}
+> > +
+> > +int tdx_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_=
+fd)
+> > +{
+> > +     struct kvm_tdx *dst_tdx =3D to_kvm_tdx(kvm);
+> > +     struct file *src_kvm_file;
+> > +     struct kvm_tdx *src_tdx;
+> > +     struct kvm *src_kvm;
+> > +     int ret;
+> > +
+> > +     src_kvm_file =3D fget(source_fd);
+> > +     if (!file_is_kvm(src_kvm_file)) {
+> > +             ret =3D -EBADF;
+> > +             goto out_fput;
+> > +     }
+> > +     src_kvm =3D src_kvm_file->private_data;
+> > +     src_tdx =3D to_kvm_tdx(src_kvm);
+> > +
+> > +     ret =3D pre_move_enc_context_from(kvm, src_kvm,
+> > +                                     &dst_tdx->migration_in_progress,
+> > +                                     &src_tdx->migration_in_progress);
+> > +     if (ret)
+> > +             goto out_fput;
+> > +
+> > +     if (tdx_guest(kvm) || !tdx_guest(src_kvm)) {
+> > +             ret =3D -EINVAL;
+> > +             goto out_post;
+> > +     }
+> > +
+> > +     ret =3D tdx_migrate_from(kvm, src_kvm);
+> > +     if (ret)
+> > +             goto out_post;
+> > +
+> > +     kvm_vm_dead(src_kvm);
+> > +     ret =3D 0;
+> > +
+> > +out_post:
+> > +     post_move_enc_context_from(kvm, src_kvm,
+> > +                              &dst_tdx->migration_in_progress,
+> > +                              &src_tdx->migration_in_progress);
+> > +out_fput:
+> > +     if (src_kvm_file)
+> > +             fput(src_kvm_file);
+> > +     return ret;
+> > +}
+> > diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
+> > index 71818c5001862..21b7e710be1fd 100644
+> > --- a/arch/x86/kvm/vmx/tdx.h
+> > +++ b/arch/x86/kvm/vmx/tdx.h
+> > @@ -24,6 +24,8 @@ struct kvm_tdx {
+> >       atomic_t tdh_mem_track;
+> >
+> >       u64 tsc_offset;
+> > +
+> > +     atomic_t migration_in_progress;
+> >  };
+> >
+> >  union tdx_exit_reason {
+> > diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
+> > index d049e0c72ed0c..275f5d75e9bf1 100644
+> > --- a/arch/x86/kvm/vmx/x86_ops.h
+> > +++ b/arch/x86/kvm/vmx/x86_ops.h
+> > @@ -187,6 +187,8 @@ int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __us=
+er *argp);
+> >  void tdx_flush_tlb(struct kvm_vcpu *vcpu);
+> >  int tdx_sept_tlb_remote_flush(struct kvm *kvm);
+> >  void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_=
+level);
+> > +
+> > +int tdx_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_=
+fd);
+> >  #else
+> >  static inline int tdx_init(void) { return 0; };
+> >  static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { re=
+turn -ENOSYS; }
+> > @@ -241,6 +243,9 @@ static inline int tdx_vcpu_ioctl(struct kvm_vcpu *v=
+cpu, void __user *argp) { ret
+> >  static inline void tdx_flush_tlb(struct kvm_vcpu *vcpu) {}
+> >  static inline int tdx_sept_tlb_remote_flush(struct kvm *kvm) { return =
+0; }
+> >  static inline void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_=
+hpa, int root_level) {}
+> > +
+> > +static inline int tdx_vm_move_enc_context_from(struct kvm *kvm, u
+> > +                                            nsigned int source_fd) { r=
+eturn -EOPNOTSUPP; }
+> >  #endif
+> >
+> >  #if defined(CONFIG_INTEL_TDX_HOST) && defined(CONFIG_KVM_SMM)
+>
