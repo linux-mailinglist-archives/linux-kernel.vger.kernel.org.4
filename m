@@ -2,161 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C62F6E57CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 05:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEABB6E57C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 05:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjDRDTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 23:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S230189AbjDRDSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 23:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbjDRDTI (ORCPT
+        with ESMTP id S230053AbjDRDSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 23:19:08 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868CF558D
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 20:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681787939; x=1713323939;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=gT+D5YtuQoJ6bOdWxtXhnLJmmnVqK24v1D+Tt8JeRnY=;
-  b=Hz13J3lKYa7NVwDWS0m1mZnaUAyoMCC5MZsUhhB+E4dlV+XdWYhqMOo3
-   T/T7Re2Mu1aZF4C8LvCwQet5BWFMccN5un1v/PrVKiFPNlLstlFGt9H5K
-   /1H2IrgNt4i+rIEvcaDD7gIRNCVZABIonmXF9razW2QJc7phL313g4IQk
-   UpFpmMOjsqA9NpAqvJPxoe0VZAPrUfp1Jnh7yJB1JqZxARwUG1Krnw1jc
-   Azh3+ubG4xwjU1b7119/y31xBR4DmHcT4G2vtzyc4L/NWgrXmVCYWh6ix
-   onurRLDSH58/rxKbEdeumrltXi40mjMSdv8o+xWl8hC1XQZ6fV6IIWiH9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="345061344"
-X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
-   d="scan'208";a="345061344"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 20:18:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="780352365"
-X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
-   d="scan'208";a="780352365"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 20:18:56 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel test robot <yujie.liu@intel.com>,
-        "Mel Gorman" <mgorman@techsingularity.net>,
-        Hugh Dickins <hughd@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH] mm,unmap: avoid flushing TLB in batch if PTE is
- inaccessible
-References: <20230410075224.827740-1-ying.huang@intel.com>
-        <402A3E9D-5136-4747-91FF-C3AA2D557784@vmware.com>
-        <87zg7f19xu.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <D432368D-7E3F-47C8-8BE3-A0D11BC6EA2D@vmware.com>
-        <87sfd5zx5b.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <03BCE979-33B1-486F-A969-0475A35DEBB5@vmware.com>
-Date:   Tue, 18 Apr 2023 11:17:52 +0800
-In-Reply-To: <03BCE979-33B1-486F-A969-0475A35DEBB5@vmware.com> (Nadav Amit's
-        message of "Wed, 12 Apr 2023 17:00:49 +0000")
-Message-ID: <87a5z5vpy7.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 17 Apr 2023 23:18:35 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D1E19A7;
+        Mon, 17 Apr 2023 20:18:34 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [7.221.188.120])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Q0pyG74F3zKsPW;
+        Tue, 18 Apr 2023 11:17:42 +0800 (CST)
+Received: from M910t (10.110.54.157) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 18 Apr
+ 2023 11:18:31 +0800
+Date:   Tue, 18 Apr 2023 11:18:16 +0800
+From:   Changbin Du <changbin.du@huawei.com>
+To:     Changbin Du <changbin.du@huawei.com>
+CC:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Hui Wang <hw.huiwang@huawei.com>
+Subject: Re: [PATCH v5 0/2] perf script: Have consistent output for symbol
+ address
+Message-ID: <20230418031816.cm7yzbnvfonwdoub@M910t>
+References: <20230418031519.1261310-1-changbin.du@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230418031519.1261310-1-changbin.du@huawei.com>
+X-Originating-IP: [10.110.54.157]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nadav Amit <namit@vmware.com> writes:
+oops, I missed one patch. please ignore this.
 
->> On Apr 11, 2023, at 6:50 PM, Huang, Ying <ying.huang@intel.com> wrote:
->>=20
->> !! External Email
->>=20
->> Nadav Amit <namit@vmware.com> writes:
->>=20
->>>> On Apr 10, 2023, at 6:31 PM, Huang, Ying <ying.huang@intel.com> wrote:
->>>>=20
->>>> !! External Email
->>>>=20
->>>> Hi, Amit,
->>>>=20
->>>> Thank you very much for review!
->>>>=20
->>>> Nadav Amit <namit@vmware.com> writes:
->>>>=20
->>>>>> On Apr 10, 2023, at 12:52 AM, Huang Ying <ying.huang@intel.com> wrot=
-e:
->>>>>>=20
->>>>>> 0Day/LKP reported a performance regression for commit
->>>>>> 7e12beb8ca2a ("migrate_pages: batch flushing TLB"). In the commit, t=
-he
->>>>>> TLB flushing during page migration is batched.  So, in
->>>>>> try_to_migrate_one(), ptep_clear_flush() is replaced with
->>>>>> set_tlb_ubc_flush_pending().  In further investigation, it is found
->>>>>> that the TLB flushing can be avoided in ptep_clear_flush() if the PTE
->>>>>> is inaccessible.  In fact, we can optimize in similar way for the
->>>>>> batched TLB flushing too to improve the performance.
->>>>>>=20
->>>>>> So in this patch, we check pte_accessible() before
->>>>>> set_tlb_ubc_flush_pending() in try_to_unmap/migrate_one().  Tests sh=
-ow
->>>>>> that the benchmark score of the anon-cow-rand-mt test case of
->>>>>> vm-scalability test suite can improve up to 2.1% with the patch on a
->>>>>> Intel server machine.  The TLB flushing IPI can reduce up to 44.3%.
->>>>>=20
->>>>> LGTM.
->>>>=20
->>>> Thanks!
->>>>=20
->>>>> I know it=E2=80=99s meaningless for x86 (but perhaps ARM would use th=
-is infra
->>>>> too): do we need smp_mb__after_atomic() after ptep_get_and_clear() and
->>>>> before pte_accessible()?
->>>>=20
->>>> Why do we need the memory barrier?  IIUC, the PTL is locked, so PTE
->>>> value will not be changed under us.  Anything else?
->>>=20
->>> I was thinking about the ordering with respect to
->>> atomic_read(&mm->tlb_flush_pending), which is not protected by the PTL.
->>> I guess you can correctly argue that because of other control-flow
->>> dependencies, the barrier is not necessary.
->>=20
->> For ordering between ptep_get_and_clear() and
->> atomic_read(&mm->tlb_flush_pending), I think PTL has provided the
->> necessary protection already.  The code path to write
->> mm->tlb_flush_pending is,
->>=20
->>  tlb_gather_mmu
->>    inc_tlb_flush_pending       a)
->>  lock PTL
->>  change PTE                    b)
->>  unlock PTL
->>  tlb_finish_mmu
->>    dec_tlb_flush_pending       c)
->>=20
->> While code path of try_to_unmap/migrate_one is,
->>=20
->>  lock PTL
->>  read and change PTE           d)
->>  read mm->tlb_flush_pending    e)
->>  unlock PTL
->>=20
->> Even if e) occurs before d), they cannot occur at the same time of b).
->> Do I miss anything?
->
-> You didn=E2=80=99t miss anything. I went over the comment on
-> inc_tlb_flush_pending() and you follow the scheme.
+On Tue, Apr 18, 2023 at 11:15:17AM +0800, Changbin Du wrote:
+> The goal of this change is to achieve consistent output for symbol address.
+> Before this, the raw ip is printed for non-callchain and dso offset for
+> callchain. Mostly what we expect is the raw ip.
+> 
+> This patch does two changes:
+>   - Always print raw ip for resolved symbols.
+>   - Add a new 'dsoff' field if we really need the dso offset, and the
+>     offset is appended to dso name.
+> 
+> v5:
+>   o add helper map__fprintf_dsoname_dsoff() to eliminate repeated dso printing code. (Adrian)
+>   o do not print offset for kernel dso (a.k.a [kernel.kallsyms])
+> v4:
+>   o also print 'dsoff' for brstack,brstacksym,brstackoff,etc.
+> v3:
+>   o 'dsoff' implys 'dso' field. (Namhyung)
+> v2:
+>   o split into two patches. (Adrian)
+>   o do not print offset for unresolved symbols. (Adrian)
+> 
+> Changbin Du (2):
+>   perf: add helper map__fprintf_dsoname_dsoff
+>   perf: script: add new output field 'dsoff' to print dso offset
+> 
+>  tools/perf/Documentation/perf-script.txt |  2 +-
+>  tools/perf/builtin-script.c              | 60 ++++++++++--------------
+>  tools/perf/util/evsel_fprintf.c          | 16 +++----
+>  tools/perf/util/evsel_fprintf.h          |  1 +
+>  tools/perf/util/map.c                    | 13 +++++
+>  tools/perf/util/map.h                    |  1 +
+>  6 files changed, 46 insertions(+), 47 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
 
-Thanks!  Can I get your acked-by or reviewed-by for this patch?
-
-Best Regards,
-Huang, Ying
+-- 
+Cheers,
+Changbin Du
