@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273EB6E683B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EC76E6816
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232354AbjDRPcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 11:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
+        id S232163AbjDRPaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 11:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbjDRPcK (ORCPT
+        with ESMTP id S230423AbjDRP3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:32:10 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2C3125B1;
-        Tue, 18 Apr 2023 08:32:08 -0700 (PDT)
-Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33IBHK90013970;
-        Tue, 18 Apr 2023 15:31:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=pps0720;
- bh=dAIIzQaU+Kiqn9GnVIQkPXlXHdyWvMYyRuSKEZVxqpw=;
- b=eV8QatR6OZ46jcsfGDjYtnEm3WWs6/ECPhsgN9abctszN66wrieQLuMwybL+uqlUhguS
- sgZaT1R6YFi0+pb1kEYFt4TNZWSgh0fVHQxNK8tBUviIBksoX9caiS4xgyAsi6WOD12W
- nztcq9y8egggARHhODm9vj/CWxHMUNtZNw5imSiiEhE837mQXiy0r5Rdv/PyFRPne4Js
- JE1oBGUCz/ATP8qmEuv//LMevgTB9FHjgZ8UIWbOdWc04o6JxWw138m6MuDIZZukJdVI
- OJ8MIlMRiXFREPeGimH3gFmDCgdSbuXl7SDRwBu3kz9BSnW3ywAa02XtR7vt0hklzVxr zQ== 
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3q1t6pj428-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 15:31:42 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 18 Apr 2023 11:29:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8191E60
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:29:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681831740;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xy2baqViLPQFaV+ePofs2RF21rT4D1RwTBQ+hV2mFL0=;
+        b=TxJ9PGukBKKBzTCTzQv0WEbOBYXu3Q19jm/Pvvg4Nm9ThjgcxQe7YC7+Af+TRhKPSx87lb
+        l87lpsWm7bTlF2eC7qrjIUQ4uI6h1Z3m5ULXHR6yGvLiuJYDxRonLMxRDN1i33SZLisZln
+        +2xsmDeuT1IsMtChvkcTH3q2FouuJmI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-1Y5Vri3MOPCaoatnNYVwXg-1; Tue, 18 Apr 2023 11:28:56 -0400
+X-MC-Unique: 1Y5Vri3MOPCaoatnNYVwXg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 8726913059;
-        Tue, 18 Apr 2023 15:31:41 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 8AD4B81532D;
-        Tue, 18 Apr 2023 15:31:40 +0000 (UTC)
-From:   nick.hawkins@hpe.com
-To:     verdun@hpe.com, nick.hawkins@hpe.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jdelvare@suse.com,
-        linux@roeck-us.net, linux@armlinux.org.uk,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v1 9/9] MAINTAINERS: hpe: Add GPIO, PSU
-Date:   Tue, 18 Apr 2023 10:28:24 -0500
-Message-Id: <20230418152824.110823-10-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230418152824.110823-1-nick.hawkins@hpe.com>
-References: <20230418152824.110823-1-nick.hawkins@hpe.com>
-X-Proofpoint-GUID: D-5jxxe18OTKk68YzM-A06-LVUnk68gS
-X-Proofpoint-ORIG-GUID: D-5jxxe18OTKk68YzM-A06-LVUnk68gS
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-18_11,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- impostorscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 mlxlogscore=999
- priorityscore=1501 adultscore=0 suspectscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304180132
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 12B78889059;
+        Tue, 18 Apr 2023 15:28:54 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.194.149])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C7EB914152F6;
+        Tue, 18 Apr 2023 15:28:50 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stefan Roesch <shr@devkernel.io>,
+        Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH v1 0/3] mm/ksm: improve PR_SET_MEMORY_MERGE=0 handling and cleanup disabling KSM
+Date:   Tue, 18 Apr 2023 17:28:46 +0200
+Message-Id: <20230418152849.505124-1-david@redhat.com>
+In-Reply-To: <20230418051342.1919757-1-shr@devkernel.io>
+References: <20230418051342.1919757-1-shr@devkernel.io>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,39 +73,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+This is a follow-up to [1]:
+	[PATCH v9 0/3] mm: process/cgroup ksm support
 
-List the files added for GPIO and PSU support.
+which is not in mm-unstable yet (but soon? :) ). I'll be on vacation for
+~2 weeks, so sending it out now as reply to [1].
 
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
----
- MAINTAINERS | 4 ++++
- 1 file changed, 4 insertions(+)
+(1) Make PR_SET_MEMORY_MERGE=0 unmerge pages like setting MADV_UNMERGEABLE
+does, (2) add a selftest for it and (3) factor out disabling of KSM from
+s390/gmap code.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a3b14ec33830..6df959ebf523 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2239,7 +2239,9 @@ M:	Nick Hawkins <nick.hawkins@hpe.com>
- S:	Maintained
- F:	Documentation/hwmon/gxp-fan-ctrl.rst
- F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
-+F:	Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
- F:	Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
-+F:	Documentation/devicetree/bindings/hwmon/hpe,gxp-psu.yaml
- F:	Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
- F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
- F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
-@@ -2247,7 +2249,9 @@ F:	arch/arm/boot/dts/hpe-bmc*
- F:	arch/arm/boot/dts/hpe-gxp*
- F:	arch/arm/mach-hpe/
- F:	drivers/clocksource/timer-gxp.c
-+F:	drivers/gpio/gpio-gxp.c
- F:	drivers/hwmon/gxp-fan-ctrl.c
-+F:	drivers/hwmon/gxp-psu.c
- F:	drivers/i2c/busses/i2c-gxp.c
- F:	drivers/spi/spi-gxp.c
- F:	drivers/watchdog/gxp-wdt.c
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Stefan Roesch <shr@devkernel.io>
+Cc: Rik van Riel <riel@surriel.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc: Janosch Frank <frankja@linux.ibm.com>
+Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>
+
+[1] https://lkml.kernel.org/r/20230418051342.1919757-1-shr@devkernel.io
+
+David Hildenbrand (3):
+  mm/ksm: unmerge and clear VM_MERGEABLE when setting
+    PR_SET_MEMORY_MERGE=0
+  selftests/ksm: ksm_functional_tests: add prctl unmerge test
+  mm/ksm: move disabling KSM from s390/gmap code to KSM code
+
+ arch/s390/mm/gmap.c                           | 20 +------
+ include/linux/ksm.h                           |  7 +++
+ kernel/sys.c                                  |  7 +--
+ mm/ksm.c                                      | 58 +++++++++++++++++++
+ .../selftests/mm/ksm_functional_tests.c       | 46 +++++++++++++--
+ 5 files changed, 107 insertions(+), 31 deletions(-)
+
 -- 
-2.17.1
+2.39.2
 
