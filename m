@@ -2,178 +2,614 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318EE6E5F49
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3566E5F51
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjDRLEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 07:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
+        id S231138AbjDRLHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 07:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjDRLEs (ORCPT
+        with ESMTP id S230482AbjDRLHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 07:04:48 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C7F55BB
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:04:46 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-7606d455e4cso476118339f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:04:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681815886; x=1684407886;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JlJ5emJe9Z4EQ3vuIj9HxGmuBXyF49i+IhR55CYXeMo=;
-        b=FzPE9K7VIGKQPKxNLs2fvwgYeeXeyLIAazsC7j82lBmDAtR3V/XkmrmRgHC3DVrw9u
-         pffUdkq0mrTzV/UfBK7W44MYNewtrrLQdBRoLe2TURIOKh+9HZ2OQYcl8wc9cQl84q1Q
-         r+2k5tHcBIkGx85FMDFBEorZpaXEvLh0+ZxRHNn9p6ha7F7J5PwqgSEuAn5WBSJLcZPS
-         REjmzSrlp2j4PcY8tkk105XklBVntFYiQL7o7Zs/WVT431aD3UQmpYB91GB6Gr19rw6g
-         Ph+vm+DEN8UpmQgUvRGTkPIIlChN/mTQW7eEUjh8MYpOJnDoG5AW349beC8Ix7u/GjzI
-         oP4Q==
-X-Gm-Message-State: AAQBX9egQ43mrOC8cRPrkYBjLOjrf+8M91+umEGewogLfpeTMqfyij+s
-        Op4BovaXlrdsrDqCzxYMakQ/lb58Nx0eWI3Yhh02QUame0kd
-X-Google-Smtp-Source: AKy350axwh0zVYk7nmeGYiiC2CPgUtunmZSEmOCvPG9Fl0AHbaGF1T8isxd5gJhb/6LdkbbEIvSxf+ol62mRyEfgK9VeploLFYFj
+        Tue, 18 Apr 2023 07:07:10 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DBA5F7ED1;
+        Tue, 18 Apr 2023 04:07:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 378C2168F;
+        Tue, 18 Apr 2023 04:07:48 -0700 (PDT)
+Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE3963F5A1;
+        Tue, 18 Apr 2023 04:07:02 -0700 (PDT)
+Message-ID: <122f0599-0ed4-6753-ef7a-5fed5c50fa1b@arm.com>
+Date:   Tue, 18 Apr 2023 12:07:01 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a02:7a50:0:b0:40b:d54d:e5bf with SMTP id
- z16-20020a027a50000000b0040bd54de5bfmr1147402jad.1.1681815885805; Tue, 18 Apr
- 2023 04:04:45 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 04:04:45 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000739c9f05f99a46d7@google.com>
-Subject: [syzbot] [fs?] [mm?] general protection fault in folio_wait_stable
-From:   syzbot <syzbot+d1ae544e6e9dc29bcba5@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] perf: arm_cspmu: Separate Arm and vendor module
+Content-Language: en-US
+To:     Besar Wicaksono <bwicaksono@nvidia.com>, catalin.marinas@arm.com,
+        will@kernel.org, mark.rutland@arm.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, treding@nvidia.com,
+        jonathanh@nvidia.com, vsethi@nvidia.com, rwiley@nvidia.com,
+        efunsten@nvidia.com
+References: <20230418062030.45620-1-bwicaksono@nvidia.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20230418062030.45620-1-bwicaksono@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 18/04/2023 07:20, Besar Wicaksono wrote:
+> Arm Coresight PMU driver consists of main standard code and vendor
+> backend code. Both are currently built as a single module.
+> This patch adds vendor registration API to separate the two to
+> keep things modular. Vendor module shall register to the main
+> module on loading and trigger device reprobe.
+> 
+> Signed-off-by: Besar Wicaksono <bwicaksono@nvidia.com>
+> ---
+> 
+> Changes from v1:
+>   * Added separate Kconfig entry for nvidia backend
+>   * Added lock to protect accesses to the lists
+>   * Added support for matching subset devices from a vendor
+>   * Added state tracking to avoid reprobe when a device is in use
+> v1: ttps://lore.kernel.org/linux-arm-kernel/20230403163905.20354-1-bwicaksono@nvidia.com/T/#u
+> 
+> ---
+>   drivers/perf/arm_cspmu/Kconfig        |   9 +-
+>   drivers/perf/arm_cspmu/Makefile       |   6 +-
+>   drivers/perf/arm_cspmu/arm_cspmu.c    | 280 +++++++++++++++++++++++---
+>   drivers/perf/arm_cspmu/arm_cspmu.h    |  32 ++-
+>   drivers/perf/arm_cspmu/nvidia_cspmu.c |  39 +++-
+>   drivers/perf/arm_cspmu/nvidia_cspmu.h |  17 --
+>   6 files changed, 325 insertions(+), 58 deletions(-)
+>   delete mode 100644 drivers/perf/arm_cspmu/nvidia_cspmu.h
+> 
+> diff --git a/drivers/perf/arm_cspmu/Kconfig b/drivers/perf/arm_cspmu/Kconfig
+> index 0b316fe69a45..8ce7b45a0075 100644
+> --- a/drivers/perf/arm_cspmu/Kconfig
+> +++ b/drivers/perf/arm_cspmu/Kconfig
+> @@ -1,6 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   #
+> -# Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+> +# Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+>   
+>   config ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU
+>   	tristate "ARM Coresight Architecture PMU"
+> @@ -11,3 +11,10 @@ config ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU
+>   	  based on ARM CoreSight PMU architecture. Note that this PMU
+>   	  architecture does not have relationship with the ARM CoreSight
+>   	  Self-Hosted Tracing.
+> +
+> +config NVIDIA_CORESIGHT_PMU_ARCH_SYSTEM_PMU
+> +	tristate "NVIDIA Coresight Architecture PMU"
+> +	depends on ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU
+> +	help
+> +	  Provides NVIDIA specific attributes for performance monitoring unit
+> +	  (PMU) devices based on ARM CoreSight PMU architecture.
+> diff --git a/drivers/perf/arm_cspmu/Makefile b/drivers/perf/arm_cspmu/Makefile
+> index fedb17df982d..f8ae22411d59 100644
+> --- a/drivers/perf/arm_cspmu/Makefile
+> +++ b/drivers/perf/arm_cspmu/Makefile
+> @@ -1,6 +1,6 @@
+> -# Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+> +# Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+>   #
+>   # SPDX-License-Identifier: GPL-2.0
+>   
+> -obj-$(CONFIG_ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU) += arm_cspmu_module.o
+> -arm_cspmu_module-y := arm_cspmu.o nvidia_cspmu.o
+> +obj-$(CONFIG_ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU) += arm_cspmu.o
+> +obj-$(CONFIG_NVIDIA_CORESIGHT_PMU_ARCH_SYSTEM_PMU) += nvidia_cspmu.o
+> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
+> index e31302ab7e37..c55ea2b74454 100644
+> --- a/drivers/perf/arm_cspmu/arm_cspmu.c
+> +++ b/drivers/perf/arm_cspmu/arm_cspmu.c
+> @@ -16,7 +16,7 @@
+>    * The user should refer to the vendor technical documentation to get details
+>    * about the supported events.
+>    *
+> - * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+> + * Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+>    *
+>    */
+>   
+> @@ -25,13 +25,14 @@
+>   #include <linux/ctype.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/io-64-nonatomic-lo-hi.h>
+> +#include <linux/list.h>
+>   #include <linux/module.h>
+> +#include <linux/mutex.h>
+>   #include <linux/perf_event.h>
+>   #include <linux/platform_device.h>
+>   #include <acpi/processor.h>
+>   
+>   #include "arm_cspmu.h"
+> -#include "nvidia_cspmu.h"
+>   
+>   #define PMUNAME "arm_cspmu"
+>   #define DRVNAME "arm-cs-arch-pmu"
+> @@ -117,11 +118,52 @@
+>    */
+>   #define HILOHI_MAX_POLL	1000
+>   
+> -/* JEDEC-assigned JEP106 identification code */
+> -#define ARM_CSPMU_IMPL_ID_NVIDIA		0x36B
+> -
+>   static unsigned long arm_cspmu_cpuhp_state;
+>   
+> +/* List of Coresight PMU instances in the system. */
+> +static LIST_HEAD(arm_cspmus);
+> +
+> +/* List of registered vendor backends. */
+> +static LIST_HEAD(arm_cspmu_impls);
+> +
+> +static DEFINE_MUTEX(arm_cspmu_lock);
+> +
+> +/*
+> + * State of the generic driver.
+> + * 0 => registering backend.
+> + * 1 => ready to use.
+> + * 2 or more => in use.
+> + */
+> +#define ARM_CSPMU_STATE_REG	0
+> +#define ARM_CSPMU_STATE_READY	1
+> +static atomic_t arm_cspmu_state;
+> +
+> +static void arm_cspmu_state_ready(void)
+> +{
+> +	atomic_set(&arm_cspmu_state, ARM_CSPMU_STATE_READY);
+> +}
+> +
+> +static bool try_arm_cspmu_state_reg(void)
+> +{
+> +	const int old = ARM_CSPMU_STATE_READY;
+> +	const int new = ARM_CSPMU_STATE_REG;
+> +
+> +	return atomic_cmpxchg(&arm_cspmu_state, old, new) == old;
+> +}
+> +
+> +static bool try_arm_cspmu_state_get(void)
+> +{
+> +	return atomic_inc_not_zero(&arm_cspmu_state);
+> +}
+> +
+> +static void arm_cspmu_state_put(void)
+> +{
+> +	int ret;
+> +
+> +	ret = atomic_dec_if_positive(&arm_cspmu_state);
+> +	WARN_ON(ret < 0);
+> +}
+> +
 
-syzbot found the following issue on:
+As long as the vendor module is set for the PMU instance, it won't be 
+unloaded as long as there are any perf events and thus the specific
+driver cannot be unloaded. So, you don't need explicit refcount
+maintenance for each pmu callbacks.
 
-HEAD commit:    4aa1da8d9972 Add linux-next specific files for 20230417
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13b08dc0280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3e1a2e42c883f5b6
-dashboard link: https://syzkaller.appspot.com/bug?extid=d1ae544e6e9dc29bcba5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>   /*
+>    * In CoreSight PMU architecture, all of the MMIO registers are 32-bit except
+>    * counter register. The counter register can be implemented as 32-bit or 64-bit
+> @@ -380,26 +422,161 @@ static struct attribute_group arm_cspmu_cpumask_attr_group = {
+>   };
+>   
+>   struct impl_match {
+> -	u32 pmiidr;
+> -	u32 mask;
+> -	int (*impl_init_ops)(struct arm_cspmu *cspmu);
+> +	struct list_head next;
+> +	struct arm_cspmu_impl_param param;
+>   };
+>   
+> -static const struct impl_match impl_match[] = {
+> -	{
+> -	  .pmiidr = ARM_CSPMU_IMPL_ID_NVIDIA,
+> -	  .mask = ARM_CSPMU_PMIIDR_IMPLEMENTER,
+> -	  .impl_init_ops = nv_cspmu_init_ops
+> -	},
+> -	{}
+> -};
+> +static struct arm_cspmu_impl_param to_impl_param(const struct arm_cspmu *cspmu)
+> +{
+> +	struct arm_cspmu_impl_param ret = {0};
+> +	u32 pmiidr = cspmu->impl.pmiidr;
+> +
+> +	ret.impl_id = FIELD_GET(ARM_CSPMU_PMIIDR_IMPLEMENTER, pmiidr);
+> +	ret.pvr = FIELD_GET(ARM_CSPMU_PMIIDR_PVR, pmiidr);
+> +	ret.pvr_mask = GENMASK(31, 0);
+> +
+> +	return ret;
+> +}
+> +
+> +static bool impl_param_match(const struct arm_cspmu_impl_param *A,
+> +			     const struct arm_cspmu_impl_param *B)
+> +{
+> +	/*
+> +	 * Match criteria:
+> +	 * - Implementer id should match.
+> +	 * - A's device id is within B's range, or vice versa. This allows
+> +	 *   vendor to register backend for a range of devices.
+> +	 */
+> +	if ((A->impl_id == B->impl_id) &&
+> +	    (((A->pvr & A->pvr_mask) == (B->pvr & A->pvr_mask)) ||
+> +	     ((A->pvr & B->pvr_mask) == (B->pvr & B->pvr_mask))))
+> +		return true;
+> +
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0beda3b66b40/disk-4aa1da8d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a7cd9f14ca57/vmlinux-4aa1da8d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/48453a9c6a60/bzImage-4aa1da8d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d1ae544e6e9dc29bcba5@syzkaller.appspotmail.com
-
-RSP: 002b:00007f963cd4d168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007f963c1abf80 RCX: 00007f963c08c169
-RDX: 0000000000000000 RSI: 0000000000000006 RDI: 0000000000000003
-RBP: 00007f963cd4d1d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 000000000001dd03 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007ffd7ae18d4f R14: 00007f963cd4d300 R15: 0000000000022000
- </TASK>
-general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 0 PID: 18742 Comm: syz-executor.5 Not tainted 6.3.0-rc7-next-20230417-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-RIP: 0010:folio_inode include/linux/pagemap.h:400 [inline]
-RIP: 0010:folio_wait_stable+0x23/0xe0 mm/page-writeback.c:3132
-Code: 00 00 00 0f 1f 40 00 f3 0f 1e fa 55 48 89 fd 53 e8 a2 92 d1 ff 48 8d 7d 18 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 a4 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b
-RSP: 0018:ffffc9000316f488 EFLAGS: 00010203
-RAX: dffffc0000000000 RBX: ffff88803e265cb0 RCX: ffffc9000c002000
-RDX: 0000000000000001 RSI: ffffffff81b1f0ee RDI: 000000000000000c
-RBP: fffffffffffffff4 R08: 0000000000000001 R09: ffffffff8c8eef13
-R10: fffffbfff191dde2 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff88803e265ed8 R14: 0000000000002000 R15: ffff88803e265a50
-FS:  00007f963cd4d700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f668b534110 CR3: 000000006ca4c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ext4_da_write_begin+0x47f/0x8b0 fs/ext4/inode.c:2939
- generic_perform_write+0x256/0x570 mm/filemap.c:3927
- ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:289
- ext4_file_write_iter+0xbe0/0x1740 fs/ext4/file.c:710
- call_write_iter include/linux/fs.h:1854 [inline]
- do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:735
- do_iter_write+0x185/0x7e0 fs/read_write.c:860
- vfs_iter_write+0x74/0xa0 fs/read_write.c:901
- iter_file_splice_write+0x745/0xc80 fs/splice.c:761
- do_splice_from fs/splice.c:839 [inline]
- direct_splice_actor+0x114/0x180 fs/splice.c:1018
- splice_direct_to_actor+0x335/0x8a0 fs/splice.c:973
- do_splice_direct+0x1ab/0x280 fs/splice.c:1061
- do_sendfile+0xb19/0x12c0 fs/read_write.c:1254
- __do_sys_sendfile64 fs/read_write.c:1322 [inline]
- __se_sys_sendfile64 fs/read_write.c:1308 [inline]
- __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1308
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f963c08c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f963cd4d168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007f963c1abf80 RCX: 00007f963c08c169
-RDX: 0000000000000000 RSI: 0000000000000006 RDI: 0000000000000003
-RBP: 00007f963cd4d1d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 000000000001dd03 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007ffd7ae18d4f R14: 00007f963cd4d300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:folio_inode include/linux/pagemap.h:400 [inline]
-RIP: 0010:folio_wait_stable+0x23/0xe0 mm/page-writeback.c:3132
-Code: 00 00 00 0f 1f 40 00 f3 0f 1e fa 55 48 89 fd 53 e8 a2 92 d1 ff 48 8d 7d 18 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 a4 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b
-RSP: 0018:ffffc9000316f488 EFLAGS: 00010203
-RAX: dffffc0000000000 RBX: ffff88803e265cb0 RCX: ffffc9000c002000
-RDX: 0000000000000001 RSI: ffffffff81b1f0ee RDI: 000000000000000c
-RBP: fffffffffffffff4 R08: 0000000000000001 R09: ffffffff8c8eef13
-R10: fffffbfff191dde2 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff88803e265ed8 R14: 0000000000002000 R15: ffff88803e265a50
-FS:  00007f963cd4d700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b32724000 CR3: 000000006ca4c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	00 00                	add    %al,(%rax)
-   2:	0f 1f 40 00          	nopl   0x0(%rax)
-   6:	f3 0f 1e fa          	endbr64
-   a:	55                   	push   %rbp
-   b:	48 89 fd             	mov    %rdi,%rbp
-   e:	53                   	push   %rbx
-   f:	e8 a2 92 d1 ff       	callq  0xffd192b6
-  14:	48 8d 7d 18          	lea    0x18(%rbp),%rdi
-  18:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  1f:	fc ff df
-  22:	48 89 fa             	mov    %rdi,%rdx
-  25:	48 c1 ea 03          	shr    $0x3,%rdx
-* 29:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2d:	0f 85 a4 00 00 00    	jne    0xd7
-  33:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  3a:	fc ff df
-  3d:	48                   	rex.W
-  3e:	8b                   	.byte 0x8b
+nit: Please do not use CAPITAL letters for variable names. Could this
+simply accept a pmiidr and a impl_match and match the fields with that
+of the mask/value pair. See more below.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> +	return false;
+> +}
+> +
+> +static struct impl_match *impl_match_find(
+> +	const struct arm_cspmu_impl_param *impl_param)
+> +{
+> +	struct impl_match *impl_match;
+> +
+> +	list_for_each_entry(impl_match, &arm_cspmu_impls, next) {
+> +		if (impl_param_match(impl_param, &impl_match->param))
+> +			return impl_match;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static int arm_cspmu_impl_reprobe(
+> +	const struct arm_cspmu_impl_param *impl_param)
+> +{
+> +	struct arm_cspmu *cspmu, *temp;
+> +	LIST_HEAD(reprobe_list);
+> +	int ret = 0;
+> +
+> +	mutex_lock(&arm_cspmu_lock);
+> +
+> +	/* Move the matching devices to temp list to avoid recursive lock. */
+> +	list_for_each_entry_safe(cspmu, temp, &arm_cspmus, next) {
+> +		struct arm_cspmu_impl_param match_param = to_impl_param(cspmu);
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Also, does this work if the pvr and pvr_mask were provided by the
+backend driver ? to_impl_param() takes the pmiidr which is either
+read from the device or from the ACPI table, unfiltered. Could we
+not change impl_param_match() to :
+		impl_param_match(cspmu->impl.pmiidr, impl_param) ?
+
+> +
+> +		if (impl_param_match(impl_param, &match_param))
+> +			list_move(&cspmu->next, &reprobe_list);
+> +	}
+> +
+> +	mutex_unlock(&arm_cspmu_lock);
+> +
+> +	/* Reprobe the devices. */
+> +	list_for_each_entry_safe(cspmu, temp, &reprobe_list, next) {
+> +		ret = device_reprobe(cspmu->dev);
+> +		if (ret) {
+> +			pr_err("arm_cspmu fail reprobe err: %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +int arm_cspmu_impl_register(const struct arm_cspmu_impl_param *impl_param)
+> +{
+> +	struct impl_match *match;
+> +	int ret = 0;
+> +
+> +	if (!try_arm_cspmu_state_reg()) {
+> +		pr_err("arm_cspmu reg failed, device(s) is in use\n");
+> +		return -EBUSY;
+> +	}
+> +
+> +	mutex_lock(&arm_cspmu_lock);
+> +
+> +	match = impl_match_find(impl_param);
+> +	if (match) {
+> +		pr_err("arm_cspmu reg failed, impl: 0x%x, pvr: 0x%x, pvr_mask: 0x%x already exists\n",
+> +			match->param.impl_id, match->param.pvr,
+> +			match->param.pvr_mask);
+> +		mutex_unlock(&arm_cspmu_lock);
+> +		arm_cspmu_state_ready();
+> +		return -EINVAL;
+> +	}
+> +
+> +	match = kzalloc(sizeof(struct impl_match), GFP_KERNEL);
+> +	if (!match) {
+> +		mutex_unlock(&arm_cspmu_lock);
+> +		arm_cspmu_state_ready();
+> +		return -ENOMEM;
+> +	}
+> +
+> +	memcpy(&match->param, impl_param, sizeof(match->param));
+
+nit: 	match->param = *impl_param; ?
+
+> +	list_add(&match->next, &arm_cspmu_impls);
+> +
+> +	mutex_unlock(&arm_cspmu_lock);
+> +
+> +	/* Replace generic backend with vendor implementation. */
+> +	ret = arm_cspmu_impl_reprobe(impl_param);
+> +
+> +	if (ret)
+> +		arm_cspmu_impl_unregister(impl_param);
+> +
+> +	arm_cspmu_state_ready();
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(arm_cspmu_impl_register);
+> +
+> +void arm_cspmu_impl_unregister(const struct arm_cspmu_impl_param *impl_param)
+> +{
+> +	struct impl_match *match;
+> +
+> +	mutex_lock(&arm_cspmu_lock);
+> +
+> +	match = impl_match_find(impl_param);
+> +	if (!match) {
+> +		pr_err("arm_cspmu unreg failed, unable to find impl: 0x%x, pvr: 0x%x, pvr_mask: 0x%x\n",
+> +			impl_param->impl_id, impl_param->pvr,
+> +			impl_param->pvr_mask);
+> +		mutex_unlock(&arm_cspmu_lock);
+> +		return;
+> +	}
+> +
+> +	list_del(&match->next);
+> +	kfree(match);
+> +
+> +	mutex_unlock(&arm_cspmu_lock);
+> +
+> +	/* Re-attach devices to standard driver. */
+> +	arm_cspmu_impl_reprobe(impl_param);
+> +}
+> +EXPORT_SYMBOL_GPL(arm_cspmu_impl_unregister);
+>   
+>   static int arm_cspmu_init_impl_ops(struct arm_cspmu *cspmu)
+>   {
+> -	int ret;
+> +	int ret = 0;
+>   	struct acpi_apmt_node *apmt_node = cspmu->apmt_node;
+>   	struct arm_cspmu_impl_ops *impl_ops = &cspmu->impl.ops;
+> -	const struct impl_match *match = impl_match;
+> +	struct arm_cspmu_impl_param match_param = {0};
+> +	const struct impl_match *match;
+>   
+>   	/*
+>   	 * Get PMU implementer and product id from APMT node.
+> @@ -410,19 +587,23 @@ static int arm_cspmu_init_impl_ops(struct arm_cspmu *cspmu)
+>   		(apmt_node->impl_id) ? apmt_node->impl_id :
+>   				       readl(cspmu->base0 + PMIIDR);
+>   
+> -	/* Find implementer specific attribute ops. */
+> -	for (; match->pmiidr; match++) {
+> -		const u32 mask = match->mask;
+> +	cspmu->impl.module = THIS_MODULE;
+>   
+> -		if ((match->pmiidr & mask) == (cspmu->impl.pmiidr & mask)) {
+> -			ret = match->impl_init_ops(cspmu);
+> -			if (ret)
+> -				return ret;
+> +	mutex_lock(&arm_cspmu_lock);
+>   
+> -			break;
+> -		}
+> +	/* Find implementer specific attribute ops. */
+> +	match_param = to_impl_param(cspmu);
+> +	match = impl_match_find(&match_param);
+> +	if (match) {
+> +		cspmu->impl.module = match->param.module;
+> +		ret = match->param.impl_init_ops(cspmu);
+>   	}
+>   
+> +	mutex_unlock(&arm_cspmu_lock);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+>   	/* Use default callbacks if implementer doesn't provide one. */
+>   	CHECK_DEFAULT_IMPL_OPS(impl_ops, get_event_attrs);
+>   	CHECK_DEFAULT_IMPL_OPS(impl_ops, get_format_attrs);
+> @@ -639,6 +820,11 @@ static int arm_cspmu_event_init(struct perf_event *event)
+>   	struct arm_cspmu *cspmu;
+>   	struct hw_perf_event *hwc = &event->hw;
+>   
+> +	if (!try_arm_cspmu_state_get()) {
+> +		pr_err("arm_cspmu event_init fail: driver is reprobing\n");
+> +		return -EBUSY;
+> +	}
+> +
+>   	cspmu = to_arm_cspmu(event->pmu);
+>   
+>   	/*
+> @@ -648,12 +834,14 @@ static int arm_cspmu_event_init(struct perf_event *event)
+>   	if (is_sampling_event(event)) {
+>   		dev_dbg(cspmu->pmu.dev,
+>   			"Can't support sampling events\n");
+> +		arm_cspmu_state_put();
+>   		return -EOPNOTSUPP;
+>   	}
+>   
+>   	if (event->cpu < 0 || event->attach_state & PERF_ATTACH_TASK) {
+>   		dev_dbg(cspmu->pmu.dev,
+>   			"Can't support per-task counters\n");
+> +		arm_cspmu_state_put();
+>   		return -EINVAL;
+>   	}
+>   
+> @@ -664,16 +852,21 @@ static int arm_cspmu_event_init(struct perf_event *event)
+>   	if (!cpumask_test_cpu(event->cpu, &cspmu->associated_cpus)) {
+>   		dev_dbg(cspmu->pmu.dev,
+>   			"Requested cpu is not associated with the PMU\n");
+> +		arm_cspmu_state_put();
+>   		return -EINVAL;
+>   	}
+>   
+>   	/* Enforce the current active CPU to handle the events in this PMU. */
+>   	event->cpu = cpumask_first(&cspmu->active_cpu);
+> -	if (event->cpu >= nr_cpu_ids)
+> +	if (event->cpu >= nr_cpu_ids) {
+> +		arm_cspmu_state_put();
+>   		return -EINVAL;
+> +	}
+>   
+> -	if (!arm_cspmu_validate_group(event))
+> +	if (!arm_cspmu_validate_group(event)) {
+> +		arm_cspmu_state_put();
+>   		return -EINVAL;
+> +	}
+>   
+>   	/*
+>   	 * The logical counter id is tracked with hw_perf_event.extra_reg.idx.
+> @@ -686,6 +879,8 @@ static int arm_cspmu_event_init(struct perf_event *event)
+>   	hwc->extra_reg.idx = -1;
+>   	hwc->config = cspmu->impl.ops.event_type(event);
+>   
+> +	arm_cspmu_state_put();
+> +
+>   	return 0;
+>   }
+>   
+> @@ -864,13 +1059,22 @@ static int arm_cspmu_add(struct perf_event *event, int flags)
+>   	struct hw_perf_event *hwc = &event->hw;
+>   	int idx;
+>   
+> +	if (!try_arm_cspmu_state_get()) {
+> +		pr_err("arm_cspmu event_init fail: driver is reprobing\n");
+> +		return -EBUSY;
+> +	}
+> +
+>   	if (WARN_ON_ONCE(!cpumask_test_cpu(smp_processor_id(),
+> -					   &cspmu->associated_cpus)))
+> +					   &cspmu->associated_cpus))) {
+> +		arm_cspmu_state_put();
+>   		return -ENOENT;
+> +	}
+>   
+>   	idx = arm_cspmu_get_event_idx(hw_events, event);
+> -	if (idx < 0)
+> +	if (idx < 0) {
+> +		arm_cspmu_state_put();
+>   		return idx;
+> +	}
+>   
+>   	hw_events->events[idx] = event;
+>   	hwc->idx = to_phys_idx(cspmu, idx);
+> @@ -900,6 +1104,8 @@ static void arm_cspmu_del(struct perf_event *event, int flags)
+>   	clear_bit(idx, hw_events->used_ctrs);
+>   
+>   	perf_event_update_userpage(event);
+> +
+> +	arm_cspmu_state_put();
+>   }
+>   
+>   static void arm_cspmu_read(struct perf_event *event)
+> @@ -1154,7 +1360,7 @@ static int arm_cspmu_register_pmu(struct arm_cspmu *cspmu)
+>   
+>   	cspmu->pmu = (struct pmu){
+>   		.task_ctx_nr	= perf_invalid_context,
+> -		.module		= THIS_MODULE,
+> +		.module		= cspmu->impl.module,
+>   		.pmu_enable	= arm_cspmu_enable,
+>   		.pmu_disable	= arm_cspmu_disable,
+>   		.event_init	= arm_cspmu_event_init,
+> @@ -1205,6 +1411,10 @@ static int arm_cspmu_device_probe(struct platform_device *pdev)
+>   	if (ret)
+>   		return ret;
+>   
+> +	mutex_lock(&arm_cspmu_lock);
+> +	list_add(&cspmu->next, &arm_cspmus);
+> +	mutex_unlock(&arm_cspmu_lock);
+> +
+>   	return 0;
+>   }
+>   
+> @@ -1212,6 +1422,10 @@ static int arm_cspmu_device_remove(struct platform_device *pdev)
+>   {
+>   	struct arm_cspmu *cspmu = platform_get_drvdata(pdev);
+>   
+> +	mutex_lock(&arm_cspmu_lock);
+> +	list_del(&cspmu->next);
+> +	mutex_unlock(&arm_cspmu_lock);
+> +
+>   	perf_pmu_unregister(&cspmu->pmu);
+>   	cpuhp_state_remove_instance(arm_cspmu_cpuhp_state, &cspmu->cpuhp_node);
+>   
+> @@ -1281,6 +1495,8 @@ static int __init arm_cspmu_init(void)
+>   {
+>   	int ret;
+>   
+> +	arm_cspmu_state_ready();
+> +
+>   	ret = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN,
+>   					"perf/arm/cspmu:online",
+>   					arm_cspmu_cpu_online,
+> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.h b/drivers/perf/arm_cspmu/arm_cspmu.h
+> index 51323b175a4a..cf3458d9fc63 100644
+> --- a/drivers/perf/arm_cspmu/arm_cspmu.h
+> +++ b/drivers/perf/arm_cspmu/arm_cspmu.h
+> @@ -1,7 +1,7 @@
+>   /* SPDX-License-Identifier: GPL-2.0
+>    *
+>    * ARM CoreSight Architecture PMU driver.
+> - * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+> + * Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+>    *
+>    */
+>   
+> @@ -68,7 +68,10 @@
+>   
+>   /* PMIIDR register field */
+>   #define ARM_CSPMU_PMIIDR_IMPLEMENTER	GENMASK(11, 0)
+> +#define ARM_CSPMU_PMIIDR_REVISION	GENMASK(15, 12)
+> +#define ARM_CSPMU_PMIIDR_VARIANT	GENMASK(19, 16)
+>   #define ARM_CSPMU_PMIIDR_PRODUCTID	GENMASK(31, 20)
+> +#define ARM_CSPMU_PMIIDR_PVR		GENMASK(31, 12)
+>   
+>   struct arm_cspmu;
+>   
+> @@ -107,15 +110,36 @@ struct arm_cspmu_impl_ops {
+>   					 struct attribute *attr, int unused);
+>   };
+>   
+> +/* Vendor/implementer registration parameter. */
+> +struct arm_cspmu_impl_param {
+> +	/* JEDEC assigned implementer id of the vendor. */
+> +	u32 impl_id;
+> +	/*
+> +	 * The pvr value and mask describes the device ids covered by the
+> +	 * vendor backend. pvr contains the pattern of acceptable product,
+> +	 * variant, and revision bits from device's PMIIDR. pvr_mask contains
+> +	 * the relevant bits when comparing pvr. 0 value on the mask means any
+> +	 * pvr value is supported.
+> +	 */
+> +	u32 pvr;
+> +	u32 pvr_mask;
+
+Do we need to separate pvr from the vendor_id ? we could simply have:
+
+pmiidr_val; /* includes Vendor id and any other fields of the pmiidr */
+pmiidr_mask;
+
+Rest looks fine to me.
+
+Suzuki
+
+
