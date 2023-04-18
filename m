@@ -2,109 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3030C6E57A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CB46E57AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbjDRCyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 22:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
+        id S230290AbjDRCyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 22:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjDRCyh (ORCPT
+        with ESMTP id S230283AbjDRCyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 22:54:37 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B55B527C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 19:54:10 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b5465fc13so1162265b3a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 19:54:10 -0700 (PDT)
+        Mon, 17 Apr 2023 22:54:49 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC165245
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 19:54:48 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id 41be03b00d2f7-51f6461af24so89554a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 19:54:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681786449; x=1684378449;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rI8CSW8wZY6h2DetmThed8bwX0CVp8MeiGi3ooxUQA0=;
-        b=H+aEpkToTaqeRZMoNe5U647O5kYJ1IqlYabxWBmtbtWHnfrsp7FBJSyhjgGneIyc5X
-         csQLFLvJhDJVW2KFJrN+/e2D77QfJd6toFrE64v4EDK9N20OWmC1v58XBX4KImHw5H3y
-         h13jgJtHlNd7uTOSunITpA9tqXgqggbEYlfg8FsyLrDZHjouUFzRTtOXih85qjLuEndk
-         wmbU/raenCrq8HqGisML+MEOiZJvfmqeRvGbM4/9T9bHl2Ub4pGWxsZtB5Lemx/BqMio
-         SMn1S3ki+4Y4GBfexFR9UXeVuQ8DRhr/p7h+49fpKXh6LHFspnLtU904my5R/S9i/M0v
-         FLxA==
+        d=gmail.com; s=20221208; t=1681786488; x=1684378488;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2EdY+MOU1TmeQWcJcFS/IvhQ+5RhMFDPkRQk2g/H9YA=;
+        b=elBLaAHINYbfNLLcIz+R9zZFtyw7swFPzl0JKRGTQWokMFB5CvI8mr4g/sX4YJhcHZ
+         QQrXKp8ljW7YOCngboMhoBDNwv6/yHAAOn0I//Q2pSfgCTnbS3GERd6HXvWHs8fKmgzV
+         yP9ZEuquMaJU/hucgON7kJNDz9TbwkdxmmA0EMWAwSY80Jd1kWQPwkYg57SkDD92n8j7
+         +sk89CyDi274qoateGf7tfgcKocv7dtR7eCIi44XAZF0eLk2ZPxD9TiqGEwRcxufbeYb
+         uKVlXlWI2xw8yQwKDiAe1lmuQfv22PZHdfmufdPVPi60nyaRWTG9T9McxrjwQXrjQr8y
+         zC7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681786449; x=1684378449;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=rI8CSW8wZY6h2DetmThed8bwX0CVp8MeiGi3ooxUQA0=;
-        b=HN+wZb8V5OK5QirdfPfG8XTSZQGAuCf/6MPfG+mbj/gZpHvBwqFDliKN15JWur8njG
-         qqtZoUtcciA75sRoLSp91QuC22S1m0xVE5V42zOCQ4H1rCrEmvg6yyuDOewejmG2aha4
-         mrsHt4Jes+T2MctUL20G9A5MOP0EVu1dGCuJfvVHQ6nWWVzSvuhr6570Q4IKJqHh6ezM
-         WuOW6KQ2Si+GbS/jhI6JWi0WDvsblBz3Yo45hofxxtA1cVB/G1GHSlJIjWBIiElAtXWZ
-         WNdVVxcd2dcV0ie47y6BK4sXLFzGnwyrUyYSSOx7wvopoEB/sx35mUd4ysL4oUBJM/xU
-         PDbA==
-X-Gm-Message-State: AAQBX9fuv0PPbAM5hqenFSuYVyrlyOGCo3dcl8Le4oK9WsBeS91ayFEa
-        DeTGNGmbasgivX2fbxEC3PWAhg==
-X-Google-Smtp-Source: AKy350YpQrpKPDJGeX+yABq7FPc9EADNX5sZ8C+tl27EDJLN7iicddp5XLV7FcqMPPxIZ7AK4Evc+A==
-X-Received: by 2002:a05:6a00:cc7:b0:637:920c:25fd with SMTP id b7-20020a056a000cc700b00637920c25fdmr26555641pfv.17.1681786449272;
-        Mon, 17 Apr 2023 19:54:09 -0700 (PDT)
-Received: from [10.71.57.173] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id a8-20020a62bd08000000b0062dd993fdfcsm8194548pff.105.2023.04.17.19.54.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 19:54:08 -0700 (PDT)
-Message-ID: <0460e6ac-40f9-6e47-e121-87c824658482@bytedance.com>
-Date:   Tue, 18 Apr 2023 10:53:59 +0800
+        d=1e100.net; s=20221208; t=1681786488; x=1684378488;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2EdY+MOU1TmeQWcJcFS/IvhQ+5RhMFDPkRQk2g/H9YA=;
+        b=HoyREwBbqA8OB7JDkdowuuCu8PTSTEaXfJdtsjToz4FY89EfYptgEKPfrpt8MW4/KQ
+         xl+Ia+k8psl4XQgmQ8WJBzITCEyNC4sSAH7YmXxXwwi8dsrDcWx01xdulC1VbRiNXEtC
+         pA/LZJn4g2+P5klbRNhQ7Ridxc4XXZ7qEOtaB//uFNGMJl5TV8lYpHK7DHM4IDoUOgI0
+         0TSSov4g2pJjv5Ftkh3Z3CuzdHvXLCLwFOKFxnUsEFbS54/3S/TV7UlDxdEfijt4seVN
+         dyg9DDlfDKyNLa7JWJlTC8GMUpeQMcyRODYUuYH63/FZRmYKuQqUlpNc38Ow7PNaTv1A
+         Sg+A==
+X-Gm-Message-State: AAQBX9eJo/MpAZOXor0XH/zrfda/FGTM53/GV8e72fKw6cRAeexSSp1W
+        pkw7QtzNum0ZJORrjWHAs1ExUVY/xTWCCjfRGpo=
+X-Google-Smtp-Source: AKy350ZN4m512imBUiS5jwaMpAqP4J5JMH+ULXDboWRsY41tveuj/XCqT1Op9DoGHw8eHgTp/E4w3HlynCslHLD6KVo=
+X-Received: by 2002:a17:90a:7547:b0:233:cc2c:7dae with SMTP id
+ q65-20020a17090a754700b00233cc2c7daemr178153pjk.8.1681786487923; Mon, 17 Apr
+ 2023 19:54:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: Re: [PATCH 1/2] bpf: support access variable length array of
- integer type
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, yangzhenze@bytedance.com,
-        wangdongdong.6@bytedance.com, zhouchengming@bytedance.com
-References: <20230417080749.39074-1-zhoufeng.zf@bytedance.com>
- <20230417080749.39074-2-zhoufeng.zf@bytedance.com>
- <20230418000833.keqhb7kdpibgaodt@dhcp-172-26-102-232.dhcp.thefacebook.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <20230418000833.keqhb7kdpibgaodt@dhcp-172-26-102-232.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Sender: lucasjarry231@gmail.com
+Received: by 2002:a17:522:99ce:b0:4ef:e840:6671 with HTTP; Mon, 17 Apr 2023
+ 19:54:46 -0700 (PDT)
+From:   Sophia Erick <sdltdkggl3455@gmail.com>
+Date:   Tue, 18 Apr 2023 04:54:46 +0200
+X-Google-Sender-Auth: oO6k3yUPVm70PbooBVJ-hVYqnT0
+Message-ID: <CAMXDO3VNEYRsENKgw+L16UAQOO8akiYqZboiNp4jj6rKYdRrYQ@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,HK_RANDOM_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2023/4/18 08:08, Alexei Starovoitov 写道:
-> On Mon, Apr 17, 2023 at 04:07:48PM +0800, Feng zhou wrote:
->> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->>
->> After this commit:
->> bpf: Support variable length array in tracing programs (9c5f8a1008a1)
->> Trace programs can access variable length array, but for structure
->> type. This patch adds support for integer type.
->>
->> Example:
->> Hook load_balance
->> struct sched_domain {
->> 	...
->> 	unsigned long span[];
->> }
->>
->> The access: sd->span[0].
-> The use case makes sense.
-> Please add it as a selftest. Either combine it with patch 2 or another patch 3.
-> and then resubmit.
-> Make sure to use [PATCH bpf-next] subject, so BPF CI knows how to test it.
+Dearly Beloved In Christ,
 
-Will do, thanks.
+Please forgive me for stressing you with my predicaments as I directly
+believe that you will be honest to fulfill my final wish before i die.
 
+I am Mrs.Sophia Erick, and i was Diagnosed with Cancer about 2 years
+ago, before i go for a surgery i have to do this by helping the
+Orphanages home, Motherless babies home, less privileged and disable
+citizens and widows around the world,
+
+So If you are interested to fulfill my final wish by using the sum of
+Eleven Million Dollars, to help them as I mentioned, kindly get back
+to me for more information on how the fund will be transferred to your
+account.
+
+Warm Regards,
+Sincerely Mrs. Sophia Erick.
