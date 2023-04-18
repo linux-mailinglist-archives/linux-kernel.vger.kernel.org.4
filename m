@@ -2,184 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD0E6E5790
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 168CA6E5794
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjDRCkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 22:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
+        id S230002AbjDRCna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 22:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjDRCkH (ORCPT
+        with ESMTP id S229517AbjDRCn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 22:40:07 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7F340C8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 19:40:04 -0700 (PDT)
-Received: from dggpemm500016.china.huawei.com (unknown [7.185.36.25])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Q0p5T2dV5zKs8h;
-        Tue, 18 Apr 2023 10:38:53 +0800 (CST)
-Received: from [10.67.111.115] (10.67.111.115) by
- dggpemm500016.china.huawei.com (7.185.36.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 18 Apr 2023 10:39:42 +0800
-Message-ID: <84d80347-5d48-3a75-3f61-8096cd819d61@huawei.com>
-Date:   Tue, 18 Apr 2023 10:39:42 +0800
+        Mon, 17 Apr 2023 22:43:28 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF53422D;
+        Mon, 17 Apr 2023 19:43:27 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b51fd2972so1366412b3a.3;
+        Mon, 17 Apr 2023 19:43:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681785806; x=1684377806;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OmIO4AdDKQdy+8t5oD0ActH/+eFcz+x5x3nOJUUqhCQ=;
+        b=ZYk8e0xnFpSbdWGBL12gfnkN8bm66ghxLYzKfJSzINawVMKpggmz1STUYKM922oyOt
+         Eaq2nakbFzVsulDAExekVrQChKfXHBw/lKK83+dnrqNUyApP3KvSTCXu2jy/s8j6wtzO
+         wogs34JGO0c8R8X51ZRT/zyd9MUDd+7tEJhHSGl9sdHuFN+Al+Q+psLL05mQcBOO16eJ
+         8Q+9mYJLw1AIz3/PC+iPn7m3JgSm49iFCG+AbJKgmAUaPc5GbBpeej/a7OCW2f5HWFK7
+         wnbkYY6ca1IRlVhgZI+fVaeuqxInU2LmuXDpXdK0ev/nwPJM6+qxILSmHH0VlhVGx7z8
+         HDEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681785807; x=1684377807;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OmIO4AdDKQdy+8t5oD0ActH/+eFcz+x5x3nOJUUqhCQ=;
+        b=Y567FG2f9h+ULqxLB5v96dRrrvp0EUpTlsQRuEI0i3c5OEGgGTNgmrOzgaD9zJdhrg
+         FRmgb8zL+mk33seWOIdIejpx11qha8KpTOM7MauDiEWzif/HcqPkUDwZe8jS1UQmGX9P
+         eJquShuU6DlktUrewnwC+uSByhLBrEEYbCYKGLjrzOY185ZM5TtJpdiZAL7IdsSaQrcL
+         W7sJP8rfqWEbdSPgRrxR/L51Rj94u722HX+cVUC+ZyRR6SP6mGTv8zH/XUy2pBoLL190
+         51C7ar1s5z4WWNln3EK6MZIgJYzVzhQxLE+xqxxlfI8ko615EqEl0A6QGpkymhDaYKzx
+         d1uw==
+X-Gm-Message-State: AAQBX9dJ2DBv9BdkS9uKS2SXk4m9LMMwayDW4gGdlkSKcsmDCVkZ0iOB
+        dDEZcYQkVVnQJl4T2GSgjOBtPPrWzJBmgE7QoEo=
+X-Google-Smtp-Source: AKy350aqgDdKIo5YoTPII4rMPfWaTsReCveuBWc1lewoRA1K3Hlesmnd9usHQaRZbq3AjGXKObrTSc1kQu7Xxza7oCY=
+X-Received: by 2002:a05:6a00:228b:b0:63b:641d:76d8 with SMTP id
+ f11-20020a056a00228b00b0063b641d76d8mr6976290pfe.2.1681785806554; Mon, 17 Apr
+ 2023 19:43:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] irq: fasteoi handler re-runs on concurrent invoke
-To:     Marc Zyngier <maz@kernel.org>, "Gowans, James" <jgowans@amazon.com>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Raslan, KarimAllah" <karahmed@amazon.com>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sironi, Filippo" <sironi@amazon.de>,
-        "chris.zjh@huawei.com" <chris.zjh@huawei.com>
-References: <20230317095300.4076497-1-jgowans@amazon.com>
- <87h6tp5lkt.wl-maz@kernel.org>
- <0869847124f982c50d0f8d0ede996004f90a5576.camel@amazon.com>
- <86pm89kyyt.wl-maz@kernel.org>
-Content-Language: en-US
-From:   Yipeng Zou <zouyipeng@huawei.com>
-In-Reply-To: <86pm89kyyt.wl-maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.115]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230415104104.5537-1-aford173@gmail.com> <20230415104104.5537-4-aford173@gmail.com>
+ <8db7ad8da4805d7eb4471051676d179e193ee399.camel@pengutronix.de> <CAHCN7x+hFu15TM0w5DXzmWZRKEN6=MNNTVLNtpNxbirVGrapdg@mail.gmail.com>
+In-Reply-To: <CAHCN7x+hFu15TM0w5DXzmWZRKEN6=MNNTVLNtpNxbirVGrapdg@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 17 Apr 2023 21:43:15 -0500
+Message-ID: <CAHCN7xKmFzuwFVO1eR8fdVQ9iXUuB0zVadFYG5_6t8p0=dPG+w@mail.gmail.com>
+Subject: Re: [PATCH 4/6] drm: bridge: samsung-dsim: Dynamically configure DPHY timing
+To:     Lucas Stach <l.stach@pengutronix.de>
+Cc:     dri-devel@lists.freedesktop.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        aford@beaconembedded.com,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Fabio Estevam <festevam@gmail.com>, m.szyprowski@samsung.com,
+        marex@denx.de, Robert Foss <rfoss@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Inki Dae <inki.dae@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2023/4/12 21:32, Marc Zyngier 写道:
-> I think we have most of what we need already, see the hack below. It
-> is totally untested, but you'll hopefully get the idea.
+On Mon, Apr 17, 2023 at 6:53=E2=80=AFAM Adam Ford <aford173@gmail.com> wrot=
+e:
 >
-> Thanks,
+> On Mon, Apr 17, 2023 at 3:38=E2=80=AFAM Lucas Stach <l.stach@pengutronix.=
+de> wrote:
+> >
+> > Hi Adam,
+> >
+> > Am Samstag, dem 15.04.2023 um 05:41 -0500 schrieb Adam Ford:
+> > > NXP uses a lookup table to determine the various values for
+> > > the PHY Timing based on the clock rate in their downstream
+> > > kernel.  Since the input clock can be variable, the phy
+> > > settings need to be variable too.  Add an additional variable
+> > > to the driver data to enable this feature to prevent breaking
+> > > boards that don't support it.
+> > >
+> >
+> > I haven't checked if this generates values close to the ones in this
+> > table, but I guess it should be worth a try to use
+> > phy_mipi_dphy_get_default_config() instead.
 >
-> 	M.
+> I didn't know that was a thing.  I like that idea much better than the
+> table.  I just pulled what NXP had and tweaked it to fit the mainline.
+> I'll give it a try in the next few days, when I have some more time.
+
+I tried phy_mipi_dphy_get_default_config() and the function return
+different values than what NXP's table returns, and the screen doesn't
+sync properly.  I will try to figure out the mathematical calculation
+to generate the values for this DSIM instead of using a lookup table.
+
+adam
 >
-> >From c96d2ab37fe273724f1264fba5f4913259875d56 Mon Sep 17 00:00:00 2001
-> From: Marc Zyngier <maz@kernel.org>
-> Date: Mon, 10 Apr 2023 10:56:32 +0100
-> Subject: [PATCH] irqchip/gicv3-its: Force resend of LPIs taken while already
->   in-progress
->
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> ---
->   drivers/irqchip/irq-gic-v3-its.c |  3 +++
->   include/linux/irq.h              | 13 +++++++++++++
->   kernel/irq/chip.c                |  5 ++++-
->   kernel/irq/debugfs.c             |  2 ++
->   4 files changed, 22 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-> index 586271b8aa39..d04c73a2bc6b 100644
-> --- a/drivers/irqchip/irq-gic-v3-its.c
-> +++ b/drivers/irqchip/irq-gic-v3-its.c
-> @@ -3574,6 +3574,7 @@ static int its_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
->   		irqd = irq_get_irq_data(virq + i);
->   		irqd_set_single_target(irqd);
->   		irqd_set_affinity_on_activate(irqd);
-> +		irqd_set_resend_when_in_progress(irqd);
->   		pr_debug("ID:%d pID:%d vID:%d\n",
->   			 (int)(hwirq + i - its_dev->event_map.lpi_base),
->   			 (int)(hwirq + i), virq + i);
-> @@ -4512,6 +4513,8 @@ static int its_vpe_irq_domain_alloc(struct irq_domain *domain, unsigned int virq
->   		irq_domain_set_hwirq_and_chip(domain, virq + i, i,
->   					      irqchip, vm->vpes[i]);
->   		set_bit(i, bitmap);
-> +
-> +		irqd_set_resend_when_in_progress(irq_get_irq_data(virq + i));
->   	}
->   
->   	if (err) {
-> diff --git a/include/linux/irq.h b/include/linux/irq.h
-> index b1b28affb32a..4b2a7cc96eb2 100644
-> --- a/include/linux/irq.h
-> +++ b/include/linux/irq.h
-> @@ -223,6 +223,8 @@ struct irq_data {
->    *				  irq_chip::irq_set_affinity() when deactivated.
->    * IRQD_IRQ_ENABLED_ON_SUSPEND	- Interrupt is enabled on suspend by irq pm if
->    *				  irqchip have flag IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND set.
-> + * IRQD_RESEND_WHEN_IN_PROGRESS - Interrupt may fire when already in progress,
-> + *				  needs resending.
->    */
->   enum {
->   	IRQD_TRIGGER_MASK		= 0xf,
-> @@ -249,6 +251,7 @@ enum {
->   	IRQD_HANDLE_ENFORCE_IRQCTX	= (1 << 28),
->   	IRQD_AFFINITY_ON_ACTIVATE	= (1 << 29),
->   	IRQD_IRQ_ENABLED_ON_SUSPEND	= (1 << 30),
-> +	IRQD_RESEND_WHEN_IN_PROGRESS	= (1 << 31),
->   };
->   
->   #define __irqd_to_state(d) ACCESS_PRIVATE((d)->common, state_use_accessors)
-> @@ -448,6 +451,16 @@ static inline bool irqd_affinity_on_activate(struct irq_data *d)
->   	return __irqd_to_state(d) & IRQD_AFFINITY_ON_ACTIVATE;
->   }
->   
-> +static inline bool irqd_needs_resend_when_in_progress(struct irq_data *d)
-> +{
-> +	return __irqd_to_state(d) & IRQD_RESEND_WHEN_IN_PROGRESS;
-> +}
-> +
-> +static inline void irqd_set_resend_when_in_progress(struct irq_data *d)
-> +{
-> +	__irqd_to_state(d) |= IRQD_RESEND_WHEN_IN_PROGRESS;
-> +}
-> +
->   #undef __irqd_to_state
->   
->   static inline irq_hw_number_t irqd_to_hwirq(struct irq_data *d)
-> diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
-> index 49e7bc871fec..73546ba8bc43 100644
-> --- a/kernel/irq/chip.c
-> +++ b/kernel/irq/chip.c
-> @@ -692,8 +692,11 @@ void handle_fasteoi_irq(struct irq_desc *desc)
->   
->   	raw_spin_lock(&desc->lock);
->   
-> -	if (!irq_may_run(desc))
-> +	if (!irq_may_run(desc)) {
-> +		if (irqd_needs_resend_when_in_progress(&desc->irq_data))
-> +			check_irq_resend(desc, true);
->   		goto out;
-> +	}
->   
->   	desc->istate &= ~(IRQS_REPLAY | IRQS_WAITING);
->   
-> diff --git a/kernel/irq/debugfs.c b/kernel/irq/debugfs.c
-> index bbcaac64038e..5971a66be034 100644
-> --- a/kernel/irq/debugfs.c
-> +++ b/kernel/irq/debugfs.c
-> @@ -133,6 +133,8 @@ static const struct irq_bit_descr irqdata_states[] = {
->   	BIT_MASK_DESCR(IRQD_HANDLE_ENFORCE_IRQCTX),
->   
->   	BIT_MASK_DESCR(IRQD_IRQ_ENABLED_ON_SUSPEND),
-> +
-> +	BIT_MASK_DESCR(IRQD_RESEND_WHEN_IN_PROGRESS),
->   };
->   
->   static const struct irq_bit_descr irqdesc_states[] = {
-
-Hi Marc:
-
-     Thanks for you patch, and i was tested it on my board, it works for me.
-
-     We force resend a irq when irq_may_run return false, besides 
-IRQD_IRQ_INPROGRESS,
-
-     are there other situations (such as IRQD_WAKEUP_ARMED) that will 
-also resend an irq?
-
--- 
-Regards,
-Yipeng Zou
-
+> adam
+> >
+> > Regards,
+> > Lucas
+> >
+> > > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > > ---
+> > >  drivers/gpu/drm/bridge/samsung-dsim.c |  85 +++++++--
+> > >  drivers/gpu/drm/bridge/samsung-dsim.h | 254 ++++++++++++++++++++++++=
+++
+> > >  include/drm/bridge/samsung-dsim.h     |   1 +
+> > >  3 files changed, 326 insertions(+), 14 deletions(-)
+> > >  create mode 100644 drivers/gpu/drm/bridge/samsung-dsim.h
+> > >
+> <snip>
+> >
