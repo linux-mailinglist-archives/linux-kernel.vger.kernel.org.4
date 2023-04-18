@@ -2,84 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AF86E6DC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 22:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3C96E6DC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 22:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbjDRU4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 16:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54100 "EHLO
+        id S232194AbjDRU5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 16:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjDRU4K (ORCPT
+        with ESMTP id S229838AbjDRU5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 16:56:10 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0592C1700
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1gVMuS9EKtGcIRrRl/Odp4GU0naBD6jze+OHwpW6A+8=; b=12T/Pu5st14xkjhJxseP7HyJJC
-        uAkjyI+P74hc0pziwUyn3cAHKkFtqsCiYzrMUrhyl3izViy2JyzRUAHK7xsJQ+2ASaSOcoqmxksgv
-        EOGaDch53zorEiLXa1X2eY2BoaTQUd8mWYV2MXvPD3uMl5CZ2Fg+42Kdlzv9o9wNES7CmOtATM4Zl
-        ZIkrwPlGz0kUg++EFgBS45SdSpX72eDWEZUzEEfz9uVJwdxDB6zDUHpZYpYg+WLrmKNYN6MiIH9N4
-        6E/oc2eXe0IqXgwv6YkzVMIcNkVNYkMpinIqHtNYSd9RnYwMDUG6G/QXm4BnNyxDNh9FibthM99up
-        zjfedfNg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1posMo-003L56-0A;
-        Tue, 18 Apr 2023 20:55:58 +0000
-Date:   Tue, 18 Apr 2023 13:55:58 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, brauner@kernel.org,
-        linux-mm@kvack.org, p.raghav@samsung.com, da.gomez@samsung.com,
-        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
-        keescook@chromium.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] tmpfs: add the option to disable swap
-Message-ID: <ZD8D3kdVALbWvgYU@bombadil.infradead.org>
-References: <20230309230545.2930737-1-mcgrof@kernel.org>
- <3382819f-4a4-8622-5642-78c03ecfb878@google.com>
+        Tue, 18 Apr 2023 16:57:12 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DC5E53
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681851430; x=1713387430;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6o2vi1uZ+AQ31rMsv8XiqCfgK8Yjqe2N0xhHfnlSPak=;
+  b=CVQDwpPhPIiK6VMhiVQLsnQhV1+LEMUJWMsVtnYxwgnjAIxdTeGiymRJ
+   99wsFihP531Xp6XuxqWFo+7ZS1G9lBNleLxlsFVyhMendtiKIFi1TA2yQ
+   1fWlbwFXLohgQTkfVOj+ZJWpOs2HlkNo1X8RGMdTM4UWhqin/B/fzJuVj
+   B6OcIjGoFzcebQHL86PwITPcbjHr4cs+O00eKIs+kCOqB/i6ZFfSaeKJ1
+   DJupUEtAQyPeBsgGLnG1igwg0OJwsshQA/NKBEwD/8PwHlP8OcFr4W7Qu
+   0oM/UUMCngGZPqX9IwNI3mRfkeWNhU37uISA28pfC2Hgoaaw8E7OBrzcM
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="324903005"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="324903005"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 13:57:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="755831890"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="755831890"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Apr 2023 13:57:09 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1posNw-000e2T-0v;
+        Tue, 18 Apr 2023 20:57:08 +0000
+Date:   Wed, 19 Apr 2023 04:56:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:core/entry] BUILD SUCCESS
+ 8c8fa605f7b8b6df3e6fb280a74cff8d7374a7b7
+Message-ID: <643f03fb.zbvhtaKCl64yL+Yy%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3382819f-4a4-8622-5642-78c03ecfb878@google.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 09:31:20PM -0700, Hugh Dickins wrote:
-> On Thu, 9 Mar 2023, Luis Chamberlain wrote:
-> 
-> > I'm doing this work as part of future experimentation with tmpfs and the
-> > page cache, but given a common complaint found about tmpfs is the
-> > innability to work without the page cache I figured this might be useful
-> > to others. It turns out it is -- at least Christian Brauner indicates
-> > systemd uses ramfs for a few use-cases because they don't want to use
-> > swap and so having this option would let them move over to using tmpfs
-> > for those small use cases, see systemd-creds(1).
-> 
-> Thanks for your thorough work on tmpfs "noswap": seems well-received
-> by quite a few others, that's good.
-> 
-> I've just a few comments on later patches (I don't understand why you
-> went into those little rearrangements at the start of shmem_writepage(),
-> but they seem harmless so I don't object),
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/entry
+branch HEAD: 8c8fa605f7b8b6df3e6fb280a74cff8d7374a7b7  selftest, ptrace: Add selftest for syscall user dispatch config api
 
-Because the devil is in the details as you noted too!
+elapsed time: 720m
 
-> but wanted to ask here:
-> 
-> You say "a common complaint about tmpfs is the inability to work without
-> the page cache".  Ehh?
+configs tested: 89
+configs skipped: 11
 
-That was a mistake! s/page cache/swap.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-  Luis
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r001-20230417   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm          buildonly-randconfig-r005-20230416   clang
+arm                                 defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r011-20230418   gcc  
+csky                                defconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230417   gcc  
+i386                 randconfig-a002-20230417   gcc  
+i386                 randconfig-a003-20230417   gcc  
+i386                 randconfig-a004-20230417   gcc  
+i386                 randconfig-a005-20230417   gcc  
+i386                 randconfig-a006-20230417   gcc  
+i386                 randconfig-a011-20230417   clang
+i386                 randconfig-a012-20230417   clang
+i386                 randconfig-a013-20230417   clang
+i386                 randconfig-a014-20230417   clang
+i386                 randconfig-a015-20230417   clang
+i386                 randconfig-a016-20230417   clang
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r001-20230417   gcc  
+ia64         buildonly-randconfig-r005-20230418   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r002-20230416   gcc  
+ia64                 randconfig-r005-20230418   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r006-20230416   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r016-20230418   gcc  
+microblaze   buildonly-randconfig-r004-20230418   gcc  
+microblaze   buildonly-randconfig-r006-20230418   gcc  
+microblaze           randconfig-r001-20230416   gcc  
+microblaze           randconfig-r014-20230418   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2        buildonly-randconfig-r001-20230416   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r006-20230418   gcc  
+openrisc             randconfig-r006-20230416   gcc  
+parisc       buildonly-randconfig-r003-20230416   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r004-20230418   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc      buildonly-randconfig-r003-20230417   clang
+powerpc      buildonly-randconfig-r004-20230417   clang
+powerpc              randconfig-r002-20230418   clang
+powerpc              randconfig-r012-20230418   gcc  
+powerpc              randconfig-r013-20230418   gcc  
+powerpc              randconfig-r015-20230418   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r001-20230418   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r003-20230417   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390         buildonly-randconfig-r004-20230416   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r003-20230418   clang
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r002-20230416   gcc  
+sh           buildonly-randconfig-r005-20230417   gcc  
+sh                   randconfig-r001-20230418   gcc  
+sparc                               defconfig   gcc  
+sparc64      buildonly-randconfig-r002-20230417   gcc  
+sparc64      buildonly-randconfig-r003-20230418   gcc  
+sparc64              randconfig-r004-20230417   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
