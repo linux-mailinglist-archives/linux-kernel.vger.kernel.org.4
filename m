@@ -2,140 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECDB6E5774
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94816E5776
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjDRCWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 22:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
+        id S230043AbjDRCW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 22:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjDRCWA (ORCPT
+        with ESMTP id S229621AbjDRCWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 22:22:00 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D34E7E;
-        Mon, 17 Apr 2023 19:21:57 -0700 (PDT)
-Received: from kwepemm600004.china.huawei.com (unknown [7.193.23.242])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q0nhB5NKWzsR94;
-        Tue, 18 Apr 2023 10:20:26 +0800 (CST)
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 18 Apr 2023 10:21:55 +0800
-Message-ID: <3d8e8817-12b9-62bc-4c04-34d8822d366f@huawei.com>
-Date:   Tue, 18 Apr 2023 10:21:54 +0800
+        Mon, 17 Apr 2023 22:22:54 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A671BE9;
+        Mon, 17 Apr 2023 19:22:53 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-63b509fe13eso1190676b3a.1;
+        Mon, 17 Apr 2023 19:22:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681784573; x=1684376573;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yprd3wHAL9rLkpnLmwunLZWQV7uHj4StKSCiF+CISUI=;
+        b=UpnRjH5GM7n6wXfS4e+jdphe+IgyYBocIg2wHw3bBNJMs5xoaMLx/iUT++WtIYi8Vc
+         VfALrF5LkQg4kimliOWEFJ0Mp/r+BbvgaVfkPCbtp5fCAFZvWEeJFI6kazGBLZHenueR
+         al5JS0pKrLi+8yu37Lc7FQvW2qAfR3nGt7mVGyMjH97+WZrxCEYd39ZXP/b/zlfgAdW9
+         PJaPhOxeKj9BZbDrCpt7CqJAt51Or2WDST5RnVzKQN/feJ2YsFuJHH/GeGLhB86xxPkx
+         p5nOSBhVPU6lgP/InH/mTwk2/Kc7BR7bJ4p/bxS6hdPVDYO4mrYnPsH7T0DPP7POrXwl
+         KFTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681784573; x=1684376573;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yprd3wHAL9rLkpnLmwunLZWQV7uHj4StKSCiF+CISUI=;
+        b=SgRj8Zm1Gd6kAYiJ2oEOEyw74m5cbYh5Jldrp/zndP/4dqQnd2rNyGWmJh0W+dzHtl
+         mOduBc1iX1h4YfLtUswJeyxBxoPoz6lBlqgptG/UOSNgoyHAuru4hogeAsC4WQPTQhZW
+         SzbuGmy9nunfc7F62dswYEsiKW23tLIJ/MFnnX978+TjV5HPvoZpcOBphL1Rl3kZOIKf
+         8yjpkTNJ8dD7AmdESAov6kuzn2UI1DQILIREJWDeOIZNfdlptaDGFw6hRBkqh+bB6Y6j
+         xNTOVhaMiB3P+Dbfe1JB3wY6V1flbh/+L/1HSH3M3fe3gHnifmKBOArkM7MwgL5dmBRI
+         HzIg==
+X-Gm-Message-State: AAQBX9dhTFO4UPwXF0xftAHrBACp/wvPjCJm+wpyciJHfJUBe2lPJB1Y
+        rBzrawjWWkVR7r1gGMWqDvw=
+X-Google-Smtp-Source: AKy350aQlbEDlcj2/dsD25/yldbDcPYJ+Za5day4TYq1AuYfiNOpciBkiHMJPtjs8NsDp6sBdsfqLQ==
+X-Received: by 2002:a05:6a00:2e0b:b0:63d:38dd:b120 with SMTP id fc11-20020a056a002e0b00b0063d38ddb120mr911528pfb.22.1681784573387;
+        Mon, 17 Apr 2023 19:22:53 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-15.three.co.id. [180.214.233.15])
+        by smtp.gmail.com with ESMTPSA id x21-20020aa79195000000b00628e9871c24sm8137251pfa.183.2023.04.17.19.22.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 19:22:52 -0700 (PDT)
+Message-ID: <a608d2f3-e498-8253-a58f-7be0e4d832d8@gmail.com>
+Date:   Tue, 18 Apr 2023 09:22:43 +0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 0/2] mailbox: pcc: Support platform notification for
- type4 and shared interrupt
-To:     Robbie King <robbiek@xsightlabs.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-CC:     "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "wanghuiqiang@huawei.com" <wanghuiqiang@huawei.com>,
-        "zhangzekun11@huawei.com" <zhangzekun11@huawei.com>,
-        "wangxiongfeng2@huawei.com" <wangxiongfeng2@huawei.com>,
-        "tanxiaofei@huawei.com" <tanxiaofei@huawei.com>,
-        "guohanjun@huawei.com" <guohanjun@huawei.com>,
-        "xiexiuqi@huawei.com" <xiexiuqi@huawei.com>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "huangdaode@huawei.com" <huangdaode@huawei.com>
-References: <20221016034043.52227-1-lihuisong@huawei.com>
- <20230314111135.16520-1-lihuisong@huawei.com>
- <20230327113326.dgrb5ainl6mv7wr5@bogus>
- <570a6f6d-87cb-48ca-3bbc-cd1221bfa88c@huawei.com>
- <7ef4eec4-2cfb-6f66-a9b9-9c130a1b71d8@huawei.com>
- <AS8P193MB2335FA58943B305F97D2BACCCA9A9@AS8P193MB2335.EURP193.PROD.OUTLOOK.COM>
- <57c537d8-6728-2ffc-3421-accd79c1eddf@huawei.com>
- <AS8P193MB2335F1954BC345575A2C8829CA999@AS8P193MB2335.EURP193.PROD.OUTLOOK.COM>
-From:   "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <AS8P193MB2335F1954BC345575A2C8829CA999@AS8P193MB2335.EURP193.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 6/7] x86/resctrl: Display CLOSID and RMID for the
+ resctrl groups
+Content-Language: en-US
+To:     Babu Moger <babu.moger@amd.com>, corbet@lwn.net,
+        reinette.chatre@intel.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de
+Cc:     fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
+        quic_neeraju@quicinc.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
+        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        jmattson@google.com, daniel.sneddon@linux.intel.com,
+        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        eranian@google.com, christophe.leroy@csgroup.eu, jarkko@kernel.org,
+        adrian.hunter@intel.com, quic_jiles@quicinc.com,
+        peternewman@google.com
+References: <168177435378.1758847.8317743523931859131.stgit@bmoger-ubuntu>
+ <168177449635.1758847.13040588638888054027.stgit@bmoger-ubuntu>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <168177449635.1758847.13040588638888054027.stgit@bmoger-ubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/18/23 06:34, Babu Moger wrote:
+> +"ctrl_hw_id":
+> +	Available only with debug option. On x86, reading this file shows
+> +	the Class of Service (CLOS) id which acts as a resource control
+> +	tag on which the resources can be throttled. Kernel assigns a new
+> +	CLOSID a control group is created depending on the available
+> +	CLOSIDs. Multiple cores(or threads) or processes can share a
+> +	same CLOSID in a resctrl group.
+> +
+> <snipped>...
+> +"mon_hw_id":
+> +	Available only with debug option. On x86, reading this file shows
+> +	the Resource Monitoring ID (RMID) for monitoring the resource
+> +	utilization. Monitoring is performed by tagging each core (or
+> +	thread) or process via a RMID. Kernel assigns a new RMID when
+> +	a group is created depending on the available RMIDs. Multiple
+> +	cores (or threads) or processes can share a same RMID in a
+> +	resctrl group.
+> +
 
-在 2023/4/14 21:48, Robbie King 写道:
-> Sorry for the delay.  I ran my simple stress test against the patch set and
-> saw no issues.  For the record it is by no means a thorough regression, but it
-> has illuminated issues in the past.
-Thanks for your testing.
->
-> The test itself uses a "heartbeat" module in the SCP firmware that generates
-> notifications at a programmable interval.  The stress test is simply generating
-> these heartbeats (SCP to AP notifications) while also generating protocol version
-> queries (AP to SCP).  The notifications are sequence numbered to verify none are
-> lost, however SCP to AP notification support does not support SCP generating
-> notifications faster than the AP can process them, so the heartbeat rate must be
-> reasonably slow (on the order of 10s of millliseconds).
-I understand your concern. I think this doesn't get int the way of what 
-we are doing.
+Is CONFIG_DEBUG=y required?
 
-My stress tests were also run in type3 and type4 concurrent scenarios.
-There were two drivers using type3 to send command looply on platform.
-In the firmware terminal window,
-there were two channels for type4 to generate notifications from 
-platform at the 1ms(even shorter) interval.
-I didn't find anything issues in this stress after running a couple of 
-hours.
+-- 
+An old man doll... just what I always wanted! - Clara
 
-@Robbie King and @Sudeep, what do you think of my test?
-
->
-> -----Original Message-----
-> From: lihuisong (C) <lihuisong@huawei.com>
-> Sent: Thursday, April 13, 2023 9:05 PM
-> To: Robbie King <robbiek@xsightlabs.com>; Sudeep Holla <sudeep.holla@arm.com>
-> Cc: linux-acpi@vger.kernel.org; linux-kernel@vger.kernel.org; rafael@kernel.org; rafael.j.wysocki@intel.com; wanghuiqiang@huawei.com; zhangzekun11@huawei.com; wangxiongfeng2@huawei.com; tanxiaofei@huawei.com; guohanjun@huawei.com; xiexiuqi@huawei.com; wangkefeng.wang@huawei.com; huangdaode@huawei.com
-> Subject: Re: [PATCH v2 0/2] mailbox: pcc: Support platform notification for type4 and shared interrupt
->
->
-> 在 2023/4/11 22:47, Robbie King 写道:
->> Apologies, missed earlier emails.  Will make this a priority for the week.
-> Thanks. Looking forward to you reply.
->> -----Original Message-----
->> From: lihuisong (C) <lihuisong@huawei.com>
->> Sent: Sunday, April 9, 2023 9:27 PM
->> To: Sudeep Holla <sudeep.holla@arm.com>; Robbie King
->> <robbiek@xsightlabs.com>
->> Cc: linux-acpi@vger.kernel.org; linux-kernel@vger.kernel.org;
->> rafael@kernel.org; rafael.j.wysocki@intel.com;
->> wanghuiqiang@huawei.com; zhangzekun11@huawei.com;
->> wangxiongfeng2@huawei.com; tanxiaofei@huawei.com;
->> guohanjun@huawei.com; xiexiuqi@huawei.com; wangkefeng.wang@huawei.com;
->> huangdaode@huawei.com
->> Subject: Re: [PATCH v2 0/2] mailbox: pcc: Support platform
->> notification for type4 and shared interrupt
->>
->>
->> 在 2023/3/27 20:31, lihuisong (C) 写道:
->>> 在 2023/3/27 19:33, Sudeep Holla 写道:
->>>> On Tue, Mar 14, 2023 at 07:11:33PM +0800, Huisong Li wrote:
->>>>> PCC supports processing platform notification for slave subspaces
->>>>> and shared interrupt for multiple subspaces.
->>>>>
->>>> Other than a super minor nit in the patch 1/2, this looks good to me.
->>>> It would be good if we can get tested-by from Robbie King
->>>> <robbiek@xsightlabs.com>
->>>>
->>>> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
->>> Thanks for your review.😁
->>>
->>> @Robbie King, can you give us some feedback?
->>> Looking forward to you reply.
->>>
->>>
->> @Robbie King, kindly ping.
