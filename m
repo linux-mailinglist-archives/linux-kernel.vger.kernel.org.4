@@ -2,86 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CB46E57AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0DA6E57B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 05:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjDRCyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 22:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
+        id S229779AbjDRDFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 23:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbjDRCyt (ORCPT
+        with ESMTP id S229560AbjDRDFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 22:54:49 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC165245
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 19:54:48 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id 41be03b00d2f7-51f6461af24so89554a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 19:54:48 -0700 (PDT)
+        Mon, 17 Apr 2023 23:05:52 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9B030E8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 20:05:48 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1a66911f5faso11920455ad.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 20:05:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681786488; x=1684378488;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2EdY+MOU1TmeQWcJcFS/IvhQ+5RhMFDPkRQk2g/H9YA=;
-        b=elBLaAHINYbfNLLcIz+R9zZFtyw7swFPzl0JKRGTQWokMFB5CvI8mr4g/sX4YJhcHZ
-         QQrXKp8ljW7YOCngboMhoBDNwv6/yHAAOn0I//Q2pSfgCTnbS3GERd6HXvWHs8fKmgzV
-         yP9ZEuquMaJU/hucgON7kJNDz9TbwkdxmmA0EMWAwSY80Jd1kWQPwkYg57SkDD92n8j7
-         +sk89CyDi274qoateGf7tfgcKocv7dtR7eCIi44XAZF0eLk2ZPxD9TiqGEwRcxufbeYb
-         uKVlXlWI2xw8yQwKDiAe1lmuQfv22PZHdfmufdPVPi60nyaRWTG9T9McxrjwQXrjQr8y
-         zC7w==
+        d=chromium.org; s=google; t=1681787148; x=1684379148;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kOJuZ4mIPzt5F0DJllOV4ZkHX5DeqvTCiU6JGDixwwQ=;
+        b=eBXlVh5peYX73LusmM4JjASgjEcrYjgy5dKc/k9GHFgBzHwO9ZJjAQqpwb9iWc0igu
+         YhUY3ZArQAGcg8vjPGKt/NR1ZpSbb0/RndHZFwDGEz4GiPa7e/5jjUZxZyOhAqFRk+xs
+         kqinRj4JAQ2UsZuy1rEXL8Q5gNrTZlH1AIjZY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681786488; x=1684378488;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2EdY+MOU1TmeQWcJcFS/IvhQ+5RhMFDPkRQk2g/H9YA=;
-        b=HoyREwBbqA8OB7JDkdowuuCu8PTSTEaXfJdtsjToz4FY89EfYptgEKPfrpt8MW4/KQ
-         xl+Ia+k8psl4XQgmQ8WJBzITCEyNC4sSAH7YmXxXwwi8dsrDcWx01xdulC1VbRiNXEtC
-         pA/LZJn4g2+P5klbRNhQ7Ridxc4XXZ7qEOtaB//uFNGMJl5TV8lYpHK7DHM4IDoUOgI0
-         0TSSov4g2pJjv5Ftkh3Z3CuzdHvXLCLwFOKFxnUsEFbS54/3S/TV7UlDxdEfijt4seVN
-         dyg9DDlfDKyNLa7JWJlTC8GMUpeQMcyRODYUuYH63/FZRmYKuQqUlpNc38Ow7PNaTv1A
-         Sg+A==
-X-Gm-Message-State: AAQBX9eJo/MpAZOXor0XH/zrfda/FGTM53/GV8e72fKw6cRAeexSSp1W
-        pkw7QtzNum0ZJORrjWHAs1ExUVY/xTWCCjfRGpo=
-X-Google-Smtp-Source: AKy350ZN4m512imBUiS5jwaMpAqP4J5JMH+ULXDboWRsY41tveuj/XCqT1Op9DoGHw8eHgTp/E4w3HlynCslHLD6KVo=
-X-Received: by 2002:a17:90a:7547:b0:233:cc2c:7dae with SMTP id
- q65-20020a17090a754700b00233cc2c7daemr178153pjk.8.1681786487923; Mon, 17 Apr
- 2023 19:54:47 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681787148; x=1684379148;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kOJuZ4mIPzt5F0DJllOV4ZkHX5DeqvTCiU6JGDixwwQ=;
+        b=UPttWPIdQHHbuADdN6FTuRGxVuBN3Jk07lZxi+8H1lKws2JCRVF6rsAKamE4sXMLIL
+         eaELsP28G3fhIc7asYUxDilTsL3lplsvGK7x529ip4V9VaFNIi/7UBffevmV5KpdNBIe
+         FPSKFdeE7koZ67jy4y304VamKANe3f134pN4Kmk+lvaugeu0/ixrWyBElPrJk6cEaG3A
+         XNe03xIjkOrNo+rwFdyQCxTw697xKgKwscYIJ7iCrJg3ouoGKAx3ruiQmFWWnHCA6FqV
+         x0rNSa+cfg5qMZ9rnKET/oABixFD18WHocKF9EN+pGF4NSzlHG3H2EHntww+S79CNBOa
+         nREQ==
+X-Gm-Message-State: AAQBX9fv5RujibWb0kKkTzEEvCOWeuxRWga9tHJ2rQOJ/cAbSW1Eellm
+        9vgYH6qKJdblKUvv6fgfiwL/FQ==
+X-Google-Smtp-Source: AKy350bHk3PY5dWCECEECusc5D+Fv4G9g4VDR/o4nC6ceUaXcOblYSMAODNymspLQvMLfoS2fwoXZQ==
+X-Received: by 2002:a17:903:11c4:b0:1a5:180d:c317 with SMTP id q4-20020a17090311c400b001a5180dc317mr762782plh.43.1681787148317;
+        Mon, 17 Apr 2023 20:05:48 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id e4-20020a170902744400b001a681fb3e77sm8383003plt.44.2023.04.17.20.05.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 20:05:48 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 12:05:44 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCHv2] zsmalloc: allow only one active pool compaction context
+Message-ID: <20230418030544.GS25053@google.com>
+References: <20230417135420.1836741-1-senozhatsky@chromium.org>
+ <20230417174131.44de959204814209ef73e53e@linux-foundation.org>
 MIME-Version: 1.0
-Sender: lucasjarry231@gmail.com
-Received: by 2002:a17:522:99ce:b0:4ef:e840:6671 with HTTP; Mon, 17 Apr 2023
- 19:54:46 -0700 (PDT)
-From:   Sophia Erick <sdltdkggl3455@gmail.com>
-Date:   Tue, 18 Apr 2023 04:54:46 +0200
-X-Google-Sender-Auth: oO6k3yUPVm70PbooBVJ-hVYqnT0
-Message-ID: <CAMXDO3VNEYRsENKgw+L16UAQOO8akiYqZboiNp4jj6rKYdRrYQ@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,HK_RANDOM_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230417174131.44de959204814209ef73e53e@linux-foundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dearly Beloved In Christ,
+On (23/04/17 17:41), Andrew Morton wrote:
+> On Mon, 17 Apr 2023 22:54:20 +0900 Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
+> > Introduce pool compaction mutex and permit only one compaction
+> > context at a time. This reduces overall pool->lock contention.
+> 
+> That isn't what the patch does!  Perhaps an earlier version used a mutex?
 
-Please forgive me for stressing you with my predicaments as I directly
-believe that you will be honest to fulfill my final wish before i die.
+Oh, yes.
 
-I am Mrs.Sophia Erick, and i was Diagnosed with Cancer about 2 years
-ago, before i go for a surgery i have to do this by helping the
-Orphanages home, Motherless babies home, less privileged and disable
-citizens and widows around the world,
+[..]
+> > @@ -2274,6 +2275,9 @@ unsigned long zs_compact(struct zs_pool *pool)
+> >  	struct size_class *class;
+> >  	unsigned long pages_freed = 0;
+> >  
+> > +	if (atomic_xchg(&pool->compaction_in_progress, 1))
+> > +		return 0;
+> > +
+> 
+> A code comment might be appropriate here.
 
-So If you are interested to fulfill my final wish by using the sum of
-Eleven Million Dollars, to help them as I mentioned, kindly get back
-to me for more information on how the fund will be transferred to your
-account.
+OK.
 
-Warm Regards,
-Sincerely Mrs. Sophia Erick.
+> Is the spin_is_contended() test in __zs_compact() still relevant?
+
+I'd say yes, pool->lock is "big pool lock", we use it for everything:
+zs_map_object() when we read objects, zs_malloc() when we allocate objects,
+zs_free() when we free objects, etc.
+
+> And....  single-threading the operation seems a pretty sad way of
+> addressing a contention issue.  zs_compact() is fairly computationally
+> expensive - surely a large machine would like to be able to
+> concurrently run many instances of zs_compact()?
+
+Compaction is effective only when zspool suffers from internal fragmentation.
+Concurrent compaction threads iterate size classes in the same order and are
+likely to compete for pool->lock to just find out that previous pool->lock
+owner has compacted the class already and there isn't much left to do.
+
+As of concurrent compaction on big machines, the thing is - concurrent
+compaction doesn't really happen. We always have just one thread compacting
+size classes under pool->lock, the remaining compaction threads just spin on
+pool->lock. I believe it used to be slightly different in the past when we
+had per size-class lock instead of "global" pool->lock. Commit c0547d0b6a4b
+("zsmalloc: consolidate zs_pool's migrate_lock and size_class's locks") has
+basically made compaction single-threaded.
