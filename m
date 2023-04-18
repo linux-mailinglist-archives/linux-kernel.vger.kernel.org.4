@@ -2,175 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 272316E6997
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 785C66E6999
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232537AbjDRQbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 12:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
+        id S232273AbjDRQdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 12:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbjDRQbX (ORCPT
+        with ESMTP id S229900AbjDRQdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 12:31:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7178BC66A;
-        Tue, 18 Apr 2023 09:31:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08DB6613FB;
-        Tue, 18 Apr 2023 16:31:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 343AEC433EF;
-        Tue, 18 Apr 2023 16:31:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681835476;
-        bh=EnkGpZ0KT5wQZ3p6H2OsLu3RjSBEBA8xTMop2/9F6P0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=uWDfL7nwvc14b7pg1yK7n42vedIfE0SYdtcDNvIetym7pJWbeEKYA1swuoQld8PLa
-         cZUN2TplBTd/RJhOgdN34Lc1mmOLlplg/GSsedT8yPf8obqFjvBGN/ChiXdGSDDU+B
-         MBbXPtnT3QNrA+1pzuC+fgwr40r0+VPQx4BaKHaqt6/JM/Q30nQf8iCSBr3KoKxnbC
-         VKG6vRCZaFxq8Ut/B7cag6K482wnhOoZcF28l9cAJYTi7ctxbFLMkTcLQp5hTgk8P+
-         gt9aDQrEEF+WljFnSgQt01dF0fEAM784lCnZGN0OjAxPcbjxUNtQ993Kla3svfop7q
-         xrYh6crrxLqXw==
-Date:   Tue, 18 Apr 2023 11:31:14 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Igor Mammedov <imammedo@redhat.com>, linux-kernel@vger.kernel.org,
-        mst@redhat.com, lenb@kernel.org, bhelgaas@google.com,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH] pci: acpiphp: try to reassign resources on bridge if
- necessary
-Message-ID: <20230418163114.GA134491@bhelgaas>
+        Tue, 18 Apr 2023 12:33:17 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2946EA0;
+        Tue, 18 Apr 2023 09:33:15 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-24736992dd3so1015359a91.1;
+        Tue, 18 Apr 2023 09:33:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681835595; x=1684427595;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=00yd/b00VMDTGnIONMzl0dPq75Gv0LFssWOJWefjpaw=;
+        b=DPAViHFInAzVqI8i4jL9oVEO402VQEhCxUsZ9FqE7Ti6tIivK1HoAWMsOUnBoJ9Hr+
+         ngPT4vhd6+fikkd2884WAgu6VLaiLNNdLH2WhCQWUfVd3+M1VBhI6QuYTTHEeoKJrGbO
+         JmVrSimHtX8i0pA+zQ3UNtk7Ornq/994UVpuqRtFh+zL9G0bnpizSsExR5Eix/UZWpQ1
+         dHnqIHZWUvgitusR9MoR4689IInxLPLQk8tvKGnyM5CGI2HI+KhUsO1/06/SBWMMscdx
+         QDNPlwgVPYT0NxA0oWdlxKGdx9KLwutPZjsCAK4vxnu2vcGErN8+Ly+kKNlQkXcASj22
+         s3hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681835595; x=1684427595;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=00yd/b00VMDTGnIONMzl0dPq75Gv0LFssWOJWefjpaw=;
+        b=Qg1v68tKsY/VDkyYjDVF9CX0FPJa1ETq3c849GGzwG2c17WbEhV+bigInGwKKI1x2C
+         BlnpZVhU+6j6oztDsDQZMAO3ow2CyAtV80DV8eAtYOTJoAptBj3oP141f++SA3HTLBlj
+         zpZufKeB1zkBPrSLMzGtV7/X9oLQUFz3idXtyujm/B3FH8KOIZVK4VnUAV2enc8MqFJn
+         x0Chp+MTL9WKZL9CkPZ8rqZlv755k3YnLnK1eoib1YuTwThMRuj+Qeyvvq+H2aVZvrYp
+         v22PDREJV/d3m/8Dqf7tfsKHT/k6BcG9eROy1o45HFzFxuWrrY5isqu++GSGJmCN8x1k
+         ZZDQ==
+X-Gm-Message-State: AAQBX9eeib2lMIt8ka+pN6VeJzifYWzuEUbgMliXgOfBy5+CDCi9OS4I
+        A8mffE86/fNr2IjCE0v1RTE=
+X-Google-Smtp-Source: AKy350Zh/sJxMVTBAgjSWr5N5lBGR5v4pCtY+keT/2Dv2W171DTq5BcU+EBNli/yr+YZasz79dpy4Q==
+X-Received: by 2002:a17:90a:eacb:b0:246:5a79:a0e9 with SMTP id ev11-20020a17090aeacb00b002465a79a0e9mr205292pjb.30.1681835594602;
+        Tue, 18 Apr 2023 09:33:14 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id gl13-20020a17090b120d00b0024781f5e8besm4353423pjb.26.2023.04.18.09.33.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 09:33:13 -0700 (PDT)
+Message-ID: <40e91346-19d7-c0b4-7fcc-d5a2081fe8dd@gmail.com>
+Date:   Tue, 18 Apr 2023 09:33:06 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 2/2] firmware: arm_scmi: Augment SMC/HVC to allow
+ optional parameter
+Content-Language: en-US
+To:     Nikunj Kela <quic_nkela@quicinc.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     cristian.marussi@arm.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230409181918.29270-1-quic_nkela@quicinc.com>
+ <20230417174401.19563-1-quic_nkela@quicinc.com>
+ <20230417174401.19563-3-quic_nkela@quicinc.com>
+ <02b34c80-f37e-deee-29cd-de7db902797d@gmail.com>
+ <20230418095846.4lkncoa4beeih2hj@bogus>
+ <d05b26ff-1c49-69eb-7146-8f7cef7e1ddb@quicinc.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <d05b26ff-1c49-69eb-7146-8f7cef7e1ddb@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0gWKwOiACmK9=ru5W15Kydv6JqKJ8d4ngzKC7jqAjjcpQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Mika, who made previous changes in this area]
-
-On Tue, Apr 18, 2023 at 05:38:15PM +0200, Rafael J. Wysocki wrote:
-> On Tue, Apr 18, 2023 at 4:17 PM Igor Mammedov <imammedo@redhat.com> wrote:
-> > On Tue, 18 Apr 2023 14:55:29 +0200
-> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > > On Tue, Apr 18, 2023 at 10:50 AM Igor Mammedov <imammedo@redhat.com> wrote:
-> > > >
-> > > > When using ACPI PCI hotplug, hotplugging a device with
-> > > > large BARs may fail if bridge windows programmed by
-> > > > firmware are not large enough.
-> > > >
-> > > > Reproducer:
-> > > >   $ qemu-kvm -monitor stdio -M q35  -m 4G \
-> > > >       -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=on \
-> > > >       -device id=rp1,pcie-root-port,bus=pcie.0,chassis=4 \
-> > > >       disk_image
-> > > >
-> > > >  wait till linux guest boots, then hotplug device
-> > > >    (qemu) device_add qxl,bus=rp1
-> > > >
-> > > >  hotplug on guest side fails with:
-> > > >    pci 0000:01:00.0: [1b36:0100] type 00 class 0x038000
-> > > >    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x03ffffff]
-> > > >    pci 0000:01:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
-> > > >    pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x00001fff]
-> > > >    pci 0000:01:00.0: reg 0x1c: [io  0x0000-0x001f]
-> > > >    pci 0000:01:00.0: BAR 0: no space for [mem size 0x04000000]
-> > > >    pci 0000:01:00.0: BAR 0: failed to assign [mem size 0x04000000]
-> > > >    pci 0000:01:00.0: BAR 1: no space for [mem size 0x04000000]
-> > > >    pci 0000:01:00.0: BAR 1: failed to assign [mem size 0x04000000]
-> > > >    pci 0000:01:00.0: BAR 2: assigned [mem 0xfe800000-0xfe801fff]
-> > > >    pci 0000:01:00.0: BAR 3: assigned [io  0x1000-0x101f]
-> > > >    qxl 0000:01:00.0: enabling device (0000 -> 0003)
-> > > >    Unable to create vram_mapping
-> > > >    qxl: probe of 0000:01:00.0 failed with error -12
-> > > >
-> > > > However when using native PCIe hotplug
-> > > >   '-global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off'
-> > > > it works fine, since kernel attempts to reassign unused resources.
-> > > > Use the same machinery as native PCIe hotplug to (re)assign resources.
-
-Thanks for the nice reproducer and logs!
-
-> > > > Signed-off-by: Igor Mammedov <imammedo@redhat.com>
-> > >
-> > > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > or please let me know if you want me to pick this up.
-> >
-> > It would be nice if you could pick it up.
+On 4/18/23 07:20, Nikunj Kela wrote:
 > 
-> OK, I'll do that unless Bjorn tells me that he prefers to take it via
-> the PCI tree.
+> On 4/18/2023 2:58 AM, Sudeep Holla wrote:
+>> On Mon, Apr 17, 2023 at 11:01:13AM -0700, Florian Fainelli wrote:
+>>> On 4/17/23 10:44, Nikunj Kela wrote:
+>>>> This patch add support for passing shmem channel address as parameter
+>>>> in smc/hvc call. This patch is useful when multiple scmi instances are
+>>>> using same smc-id and firmware needs to distiguish among the instances.
+>>> Typo: distinguish.
+>>>
+>>> It really would have been a lot clearer and made a whole lot more 
+>>> sense to
+>>> encode a VM ID/channel number within some of the SMCCC parameters, 
+>>> possibly
+>>> as part of the function ID itself.
+>>>
+>> Yes I was about to suggest this but then remembered one main reason I 
+>> have
+>> been given in the past against that:
+>> If the system launches high number of VMs then that means loads of FID
+>> needs to be reserved for SCMI and the hypervisor needs to support it.
+>> Basically it is not scalable which I agree but not sure if such large
+>> number of VMs are used in reality with SCMI. But I agree with the 
+>> technical
+>> reasoning.
+>>
+>> The other reason why I preferred the shmem address itself instead of some
+>> custom VM ID/channel number is that it can easily becomes vendor specific
+>> for no real good reason and then we need to add support for each such
+>> different parameters. Nikunj suggested getting them from DT which I 
+>> really
+>> don't like if the sole reason is just to identify the channel. We don't
+>> have standard SCMI SMC/HVC but allowing such deviations with params from
+>> DT will just explode with various combinations for silly/no reason.
+>>
+> Would you be ok to pass the smc/hvc parameters via kernel parameters in 
+> commandline? If so, I can implement that. I just wanted to keep 
+> everything in one place hence suggested using DTB node.
 
-It's OK with me if you pick this up, but please update the subject to
-use the style of previous commits, e.g.,
+Command line arguments seem a bit unnecessary here and it would force 
+you to invent a scheme to control per SCMI device/instance parameters.
 
-  PCI: acpiphp: Reassign resources on bridge if necessary
+> 
+>> [...]
+>>
+>>>> @@ -137,6 +144,8 @@ static int smc_chan_setup(struct scmi_chan_info 
+>>>> *cinfo, struct device *dev,
+>>>>        if (ret < 0)
+>>>>            return ret;
+>>>> +    if (of_device_is_compatible(dev->of_node, "arm,scmi-smc-param"))
+>>>> +        scmi_info->param = res.start;
+>>> There is not even a check that this is going to be part of the 
+>>> kernel's view
+>>> of memory, that seems a bit brittle and possibly a security hole, 
+>>> too. Your
+>>> hypervisor presumably needs to have carved out some amount of memory in
+>>> order for the messages to be written to/read from, and so would the VM
+>>> kernel, so eventually we should have a 'reserved-memory' entry of 
+>>> some sort,
+>>> no?
+>>>
+>> Not disagreeing here. Just checking if my understanding is correct or 
+>> not.
+>> IIUC, we need reserved-memory if it is part of the memory presented to 
+>> the
+>> OS right ? You don't need that if it is dedicated memory like part of 
+>> SRAM
+>> or something similar.
+> We are not using reserved-memory node. Instead using sram-mmio to carve 
+> out shmem for scmi instances.
 
-Previous changes involving pci_assign_unassigned_bridge_resources() in
-enable_slot() (these are from Mika, so I cc'd him in case he wants to
-comment):
+OK, that works too.
 
-  84c8b58ed3ad ("ACPI / hotplug / PCI: Don't scan bridges managed by native hotplug")
-  77adf9355304 ("ACPI / hotplug / PCI: Allocate resources directly under the non-hotplug bridge")
+>>>>        /*
+>>>>         * If there is an interrupt named "a2p", then the service and
+>>>>         * completion of a message is signaled by an interrupt rather 
+>>>> than by
+>>>> @@ -156,6 +165,7 @@ static int smc_chan_setup(struct scmi_chan_info 
+>>>> *cinfo, struct device *dev,
+>>>>        }
+>>>>        scmi_info->func_id = func_id;
+>>>> +    scmi_info->is_smc64 = ARM_SMCCC_IS_64(func_id);
+>>>>        scmi_info->cinfo = cinfo;
+>>>>        smc_channel_lock_init(scmi_info);
+>>>>        cinfo->transport_info = scmi_info;
+>>>> @@ -188,7 +198,20 @@ static int smc_send_message(struct 
+>>>> scmi_chan_info *cinfo,
+>>>>        shmem_tx_prepare(scmi_info->shmem, xfer, cinfo);
+>>>> -    arm_smccc_1_1_invoke(scmi_info->func_id, 0, 0, 0, 0, 0, 0, 0, 
+>>>> &res);
+>>>> +#ifdef CONFIG_ARM64
+>>>> +    /*
+>>>> +     * if SMC32 convention is used, pass 64 bit address in
+>>>> +     * two parameters
+>>>> +     */
+>>>> +    if (!scmi_info->is_smc64)
+>>> There is no need for scmi_info to store is_smc64, just check the func_id
+>>> here and declare is_smc64 as a local variable to the function.
+>>>
+>> +1
+> ACK!
+>>> Also, another way to approach this would be to encode the parameters 
+>>> region
+>>> in 4KB units such that event on a 32-bit system with LPAE you are 
+>>> guaranteed
+>>> to fit the region into a 32-bit unsigned long. AFAIR virtualization 
+>>> and LPAE
+>>> are indistinguishable on real CPUs?
+>>>
+>> Agree with the idea. But can a single 4kB be used for multiple shmem 
+>> across
+>> VMs ? IIUC the hypervisor can deal with that, so I prefer it if it is 
+>> possible
+>> practically.
+> We have multiple VMs and each VM has multiple instances. We will have 
+> quite a few domains and I am not sure if single page will suffice.
 
-> > > > ---
-> > > > tested in QEMU with Q35 machine on PCIE root port and also
-> > > > with nested conventional bridge attached to root port.
-> > > > ---
-> > > >  drivers/pci/hotplug/acpiphp_glue.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/pci/hotplug/acpiphp_glue.c b/drivers/pci/hotplug/acpiphp_glue.c
-> > > > index 5b1f271c6034..9aebde28a92f 100644
-> > > > --- a/drivers/pci/hotplug/acpiphp_glue.c
-> > > > +++ b/drivers/pci/hotplug/acpiphp_glue.c
-> > > > @@ -517,7 +517,7 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
+I did not make myself clear enough, you can encode an offset into the 
+shared memory area, and however big that shared memory area will be, 
+that offset can be in a 4KB size. So for instance if you have your MMIO 
+SRAM at 0x8000_0000, the first VM can use 0x8000_0ffff, the second VM 
+can use 0x8000_1000 to 0x8000_1fff and so on and so forth.
 
-Previous context:
+Even if you need more than 4KB per VM, you can put that information into 
+the two additional parameters you pass through the SMC/HVC call.
+-- 
+Florian
 
-                                             __pci_bus_size_bridges(dev->subordinate,
-                                                                    &add_list);
-
-> > > >                                 }
-> > > >                         }
-> > > >                 }
-> > > > -               __pci_bus_assign_resources(bus, &add_list, NULL);
-> > > > +               pci_assign_unassigned_bridge_resources(bus->self);
-
-"add_list" is now used only for __pci_bus_size_bridges(), which
-*looks* unnecessary unless there's some obscure side-effect of that
-path when that parameter is non-NULL.
-
-If "add_list" is unnecessary, you would probably use
-pci_bus_size_bridges() above instead of __pci_bus_size_bridges().
-
-After this patch, we have:
-
-  if (bridge && bus->self && hotplug_is_native(bus->self)) {
-    for_each_pci_bridge(dev, bus)
-      acpiphp_native_scan_bridge(dev);
-  } else {
-    ...
-    pci_assign_unassigned_bridge_resources(bus->self);
-  }
-
-We do not do pci_assign_unassigned_bridge_resources() in the "then"
-part of the "if".  Per the comment, that case may be used for adding
-Thunderbolt controllers.  Is there a reason we do not want
-pci_assign_unassigned_bridge_resources() in that path, or should it be
-in both cases?
-
-> > > >         }
-> > > >
-> > > >         acpiphp_sanitize_bus(bus);
