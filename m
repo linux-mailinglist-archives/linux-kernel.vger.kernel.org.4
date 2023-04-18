@@ -2,117 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4656E6F58
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5475D6E6F5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbjDRW0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 18:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
+        id S231539AbjDRW2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 18:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbjDRW0Q (ORCPT
+        with ESMTP id S229940AbjDRW2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 18:26:16 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369D559D7;
-        Tue, 18 Apr 2023 15:26:15 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1842c7c2daaso470971fac.0;
-        Tue, 18 Apr 2023 15:26:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681856774; x=1684448774;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DzkYu2FZFUxwYvdabyHvXaq9bbCUpOwOEj0N+6nTnPE=;
-        b=dvhF4A1PpuHaqCHDBeyzvgJrX354fRn2/VrKKNq6bW1R6Q7cMj6vomNpaLq1OpZHe2
-         0Guq9r556cWq6AWKzqKsv/+6o/K8q9RsuMFFJkIi6WSFwPa54tZBx2VV8BLJYe+OH5ru
-         akJmbMttjOh92iIygodVTsFWdyA+qhm43YCUQVR90kSzUnue5nmfZnL3VDSBdmEEK7x6
-         1mBzVROySrecgTKd4ESEAaUaVQEiSX2S4uM0dDRSbkTI0rL3BANTDIrIoh4yTMVAUcCw
-         +V74HHc9EOTxDHsnoVz5/80HQ5X94WdYXBWE5qyKBmbuWwskDodAvHq9O7pxHm2q2GJu
-         vYVw==
-X-Gm-Message-State: AAQBX9fhRcd2BgOh0a1aIG/hI5+Bti9lo9/iU0voPA7wZ/N7yMkbzn0R
-        cKjJoG+Rx9LQZvU+VTKr0w==
-X-Google-Smtp-Source: AKy350bFvNy0NlWTzt68rhthpi/WPjnoE7xLzVZ9Y3ny/MmMDQ7CWhC385UPZEOO6x3QefiiZ6rpbQ==
-X-Received: by 2002:a05:6870:f2a5:b0:184:50ac:2e27 with SMTP id u37-20020a056870f2a500b0018450ac2e27mr1936247oap.50.1681856774469;
-        Tue, 18 Apr 2023 15:26:14 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e8-20020a9d63c8000000b006a5f70dd12bsm1374581otl.17.2023.04.18.15.26.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 15:26:13 -0700 (PDT)
-Received: (nullmailer pid 2439794 invoked by uid 1000);
-        Tue, 18 Apr 2023 22:26:13 -0000
-Date:   Tue, 18 Apr 2023 17:26:13 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH] dt-bindings: display: panel: add common definition of
- ports
-Message-ID: <20230418222613.GA2408838-robh@kernel.org>
-References: <20230416153929.356330-1-krzysztof.kozlowski@linaro.org>
+        Tue, 18 Apr 2023 18:28:17 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3309AE5C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 15:28:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681856896; x=1713392896;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RLd/1xU99+ttlf1hdzIgHd1UUffC8F6HeleQYnu17XQ=;
+  b=LLFKYSUcBzcZS/Ulu1SGf9DdRV1M6gxTpAt9bBQP7O/VbzwxiO9vd4Kt
+   SgFGZ5subzalUzF7ob0B+DOfIBvSXBrYfDDS0tMm/F39OGZNnRiMJzJ4N
+   tc2Sm7bCP2IAdWHgEdVW08lka3TPALQ0oNdMxD4bX8ByaKIXpyFwNEttH
+   6Qkd7eF5xLdPF/pHQ62desFLUSqKgZADjIZ3rEoZqo4IwWGY9Nh0qMdEH
+   URrofE1ReUPWD6852eAtMS0j4Lcxwa1cxKp2wuhs2bwx1cE7kR2NFuqnG
+   YkVJNZt11v40XeRC2/CAtvqt7dlyTb5ZPhMSkNGQYcRB7RjAb4jBN/i0Q
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="348055626"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="348055626"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 15:28:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="780642984"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="780642984"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 18 Apr 2023 15:28:13 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1poto4-000e8z-1X;
+        Tue, 18 Apr 2023 22:28:12 +0000
+Date:   Wed, 19 Apr 2023 06:28:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ c22ef5684b64a3a1ac08db06a6f327f2695fd377
+Message-ID: <643f1972.dtUkCF9vxya0AHwT%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230416153929.356330-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 05:39:29PM +0200, Krzysztof Kozlowski wrote:
-> Few panel bindings for dual-link connections just type "ports: true",
-> which does not enforce any type.  Add common definition of ports, so the
-> type will be fixed.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../bindings/display/panel/panel-common.yaml     | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/panel/panel-common.yaml b/Documentation/devicetree/bindings/display/panel/panel-common.yaml
-> index 5b38dc89cb21..ad62d34e6fa3 100644
-> --- a/Documentation/devicetree/bindings/display/panel/panel-common.yaml
-> +++ b/Documentation/devicetree/bindings/display/panel/panel-common.yaml
-> @@ -70,6 +70,16 @@ properties:
->    port:
->      $ref: /schemas/graph.yaml#/properties/port
->  
-> +  # For dual-link connections
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    patternProperties:
-> +      "^port@[0-9a-f]+$":
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: c22ef5684b64a3a1ac08db06a6f327f2695fd377  x86/alternatives: Do not use integer constant suffixes in inline asm
 
-This allows any undocumented property.
+elapsed time: 720m
 
-> +
-> +    required:
-> +      - port@0
-> +
+configs tested: 69
+configs skipped: 144
 
-I don't think this should be added here because users must define what 
-each port is. With it here, we're going to validate the nodes twice as 
-well. Same can be said for 'port' though. It can't be extended though.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I originally wanted to a do a meta-schema to enforce some of this, but 
-there's just too many exceptions.
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r015-20230418   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230417   gcc  
+i386                 randconfig-a002-20230417   gcc  
+i386                 randconfig-a003-20230417   gcc  
+i386                 randconfig-a004-20230417   gcc  
+i386                 randconfig-a005-20230417   gcc  
+i386                 randconfig-a006-20230417   gcc  
+i386                 randconfig-a011-20230417   clang
+i386                 randconfig-a012-20230417   clang
+i386                 randconfig-a013-20230417   clang
+i386                 randconfig-a014-20230417   clang
+i386                 randconfig-a015-20230417   clang
+i386                 randconfig-a016-20230417   clang
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230417   gcc  
+x86_64               randconfig-a002-20230417   gcc  
+x86_64               randconfig-a003-20230417   gcc  
+x86_64               randconfig-a004-20230417   gcc  
+x86_64               randconfig-a005-20230417   gcc  
+x86_64               randconfig-a006-20230417   gcc  
+x86_64               randconfig-a011-20230417   clang
+x86_64               randconfig-a012-20230417   clang
+x86_64               randconfig-a013-20230417   clang
+x86_64               randconfig-a014-20230417   clang
+x86_64               randconfig-a015-20230417   clang
+x86_64               randconfig-a016-20230417   clang
+x86_64               randconfig-k001-20230417   clang
+x86_64                               rhel-8.3   gcc  
 
-Rob
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
