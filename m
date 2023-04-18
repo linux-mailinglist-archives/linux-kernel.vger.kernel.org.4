@@ -2,43 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 730696E60EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EAF6E60EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbjDRMPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 08:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
+        id S230315AbjDRMPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 08:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjDRMO7 (ORCPT
+        with ESMTP id S229706AbjDRMPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 08:14:59 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4979449C6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:14:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 81E6E1691;
-        Tue, 18 Apr 2023 05:14:30 -0700 (PDT)
-Received: from [10.57.21.174] (unknown [10.57.21.174])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 511963F587;
-        Tue, 18 Apr 2023 05:13:45 -0700 (PDT)
-Message-ID: <f4227609-ec24-58f8-e4d3-073434fd7ab3@arm.com>
-Date:   Tue, 18 Apr 2023 13:14:05 +0100
+        Tue, 18 Apr 2023 08:15:44 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E542D58;
+        Tue, 18 Apr 2023 05:15:20 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33ICElmZ010016;
+        Tue, 18 Apr 2023 07:14:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681820087;
+        bh=ATEwRLj88D73ZY92VaV6r650BMc4NPzhzx9/mXDs8N8=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=nyrwf5wFaowiPfv/ywi5GjUvTQwPw6mrHQRZFAcb8PiS5Be5jU90nzsi7fBOJDa5a
+         sMhwB9sqfYilHdyYWZkOZiYTPmmpQZoHT+OB83+qbDt9ZeXhAoSl0QlMypul4UZ0DH
+         553/mAyBTXOxrRpWM9vhaYV3XGLPahR4SGkaPn0I=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33ICElgj084807
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 18 Apr 2023 07:14:47 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 18
+ Apr 2023 07:14:46 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 18 Apr 2023 07:14:46 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33ICEkHu081464;
+        Tue, 18 Apr 2023 07:14:46 -0500
+Date:   Tue, 18 Apr 2023 07:14:46 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Udit Kumar <u-kumar1@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>, <afd@ti.com>, <bb@ti.com>,
+        <vaishnav.a@ti.com>, <j-choudhary@ti.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v2 2/2] arm64: dts: ti: k3-j7200-som: Enable I2C
+Message-ID: <20230418121446.wv5sng7i7n56yrtd@granny>
+References: <20230418050514.2392717-1-u-kumar1@ti.com>
+ <20230418050514.2392717-3-u-kumar1@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: SMP enablement on Cortex-R52 (using PSCI ?)
-To:     Ayan Kumar Halder <ayankuma@amd.com>, mark.rutland@arm.com,
-        lpieralisi@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Stefano Stabellini <sstabellini@kernel.org>
-References: <1cb7d428-c047-1485-e39d-465806f6ef0b@amd.com>
-Content-Language: en-US
-From:   Vladimir Murzin <vladimir.murzin@arm.com>
-In-Reply-To: <1cb7d428-c047-1485-e39d-465806f6ef0b@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230418050514.2392717-3-u-kumar1@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,33 +67,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 10:35-20230418, Udit Kumar wrote:
+> This patch enables wkup_i2c0 node in board dts file.
+> and underneath eeprom CAV24C256WE.
+> 
+> J7200 User Guide (Section 4.3, Table 4-2) :
+> https://www.ti.com/lit/ug/spruiw7a/spruiw7a.pdf
+> 
+> Signed-off-by: Udit Kumar <u-kumar1@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
+> index fa44ed4c17d5..137492ae89c4 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
+> @@ -214,6 +214,14 @@ exp_som: gpio@21 {
+>  	};
+>  };
+>  
+> +&wkup_i2c0 {
+> +	status = "okay";
+> +	eeprom@50 {
+> +		compatible = "atmel,24c256";
+> +		reg = <0x50>;
+> +	};
+> +};
 
-On 4/14/23 12:24, Ayan Kumar Halder wrote:
-> Hi PSCI developers,
-> 
-> We have a SoC where there are 4 Cortex-R52 which is distributed in two clusters. So we have 2 Cortex-R52 in one cluster and 2 Cortex-R52 in another cluster.
-> 
-> We wish to enable SMP on the 2 R52 within a cluster with Xen hypervisor (EL2 software) running on them.
-> 
-> We are trying to explore if we can use PSCI for booting the secondary cores.
+pinmux?
+speed ?
+
+> +
+>  &ospi0 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&mcu_fss0_ospi0_pins_default>;
+> -- 
+> 2.34.1
 > 
 
-snip
-
-> 
-> I wish to know how do we wake up the secondary core if PSCI is not supported.
-> 
-
-It looks to me you need to provide/use platform defined method. I see that
-Xen provides struct platform_desc with smp_init and cpu_up callbacks...
-
-Cheers
-Vladimir
-
-> Kind regards,
-> Ayan
-> 
-> 
-> 
-
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
