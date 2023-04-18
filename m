@@ -2,176 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8246E6DCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0E56E6DD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232810AbjDRVD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
+        id S232818AbjDRVFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232773AbjDRVDZ (ORCPT
+        with ESMTP id S229633AbjDRVFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:03:25 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0E386B6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:03:23 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id z1so20271194qti.5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:03:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1681851803; x=1684443803;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FNglwINUCAt3ccJJLEBkDRXVmh5q8gNpnI9SQ7Ogt5M=;
-        b=RY9JXHbv9rd5w05TShsS2SJI+2H8HVRVwHe3oiSLlLehgGwOC8Zy4sgi43ailu9J0U
-         LDxh6tNlr1l7dfdVd196B11QxWbTFSH0BWFwZU8paOlCPiVJYskmirZ0IPRm/2C9AXHA
-         BF2Ms72rsrPnW4WjsIqt1vC0mfPJQZ/tXILUs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681851803; x=1684443803;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FNglwINUCAt3ccJJLEBkDRXVmh5q8gNpnI9SQ7Ogt5M=;
-        b=H5psrnwrDj2CgTgsfqLA4fkUbVRxjF3tDCsf34yFQDOH6dR/PXpS4HpAAfplh7Nvn5
-         H1QF0MBlPOzG6pVworM+5g8/7xLka8qXKFNrK/VlE2wyZHZdE6cyNOTQv3AfZUYamZ6p
-         +DEmtp3Wf6w4l3FHDYmLtrpXMGPjrVs13V0zd3sV2A+OYTmcWyG+36mRJWHtJOzkJyfL
-         VMaUm89lqv2GqWSrSKVhJxNynlgRSUksMPXpwNkYfA/w4uYkONxUaTkT8w3cyZ9dpS3g
-         Bq1k/ujKgQCUEA2VUpdjiaaLqGPcDWIMdOOcOAQ/R2NschgU9aHix7vmwGLiU/S8hjSX
-         U+UA==
-X-Gm-Message-State: AAQBX9fdKAWuskEYt6csqbHBi8aS61krLMRMEm0sGDvJ58nMs8vO7qxA
-        5nYHt193H6mofoDNTd7aEWOMuA==
-X-Google-Smtp-Source: AKy350aiunplJiCaf2PviZ0YofiOv/IlFis7nCJ/CUiB4SbkEn25Zy6/Pnck783zpuJMk93zOa+1JQ==
-X-Received: by 2002:a05:622a:108:b0:3e8:d461:fae3 with SMTP id u8-20020a05622a010800b003e8d461fae3mr2111387qtw.55.1681851802595;
-        Tue, 18 Apr 2023 14:03:22 -0700 (PDT)
-Received: from localhost (55.87.194.35.bc.googleusercontent.com. [35.194.87.55])
-        by smtp.gmail.com with ESMTPSA id i1-20020ac813c1000000b003ef13aa5b0bsm2121861qtj.82.2023.04.18.14.03.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 14:03:22 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 21:03:21 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     rcu@vger.kernel.org, nathan@kernel.org, trix@redhat.com,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        paulmck@kernel.org
-Subject: Re: clangd cannot handle tree_nocb.h
-Message-ID: <20230418210321.GA3648938@google.com>
-References: <20230414005309.GA2198310@google.com>
- <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
- <20230418203611.GA3640630@google.com>
- <CAKwvOdnxCJo-FoPfcNw=SBum6yRXOY7_meT8T6gsjV3c3FFm5A@mail.gmail.com>
+        Tue, 18 Apr 2023 17:05:44 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2057.outbound.protection.outlook.com [40.107.237.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2619748;
+        Tue, 18 Apr 2023 14:05:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hfCwmQLNt+sbxZ0TXp5t8tDr6DUllg3LPKbyzZmgIrAED/DRgXgrqVKWI0IgodyBoaXmTxUYufd4ZXSZwzJZli6pKmfA61S6fadoZr0yFPXVEnRl3TDFgyWYm2Qr49LqIqi8sHvFfn999jN6rd8NhIQp7uJkhH7uVKU+mKnFU0MgaJcRWqJsNqHN4eUs0uriZz3md2/uKfawdIXM0V4uSdhfhtxaYi0cSKyCdoP7HOFNyiDFpgbxmNZI1mxTiVFR7kabJf3IODi4eVF/gJLMpxDoN16oUgGQwASOBF6rTB++QAzDBDSgbmIsD3DHecQ7VVc0x5PgAYx0I0D6tYsMbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Lxf/pQhQdoRpTOXAYTc5kkcCEPy8yMD+lyPmzHOXnr0=;
+ b=k0US6AdxstMUV2FlDmiNa/F8r4yBmzh6+knKwIhr+fXjDHkZKTuJMTSvQg2LYndwK9Jih+cks8jVi5edh5akh5M3QYMCyoOji8EQRAotJnw/I1V9+2GUw4zKcj1uqRrcQmfl9sT4Iplu6LCUuijif3NKqXcll2kWvAj2A2MzhkzgfLlW43cI/BiwVuDjKEeec4HaapNIYV+fgDqGFvocaHjVxYApmXC83CCo8x3KuhB+q7YPvRjy8yKFl00Rx8NZsEWfwp6W8roNtTEZ33aMTslX2GXZA9Vj1RXPwxR+jVQJhBUvYZHz46Z0/cTc3lQ5Gfy/2zEg3KPyL1UXmo+SOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Lxf/pQhQdoRpTOXAYTc5kkcCEPy8yMD+lyPmzHOXnr0=;
+ b=tzjreaBJ4jctuRv8ZAeMzTfESRJ9ca6yUUV0oFg++TFD9KiptzuxlsUnqRSYtr6kdSXKWALezcPCMmrYGqr6yYYwBKhv39g5wPxdGZJ1407gvWlGNVb9bVzrzAm+mpewZurY1ZZIANJxZjmlsSexOhnHlD6krxVe9QTtP+ULmc8=
+Received: from MW4PR04CA0037.namprd04.prod.outlook.com (2603:10b6:303:6a::12)
+ by PH7PR12MB6835.namprd12.prod.outlook.com (2603:10b6:510:1b5::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Tue, 18 Apr
+ 2023 21:05:40 +0000
+Received: from CO1NAM11FT051.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:6a:cafe::fd) by MW4PR04CA0037.outlook.office365.com
+ (2603:10b6:303:6a::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.46 via Frontend
+ Transport; Tue, 18 Apr 2023 21:05:40 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT051.mail.protection.outlook.com (10.13.174.114) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6319.20 via Frontend Transport; Tue, 18 Apr 2023 21:05:40 +0000
+Received: from ethanolx50f7host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 18 Apr
+ 2023 16:05:39 -0500
+From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+To:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Bjorn Helgaas <bhelgaas@google.com>, <oohall@gmail.com>,
+        "Mahesh J Salgaonkar" <mahesh@linux.ibm.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Kuppuswamy Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Fontenot Nathan <Nathan.Fontenot@amd.com>,
+        "Smita Koralahalli" <Smita.KoralahalliChannabasappa@amd.com>
+Subject: [PATCH v2 0/2] PCI: pciehp: Add support for native AER and DPC handling on async remove
+Date:   Tue, 18 Apr 2023 21:05:24 +0000
+Message-ID: <20230418210526.36514-1-Smita.KoralahalliChannabasappa@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdnxCJo-FoPfcNw=SBum6yRXOY7_meT8T6gsjV3c3FFm5A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT051:EE_|PH7PR12MB6835:EE_
+X-MS-Office365-Filtering-Correlation-Id: cbdf47c3-bc58-48a7-3bb7-08db4050aa78
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FUFI07b0X4dg1M+CaC+CfB6thJsh5Z3DHAzp56o1dkSLvarxt3J+KX90RoH4UE+m7JLaj5W6KNA/Dt+EdyzZGnlyqMQpooWdLBu+F9sbQew+lXiLrCoWiKgMBZnm8efxNOtE/lwC0sqXt9MqM0OafOavDChFUiWN00YuIDQ6ihDLI8bY/J019QvYL8ME11PRkYdHNmZ71vOXkYJGZ2SZuBQhekVQakWNIxE2zYYOYX7bNgQ+vouO69oEAEbHZ4UzrSf1Um3nwCn7TFQNwJjUs9/ZzyzrKG4bajspAPglX+SO3KNufE/yqISGmpsFhApAXQpvHQPZrLFarra9d9lSRNaAeRNNDjEnkiqNMxoM8m7jCahBfFrkntrCl1j9p1DStVFH0w920+dyUjergHC8aVtmxfT/Z6HCHBkIyt6V7Lf7z15oM0C6DsoajzZdcAGupar2VJcwY8pYSU5AQVTMD2p6UBV5oekg9Fmj/AH3n8qmPXMpJ8nQ3XMUJjkVaHh5Idv5NPgYMIJqoDbc+dyv7sON0P18I0mPT92yCsZxRTzlKV9YvJCGloYnXV+84NNWWnADhL8t4DR1xiXo7BwtZkM3yQQCA0hiLvWD+4+ZGjGUZAngReQAyPUf1t2VdhMyn7lafFOjmYtip+Xv2cRl7TP3M9wvLfzYs4abfklJkUojzN2JhCubKhHdLumH0FStA6Ff5ldQj5aclKAwzj+H2iKxhYowFoFxZ6eVn+9um84=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(396003)(376002)(451199021)(40470700004)(36840700001)(46966006)(5660300002)(966005)(4744005)(7696005)(40460700003)(2906002)(4326008)(70206006)(70586007)(36756003)(86362001)(81166007)(8936002)(41300700001)(6666004)(478600001)(82740400003)(356005)(316002)(8676002)(82310400005)(40480700001)(54906003)(110136005)(1076003)(26005)(336012)(426003)(36860700001)(2616005)(16526019)(47076005)(186003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 21:05:40.2906
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cbdf47c3-bc58-48a7-3bb7-08db4050aa78
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT051.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6835
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
+This series of patches adds native support to handle AER and DPC/EDR events
+occurred as a side-effect on an async remove.
 
-On Tue, Apr 18, 2023 at 01:46:40PM -0700, Nick Desaulniers wrote:
-> On Tue, Apr 18, 2023 at 1:36 PM Joel Fernandes <joel@joelfernandes.org> wrote:
-> >
-> > On Fri, Apr 14, 2023 at 03:47:51PM -0700, Nick Desaulniers wrote:
-> > > On Thu, Apr 13, 2023 at 5:53 PM Joel Fernandes <joel@joelfernandes.org> wrote:
-> > > >
-> > > > Hello!
-> > > >
-> > > > I have been trying to get clangd working properly with tree_nocb.h. clangd
-> > > > trips quite badly when trying to build tree_nocb.h to generate ASTs.
-> > >
-> > > Hi Joel,
-> > > Thanks for the report.  What are you using clangd for? I'll bet
-> > > something interesting.
-> >
-> > Thanks for the response and sorry for the late reply. I am at the OSPM
-> > conference. I use vim and vscode with clangd. In vim, YCM uses it to
-> > highlight compiler errors live while editing, I am pretty happy with it so
-> > far and has been a huge time saver. Enough that now I want to use it for
-> > everything...
-> 
-> Cool! I use vim, can you share more info about your set up for this?
-> I'll have to try it.
+Link to v1:
+https://lore.kernel.org/all/20221101000719.36828-1-Smita.KoralahalliChannabasappa@amd.com/
 
-This is how I installed YCM:
+Smita Koralahalli (2):
+  PCI: pciehp: Add support for async hotplug with native AER and DPC/EDR
+  PCI: pciehp: Clear the optional capabilities in DEVCTL2 on a hot-plug
 
-# Install YouCompleteMe for vim
-# cd ~/.vim/bundle
-# git clone https://github.com/Valloric/YouCompleteMe.git
-# cd YouCompleteMe/
-# git submodule update --init --recursive
-# python3 install.py --clang-completer
+ drivers/pci/hotplug/pciehp_pci.c |  1 +
+ drivers/pci/pcie/dpc.c           | 50 ++++++++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+)
 
-Then install and run bear in the kernel sources to generate
-compile_compands.json:
-bear -- make -j99 CC=clang
-
-However, there's also the script:
-scripts/clang-tools/gen_compile_commands.py
-
-This generates the .json from an existing build. Thank God because we can
-probably make this generate better .json files which may make clangd better.
-
-You don't need YCM to reproduce the issue though if you just use vscode with
-the clangd plugin.
-
-> > I first came across clangd when developing Chrome userspace code which is C++
-> > :). In Chrome, ninja builds can be made to output compile_commands.json.
-> > However, now I noticed the support in the kernel and was like, wow I need to
-> > try it. Further, YCM seems to work much better with it than without :)
-> >
-> > > I've never used it myself, so I don't know where to even begin with
-> > > how to reproduce the issue.
-> >
-> > Ah ok. :). When I ran get_maintainer on the script, your name popped up and
-> > someone also suggested that you're the goto person for clang on the kernel
-> > (which I kind of already knew ;)
-> 
-> You've cc'ed the right set of folks.  We might not have the expertise
-> related to clangd specifically, but we can point you in the right
-> direction.
-
-Sure, thanks! And thanks for CC'ing the right folks.
-
-> > > It might be worth filing a bug upstream at
-> > > https://github.com/llvm/llvm-project/issues
-> > > or internally under the component
-> > > Language Platforms > C++ > Clang > Tools > Clangd
-> > > with detailed steps to reproduce (and what the observed error actually
-> > > is). Feel free to cc me, though I don't know the first thing about
-> > > clangd.
-> >
-> > Ok I will consider doing this if needed. One thing I do observe is lack of
-> > good support for header files and it is a known clangd issue [1].
-> >
-> > However, the fixes I was proposing can purely be done in the kernel itself
-> > since all it'd require is generating compile_compands.json with the -D<macro>
-> > and editing files to keep clangd happy. I guess one question is, how welcome
-> > would such changes to header files be since they're for tooling and isn't
-> > code that will be compiled outside of clangd.
-> 
-> Specifically your patch sites some log print that doesn't look
-> indicative of a failure:
-> https://github.com/llvm/llvm-project/blob/53430bfd5c9d0074dd6de06dccea366e1d40bce4/clang-tools-extra/clangd/TUScheduler.cpp#L903-L906
-> so something else is going on here. Just trying to make sure we root cause this.
-> 
-
-Right, so clangd's log does not show failure, the failure is when it displays
-in the code editor that your code has compiler errors when in fact it does
-not.
-
-So if you open up tree_nocb.h in vscode, for example, you'll see squiggles
-saying 'undefined reference to rcu_data', etc. That makes clangd stop working
-at the error. Sorry to not make the failure mode clear earlier.
-
-thanks,
-
- - Joel
+-- 
+2.17.1
 
