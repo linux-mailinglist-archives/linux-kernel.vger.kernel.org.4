@@ -2,196 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13936E6E31
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 792336E6E33
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232935AbjDRV2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
+        id S232909AbjDRV3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbjDRV2e (ORCPT
+        with ESMTP id S232949AbjDRV3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:28:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C12CC0B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:28:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D12D96395F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 21:28:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1075AC4339E;
-        Tue, 18 Apr 2023 21:28:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681853282;
-        bh=ntG9ViCrjPSzd67qUu5eqOdkFLpY/tylKZuYgUZ9cSU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pk0raLmseMDt9vaVephe1yLCLi62LKnBpUmBkCmZlO4/Sn3u7b5Ln3Zq5YmxpVl+4
-         /t87PR/8MhAMcKqkGZLxm4l1AzGlZAYMNnGoWU97LqXABy7V+oyb7fV2BX5mefj5v9
-         ZgONh0VS3+sWtvi9PqpNzfztuVF2fvJhT93yBfdsF6NUXBndZ4JFT2xAQj9F9lsBcD
-         Ofa4D3QKqOVN02bDfDOTunZixBiISy78Mo4Lczhwm6GMndgpBvRj/QQviAUl1ckPXc
-         fEoFqkIPx6TAG28sjHwumFEAsFUNVPf8iv/Ywge5y5uV0EGzIkDfuyalEG+UYb/MOf
-         e2KbhGMX43y9Q==
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH v3 8/8] objtool: Move noreturn function list to separate file
-Date:   Tue, 18 Apr 2023 14:27:54 -0700
-Message-Id: <cecacf07a69a244c74474c18b7652627de67a528.1681853186.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1681853186.git.jpoimboe@kernel.org>
-References: <cover.1681853186.git.jpoimboe@kernel.org>
+        Tue, 18 Apr 2023 17:29:06 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D8D10250
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:28:41 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-760f040ecccso9219739f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:28:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1681853320; x=1684445320;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AF+TKDSwlJxEFvef+zLB3pMaYgBVJqNgkRygFdxNlT4=;
+        b=CPg4nV1fbFsHAryFxUq33eiQukeLnfEN2+T6suHcy8BLOSsHvyB88Ad0wrH3eIlsms
+         d3i4pw6V8UogxgGWZ8SjdWyqpwBaah5C9D/S0Txmr/FFB+lA2PxhcQFA7Do2P0hwraUV
+         +XuqF7dyqNsRBFGoeJjX5/tJEDiNUlwZQMpJE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681853320; x=1684445320;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AF+TKDSwlJxEFvef+zLB3pMaYgBVJqNgkRygFdxNlT4=;
+        b=eVq9HGG2C3KxgHFKjp7pQTw/kht/VnhfOQV7Tol0NFxaTEIzov+kMmIv2U7ueZGgaX
+         A2FCM+u5NjUXRsFjkNjqFwFK/a8fWBMmvFZbjqydhHh40ccxPf0e9SkNLEFShgdMKJ1e
+         vxr4g+ZAbNZIEU9VabuMejSAHnaFpY9PusVsI9lIBsx6YAOEhIhbabqCSD8lY+o6IxPD
+         JFcTfg4meFHg7cI6cj+PVG6Dbnj7+bslncziuzLPwowDX7y1Nwaip0tv5k41lr1Pdbwq
+         VJLlteRSZu0hQYr7+LXtQ69zmTqE7ALR8gmlXCUA9KrCc7QHYFMQsi9IPbYCX4a55SkB
+         4X2g==
+X-Gm-Message-State: AAQBX9d6JLj5SI23aPEVY0X7j00HPDrsLjngKPqU8MjnWTvKj/ApGIgN
+        49guiLJWXEVJRyPHAKzpr3fPnQ==
+X-Google-Smtp-Source: AKy350YiS5R2Iq9yAjKo6pDkiNMNYsvpJyUtu0o416AIUIjVw5bg2sAXzqIda+xaA9Ecpg8BKrTcyQ==
+X-Received: by 2002:a05:6602:340e:b0:760:ede8:5371 with SMTP id n14-20020a056602340e00b00760ede85371mr6811092ioz.0.1681853320248;
+        Tue, 18 Apr 2023 14:28:40 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id r16-20020a056638131000b0040bc5460051sm3531116jad.98.2023.04.18.14.28.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 14:28:39 -0700 (PDT)
+Message-ID: <a94f6d9b-d2d3-1c56-e6dd-964e15763eb3@linuxfoundation.org>
+Date:   Tue, 18 Apr 2023 15:28:39 -0600
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 5.4 00/92] 5.4.241-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230418120304.658273364@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230418120304.658273364@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This makes it a little cleaner and easier to maintain.
+On 4/18/23 06:20, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.241 release.
+> There are 92 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.241-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- tools/objtool/Documentation/objtool.txt |  5 ++-
- tools/objtool/check.c                   | 44 ++----------------------
- tools/objtool/noreturns.h               | 45 +++++++++++++++++++++++++
- 3 files changed, 50 insertions(+), 44 deletions(-)
- create mode 100644 tools/objtool/noreturns.h
+Compiled and booted on my test system. No dmesg regressions.
 
-diff --git a/tools/objtool/Documentation/objtool.txt b/tools/objtool/Documentation/objtool.txt
-index 2cd1fa16ed08..00f0a7e385ec 100644
---- a/tools/objtool/Documentation/objtool.txt
-+++ b/tools/objtool/Documentation/objtool.txt
-@@ -306,9 +306,8 @@ the objtool maintainers.
- 3. file.o: warning: objtool: foo+0x48c: bar() is missing a __noreturn annotation
- 
-    The call from foo() to bar() doesn't return, but bar() is missing the
--   __noreturn annotation.  NOTE: In addition to adding the __noreturn
--   annotation, the function name also needs to be added to
--   'global_noreturns' in tools/objtool/check.c.
-+   __noreturn annotation.  NOTE: In addition to annotating the function
-+   with __noreturn, please also add it to tools/objtool/noreturns.h.
- 
- 4. file.o: warning: objtool: func(): can't find starting instruction
-    or
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 2047a6d5339b..69794c25f857 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -192,49 +192,11 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
- 	struct instruction *insn;
- 	bool empty = true;
- 
--	/*
--	 * Unfortunately these have to be hard coded because the noreturn
--	 * attribute isn't provided in ELF data. Keep 'em sorted.
--	 */
-+#define NORETURN(func) __stringify(func),
- 	static const char * const global_noreturns[] = {
--		"__invalid_creds",
--		"__module_put_and_kthread_exit",
--		"__reiserfs_panic",
--		"__stack_chk_fail",
--		"__ubsan_handle_builtin_unreachable",
--		"arch_call_rest_init",
--		"arch_cpu_idle_dead",
--		"btrfs_assertfail",
--		"cpu_bringup_and_idle",
--		"cpu_startup_entry",
--		"do_exit",
--		"do_group_exit",
--		"do_task_dead",
--		"ex_handler_msr_mce",
--		"fortify_panic",
--		"hlt_play_dead",
--		"hv_ghcb_terminate",
--		"kthread_complete_and_exit",
--		"kthread_exit",
--		"kunit_try_catch_throw",
--		"machine_real_restart",
--		"make_task_dead",
--		"mpt_halt_firmware",
--		"nmi_panic_self_stop",
--		"panic",
--		"panic_smp_self_stop",
--		"rest_init",
--		"rewind_stack_and_make_dead",
--		"sev_es_terminate",
--		"snp_abort",
--		"start_kernel",
--		"stop_this_cpu",
--		"usercopy_abort",
--		"x86_64_start_kernel",
--		"x86_64_start_reservations",
--		"xen_cpu_bringup_again",
--		"xen_start_kernel",
-+#include "noreturns.h"
- 	};
-+#undef NORETURN
- 
- 	if (!func)
- 		return false;
-diff --git a/tools/objtool/noreturns.h b/tools/objtool/noreturns.h
-new file mode 100644
-index 000000000000..cede6068ddf6
---- /dev/null
-+++ b/tools/objtool/noreturns.h
-@@ -0,0 +1,45 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+/*
-+ * This is a (sorted!) list of all known __noreturn functions in the kernel.
-+ * It's needed for objtool to properly reverse-engineer the control flow graph.
-+ *
-+ * Yes, this is unfortunate.  A better solution is in the works.
-+ */
-+NORETURN(__invalid_creds)
-+NORETURN(__module_put_and_kthread_exit)
-+NORETURN(__reiserfs_panic)
-+NORETURN(__stack_chk_fail)
-+NORETURN(__ubsan_handle_builtin_unreachable)
-+NORETURN(arch_call_rest_init)
-+NORETURN(arch_cpu_idle_dead)
-+NORETURN(btrfs_assertfail)
-+NORETURN(cpu_bringup_and_idle)
-+NORETURN(cpu_startup_entry)
-+NORETURN(do_exit)
-+NORETURN(do_group_exit)
-+NORETURN(do_task_dead)
-+NORETURN(ex_handler_msr_mce)
-+NORETURN(fortify_panic)
-+NORETURN(hlt_play_dead)
-+NORETURN(hv_ghcb_terminate)
-+NORETURN(kthread_complete_and_exit)
-+NORETURN(kthread_exit)
-+NORETURN(kunit_try_catch_throw)
-+NORETURN(machine_real_restart)
-+NORETURN(make_task_dead)
-+NORETURN(mpt_halt_firmware)
-+NORETURN(nmi_panic_self_stop)
-+NORETURN(panic)
-+NORETURN(panic_smp_self_stop)
-+NORETURN(rest_init)
-+NORETURN(rewind_stack_and_make_dead)
-+NORETURN(sev_es_terminate)
-+NORETURN(snp_abort)
-+NORETURN(start_kernel)
-+NORETURN(stop_this_cpu)
-+NORETURN(usercopy_abort)
-+NORETURN(x86_64_start_kernel)
-+NORETURN(x86_64_start_reservations)
-+NORETURN(xen_cpu_bringup_again)
-+NORETURN(xen_start_kernel)
--- 
-2.39.2
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
+thanks,
+-- Shuah
