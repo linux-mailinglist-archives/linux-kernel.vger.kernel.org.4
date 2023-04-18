@@ -2,111 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EAF6E60EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8B06E60F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjDRMPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 08:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
+        id S231187AbjDRMQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 08:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjDRMPo (ORCPT
+        with ESMTP id S231142AbjDRMQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 08:15:44 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E542D58;
-        Tue, 18 Apr 2023 05:15:20 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33ICElmZ010016;
-        Tue, 18 Apr 2023 07:14:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681820087;
-        bh=ATEwRLj88D73ZY92VaV6r650BMc4NPzhzx9/mXDs8N8=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=nyrwf5wFaowiPfv/ywi5GjUvTQwPw6mrHQRZFAcb8PiS5Be5jU90nzsi7fBOJDa5a
-         sMhwB9sqfYilHdyYWZkOZiYTPmmpQZoHT+OB83+qbDt9ZeXhAoSl0QlMypul4UZ0DH
-         553/mAyBTXOxrRpWM9vhaYV3XGLPahR4SGkaPn0I=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33ICElgj084807
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 18 Apr 2023 07:14:47 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 18
- Apr 2023 07:14:46 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 18 Apr 2023 07:14:46 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33ICEkHu081464;
-        Tue, 18 Apr 2023 07:14:46 -0500
-Date:   Tue, 18 Apr 2023 07:14:46 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Udit Kumar <u-kumar1@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>, <afd@ti.com>, <bb@ti.com>,
-        <vaishnav.a@ti.com>, <j-choudhary@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v2 2/2] arm64: dts: ti: k3-j7200-som: Enable I2C
-Message-ID: <20230418121446.wv5sng7i7n56yrtd@granny>
-References: <20230418050514.2392717-1-u-kumar1@ti.com>
- <20230418050514.2392717-3-u-kumar1@ti.com>
+        Tue, 18 Apr 2023 08:16:32 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FA73580
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:16:14 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681820172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SbfVCxQkPCMEbMiCeEKOWEBgvAaqYdww9xSC7ukJlN0=;
+        b=sw4bDGCqlcYiJsWKnNpRtww2/uFO4heCem2hznP04bzy8vFvEWmfIwXJtJqBBjDgCiz+Mb
+        T+iaE6ozzkRqPkphNpz2HpgawcyqLbxuhH7u5RKj3flWYQu675fs0p6sRXFVvSDi5kywMA
+        /M9oM2GcrTMXYfiocynvipoe1cb84d2OlRBwQ1uGCsYcqGn33jgWmmUFeMDeqAeMTV0xMO
+        E2gIqdRm78rkmlThWP1CfIoZfK0/aklnlk5+563gJti/Zw0eU3B4o1eunAE+xHuBM3h+pG
+        kf+R0OEp0dKOdZhEXF3AjxAERmu/DQjRtWiwJxB9id3RuNYO6ys7XN5Sn0MBgQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681820172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SbfVCxQkPCMEbMiCeEKOWEBgvAaqYdww9xSC7ukJlN0=;
+        b=ktHPUesE5gTBgC2r0/03ayhPF1qLzLdA5OmmM/rOi5psNuO1sPZp8v/InZ35hb6Z+e6gX6
+        IQcawWjYsuPy49Bw==
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Cc:     Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCH RFC] preempt: Put preempt_enable() within an
+ instrumentation*() section.
+In-Reply-To: <20230309072724.3F6zRkvw@linutronix.de>
+References: <20230309072724.3F6zRkvw@linutronix.de>
+Date:   Tue, 18 Apr 2023 14:16:11 +0200
+Message-ID: <87fs8x4c8k.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230418050514.2392717-3-u-kumar1@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10:35-20230418, Udit Kumar wrote:
-> This patch enables wkup_i2c0 node in board dts file.
-> and underneath eeprom CAV24C256WE.
-> 
-> J7200 User Guide (Section 4.3, Table 4-2) :
-> https://www.ti.com/lit/ug/spruiw7a/spruiw7a.pdf
-> 
-> Signed-off-by: Udit Kumar <u-kumar1@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
-> index fa44ed4c17d5..137492ae89c4 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
-> @@ -214,6 +214,14 @@ exp_som: gpio@21 {
->  	};
->  };
->  
-> +&wkup_i2c0 {
-> +	status = "okay";
-> +	eeprom@50 {
-> +		compatible = "atmel,24c256";
-> +		reg = <0x50>;
-> +	};
-> +};
+On Thu, Mar 09 2023 at 08:27, Sebastian Andrzej Siewior wrote:
+> Callers of preempt_enable() can be within an noinstr section leading to:
+> | vmlinux.o: warning: objtool: native_sched_clock+0x97: call to preempt_schedule_notrace_thunk() leaves .noinstr.text section
+> | vmlinux.o: warning: objtool: kvm_clock_read+0x22: call to preempt_schedule_notrace_thunk() leaves .noinstr.text section
+> | vmlinux.o: warning: objtool: local_clock+0xb4: call to preempt_schedule_notrace_thunk() leaves .noinstr.text section
 
-pinmux?
-speed ?
+> | vmlinux.o: warning: objtool: enter_from_user_mode+0xea: call to preempt_schedule_thunk() leaves .noinstr.text section
+> | vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x140: call to preempt_schedule_thunk() leaves .noinstr.text section
+> | vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0xf2: call to preempt_schedule_thunk() leaves .noinstr.text section
+> | vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0xea: call to preempt_schedule_thunk() leaves .noinstr.text section 
 
-> +
->  &ospi0 {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&mcu_fss0_ospi0_pins_default>;
-> -- 
-> 2.34.1
-> 
+I'm confused where this preempt_enable is in those
+*_enter_from_user_mode() functions.
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Kernel config and compiler version please.
+
+>  #define preempt_enable() \
+>  do { \
+>  	barrier(); \
+> -	if (unlikely(preempt_count_dec_and_test())) \
+> +	if (unlikely(preempt_count_dec_and_test())) { \
+> +		instrumentation_begin(); \
+>  		__preempt_schedule(); \
+> +		instrumentation_end(); \
+> +	} \
+>  } while (0)
+
+This would paper over a misplaced preempt_disable/enable() pair in
+noinstr code. I'm not really happy about that.
+
+Thanks,
+
+        tglx
