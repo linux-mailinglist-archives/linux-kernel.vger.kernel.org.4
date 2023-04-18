@@ -2,234 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3276A6E67F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6815F6E67F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbjDRPVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 11:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
+        id S231600AbjDRPXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 11:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbjDRPVO (ORCPT
+        with ESMTP id S230070AbjDRPXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:21:14 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CEB1259E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:21:03 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id B2F165C0038;
-        Tue, 18 Apr 2023 11:21:00 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 18 Apr 2023 11:21:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1681831260; x=1681917660; bh=HBwXZ4le8QfZFyKH909+R6NwS
-        d4X3N60Ze2MtxIZhGM=; b=ZBs79K+m4tKxaUOUbVkn9ifoiJu3JGUeXoHFnPIuu
-        XIwqBJ3IX2Qfh9KNldMXPbIPK+v+1Ys6/LZ1nuyslENltP1hSOciObP5WH4+2ovn
-        1CZwAZcL+Li5iT9K0kFpM5MRuPXo7qIUGbDhtQVMUGbr6luG/mA7TE65+wwQpqzF
-        VV1a1o78M9kuX2TIaMmQVGXSEhSrjt2Cvru5RjgvuBSU11i9zYQCB/lY++Izke4s
-        IqOWR9ngr2mQpnET0UAe0j07ynOIcUxNDjmJCeMUKkhYNKxDy+JnnKD8/ZB2ACVc
-        LBxGUtEVbNGO3eCpNm3RrxnCvtAfRzybziKdE1t741lyQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1681831260; x=1681917660; bh=HBwXZ4le8QfZFyKH909+R6NwSd4X3N60Ze2
-        MtxIZhGM=; b=iU6buSCtWjGwcrAOw+O1jbwGFiBQB/+4yv4MKo0yzD4xjSR/l6l
-        n8Qg975+gOksNbysMXpp7oPIKluZAkqWIXmRyZBF7RgVBC+YHL10dQ6xeXHi1EuA
-        Mc5aAjB1H3lDa4c+L7lD0q4FhMGAssg05dKpNVVWDHeXaunyv2fg1ZivFAJSpuUB
-        Zjv7ojSxX+rS+lCOcGEcrMvSdJ7tUbPUp2HgeAvNojqeGvILZHzXgYQnLwXVkDnE
-        Dyk90UIh6SQgeMAAcZ4QGEGpvPDP25EZahishusBq7ezJLHBUtjfbCMo8QTMHtSk
-        wE9OcQ4M1VfccBvit4oifoQ3qLfXV8qjSdQ==
-X-ME-Sender: <xms:XLU-ZCqWeNmgwIb4HsRU8d-Ny6ya8OMuA6bwZa5xcQ5lUcAKcphQ7Q>
-    <xme:XLU-ZArI7xFET4UwDwpF4mt7eLcGT_47l5UV54SrrpEKB9kbInK5hEAOGosOHVi1-
-    staUr3uAa8cy_lFUw0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdelkedgkeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnheptdelhfekvddvtefhueetkeehtedtvdevledtfffhjeduffehleeileehveejjeek
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghdplhhinhgrrhhordhorhhgnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhn
-    uggsrdguvg
-X-ME-Proxy: <xmx:XLU-ZHOAaR1dXejnktZeo5X44o-iNcHsUOKcZUUHX_Lm526B1DznZg>
-    <xmx:XLU-ZB5vOrjWCWNl6BW-wamrgSQ3-JPiIVWdLNE9m3g_h7KRrpefVQ>
-    <xmx:XLU-ZB4IoqBa3SFjEPrJHn08ab4U6cgPJ4-xWuxRifUeB3E4G7YpzQ>
-    <xmx:XLU-ZDQAOdesU8S8FScWR-BoKllrOl7Cwi3xUMCG31h-30aHmfkqwQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 711AFB60086; Tue, 18 Apr 2023 11:21:00 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
-Mime-Version: 1.0
-Message-Id: <bf8a1e1d-c8d0-4082-a262-6e6dc75c47a7@app.fastmail.com>
-Date:   Tue, 18 Apr 2023 17:20:40 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] ARM: SoC fixes for 6.3, part 3
+        Tue, 18 Apr 2023 11:23:37 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3CE12C8C;
+        Tue, 18 Apr 2023 08:23:27 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33IAYOGc005302;
+        Tue, 18 Apr 2023 15:23:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=/fFvPvWewR1GVh5hVO4hPrFoOL8bObIJCmqYQi9jYlU=;
+ b=h0SiLPxa1RiOBLn6kuZ3r0RPZSCpHfZzQYuD9x5PTmANEgRrk8sL2ODaxEsTiWNHK0ht
+ kWMq8DgngDezcFF2UToJCxSOGED32uD11Nh/D8e1t7E1AriHg8ViYZSsIsgzUKEqQ1rA
+ cJtWEhIRi/7AXwtFU1ob/orC0PAyY87wZxoD11T+k9denk/ifPXu/Nyn3gd7h7I8YeGN
+ v/JlQzVPdAqNIaDyRBDFaon5pb6KBCKpbqQwUByacN+TuW/nZcwvkdJvQjy8t5JLeazr
+ emrDzUJuiigTd9x1MGks6chnp64FYyLeE60W9S/QiIy2tbiyu8csWGxAURVKqx1GoHL/ Og== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q17yhu37a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 15:23:13 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33IFNB2v027839
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 15:23:11 GMT
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 18 Apr 2023 08:23:06 -0700
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: [PATCH V22 0/3] misc: Add driver support for Data Capture and Compare unit(DCC)
+Date:   Tue, 18 Apr 2023 20:52:34 +0530
+Message-ID: <cover.1681829664.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: v6c3ZseiAY6P9t2JkKlHXTOofo3HJR-a
+X-Proofpoint-GUID: v6c3ZseiAY6P9t2JkKlHXTOofo3HJR-a
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-18_11,2023-04-18_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 impostorscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
+ clxscore=1015 malwarescore=0 phishscore=0 bulkscore=0 lowpriorityscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304180131
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 7e364e56293bb98cae1b55fd835f5991c4e96e7d:
+DCC(Data Capture and Compare) is a DMA engine designed for debugging purposes.
+In case of a system crash or manual software triggers by the user the DCC hardware
+stores the value at the register addresses which can be used for debugging purposes.
+The DCC driver provides the user with debugfs interface to configure the register
+addresses. The options that the DCC hardware provides include reading from registers,
+writing to registers, first reading and then writing to registers and looping
+through the values of the same register.
 
-  Linux 6.3-rc5 (2023-04-02 14:29:29 -0700)
+In certain cases a register write needs to be executed for accessing the rest of the
+registers, also the user might want to record the changing values of a register with
+time for which he has the option to use the loop feature.
 
-are available in the Git repository at:
+The options mentioned above are exposed to the user by debugfs files once the driver
+is probed. The details and usage of this debugfs files are documented in
+Documentation/ABI/testing/debugfs-driver-dcc.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.3-3
+As an example let us consider a couple of debug scenarios where DCC has been proved to be
+effective for debugging purposes:-
 
-for you to fetch changes up to d75eecc3d170d8963ae554a774b8af1f4e1246da:
+i)TimeStamp Related Issue
 
-  Merge tag 'qcom-arm64-fixes-for-6.3-2' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes (2023-04-14 13:52:48 +0200)
+On SC7180, there was a coresight timestamp issue where it would occasionally be all 0
+instead of proper timestamp values.
 
-----------------------------------------------------------------
-ARM: SoC fixes for 6.3, part 3
+Proper timestamp:
+Idx:3373; ID:10; I_TIMESTAMP : Timestamp.; Updated val = 0x13004d8f5b7aa; CC=0x9e
 
-There are a number of updates for devicetree files for Qualcomm,
-Rockchips, and NXP i.MX platforms, addressing mistakes in the DT
-contents:
+Zero timestamp:
+Idx:3387; ID:10; I_TIMESTAMP : Timestamp.; Updated val = 0x0; CC=0xa2
 
- - Wrong GPIO polarity on some boards
+Now this is a non-fatal issue and doesn't need a system reset, but still needs
+to be rootcaused and fixed for those who do care about coresight etm traces.
+Since this is a timestamp issue, we would be looking for any timestamp related
+clocks and such.
 
- - Lower SD card interface speed for better stability
+We get all the clk register details from IP documentation and configure it
+via DCC config_read debugfs node. Before that we set the current linked list.
 
- - Incorrect power supply, clock, pmic, cache properties
+/* Program the linked list with the addresses */
+echo R 0x10c004 > /sys/kernel/debug/dcc/../3/config
+echo R 0x10c008 > /sys/kernel/debug/dcc/../3/config
+echo R 0x10c00c > /sys/kernel/debug/dcc/../3/config
+echo R 0x10c010 > /sys/kernel/debug/dcc/../3/config
+..... and so on for other timestamp related clk registers
 
- - Disable broken hbr3 on sc7280-herobrine
+/* Other way of specifying is in "addr len" pair, in below case it
+specifies to capture 4 words starting 0x10C004 */
 
- - Devicetree warning fixes
+echo R 0x10C004 4 > /sys/kernel/debug/dcc/../3/config_read
 
-The only other changes are:
+/* Enable DCC */
+echo 1 > /sys/kernel/debug/dcc/../3/enable
 
- - A regression fix for the Amlogic performance monitoring unit driver,
-   along with two related DT changes.
+/* Run the timestamp test for working case */
 
- - imx_v6_v7_defconfig enables PCI support again.
+/* Send SW trigger */
+echo 1 > /sys/kernel/debug/dcc/../trigger
 
- - Trivial fixes for tee, optee and psci firmware drivers, addressing
-   compiler warning and error output
+/* Read SRAM */
+cat /dev/dcc_sram > dcc_sram1.bin
 
-----------------------------------------------------------------
-Abhinav Kumar (1):
-      arm64: dts: qcom: sc7280: remove hbr3 support on herobrine boards
+/* Run the timestamp test for non-working case */
 
-Alexander Stein (1):
-      arm64: dts: imx8mp: fix address length for LCDIF2
+/* Send SW trigger */
+echo 1 > /sys/kernel/debug/dcc/../trigger
 
-Arnd Bergmann (7):
-      Merge tag 'optee-fix-for-v6.3' of https://git.linaro.org/people/jens.wiklander/linux-tee into arm/fixes
-      Merge tag 'amlogic-fixes-v6.3-rc' of https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux into arm/fixes
-      Merge tag 'tee-fix-for-v6.3' of https://git.linaro.org/people/jens.wiklander/linux-tee into arm/fixes
-      Merge tag 'imx-fixes-6.3-2' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fixes
-      Merge tag 'riscv-dt-fixes-for-v6.3-final' of https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux into arm/fixes
-      Merge tag 'v6.3-rockchip-dtsfixes1' of git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip into arm/fixes
-      Merge tag 'qcom-arm64-fixes-for-6.3-2' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
+/* Read SRAM */
+cat /dev/dcc_sram > dcc_sram2.bin
 
-Chris Morgan (1):
-      arm64: dts: rockchip: Add clk_rtc_32k to Anbernic xx3 Devices
+Get the parser from [1] and checkout the latest branch.
 
-Dan Johansen (2):
-      arm64: dts: rockchip: Lower sd speed on rk3566-soquartz
-      arm64: dts: rockchip: Lower SD card speed on rk3399 Pinebook Pro
+/* Parse the SRAM bin */
+python dcc_parser.py -s dcc_sram1.bin --v2 -o output/
+python dcc_parser.py -s dcc_sram2.bin --v2 -o output/
 
-Dmitry Baryshkov (2):
-      arm64: dts: qcom: ipq8074-hk01: enable QMP device, not the PHY node
-      arm64: dts: qcom: ipq8074-hk10: enable QMP device, not the PHY node
+Sample parsed output of dcc_sram1.bin:
 
-Fabio Estevam (3):
-      ARM: dts: imx7d-remarkable2: Remove unnecessary #address-cells/#size-cells
-      ARM: dts: imx6ull-colibri: Remove unnecessary #address-cells/#size-cells
-      ARM: imx_v6_v7_defconfig: Fix unintentional disablement of PCI
+<hwioDump version="1">
+        <timestamp>03/14/21</timestamp>
+            <generator>Linux DCC Parser</generator>
+                <chip name="None" version="None">
+                <register address="0x0010c004" value="0x80000000" />
+                <register address="0x0010c008" value="0x00000008" />
+                <register address="0x0010c00c" value="0x80004220" />
+                <register address="0x0010c010" value="0x80000000" />
+            </chip>
+    <next_ll_offset>next_ll_offset : 0x1c </next_ll_offset>
+</hwioDump>
 
-Javier Martinez Canillas (1):
-      arm64: dts: rockchip: Remove non-existing pwm-delay-us property
+ii)NOC register errors
 
-Jianqun Xu (1):
-      ARM: dts: rockchip: fix a typo error for rk3288 spdif node
+A particular class of registers called NOC which are functional registers was reporting
+errors while logging the values.To trace these errors the DCC has been used effectively.
+The steps followed were similar to the ones mentioned above.
+In addition to NOC registers a few other dependent registers were configured in DCC to
+monitor it's values during a crash. A look at the dependent register values revealed that
+the crash was happening due to a secured access to one of these dependent registers.
+All these debugging activity and finding the root cause was achieved using DCC.
 
-Johan Hovold (2):
-      arm64: dts: qcom: sc8280xp-pmics: fix pon compatible and registers
-      firmware/psci: demote suspend-mode warning to info level
+DCC parser is available at the following open source location
 
-Jules Maselbas (1):
-      tee: optee: Fix typo Unuspported -> Unsupported
+https://source.codeaurora.org/quic/la/platform/vendor/qcom-opensource/tools/tree/dcc_parser
 
-Krzysztof Kozlowski (8):
-      arm64: dts: qcom: sdm850-lenovo-yoga-c630: Use proper WSA881x shutdown GPIO polarity
-      arm64: dts: qcom: sdm850-samsung-w737: Use proper WSA881x shutdown GPIO polarity
-      arm64: dts: qcom: sm8250-mtp: Use proper WSA881x shutdown GPIO polarity
-      arm64: dts: qcom: qrb5165-rb5: Use proper WSA881x shutdown GPIO polarity
-      riscv: dts: canaan: drop invalid spi-max-frequency
-      arm64: dts: rockchip: use just "port" in panel on Pinebook Pro
-      arm64: dts: rockchip: use just "port" in panel on RockPro64
-      arm64: dts: rockchip: correct panel supplies on some rk3326 boards
+Changes in v22
 
-Linus Walleij (1):
-      tee: Pass a pointer to virt_to_page()
+* DCC driver is added to the new location as per discussions
 
-Marc Gonzalez (3):
-      arm64: dts: meson-g12-common: specify full DMC range
-      arm64: dts: meson-g12-common: resolve conflict between canvas & pmu
-      perf/amlogic: adjust register offsets
+* Implemented the comments on the previous version of this patch
 
-Peng Fan (3):
-      arm64: dts: imx8mm-evk: correct pmic clock source
-      arm64: dts: imx8mm-verdin: correct off-on-delay
-      arm64: dts: imx8mp-verdin: correct off-on-delay
+Souradeep Chowdhury (3):
+  dt-bindings: misc: qcom,dcc: Add the dtschema
+  misc: dcc: Add driver support for Data Capture and Compare unit(DCC)
+  MAINTAINERS: Add the entry for DCC(Data Capture and Compare) driver
+    support
 
-Rob Herring (1):
-      arm64: dts: rockchip: Fix rk3399 GICv3 ITS node name
+ .../devicetree/bindings/misc/qcom,dcc.yaml         |   44 +
+ MAINTAINERS                                        |    8 +
+ drivers/misc/Kconfig                               |    8 +
+ drivers/misc/Makefile                              |    1 +
+ drivers/misc/dcc.c                                 | 1300 ++++++++++++++++++++
+ 5 files changed, 1361 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/misc/qcom,dcc.yaml
+ create mode 100644 drivers/misc/dcc.c
 
-Sebastian Reichel (1):
-      arm64: dts: rockchip: add rk3588 cache level information
+--
+2.7.4
 
- arch/arm/boot/dts/imx6ull-colibri.dtsi             | 12 ++------
- arch/arm/boot/dts/imx7d-remarkable2.dts            |  2 --
- arch/arm/boot/dts/rk3288.dtsi                      |  2 +-
- arch/arm/configs/imx_v6_v7_defconfig               |  2 +-
- arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  | 15 +++++-----
- arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi      |  2 +-
- arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi   |  4 +--
- .../boot/dts/freescale/imx8mp-verdin-dev.dtsi      |  2 +-
- arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi   |  4 +--
- arch/arm64/boot/dts/freescale/imx8mp.dtsi          |  2 +-
- arch/arm64/boot/dts/qcom/ipq8074-hk01.dts          |  4 +--
- arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi         |  4 +--
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts           |  4 +--
- arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi     |  2 +-
- arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi       |  5 ++--
- .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      |  4 +--
- arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts   |  4 +--
- arch/arm64/boot/dts/qcom/sm8250-mtp.dts            |  4 +--
- .../boot/dts/rockchip/rk3326-anbernic-rg351m.dts   |  2 ++
- arch/arm64/boot/dts/rockchip/rk3326-odroid-go.dtsi |  2 --
- .../boot/dts/rockchip/rk3326-odroid-go2-v11.dts    |  2 ++
- arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts |  2 ++
- arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi       |  1 -
- .../boot/dts/rockchip/rk3399-gru-chromebook.dtsi   |  1 -
- .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi      |  1 -
- .../boot/dts/rockchip/rk3399-pinebook-pro.dts      | 18 +++---------
- arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi | 12 ++------
- arch/arm64/boot/dts/rockchip/rk3399.dtsi           |  2 +-
- .../boot/dts/rockchip/rk3566-anbernic-rg353x.dtsi  |  6 ++--
- .../boot/dts/rockchip/rk3566-anbernic-rg503.dts    |  6 ++--
- arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi  |  2 +-
- arch/arm64/boot/dts/rockchip/rk3588s.dtsi          |  9 ++++++
- arch/riscv/boot/dts/canaan/k210.dtsi               |  1 -
- drivers/firmware/psci/psci.c                       |  3 +-
- drivers/perf/amlogic/meson_g12_ddr_pmu.c           | 34 +++++++++++-----------
- drivers/tee/optee/call.c                           |  2 +-
- drivers/tee/tee_shm.c                              |  2 +-
- 37 files changed, 88 insertions(+), 98 deletions(-)
