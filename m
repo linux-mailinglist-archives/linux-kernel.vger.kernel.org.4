@@ -2,80 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104196E5C4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6EA26E5C4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjDRIjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
+        id S231446AbjDRIk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbjDRIjg (ORCPT
+        with ESMTP id S230359AbjDRIkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:39:36 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655DC72B9;
-        Tue, 18 Apr 2023 01:39:12 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33I50ujp014943;
-        Tue, 18 Apr 2023 03:38:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=QIGOwCnoD9saG41Ua74ZCdSTXr1oUGK7HY9sOWvvMSg=;
- b=O1uzvMyS9wYrgoEollZhxJd4gzViZuXEz/l01QmpxK3VoVfzGVW1rxKEc707uiqAhk4B
- bhrD0UFfP9l0WRNLgHDD1PDwl7krW/dOLXz2fLKfXf9ahKzLoYgrU2FxQsvRnGDV2xn0
- dcFLk2ZCzS7yzjds5gjDC0Le8xNaIGhTEQKBk4ypaBcxdLsuPd7QPgr5v8dGQ7cXQ6O7
- DzSjMrXZT9pksHxG0yDZKS8XO7PEP7E3655AXlwMQSHHb16a/FA3bQNelerU9x09Z7el
- nnfglIRePSH/bEzlV3sZECNOmu+m7eONvowFawZUvcL58XETDtR3+Q144hVhEejYnEUU 1Q== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pyrbpwuk1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 03:38:31 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 18 Apr
- 2023 03:38:30 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 18 Apr 2023 03:38:30 -0500
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E959445D;
-        Tue, 18 Apr 2023 08:38:29 +0000 (UTC)
-Date:   Tue, 18 Apr 2023 08:38:29 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Saalim Quadri <danascape@gmail.com>
-CC:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <daniel.baluta@gmail.com>,
-        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ASoC: dt-bindings: wm8728: Convert to dtschema
-Message-ID: <20230418083829.GA68926@ediswmail.ad.cirrus.com>
-References: <20230417204323.137681-1-danascape@gmail.com>
+        Tue, 18 Apr 2023 04:40:55 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C06C5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:40:54 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b5465fb99so1635606b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:40:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681807253; x=1684399253;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=olmN5gzlqP0NhrI47T0CCa7149+yb2ZCju0LTQmGI+4=;
+        b=ageKEel5fyZv58tT025n8lqnZUiQ+cxCGVdQkICI1dh7J7VmSwxtTivqmdjU79I/Qo
+         vpCBbkdrkJTlMQgLIbzVqr3aFjxx1zPt56ImFdKa4upwf3xN3L+p3gif4WHtLXkkG+t3
+         Qx0i5U3/lCXRFCZn4698WdTVFJFunG2ubvagU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681807253; x=1684399253;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=olmN5gzlqP0NhrI47T0CCa7149+yb2ZCju0LTQmGI+4=;
+        b=Lq3E8uKNKfdJUPGU2TsG0wn6L3kIXPB+zDf4rHe3HfPha6nmFCOilA0ZpQqMaRyBZL
+         kioWmbyexWeVOBv8M75BdOh/Agk7ZDanyWBY86nv6La7COonPmnQ8HgXKgGW1+F5w3gZ
+         vHJY9/vn0LOLwj0oPOPelSluJFi6lf7A5iGgq7ofh2BeSvI4YP7Sv4W+27lI6RkHRRco
+         UaGNrX0cMXqUI9eLOdS2zbNBHZZyYYaCwmThT8gv31+t0iu03yLxBQdCqZf70p84WeDI
+         QzeZFnmnUzF4sMuB/ZCALsiymZp8CtadUGIwZg0dAempGtPAERYaLtp4vCCk6eHrEau8
+         dNkA==
+X-Gm-Message-State: AAQBX9fyGOrdTpxIXun1lV/AHR7KY70ulBy45qE5Y7VZWyYocNNk5tmB
+        aIZxdjcaoD+WxjOheGJ3Feiw5Q==
+X-Google-Smtp-Source: AKy350ZxonPvBGz2w+q2ydfxziDS0CMMutHh8UVXMlDu7WQu9HDpm3Lk0fD6oTQLzVjEnx6nyC+jCA==
+X-Received: by 2002:a05:6a00:2390:b0:636:e0fb:8c44 with SMTP id f16-20020a056a00239000b00636e0fb8c44mr26317272pfc.12.1681807253493;
+        Tue, 18 Apr 2023 01:40:53 -0700 (PDT)
+Received: from localhost ([2401:fa00:8f:203:7254:8270:74ed:755b])
+        by smtp.gmail.com with UTF8SMTPSA id y3-20020a62b503000000b00625b9e625fdsm9007639pfe.179.2023.04.18.01.40.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 01:40:53 -0700 (PDT)
+From:   David Stevens <stevensd@chromium.org>
+X-Google-Original-From: David Stevens <stevensd@google.com>
+To:     linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        linux-kernel@vger.kernel.org,
+        David Stevens <stevensd@chromium.org>, stable@vger.kernel.org
+Subject: [PATCH v2] mm/shmem: Fix race in shmem_undo_range w/THP
+Date:   Tue, 18 Apr 2023 17:40:31 +0900
+Message-ID: <20230418084031.3439795-1-stevensd@google.com>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230417204323.137681-1-danascape@gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: 1_gKeb4A7u8aGsCnr1sCts4zPnKAP3QN
-X-Proofpoint-ORIG-GUID: 1_gKeb4A7u8aGsCnr1sCts4zPnKAP3QN
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 08:43:23PM +0000, Saalim Quadri wrote:
-> Convert the WM8728 audio CODEC bindings to DT schema
-> 
-> Signed-off-by: Saalim Quadri <danascape@gmail.com>
-> ---
+From: David Stevens <stevensd@chromium.org>
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Split folios during the second loop of shmem_undo_range. It's not
+sufficient to only split folios when dealing with partial pages, since
+it's possible for a THP to be faulted in after that point. Calling
+truncate_inode_folio in that situation can result in throwing away data
+outside of the range being targeted.
 
-Thanks,
-Charles
+Fixes: b9a8a4195c7d ("truncate,shmem: Handle truncates that split large folios")
+Cc: stable@vger.kernel.org
+Signed-off-by: David Stevens <stevensd@chromium.org>
+---
+v1 -> v2:
+ - Actually drop pages after splitting a THP
+
+ mm/shmem.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 9218c955f482..226c94a257b1 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -1033,7 +1033,22 @@ static void shmem_undo_range(struct inode *inode, loff_t lstart, loff_t lend,
+ 				}
+ 				VM_BUG_ON_FOLIO(folio_test_writeback(folio),
+ 						folio);
+-				truncate_inode_folio(mapping, folio);
++
++				if (!folio_test_large(folio)) {
++					truncate_inode_folio(mapping, folio);
++				} else if (truncate_inode_partial_folio(folio, lstart, lend)) {
++					/*
++					 * If we split a page, reset the loop so that we
++					 * pick up the new sub pages. Otherwise the THP
++					 * was entirely dropped or the target range was
++					 * zeroed, so just continue the loop as is.
++					 */
++					if (!folio_test_large(folio)) {
++						folio_unlock(folio);
++						index = start;
++						break;
++					}
++				}
+ 			}
+ 			folio_unlock(folio);
+ 		}
+-- 
+2.40.0.634.g4ca3ef3211-goog
+
