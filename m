@@ -2,209 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7D26E5F39
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 318EE6E5F49
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjDRK5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 06:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
+        id S230332AbjDRLEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 07:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjDRK5c (ORCPT
+        with ESMTP id S229761AbjDRLEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 06:57:32 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFFAA40EF
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:57:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72EF4168F;
-        Tue, 18 Apr 2023 03:58:14 -0700 (PDT)
-Received: from [10.57.82.12] (unknown [10.57.82.12])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 712563F5A1;
-        Tue, 18 Apr 2023 03:57:29 -0700 (PDT)
-Message-ID: <54083e3b-cba3-c719-651d-bf99d6eca16d@arm.com>
-Date:   Tue, 18 Apr 2023 11:57:23 +0100
+        Tue, 18 Apr 2023 07:04:48 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C7F55BB
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:04:46 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-7606d455e4cso476118339f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:04:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681815886; x=1684407886;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JlJ5emJe9Z4EQ3vuIj9HxGmuBXyF49i+IhR55CYXeMo=;
+        b=FzPE9K7VIGKQPKxNLs2fvwgYeeXeyLIAazsC7j82lBmDAtR3V/XkmrmRgHC3DVrw9u
+         pffUdkq0mrTzV/UfBK7W44MYNewtrrLQdBRoLe2TURIOKh+9HZ2OQYcl8wc9cQl84q1Q
+         r+2k5tHcBIkGx85FMDFBEorZpaXEvLh0+ZxRHNn9p6ha7F7J5PwqgSEuAn5WBSJLcZPS
+         REjmzSrlp2j4PcY8tkk105XklBVntFYiQL7o7Zs/WVT431aD3UQmpYB91GB6Gr19rw6g
+         Ph+vm+DEN8UpmQgUvRGTkPIIlChN/mTQW7eEUjh8MYpOJnDoG5AW349beC8Ix7u/GjzI
+         oP4Q==
+X-Gm-Message-State: AAQBX9egQ43mrOC8cRPrkYBjLOjrf+8M91+umEGewogLfpeTMqfyij+s
+        Op4BovaXlrdsrDqCzxYMakQ/lb58Nx0eWI3Yhh02QUame0kd
+X-Google-Smtp-Source: AKy350axwh0zVYk7nmeGYiiC2CPgUtunmZSEmOCvPG9Fl0AHbaGF1T8isxd5gJhb/6LdkbbEIvSxf+ol62mRyEfgK9VeploLFYFj
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4] iommu: Optimise PCI SAC address trick
-Content-Language: en-GB
-To:     Vasant Hegde <vasant.hegde@amd.com>, joro@8bytes.org
-Cc:     will@kernel.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        John Garry <john.g.garry@oracle.com>
-References: <b8502b115b915d2a3fabde367e099e39106686c8.1681392791.git.robin.murphy@arm.com>
- <21e49cd7-ee15-5ebd-7805-37d5f347635f@amd.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <21e49cd7-ee15-5ebd-7805-37d5f347635f@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:7a50:0:b0:40b:d54d:e5bf with SMTP id
+ z16-20020a027a50000000b0040bd54de5bfmr1147402jad.1.1681815885805; Tue, 18 Apr
+ 2023 04:04:45 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 04:04:45 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000739c9f05f99a46d7@google.com>
+Subject: [syzbot] [fs?] [mm?] general protection fault in folio_wait_stable
+From:   syzbot <syzbot+d1ae544e6e9dc29bcba5@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-18 10:23, Vasant Hegde wrote:
-> Robin,
-> 
-> 
-> On 4/13/2023 7:10 PM, Robin Murphy wrote:
->> Per the reasoning in commit 4bf7fda4dce2 ("iommu/dma: Add config for
->> PCI SAC address trick") and its subsequent revert, this mechanism no
->> longer serves its original purpose, but now only works around broken
->> hardware/drivers in a way that is unfortunately too impactful to remove.
->>
->> This does not, however, prevent us from solving the performance impact
->> which that workaround has on large-scale systems that don't need it.
->> Once the 32-bit IOVA space fills up and a workload starts allocating and
->> freeing on both sides of the boundary, the opportunistic SAC allocation
->> can then end up spending significant time hunting down scattered
->> fragments of free 32-bit space, or just reestablishing max32_alloc_size.
->> This can easily be exacerbated by a change in allocation pattern, such
->> as by changing the network MTU, which can increase pressure on the
->> 32-bit space by leaving a large quantity of cached IOVAs which are now
->> the wrong size to be recycled, but also won't be freed since the
->> non-opportunistic allocations can still be satisfied from the whole
->> 64-bit space without triggering the reclaim path.
->>
->> However, in the context of a workaround where smaller DMA addresses
->> aren't simply a preference but a necessity, if we get to that point at
->> all then in fact it's already the endgame. The nature of the allocator
->> is currently such that the first IOVA we give to a device after the
->> 32-bit space runs out will be the highest possible address for that
->> device, ever. If that works, then great, we know we can optimise for
->> speed by always allocating from the full range. And if it doesn't, then
->> the worst has already happened and any brokenness is now showing, so
->> there's little point in continuing to try to hide it.
->>
->> To that end, implement a flag to refine the SAC business into a
->> per-device policy that can automatically get itself out of the way if
->> and when it stops being useful.
->>
->> CC: Linus Torvalds <torvalds@linux-foundation.org>
->> CC: Jakub Kicinski <kuba@kernel.org>
->> Reviewed-by: John Garry <john.g.garry@oracle.com>
->> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> 
-> We hit kernel softlockup while running stress-ng test system having 384 CPU and
-> NVMe disk. This patch helped to solve one soft lockup in allocation path.
-> 
->> ---
->>
->> v4: Rebase to use the new bitfield in dev_iommu, expand commit message.
->>
->>   drivers/iommu/dma-iommu.c | 26 ++++++++++++++++++++------
->>   drivers/iommu/dma-iommu.h |  8 ++++++++
->>   drivers/iommu/iommu.c     |  3 +++
->>   include/linux/iommu.h     |  2 ++
->>   4 files changed, 33 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
->> index 99b2646cb5c7..9193ad5bc72f 100644
->> --- a/drivers/iommu/dma-iommu.c
->> +++ b/drivers/iommu/dma-iommu.c
->> @@ -630,7 +630,7 @@ static dma_addr_t iommu_dma_alloc_iova(struct iommu_domain *domain,
->>   {
->>   	struct iommu_dma_cookie *cookie = domain->iova_cookie;
->>   	struct iova_domain *iovad = &cookie->iovad;
->> -	unsigned long shift, iova_len, iova = 0;
->> +	unsigned long shift, iova_len, iova;
->>   
->>   	if (cookie->type == IOMMU_DMA_MSI_COOKIE) {
->>   		cookie->msi_iova += size;
->> @@ -645,15 +645,29 @@ static dma_addr_t iommu_dma_alloc_iova(struct iommu_domain *domain,
->>   	if (domain->geometry.force_aperture)
->>   		dma_limit = min(dma_limit, (u64)domain->geometry.aperture_end);
->>   
->> -	/* Try to get PCI devices a SAC address */
->> -	if (dma_limit > DMA_BIT_MASK(32) && !iommu_dma_forcedac && dev_is_pci(dev))
->> +	/*
->> +	 * Try to use all the 32-bit PCI addresses first. The original SAC vs.
->> +	 * DAC reasoning loses relevance with PCIe, but enough hardware and
->> +	 * firmware bugs are still lurking out there that it's safest not to
->> +	 * venture into the 64-bit space until necessary.
->> +	 *
->> +	 * If your device goes wrong after seeing the notice then likely either
->> +	 * its driver is not setting DMA masks accurately, the hardware has
->> +	 * some inherent bug in handling >32-bit addresses, or not all the
->> +	 * expected address bits are wired up between the device and the IOMMU.
->> +	 */
->> +	if (dma_limit > DMA_BIT_MASK(32) && dev->iommu->pci_32bit_workaround) {
->>   		iova = alloc_iova_fast(iovad, iova_len,
->>   				       DMA_BIT_MASK(32) >> shift, false);
->> +		if (iova)
->> +			goto done;
->>   
->> -	if (!iova)
->> -		iova = alloc_iova_fast(iovad, iova_len, dma_limit >> shift,
->> -				       true);
->> +		dev->iommu->pci_32bit_workaround = false;
->> +		dev_notice(dev, "Using %d-bit DMA addresses\n", bits_per(dma_limit));
-> 
-> May be dev_notice_once? Otherwise we may see this message multiple time for same
-> device like below:
+Hello,
 
-Oh, that's a bit irritating. Of course multiple threads can reach this
-in parallel, silly me :(
+syzbot found the following issue on:
 
-I would really prefer the notice to be once per device rather than once
-globally, since there's clearly no guarantee that the first device to
-hit this case is going to be the one which is liable to go wrong. Does
-the (untested) diff below do any better?
+HEAD commit:    4aa1da8d9972 Add linux-next specific files for 20230417
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=13b08dc0280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3e1a2e42c883f5b6
+dashboard link: https://syzkaller.appspot.com/bug?extid=d1ae544e6e9dc29bcba5
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-> [  172.017120] nvme 0000:41:00.0: Using 64-bit DMA addresses
-> [  172.022955] nvme 0000:41:00.0: Using 64-bit DMA addresses
-> [  172.028720] nvme 0000:41:00.0: Using 64-bit DMA addresses
-> [  172.031815] nvme 0000:41:00.0: Using 64-bit DMA addresses
-> [  172.031816] nvme 0000:41:00.0: Using 64-bit DMA addresses
-> [  172.038727] nvme 0000:41:00.0: Using 64-bit DMA addresses
-> [  172.038726] nvme 0000:41:00.0: Using 64-bit DMA addresses
-> [  172.038917] nvme 0000:41:00.0: Using 64-bit DMA addresses
-> [  172.038968] nvme 0000:41:00.0: Using 64-bit DMA addresses
-> [  172.038970] nvme 0000:41:00.0: Using 64-bit DMA addresses
-> [  172.039007] nvme 0000:41:00.0: Using 64-bit DMA addresses
-> [  172.039091] nvme 0000:41:00.0: Using 64-bit DMA addresses
-> [  172.039102] nvme 0000:41:00.0: Using 64-bit DMA addresses
-> 
-> Otherwise patch worked fine for us.
-> 
-> Tested-by: Vasant Hegde <vasant.hegde@amd.com>
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Thanks!
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0beda3b66b40/disk-4aa1da8d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a7cd9f14ca57/vmlinux-4aa1da8d.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/48453a9c6a60/bzImage-4aa1da8d.xz
 
-Robin.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d1ae544e6e9dc29bcba5@syzkaller.appspotmail.com
 
------>8-----
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 9193ad5bc72f..db246fd3037f 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -662,8 +662,8 @@ static dma_addr_t iommu_dma_alloc_iova(struct iommu_domain *domain,
-  		if (iova)
-  			goto done;
-  
--		dev->iommu->pci_32bit_workaround = false;
--		dev_notice(dev, "Using %d-bit DMA addresses\n", bits_per(dma_limit));
-+		if (xchg(&dev->iommu->pci_32bit_workaround, false))
-+			dev_notice(dev, "Using %d-bit DMA addresses\n", bits_per(dma_limit));
-  	}
-  
-  	iova = alloc_iova_fast(iovad, iova_len, dma_limit >> shift, true);
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 2575630d402d..8a12e923718f 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -419,7 +419,7 @@ struct dev_iommu {
-  	void				*priv;
-  	u32				max_pasids;
-  	u32				attach_deferred:1;
--	u32				pci_32bit_workaround:1;
-+	bool				pci_32bit_workaround;
-  };
-  
-  int iommu_device_register(struct iommu_device *iommu,
+RSP: 002b:00007f963cd4d168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007f963c1abf80 RCX: 00007f963c08c169
+RDX: 0000000000000000 RSI: 0000000000000006 RDI: 0000000000000003
+RBP: 00007f963cd4d1d0 R08: 0000000000000000 R09: 0000000000000000
+R10: 000000000001dd03 R11: 0000000000000246 R12: 0000000000000002
+R13: 00007ffd7ae18d4f R14: 00007f963cd4d300 R15: 0000000000022000
+ </TASK>
+general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+CPU: 0 PID: 18742 Comm: syz-executor.5 Not tainted 6.3.0-rc7-next-20230417-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+RIP: 0010:folio_inode include/linux/pagemap.h:400 [inline]
+RIP: 0010:folio_wait_stable+0x23/0xe0 mm/page-writeback.c:3132
+Code: 00 00 00 0f 1f 40 00 f3 0f 1e fa 55 48 89 fd 53 e8 a2 92 d1 ff 48 8d 7d 18 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 a4 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b
+RSP: 0018:ffffc9000316f488 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: ffff88803e265cb0 RCX: ffffc9000c002000
+RDX: 0000000000000001 RSI: ffffffff81b1f0ee RDI: 000000000000000c
+RBP: fffffffffffffff4 R08: 0000000000000001 R09: ffffffff8c8eef13
+R10: fffffbfff191dde2 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff88803e265ed8 R14: 0000000000002000 R15: ffff88803e265a50
+FS:  00007f963cd4d700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f668b534110 CR3: 000000006ca4c000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ ext4_da_write_begin+0x47f/0x8b0 fs/ext4/inode.c:2939
+ generic_perform_write+0x256/0x570 mm/filemap.c:3927
+ ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:289
+ ext4_file_write_iter+0xbe0/0x1740 fs/ext4/file.c:710
+ call_write_iter include/linux/fs.h:1854 [inline]
+ do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:735
+ do_iter_write+0x185/0x7e0 fs/read_write.c:860
+ vfs_iter_write+0x74/0xa0 fs/read_write.c:901
+ iter_file_splice_write+0x745/0xc80 fs/splice.c:761
+ do_splice_from fs/splice.c:839 [inline]
+ direct_splice_actor+0x114/0x180 fs/splice.c:1018
+ splice_direct_to_actor+0x335/0x8a0 fs/splice.c:973
+ do_splice_direct+0x1ab/0x280 fs/splice.c:1061
+ do_sendfile+0xb19/0x12c0 fs/read_write.c:1254
+ __do_sys_sendfile64 fs/read_write.c:1322 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1308 [inline]
+ __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1308
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f963c08c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f963cd4d168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007f963c1abf80 RCX: 00007f963c08c169
+RDX: 0000000000000000 RSI: 0000000000000006 RDI: 0000000000000003
+RBP: 00007f963cd4d1d0 R08: 0000000000000000 R09: 0000000000000000
+R10: 000000000001dd03 R11: 0000000000000246 R12: 0000000000000002
+R13: 00007ffd7ae18d4f R14: 00007f963cd4d300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:folio_inode include/linux/pagemap.h:400 [inline]
+RIP: 0010:folio_wait_stable+0x23/0xe0 mm/page-writeback.c:3132
+Code: 00 00 00 0f 1f 40 00 f3 0f 1e fa 55 48 89 fd 53 e8 a2 92 d1 ff 48 8d 7d 18 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 a4 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b
+RSP: 0018:ffffc9000316f488 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: ffff88803e265cb0 RCX: ffffc9000c002000
+RDX: 0000000000000001 RSI: ffffffff81b1f0ee RDI: 000000000000000c
+RBP: fffffffffffffff4 R08: 0000000000000001 R09: ffffffff8c8eef13
+R10: fffffbfff191dde2 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff88803e265ed8 R14: 0000000000002000 R15: ffff88803e265a50
+FS:  00007f963cd4d700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b32724000 CR3: 000000006ca4c000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess), 1 bytes skipped:
+   0:	00 00                	add    %al,(%rax)
+   2:	0f 1f 40 00          	nopl   0x0(%rax)
+   6:	f3 0f 1e fa          	endbr64
+   a:	55                   	push   %rbp
+   b:	48 89 fd             	mov    %rdi,%rbp
+   e:	53                   	push   %rbx
+   f:	e8 a2 92 d1 ff       	callq  0xffd192b6
+  14:	48 8d 7d 18          	lea    0x18(%rbp),%rdi
+  18:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  1f:	fc ff df
+  22:	48 89 fa             	mov    %rdi,%rdx
+  25:	48 c1 ea 03          	shr    $0x3,%rdx
+* 29:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2d:	0f 85 a4 00 00 00    	jne    0xd7
+  33:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  3a:	fc ff df
+  3d:	48                   	rex.W
+  3e:	8b                   	.byte 0x8b
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
