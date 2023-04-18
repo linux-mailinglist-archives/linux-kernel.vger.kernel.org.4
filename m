@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E14D6E6F61
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063D16E6F64
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 00:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232279AbjDRWaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 18:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
+        id S232172AbjDRWcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 18:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbjDRW3x (ORCPT
+        with ESMTP id S229940AbjDRWcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 18:29:53 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2099D35A3;
-        Tue, 18 Apr 2023 15:29:52 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6a5f765d5b8so613457a34.3;
-        Tue, 18 Apr 2023 15:29:52 -0700 (PDT)
+        Tue, 18 Apr 2023 18:32:20 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CA240C9;
+        Tue, 18 Apr 2023 15:32:19 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a686260adcso27696535ad.0;
+        Tue, 18 Apr 2023 15:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681857138; x=1684449138;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QWumH5jSTQJEu5E26uuxjLhMaYa16981H9nAq/7awlg=;
+        b=EmGEubnwDXGIytjygKwVWzMvy/p++gLjdLWieYdg8ogn5SJ5QMdF5jCLnRPZTKONz0
+         /v4tKeOVWassklOfHy/f2KO4erJBXbYm5DTAaF1REno/h/hPG6T0S9OzTkvgn5OXEy/T
+         jGgV8Dg1K0wOXrcYXEgcCMF+t8O/UOu4o0246Pzgrcd4vCs0yTlN2GF9XhVaeSi0Qnct
+         gf+Su29hSlfFiw45pGx9MDur2WQei6Ri62y3j5a/+6ejNRc1LrZiZ8KM7symbmffx67S
+         C/8SSj67aTReBUDamL1mfVvkb1OJE8mC2mqOfplinPhaG774lmlvHuol9eo15nsny+Vs
+         Fi6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681856991; x=1684448991;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IrmDFMV+ByWwft8Vdv6h3adx/3/XUUc95kI+OilyKT8=;
-        b=Jr7yKa6qFgf9fTJA1+l7uRd6u95JxDEuolU8g8949kjAN9pPNlMRjVGGZlsDH0PCNN
-         8MtKbMg4txDB8zfoBxPFrYM9yAR4+Cs19rJ1haq7OxG0YX3zDGnUFRQzQ1m084xjO/zj
-         v6Dr7WYhlCzK1DuzLxDlQBcQqORVHBLTdLoq0TMsq7zXe9iNriVONAxfOpZfhTqckT+y
-         KTDXaj2RsZDCqg7X3uGmJewqHVeclt+scR12WA5eK17v5iZsU8+9Exd1oE+vdShz2FvK
-         wPyUNe2HhnjqefRRJFHpRoZvxh7tEDena+lO1+l5ICpBYTnnEjs4JKx8vaDwPO822NMH
-         NM3g==
-X-Gm-Message-State: AAQBX9c9sG3qhG9g2VzpYHkUz9ExgR3TuETMVDYzWTYuVxTVhKH9A7QS
-        Jp1Jx1m+bpnAA2gY/UigAVSzTdAsFg==
-X-Google-Smtp-Source: AKy350ZNJODwIqGkJ5sG/17OBGRNxMmBa91BltKwVlK1NWnfPu6nrcHAX+Hxtp3Q9SF1r4NaiL27Vw==
-X-Received: by 2002:a9d:6350:0:b0:6a4:390f:cd61 with SMTP id y16-20020a9d6350000000b006a4390fcd61mr1858161otk.0.1681856991282;
-        Tue, 18 Apr 2023 15:29:51 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d16-20020a056830005000b0068bd922a244sm6134585otp.20.2023.04.18.15.29.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 15:29:50 -0700 (PDT)
-Received: (nullmailer pid 2443692 invoked by uid 1000);
-        Tue, 18 Apr 2023 22:29:50 -0000
-Date:   Tue, 18 Apr 2023 17:29:50 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        Matti Vaittinen <mazziesaccount@gmail.com>, pavel@ucw.cz,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v5 1/2] dt-bindings: leds: Add ROHM BD2606MVV LED
-Message-ID: <168185698973.2443640.10846609870028128019.robh@kernel.org>
-References: <20230416211550.903240-1-andreas@kemnade.info>
- <20230416211550.903240-2-andreas@kemnade.info>
+        d=1e100.net; s=20221208; t=1681857138; x=1684449138;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QWumH5jSTQJEu5E26uuxjLhMaYa16981H9nAq/7awlg=;
+        b=DN7rSkUwVf/suzIPg8+V4IV9k1G05Ins9yuvmlVs/8a43e18BOXlN7KJzcuHLqOel5
+         VbSDonlrMT8TjMpbccDpk+qdLxKePxPJb7E8bOzYwRiCmDu9Vei5ZXPLVIKI+H4jbUA+
+         w/BfwoJSpONfP/nmT+xqh6eqOjDo5tDdny7aT/x3cEKXuc4rKvJV7qE24quuYXC8pOjf
+         NkKJqegRttsmN8rBIx52kPAUHk4FSoi/y02A5+N5nO3W9ylofdpwB0FEpmu2CXI1ZBZj
+         paRefvrp3Zcg8KpNDB5ArNOi4K0PbeldCogusvVov4nWjbR3lOZQnOnQBAuuUtyWmPxU
+         zCSA==
+X-Gm-Message-State: AAQBX9fbt64di+OBKxe7awcovrZXZDxgMMcxCX1CzucFcm2oAUI/UofG
+        AdpomHs++qpUixd405x33wCv429LE79K9A==
+X-Google-Smtp-Source: AKy350ZEOEZfDbKRfmeepXRguKPu6pEtFsm9Xi5BcpK+zWcQnb805CHK23Vv/2C0tKw5m+pzO8sQmQ==
+X-Received: by 2002:a17:902:c40a:b0:1a2:56f4:d369 with SMTP id k10-20020a170902c40a00b001a256f4d369mr4070373plk.19.1681857138646;
+        Tue, 18 Apr 2023 15:32:18 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id x19-20020a170902821300b001a6d781eda6sm4135319pln.120.2023.04.18.15.32.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 15:32:17 -0700 (PDT)
+Message-ID: <19f316a5-1f8f-c929-2997-c72f84637906@gmail.com>
+Date:   Tue, 18 Apr 2023 15:32:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230416211550.903240-2-andreas@kemnade.info>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 6.1 000/134] 6.1.25-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230418120313.001025904@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20230418120313.001025904@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,16 +80,30 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Sun, 16 Apr 2023 23:15:49 +0200, Andreas Kemnade wrote:
-> Document ROHM BD2606MVV LED driver devicetree bindings.
-> 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> ---
->  .../bindings/leds/rohm,bd2606mvv.yaml         | 81 +++++++++++++++++++
->  1 file changed, 81 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/rohm,bd2606mvv.yaml
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On 4/18/2023 5:20 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.25 release.
+> There are 134 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.25-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
