@@ -2,91 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 571216E66F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D016E66F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbjDROTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 10:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
+        id S232360AbjDROTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 10:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbjDROTl (ORCPT
+        with ESMTP id S230290AbjDROS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 10:19:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522AC146C2
+        Tue, 18 Apr 2023 10:18:59 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF93F146C5
         for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 07:18:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681827526;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RdQFurhc8g977rEvyt6mIZFP787lLkcIJf0Fatg7b/A=;
-        b=CcFaeQ2EsD60MkT4WoSqZvFdtPz+szuw0D/vPHYfRVTGrMuyRLLCpEjFPQLNnAnN+WQd6Y
-        zZmSZpPX8KjAk99tOBt5sIRRDDXmEGg3QsLoKs7XZi+4rJ8krmg/KKetoU7JX3BoLA/5cV
-        JmZKxSifK1BISmaoQqwhdfCzEVTBP8U=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-445-kiVNlW5jOPeyDDfSKmLpsw-1; Tue, 18 Apr 2023 10:18:43 -0400
-X-MC-Unique: kiVNlW5jOPeyDDfSKmLpsw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 832EC185A7A2;
-        Tue, 18 Apr 2023 14:18:35 +0000 (UTC)
-Received: from fedora (unknown [10.22.9.76])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 277D7C159F2;
-        Tue, 18 Apr 2023 14:18:27 +0000 (UTC)
-Date:   Tue, 18 Apr 2023 11:18:26 -0300
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>, Hu Chunyu <chuhu@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v6 2/3] sched/task: Add the put_task_struct_atomic_safe()
- function
-Message-ID: <kx2lctgc4be4zeb7rzdbqpindufmqdjwnh63j75s4hsxspw4si@vva4gdgc5hq7>
-References: <20230414125532.14958-1-wander@redhat.com>
- <20230414125532.14958-3-wander@redhat.com>
- <e197ad4d-a60b-f773-dd74-ba91ad66a617@redhat.com>
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-504ecbfddd5so4636372a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 07:18:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681827525; x=1684419525;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zST2ogY5xFX7piRNXStlaVQvyezkCUdzLc+A/+WCH/0=;
+        b=Mison/D9qO8cX3MKF9BO8D99s/3fvPtGb7uQOULjQ58TigK+IZh4ewSKnxLKzrYPyw
+         YdCN9qUpLQgTd92ENadYxAVjONyB/iFfxHmt3/L0Zz7jRFSYo6lwCeteQvXQWf9P6cxK
+         ouL+D/1itTMyEpUW20FCHfecexCuF33n0c4Jw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681827525; x=1684419525;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zST2ogY5xFX7piRNXStlaVQvyezkCUdzLc+A/+WCH/0=;
+        b=OG+FEwfsyim89H+48COwc95xzFp/T4oxtgCTmm6bw+qXWynIop5sG/uDCLco+ezRhX
+         SerXfLEbqNN13X+AJ09bQ8o91up7R0ek6oKviZ+qnfJx5NbQHjypZ/KkX3Q2PeRp5Ohn
+         NmGqCw4FO0Z8BWv7DVbEolQi2sWMak36vxfupRvNRoRyOxNuASFlb12GCXgS9FPtxH9Q
+         ug9/vWYVzxQ+Bdb79DV78jlDSHI2zlLc5S9qVmKg1GegtjkJuImGLSmyOLjMwCV2pvqy
+         GDytJLzKvJlG+o136lGCPf/ZKOHJCLktlCBM/jgHbE7p+Oumz4Oz4YjD74RTZSy6QmLt
+         AYVg==
+X-Gm-Message-State: AAQBX9f6jnib6uLsq1UE3xXgAWsTK/92pgnvRysiP2EmsqMJwTA2IsPb
+        JV6A9MRDi3lxetdytoyJu85sR5PqgiSxh1xjYD27Iw==
+X-Google-Smtp-Source: AKy350Yi5+lmw88stx0Ox8TcqDMQybP0sDeFzMyGmhnip9DT9F/WQQSAEJM6GA+ugN5suh6QN/hvHg==
+X-Received: by 2002:aa7:cf05:0:b0:4fc:3777:f630 with SMTP id a5-20020aa7cf05000000b004fc3777f630mr2384607edy.0.1681827525603;
+        Tue, 18 Apr 2023 07:18:45 -0700 (PDT)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
+        by smtp.gmail.com with ESMTPSA id x8-20020aa7d388000000b00506b83ef9e2sm1294403edq.13.2023.04.18.07.18.44
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 07:18:44 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-3f16fd9bc0dso20723925e9.2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 07:18:44 -0700 (PDT)
+X-Received: by 2002:adf:e803:0:b0:2fa:d7ac:6462 with SMTP id
+ o3-20020adfe803000000b002fad7ac6462mr485497wrm.11.1681827524446; Tue, 18 Apr
+ 2023 07:18:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e197ad4d-a60b-f773-dd74-ba91ad66a617@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+References: <20230418124953.3170028-1-fshao@chromium.org> <20230418124953.3170028-2-fshao@chromium.org>
+In-Reply-To: <20230418124953.3170028-2-fshao@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 18 Apr 2023 07:18:32 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=V8ZN3969RrPu2-zZYoEE=LDxpi8K_E8EziiDpGOSsq1w@mail.gmail.com>
+Message-ID: <CAD=FV=V8ZN3969RrPu2-zZYoEE=LDxpi8K_E8EziiDpGOSsq1w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: input: goodix: Add powered-in-suspend property
+To:     Fei Shao <fshao@chromium.org>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,75 +81,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 02:51:45PM -0400, Waiman Long wrote:
-> 
-> On 4/14/23 08:55, Wander Lairson Costa wrote:
-> > Due to the possibility of indirectly acquiring sleeping locks, it is
-> > unsafe to call put_task_struct() in atomic contexts when the kernel is
-> > compiled with PREEMPT_RT.
-> > 
-> > To mitigate this issue, this commit introduces
-> > put_task_struct_atomic_safe(), which schedules __put_task_struct()
-> > through call_rcu() when PREEMPT_RT is enabled. While a workqueue would
-> > be a more natural approach, we cannot allocate dynamic memory from
-> > atomic context in PREEMPT_RT, making the code more complex.
-> > 
-> > This implementation ensures safe execution in atomic contexts and
-> > avoids any potential issues that may arise from using the non-atomic
-> > version.
-> > 
-> > Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-> > Reported-by: Hu Chunyu <chuhu@redhat.com>
-> > Cc: Paul McKenney <paulmck@kernel.org>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > ---
-> >   include/linux/sched/task.h | 31 +++++++++++++++++++++++++++++++
-> >   kernel/fork.c              |  8 ++++++++
-> >   2 files changed, 39 insertions(+)
-> > 
-> > diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-> > index b597b97b1f8f..5c13b83d7008 100644
-> > --- a/include/linux/sched/task.h
-> > +++ b/include/linux/sched/task.h
-> > @@ -141,6 +141,37 @@ static inline void put_task_struct_many(struct task_struct *t, int nr)
-> >   void put_task_struct_rcu_user(struct task_struct *task);
-> > +extern void __delayed_put_task_struct(struct rcu_head *rhp);
-> > +
-> > +static inline void put_task_struct_atomic_safe(struct task_struct *task)
-> > +{
-> > +	if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
-> > +		/*
-> > +		 * Decrement the refcount explicitly to avoid unnecessarily
-> > +		 * calling call_rcu.
-> > +		 */
-> > +		if (refcount_dec_and_test(&task->usage))
-> > +			/*
-> > +			 * under PREEMPT_RT, we can't call put_task_struct
-> > +			 * in atomic context because it will indirectly
-> > +			 * acquire sleeping locks.
-> > +			 * call_rcu() will schedule delayed_put_task_struct_rcu()
-> delayed_put_task_struct_rcu()?
-> > +			 * to be called in process context.
-> > +			 *
-> > +			 * __put_task_struct() is called called when
-> "called called"?
-> > +			 * refcount_dec_and_test(&t->usage) succeeds.
-> > +			 *
-> > +			 * This means that it can't "conflict" with
-> > +			 * put_task_struct_rcu_user() which abuses ->rcu the same
-> > +			 * way; rcu_users has a reference so task->usage can't be
-> > +			 * zero after rcu_users 1 -> 0 transition.
-> 
-> Note that put_task_struct_rcu_user() isn't the only user of task->rcu.
-> delayed_free_task() in kernel/fork.c also uses it, though it is only called
-> in the error case. Still you may need to take a look to make sure that there
-> is no conflict.
-> 
+Hi,
 
-delayed_free_task() is called when a process fails to start. Therefore, AFAICT,
-there is no way it can conflict with put_task_struct().
+On Tue, Apr 18, 2023 at 5:50=E2=80=AFAM Fei Shao <fshao@chromium.org> wrote=
+:
+>
+> We observed that on Chromebook device Steelix, if Goodix GT7375P
+> touchscreen is powered in suspend (because, for example, it connects to
+> an always-on regulator) and with the reset GPIO asserted, it will
+> introduce about 14mW power leakage.
+>
+> This property is used to indicate that the touchscreen is powered in
+> suspend. If it's set, the driver will stop asserting the reset GPIO in
+> power-down, and it will do it in power-up instead to ensure that the
+> state is always reset after resuming.
+>
+> Signed-off-by: Fei Shao <fshao@chromium.org>
+> ---
+>
+>  Documentation/devicetree/bindings/input/goodix,gt7375p.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/input/goodix,gt7375p.yaml =
+b/Documentation/devicetree/bindings/input/goodix,gt7375p.yaml
+> index ce18d7dadae2..942acb286d77 100644
+> --- a/Documentation/devicetree/bindings/input/goodix,gt7375p.yaml
+> +++ b/Documentation/devicetree/bindings/input/goodix,gt7375p.yaml
+> @@ -43,6 +43,12 @@ properties:
+>        itself as long as it allows the main board to make signals compati=
+ble
+>        with what the touchscreen is expecting for its IO rails.
+>
+> +  powered-in-suspend:
+> +    description:
+> +      This indicates that the touchscreen is powered in suspend, so the =
+driver
+> +      will not assert the reset GPIO in power-down to prevent power leak=
+age.
+> +    type: boolean
 
-> Cheers,
-> Longman
-> 
+This seems OK to me. The overall idea is that if we ever turn off the
+power to the touchscreen we have to assert reset (active low) before
+doing so, but we don't want to hold reset if we're not actually going
+to turn the power off because it causes the touchscreen to go into a
+high power state. This gets complicated if the power rail is always-on
+or shared with another device.
 
+Alternatives I could think of:
+
+1. In the OS, monitor the regulator and see when it's about to go off
+and then assert reset. This is what I tried to do in previous patches
+but it got too messy in Linux. It also wasn't perfect since it's
+(theoretically) possible for a regulator to turn off outside of the
+scope of the OS (some PMICs will auto turn off rails when the main
+processor says it's off).
+
+2. In the OS, peek to see if our regulator is marked "always on". This
+doesn't handle the shared rail case, of course. Also, regulators that
+are "always on" from the OS perspective could still (theoretically)
+get turned off at suspend time by the PMIC.
+
+3. Don't even hook up the reset line and just leave the touchscreen
+out of reset all the time. This has the disadvantage that we can't
+reset the touchscreen if it gets into a bad state, which could be even
+more important if the touchscreen is on an always-on or shared rail.
+
+
+Given the above, the solution in ${SUBJECT} patch seems reasonable.
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
