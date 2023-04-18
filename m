@@ -2,125 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852976E5974
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765376E5981
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbjDRGcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 02:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34972 "EHLO
+        id S230218AbjDRGgy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 02:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjDRGcI (ORCPT
+        with ESMTP id S229714AbjDRGgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 02:32:08 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C671BDA;
-        Mon, 17 Apr 2023 23:32:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681799527; x=1713335527;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jnwKOCRsuLnztB+KT1haBu8YKUI0iN96QK5cHgHZ3Ck=;
-  b=xkjhZGU6f29Ly+pTCI7QUKkK+QISZ8uwDO0qmCjSjGJ37zcdfK8Sa8fo
-   WzN5HBCzY6Q4QsBLLfkBgKbpLNdvDCd8QqwlFceYG35M7tf4aVD2fdkXa
-   c3QaR0xYbEqq74KXDSBQTJ3ZrQIz0Ovfhk5xXL00Yqmi0b8J3Au8JjfaS
-   DDQHGhzcdF8j59mc41Fi2tfyL+UqQ2DwYkNoQeqP6lFHmUWeIjlosaemM
-   BzH3Y6NJYkZomvAShO/7ig67yWxyWeMUe/UtpTx0rzGHK6upzB1Jw4jJh
-   Tw3TzNh+ND8upIPSDD8owBj5hy0eIq6KfgtafMFSUhSaQOoTX1BEIKPpD
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,206,1677567600"; 
-   d="asc'?scan'208";a="210010487"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Apr 2023 23:32:07 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 17 Apr 2023 23:32:06 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 17 Apr 2023 23:32:04 -0700
-Date:   Tue, 18 Apr 2023 07:31:47 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Hal Feng <hal.feng@starfivetech.com>
-CC:     Stephen Boyd <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
-        <oe-kbuild-all@lists.linux.dev>, <linux-mm@kvack.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 1/2] clk: starfive: Fix RESET_STARFIVE_JH7110 can't be
- selected in a specified case
-Message-ID: <20230418-caliber-clavicle-e8c1beb3fb75@wendy>
-References: <20230417074115.30786-1-hal.feng@starfivetech.com>
- <20230417074115.30786-2-hal.feng@starfivetech.com>
- <20230417-buckwheat-wilt-92a4e85a5ca0@wendy>
- <83c5a35a-c646-cbc7-83f9-c02fcb24e069@starfivetech.com>
- <20230417-bolster-vitality-89d279146497@wendy>
- <0fe42faa3b34f82cc2fb73ae61460bf2.sboyd@kernel.org>
- <be049959-423e-6cd6-1f11-9bfa72665803@starfivetech.com>
+        Tue, 18 Apr 2023 02:36:52 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCB73C20;
+        Mon, 17 Apr 2023 23:36:50 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1poexH-002CzT-3h; Tue, 18 Apr 2023 08:36:43 +0200
+Received: from p5b13a017.dip0.t-ipconnect.de ([91.19.160.23] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1poexG-000nCD-MG; Tue, 18 Apr 2023 08:36:43 +0200
+Message-ID: <b5fea49d68e1e2a702b0050f73582526e205cfa2.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH RESEND] sh: sq: Use the bitmap API when applicable
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-sh@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 18 Apr 2023 08:36:40 +0200
+In-Reply-To: <071e9f32c19a007f4922903282c9121898641400.1681671848.git.christophe.jaillet@wanadoo.fr>
+References: <071e9f32c19a007f4922903282c9121898641400.1681671848.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.0 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Auc3gasTttW5e2PO"
-Content-Disposition: inline
-In-Reply-To: <be049959-423e-6cd6-1f11-9bfa72665803@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 91.19.160.23
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Auc3gasTttW5e2PO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Christophe!
 
-On Tue, Apr 18, 2023 at 10:14:06AM +0800, Hal Feng wrote:
-> On Mon, 17 Apr 2023 17:22:01 -0700, Stephen Boyd wrote:
-> > Quoting Conor Dooley (2023-04-17 03:18:35)
+Thanks for your patch. The changes look good to me. However, I have
+one question, see below.
 
-> >> Aye, just the explicit dependency seems like it'd be less fragile and
-> >> more obvious in the future.
-> >=20
-> > Agreed. Be explicit so we don't have to hunt down select dependencies.
->=20
-> With further consideration, on the other hand, if we set `if ARCH_STARFIV=
-E`
-> here, it can point out that we need the reset driver to boot up JH7110
-> besides the clock drivers, and the reset driver is not a necessary option
-> for compilation test. So the reset driver is independent to the clock
-> drivers when you doing a compilation test.
+On Sun, 2023-04-16 at 21:05 +0200, Christophe JAILLET wrote:
+> Using the bitmap API is less verbose than hand writing them.
+> It also improves the semantic.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> This is a resend of [1].
+> 
+> Now cross-compile tested with CONFIG_CPU_SUBTYPE_SH7770=y
+> 
+> [1]: https://lore.kernel.org/all/521788e22ad8f7a5058c154f068b061525321841.1656142814.git.christophe.jaillet@wanadoo.fr/
+> ---
+>  arch/sh/kernel/cpu/sh4/sq.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/sh/kernel/cpu/sh4/sq.c b/arch/sh/kernel/cpu/sh4/sq.c
+> index 27f2e3da5aa2..d289e99dc118 100644
+> --- a/arch/sh/kernel/cpu/sh4/sq.c
+> +++ b/arch/sh/kernel/cpu/sh4/sq.c
+> @@ -372,7 +372,6 @@ static struct subsys_interface sq_interface = {
+>  static int __init sq_api_init(void)
+>  {
+>  	unsigned int nr_pages = 0x04000000 >> PAGE_SHIFT;
+> -	unsigned int size = (nr_pages + (BITS_PER_LONG - 1)) / BITS_PER_LONG;
+>  	int ret = -ENOMEM;
+>  
+>  	printk(KERN_NOTICE "sq: Registering store queue API.\n");
+> @@ -382,7 +381,7 @@ static int __init sq_api_init(void)
+>  	if (unlikely(!sq_cache))
+>  		return ret;
+>  
+> -	sq_bitmap = kzalloc(size, GFP_KERNEL);
+> +	sq_bitmap = bitmap_zalloc(nr_pages, GFP_KERNEL);
+>  	if (unlikely(!sq_bitmap))
+>  		goto out;
+> 
 
-If ARCH_STARFIVE is enabled, both options (RESET_CONTROLLER &
-RESET_STARFIVE_JH7110) will be selected & you don't need to worry about
-people not realising this. Try it out & look at the option in
-menuconfig.
+I have look through other patches where k{z,c,m}alloc() were replaced with
+bitmap_zalloc() and I noticed that in the other cases such as [1], kcalloc()
+was used instead of kzalloc() in our cases with the element size set to
+sizeof(long) while kzalloc() is using an element size equal to a byte.
 
-> If we set `if RESET_CONTROLLER` here, the reset driver will be compiled
-> automatically when (ARCH_STARFIVE [=3Dn] && COMPILE_TEST [=3Dy] &&=20
-> RESET_CONTROLLER [=3Dy] && CLK_STARFIVE_JH7110_SYS [=3Dy]).
+Wouldn't that mean that the current code in sq is allocating a buffer that is
+too small by a factor of 1/sizeof(long) or am I missing something?
 
-This is what we want, right? The more often it gets built by randconfig
-etc the better, especially for archs that are not RISC-V.
+@Geert: Do you have any idea?
 
-Cheers,
-Conor.
+> @@ -393,7 +392,7 @@ static int __init sq_api_init(void)
+>  	return 0;
+>  
+>  out:
+> -	kfree(sq_bitmap);
+> +	bitmap_free(sq_bitmap);
+>  	kmem_cache_destroy(sq_cache);
+>  
+>  	return ret;
+> @@ -402,7 +401,7 @@ static int __init sq_api_init(void)
+>  static void __exit sq_api_exit(void)
+>  {
+>  	subsys_interface_unregister(&sq_interface);
+> -	kfree(sq_bitmap);
+> +	bitmap_free(sq_bitmap);
+>  	kmem_cache_destroy(sq_cache);
+>  }
+>  
 
---Auc3gasTttW5e2PO
-Content-Type: application/pgp-signature; name="signature.asc"
+Adrian
 
------BEGIN PGP SIGNATURE-----
+> [1] https://lkml.org/lkml/2021/11/28/155
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZD45UAAKCRB4tDGHoIJi
-0gqZAP4zWJAbqDGJL6zo/fU0NWtQyqwb3ZmwLp+AV2ApCUFX4wEAqOy+AkXU9CQ1
-b1QFGJkfN94a1mIqoBT5EPv8nfrnYwA=
-=J1Iw
------END PGP SIGNATURE-----
-
---Auc3gasTttW5e2PO--
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
