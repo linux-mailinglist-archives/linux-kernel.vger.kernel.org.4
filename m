@@ -2,79 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E5836E5B99
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63036E5BA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjDRIG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
+        id S231341AbjDRIJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbjDRIGX (ORCPT
+        with ESMTP id S231143AbjDRIJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:06:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1147D6EBA
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:06:04 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1410F66031F1;
-        Tue, 18 Apr 2023 09:04:55 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681805095;
-        bh=HYpSE05+ALPgNHVs9N+MeFT7atq4JrXWaOIKaYOOtLA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=I+M00XgHxGxyOLUsCzKyQXxyIFIaswZl6IWIAkI/YQpGz/SP7UHqvJNwJu+2G0U5U
-         g7glAtqLguG31hmXCDsLoscckWntth9/l3n7/0vIT0asKHkuEng9Ln9HAcfYOCNBt9
-         Uu8Qab4z2c7pcpTKUbp7FCcTHLvVANrJ2ff/LKPCVPY6uzERkD1ilJgP0eZ63L5XMp
-         vh6+K9uOa1RXtGJaly62mFwpTnsm+IYQBUMi06FZw07twoHX5yUeoTmfZZ9TpzDWIW
-         qfmOvpK/DnQeEHLwK7DM1uUOhS1lPYGq4RbaTo0uPUuvRQ/LbVVrn9VzkdJyuweAto
-         r/cEmfdyXuKpA==
-Message-ID: <b91a7bf5-9da5-cfe2-e488-b7c4e6fd5470@collabora.com>
-Date:   Tue, 18 Apr 2023 10:04:52 +0200
+        Tue, 18 Apr 2023 04:09:05 -0400
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9D67ABC
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:08:32 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VgOfNHv_1681805096;
+Received: from 30.221.131.28(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VgOfNHv_1681805096)
+          by smtp.aliyun-inc.com;
+          Tue, 18 Apr 2023 16:04:57 +0800
+Message-ID: <b6214ee7-3fa0-7363-f320-153b6daad2c0@linux.alibaba.com>
+Date:   Tue, 18 Apr 2023 16:04:56 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] drm/panel: novatek-nt35950: Only unregister DSI1 if it
- exists
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH] x86/alternatives: fix build issue with binutils before
+ 2.28
+To:     Willy Tarreau <w@1wt.eu>, Borislav Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, linux-kernel@vger.kernel.org
+References: <20230418064228.21577-1-w@1wt.eu>
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230417-topic-maple_panel_fixup-v1-1-07c8db606f5e@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230417-topic-maple_panel_fixup-v1-1-07c8db606f5e@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20230418064228.21577-1-w@1wt.eu>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/04/23 17:41, Konrad Dybcio ha scritto:
-> Commit 5dd45b66742a ("drm/panel: novatek-nt35950: Improve error handling")
-> introduced logic to unregister DSI1 on any sort of probe failure, as
-> that's not done automatically by kernel APIs.
+
+
+On 4/18/23 2:42 PM, Willy Tarreau wrote:
+> The usage of the BIT() macro in asm code was introduced in 6.3 in by
+> commit 5d1dd961e743 ("x86/alternatives: Add alt_instr.flags") but this
+> macro uses "1UL" in the shift operations, while gas before 2.28 do not
+> support the "L" suffix after a number, and those before 2.27 do not
+> support the "U" suffix, resulting in build errors such as the following
+> with such versions:
 > 
-> It did not however account for cases where only one DSI host is used.
-> Fix that.
+>   ./arch/x86/include/asm/uaccess_64.h:124: Error: found 'L', expected: ')'
+>   ./arch/x86/include/asm/uaccess_64.h:124: Error: junk at end of line,
+>   first unrecognized character is `L'
 > 
-> Fixes: 5dd45b66742a ("drm/panel: novatek-nt35950: Improve error handling")
-> Reported-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> There's a single use of this macro here, let's revert to (1 << 0) that
+> works with such older binutils.
+> 
+> Cc: Jingbo Xu <jefflexu@linux.alibaba.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Link: https://lore.kernel.org/lkml/a9aae568-3046-306c-bd71-92c1fc8eeddc@linux.alibaba.com/
+> Signed-off-by: Willy Tarreau <w@1wt.eu>
+> ---
+> 
+> Boris, I understood from your message that 2.28 was the first working version,
+> so that's what I mentioned here. My tests showed that 2.27 wasn't sufficient
+> and that 2.29 was OK. If I was wrong and it's 2.29 instead, feel free to edit
+> the subject line, description and the comment, I'm totally fine with this!
+> 
+> 
+>  arch/x86/include/asm/alternative.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
+> index e2975a32d443..b119685c0b31 100644
+> --- a/arch/x86/include/asm/alternative.h
+> +++ b/arch/x86/include/asm/alternative.h
+> @@ -8,7 +8,7 @@
+>  
+>  #define ALT_FLAGS_SHIFT		16
+>  
+> -#define ALT_FLAG_NOT		BIT(0)
+> +#define ALT_FLAG_NOT		(1 << 0) /* note: gas < 2.28 can't use BIT(0) */
+>  #define ALT_NOT(feature)	((ALT_FLAG_NOT << ALT_FLAGS_SHIFT) | (feature))
+>  
+>  #ifndef __ASSEMBLY__
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+It works for me.
+
+Tested-by: Jingbo Xu <jefflexu@linux.alibaba.com>
 
 
+-- 
+Thanks,
+Jingbo
