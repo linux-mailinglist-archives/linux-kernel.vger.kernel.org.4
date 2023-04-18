@@ -2,99 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32BF6E5753
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721846E5739
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 03:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbjDRCL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 22:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
+        id S230471AbjDRB60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 21:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjDRCL0 (ORCPT
+        with ESMTP id S229589AbjDRB6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 22:11:26 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52C31A1;
-        Mon, 17 Apr 2023 19:11:20 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id i8so18736350plt.10;
-        Mon, 17 Apr 2023 19:11:20 -0700 (PDT)
+        Mon, 17 Apr 2023 21:58:24 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1867972A4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 18:57:50 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1a66e7a52d3so8326485ad.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 18:57:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681783880; x=1684375880;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=landley-net.20221208.gappssmtp.com; s=20221208; t=1681783069; x=1684375069;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=30LF+74h47bireainrLuyJUJ7mJ1XOOzx7GiLgJnkq4=;
-        b=lgkprahT40tqQeRc4PO26Jp/f18/2SbJOZQf0Rhiw3RdsSerCuGwlFNmBEBazdCknI
-         1/ZNAi+HB/7xO5nWI4pc3DkshTdI/AWrr5IFFTmGLAoiTlwCJS/RioNsYY/PTixuKDtb
-         1W89nrBXfwjrc2PoiqlidrkS6EzALcqxlRqP5sauwaDKhiD+o+mvXRPTRe9ytQXotRkE
-         mELBOZ7L1kwOk2bFVG+bbPvJ+22RPs4aFg/tfkm/wSnXXDR9+BFzMLW7NyxSRs+MJgdh
-         J2ccFcCy9DCBXD9d8IHEMVPVFbHXuQhQQj91KesPm2lHjhnrqhdHWjv75MlTWVl5n7qW
-         CGTw==
+        bh=K7vLZY5J50FSt8lwsCIHqb0KqBwYt8YdqEgV1/N0h/I=;
+        b=NOiNaHH5RvWGgDQE3cwC4NK+sGVh4LMa60CHcMcMk0Ns8/Yq5MGld5dWUjwTse7vyl
+         sKC5+TdqTJ0g1DA3AJel0DSxVVoIfHlh6fzn60kvCJygfZLA3ZNhsNlH90HskcfW8wyr
+         aEM0bRz+roJWmD5kJK1PECX7UrfFX9MGO6zUqJiSiv6N3eBLNsftiuRiFL/zWvI75fC+
+         oZ7uEWVRwepxdfHNbdJIMcfw1NY97WRjW4XrMM06UeI+bfDM4s9VuKIC+wiCKVhur8qy
+         qgcsF5dR0mHZLPLlOBV3tsbo+zGRrlytO+pk1VNiCHWtagqs7/gi0BKWFu2SiZdVeUK9
+         tu/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681783880; x=1684375880;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1681783069; x=1684375069;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=30LF+74h47bireainrLuyJUJ7mJ1XOOzx7GiLgJnkq4=;
-        b=hhlQEZuPs7d1lCIHdZiHDuvRIerP4bKpovfMxvnX9LQw/YcjRJh03OsaeIZw7BKT1s
-         kw7ivC5T8SXT7ozWwQhcuMORhfnADkF1pPJH5sbuUHzD0eQbRpcxBrYFWNBlyz73LSac
-         zzMEkd83V7r0/5TRWLcnKiZY9GO8CmjGSF3Y70xfqXmcZtMa3oNfHf4ms7QdArxVuJOh
-         ZpsYQDQGFXjpCGKflL11sVWgBZaMK7JtDY603xAp6D8dMo7zqXkB0bkCcyMhJsBVEXbP
-         EtgyCCiBNq2vB1j/2B/3zHjDeo/9s4CJ5TxJ4ndDZeHbf2Z3IC+PaVkkyxp9LVObdRUX
-         rAdg==
-X-Gm-Message-State: AAQBX9fQFywKOZPcl3k+YXsPWpwtK2oP11CesPI5Fukk/XNH3ZwhRfye
-        Om3qScnVGwW5Kt+DpSOqQh32Z5UxzEcpFQ==
-X-Google-Smtp-Source: AKy350aOOiDkLzk1dzYsDdo+Y5rFtFQYG6MGFGKTxrR5ASI4L+Vshmq/XhawN6xegxioU96rxz6k6A==
-X-Received: by 2002:a05:6a21:7891:b0:ed:ca22:a1e7 with SMTP id bf17-20020a056a21789100b000edca22a1e7mr18463189pzc.16.1681783880149;
-        Mon, 17 Apr 2023 19:11:20 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-15.three.co.id. [180.214.233.15])
-        by smtp.gmail.com with ESMTPSA id r5-20020a635145000000b005186e562db0sm7581267pgl.82.2023.04.17.19.11.17
+        bh=K7vLZY5J50FSt8lwsCIHqb0KqBwYt8YdqEgV1/N0h/I=;
+        b=Cxw7TsdSXHMrG+2HPNYrGZ5eCZeX7NI1Ic4EBPDaced/MN3XbD2d5nV7Um8nZS3ffA
+         n4dI8PPphgymoX6zMFhnMSBjGHcDNaGUwYrCLBd1RZfjDQGDax4mKc2iXv2AMdWxBRwp
+         g6g2OLqVlkdlfjJ0s9Me9NfL5dzFx0IzOosgq+V0dPYBiUWCAgtTcd7/Z1aqIzQ6mbL7
+         nVAsxlWC/SVuRNdEkZ63cZ9EbKnHZiVKDfyQaTa7wsUboe0U4YcrzeYLCW8AxZTXu1xB
+         5rGXATUapcdfvTxzly4ajqmTGvgk1CcKIgJGXyXvVxAqTzN/eKTKI2infeIXK3PQHbUf
+         phyg==
+X-Gm-Message-State: AAQBX9czufnsPycAlQCB8QgzRiJpxa1zux1/6D5blgMGMBPB6yRSw7Y4
+        0OkzP5gkvbIdEnkW8fRHKlVpfw==
+X-Google-Smtp-Source: AKy350aHPlYlChJxF4HQlAb3s/ccQQXKkLuj/0YwpGffvcRq+tpfEP9ObhroKMearnzP07TrPYVfAw==
+X-Received: by 2002:a17:903:230c:b0:1a6:b78e:de0f with SMTP id d12-20020a170903230c00b001a6b78ede0fmr590735plh.51.1681783069405;
+        Mon, 17 Apr 2023 18:57:49 -0700 (PDT)
+Received: from [192.168.33.147] (124-110-25-102.east.xps.vectant.ne.jp. [124.110.25.102])
+        by smtp.gmail.com with ESMTPSA id jf7-20020a170903268700b001a2135e7eabsm8342694plb.16.2023.04.17.18.57.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 19:11:19 -0700 (PDT)
-Message-ID: <4517330a-00a3-220f-2fc5-a9ef4aba5ea8@gmail.com>
-Date:   Tue, 18 Apr 2023 09:10:39 +0700
+        Mon, 17 Apr 2023 18:57:49 -0700 (PDT)
+Message-ID: <4e5a887d-1c8a-5592-9dcc-fcc85ec7e319@landley.net>
+Date:   Mon, 17 Apr 2023 21:13:02 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] docs: f2fs: specify extent cache for read explicitly
-To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>,
-        Chao Yu <chao@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-f2fs-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230417044100.56409-1-frank.li@vivo.com>
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RESEND] sh: sq: Use the bitmap API when applicable
 Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20230417044100.56409-1-frank.li@vivo.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-sh@vger.kernel.org
+References: <071e9f32c19a007f4922903282c9121898641400.1681671848.git.christophe.jaillet@wanadoo.fr>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <071e9f32c19a007f4922903282c9121898641400.1681671848.git.christophe.jaillet@wanadoo.fr>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/17/23 11:41, Yangtao Li wrote:
-> Let's descrbie it's read extent cache.
+On 4/16/23 14:05, Christophe JAILLET wrote:
+> Using the bitmap API is less verbose than hand writing them.
+> It also improves the semantic.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-"Clarify the fact that extent_cache and noextent_cache toggle read
-extent cache on or off."
+Tested-by: Rob Landley <rob@landley.net>
 
-> -extent_cache		 Enable an extent cache based on rb-tree, it can cache
-> -			 as many as extent which map between contiguous logical
-> +extent_cache		 Enable a read extent cache based on rb-tree, it can cache
-"... . It can cache ..."
+It booted and ran for me.
 
->  noinline_data		 Disable the inline data feature, inline data feature is
->  			 enabled by default.
-
-"Disable inline data feature, for which the feature is enabled by
-default." (submit as separate patch).
-
-Thanks.
-
--- 
-An old man doll... just what I always wanted! - Clara
-
+Rob
