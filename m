@@ -2,93 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C3B6E6C26
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 832EB6E6C29
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbjDRSey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58946 "EHLO
+        id S232723AbjDRSe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232693AbjDRSev (ORCPT
+        with ESMTP id S232708AbjDRSey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:34:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0505FD2;
-        Tue, 18 Apr 2023 11:34:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 882CF637F5;
-        Tue, 18 Apr 2023 18:34:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 074A4C433EF;
-        Tue, 18 Apr 2023 18:34:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681842890;
-        bh=SeVwh5A9aJ9SlglUnJ0cjP75eIubcOPUJMDYzYkuyBo=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=aGfvXLlNQ5Yj8NvglyGbv8AVjndyFeloF3Y/mP0BEptNYBuO1xYHSF4XR/yEwVSdT
-         0f4MlVcHXMDRK7MBCfqU6ZPuUPNqtk8kR0I6f18LavmMIxoESRnIeYaVtv0RfL94am
-         kCEfOC41J6MK71yGTzyjj3OAcRJukqOn3eh7pxtKrwSbULrb65sIQpTth5F0EFK3is
-         U+fc7cBNAButisaGA63tg7D1FLmH6OS9YAiCmtsq/6REaCLMZKRWJqf19r7dhi9qTB
-         0i7Spx/CZTOW3ON9wEzcZVWC41MhzTpvydld3MRNokbUQRkTcExlnaXfgS7N9FvRfz
-         lkqLCYGEhmmww==
-Date:   Tue, 18 Apr 2023 19:34:44 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tue, 18 Apr 2023 14:34:54 -0400
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECDE5FEB;
+        Tue, 18 Apr 2023 11:34:53 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id n43-20020a05600c502b00b003f17466a9c1so329276wmr.2;
+        Tue, 18 Apr 2023 11:34:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681842892; x=1684434892;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xm4ZY1i9Dh6gYkNxKtAHV+VT8qVk5zXV7kjjZ2dWbbc=;
+        b=inlV1UZNjGzLwdvkVYspz00/fgBNC/HgmECKW8DMTDz/pASPGFJ10vXWsNZJagcZbf
+         1unixmRXkNu21ME7DDP7bMqzdgtJfoILZbXz7mUWlsaOXPoi4qqyG5uoACXFhAw4P+oP
+         bNgNHynOt4WhOnsoxIPFsIukB2EAiixx0Sz/ku6/rhQp+9X58RzDPw6eFqxqW1eDe4CV
+         uhTbIle2OyEARsUKnYTtTcfbNuRVxmt/1BV7g+gg8xHykjIveq6ioyeCFGzSbKjaQQo2
+         LONibxMtPKxB/JGbNIwRM2yECyQNeX0wYk/XIilcXaRpj+vAmLz5GIs97Ux09UcfOyb+
+         8Jzg==
+X-Gm-Message-State: AAQBX9fXz+0u9eNKvRJZ95CQRMt2XcIwXbjSMjmImZIN0QgcBf0ud5Z0
+        gxxXqOSfqd06oSIJoXhoieU=
+X-Google-Smtp-Source: AKy350bHlssa6DuT3MY94kLm7rWccLcuvRtMBc56od1YbGIgIpSIvi7awTSaLifcA4m0MK5BSYngAw==
+X-Received: by 2002:a05:600c:c3:b0:3f1:76a2:33a8 with SMTP id u3-20020a05600c00c300b003f176a233a8mr4105861wmm.5.1681842891914;
+        Tue, 18 Apr 2023 11:34:51 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id q9-20020a1ce909000000b003ee20b4b2dasm15588429wmc.46.2023.04.18.11.34.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 11:34:51 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 18:34:48 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     broonie@kernel.org
+Cc:     Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: Re: linux-next: manual merge of the drm-misc tree with the mm-stable
- tree
-Message-ID: <8c90b4db-3075-4275-bea8-01f501b00885@sirena.org.uk>
-References: <20230414125913.851920-1-broonie@kernel.org>
- <ZDuqut+8BKjMXblJ@phenom.ffwll.local>
+        linux-hyperv@vger.kernel.org
+Subject: Re: linux-next: build failure after merge of the hyperv tree
+Message-ID: <ZD7iyCf2WdnTMurW@liuwe-devbox-debian-v2>
+References: <20230418173157.92827-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Dl9k+y2vnho49Hoq"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZDuqut+8BKjMXblJ@phenom.ffwll.local>
-X-Cookie: Just to have it is enough.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230418173157.92827-1-broonie@kernel.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 18, 2023 at 06:31:57PM +0100, broonie@kernel.org wrote:
+> Hi all,
+> 
+> After merging the hyperv tree, today's linux-next build (x86 allmodconfig)
+> failed like this:
+> 
+> /tmp/next/build/drivers/hv/connection.c: In function 'vmbus_connect':
+> /tmp/next/build/drivers/hv/connection.c:228:53: error: implicit
+> declaration of function 'hv_alloc_hyperv_page'; did you mean 'hv_free_hyperv_page'? [-Werror=implicit-function-declaration]
+>   228 |         vmbus_connection.monitor_pages[0] = (void *)hv_alloc_hyperv_page();
+>       |                                                     ^~~~~~~~~~~~~~~~~~~~
+>       |                                                     hv_free_hyperv_page
+> /tmp/next/build/drivers/hv/connection.c:228:45: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+>   228 |         vmbus_connection.monitor_pages[0] = (void *)hv_alloc_hyperv_page();
+>       |                                             ^
+> /tmp/next/build/drivers/hv/connection.c:229:45: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+>   229 |         vmbus_connection.monitor_pages[1] = (void *)hv_alloc_hyperv_page();
+>       |                                             ^
+> cc1: all warnings being treated as errors
+> 
+> Caused by commit
+> 
+>   4dbdcfe1c5db80edca ("Drivers: hv: move panic report code from vmbus to hv early init code")
+> 
+> I will use the hyperv tree from yesterday instead.
 
---Dl9k+y2vnho49Hoq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This has been fixed by removing the problematic commit.
 
-On Sun, Apr 16, 2023 at 09:58:50AM +0200, Daniel Vetter wrote:
-
-> Note there was a ppc compile fail, which is why we pushed the ttm revert.
-> That /should/ be fixed now, but would be good if you can confirm?
-
-According to Nathan (CCed) there's still issues with the interaction
-with the PowerPC tree.
-
---Dl9k+y2vnho49Hoq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ+4sMACgkQJNaLcl1U
-h9DGMQf+LkWF7rgQeUihBV3DSNnLDVzuJWjMjb+nORsV1I4ys/Y5fN1hpEOwj0yS
-J6a+Xdu8F+CMZEjbUv4U91LShNZPOLRYAJpVxSW5TEpzx4/uE4/jhbGJlvt84vwN
-XRzfmUNgbQBmdUnDtsZ1RVVwgR7A1E+b3UeTPs4lqvsZxga6B/cixLMb+xxGaIRF
-6AWMfRT4HPCGCBy2I4T0qAHyTx0EG1ABonZ5hMHDmvNjzLhix+mC0lgUAeaVwUli
-VHhOqNVDPbuq/R9KPleCY3nWoW1b7AEsG7pobLuEvhiUjzNZMVz7e/5sziGOAR47
-Ptgj2bQduqikgcMGLCI+jpthiyxhkA==
-=oIM3
------END PGP SIGNATURE-----
-
---Dl9k+y2vnho49Hoq--
+Thanks,
+Wei.
