@@ -2,101 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C706E5CB7
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C2F6E5CC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjDRJAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
+        id S230359AbjDRJDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjDRJAX (ORCPT
+        with ESMTP id S229640AbjDRJC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:00:23 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C5E40D2;
-        Tue, 18 Apr 2023 02:00:22 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 2784487;
-        Tue, 18 Apr 2023 11:00:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1681808418;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xvvRB86AQVxOlD3RtO02pISStAPqaDuG7j7JHADtm5o=;
-        b=gmlX31n9YMYDUtWphYdGkIco9r5NaX9mwotHkGiTKllOEnDIuuubO4vMFqRzAYyRx6YeH7
-        jopwzCirZzYaxIGYzoQjwxvk4G8lGflMjUO5SZSUtQTEC7j7H6yDDKHQ7CyddjA+6g7iGv
-        w/VOAI1XI1dT4jEjkcYWclaOGtEI3ygQ4yHBv/Dq+g9cfoCKpVx0GZ7qhr2ts+YQzKRkoU
-        3V3TMCafUHuILI94K5WG4+WV8X6dq4y+VQd2cbNBgpc+302rVfuEVxhLEW4tR1yMEIHoGW
-        L1Fa30aCsKkadDewKh1uaLZKOtdUpCqMCrbhnYdAqQX6SrR2zOaGemCBnDbIgQ==
+        Tue, 18 Apr 2023 05:02:59 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD7C4C0B
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:02:57 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-552fb3c2bb7so40342897b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681808577; x=1684400577;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=q3Aq3UeThcjyQHwpjXcMomx6rO6mRd481lmdvuh5Oow=;
+        b=Xy6ZmrI/H0Kdia05qrYa2I/WhsZZI5u5+m6+ENsTFURUqUVrzDW40RFuF1g+6cqKX5
+         9qtLn6juoiUfREGdxk+XeVnvgU5/QkI30uyOUKs8kUpR1gpw+6NeOqzW7mOOdYwRheDn
+         GfximeNcodzU7Lu8JzWh47VeMlfig9jelyGSSRGZHNTFrEpaJ1Ip4KSxx4KQDebkFpbS
+         01LKX3SsGYAWC7nCbA+mOiPXjJX5w4fYpznwzELFYXjYePPyZFPCFGipf+fybblD4K9z
+         FYYw3M+zDR/HalIG4VQ6GlVvXuNRG3FdtSkXZcL08AG6fzcRPvCxj2LyoBQpUocFyqv9
+         pUkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681808577; x=1684400577;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q3Aq3UeThcjyQHwpjXcMomx6rO6mRd481lmdvuh5Oow=;
+        b=c/WYCT9Mg5QtoXl42SGfjNzyr7EK8aX+iwo7elt2ktpdj+yKkZU/4UpgYiYwcFBwq0
+         by5w4rYzwGS2PQohJ5hP+y/69X2gz4o9AFY0HlJoTkYggLpwyopGDzxTXCIVFCwbPkx4
+         EY6496IstCgM9PB2Z45+I3/fdXrnDC6PU1Nzx3strh6d/VufPBkUyYIVnA/XuSan4fTB
+         mSxwqbGEbdYX71zGZXe7v9AXQuOIPmFLQUfj9aqBrHLBzyB4O+yKyDVZnpem9euxLb7u
+         BOKupcKjYZlTscALFZvfTTL3uEys10xYwI4sFvQbwf+6Hk6O1ZW9il5NDvqehjEuHXIN
+         aDgA==
+X-Gm-Message-State: AAQBX9cQFtmG6AzrXUzdKLaYBD/DQhtFq+86iodn3g8AEZyHhC3Q1CaT
+        hhQiqyFepedC7yMxuKjIgDl7xh0Hvsk6ryzjZ+Vv6w==
+X-Google-Smtp-Source: AKy350amoDVVD88+7xkB0c1Jy4Ume5+tTHb+L2xXcEeYeooa1Sr2o51iKrN5St2NFM68tB8MlRjVe8jcwud4C0j+y0w=
+X-Received: by 2002:a0d:d8cc:0:b0:54d:c121:6c88 with SMTP id
+ a195-20020a0dd8cc000000b0054dc1216c88mr18441840ywe.20.1681808576751; Tue, 18
+ Apr 2023 02:02:56 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Tue, 18 Apr 2023 11:00:18 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     VaibhaavRam.TL@microchip.com
-Cc:     gregkh@linuxfoundation.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        arnd@arndb.de
-Subject: Re: [PATCH v9 char-misc-next 1/2] misc: microchip: pci1xxxx: Add
- support to read and write into PCI1XXXX OTP via NVMEM sysfs
-In-Reply-To: <49405ea2bb0bee16a41ce88b7d679ff714823585.camel@microchip.com>
-References: <20230413105318.6070-1-vaibhaavram.tl@microchip.com>
- <20230413105318.6070-2-vaibhaavram.tl@microchip.com>
- <51847629489852d493af928580c5a2de@walle.cc>
- <49405ea2bb0bee16a41ce88b7d679ff714823585.camel@microchip.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <8b7b98e60fd871cc7aafda6f9b4e146a@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20230413064344.18714-1-quic_tjiang@quicinc.com>
+ <CAA8EJpoc4nn+Wr131-o=YQoDeL0t7aj9hC=8NNnJa3SeHwgJ-w@mail.gmail.com> <934c32ef9427464a9d0b898b843df6ab@quicinc.com>
+In-Reply-To: <934c32ef9427464a9d0b898b843df6ab@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 18 Apr 2023 12:02:45 +0300
+Message-ID: <CAA8EJpqz9o9CtAnXRE86kw-cfL=_d-c5BDAXwQLSJAyZRy_fEg@mail.gmail.com>
+Subject: Re: [PATCH v2] Bluetooth: btusb: Add WCN6855 devcoredump support
+To:     "Tim Jiang (QUIC)" <quic_tjiang@quicinc.com>
+Cc:     "marcel@holtmann.org" <marcel@holtmann.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "Balakrishna Godavarthi (QUIC)" <quic_bgodavar@quicinc.com>,
+        "Hemant Gupta (QUIC)" <quic_hemantg@quicinc.com>,
+        "mka@chromium.org" <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-04-17 14:47, schrieb VaibhaavRam.TL@microchip.com:
->> > +#include <linux/auxiliary_bus.h>
->> > +#include <linux/bio.h>
->> > +#include <linux/device.h>
->> > +#include <linux/iopoll.h>
->> > +#include <linux/kthread.h>
->> 
->> Is this needed? I don't see any threads. Also bio.h. Please double
->> check
->> your includes.
-> Ok, Will remove in next version of patch
->> > +     if (priv != NULL)
->> > +             rb = priv->reg_base;
->> > +     else
->> > +             return -ENODEV;
->> 
->> Unneeded check, priv cannot be NULL, right?
-> Ok, I think this can be removed
->> > +
->> > +             data = readl(rb +
->> > MMAP_OTP_OFFSET(OTP_PASS_FAIL_OFFSET));
->> > +             if (ret < 0 || data & OTP_FAIL_BIT)
->> > +                     break;
->> 
->> No error handling?
-> We have implemented short read which returns count of successful bytes
-> read and therefore userspace will recognise the situation when the
-> requested count is not obtained.
+On Tue, 18 Apr 2023 at 04:02, Tim Jiang (QUIC) <quic_tjiang@quicinc.com> wrote:
+>
+> Hi Dmitry:
+>
+> -----Original Message-----
+> From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Sent: Saturday, April 15, 2023 5:03 AM
+> To: Tim Jiang (QUIC) <quic_tjiang@quicinc.com>
+> Cc: marcel@holtmann.org; linux-kernel@vger.kernel.org; linux-bluetooth@vger.kernel.org; linux-arm-msm@vger.kernel.org; Balakrishna Godavarthi (QUIC) <quic_bgodavar@quicinc.com>; Hemant Gupta (QUIC) <quic_hemantg@quicinc.com>; mka@chromium.org
+> Subject: Re: [PATCH v2] Bluetooth: btusb: Add WCN6855 devcoredump support
+>
+> On Thu, 13 Apr 2023 at 09:44, Tim Jiang <quic_tjiang@quicinc.com> wrote:
+> >
+> > WCN6855 will report memdump via ACL data or HCI event when it get
+> > crashed, so we collect memdump to debug firmware.
+>
+> Is it applicable only to wcn6855 or to some of earlier chips too?
+>  [Tim]  Also applicable to earlier chips , but currently google only require us to support wcn6855
 
-I'll leave that up to Greg, but I'd prefer a proper error to userspace.
-I'm not sure if you'd need to differentiate between a short read/write
-and an error.
+Since upstream is not a google kernel, please enable this feature for
+all relevant chipsets.
 
-Maybe a short read or write is a valid situation where an access which
-leads to the OTP_FAIL_BIT is for sure an error situation.
+>
+> >
+> > Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
+> > ---
+> >  drivers/bluetooth/btusb.c | 222
+> > ++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 222 insertions(+)
 
--michael
+
+
+
+-- 
+With best wishes
+Dmitry
