@@ -2,114 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F3F6E6EA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C656E6EAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233141AbjDRVve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
+        id S233170AbjDRVwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233137AbjDRVvc (ORCPT
+        with ESMTP id S232864AbjDRVwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:51:32 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E139ED9
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:51:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ClDY4zHXRxRv2R7Gk0yxGFQ9XOyZD63mK1Ox3vqagFk=; b=tLrHj4dpnxEso0zEI7YDFkRe8c
-        ccFF/qmeH0RhHBIz3uv6kHhvZCxc2qY6avkIHU6R2A4DI7lyB4C2vyszGoON7OELrM18pDKzcOf+x
-        6V3NjGz5FcREQN1Rt3T7yReInwnEYFl7ve2fLcXs5A+UzX0oPcsEDH2MbmWx7CGLwIVnDRmPuaSSb
-        vFuqm5As8EbB7LF+Hrk/UH4w8yxfaFdeiY6ZZz38NF/ujIMZ+opaidxDOZu3v0lMkeGDdWiePSEzR
-        XDpgUX/FzPEt1EwQegGHRWoQBT47xC2RlFe/WAi2hLF30NkOso6UMWnwbJ75pExjMRt+dNuFCqRkk
-        6mGiSQDQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1potEP-003RhZ-23;
-        Tue, 18 Apr 2023 21:51:21 +0000
-Date:   Tue, 18 Apr 2023 14:51:21 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Hugh Dickins <hughd@google.com>, akpm@linux-foundation.org,
-        willy@infradead.org, linux-mm@kvack.org, p.raghav@samsung.com,
-        da.gomez@samsung.com, a.manzanares@samsung.com, dave@stgolabs.net,
-        yosryahmed@google.com, keescook@chromium.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] shmem: add support to ignore swap
-Message-ID: <ZD8Q2SzVr3xDmCgY@bombadil.infradead.org>
-References: <20230309230545.2930737-1-mcgrof@kernel.org>
- <20230309230545.2930737-7-mcgrof@kernel.org>
- <79eae9fe-7818-a65c-89c6-138b55d609a@google.com>
- <20230418-zynisch-satzglied-55821361f70a@brauner>
+        Tue, 18 Apr 2023 17:52:06 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085D49ED2;
+        Tue, 18 Apr 2023 14:51:59 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33ILOi1M031252;
+        Tue, 18 Apr 2023 21:51:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=3HsRrfr6uEi597nAEVxngP/P+gdrt96xB0IUuG8Lktk=;
+ b=hstE+GG4ITf7i1MOoBBRMo+fKsYmx/TVMd1EZtkF/lUJzduUkyXldmMEN/Id2gtjaO+H
+ 9T0/VqNIk5cEJKPLeEbZpWWq9kj/mwBZLhlupPanPet5CAznkQE/48XyxY1gFjW1tTUF
+ 1s/HJuYeSrI1+1gRhcoeqGqfZcxKUp614lqeqGYTWXnSSwnwteWBjCoVSiOGDcLGEGg9
+ JujpoY7CPhNm6X/pOZS+qVtW8ely1t6lzK5lH7cTH3acL36ByH9yXJWVtHiIDDwoIgYM
+ 9GX3MBT8xea2erTL0WowMgxNpomU6A+e8xKFtjQ8e19BdQQAxhmc5KHRb9HjUFz2xM4U aA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1v2ahbw9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 21:51:48 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33ILpQPm006302
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 21:51:26 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 18 Apr
+ 2023 14:51:24 -0700
+Message-ID: <3f27c84f-f8b0-bddf-cdd5-952c9576c6c3@quicinc.com>
+Date:   Tue, 18 Apr 2023 15:51:23 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418-zynisch-satzglied-55821361f70a@brauner>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] accel/qaic: initialize ret variable to 0
+Content-Language: en-US
+To:     Nick Desaulniers <ndesaulniers@google.com>
+CC:     Tom Rix <trix@redhat.com>, <ogabbay@kernel.org>,
+        <nathan@kernel.org>, <jacek.lawrynowicz@linux.intel.com>,
+        <quic_carlv@quicinc.com>, <stanislaw.gruszka@linux.intel.com>,
+        <quic_pkanojiy@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>
+References: <20230418192046.3235870-1-trix@redhat.com>
+ <fe7da2c1-904e-ee4f-9a6c-443049c214b7@quicinc.com>
+ <CAKwvOdmFGVPddi98yt22i+U+3aow+dwhxKgdJ45h3n1i-n3bzw@mail.gmail.com>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <CAKwvOdmFGVPddi98yt22i+U+3aow+dwhxKgdJ45h3n1i-n3bzw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: tAIzabtbEnlqnjwMTzlJetoLznbSrvbL
+X-Proofpoint-ORIG-GUID: tAIzabtbEnlqnjwMTzlJetoLznbSrvbL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-18_15,2023-04-18_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 spamscore=0 phishscore=0
+ clxscore=1015 impostorscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304180182
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 09:38:10AM +0200, Christian Brauner wrote:
-> On Mon, Apr 17, 2023 at 10:50:59PM -0700, Hugh Dickins wrote:
-> > On Thu, 9 Mar 2023, Luis Chamberlain wrote:
-> > 
-> > > In doing experimentations with shmem having the option to avoid swap
-> > > becomes a useful mechanism. One of the *raves* about brd over shmem is
-> > > you can avoid swap, but that's not really a good reason to use brd if
-> > > we can instead use shmem. Using brd has its own good reasons to exist,
-> > > but just because "tmpfs" doesn't let you do that is not a great reason
-> > > to avoid it if we can easily add support for it.
-> > > 
-> > > I don't add support for reconfiguring incompatible options, but if
-> > > we really wanted to we can add support for that.
-> > > 
-> > > To avoid swap we use mapping_set_unevictable() upon inode creation,
-> > > and put a WARN_ON_ONCE() stop-gap on writepages() for reclaim.
-> > 
-> > I have one big question here, which betrays my ignorance:
-> > I hope that you or Christian can reassure me on this.
-> > 
-> > tmpfs has fs_flags FS_USERNS_MOUNT.  I know nothing about namespaces,
-> > nothing; but from overhearings, wonder if an ordinary user in a namespace
-> > might be able to mount their own tmpfs with "noswap", and thereby evade
-> > all accounting of the locked memory.
-> > 
-> > That would be an absolute no-no for this patch; but I assume that even
-> > if so, it can be easily remedied by inserting an appropriate (unknown
-> > to me!) privilege check where the "noswap" option is validated.
+On 4/18/2023 2:48 PM, Nick Desaulniers wrote:
+> On Tue, Apr 18, 2023 at 1:46 PM Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
+>>
+>> On 4/18/2023 1:20 PM, Tom Rix wrote:
+>>> clang static analysis reports
+>>> drivers/accel/qaic/qaic_data.c:610:2: warning: Undefined or garbage
+>>>     value returned to caller [core.uninitialized.UndefReturn]
+>>>           return ret;
+>>>           ^~~~~~~~~~
+>>>
+>>> The ret variable is only set some of the time but is always returned.
+>>> So initialize ret to 0.
+>>
+>> This does not appear to be entirely accurate to me.
+>>
+>> Do you know what analysis Clang is doing?  Is it limited to the function
+>> itself?
+>>
+>> remap_pfn_range, which initializes ret, will always run at-least once.
 > 
-> Oh, good catch. Thanks! So you would just need sm like:
-> 
-> diff --git a/mm/shmem.c b/mm/shmem.c
-> index 787e83791eb5..21ce9b26bb4d 100644
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -3571,6 +3571,10 @@ static int shmem_parse_one(struct fs_context *fc, struct fs_parameter *param)
->                 ctx->seen |= SHMEM_SEEN_INUMS;
->                 break;
->         case Opt_noswap:
-> +               if ((fc->user_ns != &init_user_ns) || !capable(CAP_SYS_ADMIN)) {
-> +                       return invalfc(fc,
-> +                                      "Turning off swap in unprivileged tmpfs mounts unsupported");
-> +               }
->                 ctx->noswap = true;
->                 ctx->seen |= SHMEM_SEEN_NOSWAP;
->                 break;
-> 
-> The fc->user_ns is the userns that the tmpfs mount will be mounted in, i.e.,
-> fc->user_ns will become sb->s_user_ns if FS_USERNS_MOUNT is raised. So with the
-> check above we require that the tmpfs instance must ultimately belong to the
-> initial userns and that the caller has CAP_SYS_ADMIN in the initial userns
-> (CAP_SYS_ADMIN guards swapon and swapoff) according to capabilities(7).
+> What happens if the loop body is never executed, say if `bo->sgt->sgl` is NULL?
 
-Christian, mind sending this as a fix?
+qaic_gem_object_mmap() doesn't get called unless a valid GEM object is 
+provided by userspace.  For userspace to get a valid GEM object, it has 
+to go through qaic_create_bo_ioctl().  qaic_create_bo_ioctl() will not 
+return a valid GEM object unless sgt is allocated and initialized.
 
-  Luis
+The loop body will execute at-least once.  The if body will execute 
+at-least once.  remap_pfn_range() will run at-least once.  Therefore, 
+ret is always initialized.
+
+This is how the code is intended to operate, and how it appears to be 
+implemented from what I see.  Unless I'm missing something.
+
+I can see how Clang might not be able to infer these things, but I don't 
+believe the code is broken.  I feel that the commit text is unclear and 
+suggests that the code is infact, broken.
+
+Userspace should not call mmap() in a critical path thus I don't see a 
+true performance concern here.  So while my understanding of the coding 
+style is that redundant initialization of variables are to be avoided, I 
+think we can say that this is not redundant because it silences a 
+warning (because Clang is limited).
+
+>> Feels more accurate to say that Clang cannot detect that ret will be
+>> initialized, and we want to quiet the warning from the false positive.
+>>
+>>> Fixes: ff13be830333 ("accel/qaic: Add datapath")
+>>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>> ---
+>>>    drivers/accel/qaic/qaic_data.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/accel/qaic/qaic_data.c b/drivers/accel/qaic/qaic_data.c
+>>> index c0a574cd1b35..b46a16fb3080 100644
+>>> --- a/drivers/accel/qaic/qaic_data.c
+>>> +++ b/drivers/accel/qaic/qaic_data.c
+>>> @@ -591,7 +591,7 @@ static int qaic_gem_object_mmap(struct drm_gem_object *obj, struct vm_area_struc
+>>>        struct qaic_bo *bo = to_qaic_bo(obj);
+>>>        unsigned long offset = 0;
+>>>        struct scatterlist *sg;
+>>> -     int ret;
+>>> +     int ret = 0;
+>>>
+>>>        if (obj->import_attach)
+>>>                return -EINVAL;
+>>
+> 
+> 
+
