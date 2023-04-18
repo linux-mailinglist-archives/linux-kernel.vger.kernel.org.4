@@ -2,99 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F916E62FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCE96E6323
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbjDRMhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 08:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
+        id S231778AbjDRMiM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 08:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbjDRMhC (ORCPT
+        with ESMTP id S231215AbjDRMiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 08:37:02 -0400
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707A212CA7
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:36:56 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.187.55])
-        by andre.telenet-ops.be with bizsmtp
-        id mCci290131C8whw01CciYR; Tue, 18 Apr 2023 14:36:53 +0200
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pokZe-00H56B-Ey;
-        Tue, 18 Apr 2023 14:36:42 +0200
-Date:   Tue, 18 Apr 2023 14:36:42 +0200 (CEST)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev,
-        Vineet Gupta <vgupta@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] [v2] mm: make arch_has_descending_max_zone_pfns()
- static
-In-Reply-To: <20230415081904.969049-1-arnd@kernel.org>
-Message-ID: <cab7df5e-a7d7-ce15-20fa-31afe6f7180@linux-m68k.org>
-References: <20230415081904.969049-1-arnd@kernel.org>
+        Tue, 18 Apr 2023 08:38:09 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A52513877;
+        Tue, 18 Apr 2023 05:38:01 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 1164D24E311;
+        Tue, 18 Apr 2023 20:37:59 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 18 Apr
+ 2023 20:37:59 +0800
+Received: from ubuntu.localdomain (113.72.144.253) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 18 Apr
+ 2023 20:37:58 +0800
+From:   Hal Feng <hal.feng@starfivetech.com>
+To:     <linux-clk@vger.kernel.org>, <oe-kbuild-all@lists.linux.dev>,
+        <linux-mm@kvack.org>
+CC:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "Paul Gazzillo" <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/1] A fix for StarFive JH7110 clock drivers
+Date:   Tue, 18 Apr 2023 20:37:55 +0800
+Message-ID: <20230418123756.62495-1-hal.feng@starfivetech.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [113.72.144.253]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- 	Hi Arnd,
+This series fix some issues of StarFive JH7110 sys and aon clock drivers.
 
-On Sat, 15 Apr 2023, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> clang produces a build failure on x86 for some randconfig builds
-> after a change that moves around code to mm/mm_init.c:
->
-> Cannot find symbol for section 2: .text.
-> mm/mm_init.o: failed
->
-> I have not been able to figure out why this happens, but the __weak
-> annotation on arch_has_descending_max_zone_pfns() is the trigger here.
->
-> Removing the weak function in favor of an open-coded Kconfig option
-> check avoids the problem and becomes clearer as well as better to
-> optimize by the compiler.
->
-> Fixes: 9420f89db2dd ("mm: move most of core MM initialization to mm/mm_init.c")
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> v2: fix logic bug reported-by: kernel test robot <oliver.sang@intel.com>,
-> see https://lore.kernel.org/oe-lkp/202304151422.5e4d380b-oliver.sang@intel.com
+The first patch fix two issues [1] [2] reported by kernel test robot.
 
-Thanks, reverting commit 413d478d3b366d09 ("mm: make
-arch_has_descending_max_zone_pfns() static") in next-20230417 and
-applying your v2 makes Salvator-XS regain its DMA memory zone.
+The second patch is accepted in v1 so drop it in v2.
 
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+[1] https://lore.kernel.org/oe-kbuild-all/202304140256.aIlJMfbA-lkp@intel.com/
+[2] https://lore.kernel.org/oe-kbuild-all/202304140706.aOBNhUj2-lkp@intel.com/
 
-Gr{oetje,eeting}s,
+Changes since v1:
+- Drop patch 2 since it is accepted.
+- Change `select RESET_STARFIVE_JH7110 if ARCH_STARFIVE` to
+  `select RESET_STARFIVE_JH7110 if RESET_CONTROLLER`.
+- Change the commit message accordingly.
 
- 						Geert
+---
+History:
+v1: https://lore.kernel.org/all/20230417074115.30786-1-hal.feng@starfivetech.com/
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Hal Feng (1):
+  clk: starfive: Fix RESET_STARFIVE_JH7110 can't be selected in a
+    specified case
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+ drivers/clk/starfive/Kconfig | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+-- 
+2.38.1
+
