@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 478D66E559A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 02:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96176E559F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 02:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjDRAIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 20:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
+        id S230371AbjDRAJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 20:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjDRAIj (ORCPT
+        with ESMTP id S229951AbjDRAJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 20:08:39 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F09A49DD;
-        Mon, 17 Apr 2023 17:08:38 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a677dffb37so11659735ad.2;
-        Mon, 17 Apr 2023 17:08:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681776518; x=1684368518;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hYmxN4UjuYj06SpL1wUV2ZlF7dJmbG+ouluZz1JaIPk=;
-        b=W6+Rs64v91YHB9S0YRvmXeDlPruSoE4mMoN+KXTP79AGcnJIY5/lm6DIz/0ynnE8uw
-         HwLLiLsznh8rEOkCDlXcLQyWJOD55ZslovGGmaaryfjiZvLg3kFoMrr3oV7RWFIQC0Jv
-         9wIjsxTfWPNESjcZScdcaUThqGkH3Z+ePap7JzGOpxVXufQn5bq6gjrhetjh+VWcMDPU
-         tNMScdk4DKmMx1+xzXpanIpCkQr7KVQE8scB2cOc0OiIdg7RSnY2NBmpct8NrGl+BMJO
-         UhlvZ3SnlLogL6q85Aoq/NGRNxjh63jje3NHNdZL7EvBu3bTWx13ySYCrzZT2HQ+BPPt
-         6gPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681776518; x=1684368518;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hYmxN4UjuYj06SpL1wUV2ZlF7dJmbG+ouluZz1JaIPk=;
-        b=AUNA0NZ1W0Z7YNX6TKBRlq+5uqqnNVjHXV0wbG9+AwT3TvQUyKCDl/XdW3loMlEbde
-         65EnWVG/2eZ3WNIA3QS6mDhDZ+9iSCYLcLm0ubycQ6qVXOjU2X84snLzzpszpsR6fZy2
-         +bPN0HhGjooA6tvUS+0E39OkS6BlLKroKs/GX3ZdXYdNQAOUY33IDJIoKidwcbXm3zNy
-         R0Sam3IdUMlqTbTe5dpq4/FYe4M8SXbJ0jN2cPkviYxnL9v0RNTuLWh9xaIBNIi6228b
-         MBI0np1LgruJENDBQs7TZUY1j9wgT8hMBA1K0VBZpDXRZ9dHDG/5YMDCTzbtkaQsEZ6Q
-         6RdA==
-X-Gm-Message-State: AAQBX9fJox//gtkPXITnTSJkLF/OmWOnepoGkTusNaziIfvl6mpl4rb4
-        KlEqIyL7PWqvEH5NGXDPmIA=
-X-Google-Smtp-Source: AKy350ZeCVb4KAbWOiKbk2S7teFEqQr2BBsW8R6ZfmRC80gnH89qNymkRqEtzaUgJ6bQXY90n+ubyA==
-X-Received: by 2002:a17:903:1210:b0:1a6:4a64:4d27 with SMTP id l16-20020a170903121000b001a64a644d27mr268087plh.40.1681776517661;
-        Mon, 17 Apr 2023 17:08:37 -0700 (PDT)
-Received: from dhcp-172-26-102-232.dhcp.thefacebook.com ([2620:10d:c090:400::5:9cf7])
-        by smtp.gmail.com with ESMTPSA id i2-20020a1709026ac200b001a64a2b790fsm8225505plt.164.2023.04.17.17.08.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 17:08:37 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 17:08:33 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Feng zhou <zhoufeng.zf@bytedance.com>
-Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, yangzhenze@bytedance.com,
-        wangdongdong.6@bytedance.com, zhouchengming@bytedance.com
-Subject: Re: [PATCH 1/2] bpf: support access variable length array of integer
- type
-Message-ID: <20230418000833.keqhb7kdpibgaodt@dhcp-172-26-102-232.dhcp.thefacebook.com>
-References: <20230417080749.39074-1-zhoufeng.zf@bytedance.com>
- <20230417080749.39074-2-zhoufeng.zf@bytedance.com>
+        Mon, 17 Apr 2023 20:09:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764744C3A;
+        Mon, 17 Apr 2023 17:09:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D2BE624E0;
+        Tue, 18 Apr 2023 00:09:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44E44C433D2;
+        Tue, 18 Apr 2023 00:09:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681776557;
+        bh=b71MwB1GPHPGUGJNYm/USXjO8vdrSbhJfyNLXt/caJk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mWOwpl9xJtkdrH9tLNqKB6OsMG+6PTWKD7b5eyaeARTd0g8XoMdsxLi9++Jyl34kj
+         w9teMIc8GVbmeBD7NbCBX8K+c+HUVQNlPv/SfSdus5l9qkKqUFP8xjXRchJYIUeBKH
+         LP8t71q9iSLOM0q5g9vGJtighGEcOt7UdUpk1FyUMwtQ0Yfryh+G8auiEhgGJqZzrJ
+         rm8QQoSWnKoUdtL3RqkuhLca/s77+4/ahVRhHuSj0wWt18cCdMEb4Kt0pvJ+n05luv
+         11Ka5G1Uud0dhING8D2xJGP2vKC5/3LSAU1LjPiT91j9k74SmVLdD+C/vtxJjidMJS
+         PXHhTnQY5fXkA==
+Message-ID: <ea29e339-6f61-5bbb-7290-03df629d5b11@kernel.org>
+Date:   Tue, 18 Apr 2023 09:09:12 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230417080749.39074-2-zhoufeng.zf@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 00/11] PCI: rockchip: Fix RK3399 PCIe endpoint
+ controller driver
+Content-Language: en-US
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+        alberto.dassatti@heig-vd.ch
+Cc:     xxm@rock-chips.com, Shawn Lin <shawn.lin@rock-chips.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Arnaud Ferraris <arnaud.ferraris@collabora.com>,
+        Hugh Cole-Baker <sigmaris@gmail.com>,
+        linux-pci@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230417092631.347976-1-rick.wertenbroek@gmail.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20230417092631.347976-1-rick.wertenbroek@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,24 +75,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 04:07:48PM +0800, Feng zhou wrote:
-> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+On 4/17/23 18:26, Rick Wertenbroek wrote:
+> This is a series of patches that fixes the PCIe endpoint controller driver
+> for the Rockchip RK3399 SoC. The driver was introduced in commit
+> cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
+> The original driver had issues and would not allow for the RK3399 to
+> operate in PCIe endpoint mode correctly. This patch series fixes that so
+> that the PCIe core controller of the RK3399 SoC can now act as a PCIe
+> endpoint. This is v4 of the patch series and addresses the comments received
+> during the review of the v3 [1]. The changes to the v3 are minor and none of
+> them change the logic of the driver.
 > 
-> After this commit:
-> bpf: Support variable length array in tracing programs (9c5f8a1008a1)
-> Trace programs can access variable length array, but for structure
-> type. This patch adds support for integer type.
+> Thank you in advance for reviewing this patch series and hopefully
+> getting this merged. Having a functional PCIe endpoint controller
+> driver for the RK3399 would allow to develop further PCIe endpoint
+> functions through the Linux PCIe endpoint framework using this SoC.
 > 
-> Example:
-> Hook load_balance
-> struct sched_domain {
-> 	...
-> 	unsigned long span[];
-> }
+> [1] https://lore.kernel.org/linux-pci/20230404082426.3880812-1-rick.wertenbroek@gmail.com/
 > 
-> The access: sd->span[0].
+> Summary of changes to V3 :
+> 
+> * Set the fields in the standard order in the dtsi and removed unnecessary
+>   change in associated documentation, thanks to Krzysztof for pointing this out.
+> * Added comment to explain how MSI-X capabilities advertisement was removed.
+> * Changed Damien Le Moal <damien.lemoal@opensource.wdc.com> address to his
+>   kernel.org address Damien Le Moal <dlemoal@kernel.org> in tags.
+> * [minor] Simplified code where a power of 2 was applied followed by a ilog2
+>   operation.
+> * [minor] Small code changes, replaced constant variable by macro, split
+>   remaining long lines.
 
-The use case makes sense.
-Please add it as a selftest. Either combine it with patch 2 or another patch 3.
-and then resubmit.
-Make sure to use [PATCH bpf-next] subject, so BPF CI knows how to test it.
+I retested this series, all good. So my Tested-by tag stands.
+
+Lorenzo, Krzysztof, Bjorn,
+
+Let's please get this series queued for 6.4 ASAP as otherwise the rockchip EP
+controller is unusable.
+
+Also please note that working with Rick off-list, we found out that more fixes
+are in fact needed for the PCI address mapping (ATU programming) on top of this
+series. But the problems detected are subtle and harder to trigger. The fixes
+needed involve changes to the EPC core API so we are still working on the best
+way to do that. We'll work on another series on top of this one for addressing
+these issues.
+
+
