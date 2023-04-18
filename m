@@ -2,89 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EBE16E5829
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 06:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3816E582F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 06:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjDREnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 00:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
+        id S230053AbjDREs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 00:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjDREnb (ORCPT
+        with ESMTP id S229517AbjDREsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 00:43:31 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5EC272C;
-        Mon, 17 Apr 2023 21:43:30 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id he11-20020a05600c540b00b003ef6d684102so12998455wmb.3;
-        Mon, 17 Apr 2023 21:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681793009; x=1684385009;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Eo1dY/ttewg13qVvGQdVcJPBa1hUmnXLA4fbsLDnKVc=;
-        b=P2/wTxe/u056PKJtPuL+KjH/34N8gvJxmrFOtAFqIhFBOsZrLDojAOAHd6fzN2Qe7a
-         iGzXEXksMsxKSwLZ6PYwwLsaj/Gg8uo251YpzBYC63H0h1MwJ+bw6QgSDSq+dghzmgF8
-         4oyNsZ+xVBQ2uqyY1YX9XunXPDDw57AWSoarIHh0vT6NCnQlDYnV6F22KXHwlqhMYe1Z
-         iz/7pzgOmLEwwEFG40MbXfCaSzNZE/VPyaD1tWmDhr3jM2qQ8J0H7y6OMzFa6bilAVrv
-         fghW8rKmIhFUyT1XwLBvI9Ju4aguPPoFW7pLsUfQY2kPak/hdAN70gKw5nVWkPJ9zt8t
-         B2Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681793009; x=1684385009;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Eo1dY/ttewg13qVvGQdVcJPBa1hUmnXLA4fbsLDnKVc=;
-        b=N1wb0bMzwiYvBRqE5eGJWTnhrAcpCQPvIqMIMPbz06lOz5ifXPQR0V9Vwc5FMTYsOJ
-         Ncwq0A+Q17fxS8pOz5FEJmRHlXq/gyk/L+HphZYFMdluJXr2+rTJu6LYn5OfSGvj0AQU
-         pkwxZP/lHbkyUrhsFPUSKv7D1wHWADX3onpLl2Ia4sEEP8s/qiCBtpn0zWlF+scEuG1X
-         YbIAbeI5zGyOZvqyYc3n/DP8W/TNFT6vDZyAW1+yNlx21Ng1Xmw1tezC4BYWN7xxzkpc
-         9sqQuhEhjpuEypuKfifvxoLzqxNcULMrdlEp93TL1n4Rn+zAtITWRo7ifhtmjmnII4D/
-         OyIg==
-X-Gm-Message-State: AAQBX9e9Usl7PxxkIogbpmA/WYznN2TcMQaTQ8xqQ3GincWcKWNwzu7h
-        nyEFRgAZNUVpc6BTJvd9QTdezq6s4faF4PAY
-X-Google-Smtp-Source: AKy350YCgcQ296ja4deDMuyoPZgAFD/KiSBIyP+WT9ox0lGEwO7mXcoadEYNo8ROEFvprJ8PD0y6tg==
-X-Received: by 2002:a7b:c38a:0:b0:3f1:6fba:b69a with SMTP id s10-20020a7bc38a000000b003f16fbab69amr6614091wmj.11.1681793009247;
-        Mon, 17 Apr 2023 21:43:29 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id r4-20020a05600c458400b003f0a090d798sm15629180wmo.18.2023.04.17.21.43.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 21:43:28 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 07:43:25 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [PATCH] f2fs: remove some dead code
-Message-ID: <2867d5b3-c6cb-49fa-854a-0f58f9a5adb5@kili.mountain>
-References: <523ec4b037d064e92e19203e3ab9a161e3d9aa71.1681764681.git.christophe.jaillet@wanadoo.fr>
+        Tue, 18 Apr 2023 00:48:24 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3322A1BDC
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 21:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681793303; x=1713329303;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iikn2fHq/VA1/UjIXV1sXkApoZpQm+NLROyuPf7mgmg=;
+  b=QTxPNjaS45TGOjNFl3L/sv573u7yTIn04+M7mEZMIsC/zx99guwT1e+o
+   wbAkto4JG4E61DfYiCerCIZ6eX7SQOxBDXBcOPjnAaeKDC6I08xvuXGE+
+   3n+lyW8UVNgU0fR3dVUyuzjUpA3oMIFghpnRj26+TLDxln/egGab8UCun
+   b8N5jz47yX0iXmbSL9FHwHfI/3HM9nPUvUU9/8uPdQ3T8T3PZ2nGaybeq
+   lJDLkNxqXynkGQvjg8+wU3lLUzmjDxTKPEvAv2U+dwUmNluNOwX5L0i2I
+   Iq1dbdBQ6c6dpFs3zudtZbrUNHoCO8CBLlBzkiUDhXE4284M/Hj6v1+eW
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="342567802"
+X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
+   d="scan'208";a="342567802"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 21:48:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="865238122"
+X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
+   d="scan'208";a="865238122"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 17 Apr 2023 21:48:21 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1podGO-000d03-2M;
+        Tue, 18 Apr 2023 04:48:20 +0000
+Date:   Tue, 18 Apr 2023 12:47:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>
+Subject: ERROR: modpost: "__divsi3_table" [lib/lz4/lz4_compress.ko] undefined!
+Message-ID: <202304181254.PNdQfsf9-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <523ec4b037d064e92e19203e3ab9a161e3d9aa71.1681764681.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 10:51:46PM +0200, Christophe JAILLET wrote:
->  
-> -	ret2 = filemap_check_errors(NODE_MAPPING(sbi));
-> -	if (!ret)
-> -		ret = ret2;
-> +	ret = filemap_check_errors(NODE_MAPPING(sbi));
->  
->  	return ret;
+Hi Masahiro,
 
-Let's get rid of "ret" as well:
+First bad commit (maybe != root cause):
 
-	return filemap_check_errors(NODE_MAPPING(sbi));
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
+commit: 5750121ae7382ebac8d47ce6d68012d6cd1d7926 kbuild: list sub-directories in ./Kbuild
+date:   7 months ago
+config: nios2-randconfig-r014-20230417 (https://download.01.org/0day-ci/archive/20230418/202304181254.PNdQfsf9-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5750121ae7382ebac8d47ce6d68012d6cd1d7926
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 5750121ae7382ebac8d47ce6d68012d6cd1d7926
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-regards,
-dan carpenter
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304181254.PNdQfsf9-lkp@intel.com/
 
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+ERROR: modpost: "__mulsi3" [kernel/locking/locktorture.ko] undefined!
+ERROR: modpost: "__mulsi3" [kernel/rcu/rcuscale.ko] undefined!
+ERROR: modpost: "__mulsi3" [kernel/time/test_udelay.ko] undefined!
+ERROR: modpost: "__mulsi3" [kernel/scftorture.ko] undefined!
+ERROR: modpost: "__mulsi3" [fs/fuse/virtiofs.ko] undefined!
+ERROR: modpost: "__mulsi3" [fs/fscache/fscache.ko] undefined!
+ERROR: modpost: "__mulsi3" [fs/autofs/autofs4.ko] undefined!
+ERROR: modpost: "__mulsi3" [lib/math/prime_numbers.ko] undefined!
+ERROR: modpost: "__mulsi3" [lib/lz4/lz4_compress.ko] undefined!
+>> ERROR: modpost: "__divsi3_table" [lib/lz4/lz4_compress.ko] undefined!
+WARNING: modpost: suppressed 415 unresolved symbol warnings because there were too many)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
