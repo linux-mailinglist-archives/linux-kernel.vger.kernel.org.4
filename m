@@ -2,198 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC8D6E5E5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382806E5E63
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbjDRKNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 06:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S230420AbjDRKOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 06:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjDRKNL (ORCPT
+        with ESMTP id S229706AbjDRKOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 06:13:11 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C2E9008
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:12:46 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-54fbee98814so202406867b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:12:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681812765; x=1684404765;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xC5HB+JoQGOIOmvA/qusKibRWMlQntrXoL6/Tv+XLo8=;
-        b=LwIiAS+sbus0YfZsq1wK26u+6YvvJTXbGyOSOfN5zPJAPIH20GDOVMk+SKwTUIGFVP
-         ulbtJ/upRLYSBffzsHN8ZeUr88MiE7tqzVsYDXdMaiF46NduMQSUybBGuLvPWFHuNfit
-         reBp1ZCFhsWFMjGPDBhospSBJf1seNfH6SUjOjL3eBshDwhLS6IZOsLRxoZSkxpzj4R5
-         1ecAVrHE79EAeD4VegIvsAri5aYvRdIea7xh1JasmiH+sMTiPnoCr2okq1QV/9yTyjLP
-         vm3r+Qoelio034KvfioMlccmrwFTqv3tSi+CkBSB8Uv7SiAbM7Ix5dAH9m1Lz2D0HSP7
-         RRXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681812765; x=1684404765;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xC5HB+JoQGOIOmvA/qusKibRWMlQntrXoL6/Tv+XLo8=;
-        b=SXEZmxk0VStPWZeGmDel5mEZ5mfxe99mXQs7ueGPdkk7l/4pcY1zyOavDv9lPaV8hA
-         kdgqZcvZgmQ8OB++i6dG1yiX5IkZWxFhoJPuEFGuyGxNP77snxwfoK7r74HJRyS6/SuH
-         zSslrDSW9CiGGNJU0jGO14dfKi1KG5ZCp36XgVXxlTT+E0XTqk8E9neJUD4hYub99uNK
-         6+ylSGXxKK2zPAtRwOaKUpCohYrs4dPFhGmP0qOrEJAsHVrQERnNL/ciTvIqUe7/WqOq
-         SDbcdwQKavUvUE3TDDgBUDZelqSEE9ZjeHxo+HReMRBXUt7FmteQigf2q0jwIvOyGPO/
-         YQYA==
-X-Gm-Message-State: AAQBX9d6oP6FvWNCOwyfbxBfQ667I87QecNtG+TRR2fAZioUw9lOUieU
-        HDp4Ytx+nlICrGsrG78BTtD9sS++zO0hgbo4O+H+hA==
-X-Google-Smtp-Source: AKy350ZqW9zyMrBAeUs8Uv0xL5UJaBmFtbubbnptID+PuJSnkIkt8wxq2EHb4R5D6Xt6TE7mlYZGaQ==
-X-Received: by 2002:a81:4f09:0:b0:541:66e8:d4da with SMTP id d9-20020a814f09000000b0054166e8d4damr16303547ywb.29.1681812765594;
-        Tue, 18 Apr 2023 03:12:45 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id 62-20020a811741000000b0054605c23114sm3671343ywx.66.2023.04.18.03.12.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 03:12:44 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 06:12:43 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>, stable@vger.kernel.org
-Subject: Re: [RESEND PATCH 5.15 v3 5/5] counter: 104-quad-8: Fix race
- condition between FLAG and CNTR reads
-Message-ID: <ZD5tG45rXLemtkrX@fedora>
-References: <20230411155220.9754-1-william.gray@linaro.org>
- <20230411155220.9754-5-william.gray@linaro.org>
- <ZD1MZO3KpRmuzy42@fedora>
- <2023041849-nursing-cling-8729@gregkh>
+        Tue, 18 Apr 2023 06:14:14 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60E913ABF;
+        Tue, 18 Apr 2023 03:14:13 -0700 (PDT)
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id 6899C8106;
+        Tue, 18 Apr 2023 10:14:11 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/1] serial: 8250: Reinit port->pm on port specific driver unbind
+Date:   Tue, 18 Apr 2023 13:14:06 +0300
+Message-Id: <20230418101407.12403-1-tony@atomide.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GjX2gYdKDPhjx3jN"
-Content-Disposition: inline
-In-Reply-To: <2023041849-nursing-cling-8729@gregkh>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When we unbind a serial port hardware specific 8250 driver, the generic
+serial8250 driver takes over the port. After that we see an oops about 10
+seconds later. This can produce the following at least on some TI SoCs:
 
---GjX2gYdKDPhjx3jN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Unhandled fault: imprecise external abort (0x1406)
+Internal error: : 1406 [#1] SMP ARM
 
-On Tue, Apr 18, 2023 at 11:41:29AM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Apr 17, 2023 at 09:40:52AM -0400, William Breathitt Gray wrote:
-> > On Tue, Apr 11, 2023 at 11:52:20AM -0400, William Breathitt Gray wrote:
-> > > commit 4aa3b75c74603c3374877d5fd18ad9cc3a9a62ed upstream.
-> > >=20
-> > > The Counter (CNTR) register is 24 bits wide, but we can have an
-> > > effective 25-bit count value by setting bit 24 to the XOR of the Borr=
-ow
-> > > flag and Carry flag. The flags can be read from the FLAG register, bu=
-t a
-> > > race condition exists: the Borrow flag and Carry flag are instantaneo=
-us
-> > > and could change by the time the count value is read from the CNTR
-> > > register.
-> > >=20
-> > > Since the race condition could result in an incorrect 25-bit count
-> > > value, remove support for 25-bit count values from this driver.
-> > >=20
-> > > Fixes: 28e5d3bb0325 ("iio: 104-quad-8: Add IIO support for the ACCES =
-104-QUAD-8")
-> > > Cc: <stable@vger.kernel.org> # 5.15.x
-> > > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
-> > > ---
-> > >  drivers/counter/104-quad-8.c | 18 +++---------------
-> > >  1 file changed, 3 insertions(+), 15 deletions(-)
-> > >=20
-> > > diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-=
-8.c
-> > > index 0caa60537b..643aae0c9f 100644
-> > > --- a/drivers/counter/104-quad-8.c
-> > > +++ b/drivers/counter/104-quad-8.c
-> > > @@ -61,10 +61,6 @@ struct quad8 {
-> > >  #define QUAD8_REG_CHAN_OP 0x11
-> > >  #define QUAD8_REG_INDEX_INPUT_LEVELS 0x16
-> > >  #define QUAD8_DIFF_ENCODER_CABLE_STATUS 0x17
-> > > -/* Borrow Toggle flip-flop */
-> > > -#define QUAD8_FLAG_BT BIT(0)
-> > > -/* Carry Toggle flip-flop */
-> > > -#define QUAD8_FLAG_CT BIT(1)
-> > >  /* Error flag */
-> > >  #define QUAD8_FLAG_E BIT(4)
-> > >  /* Up/Down flag */
-> > > @@ -121,17 +117,9 @@ static int quad8_count_read(struct counter_devic=
-e *counter,
-> > >  {
-> > >  	struct quad8 *const priv =3D counter->priv;
-> > >  	const int base_offset =3D priv->base + 2 * count->id;
-> > > -	unsigned int flags;
-> > > -	unsigned int borrow;
-> > > -	unsigned int carry;
-> > >  	int i;
-> > > =20
-> > > -	flags =3D inb(base_offset + 1);
-> > > -	borrow =3D flags & QUAD8_FLAG_BT;
-> > > -	carry =3D !!(flags & QUAD8_FLAG_CT);
-> > > -
-> > > -	/* Borrow XOR Carry effectively doubles count range */
-> > > -	*val =3D (unsigned long)(borrow ^ carry) << 24;
-> > > +	*val =3D 0;
-> > > =20
-> > >  	mutex_lock(&priv->lock);
-> > > =20
-> > > @@ -699,8 +687,8 @@ static ssize_t quad8_count_ceiling_read(struct co=
-unter_device *counter,
-> > > =20
-> > >  	mutex_unlock(&priv->lock);
-> > > =20
-> > > -	/* By default 0x1FFFFFF (25 bits unsigned) is maximum count */
-> > > -	return sprintf(buf, "33554431\n");
-> > > +	/* By default 0xFFFFFF (24 bits unsigned) is maximum count */
-> > > +	return sprintf(buf, "16777215\n");
-> > >  }
-> > > =20
-> > >  static ssize_t quad8_count_ceiling_write(struct counter_device *coun=
-ter,
-> > >=20
-> > > base-commit: d86dfc4d95cd218246b10ca7adf22c8626547599
-> > > --=20
-> > > 2.39.2
-> >=20
-> > Greg,
-> >=20
-> > This patch will no longer apply to 5.15.x when the "counter: Internalize
-> > sysfs interface code" patch in the stable-queue tree is merged [0].
-> > However, I believe the 6.1 backport [1] will apply instead at that
-> > point. What is the best way to handle this situation? Should I resend
-> > the 6.1 backport with the stable list Cc tag adjusted for 5.15.x, or are
-> > you able to apply the 6.1 backport patch directly to the 5.15.x tree?
->=20
-> The 6.1.y backport didn't apply either :(
->=20
-> Can you resend all of these rebased against the next round of stable
-> releases when they are released later this week?
->=20
-> thanks,
->=20
-> greg k-h
+Turns out that we may still have the serial port hardware specific driver
+port->pm in use, and serial8250_pm() tries to call it after the port
+specific driver is gone:
 
-Sure, I'll rebase and resend these after the next round of stable
-releases is available.
+serial8250_pm [8250_base] from uart_change_pm+0x54/0x8c [serial_base]
+uart_change_pm [serial_base] from uart_hangup+0x154/0x198 [serial_base]
+uart_hangup [serial_base] from __tty_hangup.part.0+0x328/0x37c
+__tty_hangup.part.0 from disassociate_ctty+0x154/0x20c
+disassociate_ctty from do_exit+0x744/0xaac
+do_exit from do_group_exit+0x40/0x8c
+do_group_exit from __wake_up_parent+0x0/0x1c
 
-William Breathitt Gray
+Let's fix the issue by calling serial8250_set_defaults() in
+serial8250_unregister_port(). This will set the port back to using
+the serial8250 default functions, and sets the port->pm to point to
+serial8250_pm.
 
---GjX2gYdKDPhjx3jN
-Content-Type: application/pgp-signature; name="signature.asc"
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+---
 
------BEGIN PGP SIGNATURE-----
+Changes since v1:
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZD5tGwAKCRC1SFbKvhIj
-K5nIAQD0P+faGjAKpFGYha1jg2kvB+Vw8HGrbzC9gQ3NUv+ZqQEA4/PRFI//Kzjq
-UalBMdVBq8Y+BSd2RlOInpa0i9oBsgc=
-=u9fk
------END PGP SIGNATURE-----
+- Call serial8250_init_port() instead of just clearing port->pm
 
---GjX2gYdKDPhjx3jN--
+- Updated patch subject line a bit
+
+---
+ drivers/tty/serial/8250/8250_core.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+--- a/drivers/tty/serial/8250/8250_core.c
++++ b/drivers/tty/serial/8250/8250_core.c
+@@ -1158,6 +1158,7 @@ void serial8250_unregister_port(int line)
+ 		uart->port.type = PORT_UNKNOWN;
+ 		uart->port.dev = &serial8250_isa_devs->dev;
+ 		uart->capabilities = 0;
++		serial8250_init_port(uart);
+ 		serial8250_apply_quirks(uart);
+ 		uart_add_one_port(&serial8250_reg, &uart->port);
+ 	} else {
+-- 
+2.40.0
