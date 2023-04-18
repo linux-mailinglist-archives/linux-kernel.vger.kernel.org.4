@@ -2,83 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2106E5638
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 03:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 774FD6E563B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 03:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjDRBLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 21:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
+        id S230197AbjDRBN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 21:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjDRBLU (ORCPT
+        with ESMTP id S229619AbjDRBNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 21:11:20 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D94D40C8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 18:11:15 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id a9so25114162vsh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 18:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681780274; x=1684372274;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=pOZWpHPONtN7zZsVX/5fsJwnQY3VExlQWj07foyji3A=;
-        b=sQta8dS4v6QjbacRoEX+3emtAM7anNzHsZQqTRdI4BU9olLGWAJbgwkd39LNsAOOfZ
-         tME8s3iu8idRsA8i+Hs/r6sUE/3dDWuG6AX68TWFHriWHzRgyhOZLi1UvxdIXchyaus0
-         gr7rBaAt9mkfWxD+n0QjJZH40r6LEkqtqxNAGwuFJaiaRU1n7IGeMLn8ckH6cqjbtI4e
-         f6JrhKvgYwh5B9cOGn4gmdZIY473CQ916cjHt21DrYDTv65FpRrtRuO/9KWQSNVnpBwQ
-         6SjnV/YFGgXvJQ35dNBdA8nZePVEgwdVDEhIkgZdAwJBKarwHhisj1SXxiirN3R/bmbP
-         hSVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681780274; x=1684372274;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pOZWpHPONtN7zZsVX/5fsJwnQY3VExlQWj07foyji3A=;
-        b=XHqH/oDnDB3Ro7YCVBsZqvqk1S0/bo+V65L8wyVQvCtzvck9o9PdJz82yphpgNEXvC
-         T9+xrqsGoJ+wXBjEUCpaLaD1winTsV/pWE/AEZm652OrpEvUdqwZYNfYwGJkLGNJJzeE
-         EKuEQD0nOOvNMIJRhqry/4EX/e+bZT9zqhL8zqgwKXY1Cq8ztFTjAz0QP6kFFObmHxxW
-         4qXnPv4KdgM9HW6RqKV8S8MNkqpNTYxjLOPVOdqLXB8TWID31lDe1d3w8kOpsqF7ldHD
-         8WWRABsXuyGrgN75BQO62wyCd2aViLRSCi/vzyPxARVu6n4FDF/HRjTh8oI7M9FryM7p
-         4TLw==
-X-Gm-Message-State: AAQBX9fjs8Vmd0LkGXrq+tB98dDqb6l1IKrigwuax1B79GCzDuZNZRbf
-        YTUiYsy5XTYEe7p9S0O15fTyD2MPJa54OBxslYw=
-X-Google-Smtp-Source: AKy350ZbL/23W7VrPqiCqHw0RQUHN/19JgcuB+fbJ9qlP5XCo9lFlRBrFmpqh4mchTkARDrl2ENe//Yh2L3oUMFpw6E=
-X-Received: by 2002:a67:e1cd:0:b0:42e:5599:7021 with SMTP id
- p13-20020a67e1cd000000b0042e55997021mr5369210vsl.5.1681780274465; Mon, 17 Apr
- 2023 18:11:14 -0700 (PDT)
+        Mon, 17 Apr 2023 21:13:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2D03A8C;
+        Mon, 17 Apr 2023 18:13:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 379E76176F;
+        Tue, 18 Apr 2023 01:13:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 861A2C433D2;
+        Tue, 18 Apr 2023 01:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681780403;
+        bh=RGVB4b1Ma/kemnqMd6QFYrPQXvJkDZYWawFz3hC5t4U=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=YhM43pLMLnpYrnHFd76107gj08QmgTS0Ai+eBSvLbgEpRRrFHrEmOtKeE49msoN/Q
+         obhPiDUu4YHgVI+ySsqvuBipzkyP2mfvNYqIlmlyq5wBULGLcy0P+O9uy2B1/o5l+t
+         0xVEKpea/pgs51J1U7SQpRFSPAIWf/Ug1+dEizqUxVY8mMB1NBNzVhhyg/FydcSR+X
+         E/G+iTeNTM6GUFAMBngWr+ucey82v02X/yXiQ//axBfyuCkKl4mypJ5Dy+lZM/fP4W
+         X+c3Qzz5ECjGbGNdzIMfsInrDoEGZHcnvKYkDvgN4yUIJi38lG3k01amdZbMmtO3uZ
+         ZOyU2T+OZTqmg==
+Message-ID: <cb922046c9e9ae2359b7f22fa7436e2c.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:ab0:22c6:0:b0:772:9f37:85ec with HTTP; Mon, 17 Apr 2023
- 18:11:14 -0700 (PDT)
-From:   john mike <johnson303mike@gmail.com>
-Date:   Mon, 17 Apr 2023 18:11:14 -0700
-Message-ID: <CAE1oSEf6j8CQhUbDSX_o8r8svX-QR43CVF1EsEAfgUTgrtHU=A@mail.gmail.com>
-Subject: waiting transfer
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230417074115.30786-3-hal.feng@starfivetech.com>
+References: <20230417074115.30786-1-hal.feng@starfivetech.com> <20230417074115.30786-3-hal.feng@starfivetech.com>
+Subject: Re: [PATCH v1 2/2] clk: starfive: Delete the redundant dev_set_drvdata() in JH7110 clock drivers
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        linux-kernel@vger.kernel.org
+To:     Hal Feng <hal.feng@starfivetech.com>, linux-clk@vger.kernel.org,
+        linux-mm@kvack.org, oe-kbuild-all@lists.linux.dev
+Date:   Mon, 17 Apr 2023 18:13:21 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Valued Attention
-Our recent record   indicates that you are eligible to receive an
-optional repayment of cash fund!! $750,000.00 which has been found in
-the security vault registered in your favor under your email account
-waiting to be dispatch without claims.
-the account is set up under your email address  can only be obtained
-by you (receiver),all  you have to do is to provide
-Your full Name.....................
-Direct Telephone: ..............
-And delivery address........... For immediate shipment
-Thanks and anticipating your urgent respond
-finaccial@citromail.hu
-Yours faithfully,
-Johnson Mike
-Section assistance and   Verification committee
-USAfro-Euro   Debit Reconciliation Office
+Quoting Hal Feng (2023-04-17 00:41:15)
+> The dev_set_drvdata() is no longer needed after we used a wrapper
+> struct to get the data in auxiliary driver.
+>=20
+> Cc: Xingyu Wu <xingyu.wu@starfivetech.com>
+> Fixes: d1aae0663023 ("clk: starfive: Avoid casting iomem pointers")
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> ---
+
+Applied to clk-next
