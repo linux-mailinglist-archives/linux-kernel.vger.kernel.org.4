@@ -2,140 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301866E5C6F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD9F6E5C74
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjDRIrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
+        id S231477AbjDRItH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbjDRIrm (ORCPT
+        with ESMTP id S231535AbjDRIsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:47:42 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4FC40D5;
-        Tue, 18 Apr 2023 01:47:41 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 08:47:39 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681807659;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rsdIAMAwWopaXTDtOD5aLMYboZIulPn7eG1OGyICisY=;
-        b=xwdwruv5LDE0XdxsJNO3X4Ce8VwNwW1kTbUv8dNRcQs2A74197WoXjAOQuo8rwieyp/gPf
-        sHjYruQ+/DDhqfgZy/68rXJLuPGDOlr1LZgcV9ieBDaGEhrME1nxaeiYND6idsHuudoTXv
-        FWy+ax3/HwHtA+hSQgGI0ZS2pTELCiPyACi20PApvPaZ0+48UzM4PWAK5Y9O6rYRubMjNL
-        6+ffz0BZzPkQcMizAjz4eKSazv2Ra4zNh3o9OLNZHEZDnHJ8uU+0jERqbEK1mBx7YGnca+
-        N0i83gU7M1gQlMp5YzGnBN0xSE2FBfr+5rwlgVccH4xCh7N5ba+NN+Wn/fyHCg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681807659;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rsdIAMAwWopaXTDtOD5aLMYboZIulPn7eG1OGyICisY=;
-        b=m+YIBgxL+JFywTivrGbJLJYCDdNBQALYylOekIxGtcI7zzgWtRN3xXkhLnQIoVRwaWrL6S
-        vO2pFvNasplqyNAg==
-From:   "tip-bot2 for Gregory Price" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: core/entry] syscall_user_dispatch: Split up set_syscall_user_dispatch()
-Cc:     Gregory Price <gregory.price@memverge.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Oleg Nesterov <oleg@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230407171834.3558-2-gregory.price@memverge.com>
-References: <20230407171834.3558-2-gregory.price@memverge.com>
+        Tue, 18 Apr 2023 04:48:50 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00B76E82;
+        Tue, 18 Apr 2023 01:48:18 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2a7ac89b82dso19390701fa.1;
+        Tue, 18 Apr 2023 01:48:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681807695; x=1684399695;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DQTL6gqoekyUKEKfWJahiNXjj1p7JeMbW1pMbRbnCsI=;
+        b=Wgny9GWkovXUcuzra15R9Ya8NrBk2HhG1yreAWsLLelZmC6KQTmWQGLFa19EQgHlAI
+         y+5p7gteUZus9rYbZAkL3VwapJxpryZupHpMBpWkcGnnc0HjPukMpaX0Z8VGCRGTFY4m
+         qNOKE2y4qeJVdHcoezQU2oo/1582oCCLm45uTxa0v4xSs/36V1OLt/oCoIKA/no/8oha
+         FriZ837lR607GSF8NAxCXHKd5Z9RIhjuN9aYxi+VEyUVbZ7jlVFh6bZWnj8xQo5oiRq4
+         IDC+ZzKC3Tf9KK/M0UcnGJV8LDPZu6jybiTKa50tsKDQzWLPIGN9qxptUduao2CxTGIl
+         FdEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681807695; x=1684399695;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DQTL6gqoekyUKEKfWJahiNXjj1p7JeMbW1pMbRbnCsI=;
+        b=IdYGah+gz5s3fimw5QpAId24KzKRxpKSrChre7VqV1jDAXpNPWJjcKsdMhEQOMblwc
+         DvK4QfOLrl82LU6cLyAWrynj3FYfJl2PMascHvG1/As85BjHYbwXynDrZygAAGUc5qBw
+         Ph70hmc/d1+hdJ+YkaigUwZ0C1f3Qu3ZssIp/WG30acS+PmF6+oDXjVf908g3dR5ZTCy
+         aVGjiddWZDSPMYNGZhEKXuczPUpO46inO2pYOtDTse7oEL7FtYgjCpa5Q2xda32UdjBr
+         8oCIFCjEbPDF7k7L3esG2lUEGnN63/cqUwUxJvj6A2qRzf2yD+qDl/Ep5v3s1UWG9mOd
+         1SvQ==
+X-Gm-Message-State: AAQBX9dv7ihOEtHaA9zb7SRo7bLHqJzkc2YhcqMe/X/dKwfRmJx03NTv
+        7bDkwC1WQHVk6EON26T5rNc=
+X-Google-Smtp-Source: AKy350a+YRhVtMEX2gDL2vy9uqCNxvNfQwxlBOxVZzqQkPi4tiThAj8JZwG9aqOHHyWcZCu3XTUdXw==
+X-Received: by 2002:a19:f80a:0:b0:4ea:fa26:2378 with SMTP id a10-20020a19f80a000000b004eafa262378mr2670569lff.23.1681807695312;
+        Tue, 18 Apr 2023 01:48:15 -0700 (PDT)
+Received: from [192.168.1.103] ([31.173.80.61])
+        by smtp.gmail.com with ESMTPSA id v20-20020ac25594000000b004eacd90e0c7sm2313021lfg.81.2023.04.18.01.48.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 01:48:14 -0700 (PDT)
+Subject: Re: [PATCH 1/2] gpu: Move ASPEED vendor ID definition to pci_ids.h
+To:     Patrick McLean <chutzpah@gentoo.org>, linux-kernel@vger.kernel.org
+Cc:     linux-ide@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org, Dave Airlie <airlied@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org
+References: <20230418011720.3900090-1-chutzpah@gentoo.org>
+ <20230418011720.3900090-2-chutzpah@gentoo.org>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <c33ce80f-611e-2841-d4bb-dbddd1b34053@gmail.com>
+Date:   Tue, 18 Apr 2023 11:48:13 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Message-ID: <168180765934.404.13399191864427617953.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20230418011720.3900090-2-chutzpah@gentoo.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the core/entry branch of tip:
+On 4/18/23 4:17 AM, Patrick McLean wrote:
 
-Commit-ID:     43360686328b1f4b7d9dcc883ee9243ad7c16fae
-Gitweb:        https://git.kernel.org/tip/43360686328b1f4b7d9dcc883ee9243ad7c16fae
-Author:        Gregory Price <gourry.memverge@gmail.com>
-AuthorDate:    Fri, 07 Apr 2023 13:18:31 -04:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Sun, 16 Apr 2023 14:23:07 +02:00
+> Currently the ASPEED PCI vendor ID is defined in drivers/gpu/drm/ast/ast_drv.c,
+> move that to include/linux/pci_ids.h with all the rest of the PCI vendor ID
+> definitions. Rename the definition to follow the format that the other
+> definitions follow.
+> 
+> Signed-off-by: Patrick McLean <chutzpah@gentoo.org>
+[...]
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index 45c3d62e616d..6634741aea80 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -815,6 +815,8 @@
+>  #define PCI_VENDOR_ID_ASUSTEK		0x1043
+>  #define PCI_DEVICE_ID_ASUSTEK_0675	0x0675
+>  
+> +#define PCI_VENDOR_ID_ASPEED		0x1a03
+> +
+>  #define PCI_VENDOR_ID_DPT		0x1044
+>  #define PCI_DEVICE_ID_DPT		0xa400
+>  
 
-syscall_user_dispatch: Split up set_syscall_user_dispatch()
+   The vendor IDs in this file are sorted numerically, not
+alphabetically...
 
-syscall user dispatch configuration is not covered by checkpoint/restore.
-
-To prepare for ptrace access to the syscall user dispatch configuration,
-move the inner working of set_syscall_user_dispatch() into a helper
-function. Make the helper function task pointer based and let
-set_syscall_user_dispatch() invoke it with task=current.
-
-No functional change.
-
-Signed-off-by: Gregory Price <gregory.price@memverge.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
-Link: https://lore.kernel.org/r/20230407171834.3558-2-gregory.price@memverge.com
-
----
- kernel/entry/syscall_user_dispatch.c | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
-
-diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user_dispatch.c
-index 0b6379a..22396b2 100644
---- a/kernel/entry/syscall_user_dispatch.c
-+++ b/kernel/entry/syscall_user_dispatch.c
-@@ -68,8 +68,9 @@ bool syscall_user_dispatch(struct pt_regs *regs)
- 	return true;
- }
- 
--int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
--			      unsigned long len, char __user *selector)
-+static int task_set_syscall_user_dispatch(struct task_struct *task, unsigned long mode,
-+					  unsigned long offset, unsigned long len,
-+					  char __user *selector)
- {
- 	switch (mode) {
- 	case PR_SYS_DISPATCH_OFF:
-@@ -94,15 +95,21 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- 		return -EINVAL;
- 	}
- 
--	current->syscall_dispatch.selector = selector;
--	current->syscall_dispatch.offset = offset;
--	current->syscall_dispatch.len = len;
--	current->syscall_dispatch.on_dispatch = false;
-+	task->syscall_dispatch.selector = selector;
-+	task->syscall_dispatch.offset = offset;
-+	task->syscall_dispatch.len = len;
-+	task->syscall_dispatch.on_dispatch = false;
- 
- 	if (mode == PR_SYS_DISPATCH_ON)
--		set_syscall_work(SYSCALL_USER_DISPATCH);
-+		set_task_syscall_work(task, SYSCALL_USER_DISPATCH);
- 	else
--		clear_syscall_work(SYSCALL_USER_DISPATCH);
-+		clear_task_syscall_work(task, SYSCALL_USER_DISPATCH);
- 
- 	return 0;
- }
-+
-+int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
-+			      unsigned long len, char __user *selector)
-+{
-+	return task_set_syscall_user_dispatch(current, mode, offset, len, selector);
-+}
+MBR, Sergey
