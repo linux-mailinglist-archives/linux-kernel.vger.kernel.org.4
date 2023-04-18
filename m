@@ -2,127 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B066E6683
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:01:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1282C6E668C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjDROA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 10:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
+        id S232117AbjDROBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 10:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjDROAy (ORCPT
+        with ESMTP id S230179AbjDROBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 10:00:54 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2069.outbound.protection.outlook.com [40.107.93.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E711384F;
-        Tue, 18 Apr 2023 07:00:48 -0700 (PDT)
+        Tue, 18 Apr 2023 10:01:31 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2046.outbound.protection.outlook.com [40.107.93.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F057C10244;
+        Tue, 18 Apr 2023 07:01:29 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VMSh4kH7aqm8IXyS///y221nMuWrMHuaWqLdM78l82UDNmBxF3SlZP7vnV2CUkuyQao1fa7haS/0Im4IZjrarFiEarleBcAutajvJEX5aTYLpJOWAC0bP7aqMWnLb0TDXqKRRn2LYc1OTuDsCy2tTy60gIy9UN+IC49ziPtmp/93J5nz+oc8CiAGk+M+s7XQv61xs2ZMt4cy4w9XtWHLPxNtyXr/6D1WE2CBY1+5PNWKb16m9Nj0Cqt6SqzwFxST7P7JZYeFmu0UOMbYPy/YDh4C0WQndt1FgZ8Nd3m2/XqZ7lK/z4WbzDSwUbe0NTAmpWXIMJXWWltM4egj715wbQ==
+ b=MTMSNSAW8s+0wDqxyEy/v7fPTXAi2cKsDwMws2lWqzrKIBqOgvBTf+kFhUqOvPGEgoAi2hSaAZTuVbgYdgkmAh+6E1tSUnEfaQsoIf48KU7ecX5gtssO7Y39GXxGs9NqXstnkip/xMWqJPf992Z5m9ttrZYpqPXkzMWFfuS0CcU8Jtb5Cwx1gbzIggD6/sFI9MheHEHzp/zFNXzmBaz8Ck/9gr3GpZDf7cjw+exUSSNknDfn9zDTzJNN3jGQp69247/5pwGbi8yYZgL0JQBwddzArr9FQH/RJ9827XembZLZ+rP1kwM1v52F/Cg8aFTGQ6WE/V8d6KP5anW0qvmO9g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uB18raNWnmeNPDPC26CDptXk7WiQSIQT7vl2EaQoqSY=;
- b=kSjHSEDgbUHlwY7se9S2XVHeelyS8I9LtFGpHuWToXeOgSrb3jkLEkzq67LwT3aCzrxXFIXo17JK/MxlZv9IHDhByb/hYGYCWp8+gArK4BeY3s7qWba+CUhRmgzanbaR4UUah6MKvVpqr2wcGMkJiqKoB3Cl458bg2tJmU6Okeu/mEPd5L8+wwxew6xr8ujfFDNQ1MMazXyLcoylvPjEZCSIwZVi0rPUEXXUR1OWDiuvjVs4FhHpg7fmQKghQsm/vygofmlBBzuEIrPXyCrl8TsfyO89QvBeUr2jpxesgVSopolE1P2JycUQ3lDiHxOnsa8cd2MGuUmwMwfVLj5UYQ==
+ bh=nkTgp8eopxx5rF3jXB0wRJ0NH+ZiOq8gkTmm6PADmsc=;
+ b=c/pFyB8kVHG8yG3wFb6pLcgqHsxD7xQzz0HIuAGNYBPhiTwqIohNCOYYairaaoxNgKV/jAUIgf/bJytoVKjsYy3A+uZgyFMSAOrH43c/2IbcdmAWgLEuAZuOUuDPcENRrYjoAAESqMefVabbyk5E14SB/sOVp/4FeSMI16aKf/nechSF8bghyCN+s3soVSGycr08bynOfMpqt5oCzE659QmZGWzErmVWkhpG0j8QBHHR5gPZZ9n2e8rAnX+Y7FueFb7xQGlh1OJg/YJrRbJ1VBdQqdomyzw4pvULzJfUCleS1PeNYZ1IT4E6adPFXjsi1c/evisRx9VgaKoxNqummg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uB18raNWnmeNPDPC26CDptXk7WiQSIQT7vl2EaQoqSY=;
- b=mddm9d5304RIAIE4gJQfWLqQFUverQv+UqYhAzs73SPO1OmkB3sLqFaBwcpY3e5lVoniy1qBhD8dblrlvi8p/BUmhO1RRZBr0mYXgfrqY04LOH8cLmGE8JbPcIhYV31MwMZc5Baet8zJBMYa9O6o2/YQlCt85bTFqcl0YKqqwZ5wh/jfejDmWD5JI2cG6k3I+CYXSmgRBcS1vXyu/orrPMyuSeKmuH9e2cbLrGiCUelgG1TzBi8qq/IqQR7S7A/yRU3Lgj+9Syx2ZEaCJBo8WP41HH+8EGTkjeMXDkKapsfvvgLEQHrZF3ZWr7S0B+47DcLqN3z8LVJzHQ7SiLjkkg==
+ bh=nkTgp8eopxx5rF3jXB0wRJ0NH+ZiOq8gkTmm6PADmsc=;
+ b=lYxjaPwCqsAQ9PUcyhi8x+IbcQq5SoDDK68qIgRQbA9wQgJ6WHgliX+ZP+ogi+zp95RXGII5ELLKTDV+iQ3Iye3d7MhD9L/5IF/UkuHRi9knBMJDAUZKs3kPYRoCcKzqYfVZAKE22ehhWBM3/D6P4r7GQkvMpdmEQK6jmFtkBjI=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- DS7PR12MB6096.namprd12.prod.outlook.com (2603:10b6:8:9b::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6298.45; Tue, 18 Apr 2023 14:00:47 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::847b:988d:86fe:a0f8]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::847b:988d:86fe:a0f8%5]) with mapi id 15.20.6298.045; Tue, 18 Apr 2023
- 14:00:47 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
-        linux-mm@kvack.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        =?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        "Zach O'Keefe" <zokeefe@google.com>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 0/7] Split a folio to any lower order folios
-Date:   Tue, 18 Apr 2023 10:00:43 -0400
-X-Mailer: MailMate (1.14r5963)
-Message-ID: <9AA686F5-5366-4F41-92A7-C18B77BFDD6E@nvidia.com>
-In-Reply-To: <c1429e20-7462-dc73-766a-cf7b3d482c6d@redhat.com>
-References: <20230403201839.4097845-1-zi.yan@sent.com>
- <20230404144727.e613116684dbd65a4b4745c1@linux-foundation.org>
- <49ee481e-452f-61c7-2da5-28de2cf3de2@google.com>
- <b37d1876-0a74-aa52-7911-e6f78280caaa@redhat.com>
- <8B784026-7C90-427D-91E2-2D551FA576D7@nvidia.com>
- <c1429e20-7462-dc73-766a-cf7b3d482c6d@redhat.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_7EF800F6-588F-4AE4-909D-5775F8A02B83_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BLAPR03CA0144.namprd03.prod.outlook.com
- (2603:10b6:208:32e::29) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2815.namprd12.prod.outlook.com (2603:10b6:805:78::24)
+ by CH0PR12MB8463.namprd12.prod.outlook.com (2603:10b6:610:187::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38; Tue, 18 Apr
+ 2023 14:01:27 +0000
+Received: from SN6PR12MB2815.namprd12.prod.outlook.com
+ ([fe80::77ff:cc9b:4e6d:55fe]) by SN6PR12MB2815.namprd12.prod.outlook.com
+ ([fe80::77ff:cc9b:4e6d:55fe%4]) with mapi id 15.20.6298.045; Tue, 18 Apr 2023
+ 14:01:27 +0000
+Message-ID: <97f2ddbd-8495-9479-a11c-054296602027@amd.com>
+Date:   Tue, 18 Apr 2023 16:01:15 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH V4 13/17] x86/sev: Add Check of #HV event in path
+To:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
+Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arch@vger.kernel.org
+References: <20230403174406.4180472-1-ltykernel@gmail.com>
+ <20230403174406.4180472-14-ltykernel@gmail.com>
+Content-Language: en-US
+From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
+In-Reply-To: <20230403174406.4180472-14-ltykernel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0010.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a::20) To SN6PR12MB2815.namprd12.prod.outlook.com
+ (2603:10b6:805:78::24)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|DS7PR12MB6096:EE_
-X-MS-Office365-Filtering-Correlation-Id: 97f01431-c053-4c9d-1090-08db40154ed2
+X-MS-TrafficTypeDiagnostic: SN6PR12MB2815:EE_|CH0PR12MB8463:EE_
+X-MS-Office365-Filtering-Correlation-Id: 68a188ac-4741-463d-d78c-08db4015672a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nCNadWrXVWrMpsrJmvYM6xq7LD/0Wjaw+0wkFPlu9NOne/UO316VaS19Y+GQf32YfC3XRuZVpjAFrKCz3btttOpFaFB1glovkqyDfOuy//8b0it6wOys/XJMOtdmemUll0vBQI4WPNkTzeCiMM7SyADlesjto2G6YdZ84MteP0tVGJjUlQN0LTLtrSMu2/s9e28exVise24Dw+CNOcI0hu8fFTWECLrYvmad16nwpt61wh4qJH7D+n52GPGDxLo74OXb/Z1mYrrVW86LDPXBrImEU/FEdKWFF2zmgWN/k0BkfTmY6qR3IOPEknXUDlAnqn7wrIfZP318GE6/H7FeM3+DJ78W/xiXeZvHG14f6vMZMlLFO22Z4H5VMVzSoYCMV9jDxkgkkCpjIp5S/TRnAs3XWUQTIrz0CgSqSIKSErampTWO7z/RHzH2GlHJlLUNjf5Qx/nmIaHO26er+by157F9hMuC0/jASqrQZ/Q06J9tK+d/dM04m+vJ65FmBvYj5fv9vwTwJ1hEnVhxZzO2A1lh/msDqJzOfVGXoiw7DIV5WoISOI6WQjvSytjplKc1AM0/00dUXt5yqZNcYELtNM4b8Jig9b+ifReEuXbzCCEq7oy4RUMOAP3KuCytpezhauvs7TC5DP+YRcBaMQVZsw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(366004)(376002)(396003)(346002)(451199021)(6916009)(4326008)(54906003)(316002)(66946007)(66476007)(66556008)(8936002)(478600001)(6486002)(6666004)(5660300002)(41300700001)(8676002)(235185007)(7416002)(86362001)(2906002)(33656002)(36756003)(38100700002)(2616005)(6506007)(26005)(53546011)(6512007)(186003)(83380400001)(45980500001)(72826004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Q5SHU7uISJbNaQYtpY9MsGCDMMuHr3mo58yrV5sNviC1mxGQ/P9enZj5mCPKoqCDNW9/YDijDpaogifomqsSpV7/+63AAg7wus2kvog+8KOcFuv6rMul6kSvbNNyNO++LApbkjRhtBQJl5uq0emwjAcFnOnJc+/KcFl4G8NHd5cfB16PLG6HhLXGcICMMvO0oWzhrzbBaehijEfqmT/m1ul3Gpwv9RcW+Areb0cvNeXrzvrisIgVFxpKcNoMWyy60Vhmb6mCIuC2jK6gtQ5YXU7IOmV/3zx2IT5U8qCKyaj+JMsaBJuMnr940iGv+LQPzzju/Ufkt1dDjA+RyT32FfFGqOLlYrLY7h8wFCHellyTGXzB9ysfBXT7MtmHrp+Alcz4sBgdzlNv4CK5EDA4iAj1BtnAgXoqOwTE9lgWWjV3uuYu+Rn1gxAOaqTtK5V+HASepJzjHp22vkNscRQKvDOIRap+mIfCgDmyyCGydkdjKaiVnXV3Di1Yg2X40Wx85xtU/029S+JbrcVqq60gCkp3IhRZYy5iRsjkqy04Qq/rEg49I7QyGidVXOs4tUrizyQJOVuTcB7rF3f8Qnw3CKPxvdjHrcg0JeTWXYt4Saj2WFv5pfIjkFcwyvwQ6XoXK67bW+NFRAJ9LzFe04Gk8ETOJHUyn//rUwtxfdG1X8E=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2815.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(376002)(366004)(346002)(396003)(451199021)(2616005)(7416002)(36756003)(6666004)(6486002)(86362001)(921005)(31686004)(7406005)(5660300002)(83380400001)(2906002)(6512007)(6506007)(186003)(38100700002)(45080400002)(26005)(478600001)(31696002)(4326008)(66556008)(66946007)(66476007)(8936002)(316002)(41300700001)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MbneRwEoHDaEmqr/EVbjTdCGuTgAl+lrDZBcU+uU//9df0gKDHLzeYzUo+23?=
- =?us-ascii?Q?IdLXMIo85/cCwto0PQk0rZkGyHO+xNp0g7C1DGFeTjA8dHtrPo8sW6Kfr0G7?=
- =?us-ascii?Q?ZTOa3HHtFCoBgJeFrc1+lbRk9hcb4KR0BSuWw/u85PnPbN5X9SxnR8URAyr6?=
- =?us-ascii?Q?l4suYoaL9aSz2cY4FZLGazev0icGWlBiiJ2XH7Eor/MwLThU4OXW0op+YykP?=
- =?us-ascii?Q?tMITgniyndrx8Wjm+aKEkC34GLkPrFJQXEdrTCyK3XlrycUdtHzKc10gPaXX?=
- =?us-ascii?Q?TfJAXvRS3dBBOJho3bv41TgU4AYh95OjHT2AB8C+RG92K2AhDy5X1q7T26yH?=
- =?us-ascii?Q?vsfRPjX1QdCw71fN/gV/WlRU78O3avnMiTS8um/vw9Zt0qw9afNZcimRCka5?=
- =?us-ascii?Q?nW1gfR41EFIHcW+7Vfu4neijQ8zgOLJc4t2NlyYYBoI5nwrkxkHXa+7JYHIE?=
- =?us-ascii?Q?nh/TjdtN9lNtSSc6wycge4PioetQr07l3ShoftOS78FoiF7cIWzpLbODUfc/?=
- =?us-ascii?Q?87xJTcdf+ZKaxB5Me8xZ6rxU9BaIHMpqNf5qKf7/ONSRJJQum/6lzxLhqH+Q?=
- =?us-ascii?Q?e2jLtiMqYRi6TFGXPqGZwaO44qS68JK8MzuwZnu7h1NtY2ks8qeQKycrHsxl?=
- =?us-ascii?Q?1bziNsJOvnPZa65icmvdlpbhgTxnyfYvWy1n6Ty/AzilcDrk4zFEDV3KeGFJ?=
- =?us-ascii?Q?DxaHW/zYrrZ0tPO43mElgWP9ZjbOovVgab8zPTA++ncvj/TdckpzyALPs9eS?=
- =?us-ascii?Q?9O2dNZpDKhVW9wgCpr80X2IzP1lfRmDNz9cCbq5jz4I24o47l8OHN63mg8Qy?=
- =?us-ascii?Q?qmJ6uJO397eiASKM0mSbvLAaSkKTRpLDE5iUiMiDiMc4R2xWST3orc9bJU8t?=
- =?us-ascii?Q?19Qcj6LW8wCen6PEwSMX4l8fhD2+PWduYVfC5inmnBdxgUyttx+WzV9oo61q?=
- =?us-ascii?Q?bUMyiWJ7Y/41i/DQAB9mBVCzdQNSVcXzTc+e2AUiMnr8AZWyibyUNSZnSovj?=
- =?us-ascii?Q?0TfILnSdCQZRe0MTAy2mDXMhjWju+LvCuwLDpMYCjHS/cWLdCOlCA7l4YiZS?=
- =?us-ascii?Q?UIi6SfnZjh86JJ/xs9G88r77jiSzZrfqP82LTepNdKrQWPQapqIEYrKF9x6g?=
- =?us-ascii?Q?effVU1R0rxK3G+Jh8GuLQluZ/7uMYtMg7QYndO949bDC8p0741BiDsHw7eQM?=
- =?us-ascii?Q?a0Qty9BGVkkHvYIsF2k8ew9zxw/k69btiRqg4tspcppcIuTQLyfvhDuwSaEh?=
- =?us-ascii?Q?yWrxUIfriyFSRB4TJATPxpGeySIqX40nP15da6yDfTXXKlfzouDNlLLCQax0?=
- =?us-ascii?Q?4hhKZbR30VW6Jzqo15q1iTCzZKUR9S1r1FSMQ9ROuIzhV30+Wzjwrlg1wUN7?=
- =?us-ascii?Q?UjjD3oZ7H5nvJtV4OwIiDsN0zRbV56ZwHFm4fW+aBnw8Ht0PKYZGFyKmrSHt?=
- =?us-ascii?Q?yMSgope6QgAczEyZWHgo1IzcKAZZsnREWmLsS7DlzAXzWv7gtJkBveYbGVQk?=
- =?us-ascii?Q?ig1ZFDgpmVAyUw9+Z/4GdJovRq6f0ucIi+q2LTL3En5DHge3T2YggQBaAP4L?=
- =?us-ascii?Q?dTCf9AVEnKNqh9Cs/0M=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97f01431-c053-4c9d-1090-08db40154ed2
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ekowSlgrQVRzc0dNaVhOOXJBZCtZTUZvOFNYV3p2TzQyUU1LcDc4bENiNks5?=
+ =?utf-8?B?OFhtbFpuSXI5cXJIdytReVRzTE5Zbk1YUUZ5ZFczSDJwc3hvdVNIYjlHLzBR?=
+ =?utf-8?B?YjVzYUJDOGhRTFR4cmQrblVLS0xSRCtOQVhSMTJqdVlMenB5V284ZUIvSWtq?=
+ =?utf-8?B?TXhMb1MxdkxjdWtCcFVJUDZDbUh6OE5UUFZWbXdoNHNpVzB0RGJHcTRyTisy?=
+ =?utf-8?B?d2xjOVRUMVZ4MFhUMjZoenJFVTJielpyMWM0S1ZEYUxLMzEyWndYMVh1SHF0?=
+ =?utf-8?B?Ym1MYW1PUTlTR25oVVFCSjBZN2kzUEJIUXJKQWFmRWV0ZkxocGZOVWpSazQ0?=
+ =?utf-8?B?UUNEM0wwRzZsWjRscHV2eHdnbUxqVzRDWUh4UTIxYkhRcjRmY2VQbjJUeHBz?=
+ =?utf-8?B?QlpPVmZRVG5rc29FRWVOdHU4TFA2K3NxRVprbzI2bThnVS9zNXUrRE0vQS8x?=
+ =?utf-8?B?bkhFZTBQYlJ3eSs1UHFjaWxXMnRWQTJGa2pYcUpjV3pKSjY2MmlwVEl4Qk40?=
+ =?utf-8?B?WVN1K3B2SmF3TlpxOWtzaUhWa1l1VTAySWxmQTc0eGpNcUVsMFV3dFQrMlUz?=
+ =?utf-8?B?UVpSWDJWTThVbklBV3Z4c1JRcXRSWXBNMXdXbHRDZkZWQ2FpeUZCcHVmSXJn?=
+ =?utf-8?B?ODNRRjJHR2ZKeTQ1U3NudlMzdWlENWZCV3Z3bU5Xa3NHSzYvVkw4N1hjVDAz?=
+ =?utf-8?B?YXpBT3dJOXM3NVlDTWp3Vm02TnlXc0IxOTM4alNhMmtIZlROWHRUUGVRTTFn?=
+ =?utf-8?B?Nlp5ZnhtRG9rV3dvUEl6SHFrNW9DU2dMbUFycFBDNW5Ra2hXVWl2bjk0ZlNr?=
+ =?utf-8?B?aXF0cTlrMlNSUkRvSE9IL3daaUtMeENvemgyUk1FL1dncDd6MytTTjdMWTdu?=
+ =?utf-8?B?WEd2Nm9ONmJSRGdnUmRSN3BWblBUU0hURVJpeEdhTUo2OXd0eE1FYzFLQVdC?=
+ =?utf-8?B?TU9wNUdaQVYyOS9xdnZJakhQcmZLUzluTWRsNmVMaVJVdkd2dXRmTUNkWTBp?=
+ =?utf-8?B?QVBsMjROUk5ZbHdkcTlZbGRmLzB4QmpxQ1JHMTdhTlFrVTkvc2l0WGpzRTd3?=
+ =?utf-8?B?NW8wWGNPODBaRlVaU1o4MUlTU1ZJbzUxT0ZZM3B0cTFWNEJLaHBiODdCK0hF?=
+ =?utf-8?B?M2lkdVFTOUNTZ05jWXRFRFhSNTcvRzJST2lkNGJiTDlxcHN5eVlQUWJoNCtt?=
+ =?utf-8?B?bXNiVnBDbENuTnhlQkt0U0lvTUxZeDNyWnU0NU50WUM0VVFOU0U4L2o3MGFt?=
+ =?utf-8?B?OWhCTjFHZXhWbGwxcnIwMlNUWDk3b3F5TGFGOCs2c2dCbyt5OExoaFdONTJ3?=
+ =?utf-8?B?R1Q3K2tYY0xaN29VZExJRnBlUy9KOGFaUkRyVGtyQ29RZnYwSGt6OTJsSWVT?=
+ =?utf-8?B?dXJwd1JvWm1vaUhpVkJsV05vK3VsVDlpbHNWUUV2LzlERkN0aUdZVG9wUUhN?=
+ =?utf-8?B?S2VudVgwL3hRZnJVSWJpWEJrN0pOYXk5RnJvQ0JYZUN5UDE3QXlZbW1MZlV6?=
+ =?utf-8?B?TkViTUhlcUV4V3cvQ1FnVDY5bkJBdjFNdHpaZXRrd01yNWdhWFRUbEozRS95?=
+ =?utf-8?B?bEhTYmxBNXRibFNqaW9YK1FkYVFoZW1jbzg3bUZWNDV2UWg1R1dCK05iMUk0?=
+ =?utf-8?B?ekV6UGV0WlBOL25EakZHUVFsVmFzSzczTUF1NHVNVGVqUTZLb3ZYMmlnVzh6?=
+ =?utf-8?B?c1FMUW4rd1VDNXdjVmZtemJsQ1ZFZDAyRXZocGdtRkM1c29ESzRYbExiUG9r?=
+ =?utf-8?B?WW1jYjR6cEVyUjJHZWJtWTRzVXlaUGVZOVRVV1dDOXA3Umw3dW51TUY2TW4r?=
+ =?utf-8?B?bDRlT1dMRDgxYnJkVVhSd1U4OFAvdG5iVmVOdGJ5a3psVXpWVW1OZFNCWEJP?=
+ =?utf-8?B?TmN3NXZEdzFBbVRyWjBhL2pwalQrODB0SmR4SHJkenZ5b3ZieHNZMVB3YW50?=
+ =?utf-8?B?dFh5L1FpSVZ1WmZ4Tjh2QS83RjFpcFNSNGtJWU53S1VpYVo5K21NSXNqbzNK?=
+ =?utf-8?B?MzVxbGZaTVZucEhYSnIybXhSTEt0MEE5NmFkQzh0dkdjU1lOSDhPTGNRY21a?=
+ =?utf-8?B?eC9JbmxxSE12bWFlclMvbVJNaUhiR2YrajJOR244d1RDUlhSeW5HSVhwOGZn?=
+ =?utf-8?Q?qPWm6uPioojIPXk+gkKDtkowT?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68a188ac-4741-463d-d78c-08db4015672a
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2815.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 14:00:46.8233
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 14:01:27.5346
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VO1OkqgVDKmnsjvDY9bS5dYJGKlYbB6YkQ+ZUzRMzB7tJj6cK2ociXFxAnvg3pR5
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6096
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+X-MS-Exchange-CrossTenant-UserPrincipalName: X0y/Gx0rmoLMZJp17TT8wRvy47oYc84ii03OSbbbDrvxCo9sh/PEzjR3PFMhMmFNDqD9oLNFQEECdfNVDHlDHQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8463
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,122 +139,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_7EF800F6-588F-4AE4-909D-5775F8A02B83_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
-On 18 Apr 2023, at 6:29, David Hildenbrand wrote:
-
-> On 17.04.23 21:26, Zi Yan wrote:
->> On 17 Apr 2023, at 10:20, David Hildenbrand wrote:
->>
->>> On 16.04.23 20:11, Hugh Dickins wrote:
->>>> On Tue, 4 Apr 2023, Andrew Morton wrote:
->>>>> On Mon,  3 Apr 2023 16:18:32 -0400 Zi Yan <zi.yan@sent.com> wrote:
->>>>>
->>>>>> File folio supports any order and people would like to support fle=
-xible orders
->>>>>> for anonymous folio[1] too. Currently, split_huge_page() only spli=
-ts a huge
->>>>>> page to order-0 pages, but splitting to orders higher than 0 is al=
-so useful.
->>>>>> This patchset adds support for splitting a huge page to any lower =
-order pages
->>>>>> and uses it during file folio truncate operations.
->>>>>
->>>>> This series (and its v1 & v2) don't appear to have much in the way =
-of
->>>>> detailed review.  As it's at v3 and has been fairly stable I'll que=
-ue
->>>>> it up for some testing now, but I do ask that some reviewers go thr=
-ough
->>>>> it please.
->>>>
->>>> Andrew, please don't let this series drift into 6.4-rc1.
->>>>
->>>> I've seen a bug or two (I'll point out in response to those patches)=
-,
->>>> but overall I don't see what the justification for the series is: do=
-ne
->>>> because it could be done, it seems to me, but liable to add surprise=
-s.
->>>>
->>>> The cover letter says "splitting to orders higher than 0 is also use=
-ful",
->>>> but it's not clear why; and the infrastructure provided seems unsuit=
-ed
->>>> to the one use provided - I'll say more on that truncation patch.
->>>
->>> I agree. Maybe this patch set is something we want to have in the fut=
-ure once actual consumers that can benefit are in place, such that we can=
- show actual performance numbers with/without.
->>
->> Ryan is working on large folio for anonymous pages and has shown promi=
-sing performance
->> results[1]. This patchset would avoid getting base pages during split =
-if possible.
->>
-> Yes, I know. And it would be great to get some actual numbers with/with=
-out your patches to show that this optimization actually matters in pract=
-ice.
-
-Sure. Will try to add perf numbers in the next version.
-
->
-> Unrelated, your cover letter mentions "file folio truncate operations."=
-=2E Would it also apply to FALLOC_FL_PUNCH_HOLE, when partially zapping a=
- THP?
-
-Yes. In the self tests, I have
-fallocate(fd, FALLOC_FL_PUNCH_HOLE|FALLOC_FL_KEEP_SIZE, offset[j], len[j]=
-);
-and it uses the truncate operation I updated in patch 6.
-
->
->>>
->>> Until then, "365 insertions(+), 68 deletions(-)" certainly needs some=
- reasonable motivation.
->>
->> Come on. 225 out of 365 insertions are self tests code. We need motiva=
-tion to add
->> testing code?
->
-> Well, if you add feature X and the tests target feature X, then certain=
-ly having the tests require the same motivation as feature X. But yeah, t=
-he actual kernel code change is smaller than it looks at first sight.
->
-> -- =
-
-> Thanks,
->
-> David / dhildenb
+Hi Tianyu,
 
 
---
-Best Regards,
-Yan, Zi
+> Add check_hv_pending() and check_hv_pending_after_irq() to
+> check queued #HV event when irq is disabled.
+> 
+> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+> ---
+>   arch/x86/entry/entry_64.S       | 18 ++++++++++++++++
+>   arch/x86/include/asm/irqflags.h | 11 ++++++++++
+>   arch/x86/kernel/sev.c           | 38 +++++++++++++++++++++++++++++++++
+>   3 files changed, 67 insertions(+)
+> 
+> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+> index d877774c3141..efa56dfde19e 100644
+> --- a/arch/x86/entry/entry_64.S
+> +++ b/arch/x86/entry/entry_64.S
+> @@ -1073,6 +1073,15 @@ SYM_CODE_END(paranoid_entry)
+>    * R15 - old SPEC_CTRL
+>    */
+>   SYM_CODE_START_LOCAL(paranoid_exit)
+> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+> +	/*
+> +	 * If a #HV was delivered during execution and interrupts were
+> +	 * disabled, then check if it can be handled before the iret
+> +	 * (which may re-enable interrupts).
+> +	 */
+> +	mov     %rsp, %rdi
+> +	call    check_hv_pending
+> +#endif
+>   	UNWIND_HINT_REGS
+>   
+>   	/*
+> @@ -1197,6 +1206,15 @@ SYM_CODE_START(error_entry)
+>   SYM_CODE_END(error_entry)
+>   
+>   SYM_CODE_START_LOCAL(error_return)
+> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+> +	/*
+> +	 * If a #HV was delivered during execution and interrupts were
+> +	 * disabled, then check if it can be handled before the iret
+> +	 * (which may re-enable interrupts).
+> +	 */
+> +	mov     %rsp, %rdi
+> +	call    check_hv_pending
+> +#endif
+>   	UNWIND_HINT_REGS
+>   	DEBUG_ENTRY_ASSERT_IRQS_OFF
+>   	testb	$3, CS(%rsp)
+> diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
+> index 8c5ae649d2df..8368e3fe2d36 100644
+> --- a/arch/x86/include/asm/irqflags.h
+> +++ b/arch/x86/include/asm/irqflags.h
+> @@ -11,6 +11,10 @@
+>   /*
+>    * Interrupt control:
+>    */
+> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+> +void check_hv_pending(struct pt_regs *regs);
+> +void check_hv_pending_irq_enable(void);
+> +#endif
+>   
+>   /* Declaration required for gcc < 4.9 to prevent -Werror=missing-prototypes */
+>   extern inline unsigned long native_save_fl(void);
+> @@ -40,12 +44,19 @@ static __always_inline void native_irq_disable(void)
+>   static __always_inline void native_irq_enable(void)
+>   {
+>   	asm volatile("sti": : :"memory");
+> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+> +	check_hv_pending_irq_enable();
+> +#endif
+>   }
+>   
+>   static __always_inline void native_safe_halt(void)
+>   {
+>   	mds_idle_clear_cpu_buffers();
+>   	asm volatile("sti; hlt": : :"memory");
 
---=_MailMate_7EF800F6-588F-4AE4-909D-5775F8A02B83_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
+I was able to boot the Linux guest on KVM SNP host with below [1]
+change above your patch series.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Pankaj
 
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmQ+oowPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhU3ykP+wRt9zBYbVEprluv/xhZhFq8Vxhlfgi/v6Yo
-ZGoedu6yksFPONQvTFuIsb73w1kjvVGHy60h9OqWWoMQGOvB+2lPC/tWMK/8TcE0
-9PZrzo0Frt5XiMrDXWdBFHsSEbwFupITrNvbooqout+JEkWLDGifwTM05bZQJgwg
-8MgccjHopOimBACXMTNNzIkW4iePMXnB5BxBRlSKn1RQCSv2bEFjOMZdMFi7M1LD
-2WC79ipJl1qN1PZ2YKb5NCOjj3S57nPEW42QZWuL9MgitWLJmfBUodca500GEG50
-pirkM6MQPmIkNsgBClFvPIVYuwuuebrndos7wkdGBJ3bfAGt0v91b8gC0ilhXjUX
-le1SzCkTfFtJeo1gbN9baKln61USx3BtavmJKQA0dTLuzWD23QFb+/9lq5YC425r
-F9cwwXEnI7Yvtuxh2Q8I/3vVF4MwGM+/2isL+mWzU5jd+7yokaukiaWpPBcyPrOu
-Nm28lfqoMttOxumZOraG2/OaNfh74ZQ4IPG1T1grBCu0hVp/WIxqMZlvBpC4ROZv
-mqc/vmoMiQSy3MIs0R08TQWLbxenNevwFeqAIWKwNkFyBwam4Gk8Al29DyqF3hX/
-2BHaNVVmi6mNaIifx1vnFajVbvsKGURvUCDXHEKxCXYJ7HePnAwhZ7IBx1eb3wy/
-o8QXb+77
-=4mbv
------END PGP SIGNATURE-----
+[1]
+diff --git a/arch/x86/include/asm/irqflags.h 
+b/arch/x86/include/asm/irqflags.h
+index 8368e3fe2d36..df993bec56c4 100644
+--- a/arch/x86/include/asm/irqflags.h
++++ b/arch/x86/include/asm/irqflags.h
+@@ -52,11 +52,13 @@ static __always_inline void native_irq_enable(void)
+  static __always_inline void native_safe_halt(void)
+  {
+         mds_idle_clear_cpu_buffers();
+-       asm volatile("sti; hlt": : :"memory");
++       asm volatile("sti": : :"memory");
 
---=_MailMate_7EF800F6-588F-4AE4-909D-5775F8A02B83_=--
+  #ifdef CONFIG_AMD_MEM_ENCRYPT
+         check_hv_pending_irq_enable();
+  #endif
++       asm volatile("hlt": : :"memory");
+  }
