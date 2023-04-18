@@ -2,130 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC80E6E6024
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13EF26E6026
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbjDRLoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 07:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
+        id S231377AbjDRLp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 07:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjDRLof (ORCPT
+        with ESMTP id S229568AbjDRLp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 07:44:35 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7A6173A;
-        Tue, 18 Apr 2023 04:44:34 -0700 (PDT)
+        Tue, 18 Apr 2023 07:45:27 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD9DE78;
+        Tue, 18 Apr 2023 04:45:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681818274; x=1713354274;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+C2jqc6qkrcBwo4zQizbRJP0wcjhdwJdRlYZeeyBDhE=;
-  b=M4sSo0n43XUtoTczDZI48YRkfGWv5BZDIw/4jw8VF6WRF1w2sx+8lApK
-   vO745l0Rg87E4E/JD+6OEzrOloC8T0NDm9WmDMphYx9l23zH4nkckjtsj
-   65157tmZzH/jjoIE4EMSNEpgrjOjdycnl33S3CseQTaM/XW7G+ZHmlCis
-   gW2NDz2u9uEkYz6SXRCuVEZB3zuffL4vDv+EGmoFsKPKx10b3XXGOfmhT
-   nNz78sDO3sQcaayXWzyS58WnnFwZW1BG4X/ltAft/7PpuH2xejXlFY2CM
-   HrhNGed4zl2cTSRvSUQrvhCq5fHxsgp2k+BsGyKeO0du6hgN+H+mXTh+f
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,207,1677567600"; 
-   d="scan'208";a="221417508"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Apr 2023 04:44:33 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 18 Apr 2023 04:44:33 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Tue, 18 Apr 2023 04:44:33 -0700
-Date:   Tue, 18 Apr 2023 13:44:32 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Zheng Wang <zyytlz.wz@163.com>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <hackerzheng666@gmail.com>,
-        <1395428693sheep@gmail.com>, <alex000young@gmail.com>
-Subject: Re: [PATCH net v3] net: ethernet: fix use after free bug in
- ns83820_remove_one  due to race condition
-Message-ID: <20230418114432.4zd5vec4q7t4w7ll@soft-dev3-1>
-References: <20230417013107.360888-1-zyytlz.wz@163.com>
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681818325; x=1713354325;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=h8QaAlwFBQycjOdUMX9rLTEF7spqQQ3eBcNWhxwveQU=;
+  b=j6/B/twk8u5Ar6ac82CGpL1/LMm2bIQoHYmvTXoNWyvh0BkHqgdEjI9E
+   +FNqXXfBE9zCXZgA5PCouZL+ouqYuxRCbO7HPb3Y+bsBadT3XN8FysEhw
+   S/seELYU4jwlnJmMef5f0M6lojK1bW0aGq0J5ULAHTJCQFsXlbD0a+a0S
+   qLZ+0KNS5j258fKqVZq1/ux3Tzl6uB9MzuIrhrGVSLFpVO0jk+uyhxuX8
+   hYup8l/dGGL4tAcCcKmDM3Yq6yFnwTj4ljNpDNLWOU2G+4YTbFY8ATFSt
+   xx1i5hona4N1z0qVLdc1XPjWzYjoEMC09yRflWDYHBP9soocyZ5OaWvPx
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="346994263"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="346994263"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:45:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="723601491"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="723601491"
+Received: from yvolokit-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.213.103])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:45:22 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-kselftest@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 00/24] selftests/resctrl: Fixes, cleanups, and rewritten CAT test
+Date:   Tue, 18 Apr 2023 14:44:42 +0300
+Message-Id: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20230417013107.360888-1-zyytlz.wz@163.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 04/17/2023 09:31, Zheng Wang wrote:
-> 
-> In ns83820_init_one, dev->tq_refill was bound with queue_refill.
-> 
-> If irq happens, it will call ns83820_irq->ns83820_do_isr.
-> Then it invokes tasklet_schedule(&dev->rx_tasklet) to start
-> rx_action function. And rx_action will call ns83820_rx_kick
-> and finally start queue_refill function.
-> 
-> If we remove the driver without finishing the work, there
-> may be a race condition between ndev, which may cause UAF
-> bug.
-> 
-> CPU0                  CPU1
-> 
->                      |queue_refill
-> ns83820_remove_one   |
-> free_netdev                      |
-> put_device                       |
-> free ndev                        |
->                      |rx_refill
->                      |//use ndev
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Here is a series with some fixes and cleanups to resctrl selftests and
+rewrite of CAT test into something that really tests CAT working or not
+condition.
 
-I think it looks OK:
-Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+v2:
+- Rebased on top of next to solve the conflicts
+- Added 2 patches related to resctrl FS mount/umount (fix + cleanup)
+- Consistently use "alloc" in cache_alloc_size()
+- CAT test error handling tweaked
+- Remove a spurious newline change from the CAT patch
+- Small improvements to changelogs
 
-> ---
-> v3:
-> - add tasklet_kill to stop more task scheduling suggested by
-> Horatiu Vultur
-> v2:
-> - cancel the work after unregister_netdev to make sure there
-> is no more request suggested by Jakub Kicinski
-> ---
->  drivers/net/ethernet/natsemi/ns83820.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/natsemi/ns83820.c b/drivers/net/ethernet/natsemi/ns83820.c
-> index 998586872599..af597719795d 100644
-> --- a/drivers/net/ethernet/natsemi/ns83820.c
-> +++ b/drivers/net/ethernet/natsemi/ns83820.c
-> @@ -2208,8 +2208,14 @@ static void ns83820_remove_one(struct pci_dev *pci_dev)
-> 
->         ns83820_disable_interrupts(dev); /* paranoia */
-> 
-> +       netif_carrier_off(ndev);
-> +       netif_tx_disable(ndev);
-> +
->         unregister_netdev(ndev);
->         free_irq(dev->pci_dev->irq, ndev);
-> +       tasklet_kill(&dev->rx_tasklet);
-> +       cancel_work_sync(&dev->tq_refill);
-> +
->         iounmap(dev->base);
->         dma_free_coherent(&dev->pci_dev->dev, 4 * DESC_SIZE * NR_TX_DESC,
->                           dev->tx_descs, dev->tx_phy_descs);
-> --
-> 2.25.1
-> 
+Ilpo Järvinen (24):
+  selftests/resctrl: Add resctrl.h into build deps
+  selftests/resctrl: Check also too low values for CBM bits
+  selftests/resctrl: Move resctrl FS mount/umount to higher level
+  selftests/resctrl: Remove mum_resctrlfs
+  selftests/resctrl: Make span unsigned long everywhere
+  selftests/resctrl: Express span in bytes
+  selftests/resctrl: Remove duplicated preparation for span arg
+  selftests/resctrl: Don't use variable argument list for ->setup()
+  selftests/resctrl: Remove "malloc_and_init_memory" param from
+    run_fill_buf()
+  selftests/resctrl: Split run_fill_buf() to alloc, work, and dealloc
+    helpers
+  selftests/resctrl: Remove start_buf local variable from buffer alloc
+    func
+  selftests/resctrl: Don't pass test name to fill_buf
+  selftests/resctrl: Add flush_buffer() to fill_buf
+  selftests/resctrl: Remove test type checks from cat_val()
+  selftests/resctrl: Refactor get_cbm_mask()
+  selftests/resctrl: Create cache_alloc_size() helper
+  selftests/resctrl: Replace count_bits with count_consecutive_bits()
+  selftests/resctrl: Exclude shareable bits from schemata in CAT test
+  selftests/resctrl: Pass the real number of tests to show_cache_info()
+  selftests/resctrl: Move CAT/CMT test global vars to func they are used
+  selftests/resctrl: Read in less obvious order to defeat prefetch
+    optimizations
+  selftests/resctrl: Split measure_cache_vals() function
+  selftests/resctrl: Split show_cache_info() to test specific and
+    generic parts
+  selftests/resctrl: Rewrite Cache Allocation Technology (CAT) test
+
+ tools/testing/selftests/resctrl/Makefile      |   2 +-
+ tools/testing/selftests/resctrl/cache.c       | 154 ++++++------
+ tools/testing/selftests/resctrl/cat_test.c    | 235 ++++++++----------
+ tools/testing/selftests/resctrl/cmt_test.c    |  65 +++--
+ tools/testing/selftests/resctrl/fill_buf.c    | 105 ++++----
+ tools/testing/selftests/resctrl/mba_test.c    |   9 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |  17 +-
+ tools/testing/selftests/resctrl/resctrl.h     |  32 +--
+ .../testing/selftests/resctrl/resctrl_tests.c |  82 ++++--
+ tools/testing/selftests/resctrl/resctrl_val.c |   9 +-
+ tools/testing/selftests/resctrl/resctrlfs.c   | 187 ++++++++++----
+ 11 files changed, 499 insertions(+), 398 deletions(-)
 
 -- 
-/Horatiu
+2.30.2
+
