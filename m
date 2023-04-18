@@ -2,139 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F0A6E5DC6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABEE6E5DC4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbjDRJoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
+        id S229726AbjDRJoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbjDRJoR (ORCPT
+        with ESMTP id S229940AbjDRJoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:44:17 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2042.outbound.protection.outlook.com [40.107.14.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57433AA4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:44:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iFlThUNOomqT4WodGQFsZxxqVRXHgfQLUbgU0MTk2nVrCaYKXOmfzVKghpTFv0uEaxG12ppTylUeFQSxRbGhCOuOJYhskPZmtOHWtxxUu92zCXtdwuW/PwQPmSkje8qedDe1u2/vMC3fe1TckTsD7hQiIEaTe42nozc7jy9x7yznUXP7KAqnSV8sw5V5cqXReMO3nanCF1H0hlrdBtX09LgLWTZtXGT3VgiZ5Kjmb8y5b/a6dwJcPZSa3IP18Z/w0quHgYPN96cGcnNaSMEE05Ixf8VGsrt6g50A2D9isL9VbPZYbOCH3NR95oV8+6Ew+63uhmN0cCtmB/ZYm/VWDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CONOyBLJv4/5J6W0ZZNJfSClBAR7ADjSUu8dGxs8Zvc=;
- b=JJTXam9pYR1GCBGdjdN83V6zJGOFriQIHlD5u9tSHD3l6pbOTV0WOXYfgVDVzweY2fHlVXHJZL9EtGxqfbYHFPia6zZatCsEQn723YNiduSrBKokipSshvlwX/0e5zWD1anxBeVVTEGYQcmbezj4RLx8aOyZPN/6HR4kc6No8mqK/ugEYrNfmqNk9YU1EvkB1d7I7wIH+y+J5DO2WiNJp4kZE0mdFO/ZLsGAZIJNEeSPqb12RwQdW+YaO79Zxzp/tM8d7sPAhMxXOq2n0yvdoYVs1MCRiHrkCsini66bSKJ/JwHQRBtRrtJk6qd+X1ELPujc517KY397hv2C5cx9RA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CONOyBLJv4/5J6W0ZZNJfSClBAR7ADjSUu8dGxs8Zvc=;
- b=S9rrZ2Qu8ibcriFnKHLMFoBMPp/Ze5ke/Bncki8whz2jmWQHFfwF6GHDUmKrlBlDmgnng97DkcWZBmgKPfOCMbQP4O5f1UEnmH0U3uBqpmmGdxjf65eDxteLH30Aha/CIaZfvQpc3HznCjkcuIAVdlkYOJh7n0pL1Ve4biuYbCI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB4222.eurprd04.prod.outlook.com (2603:10a6:803:46::19)
- by VI1PR04MB7117.eurprd04.prod.outlook.com (2603:10a6:800:12f::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.20; Tue, 18 Apr
- 2023 09:44:13 +0000
-Received: from VI1PR04MB4222.eurprd04.prod.outlook.com
- ([fe80::7ec7:98d4:f0f6:f13]) by VI1PR04MB4222.eurprd04.prod.outlook.com
- ([fe80::7ec7:98d4:f0f6:f13%4]) with mapi id 15.20.6298.045; Tue, 18 Apr 2023
- 09:44:13 +0000
-From:   Chancel Liu <chancel.liu@nxp.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        shengjiu.wang@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
-        nicoleotsuka@gmail.com
-Cc:     Chancel Liu <chancel.liu@nxp.com>
-Subject: [PATCH] ASoC: fsl_sai: Fix pins setting for i.MX8QM platform
-Date:   Tue, 18 Apr 2023 17:42:59 +0800
-Message-Id: <20230418094259.4150771-1-chancel.liu@nxp.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0160.apcprd04.prod.outlook.com (2603:1096:4::22)
- To VI1PR04MB4222.eurprd04.prod.outlook.com (2603:10a6:803:46::19)
+        Tue, 18 Apr 2023 05:44:02 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0A21729
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:44:00 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2a8b62cfaceso19000931fa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:44:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681811038; x=1684403038;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=l2LMbqz6wH8w60oclmV6uXVVb8iyR/SHLVOrQfQu5n4=;
+        b=wG+IKMn0J81Q85iLIDHTC0YAFhqDdS8tsiOF75ljf6BHnjZsDbafzV3nSJXp0PC56O
+         hpDuwbm2sJgSBouOkRHbvM7xfqxRMm0k3GiVipJa9QK7QUG5Rt+0gV226P/QtO/oOuu0
+         22JEwj0Eh8tCPdc8LAMh1MeCYYmAVWDRhahWTR/SWJCvHRfI7pwu5MP43pQxqkBs4l0k
+         4SWXa8GLepongw7rSaoLtbiINSDxQnztcS3l7z8CusPC1q9q/SVzibU7lSb6DkKpCK96
+         2+QFKROWuG+aMTSrYv2OGZAIIOSwutcTTWldBKLJ/eDDnnxd58e7sqFj1AFdmqWF5uw4
+         nbmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681811038; x=1684403038;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l2LMbqz6wH8w60oclmV6uXVVb8iyR/SHLVOrQfQu5n4=;
+        b=ihF7JOQBW+QcMAUjZHZ8RI0b2Usn/jDhDSZG1uI3ktkNaxbhWP8xy4gdXYk2lXeCSs
+         HuxwxVOjwtStveilhey8NR59bTDin+i4IGkhofcJam6pw19Uw/3NBhaQSVx5iPp2E4Y9
+         PEMiAkY+ai3BO6axKhEP4cTY1eJiWKhD082pVVa/LK3PONwjDUPlXvbl3EocsTL/RvZR
+         NV7/nOVLsy7hBrMnyErASTTNw+dEhVPzWtwRYD/7vrrG9A47882fhkUe2vORIa36z54q
+         C8nSFGakKD/8lavrmmvVB2g3ddvutzR8LzeKdSSezK0F3ZbYrmq8nWfKdtkdTbJpKhHC
+         cCCA==
+X-Gm-Message-State: AAQBX9cEv8bDbNrrNBjxvJBgsiNpbdMlPHSL8iBz88ZvelOlTAH5WRV3
+        YA1z0MRgFegFk6Rzv1sq4PstPA==
+X-Google-Smtp-Source: AKy350bMMt96DgjDZhelJgwdeH91GqmXc2epqbLnaBdJ6rmoJqtReem1n9MIx8T5neOs4RY5uDia5Q==
+X-Received: by 2002:ac2:5ec2:0:b0:4ed:b9b6:fc46 with SMTP id d2-20020ac25ec2000000b004edb9b6fc46mr2509904lfq.41.1681811038405;
+        Tue, 18 Apr 2023 02:43:58 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id n3-20020ac242c3000000b004eb09081d77sm2319615lfl.91.2023.04.18.02.43.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 02:43:58 -0700 (PDT)
+Message-ID: <a17c21b7-9c0a-2458-735c-ac3b16ed337f@linaro.org>
+Date:   Tue, 18 Apr 2023 11:43:56 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB4222:EE_|VI1PR04MB7117:EE_
-X-MS-Office365-Filtering-Correlation-Id: 92ebcc95-4207-4ebb-b3a6-08db3ff17790
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: u65xVpZaZfL/CIHWsEOXxQN/4K1qXv3+Ft2rXvF3atC4vESig/XC9HSGxxqZjh2jTa+0xevr2VwgvO3X3qk0s0bBjhzqlTcBDBTV2FctWJaHb2r6voSAWHyw+6Y8ScnBBk+Oeq09wfPVObFOjK+wizZ6jNA7oKmOpRaH/bjtGXdMOpV+l9eSPn9xhzVyzSm96UX6uIUf6XjhluxAYzFVT6z/duIl2XgRUxbAXcU8D7aFiPCi3U/gS5mTwUt+Jn/1OHHMzTS/zFdelJiqEaHyIQq4oo7wj0ABGyZN/NgGIZrupKWh/Lyyo3wm+8i5Ciia/YiiXjpAKpVM10O4YCzi41fqBBwtQLfDLyqLLyaseWdliXKKxnW1VSRe6wjj84aS+V6u456VpfH+HLbNroAGwmAwfnRTvlZVOuM9a+EvmXMpqEW3GFlRME4HuL2vVzyov6/hWmI1cnRqx5vnII4/SgMdkmY0yzAUIV2I6svnMlnu/Gd+3UVPcpDcb71XvvaHMTZufqh3Zj2/kKGBZq3YGDlqfnnuF6iNWmT79wHVEQAdDzbGO2iuJhfMlBm/qYapEnHzsrAsPEZSASpN9EPGPaunNkP4A2hBfrA7OxENyv0Ud/O0zQnKSsXme2EYu6R707+vot9vqjRC1u1JCaNJ+Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4222.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(346002)(396003)(39860400002)(376002)(451199021)(6666004)(6486002)(478600001)(86362001)(36756003)(2616005)(83380400001)(186003)(1076003)(6506007)(6512007)(26005)(38350700002)(38100700002)(52116002)(921005)(316002)(4326008)(66476007)(66556008)(66946007)(4744005)(2906002)(44832011)(7416002)(8676002)(8936002)(5660300002)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ONfBTI5O7wp/DGcgfVYQoX7Q0ljqvqn+0qbzRSQeWVFbYsNyOYTcC5+ifTGm?=
- =?us-ascii?Q?PBQ0A60daEYGbqjiJFz8SHSGfbyzpzWf/dZoE5gv7nmRjXhKh3LIzrBM623V?=
- =?us-ascii?Q?Qj3S0HFUSgb1V5kXX0hqFxEkldGVI4fW0M/pn5M1uC5iAkr4SyNIKV5Hk1ly?=
- =?us-ascii?Q?O8huuwgdB0b1VNHJFCei3njO9/MIecr5CWqyagg4g2UVTP9sB/InrYrzGn7u?=
- =?us-ascii?Q?yILIurSDKMhIz263GjFbO+nqrVkfU+jGY1QRWYpTCzauRAn8YRBHGI1kP5vV?=
- =?us-ascii?Q?2VV8m1WFCLZPODw6JEzaHmUIvlahtJxI9Vgf+3qNsCWR1S37RXY3zNo739kc?=
- =?us-ascii?Q?0WJAuHrC2vu5JKzz1ZvQdIsrebBG66apkZiijl0ZwtVyog0du2brzG1pPv3z?=
- =?us-ascii?Q?MeMH422JKDHMWwZznLl78VnHNqNKU1juBj6hPGY/76uaGa/T6iUk5xoqOGnx?=
- =?us-ascii?Q?5zsiPlAUfES+MDUbcL7MwNhqegI2WFAGYrfRJNs/uSoOR+iczuJTMw7376MK?=
- =?us-ascii?Q?F7dp+VxJ0oYKXJU/m3JyvMF1tPm3mSfX4TTzEjvp0fC99cXgvkjZ5K3DToOr?=
- =?us-ascii?Q?zavvX3qxaKEuXmBlVatN26kPnpF76mxbCnGzFdPhjjcqqsgikCY0AXkuDFcN?=
- =?us-ascii?Q?7wMjPlrGpYYK6ys2IjBuOYAxP7A3e5U7/GmXO+9sfWXJuMvBv6ppVJ3SSufV?=
- =?us-ascii?Q?bwnXgM+Et89F6CPfxGJV2glRCrCrVTFzOYEtFqeRj0DGqavPqTLybS6Wq9Ot?=
- =?us-ascii?Q?09x9je6MSK5P5It7gYaFNhxLWSNNxsUhHs1HyieleXPb2OaJ97jr+nn0BNx1?=
- =?us-ascii?Q?KlEE3DcFIx/+LhYEC0w1wx9aVaS0mYUqK5LFfaitprCD+urPOsvmHRyJ3AfH?=
- =?us-ascii?Q?vmYDnf8cK/JYl7FgIfVKhCEeHsLFK9XCxqTXYOZBckQUJyYDtLBAVxpniFYP?=
- =?us-ascii?Q?4qjtRbkRbe8PE/xXDRVP/t/IIR0GhAsKyTsqXrVitEm3Qzjw3Pju8TINjXkj?=
- =?us-ascii?Q?DeIP+PW1BXxTLxSTXyzxXRxMPuaxSFHeWB8VaxhKy77KXqIs/FYoPQKiWzkQ?=
- =?us-ascii?Q?lpl/eXC2YaR0QoMbwoJSZq0Eyu3AIe/LiN6cwCU5WMKt63UYAeWDBzVMyajN?=
- =?us-ascii?Q?jJiqoMefUaFBpiV9aW4bPSUuVoJV/pKhr5436SzMASn31kPYMYpw+ZZpgjh8?=
- =?us-ascii?Q?9xmKsIjnR94j5IVsSXNt5LRdCl8vkKIK9pv0b3aieScK5NcBNwRW/HcBLUMT?=
- =?us-ascii?Q?0h5ZKkSfKU4N0Jiw/WLJ3/l+cP/3pAer1x/75qFmaPWubgBq+YYaGscH3tHY?=
- =?us-ascii?Q?uRpwnlMirsuirYKX+ZZWmGEaNhAIrPTNIkDbO8e9G8CbpwghQi4pZtsDyvx1?=
- =?us-ascii?Q?63LXxo9gZyGLAdPnbED4EPgsjWcDtdCs6AEb93Ls6wlFNL7uuSUlKVPGaWo1?=
- =?us-ascii?Q?8jZmTO8MTqBo8/+NdLFvJXaA252nLnC03cHXbkS/m6CNBDIMV+w6WVpvbY5H?=
- =?us-ascii?Q?xa14s6x9Mb7AtCVXc26b8XAwnrnkqXGqOdMPuZQ6d6cFBF4Av8y+3Hhi/CoO?=
- =?us-ascii?Q?TGCEiPXyjE4qpIeJj6uO0Ua+0r/cBpjuPX31qJ5X?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92ebcc95-4207-4ebb-b3a6-08db3ff17790
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4222.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 09:44:13.2459
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GOozvwtiSdaqQufriEU0CypBt55TFNZeJ0awNH1fZyyK2i+l5gv2gZred3jrGgwFdk0ZCXA//OPtDyuWswNekQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7117
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 1/4] arm64: dts: qcom: sa8775p: pmic: remove the PON modes
+Content-Language: en-US
+To:     Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Parikshit Pareek <quic_ppareek@quicinc.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230413131705.3073911-1-brgl@bgdev.pl>
+ <20230413131705.3073911-2-brgl@bgdev.pl>
+ <3e361a73-797f-41c7-1ead-ecafee3928e4@linaro.org>
+ <792e1f22-c3eb-80c7-0600-b478b3764f7c@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <792e1f22-c3eb-80c7-0600-b478b3764f7c@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SAI on i.MX8QM platform supports the data lines up to 4. So the pins
-setting should be corrected to 4.
 
-Fixes: eba0f0077519 ("ASoC: fsl_sai: Enable combine mode soft")
-Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
----
- sound/soc/fsl/fsl_sai.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
-index 07d13dca852e..abdaffb00fbd 100644
---- a/sound/soc/fsl/fsl_sai.c
-+++ b/sound/soc/fsl/fsl_sai.c
-@@ -1544,7 +1544,7 @@ static const struct fsl_sai_soc_data fsl_sai_imx8qm_data = {
- 	.use_imx_pcm = true,
- 	.use_edma = true,
- 	.fifo_depth = 64,
--	.pins = 1,
-+	.pins = 4,
- 	.reg_offset = 0,
- 	.mclk0_is_mclk1 = false,
- 	.flags = 0,
--- 
-2.25.1
+On 18.04.2023 06:39, Shazad Hussain wrote:
+> 
+> 
+> On 4/13/2023 9:42 PM, Krzysztof Kozlowski wrote:
+>> On 13/04/2023 15:17, Bartosz Golaszewski wrote:
+>>> From: Parikshit Pareek <quic_ppareek@quicinc.com>
+>>>
+>>> Remove the power on reasons with reboot from the pmm8654au_0_pon.
+>>> Instead, the PoN reaons should be part of different sdam_0 mode, to
+>>
+>> typo: reasons
+>>
+>>> be interoduced.
+>>
+>> introduced
+>>
+>> Anyway it does not say why. Are these power reasons not correct?
+>>
+> 
+> Hi Krzysztof,
+> Since sm8350 the PMIC PON peripheral was split into PON_HLOS and PON_PBS
+> to avoid security concerns with HLOS APPS being able to trigger a PMIC
+> WARM_RESET unilaterally. When the split occurred, the spare registers
+> ended up in PON_PBS, not PON_HLOS. Thus at that time, we moved to using
+> an SDAM register for Linux “reboot reason” configuration. And bootloader
+> also SDAM register to get these reboot region data to get into
+> bootloader/edl, so to have this working we need to use SDAM.
+> 
+Does that imply all PMICs following the PMK8350 scheme (separate HLOS and
+PBS) should direct reboot mode writes to SDAM?
 
+Konrad
+>>>
+>>> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+>>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>> ---
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
+> -Shazad
