@@ -2,109 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A45536E68F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B370D6E68FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbjDRQHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 12:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        id S231488AbjDRQHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 12:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbjDRQHM (ORCPT
+        with ESMTP id S232156AbjDRQHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 12:07:12 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6746813F89;
-        Tue, 18 Apr 2023 09:06:49 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33IFU0pd006152;
-        Tue, 18 Apr 2023 16:06:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=anWyvRSLQ2R8CpDI4TbnpyM9aRqD9vXygDkn+RJxXzQ=;
- b=SUF0Ky5/vJbFKiSBYsE2Y+2bw8BpPZh1H36h4WZsVM6UWolEeBtwIMktf/PiTGDW1DXa
- k9TIeOy7BIcUoIexvPBe1nPTaz93Q/9vrNttflzwJ7ANNdrbXivn24wwlqacpQwv/fes
- AxxylHYtBaYjJQnkQLrsEsh2VgB7hKwHAYNH8ea0XYMIJ3LuUwtH0YibfbXeIkG+kjl4
- ogLXNr8ctBEGBhtw/CA66Ropf+e7Gbb1C8VQSScl+xwA6v9NikBXcKsT9Sxnem6fMcxc
- Zj7rJNhdRQUESaSNqFuGKt+5CJ6JpPOgFcm0RH01QccAVyDCzbCfg4coqUXMsUVdK2In jA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1v190em2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 16:06:37 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33IG6bN4010158
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 16:06:37 GMT
-Received: from [10.110.98.241] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 18 Apr
- 2023 09:06:35 -0700
-Message-ID: <60bb4a4a-f414-e926-df53-d6d1a01fc221@quicinc.com>
-Date:   Tue, 18 Apr 2023 09:06:34 -0700
+        Tue, 18 Apr 2023 12:07:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270EBC678
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:07:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B956B6363A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 16:07:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E79C4339C;
+        Tue, 18 Apr 2023 16:07:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681834023;
+        bh=nLK3HuPjSuFH/vS2H+8eBQtgXoA+Y82Z7zfq+WISfx8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=avsseWId/13Cvdf1kXTPI6USe0FJrQFGs4MG6TrSJxcnOtLhj6aAv47sEhbk0GcoF
+         ozxEGyTlI2ONLQeyYiqnCgnHwVNDkaoB6VFiGJVlM1gxV6nMFltQEc4Sc7/xIyYbyM
+         wexU2ee4vTwBr0GM7gGHFF1mL1aVI3mvSM8ne535DgKyFLRSjt7qj07h/CRjjRJ9YH
+         3XEXNFaLdNPxPyO7fq3UylLAScovoCKU9JIzZczCrSU2+qQi6Q+gg27eM5lwrs/UHX
+         9dqcxJ5cUORICAMpVeB+tDvkqf78wgnawffbYwgCHQgrFaPZxpfYa6BCraefvn2BCI
+         VlW4ezJbSgw7g==
+Date:   Tue, 18 Apr 2023 09:07:01 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     Wu Bo <bo.wu@vivo.com>, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, wubo.oduw@gmail.com
+Subject: Re: [PATCH 1/1] f2fs: allocate trace path buffer from names_cache
+Message-ID: <ZD7AJT7ZYPji8TWk@google.com>
+References: <20230414104308.6591-1-bo.wu@vivo.com>
+ <e2ec7e19-634c-a065-fe7a-b052d02d4752@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 2/3] drm/msm/dpu: Assign missing writeback log_mask
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230418-dpu-drop-useless-for-lookup-v1-0-b9897ceb6f3e@somainline.org>
- <20230418-dpu-drop-useless-for-lookup-v1-2-b9897ceb6f3e@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20230418-dpu-drop-useless-for-lookup-v1-2-b9897ceb6f3e@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Y4QKOVO5AxmNisp-ZDaWfYTJM9oyJoNM
-X-Proofpoint-GUID: Y4QKOVO5AxmNisp-ZDaWfYTJM9oyJoNM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-18_11,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 phishscore=0 mlxscore=0 spamscore=0 clxscore=1015
- mlxlogscore=853 bulkscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304180136
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e2ec7e19-634c-a065-fe7a-b052d02d4752@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 04/18, Chao Yu wrote:
+> On 2023/4/14 18:43, Wu Bo wrote:
+> > It would be better to use the dedicated slab to store path.
+> > 
+> > Signed-off-by: Wu Bo <bo.wu@vivo.com>
+> > ---
+> >   fs/f2fs/file.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> > index 15dabeac4690..27137873958f 100644
+> > --- a/fs/f2fs/file.c
+> > +++ b/fs/f2fs/file.c
+> > @@ -4361,7 +4361,7 @@ static void f2fs_trace_rw_file_path(struct kiocb *iocb, size_t count, int rw)
+> >   	struct inode *inode = file_inode(iocb->ki_filp);
+> >   	char *buf, *path;
+> > -	buf = f2fs_kmalloc(F2FS_I_SB(inode), PATH_MAX, GFP_KERNEL);
+> > +	buf = __getname();
+> 
+> How about:
+> 
+> buf = f2fs_kmem_cache_alloc(names_cachep, GFP_KERNEL, NULL, F2FS_I_SB(inode));
 
-
-On 4/17/2023 4:14 PM, Marijn Suijten wrote:
-> The WB debug log mask ended up never being assigned, leading to writes
-> to this block to never be logged even if the mask is enabled in
-> dpu_hw_util_log_mask via sysfs.
-
-This should be debugfs not sysfs.
+This looks like a hack using names_cachep?
 
 > 
-> Fixes: 84a33d0fd921 ("drm/msm/dpu: add dpu_hw_wb abstraction for writeback blocks")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
-
-With that fixed,
-
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> >   	if (!buf)
+> >   		return;
+> >   	path = dentry_path_raw(file_dentry(iocb->ki_filp), buf, PATH_MAX);
+> > @@ -4374,7 +4374,7 @@ static void f2fs_trace_rw_file_path(struct kiocb *iocb, size_t count, int rw)
+> >   		trace_f2fs_dataread_start(inode, iocb->ki_pos, count,
+> >   				current->pid, path, current->comm);
+> >   free_buf:
+> > -	kfree(buf);
+> > +	__putname(buf);
+> 
+> kmem_cache_free(names_cachep, buf);
+> 
+> Thanks,
+> 
+> >   }
+> >   static ssize_t f2fs_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
