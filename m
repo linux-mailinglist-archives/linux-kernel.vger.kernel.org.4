@@ -2,132 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1558C6E5FD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4796E5FDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjDRL36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 07:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
+        id S231172AbjDRLaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 07:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjDRL34 (ORCPT
+        with ESMTP id S230517AbjDRLaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 07:29:56 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0954146B8;
-        Tue, 18 Apr 2023 04:29:55 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id c9so33429162ejz.1;
-        Tue, 18 Apr 2023 04:29:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681817393; x=1684409393;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zUjxC0HW0q5I55Ax2kRGx20p8+lDHCxMQJGu0kJowSw=;
-        b=U0iCP8nOAVApaPEkGMtGpgndS6lVxObOT5lefbgS6i07iCjKPsAtfi0yrtsLTFav7C
-         dsYcDXIDHBHjLSwxkRnVns9jMC5mSyElI7ZZu8JIHF/v+r8F75GjSb/+BrBZC+ogAwgT
-         +jNu5mJgctRSYIY3mL0mxn8TGFh6qQ9Tm8hnXSGaYyUpD2epJt+wqrqM2j7fFbnwe/dm
-         PUkk3qgKtanqohQqh5BevHHP1jbw952C5P8+sTQruVtoSbQhITjeivDEXVs2fnYA+FZX
-         6PUuJQfNVssCi+Nb99qx+S4Gt95d9RG5gp/MZNRRuzQLjZFAWMerIZfHXA4P1Fe3Higa
-         a17w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681817393; x=1684409393;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zUjxC0HW0q5I55Ax2kRGx20p8+lDHCxMQJGu0kJowSw=;
-        b=FwppERspLD+BdyoDkyY86lkUCSejiqxGNxTomA6qmZNTpvECXJoLvcjRElX8qe8/Iu
-         rc6u2bojaOIj8OSieLj7YuRcSHUIYqn31O9kK4LYqppr72uaefRx6ChzlunATZM/8IJ9
-         h/Anex1ak+kn8vNNEpHrcgsWWOcE1xY3s9Tt1U6Sks4fHqrBE5710Pq2ftN86FGfhM5e
-         WxmGWcHEPp0s/BhP82HxymKaf+C2QZc2UjGWznBAVmIyyoBvBcC1iTv9jqyiT1E6kdbp
-         Ru6rBns2gtV5s+gehoC0gTC8zCCn4+2H5IU3UXRjzoJslOlfXDMk31UkZwsX10jNA3Pq
-         tHkQ==
-X-Gm-Message-State: AAQBX9cY8n0fQCS8mpIZ1t0f88maUf9rN7SNY/VWf27B6onjbXmxZWbH
-        bpWXjWuOMgHXwl1WhqGeEbI=
-X-Google-Smtp-Source: AKy350Z5PYIUr+24jeO+tsguwPxv00arJ5cPOm61+xLOM5UFxuNli8FAI+NRKMphOLz9QZFDv9jT/A==
-X-Received: by 2002:a17:906:f107:b0:895:58be:957 with SMTP id gv7-20020a170906f10700b0089558be0957mr10433828ejb.2.1681817393267;
-        Tue, 18 Apr 2023 04:29:53 -0700 (PDT)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id c1-20020a17090603c100b00882f9130eafsm7799572eja.26.2023.04.18.04.29.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 04:29:52 -0700 (PDT)
-Message-ID: <a8a9e82b-996e-2b0d-4e3b-9ceda0ab81e4@gmail.com>
-Date:   Tue, 18 Apr 2023 13:29:51 +0200
+        Tue, 18 Apr 2023 07:30:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B8D468E;
+        Tue, 18 Apr 2023 04:30:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 830AF61500;
+        Tue, 18 Apr 2023 11:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DC28FC433EF;
+        Tue, 18 Apr 2023 11:30:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681817420;
+        bh=rRRuyw16Gggmf7eYASFhnKYz5r8Dy2IULXNtZc9Bvlg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=nkrMWq4qToOZjbhBPhZzz80EEZkQ92VKIKWFaMwgEkaCNSgXtCf9ZqINxjZQxGUT8
+         eTUfdw6Ad4XDm4qGqLP58X5+M3x6d9qevSBnqGqw67kyV1Bdu1aEIiUd3fxZDD63jR
+         OPUS7CDCWKdCisHG1/BJYr/01f46zx5ouO7xEap0wH0EDILz+YXeJur4QDHGExtEzz
+         hwxOo0d+Qi9mujN5CNp6kIfdk5s4qD6CNmDMmdJNIcDc9+MDh3CHxHG2J6HiIFc8YH
+         PK/2fKs9o8VRlpkJs8wCcTLcEJLjpGPxHrvLJ2riT3rl/DyidjgZZTVAzfFox4UdyQ
+         TN4AUKBsbChVg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BA1A3C4167B;
+        Tue, 18 Apr 2023 11:30:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 3/3] arm64: dts: rockchip: Add rk3588 timer
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sugar Zhang <sugar.zhang@rock-chips.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Kever Yang <kever.yang@rock-chips.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-References: <20230418095344.274025-1-cristian.ciocaltea@collabora.com>
- <20230418095344.274025-4-cristian.ciocaltea@collabora.com>
-Content-Language: en-US
-From:   Johan Jonker <jbx6244@gmail.com>
-In-Reply-To: <20230418095344.274025-4-cristian.ciocaltea@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [-net-next v12 0/6] Add Ethernet driver for StarFive JH7110 SoC
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168181742075.8442.13068337635820008574.git-patchwork-notify@kernel.org>
+Date:   Tue, 18 Apr 2023 11:30:20 +0000
+References: <20230417100251.11871-1-samin.guo@starfivetech.com>
+In-Reply-To: <20230417100251.11871-1-samin.guo@starfivetech.com>
+To:     Samin Guo <samin.guo@starfivetech.com>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, kernel@esmil.dk,
+        pmmoreir@synopsys.com, richardcochran@gmail.com, conor@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, andrew@lunn.ch, hkallweit1@gmail.com,
+        pgwipeout@gmail.com, yanhong.wang@starfivetech.com,
+        tomm.merciai@gmail.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This series was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-On 4/18/23 11:53, Cristian Ciocaltea wrote:
-> Add DT node for Rockchip RK3588/RK3588S SoC timer.
+On Mon, 17 Apr 2023 18:02:45 +0800 you wrote:
+> This series adds ethernet support for the StarFive JH7110 RISC-V SoC,
+> which includes a dwmac-5.20 MAC driver (from Synopsys DesignWare).
+> This series has been tested and works fine on VisionFive-2 v1.2A and
+> v1.3B SBC boards.
 > 
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-> ---
->  arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> For more information and support, you can visit RVspace wiki[1].
+> You can simply review or test the patches at the link [2].
+> This patchset should be applied after the patchset [3] [4].
 > 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-> index 657c019d27fa..acd89a55374a 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-> @@ -1400,6 +1400,14 @@ i2c5: i2c@fead0000 {
->  		status = "disabled";
->  	};
->  
+> [...]
 
-> +	rktimer: timer@feae0000 {
+Here is the summary with links:
+  - [-net-next,v12,1/6] dt-bindings: net: snps,dwmac: Add dwmac-5.20 version
+    https://git.kernel.org/netdev/net-next/c/13f9351180aa
+  - [-net-next,v12,2/6] net: stmmac: platform: Add snps,dwmac-5.20 IP compatible string
+    https://git.kernel.org/netdev/net-next/c/65a1d72f0c7c
+  - [-net-next,v12,3/6] dt-bindings: net: snps,dwmac: Add 'ahb' reset/reset-name
+    https://git.kernel.org/netdev/net-next/c/843f603762a5
+  - [-net-next,v12,4/6] dt-bindings: net: Add support StarFive dwmac
+    https://git.kernel.org/netdev/net-next/c/b76eaf7d7ede
+  - [-net-next,v12,5/6] net: stmmac: Add glue layer for StarFive JH7110 SoC
+    https://git.kernel.org/netdev/net-next/c/4bd3bb7b4526
+  - [-net-next,v12,6/6] net: stmmac: dwmac-starfive: Add phy interface settings
+    https://git.kernel.org/netdev/net-next/c/b4a5afa51cee
 
-There are multiple timers.
-Use a label in line with the TRM.
-Maybe change your label to "timer0" in that trend?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> +		compatible = "rockchip,rk3588-timer", "rockchip,rk3288-timer";
-> +		reg = <0x0 0xfeae0000 0x0 0x20>;
 
-> +		clocks = <&cru PCLK_BUSTIMER0>, <&cru CLK_BUSTIMER0>;
-> +		clock-names = "pclk", "timer";
-> +		interrupts = <GIC_SPI 289 IRQ_TYPE_LEVEL_HIGH 0>;
-
-Heiko's sort rules:
-
-compatible
-reg
-interrupts
-[alphabetical]
-status [if needed]
-
-> +	};
-> +
->  	wdt: watchdog@feaf0000 {
->  		compatible = "rockchip,rk3588-wdt", "snps,dw-wdt";
->  		reg = <0x0 0xfeaf0000 0x0 0x100>;
