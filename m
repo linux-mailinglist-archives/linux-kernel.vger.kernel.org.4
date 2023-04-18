@@ -2,116 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8BA6E6C5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8C36E6C66
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232692AbjDRSqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
+        id S232655AbjDRSry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbjDRSqq (ORCPT
+        with ESMTP id S231421AbjDRSrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:46:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA12FC164;
-        Tue, 18 Apr 2023 11:46:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5971C6381E;
-        Tue, 18 Apr 2023 18:46:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2CC4C433A0;
-        Tue, 18 Apr 2023 18:46:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681843604;
-        bh=pKJj9g3tBEkFJP6eRoZIhrGdL6/PVt203b7XHIVgCB8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MA532bzdkC8gnUE8qJC+Z9XJx4r60U4jXHWdnFCAP1lqtSvNm63zBg9I7tps0GmeO
-         LZhywIGCGgapvYxPTRWSgInBfrtV1qOOUBoxfUZzd43xfjpfRniaqx7y3xdQroY2Pb
-         YG7PK7BrpCd844yVBrwErw45bhlpqdwYPo4joG9p2uOq46lHNRF3U8u/Oi/KtS5eRq
-         o17pjw1qlLb7yIiMx3swcZFILGOI9UNAtMuhNTvLyHmKiesKs+wx04aay0+N2wu3iX
-         8lN5XQzvH3nnHwnn7BQh3GCjaZ2Vc2Nri+6GT7Gn4OMvjt5P4gbWVpX9opCgjGGdSG
-         ElO46apzLuPCA==
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-54ee0b73e08so473020817b3.0;
-        Tue, 18 Apr 2023 11:46:44 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eb21SGv2ZRaPt+j/7XyGxfRhLwhdP1S2hLRmbN/KA2WOl7J2Ox
-        Do85azT3ow9sWRA8Cbb6FDPS4ETJvE35tgxkjQ==
-X-Google-Smtp-Source: AKy350YZVJSdk9pRa2UGMByWO/Ybo+AAHEAwh2PwITon48BeO0ZkbmsZmJF6/RAw5tyZru+XXDUnu779QuByl8GQZhE=
-X-Received: by 2002:a81:bc05:0:b0:54f:b27f:286a with SMTP id
- a5-20020a81bc05000000b0054fb27f286amr476178ywi.5.1681843603770; Tue, 18 Apr
- 2023 11:46:43 -0700 (PDT)
+        Tue, 18 Apr 2023 14:47:51 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDDFA275;
+        Tue, 18 Apr 2023 11:47:46 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id 41so46062pjo.0;
+        Tue, 18 Apr 2023 11:47:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681843665; x=1684435665;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=qdrElW73CyUlcUQEClO9EDUAz3mThnr1vcZk4xLQL2k=;
+        b=MyDX1zU5nDUFfCk7a8bqMnmAoiE+/xQMuOgeWvgr4UbWB9NVcgfTrYc9XIwjtd6eLN
+         ekqQEyaGmCmygL7e31av4ogs7r9J+T0icRsx0szp56/AOvQYljJMfKowIcR4qP+5O3va
+         ps9my6LUGYeqHl0lm2ML51nFAmQZj/arP5PPQRVSuPvbG/OYpGpDXP2BKSHQS+B6eRWm
+         EEVLtnWEHp7TGl/EwnSUVEU/1Rp0KJQmksl2rQ7tse8nxTnYp/jkPuty2sK6ault5/fN
+         pOa1f/FV8xRwX1fhI/i3daIgQu8rJ9ZjgGfS7Wze2vmyUhqex8SzxQY+0NpWXUFicvqA
+         e+ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681843665; x=1684435665;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qdrElW73CyUlcUQEClO9EDUAz3mThnr1vcZk4xLQL2k=;
+        b=Gp+NFrbiw09ezrdzI6ovN7o2+da9rE+JY+pse6iYDZuNVRlNqBB1ysE6gl4uvsHF6E
+         26y4I8lwNBrWxu/lUiWYdRNqU98p0SlDhXibIRyY0UvRQklWA3HuTGSUnmxej3Ck929E
+         hzI+VAlGjP2XPGtMu8b2cSMoKHHD2ri9nycjuBVxgRjR5Id3/so098NU3rUB7uIr8b0K
+         Meje8VXzpH9r9Zd3kw0UbX2OkML3l+aMcJRcpBamKFtY7kikqBtSNDaYAqy09XeLr3lL
+         zdj4R35K8gHMkh/d5asa2wc0Ij60lKAHU9ChlxuiH6DeKVocf1TKujhMVvGXuiAJ55nG
+         Ek0g==
+X-Gm-Message-State: AAQBX9cd5Z/xjlpE135dObdqbb5H1Ge6HuRqCtceZ23hM9hK0irjXkR4
+        Km3QE3l4I9jakN/+z5rlXiw=
+X-Google-Smtp-Source: AKy350YWAZo62MlxCISzCzTXCWB6HNcLN+rogclsKSl19ZhfESlpqOSpTd+nyaD1f8ff6CcIRE3pqA==
+X-Received: by 2002:a05:6a20:938b:b0:ef:e017:c60f with SMTP id x11-20020a056a20938b00b000efe017c60fmr593762pzh.51.1681843665590;
+        Tue, 18 Apr 2023 11:47:45 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d3-20020a63d703000000b0050bc4ca9024sm9106874pgg.65.2023.04.18.11.47.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 11:47:44 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <81e21f0a-a149-7bd7-e37d-741ddce101eb@roeck-us.net>
+Date:   Tue, 18 Apr 2023 11:47:42 -0700
 MIME-Version: 1.0
-References: <20230412084540.295411-1-changhuang.liang@starfivetech.com>
- <20230412084540.295411-2-changhuang.liang@starfivetech.com>
- <8dd0dc63-e0df-8764-f756-da032d9d671c@linaro.org> <eb47b7c7-bdbb-92d9-ba39-604ce487f297@starfivetech.com>
- <f6a4fb28-d635-4d99-44bb-d929cb41eef2@linaro.org> <b34a8d59-34e4-8358-9d2b-367f4707ca7c@starfivetech.com>
- <f0d82428-aaa5-3dd4-bc29-f1057fe749bc@linaro.org> <20230418184246.GA2103246-robh@kernel.org>
-In-Reply-To: <20230418184246.GA2103246-robh@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 18 Apr 2023 13:46:31 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKVa+XHkoDbDLaD+haC2J7QDJ_oLr9RAT=7Pvwa-rWHLg@mail.gmail.com>
-Message-ID: <CAL_JsqKVa+XHkoDbDLaD+haC2J7QDJ_oLr9RAT=7Pvwa-rWHLg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: phy: Add starfive,jh7110-dphy-rx
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jack Zhu <jack.zhu@starfivetech.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 5.10 000/124] 5.10.178-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <20230418120309.539243408@linuxfoundation.org>
+ <CA+G9fYsA+CzsxVYgQEN3c2pOV6F+1EOqY1vQrhj8yt1t-EYs7g@mail.gmail.com>
+ <2023041819-canyon-unarmored-38c6@gregkh>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <2023041819-canyon-unarmored-38c6@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 1:42=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
->
-> On Thu, Apr 13, 2023 at 10:41:23AM +0200, Krzysztof Kozlowski wrote:
-> > On 13/04/2023 04:34, Changhuang Liang wrote:
-> > >>>>> +  lane_maps:
-> > >>>>
-> > >>>> Why did this appear? Underscores are not allowed. It looks like yo=
-u
-> > >>>> re-implement some standard property.
-> > >>>>
-> > >>>
-> > >>> Will change to lane-maps.
-> > >>> Yes, according to Vinod advice, lane mapping table use device tree
-> > >>> to parse makes sense.
-> > >>
-> > >> Hm, I have a feeling that I saw such property, so you should dig int=
-o
-> > >> existing and in-flight bindings.
-> > >>
-> > >> Best regards,
-> > >> Krzysztof
-> > >>
-> > >
-> > > A standard property? Like "clocks" or "resets"?
-> >
-> > Like lane-polarities now submitted to one MIPI.
-> >
->
-> data-lanes perhaps?
+On 4/18/23 08:34, Greg Kroah-Hartman wrote:
+> On Tue, Apr 18, 2023 at 08:38:47PM +0530, Naresh Kamboju wrote:
+>> On Tue, 18 Apr 2023 at 18:03, Greg Kroah-Hartman
+>> <gregkh@linuxfoundation.org> wrote:
+>>>
+>>> This is the start of the stable review cycle for the 5.10.178 release.
+>>> There are 124 patches in this series, all will be posted as a response
+>>> to this one.  If anyone has any issues with these being applied, please
+>>> let me know.
+>>>
+>>> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
+>>> Anything received after that time might be too late.
+>>>
+>>> The whole patch series can be found in one patch at:
+>>>          https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.178-rc1.gz
+>>> or in the git tree and branch at:
+>>>          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+>>> and the diffstat can be found below.
+>>>
+>>> thanks,
+>>>
+>>> greg k-h
+>>
+>> Following build errors noticed on 5.15 and 5.10.,
+>>
+>>
+>>> Waiman Long <longman@redhat.com>
+>>>      cgroup/cpuset: Change references of cpuset_mutex to cpuset_rwsem
+>>
+> 
+> That's a documentation patch, it can not:
+> 
+>> kernel/cgroup/cpuset.c: In function 'cpuset_can_fork':
+>> kernel/cgroup/cpuset.c:2941:30: error: 'cgroup_mutex' undeclared
+>> (first use in this function); did you mean 'cgroup_put'?
+>>   2941 |         lockdep_assert_held(&cgroup_mutex);
+> 
+> Cause this.
+> 
+> What arch is failing here?  This builds for x86.
+> 
+No, it doesn't.
 
-Except that is for the controller's endpoint rather than the phy.
-Presumably if the controller knows the mapping, then it can tell the
-phy if it needs the information. IOW, don't just copy 'data-lanes' to
-the phy. Follow the normal patterns.
+Build reference: v5.10.177-125-g19b9d9b9f62e
+Compiler version: x86_64-linux-gcc (GCC) 11.3.0
+Assembler version: GNU assembler (GNU Binutils) 2.39
 
-Rob
+Building x86_64:defconfig ... failed
+--------------
+Error log:
+In file included from include/linux/rcupdate.h:29,
+                  from include/linux/rculist.h:11,
+                  from include/linux/pid.h:5,
+                  from include/linux/sched.h:14,
+                  from include/linux/ratelimit.h:6,
+                  from include/linux/dev_printk.h:16,
+                  from include/linux/device.h:15,
+                  from include/linux/node.h:18,
+                  from include/linux/cpu.h:17,
+                  from kernel/cgroup/cpuset.c:25:
+kernel/cgroup/cpuset.c: In function 'cpuset_can_fork':
+kernel/cgroup/cpuset.c:2941:30: error: 'cgroup_mutex' undeclared (first use in this function); did you mean 'cgroup_put'?
+  2941 |         lockdep_assert_held(&cgroup_mutex);
+       |                              ^~~~~~~~~~~~
+include/linux/lockdep.h:393:61: note: in definition of macro 'lockdep_assert_held'
+   393 | #define lockdep_assert_held(l)                  do { (void)(l); } while (0)
+       |                                                             ^
+kernel/cgroup/cpuset.c:2941:30: note: each undeclared identifier is reported only once for each function it appears in
+  2941 |         lockdep_assert_held(&cgroup_mutex);
+       |                              ^~~~~~~~~~~~
+include/linux/lockdep.h:393:61: note: in definition of macro 'lockdep_assert_held'
+   393 | #define lockdep_assert_held(l)                  do { (void)(l); } while (0)
+       |                                                             ^
+make[3]: *** [scripts/Makefile.build:286: kernel/cgroup/cpuset.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [scripts/Makefile.build:503: kernel/cgroup] Error 2
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [Makefile:1828: kernel] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:192: __sub-make] Error 2
