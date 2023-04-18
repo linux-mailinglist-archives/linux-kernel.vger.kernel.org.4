@@ -2,149 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFA36E5F1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9C86E5F27
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbjDRKnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 06:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39488 "EHLO
+        id S231317AbjDRKtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 06:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbjDRKnG (ORCPT
+        with ESMTP id S230350AbjDRKtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 06:43:06 -0400
-Received: from mail.fris.de (mail.fris.de [116.203.77.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439F17AAE
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:43:02 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 17E35BFAFF;
-        Tue, 18 Apr 2023 12:42:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-        t=1681814579; h=from:subject:date:message-id:to:cc:mime-version:
-         content-transfer-encoding; bh=BXhi8YyumEodLsDXRdhu1OgBuW6ZXGeQiJDpibPmXDU=;
-        b=dMUU+FUnWU/hM5OFAJgGDXTUlJNbbYiardwzNkcNqgAYX3JDOd10wFYRoBjTpVxkeGaOW2
-        3QIhGM+0m3mCl9RYkBrQuWB8jAoXhVFN+Q1S9PjpjFT49r7pm/Q4ZDwF5JorZYNY52bJzq
-        1BRUkffzw1pIJkel+rIlzfl9bP3nZn20TBsl0JJSMoFoeq4wR0/v8ea3BcIHcRXdX03FbK
-        RzJWyXbr0vLnAjkgRGeP5KMs4/5XZwLSJmq5JMAsNyUm0s3RbF405SL8q3FZ+l3OsSBZzg
-        IEFT1z+KESmwT/rjyiFa8+fdZx+kS8TziWPlpd0tLgdhSVBoeWdeBxxQFFOPlw==
-From:   Frieder Schrempf <frieder@fris.de>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        dri-devel@lists.freedesktop.org, Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>
-Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Marek Vasut <marex@denx.de>
-Subject: [RFC PATCH 3/3] drm: bridge: samsung-dsim: Remove init quirk for Exynos
-Date:   Tue, 18 Apr 2023 12:42:53 +0200
-Message-Id: <20230418104256.878017-1-frieder@fris.de>
+        Tue, 18 Apr 2023 06:49:36 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E2D5BBF;
+        Tue, 18 Apr 2023 03:49:35 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-246eebbde1cso2153966a91.3;
+        Tue, 18 Apr 2023 03:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681814975; x=1684406975;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DVrqBF397n+wyX1nXbC/nI8o17aiMQaR1hvjDl7dDXg=;
+        b=GIsmMcGJRopC8pM1uUDcw0uD8zMW/7xHmShVLsYoq7VFw4kSHC/STVQuUXu74aGAHi
+         o2RyfriUazcmr4JfOZ32skmJ5kQzW9peZMbNm3pTFZJefXDFsbVUOfaeFpCPS0FE4SAG
+         0opqk45WHWfsmFi6UplvgiCCQFMIfdbIb74oMvPnoaQz0xJy1kFy7QcSFJr3OM7Sska4
+         bPKwXEGPUB8YLpoPo/wrUK2GXMhc7QygC+E7Q0CgP4T2cNtBSSL8C7aaEJDcobqgYo3/
+         Bc9j10MP9Ocmri4sHp2Tr4fx1k07Enp/4EkwCyA8KZFnrQl98C1BJHNweQdi+DsrwrBF
+         kQiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681814975; x=1684406975;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DVrqBF397n+wyX1nXbC/nI8o17aiMQaR1hvjDl7dDXg=;
+        b=QXksa3r5ZreO7lL2QoU63SVZCNp3G34Il6f+g5YrCiJoDaZGcssBnIAnDz89U/htPE
+         V2Q0VWkzllfiIsPuwM4iRfX8MzRKN1igt3eQYEGMEXi+8Y6gIAuVzORyzNca6QD7Uga4
+         Ow1t+MpG6IvINJZujzWrKnUo8zgzzr8nCTHWc454DldLUHTCit6lK+yk7yLNGg6mpCSp
+         QgmHbdPBNqC1SpqWUhBdTpDRTg0UAT5d24icTEexKf41Fme0nKgxEGD4YEvexerElUdr
+         StTJuePE+Z3isrNA1LRMUe62uluCSUqtbaM/zTUSMCFG/vJvKEO4BPHPrnM2kIpBeC2I
+         6nyA==
+X-Gm-Message-State: AAQBX9dX8VpLuEMZAtBHToiG+AtJVJ9H79K4udWcrIkpspoXpcMW4zX1
+        lv9RbP9UUHVf6OOV9oe7y04=
+X-Google-Smtp-Source: AKy350YMXNhm14FGlQ6oLuFJ5X/eenUtM34P1Mu1GpPalGaC/Vyg7NTb1ABjIjTxUtdHRoCXRt5Gmg==
+X-Received: by 2002:a17:90a:e144:b0:237:ae7c:15be with SMTP id ez4-20020a17090ae14400b00237ae7c15bemr1616438pjb.30.1681814974762;
+        Tue, 18 Apr 2023 03:49:34 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.8])
+        by smtp.gmail.com with ESMTPSA id gz2-20020a17090b0ec200b002473d046e23sm6906437pjb.3.2023.04.18.03.49.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 03:49:34 -0700 (PDT)
+From:   alexjlzheng@gmail.com
+X-Google-Original-From: alexjlzheng@tencent.com
+To:     seanjc@google.com
+Cc:     pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jinliang Zheng <alexjlzheng@tencent.com>
+Subject: [PATCH 1/2] KVM: x86: Fix poll command
+Date:   Tue, 18 Apr 2023 18:47:44 +0800
+Message-Id: <20230418104743.842683-2-alexjlzheng@tencent.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20230418104743.842683-1-alexjlzheng@tencent.com>
+References: <20230418104743.842683-1-alexjlzheng@tencent.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frieder Schrempf <frieder.schrempf@kontron.de>
+From: Jinliang Zheng <alexjlzheng@tencent.com>
 
-Assuming that with the init flow fixed to meet the documentation at
-[1] and the pre_enable_prev_first flag set in downstream bridge/panel
-drivers which require it, we can use the default flow for Exynos as
-already done for i.MX8M.
+According to the hardware manual, when the Poll command is issued, the
+byte returned by the I/O read is 1 in Bit 7 when there is an interrupt,
+and the highest priority binary code in Bits 2:0. The current pic
+simulation code is not implemented strictly according to the above
+expression.
 
-[1] https://docs.kernel.org/gpu/drm-kms-helpers.html#mipi-dsi-bridge-operation
+Fix the implementation of pic_poll_read(), set Bit 7 when there is an
+interrupt.
 
-Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+Signed-off-by: Jinliang Zheng <alexjlzheng@tencent.com>
 ---
-I have no idea if my assumptions are correct and if this works at all.
-There's a very good chance it doesn't...
----
- drivers/gpu/drm/bridge/samsung-dsim.c | 39 ++++++++-------------------
- 1 file changed, 11 insertions(+), 28 deletions(-)
+ arch/x86/kvm/i8259.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
-index 9775779721d9..8c68b767ae50 100644
---- a/drivers/gpu/drm/bridge/samsung-dsim.c
-+++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-@@ -1336,18 +1336,12 @@ static void samsung_dsim_atomic_pre_enable(struct drm_bridge *bridge,
- 
- 	dsi->state |= DSIM_STATE_ENABLED;
- 
--	/*
--	 * For Exynos-DSIM the downstream bridge, or panel are expecting
--	 * the host initialization during DSI transfer.
--	 */
--	if (!samsung_dsim_hw_is_exynos(dsi->plat_data->hw_type)) {
--		ret = samsung_dsim_init(dsi);
--		if (ret)
--			return;
-+	ret = samsung_dsim_init(dsi);
-+	if (ret)
-+		return;
- 
--		samsung_dsim_set_display_mode(dsi);
--		samsung_dsim_set_display_enable(dsi, true);
--	}
-+	samsung_dsim_set_display_mode(dsi);
-+	samsung_dsim_set_display_enable(dsi, true);
- }
- 
- static void samsung_dsim_atomic_enable(struct drm_bridge *bridge,
-@@ -1356,14 +1350,9 @@ static void samsung_dsim_atomic_enable(struct drm_bridge *bridge,
- 	struct samsung_dsim *dsi = bridge_to_dsi(bridge);
- 	u32 reg;
- 
--	if (samsung_dsim_hw_is_exynos(dsi->plat_data->hw_type)) {
--		samsung_dsim_set_display_mode(dsi);
--		samsung_dsim_set_display_enable(dsi, true);
--	} else {
--		reg = samsung_dsim_read(dsi, DSIM_ESCMODE_REG);
--		reg &= ~DSIM_FORCE_STOP_STATE;
--		samsung_dsim_write(dsi, DSIM_ESCMODE_REG, reg);
--	}
-+	reg = samsung_dsim_read(dsi, DSIM_ESCMODE_REG);
-+	reg &= ~DSIM_FORCE_STOP_STATE;
-+	samsung_dsim_write(dsi, DSIM_ESCMODE_REG, reg);
- 
- 	dsi->state |= DSIM_STATE_VIDOUT_AVAILABLE;
- }
-@@ -1377,11 +1366,9 @@ static void samsung_dsim_atomic_disable(struct drm_bridge *bridge,
- 	if (!(dsi->state & DSIM_STATE_ENABLED))
- 		return;
- 
--	if (!samsung_dsim_hw_is_exynos(dsi->plat_data->hw_type)) {
--		reg = samsung_dsim_read(dsi, DSIM_ESCMODE_REG);
--		reg |= DSIM_FORCE_STOP_STATE;
--		samsung_dsim_write(dsi, DSIM_ESCMODE_REG, reg);
--	}
-+	reg = samsung_dsim_read(dsi, DSIM_ESCMODE_REG);
-+	reg |= DSIM_FORCE_STOP_STATE;
-+	samsung_dsim_write(dsi, DSIM_ESCMODE_REG, reg);
- 
- 	dsi->state &= ~DSIM_STATE_VIDOUT_AVAILABLE;
- }
-@@ -1680,10 +1667,6 @@ static ssize_t samsung_dsim_host_transfer(struct mipi_dsi_host *host,
- 	if (!(dsi->state & DSIM_STATE_ENABLED))
- 		return -EINVAL;
- 
--	ret = samsung_dsim_init(dsi);
--	if (ret)
--		return ret;
--
- 	ret = mipi_dsi_create_packet(&xfer.packet, msg);
- 	if (ret < 0)
- 		return ret;
+diff --git a/arch/x86/kvm/i8259.c b/arch/x86/kvm/i8259.c
+index 4756bcb5724f..861872e2641a 100644
+--- a/arch/x86/kvm/i8259.c
++++ b/arch/x86/kvm/i8259.c
+@@ -411,6 +411,8 @@ static u32 pic_poll_read(struct kvm_kpic_state *s, u32 addr1)
+ 		pic_clear_isr(s, ret);
+ 		if (addr1 >> 7 || ret != 2)
+ 			pic_update_irq(s->pics_state);
++		/* Bit 7 is 1, means there's an interrupt */
++		ret |= 0x80;
+ 	} else {
+ 		ret = 0x07;
+ 		pic_update_irq(s->pics_state);
 -- 
-2.40.0
+2.31.1
 
