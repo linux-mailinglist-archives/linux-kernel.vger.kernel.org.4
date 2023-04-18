@@ -2,66 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B596E67E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4DB6E67EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjDRPTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 11:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
+        id S231384AbjDRPUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 11:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbjDRPTH (ORCPT
+        with ESMTP id S231338AbjDRPUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:19:07 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FE0118D3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:19:02 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id f66-20020a255145000000b00b7f75c3cafdso11391093ybb.16
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:19:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681831141; x=1684423141;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7MmhDtuqEjzktXZMZUjTd5/IRF+IYVg/to26fXE0GgA=;
-        b=cXwIKIbKcePgE0q1ohaCKDZjHkJcA4ZV0ksHYDn//I4wmobuvoBzNsVE0c5gNwcOTo
-         qfw6MfVqURVUymOpmFD/viT8NRh+/QPqkWGEP/zZC6JAcCptnls0LrnevKyEF9kelJ7S
-         srbQuo+GMmO8LJnlvFoQmWfdUkTjc8FC4m5lkUQlme08GLiW6DAKOYmxR0yi50X4h+qv
-         h8By7Kfva1zzmByAJbHa/Mytmh7tykK5D/Pel80uXRpiw8cLZsffNvZIqTuZC8MRYm2J
-         7vneSyP+Ito5NYrvaeBljLBKmrP/DymNuxovYVToho1y7CNqmZEUY0dyY3rMDWtKG2kh
-         AQXw==
+        Tue, 18 Apr 2023 11:20:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E2ED335
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681831185;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=miM/su/ZqczkGcKkc9PCKjknSxb3kUfz7+/bPlcxub8=;
+        b=LYNhTO21XgQIE8Imc8D1gupkJSvz6HEFAuaCbeANcaeUtJyHaB0effV8nGIPk0CbT5gqEm
+        WjduqQUA6enAoDBY08Gja8nlQhfGhGI1KOfOlq51iuYW3j4oyQnQ+FAoYa1Id89Myp+AP/
+        y4HF0P5HRPETU6RAuIaYP9ifZ4oagwI=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-516-I8dvfcGjN2mVIPQzFcctMw-1; Tue, 18 Apr 2023 11:19:43 -0400
+X-MC-Unique: I8dvfcGjN2mVIPQzFcctMw-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3ef3116d1dcso3747521cf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:19:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681831141; x=1684423141;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7MmhDtuqEjzktXZMZUjTd5/IRF+IYVg/to26fXE0GgA=;
-        b=Ax8J1F/GYeCIezUeAls8W1P9gSbP/l99ltfWHrgmOd4X7wKEr7f0tiWLoq03Tj4D2e
-         9X/pBglKa6tdXgaOtkGGbHDxjc1+u2Wj2lno/tXAfPUZOCwWJriHjzL0+r+/aMnzj254
-         p1p0ZrWEaPtTTntAS+DwFiwfjgJ6FVQWmW++TIqLIWOcSC3W/ryZ/QnyeTAUE4KAtnb0
-         uDaYIF/UG9k4InXfakJIBZP8w0cAJEjZAXLsuR6Crdh6+s4t4XcvNbYEStWU823G2UtC
-         MYDqfad0JcKkwXBHsoe14drARsF0bXLYxK6+TP5ArMgRQ7Qk7Dogf120uJe7JIjtudqK
-         wfJg==
-X-Gm-Message-State: AAQBX9fFBUi1DnUJ0Yv2WWAxmNHXaoDnIZ/O0sNVPWxGF5U3+GsC9Wk/
-        HCccxeKFytwPoY2zUZpjSG+XrhJxlx4=
-X-Google-Smtp-Source: AKy350Y+AP5rglL+RyREvKohVZkyrZn94gtw9e/Bj39GeBvGlorG7JZnxzCrYv3zUY1rwsaF5NPi9Vbvcww=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:d651:0:b0:b95:f0de:240e with SMTP id
- n78-20020a25d651000000b00b95f0de240emr560829ybg.11.1681831141681; Tue, 18 Apr
- 2023 08:19:01 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 08:19:00 -0700
-In-Reply-To: <20230418104743.842683-3-alexjlzheng@tencent.com>
-Mime-Version: 1.0
-References: <20230418104743.842683-1-alexjlzheng@tencent.com> <20230418104743.842683-3-alexjlzheng@tencent.com>
-Message-ID: <ZD605NFbjiCBX9jW@google.com>
-Subject: Re: [PATCH 2/2] KVM: x86: Adjust return value of pic_poll_read()
-From:   Sean Christopherson <seanjc@google.com>
-To:     alexjlzheng@gmail.com
-Cc:     pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinliang Zheng <alexjlzheng@tencent.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        d=1e100.net; s=20221208; t=1681831183; x=1684423183;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=miM/su/ZqczkGcKkc9PCKjknSxb3kUfz7+/bPlcxub8=;
+        b=Nn3kdOo1L+HpRUK1Dqcra1gMhIouA0LWq8sSLov6VkhLeC3bJgFge4dPSg9cKyiHCt
+         MvGvnN4k4JMR382MLxb7t/wGQFa73UXbY3V9ewJUJJFO0rE1TsQ5Cvg9n64M24xeXscr
+         vVHaozQ0xpoyaAGJbxre3Czzg3N3l8S4asE1ZTIfXEqj/EkscPHcaH5jilvolm3Sa60V
+         pA52CwyiiXguVCen07g56OmdUYP2HwanwiRkbuHusBMHbXjQxWHcNOXCLZtwY8M3n7mI
+         XOeN5Rg4fVXW2b0F10nZthrIQvGxWfQDkJj7k54V3FwDfWXWkoaFWPNsQYSOQ07iq77D
+         iwgQ==
+X-Gm-Message-State: AAQBX9frtHKxmv5q6xjuDUIlQTzgoAhzNMVe+T/SpbyBVf5lqPkCBqOd
+        0aJo2N8f3pLrXDcmX6GWC+d/xfSHTcJBajO28PPIqIzMN7E5iV8vYea2wVV9fOTA7aIJfgguQ2A
+        ySM/99j/XWb/HBJ7tjLrOmMh7
+X-Received: by 2002:ac8:5e0b:0:b0:3ee:5637:29be with SMTP id h11-20020ac85e0b000000b003ee563729bemr14493400qtx.5.1681831183442;
+        Tue, 18 Apr 2023 08:19:43 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Zi17x4m1IQ5qI1ICKFQyCQl4GhyF2z+67LbRfbzNK+T1eFMCyaLE7CzceXB+rr//EqZo72gA==
+X-Received: by 2002:ac8:5e0b:0:b0:3ee:5637:29be with SMTP id h11-20020ac85e0b000000b003ee563729bemr14493360qtx.5.1681831183172;
+        Tue, 18 Apr 2023 08:19:43 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id l5-20020a05620a210500b0074cf009f443sm2422417qkl.85.2023.04.18.08.19.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 08:19:42 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 11:19:40 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 1/1] mm: do not increment pgfault stats when page
+ fault handler retries
+Message-ID: <ZD61DLJNilUeDCnC@x1n>
+References: <20230415000818.1955007-1-surenb@google.com>
+ <ZD25bBPbZYSb7grA@x1n>
+ <CAJuCfpHf06cr2d277DXQUtBto_0bVgK3ykMHLYRgZXgnot=e4w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpHf06cr2d277DXQUtBto_0bVgK3ykMHLYRgZXgnot=e4w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,26 +88,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023, alexjlzheng@gmail.com wrote:
-> From: Jinliang Zheng <alexjlzheng@tencent.com>
+On Mon, Apr 17, 2023 at 03:47:57PM -0700, Suren Baghdasaryan wrote:
+> On Mon, Apr 17, 2023 at 2:26 PM Peter Xu <peterx@redhat.com> wrote:
+> >
+> > On Fri, Apr 14, 2023 at 05:08:18PM -0700, Suren Baghdasaryan wrote:
+> > > @@ -5223,8 +5230,8 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+> > >               if (task_in_memcg_oom(current) && !(ret & VM_FAULT_OOM))
+> > >                       mem_cgroup_oom_synchronize(false);
+> > >       }
+> > > -
+> > > -     mm_account_fault(regs, address, flags, ret);
+> > > +out:
+> > > +     mm_account_fault(mm, regs, address, flags, ret);
+> >
+> > Ah, one more question.. can this cached mm race with a destroying mm (just
+> > like the vma race we wanted to avoid)?  Still a question only applies to
+> > COMPLETE case when mmap read lock can be released.  Thanks,
 > 
-> Returning 0x07 raises ambiguity when no interrupt is in pic_poll_read().
-> Although it will not cause a functional exception (Bit 7 is 0 means no
+> I believe that is impossible because whoever is calling the page fault
+> handler has stabilized the mm by getting a refcount.
 
-From KVM's perspective, it's a functional change.  It _shouldn't_ impact the
-overall functionality of the guest, but we have no idea what guest code exists
-in the wild.
+Do you have a hint on where that refcount is taken?
 
-> interrupt), it will easily make developers mistakenly think that a
-> spurious interrupt (IRQ 7) has been returned.
-> 
-> Return 0x00 instread of 0x07.
+Btw, it's definitely not a question sololy for this patch but a more common
+question to the page fault path.  It's just that when I wanted to look for
+any refcount boost (which I also expect to have somewhere) I didn't really
+see that in current path (e.g. do_user_addr_fault() for x86_64).
 
-Again, I do not want to introduce a functional change in this code without evidence
-that the change fixes something for a real world guest.  Based on your response[*],
-that is not the case.
+I also had a quick look on do_exit() but I also didn't see where do we
+e.g. wait for all the threads to stop before recycles a mm.
 
-A comment explaining the KVM behavior would be very welcome, but I'm not taking
-this patch.
+I had a feeling that I must have missed something, but just want to make
+sure it's the case.
 
-[*] https://lore.kernel.org/all/20230418075923.752113-1-alexjlzheng@tencent.com
+-- 
+Peter Xu
+
