@@ -2,79 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D056E6BDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D49366E6BE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbjDRSNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
+        id S231544AbjDRSQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbjDRSNJ (ORCPT
+        with ESMTP id S229813AbjDRSQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:13:09 -0400
-Received: from mail-out.aladdin-rd.ru (mail-out.aladdin-rd.ru [91.199.251.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB8E4C3A
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:13:05 -0700 (PDT)
-From:   Daniil Dulov <D.Dulov@aladdin.ru>
-To:     Andi Shyti <andi.shyti@linux.intel.com>
-CC:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>,
-        David Airlie <airlied@linux.ie>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "Alex Deucher" <alexander.deucher@amd.com>,
-        Oak Zeng <oak.zeng@intel.com>,
-        =?utf-8?B?Q2hyaXN0aWFuIEvDtm5pZw==?= <christian.koenig@amd.com>
-Subject: Re: [PATCH] drm/amdkfd: Fix potential deallocation of previously
- deallocated memory.
-Thread-Topic: [PATCH] drm/amdkfd: Fix potential deallocation of previously
- deallocated memory.
-Thread-Index: AQHZccLCArZBbSPlkkChgaoDf69fTK8wjvMAgAAWVoCAAHM/AIAADGSAgAA6UR8=
-Date:   Tue, 18 Apr 2023 18:12:48 +0000
-Message-ID: <PR3P193MB052467DAA1F33E3C7A128F6EF19D9@PR3P193MB0524.EURP193.PROD.OUTLOOK.COM>
-References: <20230418065521.453001-1-d.dulov@aladdin.ru>
- <ZD5ZFoEk92MNQpqD@ashyti-mobl2.lan>
- <d41669a1-9e18-defb-d0cc-d43d7be7d23e@kernel.org>
- <ZD7MgL619KVYKeTV@ashyti-mobl2.lan>,<ZD7W5aaslOXLg707@ashyti-mobl2.lan>
-In-Reply-To: <ZD7W5aaslOXLg707@ashyti-mobl2.lan>
-Accept-Language: ru-RU, en-US
-Content-Language: ru-RU
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 18 Apr 2023 14:16:14 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE9C30E0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:16:12 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f04275b2bdso66865e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:16:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681841771; x=1684433771;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uzk00VVwAMnUgl8nqdf7G+u1lGlONN9yY2/sgJWoENw=;
+        b=nVANayyNWQEEcixXLqV58hlA44rj6vtMwQer5ALpXD+J7VO5ysQutiY7HHiuVoz8F+
+         yORfLruneACibPMnxRaVgKWwcMZVcMD9oFIhFI67ivS4lcNI+4TRMk9rtITgyWkXMNNd
+         PlCuhCVu8rfB3QxBCZQCgaDOC1FDvoVj1H5R5FnFIc1PqdCrK/uiOqLTVShiSQ7M170d
+         VEdup8js/MK8j0kVW+RDn+EEyfkMLCIX7k1ylHxCZlM1YJnlk7+R1enDl3Iq+wHyzLDa
+         deRchW644KPY6XyWgOy4AczDdGW3MUgxI3c4nJ7bH6UddtzrMLoK7+huqXWBBoG+hvlf
+         zj4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681841771; x=1684433771;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Uzk00VVwAMnUgl8nqdf7G+u1lGlONN9yY2/sgJWoENw=;
+        b=Er6w6ljT5N6clo76HEBlZJn2u6fMH3/mKxoZ936UkR4LBRPZnHaYgK/5+UJ4Ws4Rbw
+         ii0Ljb8qGMPHDlqp8STZFGFlWC3KMXL0IVfldvAn+3EXJNVpNW1fqUERHRi9u/aeTnNZ
+         n9miH/qCWaM99mlTPa9EAw2nFYmg6+3qB19Q1KxpFaX9YJHDFo45BsjUCQeGWsOP85fq
+         RiOoZFd8c6t6/QFBd276NBfmlz35J3Wo+PykXq9+ERZrniqB2nwE88D9kB83w5CW9J01
+         oCdHFhDbuv00KjuzHOcsSKB4eSxyVANinpPovg7g4Iiy5VN8B7cg5+MT/jy2YdiLc08l
+         /GLw==
+X-Gm-Message-State: AAQBX9ertWLCPnACm/y+hutkiEEBIuasPKoAWKXJTSWGlYWdvpTOliUj
+        UlZUkquH8i+S4WjUrAPGhAaTfWWtiop9/uZU2aZM9g==
+X-Google-Smtp-Source: AKy350YlrlOxmvzog0f3D5uEtE7OfRYpZXxq6H5LRCHAsI0piErrBw4HBLPgJ3F/vVAjjDRqNTs1wro+Od2+A+R7Nms=
+X-Received: by 2002:a05:600c:22c8:b0:3f1:758c:dd23 with SMTP id
+ 8-20020a05600c22c800b003f1758cdd23mr10353wmg.7.1681841770657; Tue, 18 Apr
+ 2023 11:16:10 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230413161725.195417-1-alexghiti@rivosinc.com>
+ <CAOnJCU+72PV1=o1c_TpogkmBT36278BneVWEMr1=tqX0CZi+ag@mail.gmail.com>
+ <aadca595b4a24e36932ba41e61f4e263@AcuMS.aculab.com> <CAOnJCUJ7mY+fh9VqE4dRntnVAEAc26=NnOCPUqkXk6ky__cUZQ@mail.gmail.com>
+In-Reply-To: <CAOnJCUJ7mY+fh9VqE4dRntnVAEAc26=NnOCPUqkXk6ky__cUZQ@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 18 Apr 2023 11:15:56 -0700
+Message-ID: <CAP-5=fUYJEecmhQVuvbM4ZoDP_Hj=2RKOgR4cKepU072Uy3xyw@mail.gmail.com>
+Subject: Re: [PATCH 0/4] riscv: Allow userspace to directly access perf counters
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        paranlee <p4ranlee@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhhbmsgeW91IGZvciB5b3VyIGZlZWRiYWNrISBJIHdpbGwgZG8gaXQgYXMgc29vbiBhcyBwb3Nz
-aWJsZS4NCg0KRGFuaWlsDQoNCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQrQntGC
-OiBBbmRpIFNoeXRpIDxhbmRpLnNoeXRpQGxpbnV4LmludGVsLmNvbT4NCtCe0YLQv9GA0LDQstC7
-0LXQvdC+OiDQstGC0L7RgNC90LjQuiwgMTgg0LDQv9GA0LXQu9GPIDIwMjMg0LMuLCAyMDo0NA0K
-0JrQvtC80YM6IEFuZGkgU2h5dGkgPGFuZGkuc2h5dGlAbGludXguaW50ZWwuY29tPg0K0JrQvtC/
-0LjRjzogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6a0BrZXJuZWwub3JnPjsgRGFuaWlsIER1bG92
-IDxELkR1bG92QGFsYWRkaW4ucnU+OyBGZWxpeCBLdWVobGluZyA8RmVsaXguS3VlaGxpbmdAYW1k
-LmNvbT47IGx2Yy1wcm9qZWN0QGxpbnV4dGVzdGluZy5vcmcgPGx2Yy1wcm9qZWN0QGxpbnV4dGVz
-dGluZy5vcmc+OyBEYXZpZCBBaXJsaWUgPGFpcmxpZWRAbGludXguaWU+OyBsaW51eC1rZXJuZWxA
-dmdlci5rZXJuZWwub3JnIDxsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnPjsgYW1kLWdmeEBs
-aXN0cy5mcmVlZGVza3RvcC5vcmcgPGFtZC1nZnhAbGlzdHMuZnJlZWRlc2t0b3Aub3JnPjsgZHJp
-LWRldmVsQGxpc3RzLmZyZWVkZXNrdG9wLm9yZyA8ZHJpLWRldmVsQGxpc3RzLmZyZWVkZXNrdG9w
-Lm9yZz47IEFsZXggRGV1Y2hlciA8YWxleGFuZGVyLmRldWNoZXJAYW1kLmNvbT47IE9hayBaZW5n
-IDxvYWsuemVuZ0BpbnRlbC5jb20+OyBDaHJpc3RpYW4gS8O2bmlnIDxjaHJpc3RpYW4ua29lbmln
-QGFtZC5jb20+DQrQotC10LzQsDogUmU6IFtQQVRDSF0gZHJtL2FtZGtmZDogRml4IHBvdGVudGlh
-bCBkZWFsbG9jYXRpb24gb2YgcHJldmlvdXNseSBkZWFsbG9jYXRlZCBtZW1vcnkuDQoNCj4gRGFu
-aWlsIHdpbGwgeW91IGxvb2sgaW50byB0aGlzPw0KDQphbmQsIGJlY2F1c2UgdGhpcyBpcyBhIGJ1
-ZyBmaXgsIGlmIHlvdSBkbyB3YW50IHRvIHNlbmQgYSByZWFsDQpmaXgsIHBsYXNlIGFkZCB0byB0
-aGUgY29tbWl0IG1lc3NhZ2U6DQoNCkZpeGVzOiBkMWY4ZjBkMTdkNDAgKCJkcm0vYW1ka2ZkOiBN
-b3ZlIG5vbi1zZG1hIG1xZCBhbGxvY2F0aW9uIG91dCBvZiBpbml0X21xZCIpDQpDYzogT2FrIFpl
-bmcgPG9hay56ZW5nQGludGVsLmNvbT4NCkNjOiA8c3RhYmxlQHZnZXIua2VybmVsLm9yZz4gIyB2
-NS4zKw0KDQpBbmRpDQoNClBTOiBwbGVhc2Ugbm90ZSB0aGF0IE9haydzIGUtbWFpbCBoYXMgY2hh
-bmdlZC4NCg0K
+On Tue, Apr 18, 2023 at 9:43=E2=80=AFAM Atish Patra <atishp@atishpatra.org>=
+ wrote:
+>
+> On Fri, Apr 14, 2023 at 2:40=E2=80=AFAM David Laight <David.Laight@aculab=
+.com> wrote:
+> >
+> > From: Atish Patra
+> > > Sent: 13 April 2023 20:18
+> > >
+> > > On Thu, Apr 13, 2023 at 9:47=E2=80=AFPM Alexandre Ghiti <alexghiti@ri=
+vosinc.com> wrote:
+> > > >
+> > > > riscv used to allow direct access to cycle/time/instret counters,
+> > > > bypassing the perf framework, this patchset intends to allow the us=
+er to
+> > > > mmap any counter when accessed through perf. But we can't break the
+> > > > existing behaviour so we introduce a sysctl perf_user_access like a=
+rm64
+> > > > does, which defaults to the legacy mode described above.
+> > > >
+> > >
+> > > It would be good provide additional direction for user space packages=
+:
+> > >
+> > > The legacy behavior is supported for now in order to avoid breaking
+> > > existing software.
+> > > However, reading counters directly without perf interaction may
+> > > provide incorrect values which
+> > > the userspace software must avoid. We are hoping that the user space
+> > > packages which
+> > > read the cycle/instret directly, will move to the proper interface
+> > > eventually if they actually need it.
+> > > Most of the users are supposed to read "time" instead of "cycle" if
+> > > they intend to read timestamps.
+> >
+> > If you are trying to measure the performance of short code
+> > fragments then you need pretty much raw access directly to
+> > the cycle/clock count register.
+> >
+> > I've done this on x86 to compare the actual cycle times
+> > of different implementations of the IP checksum loop
+> > (and compare them to the theoretical limit).
+> > The perf framework just added far too much latency,
+> > only directly reading the cpu registers gave anything
+> > like reliable (and consistent) answers.
+> >
+>
+> This series allows direct access to the counters once configured
+> through the perf.
+> Earlier the cycle/instret counters are directly exposed to the
+> userspace without kernel/perf frameworking knowing
+> when/which user space application is reading it. That has security implic=
+ations.
+>
+> With this series applied, the user space application just needs to
+> configure the event (cycle/instret) through perf syscall.
+> Once configured, the userspace application can find out the counter
+> information from the mmap & directly
+> read the counter. There is no latency while reading the counters.
+>
+> This mechanism allows stop/clear the counters when the requesting task
+> is not running. It also takes care of context switching
+> which may result in invalid values as you mentioned below. This is
+> nothing new and all other arch (x86, ARM64) allow user space
+> counter read through the same mechanism.
+>
+> Here is the relevant upstream discussion:
+> https://lore.kernel.org/lkml/Y7wLa7I2hlz3rKw%2F@hirez.programming.kicks-a=
+ss.net/T/
+>
+> ARM64:
+> https://docs.kernel.org/arm64/perf.html?highlight=3Dperf_user_access#perf=
+-userspace-pmu-hardware-counter-access
+>
+> example usage in x86:
+> https://github.com/andikleen/pmu-tools/blob/master/jevents/rdpmc.c
+
+The canonical implementation of this should be:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
+ls/lib/perf/mmap.c#n400
+which is updated in these patches but the tests are not:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
+ls/perf/tests/mmap-basic.c#n287
+Which appears to be an oversight. The tests display some differences
+between x86 and aarch64 that have assumed userspace hardware counter
+access, and everything else that it is assumed don't.
+
+Thanks,
+Ian
+
+> > Clearly process switches (especially cpu migrations) cause
+> > problems, but they are obviously invalid values and can
+> > be ignored.
+> >
+> > So while a lot of uses may be 'happy' with the values the
+> > perf framework gives, sometimes you do need to directly
+> > read the relevant registers.
+> >
+> >         David
+> >
+> > -
+> > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, M=
+K1 1PT, UK
+> > Registration No: 1397386 (Wales)
+>
+>
+>
+> --
+> Regards,
+> Atish
