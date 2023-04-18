@@ -2,360 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895F16E608D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F5A6E60A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbjDRMCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 08:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
+        id S231476AbjDRMI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 08:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjDRL7u (ORCPT
+        with ESMTP id S231615AbjDRMIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 07:59:50 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D31B474
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:57:02 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id r9so16240263ljp.9
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:57:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681819021; x=1684411021;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mjhT7c5vpFQRJS8nwL3Z88wTyDAD+eZRtyY5BOWpF+w=;
-        b=zE8rNev5UcDJboxw+q774X9yDzzU1rT3+U0tnvcPA7hjqzUVSHdPAxHW+C1wK7HdSJ
-         F6rtP+MYJQQHG2vydiX6toLHpkg4WJTV526V6HQWOhcEOqwS8Y5v1U8faPPrjJhaiII1
-         Qxgr/gp55oA8LhlzVnh6ULHbD+/VzWWuU8w8mr2InLw7Nq/7VPOV0z46MV9Aja+TzCJZ
-         9YUtB3R00ECK6g78OsjZ/MqcSUYZK986JmNYHUKHaDtaS3yqNVseEEcLcaKEtUmAHrk/
-         dtdemxHeLzOB6AgvosavSlu9kP/hQnLFj/oGDA+MU+/BN4JEqzOT1cgUqpIS2WZbHF8t
-         9B4w==
+        Tue, 18 Apr 2023 08:08:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E46CC1B
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681819135;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ic+G8JxkY030ztDDxrSVr0gIWS+MILOdZNy5BfZjtHQ=;
+        b=ATx0Ah/Icikd2b0ThTNn6hIqlIZ+y0ZX/uNRpW+t3oXPfS6xO1cXOr53O7iL/yVD1KvGH1
+        S2b0qE+RfwbizcSQUGuS8P4HQmeSUOnLWR/2LRgYb8kICNN2KhGvum26j35GgCbms+szG3
+        E3j8MuAGl5DeBpo59MJrfmchoDyFucg=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-584-YUV7Dt8BNdGXz_oOqz59ZA-1; Tue, 18 Apr 2023 07:58:52 -0400
+X-MC-Unique: YUV7Dt8BNdGXz_oOqz59ZA-1
+Received: by mail-wm1-f70.google.com with SMTP id fl8-20020a05600c0b8800b003f16fe94249so4147009wmb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:58:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681819021; x=1684411021;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mjhT7c5vpFQRJS8nwL3Z88wTyDAD+eZRtyY5BOWpF+w=;
-        b=bRtkH72v55ILJJgvLe+MZ8LfbOhanYtIVlFe//d/QcYDFU0xT+rwNMs3Fnw2chCcG+
-         KTWXy+cGaG1+CJST0Wp0DzXnSNFu44w0l0tSI0nPY8VrAfp5lrAnzwDW2bLjtKOR7rz5
-         PoApxq98RtzuuXCC0Lavp0/p7TocEUjwzvgrtwXoXyR6vtewNPnKdoRfJvEibFobzdtF
-         Y4KxjB0cJrBi0l8QTE7+bAmzqd09XWbIP63mwPxx/wcZikt005vkkx0BY04HpYWj4gvR
-         S5Rv3nNv2RBkzyx0pQisutyikt8hzanwnNE1iKNIHU3sHjmVC/KGBhFApR6eH3UdW42u
-         Ai5w==
-X-Gm-Message-State: AAQBX9fJS9NH4cJAelkZCKKE5rd69v9GX4Lji7RCJH3fxA+KFG6y8wqO
-        U07EIVQRPtk/5l0li89DbIU7HA==
-X-Google-Smtp-Source: AKy350YWAf8ZWRkhimz4yUkdQ1xEmjTrsRRXXfQoNJVQJkLdcR+DmAPJZnHF+XYSTYDStU9r6OJtig==
-X-Received: by 2002:a2e:998b:0:b0:2a8:ace6:bf80 with SMTP id w11-20020a2e998b000000b002a8ace6bf80mr725460lji.8.1681819020917;
-        Tue, 18 Apr 2023 04:57:00 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id 2-20020a2eb282000000b00298a8527806sm2550121ljx.93.2023.04.18.04.56.59
+        d=1e100.net; s=20221208; t=1681819131; x=1684411131;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ic+G8JxkY030ztDDxrSVr0gIWS+MILOdZNy5BfZjtHQ=;
+        b=Qp/TG8s2Xh4uTk2qcwcvOGocfwFHaK+b+hdkDJSpsaThb3zkyJz43mykyzpCmpVeFi
+         4KeNYCWA/zPAD/yolsAq1QWbMaD1f01sfNkYQxRKkAK+tloP0mVea/657Y6IevypTY6w
+         ugbCxNfGUtyTB9n/sJzle3XqiqgaR0MMJFPx+qWH+00pEw9Fc05asDaXSy7rTYg36c0S
+         QEkHxSlrVhyh0pR4bxJZ7oCOqPS64kMjwOoXdQn2F5RPy0lOe5rQNO47ptNY2PR93+J8
+         2EJD5F/Giu3ekdrJDikG9r32+l6zX9ylY8/YnTAVBs4ocg6WUEE87C+/wPJSxE8pG0K4
+         j3nw==
+X-Gm-Message-State: AAQBX9cS5tFsV15jfoLvQSc6BNbpHWtiKdt7x/S6h2tYRqTyCqm/IbEZ
+        2qJ3cp6FHfyqLzpn4YqxSqPuOWJRLpd0SSzDpkB+96ZEBli0xilIbh0EwNeqFulkVaX3yOLVh6h
+        67IlMFq1XInxidkmd/7uuEapW
+X-Received: by 2002:a7b:cb07:0:b0:3f0:5519:9049 with SMTP id u7-20020a7bcb07000000b003f055199049mr13710172wmj.8.1681819131390;
+        Tue, 18 Apr 2023 04:58:51 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YYPfT3gB+38KJa3OuGZh4qKj+97YG3AusxGQ1ufp+BlxDKePtvpPOBSG270xYpIPQ/XjAu0Q==
+X-Received: by 2002:a7b:cb07:0:b0:3f0:5519:9049 with SMTP id u7-20020a7bcb07000000b003f055199049mr13710144wmj.8.1681819131056;
+        Tue, 18 Apr 2023 04:58:51 -0700 (PDT)
+Received: from localhost ([37.160.130.245])
+        by smtp.gmail.com with ESMTPSA id m4-20020a05600c4f4400b003f0ae957fcesm12903095wmq.42.2023.04.18.04.58.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 04:57:00 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 18 Apr 2023 13:56:56 +0200
-Subject: [PATCH] arm64: dts: qcom: sm6115: Set up CPU cooling maps
+        Tue, 18 Apr 2023 04:58:50 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 13:58:46 +0200
+From:   Andrea Claudi <aclaudi@redhat.com>
+To:     Abhijeet Rastogi <abhijeet.1989@gmail.com>
+Cc:     Julian Anastasov <ja@ssi.bg>, Simon Horman <horms@verge.net.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ipvs: change ip_vs_conn_tab_bits range to [8,31]
+Message-ID: <ZD6F9l2yE0i42YE5@renaissance-vector>
+References: <20230412-increase_ipvs_conn_tab_bits-v1-1-60a4f9f4c8f2@gmail.com>
+ <d2519ce3-e49b-a544-b79d-42905f4a2a9a@ssi.bg>
+ <CACXxYfxLU0jWmq0W7YxX=44XFCGvgMX2HwTFUUHCUMjO28g5BA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230418-topic-cool_bengal-v1-1-c5d53814dc74@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAIeFPmQC/x2N7QqDMAwAX0XyewGt7vNVZEibpRooqbTbEMR3X
- 9jPOzhuh8pFuMKj2aHwV6pkNehODdDidWaUlzG41vXt0N3wnVchpJzTFFhnn9DFc+zjcHWXO4F
- 1wVfGULzSYqV+UjK5Fo6y/Ufj8zh+EDZ0o3gAAAA=
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681819019; l=8208;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=mw3YwshvzeBPE3qS+R34Cnn7pe3SKVF9EwUI0dpQdR4=;
- b=Gus7uJvwBLIkNjA59xMMfkZ/SLrqjhK7dV5Zhx8X6uTBzRvIN0rycgFhNT2dH9yUhgbdlY+fmy9/
- etJ8mFk+B2JZq3fF1bl53opkOOS5+y4HPUFHTKd4qgvruiQ4OWil
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACXxYfxLU0jWmq0W7YxX=44XFCGvgMX2HwTFUUHCUMjO28g5BA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set up CPU cooling maps to ensure the thermal framework is aware of
-the connection between the CPUs and the TSENS sensors.
+On Thu, Apr 13, 2023 at 06:58:06PM -0700, Abhijeet Rastogi wrote:
+> Hi Simon, Andrea and Julian,
+> 
+> I really appreciate you taking the time to respond to my patch. Some follow up
+> questions that I'll appreciate a response for.
+> 
+> @Simon Horman
+> >In any case, I think this patch is an improvement on the current situation.
+> 
+> +1 to this. I wanted to add that, we're not changing the defaults
+> here, the default still stays at 2^12. If a kernel user changes the
+> default, they probably already know what the limitations are, so I
+> personally don't think it is a big concern.
+> 
+> @Andrea Claudi
+> >for the record, RHEL ships with CONFIG_IP_VS_TAB_BITS set to 12 as
+> default.
+> 
+> Sorry, I should have been clearer. RHEL ships with the same default,
+> yes, but it doesn't have the range check, at least, on the version I'm
+> using right now (3.10.0-1160.62.1.el7.x86_64).
+> 
+> On this version, I'm able to load with bit size 30, 31 gives me error
+> regarding allocating memory (64GB host) and anything beyond 31 is
+> mysteriously switched to a lower number. The following dmesg on my
+> host confirms that the bitsize 30 worked, which is not possible
+> without a patch on the current kernel version.
+> 
+> "[Fri Apr 14 01:14:51 2023] IPVS: Connection hash table configured (size=1073741
+> 824, memory=16777216Kbytes)"
 
-All of the maps refer to all 4 CPUs within a given cluster at a time,
-as that's what can be considered the smallest DVFS target unit - they
-all share the same voltage line and clock source.
+I see. This makes sense to me as RHEL 7 does not include the range
+check, while RHEL 8 and RHEL 9 both includes it.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 137 +++++++++++++++++++++++++++++++++++
- 1 file changed, 137 insertions(+)
+The reason why any number beyond 31 results in a lower number is to be
+searched in gcc implementation. IIRC shifting an int by more than 31 or
+less than 0 results in an undefined behaviour, according to the C
+standard.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 631ca327e064..36ff913c1a60 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -12,6 +12,7 @@
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
-+#include <dt-bindings/thermal/thermal.h>
- 
- / {
- 	interrupt-parent = <&intc>;
-@@ -47,6 +48,8 @@ CPU0: cpu@0 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			#cooling-cells = <2>;
-+
- 			L2_0: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -63,6 +66,7 @@ CPU1: cpu@1 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		CPU2: cpu@2 {
-@@ -75,6 +79,7 @@ CPU2: cpu@2 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		CPU3: cpu@3 {
-@@ -87,6 +92,7 @@ CPU3: cpu@3 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		CPU4: cpu@100 {
-@@ -99,6 +105,8 @@ CPU4: cpu@100 {
- 			dynamic-power-coefficient = <282>;
- 			next-level-cache = <&L2_1>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
-+			#cooling-cells = <2>;
-+
- 			L2_1: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -115,6 +123,7 @@ CPU5: cpu@101 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_1>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		CPU6: cpu@102 {
-@@ -127,6 +136,7 @@ CPU6: cpu@102 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_1>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		CPU7: cpu@103 {
-@@ -139,6 +149,7 @@ CPU7: cpu@103 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_1>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu-map {
-@@ -2471,6 +2482,24 @@ cpu4-thermal {
- 			polling-delay = <0>;
- 			thermal-sensors = <&tsens0 6>;
- 
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu4_alert0>;
-+					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+
-+				map1 {
-+					trip = <&cpu4_alert1>;
-+					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+
- 			trips {
- 				cpu4_alert0: trip-point0 {
- 					temperature = <90000>;
-@@ -2497,6 +2526,24 @@ cpu5-thermal {
- 			polling-delay = <0>;
- 			thermal-sensors = <&tsens0 7>;
- 
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu5_alert0>;
-+					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+
-+				map1 {
-+					trip = <&cpu5_alert1>;
-+					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+
- 			trips {
- 				cpu5_alert0: trip-point0 {
- 					temperature = <90000>;
-@@ -2523,6 +2570,24 @@ cpu6-thermal {
- 			polling-delay = <0>;
- 			thermal-sensors = <&tsens0 8>;
- 
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu6_alert0>;
-+					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+
-+				map1 {
-+					trip = <&cpu6_alert1>;
-+					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+
- 			trips {
- 				cpu6_alert0: trip-point0 {
- 					temperature = <90000>;
-@@ -2549,6 +2614,24 @@ cpu7-thermal {
- 			polling-delay = <0>;
- 			thermal-sensors = <&tsens0 9>;
- 
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu7_alert0>;
-+					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+
-+				map1 {
-+					trip = <&cpu7_alert1>;
-+					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+
- 			trips {
- 				cpu7_alert0: trip-point0 {
- 					temperature = <90000>;
-@@ -2575,6 +2658,24 @@ cpu45-thermal {
- 			polling-delay = <0>;
- 			thermal-sensors = <&tsens0 10>;
- 
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu45_alert0>;
-+					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+
-+				map1 {
-+					trip = <&cpu45_alert1>;
-+					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+
- 			trips {
- 				cpu45_alert0: trip-point0 {
- 					temperature = <90000>;
-@@ -2601,6 +2702,24 @@ cpu67-thermal {
- 			polling-delay = <0>;
- 			thermal-sensors = <&tsens0 11>;
- 
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu67_alert0>;
-+					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+
-+				map1 {
-+					trip = <&cpu67_alert1>;
-+					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+
- 			trips {
- 				cpu67_alert0: trip-point0 {
- 					temperature = <90000>;
-@@ -2627,6 +2746,24 @@ cpu0123-thermal {
- 			polling-delay = <0>;
- 			thermal-sensors = <&tsens0 12>;
- 
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu0123_alert0>;
-+					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+
-+				map1 {
-+					trip = <&cpu0123_alert1>;
-+					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+
- 			trips {
- 				cpu0123_alert0: trip-point0 {
- 					temperature = <90000>;
-
----
-base-commit: 4aa1da8d99724f6c0b762b58a71cee7c5e2e109b
-change-id: 20230418-topic-cool_bengal-2f5f3f47269c
-
-Best regards,
--- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+> @Julian Anastasov,
+> >This is not a limit of number of connections. I prefer
+> not to allow value above 24 without adding checks for the
+> available memory,
+> 
+> Interesting that you brought up that number 24, that is exactly what
+> we use in production today. One IPVS node is able to handle spikes of
+> 10M active connections without issues. This patch idea originated as
+> my company is migrating from the ancient RHEL version to a somewhat
+> newer CentOS (5.* kernel) and noticed that we were unable to load the
+> ip_vs kernel module with anything greater than 20 bits. Another
+> motivation for kernel upgrade is utilizing maglev to reduce table size
+> but that's out of context in this discussion.
+> 
+> My request is, can we increase the range from 20 to something larger?
+> If 31 seems a bit excessive, maybe, we can settle for something like
+> [8,30] or even lower. With conn_tab_bits=30, it allocates 16GB at
+> initialization time, it is not entirely absurd by today's standards.
+> 
+> I can revise my patch to a lower range as you guys see fit.
+> 
+> --
+> Cheers,
+> Abhijeet (https://abhi.host)
+> 
 
