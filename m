@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746E06E5FFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529DE6E6000
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbjDRLgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 07:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
+        id S230429AbjDRLgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 07:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbjDRLgf (ORCPT
+        with ESMTP id S231455AbjDRLgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 07:36:35 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E7976AF;
-        Tue, 18 Apr 2023 04:36:16 -0700 (PDT)
+        Tue, 18 Apr 2023 07:36:36 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2067.outbound.protection.outlook.com [40.107.93.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C0B49DB;
+        Tue, 18 Apr 2023 04:36:25 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ChN8CQRlZigFgOSF+gy/4OuKzzzpqYHGcWxsK/DhW0e39WIPoUqo4w5vRpxydX85RNkjpathOBbJ+JFLXzlrvQFzMJAOZfgl3zAGbo05ZEI0yKDw12HAMy9qmbF0R/O0K0L0fsSSg8+lHTEHC4SmhYllcg6hf+V+dQAku7Ci519L1Xa5w7JKDa6XsSXNG4NFr/r9ebuUHfVREh0ZcuRJX/3bIRQQbct0Q58xc/icgARmrqKlB/L+TgxWTvBsjPqx19ABW7KDjdQ/O0pyiBPkAHYw6IeXwUsgBCs91df2zFNLceex0S/+8RO6uUrLr0ajxMxhGefKM+8aNRr2ZCcqMQ==
+ b=BGqeI3Tkak1vucWq3OxDxA+OJSoKJq4oxzbybBP+RWW+8OYBCOeelD6zhHiOKSZikRHhemJpgCZQEQUPID6Vz4Dxc4RTbGPMI+3rbbG+fzr/CNV4IgTEgz/b4RlzpUPq/hCl7AEGfn/uAOWA0X36BiZjvXZEAt4s/goHkoy9LcSqvBGIGwBwQgyGgF5/e+jbfmzJkxqCkXy9Z414VosMPaOmdnsozMa7+d+tF+tfQQ281YE7zA+e4sme4PhQPcL4WZteuW2HggS++jyN0uwTLS7uWoCU5gAHiAbb/zmxtwArPPq7HEBk36Dc/mcZzadDpqyV8HPCyO9QgAOxaaL3uQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/rahqSi0lxKjo4ecE7XdMLzWetALNSJxu0JOZbNFBoU=;
- b=FFbKNjSq4334oNq1JrCGCu3zpifc8QbvJNraXzepXsZ2jZc+r8zsKF/JhcvQ7Nj30PzkiZP6xt3z1X69BlLBoLGF6SH4z8ti50M9a+owX/ZgWEybbAsV4UHvbIie1Pi4NnZZoco0LNZ0zCMLQwHc+3WRYkViTtOx9/O6dmPKf96j7YElZhn5NG21KZuXplvdvbgMLOOTbnMkDxpxzAvPI0fmT0T+Y9q7IrP0cGQbPV2498s4S3Ee0Iv+ZV4XE48pX6uu0PU70dIXRCyVUy1Ve0q0MH7lFtTDbxzlZo9hUTT9dc1E4S+i/VSIcjYBSXIFKZ5Nm0Ej+OOnLPgTY2eBRA==
+ bh=bUt+6/5XC1OaGh7iuH+Z/LJrw1UWkzVE+H6FlLwW0qM=;
+ b=d6ophGo0qBZMOGTjZ4HN8e+oPTATAbKEFkCagPHNsNlkEPRhc9wDjdLTHrW7UNe/h5utnf9eBB0fJ7wIWgPcZm2l68dfSoJkthUGYZcok9OZ/UB/r5OCSW3iSVf4/A+RZ1EUVZZzOLX/ww2ezK/hxEMFLs3uxTeiQeIJevuF/2soDSk+87FaQ1ppgErcMi/Lq15YtJemhiaHvGLitCokRezrR27LmUZWX/nsyi0fp8sggy484NQ+2RrskC5xK2FBH9E/anzxnp1tlKooeBsFHHXxp8BoF7/UlPK9HmVo26siBf28dNpenauUseGxdb5HUVofO1GSCeDjyelBWy1UIQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.118.233) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -29,18 +29,17 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/rahqSi0lxKjo4ecE7XdMLzWetALNSJxu0JOZbNFBoU=;
- b=DNNYZXYbeOeoBXsgBX4Py2NaVMsoMcjFn0Xz1G55woI3Fqi9GQAgRnAX/pFkSc+5zBz/HFS5jKBxZphzsKZHjTXUQEj6BthQwX6vmbj4wB5UHsTJT83hV+Gtbt/jPbqiWbbv3BUyRqTisy2iXXFWM62hRsI4x0c0aUjFIB/jm3AS8bt8fdXD83KNuGFZIWOZxI4g/WippnwWNhfnuY0nLi7BSgW94+Ich0GmCosLonblf7gdF1FStGBZVqS7SUCTd8kFlVDoHVcxN9KDt9B5Gl0xV07AquMQp3ntiNEDytcbMZ8652rOSxQ5UZ9895LBA0pvsWyZlN705ArsytgaCg==
-Received: from DM6PR06CA0102.namprd06.prod.outlook.com (2603:10b6:5:336::35)
- by PH8PR12MB6914.namprd12.prod.outlook.com (2603:10b6:510:1cb::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
- 2023 11:36:14 +0000
-Received: from DM6NAM11FT033.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:336:cafe::bf) by DM6PR06CA0102.outlook.office365.com
- (2603:10b6:5:336::35) with Microsoft SMTP Server (version=TLS1_2,
+ bh=bUt+6/5XC1OaGh7iuH+Z/LJrw1UWkzVE+H6FlLwW0qM=;
+ b=fMSo8o/B7PGSC5yo1eNmmxCIFHq+8gtfxJno1y7HGw9oWw8pEeXoYkLrBdIBVG93f3I3TJG2ZfiYMHjXOZYY21nSz3+f7Fbs2kZRcxLB8J/FQDo3V1oBWjmkGI4o47pFMoA7jMNC5dAA1XlGGl8pXE3ObR26JmKWh7S8OKcuGT3KANl2mZvvmqNzxqhV5eMDgquOqH9XrUTZ7q8NJZ8LqnDgoeFKUThaJZnu7MeR/gmr8gmukMAhPIhdGucI8lBgGZ3GYPiOWI5vdd96ENIo20/5GwbXGMGnozIfPX/WnuEf68xFQ1VjIl0CA+GezClPi8EqXeuHnaGrXGgKMVQAnw==
+Received: from DM5PR07CA0101.namprd07.prod.outlook.com (2603:10b6:4:ae::30) by
+ DS7PR12MB5767.namprd12.prod.outlook.com (2603:10b6:8:76::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.20; Tue, 18 Apr 2023 11:36:23 +0000
+Received: from DM6NAM11FT098.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:4:ae:cafe::58) by DM5PR07CA0101.outlook.office365.com
+ (2603:10b6:4:ae::30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.20 via Frontend
- Transport; Tue, 18 Apr 2023 11:36:14 +0000
+ Transport; Tue, 18 Apr 2023 11:36:23 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -48,20 +47,20 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.118.233 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.118.233) by
- DM6NAM11FT033.mail.protection.outlook.com (10.13.172.221) with Microsoft SMTP
+ DM6NAM11FT098.mail.protection.outlook.com (10.13.173.61) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6319.20 via Frontend Transport; Tue, 18 Apr 2023 11:36:14 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ 15.20.6319.20 via Frontend Transport; Tue, 18 Apr 2023 11:36:23 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
  (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 18 Apr 2023
- 04:36:12 -0700
+ 04:36:18 -0700
 Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Tue, 18 Apr 2023 04:36:11 -0700
+ 15.2.986.37; Tue, 18 Apr 2023 04:36:18 -0700
 Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
  (10.126.190.181) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Tue, 18 Apr 2023 04:36:07 -0700
+ Transport; Tue, 18 Apr 2023 04:36:13 -0700
 From:   Sumit Gupta <sumitg@nvidia.com>
 To:     <viresh.kumar@linaro.org>, <rafael@kernel.org>,
         <ionela.voinescu@arm.com>, <mark.rutland@arm.com>,
@@ -72,9 +71,9 @@ CC:     <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         <treding@nvidia.com>, <jonathanh@nvidia.com>, <vsethi@nvidia.com>,
         <sdonthineni@nvidia.com>, <sanjayc@nvidia.com>,
         <ksitaraman@nvidia.com>, <bbasu@nvidia.com>, <sumitg@nvidia.com>
-Subject: [Patch 5/6] arm64: cpufeature: Export get_cpu_with_amu_feat func
-Date:   Tue, 18 Apr 2023 17:04:58 +0530
-Message-ID: <20230418113459.12860-6-sumitg@nvidia.com>
+Subject: [Patch 6/6] cpufreq: CPPC: use wq to read amu counters on target cpu
+Date:   Tue, 18 Apr 2023 17:04:59 +0530
+Message-ID: <20230418113459.12860-7-sumitg@nvidia.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230418113459.12860-1-sumitg@nvidia.com>
 References: <20230418113459.12860-1-sumitg@nvidia.com>
@@ -83,23 +82,23 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT033:EE_|PH8PR12MB6914:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1831378e-dd9b-4a39-b9e7-08db40011df0
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT098:EE_|DS7PR12MB5767:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9409800e-d1b8-4413-9990-08db4001233d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JlnWLich6hJsPjApHLubZ3Z0GUiKAZ5DFIbbjpfNIMt/oPjW5PJHJmZf1aL/4DdmqoSq99oOHdLpd6vIPnFcy4LPmFGQsAZG7dtW1+h4xG2RUJtMJbNd3n3qRCMJjJgnKtn7/bCsC1nnbwoZo84yamRaQ6cHCtD3RV+YtZOzUmtjrxzn4wkqFCdsySePg67zJ+tW6RdhkGd9rByDCExCGeXilCLw2cfzv290qqdgXENhXNmOopPArSShDzeRMTs6W1gVCVtRm8rYZDYZVxKfP21cujtxzFp2XCkdiZF8s8iJuO/dDpchZ+327zrgcz6H7AZ0qfI2K6iTlwNZUcuYFo7j8qRXPNcVZF29qjF8Yem6yPbog31DD3cNgoy+nkrJH0vSb7UyPrC5ak3iZ75zDmSgJuI7qOhcEy8b8z5Foq1hLqRnHNl3+PUrdZZSItqLRPT5QjNOnt3fQla/vwmxSqAbU2p5jVdb7C1ZHE3BaTaD4WkU2ergSjlWEFlexejFblcunz1CKUrAL5dkP1ZqRDHusv4qz6fE4YQwqW+4rVEIOA7QV4TG0GgzRat0KmOH9ptlcmHQsh/pZU1/UROJMaPwGoM3PU9Zg4qAB4B+6gySDuZFlJrBapojfbLse8ivCoNaTj/Z9agmxifFrkc3PJIvChZSfdhsBDRDcEmRewt5u+HcrNk8Cc5Z5smfL2IvjeMSfd/oYM4lB3Bea+hqb33kyIEIj2E9JIQCymIVN0LM68U5NTToKsu3ykHD7Q+NcTOyPf+U1wd7gCjr1bIS53ow/m87m7/8jIhC6+F7lhs=
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(39860400002)(346002)(451199021)(46966006)(36840700001)(40470700004)(36756003)(4326008)(110136005)(54906003)(316002)(70586007)(70206006)(7696005)(478600001)(6666004)(41300700001)(5660300002)(82310400005)(8676002)(8936002)(40480700001)(2906002)(7416002)(4744005)(34020700004)(82740400003)(86362001)(356005)(426003)(2616005)(336012)(107886003)(40460700003)(1076003)(26005)(186003)(36860700001)(47076005)(7636003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: v/J4rRkBFY9ugXe3zIplEb2pH+4QT+tdN/F+xAZ75WLxCTJGcl1e3cB7QDMMCXifetWXg5TDltKry2WxECRubPP/GqZ73FpnDefL8WS30AfrDDSHcUcEpIv3LWAwDUyd9+hK3UMcsdWn1kzcOYpaUkq+DcKnreGHJ8I+YWEAr4UGV20XuyWd7tmfqyj267QbL3zgG69UDveeOejK3cDiER5t2cSuyzw92BG70mVap3QvuwAmWq4GGaV8nVxAz9bL2CsdkvX7aXyGy5y8zryw507hu4TJTvgDb/3LO7yHN5od7kv3EowZWofymOhDhiRhwciMS0YvaJyHw8cNhdDKWoCV/IKqx6Q4wNG7VI7EtJZlMETn3QUCNfjEfxbpaIb4AQ82tnktz+5UZLjLTI2WybB3uIzvTj3uVqIanOlw1er4BlMOsB/ASPBcC3uY2gFM+fX46OT0sCuChIi4QtSYBW6Ss6dPwYvqXvdoq4Wv9qyf9P5nQmVJFI1lXimD7yzZYeATmmLZf27vFx5GqgCO22S874tmSm3ltBp7PH8ssVkPiZ3+Lo3h3D4pbFFFIEe/K+EnuG9D9ETEPPstyTjvx4ESfsMeKvz0FV8Phgs5fRcE2mf9LUMfl4W1R247dm5wScBPY9+jAeJ4/wPAoJzBRYMxN+R3T77WFQ5IzM2u4H+YrIPHAAcSivcrmBg8GveyjwlP43w1O7daInQnuGs/hzMagpKYCjwHQWSqG7WTZdV7UOyI897nqgRQ/H052oJ0iOkHWRYBVZ5AAJv7deLZRdZHIEP+ZT5/AM6UnUVv7A4=
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(346002)(39860400002)(451199021)(40470700004)(36840700001)(46966006)(2906002)(34020700004)(2616005)(36860700001)(40460700003)(478600001)(6666004)(86362001)(82310400005)(26005)(1076003)(107886003)(7696005)(186003)(36756003)(40480700001)(426003)(336012)(41300700001)(82740400003)(356005)(7636003)(54906003)(8936002)(8676002)(47076005)(110136005)(316002)(70586007)(70206006)(83380400001)(4326008)(5660300002)(7416002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 11:36:14.3267
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 11:36:23.2191
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1831378e-dd9b-4a39-b9e7-08db40011df0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9409800e-d1b8-4413-9990-08db4001233d
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT033.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT098.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6914
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5767
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -111,31 +110,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Export the get_cpu_with_amu_feat() function for use by
-"cppc_cpufreq" to check if any CPU implements ARM's
-Activity Monitor Unit (AMU). If AMU is available, then
-for re-constructing the current CPU freq from its
-counters, queue work on target CPU to read the counters
-in a single call instead of reading them in separate
-smp calls.
+ARM cores which implement the Activity Monitor Unit (AMU)
+use Functional Fixed Hardware (FFH) to map AMU counters to
+Delivered_Counter and Reference_Counter registers. Each
+sysreg is read separately with a smp_call_function_single
+call. So, total four IPI's are used, one per register.
+Due to this, the AMU's core counter and constant counter
+sampling can happen at a non-consistent time interval if
+an IPI is handled late. This results in unstable frequency
+value from "cpuinfo_cur_req" node sometimes. To fix, queue
+work on target CPU to read all counters synchronously in
+sequence. This helps to remove the inter-IPI latency and
+make sure that both the counters are sampled at a close
+time interval.
+Without this change we observed that the re-generated value
+of CPU Frequency from AMU counters sometimes deviates by
+~25% as the counters are read at non-determenistic time.
+Currently, kept the change specific to Tegra241. It can be
+applied to other SoC's having AMU if same issue is observed.
 
 Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
 ---
- arch/arm64/kernel/cpufeature.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/cpufreq/cppc_cpufreq.c | 53 +++++++++++++++++++++++++++-------
+ 1 file changed, 43 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index d9345e9c0226..ec31da7043eb 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -1917,6 +1917,7 @@ int get_cpu_with_amu_feat(void)
- {
- 	return cpumask_any(&amu_cpus);
- }
-+EXPORT_SYMBOL_GPL(get_cpu_with_amu_feat);
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index 5e6a132a525e..52b93ac6225e 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -46,6 +46,8 @@ static bool boost_supported;
+ /* default 2usec delay between sampling */
+ static unsigned int sampling_delay_us = 2;
  
- static void cpu_amu_enable(struct arm64_cpu_capabilities const *cap)
++static bool get_rate_use_wq;
++
+ static void cppc_check_hisi_workaround(void);
+ static void cppc_nvidia_workaround(void);
+ 
+@@ -99,6 +101,12 @@ struct cppc_freq_invariance {
+ static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
+ static struct kthread_worker *kworker_fie;
+ 
++struct feedback_ctrs {
++	u32 cpu;
++	struct cppc_perf_fb_ctrs fb_ctrs_t0;
++	struct cppc_perf_fb_ctrs fb_ctrs_t1;
++};
++
+ static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu);
+ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
+ 				 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
+@@ -851,28 +859,44 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
+ 	return (reference_perf * delta_delivered) / delta_reference;
+ }
+ 
++static int cppc_get_perf_ctrs_sync(void *fb_ctrs)
++{
++	struct feedback_ctrs *ctrs = fb_ctrs;
++	int ret;
++
++	ret = cppc_get_perf_ctrs(ctrs->cpu, &(ctrs->fb_ctrs_t0));
++	if (ret)
++		return ret;
++
++	udelay(sampling_delay_us);
++
++	ret = cppc_get_perf_ctrs(ctrs->cpu, &(ctrs->fb_ctrs_t1));
++	if (ret)
++		return ret;
++
++	return ret;
++}
++
+ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
  {
+-	struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
+ 	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+ 	struct cppc_cpudata *cpu_data = policy->driver_data;
++	struct feedback_ctrs fb_ctrs = {0};
+ 	u64 delivered_perf;
+ 	int ret;
+ 
+ 	cpufreq_cpu_put(policy);
++	fb_ctrs.cpu = cpu;
+ 
+-	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
+-	if (ret)
+-		return ret;
+-
+-	udelay(sampling_delay_us);
+-
+-	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
++	if (get_rate_use_wq)
++		ret = smp_call_on_cpu(cpu, cppc_get_perf_ctrs_sync, &fb_ctrs, false);
++	else
++		ret = cppc_get_perf_ctrs_sync(&fb_ctrs);
+ 	if (ret)
+ 		return ret;
+ 
+-	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
+-					       &fb_ctrs_t1);
++	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &(fb_ctrs.fb_ctrs_t0),
++					       &(fb_ctrs.fb_ctrs_t1));
+ 
+ 	return cppc_cpufreq_perf_to_khz(cpu_data, delivered_perf);
+ }
+@@ -953,7 +977,16 @@ static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu)
+ 
+ static void cppc_nvidia_workaround(void)
+ {
++	int cpu;
++
+ 	sampling_delay_us = 25;
++
++#ifdef CONFIG_ARM64_AMU_EXTN
++	cpu = get_cpu_with_amu_feat();
++
++	if (cpu < nr_cpu_ids)
++		get_rate_use_wq = true;
++#endif
+ }
+ 
+ static void cppc_check_hisi_workaround(void)
 -- 
 2.17.1
 
