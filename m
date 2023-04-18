@@ -2,140 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB7A6E5D0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3886E5D13
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjDRJKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:10:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        id S230471AbjDRJLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbjDRJK3 (ORCPT
+        with ESMTP id S230352AbjDRJLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:10:29 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEB610E0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:10:26 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-54fa9da5e5bso248723087b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681809026; x=1684401026;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sIdLuh0YsEXFhwNIbAtHDqpsY5fap9VloDpWQIFGF4U=;
-        b=HosxURX3ChbwZKNn4YKQtISwq82SPHNlHvU8+KQZ1TEkHlYSdwkEaq5scPHbCl4xfi
-         Bn9K+Aq8rHGOFtRfFAX/W/jNlA4OEbM3RcKWpfeQg49Tz04TjDhfAAagcTbiN+7QbE12
-         axNbUDmR2CwEh2pfVHCZQOC5/sIrtY5ksZBXHQR6EXNAdOAE2jENQNQs2Nfg4u/QCLBf
-         DV3HRBDBozCNC6QdYCLkYPYNkIm23y7gtAivT3NTsN50XOwrR+dWwGY9guId5dwq7gWx
-         M75rPtPkAmpBcGdTABTXYhOzWmb3V/ic1+DCAo0lrFzBgv3XDlIqoLHtxpL9C6jIImma
-         izPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681809026; x=1684401026;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sIdLuh0YsEXFhwNIbAtHDqpsY5fap9VloDpWQIFGF4U=;
-        b=XMZ0+d7KRtA0ILJwyY0CrWj538yIYRvlP+Fep9A6hp/umq90dX5O3v5dVxCEX2M0HI
-         6XimZs8QvK9xfh25c3S4c+6YUhkevvPs2rnDtn+AfQPmL7VL3HnaXZT9Zi4f33GxAs20
-         OuabaUuiXcBn5jw5URmf8HbLz4V8ZZGl5hvkVYOw10eM09QF6TyGfHeity7bIw5nXWeA
-         w7KwMK34rDj8CQgZgJrnU5UnHmFmj9GSNOV/Kb29NocLDNGAC26blATqsJVqUYHi2hNc
-         yTOf6S//MYgJmBQXfYacPf0OMj/VHUn+s26R2SO/SSZ899XqROMYOesKe5xJUt+v0dlC
-         +y0Q==
-X-Gm-Message-State: AAQBX9f0fxo0TgEztejsBvkDv3KLFetGPZDrCNHHvrKUDGeayHm8YwcO
-        J47UoYDN8zK4eP6rTV76KGm5BGeaw8YRPhOZI5k4FA==
-X-Google-Smtp-Source: AKy350baYiQUbT4k6ozDbpWs1GqPpRg4luYmX8oNyF2aGUcFzmagNtslM3QDJSesiOtxgceK3fvS/HN1TDH2ygSBaB8=
-X-Received: by 2002:a81:4f09:0:b0:541:66e8:d4da with SMTP id
- d9-20020a814f09000000b0054166e8d4damr16184276ywb.29.1681809026050; Tue, 18
- Apr 2023 02:10:26 -0700 (PDT)
+        Tue, 18 Apr 2023 05:11:51 -0400
+Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF6B10E0;
+        Tue, 18 Apr 2023 02:11:50 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by sonata.ens-lyon.org (Postfix) with ESMTP id 175AE20180;
+        Tue, 18 Apr 2023 11:11:49 +0200 (CEST)
+Received: from sonata.ens-lyon.org ([127.0.0.1])
+        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id bKQ3-A0V8pgX; Tue, 18 Apr 2023 11:11:48 +0200 (CEST)
+Received: from begin.home (apoitiers-658-1-118-253.w92-162.abo.wanadoo.fr [92.162.65.253])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by sonata.ens-lyon.org (Postfix) with ESMTPSA id B380620177;
+        Tue, 18 Apr 2023 11:11:48 +0200 (CEST)
+Received: from samy by begin.home with local (Exim 4.96)
+        (envelope-from <samuel.thibault@ens-lyon.org>)
+        id 1pohNM-00BMWM-0m;
+        Tue, 18 Apr 2023 11:11:48 +0200
+Date:   Tue, 18 Apr 2023 11:11:48 +0200
+From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     James Chapman <jchapman@katalix.com>, tparkin@katalix.com,
+        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwn.net, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PPPoL2TP: Add more code snippets
+Message-ID: <20230418091148.hh3b52zceacduex6@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Guillaume Nault <gnault@redhat.com>,
+        James Chapman <jchapman@katalix.com>, tparkin@katalix.com,
+        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwn.net, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230416220704.xqk4q6uwjbujnqpv@begin>
+ <ZD5V+z+cBaXvPbQa@debian>
+ <20230418085323.h6xij7w6d2o4kxxi@begin>
+ <ZD5dqwPblo4FOex1@debian>
 MIME-Version: 1.0
-References: <20230413064344.18714-1-quic_tjiang@quicinc.com>
- <CAA8EJpoc4nn+Wr131-o=YQoDeL0t7aj9hC=8NNnJa3SeHwgJ-w@mail.gmail.com>
- <934c32ef9427464a9d0b898b843df6ab@quicinc.com> <CAA8EJpqz9o9CtAnXRE86kw-cfL=_d-c5BDAXwQLSJAyZRy_fEg@mail.gmail.com>
- <a908e04e9b7d4b97bc6b5ee3c713e71f@quicinc.com>
-In-Reply-To: <a908e04e9b7d4b97bc6b5ee3c713e71f@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 18 Apr 2023 12:10:15 +0300
-Message-ID: <CAA8EJprztGdP0yqV=O6P2tn4i0+iQ4rfBVY2x-3_93o3C0c-Nw@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: btusb: Add WCN6855 devcoredump support
-To:     "Tim Jiang (QUIC)" <quic_tjiang@quicinc.com>
-Cc:     "marcel@holtmann.org" <marcel@holtmann.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "Balakrishna Godavarthi (QUIC)" <quic_bgodavar@quicinc.com>,
-        "Hemant Gupta (QUIC)" <quic_hemantg@quicinc.com>,
-        "mka@chromium.org" <mka@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZD5dqwPblo4FOex1@debian>
+Organization: I am not organized
+User-Agent: NeoMutt/20170609 (1.8.3)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Apr 2023 at 12:07, Tim Jiang (QUIC) <quic_tjiang@quicinc.com> wrote:
->
-> Hi Dmitry:
->
-> -----Original Message-----
-> From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Sent: Tuesday, April 18, 2023 5:03 PM
-> To: Tim Jiang (QUIC) <quic_tjiang@quicinc.com>
-> Cc: marcel@holtmann.org; linux-kernel@vger.kernel.org; linux-bluetooth@vger.kernel.org; linux-arm-msm@vger.kernel.org; Balakrishna Godavarthi (QUIC) <quic_bgodavar@quicinc.com>; Hemant Gupta (QUIC) <quic_hemantg@quicinc.com>; mka@chromium.org
-> Subject: Re: [PATCH v2] Bluetooth: btusb: Add WCN6855 devcoredump support
->
-> On Tue, 18 Apr 2023 at 04:02, Tim Jiang (QUIC) <quic_tjiang@quicinc.com> wrote:
-> >
-> > Hi Dmitry:
-> >
-> > -----Original Message-----
-> > From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Sent: Saturday, April 15, 2023 5:03 AM
-> > To: Tim Jiang (QUIC) <quic_tjiang@quicinc.com>
-> > Cc: marcel@holtmann.org; linux-kernel@vger.kernel.org;
-> > linux-bluetooth@vger.kernel.org; linux-arm-msm@vger.kernel.org;
-> > Balakrishna Godavarthi (QUIC) <quic_bgodavar@quicinc.com>; Hemant
-> > Gupta (QUIC) <quic_hemantg@quicinc.com>; mka@chromium.org
-> > Subject: Re: [PATCH v2] Bluetooth: btusb: Add WCN6855 devcoredump
-> > support
-> >
-> > On Thu, 13 Apr 2023 at 09:44, Tim Jiang <quic_tjiang@quicinc.com> wrote:
-> > >
-> > > WCN6855 will report memdump via ACL data or HCI event when it get
-> > > crashed, so we collect memdump to debug firmware.
-> >
-> > Is it applicable only to wcn6855 or to some of earlier chips too?
-> >  [Tim]  Also applicable to earlier chips , but currently google only
-> > require us to support wcn6855
->
-> Since upstream is not a google kernel, please enable this feature for all relevant chipsets.
-> [Tim] agreed , but the title of this gerrit unchanged,  I raise a new gerrit for other relevant chipsets , is OK?
+Guillaume Nault, le mar. 18 avril 2023 11:06:51 +0200, a ecrit:
+> On Tue, Apr 18, 2023 at 10:53:23AM +0200, Samuel Thibault wrote:
+> > Guillaume Nault, le mar. 18 avril 2023 10:34:03 +0200, a ecrit:
+> > > On Mon, Apr 17, 2023 at 12:07:04AM +0200, Samuel Thibault wrote:
+> > > >          sax.sa_family = AF_PPPOX;
+> > > >          sax.sa_protocol = PX_PROTO_OL2TP;
+> > > >          sax.pppol2tp.fd = tunnel_fd;
+> > > > @@ -406,12 +407,64 @@ Sample userspace code:
+> > > >          /* session_fd is the fd of the session's PPPoL2TP socket.
+> > > >           * tunnel_fd is the fd of the tunnel UDP / L2TPIP socket.
+> > > >           */
+> > > > -        fd = connect(session_fd, (struct sockaddr *)&sax, sizeof(sax));
+> > > > -        if (fd < 0 ) {
+> > > > +        ret = connect(session_fd, (struct sockaddr *)&sax, sizeof(sax));
+> > > > +        if (ret < 0 ) {
+> > > 
+> > > Now you also need to close session_fd.
+> > 
+> > ? No, we need it for PPPIOCGCHAN, and also PPPIOCGL2TPSTATS.
+> 
+> connect() failed. You can't do anything with this socket.
 
-There is no gerrit here.
+Ah, you were talking about the failure case, ok.
 
-Also, is there any chance you can fix your email client to stop
-putting old headers at the top of the email?
+> > > > +The ppp<ifunit> interface can then be configured as usual with SIOCSIFMTU,
+> > > > +SIOCSIFADDR, SIOCSIFDSTADDR, SIOCSIFNETMASK, and activated by setting IFF_UP
+> > > > +with SIOCSIFFLAGS
+> > > > +
+> > > > +  - Tunnel switching is supported by bridging channels::
+> > > 
+> > > This is a PPP feature not an L2TP one.
+> > > 
+> > > PPPIOCBRIDGECHAN's description
+> > > belongs to Documentation/networking/ppp_generic.rst, where it's already
+> > > documented.
+> > 
+> > Yes but that's hard to find out when you're looking from the L2TP end.
+> 
+> That's why I proposed linking to ppp_generic.rst.
 
->
-> >
-> > >
-> > > Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
-> > > ---
-> > >  drivers/bluetooth/btusb.c | 222
-> > > ++++++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 222 insertions(+)
->
->
->
->
-> --
-> With best wishes
-> Dmitry
+Yes, but it's still not obvious to L2TP people that it's a ppp channel
+that you have to bridge. Really, having that 20-line snippet available
+would have saved me some head-scratching time.
 
-
-
--- 
-With best wishes
-Dmitry
+Samuel
