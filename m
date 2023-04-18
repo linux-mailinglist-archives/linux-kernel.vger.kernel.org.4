@@ -2,203 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540A56E6793
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DAD6E6796
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjDROxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 10:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
+        id S231169AbjDROys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 10:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjDROxg (ORCPT
+        with ESMTP id S230027AbjDROyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 10:53:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91150AF22;
-        Tue, 18 Apr 2023 07:53:34 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 14:53:30 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681829611;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wfTLvPvmkoUmxckHjErqBahcxhIhR7fQTO9hzWxAnZw=;
-        b=xxqyjxqyvSHPdC1ZxRVViREChzGTWEkLxB5z7VVY5boT2aq5M4YJgTVHpFxZnEfi44eCx9
-        mwbvCk+Rndb1l9Fjn/US6WDAHSsaWKiCf2BF8O8Kx5DMAKXhq8XeFoBvCM38r6kzAFWwSa
-        UMcIorv8lSRhfG2KYxVQvZpPK7m06NFsKjlqJU/pOHHoHjpvyyMNExcWghg+cXBCx5+0Wx
-        2Uk2/RfQZJ2VrrO1SPgXw0oW+9GvdxNgbzU9gMB1Otnw/jhXCpICA3L5mztEqw/Xn9cGns
-        PPWhcar3m4lAPZvJV7P5j8k+Iht7qy7DIAN9avMCmt/79ToJUBD6KmsGKpFpYw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681829611;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wfTLvPvmkoUmxckHjErqBahcxhIhR7fQTO9hzWxAnZw=;
-        b=cYkBd8388jmf1KZdUmKkCDReTvVjICTOcJb1i1x6ZLe7uWbMfVqpLpEG01qErAq0G38IXo
-        DWZHNvZUcq8IVqCg==
-From:   "tip-bot2 for Frederic Weisbecker" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] timers/nohz: Restructure and reshuffle struct tick_sched
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230222144649.624380-2-frederic@kernel.org>
-References: <20230222144649.624380-2-frederic@kernel.org>
+        Tue, 18 Apr 2023 10:54:45 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A1413C2A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 07:54:15 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id u13so29515190ybu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 07:54:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681829653; x=1684421653;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EfhwMvTdF+nxW4QIbzDKMW7E7O/7EuCgSfJoT4ktJKk=;
+        b=V6daXsKy1PWZRcniSnjOMJGA+yng2Oy491YMI3OFPQGoQBhf81M+e6ihsqqDWd1xxv
+         l3PU44fgRj6U8tOVtSQ8riMlwu1AHyEI3QvtZOiDSRERUbIJZgBuPobs5NqywDwEeTk7
+         8O1x9yAlV0Ng3D7bY0KuYrTW7faDUJAOGBpJpsvsXl580kGvh7aH7dTZ3iVpswpSfrlJ
+         A3E/u4sSyT6IAdHEsP7Y07TgbPMz2CAzZ0PQiDYF0CTY1JqVU5FvlGlE6TSmcP+eg3vD
+         /VcOle5QjG2sGkhO274MhCCDuxIqPA5R9u/iqZ29wfIrdGpce0AKdXoFQ6EnWP7/4cLg
+         AKKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681829653; x=1684421653;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EfhwMvTdF+nxW4QIbzDKMW7E7O/7EuCgSfJoT4ktJKk=;
+        b=Sre1yFzVb4aNpceKdRiQrIDyE1ulB5eysCm0Dg+NxMfX+HxDEv23gGUstgs+RIufAt
+         hqd81n12PjH5Bl6Xb3bnVlkn/O6bISY/0Wi2PZulplkzAXbeC97pFKTwRFE1ezuKBxxs
+         2s/AaTwxEbso4V/f+rIWMkEOpxYKU2UxwC92KvFPH4nuhIMk8TofN18b/VaBUDju0fj7
+         tCeyKOQZ5aEfVX/T8ISlnsBxuXCqjl4B/k7APeyDWoiFy67Mkuh0JVtFE+kSIohwtfxa
+         EbuNVND9QqqI+W1px6kZqZgIOgQIBhdiESCejxOrfOSRpPx/DX9YhZcqzfOHOiyNLGK5
+         B0ZA==
+X-Gm-Message-State: AAQBX9eJNpvf1R2vG6lEuRlrO+jZ5icQAY0bzllvnW62vd6dMjy0RQ3H
+        Ii4+OEWyBnH0IZpHFWjtlc7Fqp88B46HbDbmSxeCMA==
+X-Google-Smtp-Source: AKy350ZgLB/WBc8GOyEDUDumrOQ+KvSYZQqa6oa0isslarGW+peOSaafPqoy5z25OTE2YBDofEZ/JnufNH0SWm/ucyE=
+X-Received: by 2002:a25:d2d2:0:b0:b95:518b:4921 with SMTP id
+ j201-20020a25d2d2000000b00b95518b4921mr1400083ybg.12.1681829652615; Tue, 18
+ Apr 2023 07:54:12 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <168182961061.404.1643520889505328562.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230415000818.1955007-1-surenb@google.com> <ZD2gsbN2K66oXT69@x1n>
+ <ZD3Nk0u+nxOT4snZ@casper.infradead.org> <CAJuCfpFPziNK65qpzd5dEYSnoE-94UHAsM-CX080VTTJC5ZZKA@mail.gmail.com>
+ <ZD6oVgIi/yY1+t1L@casper.infradead.org>
+In-Reply-To: <ZD6oVgIi/yY1+t1L@casper.infradead.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 18 Apr 2023 07:54:01 -0700
+Message-ID: <CAJuCfpFJ0owZELS2COukb0rHCOpqNMW-x9vVonkhknReZb=Zsg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] mm: do not increment pgfault stats when page fault
+ handler retries
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Peter Xu <peterx@redhat.com>, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
+        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the timers/core branch of tip:
+On Tue, Apr 18, 2023 at 7:25=E2=80=AFAM Matthew Wilcox <willy@infradead.org=
+> wrote:
+>
+> On Mon, Apr 17, 2023 at 04:17:45PM -0700, Suren Baghdasaryan wrote:
+> > On Mon, Apr 17, 2023 at 3:52=E2=80=AFPM Matthew Wilcox <willy@infradead=
+.org> wrote:
+> > >
+> > > On Mon, Apr 17, 2023 at 03:40:33PM -0400, Peter Xu wrote:
+> > > > >     /*
+> > > > > -    * We don't do accounting for some specific faults:
+> > > > > -    *
+> > > > > -    * - Unsuccessful faults (e.g. when the address wasn't valid)=
+.  That
+> > > > > -    *   includes arch_vma_access_permitted() failing before reac=
+hing here.
+> > > > > -    *   So this is not a "this many hardware page faults" counte=
+r.  We
+> > > > > -    *   should use the hw profiling for that.
+> > > > > -    *
+> > > > > -    * - Incomplete faults (VM_FAULT_RETRY).  They will only be c=
+ounted
+> > > > > -    *   once they're completed.
+> > > > > +    * Do not account for incomplete faults (VM_FAULT_RETRY). The=
+y will be
+> > > > > +    * counted upon completion.
+> > > > >      */
+> > > > > -   if (ret & (VM_FAULT_ERROR | VM_FAULT_RETRY))
+> > > > > +   if (ret & VM_FAULT_RETRY)
+> > > > > +           return;
+> > > > > +
+> > > > > +   /* Register both successful and failed faults in PGFAULT coun=
+ters. */
+> > > > > +   count_vm_event(PGFAULT);
+> > > > > +   count_memcg_event_mm(mm, PGFAULT);
+> > > >
+> > > > Is there reason on why vm events accountings need to be explicitly
+> > > > different from perf events right below on handling ERROR?
+> > >
+> > > I think so.  ERROR is quite different from RETRY.  If we are, for
+> > > example, handling a SIGSEGV (perhaps a GC language?) that should be
+> > > accounted.  If we can't handle a page fault right now, and need to
+> > > retry within the kernel, that should not be accounted.
+> >
+> > IIUC, the question was about the differences in vm vs perf accounting
+> > for errors, not the difference between ERROR and RETRY cases. Matthew,
+> > are you answering the right question or did I misunderstand your
+> > answer?
+>
+> Maybe I'm misunderstanding what you're proposing.  I thought the
+> proposal was to make neither ERROR nor RETRY increment the counters,
+> but if the proposal is to make ERROR increment the perf counters
+> instead, then that's cool with me.
 
-Commit-ID:     605da849d5982dee0527edb2488b79795f31a150
-Gitweb:        https://git.kernel.org/tip/605da849d5982dee0527edb2488b79795f31a150
-Author:        Frederic Weisbecker <frederic@kernel.org>
-AuthorDate:    Wed, 22 Feb 2023 15:46:42 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Tue, 18 Apr 2023 16:35:12 +02:00
-
-timers/nohz: Restructure and reshuffle struct tick_sched
-
-Restructure and group fields by access in order to optimize cache
-layout. While at it, also add missing kernel doc for two fields:
-@last_jiffies and @idle_expires.
-
-Reported-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20230222144649.624380-2-frederic@kernel.org
-
----
- kernel/time/tick-sched.h | 66 ++++++++++++++++++++++++---------------
- 1 file changed, 41 insertions(+), 25 deletions(-)
-
-diff --git a/kernel/time/tick-sched.h b/kernel/time/tick-sched.h
-index 5046495..c666325 100644
---- a/kernel/time/tick-sched.h
-+++ b/kernel/time/tick-sched.h
-@@ -22,65 +22,81 @@ enum tick_nohz_mode {
- 
- /**
-  * struct tick_sched - sched tick emulation and no idle tick control/stats
-- * @sched_timer:	hrtimer to schedule the periodic tick in high
-- *			resolution mode
-- * @check_clocks:	Notification mechanism about clocksource changes
-- * @nohz_mode:		Mode - one state of tick_nohz_mode
-+ *
-  * @inidle:		Indicator that the CPU is in the tick idle mode
-  * @tick_stopped:	Indicator that the idle tick has been stopped
-  * @idle_active:	Indicator that the CPU is actively in the tick idle mode;
-  *			it is reset during irq handling phases.
-- * @do_timer_lst:	CPU was the last one doing do_timer before going idle
-+ * @do_timer_last:	CPU was the last one doing do_timer before going idle
-  * @got_idle_tick:	Tick timer function has run with @inidle set
-+ * @stalled_jiffies:	Number of stalled jiffies detected across ticks
-+ * @last_tick_jiffies:	Value of jiffies seen on last tick
-+ * @sched_timer:	hrtimer to schedule the periodic tick in high
-+ *			resolution mode
-  * @last_tick:		Store the last tick expiry time when the tick
-  *			timer is modified for nohz sleeps. This is necessary
-  *			to resume the tick timer operation in the timeline
-  *			when the CPU returns from nohz sleep.
-  * @next_tick:		Next tick to be fired when in dynticks mode.
-  * @idle_jiffies:	jiffies at the entry to idle for idle time accounting
-+ * @idle_waketime:	Time when the idle was interrupted
-+ * @idle_entrytime:	Time when the idle call was entered
-+ * @nohz_mode:		Mode - one state of tick_nohz_mode
-+ * @last_jiffies:	Base jiffies snapshot when next event was last computed
-+ * @timer_expires_base:	Base time clock monotonic for @timer_expires
-+ * @timer_expires:	Anticipated timer expiration time (in case sched tick is stopped)
-+ * @next_timer:		Expiry time of next expiring timer for debugging purpose only
-+ * @idle_expires:	Next tick in idle, for debugging purpose only
-  * @idle_calls:		Total number of idle calls
-  * @idle_sleeps:	Number of idle calls, where the sched tick was stopped
-- * @idle_entrytime:	Time when the idle call was entered
-- * @idle_waketime:	Time when the idle was interrupted
-  * @idle_exittime:	Time when the idle state was left
-  * @idle_sleeptime:	Sum of the time slept in idle with sched tick stopped
-  * @iowait_sleeptime:	Sum of the time slept in idle with sched tick stopped, with IO outstanding
-- * @timer_expires:	Anticipated timer expiration time (in case sched tick is stopped)
-- * @timer_expires_base:	Base time clock monotonic for @timer_expires
-- * @next_timer:		Expiry time of next expiring timer for debugging purpose only
-  * @tick_dep_mask:	Tick dependency mask - is set, if someone needs the tick
-- * @last_tick_jiffies:	Value of jiffies seen on last tick
-- * @stalled_jiffies:	Number of stalled jiffies detected across ticks
-+ * @check_clocks:	Notification mechanism about clocksource changes
-  */
- struct tick_sched {
--	struct hrtimer			sched_timer;
--	unsigned long			check_clocks;
--	enum tick_nohz_mode		nohz_mode;
--
-+	/* Common flags */
- 	unsigned int			inidle		: 1;
- 	unsigned int			tick_stopped	: 1;
- 	unsigned int			idle_active	: 1;
- 	unsigned int			do_timer_last	: 1;
- 	unsigned int			got_idle_tick	: 1;
- 
-+	/* Tick handling: jiffies stall check */
-+	unsigned int			stalled_jiffies;
-+	unsigned long			last_tick_jiffies;
-+
-+	/* Tick handling */
-+	struct hrtimer			sched_timer;
- 	ktime_t				last_tick;
- 	ktime_t				next_tick;
- 	unsigned long			idle_jiffies;
--	unsigned long			idle_calls;
--	unsigned long			idle_sleeps;
--	ktime_t				idle_entrytime;
- 	ktime_t				idle_waketime;
--	ktime_t				idle_exittime;
--	ktime_t				idle_sleeptime;
--	ktime_t				iowait_sleeptime;
-+
-+	/* Idle entry */
-+	ktime_t				idle_entrytime;
-+
-+	/* Tick stop */
-+	enum tick_nohz_mode		nohz_mode;
- 	unsigned long			last_jiffies;
--	u64				timer_expires;
- 	u64				timer_expires_base;
-+	u64				timer_expires;
- 	u64				next_timer;
- 	ktime_t				idle_expires;
-+	unsigned long			idle_calls;
-+	unsigned long			idle_sleeps;
-+
-+	/* Idle exit */
-+	ktime_t				idle_exittime;
-+	ktime_t				idle_sleeptime;
-+	ktime_t				iowait_sleeptime;
-+
-+	/* Full dynticks handling */
- 	atomic_t			tick_dep_mask;
--	unsigned long			last_tick_jiffies;
--	unsigned int			stalled_jiffies;
-+
-+	/* Clocksource changes */
-+	unsigned long			check_clocks;
- };
- 
- extern struct tick_sched *tick_get_tick_sched(int cpu);
+Oh, I think now I understand your answer. You were not highlighting
+the difference between the who but objecting to the proposal of not
+counting both ERROR and RETRY. Am I on the same page now?
