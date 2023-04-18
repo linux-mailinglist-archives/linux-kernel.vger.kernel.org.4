@@ -2,97 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832EB6E6C29
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA876E6C30
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbjDRSe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
+        id S232690AbjDRSfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232708AbjDRSey (ORCPT
+        with ESMTP id S232406AbjDRSfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:34:54 -0400
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECDE5FEB;
-        Tue, 18 Apr 2023 11:34:53 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id n43-20020a05600c502b00b003f17466a9c1so329276wmr.2;
-        Tue, 18 Apr 2023 11:34:53 -0700 (PDT)
+        Tue, 18 Apr 2023 14:35:47 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912D57A8A;
+        Tue, 18 Apr 2023 11:35:39 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-18777914805so5423016fac.1;
+        Tue, 18 Apr 2023 11:35:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681842892; x=1684434892;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xm4ZY1i9Dh6gYkNxKtAHV+VT8qVk5zXV7kjjZ2dWbbc=;
-        b=inlV1UZNjGzLwdvkVYspz00/fgBNC/HgmECKW8DMTDz/pASPGFJ10vXWsNZJagcZbf
-         1unixmRXkNu21ME7DDP7bMqzdgtJfoILZbXz7mUWlsaOXPoi4qqyG5uoACXFhAw4P+oP
-         bNgNHynOt4WhOnsoxIPFsIukB2EAiixx0Sz/ku6/rhQp+9X58RzDPw6eFqxqW1eDe4CV
-         uhTbIle2OyEARsUKnYTtTcfbNuRVxmt/1BV7g+gg8xHykjIveq6ioyeCFGzSbKjaQQo2
-         LONibxMtPKxB/JGbNIwRM2yECyQNeX0wYk/XIilcXaRpj+vAmLz5GIs97Ux09UcfOyb+
-         8Jzg==
-X-Gm-Message-State: AAQBX9fXz+0u9eNKvRJZ95CQRMt2XcIwXbjSMjmImZIN0QgcBf0ud5Z0
-        gxxXqOSfqd06oSIJoXhoieU=
-X-Google-Smtp-Source: AKy350bHlssa6DuT3MY94kLm7rWccLcuvRtMBc56od1YbGIgIpSIvi7awTSaLifcA4m0MK5BSYngAw==
-X-Received: by 2002:a05:600c:c3:b0:3f1:76a2:33a8 with SMTP id u3-20020a05600c00c300b003f176a233a8mr4105861wmm.5.1681842891914;
-        Tue, 18 Apr 2023 11:34:51 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id q9-20020a1ce909000000b003ee20b4b2dasm15588429wmc.46.2023.04.18.11.34.51
+        d=1e100.net; s=20221208; t=1681842939; x=1684434939;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QlhqO9AxBER4HIpBC59Ob9+ScXyTg9RUgf/dYIiD+8Y=;
+        b=SRLO6ldS5SRp9sR19/akVmV9YPU1g4pjctnkjHZ5Jbukum0iMk7ifWYAky9AbcPz5F
+         OPl6KorK3BlmttDCg4Skyv2LJbDEAmkyRid4KtPgWCBlvxSTnvkFP8c5roXz+rV+2FGg
+         irGfJXAq3lGBBypQQzb3o4sXXYQPgtW8F9RpLc5WeRrxFz9OXix6uGrMRYcLgY1YzMYe
+         HnK11PUojjLBED5f00EVHBTnIymuFGg65TR4BID1oreVjEMABNvTaCKx+CF782HDZ/Yp
+         YYAWizK60+UprnKIW8kP8V9WB17/exmm5MJGapTOAmWX0iA6rVbfQNg0UCBfROgm6GKL
+         wbZg==
+X-Gm-Message-State: AAQBX9fTTFJufRNtE50lM5jxCkNdSgXO5zZCLlNSKy9t/Qzy8+fWDdzP
+        vSD6VXOhcx/MtVIfqv+Z9g==
+X-Google-Smtp-Source: AKy350ajh+wJUffh8UxLGdDHl6vWMJtQQygdPag8NrHhfp+uVX045UKSF40LZDsSiMF1w+rVbFQNPA==
+X-Received: by 2002:a05:6870:b620:b0:184:80bf:753f with SMTP id cm32-20020a056870b62000b0018480bf753fmr1790600oab.26.1681842938837;
+        Tue, 18 Apr 2023 11:35:38 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id sc15-20020a056871220f00b00187fdd3e0d1sm1700958oab.54.2023.04.18.11.35.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 11:34:51 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 18:34:48 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     broonie@kernel.org
-Cc:     Long Li <longli@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-hyperv@vger.kernel.org
-Subject: Re: linux-next: build failure after merge of the hyperv tree
-Message-ID: <ZD7iyCf2WdnTMurW@liuwe-devbox-debian-v2>
-References: <20230418173157.92827-1-broonie@kernel.org>
+        Tue, 18 Apr 2023 11:35:38 -0700 (PDT)
+Received: (nullmailer pid 2097482 invoked by uid 1000);
+        Tue, 18 Apr 2023 18:35:36 -0000
+Date:   Tue, 18 Apr 2023 13:35:36 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Jim Quinlan <jim2101024@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] dt-bindings: PCI: brcmstb: Add two optional props
+Message-ID: <20230418183536.GA2087834-robh@kernel.org>
+References: <20230411165919.23955-1-jim2101024@gmail.com>
+ <20230411165919.23955-2-jim2101024@gmail.com>
+ <5a28e520-63e4-dbcf-5b3e-e5097f02dea2@linaro.org>
+ <78c18cdb-5757-8d30-e2a6-414f09505cc6@gmail.com>
+ <66b7d0b9-9569-ddaf-89ca-5a0133074a17@linaro.org>
+ <CANCKTBtZt9QRkT4yAW5LsfHGf5TTL7tQ025H42+PPEi-=rWE8A@mail.gmail.com>
+ <20230412153723.GA2473030-robh@kernel.org>
+ <ac2245fd-52c8-3255-3e54-bd8daab1282d@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230418173157.92827-1-broonie@kernel.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ac2245fd-52c8-3255-3e54-bd8daab1282d@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 06:31:57PM +0100, broonie@kernel.org wrote:
-> Hi all,
+On Wed, Apr 12, 2023 at 09:12:07AM -0700, Florian Fainelli wrote:
+> On 4/12/23 08:37, Rob Herring wrote:
+> > On Wed, Apr 12, 2023 at 10:14:46AM -0400, Jim Quinlan wrote:
+> > > On Wed, Apr 12, 2023 at 7:56 AM Krzysztof Kozlowski
+> > > <krzysztof.kozlowski@linaro.org> wrote:
+> > > > 
+> > > > On 12/04/2023 13:49, Florian Fainelli wrote:
+> > > > > 
+> > > > > 
+> > > > > On 4/12/2023 1:09 AM, Krzysztof Kozlowski wrote:
+> > > > > > On 11/04/2023 18:59, Jim Quinlan wrote:
+> > > > > > > Regarding "brcm,enable-l1ss":
+> > > > > > > 
+> > > > > > >     The Broadcom STB/CM PCIe HW -- a core that is also used by RPi SOCs --
+> > > > > > >     requires the driver probe() to deliberately place the HW one of three
+> > > > > > >     CLKREQ# modes:
+> > > > > > > 
+> > > > > > >     (a) CLKREQ# driven by the RC unconditionally
+> > > > > > >     (b) CLKREQ# driven by the EP for ASPM L0s, L1
+> > > > > > >     (c) Bidirectional CLKREQ#, as used for L1 Substates (L1SS).
+> > > > > > > 
+> > > > > > >     The HW+driver can tell the difference between downstream devices that
+> > > > > > >     need (a) and (b), but does not know when to configure (c).  Further, the
+> > > > > > >     HW may cause a CPU abort on boot if guesses wrong regarding the need for
+> > > > > > >     (c).  So we introduce the boolean "brcm,enable-l1ss" property to indicate
+> > > > > > >     that (c) is desired.  Setting this property only makes sense when the
+> > > > > > >     downstream device is L1SS-capable and the OS is configured to activate
+> > > > > > >     this mode (e.g. policy==superpowersave).
+> > > > > > > 
+> > > > > > >     This property is already present in the Raspian version of Linux, but the
+> > > > > > >     upstream driver implementaion that will follow adds more details and
+> > > > > > 
+> > > > > > typo, implementation
+> > > > > > 
+> > > > > > >     discerns between (a) and (b).
+> > > > > > > 
+> > > > > > > Regarding "brcm,completion-timeout-us"
+> > > > > > > 
+> > > > > > >     Our HW will cause a CPU abort if the L1SS exit time is longer than the
+> > > > > > >     PCIe transaction completion abort timeout.  We've been asked to make this
+> > > > > > >     configurable, so we are introducing "brcm,completion-timeout-us".
+> > > > > > > 
+> > > > > > > Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> > > > > > 
+> > > > > > What happened here? Where is the changelog?
+> > > > > 
+> > > > > It is in the cover letter:
+> > > > > 
+> > > > > https://lore.kernel.org/all/20230411165919.23955-1-jim2101024@gmail.com/
+> > > > > 
+> > > > > but it does not look like the cover letter was copied to you or Rob.
+> > > > 
+> > > > As you said, I did not get it.
+> > > 
+> > > Yes, sorry about that; I use a wrapper over the "cocci_cc" script and
+> > > I need to modify one or both scripts to send the cover to the
+> > > superset of recipients in the constituent commits.
+> > 
+> > Try out 'b4'. It's much easier.
+> > 
+> > In any case, I don't read cover letters. Changes to a patch belong with
+> > the patch.
 > 
-> After merging the hyperv tree, today's linux-next build (x86 allmodconfig)
-> failed like this:
-> 
-> /tmp/next/build/drivers/hv/connection.c: In function 'vmbus_connect':
-> /tmp/next/build/drivers/hv/connection.c:228:53: error: implicit
-> declaration of function 'hv_alloc_hyperv_page'; did you mean 'hv_free_hyperv_page'? [-Werror=implicit-function-declaration]
->   228 |         vmbus_connection.monitor_pages[0] = (void *)hv_alloc_hyperv_page();
->       |                                                     ^~~~~~~~~~~~~~~~~~~~
->       |                                                     hv_free_hyperv_page
-> /tmp/next/build/drivers/hv/connection.c:228:45: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
->   228 |         vmbus_connection.monitor_pages[0] = (void *)hv_alloc_hyperv_page();
->       |                                             ^
-> /tmp/next/build/drivers/hv/connection.c:229:45: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
->   229 |         vmbus_connection.monitor_pages[1] = (void *)hv_alloc_hyperv_page();
->       |                                             ^
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   4dbdcfe1c5db80edca ("Drivers: hv: move panic report code from vmbus to hv early init code")
-> 
-> I will use the hyperv tree from yesterday instead.
+> This is not what most other maintainers do, and there does not appear to be
+> a general consensus amongst maintainers that the changes belong in the
+> individual patches, or in the cover letter. 
 
-This has been fixed by removing the problematic commit.
+Well, I stole that phrase from someone else (gregkh). 
 
-Thanks,
-Wei.
+> Some trees like the networking
+> tree do merge commits of patch sets where the cover letter is used as part
+> of the merge commit message. Other maintainers don't, and some want the
+> change log after the '---' and some do not.
+
+I'm not aware of anyone except for DRM wanting the changelog in the 
+final commits, but that's really a different issue.
+
+I'm pretty sure no one will complain about a changelog in the patches. I 
+guess you just have to duplicate it if you think it should be in both. 
+b4 could be taught to do that I suppose. IMO, the cover letter should 
+have a higher level changelog than the individual patches.
+
+Rob
