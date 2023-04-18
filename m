@@ -2,129 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBC16E59F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 689306E59F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbjDRG5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 02:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
+        id S230317AbjDRG5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 02:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbjDRG45 (ORCPT
+        with ESMTP id S229710AbjDRG5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 02:56:57 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9721BC8;
-        Mon, 17 Apr 2023 23:56:52 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4ec816c9d03so1999017e87.2;
-        Mon, 17 Apr 2023 23:56:52 -0700 (PDT)
+        Tue, 18 Apr 2023 02:57:22 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168EACD
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:57:09 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4ec8133c698so9159351e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:57:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681801011; x=1684393011;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dA0tFrgEscDTi4fNivjO6EpmE8ixxAtZdpP5mEG8YhA=;
-        b=J1KtyhMvdYqQzlX5mKACIwwP/pZMKqEJe0NsJVb9w2wnadi4D9kN97h+GAYJ+Ex3LQ
-         m9K5CNQOJIaNkQ4fnuUV/qrkc46zKUh5vL0jzkczdIQ2nNsOGDaOqNytuANDgcnP61IM
-         YLnCkiz3f6BbIH4for12d2vnFbhHg7rD3nHWxku5dc68E7YHlDgUgyOy3gqAhvU0IPiK
-         NiF5vSZT//zGFSZe9eVpv6kR3BewGon5vTVwECna6OzsSoOwHEmGNOzoOuh/Cx8hvp0X
-         upviemOBcCd2FZolz+6QNhd8vxiSwHZF2LoT4HpMtNX1fzh6qM/ZClNC5tMpfBjfb2Rd
-         RKuA==
+        d=gmail.com; s=20221208; t=1681801027; x=1684393027;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wury6L3OQG1ufIvX/grHQuKDJEwij1r17BDLWsHICdc=;
+        b=K8Inm+OU8VtYD0LQDugV+pE7Ktfhczo0L1Jj3txBlrsem8DyET5OMcBQ0TquM136OP
+         pd8hZshXgZw5vCJ2brh2LnpXe0jBTdzeAO5DiRk5+eDjPjedM0ZZFCeZzsaLW9M7x6/W
+         wDgA8MELYGl6EjKAlMKF9d96dnAjLwPgBNS1E6YcTx8m+9il+RzEkmc+jdYKSuraRW0K
+         ahS7AeoXx4VB7AwEJn+DgxbgeQbRGBnFIVkSxG/6/DfILt6LhtCdH4GDKUmls0za5hMx
+         ZTxEyRACELH/HnBhW3euyIT2IdVeC3Mwij26EmRXU6GrRfkbfzDajuSplUkrOKaCmHES
+         pI/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681801011; x=1684393011;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1681801027; x=1684393027;
+        h=to:subject:message-id:date:from:sender:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dA0tFrgEscDTi4fNivjO6EpmE8ixxAtZdpP5mEG8YhA=;
-        b=eTH2aLJdk0vW2K5k2g4ab1xNG7tarC+FaZPM+SqLPV3GHztapcCOTBNHur12kYgSWO
-         /80pgV1DPczpPjIalEv4Ec2wL9o6zP8e66g8BqCRpKzNMRwOVkoT4QTxTmK8j1pjuCzE
-         gxgXp1D612x0FvNGjoF6y2bavfogHaOGUqjiBGDSre+ZPwAaHCvV2nNekiJM/MqKIPu1
-         H4qmyNqjpTgIzfCcp7hdMAhoIC6u0PMczA79jo0upNNdyh8zbsOgfDZsfKCf626zRWd6
-         OfgeSbL5otPHhd93KvmvrlrXJWpUX1tWUYva9nS20ePeaePiJ8/A72UQUCbLQB4bieWQ
-         ynXg==
-X-Gm-Message-State: AAQBX9c8VDws07lz+KwRPevKCrFJ8tboitGaxo89wSuzyltVO/ChwEYa
-        NSGXLBmRJ4YaoHm8CYq2K/je/GuUV7kL7R5V
-X-Google-Smtp-Source: AKy350bh4iLHJqw33FBsW9qjVRJKdFTJQRoNZvE4h1CO5+Y1a1rjVn07r/zxf/2lvXcOPgalcDaDsA==
-X-Received: by 2002:ac2:4a89:0:b0:4ed:bfc6:d37c with SMTP id l9-20020ac24a89000000b004edbfc6d37cmr2535884lfp.55.1681801010645;
-        Mon, 17 Apr 2023 23:56:50 -0700 (PDT)
-Received: from [172.25.56.57] ([212.22.67.162])
-        by smtp.gmail.com with ESMTPSA id m26-20020ac2425a000000b004cc9042c9cfsm2258225lfl.158.2023.04.17.23.56.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 23:56:50 -0700 (PDT)
-Message-ID: <22a5bd86-8d41-14e2-bb5a-968d15618adf@gmail.com>
-Date:   Tue, 18 Apr 2023 09:56:51 +0300
+        bh=wury6L3OQG1ufIvX/grHQuKDJEwij1r17BDLWsHICdc=;
+        b=BhXsWLW4yNKh9+fYVoc+eW49xj1sKNRx7F/gwgho6EnfMlEB+zhIF0vqGQRsZIIhEI
+         KXazyYyluHj2SMJ6CMDXyI0XYRppFIUT14jpxjJivQOJHmHDM6KQ4k5Jybto0ZsfjTP/
+         pUa3SRyKilOZgs1czNGuHOQTG/GC6+RYvLn/xMshCKjnz5++ME45h5jKGBa7ijND8c1e
+         JHdWlYnbxLt6vgz2On1JphGVqgbydGxobd4ALUg64PkNKiwftZjIdqdl8BcqxedKXptI
+         7R2nbgON5wsnbInyXPRjW+fIA1cidjDFS2dxa9ou8aqazsBi+m93fwDiHJJNKTIOoJco
+         bXNQ==
+X-Gm-Message-State: AAQBX9fVhcDQUrbpeau62IsBptH2ZQGpy/PHZD/9iLwW93qtEDQhx61L
+        vVbaQ0tSiQyklNlw/bRigwI4yyMU3eyiHKj5oyk=
+X-Google-Smtp-Source: AKy350Za61Va+MaGjuZXhEYFJLnK/PMv2u8jJswSUNP6GbBTPg8bn4cwdqyI4iKCV9AgGrE6MQOJQwH8ou+GdhEgnso=
+X-Received: by 2002:a05:6512:280e:b0:4ed:c2d2:8079 with SMTP id
+ cf14-20020a056512280e00b004edc2d28079mr3121052lfb.5.1681801026888; Mon, 17
+ Apr 2023 23:57:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] usb: typec: fix potential NULL dereference
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-References: <20230417195003.19504-1-korotkov.maxim.s@gmail.com>
- <ZD41tLi3sMB71Xf2@kroah.com>
-Content-Language: en-US
-From:   Maxim Korotkov <korotkov.maxim.s@gmail.com>
-In-Reply-To: <ZD41tLi3sMB71Xf2@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: alijames564@gmail.com
+Received: by 2002:ab2:494d:0:b0:1b6:a3b5:7d4b with HTTP; Mon, 17 Apr 2023
+ 23:57:06 -0700 (PDT)
+From:   Mrs Bill Chantal <chantalbills0585@gmail.com>
+Date:   Tue, 18 Apr 2023 06:57:06 +0000
+X-Google-Sender-Auth: TUpqAY40TwyZ0kjntMmZtnIV7NQ
+Message-ID: <CAL9ZXOZ1E3sGHiHspdyBPcfsgodS2oTWZYj0k=Eogf6V-=u+aA@mail.gmail.com>
+Subject: Dear Friend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.9 required=5.0 tests=BAYES_00,DEAR_FRIEND,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.04.2023 09:16, Greg Kroah-Hartman wrote:
-> On Mon, Apr 17, 2023 at 10:50:03PM +0300, Maxim Korotkov wrote:
->> The pointer 'adev' was being dereferenced before being checked for NULL
->> in the 'type_alt mode_enter()' and 'type_alt mode_exit()' functions.
->> Although this is a hypothetical issue, it's better to move the pointer
->> assignment after the NULL check to avoid any potential problems.
->>
->> Found by Linux Verification Center with Svace static analyzer.
->>
->> Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
->> Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
->> ---
->>   drivers/usb/typec/bus.c | 13 +++++++++----
->>   1 file changed, 9 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
->> index 098f0efaa58d..ae0aca8f33db 100644
->> --- a/drivers/usb/typec/bus.c
->> +++ b/drivers/usb/typec/bus.c
->> @@ -125,13 +125,16 @@ EXPORT_SYMBOL_GPL(typec_altmode_notify);
->>    */
->>   int typec_altmode_enter(struct typec_altmode *adev, u32 *vdo)
->>   {
->> -	struct altmode *partner = to_altmode(adev)->partner;
->> -	struct typec_altmode *pdev = &partner->adev;
->> +	struct altmode *partner;
->> +	struct typec_altmode *pdev;
->>   	int ret;
->>   
->>   	if (!adev || adev->active)
->>   		return 0;
->>   
->> +	partner = to_altmode(adev)->partner;
->> +	pdev = &partner->adev;
-> 
-> As you point out, the original code is still fine here, we check before
-> we actually use these values.
-> 
-> Also, can adev every actually be NULL?  In looking at the code paths, I
-> can't see how that could happen.
-> 
-> thanks,
-> 
-> greg k-h
+-- 
+Dear friend
 
-I agree that the adev will most likely never be NULL, but usually this 
-pointer is checked before usage (for example in typec_altmode_notify() 
-or typec_altmode_vdm()). It is a little odd that in these functions it 
-utilized before check. Is it just extra check that can be removed?
+You have compensated withthe sum of 3.6 million dollarsin this united
+nation, the payment will be issued into aym visa cardand send to you
+from the santander bank, we need your address and your whatsapp
+number.
 
-best regards, Max
+his my E-mail address  ( chantalbills0585@gmail.com ) contact me
+
+Thanks
+Mrs Bill Chantal
