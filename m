@@ -2,85 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964456E5D2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3271F6E5D2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbjDRJR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53812 "EHLO
+        id S231238AbjDRJRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjDRJRY (ORCPT
+        with ESMTP id S230509AbjDRJR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:17:24 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAD5D3C2A;
-        Tue, 18 Apr 2023 02:17:22 -0700 (PDT)
-Received: from u202112136$hust.edu.cn ( [10.21.196.175] ) by
- ajax-webmail-app1 (Coremail) ; Tue, 18 Apr 2023 17:17:00 +0800 (GMT+08:00)
-X-Originating-IP: [10.21.196.175]
-Date:   Tue, 18 Apr 2023 17:17:00 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5p2O6Ziz?= <u202112136@hust.edu.cn>
-To:     "greg kroah-hartman" <gregkh@linuxfoundation.org>,
-        "felipe balbi" <balbi@kernel.org>,
-        "sergey shtylyov" <s.shtylyov@omp.ru>
-Cc:     "dongliang mu" <dzm91@hust.edu.cn>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        hust-os-kernel-patches@googlegroups.com
-Subject: Re: [PATCH] usb: phy: phy-tahvo: fix memory leak in
- tahvo_usb_probe()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
- Copyright (c) 2002-2023 www.mailtech.cn hust
-In-Reply-To: <20230418090758.18756-1-lidaxian@hust.edu.cn>
-References: <20230418090758.18756-1-lidaxian@hust.edu.cn>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Tue, 18 Apr 2023 05:17:26 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00DFED
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:17:24 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9F40A1F8D6;
+        Tue, 18 Apr 2023 09:17:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681809443; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lrrlZEOMXRldfaSPVNeyMPGMmoVT36um+XV3eepdEbU=;
+        b=WwH0Z2XykF5KxMGR4buRTbjZGhLlP9MICgQbXewkGCuBRvYnV5OMRZF4JWeaNLr3MQOoJq
+        wGgWUCRufMnnnqSQr8QN0j9j4qAOC8hol7w9SZ7RrYHBCf1nGQVVE5gQsw6UrbFf66B2fl
+        SO9bcGCDI67Z+AD2yuzWkwIdS2ioR+M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681809443;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lrrlZEOMXRldfaSPVNeyMPGMmoVT36um+XV3eepdEbU=;
+        b=WPJvjY6GNu1rif4tTjyEY7sgW8ZBOMtbfO+UbtH70StIamHihmy9/p7GIhFFGG0NqYSWaC
+        6Xgav+sfZUE1mPCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8066213581;
+        Tue, 18 Apr 2023 09:17:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8/aeHiNgPmQaIwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 18 Apr 2023 09:17:23 +0000
+Message-ID: <e5237b55-50eb-2a93-78cf-79421164f1fd@suse.cz>
+Date:   Tue, 18 Apr 2023 11:17:23 +0200
 MIME-Version: 1.0
-Message-ID: <63953090.3ef41.18793a73009.Coremail.u202112136@hust.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID: FgEQrAB3xwgMYD5kSw33Ag--.40058W
-X-CM-SenderInfo: rxsqjiirsrjlo6kx23oohg3hdfq/1tbiAQoFE17Em5GXpQACs9
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH] migrate_pages: Never block waiting for the page lock
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhao <yuzhao@google.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230413182313.RFC.1.Ia86ccac02a303154a0b8bc60567e7a95d34c96d3@changeid>
+ <87v8hz17o9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <CAD=FV=XPBaGGLJVG9UGoJss6EU5=esqyt=aWsp2nOm2YcVOc8g@mail.gmail.com>
+ <87ildvwbr5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <CAD=FV=WCWWuGO7D9X6By-fQ0ZB63iDsAvcPwza-F6tbA-Z_M6w@mail.gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <CAD=FV=WCWWuGO7D9X6By-fQ0ZB63iDsAvcPwza-F6tbA-Z_M6w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiTGkgWWFuZyIgPGxpZGF4
-aWFuQGh1c3QuZWR1LmNuPgo+IFNlbnQgVGltZTogMjAyMy0wNC0xOCAxNzowNzo1NyAoVHVlc2Rh
-eSkKPiBUbzogIkdyZWcgS3JvYWgtSGFydG1hbiIgPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3Jn
-PiwgIkZlbGlwZSBCYWxiaSIgPGJhbGJpQGtlcm5lbC5vcmc+LCAiU2VyZ2V5IFNodHlseW92IiA8
-cy5zaHR5bHlvdkBvbXAucnU+Cj4gQ2M6ICJMaSBZYW5nIiA8bGlkYXhpYW5AaHVzdC5lZHUuY24+
-LCAiRG9uZ2xpYW5nIE11IiA8ZHptOTFAaHVzdC5lZHUuY24+LCBsaW51eC11c2JAdmdlci5rZXJu
-ZWwub3JnLCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnCj4gU3ViamVjdDogW1BBVENIXSB1
-c2I6IHBoeTogcGh5LXRhaHZvOiBmaXggbWVtb3J5IGxlYWsgaW4gdGFodm9fdXNiX3Byb2JlKCkK
-PiAKPiBTbWF0Y2ggcmVwb3J0czoKPiBkcml2ZXJzL3VzYi9waHkvcGh5LXRhaHZvLmM6IHRhaHZv
-X3VzYl9wcm9iZSgpCj4gd2FybjogbWlzc2luZyB1bndpbmQgZ290bz8KPiAKPiBBZnRlciBnZXRp
-bmcgaXJxLCBpZiByZXQgPCAwLCBpdCB3aWxsIHJldHVybiB3aXRob3V0IGVycm9yIGhhbmRsaW5n
-IHRvCj4gZnJlZSBtZW1vcnkuCj4gSnVzdCBhZGQgZXJyb3IgaGFuZGxpbmcgdG8gZml4IHRoaXMg
-cHJvYmxlbS4KPiAKPiBGaXhlczogMGQ0NWExMzczZTY2ICgidXNiOiBwaHk6IHRhaHZvOiBhZGQg
-SVJRIGNoZWNrIikKPiBTaWduZWQtb2ZmLWJ5OiBMaSBZYW5nIDxsaWRheGlhbkBodXN0LmVkdS5j
-bj4KPiBSZXZpZXdlZC1ieTogRG9uZ2xpYW5nIE11IDxkem05MUBodXN0LmVkdS5jbj4KPiAtLS0K
-PiBUaGUgaXNzdWUgaXMgZm91bmQgYnkgc3RhdGljIGFuYWx5c2lzLCBhbmQgdGhlIHBhdGNoIHJl
-bWFpbnMgdW50ZXN0Lgo+IC0tLQo+ICBkcml2ZXJzL3VzYi9waHkvcGh5LXRhaHZvLmMgfCA3ICsr
-KysrLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkK
-PiAKPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvcGh5L3BoeS10YWh2by5jIGIvZHJpdmVycy91
-c2IvcGh5L3BoeS10YWh2by5jCj4gaW5kZXggZjJkMmNjNTg2YzViLi4xODRhNWYzZDc0NzMgMTAw
-NjQ0Cj4gLS0tIGEvZHJpdmVycy91c2IvcGh5L3BoeS10YWh2by5jCj4gKysrIGIvZHJpdmVycy91
-c2IvcGh5L3BoeS10YWh2by5jCj4gQEAgLTM5MCw4ICszOTAsMTEgQEAgc3RhdGljIGludCB0YWh2
-b191c2JfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPiAgCWRldl9zZXRfZHJ2
-ZGF0YSgmcGRldi0+ZGV2LCB0dSk7Cj4gIAo+ICAJdHUtPmlycSA9IHJldCA9IHBsYXRmb3JtX2dl
-dF9pcnEocGRldiwgMCk7Cj4gLQlpZiAocmV0IDwgMCkKPiAtCQlyZXR1cm4gcmV0Owo+ICsJaWYg
-KHJldCA8IDApIHsKPiArCQlkZXZfZXJyKCZwZGV2LT5kZXYsICJjb3VsZCBub3QgZ2V0IGlycTog
-JWRcbiIsCj4gKwkJCQlyZXQpOwo+ICsJCWdvdG8gZXJyX3JlbW92ZV9waHk7Cj4gKwl9Cj4gIAly
-ZXQgPSByZXF1ZXN0X3RocmVhZGVkX2lycSh0dS0+aXJxLCBOVUxMLCB0YWh2b191c2JfdmJ1c19p
-bnRlcnJ1cHQsCj4gIAkJCQkgICBJUlFGX09ORVNIT1QsCj4gIAkJCQkgICAidGFodm8tdmJ1cyIs
-IHR1KTsKPiAtLSAKPiAyLjM0LjEKY2MgaHVzdC1vcy1rZXJuZWwtcGF0Y2hlc0Bnb29nbGVncm91
-cHMuY29t
+On 4/17/23 16:28, Doug Anderson wrote:
+> Hi,
+> 
+> On Sun, Apr 16, 2023 at 6:15 PM Huang, Ying <ying.huang@intel.com> wrote:
+>>
+>> Doug Anderson <dianders@chromium.org> writes:
+>>
+>> > Hi,
+>> >
+>> > On Thu, Apr 13, 2023 at 8:10 PM Huang, Ying <ying.huang@intel.com> wrote:
+>> >>
+>> >> Douglas Anderson <dianders@chromium.org> writes:
+>> >>
+>> >> > Currently when we try to do page migration and we're in "synchronous"
+>> >> > mode (and not doing direct compaction) then we'll wait an infinite
+>> >> > amount of time for a page lock. This does not appear to be a great
+>> >> > idea.
+>> >> >
+>> >> > One issue can be seen when I put a device under extreme memory
+>> >> > pressure. I took a sc7180-trogdor Chromebook (4GB RAM, 8GB zram
+>> >> > swap). I ran the browser along with Android (which runs from a
+>> >> > loopback mounted 128K block-size squashfs "disk"). I then manually ran
+>> >> > the mmm_donut memory pressure tool [1]. The system is completely
+>> >> > unusable both with and without this patch since there are 8 processes
+>> >> > completely thrashing memory, but it was still interesting to look at
+>> >> > how migration was behaving. I put some timing code in and I could see
+>> >> > that we sometimes waited over 25 seconds (in the context of
+>> >> > kcompactd0) for a page lock to become available. Although the 25
+>> >> > seconds was the high mark, it was easy to see tens, hundreds, or
+>> >> > thousands of milliseconds spent waiting on the lock.
+>> >> >
+>> >> > Instead of waiting, if I bailed out right away (as this patch does), I
+>> >> > could see kcompactd0 move forward to successfully to migrate other
+>> >> > pages instead. This seems like a better use of kcompactd's time.
+>> >> >
+>> >> > Thus, even though this didn't make the system any more usable in my
+>> >> > absurd test case, it still seemed to make migration behave better and
+>> >> > that feels like a win. It also makes the code simpler since we have
+>> >> > one fewer special case.
+>> >>
+>> >> TBH, the test case is too extreme for me.
+>> >
+>> > That's fair. That being said, I guess the point I was trying to make
+>> > is that waiting for this lock could take an unbounded amount of time.
+>> > Other parts of the system sometimes hold a page lock and then do a
+>> > blocking operation. At least in the case of kcompactd there are better
+>> > uses of its time than waiting for any given page.
+>> >
+>> >> And, we have multiple "sync" mode to deal with latency requirement, for
+>> >> example, we use MIGRATE_SYNC_LIGHT for compaction to avoid too long
+>> >> latency.  If you have latency requirement for some users, you may
+>> >> consider to add new "sync" mode.
+>> >
+>> > Sure. kcompactd_do_work() is currently using MIGRATE_SYNC_LIGHT. I
+>> > guess my first thought would be to avoid adding a new mode and make
+>> > MIGRATE_SYNC_LIGHT not block here. Then anyone that truly needs to
+>> > wait for all the pages to be migrated can use the heavier sync modes.
+>> > It seems to me like the current users of MIGRATE_SYNC_LIGHT would not
+>> > want to block for an unbounded amount of time here. What do you think?
+>>
+>> It appears that you can just use MIGRATE_ASYNC if you think the correct
+>> behavior is "NOT block at all".  I found that there are more
+>> fine-grained controls on this in compaction code, please take a look at
+>> "enum compact_priority" and its comments.
+> 
+> Actually, the more I think about it the more I think the right answer
+> is to keep kcompactd as using MIGRATE_SYNC_LIGHT and make
+> MIGRATE_SYNC_LIGHT not block on the folio lock. kcompactd can accept
+> some blocking but we don't want long / unbounded blocking. Reading the
+> comments for MIGRATE_SYNC_LIGHT, this also seems like it fits pretty
+> well. MIGRATE_SYNC_LIGHT says that the stall time of writepage() is
+> too much. It's entirely plausible that someone else holding the lock
+> is doing something as slow as writepage() and thus waiting on the lock
+> can be just as bad for latency.
+
++Cc Mel for potential insights. Sounds like a good compromise at first
+glance, but it's a tricky area.
+Also there are other callers of migration than compaction, and we should
+make sure we are not breaking them unexpectedly.
+
+> I'll try to send out a v2 with this approach today and we can see what
+> people think.
+
+Please Cc Mel and myself for further versions.
+
+> -Doug
+> 
+
