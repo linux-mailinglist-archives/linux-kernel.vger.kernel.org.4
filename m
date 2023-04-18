@@ -2,278 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209526E6AFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 538466E6B16
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232488AbjDRR3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 13:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
+        id S232628AbjDRRaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 13:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbjDRR3p (ORCPT
+        with ESMTP id S232689AbjDRRaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 13:29:45 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DFB93D8;
-        Tue, 18 Apr 2023 10:29:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681838983; x=1713374983;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=61V/qAwqnBFdBOqNk/oS9bVHtvIe8KLKP/DdJwKdTEM=;
-  b=RVk0JmVY7d9FPd20YEeP1Z882+ucTF5CCjzoYQF+IM/nMP9jlzB7sOQy
-   txmDEKEIdWrPzeAsdhODJlkVMTDdBGxNfg9h88hPn5QrsYskPYeDBNA5p
-   gwUKICQWcEA02UoU5N7/i2Cif+GAASDJi1Tp8dISfQGGEdZezRcLSZLOh
-   0FYUkUscga1zWFsYH6qD9/ds6kq4frH3VG6EHQWqrGifgSStkENLtzIqC
-   0Zqq12sjGHcw8UDTSGBH7nUVQ5fd2LrQp5TjEX+u7iXbJr8e9jyn2e0gJ
-   Q4qzYfP/FfLP5pRrQwxDlb/xm+CX/Pm9NccHA/YIk1z1P0ZVrhmsadSXH
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="334044432"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="334044432"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 10:29:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="668648225"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="668648225"
-Received: from dinguyen-mobl1.amr.corp.intel.com (HELO [10.213.190.103]) ([10.213.190.103])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 10:29:41 -0700
-Message-ID: <a1a34c32-dbd4-7a77-ab7e-5e34af85900f@linux.intel.com>
-Date:   Tue, 18 Apr 2023 12:29:40 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 3/5] hwmon: (socfpga) Add hardware monitoring support on
- SoCFPGA platforms
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc:     dinguyen@kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, jdelvare@suse.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20230410153314.27127-1-dinh.nguyen@linux.intel.com>
- <20230410153314.27127-3-dinh.nguyen@linux.intel.com>
- <09730359-8731-e21e-3335-bf60ba7f1280@roeck-us.net>
- <a3e966f8-8e9d-7081-1665-9d2e87acb310@linux.intel.com>
- <8d158880-1e6a-5fdd-dae7-a7647794eb60@roeck-us.net>
-From:   Dinh Nguyen <dinh.nguyen@linux.intel.com>
-In-Reply-To: <8d158880-1e6a-5fdd-dae7-a7647794eb60@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 18 Apr 2023 13:30:08 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B763D1258E
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:30:05 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-63b54cd223dso1983542b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:30:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681839005; x=1684431005;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PlOlbguZJLrNwmoIaPL1ifiEMFL+mnPjJo6jiLeiwy0=;
+        b=G9HWkOlA0TiZebZZw+BMSxSLc5r9Jiy9rx89WRkLtCGZZZ36xur97IUfA5HnEoyh9G
+         KAIlk6yeNa97YBy19TiATPTOyZmAJwh07XsiZfSXhjZm6iDzKsA7vGqvXg+TXZsAdmGh
+         HYn2FaRZC2EpVHyewDTC17u4mCjI5eBBhM6pdfkPqTzA2K+Xgx1W+et0dTYlBeW3C5kY
+         90Zl1vjuesr2FIufXZK0VNUubN/QktlHs4WIrSDeuvkxIJfYmIexL3mG7RC6ZeTdac9i
+         saJJ40b6xgvv5MOqo3xJr/NAOVxQWx+oucZsKe4rMUSkFuPX+Pl00ZYMtU4TWRsK7vRx
+         /Cpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681839005; x=1684431005;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PlOlbguZJLrNwmoIaPL1ifiEMFL+mnPjJo6jiLeiwy0=;
+        b=Yq4/s6Yl5GL6rUitHWSAKsgQyZERhOaIp8HOANjCCJhW64pJri4coOwT7jL4AQBG+N
+         vWo0pXK8wWi7sKIBefsmhqA7SauhFr6vc6+0GnsOicSyj/N8ESp+4jFkfmfr4pRTcYGy
+         2e3ZLLw+F3IDoGhMzwrH7d5cEIPOZoxS6HO2iQ2Ly2cZK5359CjNTw3zL4f1HJ0SM0ge
+         yvGAlywP4I5Q0wC0l+aKSJm/n4rZ7/fpwXLK66koHOcAWYsBqU4cWivcYKFf64xmZpxT
+         nf34EcBCf/C/cVU7Oz7CyDDE2TRlOgGpPOn9aps0w5bMZ5sQLQ75hUisLU3sYG49YPM2
+         PMNA==
+X-Gm-Message-State: AAQBX9ds1mESTNH+jIA0xbiHW0sPao6hSMGqzo1Z9JPMjJ3uEFgn/t1P
+        C8o9+NywfvnQTSxqTip0h/zIF3uz
+X-Google-Smtp-Source: AKy350aIAJlfwJhWzziM8p+6vuzo1W8STSemhYtD8EtCpnLuWYwtfa8K+Iydds8sLtUmL6GmTkx9cQb5
+X-Received: from fvdl-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:46ab])
+ (user=fvdl job=sendgmr) by 2002:a05:6a00:10cd:b0:625:66a9:c393 with SMTP id
+ d13-20020a056a0010cd00b0062566a9c393mr346478pfu.0.1681839005210; Tue, 18 Apr
+ 2023 10:30:05 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 17:29:42 +0000
+In-Reply-To: <e6cd1f1e-e54c-87ae-ed23-cc1eca26837c@quicinc.com>
+Mime-Version: 1.0
+References: <e6cd1f1e-e54c-87ae-ed23-cc1eca26837c@quicinc.com>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <20230418172942.740769-1-fvdl@google.com>
+Subject: Re: [PATCH V7 0/2] mm: shmem: support POSIX_FADV_[WILL|DONT]NEED for
+ shmem files
+From:   Frank van der Linden <fvdl@google.com>
+To:     quic_charante@quicinc.com
+Cc:     akpm@linux-foundation.org, hughd@google.com, willy@infradead.org,
+        markhemm@googlemail.com, rientjes@google.com, surenb@google.com,
+        shakeelb@google.com, quic_pkondeti@quicinc.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Frank van der Linden <fvdl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Below is a quick patch to allow FADVISE_DONTNEED for shmem to reclaim
+mapped pages too. This would fit our usecase, and matches MADV_PAGEOUT
+more closely.
 
-On 4/17/2023 4:51 PM, Guenter Roeck wrote:
-> On 4/17/23 13:55, Dinh Nguyen wrote:
->>
->> On 4/10/2023 9:44 PM, Guenter Roeck wrote:
->>> On 4/10/23 08:33, dinh.nguyen@linux.intel.com wrote:
->>>> From: Dinh Nguyen <dinh.nguyen@linux.intel.com>
->>>>
->>>> The driver supports 64-bit SoCFPGA platforms for temperature and 
->>>> voltage
->>>> reading using the platform's SDM(Secure Device Manager). The driver
->>>> also uses the Stratix10 Service layer driver.
->>>>
->>>> This driver only supports OF SoCFPGA 64-bit platforms.
->>>>
->>>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>>> Signed-off-by: Dinh Nguyen <dinh.nguyen@linux.intel.com>
->>>> ---
->>>>   Documentation/hwmon/index.rst                 |   1 +
->>>>   Documentation/hwmon/socfpga-hwmon.rst         |  30 ++
->>>>   drivers/firmware/stratix10-svc.c              |  18 +-
->>>
->>> Changes outside the hwmon subsystem need to be in a separate patch.
->>
->> will separate...
->>
->>>
->>>> drivers/hwmon/Kconfig |  11 +
->>>>   drivers/hwmon/Makefile                        |   1 +
->>>>   drivers/hwmon/socfpga-hwmon.c                 | 406 
->>>> ++++++++++++++++++
->>>>   include/linux/firmware/intel/stratix10-smc.h  |  34 ++
->>>>   .../firmware/intel/stratix10-svc-client.h     |   6 +
->>>>   8 files changed, 506 insertions(+), 1 deletion(-)
->>>>   create mode 100644 Documentation/hwmon/socfpga-hwmon.rst
->>>>   create mode 100644 drivers/hwmon/socfpga-hwmon.c
->>>>
->>>>
->> ...
->>>> +
->>>> +enum hwmon_type_op {
->>>> +    SOCFPGA_HWMON_TYPE_TEMP,
->>>> +    SOCFPGA_HWMON_TYPE_VOLT,
->>>> +    SOCFPGA_HWMON_TYPE_MAX
->>>
->>> Unused define
->>
->> Removed.
->>
->>>
->>>> +};
->>>> +
->>>> +static const char *const hwmon_types_str[] = { "temperature", 
->>>> "voltage" };
->>>> +
->>>> +static umode_t socfpga_is_visible(const void *dev,
->>>> +                  enum hwmon_sensor_types type,
->>>> +                  u32 attr, int chan)
->>>> +{
->>>> +    switch (type) {
->>>> +    case hwmon_temp:
->>>> +    case hwmon_in:
->>>> +        return 0444;
->>>> +    default:
->>>> +        return 0;
->>>> +    }
->>>> +}
->>>> +
->>>> +static void socfpga_smc_callback(struct stratix10_svc_client *client,
->>>> +                      struct stratix10_svc_cb_data *data)
->>>> +{
->>>> +    struct socfpga_hwmon_priv *priv = client->priv;
->>>> +    struct arm_smccc_res *res = data->kaddr1;
->>>> +
->>>> +    if (data->status == BIT(SVC_STATUS_OK))    {
->>>> +        if (priv->msg.command == COMMAND_HWMON_READTEMP)
->>>> +            priv->temperature.value = res->a0;
->>>> +        else
->>>> +            priv->voltage.value = res->a0;
->>>> +    } else
->>>> +        dev_err(client->dev, "%s returned 0x%lX\n", __func__, 
->>>> res->a0);
->>>> +
->>>
->>> Missing { } in else branch. Please run checkpatch --strict and fix
->>> continuation line alignment issues as well as unbalanced if/else
->>> reports.
->> Will do.
->>>
->>>> + complete(&priv->completion);
->>>> +}
->>>> +
->>>> +static int socfpga_hwmon_send(struct socfpga_hwmon_priv *priv)
->>>> +{
->>>> +    int ret;
->>>> +
->>>> +    priv->client.receive_cb = socfpga_smc_callback;
->>>> +
->>>> +    ret = stratix10_svc_send(priv->chan, &priv->msg);
->>>> +    if (ret < 0)
->>>> +        return ret;
->>>> +
->>>> +    if (!wait_for_completion_timeout(&priv->completion, 
->>>> HWMON_TIMEOUT)) {
->>>> +        dev_err(priv->client.dev, "SMC call timeout!\n");
->>>> +        return -ETIMEDOUT;
->>>> +    }
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static int socfpga_hwmon_err_to_errno(struct socfpga_hwmon_priv 
->>>> *priv)
->>>> +{
->>>> +    int value = priv->temperature.value;
->>>> +
->>>> +    if (!(value & ETEMP_ERROR))
->>>> +        return 0;
->>>> +
->>>
->>> This is odd. int is normally 32 bit, this function is called from
->>> socfpga_read() for temperatures, which presumably are defined
->>> as "signed 32-bit fixed point binary". That means that negative
->>> temperatures would be treated as errors. Please verify.
->>
->> That's correct, if bit 31 is set, then it indicates an error.
->>
->
-> This ...
->
->>>
->>>> +    dev_err(priv->client.dev, "temperature sensor code 0x%08x\n", 
->>>> value);
->>>> +
->>>
->>> Please don't clog the log with such messages.
->>
->> Removed.
->>
->>>
->>>> +    value &= ~ETEMP_ERROR;
->>>> +    switch (value) {
->>>> +    case ETEMP_NOT_PRESENT:
->>>> +        return -ENOENT;
->>>> +    case ETEMP_CORRUPT:
->>>> +    case ETEMP_NOT_INITIALIZED:
->>>> +        return -ENODATA;
->>>> +    case ETEMP_BUSY:
->>>> +        return -EBUSY;
->>>> +    case ETEMP_INACTIVE:
->>>> +    case ETEMP_TIMEOUT:
->>>> +    case ETEMP_TOO_OLD:
->>>> +        return -EAGAIN;
->>>> +    default:
->>>> +        /* Unknown error */
->>>> +        return -EINVAL;
->>>
->>> Should be -EIO.
->>>
->> Replaced.
->>>> +    }
->>>> +}
->>>> +
->>>> +static int socfpga_read(struct device *dev, enum 
->>>> hwmon_sensor_types type,
->>>> +            u32 attr, int chan, long *val)
->>>> +{
->>>> +    struct socfpga_hwmon_priv *priv = dev_get_drvdata(dev);
->>>> +    int ret;
->>>> +
->>>> +    mutex_lock(&priv->lock);
->>>> +    reinit_completion(&priv->completion);
->>>> +
->>>> +    switch (type) {
->>>> +    case hwmon_temp:
->>>> +        priv->msg.arg[0] = BIT_ULL(priv->temperature.chan[chan]);
->>>> +        priv->msg.command = COMMAND_HWMON_READTEMP;
->>>> +        if (socfpga_hwmon_send(priv))
->>>> +            goto status_done;
->>>> +
->>>> +        ret = socfpga_hwmon_err_to_errno(priv);
->>>> +        if (ret)
->>>> +            break;
->>>> +        /*
->>>> +         * The Temperature Sensor IP core returns the Celsius
->>>> +         * temperature value in signed 32-bit fixed point binary
->
-> ... and this contradict each other. If bit 31 indicates an error,
-> this can not be a signed 32-bit value.
->
-You're right! I've re-read the spec and should have the the code look 
-for the specific error values:
+The patch series as posted skips mapped pages even if you remove
+the folio_mapped() check, because page_referenced() in
+shrink_page_list() will find page tables with the page mapped,
+and ignore_references is not set when called from reclaim_pages().
 
-0x80000000 - inactive
+You can make this work in a similar fashion to MADV_PAGEOUT by
+first unmapping a page, but only if the mapping belongs to
+the caller. You just have to change the check for "is there
+only one mapping and am I the owner". To do that, change a few
+lines in try_to_unmap to allow for checking the mm the mapping
+belongs to, and pass in current->mm (NULL still unmaps all mappings).
 
-0x80000001 - old value
+I lightly tested this in a somewhat older codebase, so the diff
+below isn't fully tested. But if there are no objections to
+this approach, we could add it on top of your patchset after
+better testing.
 
-0x80000002 - invalid channel
+- Frank
 
-0x80000003 -  corrupted.
-
-...
-
-Dinh
-
+diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+index b87d01660412..4403cc2ccc4c 100644
+--- a/include/linux/rmap.h
++++ b/include/linux/rmap.h
+@@ -368,6 +368,8 @@ int folio_referenced(struct folio *, int is_locked,
+ 
+ void try_to_migrate(struct folio *folio, enum ttu_flags flags);
+ void try_to_unmap(struct folio *, enum ttu_flags flags);
++void try_to_unmap_mm(struct mm_struct *mm, struct folio *folio,
++			enum ttu_flags flags);
+ 
+ int make_device_exclusive_range(struct mm_struct *mm, unsigned long start,
+ 				unsigned long end, struct page **pages,
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 8632e02661ac..4d30e8f5afe2 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -1443,6 +1443,11 @@ void page_remove_rmap(struct page *page, struct vm_area_struct *vma,
+ 	munlock_vma_folio(folio, vma, compound);
+ }
+ 
++struct unmap_arg {
++	enum ttu_flags flags;
++	struct mm_struct *mm;
++};
++
+ /*
+  * @arg: enum ttu_flags will be passed to this argument
+  */
+@@ -1455,7 +1460,11 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+ 	struct page *subpage;
+ 	bool anon_exclusive, ret = true;
+ 	struct mmu_notifier_range range;
+-	enum ttu_flags flags = (enum ttu_flags)(long)arg;
++	struct unmap_arg *uap = (struct unmap_arg *)arg;
++	enum ttu_flags flags = uap->flags;
++
++	if (uap->mm && uap->mm != mm)
++		return true;
+ 
+ 	/*
+ 	 * When racing against e.g. zap_pte_range() on another cpu,
+@@ -1776,6 +1785,7 @@ static int folio_not_mapped(struct folio *folio)
+ 
+ /**
+  * try_to_unmap - Try to remove all page table mappings to a folio.
++ * @mm: mm to unmap from (NULL to unmap from all)
+  * @folio: The folio to unmap.
+  * @flags: action and flags
+  *
+@@ -1785,11 +1795,16 @@ static int folio_not_mapped(struct folio *folio)
+  *
+  * Context: Caller must hold the folio lock.
+  */
+-void try_to_unmap(struct folio *folio, enum ttu_flags flags)
++void try_to_unmap_mm(struct mm_struct *mm, struct folio *folio,
++		enum ttu_flags flags)
+ {
++	struct unmap_arg ua = {
++		.flags = flags,
++		.mm = mm,
++	};
+ 	struct rmap_walk_control rwc = {
+ 		.rmap_one = try_to_unmap_one,
+-		.arg = (void *)flags,
++		.arg = (void *)&ua,
+ 		.done = folio_not_mapped,
+ 		.anon_lock = folio_lock_anon_vma_read,
+ 	};
+@@ -1800,6 +1815,11 @@ void try_to_unmap(struct folio *folio, enum ttu_flags flags)
+ 		rmap_walk(folio, &rwc);
+ }
+ 
++void try_to_unmap(struct folio *folio, enum ttu_flags flags)
++{
++	try_to_unmap_mm(NULL, folio, flags);
++}
++
+ /*
+  * @arg: enum ttu_flags will be passed to this argument.
+  *
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 1af85259b6fc..b24af2fb3378 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -2362,8 +2362,24 @@ static void shmem_isolate_pages_range(struct address_space *mapping, loff_t star
+ 
+ 		if (!folio_try_get(folio))
+ 			continue;
+-		if (folio_test_unevictable(folio) || folio_mapped(folio) ||
+-				folio_isolate_lru(folio)) {
++
++		if (folio_test_unevictable(folio)) {
++			folio_put(folio);
++			continue;
++		}
++
++		/*
++		 * If the folio is mapped once, try to unmap it from the
++		 * caller's page table. If it's still mapped afterwards,
++		 * it belongs to someone else, and we're not going to
++		 * change someone else's mapping.
++		 */
++		if (folio_mapcount(folio) == 1 && folio_trylock(folio)) {
++			try_to_unmap_mm(current->mm, folio, TTU_BATCH_FLUSH);
++			folio_unlock(folio);
++		}
++
++		if (folio_mapped(folio) || folio_isolate_lru(folio)) {
+ 			folio_put(folio);
+ 			continue;
+ 		}
+@@ -2383,6 +2399,8 @@ static void shmem_isolate_pages_range(struct address_space *mapping, loff_t star
+ 		}
+ 	}
+ 	rcu_read_unlock();
++
++	try_to_unmap_flush();
+ }
+ 
+ static int shmem_fadvise_dontneed(struct address_space *mapping, loff_t start,
