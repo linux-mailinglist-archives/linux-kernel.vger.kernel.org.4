@@ -2,107 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559CA6E6E77
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BC56E6E7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232906AbjDRVlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
+        id S232744AbjDRVoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbjDRVlS (ORCPT
+        with ESMTP id S229637AbjDRVoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:41:18 -0400
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8EBCE;
-        Tue, 18 Apr 2023 14:41:17 -0700 (PDT)
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-541b69cbe87so643688eaf.2;
-        Tue, 18 Apr 2023 14:41:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681854077; x=1684446077;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ElC7aqM0OYKhp7zqQxQuTXx1H9IDxJGXKnxZVOIROXA=;
-        b=NmpIvhZRJp6raBg/mVkrpZFNcKaiWGplwGrgsH/mP6IxpaSZ+OKr+iOuW2TN1hLa8k
-         IWQ9M0bvSEMzewk2lphtchRUQ7ScXF7RlL8ryiX2KtKA8k1nAh2HKp2hmwa+M8yV30wz
-         I545LHecrHcUHmb9glbPVdVWbnIvvmyrm5INMDvxUfeDlhiXjHiYKw5PdOJiYUOU4HQ0
-         unSCWacZ490peovOqPtD8tBa++0LJsJJmOpJffy1EO+OGYy3eSXs4F9co+jioc4f5y+F
-         WJeq/OpvHjwFF2QbcIaeezzXPvaftE1k1hmyi+op5VJjAcLiKQjGxbRfB3KtsLaiupLN
-         FMsw==
-X-Gm-Message-State: AAQBX9fkEhS+qBjfBqosuiCeGNr9GeFPaI/ueMQai8A080ZZ4o3J+RdX
-        wvGDiKWdbqtx6n0pBzUhrQ==
-X-Google-Smtp-Source: AKy350Y/zUwTPUY+bloMxG86x5GIO5/WgZZJ0w2lgVcgHZEOKfFzsX6+0hRjmFOdov3MNztPcibQZw==
-X-Received: by 2002:a05:6870:1702:b0:187:8f01:7107 with SMTP id h2-20020a056870170200b001878f017107mr2215193oae.44.1681854076847;
-        Tue, 18 Apr 2023 14:41:16 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o19-20020a9d5c13000000b006a3f8f7b686sm6075534otk.28.2023.04.18.14.41.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 14:41:16 -0700 (PDT)
-Received: (nullmailer pid 2378744 invoked by uid 1000);
-        Tue, 18 Apr 2023 21:41:15 -0000
-Date:   Tue, 18 Apr 2023 16:41:15 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        rfoss@kernel.org, krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
-        samuel@sholland.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-media@vger.kernel.org,
-        hverkuil-cisco@xs4all.nl
-Subject: Re: [PATCH 1/3] dt-bindings: display: synopsys,dw-hdmi: Add property
- for disabling CEC
-Message-ID: <20230418214115.GA2376963-robh@kernel.org>
-References: <20230415104613.61224-1-jernej.skrabec@gmail.com>
- <20230415104613.61224-2-jernej.skrabec@gmail.com>
+        Tue, 18 Apr 2023 17:44:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E5149FD;
+        Tue, 18 Apr 2023 14:44:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34C11615CB;
+        Tue, 18 Apr 2023 21:44:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB1E9C433EF;
+        Tue, 18 Apr 2023 21:44:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681854268;
+        bh=fShyOiFtQErvDADUUDFhY+2tgV5ExyPswF84GvCNBZE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=J04K5N7gKP+5+xoE5xA2lOlYNmlAJ7lOSWuDt2uopOVJuJDYtRmuSALHOjILmiwmh
+         7tKjStUheF6sj6YemX9ng1l57flCn/5TXP057lBOJ4YUkSD9CytiEAnJiPwZu68usF
+         PWYnEi8mylSeJRYdDeW1TVk+SzmrApVc0k3xBihbMGMJMhj+NUFXpTC4ThLbDRNIb/
+         RMuiafO6r8szTtNcFWkLk1ahc28x2XGU00x7pPiLW3p4595VLmLMQV0MN49fO5FMTG
+         DaJwrP5JWJc1MY0SO+e2a3/B+1XCgqZ1THjiTBK9Qf/ChyfyGoDaMfEKMrU7ejaQPE
+         B9g7mn8YlGmzw==
+From:   Miguel Ojeda <ojeda@kernel.org>
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Josh Stone <jistone@redhat.com>,
+        William Brown <william.brown@suse.com>,
+        Georgy Yakovlev <gyakovlev@gentoo.org>,
+        Jan Alexander Steffens <jan.steffens@gmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: [PATCH 0/3] Rust 1.68.2 upgrade
+Date:   Tue, 18 Apr 2023 23:43:44 +0200
+Message-Id: <20230418214347.324156-1-ojeda@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230415104613.61224-2-jernej.skrabec@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 15, 2023 at 12:46:11PM +0200, Jernej Skrabec wrote:
-> Even though some DW-HDMI controllers have perfectly usable HDMI-CEC
-> implementation, some boards might prefer not to use it or even use
-> software implementation instead.
-> 
-> Add property for disabling CEC so driver doesn't expose unused CEC
-> interface, if CEC pin isn't connected anywhere.
+This is the first upgrade to the Rust toolchain since the initial Rust
+merge, from 1.62.0 to 1.68.2 (i.e. the latest).
 
-Isn't this all true for any bridge supporting CEC? Make this common.
+Please see the last patch message for a long explanation of the upgrade,
+the policy for future upgrades and some indications on how to easily
+review this.
 
-> 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> ---
->  .../devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-> index 4b7e54a8f037..624d32c024f6 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-> @@ -48,6 +48,11 @@ properties:
->    interrupts:
->      maxItems: 1
->  
-> +  snps,disable-cec:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description:
-> +      Disable HDMI-CEC.
-> +
->  additionalProperties: true
->  
->  ...
-> -- 
-> 2.40.0
-> 
+The series is based on `rust-next`.
+
+Miguel Ojeda (3):
+  rust: alloc: clarify what is the upstream version
+  rust: arc: fix intra-doc link in `Arc<T>::init`
+  rust: upgrade to Rust 1.68.2
+
+ Documentation/process/changes.rst |   2 +-
+ rust/alloc/README.md              |   3 +
+ rust/alloc/alloc.rs               |  55 ++--
+ rust/alloc/boxed.rs               | 446 ++++++++++++++++++++++++++--
+ rust/alloc/collections/mod.rs     |   5 +-
+ rust/alloc/lib.rs                 |  71 +++--
+ rust/alloc/raw_vec.rs             |  16 +-
+ rust/alloc/slice.rs               | 447 ++++------------------------
+ rust/alloc/vec/drain.rs           |  81 +++++-
+ rust/alloc/vec/drain_filter.rs    |  60 +++-
+ rust/alloc/vec/into_iter.rs       | 125 ++++++--
+ rust/alloc/vec/is_zero.rs         |  96 ++++++-
+ rust/alloc/vec/mod.rs             | 464 +++++++++++++++++++++++-------
+ rust/alloc/vec/set_len_on_drop.rs |   5 +
+ rust/alloc/vec/spec_extend.rs     |  63 +---
+ rust/bindings/lib.rs              |   1 -
+ rust/kernel/build_assert.rs       |   2 +
+ rust/kernel/init.rs               |   5 +
+ rust/kernel/lib.rs                |   4 -
+ rust/kernel/std_vendor.rs         |   2 +
+ rust/kernel/sync/arc.rs           |   2 +-
+ scripts/Makefile.build            |   2 +-
+ scripts/min-tool-version.sh       |   2 +-
+ 23 files changed, 1278 insertions(+), 681 deletions(-)
+
+-- 
+2.40.0
+
