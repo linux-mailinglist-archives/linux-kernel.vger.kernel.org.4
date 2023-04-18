@@ -2,135 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3336E5E52
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581396E5E59
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjDRKLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 06:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
+        id S229706AbjDRKLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 06:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjDRKLG (ORCPT
+        with ESMTP id S229882AbjDRKLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 06:11:06 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1B57EFD
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:10:23 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id q21so256591ljp.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:10:23 -0700 (PDT)
+        Tue, 18 Apr 2023 06:11:19 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437A859C1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:11:04 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-32b2485c0b1so1847675ab.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:11:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681812622; x=1684404622;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UXA7IdH6OnmIg4dHeihhBVhSOUFUULrLJzUMC4zJSkE=;
-        b=S1EqyM2bhUI/MpHfz9cdN+dN5X18qxer6sd7/Yay6PaBl0qjv70HRKYD7KYwR7etYF
-         1vIRBJ4mHwI31SPHf8vj6eEbCGw7G2Ri0UyYMzyvo8MSYhMYOMDtFo7fNGHrK4FbXYr3
-         n5tz+/6TD//u2/POqi6787YQ34NlydfvPNBcTLO48HTQlRWTV38LVlFc31rVaukcX5TX
-         n3ITAvgfSWkE6bwRFAUA3q8ZxhE090CZkq9Jeq/B6flvHbpz57fwCKY4hlzQmGcjQotS
-         ox4l5MeFHiKdBny6AaH7u/jeO0ogy3gelR8TPVrWWRBrFprIOHhR8FAzMh9FpMNjmvDR
-         4NAA==
+        d=google.com; s=20221208; t=1681812663; x=1684404663;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qkfA+RN8+NxglUFBtFLBAQbfb++ZPOPFuIp98xxhha0=;
+        b=MmwB5ib1jiB1vveishoJODEjHtjcRFokuTQ+zoReKj4y6MHzILRvRxPxQikoUZ3gpg
+         OzDLNgHEdo17gJTBx4c6NcHJYTqHtZkfFeJbNgY9nvxcxjDA1+D99cfiApUuBfECaNUW
+         yn2RbQ1mGm/WgRlOmRkfOr0afQMeRiP80XJAPzYWduLXDm0+qOuS0RugqlO3FQbbKLMb
+         NZPzmmHxLyRPXXJ3ixqfD9axn9QJlYi45/FUj9a6EqSBtCAth5OUUwqqStXgbx012Qb4
+         yCEmf8bMROeA78mVQh/64uLXqnxilN/Kguv4LTDZOHuEQ/RfCax5irsd+jHMI/Rq0Olc
+         L+uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681812622; x=1684404622;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UXA7IdH6OnmIg4dHeihhBVhSOUFUULrLJzUMC4zJSkE=;
-        b=D2e2minraWMmuWeRi5IJJGRoY8xvtHO78GRpxPVJUMXKEm4YxuaY3iaejxe8rYhMjH
-         /uLWzZNSpeohoCoWeBedyBIC0Z58zbFaOfDw8XBKK0vG8d5Aw9qqW4RUtFiZCK4dGSFY
-         Df0HbgZOExcD8va+e4eiqMbD4VtmsgmOCQSuR1swFgIYQ4OfFsOjVMr1KiME4o5iR2fd
-         BJo/UUwqTOmRi0I7cwBLyPGL5IY6Rc2l4AZHiG0Fm51/0gZWjYOF/Tkboem1UZRY4y4Y
-         xvEd/4pCE0OhCaZkxOZDwrTAoAzKxXme9Rjky42Ff7rJ2HJ1CKSAoT8C0ooReXp8Mwsk
-         mOsg==
-X-Gm-Message-State: AAQBX9dEY4BG49k3q7vB7BG2gjqXkN45cswOtbad5Rj/5XNHSNdzoI8N
-        XSz893+MV/X8lEkYATORrNbOww==
-X-Google-Smtp-Source: AKy350b+EZLC54YBdhnK8Qcxhhtkwyp2iBSktRYLNRnit+ipp8TAThYMwu8PI5N+Sp20tV4Ys/lePA==
-X-Received: by 2002:a2e:9117:0:b0:2a6:15c7:1926 with SMTP id m23-20020a2e9117000000b002a615c71926mr665207ljg.3.1681812621746;
-        Tue, 18 Apr 2023 03:10:21 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id c22-20020a197616000000b004eb3b84d2a1sm2312523lff.114.2023.04.18.03.10.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 03:10:21 -0700 (PDT)
-Message-ID: <e6eeb6ca-fdac-a2a0-bf7e-54cd8f13cc9e@linaro.org>
-Date:   Tue, 18 Apr 2023 12:10:20 +0200
+        d=1e100.net; s=20221208; t=1681812663; x=1684404663;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qkfA+RN8+NxglUFBtFLBAQbfb++ZPOPFuIp98xxhha0=;
+        b=MwTRbbPujBV5Vy+NisTsuxIBQRqauNWWkBdc7WoIAD5lywD7liIl6PVAb6K4/49mfE
+         Pl15IN4WIZuPzGDc9vFckkH+2OQBuLIYbe7UrSIiLe5T3aZYAsWq7FAuWuhdBDVV1/rP
+         VJR9cp8NX1eh6ZgbUsff3uvPbZ6oe/uG2uM8YFR42uyGkptBaJ/hagMLRXZPNlth8eqC
+         AFttl3P+T4hnzZodFx5IyRL/kUz6vQbvDQTfHHT+PT/TW+n3OUMalVueP7rvZF0WD/lN
+         7PAEW+vzxwmBMIFQgHWiK/E0m6/KDU3W8SYPJRPO1FiOAEGpq1hDKooJ6cKr6/gvXwA8
+         Soog==
+X-Gm-Message-State: AAQBX9c/6uOKT+uh2gVPBxOGfDkVzYyV7JhtyfxnCkOGmKycND4UXo6N
+        eF4W1KDrN4bRzEYedcE7pkb57CTcfQ9QDA+9SDnCORA98XKniQUQIyhdhw==
+X-Google-Smtp-Source: AKy350aerQraOJZ/IlNOLQy+h6vs4wtRqD4ScpxSOOhcGpktvkaRORLvGcdmd2MNK01I92oGFDmBNJrDwPeRokzyzGs=
+X-Received: by 2002:a92:1301:0:b0:326:68bc:b423 with SMTP id
+ 1-20020a921301000000b0032668bcb423mr12482145ilt.20.1681812663485; Tue, 18 Apr
+ 2023 03:11:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] arm64: dts: qcom: sm8550: use uint16 for Soundwire
- interval
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230418095734.669858-1-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230418095734.669858-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230413131223.4135168-1-glider@google.com> <20230413131223.4135168-2-glider@google.com>
+In-Reply-To: <20230413131223.4135168-2-glider@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 18 Apr 2023 12:10:27 +0200
+Message-ID: <CANpmjNML3wQjaxujkAxWiTVwgBaUtbCPEQES7duh0ktyT2ddTQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] mm: kmsan: handle alloc failures in kmsan_ioremap_page_range()
+To:     Alexander Potapenko <glider@google.com>
+Cc:     urezki@gmail.com, hch@infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, dvyukov@google.com,
+        kasan-dev@googlegroups.com,
+        Dipanjan Das <mail.dipanjan.das@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 13 Apr 2023 at 15:12, Alexander Potapenko <glider@google.com> wrote:
+>
+> Similarly to kmsan_vmap_pages_range_noflush(),
+> kmsan_ioremap_page_range() must also properly handle allocation/mapping
+> failures. In the case of such, it must clean up the already created
+> metadata mappings and return an error code, so that the error can be
+> propagated to ioremap_page_range(). Without doing so, KMSAN may silently
+> fail to bring the metadata for the page range into a consistent state,
+> which will result in user-visible crashes when trying to access them.
+>
+> Reported-by: Dipanjan Das <mail.dipanjan.das@gmail.com>
+> Link: https://lore.kernel.org/linux-mm/CANX2M5ZRrRA64k0hOif02TjmY9kbbO2aCBPyq79es34RXZ=cAw@mail.gmail.com/
+> Fixes: b073d7f8aee4 ("mm: kmsan: maintain KMSAN metadata for page operations")
+> Signed-off-by: Alexander Potapenko <glider@google.com>
 
+Reviewed-by: Marco Elver <elver@google.com>
 
-On 18.04.2023 11:57, Krzysztof Kozlowski wrote:
-> The Soundwire bindings changed during review, after the SM8550 DTS
-> Soundwire nodes were merged.  Switch to uint16 for Soundwire
-> qcom,ports-sinterval property, to match with current bindings.
-> 
-> Fixes: 61b006389bb7 ("arm64: dts: qcom: sm8550: add Soundwire controllers")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
-> 
-> Fix for v6.4-rc1.
-> 
-> Bindings v3 (with uint16):
-> https://lore.kernel.org/linux-arm-msm/20230418095447.577001-1-krzysztof.kozlowski@linaro.org/T/#md34302ec02eebdbe3e4defef79a40b32a7e621b8
+> v2:
+>  -- updated patch description as requested by Andrew Morton
+>  -- check the return value of __vmap_pages_range_noflush(), as suggested by Dipanjan Das
+>  -- return 0 from the inline version of kmsan_ioremap_page_range()
+>     (spotted by kernel test robot <lkp@intel.com>)
 > ---
->  arch/arm64/boot/dts/qcom/sm8550.dtsi | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> index 6e9bad8f6f33..80a01ff3ee30 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> @@ -2022,7 +2022,7 @@ swr3: soundwire-controller@6ab0000 {
->  			qcom,din-ports = <4>;
->  			qcom,dout-ports = <9>;
->  
-> -			qcom,ports-sinterval =		<0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x18f 0xff 0xff 0x0f 0x0f 0xff 0x31f>;
-> +			qcom,ports-sinterval =		/bits/ 16 <0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x18f 0xff 0xff 0x0f 0x0f 0xff 0x31f>;
->  			qcom,ports-offset1 =		/bits/ 8 <0x01 0x03 0x05 0x02 0x04 0x15 0x00 0xff 0xff 0x06 0x0d 0xff 0x00>;
->  			qcom,ports-offset2 =		/bits/ 8 <0xff 0x07 0x1f 0xff 0x07 0x1f 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
->  			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x0f>;
-> @@ -2068,7 +2068,7 @@ swr1: soundwire-controller@6ad0000 {
->  			qcom,din-ports = <0>;
->  			qcom,dout-ports = <10>;
->  
-> -			qcom,ports-sinterval =		<0x03 0x3f 0x1f 0x07 0x00 0x18f 0xff 0xff 0xff 0xff>;
-> +			qcom,ports-sinterval =		/bits/ 16 <0x03 0x3f 0x1f 0x07 0x00 0x18f 0xff 0xff 0xff 0xff>;
->  			qcom,ports-offset1 =		/bits/ 8 <0x00 0x00 0x0b 0x01 0x00 0x00 0xff 0xff 0xff 0xff>;
->  			qcom,ports-offset2 =		/bits/ 8 <0x00 0x00 0x0b 0x00 0x00 0x00 0xff 0xff 0xff 0xff>;
->  			qcom,ports-hstart =		/bits/ 8 <0xff 0x03 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff>;
-> @@ -2133,7 +2133,7 @@ swr0: soundwire-controller@6b10000 {
->  			qcom,din-ports = <4>;
->  			qcom,dout-ports = <9>;
->  
-> -			qcom,ports-sinterval =		<0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x18f 0xff 0xff 0x0f 0x0f 0xff 0x31f>;
-> +			qcom,ports-sinterval =		/bits/ 16 <0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x18f 0xff 0xff 0x0f 0x0f 0xff 0x31f>;
->  			qcom,ports-offset1 =		/bits/ 8 <0x01 0x03 0x05 0x02 0x04 0x15 0x00 0xff 0xff 0x06 0x0d 0xff 0x00>;
->  			qcom,ports-offset2 =		/bits/ 8 <0xff 0x07 0x1f 0xff 0x07 0x1f 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
->  			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x0f>;
+>  include/linux/kmsan.h | 19 ++++++++-------
+>  mm/kmsan/hooks.c      | 55 ++++++++++++++++++++++++++++++++++++-------
+>  mm/vmalloc.c          |  4 ++--
+>  3 files changed, 59 insertions(+), 19 deletions(-)
+>
+> diff --git a/include/linux/kmsan.h b/include/linux/kmsan.h
+> index c7ff3aefc5a13..30b17647ce3c7 100644
+> --- a/include/linux/kmsan.h
+> +++ b/include/linux/kmsan.h
+> @@ -160,11 +160,12 @@ void kmsan_vunmap_range_noflush(unsigned long start, unsigned long end);
+>   * @page_shift:        page_shift argument passed to vmap_range_noflush().
+>   *
+>   * KMSAN creates new metadata pages for the physical pages mapped into the
+> - * virtual memory.
+> + * virtual memory. Returns 0 on success, callers must check for non-zero return
+> + * value.
+>   */
+> -void kmsan_ioremap_page_range(unsigned long addr, unsigned long end,
+> -                             phys_addr_t phys_addr, pgprot_t prot,
+> -                             unsigned int page_shift);
+> +int kmsan_ioremap_page_range(unsigned long addr, unsigned long end,
+> +                            phys_addr_t phys_addr, pgprot_t prot,
+> +                            unsigned int page_shift);
+>
+>  /**
+>   * kmsan_iounmap_page_range() - Notify KMSAN about a iounmap_page_range() call.
+> @@ -296,12 +297,12 @@ static inline void kmsan_vunmap_range_noflush(unsigned long start,
+>  {
+>  }
+>
+> -static inline void kmsan_ioremap_page_range(unsigned long start,
+> -                                           unsigned long end,
+> -                                           phys_addr_t phys_addr,
+> -                                           pgprot_t prot,
+> -                                           unsigned int page_shift)
+> +static inline int kmsan_ioremap_page_range(unsigned long start,
+> +                                          unsigned long end,
+> +                                          phys_addr_t phys_addr, pgprot_t prot,
+> +                                          unsigned int page_shift)
+>  {
+> +       return 0;
+>  }
+>
+>  static inline void kmsan_iounmap_page_range(unsigned long start,
+> diff --git a/mm/kmsan/hooks.c b/mm/kmsan/hooks.c
+> index 3807502766a3e..ec0da72e65aa0 100644
+> --- a/mm/kmsan/hooks.c
+> +++ b/mm/kmsan/hooks.c
+> @@ -148,35 +148,74 @@ void kmsan_vunmap_range_noflush(unsigned long start, unsigned long end)
+>   * into the virtual memory. If those physical pages already had shadow/origin,
+>   * those are ignored.
+>   */
+> -void kmsan_ioremap_page_range(unsigned long start, unsigned long end,
+> -                             phys_addr_t phys_addr, pgprot_t prot,
+> -                             unsigned int page_shift)
+> +int kmsan_ioremap_page_range(unsigned long start, unsigned long end,
+> +                            phys_addr_t phys_addr, pgprot_t prot,
+> +                            unsigned int page_shift)
+>  {
+>         gfp_t gfp_mask = GFP_KERNEL | __GFP_ZERO;
+>         struct page *shadow, *origin;
+>         unsigned long off = 0;
+> -       int nr;
+> +       int nr, err = 0, clean = 0, mapped;
+>
+>         if (!kmsan_enabled || kmsan_in_runtime())
+> -               return;
+> +               return 0;
+>
+>         nr = (end - start) / PAGE_SIZE;
+>         kmsan_enter_runtime();
+> -       for (int i = 0; i < nr; i++, off += PAGE_SIZE) {
+> +       for (int i = 0; i < nr; i++, off += PAGE_SIZE, clean = i) {
+>                 shadow = alloc_pages(gfp_mask, 1);
+>                 origin = alloc_pages(gfp_mask, 1);
+> -               __vmap_pages_range_noflush(
+> +               if (!shadow || !origin) {
+> +                       err = -ENOMEM;
+> +                       goto ret;
+> +               }
+> +               mapped = __vmap_pages_range_noflush(
+>                         vmalloc_shadow(start + off),
+>                         vmalloc_shadow(start + off + PAGE_SIZE), prot, &shadow,
+>                         PAGE_SHIFT);
+> -               __vmap_pages_range_noflush(
+> +               if (mapped) {
+> +                       err = mapped;
+> +                       goto ret;
+> +               }
+> +               shadow = NULL;
+> +               mapped = __vmap_pages_range_noflush(
+>                         vmalloc_origin(start + off),
+>                         vmalloc_origin(start + off + PAGE_SIZE), prot, &origin,
+>                         PAGE_SHIFT);
+> +               if (mapped) {
+> +                       __vunmap_range_noflush(
+> +                               vmalloc_shadow(start + off),
+> +                               vmalloc_shadow(start + off + PAGE_SIZE));
+> +                       err = mapped;
+> +                       goto ret;
+> +               }
+> +               origin = NULL;
+> +       }
+> +       /* Page mapping loop finished normally, nothing to clean up. */
+> +       clean = 0;
+> +
+> +ret:
+> +       if (clean > 0) {
+> +               /*
+> +                * Something went wrong. Clean up shadow/origin pages allocated
+> +                * on the last loop iteration, then delete mappings created
+> +                * during the previous iterations.
+> +                */
+> +               if (shadow)
+> +                       __free_pages(shadow, 1);
+> +               if (origin)
+> +                       __free_pages(origin, 1);
+> +               __vunmap_range_noflush(
+> +                       vmalloc_shadow(start),
+> +                       vmalloc_shadow(start + clean * PAGE_SIZE));
+> +               __vunmap_range_noflush(
+> +                       vmalloc_origin(start),
+> +                       vmalloc_origin(start + clean * PAGE_SIZE));
+>         }
+>         flush_cache_vmap(vmalloc_shadow(start), vmalloc_shadow(end));
+>         flush_cache_vmap(vmalloc_origin(start), vmalloc_origin(end));
+>         kmsan_leave_runtime();
+> +       return err;
+>  }
+>
+>  void kmsan_iounmap_page_range(unsigned long start, unsigned long end)
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 1355d95cce1ca..31ff782d368b0 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -313,8 +313,8 @@ int ioremap_page_range(unsigned long addr, unsigned long end,
+>                                  ioremap_max_page_shift);
+>         flush_cache_vmap(addr, end);
+>         if (!err)
+> -               kmsan_ioremap_page_range(addr, end, phys_addr, prot,
+> -                                        ioremap_max_page_shift);
+> +               err = kmsan_ioremap_page_range(addr, end, phys_addr, prot,
+> +                                              ioremap_max_page_shift);
+>         return err;
+>  }
+>
+> --
+> 2.40.0.577.gac1e443424-goog
+>
