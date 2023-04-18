@@ -2,44 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95B26E6E26
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD57D6E6E27
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbjDRV1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
+        id S232804AbjDRV2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232194AbjDRV1s (ORCPT
+        with ESMTP id S232194AbjDRV2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:27:48 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4977DB2;
-        Tue, 18 Apr 2023 14:27:46 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 298571C0AB3; Tue, 18 Apr 2023 23:27:44 +0200 (CEST)
-Date:   Tue, 18 Apr 2023 23:27:43 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Subject: Re: [PATCH 5.10 000/124] 5.10.178-rc1 review
-Message-ID: <ZD8LT95DKIT0PKmC@duo.ucw.cz>
-References: <20230418120309.539243408@linuxfoundation.org>
- <CA+G9fYsA+CzsxVYgQEN3c2pOV6F+1EOqY1vQrhj8yt1t-EYs7g@mail.gmail.com>
+        Tue, 18 Apr 2023 17:28:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FA6D329
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:28:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F15C46394E
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 21:27:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27CECC433EF;
+        Tue, 18 Apr 2023 21:27:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681853279;
+        bh=KHENKxaF55SQBliT/mpnTGG5cuTM0pkWpkCrg3hcaZI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=txCks2cQ+CUtoBAX6cM++h3A0wEt6SCndJG3vAuJ9ZAl9C2X4UD6ZxqvFPUBaf5BC
+         BpXJ7ShyHv82arUH7S14OoEi63QuTI7RibwXl1OKCGXmrOiGYxU0M2PSVXNA6MSwDf
+         FGp2Bnw5UnV3vgxiYi/jnOpDlf+bOj7FW6FhT+YQW8covPvnDJrySNvrnM9DOv3hkp
+         tKGCYcpqF1yE//XLV/oYJTFpkJ4LaTjKE43i8newu1gE/aYqmO3TNTXvrlbzKmUVxY
+         vWei9pCKFcXZtzxLM1CUc34OrZQeoI6dooXuHIojQR9+mNCMLCiXCC9sYwY3abLmtD
+         Q2HIn6MHjaxIQ==
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH v3 0/8] objtool: warning improvements
+Date:   Tue, 18 Apr 2023 14:27:46 -0700
+Message-Id: <cover.1681853186.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="TQZ0e1oGHiPq7BSO"
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYsA+CzsxVYgQEN3c2pOV6F+1EOqY1vQrhj8yt1t-EYs7g@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,67 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+v3:
+- dropped merged patches and rebased on tip/objtool/core
+- moved list of noreturn functions to separate file
+- improved WARN_INSN() to do single evaluation of insn arg
 
---TQZ0e1oGHiPq7BSO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Josh Poimboeuf (8):
+  objtool: Limit unreachable warnings to once per function
+  objtool: Add verbose option for disassembling affected functions
+  objtool: Include backtrace in verbose mode
+  objtool: Detect missing __noreturn annotations
+  objtool: Ignore exc_double_fault() __noreturn warnings
+  objtool: Remove superfluous global_noreturns entries
+  tools/lib/subcmd: Replace NORETURN usage with __noreturn
+  objtool: Move noreturn function list to separate file
 
-Hi!
+ tools/lib/subcmd/parse-options.h        |   8 +-
+ tools/lib/subcmd/subcmd-util.h          |   5 +-
+ tools/objtool/Documentation/objtool.txt |  10 ++
+ tools/objtool/builtin-check.c           |   5 +
+ tools/objtool/check.c                   | 195 ++++++++++++++++--------
+ tools/objtool/include/objtool/builtin.h |   1 +
+ tools/objtool/include/objtool/elf.h     |   1 +
+ tools/objtool/include/objtool/warn.h    |  21 ++-
+ tools/objtool/noreturns.h               |  45 ++++++
+ 9 files changed, 214 insertions(+), 77 deletions(-)
+ create mode 100644 tools/objtool/noreturns.h
 
-> > This is the start of the stable review cycle for the 5.10.178 release.
-> > There are 124 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patc=
-h-5.10.178-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stab=
-le-rc.git linux-5.10.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
->=20
-> Following build errors noticed on 5.15 and 5.10.,
->=20
->=20
-> > Waiman Long <longman@redhat.com>
-> >     cgroup/cpuset: Change references of cpuset_mutex to cpuset_rwsem
->=20
-> kernel/cgroup/cpuset.c: In function 'cpuset_can_fork':
-> kernel/cgroup/cpuset.c:2941:30: error: 'cgroup_mutex' undeclared
-> (first use in this function); did you mean 'cgroup_put'?
->  2941 |         lockdep_assert_held(&cgroup_mutex);
->       |                              ^~~~~~~~~~~~
+-- 
+2.39.2
 
-For the record, we can see the same failure in CIP testing.
-
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
-40769270
-
-And it is the only build error I can see in a quick search.
-
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,        Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---TQZ0e1oGHiPq7BSO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZD8LTwAKCRAw5/Bqldv6
-8ojdAJ94Tx88lz9vazlcV37F4csfMvZRDACdHCUBoLiiaDK17WwQY99HSxqb4Ew=
-=IUAC
------END PGP SIGNATURE-----
-
---TQZ0e1oGHiPq7BSO--
