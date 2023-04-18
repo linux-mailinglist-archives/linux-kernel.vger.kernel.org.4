@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9044D6E6C3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 467176E6C45
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbjDRSjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
+        id S232491AbjDRSkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjDRSjA (ORCPT
+        with ESMTP id S232241AbjDRSkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:39:00 -0400
+        Tue, 18 Apr 2023 14:40:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139428A78;
-        Tue, 18 Apr 2023 11:38:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36AE83F7;
+        Tue, 18 Apr 2023 11:40:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A207A6157C;
-        Tue, 18 Apr 2023 18:38:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3B5C433D2;
-        Tue, 18 Apr 2023 18:38:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D8E463664;
+        Tue, 18 Apr 2023 18:40:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2984C433D2;
+        Tue, 18 Apr 2023 18:40:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681843138;
-        bh=yWZFzaHwyCv590iWQSNnSJIy2iMn1qsrmtyHHPDyNjk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tTBz5/THNY2r5Qonb0/k6KdIPTIHWgikjyDPzf+X1CICN1lxEdutltpVPJoGX9pjy
-         WqKOZpVRZY0q6nJQ3RYe7e/TfBBeAwCx/KAxR0U91xrWyi7lP9XovtLU+NONZAKO+d
-         ScD0DiySwUAOGwN6xys/QurCg2R7yD0S+jMz7uXB3EzHsC+hWIXrQxXXdwrh9KYZsb
-         hv8zIC7HPIQDTGQheaOg08pro71okyo8+t5cQAkm9ZZACzIDAombvSEk5qM+pAgezg
-         Eub6hOrIbap1qAU3ilp1OiP7eZP79jSejWKR3iEkc0RiULl6Fq6pjpvJX0heVd5dnB
-         +1GaFzUgj0nIQ==
-Date:   Tue, 18 Apr 2023 11:38:56 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: Re: [PATCH] kbuild: rpm-pkg: remove kernel-drm PROVIDES
-Message-ID: <20230418183856.GA2635379@dev-arch.thelio-3990X>
-References: <20230417143535.250565-1-masahiroy@kernel.org>
+        s=k20201202; t=1681843204;
+        bh=MRs4OuuRPjwuAA/j/6wNgv/n7ZileduB/sqKzknPRDc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=fJfNQ/ZalDa6qqwcMj4QDtO94py/zNjALGURUlVXqCh6pRglJCGXOq78050+QFdps
+         Gxu78ZF4oEXWJgMMj/4coWyD9PPnfnTvyd8Ooy0qoh++1V4x5yuygekYP2DtAgHkDL
+         Xq5Qgxr/JasGpSKigm93nIjk6LpF300mU718CzipQJ9xtkt/qc1NmViFBm3iv/WojF
+         dAz13/v/yeZ7+6wSc8eCtwJdIFwxnyfchKkJNBPYGlcu738g8FNp2MYToKE5Lvv/4G
+         hOODbYPS00tLqCSwqcy7aJ6qgKJ3CfExu/hpykcD7ZXLFt+TQIxiX4KtAvL4r5D/az
+         JSTjLONy3foGA==
+Date:   Tue, 18 Apr 2023 13:40:02 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-pci@vger.kernel.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Yue Wang <yue.wang@Amlogic.com>
+Subject: Re: [PATCH 1/7] PCI: meson: Add 'Amlogic' to Kconfig prompt
+Message-ID: <20230418184002.GA148053@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230417143535.250565-1-masahiroy@kernel.org>
+In-Reply-To: <cdcd04e2-13dc-3dac-daf5-ea784af75467@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,51 +56,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 11:35:35PM +0900, Masahiro Yamada wrote:
-> This code was added more than 20 years ago. [1]
+On Tue, Apr 18, 2023 at 11:10:39AM -0700, Florian Fainelli wrote:
+> On 4/18/23 10:43, Bjorn Helgaas wrote:
+> > From: Bjorn Helgaas <bhelgaas@google.com>
+> > 
+> > Add the "Amlogic" vendor name to the CONFIG_PCI_MESON Kconfig prompt to
+> > match other PCIe drivers.  Capitalize "Meson" to match other Meson Kconfig
+> > prompts.
 > 
-> I checked the kernel spec files in Fedora and OpenSUSE, but did not
-> see 'kernel-drm'. I do not know if there exists a distro that uses it
-> in RPM dependency.
-> 
-> Remove this, and let's see if somebody complains about it.
-> 
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?id=6d956df7d6b716b28c910c4f5b360c4d44d96c4d
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Did you mean, do not capitalize "Meson" or did you intend to preserve the
+> previous hunk that had "Meson" capitalized?
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+I made it match other Meson prompts:
 
-> ---
-> 
->  scripts/package/mkspec | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/scripts/package/mkspec b/scripts/package/mkspec
-> index fc8ad3fbc0a9..8049f0e2c110 100755
-> --- a/scripts/package/mkspec
-> +++ b/scripts/package/mkspec
-> @@ -28,11 +28,6 @@ else
->  	M=DEL
->  fi
->  
-> -if grep -q CONFIG_DRM=y include/config/auto.conf; then
-> -	PROVIDES=kernel-drm
-> -fi
-> -
-> -PROVIDES="$PROVIDES kernel-$KERNELRELEASE"
->  __KERNELRELEASE=$(echo $KERNELRELEASE | sed -e "s/-/_/g")
->  EXCLUDES="$RCS_TAR_IGNORE --exclude=*vmlinux* --exclude=*.mod \
->  --exclude=*.o --exclude=*.ko --exclude=*.cmd --exclude=Documentation \
-> @@ -55,7 +50,7 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
->  $S	Source0: linux.tar.gz
->  $S	Source1: config
->  $S	Source2: diff.patch
-> -	Provides: $PROVIDES
-> +	Provides: kernel-$KERNELRELEASE
->  $S	BuildRequires: bc binutils bison dwarves
->  $S	BuildRequires: (elfutils-libelf-devel or libelf-devel) flex
->  $S	BuildRequires: gcc make openssl openssl-devel perl python3 rsync
-> -- 
-> 2.37.2
-> 
+  arch/arm/mach-meson/Kconfig-    bool "Amlogic Meson6 (8726MX) SoCs support"
+  drivers/char/hw_random/Kconfig- tristate "Amlogic Meson Random Number Generator support"
+  drivers/clk/meson/Kconfig-      bool "Meson8 SoC Clock controller support"
+  drivers/gpu/drm/meson/Kconfig-  tristate "DRM Support for Amlogic Meson Display Controller"
+  drivers/i2c/busses/Kconfig-     tristate "Amlogic Meson I2C controller"
+  drivers/iio/adc/Kconfig-        tristate "Amlogic Meson SAR ADC driver"
+  drivers/media/cec/platform/Kconfig-     tristate "Amlogic Meson AO CEC driver"
+
+So I guess could have described as "style Meson with initial cap only
+instead of all caps" or something.
+
+Bjorn
