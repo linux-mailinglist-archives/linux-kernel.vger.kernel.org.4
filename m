@@ -2,72 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77B46E567C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 03:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7166E567E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 03:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjDRB3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 21:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
+        id S229632AbjDRBbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 21:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjDRB3W (ORCPT
+        with ESMTP id S229510AbjDRBbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 21:29:22 -0400
-Received: from ubuntu20 (unknown [193.203.214.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1669B5B97;
-        Mon, 17 Apr 2023 18:29:11 -0700 (PDT)
-Received: by ubuntu20 (Postfix, from userid 1003)
-        id 666C0E1AB8; Tue, 18 Apr 2023 01:29:10 +0000 (UTC)
-From:   Yang Yang <yang.yang29@zte.com.cn>
-To:     willemdebruijn.kernel@gmail.com
-Cc:     davem@davemloft.net, edumazet@google.com, jiang.xuexin@zte.com.cn,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, xu.xin16@zte.com.cn,
-        yang.yang29@zte.com.cn, zhang.yunkai@zte.com.cn
-Subject: RE: [PATCH linux-next 1/3] selftests: net: udpgso_bench_rx: Fix verifty exceptions
-Date:   Tue, 18 Apr 2023 09:29:10 +0800
-Message-Id: <20230418012910.194745-1-yang.yang29@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <643d62b28e413_29adc929416@willemb.c.googlers.com.notmuch>
-References: <643d62b28e413_29adc929416@willemb.c.googlers.com.notmuch>
+        Mon, 17 Apr 2023 21:31:35 -0400
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3157FEC;
+        Mon, 17 Apr 2023 18:31:31 -0700 (PDT)
+X-UUID: 9a07e4d5f39c4ddcab5b58965412e4d8-20230418
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:08c9f934-2b0b-4ad5-a1a4-fd84f8acc7d8,IP:20,
+        URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-INFO: VERSION:1.1.22,REQID:08c9f934-2b0b-4ad5-a1a4-fd84f8acc7d8,IP:20,UR
+        L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:5
+X-CID-META: VersionHash:120426c,CLOUDID:a97b6284-cd9c-45f5-8134-710979e3df0e,B
+        ulkID:230418093117RV3XC0OP,BulkQuantity:0,Recheck:0,SF:19|44|24|17|102,TC:
+        nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 9a07e4d5f39c4ddcab5b58965412e4d8-20230418
+Received: from mail.kylinos.cn [(39.156.73.10)] by mailgw
+        (envelope-from <zenghao@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1882977521; Tue, 18 Apr 2023 09:30:59 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+        by mail.kylinos.cn (NSMail) with SMTP id 9E25FE0084A4;
+        Tue, 18 Apr 2023 09:30:59 +0800 (CST)
+X-ns-mid: postfix-643DF2D3-43431154
+Received: from zdzh5-QiTianM428-A376.. (unknown [172.20.12.253])
+        by mail.kylinos.cn (NSMail) with ESMTPA id D603DE0084A4;
+        Tue, 18 Apr 2023 09:30:58 +0800 (CST)
+From:   Hao Zeng <zenghao@kylinos.cn>
+To:     skhan@linuxfoundation.org
+Cc:     trenn@suse.com, shuah@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zenghao@kylinos.cn
+Subject: [PATCH v4] cpupower:Fix resource leaks in sysfs_get_enabled()
+Date:   Tue, 18 Apr 2023 09:30:56 +0800
+Message-Id: <20230418013056.995478-1-zenghao@kylinos.cn>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_NON_FQDN_1,
-        HEADER_FROM_DIFFERENT_DOMAINS,HELO_NO_DOMAIN,NO_DNS_FOR_FROM,
-        RCVD_IN_PBL,RDNS_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL_NO_RDNS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Why are you running two senders concurrently? The test is not intended
-> to handle that case.
+The sysfs_get_enabled() opened file processor not closed,
+may cause a file handle leak.
+Putting error handling and resource cleanup code together
+makes the code easy to maintain and read.
+Removed the unnecessary else if branch from the original
+function, as it should return an error in cases other than '0'.
 
-Sorry for the inaccuracy of the description here, these two commands,
-i.e. with or without GSO, cause the problem. The same goes for patch 2/3.
-The problem is easily reproducible in the latest kernel, QEMU environment, E1000.
+Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
+Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/power/cpupower/lib/powercap.c | 23 ++++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
 
-bash# udpgso_bench_tx -l 4 -4 -D "$DST" 
-udpgso_bench_tx: write: Connection refused
-bash# udpgso_bench_rx -4 -G -S 1472 -v
-udpgso_bench_rx: data[1472]: len 17664, a(97) != q(113)
+diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/l=
+ib/powercap.c
+index 0ce29ee4c2e4..a7a59c6bacda 100644
+--- a/tools/power/cpupower/lib/powercap.c
++++ b/tools/power/cpupower/lib/powercap.c
+@@ -40,25 +40,34 @@ static int sysfs_get_enabled(char *path, int *mode)
+ {
+ 	int fd;
+ 	char yes_no;
++	int ret =3D 0;
+=20
+ 	*mode =3D 0;
+=20
+ 	fd =3D open(path, O_RDONLY);
+-	if (fd =3D=3D -1)
+-		return -1;
++	if (fd =3D=3D -1) {
++		ret =3D -1;
++		goto out;
++	}
+=20
+ 	if (read(fd, &yes_no, 1) !=3D 1) {
+-		close(fd);
+-		return -1;
++		ret =3D -1;
++		goto out_close;
+ 	}
+=20
+ 	if (yes_no =3D=3D '1') {
+ 		*mode =3D 1;
+-		return 0;
++		goto out_close;
+ 	} else if (yes_no =3D=3D '0') {
+-		return 0;
++		goto out_close;
++	} else {
++		ret =3D -1;
++		goto out_close;
+ 	}
+-	return -1;
++out_close:
++	close(fd);
++out:
++	return ret;
+ }
+=20
+ int powercap_get_enabled(int *mode)
+--=20
+2.37.2
 
-bash# udpgso_bench_tx -l 4 -4 -D "$DST" -S 0
-udpgso_bench_tx: sendmsg: Connection refused
-bash# udpgso_bench_rx -4 -G -S 1472 -v
-udpgso_bench_rx: data[61824]: len 64768, a(97) != w(119)
-
-In one test, the verification data is printed as follows:
-abcd...xyz
-...
-abcd...xyz
-abcd...opabcd...xyz
-
-This is because the sender intercepts from the buf at a certain length,
-which is not aligned according to 26 bytes, and multiple packets are
-merged. The verification of the receiving end needs to be performed
-after splitting.
