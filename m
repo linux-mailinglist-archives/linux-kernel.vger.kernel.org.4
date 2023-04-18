@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445696E60D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBDA6E60DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjDRMMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 08:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
+        id S230500AbjDRMMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 08:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjDRMLe (ORCPT
+        with ESMTP id S231639AbjDRMLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 08:11:34 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EEA4ED5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:10:59 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2a8aea2a654so20357211fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:10:59 -0700 (PDT)
+        Tue, 18 Apr 2023 08:11:35 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629DF4EC3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:11:01 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4ec817060cdso2169778e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:11:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681819858; x=1684411858;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0FtC68OU05WVvDMbJdinmshqebJEKgAhn9ch5Qe5aNc=;
-        b=oN7I222L001U6oDBsNQ2Z5r5KMJbnqkErXI/QjKJVbO1yn6F2htBlGooLVIismVzr4
-         76hsQ7fTvy4NDCgh0MHFz/ICYDD5yItQVx81xQSvk1CWKeetqH8y/SkstCtfzOk/0Ws2
-         Sce66q4FtaDOnTjf/JjfBGU0bmAVSrgFbOI2RpXjNFkcxbSZ39sGEsYbepqaqf2YzA/4
-         qtnOE7Xuh6bXp3/Xn0GS1Ala/5ncj0F57JpNd/YfN/yQE2Mxw2A0J5FkZqE+dVyEFRnU
-         G1HSUStT84NrTD/wJQIoFegZuFrzmIB9VapwNIumIDpMUlWIGpMJ0S3UmgdVLQBAJMsb
-         xPSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681819858; x=1684411858;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1681819859; x=1684411859;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0FtC68OU05WVvDMbJdinmshqebJEKgAhn9ch5Qe5aNc=;
-        b=bc7oI9MbnhwvFJ6G99O71rt7lYRsqUMzivbVZWzRiTFOpyALjygUVW7EKtWvOCMvEA
-         fGMB3O7cUm/CadTNqWtSjIOCO9rahpSQ7kNgAeyFevUIN/5EfUjHyMEKEU+FbK1bQjlD
-         7YyiY2hj4eDTc4oTsPlWCPqhS828H5rsejBnHiBTAlvZRdvXycvI/0/opir8H+ZrkB98
-         gPcbzQMV/e5le/f0lCTQDrx9yNPl4UMTUhwEQHocpf45hkk2e3EkcFpXBWZVa2bsNVX0
-         s1/fQckAj+Jq/uclp+Fcg1dixtPUpx1CUuLBhz9VdevOmTe5KJW85tS6nkxKxnS53ytk
-         zGFg==
-X-Gm-Message-State: AAQBX9ez4YYMB/tCs/OGNkuNfWqZQRMbQ5iNYZEaXIVIDzIuuo947Lxh
-        xBCZrEiS+G/PEoccZe7STQsY0A==
-X-Google-Smtp-Source: AKy350b1R8Gw9qWShitOCt9kHDGW8yxwVJp7S7FeWgH2XL+i6oh7hdrksmu3Eu1fsIACNW9o0RcwZg==
-X-Received: by 2002:a05:6512:946:b0:4cc:7282:702b with SMTP id u6-20020a056512094600b004cc7282702bmr2915977lft.2.1681819858155;
-        Tue, 18 Apr 2023 05:10:58 -0700 (PDT)
+        bh=fftkJp3Coct54pcoJxqOJznZa4eb2ZsBLmF7Bh2NPzw=;
+        b=yT/BiOHJ+Wb2Fowb5VKhN9CkH2wqsNJE9NMZRSDGk4DXvenGL6eOdB8DlC/etQesDw
+         dtOy68VZtrLhULwcn9/Mi9WT7Y8P3NAvFpLgTBxc+8AIDLGEScilP24Dh3AA/nx4wMOD
+         j3Z9Q7BlS2bnKN139hMOkzsDLGoMk0fPulZVUEm5TosYsVVqzQMizwSXVbX72TBmvagL
+         looqHnRRbrN27J2r3pebd4DSAIVDVFu/Et035MPmkDkjTuMHAluOrpHYbTTgAUgD0AYe
+         dP3Kq03ixRHzCPq7IzoNQ3erAJ/HIQVJ4AfwP3pg49snXLAoXuIq8GSkth6QU20GOrmB
+         YCXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681819859; x=1684411859;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fftkJp3Coct54pcoJxqOJznZa4eb2ZsBLmF7Bh2NPzw=;
+        b=SYRSqmmp/AtcwSugP90SDPd6oQR1rbN6n/tNimJJJUB4O4hsb8KzMYoQSLb+zl5X3d
+         OWhz+SeocOzndNXl7SVW+pUyYPMVtg/gXFPpr/Vj8jJh/WRgDqdJsfKQEJ5dc7uHaQ4M
+         filqNva7TsviCU1TWCSZuUcw/oQ0AYBi9VQVXjXxRiNw7bF5PCqvbPzVWgKjSnF+6sch
+         GYVtUwztM3Ua5sv6x3dvOGNTqkdSn8lMG7RKOjq7fWu8xrKXDjj0hR8d8rlTtgWXPbHv
+         TlozP9t/byZNJyMn8+j5hl9WlC14zcReZ9oKcc7nko3FNZEtDlkOHT/EOHJ5wGEMSg0S
+         DnSQ==
+X-Gm-Message-State: AAQBX9cFjM5ZyG57wRwVy3dG02bBd3AlOmzH7M4cF014/a+28tymLFfS
+        EBeJSc16vyBfqgDACoZksAVf+A==
+X-Google-Smtp-Source: AKy350ZPb2pcudeOWD4NUzexqOVtDM0ulgBKkxy07npJmGB5XjCQyP1ClBYjw6LCleNLEPUOy8LFOw==
+X-Received: by 2002:a19:f70b:0:b0:4ed:cb37:7d95 with SMTP id z11-20020a19f70b000000b004edcb377d95mr897901lfe.44.1681819859602;
+        Tue, 18 Apr 2023 05:10:59 -0700 (PDT)
 Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id q17-20020a19a411000000b004d86808fd33sm2365895lfc.15.2023.04.18.05.10.56
+        by smtp.gmail.com with ESMTPSA id q17-20020a19a411000000b004d86808fd33sm2365895lfc.15.2023.04.18.05.10.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 05:10:57 -0700 (PDT)
+        Tue, 18 Apr 2023 05:10:59 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH v2 0/5] MDSS reg bus interconnect
-Date:   Tue, 18 Apr 2023 14:10:55 +0200
-Message-Id: <20230417-topic-dpu_regbus-v2-0-91a66d04898e@linaro.org>
+Date:   Tue, 18 Apr 2023 14:10:56 +0200
+Subject: [PATCH v2 1/5] dt-bindings: display/msm: Add reg bus interconnect
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAM+IPmQC/32NQQqDMBAAvyJ7bkoSrWJP/UeRksRVFyQJG5UW8
- e9NfUCPMzDMDgmZMMG92IFxo0TBZ9CXAtxk/IiC+sygpS5lpRqxhEhO9HF9MY52TcJY11amaWR
- 705AzaxIKy8a7KYd+necsI+NA7/Pz7DJPlJbAn3O7qZ/9c9iUkELWg+2dqqvSycdM3nC4Bh6hO
- 47jC+z6B/rGAAAA
+Message-Id: <20230417-topic-dpu_regbus-v2-1-91a66d04898e@linaro.org>
+References: <20230417-topic-dpu_regbus-v2-0-91a66d04898e@linaro.org>
+In-Reply-To: <20230417-topic-dpu_regbus-v2-0-91a66d04898e@linaro.org>
 To:     Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
@@ -74,11 +73,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681819856; l=1588;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681819856; l=1310;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=9T+oPpgA4/nGeRlxxYT3UQzjlTmn8RNRP+pFgS35nLA=;
- b=XjbFOQMabHazQLE042ggp/Qsi6Htq0N/t8+YpKAeT+K76r5ZaYtdmBUHabs5aYEel2Pn+xJfsea8
- xG5lbEfjCv97dAhRoRjnauhXPCsCcfnkcYAN63wmEQL6lNH9N9D7
+ bh=9eGzIhdzE/kh12Ssb8zLi8BB+5t4kj0lnuayorvjl54=;
+ b=6fysWEnV+Y3QmSTMiVPNmoQ9u0QIAaEjvJEkX1mj0vdB2azvjMKBFTXFeb43KILmDBjB8FFs4iVp
+ BB/S89PrA4Ytu9jBc2Dfi9OeeG/7wbARaGTUTtuRCJrQlU8X+ytt
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,12 +90,6 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v1 -> v2:
-- Fix "Mbps" -> "MBps" [5/5]
-- Add an interconnects: entry in dt-bindings (and not only -names..) [1/5]
-
-v1: https://lore.kernel.org/r/20230417-topic-dpu_regbus-v1-0-06fbdc1643c0@linaro.org
-
 Apart from the already handled data bus (MAS_MDP_Pn<->DDR), there's
 another path that needs to be handled to ensure MDSS functions properly,
 namely the "reg bus", a.k.a the CPU-MDSS interconnect.
@@ -104,32 +97,33 @@ namely the "reg bus", a.k.a the CPU-MDSS interconnect.
 Gating that path may have a variety of effects.. from none to otherwise
 inexplicable DSI timeouts..
 
-This series tries to address the lack of that.
-
-Example path:
-
-interconnects = <&bimc MASTER_AMPSS_M0 0 &config_noc SLAVE_DISPLAY_CFG 0>;
+Describe it in bindings to allow for use in device trees.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Konrad Dybcio (5):
-      dt-bindings: display/msm: Add reg bus interconnect
-      drm/msm/dpu1: Rename path references to mdp_path
-      drm/msm/mdss: Rename path references to mdp_path
-      drm/msm/mdss: Handle the reg bus ICC path
-      drm/msm/dpu1: Handle the reg bus ICC path
+ Documentation/devicetree/bindings/display/msm/mdss-common.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
- .../bindings/display/msm/mdss-common.yaml          |  2 ++
- drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c      | 10 +++----
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            | 34 ++++++++++++++++-----
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h            |  5 ++--
- drivers/gpu/drm/msm/msm_mdss.c                     | 35 ++++++++++++++--------
- 5 files changed, 58 insertions(+), 28 deletions(-)
----
-base-commit: 4aa1da8d99724f6c0b762b58a71cee7c5e2e109b
-change-id: 20230417-topic-dpu_regbus-abc94a770952
+diff --git a/Documentation/devicetree/bindings/display/msm/mdss-common.yaml b/Documentation/devicetree/bindings/display/msm/mdss-common.yaml
+index ccd7d6417523..30a8aed4289a 100644
+--- a/Documentation/devicetree/bindings/display/msm/mdss-common.yaml
++++ b/Documentation/devicetree/bindings/display/msm/mdss-common.yaml
+@@ -66,12 +66,14 @@ properties:
+     items:
+       - description: Interconnect path from mdp0 (or a single mdp) port to the data bus
+       - description: Interconnect path from mdp1 port to the data bus
++      - description: Interconnect path from CPU to the reg bus
+ 
+   interconnect-names:
+     minItems: 1
+     items:
+       - const: mdp0-mem
+       - const: mdp1-mem
++      - const: cpu-cfg
+ 
+   resets:
+     items:
 
-Best regards,
 -- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+2.40.0
 
