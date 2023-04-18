@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2220B6E5DEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E00C6E5DED
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjDRJx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
+        id S229652AbjDRJyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjDRJxz (ORCPT
+        with ESMTP id S231251AbjDRJx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:53:55 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D9F10D9;
-        Tue, 18 Apr 2023 02:53:54 -0700 (PDT)
+        Tue, 18 Apr 2023 05:53:59 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BDD2D64;
+        Tue, 18 Apr 2023 02:53:57 -0700 (PDT)
 Received: from localhost (unknown [188.27.34.213])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F332C6603241;
-        Tue, 18 Apr 2023 10:53:52 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 44D886603242;
+        Tue, 18 Apr 2023 10:53:56 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681811633;
-        bh=OTHboIIVMiE40O35GcCnXwb3kSF6mCIQcyBQmGLk9M0=;
+        s=mail; t=1681811636;
+        bh=QAKXSHNeG9DCJb6ZMUd7iXClPcNDJLQxuEo4vhchV8k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ekx5antfdIzaGKk2d7+FyS+jYl5tCnhm9wjv7h9qe9ZlQI9WKit2edBg7UcIvJWyQ
-         Y/4I7Gp3DwMPxsHeYh9rBWBiNFI4J9asUCoP85JD/NZN7QcsGkZ8zWDZIpsKVyy3aG
-         iIhJIYJpfclRwexcEt74KEAPrOIt2L+lB/QB9R6HGS2LeowIxmbdya6HKviiRHl3oJ
-         uVTLBzMtd5nKXgNaZddzbcxrVxE9xAieqogYCMgkm/G+zrxRUl+ovENWiV+XQdQjMx
-         DcDM0Wns+6iyik3DsUWuk4abJsrkHD9bPY6lCEH/eoF2OEOijmF2en7FMj8+d7xMgZ
-         RI1anX5lOtt8Q==
+        b=A2R7uPX6DTLm0bATJ4mkkXme7TGZj5FY/IR/qz3idT4+br+VA5WObUbiohGLQ2QeX
+         UdEWfLbUqYrQpAYXy92f7FcpooBvBgh4/Gnzb5/HnX2HGPhQXU1eptTdGZEsM0FTKs
+         u5K99MghfSrLgUykhepfG66BfWo6PWzrmAPE+ocidVzgb086mUgFnpzb5UsOoQ0qqg
+         uhvElN8v2hmEsjyCk6T96DQN//zoSFZCVPIf+0inL7T7vqjG0BVTMfFS8nofjbCBon
+         17yjkU6zQaGpZY0ACseBX/QBE+k+Juz+HU8Y5W+mXd2+ISSHb7TKdiEbOuWNIp0Jlh
+         clt330Iwl641A==
 From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -45,9 +45,9 @@ To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH 1/3] dt-bindings: timer: rockchip: Drop superfluous rk3288 compatible
-Date:   Tue, 18 Apr 2023 12:53:42 +0300
-Message-Id: <20230418095344.274025-2-cristian.ciocaltea@collabora.com>
+Subject: [PATCH 2/3] dt-bindings: timer: rockchip: Add rk3588 compatible
+Date:   Tue, 18 Apr 2023 12:53:43 +0300
+Message-Id: <20230418095344.274025-3-cristian.ciocaltea@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230418095344.274025-1-cristian.ciocaltea@collabora.com>
 References: <20230418095344.274025-1-cristian.ciocaltea@collabora.com>
@@ -63,27 +63,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The compatible string for Rockchip RK3288 is provided in both the 'enum'
-and the subsequent 'const' item. Drop the unnecessary entry from the
-enum.
+Add compatible string for Rockchip RK3588 timer.
 
 Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 ---
- Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml | 1 -
- 1 file changed, 1 deletion(-)
+ Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml b/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
-index 65e59836a660..2bdb6e6bdb21 100644
+index 2bdb6e6bdb21..19e56b7577a0 100644
 --- a/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
 +++ b/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
-@@ -23,7 +23,6 @@ properties:
-               - rockchip,rk3188-timer
+@@ -24,6 +24,7 @@ properties:
                - rockchip,rk3228-timer
                - rockchip,rk3229-timer
--              - rockchip,rk3288-timer
                - rockchip,rk3368-timer
++              - rockchip,rk3588-timer
                - rockchip,px30-timer
            - const: rockchip,rk3288-timer
+   reg:
 -- 
 2.40.0
 
