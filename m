@@ -2,86 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94F56E5AF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 693336E5AF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjDRHvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 03:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        id S231160AbjDRHwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 03:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjDRHvq (ORCPT
+        with ESMTP id S230467AbjDRHwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 03:51:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929124C1C;
-        Tue, 18 Apr 2023 00:51:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 18 Apr 2023 03:52:14 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A4D72A9;
+        Tue, 18 Apr 2023 00:51:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74DE862DF0;
-        Tue, 18 Apr 2023 07:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CA3D2C4339B;
-        Tue, 18 Apr 2023 07:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681804219;
-        bh=ewysq3wuCASTIg2rOKNlf3mJR3OqeJ/n2NrPeJ4lnmY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=fLlXHuuViMqml9D5TP+oZHfAEtbnKQAAejJCU0l3PMgFOGb7nklLOozXlpdShmtu1
-         T93xvdkZdZIdq3UE9r1CURHg04w1K0OhW4tM+H+nzPcIcHtn3ThyNRDqnJxk1gnkOE
-         NtspbTB30uElI3OR6qB3ybeSj7fTIJaauuEyilXpLRf0Vu2vEtHgRtsSPcAQTPVQ2D
-         0OGIhj4ZHNpr6T2DWCwgqMW0yK4T1s9fSiaygakGzKTZVyvxW4hAi7CYlxbHfOb/o3
-         jpsN0mnFycQMCE57L/emPdCEjPPQGTQYT08OZIFODVM2qGJRF4TZAygqaF69En4eQ8
-         m0Ftu1RSitc+Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AD3B1C4167B;
-        Tue, 18 Apr 2023 07:50:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A78F31F8D5;
+        Tue, 18 Apr 2023 07:50:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681804236; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=46e7WTGcHNks6sxTiebpVk6ExMfzEHXXE/aXkJusS5g=;
+        b=uG1RAziSlvQ/AB6RQnxcNayvtDodqRrOp363Gas3XQAKfYeJPHa3904AfTgyYGI541gMah
+        Oo0jHROGhui6HyXV9gYIf8RIPuSxbHVOhwE5XmOaKmnqwBTkLHM0b8dsHL4cKZgmMp8qzn
+        c2Fpq7XO2GcRQuxTvj22KrhI3FzVSf4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681804236;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=46e7WTGcHNks6sxTiebpVk6ExMfzEHXXE/aXkJusS5g=;
+        b=6SHx2StO+Tcg6qDit+z9WzPQX0muMG1mdmG4QkhvSHTYHiXGL6rliQuS4Mq9yrRmecHD8j
+        1L/LSMcbIoXjj0Dw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7327E139CC;
+        Tue, 18 Apr 2023 07:50:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EG1rG8xLPmRGbgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 18 Apr 2023 07:50:36 +0000
+Message-ID: <7dda08c3-4f51-7ab5-12af-3635302ffc63@suse.cz>
+Date:   Tue, 18 Apr 2023 09:50:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH RESEND net] cxgb4: fix use after free bugs caused by circular
- dependency problem
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168180421970.1332.3923625350941778517.git-patchwork-notify@kernel.org>
-Date:   Tue, 18 Apr 2023 07:50:19 +0000
-References: <20230415081227.7463-1-duoming@zju.edu.cn>
-In-Reply-To: <20230415081227.7463-1-duoming@zju.edu.cn>
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net, rajur@chelsio.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 0/5] Some tiny clean ups for SLUB
+Content-Language: en-US
+To:     sxwjean@me.com, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, iamjoonsoo.kim@lge.com,
+        akpm@linux-foundation.org, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com, keescook@chromium.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Xiongwei Song <xiongwei.song@windriver.com>
+References: <20230413143452.211250-1-sxwjean@me.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230413143452.211250-1-sxwjean@me.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Sat, 15 Apr 2023 16:12:27 +0800 you wrote:
-> The flower_stats_timer can schedule flower_stats_work and
-> flower_stats_work can also arm the flower_stats_timer. The
-> process is shown below:
+On 4/13/23 16:34, sxwjean@me.com wrote:
+> From: Xiongwei Song <xiongwei.song@windriver.com>
 > 
-> ----------- timer schedules work ------------
-> ch_flower_stats_cb() //timer handler
->   schedule_work(&adap->flower_stats_work);
+> Hi,
 > 
-> [...]
+> Just clean ups, no any functionality changed. Thanks for your time.
 
-Here is the summary with links:
-  - [RESEND,net] cxgb4: fix use after free bugs caused by circular dependency problem
-    https://git.kernel.org/netdev/net/c/e50b9b9e8610
+Thanks, added to slab.git for 6.5:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/log/?h=slab/for-6.5/cleanup
 
+> Xiongwei Song (5):
+>   slub: Correct the error code when slab_kset is NULL
+>   slub: Put objects_show() into CONFIG_SLUB_DEBUG enabled block
+>   slub: Remove CONFIG_SMP defined check
+>   slub: Remove slabs_node() function
+>   slub: Don't read nr_slabs and total_objects directly
+> 
+>  mm/slub.c | 45 +++++++++++++++++----------------------------
+>  1 file changed, 17 insertions(+), 28 deletions(-)
+> 
 
