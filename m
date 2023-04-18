@@ -2,116 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1104E6E576F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA966E5772
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbjDRCTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 22:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
+        id S231154AbjDRCVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 22:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbjDRCTw (ORCPT
+        with ESMTP id S229621AbjDRCVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 22:19:52 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D32112C;
-        Mon, 17 Apr 2023 19:19:51 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-63b5312bd4fso7056626b3a.0;
-        Mon, 17 Apr 2023 19:19:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681784391; x=1684376391;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cjj56tEMHykNAp+oS24dnLfDKAnKTyWKgv6cy2vr5wY=;
-        b=GXVS89lNTQHBShGn+sCZBzjxtIoeGXVkDe3d7wwjZuwfdT2b1nZXGIpGxFjG1Ohw4l
-         NBjjAdeoA75jMdDGC49ovsgRZEKbFK0npZ9J991+RLSPyG1LM9h93V8N6dfAGPun5sxE
-         4ozc37T7F2XM3xfrTdmY4eJqOyjYm+JP0Pszf4d4ETu2rFWzlS3ahrYCWZN6GNuwwhnL
-         M5mkWLBpWq5YqKYg705tjJbrO+/L+ciKIBm/ERmrBuNzvHDNg/GajzQupQqsctGBWb5r
-         HDXbBLWuAThw4BEQHZ92866sm5B2k0IqKuKPB63jpy8QneknhsNcyL8if5gXYCvsSRV4
-         l+mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681784391; x=1684376391;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cjj56tEMHykNAp+oS24dnLfDKAnKTyWKgv6cy2vr5wY=;
-        b=g0dk507+7DMCGUrGfwldiwV83Gqzoa3LmmH+tNWFGHZAhUft8u40NipFt2EtfiR/em
-         mruYBC+g4gKMmvShD5VmQu85ZUQU12WCaGW6mA7Do1fIRwg6K7Ii1Ua24FPKel3lYtJj
-         RUUx4Ub7EMnRbwYDXWNFu/a3PxS6Y61Cl7beeeKegzNfIDnKBRpD6+IN/mX8WStWZmTG
-         kE4U45xg0tH1vTFhRn96HWga67AMU+prUV0PQHQnuD4ZvLQ4cPeXqK2M1GpEnvKgzJzu
-         uj05GWB2KU89aceIKuRNmVTDZM7PnMmXsrPdGTi0XPmyqJeBWF/3/NtEUHxquPWInG2s
-         QJ6w==
-X-Gm-Message-State: AAQBX9cPoEqYiVObMqxGQ5g8Z4zxUVRS2RQhYQk+6Y8pcplUqZ2cfS35
-        zcBWH0aMlSrEaqpL2OR4ZTI=
-X-Google-Smtp-Source: AKy350ZfonQJF00xROCi41foA6j4305I4EHVz+N8kBAbt7Nk+RMFf6+Zp5EvHOScTXw88gOLJu44/A==
-X-Received: by 2002:a17:90b:87:b0:246:57ba:ab28 with SMTP id bb7-20020a17090b008700b0024657baab28mr644067pjb.2.1681784390824;
-        Mon, 17 Apr 2023 19:19:50 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-15.three.co.id. [180.214.233.15])
-        by smtp.gmail.com with ESMTPSA id gl13-20020a17090b120d00b0024781f5e8besm3067601pjb.26.2023.04.17.19.19.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 19:19:50 -0700 (PDT)
-Message-ID: <ce1dcea0-748a-878c-cb2b-3730690004a4@gmail.com>
-Date:   Tue, 18 Apr 2023 09:19:44 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2.1 2/2] x86/Documentation: Add documentation about
- cluster
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Mon, 17 Apr 2023 22:21:33 -0400
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B828A7;
+        Mon, 17 Apr 2023 19:21:31 -0700 (PDT)
+X-UUID: fd0f252e83574171aca8818452e12339-20230418
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:d3425583-a400-4281-87c0-1e7fccebb94d,IP:5,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:-15
+X-CID-INFO: VERSION:1.1.22,REQID:d3425583-a400-4281-87c0-1e7fccebb94d,IP:5,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-15
+X-CID-META: VersionHash:120426c,CLOUDID:5b74a9a1-8fcb-430b-954a-ba3f00fa94a5,B
+        ulkID:230418050923GEA6D6HB,BulkQuantity:3,Recheck:0,SF:24|17|19|44|102,TC:
+        nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI
+        :0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: fd0f252e83574171aca8818452e12339-20230418
+X-User: zenghao@kylinos.cn
+Received: from [172.20.12.253] [(116.128.244.169)] by mailgw
+        (envelope-from <zenghao@kylinos.cn>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1259229817; Tue, 18 Apr 2023 10:21:26 +0800
+Message-ID: <09de34cfd7aec323e3841446c1bf41749909cf58.camel@kylinos.cn>
+Subject: Re: [PATCH v3] cpupower:Fix resource leaks in sysfs_get_enabled()
+From:   Hao Zeng <zenghao@kylinos.cn>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     trenn@suse.com, shuah@kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, corbet@lwn.net,
-        jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
-        Jason@zx2c4.com, thomas.lendacky@amd.com, puwen@hygon.cn,
-        x86@kernel.org, linux-doc@vger.kernel.org, oleksandr@natalenko.name
-References: <20230413172918.1500-3-kprateek.nayak@amd.com>
- <20230414031743.875-1-kprateek.nayak@amd.com>
- <cf4fdb30-6f2e-ca3e-fbc0-b48f6949508d@gmail.com>
- <7b068fc1-2d88-27c3-b561-0a6c36c589da@intel.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <7b068fc1-2d88-27c3-b561-0a6c36c589da@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 18 Apr 2023 10:21:09 +0800
+In-Reply-To: <4eaae372-c312-6a77-f57f-dffc5f9aff02@linuxfoundation.org>
+References: <20230417075617.10487-1-zenghao@kylinos.cn>
+         <4eaae372-c312-6a77-f57f-dffc5f9aff02@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.1-0ubuntu1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/17/23 07:23, Dave Hansen wrote:
-> On 4/14/23 19:24, Bagas Sanjaya wrote:
->> On 4/14/23 10:17, K Prateek Nayak wrote:
->>> +  - cluster_id:
->>> +
->>> +    A per-CPU variable containing:
->>> +
->>> +      - Upper bits extracted from the APIC ID.  CPUs which have the same value
->>> +        in these bits share an L2 and have the same cluster_id.
->>> +
->>> +        CPUs for which cluster information is unavailable will show 65535
->>> +        (BAD_APICID) as the cluster_id.
->> "... return cluster_id of 65535 (BAD_APICID)."
-> 
-> Bagas, this is talking about a per-cpu variable.  Variables don't
-> "return" things, functions do.
-> 
-
-Oops, I don't see that!
-
-> I also have a request: I'd really appreciate if you could avoid
-> reviewing x86-related documentation.  The review comments that I've seen
-> coming from you have not helped x86 documentation.  They've hurt the
-> patches more than they have helped.
-> 
-
-OK, thanks!
-
--- 
-An old man doll... just what I always wanted! - Clara
+RGVhciBTaHVhaDoKClRoYW5rIHlvdSBhZ2FpbiBmb3IgeW91ciBwYXRpZW5jZSBhbmQgZ3VpZGFu
+Y2UuIFRoaXMgaGFzIGJlbmVmaXRlZCBtZSBhCmxvdC4gSSB3aWxsIGFwcGx5IHdoYXQgSSBoYXZl
+IGxlYXJuZWQgdGhpcyB0aW1lIHRvIG15IHdvcmsgYW5kIGtlcm5lbApjb250cmlidXRpb24KCkJl
+c3QgcmVnYXJkcwotLSBIYW8KCk9uIE1vbiwgMjAyMy0wNC0xNyBhdCAxNTowOSAtMDYwMCwgU2h1
+YWggS2hhbiB3cm90ZToKPiBPbiA0LzE3LzIzIDAxOjU2LCBIYW8gWmVuZyB3cm90ZToKPiA+IFRo
+ZSBzeXNmc19nZXRfZW5hYmxlZCgpIG9wZW5lZCBmaWxlIHByb2Nlc3NvciBub3QgY2xvc2VkLAo+
+ID4gbWF5IGNhdXNlIGEgZmlsZSBoYW5kbGUgbGVhay4KPiA+IFB1dHRpbmcgZXJyb3IgaGFuZGxp
+bmcgYW5kIHJlc291cmNlIGNsZWFudXAgY29kZSB0b2dldGhlcgo+ID4gbWFrZXMgdGhlIGNvZGUg
+ZWFzeSB0byBtYWludGFpbiBhbmQgcmVhZC4KPiA+IFJlbW92ZWQgdGhlIHVubmVjZXNzYXJ5IGVs
+c2UgaWYgYnJhbmNoIGZyb20gdGhlIG9yaWdpbmFsCj4gPiBmdW5jdGlvbiwgYXMgaXQgc2hvdWxk
+IHJldHVybiBhbiBlcnJvciBpbiBjYXNlcyBvdGhlciB0aGFuICcwJy4KPiA+IAo+ID4gU2lnbmVk
+LW9mZi1ieTogSGFvIFplbmcgPHplbmdoYW9Aa3lsaW5vcy5jbj4KPiA+IFN1Z2dlc3RlZC1ieTog
+U2h1YWggS2hhbiA8c2toYW5AbGludXhmb3VuZGF0aW9uLm9yZz4KPiA+IC0tLQo+ID4gwqAgdG9v
+bHMvcG93ZXIvY3B1cG93ZXIvbGliL3Bvd2VyY2FwLmMgfCAyMiArKysrKysrKysrKysrKy0tLS0t
+LS0tCj4gPiDCoCAxIGZpbGUgY2hhbmdlZCwgMTQgaW5zZXJ0aW9ucygrKSwgOCBkZWxldGlvbnMo
+LSkKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2xpYi9wb3dlcmNh
+cC5jCj4gPiBiL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2xpYi9wb3dlcmNhcC5jCj4gPiBpbmRleCAw
+Y2UyOWVlNGMyZTQuLmYwMzM0YTVmMWFjZiAxMDA2NDQKPiA+IC0tLSBhL3Rvb2xzL3Bvd2VyL2Nw
+dXBvd2VyL2xpYi9wb3dlcmNhcC5jCj4gPiArKysgYi90b29scy9wb3dlci9jcHVwb3dlci9saWIv
+cG93ZXJjYXAuYwo+ID4gQEAgLTQwLDI1ICs0MCwzMSBAQCBzdGF0aWMgaW50IHN5c2ZzX2dldF9l
+bmFibGVkKGNoYXIgKnBhdGgsIGludAo+ID4gKm1vZGUpCj4gPiDCoCB7Cj4gPiDCoMKgwqDCoMKg
+wqDCoMKgaW50IGZkOwo+ID4gwqDCoMKgwqDCoMKgwqDCoGNoYXIgeWVzX25vOwo+ID4gK8KgwqDC
+oMKgwqDCoMKgaW50IHJldCA9IDA7Cj4gPiDCoCAKPiA+IMKgwqDCoMKgwqDCoMKgwqAqbW9kZSA9
+IDA7Cj4gPiDCoCAKPiA+IMKgwqDCoMKgwqDCoMKgwqBmZCA9IG9wZW4ocGF0aCwgT19SRE9OTFkp
+Owo+ID4gLcKgwqDCoMKgwqDCoMKgaWYgKGZkID09IC0xKQo+ID4gLcKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoHJldHVybiAtMTsKPiA+ICvCoMKgwqDCoMKgwqDCoGlmIChmZCA9PSAtMSkg
+ewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldCA9IC0xOwo+ID4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdvdG8gb3V0Owo+ID4gK8KgwqDCoMKgwqDCoMKgfQo+
+ID4gwqAgCj4gPiDCoMKgwqDCoMKgwqDCoMKgaWYgKHJlYWQoZmQsICZ5ZXNfbm8sIDEpICE9IDEp
+IHsKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjbG9zZShmZCk7Cj4gPiAtwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIC0xOwo+ID4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoHJldCA9IC0xOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGdvdG8gb3V0X2Nsb3NlOwo+ID4gwqDCoMKgwqDCoMKgwqDCoH0KPiA+IMKgIAo+ID4gwqDC
+oMKgwqDCoMKgwqDCoGlmICh5ZXNfbm8gPT0gJzEnKSB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCptb2RlID0gMTsKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqByZXR1cm4gMDsKPiAKPiBZb3UgY2FuIGp1c3QgYWRkIGdvdG8gb3V0X2Nsb3NlIGhlcmUKPiAK
+PiA+IC3CoMKgwqDCoMKgwqDCoH0gZWxzZSBpZiAoeWVzX25vID09ICcwJykgewo+ID4gLcKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiAwOwo+IAo+IEtlZXAgPT0gJzAnIGNoZWNr
+IGFuZCBhZGQgZ290byBvdXRfY2xvc2UgaGVyZQo+ID4gK8KgwqDCoMKgwqDCoMKgfSBlbHNlIGlm
+ICh5ZXNfbm8gIT0gJzAnKSB7Cj4gCj4gVGhpcyBjYW4gYmUganVzdCBlbHNlIHdpdGggdGhlIGFi
+b3ZlIGNoYW5nZS4KPiAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSAt
+MTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIG91dF9jbG9zZTsKPiA+
+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiAtwqDCoMKgwqDCoMKgwqByZXR1cm4gLTE7Cj4gPiArb3V0
+X2Nsb3NlOgo+ID4gK8KgwqDCoMKgwqDCoMKgY2xvc2UoZmQpOwo+ID4gK291dDoKPiA+ICvCoMKg
+wqDCoMKgwqDCoHJldHVybiByZXQ7Cj4gPiDCoCB9Cj4gPiDCoCAKPiA+IMKgIGludCBwb3dlcmNh
+cF9nZXRfZW5hYmxlZChpbnQgKm1vZGUpCj4gCj4gdGhhbmtzLAo+IC0tIFNodWFoCgo=
 
