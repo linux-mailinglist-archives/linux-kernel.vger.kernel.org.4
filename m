@@ -2,119 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B387E6E6AD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0216E6AD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232443AbjDRRZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 13:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
+        id S232321AbjDRRYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 13:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjDRRZL (ORCPT
+        with ESMTP id S230036AbjDRRYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 13:25:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D05E7ED3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:24:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681838657;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jn5RPEGr1DTajVAXu1piR4pVm7hgdJHjJ9pFrb3qnus=;
-        b=Nt9DzuRuPbnFUhjZOdzHfGzAEOPVGcuM08jnUrkdrlXa+lag/GmQXUu3J6ctXtZPpoHWiX
-        5SMkpA27+ez191Vm6rrP+nD+fzc5ZjooBbrICFskOXeVA6Wk5KwraA8KVWG2859i9m8t+S
-        L9pJNKell85pqf8fK45vvSIQAxdJTg0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-25-vrkqTGiTMBSQePpWxYnGUw-1; Tue, 18 Apr 2023 13:24:14 -0400
-X-MC-Unique: vrkqTGiTMBSQePpWxYnGUw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8283C85C6E0;
-        Tue, 18 Apr 2023 17:24:13 +0000 (UTC)
-Received: from [10.22.34.98] (unknown [10.22.34.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8C643492B04;
-        Tue, 18 Apr 2023 17:24:12 +0000 (UTC)
-Message-ID: <76d8bf7a-20ec-481e-2c21-e456a29e731e@redhat.com>
-Date:   Tue, 18 Apr 2023 13:24:12 -0400
+        Tue, 18 Apr 2023 13:24:39 -0400
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A41283E2;
+        Tue, 18 Apr 2023 10:24:38 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-2f8405b3dc1so1674229f8f.3;
+        Tue, 18 Apr 2023 10:24:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681838668; x=1684430668;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fPWQx/fs5PzjjHX2PHTqsYFmJ+uyZG83rV1eTD1ZyGQ=;
+        b=LZUBWWwGcmeXKm1Ny4CgeFH6BpqQYwgAXjcYeH+8QuclCRXQH6F7US6R0z18LU2Fug
+         E/KTM12x/nbUMKS0fuZqcLfOMbaenywT3t0bwd08RTYKXxC9AwaNCikyCjqzkRd0XCBl
+         a6eJZ09EQkw7sH2oHo3BqptMsa+/aVc7O3TvD+5em8uH0zDIYQV+R9lzgdztXy88hKXs
+         4fRe04U+AmiXxHfqX58U98UlamWUQ9mvy1qIeEMA+SwASf8V3qfgZIGB2fNMdpW6SnYN
+         CnR01siF1IUhm27FPUN5/bZ4M3vPfwPtvx04Av90r6N34QIBFLkNL1E3Rz6l//MI0sxc
+         Lwrw==
+X-Gm-Message-State: AAQBX9cBNDX9SJS3kivsp/3IuS6MEYS2FssCUho/memmMHzBXRGW+8q7
+        Vno32q+cQdA1OCetkiWfxfc=
+X-Google-Smtp-Source: AKy350bkyxb0Z55rF5GxI1fxrzhvbX/syEuDTeJsx+jHuT+bJ+Mm216/i9WdlwWxB59lmM6YMekW9g==
+X-Received: by 2002:adf:e385:0:b0:2f8:e190:e719 with SMTP id e5-20020adfe385000000b002f8e190e719mr2246664wrm.65.1681838668329;
+        Tue, 18 Apr 2023 10:24:28 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id s9-20020a5d4ec9000000b002cde25fba30sm13697879wrv.1.2023.04.18.10.24.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 10:24:27 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 17:24:24 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Tianyu Lan <tiala@microsoft.com>,
+        Saurabh Sengar <ssengar@linux.microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-hyperv@vger.kernel.org,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>
+Subject: Re: linux-next: build failure after merge of the hyperv tree
+Message-ID: <ZD7SSCXTiEvN27xO@liuwe-devbox-debian-v2>
+References: <20230418170021.90280-1-broonie@kernel.org>
+ <e8780a61-96e9-4050-b0d5-8e6be43e2e27@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5.10 000/124] 5.10.178-rc1 review
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Tejun Heo <tj@kernel.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-References: <20230418120309.539243408@linuxfoundation.org>
- <CA+G9fYsA+CzsxVYgQEN3c2pOV6F+1EOqY1vQrhj8yt1t-EYs7g@mail.gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <CA+G9fYsA+CzsxVYgQEN3c2pOV6F+1EOqY1vQrhj8yt1t-EYs7g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e8780a61-96e9-4050-b0d5-8e6be43e2e27@sirena.org.uk>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 18, 2023 at 06:06:58PM +0100, Mark Brown wrote:
+> On Tue, Apr 18, 2023 at 06:00:21PM +0100, broonie@kernel.org wrote:
+> > Hi all,
+> > 
+> > After merging the hyperv tree, today's linux-next build (x86 allmodconfig)
+> > failed like this:
+> 
+> Adding more Hyper-V CCs, sorry the capitialisation in MAINTAINERS
+> confused my search.
 
-On 4/18/23 11:08, Naresh Kamboju wrote:
-> On Tue, 18 Apr 2023 at 18:03, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
->> This is the start of the stable review cycle for the 5.10.178 release.
->> There are 124 patches in this series, all will be posted as a response
->> to this one.  If anyone has any issues with these being applied, please
->> let me know.
->>
->> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
->> Anything received after that time might be too late.
->>
->> The whole patch series can be found in one patch at:
->>          https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.178-rc1.gz
->> or in the git tree and branch at:
->>          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
->> and the diffstat can be found below.
->>
->> thanks,
->>
->> greg k-h
-> Following build errors noticed on 5.15 and 5.10.,
->
->
->> Waiman Long <longman@redhat.com>
->>      cgroup/cpuset: Change references of cpuset_mutex to cpuset_rwsem
-> kernel/cgroup/cpuset.c: In function 'cpuset_can_fork':
-> kernel/cgroup/cpuset.c:2941:30: error: 'cgroup_mutex' undeclared
-> (first use in this function); did you mean 'cgroup_put'?
->   2941 |         lockdep_assert_held(&cgroup_mutex);
->        |                              ^~~~~~~~~~~~
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> Suspected commit,
-> cgroup/cpuset: Add cpuset_can_fork() and cpuset_cancel_fork() methods
-> commit eee87853794187f6adbe19533ed79c8b44b36a91 upstream.
+I will fix this. Thanks for the heads up and sorry for the breakage.
 
-Oh, cgroup_mutex needs the recent commit 354ed59744295 ("mm: multi-gen 
-LRU: kill switch") to make it available in include/linux/cgroup.h. I did 
-my testing with a debug Kconfig and so didn't catch that. This line can 
-be safely removed.
-
-Regards,
-Longman
-
+Wei.
