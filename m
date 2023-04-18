@@ -2,100 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17196E651B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB4A6E6531
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbjDRM5V convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 08:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
+        id S230414AbjDRNBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 09:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjDRM5T (ORCPT
+        with ESMTP id S232161AbjDRNBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 08:57:19 -0400
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D373581;
-        Tue, 18 Apr 2023 05:57:18 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5067716f9e7so582832a12.0;
-        Tue, 18 Apr 2023 05:57:18 -0700 (PDT)
+        Tue, 18 Apr 2023 09:01:20 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1078F;
+        Tue, 18 Apr 2023 06:01:19 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id h14so17238620qvr.7;
+        Tue, 18 Apr 2023 06:01:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681822878; x=1684414878;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CL9yk8kR8JQHCBiG6XJPcoKIWuAuKCuMXhZTdC/kwrs=;
+        b=nKsTehVbZ82XntFvPWdPhF+0TCfRkC9HA8Q+iZ6PVkShou4eoJ2ewuO6YDNeDcnejk
+         ja3tNceWubITIcWnV3jUea1VpEO8Em7upC1RXsuJnWiRlMTYfLwFKtslSvhuFKpE2VrC
+         qtSOf+g0i/rEfmvvKMhf8DhB+1yIwNn8mqaBeakOeAandQQmb78vaF5E3dIGbn7mgwUj
+         5C7Jbf0WOdk4zgL1gae1DJlo0mYbe7/TWCfdpAp1aAtCHIhZFpAWNg30fyMx/S6/4aSU
+         ENo1mLyyh5qL3+bmFmL7g4q98gHjegb+ihMuYxqtJ0ciH9g5isNA0OKfBTb9V0C4AwGq
+         dLnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681822637; x=1684414637;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o7EH+OiQQWS3SSmVWRfh6k6IhcaxgkbEID60apQt6+E=;
-        b=PVqEirSWOCUi8HZdnZrD4zI3GKCMp3b5Kym3GOUKFYchEkplTl7AxiNDVo+aRkHzl3
-         0h2EJAwzkmtFyQurMeleM/CwEJ9juaPs5ATKujiwUcgcwosrWcvuxMM580YCrbqC/qNi
-         skOHTaUWw8ojNWEuv38UoFYZUhK3lTAz4SzZJqFYa54gw1d4/I9L4XEinuUqw+ozjZ0n
-         JMV+90Cfd2SCuWyVKNTJNewr0YJ7osz/CAYd34Wlh+pVomLY0SO3MQIa9ofvuxqVGKhL
-         79N8nIy3ua1pg5jI9XwvBTR4hXHDRm1wfLkDvd29DwPmFv0UHGa+0jmExjWo+iyfhfsG
-         yuSQ==
-X-Gm-Message-State: AAQBX9fNO99PCyKooTehtwCU7VMCLKJQbBsRq6WWQqv8cCkq9cNj63s0
-        43hBkoOHS84Zgvy5CnxFVtULyLE/hNAeYU6vB+8=
-X-Google-Smtp-Source: AKy350YcISS/PquK9G1zrP4kh7Hc7lKIaI1otJM07VGdGGwnWApG2qhYMDdnuFyynrQZ6TQon16a+qaeftwSYRWpg2U=
-X-Received: by 2002:a05:6402:2692:b0:506:6c2a:528f with SMTP id
- w18-20020a056402269200b005066c2a528fmr15872373edd.4.1681822636603; Tue, 18
- Apr 2023 05:57:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230418113459.12860-1-sumitg@nvidia.com> <20230418113459.12860-2-sumitg@nvidia.com>
-In-Reply-To: <20230418113459.12860-2-sumitg@nvidia.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 18 Apr 2023 14:57:05 +0200
-Message-ID: <CAJZ5v0iMcVZMd3YpEC++BZzCwOM2ocYQuK98tm9gQq0fjO41gg@mail.gmail.com>
-Subject: Re: [Patch 1/6] cpufreq: use correct unit when verify cur freq
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     viresh.kumar@linaro.org, rafael@kernel.org,
-        ionela.voinescu@arm.com, mark.rutland@arm.com,
-        sudeep.holla@arm.com, lpieralisi@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, treding@nvidia.com,
-        jonathanh@nvidia.com, vsethi@nvidia.com, sdonthineni@nvidia.com,
-        sanjayc@nvidia.com, ksitaraman@nvidia.com, bbasu@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1681822878; x=1684414878;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=CL9yk8kR8JQHCBiG6XJPcoKIWuAuKCuMXhZTdC/kwrs=;
+        b=MVP/d6Dx30vd78a5WuFGBWelSNtWr2hm+EnwqzxtifLWfLXdgWot81nzVRoGGYUGg6
+         i850hQ+7RcbUQqx43wd6XV21oOMjwP07HsMQd0gJ2UzIPOO4WgKglhcZX/CM6kmu4Tf8
+         Mp96gPPDvG1wPYPfJyPpBTaYLcOW/XNOmcdJDIAsL5DcKCjv/Jg/8RUyZF/u0qSjCiAG
+         9eMCG3ABGmQDr1Dkb87Qglta15hwS+phQINEHS/d84+QJxnXvKaIfhZAsoC+fNDEUSo/
+         BWJSt+p0gG0nll4LHohNSQxV7D6ez5KB/nmTkjsTw3s8qWnz3wCo3v6GoCkfJ8Tv6yPr
+         YwNg==
+X-Gm-Message-State: AAQBX9cLeO5+HnzzR1kpCsr/x67xMWEceouMm0K5holRXvc3FZKXzWBR
+        tem5JP8OYa7602c0SuhrZQBW2NlfpNw=
+X-Google-Smtp-Source: AKy350bUY+ve5/bYNtJHpsxYFA3wdEg5faDFlBXtu3rCcJ4Dj0VzAq8hz6tem8hH7nW0vAZ+PVjDbg==
+X-Received: by 2002:ad4:4eae:0:b0:5ca:83ed:12be with SMTP id ed14-20020ad44eae000000b005ca83ed12bemr26507409qvb.21.1681822878386;
+        Tue, 18 Apr 2023 06:01:18 -0700 (PDT)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id dd11-20020ad4580b000000b005dd8b9345a8sm3698594qvb.64.2023.04.18.06.01.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 06:01:17 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 09:01:17 -0400
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     Yang Yang <yang.yang29@zte.com.cn>, willemdebruijn.kernel@gmail.com
+Cc:     davem@davemloft.net, edumazet@google.com, jiang.xuexin@zte.com.cn,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, xu.xin16@zte.com.cn,
+        yang.yang29@zte.com.cn, zhang.yunkai@zte.com.cn
+Message-ID: <643e949db6497_328d8929430@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20230418012910.194745-1-yang.yang29@zte.com.cn>
+References: <643d62b28e413_29adc929416@willemb.c.googlers.com.notmuch>
+ <20230418012910.194745-1-yang.yang29@zte.com.cn>
+Subject: RE: [PATCH linux-next 1/3] selftests: net: udpgso_bench_rx: Fix
+ verifty exceptions
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 1:35 PM Sumit Gupta <sumitg@nvidia.com> wrote:
->
-> From: Sanjay Chandrashekara <sanjayc@nvidia.com>
->
-> cpufreq_verify_current_freq checks if the frequency returned by
-> the hardware has a slight delta with the valid frequency value
-> last set and returns "policy->cur" if the delta is within "1 MHz".
-> In the comparison, "policy->cur" is in "kHz" but it's compared
-> against HZ_PER_MHZ. So, the comparison range becomes "1 GHz".
-> Fix this by comparing against KHZ_PER_MHZ instead of HZ_PER_MHZ.
->
-> Fixes: f55ae08c8987 ("cpufreq: Avoid unnecessary frequency updates due to mismatch")
-> Signed-off-by: Sanjay Chandrashekara <sanjayc@nvidia.com>
-> [ sumit gupta: Commit message update ]
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 8b0509f89f1b..6b52ebe5a890 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1732,7 +1732,7 @@ static unsigned int cpufreq_verify_current_freq(struct cpufreq_policy *policy, b
->                  * MHz. In such cases it is better to avoid getting into
->                  * unnecessary frequency updates.
->                  */
-> -               if (abs(policy->cur - new_freq) < HZ_PER_MHZ)
-> +               if (abs(policy->cur - new_freq) < KHZ_PER_MHZ)
->                         return policy->cur;
->
->                 cpufreq_out_of_sync(policy, new_freq);
-> --
+Yang Yang wrote:
+> > Why are you running two senders concurrently? The test is not intended
+> > to handle that case.
+> 
+> Sorry for the inaccuracy of the description here, these two commands,
+> i.e. with or without GSO, cause the problem. The same goes for patch 2/3.
+> The problem is easily reproducible in the latest kernel, QEMU environment, E1000.
+> 
+> bash# udpgso_bench_tx -l 4 -4 -D "$DST" 
+> udpgso_bench_tx: write: Connection refused
+> bash# udpgso_bench_rx -4 -G -S 1472 -v
+> udpgso_bench_rx: data[1472]: len 17664, a(97) != q(113)
+> 
+> bash# udpgso_bench_tx -l 4 -4 -D "$DST" -S 0
+> udpgso_bench_tx: sendmsg: Connection refused
+> bash# udpgso_bench_rx -4 -G -S 1472 -v
+> udpgso_bench_rx: data[61824]: len 64768, a(97) != w(119)
 
-So this is a fix that can be applied separately from the rest of the
-series, isn't it?
+I still don't follow: are you running the tx and rx commands
+sequentially or in parallel? On different (virtual) hosts?
+ 
+> In one test, the verification data is printed as follows:
+> abcd...xyz
+> ...
+> abcd...xyz
+> abcd...opabcd...xyz
+> 
+> This is because the sender intercepts from the buf at a certain length,
+> which is not aligned according to 26 bytes, and multiple packets are
+> merged. The verification of the receiving end needs to be performed
+> after splitting.
+
+The 26 bytes is a reference to the pattern printed by the test, which
+iterates over A-Z.
+
+Is your point that each individual segment starts at A, so that a test
+for pattern {ABC..Z}+ only matches if the segments size is a multiple
+of 26, else a the pattern will have discontinuities?
+
+
