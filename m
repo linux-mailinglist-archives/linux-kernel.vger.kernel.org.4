@@ -2,117 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B21776E6801
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEEE6E67F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbjDRPXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 11:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
+        id S231398AbjDRPXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 11:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbjDRPXt (ORCPT
+        with ESMTP id S230070AbjDRPXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:23:49 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBF61385E;
-        Tue, 18 Apr 2023 08:23:40 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33IAUitN023350;
-        Tue, 18 Apr 2023 15:23:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=QJUzhc+RA8TH9PdxIysA6RyvA/OZ16PTk6JeUDHL7/M=;
- b=V7YNIOh4rfEb3DzhuzrgIHwAq2OaABgjvybA9Dp+U4OyVxnOwOQ3X/2OJe1DdBDTJmF8
- KleEg8YoYyvHi2ylSxphTWcj/5LiXhgvYI6DySm13VRWITN/A3jUnOF1rjoHpt3PMejL
- CMsSK4xy5A5St/KssxQRXGO7Nuxz5Aqfcv6JsTNQPm2K1ZIHzTDI30PP1L4JeI2ghwRO
- k9AUZMB6LLTcdIF9f9EEQ4eqOnLqoZ0e3cSg1pD1EsWF42p0UsYNx3CuLuTqfw/AeUE/
- DyN/sW5add1mIrx4clpzIv0GMclJyzSX3KluerByIVFpKU0TNAqWVdUW7B7qE/UM25bF fw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q19kg2nb8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 15:23:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33IFNRlc014626
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 15:23:27 GMT
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 18 Apr 2023 08:23:22 -0700
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: [PATCH V22 3/3] MAINTAINERS: Add the entry for DCC(Data Capture and Compare) driver support
-Date:   Tue, 18 Apr 2023 20:52:37 +0530
-Message-ID: <a9a4f7a6ba11fa14674c60b16ed85ae010e2be56.1681829664.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1681829664.git.quic_schowdhu@quicinc.com>
-References: <cover.1681829664.git.quic_schowdhu@quicinc.com>
+        Tue, 18 Apr 2023 11:23:10 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2079.outbound.protection.outlook.com [40.107.14.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1912112584
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:23:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AOUkxBIC2Cz5Gx0Qbx4hYV9qydLXls7EOVVO/fKWM24=;
+ b=QAzdf8lryAW5tqcwk802BOf2VjtQt0IYCwM8qLmBKvqoKZIbwtgYGd9L4zhJa2CrnY88SOiDchFjxT7sJMvHIzPzYbdwR0meTw57F8f6qJZ88gvHcsLEs1u/QwOIhPw701X2ewoMdj210nO8PVF/lJr/fcI7J6S4AahSlOjJX4E+tlUG3nCMKCYs10RC9sIgcmaDJIM7ThddJa/H1dx3UZ39FGCYbWLj5H2jJ0HEWO2JE5s7aw/xOg9qdLT1Y664e/UUQKO6lu2UU1eJEW4yu56u6hOUit3qgiKCdBb/pgFe5Q174WMrVpfc0FzyBbGuauC8VifHazTfD6colm6uNw==
+Received: from AM5PR1001CA0036.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:206:2::49)
+ by DU0PR03MB9566.eurprd03.prod.outlook.com (2603:10a6:10:41e::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
+ 2023 15:23:04 +0000
+Received: from AM6EUR05FT036.eop-eur05.prod.protection.outlook.com
+ (2603:10a6:206:2:cafe::50) by AM5PR1001CA0036.outlook.office365.com
+ (2603:10a6:206:2::49) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.47 via Frontend
+ Transport; Tue, 18 Apr 2023 15:23:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.160.56.86)
+ smtp.mailfrom=seco.com; dkim=pass (signature was verified)
+ header.d=seco.com;dmarc=pass action=none header.from=seco.com;
+Received-SPF: Pass (protection.outlook.com: domain of seco.com designates
+ 20.160.56.86 as permitted sender) receiver=protection.outlook.com;
+ client-ip=20.160.56.86; helo=inpost-eu.tmcas.trendmicro.com; pr=C
+Received: from inpost-eu.tmcas.trendmicro.com (20.160.56.86) by
+ AM6EUR05FT036.mail.protection.outlook.com (10.233.241.222) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.20 via Frontend Transport; Tue, 18 Apr 2023 15:23:03 +0000
+Received: from outmta (unknown [192.168.82.140])
+        by inpost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id C28EE20080266;
+        Tue, 18 Apr 2023 15:23:03 +0000 (UTC)
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (unknown [104.47.18.104])
+        by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id 1595920080073;
+        Tue, 18 Apr 2023 15:24:03 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AIx57jjBsUKOEsnjMmrjsQ+WfGJ63fpzkIziRSDe+MwFROyjGyaSndiW/idmo1VJbHpTppltfUDFT8vsZNf5JQIPhSmiX9y+B8rt4ASl4ySeg0AMkfSPf+RIu8FVExycdyI4o7vrPRY7lBu7x0HuL942JsBRqdA+qoBnMezoFNJx5PbWp0i5nH13EcVWV0mUWpqeBSzxyUJ47IkZm4x/3yqgwyHKBCbplAbSOeTI6oFuTaTNwEMjQeIkUINh56AE+SqA9+LbeRk1w1lZDmbom2mevToIg2Ry1dWNgLFUeFs5bhhaL5Mpbf2Qo/eBVQKfSD/eGPukMz+ZMyPKHDIcbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AOUkxBIC2Cz5Gx0Qbx4hYV9qydLXls7EOVVO/fKWM24=;
+ b=VqluJ23ydD/R4qtjxG0s7UFZ9WpGK7Gy8cfbJ9kd8vuTa4LjXJzYeMkjK0WJmVLfcOiOqXwwEhrCQqBAcy2ULSyXMN8Z+Ad1eZWrT2RVz8Rpf0A2yLbv2dYTxwzAWHi7l7IQZE5MEoRVv4f34WMSiRc9cGSgiCDXD0hx7dsP2AXlOAE6VM8o0XAiDnVtaQkZYD+yOGQ0u3QcrMl/Hf/D7l/c2EbqEPAVpl//Ftu4/U0z8lOiuESA/3S2yYeNlqXr9pGCpzeW9bbFXEjd+c/0n+wlWQstHuf6nXO4vlcIpBVYKMhsxT7Oq5gqyM4iO+X3ZVSYRCp9hh1OvQopA7bgcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AOUkxBIC2Cz5Gx0Qbx4hYV9qydLXls7EOVVO/fKWM24=;
+ b=QAzdf8lryAW5tqcwk802BOf2VjtQt0IYCwM8qLmBKvqoKZIbwtgYGd9L4zhJa2CrnY88SOiDchFjxT7sJMvHIzPzYbdwR0meTw57F8f6qJZ88gvHcsLEs1u/QwOIhPw701X2ewoMdj210nO8PVF/lJr/fcI7J6S4AahSlOjJX4E+tlUG3nCMKCYs10RC9sIgcmaDJIM7ThddJa/H1dx3UZ39FGCYbWLj5H2jJ0HEWO2JE5s7aw/xOg9qdLT1Y664e/UUQKO6lu2UU1eJEW4yu56u6hOUit3qgiKCdBb/pgFe5Q174WMrVpfc0FzyBbGuauC8VifHazTfD6colm6uNw==
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
+ by PAWPR03MB9788.eurprd03.prod.outlook.com (2603:10a6:102:2ef::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
+ 2023 15:22:58 +0000
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::2226:eb03:a8c:a7e5]) by DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::2226:eb03:a8c:a7e5%2]) with mapi id 15.20.6298.045; Tue, 18 Apr 2023
+ 15:22:58 +0000
+Message-ID: <e9c2b2df-72e5-f0ab-728a-255e8b2e565d@seco.com>
+Date:   Tue, 18 Apr 2023 11:22:50 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v3 2/2] soc: fsl: qbman: Use raw spinlock for cgr_lock
+Content-Language: en-US
+To:     Crystal Wood <oss@buserror.net>, Li Yang <leoyang.li@nxp.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Camelia Groza <camelia.groza@nxp.com>,
+        linux-kernel@vger.kernel.org, Roy Pledge <roy.pledge@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Madalin Bucur <madalin.bucur@nxp.com>
+References: <20230404145557.2356894-1-sean.anderson@seco.com>
+ <20230404145557.2356894-2-sean.anderson@seco.com>
+ <48dacc58c7c04ba8a005d8edd56744c8455f007e.camel@buserror.net>
+ <d4737c45-2bbf-d364-9768-20baa46f6af4@seco.com>
+ <3b707d1c-1120-274f-6cd6-b3283a334563@seco.com>
+ <497c92b50103a4ba3469cd41edbd967ee9bfb291.camel@buserror.net>
+From:   Sean Anderson <sean.anderson@seco.com>
+In-Reply-To: <497c92b50103a4ba3469cd41edbd967ee9bfb291.camel@buserror.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BL1P221CA0029.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c5::25) To DB9PR03MB8847.eurprd03.prod.outlook.com
+ (2603:10a6:10:3dd::13)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: G6glkm0dJs6DIEBopSPHcfpeVS5WZgYt
-X-Proofpoint-ORIG-GUID: G6glkm0dJs6DIEBopSPHcfpeVS5WZgYt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-18_11,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=879
- suspectscore=0 bulkscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 clxscore=1015 mlxscore=0 adultscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304180131
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|PAWPR03MB9788:EE_|AM6EUR05FT036:EE_|DU0PR03MB9566:EE_
+X-MS-Office365-Filtering-Correlation-Id: 268a86b5-78a6-4f95-9595-08db4020cdd0
+X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: 1Wr6hZqCtiCN2v95JDDW/2jvIccgo4m90ocBk4xxyiXXwYinT88Gov7cCTQUaLEwlWg2ur+2mMnwnPgpCoCa6+wE2oBu3KJQtnCXscTv2m3iK6S3N9DllPI9Hig6YscZEjWWS7Gz4OfW36sZ2UhoHK1SQ8a4ndPcPbJQiQXhvdpxEpkY4FCjEdG14G59CMEU8O2kaYnk7tHkPo+si97+pJJtv8v/nT8UjyatfR3BhaL6QmVbzVfDq3r8+4ChsAtw7ccoZRjgqbeeMdbQJNv2LqunTwhONYkPpBwbYvYoC5bf0bTXEQ0+IaKd5NsKXRjY4QRALXyGmKSI6+HFIPlbQvjIWY5fabCY2wOTRF52I2QfxtBXtVEE5Hh3Y3N7OSzDiYxIm+6WCQu1cSWSyqv+ilswtxH2hr4KLTb5GfUyBxWldXBXQh5EwB1s71X9r0D9W+lCSStwsxdqoYxdweWshRpMepc0wMkMsN4epUWcK1lNQp8TxmJyKq2DXJDtZGKBfoVg8E/cM2jIclTpDHquuWW8cxwFMkpvpKMwI9n2Ao5KW7l/xCFUe0jR0/G57eiq+9ZD9KtBSk8CMPgg4CxvDMonGAgRvaAeAmDaW+7LwSl9A3bYUZfxIjVQrjX4MoBRea9sWjDF9SwCKGGANv16cuTmzd2+jyCbVBWNgRQVCZAm4EM1mDHYAg2wXd93r1a8
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(136003)(39850400004)(376002)(396003)(451199021)(6506007)(86362001)(31696002)(26005)(83380400001)(6512007)(53546011)(36756003)(186003)(2906002)(44832011)(7416002)(31686004)(2616005)(6486002)(52116002)(5660300002)(38350700002)(38100700002)(6666004)(8676002)(8936002)(66476007)(478600001)(110136005)(54906003)(41300700001)(316002)(66556008)(66946007)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR03MB9788
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM6EUR05FT036.eop-eur05.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 6eadbde8-6ea6-460a-16ec-08db4020c8d7
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pfjckRU0hiSSlcw0wDNgOxyOT57yO27Ry4PepPYhDnQCM84aerifCG+Ztk7LwTIqnD16wR5xMchpP7p6Hs0Jk/Cf5b/kMIGC2SB9uOrA/NoFq/fQzKx1Zdj3k8Ym1Nn/atHMCf/GllVx7+M8J1MKaNz5E+p3IFFGT5rxATIeyEYB6Wxky9cdyc7k04z/cGpzcdKPoIUcnR0Cd8XISk1eBETysiFPAYYU9kMQgw+pEPlyUHDfulNoj7DbgVq4qEqBUgzCoP2VdWziEUsvxuCT7tVUzGR45pNdMK3KGZVdMGVv9soLU17In7+d4zyMOftgUpMUsko7MwPjqUUG/HIgp6ZXWpMIpJVEK/vByLvshLch8jwRq25M9PJwN0i4yjhFgL74G4KZrsGYXPC6JsmxKGn3I67uVhF0fyOVgHiEozFFtElkyBXKH2hEjvfyvyctrPwnM9eYcJdyW5YqAd+ELP8ZkzTU/EqgT1teiKD1V4CSC2Hv4XDmKc0rnQ85wK7gqldxUvTsnXCUD88O8v5x+5GAcXmbVldsrpte6PQLkgyhE23QI+akGjx3AyL5CLXe3xGpsPnqlq2Bah1G7cJY8MXped0Am3oZWAjXl5pFISiJF+jYmfQFt+tJTlGLtEp30qKdVhCuIklhjhLw1vOoDdQu46AW1EW0AG8uUzdxs3bg5/zvp8fmijVOtlMaO25Pp9oLfHKvs48+FcszQmJtD8lHuHArksLZIssW16RXgN1I3I2BtdnxJIzorHq+OheDqokeUiyhU2V0/7kN09hEYA==
+X-Forefront-Antispam-Report: CIP:20.160.56.86;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:inpost-eu.tmcas.trendmicro.com;PTR:inpost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230028)(396003)(346002)(136003)(39850400004)(376002)(451199021)(46966006)(40470700004)(36840700001)(36860700001)(2616005)(110136005)(6512007)(6506007)(26005)(6666004)(40480700001)(86362001)(54906003)(34070700002)(478600001)(31686004)(316002)(4326008)(83380400001)(336012)(186003)(6486002)(53546011)(47076005)(70206006)(70586007)(7596003)(356005)(7636003)(82740400003)(5660300002)(44832011)(7416002)(41300700001)(2906002)(40460700003)(8936002)(8676002)(31696002)(36756003)(82310400005)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 15:23:03.8874
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 268a86b5-78a6-4f95-9595-08db4020cdd0
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.86];Helo=[inpost-eu.tmcas.trendmicro.com]
+X-MS-Exchange-CrossTenant-AuthSource: AM6EUR05FT036.eop-eur05.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR03MB9566
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the entries for all the files added as a part of driver support for
-DCC(Data Capture and Compare).
+On 4/18/23 02:29, Crystal Wood wrote:
+> On Tue, 2023-04-11 at 11:09 -0400, Sean Anderson wrote:
+>> Hi Crystal,
+>> 
+>> On 4/4/23 12:04, Sean Anderson wrote:
+>> > On 4/4/23 11:33, Crystal Wood wrote:
+>> > > On Tue, 2023-04-04 at 10:55 -0400, Sean Anderson wrote:
+>> > > 
+>> > > > @@ -1456,11 +1456,11 @@ static void tqm_congestion_task(struct
+>> > > > work_struct
+>> > > > *work)
+>> > > >         union qm_mc_result *mcr;
+>> > > >         struct qman_cgr *cgr;
+>> > > >  
+>> > > > -       spin_lock_irq(&p->cgr_lock);
+>> > > > +       raw_spin_lock_irq(&p->cgr_lock);
+>> > > >         qm_mc_start(&p->p);
+>> > > >         qm_mc_commit(&p->p, QM_MCC_VERB_QUERYCONGESTION);
+>> > > >         if (!qm_mc_result_timeout(&p->p, &mcr)) {
+>> > > > -               spin_unlock_irq(&p->cgr_lock);
+>> > > > +               raw_spin_unlock_irq(&p->cgr_lock);
+>> > > 
+>> > > qm_mc_result_timeout() spins with a timeout of 10 ms which is very
+>> > > inappropriate for a raw lock.  What is the actual expected upper bound?
+>> > 
+>> > Hm, maybe we can move this qm_mc stuff outside cgr_lock? In most other
+>> > places they're called without cgr_lock, which implies that its usage
+>> > here is meant to synchronize against some other function.
+>> 
+>> Do you have any suggestions here? I think this should really be handled
+>> in a follow-up patch. If you think this code is waiting too long in a raw
+>> spinlock, the existing code can wait just as long with IRQs disabled.
+>> This patch doesn't change existing system responsiveness.
+> 
+> Well, AFAICT it expands the situations in which it happens from configuration
+> codepaths to stuff like congestion handling.  The proper fix would probably be
+> to use some mechanism other than smp_call_function_single() to run code on the
+> target cpu so that it can run with irqs enabled (or get confirmation that the
+> actual worst case is short enough),
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Well, we used to use a kthread/wait_for_completion before 96f413f47677
+("soc/fsl/qbman: fix issue in qman_delete_cgr_safe()"). The commit
+description there isn't very enlightening as to the actual bug, which is
+why I CC's Madalin earlier. To be honest, I'm not really familiar with
+the other options in the kernel.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b4e9c5b..6b8a5c8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5705,6 +5705,14 @@ W:	http://lists.twibble.org/mailman/listinfo/dc395x/
- F:	Documentation/scsi/dc395x.rst
- F:	drivers/scsi/dc395x.*
- 
-+DCC QTI DRIVER
-+M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/ABI/testing/debugfs-driver-dcc
-+F:	Documentation/devicetree/bindings/misc/qcom,dcc.yaml
-+F:	drivers/misc/dcc.c
-+
- DCCP PROTOCOL
- L:	dccp@vger.kernel.org
- S:	Orphan
--- 
-2.7.4
+> but barring that I guess at least acknowledge the situation in a
+> comment?
 
+Fine by me.
+
+--Sean
