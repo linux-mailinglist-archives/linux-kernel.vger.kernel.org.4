@@ -2,215 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DEFA6E65AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E166E65B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbjDRNS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 09:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
+        id S231510AbjDRNTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 09:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbjDRNSZ (ORCPT
+        with ESMTP id S232388AbjDRNTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 09:18:25 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6801113F90
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 06:18:24 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5144043d9d1so2030466a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 06:18:24 -0700 (PDT)
+        Tue, 18 Apr 2023 09:19:38 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D1214F6C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 06:19:36 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id kt6so34951505ejb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 06:19:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681823904; x=1684415904;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bY3H0W2+yGUzRgmNYp2BkoKOa+V40Y6M2DaohWXcmZc=;
-        b=OYSWgnnR3fS66p99KdwyGJ5aJ+WMh+j6yqM5Ps3Lk4FjD59cbRrqJRwTJCWXshnrZb
-         QIo+1Z/Zm/NE4t8hjZsOmvujQkQ/T6KaY+kkdsQ/AYGZR4IJZilIyRJN90FTqPlHvwzZ
-         6DYTAv+RTiNgTQTEBL/INUYEPz++67VOyDiSd5ku3Qz+AUip+dIkVgEDBMQOHFaAowZ5
-         1QCLuJyeB6rSMuPICbl2f8zeRpAQOTeo0r1+6E1huF/cSioQv+e5RjcuXLE81F0bpdK5
-         uDK1S+sDY13+rbbgi/3cW04eKRj0zOZF0Tig74DDKF5TqUV3ApkzAHdKrl7iYSFHSX+Z
-         eAbw==
+        d=linaro.org; s=google; t=1681823975; x=1684415975;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bIX4Rr3ehv2fMoH6ZgqIbWsmVfGdQo2i8FUTrHShcig=;
+        b=pB7wXu1ywZIBBUonDsDq5inPakthH6Vy3I76ItK9jN1tih7yBOxvY/FgnwG4oqtgHK
+         i+M37Oh3+41Abtz3/DNjk4RR7JI9RNSbiusp5YzeRpOvWhH58yz8YdnwQqMiQ/B3Zo/p
+         WR8Kry0BQPQwA59G8HZgQorBqDdQqrVL8TwgJWjoJ+nQcEN53rwYm2+vdRBf1cxhao4y
+         2Rj3tbxzzQmDuAsIHBGb3Bx/AIMv4GQztYZL7s+WYI7Vbua+B3NnGRz7ZYaBv4JK6VoW
+         Xae7N+o6eTlS3eVftvt+Odr1ASmq5BiHw7iNsbpuq+0SuDz/Of5ikYVg18hPUCh92N1a
+         wwpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681823904; x=1684415904;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bY3H0W2+yGUzRgmNYp2BkoKOa+V40Y6M2DaohWXcmZc=;
-        b=IxfKILSCI1tXMQicluFAfq4C8tCHEAD+y8C3MorkH6AraFS3z1iGwHhqCFdUvuaktu
-         sQUMuTCqnT4oRN3OaILpTK3WzV22z9DlXCsx+xAzLhjLzdwnT8yccaZIuZgwfCfQMBdf
-         9UcQ1wkZFVR/7GVjNCk46poOO3DRO2NPaoqNJp6afpSWHTsiXG40cnHKFFKGzf2XzWEX
-         LPT7oub81PFkCvlBw2Yu+Hi+PRSzevEzK1MDauefsLENSjB8l7MpMf+znyL4SXP+/HYO
-         TdNQ0c6pDOAYw3V1f36lsRR/dEtst3UUOilO3x5nZz9JEAc9+w8ghkY72g67R/aueN2g
-         ZQGA==
-X-Gm-Message-State: AAQBX9f/oOdM8L2RuyiB3bH7fDfuIwrFyCZO94g3ZT/wZO12Mz94awPD
-        WvvZSM25AGqRq8jpn63eALlX8yyq5v/gD9ZABGU=
-X-Google-Smtp-Source: AKy350Yi01vddmY2TYAhPaO8MVbnocFKSLapmfGjb3odpIaJueF5ZMSXNZHsLn1vyLNXl/zhm1HMiXcJ0C/bdK2gzZU=
-X-Received: by 2002:a63:384f:0:b0:513:faf5:e430 with SMTP id
- h15-20020a63384f000000b00513faf5e430mr616050pgn.9.1681823903726; Tue, 18 Apr
- 2023 06:18:23 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681823975; x=1684415975;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bIX4Rr3ehv2fMoH6ZgqIbWsmVfGdQo2i8FUTrHShcig=;
+        b=craxTD4iGG9ZV1i6cLeYsoJkkSs7jjaCdjPmplkqHq/AetVFM9lQPL7bpWn0nh6vmH
+         LUteYx4YYXtRGxbSfDkx7ImyfDC6pznrEy1+AyyG+eq+meNDEsDUjlDCHRO6j11Rw+7Z
+         NEjRU6e4UoqOWDsUw5Rv4zE+sLYSblVp2ydQSbB9KdAwrRJRQ37F8X7Z2hTyQ0L5TlXD
+         KAljS7BlOFxgfEPTNBqv7sT56lbFo828V4gO6zc7zCFdXwKPAzVN41kBPf/hINSN9HI6
+         X9FMolch2ggP8OSvWPPE9W0iX0nKoGsi+HpNoO6U5v81wAgcyFg4tIKe6dvOunp/B7Kn
+         qmFw==
+X-Gm-Message-State: AAQBX9chxuOiVqJoFNwy1sEDyigVlKJXLYo0fnBD7OLIMHDu7qydp5Cn
+        lyGhEFRryWN0YKmu+cArShxpwbeCiJAyun44oiK3QA==
+X-Google-Smtp-Source: AKy350auYZpuRF8dsf9xL60a7BUYDlrVge9la3UOE6deGPEpmQQCziMBihvpBb7AgbinT46ger1D5Q==
+X-Received: by 2002:a17:906:da88:b0:94f:6616:8b00 with SMTP id xh8-20020a170906da8800b0094f66168b00mr7603319ejb.74.1681823975270;
+        Tue, 18 Apr 2023 06:19:35 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
+        by smtp.gmail.com with ESMTPSA id g17-20020a170906349100b0094eeea5c649sm6234681ejb.114.2023.04.18.06.19.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 06:19:34 -0700 (PDT)
+Message-ID: <ae487706-1081-bab3-0b31-1c5b3a72890e@linaro.org>
+Date:   Tue, 18 Apr 2023 15:19:33 +0200
 MIME-Version: 1.0
-References: <20230312145305.1908607-1-zyytlz.wz@163.com> <CANDhNCr=hdhKS4c+U=+W1ONHDWv6BrwL5TovGjs0G2G+Reqc9g@mail.gmail.com>
- <CAJedcCyJnV+KnFF5h+2-0W1R4uaUxUxXFUH3Q9HGYh-5F5LmBQ@mail.gmail.com>
- <CAJedcCyERP0-9DNgeKmS3C9Soqq590PteEorr_bxKzNanht=TQ@mail.gmail.com>
- <CAMSo37Vfr0DOqN+1XjH0o3pOY=BaHnSFkUbnZPOdMQ3TbfoAKg@mail.gmail.com>
- <CAJedcCzm3MqYe3QGT7V4sMmDsVHbjVSnEc2NXWPMGVZL=a_cBA@mail.gmail.com>
- <2023041308-nerd-dry-98a6@gregkh> <CAJedcCyeM2a79i0=ffKwdKfnQayo7svhTTEth2ka6K9np0Ztiw@mail.gmail.com>
- <2023041308-unvisited-slinky-a56f@gregkh> <CAJedcCxzGbUSj0nh4xYp8P2zhYSM31CGi2fGE+9VJt7mkg6h4g@mail.gmail.com>
- <CAMSo37V3vgjzgM_3Toy2HGwVuFcTw9DfVKDnVNaD-j4UJtOPvg@mail.gmail.com>
-In-Reply-To: <CAMSo37V3vgjzgM_3Toy2HGwVuFcTw9DfVKDnVNaD-j4UJtOPvg@mail.gmail.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Tue, 18 Apr 2023 21:18:13 +0800
-Message-ID: <CAJedcCwow9sTEzZpiqmmcEDZ0XFLauA_tVBTJf5MfpadC1M+cQ@mail.gmail.com>
-Subject: Re: [PATCH] misc: hisi_hikey_usb: Fix use after free bug in
- hisi_hikey_usb_remove due to race condition
-To:     Yongqin Liu <yongqin.liu@linaro.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        John Stultz <jstultz@google.com>,
-        Zheng Wang <zyytlz.wz@163.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
-        alex000young@gmail.com, Mauro Carvalho Chehab <mchehab@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] dt-bindings: mfd: stm32: Remove unnecessary blank
+ lines
+Content-Language: en-US
+To:     Patrick DELAUNAY <patrick.delaunay@foss.st.com>,
+        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230417181342.v2.1.I483a676579cc7e3ac07e1db649091553743fecc8@changeid>
+ <fde49fb8-c337-3a6b-811e-b9d7c3620393@linaro.org>
+ <f2ad2414-526e-8b9b-aa95-a35953556f36@foss.st.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <f2ad2414-526e-8b9b-aa95-a35953556f36@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yongqin Liu <yongqin.liu@linaro.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=8818=E6=
-=97=A5=E5=91=A8=E4=BA=8C 01:31=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hi, Zheng
->
-> Sorry for the late reply.
->
-> I tested this change with Android build based on the ACK
-> android-mainline branch.
-> The hisi_hikey_usb module could not be removed with error like this:
->     console:/ # rmmod -f hisi_hikey_usb
->     rmmod: failed to unload hisi_hikey_usb: Try again
->     1|console:/ #
-> Sorry I am not able to reproduce any problem without this commit,
-> but I do not see any problem with this change applied either.
->
-> If there is any specific things you want to check, please feel free let m=
-e know
->
+On 18/04/2023 15:03, Patrick DELAUNAY wrote:
+> Hi,
+> 
+> On 4/18/23 09:22, Krzysztof Kozlowski wrote:
+>> On 17/04/2023 18:14, Patrick Delaunay wrote:
+>>> Remove double blank line.
+>>>
+>>> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+>>> ---
+>>>
+>>> Changes in v2:
+>>> - update commit title and commit message to reflect what the change is
+>>>    V1="dt-bindings: mfd: stm32: Fix STM32F4 DT include fil
+>> More than one file has the same issue. This is quite a churn to handle
+>> such patch one by one. Please fix all of them or just skip, as it is
+>> harmless.
+> 
+> 
+> To be crystal clear, it is minor difference between files in U-Boot
+> 
+> and in Linux, just because we correct the check-patch errors
+> 
+> when this file for STM32F4 was up streamed in U-Boot.
+> 
+> 
+> I prefer correct this line in the Linux file and no having
+> 
+> this difference for each device tree synchronization with U-Boot.
 
-Hi Yongqin,
-
-Thanks for your testing. I have no more questions about the issue.
+I don't know what is there in U-Boot, so my comment was not about it. I
+prefer all the files in Linux kernel being correct, but done once for
+all. Not once for stm32XX, then later for stm32XY and then stm32XZ...
 
 Best regards,
-Zheng
+Krzysztof
 
-> Thanks,
-> Yongqin Liu
->
->
-> On Fri, 14 Apr 2023 at 00:46, Zheng Hacker <hackerzheng666@gmail.com> wro=
-te:
-> >
-> > Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=8813=
-=E6=97=A5=E5=91=A8=E5=9B=9B 23:56=E5=86=99=E9=81=93=EF=BC=9A
-> > >
-> > > On Thu, Apr 13, 2023 at 11:35:17PM +0800, Zheng Hacker wrote:
-> > > > Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=
-=8813=E6=97=A5=E5=91=A8=E5=9B=9B 20:48=E5=86=99=E9=81=93=EF=BC=9A
-> > > > >
-> > > > > On Thu, Apr 13, 2023 at 07:12:07PM +0800, Zheng Hacker wrote:
-> > > > > > Yongqin Liu <yongqin.liu@linaro.org> =E4=BA=8E2023=E5=B9=B44=E6=
-=9C=8813=E6=97=A5=E5=91=A8=E5=9B=9B 18:55=E5=86=99=E9=81=93=EF=BC=9A
-> > > > > > >
-> > > > > > > Hi, Zheng
-> > > > > > >
-> > > > > > > On Thu, 13 Apr 2023 at 16:08, Zheng Hacker <hackerzheng666@gm=
-ail.com> wrote:
-> > > > > > > >
-> > > > > > > > Friendly ping about the bug.
-> > > > > > >
-> > > > > > > Sorry, wasn't aware of this message before,
-> > > > > > >
-> > > > > > > Could you please help share the instructions to reproduce the=
- problem
-> > > > > > > this change fixes?
-> > > > > > >
-> > > > > >
-> > > > > > Hi Yongqin,
-> > > > > >
-> > > > > > Thanks for your reply. This bug is found by static analysis. Th=
-ere is no PoC.
-> > > > > >
-> > > > > > >From my personal experience, triggering race condition bugs st=
-ably in
-> > > > > > the kernel needs some tricks.
-> > > > > > For example, you can insert some sleep-time code to slow down t=
-he
-> > > > > > thread until the related object is freed.
-> > > > > > Besides, you can use gdb to control the time window. Also, ther=
-e are
-> > > > > > some other tricks as [1] said.
-> > > > > >
-> > > > > > As for the reproduction, this attack vector requires that the a=
-ttacker
-> > > > > > can physically access the device.
-> > > > > > When he/she unplugs the usb, the remove function is triggered, =
-and if
-> > > > > > the set callback is invoked, there might be a race condition.
-> > > > >
-> > > > > How does the removal of the USB device trigger a platform device
-> > > > > removal?
-> > > >
-> > > > Sorry I made a mistake. The USB device usually calls disconnect
-> > > > callback when it's unpluged.
-> > >
-> > > Yes, but you are changing the platform device disconnect, not the USB
-> > > device disconnect.
-> > >
-> > > > What I want to express here is When the driver-related device(here
-> > > > it's USB GPIO Hub) was removed, the remove function is triggered.
-> > >
-> > > And is this a patform device on a USB device?  If so, that's a bigger
-> > > problem that we need to fix as that is not allowed.
-> >
-> > No this is not a platform  device on a USB device.
-> >
-> > >
-> > > But in looking at the code, it does not seem to be that at all, this =
-is
-> > > just a "normal" platform device.  So how can it ever be removed from =
-the
-> > > system?  (and no, unloading the driver doesn't count, that can never
-> > > happen on a normal machine.)
-> > >
-> >
-> > Yes, I finally figured out your meaning. I know it's hard to unplug
-> > the platform device
-> > directly. All I want to express is that it's a theoretical method
-> > except  rmmod. I think it's better to fix the bug. But if the
-> > developers think it's practically impossible, I think there's no need
-> > to take further action.
-> >
-> > Sorry for wasting your time and thanks for your explanation.
-> >
-> > Best regards,
-> > Zheng
-> >
-> > > thanks,
-> > >
-> > > greg k-h
->
->
->
-> --
-> Best Regards,
-> Yongqin Liu
-> ---------------------------------------------------------------
-> #mailing list
-> linaro-android@lists.linaro.org
-> http://lists.linaro.org/mailman/listinfo/linaro-android
