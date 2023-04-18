@@ -2,235 +2,371 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707076E59E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB6F6E59E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 08:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjDRGyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 02:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
+        id S231148AbjDRGy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 02:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbjDRGyF (ORCPT
+        with ESMTP id S231174AbjDRGye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 02:54:05 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC7A72A0
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:53:47 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54f21cdfadbso394549007b3.7
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:53:47 -0700 (PDT)
+        Tue, 18 Apr 2023 02:54:34 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62177282
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:54:00 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id l15so4574749ljq.8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 23:54:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681800826; x=1684392826;
+        d=google.com; s=20221208; t=1681800837; x=1684392837;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yd76W0tVojvPe5u4+ZoHnQqGnlE3MWhSK97zn5yc4jo=;
-        b=p9H+BoZy3P9/6JjKoeycrbtxnPkS2vsXpNjnUKTWC5wmD41kgs2BPccSLxjXVD20WJ
-         qTMCY5B4RmEfqhMzKXP9NGZcQDYFKb73LNbO8L/5cBsu8rGvD5I5IcBfC8bkPu2F6nH1
-         uu/Crl4jwTfQUvAEwKKv1pZosWLEgnVBed9gtpeF/nfqLQfw7xwwrZ3Nm9WLIq+vTRC5
-         k8gUK+XxMxnN1phK/MLCro6AJAX2rQNr2/NXTvw5eoZyj0eKR5rR2KBzXhDaNV9anBKN
-         aSteqj8OdWrFVUb7wMjOncdTCkWEGq+DKLl63QWbP6qpWxWWnswGk6RKhMm3CtBrNcRQ
-         GpQA==
+        bh=XLzv3z+sFdQb7kpGCR+OSVPCQuHMhAQGAI2Zo0u0VJs=;
+        b=rPzOq0DJ61sT+xYBYQ1BngHsZWU+VnEz65yArSHXOcgaiwIyfvsB358CMWQ/s52j5V
+         tatd4KwBM2onIPZLE8Gj5RuG+XcG1FY33kdV0Ei8Ng1/Fdgbyk82tZuu/Skp3eQ+XG9L
+         hcXi8y4yVklKpXVS0EIQ+vIQvzS25LJvf5MzncM37pAsHUEnLvLiYOtP8pVNO8+IeS5Z
+         /6gIrpxbsurH9bN+9X09kIkd44q1mVBjtFJipd/SrN/GDRhSfEgh/bRPqEuYEtQ4C3Y1
+         tkE5qhI9QD85ApeW2H4pRdbjJ6N/tyk6feE3fiueB45oHA9b5Le2T9m+NpfYCs4vpoqb
+         mCiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681800826; x=1684392826;
+        d=1e100.net; s=20221208; t=1681800837; x=1684392837;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Yd76W0tVojvPe5u4+ZoHnQqGnlE3MWhSK97zn5yc4jo=;
-        b=W/jJxjRsIWJ4MdWh3h5Iun2A0275CT+k7I29R0w/ZulMsiNteRofmahWt/bdEk3k7a
-         IKMxjtt6/1BbmMKO9bRZIH6vtNGgm6Km2P4tCQ/nXSkPEGVGVOfg05esjIR3Y5qGovYE
-         CS+QdjeNvRUTNjR0HO3u6Ec1Qzodnwr9+UIpihQ1luFef8kGdeZx0hh4+i0U8PzA5jGJ
-         c+FCKtHt4z+d9wxWtDCpIKbENSFOnRLok0/TROtQrpYlzzMhv8pme14IIfBQOoseEgz7
-         bA/qTzYge1CyGKfKIhQu/DZCX84UWaD6JVMI96bB6YxnTiAFsdKFibBW1ZUM2QONCf8C
-         KPpQ==
-X-Gm-Message-State: AAQBX9cJU8yeW1BGvdeUmh5gsUzGcipN3sxc/DwsBbj1UvPekt9QbLER
-        GBsSMoo0Upzyaz1z1qv1KNvem5sTgnsY8SKI6yBnUQ==
-X-Google-Smtp-Source: AKy350YWxYJxzXD8Xi+3tsqQfqByAEKPac8FlonZV1AGUyxrUOwnG6uknHDp7HEkceo5N6TO3OeioTaiYaAcVkR0+aw=
-X-Received: by 2002:a81:4307:0:b0:545:f7cc:f30 with SMTP id
- q7-20020a814307000000b00545f7cc0f30mr11093586ywa.0.1681800826504; Mon, 17 Apr
- 2023 23:53:46 -0700 (PDT)
+        bh=XLzv3z+sFdQb7kpGCR+OSVPCQuHMhAQGAI2Zo0u0VJs=;
+        b=ED3AvZnGPgl576G2n+I+9PZ+HRYY3+7tmbhrDGaU6aPJkK1UnxyUhWG5eN5vMRK3jw
+         Qh4d4dp2C/MmFeetIjkdDfoKvQHN1c2hVTXdGD0SStzdAmWpkEjRGi2kuGP0/aryMYRu
+         T6wnZ9qy/DKMyc71j8cHEnP67hCd1FrDP9pmVYRhqjZtmNANsCHDsaEs2G5fzf/Gn+xL
+         x/27TwIat8rJQHqO4l+zAW6kF/CFcQ5T4+N4xfdLYZt5Y2JZFUAUIaP4NZwWstARB1XS
+         sbjnkz1JdiCY/xqO4TJKfp9Ei/rePPKFY38gIOkIh1quUCCmc9GS1Y2B3w7d1dKr5IUx
+         dV8A==
+X-Gm-Message-State: AAQBX9d+qqn0hGRbIsG/Jryl1mxht/HhOMwdOQxMhQsJwZvE3/slrbb5
+        oecxT/1RwJvwPoIEZMpNQdmBRanfQavuQX01u5+rqA==
+X-Google-Smtp-Source: AKy350ZS/XP6tfjebsXXCpSLuKRwGd3hKJu66YmuOqxrUHl1r+jGxfzDmv4jDu4j+UNcy4jAuN7axIbjyaXpCXOfhOs=
+X-Received: by 2002:a2e:9e49:0:b0:2a8:d183:47a5 with SMTP id
+ g9-20020a2e9e49000000b002a8d18347a5mr465070ljk.8.1681800836714; Mon, 17 Apr
+ 2023 23:53:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230415091401.681395-1-davidgow@google.com> <4560d22e3d0a9beb71ef10202d8bcb77b5148eae.camel@sipsolutions.net>
-In-Reply-To: <4560d22e3d0a9beb71ef10202d8bcb77b5148eae.camel@sipsolutions.net>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 18 Apr 2023 14:53:28 +0800
-Message-ID: <CABVgOSmGa-4M6w7MJ5MP8222FMuZJike1uDauporBsu5QUDb9w@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Set the current KUnit context when cleaning up
-To:     Benjamin Berg <benjamin@sipsolutions.net>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <rmoar@google.com>,
-        Daniel Latypov <dlatypov@google.com>, maxime@cerno.tech,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000de82f505f996c4a5"
+References: <CGME20230417051556epcas2p25b57d681bfae498b30ff33f0a96033d6@epcas2p2.samsung.com>
+ <20230417051637.103964-1-hy50.seo@samsung.com> <CACT4Y+YnbfUdh5G6cXX2goP2VFfCx=Mr=_ZXAyGyLTHV1EqXwA@mail.gmail.com>
+ <058901d971ab$b6a5b640$23f122c0$@samsung.com> <CACT4Y+Z_Yki4TVP5W8EwZbFf+YvOdo9geeN0nUYep1QsgMwiLw@mail.gmail.com>
+In-Reply-To: <CACT4Y+Z_Yki4TVP5W8EwZbFf+YvOdo9geeN0nUYep1QsgMwiLw@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 18 Apr 2023 08:53:44 +0200
+Message-ID: <CACT4Y+Z-HkzgJO2a-0ymq6sQo9X7T9sh6f6aNaeqe=X1LGqb5Q@mail.gmail.com>
+Subject: Re: [PATCH v1] lib/stackdepot: limit nr_entries size
+To:     hoyoung seo <hy50.seo@samsung.com>
+Cc:     andreyknvl@gmail.com, osalvador@suse.de, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, mhocko@suse.com,
+        vbabka@suse.cz, edumazet@google.com, longman@redhat.com,
+        surenb@google.com, elver@google.com, glider@google.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000de82f505f996c4a5
-Content-Type: text/plain; charset="UTF-8"
-
-On Mon, 17 Apr 2023 at 18:43, Benjamin Berg <benjamin@sipsolutions.net> wrote:
+On Tue, 18 Apr 2023 at 08:10, Dmitry Vyukov <dvyukov@google.com> wrote:
 >
-> Hi,
+> On Tue, 18 Apr 2023 at 06:10, hoyoung seo <hy50.seo@samsung.com> wrote:
+> >
+> > > -----Original Message-----
+> > > From: Dmitry Vyukov <dvyukov@google.com>
+> > > Sent: Monday, April 17, 2023 3:20 PM
+> > > To: SEO HOYOUNG <hy50.seo@samsung.com>
+> > > Cc: andreyknvl@gmail.com; osalvador@suse.de; akpm@linux-foundation.org;
+> > > linux-kernel@vger.kernel.org; linux-mm@kvack.org; mhocko@suse.com;
+> > > vbabka@suse.cz; edumazet@google.com; longman@redhat.com; surenb@google.com;
+> > > elver@google.com; glider@google.com
+> > > Subject: Re: [PATCH v1] lib/stackdepot: limit nr_entries size
+> > >
+> > > On Mon, 17 Apr 2023 at 07:16, SEO HOYOUNG <hy50.seo@samsung.com> wrote:
+> > > >
+> > > > While using the MCQ feature of UFS, dump stack was detected very deeply.
+> > > > If this continues to happen, depot_alloc_stack() will continue to
+> > > > exceed STACK_ALLOC_SIZE and STACK_ALLOC_MAX_SLABS, eventually
+> > > > resulting in the warning "Stack depot reached limit capacity".
+> > > >
+> > > > So want to limit the size of entries stored in it.
+> > > > 25 is a test value, and we found that in a normal case, the depth of
+> > > > the stack does not exceed 25.
+> > > >
+> > > > [ 2479.383395]I[0:launcher-loader: 1719] Stack depot reached limit
+> > > > capacity [ 2479.383538]I[0:launcher-loader: 1719] WARNING: CPU: 0 PID:
+> > > > 1719 at lib/stackdepot.c:129 __stack_depot_save+0x464/0x46c [
+> > > > 2479.385693]I[0:launcher-loader: 1719] pstate: 624000c5 (nZCv daIF
+> > > > +PAN -UAO +TCO -DIT -SSBS BTYPE=--) [ 2479.385724]I[0:launcher-loader:
+> > > > 1719] pc : __stack_depot_save+0x464/0x46c [
+> > > > 2479.385751]I[0:launcher-loader: 1719] lr :
+> > > > __stack_depot_save+0x460/0x46c [ 2479.385774]I[0:launcher-loader:
+> > > > 1719] sp : ffffffc0080073c0 [ 2479.385793]I[0:launcher-loader: 1719]
+> > > > x29: ffffffc0080073e0 x28: ffffffd00b78a000 x27: 0000000000000000 [
+> > > > 2479.385839]I[0:launcher-loader: 1719] x26: 000000000004d1dd x25:
+> > > > ffffff891474f000 x24: 00000000ca64d1dd [
+> > > > 2479.385882]I[0:launcher-loader: 1719] x23: 0000000000000200 x22:
+> > > > 0000000000000220 x21: 0000000000000040 [
+> > > > 2479.385925]I[0:launcher-loader: 1719] x20: ffffffc008007440 x19:
+> > > > 0000000000000000 x18: 0000000000000000 [
+> > > > 2479.385969]I[0:launcher-loader: 1719] x17: 2065726568207475 x16:
+> > > 000000000000005e x15: 2d2d2d2d2d2d2d20 [ 2479.386013]I[0:launcher-loader:
+> > > 1719] x14: 5d39313731203a72 x13: 00000000002f6b30 x12: 00000000002f6af8
+> > > [ 2479.386057]I[0:launcher-loader: 1719] x11: 00000000ffffffff x10:
+> > > ffffffb90aacf000 x9 : e8a74a6c16008800 [ 2479.386101]I[0:launcher-loader:
+> > > 1719] x8 : e8a74a6c16008800 x7 : 00000000002f6b30 x6 : 00000000002f6af8
+> > > [ 2479.386145]I[0:launcher-loader: 1719] x5 : ffffffc0080070c8 x4 :
+> > > ffffffd00b192380 x3 : ffffffd0092b313c [ 2479.386189]I[0:launcher-loader:
+> > > 1719] x2 : 0000000000000001 x1 : 0000000000000004 x0 : 0000000000000022
+> > > [ 2479.386231]I[0:launcher-loader: 1719] Call trace:
+> > > > [ 2479.386248]I[0:launcher-loader: 1719]
+> > > > __stack_depot_save+0x464/0x46c [ 2479.386273]I[0:launcher-loader:
+> > > > 1719]  kasan_save_stack+0x58/0x70 [ 2479.386303]I[0:launcher-loader:
+> > > > 1719]  save_stack_info+0x34/0x138 [ 2479.386331]I[0:launcher-loader:
+> > > > 1719]  kasan_save_free_info+0x18/0x24 [
+> > > > 2479.386358]I[0:launcher-loader: 1719]
+> > > > ____kasan_slab_free+0x16c/0x170 [ 2479.386385]I[0:launcher-loader:
+> > > > 1719]  __kasan_slab_free+0x10/0x20 [ 2479.386410]I[0:launcher-loader:
+> > > > 1719]  kmem_cache_free+0x238/0x53c [ 2479.386435]I[0:launcher-loader:
+> > > > 1719]  mempool_free_slab+0x1c/0x28 [ 2479.386460]I[0:launcher-loader:
+> > > > 1719]  mempool_free+0x7c/0x1a0 [ 2479.386484]I[0:launcher-loader:
+> > > > 1719]  bvec_free+0x34/0x80 [ 2479.386514]I[0:launcher-loader: 1719]
+> > > > bio_free+0x60/0x98 [ 2479.386540]I[0:launcher-loader: 1719]
+> > > > bio_put+0x50/0x21c [ 2479.386567]I[0:launcher-loader: 1719]
+> > > > f2fs_write_end_io+0x4ac/0x4d0 [ 2479.386594]I[0:launcher-loader: 1719]
+> > > > bio_endio+0x2dc/0x300 [ 2479.386622]I[0:launcher-loader: 1719]
+> > > > __dm_io_complete+0x324/0x37c [ 2479.386650]I[0:launcher-loader: 1719]
+> > > > dm_io_dec_pending+0x60/0xa4 [ 2479.386676]I[0:launcher-loader: 1719]
+> > > > clone_endio+0xf8/0x2f0 [ 2479.386700]I[0:launcher-loader: 1719]
+> > > > bio_endio+0x2dc/0x300 [ 2479.386727]I[0:launcher-loader: 1719]
+> > > > blk_update_request+0x258/0x63c [ 2479.386754]I[0:launcher-loader:
+> > > > 1719]  scsi_end_request+0x50/0x304 [ 2479.386782]I[0:launcher-loader:
+> > > > 1719]  scsi_io_completion+0x88/0x160 [
+> > > > 2479.386808]I[0:launcher-loader: 1719]
+> > > > scsi_finish_command+0x17c/0x194 [ 2479.386833]I[0:launcher-loader:
+> > > > 1719]  scsi_complete+0xcc/0x158 [ 2479.386859]I[0:launcher-loader:
+> > > > 1719]  blk_mq_complete_request+0x4c/0x5c [
+> > > > 2479.386885]I[0:launcher-loader: 1719]  scsi_done_internal+0xf4/0x1e0
+> > > > [ 2479.386910]I[0:launcher-loader: 1719]  scsi_done+0x14/0x20 [
+> > > > 2479.386935]I[0:launcher-loader: 1719]
+> > > > ufshcd_compl_one_cqe+0x578/0x71c [ 2479.386963]I[0:launcher-loader:
+> > > > 1719]  ufshcd_mcq_poll_cqe_nolock+0xc8/0x150
+> > > > [ 2479.386991]I[0:launcher-loader: 1719]  ufshcd_intr+0x868/0xc0c [
+> > > > 2479.387017]I[0:launcher-loader: 1719]
+> > > > __handle_irq_event_percpu+0xd0/0x348
+> > > > [ 2479.387044]I[0:launcher-loader: 1719]
+> > > > handle_irq_event_percpu+0x24/0x74 [ 2479.387068]I[0:launcher-loader:
+> > > > 1719]  handle_irq_event+0x74/0xe0 [ 2479.387091]I[0:launcher-loader:
+> > > > 1719]  handle_fasteoi_irq+0x174/0x240 [
+> > > > 2479.387118]I[0:launcher-loader: 1719]  handle_irq_desc+0x7c/0x2c0 [
+> > > > 2479.387147]I[0:launcher-loader: 1719]
+> > > > generic_handle_domain_irq+0x1c/0x28
+> > > > [ 2479.387174]I[0:launcher-loader: 1719]  gic_handle_irq+0x64/0x158 [
+> > > > 2479.387204]I[0:launcher-loader: 1719]  call_on_irq_stack+0x2c/0x54 [
+> > > > 2479.387231]I[0:launcher-loader: 1719]  do_interrupt_handler+0x70/0xa0
+> > > > [ 2479.387258]I[0:launcher-loader: 1719]  el1_interrupt+0x34/0x68 [
+> > > > 2479.387283]I[0:launcher-loader: 1719]  el1h_64_irq_handler+0x18/0x24
+> > > > [ 2479.387308]I[0:launcher-loader: 1719]  el1h_64_irq+0x68/0x6c [
+> > > > 2479.387332]I[0:launcher-loader: 1719]
+> > > > blk_attempt_bio_merge+0x8/0x170 [ 2479.387356]I[0:launcher-loader:
+> > > > 1719]  blk_mq_attempt_bio_merge+0x78/0x98
+> > > > [ 2479.387383]I[0:launcher-loader: 1719]
+> > > > blk_mq_submit_bio+0x324/0xa40 [ 2479.387409]I[0:launcher-loader: 1719]
+> > > > __submit_bio+0x104/0x138 [ 2479.387436]I[0:launcher-loader: 1719]
+> > > > submit_bio_noacct_nocheck+0x1d0/0x4a0
+> > > > [ 2479.387462]I[0:launcher-loader: 1719]
+> > > > submit_bio_noacct+0x618/0x804 [ 2479.387487]I[0:launcher-loader: 1719]
+> > > > submit_bio+0x164/0x180 [ 2479.387511]I[0:launcher-loader: 1719]
+> > > > f2fs_submit_read_bio+0xe4/0x1c4 [ 2479.387537]I[0:launcher-loader:
+> > > > 1719]  f2fs_mpage_readpages+0x888/0xa4c [
+> > > > 2479.387563]I[0:launcher-loader: 1719]  f2fs_readahead+0xd4/0x19c [
+> > > > 2479.387587]I[0:launcher-loader: 1719]  read_pages+0xb0/0x4ac [
+> > > > 2479.387614]I[0:launcher-loader: 1719]
+> > > > page_cache_ra_unbounded+0x238/0x288
+> > > > [ 2479.387642]I[0:launcher-loader: 1719]  do_page_cache_ra+0x60/0x6c [
+> > > > 2479.387669]I[0:launcher-loader: 1719]
+> > > > page_cache_ra_order+0x318/0x364 [ 2479.387695]I[0:launcher-loader:
+> > > > 1719]  ondemand_readahead+0x30c/0x3d8 [
+> > > > 2479.387722]I[0:launcher-loader: 1719]  page_cache_sync_ra+0xb4/0xc8 [
+> > > > 2479.387749]I[0:launcher-loader: 1719]  filemap_read+0x268/0xd24 [
+> > > > 2479.387777]I[0:launcher-loader: 1719]
+> > > > f2fs_file_read_iter+0x1a0/0x62c [ 2479.387806]I[0:launcher-loader:
+> > > > 1719]  vfs_read+0x258/0x34c [ 2479.387831]I[0:launcher-loader: 1719]
+> > > > ksys_pread64+0x8c/0xd0 [ 2479.387857]I[0:launcher-loader: 1719]
+> > > > __arm64_sys_pread64+0x48/0x54 [ 2479.387881]I[0:launcher-loader: 1719]
+> > > > invoke_syscall+0x58/0x158 [ 2479.387909]I[0:launcher-loader: 1719]
+> > > > el0_svc_common+0xf0/0x134 [ 2479.387935]I[0:launcher-loader: 1719]
+> > > > do_el0_svc+0x44/0x114 [ 2479.387961]I[0:launcher-loader: 1719]
+> > > > el0_svc+0x2c/0x80 [ 2479.387985]I[0:launcher-loader: 1719]
+> > > > el0t_64_sync_handler+0x48/0x114 [ 2479.388010]I[0:launcher-loader: 1719]
+> > > el0t_64_sync+0x190/0x194 [ 2479.388038]I[0:launcher-loader: 1719] Kernel
+> > > panic - not syncing: kernel: panic_on_warn set ...
+> > > >
+> > > > Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
+> > > > ---
+> > > >  lib/stackdepot.c | 3 ++-
+> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/lib/stackdepot.c b/lib/stackdepot.c index
+> > > > 2f5aa851834e..f158729598a6 100644
+> > > > --- a/lib/stackdepot.c
+> > > > +++ b/lib/stackdepot.c
+> > > > @@ -43,6 +43,7 @@
+> > > >  #define DEPOT_MAX_POOLS \
+> > > >         (((1LL << (DEPOT_POOL_INDEX_BITS)) < DEPOT_POOLS_CAP) ? \
+> > > >          (1LL << (DEPOT_POOL_INDEX_BITS)) : DEPOT_POOLS_CAP)
+> > > > +#define DEPO_MAX_DEPTH 25
+> > > >
+> > > >  /* Compact structure that stores a reference to a stack. */  union
+> > > > handle_parts { @@ -375,7 +376,7 @@ depot_stack_handle_t
+> > > > __stack_depot_save(unsigned long *entries,
+> > > >          * filter_irq_stacks() to simplify all callers' use of stack depot.
+> > > >          */
+> > > >         nr_entries = filter_irq_stacks(entries, nr_entries);
+> > > > -
+> > > > +       nr_entries = nr_entries > DEPO_MAX_DEPTH ? DEPO_MAX_DEPTH :
+> > > > + nr_entries;
+> > > >         if (unlikely(nr_entries == 0) || stack_depot_disabled)
+> > > >                 goto fast_exit;
+> > >
+> > > Hi SEO,
+> > >
+> > > The stack overflow errors are related to total number of stacks rather
+> > > than size of a single stack.
+> > >
+> > > filter_irq_stacks() is somehow not working in your case. It's supposed to
+> > > strip stacks somewhere around el1_interrupt (on interrupt entry), but it's
+> > > failing to do it.
+> > > As a result you are getting an effectively infinite amount of random
+> > > stacks saved.
+> > >
+> > >  You need to debug why filter_irq_stacks() is failing in your case and fix
+> > > that instead.
+> >
+> > Hi Vyukov.
+> >
+> > Thanks your reply.
+> > As you say, the filter_irq_stacks()  doesn't seem to be work correctly.
+> > I checked by print a symbol name, and it looks like the filter itself is wrong.
+> > __irqentry_text_start -> _stext+0x0/0x66c
+> > __irqentry_text_end -> _stext+0x0/0x66c
+> >
+> > __softirqentry_text_start -> _stext+0x0/0x66c
+> > __softirqentry_text_end -> __softirqentry_text_end+0x0/0x4
+> > Do you have the symbol name you were originally expecting?
+> >
+> > The problem seems to be caused by not riding the call stack defined
+> > by __irqentry_text_start, __irqentry_text_end when h/w irq occurs in our driver.
+> > If you can tell us the call stack names defined by __irqentry_text_start, __irqentry_text_end,
+> > it will help us to solve the problem.
 >
-> On Sat, 2023-04-15 at 17:14 +0800, David Gow wrote:
-> > KUnit tests run in a kthread, with the current->kunit_test pointer set
-> > to the test's context. This allows the kunit_get_current_test() and
-> > kunit_fail_current_test() macros to work. Normally, this pointer is
-> > still valid during test shutdown (i.e., the suite->exit function, and
-> > any resource cleanup). However, if the test has exited early (e.g., due
-> > to a failed assertion), the cleanup is done in the parent KUnit thread,
-> > which does not have an active context.
+> These __irqentry_text_start/end markers should contain all irq entry functions.
 >
-> My only question here is whether assertions (not expectations) are OK
-> within the exit/cleanup handler. That said, it wouldn't be clear
-> whether we should try to continue cleaning up after every failure, so
-> probably it is reasonable to not do that.
-
-Excellent point.
-In general:
-- It's okay to use expectations within exit and cleanup functions.
-- It's not okay for assertions to fail within an exit / cleanup handler.
-- It's not okay to access anything which was allocated on the stack
-from within a test in exit / cleanup handlers.
-- It's okay to access and free resources from within cleanup / exit
-handlers, though it's not permitted to create new resources from
-cleanup handlers (exit is okay).
-
-I do think we need to document this better, at the very least.
-
-What I think we'll end up doing is implementing a different system:
-- The test (and, if successful, cleanup) runs in a kthread.
-- If it aborts (e.g., due to an assertion), cleanup runs in another kthread.
-- If this second kthread aborts early, no further cleanup is run.
-
-This would protect the KUnit executor thread from misbehaving cleanup
-functions, and if an assertion happens in a cleanup function, we'll
-leak things (which is bad), but not dereference a bunch of invalid
-pointers (which is worse).
-
-I've got this mostly working here, and will send it out as a
-replacement to this patch (that second kthread will have
-current->kunit_test set, rendering this change redundant).
-
+> For example, for a random x86 kernel I see:
 >
-> But, I did see that at least the clock tests currently use assertions
-> inside the init function. And, in those tests, if the context
-> allocation fails the exit handler will dereference the NULL pointer.
-
-Hmm... which clock test is that? Regardless, it sounds like a bug in the test.
-
-I think that ultimately, the right solution for dealing with the
-context pointer issue is to use resources (or, when available,
-kunit_add_action()), which nicely enforces the ordering as well. In
-the meantime, though, I guess it just needs wrapping in a lot of "if
-(ctx)" or similar...
-
-> So, nothing for this patch, but maybe it would make sense to mark tests
-> as failed (or print a warning) if they use assertions inside init, exit
-> or cleanup handlers?
+> $ nm -ngS vmlinux | grep -C 3 irqentry_text
+> ffffffff8aaeffc0 00000000000008d9 T __do_softirq
+> ffffffff8aaeffc0 T __kprobes_text_end
+> ffffffff8aaeffc0 T __kprobes_text_start
+> ffffffff8aaeffc0 T __softirqentry_text_start
+> ffffffff8aaf0899 T __softirqentry_text_end
+> ffffffff8aaf08a0 0000000000000008 T __SCT__tp_func_initcall_level
+> ffffffff8aaf08a0 T __static_call_text_start
+> ffffffff8aaf08a8 0000000000000008 T __SCT__tp_func_initcall_start
+> --
+> ffffffff8ac0013f T entry_SYSRETQ_end
+> ffffffff8ac00140 0000000000000049 T xen_error_entry
+> ffffffff8ac00190 0000000000000cc0 T irq_entries_start
+> ffffffff8ac00190 T __irqentry_text_start
+> ffffffff8ac00e50 0000000000000140 T spurious_entries_start
+> ffffffff8ac00f90 000000000000001f T asm_exc_divide_error
+> ffffffff8ac00fb0 000000000000001f T asm_exc_overflow
+> --
+> ffffffff8ac01570 000000000000001f T asm_sysvec_kvm_posted_intr_wakeup_ipi
+> ffffffff8ac01590 000000000000001f T asm_sysvec_kvm_posted_intr_nested_ipi
+> ffffffff8ac015b0 000000000000001f T asm_sysvec_kvm_asyncpf_interrupt
+> ffffffff8ac015d0 T __irqentry_text_end
+> ffffffff8ac015d0 T swapgs_restore_regs_and_return_to_usermode
+> ffffffff8ac01624 T restore_regs_and_return_to_kernel
+> ffffffff8ac01646 T native_irq_return_iret
 >
+>
+> So the __softirqentry_text_start/end range includes only __do_softirq symbol.
+>
+> And __irqentry_text_start/end includes asm_exc_divide_error,
+> asm_exc_overflow, etc.
+>
+> This looks reasonable.
+>
+> Now for a random arm64 kernel I see this:
+>
+> $ nm -nS vmlinux | grep -v "\$x" | grep -C 3 irqentry_text
+> ffff800008000008 t $d.1
+> ffff800008010008 000000000000000c t __primary_entry_veneer
+> ffff800008020000 0000000000000158 t dw_apb_ictl_handle_irq
+> ffff800008020000 T __irqentry_text_start
+> ffff800008020000 T _stext
+> ffff80000802015c 0000000000000d2c T __do_softirq
+> ffff80000802015c T __irqentry_text_end
+> ffff80000802015c T __softirqentry_text_start
+> ffff800008020ebc T __entry_text_start
+> ffff800008020ebc T __softirqentry_text_end
+> ffff800008021000 0000000000000800 T vectors
+> ffff800008021800 000000000000007c t __bad_stack
+> ffff80000802187c 0000000000000068 t el1t_64_sync
+>
+> So the __softirqentry_text_start/end range also includes only
+> __do_softirq symbol.
+>
+> And __irqentry_text_start/end includes only dw_apb_ictl_handle_irq.
+>
+> I don't know if it's correct for arm64 kernel or not (are there other
+> irq entry points?).
+>
+> If you have other entry points, I think you need to mark them with
+> __irq_entry macro, which should place them in the section:
+>
+> https://elixir.bootlin.com/linux/latest/source/include/linux/interrupt.h#L829
+> https://elixir.bootlin.com/linux/latest/A/ident/__irq_entry
 
-I think we'll still want to support assertions in init functions
-(albeit possibly with some documentation pointing out any pitfalls).
-If actions or resources are used, it's not a problem.
+Found examples of proper cut points for irq/softirq for arm64 on syzbot:
 
-Also, a lot of these issues also apply to kunit_skip(), which is used
-_heavily_ in init functions.
+https://syzkaller.appspot.com/text?tag=CrashReport&x=131be6be880000
+Freed by task 2264:
+ kasan_save_stack+0x2c/0x60 mm/kasan/common.c:45
+ kasan_set_track+0x2c/0x40 mm/kasan/common.c:52
+ kasan_save_free_info+0x38/0x5c mm/kasan/generic.c:511
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x124/0x1f0 mm/kasan/common.c:200
+ __kasan_slab_free+0x18/0x24 mm/kasan/common.c:244
+ kasan_slab_free include/linux/kasan.h:177 [inline]
+ slab_free_hook mm/slub.c:1724 [inline]
+ slab_free_freelist_hook+0x9c/0x1bc mm/slub.c:1750
+ slab_free mm/slub.c:3661 [inline]
+ __kmem_cache_free+0xa4/0x370 mm/slub.c:3674
+ kfree+0xdc/0x284 mm/slab_common.c:1007
+ rcu_free_wq+0x9c/0x10c kernel/workqueue.c:3531
+ rcu_do_batch kernel/rcu/tree.c:2250 [inline]
+ rcu_core+0x874/0x1b50 kernel/rcu/tree.c:2510
+ rcu_core_si+0x10/0x1c kernel/rcu/tree.c:2527
+ _stext+0x28c/0x107c
 
-Warnings for assertions in exit or cleanup make sense. I _could_ see a
-reason to allow assertions if we wanted to have, e.g., helpers which
-asserted that their inputs were valid -- it'd be a bit rough to deny
-their use if the inputs are known to be okay -- but I'm not aware of
-any such case in practice yet, so I suspect it's still worth failing
-tests (and seeing if anyone complains).
 
-Cheers,
--- David
-
---000000000000de82f505f996c4a5
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAv
-V7xGoxqxZhuil0Y7MEtfWK8SbjH3Ms0NaH2MIoAE+DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA0MTgwNjUzNDZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAoc8pDN9O77XryCjpqUNk
-oNe6iiQItHk6vw+mP5bFJfgWnuGyQtWK04XiR4yaE+1JdoLu4w1lyedjbqXOMDSDSD1E4iqj3wyi
-k9gdYLFBsYTztuOOo3cXqsKSgG3zoG1MNNLmVGQlSWI9Fqg79V3J4LMG/ydV59fdu4J/ZaeWnmYT
-tQY9ziHgeIn7BINp1fM8kK5l+0dJCUDE9hl0ljb3IOninwWKm2Wmqz9pvFMAB8hADbgQ7Ap9xUvj
-MMsY0oHlaY2Oj5ST9R5Mlt9Ni5swjs0GoN8uTe3lJ0jr1M7/2JSOzwr/vVtl9TKF8QNXQ445b7iq
-9Elep2ohP1UVIqS6kw==
---000000000000de82f505f996c4a5--
+https://syzkaller.appspot.com/text?tag=CrashReport&x=1147006cc80000
+Freed by task 21:
+...
+ skb_release_all net/core/skbuff.c:916 [inline]
+ __kfree_skb net/core/skbuff.c:930 [inline]
+ consume_skb+0xa4/0x17c net/core/skbuff.c:1098
+ mac80211_hwsim_tx_frame+0x1cc/0x1f8 drivers/net/wireless/mac80211_hwsim.c:2054
+ mac80211_hwsim_beacon_tx+0x4f0/0x8ec drivers/net/wireless/mac80211_hwsim.c:2116
+ __iterate_interfaces+0x204/0x460 net/mac80211/util.c:763
+ ieee80211_iterate_active_interfaces_atomic+0xb4/0x140 net/mac80211/util.c:799
+ mac80211_hwsim_beacon+0xcc/0x1c8 drivers/net/wireless/mac80211_hwsim.c:2142
+ __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
+ __hrtimer_run_queues+0x580/0x10a8 kernel/time/hrtimer.c:1749
+ hrtimer_run_softirq+0x158/0x220 kernel/time/hrt
