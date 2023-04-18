@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D196E5EB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5A16E5EBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbjDRK1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 06:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
+        id S231293AbjDRK11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 06:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjDRK0v (ORCPT
+        with ESMTP id S229734AbjDRK1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 06:26:51 -0400
+        Tue, 18 Apr 2023 06:27:11 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BE665A9;
-        Tue, 18 Apr 2023 03:26:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EFF3580;
+        Tue, 18 Apr 2023 03:27:04 -0700 (PDT)
 Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <heiko@sntech.de>)
-        id 1poiXh-0002Nw-GJ; Tue, 18 Apr 2023 12:26:33 +0200
+        id 1poiY7-0002OL-Eu; Tue, 18 Apr 2023 12:26:59 +0200
 From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -33,13 +33,12 @@ To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH 1/3] dt-bindings: timer: rockchip: Drop superfluous rk3288
- compatible
-Date:   Tue, 18 Apr 2023 12:26:32 +0200
-Message-ID: <2436573.fIoEIV5pvu@diego>
-In-Reply-To: <20230418095344.274025-2-cristian.ciocaltea@collabora.com>
+Subject: Re: [PATCH 2/3] dt-bindings: timer: rockchip: Add rk3588 compatible
+Date:   Tue, 18 Apr 2023 12:26:58 +0200
+Message-ID: <3329410.yaVYbkx8dN@diego>
+In-Reply-To: <20230418095344.274025-3-cristian.ciocaltea@collabora.com>
 References: <20230418095344.274025-1-cristian.ciocaltea@collabora.com>
- <20230418095344.274025-2-cristian.ciocaltea@collabora.com>
+ <20230418095344.274025-3-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -52,15 +51,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, 18. April 2023, 11:53:42 CEST schrieb Cristian Ciocaltea:
-> The compatible string for Rockchip RK3288 is provided in both the 'enum'
-> and the subsequent 'const' item. Drop the unnecessary entry from the
-> enum.
-
-And the actual rk3288-timer case is handled in the separate
-	- const: rockchip,rk3288-timer
-at the top of the list too.
-
+Am Dienstag, 18. April 2023, 11:53:43 CEST schrieb Cristian Ciocaltea:
+> Add compatible string for Rockchip RK3588 timer.
 > 
 > Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 
