@@ -2,75 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C82F6E5F37
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7D26E5F39
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjDRK4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 06:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
+        id S230026AbjDRK5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 06:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjDRK4P (ORCPT
+        with ESMTP id S229526AbjDRK5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 06:56:15 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B338D44B3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:56:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1681815374; x=1713351374;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=yAe7o0MTTR0yESKouwIoPDqkr9X5P9mqViqewvDNldc=;
-  b=XvLzgs6p9f9ySKQVh0EJBVJwiV2HYSZrBRlWV+tRQa28WWgoEePTWHwd
-   dPWzBR+ihUAzqGJv20iwvSX3QgOFdg22WLsZnxoaMyCS4J0yyojowKcMI
-   XnRUFmCqF1B0nVBAGQg11njx1biWPqAWw9SmaIyW8AvFwaLDcjUuWqymu
-   Q=;
-X-IronPort-AV: E=Sophos;i="5.99,207,1677542400"; 
-   d="scan'208";a="321650986"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-f253a3a3.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 10:56:10 +0000
-Received: from EX19D002EUC004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-f253a3a3.us-west-2.amazon.com (Postfix) with ESMTPS id F183D80DF1;
-        Tue, 18 Apr 2023 10:56:08 +0000 (UTC)
-Received: from EX19D014EUC004.ant.amazon.com (10.252.51.182) by
- EX19D002EUC004.ant.amazon.com (10.252.51.230) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 18 Apr 2023 10:56:07 +0000
-Received: from EX19D014EUC004.ant.amazon.com ([fe80::76dd:4020:4ff2:1e41]) by
- EX19D014EUC004.ant.amazon.com ([fe80::76dd:4020:4ff2:1e41%3]) with mapi id
- 15.02.1118.026; Tue, 18 Apr 2023 10:56:07 +0000
-From:   "Gowans, James" <jgowans@amazon.com>
-To:     "maz@kernel.org" <maz@kernel.org>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Raslan, KarimAllah" <karahmed@amazon.com>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "zouyipeng@huawei.com" <zouyipeng@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sironi, Filippo" <sironi@amazon.de>,
-        "chris.zjh@huawei.com" <chris.zjh@huawei.com>
-Subject: Re: [PATCH] irq: fasteoi handler re-runs on concurrent invoke
-Thread-Topic: [PATCH] irq: fasteoi handler re-runs on concurrent invoke
-Thread-Index: AQHZceRg2u2D9PMEE0SrVnUWrsGPFA==
-Date:   Tue, 18 Apr 2023 10:56:07 +0000
-Message-ID: <7fdfb01590d8e502f384aa0bb0dc9c614caa5dfc.camel@amazon.com>
-References: <20230317095300.4076497-1-jgowans@amazon.com>
-         <87h6tp5lkt.wl-maz@kernel.org>
-         <0869847124f982c50d0f8d0ede996004f90a5576.camel@amazon.com>
-         <86pm89kyyt.wl-maz@kernel.org>
-In-Reply-To: <86pm89kyyt.wl-maz@kernel.org>
-Accept-Language: en-ZA, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.146.13.223]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D4F3FE786563DF43B6D23AA229667D27@amazon.com>
-Content-Transfer-Encoding: base64
+        Tue, 18 Apr 2023 06:57:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFFAA40EF
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:57:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72EF4168F;
+        Tue, 18 Apr 2023 03:58:14 -0700 (PDT)
+Received: from [10.57.82.12] (unknown [10.57.82.12])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 712563F5A1;
+        Tue, 18 Apr 2023 03:57:29 -0700 (PDT)
+Message-ID: <54083e3b-cba3-c719-651d-bf99d6eca16d@arm.com>
+Date:   Tue, 18 Apr 2023 11:57:23 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4] iommu: Optimise PCI SAC address trick
+Content-Language: en-GB
+To:     Vasant Hegde <vasant.hegde@amd.com>, joro@8bytes.org
+Cc:     will@kernel.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Garry <john.g.garry@oracle.com>
+References: <b8502b115b915d2a3fabde367e099e39106686c8.1681392791.git.robin.murphy@arm.com>
+ <21e49cd7-ee15-5ebd-7805-37d5f347635f@amd.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <21e49cd7-ee15-5ebd-7805-37d5f347635f@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,118 +49,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTA0LTEyIGF0IDE0OjMyICswMTAwLCBNYXJjIFp5bmdpZXIgd3JvdGU6DQo+
-IA0KPiA+ID4gPiAxLiBEbyB3ZSBuZWVkIHRvIG1hc2sgdGhlIElSUSBhbmQgdGhlbiB1bm1hc2sg
-aXQgbGF0ZXI/IEkgZG9uJ3QgdGhpbmsgc28NCj4gPiA+ID4gYnV0IGl0J3Mgbm90IGVudGlyZWx5
-IGNsZWFyIHdoeSBoYW5kbGVfZWRnZV9pcnEgZG9lcyB0aGlzIGFueXdheTsgaXQncw0KPiA+ID4g
-PiBhbiBlZGdlIElSUSBzbyBub3Qgc3VyZSB3aHkgaXQgbmVlZHMgdG8gYmUgbWFza2VkLg0KPiA+
-ID4gDQo+ID4gPiBQbGVhc2UgbWVhc3VyZSB0aGF0IGNvc3QgYW5kIHdlZXAsIHNwZWNpYWxseSBp
-biB0aGUgY29udGV4dCBvZg0KPiA+ID4gbXVsdGlwbGUgY29uY3VycmVudCBpbnRlcnJ1cHRzIHNl
-cnZpY2VkIGJ5IGEgc2luZ2xlIElUUyAoY29zdCBvZg0KPiA+ID4gbG9ja2luZyB0aGUgY29tbWFu
-ZCBxdWV1ZSwgb2Ygd2FpdGluZyBmb3IgYSBmdWxsIHJvdW5kIHRyaXAgdG8gdGhlIElUUw0KPiA+
-ID4gZm9yIGEgY291cGxlIG9mIGNvbW1hbmRzLi4uKS4NCj4gPiANCj4gPiBGb3J0dW5hdGVseSB0
-aGlzIG1hc2svdW5tYXNraW5nIHdvdWxkIG9ubHkgaGFwcGVuIGluIHRoZSByYXJlKGlzaCkgY2Fz
-ZWQgb2YgdGhlDQo+ID4gcmFjZSBjb25kaXRpb24gZGVzY3JpYmVkIGhlcmUgYmVpbmcgaGl0LiBF
-eGFjdGx5IHRoZSBzYW1lIGFzDQo+ID4gd2l0aCBoYW5kbGVfZWRnZV9pcnEoKSwgdGhlIG1hc2tp
-bmcgYW5kIGxhdGVyIHVubWFza2luZyB3b3VsZCBvbmx5IGJlIGRvbmUNCj4gPiB3aGVuIGlycV9t
-YXlfcnVuKCkgPT0gZmFsc2UgZHVlIHRvIHRoZSByYWNlIGJlaW5nIGhpdC4gQ29uc2lkZXJpbmcg
-dGhhdCB0aGlzIGlzDQo+ID4gYSByYXJlIG9jY3VycmVuY2UsIEkgdGhpbmsgd2UgY291bGQgc3Rv
-bWFjaCB0aGUgb2NjYXNpb25hbCBvdmVyaGVhZD8gSSB3YXMgbW9yZQ0KPiA+IGFza2luZyBpZiBp
-dCdzIGFjdHVhbGx5ICpuZWNlc3NhcnkqIHRvIGRvIHRoaXMgbWFza2luZy91bm1hc2tpbmcuIEkn
-bSBub3Qgc3VyZQ0KPiA+IGl0J3MgbmVjZXNzYXJ5IGFueXdheSwgaGVuY2UgaXQgd2Fzbid0IGlt
-cGxlbWVudGVkIGluIG15IHBhdGNoLg0KPiANCj4gQnV0IGRvZXMgaXQgc29sdmUgYW55dGhpbmc/
-IEF0IHRoZSBwb2ludCB3aGVyZSB5b3UgbWFzayB0aGUgaW50ZXJydXB0LA0KPiB5b3UgYWxyZWFk
-eSBoYXZlIGNvbnN1bWVkIGl0LiBZb3UnZCBzdGlsbCBuZWVkIHRvIG1ha2UgaXQgcGVuZGluZw0K
-PiBzb21laG93LCB3aGljaCBpcyB3aGF0IHlvdXIgcGF0Y2ggc29tZWhvdy4NCg0KSSBkb24ndCBy
-ZWFsbHkga25vdyAtIHRoZSByZWFzb24gSSBhc2tlZCB0aGUgcXVlc3Rpb24gaXMgdGhhdCB0aGUg
-cmVsYXRlZA0KaGFuZGxlX2VkZ2VfaXJxKCkgZG9lcyB0aGlzIG1hc2svdW5tYXNraW5nLCBhbmQg
-SSB3YXNuJ3QgcXVpdGUgc3VyZSB3aHkgaXQNCmRpZCB0aGF0IGFuZCBoZW5jZSBpZiB3ZSBuZWVk
-ZWQgdG8gZG8gc29tZXRoaW5nIHNpbWlsYXIuDQpBbnl3YXksIGxldCdzIGZvY3VzIG9uIHlvdXIg
-cGF0Y2ggcmF0aGVyIC0gSSB0aGluayBpdCdzIG1vcmUgY29tcGVsbGluZy4NCg0KDQo+ID4gWWVz
-LiBUaGlzIGJvdGhlcmVkIG1lIHRvbyBpbml0aWFsbHksIGJ1dCBvbiByZWZsZWN0aW9uIEknbSBu
-b3Qgc3VyZSBpdCdzDQo+ID4gYWN0dWFsbHkgYSBwcm9ibGVtLiBPbmUgcG9zc2libGUgaXNzdWUg
-dGhhdCBjYW1lIHRvIG1pbmQgd2FzIGFyb3VuZCBDUFUNCj4gPiBvZmZsaW5pbmcsIGJ1dCBpbiB0
-aGUgZXZlbnQgdGhhdCBhIENQVSBiZWluZyBvZmZsaW5lZCB3YXMgcnVubmluZyBpbnRlcnJ1cHQN
-Cj4gPiBoYW5kbGVycyBpdCB3b3VsZG4ndCBiZSBhYmxlIHRvIGNvbXBsZXRlIHRoZSBvZmZsaW5l
-IGFueXdheSB1bnRpbCB0aGUgaGFuZGxlcnMNCj4gPiB3ZXJlIGZpbmlzaGVkLCBzbyBJIGRvbid0
-IHRoaW5rIHRoaXMgaXMgYW4gaXNzdWUuIERvIHlvdSBzZWUgYW55IHByYWN0aWNhbCBpc3N1ZQ0K
-PiA+IHdpdGggcnVubmluZyB0aGUgaGFuZGxlciBvbmNlIG1vcmUgb24gdGhlIG9yaWdpbmFsIENQ
-VSBpbW1lZGlhdGVseSBhZnRlciB0aGUNCj4gPiBhZmZpbml0eSBoYXMgYmVlbiBjaGFuZ2VkPw0K
-PiANCj4gTXkgdGFrZSBvbiB0aGlzIGlzIHRoYXQgd2UgcHV0IHRoZSBwcmVzc3VyZSBvbiB0aGUg
-Q1BVIHdlIHdhbnQgdG8gbW92ZQ0KPiBhd2F5IGZyb20uIEknZCByYXRoZXIgd2UgcHV0IHRoZSBp
-dCBvbiB0aGUgR0lDIGl0c2VsZiwgYW5kIHVzZSBpdHMNCj4gVHVyaW5nLWNvbXBsZXRlIHBvd2Vy
-cyB0byBmb3JjZSBpdCB0byByZWRlbGl2ZXIgdGhlIGludGVycnVwdCBhdCBhDQo+IG1vcmUgY29u
-dmVuaWVudCB0aW1lLg0KDQpUaGlzIGlkZWEgYW5kIGltcGxlbWVudGF0aW9uIGxvb2tzIGFuZCB3
-b3JrcyBncmVhdCEgSXQgbWF5IG5lZWQgYSBmZXcNCnR3ZWFrczsgZGlzY3Vzc2luZyBiZWxvdy4N
-Cg0KPiANCj4gRnJvbSBjOTZkMmFiMzdmZTI3MzcyNGYxMjY0ZmJhNWY0OTEzMjU5ODc1ZDU2IE1v
-biBTZXAgMTcgMDA6MDA6MDAgMjAwMQ0KPiBGcm9tOiBNYXJjIFp5bmdpZXIgPG1hekBrZXJuZWwu
-b3JnPg0KPiBEYXRlOiBNb24sIDEwIEFwciAyMDIzIDEwOjU2OjMyICswMTAwDQo+IFN1YmplY3Q6
-IFtQQVRDSF0gaXJxY2hpcC9naWN2My1pdHM6IEZvcmNlIHJlc2VuZCBvZiBMUElzIHRha2VuIHdo
-aWxlDQo+IGFscmVhZHkNCj4gIGluLXByb2dyZXNzDQoNClBlcmhhcHMgeW91IGNhbiBwaWxsYWdl
-IHNvbWUgb2YgbXkgY29tbWl0IG1lc3NhZ2UgdG8gZXhwbGFpbiB0aGUgcmFjZSBoZXJlDQp3aGVu
-IHlvdSBzZW5kIHRoaXMgcGF0Y2g/DQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBNYXJjIFp5bmdpZXIg
-PG1hekBrZXJuZWwub3JnPg0KPiANCj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvaXJxLmgg
-Yi9pbmNsdWRlL2xpbnV4L2lycS5oDQo+IGluZGV4IGIxYjI4YWZmYjMyYS4uNGIyYTdjYzk2ZWIy
-IDEwMDY0NA0KPiAtLS0gYS9pbmNsdWRlL2xpbnV4L2lycS5oDQo+ICsrKyBiL2luY2x1ZGUvbGlu
-dXgvaXJxLmgNCj4gQEAgLTIyMyw2ICsyMjMsOCBAQCBzdHJ1Y3QgaXJxX2RhdGEgew0KPiAgICog
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaXJxX2NoaXA6OmlycV9zZXRfYWZmaW5pdHko
-KSB3aGVuDQo+IGRlYWN0aXZhdGVkLg0KPiAgICogSVJRRF9JUlFfRU5BQkxFRF9PTl9TVVNQRU5E
-IC0gSW50ZXJydXB0IGlzIGVuYWJsZWQgb24gc3VzcGVuZCBieSBpcnENCj4gcG0gaWYNCj4gICAq
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlycWNoaXAgaGF2ZSBmbGFnDQo+IElSUUNI
-SVBfRU5BQkxFX1dBS0VVUF9PTl9TVVNQRU5EIHNldC4NCj4gKyAqIElSUURfUkVTRU5EX1dIRU5f
-SU5fUFJPR1JFU1MgLSBJbnRlcnJ1cHQgbWF5IGZpcmUgd2hlbiBhbHJlYWR5IGluDQo+IHByb2dy
-ZXNzLA0KPiArICogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbmVlZHMgcmVzZW5kaW5n
-Lg0KPiAgICovDQo+ICBlbnVtIHsNCj4gICAgICAgICBJUlFEX1RSSUdHRVJfTUFTSyAgICAgICAg
-ICAgICAgID0gMHhmLA0KPiBAQCAtMjQ5LDYgKzI1MSw3IEBAIGVudW0gew0KPiAgICAgICAgIElS
-UURfSEFORExFX0VORk9SQ0VfSVJRQ1RYICAgICAgPSAoMSA8PCAyOCksDQo+ICAgICAgICAgSVJR
-RF9BRkZJTklUWV9PTl9BQ1RJVkFURSAgICAgICA9ICgxIDw8IDI5KSwNCj4gICAgICAgICBJUlFE
-X0lSUV9FTkFCTEVEX09OX1NVU1BFTkQgICAgID0gKDEgPDwgMzApLA0KPiArICAgICAgIElSUURf
-UkVTRU5EX1dIRU5fSU5fUFJPR1JFU1MgICAgPSAoMSA8PCAzMSksDQo+ICB9Ow0KDQpEbyB3ZSBy
-ZWFsbHkgd2FudCBhIG5ldyBmbGFnIGhlcmU/IEknZCBiZSBrZWVuIHRvIGZpeCB0aGlzIHJhY2Ug
-Zm9yIGFsbA0KZHJpdmVycywgbm90IGp1c3QgdGhvc2Ugd2hvIGtub3cgdG8gc2V0IHRoaXMgZmxh
-Zy4gSSB0aGluayB0aGUgcGF0Y2gNCnlvdSdyZSBzdWdnZXN0aW5nIGlzIHByZXR0eSBjbG9zZSB0
-byBiZWluZyBzYWZlIHRvIGVuYWJsZSBnZW5lcmFsbHk/IElmIHNvDQpteSBwcmVmZXJlbmNlIGlz
-IGZvciBvbmUgbGVzcyBjb25maWcgb3B0aW9uIC0ganVzdCBydW4gaXQgYWx3YXlzLg0KDQo+ICBz
-dGF0aWMgaW5saW5lIGlycV9od19udW1iZXJfdCBpcnFkX3RvX2h3aXJxKHN0cnVjdCBpcnFfZGF0
-YSAqZCkNCj4gZGlmZiAtLWdpdCBhL2tlcm5lbC9pcnEvY2hpcC5jIGIva2VybmVsL2lycS9jaGlw
-LmMNCj4gaW5kZXggNDllN2JjODcxZmVjLi43MzU0NmJhOGJjNDMgMTAwNjQ0DQo+IC0tLSBhL2tl
-cm5lbC9pcnEvY2hpcC5jDQo+ICsrKyBiL2tlcm5lbC9pcnEvY2hpcC5jDQo+IEBAIC02OTIsOCAr
-NjkyLDExIEBAIHZvaWQgaGFuZGxlX2Zhc3Rlb2lfaXJxKHN0cnVjdCBpcnFfZGVzYyAqZGVzYykN
-Cj4gDQo+ICAgICAgICAgcmF3X3NwaW5fbG9jaygmZGVzYy0+bG9jayk7DQo+IA0KPiAtICAgICAg
-IGlmICghaXJxX21heV9ydW4oZGVzYykpDQo+ICsgICAgICAgaWYgKCFpcnFfbWF5X3J1bihkZXNj
-KSkgew0KPiArICAgICAgICAgICAgICAgaWYgKGlycWRfbmVlZHNfcmVzZW5kX3doZW5faW5fcHJv
-Z3Jlc3MoJmRlc2MtPmlycV9kYXRhKSkNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgY2hlY2tf
-aXJxX3Jlc2VuZChkZXNjLCB0cnVlKTsNCj4gICAgICAgICAgICAgICAgIGdvdG8gb3V0Ow0KPiAr
-ICAgICAgIH0NCg0KVGhpcyB3aWxsIHJ1biBjaGVja19pcnFfcmVzZW5kKCkgb24gdGhlICpuZXds
-eSBhZmZpbmVkKiBDUFUsIHdoaWxlIHRoZSBvbGQNCm9uZSBpcyBzdGlsbCBydW5uaW5nIHRoZSBv
-cmlnaW5hbCBoYW5kbGVyLiBBRkFJQ1Qgd2hhdCB3aWxsIGhhcHBlbiBpczoNCmNoZWNrX2lycV9y
-ZXNlbmQNCiAgdHJ5X3JldHJpZ2dlcg0KICAgIGlycV9jaGlwX3JldHJpZ2dlcl9oaWVyYXJjaHkN
-CiAgICAgIGl0c19pcnFfcmV0cmlnZ2VyDQouLi4gd2hpY2ggd2lsbCBjYXVzZSB0aGUgSVRTIHRv
-ICppbW1lZGlhdGVseSogcmUtdHJpZ2dlciB0aGUgSVJRLiBUaGUNCm9yaWdpbmFsIENQVSBjYW4g
-c3RpbGwgYmUgcnVubmluZyB0aGUgaGFuZGxlciBpbiB0aGF0IGNhc2UuDQoNCklmIHRoYXQgaGFw
-cGVucywgY29uc2lkZXIgd2hhdCB3aWxsIGhhcHBlbiBpbiBjaGVja19pcnFfcmVzZW5kOg0KLSBm
-aXJzdCBJUlEgY29tZXMgaW4sIHN1Y2Nlc3NmbGx5IHJ1bnMgdHJ5X3JldHJpZ2dlciBhbmQgc2V0
-cyBJUlFTX1JFUExBWS4NCi0gaXQgaXMgKmltbWVkaWF0ZWx5KiByZXRyaWdnZXJlZCBieSBJVFMs
-IGFuZCBiZWNhdXNlIHRoZSBvcmlnaW5hbCBoYW5kbGVyDQpvbiB0aGUgb3RoZXIgQ1BVIGlzIHN0
-aWxsIHJ1bm5pbmcsIGNvbWVzIGludG8gY2hlY2tfaXJxX3Jlc2VuZCBhZ2Fpbi4NCi0gY2hlY2tf
-aXJxX3Jlc2VuZCBub3cgb2JzZXJ2ZXMgdGhhdCBJUlFTX1JFUExBWSBpcyBzZXQgYW5kIGVhcmx5
-IG91dHMuDQotIE5vIG1vcmUgcmVzZW5kcywgdGhlIElSUSBpcyBzdGlsbCBsb3N0LiA6LSgNCg0K
-Tm93IEkgYWRtaXQgdGhlIGZhaWx1cmUgbW9kZSBpcyBnZXR0aW5nIGEgYml0IHBhdGhvbG9naWNh
-bDogdHdvIHJlLQ0KdHJpZ2dlcnMgd2hpbGUgdGhlIG9yaWdpbmFsIGhhbmRsZXIgaXMgc3RpbGwg
-cnVubmluZywgYnV0IEkgd2FzIGFibGUgdG8NCmhpdCB0aGlzIG9uIG15IHRlc3QgbWFjaGluZSBi
-eSBpbnRlbnRpb25hbGx5IHNsb3dpbmcNCnRoZSBoYW5kbGVyIGRvd24gYnkgYSBmZXcgZG96ZW4g
-bWljcm9zLiBTaG91bGQgd2UgY2F0ZXIgZm9yIHRoaXM/DQoNCkkgY2FuIHNlZSB0d28gcG9zc2li
-aWxpdGllczoNCi0gdHdlYWsgY2hlY2tfaXJxX3Jlc2VuZCgpIHRvIG5vdCBlYXJseS1vdXQgaW4g
-dGhpcyBjYXNlIGJ1dCB0byBrZWVwIHJlLQ0KdHJpZ2dlcmluZyB1bnRpbCBpdCBldmVudHVhbGx5
-IHJ1bnMuDQotIG1vdmUgdGhlIGNoZWNrX2lycV9yZXNlbmQgdG8gb25seSBoYXBwZW4gbGF0ZXIs
-ICphZnRlciogdGhlIG9yaWdpbmFsDQpoYW5kbGVyIGhhcyBmaW5pc2hlZCBydW5uaW5nLiBUaGlz
-IHdvdWxkIGJlIHZlcnkgc2ltaWxhciB0byB3aGF0IEkNCnN1Z2dlc3RlZCBpbiBteSBvcmlnaW5h
-bCBwYXRjaCwgZXhjZXB0IGluc3RlYWQgb2YgcnVubmluZyBhIGRvL3doaWxlIGxvb3AsDQp0aGUg
-Y29kZSB3b3VsZCBvYnNlcnZlIHRoYXQgdGhlIHBlbmRpbmcgZmxhZyB3YXMgc2V0IGFnYWluIGFu
-ZCBydW4NCmNoZWNrX2lycV9yZXNlbmQuDQoNCkknbSBhbHNvIHdvbmRlcmluZyB3aGF0IHdpbGwg
-aGFwcGVuIGZvciB1c2VycyB3aG8gZG9uJ3QgaGF2ZSB0aGUNCmNoaXAtPmlycV9yZXRyaWdnZXIg
-Y2FsbGJhY2sgc2V0IGFuZCBmYWxsIGJhY2sgdG8gdGhlIHRhc2tsZXQNCnZpYSBpcnFfc3dfcmVz
-ZW5kKCkuLi4gTG9va3MgbGlrZSBpdCB3aWxsIHdvcmsgZmluZS4gSG93ZXZlciBpZiB3ZSBkbyBt
-eQ0Kc3VnZ2VzdGlvbiBhbmQgbW92ZSBjaGVja19pcnFfcmVzZW5kIHRvIHRoZSBlbmQgb2YgaGFu
-ZGxlX2Zhc3Rlb2lfaXJxIHRoZW4NCnRoZSB0YXNrbGV0IHdpbGwgYmUgc2NoZWR1bGVkIG9uIHRo
-ZSBvbGQgQ1BVIGFnYWluLCB3aGljaCBtYXkgYmUgc3ViLQ0Kb3B0aW1hbC4NCg0KSkcNCg==
+On 2023-04-18 10:23, Vasant Hegde wrote:
+> Robin,
+> 
+> 
+> On 4/13/2023 7:10 PM, Robin Murphy wrote:
+>> Per the reasoning in commit 4bf7fda4dce2 ("iommu/dma: Add config for
+>> PCI SAC address trick") and its subsequent revert, this mechanism no
+>> longer serves its original purpose, but now only works around broken
+>> hardware/drivers in a way that is unfortunately too impactful to remove.
+>>
+>> This does not, however, prevent us from solving the performance impact
+>> which that workaround has on large-scale systems that don't need it.
+>> Once the 32-bit IOVA space fills up and a workload starts allocating and
+>> freeing on both sides of the boundary, the opportunistic SAC allocation
+>> can then end up spending significant time hunting down scattered
+>> fragments of free 32-bit space, or just reestablishing max32_alloc_size.
+>> This can easily be exacerbated by a change in allocation pattern, such
+>> as by changing the network MTU, which can increase pressure on the
+>> 32-bit space by leaving a large quantity of cached IOVAs which are now
+>> the wrong size to be recycled, but also won't be freed since the
+>> non-opportunistic allocations can still be satisfied from the whole
+>> 64-bit space without triggering the reclaim path.
+>>
+>> However, in the context of a workaround where smaller DMA addresses
+>> aren't simply a preference but a necessity, if we get to that point at
+>> all then in fact it's already the endgame. The nature of the allocator
+>> is currently such that the first IOVA we give to a device after the
+>> 32-bit space runs out will be the highest possible address for that
+>> device, ever. If that works, then great, we know we can optimise for
+>> speed by always allocating from the full range. And if it doesn't, then
+>> the worst has already happened and any brokenness is now showing, so
+>> there's little point in continuing to try to hide it.
+>>
+>> To that end, implement a flag to refine the SAC business into a
+>> per-device policy that can automatically get itself out of the way if
+>> and when it stops being useful.
+>>
+>> CC: Linus Torvalds <torvalds@linux-foundation.org>
+>> CC: Jakub Kicinski <kuba@kernel.org>
+>> Reviewed-by: John Garry <john.g.garry@oracle.com>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> 
+> We hit kernel softlockup while running stress-ng test system having 384 CPU and
+> NVMe disk. This patch helped to solve one soft lockup in allocation path.
+> 
+>> ---
+>>
+>> v4: Rebase to use the new bitfield in dev_iommu, expand commit message.
+>>
+>>   drivers/iommu/dma-iommu.c | 26 ++++++++++++++++++++------
+>>   drivers/iommu/dma-iommu.h |  8 ++++++++
+>>   drivers/iommu/iommu.c     |  3 +++
+>>   include/linux/iommu.h     |  2 ++
+>>   4 files changed, 33 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+>> index 99b2646cb5c7..9193ad5bc72f 100644
+>> --- a/drivers/iommu/dma-iommu.c
+>> +++ b/drivers/iommu/dma-iommu.c
+>> @@ -630,7 +630,7 @@ static dma_addr_t iommu_dma_alloc_iova(struct iommu_domain *domain,
+>>   {
+>>   	struct iommu_dma_cookie *cookie = domain->iova_cookie;
+>>   	struct iova_domain *iovad = &cookie->iovad;
+>> -	unsigned long shift, iova_len, iova = 0;
+>> +	unsigned long shift, iova_len, iova;
+>>   
+>>   	if (cookie->type == IOMMU_DMA_MSI_COOKIE) {
+>>   		cookie->msi_iova += size;
+>> @@ -645,15 +645,29 @@ static dma_addr_t iommu_dma_alloc_iova(struct iommu_domain *domain,
+>>   	if (domain->geometry.force_aperture)
+>>   		dma_limit = min(dma_limit, (u64)domain->geometry.aperture_end);
+>>   
+>> -	/* Try to get PCI devices a SAC address */
+>> -	if (dma_limit > DMA_BIT_MASK(32) && !iommu_dma_forcedac && dev_is_pci(dev))
+>> +	/*
+>> +	 * Try to use all the 32-bit PCI addresses first. The original SAC vs.
+>> +	 * DAC reasoning loses relevance with PCIe, but enough hardware and
+>> +	 * firmware bugs are still lurking out there that it's safest not to
+>> +	 * venture into the 64-bit space until necessary.
+>> +	 *
+>> +	 * If your device goes wrong after seeing the notice then likely either
+>> +	 * its driver is not setting DMA masks accurately, the hardware has
+>> +	 * some inherent bug in handling >32-bit addresses, or not all the
+>> +	 * expected address bits are wired up between the device and the IOMMU.
+>> +	 */
+>> +	if (dma_limit > DMA_BIT_MASK(32) && dev->iommu->pci_32bit_workaround) {
+>>   		iova = alloc_iova_fast(iovad, iova_len,
+>>   				       DMA_BIT_MASK(32) >> shift, false);
+>> +		if (iova)
+>> +			goto done;
+>>   
+>> -	if (!iova)
+>> -		iova = alloc_iova_fast(iovad, iova_len, dma_limit >> shift,
+>> -				       true);
+>> +		dev->iommu->pci_32bit_workaround = false;
+>> +		dev_notice(dev, "Using %d-bit DMA addresses\n", bits_per(dma_limit));
+> 
+> May be dev_notice_once? Otherwise we may see this message multiple time for same
+> device like below:
+
+Oh, that's a bit irritating. Of course multiple threads can reach this
+in parallel, silly me :(
+
+I would really prefer the notice to be once per device rather than once
+globally, since there's clearly no guarantee that the first device to
+hit this case is going to be the one which is liable to go wrong. Does
+the (untested) diff below do any better?
+
+> [  172.017120] nvme 0000:41:00.0: Using 64-bit DMA addresses
+> [  172.022955] nvme 0000:41:00.0: Using 64-bit DMA addresses
+> [  172.028720] nvme 0000:41:00.0: Using 64-bit DMA addresses
+> [  172.031815] nvme 0000:41:00.0: Using 64-bit DMA addresses
+> [  172.031816] nvme 0000:41:00.0: Using 64-bit DMA addresses
+> [  172.038727] nvme 0000:41:00.0: Using 64-bit DMA addresses
+> [  172.038726] nvme 0000:41:00.0: Using 64-bit DMA addresses
+> [  172.038917] nvme 0000:41:00.0: Using 64-bit DMA addresses
+> [  172.038968] nvme 0000:41:00.0: Using 64-bit DMA addresses
+> [  172.038970] nvme 0000:41:00.0: Using 64-bit DMA addresses
+> [  172.039007] nvme 0000:41:00.0: Using 64-bit DMA addresses
+> [  172.039091] nvme 0000:41:00.0: Using 64-bit DMA addresses
+> [  172.039102] nvme 0000:41:00.0: Using 64-bit DMA addresses
+> 
+> Otherwise patch worked fine for us.
+> 
+> Tested-by: Vasant Hegde <vasant.hegde@amd.com>
+
+Thanks!
+
+Robin.
+
+----->8-----
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index 9193ad5bc72f..db246fd3037f 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -662,8 +662,8 @@ static dma_addr_t iommu_dma_alloc_iova(struct iommu_domain *domain,
+  		if (iova)
+  			goto done;
+  
+-		dev->iommu->pci_32bit_workaround = false;
+-		dev_notice(dev, "Using %d-bit DMA addresses\n", bits_per(dma_limit));
++		if (xchg(&dev->iommu->pci_32bit_workaround, false))
++			dev_notice(dev, "Using %d-bit DMA addresses\n", bits_per(dma_limit));
+  	}
+  
+  	iova = alloc_iova_fast(iovad, iova_len, dma_limit >> shift, true);
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 2575630d402d..8a12e923718f 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -419,7 +419,7 @@ struct dev_iommu {
+  	void				*priv;
+  	u32				max_pasids;
+  	u32				attach_deferred:1;
+-	u32				pci_32bit_workaround:1;
++	bool				pci_32bit_workaround;
+  };
+  
+  int iommu_device_register(struct iommu_device *iommu,
