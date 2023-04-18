@@ -2,84 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36FCF6E577E
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDB66E577F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbjDRCaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 22:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
+        id S231163AbjDRCaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 22:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjDRC36 (ORCPT
+        with ESMTP id S230497AbjDRCaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 22:29:58 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57711172C;
-        Mon, 17 Apr 2023 19:29:57 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1a524c999d9so15928385ad.3;
-        Mon, 17 Apr 2023 19:29:57 -0700 (PDT)
+        Mon, 17 Apr 2023 22:30:08 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98BC3C3E
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 19:30:06 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-54fbee98814so192356157b3.8
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 19:30:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681784997; x=1684376997;
+        d=fasheh-com.20221208.gappssmtp.com; s=20221208; t=1681785006; x=1684377006;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=67tDMZwaozkC/4h2hdsCG2SkbsBh10T01ijQGIySkUo=;
-        b=VJarTu7ueI5jKfXJfk+sjPdWWMUCCCD6nLfSLTw6040i2UYSycKSAllI/xAR7zCoYu
-         OItvn0Oeemlm5n9LFQCXKTfuy8D8a0KV/HJTU9e5FTaY1m789aYYem58VdwQbzozMGuO
-         o6DOc+DXHNLkHxf0SrVu/H9w/aiTxiARFSfOOmT1zNos5os7TTkg2fmWd4aIe8siOduN
-         5cIo1HFO6CvnO5qWrKf7sYcZekO9EVXSC3gy7qjeeE0gr8lDbA8mAXZ8fd03elp3hfrL
-         aHdZWThvlq6kFwPX927MP9zOSAuNMOusekXfci4qH8FVvoVgT2Bh2CF9FbRVPD+QpIoi
-         y8bA==
+        bh=bDxggslLkUgEL2+ia1HCW7STSsqbXoPlZsIfI7N9xmA=;
+        b=xa85+Vj2JsBDsYcpf9HcVto042Lzsl6wYDyKCwA7ceCf0RHJN/thMvVIbuf73ZQaoO
+         qjGM3DOMOgRV/XSgWd97nupWFK5kcVKQW1SOlrR4VWQmrI2UkzZKcKY3QaNZoCShmO3Q
+         izScWvY20VzXjJK/LS7t/MPQZNb5hCtY6uwbaR4KOGdWveQIZB+BzI6IrIRi4mMPaESV
+         47uiN76TTBGvYBySgtfDregPYN0pS57TsjG9Bu0V8R1AOX0yHe7QNK/bQAv0fYfmONwq
+         NexDaBQFLE1IWFHpIZUawV75XHzVU9ucSPVlSbijCFuc7HOL3G5rRbzeT/OQXFCxx+ig
+         BmVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681784997; x=1684376997;
+        d=1e100.net; s=20221208; t=1681785006; x=1684377006;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=67tDMZwaozkC/4h2hdsCG2SkbsBh10T01ijQGIySkUo=;
-        b=CnUPEwNK3ckFB8Yo1Rl7S0xsV8VzlZ7ix1V6ouwCy/yMBajc6vSLJ98QN9j2SD1HM7
-         2lAc1i2I18vHpWw5AhKJMIQYpHs6DCQq20m0Lq/o/ZLT8UmQkOqUf89KdXUErOPLwvjk
-         bZamHdGC6WWwRor6emclLQQkuWI+GmVxi1OKfpMAjCsy5NXQZbsIncSp/zm7iLcci4s1
-         RxxDbcugCQ4HEffjPuPUT7+F/AaCDy0m36aK4MmbMWt8jqesfqRROMUAM7fu+z3+/MC2
-         q2YJ8LSXyZhU+k2qjuEykhsCYpHSCeFRMTtJJAwKau2s9+PTQgDXp2YG7KIpIFQP0+Uz
-         O8gA==
-X-Gm-Message-State: AAQBX9eZddxubmXbq7h77gJ6ipGIZ4lq6gHJWbSY+rFv/7GyA2s6ze01
-        8scXwAloJNzD+k+JvSa/D403khEV9llThXRgY0c=
-X-Google-Smtp-Source: AKy350a8gUiMivOsGNvLuu+CPxSUKtbHvfaXMbOwAEVLwgvkJrDx2eY3Li4L6RzuwTjiYRjvOxHRH6bVfvLtalZZ9bI=
-X-Received: by 2002:a17:902:e88e:b0:1a5:25db:5bc0 with SMTP id
- w14-20020a170902e88e00b001a525db5bc0mr217740plg.3.1681784996433; Mon, 17 Apr
- 2023 19:29:56 -0700 (PDT)
+        bh=bDxggslLkUgEL2+ia1HCW7STSsqbXoPlZsIfI7N9xmA=;
+        b=ApLKSu3876yVPkBvFjKg6XKykcFcVptqeoYuIkknrvmZA1DBKP4zr7V4zWS2OJ6tmr
+         0m2b7x4s4Z57I15fpLzRwekJLTPUtUJ1JjbwyB9Mz7gN6hP3CgkFkbokTi4zuK6q65/k
+         pfk7UKqZzPJBkjdqhO0DvtYJE7ovqDAPntXGEvgI5XXa/eNgiYIYhLbhm2K+HnxQegGt
+         gYnDdym9VwUHiW6qUDYbrWelZ1jXVoc/Y/mqVLLALCr7J60MokWUQaDoeFoG1lSp+qYZ
+         sSXMEmJEwVzRosLaOPEvAph+I7NZGVzcl48h9weRGtQot4V/2UFpA8t167FBb4M1XxZ+
+         tBIw==
+X-Gm-Message-State: AAQBX9e0A6bQY2mEjAPS4xEPbmi0pp2NkBaAudQv0euEI7z/IvI5CUK4
+        7/E0Bgh+iDSO9oiZxPPyvLQhAvcEw2hhHVvGgn1K7Q==
+X-Google-Smtp-Source: AKy350bKvrXu9w5GkD4lbrkV8di9EMGrf1pWcKqHnAs24Nn8t8I6pbkm8kneRJMSkr6k/zfpXVg4hEe2duVvIPfKQi4=
+X-Received: by 2002:a81:af0c:0:b0:54c:2889:7105 with SMTP id
+ n12-20020a81af0c000000b0054c28897105mr10993949ywh.0.1681785005975; Mon, 17
+ Apr 2023 19:30:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230415104104.5537-1-aford173@gmail.com> <20230415104104.5537-3-aford173@gmail.com>
- <7eed74e8-9f67-a410-3cec-f61a6db85238@denx.de>
-In-Reply-To: <7eed74e8-9f67-a410-3cec-f61a6db85238@denx.de>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Mon, 17 Apr 2023 21:29:44 -0500
-Message-ID: <CAHCN7xKw26TQ=t75TEDbEkA0mb9rnEwNW=7ei1=WFBZjiJMf=g@mail.gmail.com>
-Subject: Re: [PATCH 3/6] drm: bridge: samsung-dsim: Fetch pll-clock-frequency automatically
-To:     Marek Vasut <marex@denx.de>
-Cc:     dri-devel@lists.freedesktop.org, m.szyprowski@samsung.com,
-        aford@beaconembedded.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230417205631.1956027-1-arnd@kernel.org>
+In-Reply-To: <20230417205631.1956027-1-arnd@kernel.org>
+From:   Mark Fasheh <mark@fasheh.com>
+Date:   Mon, 17 Apr 2023 19:29:55 -0700
+Message-ID: <CAGe7X7ntw_iZUsKbcg7PwJAeAqtFBia20rKs=Q__mtYaCMdc2w@mail.gmail.com>
+Subject: Re: [PATCH] ocfs2: reduce ioctl stack usage
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Joel Becker <jlbec@evilplan.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
+        =?UTF-8?Q?Christoph_B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        =?UTF-8?B?SmFuIEjDtnBwbmVy?= <hoeppner@linux.ibm.com>,
+        Christian Brauner <brauner@kernel.org>,
+        ocfs2-devel@oss.oracle.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,43 +75,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 16, 2023 at 5:08=E2=80=AFPM Marek Vasut <marex@denx.de> wrote:
+On Mon, Apr 17, 2023 at 1:56=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+> On 32-bit architectures with KASAN_STACK enabled, the total stack usage
+> of the ocfs2_ioctl function grows beyond the warning limit:
 >
-> On 4/15/23 12:41, Adam Ford wrote:
-> > Fetch the clock rate of "sclk_mipi" (or "pll_clk") instead of
-> > having an entry in the device tree for samsung,pll-clock-frequency.
-> >
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > ---
-> >   drivers/gpu/drm/bridge/samsung-dsim.c | 12 ++++++------
-> >   1 file changed, 6 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/br=
-idge/samsung-dsim.c
-> > index 9fec32b44e05..73f0c3fbbdf5 100644
-> > --- a/drivers/gpu/drm/bridge/samsung-dsim.c
-> > +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-> > @@ -1744,11 +1744,6 @@ static int samsung_dsim_parse_dt(struct samsung_=
-dsim *dsi)
-> >       struct device_node *node =3D dev->of_node;
-> >       int ret;
-> >
-> > -     ret =3D samsung_dsim_of_read_u32(node, "samsung,pll-clock-frequen=
-cy",
-> > -                                    &dsi->pll_clk_rate);
-> > -     if (ret < 0)
-> > -             return ret;
-> > -
-> >       ret =3D samsung_dsim_of_read_u32(node, "samsung,burst-clock-frequ=
-ency",
-> >                                      &dsi->burst_clk_rate);
-> >       if (ret < 0)
+> fs/ocfs2/ioctl.c: In function 'ocfs2_ioctl':
+> fs/ocfs2/ioctl.c:934:1: error: the frame size of 1448 bytes is larger tha=
+n 1400 bytes [-Werror=3Dframe-larger-than=3D]
 >
-> Does this break compatibility with old samsung DTs ?
+> Move each of the variables into a basic block, and mark ocfs2_info_handle=
+()
+> as noinline_for_stack, in order to have the variable share stack slots.
 
-My goal here was to declutter the device tree stuff and fetch data
-automatically if possible. What if I changed this to make them
-optional?  If they exist, we can use them, if they don't exist, we
-could read the clock rate.  Would that be acceptable?
+Thanks for this,
 
-adam
+Reviewed-by: Mark Fasheh <mark@fasheh.com>
+  --Mark
