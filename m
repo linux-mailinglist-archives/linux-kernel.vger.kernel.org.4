@@ -2,113 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7586E5DF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B656E5E0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbjDRJzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S231211AbjDRJzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbjDRJzF (ORCPT
+        with ESMTP id S231172AbjDRJzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:55:05 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499566195
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:54:51 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-504efe702d5so4401531a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:54:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681811690; x=1684403690;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2XjTw2b21Lrfk4Jj+V6+6PBPJM9Xvx/rp1PjUa4gW2g=;
-        b=PlTVbNDBEYUnR+2Y6PfJVtcYCczUn6Ca3dFuBncv4GXwgOmqtytA4fs28OTeWM4bsi
-         OS7QrnQH1b2vjIE72icuKzcpmJFOseNqLoSXZa12NOGqUkcrdFuaxFnFcg4Du1wpRfal
-         lca47bv8Mt7LBSSPs5Fr7c+RZ5PJx2XWoXdBVuIXQHWjPKRqm3z+OFgYuAlHm6PnJvlR
-         Y3lyID1XKdRBSd6vHlzn/ntqwltwmDwpMNdTt9OBbHVFz2PJIj+e3ZMtUs7wU1rOx2r0
-         XpB07nyyJfMShpJfpsx8Jh9VIi115BHRbvIg+Va21QjlNlkQBIS23un1c4Gj86aeqdf0
-         quMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681811690; x=1684403690;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2XjTw2b21Lrfk4Jj+V6+6PBPJM9Xvx/rp1PjUa4gW2g=;
-        b=fdKWN9RDGEHqGzzx3rrxp3rv1zYDFj7MDtQqMb93e751rHPvyITjUfoOEK1i+FemMX
-         8omCHVOGjH5wQvcNhaHJPxQuS70aASBw13vXXGBXSbsi13UcjJQp1PyTNjr9Ya6jSQvu
-         7EOdpDFhdVcsyKVfEUudGtR6F3RRpTX2wrsft0Vojb1aCGhPo7fRQ0ZoCBBCKphn7E/q
-         rTNB2ebZwl+AsNZ/v2hu8JLtYnXJJLwJq5I6Uk/9QAS0ggSY0/I2pJvlv46aaCwNFYWR
-         pJQ0Cea/Xpo272zgxgFPXrpkHNaOswhOTiP/Jg40hJHE/Gi9CTpn8vrTxAqs88++Bs9N
-         Bj/w==
-X-Gm-Message-State: AAQBX9fxCGMBIiT1wsmaGebNCVlnvy2EnWd8BlErJqc0xd6MHBKp9SsY
-        V3cYR6zcEgtGVRJO7EjUm0eM9Q==
-X-Google-Smtp-Source: AKy350ZoxJAY3osQymk/xjYIDkdSjS0BzSqPxS/Lm+86HDfHKVxW1WWwARUG2qSTrkpHqDsjf2Kytg==
-X-Received: by 2002:a05:6402:748:b0:506:ae87:a36a with SMTP id p8-20020a056402074800b00506ae87a36amr1867913edy.14.1681811690360;
-        Tue, 18 Apr 2023 02:54:50 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
-        by smtp.gmail.com with ESMTPSA id o4-20020a509b04000000b00504d04c939fsm7076578edi.59.2023.04.18.02.54.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 02:54:49 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Tue, 18 Apr 2023 05:55:38 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0B940C7;
+        Tue, 18 Apr 2023 02:55:06 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33I8lAFv028173;
+        Tue, 18 Apr 2023 09:54:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=9MNYTWJnVX4ToZwrdikCP8x2UjqgSoVQz3bfG1l0798=;
+ b=DvJWHfuo/X0ipclGHa1Mno5fXpqniawailplmc/tb1t3/+D9WXcuG/r+dc6PDd+AngRq
+ PbCPTsSrJZgrxjt4u0oH0sOneCQPLWLSX59IhptKYfEblZEBBeo8aB28JZcQvpSn6wsZ
+ XtuBEH3MbeHsxLyc6i1ZB9IAJACue5RsXIiHuTXNCAfxMvpiOSpG/upT+6Ow/9WKuqod
+ ozt/OhEv8Nyau5p3ywJnkHdJ36YH+UTRnaPHiH7HO9wJ5v8iwU3hgOwQ5gDxrZQ3vzzv
+ PIC05EkGRelzNazWRG42LS4euaMBb4oq3VmvZZ/3nHB4yVoNJQMPdhLOWiIJMgDTQ3kI pw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1nk4gfnd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 09:54:52 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33I9sps0027999
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 09:54:51 GMT
+Received: from [10.218.19.109] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 18 Apr
+ 2023 02:54:44 -0700
+Message-ID: <12f13183-c381-25f7-459e-62e0c2b19498@quicinc.com>
+Date:   Tue, 18 Apr 2023 15:24:40 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 1/4] arm64: dts: qcom: sa8775p: pmic: remove the PON modes
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rao Mandadapu <quic_srivasam@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 0/7] soundwire: qcom: add support for SM8550 (Soundwire v2.0.0)
-Date:   Tue, 18 Apr 2023 11:54:40 +0200
-Message-Id: <20230418095447.577001-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Parikshit Pareek <quic_ppareek@quicinc.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230413131705.3073911-1-brgl@bgdev.pl>
+ <20230413131705.3073911-2-brgl@bgdev.pl>
+ <3e361a73-797f-41c7-1ead-ecafee3928e4@linaro.org>
+ <792e1f22-c3eb-80c7-0600-b478b3764f7c@quicinc.com>
+ <a17c21b7-9c0a-2458-735c-ac3b16ed337f@linaro.org>
+From:   Shazad Hussain <quic_shazhuss@quicinc.com>
+In-Reply-To: <a17c21b7-9c0a-2458-735c-ac3b16ed337f@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: OUOSSZ3POk8lnWGVILgZtZ22ahS1OCSE
+X-Proofpoint-GUID: OUOSSZ3POk8lnWGVILgZtZ22ahS1OCSE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-18_06,2023-04-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ adultscore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304180085
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-Changes since v2:
-1. Use uint16 for qcom,ports-sinterval.
-   DTS will be fixed in separate patchset.
-2. Add tags.
 
-Changes since v1:
-1. Patch 1: Increase maxItems to 16 for port-related properties.
-2. Re-order patch 1 and 2.
-3. Patch 3: Drop unneeded semicolon.
-4. Patch 5: Fix lang typo in subject.
+On 4/18/2023 3:13 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 18.04.2023 06:39, Shazad Hussain wrote:
+>>
+>>
+>> On 4/13/2023 9:42 PM, Krzysztof Kozlowski wrote:
+>>> On 13/04/2023 15:17, Bartosz Golaszewski wrote:
+>>>> From: Parikshit Pareek <quic_ppareek@quicinc.com>
+>>>>
+>>>> Remove the power on reasons with reboot from the pmm8654au_0_pon.
+>>>> Instead, the PoN reaons should be part of different sdam_0 mode, to
+>>>
+>>> typo: reasons
+>>>
+>>>> be interoduced.
+>>>
+>>> introduced
+>>>
+>>> Anyway it does not say why. Are these power reasons not correct?
+>>>
+>>
+>> Hi Krzysztof,
+>> Since sm8350 the PMIC PON peripheral was split into PON_HLOS and PON_PBS
+>> to avoid security concerns with HLOS APPS being able to trigger a PMIC
+>> WARM_RESET unilaterally. When the split occurred, the spare registers
+>> ended up in PON_PBS, not PON_HLOS. Thus at that time, we moved to using
+>> an SDAM register for Linux “reboot reason” configuration. And bootloader
+>> also SDAM register to get these reboot region data to get into
+>> bootloader/edl, so to have this working we need to use SDAM.
+>>
+> Does that imply all PMICs following the PMK8350 scheme (separate HLOS and
+> PBS) should direct reboot mode writes to SDAM?
+> 
+> Konrad
 
-Best regards,
-Krzysztof
+Yes, that's what the expectation is with bootloader using SDAM as well.
 
-Krzysztof Kozlowski (7):
-  dt-bindings: soundwire: qcom: add Qualcomm Soundwire v2.0.0
-  dt-bindings: soundwire: qcom: add 16-bit sample interval
-  soundwire: qcom: allow 16-bit sample interval for ports
-  soundwire: qcom: use consistently 'ctrl' as state variable name
-  soundwire: qcom: prepare for handling different register layouts
-  soundwire: qcom: add support for v2.0.0 controller
-  soundwire: qcom: use tabs for indentation in defines
+>>>>
+>>>> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+>>>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>>> ---
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>>
+>>
+>> -Shazad
 
- .../bindings/soundwire/qcom,soundwire.yaml    |  39 +-
- drivers/soundwire/qcom.c                      | 387 ++++++++++++------
- 2 files changed, 287 insertions(+), 139 deletions(-)
-
--- 
-2.34.1
-
+-Shazad
