@@ -2,127 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6796A6E6712
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA326E6718
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbjDROW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 10:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
+        id S230384AbjDROZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 10:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjDROW5 (ORCPT
+        with ESMTP id S230070AbjDROZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 10:22:57 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6847AA5E2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 07:22:31 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5050497df77so4244298a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 07:22:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681827749; x=1684419749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mr9HMDo/MJuNTypI5wjgUQXDgpx9NKUHRJlWMwJUMe0=;
-        b=MLJQYZpT1NO7iCJDWnA9xhAZ+xHe5Vpo0FCWFXyT9e/lUJmC6mLC6vgyGuOLi/mgLM
-         Bqrx1OLzSftCNclvNC94Dod0HcSWqS/f7p3ttWCYqwuFDnJmruDlNEkZrk07jbPTC/Kd
-         noCDHDv8KWaVJ9FoQoY08Psu6rfAZMPfDjvZY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681827749; x=1684419749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mr9HMDo/MJuNTypI5wjgUQXDgpx9NKUHRJlWMwJUMe0=;
-        b=TQrwr80tu+wBE7HXM2XnkDCT1l8U26ZZexsivXrjSJ1OIYarkgyeWazKEDhsncxdWP
-         fMrvqcY0qXyUJYuV/CoOAULOffKBnLyr/98ZPFgJtumMKZyDTtTUqp7daW8yZbGGsbHt
-         DcoBZ3gVpxqzG96AQtZ0IT+U+E1yfv+ExxGgANd9AGviHzYVLhaU6Wz2Jmz84zO+PipL
-         cO6+iLLMWIvxqYWEYTalBkmBF02U18qBAwRdBZ9LZpvCOXI9NlPD26Jke6+nKTmyNzaY
-         koOHB66ad3eZAV9/DwG7ldokrfdqrnAlpBUHk5X6TMpK4ixtR6S4QKGt83G33gDCmsvy
-         jBHw==
-X-Gm-Message-State: AAQBX9egYPtgimsPaYDlnHpxISB9n9PsXfqK09nHYJxpDDwf3KN3XiOO
-        50C6BhPzU2fVlQyFpK9PqYVtB3ZctFeJVg+ovZey+A==
-X-Google-Smtp-Source: AKy350b0d2pT3khsCI4KBUJw5RT8tDGKZ0KpLZ71M+6atCN+70R/Yc/s7GtRQ9LLOhNr+SjzvIlKxQ==
-X-Received: by 2002:aa7:de10:0:b0:506:b24c:284f with SMTP id h16-20020aa7de10000000b00506b24c284fmr2472275edv.26.1681827748995;
-        Tue, 18 Apr 2023 07:22:28 -0700 (PDT)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id k21-20020a056402049500b00502b0b0d75csm7064021edv.46.2023.04.18.07.22.27
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 07:22:27 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-3f09b9ac51dso69178915e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 07:22:27 -0700 (PDT)
-X-Received: by 2002:adf:e195:0:b0:2d7:9771:fc4b with SMTP id
- az21-20020adfe195000000b002d79771fc4bmr620802wrb.5.1681827746736; Tue, 18 Apr
- 2023 07:22:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230418124953.3170028-1-fshao@chromium.org> <20230418124953.3170028-3-fshao@chromium.org>
-In-Reply-To: <20230418124953.3170028-3-fshao@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 18 Apr 2023 07:22:14 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WVH3H9R=dnrOkiCEa-+izcSKjfdXbRDP8bc4xo_AhMnw@mail.gmail.com>
-Message-ID: <CAD=FV=WVH3H9R=dnrOkiCEa-+izcSKjfdXbRDP8bc4xo_AhMnw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] HID: i2c-hid: goodix: Add support for
- powered-in-suspend property
-To:     Fei Shao <fshao@chromium.org>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Tue, 18 Apr 2023 10:25:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C8B183;
+        Tue, 18 Apr 2023 07:25:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BF1162E36;
+        Tue, 18 Apr 2023 14:25:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 088A1C433D2;
+        Tue, 18 Apr 2023 14:25:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681827905;
+        bh=JjvHV44AW8fU6gt5sWWn5MYeufuxDsNYjEhFnzDlPy0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sI9M3xspqi+Y/NNWYm/NytNctShNlUXJcV9Ix2jq08NRcH4RgkWwtnwxY5PJcEBTQ
+         STA5GupBEkw08+iWQfnuY+Wp0f2XRCjMkMdcAwEtFVu9SHwkP4s0CCcbuihldOPhwH
+         i/DWOmPLpXc3JmnzRqCvGnpZF7k8KwXQHBqHEG6Um801Z4J3yjpo2VffU8sh9+nW7O
+         mrzw20v+GMMCjsGBxhFMhD3wuMFzfDTMPFepKT6Ud7/zZsMLFmXY2Y/T6HTuoKYx2A
+         bEXCMUK1H9nXtrQ4Yy47rEg6jYvjHxvLR7gr5aakVih1LwgNWNbzQQuG6QMwoI59ST
+         eOzRFm6m9XpdA==
+Date:   Tue, 18 Apr 2023 16:25:02 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Kitt <steve@sk2.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [PATCH v10 1/8] i2c: add I2C Address Translator (ATR) support
+Message-ID: <ZD6oPq+Na/80E7Mv@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>, Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>
+References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
+ <20230222132907.594690-2-tomi.valkeinen@ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Q5HMx4PIUFk/wOvT"
+Content-Disposition: inline
+In-Reply-To: <20230222132907.594690-2-tomi.valkeinen@ideasonboard.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Tue, Apr 18, 2023 at 5:51=E2=80=AFAM Fei Shao <fshao@chromium.org> wrote=
-:
->
-> In the beginning, commit 18eeef46d359 ("HID: i2c-hid: goodix: Tie the
-> reset line to true state of the regulator") introduced a change to tie
-> the reset line of the Goodix touchscreen to the state of the regulator
-> to fix a power leakage issue in suspend.
->
-> After some time, the change was deemed unnecessary and was reverted in
-> commit 557e05fa9fdd ("HID: i2c-hid: goodix: Stop tying the reset line to
-> the regulator") due to difficulties in managing regulator notifiers for
-> designs like Evoker, which provides a second power rail to touchscreen.
->
-> However, the revert caused a power regression on another Chromebook
-> device Steelix in the field, which has a dedicated always-on regulator
-> for touchscreen and was covered by the workaround in the first commit.
->
-> To address both cases, this patch adds the support for the
-> `powered-in-suspend` property in the driver that allows the driver to
-> determine whether the touchscreen is still powered in suspend, and
-> handle the reset GPIO accordingly as below:
-> - When set to true, the driver does not assert the reset GPIO in power
->   down. To ensure a clean start and the consistent behavior, it does the
->   assertion in power up instead.
->   This is for designs with a dedicated always-on regulator.
-> - When set to false, the driver uses the original control flow and
->   asserts GPIO and disable regulators normally.
->   This is for the two-regulator and shared-regulator designs.
->
-> Signed-off-by: Fei Shao <fshao@chromium.org>
->
-> ---
->
->  drivers/hid/i2c-hid/i2c-hid-of-goodix.c | 46 +++++++++++++++++++++----
->  1 file changed, 39 insertions(+), 7 deletions(-)
+--Q5HMx4PIUFk/wOvT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I privately reviewed earlier versions of this patch, so it's
-unsurprising that I have no comments. Assuming that the DT folks don't
-have any objections to the bindings change, this LGTM.
+Hi Tomi, hi Luca,
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+as mentioned on IRC already, good move to use bus notifiers here and
+drop the generic attach/detach callbacks. Those were a show stopper for
+me. This version is nicely self contained. I like that!
+
+> diff --git a/Documentation/i2c/index.rst b/Documentation/i2c/index.rst
+> index 6270f1fd7d4e..aaf33d1315f4 100644
+> --- a/Documentation/i2c/index.rst
+> +++ b/Documentation/i2c/index.rst
+> @@ -16,6 +16,7 @@ Introduction
+>     instantiating-devices
+>     busses/index
+>     i2c-topology
+> +   muxes/i2c-atr
+
+The muxes-dir is only for the description of mux drivers. I'd prefer to
+have this document not in the sub-dir. Also, renaming the document to
+"address-translations.rst" might be worth discussing.
+
+>     muxes/i2c-mux-gpio
+>     i2c-sysfs
+> =20
+> diff --git a/Documentation/i2c/muxes/i2c-atr.rst b/Documentation/i2c/muxe=
+s/i2c-atr.rst
+> new file mode 100644
+> index 000000000000..da226fd4de63
+> --- /dev/null
+> +++ b/Documentation/i2c/muxes/i2c-atr.rst
+> @@ -0,0 +1,97 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Kernel driver i2c-atr
+
+Maybe "I2C address translations"?
+
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Author: Luca Ceresoli <luca@lucaceresoli.net>
+> +Author: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> +
+> +Description
+> +-----------
+> +
+> +An I2C Address Translator (ATR) is a device with an I2C slave parent
+> +("upstream") port and N I2C master child ("downstream") ports, and
+> +forwards transactions from upstream to the appropriate downstream port
+> +with a modified slave address. The address used on the parent bus is
+> +called the "alias" and is (potentially) different from the physical
+> +slave address of the child bus. Address translation is done by the
+> +hardware.
+> +
+> +An ATR looks similar to an i2c-mux except:
+> + - the address on the parent and child busses can be different
+> + - there is normally no need to select the child port; the alias used on=
+ the
+> +   parent bus implies it
+> +
+> +The ATR functionality can be provided by a chip with many other
+> +features. This file provides a helper to implement an ATR within your
+
+I'd like to get rid of all "your". Maybe "client driver" here?
+
+> +driver.
+
+=2E..
+
+> +Usage:
+> +
+> + 1. In your driver (typically in the probe function) add an ATR by
+> +    calling i2c_atr_new() passing your attach/detach callbacks
+> + 2. When the attach callback is called pick an appropriate alias,
+> +    configure it in your chip and return the chosen alias in the
+> +    alias_id parameter
+> + 3. When the detach callback is called, deconfigure the alias from
+> +    your chip and put it back in the pool for later usage
+
+Remove all "your", please. Some can simply go, I'd say. The others
+replaced by "the".
+
+> +
+> +I2C ATR functions and data structures
+> +-------------------------------------
+> +
+
+=2E..
+
+> +/**
+> + * struct i2c_atr_cli2alias_pair - Holds the alias assigned to a client.
+
+I stumbled over this one because "cli" is "command line interface" for
+me... The long version isn't much longer: 'i2c_atr_client_alias_pair'
+But I'd be also fine with: 'i2c_atr_alias_pair'
+
+> + * @node:   List node
+> + * @client: Pointer to the client on the child bus
+> + * @alias:  I2C alias address assigned by the driver.
+> + *          This is the address that will be used to issue I2C transacti=
+ons
+> + *          on the parent (physical) bus.
+> + */
+
+> +EXPORT_SYMBOL_NS_GPL(i2c_atr_add_adapter, I2C_ATR);
+
+EXPORT_SYMBOL_GPL, please. We can then later think about using an I2C
+namespace for all I2C symbols.
+
+Pretty high level comments only so far. I'll keep at it this week and
+might come back with more detailed comments. But in general, this looks
+quite good to go. Moving the alias pool handling to here is the biggest
+question I have.
+
+Thank you for your patience!
+
+   Wolfram
+
+
+--Q5HMx4PIUFk/wOvT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ+qDoACgkQFA3kzBSg
+KbaEqA/7BSdyL0W6zqSIUkHTHRbY6TFIBZ5YQuYxvJ4O2GbF+HxzKksrNCZ8mbXM
+lMf8Na5VzuG6yeAbip6leNZZRBc4yI7B1A8d1BQ7sKDcHjvaN+OU4kPjj4UeFK7V
+fGJ1zGDS/2klcQnPrompqPujAMgyzSQO4P5MN90mc7IxWiu4z83+6DYn6EYTyt/U
+nviOZY4n9S38V0+Zerz8tksoDtJZe/YH7mH0Q8SQPS4mkVt0ii++O2ifZTabQvpy
+r0129J3uQPM4CrjTDJoNQ0YT6S/HbcJcpR/iIS/KACk/oWedTPD7eEY101kks/AS
+AbT7/qhUFNV15B97iDu30GEEXsccJVmoekE/5Sdx+H/nKmS1hT19nIVbK3htshh+
+PoaJQUogSfEXlx/ethvwSbiVXYkBYsj93M+6vddPY2cK7rCUAF6ZlkEJV5un+QM0
+/KBrijD8bCTmg0o5sSacDkbC0KzAmDdL+KZe1edXgcf8v8U1+JDP+j59CeANUoeq
+oGuv2C8nIObFwLd8mFRR9EqRTSbCAWrTBUnQk0La8+36XLBluy4vIvdLrXoDcHXh
+ql0EPjpErEH6nCyuYbuyX0Bzi8JoDspmq83UyEnxni73oooKvqtJ0gQz1gj8pQli
+Zw3zYz9Gtb919Ts97E7sSH9ZVzJ1tcdsQ8bkKRyINwrMRAXdn+M=
+=Rt6W
+-----END PGP SIGNATURE-----
+
+--Q5HMx4PIUFk/wOvT--
