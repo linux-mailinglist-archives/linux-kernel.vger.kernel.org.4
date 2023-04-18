@@ -2,145 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CDAA6E655B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF83D6E656F
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjDRNGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 09:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
+        id S232048AbjDRNHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 09:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232203AbjDRNGX (ORCPT
+        with ESMTP id S231713AbjDRNHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 09:06:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5556516B12;
-        Tue, 18 Apr 2023 06:06:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2BFE634A4;
-        Tue, 18 Apr 2023 13:06:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 760E3C433D2;
-        Tue, 18 Apr 2023 13:06:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681823178;
-        bh=irU7S47lLrx04AoHdnKG5DIJZ0xn/QZ8aCMYccc98MM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AOv1SRUHrnAZXksfOm/j0cs0clkFI1rKrYy6UymCUz9X7HKIdf+DTHJVWLLP29pBE
-         +IX11MJuabp4XTbz87tu1KLgAbN7ASPxAAzv1UbWmqpjz/zMY7hSIgnKFL2hcwYeSk
-         KYQEor5BaydxZft/wXBosPeOWA9DLGyQRBFDGGP+1MaLS9zy+dUd3NHZ7FZF1YTPBe
-         VkiZsPZYMi9etlMIyxhc2tZiIOdo92OXgB5Tc1cR8jm3+voIoT1Wi/kwDZ5XZJSx0n
-         ipuytYpebDnd5lg4JBHNhN3saBieIlu4ryX/ULNXp2lf6nZXKjQmUQSuBEqz24yHwt
-         d2GsMz7SLp0EA==
-Date:   Tue, 18 Apr 2023 15:06:10 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Rob Herring <robh@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v10 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link
- III Deserializer
-Message-ID: <ZD6VwpRya6SGBAt5@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>, Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Rob Herring <robh@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
- <20230222132907.594690-6-tomi.valkeinen@ideasonboard.com>
+        Tue, 18 Apr 2023 09:07:47 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FD61A2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 06:07:46 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-329627dabfbso32548725ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 06:07:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681823266; x=1684415266;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cXVmjV8MVgirfDn+CQoxVOKGwz3EOWGBSd7QdBjs3YU=;
+        b=FEhqIjfUFBdpSfQagkw9jonNAUAscLxrsIh1vsdZq1hGcKFvhmQ4TLtVZIvuD3ZYv9
+         /C8kcv4CIsY2w5UaWTjdhTDV+zNozyaypkg+d7+7uMrpetboBse7uVuWCaROwdkzspPV
+         2IWdEubu+rBVJuEGM1mIksIZwhi+mm8KM6yeenH98npp/oZQUeSdw8rbeyFyOe/oUbM0
+         XQoJybct5Ml8eLgf4JsmU0wbSs5FhU0ivKaAnx6QA1g0Jm0o+yjf7poWewPZMq3T4AG5
+         EN+69mfKvvmpZTfXeh4F2eCd/HdLgfGBsKO11F67NyazW3Evlxc5ut1mcYHqdUwjsC5u
+         EyTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681823266; x=1684415266;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cXVmjV8MVgirfDn+CQoxVOKGwz3EOWGBSd7QdBjs3YU=;
+        b=XFVKH+B5tbnoHrfFQqwvC96sQpa8UPJOEpMkhsHDvZw0ZxNfsRrbvdRr4BqRJDMD85
+         HgprKgSI5K93hcipV0HDNsvW5Z03rqg373QOCIm8n3FWYlr5+TFmXZ1XsZClO5G6WwJR
+         IqiWVJSBPcSlUhFJQAArB36N+CIQ8b/2qk033QfmuY+a1doT6dGq081nNgnyGBGDwzvG
+         7eKnkg3xGTnmHCz7lgyF5QyxBu2SVN5laBFLAoGjrBMAhim3fbNFhJFM6gw3TJKG3f4J
+         dWMKfJZ2eZRRxdzaBgFHbwHm7r2VTIK6atP5I8ujgusFrk6JLX09uFREnMEOV6/OIpEe
+         BHrg==
+X-Gm-Message-State: AAQBX9ekr58eWCObgtBNY87pOUSukjqAg0SMMGpzc3yvxfMi0b7GsJuq
+        8TqO9lTvARjM4VH5ChiIrUQCo6j16lw4vAgOZxyw+w==
+X-Google-Smtp-Source: AKy350YY29Hcz4bDHqyw+MtMx0elQI8dDkrsoJtgWQJYOE4mHHXtRou3LfMvdZJd7dEUdkrM0A/U6XT+VqPnNMB0tjQ=
+X-Received: by 2002:a5e:8607:0:b0:753:989:ebb5 with SMTP id
+ z7-20020a5e8607000000b007530989ebb5mr1792769ioj.7.1681823265971; Tue, 18 Apr
+ 2023 06:07:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mi+Z0PG+MUqRZwKk"
-Content-Disposition: inline
-In-Reply-To: <20230222132907.594690-6-tomi.valkeinen@ideasonboard.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230418122350.1646391-1-arnd@kernel.org>
+In-Reply-To: <20230418122350.1646391-1-arnd@kernel.org>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 18 Apr 2023 15:07:09 +0200
+Message-ID: <CANpmjNOSi32aN54_=WH1xb4jqzso+-riMomLxoqebO=AdbpHVA@mail.gmail.com>
+Subject: Re: [PATCH] [v2] kasan: remove hwasan-kernel-mem-intrinsic-prefix=1
+ for clang-14
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        kasan-dev@googlegroups.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 18 Apr 2023 at 14:24, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Some unknown -mllvm options (i.e. those starting with the letter "h")
+> don't cause an error to be returned by clang, so the cc-option helper
+> adds the unknown hwasan-kernel-mem-intrinsic-prefix=1 flag to CFLAGS
+> with compilers that are new enough for hwasan but too old for this option.
+>
+> This causes a rather unreadable build failure:
+>
+> fixdep: error opening file: scripts/mod/.empty.o.d: No such file or directory
+> make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:252: scripts/mod/empty.o] Error 2
+> fixdep: error opening file: scripts/mod/.devicetable-offsets.s.d: No such file or directory
+> make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 2
+>
+> Add a version check to only allow this option with clang-15, gcc-13
+> or later versions.
+>
+> Fixes: 51287dcb00cc ("kasan: emit different calls for instrumentable memintrinsics")
+> Link: https://lore.kernel.org/all/CANpmjNMwYosrvqh4ogDO8rgn+SeDHM2b-shD21wTypm_6MMe=g@mail.gmail.com/
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
---mi+Z0PG+MUqRZwKk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reviewed-by: Marco Elver <elver@google.com>
 
+Thanks!
 
-> +  i2c-alias-pool:
-> +    $ref: /schemas/types.yaml#/definitions/uint16-array
-> +    description:
-> +      I2C alias pool is a pool of I2C addresses on the main I2C bus that can be
-> +      used to access the remote peripherals on the serializer's I2C bus. The
-> +      addresses must be available, not used by any other peripheral. Each
-> +      remote peripheral is assigned an alias from the pool, and transactions to
-> +      that address will be forwarded to the remote peripheral, with the address
-> +      translated to the remote peripheral's real address. This property is not
-> +      needed if there are no I2C addressable remote peripherals.
-
-After some initial discussion with Tomi on IRC, this question is
-probably more for Luca:
-
-Why is "i2c-alias-pool" in the drivers binding and not a regular i2c
-binding? Same question for the implementation of the alias-pool
-handling. Shouldn't this be in the i2c-atr library? I'd think managing
-the list of aliases would look all the same in the drivers otherwise?
-
-
---mi+Z0PG+MUqRZwKk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ+lb4ACgkQFA3kzBSg
-KbYYSA/9EHTjpfBICYkwQW1dIEF2SbICH4VCTgofpP1fIAbbZ0s6cCNmk/k2TYph
-+ZTjCmBLERErgJVS3LRX7oFokQHC98uDYswJ6U2SVv1Q/qT56/qNLVvsD2d4q4gl
-9V7gmoSWIKLzeEthKQYKj7MYdbfwulJfauhm9svSRN6S+6rS/H7jEtaZpYDd5I44
-y3zhfNQDul4ktn+n2isKVXqP5IRMgI5WsB5IgGVhH50jy78LqmKn3b1mn/ao1P00
-9uCup1vdzsJB0VC4NExNkzRRfYcKHhwMdbU+wAQ+1sUdiO695qKY21iAUuWZGak3
-m9bjWdYsOsmLmHtruRniY8srFgQSBH+3Z/o241+pHuFOO42vh/oWpFieRfPJG5vN
-n5pVhMU538L0yVBrovAgxVMklqfAlGGXB+Q0suhXd8yzOYcYu9zJjve1f/FxOlEI
-nP4vsM3pwQ+G6Is1sEKPe/WxD1W46La/9TVO9nKF61gdeVVNs+UczR60jEJUVgsz
-riKuF/rEDz/RqWEmQxO4phmki79l/nYLtNCUtRWvYhWOwl/HERr8ctdyPQyRmHqp
-7h5nR0/ragtc7rn4A8pmK0UuQM5gOuANwsz6J5BDSBU73BYhCh4nrAkfNMbIcEQ0
-FeoSXAepQjG5Iv3acvPaMdwqamyT83qP2dznc7fom2naH+wkud0=
-=Fqdo
------END PGP SIGNATURE-----
-
---mi+Z0PG+MUqRZwKk--
+> ---
+> v2: use one-line version check for both clang and gcc, clarify changelog text
+> ---
+>  scripts/Makefile.kasan | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
+> index c186110ffa20..390658a2d5b7 100644
+> --- a/scripts/Makefile.kasan
+> +++ b/scripts/Makefile.kasan
+> @@ -69,7 +69,9 @@ CFLAGS_KASAN := -fsanitize=kernel-hwaddress \
+>                 $(instrumentation_flags)
+>
+>  # Instrument memcpy/memset/memmove calls by using instrumented __hwasan_mem*().
+> +ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y)
+>  CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
+> +endif
+>
+>  endif # CONFIG_KASAN_SW_TAGS
+>
+> --
+> 2.39.2
+>
+>
