@@ -2,83 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5746E664C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2650E6E6650
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbjDRNrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 09:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S232427AbjDRNsv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 09:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232429AbjDRNrm (ORCPT
+        with ESMTP id S232140AbjDRNss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 09:47:42 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B2814462;
-        Tue, 18 Apr 2023 06:47:31 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 0296E49B;
-        Tue, 18 Apr 2023 13:47:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0296E49B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1681825650; bh=PT2NCMZmHfmFhFO7WyZGuotWhtVsbEgq9Kzj+l34a7M=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=qKmHPEkMmP0pBZDYzLk8DxuAtMJRzraMP4DqyUhUdaT6/RVJStVzZDawwe4MX/Nu1
-         S5edW14rv/szYB5dh02gjIgPXvYSgH2DREbewUipFAPlDBbx3f3H6+JUJGCAUYydeI
-         2sbUSQNLb6iZsC4hHH3fUMaV9RF9qgsT6RjcyQI036ZXmYvD0ElTbfJoJ/031GoFQa
-         NMi4dr7qeTtDNEYt4xVhnmvxmco0HrNtkmRMCDw3aMqUYsFvAyZCacn/aoFZzuNMbp
-         immz4RPN+fhTfvn+hX6X2Ft0IN1hVX7ZniZRGFymKJT7mqQNSjLi6Ep+eR45MS7BoX
-         qZ6NXu97r9h0A==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Yangtao Li <frank.li@vivo.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] docs: f2fs: specify extent cache for read explicitly
-In-Reply-To: <4517330a-00a3-220f-2fc5-a9ef4aba5ea8@gmail.com>
-References: <20230417044100.56409-1-frank.li@vivo.com>
- <4517330a-00a3-220f-2fc5-a9ef4aba5ea8@gmail.com>
-Date:   Tue, 18 Apr 2023 07:47:29 -0600
-Message-ID: <87354xe1zi.fsf@meer.lwn.net>
+        Tue, 18 Apr 2023 09:48:48 -0400
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9542D1387B;
+        Tue, 18 Apr 2023 06:48:18 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-94f59fbe2cbso39025166b.1;
+        Tue, 18 Apr 2023 06:48:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681825675; x=1684417675;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3uozf3W91u85ycR8eSvHXlO7LPB6dzE935AuEqaKzec=;
+        b=PvC06eTMtd+qlA84QurcYHy8XYPG+BDwQSmZCqkdEFPmM4mzWJRl5IHK2LmA+EOkWr
+         7hQ+L8vyG7qypUs7hGeNSPGKjEzHQnBXBj4506KwxVIRvYhUQtlNRECwLtZ7q2ecS3tp
+         YF11PtsWawcZTwetkCEsFWrHczyPwBGXZ82kNd9oGI53kl9wT3AP6zHXnJ4KYTereQsy
+         kc9B/Yj5HVb1jakvKQzy8E7SKBqhs/nl5JaQz5wgnZ27ZXmAwrQhXFbgi1IA3nsdGRbA
+         kFL3gW5GSpkC3PD1cJUE019Ite9b13E6k1WbEhUPuAOAq2fiK520q+k9WM/wfySQzDz0
+         BhTA==
+X-Gm-Message-State: AAQBX9cdtQTKgxoooq3DFfIPO4Rc8ptaqS0sGKE26+O1Rh2Dt1+mgkcm
+        Kg02g9fZdIC/pxN6hx81hkYwJYUryPCU4HfBql4=
+X-Google-Smtp-Source: AKy350ZtbzWtgHQ4XNaLLsN4MTaFSWJ9riU5l62WBvTtPTO6gk+oybu7omrK5r2ggg/9RcTGgaWMJ1TI0p+2ICubIK0=
+X-Received: by 2002:a17:906:3f49:b0:94e:63ae:5b9b with SMTP id
+ f9-20020a1709063f4900b0094e63ae5b9bmr12182147ejj.7.1681825675404; Tue, 18 Apr
+ 2023 06:47:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230413114647.3878792-1-daniel.lezcano@linaro.org>
+ <20230413114647.3878792-6-daniel.lezcano@linaro.org> <CAJZ5v0jqB18c1u-eqcEiXW+fOH=nX=Uu3xi5sp2F9udsFUrYew@mail.gmail.com>
+ <7fd7df2d-f473-c0fd-5c3c-40d0fb697db7@linaro.org>
+In-Reply-To: <7fd7df2d-f473-c0fd-5c3c-40d0fb697db7@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 18 Apr 2023 15:47:44 +0200
+Message-ID: <CAJZ5v0hkF37RL4fxqE7+iUw7gEtb+KMyDKBpjdO=DE72OSHFtg@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] thermal/drivers/acpi: Make cross dev link optional
+ by configuration
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Len Brown <lenb@kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bagas Sanjaya <bagasdotme@gmail.com> writes:
-
-> On 4/17/23 11:41, Yangtao Li wrote:
->> Let's descrbie it's read extent cache.
+On Tue, Apr 18, 2023 at 3:44 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> "Clarify the fact that extent_cache and noextent_cache toggle read
-> extent cache on or off."
-
-Please stop nit-picking patches.  This is good enough, though I might
-fix the "describe" typo on the way in.
-
->> -extent_cache		 Enable an extent cache based on rb-tree, it can cache
->> -			 as many as extent which map between contiguous logical
->> +extent_cache		 Enable a read extent cache based on rb-tree, it can cache
-> "... . It can cache ..."
-
-Bagas.  Enough.  Seriously.
-
->>  noinline_data		 Disable the inline data feature, inline data feature is
->>  			 enabled by default.
+> On 18/04/2023 15:38, Rafael J. Wysocki wrote:
+> > On Thu, Apr 13, 2023 at 1:47 PM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> The ACPI thermal driver creates a link in the thermal zone device
+> >> sysfs directory pointing to the device sysfs directory. At the same
+> >> time, it creates a back pointer link from the device to the thermal
+> >> zone device sysfs directory.
+> >>
+> >>  From a generic perspective, having a device pointer in the sysfs
+> >> thermal zone directory may make sense. But the opposite is not true as
+> >> the same driver can be related to multiple thermal zones.
+> >>
+> >> The usage of these information is very specific to ACPI and it is
+> >> questionable if they are really needed.
+> >>
+> >> Let's make the code optional and disable it by default. If it hurts,
+> >> we will revert this change.
+> >>
+> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> >> ---
+> >>   drivers/acpi/Kconfig   | 13 +++++++++
+> >>   drivers/acpi/thermal.c | 62 ++++++++++++++++++++++++++++--------------
+> >>   2 files changed, 55 insertions(+), 20 deletions(-)
+> >>
+> >> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> >> index ccbeab9500ec..7df4e18f06ef 100644
+> >> --- a/drivers/acpi/Kconfig
+> >> +++ b/drivers/acpi/Kconfig
+> >> @@ -336,6 +336,19 @@ config ACPI_THERMAL
+> >>            To compile this driver as a module, choose M here:
+> >>            the module will be called thermal.
+> >>
+> >> +config ACPI_THERMAL_SYSFS_ADDON
+> >> +       bool "Enable thermal sysfs addon"
+> >> +       depends on ACPI_THERMAL
+> >> +       def_bool n
+> >> +       help
+> >> +        Enable sysfs extra information added in the thermal zone and
+> >> +        the driver specific sysfs directories. That could be a link
+> >> +        to the associated thermal zone as well as a link pointing to
+> >> +        the device from the thermal zone. By default those are
+> >> +        disabled and are candidate for removal, if you need these
+> >> +        information anyway, enable the option or upgrade the
+> >> +        userspace program using them.
+> >> +
+> >
+> > I don't think that the Kconfig option is appropriate and the help text
+> > above isn't really helpful.
 >
-> "Disable inline data feature, for which the feature is enabled by
-> default." (submit as separate patch).
+> I'm sorry, I'm missing something. Don't we want to make these sysfs
+> extra information optional and disable them by default ?
 
-And please stop trying to make additional work for others.  If you want
-to improve something, submit a patch yourself.
-
-jon
+No, I mean no Kconfig option at all for this one at least for now.
