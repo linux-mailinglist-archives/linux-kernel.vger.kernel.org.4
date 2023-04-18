@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3586E66CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 543F86E66D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbjDROMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 10:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
+        id S232152AbjDROMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 10:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231975AbjDROMU (ORCPT
+        with ESMTP id S232254AbjDROMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 10:12:20 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002BD14F62;
-        Tue, 18 Apr 2023 07:12:11 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pom3u-0003l7-Rd; Tue, 18 Apr 2023 16:12:02 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Johan Jonker <jbx6244@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sugar Zhang <sugar.zhang@rock-chips.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH 3/3] arm64: dts: rockchip: Add rk3588 timer
-Date:   Tue, 18 Apr 2023 16:12:01 +0200
-Message-ID: <2828868.BjyWNHgNrj@diego>
-In-Reply-To: <e2e59d5d-89cb-ba82-f0fc-ecddb9bdfc2a@collabora.com>
-References: <20230418095344.274025-1-cristian.ciocaltea@collabora.com>
- <a8a9e82b-996e-2b0d-4e3b-9ceda0ab81e4@gmail.com>
- <e2e59d5d-89cb-ba82-f0fc-ecddb9bdfc2a@collabora.com>
+        Tue, 18 Apr 2023 10:12:30 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 372BD146E7;
+        Tue, 18 Apr 2023 07:12:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 468C12F4;
+        Tue, 18 Apr 2023 07:13:02 -0700 (PDT)
+Received: from e127643.broadband (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E7B9B3F587;
+        Tue, 18 Apr 2023 07:12:15 -0700 (PDT)
+From:   James Clark <james.clark@arm.com>
+To:     linux-perf-users@vger.kernel.org, acme@kernel.org
+Cc:     James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] perf: cs-etm: Fix segfault in dso lookup
+Date:   Tue, 18 Apr 2023 15:12:03 +0100
+Message-Id: <20230418141203.673465-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,70 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, 18. April 2023, 13:53:23 CEST schrieb Cristian Ciocaltea:
-> 
-> On 4/18/23 14:29, Johan Jonker wrote:
-> > 
-> > 
-> > On 4/18/23 11:53, Cristian Ciocaltea wrote:
-> >> Add DT node for Rockchip RK3588/RK3588S SoC timer.
-> >>
-> >> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-> >> ---
-> >>  arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 8 ++++++++
-> >>  1 file changed, 8 insertions(+)
-> >>
-> >> diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-> >> index 657c019d27fa..acd89a55374a 100644
-> >> --- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-> >> +++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-> >> @@ -1400,6 +1400,14 @@ i2c5: i2c@fead0000 {
-> >>  		status = "disabled";
-> >>  	};
-> >>  
-> > 
-> >> +	rktimer: timer@feae0000 {
-> > 
-> > There are multiple timers.
-> > Use a label in line with the TRM.
-> > Maybe change your label to "timer0" in that trend?
-> 
-> Sure, will use "timer0".
-> 
-> >> +		compatible = "rockchip,rk3588-timer", "rockchip,rk3288-timer";
-> >> +		reg = <0x0 0xfeae0000 0x0 0x20>;
-> > 
-> >> +		clocks = <&cru PCLK_BUSTIMER0>, <&cru CLK_BUSTIMER0>;
-> >> +		clock-names = "pclk", "timer";
-> >> +		interrupts = <GIC_SPI 289 IRQ_TYPE_LEVEL_HIGH 0>;
-> > 
-> > Heiko's sort rules:
-> > 
-> > compatible
-> > reg
-> > interrupts
-> > [alphabetical]
-> > status [if needed]
-> 
-> Thanks for pointing this out! The sort rule was not obvious as there are
-> many other nodes that don't conform.
+map__dso() is called before thread__find_map() which always results in a
+null pointer dereference. Fix it by finding first, then checking if it
+exists.
 
-hmm, that is probably an oversight then :-) . Though looking through
-rk3588s.dtsi and rk3588.dtsi, it looks like most peripherals follow that
-sorting quite nicely.
+Fixes: 63df0e4bc368 ("perf map: Add accessor for dso")
+Signed-off-by: James Clark <james.clark@arm.com>
+---
+ tools/perf/util/cs-etm.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-But there is also a bit of leeway ... aka there can be an argument made
-that assigned-clocks might want to live near clocks or regulator-properties
-could be sorted somewhat differently.
-
-So general ideal is alphabetically for the random properties to give some
-guidance on sorting.
-
-And compatible, regs, interrupts at the top + status at the bottom makes
-it way easier to establish a reading pattern, when looking for something
-in the file :-) .
-
-
-Heiko
-
+diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+index 103865968700..8dd81ddd9e4e 100644
+--- a/tools/perf/util/cs-etm.c
++++ b/tools/perf/util/cs-etm.c
+@@ -885,9 +885,11 @@ static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
+ 		thread = etmq->etm->unknown_thread;
+ 	}
+ 
+-	dso = map__dso(al.map);
++	if (!thread__find_map(thread, cpumode, address, &al))
++		return 0;
+ 
+-	if (!thread__find_map(thread, cpumode, address, &al) || !dso)
++	dso = map__dso(al.map);
++	if (!dso)
+ 		return 0;
+ 
+ 	if (dso->data.status == DSO_DATA_STATUS_ERROR &&
+-- 
+2.34.1
 
