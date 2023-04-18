@@ -2,456 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B266E5784
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B946E6E578B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 04:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbjDRCcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 22:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S230347AbjDRCh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 22:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjDRCcp (ORCPT
+        with ESMTP id S229852AbjDRChx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 22:32:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E131FD4
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 19:32:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 438FA62C4B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 02:32:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F41B2C433D2;
-        Tue, 18 Apr 2023 02:32:39 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Min Zhou <zhoumin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH] LoongArch: crypto: Add crc32 and crc32c hw acceleration
-Date:   Tue, 18 Apr 2023 10:32:13 +0800
-Message-Id: <20230418023213.1995119-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
+        Mon, 17 Apr 2023 22:37:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C5F40D2;
+        Mon, 17 Apr 2023 19:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681785472; x=1713321472;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=XkS8Nl+S/BNTsu3WEeWUkENgPerzyGwAFgzfit6rtkw=;
+  b=NrBZdEEl2/dsBT8lmlYOLeDJtuY2+/eQFZV/IY13CmLBGei9eZ9Yw59L
+   NwAIK+At2Tj4fulNvT32doMjOJnBiNPuG8afvSimVfFTyYIIJ8fcU4ZOI
+   aNWontKFvXw/JZkJsJ5nn3skLlMms4b3O/woWbRS9GIYC387KMduVZ9V8
+   e/+LtlQTJhS8ThwAtMt7OzsZAV+MT8k9jDarDZqjReEHFDm65mjKJYp7g
+   p2cLlh1oa58biUO7xSZg4X2biPHl8tsfpaGig43RorN2jJ9dtRwzcejkT
+   BqtFSMbZYLtWGHhcZUk/KKGiCccqiT32HgaFrLXWDoVib2y5vjT9qzs1x
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="343809856"
+X-IronPort-AV: E=Sophos;i="5.99,205,1677571200"; 
+   d="scan'208";a="343809856"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 19:37:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="668319851"
+X-IronPort-AV: E=Sophos;i="5.99,205,1677571200"; 
+   d="scan'208";a="668319851"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga006.jf.intel.com with ESMTP; 17 Apr 2023 19:37:51 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 17 Apr 2023 19:37:51 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 17 Apr 2023 19:37:51 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Mon, 17 Apr 2023 19:37:51 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Mon, 17 Apr 2023 19:37:50 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fksfNOl5xPOcC6knlTxYQqTRWXW9zsTNHeoUx6kutOHnHe+6entL6vR5OeWKriYEMv/tGgFbICrUPw9CyALEgkv7TjqgqofqoPtmPyuqkEHmiEwu2Zb0Zbl4VLKa1LhiWkfFWiIchLKEIyAnC0p2kq+EX4imAkUFC06c6SYzTnB81FY7HzNfINbePv7FGCWvPyf/jE+imFNesqOJdOj7DwCHVjDaThydBV2hKvIUSCfWG3agS/ZGoVJrw2FNL++FkHih/LVgD92iqHFo4G0KCjYBxobQHOfAehOBseoa69OFAV0embD8tkR2EAQp/eZ1FVi7o5lePhtneV0Ik9ODyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zib61m6NcjiPEa1wBCn7AMlO/ibQmmwuFVfJvlYsUig=;
+ b=oR+IHA/omLv40AgbUvVm6MK0NkH+t6CDpfpYJxOeFIVSd1jC9QxfXkegj/pFuZiE5+vzXdgBj6zUHPzhei5fNktsWkDJbhfmYUuylXLfAQ9Sn6XcUZVz+Efp2cle9eV7Yuz0XvyoBazMuqJu1fa4JRkCKRn4ih06cWA+CE8spAaaUSv6N7CWaOkoPQ0mgom2lSsq7mWpdVZwr1z6xjviM+NnCy+GV2aYCxQfo0kcfwbE8hSZL7nDJHxwx4B/g82RNtGWgShjF650pT07Dt4p4Blq00cjeRU4m9HDPiD8fTZdd13s4fR72VVjnjBOFBlHyondntSZTiKJUtSysWhznA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by SJ0PR11MB4800.namprd11.prod.outlook.com (2603:10b6:a03:2af::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
+ 2023 02:37:49 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::ffa1:410b:20b3:6233]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::ffa1:410b:20b3:6233%6]) with mapi id 15.20.6298.045; Tue, 18 Apr 2023
+ 02:37:48 +0000
+Date:   Mon, 17 Apr 2023 19:37:45 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
+        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
+        <dave.jiang@intel.com>, <Jonathan.Cameron@huawei.com>,
+        <linux-cxl@vger.kernel.org>
+CC:     <terry.bowman@amd.com>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-pci@vger.kernel.org>
+Subject: RE: [PATCH v3 6/6] PCI/AER: Unmask RCEC internal errors to enable
+ RCH downstream port error handling
+Message-ID: <643e0279392f_1b66294d7@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230411180302.2678736-1-terry.bowman@amd.com>
+ <20230411180302.2678736-7-terry.bowman@amd.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230411180302.2678736-7-terry.bowman@amd.com>
+X-ClientProxiedBy: BYAPR01CA0054.prod.exchangelabs.com (2603:10b6:a03:94::31)
+ To PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|SJ0PR11MB4800:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4f0e0ad3-0252-46a8-56d7-08db3fb5e5ad
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8UhnwgHk29V5h49h2hG3l9dCHIVl8Jfc3uo/QvrLvHF6Tjl2z1SfzCHjFwyl6xNb/ScJ61jR9qmHPF9WmJu+D/F2tGvLRi6Yi2HWvCMO8I8mca2sSo9sgyfvXUe2uX++N5boTV5NqVM3mh1RLV22nleCPTX30Lr8ldGssfPZsyG/WqfFbGdPe084GSUkTSqtIunQBtxcxI2q26l0SycqkLVX+T1nHeZSiothjWv+bXExhWdhmvMrk7XGNYZZKCY3TO1S2V9wYYaihv3YwytFjaX2YHs5F1SAaZLnw08rbWEM0ushjv6hi86HFmMSmefHmizl3Ad6GuHOhDbzuwQE3L8/FahiFwjwvLImpF/tvY+FJdM0BY659M50HG6W7nab+OooubPtAU9iM3mu2COkW0c2DNRLBBDYwscCMDWRq1FVTiwGJ2xaKrv1hF01KpZCcSlFjM5mCDk6ZByXvD4B8aGHMMDn0LmCO2OVIHLOB1rUcQ7yGuo3p99MBXCpFORLrtXRYVFyigI1l/HW5nrckjdNzpODs90k0pGW/wT1bUI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(376002)(39860400002)(136003)(346002)(451199021)(54906003)(6666004)(478600001)(6486002)(83380400001)(82960400001)(316002)(41300700001)(4326008)(66556008)(966005)(186003)(9686003)(6506007)(26005)(6512007)(66476007)(66946007)(5660300002)(7416002)(2906002)(8936002)(38100700002)(8676002)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Qh28q8YCCzItHetswUw/pSSsb18pdqTDGSiCU8zIAvDGpEbHB3aGN1y0IQQc?=
+ =?us-ascii?Q?KWyAch078RDREIb6Iw5GtRua7NoSNF4QwCF5d35KTMsi7umw09DDa4lHZ/yN?=
+ =?us-ascii?Q?C9rV/x8G0gZMobKOBuBi7JA9PGF1QafS+qz5iU3gUXlV4lvMyhP6bCpf/I9S?=
+ =?us-ascii?Q?VOrBJ8KxeyVwVYtqtTDmygh5gUjJmJR9YXzIQUwVZ/Ekx3Ekqx/EyX0eaBsI?=
+ =?us-ascii?Q?7EK2s1/d2KU5fcHFrvxBvXvOpyhvwsbDDtlp7UrVWhL+z8nhIlA9ZoD/ajtB?=
+ =?us-ascii?Q?T9FvfVJKJ7/cPOM9eQex30caLdHOHBArA12XFucRcwcDAfR9c0/lK7zdpAsS?=
+ =?us-ascii?Q?xTb3ZDOOya8yNqFCZ3tGsazrat9nAcs6ixMcS7Be28SMLXo4El3OgBCPWjDq?=
+ =?us-ascii?Q?ZWZd+KTg4JzI86xg3MaguxdfpjHVflbCV2qQIYcDraZxfzid6YT7sG0VG0VP?=
+ =?us-ascii?Q?9DS2n3qLASJpLiK8pQO7Lh7bFu49+RR1MYRnDGqe4TYqg+wsFerMCU1GIY3G?=
+ =?us-ascii?Q?oXpVZ1BwB9i9QUIcoU1Hz6D1AVQ3V9jL12BOAJ9bicaSHxv57VGH8p5wNiwF?=
+ =?us-ascii?Q?M537GrIqJ41p1MDdiO6yG4U26MxAWk1kgXljzCNj/43z0YVjHwuyPVIZNVI+?=
+ =?us-ascii?Q?5NSqAIlikgnM2/X1B91omjli7iU71k7T5uuPPA4zd7un/dZXBD8X2NTEc50b?=
+ =?us-ascii?Q?JD+FQ0gZltpRQxQmljkH2OKEZmurzHXg/yFJBdX43dEpQwcrrma9Q58+Zpxf?=
+ =?us-ascii?Q?BR/c16ruEXWHCKHse9HJHJo8vrCwDeIo7IJWs633ZdprkPA90/OTAOD52yXK?=
+ =?us-ascii?Q?5sSaihnmq7Rf0VS3rPIJI7DG+as9xlvh3frf522/URdmpoKdAqBWzTteblEs?=
+ =?us-ascii?Q?NqLw/mgfhMauHUrEa06fwK5LXFU12JDtDJzUWveGNsKbC7xF1sRrhaR48Mvg?=
+ =?us-ascii?Q?DYkrLp9muGR+6O/Z4h0j+VW3orEUG3M0JH7AeWucgd2peJ9NWT4o4oT5qRFI?=
+ =?us-ascii?Q?6DNFhJ2TmsoiYjIkT582U3EYrnKydnYhmaVhMRh7qGxEDxOP+a7pvYBJ3IA8?=
+ =?us-ascii?Q?NRNyQilanf9GvElwxABj7EuwoCO2pQ1267Pxjk8jwoyhrn1UnuONR5OaBpWF?=
+ =?us-ascii?Q?FKKAufwpyo7yFit/cwkzsE6NNa6hZAWB02CIuLCIgjL+qPKU1Yb8FRQYnHaO?=
+ =?us-ascii?Q?w80LkuKhWjAR+k18MUXHrIjZ1iDXic7x1drDXv80Bqryvi6f3OSdiDcimQto?=
+ =?us-ascii?Q?E0Caq7pQJDe83K+eB8ltE1HT9haVrLMOazyp8Ccd66xP7J91FMxcjqT03Ctp?=
+ =?us-ascii?Q?EOmoar0vZhbbXLvhn2mXm8WchLXeNoZQUMxbLgcExRIQBn10Cdipm4RSr/Ck?=
+ =?us-ascii?Q?FlQ+989BSQyTmw0u42iuO02tlkPRrjXKextM9d6hLl81vSDsl1huxIpzaHpQ?=
+ =?us-ascii?Q?/R9/OpBUIdbkBhsXWAdZwKWjC/YFVTkA9izMcuxIYZ8edzSUQ9MgP0/7LbvZ?=
+ =?us-ascii?Q?0+HnCafNVrU3m6s/gI0tgK9GVJuEIC0sOzJe8VWL1UjL7nnZbVLOxXrV9/6I?=
+ =?us-ascii?Q?7k3umfvTDmlFjuU3ODKyoEU6V5Xsqh9ILTbnGig0BAkEdTd5TLf+NMxnjFu0?=
+ =?us-ascii?Q?KQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f0e0ad3-0252-46a8-56d7-08db3fb5e5ad
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 02:37:48.1353
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2Dfa5okU0yEn9waREzch2wmH1wce/m8FYrk5KLrN9SqpeE1GYzlqcenH0Bgh3iES5084YJ5bc3P7ysJdAyn4GCElYv8xmDI3I/swB82s5lc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4800
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Min Zhou <zhoumin@loongson.cn>
+Terry Bowman wrote:
+> From: Robert Richter <rrichter@amd.com>
+> 
+> RCEC AER corrected and uncorrectable internal errors (CIE/UIE) are
+> disabled by default. [1][2] Enable them to receive CXL downstream port
+> errors of a Restricted CXL Host (RCH).
+> 
+> [1] CXL 3.0 Spec, 12.2.1.1 - RCH Downstream Port Detected Errors
+> [2] PCIe Base Spec 6.0, 7.8.4.3 Uncorrectable Error Mask Register,
+>     7.8.4.6 Correctable Error Mask Register
 
-With a blatant copy of some MIPS bits we introduce the crc32 and crc32c
-hw accelerated module to LoongArch.
+My comment on patch5 to make CXL link details a first class property of a
+'struct pci_dev':
 
-LoongArch has provided these instructions to calculate crc32 and crc32c:
-        * crc.w.b.w    crcc.w.b.w
-        * crc.w.h.w    crcc.w.h.w
-        * crc.w.w.w    crcc.w.w.w
-        * crc.w.d.w    crcc.w.d.w
+http://lore.kernel.org/r/643debf5af445_1b66294f4@dwillia2-xfh.jf.intel.com.notmuch/
 
-So we can make use of these instructions to improve the performance of
-calculation for crc32(c) checksums.
+...also applies here.
 
-As can be seen from the following test results, crc32(c) instructions
-can improve the performance by 58%.
-
-                  Software implemention    Hardware acceleration
-  Buffer size     time cost (seconds)      time cost (seconds)    Accel.
-   100 KB                0.000845                 0.000534        59.1%
-     1 MB                0.007758                 0.004836        59.4%
-    10 MB                0.076593                 0.047682        59.4%
-   100 MB                0.756734                 0.479126        58.5%
-  1000 MB                7.563841                 4.778266        58.5%
-
-Signed-off-by: Min Zhou <zhoumin@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/Makefile                 |   2 +
- arch/loongarch/crypto/Kconfig           |  14 ++
- arch/loongarch/crypto/Makefile          |   6 +
- arch/loongarch/crypto/crc32-loongarch.c | 304 ++++++++++++++++++++++++
- crypto/Kconfig                          |   3 +
- 5 files changed, 329 insertions(+)
- create mode 100644 arch/loongarch/crypto/Kconfig
- create mode 100644 arch/loongarch/crypto/Makefile
- create mode 100644 arch/loongarch/crypto/crc32-loongarch.c
-
-diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-index f71edf574101..a27e264bdaa5 100644
---- a/arch/loongarch/Makefile
-+++ b/arch/loongarch/Makefile
-@@ -115,6 +115,8 @@ endif
- libs-y += arch/loongarch/lib/
- libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
- 
-+drivers-y		+= arch/loongarch/crypto/
-+
- # suspend and hibernation support
- drivers-$(CONFIG_PM)	+= arch/loongarch/power/
- 
-diff --git a/arch/loongarch/crypto/Kconfig b/arch/loongarch/crypto/Kconfig
-new file mode 100644
-index 000000000000..200a6e8b43b1
---- /dev/null
-+++ b/arch/loongarch/crypto/Kconfig
-@@ -0,0 +1,14 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+menu "Accelerated Cryptographic Algorithms for CPU (loongarch)"
-+
-+config CRYPTO_CRC32_LOONGARCH
-+	tristate "CRC32c and CRC32"
-+	select CRC32
-+	select CRYPTO_HASH
-+	help
-+	  CRC32c and CRC32 CRC algorithms
-+
-+	  Architecture: LoongArch with CRC32 instructions
-+
-+endmenu
-diff --git a/arch/loongarch/crypto/Makefile b/arch/loongarch/crypto/Makefile
-new file mode 100644
-index 000000000000..d22613d27ce9
---- /dev/null
-+++ b/arch/loongarch/crypto/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Makefile for LoongArch crypto files..
-+#
-+
-+obj-$(CONFIG_CRYPTO_CRC32_LOONGARCH) += crc32-loongarch.o
-diff --git a/arch/loongarch/crypto/crc32-loongarch.c b/arch/loongarch/crypto/crc32-loongarch.c
-new file mode 100644
-index 000000000000..1f2a2c3839bc
---- /dev/null
-+++ b/arch/loongarch/crypto/crc32-loongarch.c
-@@ -0,0 +1,304 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * crc32.c - CRC32 and CRC32C using LoongArch crc* instructions
-+ *
-+ * Module based on mips/crypto/crc32-mips.c
-+ *
-+ * Copyright (C) 2014 Linaro Ltd <yazen.ghannam@linaro.org>
-+ * Copyright (C) 2018 MIPS Tech, LLC
-+ * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-+ */
-+
-+#include <linux/module.h>
-+#include <crypto/internal/hash.h>
-+
-+#include <asm/cpu-features.h>
-+#include <asm/unaligned.h>
-+
-+#define _CRC32(crc, value, size, type)			\
-+do {							\
-+	__asm__ __volatile__(				\
-+		#type ".w." #size ".w" " %0, %1, %0\n\t"\
-+		: "+r" (crc)				\
-+		: "r" (value)				\
-+		: "memory");				\
-+} while (0)
-+
-+#define CRC32(crc, value, size)		_CRC32(crc, value, size, crc)
-+#define CRC32C(crc, value, size)	_CRC32(crc, value, size, crcc)
-+
-+static u32 crc32_loongarch_hw(u32 crc_, const u8 *p, unsigned int len)
-+{
-+	u32 crc = crc_;
-+
-+	while (len >= sizeof(u64)) {
-+		u64 value = get_unaligned_le64(p);
-+
-+		CRC32(crc, value, d);
-+		p += sizeof(u64);
-+		len -= sizeof(u64);
-+	}
-+
-+	if (len & sizeof(u32)) {
-+		u32 value = get_unaligned_le32(p);
-+
-+		CRC32(crc, value, w);
-+		p += sizeof(u32);
-+		len -= sizeof(u32);
-+	}
-+
-+	if (len & sizeof(u16)) {
-+		u16 value = get_unaligned_le16(p);
-+
-+		CRC32(crc, value, h);
-+		p += sizeof(u16);
-+	}
-+
-+	if (len & sizeof(u8)) {
-+		u8 value = *p++;
-+
-+		CRC32(crc, value, b);
-+	}
-+
-+	return crc;
-+}
-+
-+static u32 crc32c_loongarch_hw(u32 crc_, const u8 *p, unsigned int len)
-+{
-+	u32 crc = crc_;
-+
-+	while (len >= sizeof(u64)) {
-+		u64 value = get_unaligned_le64(p);
-+
-+		CRC32C(crc, value, d);
-+		p += sizeof(u64);
-+		len -= sizeof(u64);
-+	}
-+
-+	if (len & sizeof(u32)) {
-+		u32 value = get_unaligned_le32(p);
-+
-+		CRC32C(crc, value, w);
-+		p += sizeof(u32);
-+		len -= sizeof(u32);
-+	}
-+
-+	if (len & sizeof(u16)) {
-+		u16 value = get_unaligned_le16(p);
-+
-+		CRC32C(crc, value, h);
-+		p += sizeof(u16);
-+	}
-+
-+	if (len & sizeof(u8)) {
-+		u8 value = *p++;
-+
-+		CRC32C(crc, value, b);
-+	}
-+
-+	return crc;
-+}
-+
-+#define CHKSUM_BLOCK_SIZE	1
-+#define CHKSUM_DIGEST_SIZE	4
-+
-+struct chksum_ctx {
-+	u32 key;
-+};
-+
-+struct chksum_desc_ctx {
-+	u32 crc;
-+};
-+
-+static int chksum_init(struct shash_desc *desc)
-+{
-+	struct chksum_ctx *mctx = crypto_shash_ctx(desc->tfm);
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	ctx->crc = mctx->key;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Setting the seed allows arbitrary accumulators and flexible XOR policy
-+ * If your algorithm starts with ~0, then XOR with ~0 before you set the seed.
-+ */
-+static int chksum_setkey(struct crypto_shash *tfm, const u8 *key, unsigned int keylen)
-+{
-+	struct chksum_ctx *mctx = crypto_shash_ctx(tfm);
-+
-+	if (keylen != sizeof(mctx->key))
-+		return -EINVAL;
-+
-+	mctx->key = get_unaligned_le32(key);
-+
-+	return 0;
-+}
-+
-+static int chksum_update(struct shash_desc *desc, const u8 *data, unsigned int length)
-+{
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	ctx->crc = crc32_loongarch_hw(ctx->crc, data, length);
-+	return 0;
-+}
-+
-+static int chksumc_update(struct shash_desc *desc, const u8 *data, unsigned int length)
-+{
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	ctx->crc = crc32c_loongarch_hw(ctx->crc, data, length);
-+	return 0;
-+}
-+
-+static int chksum_final(struct shash_desc *desc, u8 *out)
-+{
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	put_unaligned_le32(ctx->crc, out);
-+	return 0;
-+}
-+
-+static int chksumc_final(struct shash_desc *desc, u8 *out)
-+{
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	put_unaligned_le32(~ctx->crc, out);
-+	return 0;
-+}
-+
-+static int __chksum_finup(u32 crc, const u8 *data, unsigned int len, u8 *out)
-+{
-+	put_unaligned_le32(crc32_loongarch_hw(crc, data, len), out);
-+	return 0;
-+}
-+
-+static int __chksumc_finup(u32 crc, const u8 *data, unsigned int len, u8 *out)
-+{
-+	put_unaligned_le32(~crc32c_loongarch_hw(crc, data, len), out);
-+	return 0;
-+}
-+
-+static int chksum_finup(struct shash_desc *desc, const u8 *data, unsigned int len, u8 *out)
-+{
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	return __chksum_finup(ctx->crc, data, len, out);
-+}
-+
-+static int chksumc_finup(struct shash_desc *desc, const u8 *data, unsigned int len, u8 *out)
-+{
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	return __chksumc_finup(ctx->crc, data, len, out);
-+}
-+
-+static int chksum_digest(struct shash_desc *desc, const u8 *data, unsigned int length, u8 *out)
-+{
-+	struct chksum_ctx *mctx = crypto_shash_ctx(desc->tfm);
-+
-+	return __chksum_finup(mctx->key, data, length, out);
-+}
-+
-+static int chksumc_digest(struct shash_desc *desc, const u8 *data, unsigned int length, u8 *out)
-+{
-+	struct chksum_ctx *mctx = crypto_shash_ctx(desc->tfm);
-+
-+	return __chksumc_finup(mctx->key, data, length, out);
-+}
-+
-+static int chksum_cra_init(struct crypto_tfm *tfm)
-+{
-+	struct chksum_ctx *mctx = crypto_tfm_ctx(tfm);
-+
-+	mctx->key = 0;
-+	return 0;
-+}
-+
-+static int chksumc_cra_init(struct crypto_tfm *tfm)
-+{
-+	struct chksum_ctx *mctx = crypto_tfm_ctx(tfm);
-+
-+	mctx->key = ~0;
-+	return 0;
-+}
-+
-+static struct shash_alg crc32_alg = {
-+	.digestsize		=	CHKSUM_DIGEST_SIZE,
-+	.setkey			=	chksum_setkey,
-+	.init			=	chksum_init,
-+	.update			=	chksum_update,
-+	.final			=	chksum_final,
-+	.finup			=	chksum_finup,
-+	.digest			=	chksum_digest,
-+	.descsize		=	sizeof(struct chksum_desc_ctx),
-+	.base			=	{
-+		.cra_name		=	"crc32",
-+		.cra_driver_name	=	"crc32-loongarch",
-+		.cra_priority		=	300,
-+		.cra_flags		=	CRYPTO_ALG_OPTIONAL_KEY,
-+		.cra_blocksize		=	CHKSUM_BLOCK_SIZE,
-+		.cra_alignmask		=	0,
-+		.cra_ctxsize		=	sizeof(struct chksum_ctx),
-+		.cra_module		=	THIS_MODULE,
-+		.cra_init		=	chksum_cra_init,
-+	}
-+};
-+
-+static struct shash_alg crc32c_alg = {
-+	.digestsize		=	CHKSUM_DIGEST_SIZE,
-+	.setkey			=	chksum_setkey,
-+	.init			=	chksum_init,
-+	.update			=	chksumc_update,
-+	.final			=	chksumc_final,
-+	.finup			=	chksumc_finup,
-+	.digest			=	chksumc_digest,
-+	.descsize		=	sizeof(struct chksum_desc_ctx),
-+	.base			=	{
-+		.cra_name		=	"crc32c",
-+		.cra_driver_name	=	"crc32c-loongarch",
-+		.cra_priority		=	300,
-+		.cra_flags		=	CRYPTO_ALG_OPTIONAL_KEY,
-+		.cra_blocksize		=	CHKSUM_BLOCK_SIZE,
-+		.cra_alignmask		=	0,
-+		.cra_ctxsize		=	sizeof(struct chksum_ctx),
-+		.cra_module		=	THIS_MODULE,
-+		.cra_init		=	chksumc_cra_init,
-+	}
-+};
-+
-+static int __init crc32_mod_init(void)
-+{
-+	int err;
-+
-+	if (!cpu_has(CPU_FEATURE_CRC32))
-+		return 0;
-+
-+	err = crypto_register_shash(&crc32_alg);
-+	if (err)
-+		return err;
-+
-+	err = crypto_register_shash(&crc32c_alg);
-+	if (err)
-+		return err;
-+
-+	return 0;
-+}
-+
-+static void __exit crc32_mod_exit(void)
-+{
-+	if (!cpu_has(CPU_FEATURE_CRC32))
-+		return;
-+
-+	crypto_unregister_shash(&crc32_alg);
-+	crypto_unregister_shash(&crc32c_alg);
-+}
-+
-+module_init(crc32_mod_init);
-+module_exit(crc32_mod_exit);
-+
-+MODULE_AUTHOR("Min Zhou <zhoumin@loongson.cn>");
-+MODULE_AUTHOR("Huacai Chen <chenhuacai@loongson.cn>");
-+MODULE_DESCRIPTION("CRC32 and CRC32C using LoongArch crc* instructions");
-+MODULE_LICENSE("GPL v2");
-diff --git a/crypto/Kconfig b/crypto/Kconfig
-index 9c86f7045157..a0e080d5f6ae 100644
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -1395,6 +1395,9 @@ endif
- if ARM64
- source "arch/arm64/crypto/Kconfig"
- endif
-+if LOONGARCH
-+source "arch/loongarch/crypto/Kconfig"
-+endif
- if MIPS
- source "arch/mips/crypto/Kconfig"
- endif
--- 
-2.39.1
-
+Other than that nothing more from me on this one beyond what Bjorn and
+Jonathan have said. I do agree with Robert about being cautious about
+only enabling this for CXL devices for now and not all internal errors
+for all AER capable devices globally. The rationale being that CXL
+devices are a new link on top of PCIe and abuse/reuse internal errors
+when they are conceptually functionally equivalent to PCIe link errors.
