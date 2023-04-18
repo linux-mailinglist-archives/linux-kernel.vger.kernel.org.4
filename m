@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499E26E5FA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29FB56E5FA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjDRLS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 07:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S231441AbjDRLSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 07:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbjDRLSX (ORCPT
+        with ESMTP id S231302AbjDRLSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 18 Apr 2023 07:18:23 -0400
 Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07969020;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8896619AA;
         Tue, 18 Apr 2023 04:17:36 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id C9C5E5FD76;
+        by mx.sberdevices.ru (Postfix) with ESMTP id F24565FD78;
         Tue, 18 Apr 2023 14:16:20 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1681816580;
-        bh=rV+/2Zo+MYA4X9kDnUDGtNKqBpG9r9Rn4Sf3ySX9kzE=;
+        s=mail; t=1681816581;
+        bh=MDzMe5CZfB1jJP7T11BEyo9k6M0Db32prO+SmusTuWw=;
         h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=F0653ogbGcbwdRloENjlGCckoaKBL+kNs03aZ1bCYLxyxxRYxSx6sLtZ3MJnjlAyo
-         OXg9yMVSSyzK5NbKaTiYACuCBX2U04u7iukNEHSvKw+LhT635rkAvyg6tBEhXHKmmA
-         PHaCnPB/NnvBpafk2Yo5Xj2lclnbLp+/RKtJIc6kCmQtOjISGp9A0MTngxEyCx0RY/
-         qmXSdNJTWhoGP046V1q6ahddQ8ux1e2XOjxBdSCc3K6JdPhrf++FGXz0+1IZj8mpTl
-         4m9dJPgYLNLpDrt2oQjcjEXm//X8hds6NCi0bZF11OwMeVqS8+wpIeDfCgLkk+PN4p
-         8UniCupfsTXHg==
+        b=brqLeNnHFhrcMVFs0R8yx2+7mwYyq+eOWHy5gKsQDSSPFOT7vG87eoE21J0MCPUtj
+         /ZDLMSEpazMaB90uVs0YZdxxHZ7tOmH1cTT114+/ioSqRj/FsNG0Sp6dXxdFAaa1OX
+         rKSIS8T9C8d5kkEeelMcSH88IvZqE4VcFgSF9189TzLEDVJ49KX/mNmRM7CNd7BN4s
+         z/Qv7rzi2lLNjo+HKfZ4RDa7QP25N+bNu+y5IyVdZcn9ztNZXrPxytrGFO3+Vj+p6H
+         G8OSARnLw0zTmHuJdvWWGWSFpibgD/h+oSUZaKgWAADMczYKrHxgbQgkD6xSvatfc7
+         UTNN778qGqelw==
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 18 Apr 2023 14:16:19 +0300 (MSK)
+        Tue, 18 Apr 2023 14:16:20 +0300 (MSK)
 From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
 To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <neil.armstrong@linaro.org>,
@@ -46,10 +46,12 @@ CC:     <yue.wang@amlogic.com>, <hanjie.lin@amlogic.com>,
         <linux-amlogic@lists.infradead.org>,
         <linux-phy@lists.infradead.org>,
         Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: [PATCH v2 0/5] arm64: meson: support Amlogic A1 USB OTG controller
-Date:   Tue, 18 Apr 2023 14:16:07 +0300
-Message-ID: <20230418111612.19479-1-ddrokosov@sberdevices.ru>
+Subject: [PATCH v2 1/5] phy: amlogic: enable/disable clkin during Amlogic USB PHY init/exit
+Date:   Tue, 18 Apr 2023 14:16:08 +0300
+Message-ID: <20230418111612.19479-2-ddrokosov@sberdevices.ru>
 X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20230418111612.19479-1-ddrokosov@sberdevices.ru>
+References: <20230418111612.19479-1-ddrokosov@sberdevices.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -73,51 +75,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series introduces full support for the Amlogic A1 USB controller
-in OTG mode (peripheral and host modes switching).
+Previously, all Amlogic boards used the XTAL clock as the default board
+clock for the USB PHY input, so there was no need to enable it.
+However, with the introduction of new Amlogic SoCs like the A1 family,
+the USB PHY now uses a gated clock. Hence, it is necessary to enable
+this gated clock during the PHY initialization sequence, or disable it
+during the PHY exit, as appropriate.
 
-Previously, Amlogic's patch series [1] was applied to the upstream tree,
-but it only had USB host mode support.
-Furthermore, the device tree patchset [2] wasn't merged due to a missing
-clk driver.
-Patchset [2] has been completely reworked:
-    - changed register base offsets to proper values
-    - introduced dwc2 in peripheral mode
-    - OTG mode support
-    - the SoB of Amlogic authors still remain
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+---
+ drivers/phy/amlogic/phy-meson-g12a-usb2.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-Testing:
-    - USB OTG role switching between gadget and host - OK
-    - Peripheral mode - OK (tested with adb shell/push/pop)
-    - Host mode - OK (tested only USB enumeration and detection)
-
-Changes v2 since v1 at [3]:
-    - as Martin suggested in v1, this commit completely removes
-      the 'otg_switch_supported' parameter from dwc3_meson_g12a_drvdata;
-      this parameter is no longer necessary as all IP versions now
-      support OTG switching
-    - this commit moves the USB PHY clkin enable/disable calls to
-      the PHY init/exit routines
-
-Links:
-    [1] https://lore.kernel.org/all/1581990859-135234-1-git-send-email-hanjie.lin@amlogic.com/
-    [2] https://lore.kernel.org/all/1581990859-135234-4-git-send-email-hanjie.lin@amlogic.com/
-    [3] https://lore.kernel.org/all/20230414152423.19842-1-ddrokosov@sberdevices.ru/
-
-Dmitry Rokosov (5):
-  phy: amlogic: enable/disable clkin during Amlogic USB PHY init/exit
-  usb: dwc2: support dwc2 IP for Amlogic A1 SoC family
-  dt-bindings: usb: dwc2: add support for Amlogic A1 SoC USB peripheral
-  usb: dwc3-meson-g12a: support OTG switch for all IP versions
-  arm64: dts: meson: a1: support USB controller in OTG mode
-
- .../devicetree/bindings/usb/dwc2.yaml         |  1 +
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi     | 59 +++++++++++++++++++
- drivers/phy/amlogic/phy-meson-g12a-usb2.c     | 13 +++-
- drivers/usb/dwc2/params.c                     | 21 +++++++
- drivers/usb/dwc3/dwc3-meson-g12a.c            | 16 +----
- 5 files changed, 95 insertions(+), 15 deletions(-)
-
+diff --git a/drivers/phy/amlogic/phy-meson-g12a-usb2.c b/drivers/phy/amlogic/phy-meson-g12a-usb2.c
+index 9d1efa0d9394..80938751da4f 100644
+--- a/drivers/phy/amlogic/phy-meson-g12a-usb2.c
++++ b/drivers/phy/amlogic/phy-meson-g12a-usb2.c
+@@ -172,10 +172,16 @@ static int phy_meson_g12a_usb2_init(struct phy *phy)
+ 	int ret;
+ 	unsigned int value;
+ 
+-	ret = reset_control_reset(priv->reset);
++	ret = clk_prepare_enable(priv->clk);
+ 	if (ret)
+ 		return ret;
+ 
++	ret = reset_control_reset(priv->reset);
++	if (ret) {
++		clk_disable_unprepare(priv->clk);
++		return ret;
++	}
++
+ 	udelay(RESET_COMPLETE_TIME);
+ 
+ 	/* usb2_otg_aca_en == 0 */
+@@ -277,8 +283,11 @@ static int phy_meson_g12a_usb2_init(struct phy *phy)
+ static int phy_meson_g12a_usb2_exit(struct phy *phy)
+ {
+ 	struct phy_meson_g12a_usb2_priv *priv = phy_get_drvdata(phy);
++	int ret = reset_control_reset(priv->reset);
++
++	clk_disable_unprepare(priv->clk);
+ 
+-	return reset_control_reset(priv->reset);
++	return ret;
+ }
+ 
+ /* set_mode is not needed, mode setting is handled via the UTMI bus */
 -- 
 2.36.0
 
