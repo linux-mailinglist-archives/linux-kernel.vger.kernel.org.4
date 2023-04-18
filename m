@@ -2,155 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738DD6E6D2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 21:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463596E6D2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 21:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjDRT4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 15:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
+        id S231659AbjDRT5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 15:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjDRT4t (ORCPT
+        with ESMTP id S229564AbjDRT5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 15:56:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5219776;
-        Tue, 18 Apr 2023 12:56:47 -0700 (PDT)
+        Tue, 18 Apr 2023 15:57:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85DDB745;
+        Tue, 18 Apr 2023 12:57:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F7F46389D;
-        Tue, 18 Apr 2023 19:56:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3BFBC433EF;
-        Tue, 18 Apr 2023 19:56:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D413638A8;
+        Tue, 18 Apr 2023 19:57:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C26C433EF;
+        Tue, 18 Apr 2023 19:57:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681847806;
-        bh=1baWnnsOYQNcfQ6JgaY1FCV+Q/yFo/OKljnAUA/yo7o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HZQV0UbOYlRa2PnvGE07lApoerEcvPIhcWcQONv420DovZx7ssFaWMFrjt2l2KKx3
-         5qgMQar8iwxUAXeviM9IiuUpzHODBU2bN0tSQ2IzaVEPPWUL2nEb9P3CBbhfhiaRx+
-         XRc7so7gItC0l8SogyzWCGGKPBwBsHT2oUmqn42+p9+Cauu/hltf6nLk1sYVmip4dx
-         kJyEtw1WMQA7F2JWdUmb2plBWA8UgjaZYIy/iCO+5CjwA9e1baJv0Rqf8w6j0BtqL9
-         c6mN2uDJvZGwJMF11/3IRVJZiJKtS8QYG86VM859dHT3hQU1lw99bfKESrt4Gl2Dx1
-         76znlPOtpsDsQ==
-Received: by mail-yb1-f182.google.com with SMTP id k39so8449793ybj.8;
-        Tue, 18 Apr 2023 12:56:46 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eot/H9NtWHhvRdAyEUY6xLJSg5XWvtGbO29rU3syOYQHpCDKl4
-        CkYlBbrWcLsmbrwhG+xiiMAwsnX0r3iYtkQbyg==
-X-Google-Smtp-Source: AKy350b2kwnFHC8moys3w7DzqeW537uNq+2dpf8DUVz7knHxiYvUG+d4B+vNSo1Jz96Xk/6CnCJb3hf6L09XNwv3be4=
-X-Received: by 2002:a25:76ce:0:b0:b95:e649:34b6 with SMTP id
- r197-20020a2576ce000000b00b95e64934b6mr1344329ybc.1.1681847805973; Tue, 18
- Apr 2023 12:56:45 -0700 (PDT)
+        s=k20201202; t=1681847825;
+        bh=NUM/9EfT+oCdQ/ixSz3HeS2pAje1HdCv95koR/4MgXw=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=JXUejncSyNOOCDo8jBZ27fDUD/UKurH9wZTS0gV6Esh2yl9h727mpeTEyIbN6lb9o
+         h24hf90F7jv7CQmfcFVhW+ArrA3OrbDx/Xgfcej1OwEA8yvjJaIlS5JVlCMlkQzyup
+         PooDhkPIfFfASUGlRHWF+JrvvOZ0h2BtFwsvpjz088Ddq5YyvoZRXCSh9J7xiZdouG
+         8195udD1neDJxPlOrpSh8ql/TijCVTYqHHOiMF70BqgMg3AHIU8dlePTzCaK6XS+LF
+         LILwrO52URPOeZRNix4JL0td0cn+qCXVLg2URtN2EPqPJSw7EDwOBQnnmcVYg7cNg0
+         sx8dbLU29Dvmg==
+Message-ID: <86398a778336846688c33a737e2a9ae2.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230315121303.3358416-1-tmricht@linux.ibm.com>
-In-Reply-To: <20230315121303.3358416-1-tmricht@linux.ibm.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 18 Apr 2023 14:56:34 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJo14uLmz5n4gSEf0gjEcODCMrsNEZKj_EnZoVPGFfDQw@mail.gmail.com>
-Message-ID: <CAL_JsqJo14uLmz5n4gSEf0gjEcODCMrsNEZKj_EnZoVPGFfDQw@mail.gmail.com>
-Subject: Re: [PATCH] perf/test: Fix wrong size for perf test Setup struct perf_event_attr
-To:     Thomas Richter <tmricht@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, jolsa@kernel.org, svens@linux.ibm.com,
-        gor@linux.ibm.com, sumanthk@linux.ibm.com, hca@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5e18370b.3c8a8.1877d7fc98a.Coremail.u201911681@hust.edu.cn>
+References: <20230413032439.1706448-1-u201911681@hust.edu.cn> <25b06794ffb595229019640e10f256fd.sboyd@kernel.org> <5e18370b.3c8a8.1877d7fc98a.Coremail.u201911681@hust.edu.cn>
+Subject: Re: Re: [PATCH] clk: imx: clk-imx8mm: fix memory leak issue in 'imx8mm_clocks_probe'
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     abel vesa <abelvesa@kernel.org>, bai ping <ping.bai@nxp.com>,
+        fabio estevam <festevam@gmail.com>,
+        michael turquette <mturquette@baylibre.com>,
+        nxp linux team <linux-imx@nxp.com>,
+        peng fan <peng.fan@nxp.com>,
+        pengutronix kernel team <kernel@pengutronix.de>,
+        sascha hauer <s.hauer@pengutronix.de>,
+        shawn guo <shawnguo@kernel.org>,
+        hust-os-kernel-patches@googlegroups.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        hao luo <m202171776@hust.edu.cn>
+To:     =?utf-8?b?5ZGo5biI5b63?= <u201911681@hust.edu.cn>
+Date:   Tue, 18 Apr 2023 12:57:03 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 7:13=E2=80=AFAM Thomas Richter <tmricht@linux.ibm.c=
-om> wrote:
->
-> The test case ./perf test 'Setup struct perf_event_attr' fails.
-> On s390 this output is observed:
->
->  # ./perf test -Fvvvv 17
->  17: Setup struct perf_event_attr                                    :
->  --- start ---
->  running './tests/attr/test-stat-C0'
->  Using CPUID IBM,8561,703,T01,3.6,002f
->  .....
->  Event event:base-stat
->       fd =3D 1
->       group_fd =3D -1
->       flags =3D 0|8
->       cpu =3D *
->       type =3D 0
->       size =3D 128     <<<--- wrong, specified in file base-stat
->       config =3D 0
->       sample_period =3D 0
->       sample_type =3D 65536
->       ...
->  'PERF_TEST_ATTR=3D/tmp/tmpgw574wvg ./perf stat -o \
->         /tmp/tmpgw574wvg/perf.data -e cycles -C 0 kill >/dev/null \
->         2>&1 ret '1', expected '1'
->   loading result events
->     Event event-0-0-4
->       fd =3D 4
->       group_fd =3D -1
->       cpu =3D 0
->       pid =3D -1
->       flags =3D 8
->       type =3D 0
->       size =3D 136     <<<--- actual size used in system call
->       .....
->   compare
->     matching [event-0-0-4]
->       to [event:base-stat]
->       [cpu] 0 *
->       [flags] 8 0|8
->       [type] 0 0
->       [size] 136 128
->     ->FAIL
->     match: [event-0-0-4] matches []
->   expected size=3D136, got 128
->   FAILED './tests/attr/test-stat-C0' - match failure
->
-> This mismatch is caused by
-> commit 09519ec3b19e ("perf: Add perf_event_attr::config3")
-> which enlarges the structure perf_event_attr by 8 bytes.
->
-> Fix this by adjusting the expected value of size.
->
-> Output after:
->  # ./perf test -Fvvvv 17
->  17: Setup struct perf_event_attr                                    :
->  --- start ---
->  running './tests/attr/test-stat-C0'
->  Using CPUID IBM,8561,703,T01,3.6,002f
->  ...
->   matched
->   compare
->     matching [event-0-0-4]
->       to [event:base-stat]
->       [cpu] 0 *
->       [flags] 8 0|8
->       [type] 0 0
->       [size] 136 136
->       ....
->    ->OK
->    match: [event-0-0-4] matches ['event:base-stat']
->  matched
->
-> Fixes: 09519ec3b19e ("perf: Add perf_event_attr::config3")
+Quoting =E5=91=A8=E5=B8=88=E5=BE=B7 (2023-04-13 19:02:19)
+>=20
+>=20
+>=20
+> > -----=E5=8E=9F=E5=A7=8B=E9=82=AE=E4=BB=B6-----
+> > =E5=8F=91=E4=BB=B6=E4=BA=BA: "Stephen Boyd" <sboyd@kernel.org>
+> > =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4: 2023-04-14 03:06:59 (=E6=98=9F=E6=
+=9C=9F=E4=BA=94)
+> > =E6=94=B6=E4=BB=B6=E4=BA=BA: "Abel Vesa" <abelvesa@kernel.org>, "Bai Pi=
+ng" <ping.bai@nxp.com>, "Fabio Estevam" <festevam@gmail.com>, "Michael Turq=
+uette" <mturquette@baylibre.com>, "NXP Linux Team" <linux-imx@nxp.com>, "Pe=
+ng Fan" <peng.fan@nxp.com>, "Pengutronix Kernel Team" <kernel@pengutronix.d=
+e>, "Sascha Hauer" <s.hauer@pengutronix.de>, "Shawn Guo" <shawnguo@kernel.o=
+rg>, "Zhou Shide" <u201911681@hust.edu.cn>
+> > =E6=8A=84=E9=80=81: hust-os-kernel-patches@googlegroups.com, "Zhou Shid=
+e" <u201911681@hust.edu.cn>, linux-clk@vger.kernel.org, linux-arm-kernel@li=
+sts.infradead.org, linux-kernel@vger.kernel.org, "Hao Luo" <m202171776@hust=
+.edu.cn>
+> > =E4=B8=BB=E9=A2=98: Re: [PATCH] clk: imx: clk-imx8mm: fix memory leak i=
+ssue in 'imx8mm_clocks_probe'
+> >=20
+> > Quoting Zhou Shide (2023-04-12 20:24:39)
+> > > The function imx8mm_clocks_probe() has two main issues:
+> > > - The of_iomap() function may cause a memory leak.
+> > > - Memory allocated for 'clk_hw_data' may not be freed properly
+> > > in some paths.
+> > >=20
+> > > To fix these issues, this commit replaces the use of of_iomap()
+> > > with devm_of_iomap() and replaces kzalloc() with devm_kzalloc().
+> > > This ensures that all memory is properly managed and automatically
+> > > freed when the device is removed.
+> > >=20
+> > > In addition, when devm_of_iomap() allocates memory with an error,
+> > > it will first jump to label "unregister_hws" and
+> > > then return PTR_ ERR(base).
+> > >=20
+> > > Fixes: 9c71f9ea35d7 ("clk: imx: imx8mm: Switch to clk_hw based API")
+> > > Fixes: ba5625c3e272 ("clk: imx: Add clock driver support for imx8mm")
+> > > Signed-off-by: Zhou Shide <u201911681@hust.edu.cn>
+> > > ---
+> > > The issue is discovered by static analysis, and the patch is not test=
+ed yet.
+> >=20
+> > And you're not coordinating with each other?
+> What do you mean by "coordinating with each other"?
+>=20
 
-Shouldn't a kernel with this change work with an old version of perf withou=
-t?
-
-Anyways, looks like the change is needed regardless.
-
-Acked-by: Rob Herring <robh@kernel.org>
-
->
-> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-> ---
->  tools/perf/tests/attr/base-record       | 2 +-
->  tools/perf/tests/attr/base-stat         | 2 +-
->  tools/perf/tests/attr/system-wide-dummy | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+I see two patches to the same driver from the same university on the
+list. Preferably you coordinate and decide who will fix what smatch
+warnings.
