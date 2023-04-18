@@ -2,120 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6EA26E5C4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 908A96E5C53
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbjDRIk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
+        id S231488AbjDRIlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbjDRIkz (ORCPT
+        with ESMTP id S230359AbjDRIlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:40:55 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C06C5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:40:54 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b5465fb99so1635606b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 01:40:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681807253; x=1684399253;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=olmN5gzlqP0NhrI47T0CCa7149+yb2ZCju0LTQmGI+4=;
-        b=ageKEel5fyZv58tT025n8lqnZUiQ+cxCGVdQkICI1dh7J7VmSwxtTivqmdjU79I/Qo
-         vpCBbkdrkJTlMQgLIbzVqr3aFjxx1zPt56ImFdKa4upwf3xN3L+p3gif4WHtLXkkG+t3
-         Qx0i5U3/lCXRFCZn4698WdTVFJFunG2ubvagU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681807253; x=1684399253;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=olmN5gzlqP0NhrI47T0CCa7149+yb2ZCju0LTQmGI+4=;
-        b=Lq3E8uKNKfdJUPGU2TsG0wn6L3kIXPB+zDf4rHe3HfPha6nmFCOilA0ZpQqMaRyBZL
-         kioWmbyexWeVOBv8M75BdOh/Agk7ZDanyWBY86nv6La7COonPmnQ8HgXKgGW1+F5w3gZ
-         vHJY9/vn0LOLwj0oPOPelSluJFi6lf7A5iGgq7ofh2BeSvI4YP7Sv4W+27lI6RkHRRco
-         UaGNrX0cMXqUI9eLOdS2zbNBHZZyYYaCwmThT8gv31+t0iu03yLxBQdCqZf70p84WeDI
-         QzeZFnmnUzF4sMuB/ZCALsiymZp8CtadUGIwZg0dAempGtPAERYaLtp4vCCk6eHrEau8
-         dNkA==
-X-Gm-Message-State: AAQBX9fyGOrdTpxIXun1lV/AHR7KY70ulBy45qE5Y7VZWyYocNNk5tmB
-        aIZxdjcaoD+WxjOheGJ3Feiw5Q==
-X-Google-Smtp-Source: AKy350ZxonPvBGz2w+q2ydfxziDS0CMMutHh8UVXMlDu7WQu9HDpm3Lk0fD6oTQLzVjEnx6nyC+jCA==
-X-Received: by 2002:a05:6a00:2390:b0:636:e0fb:8c44 with SMTP id f16-20020a056a00239000b00636e0fb8c44mr26317272pfc.12.1681807253493;
-        Tue, 18 Apr 2023 01:40:53 -0700 (PDT)
-Received: from localhost ([2401:fa00:8f:203:7254:8270:74ed:755b])
-        by smtp.gmail.com with UTF8SMTPSA id y3-20020a62b503000000b00625b9e625fdsm9007639pfe.179.2023.04.18.01.40.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 01:40:53 -0700 (PDT)
-From:   David Stevens <stevensd@chromium.org>
-X-Google-Original-From: David Stevens <stevensd@google.com>
-To:     linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        linux-kernel@vger.kernel.org,
-        David Stevens <stevensd@chromium.org>, stable@vger.kernel.org
-Subject: [PATCH v2] mm/shmem: Fix race in shmem_undo_range w/THP
-Date:   Tue, 18 Apr 2023 17:40:31 +0900
-Message-ID: <20230418084031.3439795-1-stevensd@google.com>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+        Tue, 18 Apr 2023 04:41:04 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF0B1FCA;
+        Tue, 18 Apr 2023 01:41:01 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681807259;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZcloEN6PHwdxX+wR7PTxsLZ5R7H2GaplG8eadvwcPdo=;
+        b=YSKoMebO1SMgoiijw3sT6dUmL/DeC/wEBV7I8b1z9zceTKQGSQcXYB/YeSo0ccQDTS56AJ
+        nhdRaDZ0NwXgH8hEOLQ/dTVz+deZ2fOLHnFZiiQisU0IHpMqNc6BSUUtDUgjhVk1lqhuiZ
+        hUb1G4MomabLXGs1y5CDoqcnpdFFKWDNC8+YA3UX2Tbl5n22OpF5WIiJBUlmrHKqBerKx2
+        wlWzIAPgOX14nhVpRxuNgRbo/aKsOKfHG6jdAiFfsWbGz9WdOu4gVRxQNpL5YEqBPaHGvU
+        oTthGjE00T8jwQcWEiZWH5/TiAxdRfJ1M3JoIe2bb3crK0Gl32O2LSnNFxiq6g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681807259;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZcloEN6PHwdxX+wR7PTxsLZ5R7H2GaplG8eadvwcPdo=;
+        b=rNfKPYcxDWHHNemvWuh/rsGPuG8dn/TolEBJI+1ZiBhvXwc9cXh+Pw7pgY4xNT8GFDtc33
+        j+rvG82H6UitkyAQ==
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+In-Reply-To: <87ttxd4qxz.ffs@tglx>
+References: <20230414225551.858160935@linutronix.de>
+ <8247ce4d-15b7-03b2-0c9b-74f8cd6cad50@molgen.mpg.de> <87wn2a4la5.ffs@tglx>
+ <bd5a6a93-def1-9248-2258-c3d3b40071ef@molgen.mpg.de> <87ttxd4qxz.ffs@tglx>
+Date:   Tue, 18 Apr 2023 10:40:57 +0200
+Message-ID: <87r0sh4m7a.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Stevens <stevensd@chromium.org>
+On Tue, Apr 18 2023 at 08:58, Thomas Gleixner wrote:
+> On Mon, Apr 17 2023 at 19:40, Paul Menzel wrote:
+>> Am 17.04.23 um 16:48 schrieb Thomas Gleixner:
+>>
+>>> On Mon, Apr 17 2023 at 13:19, Paul Menzel wrote:
+>>>> Am 15.04.23 um 01:44 schrieb Thomas Gleixner:
+>>>> [    0.258193] smpboot: CPU0: AMD A6-6400K APU with Radeon(tm) HD
+>>>> Graphics (family: 0x15, model: 0x13, stepping: 0x1)
+>>>> [=E2=80=A6]
+>>>> [    0.259329] smp: Bringing up secondary CPUs ...
+>>>> [    0.259527] x86: Booting SMP configuration:
+>>>> [    0.259528] .... node  #0, CPUs:      #1
+>>>> [    0.261007] After schedule_preempt_disabled
+>>>> [   10.260990] CPU1 failed to report alive state
+>>>=20
+>>> Weird. CPU1 fails to come up and report that it has reached the
+>>> synchronization point.
+>>>=20
+>>> Does it work when you add cpuhp.parallel=3Doff on the kernel command li=
+ne?
+>>
+>> Yes, the ten seconds delay is gone with `cpuhp.parallel=3Doff`.
+>>
+>> There was a patch set in the past, that worked on that device. I think=20
+>> up to v4 it did *not* work at all and hung [1]. I need some days to=20
+>> collect the results again.
+>
+> Can you please apply the patch below on top of the pile remove the
+> command line option again?
 
-Split folios during the second loop of shmem_undo_range. It's not
-sufficient to only split folios when dealing with partial pages, since
-it's possible for a THP to be faulted in after that point. Calling
-truncate_inode_folio in that situation can result in throwing away data
-outside of the range being targeted.
+Bah. That patch does not make any sense at all. Not enough coffee.
 
-Fixes: b9a8a4195c7d ("truncate,shmem: Handle truncates that split large folios")
-Cc: stable@vger.kernel.org
-Signed-off-by: David Stevens <stevensd@chromium.org>
----
-v1 -> v2:
- - Actually drop pages after splitting a THP
+Can you please provide the output of cpuid?
 
- mm/shmem.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+Thanks,
 
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 9218c955f482..226c94a257b1 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -1033,7 +1033,22 @@ static void shmem_undo_range(struct inode *inode, loff_t lstart, loff_t lend,
- 				}
- 				VM_BUG_ON_FOLIO(folio_test_writeback(folio),
- 						folio);
--				truncate_inode_folio(mapping, folio);
-+
-+				if (!folio_test_large(folio)) {
-+					truncate_inode_folio(mapping, folio);
-+				} else if (truncate_inode_partial_folio(folio, lstart, lend)) {
-+					/*
-+					 * If we split a page, reset the loop so that we
-+					 * pick up the new sub pages. Otherwise the THP
-+					 * was entirely dropped or the target range was
-+					 * zeroed, so just continue the loop as is.
-+					 */
-+					if (!folio_test_large(folio)) {
-+						folio_unlock(folio);
-+						index = start;
-+						break;
-+					}
-+				}
- 			}
- 			folio_unlock(folio);
- 		}
--- 
-2.40.0.634.g4ca3ef3211-goog
+        tglx
+
+
+
 
