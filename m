@@ -2,139 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319296E69B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A024D6E69BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231577AbjDRQkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 12:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
+        id S231659AbjDRQlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 12:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbjDRQkU (ORCPT
+        with ESMTP id S229791AbjDRQlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 12:40:20 -0400
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84679173B;
-        Tue, 18 Apr 2023 09:40:19 -0700 (PDT)
-Received: by mail-oo1-f53.google.com with SMTP id k1-20020a4ab281000000b0053e8b5524abso1842471ooo.2;
-        Tue, 18 Apr 2023 09:40:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681836019; x=1684428019;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R58J35d4BdoHDvhoCeCYMn2FqLG6zlTzEEfzJjr3YvM=;
-        b=PKDqR2O+nruNe9Ny/TL9Mvwt7H4B3wVzmgEgfGIf1568SNuiO23Rc+jxOvSHA0B7Vu
-         9zW/JjQ0Sy1lClR8/8HuM6aDiybzUdB5m7JuHLJnoLhj8gvhURStvV/ItYi+i8i+oR+J
-         gID6d7Xe3U2c07kirh/7kWBo76Y1Zp7S3ICjkno+73S2U7PULpZvRjyomKIws6RKR76D
-         Xt6tcTH5XXyGVaHmibVnPqXFhioi+fY9PRTPpTHkBPmcArteFgj5VEScwxqhw22X0mc1
-         qMXlb+1Xm20XGb3er/Uubt1yC4ovKp5Dzco0UZ32+92GGZyCW/WTa9aKlZ2FACOb1K/A
-         ZYsQ==
-X-Gm-Message-State: AAQBX9eufOpWgYB74CQi5yJv5Hm8jUKRqMjvOtldOgyXQeMaOC7hlNh+
-        sEHhstCVO5RxrJNblDcvJgE0m4Tmfw==
-X-Google-Smtp-Source: AKy350bhDqmE1OUzGaPeiIK0m0d97bc0igUxEu78dB6rIzoiiaf0Taoh1uYmJOwWMg4w5hMW13Ny7g==
-X-Received: by 2002:a4a:5555:0:b0:546:ecb3:f42 with SMTP id e82-20020a4a5555000000b00546ecb30f42mr2755325oob.8.1681836018541;
-        Tue, 18 Apr 2023 09:40:18 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j18-20020a4a9452000000b0053dfd96fa61sm6010442ooi.39.2023.04.18.09.40.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 09:40:17 -0700 (PDT)
-Received: (nullmailer pid 1824043 invoked by uid 1000);
-        Tue, 18 Apr 2023 16:40:16 -0000
-Date:   Tue, 18 Apr 2023 11:40:16 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dinh Nguyen <dinguyen@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Tero Kristo <kristo@kernel.org>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] EDAC: Use of_address_to_resource()
-Message-ID: <20230418164016.GA1823469-robh@kernel.org>
-References: <20230327201411.529948-1-robh@kernel.org>
+        Tue, 18 Apr 2023 12:41:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DA7173B
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:41:15 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 16:41:13 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681836074;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6cRnvtpjH9+6TQbpL93sJPj7FNWyCzS76ma2aAuxOwU=;
+        b=LgKgTH2Pju7qeAcv9GRbvTtGDymwoRBzmbvtRhEt0VQgyZcGaIigjg6VPaBv8G2xsTsdFd
+        xjjmYiWO82gE2AIy3E52RaQtq90HgNMQUovewZHtloHykobnJQ/JwEB5uwleUtytf+UfR7
+        /65xi6OFN1zFjTJRIFC2xU1IOJnLWnLLCqR6U59s17bX8Rm3517FZHTodWxi8+KUxdd6c4
+        JkQLA6xhtO65YIQf/YoH1Q9dVLGQpHv5zL6NgW3wFQc6L1GmGinwjuzKKYkdtzdNzmfYN6
+        LkJ+7SlDf0/uDWpsR0SzvSjiJ+CpXCukv8VzVxXQDllEtwQZOu1orVdaieSevw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681836074;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6cRnvtpjH9+6TQbpL93sJPj7FNWyCzS76ma2aAuxOwU=;
+        b=hoHDU1CDO8wpoX/BekVTtpYksqkIf8If3R5tIY+zZo1HoS+7QgGT9nUB73cZJqdtT0Vosj
+        9Ud6jljFCCv2ZLCA==
+From:   "irqchip-bot for Sebastian Reichel" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] irqchip/gic-v3: Add Rockchip 3588001
+ erratum workaround
+Cc:     XiaoDong Huang <derrick.huang@rock-chips.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        Lucas Tanure <lucas.tanure@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20230418142109.49762-2-sebastian.reichel@collabora.com>
+References: <20230418142109.49762-2-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327201411.529948-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <168183607322.404.5670700847015937556.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 03:14:11PM -0500, Rob Herring wrote:
-> Replace of_get_address() and of_translate_address() calls with single
-> call to of_address_to_resource().
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> v2:
->  - Fix compile error
-> ---
->  drivers/edac/altera_edac.c |  5 +++--
->  drivers/edac/ti_edac.c     | 10 +++++-----
->  2 files changed, 8 insertions(+), 7 deletions(-)
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Ping!
+Commit-ID:     a8707f5538846611c90116c14f72539ad5fb37da
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/a8707f5538846611c90116c14f72539ad5fb37da
+Author:        Sebastian Reichel <sebastian.reichel@collabora.com>
+AuthorDate:    Tue, 18 Apr 2023 16:21:08 +02:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Tue, 18 Apr 2023 17:31:17 +01:00
 
-> 
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index e7e8e624a436..be33329c6f18 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-> @@ -1096,6 +1096,7 @@ static int altr_s10_sdram_check_ecc_deps(struct altr_edac_device_dev *device)
->  	struct arm_smccc_res result;
->  	struct device_node *np;
->  	phys_addr_t sdram_addr;
-> +	struct resource res;
->  	u32 read_reg;
->  	int ret;
->  
-> @@ -1103,8 +1104,8 @@ static int altr_s10_sdram_check_ecc_deps(struct altr_edac_device_dev *device)
->  	if (!np)
->  		goto sdram_err;
->  
-> -	sdram_addr = of_translate_address(np, of_get_address(np, 0,
-> -							     NULL, NULL));
-> +	of_address_to_resource(np, 0, &res);
-> +	sdram_addr = res.start;
->  	of_node_put(np);
->  	sdram_ecc_addr = (unsigned long)sdram_addr + prv->ecc_en_ofst;
->  	arm_smccc_smc(INTEL_SIP_SMC_REG_READ, sdram_ecc_addr,
-> diff --git a/drivers/edac/ti_edac.c b/drivers/edac/ti_edac.c
-> index 6971ded598de..7befcf6c6637 100644
-> --- a/drivers/edac/ti_edac.c
-> +++ b/drivers/edac/ti_edac.c
-> @@ -202,19 +202,19 @@ MODULE_DEVICE_TABLE(of, ti_edac_of_match);
->  static int _emif_get_id(struct device_node *node)
->  {
->  	struct device_node *np;
-> -	const __be32 *addrp;
-> +	struct resource res;
->  	u32 addr, my_addr;
->  	int my_id = 0;
->  
-> -	addrp = of_get_address(node, 0, NULL, NULL);
-> -	my_addr = (u32)of_translate_address(node, addrp);
-> +	of_address_to_resource(node, 0, &res);
-> +	my_addr = (u32)res.start;
->  
->  	for_each_matching_node(np, ti_edac_of_match) {
->  		if (np == node)
->  			continue;
->  
-> -		addrp = of_get_address(np, 0, NULL, NULL);
-> -		addr = (u32)of_translate_address(np, addrp);
-> +		of_address_to_resource(np, 0, &res);
-> +		addr = (u32)res.start;
->  
->  		edac_printk(KERN_INFO, EDAC_MOD_NAME,
->  			    "addr=%x, my_addr=%x\n",
-> -- 
-> 2.39.2
-> 
+irqchip/gic-v3: Add Rockchip 3588001 erratum workaround
+
+Rockchip RK3588/RK3588s GIC600 integration does not support the
+sharability feature. Rockchip assigned Erratum ID #3588001 for this
+issue.
+
+Note, that the 0x0201743b ID is not Rockchip specific and thus
+there is an extra of_machine_is_compatible() check.
+
+The flags are named FORCE_NON_SHAREABLE to be vendor agnostic,
+since apparently similar integration design errors exist in other
+platforms and they can reuse the same flag.
+
+Co-developed-by: XiaoDong Huang <derrick.huang@rock-chips.com>
+Signed-off-by: XiaoDong Huang <derrick.huang@rock-chips.com>
+Co-developed-by: Kever Yang <kever.yang@rock-chips.com>
+Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
+Co-developed-by: Lucas Tanure <lucas.tanure@collabora.com>
+Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20230418142109.49762-2-sebastian.reichel@collabora.com
+---
+ Documentation/arm64/silicon-errata.rst |  3 ++-
+ arch/arm64/Kconfig                     | 10 +++++++-
+ drivers/irqchip/irq-gic-v3-its.c       | 35 +++++++++++++++++++++++++-
+ 3 files changed, 48 insertions(+)
+
+diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+index e31f6c0..9e311bc 100644
+--- a/Documentation/arm64/silicon-errata.rst
++++ b/Documentation/arm64/silicon-errata.rst
+@@ -207,6 +207,9 @@ stable kernels.
+ +----------------+-----------------+-----------------+-----------------------------+
+ | Qualcomm Tech. | Kryo4xx Gold    | N/A             | ARM64_ERRATUM_1286807       |
+ +----------------+-----------------+-----------------+-----------------------------+
+++----------------+-----------------+-----------------+-----------------------------+
++| Rockchip       | RK3588          | #3588001        | ROCKCHIP_ERRATUM_3588001    |
+++----------------+-----------------+-----------------+-----------------------------+
+ 
+ +----------------+-----------------+-----------------+-----------------------------+
+ | Fujitsu        | A64FX           | E#010001        | FUJITSU_ERRATUM_010001      |
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 1023e89..0278921 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1150,6 +1150,16 @@ config NVIDIA_CARMEL_CNP_ERRATUM
+ 
+ 	  If unsure, say Y.
+ 
++config ROCKCHIP_ERRATUM_3588001
++	bool "Rockchip 3588001: GIC600 can not support shareability attributes"
++	default y
++	help
++	  The Rockchip RK3588 GIC600 SoC integration does not support ACE/ACE-lite.
++	  This means, that its sharability feature may not be used, even though it
++	  is supported by the IP itself.
++
++	  If unsure, say Y.
++
+ config SOCIONEXT_SYNQUACER_PREITS
+ 	bool "Socionext Synquacer: Workaround for GICv3 pre-ITS"
+ 	default y
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+index 586271b..fa4641a 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -42,9 +42,11 @@
+ #define ITS_FLAGS_CMDQ_NEEDS_FLUSHING		(1ULL << 0)
+ #define ITS_FLAGS_WORKAROUND_CAVIUM_22375	(1ULL << 1)
+ #define ITS_FLAGS_WORKAROUND_CAVIUM_23144	(1ULL << 2)
++#define ITS_FLAGS_FORCE_NON_SHAREABLE		(1ULL << 3)
+ 
+ #define RDIST_FLAGS_PROPBASE_NEEDS_FLUSHING	(1 << 0)
+ #define RDIST_FLAGS_RD_TABLES_PREALLOCATED	(1 << 1)
++#define RDIST_FLAGS_FORCE_NON_SHAREABLE		(1 << 2)
+ 
+ #define RD_LOCAL_LPI_ENABLED                    BIT(0)
+ #define RD_LOCAL_PENDTABLE_PREALLOCATED         BIT(1)
+@@ -2359,6 +2361,9 @@ retry_baser:
+ 	its_write_baser(its, baser, val);
+ 	tmp = baser->val;
+ 
++	if (its->flags & ITS_FLAGS_FORCE_NON_SHAREABLE)
++		tmp &= ~GITS_BASER_SHAREABILITY_MASK;
++
+ 	if ((val ^ tmp) & GITS_BASER_SHAREABILITY_MASK) {
+ 		/*
+ 		 * Shareability didn't stick. Just use
+@@ -3096,6 +3101,9 @@ static void its_cpu_init_lpis(void)
+ 	gicr_write_propbaser(val, rbase + GICR_PROPBASER);
+ 	tmp = gicr_read_propbaser(rbase + GICR_PROPBASER);
+ 
++	if (gic_rdists->flags & RDIST_FLAGS_FORCE_NON_SHAREABLE)
++		tmp &= ~GICR_PROPBASER_SHAREABILITY_MASK;
++
+ 	if ((tmp ^ val) & GICR_PROPBASER_SHAREABILITY_MASK) {
+ 		if (!(tmp & GICR_PROPBASER_SHAREABILITY_MASK)) {
+ 			/*
+@@ -3120,6 +3128,9 @@ static void its_cpu_init_lpis(void)
+ 	gicr_write_pendbaser(val, rbase + GICR_PENDBASER);
+ 	tmp = gicr_read_pendbaser(rbase + GICR_PENDBASER);
+ 
++	if (gic_rdists->flags & RDIST_FLAGS_FORCE_NON_SHAREABLE)
++		tmp &= ~GICR_PENDBASER_SHAREABILITY_MASK;
++
+ 	if (!(tmp & GICR_PENDBASER_SHAREABILITY_MASK)) {
+ 		/*
+ 		 * The HW reports non-shareable, we must remove the
+@@ -4710,6 +4721,19 @@ static bool __maybe_unused its_enable_quirk_hip07_161600802(void *data)
+ 	return true;
+ }
+ 
++static bool __maybe_unused its_enable_rk3588001(void *data)
++{
++	struct its_node *its = data;
++
++	if (!of_machine_is_compatible("rockchip,rk3588"))
++		return false;
++
++	its->flags |= ITS_FLAGS_FORCE_NON_SHAREABLE;
++	gic_rdists->flags |= RDIST_FLAGS_FORCE_NON_SHAREABLE;
++
++	return true;
++}
++
+ static const struct gic_quirk its_quirks[] = {
+ #ifdef CONFIG_CAVIUM_ERRATUM_22375
+ 	{
+@@ -4756,6 +4780,14 @@ static const struct gic_quirk its_quirks[] = {
+ 		.init	= its_enable_quirk_hip07_161600802,
+ 	},
+ #endif
++#ifdef CONFIG_ROCKCHIP_ERRATUM_3588001
++	{
++		.desc   = "ITS: Rockchip erratum RK3588001",
++		.iidr   = 0x0201743b,
++		.mask   = 0xffffffff,
++		.init   = its_enable_rk3588001,
++	},
++#endif
+ 	{
+ 	}
+ };
+@@ -5096,6 +5128,9 @@ static int __init its_probe_one(struct resource *res,
+ 	gits_write_cbaser(baser, its->base + GITS_CBASER);
+ 	tmp = gits_read_cbaser(its->base + GITS_CBASER);
+ 
++	if (its->flags & ITS_FLAGS_FORCE_NON_SHAREABLE)
++		tmp &= ~GITS_CBASER_SHAREABILITY_MASK;
++
+ 	if ((tmp ^ baser) & GITS_CBASER_SHAREABILITY_MASK) {
+ 		if (!(tmp & GITS_CBASER_SHAREABILITY_MASK)) {
+ 			/*
