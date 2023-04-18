@@ -2,189 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB086E5B0F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 041D06E5B14
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbjDRH5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 03:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
+        id S231234AbjDRH6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 03:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjDRH5M (ORCPT
+        with ESMTP id S230036AbjDRH6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 03:57:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75BF1720;
-        Tue, 18 Apr 2023 00:57:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6393762DD4;
-        Tue, 18 Apr 2023 07:57:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E1DFC433EF;
-        Tue, 18 Apr 2023 07:57:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681804629;
-        bh=Taxd5c7pX6tM+SwtneB8L8KcXHJaBWkTNgaSXa4RFMc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JnE5nxiH/IKVD6QpDzgXGnYSHOrL8Emte4CFmtVLT5d0rNwkrdPbHBpHqVZ/eOpJr
-         9qpTTlEA/wdGdEDJ2Uy1PFYjtBscYNY22A7ACXs0TbGnrmC0ffvwxzM5H+23XKh6aG
-         7eCwq+N6yRxmq5nz5dnZ+qx1zOSCJqT/T3667gehuBPDB5jI2kVTmPIPBISleJ2cRe
-         8IZDQJqEt3SD+U81SYOm6ikfNtusp8l9vUNWk05yEqugu7gDzoQfxvaZntHdJ2Juad
-         1TAIHXgtw5Z6aSvTyT0sgNga0QUE7NGEmswrjPGl7HKXeWHaalDaFtHelzKS6/LxKD
-         3oMI7ecN3KvjA==
-Date:   Tue, 18 Apr 2023 10:57:06 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     "Zhijian Li (Fujitsu)" <lizhijian@fujitsu.com>
-Cc:     Zhu Yanjun <yanjun.zhu@linux.dev>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        "haris.iqbal@ionos.com" <haris.iqbal@ionos.com>,
-        "jinpu.wang@ionos.com" <jinpu.wang@ionos.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH for-next 2/3] RDMA/rtrs: Fix rxe_dealloc_pd warning
-Message-ID: <20230418075706.GB9740@unreal>
-References: <85323eb2-cfc7-d1b8-3a75-3fa63dde29db@fujitsu.com>
- <20230411122651.GV182481@unreal>
- <aa43746f-77f9-8592-5370-2a5042506ee5@fujitsu.com>
- <8fe62e38-e43d-3d6c-624f-1c8ce5859788@linux.dev>
- <f85cdaaa-b1d6-bc89-e963-8b611ae3667d@fujitsu.com>
- <20230413132418.GR17993@unreal>
- <4d1cacbf-f9b2-07c7-75bf-61f34abc1841@linux.dev>
- <7656e04c-1adc-6621-0e45-e2b282e6c143@fujitsu.com>
- <20230417180452.GG15386@unreal>
- <0985e0a9-fe19-1c07-0da7-48ec88eb77c6@fujitsu.com>
+        Tue, 18 Apr 2023 03:58:30 -0400
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AC14492
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 00:58:28 -0700 (PDT)
+X-ASG-Debug-ID: 1681804699-086e237e501b070001-xx1T2L
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id eORz1bmA4TLqDKLD (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Tue, 18 Apr 2023 15:58:19 +0800 (CST)
+X-Barracuda-Envelope-From: LeoLiu-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Tue, 18 Apr
+ 2023 15:58:19 +0800
+Received: from [10.32.64.2] (10.32.64.2) by ZXBJMBX03.zhaoxin.com
+ (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Tue, 18 Apr
+ 2023 15:58:16 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Message-ID: <b0581bb8-b31d-2841-3d75-cad28d503707@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.32.64.2
+Date:   Tue, 18 Apr 2023 15:58:15 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 0/5] Parse the PCIe AER and set to relevant registers
+To:     Bjorn Helgaas <helgaas@kernel.org>
+X-ASG-Orig-Subj: Re: [PATCH v2 0/5] Parse the PCIe AER and set to relevant registers
+CC:     <rafael@kernel.org>, <lenb@kernel.org>, <james.morse@arm.com>,
+        <tony.luck@intel.com>, <bp@alien8.de>, <robert.moore@intel.com>,
+        <ying.huang@intel.com>, <rdunlap@infradead.org>,
+        <bhelgaas@google.com>, <linux-acpi@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devel@acpica.org>, <CobeChen@zhaoxin.com>,
+        <TonyWWang@zhaoxin.com>, <ErosZhang@zhaoxin.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Li, Ming" <ming4.li@intel.com>, <leoliu@zhaoxin.com>
+References: <20230412163201.GA49069@bhelgaas>
+From:   LeoLiuoc <LeoLiu-oc@zhaoxin.com>
+In-Reply-To: <20230412163201.GA49069@bhelgaas>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0985e0a9-fe19-1c07-0da7-48ec88eb77c6@fujitsu.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.32.64.2]
+X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
+ ZXBJMBX03.zhaoxin.com (10.29.252.7)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1681804699
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 7685
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107579
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 07:04:00AM +0000, Zhijian Li (Fujitsu) wrote:
-> 
-> 
-> On 18/04/2023 02:04, Leon Romanovsky wrote:
-> > On Mon, Apr 17, 2023 at 02:18:24AM +0000, Zhijian Li (Fujitsu) wrote:
-> >>
-> >>
-> >> On 14/04/2023 23:58, Zhu Yanjun wrote:
-> >>> 在 2023/4/13 21:24, Leon Romanovsky 写道:
-> >>>> On Thu, Apr 13, 2023 at 08:12:15AM +0000, Zhijian Li (Fujitsu) wrote:
-> >>>>>
-> >>>>>
-> >>>>> On 13/04/2023 15:35, Guoqing Jiang wrote:
-> >>>>>> Hi,
-> >>>>>>
-> >>>>>> I take a closer look today.
-> >>>>>>
-> >>>>>> On 4/12/23 09:15, Zhijian Li (Fujitsu) wrote:
-> >>>>>>>
-> >>>>>>> On 11/04/2023 20:26, Leon Romanovsky wrote:
-> >>>>>>>> On Tue, Apr 11, 2023 at 02:43:46AM +0000, Zhijian Li (Fujitsu) wrote:
-> >>>>>>>>>
-> >>>>>>>>> On 10/04/2023 21:10, Guoqing Jiang wrote:
-> >>>>>>>>>>
-> >>>>>>>>>> On 4/10/23 20:08, Leon Romanovsky wrote:
-> >>>>>>>>>>> On Mon, Apr 10, 2023 at 06:43:03AM +0000, Li Zhijian wrote:
-> >>>>>>>>>>>> The warning occurs when destroying PD whose reference count is not zero.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> Precodition: clt_path->s.con_num is 2.
-> >>>>>>>>>>>> So 2 cm connection will be created as below:
-> >>>>>>>>>>>> CPU0                                              CPU1
-> >>>>>>>>>>>> init_conns {                              |
-> >>>>>>>>>>>>        create_cm() // a. con[0] created        |
-> >>>>>>>>>>>>                                                |  a'. rtrs_clt_rdma_cm_handler() {
-> >>>>>>>>>>>>                                                |    rtrs_rdma_addr_resolved()
-> >>>>>>>>>>>>                                                |      create_con_cq_qp(con); << con[0]
-> >>>>>>>>>>>>                                                |  }
-> >>>>>>>>>>>>                                                | in this moment, refcnt of PD was increased to 2+
-> >>>>>>
-> >>>>>> What do you mean "refcnt of PD"? usecnt in struct ib_pd or dev_ref.
-> >>>>>
-> >>>>> I mean usecnt in struct ib_pd
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>>>
-> >>>>>>>>>>>>                                                |
-> >>>>>>>>>>>>        create_cm() // b. cid = 1, failed       |
-> >>>>>>>>>>>>          destroy_con_cq_qp()                   |
-> >>>>>>>>>>>>            rtrs_ib_dev_put()                   |
-> >>>>>>>>>>>>              dev_free()                        |
-> >>>>>>>>>>>>                ib_dealloc_pd(dev->ib_pd) << PD |
-> >>>>>>>>>>>>                 is destroyed, but refcnt is    |
-> >>>>>>>>>>>>                 still greater than 0           |
-> >>>>>>
-> >>>>>> Assuming you mean "pd->usecnt". We only allocate pd in con[0] by rtrs_ib_dev_find_or_add,
-> >>>>>> if con[1] failed to create cm, then alloc_path_reqs -> ib_alloc_mr -> atomic_inc(&pd->usecnt)
-> >>>>>> can't be triggered. Is there other places could increase the refcnt?
-> >>>>>
-> >>>>>
-> >>>>> Yes, when create a qp, it will also associate to this PD, that also mean refcnt of PD will be increased.
-> >>>>>
-> >>>>> When con[0](create_con_cq_qp) succeeded, refcnt of PD will be 2. and then when con[1] failed, since
-> >>>>> QP didn't create, refcnt of PD is still 2. con[1]'s cleanup will destroy the PD(ib_dealloc_pd) since dev_ref = 1, after that its
-> >>>>> refcnt is still 1.
-> >>>>
-> >>>> Why is refcnt 1 in con[1] destruction phase? It seems to me like a bug.
-> >>
-> >>
-> >>
-> >>> +	if (!con->has_dev)
-> >>> +		return;
-> >>>   	if (clt_path->s.dev_ref && !--clt_path->s.dev_ref) {
-> >>>   		rtrs_ib_dev_put(clt_path->s.dev);
-> >>>   		clt_path->s.dev = NULL;
-> >>
-> >> Currently, without this patch:
-> >> 1. PD and clt_path->s.dev are shared among connections.
-> >> 2. every con[n]'s cleanup phase will call destroy_con_cq_qp()
-> >> 3. clt_path->s.dev will be always decreased in destroy_con_cq_qp(), and when
-> >>      clt_path->s.dev become zero, it will destroy PD.
-> >> 4. when con[1] failed to create, con[1] will not take clt_path->s.dev, but it try to decreased clt_path->s.dev <<< it's wrong to do that.
-> > 
-> > So please fix it by making sure that failure to create con[1] will
-> > release resources which were allocated. If con[1] didn't increase
-> > s.dev_ref, it shouldn't decrease it either.
-> 
-> You are right, the current patch did exactly that.
-> It introduced a con owning flag 'has_dev' to indicate whether this con has taken s.dev.
-> so that its cleanup phase will only decrease its s.dev properly.
 
-The has_dev is a workaround and not a solution. In proper error unwind
-sequence, you won't need extra flag.
 
-Thanks
+在 2023/4/13 0:32, Bjorn Helgaas 写道:
+> On Wed, Apr 12, 2023 at 05:11:28PM +0800, LeoLiuoc wrote:
+>> 在 2023/4/8 7:18, Bjorn Helgaas 写道:
+>>> On Tue, Nov 15, 2022 at 11:11:15AM +0800, LeoLiu-oc wrote:
+>>>> From: leoliu-oc <leoliu-oc@zhaoxin.com>
+>>>>
+>>>> According to the sec 18.3.2.4, 18.3.2.5 and 18.3.2.6 in ACPI r6.5, the
+>>>> register values form HEST PCI Express AER Structure should be written to
+>>>> relevant PCIe Device's AER Capabilities. So the purpose of the patch set
+>>>> is to extract register values from HEST PCI Express AER structures and
+>>>> program them into AER Capabilities. Refer to the ACPI Spec r6.5 for a more
+>>>> detailed description.
+>>>
+>>> I wasn't involved in this part of the ACPI spec, and I don't
+>>> understand how this is intended to work.
+>>>
+>>> I see that this series extracts AER mask, severity, and control
+>>> information from the ACPI HEST table and uses it to configure PCIe
+>>> devices as they are enumerated.
+>>>
+>>> What I don't understand is how this relates to ownership of the AER
+>>> capability as negotiated by the _OSC method.  Firmware can configure
+>>> the AER capability itself, and if it retains control of the AER
+>>> capability, the OS can't write to it (with the exception of clearing
+>>> EDR error status), so this wouldn't be necessary.
+>>
+>> There is no relationship between the ownership of the AER related
+>> register and the ownership of the AER capability in the OS or
+>> Firmware.
+> 
+> I don't understand this; can you say it another way?  "Ownership of
+> the AER related register" and "ownership of the AER capability" sound
+> exactly the same to me.
+> 
 
+I would like to state that the operation of writing the AER capability 
+register of the relevant PCIe device through the HEST PCI Express AER 
+structure has nothing to do with the ownership of the AER.
+
+I do not find a direct statement from ACPI Spec r6.5 that allows the OS 
+to write the value of the HEST AER register to the AER register of the 
+corresponding device without AER control but I looked in ACPI Spec for a 
+description of the relationship between writing to the AER register 
+through the _HPP/_HPX method and whether the OS requires AER control：
+The expression are as follows:
+1. OSPM uses the information returned by _HPX to determine how ①to 
+configure PCI Functions that are hot- plugged into the system, ②to 
+configure Functions not configured by the platform firmware during 
+initial system boot, ③and to configure Functions any time they lose 
+configuration space settings (e.g. OSPM issues a Secondary Bus 
+Reset/Function Level Reset or Downstream Port Containment is triggered).
+
+2. _HPX may return multiple types or Record Settings (each setting in a 
+single sub-package.) OSPM is responsible for detecting the type of 
+Function and for applying the appropriate settings. OSPM is also 
+responsible for detecting the device / port type of the PCI Express 
+Function and applying the appropriate settings provided. For example, 
+the Secondary Uncorrectable Error Severity and Secondary Uncorrectable 
+Error Mask settings of Type 2 record are only applicable to PCI Express 
+to PCI-X/PCI Bridge whose device / port type is 1000b. Similarly, AER 
+settings are only applicable to hot plug PCI Express devices that 
+support the optional AER capability.
+
+3. Note: OSPM may override the settings provided by the _HPX object’s 
+Type2 record (PCI Express Settings) or Type3 record (PCI Express 
+Descriptor Settings) when OSPM has assumed native control of the 
+corresponding feature. For example, if OSPM has assumed ownership of AER 
+(via _OSC), OSPM may override AER related settings returned by _HPX.
+
+This means that writing the AER register value by _HPX does not require 
+the OS to gain control of the AER. Also from the usage description of 
+_HPX, I think ownership of AER means who decides the configuration value 
+of the AER register rather than who can write the configuration value. 
+Even though the OS does not have control or ownership of the AER, it 
+should still write the configuration values determined by the firmware 
+to the AER register at the request of the firmware. Therefore, 
+considering that HEST AER patch is an effective supplement to _HPP/_HPX 
+method when the Firmware does not support the _HPP/_HPX method, I think 
+the question about whether OS has control of AER to write the 
+information in the HEST AER structure to the AER register of the 
+corresponding device is similar to the question about _HPX/_HPP method 
+to write the AER information to the AER register of the corresponding 
+device. Therefore, the ownership of AER is not considered in this patch.
+
+>> The processing here is to initialize the AER related register, not
+>> the AER event. If Firmware is configured with AER register, it will
+>> not be able to handle the runtime hot reset and link retrain cases
+>> in addition to the hotplug case you mentioned below.
+>>
+>>> If the OS owns the AER capability, I assume it gets to decide for
+>>> itself how to configure AER, no matter what the ACPI HEST says.
+>>
+>> What information does the OS use to decide how to configure AER? The
+>> ACPI Spec has the following description: PCI Express (PCIe) root
+>> ports may implement PCIe Advanced Error Reporting (AER) support.
+>> This table(HEST) contains  information platform firmware supplies to
+>> OSPM for configuring AER support on a given root port. We understand
+>> that HEST stands for user to express expectations.
+>>
+>> In the current implementation, the OS already configures a PCIE
+>> device based on _HPP/_HPX method when configuring a PCI device
+>> inserted into a hot-plug slot or initial configuration of a PCI
+>> device at system boot. HEST is just another way to express the
+>> desired configuration of the user.
 > 
-> Thanks
-> Zhijian
+> Why was the HEST mechanism added if the functionality is equivalent
+> to the existing _HPP/_HPX?  There must be something that HEST supplies
+> that _HPP/_HPX did not.
 > 
+> I think we need some things in the commit log (and short comments in
+> the code) to help maintain this in the future:
 > 
-> > 
-> > Thanks
-> > 
-> >>
-> >>
-> >> Thanks
-> >> Zhijian
-> >>
-> >>> Agree. We should find out why refcnt 1 and fix this problem.
-> >>
-> >>
-> >>
-> >>
-> >>>
-> >>> Zhu Yanjun
-> >>>>
-> >>>> Thanks
-> >>>
+>    - What problem does this solve, e.g., is there some bug that happens
+>      because we lack this functionality?
+> 
+>    - How is this HEST mechanism related to _HPP/_HPX?  What are the
+>      differences?
+> 
+>    - How is this related to _OSC AER ownership?
+> 
+
+Yes, I'll add explanations of these issues to the commit log in the next 
+release.
+
+> I think we ignore _OSC ownership in the existing _HPP/_HPX code, but
+> that seems like a potential problem.  The PCI Firmware spec (r3.3, sec
+> 4.5.1) is pretty clear:
+> 
+>    If control of this feature was requested and denied or was not
+>    requested, firmware returns this bit set to 0, and the operating
+>    system must not modify the Advanced Error Reporting Capability or
+>    the other error enable/status bits listed above.
+> 
+
+PCI Firmware Spec is not very clear about the relationship between 
+configuring the AER register and the ownership of the AER. ACPI Spec 
+v6.5 does specify the use of _HPP or _HPX: writing to the AER register 
+through the _HPP/HPX method does not require the OS to acquire control 
+of the AER.
+
+Your Sincerely,
+LeoLiu-oc
+
+>>> Maybe this is intended for the case where firmware retains AER
+>>> ownership but the OS uses native hotplug (pciehp), and this is a way
+>>> for the OS to configure new devices as the firmware expects?  But in
+>>> that case, we still have the problem that the OS can't write to the
+>>> AER capability to do this configuration.
+>>>
+>>> Bjorn
