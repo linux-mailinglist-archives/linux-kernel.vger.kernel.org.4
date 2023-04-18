@@ -2,120 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976626E5BB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3026E5BB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231474AbjDRIKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S231466AbjDRIKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbjDRIKQ (ORCPT
+        with ESMTP id S231502AbjDRIKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:10:16 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890E659DF;
-        Tue, 18 Apr 2023 01:09:52 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 012765C01D1;
-        Tue, 18 Apr 2023 04:09:30 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 18 Apr 2023 04:09:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1681805369; x=1681891769; bh=Ta
-        bM1MA8pfDpJqUW/8/8Nla77e3Xl6HsgEhF5ucRElE=; b=eb7EZBPlYZE2OiqG9e
-        WUImhRfufcrSeTZPK10L3dlJTKkoiNEzpeSS+/ge/oeU7cBj6jrrhH48mL6LnhFz
-        aWx/SVtjUBVaC581wMk9i3BNQhdBZdkWuxTXP8G+stMluOy9lzRSroV2MWQX2MFS
-        TN5NCWma8b2ar2pvf0KtceKEL+OKFAlaHfGS+i0xYKrOQcCOQ+YXQiAz134gNPom
-        ri3ARwap2AJMMOqm3hiZV29d41Ai34/6QRLNOocl8BqAEShJ0iJndOszjKxKKccW
-        +k5jzQ0E2tAeotcoEph06ndZYy5G7XLIpkX7lcmQ/+YR5u/hLRRqXQQrBLLvR8a1
-        YjQg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681805369; x=1681891769; bh=TabM1MA8pfDpJ
-        qUW/8/8Nla77e3Xl6HsgEhF5ucRElE=; b=Nvyki73Xx9xnirN1avv9olW4xcW/B
-        WyuJE2HzPPRz0Quw00Vn4TJzXZM+gjp6fb8185Hu6oYy+FbHSTNoalrPYHl2RCkS
-        ZXAA5ncDUyss3kenlV0eUtAFasPLUBwxj+AZyaGjr4S8A0d9lpxNlkryElUd3cJL
-        K9Nj6bbIL8X0P9hVWAoKflm3pgmUzjzN+u4P6VImJUHgxJ/6rdfdE0sJ+5d3Vd+o
-        X50k5c8wPDlVO7uvSmi7r1k+eNue3OxAAOadw1ByBirNnAdgjuRydqrbm46F1gSK
-        0lfEGCjuRmrNCv9aO5rliZp3ZmuVQ8J6jSeRHmgU747jubGfGviLlh0mQ==
-X-ME-Sender: <xms:OVA-ZMefecNW_VYTfJm47H3EX67QaMbhn7tiuJvRmoSNRJD3wjFRYA>
-    <xme:OVA-ZOPtv6Up0Pqo3Faqy4zpeqrH8zOg5-4vLNvGXqP2xkiE1_gou2OF-zSJnqYUh
-    HORjGlXuRwBwmz6qf8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdelkecutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeetffen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggv
-X-ME-Proxy: <xmx:OVA-ZNiTFiFOIUYKo3_EK-wusPItkVL6MQlHBB0Lwq_2ZRnL82oncg>
-    <xmx:OVA-ZB9vdD9LDQXWjwKtkQ5MYA9S5Ix-tvvx306sHJsF_-WUreoUtQ>
-    <xmx:OVA-ZIvuQC9MYwdE-kqFXBZzA0gXCvK5Ydc1F94BpMhfFpBEyBTXcQ>
-    <xmx:OVA-ZIE9Xo2smsOMuFglDo3yrVYiQdocg-0z1enNazrPBD3_-CsxIA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 402A6B60086; Tue, 18 Apr 2023 04:09:29 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
-Mime-Version: 1.0
-Message-Id: <6b5f7b17-6365-4791-b6e9-8505acb476f7@app.fastmail.com>
-In-Reply-To: <695e9f88-5a79-7ca4-645f-047b78495a80@xs4all.nl>
-References: <20230418071605.2971866-1-arnd@kernel.org>
- <695e9f88-5a79-7ca4-645f-047b78495a80@xs4all.nl>
-Date:   Tue, 18 Apr 2023 10:09:08 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Hans Verkuil" <hverkuil@xs4all.nl>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "laurent.pinchart" <laurent.pinchart@ideasonboard.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Shawn Guo" <shawnguo@kernel.org>,
-        "Sascha Hauer" <s.hauer@pengutronix.de>,
-        "Dong Aisheng" <aisheng.dong@nxp.com>,
-        "Guoniu Zhou" <guoniu.zhou@nxp.com>,
-        "Stefan Riedmueller" <s.riedmueller@phytec.de>
-Cc:     "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        "Fabio Estevam" <festevam@gmail.com>,
-        "NXP Linux Team" <linux-imx@nxp.com>,
-        "Christian Hemp" <c.hemp@phytec.de>,
-        "Jacopo Mondi" <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: nxp: ignore unused suspend operations
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 18 Apr 2023 04:10:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A273855BB;
+        Tue, 18 Apr 2023 01:10:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 391AB625ED;
+        Tue, 18 Apr 2023 08:09:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6F15C433EF;
+        Tue, 18 Apr 2023 08:09:34 +0000 (UTC)
+Message-ID: <5c649a34-90cb-d02b-2737-7c9a858c3faa@xs4all.nl>
+Date:   Tue, 18 Apr 2023 10:09:33 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5 14/20] staging: media: tegra-video: move MIPI
+ calibration calls from VI to CSI
+Content-Language: en-US
+To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc:     linux-tegra@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+References: <20230407133852.2850145-1-luca.ceresoli@bootlin.com>
+ <20230407133852.2850145-15-luca.ceresoli@bootlin.com>
+ <04e89fcc-87db-8677-daf9-48aa3cb61b8c@xs4all.nl>
+ <20230418100756.329305ca@booty>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20230418100756.329305ca@booty>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023, at 10:04, Hans Verkuil wrote:
-> On 18/04/2023 09:15, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> gcc warns about some functions being unused when CONFIG_PM is
->> disabled:
->
-> ???
->
-> The Kconfig has a:
->
->         depends on HAS_DMA && PM
->
-> So how can this be compiled with CONFIG_PM not set?
->
-> Am I missing something?
+On 18/04/2023 10:07, Luca Ceresoli wrote:
+> Hi Hans,
+> 
+> On Fri, 14 Apr 2023 17:51:34 +0200
+> Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+> 
+>> Hi Luca,
+>>
+>> I just encountered an error in this patch, so I have rejected the PR I made.
+>>
+>> See below for the details:
+>>
+>> On 07/04/2023 15:38, Luca Ceresoli wrote:
+>>> The CSI module does not handle all the MIPI lane calibration procedure,
+>>> leaving a small part of it to the VI module. In doing this,
+>>> tegra_channel_enable_stream() (vi.c) manipulates the private data of the
+>>> upstream subdev casting it to struct 'tegra_csi_channel', which will be
+>>> wrong after introducing a VIP (parallel video input) channel.
+>>>
+>>> This prevents adding support for the VIP module.  It also breaks the
+>>> logical isolation between modules.
+>>>
+>>> Since the lane calibration requirement does not exist in the parallel input
+>>> module, moving the calibration function to a per-module op is not
+>>> optimal. Instead move the calibration procedure in the CSI module, together
+>>> with the rest of the calibration procedures. After this change,
+>>> tegra_channel_enable_stream() just calls v4l2_subdev_call() to ask for a
+>>> stream start/stop to the CSI module, which in turn knows all the
+>>> CSI-specific details to implement it.
+>>>
+>>> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+>>> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+>>>
+>>> ---
+>>>
+>>> No changes in v5
+>>>
+>>> Changed in v4:
+>>>  - Added review tags
+>>>
+>>> No changes in v3
+>>> No changes in v2
+>>> ---
+>>>  drivers/staging/media/tegra-video/csi.c | 44 ++++++++++++++++++++
+>>>  drivers/staging/media/tegra-video/vi.c  | 54 ++-----------------------
+>>>  2 files changed, 48 insertions(+), 50 deletions(-)
+>>>
+>>> diff --git a/drivers/staging/media/tegra-video/csi.c b/drivers/staging/media/tegra-video/csi.c
+>>> index 9a03d5ccdf3c..b93fc879ef3a 100644
+>>> --- a/drivers/staging/media/tegra-video/csi.c
+>>> +++ b/drivers/staging/media/tegra-video/csi.c
+>>> @@ -328,12 +328,42 @@ static int tegra_csi_enable_stream(struct v4l2_subdev *subdev)
+>>>  	}
+>>>  
+>>>  	csi_chan->pg_mode = chan->pg_mode;
+>>> +
+>>> +	/*
+>>> +	 * Tegra CSI receiver can detect the first LP to HS transition.
+>>> +	 * So, start the CSI stream-on prior to sensor stream-on and
+>>> +	 * vice-versa for stream-off.
+>>> +	 */
+>>>  	ret = csi->ops->csi_start_streaming(csi_chan);
+>>>  	if (ret < 0)
+>>>  		goto finish_calibration;
+>>>  
+>>> +	if (csi_chan->mipi) {
+>>> +		struct v4l2_subdev *src_subdev;
+>>> +		/*
+>>> +		 * TRM has incorrectly documented to wait for done status from
+>>> +		 * calibration logic after CSI interface power on.
+>>> +		 * As per the design, calibration results are latched and applied
+>>> +		 * to the pads only when the link is in LP11 state which will happen
+>>> +		 * during the sensor stream-on.
+>>> +		 * CSI subdev stream-on triggers start of MIPI pads calibration.
+>>> +		 * Wait for calibration to finish here after sensor subdev stream-on.
+>>> +		 */
+>>> +		src_subdev = tegra_channel_get_remote_source_subdev(chan);
+>>> +		ret = v4l2_subdev_call(src_subdev, video, s_stream, true);
+>>> +		err = tegra_mipi_finish_calibration(csi_chan->mipi);
+>>> +
+>>> +		if (ret < 0 && ret != -ENOIOCTLCMD)
+>>> +			goto disable_csi_stream;  
+>>
+>> If there was an error from s_stream, then tegra_mipi_finish_calibration is called
+>> and it goes to disable_csi_stream...
+>>
+>>> +
+>>> +		if (err < 0)
+>>> +			dev_warn(csi->dev, "MIPI calibration failed: %d\n", err);
+>>> +	}
+>>> +
+>>>  	return 0;
+>>>  
+>>> +disable_csi_stream:
+>>> +	csi->ops->csi_stop_streaming(csi_chan);
+>>>  finish_calibration:
+>>>  	if (csi_chan->mipi)
+>>>  		tegra_mipi_finish_calibration(csi_chan->mipi);  
+>>
+>> ...but here tegra_mipi_finish_calibration() is called again, leading to an unlock
+>> imbalance.
+> 
+> Many thanks for your testing! Unfortunately I have no Tegra210 hardware
+> so this never happened here, but with your report the problem got
+> obvious and, luckily, the fix appeared to be just a oneliner.
+> 
+> v6 just sent! I'm wondering whether there is still hope to get this
+> 6.4...
 
-My mistake, the warning only shows up when CONFIG_PM_SLEEP is
-disabled.
+Sorry, it's too late for 6.4 now. Only fixes can go in for 6.4.
 
-     Arnd
+Regards,
+
+	Hans
+
+> 
+> Best regards,
+> Luca
+> 
+
