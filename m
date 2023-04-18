@@ -2,89 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8D86E5A43
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D366E5A47
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 09:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbjDRHSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 03:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
+        id S231250AbjDRHTA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 03:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjDRHSN (ORCPT
+        with ESMTP id S229721AbjDRHS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 03:18:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12384C28;
-        Tue, 18 Apr 2023 00:18:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A81262D7F;
-        Tue, 18 Apr 2023 07:18:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8266AC433EF;
-        Tue, 18 Apr 2023 07:18:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681802283;
-        bh=SBkw+Rl/R2V6yVsXQAH0zMIyTFbmLbUrynptNaG25HE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JoJopI2hLvvz45LqFEsYWB0LavG63McovtFt7vl4iutbwrt/EuhjRfKpEdwsgfOxb
-         hlSuumS7K//WJmEs7+jYi/xHmMWWVcdWxlqu9ZrcEsjzayRDCzd8+Dt3k1nLMp9EDR
-         0cibxuJkuIbD0r3CqZfb/rOKwP4XiqLVc7yHWW2S6tLgTiomZS5kr37qqhSVfUuvif
-         vHBgiO2umshsip0Am6wfzmM8JCbJCQA9rhU7WEuqfdrKDCmKOv9oS3uaEirfp6vXIq
-         ZbRhPnqkpoG6S0yc56nyiGs6s2hqkTEctrI+3nE1AYgaXHp3X7msA5iyVEvMIBTHNu
-         jfCqp/pnicsVw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] module: stats: fix invalid_mod_bytes typo
-Date:   Tue, 18 Apr 2023 09:17:51 +0200
-Message-Id: <20230418071758.3163529-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Tue, 18 Apr 2023 03:18:58 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96401FFF;
+        Tue, 18 Apr 2023 00:18:56 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pofc2-002QcH-GH; Tue, 18 Apr 2023 09:18:50 +0200
+Received: from p5b13a017.dip0.t-ipconnect.de ([91.19.160.23] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pofc2-0011uS-1N; Tue, 18 Apr 2023 09:18:50 +0200
+Message-ID: <f72a4fd778eb34487860bae8b597c827e4270061.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH RESEND] sh: sq: Use the bitmap API when applicable
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-sh@vger.kernel.org
+Date:   Tue, 18 Apr 2023 09:18:47 +0200
+In-Reply-To: <CAMuHMdWz7YJ4ifkxU2GGdoj46fTsjS5WE66R0YzvOYr1ZKY=4w@mail.gmail.com>
+References: <071e9f32c19a007f4922903282c9121898641400.1681671848.git.christophe.jaillet@wanadoo.fr>
+         <b5fea49d68e1e2a702b0050f73582526e205cfa2.camel@physik.fu-berlin.de>
+         <CAMuHMdWz7YJ4ifkxU2GGdoj46fTsjS5WE66R0YzvOYr1ZKY=4w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.0 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 91.19.160.23
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Geert!
 
-This was caught by randconfig builds but does not show up in
-build testing without CONFIG_MODULE_DECOMPRESS:
+On Tue, 2023-04-18 at 09:14 +0200, Geert Uytterhoeven wrote:
+> Hi Adrian,
+> 
+> On Tue, Apr 18, 2023 at 8:36 AM John Paul Adrian Glaubitz
+> <glaubitz@physik.fu-berlin.de> wrote:
+> > Thanks for your patch. The changes look good to me. However, I have
+> > one question, see below.
+> > 
+> > On Sun, 2023-04-16 at 21:05 +0200, Christophe JAILLET wrote:
+> > > Using the bitmap API is less verbose than hand writing them.
+> > > It also improves the semantic.
+> > > 
+> > > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> 
+> > > --- a/arch/sh/kernel/cpu/sh4/sq.c
+> > > +++ b/arch/sh/kernel/cpu/sh4/sq.c
+> > > @@ -372,7 +372,6 @@ static struct subsys_interface sq_interface = {
+> > >  static int __init sq_api_init(void)
+> > >  {
+> > >       unsigned int nr_pages = 0x04000000 >> PAGE_SHIFT;
+> > > -     unsigned int size = (nr_pages + (BITS_PER_LONG - 1)) / BITS_PER_LONG;
+> > >       int ret = -ENOMEM;
+> > > 
+> > >       printk(KERN_NOTICE "sq: Registering store queue API.\n");
+> > > @@ -382,7 +381,7 @@ static int __init sq_api_init(void)
+> > >       if (unlikely(!sq_cache))
+> > >               return ret;
+> > > 
+> > > -     sq_bitmap = kzalloc(size, GFP_KERNEL);
+> > > +     sq_bitmap = bitmap_zalloc(nr_pages, GFP_KERNEL);
+> > >       if (unlikely(!sq_bitmap))
+> > >               goto out;
+> > > 
+> > 
+> > I have look through other patches where k{z,c,m}alloc() were replaced with
+> > bitmap_zalloc() and I noticed that in the other cases such as [1], kcalloc()
+> > was used instead of kzalloc() in our cases with the element size set to
+> > sizeof(long) while kzalloc() is using an element size equal to a byte.
+> > 
+> > Wouldn't that mean that the current code in sq is allocating a buffer that is
+> > too small by a factor of 1/sizeof(long) or am I missing something?
+> > 
+> > @Geert: Do you have any idea?
+> 
+> Nice catch!
+> 
+> Looking more deeply at the code, the intention is to allocate a bitmap
+> with nr_pages bits, so the code fater Christophe's patch is correct.
+> However, the old code is indeed wrong:
+> 
+>     (nr_pages + (BITS_PER_LONG - 1)) / BITS_PER_LONG
+> 
+> The aim is to calculate the size in bytes, rounded up to an integral
+> number of longs, but it lacks a final multiplication by BITS_PER_BYTE,
+> so it's off by a factor of 4.
 
-kernel/module/stats.c: In function 'mod_stat_bump_invalid':
-kernel/module/stats.c:229:42: error: 'invalid_mod_byte' undeclared (first use in this function); did you mean 'invalid_mod_bytes'?
-  229 |   atomic_long_add(info->compressed_len, &invalid_mod_byte);
-      |                                          ^~~~~~~~~~~~~~~~
-      |                                          invalid_mod_bytes
+Yeah, that's what I understood from reading the code which is why I was
+wondering why the factor was missing.
 
-Fixes: 0d4ab68ce983 ("module: add debug stats to help identify memory pressure")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-This was probably already reported, sending the fix just in case everyone
-else else missed it so far.
----
- kernel/module/stats.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Fixes: d7c30c682a278abe ("sh: Store Queue API rework.")
+> 
+> As we didn't have bitmap_zalloc() until commit c42b65e363ce97a8
+> ("bitmap: Add bitmap_alloc(), bitmap_zalloc() and bitmap_free()")
+> in v4.19, it would be good to fix the bug first in a separate patch,
+> not using
 
-diff --git a/kernel/module/stats.c b/kernel/module/stats.c
-index cdcd60695399..32959ec9581f 100644
---- a/kernel/module/stats.c
-+++ b/kernel/module/stats.c
-@@ -226,7 +226,7 @@ void mod_stat_bump_invalid(struct load_info *info, int flags)
- 	atomic_inc(&failed_load_modules);
- #if defined(CONFIG_MODULE_DECOMPRESS)
- 	if (flags & MODULE_INIT_COMPRESSED_FILE)
--		atomic_long_add(info->compressed_len, &invalid_mod_byte);
-+		atomic_long_add(info->compressed_len, &invalid_mod_bytes);
- #endif
- }
- 
+I agree. Do you want to send a patch I can review?
+
+> BTW, interesting how this got missed when fixing the other out-of-range
+> bug in commit 9f650cf2b811cfb6 ("sh: Fix store queue bitmap end.",
+> s/marc.theaimsgroup.com/marc.info/ when following the link).
+
+Yeah.
+
+PS: Sorry for the slightly messy grammar in my previous mail, didn't have
+    a coffee yet that early in the morning :-).
+
+Adrian
+
 -- 
-2.39.2
-
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
