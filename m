@@ -2,81 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555FC6E5D06
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0110C6E5D03
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjDRJJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
+        id S231346AbjDRJIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjDRJJB (ORCPT
+        with ESMTP id S231320AbjDRJIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:09:01 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D617A85;
-        Tue, 18 Apr 2023 02:08:40 -0700 (PDT)
-Received: from legion.. ([172.16.0.254])
-        (user=lidaxian@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33I98CGR017477-33I98CGS017477
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 18 Apr 2023 17:08:18 +0800
-From:   Li Yang <lidaxian@hust.edu.cn>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Li Yang <lidaxian@hust.edu.cn>, Dongliang Mu <dzm91@hust.edu.cn>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: phy: phy-tahvo: fix memory leak in tahvo_usb_probe()
-Date:   Tue, 18 Apr 2023 17:07:57 +0800
-Message-Id: <20230418090758.18756-1-lidaxian@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
+        Tue, 18 Apr 2023 05:08:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBE7659E;
+        Tue, 18 Apr 2023 02:08:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4688D61B1C;
+        Tue, 18 Apr 2023 09:08:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A47F1C433D2;
+        Tue, 18 Apr 2023 09:08:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681808893;
+        bh=/TGjxtJugjADcv+bp2Z47PlcioFCR2cdHAZw6bKOkHY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Pp5nPlueSoTeeAkF+K54c2C71mg4SuGRp5hkgDI0ts9sKD/4YdDMXgo521KcX9RHX
+         HHXU9+octQcYtL0yUmgW4UsS3QJcUSTRZ/2u3I7W+pjr8fxmwSgUGnrghdAMmmCp/a
+         DnDUYssFoFkUdl0TKr23OjIomHYgn8EkuHet7Anz+L83jL0ifeLEoBc1uLLJMl2pMu
+         LjWPqee8shUkAN2tTKFFNa1G27xl/ukGbLM1opAgFnAg5115ppgTScaRpgdqPzjxik
+         oVJxPIs5moNHNltdozr9hjNniBDyyuaFv2orV0mZnIejZtsxKrGqfxvg017v/Mik9x
+         FlBBaWiQOY8wQ==
+Date:   Tue, 18 Apr 2023 11:08:07 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, amir73il@gmail.com,
+        linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] IMA: use vfs_getattr_nosec to get the i_version
+Message-ID: <20230418-engste-gastwirtschaft-601fb389bba5@brauner>
+References: <20230417165551.31130-1-jlayton@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: lidaxian@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230417165551.31130-1-jlayton@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports:
-drivers/usb/phy/phy-tahvo.c: tahvo_usb_probe()
-warn: missing unwind goto?
+On Mon, Apr 17, 2023 at 12:55:51PM -0400, Jeff Layton wrote:
+> IMA currently accesses the i_version out of the inode directly when it
+> does a measurement. This is fine for most simple filesystems, but can be
+> problematic with more complex setups (e.g. overlayfs).
+> 
+> Make IMA instead call vfs_getattr_nosec to get this info. This allows
+> the filesystem to determine whether and how to report the i_version, and
+> should allow IMA to work properly with a broader class of filesystems in
+> the future.
+> 
+> Reported-and-Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
 
-After geting irq, if ret < 0, it will return without error handling to
-free memory.
-Just add error handling to fix this problem.
-
-Fixes: 0d45a1373e66 ("usb: phy: tahvo: add IRQ check")
-Signed-off-by: Li Yang <lidaxian@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-The issue is found by static analysis, and the patch remains untest.
----
- drivers/usb/phy/phy-tahvo.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/phy/phy-tahvo.c b/drivers/usb/phy/phy-tahvo.c
-index f2d2cc586c5b..184a5f3d7473 100644
---- a/drivers/usb/phy/phy-tahvo.c
-+++ b/drivers/usb/phy/phy-tahvo.c
-@@ -390,8 +390,11 @@ static int tahvo_usb_probe(struct platform_device *pdev)
- 	dev_set_drvdata(&pdev->dev, tu);
- 
- 	tu->irq = ret = platform_get_irq(pdev, 0);
--	if (ret < 0)
--		return ret;
-+	if (ret < 0) {
-+		dev_err(&pdev->dev, "could not get irq: %d\n",
-+				ret);
-+		goto err_remove_phy;
-+	}
- 	ret = request_threaded_irq(tu->irq, NULL, tahvo_usb_vbus_interrupt,
- 				   IRQF_ONESHOT,
- 				   "tahvo-vbus", tu);
--- 
-2.34.1
-
+Excellent, thanks,
+Reviewed-by: Christian Brauner <brauner@kernel.org>
