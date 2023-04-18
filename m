@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C936C6E56FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 03:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F36806E56FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 03:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbjDRBoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 21:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
+        id S231205AbjDRBoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 21:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbjDRBna (ORCPT
+        with ESMTP id S230459AbjDRBnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 21:43:30 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9644EBF
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 18:42:10 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id v200-20020a252fd1000000b00b8f548a72bbso12436676ybv.9
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 18:42:10 -0700 (PDT)
+        Mon, 17 Apr 2023 21:43:31 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EEC4222
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 18:42:13 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-552e3233b26so32077457b3.9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 18:42:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681782110; x=1684374110;
+        d=google.com; s=20221208; t=1681782112; x=1684374112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zWwdeYSbe2MZzb6+0YuKWkWzO0OIunr3DIdjLXb+QPs=;
-        b=bvVRAayaKb3f4XHecCOw1fq1zrxbTJlfu+X0j4JJ+ODZZ8s343yV2zF5V5cJPVfBrx
-         vO1QktBuUoSHL08PHmb741zrbYTtLR44mlVkerlNbRbCJGYvY5rfLmHur4kpmRZXckp/
-         5Xt5y4R3xULWEw01wuUy+z/jQtalviK0udMiGXZVR4o34gUJMO46tjSd9TtEsLa3oC0C
-         Qs9ggxL4witMvtnXFhB17F+6dIIHcCSX5M76pppw2FB4zNzSuRHvs30bGFNla01g3E11
-         K2LsOQQ7l/LXtTgEgSoMdbEAFkvDtok6PTyc3QsDYVhsfSDu4Pfk86mtQUxZrOSNJ97d
-         ihKA==
+        bh=tnG7XRDx2oVnxRfx5yqwQBjNsF82L1FllZqCFSzhSvk=;
+        b=SkI3OL7Xwcb2D8buNw1xsFgokzhAAQBXqENLcRBKEhMxZBceAdT76zRqhUKaAlZRib
+         aI6PlfHc5n4ddtN3+6mjTW4Cs8BBdyXGjyExSVPyeQf5XRY0Liaw+CyvPQArNpVYYnib
+         TGm738pcBWjnR5XstajeRfCSTCqIp9dGcgPyzLhYYauS/Ba9DT/7Oo4iwDdfQ5MeXhvv
+         m9omEapvVlOwz2XNsPXLPYl6qDc4wN5t+WJMQ3+JHgRWz6iur0twsD7zOIFKKeIe51D7
+         dw3h5jHufm+Ui9oRM1TAW/H897y1hff2PlchumkhwBxLImVetPWMILw+PxvkA+8WTkDa
+         ztcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681782110; x=1684374110;
+        d=1e100.net; s=20221208; t=1681782112; x=1684374112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zWwdeYSbe2MZzb6+0YuKWkWzO0OIunr3DIdjLXb+QPs=;
-        b=GkMqVkTSA4mBxptcuHTEs738R1c78YFGh/cXNen0BgIgYkWxAp5Pl47zhg8t+R02zE
-         b2FF4/gK72ZELC8bozTiiOjlZUlS+tQpfVhDLvBlhu22/fBHqFYH01X68gMCTDacaiLn
-         ZtnFTkc3xi7CShNQAt+p0qV+TOcdxvMSACPvzOrSbQ9Y1w0PWCrfgZejjtXDOZPOAd6M
-         F3d9uTHV8Oc8E9dAoV6/dzr2k+r3/+wQj1kUyLCRzb/aklQGW2JjxNEAv063U+7o4k6c
-         ma7O0zUTxAFE+wROWoTeNp08y714rDkbXrhzzZ4/uIEEdHEQNJzwDngaabded6ll3W4x
-         iroA==
-X-Gm-Message-State: AAQBX9dejJ+DoPjlyV9zUNYvivcirv10u8Vdmmn8xaK1l7YBkoIizQlq
-        Ics6zl6i3GIkWgEmOb5Q762byF8Vjcg=
-X-Google-Smtp-Source: AKy350aIiy0yEVjIhRUwhKZEZY7qdBZhQoYfVQEj5j3ErV9/GTclD1JkHLmadrVOBoXwbliIvZF/mWfRLJ4=
+        bh=tnG7XRDx2oVnxRfx5yqwQBjNsF82L1FllZqCFSzhSvk=;
+        b=UmUaHr4w5L5GZYziru10QtrCT0OKF7qY/s+orrKY849RmRJB9kmZLtxc8esWSARW6/
+         Yh491LKjw8lYATDgl59HYiHqeEGNvxP3VvDd6OqAOvfmmkrc7BfXl67gcOwZsbhjbRP6
+         GClHnyj19FiW55GJJpReSDpsIO0FgEyHrzLxWEZ7FNw7pUOXyYGxTtBrbUdPgK946ljB
+         KI7P1dx6Q+jVW7Nb/GYi4Y/gwD/OLP9F19lGrOwn+eIMvCGFTEW5rgOhlg35AbU8b1o/
+         JBEiBcq2qajUZHyl8mq1Pq/WvhsEsx8xxYrBRWJuxNd3ASLE8wrYFG4uLEGZ0TlruvNR
+         3/+Q==
+X-Gm-Message-State: AAQBX9e0mAbPGThWmQaTCYTluGEScSJanXRKVnPkfpvLhdzYdOMSqWst
+        kNgMwdz5mWE0KviJA3oVmlLxTFDoxjY=
+X-Google-Smtp-Source: AKy350b7LZaOW7Db/+iu/rILXEm8KL2d9x1YzXYuCbML8M1OSVxY74Uh31fhIpMfF3C/uFjNLKcy7inXoIs=
 X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:201:e67a:98b0:942d:86aa])
- (user=drosen job=sendgmr) by 2002:a0d:ec02:0:b0:54c:2723:560d with SMTP id
- q2-20020a0dec02000000b0054c2723560dmr10855123ywn.3.1681782110238; Mon, 17 Apr
- 2023 18:41:50 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 18:40:26 -0700
+ (user=drosen job=sendgmr) by 2002:a81:e503:0:b0:54f:40fe:10cc with SMTP id
+ s3-20020a81e503000000b0054f40fe10ccmr10636927ywl.9.1681782112257; Mon, 17 Apr
+ 2023 18:41:52 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 18:40:27 -0700
 In-Reply-To: <20230418014037.2412394-1-drosen@google.com>
 Mime-Version: 1.0
 References: <20230418014037.2412394-1-drosen@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230418014037.2412394-27-drosen@google.com>
-Subject: [RFC PATCH v3 26/37] bpf: Increase struct_op limits
+Message-ID: <20230418014037.2412394-28-drosen@google.com>
+Subject: [RFC PATCH v3 27/37] fuse-bpf: Add fuse-bpf constants
 From:   Daniel Rosenberg <drosen@google.com>
 To:     Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>
@@ -82,55 +82,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fuse bpf goes a bit past the '64' limit here, although in reality, this
-limit seems to be more like 37. After 37, we start overrunning the
-safety checks while setting up the trampoline.
-
-This simply doubles some of these values. This will have the same issue,
-as we'll run out of space way before hitting the 128 limit, but for now
-that unblocks fuse-bpf.
+This adds constants that fuse_op programs will rely on for communicating
+what action fuse should take next.
 
 Signed-off-by: Daniel Rosenberg <drosen@google.com>
 ---
- include/linux/bpf.h         | 2 +-
- kernel/bpf/bpf_struct_ops.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ include/uapi/linux/bpf.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 18b592fde896..c006f823e634 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1537,7 +1537,7 @@ struct bpf_link_primer {
- struct bpf_struct_ops_value;
- struct btf_member;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 4b20a7269bee..6521c40875c7 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -7155,4 +7155,16 @@ struct bpf_iter_num {
+ 	__u64 __opaque[1];
+ } __attribute__((aligned(8)));
  
--#define BPF_STRUCT_OPS_MAX_NR_MEMBERS 64
-+#define BPF_STRUCT_OPS_MAX_NR_MEMBERS 128
- struct bpf_struct_ops {
- 	const struct bpf_verifier_ops *verifier_ops;
- 	int (*init)(struct btf *btf);
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index d3f0a4825fa6..deb9eecaf1e4 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -417,7 +417,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 	udata = &uvalue->data;
- 	kdata = &kvalue->data;
- 	image = st_map->image;
--	image_end = st_map->image + PAGE_SIZE;
-+	image_end = st_map->image + 2 * PAGE_SIZE;
- 
- 	for_each_member(i, t, member) {
- 		const struct btf_type *mtype, *ptype;
-@@ -688,7 +688,7 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union bpf_attr *attr)
- 	st_map->links =
- 		bpf_map_area_alloc(btf_type_vlen(t) * sizeof(struct bpf_links *),
- 				   NUMA_NO_NODE);
--	st_map->image = bpf_jit_alloc_exec(PAGE_SIZE);
-+	st_map->image = bpf_jit_alloc_exec(2 * PAGE_SIZE);
- 	if (!st_map->uvalue || !st_map->links || !st_map->image) {
- 		__bpf_struct_ops_map_free(map);
- 		return ERR_PTR(-ENOMEM);
++/* Return Codes for Fuse BPF struct_op programs */
++#define BPF_FUSE_CONTINUE		0
++#define BPF_FUSE_USER			1
++#define BPF_FUSE_USER_PREFILTER		2
++#define BPF_FUSE_POSTFILTER		3
++#define BPF_FUSE_USER_POSTFILTER	4
++
++/* Op Code Filter values for BPF Programs */
++#define FUSE_OPCODE_FILTER	0x0ffff
++#define FUSE_PREFILTER		0x10000
++#define FUSE_POSTFILTER		0x20000
++
+ #endif /* _UAPI__LINUX_BPF_H__ */
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
