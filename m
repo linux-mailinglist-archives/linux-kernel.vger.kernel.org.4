@@ -2,145 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0B66E6220
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344806E622D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbjDRMaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 08:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41474 "EHLO
+        id S231638AbjDRMas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 08:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231564AbjDRMaS (ORCPT
+        with ESMTP id S231597AbjDRMag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 08:30:18 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D9C93D7;
-        Tue, 18 Apr 2023 05:29:51 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9C6495C00E8;
-        Tue, 18 Apr 2023 08:29:16 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 18 Apr 2023 08:29:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1681820956; x=1681907356; bh=VM
-        wb91EjeaIIwMVJOlqozliVSEbH/Bchyh3fjPDYvkE=; b=fD2wHJI/bKnYdEKMvA
-        OFP1OMUFa/DcdiSvEeS3jyc3fs7pYGjj2nPSJWceSFkyzBgWuYkUp1kM6gzuHeiC
-        9ZIAxIZpZ6jMwkeMdWIPoht4kliqUH3+/QXsLdHCx8HsVa8PSNlCvAfOI2ndVMSm
-        ODRKuMzne3ljJTZv7uka0cz7mwApFi/2JEvh5oF8dt3ZZ3EN4BFhT4kr8KbWzdlJ
-        DuKPdGqHO+bmtVA0j93mpU0DDpPWhXPf0n4p6Kij+LAiVJhs7AzpKoDASbltxXfs
-        6BLCMsyBPhzjx4zag9KGu1Hqv5fb4U0qdwU7rez+twDyaalpKTDspjQHB+9enARb
-        8k4A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681820956; x=1681907356; bh=VMwb91EjeaIIw
-        MVJOlqozliVSEbH/Bchyh3fjPDYvkE=; b=fr585nbRin/G68HRrhwCE2ojOa/tv
-        1zDamuBIAlzPSNcntpQrIdXZdKBfOTs7ToTHbB4pKSkqO3nUs6PBb1ImutS/yxBM
-        2B4B5Uv7EnD+4OcebfIDM8WkEW91M8+0wiglGU5TGk07FiI9dPKIJjs2unCmyzgY
-        lO4fyf/jbo7HoOXPTQ1BAztviLrtGglfSP+qqLAVRcveQPzjYxvrARefG0V+CP+M
-        zlJD2N9wi+SZYY8AddLhOH0tEcSScD2tHUQoRnLHNHtkuo3i/eRBdmNAfLA/SqVj
-        2cKnspDuPfPeAkz84iYpN/LzyZSfyfQcqNaJYxClK1/ZwGBAl82+OZUvw==
-X-ME-Sender: <xms:G40-ZOECZtfLzU_dRwIEh_PFY0w4UQVr2KtuOtXeVZMJ48l5Uil3PA>
-    <xme:G40-ZPV7Z2oMUqoPDeSe0vuHqjtC0mhP7wZz96tkK9zTbmTJHq0bX-JV4RbimIrOz
-    eloZFjxTvpoONFCcd0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdelkedghedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:G40-ZII9qvrLW9EVD0ArNGrVCJfcHsQkE1vI1ulk9_FEwuyg7aPyTg>
-    <xmx:G40-ZIFoemLCyuhosrpjJst5IN9jbd8FSAV4OJ54ri-kWgradjVBLg>
-    <xmx:G40-ZEUpMllTfuXekGh_6pVCsNSv2cXoIj9asP96ZSLjiPVdvu_tWA>
-    <xmx:HI0-ZAn8YOLM7OFf3Tw8Ff7KmWXEQWEZ5sdyUmu5c62ZBUETdz2YoA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B7D7BB60089; Tue, 18 Apr 2023 08:29:15 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
-Mime-Version: 1.0
-Message-Id: <c28486a2-dc12-4613-abda-bdeace783d40@app.fastmail.com>
-In-Reply-To: <CANpmjNMwYosrvqh4ogDO8rgn+SeDHM2b-shD21wTypm_6MMe=g@mail.gmail.com>
-References: <20230414082943.1341757-1-arnd@kernel.org>
- <20230414162605.GA2161385@dev-arch.thelio-3990X>
- <CANpmjNMwYosrvqh4ogDO8rgn+SeDHM2b-shD21wTypm_6MMe=g@mail.gmail.com>
-Date:   Tue, 18 Apr 2023 14:28:55 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Marco Elver" <elver@google.com>,
-        "Nathan Chancellor" <nathan@kernel.org>
-Cc:     "Arnd Bergmann" <arnd@kernel.org>,
-        "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Nicolas Schier" <nicolas@fjasle.eu>,
-        "Alexander Potapenko" <glider@google.com>,
-        "Andrey Konovalov" <andreyknvl@gmail.com>,
-        "Dmitry Vyukov" <dvyukov@google.com>,
-        "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
-        "Tom Rix" <trix@redhat.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        linux-kbuild@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] kasan: remove hwasan-kernel-mem-intrinsic-prefix=1 for clang-14
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 18 Apr 2023 08:30:36 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145D9C17B
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:30:15 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9514ac7c8cfso53731366b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:30:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681821012; x=1684413012;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RebJ7KlFGR0siwm86EnWjSWViyEw3vNqJd5Fx0fargE=;
+        b=k3rBsl8R6I0HUCPUtWmkwwHa+e/z8pHzk0R2ccAZV/j1MR8yHhrOp6+nakU++RBlOE
+         oZ294IzekZCd1ikt+zahhPJh6+D3BSTUdQ55qFFwg6L9CyM5NlusLR9boEHOyrO5J6d7
+         4u0bJUCGZCEFDdJabe+uOqJSo5gTFcjpW3St9LClsEnucWhWBR7kpmvqUJLGK2v9lD4U
+         O/DxYDMOz0XGh6v1PkxXAiYeXbw1xGg2FN4G4zY7IcwCIvdzKD9pFOgz0xjM3vf1M19F
+         HQitsfLoO/LlpA9sC5mg1ORedYHgrX6k/4+JdvkgcR/f9cUdDmcUt8ARabKBOtEYaz1v
+         93SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681821012; x=1684413012;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RebJ7KlFGR0siwm86EnWjSWViyEw3vNqJd5Fx0fargE=;
+        b=IuwARohbg09mIR3zdcnq9LTr5D6EvZkBMg0C3zXDRAZxdIF8KVq2bB9MTFbg3jZu1j
+         NUncQoxEbxbU1fVG+xnS+njmriiZ4cDsRxd7Y+x+Teu3+ISRp4WOQrlRdGxx2Z/JnXU1
+         GTLhPW97T0INHQ6t1/XOt1tx8y8T3y3mv65ybZU881LeRdon8if5wYpwUADQg+nS1F6L
+         1xSmMxZLFhBzMLV+40S9N4RGCBb4Qc+i2IT3MWAbs0j/8IW1FU/xyp//xgx4pEI80xa0
+         9vlP/JIsR3rW5p6RFlX3esGNxX6ap7/k7QBicShA5Etp6g/SdOIc5u7RiW2gXGL2Tr0e
+         qFdg==
+X-Gm-Message-State: AAQBX9eRR+syemKGahQGNcRYLWgDhnPADxC4NkuCkMHzHALPVj/52Nj0
+        0kUZwEychqA1r4YxhGO7GGVNiA==
+X-Google-Smtp-Source: AKy350YfhlmHlX4w/RB2R+FFmHcIcze1lh7/khJZjO6qYv8P8AseVca5DA+ke0RMIVkCXuUL7N9wig==
+X-Received: by 2002:aa7:c6ce:0:b0:506:741e:5c1b with SMTP id b14-20020aa7c6ce000000b00506741e5c1bmr1796854eds.12.1681821011855;
+        Tue, 18 Apr 2023 05:30:11 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
+        by smtp.gmail.com with ESMTPSA id d12-20020a50fe8c000000b00504c33675cesm7010724edt.35.2023.04.18.05.30.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 05:30:11 -0700 (PDT)
+Message-ID: <d0071447-8521-1a71-6978-7a0f7f6f7d41@linaro.org>
+Date:   Tue, 18 Apr 2023 14:30:10 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 4/6] dt-bindings: power: supply: add MAX77659 charger
+ binding
+Content-Language: en-US
+To:     "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>
+References: <20221220132250.19383-1-Zeynep.Arslanbenzer@analog.com>
+ <20221220132250.19383-5-Zeynep.Arslanbenzer@analog.com>
+ <5ba4295f-1197-913c-b1eb-a23798c3badf@linaro.org>
+ <MN2PR03MB5197E655DE2EAACAEA2316578B9C9@MN2PR03MB5197.namprd03.prod.outlook.com>
+ <1e1fb90a-43c0-3b0a-ab7a-8ca3ce8b02ed@linaro.org>
+ <MN2PR03MB51977056C2DC014B0BC7D40F8B9D9@MN2PR03MB5197.namprd03.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <MN2PR03MB51977056C2DC014B0BC7D40F8B9D9@MN2PR03MB5197.namprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023, at 14:06, Marco Elver wrote:
-> On Fri, 14 Apr 2023 at 18:26, Nathan Chancellor <nathan@kernel.org> wrote:
->> On Fri, Apr 14, 2023 at 10:29:27AM +0200, Arnd Bergmann wrote:
-> It errors as expected. But with:
->
->> clang -Werror -mllvm -hwasan-does-not-exist -c -x c /dev/null -o /dev/null
->
-> It ends up printing _help_ text, because anything "-h..." (if it
-> doesn't recognize it as a long-form argument), will make it produce
-> the help text.
-
-Ah, that explains a lot. I think I actually tried a few other options, but
-probably only edited part of the option name, and not the beginning, so
-I always saw the help text.
-
->> >  # Instrument memcpy/memset/memmove calls by using instrumented __hwasan_mem*().
->> > +ifeq ($(call clang-min-version, 150000),y)
->> >  CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
->> > +endif
->> > +ifeq ($(call gcc-min-version, 130000),y)
->> > +CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
->> > +endif
+On 18/04/2023 11:41, Arslanbenzer, Zeynep wrote:
+>>>> No, use suffixes for common units.
+>>>
+>>> Hi Krzysztof,
+>>>
+>>> Thank you for your review. The possible register values of the fast charge safety timer are described in the datasheet as follows. I was undecided about using the common unit, second, as it may affect the comprehensibility of the code. Of course, I can use second as the common unit if you think it's more appropriate.
 >>
->> I do not think you need to duplicate this block, I think
+>> This is quite common property, so I do not understand why this one driver should have it written differently. I understand that parsing
+>> 0/1/2/3 is easier for the machine than 0/3/5/7 but it is not easier for humans.
+> 
+> I referenced property-units.yaml for common units.
+> 
+> As I understood hours and minutes are not common units in Linux for time so I cannot use them as suffixes. Therefore, I thought I had to use "seconds" instead of "hours" or "minutes". I am totally fine if I can use " adi,fast-charge-timer-hours" and "adi,topoff-timer-minutes". 
+
+Wrap your replies to match mailing list style.
+
+Yeah... indeed... because it should not be in DTS in the first place.
+It's not a property of the hardware, so the same as with other drivers -
+we don't store it in DT. Check other maxim drivers.
+
+> 
 >>
->>   ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y)
->>   CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
->>   endif
->
-> We just need the clang version check. If the compiler is gcc, it'll do
-> the "right thing" (i.e. not print help text). So at a minimum, we need
-> if "clang version >= 15 or gcc". Checking if gcc is 13 or later
-> doesn't hurt though, so I don't mind either way.
+>>>
+>>> 0b00 = Timer disabled
+>>> 0b01 = 3 hours
+>>> 0b10 = 5 hours
+>>> 0b11 = 7 hours
+Best regards,
+Krzysztof
 
-I've sent a v2 now, with an updated help text and the simplified
-version check.
-
-It might be possible to change the cc-option check in a way that
-parses the output, this variant should do that, if we care:
-
-echo "char *str = \"check that assembler works\";" | clang -Werror -mllvm -hwasan-does-not-exist  -S -x c - -o - | grep -q "check that assembler works"
-
-      Arnd
