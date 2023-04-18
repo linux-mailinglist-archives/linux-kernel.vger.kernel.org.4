@@ -2,87 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1736E6C02
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 314046E6C06
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232649AbjDRSVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
+        id S232640AbjDRSYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232642AbjDRSVu (ORCPT
+        with ESMTP id S232569AbjDRSYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:21:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0ACDB464;
-        Tue, 18 Apr 2023 11:21:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5889F637DB;
-        Tue, 18 Apr 2023 18:21:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27916C433D2;
-        Tue, 18 Apr 2023 18:21:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681842107;
-        bh=fMVjHMGHdpVVTqAnb5vzPaJx9vDQalTucSaWG0SBO9I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eC6qMqdwtVcKihRXLrTBp7pb5nBEwR95sbutowsfBcTGq858TqLYX+G81H6OmVhFJ
-         eGeF16z1nV5TlFf7Z0ihVovLmnRU+LfNcLkrjupfE1fAZKExjS4yUbfBkHE09mBZmb
-         1Qt4BosAvscnQPLKsdH8+4Jjb//CEwDv8zpx4gbFYHUGJC02Olo1roUwR0+7NvzSXv
-         uSeqtwk0OY4ViKcMfZbDPQblFwA7AWWOu2bULXCBcDZ5p0evafPCFI7BC5BHEZPgHQ
-         qLCITRmBmR1CobAeAUCKMZ4fEVPesa1yanHa/FB4YzXYThssgcHDGK6PxDUqG2xVxQ
-         rYfYc9dKgkKCg==
-Date:   Tue, 18 Apr 2023 11:21:45 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@redhat.com>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the drm tree with the powerpc tree
-Message-ID: <20230418182145.GA1392657@dev-arch.thelio-3990X>
-References: <20230412112213.59365041@canb.auug.org.au>
- <20230413184725.GA3183133@dev-arch.thelio-3990X>
- <2d69ba0a-b12f-4bd1-83c5-d7c01ceec4e8@sirena.org.uk>
+        Tue, 18 Apr 2023 14:24:01 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C2976BE;
+        Tue, 18 Apr 2023 11:24:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681842240; x=1713378240;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pRPyD6+WTQL2wAAqK/kit61fm9+alLRGx6xYjjpFuI8=;
+  b=cYNXaWxpdW2wgI+5X2DytRRxLMBxS7eQYhcYDyh7+l7okwN0DZT+SQVe
+   ikSgCoY5FkCVMnhHMPo8F/dwVPTkA4wUwz3E2M2wbbaOoumliIfl9hYEk
+   s8pKSRqoC66dwr0UIlG7IA6RWnlCsJSYejygcC9alUL+7UrnCiy8JawNg
+   ovpvZjM5tyeSxbxP45ANCu8LcpYezqollpAOOL/scFEt4SLgDNUEJ6bUx
+   FAgTn9edmJCmDa5ocsrVIYdQytvxChsrBCTRwsOmTc9wb4KaiHCvK8P5z
+   grqW6t/KUEUytAj7mcIne05zWX/s2ZfmQSSCN2cgPw6LTiWO2Uvm47hw/
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="325587922"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="325587922"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 11:24:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="684696494"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="684696494"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 11:24:00 -0700
+Date:   Tue, 18 Apr 2023 11:23:58 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: Re: [PATCH] x86/mce: Check that memory address is usable for recovery
+Message-ID: <ZD7gPkfWQeEeEfBe@agluck-desk3.sc.intel.com>
+References: <20230322005131.174499-1-tony.luck@intel.com>
+ <a5d0c575-ba4f-1120-c7ee-bc37e8d40402@amd.com>
+ <ZD7TBZex278dSYmc@agluck-desk3.sc.intel.com>
+ <5f833d37-e961-73c4-3629-74884e8b6c59@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2d69ba0a-b12f-4bd1-83c5-d7c01ceec4e8@sirena.org.uk>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5f833d37-e961-73c4-3629-74884e8b6c59@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 05:55:10PM +0100, Mark Brown wrote:
-> On Thu, Apr 13, 2023 at 11:47:25AM -0700, Nathan Chancellor wrote:
-> > On Wed, Apr 12, 2023 at 11:22:13AM +1000, Stephen Rothwell wrote:
+On Tue, Apr 18, 2023 at 01:51:37PM -0400, Yazen Ghannam wrote:
+> I agree. And I think all these checks should be baked into the severity.
+> We'll need additional, fine-grained severity levels though.
 > 
-> >  	select SND_HDA_COMPONENT if SND_HDA_CORE
-> >  	# !CC_IS_CLANG: https://github.com/ClangBuiltLinux/linux/issues/1752
-> > -	select DRM_AMD_DC_DCN if (X86 || (PPC64 && ALTIVEC) || (ARM64 && KERNEL_MODE_NEON && !CC_IS_CLANG))
-> > +	select DRM_AMD_DC_FP if (X86 || (PPC64 && ALTIVEC) || (ARM64 && KERNEL_MODE_NEON && !CC_IS_CLANG))
-> >  	help
-> >  	  Choose this option if you want to use the new display engine
-> >  	  support for AMDGPU. This adds required support for Vega and
+> The "m.cs" and "m.kflags" checks could also be baked in.
 > 
-> > Please consider resolving this in a future -next update, I was rather
-> > surprised that my AMD test machine's graphical output was not working
-> > until I noticed the configuration difference :)
+> Instead of just one AR severity:
+> 	...
+> 	MCE_AR_SEVERITY,
+> 	MCE_PANIC_SEVERITY,
 > 
-> Done.
+> replace it with specific cases:
+> 	...
+> 	MCE_AR_USER_RECOV,
+> 	MCE_AR_USER_KILL,
+> 	MCE_AR_KERNEL_COPYIN,
+> 	MCE_AR_KERNEL_RECOV,
+> 	MCE_PANIC_SEVERITY,
+> 
+> Then the #MC handler can look like this:
+> 
+> 	if (worst < MCE_AR_USER_RECOV)
+> 		goto out;
+> 
+> 	if (severity == MCE_AR_USER_RECOV)
+> 		queue_task_work(&m, msg, kill_me_maybe);
+> 
+> 	if (severity == MCE_AR_USER_KILL)
+> 		force_sig(SIGBUS);
+> 
+> 	if (severity == MCE_AR_KERNEL_COPYIN)
+> 		queue_task_work(&m, msg, kill_me_never);
+> 	
+> 	if (severity == MCE_AR_KERNEL_RECOV) {
+> 		if (!fixup_exception(regs, X86_TRAP_MC, 0, 0))
+> 			mce_panic("Failed kernel mode recovery");
+> 	}
+> 
+> I can take a shot at this if it seems reasonable.
 
-Thanks a lot, sorry for not saying it sooner! It looks like this
-regressed in next-20230417 and next-20230418 though.
+That looks much cleaner. There may be some extra MCE_AR_KERNEL* options
+in the future (I'd like someday to address COPYOUT when the corrupt
+kernel data is in the page cache). But I don't think the number of cases
+is going to explode into dozens of cases.
 
-Cheers,
-Nathan
+> What do you think?
+
+Brave person ... you are going to have to tinker with
+arch/x86/kernel/cpu/mce/severity.c !  Good luck.
+
+-Tony
