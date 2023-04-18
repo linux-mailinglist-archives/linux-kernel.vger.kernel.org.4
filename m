@@ -2,527 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC796E6783
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A746E6790
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjDROxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 10:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
+        id S232010AbjDROxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 10:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjDROw6 (ORCPT
+        with ESMTP id S230138AbjDROxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 10:52:58 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE355EE;
-        Tue, 18 Apr 2023 07:52:55 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33IAKDX8025895;
-        Tue, 18 Apr 2023 14:52:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=yO+MUnMT9TESLWF0tBl96f2k0zChaQfj+RgVGcTF9DE=;
- b=jmpB0QXCrh3x8z9qb2gEFSBo2bZbkgtnmHGBRo+tHn7DkCiJaY7s4w0E7wTCwxeWXhf7
- OAhWNtwDx2k1Y/IxL6+1P19aQYe8xVacnPabxJN2k52HzbPKYDMOnW2Yk/wjlBhMwxS5
- cLchuVSYD0dM4b9rvnBAD8ELCA33hkN6e1TvnxSWQgX2Luo0l2MqGKjY9rNi8zRet5Yq
- TGye3xJSQ7ci9suEs6IVBDcroweFpIn3vS9xyvuM5Vik6iSL0qI/RwtbPRKUQuPNSfgG
- c/PMmgVWyO+40wSlTBwjCyp7dh4fJT4X/9l1rsjoSCMUpgV5h7CCQ6TDrgEe+syN1Ce4 Ww== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1nf8h5vp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 14:52:35 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33IEqYtb004415
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 14:52:34 GMT
-Received: from [10.216.30.222] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 18 Apr
- 2023 07:52:28 -0700
-Message-ID: <7fb7e2c8-419a-f2be-e32e-ca369d62ebec@quicinc.com>
-Date:   Tue, 18 Apr 2023 20:22:16 +0530
+        Tue, 18 Apr 2023 10:53:33 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE38C678;
+        Tue, 18 Apr 2023 07:53:29 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 14:53:27 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681829608;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6ITfUbOfV2vztKvWzmFN8WZkFvcN10ekh69DY+h23qs=;
+        b=fBNDk/Fsjwlf/NZsXb9obBKndRsWYCVqjUeikpryrG4aJ324vw90Ie3ENAclS1fpsbhVMk
+        dxRSWDkSyPpiMpXHlzvirwolVVP8GJ6eWx6WJ7m1dumoo1g38uy81Q28mVAGsicFD30J2g
+        KWeZfduuP9hyZn+MRLyii1WlDadCcoN345AXXxAnfEkrx0sw1k4lEnFGNYiAI+1wiNRHhb
+        ncmyoUVtA+p2cNTSKZmP9nobjhRLWjiwlMv2c/+Mbr7jkpVEdcvL4gUkhzCQUdbabngnzU
+        qn8SJV/Y8XW03WAHUqzZBNXApxSTpZzwcSQHHRcn26qkcwAAfdmjQEg576uriQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681829608;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6ITfUbOfV2vztKvWzmFN8WZkFvcN10ekh69DY+h23qs=;
+        b=7SHOyDkmtBEh1w/+U4WZzK47qGmLl5xwOLIMuX9js/XSXCOkRCLVGxjL5gyr/2+DJewgUi
+        62xjWC6d5BRYJkDw==
+From:   "tip-bot2 for Frederic Weisbecker" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: timers/core] selftests/proc: Remove idle time monotonicity assertions
+Cc:     Yu Liao <liaoyu15@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230222144649.624380-8-frederic@kernel.org>
+References: <20230222144649.624380-8-frederic@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 2/6] remoteproc: qcom: Move minidump specific data to
- qcom_minidump.h
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <corbet@lwn.net>,
-        <keescook@chromium.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>, <will@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>
-References: <1679491817-2498-1-git-send-email-quic_mojha@quicinc.com>
- <1679491817-2498-3-git-send-email-quic_mojha@quicinc.com>
- <e74fb30d-4268-86b1-cdf7-ad3d104c6c40@linaro.org>
- <3df1ec27-7e4d-1f84-ff20-94e8ea91c86f@quicinc.com>
- <040a1992-baff-c3e4-69a9-ff3110de62e7@linaro.org>
- <a33e2d43-d6a6-f830-8421-ec68baf8159d@quicinc.com>
- <f74dfcde-e59b-a9b3-9bbc-a8de644f6740@linaro.org>
-Content-Language: en-US
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <f74dfcde-e59b-a9b3-9bbc-a8de644f6740@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 3xPJyT29ARXc2V4goKpWv5cVPYEcZgko
-X-Proofpoint-ORIG-GUID: 3xPJyT29ARXc2V4goKpWv5cVPYEcZgko
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-18_11,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 phishscore=0 malwarescore=0 suspectscore=0
- priorityscore=1501 bulkscore=0 mlxlogscore=999 adultscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304180128
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <168182960780.404.14266363355054554836.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the timers/core branch of tip:
 
+Commit-ID:     270b2a679ea7be1ee2d84ea67751fb1ab15bcb20
+Gitweb:        https://git.kernel.org/tip/270b2a679ea7be1ee2d84ea67751fb1ab15bcb20
+Author:        Frederic Weisbecker <frederic@kernel.org>
+AuthorDate:    Wed, 22 Feb 2023 15:46:48 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Tue, 18 Apr 2023 16:35:13 +02:00
 
-On 4/18/2023 7:32 PM, Srinivas Kandagatla wrote:
-> 
-> 
-> On 17/04/2023 14:22, Mukesh Ojha wrote:
->>
->>
->> On 4/14/2023 4:10 PM, Srinivas Kandagatla wrote:
->>>
->>>
->>> On 14/04/2023 08:05, Mukesh Ojha wrote:
->>>> Thanks again for coming back on this.
->>>>
->>>> On 4/14/2023 4:02 AM, Srinivas Kandagatla wrote:
->>>>>
->>>>>
->>>>> On 22/03/2023 13:30, Mukesh Ojha wrote:
->>>>>> Move minidump specific data types and macros to a separate internal
->>>>>> header(qcom_minidump.h) so that it can be shared among different
->>>>>
->>>>> minidump.h should be good as we are already in include/soc/qcom/
->>>>
->>>>
->>>> Initially, i wanted to protect the content of qcom_minidump.h 
->>>> between qcom_minidump.c and qcom_common.c
->>>>
->>>> Ideally, here qcom_minidump.h should be supplier/provider header and 
->>>> can 
->>>
->>> Am not sure if I understand the supplier concept correctly.
->>> AFAIU, we have a 2 sets of apis
->>>
->>> 1. get hold of minidump descriptor based on minidump_id fro gtoc 
->>> using qcom_minidump_subsystem_desc(). Am assuming which ever driver 
->>> uses this api will set there segments and regions in there respective 
->>> drivers.
->>>
->>> 2. setting regions/segments in APSS minidump descriptors which are 
->>> done via qcom_minidump_region_register(). TBH this should be renamed 
->>> to qcom_apss_minidump_region_register().
->>>
->>> mixing of thsee apis makes it bit confusing, specially we have these 
->>> two category of apis that deal with different things.
->>>
->>> Does it make sense to spit and abstract them properly by doing?
->>>
->>>
->>> 1. minidump driver to deal with handling gtoc and providing 
->>> descriptors to the consumers like remoteproc or apss, This can 
->>> probably live within smem driver as loc for this support is very 
->>> minimal and proabably rename the api accordingly.
->>>
->>
->>> 2. apss_minidump driver to allow other qcom drivers to 
->>> register/unregister regions within apss minidump descriptor.
->>>
->>> did I miss something?
->>
->> No, you are correct with your understanding.
->>
->> To your suggestion to split code and to keep 
->> qcom_minidump_subsystem_desc() live inside smem driver,
->>
->> And how about the header qcom_minidump.h, should we keep it separate 
->> than the apss minidump client header minidump.h ?
-> 
-> I tried to do what I suggested and it kinda looked okay w.r.t design but 
-> started to look like a bit overdo.
-> 
-> other thing that I tried like what you have in patches but creating a 
-> dedicated platform driver for minidump (along with apss minidump), just 
-> like other smem devices like socinfo..
-> 
-> This should also get rid of qcom_minidump_ready().
+selftests/proc: Remove idle time monotonicity assertions
 
-This is exactly i have said below .
+Due to broken iowait task counting design (cf: comments above
+get_cpu_idle_time_us() and nr_iowait()), it is not possible to provide
+the guarantee that /proc/stat or /proc/uptime display monotonic idle
+time values.
 
-> 
->>
->> Since, you kind of understand the driver now, do you think it is worth
->> to create platform device for minidump from smem driver, and
->> have a probe inside apss minidump driver to solve chicken and egg 
->> problem for the clients who comes before minidump and try to register 
->> itself without doing ready check and apss_minidump can note this 
->> client entry and only register this region once minidump probe success 
->> and then it can register all the noted clients in one go.
-> yes, it is doable.
-> 
->>
->> The reason to do this would be apss_minidump driver has no meaning 
->> without smem, and for this reason checking qcom_minidump_ready() would 
->> not be ideal for at least qcom clients and for core kernel may be.
->>
-> 
-> how about something like this:
+Remove the assertions that verify the related wrong assumption so that
+testers and maintainers don't spend more time on that.
 
-We are totally in sync, Thanks for your time spent on the snippet.
+Reported-by: Yu Liao <liaoyu15@huawei.com>
+Reported-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/20230222144649.624380-8-frederic@kernel.org
 
--Mukesh
-> 
-> -------------------->cut<-----------------------
-> diff --git a/drivers/soc/qcom/minidump.c b/drivers/soc/qcom/minidump.c
-> new file mode 100644
-> index 000000000000..4171054b268d
-> --- /dev/null
-> +++ b/drivers/soc/qcom/minidump.c
-> @@ -0,0 +1,100 @@
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/soc/qcom/smem.h>
-> +#include <linux/soc/qcom/minidump.h>
-> +
-> +...
-> +
-> +struct minidump {
-> +       struct minidump_global_toc      *md_gbl_toc;
-> +       struct minidump_subsystem       *md_apss_toc;
-> +       ...
-> +};
-> +
-> +struct minidump *__md;
-> +
-> +struct minidump_subsystem *qcom_minidump_subsystem_desc(unsigned int 
-> minidump_index)
-> +{
-> +       if (!__md)
-> +               return PTR_ERR(-EPROBE_DEFER);
-> +
-> +       return &__mdgtoc->subsystems[minidump_index];
-> +}
-> +EXPORT_SYMBOL(qcom_minidump_subsystem_desc);
-> +
-> +
-> +int qcom_minidump_apss_region_register(const struct 
-> qcom_minidump_region *region)
-> +{
-> +       if (!__mdgtoc)
-> +               return -EPROBE_DEFER;
-> +       ...
-> +}
-> +EXPORT_SYMBOL_GPL(qcom_minidump_apss_region_register);
-> +
-> +static int qcom_minidump_init_apss_subsystem(struct minidumd *md)
-> +{
-> +       struct minidump_subsystem *apsstoc;
-> +
-> +       apsstoc = qcom_minidump_subsystem_desc(MINIDUMP_APSS_DESC);
-> +       if (IS_ERR(apsstoc))
-> +               return -EINVAL;
-> +
-> +       md->md_regions = kcalloc(MAX_NUM_ENTRIES,
-> +                             sizeof(struct minidump_region), GFP_KERNEL);
-> +       if (!md->md_regions)
-> +               return -ENOMEM;
-> +
-> +       minidump.apss_toc = apsstoc;
-> +
-> +       ...
-> +
-> +       return 0;
-> +}
-> +static int qcom_minidump_probe(struct platform_device *pdev)
-> +{
-> +       struct minidump *md;
-> +       struct minidump_global_toc *mdgtoc;
-> +
-> +       md = devm_kzalloc(&pdev->dev, sizeof(*md), GFP_KERNEL);
-> +
-> +       ...
-> +       mdgtoc = qcom_smem_get(QCOM_SMEM_HOST_ANY, SBL_MINIDUMP_SMEM_ID, 
-> &size);
-> +       if (IS_ERR(mdgtoc)) {
-> +               dev_err(&pdev->dev, "Couldn't find minidump\n");
-> +               return ERR_PTR(mdgtoc);
-> +       }
-> +
-> +       if (size < sizeof(*mdgtoc) || !mdgtoc->status) {
-> +               dev_err(&pdev->dev, "Minidump table is not initialized\n");
-> +               return ERR_PTR(-EINVAL);
-> +       }
-> +       ...
-> +       qcom_minidump_init_apss_subsystem(md);
-> +
-> +       __md = md;
-> +       ...
-> +       return 0;
-> +}
-> +
-> +static int qcom_minidump_remove(struct platform_device *pdev)
-> +{
-> +       struct qcom_minidump *qs = platform_get_drvdata(pdev);
-> +
-> +       ...
-> +
-> +       return 0;
-> +}
-> +
-> +static struct platform_driver qcom_minidump_driver = {
-> +       .probe = qcom_minidump_probe,
-> +       .remove = qcom_minidump_remove,
-> +       .driver  = {
-> +               .name = "qcom-minidump",
-> +       },
-> +};
-> +
-> +module_platform_driver(qcom_minidump_driver);
-> +
-> +MODULE_DESCRIPTION("Qualcomm minidump driver");
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_ALIAS("platform:qcom-minidump");
-> diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
-> index 4f163d62942c..d54b07095ddd 100644
-> --- a/drivers/soc/qcom/smem.c
-> +++ b/drivers/soc/qcom/smem.c
-> @@ -279,6 +279,7 @@ struct qcom_smem {
-> 
->          u32 item_count;
->          struct platform_device *socinfo;
-> +       struct platform_device *minidump;
->          struct smem_ptable *ptable;
->          struct smem_partition global_partition;
->          struct smem_partition partitions[SMEM_HOST_COUNT];
-> @@ -1151,12 +1152,19 @@ static int qcom_smem_probe(struct 
-> platform_device *pdev)
->          if (IS_ERR(smem->socinfo))
->                  dev_dbg(&pdev->dev, "failed to register socinfo 
-> device\n");
-> 
-> +       smem->minidump = platform_device_register_data(&pdev->dev, 
-> "qcom-minidump",
-> + PLATFORM_DEVID_NONE, NULL,
-> +                                                     0);
-> +       if (IS_ERR(smem->minidump))
-> +               dev_dbg(&pdev->dev, "failed to register minidump 
-> device\n");
-> +
->          return 0;
->   }
-> 
->   static int qcom_smem_remove(struct platform_device *pdev)
->   {
->          platform_device_unregister(__smem->socinfo);
-> +       platform_device_unregister(__smem->minidump);
-> 
->          hwspin_lock_free(__smem->hwlock);
->          __smem = NULL;
-> (END)
-> -------------------->cut<-----------------------
-> 
->> --Mukesh
->>>
->>> thanks,
->>> Srini
->>>
->>>> be shared among above qcom_minidump.c and qcom_common.c but since 
->>>> they are not in same directory, moved it inside include/soc/qcom/ as 
->>>> separate header than consumer header minidump.h . >
->>>> -Mukesh
->>>>>
->>>>> --srini
->>>>>
->>>>>> Qualcomm drivers.
->>>>>>
->>>>>> There is no change in functional behavior after this.
->>>>>>
->>>>>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
->>>>>> ---
->>>>>>   drivers/remoteproc/qcom_common.c | 56 
->>>>>> +---------------------------------
->>>>>>   include/soc/qcom/qcom_minidump.h | 66 
->>>>>> ++++++++++++++++++++++++++++++++++++++++
->>>>>>   2 files changed, 67 insertions(+), 55 deletions(-)
->>>>>>   create mode 100644 include/soc/qcom/qcom_minidump.h
->>>>>>
->>>>>> diff --git a/drivers/remoteproc/qcom_common.c 
->>>>>> b/drivers/remoteproc/qcom_common.c
->>>>>> index 805e525..88fc984 100644
->>>>>> --- a/drivers/remoteproc/qcom_common.c
->>>>>> +++ b/drivers/remoteproc/qcom_common.c
->>>>>> @@ -18,6 +18,7 @@
->>>>>>   #include <linux/slab.h>
->>>>>>   #include <linux/soc/qcom/mdt_loader.h>
->>>>>>   #include <linux/soc/qcom/smem.h>
->>>>>> +#include <soc/qcom/qcom_minidump.h>
->>>>>>   #include "remoteproc_internal.h"
->>>>>>   #include "qcom_common.h"
->>>>>> @@ -26,61 +27,6 @@
->>>>>>   #define to_smd_subdev(d) container_of(d, struct 
->>>>>> qcom_rproc_subdev, subdev)
->>>>>>   #define to_ssr_subdev(d) container_of(d, struct qcom_rproc_ssr, 
->>>>>> subdev)
->>>>>> -#define MAX_NUM_OF_SS           10
->>>>>> -#define MAX_REGION_NAME_LENGTH  16
->>>>>> -#define SBL_MINIDUMP_SMEM_ID    602
->>>>>> -#define MINIDUMP_REGION_VALID        ('V' << 24 | 'A' << 16 | 'L' 
->>>>>> << 8 | 'I' << 0)
->>>>>> -#define MINIDUMP_SS_ENCR_DONE        ('D' << 24 | 'O' << 16 | 'N' 
->>>>>> << 8 | 'E' << 0)
->>>>>> -#define MINIDUMP_SS_ENABLED        ('E' << 24 | 'N' << 16 | 'B' 
->>>>>> << 8 | 'L' << 0)
->>>>>> -
->>>>>> -/**
->>>>>> - * struct minidump_region - Minidump region
->>>>>> - * @name        : Name of the region to be dumped
->>>>>> - * @seq_num:        : Use to differentiate regions with same name.
->>>>>> - * @valid        : This entry to be dumped (if set to 1)
->>>>>> - * @address        : Physical address of region to be dumped
->>>>>> - * @size        : Size of the region
->>>>>> - */
->>>>>> -struct minidump_region {
->>>>>> -    char    name[MAX_REGION_NAME_LENGTH];
->>>>>> -    __le32    seq_num;
->>>>>> -    __le32    valid;
->>>>>> -    __le64    address;
->>>>>> -    __le64    size;
->>>>>> -};
->>>>>> -
->>>>>> -/**
->>>>>> - * struct minidump_subsystem - Subsystem's SMEM Table of content
->>>>>> - * @status : Subsystem toc init status
->>>>>> - * @enabled : if set to 1, this region would be copied during 
->>>>>> coredump
->>>>>> - * @encryption_status: Encryption status for this subsystem
->>>>>> - * @encryption_required : Decides to encrypt the subsystem 
->>>>>> regions or not
->>>>>> - * @region_count : Number of regions added in this subsystem toc
->>>>>> - * @regions_baseptr : regions base pointer of the subsystem
->>>>>> - */
->>>>>> -struct minidump_subsystem {
->>>>>> -    __le32    status;
->>>>>> -    __le32    enabled;
->>>>>> -    __le32    encryption_status;
->>>>>> -    __le32    encryption_required;
->>>>>> -    __le32    region_count;
->>>>>> -    __le64    regions_baseptr;
->>>>>> -};
->>>>>> -
->>>>>> -/**
->>>>>> - * struct minidump_global_toc - Global Table of Content
->>>>>> - * @status : Global Minidump init status
->>>>>> - * @md_revision : Minidump revision
->>>>>> - * @enabled : Minidump enable status
->>>>>> - * @subsystems : Array of subsystems toc
->>>>>> - */
->>>>>> -struct minidump_global_toc {
->>>>>> -    __le32                status;
->>>>>> -    __le32                md_revision;
->>>>>> -    __le32                enabled;
->>>>>> -    struct minidump_subsystem    subsystems[MAX_NUM_OF_SS];
->>>>>> -};
->>>>>> -
->>>>>>   struct qcom_ssr_subsystem {
->>>>>>       const char *name;
->>>>>>       struct srcu_notifier_head notifier_list;
->>>>>> diff --git a/include/soc/qcom/qcom_minidump.h 
->>>>>> b/include/soc/qcom/qcom_minidump.h
->>>>>> new file mode 100644
->>>>>> index 0000000..84c8605
->>>>>> --- /dev/null
->>>>>> +++ b/include/soc/qcom/qcom_minidump.h
->>>>>> @@ -0,0 +1,66 @@
->>>>>> +/* SPDX-License-Identifier: GPL-2.0-only */
->>>>>> +/*
->>>>>> + * Qualcomm minidump shared data structures and macros
->>>>>> + *
->>>>>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights 
->>>>>> reserved.
->>>>>> + */
->>>>>> +
->>>>>> +#ifndef _QCOM_MINIDUMP_H_
->>>>>> +#define _QCOM_MINIDUMP_H_
->>>>>> +
->>>>>> +#define MAX_NUM_OF_SS           10
->>>>>> +#define MAX_REGION_NAME_LENGTH  16
->>>>>> +#define SBL_MINIDUMP_SMEM_ID    602
->>>>>> +#define MINIDUMP_REGION_VALID        ('V' << 24 | 'A' << 16 | 'L' 
->>>>>> << 8 | 'I' << 0)
->>>>>> +#define MINIDUMP_SS_ENCR_DONE        ('D' << 24 | 'O' << 16 | 'N' 
->>>>>> << 8 | 'E' << 0)
->>>>>> +#define MINIDUMP_SS_ENABLED        ('E' << 24 | 'N' << 16 | 'B' 
->>>>>> << 8 | 'L' << 0)
->>>>>> +
->>>>>> +/**
->>>>>> + * struct minidump_region - Minidump region
->>>>>> + * @name        : Name of the region to be dumped
->>>>>> + * @seq_num:        : Use to differentiate regions with same name.
->>>>>> + * @valid        : This entry to be dumped (if set to 1)
->>>>>> + * @address        : Physical address of region to be dumped
->>>>>> + * @size        : Size of the region
->>>>>> + */
->>>>>> +struct minidump_region {
->>>>>> +    char    name[MAX_REGION_NAME_LENGTH];
->>>>>> +    __le32    seq_num;
->>>>>> +    __le32    valid;
->>>>>> +    __le64    address;
->>>>>> +    __le64    size;
->>>>>> +};
->>>>>> +
->>>>>> +/**
->>>>>> + * struct minidump_subsystem - Subsystem's SMEM Table of content
->>>>>> + * @status : Subsystem toc init status
->>>>>> + * @enabled : if set to 1, this region would be copied during 
->>>>>> coredump
->>>>>> + * @encryption_status: Encryption status for this subsystem
->>>>>> + * @encryption_required : Decides to encrypt the subsystem 
->>>>>> regions or not
->>>>>> + * @region_count : Number of regions added in this subsystem toc
->>>>>> + * @regions_baseptr : regions base pointer of the subsystem
->>>>>> + */
->>>>>> +struct minidump_subsystem {
->>>>>> +    __le32    status;
->>>>>> +    __le32    enabled;
->>>>>> +    __le32    encryption_status;
->>>>>> +    __le32    encryption_required;
->>>>>> +    __le32    region_count;
->>>>>> +    __le64    regions_baseptr;
->>>>>> +};
->>>>>> +
->>>>>> +/**
->>>>>> + * struct minidump_global_toc - Global Table of Content
->>>>>> + * @status : Global Minidump init status
->>>>>> + * @md_revision : Minidump revision
->>>>>> + * @enabled : Minidump enable status
->>>>>> + * @subsystems : Array of subsystems toc
->>>>>> + */
->>>>>> +struct minidump_global_toc {
->>>>>> +    __le32                status;
->>>>>> +    __le32                md_revision;
->>>>>> +    __le32                enabled;
->>>>>> +    struct minidump_subsystem    subsystems[MAX_NUM_OF_SS];
->>>>>> +};
->>>>>> +
->>>>>> +#endif  /* _QCOM_MINIDUMP_H_ */
+---
+ tools/testing/selftests/proc/proc-uptime-001.c | 12 ++++++------
+ tools/testing/selftests/proc/proc-uptime-002.c | 13 ++++++-------
+ tools/testing/selftests/proc/proc-uptime.h     | 16 ++--------------
+ 3 files changed, 14 insertions(+), 27 deletions(-)
+
+diff --git a/tools/testing/selftests/proc/proc-uptime-001.c b/tools/testing/selftests/proc/proc-uptime-001.c
+index 781f7a5..35bddd9 100644
+--- a/tools/testing/selftests/proc/proc-uptime-001.c
++++ b/tools/testing/selftests/proc/proc-uptime-001.c
+@@ -13,7 +13,9 @@
+  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+-// Test that values in /proc/uptime increment monotonically.
++// Test that boottime value in /proc/uptime increments monotonically.
++// We don't test idle time monotonicity due to broken iowait task
++// counting, cf: comment above get_cpu_idle_time_us()
+ #undef NDEBUG
+ #include <assert.h>
+ #include <stdint.h>
+@@ -25,20 +27,18 @@
+ 
+ int main(void)
+ {
+-	uint64_t start, u0, u1, i0, i1;
++	uint64_t start, u0, u1;
+ 	int fd;
+ 
+ 	fd = open("/proc/uptime", O_RDONLY);
+ 	assert(fd >= 0);
+ 
+-	proc_uptime(fd, &u0, &i0);
++	u0 = proc_uptime(fd);
+ 	start = u0;
+ 	do {
+-		proc_uptime(fd, &u1, &i1);
++		u1 = proc_uptime(fd);
+ 		assert(u1 >= u0);
+-		assert(i1 >= i0);
+ 		u0 = u1;
+-		i0 = i1;
+ 	} while (u1 - start < 100);
+ 
+ 	return 0;
+diff --git a/tools/testing/selftests/proc/proc-uptime-002.c b/tools/testing/selftests/proc/proc-uptime-002.c
+index 7d0aa22..7ad79d5 100644
+--- a/tools/testing/selftests/proc/proc-uptime-002.c
++++ b/tools/testing/selftests/proc/proc-uptime-002.c
+@@ -13,8 +13,9 @@
+  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+-// Test that values in /proc/uptime increment monotonically
+-// while shifting across CPUs.
++// Test that boottime value in /proc/uptime increments monotonically
++// while shifting across CPUs. We don't test idle time monotonicity
++// due to broken iowait task counting, cf: comment above get_cpu_idle_time_us()
+ #undef NDEBUG
+ #include <assert.h>
+ #include <errno.h>
+@@ -45,7 +46,7 @@ int main(void)
+ 	unsigned int len;
+ 	unsigned long *m;
+ 	unsigned int cpu;
+-	uint64_t u0, u1, i0, i1;
++	uint64_t u0, u1;
+ 	int fd;
+ 
+ 	/* find out "nr_cpu_ids" */
+@@ -60,7 +61,7 @@ int main(void)
+ 	fd = open("/proc/uptime", O_RDONLY);
+ 	assert(fd >= 0);
+ 
+-	proc_uptime(fd, &u0, &i0);
++	u0 = proc_uptime(fd);
+ 	for (cpu = 0; cpu < len * 8; cpu++) {
+ 		memset(m, 0, len);
+ 		m[cpu / (8 * sizeof(unsigned long))] |= 1UL << (cpu % (8 * sizeof(unsigned long)));
+@@ -68,11 +69,9 @@ int main(void)
+ 		/* CPU might not exist, ignore error */
+ 		sys_sched_setaffinity(0, len, m);
+ 
+-		proc_uptime(fd, &u1, &i1);
++		u1 = proc_uptime(fd);
+ 		assert(u1 >= u0);
+-		assert(i1 >= i0);
+ 		u0 = u1;
+-		i0 = i1;
+ 	}
+ 
+ 	return 0;
+diff --git a/tools/testing/selftests/proc/proc-uptime.h b/tools/testing/selftests/proc/proc-uptime.h
+index dc6a42b..ca55abe 100644
+--- a/tools/testing/selftests/proc/proc-uptime.h
++++ b/tools/testing/selftests/proc/proc-uptime.h
+@@ -22,7 +22,7 @@
+ 
+ #include "proc.h"
+ 
+-static void proc_uptime(int fd, uint64_t *uptime, uint64_t *idle)
++static uint64_t proc_uptime(int fd)
+ {
+ 	uint64_t val1, val2;
+ 	char buf[64], *p;
+@@ -43,18 +43,6 @@ static void proc_uptime(int fd, uint64_t *uptime, uint64_t *idle)
+ 	assert(p[3] == ' ');
+ 
+ 	val2 = (p[1] - '0') * 10 + p[2] - '0';
+-	*uptime = val1 * 100 + val2;
+ 
+-	p += 4;
+-
+-	val1 = xstrtoull(p, &p);
+-	assert(p[0] == '.');
+-	assert('0' <= p[1] && p[1] <= '9');
+-	assert('0' <= p[2] && p[2] <= '9');
+-	assert(p[3] == '\n');
+-
+-	val2 = (p[1] - '0') * 10 + p[2] - '0';
+-	*idle = val1 * 100 + val2;
+-
+-	assert(p + 4 == buf + rv);
++	return val1 * 100 + val2;
+ }
