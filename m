@@ -2,101 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 901006E685C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30916E685B
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbjDRPgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 11:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
+        id S231177AbjDRPgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 11:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbjDRPgF (ORCPT
+        with ESMTP id S230181AbjDRPgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:36:05 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1082B13F8E;
-        Tue, 18 Apr 2023 08:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681832132; x=1713368132;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KfZPAkII450y6QsFRR+Dzs+dcuCUvr+EmFqzc6LmyAs=;
-  b=G2op57fsXGyCIaYiFsNDSI9CJ+rH29bpeP3Ey5F3UM4+Z0qn/kC2baHz
-   2PTdndY5+humSIFYHGXvp2XhsC8YBpm2E17aN9ThvGCjoliHFfEyKxwHE
-   bmnn+DzGitCqRO0zGal8Pd9QWXSAq4n/mt15Sz7mas32WDPXb96g97CSe
-   8ur2gCD4XiJUtvwf+nMYO/Vy0akAS0NmHqS4FLGwN3gwp+jyBa9cc/Y/r
-   jcfryV5uNTOflhyhLLp0aCPeTPAb/sDfKOZKc5EyIQObF7gwrA2xQ9hLt
-   ojbgttJ2hQBFnWlHmMf4Y3xSikuFoTHyCl7wcs1crcaSD6vTuVa8QhtZn
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="324824948"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="324824948"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 08:32:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="691151956"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="691151956"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga002.jf.intel.com with ESMTP; 18 Apr 2023 08:32:32 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     hdegoede@redhat.com, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wendy Wang <wendy.wang@intel.com>
-Subject: [PATCH] platform/x86/intel-uncore-freq: Return error on write frequency
-Date:   Tue, 18 Apr 2023 08:32:30 -0700
-Message-Id: <20230418153230.679094-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        Tue, 18 Apr 2023 11:36:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1873314440;
+        Tue, 18 Apr 2023 08:35:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98FB662EA0;
+        Tue, 18 Apr 2023 15:34:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 775E4C433D2;
+        Tue, 18 Apr 2023 15:34:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681832079;
+        bh=0qFKzUehbJ2vWu8bH2o2ePqZ/8AeK7d2HGLZjQsJIGg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=syMEZX6Z3GN6cpyq3Bz785LlFF+rS9iBRAeM7KS6cF+hUm5Egl1tKOV7lexf/qfsx
+         /RpsIrjWFSDFCDk8vpYs1zqHDOrkKmvOUPRGGjbZei34As9J7nAv+e1M85juV5hVNI
+         QiJB/nYRzYE6lnB3sj+oxsD/6F7rPAhDiPlXfMTQ=
+Date:   Tue, 18 Apr 2023 17:34:36 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Subject: Re: [PATCH 5.10 000/124] 5.10.178-rc1 review
+Message-ID: <2023041819-canyon-unarmored-38c6@gregkh>
+References: <20230418120309.539243408@linuxfoundation.org>
+ <CA+G9fYsA+CzsxVYgQEN3c2pOV6F+1EOqY1vQrhj8yt1t-EYs7g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYsA+CzsxVYgQEN3c2pOV6F+1EOqY1vQrhj8yt1t-EYs7g@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently when the uncore_write() returns error, it is silently
-ignored. Return error to user space when uncore_write() fails.
+On Tue, Apr 18, 2023 at 08:38:47PM +0530, Naresh Kamboju wrote:
+> On Tue, 18 Apr 2023 at 18:03, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 5.10.178 release.
+> > There are 124 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.178-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> Following build errors noticed on 5.15 and 5.10.,
+> 
+> 
+> > Waiman Long <longman@redhat.com>
+> >     cgroup/cpuset: Change references of cpuset_mutex to cpuset_rwsem
+>
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Reviewed-by: Zhang Rui <rui.zhang@intel.com>
-Tested-by: Wendy Wang <wendy.wang@intel.com>
----
-This patch has no dependency on TPMI patches for uncore support.
+That's a documentation patch, it can not:
 
- .../x86/intel/uncore-frequency/uncore-frequency-common.c    | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+> kernel/cgroup/cpuset.c: In function 'cpuset_can_fork':
+> kernel/cgroup/cpuset.c:2941:30: error: 'cgroup_mutex' undeclared
+> (first use in this function); did you mean 'cgroup_put'?
+>  2941 |         lockdep_assert_held(&cgroup_mutex);
 
-diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
-index cb24de9e97dc..fa8f14c925ec 100644
---- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
-+++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
-@@ -44,14 +44,18 @@ static ssize_t store_min_max_freq_khz(struct uncore_data *data,
- 				      int min_max)
- {
- 	unsigned int input;
-+	int ret;
- 
- 	if (kstrtouint(buf, 10, &input))
- 		return -EINVAL;
- 
- 	mutex_lock(&uncore_lock);
--	uncore_write(data, input, min_max);
-+	ret = uncore_write(data, input, min_max);
- 	mutex_unlock(&uncore_lock);
- 
-+	if (ret)
-+		return ret;
-+
- 	return count;
- }
- 
--- 
-2.38.1
+Cause this.
 
+What arch is failing here?  This builds for x86.
+
+thanks,
+
+greg k-h
