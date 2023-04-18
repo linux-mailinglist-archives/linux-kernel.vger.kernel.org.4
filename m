@@ -2,163 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B4E6E6E9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4846E6EA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbjDRVti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
+        id S233190AbjDRVuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbjDRVtg (ORCPT
+        with ESMTP id S233159AbjDRVuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:49:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC3C49FD;
-        Tue, 18 Apr 2023 14:49:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A92163985;
-        Tue, 18 Apr 2023 21:49:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E49FC433D2;
-        Tue, 18 Apr 2023 21:49:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681854568;
-        bh=EmrFUT/eYHiutiyWMgwlwsEKO7EDPGWzF/8vU7NjxTM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oLV9wxq6fo0KJRnjFHjrkOxZ4wW9+MHVySebMJil1Nu/dFX3RyGQ+P21wRo15mr5g
-         hZStLwD4z0HEI9ttY+EEW0Ft2rxRaVYtOC1vlVqerlFUzxkjH1SwuJ25pJHXHAsE0J
-         kHN/WqRL56xXTKnxPHCjTZ1T7O06Ktjvc6OtgCjM0a1wH3Sy43AyJnRT8UQKnFNE/5
-         eX1G1Ki2n3zxn4th9W6U5QRqbPHwvzQm6uV/dvVptsOjyv3EHMfFdFzXUqBe7JJlHa
-         7EuA02nARoPlSgBzfovOPIzo2riC8Fr3PbRwHFHBPm5+2oHkEXoRdX5sO066rEyHaw
-         hIeCjsRc6CyIQ==
-Date:   Tue, 18 Apr 2023 14:49:25 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Joan Bruguera =?utf-8?B?TWljw7M=?= <joanbrugueram@gmail.com>
-Cc:     i.pear@outlook.com, acme@kernel.org, alan.maguire@oracle.com,
-        alexandref75@gmail.com, bpf@vger.kernel.org, dxu@dxuuu.xyz,
-        jforbes@redhat.com, linux-kernel@vger.kernel.org,
-        olsajiri@gmail.com, peterz@infradead.org, ptalbert@redhat.com,
-        yhs@fb.com
-Subject: [PATCH v2] vmlinux.lds.h: Discard .note.gnu.property section
-Message-ID: <20230418214925.ay3jpf2zhw75kgmd@treble>
-References: <20230413185922.ufmollqlnlghwyvy@treble>
- <20230416190219.2600911-1-joanbrugueram@gmail.com>
- <20230418214701.4qky77rsxxytyoc2@treble>
+        Tue, 18 Apr 2023 17:50:10 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2052.outbound.protection.outlook.com [40.107.94.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D5512CAD;
+        Tue, 18 Apr 2023 14:50:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZNG1dBWwtDuYMKEudd5LQc/mD7lzHj6ozEPpnZ3cGaPrUefciIpb461JNYTuddkNjNTPvNopVjcELWFYjsb7HtsoV8n6AHBVVo/zi+ZN1BvN3ANHukTyn+fXR5IHH6u8BoA7BH7Nm+0i55UOYRgqddGXA7SQoAihiXL2+x4YICQ0csVSR366EPz1ZLuY+h8FkNW/3WjlumE+fSz4nTdgYkr2yUG9AEnL8S4UJjMOI9bAAHeQquR/Ce7RsxD2SCTnoZVpOVmoyb119/cbK91GI4dqxz0xPKsaiWg20TzcLA2JHC1naPzo6J98WMy2rPcdzrGp9uBekQPjX0kgATU1nA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1SiX77mWSYtvvCkRKUITeJVeuptTobeIO2s79YZu8qo=;
+ b=m7D6BxViquqtLmqFeMkrlJQxLqa559Xvu5yNi7VEmi39ztxFLKSLsA66sB7poGw7bDlx+R32m0cQaM+b7jg6k2G177BlkVvMrPvgGCAlerd7lDp+iWpbAz5VkIP8m+UjemvEEGCJ81JYe7MBAXdnAvCu87wpU1PHsvrDa1qCHs4mSyGAVxkvorYUmEYifpSjtqbKqtlrsKfJuXCsAS2nlA+JSF5rhUaNQdHLh17tHG9Q6G57ivqzojOE778QG8CbEknhzmaLw3nf7WziruAu4cmjEaAmMDDOOR670CnfeOarrLfPafQ8nZ7iQTL1iXUuNQosCXb/XoqA44Ib+TijYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1SiX77mWSYtvvCkRKUITeJVeuptTobeIO2s79YZu8qo=;
+ b=qK0LTlUg9SoGpHNG64jGZ454J8ZEVBrDnrULAE8Z/2mfgysbzEqXOcec6s7eTi6gq2dFvFFdEYfsxnc71Dq5kzgCo3mB/dcZZvL8Dh4dC6tfbC+dcg145jZVFaxwcV7eRuUP9c//EcuY/s3rMPZg3Wxu5nZZOrSV68KviX+XIAI=
+Received: from DM6PR06CA0013.namprd06.prod.outlook.com (2603:10b6:5:120::26)
+ by PH7PR12MB5593.namprd12.prod.outlook.com (2603:10b6:510:133::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
+ 2023 21:49:57 +0000
+Received: from DS1PEPF0000E646.namprd02.prod.outlook.com
+ (2603:10b6:5:120:cafe::9f) by DM6PR06CA0013.outlook.office365.com
+ (2603:10b6:5:120::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.20 via Frontend
+ Transport; Tue, 18 Apr 2023 21:49:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS1PEPF0000E646.mail.protection.outlook.com (10.167.18.36) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6319.16 via Frontend Transport; Tue, 18 Apr 2023 21:49:57 +0000
+Received: from platform-dev1.pensando.io (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 18 Apr 2023 16:49:54 -0500
+From:   Brad Larson <blarson@amd.com>
+To:     <broonie@kernel.org>
+CC:     <adrian.hunter@intel.com>, <alcooperx@gmail.com>,
+        <andy.shevchenko@gmail.com>, <arnd@arndb.de>, <blarson@amd.com>,
+        <brendan.higgins@linux.dev>, <briannorris@chromium.org>,
+        <brijeshkumar.singh@amd.com>, <catalin.marinas@arm.com>,
+        <davidgow@google.com>, <devicetree@vger.kernel.org>,
+        <fancer.lancer@gmail.com>, <gerg@linux-m68k.org>,
+        <gsomlo@gmail.com>, <krzk@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <lee.jones@linaro.org>,
+        <lee@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <p.yadav@ti.com>,
+        <p.zabel@pengutronix.de>, <piotrs@cadence.com>,
+        <rdunlap@infradead.org>, <robh+dt@kernel.org>,
+        <samuel@sholland.org>, <skhan@linuxfoundation.org>,
+        <suravee.suthikulpanit@amd.com>, <thomas.lendacky@amd.com>,
+        <tonyhuang.sunplus@gmail.com>, <ulf.hansson@linaro.org>,
+        <vaishnav.a@ti.com>, <will@kernel.org>,
+        <yamada.masahiro@socionext.com>
+Subject: [PATCH v14 03/15] dt-bindings: spi: cdns: Add compatible for AMD Pensando Elba SoC
+Date:   Tue, 18 Apr 2023 14:49:45 -0700
+Message-ID: <20230418214945.54690-1-blarson@amd.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <9c7aec03-265f-414e-9a3f-9511f40cbbc0@sirena.org.uk>
+References: <9c7aec03-265f-414e-9a3f-9511f40cbbc0@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230418214701.4qky77rsxxytyoc2@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E646:EE_|PH7PR12MB5593:EE_
+X-MS-Office365-Filtering-Correlation-Id: d3e3cfb2-3179-4dcf-67fa-08db4056da4c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 80iIufSSweYb3cLBXKu1P0RDGKEnPRDQqe5DBW9OgWUdIc96bDi2Q6URTsjEXFMGhxTln2CWnAtyw5hJs931Jg/aDAuFlC8pKjE8LuqnCPVCtq9coyFmTHSxC4cqMx5g9Un/U7cfBQ35aBnVQOwrxndvwzEPdSktE8n7HIyKI7tHXeUG+nsBpJdIh/RcMQMoUPk0Xj+/ZjKlP4G3lcl3LLOM/H+LZaEQauNlIq4IOw4KnOXAdI6ZU3+Jj6IEPwVuUyOhoRTNYCMhrumpttB9xD8tOZoPHQ58Ng0HRohSy1Gfs7z3yZUY12z/n7EkOyxwm04F9gt4t+blIS4UQOKLaFJT1DF7YnFrItarbpXZFrbfZWqquN+y9uqvi8vxELu5+YBfxEfXwNrvR4sUi+sceslvvJi73dumpbZR/6T0h80apTg+Ipk/JC8Q4do6Mb9ZLBCuSYQaUw931Xnr6FyLENmPybZpNt/+yq/cLbNJZrYspwjyzNZNknCRwPOxTdau0n2G/RsZiNmk7eQcYseP8uIWwY6fpNHeUdJGK8K7pRKHFX/55viFRvMIsql+v/nNQqmiQh7h9P7BEh+KLqYplCrIiJFv1LMnUP3w1k94QkphojsdsSFVssRfrcxJ/RoRQEpGUm278+xttOi21u1bO12LkWXh0k0c+uW21iS9/k7ujMJyUeLb2bH5oDxttUDu2rEBlAEfHT5vQ9WpvgRmZ5j/J/9jTULgwMXlf4NCMWI=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(376002)(396003)(451199021)(46966006)(36840700001)(40470700004)(316002)(6916009)(54906003)(966005)(70586007)(70206006)(4326008)(40140700001)(36756003)(26005)(1076003)(40460700003)(47076005)(36860700001)(16526019)(356005)(426003)(2616005)(336012)(81166007)(186003)(83380400001)(5660300002)(8936002)(8676002)(82310400005)(41300700001)(6666004)(478600001)(82740400003)(7416002)(2906002)(40480700001)(7406005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 21:49:57.5768
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3e3cfb2-3179-4dcf-67fa-08db4056da4c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E646.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5593
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When tooling reads ELF notes, it assumes each note entry is aligned to
-the value listed in the .note section header's sh_addralign field.
+Document the cadence qspi controller compatible for AMD Pensando
+Elba SoC boards.  The Elba qspi fifo size is 1024.
 
-The kernel-created ELF notes in the .note.Linux and .note.Xen sections
-are aligned to 4 bytes.  This causes the toolchain to set those
-sections' sh_addralign values to 4.
-
-On the other hand, the GCC-created .note.gnu.property section has an
-sh_addralign value of 8 for some reason, despite being based on struct
-Elf32_Nhdr which only needs 4-byte alignment.
-
-When the mismatched input sections get linked together into the vmlinux
-.notes output section, the higher alignment "wins", resulting in an
-sh_addralign of 8, which confuses tooling.  For example:
-
-  $ readelf -n .tmp_vmlinux.btf
-  ...
-  readelf: .tmp_vmlinux.btf: Warning: note with invalid namesz and/or descsz found at offset 0x170
-  readelf: .tmp_vmlinux.btf: Warning:  type: 0x4, namesize: 0x006e6558, descsize: 0x00008801, alignment: 8
-
-In this case readelf thinks there's alignment padding where there is
-none, so it starts reading an ELF note in the middle.
-
-With newer toolchains (e.g., latest Fedora Rawhide), a similar mismatch
-triggers a build failure when combined with CONFIG_X86_KERNEL_IBT:
-
-  btf_encoder__encode: btf__dedup failed!
-  Failed to encode BTF
-  libbpf: failed to find '.BTF' ELF section in vmlinux
-  FAILED: load BTF from vmlinux: No data available
-  make[1]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 255
-
-This latter error was caused by pahole crashing when it encountered the
-corrupt .notes section.  This crash has been fixed in dwarves version
-1.25.  As Tianyi Liu describes:
-
-  "Pahole reads .notes to look for LINUX_ELFNOTE_BUILD_LTO. When LTO is
-   enabled, pahole needs to call cus__merge_and_process_cu to merge
-   compile units, at which point there should only be one unspecified
-   type (used to represent some compilation information) in the global
-   context.
-
-   However, when the kernel is compiled without LTO, if pahole calls
-   cus__merge_and_process_cu due to alignment issues with notes,
-   multiple unspecified types may appear after merging the cus, and
-   older versions of pahole only support up to one. This is why pahole
-   1.24 crashes, while newer versions support multiple. However, the
-   latest version of pahole still does not solve the problem of
-   incorrect LTO recognition, so compiling the kernel may be slower
-   than normal."
-
-Even with the newer pahole, the note section misaligment issue still
-exists and pahole is misinterpreting the LTO note.  Fix it by discarding
-the .note.gnu.property section.  While GNU properties are important for
-user space (and VDSO), they don't seem to have any use for vmlinux.
-
-(In fact, they're already getting (inadvertently) stripped from vmlinux
-when CONFIG_DEBUG_INFO_BTF is enabled.  The BTF data is extracted from
-vmlinux.o with "objcopy --only-section=.BTF" into .btf.vmlinux.bin.o.
-That file doesn't have .note.gnu.property, so when it gets modified and
-linked back into the main object, the linker automatically strips it
-(see "How GNU properties are merged" in the ld man page).)
-
-Reported-by: Daniel Xu <dxu@dxuuu.xyz>
-Link: https://lkml.kernel.org/bpf/57830c30-cd77-40cf-9cd1-3bb608aa602e@app.fastmail.com
-Debugged-by: Tianyi Liu <i.pear@outlook.com>
-Suggested-by: Joan Bruguera Micó <joanbrugueram@gmail.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Brad Larson <blarson@amd.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
-v2:
-- fixed link
-- combined discards
-- updated comment
 
- include/asm-generic/vmlinux.lds.h | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+v14 changes:
+- Patch series is against rc1, this patch failed to apply to
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+  Rebase this patch to rc7.
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index d1f57e4868ed..cebdf1ca415d 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -891,9 +891,16 @@
- /*
-  * Discard .note.GNU-stack, which is emitted as PROGBITS by the compiler.
-  * Otherwise, the type of .notes section would become PROGBITS instead of NOTES.
-+ *
-+ * Also, discard .note.gnu.property, otherwise it forces the notes section to
-+ * be 8-byte aligned which causes alignment mismatches with the kernel's custom
-+ * 4-byte aligned notes.
-  */
- #define NOTES								\
--	/DISCARD/ : { *(.note.GNU-stack) }				\
-+	/DISCARD/ : {							\
-+		*(.note.GNU-stack)					\
-+		*(.note.gnu.property)					\
-+	}								\
- 	.notes : AT(ADDR(.notes) - LOAD_OFFSET) {			\
- 		BOUNDED_SECTION_BY(.note.*, _notes)			\
- 	} NOTES_HEADERS							\
+v11 changes:
+- Removed redundant if/then for amd,pensando-elba-qspi
+
+v10 changes:
+- Fix cdns,fifo-depth, only amd,pensando-elba-qspi is 1024 bytes
+
+v9 changes:
+- Add 1024 to cdns,fifo-depth property to resolve dtbs_check error
+
+---
+ .../devicetree/bindings/spi/cdns,qspi-nor.yaml | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+index b310069762dd..4f15f9a0cc34 100644
+--- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
++++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+@@ -46,12 +46,28 @@ allOf:
+           maxItems: 2
+           items:
+             enum: [ qspi, qspi-ocp ]
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: amd,pensando-elba-qspi
++    then:
++      properties:
++        cdns,fifo-depth:
++          enum: [ 128, 256, 1024 ]
++          default: 1024
++    else:
++      properties:
++        cdns,fifo-depth:
++          enum: [ 128, 256 ]
++          default: 128
+ 
+ properties:
+   compatible:
+     oneOf:
+       - items:
+           - enum:
++              - amd,pensando-elba-qspi
+               - ti,k2g-qspi
+               - ti,am654-ospi
+               - intel,lgm-qspi
+@@ -76,8 +92,6 @@ properties:
+     description:
+       Size of the data FIFO in words.
+     $ref: /schemas/types.yaml#/definitions/uint32
+-    enum: [ 128, 256 ]
+-    default: 128
+ 
+   cdns,fifo-width:
+     $ref: /schemas/types.yaml#/definitions/uint32
+
+base-commit: 67d5d9f013d6c3829383c08162939cabff14fccc
 -- 
-2.39.2
+2.17.1
 
