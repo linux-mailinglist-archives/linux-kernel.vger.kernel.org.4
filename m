@@ -2,97 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 121DC6E6727
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C18196E6728
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 16:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbjDRO33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 10:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
+        id S231901AbjDRO34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 10:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbjDRO30 (ORCPT
+        with ESMTP id S232326AbjDRO3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 10:29:26 -0400
-Received: from exchange.fintech.ru (exchange.fintech.ru [195.54.195.159])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8946DD;
-        Tue, 18 Apr 2023 07:29:24 -0700 (PDT)
-Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
- (195.54.195.159) with Microsoft SMTP Server (TLS) id 14.3.498.0; Tue, 18 Apr
- 2023 17:29:23 +0300
-Received: from localhost (10.0.253.138) by Ex16-01.fintech.ru (10.0.10.18)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Tue, 18 Apr
- 2023 17:29:22 +0300
-From:   Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-To:     Larry Finger <Larry.Finger@lwfinger.net>
-CC:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        <linux-wireless@vger.kernel.org>, <b43-dev@lists.infradead.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lvc-project@linuxtesting.org>,
-        Natalia Petrova <n.petrova@fintech.ru>
-Subject: [PATCH v2] b43legacy: Add checking for null for ssb_get_devtypedata(dev)
-Date:   Tue, 18 Apr 2023 07:29:18 -0700
-Message-ID: <20230418142918.70510-1-n.zhandarovich@fintech.ru>
-X-Mailer: git-send-email 2.25.1
+        Tue, 18 Apr 2023 10:29:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFBA0C676
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 07:29:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 65F971684;
+        Tue, 18 Apr 2023 07:30:32 -0700 (PDT)
+Received: from [10.1.27.157] (C02CF1NRLVDN.cambridge.arm.com [10.1.27.157])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 86F483F587;
+        Tue, 18 Apr 2023 07:29:47 -0700 (PDT)
+Message-ID: <f299a82a-a048-3f28-876d-65205f48c1b5@arm.com>
+Date:   Tue, 18 Apr 2023 15:29:46 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.253.138]
-X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
- (10.0.10.18)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH v3 55/60] arm64: kvm: avoid CONFIG_PGTABLE_LEVELS for
+ runtime levels
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Kees Cook <keescook@chromium.org>
+References: <20230307140522.2311461-1-ardb@kernel.org>
+ <20230307140522.2311461-56-ardb@kernel.org>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230307140522.2311461-56-ardb@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since second call of ssb_get_devtypedata() may fail as well as the
-first one, the NULL return value in 'wl' will be later dereferenced in
-calls to b43legacy_one_core_attach() and schedule_work().
+On 07/03/2023 14:05, Ard Biesheuvel wrote:
+> get_user_mapping_size() uses vabits_actual and CONFIG_PGTABLE_LEVELS to
+> provide the starting point for a table walk. This is fine for LVA, as
+> the number of translation levels is the same regardless of whether LVA
+> is enabled. However, with LPA2, this will no longer be the case, so
+> let's derive the number of levels from the number of VA bits directly.
+> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  arch/arm64/kvm/mmu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index d64be7b5f6692e8b..4e7c0f9a9c286c09 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -663,7 +663,7 @@ static int get_user_mapping_size(struct kvm *kvm, u64 addr)
+>  		.pgd		= (kvm_pteref_t)kvm->mm->pgd,
+>  		.ia_bits	= vabits_actual,
+>  		.start_level	= (KVM_PGTABLE_MAX_LEVELS -
+> -				   CONFIG_PGTABLE_LEVELS),
+> +				   ARM64_HW_PGTABLE_LEVELS(pgt.ia_bits)),
+>  		.mm_ops		= &kvm_user_mm_ops,
+>  	};
+>  	kvm_pte_t pte = 0;	/* Keep GCC quiet... */
 
-Instead of merely warning about this failure with
-B43legacy_WARN_ON(), properly return with error to avoid any further
-NULL pointer dereferences.
-
-Found by Linux Verification Center (linuxtesting.org) with static
-analysis tool SVACE.
-
-Fixes: 75388acd0cd8 ("[B43LEGACY]: add mac80211-based driver for legacy BCM43xx devices")
-Co-developed-by: Natalia Petrova <n.petrova@fintech.ru>
-Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
----
-v2: fix issues with overlooked null-ptr-dereferences pointed out by
-Simon Horman <simon.horman@corigine.com>
-Link: https://lore.kernel.org/all/Y+eb9mZntfe6rO3v@corigine.com/ 
-
- drivers/net/wireless/broadcom/b43legacy/main.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/wireless/broadcom/b43legacy/main.c b/drivers/net/wireless/broadcom/b43legacy/main.c
-index 760136638a95..5a706dd0b1a4 100644
---- a/drivers/net/wireless/broadcom/b43legacy/main.c
-+++ b/drivers/net/wireless/broadcom/b43legacy/main.c
-@@ -3857,7 +3857,11 @@ static int b43legacy_probe(struct ssb_device *dev,
- 		if (err)
- 			goto out;
- 		wl = ssb_get_devtypedata(dev);
--		B43legacy_WARN_ON(!wl);
-+		if (!wl) {
-+			B43legacy_WARN_ON(!wl);
-+			err = -ENODEV;
-+			goto out;
-+		}
- 	}
- 	err = b43legacy_one_core_attach(dev, wl);
- 	if (err)
--- 
-2.25.1
-
+You have the problem here that the KVM library (which isn't LPA2 aware) is
+walking a kernel page table, which may now be in LPA2 format. I think this works
+out ok as long as there are no physical addresses above 48 bits in the page
+table. But otherwise, I doubt it works out very well...
