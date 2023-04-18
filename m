@@ -2,85 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589376E65B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B616E65C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbjDRNUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 09:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44134 "EHLO
+        id S232398AbjDRNX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 09:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjDRNUi (ORCPT
+        with ESMTP id S230257AbjDRNX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 09:20:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8F7125B7;
-        Tue, 18 Apr 2023 06:20:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1976634C6;
-        Tue, 18 Apr 2023 13:20:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21C74C433A8;
-        Tue, 18 Apr 2023 13:20:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681824037;
-        bh=Le15qIzyA/mY+IzjQpWhhnFQ+7le2f1lWEaMFgytmLw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=c8xLAmkHsW0nkFOtLrh4KvwqPUnhEusajMKpACR9nuj3twoW/V8YNROQsok5u2nKc
-         KeGZeUWm/UzuqpHNB1EOBUpjJ5vD5KGEnONAvdeoohedaDIfLZaK9yvUrnZRlYmbw4
-         0t/iII+Oq0MuAazZaM78bgQ0Pw3rmHAwJ8kX5nr1GG3FiiKTyqIkkFSFJgzRasZdzD
-         vCZLveQXUOiZ9IrCrs9dDEBuOXuJrWIWsK3VDOYLtC/eTQQHORopKncJLiFleruiee
-         Qo+elQzPXkUESOoiwDJ/mjWWtplej1OBZYyIlWGsQylNUtcXphQoOHo4ASzLUa42/L
-         vQJmCFcjlsROA==
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-54c12009c30so564632627b3.9;
-        Tue, 18 Apr 2023 06:20:37 -0700 (PDT)
-X-Gm-Message-State: AAQBX9cqGHRSpa11Xq8BE7IqeIEY33xtq557g2IForSrSCXkxpGLEiCB
-        f8PfgGW1ATzpU4EX5RKysufFTYnOr+22NaMSFw==
-X-Google-Smtp-Source: AKy350a8yALkehpzCW88Q0oQmGRQSLLwBnO5deySk641wmLRpvvXPbtgYUISPzJM/0+Di1T6M1RxMnbDeIHHj+X38k8=
-X-Received: by 2002:a81:c406:0:b0:54d:913b:c9e8 with SMTP id
- j6-20020a81c406000000b0054d913bc9e8mr11219324ywi.5.1681824036131; Tue, 18 Apr
- 2023 06:20:36 -0700 (PDT)
+        Tue, 18 Apr 2023 09:23:28 -0400
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BAACC29;
+        Tue, 18 Apr 2023 06:23:23 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id o29-20020a05600c511d00b003f1739de43cso3085510wms.4;
+        Tue, 18 Apr 2023 06:23:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681824202; x=1684416202;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FqDTiBrLhR5sXi2E8N9oFKAY2YSWIckMsITGVR/waa8=;
+        b=NyBgBzh4VPrzouQBVBlcjlF3HJc1iP9ai+T1L8ykJdYAv6DsV7nbn1bHy2XVbfSCaW
+         F9EinYIvUr6UtuIWTgegfuZpfU6Oqv39FIUP/9OslCi3J1CVRZPlGqT3I01tgPp/BCdj
+         9ZFb3Wtsy5mFh7LCheVEruYzpZlGoSVlecaQDCKQZ9gkWDKg28B5e22WHRmmL5Nla0Kb
+         sdfnnpj1ocOER99D/4rEh2+pBsFPj16IK+2U1VR+2Cx5yLcKpxH/zfO5/4BiSiXT26su
+         kTfLF+PPbaNoOKLz0S0d2h75o7rfaBKbcLF7eZDjxeGOQizY6un/qqMxfjYUuBlqVMCT
+         vNLg==
+X-Gm-Message-State: AAQBX9fjuux2CAgW1OUw+wpIGuBJOsKKZTm5f6K6MG1K6CoveBSfkkPo
+        Y0nDB5E2GJNdhJoaddOtndE=
+X-Google-Smtp-Source: AKy350biM8WVl/eiJ3HJWtyNS4ItBlVWJWh5hXYnArsamS9vCseDF+MBoa17egcF/lf5BoWPjkLgfQ==
+X-Received: by 2002:a7b:c7c9:0:b0:3f1:6ecf:537 with SMTP id z9-20020a7bc7c9000000b003f16ecf0537mr7723437wmk.33.1681824201624;
+        Tue, 18 Apr 2023 06:23:21 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-119.fbsv.net. [2a03:2880:31ff:77::face:b00c])
+        by smtp.gmail.com with ESMTPSA id u15-20020a05600c19cf00b003ede3f5c81fsm18725760wmq.41.2023.04.18.06.23.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 06:23:20 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 06:23:15 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>, kuba@kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        io-uring@vger.kernel.org, netdev@vger.kernel.org, kuba@kernel.org,
+        asml.silence@gmail.com, leit@fb.com, edumazet@google.com,
+        pabeni@redhat.com, davem@davemloft.net, dccp@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+        matthieu.baerts@tessares.net, marcelo.leitner@gmail.com
+Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
+Message-ID: <ZD6Zw1GAZR28++3v@gmail.com>
+References: <643573df81e20_11117c2942@willemb.c.googlers.com.notmuch>
+ <036c80e5-4844-5c84-304c-7e553fe17a9b@kernel.dk>
+ <64357608c396d_113ebd294ba@willemb.c.googlers.com.notmuch>
+ <19c69021-dce3-1a4a-00eb-920d1f404cfc@kernel.dk>
+ <64357bb97fb19_114b22294c4@willemb.c.googlers.com.notmuch>
+ <20cb4641-c765-e5ef-41cb-252be7721ce5@kernel.dk>
+ <ZDa32u9RNI4NQ7Ko@gmail.com>
+ <6436c01979c9b_163b6294b4@willemb.c.googlers.com.notmuch>
+ <ZDdGl/JGDoRDL8ja@gmail.com>
+ <6438109fe8733_13361929472@willemb.c.googlers.com.notmuch>
 MIME-Version: 1.0
-References: <20230413163353.3408208-1-arnd@kernel.org>
-In-Reply-To: <20230413163353.3408208-1-arnd@kernel.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 18 Apr 2023 08:20:25 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJ5V57OazJOWqgi52=FHJbdqp6c+_HhRGRJYKcBC8FqWw@mail.gmail.com>
-Message-ID: <CAL_JsqJ5V57OazJOWqgi52=FHJbdqp6c+_HhRGRJYKcBC8FqWw@mail.gmail.com>
-Subject: Re: [PATCH] of: move dummy of_device_get_match_data() helper
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6438109fe8733_13361929472@willemb.c.googlers.com.notmuch>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 11:33=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wr=
-ote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The previous patch only moved the regular declaration but missed
-> the inline function that is used with CONFIG_OF=3Dn:
->
-> drivers/tty/serial/samsung_tty.c:2034:10: error: implicit declaration of =
-function 'of_device_get_match_data' is invalid in C99 [-Werror,-Wimplicit-f=
-unction-declaration]
->
-> Fixes: f5a2dc751657 ("of: Move of_device_get_match_data() declaration")
+On Thu, Apr 13, 2023 at 10:24:31AM -0400, Willem de Bruijn wrote:
+> > How to handle these contradictory behaviour ahead of time (at callee
+> > time, where the buffers will be prepared)?
+> 
+> Ah you found a counter-example to the simple pattern of put_user.
+> 
+> The answer perhaps depends on how many such counter-examples you
+> encounter in the list you gave. If this is the only one, exceptions
+> in the wrapper are reasonable. Not if there are many.
 
-Despite multiple reports and having fixed it, I still managed to apply
-the wrong version of patch. Anyways, I already fixed it.
 
-Rob
+Hello Williem,
+
+I spend sometime dealing with it, and the best way for me to figure out
+how much work this is, was implementing a PoC. You can find a basic PoC
+in the link below. It is not 100% complete (still need to convert 4
+simple ioctls), but, it deals with the most complicated cases. The
+missing parts are straighforward if we are OK with this approach.
+
+	https://github.com/leitao/linux/commits/ioctl_refactor
+
+Details
+=======
+
+1)  Change the ioctl callback to use kernel memory arguments. This
+changes a lot of files but most of them are trivial. This is the new
+ioctl callback:
+
+struct proto {
+
+        int                     (*ioctl)(struct sock *sk, int cmd,
+-                                        unsigned long arg);
++                                        int *karg);
+
+	You can see the full changeset in the following commit (which is
+	the last in the tree above)
+	https://github.com/leitao/linux/commit/ad78da14601b078c4b6a9f63a86032467ab59bf7
+
+2) Create a wrapper (sock_skprot_ioctl()) that should be called instead
+of sk->sk_prot->ioctl(). For every exception, calls a specific function
+for the exception (basically ipmr_ioctl and ipmr_ioctl) (see more on 3)
+
+	This is the commit https://github.com/leitao/linux/commit/511592e549c39ef0de19efa2eb4382cac5786227
+
+3) There are two exceptions, they are ip{6}mr_ioctl() and pn_ioctl().
+ip{6}mr is the hardest one, and I implemented the exception flow for it.
+
+	You could find ipmr changes here:
+	https://github.com/leitao/linux/commit/659a76dc0547ab2170023f31e20115520ebe33d9
+
+Is this what you had in mind?
+
+Thank you!
