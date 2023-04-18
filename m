@@ -2,87 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7329F6E68C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D42FD6E68C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 17:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjDRP5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 11:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41908 "EHLO
+        id S232156AbjDRP6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 11:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232459AbjDRP50 (ORCPT
+        with ESMTP id S230192AbjDRP6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:57:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A00072B8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:56:45 -0700 (PDT)
+        Tue, 18 Apr 2023 11:58:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73893126
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:57:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681833404;
+        s=mimecast20190719; t=1681833471;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Juss3UIfNZnJDgajqfUY7HSWywG2tSbHHgh51Zf9/Ao=;
-        b=JCk1pFo0nM/aWrQNqZjorNM7I4gaDyt9wToIOTO08qVOjl37WEClsZTauTycIYcSOdTup/
-        YBoTS47l4SJ2jhUnWAllwSpOjoM315S3Y8euUKhgtJ2uSVy2TsN2Lyc87Wvh5q+ZpR4MJW
-        8ukyptJNLeNSoDjaHgBJWTKU+D9tiJA=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=ClxVX5yTsrEn4iN5IePk2auvIblqHsmaWH8UmnJ6Yfs=;
+        b=FmLE9W9dwrV3T9YzfvCwGYlsswRnAqho98Iwcy51cid2pX+4k0jsKoU+6IP45fIcQGFlI3
+        4YzikRZYk4Ahj8QfEcKJ33MvdLpv+SJovF0Xx7QOGwsmtYtcbZwyhQKYFoaKa4X5ICdVzs
+        Ow94CB6yczJ9JXDbBxr77WWw0D7yuFU=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-187-chj_1D7rNHexbvAm_1s2Yw-1; Tue, 18 Apr 2023 11:56:43 -0400
-X-MC-Unique: chj_1D7rNHexbvAm_1s2Yw-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f0b0c85c4fso42618885e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:56:43 -0700 (PDT)
+ us-mta-454-atS77zgIMjuUAxvyYUiSdA-1; Tue, 18 Apr 2023 11:57:50 -0400
+X-MC-Unique: atS77zgIMjuUAxvyYUiSdA-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f0b0c85c4fso42634115e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 08:57:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681833402; x=1684425402;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
+        d=1e100.net; s=20221208; t=1681833469; x=1684425469;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Juss3UIfNZnJDgajqfUY7HSWywG2tSbHHgh51Zf9/Ao=;
-        b=Z/csfzO8md+8hIdiqvXuXXNUcRUK8rE5UIW7w6MKyqKaexOfPmVrxmbcMdYGsgH3sB
-         dO6vPL4BVKhvN79s3cepC0/pXBbTumMosuKc56XaHNsbxJ1zb+v1Q4LccgGGIeZiXXGY
-         rfIW3kOQMm6Ho2e1LlWpHh7UPaS1IFFSkL9rYmD3d5zcW0eCqlpAjwCi5Cdw9rHKpHoK
-         AkGKfCsWddFJbQwJ/oYLeCg3a7BiVxMw43JPVjVEwg5WiI84sgMyE/n6SFYBEX+jrSi/
-         YJq3uGscF1IuxTevE92HkZFZLRKPeopRr+vdYBRlNz1AEvGcirfNZv4due+YtytgD6a2
-         VW+g==
-X-Gm-Message-State: AAQBX9cAdpQfQhoDU9bM4ZbW4sn2+I7DszkENUE0TWzR9Z9Lt5I6WBOU
-        UPaCn1hl70+SeCM7q/aptwHUNBPAvg0RQoVp7ZmiTMLRp5HP3uP8TfyeNivxpVw87MDsTnduqSg
-        6hcJcJwcHLRfUnpdsb5VrzUgScdtbaLi/
-X-Received: by 2002:a5d:6781:0:b0:2fc:3596:7392 with SMTP id v1-20020a5d6781000000b002fc35967392mr2628935wru.24.1681833402338;
-        Tue, 18 Apr 2023 08:56:42 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YBuzvTWcCQhnHtly8+4rzkBkEULSOiTAtS5qyHVRgWX5InlOQK650XXEk9mTPSPN0p7akgTA==
-X-Received: by 2002:a5d:6781:0:b0:2fc:3596:7392 with SMTP id v1-20020a5d6781000000b002fc35967392mr2628920wru.24.1681833402021;
-        Tue, 18 Apr 2023 08:56:42 -0700 (PDT)
+        bh=ClxVX5yTsrEn4iN5IePk2auvIblqHsmaWH8UmnJ6Yfs=;
+        b=cz4JZH2D9K98Af7czcl8pBUnycdeFIJbksPE6X702ND4KxDmlLJ9cr7ry7iJqylC0F
+         9bi+KGQ5XPF4Hi3oKbgH69b7E+k38iJTz4wuIfDAnmmB3XqFwIkPu+W+ice4fpJGV/7a
+         Enl0xH89Mj188RJDtBDAH8GTBdUx+Di5c7IDft75Pfy1wGL7n37QMw6hEICmOJxZkxFB
+         qmANRtYnh6JMo84D58cZw9ayNGMSbKOh9m+rvDR2MMkuTnnv8RnfIs2bNjx8a4KFwevr
+         vtRC3xRsfLE8YltTscXJa11HsS52xt9QQrZ76nuHHj69l1p7Xhv00r6muwKLQeSm/KLk
+         YiVA==
+X-Gm-Message-State: AAQBX9f6rnXw34IwpD7Po8RmLUMNwVnaOvl60w4LFJWvq+2q3atou/dS
+        nTELGTkUV1RmVMYmOe9quGkrpDZjSfvAt2aJkEUQ3hhhOLvi16vj6d9Shzv4PhJuT35Q+ESMBfs
+        TThBrjG3kTPk/894iwfL+6jJ58u87K3F+
+X-Received: by 2002:a5d:58d1:0:b0:2f6:aa71:d5b0 with SMTP id o17-20020a5d58d1000000b002f6aa71d5b0mr2372401wrf.15.1681833469412;
+        Tue, 18 Apr 2023 08:57:49 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Zi+96637CVEF+bLgMNRwea/a7ykxdXxncauziu42MzNJmag43vt2ndN7a2lAALAol0SldyDQ==
+X-Received: by 2002:a5d:58d1:0:b0:2f6:aa71:d5b0 with SMTP id o17-20020a5d58d1000000b002f6aa71d5b0mr2372384wrf.15.1681833469028;
+        Tue, 18 Apr 2023 08:57:49 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c715:3f00:7545:deb6:f2f4:27ef? (p200300cbc7153f007545deb6f2f427ef.dip0.t-ipconnect.de. [2003:cb:c715:3f00:7545:deb6:f2f4:27ef])
-        by smtp.gmail.com with ESMTPSA id z2-20020adff1c2000000b002f900cfc262sm8099302wro.66.2023.04.18.08.56.40
+        by smtp.gmail.com with ESMTPSA id f16-20020a05600c155000b003f177cda5ebsm3316361wmg.33.2023.04.18.08.57.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 08:56:41 -0700 (PDT)
-Message-ID: <21bc9c1e-9941-9f51-0a38-85ae406ff2cd@redhat.com>
-Date:   Tue, 18 Apr 2023 17:56:40 +0200
+        Tue, 18 Apr 2023 08:57:48 -0700 (PDT)
+Message-ID: <e6b64991-65d7-0d25-3866-6b0b44f171b1@redhat.com>
+Date:   Tue, 18 Apr 2023 17:57:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
- pin_user_pages()
+Subject: Re: [PATCH mm-unstable v1] mm: don't check VMA write permissions if
+ the PTE/PMD indicates write permissions
 Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>
+References: <20230418142113.439494-1-david@redhat.com> <ZD69l0zD3UL9HD8g@x1n>
 From:   David Hildenbrand <david@redhat.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org
-References: <cover.1681831798.git.lstoakes@gmail.com>
- <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
- <7fabe6ee-ba8f-6c48-c9f7-90982e2e258c@redhat.com>
 Organization: Red Hat
-In-Reply-To: <7fabe6ee-ba8f-6c48-c9f7-90982e2e258c@redhat.com>
+In-Reply-To: <ZD69l0zD3UL9HD8g@x1n>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,37 +87,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.04.23 17:55, David Hildenbrand wrote:
-> On 18.04.23 17:49, Lorenzo Stoakes wrote:
->> We are shortly to remove pin_user_pages(), and instead perform the required
->> VMA checks ourselves. In most cases there will be a single VMA so this
->> should caues no undue impact on an already slow path.
+On 18.04.23 17:56, Peter Xu wrote:
+> On Tue, Apr 18, 2023 at 04:21:13PM +0200, David Hildenbrand wrote:
+>> Staring at the comment "Recheck VMA as permissions can change since
+>> migration started" in remove_migration_pte() can result in confusion,
+>> because if the source PTE/PMD indicates write permissions, then there
+>> should be no need to check VMA write permissions when restoring migration
+>> entries or PTE-mapping a PMD.
 >>
->> Doing this eliminates the one instance of vmas being used by
->> pin_user_pages().
+>> Commit d3cb8bf6081b ("mm: migrate: Close race between migration completion
+>> and mprotect") introduced the maybe_mkwrite() handling in
+>> remove_migration_pte() in 2014, stating that a race between mprotect() and
+>> migration finishing would be possible, and that we could end up with
+>> a writable PTE that should be readable.
 >>
->> Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
->> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+>> However, mprotect() code first updates vma->vm_flags / vma->vm_page_prot
+>> and then walks the page tables to (a) set all present writable PTEs to
+>> read-only and (b) convert all writable migration entries to readable
+>> migration entries. While walking the page tables and modifying the
+>> entries, migration code has to grab the PT locks to synchronize against
+>> concurrent page table modifications.
+> 
+> Makes sense to me.
+> 
+>>
+>> Assuming migration would find a writable migration entry (while holding
+>> the PT lock) and replace it with a writable present PTE, surely mprotect()
+>> code didn't stumble over the writable migration entry yet (converting it
+>> into a readable migration entry) and would instead wait for the PT lock to
+>> convert the now present writable PTE into a read-only PTE. As mprotect()
+>> didn't finish yet, the behavior is just like migration didn't happen: a
+>> writable PTE will be converted to a read-only PTE.
+>>
+>> So it's fine to rely on the writability information in the source
+>> PTE/PMD and not recheck against the VMA as long as we're holding the PT
+>> lock to synchronize with anyone who concurrently wants to downgrade write
+>> permissions (like mprotect()) by first adjusting vma->vm_flags /
+>> vma->vm_page_prot to then walk over the page tables to adjust the page
+>> table entries.
+>>
+>> Running test cases that should reveal such races -- mprotect(PROT_READ)
+>> racing with page migration or THP splitting -- for multiple hours did
+>> not reveal an issue with this cleanup.
+>>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: Mel Gorman <mgorman@techsingularity.net>
+>> Cc: Peter Xu <peterx@redhat.com>
+>> Signed-off-by: David Hildenbrand <david@redhat.com>
 >> ---
->>    io_uring/rsrc.c | 55 ++++++++++++++++++++++++++++---------------------
->>    1 file changed, 31 insertions(+), 24 deletions(-)
 >>
->> diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
->> index 7a43aed8e395..3a927df9d913 100644
->> --- a/io_uring/rsrc.c
->> +++ b/io_uring/rsrc.c
->> @@ -1138,12 +1138,37 @@ static int io_buffer_account_pin(struct io_ring_ctx *ctx, struct page **pages,
->>    	return ret;
->>    }
->>    
->> +static int check_vmas_locked(unsigned long addr, unsigned long len)
+>> This is a follow-up cleanup to [1]:
+>> 	[PATCH v1 RESEND 0/6] mm: (pte|pmd)_mkdirty() should not
+>> 	unconditionally allow for write access
+>>
+>> I wanted to be a bit careful and write some test cases to convince myself
+>> that I am not missing something important. Of course, there is still the
+>> possibility that my test cases are buggy ;)
+>>
+>> Test cases I'm running:
+>> 	https://gitlab.com/davidhildenbrand/scratchspace/-/raw/main/test_mprotect_migration.c
+>> 	https://gitlab.com/davidhildenbrand/scratchspace/-/raw/main/test_mprotect_thp_split.c
+>>
+>>
+>> [1] https://lkml.kernel.org/r/20230411142512.438404-1-david@redhat.com
+>>
+>> ---
+>>   mm/huge_memory.c | 4 ++--
+>>   mm/migrate.c     | 5 +----
+>>   2 files changed, 3 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>> index c23fa39dec92..624671aaa60d 100644
+>> --- a/mm/huge_memory.c
+>> +++ b/mm/huge_memory.c
+>> @@ -2234,7 +2234,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+>>   		} else {
+>>   			entry = mk_pte(page + i, READ_ONCE(vma->vm_page_prot));
+>>   			if (write)
+>> -				entry = maybe_mkwrite(entry, vma);
+>> +				entry = pte_mkwrite(entry);
 > 
-> TBH, the whole "_locked" suffix is a bit confusing.
-> 
-> I was wondering why you'd want to check whether the VMAs are locked ...
+> This is another change besides page migration.  I also don't know why it's
+> needed, but it's there since day 1 of thp split in eef1b3ba053, so maybe
+> worthwhile to copy Kirill too (which I did).
 
-FWIW, "check_vmas_compatible_locked" might be better. But the "_locked" 
-is still annoying.
+Indeed (I wanted but forgot ...), thanks Peter!
 
 -- 
 Thanks,
