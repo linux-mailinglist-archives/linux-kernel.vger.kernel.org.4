@@ -2,124 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700626E6BB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E3F6E6BBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjDRSGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
+        id S232267AbjDRSJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjDRSG3 (ORCPT
+        with ESMTP id S229564AbjDRSJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:06:29 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C9BE7B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:06:28 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso1328621wmo.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681841187; x=1684433187;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M30du5mqmgKvrK4t9HuuHfHAn0tr6/r+1Nuzg/l+qDw=;
-        b=aCFj1du12kahKPc813jpwjYOXhr5FL7OFbCUYDvNavWqd0SK6oPxKM2dMsxip95R6a
-         4/03EZc+qS79tO4AruGAqF5tD8wrk3HvYkbuTFMlMKrtCPMvCRs/aNl1bpoJtldQ9HCN
-         uOpyl6p8LXdvzbDD4gRNPiQqWyiIA3PDpjIc4XHRaTO4UmWif9MAa21W/tEpYWQFNa9C
-         /fbzoBhh+Go6lC97jomf/vHXaJZ40IA+jKnTOkzJ19J1aZ9+dL29RbP7CZVrvTblP8U5
-         MQ2yQsE5upoSJ6/BkX3VSoEOQZ3TVAUDzsy63IsUV9Hn1Klx99gVdfbeVcn+mvLuwFZx
-         Z8Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681841187; x=1684433187;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M30du5mqmgKvrK4t9HuuHfHAn0tr6/r+1Nuzg/l+qDw=;
-        b=GQzT/1hM+hJPuDjPzcxQEgxCRVT7Eitxe/Jq/+jmHe9q92vcIM2ItH3FB4QEAXO8QX
-         o5f2DRfyrSE+sQKBpRounu6jrQWc6lyoyo3iQKp+xQyLEOXuSTuw1nkRGfYUaQAZ7Cmd
-         JFW4+dDCBCCTazFhVxPcDcMOoLaN0TmeJMvHX5/V9fKE2VSunWVBbfrb19JBE8mO7THc
-         LTINHmHrhr7Nyu0His8IiLcJpP3hLM3qukS+DUQVx3Ph7HOMXkt4aCcV44ryG1XICxBU
-         Ii2sDT5D7eGELl7fHkpUaPJvC3KNCYjBNr1YHZU6Z9hQaq1AXwsLRXcDRBZEsnpK6T4y
-         1KLA==
-X-Gm-Message-State: AAQBX9fRXjRKWzuvaLTfzvZ4w25UYjOh/87NJRL4ZwJFC3YMCYrta63B
-        1y19o0XMWQUuev9PpEAY3lw=
-X-Google-Smtp-Source: AKy350affcKRPRnr6w7/Il+mJ10enRJnyp2KpkDOKh2W7Jw2M7JNi/J3H08mo2ox0CzAMVjiUCBrdg==
-X-Received: by 2002:a05:600c:218c:b0:3f1:6980:2cff with SMTP id e12-20020a05600c218c00b003f169802cffmr8162883wme.14.1681841186582;
-        Tue, 18 Apr 2023 11:06:26 -0700 (PDT)
-Received: from [192.168.1.135] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id l11-20020a5d480b000000b002f2783ba25asm13649277wrq.65.2023.04.18.11.06.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 11:06:25 -0700 (PDT)
-Message-ID: <d05f3ba8-5e89-82f2-73e0-175250e3e8fd@gmail.com>
-Date:   Tue, 18 Apr 2023 20:06:24 +0200
+        Tue, 18 Apr 2023 14:09:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6594D1FE4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:09:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E76666377A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 18:09:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76ADFC433EF;
+        Tue, 18 Apr 2023 18:09:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681841342;
+        bh=CXOYtsBMCLdNP3Hr98JNrBWJGbiewjsk+S8BD+mS85w=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Tyfty+zDc4kXnAqvKvkA+n/AjbVCGCJBktGil2MiU6a0E5K6uiIoQeHuwZ3G2a+YV
+         0tCsrYa34bWNk15dIF7wN5ifK/RYwBbT3HrKArO92aHxTfxYoYYsSP+HeRSVYbmSe8
+         zaOehVV8miW7CzrAVgYnmXT3D1POfyF8xHiz6WreZ0ERE3oV7sOzWPdZFVYmFSpzT8
+         /Ccn3xLl9O2WOYjuQMDrPJImxp2BiQRDe7IkGVMW2ojR0hjOpR6YNpCEgt1qPTS/zz
+         hnK2pXUrtHV+B0ZFqecFpmw9YNvst6r4dX6kRQ2oaRVW7WC10/kGvXbe2HWnelnwl2
+         mzfj2bw5a+G6g==
+From:   Mark Brown <broonie@kernel.org>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+In-Reply-To: <20230418144309.1100721-1-rf@opensource.cirrus.com>
+References: <20230418144309.1100721-1-rf@opensource.cirrus.com>
+Subject: Re: [PATCH 0/4] ASoC: cs35l56: Updates for B0 silicon
+Message-Id: <168184134118.119808.12469329412185790363.b4-ty@kernel.org>
+Date:   Tue, 18 Apr 2023 19:09:01 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] phy: mediatek/mt8195: fx mtk_hdmi_pll_calc() return code
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Guillaume Ranquet <granquet@baylibre.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230414075842.4006164-1-arnd@kernel.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230414075842.4006164-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Tue, 18 Apr 2023 15:43:05 +0100, Richard Fitzgerald wrote:
+> These patches make some small changes to align with the B0
+> silicon revision.
+> 
+> Richard Fitzgerald (4):
+>   ASoC: cs35l56: Update comment on masking of EINT20 interrupts
+>   ASoC: cs35l56: Remove SDW1 TX5 and TX6
+>   ASoC: cs35l56: Remove SDW2RX1 mixer source
+>   ASoC: cs35l56: Rename mixer source defines for SoundWire DP1
+> 
+> [...]
 
-On 14/04/2023 09:58, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The newly added function returns an uninitialized variable:
-> 
-> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
-> 
-> Wire it up to the return code of the function called just before,
-> assuming that this was the intention originally.
-> 
-> Fixes: 45810d486bb4 ("phy: mediatek: add support for phy-mtk-hdmi-mt8195")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->   drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-> index abfc077fb0a8..c8e540665fcb 100644
-> --- a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-> +++ b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-> @@ -292,7 +292,7 @@ static int mtk_hdmi_pll_calc(struct mtk_hdmi_phy *hdmi_phy, struct clk_hw *hw,
->   	if (!(digital_div <= 32 && digital_div >= 1))
->   		return -EINVAL;
->   
-> -	mtk_hdmi_pll_set_hw(hw, PLL_PREDIV, fbkdiv_high, fbkdiv_low,
-> +	ret = mtk_hdmi_pll_set_hw(hw, PLL_PREDIV, fbkdiv_high, fbkdiv_low,
->   			    PLL_FBKDIV_HS3, posdiv1, posdiv2, txprediv,
->   			    txposdiv, digital_div);
->   	if (ret)
+Applied to
 
-I think this is the third patch that fixes this :) Your solution look quite 
-similar to this one:
-20230413-fixes-for-mt8195-hdmi-phy-v2-1-bbad62e64321@baylibre.com
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Regards,
-Mmatthias
+Thanks!
+
+[1/4] ASoC: cs35l56: Update comment on masking of EINT20 interrupts
+      commit: 16e5fc8ae793947d7dd0de63c7a613798f75c237
+[2/4] ASoC: cs35l56: Remove SDW1 TX5 and TX6
+      commit: 5ab28c78a125a724684958f4caf8210127d3f528
+[3/4] ASoC: cs35l56: Remove SDW2RX1 mixer source
+      commit: d3a4efb334e5f6cbb3f2741fa07a873a2a78b016
+[4/4] ASoC: cs35l56: Rename mixer source defines for SoundWire DP1
+      commit: d29a966b72fb370128096393961f2c456ff24e3d
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
