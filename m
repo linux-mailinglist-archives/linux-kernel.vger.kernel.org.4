@@ -2,97 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 256A16E6BA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5144E6E6BAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbjDRSD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 14:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
+        id S232516AbjDRSE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjDRSDy (ORCPT
+        with ESMTP id S232432AbjDRSEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:03:54 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B808AE7B;
-        Tue, 18 Apr 2023 11:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681841033; x=1713377033;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Oaq26ABOZr9aDlblEsU+PBJXtAHzJdihwnBKzQqvi3Q=;
-  b=FApDeS3LPNihuAA16VA3nrVbXpHxFueM2i9GJ3OgXnCrae3Fxi3JjRqy
-   LEDgid/ItqB43QmkwrEAwevylu/6+PsWglBsAeOs3yvfygWGMXlkf4Ysm
-   AuwGoy4M0JO5oQmMoxZgvasN+ZHBTUQYdMpTRNqV3IFWKbuC0jL7busty
-   PfvVqvdLqdq+sBqn07kO1GlXBFfZLtAbCXRyD0IE8WaTKeMAPLgQM5zmH
-   k7aDD4AKOhtLJJihHmbkWajTkIvyYs23OZdgOieKnZNNcdENmw6jv8Vks
-   RymSH/XmMDOYKl2ED+uN1GjiC9+sWZ9uFQ6uqhMNGNsnqpqGTX5l9zHea
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="347098315"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="347098315"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 11:03:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="1020876838"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="1020876838"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 11:03:52 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v2] x86/mce: Always call memory_failure() when there is a valid address
-Date:   Tue, 18 Apr 2023 11:03:43 -0700
-Message-Id: <20230418180343.19167-1-tony.luck@intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <a5d0c575-ba4f-1120-c7ee-bc37e8d40402@amd.com>
-References: <a5d0c575-ba4f-1120-c7ee-bc37e8d40402@amd.com>
+        Tue, 18 Apr 2023 14:04:54 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821CF4699
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:04:51 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f048b144eeso67585e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:04:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681841090; x=1684433090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bVo7ErolbBsB3vbOoqmPHuRczZ4pjL/sGStpYzTmAxM=;
+        b=ZU5RGYlhPrrm3RUw1BAJD4ultlC7dOla6Lr/381b9LpQqBWglBq0ppKxwlU9+VwW2M
+         msjDDhP3G6FP/MJDlvw9WHNWoycAFQEK1CG2E+AxoRClYltCV0ke/P6Mp/bSZ9tg8sVf
+         s7kFlG7VZVRqpnP1CauObtccey3KhAJUwE/IlnQwXPdVJ8Rfwhx2WcvDSo8I7XBf2c+E
+         3FDWG6WCqT/xBrYcz57O2Unf215gtdpwlDaCTpY//bSDI82W9wr8KLyVA3XBzdIDYuJC
+         AQX0LuH73IcR+OEC9L+kBCdnN2DFePLw18BAbA+0j5sWsfiJiZvQokxB5ziUnLfkEX+f
+         Bm+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681841090; x=1684433090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bVo7ErolbBsB3vbOoqmPHuRczZ4pjL/sGStpYzTmAxM=;
+        b=B6ny8nXj/JLVb9cf9kCU/1Oy0n4b0VkyIHJQi3nH+NLYUTHWBQhIKJFH4oS22JmtQj
+         pMnGjPtLdrDU4p4+mR3t38u5GL6NETN0Z1r8U28iItVDnTK2r8tyhsEvhtHsCeXaQ4EZ
+         I+qyEdu2gxtrSnI/ccTZ6jT+HLICpPlhcQn9EiLrE7CXjN7uFWIyI1NZOA5eY/Q1lnzK
+         To5xdEP9DP6Uphhn459dYccdbGUGPRAaqmKTH9f4BJA7oVwu1ZOZkQ1dVRc3vT+jGDA0
+         i+OX4d2n7OOVLnKt3DRU7bDf4kD/g1QhdWATtwPUVV9kceUmlxskNNTYIweTE1deObVy
+         hHMw==
+X-Gm-Message-State: AAQBX9ckXFevLhHdha4z/pejB+IRwoCc+nElQ2KwCmVYzvA7F1WfhzNP
+        1CFkbEbuzJgACXlf1hZBEzp57pwDSWxxgfpf3ZzWMg==
+X-Google-Smtp-Source: AKy350a2qGvbYaY2rIFNyUnYbU0oiNOCuTWBN2WMAQLltFtgZZpkczBs4IU4AxO4IcKD/c5XRH1zdF6YZte2RTXgYl8=
+X-Received: by 2002:a05:600c:3c97:b0:3f1:73b8:b5fe with SMTP id
+ bg23-20020a05600c3c9700b003f173b8b5femr7640wmb.3.1681841089846; Tue, 18 Apr
+ 2023 11:04:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230417122943.2155502-1-anders.roxell@linaro.org>
+ <20230417122943.2155502-2-anders.roxell@linaro.org> <CAP-5=fWUevSnyn5MtVO1p6cEVE8MvBTq4Qgth7RcPYueRERQKA@mail.gmail.com>
+ <d940f802-8aab-140d-7a87-9cf0b3a8ac9f@isovalent.com>
+In-Reply-To: <d940f802-8aab-140d-7a87-9cf0b3a8ac9f@isovalent.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 18 Apr 2023 11:04:35 -0700
+Message-ID: <CAP-5=fVh=zNuwcQM++KFxt6ETv-Z6GpY9pWDQ=RbvnuSGUhT8g@mail.gmail.com>
+Subject: Re: [backport PATCH 1/2] tools perf: Fix compilation error with new binutils
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Anders Roxell <anders.roxell@linaro.org>, stable@vger.kernel.org,
+        acme@redhat.com, andres@anarazel.de, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Ben Hutchings <benh@debian.org>, Jiri Olsa <jolsa@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux should always take poisoned pages offline when there is an error
-report with a valid physcal address.
+On Tue, Apr 18, 2023 at 9:43=E2=80=AFAM Quentin Monnet <quentin@isovalent.c=
+om> wrote:
+>
+> 2023-04-17 10:14 UTC-0700 ~ Ian Rogers <irogers@google.com>
+> > On Mon, Apr 17, 2023 at 5:30=E2=80=AFAM Anders Roxell <anders.roxell@li=
+naro.org> wrote:
+> >>
+> >> From: Andres Freund <andres@anarazel.de>
+> >>
+> >> binutils changed the signature of init_disassemble_info(), which now c=
+auses
+> >> compilation failures for tools/perf/util/annotate.c, e.g. on debian
+> >> unstable.
+> >
+> > Thanks, I believe the compilation issue may well be resolved by:
+> > https://lore.kernel.org/lkml/20230311065753.3012826-8-irogers@google.co=
+m/
+> > where binutils is made opt-in rather than opt-out.
+>
+> Hi,
+> These commits are to make it possible to build against recent binutils,
+> without having to leave it out at compile time, so as I understand they
+> address a different issue?
 
-Note1: that call_me_maybe() will correctly handle the case currently
-covered by the test of "kill_current_task" that is deleted by this
-change because it will set the MF_MUST_KILL flag when p->mce_ripv is
-not set.
+Kind of. We don't want the Linux perf build to break. Previously if
+binutils were installed then Linux perf would default to linking with
+it and break your build were binutils to change its API. That is no
+longer the case as we don't default to linking against binutils. This
+was motivated by distributions not being able to link Linux perf with
+binutils due to the license incompatibilities. I don't see a problem
+supporting linking against newer and older binutils if people want to
+on non-distributed binaries. We'll probably need more build
+tests/containers to cover the possibilities of this. I'm not sure
+what's motivating binutils support other than personal experimentation
+though.
 
-Note2: This also provides defense against the case where the logged
-error doesn't provide a physical address.
+Thanks,
+Ian
 
-Suggested-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- arch/x86/kernel/cpu/mce/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 2eec60f50057..f72c97860524 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1533,7 +1533,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 		/* If this triggers there is no way to recover. Die hard. */
- 		BUG_ON(!on_thread_stack() || !user_mode(regs));
- 
--		if (kill_current_task)
-+		if (mce_usable_address(&m))
- 			queue_task_work(&m, msg, kill_me_now);
- 		else
- 			queue_task_work(&m, msg, kill_me_maybe);
--- 
-2.39.2
-
+> >
+> >> Relevant binutils commit:
+> >>
+> >>   https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3D60a3=
+da00bd5407f07
+> >>
+> >> Wire up the feature test and switch to init_disassemble_info_compat(),
+> >> which were introduced in prior commits, fixing the compilation failure=
+.
+> >
+> > I was kind of surprised to see no version check ifdef. Is
+> > init_disassemble_info_compat is supported in older binutils?
+>
+> It is not part of binutils, it was introduced in commit a45b3d692623
+> ("tools include: add dis-asm-compat.h to handle version differences"),
+> which should likely be backported alongside these ones if it hasn't been
+> already. Possibly the others from the same series [0], as well?
+>
+> I think all 5 patches from Andres' series were backported to 5.15 [1].
+>
+> [0]
+> https://lore.kernel.org/all/20220703212551.1114923-1-andres@anarazel.de/t=
+/#m999a44663894e235b523ffc41ce87e956019ea72
+> [1]
+> https://lore.kernel.org/all/e6e2df31-6327-f2ad-3049-0cbfa214ae5c@hauke-m.=
+de/t/#u
+>
+> Best regards,
+> Quentin
