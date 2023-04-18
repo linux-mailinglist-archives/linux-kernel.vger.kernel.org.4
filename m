@@ -2,184 +2,449 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C52606E5B79
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD836E5B29
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 10:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbjDRIDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 04:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
+        id S231341AbjDRIBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 04:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbjDRICu (ORCPT
+        with ESMTP id S230408AbjDRIBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 04:02:50 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC727DB6;
-        Tue, 18 Apr 2023 01:02:25 -0700 (PDT)
-Received: from booty.fritz.box (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id C321824001E;
-        Tue, 18 Apr 2023 08:02:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1681804934;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zI1HE7xYpFUXXPJOpa1EDaS4Y2c6dkA50VEWah254Wo=;
-        b=irXErdd8xPwyarlKe1jRze6lT993QTpw4Tx2xanfkQ65ACxGv9ta18N42bZHomyBfMPf4K
-        c/eRLUiMBKNtEAZ1rYECxImo+AF0peAN8nMYGzQLvhCyGoi5nf/f0DkUXUngG1at2wTRv3
-        LKwZfl27owGIUj2BvakXFUvODQ0R0b1jhBTcOifJ0gGnZ4m7W+ryqheuPc9VqIPX6whbhh
-        MOTDb2/9PwJQa3BE+BXuLLxd2p291CztSoSFqPc7OPNc2Ny5EYYOxU7hdfCPm7IxvsNOu0
-        GJi4dOIzrxN1lBrGA8py5nQn6YWWDau/5zwQDumASGd/Cmw5Gv6DF2xGPkMmiA==
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     linux-tegra@vger.kernel.org
-Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Subject: [PATCH v6 19/20] staging: media: tegra-video: add H/V flip controls
-Date:   Tue, 18 Apr 2023 10:00:53 +0200
-Message-Id: <20230418080054.452955-20-luca.ceresoli@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230418080054.452955-1-luca.ceresoli@bootlin.com>
-References: <20230418080054.452955-1-luca.ceresoli@bootlin.com>
+        Tue, 18 Apr 2023 04:01:03 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A7BC5;
+        Tue, 18 Apr 2023 01:01:00 -0700 (PDT)
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MrhQC-1q9lSn0SLk-00nj1C; Tue, 18
+ Apr 2023 10:00:57 +0200
+Message-ID: <a028f310-1582-77da-47b2-50b18a58d974@gmx.com>
+Date:   Tue, 18 Apr 2023 16:00:53 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: btrfs induced data loss (on xfs) - 5.19.0-38-generic
+Content-Language: en-US
+To:     Kyle Sanderson <kyle.leet@gmail.com>
+Cc:     linux-btrfs@vger.kernel.org,
+        Linux-Kernal <linux-kernel@vger.kernel.org>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+References: <CACsaVZJGPux1yhrMWnq+7nt3Zz5wZ6zEo2+S2pf=4czpYLFyjg@mail.gmail.com>
+ <748833a7-290e-e028-7367-d3795466f5fd@gmx.com>
+ <CACsaVZKtrJ52OhjoLJWRBjT_CXw6zi_voP1mwLhQk0-wqgo2fw@mail.gmail.com>
+ <52bd04ec-acea-73ce-5e9f-71f58c113833@gmx.com>
+ <CACsaVZLUk6xHUucLezbWWqPTVi_OMg-UN3=UPOBJCpRRgigHdQ@mail.gmail.com>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+In-Reply-To: <CACsaVZLUk6xHUucLezbWWqPTVi_OMg-UN3=UPOBJCpRRgigHdQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:dXf87wyvdn794+UMHGLPMwH4Ks+0stXwbyVNUlOArW1bODty1QY
+ aBcI7vsBCNC7fYmcZQEgeCxYtEFjZ6rvbeQ+DCX+sd36oUj+QnlmJtMp7IXJbEuq64GKWTd
+ hD5tLKBlYgbR/B22AcqRIr1uUrSnC8zBG9nZS9HUODUZUZbEk4HlsD992c8mSlfSRoHG2td
+ mmlOGfUx7MeOO/Gj7R98A==
+UI-OutboundReport: notjunk:1;M01:P0:tt66GwCTIEc=;Smvo7l8Fy23KTdK6FkeBfG2KXbX
+ ceNFSPJK4/FHS/KiUHn47U1OOuVTpz6HH54krEtGYBF+hGgZuJudRw/RvBr3Tp0b4eaufJxIw
+ vEj+rfxuhrftNcwf9m0XyNEiDyfB64kdvEdmVgQF/jAqFhXiA6qrEUU+DQkzll14JbStl/v6a
+ D5oP4s3XoMPFArcbDeeLMKvGiICOq7qNwRcOd98jqPKoXFVC0rysUl/Ng6kQn8Yo4U96vU+2x
+ 6TuPxheTjsdOGtgVmkdS+5fcXjnusFZDQ3dD0o/YRfqJT+bfJSUWXQQ3xfaAkmrOs4O9sI5kD
+ GnyXSIxmFP7w2qVHXh0N9mLCj+4FxkTC/MRl8gZC4yG2CC+neANQipCSzWxE99JFjymeablTh
+ oR6EVB8xFDBH2dRvf6F8gkeMoHFboNDM0Kphbkc10EPF/hFMC8MlgX4YJ0B8zF1MTpRUy9MYc
+ 2WKrJVwr3nBLJqHm26KYyjkqA8pAmSTI3s8ErqF8CX1ICUOE/sqwjymB+KnkVlcx1DBY5ceDj
+ y1MZdmWHDwSETiglakFmZ9IByAxaqZc9zIxOeOn7G+TQpwwCTWZy+p6+4cf9M7dS7sjYj5zFL
+ BhTDwewYhZH0xKWigfcTfuaSoCjHHJ4urYUIFEzcAyQqPri5no3NOp/pmrGoycjqENCtS6xi2
+ +kytb/EdlgNaprff1L8jSsTw4B0MbuSRUq3ktety3sQa2uVRcr3Sr2yTv5JVqq9p9QSgKNIG/
+ EH6T2px/SuOi53spnJ1X3os6dvpOHTTliM9yffldzup4f2EmSIVrf8zPBfGQhAId4PiwTi2KN
+ EJAFdWGSEbNavDKOcNnxeoujyGhSOhyxLxrYbivwE2rrL1q8MTHA1VVrH9tS65/ov6ZVKrrO/
+ WLOWYwGGL2cYm4ghCPynlpC915Ql0cG0kMYQrsq/jHItzZOcipwKW1/yj1s5sRE/0HEMFv7zv
+ fROQyJe0UEOWp89mAaH/zVpX/yc=
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tegra20 can do horizontal and vertical image flip, but Tegra210 cannot
-(either the hardware, or this driver).
 
-In preparation to adding Tegra20 support, add a flag in struct tegra_vi_soc
-so the generic vi.c code knows whether the flip controls should be added or
-not.
 
-Also provide a generic implementation that simply sets two flags in the
-channel struct. The Tegra20 implementation will enable flipping at stream
-start based on those flags.
+On 2023/4/18 15:31, Kyle Sanderson wrote:
+> On Tue, Apr 18, 2023 at 12:19 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
+>> On 2023/4/18 15:07, Kyle Sanderson wrote:
+>>> On Mon, Apr 17, 2023 at 1:42 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
+>> Thus better to make sure qgroup is not enabled, with the following command:
+>> If it shows error, then qgroup is really disabled and we can look
+>> somewhere else.
+> 
+> All my disks:
+> ERROR: can't list qgroups: quotas not enabled
+> 
+> As long as there's nothing else running on the disk I seem to be able
+> to remove the files now. If I have a small workload (5k~ open
+> descriptors across multiple pids) running with them open it just seems
+> to fully lockup the entire box (100% utilization on the single disk,
+> with the same iowait symptom and system load increasing). I killed
+> everything and was able to clear around 4T. The background tasks are
+> running now to actually free the space, but the "frontend" unlink
+> action is done. Running multiple unlinks in parallel seems to trigger
+> this - does it take a full lock per pid or something?
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Unlink in btrfs is expensive, unlike other filesystems.
 
----
+As btrfs put every inode into the same btree (subvolume tree), and doing 
+opeartions like unlink which may involves tons of file extents, all the 
+unlink operations will race to hold lock on the same btree nodes/leaves.
 
-No changes in v6
+Normally if there are parallel operations, it's recommended to put all 
+those files into different subvolumes, which can greatly improve the 
+performance for btrfs.
 
-Changed in v5:
- - Fixed typo in comment
+Unlike other filesystems, which mostly put one inode per-tree, btrfs is 
+not that good at handling high load inside one subvolume.
 
-Changed in v4:
- - Added review tags
-
-No changes in v3
-No changes in v2
----
- drivers/staging/media/tegra-video/vi.c | 14 +++++++++++++-
- drivers/staging/media/tegra-video/vi.h |  8 ++++++++
- 2 files changed, 21 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
-index 5ab24977ec46..39e9df895ede 100644
---- a/drivers/staging/media/tegra-video/vi.c
-+++ b/drivers/staging/media/tegra-video/vi.c
-@@ -30,7 +30,7 @@
- #include "vi.h"
- #include "video.h"
- 
--#define MAX_CID_CONTROLS		1
-+#define MAX_CID_CONTROLS		3
- 
- /**
-  * struct tegra_vi_graph_entity - Entity in the video graph
-@@ -910,6 +910,12 @@ static int vi_s_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_TEGRA_SYNCPT_TIMEOUT_RETRY:
- 		chan->syncpt_timeout_retry = ctrl->val;
- 		break;
-+	case V4L2_CID_HFLIP:
-+		chan->hflip = ctrl->val;
-+		break;
-+	case V4L2_CID_VFLIP:
-+		chan->vflip = ctrl->val;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -981,6 +987,12 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
- 		v4l2_ctrl_handler_free(&chan->ctrl_handler);
- 		return ret;
- 	}
-+
-+	if (chan->vi->soc->has_h_v_flip) {
-+		v4l2_ctrl_new_std(&chan->ctrl_handler, &vi_ctrl_ops, V4L2_CID_HFLIP, 0, 1, 1, 0);
-+		v4l2_ctrl_new_std(&chan->ctrl_handler, &vi_ctrl_ops, V4L2_CID_VFLIP, 0, 1, 1, 0);
-+	}
-+
- #endif
- 
- 	/* setup the controls */
-diff --git a/drivers/staging/media/tegra-video/vi.h b/drivers/staging/media/tegra-video/vi.h
-index cadf80b742a8..778c0ec475ab 100644
---- a/drivers/staging/media/tegra-video/vi.h
-+++ b/drivers/staging/media/tegra-video/vi.h
-@@ -74,6 +74,7 @@ struct tegra_vi_ops {
-  * @hw_revision: VI hw_revision
-  * @vi_max_channels: supported max streaming channels
-  * @vi_max_clk_hz: VI clock max frequency
-+ * @has_h_v_flip: the chip can do H and V flip, and the driver implements it
-  */
- struct tegra_vi_soc {
- 	const struct tegra_video_format *video_formats;
-@@ -83,6 +84,7 @@ struct tegra_vi_soc {
- 	u32 hw_revision;
- 	unsigned int vi_max_channels;
- 	unsigned int vi_max_clk_hz;
-+	bool has_h_v_flip:1;
- };
- 
- /**
-@@ -172,6 +174,9 @@ struct tegra_vi {
-  * @tpg_fmts_bitmap: a bitmap for supported TPG formats
-  * @pg_mode: test pattern generator mode (disabled/direct/patch)
-  * @notifier: V4L2 asynchronous subdevs notifier
-+ *
-+ * @hflip: Horizontal flip is enabled
-+ * @vflip: Vertical flip is enabled
-  */
- struct tegra_vi_channel {
- 	struct list_head list;
-@@ -222,6 +227,9 @@ struct tegra_vi_channel {
- 	enum tegra_vi_pg_mode pg_mode;
- 
- 	struct v4l2_async_notifier notifier;
-+
-+	bool hflip:1;
-+	bool vflip:1;
- };
- 
- /**
--- 
-2.34.1
-
+Thanks,
+Qu
+> 
+> Kyle.
+> 
+> On Tue, Apr 18, 2023 at 12:19 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
+>>
+>>
+>>
+>> On 2023/4/18 15:07, Kyle Sanderson wrote:
+>>> On Mon, Apr 17, 2023 at 1:42 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
+>>>> And talking about the "100% utilization", did you mean a single CPU core
+>>>> is fully utilized by some btrfs thread?
+>>>
+>>> No, iostat reporting the disk is at "100%" utilization.
+>>>
+>>>> If so, it looks like qgroup is involved.
+>>>> Did you just recently deleted one or more snapshots? If so, it's almost
+>>>> certain qgroup is the cause of the 100% CPU utilization.
+>>>
+>>> No, I used to run snapraid-btrfs (uses snapper) but both projects are
+>>> effectively orphaned. There's no snapshots left, but I used to run
+>>> zygo/bees also on these disks but that also has basic problems
+>>> (specifically mlock' on GBs of data when it's sitting completely idle
+>>> for hours at a time). bees was not running when this happened (or for
+>>> the duration of the uptime of the machine).
+>>
+>> Those are not affecting qgroups directly.
+>>
+>>>
+>>>> In that case, you can disable quota for that btrfs (permanently), or use
+>>>> newer kernel which has a sysfs interface:
+>>>>
+>>>>      /sys/fs/btrfs/<UUID>/qgroups/drop_subtree_threshold
+>>>
+>>> Thank you, I'll give it a go after the reboot here. I don't think I
+>>> have quotas enabled but I did look at it at one point (I remember
+>>> toggling on then off).
+>>
+>> Just in case, if that path exists, it means qgroup is enabled, and then
+>> qgroup would be the most possible cause.
+>>
+>> IIRC a lot of tools like snapper would enable qgroup automatically.
+>>
+>> Thus better to make sure qgroup is not enabled, with the following command:
+>>
+>>    # btrfs qgroup show -pcre <mnt>
+>>
+>> If it shows error, then qgroup is really disabled and we can look
+>> somewhere else.
+>>
+>> Thanks,
+>> Qu
+>>>
+>>>> If you write some value like 3 into that file, btrfs would automatically
+>>>> avoid such long CPU usage caused by large snapshot dropping.
+>>>>
+>>>> But talking about the XFS corruption, I'm not sure how btrfs can lead to
+>>>> problems in XFS...
+>>>
+>>> All I/O seemed to be dead on the box.
+>>>
+>>> I tried to remove the same data again and the task hung... this time I
+>>> was able to interrupt the removal and the box recovered.
+>>>
+>>> [92798.210656] INFO: task sync:1282043 blocked for more than 120 seconds.
+>>> [92798.210683]       Not tainted 5.19.0-38-generic #39~22.04.1-Ubuntu
+>>> [92798.210707] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+>>> disables this message.
+>>> [92798.210735] task:sync            state:D stack:    0 pid:1282043
+>>> ppid:1281934 flags:0x00004002
+>>> [92798.210739] Call Trace:
+>>> [92798.210741]  <TASK>
+>>> [92798.210743]  __schedule+0x257/0x5d0
+>>> [92798.210747]  schedule+0x68/0x110
+>>> [92798.210750]  wait_current_trans+0xde/0x140 [btrfs]
+>>> [92798.210820]  ? destroy_sched_domains_rcu+0x40/0x40
+>>> [92798.210824]  start_transaction+0x34d/0x5f0 [btrfs]
+>>> [92798.210895]  btrfs_attach_transaction_barrier+0x23/0x70 [btrfs]
+>>> [92798.210966]  btrfs_sync_fs+0x4a/0x1c0 [btrfs]
+>>> [92798.211029]  ? vfs_fsync_range+0xa0/0xa0
+>>> [92798.211033]  sync_fs_one_sb+0x26/0x40
+>>> [92798.211037]  iterate_supers+0x9e/0x110
+>>> [92798.211041]  ksys_sync+0x62/0xb0
+>>> [92798.211045]  __do_sys_sync+0xe/0x20
+>>> [92798.211049]  do_syscall_64+0x59/0x90
+>>> [92798.211052]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>> [92798.211057] RIP: 0033:0x7fd08471babb
+>>> [92798.211059] RSP: 002b:00007ffd344545f8 EFLAGS: 00000246 ORIG_RAX:
+>>> 00000000000000a2
+>>> [92798.211063] RAX: ffffffffffffffda RBX: 00007ffd344547d8 RCX: 00007fd08471babb
+>>> [92798.211065] RDX: 00007fd084821101 RSI: 00007ffd344547d8 RDI: 00007fd0847d9e29
+>>> [92798.211067] RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
+>>> [92798.211069] R10: 0000556ba8b21e40 R11: 0000000000000246 R12: 0000556ba8acebc0
+>>> [92798.211071] R13: 0000556ba8acc19f R14: 00007fd08481942c R15: 0000556ba8acc034
+>>> [92798.211075]  </TASK>
+>>>
+>>> Kyle.
+>>>
+>>> On Mon, Apr 17, 2023 at 1:42 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 2023/4/17 13:20, Kyle Sanderson wrote:
+>>>>> The single btrfs disk was at 100% utilization and a wa of 50~, reading
+>>>>> back at around 2MB/s. df and similar would simply freeze. Leading up
+>>>>> to this I removed around 2T of data from a single btrfs disk. I
+>>>>> managed to get most of the services shutdown and disks unmounted, but
+>>>>> when the system came back up I had to use xfs_repair (for the first
+>>>>> time in a very long time) to boot into my system. I likely should have
+>>>>> just pulled the power...
+>>>>
+>>>> I didn't see any obvious btrfs related work involved in the call trace.
+>>>> Thus I believe it's not really hanging in a waiting status.
+>>>>
+>>>> And talking about the "100% utilization", did you mean a single CPU core
+>>>> is fully utilized by some btrfs thread?
+>>>>
+>>>> If so, it looks like qgroup is involved.
+>>>> Did you just recently deleted one or more snapshots? If so, it's almost
+>>>> certain qgroup is the cause of the 100% CPU utilization.
+>>>>
+>>>> In that case, you can disable quota for that btrfs (permanently), or use
+>>>> newer kernel which has a sysfs interface:
+>>>>
+>>>>      /sys/fs/btrfs/<UUID>/qgroups/drop_subtree_threshold
+>>>>
+>>>> If you write some value like 3 into that file, btrfs would automatically
+>>>> avoid such long CPU usage caused by large snapshot dropping.
+>>>>
+>>>> But talking about the XFS corruption, I'm not sure how btrfs can lead to
+>>>> problems in XFS...
+>>>>
+>>>> Thanks,
+>>>> Qu
+>>>>>
+>>>>> [1147997.255020] INFO: task happywriter:3425205 blocked for more than
+>>>>> 120 seconds.
+>>>>> [1147997.255088]       Not tainted 5.19.0-38-generic #39~22.04.1-Ubuntu
+>>>>> [1147997.255114] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+>>>>> disables this message.
+>>>>> [1147997.255144] task:happywriter state:D stack:    0 pid:3425205
+>>>>> ppid:557021 flags:0x00004000
+>>>>> [1147997.255151] Call Trace:
+>>>>> [1147997.255155]  <TASK>
+>>>>> [1147997.255160]  __schedule+0x257/0x5d0
+>>>>> [1147997.255169]  ? __schedule+0x25f/0x5d0
+>>>>> [1147997.255173]  schedule+0x68/0x110
+>>>>> [1147997.255176]  rwsem_down_write_slowpath+0x2ee/0x5a0
+>>>>> [1147997.255180]  ? check_heap_object+0x100/0x1e0
+>>>>> [1147997.255185]  down_write+0x4f/0x70
+>>>>> [1147997.255189]  do_unlinkat+0x12b/0x2d0
+>>>>> [1147997.255194]  __x64_sys_unlink+0x42/0x70
+>>>>> [1147997.255197]  ? syscall_exit_to_user_mode+0x2a/0x50
+>>>>> [1147997.255201]  do_syscall_64+0x59/0x90
+>>>>> [1147997.255204]  ? do_syscall_64+0x69/0x90
+>>>>> [1147997.255207]  ? sysvec_call_function_single+0x4e/0xb0
+>>>>> [1147997.255211]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>>>> [1147997.255216] RIP: 0033:0x1202a57
+>>>>> [1147997.255220] RSP: 002b:00007fe467ffd4c8 EFLAGS: 00000246 ORIG_RAX:
+>>>>> 0000000000000057
+>>>>> [1147997.255224] RAX: ffffffffffffffda RBX: 00007fe3a4e94d28 RCX:
+>>>>> 0000000001202a57
+>>>>> [1147997.255226] RDX: 0000000000000000 RSI: 0000000000000000 RDI:
+>>>>> 00007fe450054b60
+>>>>> [1147997.255228] RBP: 00007fe450054b60 R08: 0000000000000000 R09:
+>>>>> 00000000000000e8
+>>>>> [1147997.255231] R10: 0000000000000001 R11: 0000000000000246 R12:
+>>>>> 00007fe467ffd5b0
+>>>>> [1147997.255233] R13: 00007fe467ffd5f0 R14: 00007fe467ffd5e0 R15:
+>>>>> 00007fe3a4e94d28
+>>>>> [1147997.255239]  </TASK>
+>>>>> [1148118.087966] INFO: task happywriter:3425205 blocked for more than
+>>>>> 241 seconds.
+>>>>> [1148118.088022]       Not tainted 5.19.0-38-generic #39~22.04.1-Ubuntu
+>>>>> [1148118.088048] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+>>>>> disables this message.
+>>>>> [1148118.088077] task:happywriter state:D stack:    0 pid:3425205
+>>>>> ppid:557021 flags:0x00004000
+>>>>> [1148118.088083] Call Trace:
+>>>>> [1148118.088087]  <TASK>
+>>>>> [1148118.088093]  __schedule+0x257/0x5d0
+>>>>> [1148118.088101]  ? __schedule+0x25f/0x5d0
+>>>>> [1148118.088105]  schedule+0x68/0x110
+>>>>> [1148118.088108]  rwsem_down_write_slowpath+0x2ee/0x5a0
+>>>>> [1148118.088113]  ? check_heap_object+0x100/0x1e0
+>>>>> [1148118.088118]  down_write+0x4f/0x70
+>>>>> [1148118.088121]  do_unlinkat+0x12b/0x2d0
+>>>>> [1148118.088126]  __x64_sys_unlink+0x42/0x70
+>>>>> [1148118.088129]  ? syscall_exit_to_user_mode+0x2a/0x50
+>>>>> [1148118.088133]  do_syscall_64+0x59/0x90
+>>>>> [1148118.088136]  ? do_syscall_64+0x69/0x90
+>>>>> [1148118.088139]  ? sysvec_call_function_single+0x4e/0xb0
+>>>>> [1148118.088142]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>>>> [1148118.088148] RIP: 0033:0x1202a57
+>>>>> [1148118.088151] RSP: 002b:00007fe467ffd4c8 EFLAGS: 00000246 ORIG_RAX:
+>>>>> 0000000000000057
+>>>>> [1148118.088155] RAX: ffffffffffffffda RBX: 00007fe3a4e94d28 RCX:
+>>>>> 0000000001202a57
+>>>>> [1148118.088158] RDX: 0000000000000000 RSI: 0000000000000000 RDI:
+>>>>> 00007fe450054b60
+>>>>> [1148118.088160] RBP: 00007fe450054b60 R08: 0000000000000000 R09:
+>>>>> 00000000000000e8
+>>>>> [1148118.088162] R10: 0000000000000001 R11: 0000000000000246 R12:
+>>>>> 00007fe467ffd5b0
+>>>>> [1148118.088164] R13: 00007fe467ffd5f0 R14: 00007fe467ffd5e0 R15:
+>>>>> 00007fe3a4e94d28
+>>>>> [1148118.088170]  </TASK>
+>>>>> [1148238.912688] INFO: task kcompactd0:70 blocked for more than 120 seconds.
+>>>>> [1148238.912741]       Not tainted 5.19.0-38-generic #39~22.04.1-Ubuntu
+>>>>> [1148238.912767] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+>>>>> disables this message.
+>>>>> [1148238.912796] task:kcompactd0      state:D stack:    0 pid:   70
+>>>>> ppid:     2 flags:0x00004000
+>>>>> [1148238.912803] Call Trace:
+>>>>> [1148238.912806]  <TASK>
+>>>>> [1148238.912812]  __schedule+0x257/0x5d0
+>>>>> [1148238.912821]  schedule+0x68/0x110
+>>>>> [1148238.912824]  io_schedule+0x46/0x80
+>>>>> [1148238.912827]  folio_wait_bit_common+0x14c/0x3a0
+>>>>> [1148238.912833]  ? filemap_invalidate_unlock_two+0x50/0x50
+>>>>> [1148238.912838]  __folio_lock+0x17/0x30
+>>>>> [1148238.912842]  __unmap_and_move.constprop.0+0x39c/0x640
+>>>>> [1148238.912847]  ? free_unref_page+0xe3/0x190
+>>>>> [1148238.912852]  ? move_freelist_tail+0xe0/0xe0
+>>>>> [1148238.912855]  ? move_freelist_tail+0xe0/0xe0
+>>>>> [1148238.912858]  unmap_and_move+0x7d/0x4e0
+>>>>> [1148238.912862]  migrate_pages+0x3b8/0x770
+>>>>> [1148238.912867]  ? move_freelist_tail+0xe0/0xe0
+>>>>> [1148238.912870]  ? isolate_freepages+0x2f0/0x2f0
+>>>>> [1148238.912874]  compact_zone+0x2ca/0x620
+>>>>> [1148238.912878]  proactive_compact_node+0x8a/0xe0
+>>>>> [1148238.912883]  kcompactd+0x21c/0x4e0
+>>>>> [1148238.912886]  ? destroy_sched_domains_rcu+0x40/0x40
+>>>>> [1148238.912892]  ? kcompactd_do_work+0x240/0x240
+>>>>> [1148238.912896]  kthread+0xeb/0x120
+>>>>> [1148238.912900]  ? kthread_complete_and_exit+0x20/0x20
+>>>>> [1148238.912904]  ret_from_fork+0x1f/0x30
+>>>>> [1148238.912911]  </TASK>
+>>>>> [1148238.913163] INFO: task happywriter:3425205 blocked for more than
+>>>>> 362 seconds.
+>>>>> [1148238.913195]       Not tainted 5.19.0-38-generic #39~22.04.1-Ubuntu
+>>>>> [1148238.913220] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+>>>>> disables this message.
+>>>>> [1148238.913250] task:happywriter state:D stack:    0 pid:3425205
+>>>>> ppid:557021 flags:0x00004000
+>>>>> [1148238.913254] Call Trace:
+>>>>> [1148238.913256]  <TASK>
+>>>>> [1148238.913259]  __schedule+0x257/0x5d0
+>>>>> [1148238.913264]  ? __schedule+0x25f/0x5d0
+>>>>> [1148238.913267]  schedule+0x68/0x110
+>>>>> [1148238.913270]  rwsem_down_write_slowpath+0x2ee/0x5a0
+>>>>> [1148238.913276]  ? check_heap_object+0x100/0x1e0
+>>>>> [1148238.913280]  down_write+0x4f/0x70
+>>>>> [1148238.913284]  do_unlinkat+0x12b/0x2d0
+>>>>> [1148238.913288]  __x64_sys_unlink+0x42/0x70
+>>>>> [1148238.913292]  ? syscall_exit_to_user_mode+0x2a/0x50
+>>>>> [1148238.913296]  do_syscall_64+0x59/0x90
+>>>>> [1148238.913299]  ? do_syscall_64+0x69/0x90
+>>>>> [1148238.913301]  ? sysvec_call_function_single+0x4e/0xb0
+>>>>> [1148238.913305]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>>>> [1148238.913310] RIP: 0033:0x1202a57
+>>>>> [1148238.913315] RSP: 002b:00007fe467ffd4c8 EFLAGS: 00000246 ORIG_RAX:
+>>>>> 0000000000000057
+>>>>> [1148238.913319] RAX: ffffffffffffffda RBX: 00007fe3a4e94d28 RCX:
+>>>>> 0000000001202a57
+>>>>> [1148238.913321] RDX: 0000000000000000 RSI: 0000000000000000 RDI:
+>>>>> 00007fe450054b60
+>>>>> [1148238.913323] RBP: 00007fe450054b60 R08: 0000000000000000 R09:
+>>>>> 00000000000000e8
+>>>>> [1148238.913325] R10: 0000000000000001 R11: 0000000000000246 R12:
+>>>>> 00007fe467ffd5b0
+>>>>> [1148238.913328] R13: 00007fe467ffd5f0 R14: 00007fe467ffd5e0 R15:
+>>>>> 00007fe3a4e94d28
+>>>>> [1148238.913333]  </TASK>
+>>>>> [1148238.913429] INFO: task kworker/u16:20:3402199 blocked for more
+>>>>> than 120 seconds.
+>>>>> [1148238.913459]       Not tainted 5.19.0-38-generic #39~22.04.1-Ubuntu
+>>>>> [1148238.913496] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+>>>>> disables this message.
+>>>>> [1148238.913527] task:kworker/u16:20  state:D stack:    0 pid:3402199
+>>>>> ppid:     2 flags:0x00004000
+>>>>> [1148238.913533] Workqueue: events_unbound io_ring_exit_work
+>>>>> [1148238.913539] Call Trace:
+>>>>> [1148238.913541]  <TASK>
+>>>>> [1148238.913544]  __schedule+0x257/0x5d0
+>>>>> [1148238.913548]  schedule+0x68/0x110
+>>>>> [1148238.913551]  schedule_timeout+0x122/0x160
+>>>>> [1148238.913556]  __wait_for_common+0x8f/0x190
+>>>>> [1148238.913559]  ? usleep_range_state+0xa0/0xa0
+>>>>> [1148238.913564]  wait_for_completion+0x24/0x40
+>>>>> [1148238.913567]  io_ring_exit_work+0x186/0x1e9
+>>>>> [1148238.913571]  ? io_uring_del_tctx_node+0xbf/0xbf
+>>>>> [1148238.913576]  process_one_work+0x21c/0x400
+>>>>> [1148238.913579]  worker_thread+0x50/0x3f0
+>>>>> [1148238.913583]  ? rescuer_thread+0x3a0/0x3a0
+>>>>> [1148238.913586]  kthread+0xeb/0x120
+>>>>> [1148238.913590]  ? kthread_complete_and_exit+0x20/0x20
+>>>>> [1148238.913594]  ret_from_fork+0x1f/0x30
+>>>>> [1148238.913600]  </TASK>
+>>>>> [1148238.913607] INFO: task stat:3434604 blocked for more than 120 seconds.
+>>>>> [1148238.913633]       Not tainted 5.19.0-38-generic #39~22.04.1-Ubuntu
+>>>>> [1148238.913658] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+>>>>> disables this message.
+>>>>> [1148238.913687] task:stat            state:D stack:    0 pid:3434604
+>>>>> ppid:3396625 flags:0x00004004
+>>>>> [1148238.913691] Call Trace:
+>>>>> [1148238.913693]  <TASK>
+>>>>> [1148238.913695]  __schedule+0x257/0x5d0
+>>>>> [1148238.913699]  schedule+0x68/0x110
+>>>>> [1148238.913703]  request_wait_answer+0x13f/0x220
+>>>>> [1148238.913708]  ? destroy_sched_domains_rcu+0x40/0x40
+>>>>> [1148238.913713]  fuse_simple_request+0x1bb/0x370
+>>>>> [1148238.913717]  fuse_do_getattr+0xda/0x320
+>>>>> [1148238.913720]  ? try_to_unlazy+0x5b/0xd0
+>>>>> [1148238.913726]  fuse_update_get_attr+0xb3/0xf0
+>>>>> [1148238.913730]  fuse_getattr+0x87/0xd0
+>>>>> [1148238.913733]  vfs_getattr_nosec+0xba/0x100
+>>>>> [1148238.913737]  vfs_statx+0xa9/0x140
+>>>>> [1148238.913741]  vfs_fstatat+0x59/0x80
+>>>>> [1148238.913744]  __do_sys_newlstat+0x38/0x80
+>>>>> [1148238.913750]  __x64_sys_newlstat+0x16/0x20
+>>>>> [1148238.913753]  do_syscall_64+0x59/0x90
+>>>>> [1148238.913757]  ? handle_mm_fault+0xba/0x2a0
+>>>>> [1148238.913761]  ? exit_to_user_mode_prepare+0xaf/0xd0
+>>>>> [1148238.913765]  ? irqentry_exit_to_user_mode+0x9/0x20
+>>>>> [1148238.913769]  ? irqentry_exit+0x43/0x50
+>>>>> [1148238.913772]  ? exc_page_fault+0x92/0x1b0
+>>>>> [1148238.913776]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>>>> [1148238.913780] RIP: 0033:0x7fa76960d6ea
+>>>>> [1148238.913783] RSP: 002b:00007ffe6d011878 EFLAGS: 00000246 ORIG_RAX:
+>>>>> 0000000000000006
+>>>>> [1148238.913787] RAX: ffffffffffffffda RBX: 0000000000000001 RCX:
+>>>>> 00007fa76960d6ea
+>>>>> [1148238.913789] RDX: 00007ffe6d011890 RSI: 00007ffe6d011890 RDI:
+>>>>> 00007ffe6d01290b
+>>>>> [1148238.913791] RBP: 00007ffe6d011a70 R08: 0000000000000001 R09:
+>>>>> 0000000000000000
+>>>>> [1148238.913793] R10: fffffffffffff3ce R11: 0000000000000246 R12:
+>>>>> 0000000000000000
+>>>>> [1148238.913795] R13: 000055feff0d2960 R14: 00007ffe6d011a68 R15:
+>>>>> 00007ffe6d01290b
+>>>>> [1148238.913800]  </TASK>
