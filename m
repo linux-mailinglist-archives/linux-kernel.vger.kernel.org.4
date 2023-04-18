@@ -2,102 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A99F6E6A17
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC19E6E6A1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 18:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbjDRQrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 12:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
+        id S232552AbjDRQsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 12:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbjDRQrf (ORCPT
+        with ESMTP id S231296AbjDRQsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 12:47:35 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2586413F8C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:47:01 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-54fbee98814so217398677b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:47:01 -0700 (PDT)
+        Tue, 18 Apr 2023 12:48:22 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FFC10240
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:48:04 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-63b5e149d87so1637133b3a.2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 09:48:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681836365; x=1684428365;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yZRNuvpYmPgzgb9JaiuV4RW67h1IFb6pBTSO2dSAGgo=;
-        b=loJ4tD9iiALqUaEHCxhFD8la/Ru1P2vdaO01NY952pB9j7EY1MsStuiIpdNY2xyAkW
-         wL7q/GWJewpwMcjGkha03Id+jx2b9ZtYwazICqiRcN77gaQfx04hN6mHP2m1zrjuICeU
-         YTfylyXSbMyvInRKZqOvfP/CaebhW3mumg1mTEANRaIXsvXhArUCd6qTPHiLEywTfUVY
-         VMFiDFD4MvAXmIU5um1e4Pr+qWAoRuhVgNBTPNyc4w7rlYFYm8Yb+0mIFOrKfutyXsSL
-         eiy9Onsd77b+w9C5WwW649m4U/md9JSf5BstPb91liW/a0aKnkAOTnjW6vMZEBGbQUSU
-         nBNg==
+        d=google.com; s=20221208; t=1681836469; x=1684428469;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5rSxGUFrAmISVwIuFMTX0Aaejk/CKt02QLw7n2d5NOs=;
+        b=PfoljIC5AZgXfIxDU8fcFKkh+Ai7eQzzLzicR4jBjiom7LEoYDZGvTMDGrbG1Z4Ud7
+         uMFVTAK+JTtzoS0MKvtPGWwdSGtIBD8kbc4SfLXHCjA0I+SdKKcDb46CvxZO4RN+QKcr
+         4hGNVdTIfrAcrWEkQiQ8/3e7ZlrlhVk194MVJD6NQvH/IjLipRSf4B0QGnTZ6j+s3rfO
+         FoaxHebR4VegmT9yDpEETwUTkmKAd4ZKG8Yfxznn/n4SwSaLHbnH7ecVFw7Uf6szdwMe
+         597Gvj4Ii7piDYSmLzXGyGrd1L9thTQGMBdxwypwEggoGYj/8WHWeiNd3wF6/PVMsJk1
+         sufA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681836365; x=1684428365;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yZRNuvpYmPgzgb9JaiuV4RW67h1IFb6pBTSO2dSAGgo=;
-        b=Rk+ug9h35RwYtgTeAxFNd9MGFl8pVNIFZVLVd+0hlxvRiYX+4eyYvad5vWTuCMY0XX
-         iTwWYHVUajGKvPyNhSueztQsYg4h5oqXXD5q/UrIqRnjljzslggJXMXJ68yHNDEslOkT
-         Goai5130h5sMwCXGfuNDVBkrZ9fhXxK1VRkxmKhPXjy8CCEJ394Y7QoFeGEHu/7lQCsa
-         fn5ltcdXg4Q1IVa2CdxG2k/6YBSKijLag7AYubfGQC1BuOODGe5Z+KEegeYsHnyk5/vZ
-         YzFu4TCCJ4NcVfOiao0tbJmnNb1MJob7k1rzbrOZmmL9ct5hOU02M0dUmD7wmj4kadHa
-         /uvg==
-X-Gm-Message-State: AAQBX9dNH3qLH0lzeTmrZz8blp8PYb/Z/DurFgZMc2pNVMVpMZP54oh6
-        lQcrtsVlKd4B0sUYUjOmpp/f8KJtoXpAEWXk5QRMgQ==
-X-Google-Smtp-Source: AKy350YCN/tqF7xIynM64BgwzU0KY90HxtWs+ncREDH+yXnMl7ZR4q58AvQ8wuLAlA6V2PT6J9UGrOIExj7k0egOkfA=
-X-Received: by 2002:a81:af08:0:b0:54f:9e1b:971c with SMTP id
- n8-20020a81af08000000b0054f9e1b971cmr305886ywh.1.1681836363269; Tue, 18 Apr
- 2023 09:46:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230415000818.1955007-1-surenb@google.com> <ZD25bBPbZYSb7grA@x1n>
- <CAJuCfpHf06cr2d277DXQUtBto_0bVgK3ykMHLYRgZXgnot=e4w@mail.gmail.com>
- <ZD61DLJNilUeDCnC@x1n> <ZD64C3R6BzqpSfYX@casper.infradead.org> <ZD672ewd4j/1v2IQ@x1n>
-In-Reply-To: <ZD672ewd4j/1v2IQ@x1n>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 18 Apr 2023 09:45:52 -0700
-Message-ID: <CAJuCfpGuF_kKXMSx2bHNC7FprOfqbCp+cfdsoct9sN=1+wqtAQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] mm: do not increment pgfault stats when page fault
- handler retries
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
-        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20221208; t=1681836469; x=1684428469;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5rSxGUFrAmISVwIuFMTX0Aaejk/CKt02QLw7n2d5NOs=;
+        b=lEwT8SLOChERzpVIMygl4GseXZvlvlRS4Efkf22MtPRuKKi95QQyw542vjnlFkot96
+         LKxo4QKdl0PimTJdItvq7m+Cr+nIhCphhpp+nu7Bybld+9vQSN0ihUxFMQJCKfBCOYT/
+         pCSWhvKn0AAeYBmVoqjOM14gapuFpxDaqTrZNqDfuaz1miJw8tAl2gRgaWR0CcLJY7Jr
+         JO9I53fToQjyH4+1tVGOgDEIYpTly0ZNkMEweRLFpE+8obWfEodpC0X4sI7Rxrs1ZKKq
+         gpgPcJOd11QQVQLkFxU2gUZWo0fVNWOZPuoWsxmY3p/zmEAkG7KAFlUfHelaGODCyw1+
+         Jy9w==
+X-Gm-Message-State: AAQBX9dgm8T12EujYJJjNYyzRbObCO25TJQ/6Cepe3oWQO1xQCLGwn2o
+        caCDp2KvtLsfS9kGX9VBzDvH76Q=
+X-Google-Smtp-Source: AKy350ZqYBxtk9IGpUQI+ESsiEZ06M7bEzkTzb5twCE4jk0SIv/hlG6z2jLAoF7+l4gdKxwicmpHmjg=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a05:6a00:17a0:b0:63b:8778:99e5 with SMTP id
+ s32-20020a056a0017a000b0063b877899e5mr195402pfg.5.1681836468849; Tue, 18 Apr
+ 2023 09:47:48 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 09:47:47 -0700
+In-Reply-To: <a4591e85-d58b-0efd-c8a4-2652dc69ff68@linux.dev>
+Mime-Version: 1.0
+References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com>
+ <CANn89iLuLkUvX-dDC=rJhtFcxjnVmfn_-crOevbQe+EjaEDGbg@mail.gmail.com>
+ <CAEivzxcEhfLttf0VK=NmHdQxF7CRYXNm6NwUVx6jx=-u2k-T6w@mail.gmail.com>
+ <CAKH8qBt+xPygUVPMUuzbi1HCJuxc4gYOdU6JkrFmSouRQgoG6g@mail.gmail.com>
+ <ZDoEG0VF6fb9y0EC@google.com> <a4591e85-d58b-0efd-c8a4-2652dc69ff68@linux.dev>
+Message-ID: <ZD7Js4fj5YyI2oLd@google.com>
+Subject: Re: handling unsupported optlen in cgroup bpf getsockopt: (was [PATCH
+ net-next v4 2/4] net: socket: add sockopts blacklist for BPF cgroup hook)
+From:   Stanislav Fomichev <sdf@google.com>
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        daniel@iogearbox.net, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org,
+        Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 8:48=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
->
-> On Tue, Apr 18, 2023 at 04:32:27PM +0100, Matthew Wilcox wrote:
-> > ... when we called clone()?  A thread by definition has a reference to
-> > its own mm.
->
-> Ah yes.. thanks!
+On 04/17, Martin KaFai Lau wrote:
+> On 4/14/23 6:55 PM, Stanislav Fomichev wrote:
+> > On 04/13, Stanislav Fomichev wrote:
+> > > On Thu, Apr 13, 2023 at 7:38=E2=80=AFAM Aleksandr Mikhalitsyn
+> > > <aleksandr.mikhalitsyn@canonical.com> wrote:
+> > > >=20
+> > > > On Thu, Apr 13, 2023 at 4:22=E2=80=AFPM Eric Dumazet <edumazet@goog=
+le.com> wrote:
+> > > > >=20
+> > > > > On Thu, Apr 13, 2023 at 3:35=E2=80=AFPM Alexander Mikhalitsyn
+> > > > > <aleksandr.mikhalitsyn@canonical.com> wrote:
+> > > > > >=20
+> > > > > > During work on SO_PEERPIDFD, it was discovered (thanks to Chris=
+tian),
+> > > > > > that bpf cgroup hook can cause FD leaks when used with sockopts=
+ which
+> > > > > > install FDs into the process fdtable.
+> > > > > >=20
+> > > > > > After some offlist discussion it was proposed to add a blacklis=
+t of
+> > > > >=20
+> > > > > We try to replace this word by either denylist or blocklist, even=
+ in changelogs.
+> > > >=20
+> > > > Hi Eric,
+> > > >=20
+> > > > Oh, I'm sorry about that. :( Sure.
+> > > >=20
+> > > > >=20
+> > > > > > socket options those can cause troubles when BPF cgroup hook is=
+ enabled.
+> > > > > >=20
+> > > > >=20
+> > > > > Can we find the appropriate Fixes: tag to help stable teams ?
+> > > >=20
+> > > > Sure, I will add next time.
+> > > >=20
+> > > > Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hook=
+s")
+> > > >=20
+> > > > I think it's better to add Stanislav Fomichev to CC.
+> > >=20
+> > > Can we use 'struct proto' bpf_bypass_getsockopt instead? We already
+> > > use it for tcp zerocopy, I'm assuming it should work in this case as
+> > > well?
+> >=20
+> > Jakub reminded me of the other things I wanted to ask here bug forgot:
+> >=20
+> > - setsockopt is probably not needed, right? setsockopt hook triggers
+> >    before the kernel and shouldn't leak anything
+> > - for getsockopt, instead of bypassing bpf completely, should we instea=
+d
+> >    ignore the error from the bpf program? that would still preserve
+> >    the observability aspect
+>=20
+> stealing this thread to discuss the optlen issue which may make sense to
+> bypass also.
+>=20
+> There has been issue with optlen. Other than this older post related to
+> optlen > PAGE_SIZE:
+> https://lore.kernel.org/bpf/5c8b7d59-1f28-2284-f7b9-49d946f2e982@linux.de=
+v/,
+> the recent one related to optlen that we have seen is
+> NETLINK_LIST_MEMBERSHIPS. The userspace passed in optlen =3D=3D 0 and the=
+ kernel
+> put the expected optlen (> 0) and 'return 0;' to userspace. The userspace
+> intention is to learn the expected optlen. This makes 'ctx.optlen >
+> max_optlen' and __cgroup_bpf_run_filter_getsockopt() ends up returning
+> -EFAULT to the userspace even the bpf prog has not changed anything.
 
-re: I also had a quick look on do_exit() but I also didn't see where
-do we e.g. wait for all the threads to stop before recycles a mm.
+(ignoring -EFAULT issue) this seems like it needs to be
 
-We recycle mm after all refcounts are dropped in the exit path:
-  do_exit
-    exit_mm
-      mmput(if !mm->mm_users)
-        mmdrop(if !mm->mm_count)
-          free_mm
+	if (optval && (ctx.optlen > max_optlen || ctx.optlen < 0)) {
+		/* error */
+	}
 
->
-> --
-> Peter Xu
->
+?
+
+> Does it make sense to also bypass the bpf prog when 'ctx.optlen >
+> max_optlen' for now (and this can use a separate patch which as usual
+> requires a bpf selftests)?
+
+Yeah, makes sense. Replacing this -EFAULT with WARN_ON_ONCE or something
+seems like the way to go. It caused too much trouble already :-(
+
+Should I prepare a patch or do you want to take a stab at it?
+
+> In the future, does it make sense to have a specific cgroup-bpf-prog (a
+> specific attach type?) that only uses bpf_dynptr kfunc to access the optv=
+al
+> such that it can enforce read-only for some optname and potentially also
+> track if bpf-prog has written a new optval? The bpf-prog can only return =
+1
+> (OK) and only allows using bpf_set_retval() instead. Likely there is stil=
+l
+> holes but could be a seed of thought to continue polishing the idea.
+
+Ack, let's think about it.
+
+Maybe we should re-evaluate 'getsockopt-happens-after-the-kernel' idea
+as well? If we can have a sleepable hook that can copy_from_user/copy_to_us=
+er,
+and we have a mostly working bpf_getsockopt (after your refactoring),
+I don't see why we need to continue the current scheme of triggering
+after the kernel?
+
+> > - or maybe we can even have a per-proto bpf_getsockopt_cleanup call tha=
+t
+> >    gets called whenever bpf returns an error to make sure protocols hav=
+e
+> >    a chance to handle that condition (and free the fd)
+> >=20
+>=20
+>=20
