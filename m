@@ -2,47 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAC96E572B
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 03:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B162B6E5732
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 03:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjDRBxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 21:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
+        id S231166AbjDRB4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 21:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjDRBxj (ORCPT
+        with ESMTP id S230285AbjDRB4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 21:53:39 -0400
-Received: from out199-18.us.a.mail.aliyun.com (out199-18.us.a.mail.aliyun.com [47.90.199.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9ED420F;
-        Mon, 17 Apr 2023 18:52:46 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VgN.twa_1681782660;
-Received: from 30.97.48.52(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VgN.twa_1681782660)
-          by smtp.aliyun-inc.com;
-          Tue, 18 Apr 2023 09:51:01 +0800
-Message-ID: <e2397b81-ec19-25e4-ee47-29da29984f9c@linux.alibaba.com>
-Date:   Tue, 18 Apr 2023 09:51:02 +0800
+        Mon, 17 Apr 2023 21:56:01 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFD261B4;
+        Mon, 17 Apr 2023 18:55:24 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33I0IZIw018180;
+        Tue, 18 Apr 2023 01:54:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=ZT6T8JazTUrOY0mEHFTu/RGzheZfZZgUG7SP163oiWw=;
+ b=oIS8AdQ5k552DF8T2GFIx6H+oM74i8BJw7hoxxtudrpXrsy4fT3lzThcgfo6R6IbIgqa
+ Eqw03+iJ22DTGHKhhjV4hB9FI0VrZOxyqQsdp+sObQvZnhxRPg2Klf/5UTBIPEqEseBE
+ TrQ0HbMk5eauno9ukAIvG8b6WX5waqYbUzLqgIiRBRWA0p/ly0y4tK4gyc/DEKkoWVyF
+ l98pRq3B0Fkq921nxFDS4//CfPEY/Qu45Q9peu5vRdexbUZK4s4LEcg4sE8IGek1Sneb
+ 9sIpi7NjQK4lOXyP7sP7HECJWxE2G6q3Glj0LpNePSAayYcAbuj4BaamONMZqHvtpMiI QQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1bvkrksq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 01:54:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33I1sK5F014814
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 01:54:20 GMT
+Received: from [10.110.98.241] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 17 Apr
+ 2023 18:54:18 -0700
+Message-ID: <bb229562-b0af-88f4-1207-ac23a6076dff@quicinc.com>
+Date:   Mon, 17 Apr 2023 18:54:18 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/3] drivers/perf: add DesignWare PCIe PMU driver
-To:     Shuai Xue <xueshuai@linux.alibaba.com>, helgaas@kernel.org,
-        yangyicong@huawei.com, will@kernel.org, Jonathan.Cameron@huawei.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, rdunlap@infradead.org,
-        robin.murphy@arm.com, mark.rutland@arm.com,
-        zhuo.song@linux.alibaba.com
-References: <20220917121036.14864-1-xueshuai@linux.alibaba.com>
- <20230410031702.68355-3-xueshuai@linux.alibaba.com>
- <713d8162-dd3c-483c-b984-7707ef8aaa36@linux.alibaba.com>
- <ca46be9a-77f2-80ee-62e8-a3ce3eb02097@linux.alibaba.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <ca46be9a-77f2-80ee-62e8-a3ce3eb02097@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH 1/3] drm/msm/dpu: Drop unused members from HW structs
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20230418-dpu-drop-useless-for-lookup-v1-0-b9897ceb6f3e@somainline.org>
+ <20230418-dpu-drop-useless-for-lookup-v1-1-b9897ceb6f3e@somainline.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20230418-dpu-drop-useless-for-lookup-v1-1-b9897ceb6f3e@somainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ws0QCnfY6to6MboIchWekFAke3Jesusg
+X-Proofpoint-ORIG-GUID: ws0QCnfY6to6MboIchWekFAke3Jesusg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-17_14,2023-04-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 mlxlogscore=623 impostorscore=0 malwarescore=0 adultscore=0
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 clxscore=1015 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304180015
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -51,49 +93,21 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 4/17/2023 9:16 AM, Shuai Xue wrote:
-
-[snip]
-
->>> +
->>> +static void dwc_pcie_pmu_event_update(struct perf_event *event)
->>> +{
->>> +    u64 counter;
->>> +    struct dwc_pcie_pmu *pcie_pmu = to_dwc_pcie_pmu(event->pmu);
->>> +    struct dwc_pcie_rp_info *rp_info = pmu_to_pcie_info(event->pmu);
->>> +    struct pci_dev *pdev = rp_info->pdev;
->>> +    u16 ras_des = rp_info->ras_des;
->>> +    struct hw_perf_event *hwc = &event->hw;
->>> +    enum dwc_pcie_event_type type = DWC_PCIE_EVENT_TYPE(event);
->>> +    u64 delta, prev, now;
->>> +
->>> +    do {
->>> +        prev = local64_read(&hwc->prev_count);
->>> +
->>> +        if (type == DWC_PCIE_LANE_EVENT)
->>> +            dwc_pcie_pmu_read_event_counter(pdev, ras_des, &counter);
->>> +        else if (type == DWC_PCIE_TIME_BASE_EVENT)
->>> +            dwc_pcie_pmu_read_base_time_counter(pdev, ras_des,
->>> +                                &counter);
->>> +        else
->>> +            dev_err(pcie_pmu->dev, "invalid event type: 0x%x\n", type);
->>> +
->>> +        now = counter;
->>> +    } while (local64_cmpxchg(&hwc->prev_count, prev, now) != prev);
->>> +
->>> +    delta = now - prev;
->>
->> This can be overflow? better to add a mask to avoid possible overflow.
+On 4/17/2023 4:14 PM, Marijn Suijten wrote:
+> Some of these members were initialized while never read, while others
+> were not even assigned any value at all.  Drop them to save some space,
+> and above all confusion when looking at these members.
 > 
-> I think it can not. This Root Complex supports up to PCIe Gen5 (32 GT/s)
-> and one root port support up to x16 lanes, with peek bandwidth 64 GB/s.
-> On Yitian 710, one root port is x4 lane with peak bandwidth 16 GB/s.
-> The counter is 64 bit width with 16 bytes unit.
-> 
-> 	2^64*16/(64*10^9)/60/60/24/365 = 146 years
-> 
-> For x16 root port, it will not overflow within 146 yeasr and for yitian 710,
-> it will never overflow in my life too.
+> Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
+> Fixes: 84a33d0fd921 ("drm/msm/dpu: add dpu_hw_wb abstraction for writeback blocks")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
 
-However the lane event counter is 32bit, so still a maximum counter mask 
-is preferable.
+It seems like WB UBWC formats are not supported today. Because otherwise 
+ctx->mdp would be used for writeback. I guess we can add a ubwc member 
+similar to hw_sspp, when we do add the support for this. Hence this is,
+
+
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+
+
