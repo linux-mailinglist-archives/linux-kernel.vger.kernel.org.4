@@ -2,197 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B376E6D7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 22:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F8F6E6D81
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 22:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232613AbjDRU1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 16:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38256 "EHLO
+        id S231516AbjDRUaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 16:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232279AbjDRU1p (ORCPT
+        with ESMTP id S230202AbjDRUad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 16:27:45 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56455A266
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:27:43 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-760ccc48b3bso202987339f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:27:43 -0700 (PDT)
+        Tue, 18 Apr 2023 16:30:33 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57771A275
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:30:31 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-517bfdf55c3so1158707a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:30:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google; t=1681849831; x=1684441831;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=758KJFnubLFSsZj7NLSbl2wQ+MQOeQGEXb82zXsrHA8=;
+        b=JKWc07Hsa1AIwKVKIMzXI4sw331w8kX1TDKqtQB//KSPOSUQN+tk39Ofo87lgk87cs
+         A++4AkL4VO7Zo172B6EmKiVr7FrbMePdElPSloCsouI2E/r/+XOY/fDC60aCptlCrI9z
+         Pj+V02e4O7mTkISl5wP8rj3Y1EWU2fzkx9GVY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681849662; x=1684441662;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Gxn0DnPfADuaP40AJhy/UnpcsyfQMhcLyuDsCayXAKg=;
-        b=CRDKfZ9yG1GBJJHtCAfHS5mrbQX6Qm0ptLVNkwqNn/BzifYEn9+JAZ2XlQx4ekrS9F
-         9IAgW0aghWPb/4SKGhsW/1fUELA5yekGLPSDhMimgq1vYVDsBG76+DSI+7fkp8PCV4BL
-         ZQfsyiMln3T6thahG+dpP9x/7KrmXoVf1Uf/k7sLFSdedRCiYhmUZ+ks1Awu7q1VCE1+
-         Xz5fWVMErEz1xjcOw5x0/uVwnB++K1mT49hfHLgd4bx+MPBVkXK8OQ4ka6M8vG4Q8GzE
-         L2jODOB4u1VwibkY1tkeWYBscq7GZ9mZ19Q7E1WN/ABlM5sA3Vd78CDUBm75PbzrViuc
-         knNw==
-X-Gm-Message-State: AAQBX9fxM99bQKz1XBB1oaN2bVhPaMOoKJlqoTgz1jOnjgzyQ7HRi7Go
-        rWbhCNoGpN4cc5ARiGQDQnHLjfohkBd64WRwzDYiRckoQZSt
-X-Google-Smtp-Source: AKy350aiI9jjpH7dR8M/oD5GiD956rOdBfdXRVDecdKwxd7Hr8DLFVejFlXqA/AW0Y1xM1w1QawQEaasmWiQuuVIXNhxdM0S/XBX
+        d=1e100.net; s=20221208; t=1681849831; x=1684441831;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=758KJFnubLFSsZj7NLSbl2wQ+MQOeQGEXb82zXsrHA8=;
+        b=PERDbCODNC9FPzQF0J/apfVXmyx5YMFjumlXgnbiyDK4EfwIzm2PODFFeFyoh0Wzbn
+         LyUxdYHXHx/C8ryhT3BA3snduiJ32bctDYNEbAFgXcBlon5Z7UgujDUZFSj9/j3jfhXq
+         RaartYQCHd7vhgga+IwYAJtZUwWLuvvkOyElckHo5LbxUC0T2yVO0abso9d9tkxfY64a
+         XezSexBM0IveEuiDbf6e7pGLal9OAiObseXi0oipDw1RzyDzjcYy+DWC5oGUq4d+82oP
+         gnSWOPsCWBJXKdxFNTphrOYOUiKCa6ajAYEqB78uk6w+wZ5hdyEoLDz/b0TDr0gutNa4
+         7pEQ==
+X-Gm-Message-State: AAQBX9evMGTlNmSBweJ4t9cRA9V58KwcsKrCS53RUDNdSVcLMWnCOB0R
+        i+wBO8q/rVxRJ2PudbqYKqYn1puwGz8eIRuhE78G
+X-Google-Smtp-Source: AKy350ZIg+M7FnY7uohsy0MLIS1rdUP3e5Y8mF0C/rJh0Ab5JDC3yj3RoFOx5gy5nC7akfL3LOBt0QioDaAyr1DFD3g=
+X-Received: by 2002:a17:90a:4706:b0:23d:1121:f211 with SMTP id
+ h6-20020a17090a470600b0023d1121f211mr293761pjg.5.1681849830738; Tue, 18 Apr
+ 2023 13:30:30 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:6519:0:b0:760:e308:1070 with SMTP id
- z25-20020a6b6519000000b00760e3081070mr2470616iob.0.1681849662669; Tue, 18 Apr
- 2023 13:27:42 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 13:27:42 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b5973405f9a22358@google.com>
-Subject: [syzbot] [ntfs3?] KASAN: stack-out-of-bounds Read in ntfs_set_inode
-From:   syzbot <syzbot+cbdd49fbb39696c71041@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com
+References: <20230413161725.195417-1-alexghiti@rivosinc.com>
+ <CAOnJCU+72PV1=o1c_TpogkmBT36278BneVWEMr1=tqX0CZi+ag@mail.gmail.com>
+ <aadca595b4a24e36932ba41e61f4e263@AcuMS.aculab.com> <CAOnJCUJ7mY+fh9VqE4dRntnVAEAc26=NnOCPUqkXk6ky__cUZQ@mail.gmail.com>
+ <CAP-5=fUYJEecmhQVuvbM4ZoDP_Hj=2RKOgR4cKepU072Uy3xyw@mail.gmail.com>
+In-Reply-To: <CAP-5=fUYJEecmhQVuvbM4ZoDP_Hj=2RKOgR4cKepU072Uy3xyw@mail.gmail.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Wed, 19 Apr 2023 02:00:18 +0530
+Message-ID: <CAOnJCULJfSN79MzAwhCrbVzG1rYyrPB3OraFmoZFBxuRCwq01w@mail.gmail.com>
+Subject: Re: [PATCH 0/4] riscv: Allow userspace to directly access perf counters
+To:     Ian Rogers <irogers@google.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        paranlee <p4ranlee@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Apr 18, 2023 at 11:46=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
+ote:
+>
+> On Tue, Apr 18, 2023 at 9:43=E2=80=AFAM Atish Patra <atishp@atishpatra.or=
+g> wrote:
+> >
+> > On Fri, Apr 14, 2023 at 2:40=E2=80=AFAM David Laight <David.Laight@acul=
+ab.com> wrote:
+> > >
+> > > From: Atish Patra
+> > > > Sent: 13 April 2023 20:18
+> > > >
+> > > > On Thu, Apr 13, 2023 at 9:47=E2=80=AFPM Alexandre Ghiti <alexghiti@=
+rivosinc.com> wrote:
+> > > > >
+> > > > > riscv used to allow direct access to cycle/time/instret counters,
+> > > > > bypassing the perf framework, this patchset intends to allow the =
+user to
+> > > > > mmap any counter when accessed through perf. But we can't break t=
+he
+> > > > > existing behaviour so we introduce a sysctl perf_user_access like=
+ arm64
+> > > > > does, which defaults to the legacy mode described above.
+> > > > >
+> > > >
+> > > > It would be good provide additional direction for user space packag=
+es:
+> > > >
+> > > > The legacy behavior is supported for now in order to avoid breaking
+> > > > existing software.
+> > > > However, reading counters directly without perf interaction may
+> > > > provide incorrect values which
+> > > > the userspace software must avoid. We are hoping that the user spac=
+e
+> > > > packages which
+> > > > read the cycle/instret directly, will move to the proper interface
+> > > > eventually if they actually need it.
+> > > > Most of the users are supposed to read "time" instead of "cycle" if
+> > > > they intend to read timestamps.
+> > >
+> > > If you are trying to measure the performance of short code
+> > > fragments then you need pretty much raw access directly to
+> > > the cycle/clock count register.
+> > >
+> > > I've done this on x86 to compare the actual cycle times
+> > > of different implementations of the IP checksum loop
+> > > (and compare them to the theoretical limit).
+> > > The perf framework just added far too much latency,
+> > > only directly reading the cpu registers gave anything
+> > > like reliable (and consistent) answers.
+> > >
+> >
+> > This series allows direct access to the counters once configured
+> > through the perf.
+> > Earlier the cycle/instret counters are directly exposed to the
+> > userspace without kernel/perf frameworking knowing
+> > when/which user space application is reading it. That has security impl=
+ications.
+> >
+> > With this series applied, the user space application just needs to
+> > configure the event (cycle/instret) through perf syscall.
+> > Once configured, the userspace application can find out the counter
+> > information from the mmap & directly
+> > read the counter. There is no latency while reading the counters.
+> >
+> > This mechanism allows stop/clear the counters when the requesting task
+> > is not running. It also takes care of context switching
+> > which may result in invalid values as you mentioned below. This is
+> > nothing new and all other arch (x86, ARM64) allow user space
+> > counter read through the same mechanism.
+> >
+> > Here is the relevant upstream discussion:
+> > https://lore.kernel.org/lkml/Y7wLa7I2hlz3rKw%2F@hirez.programming.kicks=
+-ass.net/T/
+> >
+> > ARM64:
+> > https://docs.kernel.org/arm64/perf.html?highlight=3Dperf_user_access#pe=
+rf-userspace-pmu-hardware-counter-access
+> >
+> > example usage in x86:
+> > https://github.com/andikleen/pmu-tools/blob/master/jevents/rdpmc.c
+>
+> The canonical implementation of this should be:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/t=
+ools/lib/perf/mmap.c#n400
 
-syzbot found the following issue on:
+Thanks for sharing the libperf implementation.
 
-HEAD commit:    de4664485abb Merge tag 'for-linus-2023041201' of git://git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13a065e3c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=90aa79dcf599c3f1
-dashboard link: https://syzkaller.appspot.com/bug?extid=cbdd49fbb39696c71041
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> which is updated in these patches but the tests are not:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/t=
+ools/perf/tests/mmap-basic.c#n287
+> Which appears to be an oversight. The tests display some differences
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cbdd49fbb39696c71041@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: stack-out-of-bounds in ino_get fs/ntfs3/ntfs.h:193 [inline]
-BUG: KASAN: stack-out-of-bounds in ntfs_set_inode+0x65/0x70 fs/ntfs3/inode.c:502
-Read of size 4 at addr ffffc9000ceafccf by task syz-executor.2/7192
-
-CPU: 3 PID: 7192 Comm: syz-executor.2 Not tainted 6.3.0-rc6-syzkaller-00046-gde4664485abb #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:319
- print_report mm/kasan/report.c:430 [inline]
- kasan_report+0x11c/0x130 mm/kasan/report.c:536
- ino_get fs/ntfs3/ntfs.h:193 [inline]
- ntfs_set_inode+0x65/0x70 fs/ntfs3/inode.c:502
- inode_insert5+0x125/0x660 fs/inode.c:1188
- iget5_locked fs/inode.c:1246 [inline]
- iget5_locked+0x225/0x2c0 fs/inode.c:1235
- ntfs_iget5+0xd2/0x3310 fs/ntfs3/inode.c:511
- ntfs_fill_super+0x3138/0x3ab0 fs/ntfs3/super.c:1244
- get_tree_bdev+0x444/0x760 fs/super.c:1303
- vfs_get_tree+0x8d/0x350 fs/super.c:1510
- do_new_mount fs/namespace.c:3042 [inline]
- path_mount+0x1342/0x1e40 fs/namespace.c:3372
- do_mount fs/namespace.c:3385 [inline]
- __do_sys_mount fs/namespace.c:3594 [inline]
- __se_sys_mount fs/namespace.c:3571 [inline]
- __x64_sys_mount+0x283/0x300 fs/namespace.c:3571
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0de348d69a
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f0de425af88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 000000000001f6bf RCX: 00007f0de348d69a
-RDX: 000000002001f6c0 RSI: 000000002001f700 RDI: 00007f0de425afe0
-RBP: 00007f0de425b020 R08: 00007f0de425b020 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000202 R12: 000000002001f6c0
-R13: 000000002001f700 R14: 00007f0de425afe0 R15: 000000002001f740
- </TASK>
-
-The buggy address belongs to stack of task syz-executor.2/7192
- and is located at offset 127 in frame:
- ntfs_fill_super+0x0/0x3ab0 fs/ntfs3/super.c:473
-
-This frame has 5 objects:
- [48, 52) 'vcn'
- [64, 68) 'lcn'
- [80, 84) 'len'
- [96, 104) 'tt'
- [128, 136) 'ref'
-
-The buggy address belongs to the virtual mapping at
- [ffffc9000cea8000, ffffc9000ceb1000) created by:
- kernel_clone+0xeb/0x890 kernel/fork.c:2682
-
-The buggy address belongs to the physical page:
-page:ffffea0001be4580 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x6f916
-memcg:ffff888022837602
-flags: 0x4fff00000000000(node=1|zone=1|lastcpupid=0x7ff)
-raw: 04fff00000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff ffff888022837602
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x102dc2(GFP_HIGHUSER|__GFP_NOWARN|__GFP_ZERO), pid 6955, tgid 6955 (syz-executor.3), ts 238333166289, free_ts 232134443559
- prep_new_page mm/page_alloc.c:2553 [inline]
- get_page_from_freelist+0x1190/0x2e20 mm/page_alloc.c:4326
- __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:5592
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2283
- vm_area_alloc_pages mm/vmalloc.c:2953 [inline]
- __vmalloc_area_node mm/vmalloc.c:3029 [inline]
- __vmalloc_node_range+0xb1c/0x14a0 mm/vmalloc.c:3201
- alloc_thread_stack_node kernel/fork.c:311 [inline]
- dup_task_struct kernel/fork.c:982 [inline]
- copy_process+0x1320/0x7590 kernel/fork.c:2098
- kernel_clone+0xeb/0x890 kernel/fork.c:2682
- __do_sys_clone+0xba/0x100 kernel/fork.c:2823
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1454 [inline]
- free_pcp_prepare+0x5d5/0xa50 mm/page_alloc.c:1504
- free_unref_page_prepare mm/page_alloc.c:3388 [inline]
- free_unref_page+0x1d/0x490 mm/page_alloc.c:3483
- __folio_put_small mm/swap.c:106 [inline]
- __folio_put+0xc5/0x140 mm/swap.c:129
- folio_put include/linux/mm.h:1309 [inline]
- put_page include/linux/mm.h:1378 [inline]
- generic_pipe_buf_release+0x23d/0x2b0 fs/pipe.c:210
- pipe_buf_release include/linux/pipe_fs_i.h:203 [inline]
- iter_file_splice_write+0x8a3/0xc80 fs/splice.c:793
- do_splice_from fs/splice.c:856 [inline]
- direct_splice_actor+0x114/0x180 fs/splice.c:1022
- splice_direct_to_actor+0x335/0x8a0 fs/splice.c:977
- do_splice_direct+0x1ab/0x280 fs/splice.c:1065
- do_sendfile+0xb19/0x12c0 fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1323 [inline]
- __se_sys_sendfile64 fs/read_write.c:1309 [inline]
- __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffffc9000ceafb80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc9000ceafc00: 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1 f1 f1
->ffffc9000ceafc80: 04 f2 04 f2 04 f2 00 f2 f2 f2 00 f3 f3 f3 00 00
-                                              ^
- ffffc9000ceafd00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc9000ceafd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1
-==================================================================
+Yes. It's an oversight. We should make sure that perf mmap tests pass
+for RISC-V as well.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> between x86 and aarch64 that have assumed userspace hardware counter
+> access, and everything else that it is assumed don't.
+>
+> Thanks,
+> Ian
+>
+> > > Clearly process switches (especially cpu migrations) cause
+> > > problems, but they are obviously invalid values and can
+> > > be ignored.
+> > >
+> > > So while a lot of uses may be 'happy' with the values the
+> > > perf framework gives, sometimes you do need to directly
+> > > read the relevant registers.
+> > >
+> > >         David
+> > >
+> > > -
+> > > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes,=
+ MK1 1PT, UK
+> > > Registration No: 1397386 (Wales)
+> >
+> >
+> >
+> > --
+> > Regards,
+> > Atish
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+
+--
+Regards,
+Atish
