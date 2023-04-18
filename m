@@ -2,210 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C424A6E63F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019196E6423
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 14:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbjDRMpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 08:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
+        id S231908AbjDRMq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 08:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbjDRMoz (ORCPT
+        with ESMTP id S232000AbjDRMqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 08:44:55 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7D3118C9;
-        Tue, 18 Apr 2023 05:44:54 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id fv6so15762624qtb.9;
-        Tue, 18 Apr 2023 05:44:54 -0700 (PDT)
+        Tue, 18 Apr 2023 08:46:24 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779C014F42
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:46:22 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-32a7770f7d1so32155775ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 05:46:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681821893; x=1684413893;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u//LQYDS+VuadTIFmR9meMJEyMLjxtTKHqVLJAzFJgU=;
-        b=VWF3Tf0XTZfvl1p3++okKWX1rLhVtRTh3SCN8uzr1fPWJ4PUH7dHHVg3U3ufYAXlIL
-         XjbqV71V4DYq1ryD7OyuVutZOq/BjHA4BMpkqB+LyCFw/cMGyB05HHOBzXWto0xZdCL5
-         SopaT/QUuCemcSOqTqSbhTyqippTmmb5TseHUmr9SPu+BuGGej7ISXhrdRPENEZlBFpK
-         Fg6LiFkhJP8Kq1Nf6SQBIt0apJpUDLdESDsULPrV/JVpv5TVhAjQXj7WNNix8HZClTE9
-         6Njh0UTdTDQ04BN6XE9Om3zVy1lYayq7ja3kVGezkLorhzpFZlUjTGV+FlMMN18r0ZO9
-         vTRw==
+        d=linaro.org; s=google; t=1681821982; x=1684413982;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aWKwSo+FXlLTrRAVOGN2C4OAabPij9dLF7fKxSc3DYk=;
+        b=gj0HO7uJagRwA1ORIyOVM03tkZ2LBmCT36Agq63k77L3K78EOwVrZTuPbh7tlndYv7
+         nmlmJ5bI2oONn377Mx+AJUbuuzAr3CpLV5i5/veAB0Lvxx50vMNQ6lXiY/6L8p4EDmYM
+         cLiQntTWYCFTqU5kyus2jvXkJh85KiHzGnZQ8GWWpBPndXNN5HMCVXHh66TtGH2Ed1c6
+         0CtcGVIhTP4gwmqIZNf2Wu1HNSznW/uGwPF387jaPfFSKQfjLqIAWEMVbJbC4I8e9k2c
+         5Y2c5cpPV8HxCjA9kFgzox3XtqfHKcAf3BnvCj+vpikEJf5w5jc0XTLOV+gfgzBtAqzC
+         bhsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681821893; x=1684413893;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=u//LQYDS+VuadTIFmR9meMJEyMLjxtTKHqVLJAzFJgU=;
-        b=XT5sCNJaT1DfnJlucucXiKT0xUeEHFJeMVSNE78eLakyWMW0wE13e2wIWXRUEPr/Ge
-         osgIeQFZI1EmF22LTFln5i6LaEuHhnutVUpcLJF3JSstqlXPd/7yA8QEN0gbvWLCfZZ4
-         K/6aVGGHb1t9/JPe17Rp6UGVym4xhgQ5ZSiwZwPLiL5wfXQt3xQmPb15j1FCCfQWWqrN
-         e2QHIA1Xwe18PhOmxRKPzMFglRe299TrIwNp9jAv2t2mGTAvcKCk6OgwlnmX7wM1E6C0
-         OD9Uo1DKZ7g/H0dWl1Ttcn56GSiMjUHnN4jwWV5hsF4L/jnjgdv1EJxNjj19ysBb3YKh
-         aeSg==
-X-Gm-Message-State: AAQBX9c9qZw5+TwSj/p8vp6T/DvMh3tQki66KCB0mxyKuFIiYi5ZJxeV
-        jj4M/2NJq6VYy9ldATr2eP4=
-X-Google-Smtp-Source: AKy350b7eHdH8LO3jawP225cJsvVlppKbI8nuylOLCQ6r3Ey9pjFblJuDWAPx26RZAELOUqW7ZOeqw==
-X-Received: by 2002:ac8:7f88:0:b0:3e4:e4e4:ec1 with SMTP id z8-20020ac87f88000000b003e4e4e40ec1mr25343892qtj.64.1681821893616;
-        Tue, 18 Apr 2023 05:44:53 -0700 (PDT)
-Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
-        by smtp.gmail.com with ESMTPSA id g24-20020ac84b78000000b003ee4b5a2dd3sm2165795qts.21.2023.04.18.05.44.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 05:44:53 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 08:44:52 -0400
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To:     "luwei (O)" <luwei32@huawei.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "asml.silence@gmail.com" <asml.silence@gmail.com>,
-        "imagedong@tencent.com" <imagedong@tencent.com>,
-        "brouer@redhat.com" <brouer@redhat.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "jbenc@redhat.com" <jbenc@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Message-ID: <643e90c4c7d0b_327ccc294a8@willemb.c.googlers.com.notmuch>
-In-Reply-To: <0f1d25fa-0704-f3b0-cc33-d89a5f87daac@huawei.com>
-References: <20230410022152.4049060-1-luwei32@huawei.com>
- <CANn89iKFLREJV_cfHEk6wz6xXVv_jSrZ_UyXAB8VpH7gMXacxQ@mail.gmail.com>
- <643447ba5224a_83e69294b6@willemb.c.googlers.com.notmuch>
- <450994d7-4a77-99df-6317-b535ea73e01d@huawei.com>
- <CANn89iLOcvDRMi9kVr86xNp5=h4JWpx9yYWicVxCwSMgAJGf_g@mail.gmail.com>
- <c90abe8c-ffa0-f986-11eb-bde65c84d18b@huawei.com>
- <6436b5ba5c005_41e2294dd@willemb.c.googlers.com.notmuch>
- <a30a8ffaa8dd4cb6a84103eecf0c3338@huawei.com>
- <643983f69b440_17854f2948c@willemb.c.googlers.com.notmuch>
- <64398b4c4585f_17abe429442@willemb.c.googlers.com.notmuch>
- <47fca2c7-db7c-0265-d724-38dffc62debe@huawei.com>
- <643aab0f2f39c_1afa5d2943f@willemb.c.googlers.com.notmuch>
- <0f1d25fa-0704-f3b0-cc33-d89a5f87daac@huawei.com>
-Subject: =?UTF-8?Q?Re:_=E7=AD=94=E5=A4=8D:_[PATCH_net]_net:_Add_check_for?=
- =?UTF-8?Q?_csum=5Fstart_in_skb=5Fpartial=5Fcsum=5Fset=28=29?=
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1681821982; x=1684413982;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aWKwSo+FXlLTrRAVOGN2C4OAabPij9dLF7fKxSc3DYk=;
+        b=hiYjOs8IwUM+NPcnDNq65bLQHyGyDSgVra42ZihmYVKZdi6Urd7rJVTsX50HdgYmbw
+         /jihH/LC3evvp7Zmb7mBqa7Q/vG2R5abRnU4+s8KoIiyle4WGhWHNhUcjURgcI5UtQ8A
+         uJduIaMrrDmrtSTuBe1txwSL29GCleTCq5oH9FTbjWH70rZEgNeRL5cJ0GBh3jVaEPQh
+         P8E0hQxNGpjtvD3OoA1oqlx0CjWp4xBepzR2K49+0m5v7khrTkVfPzaS4ld5UyiSae8c
+         VH4dxudrVLXDW9K0xcNsTdYeFSYRkta6qy0EXSyyj4nzGcInEHhHxT3eeteq9GbQT46s
+         DaHA==
+X-Gm-Message-State: AAQBX9c1QyUDcv23k6zUw6q/fuNduV0ee2NkYqRxtrpxPieQx+4gALJD
+        S1BU6NLrOgAqYk96Sr1LfoOdOw==
+X-Google-Smtp-Source: AKy350YDR3JepDrmTcd6UZ6PhjUVBbJ1Yivi4q/MOQ+1Za4ZU3x+3g9nnsHtHlSdIEEVGv4sSIuhhg==
+X-Received: by 2002:a05:6e02:10c7:b0:313:c32b:de26 with SMTP id s7-20020a056e0210c700b00313c32bde26mr11183052ilj.9.1681821981727;
+        Tue, 18 Apr 2023 05:46:21 -0700 (PDT)
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id p5-20020a027805000000b0040b64b68862sm2965285jac.165.2023.04.18.05.46.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 05:46:21 -0700 (PDT)
+Message-ID: <7d97b0c3-9b0a-2e2f-13d9-b9969fd3c1d3@linaro.org>
+Date:   Tue, 18 Apr 2023 07:46:19 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v11 22/26] virt: gunyah: Add proxy-scheduled vCPUs
+Content-Language: en-US
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
+ <20230304010632.2127470-23-quic_eberman@quicinc.com>
+ <98ad146d-492d-aa0c-4f6a-ba37e6bf74eb@linaro.org>
+ <274ad221-f397-b634-5742-fe6c9cb18843@quicinc.com>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <274ad221-f397-b634-5742-fe6c9cb18843@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-luwei (O) wrote:
-> =
+On 4/17/23 5:41 PM, Elliot Berman wrote:
+> 
+> 
+> On 3/31/2023 7:27 AM, Alex Elder wrote:
+>> On 3/3/23 7:06 PM, Elliot Berman wrote:
+> 
+> [snip]
+> 
+>>> diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
+>>> index caeb3b3a3e9a..e52265fa5715 100644
+>>> --- a/include/uapi/linux/gunyah.h
+>>> +++ b/include/uapi/linux/gunyah.h
+>>> @@ -62,8 +62,32 @@ struct gh_vm_dtb_config {
+>>>   #define GH_VM_START        _IO(GH_IOCTL_TYPE, 0x3)
+>>> +/**
+>>> + * GH_FN_VCPU - create a vCPU instance to control a vCPU
+>>> + *
+>>> + * gh_fn_desc is filled with &struct gh_fn_vcpu_arg
+>>> + *
+>>> + * The vcpu type will register with the VM Manager to expect to control
+>>> + * vCPU number `vcpu_id`. It returns a file descriptor allowing 
+>>> interaction with
+>>> + * the vCPU. See the Gunyah vCPU API description sections for 
+>>> interacting with
+>>> + * the Gunyah vCPU file descriptors.
+>>> + *
+>>> + * Return: file descriptor to manipulate the vcpu. See GH_VCPU_* ioctls
+>>> + */
+>>> +#define GH_FN_VCPU         1
+>>
+>> I think you should define GH_VN_VCPU, GN_FN_IRQFD, and GN_FN_IOEVENTFD
+>> in an enumerated type.  Each has a type associated with it, and you can
+>> add the explanation for the function in the kernel-doc comments above
+>> thosse type definitions.
+>>
+> 
+> I'd like to enumify the GH_FN_* macros, but one challenge I'm facing is 
+> that it breaks the module alias implementation in patch 19.
+> 
+> MODULE_ALIAS("ghfunc:"__stringify(_type))
+> 
+> When the GH_FN_* are regular preprocessor macros backed by an integer, 
+> the preprocessor will make the module alias ghfunc:0 (or ghfunc:1, etc). 
+> This works well because I can do
+> 
+> request_module("ghfunc:%d", type);
+> 
+> If the function hasn't been registered and then gunyah_vcpu.ko gets 
+> loaded automatically.
+> 
+> With enum, compiler knows the value of GH_FN_VCPU and preprocessor will 
+> make the module alias like ghfunc:GH_FN_VCPU.
+> 
+> [snip]
+> 
+>>> +
+>>> +/*
+>>> + * Gunyah presently sends max 4 bytes of exit_reason.
+>>> + * If that changes, this macro can be safely increased without breaking
+>>> + * userspace so long as struct gh_vcpu_run < PAGE_SIZE.
+>>
+>> Is PAGE_SIZE allowed to be anything other than 4096 bytes?  Do you
+>> expect this driver to work properly if the page size were configured
+>> to be 16384 bytes?  In other words, is this a Gunyah constant, or
+>> is it *really* the page size configured for Linux?
+>>
+> 
+> Our implementations are only doing 4096 bytes. I expect the driver to 
+> work properly when using 16k pages. This really is a Linux page. It's a 
+> reflection of the alloc_page in gh_vcpu_bind().
 
-> =E5=9C=A8 2023/4/15 9:47 PM, Willem de Bruijn =E5=86=99=E9=81=93:
-> > luwei (O) wrote:
-> >> =E5=9C=A8 2023/4/15 1:20 AM, Willem de Bruijn =E5=86=99=E9=81=93:
-> >>> Willem de Bruijn wrote:
-> >>>> luwei (O) wrote:
-> >>>>> yes, here is the vnet_hdr:
-> >>>>>
-> >>>>>       flags: 3
-> >>>>>       gso_type: 3
-> >>>>>       hdr_len: 23
-> >>>>>       gso_size: 58452
-> >>>>>       csum_start: 5
-> >>>>>       csum_offset: 16
-> >>>>>
-> >>>>> and the packet:
-> >>>>>
-> >>>>> | vnet_hdr | mac header | network header | data ... |
-> >>>>>
-> >>>>>     memcpy((void*)0x20000200,
-> >>>>>            "\x03\x03\x02\x00\x54\xe4\x05\x00\x10\x00\x80\x00\x00\=
-x53\xcc\x9c\x2b"
-> >>>>>            "\x19\x3b\x00\x00\x00\x89\x4f\x08\x03\x83\x81\x04",
-> >>>>>            29);
-> >>>>>     *(uint16_t*)0x200000c0 =3D 0x11;
-> >>>>>     *(uint16_t*)0x200000c2 =3D htobe16(0);
-> >>>>>     *(uint32_t*)0x200000c4 =3D r[3];
-> >>>>>     *(uint16_t*)0x200000c8 =3D 1;
-> >>>>>     *(uint8_t*)0x200000ca =3D 0;
-> >>>>>     *(uint8_t*)0x200000cb =3D 6;
-> >>>>>     memset((void*)0x200000cc, 170, 5);
-> >>>>>     *(uint8_t*)0x200000d1 =3D 0;
-> >>>>>     memset((void*)0x200000d2, 0, 2);
-> >>>>>     syscall(__NR_sendto, r[1], 0x20000200ul, 0xe45ful, 0ul, 0x200=
-000c0ul, 0x14ul);
-> >>>> Thanks. So this can happen whenever a packet is injected into the =
-tx
-> >>>> path with a virtio_net_hdr.
-> >>>>
-> >>>> Even if we add bounds checking for the link layer header in pf_pac=
-ket,
-> >>>> it can still point to the network header.
-> >>>>
-> >>>> If packets are looped to the tx path, skb_pull is common if a pack=
-et
-> >>>> traverses tunnel devices. But csum_start does not directly matter =
-in
-> >>>> the rx path (CHECKSUM_PARTIAL is just seen as CHECKSUM_UNNECESSARY=
-).
-> >>>> Until it is forwarded again to the tx path.
-> >>>>
-> >>>> So the question is which code calls skb_checksum_start_offset on t=
-he
-> >>>> tx path. Clearly, skb_checksum_help. Also a lot of drivers. Which
-> >>>> may cast the signed int return value to an unsigned. Even an u8 in=
+OK.  I guess I'd be on the lookout for anything that uses 4096 when
+PAGE_SIZE is what's actually meant.  I have no idea what's involved
+with the hypervisor if you wanted to try something else, but if you
+haven't tested that, you could maybe do an early check in your probe
+function:
+	BUILD_BUG_ON(PAGE_SIZE != 4096);
 
-> >>>> the first driver I spotted (alx).
-> >>>>
-> >>>> skb_postpull_rcsum anticipates a negative return value, as do othe=
-r
-> >>>> core functions. So it clearly allowed in certain cases. We cannot
-> >>>> just bound it.
-> >>>>
-> >>>> Summary after a long story: an initial investigation, but I don't =
-have
-> >>>> a good solution so far. Maybe others have a good suggestiong based=
- on
-> >>>> this added context.
-> >>> Specific to skb_checksum_help, it appears that skb_checksum will
-> >>> work with negative offset just fine.
-> >>   =C2=A0=C2=A0=C2=A0 =C2=A0 In this case maybe not, since it checksu=
-ms from within the mac
-> >> header, and the mac header
-> >>
-> >>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 will be stripped when the rx =
-path checks the checksum.
-> > The header is pulled, but still present. Obviously something bogus ge=
-ts
-> > written if the virtio_net_hdr configures csum offload with a bogus
-> > offset. But as long as the offset is zero or positive from skb->head,=
+> The exit reason is copied from hypervisor into field accessible by 
+> userspace directly. Gunyah makes the exit reason size dynamic -- there's 
+> no architectural limitation preventing the exit reason from being a 
+> string or some lengthy data.
 
-> > the checksum helper works as intended.
-> =
+Sounds good.  I like having statements like this tested, and maybe
+you have.  I.e., test with the exit_reason size something like 16
+bytes and ensure that works.  Testing this is not technically needed,
+but your comment suggests it can be done.
 
->  =C2=A0=C2=A0 OK, Thanks for your reply
+> As I was writing this response, I realized that I should be able to make 
+> this a zero-length array and ensure that reason[] doesn't overflow 
+> PAGE_SIZE...
 
-We still should address the unnecessary warning triggerable by syzbot.
+Maybe some good came out of it?
 
-If I'm correct that any offset programmable through virtio_net_hdr ends
-up in the skb linear section and skb_checksum_help will compute it fine,
-then the WARN_ON_ONCE just needs an explicit cast to signed.
+> The comment was trying to explain that Linux itself imposes a limitation 
+> on the maximum exit reason size. If we need to support longer exit 
 
-I have only skimmed, so not 100% sure yet. But that's the short take.
- =
+Your comment isn't clear that Linux is what limits the size.
+This is all kind of picky though.  My main point was about
+the PAGE_SIZE assumption.
 
-> >   =
+					-Alex
 
-> >>> Perhaps the only issue is that the WARN_ON_ONCE compares signed to
-> >>> unsigned, and thus incorrectly interprets a negative offset as
-> >>>    >=3D skb_headlen(skb)
-> > .
-> =
-
-> -- =
-
-> Best Regards,
-> Lu Wei
-> =
-
-
+> reason, we're OK to do so long as the total size doesn't overrun 
+> PAGE_SIZE. There aren't any plans to need longer exit reasons than the 8 
+> bytes mentioned today.
+> 
+> Thanks,
+> Elliot
 
