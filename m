@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E966D6E5CE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542C66E5CEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 11:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjDRJED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 05:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
+        id S231228AbjDRJEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 05:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbjDRJDh (ORCPT
+        with ESMTP id S231215AbjDRJDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:03:37 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64644C1F;
-        Tue, 18 Apr 2023 02:03:25 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id he13so20153789wmb.2;
-        Tue, 18 Apr 2023 02:03:25 -0700 (PDT)
+        Tue, 18 Apr 2023 05:03:38 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07E54EF7;
+        Tue, 18 Apr 2023 02:03:26 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id v10so8523949wmn.5;
+        Tue, 18 Apr 2023 02:03:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681808604; x=1684400604;
+        d=gmail.com; s=20221208; t=1681808605; x=1684400605;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/LE+IJWXi7tfgCTNCrrJQAxQtllNFJS6/BWkoAapNRE=;
-        b=KRZkxLZTylTvuVpmpvNKLfPbQPcRoxL2WfKOEJI12CDAZMd4zsDNL09515bM3/nk9W
-         9/5MG1pmZoBvaJ0NhnbPB4o2Xkb286U9MaVqOBWTr/++TlyMeNsJBx52Qe72VZapcQtn
-         9NQK9bVCaNuUUXbdZSM2Irv33rFmB17pJCvJqXKw5/bRCy/cd9A81QDgRpFKei7+QCor
-         Orz+k9svYfVa+QWlp2bj5kj+KWC5U9u17BHFU+6zgO6gCmAjlTibapGrRtLOxb+beFEM
-         xWpTFcSXpa9F/5BQU2MerB234YjVrx/2xuynvqecNgkHCML1ZCXM0Tcnrxm2gHZ/X5lt
-         ldtw==
+        bh=oM8GpGbGiC8m3xETpqZOKVCeTGKwMkImG6hLD6+J4YY=;
+        b=ctxsXyNnKMhP95P4Hk+NQVH7kFsUxogvu2M9hpBDmk2zks8C/0mUeEu7nvWTh4FjxH
+         QNdXdKZYlV/toXwg3YBYysppewAJhmYXPksk5qNDVyUzN1pUDaaPtww0qIka5SbAw18z
+         l3C5YWND3LquNZG6OIEoOgqhFDtB66aFqHc+CDb3lHhmiU25Vw4wgYeAz+2km3Mx/d1L
+         Q9eqdQQ5lKBhQe5sgtUr0nwdsmsygbom3qNSz9Jada1rk06b8FLW0+9Tua+wVDAhkVP+
+         ku78bLqiYA0DaR4MYSb3hjR++0I70LMxpekh96Mfdjz59oUbL8BXLKahBFKq74SHDU87
+         bF6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681808604; x=1684400604;
+        d=1e100.net; s=20221208; t=1681808605; x=1684400605;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/LE+IJWXi7tfgCTNCrrJQAxQtllNFJS6/BWkoAapNRE=;
-        b=M+I5hUNz0M9UDeEbw6F17ijhRh5sOidtj71p/JpJWEwEAjHPXl2clE1LHAfFENiMqc
-         JZ+D1c98NgMnQ3wUuhKoNB4rA2Py1ik2sbgKUXx2etpVM8UFyc4pvm2p1cQa9Y2CO9ht
-         /ZCG2AMCftltBbv7nVQ6EGWpoTI2psQ0PJ8n4LPy7RCQJsOA//n2uA5rmowYiZI+5fYB
-         GqaSENQCLL+/oByFOKwNsWSI0T0r9PgJlD7n+FSgMZ2CURF/G3T/Hkci6m/Sk7AHwuLz
-         QLrW89Ql/8g38IAOkJ8d01QIVZOYdNxQH1584igx/zmXxbDu35VMIcOL0npc/4C7gz/Y
-         08Wg==
-X-Gm-Message-State: AAQBX9cpYnsmgWk9SEpK6vWh34fW0Vla7ZgpSv7LHt7mOXtvuSaIYqaD
-        dKjOKRAXSWPq8eJj5AU08TbNYRtqDhI=
-X-Google-Smtp-Source: AKy350YZJPXvN94s+jD7H6m0FRMdSvsxhj3izOsDmzTyCD7MWwZyuNAcBpkBUgtmxi+inM5UaQXhZA==
-X-Received: by 2002:a1c:f402:0:b0:3f0:9f44:c7ce with SMTP id z2-20020a1cf402000000b003f09f44c7cemr13047992wma.22.1681808603703;
-        Tue, 18 Apr 2023 02:03:23 -0700 (PDT)
+        bh=oM8GpGbGiC8m3xETpqZOKVCeTGKwMkImG6hLD6+J4YY=;
+        b=j+kNSgnZ+Wz8hUwMqLc19ZTpfz+HbIX6AWYB9BtBSjGsjBgJpSerN0P8M0RZ+3wUry
+         ziJHSHIEScWWYK5LdkREGKxmWINNv2YZu3a1BJhhL93OWbvoLgtnND0a+OdXp+QevA6F
+         aYFfy9oDcF1exckXTdIH6JhXWS+z0TwUAC+K8kmSrlgX8JT9VyLfOTcAI5rY8Oqcvy5x
+         WI+VdMsu01/6RGRQXHy4+W4ItudtYL3dUrt9pskAa9rxHQk00QHqjrltxCfidDtYOoor
+         +x4qTCMRo7EF+eypN82L0kMXuFGJT67uPJZpZwTsazvLAWGz8FBueFzRijXw0Y7KWBk7
+         Q0ig==
+X-Gm-Message-State: AAQBX9cOOKSwakoEM9ZIf7m7zbUJVNwUhIo1EDQ5BMKBPDfg89fWbJbP
+        5/MFqdYrdRsTajNkBcwTviBzVNoXuIw=
+X-Google-Smtp-Source: AKy350ba2UVFuOG+JFOM810cCwXF9qurZCiipIbtykJbm4w1Eypd53rHW1F0rfXI/P4TwSF8P1/8Ng==
+X-Received: by 2002:a05:600c:ac8:b0:3f1:6fe2:c4b2 with SMTP id c8-20020a05600c0ac800b003f16fe2c4b2mr5968273wmr.23.1681808605051;
+        Tue, 18 Apr 2023 02:03:25 -0700 (PDT)
 Received: from localhost.localdomain (61.red-88-10-54.dynamicip.rima-tde.net. [88.10.54.61])
-        by smtp.gmail.com with ESMTPSA id u7-20020a7bcb07000000b003ee70225ed2sm14341109wmj.15.2023.04.18.02.03.22
+        by smtp.gmail.com with ESMTPSA id u7-20020a7bcb07000000b003ee70225ed2sm14341109wmj.15.2023.04.18.02.03.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 02:03:23 -0700 (PDT)
+        Tue, 18 Apr 2023 02:03:24 -0700 (PDT)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
 To:     linux-clk@vger.kernel.org
 Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
@@ -58,9 +58,9 @@ Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         matthias.bgg@gmail.com, devicetree@vger.kernel.org,
         arinc.unal@arinc9.com
-Subject: [PATCH v3 7/9] mips: ralink: remove reset related code
-Date:   Tue, 18 Apr 2023 11:03:10 +0200
-Message-Id: <20230418090312.2818879-8-sergio.paracuellos@gmail.com>
+Subject: [PATCH v3 8/9] mips: ralink: get cpu rate from new driver code
+Date:   Tue, 18 Apr 2023 11:03:11 +0200
+Message-Id: <20230418090312.2818879-9-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230418090312.2818879-1-sergio.paracuellos@gmail.com>
 References: <20230418090312.2818879-1-sergio.paracuellos@gmail.com>
@@ -68,135 +68,79 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A proper clock driver for ralink SoCs has been added. This driver is also
-a reset provider for the SoC. Hence there is no need to have reset related
-code in 'arch/mips/ralink' folder anymore. The only code that remains is
-the one related with mips_reboot_setup where a PCI reset is performed.
-We maintain this because I cannot test old ralink board with PCI to be
-sure all works if we remove also this code.
+At very early stage on boot, there is a need to set 'mips_hpt_frequency'.
+This timer frequency is a half of the CPU frequency. To get clocks properly
+set we need to call to 'of_clk_init()' and properly get cpu clock frequency
+afterwards. Depending on the SoC, CPU clock index in the clock provider is
+different being two for MT7620 SoC and one for the rest. Hence, adapt code
+to be aligned with new clock driver.
 
 Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- arch/mips/ralink/common.h |  2 --
- arch/mips/ralink/of.c     |  4 ---
- arch/mips/ralink/reset.c  | 61 ---------------------------------------
- 3 files changed, 67 deletions(-)
+ arch/mips/ralink/clk.c | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
 
-diff --git a/arch/mips/ralink/common.h b/arch/mips/ralink/common.h
-index fcdfc9dc6210..b0d671442966 100644
---- a/arch/mips/ralink/common.h
-+++ b/arch/mips/ralink/common.h
-@@ -23,8 +23,6 @@ extern struct ralink_soc_info soc_info;
+diff --git a/arch/mips/ralink/clk.c b/arch/mips/ralink/clk.c
+index 5b02bb7e0829..3d29e956f785 100644
+--- a/arch/mips/ralink/clk.c
++++ b/arch/mips/ralink/clk.c
+@@ -11,29 +11,41 @@
+ #include <linux/clkdev.h>
+ #include <linux/clk.h>
+ #include <linux/clk-provider.h>
++#include <asm/mach-ralink/ralink_regs.h>
  
- extern void ralink_of_remap(void);
+ #include <asm/time.h>
  
--extern void ralink_rst_init(void);
--
- extern void __init prom_soc_init(struct ralink_soc_info *soc_info);
+ #include "common.h"
  
- __iomem void *plat_of_remap_node(const char *node);
-diff --git a/arch/mips/ralink/of.c b/arch/mips/ralink/of.c
-index 4d06de77d92a..df29e6c896aa 100644
---- a/arch/mips/ralink/of.c
-+++ b/arch/mips/ralink/of.c
-@@ -81,10 +81,6 @@ static int __init plat_of_setup(void)
+-void ralink_clk_add(const char *dev, unsigned long rate)
++static int clk_cpu_index(void)
  {
- 	__dt_register_buses(soc_info.compatible, "palmbus");
+-	struct clk *clk = clk_register_fixed_rate(NULL, dev, NULL, 0, rate);
++	if (ralink_soc == RALINK_UNKNOWN)
++		return -1;
  
--	/* make sure that the reset controller is setup early */
--	if (ralink_soc != MT762X_SOC_MT7621AT)
--		ralink_rst_init();
--
- 	return 0;
+-	if (!clk)
+-		panic("failed to add clock");
++	if (ralink_soc == MT762X_SOC_MT7620A ||
++	    ralink_soc == MT762X_SOC_MT7620N)
++		return 2;
+ 
+-	clkdev_create(clk, NULL, "%s", dev);
++	return 1;
  }
  
-diff --git a/arch/mips/ralink/reset.c b/arch/mips/ralink/reset.c
-index 274d33078c5e..4875637ef469 100644
---- a/arch/mips/ralink/reset.c
-+++ b/arch/mips/ralink/reset.c
-@@ -10,7 +10,6 @@
- #include <linux/io.h>
- #include <linux/of.h>
- #include <linux/delay.h>
--#include <linux/reset-controller.h>
- 
- #include <asm/reboot.h>
- 
-@@ -22,66 +21,6 @@
- #define RSTCTL_RESET_PCI	BIT(26)
- #define RSTCTL_RESET_SYSTEM	BIT(0)
- 
--static int ralink_assert_device(struct reset_controller_dev *rcdev,
--				unsigned long id)
--{
--	u32 val;
--
--	if (id == 0)
--		return -1;
--
--	val = rt_sysc_r32(SYSC_REG_RESET_CTRL);
--	val |= BIT(id);
--	rt_sysc_w32(val, SYSC_REG_RESET_CTRL);
--
--	return 0;
--}
--
--static int ralink_deassert_device(struct reset_controller_dev *rcdev,
--				  unsigned long id)
--{
--	u32 val;
--
--	if (id == 0)
--		return -1;
--
--	val = rt_sysc_r32(SYSC_REG_RESET_CTRL);
--	val &= ~BIT(id);
--	rt_sysc_w32(val, SYSC_REG_RESET_CTRL);
--
--	return 0;
--}
--
--static int ralink_reset_device(struct reset_controller_dev *rcdev,
--			       unsigned long id)
--{
--	ralink_assert_device(rcdev, id);
--	return ralink_deassert_device(rcdev, id);
--}
--
--static const struct reset_control_ops reset_ops = {
--	.reset = ralink_reset_device,
--	.assert = ralink_assert_device,
--	.deassert = ralink_deassert_device,
--};
--
--static struct reset_controller_dev reset_dev = {
--	.ops			= &reset_ops,
--	.owner			= THIS_MODULE,
--	.nr_resets		= 32,
--	.of_reset_n_cells	= 1,
--};
--
--void ralink_rst_init(void)
--{
--	reset_dev.of_node = of_find_compatible_node(NULL, NULL,
--						"ralink,rt2880-reset");
--	if (!reset_dev.of_node)
--		pr_err("Failed to find reset controller node");
--	else
--		reset_controller_register(&reset_dev);
--}
--
- static void ralink_restart(char *command)
+ void __init plat_time_init(void)
  {
- 	if (IS_ENABLED(CONFIG_PCI)) {
++	struct of_phandle_args clkspec;
+ 	struct clk *clk;
++	int cpu_clk_idx;
+ 
+ 	ralink_of_remap();
+ 
+-	ralink_clk_init();
+-	clk = clk_get_sys("cpu", NULL);
++	cpu_clk_idx = clk_cpu_index();
++	if (cpu_clk_idx == -1)
++		panic("unable to get CPU clock index");
++
++	of_clk_init(NULL);
++	clkspec.np = of_find_node_by_name(NULL, "sysc");
++	clkspec.args_count = 1;
++	clkspec.args[0] = cpu_clk_idx;
++	clk = of_clk_get_from_provider(&clkspec);
+ 	if (IS_ERR(clk))
+ 		panic("unable to get CPU clock, err=%ld", PTR_ERR(clk));
+ 	pr_info("CPU Clock: %ldMHz\n", clk_get_rate(clk) / 1000000);
 -- 
 2.25.1
 
