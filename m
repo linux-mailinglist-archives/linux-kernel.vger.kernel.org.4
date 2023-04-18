@@ -2,114 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816EE6E6A63
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 879C56E6A68
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbjDRRBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 13:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45860 "EHLO
+        id S230502AbjDRRCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 13:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232395AbjDRRB3 (ORCPT
+        with ESMTP id S231755AbjDRRC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 13:01:29 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8958A2D42
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:01:27 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id j6-20020a255506000000b00b8ef3da4acfso24447496ybb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:01:27 -0700 (PDT)
+        Tue, 18 Apr 2023 13:02:28 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C026A6A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:02:26 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id fy21so31984773ejb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 10:02:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681837286; x=1684429286;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Dyuu5wU7j8YU7zpj0pOZ8BO/c8tny2d3D8gekiPd7fA=;
-        b=d8/Zb9YgCa8eVlBLTpV+NJ57rdS1xsLfkqIXEKvUHW2uAls6J+FJzlZN6Ji/4uRir/
-         1zS+MdaFNxXGCzCFIaF1aqXoOXWg1iFKiZNpDvV9eSfZylaThYuxowhj3wxPLo7slf/4
-         LHgnLU2DGCVx3/24VmikxziwoDQgW6WdB6Va8iTHc1Yg6NoxaE0GSi5sFvNhfyQ8EBlj
-         Geyjaz/WvFCOZ3LFQBwGUhsO/cbtnHrGgBtiKMeYHxW+6m89BnzcmE/zONLKuZzIK3Zd
-         WwjlA2lMQP53PxLKQnfqOnLmqIoOsiRGWzjBF4baNzHxGVTgYocW6PIPjpngll6Enuy7
-         +yGw==
+        d=linaro.org; s=google; t=1681837344; x=1684429344;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+5TFm8G1q6eckW0t79BRMGwZlMLiJfFRdZkFunxVru8=;
+        b=rdGnL0DWhUo73XXGLtsCT7BmZDNRn9a/kJTIoYryn5EmJbzIB93+CwLBY0kk2wHEkx
+         aqdGBNZ6pHRu0CLTwmXfEy/aWi8hwUc/cU/Kj68zW3b8nFqpq6K64PM3pjDaZFVHHecy
+         UgcD3DKVx3ncyhBzsEtsKr2XMTUFNE5TSVQJcsKIcagcFG8n65qVR28CCdgW5CTg48h6
+         CJrXTzZeHyQQRXzog9IOWDwbw6bYptuKJD/ysiIzdpYOxEJqoVZFrWadTS6tj7GBPoRS
+         xS96BHbCfnZLXu+d2iBR3VhytThfw1wj90qNUQ7cUgNkUEhqHu4M83maJkN5KCO4Lbko
+         UGeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681837286; x=1684429286;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+        d=1e100.net; s=20221208; t=1681837344; x=1684429344;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dyuu5wU7j8YU7zpj0pOZ8BO/c8tny2d3D8gekiPd7fA=;
-        b=IdnfPXjosq65ZcejE3/VAzUEcDu4YhpFID3xXEwg6peMO7XX9KJjV7mZk89PQ9IXqc
-         S6e7u9c7LgXSFRAXMUisO9I4YXyfd5SJ7fg2e9ZsaHXefy7DXRVD1oBu5VffyrH12ywS
-         3/n8BGZJLx2cLmfWD+ReWoqgTSKt71t/Ly2uwfMbFabOU+rD3QHQTKs8VqwkGhuNzg6g
-         rfd27oemUil1mox0o67xCJlTQ6xrzYP31E7gsqRgaKt3MOTB8hHt7uBagvIwht0Uyop5
-         OltEIRWcZ7tNS/8aV2cPduKL99AMMwC4wnyvEwcGX2VloSqlS3PKxrjKoturwcYsd1yF
-         ntWA==
-X-Gm-Message-State: AAQBX9cU2eHCTlzrzDz9cWzuW+1lUVjv+mWFn//uCOc8sXw/FUbJjiF+
-        HFED2lRKDmEzMfxdV4uWKXyU0oOlMGksu6Te/w==
-X-Google-Smtp-Source: AKy350bfjObXL4Qf9+g1wZMUKUYGeLrkCLVYHghpYReFp8Cgnq9KYi/FOYW0J9unNXx/8e5Sa4DQgJWQeRCCTyyt3w==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a25:d707:0:b0:b8f:578c:4e3a with SMTP
- id o7-20020a25d707000000b00b8f578c4e3amr9653508ybg.12.1681837286764; Tue, 18
- Apr 2023 10:01:26 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 17:01:25 +0000
-In-Reply-To: <ZD12htq6dWg0tg2e@google.com> (message from Sean Christopherson
- on Mon, 17 Apr 2023 09:40:38 -0700)
-Mime-Version: 1.0
-Message-ID: <diqz5y9t86qi.fsf@ackerleytng-cloudtop.c.googlers.com>
-Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
- KVM: mm: fd-based approach for supporting KVM)
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     david@redhat.com, chao.p.peng@linux.intel.com, pbonzini@redhat.com,
-        vkuznets@redhat.com, jmattson@google.com, joro@8bytes.org,
-        mail@maciej.szmigiero.name, vbabka@suse.cz, vannapurve@google.com,
-        yu.c.zhang@linux.intel.com, kirill.shutemov@linux.intel.com,
-        dhildenb@redhat.com, qperret@google.com, tabba@google.com,
-        michael.roth@amd.com, wei.w.wang@intel.com, rppt@kernel.org,
-        liam.merwick@oracle.com, isaku.yamahata@gmail.com,
-        jarkko@kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        bh=+5TFm8G1q6eckW0t79BRMGwZlMLiJfFRdZkFunxVru8=;
+        b=Vip96l2zTAwT5Jk3OH75U7oINWf/Yc/RMc7UMd8Gm5xzFZ/i+N0jfSOaNCmGQcCkMu
+         iv/fJqq42TMrxpSe/bM7kADSQkAk8WsT+g7xdIyYUuMrrm2fzpAcUw7lDRE2AJVMuW+l
+         XoWeNKNVm9GMWvKC4IXReQjnQ3A0O2DAchcdMTGbxFmqc2HsF/X93ysbwzuiiUMRCUqx
+         VmyHJQzAmJXDL8VoiqyE/i1IvNLkwzZOrSQkJ325HIN5qpeD63TNf7KrnT+8FpKbLsEk
+         cuv/sZQAj3fg6tEq0GmVDkDsigFYhECLzGujYntEZ8mGgzafxGah66RKUkd7aEJ/w7+0
+         mMXg==
+X-Gm-Message-State: AAQBX9duUXUMbJNztAXUw0+nmMtZKyFwHpjGcO56VrYFY8TDjwDDp8br
+        IATXVwBRez0CFAg7kQqlsGUvYw==
+X-Google-Smtp-Source: AKy350alE0C6cFYBJL7Qdo8B11tUxsTNi5e5v1cDFh4R+8QtplXo+RlFiksXYi/z3F5NwG6HFCjWAw==
+X-Received: by 2002:a17:906:6959:b0:94f:356d:cd0 with SMTP id c25-20020a170906695900b0094f356d0cd0mr10951845ejs.33.1681837344589;
+        Tue, 18 Apr 2023 10:02:24 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a276:7d35:5226:1c77? ([2a02:810d:15c0:828:a276:7d35:5226:1c77])
+        by smtp.gmail.com with ESMTPSA id v14-20020a170906380e00b0094a46e2f12bsm8277102ejc.93.2023.04.18.10.02.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 10:02:24 -0700 (PDT)
+Message-ID: <e28a7788-e4b5-d777-4775-d57a00b0fbcc@linaro.org>
+Date:   Tue, 18 Apr 2023 19:02:23 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1 1/9] gpio: gxp: Add HPE GXP GPIO
+Content-Language: en-US
+To:     nick.hawkins@hpe.com, verdun@hpe.com, linus.walleij@linaro.org,
+        brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jdelvare@suse.com,
+        linux@roeck-us.net, linux@armlinux.org.uk,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230418152824.110823-1-nick.hawkins@hpe.com>
+ <20230418152824.110823-2-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230418152824.110823-2-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+On 18/04/2023 17:28, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> The GXP SoC supports GPIO on multiple interfaces: Host, CPLD and Soc
+> pins. The interface from CPLD and Host are interruptable from vic0
+> and vic1. This driver allows support for both of these interfaces
+> through the use of different compatible bindings.
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> ---
+>  drivers/gpio/Kconfig    |    9 +
+>  drivers/gpio/Makefile   |    1 +
+>  drivers/gpio/gpio-gxp.c | 1056 +++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 1066 insertions(+)
+>  create mode 100644 drivers/gpio/gpio-gxp.c
+> 
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index 13be729710f2..47435307698c 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -1235,6 +1235,15 @@ config HTC_EGPIO
+>  	  several HTC phones.  It provides basic support for input
+>  	  pins, output pins, and IRQs.
+>  
+> +config GPIO_GXP
+> +        tristate "GXP GPIO support"
+> +        depends on ARCH_HPE_GXP
 
-> On Mon, Apr 17, 2023, David Hildenbrand wrote:
->> On 17.04.23 17:40, Sean Christopherson wrote:
->> > I want to start referring to the code/patches by its  
->> syscall/implementation name
->> > instead of "UPM", as "UPM" is (a) very KVM centric, (b) refers to the  
->> broader effort
->> > and not just the non-KVM code, and (c) will likely be confusing for  
->> future reviewers
->> > since there's nothing in the code that mentions "UPM" in any way.
->> >
->> > But typing out restrictedmem is quite tedious, and git grep shows  
->> that "rmem" is
->> > already used to refer to "reserved memory".
->> >
->> > Renaming the syscall to "guardedmem"...
+|| COMPILE_TEST
 
->> restrictedmem, guardedmem, ... all fairly "suboptimal" if you'd ask  
->> me ...
+(...)
 
-> I'm definitely open to other suggestions, but I suspect it's going to be  
-> difficult
-> to be more precise than something like "guarded".
+> +
+> +	drvdata->chip.parent = &pdev->dev;
+> +	ret = devm_gpiochip_add_data(&pdev->dev, &drvdata->chip, NULL);
+> +	if (ret < 0)
+> +		dev_err(&pdev->dev,
+> +			"Could not register gpiochip for fn2, %d\n", ret);
+> +	dev_info(&pdev->dev, "HPE GXP FN2 driver loaded.\n");
 
-> E.g. we discussed "unmappable" at one point, but the memory can still be  
-> mapped,
-> just not via mmap().  And it's not just about mappings, e.g. read() and  
-> its many
-> variants are all disallowed too, despite the kernel direct map still  
-> being live
-> (modulo SNP requirements).
+Drop non-informative probe successes. They are not needed.
 
-How about "opaque"?
 
-I think opaque captures the idea of enforced information hiding from the
-user(space), and that the contents can only be manipulated via internal
-(kernel) functions.
+> +
+> +	return 0;
+> +}
+> +
+> +static int gxp_gpio_pl_init(struct platform_device *pdev)
+> +{
+> +	struct gxp_gpio_drvdata *drvdata = dev_get_drvdata(&pdev->dev);
+> +	struct gpio_irq_chip *girq;
+> +	int ret;
+> +	unsigned int val;
+> +
+> +	drvdata->pl_led = gxp_gpio_init_regmap(pdev, "pl-led", 8);
+> +	if (IS_ERR(drvdata->pl_led))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(drvdata->pl_int),
+> +				     "failed to map pl_led\n");
+> +
+> +	drvdata->pl_health = gxp_gpio_init_regmap(pdev, "pl-health", 8);
+> +	if (IS_ERR(drvdata->pl_health))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(drvdata->pl_int),
+> +				     "failed to map pl_health\n");
+> +
+> +	drvdata->pl_int = gxp_gpio_init_regmap(pdev, "pl-int", 8);
+> +	if (IS_ERR(drvdata->pl_int))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(drvdata->pl_int),
+> +				     "failed to map pl_int\n");
+> +
+> +	drvdata->chip = plreg_chip;
+> +	drvdata->chip.ngpio = 100;
+> +	drvdata->chip.parent = &pdev->dev;
+> +
+> +	girq = &drvdata->chip.irq;
+> +	girq->chip = &gxp_plreg_irqchip;
+> +	girq->parent_handler = NULL;
+> +	girq->num_parents = 0;
+> +	girq->parents = NULL;
+> +	girq->default_type = IRQ_TYPE_NONE;
+> +	girq->handler = handle_edge_irq;
+> +
+> +	girq->init_hw = gxp_gpio_irq_init_hw;
+> +
+> +	ret = devm_gpiochip_add_data(&pdev->dev, &drvdata->chip, drvdata);
+> +	if (ret < 0)
+> +		dev_err(&pdev->dev, "Could not register gpiochip for plreg, %d\n",
+> +			ret);
+> +
+> +	regmap_update_bits(drvdata->pl_int, PLREG_INT_HI_PRI_EN,
+> +			   BIT(4) | BIT(5), BIT(4) | BIT(5));
+> +	regmap_update_bits(drvdata->pl_int, PLREG_INT_GRP_STAT_MASK,
+> +			   BIT(4) | BIT(5), 0x00);
+> +	regmap_read(drvdata->pl_int, PLREG_INT_HI_PRI_EN, &val);
+> +	regmap_read(drvdata->pl_int, PLREG_INT_GRP_STAT_MASK, &val);
+> +
+> +	ret = platform_get_irq(pdev, 0);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "Get irq from platform fail - %d\n", ret);
+> +		return ret;
+
+return dev_err_probe
+
+> +	}
+> +
+> +	drvdata->irq = ret;
+> +
+> +	ret = devm_request_irq(&pdev->dev, drvdata->irq, gxp_gpio_pl_irq_handle,
+> +			       IRQF_SHARED, "gxp-pl", drvdata);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "IRQ handler failed - %d\n", ret);
+
+return dev_err_probe
+Actually other applicable places as well...
+
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id gxp_gpio_of_match[] = {
+> +	{ .compatible = "hpe,gxp-gpio"},
+> +	{ .compatible = "hpe,gxp-gpio-pl"},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, gxp_gpio_of_match);
+> +
+> +static int gxp_gpio_probe(struct platform_device *pdev)
+> +{
+> +	int ret;
+> +	struct gxp_gpio_drvdata *drvdata;
+> +	struct device *dev = &pdev->dev;
+> +	struct device *parent;
+> +	const struct of_device_id *match = of_match_device(gxp_gpio_of_match, dev);
+> +
+> +	if (!match) {
+> +		dev_err(dev, "device is not compatible");
+
+It is not possible.
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	parent = dev->parent;
+> +	if (!parent) {
+> +		dev_err(dev, "no parent\n");
+
+Why do you need this check?
+
+> +		return -ENODEV;
+> +	}
+> +
+> +	drvdata = devm_kzalloc(&pdev->dev, sizeof(struct gxp_gpio_drvdata),
+
+sizeof(*)
+
+> +			       GFP_KERNEL);
+> +	if (!drvdata)
+> +		return -ENOMEM;
+> +
+> +	platform_set_drvdata(pdev, drvdata);
+> +
+> +	if (strcmp(match->compatible, "hpe,gxp-gpio-pl") == 0)
+
+No, use match data. Anyway this is open-coding of OF functions...
+
+> +		ret = gxp_gpio_pl_init(pdev);
+> +	else
+> +		ret = gxp_gpio_init(pdev);
+> +
+> +	return ret;
+
+Best regards,
+Krzysztof
+
