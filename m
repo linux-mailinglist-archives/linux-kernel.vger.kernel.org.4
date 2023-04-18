@@ -2,170 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3C96E6DC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 22:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7256E6DC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbjDRU5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 16:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
+        id S232690AbjDRVAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjDRU5M (ORCPT
+        with ESMTP id S229838AbjDRVAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 16:57:12 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DC5E53
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:57:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681851430; x=1713387430;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=6o2vi1uZ+AQ31rMsv8XiqCfgK8Yjqe2N0xhHfnlSPak=;
-  b=CVQDwpPhPIiK6VMhiVQLsnQhV1+LEMUJWMsVtnYxwgnjAIxdTeGiymRJ
-   99wsFihP531Xp6XuxqWFo+7ZS1G9lBNleLxlsFVyhMendtiKIFi1TA2yQ
-   1fWlbwFXLohgQTkfVOj+ZJWpOs2HlkNo1X8RGMdTM4UWhqin/B/fzJuVj
-   B6OcIjGoFzcebQHL86PwITPcbjHr4cs+O00eKIs+kCOqB/i6ZFfSaeKJ1
-   DJupUEtAQyPeBsgGLnG1igwg0OJwsshQA/NKBEwD/8PwHlP8OcFr4W7Qu
-   0oM/UUMCngGZPqX9IwNI3mRfkeWNhU37uISA28pfC2Hgoaaw8E7OBrzcM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="324903005"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="324903005"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 13:57:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="755831890"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="755831890"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 18 Apr 2023 13:57:09 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1posNw-000e2T-0v;
-        Tue, 18 Apr 2023 20:57:08 +0000
-Date:   Wed, 19 Apr 2023 04:56:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:core/entry] BUILD SUCCESS
- 8c8fa605f7b8b6df3e6fb280a74cff8d7374a7b7
-Message-ID: <643f03fb.zbvhtaKCl64yL+Yy%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 18 Apr 2023 17:00:20 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C744940FA;
+        Tue, 18 Apr 2023 14:00:17 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33IKxvUv027084;
+        Tue, 18 Apr 2023 15:59:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681851597;
+        bh=l+g/rrVq/gexW1MWXpawC7favKvdCG3qnBu/DVzf5vw=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=ilAQ52XaWO7kl8gbzfujSGsgaUovOS9czXPHtyb1tfLfm9gGfjO3T0rv2AHdGNNVi
+         8jOj+uOXl3lbCORlUSiDLi22pMpF823aD7qULmSidInGxrJGX/xLBa7CmGDoDht7rJ
+         AdtQko4dLMhcdvRwVdQxN6VY15Rimgq9pWv9oMBQ=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33IKxvlj087223
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 18 Apr 2023 15:59:57 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 18
+ Apr 2023 15:59:57 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 18 Apr 2023 15:59:57 -0500
+Received: from [128.247.81.102] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33IKxvWe100302;
+        Tue, 18 Apr 2023 15:59:57 -0500
+Message-ID: <5ece3561-4690-a721-aa83-adf80d0be9f5@ti.com>
+Date:   Tue, 18 Apr 2023 15:59:57 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH 5/5] can: m_can: Add hrtimer to generate software
+ interrupt
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Davis <afd@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Schuyler Patton <spatton@ti.com>
+References: <20230413223051.24455-1-jm@ti.com>
+ <20230413223051.24455-6-jm@ti.com>
+ <20230414-bounding-guidance-262dffacd05c-mkl@pengutronix.de>
+ <4a6c66eb-2ccf-fc42-a6fc-9f411861fcef@hartkopp.net>
+ <20230416-failing-washbasin-e4fa5caea267-mkl@pengutronix.de>
+ <f58e8dce-898c-8797-5293-1001c9a75381@hartkopp.net>
+ <20230417-taking-relieving-f2c8532864c0-mkl@pengutronix.de>
+ <25806ec7-64c5-3421-aea1-c0d431e3f27f@hartkopp.net>
+ <20230417-unsafe-porridge-0b712d137530-mkl@pengutronix.de>
+From:   "Mendez, Judith" <jm@ti.com>
+In-Reply-To: <20230417-unsafe-porridge-0b712d137530-mkl@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/entry
-branch HEAD: 8c8fa605f7b8b6df3e6fb280a74cff8d7374a7b7  selftest, ptrace: Add selftest for syscall user dispatch config api
+Hello Marc,
 
-elapsed time: 720m
+On 4/17/2023 2:26 PM, Marc Kleine-Budde wrote:
+> On 17.04.2023 19:34:03, Oliver Hartkopp wrote:
+>> On 17.04.23 09:26, Marc Kleine-Budde wrote:
+>>> On 16.04.2023 21:46:40, Oliver Hartkopp wrote:
+>>>>> I had the 5ms that are actually used in the code in mind. But this is a
+>>>>> good calculation.
+>>>>
+>>>> @Judith: Can you acknowledge the value calculation?
+>>>>
+>>>>>> The "shortest" 11 bit CAN ID CAN frame is a Classical CAN frame with DLC = 0
+>>>>>> and 1 Mbit/s (arbitration) bitrate. This should be 48 bits @1Mbit => ~50
+>>>>>> usecs
+>>>>>>
+>>>>>> So it should be something about
+>>>>>>
+>>>>>>        50 usecs * (FIFO queue len - 2)
+>>>>>
+>>>>> Where does the "2" come from?
+>>>>
+>>>> I thought about handling the FIFO earlier than it gets completely "full".
+>>>>
+>>>> The fetching routine would need some time too and the hrtimer could also
+>>>> jitter to some extend.
+>>>
+>>> I was assuming something like this.
+>>>
+>>> I would argue that the polling time should be:
+>>>
+>>>       50 µs * FIFO length - IRQ overhead.
+>>>
+>>> The max IRQ overhead depends on your SoC and kernel configuration.
+>>
+>> I just tried an educated guess to prevent the FIFO to be filled up
+>> completely. How can you estimate the "IRQ overhead"? And how do you catch
+>> the CAN frames that are received while the IRQ is handled?
+> 
+> We're talking about polling, better call it "overhead" or "latency from
+> timer expiration until FIFO has at least one frame room". This value
+> depends on your system.
+> 
+> It depends on many, many factors, SoC, Kernel configuration (preempt RT,
+> powersaving, frequency scaling, system load. In your example it's 100
+> µs. I wanted to say there's an overhead (or latency) and we need enough
+> space in the FIFO, to cover it.
+> 
 
-configs tested: 89
-configs skipped: 11
+I am not sure how to estimate IRQ overhead, but FIFO length should be 64
+elements.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+50 us * 62 is about 3.1 ms and we are using 1 ms timer polling interval.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r001-20230417   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r005-20230416   clang
-arm                                 defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r011-20230418   gcc  
-csky                                defconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230417   gcc  
-i386                 randconfig-a002-20230417   gcc  
-i386                 randconfig-a003-20230417   gcc  
-i386                 randconfig-a004-20230417   gcc  
-i386                 randconfig-a005-20230417   gcc  
-i386                 randconfig-a006-20230417   gcc  
-i386                 randconfig-a011-20230417   clang
-i386                 randconfig-a012-20230417   clang
-i386                 randconfig-a013-20230417   clang
-i386                 randconfig-a014-20230417   clang
-i386                 randconfig-a015-20230417   clang
-i386                 randconfig-a016-20230417   clang
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r001-20230417   gcc  
-ia64         buildonly-randconfig-r005-20230418   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r002-20230416   gcc  
-ia64                 randconfig-r005-20230418   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r006-20230416   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r016-20230418   gcc  
-microblaze   buildonly-randconfig-r004-20230418   gcc  
-microblaze   buildonly-randconfig-r006-20230418   gcc  
-microblaze           randconfig-r001-20230416   gcc  
-microblaze           randconfig-r014-20230418   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2        buildonly-randconfig-r001-20230416   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r006-20230418   gcc  
-openrisc             randconfig-r006-20230416   gcc  
-parisc       buildonly-randconfig-r003-20230416   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r004-20230418   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r003-20230417   clang
-powerpc      buildonly-randconfig-r004-20230417   clang
-powerpc              randconfig-r002-20230418   clang
-powerpc              randconfig-r012-20230418   gcc  
-powerpc              randconfig-r013-20230418   gcc  
-powerpc              randconfig-r015-20230418   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r001-20230418   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r003-20230417   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r004-20230416   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230418   clang
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r002-20230416   gcc  
-sh           buildonly-randconfig-r005-20230417   gcc  
-sh                   randconfig-r001-20230418   gcc  
-sparc                               defconfig   gcc  
-sparc64      buildonly-randconfig-r002-20230417   gcc  
-sparc64      buildonly-randconfig-r003-20230418   gcc  
-sparc64              randconfig-r004-20230417   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                               rhel-8.3   gcc  
+Running a few benchmarks showed that using 0.5 ms timer polling interval 
+starts to take a toll on CPU load, that is why I chose 1 ms polling 
+interval.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+regards,
+Judith
