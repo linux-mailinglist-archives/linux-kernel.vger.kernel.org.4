@@ -2,113 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BE26E6DF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B58DC6E6DF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 23:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbjDRVS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 17:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
+        id S232172AbjDRVUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 17:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbjDRVSz (ORCPT
+        with ESMTP id S231171AbjDRVUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:18:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651DB40C7
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:18:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 017B662CDC
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 21:18:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 386F0C433D2;
-        Tue, 18 Apr 2023 21:18:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1681852733;
-        bh=ZHLorItxEGVfcY4Q/q4ok59ZeKbJLntqIuzGqWM4Oz8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZJrxSsXnTHQnjbHNk2yl/WgKDDGRDFLxcfVRgtiByjNC7xDO1v8qYMnVfOxxpJRP3
-         wuodcAfVx0XI2XLHxp1xTZC98IQfMW0lLEy/j3GmEHQ3nuM7TuUidWfAeQCVu27G0p
-         H7h/mRHFd4XMxzmSjglYoxgDpXj6J0li/x7ECAHk=
-Date:   Tue, 18 Apr 2023 14:18:52 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Joe Mario <jmario@redhat.com>,
-        Barry Marson <bmarson@redhat.com>,
-        Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH] mm/mmap: Map MAP_STACK to VM_STACK
-Message-Id: <20230418141852.75e551e57e97f4b522957c5c@linux-foundation.org>
-In-Reply-To: <20230418210230.3495922-1-longman@redhat.com>
-References: <20230418210230.3495922-1-longman@redhat.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 18 Apr 2023 17:20:11 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0834903B
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 14:20:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3Km/vnh/sBC4DQYO69Q00ljyDReo/R1BeGSdOPULOKw=; b=1L14NJ+lXlSRxbmu5FayimPVss
+        bavZ6XsrainBIv/5bbMp3rBuUpTS3nQl+23Ul819ig5kO7uZAjLFcxDNOL0tNvLePvbwUuCG3pPTR
+        4b1IIK8sejumG/QXJ1HuwBqTUUV/NaxX/YGGbqDkbk0zRph/UfJ6IlC8kk9s4IZE5fTfrdlTponOK
+        qOX7dWJyeft5qvMgd1rlX2Npl/Y0nyX4gWgL2NZo56NopoNeGgdfOVJQzHFpwbx/dFYbYGuh+tp7Z
+        FbccCeJ2adPHUoMzGKF4bY/db598SuCcpN0MslTePYUdyT+VFw/8RbXQEQJiKsWikTVsJ89d/IDLS
+        h1pGV9KQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1posk5-003MpZ-21;
+        Tue, 18 Apr 2023 21:20:01 +0000
+Date:   Tue, 18 Apr 2023 14:20:01 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, brauner@kernel.org,
+        linux-mm@kvack.org, p.raghav@samsung.com, da.gomez@samsung.com,
+        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
+        keescook@chromium.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v2 5/6] shmem: update documentation
+Message-ID: <ZD8JgfphE+HWCGve@bombadil.infradead.org>
+References: <20230309230545.2930737-1-mcgrof@kernel.org>
+ <20230309230545.2930737-6-mcgrof@kernel.org>
+ <a4afef5c-27e4-5e67-9771-374132db61f8@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a4afef5c-27e4-5e67-9771-374132db61f8@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Apr 2023 17:02:30 -0400 Waiman Long <longman@redhat.com> wrote:
-
-> One of the flags of mmap(2) is MAP_STACK to request a memory segment
-> suitable for a process or thread stack. The kernel currently ignores
-> this flags. Glibc uses MAP_STACK when mmapping a thread stack. However,
-> selinux has an execstack check in selinux_file_mprotect() which disallows
-> a stack VMA to be made executable.
+On Mon, Apr 17, 2023 at 10:29:59PM -0700, Hugh Dickins wrote:
+> On Thu, 9 Mar 2023, Luis Chamberlain wrote:
 > 
-> Since MAP_STACK is a noop, it is possible for a stack VMA to be merged
-> with an adjacent anonymous VMA. With that merging, using mprotect(2)
-> to change a part of the merged anonymous VMA to make it executable may
-> fail. This can lead to sporadic failure of applications that need to
-> make those changes.
-
-"Sporadic failure of applications" sounds quite serious.  Can you
-provide more details?
-
-Did you consider a -stable backport?  I'm unable to judge, because the
-description of the userspace effects is so thin,
-
-> One possible fix is to make sure that a stack VMA will not be merged
-> with a non-stack anonymous VMA. That requires a vm flag that can be
-> used to distinguish a stack VMA from a regular anonymous VMA. One
-> can add a new dummy vm flag for that purpose. However, there is only
-> 1 bit left in the lower 32 bits of vm_flags. Another alternative is
-> to use an existing vm flag. VM_STACK (= VM_GROWSDOWN for most arches)
-> can certainly be used for this purpose. The downside is that it is a
-> slight change in existing behavior.
+> > Update the docs to reflect a bit better why some folks prefer tmpfs
+> > over ramfs and clarify a bit more about the difference between brd
+> > ramdisks.
+> > 
+> > While at it, add THP docs for tmpfs, both the mount options and the
+> > sysfs file.
 > 
-> Making a stack VMA growable by default certainly fits the need of a
-> process or thread stack. This patch now maps MAP_STACK to VM_STACK to
-> prevent unwanted merging with adjacent non-stack VMAs and make the VMA
-> more suitable for being used as a stack.
+> Okay: the original canonical reference for THP options on tmpfs has
+> been Documentation/admin-guide/mm/transhuge.rst.  You're right that
+> they would be helpful here too: IIRC (but I might well be confusing
+> with our Google tree) we used to have them documented in both places,
+> but grew tired of keeping the two in synch.  You're volunteering to
+> do so! so please check now that they tell the same story.
+
+Hehe. Sure, we should just make one point to the other. Which one should
+be the authoritive source?
+
+> But nowadays, "man 5 tmpfs" is much more important (and that might
+> give you a hint for what needs to be done after this series goes into
+> 6.4-rc - and I wonder if there are tmpfs manpage updates needed from
+> Christian for idmapped too? or already taken care of?).
+
+Sure, what's the man page git tree to use? I can do that once these
+documents are settled as well. I'll send fixes.
+
+> There's a little detail we do need you to remove, indicated below.
 > 
-> ...
->
-> --- a/include/linux/mman.h
-> +++ b/include/linux/mman.h
-> @@ -152,6 +152,7 @@ calc_vm_flag_bits(unsigned long flags)
->  	return _calc_vm_trans(flags, MAP_GROWSDOWN,  VM_GROWSDOWN ) |
->  	       _calc_vm_trans(flags, MAP_LOCKED,     VM_LOCKED    ) |
->  	       _calc_vm_trans(flags, MAP_SYNC,	     VM_SYNC      ) |
-> +	       _calc_vm_trans(flags, MAP_STACK,	     VM_STACK     ) |
->  	       arch_calc_vm_flag_bits(flags);
->  }
+> > +======  ============================================================
+> > +huge=0  never: disables huge pages for the mount
+> > +huge=1  always: enables huge pages for the mount
+> > +huge=2  within_size: only allocate huge pages if the page will be
+> > +        fully within i_size, also respect fadvise()/madvise() hints.
+> > +huge=3  advise: only allocate huge pages if requested with
+> > +        fadvise()/madvise()
+> 
+> You're taking the source too literally there.  Minor point is that there
+> is no fadvise() for this, to date anyway.  Major point is: have you tried
+> mounting tmpfs with huge=0 etc?  I did propose "huge=0" and "huge=1" years
+> ago, but those "never" went in, it's "always" been the named options.
+> Please remove those misleading numbers, it's "huge=never" etc.
 
-The mmap(2) manpage says
+Will do.
 
-  This flag is currently a no-op on Linux.  However, by employing
-  this flag, applications can ensure that they transparently ob- tain
-  support if the flag is implemented in the future.  Thus, it is used
-  in the glibc threading implementation to allow for the fact that some
-  architectures may (later) require special treat- ment for stack
-  allocations.  A further reason to employ this flag is portability:
-  MAP_STACK exists (and has an effect) on some other systems (e.g.,
-  some of the BSDs).
+> > +==  ============================================================
+> > +-1  deny: disables huge on shm_mnt and all mounts, for
+> > +    emergency use
+> > +-2  force: enables huge on shm_mnt and all mounts, w/o needing
+> > +    option, for testing
+> 
+> Likewise here, please delete the invalid "-1" and "-2" notations,
+> -1 and -2 are just #defines for use in the kernel source.
 
-so please propose an update for this?
+ok!
+
+> And the description above is not quite accurate: it is very hard to
+> describe shmem_enabled, partly because it combines two different things.
+> It's partly the "huge=" mount option for any "internal mount", those
+> things like SysV SHM and memfd and i915 and shared-anonymous: the shmem
+> which has no user-visible mount to hold the option.  But also these
+> "deny" and "force" overrides affecting *all* internal and visible mounts.
+
+I see thanks.
+
+  Luis
