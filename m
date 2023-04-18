@@ -2,157 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB12D6E5F79
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E14886E5F55
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbjDRLLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 07:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
+        id S231226AbjDRLHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 07:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjDRLKz (ORCPT
+        with ESMTP id S231209AbjDRLHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 07:10:55 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0378690;
-        Tue, 18 Apr 2023 04:10:31 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id xd13so38215535ejb.4;
-        Tue, 18 Apr 2023 04:10:31 -0700 (PDT)
+        Tue, 18 Apr 2023 07:07:23 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E3F8690
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:07:17 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id fw30so19327708ejc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:07:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681816229; x=1684408229;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Uj87T+hG7LXIYMqH9ajwVI/kHwGEYduJ3KruAcTVFbY=;
-        b=KdRrHgyS6gjueA0u8yVZOCP0GyvZT6zqYwmIirNo6dJ1bVal0AoDargg1S+op4S4XB
-         aGjWZiAoVvUrhgWbrzfWXJG1AXq1FX7duI3VqWVvMSnmQ6orDSQIrDTNQIjSRggPo0NU
-         DsHEmRR1yuUGWUqgA0XychhS6yx3JZca22wKDsz1KkapBDhGZ+73nZfrGF2/RJVn14Zu
-         lLGLaqOpO4Xi5hxpGInTLlpL7jkpMVP7d4ZOHxXhbBMaMcx1DJpY9Q5yikFbj9g27WnZ
-         rI6fvPrVb20j2o8aKPAXZgYKTFhoB43Zjk+UCDkMmYSdJlRo83mXiAVWc6YPxdyKpokh
-         F41w==
+        d=dectris.com; s=google; t=1681816036; x=1684408036;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YbMGtsMl4LpEBDeV5WLUhPfH8r/0zxNhz5yfYBfk980=;
+        b=cwpsX1sZICDQqgYMD9UDCYwC4hVap3RpdtRCdrJvDs1rxJ+1QvV22hoQpr7Q6GV5QX
+         ABxPlXFqSpoPY4lYYBxsayodX8bymIE+Ga+pjI9ZPJohoNpAy5AJ6NxGGRRDxHxcjFYK
+         lDGJwKBkcoXQl+dQAEa6c++cqj6Z0VCBUfzLs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681816229; x=1684408229;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Uj87T+hG7LXIYMqH9ajwVI/kHwGEYduJ3KruAcTVFbY=;
-        b=KpPpQxVBKeGsYEhbBfVgyzqNx1JUfRG1FV2JTnLo5D3X01tVaCDfLuzGvfhA34DP5/
-         qAlnj875hdvW4E4odRI4H6OKX0aHsL58jc+gMSI9RlzQvjGBVnZm9qmwqh0KdSuYuruG
-         B35r3bggvw/h3LEN3mcHi9oBTrM36C/ySHZKstN4/SDx6gXDPbCMlcc9DMV2uNFeduw9
-         mz904CxvyEmLuf36aMhP7AkxxXBb97wO8c57hbCM23oL0vKSDF+koI8ibY/sowZl1Rkg
-         /1wOs4vhp879BighlY6FVvx2fx7Udz6S6465TL19kqo5MC8LI31mNjCH597FWVT8KlU0
-         TPgQ==
-X-Gm-Message-State: AAQBX9c9S46uw0yU07pdBakC7du58XUAjZjbUGnRvlOvmZkdIxzsLRTW
-        M4FcpEnQQ0eno3jyiLnJAyFp5NrifgyPjSwQ
-X-Google-Smtp-Source: AKy350bXbwagTXdOA606HRqRvyKKhdNP8U0+PTGkWU4hjNNAesTtpKJMMkFzJ5cU6Rx+2nwcElEzGg==
-X-Received: by 2002:a17:906:2bc7:b0:94e:ef09:544c with SMTP id n7-20020a1709062bc700b0094eef09544cmr9665939ejg.10.1681816229387;
-        Tue, 18 Apr 2023 04:10:29 -0700 (PDT)
-Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id n26-20020a170906379a00b0094eef800850sm5954554ejc.204.2023.04.18.04.10.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 04:10:29 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Tue, 18 Apr 2023 13:10:05 +0200
-Subject: [PATCH v5 6/6] mfd: tps6586x: register restart handler
+        d=1e100.net; s=20221208; t=1681816036; x=1684408036;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YbMGtsMl4LpEBDeV5WLUhPfH8r/0zxNhz5yfYBfk980=;
+        b=cGUJDfThvFPiujdLXcOYtRJovwDrQ5Dm8qzHw8V5ojKRWDbKk1PCU430BIizTPS1M3
+         Q1j3+VK4SkguvCW2MfinULOoNodSHtU+O6TG2Mtv2kmK6XVrvbspTIgCxWERYGxSof9A
+         p9sRZ2ED3z6zQvKHNArCQ/u4ZrNba7izIDY0nPrb9in5SeY3+BbGlf1V859n5uunxYYh
+         wn/Vy2Hf/mviVfqTNu8guVPS3jjTriL6revg84/9xGu6kcAIyRw+ZL9PScGynFx5S5Ab
+         ofjThs82+mBrE8NRziDk/URqR7o017d0z6sIiofHSEbshe9SDdPhh4U+EE1X00Gdt0B1
+         N0dQ==
+X-Gm-Message-State: AAQBX9cBTDE/V3lX05NcECGUrybHi+hNLCwOjGko1CB7fhxXlRlHgtcd
+        PFAYGHGKCgagi6y6rhpoTz03WgkiMxSPK8sXp6mbW6fXWjQWqphESzrzDw==
+X-Google-Smtp-Source: AKy350bLdPifKZWFxQXyzOxtWqmD1ybL9R/DMpY4vTvy+NCfkiJ6z8iL8CLw6GFEgVLibKq1GL/MQw5qb1V0e8pFm6E=
+X-Received: by 2002:a17:906:af1a:b0:8b8:aef3:f2a9 with SMTP id
+ lx26-20020a170906af1a00b008b8aef3f2a9mr4546919ejb.0.1681816036230; Tue, 18
+ Apr 2023 04:07:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-tegra-pmic-reboot-v5-6-ab090e03284d@skidata.com>
-References: <20230327-tegra-pmic-reboot-v5-0-ab090e03284d@skidata.com>
-In-Reply-To: <20230327-tegra-pmic-reboot-v5-0-ab090e03284d@skidata.com>
-To:     Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
-        rafael.j.wysocki@intel.com
-Cc:     dmitry.osipenko@collabora.com, peterz@infradead.org,
-        jonathanh@nvidia.com, richard.leitner@linux.dev,
-        treding@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230406130205.49996-1-kal.conley@dectris.com>
+ <20230406130205.49996-2-kal.conley@dectris.com> <87sfdckgaa.fsf@toke.dk>
+ <ZDBEng1KEEG5lOA6@boxer> <CAHApi-nuD7iSY7fGPeMYiNf8YX3dG27tJx1=n8b_i=ZQdZGZbw@mail.gmail.com>
+ <875ya12phx.fsf@toke.dk> <CAHApi-=rMHt7uR8Sw1Vw+MHDrtkyt=jSvTvwz8XKV7SEb01CmQ@mail.gmail.com>
+ <87ile011kz.fsf@toke.dk> <CAHApi-=ODe-WtJ=m6bycQhKoQxb+kk2Yk9Fx5SgBsWUuWT_u-A@mail.gmail.com>
+ <874jpdwl45.fsf@toke.dk>
+In-Reply-To: <874jpdwl45.fsf@toke.dk>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Tue, 18 Apr 2023 13:12:00 +0200
+Message-ID: <CAHApi-kcaMRPj4mEPs87_4Z6iO5qEpzOOcbVza7vxURqCtpz=Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
+> >> In addition, presumably when using this mode, the other XDP actions
+> >> (XDP_PASS, XDP_REDIRECT to other targets) would stop working unless we
+> >> add special handling for that in the kernel? We'll definitely need to
+> >> handle that somehow...
+> >
+> > I am not familiar with all the details here. Do you know a reason why
+> > these cases would stop working / why special handling would be needed?
+> > For example, if I have a UMEM that uses hugepages and XDP_PASS is
+> > returned, then the data is just copied into an SKB right? SKBs can
+> > also be created directly from hugepages AFAIK. So I don't understand
+> > what the issue would be. Can someone explain this concern?
+>
+> Well, I was asking :) It may well be that the SKB path just works; did
+> you test this? Pretty sure XDP_REDIRECT to another device won't, though?
+>
 
-There are a couple of boards which use a tps6586x as
-"ti,system-power-controller", e.g. the tegra20-tamonten.dtsi.
-For these, the only registered restart handler is the warm reboot via
-tegra's PMC. As the bootloader of the tegra20 requires the VDE, it must
-be ensured that VDE is enabled (which is the case after a cold reboot).
-For the "normal reboot", this is basically the case since 8f0c714ad9be.
-However, this workaround is not executed in case of an emergency restart.
-In case of an emergency restart, the system now simply hangs in the
-bootloader, as VDE is not enabled (because it is not used).
+I was also asking :-)
 
-The TPS658629-Q1 (unfortunately the only TPS6586x with public data sheet)
-provides a SOFT RST bit in the SUPPLYENE reg to request a (cold) reboot,
-which takes at least 10ms (as the data sheet states).
-This avoids the hang-up.
+I tested that the SKB path is usable today with this patch.
+Specifically, sending and receiving large jumbo packets with AF_XDP
+and that a non-multi-buffer XDP program could access the whole packet.
+I have not specifically tested XDP_REDIRECT to another device or
+anything with ZC since that is not possible without driver support.
 
-Tested on a TPS658640.
-
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
----
- drivers/mfd/tps6586x.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-diff --git a/drivers/mfd/tps6586x.c b/drivers/mfd/tps6586x.c
-index 226e856e34e0..f7665b368071 100644
---- a/drivers/mfd/tps6586x.c
-+++ b/drivers/mfd/tps6586x.c
-@@ -30,6 +30,7 @@
- #include <linux/mfd/tps6586x.h>
- 
- #define TPS6586X_SUPPLYENE	0x14
-+#define SOFT_RST_BIT		BIT(0)
- #define EXITSLREQ_BIT		BIT(1)
- #define SLEEP_MODE_BIT		BIT(3)
- 
-@@ -475,6 +476,24 @@ static int tps6586x_power_off_handler(struct sys_off_data *data)
- 	return notifier_from_errno(-ETIME);
- }
- 
-+static int tps6586x_restart_handler(struct sys_off_data *data)
-+{
-+	int ret;
-+
-+	/* tps6586x only provides a hard/cold reboot, skip others. */
-+	if (data->mode != REBOOT_UNDEFINED && data->mode != REBOOT_COLD &&
-+	    data->mode != REBOOT_HARD)
-+		return NOTIFY_DONE;
-+
-+	/* bring pmic into HARD REBOOT state. this takes at least 10ms. */
-+	ret = tps6586x_set_bits(data->dev, TPS6586X_SUPPLYENE, SOFT_RST_BIT);
-+	if (ret)
-+		return notifier_from_errno(ret);
-+
-+	mdelay(20);
-+	return notifier_from_errno(-ETIME);
-+}
-+
- static void tps6586x_print_version(struct i2c_client *client, int version)
- {
- 	const char *name;
-@@ -575,6 +594,13 @@ static int tps6586x_i2c_probe(struct i2c_client *client)
- 			dev_err(&client->dev, "register power off handler failed: %d\n", ret);
- 			goto err_add_devs;
- 		}
-+
-+		ret = devm_register_restart_handler(&client->dev, &tps6586x_restart_handler,
-+						    NULL);
-+		if (ret) {
-+			dev_err(&client->dev, "register restart handler failed: %d\n", ret);
-+			goto err_add_devs;
-+		}
- 	}
- 
- 	return 0;
-
--- 
-2.34.1
-
+My feeling is, there wouldn't be non-trivial issues here since this
+patchset changes nothing except allowing the maximum chunk size to be
+larger. The driver either supports larger MTUs with XDP enabled or it
+doesn't. If it doesn't, the frames are dropped anyway. Also, chunk
+size mismatches between two XSKs (e.g. with XDP_REDIRECT) would be
+something supported or not supported irrespective of this patchset.
