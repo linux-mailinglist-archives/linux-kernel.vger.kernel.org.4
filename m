@@ -2,66 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE7F6E6D02
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 21:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51A26E6D08
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 21:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbjDRTjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 15:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
+        id S232600AbjDRTl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 15:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbjDRTjD (ORCPT
+        with ESMTP id S231174AbjDRTl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 15:39:03 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E30C659B
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:39:02 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id u3so24090744ejj.12
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 12:39:01 -0700 (PDT)
+        Tue, 18 Apr 2023 15:41:27 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C34659B;
+        Tue, 18 Apr 2023 12:41:26 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id oo30so15825522qvb.12;
+        Tue, 18 Apr 2023 12:41:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681846740; x=1684438740;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M43/kQ95jci8zCNXbRDlZaa+f564NQzoQoFhL3xI5y8=;
-        b=pIH5hDtJUCMANdD26eav3fmF9e2NRW3aA7SrCst1faFt4T67d/vYHEDI8OcRSHS95m
-         no/1cJtbc61bKakJ04Om444WoVyAXiBXcT4/g0rtZc0qB/YzMW3M+CIskDtWV66PPOe3
-         y9bGeAKljpE+tMajHR0pJ2mpGdcbuHvhavEZGzvztd8YgMgYnnjyTciINBtiGI7TZlFb
-         TfXf6BL/Uo0oQEgSCZvjPwL/DdeIsbB+h8f0AW11belWysyad2lIKzKT0SbpOmb8gx+R
-         Aw51P+TgktUy9IqZy0yyNt7uHorYMP8E7Au+Sad8C30joWNoRPqrLnNmIaphXNKUUC83
-         JBHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681846740; x=1684438740;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1681846885; x=1684438885;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M43/kQ95jci8zCNXbRDlZaa+f564NQzoQoFhL3xI5y8=;
-        b=dQWbe31G55BxmBMTcHijOH9c1UlszgVyWYOTDXPUM2Fs6FVuq8rAbRkgC039WsDD+A
-         S/S/VqzjlhPrwcy2Kyu7UzB6zg7HjQoRjTveicHftV0viUrVq97wHJLfM2XFYtxJxn9l
-         +03UPKHD2CbhKQJl2SeQBHwN2vQgs2px82tAm1jy32p8Jd/lFjzwSuklXFdU6WWZAtB+
-         kDEQRpWLbNFaOMiD3Y0aXcDDqOpnfQU6aZ8tN06EZuSU3qyIOsRieHajxzZRjjrU7PC6
-         Ihrnw6+GqTfOyEjaMXpClzH2Gur89P46NXp/Gj/fYokfUe3VQFkIZgTRgwWpe0aXHTzd
-         VH6g==
-X-Gm-Message-State: AAQBX9fMWO9C81rkphsLPRQqLDHDWTpFdwnC8OIzUR6ZmQ/s/2VXK1VT
-        R/yrpsHshQH53CvbUHknZBM=
-X-Google-Smtp-Source: AKy350Z66t4j3cWYJbwZcBzrZu6T5OwU7z94uUH8rnGbXX/oEWbUnK5HDTQ1AmK0KlfKuWySjnwWSg==
-X-Received: by 2002:a17:906:e2cd:b0:94a:6de2:ba9 with SMTP id gr13-20020a170906e2cd00b0094a6de20ba9mr11069629ejb.68.1681846740329;
-        Tue, 18 Apr 2023 12:39:00 -0700 (PDT)
-Received: from kernelhacking.kernelhacking.example.com (dslb-088-067-245-126.088.067.pools.vodafone-ip.de. [88.67.245.126])
-        by smtp.gmail.com with ESMTPSA id d9-20020a17090648c900b0094f4f2db7e0sm4343891ejt.143.2023.04.18.12.38.59
+        bh=Dqdkta1Zk1UqyIAXbk1/CAopdFNFnp9tf0jtsKEKX/U=;
+        b=k+BsMLjVgeY/JRtYXrnJI7vJ28yuIV8fhFcqK/kmJDiMB5YFSQbzH9svJL79M/gtvu
+         VkXtGsnxtx/EqNRIl8oeR6K/kcokITpfVeYv6D7/FX6vBT1SPZJFAjj6YSU5U1EHyLM/
+         brSazLGWCynYtMhGzcI9jBakr2lDu7uVETrKXbQat9FsDly4XNz+9FFrGEZ5B868rTpN
+         Jyb9BpH/eHjDgs7P9638iPyZAgf9P7phn0RWP4cTLoJg3WbB9XYltFDYNufzNi6l8jhJ
+         kM7LEU7ZG+svskLUAyWp8q0RtlTvZkPwFsMWHwil8kjM/j/WegL9cCFlceZl/xOq76bs
+         NLBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681846885; x=1684438885;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Dqdkta1Zk1UqyIAXbk1/CAopdFNFnp9tf0jtsKEKX/U=;
+        b=GPLt6N4rMdAMQerU/3omvHZgVSzr8A4JzRPh9KGDckM5G5b+3FjtwtfYVCbHN4uhma
+         qa1sUDRGOFU6tPMmtfEJol3Kk00kHCXF5E054tFJFlNsX6wqA3LMVeQHK1sEiZ6+XbWO
+         ak1+tZ8iewyeqiMnX/oTkBq1vwbjHLE1QWQKd9PNvuS2mFEp1HLhf4/dDI4/8pufdZ4d
+         mTXEmudk9m/97g42nCUN9Qq1XNcpni05ev0bBUXaQO/bGlXxw36qACEno3tCKYRK3z1j
+         Bim7DTjlSZ05sAdfNqHjFq8SYNZe7pLlppDFAYS6VCPxhY2sD1uOJd/zUfeDbPlDblhp
+         xgIw==
+X-Gm-Message-State: AAQBX9cuG1nyhUXDUO3Jd5r5+xevoff4YcD33dqAFyBdtC9F3TIGYE5r
+        n0GP+SjpJY81KPUmGq3xkfo=
+X-Google-Smtp-Source: AKy350Y3WRyEQO9TtYe/YYFXZqAOBuHoJeYs1uPJYBRJu7+rvTUnFvSGRVH65/YcG6Zgt2Qr5fL+Ag==
+X-Received: by 2002:a05:6214:1c4e:b0:5e3:d150:3168 with SMTP id if14-20020a0562141c4e00b005e3d1503168mr25374707qvb.18.1681846885409;
+        Tue, 18 Apr 2023 12:41:25 -0700 (PDT)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id w14-20020a0cfc4e000000b005ef6ba1f4afsm2179222qvp.134.2023.04.18.12.41.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 12:39:00 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 21:38:57 +0200
-From:   Luke Koch <lu.ale.koch@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     error27@gmail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] staging: wlan-ng: replace rate macros
-Message-ID: <ZD7x0VWFedQSvA2P@kernelhacking.kernelhacking.example.com>
-References: <ZD6OqBOp1ezQDgMu@kernelhacking.kernelhacking.example.com>
- <2023041809-wildfowl-winter-be08@gregkh>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023041809-wildfowl-winter-be08@gregkh>
+        Tue, 18 Apr 2023 12:41:24 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 15:41:24 -0400
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     Breno Leitao <leitao@debian.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        kuba@kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        io-uring@vger.kernel.org, netdev@vger.kernel.org, kuba@kernel.org,
+        asml.silence@gmail.com, leit@fb.com, edumazet@google.com,
+        pabeni@redhat.com, davem@davemloft.net, dccp@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+        matthieu.baerts@tessares.net, marcelo.leitner@gmail.com
+Message-ID: <643ef2643f3ce_352b2f2945d@willemb.c.googlers.com.notmuch>
+In-Reply-To: <ZD6Zw1GAZR28++3v@gmail.com>
+References: <643573df81e20_11117c2942@willemb.c.googlers.com.notmuch>
+ <036c80e5-4844-5c84-304c-7e553fe17a9b@kernel.dk>
+ <64357608c396d_113ebd294ba@willemb.c.googlers.com.notmuch>
+ <19c69021-dce3-1a4a-00eb-920d1f404cfc@kernel.dk>
+ <64357bb97fb19_114b22294c4@willemb.c.googlers.com.notmuch>
+ <20cb4641-c765-e5ef-41cb-252be7721ce5@kernel.dk>
+ <ZDa32u9RNI4NQ7Ko@gmail.com>
+ <6436c01979c9b_163b6294b4@willemb.c.googlers.com.notmuch>
+ <ZDdGl/JGDoRDL8ja@gmail.com>
+ <6438109fe8733_13361929472@willemb.c.googlers.com.notmuch>
+ <ZD6Zw1GAZR28++3v@gmail.com>
+Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,29 +90,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 03:04:06PM +0200, Greg KH wrote:
-> This patch implies that these structures are set but never actually read
-> from, so why are they present at all?  Is this a structure that is on
-> the wire/air or used somewhere else as an api to hardware?
+Breno Leitao wrote:
+> On Thu, Apr 13, 2023 at 10:24:31AM -0400, Willem de Bruijn wrote:
+> > > How to handle these contradictory behaviour ahead of time (at callee
+> > > time, where the buffers will be prepared)?
+> > 
+> > Ah you found a counter-example to the simple pattern of put_user.
+> > 
+> > The answer perhaps depends on how many such counter-examples you
+> > encounter in the list you gave. If this is the only one, exceptions
+> > in the wrapper are reasonable. Not if there are many.
+> 
+> 
+> Hello Williem,
+> 
+> I spend sometime dealing with it, and the best way for me to figure out
+> how much work this is, was implementing a PoC. You can find a basic PoC
+> in the link below. It is not 100% complete (still need to convert 4
+> simple ioctls), but, it deals with the most complicated cases. The
+> missing parts are straighforward if we are OK with this approach.
+> 
+> 	https://github.com/leitao/linux/commits/ioctl_refactor
+> 
+> Details
+> =======
+> 
+> 1)  Change the ioctl callback to use kernel memory arguments. This
+> changes a lot of files but most of them are trivial. This is the new
+> ioctl callback:
+> 
+> struct proto {
+> 
+>         int                     (*ioctl)(struct sock *sk, int cmd,
+> -                                        unsigned long arg);
+> +                                        int *karg);
+> 
+> 	You can see the full changeset in the following commit (which is
+> 	the last in the tree above)
+> 	https://github.com/leitao/linux/commit/ad78da14601b078c4b6a9f63a86032467ab59bf7
+> 
+> 2) Create a wrapper (sock_skprot_ioctl()) that should be called instead
+> of sk->sk_prot->ioctl(). For every exception, calls a specific function
+> for the exception (basically ipmr_ioctl and ipmr_ioctl) (see more on 3)
+> 
+> 	This is the commit https://github.com/leitao/linux/commit/511592e549c39ef0de19efa2eb4382cac5786227
+> 
+> 3) There are two exceptions, they are ip{6}mr_ioctl() and pn_ioctl().
+> ip{6}mr is the hardest one, and I implemented the exception flow for it.
+> 
+> 	You could find ipmr changes here:
+> 	https://github.com/leitao/linux/commit/659a76dc0547ab2170023f31e20115520ebe33d9
+> 
+> Is this what you had in mind?
+> 
+> Thank you!
 
-I never looked that far as I was naively trying to just fix the
-checkpatch warning. They seem to be part of MAC frames coming from the
-hardware.
+Thanks for the series, Breno. Yes, this looks very much what I hoped for.
 
-> I tried to unwind things in the driver, but couldn't figure it out, what
-> happens if you just delete these fields, does the driver still work
-> properly?
+The series shows two cases of ioctls: getters that return an int, and
+combined getter/setters that take a struct of a certain size and
+return the exact same.
 
-It compiles without issue when deleting these structs, but almost
-certainly breaks the driver since it changes what the resulting message
-looks like in memory. I assume the caller of the function uses the message for
-something - otherwise setting all the message parameters wouldn't make any sense
-at all - and changing the message like this would cause major problems.
+I would deduplicate the four ipmr/ip6mr cases that constitute the second
+type, by having a single helper for this type. sock_skprot_ioctl_struct,
+which takes an argument for the struct size to copy in/out.
 
-The structs seem necessary, but changing how they are accessed to using
-arrays shouldn't introduce any issues as resulting values as well as addresses
-in relation to the message struct will be unchanged.
+Did this series cover all proto ioctls, or is this still a subset just
+for demonstration purposes -- and might there still be other types
+lurking elsewhere?
 
-Best regards,
+If this is all, this looks like a reasonable amount of code churn to me.
 
-Luke Koch
+Three small points
+
+* please keep the __user annotation. Use make C=2 when unsure to warn
+  about mismatched annotation
+* minor: special case the ipmr (type 2) ioctls in sock_skprot_ioctl
+  and treat the "return int" (type 1) ioctls as the default case.
+* introduce code in a patch together with its use-case, so no separate
+  patches for sock_skprot_ioctl and sock_skprot_ioctl_ipmr. Either one
+  patch, or two, for each type of conversion.
+
