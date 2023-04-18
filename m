@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7706E57C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 05:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 258576E57CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 05:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjDRDTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 23:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
+        id S230357AbjDRDTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 23:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbjDRDSu (ORCPT
+        with ESMTP id S230106AbjDRDSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 23:18:50 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2EB59DF;
-        Mon, 17 Apr 2023 20:18:48 -0700 (PDT)
+        Mon, 17 Apr 2023 23:18:55 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850F55FC5;
+        Mon, 17 Apr 2023 20:18:49 -0700 (PDT)
 Received: from kwepemi500013.china.huawei.com (unknown [7.221.188.120])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Q0pyX3K6xzKs83;
-        Tue, 18 Apr 2023 11:17:56 +0800 (CST)
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q0pvF2R4zzncDk;
+        Tue, 18 Apr 2023 11:15:05 +0800 (CST)
 Received: from M910t.huawei.com (10.110.54.157) by
  kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 18 Apr 2023 11:18:45 +0800
+ 15.1.2507.23; Tue, 18 Apr 2023 11:18:46 +0800
 From:   Changbin Du <changbin.du@huawei.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -35,9 +35,9 @@ CC:     Mark Rutland <mark.rutland@arm.com>,
         <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Hui Wang <hw.huiwang@huawei.com>,
         Changbin Du <changbin.du@huawei.com>
-Subject: [PATCH v5 1/3] perf script: print raw ip instead of binary offset for callchain
-Date:   Tue, 18 Apr 2023 11:18:23 +0800
-Message-ID: <20230418031825.1262579-2-changbin.du@huawei.com>
+Subject: [PATCH v5 2/3] perf: add helper map__fprintf_dsoname_dsoff
+Date:   Tue, 18 Apr 2023 11:18:24 +0800
+Message-ID: <20230418031825.1262579-3-changbin.du@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230418031825.1262579-1-changbin.du@huawei.com>
 References: <20230418031825.1262579-1-changbin.du@huawei.com>
@@ -56,53 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before this, the raw ip is printed for non-callchain and dso offset for
-callchain. This inconsistent output for address may confuse people. And
-mostly what we expect is the raw ip.
+This adds a helper function map__fprintf_dsoname_dsoff() to print dsoname
+with optional dso offset.
 
-'dso offset' is printed in callchain:
-$ perf script
-...
-ls 1341034 2739463.008343:    2162417 cycles:
-        ffffffff99d657a7 [unknown] ([unknown])
-        ffffffff99e00b67 [unknown] ([unknown])
-                   235d3 memset+0x53 (/usr/lib/x86_64-linux-gnu/ld-2.31.so)  # dso offset
-                    a61b _dl_map_object+0x1bb (/usr/lib/x86_64-linux-gnu/ld-2.31.so)
-
-raw ip is printed for non-callchain:
-$ perf script  -G
-	...
-        ls 1341034 2739463.008876:    2053304 cycles:  ffffffffc1596923 [unknown] ([unknown])
-        ls 1341034 2739463.009381:    1917049 cycles:      14def8e149e6 __strcoll_l+0xd96 (/usr/lib/x86_64-linux-gnu/libc-2.31.so) # raw ip
-
-Let's have consistent output for it. Later I'll add a new field 'dsoff' to
-print dso offset.
-
+Suggested-by: Adrian Hunter <adrian.hunter@intel.com>
 Signed-off-by: Changbin Du <changbin.du@huawei.com>
 ---
- tools/perf/util/evsel_fprintf.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ tools/perf/util/map.c | 13 +++++++++++++
+ tools/perf/util/map.h |  1 +
+ 2 files changed, 14 insertions(+)
 
-diff --git a/tools/perf/util/evsel_fprintf.c b/tools/perf/util/evsel_fprintf.c
-index a09ac00810b7..cc80ec554c0a 100644
---- a/tools/perf/util/evsel_fprintf.c
-+++ b/tools/perf/util/evsel_fprintf.c
-@@ -153,13 +153,8 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
- 			if (map)
- 				addr = map__map_ip(map, node->ip);
+diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
+index d81b6ca18ee9..7da96b41100f 100644
+--- a/tools/perf/util/map.c
++++ b/tools/perf/util/map.c
+@@ -445,6 +445,19 @@ size_t map__fprintf_dsoname(struct map *map, FILE *fp)
+ 	return fprintf(fp, "%s", dsoname);
+ }
  
--			if (print_ip) {
--				/* Show binary offset for userspace addr */
--				if (map && !map__dso(map)->kernel)
--					printed += fprintf(fp, "%c%16" PRIx64, s, addr);
--				else
--					printed += fprintf(fp, "%c%16" PRIx64, s, node->ip);
--			}
-+			if (print_ip)
-+				printed += fprintf(fp, "%c%16" PRIx64, s, node->ip);
++size_t map__fprintf_dsoname_dsoff(struct map *map, bool print_off, u64 addr, FILE *fp)
++{
++	int printed = 0;
++
++	printed += fprintf(fp, " (");
++	printed += map__fprintf_dsoname(map, fp);
++	if (print_off && map && map__dso(map) && !map__dso(map)->kernel)
++		printed += fprintf(fp, "+0x%" PRIx64, addr);
++	printed += fprintf(fp, ")");
++
++	return printed;
++}
++
+ char *map__srcline(struct map *map, u64 addr, struct symbol *sym)
+ {
+ 	if (map == NULL)
+diff --git a/tools/perf/util/map.h b/tools/perf/util/map.h
+index f89ab7c2d327..4cca211b6e66 100644
+--- a/tools/perf/util/map.h
++++ b/tools/perf/util/map.h
+@@ -175,6 +175,7 @@ static inline void __map__zput(struct map **map)
  
- 			if (print_sym) {
- 				printed += fprintf(fp, " ");
+ size_t map__fprintf(struct map *map, FILE *fp);
+ size_t map__fprintf_dsoname(struct map *map, FILE *fp);
++size_t map__fprintf_dsoname_dsoff(struct map *map, bool print_off, u64 addr, FILE *fp);
+ char *map__srcline(struct map *map, u64 addr, struct symbol *sym);
+ int map__fprintf_srcline(struct map *map, u64 addr, const char *prefix,
+ 			 FILE *fp);
 -- 
 2.25.1
 
