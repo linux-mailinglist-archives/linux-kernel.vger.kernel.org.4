@@ -2,164 +2,392 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABAA96E5E40
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523126E5E45
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 12:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbjDRKJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 06:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
+        id S231163AbjDRKJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 06:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjDRKIz (ORCPT
+        with ESMTP id S230433AbjDRKJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 06:08:55 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4924E3C2F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:08:51 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id xd13so37807346ejb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:08:51 -0700 (PDT)
+        Tue, 18 Apr 2023 06:09:28 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBA961B7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:09:27 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-760bba6404cso72373539f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 03:09:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681812530; x=1684404530;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CHTRuDZizZmh3JLZCo5lprJ34wrb3qJisxHDlzonFVQ=;
-        b=IL9QQcBRXReGXfHqy0crh2FxCNKO1auiDipds27slpKbXHVXazCM6KG8qIo1FvRcxt
-         iq9WJU9MycEAR+w87PKddU8wGGtQ3anbOKLaRUO5Uj77vcpjST+eNxWyoFKtpxwBNTn6
-         G1ntWN0oiQjJnSREdUT7A/iCLtwacqzVXVbFzhVHDjS7r7M0vZ0dtMTHSwxhEnK3OSdy
-         7or+H0TxJbxiZ+08cu+obndPVE/glYUYnb9oZlhzjyRdVmsQZjqtLd1O9T0MhpfJCHs0
-         Z5Bc3nY0iDEq6teRKfyraaYCkBi7VT8B8GOAShTPUpUSi7ajgy1E1yX5wuVT5Fx3nj9F
-         wNog==
+        d=google.com; s=20221208; t=1681812566; x=1684404566;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cIRQdv6iYYC6I1RqYwDtorj0pIGGotKUqAJL8F9Nl60=;
+        b=0U4F1LJOltCDxAjdDTUrahLDzO1XwqkRTfEt5euRQj4JpgKME8KAbbpcDIkML7a+aZ
+         h/M6094D0adpX6HAv+aOrkX/mXp9IXZJ87ewSOQQ9CHrym7eYbMdPynurKrtuUHsBJvH
+         r5eH/yUyiHcHa4Cyof11UlHgHHDmoRFp0FeA650bbcAKhB1JtthxbicsacjM2cLUgx35
+         IjHoZydA9uowhO6xtYfheRbqGbz0dGJ1XvC0DQzVXLedsjfB4XUDTLfcmaokQRtZStgI
+         Y8si0rK5Uyu4XpEpP5yL8El2TzoVMFlzZ1L6qWwqMV5xtTDyZgsjeiMXXQGx1BbddAbv
+         yxYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681812530; x=1684404530;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CHTRuDZizZmh3JLZCo5lprJ34wrb3qJisxHDlzonFVQ=;
-        b=c/jmReDf9PWrysK7FRwQYqiwzI6f8UA9uRqxcq8c8LNI2uK48CVjdo0arFqLQLtNzm
-         fcxV2CCj7WxDlbvQu4CACbqfCcmpvNOAf9xsNt8t2CxAmEESVIhbwpCQBHepXih32CMG
-         hVGaYEZeRM9x0PijU6oWR09x3bXytaN/JEBZ+3lgOYRnutKnfZtWsntxmo60E0cUSar7
-         s1JZjNuuSVvrgEdNkRsb7v5KA9TIKybb7QqWm87gNdjwdUVH8ENm50CMwq08gVks2WeY
-         rxAyhtDnvkHfDVsaaoekSBYbSqKQsT+ErzDG9hpVLRowotSMNNlM3zEF2o8XIVYKq2EJ
-         XUJw==
-X-Gm-Message-State: AAQBX9f5PAI1cyCnjSUFkanhVQfyylEpQ1CkbU6Nni0Oaf2cCzBtqc58
-        VVxhIkbLiFzjlOn9hm4Oh33zpg==
-X-Google-Smtp-Source: AKy350Y6QKNYyStk/yeNY7V9U+pJgUn1EghZMLBG2sV9zSfpYxNv6bvXFckJUhC1XhExS9B0xAO02g==
-X-Received: by 2002:a17:906:82c5:b0:94a:8e19:6aba with SMTP id a5-20020a17090682c500b0094a8e196abamr10589810ejy.21.1681812529724;
-        Tue, 18 Apr 2023 03:08:49 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id kt2-20020a170906aac200b0094f6458157csm3300672ejb.223.2023.04.18.03.08.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 03:08:49 -0700 (PDT)
-Message-ID: <4a250d8f-5771-4933-be99-5721c163fe8a@linaro.org>
-Date:   Tue, 18 Apr 2023 11:08:47 +0100
+        d=1e100.net; s=20221208; t=1681812566; x=1684404566;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cIRQdv6iYYC6I1RqYwDtorj0pIGGotKUqAJL8F9Nl60=;
+        b=lk+806qTQDaEBaYcCvcnRzSXhXkyzWqLRhAVkLKqDhGXH1cMqLWQ7A3WyXyDIOa3Jy
+         478PYcIUD05niKcnSmxC6Xhu9DJQTWY5QeWQLK7WK6bDZaMRrE7cqSO3Pb3aqHe85Gcy
+         vhLb8gy+tEICCNvKHvPDGFy2/MhQw3j0RfhV++tCsAzFhzx6S03dkKXyuLc0bLazDfoi
+         7Qqauk7zAJ7aUyA00IaUxalLPOr+UPBde59NDhH1Usjsg9M9zQQcfv1I0kJqFaTMkN4e
+         CvXDoV/ckukx1iS0QlRs8lwLseW6JjPRjEXr1/Q3f1cyBcWggWEDtMFKLiomrxcFi5+j
+         GBvQ==
+X-Gm-Message-State: AAQBX9fJh7zxOohRrMF+71Nu1F5IxVkVIQ0djD7dgGKfkOtIO2+UKQ27
+        qJf6FJVQ5FMTMj6CeUyrZPdDREHZS8ohifghfcWPOA==
+X-Google-Smtp-Source: AKy350bjw1Th1BsGmyooEfwEzHpPWCjXNDK6ekyspSS5g40M28XFe2V74kGiB1Ckq156bWRFgxtRB05m0uXEiOLemrE=
+X-Received: by 2002:a6b:ea09:0:b0:760:eab2:71b1 with SMTP id
+ m9-20020a6bea09000000b00760eab271b1mr1310660ioc.20.1681812566273; Tue, 18 Apr
+ 2023 03:09:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 2/7] dt-bindings: soundwire: qcom: add 16-bit sample
- interval
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Rao Mandadapu <quic_srivasam@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Cc:     Rob Herring <robh@kernel.org>
-References: <20230418095447.577001-1-krzysztof.kozlowski@linaro.org>
- <20230418095447.577001-3-krzysztof.kozlowski@linaro.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230418095447.577001-3-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230413160644.490976-1-mark.rutland@arm.com>
+In-Reply-To: <20230413160644.490976-1-mark.rutland@arm.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 18 Apr 2023 12:08:49 +0200
+Message-ID: <CANpmjNPfmFcAGFnZRY_G_34DqW4MRSHObfZhKBNh0X1Up00fGA@mail.gmail.com>
+Subject: Re: [PATCH] locking/atomic: correct (cmp)xhcg instrumentation
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, boqun.feng@gmail.com,
+        peterz@infradead.org, will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 13 Apr 2023 at 18:06, Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> All xchg() and cmpxchg() ops are atomic RMWs, but currently we
+> instrument these with instrument_atomic_write() rather than
+> instrument_atomic_read_write(), missing the read aspect.
+>
+> Similarly, all try_cmpxchg() ops are non-atomic RMWs on *oldp, but we
+> instrument these accesses with instrument_atomic_write() rather than
+> instrument_read_write(), missing the read aspect and erroneously marking
+> these as atomic.
+>
+> Fix the instrumentation for both points.
+>
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Will Deacon <will@kernel.org>
 
+Reviewed-by: Marco Elver <elver@google.com>
 
-On 18/04/2023 10:54, Krzysztof Kozlowski wrote:
-> The port sample interval was always 16-bit, split into low and high
-> bytes.  This split was unnecessary, although harmless for older devices
-> because all of them used only lower byte (so values < 0xff).  With
-> support for Soundwire controller on Qualcomm SM8550 and its devices,
-> both bytes will be used, thus add a new 'qcom,ports-sinterval' property
-> to allow 16-bit sample intervals.
-> 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+Thanks!
+
 > ---
-
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-
---srini
-> 
-> Changes since v2:
-> 1. Use uint16 for qcom,ports-sinterval.
->     DTS will be fixed in separate patchset.
-> 2. Add tags.
-> ---
->   .../bindings/soundwire/qcom,soundwire.yaml    | 20 +++++++++++++++++--
->   1 file changed, 18 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml b/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
-> index 98c7fc7e1189..fb44b89a754e 100644
-> --- a/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
-> +++ b/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
-> @@ -86,7 +86,7 @@ properties:
->     qcom,ports-sinterval-low:
->       $ref: /schemas/types.yaml#/definitions/uint8-array
->       description:
-> -      Sample interval low of each data port.
-> +      Sample interval (only lowest byte) of each data port.
->         Out ports followed by In ports. Used for Sample Interval calculation.
->         Value of 0xff indicates that this option is not implemented
->         or applicable for the respective data port.
-> @@ -94,6 +94,17 @@ properties:
->       minItems: 3
->       maxItems: 16
->   
-> +  qcom,ports-sinterval:
-> +    $ref: /schemas/types.yaml#/definitions/uint16-array
-> +    description:
-> +      Sample interval of each data port.
-> +      Out ports followed by In ports. Used for Sample Interval calculation.
-> +      Value of 0xffff indicates that this option is not implemented
-> +      or applicable for the respective data port.
-> +      More info in MIPI Alliance SoundWire 1.0 Specifications.
-> +    minItems: 3
-> +    maxItems: 16
-> +
->     qcom,ports-offset1:
->       $ref: /schemas/types.yaml#/definitions/uint8-array
->       description:
-> @@ -220,10 +231,15 @@ required:
->     - '#size-cells'
->     - qcom,dout-ports
->     - qcom,din-ports
-> -  - qcom,ports-sinterval-low
->     - qcom,ports-offset1
->     - qcom,ports-offset2
->   
-> +oneOf:
-> +  - required:
-> +      - qcom,ports-sinterval-low
-> +  - required:
-> +      - qcom,ports-sinterval
-> +
->   additionalProperties: false
->   
->   examples:
+>  include/linux/atomic/atomic-instrumented.h | 76 +++++++++++-----------
+>  scripts/atomic/gen-atomic-instrumented.sh  |  6 +-
+>  2 files changed, 41 insertions(+), 41 deletions(-)
+>
+> Note: this is based on tip locking/core, with the head commit being:
+>
+>   561b081f19655a46 ("locking/x86: Define arch_try_cmpxchg_local")
+>
+> Mark.
+>
+> diff --git a/include/linux/atomic/atomic-instrumented.h b/include/linux/atomic/atomic-instrumented.h
+> index 245ba661c4938..03a232a1fa578 100644
+> --- a/include/linux/atomic/atomic-instrumented.h
+> +++ b/include/linux/atomic/atomic-instrumented.h
+> @@ -1948,14 +1948,14 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         kcsan_mb(); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_xchg(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+>  #define xchg_acquire(ptr, ...) \
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_xchg_acquire(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+> @@ -1963,14 +1963,14 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         kcsan_release(); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+>  #define xchg_relaxed(ptr, ...) \
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_xchg_relaxed(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+> @@ -1978,14 +1978,14 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         kcsan_mb(); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+>  #define cmpxchg_acquire(ptr, ...) \
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_cmpxchg_acquire(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+> @@ -1993,14 +1993,14 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         kcsan_release(); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_cmpxchg_release(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+>  #define cmpxchg_relaxed(ptr, ...) \
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+> @@ -2008,14 +2008,14 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         kcsan_mb(); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_cmpxchg64(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+>  #define cmpxchg64_acquire(ptr, ...) \
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_cmpxchg64_acquire(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+> @@ -2023,14 +2023,14 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         kcsan_release(); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_cmpxchg64_release(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+>  #define cmpxchg64_relaxed(ptr, ...) \
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_cmpxchg64_relaxed(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+> @@ -2039,8 +2039,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         typeof(oldp) __ai_oldp = (oldp); \
+>         kcsan_mb(); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> -       instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
+>         arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>  })
+>
+> @@ -2048,8 +2048,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         typeof(oldp) __ai_oldp = (oldp); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> -       instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
+>         arch_try_cmpxchg_acquire(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>  })
+>
+> @@ -2058,8 +2058,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         typeof(oldp) __ai_oldp = (oldp); \
+>         kcsan_release(); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> -       instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
+>         arch_try_cmpxchg_release(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>  })
+>
+> @@ -2067,8 +2067,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         typeof(oldp) __ai_oldp = (oldp); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> -       instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
+>         arch_try_cmpxchg_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>  })
+>
+> @@ -2077,8 +2077,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         typeof(oldp) __ai_oldp = (oldp); \
+>         kcsan_mb(); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> -       instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
+>         arch_try_cmpxchg64(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>  })
+>
+> @@ -2086,8 +2086,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         typeof(oldp) __ai_oldp = (oldp); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> -       instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
+>         arch_try_cmpxchg64_acquire(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>  })
+>
+> @@ -2096,8 +2096,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         typeof(oldp) __ai_oldp = (oldp); \
+>         kcsan_release(); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> -       instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
+>         arch_try_cmpxchg64_release(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>  })
+>
+> @@ -2105,22 +2105,22 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         typeof(oldp) __ai_oldp = (oldp); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> -       instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
+>         arch_try_cmpxchg64_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>  })
+>
+>  #define cmpxchg_local(ptr, ...) \
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_cmpxchg_local(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+>  #define cmpxchg64_local(ptr, ...) \
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_cmpxchg64_local(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+> @@ -2128,7 +2128,7 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         kcsan_mb(); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+>         arch_sync_cmpxchg(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+> @@ -2136,8 +2136,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         typeof(oldp) __ai_oldp = (oldp); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> -       instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
+>         arch_try_cmpxchg_local(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>  })
+>
+> @@ -2145,8 +2145,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         typeof(oldp) __ai_oldp = (oldp); \
+> -       instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> -       instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +       instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +       instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
+>         arch_try_cmpxchg64_local(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>  })
+>
+> @@ -2154,7 +2154,7 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+>         kcsan_mb(); \
+> -       instrument_atomic_write(__ai_ptr, 2 * sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, 2 * sizeof(*__ai_ptr)); \
+>         arch_cmpxchg_double(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+> @@ -2162,9 +2162,9 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  #define cmpxchg_double_local(ptr, ...) \
+>  ({ \
+>         typeof(ptr) __ai_ptr = (ptr); \
+> -       instrument_atomic_write(__ai_ptr, 2 * sizeof(*__ai_ptr)); \
+> +       instrument_atomic_read_write(__ai_ptr, 2 * sizeof(*__ai_ptr)); \
+>         arch_cmpxchg_double_local(__ai_ptr, __VA_ARGS__); \
+>  })
+>
+>  #endif /* _LINUX_ATOMIC_INSTRUMENTED_H */
+> -// 97fe4d79aa058d2164df824632cbc4f716d2a407
+> +// 6b513a42e1a1b5962532a019b7fc91eaa044ad5e
+> diff --git a/scripts/atomic/gen-atomic-instrumented.sh b/scripts/atomic/gen-atomic-instrumented.sh
+> index c8165e9431bf8..d9ffd74f73ca2 100755
+> --- a/scripts/atomic/gen-atomic-instrumented.sh
+> +++ b/scripts/atomic/gen-atomic-instrumented.sh
+> @@ -104,8 +104,8 @@ cat <<EOF
+>  EOF
+>  [ -n "$kcsan_barrier" ] && printf "\t${kcsan_barrier}; \\\\\n"
+>  cat <<EOF
+> -       instrument_atomic_write(__ai_ptr, ${mult}sizeof(*__ai_ptr)); \\
+> -       instrument_atomic_write(__ai_oldp, ${mult}sizeof(*__ai_oldp)); \\
+> +       instrument_atomic_read_write(__ai_ptr, ${mult}sizeof(*__ai_ptr)); \\
+> +       instrument_read_write(__ai_oldp, ${mult}sizeof(*__ai_oldp)); \\
+>         arch_${xchg}${order}(__ai_ptr, __ai_oldp, __VA_ARGS__); \\
+>  })
+>  EOF
+> @@ -119,7 +119,7 @@ cat <<EOF
+>  EOF
+>  [ -n "$kcsan_barrier" ] && printf "\t${kcsan_barrier}; \\\\\n"
+>  cat <<EOF
+> -       instrument_atomic_write(__ai_ptr, ${mult}sizeof(*__ai_ptr)); \\
+> +       instrument_atomic_read_write(__ai_ptr, ${mult}sizeof(*__ai_ptr)); \\
+>         arch_${xchg}${order}(__ai_ptr, __VA_ARGS__); \\
+>  })
+>  EOF
+> --
+> 2.30.2
+>
