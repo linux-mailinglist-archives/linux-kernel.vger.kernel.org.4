@@ -2,100 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0656E5612
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 02:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE0A6E5614
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 02:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjDRAyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Apr 2023 20:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
+        id S229946AbjDRAzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Apr 2023 20:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjDRAyI (ORCPT
+        with ESMTP id S229654AbjDRAzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Apr 2023 20:54:08 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172FB19A4;
-        Mon, 17 Apr 2023 17:54:07 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1a68d61579bso6522495ad.1;
-        Mon, 17 Apr 2023 17:54:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681779246; x=1684371246;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IA/HwtcM7Zy6wN8He0TmRxUfOHXjEruLmNGo1GrwrKc=;
-        b=sMz9Qso4Ofd080LVdOCpGVzoML2jyFxDEnv+6yS0fw4dPjcrnUiooMT7ySHVsMrWdI
-         2xMyPFpnPLkVnCC3oLuBXPi8je+iDtdZBKJMF1xhWKi336aMRflYYGN0TcT4OfPzOT9Y
-         4Do3QNhlz4iHoN4DclgRiU2q2yaO2fMcMqLG85zw9U/m4wpDb7MQiAfRaxC+03uuI8JM
-         EVHOxxQZCBi5wfrGrlcyr+tzzo4vC1jWrUaA1tv2xg708TFK0/CEKA/zVZNGqPdCYTDq
-         0TqAZ7t+m4I4UQuPFQ+w9YXThiEkeE9ylp33rOgWFYKQB4x2HkRyhDMqOlJ2rtr0gkNC
-         fEYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681779246; x=1684371246;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IA/HwtcM7Zy6wN8He0TmRxUfOHXjEruLmNGo1GrwrKc=;
-        b=RL6amWcD1nyqTtwuD4hWbinV5UWHQLdLeGEaO6vj43EMKi6Hw2IVzM0H2IkPXLhaV6
-         GDGxm4maKQ7FOy4JNzK9krabwMy1wdspsLoUFw5YcpI0ZDNofjNV2KmeeA3TRAYqDsBa
-         Onu9eKs8I+6LPqdM5ZKtVM3bOcrZA5d4knZ/amYhX0sIGi8XEwX4JOwrl2VfJj0mwq6o
-         JGJvIDKmePDgAT7IvdwcZPqvoZb/k6O3vLLwpCVjih/Cb3pG48kd3l9dwXt2dnJANlxo
-         M9vBtpJhXNwXGaQjREgXhVkINIoghbj91SAbvbf9/5vXEcd9Xzo3rkyrCgLXzbsa8F04
-         nuaQ==
-X-Gm-Message-State: AAQBX9eKUnSwHvRB141IrFBiUkTRRaxV/YRKghr6hucy2OwY7MG1stzN
-        7qJxQ5g5IZcMWTqE9mD339o=
-X-Google-Smtp-Source: AKy350YE0HWEHMmsS57vty8G6fGdp3N81yKNlogHtKngt7TQXWG+/fz22C2EH7/aTVT1VdEWpqCIdA==
-X-Received: by 2002:a17:903:11c4:b0:1a6:45e5:a26a with SMTP id q4-20020a17090311c400b001a645e5a26amr481829plh.27.1681779246245;
-        Mon, 17 Apr 2023 17:54:06 -0700 (PDT)
-Received: from localhost ([216.228.127.129])
-        by smtp.gmail.com with ESMTPSA id 19-20020a170902c21300b001a1d553de0fsm8327113pll.271.2023.04.17.17.54.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 17:54:05 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 17:51:54 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Pawel Chmielewski <pawel.chmielewski@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Barry Song <baohua@kernel.org>
-Subject: Re: [PATCH v2 0/8] sched/topology: add for_each_numa_cpu() macro
-Message-ID: <ZD3l6FBnUh9vTIGc@yury-ThinkPad>
-References: <20230415050617.324288-1-yury.norov@gmail.com>
- <20230417111137.GI83892@hirez.programming.kicks-ass.net>
+        Mon, 17 Apr 2023 20:55:01 -0400
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD6019A4
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Apr 2023 17:54:59 -0700 (PDT)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 33I0bc1v049048;
+        Tue, 18 Apr 2023 08:37:38 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from [192.168.2.115] (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 18 Apr
+ 2023 08:53:53 +0800
+Message-ID: <17008c40-d1e2-a6ec-5964-ea817ca3b447@aspeedtech.com>
+Date:   Tue, 18 Apr 2023 08:53:48 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230417111137.GI83892@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 01/11] drm/ast: Use
+ drm_aperture_remove_conflicting_pci_framebuffers
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+CC:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Helge Deller <deller@gmx.de>, <linux-fbdev@vger.kernel.org>
+References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
+ <019d57ab-2717-25bd-897a-5301f245263c@suse.de>
+Content-Language: en-US
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+In-Reply-To: <019d57ab-2717-25bd-897a-5301f245263c@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 33I0bc1v049048
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 01:11:37PM +0200, Peter Zijlstra wrote:
-> 
-> 
-> Something went wrong with sending your patches; I only have 0/n.
+Hi Thomas,
 
-Indeed. Thanks for pointing. I'll resend shortly.
+The Intel(x86) CPUs have a separate address space for "IO", but the ARM 
+architecture only has "memory", so all IO devices are accessed as if 
+they were memory. Which means ARM does not support isolated IO. Here is 
+a related discussion on ARM's forum.
+
+https://community.arm.com/support-forums/f/architectures-and-processors-forum/52046/how-to-read-write-an-i-o-port-in-aarch64
+
+Thus, we adapt MMIO only after this patch.
+
+
+On 2023/4/4 下午 10:45, Thomas Zimmermann wrote:
+> Hi,
+>
+> FYI I have merged patches 1, 6 and 7 of this patchset. They look fine 
+> and are worthwhile fixes on their own.
+>
+> Best regards
+> Thomas
+>
+> Am 11.01.23 um 16:41 schrieb Daniel Vetter:
+>> It's just open coded and matches.
+>>
+>> Note that Thomas said that his version apparently failed for some
+>> reason, but hey maybe we should try again.
+>>
+>> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+>> Cc: Dave Airlie <airlied@redhat.com>
+>> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+>> Cc: Javier Martinez Canillas <javierm@redhat.com>
+>> Cc: Helge Deller <deller@gmx.de>
+>> Cc: linux-fbdev@vger.kernel.org
+>> ---
+>>   drivers/gpu/drm/ast/ast_drv.c | 16 +---------------
+>>   1 file changed, 1 insertion(+), 15 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/ast/ast_drv.c 
+>> b/drivers/gpu/drm/ast/ast_drv.c
+>> index 420fc75c240e..3ac24a780f50 100644
+>> --- a/drivers/gpu/drm/ast/ast_drv.c
+>> +++ b/drivers/gpu/drm/ast/ast_drv.c
+>> @@ -90,27 +90,13 @@ static const struct pci_device_id ast_pciidlist[] 
+>> = {
+>>     MODULE_DEVICE_TABLE(pci, ast_pciidlist);
+>>   -static int ast_remove_conflicting_framebuffers(struct pci_dev *pdev)
+>> -{
+>> -    bool primary = false;
+>> -    resource_size_t base, size;
+>> -
+>> -    base = pci_resource_start(pdev, 0);
+>> -    size = pci_resource_len(pdev, 0);
+>> -#ifdef CONFIG_X86
+>> -    primary = pdev->resource[PCI_ROM_RESOURCE].flags & 
+>> IORESOURCE_ROM_SHADOW;
+>> -#endif
+>> -
+>> -    return drm_aperture_remove_conflicting_framebuffers(base, size, 
+>> primary, &ast_driver);
+>> -}
+>> -
+>>   static int ast_pci_probe(struct pci_dev *pdev, const struct 
+>> pci_device_id *ent)
+>>   {
+>>       struct ast_private *ast;
+>>       struct drm_device *dev;
+>>       int ret;
+>>   -    ret = ast_remove_conflicting_framebuffers(pdev);
+>> +    ret = drm_aperture_remove_conflicting_pci_framebuffers(pdev, 
+>> &ast_driver);
+>>       if (ret)
+>>           return ret;
+>
+-- 
+Best Regards
+Jammy
+
