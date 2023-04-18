@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0696E6083
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2326E6081
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 13:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbjDRL6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 07:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
+        id S231593AbjDRL56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 07:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbjDRLzz (ORCPT
+        with ESMTP id S231200AbjDRLzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 07:55:55 -0400
+        Tue, 18 Apr 2023 07:55:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6769977D
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 04:54:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23729742;
+        Tue, 18 Apr 2023 04:54:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19D8A625F0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 11:54:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 373A8C433A1;
-        Tue, 18 Apr 2023 11:54:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AFDA625F0;
+        Tue, 18 Apr 2023 11:54:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F21D8C433A1;
+        Tue, 18 Apr 2023 11:54:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681818849;
-        bh=IwyqCw0ZeRA4BYG/sIG8QCK/6HafSnbXWPI++Rremlc=;
-        h=From:Date:Subject:To:Cc:From;
-        b=HnV7Gg44KLdEPtO6NSa/XqBBiESq55Dum3jMjkpXMI9O7nRk9We5Rgo/MoFCdPyvI
-         JWnWnbZQGpnI53fmf/120wytyjRBVXIxocsDWTcHxQ449S1rNE7j6fLdQiDT0DvfBN
-         sKRjEFhrO0xM1AM7iVstceNC5N13OVkk4tlGhDZuNMHKGALxloBwPMHFCekA0Xju+m
-         HKpIBtlo11JRgA8CQQCsoPL9Z1Zt0xb2TaqBDdfu9HrdLRXUmLuD44ChLz2iXa9cDV
-         wcUn2DNc16EeY8sE/nqGAcg2HS/k+jchwXFz37jm20J/xST6+hewX8ln2sNecIatl4
-         TnVCsi9DqdgWQ==
-From:   Simon Horman <horms@kernel.org>
-Date:   Tue, 18 Apr 2023 13:54:00 +0200
-Subject: [PATCH] arm64: kexec: include reboot.h
+        s=k20201202; t=1681818846;
+        bh=AXG/C2BTZBum1dQyk9xGMcX+JvRAly8xQcU58qub2TY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=YWm19zFa301nIsz39oDFn59dpZkUCH2MAVqlW5HDdaX1rAdGSRB1o1hw8xpyfUcxk
+         X9anxNHN9gXA711KO6QVbkC9vMQMmrEWLPfg0SpYzrhLQpuxuk8Bg+/XgY+V8O/PDX
+         3PAGR0NoOWjjFH4zYUdlavCcVT0IVvyXbuj4WOZMM4X7384z7GeQjLXcfkDp5IVA0v
+         cL5b7JyDHDBPPv7XW4tJDJsijvZAtKItqU2bI2OzA69vUdtHjcmS/I5PoG/PEXLzgf
+         lwtKNF5/+RRFRs4mUP+TEyi5xupeCBi1Zz4Y9Z65SKbw4disf506aJnBYryW1r3JVR
+         YgXncspNH3AwA==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Aleksandr Nogikh <nogikh@google.com>, pulehui@huawei.com,
+        bpf@vger.kernel.org
+Cc:     linux-riscv@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>
+Subject: Re: arch/riscv/net/bpf_jit_comp64.c build error
+In-Reply-To: <CANp29Y6YqPbE9Y3iQEaTwD_YAQBvsxxRE=0COVYy=gBP-USvkg@mail.gmail.com>
+References: <CANp29Y6YqPbE9Y3iQEaTwD_YAQBvsxxRE=0COVYy=gBP-USvkg@mail.gmail.com>
+Date:   Tue, 18 Apr 2023 13:54:03 +0200
+Message-ID: <871qkh9zj8.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230418-arm64-kexec-include-reboot-v1-1-8453fd4fb3fb@kernel.org>
-X-B4-Tracking: v=1; b=H4sIANeEPmQC/x2NzQrCMBAGX6Xs2cW0KW3xVcRDfr7aoCayqRIof
- XdTj8PAzEYZEpDp0mwk+IYcUqzQnhpyi4l3cPCVqVOdVn07sZHX0PMDBY5DdM+PBwtsSiu3A0b
- ltVbjpKkGrMlgKya65UjMSTiirGeXBId/C+ZQ/vPrbd9/exbtaYwAAAA=
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Baoquan He <bhe@redhat.com>,
-        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-X-Mailer: b4 0.12.2
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,32 +59,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Include reboot.h in machine_kexec.c for declaration of
-machine_crash_shutdown.
+Aleksandr Nogikh <nogikh@google.com> writes:
 
-gcc-12 with W=1 reports:
+> Hi Pu Lehui,
+>
+> I'm writing to you regarding your following patch.
+>
+> Author: Pu Lehui <pulehui@huawei.com>
+> Date:   Wed Feb 15 21:52:04 2023 +0800
+>
+>     riscv, bpf: Add bpf_arch_text_poke support for RV64
+>
+> When trying to compile the "fixes" branch of the
+> "git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git" tree,
+> syzbot gets the following error:
+>
+> arch/riscv/net/bpf_jit_comp64.c: In function 'bpf_arch_text_poke':
+> arch/riscv/net/bpf_jit_comp64.c:691:9: error: implicit declaration of
+> function 'patch_text'; did you mean 'path_get'?
+> [-Werror=3Dimplicit-function-declaration]
+>   691 |   ret =3D patch_text(ip, new_insns, ninsns);
+>       |         ^~~~~~~~~~
+>       |         path_get
+>
+> FWIW the compiler is riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1
+> 20210110, GNU ld (GNU Binutils for Debian) 2.35.2.
+>
+> Could you please take a look?
 
- arch/arm64/kernel/machine_kexec.c:257:6: warning: no previous prototype for 'machine_crash_shutdown' [-Wmissing-prototypes]
-   257 | void machine_crash_shutdown(struct pt_regs *regs)
+Randy sent a fix for this [1], which went in via the BPF tree. Pull in
+commit 2d311f480b52 ("riscv, bpf: Fix patch_text implicit declaration").
 
-No functional changes intended.
-Compile tested only.
 
-Signed-off-by: Simon Horman <horms@kernel.org>
----
- arch/arm64/kernel/machine_kexec.c | 1 +
- 1 file changed, 1 insertion(+)
+Bj=C3=B6rn
 
-diff --git a/arch/arm64/kernel/machine_kexec.c b/arch/arm64/kernel/machine_kexec.c
-index 54f8e2d081c4..078910db77a4 100644
---- a/arch/arm64/kernel/machine_kexec.c
-+++ b/arch/arm64/kernel/machine_kexec.c
-@@ -11,6 +11,7 @@
- #include <linux/kernel.h>
- #include <linux/kexec.h>
- #include <linux/page-flags.h>
-+#include <linux/reboot.h>
- #include <linux/set_memory.h>
- #include <linux/smp.h>
- 
-
+[1] https://lore.kernel.org/linux-riscv/20230227072016.14618-1-rdunlap@infr=
+adead.org/
