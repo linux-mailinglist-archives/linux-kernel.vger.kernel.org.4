@@ -2,87 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D625A6E6B97
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 19:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C02C6E6B9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 20:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjDRR7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 13:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
+        id S232385AbjDRSBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 14:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjDRR73 (ORCPT
+        with ESMTP id S231373AbjDRSBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 13:59:29 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704753A91;
-        Tue, 18 Apr 2023 10:59:28 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6a5dd2558a1so443278a34.2;
-        Tue, 18 Apr 2023 10:59:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681840767; x=1684432767;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x8MFstXuLa8k8cja4E1yfkQtBdGNGfZiKSVN/L2SzdI=;
-        b=Btk4ELy6MmLHg2/1I844KvoEhh5qY+9xPqJuT9MdTIDriHWl21T4a81l3K3dvp2EFr
-         cbqhIAOOyQhLsnV6+jHd7pEPU4Q15yYtyr9FUpeWky3Ok1L+l1vwvmmpNdolLT4FpmIq
-         LiF9hWbqTm6TBVya7IwR1JNDW0Ks9xC8RtyoNRHc9FU/IoX+5gNKCN1snj/Pls7lRQiq
-         MeFpj2b/evarvKsnCaqWFiBIiVkvY10Mwy7+SmW0HryxEDEDrCgUji8kNbFqrMYmBOd6
-         SEREdwyzO3nNMS5xJukh6Qnmk8y/8QAXAyIUPyA/9sXICCA8BQc2tKcwVXs2fjpkF7sc
-         BgVQ==
-X-Gm-Message-State: AAQBX9fw/Kztpr2HSs+RkbXtvFg15lF0sPh3SCh1ZY1h4NOddC/9rszI
-        m85ZGOF3N1aWMCq+gGQ9sQ==
-X-Google-Smtp-Source: AKy350YX+DABGEPqChIGWsAxGnJ8chTKJTpXdwcLz28bMyClLDoDeX5tdKFk9D3+Z+MO2zUKRE3t7Q==
-X-Received: by 2002:a05:6830:1db5:b0:6a2:f3e2:d5b with SMTP id z21-20020a0568301db500b006a2f3e20d5bmr1410214oti.9.1681840767612;
-        Tue, 18 Apr 2023 10:59:27 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u4-20020a056830118400b006a5e22458e9sm2715655otq.80.2023.04.18.10.59.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 10:59:27 -0700 (PDT)
-Received: (nullmailer pid 2050189 invoked by uid 1000);
-        Tue, 18 Apr 2023 17:59:26 -0000
-Date:   Tue, 18 Apr 2023 12:59:26 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: samsung: Fix 'deprecated' value
-Message-ID: <20230418175926.GA2049178-robh@kernel.org>
-References: <20230418150643.1529895-1-robh@kernel.org>
- <04d21b26-afb8-3ef8-ce21-f97c1752ea99@kernel.org>
+        Tue, 18 Apr 2023 14:01:09 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D143A91;
+        Tue, 18 Apr 2023 11:01:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681840867; x=1713376867;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BVE3bggXhz5HchsWGyKoRHydarVcina0WcntcKfl6U4=;
+  b=QUMZQoAmvUR5H3ha4ahDr3cvZh9ZMVQcu85QwiC5Rmg5tg9Mka5fECI1
+   IsT6t/uV0J6CbjiqNNtUpDDTZ8EtSQIOJquqj7GuNWs9uGxkcJoDH2Z2+
+   emR0o5to+8qV/5+76kMpWHDLf6UZNfkDEUwy/xYN6I+P9UC4KY40WuSKP
+   bIkD4T2LagFzg6vk+DC7hC6GdXAogb9cTw0yjPZK6aW6MlN99g83xXiHp
+   5GcHXDvlPGRLvAGbusvoQTt6rJZz4FFpzYnMbsmqB7gh56/r8uljIdX4/
+   j3Dm+mUNiW7tXh6U9+jGC+Rmofr6Xc53gTJT5BfOO+BLc8m3nJ9ke9H+E
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="343995532"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="343995532"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 11:01:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="802616649"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="802616649"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Apr 2023 11:01:00 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1popdT-000dqR-38;
+        Tue, 18 Apr 2023 18:00:59 +0000
+Date:   Wed, 19 Apr 2023 02:00:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     nick.hawkins@hpe.com, verdun@hpe.com, linus.walleij@linaro.org,
+        brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jdelvare@suse.com,
+        linux@roeck-us.net, linux@armlinux.org.uk,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v1 2/9] hwmon: (gxp_fan_ctrl) Give GPIO access to fan data
+Message-ID: <202304190119.scX6TsQH-lkp@intel.com>
+References: <20230418152824.110823-3-nick.hawkins@hpe.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <04d21b26-afb8-3ef8-ce21-f97c1752ea99@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230418152824.110823-3-nick.hawkins@hpe.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 06:01:02PM +0200, Krzysztof Kozlowski wrote:
-> On 18/04/2023 17:06, Rob Herring wrote:
-> > 'deprecated' is a boolean type which should have a value of 'false' rather
-> 
-> I think you meant 'true'.
+Hi,
 
-That is so true. ;)
+kernel test robot noticed the following build warnings:
 
-> 
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> > than 'yes'.
-> > 
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/i2c/samsung,s3c2410-i2c.yaml | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> Best regards,
-> Krzysztof
-> 
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on robh/for-next linus/master v6.3-rc7]
+[cannot apply to brgl/gpio/for-next next-20230417]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/nick-hawkins-hpe-com/gpio-gxp-Add-HPE-GXP-GPIO/20230418-233513
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230418152824.110823-3-nick.hawkins%40hpe.com
+patch subject: [PATCH v1 2/9] hwmon: (gxp_fan_ctrl) Give GPIO access to fan data
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230419/202304190119.scX6TsQH-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/be3722d7f32fea1ea375090d05cbfdd3dd4e04d3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review nick-hawkins-hpe-com/gpio-gxp-Add-HPE-GXP-GPIO/20230418-233513
+        git checkout be3722d7f32fea1ea375090d05cbfdd3dd4e04d3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/hwmon/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304190119.scX6TsQH-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/gxp-fan-ctrl.c:32:4: warning: no previous prototype for 'get_fans_installed' [-Wmissing-prototypes]
+      32 | u8 get_fans_installed(void)
+         |    ^~~~~~~~~~~~~~~~~~
+>> drivers/hwmon/gxp-fan-ctrl.c:52:4: warning: no previous prototype for 'get_fans_failed' [-Wmissing-prototypes]
+      52 | u8 get_fans_failed(void)
+         |    ^~~~~~~~~~~~~~~
+
+
+vim +/get_fans_installed +32 drivers/hwmon/gxp-fan-ctrl.c
+
+    31	
+  > 32	u8 get_fans_installed(void)
+    33	{
+    34		static u8 val;
+    35	
+    36		val = readb(drvdata->plreg + OFS_FAN_INST);
+    37	
+    38		return val;
+    39	}
+    40	EXPORT_SYMBOL(get_fans_installed);
+    41	
+    42	static long fan_failed(struct device *dev, int fan)
+    43	{
+    44		struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
+    45		u8 val;
+    46	
+    47		val = readb(drvdata->plreg + OFS_FAN_FAIL);
+    48	
+    49		return !!(val & BIT(fan));
+    50	}
+    51	
+  > 52	u8 get_fans_failed(void)
+    53	{
+    54		static u8 val;
+    55	
+    56		val = readb(drvdata->plreg + OFS_FAN_FAIL);
+    57	
+    58		return val;
+    59	}
+    60	EXPORT_SYMBOL(get_fans_failed);
+    61	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
