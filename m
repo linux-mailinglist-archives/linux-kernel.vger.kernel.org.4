@@ -2,132 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B670A6E654F
-	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F01D96E654D
+	for <lists+linux-kernel@lfdr.de>; Tue, 18 Apr 2023 15:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbjDRNEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 09:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
+        id S231713AbjDRNEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 09:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbjDRNE2 (ORCPT
+        with ESMTP id S232367AbjDRNEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 09:04:28 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02ADB10E6;
-        Tue, 18 Apr 2023 06:04:14 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33ICtFoA018647;
-        Tue, 18 Apr 2023 15:03:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=LzUumFtrr4EeMVRLDS/dYjTQf8MdHw4wgweVrOp0zKo=;
- b=cf3bdRyeXFiTl7hRHU45JVbVLmRzx92ZLqqQPLhYN2u7pM9fX2lh6kvqaAj49qCzUP+S
- 2KEBq6zeaBhskSEmwLFvcNuEcK3SbFIz3lwWipIGCZFBW058YU218FL3QxOwv/x3wLsc
- 0MyC+HSz7PG7xQCI+7tpkii6zZK5X0drKFiW4Z/0vDTnbeN0k/6ZI8JFmsfVav3301HE
- U1pHkEqe4CAJ120k0I4kHx7aJ7IPqpdM7LDWDNxhT2NKgVMRWd5vizlOHP7N9fsmpRov
- bAPs6hw1NhMvwoI0fMlGLwrnUknEYKM74Omp+ykABBmXCsm1eQ1lpm6UW5YobKV7kVQ7 Lg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3q10ve1yvu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 15:03:54 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F30B610002A;
-        Tue, 18 Apr 2023 15:03:53 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EAE7821F0C8;
-        Tue, 18 Apr 2023 15:03:53 +0200 (CEST)
-Received: from [10.48.0.157] (10.48.0.157) by SHFDAG1NODE3.st.com
- (10.75.129.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 18 Apr
- 2023 15:03:53 +0200
-Message-ID: <f2ad2414-526e-8b9b-aa95-a35953556f36@foss.st.com>
-Date:   Tue, 18 Apr 2023 15:03:52 +0200
+        Tue, 18 Apr 2023 09:04:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA20E17913
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 06:04:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47CE062CEC
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 13:04:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 525A0C433D2;
+        Tue, 18 Apr 2023 13:04:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681823048;
+        bh=4Ph/dFwCh9YbMeZnsdIGgxesneSIpcLjZKhHXRORa2Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DbLiBOxxVnaMhKnJIAulfc/O7AxPU5onlOAJFLo/K1ahf+ZbMlOQNQSnGPnsgO9+J
+         Uul/XnZGWbZCzYhSZBp8s25GVE3fzGiEf4PtUwMCsDb+ZQFfT041GNFtZlPrARIouP
+         Itcsm0Ggsa+rxlgM3eHDYQ/xiGOrp5rM3Gd8F2Sw=
+Date:   Tue, 18 Apr 2023 15:04:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Luke Koch <lu.ale.koch@gmail.com>
+Cc:     error27@gmail.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] staging: wlan-ng: replace rate macros
+Message-ID: <2023041809-wildfowl-winter-be08@gregkh>
+References: <ZD6OqBOp1ezQDgMu@kernelhacking.kernelhacking.example.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] dt-bindings: mfd: stm32: Remove unnecessary blank
- lines
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20230417181342.v2.1.I483a676579cc7e3ac07e1db649091553743fecc8@changeid>
- <fde49fb8-c337-3a6b-811e-b9d7c3620393@linaro.org>
-From:   Patrick DELAUNAY <patrick.delaunay@foss.st.com>
-In-Reply-To: <fde49fb8-c337-3a6b-811e-b9d7c3620393@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.0.157]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-18_09,2023-04-18_01,2023-02-09_01
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZD6OqBOp1ezQDgMu@kernelhacking.kernelhacking.example.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+<note, your Reply-To: is very odd, please fix your email client up...>
 
-On 4/18/23 09:22, Krzysztof Kozlowski wrote:
-> On 17/04/2023 18:14, Patrick Delaunay wrote:
->> Remove double blank line.
->>
->> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
->> ---
->>
->> Changes in v2:
->> - update commit title and commit message to reflect what the change is
->>    V1="dt-bindings: mfd: stm32: Fix STM32F4 DT include fil
-> More than one file has the same issue. This is quite a churn to handle
-> such patch one by one. Please fix all of them or just skip, as it is
-> harmless.
+On Tue, Apr 18, 2023 at 02:35:52PM +0200, Luke Koch wrote:
+> Change p80211msg_dot11req_scan_results rate members to struct arrays
+> instead of individually numbered member structs.
+> Replace macros to set rates with loops to avoid checkpatch warning
+> and adhere to linux coding style.
+> 
+> Reported by checkpatch:
+> 
+> CHECK: Macro argument reuse 'N' - possible side-effects?
+> 
+> Signed off by: Luke Koch <lu.ale.koch@gmail.com>
+> ---
+> v2: - Fix array underflow and conditions with respect to the start at 0
+> v3: - Remove unnecessary spaces
+> ---
+>  drivers/staging/wlan-ng/p80211metastruct.h | 18 +-------
+>  drivers/staging/wlan-ng/prism2mgmt.c       | 52 +++++++---------------
+>  2 files changed, 18 insertions(+), 52 deletions(-)
+> 
+> diff --git a/drivers/staging/wlan-ng/p80211metastruct.h b/drivers/staging/wlan-ng/p80211metastruct.h
+> index 4adc64580185..e963227f797c 100644
+> --- a/drivers/staging/wlan-ng/p80211metastruct.h
+> +++ b/drivers/staging/wlan-ng/p80211metastruct.h
+> @@ -114,22 +114,8 @@ struct p80211msg_dot11req_scan_results {
+>  	struct p80211item_uint32 cfpollreq;
+>  	struct p80211item_uint32 privacy;
+>  	struct p80211item_uint32 capinfo;
+> -	struct p80211item_uint32 basicrate1;
+> -	struct p80211item_uint32 basicrate2;
+> -	struct p80211item_uint32 basicrate3;
+> -	struct p80211item_uint32 basicrate4;
+> -	struct p80211item_uint32 basicrate5;
+> -	struct p80211item_uint32 basicrate6;
+> -	struct p80211item_uint32 basicrate7;
+> -	struct p80211item_uint32 basicrate8;
+> -	struct p80211item_uint32 supprate1;
+> -	struct p80211item_uint32 supprate2;
+> -	struct p80211item_uint32 supprate3;
+> -	struct p80211item_uint32 supprate4;
+> -	struct p80211item_uint32 supprate5;
+> -	struct p80211item_uint32 supprate6;
+> -	struct p80211item_uint32 supprate7;
+> -	struct p80211item_uint32 supprate8;
+> +	struct p80211item_uint32 basicrate[8];
+> +	struct p80211item_uint32 supprate[8];
+>  } __packed;
+>  
+>  struct p80211msg_dot11req_start {
+> diff --git a/drivers/staging/wlan-ng/prism2mgmt.c b/drivers/staging/wlan-ng/prism2mgmt.c
+> index 9030a8939a9b..fc465261baa1 100644
+> --- a/drivers/staging/wlan-ng/prism2mgmt.c
+> +++ b/drivers/staging/wlan-ng/prism2mgmt.c
+> @@ -437,42 +437,22 @@ int prism2mgmt_scan_results(struct wlandevice *wlandev, void *msgp)
+>  		if (item->supprates[count] == 0)
+>  			break;
+>  
+> -#define REQBASICRATE(N) \
+> -	do { \
+> -		if ((count >= (N)) && DOT11_RATE5_ISBASIC_GET(	\
+> -			item->supprates[(N) - 1])) { \
+> -			req->basicrate ## N .data = item->supprates[(N) - 1]; \
+> -			req->basicrate ## N .status = \
+> -				P80211ENUM_msgitem_status_data_ok; \
+> -		} \
+> -	} while (0)
+> -
+> -	REQBASICRATE(1);
+> -	REQBASICRATE(2);
+> -	REQBASICRATE(3);
+> -	REQBASICRATE(4);
+> -	REQBASICRATE(5);
+> -	REQBASICRATE(6);
+> -	REQBASICRATE(7);
+> -	REQBASICRATE(8);
+> -
+> -#define REQSUPPRATE(N) \
+> -	do { \
+> -		if (count >= (N)) {					\
+> -			req->supprate ## N .data = item->supprates[(N) - 1]; \
+> -			req->supprate ## N .status = \
+> -				P80211ENUM_msgitem_status_data_ok; \
+> -		} \
+> -	} while (0)
+> -
+> -	REQSUPPRATE(1);
+> -	REQSUPPRATE(2);
+> -	REQSUPPRATE(3);
+> -	REQSUPPRATE(4);
+> -	REQSUPPRATE(5);
+> -	REQSUPPRATE(6);
+> -	REQSUPPRATE(7);
+> -	REQSUPPRATE(8);
+> +	for (int i = 0; i < 8; i++) {
+> +		if (count > i &&
+> +		    DOT11_RATE5_ISBASIC_GET(item->supprates[i])) {
+> +			req->basicrate[i].data = item->supprates[i];
+> +			req->basicrate[i].status =
+> +				P80211ENUM_msgitem_status_data_ok;
+> +		}
+> +	}
+> +
+> +	for (int i = 0; i < 8; i++) {
+> +		if (count > i) {
+> +			req->supprate[i].data = item->supprates[i];
+> +			req->supprate[i].status =
+> +				P80211ENUM_msgitem_status_data_ok;
+> +		}
+> +	}
 
+This patch implies that these structures are set but never actually read
+from, so why are they present at all?  Is this a structure that is on
+the wire/air or used somewhere else as an api to hardware?
 
-To be crystal clear, it is minor difference between files in U-Boot
+I tried to unwind things in the driver, but couldn't figure it out, what
+happens if you just delete these fields, does the driver still work
+properly?
 
-and in Linux, just because we correct the check-patch errors
+thanks,
 
-when this file for STM32F4 was up streamed in U-Boot.
-
-
-I prefer correct this line in the Linux file and no having
-
-this difference for each device tree synchronization with U-Boot.
-
-
-But if you prefer, you can drop this modification and
-
-I will align U-Boot file with this error.
-
-
-Alexandre: it could part of patch for STM32 files clean-up ?
-
-scripts/checkpatch.pl -f include/dt-bindings/*/*stm*
-
-scripts/checkpatch.pl -f arch/arm/boot/dts/stm*
-
-
->
-> Best regards,
-> Krzysztof
-
-
-Regards
-
-Patrick
-
-
+greg k-h
