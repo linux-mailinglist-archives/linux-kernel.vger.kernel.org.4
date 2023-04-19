@@ -2,214 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F82C6E74AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3CB66E74B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbjDSIKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
+        id S232164AbjDSILL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbjDSIKx (ORCPT
+        with ESMTP id S232172AbjDSILI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:10:53 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B059A5C7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:10:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681891847; x=1713427847;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ldfHi5FJOij2vVlboMSTKmDdQJF9+AoXFipgUDIrzP0=;
-  b=bwUnh0vVH9gJv57o0hWJkOpevTgQZOmP69PCrO6dIGd3Sp36TzhvQ8HQ
-   xck2Vo6BYyVj5eN3iaaN5PnmgQeM4Jd/kU2icQPoTuglsVI5WckN68XE+
-   PdzLSF7/AEqhtchX4ffjU4gC6ydIOUp2IOrEA6yPTtrWourdQlq3Q/voB
-   I56uZeQx1QPIH6IAOS5NKqTJ/pjzH6yXhlsNDyQtzeUWu5LcKQktnxt+s
-   OLJUFLmZG7IjXpVOakGAxA2EJj4v1gAcF15qLxle0abB5g61rmGh7JOBP
-   DIbC0mhyFPqnA8e5ol3XLUBWyOYBwxJOJqyKkMqN7FILELU0WNTazzQbV
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="431664124"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="431664124"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 01:10:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="684896973"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="684896973"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 19 Apr 2023 01:10:43 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pp2tm-000eix-2C;
-        Wed, 19 Apr 2023 08:10:42 +0000
-Date:   Wed, 19 Apr 2023 16:10:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Andi Shyti <andi.shyti@linux.intel.com>
-Subject: [tip:locking/core 5/5]
- drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c:232:34: sparse: sparse:
- Using plain integer as NULL pointer
-Message-ID: <202304191617.HODs4X6a-lkp@intel.com>
+        Wed, 19 Apr 2023 04:11:08 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BD7A5F0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:11:02 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 403FB660324C;
+        Wed, 19 Apr 2023 09:11:00 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681891861;
+        bh=N9N5Z5PUO2VBsvggGI6LzSyVWaQ71ALkM8ielchtweQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=oe0VZA1rILmQ75rbPrJ+2gbcSIw4gNsBHM7Cw4E4GeHiEjkksuUYU5keH3A3B8p4x
+         zy4l6tqfIgoE8mwzTQye/Lh6zZV36EPcYjX5RMORPVh1NBJou8L7NOO4jUGBzQ+pDu
+         hzbzTCbOHRHHoapv6JY0Zw2Czdc0QBGFRYNrvbsfnJN62hOeOvdDKmMkvpvMLmyiX8
+         EEmht/5D3QSyrQwTpjgeXVAcl2SjN8jGEZYIqB0/gOMYeTfGMHV4EpTUniSDZ5RlvM
+         /nMo77nkSmvPqG3tx84BEuHIFIhmKHCHKgG1wZ7uoe/7MJlTPscfES/YzaW8hjQYKd
+         PIP6FyBICkujQ==
+Message-ID: <3dac0be8-6a49-43db-da65-e99d2e9719e6@collabora.com>
+Date:   Wed, 19 Apr 2023 10:10:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH linux-next v3 4/4] clocksource/drivers/timer-mediatek:
+ Make timer-mediatek become loadable module
+To:     walter.chang@mediatek.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        John Stultz <jstultz@google.com>
+Cc:     wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
+        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230419074910.10809-1-walter.chang@mediatek.com>
+ <20230419074910.10809-5-walter.chang@mediatek.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230419074910.10809-5-walter.chang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
-head:   93eff603d6a2bc1895eeb7063dbd0661bb760b74
-commit: f7faedffa92c35afbcfbf0a3dd73079e16b2b87f [5/5] drm/i915/gt: use __xchg instead of internal helper
-config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20230419/202304191617.HODs4X6a-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=f7faedffa92c35afbcfbf0a3dd73079e16b2b87f
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip locking/core
-        git checkout f7faedffa92c35afbcfbf0a3dd73079e16b2b87f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 olddefconfig
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+Il 19/04/23 09:49, walter.chang@mediatek.com ha scritto:
+> From: Chun-Hung Wu <chun-hung.wu@mediatek.com>
+> 
+> Make the timer-mediatek driver which can register
+> an always-on timer as tick_broadcast_device on
+> MediaTek SoCs become loadable module in GKI.
+> 
+> Tested-by: Walter Chang <walter.chang@mediatek.com>
+> Signed-off-by: Chun-Hung Wu <chun-hung.wu@mediatek.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304191617.HODs4X6a-lkp@intel.com/
+I think I typoed your email when sending the example patch for the
+conversion to platform_device. Check [1], it may be better to just
+iterate through that? (please ignore the pure_initcall() part, that's
+a mistake, it's never gonna happen as it automatically becomes a
+module_init() call).
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c:232:34: sparse: sparse: Using plain integer as NULL pointer
-   drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c:247:34: sparse: sparse: Using plain integer as NULL pointer
---
->> drivers/gpu/drm/i915/gt/intel_engine_cs.c:1045:15: sparse: sparse: Using plain integer as NULL pointer
---
->> drivers/gpu/drm/i915/gt/intel_lrc.c:1112:37: sparse: sparse: Using plain integer as NULL pointer
-   drivers/gpu/drm/i915/gt/intel_lrc.c:1229:24: sparse: sparse: Using plain integer as NULL pointer
-   drivers/gpu/drm/i915/gt/intel_lrc.c:1230:22: sparse: sparse: Using plain integer as NULL pointer
---
->> drivers/gpu/drm/i915/gt/intel_gt.c:756:21: sparse: sparse: Using plain integer as NULL pointer
-   drivers/gpu/drm/i915/gt/intel_gt.c:803:14: sparse: sparse: Using plain integer as NULL pointer
---
->> drivers/gpu/drm/i915/gt/intel_rc6.c:705:16: sparse: sparse: Using plain integer as NULL pointer
---
->> drivers/gpu/drm/i915/gt/intel_migrate.c:1150:14: sparse: sparse: Using plain integer as NULL pointer
---
->> drivers/gpu/drm/i915/gt/intel_gsc.c:73:43: sparse: sparse: Using plain integer as NULL pointer
+It depends on what maintainers think about that clocksource.h addition,
+the patch got zero comments, so if you're interested in that perhaps we
+can explicitly ask what would be the best option between yours and mine;
+that addition is done only to avoid the big ifdef party that this patch
+proposes and makes things a bit shorter if this timer modularization
+goes on with more drivers, but I don't have strong opinions anyway.
 
-vim +232 drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c
+In the meanwhile, just to eventually speed up integrating this, or the
+other patch - I'll still give you a review of this one.
 
-   134	
-   135	static void heartbeat(struct work_struct *wrk)
-   136	{
-   137		struct i915_sched_attr attr = { .priority = I915_PRIORITY_MIN };
-   138		struct intel_engine_cs *engine =
-   139			container_of(wrk, typeof(*engine), heartbeat.work.work);
-   140		struct intel_context *ce = engine->kernel_context;
-   141		struct i915_request *rq;
-   142		unsigned long serial;
-   143	
-   144		/* Just in case everything has gone horribly wrong, give it a kick */
-   145		intel_engine_flush_submission(engine);
-   146	
-   147		rq = engine->heartbeat.systole;
-   148		if (rq && i915_request_completed(rq)) {
-   149			i915_request_put(rq);
-   150			engine->heartbeat.systole = NULL;
-   151		}
-   152	
-   153		if (!intel_engine_pm_get_if_awake(engine))
-   154			return;
-   155	
-   156		if (intel_gt_is_wedged(engine->gt))
-   157			goto out;
-   158	
-   159		if (i915_sched_engine_disabled(engine->sched_engine)) {
-   160			reset_engine(engine, engine->heartbeat.systole);
-   161			goto out;
-   162		}
-   163	
-   164		if (engine->heartbeat.systole) {
-   165			long delay = READ_ONCE(engine->props.heartbeat_interval_ms);
-   166	
-   167			/* Safeguard against too-fast worker invocations */
-   168			if (!time_after(jiffies,
-   169					rq->emitted_jiffies + msecs_to_jiffies(delay)))
-   170				goto out;
-   171	
-   172			if (!i915_sw_fence_signaled(&rq->submit)) {
-   173				/*
-   174				 * Not yet submitted, system is stalled.
-   175				 *
-   176				 * This more often happens for ring submission,
-   177				 * where all contexts are funnelled into a common
-   178				 * ringbuffer. If one context is blocked on an
-   179				 * external fence, not only is it not submitted,
-   180				 * but all other contexts, including the kernel
-   181				 * context are stuck waiting for the signal.
-   182				 */
-   183			} else if (engine->sched_engine->schedule &&
-   184				   rq->sched.attr.priority < I915_PRIORITY_BARRIER) {
-   185				/*
-   186				 * Gradually raise the priority of the heartbeat to
-   187				 * give high priority work [which presumably desires
-   188				 * low latency and no jitter] the chance to naturally
-   189				 * complete before being preempted.
-   190				 */
-   191				attr.priority = 0;
-   192				if (rq->sched.attr.priority >= attr.priority)
-   193					attr.priority = I915_PRIORITY_HEARTBEAT;
-   194				if (rq->sched.attr.priority >= attr.priority)
-   195					attr.priority = I915_PRIORITY_BARRIER;
-   196	
-   197				local_bh_disable();
-   198				engine->sched_engine->schedule(rq, &attr);
-   199				local_bh_enable();
-   200			} else {
-   201				reset_engine(engine, rq);
-   202			}
-   203	
-   204			rq->emitted_jiffies = jiffies;
-   205			goto out;
-   206		}
-   207	
-   208		serial = READ_ONCE(engine->serial);
-   209		if (engine->wakeref_serial == serial)
-   210			goto out;
-   211	
-   212		if (!mutex_trylock(&ce->timeline->mutex)) {
-   213			/* Unable to lock the kernel timeline, is the engine stuck? */
-   214			if (xchg(&engine->heartbeat.blocked, serial) == serial)
-   215				intel_gt_handle_error(engine->gt, engine->mask,
-   216						      I915_ERROR_CAPTURE,
-   217						      "no heartbeat on %s",
-   218						      engine->name);
-   219			goto out;
-   220		}
-   221	
-   222		rq = heartbeat_create(ce, GFP_NOWAIT | __GFP_NOWARN);
-   223		if (IS_ERR(rq))
-   224			goto unlock;
-   225	
-   226		heartbeat_commit(rq, &attr);
-   227	
-   228	unlock:
-   229		mutex_unlock(&ce->timeline->mutex);
-   230	out:
-   231		if (!engine->i915->params.enable_hangcheck || !next_heartbeat(engine))
- > 232			i915_request_put(__xchg(&engine->heartbeat.systole, 0));
-   233		intel_engine_pm_put(engine);
-   234	}
-   235	
+[1]: 
+https://patchwork.kernel.org/project/linux-mediatek/patch/20230309132119.175650-1-angelogioacchino.delregno@collabora.com/
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+>   drivers/clocksource/Kconfig          |  2 +-
+>   drivers/clocksource/timer-mediatek.c | 39 ++++++++++++++++++++++++++++
+>   2 files changed, 40 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+> index 526382dc7482..a7413ad7b6ad 100644
+> --- a/drivers/clocksource/Kconfig
+> +++ b/drivers/clocksource/Kconfig
+> @@ -472,7 +472,7 @@ config SYS_SUPPORTS_SH_CMT
+>   	bool
+>   
+>   config MTK_TIMER
+> -	bool "Mediatek timer driver" if COMPILE_TEST
+> +	tristate "Mediatek timer driver"
+
+While at it, you could also fix the text, Mediatek -> MediaTek
+
+>   	depends on HAS_IOMEM
+>   	select TIMER_OF
+>   	select CLKSRC_MMIO
+> diff --git a/drivers/clocksource/timer-mediatek.c b/drivers/clocksource/timer-mediatek.c
+> index 7bcb4a3f26fb..3448848682c0 100644
+> --- a/drivers/clocksource/timer-mediatek.c
+> +++ b/drivers/clocksource/timer-mediatek.c
+> @@ -13,6 +13,9 @@
+>   #include <linux/clocksource.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/irqreturn.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+>   #include <linux/sched_clock.h>
+>   #include <linux/slab.h>
+>   #include "timer-of.h"
+> @@ -337,5 +340,41 @@ static int __init mtk_gpt_init(struct device_node *node)
+>   
+>   	return 0;
+>   }
+> +
+> +#ifdef MODULE
+
+#ifndef MODULE
+... two lines...
+#else
+... a bunch of lines ...
+#endif
+
+looks more readable. I'd go with that.
+
+> +static int mtk_timer_probe(struct platform_device *pdev)
+> +{
+> +	int (*timer_init)(struct device_node *node);
+> +	struct device_node *np = pdev->dev.of_node;
+> +
+> +	timer_init = of_device_get_match_data(&pdev->dev);
+> +	return timer_init(np);
+> +}
+> +
+> +static const struct of_device_id mtk_timer_match_table[] = {
+> +	{
+> +		.compatible = "mediatek,mt6577-timer",
+> +		.data = mtk_gpt_init,
+
+Fits in one line!
+
+> +	},
+> +	{
+> +		.compatible = "mediatek,mt6765-timer",
+> +		.data = mtk_syst_init,
+
+ditto.
+
+> +	},
+> +	{}
+
+Always end with { /* sentinel */ }
+
+> +};
+> +
+> +static struct platform_driver mtk_timer_driver = {
+> +	.probe = mtk_timer_probe,
+> +	.driver = {
+> +		.name = "mtk-timer",
+
+"mediatek-timer" looks nicer :-)
+
+> +		.of_match_table = mtk_timer_match_table,
+> +	},
+> +};
+> +module_platform_driver(mtk_timer_driver);
+> +
+> +MODULE_DESCRIPTION("MediaTek Module Timer driver");
+
+"MediaTek Timer driver" is enough, "Module" gets misleading if this gets compiled
+as built in platform driver (instead of built in timer_of).
+
+> +MODULE_LICENSE("GPL v2");
+> +#else
+>   TIMER_OF_DECLARE(mtk_mt6577, "mediatek,mt6577-timer", mtk_gpt_init);
+>   TIMER_OF_DECLARE(mtk_mt6765, "mediatek,mt6765-timer", mtk_syst_init);
+> +#endif
+
+
