@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505916E7DC9
+	by mail.lfdr.de (Postfix) with ESMTP id 063CF6E7DC8
 	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233042AbjDSPND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
+        id S232561AbjDSPNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 11:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232823AbjDSPM5 (ORCPT
+        with ESMTP id S232269AbjDSPNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:12:57 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16B740FE;
-        Wed, 19 Apr 2023 08:12:55 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id 5614622812f47-38bcc5914ecso3023b6e.0;
-        Wed, 19 Apr 2023 08:12:55 -0700 (PDT)
+        Wed, 19 Apr 2023 11:13:02 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2E2422B;
+        Wed, 19 Apr 2023 08:12:58 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-187ba2311b7so1258772fac.1;
+        Wed, 19 Apr 2023 08:12:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681917175; x=1684509175;
+        d=gmail.com; s=20221208; t=1681917176; x=1684509176;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2uw6cJJOj4NpjhqsMBl9W9u80TyJYI2izxlDAFaHoDI=;
-        b=i1kE4vzt2f/t9G9UipAYtp/r43L4X2m4RsNEPQ4ji5HTT8Zv/IXV7lcSiUxifcDFMO
-         gfv0G0x4NCfU5k5G90/wt+EhepxsBwe/MGVeqxlIbCqJmZIcsSbSaBceggUCgudJyeWV
-         L7iJjFngAc9ozec1ifhqFV3bCZUJZLncAa9PDc89wUB88du1X9OI6cfggy9YJgjAH7E5
-         OswNxUvETYMq8IzxoHrpHHsNo4qKc6NrLny2I0CfIobInuUU7A2oqHDUHY154F85ktr6
-         K3QA+Pi3EmPpWxEwKpCKDpzj+RZmgFdIMoM7QbCpKdyxxGsnXoznW7RkYQpEIM5+1hAe
-         ubaA==
+        bh=vzLImlJ2xUEAyi3jv3gWv/IPDBNGCDbFeUrywLA9JzY=;
+        b=IyRsmt8hqkrbBLwkPJcWMBkhldl36CJW3/IbwV7zbQZgPE3PW58T4CH3x8CS6rgs8M
+         VGctMaaRXBmGGpMZ/WnbttucDQibFQcTIKdhVUxHCE0RmWBGBs0wqiekgSzdfioGS4Bt
+         liCpExDB/B/H+qEPhow14ppfc6ljLP1VvHCzFgU+kg3Z4kCC/IcK+j4r3dFR1NBaROd0
+         PvMHDgqfejIx6kf5kCoBhgepcej61/+GM4mu6XkCaeeMXvCcO3lzXzKXB82KIChmBmqb
+         7oLNfqK0blItwu60s3m1pmXi2YLoNRdSuOpoPcg1ZWKiuHH8yt05a5VM5i0B6fAK4+Mi
+         Nq4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681917175; x=1684509175;
+        d=1e100.net; s=20221208; t=1681917176; x=1684509176;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2uw6cJJOj4NpjhqsMBl9W9u80TyJYI2izxlDAFaHoDI=;
-        b=LIov0WGDVqmBAR5O9BzThkYOkUuLwTWFMgRBv9V4W14JlSv2uGYwDLhKMDVQ0zitEd
-         VoujBb8GGLiHpFuTOWqkaUmaNjakgKxMPpuYvgyeF/Bgn6RiPpXKtiq/WF4DMmkQ7t0O
-         Ma6ZM/sujwdHxMZVyJ8VJporHV4PQj2bjjnKPy0y61fTPMU5+OaMiS/HrT+fX0HBAF8a
-         SL7qBsa/rCHvJNRc8nIEJOHmVVoSKj6TckUlipujgRhW1mnwlneki5CGILUcaKWW3jC3
-         HxHJOSC4Ts1pFqX/mupGvMdhyC4vCfk+mMgDZGNPIW9gWcImpqzDgGea4ExfQlAAKOeo
-         wqjw==
-X-Gm-Message-State: AAQBX9cBh9GszOCSQZjm2Ohmipt/UONBA6Ng6AS82DZsxqVHHTNoCpJ1
-        9kL09NOc6SuKQvntcrHaFuknjHOBe+w=
-X-Google-Smtp-Source: AKy350aCvE6JBwLsGP05LGV69QuEFTx0apH2l++wlH1wejpzrorncbZtXH0kz6sHZLSIIK6nIbW1Hw==
-X-Received: by 2002:a05:6808:9:b0:37f:aa3f:7218 with SMTP id u9-20020a056808000900b0037faa3f7218mr2849073oic.27.1681917175023;
-        Wed, 19 Apr 2023 08:12:55 -0700 (PDT)
+        bh=vzLImlJ2xUEAyi3jv3gWv/IPDBNGCDbFeUrywLA9JzY=;
+        b=WNBC/NTZka3+/y4ZgpcgCrlp5q9eqh4rcMSlG0GokRqMEUqumTP4HzeE+4v92fpluR
+         Qt0Y9bkWhkT8+nvZOfNJV/rNvGjb/tjcp515ADtncpoW3krvH8TvcRpy8cncloi1XZD4
+         N3nupWlEYkTRk/A4rPsOX6sT0xjPj1InUYhjyifZBFHPfuaKyZ7kciGtPzFqq3dciTvD
+         SyLm82rHdcB+o9SiChYXTj7WJrGHuUDaZ55YBDPi32M0Ni0sK284xx2x57l69SBdYbNu
+         +5dAgmUgTFldjwoXTjhU9OLJOzH31mwr9iA0B6KfOZgrFnuP17zUrXNU5HKdB66+1hG5
+         XrwQ==
+X-Gm-Message-State: AAQBX9cjHbaPAqMxnM/WW//ks0oDBFoNdaaeNDqUwtWLSonRQcR4SndE
+        nVCVyVFbq+KBWgLC2mS2zmtsi9UecK0=
+X-Google-Smtp-Source: AKy350YHaM7AgnIqySJ9F0nhGINPyZl8WQi8ucp42s3q8S0Yz6k9G8syiBy1SeJcertNjG72Q0yeVw==
+X-Received: by 2002:a05:6870:630c:b0:183:f806:29e1 with SMTP id s12-20020a056870630c00b00183f80629e1mr52716oao.19.1681917176312;
+        Wed, 19 Apr 2023 08:12:56 -0700 (PDT)
 Received: from grumpy-VECTOR.hsd1.tx.comcast.net ([2601:2c3:480:7390:e175:6963:338:7453])
-        by smtp.gmail.com with ESMTPSA id o10-20020acad70a000000b0038bae910f7bsm5766847oig.1.2023.04.19.08.12.54
+        by smtp.gmail.com with ESMTPSA id o10-20020acad70a000000b0038bae910f7bsm5766847oig.1.2023.04.19.08.12.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 08:12:54 -0700 (PDT)
+        Wed, 19 Apr 2023 08:12:56 -0700 (PDT)
 From:   Jorge Lopez <jorgealtxwork@gmail.com>
 X-Google-Original-From: Jorge Lopez <jorge.lopez2@hp.com>
 To:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v10 01/14] HP BIOSCFG driver - Documentation
-Date:   Wed, 19 Apr 2023 10:12:41 -0500
-Message-Id: <20230419151249.6126-2-jorge.lopez2@hp.com>
+Subject: [PATCH v10 02/14] HP BIOSCFG driver  - biosattr-interface
+Date:   Wed, 19 Apr 2023 10:12:42 -0500
+Message-Id: <20230419151249.6126-3-jorge.lopez2@hp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230419151249.6126-1-jorge.lopez2@hp.com>
 References: <20230419151249.6126-1-jorge.lopez2@hp.com>
@@ -116,150 +116,321 @@ Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
 ---
 Based on the latest platform-drivers-x86.git/for-next
 ---
- .../testing/sysfs-class-firmware-attributes   | 98 ++++++++++++++++++-
- 1 file changed, 96 insertions(+), 2 deletions(-)
+ .../x86/hp/hp-bioscfg/biosattr-interface.c    | 305 ++++++++++++++++++
+ 1 file changed, 305 insertions(+)
+ create mode 100644 drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c
 
-diff --git a/Documentation/ABI/testing/sysfs-class-firmware-attributes b/Documentation/ABI/testing/sysfs-class-firmware-attributes
-index 4cdba3477176..73d7b8fbc0b2 100644
---- a/Documentation/ABI/testing/sysfs-class-firmware-attributes
-+++ b/Documentation/ABI/testing/sysfs-class-firmware-attributes
-@@ -22,6 +22,12 @@ Description:
- 			- integer: a range of numerical values
- 			- string
- 
-+		HP specific types
-+		-----------------
-+			- ordered-list - a set of ordered list valid values
-+			- sure-start - report audit logs read from BIOS
+diff --git a/drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c b/drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c
+new file mode 100644
+index 000000000000..bbe00c84c711
+--- /dev/null
++++ b/drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c
+@@ -0,0 +1,305 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Functions corresponding to methods under BIOS interface GUID
++ * for use with hp-bioscfg driver.
++ *
++ *  Copyright (c) 2022 Hewlett-Packard Inc.
++ */
++
++#include <linux/wmi.h>
++#include "bioscfg.h"
++
++#define SET_DEFAULT_VALUES_METHOD_ID	0x02
++#define SET_BIOS_DEFAULTS_METHOD_ID	0x03
++#define SET_ATTRIBUTE_METHOD_ID		0x04
++
++/*
++ * set_attribute() - Update an attribute value
++ * @a_name: The attribute name
++ * @a_value: The attribute value
++ *
++ * Sets an attribute to new value
++ */
++int hp_set_attribute(const char *a_name, const char *a_value)
++{
++	size_t security_area_size;
++	size_t a_name_size, a_value_size;
++	u16 *buffer = NULL;
++	u16 *start = NULL;
++	int  buffer_size;
++	int ret;
++	int instance;
++	char *auth_empty_value = "";
++	char *auth_token_choice = NULL;
 +
 +
- 		All attribute types support the following values:
- 
- 		current_value:
-@@ -126,6 +132,44 @@ Description:
- 					value will not be effective through sysfs until this rule is
- 					met.
- 
-+		HP specific class extensions
-+		------------------------------
++	mutex_lock(&bioscfg_drv.mutex);
++	if (!bioscfg_drv.bios_attr_wdev) {
++		ret = -ENODEV;
++		goto out_set_attribute;
++	}
 +
-+		On HP systems the following additional attributes are available:
++	instance = get_password_instance_for_type(SETUP_PASSWD);
++	if (instance < 0)
++		goto out_set_attribute;
 +
-+		"ordered-list"-type specific properties:
++	if (strlen(bioscfg_drv.password_data[instance].current_password) == 0)
++		strscpy(bioscfg_drv.password_data[instance].current_password,
++			auth_empty_value,
++			sizeof(bioscfg_drv.password_data[instance].current_password));
 +
-+		elements:
-+					A file that can be read to obtain the possible
-+					list of values of the <attr>. Values are separated using
-+					semi-colon (``;``). The order individual elements are listed
-+					according to their priority.  An Element listed first has the
-+					highest priority. Writing the list in a different order to
-+					current_value alters the priority order for the particular
-+					attribute.
++	/* Select which auth token to use; password or [auth token] */
 +
-+		"sure-start"-type specific properties:
++	if (bioscfg_drv.spm_data.auth_token != NULL)
++		auth_token_choice = bioscfg_drv.spm_data.auth_token;
++	else
++		auth_token_choice = bioscfg_drv.password_data[instance].current_password;
 +
-+		audit_log_entries:
-+					A read-only file that returns the events in the log.
-+					Values are separated using semi-colon (``;``)
++	a_name_size = bioscfg_calculate_string_buffer(a_name);
++	a_value_size = bioscfg_calculate_string_buffer(a_value);
++	security_area_size = calculate_security_buffer(auth_token_choice);
++	buffer_size = a_name_size + a_value_size + security_area_size;
 +
-+					Audit log entry format
++	buffer = kmalloc(buffer_size + 1, GFP_KERNEL);
++	if (!buffer) {
++		ret = -ENOMEM;
++		goto out_set_attribute;
++	}
 +
-+					Byte 0-15:   Requested Audit Log entry  (Each Audit log is 16 bytes)
-+					Byte 16-127: Unused
++	/* build variables to set */
++	start = buffer;
++	start = ascii_to_utf16_unicode(start, a_name);
++	if (!start)
++		goto out_set_attribute;
 +
-+		audit_log_entry_count:
-+					A read-only file that returns the number of existing audit log events available to be read.
-+					Values are separated using comma (``,``)
++	start = ascii_to_utf16_unicode(start, a_value);
++	if (!start)
++		goto out_set_attribute;
 +
-+					[No of entries],[log entry size],[Max number of entries supported]
++	populate_security_buffer(start, auth_token_choice);
 +
-+					log entry size identifies audit log size for the current BIOS version.
-+					The current size is 16 bytes but it can be to up to 128 bytes long
-+					in future BIOS versions.
-+
-+
- What:		/sys/class/firmware-attributes/*/authentication/
- Date:		February 2021
- KernelVersion:	5.11
-@@ -206,7 +250,7 @@ Description:
- 		Drivers may emit a CHANGE uevent when a password is set or unset
- 		userspace may check it again.
- 
--		On Dell and Lenovo systems, if Admin password is set, then all BIOS attributes
-+		On Dell, Lenovo and HP systems, if Admin password is set, then all BIOS attributes
- 		require password validation.
- 		On Lenovo systems if you change the Admin password the new password is not active until
- 		the next boot.
-@@ -296,6 +340,15 @@ Description:
- 						echo "signature" > authentication/Admin/signature
- 						echo "password" > authentication/Admin/certificate_to_password
- 
-+		HP specific class extensions
-+		--------------------------------
-+
-+		On HP systems the following additional settings are available:
-+
-+		role: enhanced-bios-auth:
-+					This role is specific to Secure Platform Management (SPM) attribute.
-+					It requires configuring an endorsement (kek) and signing certificate (sk).
-+
- 
- What:		/sys/class/firmware-attributes/*/attributes/pending_reboot
- Date:		February 2021
-@@ -311,7 +364,7 @@ Description:
- 			==	=========================================
- 			0	All BIOS attributes setting are current
- 			1	A reboot is necessary to get pending BIOS
--			        attribute changes applied
-+				attribute changes applied
- 			==	=========================================
- 
- 		Note, userspace applications need to follow below steps for efficient
-@@ -364,3 +417,44 @@ Description:
- 		use it to enable extra debug attributes or BIOS features for testing purposes.
- 
- 		Note that any changes to this attribute requires a reboot for changes to take effect.
++	ret = hp_wmi_set_bios_setting(buffer, buffer_size);
 +
 +
-+		HP specific class extensions - Secure Platform Manager (SPM)
-+		--------------------------------
++out_set_attribute:
++	kfree(buffer);
++	mutex_unlock(&bioscfg_drv.mutex);
++	return ret;
++}
 +
-+What:		/sys/class/firmware-attributes/*/authentication/SPM/kek
-+Date:		March 29
-+KernelVersion:	5.18
-+Contact:	"Jorge Lopez" <jorge.lopez2@hp.com>
-+Description:	'kek' Key-Encryption-Key is a write-only file that can be used to configure the
-+		RSA public key that will be used by the BIOS to verify
-+		signatures when setting the signing key.  When written,
-+		the bytes should correspond to the KEK certificate
-+		(x509 .DER format containing an OU).  The size of the
-+		certificate must be less than or equal to 4095 bytes.
++/*
++ * hp_wmi_perform_query
++ *
++ * query:	The commandtype (enum hp_wmi_commandtype)
++ * write:	The command (enum hp_wmi_command)
++ * buffer:	Buffer used as input and/or output
++ * insize:	Size of input buffer
++ * outsize:	Size of output buffer
++ *
++ * returns zero on success
++ *         an HP WMI query specific error code (which is positive)
++ *         -EINVAL if the query was not successful at all
++ *         -EINVAL if the output buffer size exceeds buffersize
++ *
++ * Note: The buffersize must at least be the maximum of the input and output
++ *       size. E.g. Battery info query is defined to have 1 byte input
++ *       and 128 byte output. The caller would do:
++ *       buffer = kzalloc(128, GFP_KERNEL);
++ *       ret = hp_wmi_perform_query(HPWMI_BATTERY_QUERY, HPWMI_READ,
++ *				    buffer, 1, 128)
++ */
++int hp_wmi_perform_query(int query, enum hp_wmi_command command, void *buffer,
++			 int insize, int outsize)
++{
++	struct acpi_buffer input, output = { ACPI_ALLOCATE_BUFFER, NULL };
++	struct bios_return *bios_return;
++	union acpi_object *obj = NULL;
++	struct bios_args *args = NULL;
++	int mid, actual_outsize;
++	size_t bios_args_size;
++	int ret;
++
++	mid = encode_outsize_for_pvsz(outsize);
++	if (WARN_ON(mid < 0))
++		return mid;
++
++	bios_args_size = struct_size(args, data, insize);
++	args = kmalloc(bios_args_size, GFP_KERNEL);
++	if (!args)
++		return -ENOMEM;
++
++	input.length = bios_args_size;
++	input.pointer = args;
++
++	args->signature = 0x55434553;
++	args->command = command;
++	args->commandtype = query;
++	args->datasize = insize;
++	memcpy(args->data, buffer, flex_array_size(args, data, insize));
++
++	ret = wmi_evaluate_method(HP_WMI_BIOS_GUID, 0, mid, &input, &output);
++	bioscfg_wmi_error_and_message(ret);
++
++	if (ret)
++		goto out_free;
++
++	obj = output.pointer;
++	if (!obj) {
++		ret = -EINVAL;
++		goto out_free;
++	}
++	if (query != HPWMI_SECUREPLATFORM_GET_STATE &&
++	    command != HPWMI_SECUREPLATFORM)
++		if (obj->type != ACPI_TYPE_BUFFER ||
++		    obj->buffer.length < sizeof(*bios_return)) {
++			pr_warn("query 0x%x returned wrong type or too small buffer\n", query);
++			ret = -EINVAL;
++			goto out_free;
++		}
 +
 +
-+What:		/sys/class/firmware-attributes/*/authentication/SPM/sk
-+Date:		March 29
-+KernelVersion:	5.18
-+Contact:	"Jorge Lopez" <jorge.lopez2@hp.com>
-+Description:	'sk' Signature Key is a write-only file that can be used to configure the RSA
-+		public key that will be used by the BIOS to verify signatures
-+		when configuring BIOS settings and security features.  When
-+		written, the bytes should correspond to the modulus of the
-+		public key.  The exponent is assumed to be 0x10001.
++	bios_return = (struct bios_return *)obj->buffer.pointer;
++	ret = bios_return->return_code;
++	bioscfg_wmi_error_and_message(ret);
 +
++	if (ret) {
++		if (ret != HPWMI_RET_UNKNOWN_COMMAND &&
++		    ret != HPWMI_RET_UNKNOWN_CMDTYPE)
++			pr_warn("query 0x%x returned error 0x%x\n", query, ret);
++		goto out_free;
++	}
 +
-+What:		/sys/class/firmware-attributes/*/authentication/SPM/status
-+Date:		March 29
-+KernelVersion:	5.18
-+Contact:	"Jorge Lopez" <jorge.lopez2@hp.com>
-+Description:	'status' is a read-only file that returns ASCII text in JSON format reporting
-+		the status information.
++	/* Ignore output data of zero size */
++	if (!outsize)
++		goto out_free;
 +
-+		  "State": "not provisioned | provisioned | provisioning in progress ",
-+		  "Version": " Major. Minor ",
-+		  "Nonce": <16-bit unsigned number display in base 10>,
-+		  "FeaturesInUse": <16-bit unsigned number display in base 10>,
-+		  "EndorsementKeyMod": "<256 bytes in base64>",
-+		  "SigningKeyMod": "<256 bytes in base64>"
++	actual_outsize = min(outsize, (int)(obj->buffer.length - sizeof(*bios_return)));
++	memcpy(buffer, obj->buffer.pointer + sizeof(*bios_return), actual_outsize);
++	memset(buffer + actual_outsize, 0, outsize - actual_outsize);
++
++out_free:
++	kfree(obj);
++	kfree(args);
++	return ret;
++}
++
++static void *utf16_empty_string(u16 *p)
++{
++	*p++ = 2;
++	*p++ = (u8)0x00;
++	return p;
++}
++
++/*
++ * ascii_to_utf16_unicode -  Convert ascii string to UTF-16 unicode
++ *
++ * BIOS supports UTF-16 characters that are 2 bytes long.  No variable
++ * multi-byte language supported.
++ *
++ * @p:   Unicode buffer address
++ * @str: string to convert to unicode
++ *
++ * Returns a void pointer to the buffer containing unicode string
++ */
++void *ascii_to_utf16_unicode(u16 *p, const u8 *str)
++{
++	int len = strlen(str);
++	int ret;
++
++	/*
++	 * Add null character when reading an empty string
++	 * "02 00 00 00"
++	 */
++	if (len == 0)
++		return utf16_empty_string(p);
++
++	/* Move pointer len * 2 number of bytes */
++	*p++ = len * 2;
++	ret = utf8s_to_utf16s(str, strlen(str), UTF16_HOST_ENDIAN, p, len);
++	if (ret < 0) {
++		dev_err(bioscfg_drv.class_dev, "UTF16 conversion failed\n");
++		goto ascii_to_utf16_unicode_out;
++	}
++
++	if ((ret * sizeof(u16)) > U16_MAX) {
++		dev_err(bioscfg_drv.class_dev, "Error string too long\n");
++		goto ascii_to_utf16_unicode_out;
++	}
++
++ascii_to_utf16_unicode_out:
++	p += len;
++	return p;
++}
++
++/*
++ * hp_wmi_set_bios_setting - Set setting's value in BIOS
++ *
++ * @input_buffer: Input buffer address
++ * @input_size:   Input buffer size
++ *
++ * Returns: Count of unicode characters written to BIOS if successful, otherwise
++ *		-ENOMEM unable to allocate memory
++ *		-EINVAL buffer not allocated or too small
++ */
++int hp_wmi_set_bios_setting(u16 *input_buffer, u32 input_size)
++{
++	union acpi_object *obj;
++	struct acpi_buffer input = {input_size, input_buffer};
++	struct acpi_buffer output = {ACPI_ALLOCATE_BUFFER, NULL};
++	int ret = 0;
++
++	ret = wmi_evaluate_method(HP_WMI_SET_BIOS_SETTING_GUID, 0, 1, &input, &output);
++
++	obj = output.pointer;
++	if (!obj)
++		return -EINVAL;
++
++	if (obj->type != ACPI_TYPE_INTEGER)
++		ret = -EINVAL;
++
++	ret = obj->integer.value;
++	bioscfg_wmi_error_and_message(ret);
++
++	kfree(obj);
++	return ret;
++}
++
++static int bios_attr_set_interface_probe(struct wmi_device *wdev, const void *context)
++{
++	mutex_lock(&bioscfg_drv.mutex);
++	bioscfg_drv.bios_attr_wdev = wdev;
++	mutex_unlock(&bioscfg_drv.mutex);
++	return 0;
++}
++
++static void bios_attr_set_interface_remove(struct wmi_device *wdev)
++{
++	mutex_lock(&bioscfg_drv.mutex);
++	bioscfg_drv.bios_attr_wdev = NULL;
++	mutex_unlock(&bioscfg_drv.mutex);
++}
++
++static const struct wmi_device_id bios_attr_set_interface_id_table[] = {
++	{ .guid_string = HP_WMI_BIOS_GUID},
++	{ }
++};
++static struct wmi_driver bios_attr_set_interface_driver = {
++	.driver = {
++		.name = DRIVER_NAME
++	},
++	.probe = bios_attr_set_interface_probe,
++	.remove = bios_attr_set_interface_remove,
++	.id_table = bios_attr_set_interface_id_table
++};
++
++int init_bios_attr_set_interface(void)
++{
++	return wmi_driver_register(&bios_attr_set_interface_driver);
++}
++
++void exit_bios_attr_set_interface(void)
++{
++	wmi_driver_unregister(&bios_attr_set_interface_driver);
++}
++
++MODULE_DEVICE_TABLE(wmi, bios_attr_set_interface_id_table);
 -- 
 2.34.1
 
