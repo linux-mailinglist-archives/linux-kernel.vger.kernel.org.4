@@ -2,46 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E596E80DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A996E80F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233386AbjDSSGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
+        id S231831AbjDSSJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233285AbjDSSGm (ORCPT
+        with ESMTP id S230429AbjDSSJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 14:06:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B334B5B92
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 11:06:38 -0700 (PDT)
+        Wed, 19 Apr 2023 14:09:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68AF5FCF;
+        Wed, 19 Apr 2023 11:09:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B56B6166E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:06:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8262FC433EF;
-        Wed, 19 Apr 2023 18:06:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A71C63754;
+        Wed, 19 Apr 2023 18:09:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D689FC433EF;
+        Wed, 19 Apr 2023 18:09:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681927597;
-        bh=bMLoxOhWXVqY8Sas+obj9neqtDS1gz9HD3YT4tNYF4g=;
-        h=Date:From:To:Subject:From;
-        b=hdPyq+L2uovQ6bVoqiEOmg9Ogb9KC7nYh+j0FHub2G7yjvCHYEE7XDSAX4WdFnN1M
-         15HLIwOiXFbj+rM4Ju5P0LOTpk2sHgEs4UHjv4J2Mfb8f/Pw8YbyWBFcd6OkC/aTov
-         EIke5VVrHR3T9YhwCXR9Z1Dd7j4P+z7B/DfY18XEosANAJ6wAkKo/Q+W5PZfKvx1Mz
-         JM73RELtgbEOeeyGbxjCsvGBHQX542cKTz+JCARijSRRcSWDz7uZdqXjiRxca4pKec
-         i0UFsX3z9S+xIsqH+8dF3yewZp5TEPqOpNYwwYiAwHXQYGtmhOvQ86tEpmLG9lUDvg
-         ttsBucwsP/U+g==
-Date:   Wed, 19 Apr 2023 11:06:35 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Prebuilt LLVM 16.0.2 uploaded
-Message-ID: <20230419180635.GA1965688@dev-arch.thelio-3990X>
+        s=k20201202; t=1681927756;
+        bh=TUCoGmaqQfZ4NLT3d2Ho195v5mLMI7sX5znBLXrOWYo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YSId98oIHhtiqAjHaGZa5tH4QrllvBTtHbfK5SNLnS/GnJAdxk0NjTFGN/2BuoiOA
+         MjZoy5mZBAFzlqKj8hKCMmkalrFBYb7VkKXm8m10E3MaA5GeB3fyOcUwVbJ5ENC7j7
+         gptDeJYVVUA3olaQ60CPTt889ZlJUplEivUcBZH1PFD38m95sgozr5YA7XSa8brplc
+         jHVZRJdpi6kSSUy5VhLghE94aKROIDeP1qKEBfqwETk0SDdAzM0pOOdipMrU0D5z4Y
+         XoVxuVVZLa/7Sz/E1bNZHbfiatzxA6y1qnut7/BUQKZJQ71Xydb26o10ybMI0Z+lL8
+         0XHqpTSQDsmzg==
+Date:   Wed, 19 Apr 2023 20:09:08 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Rob Herring <robh@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v10 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link
+ III Deserializer
+Message-ID: <ZEAuRNxRzjRuJRuW@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>, Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Rob Herring <robh@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
+ <20230222132907.594690-6-tomi.valkeinen@ideasonboard.com>
+ <ZD6VwpRya6SGBAt5@shikoro>
+ <20230419091336.4e10ba65@booty>
+ <ZD+g4j7jEg2AETNe@ninjato>
+ <20230419181337.2448179d@booty>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JSr5SI6LktGGn5l9"
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230419181337.2448179d@booty>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,22 +101,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
 
-I have built and uploaded LLVM 16.0.2 to
-https://mirrors.edge.kernel.org/pub/tools/llvm/.
+--JSr5SI6LktGGn5l9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This release includes a fix relevant to the Linux kernel, which you can
-read about here:
+Hi Luca,
 
-https://github.com/llvm/llvm-project/commit/bf80902fdd43eed5b7a4c401bccc0a06ceac582c
-https://github.com/ClangBuiltLinux/linux/issues/1815
+> > Ah, you mean we agreed on that at the Plumbers BoF? I think we can
+> > conclude this is obsolete meanwhile. GMSL encodes the target addresses
+> > in DT. Rob is also fine with the binding here to encode the pool in DT.
+> > Let's follow that road, I'd say.
+>=20
+> Sure, I'm not questioning that. Apologies if it did look like. I was
+> just trying to explain (to myself as well) why this hadn't been done
+> previously.
 
-It is recommended that you use 16.0.2 in lieu of older 16.x series for
-this reason, although there is a kernel series in progress to resolve
-this for older 16.x releases:
+All fine. I didn't understand it this way and mainly wanted to summarize
+what happened since the BoF. To myself as well ;) And also for Tomi so
+he knows what happened.
 
-https://lore.kernel.org/20230412-no_stackp-v2-0-116f9fe4bbe7@google.com/
 
-Cheers,
-Nathan
+--JSr5SI6LktGGn5l9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRALkAACgkQFA3kzBSg
+KbbHPhAAsBiWcgVFjEBmCAlyakvYjpddOTuVEIw/A5MtqXGqnGvzU3FGkINLgQ6o
+beN3h/bzL4+oaGvHxnG1WA+C3sRJ4Zc327cs26vMm6BXFl6LSe0rgxSEbUDdoKIs
+oTvSEksTwQji5jMdtetKITvXqs0n9mp5/Iqs8RF7KNDIffMCBdidWpURl7umOmJW
+xUlKsbFcSR0yZIIVv7GSr/2rceOTQUyZw1lPev0W9mbbt1eOtgYxdiPTfL6HO+fz
+77B/Wyt57nZ0yv/rkRztEFA0r2+4O8MSQdGtkygD4pfn2EEVAgajSM9iuspa5Rn/
+GLzEDLSdnufrk29pR3YehrY2idPlfj5T4tYyaQZS/RVHBxn1X+NSBiMlSmsT0+cr
+MOGBOvgJ29TXQRPGBiP8246A4JpWjnQx2sYM1rMX6jiHUkXYR3JKszeMxLwbjKvV
+bRItbHK/1YI0nKFSef3WykZ0kvwBma/IU60enJYMVITpPPoMXR60+4dpqQCOU398
+I/eLodap5bd6OC67VEvgE/89W68WBnG7aDCDuf63+gdCXJw5omD+GFLX5IvugGPU
+EsoSu12g6gwQcSDJm6MHdCaXbNxrzKVt8ssikScPc0cLpWUfOz12IOfY0WGbwm4u
+aCGScieeLd64u3Gp4lOL4Nm1vWGlLUZzu/VldD4t5ZBsOMEWnJ0=
+=LQvv
+-----END PGP SIGNATURE-----
+
+--JSr5SI6LktGGn5l9--
