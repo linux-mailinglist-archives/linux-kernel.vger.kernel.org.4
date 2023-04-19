@@ -2,88 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419B96E7438
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFC56E743E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbjDSHnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 03:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
+        id S232279AbjDSHoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 03:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232502AbjDSHma (ORCPT
+        with ESMTP id S232443AbjDSHoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 03:42:30 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C17DB472
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:42:29 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id CFE891FD8A;
-        Wed, 19 Apr 2023 07:42:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1681890147; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=UzVUs+NcKfpPnRkrILdkjoJFYTyn1Afn69dgHx+rH9U=;
-        b=SZgPNF5LpNK1fCrO63cyU4bB2QrO7CqxFrHaLjLAfb0sZ8t+HFXn1Ic1ymsnyggIsxfWew
-        1DSCfmhSS1GRNyaEFdmNtDJ3l1lbb05icTlFCZSYRhsUY2he+ozejj2iYMLFj2+u2bBNCG
-        Ubn/e/TWdAZdLXH1c0fbyNSDLo6RaWw=
-Received: from alley.suse.cz (unknown [10.100.201.202])
-        by relay2.suse.de (Postfix) with ESMTP id 3A0ED2C141;
-        Wed, 19 Apr 2023 07:42:27 +0000 (UTC)
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>
-Subject: [PATCH] printk: Enough to disable preemption in printk deferred context
-Date:   Wed, 19 Apr 2023 09:42:10 +0200
-Message-Id: <20230419074210.17646-1-pmladek@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Wed, 19 Apr 2023 03:44:07 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A869B451
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:43:55 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id n43-20020a05600c502b00b003f17466a9c1so964178wmr.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:43:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681890234; x=1684482234;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gZDXVKvsMbMfc3QHDbhDLe7byPrtEPfNnInfzjGU0DY=;
+        b=spioXNQ4zpOkRnYaEv0FazW+Wr9DNiZxKaUmxUdz7M9Lk/ZlWTKRBncGHhzpZ74N1/
+         GyQdqe7si9M8bz+9342fZu2pi0yLUbNY8t9kOS0/XFXxPPYCd4+PS6hD6X5h/a3Lu85i
+         jFU1BCCek+UGbSgRXp5xROmNXmVE8QvRp6GBJyu04pAjdKzDNYFWdH1Wf7MUZuzEVqC3
+         91pwwsK+4qGx99y1AVEDSTmdrR+5qTAQd43DuYzCwxW2i7yCktKR1F3QciXHqiACipyo
+         BjM3QkPSfgDWKbInEwCEvAI8Q05el5JW9qj/M7+1OEFak5WqNSOMlF2VJQfp4SYtYG8O
+         2PTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681890234; x=1684482234;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gZDXVKvsMbMfc3QHDbhDLe7byPrtEPfNnInfzjGU0DY=;
+        b=lNAEOgxZHSDXJftohIKKHrH8ypQaNv4NHPMoZouS2WB8Vn89JUPedMdtEdtm1E7jq0
+         6tg1zPmUy3KuLKu1SUWJeIFDlxsgZE1+DKxMSKERJbSGBIcdnsjbTwejCRzPOvcyecgP
+         kHL5jzrvQZ5nl5PbEXV2NhJnKhjHAhq9d4ZMihIxnDjFbPjrmtrDcVG/WveLonnZbro+
+         WycDgR4pC84LFqHJAlOhm35ANmPYit+vglvPCw21pSTWAcFq0AqPCtDZJ3N0aBBRNHZx
+         pvtCVVvS3e8rehxcP8cecbfrfO0mGBbU5JVtJFbav/T4RAfo0wQnT58C1gsdUJnMBzPS
+         wYiQ==
+X-Gm-Message-State: AAQBX9dguVldButeCZtovs/sYqObltLKX1QOeG1Ele23eccE59qkWbQ4
+        +ODF++GQBs9qOmbij34eMciLl7TmtuOLJZ8I3M+eBA==
+X-Google-Smtp-Source: AKy350a7PqWzaqXelupqzfecORzuWn5Cptqv/p6TdTifyGYk/tO05uZdapqxRO6XsNQsls5Rh11AiA==
+X-Received: by 2002:a1c:cc07:0:b0:3f0:9c6c:54a0 with SMTP id h7-20020a1ccc07000000b003f09c6c54a0mr16014396wmb.2.1681890233898;
+        Wed, 19 Apr 2023 00:43:53 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id s9-20020a05600c45c900b003f092f0e0a0sm2248856wmo.3.2023.04.19.00.43.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 00:43:53 -0700 (PDT)
+Message-ID: <a4b5c1cd-3d43-7286-749a-5627de9c48d5@linaro.org>
+Date:   Wed, 19 Apr 2023 09:43:51 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] clocksource: ti: Use of_property_read_bool() for boolean
+ properties
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230310144702.1541660-1-robh@kernel.org>
+ <20230418162437.GB1764573-robh@kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230418162437.GB1764573-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The comment above printk_deferred_enter()/exit() definition claims
-that it can be used only when interrupts are disabled.
+On 18/04/2023 18:24, Rob Herring wrote:
+> On Fri, Mar 10, 2023 at 08:47:01AM -0600, Rob Herring wrote:
+>> It is preferred to use typed property access functions (i.e.
+>> of_property_read_<type> functions) rather than low-level
+>> of_get_property/of_find_property functions for reading properties.
+>> Convert reading boolean properties to to of_property_read_bool().
+>>
+>> Signed-off-by: Rob Herring <robh@kernel.org>
+>> ---
+>>   drivers/clocksource/timer-ti-dm-systimer.c | 4 ++--
+>>   drivers/clocksource/timer-ti-dm.c          | 8 ++++----
+>>   2 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> Ping!
 
-It was required by the original printk_safe_log_store() implementation.
-The code provided lockless synchronization between a single writer and
-a single reader. The interrupt and the normal context shared the same
-buffer.
+Applied, thanks for heads up
 
-The commit 93d102f094be ("printk: remove safe buffers") removed
-these temporary buffers. Instead, the messages are stored directly into
-the new global lockless buffer which supports multiple parallel writers.
 
-As a result, it is safe to interrupt one writer now. The preemption still
-has to be disabled because the deferred context is CPU specific.
-
-Fixes: 93d102f094be ("printk: remove safe buffers")
-Signed-off-by: Petr Mladek <pmladek@suse.com>
----
- include/linux/printk.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/printk.h b/include/linux/printk.h
-index 8ef499ab3c1e..915a321b491e 100644
---- a/include/linux/printk.h
-+++ b/include/linux/printk.h
-@@ -161,7 +161,7 @@ extern void __printk_safe_enter(void);
- extern void __printk_safe_exit(void);
- /*
-  * The printk_deferred_enter/exit macros are available only as a hack for
-- * some code paths that need to defer all printk console printing. Interrupts
-+ * some code paths that need to defer all printk console printing. Preemption
-  * must be disabled for the deferred duration.
-  */
- #define printk_deferred_enter __printk_safe_enter
 -- 
-2.35.3
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
