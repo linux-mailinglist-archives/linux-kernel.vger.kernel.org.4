@@ -2,146 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96C56E70AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 03:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C25B16E70AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 03:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbjDSBME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 21:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
+        id S231478AbjDSBPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 21:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjDSBMB (ORCPT
+        with ESMTP id S229884AbjDSBPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 21:12:01 -0400
-Received: from mail-m11875.qiye.163.com (mail-m11875.qiye.163.com [115.236.118.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADA05FFE;
-        Tue, 18 Apr 2023 18:12:00 -0700 (PDT)
-Received: from [0.0.0.0] (unknown [172.96.223.238])
-        by mail-m11875.qiye.163.com (Hmail) with ESMTPA id ACCD92801F5;
-        Wed, 19 Apr 2023 09:11:49 +0800 (CST)
-Message-ID: <ff2e0a06-abbb-213a-40ed-20c8e8b2f429@sangfor.com.cn>
-Date:   Wed, 19 Apr 2023 09:11:37 +0800
+        Tue, 18 Apr 2023 21:15:45 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9E319B3
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 18:15:35 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id q5so16326228wmo.4
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 18:15:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ixsystems.com; s=google; t=1681866934; x=1684458934;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/CR1IHc9HYlrEY3U89v5t/OX9dshkbM7G0EYz0O4fCI=;
+        b=DrQpXoa2vwYv5KgKUocv5hzJ7n0BoWaqg2iruABRxMov33aWAqj4qiPvOpss7HZR6Y
+         eyhIIAvceuyg0ifTvZI9Cnjr9QhSmbFFlN/3wGztQxQNtOJXXg+UDScf7cszt/Z4gG/8
+         8VrBJobMhaHoDO15M4c6DyBgLQEPPJ/FFkqH5cILQS0bDRRYYDDLrPUToOl7fvKCTc31
+         n30oW0IbuLxNMSx+pt1G042pQtt0qZ/C6hzA+axA6jk/GuLAvkMW+II58uvrZLMA9bWR
+         JqjZobprhwD2ArHbL08QY90pWDqrTPn6wy6+nyAJ7Fzu9gPSCvgG92Pjz/yoAOITQeqq
+         B/HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681866934; x=1684458934;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/CR1IHc9HYlrEY3U89v5t/OX9dshkbM7G0EYz0O4fCI=;
+        b=ef2FC70AfGoNpZY9RMgXTDs0EASdcV8Gtmv7jrwA3UDs34ogFNf5XfoYYk5gy696Zh
+         OcohmZMOLxgngijIaleJxzqfXDfL5S0Wp/pg6gLGTwCpKTJ9DzY8I7f6IS1LpfRqQ7Rf
+         774hDNNojiA+X9hKUCFMNCQyRCi387YLBjfsbvUNqkwFfL+hZwHKXA6iv1K2mDTSrCtP
+         Ky5s57SGgaBbSi+T40oSaED2skGM9+ymTVZx6kUOxzZ3+PJjbTGfS2wRdIrp1qUm9mpG
+         ByuNH/ySnrXBx7D97rbCewuGz5xR7G5YlYHkGxyFH/9QrwMfyfZKc1phRmOsBnOR6ngo
+         1Y2Q==
+X-Gm-Message-State: AAQBX9f7IjsgTdboYkKbqM+0nCyX9volqozBCY4nMmHZY3tnTuVOu54Z
+        yI0k6QWYTvz8mmvAvcJymn8JPDFn/wQoQ59pjjMvOw==
+X-Google-Smtp-Source: AKy350ZZSF1q/Toh4q2I8/pCwearcYtGy2vLmaJlZhVGcoLdCGT35UiwGZj6mJP4LqHxbBkciQlPeQ==
+X-Received: by 2002:a1c:f315:0:b0:3f1:6757:6245 with SMTP id q21-20020a1cf315000000b003f167576245mr10165291wmq.7.1681866934353;
+        Tue, 18 Apr 2023 18:15:34 -0700 (PDT)
+Received: from hamza-pc ([2400:adc1:158:c700:9f4d:2f2e:ebe7:1578])
+        by smtp.gmail.com with ESMTPSA id o2-20020a05600c4fc200b003f1738e64c0sm514527wmq.20.2023.04.18.18.15.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 18:15:33 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 06:15:29 +0500
+From:   Ameer Hamza <ahamza@ixsystems.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     viro@zeniv.linux.org.uk, jlayton@kernel.org,
+        chuck.lever@oracle.com, arnd@arndb.de, guoren@kernel.org,
+        palmer@rivosinc.com, f.fainelli@gmail.com, slark_xiao@163.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, awalker@ixsystems.com
+Subject: Re: [PATCH] Add new open(2) flag - O_EMPTY_PATH
+Message-ID: <ZD9AsWMnNKJ4dpjm@hamza-pc>
+References: <20221228160249.428399-1-ahamza@ixsystems.com>
+ <20230106130651.vxz7pjtu5gvchdgt@wittgenstein>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RESEND PATCH net 1/2] iavf: Fix use-after-free in free_netdev
-Content-Language: en-US
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        keescook@chromium.org, grzegorzx.szczurek@intel.com,
-        mateusz.palczewski@intel.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn
-References: <20230417074016.3920-1-dinghui@sangfor.com.cn>
- <20230417074016.3920-2-dinghui@sangfor.com.cn>
- <ZD70DKC3+K6gngTh@corigine.com>
-From:   Ding Hui <dinghui@sangfor.com.cn>
-In-Reply-To: <ZD70DKC3+K6gngTh@corigine.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZTEMaVkJOH00aSBpOT05CGVUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpMSVVCTVVJSUhVSUhDWVdZFhoPEhUdFFlBWU9LSFVKSktISkxVSktLVUtZBg++
-X-HM-Tid: 0a87971175d02eb1kusnaccd92801f5
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Mgw6DCo5Tj0JGhESLzEsKkI0
-        TB8aFChVSlVKTUNKQ01NTEpMTU9KVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
-        QVlKTElVQk1VSUlIVUlIQ1lXWQgBWUFPT0xONwY+
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230106130651.vxz7pjtu5gvchdgt@wittgenstein>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/19 3:48, Simon Horman wrote:
-> Hi Ding Hui,
+On Fri, Jan 06, 2023 at 02:06:51PM +0100, Christian Brauner wrote:
+> On Wed, Dec 28, 2022 at 09:02:49PM +0500, Ameer Hamza wrote:
+> > This patch adds a new flag O_EMPTY_PATH that allows openat and open
+> > system calls to open a file referenced by fd if the path is empty,
+> > and it is very similar to the FreeBSD O_EMPTY_PATH flag. This can be
+> > beneficial in some cases since it would avoid having to grant /proc
+> > access to things like samba containers for reopening files to change
+> > flags in a race-free way.
+> > 
+> > Signed-off-by: Ameer Hamza <ahamza@ixsystems.com>
+> > ---
 > 
-> On Mon, Apr 17, 2023 at 03:40:15PM +0800, Ding Hui wrote:
->> We do netif_napi_add() for all allocated q_vectors[], but potentially
->> do netif_napi_del() for part of them, then kfree q_vectors and lefted
+> In general this isn't a bad idea and Aleksa and I proposed this as part
+> of the openat2() patchset (see [1]).
 > 
-> nit: lefted -> leave
+> However, the reason we didn't do this right away was that we concluded
+> that it shouldn't be simply adding a flag. Reopening file descriptors
+> through procfs is indeed very useful and is often required. But it's
+> also been an endless source of subtle bugs and security holes as it
+> allows reopening file descriptors with more permissions than the
+> original file descriptor had.
 > 
-
-Thanks, I'll update in v2.
-
->> invalid pointers at dev->napi_list.
->>
->> If num_active_queues is changed to less than allocated q_vectors[] by
->> unexpected, when iavf_remove, we might see UAF in free_netdev like this:
->>
-
-...
-
->>
->> Fix it by letting netif_napi_del() match to netif_napi_add().
->>
->> Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
->> Cc: Donglin Peng <pengdonglin@sangfor.com.cn>
->> CC: Huang Cun <huangcun@sangfor.com.cn>
+> The same lax behavior should not be encoded into O_EMPTYPATH. Ideally we
+> would teach O_EMPTYPATH to adhere to magic link modes by default. This
+> would be tied to the idea of upgrade mask in openat2() (cf. [2]). They
+> allow a caller to specify the permissions that a file descriptor may be
+> reopened with at the time the fd is opened.
 > 
-> as this is a fix it probably should have a fixes tag.
-> I wonder if it should be:
-> 
-> Fixes: cc0529271f23 ("i40evf: don't use more queues than CPUs")
+> [1]: https://lore.kernel.org/lkml/20190930183316.10190-4-cyphar@cyphar.com/
+> [2]: https://lore.kernel.org/all/20220526130355.fo6gzbst455fxywy@senku/Kk
 
-I don't think so.
-I searched the git log, and found that the mismatched usage was
-introduced since the beginning of i40evf_main.c, so I'll add
+Thank you for the detailed explanation and sorry for getting back late
+at it. It seems like a pre-requisite for O_EMPTYPATH is to make it safe
+and that depends on a patchset that Aleksa was working on. It would be
+helpful to know the current status of that effort and if we could expect
+it in the near future.
 
-Fixes: 5eae00c57f5e ("i40evf: main driver core")
+The repo[1] that was mentioned here[2] seems to be private. I am wondering
+if there's a way to look at the patch somehow.
 
-in v2.
-
-> 
-> Code change looks good to me.
-> 
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> 
-
-Thanks.
-
-And sorry for you confusion since my RESEND.
-
->> ---
->>   drivers/net/ethernet/intel/iavf/iavf_main.c | 6 +-----
->>   1 file changed, 1 insertion(+), 5 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
->> index 095201e83c9d..a57e3425f960 100644
->> --- a/drivers/net/ethernet/intel/iavf/iavf_main.c
->> +++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
->> @@ -1849,19 +1849,15 @@ static int iavf_alloc_q_vectors(struct iavf_adapter *adapter)
->>   static void iavf_free_q_vectors(struct iavf_adapter *adapter)
->>   {
->>   	int q_idx, num_q_vectors;
->> -	int napi_vectors;
->>   
->>   	if (!adapter->q_vectors)
->>   		return;
->>   
->>   	num_q_vectors = adapter->num_msix_vectors - NONQ_VECS;
->> -	napi_vectors = adapter->num_active_queues;
->>   
->>   	for (q_idx = 0; q_idx < num_q_vectors; q_idx++) {
->>   		struct iavf_q_vector *q_vector = &adapter->q_vectors[q_idx];
->> -
->> -		if (q_idx < napi_vectors)
->> -			netif_napi_del(&q_vector->napi);
->> +		netif_napi_del(&q_vector->napi);
->>   	}
->>   	kfree(adapter->q_vectors);
->>   	adapter->q_vectors = NULL;
->> -- 
->> 2.17.1
->>
-> 
-
--- 
-Thanks,
-- Ding Hui
-
+[1]: https://github.com/cyphar/linux/tree/magiclink/main
+[2]: https://lore.kernel.org/all/20220526130952.z5efngrnh7xtli32@senku/
