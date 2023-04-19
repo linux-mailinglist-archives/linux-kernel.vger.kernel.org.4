@@ -2,142 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0656E75CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3871F6E75D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232825AbjDSI5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
+        id S232629AbjDSI6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232776AbjDSI5B (ORCPT
+        with ESMTP id S232704AbjDSI6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:57:01 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3582118D6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:56:58 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id ud9so79496849ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:56:58 -0700 (PDT)
+        Wed, 19 Apr 2023 04:58:11 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD004C0B;
+        Wed, 19 Apr 2023 01:58:07 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id g6so11234752pjx.4;
+        Wed, 19 Apr 2023 01:58:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681894617; x=1684486617;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mFuzy4TuvFqYZVB9yIonpVvfyyHxImCxfwDErPMQgRg=;
-        b=H/iMr/DovWLHt2YCjeW6aLfRxx2KGDYSy/hsKKdRIiNQKmpU9pgW72ZIATuskwh2gK
-         GPWY+4ijiNsyeM+X4Dbf7/YsVp23JLhKLRC6kcInZXIlj+ZHf+E6rLY8R3slKcoER14e
-         oolLGqzzPaJX8IkBrpJpwcP7ZQMMnl5zUgQca6wpzbKSkAPDcyqEDwds585KkzrMAQoO
-         Dod9TgyryqBl6bb8iOWLH6zWlaYfhOcMN/q5of2nXEtHI1u52DMhLtJA5CSrFGAcLNy1
-         A+DJhj/85CcQFOg9iz3jbKKDywW0wP/I3HBB/u9J3zdFiuzvjTcqRuuxIG1RGNMdwrUJ
-         SHRg==
+        d=gmail.com; s=20221208; t=1681894686; x=1684486686;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3zpvMjDc8PUDIFIffBUt+CiFgxX1fPBud4Kt6HqJXz8=;
+        b=UtlW7QeLG94NWEB+dlWHbmjRnFYxbJOyvIGIfJLxjiZJWo8SZyBMKGSu71KsdnwYkM
+         5Embc4NaJ3SRopVgqDxHW19iPNF3jiDTDgNow4AnPZhfVsPAXcYRUDzE1Vg8kwHbGJUD
+         Jul3ZOIWXSqS2g+Yx3G3JGBEeRD5s3faZmYLtYfgoeuGOtaIwe0inEdi+yDJ2XrC4o8H
+         C6Fmym88uYZ4psi3ZY8pPDaFiFCq2RZWCtlWPWIPlglDjw9gTAEpgU/1MgyiFw6Rw5Y2
+         F0XB+yzdy9HPo3WvfTOqm4b5GZvfeXDVeSU9m4fgJCGIpN5Emu8pXWkG/fnCjF7VARx6
+         /heA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681894617; x=1684486617;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mFuzy4TuvFqYZVB9yIonpVvfyyHxImCxfwDErPMQgRg=;
-        b=Wr8YbVEyS5cPe5Y/EsY4zjoEexzme8XCxsbcnywsvBXE8IT9UhVpadshH7wMJM8bBT
-         BaPcIYyNq0QqO/QL5CDpnmxuS7Dkv6cbXoKS95UKlPHAena2f485bPuDTbCfklyQPsfa
-         TsI3f6mkA1N/O59WFTL1osULZuWyanU8dCMk3YRbu2+UZT+uEOwERH2BLZo5yVDorn+Z
-         JfhAraqk3e7o2cn35ouu0bOmjRHpa1ZV8utl7frp/38IpoRE/C+sv4ceNBJVh1O9P2hx
-         iOQnJoiWkXzsnMpPeBLRdfnwMT9rW64c7rQU9fCfaWKP5g6+CKagCHBbccokDQhsSPpX
-         wXNw==
-X-Gm-Message-State: AAQBX9f7ZjBqkt6tegVky3TM3WUW4iBP1onZf8hxIw8cJWr0RE7zalPz
-        9pDiTxF1A6HRZMG+VWQp4yxakw==
-X-Google-Smtp-Source: AKy350ZHhQqP60s84sOXg5hEoFCicZMMdVpYkZ1g5erVI/+cot6zkgX/52ioHeJ+kkdg+Elklcr+nw==
-X-Received: by 2002:a17:907:9805:b0:94f:3cf5:6d7f with SMTP id ji5-20020a170907980500b0094f3cf56d7fmr13114320ejc.46.1681894617176;
-        Wed, 19 Apr 2023 01:56:57 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:62f5:eb43:f726:5fee? ([2a02:810d:15c0:828:62f5:eb43:f726:5fee])
-        by smtp.gmail.com with ESMTPSA id be5-20020a1709070a4500b0094f282fc29asm5844742ejc.207.2023.04.19.01.56.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 01:56:56 -0700 (PDT)
-Message-ID: <77d94fe0-75d2-8f64-19c6-fc19438ba71a@linaro.org>
-Date:   Wed, 19 Apr 2023 10:56:55 +0200
+        d=1e100.net; s=20221208; t=1681894686; x=1684486686;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3zpvMjDc8PUDIFIffBUt+CiFgxX1fPBud4Kt6HqJXz8=;
+        b=QUESDNMuoJr9tIGOtV90fWczd4JWggk6X/fNPw+6jhCIBJGcmimF7LT0uz+Bs86uJO
+         qh52vQStPXUT32TaXtA22u7fLQmAQeno2LqHfY8VZZ7CdHkIJw1U3jYxBge/pBFpMOCL
+         lrZhCIYKYNGd8Pj5w0PnsKEcr74RS9eZVRr52u5LtjC0C2J/6xReYI9Sz0eamryjJnm0
+         JiscFjeoPftJGPs8GZKJEI0ElnU8ufDSmM5ZBxWKQCv4FyEddLUx5QJoUEc3VSZcKqcw
+         53uOPuXUPQcUXYZTI3/C82nT2Hq5eyLxR7zP5SCUkZPL+6cmGrsePhhcZZdQ7DQFrlih
+         qp0g==
+X-Gm-Message-State: AAQBX9esrGA2VQ0VbH81qV3S/f5+oABxAy4pAGGPimF/LouYXCsmcOvI
+        QnQCLJC5v7solFohwlJBjzc=
+X-Google-Smtp-Source: AKy350ZsGA0KS7CsW/PhUED2oIMNWfU0ei4iNIRQe4Ug65OBD1ljL1KiruI2NorA2j6a8NNhWpDYRA==
+X-Received: by 2002:a05:6a20:5493:b0:ef:ecaf:ff6d with SMTP id i19-20020a056a20549300b000efecafff6dmr2062989pzk.12.1681894686508;
+        Wed, 19 Apr 2023 01:58:06 -0700 (PDT)
+Received: from hackyzh-virtual-machine.localdomain ([58.34.53.146])
+        by smtp.gmail.com with ESMTPSA id r10-20020a63d90a000000b0051b72ef978fsm8144902pgg.20.2023.04.19.01.58.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 01:58:05 -0700 (PDT)
+From:   hackyzh002 <hackyzh002@gmail.com>
+To:     alexander.deucher@amd.com
+Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, sumit.semwal@linaro.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, hackyzh002 <hackyzh002@gmail.com>
+Subject: [PATCH v2 1/2] drm/radeon: Fix integer overflow in radeon_cs_parser_init
+Date:   Wed, 19 Apr 2023 16:57:47 +0800
+Message-Id: <20230419085747.4720-1-hackyzh002@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] dt-bindings: display: panel: add common definition of
- ports
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-References: <20230416153929.356330-1-krzysztof.kozlowski@linaro.org>
- <20230418222613.GA2408838-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230418222613.GA2408838-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2023 00:26, Rob Herring wrote:
-> On Sun, Apr 16, 2023 at 05:39:29PM +0200, Krzysztof Kozlowski wrote:
->> Few panel bindings for dual-link connections just type "ports: true",
->> which does not enforce any type.  Add common definition of ports, so the
->> type will be fixed.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> ---
->>
->> Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  .../bindings/display/panel/panel-common.yaml     | 16 ++++++++++++++++
->>  1 file changed, 16 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/display/panel/panel-common.yaml b/Documentation/devicetree/bindings/display/panel/panel-common.yaml
->> index 5b38dc89cb21..ad62d34e6fa3 100644
->> --- a/Documentation/devicetree/bindings/display/panel/panel-common.yaml
->> +++ b/Documentation/devicetree/bindings/display/panel/panel-common.yaml
->> @@ -70,6 +70,16 @@ properties:
->>    port:
->>      $ref: /schemas/graph.yaml#/properties/port
->>  
->> +  # For dual-link connections
->> +  ports:
->> +    $ref: /schemas/graph.yaml#/properties/ports
->> +    patternProperties:
->> +      "^port@[0-9a-f]+$":
->> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> 
-> This allows any undocumented property.
+The type of size is unsigned, if size is 0x40000000, there will be an
+integer overflow, size will be zero after size *= sizeof(uint32_t),
+will cause uninitialized memory to be referenced later
 
-Yes, which I hope the device schema (using this panel-common) will
-narrow with additionalProperties: false.
+Signed-off-by: hackyzh002 <hackyzh002@gmail.com>
+---
+ drivers/gpu/drm/radeon/radeon_cs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I can make it explicit: additionalProperties: true.
-
-Otherwise, how do I allow custom properties like:
-Documentation/devicetree/bindings/display/panel/advantech,idk-2121wr.yaml
-
-> 
->> +
->> +    required:
->> +      - port@0
->> +
-> 
-> I don't think this should be added here because users must define what 
-> each port is. With it here, we're going to validate the nodes twice as 
-> well. Same can be said for 'port' though. It can't be extended though.
-
-So you propose to drop entire "ports" here and expect every panel schema
-to define it instead?
-
-Best regards,
-Krzysztof
+diff --git a/drivers/gpu/drm/radeon/radeon_cs.c b/drivers/gpu/drm/radeon/radeon_cs.c
+index 46a27ebf4..8e12b406e 100644
+--- a/drivers/gpu/drm/radeon/radeon_cs.c
++++ b/drivers/gpu/drm/radeon/radeon_cs.c
+@@ -270,7 +270,7 @@ int radeon_cs_parser_init(struct radeon_cs_parser *p, void *data)
+ {
+ 	struct drm_radeon_cs *cs = data;
+ 	uint64_t *chunk_array_ptr;
+-	unsigned size, i;
++	u64 size, i;
+ 	u32 ring = RADEON_CS_RING_GFX;
+ 	s32 priority = 0;
+ 
+-- 
+2.34.1
 
