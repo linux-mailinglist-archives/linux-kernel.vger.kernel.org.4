@@ -2,141 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C29C6E76D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 347726E76E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232746AbjDSJyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 05:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
+        id S232779AbjDSJ4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 05:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232576AbjDSJy3 (ORCPT
+        with ESMTP id S232220AbjDSJ4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:54:29 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2093.outbound.protection.outlook.com [40.107.220.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836115FFD;
-        Wed, 19 Apr 2023 02:54:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FANYZL0xuFO6MQeLFsSDQE9A1EwQ3xC3/d85IfuVc2NG8IRVu9/wNcLZsZFvRs2u6o1LEj2ul68d5Fzgb349OwMSW2h8NsVYT32F47CVxVaRwRfIEat4qRBlxvqMil5DtvSSMZXuqp/Gd1f57vb68LtXwfp2HnVkiaBCtR02WwQjfeeIQJPnPwDMzLZgjGq0CPFa/IOivgaXrvGOnYyEn+ph1V5Ku2iWQzCpURNDX/ivGj3A91yT8U2OfgNqWnwOnonJpXeKZcg0vFHOCU4oFUXRGJkEtBinqzMw3MgNxn8se4i9Q7ecq7W4QdW07KhnZkEU3Au6T17sYn9qJIPozg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jDIyhJv4oN54CwCJK5EeyxdvB6edyIVyGB30CoRzA4o=;
- b=TIT1VTk+RrZitgnGLH8ZJy1pCe8aZB0X+1wdNv33AWfUd9JZImyMXHpHI0zdvWSv9GJBn6xAL+JfxH+I1WDLDoU7Vp1tlBXrTj9PKt6/uKfNRZ0vvcuhjgecGWau71eGb74ZRecgtE/ogcFJXmTLTzH6N/oX+e/N2FcTk4q1+8XqO3Q3Ws6QnwhLp1EYL/OWUQHT+qxLSwkAw7pH4VCw0fIG33jRkQ2LJZFeyJc+1jZfPYmNUtVLTwnrHcLYWXICNidlLQbN6CcmkeOQ6jHzFDO9ilsH+AUSQrw4gac7W08c2SZHs9b8nQlIKkUctACR0wXGInwl9MfLbHx4fWuScQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jDIyhJv4oN54CwCJK5EeyxdvB6edyIVyGB30CoRzA4o=;
- b=qAuf7gyr9NgVRHJjo9OCu/Tm3chxyYKq3RBtS9jSx9ydToFl0245xUQN7M9/ZNSP+h5ID47yLBvWOmlQBGF6kN74yu3R15wUxtQcA1IZI5Dk27icmbiB4Sd03N0rfiAHbYhQbnWW++lJi2ToNZAnV42/NO/RSAQF2lspKoQLb4M=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CH0PR13MB5132.namprd13.prod.outlook.com (2603:10b6:610:101::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
- 2023 09:54:24 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%4]) with mapi id 15.20.6319.022; Wed, 19 Apr 2023
- 09:54:24 +0000
-Date:   Wed, 19 Apr 2023 11:54:16 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Sai Krishna <saikrishnag@marvell.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, leon@kernel.org,
-        sgoutham@marvell.com, gakula@marvell.com, lcherian@marvell.com,
-        jerinj@marvell.com, hkelam@marvell.com, sbhatta@marvell.com,
-        Ratheesh Kannoth <rkannoth@marvell.com>
-Subject: Re: [net PATCH v3 03/10] octeontx2-af: Fix depth of cam and mem
- table.
-Message-ID: <ZD+6SOCYdXNG02s5@corigine.com>
-References: <20230419062018.286136-1-saikrishnag@marvell.com>
- <20230419062018.286136-4-saikrishnag@marvell.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419062018.286136-4-saikrishnag@marvell.com>
-X-ClientProxiedBy: AM0PR03CA0022.eurprd03.prod.outlook.com
- (2603:10a6:208:14::35) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Wed, 19 Apr 2023 05:56:00 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786155248;
+        Wed, 19 Apr 2023 02:55:58 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33J9pPYi021370;
+        Wed, 19 Apr 2023 11:55:49 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=zuPRjgXHQRcNa4T1aVSLxSto975fvvj+3BuI9lCCOJo=;
+ b=iph058O4NApSbJ+Uyz+xx1p4NeZPdGHk9TBCju3jitq38va2P5Tmwi9Bz4ilOt5iM30c
+ R/r4M4gOvWsd9NcfEfhT5jS/l7b4j6HXH8oW6d2s9mHP7NaXcS4n50MxHFVoyj8D8976
+ uKr0IkRVIkcRYFsHVEC3/2coj/4zm7czdppFSC+dgUq4BgaJo75HyhDW+YG2ll11Q1g/
+ AOQVtMXZF98HYZnBpCUzmC+rbeEjjJF8avgGsPXWYhgkN+ptsIWuWQoWlgS4Y45uhOTa
+ Fp4Jsau4B7EMUdnczSVz9E9+4iZlUiD/+BlecSUbm0aM1eBcUVh+BDKa54gC108us4zS jQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3q2dye81vv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 11:55:49 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4FEB810002A;
+        Wed, 19 Apr 2023 11:55:44 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 47FDD214D29;
+        Wed, 19 Apr 2023 11:55:44 +0200 (CEST)
+Received: from [10.201.21.178] (10.201.21.178) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 19 Apr
+ 2023 11:55:43 +0200
+Message-ID: <fe8c74d9-aa8a-d569-a372-7bb6d0b1963a@foss.st.com>
+Date:   Wed, 19 Apr 2023 11:55:42 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH0PR13MB5132:EE_
-X-MS-Office365-Filtering-Correlation-Id: 772eaef7-2f5a-467a-7422-08db40bc0e01
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: m/qW7a+JZdUKfcaez9GQKA/Qdf9+UQx15ay8je6jwBzQRtn857pQEyzRZ1olrCRoPTa0OEYUAiEif60gBUwUOQ6jUi+WKD2D93M8rNYhkXJPVmz1mG+57C8X96IXWdCyIJ3pldd+ofS07MbOui0IjTj1OV6h5He/Uw2SiC3etNC3DF07tZ7Kmkus+85VavTjvVXL4OptP0ZCCXKU8bByFPndyul18EF7OPlpFU3pFONYSH3AzhcWwYUf20rcYcLsXee+m+T3HktWw1FX/cBx+74wbkTuFkzZc1jaD8gT0W2yuyVQIL3D5bpwEBsoRsP0wQr5+TtyT3gaIzNuup6uKDwFC6Cfnnb5lHnh9CAdfZRLkJ99x8nuZZKrl+i4wC8d56z3dCrcdopcCMEQPUXiZp38SAK/UXsuEKOQyuV18bugwvY3gAh3zNYbX4e9DGsaDvnxeOdeHgjOueKCkRPNIlutUk9wOG/MzBITcwgCdqgPRyKS0T1uoD29vHrZK4bKhrJ7PwfsXCYqvQyxAog8ZZ7EWaz1y5LfLzFE8QvxZO+tIjhEnpXnIwtJcmMO07rXKokwTMxaFUK58OTJzmugwmhgpCqOklonKZxpPsL2+oo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39840400004)(346002)(376002)(136003)(366004)(451199021)(44832011)(7416002)(36756003)(2906002)(8936002)(5660300002)(4744005)(8676002)(41300700001)(86362001)(38100700002)(478600001)(2616005)(316002)(6506007)(6512007)(186003)(6666004)(6486002)(6916009)(4326008)(66476007)(66556008)(66946007)(83380400001)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?X8L4A4zzLgbp60pwb8H0NdNt1czahyca6Bkx1WdDwIjHnZPLvbdyg3q7AdNs?=
- =?us-ascii?Q?SVQDqKqolnr+cjav5n2RPvI+3rD8jSnjjd0Un95Xhsm4FdxaMPrvnCGqV6bZ?=
- =?us-ascii?Q?SEREaF0Y0zEJeHOZSB6OfP9TWQbu1nTHMS8nkNSqNCHaJQ6Vs0nok6GjJDGX?=
- =?us-ascii?Q?m8LFLJdUkJZqP/IONUt565kg1X6ZvMHKcv8kTqmYmyHI+D9BClzM9AXQdONv?=
- =?us-ascii?Q?ego8YVGscZCqs66yKBbDzdQDbUlA1vCvetCxOAqtet2Km96IZT79koKI8LJl?=
- =?us-ascii?Q?d9we+JLuoN6fkOskjntAR7qikbjBoRQsH0V++RCqCDFexFw8KCG1cceLwoKa?=
- =?us-ascii?Q?8lt+HqNoBNuevOETuZf2nUrvxZ4o4fZ+M3mXdeSSnJi6wELau6IGnkyTpIAi?=
- =?us-ascii?Q?7MF+afNdDw7QoBgllAN6L3q2MS3LqO3qukrVIHKWkyOwkA9N/XtF+ZOSVqP9?=
- =?us-ascii?Q?ztHRjxCykowAS5ic9a/gLvO4DR9Y+hbMsNBPmCJxEgGJ+nBpkjeMjYPeoFQS?=
- =?us-ascii?Q?AxUYCn+PN9WVbY65INT8yYuQXK72WnYnFQUOA2HyruMizs5F5aMgmui7SDIX?=
- =?us-ascii?Q?FKE+Iz+eJkQzPhHEDWm9jT4o96hmsuFvt+zNocpajFbAuh+A/sJDHE8c4B6V?=
- =?us-ascii?Q?UCvaSQ2TWJIktGqGWc3wf+YiMtXqM/ZUa4gf4rXfIO9gkUn+nSVyPoL1lXwj?=
- =?us-ascii?Q?vOkoOs1lAV+Btpv1oJSI4sdCRD0DGVXUlipUdMaUe8ru4n8oRq0TvUUvuBT9?=
- =?us-ascii?Q?R+Bx3Aq0ZXZV/n1QEQoTjNC5TkTf83Ea6QSxTUVYheptACpSQlulgMj4A+Vo?=
- =?us-ascii?Q?SCzTWG5SaUOjJ6Ypf/dV2btegUkJLk2FaYjq5s3NBMHWH1s7gpsa0pGA6IzH?=
- =?us-ascii?Q?1x9EGuakr977tZk1B7B9tsIfIgN1KRIfqn7SZCdXboz4eusO+uLNKcNq6Pjg?=
- =?us-ascii?Q?MlM6cwSHT1HXU2wTBLYJKxL2BUbqjmNiA6AZbt9EyzidwnyY5Y29FqIf+gOc?=
- =?us-ascii?Q?GJKGtmdETpIdIUzY1/fV+eQq5+ku/uVxx3Q+akJhbbDLVVBfzZUEoei7oZEe?=
- =?us-ascii?Q?+EbC7xwhkloqQuwnFCHo5u22FPZBpzl5gA21pg6V7Ou6vgOQc1mfw1VXN1ad?=
- =?us-ascii?Q?K28yzF4vFzpsw8ULgFJZ/bFREj8f54Fay1El4VPKN8AzB63x/bkGu2x0zFCH?=
- =?us-ascii?Q?IZT91HvmYhN3KRsfFTDjjoJSdfvTXT4wGTM3P41kah0XooD5IGobtBpZD4Ad?=
- =?us-ascii?Q?mItSmvHNk3NcO3a7d6o0p60irnN8wNpltuVDe5/YFdr1Xe8Xjq6W0XiWqDMr?=
- =?us-ascii?Q?WxUzin1U68zfDWzyK4v61Do3RACR6dA1ID53xccOOy/cIv/4tb5663s7O6M7?=
- =?us-ascii?Q?opI5cbCHMjbvriotAdXMfBh+lvxjomOwJtybuDgwkD4+qIfuYsje061Wxgpd?=
- =?us-ascii?Q?NY0p5xcQoV6LJs9DN3oBtQ6DP4CT7HOWTJP1IL+vE73BBEdoOW28WBVWQPKU?=
- =?us-ascii?Q?+K4sGoafd4Rzh+Cb0aSBAWh/vjXBVG1yMFMoit8+E8mo13SGNmX1I6aASL7M?=
- =?us-ascii?Q?21ZiJRhwQ5PHlf5MWEiCoC+dqrlkB27dIAJFCtyodCDOJs/eM3mXpjI139V5?=
- =?us-ascii?Q?iuEIxXqxP+30fYSpxKO0uplOPd0H9L2QzsrarXBT9MDA5ArcRgP/kVr/pe9e?=
- =?us-ascii?Q?rooWPA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 772eaef7-2f5a-467a-7422-08db40bc0e01
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 09:54:23.8683
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: d1EPDQn/29ujPeab5n25R48MlS42Rc95Va/cG89c/DMfTgGjmLsx6PIXWXkgGQ0PTQ8ty1eQfwDkpdrZ9Q077PNBSsaZuwxfbnHI3j6OQoc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR13MB5132
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V5 3/3] rpmsg: char: Add RPMSG GET/SET SIGNAL IOCTL
+ support
+Content-Language: en-US
+To:     Sarannya S <quic_sarannya@quicinc.com>,
+        <quic_bjorande@quicinc.com>, <swboyd@chromium.org>,
+        <quic_clew@quicinc.com>, <mathieu.poirier@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>
+References: <1681807721-32343-1-git-send-email-quic_sarannya@quicinc.com>
+ <1681807721-32343-4-git-send-email-quic_sarannya@quicinc.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Organization: STMicroelectronics
+In-Reply-To: <1681807721-32343-4-git-send-email-quic_sarannya@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.178]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-19_06,2023-04-18_01,2023-02-09_01
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 11:50:11AM +0530, Sai Krishna wrote:
-> From: Ratheesh Kannoth <rkannoth@marvell.com>
+
+
+On 4/18/23 10:48, Sarannya S wrote:
+> From: Chris Lew <quic_clew@quicinc.com>
 > 
-> Depth of CAM and MEM tables were wrongly configured. Fixed
-> the same in NPC module.
+> Add RPMSG_GET_SIGNAL_IOCTL and RPMSG_SET_SIGNAL_IOCTL ioctl support for
+> rpmsg char device nodes to get/set the low level transport signals.
+
+
+Quite difficult to follow this series as there are two V5...
+
+If I am not mistaken the comment from Bjorn in the first V5[1] has not been
+addressed
+
+[1] https://www.spinics.net/lists/linux-arm-msm/msg145036.html
+
+Regards
+Arnaud
+
 > 
-> Fixes: b747923afff8 ("octeontx2-af: Exact match support")
-> Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
-> Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
-> Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
-
-If there is an issue that this resolves, especially
-something user-visible, it might be useful to explain what it
-is - e.g. before and after. Likewise for a number of other patches
-in the series.
-
-But that notwithstanding, this looks good,
-with the caveat that I can't verify that the change matches the HW.
-
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> Signed-off-by: Chris Lew <quic_clew@quicinc.com>
+> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
+> Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
+> ---
+>  drivers/rpmsg/rpmsg_char.c | 58 ++++++++++++++++++++++++++++++++++++++++------
+>  include/linux/rpmsg.h      | 15 ++++++++++++
+>  include/uapi/linux/rpmsg.h | 12 +++++++++-
+>  3 files changed, 77 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+> index a271fce..efe14f8 100644
+> --- a/drivers/rpmsg/rpmsg_char.c
+> +++ b/drivers/rpmsg/rpmsg_char.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/rpmsg.h>
+>  #include <linux/skbuff.h>
+>  #include <linux/slab.h>
+> +#include <linux/termios.h>
+>  #include <linux/uaccess.h>
+>  #include <uapi/linux/rpmsg.h>
+>  
+> @@ -68,6 +69,8 @@ struct rpmsg_eptdev {
+>  	struct sk_buff_head queue;
+>  	wait_queue_head_t readq;
+>  
+> +	u32 remote_signals;
+> +	bool flow_control;
+>  };
+>  
+>  int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
+> @@ -110,7 +113,22 @@ static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
+>  	skb_queue_tail(&eptdev->queue, skb);
+>  	spin_unlock(&eptdev->queue_lock);
+>  
+> -	/* wake up any blocking processes, waiting for new data */
+> +	wake_up_interruptible(&eptdev->readq);
+> +
+> +	return 0;
+> +}
+> +
+> +static int rpmsg_ept_flow_cb(struct rpmsg_device *rpdev, void *priv, bool enable)
+> +{
+> +	struct rpmsg_eptdev *eptdev = priv;
+> +
+> +	if (enable)
+> +		eptdev->remote_signals = RPMSG_FLOW_CONTROL_ON;
+> +	else
+> +		eptdev->remote_signals = 0;
+> +
+> +	eptdev->flow_control = true;
+> +
+>  	wake_up_interruptible(&eptdev->readq);
+>  
+>  	return 0;
+> @@ -152,6 +170,7 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
+>  		return -EINVAL;
+>  	}
+>  
+> +	ept->flow_cb = rpmsg_ept_flow_cb;
+>  	eptdev->ept = ept;
+>  	filp->private_data = eptdev;
+>  	mutex_unlock(&eptdev->ept_lock);
+> @@ -172,6 +191,7 @@ static int rpmsg_eptdev_release(struct inode *inode, struct file *filp)
+>  		eptdev->ept = NULL;
+>  	}
+>  	mutex_unlock(&eptdev->ept_lock);
+> +	eptdev->flow_control = false;
+>  
+>  	/* Discard all SKBs */
+>  	skb_queue_purge(&eptdev->queue);
+> @@ -285,6 +305,9 @@ static __poll_t rpmsg_eptdev_poll(struct file *filp, poll_table *wait)
+>  	if (!skb_queue_empty(&eptdev->queue))
+>  		mask |= EPOLLIN | EPOLLRDNORM;
+>  
+> +	if (eptdev->flow_control)
+> +		mask |= EPOLLPRI;
+> +
+>  	mutex_lock(&eptdev->ept_lock);
+>  	mask |= rpmsg_poll(eptdev->ept, filp, wait);
+>  	mutex_unlock(&eptdev->ept_lock);
+> @@ -297,14 +320,35 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
+>  {
+>  	struct rpmsg_eptdev *eptdev = fp->private_data;
+>  
+> -	if (cmd != RPMSG_DESTROY_EPT_IOCTL)
+> -		return -EINVAL;
+> +	bool set;
+> +	u32 val;
+> +	int ret;
+>  
+> -	/* Don't allow to destroy a default endpoint. */
+> -	if (eptdev->default_ept)
+> -		return -EINVAL;
+> +	switch (cmd) {
+> +	case RPMSG_GET_SIGNAL_IOCTL:
+> +		eptdev->flow_control = false;
+> +		ret = put_user(eptdev->remote_signals, (int __user *)arg);
+> +		break;
+> +	case RPMSG_SET_SIGNAL_IOCTL:
+> +		ret = get_user(val, (int __user *)arg);
+> +		if (ret)
+> +			break;
+> +		set = (val & RPMSG_FLOW_CONTROL_ON) ? true : false;
+> +		ret = rpmsg_set_flow_control(eptdev->ept, set);
+> +		break;
+> +	case RPMSG_DESTROY_EPT_IOCTL:
+> +		/* Don't allow to destroy a default endpoint. */
+> +		if (eptdev->default_ept) {
+> +			ret = -EINVAL;
+> +			break;
+> +		}
+> +		ret = rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +	}
+>  
+> -	return rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
+> +	return ret;
+>  }
+>  
+>  static const struct file_operations rpmsg_eptdev_fops = {
+> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
+> index 523c98b..cc7a917 100644
+> --- a/include/linux/rpmsg.h
+> +++ b/include/linux/rpmsg.h
+> @@ -64,12 +64,14 @@ struct rpmsg_device {
+>  };
+>  
+>  typedef int (*rpmsg_rx_cb_t)(struct rpmsg_device *, void *, int, void *, u32);
+> +typedef int (*rpmsg_flowcontrol_cb_t)(struct rpmsg_device *, void *, bool);
+>  
+>  /**
+>   * struct rpmsg_endpoint - binds a local rpmsg address to its user
+>   * @rpdev: rpmsg channel device
+>   * @refcount: when this drops to zero, the ept is deallocated
+>   * @cb: rx callback handler
+> + * @flow_cb: remote flow control callback handler
+>   * @cb_lock: must be taken before accessing/changing @cb
+>   * @addr: local rpmsg address
+>   * @priv: private data for the driver's use
+> @@ -92,6 +94,7 @@ struct rpmsg_endpoint {
+>  	struct rpmsg_device *rpdev;
+>  	struct kref refcount;
+>  	rpmsg_rx_cb_t cb;
+> +	rpmsg_flowcontrol_cb_t flow_cb;
+>  	struct mutex cb_lock;
+>  	u32 addr;
+>  	void *priv;
+> @@ -106,6 +109,7 @@ struct rpmsg_endpoint {
+>   * @probe: invoked when a matching rpmsg channel (i.e. device) is found
+>   * @remove: invoked when the rpmsg channel is removed
+>   * @callback: invoked when an inbound message is received on the channel
+> + * @flowcontrol: invoked when remote side flow control status is received
+>   */
+>  struct rpmsg_driver {
+>  	struct device_driver drv;
+> @@ -113,6 +117,7 @@ struct rpmsg_driver {
+>  	int (*probe)(struct rpmsg_device *dev);
+>  	void (*remove)(struct rpmsg_device *dev);
+>  	int (*callback)(struct rpmsg_device *, void *, int, void *, u32);
+> +	int (*flowcontrol)(struct rpmsg_device *, void *, bool);
+>  };
+>  
+>  static inline u16 rpmsg16_to_cpu(struct rpmsg_device *rpdev, __rpmsg16 val)
+> @@ -192,6 +197,8 @@ __poll_t rpmsg_poll(struct rpmsg_endpoint *ept, struct file *filp,
+>  
+>  ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept);
+>  
+> +int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable);
+> +
+>  #else
+>  
+>  static inline int rpmsg_register_device_override(struct rpmsg_device *rpdev,
+> @@ -316,6 +323,14 @@ static inline ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept)
+>  	return -ENXIO;
+>  }
+>  
+> +static inline int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable)
+> +{
+> +	/* This shouldn't be possible */
+> +	WARN_ON(1);
+> +
+> +	return -ENXIO;
+> +}
+> +
+>  #endif /* IS_ENABLED(CONFIG_RPMSG) */
+>  
+>  /* use a macro to avoid include chaining to get THIS_MODULE */
+> diff --git a/include/uapi/linux/rpmsg.h b/include/uapi/linux/rpmsg.h
+> index 1637e68..c549649 100644
+> --- a/include/uapi/linux/rpmsg.h
+> +++ b/include/uapi/linux/rpmsg.h
+> @@ -10,7 +10,7 @@
+>  #include <linux/types.h>
+>  
+>  #define RPMSG_ADDR_ANY		0xFFFFFFFF
+> -
+> +#define RPMSG_FLOW_CONTROL_ON	0x001
+>  /**
+>   * struct rpmsg_endpoint_info - endpoint info representation
+>   * @name: name of service
+> @@ -43,4 +43,14 @@ struct rpmsg_endpoint_info {
+>   */
+>  #define RPMSG_RELEASE_DEV_IOCTL	_IOW(0xb5, 0x4, struct rpmsg_endpoint_info)
+>  
+> +/**
+> + * Get the remote rpmsg char device's flow control signal.
+> + */
+> +#define RPMSG_GET_SIGNAL_IOCTL _IOW(0xb5, 0x5, struct rpmsg_endpoint_info)
+> +
+> +/**
+> + * Set the flow control for the local rpmsg char device.
+> + */
+> +#define RPMSG_SET_SIGNAL_IOCTL _IOW(0xb5, 0x6, struct rpmsg_endpoint_info)
+> +
+>  #endif
