@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 137776E8104
+	by mail.lfdr.de (Postfix) with ESMTP id 681216E8105
 	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233521AbjDSSNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S233567AbjDSSNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjDSSNS (ORCPT
+        with ESMTP id S229565AbjDSSNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Apr 2023 14:13:18 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C12CE53;
-        Wed, 19 Apr 2023 11:13:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11E5212A;
+        Wed, 19 Apr 2023 11:13:17 -0700 (PDT)
 Received: from localhost (unknown [188.27.34.213])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C03436603252;
-        Wed, 19 Apr 2023 19:13:13 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 712CB6603263;
+        Wed, 19 Apr 2023 19:13:16 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681927993;
-        bh=5wpEqApFj1eBs4XebojD3UFFhW8LqZtfNsukti4eYVw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=f4q/WG/Xw2/G/I+j2N7iQoS3HKjpqf7X1jlqefn7/IXVL6bnt30k0+o9D8gN/CW0w
-         xSTD9XtpZ2G1vE2Jdyh+5H2KXEE5e2yfEF+3VGnEyP+sH3CR5gzdGaYFLBK+hMDZCP
-         KkCGSw5L8qSy00WRUCahRTGilVjBs2XqjXKox7S/D87TXxFttXwWqS8bxv1uYkmAQx
-         ys9+r+Q8CUVXa8pEZWuroYPIifiIGwbQFx5OUfhXcKb99UtvpUEUkbzjS0+cdYmlj/
-         xQWBmlVMg500CETIe3uF1ufZqD+nXkU4tB95pLJUYwpyRcny95cT2uTLZ7rHzyYJg1
-         +v1wWqAvTHeOQ==
+        s=mail; t=1681927996;
+        bh=8mHiEdYtricQtv90csR7aHt5nQURoxkm/vNcQ2Jjvuc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IBT1CQEILyBN0EEzhGCls1OHWD15cIh3MfKOIPM0Gh8smhtu7RENdRlnruPiiXctX
+         TNXWLGkEneBGxGs/nmjvpLf5qu7pdCWEfy/Qn86NJO68JcEEOC6jYfP+EOayL9RO2O
+         hE6J2mobMF72cy9itk/qrb3sEi1Iclw9arYXUukMDC+4h6NX7d4itoiMRK93Waw2hW
+         EEDKGIL3J4wx+e4UB+byFFt+08Kb+Pvo67/zmWEtjq+5wM+rQnOAwbFqHyIQ51EFpo
+         jCg+BSb9jkpZhFtoRx2E90e0xuN5FIf7KoZepqn37sSFLRmJnaSCpsShSCI7/RPR02
+         21XLSQVbeQqIQ==
 From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -46,10 +46,12 @@ To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH v3 0/3] Enable rk3588 timer support
-Date:   Wed, 19 Apr 2023 21:13:06 +0300
-Message-Id: <20230419181309.338354-1-cristian.ciocaltea@collabora.com>
+Subject: [PATCH v3 1/3] dt-bindings: timer: rockchip: Drop superfluous rk3288 compatible
+Date:   Wed, 19 Apr 2023 21:13:07 +0300
+Message-Id: <20230419181309.338354-2-cristian.ciocaltea@collabora.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230419181309.338354-1-cristian.ciocaltea@collabora.com>
+References: <20230419181309.338354-1-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -62,28 +64,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset enables Rockchip RK3588/RK3588S SoC timer support.
-While here, it also handles a minor DT binding issue related to RK3288.
+The compatible string for Rockchip RK3288 is wrongly provided in the
+'enum' item, in addition to the subsequent 'const', which allows the
+usage of an incorrect specification:
 
-Changes in v3:
- - Updated commit description in patch 1, per Krzysztof's review
- - Added Acked-by tag from Krzysztof in patch 2
- - v2: https://lore.kernel.org/lkml/20230418120624.284551-1-cristian.ciocaltea@collabora.com/
+  compatible = "rockchip,rk3288-timer", "rockchip,rk3288-timer";
 
-Changes in v2:
- - Added Reviewed-by tag from Heiko in patches 1 & 2
- - Update patch 3 according to Johan's review
- - v1: https://lore.kernel.org/lkml/20230418095344.274025-1-cristian.ciocaltea@collabora.com/
+As the rk3288 string is also specified in the top-most 'const' item, the
+binding already allows the usage of the correct variant:
 
-Cristian Ciocaltea (3):
-  dt-bindings: timer: rockchip: Drop superfluous rk3288 compatible
-  dt-bindings: timer: rockchip: Add rk3588 compatible
-  arm64: dts: rockchip: Add rk3588 timer
+  compatible = "rockchip,rk3288-timer";
 
- .../devicetree/bindings/timer/rockchip,rk-timer.yaml      | 2 +-
- arch/arm64/boot/dts/rockchip/rk3588s.dtsi                 | 8 ++++++++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+Drop the unwanted rk3288 entry from the enum.
 
+Fixes: faa186adbd06 ("dt-bindings: timer: convert rockchip,rk-timer.txt to YAML")
+Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+---
+ Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml b/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
+index 65e59836a660..2bdb6e6bdb21 100644
+--- a/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
++++ b/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
+@@ -23,7 +23,6 @@ properties:
+               - rockchip,rk3188-timer
+               - rockchip,rk3228-timer
+               - rockchip,rk3229-timer
+-              - rockchip,rk3288-timer
+               - rockchip,rk3368-timer
+               - rockchip,px30-timer
+           - const: rockchip,rk3288-timer
 -- 
 2.40.0
 
