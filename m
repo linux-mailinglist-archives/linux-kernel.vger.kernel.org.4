@@ -2,255 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FC56E81AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791B06E81B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjDSTG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 15:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33466 "EHLO
+        id S231577AbjDSTHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 15:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDSTGZ (ORCPT
+        with ESMTP id S229441AbjDSTHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 15:06:25 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E2D40EC;
-        Wed, 19 Apr 2023 12:06:21 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33JJ658A056800;
-        Wed, 19 Apr 2023 14:06:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681931165;
-        bh=E+cjoie7RPKxaQf86Kyiqb8pq9K0t0ykgWwdaQ9rxoQ=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=qfIGhe4QdpZA2a4p3EkKA9wO5DkmbgZVQBH4iMoqMyMwCoL+eXmnY0QEHVHC7jYcj
-         GR4UEgDWlCVZ3lbtfo06cI6cB3V+5iS2mVYGcHjQzmZ+hvR+I40ZpqL9bfpW2Fomgr
-         zSfFqCDeMg2NDF71uk6QKI29HM9mn+1Yd9RbldwI=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33JJ65eW057983
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 19 Apr 2023 14:06:05 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
- Apr 2023 14:06:05 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 19 Apr 2023 14:06:04 -0500
-Received: from [128.247.81.102] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33JJ64lN081689;
-        Wed, 19 Apr 2023 14:06:04 -0500
-Message-ID: <fb137f96-b1a1-30ee-cd92-d52f1f0f76d7@ti.com>
-Date:   Wed, 19 Apr 2023 14:06:04 -0500
+        Wed, 19 Apr 2023 15:07:07 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4130565B6;
+        Wed, 19 Apr 2023 12:07:02 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33JGiLbp030220;
+        Wed, 19 Apr 2023 19:06:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=G/y8ctTcURCYoZmiuLkLbWXgnfrdu76wyZiUSLHo2Ho=;
+ b=cDK4YRXujHSOFTJOMGYS7EvoADjvXAdnrheVTaxZqdhZKTsqPjIQc2SNKFcGXNUIIcho
+ CssuFkbh4TQoOf3dT6yGxG48d404avLzqkTsp4mmGoT9HqaMWhx56MJ4Q+qBGLlsJerT
+ qMHayZ1QY+N1nr4XKCDoPOXk0a/cnPdW9o6vV7ho/qpIsaQelG01iXpZoy9DXu0er/eO
+ SXe3Feyu5XqEQYKN6MnWbDWe3WOu+SqqhDadykXJnV6JTLZyBHuQp/cfVbg6DfBRVX8i
+ CODSMbJPY0+vlBYUMnwmPMVjmX+mrINQMDjJ8+OFHWxJGdE5tt0/mFBp5Wd/YslTUKN1 hA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q26wy29j5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 19:06:52 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33JJ6pG8019846
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 19:06:51 GMT
+Received: from [10.134.71.70] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 19 Apr
+ 2023 12:06:50 -0700
+Message-ID: <11c72462-b256-d0db-a666-9615da4420f6@quicinc.com>
+Date:   Wed, 19 Apr 2023 12:06:50 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [RFC PATCH 5/5] can: m_can: Add hrtimer to generate software
- interrupt
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andrew Davis <afd@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+Subject: Re: [Freedreno] [PATCH 5/5] drm/msm/dpu1: Handle the reg bus ICC path
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Schuyler Patton <spatton@ti.com>
-References: <20230413223051.24455-1-jm@ti.com>
- <20230413223051.24455-6-jm@ti.com>
- <20230414-bounding-guidance-262dffacd05c-mkl@pengutronix.de>
-Content-Language: en-US
-From:   "Mendez, Judith" <jm@ti.com>
-In-Reply-To: <20230414-bounding-guidance-262dffacd05c-mkl@pengutronix.de>
+        Krishna Manikandan <quic_mkrishn@quicinc.com>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        "Marijn Suijten" <marijn.suijten@somainline.org>,
+        <freedreno@lists.freedesktop.org>
+References: <20230417-topic-dpu_regbus-v1-0-06fbdc1643c0@linaro.org>
+ <20230417-topic-dpu_regbus-v1-5-06fbdc1643c0@linaro.org>
+From:   Jeykumar Sankaran <quic_jeykumar@quicinc.com>
+In-Reply-To: <20230417-topic-dpu_regbus-v1-5-06fbdc1643c0@linaro.org>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: uZuyWiNw6UBDUJjAuj75d_TvKXv1_VVz
+X-Proofpoint-ORIG-GUID: uZuyWiNw6UBDUJjAuj75d_TvKXv1_VVz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-19_13,2023-04-18_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 clxscore=1011 mlxscore=0 malwarescore=0 spamscore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304190167
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Marc,
 
-On 4/14/2023 1:20 PM, Marc Kleine-Budde wrote:
-> On 13.04.2023 17:30:51, Judith Mendez wrote:
->> Add a hrtimer to MCAN struct. Each MCAN will have its own
->> hrtimer instantiated if there is no hardware interrupt found.
->>
->> The hrtimer will generate a software interrupt every 1 ms. In
-> 
-> Are you sure about the 1ms?
-> 
->> hrtimer callback, we check if there is a transaction pending by
->> reading a register, then process by calling the isr if there is.
->>
->> Signed-off-by: Judith Mendez <jm@ti.com>
->> ---
->>   drivers/net/can/m_can/m_can.c          | 24 ++++++++++++++++++++++--
->>   drivers/net/can/m_can/m_can.h          |  3 +++
->>   drivers/net/can/m_can/m_can_platform.c |  9 +++++++--
->>   3 files changed, 32 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
->> index 8e83d6963d85..bb9d53f4d3cc 100644
->> --- a/drivers/net/can/m_can/m_can.c
->> +++ b/drivers/net/can/m_can/m_can.c
->> @@ -23,6 +23,7 @@
->>   #include <linux/pinctrl/consumer.h>
->>   #include <linux/platform_device.h>
->>   #include <linux/pm_runtime.h>
->> +#include <linux/hrtimer.h>
->>   
->>   #include "m_can.h"
->>   
->> @@ -1584,6 +1585,11 @@ static int m_can_close(struct net_device *dev)
->>   	if (!cdev->is_peripheral)
->>   		napi_disable(&cdev->napi);
->>   
->> +	if (dev->irq < 0) {
->> +		dev_info(cdev->dev, "Disabling the hrtimer\n");
-> 
-> Make it a dev_dbg() or remove completely.
-> 
 
-Will do, thanks.
-
->> +		hrtimer_cancel(&cdev->hrtimer);
->> +	}
->> +
->>   	m_can_stop(dev);
->>   	m_can_clk_stop(cdev);
->>   	free_irq(dev->irq, dev);
->> @@ -1792,6 +1798,19 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
->>   	return NETDEV_TX_OK;
->>   }
->>   
->> +enum hrtimer_restart hrtimer_callback(struct hrtimer *timer)
->> +{
->> +	irqreturn_t ret;
+On 4/17/2023 8:30 AM, Konrad Dybcio wrote:
+> Apart from the already handled data bus (MAS_MDP_Pn<->DDR), there's
+> another path that needs to be handled to ensure MDSS functions properly,
+> namely the "reg bus", a.k.a the CPU-MDSS interconnect.
 > 
-> never read value?
+> Gating that path may have a variety of effects.. from none to otherwise
+> inexplicable DSI timeouts..
 > 
-
-I have removed ret completely now.
-
->> +	struct m_can_classdev *cdev =
->> +		container_of(timer, struct m_can_classdev, hrtimer);
->> +
->> +	ret = m_can_isr(0, cdev->net);
->> +
->> +	hrtimer_forward_now(timer, ns_to_ktime(5 * NSEC_PER_MSEC));
+> On the DPU side, we need to keep the bus alive. The vendor driver
+> kickstarts it to max (300Mbps) throughput on first commit, but in
+> exchange for some battery life in rare DPU-enabled-panel-disabled
+> usecases, we can request it at DPU init and gate it at suspend.
 > 
-> There's ms_to_ktime()....and the "5" doesn't match your patch
-> description.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 22 ++++++++++++++++++++--
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h |  1 +
+>   2 files changed, 21 insertions(+), 2 deletions(-)
 > 
->> +
->> +	return HRTIMER_RESTART;
->> +}
->> +
->>   static int m_can_open(struct net_device *dev)
->>   {
->>   	struct m_can_classdev *cdev = netdev_priv(dev);
->> @@ -1836,8 +1855,9 @@ static int m_can_open(struct net_device *dev)
->>   	}
->>   
->>   	if (err < 0) {
->> -		netdev_err(dev, "failed to request interrupt\n");
->> -		goto exit_irq_fail;
->> +		dev_info(cdev->dev, "Enabling the hrtimer\n");
->> +		cdev->hrtimer.function = &hrtimer_callback;
->> +		hrtimer_start(&cdev->hrtimer, ns_to_ktime(0), HRTIMER_MODE_REL_PINNED);
-> 
-> IMHO it makes no sense to request an IRQ if the device doesn't have one,
-> and then try to fix up things in the error path. What about this?
-> 
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -1831,9 +1831,11 @@ static int m_can_open(struct net_device *dev)
->                   err = request_threaded_irq(dev->irq, NULL, m_can_isr,
->                                              IRQF_ONESHOT,
->                                              dev->name, dev);
-> -        } else {
-> +        } else if (dev->irq) {
->                   err = request_irq(dev->irq, m_can_isr, IRQF_SHARED, dev->name,
->                                     dev);
-> +        } else {
-> +                // polling
->           }
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index dd6c1c40ab9e..d1f77faebbc0 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -384,15 +384,17 @@ static int dpu_kms_global_obj_init(struct dpu_kms *dpu_kms)
+>   	return 0;
+>   }
 >   
->           if (err < 0) {
+> -static int dpu_kms_parse_data_bus_icc_path(struct dpu_kms *dpu_kms)
+> +static int dpu_kms_parse_icc_paths(struct dpu_kms *dpu_kms)
+>   {
+>   	struct icc_path *path0;
+>   	struct icc_path *path1;
+> +	struct icc_path *reg_bus_path;
+>   	struct drm_device *dev = dpu_kms->dev;
+>   	struct device *dpu_dev = dev->dev;
+>   
+>   	path0 = msm_icc_get(dpu_dev, "mdp0-mem");
+>   	path1 = msm_icc_get(dpu_dev, "mdp1-mem");
+> +	reg_bus_path = msm_icc_get(dpu_dev, "cpu-cfg");
+>   
+>   	if (IS_ERR_OR_NULL(path0))
+>   		return PTR_ERR_OR_ZERO(path0);
+> @@ -404,6 +406,10 @@ static int dpu_kms_parse_data_bus_icc_path(struct dpu_kms *dpu_kms)
+>   		dpu_kms->mdp_path[1] = path1;
+>   		dpu_kms->num_mdp_paths++;
+>   	}
+> +
+> +	if (!IS_ERR_OR_NULL(reg_bus_path))
+> +		dpu_kms->reg_bus_path = reg_bus_path;
+> +
+>   	return 0;
+>   }
+>   
+> @@ -1039,7 +1045,7 @@ static int dpu_kms_hw_init(struct msm_kms *kms)
+>   		DPU_DEBUG("REG_DMA is not defined");
+>   	}
+>   
+> -	dpu_kms_parse_data_bus_icc_path(dpu_kms);
+> +	dpu_kms_parse_icc_paths(dpu_kms);
+>   
+>   	rc = pm_runtime_resume_and_get(&dpu_kms->pdev->dev);
+>   	if (rc < 0)
+> @@ -1241,6 +1247,9 @@ static int __maybe_unused dpu_runtime_suspend(struct device *dev)
+>   	for (i = 0; i < dpu_kms->num_mdp_paths; i++)
+>   		icc_set_bw(dpu_kms->mdp_path[i], 0, 0);
+>   
+> +	if (dpu_kms->reg_bus_path)
+> +		icc_set_bw(dpu_kms->reg_bus_path, 0, 0);
+> +
+>   	return 0;
+>   }
+>   
+> @@ -1261,6 +1270,15 @@ static int __maybe_unused dpu_runtime_resume(struct device *dev)
+>   		return rc;
+>   	}
+>   
+> +	/*
+> +	 * The vendor driver supports setting 76.8 / 150 / 300 Mbps on this
+How do you arrive at these distint BW values? Are they provided by the 
+ICC fwk for the given path?
+> +	 * path, but it seems to go for the highest level when display output
+> +	 * is enabled and zero otherwise. For simplicity, we can assume that
+> +	 * DPU being enabled and running implies that.
+> +	 */
+> +	if (dpu_kms->reg_bus_path)
+> +		icc_set_bw(dpu_kms->reg_bus_path, 0, MBps_to_icc(300));
+> +
+>   	dpu_vbif_init_memtypes(dpu_kms);
+>   
+>   	drm_for_each_encoder(encoder, ddev)
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
+> index d5d9bec90705..c332381d58c4 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
+> @@ -111,6 +111,7 @@ struct dpu_kms {
+>   	atomic_t bandwidth_ref;
+>   	struct icc_path *mdp_path[2];
+>   	u32 num_mdp_paths;
+> +	struct icc_path *reg_bus_path;
+>   };
+>   
+>   struct vsync_info {
 > 
->>   	}
-
-Thanks for the recommendation, I will include in v2.
-
->>   
->>   	/* start the m_can controller */
->> diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
->> index a839dc71dc9b..ed046d77fdb9 100644
->> --- a/drivers/net/can/m_can/m_can.h
->> +++ b/drivers/net/can/m_can/m_can.h
->> @@ -28,6 +28,7 @@
->>   #include <linux/pm_runtime.h>
->>   #include <linux/slab.h>
->>   #include <linux/uaccess.h>
->> +#include <linux/hrtimer.h>
->>   
->>   /* m_can lec values */
->>   enum m_can_lec_type {
->> @@ -93,6 +94,8 @@ struct m_can_classdev {
->>   	int is_peripheral;
->>   
->>   	struct mram_cfg mcfg[MRAM_CFG_NUM];
->> +
->> +	struct hrtimer hrtimer;
->>   };
->>   
->>   struct m_can_classdev *m_can_class_allocate_dev(struct device *dev, int sizeof_priv);
->> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
->> index 9c1dcf838006..53e1648e9dab 100644
->> --- a/drivers/net/can/m_can/m_can_platform.c
->> +++ b/drivers/net/can/m_can/m_can_platform.c
->> @@ -7,6 +7,7 @@
->>   
->>   #include <linux/phy/phy.h>
->>   #include <linux/platform_device.h>
->> +#include <linux/hrtimer.h>
->>   
->>   #include "m_can.h"
->>   
->> @@ -98,8 +99,12 @@ static int m_can_plat_probe(struct platform_device *pdev)
->>   	addr = devm_platform_ioremap_resource_byname(pdev, "m_can");
->>   	irq = platform_get_irq_byname(pdev, "int0");
->>   	if (IS_ERR(addr) || irq < 0) {
-> 
-> What about the IS_ERR(addr) case?
-> 
-
-Added, thanks.
-
->> -		ret = -EINVAL;
->> -		goto probe_fail;
->> +		if (irq == -EPROBE_DEFER) {
->> +			ret = -EPROBE_DEFER;
->> +			goto probe_fail;
->> +		}
->> +		dev_info(mcan_class->dev, "Failed to get irq, initialize hrtimer\n");
->> +		hrtimer_init(&mcan_class->hrtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_PINNED);
-> 
-> I don't like it when polling is unconditionally set up in case of an irq
-> error. I'm not sure if we need an explicit device tree property....
-
-This is an interesting thought, I would definitely like to look more 
-into this. Though I am thinking it would be part of future optimization 
-patch. Thanks so much for your recommendation.
-
-regards,
-Judith
