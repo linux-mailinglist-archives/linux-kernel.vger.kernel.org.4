@@ -2,120 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E146E7E76
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE046E7E7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232942AbjDSPh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58972 "EHLO
+        id S232678AbjDSPjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 11:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjDSPh4 (ORCPT
+        with ESMTP id S231719AbjDSPji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:37:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3227EF7;
-        Wed, 19 Apr 2023 08:37:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35D0163FC4;
-        Wed, 19 Apr 2023 15:37:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC738C433D2;
-        Wed, 19 Apr 2023 15:37:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681918674;
-        bh=U9geXgq4ygeKbujO9rJvRGQ8zOI7jRlhYWniDQFwO5w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DNeRX4FF7Nyh1PUa+d5JAg/Bn7U1VisN4i/Vq6/4aucy5SI87mNE5RwDR01kw7i6q
-         YEKDWFiLte5XT1IqiyxDsBxOkmXm4gsHWYj6kjFJTV3vxKi/RV/4PWgvqmQV0VdMop
-         wnc3l8Vur2JWWmTZ4rMzZ5TH+DswMWHdjElXS1ldSp624kC5qLlVi8nnNcBhIkeMu7
-         GDYcxOkFHe5lvMds5JJ0UG2/6rg15sS+t4xqr5vZgVSmvz/y6x9XjR2R5RwIIv+1gp
-         nQnTPXHGA+jnc0r/B+jdk4YFPjW8G4ZFP6SFWmqqkkrdjbviTkrAq0vh+mt0re36dc
-         ApCth/3BTcHMQ==
-Date:   Wed, 19 Apr 2023 16:37:46 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Jacky Huang <ychuang570808@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-Subject: Re: [PATCH v7 05/12] dt-bindings: mfd: syscon: Add
- nuvoton,ma35d1-sys compatible
-Message-ID: <20230419153746.GA9904@google.com>
-References: <20230412053824.106-1-ychuang570808@gmail.com>
- <20230412053824.106-6-ychuang570808@gmail.com>
- <d11b6acb-b072-9496-5ad6-0635357394f1@linaro.org>
- <69b0aa3a-f5d2-8310-81ae-61d379db0d3b@gmail.com>
- <20230414070326.GA1036697@google.com>
- <a7217c06-1037-9245-1241-33a7b1398907@gmail.com>
+        Wed, 19 Apr 2023 11:39:38 -0400
+Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDC1A5CB
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:38:56 -0700 (PDT)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id E8C7C100471B0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:38:44 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id p9tMpnDxANX2ap9tMpPYy2; Wed, 19 Apr 2023 15:38:44 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=64400b04
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=dKHAf1wccvYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=2f24+Aio55UNPDBTkCe7ZeCsxM2kFAFj/xn3CWHMG3U=; b=GoGiVzeS/htfrG4uXUn9yRc5ok
+        KRv/pXNFq6EcogF4WP16PV9dph3lJ3emfRhT1FaUCY2dxGqYm17Vjopk1GzkO4QMya1fzBSNde5WG
+        uCzUwfXTCCcLWPk7YNPPNYEDtWA2+xUKgXkX5ZrK7E8+IJKjmO+ZAD6rpxFVPrEtpaKiZNSk/wgEV
+        T+Jq5XIwm14bZiCxDKcLsbuAr9n0H3R4BApoH3NyfReF24e8cUIyDiXezn8xn1Mp4QS3cae513uUU
+        MDTatLNKFSLX4BzDmAHQBIT176/G+wfmmJp3ne6y7m2911Nd/g8czL1Ghl5g98MaOXNcCpZVMS0ST
+        EtLfmvGw==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:35488 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pp9tM-003Fjy-5b;
+        Wed, 19 Apr 2023 09:38:44 -0600
+Subject: Re: [PATCH 6.1 000/129] 6.1.25-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230419132048.193275637@linuxfoundation.org>
+In-Reply-To: <20230419132048.193275637@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <356ecd37-3f1d-a46c-d17d-1ecc4e76798f@w6rz.net>
+Date:   Wed, 19 Apr 2023 08:38:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a7217c06-1037-9245-1241-33a7b1398907@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pp9tM-003Fjy-5b
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:35488
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Apr 2023, Jacky Huang wrote:
+On 4/19/23 6:21 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.25 release.
+> There are 129 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 21 Apr 2023 13:20:20 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.25-rc3.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-> 
-> 
-> On 2023/4/14 下午 03:03, Lee Jones wrote:
-> > On Fri, 14 Apr 2023, Jacky Huang wrote:
-> > 
-> > > Dear Krzysztof,
-> > > 
-> > > 
-> > > On 2023/4/14 上午 12:47, Krzysztof Kozlowski wrote:
-> > > > On 12/04/2023 07:38, Jacky Huang wrote:
-> > > > > From: Jacky Huang <ychuang3@nuvoton.com>
-> > > > > 
-> > > > > Add Nuvoton ma35d1 system registers compatible.
-> > > > > 
-> > > > > Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> > > > What about the tag? Why did you ignore it?
-> > > > 
-> > > > Also, wasn't this applied? Why do you resend (incorrect version)?
-> > > > 
-> > > > Best regards,
-> > > > Krzysztof
-> > > > 
-> > > When I was making this patchset, this patch was still not merged.
-> > > So I'm not sure if I should remove it.
-> > > This is just a resend with no updates. And I will remove this patch
-> > > in the next version as it was applied.
-> > > If possible, please add the following tags for this patch.
-> > > 
-> > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > I added this.
-> > 
-> > > Reviewed-by: Lee Jones <lee@kernel.org>
-> > When did I provide this?
-> > 
-> > --
-> > Lee Jones [李琼斯]
-> 
-> Dear Lee,
-> 
-> Thank you for your help. And, I'm sorry, I thought 'applied' meant
-> 'reviewed', and this patch
-> didn't actually get your review tag. If this offends you, please remove it.
-> Of course, if you are
-> willing to provide a review tag, I would greatly appreciate it.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-If I replied with "applied" then it's applied and you do not have to
-submit it again.
+Tested-by: Ron Economos <re@w6rz.net>
 
--- 
-Lee Jones [李琼斯]
