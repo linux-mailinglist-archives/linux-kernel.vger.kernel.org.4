@@ -2,71 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C686E76C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D896E76C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232699AbjDSJvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 05:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
+        id S232356AbjDSJxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 05:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbjDSJvX (ORCPT
+        with ESMTP id S231783AbjDSJxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:51:23 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911444C19;
-        Wed, 19 Apr 2023 02:51:22 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33J9osN8042875;
-        Wed, 19 Apr 2023 04:50:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681897854;
-        bh=mljfsvL/pHsCnWc7Sj/aslhGS6YKsV/O4C4RsaipU8E=;
-        h=From:To:CC:Subject:Date;
-        b=fdw2yxT2YR2VVW9fG1zO6Uxutx3LsbE/qVN/aZbcmi/S2biFNzgze0kmGi40WYYf4
-         1QZfIpNJVq6e+PEUDbnb6b0WdkqIewuOnMp+GxcMhgwmjd7TGtppkBMKv1Akh/ZphI
-         oWL64bC0pePUT3jsqK9CrMy6ESRsniw0O0aRsjGw=
-Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33J9osID128470
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 19 Apr 2023 04:50:54 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
- Apr 2023 04:50:53 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 19 Apr 2023 04:50:53 -0500
-Received: from lelv0854.itg.ti.com (lelv0854.itg.ti.com [10.181.64.140])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33J9orj3112149;
-        Wed, 19 Apr 2023 04:50:53 -0500
-Received: from localhost (uda0501179.dhcp.ti.com [10.24.69.114])
-        by lelv0854.itg.ti.com (8.14.7/8.14.7) with ESMTP id 33J9oqpE019027;
-        Wed, 19 Apr 2023 04:50:53 -0500
-From:   MD Danish Anwar <danishanwar@ti.com>
-To:     <rafal@milecki.pl>, Mark Brown <broonie@kernel.org>,
-        <nfraprado@collabora.com>, Thierry Reding <treding@nvidia.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>, <nm@ti.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-omap@vger.kernel.org>, <vigneshr@ti.com>,
-        <danishanwar@ti.com>
-Subject: [PATCH] arm64: defconfig: Enable PRUSS as module
-Date:   Wed, 19 Apr 2023 15:20:51 +0530
-Message-ID: <20230419095051.3269777-1-danishanwar@ti.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 19 Apr 2023 05:53:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5062DE7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:53:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A81B01063;
+        Wed, 19 Apr 2023 02:54:00 -0700 (PDT)
+Received: from [10.57.20.93] (unknown [10.57.20.93])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C10963F6C4;
+        Wed, 19 Apr 2023 02:53:14 -0700 (PDT)
+Message-ID: <dcd957cf-8e26-11f1-2ac1-0fdd8541eed3@arm.com>
+Date:   Wed, 19 Apr 2023 10:53:12 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] drm/scheduler: set entity to NULL in
+ drm_sched_entity_pop_job()
+Content-Language: en-GB
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Danilo Krummrich <dakr@redhat.com>, luben.tuikov@amd.com,
+        airlied@gmail.com, daniel@ffwll.ch, christian.koenig@amd.com
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230418100453.4433-1-dakr@redhat.com>
+ <ddaf4984-6f5a-404c-df9d-537245e99420@arm.com>
+ <04f039ac71f3c0685a849b492478d18ec6ea4d11.camel@pengutronix.de>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <04f039ac71f3c0685a849b492478d18ec6ea4d11.camel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,25 +49,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enables PRUSS as kernel module for TI SoCs.
+On 19/04/2023 10:44, Lucas Stach wrote:
+> Hi Steven,
+> 
+> Am Mittwoch, dem 19.04.2023 um 10:39 +0100 schrieb Steven Price:
+>> On 18/04/2023 11:04, Danilo Krummrich wrote:
+>>> It already happend a few times that patches slipped through which
+>>> implemented access to an entity through a job that was already removed
+>>> from the entities queue. Since jobs and entities might have different
+>>> lifecycles, this can potentially cause UAF bugs.
+>>>
+>>> In order to make it obvious that a jobs entity pointer shouldn't be
+>>> accessed after drm_sched_entity_pop_job() was called successfully, set
+>>> the jobs entity pointer to NULL once the job is removed from the entity
+>>> queue.
+>>>
+>>> Moreover, debugging a potential NULL pointer dereference is way easier
+>>> than potentially corrupted memory through a UAF.
+>>>
+>>> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+>>
+>> This triggers a splat for me (with Panfrost driver), the cause of which
+>> is the following code in drm_sched_get_cleanup_job():
+>>
+>> 	if (job) {
+>> 		job->entity->elapsed_ns += ktime_to_ns(
+>> 			ktime_sub(job->s_fence->finished.timestamp,
+>> 				  job->s_fence->scheduled.timestamp));
+>> 	}
+>>
+>> which indeed is accessing entity after the job has been returned from
+>> drm_sched_entity_pop_job(). And obviously job->entity is a NULL pointer
+>> with this patch.
+>>
+>> I'm afraid I don't fully understand the lifecycle so I'm not sure if
+>> this is simply exposing an existing bug in drm_sched_get_cleanup_job()
+>> or if this commit needs to be reverted.
+>>
+> Not sure which tree you are on. The offending commit has been reverted
+> in 6.3-rc5.
 
-Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+This is in drm-misc-next - I'm not sure which "offending commit" you are
+referring to. I'm referring to:
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index a24609e14d50..2a362a902526 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1277,6 +1277,7 @@ CONFIG_ARCH_TEGRA_186_SOC=y
- CONFIG_ARCH_TEGRA_194_SOC=y
- CONFIG_ARCH_TEGRA_234_SOC=y
- CONFIG_TI_SCI_PM_DOMAINS=y
-+CONFIG_TI_PRUSS=m
- CONFIG_ARM_IMX_BUS_DEVFREQ=y
- CONFIG_ARM_IMX8M_DDRC_DEVFREQ=m
- CONFIG_ARM_MEDIATEK_CCI_DEVFREQ=m
--- 
-2.34.1
+96c7c2f4d5bd ("drm/scheduler: set entity to NULL in
+drm_sched_entity_pop_job()")
+
+which was merged yesterday to drm-misc-next (and is currently the top
+commit).
+
+Is there another commit which has been reverted elsewhere which is
+conflicting?
+
+Steve
+
+> Regards,
+> Lucas
+> 
+>> Thanks,
+>>
+>> Steve
+>>
+>>> ---
+>>>  drivers/gpu/drm/scheduler/sched_entity.c | 6 ++++++
+>>>  drivers/gpu/drm/scheduler/sched_main.c   | 4 ++++
+>>>  2 files changed, 10 insertions(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
+>>> index 15d04a0ec623..a9c6118e534b 100644
+>>> --- a/drivers/gpu/drm/scheduler/sched_entity.c
+>>> +++ b/drivers/gpu/drm/scheduler/sched_entity.c
+>>> @@ -448,6 +448,12 @@ struct drm_sched_job *drm_sched_entity_pop_job(struct drm_sched_entity *entity)
+>>>  			drm_sched_rq_update_fifo(entity, next->submit_ts);
+>>>  	}
+>>>  
+>>> +	/* Jobs and entities might have different lifecycles. Since we're
+>>> +	 * removing the job from the entities queue, set the jobs entity pointer
+>>> +	 * to NULL to prevent any future access of the entity through this job.
+>>> +	 */
+>>> +	sched_job->entity = NULL;
+>>> +
+>>>  	return sched_job;
+>>>  }
+>>>  
+>>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+>>> index 9b16480686f6..e89a3e469cd5 100644
+>>> --- a/drivers/gpu/drm/scheduler/sched_main.c
+>>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+>>> @@ -42,6 +42,10 @@
+>>>   *    the hardware.
+>>>   *
+>>>   * The jobs in a entity are always scheduled in the order that they were pushed.
+>>> + *
+>>> + * Note that once a job was taken from the entities queue and pushed to the
+>>> + * hardware, i.e. the pending queue, the entity must not be referenced anymore
+>>> + * through the jobs entity pointer.
+>>>   */
+>>>  
+>>>  #include <linux/kthread.h>
+>>
+> 
 
