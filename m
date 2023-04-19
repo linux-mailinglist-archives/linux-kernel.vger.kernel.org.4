@@ -2,118 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE046E7E7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E46FF6E7E8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbjDSPjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S233225AbjDSPl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 11:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231719AbjDSPji (ORCPT
+        with ESMTP id S233120AbjDSPl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:39:38 -0400
-Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDC1A5CB
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:38:56 -0700 (PDT)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id E8C7C100471B0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:38:44 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id p9tMpnDxANX2ap9tMpPYy2; Wed, 19 Apr 2023 15:38:44 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=64400b04
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=dKHAf1wccvYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=2f24+Aio55UNPDBTkCe7ZeCsxM2kFAFj/xn3CWHMG3U=; b=GoGiVzeS/htfrG4uXUn9yRc5ok
-        KRv/pXNFq6EcogF4WP16PV9dph3lJ3emfRhT1FaUCY2dxGqYm17Vjopk1GzkO4QMya1fzBSNde5WG
-        uCzUwfXTCCcLWPk7YNPPNYEDtWA2+xUKgXkX5ZrK7E8+IJKjmO+ZAD6rpxFVPrEtpaKiZNSk/wgEV
-        T+Jq5XIwm14bZiCxDKcLsbuAr9n0H3R4BApoH3NyfReF24e8cUIyDiXezn8xn1Mp4QS3cae513uUU
-        MDTatLNKFSLX4BzDmAHQBIT176/G+wfmmJp3ne6y7m2911Nd/g8czL1Ghl5g98MaOXNcCpZVMS0ST
-        EtLfmvGw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:35488 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pp9tM-003Fjy-5b;
-        Wed, 19 Apr 2023 09:38:44 -0600
-Subject: Re: [PATCH 6.1 000/129] 6.1.25-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230419132048.193275637@linuxfoundation.org>
-In-Reply-To: <20230419132048.193275637@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <356ecd37-3f1d-a46c-d17d-1ecc4e76798f@w6rz.net>
-Date:   Wed, 19 Apr 2023 08:38:42 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 19 Apr 2023 11:41:57 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4395FFA
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:41:56 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54fbb713301so3948017b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:41:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681918914; x=1684510914;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QDmw3DOKheKrCuqTG4/mWuNaV4eeLzuLIRCba3L2HpA=;
+        b=Gg4RxpZah5di/iSrLdpwdRSIfMGRBV8IwJrAL27K41P1YYxGVvfDhdppRnNISJOHEz
+         BuOB4GDq3zr9tDF6toTO7ihF7X/1r5pavBAcxjOPg4mOu6ZYYZJsTVcX23pubT7ghAa5
+         vMquJjdHstncLI7p6ZHZpcen6I+w/xTe2YlkQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681918914; x=1684510914;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QDmw3DOKheKrCuqTG4/mWuNaV4eeLzuLIRCba3L2HpA=;
+        b=WF9x6PbV8otcACvpOdvqVQhUpXcmUQ/ufUEKiJm3c2mDsKf86x3HYPMuys295h8Nh/
+         zUDJcSCYCqggnXyXfDh9+SlYhaVLd//mkXZWfnsv3ukwNvBLMP/w9sN0HTAo2lHEbBaH
+         tMzEvYtA/HkFEx8jQgOOh4/ciQCQVD5F7eDdI6GrdW9/nsB6ema+eK5SnnsBALffkZqG
+         XuAAROkQVjiqx1MUKiWYfvoJXai18GfPaLZovjBjcXZMkqRASWyoHjVhjy7jfJgEcgii
+         Kff7tXfqdWuyI0CXLStp6LVkVdJ+MRVXcznbABnNi/y4p2O+XdFSh9vu0bUzUUnIq10m
+         8u/A==
+X-Gm-Message-State: AAQBX9cNv7Ag0ICU2s9heSU7U4JswU5tYlE4hD2m3N5FxRHCOByXr2+7
+        uvKuq3NDY9fi+12wDFvzS8oSVm0PNgr36LqBCjO1cQ==
+X-Google-Smtp-Source: AKy350a2RuW3tMMFiqpsmfRp89hZ5G4r9oda2c3K7rw18GD7v8Fp/Ns60Q1Fx0qR7O6mEB2tSFYEtQ==
+X-Received: by 2002:a0d:d514:0:b0:54f:c337:f2d9 with SMTP id x20-20020a0dd514000000b0054fc337f2d9mr3335651ywd.42.1681918913842;
+        Wed, 19 Apr 2023 08:41:53 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id 135-20020a81148d000000b0054fadeb9899sm4562339ywu.35.2023.04.19.08.41.52
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 08:41:52 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-54fbb713301so3944987b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:41:52 -0700 (PDT)
+X-Received: by 2002:a81:ae55:0:b0:545:5f92:f7ee with SMTP id
+ g21-20020a81ae55000000b005455f92f7eemr2300152ywk.2.1681918912183; Wed, 19 Apr
+ 2023 08:41:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pp9tM-003Fjy-5b
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:35488
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230418124953.3170028-1-fshao@chromium.org> <20230418124953.3170028-2-fshao@chromium.org>
+ <ZD8z57MBvcfExJx8@nixie71> <CAC=S1ngBt9DmBobMkQXWhqE1UUxFv2U6iFd42nT=1N7r8+pFUg@mail.gmail.com>
+ <CAD=FV=U_i26a8uJYmqYf6PUgmTUgmEB5L2DkVga0zDX_iDcGQg@mail.gmail.com> <ZEAGTiGyvynGA9P1@nixie71>
+In-Reply-To: <ZEAGTiGyvynGA9P1@nixie71>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 19 Apr 2023 08:41:38 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UB393Z1zhK54Apgr-iRcvgiK0t36jt6-t5-5zz3m8OZQ@mail.gmail.com>
+Message-ID: <CAD=FV=UB393Z1zhK54Apgr-iRcvgiK0t36jt6-t5-5zz3m8OZQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: input: goodix: Add powered-in-suspend property
+To:     Jeff LaBundy <jeff@labundy.com>
+Cc:     Fei Shao <fshao@chromium.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 6:21 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.25 release.
-> There are 129 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 21 Apr 2023 13:20:20 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.25-rc3.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi,
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+On Wed, Apr 19, 2023 at 8:18=E2=80=AFAM Jeff LaBundy <jeff@labundy.com> wro=
+te:
+>
+> Hi Doug and Fei,
+>
+> Thank you for the informative discussion; I can empathize with the pain
+> these issues bring.
+>
+> On Wed, Apr 19, 2023 at 07:38:13AM -0700, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Wed, Apr 19, 2023 at 3:44=E2=80=AFAM Fei Shao <fshao@chromium.org> w=
+rote:
+> > >
+> > > Hi Jeff,
+> > >
+> > > On Wed, Apr 19, 2023 at 8:21=E2=80=AFAM Jeff LaBundy <jeff@labundy.co=
+m> wrote:
+> > > >
+> > > > Hi Fei,
+> > > >
+> > > > On Tue, Apr 18, 2023 at 08:49:51PM +0800, Fei Shao wrote:
+> > > > > We observed that on Chromebook device Steelix, if Goodix GT7375P
+> > > > > touchscreen is powered in suspend (because, for example, it conne=
+cts to
+> > > > > an always-on regulator) and with the reset GPIO asserted, it will
+> > > > > introduce about 14mW power leakage.
+> > > > >
+> > > > > This property is used to indicate that the touchscreen is powered=
+ in
+> > > > > suspend. If it's set, the driver will stop asserting the reset GP=
+IO in
+> > > > > power-down, and it will do it in power-up instead to ensure that =
+the
+> > > > > state is always reset after resuming.
+> > > > >
+> > > > > Signed-off-by: Fei Shao <fshao@chromium.org>
+> > > > > ---
+> > > >
+> > > > This is an interesting problem; were you able to root-cause why the=
+ silicon
+> > > > exhibits this behavior? Simply asserting reset should not cause it =
+to draw
+> > > > additional power, let alone 14 mW. This almost sounds like a back-p=
+owering
+> > > > problem during suspend.
+> > > >
+> > > There was a fix for this behavior before so I didn't dig into it on
+> > > the silicon side.
+> > > I can ask internally and see if we can have Goodix to confirm this is
+> > > a known HW erratum.
+> >
+> > Certainly it doesn't hurt to check, but it's not really that shocking
+> > to me that asserting reset could cause a power draw on some hardware.
+> > Reset puts hardware into a default state and that's not necessarily
+> > low power. I guess ideally hardware would act like it's "off" when
+> > reset is asserted and then then init to the default state on the edge
+> > as reset was deasserted, but I not all hardware is designed in an
+> > ideal way.
+>
+> While that is true in theory, I have never, ever seen that to be the case
+> when there is not some other underlying problem.
+>
+> What I have seen, however, is that asserting reset actually causes the GP=
+IO
+> to sink current from some other supply and through the IC. I loosely susp=
+ect
+> that if you probe the IC's rails and digital I/O during the failure condi=
+tion,
+> you may find one of them resting at some mid-rail voltage or diode drop. =
+It
+> seems you have a similar suspicion.
+>
+> In that case, it may mean that some other supply in the system should act=
+ually
+> be kept on, or that supplies are being brought down out of order. In whic=
+h
+> case, the solution should actually be a patch to the affected platform(s)=
+ dts
+> and not the mainline driver.
 
-Tested-by: Ron Economos <re@w6rz.net>
+I agree that it's a bandaid, but I'm not hopeful that a better
+solution will be found.
 
+Specifically, I'd expect a current leak in the system when you turn a
+supply off and then assert a GPIO high. That's when the device can
+start backpowering itself from a GPIO. In this case, it's the
+opposite. We're keeping the supply on and asserting the (active low)
+reset GPIO to cause the higher power draw. In another design it was
+confirmed that the power draw went away when we were able to turn the
+regulator off (but still keep the active low reset GPIO asserted).
+We've also confirmed that power is good if we keep the supply on and
+_don't_ assert the reset GPIO. Both of these two experiments provide
+some evidence that the system is configured properly and we're not
+backpowering something.
+
+I guess I should revise the above, though. I could believe that there
+is a current leak but on the touchscreen controller board itself,
+which is a black box to us. I have certainly been involved in products
+in the past where the default state of the system at reset caused a
+minor current leak (I remember an EE telling me that as soon as
+software started running I should quickly change the direction of a
+GPIO) and it wouldn't shock me if the touchscreen controller board had
+a problem like this. If there is a problem like this on the
+touchscreen controller board there's not much we can do to workaround
+it.
+
+Unfortunately, if the problem ends up needing a hardware change to fix
+more correctly (which I suspect it does), our hands are tied a bit.
+This is not prototype hardware but is final hardware.
+
+I guess one further note is that, at least on the project I was
+involved in that had a similar problem, folks in China did a bunch of
+analysis on this and went as far as adding an extra regulator to the
+main board schematic to "fix" it. Had the issue just been something
+where we were misconfiguing GPIOs or leaving a regulator in the wrong
+state then they (probably) would have identified it rather than
+spinning the board.
+
+-Doug
