@@ -2,247 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4756E7E49
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6E56E7E64
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233084AbjDSPau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        id S233404AbjDSPgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 11:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbjDSPan (ORCPT
+        with ESMTP id S233187AbjDSPgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:30:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C76840E6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:30:41 -0700 (PDT)
+        Wed, 19 Apr 2023 11:36:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01552702;
+        Wed, 19 Apr 2023 08:36:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9A7E61633
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:30:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A03BC433D2;
-        Wed, 19 Apr 2023 15:30:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 639C962DE1;
+        Wed, 19 Apr 2023 15:36:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B27E8C4339B;
+        Wed, 19 Apr 2023 15:36:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681918240;
-        bh=JMaZwA1dCOk+ofXmP6eFP+HvsGhy7OmhboIcr8AIwVM=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=OjKokYALqdz14ovnpWb2G0lrqzwH3Y3EtIWFGljrdFfcSge7bnQPXWWQxJfex8W1l
-         0P61ZJdja7F0v9+LEHFqOpf7Fb1mZ/jP9NLEXzIwaR0xJoeFJbxVcALufZO5Nt0u+9
-         7ebsyUvC9VhzfsGa75Y+TxWlXxU5OSZTJtj0iVivJi7dBSvllSK8zd9oItTXkVAm0P
-         6myos6Mm/2QMMYIQtvAsgo1ayN6hP0hEGVqrXUm8QLiK4uaYakH2DVLoEWwbQbLYT1
-         uUGIFDAFIKnPLTDj649tg3G0869C0hOxFbKZw+ve+iqHBRSshQYlcc6v3WfyUbxRqy
-         hf4CNyR0fE0Cg==
-Message-ID: <18ed82d6-b191-9c04-23ac-caa0a16f263e@kernel.org>
-Date:   Wed, 19 Apr 2023 23:30:36 +0800
+        s=k20201202; t=1681918571;
+        bh=7yO8igzR+tFz5qq3cMgXsjgERkys/bHwVVMy1POC8D8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R205qyx40segdQjwa4sPe2Sc+nS3GNhfuo1ay4/1X0J4Z322M+3fHeBTL6jaSdFX2
+         ETO4QuLxyb5hBdJnlWFlaPex12/erWxiYBdBGWM+yTFV+QZ4KobI1UGJUL+Z+KwnJJ
+         nr0fKap9u9hI52CoGdIHW4vLsLMbyYEuNABfpDi+tEC/WDIl76XRVEPCWUr/OAYe/e
+         R2M4MHlzMOMlEWSuWzlzEPp+1PIBoLuS0QxfQg70/92XM//V4esPiz614G4sVDlvkN
+         RNB/KGyoc+9dZp757s6QMjwQIkF+rO8xm1J99YMUUwibyKprR+WQNhDGXyp+P7W6PE
+         RXeW+jivhAHjw==
+Date:   Wed, 19 Apr 2023 08:36:11 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Daniil Lunev <dlunev@google.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [dm-devel] [PATCH v4 1/4] block: Introduce provisioning
+ primitives
+Message-ID: <20230419153611.GE360885@frogsfrogsfrogs>
+References: <20230414000219.92640-1-sarthakkukreti@chromium.org>
+ <20230418221207.244685-1-sarthakkukreti@chromium.org>
+ <20230418221207.244685-2-sarthakkukreti@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [f2fs-dev] [PATCH] f2fs: fix to tag FIEMAP_EXTENT_DELALLOC in
- fiemap() for delay allocated extent
-Content-Language: en-US
-From:   Chao Yu <chao@kernel.org>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20230405144359.930253-1-chao@kernel.org>
- <ZDCEK2OPkhTmRZrq@google.com>
- <224e8756-7c63-fd53-a0f3-f3e2a7b4c13f@kernel.org>
- <ZDROBJFxSUdGaqAa@google.com>
- <538fd229-28ae-0ec5-ef07-35d505fbb8a9@kernel.org>
- <2341db3b-5a40-a9f0-51f1-29a8908e3e98@kernel.org>
- <ZDWUGr2c3TT2tTgu@google.com>
- <2d3125e9-0e5c-644f-1ffa-e41ba55b4ecb@kernel.org>
-In-Reply-To: <2d3125e9-0e5c-644f-1ffa-e41ba55b4ecb@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418221207.244685-2-sarthakkukreti@chromium.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/13 17:49, Chao Yu wrote:
-> On 2023/4/12 1:08, Jaegeuk Kim wrote:
->> On 04/11, Chao Yu wrote:
->>> On 2023/4/11 16:14, Chao Yu wrote:
->>>> On 2023/4/11 1:57, Jaegeuk Kim wrote:
->>>>> On 04/08, Chao Yu wrote:
->>>>>> On 2023/4/8 4:59, Jaegeuk Kim wrote:
->>>>>>> This breaks generic/009?
->>>>>>
->>>>>> I guess it is as expected?
->>>>>>
->>>>>> Please check description of fiemap ioctl manual from [1]:
->>>>>>
->>>>>> FIEMAP_EXTENT_UNKNOWN
->>>>>> The location of this extent is currently unknown. This may
->>>>>> indicate the data is stored on an inaccessible volume or that
->>>>>> no storage has been allocated for the file yet.
->>>>>>
->>>>>> FIEMAP_EXTENT_DELALLOC
->>>>>> This will also set FIEMAP_EXTENT_UNKNOWN.
->>>>>>
->>>>>> Delayed allocation - while there is data for this extent, its
->>>>>> physical location has not been allocated yet.
->>>>>>
->>>>>> FIEMAP_EXTENT_UNWRITTEN
->>>>>> Unwritten extent - the extent is allocated but its data has not
->>>>>> been initialized. This indicates the extent’s data will be all
->>>>>> zero if read through the filesystem but the contents are undefined
->>>>>> if read directly from the device.
->>>>>>
->>>>>> [1] https://www.kernel.org/doc/html/latest/filesystems/fiemap.html
->>>>>>
->>>>>> According to its description, f2fs only support
->>>>>> FIEMAP_EXTENT_{UNKNOWN, DELALLOC}, but not support
->>>>>> FIEMAP_EXTENT_UNWRITTEN.
->>>>>
->>>>> No, I don't think so.
->>>>
->>>> Jaegeuk,
->>>>
->>>> Could you please check the detailed description of FIEMAP_EXTENT_UNWRITTEN?
->>>> The flag indicates two conditions:
->>>> 1. on-disk blkaddrs were allocated for extent, and the extent is tagged as
->>>> unwritten status.
->>>> 2. data readed on those blocks will be all zero.
->>>
->>> Sorry, I mean:
->>>
->>> 1. on-disk blkaddrs were allocated for extent;
->>> 2. extent is tagged as unwritten status, data readed on those blocks will be
->>> all zero.
->>
->> I was thinking fallocate/pin cases to give zero data. But, we may need to check
->> the space discarded securely or disk support?
+On Tue, Apr 18, 2023 at 03:12:04PM -0700, Sarthak Kukreti wrote:
+> Introduce block request REQ_OP_PROVISION. The intent of this request
+> is to request underlying storage to preallocate disk space for the given
+> block range. Block devices that support this capability will export
+> a provision limit within their request queues.
 > 
-> I thought about similar scheme, we can add F2FS_GET_BLOCK_ZERO for fallocate/pin
-> case to zero data in valid block address, but the problem is how can we distinguish
-> zero/valid data from valid block address w/o additional unwritten flag of metadata.
+> This patch also adds the capability to call fallocate() in mode 0
+> on block devices, which will send REQ_OP_PROVISION to the block
+> device for the specified range,
 > 
-> e.g.
-> 1. write page [0,511] w/ valid data;
-> 2. fallocate/pin page [512,1023] w/ zero data;
-> 3. fiemap file  --- what output should it be?
+> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> ---
+>  block/blk-core.c          |  5 ++++
+>  block/blk-lib.c           | 53 +++++++++++++++++++++++++++++++++++++++
+>  block/blk-merge.c         | 18 +++++++++++++
+>  block/blk-settings.c      | 19 ++++++++++++++
+>  block/blk-sysfs.c         |  8 ++++++
+>  block/bounce.c            |  1 +
+>  block/fops.c              | 25 +++++++++++++-----
+>  include/linux/bio.h       |  6 +++--
+>  include/linux/blk_types.h |  5 +++-
+>  include/linux/blkdev.h    | 16 ++++++++++++
+>  10 files changed, 147 insertions(+), 9 deletions(-)
+> 
 
-Thoughts?
+<cut to the fallocate part; the block/ changes look fine to /me/ at
+first glance, but what do I know... ;)>
 
-Thanks,
+> diff --git a/block/fops.c b/block/fops.c
+> index d2e6be4e3d1c..e1775269654a 100644
+> --- a/block/fops.c
+> +++ b/block/fops.c
+> @@ -611,9 +611,13 @@ static ssize_t blkdev_read_iter(struct kiocb *iocb, struct iov_iter *to)
+>  	return ret;
+>  }
+>  
+> +#define	BLKDEV_FALLOC_FL_TRUNCATE				\
 
+At first I thought from this name that you were defining a new truncate
+mode for fallocate, then I realized that this is mask for deciding if we
+/want/ to truncate the pagecache.
+
+#define		BLKDEV_FALLOC_TRUNCATE_MASK ?
+
+> +		(FALLOC_FL_PUNCH_HOLE |	FALLOC_FL_ZERO_RANGE |	\
+
+Ok, so discarding and writing zeroes truncates the page cache, makes
+sense since we're "writing" directly to the block device.
+
+> +		 FALLOC_FL_NO_HIDE_STALE)
+
+Here things get tricky -- some of the FALLOC_FL mode bits are really an
+opcode and cannot be specified together, whereas others select optional
+behavior for certain opcodes.
+
+IIRC, the mutually exclusive opcodes are:
+
+	PUNCH_HOLE
+	ZERO_RANGE
+	COLLAPSE_RANGE
+	INSERT_RANGE
+	(none of the above, for allocation)
+
+and the "variants on a theme are":
+
+	KEEP_SIZE
+	NO_HIDE_STALE
+	UNSHARE_RANGE
+
+not all of which are supported by all the opcodes.
+
+Does it make sense to truncate the page cache if userspace passes in
+mode == NO_HIDE_STALE?  There's currently no defined meaning for this
+combination, but I think this means we'll truncate the pagecache before
+deciding if we're actually going to issue any commands.
+
+I think that's just a bug in the existing code -- it should be
+validating that @mode is any of the supported combinations *before*
+truncating the pagecache.
+
+Otherwise you could have a mkfs program that starts writing new fs
+metadata, decides to provision the storage (say for a logging region),
+doesn't realize it's running on an old kernel, and then oops the
+provision attempt fails but have we now shredded the pagecache and lost
+all the writes?
+
+--D
+
+> +
+>  #define	BLKDEV_FALLOC_FL_SUPPORTED					\
+> -		(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE |		\
+> -		 FALLOC_FL_ZERO_RANGE | FALLOC_FL_NO_HIDE_STALE)
+> +		(BLKDEV_FALLOC_FL_TRUNCATE | FALLOC_FL_KEEP_SIZE |	\
+> +		 FALLOC_FL_UNSHARE_RANGE)
+>  
+>  static long blkdev_fallocate(struct file *file, int mode, loff_t start,
+>  			     loff_t len)
+> @@ -625,7 +629,7 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
+>  	int error;
+>  
+>  	/* Fail if we don't recognize the flags. */
+> -	if (mode & ~BLKDEV_FALLOC_FL_SUPPORTED)
+> +	if (mode != 0 && mode & ~BLKDEV_FALLOC_FL_SUPPORTED)
+>  		return -EOPNOTSUPP;
+>  
+>  	/* Don't go off the end of the device. */
+> @@ -649,11 +653,20 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
+>  	filemap_invalidate_lock(inode->i_mapping);
+>  
+>  	/* Invalidate the page cache, including dirty pages. */
+> -	error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> -	if (error)
+> -		goto fail;
+> +	if (mode & BLKDEV_FALLOC_FL_TRUNCATE) {
+> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> +		if (error)
+> +			goto fail;
+> +	}
+>  
+>  	switch (mode) {
+> +	case 0:
+> +	case FALLOC_FL_UNSHARE_RANGE:
+> +	case FALLOC_FL_KEEP_SIZE:
+> +	case FALLOC_FL_UNSHARE_RANGE | FALLOC_FL_KEEP_SIZE:
+> +		error = blkdev_issue_provision(bdev, start >> SECTOR_SHIFT,
+> +					       len >> SECTOR_SHIFT, GFP_KERNEL);
+> +		break;
+>  	case FALLOC_FL_ZERO_RANGE:
+>  	case FALLOC_FL_ZERO_RANGE | FALLOC_FL_KEEP_SIZE:
+>  		error = blkdev_issue_zeroout(bdev, start >> SECTOR_SHIFT,
+> diff --git a/include/linux/bio.h b/include/linux/bio.h
+> index d766be7152e1..9820b3b039f2 100644
+> --- a/include/linux/bio.h
+> +++ b/include/linux/bio.h
+> @@ -57,7 +57,8 @@ static inline bool bio_has_data(struct bio *bio)
+>  	    bio->bi_iter.bi_size &&
+>  	    bio_op(bio) != REQ_OP_DISCARD &&
+>  	    bio_op(bio) != REQ_OP_SECURE_ERASE &&
+> -	    bio_op(bio) != REQ_OP_WRITE_ZEROES)
+> +	    bio_op(bio) != REQ_OP_WRITE_ZEROES &&
+> +	    bio_op(bio) != REQ_OP_PROVISION)
+>  		return true;
+>  
+>  	return false;
+> @@ -67,7 +68,8 @@ static inline bool bio_no_advance_iter(const struct bio *bio)
+>  {
+>  	return bio_op(bio) == REQ_OP_DISCARD ||
+>  	       bio_op(bio) == REQ_OP_SECURE_ERASE ||
+> -	       bio_op(bio) == REQ_OP_WRITE_ZEROES;
+> +	       bio_op(bio) == REQ_OP_WRITE_ZEROES ||
+> +	       bio_op(bio) == REQ_OP_PROVISION;
+>  }
+>  
+>  static inline void *bio_data(struct bio *bio)
+> diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+> index 99be590f952f..27bdf88f541c 100644
+> --- a/include/linux/blk_types.h
+> +++ b/include/linux/blk_types.h
+> @@ -385,7 +385,10 @@ enum req_op {
+>  	REQ_OP_DRV_IN		= (__force blk_opf_t)34,
+>  	REQ_OP_DRV_OUT		= (__force blk_opf_t)35,
+>  
+> -	REQ_OP_LAST		= (__force blk_opf_t)36,
+> +	/* request device to provision block */
+> +	REQ_OP_PROVISION        = (__force blk_opf_t)37,
+> +
+> +	REQ_OP_LAST		= (__force blk_opf_t)38,
+>  };
+>  
+>  enum req_flag_bits {
+> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+> index 941304f17492..239e2f418b6e 100644
+> --- a/include/linux/blkdev.h
+> +++ b/include/linux/blkdev.h
+> @@ -303,6 +303,7 @@ struct queue_limits {
+>  	unsigned int		discard_granularity;
+>  	unsigned int		discard_alignment;
+>  	unsigned int		zone_write_granularity;
+> +	unsigned int		max_provision_sectors;
+>  
+>  	unsigned short		max_segments;
+>  	unsigned short		max_integrity_segments;
+> @@ -921,6 +922,8 @@ extern void blk_queue_max_discard_sectors(struct request_queue *q,
+>  		unsigned int max_discard_sectors);
+>  extern void blk_queue_max_write_zeroes_sectors(struct request_queue *q,
+>  		unsigned int max_write_same_sectors);
+> +extern void blk_queue_max_provision_sectors(struct request_queue *q,
+> +		unsigned int max_provision_sectors);
+>  extern void blk_queue_logical_block_size(struct request_queue *, unsigned int);
+>  extern void blk_queue_max_zone_append_sectors(struct request_queue *q,
+>  		unsigned int max_zone_append_sectors);
+> @@ -1060,6 +1063,9 @@ int __blkdev_issue_discard(struct block_device *bdev, sector_t sector,
+>  int blkdev_issue_secure_erase(struct block_device *bdev, sector_t sector,
+>  		sector_t nr_sects, gfp_t gfp);
+>  
+> +extern int blkdev_issue_provision(struct block_device *bdev, sector_t sector,
+> +		sector_t nr_sects, gfp_t gfp_mask);
+> +
+>  #define BLKDEV_ZERO_NOUNMAP	(1 << 0)  /* do not free blocks */
+>  #define BLKDEV_ZERO_NOFALLBACK	(1 << 1)  /* don't write explicit zeroes */
+>  
+> @@ -1139,6 +1145,11 @@ static inline unsigned short queue_max_discard_segments(const struct request_que
+>  	return q->limits.max_discard_segments;
+>  }
+>  
+> +static inline unsigned short queue_max_provision_sectors(const struct request_queue *q)
+> +{
+> +	return q->limits.max_provision_sectors;
+> +}
+> +
+>  static inline unsigned int queue_max_segment_size(const struct request_queue *q)
+>  {
+>  	return q->limits.max_segment_size;
+> @@ -1281,6 +1292,11 @@ static inline bool bdev_nowait(struct block_device *bdev)
+>  	return test_bit(QUEUE_FLAG_NOWAIT, &bdev_get_queue(bdev)->queue_flags);
+>  }
+>  
+> +static inline unsigned int bdev_max_provision_sectors(struct block_device *bdev)
+> +{
+> +	return bdev_get_queue(bdev)->limits.max_provision_sectors;
+> +}
+> +
+>  static inline enum blk_zoned_model bdev_zoned_model(struct block_device *bdev)
+>  {
+>  	return blk_queue_zoned_model(bdev_get_queue(bdev));
+> -- 
+> 2.40.0.634.g4ca3ef3211-goog
 > 
-> Thanks,
+> --
+> dm-devel mailing list
+> dm-devel@redhat.com
+> https://listman.redhat.com/mailman/listinfo/dm-devel
 > 
->>
->>>
->>> Thanks,
->>>
->>>>
->>>> So, let's check f2fs' status:
->>>> - fallocate only reserve valid block count and set NEW_ADDR in dnode, so
->>>> it does not match condition 1)
->>>> - pin & fallocate preallocates blkaddrs and set blkaddrs in dnode, but
->>>> content on those blkaddrs may contain zero or random data, so it does not
->>>> match  condition 2)
->>>>
->>>> Christoph describes this issue in below patch as well, you can check it.
->>>> da8c7fecc9c7 ("f2fs: rename F2FS_MAP_UNWRITTEN to F2FS_MAP_DELALLOC")
->>>>
->>>> Am I missing something?
->>>>
->>>> Thanks,
->>>>
->>>>>
->>>>>>
->>>>>> So 009, 092, 094 .. which expects unwritten status from extent will
->>>>>> fail.
->>>>>>
->>>>>> How about disabling those testcase?
->>>>>>
->>>>>> Thanks,
->>>>>>
->>>>>>>
->>>>>>> On 04/05, Chao Yu wrote:
->>>>>>>> xfstest generic/614 fails to run due below reason:
->>>>>>>>
->>>>>>>> generic/614 1s ... [not run] test requires delayed allocation buffered writes
->>>>>>>>
->>>>>>>> The root cause is f2fs tags wrong fiemap flag for delay allocated
->>>>>>>> extent.
->>>>>>>>
->>>>>>>> Quoted from fiemap.h:
->>>>>>>> FIEMAP_EXTENT_UNKNOWN        0x00000002 /* Data location unknown. */
->>>>>>>> FIEMAP_EXTENT_DELALLOC        0x00000004 /* Location still pending.
->>>>>>>>                               * Sets EXTENT_UNKNOWN. */
->>>>>>>> FIEMAP_EXTENT_UNWRITTEN        0x00000800 /* Space allocated, but
->>>>>>>>                               * no data (i.e. zero). */
->>>>>>>>
->>>>>>>> FIEMAP_EXTENT_UNWRITTEN means block address is preallocated, but w/o
->>>>>>>> been written any data, which status f2fs is not supported now, for all
->>>>>>>> NEW_ADDR block addresses, it means delay allocated blocks, so let's
->>>>>>>> tag FIEMAP_EXTENT_DELALLOC instead.
->>>>>>>>
->>>>>>>> Testcase:
->>>>>>>> xfs_io -f -c 'pwrite 0 64k' /mnt/f2fs/file;
->>>>>>>> filefrag -v /mnt/f2fs/file
->>>>>>>>
->>>>>>>> Output:
->>>>>>>> - Before
->>>>>>>> Filesystem type is: f2f52010
->>>>>>>> Fize of /mnt/f2fs/file is 65536 (16 blocks of 4096 bytes)
->>>>>>>>      ext:     logical_offset:        physical_offset: length:   expected: flags:
->>>>>>>>        0:        0..      15:          0..        15:     16:             last,unwritten,merged,eof
->>>>>>>> /mnt/f2fs/file: 1 extent found
->>>>>>>>
->>>>>>>> After:
->>>>>>>> Filesystem type is: f2f52010
->>>>>>>> File size of /mnt/f2fs/file is 65536 (16 blocks of 4096 bytes)
->>>>>>>>      ext:     logical_offset:        physical_offset: length:   expected: flags:
->>>>>>>>        0:        0..      15:          0..         0:      0:             last,unknown_loc,delalloc,eof
->>>>>>>> /mnt/f2fs/file: 1 extent found
->>>>>>>>
->>>>>>>> Fixes: 7f63eb77af7b ("f2fs: report unwritten area in f2fs_fiemap")
->>>>>>>> Signed-off-by: Chao Yu <chao@kernel.org>
->>>>>>>> ---
->>>>>>>>      fs/f2fs/data.c | 7 +++++--
->>>>>>>>      1 file changed, 5 insertions(+), 2 deletions(-)
->>>>>>>>
->>>>>>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
->>>>>>>> index 359de650772e..3afc9764743e 100644
->>>>>>>> --- a/fs/f2fs/data.c
->>>>>>>> +++ b/fs/f2fs/data.c
->>>>>>>> @@ -1995,7 +1995,10 @@ int f2fs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
->>>>>>>>          }
->>>>>>>>          if (size) {
->>>>>>>> -        flags |= FIEMAP_EXTENT_MERGED;
->>>>>>>> +        if (flags & FIEMAP_EXTENT_DELALLOC)
->>>>>>>> +            phys = 0;
->>>>>>>> +        else
->>>>>>>> +            flags |= FIEMAP_EXTENT_MERGED;
->>>>>>>>              if (IS_ENCRYPTED(inode))
->>>>>>>>                  flags |= FIEMAP_EXTENT_DATA_ENCRYPTED;
->>>>>>>> @@ -2035,7 +2038,7 @@ int f2fs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
->>>>>>>>                      size += blks_to_bytes(inode, 1);
->>>>>>>>                  }
->>>>>>>>              } else if (map.m_flags & F2FS_MAP_DELALLOC) {
->>>>>>>> -            flags = FIEMAP_EXTENT_UNWRITTEN;
->>>>>>>> +            flags = FIEMAP_EXTENT_DELALLOC;
->>>>>>>>              }
->>>>>>>>              start_blk += bytes_to_blks(inode, size);
->>>>>>>> -- 
->>>>>>>> 2.36.1
->>>>
->>>>
->>>> _______________________________________________
->>>> Linux-f2fs-devel mailing list
->>>> Linux-f2fs-devel@lists.sourceforge.net
->>>> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
-> 
-> 
-> _______________________________________________
-> Linux-f2fs-devel mailing list
-> Linux-f2fs-devel@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
