@@ -2,162 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65C96E72ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F6C6E72F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbjDSGON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 02:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
+        id S231577AbjDSGPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 02:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231264AbjDSGOK (ORCPT
+        with ESMTP id S231796AbjDSGPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 02:14:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D681B5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:14:09 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pp14k-000742-Qv; Wed, 19 Apr 2023 08:13:54 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D371B1B2AA2;
-        Wed, 19 Apr 2023 06:13:53 +0000 (UTC)
-Date:   Wed, 19 Apr 2023 08:13:52 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     "Mendez, Judith" <jm@ti.com>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andrew Davis <afd@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        Wed, 19 Apr 2023 02:15:33 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D721996;
+        Tue, 18 Apr 2023 23:15:30 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (133-32-181-51.west.xps.vectant.ne.jp [133.32.181.51])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DD1FC12F;
+        Wed, 19 Apr 2023 08:15:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1681884922;
+        bh=rkUOMWQkU584u4Ts3QSMexZDobe08ycYK92hPZWwusc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=akrbepo9QwNMMW1Aba5GtEsYHKwgwhM2FVI4ESLzXhXlkN5m8E8uY6s/KrDh1Y5yp
+         VlzHKEqzVEzYTIBC8LKnRe4ChQ6UbNGIGJfVDzUS2kp+PhdMkLuE96fubp6Xg7l3IM
+         Z6q2r5Af1W6CPOw1HeKIk5PQ0aHci+Wn3fxHYY/c=
+Date:   Wed, 19 Apr 2023 09:15:40 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jack Zhu <jack.zhu@starfivetech.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Schuyler Patton <spatton@ti.com>
-Subject: Re: [RFC PATCH 5/5] can: m_can: Add hrtimer to generate software
- interrupt
-Message-ID: <20230419-trimmer-fasting-928868e8cb81-mkl@pengutronix.de>
-References: <20230413223051.24455-1-jm@ti.com>
- <20230413223051.24455-6-jm@ti.com>
- <20230414-bounding-guidance-262dffacd05c-mkl@pengutronix.de>
- <4a6c66eb-2ccf-fc42-a6fc-9f411861fcef@hartkopp.net>
- <20230416-failing-washbasin-e4fa5caea267-mkl@pengutronix.de>
- <f58e8dce-898c-8797-5293-1001c9a75381@hartkopp.net>
- <20230417-taking-relieving-f2c8532864c0-mkl@pengutronix.de>
- <25806ec7-64c5-3421-aea1-c0d431e3f27f@hartkopp.net>
- <20230417-unsafe-porridge-0b712d137530-mkl@pengutronix.de>
- <5ece3561-4690-a721-aa83-adf80d0be9f5@ti.com>
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, changhuang.liang@starfivetech.com
+Subject: Re: [PATCH v4 6/8] media: dt-bindings: Add bindings for JH7110
+ Camera Subsystem
+Message-ID: <20230419061540.GB11679@pendragon.ideasonboard.com>
+References: <20230413035541.62129-1-jack.zhu@starfivetech.com>
+ <20230413035541.62129-7-jack.zhu@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cggld5pyystbuhs6"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5ece3561-4690-a721-aa83-adf80d0be9f5@ti.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230413035541.62129-7-jack.zhu@starfivetech.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jack,
 
---cggld5pyystbuhs6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for the patch.
 
-On 18.04.2023 15:59:57, Mendez, Judith wrote:
-> > > > > > > The "shortest" 11 bit CAN ID CAN frame is a Classical CAN fra=
-me with DLC =3D 0
-> > > > > > > and 1 Mbit/s (arbitration) bitrate. This should be 48 bits @1=
-Mbit =3D> ~50
-> > > > > > > usecs
-> > > > > > >=20
-> > > > > > > So it should be something about
-> > > > > > >=20
-> > > > > > >        50 usecs * (FIFO queue len - 2)
-> > > > > >=20
-> > > > > > Where does the "2" come from?
-> > > > >=20
-> > > > > I thought about handling the FIFO earlier than it gets completely=
- "full".
-> > > > >=20
-> > > > > The fetching routine would need some time too and the hrtimer cou=
-ld also
-> > > > > jitter to some extend.
-> > > >=20
-> > > > I was assuming something like this.
-> > > >=20
-> > > > I would argue that the polling time should be:
-> > > >=20
-> > > >       50 =C2=B5s * FIFO length - IRQ overhead.
-> > > >=20
-> > > > The max IRQ overhead depends on your SoC and kernel configuration.
-> > >=20
-> > > I just tried an educated guess to prevent the FIFO to be filled up
-> > > completely. How can you estimate the "IRQ overhead"? And how do you c=
-atch
-> > > the CAN frames that are received while the IRQ is handled?
-> >=20
-> > We're talking about polling, better call it "overhead" or "latency from
-> > timer expiration until FIFO has at least one frame room". This value
-> > depends on your system.
-> >=20
-> > It depends on many, many factors, SoC, Kernel configuration (preempt RT,
-> > powersaving, frequency scaling, system load. In your example it's 100
-> > =C2=B5s. I wanted to say there's an overhead (or latency) and we need e=
-nough
-> > space in the FIFO, to cover it.
-> >=20
->=20
-> I am not sure how to estimate IRQ overhead, but FIFO length should be 64
-> elements.
+On Thu, Apr 13, 2023 at 11:55:39AM +0800, Jack Zhu wrote:
+> Add the bindings documentation for Starfive JH7110 Camera Subsystem
+> which is used for handing image sensor data.
+> 
+> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+> ---
+>  .../bindings/media/starfive,jh7110-camss.yaml | 164 ++++++++++++++++++
+>  MAINTAINERS                                   |   7 +
+>  2 files changed, 171 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> new file mode 100644
+> index 000000000000..4cd144f1b845
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> @@ -0,0 +1,164 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/starfive,jh7110-camss.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Starfive SoC CAMSS ISP
+> +
+> +maintainers:
+> +  - Jack Zhu <jack.zhu@starfivetech.com>
+> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
+> +
+> +description:
+> +  The Starfive CAMSS ISP is a Camera interface for Starfive JH7110 SoC. It
+> +  consists of a VIN controller (Video In Controller, a top-level control until)
+> +  and an ISP.
+> +
+> +properties:
+> +  compatible:
+> +    const: starfive,jh7110-camss
+> +
+> +  reg:
+> +    maxItems: 2
+> +
+> +  reg-names:
+> +    items:
+> +      - const: syscon
+> +      - const: isp
+> +
+> +  clocks:
+> +    maxItems: 7
+> +
+> +  clock-names:
+> +    items:
+> +      - const: apb_func
+> +      - const: wrapper_clk_c
+> +      - const: dvp_inv
+> +      - const: axiwr
+> +      - const: mipi_rx0_pxl
+> +      - const: ispcore_2x
+> +      - const: isp_axi
+> +
+> +  resets:
+> +    maxItems: 6
+> +
+> +  reset-names:
+> +    items:
+> +      - const: wrapper_p
+> +      - const: wrapper_c
+> +      - const: axird
+> +      - const: axiwr
+> +      - const: isp_top_n
+> +      - const: isp_top_axi
+> +
+> +  power-domains:
+> +    items:
+> +      - description: JH7110 ISP Power Domain Switch Controller.
+> +
+> +  interrupts:
+> +    maxItems: 4
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description: Input port for receiving DVP data.
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              bus-width:
+> +                const: 8
+> +
+> +              data-shift:
+> +                const: 2
 
-Ok
+As far as I can tell, those two properties are not handled by the
+driver. I assume this is because the driver doesn't support the DVP
+input yet. That's fine, but it makes it a bit hard to review the device
+tree. Could you provide some information about the DVP hardware
+interface ? Does it support both BT.656 and sync signals, or just sync
+signals ? Are the polarities of the clock and h/v sync controllable ?
+Is the parallel input bus 8-bit wide or are other options supported ?
+And finally, what are you modelling with data-shift: 2 ?
 
-> 50 us * 62 is about 3.1 ms and we are using 1 ms timer polling interval.
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Input port for receiving CSI data.
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - reset-names
+> +  - power-domains
+> +  - interrupts
+> +  - ports
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    isp@19840000 {
+> +        compatible = "starfive,jh7110-camss";
+> +        reg = <0x19840000 0x10000>,
+> +              <0x19870000 0x30000>;
+> +        reg-names = "syscon", "isp";
+> +        clocks = <&ispcrg 0>,
+> +                 <&ispcrg 13>,
+> +                 <&ispcrg 2>,
+> +                 <&ispcrg 12>,
+> +                 <&ispcrg 1>,
+> +                 <&syscrg 51>,
+> +                 <&syscrg 52>;
+> +        clock-names = "apb_func",
+> +                      "wrapper_clk_c",
+> +                      "dvp_inv",
+> +                      "axiwr",
+> +                      "mipi_rx0_pxl",
+> +                      "ispcore_2x",
+> +                      "isp_axi";
+> +        resets = <&ispcrg 0>,
+> +                 <&ispcrg 1>,
+> +                 <&ispcrg 10>,
+> +                 <&ispcrg 11>,
+> +                 <&syscrg 41>,
+> +                 <&syscrg 42>;
+> +        reset-names = "wrapper_p",
+> +                      "wrapper_c",
+> +                      "axird",
+> +                      "axiwr",
+> +                      "isp_top_n",
+> +                      "isp_top_axi";
+> +        power-domains = <&pwrc 5>;
+> +        interrupts = <92>, <87>, <88>, <90>;
+> +
+> +        ports {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            port@0 {
+> +                reg = <0>;
+> +                vin_from_sc2235: endpoint {
+> +                    remote-endpoint = <&sc2235_to_vin>;
+> +                    bus-width = <8>;
+> +                    data-shift = <2>;
+> +                    hsync-active = <1>;
+> +                    vsync-active = <0>;
+> +                    pclk-sample = <1>;
+> +                };
+> +            };
+> +
+> +            port@1 {
+> +                reg = <1>;
+> +                vin_from_csi2rx: endpoint {
+> +                    remote-endpoint = <&csi2rx_to_vin>;
+> +                };
+> +            };
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index bbb8b5c0187b..b8c76b0d7eb3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19909,6 +19909,13 @@ M:	Ion Badulescu <ionut@badula.org>
+>  S:	Odd Fixes
+>  F:	drivers/net/ethernet/adaptec/starfire*
+>  
+> +STARFIVE CAMERA SUBSYSTEM DRIVER
+> +M:	Jack Zhu <jack.zhu@starfivetech.com>
+> +M:	Changhuang Liang <changhuang.liang@starfivetech.com>
+> +L:	linux-media@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> +
+>  STARFIVE DEVICETREES
+>  M:	Emil Renner Berthing <kernel@esmil.dk>
+>  S:	Maintained
 
-Sounds good.
+-- 
+Regards,
 
-> Running a few benchmarks showed that using 0.5 ms timer polling interval
-> starts to take a toll on CPU load, that is why I chose 1 ms polling
-> interval.
-
-However in the code you use 5 ms.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---cggld5pyystbuhs6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQ/hp0ACgkQvlAcSiqK
-BOjeFwf/UaNEfsSOA9OPls69RXd4P4lR2cQibXWCABAg/B1OHkD9BdLDKqR+mS8S
-G+PG//Ot9k8CwPoFFt+xZ0TrxIj/CakDJzawuMoJvSpToSX84V0eYZgh2oH0JBmd
-m8ocOGnz3dPGaIH+UQ6sUZQN3JxE/oeDV8AgLyD86tE6NDc4BxPARTdiH3oJP1mj
-Wn109juOs0zfj+BftxgtfvfTPcYcDxmR/8Skvy7lWi/6Oir5lpRcyVRuo6zd4wfh
-KfsuBSJ0TgdVwntMN8R/P6UXAkvburMAZZj1p3Nv91DweeiJCX7T4K07B1tGWWpu
-1iKTXZ4x3NzwMww5oizIjKx+Mjhkhg==
-=CtTc
------END PGP SIGNATURE-----
-
---cggld5pyystbuhs6--
+Laurent Pinchart
