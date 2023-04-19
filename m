@@ -2,93 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D22166E7151
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 143E26E7156
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjDSCqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 22:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
+        id S231878AbjDSCsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 22:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232041AbjDSCqF (ORCPT
+        with ESMTP id S231753AbjDSCsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 22:46:05 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54B59755;
-        Tue, 18 Apr 2023 19:45:38 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6a437526b7cso879817a34.1;
-        Tue, 18 Apr 2023 19:45:38 -0700 (PDT)
+        Tue, 18 Apr 2023 22:48:05 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA68AD1C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 19:47:30 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id sz19so20996253ejc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 19:47:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681872330; x=1684464330;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E069ZTY6nFYszV+/5FzOjU5LbuCwW8x4gHc3aSQEBg8=;
-        b=UhQs5Y/3zpq4zX5sMEGThvciVqiFLBfm1teJcsEZzz5FG1jhGuAJZkW4WWBG0z5odO
-         sIXPLrBUHBnj8uidXCrTBCqtfVRG8xeEpmxLVT4wVF5v9L7mSJMNlOrg6HfxAg1TN5dR
-         YJlOs7ksl1ob5qSztI2NE/qskge0XjDaEErG7SKNd9xxyH9QG3TH1LBOiA7wf8f4POs7
-         agk65MtIa5mBrXA3Yv3GHJazl3hkeLYE/yUpkGWPB8cBiJSR8ViIxrBVPPpkobNj+paK
-         XBKV6NG2FlizvxxbwP0GNoFJMjyPLaCxkz7LXDqjCF8abkw55v26qf3Q6kGodaDE5j3z
-         vsSQ==
+        d=brainfault-org.20221208.gappssmtp.com; s=20221208; t=1681872410; x=1684464410;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T2vBa433INXpwxf/vQcrrT0UFfPGPq+8GhQBLQMIVnQ=;
+        b=3x3qdfqgPPOdkPFYRRoL/OQsV3IxiwB9/khhNg39FXiAgvw7/7Yq9YdaCcTqSTKdMO
+         e3a7xh8XXy+xTWB1c4HQyw2ZyXBNN6+CNFtaHowG6IyPsBGd+zA8o+dSKBOxaaNpeUea
+         s1dvdCFgQww8OhXVi5utwAkwfKJL3g8SIxbDREJ9TJkH1XhqcV0wJi0fRtbWY+xoaPnM
+         dIc/8hCwmSNE9Odw4s3zyhYdi7Z0/i9T7sfRc4btYCFhPy3+Ps5C7WM0tF5E6Pb8GKQE
+         47s95eExISnQL2ApcOfZRBZ+i+ojB4kwHKKL2sb5+NgXE2zFXsuDtoKioWSX7TipfLg9
+         cgEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681872330; x=1684464330;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E069ZTY6nFYszV+/5FzOjU5LbuCwW8x4gHc3aSQEBg8=;
-        b=bLT2Zb2BO41He+ZrGJNW+xuQSm1BQfm2B0q0MhIOB8S9Q9rDA2ZFTeiYFxJfwdSoT2
-         0519txWQlYTwPTlv9JR3Lv7yUk6ta5yhxhswtOkvnraJlwuOfXyN76b1PSGPYWafA3PH
-         FYv5Cpu/R/+QOIY8oJyb8s26vKg4s+l3BUwdj1NNqDz1PX2Az7LQletXPFUHwj/creyp
-         mhRplPjWyUMfpidWAusKCePHyVNS16LrM4+r6tmXz+4KaapP31fEXEQGSC9w/zbvXzLA
-         THED22DHMSNy9gyB2MagxpBwPCQ0Mvc28vknTTJviZ2Nr/Q1iSekiR1Shob4HKGZFV/z
-         WNSw==
-X-Gm-Message-State: AAQBX9fcH7ybEPKVeOUZSUEtOrd2YdlcM1ZqY7xteWU7u0Af0nraGXOq
-        4vCQjJVs9vpIHb0AjjfJuD8=
-X-Google-Smtp-Source: AKy350b+TpaRh7+IMRxW7bQHLeOF/kqFYVzDURhqDqBXE7Ss1mrHoC4nEcZ4sXwTsyTxEAG+z4Q4EQ==
-X-Received: by 2002:a9d:6d0f:0:b0:6a5:cf29:f310 with SMTP id o15-20020a9d6d0f000000b006a5cf29f310mr2239494otp.34.1681872329921;
-        Tue, 18 Apr 2023 19:45:29 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id m14-20020a9d644e000000b006a4308f1e2asm6165250otl.54.2023.04.18.19.45.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 19:45:29 -0700 (PDT)
-Message-ID: <2fc535da-0d83-049a-53a6-e310d12a884a@gmail.com>
-Date:   Tue, 18 Apr 2023 23:45:25 -0300
+        d=1e100.net; s=20221208; t=1681872410; x=1684464410;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T2vBa433INXpwxf/vQcrrT0UFfPGPq+8GhQBLQMIVnQ=;
+        b=gW0cMKXQDIMch5JES7Tz/howFGuy6oDq6+/jdSi2h1jLCFoJp1JWidrE3YRCBCg+Z8
+         tpu+icpKSm2pfKDIezRiQmExk39GXwq1dGwYIkpFysoqH9FxpLo6RnZB5TzeZ7ESAy3t
+         hpZ7TnXTnZLObijtuZWJY7buRzhBf08VB+YznzyqGJwi8IknMJuZDqp1JW6QF96Qqs9z
+         iCXNCcJRehQdqZJifjmY+Eo04twUzwB+XOpMTkPkM3X791LEUSB8YLonQVoYtbRk2EAe
+         xB+RxwA/1uoUfenFv++/AYB0FDEri6P81VtISSZOfaWmCzy+dEfv1QA9WKbKzSWCFXV7
+         0Bww==
+X-Gm-Message-State: AAQBX9fFdXMRTb8IIA+/bnYzyma020zBwJdKKHKHJ9kCEJOn9EeZWuZH
+        OLGnHJe9tcN8LIuWJzyYoHGAMi67P2/KMkUI8xvs1g==
+X-Google-Smtp-Source: AKy350Z6+jK/PM/xSJspnT7QqbQWFEVMFBr49J7MQW6Uh3I2UmQ5STweXzYucN2UX8zPn3hAX2G+olN+d0Gh41fLahY=
+X-Received: by 2002:a17:906:c355:b0:94f:b5c:a254 with SMTP id
+ ci21-20020a170906c35500b0094f0b5ca254mr11125425ejb.49.1681872410050; Tue, 18
+ Apr 2023 19:46:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] .gitattributes: set diff driver for Rust source code
- files
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-References: <20230418233048.335281-1-ojeda@kernel.org>
-Content-Language: en-US
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230418233048.335281-1-ojeda@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230404153452.2405681-1-apatel@ventanamicro.com> <20230404153452.2405681-3-apatel@ventanamicro.com>
+In-Reply-To: <20230404153452.2405681-3-apatel@ventanamicro.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Wed, 19 Apr 2023 08:16:37 +0530
+Message-ID: <CAAhSdy1FKKt-RpE5f8ZEaQyoJL4oEr=YB3MfKDdHqFmL+AyrHg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/9] RISC-V: Detect AIA CSRs from ISA string
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/18/23 20:30, Miguel Ojeda wrote:
-> Git supports a builtin Rust diff driver [1] since v2.23.0 (2019).
-> 
-> [...]
+Hi Palmer,
 
-At this stage in the game such an improvement in diffs is required.
+On Tue, Apr 4, 2023 at 9:05=E2=80=AFPM Anup Patel <apatel@ventanamicro.com>=
+ wrote:
+>
+> We have two extension names for AIA ISA support: Smaia (M-mode AIA CSRs)
+> and Ssaia (S-mode AIA CSRs).
+>
+> We extend the ISA string parsing to detect Smaia and Ssaia extensions.
+>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Can you please ACK this patch so that I can include it in Linux-6.4 PR ?
+
+Regards,
+Anup
+
+> ---
+>  arch/riscv/include/asm/hwcap.h | 2 ++
+>  arch/riscv/kernel/cpu.c        | 2 ++
+>  arch/riscv/kernel/cpufeature.c | 2 ++
+>  3 files changed, 6 insertions(+)
+>
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwca=
+p.h
+> index 6263a0de1c6a..74f5dab2148f 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -42,6 +42,8 @@
+>  #define RISCV_ISA_EXT_ZBB              30
+>  #define RISCV_ISA_EXT_ZICBOM           31
+>  #define RISCV_ISA_EXT_ZIHINTPAUSE      32
+> +#define RISCV_ISA_EXT_SMAIA            33
+> +#define RISCV_ISA_EXT_SSAIA            34
+>
+>  #define RISCV_ISA_EXT_MAX              64
+>  #define RISCV_ISA_EXT_NAME_LEN_MAX     32
+> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> index 8400f0cc9704..ae1e7bbf9344 100644
+> --- a/arch/riscv/kernel/cpu.c
+> +++ b/arch/riscv/kernel/cpu.c
+> @@ -188,6 +188,8 @@ static struct riscv_isa_ext_data isa_ext_arr[] =3D {
+>         __RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
+>         __RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+>         __RISCV_ISA_EXT_DATA(zbb, RISCV_ISA_EXT_ZBB),
+> +       __RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
+> +       __RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
+>         __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+>         __RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
+>         __RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
+e.c
+> index 59d58ee0f68d..9e92e23f6f82 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -221,6 +221,8 @@ void __init riscv_fill_hwcap(void)
+>                                 }
+>                         } else {
+>                                 /* sorted alphabetically */
+> +                               SET_ISA_EXT_MAP("smaia", RISCV_ISA_EXT_SM=
+AIA);
+> +                               SET_ISA_EXT_MAP("ssaia", RISCV_ISA_EXT_SS=
+AIA);
+>                                 SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT=
+_SSCOFPMF);
+>                                 SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SST=
+C);
+>                                 SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_=
+SVINVAL);
+> --
+> 2.34.1
+>
