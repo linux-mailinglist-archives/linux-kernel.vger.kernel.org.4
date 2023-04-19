@@ -2,72 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0CDD6E74AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F82C6E74AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbjDSIKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
+        id S231308AbjDSIKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231977AbjDSIKZ (ORCPT
+        with ESMTP id S231953AbjDSIKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:10:25 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B888A5CE
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:10:23 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f04275b2bdso108395e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:10:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681891822; x=1684483822;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jsGwV2Q8hiUUCin8FfQuNgJhB+1Rkf9xa+k9rhAHqZo=;
-        b=zQJ8vS4RxsDCS7E0LTCt87h1B2g+itFCXg/Y7oCyhQxecwl/ymjeTP2UNW4kILWCfq
-         vDO9QvkLpVx/K77cuk0nFrvPj9JZTG/GqNCc69q7FwiJB6HWp/UGpBqIKB++oGIXIwWu
-         Q/+IjAclnE0qosL1x70GrgKTqioCaGZUjPcxECSE8wcJFsYW6zISEE0oQVWhiFQKT9Qe
-         mBecJmzU3DkHc/DTFPO92SXu0GOK2m3JZF4Y59XmLKy7mH4B+d6QBftimrHWubbl3gXQ
-         PIDkUyUqTWvALTxlSRSsPXL9NQd1wGonI1LHVod557K/UNND1ua43TCFdNUmEhbNXGzU
-         RrXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681891822; x=1684483822;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jsGwV2Q8hiUUCin8FfQuNgJhB+1Rkf9xa+k9rhAHqZo=;
-        b=H03VSeA7mWBQn45eP9wYarzoj2mL4tWdn19+X9Tn/43Geh+fpmFm0FWrBy1mm37Kkr
-         RSSOItvxFs5BsJgDbL9KpDCZaoW9PhiDQWxQh5MUiHpgHdxhnxate2J0517MQeF5P9CK
-         8DFZROA+WPAcV75Ezm5t3wOfDwqjQYThYAVtbcjlt7y7RHJkqA+wM+7d0hroL/tjWzz+
-         lIt9tQ2SfGZPB0bdbpenyAFvtKlF3R9MindIZr3hjdrrymFDEUn2i/rneJ0EuowQgMUv
-         jy7DEPlnUDa4rcR4t5xb6+tBY6Zi3eLI6176FgGn/q1c89bjyoBEN7D3PJPv7tD50mgY
-         uS0g==
-X-Gm-Message-State: AAQBX9cyIQR2ULI43PVpzqQxQWAbvoGgAQvuijc5CyzUvo9lwm2xP/h6
-        tndzvt6dmJetjYY60QJ06uIg5A==
-X-Google-Smtp-Source: AKy350aswh3IRcXsvvw2ETIZyZZt4fSbriSdkF+WXX88/JuCVVzPnt3DMpU/ck62cZtnIIRI5mVsaA==
-X-Received: by 2002:a1c:7c06:0:b0:3f1:6f35:f677 with SMTP id x6-20020a1c7c06000000b003f16f35f677mr93206wmc.1.1681891821553;
-        Wed, 19 Apr 2023 01:10:21 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:209:adc2:d1ba:3d22:aaca])
-        by smtp.gmail.com with ESMTPSA id c10-20020a7bc2aa000000b003f080b2f9f4sm1342501wmk.27.2023.04.19.01.10.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 01:10:20 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 09:10:19 +0100
-From:   Matthias Maennich <maennich@google.com>
-To:     Yifan Hong <elsk@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Daniel Mentz <danielmentz@google.com>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kheaders: Follow symlinks to source files.
-Message-ID: <ZD+h60QyBYEXnCHQ@google.com>
-References: <20230419002946.2566272-1-elsk@google.com>
+        Wed, 19 Apr 2023 04:10:53 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B059A5C7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:10:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681891847; x=1713427847;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ldfHi5FJOij2vVlboMSTKmDdQJF9+AoXFipgUDIrzP0=;
+  b=bwUnh0vVH9gJv57o0hWJkOpevTgQZOmP69PCrO6dIGd3Sp36TzhvQ8HQ
+   xck2Vo6BYyVj5eN3iaaN5PnmgQeM4Jd/kU2icQPoTuglsVI5WckN68XE+
+   PdzLSF7/AEqhtchX4ffjU4gC6ydIOUp2IOrEA6yPTtrWourdQlq3Q/voB
+   I56uZeQx1QPIH6IAOS5NKqTJ/pjzH6yXhlsNDyQtzeUWu5LcKQktnxt+s
+   OLJUFLmZG7IjXpVOakGAxA2EJj4v1gAcF15qLxle0abB5g61rmGh7JOBP
+   DIbC0mhyFPqnA8e5ol3XLUBWyOYBwxJOJqyKkMqN7FILELU0WNTazzQbV
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="431664124"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="431664124"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 01:10:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="684896973"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="684896973"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 19 Apr 2023 01:10:43 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pp2tm-000eix-2C;
+        Wed, 19 Apr 2023 08:10:42 +0000
+Date:   Wed, 19 Apr 2023 16:10:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Andi Shyti <andi.shyti@linux.intel.com>
+Subject: [tip:locking/core 5/5]
+ drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c:232:34: sparse: sparse:
+ Using plain integer as NULL pointer
+Message-ID: <202304191617.HODs4X6a-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230419002946.2566272-1-elsk@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,47 +65,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 12:29:36AM +0000, Android Kernel Team wrote:
->When the kernel is built inside a sandbox container,
->a forest of symlinks to the source files may be
->created in the container. In this case, the generated
->kheaders.tar.xz should follow these symlinks
->to access the source files, instead of packing
->the symlinks themselves.
->
->Signed-off-by: Yifan Hong <elsk@google.com>
->---
-> kernel/gen_kheaders.sh | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/kernel/gen_kheaders.sh b/kernel/gen_kheaders.sh
->index 1ef9a87511f5..183d9a44aa39 100755
->--- a/kernel/gen_kheaders.sh
->+++ b/kernel/gen_kheaders.sh
->@@ -87,7 +87,7 @@ find $cpio_dir -type f -print0 |
-> # pre-sorted, as --sort=name might not be available.
-> find $cpio_dir -printf "./%P\n" | LC_ALL=C sort | \
->     tar "${KBUILD_BUILD_TIMESTAMP:+--mtime=$KBUILD_BUILD_TIMESTAMP}" \
->-    --owner=0 --group=0 --numeric-owner --no-recursion \
->+    --owner=0 --group=0 --numeric-owner --no-recursion -h \
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+head:   93eff603d6a2bc1895eeb7063dbd0661bb760b74
+commit: f7faedffa92c35afbcfbf0a3dd73079e16b2b87f [5/5] drm/i915/gt: use __xchg instead of internal helper
+config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20230419/202304191617.HODs4X6a-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=f7faedffa92c35afbcfbf0a3dd73079e16b2b87f
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip locking/core
+        git checkout f7faedffa92c35afbcfbf0a3dd73079e16b2b87f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 olddefconfig
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-I would have a preference for the long form --dereference as it is more
-descriptive.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304191617.HODs4X6a-lkp@intel.com/
 
-With that, feel free to add
+sparse warnings: (new ones prefixed by >>)
+>> drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c:232:34: sparse: sparse: Using plain integer as NULL pointer
+   drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c:247:34: sparse: sparse: Using plain integer as NULL pointer
+--
+>> drivers/gpu/drm/i915/gt/intel_engine_cs.c:1045:15: sparse: sparse: Using plain integer as NULL pointer
+--
+>> drivers/gpu/drm/i915/gt/intel_lrc.c:1112:37: sparse: sparse: Using plain integer as NULL pointer
+   drivers/gpu/drm/i915/gt/intel_lrc.c:1229:24: sparse: sparse: Using plain integer as NULL pointer
+   drivers/gpu/drm/i915/gt/intel_lrc.c:1230:22: sparse: sparse: Using plain integer as NULL pointer
+--
+>> drivers/gpu/drm/i915/gt/intel_gt.c:756:21: sparse: sparse: Using plain integer as NULL pointer
+   drivers/gpu/drm/i915/gt/intel_gt.c:803:14: sparse: sparse: Using plain integer as NULL pointer
+--
+>> drivers/gpu/drm/i915/gt/intel_rc6.c:705:16: sparse: sparse: Using plain integer as NULL pointer
+--
+>> drivers/gpu/drm/i915/gt/intel_migrate.c:1150:14: sparse: sparse: Using plain integer as NULL pointer
+--
+>> drivers/gpu/drm/i915/gt/intel_gsc.c:73:43: sparse: sparse: Using plain integer as NULL pointer
 
-Reviewed-by: Matthias Maennich <maennich@google.com>
+vim +232 drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c
 
-Cheers,
-Matthias
+   134	
+   135	static void heartbeat(struct work_struct *wrk)
+   136	{
+   137		struct i915_sched_attr attr = { .priority = I915_PRIORITY_MIN };
+   138		struct intel_engine_cs *engine =
+   139			container_of(wrk, typeof(*engine), heartbeat.work.work);
+   140		struct intel_context *ce = engine->kernel_context;
+   141		struct i915_request *rq;
+   142		unsigned long serial;
+   143	
+   144		/* Just in case everything has gone horribly wrong, give it a kick */
+   145		intel_engine_flush_submission(engine);
+   146	
+   147		rq = engine->heartbeat.systole;
+   148		if (rq && i915_request_completed(rq)) {
+   149			i915_request_put(rq);
+   150			engine->heartbeat.systole = NULL;
+   151		}
+   152	
+   153		if (!intel_engine_pm_get_if_awake(engine))
+   154			return;
+   155	
+   156		if (intel_gt_is_wedged(engine->gt))
+   157			goto out;
+   158	
+   159		if (i915_sched_engine_disabled(engine->sched_engine)) {
+   160			reset_engine(engine, engine->heartbeat.systole);
+   161			goto out;
+   162		}
+   163	
+   164		if (engine->heartbeat.systole) {
+   165			long delay = READ_ONCE(engine->props.heartbeat_interval_ms);
+   166	
+   167			/* Safeguard against too-fast worker invocations */
+   168			if (!time_after(jiffies,
+   169					rq->emitted_jiffies + msecs_to_jiffies(delay)))
+   170				goto out;
+   171	
+   172			if (!i915_sw_fence_signaled(&rq->submit)) {
+   173				/*
+   174				 * Not yet submitted, system is stalled.
+   175				 *
+   176				 * This more often happens for ring submission,
+   177				 * where all contexts are funnelled into a common
+   178				 * ringbuffer. If one context is blocked on an
+   179				 * external fence, not only is it not submitted,
+   180				 * but all other contexts, including the kernel
+   181				 * context are stuck waiting for the signal.
+   182				 */
+   183			} else if (engine->sched_engine->schedule &&
+   184				   rq->sched.attr.priority < I915_PRIORITY_BARRIER) {
+   185				/*
+   186				 * Gradually raise the priority of the heartbeat to
+   187				 * give high priority work [which presumably desires
+   188				 * low latency and no jitter] the chance to naturally
+   189				 * complete before being preempted.
+   190				 */
+   191				attr.priority = 0;
+   192				if (rq->sched.attr.priority >= attr.priority)
+   193					attr.priority = I915_PRIORITY_HEARTBEAT;
+   194				if (rq->sched.attr.priority >= attr.priority)
+   195					attr.priority = I915_PRIORITY_BARRIER;
+   196	
+   197				local_bh_disable();
+   198				engine->sched_engine->schedule(rq, &attr);
+   199				local_bh_enable();
+   200			} else {
+   201				reset_engine(engine, rq);
+   202			}
+   203	
+   204			rq->emitted_jiffies = jiffies;
+   205			goto out;
+   206		}
+   207	
+   208		serial = READ_ONCE(engine->serial);
+   209		if (engine->wakeref_serial == serial)
+   210			goto out;
+   211	
+   212		if (!mutex_trylock(&ce->timeline->mutex)) {
+   213			/* Unable to lock the kernel timeline, is the engine stuck? */
+   214			if (xchg(&engine->heartbeat.blocked, serial) == serial)
+   215				intel_gt_handle_error(engine->gt, engine->mask,
+   216						      I915_ERROR_CAPTURE,
+   217						      "no heartbeat on %s",
+   218						      engine->name);
+   219			goto out;
+   220		}
+   221	
+   222		rq = heartbeat_create(ce, GFP_NOWAIT | __GFP_NOWARN);
+   223		if (IS_ERR(rq))
+   224			goto unlock;
+   225	
+   226		heartbeat_commit(rq, &attr);
+   227	
+   228	unlock:
+   229		mutex_unlock(&ce->timeline->mutex);
+   230	out:
+   231		if (!engine->i915->params.enable_hangcheck || !next_heartbeat(engine))
+ > 232			i915_request_put(__xchg(&engine->heartbeat.systole, 0));
+   233		intel_engine_pm_put(engine);
+   234	}
+   235	
 
-
->     -I $XZ -cf $tarfile -C $cpio_dir/ -T - > /dev/null
->
-> echo $headers_md5 > kernel/kheaders.md5
->-- 
->2.40.0.634.g4ca3ef3211-goog
->
->-- 
->To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
