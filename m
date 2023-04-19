@@ -2,106 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBC56E77FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C75D6E7806
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbjDSLEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 07:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
+        id S232518AbjDSLFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 07:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbjDSLEB (ORCPT
+        with ESMTP id S231527AbjDSLFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 07:04:01 -0400
-Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DF04C15
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:04:00 -0700 (PDT)
-Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-54fc337a650so243663197b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:04:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681902239; x=1684494239;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AZtZFW4Yu8/s9hisFwTitWaI2cjRerxPZcc9cSg2rPE=;
-        b=eCOranTvGfGyiJwKgEXRuNQIFb6eX/scj2FDRKgQHiCEeo40qDqFmH/fFqjo8zdK+H
-         df/2PnOVqqcqKd/WEvtC45s+QaVALEXDCnEAHIwxfjIgr/yTpsZ32ZfjyQqSzavy+DfD
-         pfi6/yjYE1uMe1Nsn3iFfdYny5Ln5NT2we4dDMZoGPJmRByVn8kB1DXx1pw8JRQ0nAEK
-         ihoVCmgL6ht4eRAmYF6LUIL7zig05FquaA1NDl2I5vQsf7dEHyWra9eReFfq7dTk8wBV
-         qA/RwmY70YBPwA+4FpHGFcsbG1xxFxqo2LVxuJMDGKzrD206c45xrMK+qWHvcUUEx/iu
-         EQgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681902239; x=1684494239;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AZtZFW4Yu8/s9hisFwTitWaI2cjRerxPZcc9cSg2rPE=;
-        b=BNdOXvs8j09/XrdyJNTWHr2hRJ508q3SX1Y6mpgA4g2YGSfZuLxBqMhIrDRH4yItdD
-         Of4mCK8CXuIE5Dr98uXJcLjUW91Dk/qbayz/+Dlmeb565ePGcFQgHuoo879/gYqEvRTb
-         3CyTYskrVs7xuKjfe298bcsP0MB/gH3vFQhigUTy20AzAEes80fO7TUY1F9T2oxb9NdP
-         0+phwMj7Bz9f3l3eZTfxqmTsSyx9Eao9XwjPtdPQAS2uO5rTG9nVBsCvDDbdLUPDlOUs
-         /C5j2mbM9nxHZ17SHFsDmqh6A58SMsY3c4hoTqCz6AUnJ4Ba6Lw6M+5hpypsm4WjYlvN
-         /5QQ==
-X-Gm-Message-State: AAQBX9f5xTKT01VIBELCkFcog8k7R+O0JL7o6pdYA8YpmQX9jNv+UXnQ
-        8JoW/HhVL5eB7NBpkTWKlrgLkUXiFKm0yb/3cQw=
-X-Google-Smtp-Source: AKy350Z29lReMeohrwftgjANcVuqzBtykHw6roLtX6PekNbfJEpAsCVqFy31JekDOMjCwZSCUcoysgKLF+YkRiQ4pwc=
-X-Received: by 2002:a81:92d7:0:b0:546:2787:4b93 with SMTP id
- j206-20020a8192d7000000b0054627874b93mr3199305ywg.35.1681902238676; Wed, 19
- Apr 2023 04:03:58 -0700 (PDT)
+        Wed, 19 Apr 2023 07:05:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6A24C19;
+        Wed, 19 Apr 2023 04:05:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C896963D4C;
+        Wed, 19 Apr 2023 11:05:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C58FEC433EF;
+        Wed, 19 Apr 2023 11:05:31 +0000 (UTC)
+Date:   Wed, 19 Apr 2023 12:05:28 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Justin Forbes <jforbes@fedoraproject.org>,
+        Mike Rapoport <rppt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guo Ren <guoren@kernel.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Rich Felker <dalias@libc.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Zi Yan <ziy@nvidia.com>, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mm@kvack.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH v3 02/14] arm64: drop ranges in definition of
+ ARCH_FORCE_MAX_ORDER
+Message-ID: <ZD/K+Mof/Dx5yzjQ@arm.com>
+References: <20230325060828.2662773-1-rppt@kernel.org>
+ <20230325060828.2662773-3-rppt@kernel.org>
+ <CAFxkdAr5C7ggZ+WdvDbsfmwuXujT_z_x3qcUnhnCn-WrAurvgA@mail.gmail.com>
+ <ZCvQGJzdED+An8an@kernel.org>
+ <CAFbkSA38eTA_iJ3ttBvQ8G4Rjj8qB12GxY7Z=qmZ8wm+0tZieA@mail.gmail.com>
+ <ZDbp7LAHES3YFo30@arm.com>
+ <20230418150557.ea8c87c96ec64c899c88ab08@linux-foundation.org>
 MIME-Version: 1.0
-Reply-To: mis.vera145@gmail.com
-Sender: adamsfrancis140@gmail.com
-Received: by 2002:a05:7010:218c:b0:344:4f01:f1f with HTTP; Wed, 19 Apr 2023
- 04:03:58 -0700 (PDT)
-From:   Vera Wilfred <mis.vera145@gmail.com>
-Date:   Wed, 19 Apr 2023 12:03:58 +0100
-X-Google-Sender-Auth: 6BBMiGukeEzvluwqqcdLTH_RNkc
-Message-ID: <CAD3yhOVTx87Z5d4EZFchNzo6DGG4dE8i1jS0AEB1dJBWmYefAw@mail.gmail.com>
-Subject: Ich bin Mis Vera Wilfred
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,
-        MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418150557.ea8c87c96ec64c899c88ab08@linux-foundation.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Hallo,
+On Tue, Apr 18, 2023 at 03:05:57PM -0700, Andrew Morton wrote:
+> On Wed, 12 Apr 2023 18:27:08 +0100 Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > It sounds nice in theory. In practice. EXPERT hides too much. When you
+> > > flip expert, you expose over a 175ish new config options which are
+> > > hidden behind EXPERT.  You don't have to know what you are doing just
+> > > with the MAX_ORDER, but a whole bunch more as well.  If everyone were
+> > > already running 10, this might be less of a problem. At least Fedora
+> > > and RHEL are running 13 for 4K pages on aarch64. This was not some
+> > > accidental choice, we had to carry a patch to even allow it for a
+> > > while.  If this does go in as is, we will likely just carry a patch to
+> > > remove the "if EXPERT", but that is a bit of a disservice to users who
+> > > might be trying to debug something else upstream, bisecting upstream
+> > > kernels or testing a patch.  In those cases, people tend to use
+> > > pristine upstream sources without distro patches to verify, and they
+> > > tend to use their existing configs. With this change, their MAX_ORDER
+> > > will drop to 10 from 13 silently.   That can look like a different
+> > > issue enough to ruin a bisect or have them give bad feedback on a
+> > > patch because it introduces a "regression" which is not a regression
+> > > at all, but a config change they couldn't see.
+> > 
+> > If we remove EXPERT (as prior to this patch), I'd rather keep the ranges
+> > and avoid having to explain to people why some random MAX_ORDER doesn't
+> > build (keeping the range would also make sense for randconfig, not sure
+> > we got to any conclusion there).
+> 
+> Well this doesn't seem to have got anywhere.  I think I'll send the
+> patchset into Linus for the next merge window as-is.  Please let's take
+> a look at this Kconfig presentation issue during the following -rc
+> cycle.
 
-Ich bin Mis Vera Wilfred aus Abidjan Cote D'Ivoire (Elfenbeink=C3=BCste)
-Ich bin 22 Jahre alt, M=C3=A4dchen, Waise, das hei=C3=9Ft, weil ich keine E=
-ltern
-habe, ich habe ungef=C3=A4hr (10.500.000,00 US-Dollar) Zehn Millionen,
-f=C3=BCnfhunderttausend vereint Staatsdollar.
+That's fine by me. I have a slight preference to drop EXPERT and keep
+the ranges in, especially if it affects current distro kernels. Debian
+seems to enable EXPERT already in their arm64 kernel config but I'm not
+sure about the Fedora or other distro kernels. If they don't, we can
+fix/revert this Kconfig entry once the merging window is closed.
 
-Was ich von meinem verstorbenen Vater geerbt habe, hat er den Fonds
-auf einem Fest- / Wechselkonto bei einer der besten Banken hier in
-Abidjan hinterlegt.
-
-mein Vater hat meinen Namen als seine einzige Tochter und einziges
-Kind f=C3=BCr die n=C3=A4chsten Angeh=C3=B6rigen des Fonds verwendet.
-
-Zweitens bekunden Sie mit Ihrer vollen Zustimmung, mit mir zu diesem
-Zweck zusammenzuarbeiten, Ihr Interesse, indem Sie mir antworten,
-damit ich Ihnen die notwendigen Informationen und die Details zum
-weiteren Vorgehen zukommen lassen kann. Ich werde Ihnen 20% des Geldes
-anbieten deine Hilfe f=C3=BCr mich.
-
-M=C3=B6ge Gott Sie f=C3=BCr Ihre schnelle Aufmerksamkeit segnen. Meine best=
-en
-und liebensw=C3=BCrdigen Gr=C3=BC=C3=9Fe an Sie und Ihre ganze Familie, wen=
-n Sie mich
-f=C3=BCr weitere Details kontaktieren.
-
-Ich brauche Ihre Assistentin, um mir zu helfen, diesen Fonds in Ihrem
-Land zu investieren. Kontaktieren Sie mich jetzt f=C3=BCr weitere Details.
-Vielen Dank
-
-Vera Wilfred.
+-- 
+Catalin
