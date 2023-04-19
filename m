@@ -2,144 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C6E6E7A3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 040FA6E7A3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233217AbjDSNC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 09:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S232750AbjDSNEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 09:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233060AbjDSNCt (ORCPT
+        with ESMTP id S230154AbjDSNE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 09:02:49 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6585B740
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:02:47 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id b16so6180167ejz.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:02:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681909366; x=1684501366;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8km01v+AsIzRKdAlrr0KvdJekH9kf5ltyq2aXyHrieo=;
-        b=D5O1qyYGjSQa+JcJwDfFlH9YdTiHAPcBDMKcQLbRXflYJ7RR8V49omri0rgWes/mjM
-         zDbapRCM8PgTdMpoXbXZ132R3h5Juf/1sNcIUhnlIy9YplcDJMQaGuFsnk4U1/Lx39B5
-         9KrNsRlwIv6GjLrisG/CUAYyYGphYAxU2VQThBe3H/7/3wZjakiuOT7jbWPVmS1PIu8A
-         Yvtt6Gvv26X1Kn91RD4O1ARdCnEQb11MSmS3lznTpdq8Vc2NcprYF9ZOBkWIiMI0v94w
-         Eo3vT+3LSQQQZdMF726HqGFTL2mZ3rUJVMbz/rQQjUjrOEYpguC+Ij0/uC0UN+jLczjU
-         Wakw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681909366; x=1684501366;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8km01v+AsIzRKdAlrr0KvdJekH9kf5ltyq2aXyHrieo=;
-        b=dEutgstZejT1d+fyVOVQNyEKutEsaMDZkkX9LVeO8whjQghFjCgEZ+XWPEJYtQuN/V
-         JwtnTuAx2ReLidiunZQwv7iKxXNFY0Q4tE6xBo17mmZdx9JQKPh8kzfUCqk8vwCTMLHr
-         8eC+IaqF/h/fQZmKWPO0Oz8SgnRKXBSrzuuicrn6X/WD88406ZWctZ4Sx1vx1VhJ9LSk
-         mVn7rokpvxQfWcvfnSdQK3KzYKg5DRcnyqLhuAXoGnidMDPbmEpQw/PjFAQfBRfSHd4C
-         o97QnJWGgNff7LfVcIJXrdtfxWHDdJCpBTOFmHe0dUUFlVZ0xsl/80q5YdxFg94pXiWR
-         kuag==
-X-Gm-Message-State: AAQBX9cQD0/Zpp6T/a9X2Ja+1sSDJR99iHkFGHy7Fwk7/NjnM3ih0itW
-        GRMp0DDKrUWjwjwh8cVzs7+Lwmoh0cUlClIAhkgXtg==
-X-Google-Smtp-Source: AKy350bQj5ebLuFff0NLlfexWn17JrgpMNYHvclyn0mKtEsAvSL3yB1BiISTdmAZ7D0RmkSMgxP4uw==
-X-Received: by 2002:a17:906:82c5:b0:94b:88c6:9282 with SMTP id a5-20020a17090682c500b0094b88c69282mr17830189ejy.22.1681909366372;
-        Wed, 19 Apr 2023 06:02:46 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:b7d8:d88b:1fac:c802? ([2a02:810d:15c0:828:b7d8:d88b:1fac:c802])
-        by smtp.gmail.com with ESMTPSA id f10-20020a1709064dca00b0094f2dca017fsm5971762ejw.50.2023.04.19.06.02.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 06:02:46 -0700 (PDT)
-Message-ID: <c568f571-22ee-0d85-043f-4673d76bf364@linaro.org>
-Date:   Wed, 19 Apr 2023 15:02:44 +0200
+        Wed, 19 Apr 2023 09:04:29 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD855FC7;
+        Wed, 19 Apr 2023 06:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681909466; x=1713445466;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BML7/b8TDUo80CIXFv+vU4FWN/NIrn3/77zbgYSC9CA=;
+  b=HEUmeeXnec5AHuXIoFbbZf/nDLxpoecWy5bQRd9KlMvY2FqijfZV9sZl
+   hLrfRrAymvwu3HexuHZjzDfNbZuzmRryvPpc1wmqSp4kTy4rJLpw3Xavr
+   rVBC2CPxKAeEumcGkJkvQ/kHxU/OkAHCHOqepcSH617q3EM1L6thpg5Zm
+   vY4627Jf6ZHvKU3FH5iKoxnQLu7HHKyGdNqrSyox1CVQtbaVXX2eMS4sM
+   aawrLEdFUzfQiX96vnTsJnPIjFHlnzZY8FRhgxMh2t8hjoEf9m0YjgEE7
+   ckkquR4uI4taEcA2pWKO6ccjCCY+oU2JRHU35XDwB/0Ufc3mR7WwSn0mx
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="431716461"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="431716461"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 06:04:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="641749474"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="641749474"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 06:04:25 -0700
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: [PATCH v3] usb: typec: intel_pmc_mux: Expose IOM port status to debugfs
+Date:   Wed, 19 Apr 2023 18:33:45 +0530
+Message-Id: <20230419130345.1689915-1-rajat.khandelwal@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/7] arm64: dts: imx93-11x11-evk: added ele-mu
-Content-Language: en-US
-To:     Pankaj Gupta <pankaj.gupta@nxp.com>, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        gaurav.jain@nxp.com, sahil.malhotra@nxp.com, aisheng.dong@nxp.com,
-        V.Sethi@nxp.com
-References: <20230419175538.855493-1-pankaj.gupta@nxp.com>
- <20230419175538.855493-3-pankaj.gupta@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230419175538.855493-3-pankaj.gupta@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2023 19:55, Pankaj Gupta wrote:
-> adde support for ele-mu for imx93-11x11-evk.
+IOM status has a crucial role during debugging to check the
+current state of the type-C port.
+There are ways to fetch the status, but all those require the
+IOM port status offset, which could change with platform.
 
-Typo, missing capital letter.
+Make a debugfs directory for intel_pmc_mux and expose the status
+under it per port basis.
 
-> 
-> Signed-off-by: Pankaj Gupta <pankaj.gupta@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx93.dtsi | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx93.dtsi b/arch/arm64/boot/dts/freescale/imx93.dtsi
-> index 41efd97dd6d6..ffb7cb8ed228 100644
-> --- a/arch/arm64/boot/dts/freescale/imx93.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx93.dtsi
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->  /*
-> - * Copyright 2022 NXP
-> + * Copyright 2022-2022 NXP
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+---
 
-?
+v3: Allocate the debugfs directory name for the platform device with
+its ACPI dev name included
 
+v2:
+1. Remove static declaration of the debugfs root for 'intel_pmc_mux'
+2. Remove explicitly defined one-liner functions
 
->   */
->  
->  #include <dt-bindings/clock/imx93-clock.h>
-> @@ -741,5 +741,14 @@ media_blk_ctrl: system-controller@4ac10000 {
->  			#power-domain-cells = <1>;
->  			status = "disabled";
->  		};
+ drivers/usb/typec/mux/intel_pmc_mux.c | 38 +++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-Missing blank line.
-
-> +		ele_mu: ele-mu {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-> +			compatible = "fsl,imx93-ele";
-> +			mboxes = <&s4muap 0 0 &s4muap 1 0>;
-
-Two phandles, not one.
-
-> +			mbox-names = "tx", "rx";
-> +			fsl,ele_mu_did = <3>;
-> +			fsl,ele_mu_id = <2>;
-> +			fsl,ele_mu_max_users = <4>;
-> +			status = "okay";
-
-Why do you need it?
-
-Run your patches through internal review to fix such obvious mistakes.
-There is entire NXP to help you, instead of relying on us to fix trivial
-code style.
-
-> +		};
->  	};
->  };
-
-Best regards,
-Krzysztof
+diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+index 34e4188a40ff..2264b8dd5436 100644
+--- a/drivers/usb/typec/mux/intel_pmc_mux.c
++++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+@@ -15,6 +15,7 @@
+ #include <linux/usb/typec_mux.h>
+ #include <linux/usb/typec_dp.h>
+ #include <linux/usb/typec_tbt.h>
++#include <linux/debugfs.h>
+ 
+ #include <asm/intel_scu_ipc.h>
+ 
+@@ -143,6 +144,10 @@ struct pmc_usb {
+ 	struct acpi_device *iom_adev;
+ 	void __iomem *iom_base;
+ 	u32 iom_port_status_offset;
++
++#ifdef CONFIG_DEBUG_FS
++	struct dentry *dentry;
++#endif
+ };
+ 
+ static void update_port_status(struct pmc_usb_port *port)
+@@ -639,10 +644,34 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
+ 	return 0;
+ }
+ 
++static int port_iom_status_show(struct seq_file *s, void *unused)
++{
++	struct pmc_usb_port *port = s->private;
++
++	update_port_status(port);
++	seq_printf(s, "0x%08x\n", port->iom_status);
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(port_iom_status);
++
++static void pmc_mux_port_debugfs_init(struct pmc_usb_port *port)
++{
++	struct dentry *debugfs_dir;
++	char name[6];
++
++	snprintf(name, sizeof(name), "port%d", port->usb3_port - 1);
++
++	debugfs_dir = debugfs_create_dir(name, port->pmc->dentry);
++	debugfs_create_file("iom_status", 0400, debugfs_dir, port,
++			    &port_iom_status_fops);
++}
++
+ static int pmc_usb_probe(struct platform_device *pdev)
+ {
+ 	struct fwnode_handle *fwnode = NULL;
+ 	struct pmc_usb *pmc;
++	char name[NAME_MAX];
+ 	int i = 0;
+ 	int ret;
+ 
+@@ -674,6 +703,9 @@ static int pmc_usb_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	snprintf(name, NAME_MAX, "intel_pmc_mux-%s", pdev->name);
++	pmc->dentry = debugfs_create_dir(name, NULL);
++
+ 	/*
+ 	 * For every physical USB connector (USB2 and USB3 combo) there is a
+ 	 * child ACPI device node under the PMC mux ACPI device object.
+@@ -688,6 +720,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
+ 			fwnode_handle_put(fwnode);
+ 			goto err_remove_ports;
+ 		}
++
++		pmc_mux_port_debugfs_init(&pmc->port[i]);
+ 	}
+ 
+ 	platform_set_drvdata(pdev, pmc);
+@@ -703,6 +737,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
+ 
+ 	acpi_dev_put(pmc->iom_adev);
+ 
++	debugfs_remove(pmc->dentry);
++
+ 	return ret;
+ }
+ 
+@@ -719,6 +755,8 @@ static int pmc_usb_remove(struct platform_device *pdev)
+ 
+ 	acpi_dev_put(pmc->iom_adev);
+ 
++	debugfs_remove(pmc->dentry);
++
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
 
