@@ -2,333 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8646E8607
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 01:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABFFA6E878E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbjDSXmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 19:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
+        id S231474AbjDTBpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 21:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjDSXmG (ORCPT
+        with ESMTP id S229580AbjDTBpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 19:42:06 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD0730C0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 16:42:04 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id C0C5B32007F1;
-        Wed, 19 Apr 2023 19:42:03 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 19 Apr 2023 19:42:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1681947723; x=1682034123; bh=yx1o5xrLkkfX/ayxDBgXkHp81fEFHgvVba2
-        0Qzf//Xo=; b=KVjiAEoj+LbexsV2pt4zrqZre18ofcY8OP+okl5sooAoc/p3pnI
-        ngbFo6Lu5fQxbwtblKxhOc30cnh8lSC2HE3in7K++gnXGodzY8grlc3m8QtwrWY3
-        qFYU36XVGAPDwikfNLnbH7OAkbjGqJJgMXISMyxKV1a6aUU+wcCluLNNmvZfdz/4
-        FA7KCnIC3Am+Qv27y9wJUSyxhnB3Yv668/wSUEWWKb1gRWYczN/Wsy0roifQewOz
-        T8YCVPFq/v0hd7ftWRQROwua4C1/VA+tAINXXwzcbIYfXKUseGA2BCHfN1u21s6y
-        QdKRGn++wF932+OQ3ZvRjuGBQY7L3tS+OyQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1681947723; x=1682034123; bh=yx1o5xrLkkfX/ayxDBgXkHp81fEFHgvVba2
-        0Qzf//Xo=; b=FiHhMsbtNj0b0Z+/ZE0SHvPBsO+lhIeU40AfGimQ+BIaUGrZwPY
-        dHrapBlki8HXH9Rakl2SqSEYYVJM3fFNmDu8RFyy2E6FgveKoEX5WixxVex/aalG
-        UwCuUsy2HsAM+EWIQNVxeW48b8TABJw7osvhTvULxwhNntq0DNRGssWddCj3uQ88
-        3NBg6XHno2VMXqXmtsl48RW81yqJPUUZ417OimqthwRDMWdnezgcPo90HP3wjWZT
-        EDKXOVfJRaruat67D4xDm0jveP3zlisYFWQ5wo8BYZI77WfibIWcoEj4JI3/Z5pR
-        tG09gds6WjwIl44abFMbjJwRnE+IaDoIShw==
-X-ME-Sender: <xms:S3xAZDHx6gNScoxOvRdsBNafQS7PT6gGCrSrbNkzdPouK4gA0A4NCw>
-    <xme:S3xAZAXU3N5Og9-CuUvjL2kz2ia0ks7UKF_ZjR13ue4tzRRD-gPt038AJG9p-oPPK
-    C8R4WZx5HELeFsrP9M>
-X-ME-Received: <xmr:S3xAZFIcfwyQzxH1P6KfhFEh4ZWCiBc4AaKpgYHl_rQ-V_IBoVk_NlIeD7R9ZWI7gDVq>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtuddgvdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepvedtfeekhefgvdfgveekkeegiedvfffhgfffledvleetgeek
-    vdfhfeegveekhedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdptddurdhorhhgpd
-    hgihhthhhusgdrtghomhdpghhithhhuhgsuhhsvghrtghonhhtvghnthdrtghomhenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunh
-    drhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:S3xAZBEnDAKlnvFsvdOmetgZ6HEATMt9_Oc9TJd5BdobA5lWNSIYew>
-    <xmx:S3xAZJWsNcjqqTUdnb6ikMlvLogkaja5AyaOqw9fd58ndHKhDFhVQw>
-    <xmx:S3xAZMP1KkiY_42I_0lZAQDOsNoQpy-YOX5_t5CFfQO1yBL_faYpjw>
-    <xmx:S3xAZHe7YIGOiEBosuCwlQL5dS04m0YHgh8RlyGSdyRPdeTWeJ3evg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 19 Apr 2023 19:42:01 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: arch/mips/include/asm/timex.h:75:10: error: instruction requires
- a CPU feature not currently enabled
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230419231834.GA1269248@dev-arch.thelio-3990X>
-Date:   Thu, 20 Apr 2023 00:41:50 +0100
-Cc:     Borislav Petkov <bp@alien8.de>, kernel test robot <lkp@intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C6A730FC-C7B5-4A32-92CD-98FDA632782C@flygoat.com>
-References: <202304170748.Fg9VIgGd-lkp@intel.com>
- <20230419223707.GAZEBtE1vZGy5B4EUR@fat_crate.local>
- <20230419231834.GA1269248@dev-arch.thelio-3990X>
-To:     Nathan Chancellor <nathan@kernel.org>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 19 Apr 2023 21:45:03 -0400
+X-Greylist: delayed 4247 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Apr 2023 18:45:01 PDT
+Received: from mail.heimpalkorhaz.hu (mail.heimpalkorhaz.hu [193.224.51.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F52430EA;
+        Wed, 19 Apr 2023 18:45:01 -0700 (PDT)
+Received: from mail.heimpalkorhaz.hu (localhost [127.0.0.1])
+        (Authenticated sender: lmateisz@heimpalkorhaz.hu)
+        by mail.heimpalkorhaz.hu (Postfix) with ESMTPA id D0F3B384A1BDDF;
+        Thu, 20 Apr 2023 01:59:06 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.heimpalkorhaz.hu D0F3B384A1BDDF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heimpalkorhaz.hu;
+        s=default; t=1681948747;
+        bh=0SvEQ2qxWUr6CAhQeUp6fE6iKpfYW2PiFDnjTXdqJls=;
+        h=Date:From:To:Subject:Reply-To:From;
+        b=gMPj4snOI5ESUdbEhfkXPRpZwvIV/7HnohgSWn5+ZIArdbtl5ckJ4Cb1pVUTHfXpa
+         uOedmA8uaqDb3CkDmOXhWIVsNnIuyZzKpM45ewmmd+miCyeYBFNoE8RZxOZxheZA4Z
+         mSjQy4y6UbTs0Tu7nvwUTlLrDsKQhAnXwE4w8OT/zqAzDPZ3PgGIUhV0q8+U7rN7eL
+         SfxgjxJuB/q14VlyLe1xBKXZet2qVj7m64kQHyuGMGPVZFey2sR8ZNPTxVk6PodR9V
+         Qy+azuqOCn5VdVuqwnM8YO2mGrEPEDuVj6IEJ1hHp1mshS5eEM0xX3sehEY3oMq4lh
+         dQGSNSUcAycLg==
+MIME-Version: 1.0
+Date:   Thu, 20 Apr 2023 01:59:06 +0200
+From:   MK <mk@heimpalkorhaz.hu>
+To:     undisclosed-recipients:;
+Subject: Hallo zonneschijn, hoe gaat het?
+Reply-To: marion.k07081@gmail.com
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <5e720fb798e6f8d100eb1b63975da9f6@heimpalkorhaz.hu>
+X-Sender: mk@heimpalkorhaz.hu
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [5.46 / 20.00];
+        R_UNDISC_RCPT(3.00)[];
+        FORGED_RECIPIENTS(2.00)[m:,s:ria.engels@upcmail.nl,s:riandre56@upcmail.nl,s:s.marcus@upcmail.nl,s:s.natoewal@upcmail.nl,s:s.ritoe@upcmail.nl,s:s.zelst@upcmail.nl,s:secretariaat.zwcdts@upcmail.nl,s:sonnevelt@upcmail.nl,s:svennauta@upcmail.nl,s:t.adrichem@upcmail.nl,s:t.buitenhuis5@upcmail.nl,s:t.michelbrink@upcmail.nl,s:thea.g@upcmail.nl,s:v.klasens@upcmail.nl,s:w.angel7@upcmail.nl,s:w.maronier@upcmail.nl,s:w.stevens22@upcmail.nl,s:w.zweijpfenning@upcmail.nl,s:waza@upcmail.nl,s:wielle695@upcmail.nl,s:wimels@upcmail.nl,s:yvonne.hemert@upcmail.nl,s:d.blokland88@upcmail.nl,s:a.wierda4@upcmail.nl,s:r.van.emmerik@upcmail.nl,s:Ruisch06-83202551sruisch@upcmail.nl,s:Ruisch06-46358145mruisch@upcmail.nl,s:7w.heijdacker@upcmail.nl,s:a.zegers11@upcmail.nl,s:rufin.yune@upf.pf,s:info@upplevnordanstig.se,s:buzzwurks@usa.net,s:info@usaeconnect.com,s:test@user.nl,s:rawnar@users.sourceforge.net,s:info@uskeatsen.nl,s:kgpadilh@usp.br,s:vian@usp.br,s:jo8@usvhercules.nl,s:aare.kasemets@ut.ee,s:olli.ylonen
+ @uta.fi,s:a.reite@utanet.at,s:ph.lorentz@utex.ma,s:andyz@utexas.edu,s:external@utn.stjr.is,s:postur@utn.stjr.is,s:j.nganji@utoronto.ca,s:odlc@utoronto.ca,s:nico@utrecht-promotions.nl,s:duurzame-energierijnenburg@utrecht.nl,s:j.gootzen@utrecht.nl,s:johan.simon@utrecht.nl,s:k.vandenbos@uu.nl,s:m.asadpoor@uu.nl,s:n.h.g.devries@uu.nl,s:o.h.klungel@uu.nl,s:Y.Zhou1@uu.nl,s:c.vanewijk@uva.nl,s:e.s.bergvelt@uva.nl,s:g.m.m.kuipers@uva.nl,s:anne.vermeer@uvt.nl,s:RWarne@uvu.edu,s:n.schiphouwer@uvvz.nl,s:info@uwe.be,s:mthuys@uwnet.nl,s:draaisma@uwnwt.nl,s:alexontwerpt@uwsieraad.nl,s:veerle.taelman@uz.kuleuven.be,s:bart.op.de.beeck@uza.be,s:marie-jose.tassignon@uza.be,s:paul.parizel@uza.be,s:wouter.vaneerdeweg@uza.be,s:05susanne.bohler@uzbrussel.be,s:13ursula.vandeneede@uzbrussel.be,s:72ida.flament@uzbrussel.be,s:bart.depreitere@uzleuven.be,s:Karel.Vankeer@uzleuven.be,s:rik.willems@uzleuven.be,s:sofie.coenen@uzleuven.be,s:roland@uzn.nl,s:carla@v-breemen.demon.nl,s:alex@v2.nl,s:accounthaube@v7ver
+ sand.de,s:Jeroen@vabnethems.nl,s:riem@val.be,s:auquiere@valbiom.be,s:willy@van-roemburg.nl,s:info@vanbaallingerie.nl,s:astrologie@vanblommestein.nl,s:marnix@vandekerkhove.be,s:infol@vandepoel-expertise.be,s:roel@vanderdrift.nl,s:wilco@vandermerch.net,s:Francoise@vanderwaals01.demon.nl,s:vandort@vandort.com,s:matthias@vanduysen.be,s:CARLA@VANENTHOVEN.NL,s:info@vanerck.be,s:bureau@vanhentenrijk.be];
+        SUBJECT_ENDS_QUESTION(1.00)[];
+        GENERIC_REPUTATION(-0.59)[-0.58872629738287];
+        BAYES_SPAM(0.15)[64.09%];
+        MIME_GOOD(-0.10)[text/plain];
+        FROM_EQ_ENVFROM(0.00)[];
+        MIME_TRACE(0.00)[0:+];
+        RCVD_COUNT_ZERO(0.00)[0];
+        TO_DN_ALL(0.00)[];
+        RCPT_COUNT_ONE(0.00)[1];
+        REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+        FROM_HAS_DN(0.00)[];
+        MID_RHS_MATCH_FROM(0.00)[];
+        FREEMAIL_ENVRCPT(0.00)[upcmail.nl,usa.net,utanet.at,verizon.net,VERIZON.NET,versatel.nl,videotron.ca,vip.onet.pl,virgilio.it,virgin.net,vodafonethuis.nl,wanadoo.fr,web.de,windowslive.com,worldnet.att.net,wp.pl,xs4all.nl,XS4all.nl,xtra.co.nz,ya.ru,yahoo.ca,Yahoo.Ca,yahoo.co.in,yahoo.co.jp,yahoo.co.nz,yahoo.co.uk,yahoo.com,YAHOO.COM,yahoo.com.ar,yahoo.com.au,yahoo.com.br,yahoo.com.ph,yahoo.com.sg,yahoo.com.tw,yahoo.de,yahoo.dk,yahoo.es,yahoo.fr,yahoo.gr,yahoo.it];
+        FREEMAIL_REPLYTO(0.00)[gmail.com];
+        HAS_REPLYTO(0.00)[marion.k07081@gmail.com]
+X-Rspamd-Queue-Id: D0F3B384A1BDDF
+X-Rspamd-Server: mail.heimpalkorhaz.hu
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Het spijt me u te storen en uw privacy te schenden. Ik ben vrijgezel,
+   eenzaam en heeft behoefte aan een zorgzame, liefdevolle en romantische 
+metgezel.
+
+Ik ben een geheime bewonderaar en zou graag de mogelijkheid willen 
+onderzoeken
+leer meer over elkaar. Ik weet dat het vreemd is om contact met je op te 
+nemen
+op deze manier en ik hoop dat je me kunt vergeven. Ik ben een verlegen 
+persoon en
+dit is de enige manier waarop ik weet dat ik je aandacht kan trekken. Ik 
+wil gewoon
+om te weten wat je denkt en het is niet mijn bedoeling om je te 
+beledigen.
+Ik hoop dat we vrienden kunnen zijn als je dat wilt, hoewel ik dat zou 
+willen
+om meer te zijn dan alleen een vriend. Ik weet dat je een paar vragen 
+hebt
+vraag het en ik hoop dat ik met een paar iets van je nieuwsgierigheid 
+kan bevredigen
+antwoorden.
+
+Ik geloof in het gezegde dat 'voor de wereld ben je maar één persoon,
+maar voor een speciaal iemand ben jij de wereld'. Alles wat ik wil is 
+liefde,
+romantische zorg en aandacht van een speciale metgezel die ik ben
+in de hoop dat jij dat zou zijn.
+
+Ik hoop dat dit bericht het begin is van een lange termijn
+communicatie tussen ons, stuur gewoon een antwoord op dit bericht, it
+zal me gelukkig maken.
 
 
-> 2023=E5=B9=B44=E6=9C=8820=E6=97=A5 00:18=EF=BC=8CNathan Chancellor =
-<nathan@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> + Jiaxun, who has been looking into MIPS + LLVM issues recently and =
-has
-> been a big help :)
+Knuffels en kussen,
 
-I think this patch[1] may fix the problem.
-
-Thanks
-- Jiaxun
-
-[1]: =
-https://patchwork.kernel.org/project/linux-mips/patch/20230411111225.55725=
--2-jiaxun.yang@flygoat.com/
-
->=20
-> On Thu, Apr 20, 2023 at 12:37:07AM +0200, Borislav Petkov wrote:
->> + Thomas.
->>=20
->> On Mon, Apr 17, 2023 at 07:57:04AM +0800, kernel test robot wrote:
->>> tree:   =
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git =
-master
->>> head:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
->>> commit: aba5b397cad7d398b385aaf5029f99f41b690466 hamradio: =
-baycom_epp: Do not use x86-specific rdtsc()
->>> date:   4 months ago
->>> config: mips-buildonly-randconfig-r001-20230417 =
-(https://download.01.org/0day-ci/archive/20230417/202304170748.Fg9VIgGd-lk=
-p@intel.com/config)
->>> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project =
-9638da200e00bd069e6dd63604e14cbafede9324)
->>=20
->> Where do I get clang 17?
->=20
-> I think they intend for you to get it via their make.cross script but
-> this issue reproduces with clang 16.0.2 from
-> https://mirrors.edge.kernel.org/pub/tools/llvm/ for me locally.
->=20
->> In any case, this
->>=20
->> "error: instruction requires a CPU feature not currently enabled"
->>=20
->> sounds like clang is trying to generate invalid code for the wrong
->> target. .config issue?
->=20
-> I am far from a MIPS expert but this usually means that there is some
-> assembler directive that we are missing to allow access to certain
-> instructions in newer ISA versions than the one specified via =
-'-march'.
-> I have no idea if that is the case here or not but I do see the =
-correct
-> target flags when building with V=3D1, so it is not something obvious =
-like
-> that. I can double back to this later this week or next week if nobody
-> else is able to.
->=20
-> Regardless, this seems like a pre-existing issue that was just exposed
-> by your patch, not the root cause of it.
->=20
-> Cheers,
-> Nathan
->=20
->>> reproduce (this is a W=3D1 build):
->>>        wget =
-https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross =
--O ~/bin/make.cross
->>>        chmod +x ~/bin/make.cross
->>>        # install mips cross compiling tool for clang build
->>>        # apt-get install binutils-mipsel-linux-gnu
->>>        # =
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/=
-?id=3Daba5b397cad7d398b385aaf5029f99f41b690466
->>>        git remote add linus =
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>>        git fetch --no-tags linus master
->>>        git checkout aba5b397cad7d398b385aaf5029f99f41b690466
->>>        # save the config file
->>>        mkdir build_dir && cp config build_dir/.config
->>>        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang =
-make.cross W=3D1 O=3Dbuild_dir ARCH=3Dmips olddefconfig
->>>        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang =
-make.cross W=3D1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash =
-drivers/net/hamradio/
->>>=20
->>> If you fix the issue, kindly add following tag where applicable
->>> | Reported-by: kernel test robot <lkp@intel.com>
->>> | Link: =
-https://lore.kernel.org/oe-kbuild-all/202304170748.Fg9VIgGd-lkp@intel.com/=
-
->>>=20
->>> All errors (new ones prefixed by >>):
->>>=20
->>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
->>>   In file included from include/linux/module.h:13:
->>>   In file included from include/linux/stat.h:19:
->>>   In file included from include/linux/time.h:60:
->>>   In file included from include/linux/time32.h:13:
->>>   In file included from include/linux/timex.h:67:
->>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a =
-CPU feature not currently enabled
->>>                   return read_c0_count();
->>>                          ^
->>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from =
-macro 'read_c0_count'
->>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
->>>                                   ^
->>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro =
-'__read_32bit_c0_register'
->>>           ___read_32bit_c0_register(source, sel, __volatile__)
->>>           ^
->>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro =
-'___read_32bit_c0_register'
->>>                           "mfc0\t%0, " #source "\n\t"                =
-     \
->>>                           ^
->>>   <inline asm>:1:2: note: instantiated into assembly here
->>>           mfc0    $4, $9
->>>           ^
->>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
->>>   In file included from include/linux/module.h:13:
->>>   In file included from include/linux/stat.h:19:
->>>   In file included from include/linux/time.h:60:
->>>   In file included from include/linux/time32.h:13:
->>>   In file included from include/linux/timex.h:67:
->>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a =
-CPU feature not currently enabled
->>>                   return read_c0_count();
->>>                          ^
->>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from =
-macro 'read_c0_count'
->>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
->>>                                   ^
->>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro =
-'__read_32bit_c0_register'
->>>           ___read_32bit_c0_register(source, sel, __volatile__)
->>>           ^
->>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro =
-'___read_32bit_c0_register'
->>>                           "mfc0\t%0, " #source "\n\t"                =
-     \
->>>                           ^
->>>   <inline asm>:1:2: note: instantiated into assembly here
->>>           mfc0    $2, $9
->>>           ^
->>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
->>>   In file included from include/linux/module.h:13:
->>>   In file included from include/linux/stat.h:19:
->>>   In file included from include/linux/time.h:60:
->>>   In file included from include/linux/time32.h:13:
->>>   In file included from include/linux/timex.h:67:
->>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a =
-CPU feature not currently enabled
->>>                   return read_c0_count();
->>>                          ^
->>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from =
-macro 'read_c0_count'
->>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
->>>                                   ^
->>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro =
-'__read_32bit_c0_register'
->>>           ___read_32bit_c0_register(source, sel, __volatile__)
->>>           ^
->>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro =
-'___read_32bit_c0_register'
->>>                           "mfc0\t%0, " #source "\n\t"                =
-     \
->>>                           ^
->>>   <inline asm>:1:2: note: instantiated into assembly here
->>>           mfc0    $2, $9
->>>           ^
->>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
->>>   In file included from include/linux/module.h:13:
->>>   In file included from include/linux/stat.h:19:
->>>   In file included from include/linux/time.h:60:
->>>   In file included from include/linux/time32.h:13:
->>>   In file included from include/linux/timex.h:67:
->>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a =
-CPU feature not currently enabled
->>>                   return read_c0_count();
->>>                          ^
->>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from =
-macro 'read_c0_count'
->>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
->>>                                   ^
->>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro =
-'__read_32bit_c0_register'
->>>           ___read_32bit_c0_register(source, sel, __volatile__)
->>>           ^
->>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro =
-'___read_32bit_c0_register'
->>>                           "mfc0\t%0, " #source "\n\t"                =
-     \
->>>                           ^
->>>   <inline asm>:1:2: note: instantiated into assembly here
->>>           mfc0    $2, $9
->>>           ^
->>>   4 errors generated.
->>>=20
->>>=20
->>> vim +75 arch/mips/include/asm/timex.h
->>>=20
->>> 9c9b415c50bc29 Ralf Baechle       2013-09-12  71 =20
->>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  72  static inline =
-cycles_t get_cycles(void)
->>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  73  {
->>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  74   if =
-(can_use_mips_counter(read_c0_prid()))
->>> 9c9b415c50bc29 Ralf Baechle       2013-09-12 @75   return =
-read_c0_count();
->>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  76   else
->>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  77   return 0; /* no =
-usable counter */
->>> 9c9b415c50bc29 Ralf Baechle       2013-09-12  78  }
->>> 1c99c6a7c3c599 Jason A. Donenfeld 2022-04-08  79  #define get_cycles =
-get_cycles
->>> 9c9b415c50bc29 Ralf Baechle       2013-09-12  80 =20
->>>=20
->>> :::::: The code at line 75 was first introduced by commit
->>> :::::: 9c9b415c50bc298ac61412dff856eae2f54889ee MIPS: Reimplement =
-get_cycles().
->>>=20
->>> :::::: TO: Ralf Baechle <ralf@linux-mips.org>
->>> :::::: CC: Ralf Baechle <ralf@linux-mips.org>
->>>=20
->>> --=20
->>> 0-DAY CI Kernel Test Service
->>> https://github.com/intel/lkp-tests
->>=20
->> --=20
->> Regards/Gruss,
->>    Boris.
->>=20
->> https://people.kernel.org/tglx/notes-about-netiquette
-
+Marion.
