@@ -2,192 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6EF6E7B05
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 452636E7B18
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233488AbjDSNhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 09:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
+        id S233083AbjDSNl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 09:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjDSNhG (ORCPT
+        with ESMTP id S232035AbjDSNl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 09:37:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B05171D
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:36:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB96263F54
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:36:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1028C433D2;
-        Wed, 19 Apr 2023 13:36:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681911389;
-        bh=sYChbeqEdWIRaGCrv2btDjNr1XPBmPY6fksjrfC6lVQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PfkLMJ0QBRJceVqkdY54PEPexZse6lbVkUBHLvMq6DHqlif+2fJuQyi5SUApdx3y3
-         qYKU/EblFOCECB4PCN5KHanCwzSmqSBqfmx7dZ/avvmltOiCTPS0LSRgMBIqBcIj9m
-         rffYMVytwEl0zmR7WyicukrKlqR8AScCsB7wfg/NRwiLkl4JfFvwTgBZr/8A5kQKG4
-         t1ezHFAKWQvY6b9TD+1uWbWQP018ibz6MR2RZzBbkVpoDlvkVrn9+JiGsHRiqDd1tM
-         eSlx6K24hxEWljGDss7QYqmWE31pGctLp8Dj9W0FdRQRdV0vxAspkfpT60Tj010UxX
-         pJrYc6Z6ro2uA==
-Date:   Wed, 19 Apr 2023 15:36:25 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Victor Hassan <victor@allwinnertech.com>, fweisbec@gmail.com,
-        mingo@kernel.org, jindong.yue@nxp.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tick/broadcast: Do not set oneshot_mask except
- was_periodic was true
-Message-ID: <ZD/uWdz7dKLKlUqH@localhost.localdomain>
-References: <20230412003425.11323-1-victor@allwinnertech.com>
- <87sfd0yi4g.ffs@tglx>
+        Wed, 19 Apr 2023 09:41:58 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2F2E60;
+        Wed, 19 Apr 2023 06:41:56 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id k65-20020a17090a3ec700b00247131783f7so765624pjc.0;
+        Wed, 19 Apr 2023 06:41:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681911716; x=1684503716;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E3S7zUDqSoGDbvXpJqNdjvrmE0MdUknEcdQTrbgz6t4=;
+        b=okkUGo7gegyBD1nHjFvS6ZtyWsjV2AUXQmYK005ZtfngbgAwntbnuR92yEq1p/Xxlf
+         r1ReTZFI6mgRMkXTAa5YLi4cjQ/VbBWji6o5ZExu040KTWeUCsTPNz6EIzTIPL0AM07U
+         GitaV/m6Nd4SCe4M96IfaG10Q/YqQFDbNcb27qu8KBH2DjTjRr68fO4n9IZC9gS+xBVt
+         nzTqmk6ufa8SZGlOyOB4ZCYFwZ4kGu/vmOpzDxHGtLD+RseqQgDZrKRkQJ+tBvVFAqo0
+         XxLnZSQi+jYrkMKuuh+5x74wEpnLPdUgDYnMkosBwDok2fQGFYBVWUBmY7lPD7UhA1Xy
+         oPeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681911716; x=1684503716;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E3S7zUDqSoGDbvXpJqNdjvrmE0MdUknEcdQTrbgz6t4=;
+        b=fUzDDTiq1hwaaWCAEGxlkFirvaK8QU7NLrSwK+PRB6F57E/ex6PzWp5WDv8XhP+bU9
+         pJO5DHTCYy4u8ZlycWKKQZVLqTc85NkLw+EoonOxMGJLuFpDXjg1KTLKmi9egehYqYIN
+         wN1XXWPI7Xo8jNNfhe0KIvVXi8T+QVfgwX4iEOwy1fUmp3bPqA2+4ovWIVxELVlbhloX
+         r1X9prNom41ZundkFSt/sHZ7kmBgrGRvlSl1Qz9wAqEHv8oLNTAIPUk3bdqUTyay9XK6
+         oWEBLMUqHOYDosJxxVte7/O/2kUKKSj3YPu+2ipEOfq5mAnPQQ+AA/iU0x+c3125WrlE
+         vHTg==
+X-Gm-Message-State: AAQBX9dfhaLncySZ6ffDpvlPZEy7Qz0n/PiQEMoqGJ5sIkzqj/h7FMgn
+        ahGg+v/YpzIqLRj8ZBpmv+o=
+X-Google-Smtp-Source: AKy350asPZehfUNLL9aORgUWJy61wPDiDBSsoimxzU9gOkx8nipugfIttaItji5zLn/y5X7EhhuujA==
+X-Received: by 2002:a05:6a21:151b:b0:f0:3c5e:b997 with SMTP id nq27-20020a056a21151b00b000f03c5eb997mr3253130pzb.58.1681911715565;
+        Wed, 19 Apr 2023 06:41:55 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id p22-20020aa78616000000b0063b675f01a2sm9206802pfn.26.2023.04.19.06.41.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 06:41:54 -0700 (PDT)
+Message-ID: <34b5dd08-edac-e32f-1884-c8f2b85f7971@gmail.com>
+Date:   Wed, 19 Apr 2023 21:41:45 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87sfd0yi4g.ffs@tglx>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH 5/5] KVM: x86/pmu: Hide guest counter updates from the
+ VMRUN instruction
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Bangoria, Ravikumar" <ravi.bangoria@amd.com>,
+        Santosh Shukla <santosh.shukla@amd.com>,
+        "Tom Lendacky (AMD)" <thomas.lendacky@amd.com>,
+        Ananth Narayan <ananth.narayan@amd.com>
+References: <20230310105346.12302-1-likexu@tencent.com>
+ <20230310105346.12302-6-likexu@tencent.com> <ZC99f+AO1tZguu1I@google.com>
+ <509b697f-4e60-94e5-f785-95f7f0a14006@gmail.com>
+ <ZDAvDhV/bpPyt3oX@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <ZDAvDhV/bpPyt3oX@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Sat, Apr 15, 2023 at 11:01:51PM +0200, Thomas Gleixner a écrit :
-> @@ -1020,48 +1021,89 @@ static inline ktime_t tick_get_next_peri
->  /**
->   * tick_broadcast_setup_oneshot - setup the broadcast device
->   */
-> -static void tick_broadcast_setup_oneshot(struct clock_event_device *bc)
-> +static void tick_broadcast_setup_oneshot(struct clock_event_device *bc,
-> +					 bool from_periodic)
->  {
->  	int cpu = smp_processor_id();
-> +	ktime_t nexttick = 0;
->  
->  	if (!bc)
->  		return;
->  
->  	/* Set it up only once ! */
-> -	if (bc->event_handler != tick_handle_oneshot_broadcast) {
-> -		int was_periodic = clockevent_state_periodic(bc);
-> -
-> -		bc->event_handler = tick_handle_oneshot_broadcast;
-> -
-> +	if (bc->event_handler == tick_handle_oneshot_broadcast) {
->  		/*
-> -		 * We must be careful here. There might be other CPUs
-> -		 * waiting for periodic broadcast. We need to set the
-> -		 * oneshot_mask bits for those and program the
-> -		 * broadcast device to fire.
-> +		 * The CPU which switches from periodic to oneshot mode
-> +		 * sets the broadcast oneshot bit for all other CPUs which
-> +		 * are in the general (periodic) broadcast mask to ensure
-> +		 * that CPUs which wait for the periodic broadcast are
-> +		 * woken up.
-> +		 *
-> +		 * Clear the bit for the local CPU as the set bit would
-> +		 * prevent the first tick_broadcast_enter() after this CPU
-> +		 * switched to oneshot state to program the broadcast
-> +		 * device.
->  		 */
-> +		tick_broadcast_clear_oneshot(cpu);
+On 7/4/2023 10:56 pm, Sean Christopherson wrote:
+> On Fri, Apr 07, 2023, Like Xu wrote:
+>> On 7/4/2023 10:18 am, Sean Christopherson wrote:
+>>> Wait, really?  VMRUN is counted if and only if it enters to a CPL0 guest?  Can
+>>> someone from AMD confirm this?  I was going to say we should just treat this as
+>>> "normal" behavior, but counting CPL0 but not CPL>0 is definitely quirky.
+>>
+>> VMRUN is only counted on a CPL0-target (branch) instruction counter.
+> 
+> Yes or no question: if KVM does VMRUN and a PMC is programmed to count _all_ taken
+> branches, will the PMC count VMRUN as a branch if guest CPL>0 according to the VMCB?
 
-So this path is reached when we setup/exchange a new tick device
-on a CPU after the broadcast device has been set to oneshot, right?
+YES, my quick tests (based on run_in_user() from KUT on Zen4) show:
 
-Why does it have a specific treatment? Is it for optimization? Or am I
-missing a correctness based reason?
+EVENTSEL_GUESTONLY + EVENTSEL_ALL + VMRUN_to_USR -> AMD_ZEN_BR_RETIRED + 1
+EVENTSEL_GUESTONLY + EVENTSEL_ALL + VMRUN_to_OS -> AMD_ZEN_BR_RETIRED + 1
 
-> +	}
-> +
-> +
-> +	bc->event_handler = tick_handle_oneshot_broadcast;
-> +	bc->next_event = KTIME_MAX;
-> +
-> +	/*
-> +	 * When the tick mode is switched from periodic to oneshot it must
-> +	 * be ensured that CPUs which are waiting for periodic broadcast
-> +	 * get their wake-up at the next tick.  This is achieved by ORing
-> +	 * tick_broadcast_mask into tick_broadcast_oneshot_mask.
-> +	 *
-> +	 * For other callers, e.g. broadcast device replacement,
-> +	 * tick_broadcast_oneshot_mask must not be touched as this would
-> +	 * set bits for CPUs which are already NOHZ, but not idle. Their
-> +	 * next tick_broadcast_enter() would observe the bit set and fail
-> +	 * to update the expiry time and the broadcast event device.
-> +	 */
-> +	if (from_periodic) {
->  		cpumask_copy(tmpmask, tick_broadcast_mask);
-> +		/* Remove the local CPU as it is obviously not idle */
->  		cpumask_clear_cpu(cpu, tmpmask);
-> -		cpumask_or(tick_broadcast_oneshot_mask,
-> -			   tick_broadcast_oneshot_mask, tmpmask);
-> +		cpumask_or(tick_broadcast_oneshot_mask, tick_broadcast_oneshot_mask, tmpmask);
->  
-> -		if (was_periodic && !cpumask_empty(tmpmask)) {
-> -			ktime_t nextevt = tick_get_next_period();
-> +		/*
-> +		 * Ensure that the oneshot broadcast handler will wake the
-> +		 * CPUs which are still waiting for periodic broadcast.
-> +		 */
-> +		nexttick = tick_get_next_period();
-> +		tick_broadcast_init_next_event(tmpmask, nexttick);
->  
-> -			clockevents_switch_state(bc, CLOCK_EVT_STATE_ONESHOT);
-> -			tick_broadcast_init_next_event(tmpmask, nextevt);
-> -			tick_broadcast_set_event(bc, cpu, nextevt);
-> -		} else
-> -			bc->next_event = KTIME_MAX;
-> -	} else {
->  		/*
-> -		 * The first cpu which switches to oneshot mode sets
-> -		 * the bit for all other cpus which are in the general
-> -		 * (periodic) broadcast mask. So the bit is set and
-> -		 * would prevent the first broadcast enter after this
-> -		 * to program the bc device.
-> +		 * If the underlying broadcast clock event device is
-> +		 * already in oneshot state, then there is nothing to do.
-> +		 * The device was already armed for the next tick
-> +		 * in tick_handle_broadcast_periodic()
->  		 */
-> -		tick_broadcast_clear_oneshot(cpu);
-> +		if (clockevent_state_oneshot(bc))
-> +			return;
->  	}
-> +
-> +	/*
-> +	 * When switching from periodic to oneshot mode arm the broadcast
-> +	 * device for the next tick.
-> +	 *
-> +	 * If the broadcast device has been replaced in oneshot mode and
-> +	 * the oneshot broadcast mask is not empty, then arm it to expire
-> +	 * immediately in order to reevaluate the next expiring timer.
-> +	 * nexttick is 0 and therefore in the past which will cause the
-> +	 * clockevent code to force an event.
-> +	 *
-> +	 * For both cases the programming can be avoided when the oneshot
-> +	 * broadcast mask is empty.
-> +	 *
-> +	 * tick_broadcast_set_event() implicitly switches the broadcast
-> +	 * device to oneshot state.
-> +	 */
-> +	if (!cpumask_empty(tick_broadcast_oneshot_mask))
-> +		tick_broadcast_set_event(bc, cpu, nexttick);
+EVENTSEL_GUESTONLY + EVENTSEL_USR + VMRUN_to_USR -> AMD_ZEN_BR_RETIRED + 1
+EVENTSEL_GUESTONLY + EVENTSEL_OS + VMRUN_to_OS -> AMD_ZEN_BR_RETIRED + 1
 
-For the case where the other CPUs have already installed their
-tick devices and if that function is called with from_periodic=true,
-the other CPUs will notice the oneshot change on their next call to
-tick_broadcast_enter() thanks to the lock, right? So the tick broadcast
-will keep firing until all CPUs have been through idle once and called
-tick_broadcast_exit(), right? Because only them can clear themselves
-from tick_broadcast_oneshot_mask, am I understanding this correctly?
+VENTSEL_GUESTONLY + EVENTSEL_OS + VMRUN_to_USR -> No change
+VENTSEL_GUESTONLY + EVENTSEL_USR + VMRUN_to_OS -> No change
 
-I'm trying to find the opportunity for a race with dev->next_event
-being seen as too far ahead in the future but can't manage so far...
+I'm actually not surprised and related test would be posted later.
 
-Thanks.
+> 
+>> This issue makes a guest CPL0-target instruction counter inexplicably
+>> increase, as if it would have been under-counted before the virtualization
+>> instructions were counted.
+> 
+> Heh, it's very much explicable, it's just not desirable, and you and I would argue
+> that it's also incorrect.
+
+This is completely inaccurate from the end guest pmu user's perspective.
+
+I have a toy that looks like virtio-pmu, through which guest users can get 
+hypervisor performance data.
+But the side effect of letting the guest see the VMRUN instruction by default is 
+unacceptable, isn't it ?
+
+> 
+> AMD folks, are there plans to document this as an erratum?  I agree with Like that
+> counting VMRUN as a taken branch in guest context is a CPU bug, even if the behavior
+> is known/expected.
+
++CC: Santosh, Tom, Ananth
+
