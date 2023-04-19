@@ -2,131 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F196E8302
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B71066E8309
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjDSVHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 17:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
+        id S231348AbjDSVIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 17:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjDSVHc (ORCPT
+        with ESMTP id S230254AbjDSVIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 17:07:32 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440DA2107
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:07:31 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-63b621b1dabso100960b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:07:31 -0700 (PDT)
+        Wed, 19 Apr 2023 17:08:18 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E11961BE;
+        Wed, 19 Apr 2023 14:08:16 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso2769649wmo.0;
+        Wed, 19 Apr 2023 14:08:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681938451; x=1684530451;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Oyt6QNUaCcDWPUrakvaGCK9nOfHiZ8gYVdDjTcz/fto=;
-        b=kgFc0QGurAiZIIzkZxeIPwiSnlVM/lKit3blxQeVCUj0g1kp7WaiULBOAoFYqkaGp1
-         qfWjlcusHgSgI0QpB2/gOdRFuqnxeBz4ErAh+jQwxF5AzlzmMHZfhehAuCQ3Q76NRhaL
-         eyVR9R7xEK7BmCr6/TmLWlXv+TMlYD225cfuEWXZoE3z/b9aU4uB88kPFDn77VOm3Jpq
-         0MKZuhVLrXFUKZzyrJVS2Xdz4oBTXpFs0pen7H+CcII6huU07U0ZDNvS93xAXQJ7iG6I
-         zfQcu9UK8+DT3zosYj8lHyf+r/jRK/+ygigA0Mb+uyvWH+DXt5+2E+4UJ1tcVTS4dQ0s
-         58iw==
+        d=gmail.com; s=20221208; t=1681938494; x=1684530494;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9hKavX6galpUw3m8pjNHJAGofqqTil5bnA94vuO7DqA=;
+        b=NDFyOEJPl/51+YYFqyOkBgZKjTCR3wPUDyaVN/Ru9RzFucqvwRc9HKxNXsP/EIYZfI
+         fQqnUeiuJ15yHuNghA0OllKU33BbPqV5po5S+8/xKLi0RbO6gzV/AysijkCFpxPuwnsQ
+         sY17N9n4TV3vfFYGwNYEuVGkSBrxHNaeXbTsstSYfaj6TXksmb++rw7+jT2IhPE796bF
+         fWGesTnLTsM6lPTyMO23+TJKzqJ/Wrm0igYDfjV7X6uB5eDoREDQ3Div50JkusM7uStS
+         h1iq5DCKlVo5PEbDWyBGHuJRst78vvk0rvDfW7dBIOIfRUS5R3xYmXbKDb6mKc1qVsuM
+         0zqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681938451; x=1684530451;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oyt6QNUaCcDWPUrakvaGCK9nOfHiZ8gYVdDjTcz/fto=;
-        b=jXm7BO3jyBPgZhxtYZ+jHWeWMdhlrjDR//bShYhUIVZ9iBMVqVpOUniSCLx318jEc1
-         PryworZKYh7uMVq8jMAhA/kSFgd0vBUvpx2ubwQ+9s5dYDaTvRn9SmzVVzHQGgCC4j4j
-         a0yDiXRkTMZiUtLoefNEIxBPHJ14JmxNIK/0JlgctUh8OeBNz6/wvUT5fABcQikG1JE0
-         3Y9V5OeAuaig0EqAb7klMRy2TZiPaRrxQ/LJgO87ulbDNXaaU8QFbAIKjQ344gLOoFEE
-         FpY7837yW6YbMCZoEpwUnZ3jOvpc7DkWLJ8FkNJBFi95PHFqDmX9A64mJCYRiFsuq7i6
-         tHOQ==
-X-Gm-Message-State: AAQBX9c7aWWgBccFM2/cT9crxu2RyYDCjeGYYNCMeMujx28IMAxr8fDX
-        8OORzxx3HhwDqv89Ll4YpmhcDA==
-X-Google-Smtp-Source: AKy350bj6vmJiYsmaMMiYU0mLociOdx6IlXpNpkUji6dJ5AqERgEKGL0RT5pBwfV4Ctxtuq679ez+w==
-X-Received: by 2002:a05:6a00:4aca:b0:63d:3a18:49fd with SMTP id ds10-20020a056a004aca00b0063d3a1849fdmr6503623pfb.2.1681938450719;
-        Wed, 19 Apr 2023 14:07:30 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id q15-20020a62ae0f000000b0063b8d21be5asm6393691pff.147.2023.04.19.14.07.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 14:07:30 -0700 (PDT)
-Message-ID: <20391481-88bf-2ef4-cac5-7bd2d33c18d6@kernel.dk>
-Date:   Wed, 19 Apr 2023 15:07:29 -0600
+        d=1e100.net; s=20221208; t=1681938494; x=1684530494;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9hKavX6galpUw3m8pjNHJAGofqqTil5bnA94vuO7DqA=;
+        b=Jh6TjEzDPwEfg6BpBzIkFxvgVsekzJsWnZigk1ipncVFkQZk7G/gUJingOq3621EO5
+         9TP/tRPjzuy/XjQPaRK5ElOcRVeuEGMEV6Zwo8aw5IblbwDtlMBAjxk1ocRwAtGCpDXQ
+         /ySpFI0agEHipr4gHos1ZFHUHeE4Jl8ds6hnUunsTxFqitLY09MqIcMxAXQvWLY+If94
+         7ZPHQP5WeUg96Jcshc9ubZZ/lCqFCoKIDrri8vyNlkaBJd1dcq/lgYc8Hw+/Ezx02LI8
+         iZ/q0X0E0q4DSFvysB9zqqiCrg1sPEpVSmu9/qPZVNzgV6uKSynoEjkuSilbJeY1L62I
+         dXqg==
+X-Gm-Message-State: AAQBX9dlXveHZgxvUEnwQFq3+iSS4Xbi5YifvQCPtQQ0v9hzGa22OB5b
+        bjuD/0yjw777Uj0QVcz7U6A=
+X-Google-Smtp-Source: AKy350aXzBzXaBqYHErmjat8ng5mULX8rNlKT+FVMAxugo7/Jbj11yWOl/A2C3Zsh6kJmbLmb7cJhQ==
+X-Received: by 2002:a1c:7207:0:b0:3f1:72fb:461a with SMTP id n7-20020a1c7207000000b003f172fb461amr10046696wmc.2.1681938494445;
+        Wed, 19 Apr 2023 14:08:14 -0700 (PDT)
+Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
+        by smtp.googlemail.com with ESMTPSA id g3-20020a5d5543000000b002fe254f6c33sm81295wrw.92.2023.04.19.14.08.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 14:08:14 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Martin Schiller <ms@dev.tdt.de>, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
+Subject: [PATCH 0/5] leds: trigger: netdev: fixup preparation for LEDs hw control
+Date:   Wed, 19 Apr 2023 23:07:38 +0200
+Message-Id: <20230419210743.3594-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] relayfs: fix out-of-bounds access in relay_file_read
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        zhangzhengming <zhang.zhengming@h3c.com>
-Cc:     surenb@google.com, wuchi.zero@gmail.com, Ilia.Gavrilov@infotecs.ru,
-        xu.panda@zte.com.cn, colin.i.king@gmail.com,
-        linux-kernel@vger.kernel.org, zhou.kete@h3c.com,
-        Pengcheng Yang <yangpc@wangsu.com>
-References: <20230419040203.37676-1-zhang.zhengming@h3c.com>
- <20230419140325.b85d54794baaa828a19c138f@linux-foundation.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230419140325.b85d54794baaa828a19c138f@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 3:03?PM, Andrew Morton wrote:
-> On Wed, 19 Apr 2023 12:02:03 +0800 zhangzhengming <zhang.zhengming@h3c.com> wrote:
-> 
->> From: Zhang Zhengming <zhang.zhengming@h3c.com>
->>
->> There is a crash in relay_file_read, as the var from 
->> point to the end of last subbuf.
->> The oops looks something like:
->> pc : __arch_copy_to_user+0x180/0x310
->> lr : relay_file_read+0x20c/0x2c8
->> Call trace:
->>  __arch_copy_to_user+0x180/0x310
->>  full_proxy_read+0x68/0x98
->>  vfs_read+0xb0/0x1d0
->>  ksys_read+0x6c/0xf0
->>  __arm64_sys_read+0x20/0x28
->>  el0_svc_common.constprop.3+0x84/0x108
->>  do_el0_svc+0x74/0x90
->>  el0_svc+0x1c/0x28
->>  el0_sync_handler+0x88/0xb0
->>  el0_sync+0x148/0x180
->>
->> We get the condition by analyzing the vmcore:
->> 1). The last produced byte and last consumed byte
->>     both at the end of the last subbuf
->> 2). A softirq who will call function(e.g __blk_add_trace)
->>     to write relay buffer occurs when an program calling
->>     function relay_file_read_avail.
->>         relay_file_read
->>                 relay_file_read_avail
->>                         relay_file_read_consume(buf, 0, 0);
->>                         //interrupted by softirq who will write subbuf
->>                         ....
->>                         return 1;
->>                 //read_start point to the end of the last subbuf
->>                 read_start = relay_file_read_start_pos
->>                 //avail is equal to subsize
->>                 avail = relay_file_read_subbuf_avail
->>                 //from  points to an invalid memory address             
->>                 from = buf->start + read_start
->>                 //system is crashed
->>                 copy_to_user(buffer, from, avail)
-> 
-> Thanks.  Hopefully Pengcheng Yang and Jens Axboe can comment.
+This is a continue of [1]. It was decided to take a more gradual
+approach to implement LEDs support for switch and phy starting with
+basic support and then implementing the hw control part when we have all
+the prereq done.
 
-Patch looks good to me, but that doesn't necessarily say much. I never
-did much relayfs hacking, and the bits I did was probably almost 20
-years ago at this point when I wrote blktrace...
+This is a small series in preparation for a bigger change adding support
+for LEDs hw control.
+
+Some minor fixup and improvements are required to add support for LEDs hw
+control for the netdev trigger.
+
+The main fixes are switching to mutex from spinlocks and adding namespace
+to netdev trigger enum modes. These will be exposed in the future in the
+generic linux include folder so LEDs driver may supports these specific
+modes.
+
+While working on htis it was also discovered a bug addressed in the first
+patch of this series.
+
+Changes from the old v8 series:
+- Reword some commits and add more info on why the changes is needed
+- Add fixup patch on dev rename
+
+Christian Marangi (5):
+  leds: trigger: netdev: recheck NETDEV_LED_MODE_LINKUP on dev rename
+  leds: trigger: netdev: drop NETDEV_LED_MODE_LINKUP from mode
+  leds: trigger: netdev: rename add namespace to netdev trigger enum
+    modes
+  leds: trigger: netdev: convert device attr to macro
+  leds: trigger: netdev: use mutex instead of spinlocks
+
+ drivers/leds/trigger/ledtrig-netdev.c | 151 ++++++++++----------------
+ 1 file changed, 59 insertions(+), 92 deletions(-)
 
 -- 
-Jens Axboe
+2.39.2
 
