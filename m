@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D176E754F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42F86E7550
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232650AbjDSId7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
+        id S232666AbjDSIeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232632AbjDSId4 (ORCPT
+        with ESMTP id S232646AbjDSId7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:33:56 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A98A5D5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:33:50 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id o29-20020a05600c511d00b003f1739de43cso1007434wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:33:50 -0700 (PDT)
+        Wed, 19 Apr 2023 04:33:59 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62EB6A42
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:33:51 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id v3so3654580wml.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:33:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681893228; x=1684485228;
+        d=linaro.org; s=google; t=1681893230; x=1684485230;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qMszukETqZzqN2APgbL3HkGY76Y4/3+HTAH7iHHTbjs=;
-        b=fNZBgi5/L3NSZbebaISkqutxQT/xaM4SeSQXMJbnPyvV/yxFlknwejRTPL/+W3vMHN
-         Ts+vcb++sTq5LlGQy+2K0KouVsNq87U5HlHH2CTUEwXoGBmgei3wKuwoe5YEsWWI90Yc
-         5geInkDOs9Yg6o9c/ATkbwFS9GWM2/OaCjNXD3cTLRP8HE6+0EPLdoKkHMNDGCTmpdo4
-         FbVTrAeX3+KiTZ8FapxG7SPn1UAK4Ig7xgGTSnTqUJdgP4rLNlD4h8/pbShZfsYFX+sq
-         yPrVAP9PfOXRYimayZIq4+58i5pWqdnDYbGEKRdj8WYbTjACr2ef41PswIzTWqEcTPRR
-         HPww==
+        bh=3AD5Mv81x1OfSGYx8Typ89SsCtnJrhePS3JykvPhl6k=;
+        b=U1lPcV5heSygJ9ofWDeYojMVM95A+UuxL4ofk2x1ddaWC9Kj08sZlocP26Z78XqGzc
+         fR3RK8uuFdQxxxb9muwhb/ZGMXblcIcZnOciZUhO5/P6g/EKCInzFLax4Wf/OQZc/h6d
+         fKCjA8JpxGA0LwnDv2+vd5S17rpL1fCsNRAZc5yTZ2klDJUk6SUB0b8mlWSLk9teEMN2
+         aoAsio/MzzgtWW+XasJJg/bOlCfIzRlbNWq6iUbodgAn2/1LArJnjC0c3C0nwCtWHB9g
+         Q1XfK6L9EzupyDvj8UPWBtluCKNUWBlEzfpViqBaPvjCd2w61J1cyGx4fWEc5r1IhX/N
+         P16A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681893228; x=1684485228;
+        d=1e100.net; s=20221208; t=1681893230; x=1684485230;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qMszukETqZzqN2APgbL3HkGY76Y4/3+HTAH7iHHTbjs=;
-        b=H6iWjibqBjbtZYsk7Z2YGO3pi9+7Qp8iw1VJs8mErJ68+/USuDBJBPFw8z6AsR9+dl
-         8GHuzicbIOUV/n9tdBovrDpLnBOiIc3m0hBw+mhSXN3Lq33xhpVHOtsdfvvy7NuKxp3P
-         kgjjZhMxmUiW6iw4VeKVWCPYEFnPphTp08JKCF6HDpzDA49ZqwC+0oJvdEtBJIaTvoof
-         0e391Skaaj6UFcqi4mLv/te1XWAPHLh6Vq35Fat7zOBG6gJSGJ2KeJUVpt5ovkitsBNO
-         T8c4kJziPelcP234tMJV+hdwYzRT4sgV1O0ijnwRwbKULkLNYiIj3lMfpcTbPZHla16/
-         Zzrw==
-X-Gm-Message-State: AAQBX9eiRsD8Jm/HCZO/pn5b+60Ax2Hjp94/RUF/wlbkJ6eKf1rOYP8E
-        OwCEuRraGivKphBQtsaUCB6LJw==
-X-Google-Smtp-Source: AKy350aeTvxrVBN4wqb36Ek3mmEth8i47hzKwiDTK0PVlfOxRZIQFDS7D1tHtEb4wmu9rc/CsKT74w==
-X-Received: by 2002:a7b:ce97:0:b0:3f1:6fea:790a with SMTP id q23-20020a7bce97000000b003f16fea790amr8789096wmj.30.1681893228584;
-        Wed, 19 Apr 2023 01:33:48 -0700 (PDT)
+        bh=3AD5Mv81x1OfSGYx8Typ89SsCtnJrhePS3JykvPhl6k=;
+        b=Be2jsJRYCxLy704NrKizPjF9tzyu4t5IVpDLTEw6zQmAwoQJKTkMcTZVH18xXjWVXF
+         3ouH1SPu/xMYGM7mcGsAeeSkqryxlJZcpxnHysQWCGMxGLQhFZzYsgD8ODd0yPO9AB+l
+         IPdw759naGTuzAGScK2Ylq/UF1rqQ24nW3wokehA+E1pIN1wiYzZLZtV4Wx34syZhSIO
+         fGqD15W6/Ea4UL+xr9ZPT1Wz5COE46iiwKHlnLVXmnTof0nxarmI/Wav7Y3C9Ej53oEH
+         O8YFGj3r3LVDYCo3WLkny1nSgkGOyv9L0iScY/MyD/xwVkOQF7UjwOt+mcVk5tQNy1yO
+         XsiQ==
+X-Gm-Message-State: AAQBX9d93+5UpglNhA3UOcFIZZFRXiNdnziJJmtpqTr3QbzsKeDj6nwf
+        OBa4k94295hsBmNcK5vqbOjSUw==
+X-Google-Smtp-Source: AKy350YLyeo8OtAXmyOcq9W+8fi63dp6387Bt1EC39fTL+s5ACJ9IyXM+qJSlsGGkBjLMoeN9poGOA==
+X-Received: by 2002:a7b:c8d0:0:b0:3f1:6eaf:daa7 with SMTP id f16-20020a7bc8d0000000b003f16eafdaa7mr10106422wml.10.1681893230103;
+        Wed, 19 Apr 2023 01:33:50 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:a794:9fb2:29fb:606d])
-        by smtp.gmail.com with ESMTPSA id s5-20020a1cf205000000b003ed1ff06faasm1442033wmc.19.2023.04.19.01.33.47
+        by smtp.gmail.com with ESMTPSA id s5-20020a1cf205000000b003ed1ff06faasm1442033wmc.19.2023.04.19.01.33.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 01:33:48 -0700 (PDT)
+        Wed, 19 Apr 2023 01:33:49 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v4 1/6] thermal/core: Encapsulate tz->device field
-Date:   Wed, 19 Apr 2023 10:33:38 +0200
-Message-Id: <20230419083343.505780-2-daniel.lezcano@linaro.org>
+        linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Tim Zimmermann <tim@linux4.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>
+Subject: [PATCH v4 2/6] thermal/drivers/intel_pch_thermal: Use thermal driver device to write a trace
+Date:   Wed, 19 Apr 2023 10:33:39 +0200
+Message-Id: <20230419083343.505780-3-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230419083343.505780-1-daniel.lezcano@linaro.org>
 References: <20230419083343.505780-1-daniel.lezcano@linaro.org>
@@ -72,57 +74,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are still some drivers needing to play with the thermal zone
-device internals. That is not the best but until we can figure out if
-the information is really needed, let's encapsulate the field used in
-the thermal zone device structure, so we can move forward relocating
-the thermal zone device structure definition in the thermal framework
-private headers.
+The pch_critical() callback accesses the thermal zone device structure
+internals, it dereferences the thermal zone struct device and the 'type'.
 
-Some drivers are accessing tz->device, that implies they need to have
-the knowledge of the thermal_zone_device structure but we want to
-self-encapsulate this structure and reduce the scope of the structure
-to the thermal core only.
-
-By adding this wrapper, these drivers won't need the thermal zone
-device structure definition and are no longer an obstacle to its
-relocation to the private thermal core headers.
+Use the available accessors instead of accessing the structure directly.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/thermal_core.c | 6 ++++++
- include/linux/thermal.h        | 1 +
- 2 files changed, 7 insertions(+)
+ drivers/thermal/intel/intel_pch_thermal.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index c5025aca22ee..842f678c1c3e 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1398,6 +1398,12 @@ int thermal_zone_device_id(struct thermal_zone_device *tzd)
+diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
+index dce50d239357..b3905e34c507 100644
+--- a/drivers/thermal/intel/intel_pch_thermal.c
++++ b/drivers/thermal/intel/intel_pch_thermal.c
+@@ -127,7 +127,8 @@ static int pch_thermal_get_temp(struct thermal_zone_device *tzd, int *temp)
+ 
+ static void pch_critical(struct thermal_zone_device *tzd)
+ {
+-	dev_dbg(&tzd->device, "%s: critical temperature reached\n", tzd->type);
++	dev_dbg(thermal_zone_device(tzd), "%s: critical temperature reached\n",
++		thermal_zone_device_type(tzd));
  }
- EXPORT_SYMBOL_GPL(thermal_zone_device_id);
  
-+struct device *thermal_zone_device(struct thermal_zone_device *tzd)
-+{
-+	return &tzd->device;
-+}
-+EXPORT_SYMBOL_GPL(thermal_zone_device);
-+
- /**
-  * thermal_zone_device_unregister - removes the registered thermal zone device
-  * @tz: the thermal zone device to remove
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 82ddb32f9876..87837094d549 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -313,6 +313,7 @@ thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int
- void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
- const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
- int thermal_zone_device_id(struct thermal_zone_device *tzd);
-+struct device *thermal_zone_device(struct thermal_zone_device *tzd);
- 
- int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
- 				     struct thermal_cooling_device *,
+ static struct thermal_zone_device_ops tzd_ops = {
 -- 
 2.34.1
 
