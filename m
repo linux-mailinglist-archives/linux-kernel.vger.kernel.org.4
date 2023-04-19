@@ -2,121 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEB46E7D3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7796C6E7D53
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbjDSOmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 10:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
+        id S233192AbjDSOpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 10:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233464AbjDSOmO (ORCPT
+        with ESMTP id S232784AbjDSOpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 10:42:14 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5DC6E80
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:42:02 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id he13so22242061wmb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:42:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=freebox-fr.20221208.gappssmtp.com; s=20221208; t=1681915321; x=1684507321;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TNjgEw1XFUwnMr96e+2CQ6Lo6q2FDtNyKhqD3dmTUrE=;
-        b=4LuBgs9yLJSinqw8HSRzEzngPmX5hzcqhMf7QTeuslRyOioxSoXH7W1tHLPFVxL8Dc
-         LKPzpPKd7dgx+TNyX9PyRaBjvqPW0nmct4PZ7GltxoAb0fWMBgWEgvBl5vVBVuxGQFYv
-         MJ6vDW/SShPCy0/rw1wLYMJiDyk5Hvf5QbaefGOwazZPNGr0ynmOWszW+eNNydmSaXGT
-         xzllUv1g1NPH9oFVmm7w/81fjtbJfJd3lm7gT735eTSwdtHtsdwJmk8Qfra9H4une67D
-         W8BbPPVyYV6YT2A/mFNcFiRECiJ1eO4/AV/hWJYIKltcABnR4VBLce1ghxewvHpjG9cw
-         +iAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681915321; x=1684507321;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TNjgEw1XFUwnMr96e+2CQ6Lo6q2FDtNyKhqD3dmTUrE=;
-        b=cWLGsAQ3GBWNj7PWYD/9MUH4XjROtAg2faS1dTQWgdWwJoiY3i3vEkQIAhmT+niSWA
-         A8ZoDr3FEXaHhjAWFJI1pIxW4zw3u22/zSVygaBN0osMQUhLdZ8i4RsW4D7vygwqId4V
-         bLID0f6/XHIXF6lLH9pyfpdW4404sSK2THu5/SmWuqTLplG7iS8wxGazTQK+97QqWcAE
-         Kb9GwA/O7zvv40x8CX6qEt072pWTI0mUkrz8YAlnCkLEoOF1nEYTAmnEzn+tVM1UiAVZ
-         jcJDDF/8ei/XVuMFhmNZv8qsI9EZRK9NclqDbWUMuePFhm+enC9zvmkWcjqQgHghH1Qk
-         3gdw==
-X-Gm-Message-State: AAQBX9eylXadnqLUKg8HVnLx8LqKoWpRs9E4rouBvq/LLSHJ1whe4EbX
-        nV65vIWqMekjT5t9x+nGpr18
-X-Google-Smtp-Source: AKy350YIZQJc5mHrOF4rjTE+t8DJKPx3mv8uZ6JW80wdo5VzHFNPb+JI8VMqvJYSCsJjOCkMBCPsCA==
-X-Received: by 2002:a7b:c7d4:0:b0:3ed:418a:ec06 with SMTP id z20-20020a7bc7d4000000b003ed418aec06mr15495212wmk.28.1681915321030;
-        Wed, 19 Apr 2023 07:42:01 -0700 (PDT)
-Received: from [127.0.1.1] (freebox.vlq16.iliad.fr. [213.36.7.13])
-        by smtp.gmail.com with ESMTPSA id m22-20020a7bcb96000000b003f17131952fsm2388519wmi.29.2023.04.19.07.42.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 07:42:00 -0700 (PDT)
-From:   Arnaud Vrac <avrac@freebox.fr>
-Date:   Wed, 19 Apr 2023 16:41:18 +0200
-Subject: [PATCH 11/11] drm/msm/dpu: do not use mixer that supports dspp
- when not required
+        Wed, 19 Apr 2023 10:45:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79936D317;
+        Wed, 19 Apr 2023 07:45:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2267263851;
+        Wed, 19 Apr 2023 14:44:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83DC9C433A8;
+        Wed, 19 Apr 2023 14:44:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681915497;
+        bh=wWkzRl1bal72Ksstv2NW9WU1+ZfobVIm+Keq4QJzHOM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AW1ycGEg70wqx4sbMR5KKjxHpdpWo8ojboJjJXNi1+UhU2HzrVi6iBk2smkaSETGN
+         nCU1KMdD8zN8DgWQkEGFvx0nVXQfqYhkjpzVGxsfVXkQE+gvB2U319PbXWbXu0BkFD
+         A70H2Gl8qq9kmQklhtU0iwS0q8/YQxgiJ2qUSQ6WJWK2BCupLW7WB5/w256Cl0Vw6s
+         fnSqiT01FAVr6uSbeGGChXferxHjiR7tQ26YhoiJP+74D3C19Ovs9Ysfz4TAURTJy1
+         gQImPbbwGDHu1e5nszzeRdl2ld0cFuclN/jWyOc6VWQM5PHUJB6/S6gf9jL/Kj8gC+
+         Ey8xngZ6NM97Q==
+Received: by mail-lj1-f175.google.com with SMTP id k15so16578630ljq.4;
+        Wed, 19 Apr 2023 07:44:57 -0700 (PDT)
+X-Gm-Message-State: AAQBX9f7E/HyJGz4mmkCvx7fj76NMLcpwG8G1hevg/XhWWGAGeIy1zpT
+        pmTn6UT5NRoNuUHXBYcfwQJkMu8nLLvMdXDVpqI=
+X-Google-Smtp-Source: AKy350bCMi+LROSXgZOTDyz9U+/dbBjR1BGsAJxbDf18an2K6nxd2pTYEyUVm0Dl7Z3tqnheaAXp16510oSO8ply7uE=
+X-Received: by 2002:a05:651c:238:b0:2a7:a638:d2a1 with SMTP id
+ z24-20020a05651c023800b002a7a638d2a1mr862694ljn.18.1681915495467; Wed, 19 Apr
+ 2023 07:44:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230419-dpu-tweaks-v1-11-d1bac46db075@freebox.fr>
-References: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
-In-Reply-To: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Arnaud Vrac <avrac@freebox.fr>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=774; i=avrac@freebox.fr;
- h=from:subject:message-id; bh=eCHzSh6ygzKMrynLk5I85+wK8ZD9bT9L4MBgozHvN38=;
- b=owEBbQKS/ZANAwAIAXED/9m7NDSrAcsmYgBkP/2wtV1Bh/RNv/ZG/8M0oZScFy8jinYXpQd0Z
- l2D8Gf954aJAjMEAAEIAB0WIQSUwb/ndwkXHdZ/QQZxA//ZuzQ0qwUCZD/9sAAKCRBxA//ZuzQ0
- q1UJD/46OiGy56oZou1FdqKU/7l7QduKNHg/kGvjVQ6ejPCZbi3rN1/KsuGcpsfBDYnC9kEplxb
- uvdYGoJX7RbyRfP0M3er/R6d7fMOk7+uwCXDmsyGn5VfJ7qpkCgEutRG5O4KWV1oeiMna21h5F+
- DxVJuA2pBpUFw7JjL6fGQh1Sng8FWO8Uzcf391FHb3cK0xFZv0KXlAZAx4c6OpodRauIXYXkNd1
- Jcu5WViknxy5Ftn5+rJxEstwF7C63jyhlPLrZhjTyKqiCWVfyFXjEWAjGFdr/TkXh5WAEjbhSSt
- mU7nNxVjPtdxR6ie2B698VBZj3If5GylQw0/7BVI1Lq5qUA8eqzENzlcX+r6s3G0Lliqr3Zzl6F
- Sb1WxTjhcgQTYWU2Lotuy1lRuydJoEpSDSBpTnF4/agODy2JryUMyueEMDsy45r/1JSHkLKGNWY
- Pxle7Moqu1T+SjaNR7FQcs0TaLpSNvLGdjSregG/hZjCAWYtx8IIfLuuMKYRUTNLJ8X7jpS3E4t
- if08fYjYLSdG8uEyrg8/r7C4/A8NbcuuGuppH+nYYs/fnrfZguQQ/b9w9ZqLB08fs+zi0Ofy6Q7
- BWH5IzsYUYPdCf1/YN9bRJVoomXeRs5JSezRgMaF+ItDKS+kvI7o55nypbz0Ktlkt/IdxqkEhso
- yRJYDH3EDrznDuw==
-X-Developer-Key: i=avrac@freebox.fr; a=openpgp;
- fpr=6225092072BB58E3CEEC091E75392A176D952DB4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230416120729.2470762-1-ardb@kernel.org> <jwvybt4sro56aiqvddn6jxdjpdelasdhl747c25kzv4vbjr7ph@fbtheokrtxce>
+In-Reply-To: <jwvybt4sro56aiqvddn6jxdjpdelasdhl747c25kzv4vbjr7ph@fbtheokrtxce>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 19 Apr 2023 16:44:44 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXE4xF9RJbaR0H6uuFxxroUJxQFo8WThb=SUa7H0OpDxUg@mail.gmail.com>
+Message-ID: <CAMj1kXE4xF9RJbaR0H6uuFxxroUJxQFo8WThb=SUa7H0OpDxUg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/3] efi: Implement generic zboot support
+To:     Gerd Hoffmann <kraxel@redhat.com>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Evgeniy Baskov <baskov@ispras.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This avoids using lm blocks that support DSPP when not needed, to
-keep those resources available.
+On Wed, 19 Apr 2023 at 07:54, Gerd Hoffmann <kraxel@redhat.com> wrote:
+>
+> On Sun, Apr 16, 2023 at 02:07:26PM +0200, Ard Biesheuvel wrote:
+> > This series is a proof-of-concept that implements support for the EFI
+> > zboot decompressor for x86. It replaces the ordinary decompressor, and
+> > instead, performs the decompression, KASLR randomization and the 4/5
+> > level paging switch while running in the execution context of EFI.
+> >
+> > This simplifies things substantially, and makes it straight-forward to
+> > abide by stricter future requirements related to the use of writable and
+> > executable memory under EFI, which will come into effect on x86 systems
+> > that are certified as being 'more secure', and ship with an even shinier
+> > Windows sticker.
+> >
+> > This is an alternative approach to the work being proposed by Evgeny [0]
+> > that makes rather radical changes to the existing decompressor, which
+> > has accumulated too many features already, e.g., related to confidential
+> > compute etc.
+> >
+> > EFI zboot images can be booted in two ways:
+> > - by EFI firmware, which loads and starts it as an ordinary EFI
+> >   application, just like the existing EFI stub (with which it shares
+> >   most of its code);
+> > - by a non-EFI loader that parses the image header for the compression
+> >   metadata, and decompresses the image into memory and boots it.
+>
+> I like the idea to have all EFI archs handle compressed kernels the same
+> way.
+>
+> But given that going EFI-only on x86 isn't a realistic option for
+> distros today this isn't really an alternative for Evgeny's patch
+> series, we have to fix the existing bzImage decompressor too.
+>
 
-Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I tend to agree, although some clarification would be helpful
+regarding what is being fixed and why? I *think* I know, but I have
+not been involved as deeply as some of the distro folks in getting
+these requirements explicit.
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-index f4dda88a73f7d..4b393d46c743f 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-@@ -362,7 +362,7 @@ static bool _dpu_rm_check_lm_and_get_connected_blks(struct dpu_rm *rm,
- 	*pp_idx = idx;
- 
- 	if (!reqs->topology.num_dspp)
--		return true;
-+		return !lm_cfg->dspp;
- 
- 	idx = lm_cfg->dspp - DSPP_0;
- 	if (idx < 0 || idx >= ARRAY_SIZE(rm->dspp_blks)) {
+> Realistically, the second option is unlikely to ever be used on x86,
+>
+> What would be needed to do so?  Teach kexec-tools and grub2 parse and
+> load zboot kernels I guess?
+>
 
--- 
-2.40.0
+I already implemented this for mach-virt here, so we can load Fedora
+kernels without firmware:
 
+https://gitlab.com/qemu-project/qemu/-/commit/ff11422804cd03494cc98691eecd3909ea09ab6f
+
+On arm64, this is probably more straight-forward, as the bare metal
+image is already intended to be booted directly like that. However,
+the x86 uncompressed image requires surprisingly little from all the
+boot_params/setup_header cruft to actually boot, so perhaps there it
+is easy too.
+
+There is an unresolved issue related to kexec_load_file(), where only
+the compressed image is signed, but the uncompressed image is what
+ultimately gets booted, which either needs the decompression to occur
+in the kernel, or a secondary signature that the kernel can verify
+after the decompression happens in user space.
+
+Dave and I have generated several ideas here, but there hasn't been
+any progress towards a solution that seems palatable for upstream.
