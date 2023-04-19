@@ -2,110 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD1E6E788A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDEC6E788E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbjDSLX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 07:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
+        id S231391AbjDSLZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 07:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232902AbjDSLXs (ORCPT
+        with ESMTP id S232711AbjDSLZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 07:23:48 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE73CC3A
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:23:22 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f182d74658so407135e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:23:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681903400; x=1684495400;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MJaD7fXEAvYuTbSM75xX8Hr2S7PXb+gmhtMbcdPKD34=;
-        b=LT0hnR4L4vk2hcE2A0PvFmn2eTY7c/x6jjdyIxU4tcHg2ayO6ayOmKDS7i1HG7gLQT
-         wsTa19J64Dda7rQjD8PLaOHsMCzPyzGuxWHit0ZZBg5wW+2agfnXhK6dM44M9q16HvkY
-         Vsf80BldIY+MVuqr4+aESTxS62XNJotKUud1W9KPO1nQu/N6imT9qF5IHP1BhMTbjgTC
-         bN88ZFLadbPZoBgI6LOJpqBUGjAXprPeHOqRoCoB9K/ptstjdIxbl+NUKQznSX4qv2bm
-         6zSwxYybSWpLZUQhrkKjoePKhxQu43OUrHWpKSt/8MN0rbYKZj8MQpendyJt5XuZ3VrW
-         AnAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681903400; x=1684495400;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MJaD7fXEAvYuTbSM75xX8Hr2S7PXb+gmhtMbcdPKD34=;
-        b=C5vl7IQuGts2+GLRTOUlJUO2k7866ev7NIr21HZB6qdqJvlVoSaf43xwa1CdgTmRxI
-         aHCQBX5SGwq6ERVlz+208+44nMYkWrlRJxiSgO1T8LT4Ry7k6mqvlToT44z1nj3PFXlp
-         84EIqSIt6DTQSEWykj1JJ6YHWEKoirD/WuEPX0Z0sN2s/F+CawXaxZXg6/hZ3LbYwyYK
-         vkNihKS4w+HGgIK6IQjmqC5JmWyUIzctWB/ukvDfutb+V5SDtadbxrRfDp7lrSgTIGnu
-         h/SFETDbcAxXhFsHCFpiIHn2lGi+uOzsKylFkGP31Wjw/e9KTt9frQVRyiVjYlHfAFN5
-         7J1Q==
-X-Gm-Message-State: AAQBX9e912tGRk31jpF3pBtNED6IuvZIW66vqK0KhvtmQUPBsToj8hWB
-        SNRPy0OeRGDWNfIjxeYjI27gWQ==
-X-Google-Smtp-Source: AKy350ZhBsf72Zmu68VQgDH9ExnPMMR1SIAr7YW5IrJftrf6cCb+wwm/BHYD5Wsku/qg1zDpSbVQFQ==
-X-Received: by 2002:adf:f745:0:b0:2f7:6d72:561f with SMTP id z5-20020adff745000000b002f76d72561fmr4372733wrp.48.1681903400338;
-        Wed, 19 Apr 2023 04:23:20 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id f12-20020adffccc000000b002d45575643esm15484506wrs.43.2023.04.19.04.23.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 04:23:19 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 14:23:16 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     yingsha xu <ysxu@hust.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Benc <jbenc@suse.cz>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        hust-os-kernel-patches@googlegroups.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: mac80211: use IS_ERR to check return value
-Message-ID: <85ce5bf1-810d-4a7b-a465-e25aa34f719b@kili.mountain>
-References: <20230416083028.14044-1-ysxu@hust.edu.cn>
- <f23c038b2b586a45a8b3c757495d5bb51ee4ac7e.camel@sipsolutions.net>
+        Wed, 19 Apr 2023 07:25:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EA07A9B
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:24:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06CA661524
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 11:24:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC3AC433EF;
+        Wed, 19 Apr 2023 11:24:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681903489;
+        bh=PanmDTu5lRIgSn8GKJ9uoLf6Evo6osxCZ4efcHlSt3U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iWQ76DyFPVUXh4v11hmPber04xI849i4omW2/7EpTyHlfQDeFGzMNdfmt/ptO7kEL
+         Uj9fIK7xlz6KlyMtCZstTGAlwRevPS5u8I2hHOsbzqk6F1kIhcKYdcTlGY5bGwF6T/
+         udu4HtrAfP/zvSChXI+Y4wOJ+6HPJDr0L32KI+1AfW2mspcd+mqXM0cQgyIaWEVCcF
+         JODgl1mC7L1n3tsOOOG9mTMwukBNITvN7ANRt3v8hI9dhTFeidy2nYOOKjYBevJzHH
+         WPoFWj41GmJQdCTm5w+jN8IBCbM7NFwqL51yEahYRBtJSm4zE5NvL4+XDU9YtanTWI
+         FlKc3OmIggNRw==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
+Cc:     Wayne.Lin@amd.com, lyude@redhat.com, alexdeucher@gmail.com,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] drm: use mgr->dev in drm_dbg_kms in drm_dp_add_payload_part2
+Date:   Wed, 19 Apr 2023 07:24:46 -0400
+Message-Id: <20230419112447.18471-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f23c038b2b586a45a8b3c757495d5bb51ee4ac7e.camel@sipsolutions.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 10:36:14AM +0200, Johannes Berg wrote:
-> On Sun, 2023-04-16 at 16:30 +0800, yingsha xu wrote:
-> > According to the annotation of function debugfs_create_fs, if
-> > an error occurs, ERR_PTR(-ERROR) will be returned instead of
-> > a null pointer or zero value.
-> > 
-> > Fix it by using IS_ERR().
-> 
-> I don't this this is right, or fixed anything ...
-> 
-> If debugfs indeed returned an ERR_PTR() value, then the later debugfs
-> adds will do nothing.
-> 
-> Since it doesn't look like debugfs_create_dir() can actually return NULL
-> these days (not sure it ever could), I guess we can even remove the
-> check.
-> 
+I've been experiencing some intermittent crashes down in the display
+driver code. The symptoms are ususally a line like this in dmesg:
 
-Correct.  They have a patch ready which deletes the check and the
-comment.  Someone should have replied to this thread to NAK their own
-patch so that you didn't bother reviewing it.
+    amdgpu 0000:30:00.0: [drm] Failed to create MST payload for port 000000006d3a3885: -5
 
-> But you could've just read the comment there too, to know what the NULL
-> check was about ...
+...followed by an Oops due to a NULL pointer dereference.
 
-The comment was always wrong.  Debugfs could return NULL but then
-the other debugfs functions turned into no ops...
+Switch to using mgr->dev instead of state->dev since "state" can be
+NULL in some cases.
 
-regards,
-dan carpenter
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=2184855
+Suggested-by: Jani Nikula <jani.nikula@linux.intel.com>
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+ drivers/gpu/drm/display/drm_dp_mst_topology.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+I've been running this patch for a couple of days, but the problem
+hasn't occurred again as of yet. It seems sane though as long as we can
+assume that mgr->dev will be valid even when "state" is a NULL pointer.
+
+diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+index 38dab76ae69e..e2e21ce79510 100644
+--- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
++++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+@@ -3404,7 +3404,7 @@ int drm_dp_add_payload_part2(struct drm_dp_mst_topology_mgr *mgr,
+ 
+ 	/* Skip failed payloads */
+ 	if (payload->vc_start_slot == -1) {
+-		drm_dbg_kms(state->dev, "Part 1 of payload creation for %s failed, skipping part 2\n",
++		drm_dbg_kms(mgr->dev, "Part 1 of payload creation for %s failed, skipping part 2\n",
+ 			    payload->port->connector->name);
+ 		return -EIO;
+ 	}
+-- 
+2.39.2
+
