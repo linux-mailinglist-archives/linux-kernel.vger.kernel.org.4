@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FDA6E71DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF136E71DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbjDSDtM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 23:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
+        id S232055AbjDSDtG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 23:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231980AbjDSDsq (ORCPT
+        with ESMTP id S231825AbjDSDsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 23:48:46 -0400
+        Tue, 18 Apr 2023 23:48:42 -0400
 Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A208E;
-        Tue, 18 Apr 2023 20:48:43 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A542688;
+        Tue, 18 Apr 2023 20:48:38 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 7D40724E24B;
-        Wed, 19 Apr 2023 11:48:42 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 19 Apr
- 2023 11:48:35 +0800
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id A32E724E23E;
+        Wed, 19 Apr 2023 11:48:36 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 19 Apr
+ 2023 11:48:36 +0800
 Received: from ubuntu.localdomain (113.72.144.253) by EXMBX162.cuchost.com
  (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 19 Apr
  2023 11:48:35 +0800
@@ -39,9 +39,9 @@ CC:     Walker Chen <walker.chen@starfivetech.com>,
         Hal Feng <hal.feng@starfivetech.com>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>
-Subject: [PATCH v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
-Date:   Tue, 18 Apr 2023 20:48:27 -0700
-Message-ID: <20230419034833.43243-2-changhuang.liang@starfivetech.com>
+Subject: [PATCH v2 2/6] soc: starfive: Replace SOC_STARFIVE with ARCH_STARFIVE
+Date:   Tue, 18 Apr 2023 20:48:28 -0700
+Message-ID: <20230419034833.43243-3-changhuang.liang@starfivetech.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230419034833.43243-1-changhuang.liang@starfivetech.com>
 References: <20230419034833.43243-1-changhuang.liang@starfivetech.com>
@@ -61,70 +61,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add AON PMU for StarFive JH7110 SoC, it can be used to turn on/off DPHY
-rx/tx power switch, and it don't need the properties of reg and
-interrupts.
+Using ARCH_FOO symbol is preferred than SOC_FOO.
 
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Walker Chen <walker.chen@starfivetech.com>
 Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
 ---
- .../bindings/power/starfive,jh7110-pmu.yaml       | 15 +++++++++++++--
- include/dt-bindings/power/starfive,jh7110-pmu.h   |  3 +++
- 2 files changed, 16 insertions(+), 2 deletions(-)
+ drivers/soc/starfive/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/power/starfive,jh7110-pmu.yaml b/Documentation/devicetree/bindings/power/starfive,jh7110-pmu.yaml
-index 98eb8b4110e7..c50507c38e14 100644
---- a/Documentation/devicetree/bindings/power/starfive,jh7110-pmu.yaml
-+++ b/Documentation/devicetree/bindings/power/starfive,jh7110-pmu.yaml
-@@ -8,6 +8,7 @@ title: StarFive JH7110 Power Management Unit
- 
- maintainers:
-   - Walker Chen <walker.chen@starfivetech.com>
-+  - Changhuang Liang <changhuang.liang@starfivetech.com>
- 
- description: |
-   StarFive JH7110 SoC includes support for multiple power domains which can be
-@@ -17,6 +18,7 @@ properties:
-   compatible:
-     enum:
-       - starfive,jh7110-pmu
-+      - starfive,jh7110-aon-pmu
- 
-   reg:
-     maxItems: 1
-@@ -29,10 +31,19 @@ properties:
- 
- required:
-   - compatible
--  - reg
--  - interrupts
-   - "#power-domain-cells"
- 
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: starfive,jh7110-pmu
-+    then:
-+      required:
-+        - reg
-+        - interrupts
-+
- additionalProperties: false
- 
- examples:
-diff --git a/include/dt-bindings/power/starfive,jh7110-pmu.h b/include/dt-bindings/power/starfive,jh7110-pmu.h
-index 132bfe401fc8..0bfd6700c144 100644
---- a/include/dt-bindings/power/starfive,jh7110-pmu.h
-+++ b/include/dt-bindings/power/starfive,jh7110-pmu.h
-@@ -14,4 +14,7 @@
- #define JH7110_PD_ISP		5
- #define JH7110_PD_VENC		6
- 
-+#define JH7110_PD_DPHY_TX	0
-+#define JH7110_PD_DPHY_RX	1
-+
- #endif
+diff --git a/drivers/soc/starfive/Kconfig b/drivers/soc/starfive/Kconfig
+index bdb96dc4c989..1e9b0c414fec 100644
+--- a/drivers/soc/starfive/Kconfig
++++ b/drivers/soc/starfive/Kconfig
+@@ -3,8 +3,8 @@
+ config JH71XX_PMU
+ 	bool "Support PMU for StarFive JH71XX Soc"
+ 	depends on PM
+-	depends on SOC_STARFIVE || COMPILE_TEST
+-	default SOC_STARFIVE
++	depends on ARCH_STARFIVE || COMPILE_TEST
++	default ARCH_STARFIVE
+ 	select PM_GENERIC_DOMAINS
+ 	help
+ 	  Say 'y' here to enable support power domain support.
 -- 
 2.25.1
 
