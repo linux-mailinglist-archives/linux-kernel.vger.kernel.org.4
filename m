@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC286E74FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5886E7502
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232010AbjDSI0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
+        id S232484AbjDSI1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjDSI0e (ORCPT
+        with ESMTP id S232460AbjDSI1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:26:34 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08E119A7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:26:32 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id dx24so35512682ejb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:26:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681892791; x=1684484791;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Cn8sw9IP8LiVn6+N6W0wmYqLVqWZIVaQNaxL7vP2/hY=;
-        b=J1i/i0FgqzTKm7G0QiddqXo6Ri5/9n1aNp1jCQ+jZKrMagLa0Gj1HtFV59bes7i9VZ
-         G83lDzwDi1A7HpHxF9kROzaxgYHN4dpfF7ztMXna/pdwIWRcllZsMJ8HYqtNKKKZJKpS
-         w93rgHqH8IiKjWMa6duvs2JsAQt+9hggM7KR71VvR8Ok1eSji6GuvbLGqVCWXje1Y9ac
-         chpMvoL89Gt5HCkKOmUXrRuU56SOJ6EN7LZLFhFzz1pA7FDcE39zLeUlyCsBWVW5/6IZ
-         bLZoNM7V01Ok6swveYYyirxGp7XnNm+VNvdRETMimsnBRZeBROBjE/RckkLuZrK98KWk
-         Jtsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681892791; x=1684484791;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cn8sw9IP8LiVn6+N6W0wmYqLVqWZIVaQNaxL7vP2/hY=;
-        b=L5n7A8q9BpUDAjgvenfSCrAtr1QTJVO51O8zdD5zILNskWHbPEqRH5FpwExfFHIOFz
-         vGjn0LOFjvwegZ5KMAh1SVen/3hXYYeiGhF8C1VPHlXIUc8CrF5RUWdfItAqxp6u8oEy
-         groVehCk3jabKiB5GpWh42ZrDuF5Nqyg+236opoKP0GcvbXAg7eQ1tOK+EDWu0g8eEwL
-         E7kUDk+PbIx7tFoWJ+tUtkr4XKFLUL+TT9zWO9zzwT/tUEnkZbQHjYRwkMkgs6IFhVy/
-         lBLtx5tw8/+t6jdy7fpa+DJQqUmyhlpwF38wSyDPMPZeMMPFrO9bAmEf+k88CNR0Xfyf
-         IcvQ==
-X-Gm-Message-State: AAQBX9fpMW6Cof31kqcvBi0kyYg5H6cRyMGL1VFg95AkYBDBz1MnJF0P
-        I0VbvSHLNBe6spbYtiYX4XUv4A==
-X-Google-Smtp-Source: AKy350bRJ1WkIkaKqBC4j+0kdeEKhVCv+zX5drbWouRUp1ZA6qztn4VVUu2MljyPUD/o+nvd8267LQ==
-X-Received: by 2002:a17:907:75ca:b0:94f:680d:3437 with SMTP id jl10-20020a17090775ca00b0094f680d3437mr9858125ejc.17.1681892791421;
-        Wed, 19 Apr 2023 01:26:31 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:62f5:eb43:f726:5fee? ([2a02:810d:15c0:828:62f5:eb43:f726:5fee])
-        by smtp.gmail.com with ESMTPSA id rp26-20020a170906d97a00b0094f3132cb86sm5681596ejb.40.2023.04.19.01.26.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 01:26:31 -0700 (PDT)
-Message-ID: <3aeac99f-aef3-ee22-f307-3871b141dc7b@linaro.org>
-Date:   Wed, 19 Apr 2023 10:26:30 +0200
+        Wed, 19 Apr 2023 04:27:12 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F30E51;
+        Wed, 19 Apr 2023 01:27:11 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33J8R6Ej028178;
+        Wed, 19 Apr 2023 03:27:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681892826;
+        bh=fpxwJ4UuCMRbCcS/k/rtxuIckU067HMuYB3fKrjP3yc=;
+        h=Date:To:CC:From:Subject;
+        b=mL8Dy4ulpeN+pLr9vNqZNsgRC0yE11hf8R1fsONMiUgciDhgrA6l2Au4LrO02Pc/M
+         MlphJdC7ERymUWdRboD79MyEymnXyCuhN5xBMv4QcV9BWg/0gw/r0N3G7VQrOFwYZU
+         hpO9PK4CEHLle9XyBXxgS71pIeFwkxUQr0ivALTc=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33J8R6dw104653
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 19 Apr 2023 03:27:06 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
+ Apr 2023 03:27:05 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 19 Apr 2023 03:27:05 -0500
+Received: from [10.24.69.141] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33J8R2Sp017432;
+        Wed, 19 Apr 2023 03:27:03 -0500
+Message-ID: <291807c9-8d1c-56f0-ee39-4d221e18bd1a@ti.com>
+Date:   Wed, 19 Apr 2023 13:57:02 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] net: nfc: nci: fix for UBSAN: shift-out-of-bounds in
- nci_activate_target
+ Thunderbird/102.4.2
 Content-Language: en-US
-To:     Anup Sharma <anupnewsmail@gmail.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linma@zju.edu.cn, dvyukov@google.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ZD9A5Krm+ZoFEFWZ@yoga>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZD9A5Krm+ZoFEFWZ@yoga>
-Content-Type: text/plain; charset=UTF-8
+To:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <vkoul@kernel.org>,
+        =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        "J, KEERTHY" <j-keerthy@ti.com>, <u-kumar1@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>,
+        "Menon, Nishanth" <nm@ti.com>
+From:   Vaishnav Achath <vaishnav.a@ti.com>
+Subject: Question: dmaengine: dma_request_chan_by_mask() and DMA controller
+ probe order
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,69 +69,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2023 03:16, Anup Sharma wrote:
-> syzbot found  UBSAN: shift-out-of-bounds in nci_activate_target [1],
-> when nci_target->supported_protocols is bigger than UNIT_MAX,
+Hi,
 
-UINT_MAX?
+In dma_request_chan_by_mask() , the probe defer logic returns -EPROBE_DEFER if
+there are no DMA devices registered yet. But in case of multiple DMA controllers
+in an SoC and when only one(or a subset) of the controllers have finished probe
+dma_request_chan_by_mask() can return -ENODEV incorrectly since the first DMA
+device probed might not support the particular mask requested.
 
-> where supported_protocols is unsigned 32-bit interger type.
+What is the recommended solution to avoid situation like these?
 
-integer?
+Consider the following scenario for example:
 
-> 
-> 32 is the maximum allowed for supported_protocols. Added a check
-> for it. 
-> 
-> [1] UBSAN: shift-out-of-bounds in net/nfc/nci/core.c:912:45
-> shift exponent 4294967071 is too large for 32-bit type 'int'
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
->  ubsan_epilogue lib/ubsan.c:217 [inline]
->  __ubsan_handle_shift_out_of_bounds+0x221/0x5a0 lib/ubsan.c:387
->  nci_activate_target.cold+0x1a/0x1f net/nfc/nci/core.c:912
->  nfc_activate_target+0x1f8/0x4c0 net/nfc/core.c:420
->  nfc_genl_activate_target+0x1f3/0x290 net/nfc/netlink.c:900
->  genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
->  genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
-> 
-> Reported-by: syzbot+0839b78e119aae1fec78@syzkaller.appspotmail.com
-> Link: https://syzkaller.appspot.com/bug?id=19cf2724120ef8c51c8d2566df0cc34617188433
-> 
-> Signed-off-by: anupsharma <anupnewsmail@gmail.com>
-> ---
->  net/nfc/nci/core.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/net/nfc/nci/core.c b/net/nfc/nci/core.c
-> index fff755dde30d..e9d968bd1cd9 100644
-> --- a/net/nfc/nci/core.c
-> +++ b/net/nfc/nci/core.c
-> @@ -908,6 +908,11 @@ static int nci_activate_target(struct nfc_dev *nfc_dev,
->  		pr_err("unable to find the selected target\n");
->  		return -EINVAL;
->  	}
-> +	
-> +	if (nci_target->supported_protocols >= 32) {
+SoC has two DMA controllers, one instance of system DMA, one dedicated for
+Camera subsytem which does not support DMA_MEMCPY and has lesser number of channels.
 
-I don't think it makes any sense. How do you protect from UBSAN reported
-shift? Why supported_protocols cannot be 33? You are not shifting the
-supported_protocols...
+* Camera subsystem DMA is probed first.
+* Another peripheral requests dma_request_chan_by_mask(DMA_MEMCPY)
+* dmaengine returns -ENODEV for above as the controller with DMA_MEMCPY support
+is not ready yet.
+* System DMA is probed later but peripheral driver failed to start with DMA.
 
-> +		pr_err("Too many supported protocol by the device\n");
-> +		return -EINVAL;
-
-I am pretty sure that you broke now NFC. Test the patches first and
-share your test scenario.
-
-> +	}
->  
->  	if (!(nci_target->supported_protocols & (1 << protocol))) {
-
-
-
-Best regards,
-Krzysztof
-
+-- 
+Thanks and Regards,
+Vaishnav
