@@ -2,201 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BD26E826C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A076E8272
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbjDSUL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 16:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
+        id S230042AbjDSUPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 16:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjDSUL4 (ORCPT
+        with ESMTP id S229682AbjDSUPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 16:11:56 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D8F4C33;
-        Wed, 19 Apr 2023 13:11:54 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33JIxtmO018870;
-        Wed, 19 Apr 2023 20:11:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=4lRYuddyzyOZ7T7y8ZQegTBdQ60Z0hvBn21Sa+GzYxQ=;
- b=HvRchAgw02Ch8X+g29yHnN9vf5u/PuEGXhDu3jNbwFNO1KnGHGWzqFDlFNrQzsLQ5fGg
- QJ6noOXZa1j0gQxbICLW9KK8XTyMfJ0K7pYuXdTABeJ+wRj3ZzKxVTvmMoRda0wQ0U5f
- t4Em5ru1v5xW8DVsEnuPMpzltCDUnj5WjB6zlhgCqCC1PQTY4njXrc80FsRmNvAkB18Z
- YI4AHEWD+Rl7IzANQzuveqt2Pm7DSzYY7MtJ7sIYOL84ykMKMhiNZjEHOvOqwyVde2nK
- MRsYQ/xNFnjJX2RQoDrfajVUwH8Kn6mz8bxDpxAI5IQ6PlZ8HN54yh12G3VwCMCQPWgH Jg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q2nn807cf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 20:11:46 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33JKBjHY024484
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 20:11:46 GMT
-Received: from [10.134.71.70] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 19 Apr
- 2023 13:11:44 -0700
-Message-ID: <77bb1b3c-09cb-310a-be34-166e573a13a7@quicinc.com>
-Date:   Wed, 19 Apr 2023 13:11:43 -0700
+        Wed, 19 Apr 2023 16:15:53 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C69124
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:15:52 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-5180ad24653so35776a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:15:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681935351; x=1684527351;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uEZv1+Sjy8aPaSMjtOnGV5vUYFV+uw4lXf3C6WgeEKE=;
+        b=kqmbcIMcU4sefLMfBO5v9IBowedzR2UPkBRN2Gq1QQgY4Y/4fl2cWlTgxRnT3tn90r
+         Hk70xLyL/z9yAbzvABd8SjQeVaX23dgCpELjiH4Bpwh+zTOAKdhHR2+BRXe48JsUmv3D
+         Phs/qFbZDTIG2/TpbtXAsxTbJ12fcLZTusv6B4dKMhI0CaLjKYdlR4N/Dy+JphMT8M2/
+         ZW0DToCtqFmCpq2BDM2pwjxeidP2NslWcUpx/idDtTJx3yn8L2HnRHDdEEwcc73vE0TW
+         KXxw8Z9EIdKr492C9nRvzfKxfcF71FqMNunb3J9asiO6L7WjQFXwxi/F6y+tr+/+J6LZ
+         AGhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681935351; x=1684527351;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uEZv1+Sjy8aPaSMjtOnGV5vUYFV+uw4lXf3C6WgeEKE=;
+        b=U2ICKZ+Ag7vHVcqNuPiB7foFyAiwJZOAKORMdWFzQjb3oQNODIsf3X9XctJ1cSwMwU
+         Kz/Xs8FcDRQgn9thU2NIN9Hw26MuoQjgSr416Zu0YC/shVt5T23JyusVGXtwB1zlBpNE
+         i2pXNY3bnwXSXzj/vnOU/9e4rpulGqQnNobEdNRi3kcSakNRmR6QCecvYEpcM1jLxnqG
+         nLuuCvSzqjPqcUfJg14Vzt1w68uxLYk4CzEsTOjnoEOoQCP4dGIZ/eSOZKSQYOdakUuG
+         HW50QD/nzTeEqyHG8WQqTamfWbOPsWmLTReBlmXdOtupfAQpmZsu6AINY4GhpF/jyx54
+         dlJg==
+X-Gm-Message-State: AAQBX9dZT1cRjsJ3g9eWA1xR1vWt5KcX9NXhgWb9ZhUuO87fUNkGs8pp
+        X9oV0r1c/FGD86u4BcBcGXaAcA==
+X-Google-Smtp-Source: AKy350YabKeWFagAMyyryCcLxhkrECa4iIsx2RGdrmHhx+B7W3FNw6MnNvf/b3L2CGRQg/VOxFkOVg==
+X-Received: by 2002:a17:902:e751:b0:1a6:3ba2:c896 with SMTP id p17-20020a170902e75100b001a63ba2c896mr23159358plf.3.1681935351470;
+        Wed, 19 Apr 2023 13:15:51 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id b5-20020a170902bd4500b001a19cf1b37esm11831037plx.40.2023.04.19.13.15.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 13:15:51 -0700 (PDT)
+Message-ID: <567b593e-2ad0-9bec-4e6f-4bbb3301524c@kernel.dk>
+Date:   Wed, 19 Apr 2023 14:15:49 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [Freedreno] [PATCH 5/5] drm/msm/dpu1: Handle the reg bus ICC path
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
+ pin_user_pages()
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        "Marijn Suijten" <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>
-References: <20230417-topic-dpu_regbus-v1-0-06fbdc1643c0@linaro.org>
- <20230417-topic-dpu_regbus-v1-5-06fbdc1643c0@linaro.org>
- <11c72462-b256-d0db-a666-9615da4420f6@quicinc.com>
- <e15ec005-ef52-c14c-bdeb-faaca207d39b@linaro.org>
-From:   Jeykumar Sankaran <quic_jeykumar@quicinc.com>
-In-Reply-To: <e15ec005-ef52-c14c-bdeb-faaca207d39b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: QGMhDy7ReST1ODUAfKQWCbU9L5K7e2AZ
-X-Proofpoint-GUID: QGMhDy7ReST1ODUAfKQWCbU9L5K7e2AZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-19_14,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- spamscore=0 impostorscore=0 clxscore=1015 phishscore=0 mlxlogscore=999
- bulkscore=0 priorityscore=1501 adultscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304190174
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org
+References: <cover.1681831798.git.lstoakes@gmail.com>
+ <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
+ <936e8f52-00be-6721-cb3e-42338f2ecc2f@kernel.dk>
+ <c2e22383-43ee-5cf0-9dc7-7cd05d01ecfb@kernel.dk>
+ <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
+ <69f48cc6-8fc6-0c49-5a79-6c7d248e4ad5@kernel.dk>
+ <bec03e0f-a0f9-43c3-870b-be406ca848b9@lucifer.local>
+ <8af483d2-0d3d-5ece-fb1d-a3654411752b@kernel.dk>
+ <d601ca0c-d9b8-4e5d-a047-98f2d1c65eb9@lucifer.local>
+ <ZEAxhHx/4Ql6AMt2@casper.infradead.org> <ZEAx90C2lDMJIux1@nvidia.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <ZEAx90C2lDMJIux1@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/19/2023 12:48 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 19.04.2023 21:06, Jeykumar Sankaran wrote:
+On 4/19/23 12:24?PM, Jason Gunthorpe wrote:
+> On Wed, Apr 19, 2023 at 07:23:00PM +0100, Matthew Wilcox wrote:
+>> On Wed, Apr 19, 2023 at 07:18:26PM +0100, Lorenzo Stoakes wrote:
+>>> So even if I did the FOLL_ALLOW_BROKEN_FILE_MAPPING patch series first, I
+>>> would still need to come along and delete a bunch of your code
+>>> afterwards. And unfortunately Pavel's recent change which insists on not
+>>> having different vm_file's across VMAs for the buffer would have to be
+>>> reverted so I expect it might not be entirely without discussion.
 >>
+>> I don't even understand why Pavel wanted to make this change.  The
+>> commit log really doesn't say.
 >>
->> On 4/17/2023 8:30 AM, Konrad Dybcio wrote:
->>> Apart from the already handled data bus (MAS_MDP_Pn<->DDR), there's
->>> another path that needs to be handled to ensure MDSS functions properly,
->>> namely the "reg bus", a.k.a the CPU-MDSS interconnect.
->>>
->>> Gating that path may have a variety of effects.. from none to otherwise
->>> inexplicable DSI timeouts..
->>>
->>> On the DPU side, we need to keep the bus alive. The vendor driver
->>> kickstarts it to max (300Mbps) throughput on first commit, but in
->>> exchange for some battery life in rare DPU-enabled-panel-disabled
->>> usecases, we can request it at DPU init and gate it at suspend.
->>>
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>> ---
->>>    drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 22 ++++++++++++++++++++--
->>>    drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h |  1 +
->>>    2 files changed, 21 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>> index dd6c1c40ab9e..d1f77faebbc0 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>> @@ -384,15 +384,17 @@ static int dpu_kms_global_obj_init(struct dpu_kms *dpu_kms)
->>>        return 0;
->>>    }
->>>    -static int dpu_kms_parse_data_bus_icc_path(struct dpu_kms *dpu_kms)
->>> +static int dpu_kms_parse_icc_paths(struct dpu_kms *dpu_kms)
->>>    {
->>>        struct icc_path *path0;
->>>        struct icc_path *path1;
->>> +    struct icc_path *reg_bus_path;
->>>        struct drm_device *dev = dpu_kms->dev;
->>>        struct device *dpu_dev = dev->dev;
->>>          path0 = msm_icc_get(dpu_dev, "mdp0-mem");
->>>        path1 = msm_icc_get(dpu_dev, "mdp1-mem");
->>> +    reg_bus_path = msm_icc_get(dpu_dev, "cpu-cfg");
->>>          if (IS_ERR_OR_NULL(path0))
->>>            return PTR_ERR_OR_ZERO(path0);
->>> @@ -404,6 +406,10 @@ static int dpu_kms_parse_data_bus_icc_path(struct dpu_kms *dpu_kms)
->>>            dpu_kms->mdp_path[1] = path1;
->>>            dpu_kms->num_mdp_paths++;
->>>        }
->>> +
->>> +    if (!IS_ERR_OR_NULL(reg_bus_path))
->>> +        dpu_kms->reg_bus_path = reg_bus_path;
->>> +
->>>        return 0;
->>>    }
->>>    @@ -1039,7 +1045,7 @@ static int dpu_kms_hw_init(struct msm_kms *kms)
->>>            DPU_DEBUG("REG_DMA is not defined");
->>>        }
->>>    -    dpu_kms_parse_data_bus_icc_path(dpu_kms);
->>> +    dpu_kms_parse_icc_paths(dpu_kms);
->>>          rc = pm_runtime_resume_and_get(&dpu_kms->pdev->dev);
->>>        if (rc < 0)
->>> @@ -1241,6 +1247,9 @@ static int __maybe_unused dpu_runtime_suspend(struct device *dev)
->>>        for (i = 0; i < dpu_kms->num_mdp_paths; i++)
->>>            icc_set_bw(dpu_kms->mdp_path[i], 0, 0);
->>>    +    if (dpu_kms->reg_bus_path)
->>> +        icc_set_bw(dpu_kms->reg_bus_path, 0, 0);
->>> +
->>>        return 0;
->>>    }
->>>    @@ -1261,6 +1270,15 @@ static int __maybe_unused dpu_runtime_resume(struct device *dev)
->>>            return rc;
->>>        }
->>>    +    /*
->>> +     * The vendor driver supports setting 76.8 / 150 / 300 Mbps on this
->> How do you arrive at these distint BW values? Are they provided by the ICC fwk for the given path?
-> They're hardcoded in the SDE driver.
+>> commit edd478269640
+>> Author: Pavel Begunkov <asml.silence@gmail.com>
+>> Date:   Wed Feb 22 14:36:48 2023 +0000
+>>
+>>     io_uring/rsrc: disallow multi-source reg buffers
+>>
+>>     If two or more mappings go back to back to each other they can be passed
+>>     into io_uring to be registered as a single registered buffer. That would
+>>     even work if mappings came from different sources, e.g. it's possible to
+>>     mix in this way anon pages and pages from shmem or hugetlb. That is not
+>>     a problem but it'd rather be less prone if we forbid such mixing.
+>>
+>>     Cc: <stable@vger.kernel.org>
+>>     Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+>>     Signed-off-by: Jens Axboe <axboe@kernel.dk>
+>>
+>> It even says "That is not a problem"!  So why was this patch merged
+>> if it's not fixing a problem?
+>>
+>> It's now standing in the way of an actual cleanup.  So why don't we
+>> revert it?  There must be more to it than this ...
 > 
-> Konrad
-These bandwidths are derived from the scaling frequencies of all the 
-buses participating in the icc-path. So they cannot be constants. 
-Ideally they should be read from the hw catalog data of the respective 
-platform.
+> https://lore.kernel.org/all/61ded378-51a8-1dcb-b631-fda1903248a9@gmail.com/
 
-Jeykumar S.
->>> +     * path, but it seems to go for the highest level when display output
->>> +     * is enabled and zero otherwise. For simplicity, we can assume that
->>> +     * DPU being enabled and running implies that.
->>> +     */
->>> +    if (dpu_kms->reg_bus_path)
->>> +        icc_set_bw(dpu_kms->reg_bus_path, 0, MBps_to_icc(300));
->>> +
->>>        dpu_vbif_init_memtypes(dpu_kms);
->>>          drm_for_each_encoder(encoder, ddev)
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
->>> index d5d9bec90705..c332381d58c4 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
->>> @@ -111,6 +111,7 @@ struct dpu_kms {
->>>        atomic_t bandwidth_ref;
->>>        struct icc_path *mdp_path[2];
->>>        u32 num_mdp_paths;
->>> +    struct icc_path *reg_bus_path;
->>>    };
->>>      struct vsync_info {
->>>
+Let's just kill that patch that, I can add a revert for 6.4. I had
+forgotten about that patch and guess I didn't realize that most of the
+issue do in fact just stem from that.
+
+-- 
+Jens Axboe
+
