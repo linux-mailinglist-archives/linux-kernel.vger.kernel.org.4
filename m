@@ -2,60 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 010D56E7EF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBA16E7EF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233701AbjDSP40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46664 "EHLO
+        id S233724AbjDSP44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 11:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233025AbjDSP4Y (ORCPT
+        with ESMTP id S233025AbjDSP4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:56:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3EA2721;
-        Wed, 19 Apr 2023 08:56:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE9DE64093;
-        Wed, 19 Apr 2023 15:56:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B6C6C433D2;
-        Wed, 19 Apr 2023 15:56:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681919782;
-        bh=nvxf91IZA13U9SiA5t6TZYEJqcyil96kcEWzpNxXu14=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gD1P+NCUTLvEthQmNMDGFVXxkRgXw0BrpxWV13ruufTKw7J0cIwFV88kLEdD0PBZA
-         iIxux7K0TfFvgXUXMZT+v78W8zXKG6l5I3CKbUGclWuCDmOJFxHzlUUsS9Mr/IJeJT
-         dsGNn1mPkYvDFMEcylhvo9ogJavWEodQBMMrILwpQCRyzhauVjl2wExBHRkuFcF+cn
-         AUWPF52ZIHUOFLdgX6O1DMMV6ReR19fpG43rOmplpCyVkIYNgC+W/mT0CQdb5hTP4S
-         50zDONfIEtuiN0eeGeg6kBCq4zDfnWF8FAoQ+cHlvUJ2v8VIFwyA6Pgj+ejV7eWgnJ
-         k7E1PZcbH3W/g==
-Date:   Wed, 19 Apr 2023 17:56:17 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Jaewon Kim <jaewon02.kim@samsung.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-Subject: Re: [PATCH v2 3/4] spi: s3c64xx: add sleep during transfer
-Message-ID: <20230419155617.gobedupbdmdaj4kz@intel.intel>
-References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
- <CGME20230419062755epcas2p1bca14bbd5200ebe5241780d2d7ec1596@epcas2p1.samsung.com>
- <20230419060639.38853-4-jaewon02.kim@samsung.com>
- <b91c6cfb-4fd2-1189-72fd-92b40d1b4743@linaro.org>
- <9d2e2bda-4213-35d0-55d7-827bad9b13a1@samsung.com>
+        Wed, 19 Apr 2023 11:56:55 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4376189;
+        Wed, 19 Apr 2023 08:56:52 -0700 (PDT)
+Received: from [194.95.143.137] (helo=phil.dip.tu-dresden.de)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1ppAAc-0003JF-Ra; Wed, 19 Apr 2023 17:56:34 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Marc Zyngier <maz@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        XiaoDong Huang <derrick.huang@rock-chips.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Peng Fan <peng.fan@nxp.com>, kernel@collabora.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: (subset) [PATCH v4 0/2] Add Rockchip RK3588 GIC ITS support
+Date:   Wed, 19 Apr 2023 17:56:33 +0200
+Message-Id: <168191977930.4131912.6423526852468293382.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230418142109.49762-1-sebastian.reichel@collabora.com>
+References: <20230418142109.49762-1-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="lpnfxvg6q5y66f32"
-Content-Disposition: inline
-In-Reply-To: <9d2e2bda-4213-35d0-55d7-827bad9b13a1@samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,70 +51,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 18 Apr 2023 16:21:07 +0200, Sebastian Reichel wrote:
+> This adds GIC ITS support to Rockchip RK3588, which is affected
+> by an integration issue effectively breaking shareability support.
+> PCIe2 support will follow in its own series.
+> 
+> Changelog:
+>  * Changes since PATCHv3
+>   - https://lore.kernel.org/lkml/20230417214035.101190-1-sebastian.reichel@collabora.com/
+>   - Add RB from AngeloGioacchino Del Regno
+>   - Update patch description
+>   - Update Kconfig description
+>   - rename flags from BROKEN_SHAREABILITY to FORCE_NON_SHAREABLE
+>  * Changes since PATCHv2
+>   - https://lore.kernel.org/lkml/20230417150038.51698-1-sebastian.reichel@collabora.com/
+>   - apply changes requested by Marc Zyngier
+>  * PATCHv1
+>   - https://lore.kernel.org/lkml/20230227151847.207922-1-lucas.tanure@collabora.com/
+>   - uses of_dma_is_coherent() instead of providing errata info from kernel
+>  * RFCv1
+>   - https://lore.kernel.org/lkml/20230310080518.78054-1-lucas.tanure@collabora.com/
+>   - uses 0x0201743b IIDR for quirk detection and misses errata #
+> 
+> [...]
 
---lpnfxvg6q5y66f32
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks!
 
-Hi Jaewon,
+[2/2] arm64: dts: rockchip: rk3588: add GIC ITS support
+      commit: 9325c119312ce7e228216c1070fbaaeb96f7afcf
 
-> >> In polling mode, the status register is constantly read to check trans=
-fer
-> >> completion. It cause excessive CPU usage.
-> >> So, it calculates the SPI transfer time and made it sleep.
-> >>
-> >> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
-> >> ---
-> >>   drivers/spi/spi-s3c64xx.c | 8 ++++++++
-> >>   1 file changed, 8 insertions(+)
-> >>
-> >> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-> >> index 886722fb40ea..cf3060b2639b 100644
-> >> --- a/drivers/spi/spi-s3c64xx.c
-> >> +++ b/drivers/spi/spi-s3c64xx.c
-> >> @@ -561,6 +561,14 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_sp=
-i_driver_data *sdd,
-> >>   	u32 cpy_len;
-> >>   	u8 *buf;
-> >>   	int ms;
-> >> +	u32 tx_time;
-> >> +
-> >> +	/* sleep during signal transfer time */
-> >> +	status =3D readl(regs + S3C64XX_SPI_STATUS);
-> >> +	if (RX_FIFO_LVL(status, sdd) < xfer->len) {
-> >> +		tx_time =3D (xfer->len * 8 * 1000 * 1000) / sdd->cur_speed;
-> >> +		usleep_range(tx_time / 2, tx_time);
-> >> +	}
-> > Did you actually check the delays introduced by it? Is it worth?
->=20
-> Yes, I already test it.
->=20
-> Throughput was the same, CPU utilization decreased to 30~40% from 100%.
->=20
-> Tested board is ExynosAutov9 SADK.
->=20
->=20
-> >
-> >>  =20
-> >>   	/* millisecs to xfer 'len' bytes @ 'cur_speed' */
-> >>   	ms =3D xfer->len * 8 * 1000 / sdd->cur_speed;
-> > You have now some code duplication so this could be combined.
-
-you could put the 'if' under the 'ms =3D ...' and just use ms
-without declaring any tx_time.
-
-Andi
-
---lpnfxvg6q5y66f32
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQScDfrjQa34uOld1VLaeAVmJtMtbgUCZEAPIQAKCRDaeAVmJtMt
-bl9sAQD2KwYXJUe6dy2fLex4Y9UuGAihcSgb/Wa9N975crk9jwD+JUTSU1epIcx1
-qB02nuF53TZR5uR0n1e5gKLxHeCCdgc=
-=45qL
------END PGP SIGNATURE-----
-
---lpnfxvg6q5y66f32--
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
