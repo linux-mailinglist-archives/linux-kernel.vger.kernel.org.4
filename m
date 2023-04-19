@@ -2,98 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3871F6E75D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6036E75D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbjDSI6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
+        id S231600AbjDSI7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232704AbjDSI6L (ORCPT
+        with ESMTP id S232708AbjDSI7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:58:11 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD004C0B;
-        Wed, 19 Apr 2023 01:58:07 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id g6so11234752pjx.4;
-        Wed, 19 Apr 2023 01:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681894686; x=1684486686;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3zpvMjDc8PUDIFIffBUt+CiFgxX1fPBud4Kt6HqJXz8=;
-        b=UtlW7QeLG94NWEB+dlWHbmjRnFYxbJOyvIGIfJLxjiZJWo8SZyBMKGSu71KsdnwYkM
-         5Embc4NaJ3SRopVgqDxHW19iPNF3jiDTDgNow4AnPZhfVsPAXcYRUDzE1Vg8kwHbGJUD
-         Jul3ZOIWXSqS2g+Yx3G3JGBEeRD5s3faZmYLtYfgoeuGOtaIwe0inEdi+yDJ2XrC4o8H
-         C6Fmym88uYZ4psi3ZY8pPDaFiFCq2RZWCtlWPWIPlglDjw9gTAEpgU/1MgyiFw6Rw5Y2
-         F0XB+yzdy9HPo3WvfTOqm4b5GZvfeXDVeSU9m4fgJCGIpN5Emu8pXWkG/fnCjF7VARx6
-         /heA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681894686; x=1684486686;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3zpvMjDc8PUDIFIffBUt+CiFgxX1fPBud4Kt6HqJXz8=;
-        b=QUESDNMuoJr9tIGOtV90fWczd4JWggk6X/fNPw+6jhCIBJGcmimF7LT0uz+Bs86uJO
-         qh52vQStPXUT32TaXtA22u7fLQmAQeno2LqHfY8VZZ7CdHkIJw1U3jYxBge/pBFpMOCL
-         lrZhCIYKYNGd8Pj5w0PnsKEcr74RS9eZVRr52u5LtjC0C2J/6xReYI9Sz0eamryjJnm0
-         JiscFjeoPftJGPs8GZKJEI0ElnU8ufDSmM5ZBxWKQCv4FyEddLUx5QJoUEc3VSZcKqcw
-         53uOPuXUPQcUXYZTI3/C82nT2Hq5eyLxR7zP5SCUkZPL+6cmGrsePhhcZZdQ7DQFrlih
-         qp0g==
-X-Gm-Message-State: AAQBX9esrGA2VQ0VbH81qV3S/f5+oABxAy4pAGGPimF/LouYXCsmcOvI
-        QnQCLJC5v7solFohwlJBjzc=
-X-Google-Smtp-Source: AKy350ZsGA0KS7CsW/PhUED2oIMNWfU0ei4iNIRQe4Ug65OBD1ljL1KiruI2NorA2j6a8NNhWpDYRA==
-X-Received: by 2002:a05:6a20:5493:b0:ef:ecaf:ff6d with SMTP id i19-20020a056a20549300b000efecafff6dmr2062989pzk.12.1681894686508;
-        Wed, 19 Apr 2023 01:58:06 -0700 (PDT)
-Received: from hackyzh-virtual-machine.localdomain ([58.34.53.146])
-        by smtp.gmail.com with ESMTPSA id r10-20020a63d90a000000b0051b72ef978fsm8144902pgg.20.2023.04.19.01.58.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 01:58:05 -0700 (PDT)
-From:   hackyzh002 <hackyzh002@gmail.com>
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, sumit.semwal@linaro.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, hackyzh002 <hackyzh002@gmail.com>
-Subject: [PATCH v2 1/2] drm/radeon: Fix integer overflow in radeon_cs_parser_init
-Date:   Wed, 19 Apr 2023 16:57:47 +0800
-Message-Id: <20230419085747.4720-1-hackyzh002@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 19 Apr 2023 04:59:05 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C69E19AA;
+        Wed, 19 Apr 2023 01:59:03 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.120])
+        by gateway (Coremail) with SMTP id _____8AxrtpWrT9k39weAA--.36323S3;
+        Wed, 19 Apr 2023 16:59:02 +0800 (CST)
+Received: from [10.20.42.120] (unknown [10.20.42.120])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxbb5UrT9kp9UuAA--.15562S3;
+        Wed, 19 Apr 2023 16:59:01 +0800 (CST)
+Subject: Re: [PATCH v7 17/30] LoongArch: KVM: Implement virtual machine tlb
+ operations
+To:     Huacai Chen <chenhuacai@kernel.org>
+References: <20230417094649.874671-1-zhaotianrui@loongson.cn>
+ <20230417094649.874671-18-zhaotianrui@loongson.cn>
+ <CAAhV-H4Ca18bo-DV8gzaJeVCDT8o_dqFfX4+ruQLHL+V+HrmOg@mail.gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
+        Xi Ruoyao <xry111@xry111.site>
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+Message-ID: <9209324c-28c5-1305-8ff3-95e79b380f4d@loongson.cn>
+Date:   Wed, 19 Apr 2023 16:59:00 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
+In-Reply-To: <CAAhV-H4Ca18bo-DV8gzaJeVCDT8o_dqFfX4+ruQLHL+V+HrmOg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Bxbb5UrT9kp9UuAA--.15562S3
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7tw18uF1kJF43uF4rCF18Grg_yoW8Ar4fpF
+        y8uF4rtF4xXrnrJ3sIqw13WFnxZrWkKF12vFWSv34fArZFkr18Kr9akr98GFyrJ34rJr10
+        va4rtrsFgF1UJ37anT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCa
+        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8KNt3UUUUU==
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The type of size is unsigned, if size is 0x40000000, there will be an
-integer overflow, size will be zero after size *= sizeof(uint32_t),
-will cause uninitialized memory to be referenced later
 
-Signed-off-by: hackyzh002 <hackyzh002@gmail.com>
----
- drivers/gpu/drm/radeon/radeon_cs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/radeon/radeon_cs.c b/drivers/gpu/drm/radeon/radeon_cs.c
-index 46a27ebf4..8e12b406e 100644
---- a/drivers/gpu/drm/radeon/radeon_cs.c
-+++ b/drivers/gpu/drm/radeon/radeon_cs.c
-@@ -270,7 +270,7 @@ int radeon_cs_parser_init(struct radeon_cs_parser *p, void *data)
- {
- 	struct drm_radeon_cs *cs = data;
- 	uint64_t *chunk_array_ptr;
--	unsigned size, i;
-+	u64 size, i;
- 	u32 ring = RADEON_CS_RING_GFX;
- 	s32 priority = 0;
- 
--- 
-2.34.1
+在 2023年04月19日 10:02, Huacai Chen 写道:
+> Hi, Tianrui,
+>
+> On Mon, Apr 17, 2023 at 5:47 PM Tianrui Zhao <zhaotianrui@loongson.cn> wrote:
+>> Implement loongarch virtual machine tlb operations such as flush tlb by
+>> specific gpa parameter and flush all of the virt machines tlb.
+> Use LoongArch instead of loongarch in commit messages and comments, please.
+>
+> Huacai
+Ok, I will replace loongarch with LoongArch, thanks.
+
+Thanks
+Tianrui Zhao
+>> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+>> ---
+>>   arch/loongarch/kvm/tlb.c | 31 +++++++++++++++++++++++++++++++
+>>   1 file changed, 31 insertions(+)
+>>   create mode 100644 arch/loongarch/kvm/tlb.c
+>>
+>> diff --git a/arch/loongarch/kvm/tlb.c b/arch/loongarch/kvm/tlb.c
+>> new file mode 100644
+>> index 000000000000..66e116cf2486
+>> --- /dev/null
+>> +++ b/arch/loongarch/kvm/tlb.c
+>> @@ -0,0 +1,31 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
+>> + */
+>> +
+>> +#include <linux/kvm_host.h>
+>> +#include <asm/tlb.h>
+>> +
+>> +int kvm_flush_tlb_gpa(struct kvm_vcpu *vcpu, unsigned long gpa)
+>> +{
+>> +       preempt_disable();
+>> +       gpa &= (PAGE_MASK << 1);
+>> +       invtlb(INVTLB_GID_ADDR, read_csr_gstat() & CSR_GSTAT_GID, gpa);
+>> +       preempt_enable();
+>> +       return 0;
+>> +}
+>> +
+>> +/**
+>> + * kvm_flush_tlb_all() - Flush all root TLB entries for
+>> + * guests.
+>> + *
+>> + * Invalidate all entries including GVA-->GPA and GPA-->HPA mappings.
+>> + */
+>> +void kvm_flush_tlb_all(void)
+>> +{
+>> +       unsigned long flags;
+>> +
+>> +       local_irq_save(flags);
+>> +       invtlb_all(INVTLB_ALLGID, 0, 0);
+>> +       local_irq_restore(flags);
+>> +}
+>> --
+>> 2.31.1
+>>
 
