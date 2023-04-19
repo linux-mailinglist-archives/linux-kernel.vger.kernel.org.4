@@ -2,152 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2770C6E7E42
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4756E7E49
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbjDSP3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
+        id S233084AbjDSPau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 11:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232587AbjDSP3G (ORCPT
+        with ESMTP id S233276AbjDSPan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:29:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F07C93E2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:27:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681918045;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0JNpJwmiFACkqi0TsruUzwO4IifuU5oAc++33wIMhdE=;
-        b=OVYMTVcb/jqxDC2nYzWwC5kaj6sxCid6nl6Ghl2aZA1jtYsr5IMk+lzpf3C/wikoslhCRh
-        2vi2SSz+5KbWy4IQucedU8CaEt8HW7y5cX5w6XQX9gJMzEH4BiNgKIXGGRecbviO7Cb9oT
-        gzRPJgGrvOhr6yTq75WYM4FVGUtULwY=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-477-wTm8Za8eP4eVHnUFBe1LCg-1; Wed, 19 Apr 2023 11:27:23 -0400
-X-MC-Unique: wTm8Za8eP4eVHnUFBe1LCg-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-2f446161e5aso1972842f8f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:27:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681918043; x=1684510043;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0JNpJwmiFACkqi0TsruUzwO4IifuU5oAc++33wIMhdE=;
-        b=dJxjD3VUY899vCj1iRAUPUMIECK9ej+P/dIDwYG/vKdFIsNZYSIqvQz5t5YtEEc6dz
-         pjxm5Jq1mG13xYyzymka9xiw+jC4rDHWhBh8JCtWuR6Aj9Ql3qGk3n8G8aaItRnqMdCX
-         1axRpOUqDlsTpC68t3SRAJwx5/S6BV6VNBRny69Z5HzanKGqM0rCBrDnhAiUM9HqYsQE
-         nQOMDZXkFZ2Lrkf8a74jpYJW+INgkHE5l3XMPC4nkXMYLPiOBJmL2LwiTpriopQ7Pluu
-         uu3f40emvWnUgTEi1Y3yLzWF/ge7KQQMsbsGFCrviRGQLvNzAezWfAwV/oTqxowbyXkn
-         /hOg==
-X-Gm-Message-State: AAQBX9cBmw3h/6rC3EC+dssjYA7u/4s0ciIr3Ec6DLv0z4Cmjm6MgHfE
-        uideQjckqf7EiYIl1bVdoVulYh8SpINTuS2Kh0u1ypesIBgopIp72dQnkkcNMG/XIFu1LNs8WgV
-        3fxhXWPZrZUAJ6fuv0UMHsfSB
-X-Received: by 2002:adf:f8d1:0:b0:2f8:c65:2966 with SMTP id f17-20020adff8d1000000b002f80c652966mr5108619wrq.32.1681918042717;
-        Wed, 19 Apr 2023 08:27:22 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bQCca7TZwC/DY71GMkp8QP25n5qhAvm8+MNF70jK0dZKOeYRWfyCK5MJywgo5ohbve6IL3HA==
-X-Received: by 2002:adf:f8d1:0:b0:2f8:c65:2966 with SMTP id f17-20020adff8d1000000b002f80c652966mr5108605wrq.32.1681918042384;
-        Wed, 19 Apr 2023 08:27:22 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70b:7b00:7c52:a5fa:8004:96fd? (p200300cbc70b7b007c52a5fa800496fd.dip0.t-ipconnect.de. [2003:cb:c70b:7b00:7c52:a5fa:8004:96fd])
-        by smtp.gmail.com with ESMTPSA id y9-20020a7bcd89000000b003f173c566b5sm2527616wmj.5.2023.04.19.08.27.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 08:27:21 -0700 (PDT)
-Message-ID: <a7dcbf5f-8ccf-1078-4bde-6cd2ed883ae6@redhat.com>
-Date:   Wed, 19 Apr 2023 17:27:20 +0200
+        Wed, 19 Apr 2023 11:30:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C76840E6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:30:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9A7E61633
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:30:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A03BC433D2;
+        Wed, 19 Apr 2023 15:30:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681918240;
+        bh=JMaZwA1dCOk+ofXmP6eFP+HvsGhy7OmhboIcr8AIwVM=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=OjKokYALqdz14ovnpWb2G0lrqzwH3Y3EtIWFGljrdFfcSge7bnQPXWWQxJfex8W1l
+         0P61ZJdja7F0v9+LEHFqOpf7Fb1mZ/jP9NLEXzIwaR0xJoeFJbxVcALufZO5Nt0u+9
+         7ebsyUvC9VhzfsGa75Y+TxWlXxU5OSZTJtj0iVivJi7dBSvllSK8zd9oItTXkVAm0P
+         6myos6Mm/2QMMYIQtvAsgo1ayN6hP0hEGVqrXUm8QLiK4uaYakH2DVLoEWwbQbLYT1
+         uUGIFDAFIKnPLTDj649tg3G0869C0hOxFbKZw+ve+iqHBRSshQYlcc6v3WfyUbxRqy
+         hf4CNyR0fE0Cg==
+Message-ID: <18ed82d6-b191-9c04-23ac-caa0a16f263e@kernel.org>
+Date:   Wed, 19 Apr 2023 23:30:36 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
- KVM: mm: fd-based approach for supporting KVM)
+Subject: Re: [f2fs-dev] [PATCH] f2fs: fix to tag FIEMAP_EXTENT_DELALLOC in
+ fiemap() for delay allocated extent
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        tabba@google.com, Michael Roth <michael.roth@amd.com>,
-        wei.w.wang@intel.com, Mike Rapoport <rppt@kernel.org>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <ZD1oevE8iHsi66T2@google.com>
- <658018f9-581c-7786-795a-85227c712be0@redhat.com>
- <ZD12htq6dWg0tg2e@google.com>
- <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
- <ZD2bBB00eKP6F8kz@google.com>
- <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
- <ZD86E23gyzF6Q7AF@google.com>
- <5869f50f-0858-ab0c-9049-4345abcf5641@redhat.com>
- <ZEAGIe7m4lWW5mV+@google.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <ZEAGIe7m4lWW5mV+@google.com>
+From:   Chao Yu <chao@kernel.org>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20230405144359.930253-1-chao@kernel.org>
+ <ZDCEK2OPkhTmRZrq@google.com>
+ <224e8756-7c63-fd53-a0f3-f3e2a7b4c13f@kernel.org>
+ <ZDROBJFxSUdGaqAa@google.com>
+ <538fd229-28ae-0ec5-ef07-35d505fbb8a9@kernel.org>
+ <2341db3b-5a40-a9f0-51f1-29a8908e3e98@kernel.org>
+ <ZDWUGr2c3TT2tTgu@google.com>
+ <2d3125e9-0e5c-644f-1ffa-e41ba55b4ecb@kernel.org>
+In-Reply-To: <2d3125e9-0e5c-644f-1ffa-e41ba55b4ecb@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.04.23 17:17, Sean Christopherson wrote:
-> On Wed, Apr 19, 2023, David Hildenbrand wrote:
->> On 19.04.23 02:47, Sean Christopherson wrote:
->>> On Tue, Apr 18, 2023, David Hildenbrand wrote:
->>>> "memfd_vm" / "vm_mem" would be sooo (feel free to add some more o's here)
->>>> much easier to get. It's a special fd to be used to back VM memory. Depending
->>>> on the VM type (encrypted/protected/whatever), restrictions might apply (not
->>>> able to mmap, not able to read/write ...). For example, there really is no
->>>> need to disallow mmap/read/write when using that memory to back a simple VM
->>>> where all we want to do is avoid user-space page tables.
+On 2023/4/13 17:49, Chao Yu wrote:
+> On 2023/4/12 1:08, Jaegeuk Kim wrote:
+>> On 04/11, Chao Yu wrote:
+>>> On 2023/4/11 16:14, Chao Yu wrote:
+>>>> On 2023/4/11 1:57, Jaegeuk Kim wrote:
+>>>>> On 04/08, Chao Yu wrote:
+>>>>>> On 2023/4/8 4:59, Jaegeuk Kim wrote:
+>>>>>>> This breaks generic/009?
+>>>>>>
+>>>>>> I guess it is as expected?
+>>>>>>
+>>>>>> Please check description of fiemap ioctl manual from [1]:
+>>>>>>
+>>>>>> FIEMAP_EXTENT_UNKNOWN
+>>>>>> The location of this extent is currently unknown. This may
+>>>>>> indicate the data is stored on an inaccessible volume or that
+>>>>>> no storage has been allocated for the file yet.
+>>>>>>
+>>>>>> FIEMAP_EXTENT_DELALLOC
+>>>>>> This will also set FIEMAP_EXTENT_UNKNOWN.
+>>>>>>
+>>>>>> Delayed allocation - while there is data for this extent, its
+>>>>>> physical location has not been allocated yet.
+>>>>>>
+>>>>>> FIEMAP_EXTENT_UNWRITTEN
+>>>>>> Unwritten extent - the extent is allocated but its data has not
+>>>>>> been initialized. This indicates the extent’s data will be all
+>>>>>> zero if read through the filesystem but the contents are undefined
+>>>>>> if read directly from the device.
+>>>>>>
+>>>>>> [1] https://www.kernel.org/doc/html/latest/filesystems/fiemap.html
+>>>>>>
+>>>>>> According to its description, f2fs only support
+>>>>>> FIEMAP_EXTENT_{UNKNOWN, DELALLOC}, but not support
+>>>>>> FIEMAP_EXTENT_UNWRITTEN.
+>>>>>
+>>>>> No, I don't think so.
+>>>>
+>>>> Jaegeuk,
+>>>>
+>>>> Could you please check the detailed description of FIEMAP_EXTENT_UNWRITTEN?
+>>>> The flag indicates two conditions:
+>>>> 1. on-disk blkaddrs were allocated for extent, and the extent is tagged as
+>>>> unwritten status.
+>>>> 2. data readed on those blocks will be all zero.
 >>>
->>> In seriousness, I do agree with Jason's very explicit objection[2] against naming
->>> a non-KVM uAPI "guest", or any variation thereof.
+>>> Sorry, I mean:
+>>>
+>>> 1. on-disk blkaddrs were allocated for extent;
+>>> 2. extent is tagged as unwritten status, data readed on those blocks will be
+>>> all zero.
 >>
->> While I agree, it's all better than the naming we use right now ...
->>
->>
->> Let me throw "tee_mem" / "memfd_tee" into the picture. That could eventually
->> catch what we want to have.
->>
->> Or "coco_mem" / "memfd_coco".
->>
->> Of course, both expect that people know the terminology (just like what "vm"
->> stands for), but it's IMHO significantly better than
->> restricted/guarded/opaque/whatsoever.
->>
->> Again, expresses what it's used for, not why it behaves in weird ways.
+>> I was thinking fallocate/pin cases to give zero data. But, we may need to check
+>> the space discarded securely or disk support?
 > 
-> I don't want to explicitly tie this to trusted execution or confidential compute,
-> as there is value in backing "normal" guests with memory that cannot be accessed
-> by the host userspace without jumping through a few extra hoops, e.g. to add a
-> layer of protection against data corruption due to host userspace bugs.
+> I thought about similar scheme, we can add F2FS_GET_BLOCK_ZERO for fallocate/pin
+> case to zero data in valid block address, but the problem is how can we distinguish
+> zero/valid data from valid block address w/o additional unwritten flag of metadata.
+> 
+> e.g.
+> 1. write page [0,511] w/ valid data;
+> 2. fallocate/pin page [512,1023] w/ zero data;
+> 3. fiemap file  --- what output should it be?
 
-Nothing speaks against using tee_mem for the same purpose I guess. I 
-like the sound of it after all. :)
+Thoughts?
 
--- 
 Thanks,
 
-David / dhildenb
-
+> 
+> Thanks,
+> 
+>>
+>>>
+>>> Thanks,
+>>>
+>>>>
+>>>> So, let's check f2fs' status:
+>>>> - fallocate only reserve valid block count and set NEW_ADDR in dnode, so
+>>>> it does not match condition 1)
+>>>> - pin & fallocate preallocates blkaddrs and set blkaddrs in dnode, but
+>>>> content on those blkaddrs may contain zero or random data, so it does not
+>>>> match  condition 2)
+>>>>
+>>>> Christoph describes this issue in below patch as well, you can check it.
+>>>> da8c7fecc9c7 ("f2fs: rename F2FS_MAP_UNWRITTEN to F2FS_MAP_DELALLOC")
+>>>>
+>>>> Am I missing something?
+>>>>
+>>>> Thanks,
+>>>>
+>>>>>
+>>>>>>
+>>>>>> So 009, 092, 094 .. which expects unwritten status from extent will
+>>>>>> fail.
+>>>>>>
+>>>>>> How about disabling those testcase?
+>>>>>>
+>>>>>> Thanks,
+>>>>>>
+>>>>>>>
+>>>>>>> On 04/05, Chao Yu wrote:
+>>>>>>>> xfstest generic/614 fails to run due below reason:
+>>>>>>>>
+>>>>>>>> generic/614 1s ... [not run] test requires delayed allocation buffered writes
+>>>>>>>>
+>>>>>>>> The root cause is f2fs tags wrong fiemap flag for delay allocated
+>>>>>>>> extent.
+>>>>>>>>
+>>>>>>>> Quoted from fiemap.h:
+>>>>>>>> FIEMAP_EXTENT_UNKNOWN        0x00000002 /* Data location unknown. */
+>>>>>>>> FIEMAP_EXTENT_DELALLOC        0x00000004 /* Location still pending.
+>>>>>>>>                               * Sets EXTENT_UNKNOWN. */
+>>>>>>>> FIEMAP_EXTENT_UNWRITTEN        0x00000800 /* Space allocated, but
+>>>>>>>>                               * no data (i.e. zero). */
+>>>>>>>>
+>>>>>>>> FIEMAP_EXTENT_UNWRITTEN means block address is preallocated, but w/o
+>>>>>>>> been written any data, which status f2fs is not supported now, for all
+>>>>>>>> NEW_ADDR block addresses, it means delay allocated blocks, so let's
+>>>>>>>> tag FIEMAP_EXTENT_DELALLOC instead.
+>>>>>>>>
+>>>>>>>> Testcase:
+>>>>>>>> xfs_io -f -c 'pwrite 0 64k' /mnt/f2fs/file;
+>>>>>>>> filefrag -v /mnt/f2fs/file
+>>>>>>>>
+>>>>>>>> Output:
+>>>>>>>> - Before
+>>>>>>>> Filesystem type is: f2f52010
+>>>>>>>> Fize of /mnt/f2fs/file is 65536 (16 blocks of 4096 bytes)
+>>>>>>>>      ext:     logical_offset:        physical_offset: length:   expected: flags:
+>>>>>>>>        0:        0..      15:          0..        15:     16:             last,unwritten,merged,eof
+>>>>>>>> /mnt/f2fs/file: 1 extent found
+>>>>>>>>
+>>>>>>>> After:
+>>>>>>>> Filesystem type is: f2f52010
+>>>>>>>> File size of /mnt/f2fs/file is 65536 (16 blocks of 4096 bytes)
+>>>>>>>>      ext:     logical_offset:        physical_offset: length:   expected: flags:
+>>>>>>>>        0:        0..      15:          0..         0:      0:             last,unknown_loc,delalloc,eof
+>>>>>>>> /mnt/f2fs/file: 1 extent found
+>>>>>>>>
+>>>>>>>> Fixes: 7f63eb77af7b ("f2fs: report unwritten area in f2fs_fiemap")
+>>>>>>>> Signed-off-by: Chao Yu <chao@kernel.org>
+>>>>>>>> ---
+>>>>>>>>      fs/f2fs/data.c | 7 +++++--
+>>>>>>>>      1 file changed, 5 insertions(+), 2 deletions(-)
+>>>>>>>>
+>>>>>>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>>>>>>>> index 359de650772e..3afc9764743e 100644
+>>>>>>>> --- a/fs/f2fs/data.c
+>>>>>>>> +++ b/fs/f2fs/data.c
+>>>>>>>> @@ -1995,7 +1995,10 @@ int f2fs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
+>>>>>>>>          }
+>>>>>>>>          if (size) {
+>>>>>>>> -        flags |= FIEMAP_EXTENT_MERGED;
+>>>>>>>> +        if (flags & FIEMAP_EXTENT_DELALLOC)
+>>>>>>>> +            phys = 0;
+>>>>>>>> +        else
+>>>>>>>> +            flags |= FIEMAP_EXTENT_MERGED;
+>>>>>>>>              if (IS_ENCRYPTED(inode))
+>>>>>>>>                  flags |= FIEMAP_EXTENT_DATA_ENCRYPTED;
+>>>>>>>> @@ -2035,7 +2038,7 @@ int f2fs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
+>>>>>>>>                      size += blks_to_bytes(inode, 1);
+>>>>>>>>                  }
+>>>>>>>>              } else if (map.m_flags & F2FS_MAP_DELALLOC) {
+>>>>>>>> -            flags = FIEMAP_EXTENT_UNWRITTEN;
+>>>>>>>> +            flags = FIEMAP_EXTENT_DELALLOC;
+>>>>>>>>              }
+>>>>>>>>              start_blk += bytes_to_blks(inode, size);
+>>>>>>>> -- 
+>>>>>>>> 2.36.1
+>>>>
+>>>>
+>>>> _______________________________________________
+>>>> Linux-f2fs-devel mailing list
+>>>> Linux-f2fs-devel@lists.sourceforge.net
+>>>> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+> 
+> 
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
