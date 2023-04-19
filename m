@@ -2,118 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C25B16E70AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 03:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1D66E70B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 03:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjDSBPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 21:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S231565AbjDSBQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 21:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjDSBPp (ORCPT
+        with ESMTP id S229884AbjDSBQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 21:15:45 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9E319B3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 18:15:35 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id q5so16326228wmo.4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 18:15:35 -0700 (PDT)
+        Tue, 18 Apr 2023 21:16:29 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39819E4D;
+        Tue, 18 Apr 2023 18:16:28 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-63b5c48ea09so2346223b3a.1;
+        Tue, 18 Apr 2023 18:16:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ixsystems.com; s=google; t=1681866934; x=1684458934;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/CR1IHc9HYlrEY3U89v5t/OX9dshkbM7G0EYz0O4fCI=;
-        b=DrQpXoa2vwYv5KgKUocv5hzJ7n0BoWaqg2iruABRxMov33aWAqj4qiPvOpss7HZR6Y
-         eyhIIAvceuyg0ifTvZI9Cnjr9QhSmbFFlN/3wGztQxQNtOJXXg+UDScf7cszt/Z4gG/8
-         8VrBJobMhaHoDO15M4c6DyBgLQEPPJ/FFkqH5cILQS0bDRRYYDDLrPUToOl7fvKCTc31
-         n30oW0IbuLxNMSx+pt1G042pQtt0qZ/C6hzA+axA6jk/GuLAvkMW+II58uvrZLMA9bWR
-         JqjZobprhwD2ArHbL08QY90pWDqrTPn6wy6+nyAJ7Fzu9gPSCvgG92Pjz/yoAOITQeqq
-         B/HA==
+        d=gmail.com; s=20221208; t=1681866988; x=1684458988;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=l7KcAK1S7DUZq/Db3Jz+q+bCAF609VatxfLnf+LJlvo=;
+        b=UImrKatqY1FwR0yQweibDR4DseukfyBwClwOPcMSYL3LBowh0aaBzIJSwFoWoMpZRx
+         ZSWprAGqMtPABENmu6U6o5rsAqL42xljbObDCdLi6RpQtW6TLxizruD/9K06SRsgLK6s
+         BJvj3ltjBCwGMLO9bjQbpfHPQH8UFr9M1+kbeiylIgLuLpOhWZ5MBOUTSyLFfy6HlYqz
+         IwCO5OogzV7U5Yvaa31THa8mXH0Kj8DLkBLG1CGBXLWDKruXECOmGTkpVZ7gSzycuTCJ
+         9gDXKcTm3dKfe6Ss4wV4g7/JEMCV1dM7fPygD/70/S4oMNXqIrZ0VMD9WKinPLiZSpCH
+         m14A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681866934; x=1684458934;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/CR1IHc9HYlrEY3U89v5t/OX9dshkbM7G0EYz0O4fCI=;
-        b=ef2FC70AfGoNpZY9RMgXTDs0EASdcV8Gtmv7jrwA3UDs34ogFNf5XfoYYk5gy696Zh
-         OcohmZMOLxgngijIaleJxzqfXDfL5S0Wp/pg6gLGTwCpKTJ9DzY8I7f6IS1LpfRqQ7Rf
-         774hDNNojiA+X9hKUCFMNCQyRCi387YLBjfsbvUNqkwFfL+hZwHKXA6iv1K2mDTSrCtP
-         Ky5s57SGgaBbSi+T40oSaED2skGM9+ymTVZx6kUOxzZ3+PJjbTGfS2wRdIrp1qUm9mpG
-         ByuNH/ySnrXBx7D97rbCewuGz5xR7G5YlYHkGxyFH/9QrwMfyfZKc1phRmOsBnOR6ngo
-         1Y2Q==
-X-Gm-Message-State: AAQBX9f7IjsgTdboYkKbqM+0nCyX9volqozBCY4nMmHZY3tnTuVOu54Z
-        yI0k6QWYTvz8mmvAvcJymn8JPDFn/wQoQ59pjjMvOw==
-X-Google-Smtp-Source: AKy350ZZSF1q/Toh4q2I8/pCwearcYtGy2vLmaJlZhVGcoLdCGT35UiwGZj6mJP4LqHxbBkciQlPeQ==
-X-Received: by 2002:a1c:f315:0:b0:3f1:6757:6245 with SMTP id q21-20020a1cf315000000b003f167576245mr10165291wmq.7.1681866934353;
-        Tue, 18 Apr 2023 18:15:34 -0700 (PDT)
-Received: from hamza-pc ([2400:adc1:158:c700:9f4d:2f2e:ebe7:1578])
-        by smtp.gmail.com with ESMTPSA id o2-20020a05600c4fc200b003f1738e64c0sm514527wmq.20.2023.04.18.18.15.31
+        d=1e100.net; s=20221208; t=1681866988; x=1684458988;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l7KcAK1S7DUZq/Db3Jz+q+bCAF609VatxfLnf+LJlvo=;
+        b=eaHxFzCmtI5NFLwRlo8k7o1qW0ToznYDrr7xnOBJSswcmttbrE3vQWbciXRLXHfo5p
+         B+P/gMeQ/GnXigSwU53iZQ+luRtDgMsZ+WZY6DJw5fkiELrfp+kxeXGR4ogGjvg939f0
+         j30u5YwplorxInXrhJtz+Mv89Wy6QTIS7bn9YzOAXhTLEgWOSIXliNWBvZqwxqMwKeh+
+         /5fsUWpnTTlva5gbFVxFXTvewrWdzGbfgmWN0+FhazaLvx9fPnvsZDzmXui+NV6QXJwE
+         pjl6KRDUMDxsnijh31XvIrHnOrXFyu7yLa/SAt2jVWX925yCfZURdUfxs4TWKv/Ovedk
+         Z+dQ==
+X-Gm-Message-State: AAQBX9eD5/cvMp0CEKAfi9paA28KZkBpiiZF33D+HxBKrDA0DFQxxGtO
+        1qlnGOv87asW1ya5PE6e6oitzFK9Wt/gkNxh
+X-Google-Smtp-Source: AKy350YjcaDx5WmdZkF9f2yyCEe57eKJTE93TCYPqXHAZDDTX2kvT5q/9JN9Nvf4osvomTvKY0qU6A==
+X-Received: by 2002:a05:6a00:1493:b0:63b:19e5:a9ec with SMTP id v19-20020a056a00149300b0063b19e5a9ecmr2033968pfu.33.1681866987601;
+        Tue, 18 Apr 2023 18:16:27 -0700 (PDT)
+Received: from yoga ([2400:1f00:13:d56c:e810:608c:4286:179f])
+        by smtp.gmail.com with ESMTPSA id q25-20020a62ae19000000b0063b89300316sm5232157pff.14.2023.04.18.18.16.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 18:15:33 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 06:15:29 +0500
-From:   Ameer Hamza <ahamza@ixsystems.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     viro@zeniv.linux.org.uk, jlayton@kernel.org,
-        chuck.lever@oracle.com, arnd@arndb.de, guoren@kernel.org,
-        palmer@rivosinc.com, f.fainelli@gmail.com, slark_xiao@163.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, awalker@ixsystems.com
-Subject: Re: [PATCH] Add new open(2) flag - O_EMPTY_PATH
-Message-ID: <ZD9AsWMnNKJ4dpjm@hamza-pc>
-References: <20221228160249.428399-1-ahamza@ixsystems.com>
- <20230106130651.vxz7pjtu5gvchdgt@wittgenstein>
+        Tue, 18 Apr 2023 18:16:27 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 06:46:20 +0530
+From:   Anup Sharma <anupnewsmail@gmail.com>
+To:     krzysztof.kozlowski@linaro.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linma@zju.edu.cn, dvyukov@google.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: nfc: nci: fix for UBSAN: shift-out-of-bounds in
+ nci_activate_target
+Message-ID: <ZD9A5Krm+ZoFEFWZ@yoga>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230106130651.vxz7pjtu5gvchdgt@wittgenstein>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 02:06:51PM +0100, Christian Brauner wrote:
-> On Wed, Dec 28, 2022 at 09:02:49PM +0500, Ameer Hamza wrote:
-> > This patch adds a new flag O_EMPTY_PATH that allows openat and open
-> > system calls to open a file referenced by fd if the path is empty,
-> > and it is very similar to the FreeBSD O_EMPTY_PATH flag. This can be
-> > beneficial in some cases since it would avoid having to grant /proc
-> > access to things like samba containers for reopening files to change
-> > flags in a race-free way.
-> > 
-> > Signed-off-by: Ameer Hamza <ahamza@ixsystems.com>
-> > ---
-> 
-> In general this isn't a bad idea and Aleksa and I proposed this as part
-> of the openat2() patchset (see [1]).
-> 
-> However, the reason we didn't do this right away was that we concluded
-> that it shouldn't be simply adding a flag. Reopening file descriptors
-> through procfs is indeed very useful and is often required. But it's
-> also been an endless source of subtle bugs and security holes as it
-> allows reopening file descriptors with more permissions than the
-> original file descriptor had.
-> 
-> The same lax behavior should not be encoded into O_EMPTYPATH. Ideally we
-> would teach O_EMPTYPATH to adhere to magic link modes by default. This
-> would be tied to the idea of upgrade mask in openat2() (cf. [2]). They
-> allow a caller to specify the permissions that a file descriptor may be
-> reopened with at the time the fd is opened.
-> 
-> [1]: https://lore.kernel.org/lkml/20190930183316.10190-4-cyphar@cyphar.com/
-> [2]: https://lore.kernel.org/all/20220526130355.fo6gzbst455fxywy@senku/Kk
+syzbot found  UBSAN: shift-out-of-bounds in nci_activate_target [1],
+when nci_target->supported_protocols is bigger than UNIT_MAX,
+where supported_protocols is unsigned 32-bit interger type.
 
-Thank you for the detailed explanation and sorry for getting back late
-at it. It seems like a pre-requisite for O_EMPTYPATH is to make it safe
-and that depends on a patchset that Aleksa was working on. It would be
-helpful to know the current status of that effort and if we could expect
-it in the near future.
+32 is the maximum allowed for supported_protocols. Added a check
+for it. 
 
-The repo[1] that was mentioned here[2] seems to be private. I am wondering
-if there's a way to look at the patch somehow.
+[1] UBSAN: shift-out-of-bounds in net/nfc/nci/core.c:912:45
+shift exponent 4294967071 is too large for 32-bit type 'int'
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:217 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x221/0x5a0 lib/ubsan.c:387
+ nci_activate_target.cold+0x1a/0x1f net/nfc/nci/core.c:912
+ nfc_activate_target+0x1f8/0x4c0 net/nfc/core.c:420
+ nfc_genl_activate_target+0x1f3/0x290 net/nfc/netlink.c:900
+ genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
+ genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
 
-[1]: https://github.com/cyphar/linux/tree/magiclink/main
-[2]: https://lore.kernel.org/all/20220526130952.z5efngrnh7xtli32@senku/
+Reported-by: syzbot+0839b78e119aae1fec78@syzkaller.appspotmail.com
+Link: https://syzkaller.appspot.com/bug?id=19cf2724120ef8c51c8d2566df0cc34617188433
+
+Signed-off-by: anupsharma <anupnewsmail@gmail.com>
+---
+ net/nfc/nci/core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/net/nfc/nci/core.c b/net/nfc/nci/core.c
+index fff755dde30d..e9d968bd1cd9 100644
+--- a/net/nfc/nci/core.c
++++ b/net/nfc/nci/core.c
+@@ -908,6 +908,11 @@ static int nci_activate_target(struct nfc_dev *nfc_dev,
+ 		pr_err("unable to find the selected target\n");
+ 		return -EINVAL;
+ 	}
++	
++	if (nci_target->supported_protocols >= 32) {
++		pr_err("Too many supported protocol by the device\n");
++		return -EINVAL;
++	}
+ 
+ 	if (!(nci_target->supported_protocols & (1 << protocol))) {
+ 		pr_err("target does not support the requested protocol 0x%x\n",
+-- 
+2.34.1
+
