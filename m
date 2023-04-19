@@ -2,94 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7CC96E78F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E406E78ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232969AbjDSLtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 07:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
+        id S232930AbjDSLtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 07:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjDSLtR (ORCPT
+        with ESMTP id S231524AbjDSLtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 07:49:17 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BA6210B;
-        Wed, 19 Apr 2023 04:49:15 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pp6J4-0046Nz-0z; Wed, 19 Apr 2023 13:49:02 +0200
-Received: from p5b13a017.dip0.t-ipconnect.de ([91.19.160.23] helo=z6.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pp6J3-002VAU-Po; Wed, 19 Apr 2023 13:49:01 +0200
-Received: from glaubitz by z6.fritz.box with local (Exim 4.96)
-        (envelope-from <glaubitz@physik.fu-berlin.de>)
-        id 1pp6J3-002DXP-1M;
-        Wed, 19 Apr 2023 13:49:01 +0200
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Baoquan He <bhe@redhat.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Mundt <lethal@linux-sh.org>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] sh: sq: Fix incorrect element size for allocating bitmap buffer
-Date:   Wed, 19 Apr 2023 13:48:52 +0200
-Message-Id: <20230419114854.528677-1-glaubitz@physik.fu-berlin.de>
-X-Mailer: git-send-email 2.39.2
+        Wed, 19 Apr 2023 07:49:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912AF196
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:49:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A25162CE7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 11:49:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FA62C433D2;
+        Wed, 19 Apr 2023 11:48:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681904939;
+        bh=efh+5H8A8LPK5xRJMGyzwRgk6UCz+rOpyyurbUGxVnU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ueKXv7GCVt8yL+hR9TrL41ieTEw9EOTggudjpbcnvuGLR9PLQynL7SaF9EwgXvxwL
+         B2tMPoV/4XZAdf2hsh+8Xb4vdN9y45oRydcsXweJYCOnZf+ccBsAyuzxqqbxp/YIT7
+         xGBrrMt8UXImSd2e1+BBhSIKqz+CmLT5y8QI9I2ZdW1nvapmlWbjBllh4FEU6jOc7C
+         67IKmTQee50YPDrZJMPJLK8dDcD7P+NC/UoXJQm/7qce0ZkUNyRYvAerucuGiExaDc
+         4FPL0O2sRLYMaZAJQpLixvzpYoFVNEsKtnh+6KiA87oWL20wMBYXqYSsstNspu0pL7
+         73j70xlOIUBRw==
+Date:   Wed, 19 Apr 2023 12:48:52 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        David Lin <CTLIN0@nuvoton.com>, Arnd Bergmann <arnd@arndb.de>,
+        Tom Rix <trix@redhat.com>, Peter Rosin <peda@axentia.se>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] ASoC: nau8825: fix delay time range check
+Message-ID: <c6bc42c6-4a98-4bb6-9639-acf4c2010b68@sirena.org.uk>
+References: <20230419114546.820921-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 91.19.160.23
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="J8zj3FY9iXJVyBa1"
+Content-Disposition: inline
+In-Reply-To: <20230419114546.820921-1-arnd@kernel.org>
+X-Cookie: This is your fortune.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Store Queue code allocates a bitmap buffer with the size of
-multiple of sizeof(long) in sq_api_init(). While the buffer size
-is calculated correctly, the code uses the wrong element size to
-allocate the buffer which results in the allocated bitmap buffer
-being too small.
 
-Fix this by allocating the buffer with kcalloc() with element size
-sizeof(long) instead of kzalloc() whose elements size defaults to
-sizeof(char).
+--J8zj3FY9iXJVyBa1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: d7c30c682a27 ("sh: Store Queue API rework.")
-Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
----
- arch/sh/kernel/cpu/sh4/sq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Apr 19, 2023 at 01:45:39PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> clang points out that the recently added range check is nonsensical:
 
-diff --git a/arch/sh/kernel/cpu/sh4/sq.c b/arch/sh/kernel/cpu/sh4/sq.c
-index 27f2e3da5aa2..6e0bb3f47fa5 100644
---- a/arch/sh/kernel/cpu/sh4/sq.c
-+++ b/arch/sh/kernel/cpu/sh4/sq.c
-@@ -382,7 +382,7 @@ static int __init sq_api_init(void)
- 	if (unlikely(!sq_cache))
- 		return ret;
- 
--	sq_bitmap = kzalloc(size, GFP_KERNEL);
-+	sq_bitmap = kcalloc(size, sizeof(long), GFP_KERNEL);
- 	if (unlikely(!sq_bitmap))
- 		goto out;
- 
--- 
-2.39.2
+Someone already sent a patch for tihs.
 
+--J8zj3FY9iXJVyBa1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ/1SQACgkQJNaLcl1U
+h9D4hgf+NsxxGD7IocXiGwI+ClPVOXKW4Sgiuh+nGdVi2M0/itthwOkgwRP43xZE
+eQzzwnqIVyXsCjcBZemgyhbotowwatYmISqVBmscT8TwKLIwJw/lygPainFNqwIE
+mhqR81sPysEJPJWFnlkSBpOoao5Cs6a5OqHQrogdiHKVg7OjYI3mGknP+x9mcwaB
+wGJZ0u1hb7YyzH7rVN2mkdRC90hiCOm/30GsLQir5XEiSGTbJzUaaJ4BSqYpwD7C
+E58q7UUnWI3ITddqAuUGU3W9rKppfHgIi766pw1u1jKxJeXbbqAbXfrMH/nfVBka
+RCfCaY1J5pupmlUkUIynLuz6YLT4jw==
+=Kwn5
+-----END PGP SIGNATURE-----
+
+--J8zj3FY9iXJVyBa1--
