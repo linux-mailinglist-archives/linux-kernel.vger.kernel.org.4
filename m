@@ -2,106 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8566E71B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDBE06E71BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbjDSDjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 23:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
+        id S231787AbjDSDjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 23:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbjDSDjo (ORCPT
+        with ESMTP id S231658AbjDSDjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 23:39:44 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E9940E8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 20:39:43 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b46186c03so3296624b3a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 20:39:43 -0700 (PDT)
+        Tue, 18 Apr 2023 23:39:47 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A001340DB;
+        Tue, 18 Apr 2023 20:39:46 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-51f3289d306so1192027a12.3;
+        Tue, 18 Apr 2023 20:39:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1681875582; x=1684467582;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1681875586; x=1684467586;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=a0e/blrL6Tf9C9Zm88s7yEUaau7+OiJEMt6DtUxmn8U=;
-        b=heQMR9KeF4YP7cYFKebZxUoa0zwSm6yermCbrw1yWPuH8qOnanz2PICoK7wFsHoCii
-         ITyyopfMMFdHPQ3l53RQJ9R0iCJNIqSOBu8v2kGorc56fgoHdo+lwQn7Rtyot6Fc2TRr
-         edENA3S1GqNaFQoyAISXSMcD9w43pa2t9HmnVeof/RNZ8rjOMFaCqEAh77zgB8EAoQ6W
-         kv4VzctHo6uh6MWOsPvjXLQbUvLQo6wLB2L4hbWjvmnu6qu8dtL4oR5XBt2/YOm2Avu/
-         Hj08KoyiW66V1OPkWan8ZU06NlDH8ZrKHOh5SaFHvZXODbRYM1HW4zSJDCITBvWtjQwK
-         dRYg==
+        bh=lCMyUIkSESOlhZx4cSCMuxrtlv3+z5on7gThiRJtPRk=;
+        b=JCeUKqdLjpiwkKPZHnaog2PoakuyxE03eb31a/EyI7ltPNpggCaUJslmG1VoQQmadD
+         aDuFMSGNBMFVYUIfzr29rYKh9Vcae8Wi6pCDV5pOadaHEJLLIEoxZpA3ewHtKSx1s9Aq
+         CFMYrXhCsVM93MTO5fHIvFqlgkgyr+jowjRrasEUxF5pMCFMiYm+KwdvABd5++8BVn23
+         X91NvwjjOPwDbW/WJB+O/3ygWeDLq5TOu+42FzkURfgQS3/zpBQ6MAknjZmPk0+l62yM
+         5ZzZWElw86n97nGME4AtuCifO8iMO5F0JQBTZFyIH4poVRRdFRx9C5MindNOnXrUbL4v
+         BzvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681875582; x=1684467582;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a0e/blrL6Tf9C9Zm88s7yEUaau7+OiJEMt6DtUxmn8U=;
-        b=KVM6YZUsS2e6awtCqZ0f4r5FYjvue8l5VZX9GPh049DKw+IW1jDm7hAc7xICR3HN8q
-         UU0rhSnLTPe5ny29JimHlwVW6W1Tha61FHBSQAg5uDrgK2KaTDCET/Z8DRlu0OHtI7t/
-         1zSDx6G+iB9Bny4L2UsRkPK7zVRq/vIMeICUKi6f5EFRCk2rsbMcosAX70y4vAIEh7e8
-         u1epFuyrlv8/VFdu/uBQV+v7RmliX11QNZnHXyWuTTUN8d/QxI4rZEdUZLzQ3SzheZtv
-         CkW67RdGl4PWxf4TCnc+SwgyKr0OZFravZcIYzoAfodh4gFLsKoo37ASn61r7C/5rYNW
-         gcWw==
-X-Gm-Message-State: AAQBX9cOWUX2NyVeGg2ylXP7T1I5np6cjxndigoG2gpKFU6e/c/94YoZ
-        vIzv1DaLNk5zUJBhfnO+T58vYA==
-X-Google-Smtp-Source: AKy350bVWhvudAUkLl/P0TT9j1GmLD1pufJBRjFi20EeKXYqEO3qjLGawXTfX3mlLaN9b1oPB/HNmA==
-X-Received: by 2002:a05:6a00:2e94:b0:63b:89a2:d62d with SMTP id fd20-20020a056a002e9400b0063b89a2d62dmr2618037pfb.20.1681875582590;
-        Tue, 18 Apr 2023 20:39:42 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id n9-20020aa79049000000b0062ddcad2cbesm10270224pfo.145.2023.04.18.20.39.41
+        d=1e100.net; s=20221208; t=1681875586; x=1684467586;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lCMyUIkSESOlhZx4cSCMuxrtlv3+z5on7gThiRJtPRk=;
+        b=h28BMfxsqNVA/8hJkM6EMIdrEoJ+W3rKgcDhyQJFM9BpGExtTwWtKaqwDYfq4ZR6Ez
+         oi/rqlyGkAjP8ow+Ey+xYrzwAEdtikjx9SqdavhYK9+xq2CoKrayw7GFCQtF2h0h7fBn
+         vEfyoFS4jxd7Ii0qmWKIaS+ujFn8k2w5ggs3FP/bO+Qg63w9tDDZyegqPBf0hmrQlQVy
+         S3BOx08ohzFI9aGueCC1uCuyp5+Q3KFuZt41oRiCT+2mXb0Ihq1ixCEed6/shRCf8sYk
+         8zlC7B4wK5ELepJEtrGnOltJo52fQJ7pZmfvqon0yd7R1v0VZ1u2qnxJbPAHe0NVSUMD
+         vVQA==
+X-Gm-Message-State: AAQBX9f+ID8+AFdCHTwFrVakYQL/Qa62e86x2l7fXJJzuV9ZmiNiu5Wd
+        OCm10qcSISgS+OpRBn11T8E=
+X-Google-Smtp-Source: AKy350alzAQ1tk3cE3nGnmYS3QnMmTPe+MoJYsB8Rc6bkccmvKe7LoWQWcsuM1cBEJmsKqNTYXzeDQ==
+X-Received: by 2002:a17:902:cad5:b0:1a6:9794:a4 with SMTP id y21-20020a170902cad500b001a6979400a4mr3112233pld.63.1681875585754;
+        Tue, 18 Apr 2023 20:39:45 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id jw19-20020a170903279300b0019f3cc463absm10384893plb.0.2023.04.18.20.39.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 20:39:42 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 20:39:42 -0700 (PDT)
-X-Google-Original-Date: Tue, 18 Apr 2023 20:39:34 PDT (-0700)
-Subject:     Re: [PATCH v1 3/4] soc: sifive: make SiFive's cache controller driver depend on ARCH_ symbols
-In-Reply-To: <20230406-subdued-observer-cbb0e2f72cc7@spud>
-CC:     linux-riscv@lists.infradead.org, Conor Dooley <conor@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, Greg KH <gregkh@linuxfoundation.org>,
-        jirislaby@kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-serial@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-8318a24b-b187-4056-ba08-3dfe2054d4fe@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 18 Apr 2023 20:39:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 18 Apr 2023 20:39:44 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 000/124] 5.10.178-rc1 review
+Message-ID: <ad99f18a-6cb3-4187-99ed-40128bb8e98a@roeck-us.net>
+References: <20230418120309.539243408@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418120309.539243408@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Apr 2023 13:57:49 PDT (-0700), Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> As part of converting RISC-V SOC_FOO symbols to ARCH_FOO to match the
-> use of such symbols on other architectures, convert the SiFive soc
-> drivers to use the new ARCH_FOO symbols.
->
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  drivers/soc/sifive/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/soc/sifive/Kconfig b/drivers/soc/sifive/Kconfig
-> index e86870be34c9..139884addc41 100644
-> --- a/drivers/soc/sifive/Kconfig
-> +++ b/drivers/soc/sifive/Kconfig
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->
-> -if SOC_SIFIVE || SOC_STARFIVE
-> +if ARCH_SIFIVE || ARCH_STARFIVE
->
->  config SIFIVE_CCACHE
->  	bool "Sifive Composable Cache controller"
+On Tue, Apr 18, 2023 at 02:20:19PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.178 release.
+> There are 124 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
+> Anything received after that time might be too late.
+> 
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Build results:
+	total: 162 pass: 148 fail: 14
+Failed builds:
+	alpha:allmodconfig
+	arm:omap2plus_defconfig
+	arm:vexpress_defconfig
+	arm64:defconfig
+	i386:defconfig
+	ia64:defconfig
+	mips:defconfig
+	parisc:allmodconfig
+	parisc64:generic-64bit_defconfig
+	powerpc:defconfig
+	powerpc:ppc64e_defconfig
+	powerpc:cell_defconfig
+	s390:defconfig
+	x86_64:defconfig
+Qemu test results:
+	total: 485 pass: 477 fail: 8
+Failed tests:
+	mipsel64:64r6el_defconfig:notests:nonet:smp:ide:hd
+	mipsel64:64r6el_defconfig:notests:nonet:smp:ide:hd
+	mipsel64:64r6el_defconfig:notests:nonet:smp:ide:cd
+	s390:defconfig:nolocktests:smp2:net,default:initrd
+	s390:defconfig:nolocktests:smp2:virtio-blk-ccw:net,virtio-net-pci:rootfs
+	s390:defconfig:nolocktests:smp2:scsi[virtio-ccw]:net,default:rootfs
+	s390:defconfig:nolocktests:virtio-pci:net,virtio-net-pci:rootfs
+	s390:defconfig:nolocktests:scsi[virtio-pci]:net,default:rootfs
+
+Caused by:
+
+kernel/cgroup/cpuset.c: In function 'cpuset_can_fork':
+kernel/cgroup/cpuset.c:2941:30: error: 'cgroup_mutex' undeclared
+
+Guenter
