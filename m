@@ -2,72 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB0C6E8242
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 920446E8247
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbjDST7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 15:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
+        id S230373AbjDSUBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 16:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjDST7E (ORCPT
+        with ESMTP id S229785AbjDSUBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 15:59:04 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A835FCF
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:59:00 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id dx24so1087437ejb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:59:00 -0700 (PDT)
+        Wed, 19 Apr 2023 16:01:30 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FC32135
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:01:29 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id xd13so1258070ejb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:01:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681934339; x=1684526339;
+        d=linaro.org; s=google; t=1681934487; x=1684526487;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aVpt9sYJTPat9HTzksp4fUGvUNXr5TZYMpJLvWLAs48=;
-        b=UCchYZWwyaAxmNQRMnL0/yxZ4z+iMuPi6CvIcH8er9PdAg/MY/Ta2EGvOtwShkRx0u
-         ztigkRUqYt+pSm06PJzEss29M8wUYvermAmsruFrJR3QGp2rUxKC4iMwpk2BRKRSTzDo
-         KgR2FXxx0uCJJbLH7jOtSfF/h9w6koKEP0m5Yvo34dHQhULhwcTech/NZ+vTt8TpfWV7
-         DRoegta9ydAvXEMUGfwMARk2bzcrhYDY88NlQWxxk0Sl1S/lunNKjarvgWJNVz5IaQ3J
-         AdfvwkqqMV0/fL0UMdfOKZXyHI3kyE/9krrzlUzuzJPKO2CPmQVvoX0zI0UywoT/JGlO
-         Am0w==
+        bh=uR1sg37u4yLqstygNFNs5VOG/aJjyMp9p6EHpt4xrlU=;
+        b=t8UO6709ej90L404wmD+d6lwQDgZJ3lnbmCFTtcjX2lYbOOp6jCA8/PNdrpn+g+Dz5
+         /ufKN1PjfmQNz8C5jLDjv7sCFtpttLjH8Isk1T90rZGK2qeJquSTpMuT/qCxfmU8V5oP
+         wbrnjdvQ+Jq8Zo4PBL172EiONjNMF9HbAxCdqXkrEdMEsAZN77ahqq3iQa0J2jBffHfu
+         D5rloRoTmMyjdkp0dBPkN50iwhKXYLlnJW+5uXikYZwSxCla0reblEDRbmdsepE9w0GM
+         P9KWA5G0Y4vPtQVAcrqNRGu4mU2zmmqjkFNqioPaovUJnb4YEoPDJJdaMtMfY/HA+DeK
+         zYUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681934339; x=1684526339;
+        d=1e100.net; s=20221208; t=1681934487; x=1684526487;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aVpt9sYJTPat9HTzksp4fUGvUNXr5TZYMpJLvWLAs48=;
-        b=N21xG0cxcM7CrXPfDJ7AGlaTwQsIP5RUMoFHsRFNkeRJgc2LV4vc0xK0miw2aaK0+y
-         HbNZxJFARrv56Tc/STdBpED718G40JSbCQ0qzhGT+MpxjLsDJrJ95ZHcaawvcz3ZH77W
-         YmoUxcRuOImTDqpys+FWjEVMjyCxpEn12sSdOfNtdz8HoyrQohb5aEkrR5rWRaH/M+7I
-         0x9MvmfHyGidfrZ/J9ylx4Ti2TB3U7Gnq8Wz+kGfXgq9RXvHGmX685DNhqjwdyvMmEjE
-         4Bim2l2TJzJ1d9/APPHv/BHNm5lI+O3F9E/eDsLJDs5299AwPY8FlxLwZJ1WqO+zODcQ
-         9otw==
-X-Gm-Message-State: AAQBX9ch+q/lkewDjW0KMw8P1mLTk9Di13g92ttUuziatMG5PsPHPIQk
-        vuoO0NrGY9SPO8HxEs6wJBeR2Q==
-X-Google-Smtp-Source: AKy350YIYDJYSouUVSRt5Wq71UJfzT4ew+7n169i9LaxUWTLVoQm33LkHdjA2Il2yYY1OBlwS6F3NQ==
-X-Received: by 2002:a17:907:8d13:b0:953:7d80:c40e with SMTP id tc19-20020a1709078d1300b009537d80c40emr600186ejc.0.1681934338819;
-        Wed, 19 Apr 2023 12:58:58 -0700 (PDT)
+        bh=uR1sg37u4yLqstygNFNs5VOG/aJjyMp9p6EHpt4xrlU=;
+        b=bO4P45cNEvimmMKZwm6cc8qozLZmFmV5r7lpZb7Yp+RPpn7+vjdAZLrSqZtTs07X/N
+         feHaLRqQ2dj7lzA8oQow5vG6BeP0jVDPg2foRqPmx8t94kMm78lS08kVk2GMW6nFqrtS
+         dH8NvvC15PEmv2CKAWZPfRDlQCSmgud2MxsOBBgtpygrBcklT98bwI0G/3H/6u/yveXA
+         XvRTKOnE4w0XTUZnyKHE0x04pAZqE40sdBMktr0dLU+t+clAjjmkEkLUkOSB7svwR0db
+         2jG5MgudLlS7HPy9Vww36n3PK2SSGGOiQptuyY7WWvZr5JwdQxffvSj28/Hr1Y1Xcqbs
+         arrA==
+X-Gm-Message-State: AAQBX9fcbNyie1x69/oqBvR+aE1eAC/uP/8AWnIAKLJWiWe5ty7yDUXU
+        kLjz8qY4rqcjJ3tnFOdjCg2dMA==
+X-Google-Smtp-Source: AKy350Ymx4qFw5Wb5XaUf2ClN/hYaKBoxle02tqUxYWB3N1hLco5TfUFJFyOd9eaddTXOetVPigRsg==
+X-Received: by 2002:a17:906:7006:b0:94a:44bc:31e7 with SMTP id n6-20020a170906700600b0094a44bc31e7mr17921518ejj.60.1681934487403;
+        Wed, 19 Apr 2023 13:01:27 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:976c:1d6c:6ed0:8935? ([2a02:810d:15c0:828:976c:1d6c:6ed0:8935])
-        by smtp.gmail.com with ESMTPSA id rk1-20020a170907214100b0094f0a56e33esm7130721ejb.47.2023.04.19.12.58.57
+        by smtp.gmail.com with ESMTPSA id v15-20020a17090606cf00b0095336e8e012sm1922174ejb.176.2023.04.19.13.01.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 12:58:58 -0700 (PDT)
-Message-ID: <9d233482-b2e1-3fc6-0806-1d777779f104@linaro.org>
-Date:   Wed, 19 Apr 2023 21:58:57 +0200
+        Wed, 19 Apr 2023 13:01:26 -0700 (PDT)
+Message-ID: <172c46b7-256e-b09d-3940-880fa8989b49@linaro.org>
+Date:   Wed, 19 Apr 2023 22:01:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v4 2/2] arm64: dts: meson-gxl: add support for Xiaomi Mi
- box 3
+Subject: Re: [PATCH v5 06/11] dt-bindings: PCI: Update the RK3399 example to a
+ valid one
 Content-Language: en-US
-To:     Karl Chan <exkcmailist@inbox.lv>, linux-amlogic@lists.infradead.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        neil.armstrong@linaro.org, khilman@baylibre.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+        alberto.dassatti@heig-vd.ch
+Cc:     xxm@rock-chips.com, dlemoal@kernel.org,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Hugh Cole-Baker <sigmaris@gmail.com>,
+        Arnaud Ferraris <arnaud.ferraris@collabora.com>,
+        linux-pci@vger.kernel.org, linux-rockchip@lists.infradead.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Karl Chan <exxxxkc@getgoogleoff.me>
-References: <20230418145515.19547-1-exkcmailist@inbox.lv>
- <20230418145515.19547-3-exkcmailist@inbox.lv>
+        linux-kernel@vger.kernel.org
+References: <20230418074700.1083505-1-rick.wertenbroek@gmail.com>
+ <20230418074700.1083505-7-rick.wertenbroek@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230418145515.19547-3-exkcmailist@inbox.lv>
+In-Reply-To: <20230418074700.1083505-7-rick.wertenbroek@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,24 +95,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/04/2023 16:55, Karl Chan wrote:
-> From: "Karl Chan"  <exkcmailist@inbox.lv>
+On 18/04/2023 09:46, Rick Wertenbroek wrote:
+> Update the example in the documentation to a valid example.
+> Address for mem-base was invalid, it pointed to address
+> 0x8000'0000 which is the upper region of the DDR which
+> is not necessarily populated depending on the board.
+> This address should point to the base of the memory
+> window region of the controller which is 0xfa00'0000.
+> Add missing pinctrl.
 > 
-> The Xiaomi Mi box 3 is a TV box based on the Amlogic S905X chipset.
-> There are two variants:
-> - 2 GiB/8GIB
-> - 1 GiB/4GIB
+> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
+> ---
+>  .../devicetree/bindings/pci/rockchip,rk3399-pcie-ep.yaml      | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> Both variants come with:
-> - 802.11a/b/g/n/ac wifi (BCM4345)
-> - HDMI , AV (CVBS) and S/PDIF optical output
-> - 1x USB (utilizing both USB ports provided by the SoC)
-> 
-> Signed-off-by: Karl Chan <exxxxkc@getgoogleoff.me>
+> diff --git a/Documentation/devicetree/bindings/pci/rockchip,rk3399-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/rockchip,rk3399-pcie-ep.yaml
+> index 88386a6d7011..6b62f6f58efe 100644
+> --- a/Documentation/devicetree/bindings/pci/rockchip,rk3399-pcie-ep.yaml
+> +++ b/Documentation/devicetree/bindings/pci/rockchip,rk3399-pcie-ep.yaml
+> @@ -47,7 +47,7 @@ examples:
+>  
+>          pcie-ep@f8000000 {
+>              compatible = "rockchip,rk3399-pcie-ep";
+> -            reg = <0x0 0xfd000000 0x0 0x1000000>, <0x0 0x80000000 0x0 0x20000>;
+> +            reg = <0x0 0xfd000000 0x0 0x1000000>, <0x0 0xfa000000 0x0 0x2000000>;
+>              reg-names = "apb-base", "mem-base";
+>              clocks = <&cru ACLK_PCIE>, <&cru ACLK_PERF_PCIE>,
+>                <&cru PCLK_PCIE>, <&cru SCLK_PCIE_PM>;
+> @@ -63,6 +63,8 @@ examples:
+>              phys = <&pcie_phy 0>, <&pcie_phy 1>, <&pcie_phy 2>, <&pcie_phy 3>;
+>              phy-names = "pcie-phy-0", "pcie-phy-1", "pcie-phy-2", "pcie-phy-3";
+>              rockchip,max-outbound-regions = <16>;
+> +            pinctrl-names = "default";
+> +            pinctrl-0 = <&pcie_clkreqnb_cpm>;
 
-Still broken chain.
+This is just example of the binding, you do not need to fill all
+unrelated (generic) properties like pinctrl.
 
-Also, drop stray blank lines from end of files.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
