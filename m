@@ -2,93 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD286E81C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D62D6E81CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjDSTXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 15:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
+        id S229458AbjDSTYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 15:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjDSTXP (ORCPT
+        with ESMTP id S229822AbjDSTYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 15:23:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1465259E3;
-        Wed, 19 Apr 2023 12:23:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC0AD6400C;
-        Wed, 19 Apr 2023 19:23:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 572B7C433D2;
-        Wed, 19 Apr 2023 19:23:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681932193;
-        bh=or2HJONe3O8ddoiHASXnOq90Hlfo90B4VuLfBfgdYqE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Id9KKEqa3u7Hw33Z0acnzBZadz+dMCNFxIQLyVhS3u13XRkCWlLnoSQFI0xU+b9zl
-         Xxs5ltpxuOWIEUHPofCUCGkQFNNZIYozsaPSfaNpyqwTgLgt/OAdIG57CtfFReualA
-         Yn22aVc34YNL8YvJSYSwfnTmsk6njjmFzNYDBSvmDnuTQANfhQlTcTtGTKswKamb9d
-         aBZy19fy3Tlh4THITpI4Y30Iz0tFIbKMznNYy2e8XrVCH15a8LJhYk3xUOh75FQpSS
-         T+vqjYdsQnLm1jHnfTXgpqF8uStz/JU67u4Wef1trYmvDz/dk+AGnfIopxLSBeaAlW
-         ip/07oS8GyYNA==
-From:   broonie@kernel.org
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: linux-next: manual merge of the cxl tree with the pci tree
-Date:   Wed, 19 Apr 2023 20:22:16 +0100
-Message-Id: <20230419192216.149588-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Wed, 19 Apr 2023 15:24:49 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDA2527E;
+        Wed, 19 Apr 2023 12:24:48 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1ppDQ6-0003wa-0a;
+        Wed, 19 Apr 2023 21:24:46 +0200
+Date:   Wed, 19 Apr 2023 20:24:41 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        John Crispin <john@phrozen.org>
+Subject: [PATCH 0/2] Support PWM on MediaTek MT7981
+Message-ID: <cover.1681932165.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Add support for PWM on the MediaTek MT7981 to pwm-mediatek.c as well
+as new mediatek,mt7981-pwm compatible string to the existing bindings.
 
-Today's linux-next merge of the cxl tree got a conflict in:
+Daniel Golle (2):
+  dt-bindings: pwm: mediatek: Add mediatek,mt7981 compatible
+  pwm: mediatek: Add support for MT7981
 
-  .clang-format
+ .../bindings/pwm/mediatek,mt2712-pwm.yaml     |  1 +
+ drivers/pwm/pwm-mediatek.c                    | 54 ++++++++++++++++---
+ 2 files changed, 47 insertions(+), 8 deletions(-)
 
-between commit:
 
-  09cc900632400 ("PCI: Introduce pci_dev_for_each_resource()")
+base-commit: 67d5d9f013d6c3829383c08162939cabff14fccc
+-- 
+2.40.0
 
-from the pci tree and commit:
-
-  74e491e5d1bcc ("PCI/DOE: Make mailbox creation API private")
-
-from the cxl tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc .clang-format
-index 2048b0296d76f,1c85f6ddc71ab..0000000000000
---- a/.clang-format
-+++ b/.clang-format
-@@@ -520,8 -520,6 +520,7 @@@ ForEachMacros
-    - 'of_property_for_each_string'
-    - 'of_property_for_each_u32'
-    - 'pci_bus_for_each_resource'
- +  - 'pci_dev_for_each_resource'
--   - 'pci_doe_for_each_off'
-    - 'pcl_for_each_chunk'
-    - 'pcl_for_each_segment'
-    - 'pcm_for_each_format'
