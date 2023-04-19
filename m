@@ -2,69 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3496E7DA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECAF6E7DAA
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232920AbjDSPJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
+        id S231600AbjDSPKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 11:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232593AbjDSPJl (ORCPT
+        with ESMTP id S233298AbjDSPJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:09:41 -0400
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E624C1F
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:09:38 -0700 (PDT)
-Received: by mail-oo1-xc32.google.com with SMTP id 006d021491bc7-545d82e1a1bso684340eaf.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:09:38 -0700 (PDT)
+        Wed, 19 Apr 2023 11:09:55 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4CC4C1F
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:09:50 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-5144043d9d1so3015148a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:09:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1681916978; x=1684508978;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vxz4WpDlv6wH199UsEqYfGj6F7utE5kHnU1NSqrYkEI=;
-        b=a3Xj8a4LitxGLjzfNfiSrOOIuEUFh4CTav04xvB0rDBxTRMVcIg6pyUQJp/xAlLnQe
-         0Ur3qYeBmDt51R0iqSb2KTCKZsmfGorpAbGVYGJlNS6YiCIx6y+TLeTMXEUQRTHSpwWa
-         /WT4J20/Q8d4ghyuY3j04x56N9IvmiEUFMNLE=
+        d=linaro.org; s=google; t=1681916990; x=1684508990;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9xYRx4lxSwrTz8KomOP3X7PYWUvothv5g/ZoMajkQIs=;
+        b=sXPBCslnv6R9uVZX7Gq3xtSsKpgzb0/01i98xXOZQx+KbP4KqVddhPYdcEVIH92o4/
+         pmZSEaoq7K27ohwgJ+wenSjn0dMQerb+uCo2ZucB/ttrkOH+5nH3PbagzZ3PTu4MLinA
+         TuKX/J6WZKuecdQ+SbtWPDBxIT9YSQFdk9EpXU82KxmWB7eepY+FOWYRQZw89n6lAOaK
+         XrVRagqX0pIaFphG3FrY/Kf+S15ViKgyd1zdDEgbm2ZGDCRg5ygwZkCfIxnA/TylLYqo
+         kupYb4zacsCkJMBL3td7FdPMMyd0LNOaVeCVWWXhum1Qx2Kzg3cACS2tSOJI8K/kMrPz
+         X4Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681916978; x=1684508978;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vxz4WpDlv6wH199UsEqYfGj6F7utE5kHnU1NSqrYkEI=;
-        b=HY9H35vtXxlgRh2IJCTq9ATTyVB4D6xCGRThwyaChRL2ZOv5QoQbrFhVEOFBbRJ+7L
-         CB5D+6BFcqbqB056DBcwbXouDvXNqwLDrcsi50DCj3d1V1sca3K9n/lgolJZTPo1dc2T
-         1P/UeFGmEyy55o0H10Lw1X7JMQFHIzDP/aCp8Otgoet1MAvX7uhcp/QLr1+i0cXGiDsf
-         9+R2eULM00NZaJ+zE0xrgaWBGVm+Dvtuyrd6fsIEN16otUuvTyt5GqRMoIalZn8Fya8k
-         GstdYBOVXdQzBuJVu3AHn2nZT/+202Bxg1S/mskyt526/Ow8fAALcpPwoMAtt9unMe9i
-         kW5w==
-X-Gm-Message-State: AAQBX9cN/fH17ElcgYutflfIq9vG9O+S+5nM/F3lqEUKdV7cEDIo6VyI
-        1JZS2DEXfdSDy87Ud/KN1T/SH+bH2Q5dSRAsq8je+Q==
-X-Google-Smtp-Source: AKy350bO9mOX8qtAPRjIaVy1M/QFCCzMf9lzbVAJueqp3G07UxxxQ4LvHgK5p6EwWLFFS4PJtu4S7Cfr5JrU1gQThIw=
-X-Received: by 2002:aca:df87:0:b0:384:2019:c201 with SMTP id
- w129-20020acadf87000000b003842019c201mr1706947oig.8.1681916977741; Wed, 19
- Apr 2023 08:09:37 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681916990; x=1684508990;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9xYRx4lxSwrTz8KomOP3X7PYWUvothv5g/ZoMajkQIs=;
+        b=aU0pJKTXupjtOLQu/8i7RLzF/KhLjiSaHtc9mEdSl9FHGf+CJlGL2QvwlZ01o+VpDK
+         iwbR/XE1JQxLpBnKx6iPklAQXN31EucHzLK29I5G0Pn7yQKDLU2AgG2tB9Zd6qEJfLj7
+         FD6BjMzl7VK/RHvR3S9+SAH/JwxIK15RSfQqBgLtalnbgWuQumjQ2HCsH3KQIkLxpvaF
+         o/3E/mr3jeHQ1zbMQYtplQuKfFdK0wdavDJYconZs3tWBpaPZDKGMCOJI4rCTTnHhFpz
+         bz5tikQCOtLdl7RQ0C3lLlv+CGJ31y3bkTWu/D9mqg+y4Ky7+w5qEoKhVZ0gF2qDSZg/
+         /GmA==
+X-Gm-Message-State: AAQBX9eaAdYQuHAp7J7olZHFVa2KTuhH3fubGLQRj3HUT3QGq9TpHpx/
+        O7h6lI0qMrTFR1OXTHsGyOATCA==
+X-Google-Smtp-Source: AKy350ZOsj/rgDa7m85kCFSt/yyAxPXdtikhF0MU23Wn0WjNTH8dh6EXRwbGslBJniiqLHyCe3xjGQ==
+X-Received: by 2002:a17:90a:72c8:b0:246:9bad:2354 with SMTP id l8-20020a17090a72c800b002469bad2354mr3110204pjk.43.1681916990193;
+        Wed, 19 Apr 2023 08:09:50 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:302c:551a:91d2:840f])
+        by smtp.gmail.com with ESMTPSA id ip11-20020a17090b314b00b00246626343aesm1541885pjb.25.2023.04.19.08.09.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 08:09:49 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 09:09:47 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     TingHan Shen =?utf-8?B?KOayiOW7t+e/sCk=?= 
+        <TingHan.Shen@mediatek.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "andersson@kernel.org" <andersson@kernel.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v9 05/11] remoteproc: mediatek: Extract remoteproc
+ initialization flow
+Message-ID: <ZEAEO3ZOptIoIskz@p14s>
+References: <20230328022733.29910-1-tinghan.shen@mediatek.com>
+ <20230328022733.29910-6-tinghan.shen@mediatek.com>
+ <20230331174431.GA3504605@p14s>
+ <46baff1f95fa13976d7a07b5e50ff2175e464baa.camel@mediatek.com>
 MIME-Version: 1.0
-References: <20230417113219.1354078-1-suijingfeng@loongson.cn>
- <ZD5Vgx9Txaiz7Bun@phenom.ffwll.local> <139c9398-488d-df19-9ae2-2b4b47ef64f4@189.cn>
- <86a8b262-cbf2-b75f-9972-491f557edf74@189.cn>
-In-Reply-To: <86a8b262-cbf2-b75f-9972-491f557edf74@189.cn>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Wed, 19 Apr 2023 17:09:26 +0200
-Message-ID: <CAKMK7uE-azFT02Sp2FDfMGTc57eYJEn8iM8Wk1mt5ucPs1qM-w@mail.gmail.com>
-Subject: Re: [PATCH v3] drm/fbdev-generic: prohibit potential out-of-bounds access
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Li Yi <liyi@loongson.cn>,
-        Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <46baff1f95fa13976d7a07b5e50ff2175e464baa.camel@mediatek.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,185 +92,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Apr 2023 at 20:16, Sui Jingfeng <15330273260@189.cn> wrote:
->
-> Hi,
->
-> On 2023/4/19 01:52, Sui Jingfeng wrote:
-> > Hi,
-> >
-> > On 2023/4/18 16:32, Daniel Vetter wrote:
-> >> On Mon, Apr 17, 2023 at 07:32:19PM +0800, Sui Jingfeng wrote:
-> >>> The fbdev test of IGT may write after EOF, which lead to out-of-bound
-> >>> access for the drm drivers using fbdev-generic. For example, on a x86
-> >>> + aspeed bmc card platform, with a 1680x1050 resolution display,
-> >>> running
-> >>> fbdev test if IGT will cause the linux kernel hang with the following
-> >>> call trace:
-> >>>
-> >>>    Oops: 0000 [#1] PREEMPT SMP PTI
-> >>>    [IGT] fbdev: starting subtest eof
-> >>>    Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
-> >>>    [IGT] fbdev: starting subtest nullptr
-> >>>
-> >>>    RIP: 0010:memcpy_erms+0xa/0x20
-> >>>    RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
-> >>>    RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
-> >>>    RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
-> >>>    RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
-> >>>    R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
-> >>>    R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
-> >>>    FS:  0000000000000000(0000) GS:ffff895257380000(0000)
-> >>> knlGS:0000000000000000
-> >>>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >>>    CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
-> >>>    Call Trace:
-> >>>     <TASK>
-> >>>     ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
-> >>>     drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
-> >>>     process_one_work+0x21f/0x430
-> >>>     worker_thread+0x4e/0x3c0
-> >>>     ? __pfx_worker_thread+0x10/0x10
-> >>>     kthread+0xf4/0x120
-> >>>     ? __pfx_kthread+0x10/0x10
-> >>>     ret_from_fork+0x2c/0x50
-> >>>     </TASK>
-> >>>    CR2: ffffa17d40e0b000
-> >>>    ---[ end trace 0000000000000000 ]---
-> >>>
-> >>> The direct reason is that damage rectange computed by
-> >>> drm_fb_helper_memory_range_to_clip() does not guaranteed to be
-> >>> in-bound.
-> >>> It is already results in workaround code populate to elsewhere. Another
-> >>> reason is that exposing a larger buffer size than the actual needed
-> >>> help
-> >>> to trigger this bug intrinsic in drm_fb_helper_memory_range_to_clip().
-> >>>
-> >>> Others fbdev emulation solutions write to the GEM buffer directly, they
-> >>> won't reproduce this bug because the .fb_dirty function callback do not
-> >>> being hooked, so no chance is given to
-> >>> drm_fb_helper_memory_range_to_clip()
-> >>> to generate a out-of-bound when drm_fb_helper_sys_write() is called.
-> >>>
-> >>> This patch break the trigger condition of this bug by shrinking the
-> >>> shadow
-> >>> buffer size to sizes->surface_height * buffer->fb->pitches[0].
-> >>>
-> >>> Fixes: '8fbc9af55de0 ("drm/fbdev-generic: Set screen size to size of
-> >>> GEM
-> >>> buffer")'
-> >>>
-> >>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> >>> ---
-> >>>   drivers/gpu/drm/drm_fbdev_generic.c | 2 +-
-> >>>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c
-> >>> b/drivers/gpu/drm/drm_fbdev_generic.c
-> >>> index 8e5148bf40bb..b057cfbba938 100644
-> >>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
-> >>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
-> >>> @@ -94,7 +94,7 @@ static int
-> >>> drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
-> >>>       fb_helper->buffer = buffer;
-> >>>       fb_helper->fb = buffer->fb;
-> >>>   -    screen_size = buffer->gem->size;
-> >>> +    screen_size = sizes->surface_height * buffer->fb->pitches[0];
-> >> So I read core some more and stumbled over drm_fb_helper_deferred_io().
-> >> Which has all the code and comments about this, including limiting.
-> >>
-> >> I think it would be clearer if we fix the issue there, instead of
-> >> passing
-> >> limits around in obscure places that then again get broken?
-> >
-> > No, it is more obscure doing that way...
-> >
-> >
-> > As the size of the shadow screen buffer will be exposed to userspace.
-> >
-> > The size 'helper->fb->height * helper->fb->pitches[0]' is a
-> > exactly(best) fit,
-> >
-> > You are guaranteed to waste at lease one byte by increasing one byte,
-> >
-> > and can not store all pixels by decreasing one byte (In the case where
-> > `helper->fb->pitches[0] = helper->fb->width * 4`).
-> >
-> > It implicitly tell the userspace do not go beyond that boundary.
-> >
-> > although userspace program can still choose to write  after EOF,
-> >
-> > But it is for test purpose, to test the kernel if it can return a
-> > -EFBIG or not.
-> >
-> >> The thing is,
-> >> Thomas both authored the limit checks in drm_fb_helper_deferred_io() and
-> >> the patch which broken them again, so clearly this isn't very
-> >> obvious. I'm
-> >> thinking of something like this:
-> >>
-> >>
-> >> diff --git a/drivers/gpu/drm/drm_fb_helper.c
-> >> b/drivers/gpu/drm/drm_fb_helper.c
-> >> index ef4eb8b12766..726dab67c359 100644
-> >> --- a/drivers/gpu/drm/drm_fb_helper.c
-> >> +++ b/drivers/gpu/drm/drm_fb_helper.c
-> >> @@ -697,10 +697,7 @@ void drm_fb_helper_deferred_io(struct fb_info
-> >> *info, struct list_head *pagerefli
-> >>        * of the screen and account for non-existing scanlines. Hence,
-> >>        * keep the covered memory area within the screen buffer.
-> >>        */
-> >> -    if (info->screen_size)
-> >> -        total_size = info->screen_size;
-> >> -    else
-> >> -        total_size = info->fix.smem_len;
-> >> +    total_size = helper->fb->height * helper->fb->pitches[0];
-> >
-> > This is just to mitigate the mistakes already has been made,
-> >
-> > because it  do not do a good splitting between the *clip* part and the
-> > *damage update* part.
-> >
-> > An ideal clipping do not obscure its updating backend with a
-> > out-of-bound damage rectangle.
-> >
-> > Why did the drm_fb_helper_memory_range_to_clip() can not do a good job
-> > in all case
-> >
-> > to pass its backend a always meaningful damage rect ?
-> >
-> >>       max_off = min(max_off, total_size);
-> >>         if (min_off < max_off) {
-> >>
-> >>
-> >> I think that would make it utmost clear on what we're doing and why.
-> >> Otherwise we're just going to re-create the same bug again, like we've
-> >> done already :-)
-> >
-> > No, we create no bugs, we fix one.
-> >
-> > Thanks.
-> >
-> But honestly I do not have strong feel toward this, I just type what I'm
-> understand without seeing you resend a V3.
->
-> It's OK in overall,  I will help to test this tomorrow.  :-)
+On Wed, Apr 19, 2023 at 03:38:14AM +0000, TingHan Shen (沈廷翰) wrote:
+> Hi Mathieu,
+> 
+> On Fri, 2023-03-31 at 11:44 -0600, Mathieu Poirier wrote:
+> > External email : Please do not click links or open attachments until you have verified the sender or the content.
+> > 
+> > 
+> > On Tue, Mar 28, 2023 at 10:27:27AM +0800, Tinghan Shen wrote:
+> > > This is the preparation for probing multi-core SCP. The remoteproc
+> > > initialization flow is similar on cores and is reused to avoid
+> > > redundant code.
+> > > 
+> > > The registers of config and l1tcm are shared for multi-core
+> > > SCP. Reuse the mapped addresses for all cores.
+> > > 
+> > > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > > ---
+> > >  drivers/remoteproc/mtk_scp.c | 64 +++++++++++++++++++++++++-----------
+> > >  1 file changed, 45 insertions(+), 19 deletions(-)
+> > > 
+> > > diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+> > > index a3b9bc158cd9..32ecd1450c6f 100644
+> > > --- a/drivers/remoteproc/mtk_scp.c
+> > > +++ b/drivers/remoteproc/mtk_scp.c
+> > > @@ -23,6 +23,13 @@
+> > >  #define MAX_CODE_SIZE 0x500000
+> > >  #define SECTION_NAME_IPI_BUFFER ".ipi_buffer"
+> > > 
+> > > +struct mtk_scp_of_regs {
+> > > +     void __iomem *reg_base;
+> > > +     void __iomem *l1tcm_base;
+> > > +     size_t l1tcm_size;
+> > > +     phys_addr_t l1tcm_phys;
+> > > +};
+> > > +
+> > 
+> > This should represent the cluster with a list of mtk_scp instead of @cluster_cores as
+> > introduced in the next patch.
+> 
+> If I'm understanding you correctly, you're suggesting that @cluster_cores should be included 
+> as a member of this structure. Is that correct?
 
-Apologies for making you jump around all the time and doing different
-versions of the same bugfix :-/
+Correct.  Than this structure is allocated in probe() and added as driver data
+for the platform device.  Its name should also be something like
+mtk_scp_cluster or something like that.  I suggest you look at what has been
+done in ti_k3_r5_remoteproc.c, your end design should be quite similar to that.
+In fact you are close but a few things need to be addressed.
 
-I think this one here is ok to merge, I just thought when looking at
-the history that we revert the exact patch without any other changes
-or comments, and usually that means someone will come up with the same
-cleanup idea again, and then we'll have a bug again. So maybe a
-comment or a WARN_ON or something else would be good.
-
-I guess we could also do your patch, but put a WARN_ON that the
-computed total_size is never bigger than the drm_fb size into
-drm_fb_helper_deferred_io()? That would also make sure that this bug
-doesn't get resurrected again.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+> 
+> Best regards,
+> TingHan
+> 
+> > 
+> > >  /**
+> > >   * scp_get() - get a reference to SCP.
+> > >   *
+> > > @@ -855,7 +862,8 @@ static void scp_remove_rpmsg_subdev(struct mtk_scp *scp)
+> > >       }
+> > >  }
+> > > 
+> > > -static int scp_probe(struct platform_device *pdev)
+> > > +static int scp_rproc_init(struct platform_device *pdev,
+> > > +                       struct mtk_scp_of_regs *of_regs)
+> > >  {
+> > >       struct device *dev = &pdev->dev;
+> > >       struct device_node *np = dev->of_node;
+> > > @@ -879,6 +887,11 @@ static int scp_probe(struct platform_device *pdev)
+> > >       scp->data = of_device_get_match_data(dev);
+> > >       platform_set_drvdata(pdev, scp);
+> > > 
+> > > +     scp->reg_base = of_regs->reg_base;
+> > > +     scp->l1tcm_base = of_regs->l1tcm_base;
+> > > +     scp->l1tcm_size = of_regs->l1tcm_size;
+> > > +     scp->l1tcm_phys = of_regs->l1tcm_phys;
+> > > +
+> > >       res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
+> > >       scp->sram_base = devm_ioremap_resource(dev, res);
+> > >       if (IS_ERR(scp->sram_base))
+> > > @@ -888,24 +901,6 @@ static int scp_probe(struct platform_device *pdev)
+> > >       scp->sram_size = resource_size(res);
+> > >       scp->sram_phys = res->start;
+> > > 
+> > > -     /* l1tcm is an optional memory region */
+> > > -     res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "l1tcm");
+> > > -     scp->l1tcm_base = devm_ioremap_resource(dev, res);
+> > > -     if (IS_ERR(scp->l1tcm_base)) {
+> > > -             ret = PTR_ERR(scp->l1tcm_base);
+> > > -             if (ret != -EINVAL) {
+> > > -                     return dev_err_probe(dev, ret, "Failed to map l1tcm memory\n");
+> > > -             }
+> > > -     } else {
+> > 
+> >                 scp->l1tcm_base = NULL;
+> > 
+> > > -             scp->l1tcm_size = resource_size(res);
+> > > -             scp->l1tcm_phys = res->start;
+> > > -     }
+> > > -
+> > > -     scp->reg_base = devm_platform_ioremap_resource_byname(pdev, "cfg");
+> > > -     if (IS_ERR(scp->reg_base))
+> > > -             return dev_err_probe(dev, PTR_ERR(scp->reg_base),
+> > > -                                  "Failed to parse and map cfg memory\n");
+> > > -
+> > >       ret = scp->data->scp_clk_get(scp);
+> > >       if (ret)
+> > >               return ret;
+> > > @@ -957,6 +952,37 @@ static int scp_probe(struct platform_device *pdev)
+> > >       return ret;
+> > >  }
+> > > 
+> > > +static int scp_probe(struct platform_device *pdev)
+> > > +{
+> > > +     struct device *dev = &pdev->dev;
+> > > +     struct mtk_scp_of_regs scp_regs;
+> > > +     struct resource *res;
+> > > +     int ret;
+> > > +
+> > > +     res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg");
+> > > +     scp_regs.reg_base = devm_ioremap_resource(dev, res);
+> > > +     if (IS_ERR(scp_regs.reg_base))
+> > > +             return dev_err_probe(dev, PTR_ERR(scp_regs.reg_base),
+> > > +                                  "Failed to parse and map cfg memory\n");
+> > > +
+> > > +     /* l1tcm is an optional memory region */
+> > > +     res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "l1tcm");
+> > > +     scp_regs.l1tcm_base = devm_ioremap_resource(dev, res);
+> > > +     if (IS_ERR(scp_regs.l1tcm_base)) {
+> > > +             ret = PTR_ERR(scp_regs.l1tcm_base);
+> > > +             if (ret != -EINVAL)
+> > > +                     return dev_err_probe(dev, ret, "Failed to map l1tcm memory\n");
+> > > +
+> > > +             scp_regs.l1tcm_size = 0;
+> > > +             scp_regs.l1tcm_phys = 0;
+> > > +     } else {
+> > > +             scp_regs.l1tcm_size = resource_size(res);
+> > > +             scp_regs.l1tcm_phys = res->start;
+> > > +     }
+> > > +
+> > > +     return scp_rproc_init(pdev, &scp_regs);
+> > > +}
+> > > +
+> > >  static int scp_remove(struct platform_device *pdev)
+> > >  {
+> > >       struct mtk_scp *scp = platform_get_drvdata(pdev);
+> > > --
+> > > 2.18.0
+> > > 
+> 
+> -- 
+> Best regards,
+> TingHan
