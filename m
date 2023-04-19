@@ -2,116 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5D26E7770
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F086E7773
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232698AbjDSKaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 06:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
+        id S232242AbjDSKch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 06:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232416AbjDSK3t (ORCPT
+        with ESMTP id S232346AbjDSKb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 06:29:49 -0400
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72A655B5;
-        Wed, 19 Apr 2023 03:29:48 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-2f27a9c7970so2872830f8f.2;
-        Wed, 19 Apr 2023 03:29:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681900187; x=1684492187;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1cjooBvMCNJhlavL1EbY+Mb4+Vf8+MK1I5YGhYcyjWY=;
-        b=BieOR9qWpyyctOUZRHD6mXLe5j0m8n2iG0O3S/oPEzGCNK9x68OUJOBanpmPzJLkp2
-         i25+twwxGmBoPYFsoa2z+1+09eYUpT1uVHvGnh6O0V+LdDYnV3kMr8GvwUFEsgUERsVU
-         cmqFaRTXc9W03qSe6YjIxrbYnjIzMKB0FKj3CiaewPwt/wdhDGMqVWoGYOIUVCXEELNA
-         Pn8kNH+1RlBt/hZKzqZ9CFziKSa5aof7PpIKBp3BvADoVAYXTX1CpE4DZEXK+T0hKoE+
-         REGmiId4IVmS9HaI1ebEwpa1ywjv3QPxgH0lul8vASr+IaTd4t/NhFt04AmsrTVKdqjU
-         klgg==
-X-Gm-Message-State: AAQBX9eZFIgy/ExcYmm+edBz1gCew6YooUdpZlEgS3+Awi2sWGMQUj3q
-        KJKKcI4eJqS86yslwEx0ppm1UwUFU/j4U0G2
-X-Google-Smtp-Source: AKy350ZrF9+PU5wlzZyJvzaoxWd8IqaVJy/LdD8KdSkMSbZ5FuQTzjQ/kFdz1vtwzq0yJtgJRJNPWw==
-X-Received: by 2002:adf:e588:0:b0:2f9:2fb0:c46 with SMTP id l8-20020adfe588000000b002f92fb00c46mr3516652wrm.68.1681900187024;
-        Wed, 19 Apr 2023 03:29:47 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-017.fbsv.net. [2a03:2880:31ff:11::face:b00c])
-        by smtp.gmail.com with ESMTPSA id k25-20020a7bc419000000b003f1736fdfedsm1783916wmi.10.2023.04.19.03.29.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 03:29:46 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-        asml.silence@gmail.com, axboe@kernel.dk
-Cc:     leit@fb.com, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, sagi@grimberg.me, hch@lst.de,
-        kbusch@kernel.org, ming.lei@redhat.com
-Subject: [PATCH 2/2] io_uring: Remove unnecessary BUILD_BUG_ON
-Date:   Wed, 19 Apr 2023 03:29:30 -0700
-Message-Id: <20230419102930.2979231-3-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230419102930.2979231-1-leitao@debian.org>
-References: <20230419102930.2979231-1-leitao@debian.org>
+        Wed, 19 Apr 2023 06:31:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B70913858
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:31:46 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 37D6A1FD87;
+        Wed, 19 Apr 2023 10:31:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681900305; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OGKAy4N0T/4jotT8qmbcXDsH0pxSP2/5E3cQhQqsEOM=;
+        b=FKLRDDvRY/q1fMiGAUd4FZEFgUYN6iaYwCJHaXFT9xCLGODWkcM1MIiJICE7d99t5RVDqD
+        fEQC9R987THCUyTUIbUvE6yFY5+lhorpFNW4Bru6n3smZfbXKplRoRP/PPIYFMVDZc127O
+        SuM56Eq8P1SvQIg0XeqldtSGdmY7Gw0=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id BCF7B2C141;
+        Wed, 19 Apr 2023 10:31:44 +0000 (UTC)
+Date:   Wed, 19 Apr 2023 12:31:44 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] printk: Enough to disable preemption in printk deferred
+ context
+Message-ID: <ZD_DED6ttnLvUJsI@alley>
+References: <20230419074210.17646-1-pmladek@suse.com>
+ <ZD+lBU1PGkLadDMT@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZD+lBU1PGkLadDMT@dhcp22.suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the io_uring_cmd_prep_async() there is a unnecessary compilation time
-check to check if cmd is correctly placed at field 48 of the SQE.
+On Wed 2023-04-19 10:23:33, Michal Hocko wrote:
+> On Wed 19-04-23 09:42:10, Petr Mladek wrote:
+> > The comment above printk_deferred_enter()/exit() definition claims
+> > that it can be used only when interrupts are disabled.
+> > 
+> > It was required by the original printk_safe_log_store() implementation.
+> > The code provided lockless synchronization between a single writer and
+> > a single reader. The interrupt and the normal context shared the same
+> > buffer.
+> > 
+> > The commit 93d102f094be ("printk: remove safe buffers") removed
+> > these temporary buffers. Instead, the messages are stored directly into
+> > the new global lockless buffer which supports multiple parallel writers.
+> > 
+> > As a result, it is safe to interrupt one writer now. The preemption still
+> > has to be disabled because the deferred context is CPU specific.
+> 
+> Thanks for the clarification and explanation.
+> 
+> > Fixes: 93d102f094be ("printk: remove safe buffers")
+> 
+> Is this a fix though? I would expect some users to be changed from irq
+> to preempt to disabling to be considered a fix.
 
-This is uncessary, since this check is already in place at
-io_uring_init():
+Yeah, I am not sure about the Fixes tag either. I wanted to cross-link
+the two commits. But it is probably enough to mention it in the commit
+message.
 
-          BUILD_BUG_SQE_ELEM(48, __u64,  addr3);
-
-Remove it and the uring_cmd_pdu_size() function, which is not used
-anymore.
-
-Keith started a discussion about this topic in the following thread:
-https://lore.kernel.org/lkml/ZDBmQOhbyU0iLhMw@kbusch-mbp.dhcp.thefacebook.com/
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- io_uring/uring_cmd.c | 3 ---
- io_uring/uring_cmd.h | 8 --------
- 2 files changed, 11 deletions(-)
-
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 5cb2e39e99f9..fccc497bab59 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -71,9 +71,6 @@ int io_uring_cmd_prep_async(struct io_kiocb *req)
- 	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
- 	size_t size = sizeof(struct io_uring_sqe);
- 
--	BUILD_BUG_ON(uring_cmd_pdu_size(0) != 16);
--	BUILD_BUG_ON(uring_cmd_pdu_size(1) != 80);
--
- 	if (req->ctx->flags & IORING_SETUP_SQE128)
- 		size <<= 1;
- 
-diff --git a/io_uring/uring_cmd.h b/io_uring/uring_cmd.h
-index 7c6697d13cb2..8117684ec3ca 100644
---- a/io_uring/uring_cmd.h
-+++ b/io_uring/uring_cmd.h
-@@ -3,11 +3,3 @@
- int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags);
- int io_uring_cmd_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
- int io_uring_cmd_prep_async(struct io_kiocb *req);
--
--/*
-- * The URING_CMD payload starts at 'cmd' in the first sqe, and continues into
-- * the following sqe if SQE128 is used.
-- */
--#define uring_cmd_pdu_size(is_sqe128)				\
--	((1 + !!(is_sqe128)) * sizeof(struct io_uring_sqe) -	\
--		offsetof(struct io_uring_sqe, cmd))
--- 
-2.34.1
-
+Best Regards,
+Petr
