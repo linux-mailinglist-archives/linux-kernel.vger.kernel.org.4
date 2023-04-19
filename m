@@ -2,160 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3516E7EFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2766E7F03
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233729AbjDSP5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S233718AbjDSP7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 11:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbjDSP5x (ORCPT
+        with ESMTP id S233750AbjDSP7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:57:53 -0400
-Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2240B19A6;
-        Wed, 19 Apr 2023 08:57:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-        s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kDbJlrgL3sjXj3G+1OO7np5Xsz4+mKZQ6I14H0THhkc=; b=aXLiIj2Fq44PA3oRVyjSzdJsSl
-        U78F+oLK669QslhXPSbUOrvkxKfFOQ+fkdZVr4U3xqjJnvh8L3pWM5GBiSnujq1b32CKGFqlmoqFv
-        yWGUjlYOZqaup1qUCZVcYuEa5EpE5FnppaiLFquv92r619fdk/k75AZ0kgzc/ZQrMjOzC/9U/wdPZ
-        rFxgRH5Wnv1/ROhWprkMP23aYcBh2l15TrJhZimWaSxRa/pcRZahbUxZcBZ4Sfnoceqbu2HHhekLM
-        YGmC3WmS6nmL5P0t2eJWKElqtL4aHieYhpSo0M3Kn3hhkrQ9Z9QKo+6Z57B33a8v3fCO6RT3c8ran
-        /SUeMPzA==;
-Received: from authenticated user
-        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.94.2)
-        (envelope-from <kibi@debian.org>)
-        id 1ppABl-005q5R-T2; Wed, 19 Apr 2023 15:57:47 +0000
-Date:   Wed, 19 Apr 2023 17:57:43 +0200
-From:   Cyril Brulebois <kibi@debian.org>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] PCI: brcmstb: CLKREQ# accomodations of downstream
- device
-Message-ID: <20230419155743.j7lwvgkhdxz2zkrk@mraw.org>
-Organization: Debian
-References: <20230411165919.23955-1-jim2101024@gmail.com>
- <20230411165919.23955-3-jim2101024@gmail.com>
- <20230413143935.pmbyjk2boxl3rwne@mraw.org>
- <CANCKTBtXKAYf1LxR4qN+dVyxsWgyDztUVB4EdG=xhHbuhNCq5w@mail.gmail.com>
- <20230413200646.ddgsoqgmaae343nl@mraw.org>
- <CANCKTBuZ=Hxy9WgnjbauhHqXGx4QU_t8pgX=3che2K89=2BT9A@mail.gmail.com>
- <85a1cca1-f59b-6a0c-dee3-9d9ed5d6b6d1@gmail.com>
- <20230414161907.zfd2ibshfx4rz56j@mraw.org>
- <CANCKTBsgkv-8cCMi+H=3xYrdgVcDVTRNczg667L7b=DH2J76Bw@mail.gmail.com>
+        Wed, 19 Apr 2023 11:59:43 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7FA976C;
+        Wed, 19 Apr 2023 08:59:33 -0700 (PDT)
+Received: from [192.168.178.23] (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id B2BC1CCC24;
+        Wed, 19 Apr 2023 15:59:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1681919941; bh=29YVH+wvkFvIAvk+OfYcMsg5UAxmZflvPbyzwpWUGyQ=;
+        h=From:Date:Subject:To:Cc;
+        b=duRjoaqxMd7KrFKsjgT67DBKCWOxdg/jdBNp7W8PhjFQdLnJ2R1R/lFMXgi8iUVF8
+         aXOREQ1KusvTKm//ik6F5YjJ/Ar6EiuctAWb4XI/R2GXfIq87G/OBJBohMaYn81XVb
+         ZwZtGYTsvGHj1mh3V1OhDCcDlNSmHPGb8kpwfO6Q=
+From:   Luca Weiss <luca@z3ntu.xyz>
+Date:   Wed, 19 Apr 2023 17:58:27 +0200
+Subject: [PATCH] media: dt-bindings: ov2685: Correct data-lanes attribute
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3kfu6luykgorwo37"
-Content-Disposition: inline
-In-Reply-To: <CANCKTBsgkv-8cCMi+H=3xYrdgVcDVTRNczg667L7b=DH2J76Bw@mail.gmail.com>
-X-Debian-User: kibi
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230419-ov2685-dtschema-fixup-v1-1-c850a34b3a26@z3ntu.xyz>
+X-B4-Tracking: v=1; b=H4sIAKIPQGQC/x2NQQqDMBBFryKz7kCMiTW9inSRxKkJ2CiZKgXx7
+ h26fI//+Ccw1UwMj+aESkfmvBaB9tZATL7MhHkSBq10p0zrcD10P1icPhwTvT2+8nffMChjjTO
+ 2c/cBpA2eCUP1JSapy74sIrdKsv6fjc/r+gEiwFSQfAAAAA==
+To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1066; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=29YVH+wvkFvIAvk+OfYcMsg5UAxmZflvPbyzwpWUGyQ=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkQA/AGCGc9DMo94kVXJSlJG96EBN28m/8t+QV6
+ UejZ8C/SLuJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZEAPwAAKCRBy2EO4nU3X
+ VjHFD/49kidiQBIqLlqC+lb1EDiZ2QcJjSo5jVbuq06TLSkUJxLM2ualY8+mmAW3rbb94+Lcjkp
+ RQI1df1oFgCjro+rKx2PaodK6J5OedHu20hdzYFnJX9iuYKpzTR4gkBmHEooL6tdTOTXWw7IvQB
+ 8ShoWNrVLXXyaEk1BaPimWKBHhuHmEOo2v71LOiYYRoOoAoMeDNPP0boDf6asKuwIBPGtkakqw9
+ 1FNpi1C5CP/UViBXYIXTUjgh52Rd4VII7X/HCsP1MnSawft6QrasAK7+VFY5Y8C+aIaGJrJPvII
+ l+pv0cIhRKCpGPL2N41umQWDXL4HCZIIwuLkL5ELhbsX8lN3XSHwlCej3XESoE9S1mTO36YA5v9
+ q4XSbP4xZuh300KwtNQKtY7niXiaS0ZXvcVuFJew9QCr2efnb5n3EwCe5egPiVTz/CrB/E3oJL1
+ gRzWehmdQ8Z6mbCsFQzV2rSs3IwQBPn2Kkdps2kUTuIxO1FP7aYTo0Gncem/6ylOUrMl/OLBFNH
+ ASh4RWAMtMJT6TA4xSQiydGWKzAABsuR5uYq0tRen131ntw4EaJCZyvXHZUsR9T+e1hlClZ1NMi
+ OTEgJuM5DWTQl26Jb2jD1aiS1hYpKDO9zjZA2C/0ZoEdVjBitygDZVOXiB0tZj8KI5GcS80l864
+ 6ok4pzXgIsLs+Lg==
+X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
+ fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When adapting the original doc conversion to support 2 lanes, minItems
+should've been added as well since the sensor supports either 1 or 2
+lanes. Add minItems to make the validation happy again.
 
---3kfu6luykgorwo37
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 8d561d78aeab ("media: dt-bindings: ov2685: convert to dtschema")
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Hi Jim,
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+index 8b389314c352..e2ffe0a9c26b 100644
+--- a/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+@@ -49,6 +49,7 @@ properties:
+ 
+         properties:
+           data-lanes:
++            minItems: 1
+             maxItems: 2
+ 
+         required:
 
-It might take a few days before getting back to you regarding the
-various questions you asked. To be on the safe side, I'll probably run
-a cold boot for each setup a number of times (e.g. 10), so that any
-possible outlier can be spotted/rejected. And maybe share results off
-list once we have a better understanding of what's going on. Does that
-make sense to you?
+---
+base-commit: 4aa1da8d99724f6c0b762b58a71cee7c5e2e109b
+change-id: 20230419-ov2685-dtschema-fixup-b04549453978
 
-I'll cover a particular topic right away though.
+Best regards,
+-- 
+Luca Weiss <luca@z3ntu.xyz>
 
-Jim Quinlan <jim2101024@gmail.com> (2023-04-19):
-> Second, you say that you used a different "CM4" from the one used in
-> the Bugzilla  report -- what do you mean by that?   Are you referring
-> to the CM4 module proper, whose only change was going from 4GB to 8GB,
-> or the IO board being used?  My  testing is done with a standard RPi
-> CM4 and standard RPi IO board.  Before this patch series, the only way
-> this standard configuration can work for most hobbyist PCI cards (i.e.
-> floating CLKREQ# pin) is by using Raspian AND adding
-> "brcm,enable-l1ss" to the DT node.
-
-Regarding the IO Board, I'm using the official Compute Module 4 IO
-Board: https://www.raspberrypi.com/products/compute-module-4-io-board/
-
-I've been using the very same IO Board for all my testing, and what I'm
-changing is the standard RPi CM4 plugged on it.
-
-> I'm guessing that you are using the configuration that you described
-> to me in  a personal email: "[the] chip is embedded directly on the
-> modified PCB, as opposed to plugged into the PCIe slot on the official
-> CM4 IO Board".  If true, you are testing on a configuration that (a)
-> is unique to you and your group and (b) must be doing something with
-> the CLKREQ# signal so that your "before" case does not panic.  Is this
-> the case?
-
-That's definitely not the case.
-
-True, as mentioned in a personal mail, we've seen problems with a custom
-PCB, derived from the CM4 IO Board design, but of course there could be
-some faulty design at work there=E2=80=A6 So we've first researched whether=
- the
-same problem could be produced with consumer grade products, and once
-we've verified that, I opened #217276 on Bugzilla.
-
-
-Since Florian's testing seems overwhelmingly positive, and since I'm
-seeing definitive improvement with at least one CM4, maybe it would make
-sense not to block the patch series on the kernel panic I'm seeing with
-the other CM4, and track that particular issue via a separate bug?
-
-
-Cheers,
---=20
-Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
-D-I release manager -- Release team member -- Freelance Consultant
-
---3kfu6luykgorwo37
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEtg6/KYRFPHDXTPR4/5FK8MKzVSAFAmRAD3MACgkQ/5FK8MKz
-VSCfFw//Xgtk24Lz36LgywgbE/sUr33MfyGt97IY+kXL/ODVySpZ1vKIGol4Yv7g
-5DuvpJuJTbJjfGEL+LLcw9nMk9Ea+s7X//EMM6PAonKyu34ozQ1itOzkSZ1oDQQA
-AElqaYCmmyfrH48/85okdcIAcGEwACpoUY5EuS8JLdXlRtF1GvdyHdN0WvZBO39V
-Lnv97ZtBixmePnW15OkolViaA8W8Oft1/7qaCfsa0V1+14IiGxqNU2m0vmvm0qsz
-82iKWzxaZIKJqq6WAzsQwY1b3J/fwWTMp3jd8ccFIdsMFSQEyzmB8O2x/Ue2FwPQ
-RJCecXhWTGrr2gax56fZwkeq/ZLVDB6hYy1wvwOlkZesR2NJ1TrnBmL4R7NRIiCh
-vnU4qlhmNZ1/Th4k9DM2llZ7Yt9d6KZHudR4XZYAYBhIWLzji9LJheG+FXpd89My
-UBujmcT5FwLo1Tg3+79MSP9XCB29a5fB3axUXcR/IGbuuP+pj7v6pwOkMQTE+KO0
-4u1UFwGzcKAT0Ffib6o7juOSJMWZZqH6SauZOLS+YwVAYbwKumi8GimK5Gm6BVOh
-/OH6Fdp+Q+ulS1VX1/Xv8UISJTOe6jt4TkHPk/WcDJct81m0oGuo5bYFpTGtllrq
-ahVxNYBmNcOsSdRYwPIjZ7hdJPFkelV3+F/54rK37NUc8diJ35Y=
-=pvP0
------END PGP SIGNATURE-----
-
---3kfu6luykgorwo37--
