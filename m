@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4242E6E7A24
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 264DE6E7A26
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233320AbjDSM4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S232804AbjDSM6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233317AbjDSM4p (ORCPT
+        with ESMTP id S230154AbjDSM6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:56:45 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C867CC1D
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:56:32 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-54fa9da5e5bso299096297b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681908991; x=1684500991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZwUSUxrJ9n6AQrEeowk7hNCvh5UL4qrEBOKtDjo0eUw=;
-        b=eCtJmeJit9+ac5bYw8F3QMfZkxb9T5aVO3o7IyVuLXE7HvXvXyKBk2jUvjMALcUBrl
-         c8CbYgu4qJF0ToozMrzenOUHi8/PekCmWPWK/VxJRDPMlq6cSvawR843Z6SvJZJSvBB1
-         j8nGqFTyagxSvC4sLdljQMaZZsGt7tMyCxLlTCYFb27yRlDZf0cUWaPG5rNThnjL3JL2
-         P3ZG9C0uBFTJ7iG1vra9kkSVFSenl6d4wjfdHrml0Ozp28Krj78M682d3ZmIMoGlDf7s
-         MKbjQtfyd8td2FPSxtn7L2stAaZTA3fPjSe4r/ExlgYEFBtNux6KGDJlVM5kckatzhPK
-         XiOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681908991; x=1684500991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZwUSUxrJ9n6AQrEeowk7hNCvh5UL4qrEBOKtDjo0eUw=;
-        b=Eb0j20mjbSKXcCxrm5Hd7qnQZdCdt4qty6lUrw7dnxb/DGgMjZ7xT0jQp1/8wfQI2X
-         LCWpsVdoehl/oO0WCW95bWpvatBo/1zqlxV0J7dTtSs5rJx+exxYfwDCsOTK6Hi46ia1
-         zYw9xJOWV8IYgwIbbRamxbgZzzYO+DEAPfkn7IL80AmB97fX6qJ5Nm4iU3VhQUaipW4/
-         P1sdZpPTLkOCq9w4VUwlKkGTnGiNvhaRnekQ0rIq3KNSg5nQtDTALhVjsSQXwc1CnLzA
-         Sb1GR35EiGzUQ43tAv/vHrjNyvHF5j83i67k7p1/kUoxBRR3XqZMJNzo88dhIjhqrBNN
-         5tOA==
-X-Gm-Message-State: AAQBX9ck7yxzi3sKdMDY5fP8RM/LSwyKs0X4h4X3U0VFJxJDbzeIZHuv
-        VBU0PI8xKwlaVxgi60oh0mmyVrJHg4CAx875TGUl7g==
-X-Google-Smtp-Source: AKy350Z4UaAegtplyIiEokFL7xWoy1hMxn7vXuBKeJQgSawaU1dXY1LmmZCkq+l38q4nNogzRvWoZGg5JPpTTH4kL2o=
-X-Received: by 2002:a0d:e68d:0:b0:555:d12a:b5fa with SMTP id
- p135-20020a0de68d000000b00555d12ab5famr1608061ywe.5.1681908991219; Wed, 19
- Apr 2023 05:56:31 -0700 (PDT)
+        Wed, 19 Apr 2023 08:58:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0ED3B779
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:57:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681909065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gnR6bjG9bok7jCQk9F5NYnSJuEBp2LyQ4n6UhEpwshQ=;
+        b=EOt06uqoo6lcrDu35fH8yZ0xewDcTzkpvzCuaxwNkJB0nSmNauQsoZODpDdMfUrcKFYTN1
+        boldz5LlgeCtm8AtorxkxzoNxsB+p5WGSmSMb203u3Jkqtsb6Rps5uX5+4VcMtWARtXkBo
+        r1FxW8MR6iLSDSS7UpuBQ2Vf2brpxok=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-447-Bku-NdbwN6yyVpmqR7UGLw-1; Wed, 19 Apr 2023 08:57:38 -0400
+X-MC-Unique: Bku-NdbwN6yyVpmqR7UGLw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6E012185A78B;
+        Wed, 19 Apr 2023 12:57:37 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D05861121314;
+        Wed, 19 Apr 2023 12:57:35 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <168190833944.417103.14222689199936898089.b4-ty@kernel.dk>
+References: <168190833944.417103.14222689199936898089.b4-ty@kernel.dk> <1770755.1681894451@warthog.procyon.org.uk>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     dhowells@redhat.com, Ayush Jain <ayush.jain3@amd.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        David Hildenbrand <david@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Steve French <stfrench@microsoft.com>, linux-mm@kvack.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] splice: Fix filemap of a blockdev
 MIME-Version: 1.0
-References: <20230417-ux500-sram-v1-0-5924988bb835@linaro.org>
- <20230417-ux500-sram-v1-2-5924988bb835@linaro.org> <20230418223800.GA2447581-robh@kernel.org>
-In-Reply-To: <20230418223800.GA2447581-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 19 Apr 2023 14:56:19 +0200
-Message-ID: <CACRpkdaSeLOqZJ=W55AcidpF+CLbJCD9B3tpDnbiC+UTmAsZ+w@mail.gmail.com>
-Subject: Re: [PATCH 2/2] misc: sram: Generate unique names for subpools
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1828925.1681909055.1@warthog.procyon.org.uk>
+Date:   Wed, 19 Apr 2023 13:57:35 +0100
+Message-ID: <1828932.1681909055@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,40 +70,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 12:38=E2=80=AFAM Rob Herring <robh@kernel.org> wrot=
-e:
-> On Mon, Apr 17, 2023 at 09:34:57AM +0200, Linus Walleij wrote:
-> > The current code will, if we do not specify unique labels
-> > for the SRAM subnodes, fail to register several nodes named
-> > the same.
-> >
-> > Example:
-> >
-> > sram@40020000 {
-> >   (...)
-> >   sram@0 {
-> >     (...)
-> >   };
-> >   sram@1000 {
-> >     (...)
-> >   };
-> > };
-> >
-> > Since the child->name in both cases will be "sram" the
-> > gen_pool_create() will fail because the name is not unique.
-> > So let's use of_full_node_name() instead of child->name
-> > so the name is "sram@0" and "sram@1000" respectively.
-> >
-> > However if there are two or more SRAMs on the system
-> > with subnodes named the same (that exists on the U8500)
-> > then this again will not work. So catenate the top node
-> > name and the subnode full name to form a string that will
-> > always be unique.
->
-> Use the naming platform devices use which has the translated address.
-> How the addresses are defined should not affect the device name.
+Jens Axboe <axboe@kernel.dk> wrote:
 
-Aha just dev_name(&pdev->dev) I'll try this, thanks!
+> [1/1] splice: Fix filemap of a blockdev
 
-Yours,
-Linus Walleij
+Actually, would you be able to fix the subject?  I left a word out:
+
+	splice: Fix filemap splice of a blockdev
+
+or maybe:
+
+	splice: Fix buffered splice of a blockdev
+
+Sorry about that,
+David
+
