@@ -2,125 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92176E7208
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 06:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197946E7253
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 06:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbjDSEAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 00:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
+        id S231658AbjDSEfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 00:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbjDSEAe (ORCPT
+        with ESMTP id S229633AbjDSEfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 00:00:34 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040011736;
-        Tue, 18 Apr 2023 21:00:27 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33J40LO9122406;
-        Tue, 18 Apr 2023 23:00:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681876821;
-        bh=szy7311PgdkX4OcMbVwOXyI886+h9LN7JdLbzoQNfOA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=IUDDumoroH4jMkQ2WxwN5mvMGtvogFx8XeQPBa2vFrrmunXwOicEWhDA0wfT/LmeM
-         AwjotOPTA5BRaTzXh9mRHbaZeu187P/UiP8Bex67zDMMJuPOLqm7s6DJ6U+Tk+Asq/
-         dHnPZcrPhA9t+MlaUNJedkagm7L8RSBo0Oncjm0Q=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33J40Le3113532
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 18 Apr 2023 23:00:21 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 18
- Apr 2023 23:00:21 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 18 Apr 2023 23:00:21 -0500
-Received: from udit-HP-Z2-Tower-G9-Workstation-Desktop-PC.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33J4098W025277;
-        Tue, 18 Apr 2023 23:00:18 -0500
-From:   Udit Kumar <u-kumar1@ti.com>
-To:     <linux-arm-kernel@lists.infradead.org>, <afd@ti.com>, <bb@ti.com>,
-        <vaishnav.a@ti.com>, <j-choudhary@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     Udit Kumar <u-kumar1@ti.com>
-Subject: [PATCH v3 2/2] arm64: dts: ti: k3-j7200-som: Enable I2C
-Date:   Wed, 19 Apr 2023 09:30:07 +0530
-Message-ID: <20230419040007.3022780-3-u-kumar1@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230419040007.3022780-1-u-kumar1@ti.com>
-References: <20230419040007.3022780-1-u-kumar1@ti.com>
+        Wed, 19 Apr 2023 00:35:34 -0400
+X-Greylist: delayed 1710 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Apr 2023 21:35:32 PDT
+Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [221.12.31.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3937E7297
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 21:35:31 -0700 (PDT)
+Received: from h3cspam02-ex.h3c.com (localhost [127.0.0.2] (may be forged))
+        by h3cspam02-ex.h3c.com with ESMTP id 33J46x6Q095474
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:06:59 +0800 (GMT-8)
+        (envelope-from zhang.zhengming@h3c.com)
+Received: from mail.maildlp.com ([172.25.15.154])
+        by h3cspam02-ex.h3c.com with ESMTP id 33J469be094211;
+        Wed, 19 Apr 2023 12:06:09 +0800 (GMT-8)
+        (envelope-from zhang.zhengming@h3c.com)
+Received: from DAG2EX07-IDC.srv.huawei-3com.com (unknown [172.20.54.130])
+        by mail.maildlp.com (Postfix) with ESMTP id 7012522EB027;
+        Wed, 19 Apr 2023 12:10:33 +0800 (CST)
+Received: from localhost.localdomain (10.99.222.162) by
+ DAG2EX07-IDC.srv.huawei-3com.com (172.20.54.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.6; Wed, 19 Apr 2023 12:06:08 +0800
+From:   zhangzhengming <zhang.zhengming@h3c.com>
+To:     <akpm@linux-foundation.org>, <surenb@google.com>,
+        <wuchi.zero@gmail.com>, <Ilia.Gavrilov@infotecs.ru>,
+        <xu.panda@zte.com.cn>, <colin.i.king@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>, <zhou.kete@h3c.com>,
+        Zhang Zhengming <zhang.zhengming@h3c.com>
+Subject: [PATCH] relayfs: fix out-of-bounds access in relay_file_read
+Date:   Wed, 19 Apr 2023 12:02:03 +0800
+Message-ID: <20230419040203.37676-1-zhang.zhengming@h3c.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.99.222.162]
+X-ClientProxiedBy: BJSMTP01-EX.srv.huawei-3com.com (10.63.20.132) To
+ DAG2EX07-IDC.srv.huawei-3com.com (172.20.54.130)
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL: h3cspam02-ex.h3c.com 33J46x6Q095474
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables wkup_i2c0 node in board dts file
-along with pin mux and speed.
-Also enables underneath eeprom CAV24C256WE.
+From: Zhang Zhengming <zhang.zhengming@h3c.com>
 
-J7200 Datasheet (Table 6-106, Section 6.4 Pin Multiplexing) :
-https://www.ti.com/lit/ds/symlink/dra821u.pdf
+There is a crash in relay_file_read, as the var from 
+point to the end of last subbuf.
+The oops looks something like:
+pc : __arch_copy_to_user+0x180/0x310
+lr : relay_file_read+0x20c/0x2c8
+Call trace:
+ __arch_copy_to_user+0x180/0x310
+ full_proxy_read+0x68/0x98
+ vfs_read+0xb0/0x1d0
+ ksys_read+0x6c/0xf0
+ __arm64_sys_read+0x20/0x28
+ el0_svc_common.constprop.3+0x84/0x108
+ do_el0_svc+0x74/0x90
+ el0_svc+0x1c/0x28
+ el0_sync_handler+0x88/0xb0
+ el0_sync+0x148/0x180
 
-J7200 User Guide (Section 4.3, Table 4-2) :
-https://www.ti.com/lit/ug/spruiw7a/spruiw7a.pdf
+We get the condition by analyzing the vmcore:
+1). The last produced byte and last consumed byte
+    both at the end of the last subbuf
+2). A softirq who will call function(e.g __blk_add_trace)
+    to write relay buffer occurs when an program calling
+    function relay_file_read_avail.
+        relay_file_read
+                relay_file_read_avail
+                        relay_file_read_consume(buf, 0, 0);
+                        //interrupted by softirq who will write subbuf
+                        ....
+                        return 1;
+                //read_start point to the end of the last subbuf
+                read_start = relay_file_read_start_pos
+                //avail is equal to subsize
+                avail = relay_file_read_subbuf_avail
+                //from  points to an invalid memory address             
+                from = buf->start + read_start
+                //system is crashed
+                copy_to_user(buffer, from, avail)
 
-Signed-off-by: Udit Kumar <u-kumar1@ti.com>
+Signed-off-by: Zhang Zhengming <zhang.zhengming@h3c.com>
+Reviewed-by: Zhao Lei <zhao_lei1@hoperun.com>
+Reviewed-by: Zhou Kete <zhou.kete@h3c.com>
 ---
- arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ kernel/relay.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
-index fa44ed4c17d5..269424154771 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
-@@ -118,6 +118,15 @@ J721E_WKUP_IOPAD(0x0008, PIN_INPUT, 0)  /* MCU_OSPI0_DQS */
- 	};
- };
+diff --git a/kernel/relay.c b/kernel/relay.c
+index 9aa70ae..a80fa01 100644
+--- a/kernel/relay.c
++++ b/kernel/relay.c
+@@ -989,7 +989,8 @@ static size_t relay_file_read_start_pos(struct rchan_buf *buf)
+ 	size_t subbuf_size = buf->chan->subbuf_size;
+ 	size_t n_subbufs = buf->chan->n_subbufs;
+ 	size_t consumed = buf->subbufs_consumed % n_subbufs;
+-	size_t read_pos = consumed * subbuf_size + buf->bytes_consumed;
++	size_t read_pos = (consumed * subbuf_size + buf->bytes_consumed)
++			% (n_subbufs * subbuf_size);
  
-+&wkup_pmx2 {
-+	wkup_i2c0_pins_default: wkup-i2c0-pins-default {
-+			pinctrl-single,pins = <
-+			J721E_WKUP_IOPAD(0x98, PIN_INPUT_PULLUP, 0) /* (F20) WKUP_I2C0_SCL */
-+			J721E_WKUP_IOPAD(0x9c, PIN_INPUT_PULLUP, 0) /* (H21) WKUP_I2C0_SDA */
-+		>;
-+	};
-+};
-+
- &main_pmx0 {
- 	main_i2c0_pins_default: main-i2c0-pins-default {
- 		pinctrl-single,pins = <
-@@ -214,6 +223,18 @@ exp_som: gpio@21 {
- 	};
- };
- 
-+&wkup_i2c0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&wkup_i2c0_pins_default>;
-+	clock-frequency = <400000>;
-+
-+	eeprom@50 {
-+		compatible = "atmel,24c256";
-+		reg = <0x50>;
-+	};
-+};
-+
- &ospi0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&mcu_fss0_ospi0_pins_default>;
+ 	read_subbuf = read_pos / subbuf_size;
+ 	padding = buf->padding[read_subbuf];
 -- 
-2.34.1
+2.17.1
 
