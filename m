@@ -2,96 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BEA6E749F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 262416E74A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbjDSIGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
+        id S230377AbjDSIHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjDSIF7 (ORCPT
+        with ESMTP id S231393AbjDSIG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:05:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36D94C3D;
-        Wed, 19 Apr 2023 01:05:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 704F163C3A;
-        Wed, 19 Apr 2023 08:05:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45613C433EF;
-        Wed, 19 Apr 2023 08:05:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681891557;
-        bh=Pmk67VN1KWoYfHH9fjaJIYCfiu0cDeym63+mdBdupLc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cCJZZmOedUDG1K/cSy1AWLOZeG4g9dchhxqqkUkLKke4h6X0efXb0JLcMFgGQK9zj
-         xKj301TGX6JOGQc3d3XNmbncOaA7zMl+Z1FFtJcg7PtcSxYNTfJvWN5saXSatOw8L0
-         cQaFFeJwyy3gDVP3FYSSjx+q8L5UtpQdpeyZEgLNNKYwuSy3rerveY7+2HF8zIzMPQ
-         J/OBwTuhZdHrBhHodhIlGMNelE3DvXcxH0YXX0zhqEABM49kL/uh1tZRMuwBij2Uc3
-         gBm6UJD7dfx/MPmcoEFeSaynqzxz4AK39dodj08oVE443cpy+92Ys6i0SyJV3s75J6
-         ayjuFUiWwO6cQ==
-Date:   Wed, 19 Apr 2023 10:05:54 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Rob Herring <robh@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v10 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link
- III Deserializer
-Message-ID: <ZD+g4j7jEg2AETNe@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>, Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Rob Herring <robh@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
- <20230222132907.594690-6-tomi.valkeinen@ideasonboard.com>
- <ZD6VwpRya6SGBAt5@shikoro>
- <20230419091336.4e10ba65@booty>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5uh5ZyA4HcdyiNVD"
+        Wed, 19 Apr 2023 04:06:58 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E70B4C3D
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:06:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681891603; x=1713427603;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=Nxt0uFKkS98uMqw+940D0nNgO8cp21SnE/cNI8HeUyc=;
+  b=UzTvHhKJflcRRu7ddZdX9u01nRfXGIskB/ATjbzg8PFZ6YKB8x9G3vPX
+   ETPBexYR+sfdpag5xhk2gVeQVWYXh9IN0O7UUB2SAc3kq/8nObTQ1MTS1
+   uFEb5ARMp7LhYTgYXamjEYU8PU9WKkMqyptWGd0pGLt3mq6ys8bxfDAi+
+   vs7s/zKaN2V5xPwmN8RYVpgrhDbMvVy9UN+szh5YWoP6ytEqdw2Bo0DNj
+   kW1Ev8cC8lfXH1WmZlCbJFiy0/RH7FZy+tXZpN6S/C17+aDHFIY7KFkVO
+   azekuR7wngBnY2GD+jEXgmNBhdDVgE+Cs8KeSU3UlxZevDY7C8qBSbTVM
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="329558728"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="329558728"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 01:06:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="780777327"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="780777327"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by FMSMGA003.fm.intel.com with ESMTP; 19 Apr 2023 01:06:33 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 19 Apr 2023 01:06:32 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 19 Apr 2023 01:06:31 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 19 Apr 2023 01:06:31 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.176)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 19 Apr 2023 01:06:31 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FWFdaRhVNIAAVHXjKKFEMHHqs+IU6GhBXTzsm4QZwPGth7kV1vraSqjVsHu/1ocY45znIbfJTJv52xl+Eu3Cdug40yOqI0CYO3dLw/JO0DKlbTp6wItv0bfoDG7ciG2F9LTiKHaV5mYcC4Ay3xvaDfJcot++n/WavhSWaIQu7WEe1x/1j3acMMOVmXyOodumE5bkOuU45PpATGheyH/agOaudHAgHE2Wf26cDfdIUgfAOaojdYGNibxGV478jQSNdcIqHXuGuZxOQ55pcBHjnW6U9nGpV6MWxxVC6bw9Vo5RWzu3kvyyrfJqZvC729kh84eYBUSSUQTdfZX5cN6bvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=phDhbjfu/CM7wOUaIjrBWF4jtpoplb/1zCwqWzUAjj0=;
+ b=H791LnYRoeliwRL49i08pTzJ1RIe8lbJ+8t8ZZ6YCP5kKq4kLrpctKz8PkwuqhbwFAj8jZeeE8mdTegm53BUt20aBmEajfS+fMWoza3S7OgcCtLkGtf4ynZm/zsCgUy7khCxtKVaZ/DdymjEtupqW2o437CK7aUOTVyffKgne2IvyCJiHuLH8BWp9e5a8h+k44ApWDAofXXVBX8gxM35oqO27OelkB/GKV8D0Y1LyWGBAZrKg9hSuud5dqPf2DtXx6nm0rJfjVQlwJz4/V/lEzKjKNRJ66D6nqwtD/Q8qYa0N3dufxNuDcn9G5nRdGiAfl5OgL63HjdtOfGOmyKvEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
+ by MN2PR11MB4662.namprd11.prod.outlook.com (2603:10b6:208:263::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
+ 2023 08:06:23 +0000
+Received: from BYAPR11MB3062.namprd11.prod.outlook.com
+ ([fe80::9cc2:9827:4f29:5885]) by BYAPR11MB3062.namprd11.prod.outlook.com
+ ([fe80::9cc2:9827:4f29:5885%4]) with mapi id 15.20.6298.045; Wed, 19 Apr 2023
+ 08:06:23 +0000
+Date:   Wed, 19 Apr 2023 16:06:06 +0800
+From:   Aaron Lu <aaron.lu@intel.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        <linux-kernel@vger.kernel.org>, Olivier Dion <odion@efficios.com>,
+        <michael.christie@oracle.com>
+Subject: Re: [RFC PATCH v8] sched: Fix performance regression introduced by
+ mm_cid
+Message-ID: <20230419080606.GA4247@ziqianlu-desk2>
+References: <20230417150831.264780-1-mathieu.desnoyers@efficios.com>
+ <20230418112151.GA565498@ziqianlu-desk2>
+ <40689cd1-af60-542d-2245-c6362c73a365@efficios.com>
+Content-Type: multipart/mixed; boundary="EvAQijjP7Lwp4IW7"
 Content-Disposition: inline
-In-Reply-To: <20230419091336.4e10ba65@booty>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <40689cd1-af60-542d-2245-c6362c73a365@efficios.com>
+X-ClientProxiedBy: KL1P15301CA0036.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:820:6::24) To BYAPR11MB3062.namprd11.prod.outlook.com
+ (2603:10b6:a03:92::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3062:EE_|MN2PR11MB4662:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9187c7b8-7966-4a7c-074a-08db40acf444
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: t8YoynQM3+xNxaRS62Uf3Sksd24sW23uT4z2SIfTJ6QsO10PfpihhIALh621BX7E6oaHyX1k+mUOrWUXENEHzPN9DPSDVHAkz5VfbqMAMTWOSWlJIlCIZs+5Qk6iacMuPJTZBZX78/woN9/GKt1gdNkARpoAFbj5uiAgkF7Ut/Zpen7xRMnY5kaAE18jvRos4X/rT0HcsLPN9DD5uKrm4ECuem5zt9vBKZSJNw09DaTvYrj7qM4nX5N/gPOzheMOPcym3aKx1mV12CuKdpbAdWBH8Pi3mMK+W5aX/imZgPDwwS15kfleMJgVUzCQ95rtKkzAS2Tj09Dmi7qBxvWhweY2K6y7sS59FYSyxEnZp1Y6JfOR/y6yLTN9Ivq52iUjDitE0HhHdUaaG6mXFaafbnq9qreey9ZGEDebmVLC5hRsOocoA0Vphf/45jyao9cUg/5/ixZokbu8/zGJYdTzaG2UFTlkncSeRJwgXQHCKWCqitwS+kMx+L/s/QK05+bPc/weptR9fiv80g4nV0qfX4eCEaOqnOyvXZpCxknl+3xx0GNyBMzZaV6g6FwUIYhaPrwZ4wOxo4IJ6a08jInYxGOAISwYorRmcv0xzeciiUPuaZgI+LHSCf5BRo6w8l9f
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3062.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(39860400002)(346002)(376002)(136003)(366004)(451199021)(44832011)(235185007)(2906002)(8936002)(5660300002)(8676002)(41300700001)(86362001)(33656002)(38100700002)(33716001)(478600001)(316002)(53546011)(26005)(6506007)(1076003)(9686003)(6512007)(54906003)(186003)(6666004)(44144004)(33964004)(6486002)(6916009)(4326008)(66476007)(66556008)(66946007)(83380400001)(82960400001)(2700100001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NG1LclBpbHlhZW5xdk9yS2JsdVlMTGlQR09jQ1VLMU5qaFBabmh6d1pOdmpU?=
+ =?utf-8?B?UUM3TDBGeDBDQ2wzODg0WEhtYjlmUEtnR3VIeWtzTlZzYnQvWlJKeEU4YWxF?=
+ =?utf-8?B?U0xHampEU3oxbStWbHJaYnBWYi9JMk45K01nR0xFNmpnYUNQd25iT2h4WnNq?=
+ =?utf-8?B?OFlib0puZ2M1Ri9YREZiK1AxNGJrcS9pOGxpT2d1UTlweTRmUUFtY0NnSFNa?=
+ =?utf-8?B?Y1lZbVVjMUd3WjNWMnlKZlZNUXVMdllNOTdIQ2hBMXpJYThFaVpYWlNBZHI0?=
+ =?utf-8?B?WHR5K0hqamdvTVJVaHFicldwVnZPRWd3N1FnRVJLN2l6ZzZob1N0VlVYZURU?=
+ =?utf-8?B?cmJtQXlEZk90VjBOYU1LLzlBOEROck5hOFVOUkhQVHRFN0hrZ3pvbmdtbzcw?=
+ =?utf-8?B?RnZCSk1pb2M4QytQRGFTV1g3RnMwM1E0dW1BSzB5bm9UWnZJc0VMRzZVLzhL?=
+ =?utf-8?B?YlFacFduaU9EUUR5bGlvV3NraG52bzcwMTBlYSszdG1Wa1UraHdJT1JEV010?=
+ =?utf-8?B?dHBodDd3OWNhK0JVTGFqaStxdHljYkZ0TGtraHRhcEpmZGlvNnJObElGVlNm?=
+ =?utf-8?B?UmprZ3NLVWhNcjd5RWxReXV4M2syalJDREZJdEdkZ29md1pxU1kzaEFyVmd0?=
+ =?utf-8?B?a0RIM1UwNXFzalloTDgvMWIvdnFhUFB5eERlWUI0VjdmOTZQMWhoZmp2dVo5?=
+ =?utf-8?B?d0haZTF2enRQVm9XQkpoZkJaMTIwVVYrcE9pMkZIeENqMG9YRGtCeHpkMXlN?=
+ =?utf-8?B?VXhFSDBWZnZFOS9aV28rejdDaGx6c2hxOHpIaDZSdXVRend2WFVMQkIvRUJO?=
+ =?utf-8?B?ckFRSSs1bkFaVXcxaWpOQWJCdGJCUHdOdDZEaHJiMW9JQ1d2SHk4WkpzNy9w?=
+ =?utf-8?B?M3d0a0lsZ0p0eG1QbnNxRnpHaEg2OWlkN21ZckZSakJtOElPN2Y3TFRBMm1t?=
+ =?utf-8?B?M0ZqTFEzN2NaSXd6bzRXSEhHejhsV1NYZmd6eEhCOEZwM2I5N1JIa0U0d3lL?=
+ =?utf-8?B?dVg0ZFNtSUpwWlZxWXcveDNaTklyTlkrZFRmckluU1pLSzErbDR0UFFiODZl?=
+ =?utf-8?B?RFVhbkFGYnBYZTJBVlJyTVFsanMwVkFPRUZraUl5RkRWSWdBWmhsbUxEV0d0?=
+ =?utf-8?B?T0RZcVgzV0JrVURtSGR4VysrYUVGbjA4VDNkL0NZc1BKbHdrZmM2dWF4RWp0?=
+ =?utf-8?B?cVVGN29xdCs2UmpyMVR2QTlnWnQyTUdvK280N2J1bVZNT2VPaDFOZi9PWU5w?=
+ =?utf-8?B?S3pwcWszempoMytuYmZnMWZOV0JIOUVFdE1xOGJKanBIY1c0L3NVVHh3TnNO?=
+ =?utf-8?B?OEZnNWpHcFBYY1FONW5nK3MvWGlobmpSb2hYVjUyRDJ2RUF2UW5yOG5aVHNm?=
+ =?utf-8?B?WE00T3JidUI3dG5ob1hjVGlpY3VGbGdHdUdaT0FodVFWRUxlL1phWldxTk5J?=
+ =?utf-8?B?ZFhjMjF3cEU3aGF5eFJSUjJjUGtrc21qeHhzTmZXWjVRazJNdGx6OTBmY0pH?=
+ =?utf-8?B?WkRHeFZ4WGEvWU1XcWlyVWk0MTJQdDdvTkp3UUlseWhCZnA5L2FUWXdKb1Ir?=
+ =?utf-8?B?NlJ5a05ibTFMdVBteDkyL3pIbzByVXhobnhwc05tNEZlYld5a3QzQjVibm56?=
+ =?utf-8?B?SVJ4VTdCR3hDR3RIMUh4Wkl3dXEvc1dHMjZmcDV3Ry91UXdQM0xXcEJ0WWpM?=
+ =?utf-8?B?cllZVy9jb3oxTHp5NDBnOEJGQW9STHpmYkNIZTR2SGpHeTVBTXhscU5YY05S?=
+ =?utf-8?B?ak5QZkJLNDAvSEhVVzFHWVRNY3RkR2VDZExGNXJ3dURKdVVPUFA5ZVlwemxC?=
+ =?utf-8?B?ZkZ5ZlgyUVNmdDZHR1pRRjd4U0FBSTY5YUVyTVJuRjRUV3JWNkp5TjdaYlVT?=
+ =?utf-8?B?TnpIQkdSVmdXSFRDWXRDazBIUWZkaVp2OUxyNXNVUmZzYWcwWVBHOGhtcUgw?=
+ =?utf-8?B?bXVEci9RQlVrNG9mU092Sm1VRWZNRU5TdEhtWVVWZERhd1BKMFZGaTZiRGRw?=
+ =?utf-8?B?K01kb2JucFRxaDFwUmVaN0VMaHJhMG1Vam4zdFpGRS9IWlhTTmZYS2x0RytM?=
+ =?utf-8?B?YURObHR0WUVnbnc4ZldzcCtsNFk2T09EWGE3aWJuV0lqVmdsV01Uak5lMkh0?=
+ =?utf-8?Q?WFtsbDPUTTE33MMUTm8GyazcU?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9187c7b8-7966-4a7c-074a-08db40acf444
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3062.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 08:06:23.1100
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dl+YWY3/E141wTP2NGLispD5uUGSgwJBQUVWcLyNJADt3AcrBx7TRWUGIgIMO98gbgbuA5jHxLxfrKIfkt1mjw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4662
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,46 +162,1895 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---5uh5ZyA4HcdyiNVD
-Content-Type: text/plain; charset=us-ascii
+--EvAQijjP7Lwp4IW7
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+
+On Tue, Apr 18, 2023 at 12:01:09PM -0400, Mathieu Desnoyers wrote:
+> On 2023-04-18 07:21, Aaron Lu wrote:
+> > On Mon, Apr 17, 2023 at 11:08:31AM -0400, Mathieu Desnoyers wrote:
+> > > Introduce per-mm/cpu current concurrency id (mm_cid) to fix a PostgreSQL
+> > > sysbench regression reported by Aaron Lu.
+> > 
+> > For postgres_sysbench on SPR:
+> > sched_mm_cid_migrate_to() is in the range of 0.1x% - 0.4x%, mm_cid_get()
+> > is in the range of 0.1x% - 0.3x%. Other cid functions are pretty minor.
+> > 
+> > For hackbench on SPR:
+> > ched_mm_cid_migrate_to() is about 3%-4%, mm_cid_get() is about 7%-8%,
+> > other cid functions are pretty minor.
+> 
+> It's a bit higher than I would have expected for hackbench.
+> 
+> Can you run with the attached schedstats patch applied and boot
+> with schedstats=enable ? Let me know how the counters behave please,
+> because I cannot reproduce anything unexpected on my machine.
+
+Only event that stood out is mm_cid_get_cached, other events are very
+few in a 5s window. I think these numbers are expected and indicate the
+optimization worked well. Please see attachment for details, the number
+are got by doing the following after 20s the test was started:
+	touch schedstat
+	cat /proc/schedstat >> schedstat
+	sleep 5
+	cat /proc/schedstat >> schedstat
+
+However, mm_cid_get() still shows as having 7.x% in perf cycles.
+Annotate shows the cycles are mostly spent on accessing mm->pcpu_cid:
+
+       │
+       │     lockdep_assert_rq_held(rq);
+       │     cpumask = mm_cidmask(mm);
+       │     pcpu_cid = this_cpu_ptr(mm->pcpu_cid);
+ 64.50 │       mov   0x60(%r14),%r12
+       │     struct rq *rq = this_rq();
+  9.80 │       mov   %rbx,-0x30(%rbp)
+       │     pcpu_cid = this_cpu_ptr(mm->pcpu_cid);
+  0.11 │     → call  debug_smp_processor_id
+       │       mov   %eax,%ebx
+       │       cmp   $0x1fff,%eax
 
 
-> > Why is "i2c-alias-pool" in the drivers binding and not a regular i2c
-> > binding? Same question for the implementation of the alias-pool
-> > handling. Shouldn't this be in the i2c-atr library? I'd think managing
-> > the list of aliases would look all the same in the drivers otherwise?
->=20
-> I think that this _was_ the plan, as it looks obviously cleaner, but
-> then we agreed that we should remove the pool entirely, so I didn't
-> bother moving it.
+       │     raw_spin_unlock(&cid_lock);
+       │       mov   $0xffffffff8474ca84,%rdi
+       │     WRITE_ONCE(use_cid_lock, 0);
+       │       movl  $0x0,use_cid_lock
+       │     raw_spin_unlock(&cid_lock);
+       │     → call  _raw_spin_unlock
+       │     ↑ jmp   fe
+       │     arch_static_branch():
+  0.02 │236:   xchg  %ax,%ax
+       │     mm_cid_snapshot_time():
+       │     struct rq *rq = this_rq();
+       │238: → call  debug_smp_processor_id
+       │       mov   $0x33340,%r13
+       │       mov   %eax,%ebx
+       │       cmp   $0x1fff,%eax
+       │     ↓ ja    2b3
+       │24d:   add   -0x7d5ce500(,%rbx,8),%r13
+       │     pcpu_cid = this_cpu_ptr(mm->pcpu_cid);
+ 21.23 │       mov   0x60(%r14),%rbx
+  4.11 │     → call  debug_smp_processor_id
+       │       mov   %eax,%r12d
+       │       cmp   $0x1fff,%eax
+       │     ↓ ja    2c4
+       │     WRITE_ONCE(pcpu_cid->time, rq->clock);
 
-Ah, you mean we agreed on that at the Plumbers BoF? I think we can
-conclude this is obsolete meanwhile. GMSL encodes the target addresses
-in DT. Rob is also fine with the binding here to encode the pool in DT.
-Let's follow that road, I'd say.
+Initially I thought it might be due to some false sharing between
+pcpu_cid field and other fields of mm_struct, but after I placed pcpu_cid
+into a separate cacheline, it still didn't make a difference.
 
+For sched_mm_cid_migrate_to(), its cycle percent is 2.97% and most cycles
+are also spent on accessing mm->pcpu_cid according to perf annotate:
 
---5uh5ZyA4HcdyiNVD
-Content-Type: application/pgp-signature; name="signature.asc"
+       │     dst_pcpu_cid = per_cpu_ptr(mm->pcpu_cid, cpu_of(dst_rq));
+ 64.22 │       mov     0x60(%r15),%r13
+  9.53 │       movslq  0xaf0(%rdi),%r14
 
------BEGIN PGP SIGNATURE-----
+No idea why accesing mm->pcpu_cid is so expensive, surely after
+initial allocation, nobody would change its value? Without a write
+side, I don't see how this can happen...
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ/oN8ACgkQFA3kzBSg
-KbYOVQ//SvRa7pFpZDsYmp4BoiKZFaS1vYbwJiVFgXLFu7s+LqMkohp0KNgRl+YK
-VIhqZcpIR7gp52ikHDp0BinRmDoKLp2j1sAmiPzQJHKOHMWfErdDpzAybKAV/1HW
-0GXCzZeDwOnURHFO8WRwqBn2LFa6HLO1F3Rnp7apuvbqb3JaKDvRdXWpIFsRgITF
-73hVZKOm8bIn8cc3NRAJr6n2PIQVoLOmvcO/WZQIY2ZJZabcB7Z8LAYexHb4OPJp
-qG+IN4JPqhWyKelvbDKIuvpmiNtRmO3RMczBa4MSNSipTpeRYjtJCJXJW8Gvewe8
-dpqU2/1RfTH+vAo0XJ6tI7UPgmb6g1EE9d/lFRQC+t1gKFQzGtIoa+ay9okQUzln
-MZJAOxu2o64uE5mA6HXFpTemhb/7H31kSxKxu1neKMCsY/7o9CRWxMlEe5s/FBmR
-1ieHG7udVNqD+/z5HyiaLOEpdhcqeqEkTTdgEIjeQBEwlkFM1gT5da7sUoLNUy/e
-N0ZvHG9SAejFX9hw6gtv702mUczNQHGCBp/joWRNqU+/dOSSBwYYc+mmISSSj4rh
-MvxoL4dBcn81ZFIScL9RlG4UxmwdYJ0O0CFgLaO9hcosLk0kBUmWO7UlrgD9WWzu
-I7dNoWqXkoPDorW0pimTPu45z5GdZu2T+p93+0cB/xO8GlYvwyo=
-=FA+C
------END PGP SIGNATURE-----
+--EvAQijjP7Lwp4IW7
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: attachment; filename="schedstat_0"
 
---5uh5ZyA4HcdyiNVD--
+version 15
+timestamp 4295676529
+cpu0 98 0 137424905 738338 800823 36067 115402635899 37461208714 861796 mm_cid_task_work_nr_run: 603 mm_cid_task_work_clear_old: 5225 mm_cid_task_work_clear_compact: 56 mm_cid_get_cached: 827904 mm_cid_get_alloc: 8226 mm_cid_get_put_lazy: 444 mm_cid_put_lazy: 370 mm_cid_put: 161 mm_cid_migrate_steal: 13245 mm_cid_migrate_clear: 7280 mm_cid_migrate_move: 5965
+domain0 00000000,00000000,00000000,00010000,00000000,00000000,00000001 17742 17140 14 683 625 0 0 17140 2651 2595 13 175 45 0 0 2595 10507 10279 22 231 206 0 0 10152 1 0 1 0 0 0 0 0 0 6435 4067 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 5215 4685 289 734 329 5 13 1409 3 3 0 0 0 0 0 0 7350 4544 1987 3142 819 1 19 4523 10 0 10 0 0 0 0 0 0 736276 377917 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 1794 1749 27 702600 31 0 5 1100 49 49 0 0 0 0 0 0 5903 5604 280 822985 19 0 5 5597 0 0 0 0 0 0 0 0 0 21598 14927 0
+cpu1 114 0 1424335 646630 800126 24320 93728589854 35546386487 775582 mm_cid_task_work_nr_run: 454 mm_cid_task_work_clear_old: 5509 mm_cid_task_work_clear_compact: 55 mm_cid_get_cached: 761923 mm_cid_get_alloc: 8274 mm_cid_get_put_lazy: 431 mm_cid_put_lazy: 382 mm_cid_put: 190 mm_cid_migrate_steal: 10532 mm_cid_migrate_clear: 7295 mm_cid_migrate_move: 3237
+domain0 00000000,00000000,00000000,00020000,00000000,00000000,00000002 12464 11931 9 601 564 0 0 11931 1553 1473 24 221 63 0 0 1473 7728 7398 28 335 302 0 0 7198 0 0 0 0 0 0 0 0 0 5636 3671 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 3262 2712 274 776 374 5 13 2198 10 10 0 0 0 0 0 0 3232 1147 1421 2473 664 1 15 1125 2 0 2 0 0 0 0 0 0 762020 386857 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 2165 2133 17 696730 25 0 6 738 0 0 0 0 0 0 0 0 2133 1984 102 1398671 47 0 6 1978 0 0 0 0 0 0 0 0 0 8147 6974 0
+cpu2 90 0 1439322 653341 755745 17053 82689086309 33983673575 784170 mm_cid_task_work_nr_run: 185 mm_cid_task_work_clear_old: 5909 mm_cid_task_work_clear_compact: 26 mm_cid_get_cached: 773082 mm_cid_get_alloc: 8631 mm_cid_get_put_lazy: 473 mm_cid_put_lazy: 418 mm_cid_put: 261 mm_cid_migrate_steal: 11762 mm_cid_migrate_clear: 7292 mm_cid_migrate_move: 4470
+domain0 00000000,00000000,00000000,00040000,00000000,00000000,00000004 8947 8355 9 693 625 0 0 8355 1065 976 20 324 71 0 0 976 3747 3538 12 209 197 0 0 3429 0 0 0 0 0 0 0 0 0 5832 3745 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1425 847 288 793 403 7 8 572 72 72 0 0 0 0 0 2 1990 656 748 1730 586 3 21 629 3 0 3 0 0 0 0 0 0 727089 376883 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 625 605 12 424426 17 0 2 55 27 27 0 0 0 0 0 0 834 711 102 949395 21 0 15 696 0 0 0 0 0 0 0 0 0 5768 3822 0
+cpu3 81 0 1442861 654359 785929 14626 82132432218 34797848646 786606 mm_cid_task_work_nr_run: 97 mm_cid_task_work_clear_old: 6076 mm_cid_task_work_clear_compact: 11 mm_cid_get_cached: 776546 mm_cid_get_alloc: 8537 mm_cid_get_put_lazy: 412 mm_cid_put_lazy: 375 mm_cid_put: 235 mm_cid_migrate_steal: 12086 mm_cid_migrate_clear: 7185 mm_cid_migrate_move: 4901
+domain0 00000000,00000000,00000000,00080000,00000000,00000000,00000008 7919 7319 13 742 626 0 0 7319 1017 914 30 316 77 0 0 914 4463 4248 9 218 206 0 0 4151 1 0 1 0 0 0 0 0 0 5712 3788 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1122 557 281 771 384 4 11 377 50 50 0 0 0 0 0 1 2165 644 911 1927 610 1 36 603 5 0 5 0 0 0 0 0 0 758809 392959 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 454 432 9 577562 19 0 4 31 14 14 0 0 0 0 0 0 825 712 85 1194799 28 0 13 695 0 0 0 0 0 0 0 0 0 6779 5263 0
+cpu4 38 0 1422205 643972 788681 11625 80975201096 33740189666 776581 mm_cid_task_work_nr_run: 41 mm_cid_task_work_clear_old: 6225 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 766665 mm_cid_get_alloc: 8610 mm_cid_get_put_lazy: 422 mm_cid_put_lazy: 366 mm_cid_put: 259 mm_cid_migrate_steal: 11961 mm_cid_migrate_clear: 7206 mm_cid_migrate_move: 4755
+domain0 00000000,00000000,00000000,00100000,00000000,00000000,00000010 7815 7256 14 664 571 0 0 7255 967 876 20 229 74 0 0 876 8399 7928 21 487 450 0 0 7759 0 0 0 0 0 0 0 0 0 7203 4501 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1054 502 278 786 393 9 11 399 27 27 0 0 0 0 0 6 1817 466 751 1646 600 1 29 428 6 0 6 0 0 0 0 0 0 763295 393901 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 418 406 2 245530 15 0 2 29 11 11 0 0 0 0 0 0 527 418 90 1775015 19 0 19 392 0 0 0 0 0 0 0 0 0 6555 4729 0
+cpu5 8 0 1477319 671341 776148 12707 81238794390 34149681450 804322 mm_cid_task_work_nr_run: 37 mm_cid_task_work_clear_old: 6252 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 793142 mm_cid_get_alloc: 8953 mm_cid_get_put_lazy: 480 mm_cid_put_lazy: 370 mm_cid_put: 244 mm_cid_migrate_steal: 13551 mm_cid_migrate_clear: 7568 mm_cid_migrate_move: 5983
+domain0 00000000,00000000,00000000,00200000,00000000,00000000,00000020 10179 9591 12 642 613 0 0 9591 896 796 24 235 81 0 0 796 7785 7331 32 464 422 0 0 7177 0 0 0 0 0 0 0 0 0 6044 3911 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1974 1393 308 804 376 11 6 787 4 4 0 0 0 0 0 0 1863 559 719 1699 585 2 28 525 4 0 4 0 0 0 0 0 0 753135 386135 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 874 865 4 209251 7 0 2 29 2 2 0 0 0 0 0 0 784 648 112 1614977 24 0 12 616 0 0 0 0 0 0 0 0 0 4259 2564 0
+cpu6 13 0 1390659 627714 880164 12307 83671485145 34363476408 761226 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6258 mm_cid_task_work_clear_compact: 9 mm_cid_get_cached: 751240 mm_cid_get_alloc: 8088 mm_cid_get_put_lazy: 439 mm_cid_put_lazy: 386 mm_cid_put: 172 mm_cid_migrate_steal: 9032 mm_cid_migrate_clear: 7111 mm_cid_migrate_move: 1921
+domain0 00000000,00000000,00000000,00400000,00000000,00000000,00000040 7467 6894 11 651 607 0 0 6894 924 826 22 263 79 0 0 826 4836 4496 16 382 324 0 0 4343 0 0 0 0 0 0 0 0 0 6465 4149 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1077 526 269 782 384 4 10 349 6 6 0 0 0 0 0 0 2012 431 737 2040 844 1 29 395 5 0 5 0 0 0 0 0 0 846934 448265 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 424 416 1 228394 9 0 2 22 1 1 0 0 0 0 0 0 546 422 84 1181703 40 0 13 409 0 0 0 0 0 0 0 0 0 14455 14575 0
+cpu7 3 0 1428234 647171 863911 11894 83479511481 34296808217 779449 mm_cid_task_work_nr_run: 49 mm_cid_task_work_clear_old: 6224 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 769804 mm_cid_get_alloc: 7838 mm_cid_get_put_lazy: 461 mm_cid_put_lazy: 355 mm_cid_put: 157 mm_cid_migrate_steal: 10494 mm_cid_migrate_clear: 6795 mm_cid_migrate_move: 3699
+domain0 00000000,00000000,00000000,00800000,00000000,00000000,00000080 7620 6997 8 712 653 0 0 6996 962 839 29 351 104 0 1 838 5740 5401 15 351 324 0 0 5268 1 0 1 0 0 0 0 0 0 6511 4095 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1254 686 283 835 406 6 8 549 14 14 0 0 0 0 0 0 1302 333 499 1314 470 1 14 315 5 0 5 0 0 0 0 0 0 832014 427559 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 620 611 3 215654 8 0 0 25 3 3 0 0 0 0 0 0 483 385 80 1510287 18 0 20 365 0 0 0 0 0 0 0 0 0 13489 15436 0
+cpu8 4 0 1508568 687573 798692 11352 81486122351 33943222946 819421 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6245 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 809040 mm_cid_get_alloc: 9074 mm_cid_get_put_lazy: 447 mm_cid_put_lazy: 392 mm_cid_put: 139 mm_cid_migrate_steal: 12747 mm_cid_migrate_clear: 7772 mm_cid_migrate_move: 4975
+domain0 00000000,00000000,00000000,01000000,00000000,00000000,00000100 7860 7278 7 641 611 0 0 7278 900 807 21 242 80 0 0 807 4599 4306 20 305 273 0 0 4216 0 0 0 0 0 0 0 0 0 7156 4376 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1234 677 264 789 399 5 6 624 5 5 0 0 0 0 0 0 986 234 484 869 268 1 18 215 0 0 0 0 0 0 0 0 0 771579 385553 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 651 646 5 171627 0 0 2 13 2 2 0 0 0 0 0 0 347 250 74 1465038 23 0 10 233 0 0 0 0 0 0 0 0 0 8602 5145 0
+cpu9 0 0 1449234 657399 814541 11554 81617069359 34488968771 790129 mm_cid_task_work_nr_run: 41 mm_cid_task_work_clear_old: 6252 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 780008 mm_cid_get_alloc: 8691 mm_cid_get_put_lazy: 446 mm_cid_put_lazy: 353 mm_cid_put: 231 mm_cid_migrate_steal: 10777 mm_cid_migrate_clear: 7285 mm_cid_migrate_move: 3492
+domain0 00000000,00000000,00000000,02000000,00000000,00000000,00000200 7030 6416 17 691 644 0 1 6414 924 829 31 249 65 0 0 829 4110 3874 8 245 228 0 0 3807 0 0 0 0 0 0 0 0 0 6888 4517 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 930 400 273 740 354 6 10 363 8 8 0 0 0 0 0 0 1068 231 455 1099 382 3 11 215 3 0 3 0 0 0 0 0 0 790535 404048 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 399 398 1 34318 0 0 1 13 2 2 0 0 0 0 0 0 332 218 73 1836505 41 0 15 201 0 0 0 0 0 0 0 0 0 5561 6168 0
+cpu10 0 0 1401484 634417 872111 11465 83066481161 34025026696 765362 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6252 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 755698 mm_cid_get_alloc: 8316 mm_cid_get_put_lazy: 454 mm_cid_put_lazy: 393 mm_cid_put: 219 mm_cid_migrate_steal: 10367 mm_cid_migrate_clear: 7265 mm_cid_migrate_move: 3102
+domain0 00000000,00000000,00000000,04000000,00000000,00000000,00000400 7383 6801 12 762 597 0 0 6801 902 821 26 200 58 0 0 821 4702 4459 18 249 225 0 0 4359 0 0 0 0 0 0 0 0 0 5678 3762 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 898 376 253 730 381 8 8 352 0 0 0 0 0 0 0 0 627 185 259 615 183 1 3 178 4 0 4 0 0 0 0 0 0 847066 473096 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 393 386 4 197692 3 0 1 12 0 0 0 0 0 0 0 0 267 174 69 920112 24 0 7 165 0 0 0 0 0 0 0 0 0 7900 11533 0
+cpu11 8 0 1422071 643922 771645 11485 80427384852 34544813859 776496 mm_cid_task_work_nr_run: 33 mm_cid_task_work_clear_old: 6238 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 767025 mm_cid_get_alloc: 8279 mm_cid_get_put_lazy: 404 mm_cid_put_lazy: 314 mm_cid_put: 232 mm_cid_migrate_steal: 10343 mm_cid_migrate_clear: 7160 mm_cid_migrate_move: 3183
+domain0 00000000,00000000,00000000,08000000,00000000,00000000,00000800 7691 7131 10 648 592 0 0 7131 885 798 26 252 67 0 0 798 3941 3548 14 411 379 0 0 3469 0 0 0 0 0 0 0 0 0 6155 4126 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1106 603 248 731 355 6 11 572 7 7 0 0 0 0 0 0 1806 345 549 2017 912 3 19 319 0 0 0 0 0 0 0 0 0 748087 381541 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 583 579 3 106510 1 0 0 19 0 0 0 0 0 0 0 0 353 229 82 1522160 42 0 19 207 0 0 0 0 0 0 0 0 0 5915 3231 0
+cpu12 0 0 1389567 627424 833500 11677 82097592225 35100435804 760494 mm_cid_task_work_nr_run: 29 mm_cid_task_work_clear_old: 6246 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 750711 mm_cid_get_alloc: 8632 mm_cid_get_put_lazy: 416 mm_cid_put_lazy: 373 mm_cid_put: 178 mm_cid_migrate_steal: 9993 mm_cid_migrate_clear: 7338 mm_cid_migrate_move: 2655
+domain0 00000000,00000000,00000000,10000000,00000000,00000000,00001000 7170 6568 19 666 608 0 0 6568 913 813 21 308 83 0 0 813 5789 5459 18 340 312 0 0 5298 1 0 1 0 0 0 0 0 0 7198 4445 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 928 365 270 805 392 5 10 342 4 4 0 0 0 0 0 0 1871 352 771 1871 748 2 26 317 3 0 3 0 0 0 0 0 0 805033 406591 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 392 388 2 67136 5 0 0 7 0 0 0 0 0 0 0 0 442 311 87 1834347 44 0 21 289 0 0 0 0 0 0 0 0 0 9589 9170 0
+cpu13 0 0 1484844 674876 821461 11295 81640658874 34034243838 808180 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6223 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 798141 mm_cid_get_alloc: 8694 mm_cid_get_put_lazy: 491 mm_cid_put_lazy: 350 mm_cid_put: 199 mm_cid_migrate_steal: 11249 mm_cid_migrate_clear: 7478 mm_cid_migrate_move: 3771
+domain0 00000000,00000000,00000000,20000000,00000000,00000000,00002000 7200 6632 12 613 583 0 0 6632 884 794 21 306 72 0 0 794 4882 4555 19 341 308 0 0 4458 0 0 0 0 0 0 0 0 0 6404 4112 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1006 458 261 789 410 8 14 417 2 2 0 0 0 0 0 0 889 261 391 777 237 2 10 245 3 0 3 0 0 0 0 0 0 795366 411759 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 466 465 0 34304 1 0 2 10 0 0 0 0 0 0 0 0 346 221 82 2218873 43 0 8 212 0 0 0 0 0 0 0 0 0 8393 10854 0
+cpu14 24 0 1387478 627265 779229 11387 79714333968 34003707432 758496 mm_cid_task_work_nr_run: 10 mm_cid_task_work_clear_old: 6259 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 748646 mm_cid_get_alloc: 8435 mm_cid_get_put_lazy: 490 mm_cid_put_lazy: 407 mm_cid_put: 112 mm_cid_migrate_steal: 9905 mm_cid_migrate_clear: 7353 mm_cid_migrate_move: 2552
+domain0 00000000,00000000,00000000,40000000,00000000,00000000,00004000 7164 6535 10 712 654 0 0 6534 885 786 25 298 80 0 0 786 3601 3338 17 274 246 0 0 3265 0 0 0 0 0 0 0 0 0 6341 3966 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 906 375 273 753 364 7 5 353 17 17 0 0 0 0 0 0 864 182 336 934 346 3 7 173 6 0 6 0 0 0 0 0 0 753034 377595 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 380 379 1 34940 0 0 0 5 2 2 0 0 0 0 0 0 301 231 53 920880 17 0 11 219 0 0 0 0 0 0 0 0 0 8464 5031 0
+cpu15 7 0 1419500 642279 815780 11730 81090171025 34371060889 775510 mm_cid_task_work_nr_run: 21 mm_cid_task_work_clear_old: 6221 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 766043 mm_cid_get_alloc: 8155 mm_cid_get_put_lazy: 444 mm_cid_put_lazy: 395 mm_cid_put: 180 mm_cid_migrate_steal: 11140 mm_cid_migrate_clear: 7347 mm_cid_migrate_move: 3793
+domain0 00000000,00000000,00000000,80000000,00000000,00000000,00008000 7307 6709 20 674 617 0 0 6709 851 766 27 202 60 0 0 766 4930 4586 18 354 326 0 0 4471 0 0 0 0 0 0 0 0 0 6956 4323 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1025 471 278 776 387 6 5 446 5 5 0 0 0 0 0 0 1555 224 549 1766 782 1 15 201 7 0 7 0 0 0 0 0 0 789153 410246 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 487 483 2 73200 3 0 0 7 0 0 0 0 0 0 0 0 312 213 67 1588345 32 0 13 199 0 0 0 0 0 0 0 0 0 7938 9866 0
+cpu16 86 0 1464255 665263 785831 11749 80186431607 34307518697 797204 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6172 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 786390 mm_cid_get_alloc: 9397 mm_cid_get_put_lazy: 466 mm_cid_put_lazy: 342 mm_cid_put: 125 mm_cid_migrate_steal: 13167 mm_cid_migrate_clear: 7849 mm_cid_migrate_move: 5318
+domain0 00000000,00000000,00000001,00000000,00000000,00000000,00010000 7119 6540 10 658 608 0 0 6538 895 789 24 304 84 0 0 789 4688 4380 13 316 295 0 0 4269 0 0 0 0 0 0 0 0 0 6292 4027 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1046 501 259 774 394 1 18 466 7 7 0 0 0 0 0 0 1050 214 474 1031 362 0 15 194 5 0 5 0 0 0 0 0 0 758984 389771 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 508 507 1 32557 0 0 0 7 0 0 0 0 0 0 0 0 292 198 68 1456966 26 0 16 180 0 0 0 0 0 0 0 0 0 8803 5649 0
+cpu17 0 0 1451953 659191 756353 11604 79636262043 34162871847 791106 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6233 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 780795 mm_cid_get_alloc: 8818 mm_cid_get_put_lazy: 421 mm_cid_put_lazy: 353 mm_cid_put: 145 mm_cid_migrate_steal: 12997 mm_cid_migrate_clear: 7589 mm_cid_migrate_move: 5408
+domain0 00000000,00000000,00000002,00000000,00000000,00000000,00020000 7501 6878 11 684 659 0 0 6878 825 733 28 257 67 0 0 733 4334 4021 16 324 297 0 0 3911 0 0 0 0 0 0 0 0 0 6783 4357 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1061 519 276 772 379 5 10 449 0 0 0 0 0 0 0 0 1351 371 473 1341 507 2 17 349 3 0 3 0 0 0 0 0 0 732303 371130 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 487 486 1 16 0 0 0 3 0 0 0 0 0 0 0 0 416 318 71 1511437 27 0 10 308 0 0 0 0 0 0 0 0 0 5660 3171 0
+cpu18 28 0 1466337 665695 766677 11498 80019429830 34883548594 798883 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6209 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 788854 mm_cid_get_alloc: 8899 mm_cid_get_put_lazy: 413 mm_cid_put_lazy: 304 mm_cid_put: 127 mm_cid_migrate_steal: 12911 mm_cid_migrate_clear: 7333 mm_cid_migrate_move: 5578
+domain0 00000000,00000000,00000004,00000000,00000000,00000000,00040000 7535 6966 14 648 584 0 0 6966 898 788 31 273 80 0 1 787 5767 5342 17 444 408 0 0 5218 0 0 0 0 0 0 0 0 0 6454 4161 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1084 507 281 839 437 6 10 471 11 11 0 0 0 0 0 0 1241 266 481 1353 494 2 15 245 3 0 3 0 0 0 0 0 0 741930 375225 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 513 512 0 33946 1 0 0 8 0 0 0 0 0 0 0 0 392 240 99 1982478 53 0 13 227 0 0 0 0 0 0 0 0 0 6792 4195 0
+cpu19 10 0 1436335 650749 850144 11290 82152045886 34343119088 783889 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6217 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 774387 mm_cid_get_alloc: 8346 mm_cid_get_put_lazy: 431 mm_cid_put_lazy: 366 mm_cid_put: 132 mm_cid_migrate_steal: 9768 mm_cid_migrate_clear: 7264 mm_cid_migrate_move: 2504
+domain0 00000000,00000000,00000008,00000000,00000000,00000000,00080000 6982 6366 10 691 647 0 0 6366 886 785 28 339 78 0 0 785 3982 3744 11 246 227 0 0 3604 0 0 0 0 0 0 0 0 0 6038 4013 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 919 363 266 772 377 6 7 340 11 11 0 0 0 0 0 3 1116 248 467 1138 401 2 18 226 4 0 4 0 0 0 0 0 0 825226 435939 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 375 375 0 0 0 0 1 2 5 5 0 0 0 0 0 0 296 190 68 1264963 38 0 24 165 0 0 0 0 0 0 0 0 0 7587 7311 0
+cpu20 16 0 1400109 632631 874388 13019 83175902531 33986445016 765801 mm_cid_task_work_nr_run: 18 mm_cid_task_work_clear_old: 6210 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 755239 mm_cid_get_alloc: 8091 mm_cid_get_put_lazy: 458 mm_cid_put_lazy: 416 mm_cid_put: 60 mm_cid_migrate_steal: 9124 mm_cid_migrate_clear: 7201 mm_cid_migrate_move: 1923
+domain0 00000000,00000000,00000010,00000000,00000000,00000000,00100000 7119 6528 11 663 629 0 0 6526 953 877 18 211 60 0 0 877 3613 3394 7 219 212 0 0 3301 0 0 0 0 0 0 0 0 0 6177 3931 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1861 1315 262 783 402 3 5 337 3 3 0 0 0 0 0 0 771 177 294 797 300 2 5 170 3 0 3 0 0 0 0 0 0 844497 452591 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 702 700 2 35899 0 0 0 4 4 4 0 0 0 0 0 0 268 181 57 1173759 30 0 14 166 0 0 0 0 0 0 0 0 0 10692 15055 0
+cpu21 5 0 1389270 627510 866592 11429 83133113398 34868874864 760009 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6217 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 750527 mm_cid_get_alloc: 8375 mm_cid_get_put_lazy: 422 mm_cid_put_lazy: 385 mm_cid_put: 163 mm_cid_migrate_steal: 9291 mm_cid_migrate_clear: 7240 mm_cid_migrate_move: 2051
+domain0 00000000,00000000,00000020,00000000,00000000,00000000,00200000 6702 6150 7 623 576 0 0 6149 1005 917 26 250 64 0 0 917 8058 7564 25 503 469 0 0 7433 0 0 0 0 0 0 0 0 0 7071 4329 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1116 563 277 765 381 8 6 537 8 8 0 0 0 0 0 0 1148 192 420 1310 536 1 10 176 2 0 2 0 0 0 0 0 0 837458 448623 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 583 582 1 9 0 0 0 4 0 0 0 0 0 0 0 0 253 162 75 1542626 16 0 21 140 0 0 0 0 0 0 0 0 0 10631 12010 0
+cpu22 20 0 1357980 611565 870930 11231 83141529384 34566786143 744781 mm_cid_task_work_nr_run: 18 mm_cid_task_work_clear_old: 6206 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 735305 mm_cid_get_alloc: 8384 mm_cid_get_put_lazy: 429 mm_cid_put_lazy: 364 mm_cid_put: 61 mm_cid_migrate_steal: 9625 mm_cid_migrate_clear: 7281 mm_cid_migrate_move: 2344
+domain0 00000000,00000000,00000040,00000000,00000000,00000000,00400000 6409 5812 14 692 621 0 0 5812 990 888 29 324 79 0 0 888 5248 4856 17 407 375 0 0 4737 0 0 0 0 0 0 0 0 0 6616 4043 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 885 356 245 782 417 6 7 340 14 14 0 0 0 0 0 0 1385 192 584 1570 609 1 18 168 1 0 1 0 0 0 0 0 0 841273 442005 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 376 376 0 0 0 0 0 5 2 2 0 0 0 0 0 0 320 167 97 2756568 56 0 20 147 0 0 0 0 0 0 0 0 0 11808 11421 0
+cpu23 19 0 1467842 666628 814162 12418 82224447230 35052580855 799421 mm_cid_task_work_nr_run: 31 mm_cid_task_work_clear_old: 6164 mm_cid_task_work_clear_compact: 16 mm_cid_get_cached: 789525 mm_cid_get_alloc: 8439 mm_cid_get_put_lazy: 418 mm_cid_put_lazy: 356 mm_cid_put: 77 mm_cid_migrate_steal: 12405 mm_cid_migrate_clear: 7370 mm_cid_migrate_move: 5035
+domain0 00000000,00000000,00000080,00000000,00000000,00000000,00800000 7244 6681 10 664 590 0 0 6681 917 824 21 287 77 0 0 824 4969 4681 6 296 282 0 0 4570 0 0 0 0 0 0 0 0 0 6112 3898 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1388 836 269 808 400 6 7 468 9 9 0 0 0 0 0 0 1125 280 432 1080 413 2 13 262 2 0 2 0 0 0 0 0 0 786761 404560 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 518 518 0 0 0 0 0 2 4 4 0 0 0 0 0 0 291 219 51 1031193 21 0 12 205 0 0 0 0 0 0 0 0 0 8868 10290 0
+cpu24 13 0 1435422 651639 816265 11338 81774751892 34742427088 782120 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6201 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 772142 mm_cid_get_alloc: 8854 mm_cid_get_put_lazy: 463 mm_cid_put_lazy: 353 mm_cid_put: 183 mm_cid_migrate_steal: 12427 mm_cid_migrate_clear: 7564 mm_cid_migrate_move: 4863
+domain0 00000000,00000000,00000100,00000000,00000000,00000000,01000000 6923 6322 11 730 637 0 0 6321 902 804 25 292 77 0 0 804 5183 4799 21 410 363 0 0 4687 0 0 0 0 0 0 0 0 0 6503 4327 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 910 358 253 796 419 4 2 344 9 9 0 0 0 0 0 0 862 226 367 828 269 2 6 215 2 0 2 0 0 0 0 0 0 791322 408919 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 369 369 0 0 0 0 0 3 0 0 0 0 0 0 0 0 271 174 64 1557107 33 0 10 164 0 0 0 0 0 0 0 0 0 7099 6821 0
+cpu25 17 0 1409588 636827 863944 11529 83593390668 33964544389 771024 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6206 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 761660 mm_cid_get_alloc: 8133 mm_cid_get_put_lazy: 434 mm_cid_put_lazy: 390 mm_cid_put: 224 mm_cid_migrate_steal: 8984 mm_cid_migrate_clear: 7328 mm_cid_migrate_move: 1656
+domain0 00000000,00000000,00000200,00000000,00000000,00000000,02000000 7073 6474 11 692 627 0 0 6474 922 850 27 205 49 0 0 850 4104 3777 20 341 307 0 0 3707 0 0 0 0 0 0 0 0 0 6193 4070 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1000 474 283 756 360 6 5 444 8 8 0 0 0 0 0 0 1124 207 423 1228 494 1 4 198 9 0 9 0 0 0 0 0 0 835034 447951 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 472 472 0 0 0 0 0 4 2 2 0 0 0 0 0 0 300 228 59 1233109 13 0 4 221 0 0 0 0 0 0 0 0 0 11185 14137 0
+cpu26 7 0 1433312 649104 810846 11178 81795592292 33912619281 782505 mm_cid_task_work_nr_run: 15 mm_cid_task_work_clear_old: 6200 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 772074 mm_cid_get_alloc: 9329 mm_cid_get_put_lazy: 480 mm_cid_put_lazy: 403 mm_cid_put: 127 mm_cid_migrate_steal: 12125 mm_cid_migrate_clear: 7818 mm_cid_migrate_move: 4307
+domain0 00000000,00000000,00000400,00000000,00000000,00000000,04000000 6403 5775 13 703 660 0 0 5774 902 813 18 272 75 0 0 813 4339 4052 16 298 271 0 0 3940 0 0 0 0 0 0 0 0 0 6967 4510 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 885 361 260 764 367 5 12 335 5 5 0 0 0 0 0 0 1319 248 550 1420 521 3 21 221 4 0 4 0 0 0 0 0 0 785779 406220 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 376 375 0 4 2 0 0 2 3 3 0 0 0 0 0 0 310 204 62 2107400 44 0 17 186 0 0 0 0 0 0 0 0 0 6919 7279 0
+cpu27 16 0 1407228 636456 858626 11982 84234884417 34786599888 769198 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6190 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 759476 mm_cid_get_alloc: 8336 mm_cid_get_put_lazy: 429 mm_cid_put_lazy: 372 mm_cid_put: 177 mm_cid_migrate_steal: 10153 mm_cid_migrate_clear: 7109 mm_cid_migrate_move: 3044
+domain0 00000000,00000000,00000800,00000000,00000000,00000000,08000000 7299 6711 12 666 609 0 0 6711 963 875 22 261 71 0 0 875 5539 5146 14 409 379 0 0 4998 0 0 0 0 0 0 0 0 0 7660 4712 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1060 516 267 808 381 6 6 482 15 15 0 0 0 0 0 0 1544 305 598 1566 641 2 23 274 3 0 3 0 0 0 0 0 0 826959 441152 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 509 508 0 35170 1 0 0 3 2 2 0 0 0 0 0 0 431 303 87 2706358 41 0 15 287 0 0 0 0 0 0 0 0 0 12022 12827 0
+cpu28 1 0 1356065 611013 842678 11342 81859406066 34725207915 743422 mm_cid_task_work_nr_run: 14 mm_cid_task_work_clear_old: 6235 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 734157 mm_cid_get_alloc: 7947 mm_cid_get_put_lazy: 422 mm_cid_put_lazy: 344 mm_cid_put: 109 mm_cid_migrate_steal: 8713 mm_cid_migrate_clear: 6851 mm_cid_migrate_move: 1862
+domain0 00000000,00000000,00001000,00000000,00000000,00000000,10000000 7165 6582 12 649 603 0 0 6581 938 835 29 295 81 0 0 835 5626 5238 13 401 375 0 0 5111 0 0 0 0 0 0 0 0 0 5957 3874 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1100 550 282 779 364 18 10 523 1 1 0 0 0 0 0 0 1348 227 530 1560 591 5 14 204 3 0 3 0 0 0 0 0 0 819518 432953 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 560 560 0 0 0 0 0 1 0 0 0 0 0 0 0 0 280 199 54 1245191 27 0 18 179 0 0 0 0 0 0 0 0 0 5858 6315 0
+cpu29 2 0 1407580 637205 862326 11346 83051883730 34704852877 768788 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6211 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 760067 mm_cid_get_alloc: 7536 mm_cid_get_put_lazy: 434 mm_cid_put_lazy: 360 mm_cid_put: 148 mm_cid_migrate_steal: 9019 mm_cid_migrate_clear: 6820 mm_cid_migrate_move: 2199
+domain0 00000000,00000000,00002000,00000000,00000000,00000000,20000000 6605 6037 10 624 581 0 0 6037 952 851 26 269 82 0 0 851 4607 4310 21 307 276 0 0 4204 0 0 0 0 0 0 0 0 0 5883 3895 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 875 371 246 708 356 3 7 349 4 4 0 0 0 0 0 0 1268 253 509 1312 506 2 16 225 4 0 4 0 0 0 0 0 0 835750 453503 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 364 364 0 0 0 0 0 3 1 1 0 0 0 0 0 0 366 197 112 2559065 57 0 29 168 0 0 0 0 0 0 0 0 0 9344 11615 0
+cpu30 1 0 1422106 645988 785980 11231 81372713549 34380245495 774467 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6200 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 764547 mm_cid_get_alloc: 8743 mm_cid_get_put_lazy: 461 mm_cid_put_lazy: 345 mm_cid_put: 48 mm_cid_migrate_steal: 12206 mm_cid_migrate_clear: 7336 mm_cid_migrate_move: 4870
+domain0 00000000,00000000,00004000,00000000,00000000,00000000,40000000 6042 5423 11 678 642 0 0 5421 888 790 20 268 83 0 0 790 2878 2715 5 165 158 0 0 2641 0 0 0 0 0 0 0 0 0 6066 3841 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 904 378 247 752 400 5 11 345 0 0 0 0 0 0 0 0 638 131 328 669 179 2 6 124 4 0 4 0 0 0 0 0 0 761148 385758 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 372 372 0 0 0 0 0 1 1 1 0 0 0 0 0 0 236 176 40 958526 20 0 14 161 0 0 0 0 0 0 0 0 0 7532 4108 0
+cpu31 1 0 1507208 687180 754203 11378 81124158190 34845400798 818278 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6168 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 809015 mm_cid_get_alloc: 8041 mm_cid_get_put_lazy: 389 mm_cid_put_lazy: 322 mm_cid_put: 62 mm_cid_migrate_steal: 13535 mm_cid_migrate_clear: 7073 mm_cid_migrate_move: 6462
+domain0 00000000,00000000,00008000,00000000,00000000,00000000,80000000 6656 6111 13 675 568 0 0 6110 906 811 24 310 75 0 0 811 4680 4406 11 281 263 0 0 4292 0 0 0 0 0 0 0 0 0 5786 3675 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1077 547 274 751 347 9 6 514 3 3 0 0 0 0 0 0 1282 317 488 1280 477 3 12 303 4 0 4 0 0 0 0 0 0 730288 370911 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 546 546 0 0 0 0 0 2 1 1 0 0 0 0 0 0 335 214 79 2170848 42 0 23 189 0 0 0 0 0 0 0 0 0 6748 3859 0
+cpu32 1 0 1544930 705328 769076 11505 81646136304 34301599766 838014 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6186 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 828048 mm_cid_get_alloc: 8549 mm_cid_get_put_lazy: 419 mm_cid_put_lazy: 353 mm_cid_put: 83 mm_cid_migrate_steal: 14802 mm_cid_migrate_clear: 7189 mm_cid_migrate_move: 7613
+domain0 00000000,00000000,00010000,00000000,00000000,00000001,00000000 7153 6550 13 721 641 0 0 6550 881 787 24 232 72 0 0 787 5564 5250 15 321 299 0 0 5114 0 0 0 0 0 0 0 0 0 6048 3910 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 918 371 258 795 403 4 7 353 0 0 0 0 0 0 0 0 833 231 393 751 209 1 8 218 5 0 5 0 0 0 0 0 0 743310 379114 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 379 378 0 3 3 0 0 2 0 0 0 0 0 0 0 0 356 220 103 1754934 33 0 17 200 0 0 0 0 0 0 0 0 0 8210 5361 0
+cpu33 0 0 1387979 627202 816621 12352 82669142064 33847408537 759162 mm_cid_task_work_nr_run: 41 mm_cid_task_work_clear_old: 6199 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 748498 mm_cid_get_alloc: 7748 mm_cid_get_put_lazy: 461 mm_cid_put_lazy: 400 mm_cid_put: 58 mm_cid_migrate_steal: 8729 mm_cid_migrate_clear: 7043 mm_cid_migrate_move: 1686
+domain0 00000000,00000000,00020000,00000000,00000000,00000002,00000000 9923 9353 15 642 592 0 0 9352 906 816 21 298 73 0 0 816 4651 4326 10 333 315 0 0 4222 1 0 1 0 0 0 0 0 0 6231 4230 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1804 1191 304 903 433 6 1 747 1 1 0 0 0 0 0 0 1407 353 452 1433 602 0 6 342 3 0 3 0 0 0 0 0 0 790280 412126 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 871 871 0 0 0 0 0 1 1 1 0 0 0 0 0 0 505 427 43 1484407 35 0 14 413 0 0 0 0 0 0 0 0 0 7755 4347 0
+cpu34 27 0 1388199 627558 787820 13430 82110634373 34551059891 758956 mm_cid_task_work_nr_run: 65 mm_cid_task_work_clear_old: 6162 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 747016 mm_cid_get_alloc: 7850 mm_cid_get_put_lazy: 435 mm_cid_put_lazy: 361 mm_cid_put: 115 mm_cid_migrate_steal: 8633 mm_cid_migrate_clear: 6921 mm_cid_migrate_move: 1712
+domain0 00000000,00000000,00040000,00000000,00000000,00000004,00000000 9827 9247 16 659 597 0 0 9247 927 839 27 236 61 0 0 839 5413 5108 20 317 285 0 0 4937 0 0 0 0 0 0 0 0 0 5973 3761 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1861 1321 296 749 348 5 8 586 13 13 0 0 0 0 0 0 1345 362 548 1273 435 3 11 342 6 0 6 0 0 0 0 0 0 758789 389166 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 880 880 0 0 0 0 0 1 2 2 0 0 0 0 0 0 544 426 78 2863847 40 0 15 411 0 0 0 0 0 0 0 0 0 9625 5309 0
+cpu35 22 0 1409636 638173 777045 13245 81154798868 33957995754 769259 mm_cid_task_work_nr_run: 43 mm_cid_task_work_clear_old: 6161 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 757234 mm_cid_get_alloc: 8414 mm_cid_get_put_lazy: 468 mm_cid_put_lazy: 372 mm_cid_put: 97 mm_cid_migrate_steal: 10632 mm_cid_migrate_clear: 7306 mm_cid_migrate_move: 3326
+domain0 00000000,00000000,00080000,00000000,00000000,00000008,00000000 9630 9081 12 626 571 0 0 9081 932 838 28 235 70 0 0 838 3932 3715 15 222 202 0 0 3615 0 0 0 0 0 0 0 0 0 6589 4262 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1664 1135 269 748 357 7 12 570 18 18 0 0 0 0 0 0 1145 397 492 939 256 0 7 387 6 0 6 0 0 0 0 0 0 751502 381420 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 793 793 0 0 0 0 0 3 0 0 0 0 0 0 0 0 562 450 77 2007838 35 0 14 432 0 0 0 0 0 0 0 0 0 5706 3090 0
+cpu36 0 0 1592082 728964 774963 12129 80979679164 35172907248 861436 mm_cid_task_work_nr_run: 9 mm_cid_task_work_clear_old: 6157 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 851647 mm_cid_get_alloc: 8249 mm_cid_get_put_lazy: 430 mm_cid_put_lazy: 345 mm_cid_put: 75 mm_cid_migrate_steal: 15506 mm_cid_migrate_clear: 7113 mm_cid_migrate_move: 8393
+domain0 00000000,00000000,00100000,00000000,00000000,00000010,00000000 6759 6159 9 665 625 0 0 6157 869 782 20 226 70 0 0 782 4914 4602 18 320 294 0 0 4493 0 0 0 0 0 0 0 0 0 5907 3832 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1103 565 250 770 413 4 6 462 0 0 0 0 0 0 0 0 1504 277 623 1605 604 2 21 246 2 0 2 0 0 0 0 0 0 751314 387673 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 526 525 0 31339 2 0 0 2 1 1 0 0 0 0 0 0 264 203 49 1484556 12 0 10 193 0 0 0 0 0 0 0 0 0 5610 3641 0
+cpu37 72 0 1482957 674199 764381 13970 81244246426 34527207046 807076 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6135 mm_cid_task_work_clear_compact: 15 mm_cid_get_cached: 797351 mm_cid_get_alloc: 7731 mm_cid_get_put_lazy: 369 mm_cid_put_lazy: 342 mm_cid_put: 76 mm_cid_migrate_steal: 11346 mm_cid_migrate_clear: 6757 mm_cid_migrate_move: 4589
+domain0 00000000,00000000,00200000,00000000,00000000,00000020,00000000 6986 6392 7 681 620 0 0 6390 878 784 21 237 76 0 0 784 6759 6323 20 461 416 0 0 6147 0 0 0 0 0 0 0 0 0 6022 4004 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1308 775 281 761 352 7 4 506 7 7 0 0 0 0 0 0 1430 422 639 1304 369 3 18 399 2 0 2 0 0 0 0 0 0 735466 379078 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 607 606 0 33991 1 0 0 1 2 2 0 0 0 0 0 0 633 511 82 2347431 40 0 25 479 0 0 0 0 0 0 0 0 0 8920 5204 0
+cpu38 4340 0 1394105 628278 829776 11245 82682867900 34143800756 759832 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6176 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 750532 mm_cid_get_alloc: 8160 mm_cid_get_put_lazy: 431 mm_cid_put_lazy: 353 mm_cid_put: 122 mm_cid_migrate_steal: 9222 mm_cid_migrate_clear: 7178 mm_cid_migrate_move: 2044
+domain0 00000000,00000000,00400000,00000000,00000000,00000040,00000000 6754 6137 11 691 644 0 0 6137 941 856 22 265 67 0 0 856 5070 4698 14 386 358 0 0 4598 0 0 0 0 0 0 0 0 0 6149 4015 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 878 356 250 752 402 5 11 311 3 3 0 0 0 0 0 0 1356 239 433 1649 684 1 21 206 6 0 6 0 0 0 0 0 0 803798 416042 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 365 365 0 0 0 0 0 1 0 0 0 0 0 0 0 0 295 199 67 1520447 29 0 11 187 0 0 0 0 0 0 0 0 0 8581 8895 0
+cpu39 1 0 1428174 647091 787435 11397 81188851415 34190272437 779379 mm_cid_task_work_nr_run: 17 mm_cid_task_work_clear_old: 6189 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 769284 mm_cid_get_alloc: 8669 mm_cid_get_put_lazy: 490 mm_cid_put_lazy: 375 mm_cid_put: 110 mm_cid_migrate_steal: 10676 mm_cid_migrate_clear: 7459 mm_cid_migrate_move: 3217
+domain0 00000000,00000000,00800000,00000000,00000000,00000080,00000000 7074 6463 9 721 634 0 0 6463 852 746 30 277 79 0 0 746 4366 4132 8 244 226 0 0 4028 0 0 0 0 0 0 0 0 0 6240 4176 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1066 519 266 778 382 6 10 345 0 0 0 0 0 0 0 0 1323 273 587 1397 463 2 17 250 5 0 5 0 0 0 0 0 0 760552 395765 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 394 394 0 0 0 0 0 3 1 1 0 0 0 0 0 0 426 322 78 1636347 26 0 29 291 0 0 0 0 0 0 0 0 0 9243 7315 0
+cpu40 10 0 1401049 633492 774727 11197 82123792277 34015113168 765901 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6202 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 756801 mm_cid_get_alloc: 7715 mm_cid_get_put_lazy: 409 mm_cid_put_lazy: 400 mm_cid_put: 77 mm_cid_migrate_steal: 8469 mm_cid_migrate_clear: 6799 mm_cid_migrate_move: 1670
+domain0 00000000,00000000,01000000,00000000,00000000,00000100,00000000 6770 6158 13 761 648 0 0 6158 932 831 29 252 77 0 0 831 6036 5588 32 460 416 0 0 5456 0 0 0 0 0 0 0 0 0 6141 3959 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 926 391 265 759 371 7 7 343 11 11 0 0 0 0 0 6 1763 313 683 1966 767 0 32 261 6 0 6 0 0 0 0 0 0 741069 374964 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 370 370 0 0 0 0 0 0 7 7 0 0 0 0 0 0 304 224 58 1621155 22 0 20 202 0 0 0 0 0 0 0 0 0 16317 13473 0
+cpu41 10 0 1414061 640855 796036 11226 81544537777 33994467948 771515 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6193 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 762247 mm_cid_get_alloc: 8145 mm_cid_get_put_lazy: 385 mm_cid_put_lazy: 365 mm_cid_put: 118 mm_cid_migrate_steal: 10620 mm_cid_migrate_clear: 6911 mm_cid_migrate_move: 3709
+domain0 00000000,00000000,02000000,00000000,00000000,00000200,00000000 7068 6481 6 660 614 0 0 6481 871 779 19 234 76 0 0 779 4551 4274 13 292 264 0 0 4154 0 0 0 0 0 0 0 0 0 5950 3855 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 999 455 272 749 364 7 8 427 5 5 0 0 0 0 0 0 1271 256 573 1230 442 1 13 237 6 0 6 0 0 0 0 0 0 768841 398896 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 458 457 0 35076 1 0 0 3 0 0 0 0 0 0 0 0 347 239 75 1922136 33 0 18 216 0 0 0 0 0 0 0 0 0 10017 7566 0
+cpu42 22 0 1477556 671301 776595 11678 81543557059 34963560494 804601 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6153 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 794707 mm_cid_get_alloc: 8685 mm_cid_get_put_lazy: 436 mm_cid_put_lazy: 378 mm_cid_put: 72 mm_cid_migrate_steal: 14048 mm_cid_migrate_clear: 7492 mm_cid_migrate_move: 6556
+domain0 00000000,00000000,04000000,00000000,00000000,00000400,00000000 6855 6249 12 691 644 0 0 6249 861 758 25 290 80 0 0 758 4415 4169 9 251 237 0 0 4056 0 0 0 0 0 0 0 0 0 6178 4096 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 945 401 262 782 397 7 6 382 16 16 0 0 0 0 0 0 1148 279 415 1195 454 1 11 263 4 0 4 0 0 0 0 0 0 750625 387067 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 404 403 0 10 10 0 0 2 2 2 0 0 0 0 0 0 388 265 96 1720565 27 0 20 236 0 0 0 0 0 0 0 0 0 8111 5802 0
+cpu43 0 0 1513080 688703 766435 12257 80958327533 35433354388 822826 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6143 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 812377 mm_cid_get_alloc: 8882 mm_cid_get_put_lazy: 487 mm_cid_put_lazy: 385 mm_cid_put: 49 mm_cid_migrate_steal: 15657 mm_cid_migrate_clear: 7576 mm_cid_migrate_move: 8081
+domain0 00000000,00000000,08000000,00000000,00000000,00000800,00000000 7143 6555 12 666 614 0 0 6553 827 734 24 232 71 0 0 734 6411 5960 24 464 427 0 0 5821 1 0 1 0 0 0 0 0 0 5782 3737 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1477 904 295 826 396 10 10 520 0 0 0 0 0 0 0 0 1976 385 711 2143 880 1 23 354 1 0 1 0 0 0 0 0 0 743377 385191 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 573 573 0 0 0 0 0 1 0 0 0 0 0 0 0 0 310 240 61 1012566 9 0 19 214 0 0 0 0 0 0 0 0 0 5016 3817 0
+cpu44 42 0 1516052 690985 773676 14095 81778700403 34905221426 823316 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6145 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 809375 mm_cid_get_alloc: 8376 mm_cid_get_put_lazy: 404 mm_cid_put_lazy: 380 mm_cid_put: 125 mm_cid_migrate_steal: 14355 mm_cid_migrate_clear: 7369 mm_cid_migrate_move: 6986
+domain0 00000000,00000000,10000000,00000000,00000000,00001000,00000000 9419 8794 17 726 634 0 0 8793 856 751 29 460 80 0 0 751 4911 4633 20 288 258 0 0 4538 0 0 0 0 0 0 0 0 0 6666 4216 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1700 1172 250 750 389 9 7 347 0 0 0 0 0 0 0 0 1154 379 497 1025 278 1 7 365 7 0 7 0 0 0 0 0 0 746351 385680 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 741 741 0 0 0 0 0 1 2 2 0 0 0 0 0 0 563 458 81 1208853 24 0 16 436 0 0 0 0 0 0 0 0 0 6561 3613 0
+cpu45 3 0 1425705 645393 772420 11383 80529782402 34417255791 778795 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6183 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 769437 mm_cid_get_alloc: 8039 mm_cid_get_put_lazy: 429 mm_cid_put_lazy: 356 mm_cid_put: 56 mm_cid_migrate_steal: 11107 mm_cid_migrate_clear: 6917 mm_cid_migrate_move: 4190
+domain0 00000000,00000000,20000000,00000000,00000000,00002000,00000000 7435 6877 14 651 576 0 0 6876 866 788 19 219 61 0 0 788 6039 5628 20 433 391 0 0 5486 1 0 1 0 0 0 0 0 0 6082 3980 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1139 594 255 783 404 8 6 521 5 5 0 0 0 0 0 0 1210 260 555 1223 395 1 6 250 2 0 2 0 0 0 0 0 0 748453 380227 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 562 562 0 0 0 0 0 2 1 1 0 0 0 0 0 0 491 378 79 1689057 34 0 17 361 0 0 0 0 0 0 0 0 0 6499 3854 0
+cpu46 0 0 1475333 669980 782082 12028 81423205740 34974165794 803571 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6182 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 793677 mm_cid_get_alloc: 8278 mm_cid_get_put_lazy: 414 mm_cid_put_lazy: 332 mm_cid_put: 98 mm_cid_migrate_steal: 12782 mm_cid_migrate_clear: 7194 mm_cid_migrate_move: 5588
+domain0 00000000,00000000,40000000,00000000,00000000,00004000,00000000 6881 6281 7 687 627 0 0 6281 831 758 22 210 55 0 0 758 4211 3915 14 309 282 0 0 3837 0 0 0 0 0 0 0 0 0 5989 3910 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 903 368 261 774 397 6 6 348 0 0 0 0 0 0 0 0 1100 211 425 1282 464 2 9 201 5 0 5 0 0 0 0 0 0 753560 383351 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 377 377 0 0 0 0 0 0 0 0 0 0 0 0 0 0 355 257 81 715784 17 0 10 235 0 0 0 0 0 0 0 0 0 10502 11380 0
+cpu47 7 0 1421891 643698 852981 11752 85300350756 35033202683 776438 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6186 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 766872 mm_cid_get_alloc: 8383 mm_cid_get_put_lazy: 435 mm_cid_put_lazy: 368 mm_cid_put: 193 mm_cid_migrate_steal: 11678 mm_cid_migrate_clear: 7377 mm_cid_migrate_move: 4301
+domain0 00000000,00000000,80000000,00000000,00000000,00008000,00000000 6741 6191 8 617 562 0 0 6191 935 849 18 257 73 0 1 848 6958 6426 25 546 507 0 0 6229 0 0 0 0 0 0 0 0 0 5877 3809 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 919 356 264 815 413 4 5 330 7 7 0 0 0 0 0 0 1180 206 465 1317 509 4 8 192 2 0 2 0 0 0 0 0 0 824727 435298 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 379 379 0 0 0 0 0 1 1 1 0 0 0 0 0 0 320 163 113 3211257 44 0 32 131 0 0 0 0 0 0 0 0 0 10622 10388 0
+cpu48 0 0 1588705 726948 753085 11672 81043642846 34333162505 860122 mm_cid_task_work_nr_run: 11 mm_cid_task_work_clear_old: 6165 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 850119 mm_cid_get_alloc: 8428 mm_cid_get_put_lazy: 410 mm_cid_put_lazy: 362 mm_cid_put: 45 mm_cid_migrate_steal: 17911 mm_cid_migrate_clear: 7367 mm_cid_migrate_move: 10544
+domain0 00000000,00000001,00000000,00000000,00000000,00010000,00000000 6960 6361 6 661 639 0 0 6360 853 759 24 318 74 0 0 759 5911 5572 20 352 319 0 0 5454 0 0 0 0 0 0 0 0 0 6423 4110 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1130 588 264 780 408 2 12 493 2 2 0 0 0 0 0 2 1318 441 535 1075 342 1 18 420 4 0 4 0 0 0 0 0 0 728775 373907 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 533 533 0 0 0 0 0 1 3 3 0 0 0 0 0 0 462 359 81 1235764 22 0 16 340 0 0 0 0 0 0 0 0 0 6212 4294 0
+cpu49 14 0 1551741 707964 745276 11604 78700214166 35066228604 842042 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6161 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 832449 mm_cid_get_alloc: 8537 mm_cid_get_put_lazy: 460 mm_cid_put_lazy: 375 mm_cid_put: 42 mm_cid_migrate_steal: 17557 mm_cid_migrate_clear: 7238 mm_cid_migrate_move: 10319
+domain0 00000000,00000002,00000000,00000000,00000000,00020000,00000000 6914 6356 9 621 576 0 0 6356 854 746 25 352 93 0 0 746 8083 7504 37 593 542 0 0 7286 0 0 0 0 0 0 0 0 0 5858 3786 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 916 395 266 745 354 9 8 367 10 10 0 0 0 0 0 0 1769 404 705 1766 660 5 17 377 2 0 2 0 0 0 0 0 0 721150 369614 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 381 381 0 0 0 0 0 0 2 2 0 0 0 0 0 0 414 253 106 2554891 55 0 36 205 0 0 0 0 0 0 0 0 0 6661 4138 0
+cpu50 0 0 1457833 661696 869661 11588 80837704664 34761939688 794407 mm_cid_task_work_nr_run: 14 mm_cid_task_work_clear_old: 6187 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 785352 mm_cid_get_alloc: 8016 mm_cid_get_put_lazy: 407 mm_cid_put_lazy: 371 mm_cid_put: 78 mm_cid_migrate_steal: 11580 mm_cid_migrate_clear: 7111 mm_cid_migrate_move: 4469
+domain0 00000000,00000004,00000000,00000000,00000000,00040000,00000000 6533 5931 18 718 623 0 0 5931 853 750 26 284 82 0 0 750 4138 3956 10 185 172 0 0 3843 0 0 0 0 0 0 0 0 0 5797 3748 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 908 344 282 822 400 5 5 323 1 1 0 0 0 0 0 0 823 190 362 814 271 0 14 174 6 0 6 0 0 0 0 0 0 843610 471874 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 364 364 0 0 0 0 0 0 0 0 0 0 0 0 0 0 231 144 66 1257877 21 0 23 119 0 0 0 0 0 0 0 0 0 8663 9946 0
+cpu51 1 0 1449942 657712 778302 11186 79355642661 35264798349 790403 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6182 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 781044 mm_cid_get_alloc: 8315 mm_cid_get_put_lazy: 427 mm_cid_put_lazy: 378 mm_cid_put: 68 mm_cid_migrate_steal: 12813 mm_cid_migrate_clear: 7166 mm_cid_migrate_move: 5647
+domain0 00000000,00000008,00000000,00000000,00000000,00080000,00000000 6906 6292 14 666 632 0 0 6292 871 768 30 250 80 0 0 768 5013 4697 29 319 287 0 0 4578 1 0 1 0 0 0 0 0 0 5913 3883 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1051 511 254 791 395 5 10 472 1 1 0 0 0 0 0 0 1237 281 516 1223 440 1 14 258 3 0 3 0 0 0 0 0 0 754109 387212 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 488 488 0 0 0 0 0 1 0 0 0 0 0 0 0 0 296 185 84 1711156 27 0 18 166 0 0 0 0 0 0 0 0 0 7091 7076 0
+cpu52 2 0 1482157 674431 804315 11749 79495122248 35131973084 806004 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6166 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 795036 mm_cid_get_alloc: 9223 mm_cid_get_put_lazy: 406 mm_cid_put_lazy: 339 mm_cid_put: 99 mm_cid_migrate_steal: 13673 mm_cid_migrate_clear: 7885 mm_cid_migrate_move: 5788
+domain0 00000000,00000010,00000000,00000000,00000000,00100000,00000000 7286 6683 16 702 633 0 0 6683 875 788 26 227 66 0 0 788 5425 4973 24 464 428 0 0 4849 1 0 1 0 0 0 0 0 0 6425 4109 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1218 677 248 789 436 6 9 464 3 3 0 0 0 0 0 0 1380 308 573 1347 499 0 16 285 5 0 5 0 0 0 0 0 0 778572 400497 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 552 552 0 0 0 0 0 0 0 0 0 0 0 0 0 0 356 241 68 1657611 47 0 14 226 0 0 0 0 0 0 0 0 0 7566 3932 0
+cpu53 1 0 1423917 645019 861286 11421 81992667068 34434327947 777270 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6191 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 767920 mm_cid_get_alloc: 8300 mm_cid_get_put_lazy: 429 mm_cid_put_lazy: 390 mm_cid_put: 32 mm_cid_migrate_steal: 10259 mm_cid_migrate_clear: 7472 mm_cid_migrate_move: 2787
+domain0 00000000,00000020,00000000,00000000,00000000,00200000,00000000 6488 5878 12 682 644 0 0 5877 933 841 23 300 74 0 0 841 5031 4723 19 315 289 0 0 4597 1 0 1 0 0 0 0 0 0 5940 3961 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1180 645 261 796 387 6 9 601 5 5 0 0 0 0 0 0 825 175 334 873 316 1 10 164 4 0 4 0 0 0 0 0 0 834160 449439 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 635 635 0 0 0 0 0 1 0 0 0 0 0 0 0 0 213 147 46 761932 20 0 20 126 0 0 0 0 0 0 0 0 0 9762 13345 0
+cpu54 0 0 1549841 707483 793049 11616 80154794160 35018637352 840589 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6167 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 829962 mm_cid_get_alloc: 9597 mm_cid_get_put_lazy: 454 mm_cid_put_lazy: 366 mm_cid_put: 63 mm_cid_migrate_steal: 15667 mm_cid_migrate_clear: 8122 mm_cid_migrate_move: 7545
+domain0 00000000,00000040,00000000,00000000,00000000,00400000,00000000 6820 6240 9 672 609 0 0 6240 877 779 21 272 83 0 0 779 4939 4659 28 285 252 0 0 4558 0 0 0 0 0 0 0 0 0 6531 4358 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1060 523 271 761 363 5 15 488 0 0 0 0 0 0 0 0 1015 223 448 986 344 0 10 208 4 0 4 0 0 0 0 0 0 769787 395863 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 508 508 0 0 0 0 0 0 0 0 0 0 0 0 0 0 259 173 55 1053310 31 0 16 156 0 0 0 0 0 0 0 0 0 5112 3431 0
+cpu55 2 0 1477968 672142 808147 11392 80597583763 34770843048 804263 mm_cid_task_work_nr_run: 12 mm_cid_task_work_clear_old: 6182 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 794446 mm_cid_get_alloc: 8768 mm_cid_get_put_lazy: 478 mm_cid_put_lazy: 409 mm_cid_put: 34 mm_cid_migrate_steal: 12529 mm_cid_migrate_clear: 7234 mm_cid_migrate_move: 5295
+domain0 00000000,00000080,00000000,00000000,00000000,00800000,00000000 6837 6243 13 657 617 0 0 6243 909 812 23 264 79 0 0 812 4553 4184 29 381 340 0 0 4066 1 0 1 0 0 0 0 0 0 6258 4052 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1074 541 261 762 374 6 10 511 0 0 0 0 0 0 0 0 1245 208 536 1363 501 2 24 181 3 0 3 0 0 0 0 0 0 779362 397225 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 534 534 0 0 0 0 0 1 0 0 0 0 0 0 0 0 321 223 67 1668383 31 0 13 208 0 0 0 0 0 0 0 0 0 11132 11195 0
+cpu56 36 0 1996542 934922 1072655 13416 70430948312 23119706872 1060053 mm_cid_task_work_nr_run: 140 mm_cid_task_work_clear_old: 6014 mm_cid_task_work_clear_compact: 25 mm_cid_get_cached: 1054740 mm_cid_get_alloc: 445 mm_cid_get_put_lazy: 11 mm_cid_put_lazy: 38 mm_cid_put: 33 mm_cid_migrate_steal: 1277 mm_cid_migrate_clear: 139 mm_cid_migrate_move: 1138
+domain0 00000000,00000100,00000000,00000000,00000000,01000000,00000000 11102 10616 18 566 492 0 0 10616 717 674 8 118 38 0 0 674 7737 7671 10 66 56 0 0 7540 0 0 0 0 0 0 0 0 0 7057 5131 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 3115 2636 228 698 355 5 6 513 40 40 0 0 0 0 0 0 4836 2774 1862 2256 200 2 64 2644 4 0 4 0 0 0 0 0 0 1033957 632384 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 610 427 106 2975553 126 1 23 329 27 27 0 0 0 0 0 0 2093 655 1016 32389230 422 1 319 326 2 0 2 0 0 0 0 0 0 18222 48937 0
+cpu57 17 0 1972281 922275 1030562 18136 69044696505 22953323963 1048499 mm_cid_task_work_nr_run: 150 mm_cid_task_work_clear_old: 5992 mm_cid_task_work_clear_compact: 45 mm_cid_get_cached: 1041694 mm_cid_get_alloc: 1370 mm_cid_get_put_lazy: 45 mm_cid_put_lazy: 65 mm_cid_put: 92 mm_cid_migrate_steal: 9302 mm_cid_migrate_clear: 2660 mm_cid_migrate_move: 6642
+domain0 00000000,00000200,00000000,00000000,00000000,02000000,00000000 12615 12122 15 613 504 0 0 12122 728 691 11 67 28 0 0 691 12132 12046 7 87 79 0 0 11590 0 0 0 0 0 0 0 0 0 8305 5905 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 4305 3819 230 681 364 3 12 523 2 2 0 0 0 0 0 0 4418 2425 1843 2061 150 1 59 2341 2 0 2 0 0 0 0 0 0 988378 623480 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 1069 982 41 2271634 73 0 12 37 33 33 0 0 0 0 0 0 1850 702 825 23386111 323 0 260 438 0 0 0 0 0 0 0 0 0 15740 7716 0
+cpu58 7 0 1940186 905399 1077086 11430 66402055961 22849512073 1033260 mm_cid_task_work_nr_run: 50 mm_cid_task_work_clear_old: 6138 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 1030941 mm_cid_get_alloc: 1211 mm_cid_get_put_lazy: 27 mm_cid_put_lazy: 49 mm_cid_put: 60 mm_cid_migrate_steal: 8998 mm_cid_migrate_clear: 2084 mm_cid_migrate_move: 6914
+domain0 00000000,00000400,00000000,00000000,00000000,04000000,00000000 8562 8072 8 552 514 0 1 8071 630 581 12 106 38 0 0 581 14836 14644 20 193 172 0 0 14089 0 0 0 0 0 0 0 0 0 7940 5682 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 956 458 238 753 385 2 5 436 26 26 0 0 0 0 0 0 7460 4221 2953 3388 286 0 102 4009 3 0 3 0 0 0 0 0 0 1051705 696574 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 463 398 29 1537782 64 0 20 30 10 10 0 0 0 0 0 0 1675 449 928 24745247 298 0 253 183 0 0 0 0 0 0 0 0 0 6008 3357 0
+cpu59 53 0 1952056 911586 1004422 9418 64803747418 22648566812 1038884 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6213 mm_cid_task_work_clear_compact: 9 mm_cid_get_cached: 1036640 mm_cid_get_alloc: 990 mm_cid_get_put_lazy: 23 mm_cid_put_lazy: 33 mm_cid_put: 104 mm_cid_migrate_steal: 4527 mm_cid_migrate_clear: 1425 mm_cid_migrate_move: 3102
+domain0 00000000,00000800,00000000,00000000,00000000,08000000,00000000 8691 8197 10 542 515 0 0 8197 565 525 12 95 28 0 0 525 9435 9293 11 144 131 0 0 8994 0 0 0 0 0 0 0 0 0 8124 5789 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 984 481 238 723 360 5 6 430 11 11 0 0 0 0 0 3 4857 2395 2183 2663 279 0 82 2281 1 0 1 0 0 0 0 0 0 978935 621574 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 455 417 18 920940 31 0 6 17 5 5 0 0 0 0 0 0 2007 573 1080 22430861 354 0 317 244 0 0 0 0 0 0 0 0 0 7942 5906 0
+cpu60 20 0 1935140 903455 1135170 9116 66592932488 22860592638 1030226 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6230 mm_cid_task_work_clear_compact: 14 mm_cid_get_cached: 1028226 mm_cid_get_alloc: 975 mm_cid_get_put_lazy: 39 mm_cid_put_lazy: 62 mm_cid_put: 62 mm_cid_migrate_steal: 7263 mm_cid_migrate_clear: 1150 mm_cid_migrate_move: 6113
+domain0 00000000,00001000,00000000,00000000,00000000,10000000,00000000 8452 7941 12 565 535 0 0 7941 587 534 16 154 37 0 0 534 14916 14806 2 112 108 0 0 14118 1 0 1 0 0 0 0 0 0 7491 5553 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 952 443 245 734 369 2 7 421 14 14 0 0 0 0 0 0 6383 3162 3008 3334 213 2 100 3011 2 0 2 0 0 0 0 0 0 1115349 756784 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 445 410 18 789076 27 0 2 11 0 0 0 0 0 0 0 0 1975 492 1129 27154664 354 0 333 150 0 0 0 0 0 0 0 0 0 3211 1733 0
+cpu61 1 0 2083933 977458 1118691 9109 68045921009 23331910999 1104854 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6256 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1103277 mm_cid_get_alloc: 563 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 28 mm_cid_put: 87 mm_cid_migrate_steal: 5075 mm_cid_migrate_clear: 410 mm_cid_migrate_move: 4665
+domain0 00000000,00002000,00000000,00000000,00000000,20000000,00000000 8409 7913 8 549 522 0 0 7913 592 557 7 111 29 0 0 557 13285 13127 10 161 148 0 0 12506 0 0 0 0 0 0 0 0 0 7755 5499 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 936 438 248 731 368 3 9 412 1 1 0 0 0 0 0 0 5261 2382 2560 3032 319 1 81 2263 4 0 4 0 0 0 0 0 0 1098264 729070 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 432 406 15 748772 21 0 5 18 0 0 0 0 0 0 0 0 1006 264 594 16392504 148 0 157 101 0 0 0 0 0 0 0 0 0 3560 1788 0
+cpu62 31 0 2179376 1024421 1004647 10560 65675754822 22560189195 1153404 mm_cid_task_work_nr_run: 18 mm_cid_task_work_clear_old: 6198 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1150110 mm_cid_get_alloc: 454 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 18 mm_cid_put: 47 mm_cid_migrate_steal: 4054 mm_cid_migrate_clear: 280 mm_cid_migrate_move: 3774
+domain0 00000000,00004000,00000000,00000000,00000000,40000000,00000000 9284 8784 6 549 525 0 0 8784 507 475 13 88 19 0 0 475 11902 11820 7 83 75 0 0 11245 0 0 0 0 0 0 0 0 0 7579 5595 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1307 776 291 783 341 4 6 446 1 1 0 0 0 0 0 0 5754 3192 2343 2672 219 4 85 3053 7 0 7 0 0 0 0 0 0 982656 634429 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 617 593 11 599166 27 0 7 8 1 1 0 0 0 0 0 0 1761 860 686 17342405 215 0 209 639 0 0 0 0 0 0 0 0 0 3849 1965 0
+cpu63 36 0 1901808 886628 1184490 9512 68607133018 23063958633 1013794 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6226 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 1012440 mm_cid_get_alloc: 366 mm_cid_get_put_lazy: 8 mm_cid_put_lazy: 37 mm_cid_put: 43 mm_cid_migrate_steal: 1087 mm_cid_migrate_clear: 148 mm_cid_migrate_move: 939
+domain0 00000000,00008000,00000000,00000000,00000000,80000000,00000000 7858 7379 8 520 494 0 0 7379 645 594 18 134 33 0 0 594 8919 8763 11 160 145 0 0 8442 0 0 0 0 0 0 0 0 0 7857 5678 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 922 421 241 728 382 3 4 401 5 5 0 0 0 0 0 0 5709 2501 2796 3417 412 2 149 2310 0 0 0 0 0 0 0 0 0 1158276 783163 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 423 411 5 333960 7 0 2 10 0 0 0 0 0 0 0 0 1589 430 871 24608011 288 0 271 149 0 0 0 0 0 0 0 0 0 8843 6545 0
+cpu64 79 0 1973566 922303 1183888 9433 67817301939 22785770522 1049676 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6221 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1048040 mm_cid_get_alloc: 614 mm_cid_get_put_lazy: 27 mm_cid_put_lazy: 50 mm_cid_put: 28 mm_cid_migrate_steal: 5203 mm_cid_migrate_clear: 515 mm_cid_migrate_move: 4688
+domain0 00000000,00010000,00000000,00000000,00000001,00000000,00000000 8074 7552 7 589 538 0 0 7552 618 569 14 127 37 0 0 569 12492 12317 11 178 164 0 0 11733 0 0 0 0 0 0 0 0 0 8753 6444 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 935 445 250 712 336 4 6 419 4 4 0 0 0 0 0 0 5405 2440 2551 3168 414 4 105 2280 2 0 2 0 0 0 0 0 0 1163228 793479 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 429 420 5 145027 7 0 3 6 1 1 0 0 0 0 0 0 1299 339 747 19697325 213 0 203 128 0 0 0 0 0 0 0 0 0 2471 1437 0
+cpu65 24 0 1993574 932790 1177500 9721 68094037528 22966915071 1059146 mm_cid_task_work_nr_run: 45 mm_cid_task_work_clear_old: 6194 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1057483 mm_cid_get_alloc: 515 mm_cid_get_put_lazy: 31 mm_cid_put_lazy: 33 mm_cid_put: 21 mm_cid_migrate_steal: 4385 mm_cid_migrate_clear: 371 mm_cid_migrate_move: 4014
+domain0 00000000,00020000,00000000,00000000,00000002,00000000,00000000 8308 7840 6 505 488 0 0 7840 630 581 10 120 39 0 0 581 11969 11875 4 94 90 0 0 11384 0 0 0 0 0 0 0 0 0 7858 5709 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1074 576 248 733 365 5 9 474 5 5 0 0 0 0 0 0 6391 3277 2895 3199 219 1 88 3132 1 0 1 0 0 0 0 0 0 1156774 806353 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 488 477 8 224425 7 0 1 9 7 7 0 0 0 0 0 0 1731 483 960 18733941 288 0 273 195 0 0 0 0 0 0 0 0 0 3144 1493 0
+cpu66 84 0 2046613 958945 1069960 9735 67661599882 22734273937 1086124 mm_cid_task_work_nr_run: 34 mm_cid_task_work_clear_old: 6162 mm_cid_task_work_clear_compact: 12 mm_cid_get_cached: 1084590 mm_cid_get_alloc: 492 mm_cid_get_put_lazy: 28 mm_cid_put_lazy: 45 mm_cid_put: 57 mm_cid_migrate_steal: 1352 mm_cid_migrate_clear: 257 mm_cid_migrate_move: 1095
+domain0 00000000,00040000,00000000,00000000,00000004,00000000,00000000 8341 7882 5 519 479 0 0 7881 611 573 11 92 27 0 0 573 7847 7724 10 124 113 0 0 7448 0 0 0 0 0 0 0 0 0 7431 5421 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 955 455 251 727 340 6 7 433 14 14 0 0 0 0 0 0 5166 2398 2478 2920 290 1 110 2244 2 0 2 0 0 0 0 0 0 1048971 690984 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 443 441 0 66563 3 0 1 7 1 1 0 0 0 0 0 0 1860 476 1055 23220249 329 0 272 187 0 0 0 0 0 0 0 0 0 3820 1886 0
+cpu67 33 0 2200082 1035751 1053784 9665 67986631816 22406454499 1162768 mm_cid_task_work_nr_run: 28 mm_cid_task_work_clear_old: 6178 mm_cid_task_work_clear_compact: 10 mm_cid_get_cached: 1160977 mm_cid_get_alloc: 481 mm_cid_get_put_lazy: 17 mm_cid_put_lazy: 50 mm_cid_put: 46 mm_cid_migrate_steal: 3889 mm_cid_migrate_clear: 272 mm_cid_migrate_move: 3617
+domain0 00000000,00080000,00000000,00000000,00000008,00000000,00000000 8862 8316 9 597 569 0 0 8316 554 506 13 132 35 0 0 506 11442 11301 7 144 134 0 0 10855 0 0 0 0 0 0 0 0 0 8390 6195 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1219 731 261 719 332 8 8 462 0 0 0 0 0 0 0 0 8103 4337 3504 3919 262 1 100 4178 4 0 4 0 0 0 0 0 0 1030820 677564 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 468 460 3 214542 8 0 1 2 3 3 0 0 0 0 0 0 2000 482 1174 20192574 344 0 305 166 0 0 0 0 0 0 0 0 0 4906 2459 0
+cpu68 16 0 2000273 936047 1111051 9469 68544463863 23004804442 1062533 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6225 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 1061002 mm_cid_get_alloc: 468 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 45 mm_cid_put: 54 mm_cid_migrate_steal: 1556 mm_cid_migrate_clear: 228 mm_cid_migrate_move: 1328
+domain0 00000000,00100000,00000000,00000000,00000010,00000000,00000000 8214 7754 11 507 467 0 0 7754 631 586 10 144 38 0 0 586 13070 12855 18 219 197 0 0 12520 0 0 0 0 0 0 0 0 0 7498 5564 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 971 473 251 760 365 2 8 420 7 7 0 0 0 0 0 0 7667 3802 3380 4051 485 1 74 3675 4 0 4 0 0 0 0 0 0 1084147 716947 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 441 437 4 112669 0 0 1 9 1 1 0 0 0 0 0 0 2087 498 1211 21529163 378 0 332 155 0 0 0 0 0 0 0 0 0 9934 8003 0
+cpu69 36 0 2059118 965217 1115505 9505 68318682592 23104996538 1092396 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6201 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 1090645 mm_cid_get_alloc: 686 mm_cid_get_put_lazy: 26 mm_cid_put_lazy: 61 mm_cid_put: 160 mm_cid_migrate_steal: 4645 mm_cid_migrate_clear: 541 mm_cid_migrate_move: 4104
+domain0 00000000,00200000,00000000,00000000,00000020,00000000,00000000 8479 8037 8 477 455 0 0 8037 585 544 16 117 27 0 0 544 10462 10337 12 133 113 0 0 9861 0 0 0 0 0 0 0 0 0 7659 5601 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 947 437 251 728 359 3 8 414 4 4 0 0 0 0 0 0 4818 2418 2270 2457 130 5 91 2293 2 0 2 0 0 0 0 0 0 1095774 730336 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 437 427 6 221616 6 0 2 5 2 2 0 0 0 0 0 0 1712 459 944 23358393 309 0 294 154 0 0 0 0 0 0 0 0 0 2564 1537 0
+cpu70 22 0 2130799 1000593 1119640 9366 70166599909 23022367785 1128672 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6217 mm_cid_task_work_clear_compact: 10 mm_cid_get_cached: 1127012 mm_cid_get_alloc: 628 mm_cid_get_put_lazy: 33 mm_cid_put_lazy: 39 mm_cid_put: 103 mm_cid_migrate_steal: 4152 mm_cid_migrate_clear: 414 mm_cid_migrate_move: 3738
+domain0 00000000,00400000,00000000,00000000,00000040,00000000,00000000 8299 7811 9 554 506 0 0 7811 609 554 12 165 47 0 0 554 14449 14268 10 185 171 0 0 13607 0 0 0 0 0 0 0 0 0 7511 5609 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 935 427 249 742 370 4 7 409 5 5 0 0 0 0 0 0 6934 3153 3218 4040 563 4 136 2946 3 0 3 0 0 0 0 0 0 1094870 741190 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 432 429 0 133921 5 0 0 2 0 0 0 0 0 0 0 0 1667 462 937 21702142 268 0 305 146 0 0 0 0 0 0 0 0 0 7890 3558 0
+cpu71 55 0 2158876 1015180 1113624 9852 70982551943 23447358290 1142183 mm_cid_task_work_nr_run: 36 mm_cid_task_work_clear_old: 6201 mm_cid_task_work_clear_compact: 7 mm_cid_get_cached: 1140192 mm_cid_get_alloc: 753 mm_cid_get_put_lazy: 24 mm_cid_put_lazy: 50 mm_cid_put: 173 mm_cid_migrate_steal: 5386 mm_cid_migrate_clear: 419 mm_cid_migrate_move: 4967
+domain0 00000000,00800000,00000000,00000000,00000080,00000000,00000000 8919 8418 27 550 496 0 0 8418 582 548 8 102 27 0 0 548 10274 10201 6 74 67 0 0 9748 1 0 1 0 0 0 0 0 0 8549 6343 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1086 573 248 743 372 7 6 417 23 23 0 0 0 0 0 0 3662 1798 1721 1972 143 2 46 1735 3 0 3 0 0 0 0 0 0 1087278 720278 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 451 446 2 145454 4 0 2 3 0 0 0 0 0 0 0 0 1425 386 796 15400100 243 0 200 176 0 0 0 0 0 0 0 0 0 7942 3500 0
+cpu72 9 0 1976630 922833 1154780 9784 68328599585 22926310383 1052219 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6220 mm_cid_task_work_clear_compact: 24 mm_cid_get_cached: 1050327 mm_cid_get_alloc: 744 mm_cid_get_put_lazy: 31 mm_cid_put_lazy: 52 mm_cid_put: 197 mm_cid_migrate_steal: 5411 mm_cid_migrate_clear: 367 mm_cid_migrate_move: 5044
+domain0 00000000,01000000,00000000,00000000,00000100,00000000,00000000 8839 8351 6 547 519 0 0 8351 588 539 11 150 38 0 0 539 12430 12328 6 104 96 0 0 11767 0 0 0 0 0 0 0 0 0 7999 6015 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 964 449 260 722 366 4 6 416 11 11 0 0 0 0 0 0 7729 3790 3537 4092 402 3 104 3616 4 0 4 0 0 0 0 0 0 1134348 783705 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 434 432 1 32352 3 0 0 0 0 0 0 0 0 0 0 0 2007 610 1137 17364484 260 0 279 322 0 0 0 0 0 0 0 0 0 2646 1433 0
+cpu73 15 0 2341611 1105857 1121886 9292 70701747376 23292834162 1234236 mm_cid_task_work_nr_run: 29 mm_cid_task_work_clear_old: 6218 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1232667 mm_cid_get_alloc: 553 mm_cid_get_put_lazy: 20 mm_cid_put_lazy: 37 mm_cid_put: 133 mm_cid_migrate_steal: 2452 mm_cid_migrate_clear: 257 mm_cid_migrate_move: 2195
+domain0 00000000,02000000,00000000,00000000,00000200,00000000,00000000 8432 7943 8 540 507 0 0 7943 607 562 11 116 35 0 0 562 10758 10639 9 120 110 0 0 10196 0 0 0 0 0 0 0 0 0 7996 5723 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 943 441 237 736 380 3 5 420 21 21 0 0 0 0 0 0 6918 3264 3064 3941 590 2 102 3106 5 0 5 0 0 0 0 0 0 1094586 726511 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 434 431 0 74536 4 0 2 1 1 1 0 0 0 0 0 0 1567 392 954 21233627 221 0 248 135 0 0 0 0 0 0 0 0 0 10009 4731 0
+cpu74 10 0 1990489 930585 1102614 9291 69012030263 22872999586 1058386 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6262 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1056888 mm_cid_get_alloc: 497 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 37 mm_cid_put: 94 mm_cid_migrate_steal: 2630 mm_cid_migrate_clear: 230 mm_cid_migrate_move: 2400
+domain0 00000000,04000000,00000000,00000000,00000400,00000000,00000000 7901 7420 9 539 506 0 0 7419 564 531 11 101 23 0 0 531 8953 8872 9 82 72 0 0 8499 0 0 0 0 0 0 0 0 0 7591 5445 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 925 421 241 754 383 4 8 404 13 13 0 0 0 0 0 2 4535 2257 2132 2366 146 1 69 2130 2 0 2 0 0 0 0 0 0 1076411 713560 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 416 416 0 0 0 0 1 2 4 4 0 0 0 0 0 0 1093 281 649 12640666 163 0 155 118 0 0 0 0 0 0 0 0 0 9318 4183 0
+cpu75 30 0 2139623 1004535 1082933 9331 67827841278 22546206135 1133534 mm_cid_task_work_nr_run: 15 mm_cid_task_work_clear_old: 6252 mm_cid_task_work_clear_compact: 38 mm_cid_get_cached: 1131858 mm_cid_get_alloc: 650 mm_cid_get_put_lazy: 22 mm_cid_put_lazy: 44 mm_cid_put: 124 mm_cid_migrate_steal: 3984 mm_cid_migrate_clear: 363 mm_cid_migrate_move: 3621
+domain0 00000000,08000000,00000000,00000000,00000800,00000000,00000000 8508 8023 13 533 498 0 0 8023 603 553 12 145 38 0 0 553 7848 7758 3 95 87 0 0 7402 0 0 0 0 0 0 0 0 0 7196 5298 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 918 432 242 713 330 5 4 416 19 19 0 0 0 0 0 0 3382 1719 1413 1856 250 2 48 1655 5 0 5 0 0 0 0 0 0 1064635 708564 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 415 413 1 69970 1 0 1 7 1 1 0 0 0 0 0 0 1303 389 727 16907868 187 0 238 136 0 0 0 0 0 0 0 0 0 1768 823 0
+cpu76 19 0 2092226 981083 1073376 11257 71172705894 22789633975 1109794 mm_cid_task_work_nr_run: 65 mm_cid_task_work_clear_old: 6128 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 1108086 mm_cid_get_alloc: 526 mm_cid_get_put_lazy: 14 mm_cid_put_lazy: 39 mm_cid_put: 68 mm_cid_migrate_steal: 2381 mm_cid_migrate_clear: 246 mm_cid_migrate_move: 2135
+domain0 00000000,10000000,00000000,00000000,00001000,00000000,00000000 8566 8073 6 534 515 0 0 8073 655 616 8 84 31 0 0 616 13128 13008 7 124 113 0 0 12584 0 0 0 0 0 0 0 0 0 7849 5749 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1053 562 244 734 355 5 5 447 29 29 0 0 0 0 0 0 6378 3190 2978 3287 210 3 81 3046 5 0 5 0 0 0 0 0 0 1038853 666232 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 455 452 2 106932 1 0 0 2 9 9 0 0 0 0 0 0 2025 536 1141 22032483 348 0 329 195 0 0 0 0 0 0 0 0 0 15415 9927 0
+cpu77 4 0 2135348 1003690 1051586 11310 69430091637 22935856928 1130230 mm_cid_task_work_nr_run: 45 mm_cid_task_work_clear_old: 6165 mm_cid_task_work_clear_compact: 28 mm_cid_get_cached: 1128604 mm_cid_get_alloc: 435 mm_cid_get_put_lazy: 12 mm_cid_put_lazy: 26 mm_cid_put: 130 mm_cid_migrate_steal: 964 mm_cid_migrate_clear: 157 mm_cid_migrate_move: 807
+domain0 00000000,20000000,00000000,00000000,00002000,00000000,00000000 8621 8129 4 581 534 0 0 8129 621 575 11 110 36 0 0 575 8918 8742 11 180 165 0 0 8468 0 0 0 0 0 0 0 0 0 7734 5534 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1040 541 235 712 360 1 6 435 14 14 0 0 0 0 0 0 3968 1762 1867 2409 339 2 60 1684 4 0 4 0 0 0 0 0 0 1015860 658131 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 443 440 2 101266 1 0 0 4 12 12 0 0 0 0 0 0 1392 439 714 17133731 239 0 230 205 0 0 0 0 0 0 0 0 0 16680 12698 0
+cpu78 11 0 2075209 972534 1102553 9541 68479594773 22845183052 1101184 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6248 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1099275 mm_cid_get_alloc: 815 mm_cid_get_put_lazy: 55 mm_cid_put_lazy: 68 mm_cid_put: 159 mm_cid_migrate_steal: 3898 mm_cid_migrate_clear: 935 mm_cid_migrate_move: 2963
+domain0 00000000,40000000,00000000,00000000,00004000,00000000,00000000 8538 8068 11 538 496 0 0 8068 581 529 11 131 43 0 0 529 10357 10264 7 93 86 0 0 9906 0 0 0 0 0 0 0 0 0 8048 5755 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 955 439 238 738 387 3 9 410 10 10 0 0 0 0 0 0 6121 2777 2886 3506 458 4 82 2646 3 0 3 0 0 0 0 0 0 1075168 716096 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 432 432 0 0 0 0 0 2 2 2 0 0 0 0 0 0 1291 335 717 19775055 239 0 192 136 0 0 0 0 0 0 0 0 0 9793 4452 0
+cpu79 6 0 2152829 1011394 1080685 9287 66721903312 22792407748 1139857 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6256 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 1138108 mm_cid_get_alloc: 718 mm_cid_get_put_lazy: 47 mm_cid_put_lazy: 55 mm_cid_put: 161 mm_cid_migrate_steal: 2975 mm_cid_migrate_clear: 607 mm_cid_migrate_move: 2368
+domain0 00000000,80000000,00000000,00000000,00008000,00000000,00000000 8518 7996 8 591 546 0 0 7996 580 528 13 112 39 0 0 528 11799 11712 8 87 79 0 0 11195 0 0 0 0 0 0 0 0 0 8906 6482 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 946 432 246 754 396 1 9 403 8 8 0 0 0 0 0 0 4046 1958 1941 2148 147 1 56 1873 3 0 3 0 0 0 0 0 0 1052060 694727 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 416 416 0 0 0 0 0 2 4 4 0 0 0 0 0 0 1112 308 618 14325597 186 0 191 113 0 0 0 0 0 0 0 0 0 10429 4673 0
+cpu80 0 0 2376749 1124080 975527 9897 65261408841 23087896183 1251145 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6202 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1249405 mm_cid_get_alloc: 691 mm_cid_get_put_lazy: 35 mm_cid_put_lazy: 47 mm_cid_put: 131 mm_cid_migrate_steal: 4516 mm_cid_migrate_clear: 551 mm_cid_migrate_move: 3965
+domain0 00000001,00000000,00000000,00000000,00010000,00000000,00000000 8813 8328 12 525 497 0 0 8328 494 443 6 135 47 0 0 443 10695 10622 4 74 69 0 0 10189 0 0 0 0 0 0 0 0 0 7541 5496 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 973 453 263 740 366 4 2 439 5 5 0 0 0 0 0 0 6449 3630 2515 2935 304 2 74 3488 2 0 2 0 0 0 0 0 0 956098 603699 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 438 435 3 110387 0 0 0 3 2 2 0 0 0 0 0 0 1475 412 860 15883991 203 0 243 159 0 0 0 0 0 0 0 0 0 1988 1064 0
+cpu81 0 0 2290715 1081006 1052785 9158 66076390642 22838116490 1208239 mm_cid_task_work_nr_run: 11 mm_cid_task_work_clear_old: 6230 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1206695 mm_cid_get_alloc: 570 mm_cid_get_put_lazy: 27 mm_cid_put_lazy: 35 mm_cid_put: 101 mm_cid_migrate_steal: 4580 mm_cid_migrate_clear: 402 mm_cid_migrate_move: 4178
+domain0 00000002,00000000,00000000,00000000,00020000,00000000,00000000 8516 8014 8 548 521 0 0 8014 523 475 15 138 35 0 0 475 13193 13082 9 115 102 0 0 12542 0 0 0 0 0 0 0 0 0 8031 6041 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 936 430 228 745 393 2 7 415 0 0 0 0 0 0 0 0 4799 2597 2020 2282 182 1 52 2504 7 0 7 0 0 0 0 0 0 1033430 678350 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 424 421 2 71841 3 0 1 2 0 0 0 0 0 0 0 0 1391 367 766 19213898 258 0 242 115 0 0 0 0 0 0 0 0 0 2163 989 0
+cpu82 0 0 2140530 1005484 1033473 9162 67010115237 22909451656 1133698 mm_cid_task_work_nr_run: 28 mm_cid_task_work_clear_old: 6268 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1132284 mm_cid_get_alloc: 371 mm_cid_get_put_lazy: 15 mm_cid_put_lazy: 22 mm_cid_put: 106 mm_cid_migrate_steal: 756 mm_cid_migrate_clear: 174 mm_cid_migrate_move: 582
+domain0 00000004,00000000,00000000,00000000,00040000,00000000,00000000 8410 7913 7 563 521 0 0 7913 546 511 8 100 29 0 0 511 7363 7250 6 114 107 0 0 7035 0 0 0 0 0 0 0 0 0 7907 5761 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 926 446 232 713 346 1 4 430 2 2 0 0 0 0 0 0 3738 1869 1632 1997 237 0 68 1778 5 0 5 0 0 0 0 0 0 1002925 638298 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 418 416 1 67670 3 0 0 2 0 0 0 0 0 0 0 0 989 277 591 16767161 121 0 178 96 0 0 0 0 0 0 0 0 0 13476 10414 0
+cpu83 0 0 2052106 961270 1292990 9007 68024280228 22649345552 1089350 mm_cid_task_work_nr_run: 14 mm_cid_task_work_clear_old: 6261 mm_cid_task_work_clear_compact: 15 mm_cid_get_cached: 1087969 mm_cid_get_alloc: 381 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 37 mm_cid_put: 54 mm_cid_migrate_steal: 1377 mm_cid_migrate_clear: 191 mm_cid_migrate_move: 1186
+domain0 00000008,00000000,00000000,00000000,00080000,00000000,00000000 7968 7461 9 553 528 0 0 7461 592 556 4 117 34 0 0 556 7208 7097 1 113 110 0 0 6833 0 0 0 0 0 0 0 0 0 8284 6135 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 917 401 255 743 358 1 5 388 1 1 0 0 0 0 0 0 2463 1103 1284 1426 76 0 23 1065 4 0 4 0 0 0 0 0 0 1271536 913073 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 404 404 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1045 262 611 14291070 172 0 179 75 0 0 0 0 0 0 0 0 0 4160 3823 0
+cpu84 0 0 2111433 990595 1041561 8912 66986650305 22532163586 1119324 mm_cid_task_work_nr_run: 15 mm_cid_task_work_clear_old: 6251 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1117735 mm_cid_get_alloc: 596 mm_cid_get_put_lazy: 50 mm_cid_put_lazy: 71 mm_cid_put: 35 mm_cid_migrate_steal: 3236 mm_cid_migrate_clear: 843 mm_cid_migrate_move: 2393
+domain0 00000010,00000000,00000000,00000000,00100000,00000000,00000000 8023 7560 13 502 467 0 0 7560 582 536 9 126 38 0 0 536 6234 6127 10 109 97 0 0 5923 0 0 0 0 0 0 0 0 0 6748 4745 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 921 434 234 711 358 3 5 416 0 0 0 0 0 0 0 0 4634 1910 2226 2943 498 2 58 1826 3 0 3 0 0 0 0 0 0 1013399 658099 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 413 413 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1295 365 723 19760566 207 0 241 120 0 0 0 0 0 0 0 0 0 12499 8565 0
+cpu85 6 0 2108130 989511 1017255 9118 65187954053 23381993116 1117132 mm_cid_task_work_nr_run: 12 mm_cid_task_work_clear_old: 6241 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 1115600 mm_cid_get_alloc: 506 mm_cid_get_put_lazy: 24 mm_cid_put_lazy: 47 mm_cid_put: 32 mm_cid_migrate_steal: 3305 mm_cid_migrate_clear: 570 mm_cid_migrate_move: 2735
+domain0 00000020,00000000,00000000,00000000,00200000,00000000,00000000 8221 7715 11 562 523 0 0 7715 536 492 18 163 26 0 0 492 9927 9834 6 93 87 0 0 9418 0 0 0 0 0 0 0 0 0 7491 5251 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 954 431 262 760 361 2 4 415 1 1 0 0 0 0 0 0 4317 2058 2032 2362 227 0 80 1948 10 0 10 0 0 0 0 0 0 975392 608627 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 425 424 1 35052 0 0 0 2 0 0 0 0 0 0 0 0 1538 400 889 20397180 249 0 258 134 0 0 0 0 0 0 0 0 0 25251 15113 0
+cpu86 15 0 2083321 976868 996714 9475 65943727672 23007158325 1104975 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6214 mm_cid_task_work_clear_compact: 12 mm_cid_get_cached: 1102486 mm_cid_get_alloc: 864 mm_cid_get_put_lazy: 77 mm_cid_put_lazy: 128 mm_cid_put: 67 mm_cid_migrate_steal: 5934 mm_cid_migrate_clear: 1287 mm_cid_migrate_move: 4647
+domain0 00000040,00000000,00000000,00000000,00400000,00000000,00000000 8786 8288 10 555 520 0 0 8288 592 536 16 155 41 0 0 536 18353 18168 13 189 172 0 0 17384 0 0 0 0 0 0 0 0 0 7379 5170 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1004 505 250 726 349 2 6 428 8 8 0 0 0 0 0 0 6527 2598 3691 4026 238 1 78 2470 2 0 2 0 0 0 0 0 0 977612 626073 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 462 462 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1792 541 940 16998441 311 0 244 285 0 0 0 0 0 0 0 0 0 2245 1247 0
+cpu87 0 0 2104874 987402 904776 9008 64342295361 23216569319 1116007 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6245 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1114474 mm_cid_get_alloc: 528 mm_cid_get_put_lazy: 40 mm_cid_put_lazy: 59 mm_cid_put: 49 mm_cid_migrate_steal: 3462 mm_cid_migrate_clear: 696 mm_cid_migrate_move: 2766
+domain0 00000080,00000000,00000000,00000000,00800000,00000000,00000000 8371 7892 9 555 493 0 0 7892 540 499 13 87 29 0 0 499 10904 10787 3 120 114 0 0 10350 0 0 0 0 0 0 0 0 0 6889 4791 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 935 437 246 716 349 4 5 417 0 0 0 0 0 0 0 0 5075 1936 2824 3281 315 1 63 1846 2 0 2 0 0 0 0 0 0 876595 537569 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 425 424 1 2 0 0 0 2 0 0 0 0 0 0 0 0 1761 431 970 20027288 360 0 298 123 0 0 0 0 0 0 0 0 0 12281 6940 0
+cpu88 0 0 2042334 957428 1092915 9347 67881934849 23005299449 1083386 mm_cid_task_work_nr_run: 18 mm_cid_task_work_clear_old: 6247 mm_cid_task_work_clear_compact: 14 mm_cid_get_cached: 1081621 mm_cid_get_alloc: 704 mm_cid_get_put_lazy: 41 mm_cid_put_lazy: 80 mm_cid_put: 38 mm_cid_migrate_steal: 5148 mm_cid_migrate_clear: 802 mm_cid_migrate_move: 4346
+domain0 00000100,00000000,00000000,00000000,01000000,00000000,00000000 8155 7665 12 559 508 0 0 7665 592 545 10 154 40 0 0 545 8711 8616 4 100 91 0 0 8275 0 0 0 0 0 0 0 0 0 7498 5408 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 928 421 260 735 351 5 6 408 1 1 0 0 0 0 0 0 4176 2279 1675 2058 222 2 35 2222 3 0 3 0 0 0 0 0 0 1063664 710732 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 417 415 2 36211 0 0 0 1 0 0 0 0 0 0 0 0 1433 346 836 14189178 251 0 201 135 0 0 0 0 0 0 0 0 0 12403 7582 0
+cpu89 0 0 1946497 909531 1148660 9046 69109134300 22925600470 1035316 mm_cid_task_work_nr_run: 14 mm_cid_task_work_clear_old: 6265 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1033860 mm_cid_get_alloc: 442 mm_cid_get_put_lazy: 21 mm_cid_put_lazy: 51 mm_cid_put: 27 mm_cid_migrate_steal: 2428 mm_cid_migrate_clear: 393 mm_cid_migrate_move: 2035
+domain0 00000200,00000000,00000000,00000000,02000000,00000000,00000000 7389 6894 8 543 525 0 0 6890 586 537 7 119 43 0 0 537 11101 10982 15 120 104 0 0 10574 0 0 0 0 0 0 0 0 0 7990 5633 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 914 414 232 714 371 5 2 400 3 3 0 0 0 0 0 0 3873 1722 2034 2204 117 3 44 1654 6 0 6 0 0 0 0 0 0 1112598 740554 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 409 409 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1264 349 720 13447205 195 0 224 122 0 0 0 0 0 0 0 0 0 19023 11338 0
+cpu90 0 0 2135607 1004203 1147344 8884 68823692907 22779876637 1129965 mm_cid_task_work_nr_run: 15 mm_cid_task_work_clear_old: 6251 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 1128056 mm_cid_get_alloc: 908 mm_cid_get_put_lazy: 90 mm_cid_put_lazy: 142 mm_cid_put: 58 mm_cid_migrate_steal: 6300 mm_cid_migrate_clear: 1495 mm_cid_migrate_move: 4805
+domain0 00000400,00000000,00000000,00000000,04000000,00000000,00000000 8206 7695 6 555 531 0 0 7695 576 534 12 142 31 0 0 534 14941 14766 10 184 165 0 0 14088 0 0 0 0 0 0 0 0 0 7663 5516 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 923 418 231 758 393 0 5 402 2 2 0 0 0 0 0 0 3856 1684 1952 2345 220 1 43 1616 3 0 3 0 0 0 0 0 0 1128594 772363 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 409 409 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1401 335 796 19299345 270 0 215 113 0 0 0 0 0 0 0 0 0 2201 1186 0
+cpu91 0 0 2261586 1066039 1043611 9213 66080572797 22104499500 1193859 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6224 mm_cid_task_work_clear_compact: 17 mm_cid_get_cached: 1191930 mm_cid_get_alloc: 774 mm_cid_get_put_lazy: 54 mm_cid_put_lazy: 92 mm_cid_put: 136 mm_cid_migrate_steal: 5084 mm_cid_migrate_clear: 903 mm_cid_migrate_move: 4181
+domain0 00000800,00000000,00000000,00000000,08000000,00000000,00000000 9082 8592 35 550 475 0 0 8592 488 442 14 134 35 0 0 442 15564 15450 7 116 107 0 0 14645 1 0 1 0 0 0 0 0 0 7249 5340 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1044 524 240 730 382 4 3 416 0 0 0 0 0 0 0 0 7552 3412 3849 4255 291 1 97 3245 1 0 1 0 0 0 0 0 0 1023821 677246 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 428 428 0 0 0 0 0 0 2 2 0 0 0 0 0 0 1836 494 1067 17673014 275 0 279 197 0 0 0 0 0 0 0 0 0 3325 1621 0
+cpu92 3 0 2064854 968347 1227503 9108 70696045283 22777820024 1095026 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6257 mm_cid_task_work_clear_compact: 20 mm_cid_get_cached: 1093317 mm_cid_get_alloc: 672 mm_cid_get_put_lazy: 49 mm_cid_put_lazy: 93 mm_cid_put: 54 mm_cid_migrate_steal: 4069 mm_cid_migrate_clear: 717 mm_cid_migrate_move: 3352
+domain0 00001000,00000000,00000000,00000000,10000000,00000000,00000000 7704 7207 12 558 505 0 0 7205 615 567 7 130 44 0 0 567 14282 14191 8 95 83 0 0 13464 0 0 0 0 0 0 0 0 0 7440 5329 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 928 450 246 686 348 3 8 405 6 6 0 0 0 0 0 0 3901 1598 2108 2394 195 1 58 1501 6 0 6 0 0 0 0 0 0 1208599 844013 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 419 418 0 34877 2 0 0 0 1 1 0 0 0 0 0 0 1376 365 825 14615708 186 0 215 138 0 0 0 0 0 0 0 0 0 2353 1332 0
+cpu93 0 0 2102487 986548 1127125 9110 69785846366 22831405558 1114371 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6257 mm_cid_task_work_clear_compact: 11 mm_cid_get_cached: 1112877 mm_cid_get_alloc: 495 mm_cid_get_put_lazy: 26 mm_cid_put_lazy: 42 mm_cid_put: 64 mm_cid_migrate_steal: 3252 mm_cid_migrate_clear: 472 mm_cid_migrate_move: 2780
+domain0 00002000,00000000,00000000,00000000,20000000,00000000,00000000 8079 7615 12 563 490 0 0 7615 587 541 5 133 42 0 0 541 11725 11604 10 123 111 0 0 11038 0 0 0 0 0 0 0 0 0 8221 5975 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 925 415 239 754 385 4 7 393 2 2 0 0 0 0 0 0 6378 2351 3811 4123 216 1 80 2204 6 0 6 0 0 0 0 0 0 1106679 754053 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 412 411 0 11 1 0 0 1 1 1 0 0 0 0 0 0 1489 359 844 17789266 286 0 245 105 0 0 0 0 0 0 0 0 0 3112 1394 0
+cpu94 0 0 2180474 1026512 1065957 9141 68138336183 22544413074 1152411 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6249 mm_cid_task_work_clear_compact: 10 mm_cid_get_cached: 1150892 mm_cid_get_alloc: 514 mm_cid_get_put_lazy: 23 mm_cid_put_lazy: 45 mm_cid_put: 73 mm_cid_migrate_steal: 2592 mm_cid_migrate_clear: 377 mm_cid_migrate_move: 2215
+domain0 00004000,00000000,00000000,00000000,40000000,00000000,00000000 8282 7797 8 551 504 0 0 7797 566 532 9 70 25 0 0 532 6575 6524 3 52 48 0 0 6263 0 0 0 0 0 0 0 0 0 8708 6339 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 929 429 249 732 375 3 6 410 1 1 0 0 0 0 0 0 3695 1888 1585 1895 222 2 37 1813 3 0 3 0 0 0 0 0 0 1046089 691212 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 418 418 0 0 0 0 0 2 0 0 0 0 0 0 0 0 1212 311 700 16845825 201 0 198 107 0 0 0 0 0 0 0 0 0 2016 1079 0
+cpu95 0 0 2240594 1056568 1084065 9252 69206889427 22791886419 1182512 mm_cid_task_work_nr_run: 14 mm_cid_task_work_clear_old: 6230 mm_cid_task_work_clear_compact: 10 mm_cid_get_cached: 1180767 mm_cid_get_alloc: 603 mm_cid_get_put_lazy: 37 mm_cid_put_lazy: 41 mm_cid_put: 173 mm_cid_migrate_steal: 3337 mm_cid_migrate_clear: 420 mm_cid_migrate_move: 2917
+domain0 00008000,00000000,00000000,00000000,80000000,00000000,00000000 8594 8093 11 567 520 0 0 8093 566 532 10 130 29 0 0 532 14088 14000 9 88 79 0 0 13337 0 0 0 0 0 0 0 0 0 8723 6181 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 921 425 240 730 368 1 12 405 1 1 0 0 0 0 0 0 8105 2961 4739 5298 405 3 117 2758 2 0 2 0 0 0 0 0 0 1063699 709792 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 417 416 1 34181 0 0 0 0 0 0 0 0 0 0 0 0 1706 452 959 20043341 295 0 263 180 0 0 0 0 0 0 0 0 0 2387 1220 0
+cpu96 0 0 2027642 949848 1064189 8988 68983684570 22288812972 1076211 mm_cid_task_work_nr_run: 43 mm_cid_task_work_clear_old: 6223 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 1074337 mm_cid_get_alloc: 692 mm_cid_get_put_lazy: 20 mm_cid_put_lazy: 50 mm_cid_put: 159 mm_cid_migrate_steal: 3415 mm_cid_migrate_clear: 438 mm_cid_migrate_move: 2977
+domain0 00010000,00000000,00000000,00000001,00000000,00000000,00000000 9044 8535 12 560 525 0 0 8535 592 543 16 117 35 0 0 543 12826 12711 7 117 108 0 0 12087 0 0 0 0 0 0 0 0 0 7428 5389 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1003 500 237 722 363 3 7 448 3 3 0 0 0 0 0 0 5480 2070 3270 3481 140 2 94 1914 1 0 1 0 0 0 0 0 0 1045695 698711 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 451 451 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1608 420 928 17242252 260 0 247 163 0 0 0 0 0 0 0 0 0 2075 1020 0
+cpu97 0 0 2129299 1000274 1119827 9126 70552276541 22533571171 1127331 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6244 mm_cid_task_work_clear_compact: 10 mm_cid_get_cached: 1125772 mm_cid_get_alloc: 489 mm_cid_get_put_lazy: 20 mm_cid_put_lazy: 39 mm_cid_put: 135 mm_cid_migrate_steal: 2728 mm_cid_migrate_clear: 270 mm_cid_migrate_move: 2458
+domain0 00020000,00000000,00000000,00000002,00000000,00000000,00000000 9196 8703 14 538 513 0 0 8703 612 580 9 118 26 0 0 580 13503 13387 8 117 108 0 0 12778 1 0 1 0 0 0 0 0 0 8548 6146 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1524 1028 249 708 354 3 9 974 2 2 0 0 0 0 0 0 8305 2997 4962 5455 346 1 145 2766 6 0 6 0 0 0 0 0 0 1099818 750665 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 988 988 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1487 401 840 14710652 246 0 265 121 0 0 0 0 0 0 0 0 0 2332 1228 0
+cpu98 0 0 1978857 925196 1291567 10078 72470649029 22822510094 1052331 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6252 mm_cid_task_work_clear_compact: 18 mm_cid_get_cached: 1050258 mm_cid_get_alloc: 617 mm_cid_get_put_lazy: 22 mm_cid_put_lazy: 35 mm_cid_put: 218 mm_cid_migrate_steal: 2228 mm_cid_migrate_clear: 276 mm_cid_migrate_move: 1952
+domain0 00040000,00000000,00000000,00000004,00000000,00000000,00000000 8840 8350 11 544 508 0 0 8350 622 578 11 115 34 0 0 578 12303 12190 9 113 104 0 0 11644 0 0 0 0 0 0 0 0 0 7294 5384 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 938 435 249 726 357 4 11 385 5 5 0 0 0 0 0 0 8606 2842 5490 5900 274 2 149 2592 1 0 1 0 0 0 0 0 0 1266385 898451 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 421 421 0 0 0 0 0 1 1 1 0 0 0 0 0 0 625 211 335 5496205 79 0 75 131 0 0 0 0 0 0 0 0 0 7807 3343 0
+cpu99 2 0 2199232 1035369 1037864 9082 66062281938 22281252198 1162363 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6224 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1160700 mm_cid_get_alloc: 631 mm_cid_get_put_lazy: 24 mm_cid_put_lazy: 30 mm_cid_put: 201 mm_cid_migrate_steal: 3246 mm_cid_migrate_clear: 287 mm_cid_migrate_move: 2959
+domain0 00080000,00000000,00000000,00000008,00000000,00000000,00000000 9053 8558 2 547 525 0 0 8558 530 494 9 110 28 0 0 494 13951 13864 4 87 83 0 0 13343 0 0 0 0 0 0 0 0 0 7625 5440 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 943 476 229 660 336 6 10 447 2 2 0 0 0 0 0 0 6482 2556 3782 4008 144 2 108 2376 8 0 8 0 0 0 0 0 0 1018858 664806 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 426 425 0 2 1 0 0 1 2 2 0 0 0 0 0 0 1671 440 975 15162857 256 0 254 172 0 0 0 0 0 0 0 0 0 2296 1123 0
+cpu100 0 0 2062860 967547 1145171 11303 69089098713 23388966790 1093729 mm_cid_task_work_nr_run: 21 mm_cid_task_work_clear_old: 6222 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 1090441 mm_cid_get_alloc: 692 mm_cid_get_put_lazy: 27 mm_cid_put_lazy: 35 mm_cid_put: 190 mm_cid_migrate_steal: 4156 mm_cid_migrate_clear: 353 mm_cid_migrate_move: 3803
+domain0 00100000,00000000,00000000,00000010,00000000,00000000,00000000 10367 9878 9 533 511 0 0 9878 574 535 11 108 30 0 0 535 11998 11886 8 114 104 0 0 11424 0 0 0 0 0 0 0 0 0 7788 5622 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 2385 1844 276 770 386 4 4 382 2 2 0 0 0 0 0 0 9623 2913 6259 6923 451 1 174 2651 4 0 4 0 0 0 0 0 0 1122899 757939 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 446 445 1 1 0 0 0 0 6 6 0 0 0 0 0 0 1968 508 1104 15208011 356 0 311 187 0 0 0 0 0 0 0 0 0 3178 1570 0
+cpu101 0 0 2130530 1001098 1132045 9222 69505697980 22910446040 1128182 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6238 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 1126718 mm_cid_get_alloc: 474 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 33 mm_cid_put: 142 mm_cid_migrate_steal: 1204 mm_cid_migrate_clear: 179 mm_cid_migrate_move: 1025
+domain0 00200000,00000000,00000000,00000020,00000000,00000000,00000000 8585 8105 6 551 506 0 0 8105 580 543 12 103 26 0 0 543 13948 13776 12 174 160 0 0 13330 0 0 0 0 0 0 0 0 0 7973 5839 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 913 412 248 735 369 3 6 395 1 1 0 0 0 0 0 0 6593 2196 4153 4543 244 2 123 2022 3 0 3 0 0 0 0 0 0 1112411 745472 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 414 414 0 0 0 0 0 2 0 0 0 0 0 0 0 0 1326 336 776 10676632 214 0 223 104 0 0 0 0 0 0 0 0 0 2436 1192 0
+cpu102 0 0 2198516 1034741 1044441 9636 66993959540 23515664531 1162192 mm_cid_task_work_nr_run: 14 mm_cid_task_work_clear_old: 6222 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1160800 mm_cid_get_alloc: 436 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 27 mm_cid_put: 63 mm_cid_migrate_steal: 1661 mm_cid_migrate_clear: 209 mm_cid_migrate_move: 1452
+domain0 00400000,00000000,00000000,00000040,00000000,00000000,00000000 8497 8031 6 523 488 0 0 8031 535 482 16 134 39 0 0 482 8390 8232 9 159 149 0 0 7959 0 0 0 0 0 0 0 0 0 7999 5816 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 947 423 278 745 344 6 11 403 0 0 0 0 0 0 0 0 5729 2381 2986 3517 362 0 70 2262 5 0 5 0 0 0 0 0 0 1024039 665303 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 419 419 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1486 426 826 16524340 234 0 260 160 0 0 0 0 0 0 0 0 0 2764 1355 0
+cpu103 23 0 2203049 1036794 1163879 9256 70034152689 22794003960 1164825 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6210 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1163465 mm_cid_get_alloc: 350 mm_cid_get_put_lazy: 14 mm_cid_put_lazy: 31 mm_cid_put: 51 mm_cid_migrate_steal: 841 mm_cid_migrate_clear: 161 mm_cid_migrate_move: 680
+domain0 00800000,00000000,00000000,00000080,00000000,00000000,00000000 7934 7435 9 573 517 0 0 7435 592 557 13 84 24 0 0 557 7246 7154 6 92 86 0 0 6931 0 0 0 0 0 0 0 0 0 7766 5638 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 917 416 259 754 360 1 4 395 14 14 0 0 0 0 0 0 5047 2148 2449 3095 450 2 71 2059 6 0 6 0 0 0 0 0 0 1144712 793921 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 412 412 0 0 0 0 0 1 2 2 0 0 0 0 0 0 1263 375 685 16302233 203 0 221 146 0 0 0 0 0 0 0 0 0 2142 1050 0
+cpu104 5 0 2246950 1059215 1092607 9706 68981083708 23238288697 1186460 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6186 mm_cid_task_work_clear_compact: 16 mm_cid_get_cached: 1184952 mm_cid_get_alloc: 488 mm_cid_get_put_lazy: 14 mm_cid_put_lazy: 34 mm_cid_put: 75 mm_cid_migrate_steal: 1221 mm_cid_migrate_clear: 225 mm_cid_migrate_move: 996
+domain0 01000000,00000000,00000000,00000100,00000000,00000000,00000000 8466 7989 7 541 499 0 0 7989 537 492 9 92 37 0 0 492 11782 11690 4 94 88 0 0 11237 0 0 0 0 0 0 0 0 0 7759 5627 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 941 428 253 737 371 2 11 397 11 11 0 0 0 0 0 5 6157 2187 3855 4013 115 3 127 2017 1 0 1 0 0 0 0 0 0 1072023 711259 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 428 427 0 23 3 0 0 0 6 6 0 0 0 0 0 0 1618 399 931 16789689 288 0 264 128 0 0 0 0 0 0 0 0 0 3116 1555 0
+cpu105 3 0 2025389 948295 1154661 9615 69206261947 22943479995 1075757 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6233 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 1074323 mm_cid_get_alloc: 450 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 47 mm_cid_put: 45 mm_cid_migrate_steal: 2157 mm_cid_migrate_clear: 290 mm_cid_migrate_move: 1867
+domain0 02000000,00000000,00000000,00000200,00000000,00000000,00000000 8051 7569 8 529 501 0 0 7568 603 563 11 112 30 0 0 563 9856 9717 14 145 125 0 0 9424 0 0 0 0 0 0 0 0 0 7851 5652 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 921 417 237 739 374 3 7 403 7 7 0 0 0 0 0 0 4807 2831 1793 2054 183 2 45 2737 2 0 2 0 0 0 0 0 0 1134800 775120 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 420 420 0 0 0 0 0 0 2 2 0 0 0 0 0 0 1721 415 1006 15288747 300 0 262 143 0 0 0 0 0 0 0 0 0 2393 1189 0
+cpu106 12 0 1921154 895086 1378382 12270 73891606673 23303170059 1024755 mm_cid_task_work_nr_run: 28 mm_cid_task_work_clear_old: 6257 mm_cid_task_work_clear_compact: 25 mm_cid_get_cached: 1020249 mm_cid_get_alloc: 351 mm_cid_get_put_lazy: 12 mm_cid_put_lazy: 28 mm_cid_put: 82 mm_cid_migrate_steal: 662 mm_cid_migrate_clear: 130 mm_cid_migrate_move: 532
+domain0 04000000,00000000,00000000,00000400,00000000,00000000,00000000 10127 9618 7 566 529 0 0 9618 669 627 7 119 35 0 0 627 7194 7097 11 98 86 0 0 6949 0 0 0 0 0 0 0 0 0 8166 6039 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1989 1495 220 738 397 2 8 715 8 8 0 0 0 0 0 0 5987 3292 2161 2956 534 4 80 3185 3 0 3 0 0 0 0 0 0 1355880 982523 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 967 966 1 1 0 0 0 1 1 1 0 0 0 0 0 0 2497 1412 847 14628063 238 0 250 1158 0 0 0 0 0 0 0 0 0 2063 1110 0
+cpu107 11 0 1984426 927937 1153318 11130 69589974962 23488531674 1055247 mm_cid_task_work_nr_run: 45 mm_cid_task_work_clear_old: 6199 mm_cid_task_work_clear_compact: 16 mm_cid_get_cached: 1052715 mm_cid_get_alloc: 389 mm_cid_get_put_lazy: 12 mm_cid_put_lazy: 29 mm_cid_put: 71 mm_cid_migrate_steal: 1116 mm_cid_migrate_clear: 187 mm_cid_migrate_move: 929
+domain0 08000000,00000000,00000000,00000800,00000000,00000000,00000000 9169 8628 12 597 564 0 0 8628 661 618 16 102 27 0 0 618 8577 8492 4 86 81 0 0 8283 1 0 1 0 0 0 0 0 0 7750 5783 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1461 962 259 717 340 5 6 690 9 9 0 0 0 0 0 1 3493 2237 1176 1311 80 2 37 2155 9 0 9 0 0 0 0 0 0 1127779 755662 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 707 707 0 0 0 0 0 0 2 2 0 0 0 0 0 0 1575 550 814 12755658 211 0 173 366 0 0 0 0 0 0 0 0 0 6656 21482 0
+cpu108 9 0 2153496 1011630 1106797 13914 70498157492 23071591447 1140671 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6197 mm_cid_task_work_clear_compact: 11 mm_cid_get_cached: 1134668 mm_cid_get_alloc: 638 mm_cid_get_put_lazy: 34 mm_cid_put_lazy: 37 mm_cid_put: 80 mm_cid_migrate_steal: 6010 mm_cid_migrate_clear: 614 mm_cid_migrate_move: 5396
+domain0 10000000,00000000,00000000,00001000,00000000,00000000,00000000 10914 10395 8 568 538 0 0 10395 601 564 10 69 29 0 0 564 7678 7620 3 58 55 0 0 7377 0 0 0 0 0 0 0 0 0 8666 6234 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 2047 1555 247 733 350 9 6 512 8 8 0 0 0 0 0 0 5595 3551 1924 2094 120 3 77 3450 5 0 5 0 0 0 0 0 0 1081534 718215 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 972 971 1 36358 0 0 0 2 2 2 0 0 0 0 0 0 3065 2027 796 16695699 242 0 267 1751 0 0 0 0 0 0 0 0 0 2680 1377 0
+cpu109 4 0 2060837 965368 1237725 9094 68831741712 22971323213 1094154 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6247 mm_cid_task_work_clear_compact: 9 mm_cid_get_cached: 1092612 mm_cid_get_alloc: 562 mm_cid_get_put_lazy: 28 mm_cid_put_lazy: 36 mm_cid_put: 64 mm_cid_migrate_steal: 5635 mm_cid_migrate_clear: 475 mm_cid_migrate_move: 5160
+domain0 20000000,00000000,00000000,00002000,00000000,00000000,00000000 7827 7318 10 569 539 0 0 7318 616 572 13 108 32 0 0 572 10670 10531 6 142 133 0 0 10083 1 0 1 0 0 0 0 0 0 7895 5727 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 914 416 232 710 364 3 2 403 2 2 0 0 0 0 0 0 4216 1912 2111 2390 193 2 77 1816 3 0 3 0 0 0 0 0 0 1218892 868362 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 412 412 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1529 394 859 16608483 276 0 249 131 0 0 0 0 0 0 0 0 0 1841 979 0
+cpu110 29 0 2104327 986918 1029691 9334 66516210635 22276526440 1116095 mm_cid_task_work_nr_run: 38 mm_cid_task_work_clear_old: 6168 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 1114570 mm_cid_get_alloc: 496 mm_cid_get_put_lazy: 20 mm_cid_put_lazy: 27 mm_cid_put: 86 mm_cid_migrate_steal: 3878 mm_cid_migrate_clear: 253 mm_cid_migrate_move: 3625
+domain0 40000000,00000000,00000000,00004000,00000000,00000000,00000000 8336 7831 13 573 527 0 0 7831 603 561 10 112 35 0 0 561 7877 7796 10 84 71 0 0 7541 0 0 0 0 0 0 0 0 0 7705 5722 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 965 437 261 796 386 1 1 419 31 31 0 0 0 0 0 1 3131 1455 1588 1701 88 1 48 1389 6 0 6 0 0 0 0 0 0 1009710 673226 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 435 435 0 0 0 0 0 1 7 7 0 0 0 0 0 0 1295 371 718 13051504 206 0 183 179 0 0 0 0 0 0 0 0 0 2939 1485 0
+cpu111 8 0 1942956 906302 1273255 9707 71017292773 23670255718 1035380 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6242 mm_cid_task_work_clear_compact: 12 mm_cid_get_cached: 1033925 mm_cid_get_alloc: 479 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 42 mm_cid_put: 60 mm_cid_migrate_steal: 4818 mm_cid_migrate_clear: 270 mm_cid_migrate_move: 4548
+domain0 80000000,00000000,00000000,00008000,00000000,00000000,00000000 7787 7298 15 530 497 0 0 7298 650 596 17 136 38 0 0 596 9294 9160 9 140 125 0 0 8804 0 0 0 0 0 0 0 0 0 8077 5814 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 907 415 243 719 356 8 7 393 4 4 0 0 0 0 0 1 5127 2087 2630 3285 410 3 101 1947 3 0 3 0 0 0 0 0 0 1252797 885551 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 406 406 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1215 285 741 14301996 189 0 147 126 0 0 0 0 0 0 0 0 0 2671 1257 0
+cpu112 0 0 1557218 711559 759392 14003 81303032182 34224597902 844039 mm_cid_task_work_nr_run: 46 mm_cid_task_work_clear_old: 6097 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 831374 mm_cid_get_alloc: 8520 mm_cid_get_put_lazy: 458 mm_cid_put_lazy: 356 mm_cid_put: 18 mm_cid_migrate_steal: 14860 mm_cid_migrate_clear: 7225 mm_cid_migrate_move: 7635
+domain0 00000000,00000000,00000000,00010000,00000000,00000000,00000001 8143 7537 18 706 627 0 1 7535 922 823 13 393 94 0 0 823 10066 9483 59 602 524 0 0 9295 1 0 1 0 0 0 0 0 0 8221 5630 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1315 928 154 572 327 2 8 60 10 10 0 0 0 0 0 0 1801 796 577 1325 428 1 18 775 1 0 1 0 0 0 0 0 0 731634 374214 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 497 497 0 0 0 0 0 0 6 6 0 0 0 0 0 0 829 718 78 1898259 33 0 8 706 0 0 0 0 0 0 0 0 0 5532 2989 0
+cpu113 0 0 1423704 644317 786295 13183 79571833782 34639587573 777832 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6142 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 766271 mm_cid_get_alloc: 8192 mm_cid_get_put_lazy: 448 mm_cid_put_lazy: 340 mm_cid_put: 42 mm_cid_migrate_steal: 11831 mm_cid_migrate_clear: 7220 mm_cid_migrate_move: 4611
+domain0 00000000,00000000,00000000,00020000,00000000,00000000,00000002 8432 7871 13 642 585 0 0 7871 862 781 24 218 61 0 0 781 3977 3760 8 223 209 0 0 3663 0 0 0 0 0 0 0 0 0 6085 3987 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 2139 1765 173 505 269 2 4 60 6 6 0 0 0 0 0 0 1887 777 609 1475 501 0 14 755 0 0 0 0 0 0 0 0 0 760611 391545 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 481 481 0 0 0 0 0 1 8 8 0 0 0 0 0 0 820 664 113 2055943 43 0 12 651 0 0 0 0 0 0 0 0 0 6415 6098 0
+cpu114 0 0 1480782 673065 828377 14824 82470834787 35532199425 806097 mm_cid_task_work_nr_run: 37 mm_cid_task_work_clear_old: 6123 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 793244 mm_cid_get_alloc: 8103 mm_cid_get_put_lazy: 409 mm_cid_put_lazy: 349 mm_cid_put: 36 mm_cid_migrate_steal: 12855 mm_cid_migrate_clear: 7253 mm_cid_migrate_move: 5602
+domain0 00000000,00000000,00000000,00040000,00000000,00000000,00000004 9808 9240 20 645 570 0 0 9239 876 794 24 255 64 0 0 794 6470 6097 14 388 359 0 0 5954 0 0 0 0 0 0 0 0 0 7066 4232 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1995 1596 186 556 298 4 8 47 6 6 0 0 0 0 0 0 2626 1373 651 1637 602 2 21 1342 1 0 1 0 0 0 0 0 0 801828 421695 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 855 855 0 0 0 0 0 2 2 2 0 0 0 0 0 0 1434 1321 78 1762273 35 0 11 1293 0 0 0 0 0 0 0 0 0 4658 5042 0
+cpu115 10 0 1498092 682206 781630 12130 79709342481 34489295575 814184 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6102 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 804681 mm_cid_get_alloc: 8203 mm_cid_get_put_lazy: 444 mm_cid_put_lazy: 361 mm_cid_put: 69 mm_cid_migrate_steal: 13824 mm_cid_migrate_clear: 7149 mm_cid_migrate_move: 6675
+domain0 00000000,00000000,00000000,00080000,00000000,00000000,00000008 7271 6688 13 641 600 0 0 6687 939 840 25 315 79 0 0 840 6977 6594 24 398 359 0 0 6439 0 0 0 0 0 0 0 0 0 5806 3896 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1128 711 179 607 333 4 2 49 11 11 0 0 0 0 0 0 1614 412 662 1535 540 2 35 372 1 0 1 0 0 0 0 0 0 753767 388723 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 369 369 0 0 0 0 0 0 5 5 0 0 0 0 0 0 511 397 70 2311045 44 0 22 361 0 0 0 0 0 0 0 0 0 9926 6143 0
+cpu116 28 0 1547021 705885 776029 11553 80644101128 34575230901 839469 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6102 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 830138 mm_cid_get_alloc: 8255 mm_cid_get_put_lazy: 425 mm_cid_put_lazy: 360 mm_cid_put: 52 mm_cid_migrate_steal: 14729 mm_cid_migrate_clear: 7135 mm_cid_migrate_move: 7594
+domain0 00000000,00000000,00000000,00100000,00000000,00000000,00000010 7427 6824 18 726 618 0 0 6824 892 811 26 348 58 0 0 811 5618 5262 16 366 340 0 0 5124 0 0 0 0 0 0 0 0 0 6138 4014 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1150 764 179 559 295 3 3 48 14 14 0 0 0 0 0 0 1622 386 608 1619 628 1 40 333 2 0 2 0 0 0 0 0 0 751484 386321 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 374 374 0 0 0 0 0 0 5 5 0 0 0 0 0 0 402 303 61 1362594 38 0 19 266 0 0 0 0 0 0 0 0 0 6853 3632 0
+cpu117 40 0 1410706 637953 800278 12145 79724055763 34829911235 771098 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6142 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 760305 mm_cid_get_alloc: 8451 mm_cid_get_put_lazy: 463 mm_cid_put_lazy: 430 mm_cid_put: 50 mm_cid_migrate_steal: 12651 mm_cid_migrate_clear: 7399 mm_cid_migrate_move: 5252
+domain0 00000000,00000000,00000000,00200000,00000000,00000000,00000020 7391 6822 12 631 596 0 0 6822 871 794 13 239 67 0 0 794 5538 5193 24 350 321 0 0 5085 0 0 0 0 0 0 0 0 0 7209 4414 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1105 708 164 567 331 3 6 40 21 21 0 0 0 0 0 0 1851 551 644 1689 656 1 31 515 3 0 3 0 0 0 0 0 0 775038 389690 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 403 403 0 0 0 0 0 0 8 8 0 0 0 0 0 0 638 517 85 2063558 36 0 27 481 0 0 0 0 0 0 0 0 0 5884 2812 0
+cpu118 23 0 1452757 658874 772497 13298 80673515733 34533739856 792257 mm_cid_task_work_nr_run: 44 mm_cid_task_work_clear_old: 6107 mm_cid_task_work_clear_compact: 21 mm_cid_get_cached: 781035 mm_cid_get_alloc: 8384 mm_cid_get_put_lazy: 436 mm_cid_put_lazy: 359 mm_cid_put: 95 mm_cid_migrate_steal: 10084 mm_cid_migrate_clear: 7416 mm_cid_migrate_move: 2668
+domain0 00000000,00000000,00000000,00400000,00000000,00000000,00000040 7965 7345 17 718 639 0 0 7345 885 793 26 241 72 0 0 793 2822 2675 8 157 139 0 0 2617 1 0 1 0 0 0 0 0 0 5950 3922 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1336 952 179 551 299 3 11 55 12 12 0 0 0 0 0 0 1877 888 482 1316 507 2 10 872 3 0 3 0 0 0 0 0 0 749881 387723 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 511 511 0 0 0 0 0 1 5 5 0 0 0 0 0 0 896 814 53 1233407 29 0 16 798 0 0 0 0 0 0 0 0 0 3366 1963 0
+cpu119 18 0 1437964 652600 778201 14165 80726079200 35280725681 783768 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6131 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 771876 mm_cid_get_alloc: 8045 mm_cid_get_put_lazy: 407 mm_cid_put_lazy: 360 mm_cid_put: 98 mm_cid_migrate_steal: 9833 mm_cid_migrate_clear: 7146 mm_cid_migrate_move: 2687
+domain0 00000000,00000000,00000000,00800000,00000000,00000000,00000080 8344 7782 16 654 582 0 0 7782 936 833 24 322 85 0 0 833 7001 6617 19 391 365 0 0 6474 1 0 1 0 0 0 0 0 0 6115 3985 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 2058 1685 169 535 288 4 7 58 2 2 0 0 0 0 0 0 1948 817 527 1568 604 1 7 802 1 0 1 0 0 0 0 0 0 752516 383387 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 477 476 0 112 1 0 0 1 16 16 0 0 0 0 0 0 836 716 66 1864485 54 0 14 700 0 0 0 0 0 0 0 0 0 5404 2722 0
+cpu120 18 0 1505490 685126 756754 12122 78948635457 34784301695 818687 mm_cid_task_work_nr_run: 15 mm_cid_task_work_clear_old: 6110 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 809321 mm_cid_get_alloc: 8194 mm_cid_get_put_lazy: 437 mm_cid_put_lazy: 373 mm_cid_put: 106 mm_cid_migrate_steal: 11868 mm_cid_migrate_clear: 7148 mm_cid_migrate_move: 4720
+domain0 00000000,00000000,00000000,01000000,00000000,00000000,00000100 7011 6416 19 714 609 0 0 6416 863 771 17 242 81 0 0 771 7479 6961 23 535 495 0 0 6789 1 0 1 0 0 0 0 0 0 6670 4647 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 894 478 183 603 345 0 9 43 12 12 0 0 0 0 0 0 1822 349 670 1978 803 2 19 315 2 0 2 0 0 0 0 0 0 731549 372288 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 333 333 0 0 0 0 0 2 1 1 0 0 0 0 0 0 398 282 79 1881871 37 0 26 256 0 0 0 0 0 0 0 0 0 6412 3647 0
+cpu121 10 0 1568451 716336 774265 13306 81572798380 35136032692 850596 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6100 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 838767 mm_cid_get_alloc: 8144 mm_cid_get_put_lazy: 465 mm_cid_put_lazy: 366 mm_cid_put: 44 mm_cid_migrate_steal: 13531 mm_cid_migrate_clear: 7152 mm_cid_migrate_move: 6379
+domain0 00000000,00000000,00000000,02000000,00000000,00000000,00000200 7779 7114 14 747 687 0 0 7114 858 776 21 282 64 0 0 776 4197 4075 9 123 113 0 0 3968 0 0 0 0 0 0 0 0 0 6598 4095 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1246 854 150 569 353 1 3 48 11 11 0 0 0 0 0 0 1631 884 503 884 244 0 6 873 0 0 0 0 0 0 0 0 0 747486 382033 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 484 484 0 0 0 0 0 2 5 5 0 0 0 0 0 0 980 874 66 2180343 40 0 16 856 0 0 0 0 0 0 0 0 0 6874 3963 0
+cpu122 11 0 1401944 633697 825224 11770 80359658658 34592868066 766575 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6144 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 756994 mm_cid_get_alloc: 7995 mm_cid_get_put_lazy: 435 mm_cid_put_lazy: 389 mm_cid_put: 45 mm_cid_migrate_steal: 9075 mm_cid_migrate_clear: 7233 mm_cid_migrate_move: 1842
+domain0 00000000,00000000,00000000,04000000,00000000,00000000,00000400 6540 5963 14 664 588 0 0 5963 929 844 23 204 67 0 0 844 7803 7328 53 490 422 0 0 7176 0 0 0 0 0 0 0 0 0 6592 4477 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 888 477 186 588 320 5 5 44 6 6 0 0 0 0 0 0 697 188 349 620 160 0 7 177 3 0 3 0 0 0 0 0 0 796615 412478 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 337 337 0 0 0 0 0 1 0 0 0 0 0 0 0 0 312 218 75 1804143 19 0 21 197 0 0 0 0 0 0 0 0 0 10246 7750 0
+cpu123 2 0 1395458 629825 893876 12862 83427183849 34757108639 764045 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6154 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 752471 mm_cid_get_alloc: 7963 mm_cid_get_put_lazy: 400 mm_cid_put_lazy: 349 mm_cid_put: 50 mm_cid_migrate_steal: 8981 mm_cid_migrate_clear: 7220 mm_cid_migrate_move: 1761
+domain0 00000000,00000000,00000000,08000000,00000000,00000000,00000800 7977 7390 7 683 606 0 0 7390 954 854 26 684 80 0 0 854 6278 5916 22 372 340 0 0 5794 0 0 0 0 0 0 0 0 0 5607 3741 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1681 1305 145 545 328 4 3 27 1 1 0 0 0 0 0 0 1001 202 422 1078 377 0 7 192 1 0 1 0 0 0 0 0 0 861821 454417 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 618 618 0 0 0 0 0 0 1 1 0 0 0 0 0 0 336 271 45 907037 20 0 14 257 0 0 0 0 0 0 0 0 0 13585 18171 0
+cpu124 0 0 1521724 692922 780214 11212 80901521189 34448275472 827311 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6120 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 817656 mm_cid_get_alloc: 8573 mm_cid_get_put_lazy: 436 mm_cid_put_lazy: 376 mm_cid_put: 115 mm_cid_migrate_steal: 12027 mm_cid_migrate_clear: 7249 mm_cid_migrate_move: 4778
+domain0 00000000,00000000,00000000,10000000,00000000,00000000,00001000 9864 9296 10 634 591 0 0 9296 908 812 26 284 73 0 0 812 7141 6634 24 518 483 0 0 6482 0 0 0 0 0 0 0 0 0 5943 3973 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 3734 3337 197 580 299 3 5 39 0 0 0 0 0 0 0 0 1241 279 511 1213 451 1 22 250 5 0 5 0 0 0 0 0 0 756081 390271 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 358 357 0 2 2 0 0 0 3 3 0 0 0 0 0 0 402 277 84 2215602 41 0 24 252 0 0 0 0 0 0 0 0 0 6977 4025 0
+cpu125 19 0 1460575 663213 761121 12317 79766083224 34228387869 795312 mm_cid_task_work_nr_run: 29 mm_cid_task_work_clear_old: 6118 mm_cid_task_work_clear_compact: 7 mm_cid_get_cached: 784655 mm_cid_get_alloc: 8315 mm_cid_get_put_lazy: 444 mm_cid_put_lazy: 332 mm_cid_put: 77 mm_cid_migrate_steal: 11236 mm_cid_migrate_clear: 7312 mm_cid_migrate_move: 3924
+domain0 00000000,00000000,00000000,20000000,00000000,00000000,00002000 6961 6312 7 771 687 0 0 6310 824 739 24 251 65 0 0 739 3433 3238 8 200 187 0 0 3141 0 0 0 0 0 0 0 0 0 6262 4036 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1063 664 175 552 304 6 5 45 4 4 0 0 0 0 0 0 1222 528 371 900 323 1 6 513 1 0 1 0 0 0 0 0 0 737937 377869 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 372 372 0 0 0 0 0 0 4 4 0 0 0 0 0 0 662 550 74 1419932 38 0 12 537 0 0 0 0 0 0 0 0 0 4604 2997 0
+cpu126 1 0 1467593 665725 817275 12951 81817485504 34918767361 800342 mm_cid_task_work_nr_run: 34 mm_cid_task_work_clear_old: 6087 mm_cid_task_work_clear_compact: 16 mm_cid_get_cached: 788955 mm_cid_get_alloc: 8516 mm_cid_get_put_lazy: 461 mm_cid_put_lazy: 383 mm_cid_put: 131 mm_cid_migrate_steal: 10448 mm_cid_migrate_clear: 7358 mm_cid_migrate_move: 3090
+domain0 00000000,00000000,00000000,40000000,00000000,00000000,00004000 7841 7216 15 707 644 0 0 7216 902 791 34 305 81 0 0 791 3570 3358 14 217 198 0 0 3248 0 0 0 0 0 0 0 0 0 6314 4034 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1152 762 176 585 318 6 5 40 12 12 0 0 0 0 0 0 2056 692 680 1742 684 0 24 659 2 0 2 0 0 0 0 0 0 785288 405836 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 395 395 0 0 0 0 1 0 7 7 0 0 0 0 0 0 627 519 65 1235678 43 0 14 505 0 0 0 0 0 0 0 0 0 12721 10844 0
+cpu127 10 0 1519064 692004 737248 13032 78965206349 34973889537 825354 mm_cid_task_work_nr_run: 17 mm_cid_task_work_clear_old: 6101 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 813743 mm_cid_get_alloc: 8562 mm_cid_get_put_lazy: 449 mm_cid_put_lazy: 340 mm_cid_put: 80 mm_cid_migrate_steal: 12577 mm_cid_migrate_clear: 7670 mm_cid_migrate_move: 4907
+domain0 00000000,00000000,00000000,80000000,00000000,00000000,00008000 8596 7980 10 676 634 0 0 7980 837 747 22 266 75 0 0 747 7498 7127 18 376 353 0 0 6954 0 0 0 0 0 0 0 0 0 6065 3940 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1212 813 174 566 312 0 7 45 6 6 0 0 0 0 0 0 1605 590 564 1260 451 3 7 576 1 0 1 0 0 0 0 0 0 713072 367142 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 454 454 0 0 0 0 0 0 1 1 0 0 0 0 0 0 608 493 78 1638426 37 0 19 473 0 0 0 0 0 0 0 0 0 5078 3402 0
+cpu128 0 0 1473387 669048 768428 13467 80166238928 34881701510 802686 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6113 mm_cid_task_work_clear_compact: 7 mm_cid_get_cached: 790709 mm_cid_get_alloc: 8702 mm_cid_get_put_lazy: 499 mm_cid_put_lazy: 369 mm_cid_put: 116 mm_cid_migrate_steal: 14129 mm_cid_migrate_clear: 7512 mm_cid_migrate_move: 6617
+domain0 00000000,00000000,00000001,00000000,00000000,00000000,00010000 8379 7794 9 649 608 0 0 7794 800 710 24 231 73 0 0 710 5156 4851 10 322 295 0 0 4747 0 0 0 0 0 0 0 0 0 6613 4235 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1441 1040 196 578 287 7 4 48 1 1 0 0 0 0 0 0 2249 1120 548 1555 581 1 14 1099 5 0 5 0 0 0 0 0 0 741947 378045 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 558 557 0 1 1 0 0 1 3 3 0 0 0 0 0 0 1058 967 63 1345393 28 0 16 948 0 0 0 0 0 0 0 0 0 6400 3416 0
+cpu129 0 0 1472211 668239 818673 12093 81157788658 34728016783 802248 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6101 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 792678 mm_cid_get_alloc: 8121 mm_cid_get_put_lazy: 387 mm_cid_put_lazy: 357 mm_cid_put: 57 mm_cid_migrate_steal: 13511 mm_cid_migrate_clear: 7311 mm_cid_migrate_move: 6200
+domain0 00000000,00000000,00000002,00000000,00000000,00000000,00020000 6917 6330 9 674 607 0 0 6330 887 789 22 308 85 0 0 789 5393 5129 11 277 253 0 0 4983 0 0 0 0 0 0 0 0 0 6061 4091 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 858 458 180 592 329 7 6 33 0 0 0 0 0 0 0 0 1524 314 659 1523 551 0 16 293 5 0 5 0 0 0 0 0 0 793669 430978 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 317 317 0 0 0 0 0 0 0 0 0 0 0 0 0 0 478 324 108 3046172 46 0 22 299 0 0 0 0 0 0 0 0 0 6849 7192 0
+cpu130 0 0 1505926 685479 778147 11842 81193641870 34929119751 818723 mm_cid_task_work_nr_run: 18 mm_cid_task_work_clear_old: 6091 mm_cid_task_work_clear_compact: 12 mm_cid_get_cached: 808759 mm_cid_get_alloc: 8353 mm_cid_get_put_lazy: 406 mm_cid_put_lazy: 365 mm_cid_put: 72 mm_cid_migrate_steal: 15042 mm_cid_migrate_clear: 7374 mm_cid_migrate_move: 7668
+domain0 00000000,00000000,00000004,00000000,00000000,00000000,00040000 7036 6462 7 669 605 0 0 6462 882 781 21 274 83 0 0 781 7663 7282 25 387 356 0 0 7081 0 0 0 0 0 0 0 0 0 5778 3867 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 986 581 172 589 320 3 10 42 3 3 0 0 0 0 0 0 1764 539 646 1598 579 3 20 509 0 0 0 0 0 0 0 0 0 753736 391883 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 323 323 0 0 0 0 0 0 3 3 0 0 0 0 0 0 462 360 60 1783767 42 0 16 342 0 0 0 0 0 0 0 0 0 6790 4637 0
+cpu131 16 0 1405808 635976 809847 11573 81684811937 35627033369 768183 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6107 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 758617 mm_cid_get_alloc: 8503 mm_cid_get_put_lazy: 475 mm_cid_put_lazy: 394 mm_cid_put: 113 mm_cid_migrate_steal: 10966 mm_cid_migrate_clear: 7560 mm_cid_migrate_move: 3406
+domain0 00000000,00000000,00000008,00000000,00000000,00000000,00080000 7030 6420 22 831 624 0 0 6420 884 790 26 252 71 0 0 790 3558 3364 10 205 184 0 0 3284 1 0 1 0 0 0 0 0 0 6177 3966 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 977 602 165 538 309 1 6 45 11 11 0 0 0 0 0 0 1412 295 539 1467 578 1 11 277 4 0 4 0 0 0 0 0 0 784508 397617 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 325 325 0 0 0 0 0 0 7 7 0 0 0 0 0 0 335 195 92 2445595 48 0 19 176 0 0 0 0 0 0 0 0 0 7588 6345 0
+cpu132 6 0 1441990 652532 738280 13169 79440310591 35325417634 787857 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6080 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 776568 mm_cid_get_alloc: 8520 mm_cid_get_put_lazy: 446 mm_cid_put_lazy: 384 mm_cid_put: 180 mm_cid_migrate_steal: 10226 mm_cid_migrate_clear: 7483 mm_cid_migrate_move: 2743
+domain0 00000000,00000000,00000010,00000000,00000000,00000000,00100000 8138 7534 8 675 629 0 0 7534 874 782 22 248 76 0 0 782 6731 6362 19 380 350 0 0 6230 0 0 0 0 0 0 0 0 0 6378 4067 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1176 779 168 557 319 3 7 47 7 7 0 0 0 0 0 0 1364 734 300 886 330 0 3 725 2 0 2 0 0 0 0 0 0 713625 367829 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 448 448 0 0 0 0 0 1 6 6 0 0 0 0 0 0 724 652 59 919956 13 0 12 638 0 0 0 0 0 0 0 0 0 5107 3033 0
+cpu133 3 0 1432518 648797 741899 11814 79264122254 35085807928 782086 mm_cid_task_work_nr_run: 40 mm_cid_task_work_clear_old: 6071 mm_cid_task_work_clear_compact: 10 mm_cid_get_cached: 772665 mm_cid_get_alloc: 8256 mm_cid_get_put_lazy: 443 mm_cid_put_lazy: 395 mm_cid_put: 66 mm_cid_migrate_steal: 11858 mm_cid_migrate_clear: 7248 mm_cid_migrate_move: 4610
+domain0 00000000,00000000,00000020,00000000,00000000,00000000,00200000 7038 6431 19 706 624 0 0 6431 786 698 20 231 70 0 0 698 1456 1378 4 83 74 0 0 1335 0 0 0 0 0 0 0 0 0 6614 4159 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 916 554 173 518 272 5 5 55 7 7 0 0 0 0 0 0 816 294 340 637 182 2 0 289 2 0 2 0 0 0 0 0 0 719076 367236 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 349 349 0 0 0 0 0 1 8 8 0 0 0 0 0 0 305 220 63 1103104 22 0 15 202 0 0 0 0 0 0 0 0 0 4394 2707 0
+cpu134 0 0 1418579 641707 758383 11496 78939888546 34894375793 775228 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6127 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 765916 mm_cid_get_alloc: 7993 mm_cid_get_put_lazy: 425 mm_cid_put_lazy: 379 mm_cid_put: 125 mm_cid_migrate_steal: 9906 mm_cid_migrate_clear: 7080 mm_cid_migrate_move: 2826
+domain0 00000000,00000000,00000040,00000000,00000000,00000000,00400000 7624 7007 12 771 644 0 0 7007 850 756 26 307 73 0 0 756 4160 3873 18 289 269 0 0 3740 0 0 0 0 0 0 0 0 0 5660 3742 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1082 692 171 559 312 0 3 55 1 1 0 0 0 0 0 0 1671 347 567 1777 757 1 24 310 1 0 1 0 0 0 0 0 0 735723 383081 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 350 350 0 0 0 0 0 0 0 0 0 0 0 0 0 0 292 199 56 1399959 37 0 14 182 0 0 0 0 0 0 0 0 0 5503 3396 0
+cpu135 0 0 1415717 639595 729587 11046 79628895788 33797123907 774438 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6137 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 764836 mm_cid_get_alloc: 8602 mm_cid_get_put_lazy: 471 mm_cid_put_lazy: 398 mm_cid_put: 128 mm_cid_migrate_steal: 10378 mm_cid_migrate_clear: 7658 mm_cid_migrate_move: 2720
+domain0 00000000,00000000,00000080,00000000,00000000,00000000,00800000 7240 6638 11 726 637 0 0 6638 886 795 22 276 74 0 1 794 6463 6027 40 449 396 0 0 5893 0 0 0 0 0 0 0 0 0 5481 3573 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 856 443 180 597 342 6 3 46 1 1 0 0 0 0 0 0 1027 228 393 1060 406 2 11 209 2 0 2 0 0 0 0 0 0 705915 361625 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 308 308 0 0 0 0 0 0 0 0 0 0 0 0 0 0 216 143 44 939298 29 0 11 130 0 0 0 0 0 0 0 0 0 7144 5008 0
+cpu136 0 0 1377426 621791 766736 11274 79577584346 34932412189 754009 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6133 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 744916 mm_cid_get_alloc: 8087 mm_cid_get_put_lazy: 425 mm_cid_put_lazy: 399 mm_cid_put: 71 mm_cid_migrate_steal: 11419 mm_cid_migrate_clear: 7270 mm_cid_migrate_move: 4149
+domain0 00000000,00000000,00000100,00000000,00000000,00000000,01000000 7040 6431 7 696 635 0 0 6431 884 783 26 534 81 0 0 783 5013 4647 32 378 334 0 0 4525 0 0 0 0 0 0 0 0 0 6638 4239 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 996 608 167 541 295 2 6 44 0 0 0 0 0 0 0 0 1305 231 554 1391 520 0 12 211 1 0 1 0 0 0 0 0 0 743322 381872 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 325 325 0 0 0 0 0 0 0 0 0 0 0 0 0 0 337 210 79 1940977 48 0 21 185 0 0 0 0 0 0 0 0 0 5501 3523 0
+cpu137 0 0 1400399 633375 750405 11244 78771946671 34678155494 765219 mm_cid_task_work_nr_run: 13 mm_cid_task_work_clear_old: 6140 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 756274 mm_cid_get_alloc: 7934 mm_cid_get_put_lazy: 403 mm_cid_put_lazy: 336 mm_cid_put: 41 mm_cid_migrate_steal: 10498 mm_cid_migrate_clear: 7067 mm_cid_migrate_move: 3431
+domain0 00000000,00000000,00000200,00000000,00000000,00000000,02000000 6871 6211 14 755 685 0 0 6211 800 698 28 267 77 0 0 698 4220 3977 9 251 234 0 0 3878 0 0 0 0 0 0 0 0 0 6141 4036 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 845 464 170 536 292 2 4 54 0 0 0 0 0 0 0 0 1280 314 539 1249 427 1 10 295 1 0 1 0 0 0 0 0 0 725677 372018 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 320 320 0 0 0 0 0 0 0 0 0 0 0 0 0 0 308 185 83 1171217 40 0 11 171 0 0 0 0 0 0 0 0 0 7342 4656 0
+cpu138 0 0 1453908 659969 773852 11359 80119445405 35092212201 792338 mm_cid_task_work_nr_run: 15 mm_cid_task_work_clear_old: 6137 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 783054 mm_cid_get_alloc: 8245 mm_cid_get_put_lazy: 470 mm_cid_put_lazy: 413 mm_cid_put: 107 mm_cid_migrate_steal: 9997 mm_cid_migrate_clear: 7263 mm_cid_migrate_move: 2734
+domain0 00000000,00000000,00000400,00000000,00000000,00000000,04000000 6723 6178 14 622 570 0 0 6178 923 815 39 330 74 0 0 815 6569 6093 26 485 450 0 0 5928 1 0 1 0 0 0 0 0 0 6430 4205 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 918 546 167 527 288 4 3 43 0 0 0 0 0 0 0 0 1129 179 510 1255 440 0 9 167 1 0 1 0 0 0 0 0 0 747202 379973 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 327 327 0 0 0 0 0 0 0 0 0 0 0 0 0 0 327 184 86 1638320 57 0 19 162 0 0 0 0 0 0 0 0 0 8860 5075 0
+cpu139 0 0 1471257 668298 736413 11328 80020715044 34795068604 801255 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6120 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 792116 mm_cid_get_alloc: 8110 mm_cid_get_put_lazy: 435 mm_cid_put_lazy: 386 mm_cid_put: 49 mm_cid_migrate_steal: 10115 mm_cid_migrate_clear: 7357 mm_cid_migrate_move: 2758
+domain0 00000000,00000000,00000800,00000000,00000000,00000000,08000000 7085 6454 12 746 658 0 0 6454 832 742 23 226 69 0 0 742 4689 4351 20 352 318 0 0 4194 0 0 0 0 0 0 0 0 0 5538 3630 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1132 761 166 519 289 4 2 54 0 0 0 0 0 0 0 0 920 201 395 956 324 0 10 188 2 0 2 0 0 0 0 0 0 712821 367580 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 381 381 0 0 0 0 0 0 0 0 0 0 0 0 0 0 288 178 80 1046322 30 0 9 168 0 0 0 0 0 0 0 0 0 6725 3437 0
+cpu140 6 0 1400114 632503 800335 15611 81768326149 35147876307 765893 mm_cid_task_work_nr_run: 41 mm_cid_task_work_clear_old: 6088 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 752824 mm_cid_get_alloc: 7882 mm_cid_get_put_lazy: 427 mm_cid_put_lazy: 400 mm_cid_put: 85 mm_cid_migrate_steal: 9472 mm_cid_migrate_clear: 6928 mm_cid_migrate_move: 2544
+domain0 00000000,00000000,00001000,00000000,00000000,00000000,10000000 10472 9847 11 710 654 0 0 9846 900 782 32 352 93 0 0 782 4330 4083 11 252 236 0 0 3977 0 0 0 0 0 0 0 0 0 6232 3979 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 4238 3855 152 562 339 5 4 39 4 4 0 0 0 0 0 0 1862 437 667 1936 758 1 13 413 2 0 2 0 0 0 0 0 0 771432 395992 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 382 382 0 0 0 0 0 1 9 9 0 0 0 0 0 0 557 417 99 1161970 41 0 19 397 0 0 0 0 0 0 0 0 0 7059 6150 0
+cpu141 0 0 1348206 607168 792561 11064 80070812079 34924732398 739469 mm_cid_task_work_nr_run: 17 mm_cid_task_work_clear_old: 6151 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 730716 mm_cid_get_alloc: 7643 mm_cid_get_put_lazy: 466 mm_cid_put_lazy: 358 mm_cid_put: 68 mm_cid_migrate_steal: 8577 mm_cid_migrate_clear: 6861 mm_cid_migrate_move: 1716
+domain0 00000000,00000000,00002000,00000000,00000000,00000000,20000000 6942 6374 11 661 583 0 0 6374 856 766 21 249 70 0 0 766 4754 4487 12 278 255 0 0 4368 0 0 0 0 0 0 0 0 0 6274 3886 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 970 536 202 641 337 5 5 48 0 0 0 0 0 0 0 0 1324 281 522 1331 521 1 18 253 3 0 3 0 0 0 0 0 0 762343 380036 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 330 330 0 0 0 0 0 1 1 1 0 0 0 0 0 0 336 219 91 1872769 26 0 19 200 0 0 0 0 0 0 0 0 0 12878 8144 0
+cpu142 0 0 1363766 615500 841607 11396 82410950538 34738554162 746705 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6140 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 737291 mm_cid_get_alloc: 7792 mm_cid_get_put_lazy: 441 mm_cid_put_lazy: 317 mm_cid_put: 99 mm_cid_migrate_steal: 9475 mm_cid_migrate_clear: 6806 mm_cid_migrate_move: 2669
+domain0 00000000,00000000,00004000,00000000,00000000,00000000,40000000 7030 6415 11 714 643 0 0 6415 869 773 23 256 78 0 0 773 3349 3123 16 231 210 0 0 3058 0 0 0 0 0 0 0 0 0 7266 4627 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 930 520 192 567 290 5 2 37 2 2 0 0 0 0 0 0 1423 366 559 1460 498 0 7 353 4 0 4 0 0 0 0 0 0 812338 418723 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 350 350 0 0 0 0 0 1 0 0 0 0 0 0 0 0 483 359 77 1746172 47 0 13 344 0 0 0 0 0 0 0 0 0 10605 9617 0
+cpu143 0 0 1544851 705462 733486 11543 81269412926 34588092621 837664 mm_cid_task_work_nr_run: 33 mm_cid_task_work_clear_old: 6085 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 827979 mm_cid_get_alloc: 7685 mm_cid_get_put_lazy: 403 mm_cid_put_lazy: 315 mm_cid_put: 75 mm_cid_migrate_steal: 14398 mm_cid_migrate_clear: 6709 mm_cid_migrate_move: 7689
+domain0 00000000,00000000,00008000,00000000,00000000,00000000,80000000 7633 7039 8 693 629 0 0 7039 858 767 22 239 71 0 0 767 4982 4613 35 383 334 0 0 4463 0 0 0 0 0 0 0 0 0 6395 3941 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1049 632 177 618 335 2 6 45 3 3 0 0 0 0 0 0 1551 394 633 1509 524 2 17 373 0 0 0 0 0 0 0 0 0 710031 368268 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 393 393 0 0 0 0 0 0 2 2 0 0 0 0 0 0 394 268 89 1753274 37 0 21 245 0 0 0 0 0 0 0 0 0 5518 3275 0
+cpu144 0 0 1502907 684274 767101 11596 80726504132 35299840389 817035 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6113 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 807631 mm_cid_get_alloc: 8230 mm_cid_get_put_lazy: 444 mm_cid_put_lazy: 351 mm_cid_put: 47 mm_cid_migrate_steal: 13616 mm_cid_migrate_clear: 7276 mm_cid_migrate_move: 6340
+domain0 00000000,00000000,00010000,00000000,00000000,00000001,00000000 7728 7195 12 580 551 0 0 7195 885 785 27 276 78 0 0 785 9076 8617 25 472 434 0 0 8395 1 0 1 0 0 0 0 0 0 6232 4254 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1244 854 170 568 314 6 4 38 1 1 0 0 0 0 0 0 1552 284 696 1608 572 1 19 252 1 0 1 0 0 0 0 0 0 745924 383004 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 428 428 0 0 0 0 0 0 2 2 0 0 0 0 0 0 319 182 85 2575806 52 0 24 157 0 0 0 0 0 0 0 0 0 3348 1857 0
+cpu145 0 0 1370833 618118 836176 10938 83117795884 34335294231 751092 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6150 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 742034 mm_cid_get_alloc: 8032 mm_cid_get_put_lazy: 420 mm_cid_put_lazy: 389 mm_cid_put: 64 mm_cid_migrate_steal: 9314 mm_cid_migrate_clear: 7150 mm_cid_migrate_move: 2164
+domain0 00000000,00000000,00020000,00000000,00000000,00000002,00000000 6709 6168 7 619 558 0 0 6168 918 816 22 321 81 0 1 815 7300 6882 21 433 397 0 0 6718 0 0 0 0 0 0 0 0 0 6251 4076 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 836 438 160 563 330 2 4 39 2 2 0 0 0 0 0 0 1376 324 560 1345 492 0 11 300 0 0 0 0 0 0 0 0 0 808736 418922 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 299 299 0 0 0 0 0 0 0 0 0 0 0 0 0 0 267 181 60 897880 26 0 13 166 0 0 0 0 0 0 0 0 0 10250 9810 0
+cpu146 0 0 1479567 673013 828641 12431 83325548014 34676310384 804874 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6121 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 793310 mm_cid_get_alloc: 8007 mm_cid_get_put_lazy: 402 mm_cid_put_lazy: 352 mm_cid_put: 76 mm_cid_migrate_steal: 10388 mm_cid_migrate_clear: 6994 mm_cid_migrate_move: 3394
+domain0 00000000,00000000,00040000,00000000,00000000,00000004,00000000 8152 7527 8 701 644 0 0 7527 863 776 21 275 70 0 0 776 3547 3394 11 155 142 0 0 3295 0 0 0 0 0 0 0 0 0 5880 3937 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1571 1203 164 521 285 1 6 47 1 1 0 0 0 0 0 0 760 279 317 645 164 0 2 275 2 0 2 0 0 0 0 0 0 801839 433388 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 604 604 0 0 0 0 0 0 1 1 0 0 0 0 0 0 363 284 64 783559 15 0 9 274 0 0 0 0 0 0 0 0 0 8490 11898 0
+cpu147 1 0 1509161 687285 785645 11437 81264188239 34413787279 820239 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6090 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 810033 mm_cid_get_alloc: 9129 mm_cid_get_put_lazy: 440 mm_cid_put_lazy: 383 mm_cid_put: 111 mm_cid_migrate_steal: 13185 mm_cid_migrate_clear: 7649 mm_cid_migrate_move: 5536
+domain0 00000000,00000000,00080000,00000000,00000000,00000008,00000000 6772 6168 13 694 624 0 0 6167 816 735 21 245 61 0 0 735 4173 3930 8 249 235 0 0 3813 0 0 0 0 0 0 0 0 0 5987 4052 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 907 531 150 532 313 3 8 47 1 1 0 0 0 0 0 0 1654 309 675 1785 670 0 17 283 0 0 0 0 0 0 0 0 0 762340 402226 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 333 333 0 0 0 0 0 0 2 2 0 0 0 0 0 0 357 220 101 2253135 36 0 25 195 0 0 0 0 0 0 0 0 0 5879 5196 0
+cpu148 14 0 1532096 698765 771272 11669 81829753154 34561928407 831614 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6082 mm_cid_task_work_clear_compact: 18 mm_cid_get_cached: 822115 mm_cid_get_alloc: 8338 mm_cid_get_put_lazy: 470 mm_cid_put_lazy: 350 mm_cid_put: 172 mm_cid_migrate_steal: 15294 mm_cid_migrate_clear: 7011 mm_cid_migrate_move: 8283
+domain0 00000000,00000000,00100000,00000000,00000000,00000010,00000000 7251 6629 14 689 648 0 0 6628 868 771 29 275 71 0 0 771 3715 3570 4 148 141 0 0 3453 0 0 0 0 0 0 0 0 0 7251 4567 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1046 651 157 573 328 0 8 36 5 5 0 0 0 0 0 0 1296 327 571 1174 398 0 9 311 0 0 0 0 0 0 0 0 0 746010 381180 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 330 330 0 0 0 0 0 0 4 4 0 0 0 0 0 0 417 281 89 2050363 47 0 32 248 0 0 0 0 0 0 0 0 0 6341 2936 0
+cpu149 2 0 1475096 669787 785222 13148 82609865415 34410823080 803676 mm_cid_task_work_nr_run: 27 mm_cid_task_work_clear_old: 6108 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 792180 mm_cid_get_alloc: 8406 mm_cid_get_put_lazy: 417 mm_cid_put_lazy: 397 mm_cid_put: 147 mm_cid_migrate_steal: 14490 mm_cid_migrate_clear: 7212 mm_cid_migrate_move: 7278
+domain0 00000000,00000000,00200000,00000000,00000000,00000020,00000000 8205 7619 8 649 608 0 0 7619 893 801 29 423 68 0 0 801 7911 7490 21 442 400 0 0 7300 0 0 0 0 0 0 0 0 0 6836 4362 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1307 882 192 590 314 4 5 29 2 2 0 0 0 0 0 0 2172 966 629 1620 577 0 12 951 1 0 1 0 0 0 0 0 0 754825 383672 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 522 522 0 0 0 0 0 1 3 3 0 0 0 0 0 0 1008 889 90 1456943 29 0 15 869 0 0 0 0 0 0 0 0 0 10412 5404 0
+cpu150 41 0 1390345 628388 816028 11482 81792815951 34872090085 760372 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6115 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 750986 mm_cid_get_alloc: 8303 mm_cid_get_put_lazy: 465 mm_cid_put_lazy: 347 mm_cid_put: 125 mm_cid_migrate_steal: 10227 mm_cid_migrate_clear: 7133 mm_cid_migrate_move: 3094
+domain0 00000000,00000000,00400000,00000000,00000000,00000040,00000000 7230 6640 9 692 623 0 0 6640 982 882 15 333 92 0 0 882 8674 8177 28 510 469 0 0 7985 0 0 0 0 0 0 0 0 0 7118 4483 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 941 542 192 581 297 1 5 31 19 19 0 0 0 0 0 0 1232 278 586 1122 368 0 23 245 2 0 2 0 0 0 0 0 0 787536 409800 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 323 323 0 0 0 0 0 0 4 4 0 0 0 0 0 0 308 215 76 1276979 17 0 23 192 0 0 0 0 0 0 0 0 0 9891 6504 0
+cpu151 61 0 1493079 679220 754302 12790 81080664543 34834176794 812105 mm_cid_task_work_nr_run: 28 mm_cid_task_work_clear_old: 6076 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 801189 mm_cid_get_alloc: 8372 mm_cid_get_put_lazy: 444 mm_cid_put_lazy: 406 mm_cid_put: 126 mm_cid_migrate_steal: 11324 mm_cid_migrate_clear: 7188 mm_cid_migrate_move: 4136
+domain0 00000000,00000000,00800000,00000000,00000000,00000080,00000000 8932 8349 17 674 597 0 0 8349 856 762 30 245 65 0 0 762 4891 4622 6 278 263 0 0 4456 0 0 0 0 0 0 0 0 0 5792 3890 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 2453 2050 171 588 328 3 3 42 8 8 0 0 0 0 0 0 989 328 412 834 249 1 4 321 3 0 3 0 0 0 0 0 0 730511 378126 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 416 416 0 0 0 0 0 0 8 8 0 0 0 0 0 0 350 263 72 499952 15 0 13 247 0 0 0 0 0 0 0 0 0 5208 3218 0
+cpu152 63 0 1399477 632972 851590 13488 83894425386 34834081663 764834 mm_cid_task_work_nr_run: 36 mm_cid_task_work_clear_old: 6070 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 752388 mm_cid_get_alloc: 8013 mm_cid_get_put_lazy: 430 mm_cid_put_lazy: 345 mm_cid_put: 120 mm_cid_migrate_steal: 9925 mm_cid_migrate_clear: 6855 mm_cid_migrate_move: 3070
+domain0 00000000,00000000,01000000,00000000,00000000,00000100,00000000 8569 8017 10 608 575 0 0 8017 900 806 28 250 72 0 0 806 4360 4153 11 212 196 0 0 4066 0 0 0 0 0 0 0 0 0 6220 3871 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1440 1037 175 545 308 6 4 41 17 17 0 0 0 0 0 0 1758 1036 433 974 289 1 4 1029 1 0 1 0 0 0 0 0 0 821864 437887 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 558 558 0 0 0 0 0 0 7 7 0 0 0 0 0 0 1034 935 76 1519253 23 0 15 919 0 0 0 0 0 0 0 0 0 10017 9459 0
+cpu153 88 0 1539490 702677 773053 11513 80165094506 34149652555 835184 mm_cid_task_work_nr_run: 36 mm_cid_task_work_clear_old: 6024 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 825708 mm_cid_get_alloc: 8192 mm_cid_get_put_lazy: 410 mm_cid_put_lazy: 365 mm_cid_put: 125 mm_cid_migrate_steal: 13425 mm_cid_migrate_clear: 7134 mm_cid_migrate_move: 6291
+domain0 00000000,00000000,02000000,00000000,00000000,00000200,00000000 20968 20376 12 701 619 0 0 20376 867 774 24 274 76 0 0 774 3709 3517 14 197 178 0 0 3417 0 0 0 0 0 0 0 0 0 6657 4146 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 3181 2770 182 611 338 7 3 38 2 2 0 0 0 0 0 0 1496 392 595 1415 509 0 21 364 2 0 2 0 0 0 0 0 0 744627 381815 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 2030 2030 0 0 0 0 0 0 0 0 0 0 0 0 0 0 362 269 74 1238329 19 0 21 246 0 0 0 0 0 0 0 0 0 10255 9947 0
+cpu154 82 0 1511852 687373 765075 12359 79874071460 35249990128 822604 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6028 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 812380 mm_cid_get_alloc: 8614 mm_cid_get_put_lazy: 425 mm_cid_put_lazy: 356 mm_cid_put: 124 mm_cid_migrate_steal: 14815 mm_cid_migrate_clear: 7312 mm_cid_migrate_move: 7503
+domain0 00000000,00000000,04000000,00000000,00000000,00000400,00000000 7802 7178 8 713 662 0 0 7178 872 763 34 263 81 0 0 763 4992 4750 19 251 223 0 0 4627 0 0 0 0 0 0 0 0 0 6448 4097 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1080 680 185 569 291 5 2 45 8 8 0 0 0 0 0 0 1708 464 734 1543 510 0 17 436 3 0 3 0 0 0 0 0 0 739020 383170 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 362 362 0 0 0 0 0 0 2 2 0 0 0 0 0 0 576 394 120 2602668 62 0 32 359 0 0 0 0 0 0 0 0 0 7247 4518 0
+cpu155 48 0 1427878 646070 798674 12312 80465828246 34297279655 780088 mm_cid_task_work_nr_run: 46 mm_cid_task_work_clear_old: 6048 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 770450 mm_cid_get_alloc: 8145 mm_cid_get_put_lazy: 434 mm_cid_put_lazy: 394 mm_cid_put: 117 mm_cid_migrate_steal: 11518 mm_cid_migrate_clear: 7174 mm_cid_migrate_move: 4344
+domain0 00000000,00000000,08000000,00000000,00000000,00000800,00000000 7331 6735 11 677 617 0 0 6735 894 791 28 265 79 0 1 790 4229 4010 13 225 206 0 0 3886 0 0 0 0 0 0 0 0 0 6453 4247 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 911 532 173 551 291 1 5 42 8 8 0 0 0 0 0 0 1641 429 539 1713 673 0 14 406 2 0 2 0 0 0 0 0 0 773049 396383 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 340 340 0 0 0 0 0 0 1 1 0 0 0 0 0 0 522 410 77 1994473 35 0 14 395 0 0 0 0 0 0 0 0 0 6859 4574 0
+cpu156 43 0 1516171 690485 762237 12313 79701988476 34551005216 824111 mm_cid_task_work_nr_run: 29 mm_cid_task_work_clear_old: 6081 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 813363 mm_cid_get_alloc: 8490 mm_cid_get_put_lazy: 412 mm_cid_put_lazy: 389 mm_cid_put: 61 mm_cid_migrate_steal: 14462 mm_cid_migrate_clear: 7448 mm_cid_migrate_move: 7014
+domain0 00000000,00000000,10000000,00000000,00000000,00001000,00000000 7636 7019 16 725 637 0 0 7019 849 756 29 263 67 0 0 756 5097 4874 7 228 216 0 0 4726 0 0 0 0 0 0 0 0 0 6781 4248 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1154 740 187 588 320 3 4 44 25 25 0 0 0 0 0 0 1553 542 538 1363 473 0 9 521 0 0 0 0 0 0 0 0 0 738152 378604 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 372 372 0 0 0 0 0 0 10 10 0 0 0 0 0 0 611 437 132 1710605 42 0 20 411 0 0 0 0 0 0 0 0 0 4990 3218 0
+cpu157 15 0 1434941 650168 805700 11792 81153204179 34853812938 783141 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6100 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 773539 mm_cid_get_alloc: 7930 mm_cid_get_put_lazy: 429 mm_cid_put_lazy: 414 mm_cid_put: 104 mm_cid_migrate_steal: 11096 mm_cid_migrate_clear: 6967 mm_cid_migrate_move: 4129
+domain0 00000000,00000000,20000000,00000000,00000000,00002000,00000000 7474 6866 15 695 625 0 0 6864 878 794 23 249 66 0 0 794 7831 7472 25 369 334 0 0 7283 1 0 1 0 0 0 0 0 0 6319 4065 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1064 666 174 567 304 6 5 40 9 9 0 0 0 0 0 0 1475 591 563 1113 321 0 16 565 1 0 1 0 0 0 0 0 0 777960 406362 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 370 370 0 0 0 0 0 1 2 2 0 0 0 0 0 0 581 430 95 2152151 56 0 29 398 0 0 0 0 0 0 0 0 0 9628 9835 0
+cpu158 40 0 1524368 694620 749882 11863 79434598222 35089371449 828041 mm_cid_task_work_nr_run: 29 mm_cid_task_work_clear_old: 6068 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 817910 mm_cid_get_alloc: 8617 mm_cid_get_put_lazy: 438 mm_cid_put_lazy: 370 mm_cid_put: 85 mm_cid_migrate_steal: 14043 mm_cid_migrate_clear: 7361 mm_cid_migrate_move: 6682
+domain0 00000000,00000000,40000000,00000000,00000000,00004000,00000000 7722 7121 11 677 625 0 0 7121 883 784 27 278 73 0 0 784 7135 6769 17 375 349 0 0 6567 1 0 1 0 0 0 0 0 0 6155 4050 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 941 531 180 586 326 3 6 43 22 22 0 0 0 0 0 0 2165 545 744 2098 876 0 24 511 1 0 1 0 0 0 0 0 0 727436 376244 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 336 336 0 0 0 0 0 1 2 2 0 0 0 0 0 0 438 339 82 1218527 17 0 7 329 0 0 0 0 0 0 0 0 0 4427 2804 0
+cpu159 19 0 1400672 633024 787810 11766 80157111784 34849955358 765584 mm_cid_task_work_nr_run: 47 mm_cid_task_work_clear_old: 6099 mm_cid_task_work_clear_compact: 11 mm_cid_get_cached: 756029 mm_cid_get_alloc: 8483 mm_cid_get_put_lazy: 474 mm_cid_put_lazy: 409 mm_cid_put: 103 mm_cid_migrate_steal: 11272 mm_cid_migrate_clear: 7317 mm_cid_migrate_move: 3955
+domain0 00000000,00000000,80000000,00000000,00000000,00008000,00000000 7182 6558 16 716 654 0 0 6557 915 814 25 303 80 0 0 814 4711 4448 15 265 248 0 0 4280 0 0 0 0 0 0 0 0 0 6135 4132 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1023 623 161 566 323 0 9 56 13 13 0 0 0 0 0 0 1646 325 655 1738 666 1 15 300 2 0 2 0 0 0 0 0 0 762230 397110 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 334 334 0 0 0 0 0 0 2 2 0 0 0 0 0 0 417 273 90 2080808 54 0 18 254 0 0 0 0 0 0 0 0 0 7678 4126 0
+cpu160 17 0 1464897 664963 790368 13294 82033334684 35021110260 798226 mm_cid_task_work_nr_run: 62 mm_cid_task_work_clear_old: 6048 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 787307 mm_cid_get_alloc: 8268 mm_cid_get_put_lazy: 417 mm_cid_put_lazy: 347 mm_cid_put: 120 mm_cid_migrate_steal: 13814 mm_cid_migrate_clear: 7236 mm_cid_migrate_move: 6578
+domain0 00000000,00000001,00000000,00000000,00000000,00010000,00000000 10307 9670 4 739 668 0 1 9668 910 819 17 237 82 0 0 819 6825 6489 18 342 318 0 0 6302 0 0 0 0 0 0 0 0 0 6279 4163 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1677 1264 190 581 315 3 4 45 8 8 0 0 0 0 0 0 1719 536 742 1410 441 2 17 516 2 0 2 0 0 0 0 0 0 760826 390948 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 738 738 0 0 0 0 0 0 4 4 0 0 0 0 0 0 632 514 87 2035616 31 0 14 497 0 0 0 0 0 0 0 0 0 9968 6271 0
+cpu161 0 0 1430917 648337 768201 11915 82636930116 34099546251 780958 mm_cid_task_work_nr_run: 46 mm_cid_task_work_clear_old: 6099 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 770753 mm_cid_get_alloc: 8100 mm_cid_get_put_lazy: 469 mm_cid_put_lazy: 379 mm_cid_put: 86 mm_cid_migrate_steal: 12023 mm_cid_migrate_clear: 7037 mm_cid_migrate_move: 4986
+domain0 00000000,00000002,00000000,00000000,00000000,00020000,00000000 8457 7835 15 761 646 0 0 7835 943 845 24 325 84 0 0 845 5170 4877 16 304 277 0 0 4777 0 0 0 0 0 0 0 0 0 6311 4086 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1243 897 154 499 265 2 6 34 2 2 0 0 0 0 0 0 1392 494 475 1162 423 1 17 471 4 0 4 0 0 0 0 0 0 742133 373997 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 495 495 0 0 0 0 0 0 1 1 0 0 0 0 0 0 511 431 53 1069634 27 0 14 415 0 0 0 0 0 0 0 0 0 7841 5032 0
+cpu162 0 0 1458004 661415 745543 11705 79022509584 35685259110 794950 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6109 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 785158 mm_cid_get_alloc: 8442 mm_cid_get_put_lazy: 461 mm_cid_put_lazy: 389 mm_cid_put: 154 mm_cid_migrate_steal: 11481 mm_cid_migrate_clear: 7199 mm_cid_migrate_move: 4282
+domain0 00000000,00000004,00000000,00000000,00000000,00040000,00000000 8709 8116 11 703 617 0 0 8116 834 739 26 273 75 0 0 739 6621 6220 27 411 374 0 0 6011 0 0 0 0 0 0 0 0 0 6029 4003 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 2372 1972 182 582 305 5 5 52 0 0 0 0 0 0 0 0 1604 498 571 1518 535 2 13 477 3 0 3 0 0 0 0 0 0 723605 372894 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 368 368 0 0 0 0 0 0 1 1 0 0 0 0 0 0 327 250 59 637448 18 0 13 236 0 0 0 0 0 0 0 0 0 4203 2569 0
+cpu163 0 0 1484571 674883 757825 11793 79767911935 35101871625 808011 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6098 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 798266 mm_cid_get_alloc: 8084 mm_cid_get_put_lazy: 431 mm_cid_put_lazy: 351 mm_cid_put: 68 mm_cid_migrate_steal: 12751 mm_cid_migrate_clear: 7134 mm_cid_migrate_move: 5617
+domain0 00000000,00000008,00000000,00000000,00000000,00080000,00000000 7136 6487 12 767 688 0 0 6487 902 808 27 241 68 0 0 808 7230 6847 19 390 364 0 0 6698 0 0 0 0 0 0 0 0 0 5797 3777 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 920 528 162 551 317 4 4 38 2 2 0 0 0 0 0 0 1159 326 426 1073 407 1 14 307 1 0 1 0 0 0 0 0 0 733233 377399 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 343 343 0 0 0 0 0 0 4 4 0 0 0 0 0 0 415 307 72 1228358 36 0 13 294 0 0 0 0 0 0 0 0 0 7001 4429 0
+cpu164 0 0 1475458 670392 754217 11438 78541309402 34877748114 803377 mm_cid_task_work_nr_run: 21 mm_cid_task_work_clear_old: 6098 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 794024 mm_cid_get_alloc: 8303 mm_cid_get_put_lazy: 448 mm_cid_put_lazy: 361 mm_cid_put: 29 mm_cid_migrate_steal: 13418 mm_cid_migrate_clear: 7317 mm_cid_migrate_move: 6101
+domain0 00000000,00000010,00000000,00000000,00000000,00100000,00000000 6987 6396 8 663 620 0 0 6396 851 753 28 315 72 0 1 752 4201 3854 12 355 335 0 0 3737 0 0 0 0 0 0 0 0 0 5917 3879 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1008 593 188 556 301 3 1 47 1 1 0 0 0 0 0 0 2080 416 852 2130 812 4 38 368 3 0 3 0 0 0 0 0 0 728844 377268 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 335 335 0 0 0 0 0 0 0 0 0 0 0 0 0 0 345 229 81 2682081 35 0 20 208 0 0 0 0 0 0 0 0 0 8017 5446 0
+cpu165 3 0 1436500 651549 777303 11936 79557844526 36118184361 783358 mm_cid_task_work_nr_run: 30 mm_cid_task_work_clear_old: 6096 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 773942 mm_cid_get_alloc: 8195 mm_cid_get_put_lazy: 442 mm_cid_put_lazy: 384 mm_cid_put: 65 mm_cid_migrate_steal: 9890 mm_cid_migrate_clear: 7126 mm_cid_migrate_move: 2764
+domain0 00000000,00000020,00000000,00000000,00000000,00200000,00000000 7069 6550 2 610 545 0 0 6550 888 791 25 275 76 0 0 791 6718 6305 18 430 395 0 0 6132 0 0 0 0 0 0 0 0 0 6040 3991 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1006 616 176 528 272 4 6 44 3 3 0 0 0 0 0 0 1357 270 554 1458 533 1 18 246 1 0 1 0 0 0 0 0 0 749469 382745 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 332 332 0 0 0 0 0 0 1 1 0 0 0 0 0 0 317 218 68 1543416 31 0 20 197 0 0 0 0 0 0 0 0 0 9857 9634 0
+cpu166 1 0 1462075 664118 753449 11550 79943290916 34939372048 796271 mm_cid_task_work_nr_run: 41 mm_cid_task_work_clear_old: 6075 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 786931 mm_cid_get_alloc: 8316 mm_cid_get_put_lazy: 463 mm_cid_put_lazy: 352 mm_cid_put: 55 mm_cid_migrate_steal: 12060 mm_cid_migrate_clear: 7333 mm_cid_migrate_move: 4727
+domain0 00000000,00000040,00000000,00000000,00000000,00400000,00000000 6986 6349 10 732 669 0 0 6349 832 733 27 299 74 0 0 733 3539 3353 14 188 172 0 0 3270 0 0 0 0 0 0 0 0 0 5924 4030 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 879 484 187 568 301 5 7 49 1 1 0 0 0 0 0 0 993 295 370 946 328 0 11 276 3 0 3 0 0 0 0 0 0 729873 376238 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 331 331 0 0 0 0 0 0 1 1 0 0 0 0 0 0 337 222 83 1895680 32 0 16 205 0 0 0 0 0 0 0 0 0 6102 3555 0
+cpu167 61 0 1405687 635333 771816 11977 79658187893 35712850117 768711 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6056 mm_cid_task_work_clear_compact: 13 mm_cid_get_cached: 759860 mm_cid_get_alloc: 7846 mm_cid_get_put_lazy: 474 mm_cid_put_lazy: 337 mm_cid_put: 82 mm_cid_migrate_steal: 10200 mm_cid_migrate_clear: 7093 mm_cid_migrate_move: 3107
+domain0 00000000,00000080,00000000,00000000,00000000,00800000,00000000 6863 6300 11 630 578 0 0 6300 909 815 22 284 77 0 0 815 7124 6725 20 409 379 0 0 6509 0 0 0 0 0 0 0 0 0 5995 3959 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 856 468 152 571 342 4 7 41 10 10 0 0 0 0 0 0 1994 499 858 1845 637 1 26 460 0 0 0 0 0 0 0 0 0 744354 383388 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 304 304 0 0 0 0 0 0 5 5 0 0 0 0 0 0 444 275 100 2485008 69 0 31 243 0 0 0 0 0 0 0 0 0 9489 4815 0
+cpu168 12 0 2112673 992446 1190799 9990 70910719465 22996676239 1119014 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6163 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1117303 mm_cid_get_alloc: 498 mm_cid_get_put_lazy: 17 mm_cid_put_lazy: 32 mm_cid_put: 146 mm_cid_migrate_steal: 1403 mm_cid_migrate_clear: 202 mm_cid_migrate_move: 1201
+domain0 00000000,00000100,00000000,00000000,00000000,01000000,00000000 8194 7686 13 550 521 0 0 7686 655 622 11 91 24 0 0 622 7400 7313 5 87 82 0 0 7072 0 0 0 0 0 0 0 0 0 7598 5525 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 845 546 128 440 247 1 2 61 17 17 0 0 0 0 0 0 3751 1767 1846 2078 138 0 49 1689 2 0 2 0 0 0 0 0 0 1170545 821049 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 364 363 0 1 1 0 0 0 1 1 0 0 0 0 0 0 1563 459 833 18260826 271 0 234 217 0 0 0 0 0 0 0 0 0 2664 1268 0
+cpu169 16 0 1943135 908043 1214771 9309 68875485745 22877830251 1033878 mm_cid_task_work_nr_run: 28 mm_cid_task_work_clear_old: 6202 mm_cid_task_work_clear_compact: 11 mm_cid_get_cached: 1032392 mm_cid_get_alloc: 385 mm_cid_get_put_lazy: 22 mm_cid_put_lazy: 24 mm_cid_put: 98 mm_cid_migrate_steal: 2727 mm_cid_migrate_clear: 145 mm_cid_migrate_move: 2582
+domain0 00000000,00000200,00000000,00000000,00000000,02000000,00000000 7915 7449 8 526 473 0 0 7448 616 567 13 122 39 0 0 567 9878 9801 5 79 72 0 0 9494 0 0 0 0 0 0 0 0 0 7275 5335 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 855 529 146 477 258 2 1 70 14 14 0 0 0 0 0 0 4844 2860 1856 2062 128 2 57 2747 2 0 2 0 0 0 0 0 0 1195259 846171 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 356 356 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1601 385 928 16072385 288 0 228 148 0 0 0 0 0 0 0 0 0 2926 1366 0
+cpu170 16 0 1941379 906519 1299619 9410 72655732078 22935227985 1033676 mm_cid_task_work_nr_run: 31 mm_cid_task_work_clear_old: 6182 mm_cid_task_work_clear_compact: 20 mm_cid_get_cached: 1032014 mm_cid_get_alloc: 452 mm_cid_get_put_lazy: 13 mm_cid_put_lazy: 26 mm_cid_put: 130 mm_cid_migrate_steal: 2271 mm_cid_migrate_clear: 162 mm_cid_migrate_move: 2109
+domain0 00000000,00000400,00000000,00000000,00000000,04000000,00000000 7923 7415 7 555 533 0 0 7415 710 659 12 121 40 0 0 659 9421 9288 8 138 125 0 0 8918 0 0 0 0 0 0 0 0 0 7199 5211 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 826 529 119 448 250 0 1 60 20 20 0 0 0 0 0 0 4409 2128 2043 2426 238 0 53 2046 0 0 0 0 0 0 0 0 0 1280149 919579 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 356 356 0 0 0 0 0 2 0 0 0 0 0 0 0 0 1702 444 961 19937198 297 0 220 214 0 0 0 0 0 0 0 0 0 2858 1628 0
+cpu171 41 0 2130238 1001113 1179684 11343 69916552105 23071489016 1127759 mm_cid_task_work_nr_run: 34 mm_cid_task_work_clear_old: 6107 mm_cid_task_work_clear_compact: 12 mm_cid_get_cached: 1125922 mm_cid_get_alloc: 382 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 34 mm_cid_put: 45 mm_cid_migrate_steal: 1364 mm_cid_migrate_clear: 175 mm_cid_migrate_move: 1189
+domain0 00000000,00000800,00000000,00000000,00000000,08000000,00000000 8334 7871 6 490 479 0 0 7871 595 545 15 105 38 0 0 545 10174 10061 9 114 104 0 0 9701 0 0 0 0 0 0 0 0 0 8649 6243 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 931 609 127 479 272 2 3 57 19 19 0 0 0 0 0 0 5902 2134 3597 3880 171 0 246 1839 0 0 0 0 0 0 0 0 0 1152874 775170 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 386 386 0 0 0 0 0 2 5 5 0 0 0 0 0 0 1571 446 865 16840965 260 0 232 209 0 0 0 0 0 0 0 0 0 6816 19582 0
+cpu172 18 0 2144607 1009098 1075178 9019 67517024120 22383965232 1134281 mm_cid_task_work_nr_run: 21 mm_cid_task_work_clear_old: 6170 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1132813 mm_cid_get_alloc: 465 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 24 mm_cid_put: 82 mm_cid_migrate_steal: 4228 mm_cid_migrate_clear: 306 mm_cid_migrate_move: 3922
+domain0 00000000,00001000,00000000,00000000,00000000,10000000,00000000 8403 7923 9 535 499 0 0 7923 546 505 7 119 37 0 0 505 9240 9131 9 111 100 0 0 8708 0 0 0 0 0 0 0 0 0 7723 5686 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 874 562 133 467 254 2 3 67 11 11 0 0 0 0 0 0 4229 1996 2092 2303 141 0 56 1908 1 0 1 0 0 0 0 0 0 1055621 704358 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 372 372 0 0 0 0 0 0 3 3 0 0 0 0 0 0 1697 512 883 20471248 302 0 267 237 0 0 0 0 0 0 0 0 0 2813 1652 0
+cpu173 115 0 1930849 901008 1244122 9636 70469472455 23009380890 1028467 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6141 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 1026877 mm_cid_get_alloc: 575 mm_cid_get_put_lazy: 26 mm_cid_put_lazy: 31 mm_cid_put: 109 mm_cid_migrate_steal: 3724 mm_cid_migrate_clear: 325 mm_cid_migrate_move: 3399
+domain0 00000000,00002000,00000000,00000000,00000000,20000000,00000000 7826 7313 29 582 516 0 0 7313 650 598 10 142 44 0 0 598 12573 12396 32 181 145 0 0 11868 2 0 2 0 0 0 0 0 0 8216 6115 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 876 562 128 463 261 1 3 70 20 20 0 0 0 0 0 0 6245 2678 2928 3823 639 0 72 2561 1 0 1 0 0 0 0 0 0 1223218 862545 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 369 369 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1796 576 930 20261937 290 0 264 310 0 0 0 0 0 0 0 0 0 3050 1826 0
+cpu174 5311 0 2054707 960685 1218015 9650 70378136688 23128408643 1087477 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6158 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1085741 mm_cid_get_alloc: 607 mm_cid_get_put_lazy: 16 mm_cid_put_lazy: 38 mm_cid_put: 151 mm_cid_migrate_steal: 4548 mm_cid_migrate_clear: 320 mm_cid_migrate_move: 4228
+domain0 00000000,00004000,00000000,00000000,00000000,40000000,00000000 8219 7763 8 499 472 0 0 7763 620 573 11 127 37 0 0 573 9767 9648 5 120 114 0 0 9177 0 0 0 0 0 0 0 0 0 9640 7049 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 869 557 132 485 268 2 3 51 13 13 0 0 0 0 0 0 6604 2371 3884 4507 349 1 311 1997 2 0 2 0 0 0 0 0 0 1195440 815163 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 371 371 0 0 0 0 0 1 2 2 0 0 0 0 0 0 1928 579 1016 19102755 333 0 277 288 0 0 0 0 0 0 0 0 0 3283 1782 0
+cpu175 4 0 2088811 980853 1147840 9377 68361531243 22785487532 1106693 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6168 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1105191 mm_cid_get_alloc: 455 mm_cid_get_put_lazy: 15 mm_cid_put_lazy: 19 mm_cid_put: 149 mm_cid_migrate_steal: 1544 mm_cid_migrate_clear: 158 mm_cid_migrate_move: 1386
+domain0 00000000,00008000,00000000,00000000,00000000,80000000,00000000 8461 7906 7 602 580 0 0 7906 569 522 11 136 39 0 0 522 9199 9095 6 105 98 0 0 8744 0 0 0 0 0 0 0 0 0 7855 5817 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 856 549 144 446 233 0 3 69 0 0 0 0 0 0 0 0 5395 2357 2857 3120 181 0 201 2110 1 0 1 0 0 0 0 0 0 1126783 749189 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 363 363 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1242 333 725 12789589 184 0 187 141 0 0 0 0 0 0 0 0 0 3822 11635 0
+cpu176 58 0 2098509 985584 1106032 10015 67212329391 22913890573 1111531 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6116 mm_cid_task_work_clear_compact: 11 mm_cid_get_cached: 1109903 mm_cid_get_alloc: 582 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 26 mm_cid_put: 164 mm_cid_migrate_steal: 4140 mm_cid_migrate_clear: 323 mm_cid_migrate_move: 3817
+domain0 00000000,00010000,00000000,00000000,00000001,00000000,00000000 7981 7454 10 597 549 0 0 7453 559 523 5 91 31 0 0 523 8564 8451 7 115 106 0 0 8071 0 0 0 0 0 0 0 0 0 7798 5804 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 902 589 134 442 238 3 4 63 19 19 0 0 0 0 0 0 4541 1867 2393 2889 281 1 175 1655 0 0 0 0 0 0 0 0 0 1085659 709402 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 376 376 0 0 0 0 0 1 3 3 0 0 0 0 0 0 1676 478 927 16515372 271 0 258 209 0 0 0 0 0 0 0 0 0 2558 1446 0
+cpu177 21 0 2095797 983298 1147861 9375 68382658350 22973862023 1111024 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6181 mm_cid_task_work_clear_compact: 12 mm_cid_get_cached: 1109465 mm_cid_get_alloc: 567 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 36 mm_cid_put: 180 mm_cid_migrate_steal: 3582 mm_cid_migrate_clear: 282 mm_cid_migrate_move: 3300
+domain0 00000000,00020000,00000000,00000000,00000002,00000000,00000000 8667 8178 11 536 501 0 0 8178 587 540 15 111 36 0 0 540 11962 11776 15 189 171 0 0 11308 0 0 0 0 0 0 0 0 0 7846 5811 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 858 545 120 451 264 1 2 54 12 12 0 0 0 0 0 0 3741 1639 1885 2214 217 3 48 1577 1 0 1 0 0 0 0 0 0 1127540 768525 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 366 366 0 0 0 0 0 0 2 2 0 0 0 0 0 0 1391 406 742 16480592 243 0 182 218 0 0 0 0 0 0 0 0 0 3098 1887 0
+cpu178 21 0 2218804 1045701 1119893 9229 69357480380 22331222041 1171969 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6160 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1170510 mm_cid_get_alloc: 459 mm_cid_get_put_lazy: 17 mm_cid_put_lazy: 30 mm_cid_put: 151 mm_cid_migrate_steal: 638 mm_cid_migrate_clear: 140 mm_cid_migrate_move: 498
+domain0 00000000,00040000,00000000,00000000,00000004,00000000,00000000 8449 7935 7 580 536 0 0 7935 548 505 11 103 34 0 0 505 7705 7624 5 81 76 0 0 7370 0 0 0 0 0 0 0 0 0 7683 5688 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 864 550 119 492 284 1 0 60 18 18 0 0 0 0 0 0 3287 1293 1874 2062 120 0 112 1155 1 0 1 0 0 0 0 0 0 1087940 669261 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 373 373 0 0 0 0 0 1 3 3 0 0 0 0 0 0 1382 331 767 12314522 284 0 192 132 0 0 0 0 0 0 0 0 0 15040 65799 0
+cpu179 20 0 2232834 1051992 994681 9565 68542652980 23095330168 1179572 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6151 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 1176911 mm_cid_get_alloc: 1271 mm_cid_get_put_lazy: 79 mm_cid_put_lazy: 30 mm_cid_put: 192 mm_cid_migrate_steal: 12902 mm_cid_migrate_clear: 1750 mm_cid_migrate_move: 11152
+domain0 00000000,00080000,00000000,00000000,00000008,00000000,00000000 8877 8391 10 539 500 0 0 8391 587 537 14 114 36 0 0 537 6056 5952 6 104 98 0 0 5716 0 0 0 0 0 0 0 0 0 7767 5676 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 937 609 137 491 268 3 3 69 25 25 0 0 0 0 0 0 3277 1605 1432 1820 240 0 53 1532 0 0 0 0 0 0 0 0 0 975235 619971 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 374 374 0 0 0 0 0 0 5 5 0 0 0 0 0 0 1257 438 619 11341036 200 0 190 241 0 0 0 0 0 0 0 0 0 2112 1149 0
+cpu180 16 0 2310266 1091421 1131108 9211 68864796026 22749049181 1217528 mm_cid_task_work_nr_run: 18 mm_cid_task_work_clear_old: 6168 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 1215667 mm_cid_get_alloc: 856 mm_cid_get_put_lazy: 34 mm_cid_put_lazy: 30 mm_cid_put: 182 mm_cid_migrate_steal: 7669 mm_cid_migrate_clear: 769 mm_cid_migrate_move: 6900
+domain0 00000000,00100000,00000000,00000000,00000010,00000000,00000000 8646 8144 5 564 529 0 0 8144 565 522 9 97 37 0 0 522 5805 5676 4 135 125 0 0 5491 0 0 0 0 0 0 0 0 0 7478 5449 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 864 558 120 452 263 1 2 73 17 17 0 0 0 0 0 0 2448 1087 1241 1471 120 0 48 1026 0 0 0 0 0 0 0 0 0 1106687 688945 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 364 364 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1135 326 600 12075122 209 0 175 146 0 0 0 0 0 0 0 0 0 7730 57244 0
+cpu181 566 0 1980584 926942 1076492 9669 68423794038 23111549506 1051658 mm_cid_task_work_nr_run: 43 mm_cid_task_work_clear_old: 6178 mm_cid_task_work_clear_compact: 10 mm_cid_get_cached: 1048240 mm_cid_get_alloc: 2341 mm_cid_get_put_lazy: 138 mm_cid_put_lazy: 63 mm_cid_put: 104 mm_cid_migrate_steal: 17223 mm_cid_migrate_clear: 6315 mm_cid_migrate_move: 10908
+domain0 00000000,00200000,00000000,00000000,00000020,00000000,00000000 8243 7752 10 531 506 0 0 7752 596 557 10 126 30 0 0 557 7981 7861 10 121 110 0 0 7570 0 0 0 0 0 0 0 0 0 7988 5859 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 882 577 126 444 262 0 0 60 18 18 0 0 0 0 0 0 3647 1770 1667 1996 210 0 78 1663 1 0 1 0 0 0 0 0 0 1055861 685008 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 374 374 0 0 0 0 0 1 5 5 0 0 0 0 0 0 1356 394 694 14319090 268 0 186 202 0 0 0 0 0 0 0 0 0 2972 1479 0
+cpu182 19 0 2027707 949765 1168022 9631 68290807371 23066516216 1076680 mm_cid_task_work_nr_run: 30 mm_cid_task_work_clear_old: 6179 mm_cid_task_work_clear_compact: 11 mm_cid_get_cached: 1073401 mm_cid_get_alloc: 2141 mm_cid_get_put_lazy: 110 mm_cid_put_lazy: 56 mm_cid_put: 153 mm_cid_migrate_steal: 15813 mm_cid_migrate_clear: 5081 mm_cid_migrate_move: 10732
+domain0 00000000,00400000,00000000,00000000,00000040,00000000,00000000 8407 7893 15 568 529 0 0 7893 592 558 5 94 32 0 0 558 8211 8074 7 138 130 0 0 7744 1 0 1 0 0 0 0 0 0 10986 8939 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 965 643 145 466 240 0 2 65 17 17 0 0 0 0 0 0 4904 2511 2138 2522 255 1 150 2337 2 0 2 0 0 0 0 0 0 1145102 760168 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 374 374 0 0 0 0 0 0 3 3 0 0 0 0 0 0 1467 406 818 13866955 243 0 181 213 0 0 0 0 0 0 0 0 0 2301 1250 0
+cpu183 2 0 2280270 1075550 975877 9132 66382005116 22487174184 1203555 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6158 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1200774 mm_cid_get_alloc: 1792 mm_cid_get_put_lazy: 101 mm_cid_put_lazy: 44 mm_cid_put: 80 mm_cid_migrate_steal: 13969 mm_cid_migrate_clear: 3581 mm_cid_migrate_move: 10388
+domain0 00000000,00800000,00000000,00000000,00000080,00000000,00000000 8448 7939 12 556 527 0 0 7939 515 471 7 106 37 0 0 471 9319 9226 7 93 86 0 0 8902 0 0 0 0 0 0 0 0 0 7500 5705 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 883 553 141 498 268 0 2 78 1 1 0 0 0 0 0 0 4145 2093 1854 2152 198 0 80 1984 2 0 2 0 0 0 0 0 0 957233 617634 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 373 373 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1356 330 797 12197741 229 0 186 127 0 0 0 0 0 0 0 0 0 2010 905 0
+cpu184 2 0 2189959 1030626 1104582 9136 66579849325 22914739588 1157862 mm_cid_task_work_nr_run: 17 mm_cid_task_work_clear_old: 6170 mm_cid_task_work_clear_compact: 35 mm_cid_get_cached: 1155480 mm_cid_get_alloc: 1401 mm_cid_get_put_lazy: 61 mm_cid_put_lazy: 31 mm_cid_put: 41 mm_cid_migrate_steal: 11685 mm_cid_migrate_clear: 2371 mm_cid_migrate_move: 9314
+domain0 00000000,01000000,00000000,00000000,00000100,00000000,00000000 8322 7783 6 587 559 0 0 7783 507 456 12 652 40 0 0 456 12093 12009 6 85 78 0 0 11513 0 0 0 0 0 0 0 0 0 8072 5934 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 876 562 145 469 238 2 1 62 2 2 0 0 0 0 0 0 3895 1754 2013 2224 128 0 135 1589 0 0 0 0 0 0 0 0 0 1085035 722728 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 367 367 0 0 0 0 0 1 1 1 0 0 0 0 0 0 1223 319 693 11202628 211 0 172 140 0 0 0 0 0 0 0 0 0 2337 1171 0
+cpu185 0 0 2098952 984877 1092885 9407 68302185022 23126601770 1112859 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6169 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1110670 mm_cid_get_alloc: 1219 mm_cid_get_put_lazy: 34 mm_cid_put_lazy: 31 mm_cid_put: 79 mm_cid_migrate_steal: 11420 mm_cid_migrate_clear: 1650 mm_cid_migrate_move: 9770
+domain0 00000000,02000000,00000000,00000000,00000200,00000000,00000000 8392 7896 9 537 519 0 0 7896 559 512 11 118 37 0 0 512 13006 12867 13 143 126 0 0 12372 0 0 0 0 0 0 0 0 0 8577 6527 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 865 547 134 461 256 3 2 63 1 1 0 0 0 0 0 0 4560 2448 1794 2245 318 0 86 2316 0 0 0 0 0 0 0 0 0 1072417 703314 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 369 369 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1337 366 733 13258415 238 0 191 167 0 0 0 0 0 0 0 0 0 2482 1347 0
+cpu186 3 0 1969369 920335 1158092 9263 68626530437 23151075928 1047791 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6195 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1045818 mm_cid_get_alloc: 1019 mm_cid_get_put_lazy: 32 mm_cid_put_lazy: 30 mm_cid_put: 60 mm_cid_migrate_steal: 9610 mm_cid_migrate_clear: 1146 mm_cid_migrate_move: 8464
+domain0 00000000,04000000,00000000,00000000,00000400,00000000,00000000 8224 7730 13 553 512 0 0 7730 605 558 10 119 39 0 0 558 11396 11296 8 101 92 0 0 10909 0 0 0 0 0 0 0 0 0 8381 6192 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 865 548 129 479 268 3 3 65 5 5 0 0 0 0 0 0 3323 1776 1328 1686 219 1 50 1701 1 0 1 0 0 0 0 0 0 1138171 777914 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 364 364 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1271 371 735 13634581 165 0 180 182 0 0 0 0 0 0 0 0 0 2275 1075 0
+cpu187 0 0 2137725 1004547 1165726 9463 70394144448 23781670863 1132009 mm_cid_task_work_nr_run: 27 mm_cid_task_work_clear_old: 6172 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1130258 mm_cid_get_alloc: 758 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 27 mm_cid_put: 86 mm_cid_migrate_steal: 7508 mm_cid_migrate_clear: 599 mm_cid_migrate_move: 6909
+domain0 00000000,08000000,00000000,00000000,00000800,00000000,00000000 8160 7645 7 564 533 0 0 7645 591 543 14 120 36 0 0 543 10427 10315 6 114 106 0 0 9924 0 0 0 0 0 0 0 0 0 8581 6291 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 871 537 154 487 264 3 4 60 1 1 0 0 0 0 0 0 4612 2239 2117 2501 256 0 59 2140 0 0 0 0 0 0 0 0 0 1144956 769816 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 361 361 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1424 369 815 15182780 240 0 219 140 0 0 0 0 0 0 0 0 0 2724 1390 0
+cpu188 6 0 2323029 1096688 1021312 10271 69117255276 23394703645 1225094 mm_cid_task_work_nr_run: 84 mm_cid_task_work_clear_old: 6081 mm_cid_task_work_clear_compact: 42 mm_cid_get_cached: 1223301 mm_cid_get_alloc: 656 mm_cid_get_put_lazy: 26 mm_cid_put_lazy: 38 mm_cid_put: 121 mm_cid_migrate_steal: 6440 mm_cid_migrate_clear: 336 mm_cid_migrate_move: 6104
+domain0 00000000,10000000,00000000,00000000,00001000,00000000,00000000 8853 8387 11 520 482 0 0 8387 616 571 11 112 34 0 0 571 13900 13756 8 148 136 0 0 13283 0 0 0 0 0 0 0 0 0 12125 10125 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1057 715 155 497 258 4 3 70 18 18 0 0 0 0 0 0 6915 3394 3069 3768 452 1 136 3184 3 0 3 0 0 0 0 0 0 996606 645038 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 414 414 0 0 0 0 0 1 13 13 0 0 0 0 0 0 1833 541 1031 17200645 261 0 221 312 0 0 0 0 0 0 0 0 0 2308 1096 0
+cpu189 21 0 2012102 941719 1050505 10154 65701225647 23444251829 1069071 mm_cid_task_work_nr_run: 57 mm_cid_task_work_clear_old: 6123 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1067507 mm_cid_get_alloc: 512 mm_cid_get_put_lazy: 15 mm_cid_put_lazy: 25 mm_cid_put: 85 mm_cid_migrate_steal: 5538 mm_cid_migrate_clear: 213 mm_cid_migrate_move: 5325
+domain0 00000000,20000000,00000000,00000000,00002000,00000000,00000000 8537 8048 16 546 501 0 0 8048 597 557 12 102 30 0 0 557 13281 13127 8 155 146 0 0 12698 0 0 0 0 0 0 0 0 0 7991 5841 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 934 623 141 440 229 1 4 62 35 35 0 0 0 0 0 0 6850 3494 2964 3553 392 0 72 3343 0 0 0 0 0 0 0 0 0 1030407 669881 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 399 398 0 1 1 0 0 0 12 12 0 0 0 0 0 0 1567 465 898 13768715 204 0 209 247 0 0 0 0 0 0 0 0 0 1951 1023 0
+cpu190 0 0 2081769 977081 1089462 9489 66809129205 22846798339 1103457 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6166 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1101718 mm_cid_get_alloc: 514 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 25 mm_cid_put: 129 mm_cid_migrate_steal: 7195 mm_cid_migrate_clear: 195 mm_cid_migrate_move: 7000
+domain0 00000000,40000000,00000000,00000000,00004000,00000000,00000000 8539 8072 9 535 496 0 0 8072 556 523 12 78 21 0 0 523 11773 11628 11 149 134 0 0 11241 0 0 0 0 0 0 0 0 0 8797 6431 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 898 598 122 442 250 2 2 64 11 11 0 0 0 0 0 0 5389 2694 2503 2796 192 1 115 2505 0 0 0 0 0 0 0 0 0 1068913 696928 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 388 388 0 0 0 0 0 0 4 4 0 0 0 0 0 0 906 345 447 7600796 114 0 106 234 0 0 0 0 0 0 0 0 0 2260 1084 0
+cpu191 2 0 2114206 991939 1035252 9491 64714814943 22892392761 1120974 mm_cid_task_work_nr_run: 36 mm_cid_task_work_clear_old: 6151 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 1119413 mm_cid_get_alloc: 406 mm_cid_get_put_lazy: 13 mm_cid_put_lazy: 21 mm_cid_put: 106 mm_cid_migrate_steal: 4994 mm_cid_migrate_clear: 151 mm_cid_migrate_move: 4843
+domain0 00000000,80000000,00000000,00000000,00008000,00000000,00000000 8621 8071 9 601 569 0 0 8071 550 498 17 108 36 0 0 498 12131 12004 7 128 120 0 0 11602 0 0 0 0 0 0 0 0 0 7426 5469 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 909 579 151 490 256 1 3 73 7 7 0 0 0 0 0 0 6754 3380 2953 3518 421 0 109 3219 1 0 1 0 0 0 0 0 0 1016222 655478 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 407 407 0 0 0 0 0 0 3 3 0 0 0 0 0 0 1824 492 993 15768382 339 0 278 203 0 0 0 0 0 0 0 0 0 2111 2217 0
+cpu192 0 0 1947109 909869 1140878 9399 68397058522 23150917139 1036009 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6194 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1034526 mm_cid_get_alloc: 430 mm_cid_get_put_lazy: 14 mm_cid_put_lazy: 38 mm_cid_put: 128 mm_cid_migrate_steal: 4668 mm_cid_migrate_clear: 205 mm_cid_migrate_move: 4463
+domain0 00000001,00000000,00000000,00000000,00010000,00000000,00000000 7935 7403 11 596 556 0 0 7403 625 589 8 88 28 0 0 589 6056 5987 8 69 61 0 0 5742 0 0 0 0 0 0 0 0 0 10374 7513 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 844 553 126 427 225 1 5 43 4 4 0 0 0 0 0 0 2807 1277 1369 1626 161 0 43 1213 1 0 1 0 0 0 0 0 0 1117841 752106 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 368 368 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1239 363 681 10142300 195 0 151 208 0 0 0 0 0 0 0 0 0 3261 1656 0
+cpu193 5 0 2014981 943018 1124827 10822 69268972775 23075834960 1070702 mm_cid_task_work_nr_run: 34 mm_cid_task_work_clear_old: 6161 mm_cid_task_work_clear_compact: 16 mm_cid_get_cached: 1068512 mm_cid_get_alloc: 452 mm_cid_get_put_lazy: 14 mm_cid_put_lazy: 35 mm_cid_put: 177 mm_cid_migrate_steal: 5936 mm_cid_migrate_clear: 175 mm_cid_migrate_move: 5761
+domain0 00000002,00000000,00000000,00000000,00020000,00000000,00000000 8540 8049 5 568 516 0 0 8049 616 569 10 156 40 0 0 569 9091 8952 10 141 129 0 0 8638 0 0 0 0 0 0 0 0 0 8513 6070 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1067 729 123 496 305 2 1 59 9 9 0 0 0 0 0 0 5231 2695 2119 2741 417 0 79 2571 1 0 1 0 0 0 0 0 0 1096609 720149 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 457 457 0 0 0 0 0 0 5 5 0 0 0 0 0 0 1460 587 704 11944882 169 0 170 410 0 0 0 0 0 0 0 0 0 8881 3991 0
+cpu194 5 0 1952129 911398 1187098 9412 68929594218 22575359497 1039532 mm_cid_task_work_nr_run: 27 mm_cid_task_work_clear_old: 6215 mm_cid_task_work_clear_compact: 18 mm_cid_get_cached: 1038120 mm_cid_get_alloc: 372 mm_cid_get_put_lazy: 5 mm_cid_put_lazy: 25 mm_cid_put: 89 mm_cid_migrate_steal: 2229 mm_cid_migrate_clear: 133 mm_cid_migrate_move: 2096
+domain0 00000004,00000000,00000000,00000000,00040000,00000000,00000000 7877 7389 8 610 520 0 0 7389 603 567 10 99 26 0 0 567 4378 4289 5 96 84 0 0 4116 0 0 0 0 0 0 0 0 0 9636 7109 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 842 531 119 472 274 2 2 44 4 4 0 0 0 0 0 0 2836 1323 1251 1690 262 1 46 1253 0 0 0 0 0 0 0 0 0 1149723 768314 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 357 357 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1181 280 681 15068512 220 0 165 110 0 0 0 0 0 0 0 0 0 18325 12460 0
+cpu195 0 0 1958681 914387 1054429 9254 66406427203 22811092348 1043098 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6214 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 1041466 mm_cid_get_alloc: 624 mm_cid_get_put_lazy: 40 mm_cid_put_lazy: 63 mm_cid_put: 160 mm_cid_migrate_steal: 3519 mm_cid_migrate_clear: 527 mm_cid_migrate_move: 2992
+domain0 00000008,00000000,00000000,00000000,00080000,00000000,00000000 8241 7752 12 547 506 0 0 7752 545 506 14 81 25 0 0 506 13990 13895 5 98 90 0 0 13313 0 0 0 0 0 0 0 0 0 8147 6117 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 872 556 139 455 247 0 2 53 1 1 0 0 0 0 0 0 5808 1791 3775 4181 242 1 71 1641 4 0 4 0 0 0 0 0 0 1034261 673995 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 370 370 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1408 362 750 13013665 296 0 204 148 0 0 0 0 0 0 0 0 0 2765 1319 0
+cpu196 6 0 1938245 904554 1086374 9126 67068236541 22978166342 1032369 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6191 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1030926 mm_cid_get_alloc: 404 mm_cid_get_put_lazy: 17 mm_cid_put_lazy: 29 mm_cid_put: 142 mm_cid_migrate_steal: 704 mm_cid_migrate_clear: 149 mm_cid_migrate_move: 555
+domain0 00000010,00000000,00000000,00000000,00100000,00000000,00000000 8194 7704 11 536 498 0 1 7704 581 532 14 136 37 0 0 532 5087 4981 2 108 104 0 0 4824 0 0 0 0 0 0 0 0 0 7386 5143 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 872 542 146 493 260 2 2 62 3 3 0 0 0 0 0 0 3028 1483 1283 1710 262 0 51 1395 3 0 3 0 0 0 0 0 0 1067261 708217 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 370 370 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1143 303 659 10689846 181 0 153 141 0 0 0 0 0 0 0 0 0 2599 1330 0
+cpu197 0 0 2010551 940304 1005969 9356 65615523323 23191783287 1068981 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6198 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1067543 mm_cid_get_alloc: 449 mm_cid_get_put_lazy: 22 mm_cid_put_lazy: 23 mm_cid_put: 163 mm_cid_migrate_steal: 913 mm_cid_migrate_clear: 176 mm_cid_migrate_move: 737
+domain0 00000020,00000000,00000000,00000000,00200000,00000000,00000000 8387 7900 12 540 497 0 0 7900 557 515 9 110 34 0 0 515 5940 5877 6 63 57 0 0 5716 0 0 0 0 0 0 0 0 0 9106 6377 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 867 575 145 441 212 2 2 48 1 1 0 0 0 0 0 0 3777 1882 1768 1991 127 2 80 1754 1 0 1 0 0 0 0 0 0 985202 636473 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 360 360 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1273 349 724 12816979 200 0 200 144 0 0 0 0 0 0 0 0 0 2303 1026 0
+cpu198 0 0 1936521 903698 1021083 9179 66099897392 23244494996 1031443 mm_cid_task_work_nr_run: 18 mm_cid_task_work_clear_old: 6213 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1029797 mm_cid_get_alloc: 461 mm_cid_get_put_lazy: 15 mm_cid_put_lazy: 30 mm_cid_put: 154 mm_cid_migrate_steal: 2064 mm_cid_migrate_clear: 251 mm_cid_migrate_move: 1813
+domain0 00000040,00000000,00000000,00000000,00400000,00000000,00000000 8492 7971 13 579 539 0 0 7971 559 516 17 94 27 0 0 516 8611 8489 9 127 113 0 0 8173 0 0 0 0 0 0 0 0 0 7590 5249 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 921 590 133 494 288 0 2 52 2 2 0 0 0 0 0 0 6235 2096 3948 4261 191 0 77 1943 2 0 2 0 0 0 0 0 0 1002976 649828 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 369 369 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1517 415 830 11231542 272 0 231 180 0 0 0 0 0 0 0 0 0 1336 747 0
+cpu199 0 0 2037618 953303 947063 8930 66135716703 22993135825 1082979 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6195 mm_cid_task_work_clear_compact: 20 mm_cid_get_cached: 1081550 mm_cid_get_alloc: 451 mm_cid_get_put_lazy: 22 mm_cid_put_lazy: 22 mm_cid_put: 172 mm_cid_migrate_steal: 2001 mm_cid_migrate_clear: 222 mm_cid_migrate_move: 1779
+domain0 00000080,00000000,00000000,00000000,00800000,00000000,00000000 8698 8192 10 551 520 0 0 8192 542 497 10 114 37 0 0 497 9714 9610 4 106 100 0 0 9230 0 0 0 0 0 0 0 0 0 6831 4788 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 871 558 121 456 259 1 3 52 2 2 0 0 0 0 0 0 6216 2241 3851 4063 124 1 77 2073 0 0 0 0 0 0 0 0 0 929173 589954 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 367 367 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1539 371 856 11878850 312 0 231 125 0 0 0 0 0 0 0 0 0 2127 1109 0
+cpu200 4 0 2129107 1001278 1034206 9049 67733096982 22642388934 1126526 mm_cid_task_work_nr_run: 27 mm_cid_task_work_clear_old: 6195 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1124949 mm_cid_get_alloc: 443 mm_cid_get_put_lazy: 11 mm_cid_put_lazy: 23 mm_cid_put: 163 mm_cid_migrate_steal: 954 mm_cid_migrate_clear: 163 mm_cid_migrate_move: 791
+domain0 00000100,00000000,00000000,00000000,01000000,00000000,00000000 8555 8073 12 542 503 0 0 8073 560 519 11 110 34 0 0 519 8100 7982 12 119 106 0 0 7763 0 0 0 0 0 0 0 0 0 7114 5114 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 862 558 124 441 253 0 4 60 0 0 0 0 0 0 0 0 4194 1865 2033 2520 296 2 71 1732 0 0 0 0 0 0 0 0 0 1015752 673957 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 360 360 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1356 424 727 14834220 205 0 203 214 0 0 0 0 0 0 0 0 0 2289 1187 0
+cpu201 2 0 2231042 1050603 982629 10180 67620220450 23146510854 1179162 mm_cid_task_work_nr_run: 42 mm_cid_task_work_clear_old: 6187 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1176058 mm_cid_get_alloc: 435 mm_cid_get_put_lazy: 3 mm_cid_put_lazy: 20 mm_cid_put: 180 mm_cid_migrate_steal: 1061 mm_cid_migrate_clear: 161 mm_cid_migrate_move: 900
+domain0 00000200,00000000,00000000,00000000,02000000,00000000,00000000 9286 8808 10 554 502 0 0 8808 534 492 12 104 30 0 0 492 6996 6918 4 78 74 0 0 6716 0 0 0 0 0 0 0 0 0 7356 5334 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1086 783 130 437 250 2 0 78 1 1 0 0 0 0 0 0 4615 2165 2019 2656 431 1 43 2083 0 0 0 0 0 0 0 0 0 963012 623013 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 476 476 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1601 698 686 13639057 217 0 183 507 0 0 0 0 0 0 0 0 0 2079 1175 0
+cpu202 1 0 1936876 904809 1060043 9911 66087537315 23069096528 1030780 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6184 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 1029293 mm_cid_get_alloc: 464 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 38 mm_cid_put: 143 mm_cid_migrate_steal: 3151 mm_cid_migrate_clear: 218 mm_cid_migrate_move: 2933
+domain0 00000400,00000000,00000000,00000000,04000000,00000000,00000000 8468 7932 17 611 544 0 0 7932 588 542 13 148 35 0 0 542 12122 12002 6 125 114 0 0 11488 0 0 0 0 0 0 0 0 0 7715 5566 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 895 563 136 474 264 1 8 69 7 7 0 0 0 0 0 0 7108 2844 4124 4320 140 1 103 2665 0 0 0 0 0 0 0 0 0 1031936 666493 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 380 380 0 0 0 0 0 0 3 3 0 0 0 0 0 0 1834 509 986 17939855 339 0 287 208 0 0 0 0 0 0 0 0 0 10479 4412 0
+cpu203 0 0 1996372 934181 1111841 10564 67089571207 22817687910 1060938 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6170 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1058090 mm_cid_get_alloc: 322 mm_cid_get_put_lazy: 15 mm_cid_put_lazy: 30 mm_cid_put: 39 mm_cid_migrate_steal: 1579 mm_cid_migrate_clear: 200 mm_cid_migrate_move: 1379
+domain0 00000800,00000000,00000000,00000000,08000000,00000000,00000000 9132 8628 10 580 527 0 0 8628 544 509 9 110 27 0 0 509 9311 9237 4 74 70 0 0 8810 0 0 0 0 0 0 0 0 0 8103 5848 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1336 1038 134 437 232 4 0 61 1 1 0 0 0 0 0 0 4432 2090 2250 2396 92 0 61 1982 1 0 1 0 0 0 0 0 0 1090615 727129 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 536 536 0 0 0 0 0 0 2 2 0 0 0 0 0 0 1684 664 780 11294196 240 0 209 445 0 0 0 0 0 0 0 0 0 2557 1319 0
+cpu204 0 0 1947016 910136 963073 9397 63974798487 23079118529 1035544 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6212 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1034076 mm_cid_get_alloc: 391 mm_cid_get_put_lazy: 14 mm_cid_put_lazy: 19 mm_cid_put: 132 mm_cid_migrate_steal: 1115 mm_cid_migrate_clear: 134 mm_cid_migrate_move: 981
+domain0 00001000,00000000,00000000,00000000,10000000,00000000,00000000 8735 8266 10 542 486 0 0 8266 516 472 12 98 34 0 0 472 6688 6589 4 103 95 0 0 6285 0 0 0 0 0 0 0 0 0 7950 5786 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 927 617 146 436 214 0 4 81 1 1 0 0 0 0 0 0 5672 2370 3150 3370 152 0 93 2219 2 0 2 0 0 0 0 0 0 943973 600976 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 397 397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1545 398 876 14146996 271 0 220 169 0 0 0 0 0 0 0 0 0 1751 889 0
+cpu205 0 0 2019910 945558 980578 9568 65698537659 23315484910 1073006 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6201 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1071554 mm_cid_get_alloc: 426 mm_cid_get_put_lazy: 16 mm_cid_put_lazy: 22 mm_cid_put: 153 mm_cid_migrate_steal: 879 mm_cid_migrate_clear: 153 mm_cid_migrate_move: 726
+domain0 00002000,00000000,00000000,00000000,20000000,00000000,00000000 8530 8040 6 551 511 0 0 8040 591 545 11 126 36 0 0 545 10139 9956 8 187 175 0 0 9469 0 0 0 0 0 0 0 0 0 7591 5476 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 874 544 131 467 280 1 3 69 0 0 0 0 0 0 0 0 6714 2289 4028 4652 397 0 124 2104 0 0 0 0 0 0 0 0 0 961934 606424 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 362 362 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1454 363 869 14500072 222 0 195 152 0 0 0 0 0 0 0 0 0 1483 795 0
+cpu206 0 0 2091705 981896 1056060 9275 67742160039 22905688935 1108439 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6192 mm_cid_task_work_clear_compact: 9 mm_cid_get_cached: 1106946 mm_cid_get_alloc: 447 mm_cid_get_put_lazy: 8 mm_cid_put_lazy: 28 mm_cid_put: 175 mm_cid_migrate_steal: 805 mm_cid_migrate_clear: 169 mm_cid_migrate_move: 636
+domain0 00004000,00000000,00000000,00000000,40000000,00000000,00000000 8464 8007 6 503 481 0 0 8007 545 497 10 151 38 0 0 497 4807 4693 6 117 108 0 0 4536 0 0 0 0 0 0 0 0 0 8002 5706 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 862 558 128 448 244 0 0 81 0 0 0 0 0 0 0 0 3948 1789 1956 2223 203 0 72 1696 2 0 2 0 0 0 0 0 0 1037291 679774 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 362 362 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1323 371 735 12241211 217 0 195 168 0 0 0 0 0 0 0 0 0 1490 753 0
+cpu207 2 0 2033028 952666 971307 8928 65693266661 22382005615 1079056 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6207 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 1077763 mm_cid_get_alloc: 312 mm_cid_get_put_lazy: 17 mm_cid_put_lazy: 16 mm_cid_put: 85 mm_cid_migrate_steal: 671 mm_cid_migrate_clear: 124 mm_cid_migrate_move: 547
+domain0 00008000,00000000,00000000,00000000,80000000,00000000,00000000 8306 7822 12 531 507 0 0 7822 493 452 12 132 31 0 0 452 6130 6048 4 82 78 0 0 5794 0 0 0 0 0 0 0 0 0 8198 5877 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 869 536 132 501 296 1 4 73 0 0 0 0 0 0 0 0 5197 1853 3093 3477 251 0 91 1705 0 0 0 0 0 0 0 0 0 952438 611595 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 365 365 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1258 353 706 12583079 199 0 191 154 0 0 0 0 0 0 0 0 0 1741 809 0
+cpu208 0 0 1994506 933133 984238 9283 64042840283 22868861716 1060137 mm_cid_task_work_nr_run: 12 mm_cid_task_work_clear_old: 6216 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1058819 mm_cid_get_alloc: 371 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 23 mm_cid_put: 112 mm_cid_migrate_steal: 990 mm_cid_migrate_clear: 145 mm_cid_migrate_move: 845
+domain0 00010000,00000000,00000000,00000001,00000000,00000000,00000000 8329 7871 10 542 469 0 0 7871 506 466 11 114 29 0 0 466 7932 7815 4 117 113 0 0 7485 0 0 0 0 0 0 0 0 0 7692 5550 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 867 554 134 469 268 0 2 89 0 0 0 0 0 0 0 0 5948 2040 3520 4070 388 0 95 1896 2 0 2 0 0 0 0 0 0 965356 624205 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 367 367 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1443 370 793 13427127 280 0 197 163 0 0 0 0 0 0 0 0 0 1905 888 0
+cpu209 0 0 2026665 949289 1031021 9160 66020932970 22874838623 1076031 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6200 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1074664 mm_cid_get_alloc: 313 mm_cid_get_put_lazy: 12 mm_cid_put_lazy: 10 mm_cid_put: 127 mm_cid_migrate_steal: 548 mm_cid_migrate_clear: 85 mm_cid_migrate_move: 463
+domain0 00020000,00000000,00000000,00000002,00000000,00000000,00000000 8076 7591 14 548 496 0 0 7590 511 474 16 86 21 0 0 474 7832 7713 23 119 96 0 0 7427 1 0 1 0 0 0 0 0 0 7421 5341 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 865 549 134 459 250 1 3 78 1 1 0 0 0 0 0 0 4959 1820 2934 3238 205 0 88 1703 2 0 2 0 0 0 0 0 0 1011997 661346 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 361 361 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1324 369 712 10955990 243 0 181 180 0 0 0 0 0 0 0 0 0 2441 1301 0
+cpu210 0 0 2016214 943991 1043347 9440 63587085948 23062793319 1070951 mm_cid_task_work_nr_run: 14 mm_cid_task_work_clear_old: 6208 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1069658 mm_cid_get_alloc: 303 mm_cid_get_put_lazy: 11 mm_cid_put_lazy: 17 mm_cid_put: 57 mm_cid_migrate_steal: 1043 mm_cid_migrate_clear: 130 mm_cid_migrate_move: 913
+domain0 00040000,00000000,00000000,00000004,00000000,00000000,00000000 7736 7200 8 596 553 0 0 7198 488 453 12 100 23 0 0 453 8668 8542 8 127 118 0 0 8157 0 0 0 0 0 0 0 0 0 8107 5953 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 882 559 143 489 261 3 3 93 1 1 0 0 0 0 0 0 6069 2007 3739 4233 323 0 78 1866 3 0 3 0 0 0 0 0 0 1021970 664475 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 353 353 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1161 334 643 10329469 184 0 162 160 0 0 0 0 0 0 0 0 0 3828 2212 0
+cpu211 0 0 1971114 921459 1186468 9208 67053011745 22636060969 1048368 mm_cid_task_work_nr_run: 17 mm_cid_task_work_clear_old: 6194 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 1047048 mm_cid_get_alloc: 324 mm_cid_get_put_lazy: 13 mm_cid_put_lazy: 26 mm_cid_put: 78 mm_cid_migrate_steal: 987 mm_cid_migrate_clear: 154 mm_cid_migrate_move: 833
+domain0 00080000,00000000,00000000,00000008,00000000,00000000,00000000 8216 7705 13 569 525 0 0 7705 544 494 16 206 36 0 1 493 7836 7729 6 108 101 0 0 7437 0 0 0 0 0 0 0 0 0 8036 5897 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 860 527 149 489 256 1 7 50 0 0 0 0 0 0 0 0 3103 1131 1818 2061 154 0 44 1054 1 0 1 0 0 0 0 0 0 1161706 800077 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 360 360 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1091 308 605 9728045 178 0 143 153 0 0 0 0 0 0 0 0 0 7516 3117 0
+cpu212 0 0 2055318 963862 1047611 10072 65505089087 23718728618 1090134 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6164 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 1088522 mm_cid_get_alloc: 430 mm_cid_get_put_lazy: 21 mm_cid_put_lazy: 21 mm_cid_put: 79 mm_cid_migrate_steal: 1760 mm_cid_migrate_clear: 230 mm_cid_migrate_move: 1530
+domain0 00100000,00000000,00000000,00000010,00000000,00000000,00000000 8382 7909 8 523 486 0 0 7909 541 479 13 169 49 0 1 478 9179 8998 10 184 171 0 0 8659 0 0 0 0 0 0 0 0 0 7691 5555 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 880 571 126 427 238 1 2 77 1 1 0 0 0 0 0 0 7564 2645 4669 5029 250 0 92 2499 0 0 0 0 0 0 0 0 0 1014170 623838 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 380 380 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1597 432 880 10528409 285 0 204 221 0 0 0 0 0 0 0 0 0 15676 18971 0
+cpu213 0 0 1975654 923437 999509 9408 64997787519 22969162831 1051029 mm_cid_task_work_nr_run: 29 mm_cid_task_work_clear_old: 6183 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 1049460 mm_cid_get_alloc: 574 mm_cid_get_put_lazy: 57 mm_cid_put_lazy: 64 mm_cid_put: 77 mm_cid_migrate_steal: 4948 mm_cid_migrate_clear: 804 mm_cid_migrate_move: 4144
+domain0 00200000,00000000,00000000,00000020,00000000,00000000,00000000 8313 7810 7 542 519 0 0 7810 507 463 8 133 41 0 0 463 12613 12523 6 90 84 0 0 11896 0 0 0 0 0 0 0 0 0 8351 6237 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 880 556 142 475 254 2 2 67 0 0 0 0 0 0 0 0 5649 2733 2634 3075 282 0 86 2578 0 0 0 0 0 0 0 0 0 979348 620375 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 377 377 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1559 433 851 14240622 275 0 256 163 0 0 0 0 0 0 0 0 0 2400 1263 0
+cpu214 0 0 2119563 995029 1020576 9191 66219493772 22686740720 1123215 mm_cid_task_work_nr_run: 34 mm_cid_task_work_clear_old: 6153 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1121584 mm_cid_get_alloc: 621 mm_cid_get_put_lazy: 51 mm_cid_put_lazy: 63 mm_cid_put: 128 mm_cid_migrate_steal: 4904 mm_cid_migrate_clear: 702 mm_cid_migrate_move: 4202
+domain0 00400000,00000000,00000000,00000040,00000000,00000000,00000000 8712 8234 2 514 506 0 0 8234 506 464 18 98 24 0 0 464 6466 6391 4 78 71 0 0 6129 0 0 0 0 0 0 0 0 0 8134 6033 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 876 559 138 467 257 2 3 58 1 1 0 0 0 0 0 0 5524 2463 2842 3148 219 1 42 2382 0 0 0 0 0 0 0 0 0 1001199 650412 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 376 376 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1260 328 726 12206734 206 0 186 132 0 0 0 0 0 0 0 0 0 2050 1142 0
+cpu215 24 0 2052555 961319 956285 10014 64695838718 22909111857 1089789 mm_cid_task_work_nr_run: 45 mm_cid_task_work_clear_old: 6127 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1088214 mm_cid_get_alloc: 527 mm_cid_get_put_lazy: 31 mm_cid_put_lazy: 39 mm_cid_put: 122 mm_cid_migrate_steal: 3396 mm_cid_migrate_clear: 403 mm_cid_migrate_move: 2993
+domain0 00800000,00000000,00000000,00000080,00000000,00000000,00000000 8794 8294 3 562 519 0 0 8294 566 522 11 122 36 0 0 522 11960 11831 7 129 122 0 0 11342 0 0 0 0 0 0 0 0 0 7690 5651 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 908 573 149 483 258 3 2 71 27 27 0 0 0 0 0 0 3450 1904 1434 1627 112 0 43 1837 0 0 0 0 0 0 0 0 0 929434 581958 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 382 382 0 0 0 0 0 0 8 8 0 0 0 0 0 0 1394 433 702 11929779 259 0 203 228 0 0 0 0 0 0 0 0 0 9145 3593 0
+cpu216 17 0 1936987 903824 1009707 9455 64025100285 22387803697 1031954 mm_cid_task_work_nr_run: 27 mm_cid_task_work_clear_old: 6174 mm_cid_task_work_clear_compact: 13 mm_cid_get_cached: 1030519 mm_cid_get_alloc: 368 mm_cid_get_put_lazy: 16 mm_cid_put_lazy: 25 mm_cid_put: 88 mm_cid_migrate_steal: 953 mm_cid_migrate_clear: 143 mm_cid_migrate_move: 810
+domain0 01000000,00000000,00000000,00000100,00000000,00000000,00000000 8262 7735 10 593 562 0 0 7735 549 505 10 130 36 0 0 505 8889 8814 6 75 69 0 0 8481 0 0 0 0 0 0 0 0 0 7947 5859 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 877 549 126 474 277 1 1 66 13 13 0 0 0 0 0 0 5109 2093 2652 3206 364 0 83 1967 0 0 0 0 0 0 0 0 0 981354 632296 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 371 371 0 0 0 0 0 0 2 2 0 0 0 0 0 0 1450 405 780 15591116 265 0 228 171 0 0 0 0 0 0 0 0 0 10949 4638 0
+cpu217 3 0 1953062 911452 1098885 9945 64393911635 23133942269 1040420 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6176 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1038944 mm_cid_get_alloc: 407 mm_cid_get_put_lazy: 24 mm_cid_put_lazy: 33 mm_cid_put: 92 mm_cid_migrate_steal: 1826 mm_cid_migrate_clear: 222 mm_cid_migrate_move: 1604
+domain0 02000000,00000000,00000000,00000200,00000000,00000000,00000000 8290 7789 8 574 522 0 0 7789 577 519 16 145 44 0 0 519 10005 9868 2 139 135 0 0 9495 0 0 0 0 0 0 0 0 0 7744 5689 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 873 562 128 429 236 2 3 69 10 10 0 0 0 0 0 0 3028 1387 1520 1677 121 0 58 1303 1 0 1 0 0 0 0 0 0 1077154 714067 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 368 368 0 0 0 0 0 0 5 5 0 0 0 0 0 0 1291 366 712 12281911 213 0 179 180 0 0 0 0 0 0 0 0 0 4040 1921 0
+cpu218 61 0 1924156 897558 1067603 9564 64648784883 22967019363 1025231 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6193 mm_cid_task_work_clear_compact: 31 mm_cid_get_cached: 1023844 mm_cid_get_alloc: 337 mm_cid_get_put_lazy: 13 mm_cid_put_lazy: 42 mm_cid_put: 64 mm_cid_migrate_steal: 1252 mm_cid_migrate_clear: 165 mm_cid_migrate_move: 1087
+domain0 04000000,00000000,00000000,00000400,00000000,00000000,00000000 8131 7645 13 536 496 0 0 7645 587 543 9 127 36 0 0 543 8492 8358 6 139 128 0 0 8068 0 0 0 0 0 0 0 0 0 9050 6545 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 872 562 139 458 244 1 0 78 14 14 0 0 0 0 0 0 3761 1759 1780 2147 222 0 59 1671 2 0 2 0 0 0 0 0 0 1035682 663961 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 376 376 0 0 0 0 0 0 5 5 0 0 0 0 0 0 1186 388 589 13481043 209 0 205 175 0 0 0 0 0 0 0 0 0 13305 5625 0
+cpu219 58 0 1965669 918311 1211898 10585 67738961150 23055329184 1046231 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6201 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1043646 mm_cid_get_alloc: 323 mm_cid_get_put_lazy: 16 mm_cid_put_lazy: 24 mm_cid_put: 54 mm_cid_migrate_steal: 638 mm_cid_migrate_clear: 133 mm_cid_migrate_move: 505
+domain0 08000000,00000000,00000000,00000800,00000000,00000000,00000000 8689 8181 7 562 536 0 0 8181 619 569 10 170 42 0 0 569 7375 7279 8 98 88 0 0 7042 0 0 0 0 0 0 0 0 0 8679 6454 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1219 909 129 445 246 3 2 67 14 14 0 0 0 0 0 0 3630 1843 1548 1955 239 0 39 1781 0 0 0 0 0 0 0 0 0 1187827 786631 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 529 529 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1461 737 567 12569855 157 0 163 568 0 0 0 0 0 0 0 0 0 4805 18576 0
+cpu220 15 0 2077228 973571 1133277 10265 66734224885 23383191560 1102349 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6178 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1099831 mm_cid_get_alloc: 411 mm_cid_get_put_lazy: 14 mm_cid_put_lazy: 27 mm_cid_put: 70 mm_cid_migrate_steal: 1938 mm_cid_migrate_clear: 227 mm_cid_migrate_move: 1711
+domain0 10000000,00000000,00000000,00001000,00000000,00000000,00000000 8345 7862 7 533 503 0 0 7862 578 536 9 130 35 0 0 536 7453 7375 10 78 68 0 0 7179 0 0 0 0 0 0 0 0 0 9243 6646 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 924 605 117 481 283 0 2 79 15 15 0 0 0 0 0 0 4813 2362 2133 2592 318 0 74 2258 2 0 2 0 0 0 0 0 0 1109631 733356 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 397 397 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1436 646 620 10671678 170 0 154 486 0 0 0 0 0 0 0 0 0 4136 2084 0
+cpu221 23 0 2003447 936560 1027705 12573 64724377819 23347565241 1065589 mm_cid_task_work_nr_run: 38 mm_cid_task_work_clear_old: 6140 mm_cid_task_work_clear_compact: 7 mm_cid_get_cached: 1060341 mm_cid_get_alloc: 556 mm_cid_get_put_lazy: 29 mm_cid_put_lazy: 34 mm_cid_put: 92 mm_cid_migrate_steal: 4933 mm_cid_migrate_clear: 498 mm_cid_migrate_move: 4435
+domain0 20000000,00000000,00000000,00002000,00000000,00000000,00000000 10106 9604 9 586 527 0 0 9604 551 509 8 140 38 0 0 509 5890 5824 6 66 60 0 0 5644 0 0 0 0 0 0 0 0 0 8977 6429 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1589 1281 124 465 265 2 4 70 29 29 0 0 0 0 0 0 4179 2375 1608 1913 196 0 53 2301 1 0 1 0 0 0 0 0 0 1003454 644459 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 712 712 0 0 0 0 0 0 7 7 0 0 0 0 0 0 2192 1327 682 14027591 183 0 192 1130 0 0 0 0 0 0 0 0 0 2699 1435 0
+cpu222 5 0 2043431 956254 1059978 10936 66792024829 22341340885 1085916 mm_cid_task_work_nr_run: 52 mm_cid_task_work_clear_old: 6140 mm_cid_task_work_clear_compact: 17 mm_cid_get_cached: 1082781 mm_cid_get_alloc: 479 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 52 mm_cid_put: 70 mm_cid_migrate_steal: 3465 mm_cid_migrate_clear: 371 mm_cid_migrate_move: 3094
+domain0 40000000,00000000,00000000,00004000,00000000,00000000,00000000 9096 8633 10 510 474 0 0 8633 618 574 12 118 33 0 0 574 12291 12119 8 177 164 0 0 11733 0 0 0 0 0 0 0 0 0 7757 5736 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1262 955 122 455 259 2 2 73 10 10 0 0 0 0 0 0 6760 3263 3210 3669 287 0 70 3147 1 0 1 0 0 0 0 0 0 1037200 698482 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 558 558 0 0 0 0 0 0 4 4 0 0 0 0 0 0 1784 882 674 11366135 228 0 219 659 0 0 0 0 0 0 0 0 0 4083 2145 0
+cpu223 36 0 2042836 956858 1016510 11088 65329394702 23584603607 1084731 mm_cid_task_work_nr_run: 83 mm_cid_task_work_clear_old: 6049 mm_cid_task_work_clear_compact: 18 mm_cid_get_cached: 1082838 mm_cid_get_alloc: 559 mm_cid_get_put_lazy: 29 mm_cid_put_lazy: 49 mm_cid_put: 88 mm_cid_migrate_steal: 3217 mm_cid_migrate_clear: 385 mm_cid_migrate_move: 2832
+domain0 80000000,00000000,00000000,00008000,00000000,00000000,00000000 8101 7599 9 566 532 0 0 7597 621 574 8 135 40 0 0 574 10840 10652 11 198 177 0 0 10326 0 0 0 0 0 0 0 0 0 7641 5493 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1193 886 129 446 251 1 6 90 37 37 0 0 0 0 0 0 5618 1908 3333 4009 377 0 65 1811 0 0 0 0 0 0 0 0 0 993466 637885 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 447 447 0 0 0 0 0 0 28 28 0 0 0 0 0 0 1375 429 700 14079833 246 0 193 234 0 0 0 0 0 0 0 0 0 4313 2225 0
+version 15
+timestamp 4295677782
+cpu0 98 0 137553785 798056 874285 36412 119108591386 38506734629 930865 mm_cid_task_work_nr_run: 605 mm_cid_task_work_clear_old: 5273 mm_cid_task_work_clear_compact: 56 mm_cid_get_cached: 896941 mm_cid_get_alloc: 8226 mm_cid_get_put_lazy: 444 mm_cid_put_lazy: 370 mm_cid_put: 161 mm_cid_migrate_steal: 13257 mm_cid_migrate_clear: 7280 mm_cid_migrate_move: 5977
+domain0 00000000,00000000,00000000,00010000,00000000,00000000,00000001 17922 17281 14 728 664 0 0 17281 2686 2628 13 179 47 0 0 2628 11033 10780 23 256 230 0 0 10637 1 0 1 0 0 0 0 0 0 7078 4514 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 5248 4688 308 774 344 5 14 1410 3 3 0 0 0 0 0 0 7372 4549 1996 3163 827 1 20 4527 10 0 10 0 0 0 0 0 0 808642 419469 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 1806 1756 30 776483 35 0 6 1102 49 49 0 0 0 0 0 0 5905 5606 280 822985 19 0 7 5597 0 0 0 0 0 0 0 0 0 21706 14930 0
+cpu1 114 0 1559068 709038 868889 24629 97393580060 36589345409 847820 mm_cid_task_work_nr_run: 454 mm_cid_task_work_clear_old: 5559 mm_cid_task_work_clear_compact: 55 mm_cid_get_cached: 834144 mm_cid_get_alloc: 8275 mm_cid_get_put_lazy: 431 mm_cid_put_lazy: 382 mm_cid_put: 190 mm_cid_migrate_steal: 10536 mm_cid_migrate_clear: 7295 mm_cid_migrate_move: 3241
+domain0 00000000,00000000,00000000,00020000,00000000,00000000,00000002 12632 12072 10 629 591 0 0 12072 1587 1505 25 223 64 0 0 1505 8761 8374 28 395 359 0 0 8148 0 0 0 0 0 0 0 0 0 6181 4033 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 3295 2714 288 818 397 5 14 2199 10 10 0 0 0 0 0 0 3251 1155 1431 2485 665 1 15 1133 3 0 3 0 0 0 0 0 0 829881 427120 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 2176 2138 21 885381 27 0 6 740 0 0 0 0 0 0 0 0 2145 1993 103 1470263 49 0 11 1982 0 0 0 0 0 0 0 0 0 8195 7027 0
+cpu2 90 0 1571201 714462 828564 17419 86389049896 35017689669 854853 mm_cid_task_work_nr_run: 186 mm_cid_task_work_clear_old: 5959 mm_cid_task_work_clear_compact: 26 mm_cid_get_cached: 843747 mm_cid_get_alloc: 8631 mm_cid_get_put_lazy: 473 mm_cid_put_lazy: 418 mm_cid_put: 261 mm_cid_migrate_steal: 11766 mm_cid_migrate_clear: 7292 mm_cid_migrate_move: 4474
+domain0 00000000,00000000,00000000,00040000,00000000,00000000,00000004 9122 8497 10 727 658 0 0 8497 1102 1012 20 325 72 0 0 1012 4174 3940 13 234 221 0 0 3814 0 0 0 0 0 0 0 0 0 6446 4207 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1460 850 307 831 419 7 8 575 72 72 0 0 0 0 0 2 2052 669 779 1786 604 4 22 638 3 0 3 0 0 0 0 0 0 798853 420384 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 635 612 13 525613 22 0 2 55 27 27 0 0 0 0 0 0 843 713 108 1206616 22 0 17 696 0 0 0 0 0 0 0 0 0 5843 3867 0
+cpu3 81 0 1579572 717736 851717 14971 85790419106 35824490870 859844 mm_cid_task_work_nr_run: 98 mm_cid_task_work_clear_old: 6126 mm_cid_task_work_clear_compact: 12 mm_cid_get_cached: 849769 mm_cid_get_alloc: 8538 mm_cid_get_put_lazy: 412 mm_cid_put_lazy: 375 mm_cid_put: 235 mm_cid_migrate_steal: 12092 mm_cid_migrate_clear: 7185 mm_cid_migrate_move: 4907
+domain0 00000000,00000000,00000000,00080000,00000000,00000000,00000008 8101 7466 13 779 663 0 0 7466 1049 946 30 316 77 0 0 946 4859 4614 12 250 233 0 0 4504 1 0 1 0 0 0 0 0 0 6265 4220 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1154 561 292 813 407 5 11 381 50 50 0 0 0 0 0 1 2280 659 961 2040 660 1 41 612 5 0 5 0 0 0 0 0 0 823639 430434 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 463 440 10 609738 19 0 4 33 14 14 0 0 0 0 0 0 828 712 87 1293427 29 0 13 695 0 0 0 0 0 0 0 0 0 6839 5292 0
+cpu4 38 0 1552950 704473 865648 12004 84672020114 34850138012 846730 mm_cid_task_work_nr_run: 41 mm_cid_task_work_clear_old: 6275 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 836796 mm_cid_get_alloc: 8610 mm_cid_get_put_lazy: 422 mm_cid_put_lazy: 366 mm_cid_put: 259 mm_cid_migrate_steal: 11966 mm_cid_migrate_clear: 7206 mm_cid_migrate_move: 4760
+domain0 00000000,00000000,00000000,00100000,00000000,00000000,00000010 7982 7391 15 701 603 0 0 7390 1004 909 20 233 78 0 0 909 8814 8321 22 509 471 0 0 8139 0 0 0 0 0 0 0 0 0 7833 4987 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1088 506 297 823 408 9 11 403 27 27 0 0 0 0 0 6 1993 484 838 1835 671 1 33 441 7 0 7 0 0 0 0 0 0 839244 440117 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 428 415 3 245538 15 0 3 29 11 11 0 0 0 0 0 0 554 424 104 2500139 26 0 25 392 0 0 0 0 0 0 0 0 0 6564 4730 0
+cpu5 8 0 1610029 732810 843890 13035 84930992466 35132800951 875477 mm_cid_task_work_nr_run: 37 mm_cid_task_work_clear_old: 6302 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 864278 mm_cid_get_alloc: 8954 mm_cid_get_put_lazy: 480 mm_cid_put_lazy: 370 mm_cid_put: 244 mm_cid_migrate_steal: 13555 mm_cid_migrate_clear: 7568 mm_cid_migrate_move: 5987
+domain0 00000000,00000000,00000000,00200000,00000000,00000000,00000020 10363 9748 12 669 640 0 0 9748 925 823 24 244 83 0 0 823 8119 7650 33 479 436 0 0 7485 0 0 0 0 0 0 0 0 0 6674 4382 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 2009 1397 322 842 397 11 6 790 4 4 0 0 0 0 0 0 1955 568 748 1801 639 2 30 531 4 0 4 0 0 0 0 0 0 819889 425974 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 884 874 4 246515 9 0 2 31 2 2 0 0 0 0 0 0 791 648 116 1777273 27 0 12 616 0 0 0 0 0 0 0 0 0 4289 2567 0
+cpu6 13 0 1529002 691772 943357 12642 87302707121 35385553004 835420 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6308 mm_cid_task_work_clear_compact: 9 mm_cid_get_cached: 825426 mm_cid_get_alloc: 8088 mm_cid_get_put_lazy: 439 mm_cid_put_lazy: 386 mm_cid_put: 172 mm_cid_migrate_steal: 9036 mm_cid_migrate_clear: 7111 mm_cid_migrate_move: 1925
+domain0 00000000,00000000,00000000,00400000,00000000,00000000,00000040 7647 7049 11 686 633 0 0 7049 969 869 22 265 81 0 0 869 5892 5480 19 456 393 0 0 5286 0 0 0 0 0 0 0 0 0 7022 4590 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1111 529 282 826 411 4 10 352 6 6 0 0 0 0 0 0 2172 448 804 2207 920 1 33 407 6 0 6 0 0 0 0 0 0 909185 485401 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 434 425 1 261165 11 0 2 22 1 1 0 0 0 0 0 0 559 426 93 1484353 40 0 16 409 0 0 0 0 0 0 0 0 0 14505 14589 0
+cpu7 3 0 1561832 709023 934377 12276 87139368520 35338943184 851113 mm_cid_task_work_nr_run: 49 mm_cid_task_work_clear_old: 6274 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 841458 mm_cid_get_alloc: 7838 mm_cid_get_put_lazy: 461 mm_cid_put_lazy: 355 mm_cid_put: 157 mm_cid_migrate_steal: 10501 mm_cid_migrate_clear: 6795 mm_cid_migrate_move: 3706
+domain0 00000000,00000000,00000000,00800000,00000000,00000000,00000080 7796 7149 8 736 677 0 0 7148 1004 879 29 361 106 0 1 878 6822 6421 16 416 385 0 0 6255 1 0 1 0 0 0 0 0 0 7062 4508 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1288 691 298 878 431 6 8 554 14 14 0 0 0 0 0 0 1405 341 547 1435 517 1 15 322 5 0 5 0 0 0 0 0 0 901528 469671 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 630 620 3 250102 9 0 0 25 3 3 0 0 0 0 0 0 501 395 86 1773391 20 0 29 365 0 0 0 0 0 0 0 0 0 13509 15446 0
+cpu8 4 0 1637958 747640 864935 11702 85183088274 34948430591 888637 mm_cid_task_work_nr_run: 34 mm_cid_task_work_clear_old: 6294 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 878231 mm_cid_get_alloc: 9074 mm_cid_get_put_lazy: 447 mm_cid_put_lazy: 392 mm_cid_put: 139 mm_cid_migrate_steal: 12753 mm_cid_migrate_clear: 7772 mm_cid_migrate_move: 4981
+domain0 00000000,00000000,00000000,01000000,00000000,00000000,00000100 8043 7432 8 678 641 0 0 7432 932 837 21 244 82 0 0 837 4765 4459 20 318 286 0 0 4362 0 0 0 0 0 0 0 0 0 7817 4837 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1265 681 282 821 409 5 6 628 5 5 0 0 0 0 0 0 1026 243 509 904 274 2 18 224 0 0 0 0 0 0 0 0 0 836755 423611 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 660 655 5 171627 0 0 2 13 2 2 0 0 0 0 0 0 352 251 78 1597449 23 0 11 233 0 0 0 0 0 0 0 0 0 8658 5170 0
+cpu9 0 0 1585659 720557 883220 11925 85273821783 35520509822 863299 mm_cid_task_work_nr_run: 41 mm_cid_task_work_clear_old: 6302 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 853157 mm_cid_get_alloc: 8691 mm_cid_get_put_lazy: 446 mm_cid_put_lazy: 353 mm_cid_put: 231 mm_cid_migrate_steal: 10782 mm_cid_migrate_clear: 7285 mm_cid_migrate_move: 3497
+domain0 00000000,00000000,00000000,02000000,00000000,00000000,00000200 7242 6591 17 729 682 0 1 6589 942 846 31 251 66 0 0 846 4475 4215 10 269 250 0 0 4138 0 0 0 0 0 0 0 0 0 7443 4905 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 965 406 285 781 378 7 10 368 8 8 0 0 0 0 0 0 1192 244 517 1226 431 3 14 225 3 0 3 0 0 0 0 0 0 858274 443923 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 409 407 2 69152 0 0 1 14 2 2 0 0 0 0 0 0 351 224 84 2191201 43 0 21 201 0 0 0 0 0 0 0 0 0 5576 6169 0
+cpu10 0 0 1529413 693769 942838 11831 86759447443 35059929634 833837 mm_cid_task_work_nr_run: 36 mm_cid_task_work_clear_old: 6301 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 824156 mm_cid_get_alloc: 8316 mm_cid_get_put_lazy: 454 mm_cid_put_lazy: 393 mm_cid_put: 219 mm_cid_migrate_steal: 10374 mm_cid_migrate_clear: 7265 mm_cid_migrate_move: 3109
+domain0 00000000,00000000,00000000,04000000,00000000,00000000,00000400 7568 6957 12 793 627 0 0 6957 929 847 26 203 59 0 0 847 5087 4834 18 259 235 0 0 4728 0 0 0 0 0 0 0 0 0 6243 4181 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 928 383 267 759 392 8 9 357 0 0 0 0 0 0 0 0 631 188 259 616 184 1 3 181 4 0 4 0 0 0 0 0 0 916842 514082 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 403 395 5 229504 3 0 1 12 0 0 0 0 0 0 0 0 268 174 70 955392 24 0 7 165 0 0 0 0 0 0 0 0 0 7919 11552 0
+cpu11 8 0 1552546 704497 844873 11852 84127577656 35588626965 846307 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6287 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 836809 mm_cid_get_alloc: 8281 mm_cid_get_put_lazy: 404 mm_cid_put_lazy: 314 mm_cid_put: 232 mm_cid_migrate_steal: 10349 mm_cid_migrate_clear: 7160 mm_cid_migrate_move: 3189
+domain0 00000000,00000000,00000000,08000000,00000000,00000000,00000800 7863 7275 12 681 620 0 0 7275 918 826 29 259 69 0 0 826 4092 3693 14 417 385 0 0 3610 0 0 0 0 0 0 0 0 0 6766 4598 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1137 608 263 763 368 6 12 576 7 7 0 0 0 0 0 0 1840 358 565 2038 917 3 19 332 0 0 0 0 0 0 0 0 0 820284 424262 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 592 588 3 106510 1 0 0 19 0 0 0 0 0 0 0 0 367 234 90 1854144 43 0 23 207 0 0 0 0 0 0 0 0 0 5968 3257 0
+cpu12 0 0 1520051 687823 909793 12055 85788248599 36247666709 830491 mm_cid_task_work_nr_run: 29 mm_cid_task_work_clear_old: 6296 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 820695 mm_cid_get_alloc: 8632 mm_cid_get_put_lazy: 416 mm_cid_put_lazy: 373 mm_cid_put: 178 mm_cid_migrate_steal: 9998 mm_cid_migrate_clear: 7338 mm_cid_migrate_move: 2660
+domain0 00000000,00000000,00000000,10000000,00000000,00000000,00001000 7359 6731 20 698 633 0 0 6731 945 843 21 310 85 0 0 843 6854 6464 21 400 369 0 0 6277 1 0 1 0 0 0 0 0 0 7743 4829 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 960 371 280 844 412 6 10 348 4 4 0 0 0 0 0 0 2199 373 897 2242 929 2 27 335 3 0 3 0 0 0 0 0 0 880341 450663 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 402 397 3 67138 5 0 0 7 0 0 0 0 0 0 0 0 463 316 102 2337195 45 0 23 292 0 0 0 0 0 0 0 0 0 9651 9198 0
+cpu13 0 0 1621976 738530 887588 11644 85281051433 35043852255 881563 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6273 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 871510 mm_cid_get_alloc: 8695 mm_cid_get_put_lazy: 491 mm_cid_put_lazy: 350 mm_cid_put: 199 mm_cid_migrate_steal: 11253 mm_cid_migrate_clear: 7478 mm_cid_migrate_move: 3775
+domain0 00000000,00000000,00000000,20000000,00000000,00000000,00002000 7385 6781 12 651 621 0 0 6781 911 820 21 311 73 0 0 820 5098 4763 19 349 316 0 0 4658 0 0 0 0 0 0 0 0 0 6979 4543 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1039 458 274 833 437 8 14 417 2 2 0 0 0 0 0 0 987 268 435 882 284 2 12 250 3 0 3 0 0 0 0 0 0 860538 449545 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 476 474 0 70076 2 0 2 11 0 0 0 0 0 0 0 0 356 223 87 2470048 46 0 10 212 0 0 0 0 0 0 0 0 0 8424 10861 0
+cpu14 24 0 1519928 688741 848445 11780 83359087810 35070635902 829388 mm_cid_task_work_nr_run: 11 mm_cid_task_work_clear_old: 6309 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 819509 mm_cid_get_alloc: 8436 mm_cid_get_put_lazy: 490 mm_cid_put_lazy: 407 mm_cid_put: 112 mm_cid_migrate_steal: 9912 mm_cid_migrate_clear: 7353 mm_cid_migrate_move: 2559
+domain0 00000000,00000000,00000000,40000000,00000000,00000000,00004000 7362 6695 11 751 692 0 0 6694 911 810 25 302 82 0 0 810 3713 3443 17 281 253 0 0 3366 0 0 0 0 0 0 0 0 0 6916 4376 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 941 378 290 796 383 8 5 355 17 17 0 0 0 0 0 0 888 186 346 956 356 4 7 176 6 0 6 0 0 0 0 0 0 821250 417112 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 389 388 1 34940 0 0 0 5 2 2 0 0 0 0 0 0 310 233 59 1101380 18 0 11 221 0 0 0 0 0 0 0 0 0 8496 5038 0
+cpu15 7 0 1548809 702169 893307 12143 84784566938 35525272057 844841 mm_cid_task_work_nr_run: 21 mm_cid_task_work_clear_old: 6271 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 835362 mm_cid_get_alloc: 8156 mm_cid_get_put_lazy: 444 mm_cid_put_lazy: 395 mm_cid_put: 180 mm_cid_migrate_steal: 11149 mm_cid_migrate_clear: 7348 mm_cid_migrate_move: 3801
+domain0 00000000,00000000,00000000,80000000,00000000,00000000,00008000 7500 6865 20 716 656 0 0 6865 877 792 27 202 60 0 0 792 5369 5005 19 374 345 0 0 4876 0 0 0 0 0 0 0 0 0 7534 4698 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1059 479 292 807 401 6 5 453 5 5 0 0 0 0 0 0 1726 242 621 1939 863 3 18 212 7 0 7 0 0 0 0 0 0 865628 456329 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 497 493 2 73200 3 0 0 7 0 0 0 0 0 0 0 0 320 215 71 1721525 34 0 15 199 0 0 0 0 0 0 0 0 0 7999 9880 0
+cpu16 86 0 1597523 726923 851626 12118 83824934547 35395291604 868723 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6222 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 857897 mm_cid_get_alloc: 9397 mm_cid_get_put_lazy: 466 mm_cid_put_lazy: 342 mm_cid_put: 125 mm_cid_migrate_steal: 13172 mm_cid_migrate_clear: 7849 mm_cid_migrate_move: 5323
+domain0 00000000,00000000,00000001,00000000,00000000,00000000,00010000 7326 6716 11 696 639 0 0 6714 927 817 25 325 87 0 0 817 5190 4847 16 352 327 0 0 4718 0 0 0 0 0 0 0 0 0 6786 4388 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1080 504 275 813 414 1 19 468 7 7 0 0 0 0 0 0 1230 232 549 1225 449 1 17 206 5 0 5 0 0 0 0 0 0 823884 427918 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 518 517 1 32557 0 0 0 7 0 0 0 0 0 0 0 0 299 198 75 1693829 26 0 16 180 0 0 0 0 0 0 0 0 0 8835 5663 0
+cpu17 0 0 1583309 720017 823884 11970 83290611205 35148858566 861536 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6283 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 851209 mm_cid_get_alloc: 8818 mm_cid_get_put_lazy: 421 mm_cid_put_lazy: 353 mm_cid_put: 145 mm_cid_migrate_steal: 13003 mm_cid_migrate_clear: 7589 mm_cid_migrate_move: 5414
+domain0 00000000,00000000,00000002,00000000,00000000,00000000,00020000 7698 7045 11 715 690 0 0 7045 855 763 28 257 67 0 0 763 4900 4557 19 354 324 0 0 4434 0 0 0 0 0 0 0 0 0 7319 4769 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1090 527 284 805 396 5 12 453 0 0 0 0 0 0 0 0 1432 380 497 1425 555 2 19 356 3 0 3 0 0 0 0 0 0 798885 410107 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 496 495 1 16 0 0 0 4 0 0 0 0 0 0 0 0 432 322 79 1894454 31 0 14 308 0 0 0 0 0 0 0 0 0 5707 3199 0
+cpu18 28 0 1595927 725773 841732 11907 83699702647 35971960927 868295 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6259 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 858234 mm_cid_get_alloc: 8899 mm_cid_get_put_lazy: 413 mm_cid_put_lazy: 304 mm_cid_put: 127 mm_cid_migrate_steal: 12916 mm_cid_migrate_clear: 7333 mm_cid_migrate_move: 5583
+domain0 00000000,00000000,00000004,00000000,00000000,00000000,00040000 7703 7109 14 675 610 0 0 7109 940 827 33 278 81 0 1 826 6613 6129 19 503 465 0 0 5984 0 0 0 0 0 0 0 0 0 6950 4532 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1118 507 299 882 457 7 10 471 11 11 0 0 0 0 0 0 1360 271 538 1483 551 3 16 249 3 0 3 0 0 0 0 0 0 815907 418053 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 522 521 0 33946 1 0 0 8 0 0 0 0 0 0 0 0 419 250 111 2288265 58 0 21 229 0 0 0 0 0 0 0 0 0 6965 4285 0
+cpu19 10 0 1557214 706820 911791 11610 85926920887 35333317865 848621 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6265 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 839096 mm_cid_get_alloc: 8347 mm_cid_get_put_lazy: 431 mm_cid_put_lazy: 366 mm_cid_put: 132 mm_cid_migrate_steal: 9773 mm_cid_migrate_clear: 7264 mm_cid_migrate_move: 2509
+domain0 00000000,00000000,00000008,00000000,00000000,00000000,00080000 7161 6518 12 725 672 0 0 6518 922 818 29 349 80 0 0 818 4904 4627 11 287 266 0 0 4457 0 0 0 0 0 0 0 0 0 6508 4349 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 952 365 279 812 400 6 7 342 11 11 0 0 0 0 0 3 1162 249 488 1192 425 2 18 227 4 0 4 0 0 0 0 0 0 886043 471290 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 383 383 0 0 0 0 1 3 5 5 0 0 0 0 0 0 296 190 68 1264963 38 0 24 165 0 0 0 0 0 0 0 0 0 7627 7326 0
+cpu20 16 0 1527416 691529 949700 13397 86858258809 35129173382 834129 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6260 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 823551 mm_cid_get_alloc: 8091 mm_cid_get_put_lazy: 458 mm_cid_put_lazy: 416 mm_cid_put: 60 mm_cid_migrate_steal: 9130 mm_cid_migrate_clear: 7201 mm_cid_migrate_move: 1929
+domain0 00000000,00000000,00000010,00000000,00000000,00000000,00100000 7298 6670 11 705 666 0 0 6668 988 909 19 216 62 0 0 909 3911 3677 8 234 226 0 0 3577 0 0 0 0 0 0 0 0 0 6818 4411 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1896 1317 277 827 423 3 6 338 3 3 0 0 0 0 0 0 825 182 319 860 324 2 5 174 3 0 3 0 0 0 0 0 0 918753 496388 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 713 711 2 35899 0 0 0 4 4 4 0 0 0 0 0 0 279 184 62 1466505 33 0 17 166 0 0 0 0 0 0 0 0 0 10729 15064 0
+cpu21 5 0 1517654 686791 930086 11786 86769714267 35965805803 828999 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6266 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 819502 mm_cid_get_alloc: 8376 mm_cid_get_put_lazy: 422 mm_cid_put_lazy: 385 mm_cid_put: 163 mm_cid_migrate_steal: 9299 mm_cid_migrate_clear: 7240 mm_cid_migrate_move: 2059
+domain0 00000000,00000000,00000020,00000000,00000000,00000000,00200000 6868 6288 7 652 605 0 0 6287 1036 947 26 251 65 0 0 947 8124 7630 25 503 469 0 0 7495 0 0 0 0 0 0 0 0 0 7548 4648 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1148 566 290 800 400 8 6 540 8 8 0 0 0 0 0 0 1208 196 436 1381 576 1 11 179 2 0 2 0 0 0 0 0 0 900070 484464 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 593 592 1 9 0 0 0 4 0 0 0 0 0 0 0 0 262 162 80 1857627 20 0 21 140 0 0 0 0 0 0 0 0 0 10679 12029 0
+cpu22 20 0 1486247 671096 936016 11595 86777941602 35637799011 813435 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6256 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 803948 mm_cid_get_alloc: 8385 mm_cid_get_put_lazy: 429 mm_cid_put_lazy: 364 mm_cid_put: 61 mm_cid_migrate_steal: 9629 mm_cid_migrate_clear: 7281 mm_cid_migrate_move: 2348
+domain0 00000000,00000000,00000040,00000000,00000000,00000000,00400000 6594 5969 14 723 651 0 0 5969 1015 912 30 325 79 0 0 912 5585 5178 17 422 390 0 0 5049 0 0 0 0 0 0 0 0 0 7048 4343 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 919 359 262 826 434 6 7 343 14 14 0 0 0 0 0 0 1490 214 619 1668 657 2 25 183 2 0 2 0 0 0 0 0 0 905530 480513 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 387 387 0 0 0 0 0 5 2 2 0 0 0 0 0 0 328 171 99 2857461 58 0 24 147 0 0 0 0 0 0 0 0 0 11841 11430 0
+cpu23 19 0 1595401 725604 881782 12763 85881394267 36045549367 867915 mm_cid_task_work_nr_run: 31 mm_cid_task_work_clear_old: 6214 mm_cid_task_work_clear_compact: 16 mm_cid_get_cached: 857994 mm_cid_get_alloc: 8441 mm_cid_get_put_lazy: 418 mm_cid_put_lazy: 356 mm_cid_put: 77 mm_cid_migrate_steal: 12410 mm_cid_migrate_clear: 7370 mm_cid_migrate_move: 5040
+domain0 00000000,00000000,00000080,00000000,00000000,00000000,00800000 7429 6837 10 694 620 0 0 6837 951 853 22 306 83 0 0 853 5574 5256 8 326 310 0 0 5122 0 0 0 0 0 0 0 0 0 6591 4281 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1423 839 285 850 420 6 7 471 9 9 0 0 0 0 0 0 1314 297 491 1273 526 2 14 275 2 0 2 0 0 0 0 0 0 853435 446474 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 528 528 0 0 0 0 0 2 4 4 0 0 0 0 0 0 307 224 61 1362920 22 0 17 205 0 0 0 0 0 0 0 0 0 8990 10342 0
+cpu24 13 0 1564171 711338 884585 11709 85454583973 35820450624 851074 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6251 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 841085 mm_cid_get_alloc: 8855 mm_cid_get_put_lazy: 463 mm_cid_put_lazy: 353 mm_cid_put: 183 mm_cid_migrate_steal: 12432 mm_cid_migrate_clear: 7564 mm_cid_migrate_move: 4868
+domain0 00000000,00000000,00000100,00000000,00000000,00000000,01000000 7122 6492 11 763 667 0 0 6491 929 830 25 293 78 0 0 830 5413 5017 21 422 375 0 0 4895 0 0 0 0 0 0 0 0 0 7105 4762 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 945 360 266 836 443 5 2 346 9 9 0 0 0 0 0 0 870 227 370 835 273 2 7 215 2 0 2 0 0 0 0 0 0 858654 449229 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 378 378 0 0 0 0 0 3 0 0 0 0 0 0 0 0 275 176 66 1620089 33 0 12 164 0 0 0 0 0 0 0 0 0 7114 6824 0
+cpu25 17 0 1542378 698415 928493 11827 87254595777 34933065551 842136 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6256 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 832757 mm_cid_get_alloc: 8134 mm_cid_get_put_lazy: 434 mm_cid_put_lazy: 390 mm_cid_put: 224 mm_cid_migrate_steal: 8990 mm_cid_migrate_clear: 7328 mm_cid_migrate_move: 1662
+domain0 00000000,00000000,00000200,00000000,00000000,00000000,02000000 7257 6635 11 717 652 0 0 6635 952 880 27 205 49 0 0 880 4309 3967 22 356 320 0 0 3890 0 0 0 0 0 0 0 0 0 6688 4439 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1031 479 296 788 375 6 6 448 8 8 0 0 0 0 0 0 1214 212 447 1354 555 1 7 199 9 0 9 0 0 0 0 0 0 898756 485179 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 482 482 0 0 0 0 0 5 2 2 0 0 0 0 0 0 307 232 60 1233143 15 0 6 223 0 0 0 0 0 0 0 0 0 11219 14143 0
+cpu26 7 0 1562170 708947 882028 11563 85481144534 35018159560 851435 mm_cid_task_work_nr_run: 15 mm_cid_task_work_clear_old: 6249 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 840985 mm_cid_get_alloc: 9330 mm_cid_get_put_lazy: 480 mm_cid_put_lazy: 403 mm_cid_put: 127 mm_cid_migrate_steal: 12133 mm_cid_migrate_clear: 7819 mm_cid_migrate_move: 4314
+domain0 00000000,00000000,00000400,00000000,00000000,00000000,04000000 6572 5920 13 737 686 0 0 5919 934 845 18 272 75 0 0 845 4592 4288 16 315 288 0 0 4159 0 0 0 0 0 0 0 0 0 7464 4882 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 919 364 276 802 386 5 13 337 5 5 0 0 0 0 0 0 1425 260 606 1532 559 3 23 230 4 0 4 0 0 0 0 0 0 856045 446922 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 384 383 0 4 2 0 0 2 3 3 0 0 0 0 0 0 323 209 67 2342961 47 0 22 186 0 0 0 0 0 0 0 0 0 6953 7288 0
+cpu27 16 0 1535520 695902 930880 12376 87934554832 35836507783 837932 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6240 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 828192 mm_cid_get_alloc: 8336 mm_cid_get_put_lazy: 429 mm_cid_put_lazy: 372 mm_cid_put: 178 mm_cid_migrate_steal: 10160 mm_cid_migrate_clear: 7109 mm_cid_migrate_move: 3051
+domain0 00000000,00000000,00000800,00000000,00000000,00000000,08000000 7470 6856 13 692 634 0 0 6856 992 903 22 262 72 0 0 903 5888 5483 14 421 391 0 0 5319 0 0 0 0 0 0 0 0 0 8229 5128 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1095 518 281 852 403 7 6 484 15 15 0 0 0 0 0 0 1672 323 651 1692 698 2 25 288 3 0 3 0 0 0 0 0 0 898221 483306 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 518 517 0 35170 1 0 0 3 2 2 0 0 0 0 0 0 438 305 90 2882587 43 0 17 287 0 0 0 0 0 0 0 0 0 12051 12835 0
+cpu28 1 0 1487832 672141 916735 11737 85547423961 35796155943 813958 mm_cid_task_work_nr_run: 14 mm_cid_task_work_clear_old: 6285 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 804678 mm_cid_get_alloc: 7948 mm_cid_get_put_lazy: 422 mm_cid_put_lazy: 344 mm_cid_put: 110 mm_cid_migrate_steal: 8718 mm_cid_migrate_clear: 6851 mm_cid_migrate_move: 1867
+domain0 00000000,00000000,00001000,00000000,00000000,00000000,10000000 7366 6754 12 680 634 0 0 6753 963 858 30 303 82 0 0 858 6033 5623 16 424 394 0 0 5483 0 0 0 0 0 0 0 0 0 6527 4314 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1136 554 297 820 385 18 11 526 1 1 0 0 0 0 0 0 1468 234 581 1697 653 5 15 209 3 0 3 0 0 0 0 0 0 892580 475970 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 571 571 0 0 0 0 0 1 0 0 0 0 0 0 0 0 289 200 61 1540799 28 0 19 179 0 0 0 0 0 0 0 0 0 5888 6336 0
+cpu29 2 0 1542175 699638 935595 11723 86727012420 35742217947 840861 mm_cid_task_work_nr_run: 28 mm_cid_task_work_clear_old: 6260 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 832126 mm_cid_get_alloc: 7536 mm_cid_get_put_lazy: 434 mm_cid_put_lazy: 360 mm_cid_put: 148 mm_cid_migrate_steal: 9027 mm_cid_migrate_clear: 6820 mm_cid_migrate_move: 2207
+domain0 00000000,00000000,00002000,00000000,00000000,00000000,20000000 6785 6187 10 658 612 0 0 6187 981 877 27 275 84 0 0 877 5242 4916 23 336 303 0 0 4790 0 0 0 0 0 0 0 0 0 6399 4282 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 907 376 253 740 381 3 8 353 4 4 0 0 0 0 0 0 1366 262 546 1418 558 2 17 229 4 0 4 0 0 0 0 0 0 908116 496577 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 373 373 0 0 0 0 0 4 1 1 0 0 0 0 0 0 370 199 114 2587577 57 0 31 168 0 0 0 0 0 0 0 0 0 9354 11618 0
+cpu30 1 0 1555770 707980 850658 11596 85035472554 35425340445 846035 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6250 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 836104 mm_cid_get_alloc: 8744 mm_cid_get_put_lazy: 461 mm_cid_put_lazy: 345 mm_cid_put: 49 mm_cid_migrate_steal: 12213 mm_cid_migrate_clear: 7336 mm_cid_migrate_move: 4877
+domain0 00000000,00000000,00004000,00000000,00000000,00000000,40000000 6228 5588 11 700 664 0 0 5586 920 820 20 281 85 0 0 820 3478 3280 6 201 192 0 0 3189 0 0 0 0 0 0 0 0 0 6639 4251 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 939 382 263 789 417 5 13 346 0 0 0 0 0 0 0 0 679 135 340 713 204 2 7 126 5 0 5 0 0 0 0 0 0 824835 423248 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 380 380 0 0 0 0 0 2 1 1 0 0 0 0 0 0 238 176 42 991281 20 0 14 161 0 0 0 0 0 0 0 0 0 7585 4140 0
+cpu31 1 0 1643602 750455 823772 11738 84794090196 35858224533 891312 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6217 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 882029 mm_cid_get_alloc: 8042 mm_cid_get_put_lazy: 389 mm_cid_put_lazy: 322 mm_cid_put: 62 mm_cid_migrate_steal: 13540 mm_cid_migrate_clear: 7073 mm_cid_migrate_move: 6467
+domain0 00000000,00000000,00008000,00000000,00000000,00000000,80000000 6838 6262 13 707 600 0 0 6261 941 843 25 315 77 0 0 843 5561 5249 14 319 298 0 0 5103 0 0 0 0 0 0 0 0 0 6300 4055 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1113 549 288 799 373 9 6 516 3 3 0 0 0 0 0 0 1418 319 537 1445 562 3 13 304 4 0 4 0 0 0 0 0 0 798972 412255 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 557 557 0 0 0 0 0 2 1 1 0 0 0 0 0 0 350 221 84 2322383 45 0 26 193 0 0 0 0 0 0 0 0 0 6759 3871 0
+cpu32 1 0 1680243 768063 846049 11904 85321428997 35394529729 910523 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6236 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 900545 mm_cid_get_alloc: 8549 mm_cid_get_put_lazy: 419 mm_cid_put_lazy: 353 mm_cid_put: 83 mm_cid_migrate_steal: 14810 mm_cid_migrate_clear: 7189 mm_cid_migrate_move: 7621
+domain0 00000000,00000000,00010000,00000000,00000000,00000001,00000000 7344 6704 14 760 679 0 0 6704 917 819 25 249 75 0 0 819 5899 5571 15 335 313 0 0 5425 0 0 0 0 0 0 0 0 0 6601 4337 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 952 375 275 829 417 4 8 356 0 0 0 0 0 0 0 0 873 241 410 788 222 1 8 228 6 0 6 0 0 0 0 0 0 819304 425640 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 389 387 1 36193 3 0 0 2 0 0 0 0 0 0 0 0 373 227 110 2084215 36 0 23 201 0 0 0 0 0 0 0 0 0 8237 5387 0
+cpu33 0 0 1527194 691933 885376 12718 86314410031 34909518251 833568 mm_cid_task_work_nr_run: 41 mm_cid_task_work_clear_old: 6249 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 822885 mm_cid_get_alloc: 7749 mm_cid_get_put_lazy: 461 mm_cid_put_lazy: 400 mm_cid_put: 59 mm_cid_migrate_steal: 8737 mm_cid_migrate_clear: 7043 mm_cid_migrate_move: 1694
+domain0 00000000,00000000,00020000,00000000,00000000,00000002,00000000 10090 9499 15 666 616 0 0 9498 938 848 21 298 73 0 0 848 4920 4575 10 354 335 0 0 4458 1 0 1 0 0 0 0 0 0 6823 4634 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1836 1195 316 942 451 6 1 750 1 1 0 0 0 0 0 0 1426 355 460 1451 611 1 7 343 3 0 3 0 0 0 0 0 0 858044 452305 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 880 880 0 0 0 0 0 1 1 1 0 0 0 0 0 0 508 428 45 1570809 35 0 15 413 0 0 0 0 0 0 0 0 0 7788 4354 0
+cpu34 27 0 1521653 689466 859043 13820 85784456606 35565641302 830400 mm_cid_task_work_nr_run: 65 mm_cid_task_work_clear_old: 6212 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 818446 mm_cid_get_alloc: 7851 mm_cid_get_put_lazy: 435 mm_cid_put_lazy: 361 mm_cid_put: 115 mm_cid_migrate_steal: 8639 mm_cid_migrate_clear: 6921 mm_cid_migrate_move: 1718
+domain0 00000000,00000000,00040000,00000000,00000000,00000004,00000000 10026 9418 16 689 626 0 0 9418 964 876 27 236 61 0 0 876 6768 6402 23 380 343 0 0 6187 0 0 0 0 0 0 0 0 0 6558 4233 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1893 1326 308 786 366 5 8 590 13 13 0 0 0 0 0 0 1396 375 566 1319 455 3 13 353 6 0 6 0 0 0 0 0 0 829026 431939 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 889 889 0 0 0 0 0 1 2 2 0 0 0 0 0 0 549 428 80 2983318 41 0 17 411 0 0 0 0 0 0 0 0 0 9636 5310 0
+cpu35 22 0 1546075 701464 846975 13614 84812945771 35006271855 842307 mm_cid_task_work_nr_run: 43 mm_cid_task_work_clear_old: 6211 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 830269 mm_cid_get_alloc: 8414 mm_cid_get_put_lazy: 468 mm_cid_put_lazy: 372 mm_cid_put: 97 mm_cid_migrate_steal: 10640 mm_cid_migrate_clear: 7306 mm_cid_migrate_move: 3334
+domain0 00000000,00000000,00080000,00000000,00000000,00000008,00000000 9838 9239 13 684 622 0 0 9239 961 867 28 235 70 0 0 867 4199 3974 16 230 209 0 0 3871 0 0 0 0 0 0 0 0 0 7129 4679 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1697 1138 282 783 376 9 14 571 18 18 0 0 0 0 0 0 1169 401 503 961 265 0 7 390 6 0 6 0 0 0 0 0 0 820460 422472 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 802 802 0 0 0 0 0 3 0 0 0 0 0 0 0 0 566 451 78 2105234 37 0 15 432 0 0 0 0 0 0 0 0 0 5769 3114 0
+cpu36 0 0 1726990 791411 848788 12525 84644807881 36333791577 933819 mm_cid_task_work_nr_run: 9 mm_cid_task_work_clear_old: 6207 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 924014 mm_cid_get_alloc: 8249 mm_cid_get_put_lazy: 430 mm_cid_put_lazy: 345 mm_cid_put: 75 mm_cid_migrate_steal: 15512 mm_cid_migrate_clear: 7113 mm_cid_migrate_move: 8399
+domain0 00000000,00000000,00100000,00000000,00000000,00000010,00000000 6940 6307 9 703 659 0 0 6305 898 808 23 230 70 0 0 808 5179 4853 20 335 306 0 0 4734 0 0 0 0 0 0 0 0 0 6521 4296 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1136 571 263 801 428 4 7 467 0 0 0 0 0 0 0 0 1690 297 704 1795 689 2 27 259 2 0 2 0 0 0 0 0 0 824090 430742 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 536 535 0 31339 2 0 0 2 1 1 0 0 0 0 0 0 268 204 52 1583827 12 0 10 193 0 0 0 0 0 0 0 0 0 5649 3651 0
+cpu37 72 0 1619114 737467 835690 14333 84910531886 35598422408 879888 mm_cid_task_work_nr_run: 27 mm_cid_task_work_clear_old: 6184 mm_cid_task_work_clear_compact: 15 mm_cid_get_cached: 870148 mm_cid_get_alloc: 7731 mm_cid_get_put_lazy: 369 mm_cid_put_lazy: 342 mm_cid_put: 76 mm_cid_migrate_steal: 11357 mm_cid_migrate_clear: 6757 mm_cid_migrate_move: 4600
+domain0 00000000,00000000,00200000,00000000,00000000,00000020,00000000 7174 6558 8 711 642 0 0 6556 911 814 22 242 78 0 0 814 7897 7398 28 524 471 0 0 7201 0 0 0 0 0 0 0 0 0 6543 4403 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1343 777 295 806 377 7 4 508 7 7 0 0 0 0 0 0 1463 423 654 1341 386 3 18 400 3 0 3 0 0 0 0 0 0 805873 420039 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 616 615 0 33991 1 0 0 1 2 2 0 0 0 0 0 0 638 512 84 2478129 42 0 25 480 0 0 0 0 0 0 0 0 0 8938 5207 0
+cpu38 4340 0 1534634 693622 900975 11591 86331361356 35136127056 834917 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6227 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 825604 mm_cid_get_alloc: 8161 mm_cid_get_put_lazy: 431 mm_cid_put_lazy: 353 mm_cid_put: 122 mm_cid_migrate_steal: 9228 mm_cid_migrate_clear: 7178 mm_cid_migrate_move: 2050
+domain0 00000000,00000000,00400000,00000000,00000000,00000040,00000000 6944 6305 11 714 667 0 0 6305 967 879 22 271 70 0 0 879 5178 4799 14 393 365 0 0 4698 0 0 0 0 0 0 0 0 0 6661 4413 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 911 358 268 788 416 5 11 313 3 3 0 0 0 0 0 0 1382 244 443 1674 695 1 21 211 6 0 6 0 0 0 0 0 0 874115 458422 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 374 374 0 0 0 0 0 1 0 0 0 0 0 0 0 0 295 199 67 1520447 29 0 11 187 0 0 0 0 0 0 0 0 0 8605 8906 0
+cpu39 1 0 1567279 711744 858514 11747 84837053794 35203023672 853737 mm_cid_task_work_nr_run: 18 mm_cid_task_work_clear_old: 6240 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 843621 mm_cid_get_alloc: 8669 mm_cid_get_put_lazy: 490 mm_cid_put_lazy: 375 mm_cid_put: 110 mm_cid_migrate_steal: 10685 mm_cid_migrate_clear: 7459 mm_cid_migrate_move: 3226
+domain0 00000000,00000000,00800000,00000000,00000000,00000080,00000000 7273 6634 10 750 662 0 0 6634 879 773 30 277 79 0 0 773 4636 4392 9 254 235 0 0 4280 0 0 0 0 0 0 0 0 0 6791 4604 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1101 524 278 814 403 6 10 349 0 0 0 0 0 0 0 0 1374 280 610 1445 484 2 21 252 5 0 5 0 0 0 0 0 0 830560 437071 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 403 403 0 0 0 0 0 3 1 1 0 0 0 0 0 0 445 330 86 1866722 29 0 36 292 0 0 0 0 0 0 0 0 0 9413 7376 0
+cpu40 10 0 1530973 693583 852773 11593 85827851236 35152432588 835635 mm_cid_task_work_nr_run: 37 mm_cid_task_work_clear_old: 6251 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 826522 mm_cid_get_alloc: 7715 mm_cid_get_put_lazy: 409 mm_cid_put_lazy: 400 mm_cid_put: 77 mm_cid_migrate_steal: 8481 mm_cid_migrate_clear: 6799 mm_cid_migrate_move: 1682
+domain0 00000000,00000000,01000000,00000000,00000000,00000100,00000000 6945 6300 14 795 681 0 0 6300 968 863 30 265 80 0 0 863 6454 5979 34 488 441 0 0 5833 0 0 0 0 0 0 0 0 0 6792 4466 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 959 395 277 795 391 7 7 346 11 11 0 0 0 0 0 6 1920 325 724 2159 871 0 33 271 6 0 6 0 0 0 0 0 0 818049 421883 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 378 378 0 0 0 0 0 0 7 7 0 0 0 0 0 0 309 225 61 1743061 23 0 21 202 0 0 0 0 0 0 0 0 0 16336 13484 0
+cpu41 10 0 1550834 704218 869007 11623 85214274524 35138579880 844856 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6243 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 835579 mm_cid_get_alloc: 8146 mm_cid_get_put_lazy: 385 mm_cid_put_lazy: 365 mm_cid_put: 118 mm_cid_migrate_steal: 10625 mm_cid_migrate_clear: 6911 mm_cid_migrate_move: 3714
+domain0 00000000,00000000,02000000,00000000,00000000,00000200,00000000 7258 6643 7 691 644 0 0 6643 911 815 20 245 79 0 0 815 5412 5079 15 348 318 0 0 4932 0 0 0 0 0 0 0 0 0 6580 4353 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1033 462 288 784 377 7 11 431 5 5 0 0 0 0 0 0 1545 280 657 1546 608 3 19 254 6 0 6 0 0 0 0 0 0 840774 441755 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 468 467 0 35076 1 0 0 3 0 0 0 0 0 0 0 0 361 242 82 2284457 37 0 21 216 0 0 0 0 0 0 0 0 0 10029 7567 0
+cpu42 22 0 1608077 731899 853262 12088 85253019483 36060666796 874430 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6204 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 864515 mm_cid_get_alloc: 8685 mm_cid_get_put_lazy: 436 mm_cid_put_lazy: 378 mm_cid_put: 72 mm_cid_migrate_steal: 14053 mm_cid_migrate_clear: 7492 mm_cid_migrate_move: 6561
+domain0 00000000,00000000,04000000,00000000,00000000,00000400,00000000 7038 6398 13 726 678 0 0 6398 893 788 26 296 81 0 0 788 4897 4632 12 270 253 0 0 4503 0 0 0 0 0 0 0 0 0 6742 4532 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 979 404 279 818 416 7 6 385 16 16 0 0 0 0 0 0 1186 286 435 1229 465 1 12 269 4 0 4 0 0 0 0 0 0 826296 432579 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 413 412 0 10 10 0 0 2 2 2 0 0 0 0 0 0 405 270 104 1943257 31 0 25 236 0 0 0 0 0 0 0 0 0 8135 5812 0
+cpu43 0 0 1641942 748471 828766 12575 84683357295 36346244638 891849 mm_cid_task_work_nr_run: 28 mm_cid_task_work_clear_old: 6190 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 881360 mm_cid_get_alloc: 8886 mm_cid_get_put_lazy: 488 mm_cid_put_lazy: 385 mm_cid_put: 50 mm_cid_migrate_steal: 15662 mm_cid_migrate_clear: 7576 mm_cid_migrate_move: 8086
+domain0 00000000,00000000,08000000,00000000,00000000,00000800,00000000 7320 6708 13 690 637 0 0 6706 866 773 24 232 71 0 0 773 7044 6563 24 496 457 0 0 6402 1 0 1 0 0 0 0 0 0 6212 4077 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1512 907 311 869 416 10 10 523 0 0 0 0 0 0 0 0 2172 416 795 2333 961 2 27 380 1 0 1 0 0 0 0 0 0 804906 421832 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 584 584 0 0 0 0 0 1 0 0 0 0 0 0 0 0 336 246 77 1699542 13 0 25 214 0 0 0 0 0 0 0 0 0 5070 3840 0
+cpu44 42 0 1649725 753062 846526 14469 85458016454 36022898746 894840 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6192 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 880877 mm_cid_get_alloc: 8376 mm_cid_get_put_lazy: 404 mm_cid_put_lazy: 380 mm_cid_put: 125 mm_cid_migrate_steal: 14360 mm_cid_migrate_clear: 7369 mm_cid_migrate_move: 6991
+domain0 00000000,00000000,10000000,00000000,00000000,00001000,00000000 9614 8961 17 757 665 0 0 8960 883 777 30 461 80 0 0 777 5112 4826 21 296 265 0 0 4721 0 0 0 0 0 0 0 0 0 7216 4600 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1734 1177 262 789 413 9 7 352 0 0 0 0 0 0 0 0 1246 401 535 1096 310 1 9 382 7 0 7 0 0 0 0 0 0 818262 427354 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 750 750 0 0 0 0 0 1 2 2 0 0 0 0 0 0 582 462 95 1679299 25 0 20 436 0 0 0 0 0 0 0 0 0 6576 3617 0
+cpu45 3 0 1557500 706577 840580 11788 84202225206 35444152163 849321 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6230 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 839923 mm_cid_get_alloc: 8039 mm_cid_get_put_lazy: 429 mm_cid_put_lazy: 356 mm_cid_put: 56 mm_cid_migrate_steal: 11114 mm_cid_migrate_clear: 6917 mm_cid_migrate_move: 4197
+domain0 00000000,00000000,20000000,00000000,00000000,00002000,00000000 7637 7049 16 682 604 0 0 7048 893 814 19 220 62 0 0 814 6312 5889 21 445 402 0 0 5739 1 0 1 0 0 0 0 0 0 6635 4359 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1171 599 265 819 423 8 8 524 5 5 0 0 0 0 0 0 1284 276 588 1288 420 1 10 262 2 0 2 0 0 0 0 0 0 815629 419672 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 570 570 0 0 0 0 0 2 1 1 0 0 0 0 0 0 502 383 85 1902445 34 0 22 361 0 0 0 0 0 0 0 0 0 6526 3859 0
+cpu46 0 0 1609506 732235 854225 12407 85083709650 36083005708 875387 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6230 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 865482 mm_cid_get_alloc: 8278 mm_cid_get_put_lazy: 414 mm_cid_put_lazy: 332 mm_cid_put: 98 mm_cid_migrate_steal: 12788 mm_cid_migrate_clear: 7194 mm_cid_migrate_move: 5594
+domain0 00000000,00000000,40000000,00000000,00000000,00004000,00000000 7062 6426 7 735 663 0 0 6426 866 791 22 214 57 0 0 791 4701 4383 14 331 304 0 0 4293 0 0 0 0 0 0 0 0 0 6526 4307 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 934 373 270 810 422 6 8 351 0 0 0 0 0 0 0 0 1104 212 428 1285 464 2 9 202 5 0 5 0 0 0 0 0 0 824783 424496 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 386 386 0 0 0 0 0 0 0 0 0 0 0 0 0 0 355 257 81 715784 17 0 10 235 0 0 0 0 0 0 0 0 0 10506 11380 0
+cpu47 7 0 1552789 704282 928189 12142 89004075855 36168573056 846660 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6234 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 837086 mm_cid_get_alloc: 8383 mm_cid_get_put_lazy: 435 mm_cid_put_lazy: 368 mm_cid_put: 193 mm_cid_migrate_steal: 11685 mm_cid_migrate_clear: 7377 mm_cid_migrate_move: 4308
+domain0 00000000,00000000,80000000,00000000,00000000,00008000,00000000 6921 6341 8 662 592 0 0 6341 974 885 20 262 74 0 1 884 7483 6915 26 584 542 0 0 6693 0 0 0 0 0 0 0 0 0 6434 4225 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 954 357 286 859 430 4 5 330 7 7 0 0 0 0 0 0 1272 219 509 1409 544 4 11 202 2 0 2 0 0 0 0 0 0 898941 479932 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 388 388 0 0 0 0 0 1 1 1 0 0 0 0 0 0 328 164 118 3354929 46 0 32 131 0 0 0 0 0 0 0 0 0 10669 10403 0
+cpu48 0 0 1725554 790401 820721 12035 84683836240 35328933647 933438 mm_cid_task_work_nr_run: 11 mm_cid_task_work_clear_old: 6213 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 923420 mm_cid_get_alloc: 8428 mm_cid_get_put_lazy: 410 mm_cid_put_lazy: 362 mm_cid_put: 45 mm_cid_migrate_steal: 17915 mm_cid_migrate_clear: 7367 mm_cid_migrate_move: 10548
+domain0 00000000,00000001,00000000,00000000,00000000,00010000,00000000 7154 6520 6 697 675 0 0 6519 882 788 24 318 74 0 0 788 6268 5916 20 365 332 0 0 5789 0 0 0 0 0 0 0 0 0 6987 4541 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1163 591 283 836 426 2 12 496 2 2 0 0 0 0 0 2 1399 448 563 1166 388 2 19 426 5 0 5 0 0 0 0 0 0 795445 413921 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 543 543 0 0 0 0 0 1 3 3 0 0 0 0 0 0 469 360 87 1416644 22 0 17 340 0 0 0 0 0 0 0 0 0 6251 4303 0
+cpu49 14 0 1684454 769443 811936 11996 82342631748 36190900531 913190 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6209 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 903579 mm_cid_get_alloc: 8537 mm_cid_get_put_lazy: 460 mm_cid_put_lazy: 375 mm_cid_put: 42 mm_cid_migrate_steal: 17563 mm_cid_migrate_clear: 7238 mm_cid_migrate_move: 10325
+domain0 00000000,00000002,00000000,00000000,00000000,00020000,00000000 7092 6504 10 656 606 0 0 6504 895 785 26 357 94 0 0 785 9397 8738 44 674 615 0 0 8474 0 0 0 0 0 0 0 0 0 6343 4127 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 949 400 277 778 373 9 8 372 10 10 0 0 0 0 0 0 1977 421 777 1997 779 5 20 389 2 0 2 0 0 0 0 0 0 786899 408187 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 392 391 0 36948 1 0 0 0 2 2 0 0 0 0 0 0 447 261 123 3264470 63 0 42 207 0 0 0 0 0 0 0 0 0 6697 4162 0
+cpu50 0 0 1592155 723885 932783 11952 84469646412 35807450515 866429 mm_cid_task_work_nr_run: 14 mm_cid_task_work_clear_old: 6235 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 857365 mm_cid_get_alloc: 8016 mm_cid_get_put_lazy: 407 mm_cid_put_lazy: 371 mm_cid_put: 78 mm_cid_migrate_steal: 11584 mm_cid_migrate_clear: 7111 mm_cid_migrate_move: 4473
+domain0 00000000,00000004,00000000,00000000,00000000,00040000,00000000 6695 6069 18 743 648 0 0 6069 892 787 26 297 84 0 0 787 5056 4824 13 236 219 0 0 4681 0 0 0 0 0 0 0 0 0 6201 4044 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 942 346 296 862 423 5 5 323 1 1 0 0 0 0 0 0 872 200 385 860 287 0 15 181 6 0 6 0 0 0 0 0 0 905921 509660 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 374 374 0 0 0 0 0 0 0 0 0 0 0 0 0 0 246 152 70 1445629 24 0 28 122 0 0 0 0 0 0 0 0 0 8706 9956 0
+cpu51 1 0 1577259 716770 851211 11576 83052919481 36414987424 858570 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6230 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 849201 mm_cid_get_alloc: 8317 mm_cid_get_put_lazy: 427 mm_cid_put_lazy: 378 mm_cid_put: 70 mm_cid_migrate_steal: 12818 mm_cid_migrate_clear: 7166 mm_cid_migrate_move: 5652
+domain0 00000000,00000008,00000000,00000000,00000000,00080000,00000000 7083 6435 14 702 668 0 0 6435 906 802 30 262 81 0 0 802 5532 5188 30 347 314 0 0 5053 1 0 1 0 0 0 0 0 0 6489 4309 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1082 519 266 823 409 5 10 479 1 1 0 0 0 0 0 0 1311 288 553 1301 470 1 18 261 3 0 3 0 0 0 0 0 0 825990 430343 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 498 498 0 0 0 0 0 1 0 0 0 0 0 0 0 0 306 192 86 1782419 28 0 25 166 0 0 0 0 0 0 0 0 0 7153 7109 0
+cpu52 2 0 1616010 736482 875126 12145 83165667898 36247734031 877716 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6214 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 866734 mm_cid_get_alloc: 9223 mm_cid_get_put_lazy: 406 mm_cid_put_lazy: 339 mm_cid_put: 99 mm_cid_migrate_steal: 13680 mm_cid_migrate_clear: 7886 mm_cid_migrate_move: 5794
+domain0 00000000,00000010,00000000,00000000,00000000,00100000,00000000 7467 6834 16 735 666 0 0 6834 903 816 26 227 66 0 0 816 5565 5107 25 470 433 0 0 4977 1 0 1 0 0 0 0 0 0 6943 4511 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1251 680 263 829 454 7 9 467 3 3 0 0 0 0 0 0 1475 320 618 1444 537 0 16 296 5 0 5 0 0 0 0 0 0 848455 442552 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 562 562 0 0 0 0 0 0 0 0 0 0 0 0 0 0 363 243 72 1821579 48 0 16 226 0 0 0 0 0 0 0 0 0 7580 3934 0
+cpu53 1 0 1554447 705544 943882 11847 85708033983 35667164465 847176 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6239 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 837806 mm_cid_get_alloc: 8300 mm_cid_get_put_lazy: 429 mm_cid_put_lazy: 390 mm_cid_put: 32 mm_cid_migrate_steal: 10263 mm_cid_migrate_clear: 7472 mm_cid_migrate_move: 2791
+domain0 00000000,00000020,00000000,00000000,00000000,00200000,00000000 6658 6016 12 714 676 0 0 6015 973 877 23 314 78 0 0 877 5652 5310 21 349 321 0 0 5160 1 0 1 0 0 0 0 0 0 6533 4391 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1210 650 272 827 404 6 10 605 5 5 0 0 0 0 0 0 883 187 349 929 347 1 13 172 4 0 4 0 0 0 0 0 0 915684 497639 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 643 643 0 0 0 0 0 1 0 0 0 0 0 0 0 0 221 153 47 796941 21 0 20 132 0 0 0 0 0 0 0 0 0 9815 13373 0
+cpu54 0 0 1687095 771151 857562 11927 83793225005 36029578836 914084 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6215 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 903444 mm_cid_get_alloc: 9597 mm_cid_get_put_lazy: 454 mm_cid_put_lazy: 366 mm_cid_put: 63 mm_cid_migrate_steal: 15673 mm_cid_migrate_clear: 8122 mm_cid_migrate_move: 7551
+domain0 00000000,00000040,00000000,00000000,00000000,00400000,00000000 7026 6409 11 713 644 0 0 6409 902 802 21 275 85 0 0 802 5385 5085 28 305 272 0 0 4978 0 0 0 0 0 0 0 0 0 7018 4694 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1095 527 286 804 385 5 15 492 0 0 0 0 0 0 0 0 1078 232 479 1046 367 1 11 214 4 0 4 0 0 0 0 0 0 833479 433636 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 518 518 0 0 0 0 0 0 0 0 0 0 0 0 0 0 270 177 59 1313879 34 0 20 156 0 0 0 0 0 0 0 0 0 5135 3437 0
+cpu55 2 0 1616212 736254 870756 11732 84225358039 35778965607 878310 mm_cid_task_work_nr_run: 12 mm_cid_task_work_clear_old: 6230 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 868474 mm_cid_get_alloc: 8768 mm_cid_get_put_lazy: 478 mm_cid_put_lazy: 409 mm_cid_put: 34 mm_cid_migrate_steal: 12537 mm_cid_migrate_clear: 7234 mm_cid_migrate_move: 5303
+domain0 00000000,00000080,00000000,00000000,00000000,00800000,00000000 7051 6441 13 673 633 0 0 6441 941 842 24 268 80 0 0 842 5636 5215 30 434 391 0 0 5069 1 0 1 0 0 0 0 0 0 6689 4392 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1109 543 276 806 397 7 12 511 0 0 0 0 0 0 0 0 1245 208 536 1363 501 2 24 181 3 0 3 0 0 0 0 0 0 841196 434431 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 543 543 0 0 0 0 0 1 0 0 0 0 0 0 0 0 321 223 67 1668383 31 0 13 208 0 0 0 0 0 0 0 0 0 11136 11195 0
+cpu56 36 0 2039405 953064 1099140 14112 74386996110 25518283123 1084710 mm_cid_task_work_nr_run: 140 mm_cid_task_work_clear_old: 6062 mm_cid_task_work_clear_compact: 25 mm_cid_get_cached: 1079379 mm_cid_get_alloc: 445 mm_cid_get_put_lazy: 11 mm_cid_put_lazy: 38 mm_cid_put: 33 mm_cid_migrate_steal: 1286 mm_cid_migrate_clear: 139 mm_cid_migrate_move: 1147
+domain0 00000000,00000100,00000000,00000000,00000000,01000000,00000000 11241 10720 18 603 529 0 0 10720 760 714 9 123 40 0 0 714 7742 7676 10 66 56 0 0 7545 0 0 0 0 0 0 0 0 0 7296 5293 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 3144 2640 237 743 384 5 8 515 40 40 0 0 0 0 0 0 4839 2774 1862 2259 203 2 64 2644 4 0 4 0 0 0 0 0 0 1059461 644722 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 621 434 108 3011555 128 1 24 332 27 27 0 0 0 0 0 0 2093 655 1016 32389230 422 1 319 326 2 0 2 0 0 0 0 0 0 18268 48960 0
+cpu57 17 0 2015563 940839 1055239 18663 72984756014 25079447620 1073160 mm_cid_task_work_nr_run: 151 mm_cid_task_work_clear_old: 6040 mm_cid_task_work_clear_compact: 45 mm_cid_get_cached: 1066332 mm_cid_get_alloc: 1370 mm_cid_get_put_lazy: 45 mm_cid_put_lazy: 65 mm_cid_put: 92 mm_cid_migrate_steal: 9306 mm_cid_migrate_clear: 2660 mm_cid_migrate_move: 6646
+domain0 00000000,00000200,00000000,00000000,00000000,02000000,00000000 12767 12230 18 667 550 0 0 12230 777 731 12 91 36 0 0 731 12209 12117 7 93 85 0 0 11660 0 0 0 0 0 0 0 0 0 8497 6031 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 4335 3823 242 723 385 3 12 526 2 2 0 0 0 0 0 0 4458 2426 1851 2122 181 1 59 2341 2 0 2 0 0 0 0 0 0 1012292 634706 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 1078 991 41 2271634 73 0 13 39 33 33 0 0 0 0 0 0 1850 702 825 23386111 323 0 260 438 0 0 0 0 0 0 0 0 0 15784 7758 0
+cpu58 7 0 1983048 923632 1103324 12051 70370421617 25193778259 1057825 mm_cid_task_work_nr_run: 50 mm_cid_task_work_clear_old: 6186 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 1055488 mm_cid_get_alloc: 1211 mm_cid_get_put_lazy: 27 mm_cid_put_lazy: 49 mm_cid_put: 60 mm_cid_migrate_steal: 9002 mm_cid_migrate_clear: 2084 mm_cid_migrate_move: 6918
+domain0 00000000,00000400,00000000,00000000,00000000,04000000,00000000 8679 8163 9 582 541 0 1 8162 687 630 13 126 45 0 0 630 15485 15218 25 272 242 0 0 14654 0 0 0 0 0 0 0 0 0 8117 5794 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 988 459 246 806 419 2 5 437 26 26 0 0 0 0 0 0 7487 4221 2955 3434 311 0 102 4009 3 0 3 0 0 0 0 0 0 1077088 708972 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 470 404 30 1537783 64 0 20 32 10 10 0 0 0 0 0 0 1675 449 928 24745247 298 0 253 183 0 0 0 0 0 0 0 0 0 6065 3405 0
+cpu59 53 0 1996227 930475 1026796 9947 68731815408 24722679993 1064103 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6261 mm_cid_task_work_clear_compact: 9 mm_cid_get_cached: 1061845 mm_cid_get_alloc: 990 mm_cid_get_put_lazy: 23 mm_cid_put_lazy: 33 mm_cid_put: 104 mm_cid_migrate_steal: 4531 mm_cid_migrate_clear: 1425 mm_cid_migrate_move: 3106
+domain0 00000000,00000800,00000000,00000000,00000000,08000000,00000000 8835 8308 11 577 549 0 0 8308 612 567 14 101 31 0 0 567 9530 9374 11 158 145 0 0 9074 0 0 0 0 0 0 0 0 0 8322 5920 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1016 483 250 769 385 6 7 431 11 11 0 0 0 0 0 3 4857 2395 2183 2663 279 0 82 2281 1 0 1 0 0 0 0 0 0 1000558 631785 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 464 424 20 920972 31 0 6 20 5 5 0 0 0 0 0 0 2007 573 1080 22430861 354 0 317 244 0 0 0 0 0 0 0 0 0 7966 5920 0
+cpu60 20 0 1981408 923240 1156154 9648 70479043830 24963784321 1056630 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6278 mm_cid_task_work_clear_compact: 14 mm_cid_get_cached: 1054616 mm_cid_get_alloc: 975 mm_cid_get_put_lazy: 39 mm_cid_put_lazy: 62 mm_cid_put: 62 mm_cid_migrate_steal: 7267 mm_cid_migrate_clear: 1150 mm_cid_migrate_move: 6117
+domain0 00000000,00001000,00000000,00000000,00000000,10000000,00000000 8602 8054 13 604 573 0 0 8054 628 570 20 164 38 0 0 570 14940 14826 2 116 112 0 0 14138 1 0 1 0 0 0 0 0 0 7647 5658 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 983 444 259 785 394 3 7 422 14 14 0 0 0 0 0 0 6392 3163 3010 3344 219 2 100 3012 3 0 3 0 0 0 0 0 0 1135628 766665 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 455 419 19 789188 27 0 2 12 0 0 0 0 0 0 0 0 1975 492 1129 27154664 354 0 333 150 0 0 0 0 0 0 0 0 0 3228 1739 0
+cpu61 1 0 2126937 995864 1145422 9667 72004459254 25579813951 1129381 mm_cid_task_work_nr_run: 21 mm_cid_task_work_clear_old: 6302 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1127779 mm_cid_get_alloc: 563 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 28 mm_cid_put: 87 mm_cid_migrate_steal: 5080 mm_cid_migrate_clear: 410 mm_cid_migrate_move: 4670
+domain0 00000000,00002000,00000000,00000000,00000000,20000000,00000000 8560 8012 9 606 575 0 0 8012 643 600 9 138 36 0 0 600 13480 13298 13 187 169 0 0 12674 0 0 0 0 0 0 0 0 0 7980 5647 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 963 441 257 766 390 3 9 414 1 1 0 0 0 0 0 0 5266 2382 2561 3037 323 1 81 2263 4 0 4 0 0 0 0 0 0 1124184 741833 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 442 415 16 748773 21 0 5 19 0 0 0 0 0 0 0 0 1006 264 594 16392504 148 0 157 101 0 0 0 0 0 0 0 0 0 3588 1817 0
+cpu62 31 0 2224047 1043500 1027944 11118 69607245535 24740140999 1178907 mm_cid_task_work_nr_run: 18 mm_cid_task_work_clear_old: 6246 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1175598 mm_cid_get_alloc: 454 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 18 mm_cid_put: 47 mm_cid_migrate_steal: 4059 mm_cid_migrate_clear: 280 mm_cid_migrate_move: 3779
+domain0 00000000,00004000,00000000,00000000,00000000,40000000,00000000 9422 8889 7 586 561 0 0 8889 550 510 14 122 27 0 0 510 11948 11861 7 88 80 0 0 11286 0 0 0 0 0 0 0 0 0 7782 5715 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1334 782 303 819 354 5 6 450 1 1 0 0 0 0 0 0 5754 3192 2343 2672 219 4 85 3053 7 0 7 0 0 0 0 0 0 1005152 645150 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 626 602 11 599166 27 0 7 8 1 1 0 0 0 0 0 0 1761 860 686 17342405 215 0 209 639 0 0 0 0 0 0 0 0 0 3889 1998 0
+cpu63 36 0 1945480 905296 1209063 10101 72532810211 25312907538 1038740 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6274 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 1037372 mm_cid_get_alloc: 366 mm_cid_get_put_lazy: 8 mm_cid_put_lazy: 37 mm_cid_put: 43 mm_cid_migrate_steal: 1092 mm_cid_migrate_clear: 148 mm_cid_migrate_move: 944
+domain0 00000000,00008000,00000000,00000000,00000000,80000000,00000000 8011 7494 9 571 533 0 0 7494 684 629 18 146 37 0 0 629 9007 8839 11 172 157 0 0 8515 0 0 0 0 0 0 0 0 0 8057 5793 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 950 428 250 760 398 4 4 406 5 5 0 0 0 0 0 0 5709 2501 2796 3417 412 2 149 2310 0 0 0 0 0 0 0 0 0 1182048 794166 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 433 421 5 333960 7 0 2 11 0 0 0 0 0 0 0 0 1589 430 871 24608011 288 0 271 149 0 0 0 0 0 0 0 0 0 8855 6564 0
+cpu64 79 0 2017784 941193 1206369 9971 71748589898 24965095394 1074934 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6269 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1073290 mm_cid_get_alloc: 614 mm_cid_get_put_lazy: 27 mm_cid_put_lazy: 50 mm_cid_put: 28 mm_cid_migrate_steal: 5208 mm_cid_migrate_clear: 515 mm_cid_migrate_move: 4693
+domain0 00000000,00010000,00000000,00000000,00000001,00000000,00000000 8237 7681 8 624 572 0 0 7681 656 602 18 144 38 0 0 602 12801 12599 12 205 190 0 0 12008 0 0 0 0 0 0 0 0 0 8923 6561 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 968 447 265 766 360 4 6 420 4 4 0 0 0 0 0 0 5405 2440 2551 3168 414 4 105 2280 2 0 2 0 0 0 0 0 0 1184968 804035 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 437 428 5 145027 7 0 3 6 1 1 0 0 0 0 0 0 1299 339 747 19697325 213 0 203 128 0 0 0 0 0 0 0 0 0 2504 1455 0
+cpu65 24 0 2036839 951247 1203350 10316 72063978209 25434268310 1083893 mm_cid_task_work_nr_run: 45 mm_cid_task_work_clear_old: 6242 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1082221 mm_cid_get_alloc: 515 mm_cid_get_put_lazy: 31 mm_cid_put_lazy: 33 mm_cid_put: 21 mm_cid_migrate_steal: 4389 mm_cid_migrate_clear: 371 mm_cid_migrate_move: 4018
+domain0 00000000,00020000,00000000,00000000,00000002,00000000,00000000 8436 7932 10 544 522 0 0 7932 681 621 12 146 49 0 0 621 11988 11892 4 96 92 0 0 11401 0 0 0 0 0 0 0 0 0 8071 5860 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1100 581 256 765 383 5 10 478 5 5 0 0 0 0 0 0 6391 3277 2895 3199 219 1 88 3132 1 0 1 0 0 0 0 0 0 1181776 818209 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 497 486 8 224425 7 0 1 9 7 7 0 0 0 0 0 0 1731 483 960 18733941 288 0 273 195 0 0 0 0 0 0 0 0 0 3184 1518 0
+cpu66 84 0 2088119 976643 1092548 10290 71613196736 25011889714 1109869 mm_cid_task_work_nr_run: 34 mm_cid_task_work_clear_old: 6210 mm_cid_task_work_clear_compact: 12 mm_cid_get_cached: 1108321 mm_cid_get_alloc: 492 mm_cid_get_put_lazy: 28 mm_cid_put_lazy: 45 mm_cid_put: 57 mm_cid_migrate_steal: 1358 mm_cid_migrate_clear: 257 mm_cid_migrate_move: 1101
+domain0 00000000,00040000,00000000,00000000,00000004,00000000,00000000 8446 7957 6 572 512 0 0 7956 670 623 12 116 36 0 0 623 8066 7915 11 155 140 0 0 7636 0 0 0 0 0 0 0 0 0 7629 5567 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 980 459 260 767 362 6 7 435 14 14 0 0 0 0 0 0 5185 2398 2479 2954 308 1 110 2244 2 0 2 0 0 0 0 0 0 1070755 701171 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 452 449 1 66564 3 0 1 9 1 1 0 0 0 0 0 0 1860 476 1055 23220249 329 0 272 187 0 0 0 0 0 0 0 0 0 3871 1907 0
+cpu67 33 0 2244364 1054595 1077307 10224 71910066983 24714326641 1188144 mm_cid_task_work_nr_run: 29 mm_cid_task_work_clear_old: 6225 mm_cid_task_work_clear_compact: 10 mm_cid_get_cached: 1186339 mm_cid_get_alloc: 481 mm_cid_get_put_lazy: 17 mm_cid_put_lazy: 50 mm_cid_put: 46 mm_cid_migrate_steal: 3895 mm_cid_migrate_clear: 272 mm_cid_migrate_move: 3623
+domain0 00000000,00080000,00000000,00000000,00000008,00000000,00000000 9006 8428 9 637 606 0 0 8428 598 546 13 139 39 0 0 546 11461 11319 7 145 135 0 0 10873 0 0 0 0 0 0 0 0 0 8547 6286 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1250 733 269 767 366 8 8 464 0 0 0 0 0 0 0 0 8103 4337 3504 3919 262 1 100 4178 4 0 4 0 0 0 0 0 0 1053622 688189 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 477 469 3 214542 8 0 1 2 3 3 0 0 0 0 0 0 2000 482 1174 20192574 344 0 305 166 0 0 0 0 0 0 0 0 0 4911 2464 0
+cpu68 16 0 2045035 955090 1133326 10053 72476210965 25219171977 1088190 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6273 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 1086648 mm_cid_get_alloc: 468 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 45 mm_cid_put: 54 mm_cid_migrate_steal: 1560 mm_cid_migrate_clear: 228 mm_cid_migrate_move: 1332
+domain0 00000000,00100000,00000000,00000000,00000010,00000000,00000000 8362 7864 11 548 505 0 0 7864 685 631 11 174 46 0 0 631 13573 13297 23 282 253 0 0 12949 0 0 0 0 0 0 0 0 0 7689 5704 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1002 476 262 807 393 2 10 421 7 7 0 0 0 0 0 0 7667 3802 3380 4051 485 1 74 3675 4 0 4 0 0 0 0 0 0 1105573 727277 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 449 445 4 112669 0 0 1 9 1 1 0 0 0 0 0 0 2087 498 1211 21529163 378 0 332 155 0 0 0 0 0 0 0 0 0 10008 8043 0
+cpu69 36 0 2102872 983988 1140288 10099 72238349626 25326050088 1117321 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6248 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 1115551 mm_cid_get_alloc: 687 mm_cid_get_put_lazy: 26 mm_cid_put_lazy: 62 mm_cid_put: 160 mm_cid_migrate_steal: 4650 mm_cid_migrate_clear: 541 mm_cid_migrate_move: 4109
+domain0 00000000,00200000,00000000,00000000,00000020,00000000,00000000 8620 8145 8 515 492 0 0 8145 629 583 17 128 32 0 0 583 10667 10520 12 156 135 0 0 10043 0 0 0 0 0 0 0 0 0 7872 5749 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 976 440 261 772 388 3 8 416 4 4 0 0 0 0 0 0 4833 2418 2274 2480 141 5 91 2293 2 0 2 0 0 0 0 0 0 1119710 741496 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 446 436 6 221616 6 0 2 6 2 2 0 0 0 0 0 0 1713 460 944 23358393 309 0 294 155 0 0 0 0 0 0 0 0 0 2604 1555 0
+cpu70 22 0 2175675 1019831 1144165 9934 74095985478 25306582354 1154248 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6265 mm_cid_task_work_clear_compact: 10 mm_cid_get_cached: 1152572 mm_cid_get_alloc: 628 mm_cid_get_put_lazy: 33 mm_cid_put_lazy: 39 mm_cid_put: 103 mm_cid_migrate_steal: 4157 mm_cid_migrate_clear: 414 mm_cid_migrate_move: 3743
+domain0 00000000,00400000,00000000,00000000,00000040,00000000,00000000 8454 7921 9 613 554 0 0 7921 650 590 12 178 53 0 0 590 14523 14331 10 196 182 0 0 13670 0 0 0 0 0 0 0 0 0 7726 5751 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 965 429 260 787 394 4 7 411 5 5 0 0 0 0 0 0 6970 3153 3223 4110 594 4 136 2946 3 0 3 0 0 0 0 0 0 1118602 752811 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 441 438 0 133921 5 0 0 2 0 0 0 0 0 0 0 0 1667 462 937 21702142 268 0 305 146 0 0 0 0 0 0 0 0 0 7900 3565 0
+cpu71 55 0 2202704 1033873 1137661 10395 74909299768 25669865088 1167268 mm_cid_task_work_nr_run: 36 mm_cid_task_work_clear_old: 6249 mm_cid_task_work_clear_compact: 7 mm_cid_get_cached: 1165260 mm_cid_get_alloc: 753 mm_cid_get_put_lazy: 24 mm_cid_put_lazy: 50 mm_cid_put: 173 mm_cid_migrate_steal: 5391 mm_cid_migrate_clear: 419 mm_cid_migrate_move: 4972
+domain0 00000000,00800000,00000000,00000000,00000080,00000000,00000000 9056 8518 28 589 533 0 0 8518 621 582 10 120 30 0 0 582 10274 10201 6 74 67 0 0 9748 1 0 1 0 0 0 0 0 0 8747 6463 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1115 576 262 790 397 7 6 419 23 23 0 0 0 0 0 0 3662 1798 1721 1972 143 2 46 1735 3 0 3 0 0 0 0 0 0 1110559 731153 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 460 455 2 145454 4 0 2 3 0 0 0 0 0 0 0 0 1425 386 796 15400100 243 0 200 176 0 0 0 0 0 0 0 0 0 7957 3511 0
+cpu72 9 0 2019538 941090 1177547 10334 72258304418 25118862521 1076802 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6268 mm_cid_task_work_clear_compact: 24 mm_cid_get_cached: 1074899 mm_cid_get_alloc: 744 mm_cid_get_put_lazy: 31 mm_cid_put_lazy: 52 mm_cid_put: 197 mm_cid_migrate_steal: 5415 mm_cid_migrate_clear: 367 mm_cid_migrate_move: 5048
+domain0 00000000,01000000,00000000,00000000,00000100,00000000,00000000 8972 8446 7 588 556 0 0 8446 633 579 12 163 42 0 0 579 12584 12466 7 122 111 0 0 11901 0 0 0 0 0 0 0 0 0 8189 6123 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 989 455 265 756 385 4 9 419 11 11 0 0 0 0 0 0 7747 3790 3544 4118 413 3 104 3616 4 0 4 0 0 0 0 0 0 1156350 794283 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 442 440 1 32352 3 0 0 0 0 0 0 0 0 0 0 0 2008 611 1137 17364484 260 0 280 322 0 0 0 0 0 0 0 0 0 2671 1453 0
+cpu73 15 0 2381962 1122968 1148690 9922 74695048163 25688289437 1257403 mm_cid_task_work_nr_run: 29 mm_cid_task_work_clear_old: 6266 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1255818 mm_cid_get_alloc: 553 mm_cid_get_put_lazy: 20 mm_cid_put_lazy: 37 mm_cid_put: 133 mm_cid_migrate_steal: 2456 mm_cid_migrate_clear: 257 mm_cid_migrate_move: 2199
+domain0 00000000,02000000,00000000,00000000,00000200,00000000,00000000 8539 8020 8 573 540 0 0 8020 661 606 12 150 45 0 0 606 10881 10742 9 140 130 0 0 10295 0 0 0 0 0 0 0 0 0 8207 5853 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 972 442 249 790 410 5 5 421 21 21 0 0 0 0 0 0 7011 3265 3077 4100 669 2 103 3106 5 0 5 0 0 0 0 0 0 1120502 739005 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 441 438 0 74536 4 0 2 2 1 1 0 0 0 0 0 0 1569 394 954 21233627 221 0 249 136 0 0 0 0 0 0 0 0 0 10056 4765 0
+cpu74 10 0 2035105 949651 1127159 9857 72929348422 24974764565 1083869 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6310 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1082360 mm_cid_get_alloc: 497 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 37 mm_cid_put: 94 mm_cid_migrate_steal: 2634 mm_cid_migrate_clear: 230 mm_cid_migrate_move: 2404
+domain0 00000000,04000000,00000000,00000000,00000400,00000000,00000000 8046 7526 11 584 549 0 0 7525 612 573 13 117 27 0 0 573 8996 8908 9 89 79 0 0 8534 0 0 0 0 0 0 0 0 0 7763 5573 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 953 425 256 790 397 4 8 408 13 13 0 0 0 0 0 2 4535 2257 2132 2366 146 1 69 2130 3 0 3 0 0 0 0 0 0 1100188 724716 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 425 425 0 0 0 0 1 3 4 4 0 0 0 0 0 0 1093 281 649 12640666 163 0 155 118 0 0 0 0 0 0 0 0 0 9348 4195 0
+cpu75 30 0 2182980 1022927 1105488 9929 71743164386 24848933350 1158449 mm_cid_task_work_nr_run: 15 mm_cid_task_work_clear_old: 6300 mm_cid_task_work_clear_compact: 38 mm_cid_get_cached: 1156765 mm_cid_get_alloc: 650 mm_cid_get_put_lazy: 22 mm_cid_put_lazy: 44 mm_cid_put: 124 mm_cid_migrate_steal: 3988 mm_cid_migrate_clear: 363 mm_cid_migrate_move: 3625
+domain0 00000000,08000000,00000000,00000000,00000800,00000000,00000000 8643 8126 14 568 531 0 0 8126 653 594 15 164 44 0 0 594 7952 7849 3 109 100 0 0 7492 0 0 0 0 0 0 0 0 0 7406 5435 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 947 435 248 756 362 5 5 416 19 19 0 0 0 0 0 0 3415 1719 1416 1914 280 2 48 1655 5 0 5 0 0 0 0 0 0 1086354 719139 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 423 421 1 69970 1 0 1 7 1 1 0 0 0 0 0 0 1303 389 727 16907868 187 0 238 136 0 0 0 0 0 0 0 0 0 1796 839 0
+cpu76 19 0 2133123 998406 1099513 11930 75128124272 25045318820 1133311 mm_cid_task_work_nr_run: 65 mm_cid_task_work_clear_old: 6175 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 1131590 mm_cid_get_alloc: 526 mm_cid_get_put_lazy: 14 mm_cid_put_lazy: 39 mm_cid_put: 68 mm_cid_migrate_steal: 2387 mm_cid_migrate_clear: 246 mm_cid_migrate_move: 2141
+domain0 00000000,10000000,00000000,00000000,00001000,00000000,00000000 8690 8150 7 582 562 0 0 8150 709 664 10 110 35 0 0 664 13441 13288 8 159 145 0 0 12860 0 0 0 0 0 0 0 0 0 8013 5855 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1080 567 253 767 372 5 5 452 29 29 0 0 0 0 0 0 6378 3190 2978 3287 210 3 81 3046 5 0 5 0 0 0 0 0 0 1064135 679012 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 463 460 2 106932 1 0 0 3 9 9 0 0 0 0 0 0 2025 536 1141 22032483 348 0 329 195 0 0 0 0 0 0 0 0 0 15432 9934 0
+cpu77 4 0 2176814 1021276 1077556 11880 73383350813 25178821070 1154041 mm_cid_task_work_nr_run: 45 mm_cid_task_work_clear_old: 6213 mm_cid_task_work_clear_compact: 28 mm_cid_get_cached: 1152401 mm_cid_get_alloc: 435 mm_cid_get_put_lazy: 12 mm_cid_put_lazy: 26 mm_cid_put: 130 mm_cid_migrate_steal: 968 mm_cid_migrate_clear: 157 mm_cid_migrate_move: 811
+domain0 00000000,20000000,00000000,00000000,00002000,00000000,00000000 8750 8224 4 624 573 0 0 8224 673 619 12 127 43 0 0 619 9130 8933 12 202 185 0 0 8655 0 0 0 0 0 0 0 0 0 7937 5674 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1070 543 246 755 385 2 6 437 14 14 0 0 0 0 0 0 4071 1763 1881 2564 427 2 60 1684 4 0 4 0 0 0 0 0 0 1041018 670522 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 452 449 2 101266 1 0 1 4 12 12 0 0 0 0 0 0 1395 440 715 17190670 240 0 230 206 0 0 0 0 0 0 0 0 0 16719 12725 0
+cpu78 11 0 2117398 990343 1125973 10119 72411727389 25266090722 1125499 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6296 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1123576 mm_cid_get_alloc: 815 mm_cid_get_put_lazy: 55 mm_cid_put_lazy: 68 mm_cid_put: 159 mm_cid_migrate_steal: 3902 mm_cid_migrate_clear: 935 mm_cid_migrate_move: 2967
+domain0 00000000,40000000,00000000,00000000,00004000,00000000,00000000 8669 8163 11 591 537 0 0 8163 627 561 18 166 51 0 0 561 10664 10528 8 137 128 0 0 10158 0 0 0 0 0 0 0 0 0 8232 5883 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 986 439 250 784 414 4 9 410 10 10 0 0 0 0 0 0 6188 2777 2894 3629 517 4 82 2646 4 0 4 0 0 0 0 0 0 1097774 726686 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 441 441 0 0 0 0 0 2 2 2 0 0 0 0 0 0 1291 335 717 19775055 239 0 192 136 0 0 0 0 0 0 0 0 0 9845 4491 0
+cpu79 6 0 2193982 1028896 1107590 9882 70677079951 25225434402 1163435 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6304 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 1161673 mm_cid_get_alloc: 718 mm_cid_get_put_lazy: 47 mm_cid_put_lazy: 55 mm_cid_put: 161 mm_cid_migrate_steal: 2979 mm_cid_migrate_clear: 607 mm_cid_migrate_move: 2372
+domain0 00000000,80000000,00000000,00000000,00008000,00000000,00000000 8651 8091 9 631 585 0 0 8091 629 567 17 129 46 0 0 567 11849 11755 9 94 85 0 0 11237 0 0 0 0 0 0 0 0 0 9072 6598 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 973 435 252 803 425 2 10 404 8 8 0 0 0 0 0 0 4046 1958 1941 2148 147 1 56 1873 3 0 3 0 0 0 0 0 0 1078180 708028 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 424 424 0 0 0 0 0 2 4 4 0 0 0 0 0 0 1112 308 618 14325597 186 0 191 113 0 0 0 0 0 0 0 0 0 10453 4683 0
+cpu80 0 0 2419766 1142502 996473 10383 69182304308 25094230323 1275693 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6250 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1273941 mm_cid_get_alloc: 691 mm_cid_get_put_lazy: 35 mm_cid_put_lazy: 47 mm_cid_put: 131 mm_cid_migrate_steal: 4520 mm_cid_migrate_clear: 551 mm_cid_migrate_move: 3969
+domain0 00000001,00000000,00000000,00000000,00010000,00000000,00000000 8956 8433 12 565 537 0 0 8433 531 476 6 142 51 0 0 476 10700 10625 4 76 71 0 0 10192 0 0 0 0 0 0 0 0 0 7667 5584 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1004 455 276 781 391 4 4 439 5 5 0 0 0 0 0 0 6449 3630 2515 2935 304 2 74 3488 3 0 3 0 0 0 0 0 0 976401 613457 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 448 445 3 110387 0 0 0 3 2 2 0 0 0 0 0 0 1475 412 860 15883991 203 0 243 159 0 0 0 0 0 0 0 0 0 2019 1088 0
+cpu81 0 0 2332976 1099041 1077780 9771 70007283513 25190862640 1232397 mm_cid_task_work_nr_run: 12 mm_cid_task_work_clear_old: 6279 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1230842 mm_cid_get_alloc: 570 mm_cid_get_put_lazy: 27 mm_cid_put_lazy: 35 mm_cid_put: 101 mm_cid_migrate_steal: 4584 mm_cid_migrate_clear: 402 mm_cid_migrate_move: 4182
+domain0 00000002,00000000,00000000,00000000,00020000,00000000,00000000 8665 8123 8 591 564 0 0 8123 560 510 16 144 36 0 0 510 13203 13091 9 116 103 0 0 12551 0 0 0 0 0 0 0 0 0 8184 6138 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 967 434 237 795 420 2 8 417 0 0 0 0 0 0 0 0 4799 2597 2020 2282 182 1 52 2504 7 0 7 0 0 0 0 0 0 1057572 689121 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 434 431 2 71841 3 0 1 4 0 0 0 0 0 0 0 0 1391 367 766 19213898 258 0 242 115 0 0 0 0 0 0 0 0 0 2250 1031 0
+cpu82 0 0 2183599 1023862 1056085 9775 70929607436 25119919508 1158326 mm_cid_task_work_nr_run: 29 mm_cid_task_work_clear_old: 6316 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1156899 mm_cid_get_alloc: 372 mm_cid_get_put_lazy: 15 mm_cid_put_lazy: 22 mm_cid_put: 107 mm_cid_migrate_steal: 761 mm_cid_migrate_clear: 174 mm_cid_migrate_move: 587
+domain0 00000004,00000000,00000000,00000000,00040000,00000000,00000000 8559 8027 7 603 556 0 0 8027 587 546 9 114 34 0 0 546 7380 7265 6 116 109 0 0 7050 0 0 0 0 0 0 0 0 0 8112 5876 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 957 450 245 758 367 2 5 433 2 2 0 0 0 0 0 0 3738 1869 1632 1997 237 0 68 1778 6 0 6 0 0 0 0 0 0 1024705 648102 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 428 426 1 67670 3 0 0 2 0 0 0 0 0 0 0 0 989 277 591 16767161 121 0 178 96 0 0 0 0 0 0 0 0 0 13490 10417 0
+cpu83 0 0 2095599 979788 1316560 9584 71951069573 24932621526 1114268 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6309 mm_cid_task_work_clear_compact: 15 mm_cid_get_cached: 1112874 mm_cid_get_alloc: 381 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 37 mm_cid_put: 54 mm_cid_migrate_steal: 1382 mm_cid_migrate_clear: 191 mm_cid_migrate_move: 1191
+domain0 00000008,00000000,00000000,00000000,00080000,00000000,00000000 8093 7548 9 599 570 0 0 7548 645 602 5 132 41 0 0 602 7478 7338 3 142 137 0 0 7072 0 0 0 0 0 0 0 0 0 8493 6262 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 944 405 263 783 380 1 6 391 1 1 0 0 0 0 0 0 2505 1103 1289 1500 113 0 23 1065 4 0 4 0 0 0 0 0 0 1294270 923583 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 413 413 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1045 262 611 14291070 172 0 179 75 0 0 0 0 0 0 0 0 0 4210 3853 0
+cpu84 0 0 2157739 1010460 1064297 9495 70895197111 24592607140 1145707 mm_cid_task_work_nr_run: 17 mm_cid_task_work_clear_old: 6300 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1144104 mm_cid_get_alloc: 596 mm_cid_get_put_lazy: 50 mm_cid_put_lazy: 71 mm_cid_put: 35 mm_cid_migrate_steal: 3242 mm_cid_migrate_clear: 843 mm_cid_migrate_move: 2399
+domain0 00000010,00000000,00000000,00000000,00100000,00000000,00000000 8152 7653 14 546 507 0 0 7653 626 573 10 141 44 0 0 573 6234 6127 10 109 97 0 0 5923 0 0 0 0 0 0 0 0 0 6867 4837 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 950 437 246 752 379 3 6 417 0 0 0 0 0 0 0 0 4634 1910 2226 2943 498 2 58 1826 3 0 3 0 0 0 0 0 0 1035396 669046 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 421 421 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1295 365 723 19760566 207 0 241 120 0 0 0 0 0 0 0 0 0 12536 8582 0
+cpu85 6 0 2152249 1008378 1042498 9674 69125941260 25655698012 1142306 mm_cid_task_work_nr_run: 13 mm_cid_task_work_clear_old: 6289 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 1140754 mm_cid_get_alloc: 506 mm_cid_get_put_lazy: 24 mm_cid_put_lazy: 47 mm_cid_put: 32 mm_cid_migrate_steal: 3311 mm_cid_migrate_clear: 570 mm_cid_migrate_move: 2741
+domain0 00000020,00000000,00000000,00000000,00200000,00000000,00000000 8360 7824 13 595 553 0 0 7824 578 527 20 193 31 0 0 527 9970 9874 6 96 90 0 0 9458 0 0 0 0 0 0 0 0 0 7672 5358 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 983 435 273 801 383 2 5 418 1 1 0 0 0 0 0 0 4326 2059 2036 2371 231 0 81 1948 11 0 11 0 0 0 0 0 0 999681 620109 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 434 433 1 35052 0 0 0 3 0 0 0 0 0 0 0 0 1538 400 889 20397180 249 0 258 134 0 0 0 0 0 0 0 0 0 25468 15201 0
+cpu86 15 0 2125288 994817 1020066 10099 69889251330 25247196073 1128944 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6263 mm_cid_task_work_clear_compact: 12 mm_cid_get_cached: 1126443 mm_cid_get_alloc: 864 mm_cid_get_put_lazy: 77 mm_cid_put_lazy: 128 mm_cid_put: 67 mm_cid_migrate_steal: 5940 mm_cid_migrate_clear: 1287 mm_cid_migrate_move: 4653
+domain0 00000040,00000000,00000000,00000000,00400000,00000000,00000000 8908 8378 10 589 554 0 0 8378 643 578 18 179 48 0 0 578 18431 18242 13 193 176 0 0 17458 0 0 0 0 0 0 0 0 0 7595 5298 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1030 507 258 765 375 2 6 430 8 8 0 0 0 0 0 0 6550 2598 3696 4054 256 1 78 2470 2 0 2 0 0 0 0 0 0 1000066 636724 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 468 468 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1793 542 940 16998441 311 0 244 286 0 0 0 0 0 0 0 0 0 2303 1275 0
+cpu87 0 0 2151850 1007489 928993 9586 68224713090 25539054320 1142835 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6294 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1141291 mm_cid_get_alloc: 528 mm_cid_get_put_lazy: 40 mm_cid_put_lazy: 59 mm_cid_put: 49 mm_cid_migrate_steal: 3466 mm_cid_migrate_clear: 696 mm_cid_migrate_move: 2770
+domain0 00000080,00000000,00000000,00000000,00800000,00000000,00000000 8531 8002 9 608 546 0 0 8002 582 539 13 91 31 0 0 539 10916 10797 3 122 116 0 0 10360 0 0 0 0 0 0 0 0 0 7071 4886 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 965 440 259 764 373 4 7 418 0 0 0 0 0 0 0 0 5075 1936 2824 3281 315 1 63 1846 2 0 2 0 0 0 0 0 0 899947 548311 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 433 432 1 2 0 0 0 2 0 0 0 0 0 0 0 0 1761 431 970 20027288 360 0 298 123 0 0 0 0 0 0 0 0 0 12386 6963 0
+cpu88 0 0 2087208 976621 1118245 9978 71807558130 25312052775 1109002 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6296 mm_cid_task_work_clear_compact: 14 mm_cid_get_cached: 1107227 mm_cid_get_alloc: 704 mm_cid_get_put_lazy: 41 mm_cid_put_lazy: 80 mm_cid_put: 38 mm_cid_migrate_steal: 5155 mm_cid_migrate_clear: 802 mm_cid_migrate_move: 4353
+domain0 00000100,00000000,00000000,00000000,01000000,00000000,00000000 8287 7770 13 592 539 0 0 7770 631 582 11 158 41 0 0 582 8785 8674 5 116 106 0 0 8332 0 0 0 0 0 0 0 0 0 7691 5525 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 957 425 269 777 379 6 6 410 1 1 0 0 0 0 0 0 4209 2281 1681 2108 247 2 37 2222 3 0 3 0 0 0 0 0 0 1088153 721980 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 426 424 2 36211 0 0 0 1 0 0 0 0 0 0 0 0 1434 347 836 14189178 251 0 201 136 0 0 0 0 0 0 0 0 0 12420 7605 0
+cpu89 0 0 1989465 927785 1175028 9688 73063405748 25380783087 1059966 mm_cid_task_work_nr_run: 14 mm_cid_task_work_clear_old: 6315 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1058502 mm_cid_get_alloc: 442 mm_cid_get_put_lazy: 21 mm_cid_put_lazy: 51 mm_cid_put: 27 mm_cid_migrate_steal: 2432 mm_cid_migrate_clear: 393 mm_cid_migrate_move: 2039
+domain0 00000200,00000000,00000000,00000000,02000000,00000000,00000000 7520 6997 9 574 555 0 0 6993 629 574 9 139 47 0 0 574 11237 11104 16 134 117 0 0 10694 0 0 0 0 0 0 0 0 0 8243 5812 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 947 414 241 763 402 6 2 400 3 3 0 0 0 0 0 0 3915 1722 2044 2271 149 3 44 1654 6 0 6 0 0 0 0 0 0 1138044 752342 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 418 418 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1266 349 721 13447230 196 0 224 122 0 0 0 0 0 0 0 0 0 19050 11354 0
+cpu90 0 0 2179835 1023145 1171758 9494 72753771925 24994635860 1155194 mm_cid_task_work_nr_run: 15 mm_cid_task_work_clear_old: 6301 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 1153268 mm_cid_get_alloc: 908 mm_cid_get_put_lazy: 90 mm_cid_put_lazy: 142 mm_cid_put: 58 mm_cid_migrate_steal: 6304 mm_cid_migrate_clear: 1495 mm_cid_migrate_move: 4809
+domain0 00000400,00000000,00000000,00000000,04000000,00000000,00000000 8336 7778 11 603 574 0 0 7778 631 583 12 159 37 0 1 582 15255 15047 11 217 197 0 0 14363 0 0 0 0 0 0 0 0 0 7851 5630 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 951 421 243 795 414 0 5 405 2 2 0 0 0 0 0 0 3865 1684 1953 2356 228 1 43 1616 5 0 5 0 0 0 0 0 0 1152171 783124 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 416 416 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1401 335 796 19299345 270 0 215 113 0 0 0 0 0 0 0 0 0 2240 1209 0
+cpu91 0 0 2305786 1084799 1067195 9830 70023968990 24324054114 1219232 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6274 mm_cid_task_work_clear_compact: 17 mm_cid_get_cached: 1217291 mm_cid_get_alloc: 774 mm_cid_get_put_lazy: 54 mm_cid_put_lazy: 92 mm_cid_put: 136 mm_cid_migrate_steal: 5090 mm_cid_migrate_clear: 903 mm_cid_migrate_move: 4187
+domain0 00000800,00000000,00000000,00000000,08000000,00000000,00000000 9236 8700 36 599 521 0 0 8700 532 482 14 146 39 0 0 482 15699 15570 7 132 122 0 0 14765 1 0 1 0 0 0 0 0 0 7439 5476 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1075 525 250 786 417 4 3 417 0 0 0 0 0 0 0 0 7642 3412 3868 4375 362 1 97 3245 1 0 1 0 0 0 0 0 0 1046505 687821 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 436 436 0 0 0 0 0 1 2 2 0 0 0 0 0 0 1841 497 1069 17699981 275 0 279 200 0 0 0 0 0 0 0 0 0 3418 1662 0
+cpu92 3 0 2109344 987315 1254901 9716 74631028535 25107698481 1120479 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6307 mm_cid_task_work_clear_compact: 20 mm_cid_get_cached: 1118755 mm_cid_get_alloc: 672 mm_cid_get_put_lazy: 49 mm_cid_put_lazy: 93 mm_cid_put: 54 mm_cid_migrate_steal: 4073 mm_cid_migrate_clear: 717 mm_cid_migrate_move: 3356
+domain0 00001000,00000000,00000000,00000000,10000000,00000000,00000000 7833 7302 12 595 542 0 0 7300 653 601 10 143 46 0 0 601 14366 14271 8 99 87 0 0 13543 0 0 0 0 0 0 0 0 0 7708 5516 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 956 452 260 726 364 3 8 407 6 6 0 0 0 0 0 0 3932 1598 2117 2441 217 1 58 1501 7 0 7 0 0 0 0 0 0 1235081 856890 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 428 427 0 34877 2 0 0 0 1 1 0 0 0 0 0 0 1377 365 825 14647922 187 0 215 138 0 0 0 0 0 0 0 0 0 2393 1372 0
+cpu93 0 0 2149250 1006543 1151223 9667 73684672031 25080730833 1141064 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6307 mm_cid_task_work_clear_compact: 11 mm_cid_get_cached: 1139557 mm_cid_get_alloc: 495 mm_cid_get_put_lazy: 26 mm_cid_put_lazy: 42 mm_cid_put: 64 mm_cid_migrate_steal: 3261 mm_cid_migrate_clear: 472 mm_cid_migrate_move: 2789
+domain0 00002000,00000000,00000000,00000000,20000000,00000000,00000000 8244 7736 14 617 535 0 0 7736 632 579 6 156 48 0 0 579 11906 11764 10 146 132 0 0 11194 0 0 0 0 0 0 0 0 0 8473 6116 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 955 422 248 794 405 4 7 400 2 2 0 0 0 0 0 0 6378 2351 3811 4123 216 1 80 2204 6 0 6 0 0 0 0 0 0 1129961 765112 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 422 421 0 11 1 0 0 1 1 1 0 0 0 0 0 0 1489 359 844 17789266 286 0 245 105 0 0 0 0 0 0 0 0 0 3119 1401 0
+cpu94 0 0 2223531 1044835 1093985 9845 72091286223 24990985339 1177091 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6299 mm_cid_task_work_clear_compact: 10 mm_cid_get_cached: 1175564 mm_cid_get_alloc: 514 mm_cid_get_put_lazy: 23 mm_cid_put_lazy: 45 mm_cid_put: 73 mm_cid_migrate_steal: 2596 mm_cid_migrate_clear: 377 mm_cid_migrate_move: 2219
+domain0 00004000,00000000,00000000,00000000,40000000,00000000,00000000 8426 7909 10 587 536 0 0 7909 607 565 11 96 31 0 0 565 6617 6564 3 54 50 0 0 6301 0 0 0 0 0 0 0 0 0 8946 6482 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 961 431 264 775 398 4 6 412 1 1 0 0 0 0 0 0 3695 1888 1585 1895 222 2 37 1813 3 0 3 0 0 0 0 0 0 1073059 704721 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 427 427 0 0 0 0 0 2 0 0 0 0 0 0 0 0 1212 311 700 16845825 201 0 198 107 0 0 0 0 0 0 0 0 0 2132 1147 0
+cpu95 0 0 2285933 1076053 1107590 9808 73114324641 25015855922 1208318 mm_cid_task_work_nr_run: 14 mm_cid_task_work_clear_old: 6280 mm_cid_task_work_clear_compact: 10 mm_cid_get_cached: 1206559 mm_cid_get_alloc: 603 mm_cid_get_put_lazy: 37 mm_cid_put_lazy: 41 mm_cid_put: 173 mm_cid_migrate_steal: 3343 mm_cid_migrate_clear: 420 mm_cid_migrate_move: 2923
+domain0 00008000,00000000,00000000,00000000,80000000,00000000,00000000 8744 8199 12 617 564 0 0 8199 611 571 11 147 34 0 0 571 14203 14088 11 120 104 0 0 13423 0 0 0 0 0 0 0 0 0 8911 6300 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 952 430 256 773 384 1 14 408 1 1 0 0 0 0 0 0 8151 2962 4743 5375 446 3 118 2758 3 0 3 0 0 0 0 0 0 1086424 720310 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 426 425 1 34181 0 0 0 0 0 0 0 0 0 0 0 0 1708 453 959 20073686 296 0 264 180 0 0 0 0 0 0 0 0 0 2443 1257 0
+cpu96 0 0 2071213 968455 1084157 9514 72890155465 24316501031 1101111 mm_cid_task_work_nr_run: 44 mm_cid_task_work_clear_old: 6273 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 1099222 mm_cid_get_alloc: 692 mm_cid_get_put_lazy: 20 mm_cid_put_lazy: 50 mm_cid_put: 159 mm_cid_migrate_steal: 3421 mm_cid_migrate_clear: 438 mm_cid_migrate_move: 2983
+domain0 00010000,00000000,00000000,00000001,00000000,00000000,00000000 9164 8625 12 599 557 0 0 8625 641 584 18 160 43 0 0 584 13030 12900 9 132 121 0 0 12271 0 0 0 0 0 0 0 0 0 7611 5487 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1030 505 249 757 379 3 7 451 3 3 0 0 0 0 0 0 5480 2070 3270 3481 140 2 94 1914 2 0 2 0 0 0 0 0 0 1064934 707950 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 460 460 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1608 420 928 17242252 260 0 247 163 0 0 0 0 0 0 0 0 0 2095 1030 0
+cpu97 0 0 2174787 1019767 1144065 9729 74463670275 24757587110 1153251 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6295 mm_cid_task_work_clear_compact: 10 mm_cid_get_cached: 1151685 mm_cid_get_alloc: 489 mm_cid_get_put_lazy: 20 mm_cid_put_lazy: 39 mm_cid_put: 135 mm_cid_migrate_steal: 2732 mm_cid_migrate_clear: 270 mm_cid_migrate_move: 2462
+domain0 00020000,00000000,00000000,00000002,00000000,00000000,00000000 9327 8794 15 579 553 0 0 8794 661 619 10 150 35 0 0 619 13615 13485 9 131 121 0 0 12872 1 0 1 0 0 0 0 0 0 8770 6290 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1553 1031 259 749 377 3 10 975 2 2 0 0 0 0 0 0 8305 2997 4962 5455 346 1 145 2766 6 0 6 0 0 0 0 0 0 1123206 761887 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 995 995 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1487 401 840 14710652 246 0 265 121 0 0 0 0 0 0 0 0 0 2357 1251 0
+cpu98 0 0 2024184 944507 1316896 10707 76396532811 25022249760 1078273 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6303 mm_cid_task_work_clear_compact: 18 mm_cid_get_cached: 1076190 mm_cid_get_alloc: 617 mm_cid_get_put_lazy: 22 mm_cid_put_lazy: 35 mm_cid_put: 218 mm_cid_migrate_steal: 2232 mm_cid_migrate_clear: 276 mm_cid_migrate_move: 1956
+domain0 00040000,00000000,00000000,00000004,00000000,00000000,00000000 8987 8465 13 583 538 0 0 8465 667 616 13 133 39 0 0 616 12455 12328 9 128 118 0 0 11778 0 0 0 0 0 0 0 0 0 7458 5489 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 968 437 259 766 382 4 12 386 5 5 0 0 0 0 0 0 8606 2842 5490 5900 274 2 149 2592 1 0 1 0 0 0 0 0 0 1290885 910768 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 430 430 0 0 0 0 0 1 1 1 0 0 0 0 0 0 625 211 335 5496205 79 0 75 131 0 0 0 0 0 0 0 0 0 7843 3367 0
+cpu99 2 0 2245147 1055071 1061562 9624 69952261977 24409659872 1188514 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6275 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1186841 mm_cid_get_alloc: 631 mm_cid_get_put_lazy: 24 mm_cid_put_lazy: 30 mm_cid_put: 201 mm_cid_migrate_steal: 3252 mm_cid_migrate_clear: 287 mm_cid_migrate_move: 2965
+domain0 00080000,00000000,00000000,00000008,00000000,00000000,00000000 9214 8673 2 599 577 0 0 8673 568 524 10 132 35 0 0 524 13979 13891 4 88 84 0 0 13369 0 0 0 0 0 0 0 0 0 7835 5581 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 971 479 239 695 353 6 11 449 2 2 0 0 0 0 0 0 6482 2556 3782 4008 144 2 108 2376 8 0 8 0 0 0 0 0 0 1041764 676395 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 435 434 0 2 1 0 0 1 2 2 0 0 0 0 0 0 1671 440 975 15162857 256 0 254 172 0 0 0 0 0 0 0 0 0 2336 1141 0
+cpu100 0 0 2107953 986811 1171031 11852 73006575854 25544337805 1119488 mm_cid_task_work_nr_run: 21 mm_cid_task_work_clear_old: 6273 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 1116186 mm_cid_get_alloc: 692 mm_cid_get_put_lazy: 27 mm_cid_put_lazy: 35 mm_cid_put: 190 mm_cid_migrate_steal: 4160 mm_cid_migrate_clear: 353 mm_cid_migrate_move: 3807
+domain0 00100000,00000000,00000000,00000010,00000000,00000000,00000000 10502 9972 9 577 555 0 0 9972 624 577 15 117 34 0 0 577 12228 12085 10 146 133 0 0 11619 0 0 0 0 0 0 0 0 0 7993 5765 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 2415 1846 287 812 410 4 4 383 2 2 0 0 0 0 0 0 9670 2914 6269 6991 487 1 174 2651 4 0 4 0 0 0 0 0 0 1147955 770050 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 453 452 1 1 0 0 0 0 6 6 0 0 0 0 0 0 1968 508 1104 15208011 356 0 311 187 0 0 0 0 0 0 0 0 0 3228 1598 0
+cpu101 0 0 2173185 1019155 1159547 9878 73493546925 25344756756 1152731 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6289 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 1151251 mm_cid_get_alloc: 474 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 33 mm_cid_put: 142 mm_cid_migrate_steal: 1209 mm_cid_migrate_clear: 179 mm_cid_migrate_move: 1030
+domain0 00200000,00000000,00000000,00000020,00000000,00000000,00000000 8714 8204 7 585 539 0 0 8204 632 589 13 112 31 0 0 589 14130 13942 12 190 176 0 0 13491 0 0 0 0 0 0 0 0 0 8194 5989 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 942 414 261 779 387 4 6 397 1 1 0 0 0 0 0 0 6681 2196 4166 4688 319 2 123 2022 3 0 3 0 0 0 0 0 0 1139011 758293 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 423 423 0 0 0 0 0 2 0 0 0 0 0 0 0 0 1328 338 776 10676632 214 0 223 106 0 0 0 0 0 0 0 0 0 2461 1202 0
+cpu102 0 0 2240409 1052615 1071934 10303 70965773411 26038875652 1186144 mm_cid_task_work_nr_run: 14 mm_cid_task_work_clear_old: 6273 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1184738 mm_cid_get_alloc: 436 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 27 mm_cid_put: 63 mm_cid_migrate_steal: 1665 mm_cid_migrate_clear: 209 mm_cid_migrate_move: 1456
+domain0 00400000,00000000,00000000,00000040,00000000,00000000,00000000 8647 8137 6 569 534 0 0 8137 581 517 19 175 47 0 0 517 8411 8248 9 164 154 0 0 7975 0 0 0 0 0 0 0 0 0 8237 5985 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 977 428 287 788 367 6 11 407 0 0 0 0 0 0 0 0 5729 2381 2986 3517 362 0 70 2262 6 0 6 0 0 0 0 0 0 1050605 677877 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 427 427 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1486 426 826 16524340 234 0 260 160 0 0 0 0 0 0 0 0 0 2786 1370 0
+cpu103 23 0 2248706 1056425 1185394 9798 73934071318 24947671497 1190770 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6261 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1189397 mm_cid_get_alloc: 350 mm_cid_get_put_lazy: 14 mm_cid_put_lazy: 31 mm_cid_put: 51 mm_cid_migrate_steal: 847 mm_cid_migrate_clear: 161 mm_cid_migrate_move: 686
+domain0 00800000,00000000,00000000,00000080,00000000,00000000,00000000 8066 7531 10 612 555 0 0 7531 636 599 14 87 25 0 0 599 7251 7158 6 93 87 0 0 6935 0 0 0 0 0 0 0 0 0 7950 5744 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 947 419 268 800 387 2 4 398 14 14 0 0 0 0 0 0 5047 2148 2449 3095 450 2 71 2059 6 0 6 0 0 0 0 0 0 1165481 803430 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 420 420 0 0 0 0 0 1 2 2 0 0 0 0 0 0 1263 375 685 16302233 203 0 221 146 0 0 0 0 0 0 0 0 0 2162 1064 0
+cpu104 5 0 2291312 1078150 1117167 10256 72912819888 25403153519 1211812 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6237 mm_cid_task_work_clear_compact: 16 mm_cid_get_cached: 1210295 mm_cid_get_alloc: 488 mm_cid_get_put_lazy: 14 mm_cid_put_lazy: 34 mm_cid_put: 75 mm_cid_migrate_steal: 1226 mm_cid_migrate_clear: 225 mm_cid_migrate_move: 1001
+domain0 01000000,00000000,00000000,00000100,00000000,00000000,00000000 8587 8083 7 569 527 0 0 8083 586 534 12 111 42 0 0 534 11831 11733 4 100 94 0 0 11280 0 0 0 0 0 0 0 0 0 7904 5731 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 971 430 266 781 394 2 11 399 11 11 0 0 0 0 0 5 6181 2187 3857 4048 137 3 127 2017 1 0 1 0 0 0 0 0 0 1095883 723370 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 438 437 0 23 3 0 0 0 6 6 0 0 0 0 0 0 1619 399 932 16789690 288 0 264 128 0 0 0 0 0 0 0 0 0 3121 1561 0
+cpu105 3 0 2069076 966954 1179959 10199 73133958376 25288363493 1100728 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6284 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 1099282 mm_cid_get_alloc: 450 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 47 mm_cid_put: 45 mm_cid_migrate_steal: 2164 mm_cid_migrate_clear: 290 mm_cid_migrate_move: 1874
+domain0 02000000,00000000,00000000,00000200,00000000,00000000,00000000 8178 7663 8 563 535 0 0 7662 653 607 11 139 36 0 0 607 9974 9825 15 156 134 0 0 9531 0 0 0 0 0 0 0 0 0 8043 5782 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 950 421 248 777 396 3 8 405 7 7 0 0 0 0 0 0 4807 2831 1793 2054 183 2 45 2737 2 0 2 0 0 0 0 0 0 1159310 786444 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 429 429 0 0 0 0 0 0 2 2 0 0 0 0 0 0 1721 415 1006 15288747 300 0 262 143 0 0 0 0 0 0 0 0 0 2405 1202 0
+cpu106 12 0 1966070 914201 1402936 12854 77793985368 25634938880 1050500 mm_cid_task_work_nr_run: 28 mm_cid_task_work_clear_old: 6308 mm_cid_task_work_clear_compact: 25 mm_cid_get_cached: 1045985 mm_cid_get_alloc: 351 mm_cid_get_put_lazy: 12 mm_cid_put_lazy: 28 mm_cid_put: 82 mm_cid_migrate_steal: 669 mm_cid_migrate_clear: 130 mm_cid_migrate_move: 539
+domain0 04000000,00000000,00000000,00000400,00000000,00000000,00000000 10264 9722 7 607 563 0 0 9722 706 662 7 121 37 0 0 662 7230 7131 11 100 88 0 0 6983 0 0 0 0 0 0 0 0 0 8353 6164 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 2019 1498 231 780 421 2 8 717 8 8 0 0 0 0 0 0 5987 3292 2161 2956 534 4 80 3185 3 0 3 0 0 0 0 0 0 1379650 994096 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 977 976 1 1 0 0 0 1 1 1 0 0 0 0 0 0 2497 1412 847 14628063 238 0 250 1158 0 0 0 0 0 0 0 0 0 2076 1116 0
+cpu107 11 0 2028769 946817 1176888 11715 73502604679 25764501573 1080650 mm_cid_task_work_nr_run: 46 mm_cid_task_work_clear_old: 6250 mm_cid_task_work_clear_compact: 16 mm_cid_get_cached: 1078104 mm_cid_get_alloc: 389 mm_cid_get_put_lazy: 12 mm_cid_put_lazy: 29 mm_cid_put: 71 mm_cid_migrate_steal: 1121 mm_cid_migrate_clear: 187 mm_cid_migrate_move: 934
+domain0 08000000,00000000,00000000,00000800,00000000,00000000,00000000 9317 8725 12 669 624 0 0 8725 702 656 17 114 29 0 0 656 8580 8495 4 86 81 0 0 8286 1 0 1 0 0 0 0 0 0 7925 5903 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1489 966 266 757 362 5 6 694 9 9 0 0 0 0 0 1 3493 2237 1176 1311 80 2 37 2155 9 0 9 0 0 0 0 0 0 1150561 766049 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 716 716 0 0 0 0 0 0 2 2 0 0 0 0 0 0 1575 550 814 12755658 211 0 173 366 0 0 0 0 0 0 0 0 0 6684 21499 0
+cpu108 9 0 2199030 1031087 1130620 14461 74398919095 25382032826 1166692 mm_cid_task_work_nr_run: 33 mm_cid_task_work_clear_old: 6247 mm_cid_task_work_clear_compact: 11 mm_cid_get_cached: 1160675 mm_cid_get_alloc: 638 mm_cid_get_put_lazy: 34 mm_cid_put_lazy: 37 mm_cid_put: 80 mm_cid_migrate_steal: 6015 mm_cid_migrate_clear: 614 mm_cid_migrate_move: 5401
+domain0 10000000,00000000,00000000,00001000,00000000,00000000,00000000 11048 10497 8 601 571 0 0 10497 646 601 13 88 34 0 0 601 7790 7720 5 70 65 0 0 7476 0 0 0 0 0 0 0 0 0 8857 6355 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 2074 1560 261 765 361 9 7 514 8 8 0 0 0 0 0 0 5595 3551 1924 2094 120 3 77 3450 6 0 6 0 0 0 0 0 0 1104508 728582 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 981 980 1 36358 0 0 0 2 2 2 0 0 0 0 0 0 3065 2027 796 16695699 242 0 267 1751 0 0 0 0 0 0 0 0 0 2791 1446 0
+cpu109 4 0 2103406 983529 1263272 9669 72774941093 25320059031 1118501 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6298 mm_cid_task_work_clear_compact: 9 mm_cid_get_cached: 1116949 mm_cid_get_alloc: 562 mm_cid_get_put_lazy: 28 mm_cid_put_lazy: 36 mm_cid_put: 64 mm_cid_migrate_steal: 5639 mm_cid_migrate_clear: 475 mm_cid_migrate_move: 5164
+domain0 20000000,00000000,00000000,00002000,00000000,00000000,00000000 7971 7426 10 616 579 0 0 7426 661 612 15 113 35 0 0 612 10706 10562 6 147 138 0 0 10114 1 0 1 0 0 0 0 0 0 8082 5837 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 945 416 244 756 387 4 2 403 2 2 0 0 0 0 0 0 4216 1912 2111 2390 193 2 77 1816 3 0 3 0 0 0 0 0 0 1243645 880090 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 421 421 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1529 394 859 16608483 276 0 249 131 0 0 0 0 0 0 0 0 0 1873 1012 0
+cpu110 29 0 2145540 1004305 1056629 9926 70514400912 24593425720 1139877 mm_cid_task_work_nr_run: 38 mm_cid_task_work_clear_old: 6218 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 1138338 mm_cid_get_alloc: 497 mm_cid_get_put_lazy: 20 mm_cid_put_lazy: 27 mm_cid_put: 87 mm_cid_migrate_steal: 3882 mm_cid_migrate_clear: 253 mm_cid_migrate_move: 3629
+domain0 40000000,00000000,00000000,00004000,00000000,00000000,00000000 8478 7932 15 618 569 0 0 7932 658 609 11 125 41 0 0 609 8306 8162 12 150 132 0 0 7899 0 0 0 0 0 0 0 0 0 7904 5840 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 993 440 269 837 410 1 1 422 31 31 0 0 0 0 0 1 3306 1455 1608 1990 243 1 48 1389 6 0 6 0 0 0 0 0 0 1035809 685630 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 444 444 0 0 0 0 0 2 7 7 0 0 0 0 0 0 1301 377 718 13051504 206 0 185 183 0 0 0 0 0 0 0 0 0 2987 1522 0
+cpu111 8 0 1987876 924816 1298630 10281 74965711039 26028124266 1061719 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6291 mm_cid_task_work_clear_compact: 12 mm_cid_get_cached: 1060251 mm_cid_get_alloc: 480 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 42 mm_cid_put: 61 mm_cid_migrate_steal: 4822 mm_cid_migrate_clear: 270 mm_cid_migrate_move: 4552
+domain0 80000000,00000000,00000000,00008000,00000000,00000000,00000000 7943 7406 16 586 552 0 0 7406 692 633 20 141 40 0 0 633 9504 9332 13 178 159 0 0 8972 0 0 0 0 0 0 0 0 0 8263 5939 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 938 419 255 762 381 8 8 396 4 4 0 0 0 0 0 1 5137 2087 2630 3301 420 3 101 1947 3 0 3 0 0 0 0 0 0 1277393 897062 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 415 415 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1215 285 741 14301996 189 0 147 126 0 0 0 0 0 0 0 0 0 2690 1265 0
+cpu112 0 0 1689612 772785 834351 14440 84983380335 35385245605 915122 mm_cid_task_work_nr_run: 46 mm_cid_task_work_clear_old: 6148 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 902448 mm_cid_get_alloc: 8520 mm_cid_get_put_lazy: 458 mm_cid_put_lazy: 356 mm_cid_put: 18 mm_cid_migrate_steal: 14863 mm_cid_migrate_clear: 7225 mm_cid_migrate_move: 7638
+domain0 00000000,00000000,00000000,00010000,00000000,00000000,00000001 8330 7690 18 742 663 0 1 7688 951 847 13 404 99 0 0 847 10514 9910 61 624 543 0 0 9705 1 0 1 0 0 0 0 0 0 8831 6098 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1346 938 166 598 339 2 9 60 10 10 0 0 0 0 0 0 1878 805 618 1400 455 1 20 781 1 0 1 0 0 0 0 0 0 805515 417460 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 506 506 0 0 0 0 1 1 6 6 0 0 0 0 0 0 833 718 82 2034661 33 0 8 706 0 0 0 0 0 0 0 0 0 5563 3001 0
+cpu113 0 0 1559283 707120 853136 13557 83229927762 35674057373 850532 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6193 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 838962 mm_cid_get_alloc: 8192 mm_cid_get_put_lazy: 448 mm_cid_put_lazy: 340 mm_cid_put: 42 mm_cid_migrate_steal: 11838 mm_cid_migrate_clear: 7222 mm_cid_migrate_move: 4616
+domain0 00000000,00000000,00000000,00020000,00000000,00000000,00000002 8610 8020 13 671 614 0 0 8020 890 809 24 218 61 0 0 809 4124 3900 8 230 216 0 0 3798 0 0 0 0 0 0 0 0 0 6643 4409 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 2168 1774 184 526 278 2 4 63 6 6 0 0 0 0 0 0 1969 786 644 1566 539 0 15 761 0 0 0 0 0 0 0 0 0 826490 431042 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 491 491 0 0 0 0 0 1 8 8 0 0 0 0 0 0 825 665 116 2182073 44 0 13 651 0 0 0 0 0 0 0 0 0 6445 6106 0
+cpu114 0 0 1620328 737813 895236 15189 86106737957 36561358051 880815 mm_cid_task_work_nr_run: 37 mm_cid_task_work_clear_old: 6174 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 867950 mm_cid_get_alloc: 8104 mm_cid_get_put_lazy: 409 mm_cid_put_lazy: 349 mm_cid_put: 36 mm_cid_migrate_steal: 12858 mm_cid_migrate_clear: 7253 mm_cid_migrate_move: 5605
+domain0 00000000,00000000,00000000,00040000,00000000,00000000,00000004 10019 9422 21 679 600 0 0 9421 908 824 24 263 66 0 0 824 7386 6952 22 451 412 0 0 6780 0 0 0 0 0 0 0 0 0 7581 4643 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 2026 1604 193 586 319 4 9 48 6 6 0 0 0 0 0 0 2711 1383 685 1733 643 3 24 1348 1 0 1 0 0 0 0 0 0 867772 460802 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 863 863 0 0 0 0 0 2 2 2 0 0 0 0 0 0 1453 1329 86 2085537 38 0 19 1293 0 0 0 0 0 0 0 0 0 4693 5051 0
+cpu115 10 0 1636384 746381 853990 12502 83367309285 35596788932 888206 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6153 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 878693 mm_cid_get_alloc: 8203 mm_cid_get_put_lazy: 444 mm_cid_put_lazy: 361 mm_cid_put: 69 mm_cid_migrate_steal: 13828 mm_cid_migrate_clear: 7149 mm_cid_migrate_move: 6679
+domain0 00000000,00000000,00000000,00080000,00000000,00000000,00000008 7463 6836 15 686 642 0 0 6835 972 872 25 319 80 0 0 872 7194 6803 25 406 366 0 0 6640 0 0 0 0 0 0 0 0 0 6384 4303 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1158 722 186 631 349 4 4 51 11 11 0 0 0 0 0 0 1685 421 692 1607 572 2 37 379 1 0 1 0 0 0 0 0 0 825168 430989 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 378 378 0 0 0 0 0 0 5 5 0 0 0 0 0 0 522 401 77 2546398 44 0 26 361 0 0 0 0 0 0 0 0 0 9935 6154 0
+cpu116 28 0 1683104 769123 842538 11927 84307713202 35627658972 912212 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6153 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 902871 mm_cid_get_alloc: 8255 mm_cid_get_put_lazy: 425 mm_cid_put_lazy: 360 mm_cid_put: 52 mm_cid_migrate_steal: 14734 mm_cid_migrate_clear: 7135 mm_cid_migrate_move: 7599
+domain0 00000000,00000000,00000000,00100000,00000000,00000000,00000010 7619 6982 18 762 654 0 0 6982 916 834 26 349 59 0 0 834 5860 5489 18 381 353 0 0 5337 0 0 0 0 0 0 0 0 0 6638 4371 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1184 770 195 598 309 4 5 49 14 14 0 0 0 0 0 0 1678 391 639 1679 648 1 40 338 2 0 2 0 0 0 0 0 0 817115 425737 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 383 383 0 0 0 0 0 0 5 5 0 0 0 0 0 0 410 304 67 1606183 39 0 19 267 0 0 0 0 0 0 0 0 0 6857 3633 0
+cpu117 40 0 1549770 702481 872169 12526 83369542673 35962943278 845537 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6193 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 834730 mm_cid_get_alloc: 8451 mm_cid_get_put_lazy: 463 mm_cid_put_lazy: 430 mm_cid_put: 50 mm_cid_migrate_steal: 12654 mm_cid_migrate_clear: 7399 mm_cid_migrate_move: 5255
+domain0 00000000,00000000,00000000,00200000,00000000,00000000,00000020 7565 6967 12 660 625 0 0 6967 896 818 13 240 68 0 0 818 5825 5468 25 362 332 0 0 5352 0 0 0 0 0 0 0 0 0 7751 4789 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1137 715 175 604 353 3 7 41 21 21 0 0 0 0 0 0 1929 563 681 1761 685 1 31 527 3 0 3 0 0 0 0 0 0 845985 431179 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 413 413 0 0 0 0 0 0 8 8 0 0 0 0 0 0 656 521 97 2389219 38 0 30 482 0 0 0 0 0 0 0 0 0 5905 2815 0
+cpu118 23 0 1586481 720940 844489 13635 84355988234 35598253738 863834 mm_cid_task_work_nr_run: 44 mm_cid_task_work_clear_old: 6158 mm_cid_task_work_clear_compact: 21 mm_cid_get_cached: 852605 mm_cid_get_alloc: 8384 mm_cid_get_put_lazy: 436 mm_cid_put_lazy: 359 mm_cid_put: 95 mm_cid_migrate_steal: 10089 mm_cid_migrate_clear: 7416 mm_cid_migrate_move: 2673
+domain0 00000000,00000000,00000000,00400000,00000000,00000000,00000040 8140 7496 17 747 663 0 0 7496 917 825 26 241 72 0 0 825 3055 2895 10 170 150 0 0 2830 1 0 1 0 0 0 0 0 0 6633 4397 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1366 961 189 578 315 3 11 55 12 12 0 0 0 0 0 0 1992 906 530 1433 556 2 14 885 3 0 3 0 0 0 0 0 0 820816 429887 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 521 521 0 0 0 0 0 1 5 5 0 0 0 0 0 0 903 814 57 1470781 32 0 16 798 0 0 0 0 0 0 0 0 0 3403 1974 0
+cpu119 18 0 1577341 717313 846895 14545 84369443189 36395916231 858327 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6182 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 846424 mm_cid_get_alloc: 8045 mm_cid_get_put_lazy: 407 mm_cid_put_lazy: 360 mm_cid_put: 98 mm_cid_migrate_steal: 9836 mm_cid_migrate_clear: 7146 mm_cid_migrate_move: 2690
+domain0 00000000,00000000,00000000,00800000,00000000,00000000,00000080 8549 7954 17 688 615 0 0 7954 969 866 24 322 85 0 0 866 8192 7736 22 468 434 0 0 7553 1 0 1 0 0 0 0 0 0 6660 4385 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 2085 1700 178 552 294 4 8 61 2 2 0 0 0 0 0 0 2043 823 569 1672 651 2 7 808 1 0 1 0 0 0 0 0 0 820261 423176 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 487 486 0 112 1 0 0 1 16 16 0 0 0 0 0 0 845 722 68 1929620 55 0 16 704 0 0 0 0 0 0 0 0 0 5429 2731 0
+cpu120 18 0 1637302 746315 828475 12520 82643453441 35881716797 889208 mm_cid_task_work_nr_run: 15 mm_cid_task_work_clear_old: 6161 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 879831 mm_cid_get_alloc: 8194 mm_cid_get_put_lazy: 437 mm_cid_put_lazy: 373 mm_cid_put: 106 mm_cid_migrate_steal: 11873 mm_cid_migrate_clear: 7148 mm_cid_migrate_move: 4725
+domain0 00000000,00000000,00000000,01000000,00000000,00000000,00000100 7195 6570 19 752 640 0 0 6570 895 801 17 245 83 0 0 801 8173 7613 26 578 534 0 0 7426 1 0 1 0 0 0 0 0 0 7212 5046 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 928 484 191 640 373 0 9 45 12 12 0 0 0 0 0 0 1928 357 709 2101 862 2 19 323 3 0 3 0 0 0 0 0 0 802304 414603 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 342 342 0 0 0 0 0 2 1 1 0 0 0 0 0 0 406 285 83 2050587 38 0 29 256 0 0 0 0 0 0 0 0 0 6438 3651 0
+cpu121 10 0 1704608 779516 841336 13665 85232238872 36127942299 923482 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6151 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 911640 mm_cid_get_alloc: 8144 mm_cid_get_put_lazy: 465 mm_cid_put_lazy: 366 mm_cid_put: 44 mm_cid_migrate_steal: 13536 mm_cid_migrate_clear: 7152 mm_cid_migrate_move: 6384
+domain0 00000000,00000000,00000000,02000000,00000000,00000000,00000200 7992 7277 17 807 734 0 0 7277 889 806 21 283 65 0 0 806 4899 4736 11 164 152 0 0 4621 0 0 0 0 0 0 0 0 0 7158 4502 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1277 862 162 598 365 1 3 48 11 11 0 0 0 0 0 0 1645 887 511 899 247 0 6 876 0 0 0 0 0 0 0 0 0 813613 421199 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 493 493 0 0 0 0 0 2 5 5 0 0 0 0 0 0 984 875 68 2285047 41 0 17 856 0 0 0 0 0 0 0 0 0 6899 3986 0
+cpu122 11 0 1532188 694154 904871 12160 84067570849 35702467866 836284 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6195 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 826686 mm_cid_get_alloc: 7996 mm_cid_get_put_lazy: 435 mm_cid_put_lazy: 389 mm_cid_put: 47 mm_cid_migrate_steal: 9080 mm_cid_migrate_clear: 7233 mm_cid_migrate_move: 1847
+domain0 00000000,00000000,00000000,04000000,00000000,00000000,00000400 6734 6130 14 693 616 0 0 6130 966 878 23 207 70 0 0 878 8306 7795 55 526 456 0 0 7613 0 0 0 0 0 0 0 0 0 7100 4855 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 919 483 196 615 338 5 5 44 6 6 0 0 0 0 0 0 752 194 375 681 183 0 8 182 4 0 4 0 0 0 0 0 0 875326 460172 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 346 346 0 0 0 0 0 1 0 0 0 0 0 0 0 0 323 222 81 2036098 20 0 23 199 0 0 0 0 0 0 0 0 0 10284 7762 0
+cpu123 2 0 1527287 690899 965698 13225 87119373483 35860199056 834703 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6205 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 823118 mm_cid_get_alloc: 7963 mm_cid_get_put_lazy: 400 mm_cid_put_lazy: 349 mm_cid_put: 50 mm_cid_migrate_steal: 8986 mm_cid_migrate_clear: 7220 mm_cid_migrate_move: 1766
+domain0 00000000,00000000,00000000,08000000,00000000,00000000,00000800 8176 7560 7 713 636 0 0 7560 981 878 27 690 82 0 0 878 6457 6087 22 380 348 0 0 5961 0 0 0 0 0 0 0 0 0 6072 4098 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1714 1312 155 576 346 4 4 28 1 1 0 0 0 0 0 0 1047 207 437 1126 403 0 7 197 1 0 1 0 0 0 0 0 0 932733 496778 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 628 628 0 0 0 0 0 0 1 1 0 0 0 0 0 0 342 273 49 1035889 20 0 16 257 0 0 0 0 0 0 0 0 0 13668 18193 0
+cpu124 0 0 1654148 754443 857656 11632 84606045895 35536715570 898125 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6171 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 888459 mm_cid_get_alloc: 8573 mm_cid_get_put_lazy: 436 mm_cid_put_lazy: 376 mm_cid_put: 115 mm_cid_migrate_steal: 12033 mm_cid_migrate_clear: 7249 mm_cid_migrate_move: 4784
+domain0 00000000,00000000,00000000,10000000,00000000,00000000,00001000 10053 9452 11 669 625 0 0 9452 941 842 27 287 75 0 0 842 7521 6994 25 538 502 0 0 6830 0 0 0 0 0 0 0 0 0 6590 4485 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 3763 3349 209 600 304 3 6 40 0 0 0 0 0 0 0 0 1333 285 536 1316 512 1 25 253 5 0 5 0 0 0 0 0 0 832442 436380 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 367 366 0 2 2 0 0 0 3 3 0 0 0 0 0 0 410 277 87 2382425 46 0 24 252 0 0 0 0 0 0 0 0 0 6991 4028 0
+cpu125 19 0 1595945 725942 833284 12714 83447314151 35339976920 867867 mm_cid_task_work_nr_run: 29 mm_cid_task_work_clear_old: 6169 mm_cid_task_work_clear_compact: 7 mm_cid_get_cached: 857199 mm_cid_get_alloc: 8315 mm_cid_get_put_lazy: 444 mm_cid_put_lazy: 332 mm_cid_put: 77 mm_cid_migrate_steal: 11241 mm_cid_migrate_clear: 7312 mm_cid_migrate_move: 3929
+domain0 00000000,00000000,00000000,20000000,00000000,00000000,00002000 7156 6469 7 811 727 0 0 6467 849 764 24 251 65 0 0 764 3622 3423 8 204 191 0 0 3322 0 0 0 0 0 0 0 0 0 6739 4371 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1093 674 185 582 320 6 5 46 4 4 0 0 0 0 0 0 1249 535 387 923 327 1 6 520 2 0 2 0 0 0 0 0 0 809219 419093 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 382 382 0 0 0 0 0 0 4 4 0 0 0 0 0 0 676 554 83 1784817 39 0 16 537 0 0 0 0 0 0 0 0 0 4611 3000 0
+cpu126 1 0 1596825 725550 888456 13318 85515647071 35983967345 869690 mm_cid_task_work_nr_run: 36 mm_cid_task_work_clear_old: 6138 mm_cid_task_work_clear_compact: 16 mm_cid_get_cached: 858286 mm_cid_get_alloc: 8516 mm_cid_get_put_lazy: 461 mm_cid_put_lazy: 383 mm_cid_put: 131 mm_cid_migrate_steal: 10452 mm_cid_migrate_clear: 7358 mm_cid_migrate_move: 3094
+domain0 00000000,00000000,00000000,40000000,00000000,00000000,00004000 8016 7360 15 738 675 0 0 7360 939 826 35 307 82 0 0 826 4033 3790 15 248 228 0 0 3661 0 0 0 0 0 0 0 0 0 6886 4427 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1182 769 187 614 332 6 5 42 12 12 0 0 0 0 0 0 2345 718 774 2066 853 0 36 671 2 0 2 0 0 0 0 0 0 855387 446717 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 405 405 0 0 0 0 1 0 7 7 0 0 0 0 0 0 647 522 74 1673964 51 0 17 505 0 0 0 0 0 0 0 0 0 12865 10886 0
+cpu127 10 0 1648104 751852 810921 13442 82669881270 36119799271 894460 mm_cid_task_work_nr_run: 17 mm_cid_task_work_clear_old: 6152 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 882838 mm_cid_get_alloc: 8562 mm_cid_get_put_lazy: 449 mm_cid_put_lazy: 340 mm_cid_put: 80 mm_cid_migrate_steal: 12581 mm_cid_migrate_clear: 7670 mm_cid_migrate_move: 4911
+domain0 00000000,00000000,00000000,80000000,00000000,00000000,00008000 8773 8126 10 707 665 0 0 8126 865 774 22 268 76 0 0 774 7846 7449 19 402 378 0 0 7262 0 0 0 0 0 0 0 0 0 6592 4321 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1244 822 184 596 329 0 7 47 6 6 0 0 0 0 0 0 1694 598 582 1372 514 3 7 583 1 0 1 0 0 0 0 0 0 785797 410267 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 462 462 0 0 0 0 0 0 1 1 0 0 0 0 0 0 620 497 83 1897856 40 0 22 473 0 0 0 0 0 0 0 0 0 5089 3405 0
+cpu128 0 0 1606803 730952 840321 13853 83843027954 35988863667 874119 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6164 mm_cid_task_work_clear_compact: 7 mm_cid_get_cached: 862129 mm_cid_get_alloc: 8703 mm_cid_get_put_lazy: 499 mm_cid_put_lazy: 369 mm_cid_put: 117 mm_cid_migrate_steal: 14133 mm_cid_migrate_clear: 7512 mm_cid_migrate_move: 6621
+domain0 00000000,00000000,00000001,00000000,00000000,00000000,00010000 8547 7933 10 679 637 0 0 7933 830 740 24 231 73 0 0 740 5490 5159 11 349 320 0 0 5039 0 0 0 0 0 0 0 0 0 7104 4602 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1473 1048 207 610 304 7 4 49 1 1 0 0 0 0 0 0 2358 1126 587 1684 645 1 15 1101 5 0 5 0 0 0 0 0 0 812944 420398 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 567 566 0 1 1 0 0 1 3 3 0 0 0 0 0 0 1075 973 69 1692282 33 0 21 949 0 0 0 0 0 0 0 0 0 6419 3419 0
+cpu129 0 0 1607613 730999 889659 12484 84821106716 35799870591 874775 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6152 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 865192 mm_cid_get_alloc: 8122 mm_cid_get_put_lazy: 387 mm_cid_put_lazy: 357 mm_cid_put: 57 mm_cid_migrate_steal: 13516 mm_cid_migrate_clear: 7311 mm_cid_migrate_move: 6205
+domain0 00000000,00000000,00000002,00000000,00000000,00000000,00020000 7092 6485 11 694 625 0 0 6485 925 824 22 331 88 0 0 824 6478 6149 17 344 312 0 0 5959 0 0 0 0 0 0 0 0 0 6631 4483 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 891 467 192 625 342 7 7 34 0 0 0 0 0 0 0 0 1754 335 708 1779 711 1 21 305 5 0 5 0 0 0 0 0 0 863554 472402 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 327 327 0 0 0 0 0 0 0 0 0 0 0 0 0 0 493 329 117 3387952 47 0 26 300 0 0 0 0 0 0 0 0 0 6991 7252 0
+cpu130 0 0 1634685 745037 852744 12241 84912747664 36055606192 887835 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6141 mm_cid_task_work_clear_compact: 12 mm_cid_get_cached: 877854 mm_cid_get_alloc: 8353 mm_cid_get_put_lazy: 406 mm_cid_put_lazy: 365 mm_cid_put: 72 mm_cid_migrate_steal: 15048 mm_cid_migrate_clear: 7374 mm_cid_migrate_move: 7674
+domain0 00000000,00000000,00000004,00000000,00000000,00000000,00040000 7220 6622 7 696 630 0 0 6622 912 811 21 274 83 0 0 811 8591 8174 26 423 391 0 0 7948 0 0 0 0 0 0 0 0 0 6271 4219 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1021 587 182 626 345 3 10 42 3 3 0 0 0 0 0 0 1964 547 710 1837 707 3 22 515 0 0 0 0 0 0 0 0 0 827363 435432 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 331 331 0 0 0 0 0 0 3 3 0 0 0 0 0 0 471 365 64 1873415 42 0 17 346 0 0 0 0 0 0 0 0 0 6868 4675 0
+cpu131 16 0 1524880 691199 877059 11961 85472061999 36598094720 831951 mm_cid_task_work_nr_run: 40 mm_cid_task_work_clear_old: 6155 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 822332 mm_cid_get_alloc: 8507 mm_cid_get_put_lazy: 475 mm_cid_put_lazy: 395 mm_cid_put: 114 mm_cid_migrate_steal: 10972 mm_cid_migrate_clear: 7560 mm_cid_migrate_move: 3412
+domain0 00000000,00000000,00000008,00000000,00000000,00000000,00080000 7197 6559 24 860 650 0 0 6559 918 822 27 260 72 0 0 822 3740 3540 12 211 188 0 0 3453 1 0 1 0 0 0 0 0 0 6648 4332 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1006 610 176 567 322 1 6 49 11 11 0 0 0 0 0 0 1489 314 568 1533 607 1 16 288 4 0 4 0 0 0 0 0 0 850831 437918 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 335 335 0 0 0 0 0 0 7 7 0 0 0 0 0 0 355 201 102 2806152 52 0 24 177 0 0 0 0 0 0 0 0 0 7618 6366 0
+cpu132 6 0 1572881 713271 812791 13548 83121608134 36505837253 857934 mm_cid_task_work_nr_run: 36 mm_cid_task_work_clear_old: 6131 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 846636 mm_cid_get_alloc: 8520 mm_cid_get_put_lazy: 446 mm_cid_put_lazy: 384 mm_cid_put: 180 mm_cid_migrate_steal: 10232 mm_cid_migrate_clear: 7483 mm_cid_migrate_move: 2749
+domain0 00000000,00000000,00000010,00000000,00000000,00000000,00100000 8322 7686 9 709 662 0 0 7686 904 809 23 259 78 0 0 809 7142 6753 23 400 366 0 0 6609 0 0 0 0 0 0 0 0 0 6963 4494 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1206 787 176 588 339 3 7 50 7 7 0 0 0 0 0 0 1444 739 328 988 377 0 4 729 2 0 2 0 0 0 0 0 0 787073 410334 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 458 458 0 0 0 0 0 1 6 6 0 0 0 0 0 0 739 657 66 1249796 16 0 15 640 0 0 0 0 0 0 0 0 0 5206 3070 0
+cpu133 3 0 1558704 706983 803990 12170 82905691370 36160938586 849983 mm_cid_task_work_nr_run: 40 mm_cid_task_work_clear_old: 6122 mm_cid_task_work_clear_compact: 10 mm_cid_get_cached: 840551 mm_cid_get_alloc: 8258 mm_cid_get_put_lazy: 443 mm_cid_put_lazy: 395 mm_cid_put: 67 mm_cid_migrate_steal: 11864 mm_cid_migrate_clear: 7248 mm_cid_migrate_move: 4616
+domain0 00000000,00000000,00000020,00000000,00000000,00000000,00200000 7201 6570 19 731 649 0 0 6570 822 732 20 233 72 0 0 732 1760 1666 5 99 89 0 0 1600 0 0 0 0 0 0 0 0 0 6977 4406 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 947 559 186 551 291 5 5 55 7 7 0 0 0 0 0 0 911 300 368 757 243 2 0 295 2 0 2 0 0 0 0 0 0 780357 402873 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 358 358 0 0 0 0 0 1 8 8 0 0 0 0 0 0 321 225 71 1439608 25 0 19 203 0 0 0 0 0 0 0 0 0 4485 2730 0
+cpu134 0 0 1543686 699465 827429 11869 82638748085 35959310023 842484 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6177 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 833160 mm_cid_get_alloc: 7993 mm_cid_get_put_lazy: 425 mm_cid_put_lazy: 379 mm_cid_put: 125 mm_cid_migrate_steal: 9910 mm_cid_migrate_clear: 7080 mm_cid_migrate_move: 2830
+domain0 00000000,00000000,00000040,00000000,00000000,00000000,00400000 7818 7177 13 796 667 0 0 7177 879 784 27 308 73 0 0 784 4563 4244 20 323 299 0 0 4099 0 0 0 0 0 0 0 0 0 6194 4120 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1114 706 179 582 325 0 6 57 1 1 0 0 0 0 0 0 1827 374 624 1931 829 1 29 331 1 0 1 0 0 0 0 0 0 803857 424149 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 360 360 0 0 0 0 0 0 0 0 0 0 0 0 0 0 314 209 65 1771695 40 0 24 182 0 0 0 0 0 0 0 0 0 5508 3396 0
+cpu135 0 0 1545074 699331 789479 11391 83268540995 34830015298 843973 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6188 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 834362 mm_cid_get_alloc: 8602 mm_cid_get_put_lazy: 471 mm_cid_put_lazy: 398 mm_cid_put: 128 mm_cid_migrate_steal: 10381 mm_cid_migrate_clear: 7658 mm_cid_migrate_move: 2723
+domain0 00000000,00000000,00000080,00000000,00000000,00000000,00800000 7383 6753 11 757 668 0 0 6753 928 835 23 290 75 0 1 834 7233 6769 41 477 423 0 0 6614 0 0 0 0 0 0 0 0 0 5937 3897 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 887 446 191 632 363 7 3 47 1 1 0 0 0 0 0 0 1146 237 433 1193 476 2 13 216 2 0 2 0 0 0 0 0 0 764965 396168 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 316 316 0 0 0 0 0 0 0 0 0 0 0 0 0 0 238 149 51 1277131 38 0 16 131 0 0 0 0 0 0 0 0 0 7185 5021 0
+cpu136 0 0 1505333 680975 838204 11667 83275155030 36057300816 822669 mm_cid_task_work_nr_run: 17 mm_cid_task_work_clear_old: 6183 mm_cid_task_work_clear_compact: 9 mm_cid_get_cached: 813563 mm_cid_get_alloc: 8087 mm_cid_get_put_lazy: 425 mm_cid_put_lazy: 399 mm_cid_put: 71 mm_cid_migrate_steal: 11423 mm_cid_migrate_clear: 7270 mm_cid_migrate_move: 4153
+domain0 00000000,00000000,00000100,00000000,00000000,00000000,01000000 7227 6591 7 724 663 0 0 6591 915 814 26 534 81 0 0 814 5336 4954 33 394 349 0 0 4816 0 0 0 0 0 0 0 0 0 7207 4637 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1027 616 179 570 308 2 6 45 0 0 0 0 0 0 0 0 1396 242 593 1488 561 0 12 220 1 0 1 0 0 0 0 0 0 813752 424407 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 336 336 0 0 0 0 0 0 0 0 0 0 0 0 0 0 354 212 91 2409711 51 0 23 185 0 0 0 0 0 0 0 0 0 5577 3566 0
+cpu137 0 0 1529339 693234 825488 11627 82459156021 35816732137 834220 mm_cid_task_work_nr_run: 14 mm_cid_task_work_clear_old: 6190 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 825268 mm_cid_get_alloc: 7934 mm_cid_get_put_lazy: 403 mm_cid_put_lazy: 336 mm_cid_put: 41 mm_cid_migrate_steal: 10505 mm_cid_migrate_clear: 7067 mm_cid_migrate_move: 3438
+domain0 00000000,00000000,00000200,00000000,00000000,00000000,02000000 7031 6349 14 782 707 0 0 6349 834 729 28 270 80 0 0 729 4301 4057 9 252 235 0 0 3955 0 0 0 0 0 0 0 0 0 6673 4430 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 877 472 177 568 312 2 4 57 0 0 0 0 0 0 0 0 1346 318 572 1320 456 1 12 297 1 0 1 0 0 0 0 0 0 799841 415766 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 328 328 0 0 0 0 0 0 0 0 0 0 0 0 0 0 308 185 83 1171217 40 0 11 171 0 0 0 0 0 0 0 0 0 7346 4669 0
+cpu138 0 0 1584686 720529 841197 11714 83798511867 36152937134 862469 mm_cid_task_work_nr_run: 15 mm_cid_task_work_clear_old: 6188 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 853175 mm_cid_get_alloc: 8245 mm_cid_get_put_lazy: 470 mm_cid_put_lazy: 413 mm_cid_put: 107 mm_cid_migrate_steal: 10000 mm_cid_migrate_clear: 7263 mm_cid_migrate_move: 2737
+domain0 00000000,00000000,00000400,00000000,00000000,00000000,04000000 6900 6319 14 658 606 0 0 6319 952 843 40 335 74 0 0 843 6982 6488 27 504 467 0 0 6310 1 0 1 0 0 0 0 0 0 6968 4609 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 950 554 181 560 303 4 3 45 0 0 0 0 0 0 0 0 1202 190 541 1331 471 0 15 172 1 0 1 0 0 0 0 0 0 813632 419083 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 337 337 0 0 0 0 0 0 0 0 0 0 0 0 0 0 338 188 90 1858202 60 0 23 162 0 0 0 0 0 0 0 0 0 8884 5083 0
+cpu139 0 0 1599611 727779 808131 11708 83712087395 35889480292 870041 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6171 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 860888 mm_cid_get_alloc: 8110 mm_cid_get_put_lazy: 435 mm_cid_put_lazy: 386 mm_cid_put: 49 mm_cid_migrate_steal: 10121 mm_cid_migrate_clear: 7357 mm_cid_migrate_move: 2764
+domain0 00000000,00000000,00000800,00000000,00000000,00000000,08000000 7254 6589 13 780 691 0 0 6589 865 773 24 232 70 0 0 773 5356 4977 22 394 357 0 0 4793 0 0 0 0 0 0 0 0 0 6103 4046 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1164 766 181 554 305 4 2 56 0 0 0 0 0 0 0 0 954 207 417 985 330 1 11 192 2 0 2 0 0 0 0 0 0 783579 410800 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 390 390 0 0 0 0 0 0 0 0 0 0 0 0 0 0 293 180 83 1153177 30 0 11 168 0 0 0 0 0 0 0 0 0 6742 3440 0
+cpu140 6 0 1537251 696125 870918 15966 85443157172 36205741203 839326 mm_cid_task_work_nr_run: 41 mm_cid_task_work_clear_old: 6139 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 826247 mm_cid_get_alloc: 7882 mm_cid_get_put_lazy: 427 mm_cid_put_lazy: 400 mm_cid_put: 85 mm_cid_migrate_steal: 9478 mm_cid_migrate_clear: 6928 mm_cid_migrate_move: 2550
+domain0 00000000,00000000,00001000,00000000,00000000,00000000,10000000 10657 10002 11 741 684 0 0 10001 930 810 32 354 95 0 0 810 4556 4295 11 266 250 0 0 4184 0 0 0 0 0 0 0 0 0 6691 4315 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 4270 3861 160 597 363 5 4 41 4 4 0 0 0 0 0 0 1954 444 711 2030 799 1 15 418 2 0 2 0 0 0 0 0 0 841167 437214 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 392 392 0 0 0 0 0 1 9 9 0 0 0 0 0 0 558 417 100 1199034 41 0 19 397 0 0 0 0 0 0 0 0 0 7093 6162 0
+cpu141 0 0 1482437 669395 873092 11495 83760278896 36038655071 811391 mm_cid_task_work_nr_run: 17 mm_cid_task_work_clear_old: 6202 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 802626 mm_cid_get_alloc: 7644 mm_cid_get_put_lazy: 466 mm_cid_put_lazy: 358 mm_cid_put: 68 mm_cid_migrate_steal: 8581 mm_cid_migrate_clear: 6861 mm_cid_migrate_move: 1720
+domain0 00000000,00000000,00002000,00000000,00000000,00000000,20000000 7130 6527 11 698 620 0 0 6527 884 793 21 251 71 0 0 793 5271 4977 12 305 282 0 0 4840 0 0 0 0 0 0 0 0 0 6968 4440 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1004 539 217 686 359 5 6 49 0 0 0 0 0 0 0 0 1497 297 586 1525 614 2 18 266 3 0 3 0 0 0 0 0 0 841742 428597 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 340 340 0 0 0 0 0 1 1 1 0 0 0 0 0 0 342 221 94 2007252 27 0 21 200 0 0 0 0 0 0 0 0 0 12885 8147 0
+cpu142 0 0 1499950 678575 913825 11778 86090396676 35818921561 819742 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6191 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 810319 mm_cid_get_alloc: 7792 mm_cid_get_put_lazy: 441 mm_cid_put_lazy: 317 mm_cid_put: 99 mm_cid_migrate_steal: 9479 mm_cid_migrate_clear: 6806 mm_cid_migrate_move: 2673
+domain0 00000000,00000000,00004000,00000000,00000000,00000000,40000000 7221 6568 12 763 681 0 0 6568 900 803 23 259 79 0 0 803 3660 3414 16 251 230 0 0 3338 0 0 0 0 0 0 0 0 0 7862 5091 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 964 522 205 609 315 7 2 37 2 2 0 0 0 0 0 0 1487 370 577 1535 540 0 7 357 4 0 4 0 0 0 0 0 0 883569 461815 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 359 359 0 0 0 0 0 1 0 0 0 0 0 0 0 0 489 361 79 1869537 49 0 14 345 0 0 0 0 0 0 0 0 0 10615 9639 0
+cpu143 0 0 1676812 766670 806731 11951 84977350138 35640602216 908323 mm_cid_task_work_nr_run: 33 mm_cid_task_work_clear_old: 6136 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 898623 mm_cid_get_alloc: 7690 mm_cid_get_put_lazy: 403 mm_cid_put_lazy: 315 mm_cid_put: 79 mm_cid_migrate_steal: 14402 mm_cid_migrate_clear: 6709 mm_cid_migrate_move: 7693
+domain0 00000000,00000000,00008000,00000000,00000000,00000000,80000000 7813 7187 8 726 662 0 0 7187 889 797 22 242 72 0 0 797 5463 5071 36 407 356 0 0 4908 0 0 0 0 0 0 0 0 0 7010 4377 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1081 637 187 655 358 2 6 47 3 3 0 0 0 0 0 0 1595 400 659 1550 536 2 18 377 0 0 0 0 0 0 0 0 0 782232 410745 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 402 402 0 0 0 0 0 0 2 2 0 0 0 0 0 0 401 272 91 1822571 38 0 22 248 0 0 0 0 0 0 0 0 0 5537 3307 0
+cpu144 0 0 1640475 748116 838695 11975 84399219654 36368167675 890669 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6161 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 881249 mm_cid_get_alloc: 8230 mm_cid_get_put_lazy: 444 mm_cid_put_lazy: 351 mm_cid_put: 47 mm_cid_migrate_steal: 13623 mm_cid_migrate_clear: 7276 mm_cid_migrate_move: 6347
+domain0 00000000,00000000,00010000,00000000,00000000,00000001,00000000 7902 7343 12 609 578 0 0 7343 922 817 28 284 82 0 0 817 10012 9508 27 519 477 0 0 9259 1 0 1 0 0 0 0 0 0 6771 4640 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1273 864 184 592 323 6 5 42 1 1 0 0 0 0 0 0 1673 296 743 1743 634 1 22 261 2 0 2 0 0 0 0 0 0 816596 425163 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 438 438 0 0 0 0 0 0 2 2 0 0 0 0 0 0 322 182 87 2669333 53 0 24 157 0 0 0 0 0 0 0 0 0 3352 1858 0
+cpu145 0 0 1505441 680720 913001 11343 86811521084 35392074348 823018 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6199 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 813953 mm_cid_get_alloc: 8032 mm_cid_get_put_lazy: 420 mm_cid_put_lazy: 389 mm_cid_put: 64 mm_cid_migrate_steal: 9317 mm_cid_migrate_clear: 7150 mm_cid_migrate_move: 2167
+domain0 00000000,00000000,00020000,00000000,00000000,00000002,00000000 6899 6328 7 651 588 0 0 6328 941 837 23 336 83 0 1 836 7548 7126 21 437 401 0 0 6954 0 0 0 0 0 0 0 0 0 6772 4514 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 867 445 172 595 348 2 6 40 2 2 0 0 0 0 0 0 1433 338 586 1396 509 0 12 312 1 0 1 0 0 0 0 0 0 884629 464682 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 309 309 0 0 0 0 0 0 0 0 0 0 0 0 0 0 271 182 63 990540 26 0 14 166 0 0 0 0 0 0 0 0 0 10256 9810 0
+cpu146 0 0 1614415 735504 903129 12798 87011350460 35757478336 877149 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6168 mm_cid_task_work_clear_compact: 7 mm_cid_get_cached: 865573 mm_cid_get_alloc: 8008 mm_cid_get_put_lazy: 402 mm_cid_put_lazy: 353 mm_cid_put: 76 mm_cid_migrate_steal: 10393 mm_cid_migrate_clear: 6994 mm_cid_migrate_move: 3399
+domain0 00000000,00000000,00040000,00000000,00000000,00000004,00000000 8329 7675 9 732 672 0 0 7675 896 808 21 276 71 0 0 808 4248 4062 15 188 171 0 0 3939 0 0 0 0 0 0 0 0 0 6413 4311 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1603 1208 173 556 309 1 6 48 1 1 0 0 0 0 0 0 832 283 349 729 200 0 5 276 2 0 2 0 0 0 0 0 0 875417 477654 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 614 614 0 0 0 0 0 0 1 1 0 0 0 0 0 0 366 285 65 848900 16 0 10 274 0 0 0 0 0 0 0 0 0 8500 11901 0
+cpu147 1 0 1644120 749769 860865 11829 84956020719 35526633824 892625 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6139 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 882405 mm_cid_get_alloc: 9129 mm_cid_get_put_lazy: 440 mm_cid_put_lazy: 383 mm_cid_put: 111 mm_cid_migrate_steal: 13191 mm_cid_migrate_clear: 7649 mm_cid_migrate_move: 5542
+domain0 00000000,00000000,00080000,00000000,00000000,00000008,00000000 6965 6338 13 717 647 0 0 6337 842 759 22 250 62 0 0 759 4540 4279 9 270 252 0 0 4142 0 0 0 0 0 0 0 0 0 6603 4510 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 944 535 166 577 336 3 8 47 1 1 0 0 0 0 0 0 1860 337 759 1996 764 1 21 306 0 0 0 0 0 0 0 0 0 836509 446859 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 345 345 0 0 0 0 0 0 2 2 0 0 0 0 0 0 388 232 108 2819142 48 0 35 197 0 0 0 0 0 0 0 0 0 5923 5203 0
+cpu148 14 0 1670723 763023 840521 12023 85483616583 35564599016 905884 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6131 mm_cid_task_work_clear_compact: 18 mm_cid_get_cached: 896374 mm_cid_get_alloc: 8339 mm_cid_get_put_lazy: 470 mm_cid_put_lazy: 350 mm_cid_put: 172 mm_cid_migrate_steal: 15298 mm_cid_migrate_clear: 7011 mm_cid_migrate_move: 8287
+domain0 00000000,00000000,00100000,00000000,00000000,00000010,00000000 7421 6772 14 717 676 0 0 6771 897 797 29 278 74 0 0 797 3867 3714 4 156 149 0 0 3588 0 0 0 0 0 0 0 0 0 7696 4894 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1077 658 169 605 345 0 8 36 5 5 0 0 0 0 0 0 1342 331 596 1220 415 1 9 313 0 0 0 0 0 0 0 0 0 814445 422434 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 338 338 0 0 0 0 0 0 4 4 0 0 0 0 0 0 425 284 92 2212777 49 0 35 248 0 0 0 0 0 0 0 0 0 6356 2952 0
+cpu149 2 0 1610545 732656 857478 13557 86283588263 35521582703 876164 mm_cid_task_work_nr_run: 28 mm_cid_task_work_clear_old: 6157 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 864656 mm_cid_get_alloc: 8406 mm_cid_get_put_lazy: 417 mm_cid_put_lazy: 397 mm_cid_put: 147 mm_cid_migrate_steal: 14496 mm_cid_migrate_clear: 7212 mm_cid_migrate_move: 7284
+domain0 00000000,00000000,00200000,00000000,00000000,00000020,00000000 8404 7782 8 687 646 0 0 7782 924 831 29 456 69 0 0 831 8485 8035 26 471 424 0 0 7825 0 0 0 0 0 0 0 0 0 7364 4746 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1340 890 207 625 327 5 5 29 2 2 0 0 0 0 0 0 2270 979 680 1717 611 1 13 961 2 0 2 0 0 0 0 0 0 826115 425940 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 532 532 0 0 0 0 0 1 3 3 0 0 0 0 0 0 1022 892 100 1830709 30 0 17 869 0 0 0 0 0 0 0 0 0 10441 5414 0
+cpu150 41 0 1522240 689397 893546 11898 85505046397 36006687952 831157 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6164 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 821759 mm_cid_get_alloc: 8303 mm_cid_get_put_lazy: 465 mm_cid_put_lazy: 347 mm_cid_put: 125 mm_cid_migrate_steal: 10232 mm_cid_migrate_clear: 7133 mm_cid_migrate_move: 3099
+domain0 00000000,00000000,00400000,00000000,00000000,00000040,00000000 7405 6786 9 721 652 0 0 6786 1023 920 17 337 93 0 0 920 9569 9023 32 559 514 0 0 8817 0 0 0 0 0 0 0 0 0 7717 4905 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 971 553 199 606 311 1 7 32 19 19 0 0 0 0 0 0 1301 304 617 1166 380 0 25 268 2 0 2 0 0 0 0 0 0 864033 454597 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 332 332 0 0 0 0 0 0 4 4 0 0 0 0 0 0 315 216 81 1489144 18 0 24 192 0 0 0 0 0 0 0 0 0 9897 6504 0
+cpu151 61 0 1629956 742811 828297 13185 84748094994 35936882758 885308 mm_cid_task_work_nr_run: 30 mm_cid_task_work_clear_old: 6126 mm_cid_task_work_clear_compact: 7 mm_cid_get_cached: 874377 mm_cid_get_alloc: 8372 mm_cid_get_put_lazy: 444 mm_cid_put_lazy: 406 mm_cid_put: 126 mm_cid_migrate_steal: 11328 mm_cid_migrate_clear: 7188 mm_cid_migrate_move: 4140
+domain0 00000000,00000000,00800000,00000000,00000000,00000080,00000000 9110 8501 17 702 624 0 0 8501 889 794 30 251 66 0 0 794 5472 5174 7 307 291 0 0 4988 0 0 0 0 0 0 0 0 0 6391 4329 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 2486 2052 180 630 359 3 3 43 8 8 0 0 0 0 0 0 997 330 418 840 249 1 5 322 3 0 3 0 0 0 0 0 0 803402 420537 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 425 425 0 0 0 0 0 0 8 8 0 0 0 0 0 0 355 264 75 639271 16 0 14 247 0 0 0 0 0 0 0 0 0 5319 3268 0
+cpu152 63 0 1536338 696516 921250 13860 87575510252 35891495795 838066 mm_cid_task_work_nr_run: 37 mm_cid_task_work_clear_old: 6120 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 825610 mm_cid_get_alloc: 8014 mm_cid_get_put_lazy: 430 mm_cid_put_lazy: 345 mm_cid_put: 120 mm_cid_migrate_steal: 9930 mm_cid_migrate_clear: 6855 mm_cid_migrate_move: 3075
+domain0 00000000,00000000,01000000,00000000,00000000,00000100,00000000 8761 8171 10 652 614 0 0 8171 930 833 28 259 75 0 0 833 4489 4276 12 218 201 0 0 4185 0 0 0 0 0 0 0 0 0 6690 4229 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1471 1045 183 574 327 6 4 42 17 17 0 0 0 0 0 0 1759 1037 433 974 289 1 4 1030 1 0 1 0 0 0 0 0 0 890657 477940 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 566 566 0 0 0 0 0 0 7 7 0 0 0 0 0 0 1035 935 77 1554968 23 0 15 919 0 0 0 0 0 0 0 0 0 10044 9474 0
+cpu153 88 0 1675621 765793 849046 11932 83831253619 35294842941 908118 mm_cid_task_work_nr_run: 36 mm_cid_task_work_clear_old: 6074 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 898634 mm_cid_get_alloc: 8192 mm_cid_get_put_lazy: 410 mm_cid_put_lazy: 365 mm_cid_put: 125 mm_cid_migrate_steal: 13431 mm_cid_migrate_clear: 7134 mm_cid_migrate_move: 6297
+domain0 00000000,00000000,02000000,00000000,00000000,00000200,00000000 21143 20519 12 748 653 0 0 20519 897 803 24 277 77 0 0 803 3800 3607 14 198 179 0 0 3503 0 0 0 0 0 0 0 0 0 7305 4650 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 3209 2780 190 631 348 7 4 39 2 2 0 0 0 0 0 0 1579 405 637 1499 537 0 23 375 2 0 2 0 0 0 0 0 0 819548 425978 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 2040 2040 0 0 0 0 0 0 0 0 0 0 0 0 0 0 368 272 77 1341374 19 0 24 246 0 0 0 0 0 0 0 0 0 10260 9947 0
+cpu154 82 0 1643053 748152 844773 12764 83588512924 36471197766 892947 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6078 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 882712 mm_cid_get_alloc: 8614 mm_cid_get_put_lazy: 425 mm_cid_put_lazy: 356 mm_cid_put: 124 mm_cid_migrate_steal: 14820 mm_cid_migrate_clear: 7312 mm_cid_migrate_move: 7508
+domain0 00000000,00000000,04000000,00000000,00000000,00000400,00000000 7986 7330 9 749 694 0 0 7330 901 790 34 281 83 0 0 790 5401 5141 20 269 240 0 0 5003 0 0 0 0 0 0 0 0 0 7012 4500 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1110 691 196 595 301 5 2 45 8 8 0 0 0 0 0 0 1850 481 791 1689 578 1 18 451 3 0 3 0 0 0 0 0 0 817585 430102 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 374 374 0 0 0 0 0 0 2 2 0 0 0 0 0 0 609 404 130 3410127 75 0 41 360 0 0 0 0 0 0 0 0 0 7411 4592 0
+cpu155 48 0 1555211 704923 862506 12683 84199018571 35326325965 848488 mm_cid_task_work_nr_run: 48 mm_cid_task_work_clear_old: 6096 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 838828 mm_cid_get_alloc: 8151 mm_cid_get_put_lazy: 434 mm_cid_put_lazy: 395 mm_cid_put: 122 mm_cid_migrate_steal: 11523 mm_cid_migrate_clear: 7174 mm_cid_migrate_move: 4349
+domain0 00000000,00000000,08000000,00000000,00000000,00000800,00000000 7521 6899 14 706 641 0 0 6899 929 824 28 280 82 0 1 823 4831 4590 17 247 224 0 0 4441 0 0 0 0 0 0 0 0 0 7001 4673 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 945 539 186 588 309 1 6 45 8 8 0 0 0 0 0 0 1841 449 589 1950 803 0 15 422 2 0 2 0 0 0 0 0 0 835920 433603 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 349 349 0 0 0 0 0 0 1 1 0 0 0 0 0 0 543 417 85 2440031 41 0 18 398 0 0 0 0 0 0 0 0 0 6901 4598 0
+cpu156 43 0 1634291 745204 828949 12680 83523785775 35564149283 887446 mm_cid_task_work_nr_run: 33 mm_cid_task_work_clear_old: 6124 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 876676 mm_cid_get_alloc: 8493 mm_cid_get_put_lazy: 412 mm_cid_put_lazy: 389 mm_cid_put: 61 mm_cid_migrate_steal: 14468 mm_cid_migrate_clear: 7448 mm_cid_migrate_move: 7020
+domain0 00000000,00000000,10000000,00000000,00000000,00001000,00000000 7806 7163 16 752 664 0 0 7163 879 783 30 267 69 0 0 783 5417 5183 7 239 227 0 0 5026 0 0 0 0 0 0 0 0 0 7249 4577 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1183 747 198 616 332 3 4 46 25 25 0 0 0 0 0 0 1624 559 561 1424 504 0 9 537 0 0 0 0 0 0 0 0 0 803995 417125 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 383 383 0 0 0 0 0 0 10 10 0 0 0 0 0 0 624 440 137 2068637 47 0 23 411 0 0 0 0 0 0 0 0 0 5024 3229 0
+cpu157 15 0 1568291 712027 880166 12155 84830372985 35877707105 854537 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6147 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 844912 mm_cid_get_alloc: 7930 mm_cid_get_put_lazy: 429 mm_cid_put_lazy: 414 mm_cid_put: 104 mm_cid_migrate_steal: 11101 mm_cid_migrate_clear: 6967 mm_cid_migrate_move: 4134
+domain0 00000000,00000000,20000000,00000000,00000000,00002000,00000000 7670 7035 15 725 655 0 0 7033 910 824 24 252 67 0 0 824 8400 8016 26 394 358 0 0 7810 1 0 1 0 0 0 0 0 0 6861 4481 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1097 674 184 604 327 6 5 42 9 9 0 0 0 0 0 0 1587 604 624 1219 359 0 19 574 1 0 1 0 0 0 0 0 0 851503 451048 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 380 380 0 0 0 0 0 2 2 2 0 0 0 0 0 0 596 435 102 2505010 59 0 34 398 0 0 0 0 0 0 0 0 0 9646 9843 0
+cpu158 40 0 1657160 756237 818262 12222 83108633698 36175272871 899128 mm_cid_task_work_nr_run: 29 mm_cid_task_work_clear_old: 6115 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 888980 mm_cid_get_alloc: 8618 mm_cid_get_put_lazy: 438 mm_cid_put_lazy: 370 mm_cid_put: 86 mm_cid_migrate_steal: 14047 mm_cid_migrate_clear: 7361 mm_cid_migrate_move: 6686
+domain0 00000000,00000000,40000000,00000000,00000000,00004000,00000000 7906 7279 11 705 653 0 0 7279 923 822 27 284 75 0 0 822 7918 7503 20 425 395 0 0 7285 1 0 1 0 0 0 0 0 0 6663 4432 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 974 538 191 621 344 3 7 44 22 22 0 0 0 0 0 0 2303 562 824 2231 917 0 25 527 1 0 1 0 0 0 0 0 0 794946 415347 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 347 347 0 0 0 0 0 1 2 2 0 0 0 0 0 0 450 342 91 1508125 17 0 10 329 0 0 0 0 0 0 0 0 0 4431 2804 0
+cpu159 19 0 1534341 695027 859289 12133 83821064477 35867804346 837152 mm_cid_task_work_nr_run: 47 mm_cid_task_work_clear_old: 6146 mm_cid_task_work_clear_compact: 11 mm_cid_get_cached: 827582 mm_cid_get_alloc: 8483 mm_cid_get_put_lazy: 474 mm_cid_put_lazy: 409 mm_cid_put: 103 mm_cid_migrate_steal: 11278 mm_cid_migrate_clear: 7317 mm_cid_migrate_move: 3961
+domain0 00000000,00000000,80000000,00000000,00000000,00008000,00000000 7371 6710 16 755 693 0 0 6709 944 843 25 303 80 0 0 843 5309 5017 18 294 274 0 0 4828 0 0 0 0 0 0 0 0 0 6686 4532 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1054 629 175 599 336 0 9 58 13 13 0 0 0 0 0 0 1751 339 696 1841 716 1 16 313 4 0 4 0 0 0 0 0 0 832706 438346 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 343 343 0 0 0 0 0 0 2 2 0 0 0 0 0 0 436 278 103 2574656 55 0 22 255 0 0 0 0 0 0 0 0 0 7763 4145 0
+cpu160 17 0 1598657 726860 860853 13680 85720731562 36086386528 869993 mm_cid_task_work_nr_run: 64 mm_cid_task_work_clear_old: 6095 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 859063 mm_cid_get_alloc: 8269 mm_cid_get_put_lazy: 417 mm_cid_put_lazy: 347 mm_cid_put: 120 mm_cid_migrate_steal: 13820 mm_cid_migrate_clear: 7236 mm_cid_migrate_move: 6584
+domain0 00000000,00000001,00000000,00000000,00000000,00010000,00000000 10502 9830 4 776 705 0 1 9828 948 857 17 237 82 0 0 857 8075 7671 19 417 385 0 0 7447 0 0 0 0 0 0 0 0 0 6860 4595 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1712 1269 206 621 333 4 4 46 8 8 0 0 0 0 0 0 1873 562 811 1564 500 3 18 541 2 0 2 0 0 0 0 0 0 830308 432063 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 748 748 0 0 0 0 0 0 4 4 0 0 0 0 0 0 646 521 92 2282365 33 0 20 498 0 0 0 0 0 0 0 0 0 10004 6281 0
+cpu161 0 0 1555902 706082 842857 12325 86342227556 35272275075 848119 mm_cid_task_work_nr_run: 46 mm_cid_task_work_clear_old: 6146 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 837905 mm_cid_get_alloc: 8100 mm_cid_get_put_lazy: 469 mm_cid_put_lazy: 379 mm_cid_put: 86 mm_cid_migrate_steal: 12028 mm_cid_migrate_clear: 7037 mm_cid_migrate_move: 4991
+domain0 00000000,00000002,00000000,00000000,00000000,00020000,00000000 8638 7979 15 805 684 0 0 7979 979 878 24 337 87 0 0 878 5460 5145 16 327 299 0 0 5031 0 0 0 0 0 0 0 0 0 6838 4461 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1271 904 163 526 281 2 7 34 2 2 0 0 0 0 0 0 1456 502 505 1230 449 1 18 478 4 0 4 0 0 0 0 0 0 815789 417954 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 504 504 0 0 0 0 0 0 1 1 0 0 0 0 0 0 520 435 57 1244716 28 0 16 417 0 0 0 0 0 0 0 0 0 7904 5067 0
+cpu162 0 0 1584247 719827 817219 12082 82719735350 36789167904 862689 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6155 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 852889 mm_cid_get_alloc: 8442 mm_cid_get_put_lazy: 461 mm_cid_put_lazy: 389 mm_cid_put: 154 mm_cid_migrate_steal: 11486 mm_cid_migrate_clear: 7199 mm_cid_migrate_move: 4287
+domain0 00000000,00000004,00000000,00000000,00000000,00040000,00000000 8876 8261 12 725 638 0 0 8261 869 774 26 273 75 0 0 774 7252 6821 31 443 400 0 0 6594 0 0 0 0 0 0 0 0 0 6596 4414 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 2404 1981 195 612 318 6 5 54 0 0 0 0 0 0 0 0 1624 500 588 1536 536 2 13 479 3 0 3 0 0 0 0 0 0 794326 413851 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 379 379 0 0 0 0 0 0 1 1 0 0 0 0 0 0 337 254 64 838374 19 0 17 236 0 0 0 0 0 0 0 0 0 4214 2572 0
+cpu163 0 0 1611692 733732 831225 12161 83470313379 36218233081 876190 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6145 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 866431 mm_cid_get_alloc: 8084 mm_cid_get_put_lazy: 431 mm_cid_put_lazy: 351 mm_cid_put: 68 mm_cid_migrate_steal: 12756 mm_cid_migrate_clear: 7134 mm_cid_migrate_move: 5622
+domain0 00000000,00000008,00000000,00000000,00000000,00080000,00000000 7310 6634 12 796 717 0 0 6634 939 844 27 246 69 0 0 844 8087 7655 19 439 413 0 0 7481 0 0 0 0 0 0 0 0 0 6416 4222 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 952 534 174 586 336 5 4 39 2 2 0 0 0 0 0 0 1257 341 462 1167 454 1 15 320 1 0 1 0 0 0 0 0 0 805620 420143 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 352 352 0 0 0 0 0 0 4 4 0 0 0 0 0 0 432 311 82 1594137 39 0 17 294 0 0 0 0 0 0 0 0 0 7027 4435 0
+cpu164 0 0 1603250 729545 829124 11823 82265256812 35984754379 871945 mm_cid_task_work_nr_run: 21 mm_cid_task_work_clear_old: 6145 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 862576 mm_cid_get_alloc: 8304 mm_cid_get_put_lazy: 448 mm_cid_put_lazy: 361 mm_cid_put: 30 mm_cid_migrate_steal: 13421 mm_cid_migrate_clear: 7317 mm_cid_migrate_move: 6104
+domain0 00000000,00000010,00000000,00000000,00000000,00100000,00000000 7161 6543 8 691 648 0 0 6543 887 784 29 328 76 0 1 783 4453 4098 13 363 342 0 0 3967 0 0 0 0 0 0 0 0 0 6436 4266 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1043 601 199 592 323 4 1 49 1 1 0 0 0 0 0 0 2305 445 943 2357 917 4 44 391 3 0 3 0 0 0 0 0 0 802790 421171 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 345 345 0 0 0 0 0 0 0 0 0 0 0 0 0 0 372 243 91 3003759 38 0 32 210 0 0 0 0 0 0 0 0 0 8074 5471 0
+cpu165 3 0 1569282 712934 848148 12320 83251498852 37212403647 854686 mm_cid_task_work_nr_run: 30 mm_cid_task_work_clear_old: 6143 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 845264 mm_cid_get_alloc: 8195 mm_cid_get_put_lazy: 442 mm_cid_put_lazy: 384 mm_cid_put: 65 mm_cid_migrate_steal: 9894 mm_cid_migrate_clear: 7126 mm_cid_migrate_move: 2768
+domain0 00000000,00000020,00000000,00000000,00000000,00200000,00000000 7244 6688 2 651 583 0 0 6688 923 826 25 275 76 0 0 826 6880 6456 18 441 406 0 0 6279 0 0 0 0 0 0 0 0 0 6541 4374 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 1035 623 188 555 285 4 7 46 3 3 0 0 0 0 0 0 1487 279 597 1609 611 1 20 250 2 0 2 0 0 0 0 0 0 819413 424066 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 340 340 0 0 0 0 0 0 1 1 0 0 0 0 0 0 322 219 70 1664430 33 0 21 197 0 0 0 0 0 0 0 0 0 9873 9645 0
+cpu166 1 0 1593434 724933 827041 11923 83660183635 36046222006 866710 mm_cid_task_work_nr_run: 41 mm_cid_task_work_clear_old: 6122 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 857359 mm_cid_get_alloc: 8316 mm_cid_get_put_lazy: 463 mm_cid_put_lazy: 352 mm_cid_put: 55 mm_cid_migrate_steal: 12063 mm_cid_migrate_clear: 7333 mm_cid_migrate_move: 4730
+domain0 00000000,00000040,00000000,00000000,00000000,00400000,00000000 7148 6486 10 759 696 0 0 6486 867 765 27 318 78 0 0 765 3973 3769 14 206 190 0 0 3675 0 0 0 0 0 0 0 0 0 6522 4464 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 911 490 199 599 319 6 7 50 1 1 0 0 0 0 0 0 1011 296 377 970 338 0 11 277 3 0 3 0 0 0 0 0 0 802489 419957 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 340 340 0 0 0 0 0 0 1 1 0 0 0 0 0 0 342 222 86 2047507 34 0 16 205 0 0 0 0 0 0 0 0 0 6106 3556 0
+cpu167 61 0 1537944 696557 846827 12344 83364226572 36790231413 839650 mm_cid_task_work_nr_run: 33 mm_cid_task_work_clear_old: 6102 mm_cid_task_work_clear_compact: 13 mm_cid_get_cached: 830784 mm_cid_get_alloc: 7846 mm_cid_get_put_lazy: 474 mm_cid_put_lazy: 337 mm_cid_put: 82 mm_cid_migrate_steal: 10206 mm_cid_migrate_clear: 7093 mm_cid_migrate_move: 3113
+domain0 00000000,00000080,00000000,00000000,00000000,00800000,00000000 7032 6437 11 665 612 0 0 6437 934 839 22 285 78 0 0 839 7254 6853 21 411 380 0 0 6630 0 0 0 0 0 0 0 0 0 6563 4382 0
+domain1 00000000,000000ff,ffffffff,ffff0000,00000000,00ffffff,ffffffff 884 475 161 600 358 4 8 42 10 10 0 0 0 0 0 0 2112 518 900 1958 694 3 31 474 0 0 0 0 0 0 0 0 0 818278 428934 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 315 315 0 0 0 0 0 0 5 5 0 0 0 0 0 0 456 277 106 2754783 73 0 32 244 0 0 0 0 0 0 0 0 0 9641 4870 0
+cpu168 12 0 2156890 1011323 1216357 10638 74844760113 25303918716 1144289 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6210 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1142572 mm_cid_get_alloc: 499 mm_cid_get_put_lazy: 17 mm_cid_put_lazy: 32 mm_cid_put: 146 mm_cid_migrate_steal: 1406 mm_cid_migrate_clear: 202 mm_cid_migrate_move: 1204
+domain0 00000000,00000100,00000000,00000000,00000000,01000000,00000000 8332 7786 13 591 562 0 0 7786 701 659 11 143 34 0 0 659 7463 7368 5 95 90 0 0 7124 0 0 0 0 0 0 0 0 0 7790 5652 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 874 552 138 472 265 3 2 61 17 17 0 0 0 0 0 0 3769 1767 1846 2110 156 0 49 1689 2 0 2 0 0 0 0 0 0 1195233 833342 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 373 372 0 1 1 0 0 0 1 1 0 0 0 0 0 0 1563 459 833 18260826 271 0 234 217 0 0 0 0 0 0 0 0 0 2694 1282 0
+cpu169 16 0 1987036 926653 1241770 9997 72834696981 25197855301 1059113 mm_cid_task_work_nr_run: 28 mm_cid_task_work_clear_old: 6249 mm_cid_task_work_clear_compact: 11 mm_cid_get_cached: 1057619 mm_cid_get_alloc: 385 mm_cid_get_put_lazy: 22 mm_cid_put_lazy: 24 mm_cid_put: 98 mm_cid_migrate_steal: 2731 mm_cid_migrate_clear: 145 mm_cid_migrate_move: 2586
+domain0 00000000,00000200,00000000,00000000,00000000,02000000,00000000 8056 7556 9 564 510 0 0 7555 660 607 14 137 42 0 0 607 9964 9880 7 86 77 0 0 9571 0 0 0 0 0 0 0 0 0 7486 5469 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 884 532 158 514 276 2 2 70 14 14 0 0 0 0 0 0 4844 2860 1856 2062 128 2 57 2747 2 0 2 0 0 0 0 0 0 1221323 858817 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 364 364 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1601 385 928 16072385 288 0 228 148 0 0 0 0 0 0 0 0 0 2962 1386 0
+cpu170 16 0 1984803 925078 1327071 10012 76624909845 25270481379 1058480 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6228 mm_cid_task_work_clear_compact: 20 mm_cid_get_cached: 1056808 mm_cid_get_alloc: 452 mm_cid_get_put_lazy: 13 mm_cid_put_lazy: 26 mm_cid_put: 130 mm_cid_migrate_steal: 2275 mm_cid_migrate_clear: 162 mm_cid_migrate_move: 2113
+domain0 00000000,00000400,00000000,00000000,00000000,04000000,00000000 8057 7526 7 582 558 0 0 7526 747 691 13 132 44 0 0 691 9542 9399 9 148 134 0 0 9026 0 0 0 0 0 0 0 0 0 7397 5333 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 854 533 131 488 266 1 1 60 20 20 0 0 0 0 0 0 4418 2128 2044 2438 246 0 53 2046 0 0 0 0 0 0 0 0 0 1306675 933335 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 365 365 0 0 0 0 0 3 0 0 0 0 0 0 0 0 1702 444 961 19937198 297 0 220 214 0 0 0 0 0 0 0 0 0 2984 1690 0
+cpu171 41 0 2174059 1019753 1203858 11934 73865776502 25328231400 1152866 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6153 mm_cid_task_work_clear_compact: 12 mm_cid_get_cached: 1151020 mm_cid_get_alloc: 382 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 34 mm_cid_put: 45 mm_cid_migrate_steal: 1368 mm_cid_migrate_clear: 175 mm_cid_migrate_move: 1193
+domain0 00000000,00000800,00000000,00000000,00000000,08000000,00000000 8466 7974 7 520 507 0 0 7974 642 584 16 131 46 0 0 584 10337 10203 9 136 125 0 0 9838 0 0 0 0 0 0 0 0 0 8864 6387 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 958 612 137 515 290 2 3 57 19 19 0 0 0 0 0 0 5923 2134 3602 3917 187 0 246 1839 0 0 0 0 0 0 0 0 0 1176160 786214 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 395 395 0 0 0 0 0 2 5 5 0 0 0 0 0 0 1572 447 865 16840965 260 0 233 209 0 0 0 0 0 0 0 0 0 6898 19634 0
+cpu172 18 0 2189146 1028102 1096563 9566 71435630102 24554161638 1159742 mm_cid_task_work_nr_run: 21 mm_cid_task_work_clear_old: 6217 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1158263 mm_cid_get_alloc: 465 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 24 mm_cid_put: 82 mm_cid_migrate_steal: 4231 mm_cid_migrate_clear: 306 mm_cid_migrate_move: 3925
+domain0 00000000,00001000,00000000,00000000,00000000,10000000,00000000 8533 8021 9 569 531 0 0 8021 587 540 8 131 42 0 0 540 9290 9175 9 117 106 0 0 8752 0 0 0 0 0 0 0 0 0 7861 5798 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 899 569 141 494 271 2 4 67 11 11 0 0 0 0 0 0 4229 1996 2092 2303 141 0 56 1908 1 0 1 0 0 0 0 0 0 1076275 714222 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 381 381 0 0 0 0 0 0 3 3 0 0 0 0 0 0 1697 512 883 20471248 302 0 267 237 0 0 0 0 0 0 0 0 0 2859 1669 0
+cpu173 115 0 1974296 919456 1270031 10233 74423933795 25341590596 1053403 mm_cid_task_work_nr_run: 27 mm_cid_task_work_clear_old: 6187 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 1051805 mm_cid_get_alloc: 575 mm_cid_get_put_lazy: 26 mm_cid_put_lazy: 31 mm_cid_put: 109 mm_cid_migrate_steal: 3728 mm_cid_migrate_clear: 325 mm_cid_migrate_move: 3403
+domain0 00000000,00002000,00000000,00000000,00000000,20000000,00000000 7945 7402 29 619 549 0 0 7402 698 641 11 149 48 0 0 641 12696 12503 32 197 161 0 0 11973 2 0 2 0 0 0 0 0 0 8407 6239 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 903 570 132 496 286 1 3 70 20 20 0 0 0 0 0 0 6321 2678 2933 3971 710 0 72 2561 1 0 1 0 0 0 0 0 0 1248274 874986 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 377 377 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1798 578 930 20261937 290 0 264 312 0 0 0 0 0 0 0 0 0 3115 1856 0
+cpu174 5311 0 2099967 980047 1242071 10205 74298919561 25387802240 1113324 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6205 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1111576 mm_cid_get_alloc: 607 mm_cid_get_put_lazy: 16 mm_cid_put_lazy: 38 mm_cid_put: 151 mm_cid_migrate_steal: 4552 mm_cid_migrate_clear: 320 mm_cid_migrate_move: 4232
+domain0 00000000,00004000,00000000,00000000,00000000,40000000,00000000 8364 7869 10 552 510 0 0 7869 662 608 12 148 43 0 0 608 9796 9675 5 122 116 0 0 9204 0 0 0 0 0 0 0 0 0 9826 7168 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 894 564 142 510 279 3 4 51 13 13 0 0 0 0 0 0 6618 2371 3889 4526 358 1 311 1997 2 0 2 0 0 0 0 0 0 1218675 826466 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 380 380 0 0 0 0 0 1 2 2 0 0 0 0 0 0 1928 579 1016 19102755 333 0 277 288 0 0 0 0 0 0 0 0 0 3363 1828 0
+cpu175 4 0 2132270 999297 1173334 9984 72327145039 25074784822 1131635 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6215 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1130122 mm_cid_get_alloc: 455 mm_cid_get_put_lazy: 15 mm_cid_put_lazy: 19 mm_cid_put: 149 mm_cid_migrate_steal: 1547 mm_cid_migrate_clear: 158 mm_cid_migrate_move: 1389
+domain0 00000000,00008000,00000000,00000000,00000000,80000000,00000000 8596 8012 8 632 609 0 0 8012 623 571 15 144 40 0 0 571 9428 9298 6 131 124 0 0 8945 0 0 0 0 0 0 0 0 0 8027 5928 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 882 557 154 472 244 1 3 70 0 0 0 0 0 0 0 0 5415 2357 2862 3147 196 0 201 2110 1 0 1 0 0 0 0 0 0 1151456 761200 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 372 372 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1242 333 725 12789589 184 0 187 141 0 0 0 0 0 0 0 0 0 3864 11650 0
+cpu176 58 0 2143160 1004609 1130008 10587 71141376268 25024023997 1137095 mm_cid_task_work_nr_run: 33 mm_cid_task_work_clear_old: 6163 mm_cid_task_work_clear_compact: 11 mm_cid_get_cached: 1135461 mm_cid_get_alloc: 582 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 26 mm_cid_put: 164 mm_cid_migrate_steal: 4143 mm_cid_migrate_clear: 323 mm_cid_migrate_move: 3820
+domain0 00000000,00010000,00000000,00000000,00000001,00000000,00000000 8117 7552 11 639 590 0 0 7551 600 561 5 109 34 0 0 561 8594 8478 7 118 109 0 0 8098 0 0 0 0 0 0 0 0 0 7966 5902 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 929 596 143 472 254 3 4 63 19 19 0 0 0 0 0 0 4541 1867 2393 2889 281 1 175 1655 0 0 0 0 0 0 0 0 0 1108725 720367 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 385 385 0 0 0 0 0 1 3 3 0 0 0 0 0 0 1676 478 927 16515372 271 0 258 209 0 0 0 0 0 0 0 0 0 2728 1521 0
+cpu177 21 0 2140867 1002527 1172869 9965 72304269351 25167585524 1136807 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6228 mm_cid_task_work_clear_compact: 12 mm_cid_get_cached: 1135236 mm_cid_get_alloc: 567 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 36 mm_cid_put: 180 mm_cid_migrate_steal: 3585 mm_cid_migrate_clear: 282 mm_cid_migrate_move: 3303
+domain0 00000000,00020000,00000000,00000000,00000002,00000000,00000000 8816 8284 11 586 549 0 0 8284 631 578 15 128 42 0 0 578 11997 11805 15 195 177 0 0 11335 0 0 0 0 0 0 0 0 0 8072 5950 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 884 551 126 478 283 1 2 54 12 12 0 0 0 0 0 0 3745 1640 1885 2217 220 3 48 1578 1 0 1 0 0 0 0 0 0 1151701 780347 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 375 375 0 0 0 0 0 0 2 2 0 0 0 0 0 0 1391 406 742 16480592 243 0 182 218 0 0 0 0 0 0 0 0 0 3129 1910 0
+cpu178 21 0 2262492 1064319 1146049 9781 73311700289 24597750836 1196960 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6207 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1195491 mm_cid_get_alloc: 459 mm_cid_get_put_lazy: 17 mm_cid_put_lazy: 30 mm_cid_put: 151 mm_cid_migrate_steal: 641 mm_cid_migrate_clear: 140 mm_cid_migrate_move: 501
+domain0 00000000,00040000,00000000,00000000,00000004,00000000,00000000 8565 8013 8 638 577 0 0 8013 600 553 12 117 37 0 0 553 7717 7634 5 83 78 0 0 7380 0 0 0 0 0 0 0 0 0 7867 5786 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 888 555 125 521 303 1 0 62 18 18 0 0 0 0 0 0 3287 1293 1874 2062 120 0 112 1155 1 0 1 0 0 0 0 0 0 1113346 681637 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 380 380 0 0 0 0 0 1 3 3 0 0 0 0 0 0 1382 331 767 12314522 284 0 192 132 0 0 0 0 0 0 0 0 0 15053 65809 0
+cpu179 20 0 2275343 1070087 1021404 10205 72504351897 25512512131 1203927 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6198 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 1201259 mm_cid_get_alloc: 1272 mm_cid_get_put_lazy: 80 mm_cid_put_lazy: 30 mm_cid_put: 192 mm_cid_migrate_steal: 12905 mm_cid_migrate_clear: 1750 mm_cid_migrate_move: 11155
+domain0 00000000,00080000,00000000,00000000,00000008,00000000,00000000 9015 8498 11 575 531 0 0 8498 631 574 15 139 42 0 0 574 6271 6138 7 135 126 0 0 5897 0 0 0 0 0 0 0 0 0 7932 5783 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 963 618 146 513 278 3 5 69 25 25 0 0 0 0 0 0 3277 1605 1432 1820 240 0 53 1532 0 0 0 0 0 0 0 0 0 1001096 632712 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 382 382 0 0 0 0 0 0 5 5 0 0 0 0 0 0 1257 438 619 11341036 200 0 190 241 0 0 0 0 0 0 0 0 0 2169 1171 0
+cpu180 16 0 2353423 1109794 1157851 9865 72827402507 25068885311 1242247 mm_cid_task_work_nr_run: 18 mm_cid_task_work_clear_old: 6215 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 1240374 mm_cid_get_alloc: 856 mm_cid_get_put_lazy: 34 mm_cid_put_lazy: 30 mm_cid_put: 182 mm_cid_migrate_steal: 7672 mm_cid_migrate_clear: 769 mm_cid_migrate_move: 6903
+domain0 00000000,00100000,00000000,00000000,00000010,00000000,00000000 8786 8252 5 596 561 0 0 8252 601 556 9 99 39 0 0 556 5896 5761 4 141 131 0 0 5575 0 0 0 0 0 0 0 0 0 7687 5575 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 893 564 130 487 282 1 2 73 17 17 0 0 0 0 0 0 2448 1087 1241 1471 120 0 48 1026 0 0 0 0 0 0 0 0 0 1132545 701666 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 374 374 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1135 326 600 12075122 209 0 175 146 0 0 0 0 0 0 0 0 0 7752 57277 0
+cpu181 566 0 2024653 945689 1104504 10346 72377658056 25605895221 1076915 mm_cid_task_work_nr_run: 43 mm_cid_task_work_clear_old: 6225 mm_cid_task_work_clear_compact: 10 mm_cid_get_cached: 1073488 mm_cid_get_alloc: 2342 mm_cid_get_put_lazy: 138 mm_cid_put_lazy: 63 mm_cid_put: 104 mm_cid_migrate_steal: 17226 mm_cid_migrate_clear: 6315 mm_cid_migrate_move: 10911
+domain0 00000000,00200000,00000000,00000000,00000020,00000000,00000000 8383 7856 10 569 544 0 0 7856 641 595 13 151 36 0 0 595 7986 7864 10 123 112 0 0 7573 0 0 0 0 0 0 0 0 0 8238 6043 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 910 584 137 476 275 0 1 60 18 18 0 0 0 0 0 0 3647 1770 1667 1996 210 0 78 1663 1 0 1 0 0 0 0 0 0 1082918 697897 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 382 382 0 0 0 0 0 1 5 5 0 0 0 0 0 0 1356 394 694 14319090 268 0 186 202 0 0 0 0 0 0 0 0 0 3000 1489 0
+cpu182 19 0 2070500 968019 1194585 10296 72241989945 25453414939 1101154 mm_cid_task_work_nr_run: 31 mm_cid_task_work_clear_old: 6225 mm_cid_task_work_clear_compact: 11 mm_cid_get_cached: 1097866 mm_cid_get_alloc: 2141 mm_cid_get_put_lazy: 110 mm_cid_put_lazy: 56 mm_cid_put: 153 mm_cid_migrate_steal: 15817 mm_cid_migrate_clear: 5081 mm_cid_migrate_move: 10736
+domain0 00000000,00400000,00000000,00000000,00000040,00000000,00000000 8557 8002 16 616 574 0 0 8002 636 597 7 104 35 0 0 597 8262 8123 7 140 132 0 0 7793 1 0 1 0 0 0 0 0 0 11270 9096 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 993 648 157 501 259 1 2 65 17 17 0 0 0 0 0 0 4904 2511 2138 2522 255 1 150 2337 3 0 3 0 0 0 0 0 0 1170670 771778 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 382 382 0 0 0 0 0 0 3 3 0 0 0 0 0 0 1467 406 818 13866955 243 0 181 213 0 0 0 0 0 0 0 0 0 2347 1275 0
+cpu183 2 0 2321305 1092982 1002327 9691 70360485379 24702618443 1227093 mm_cid_task_work_nr_run: 16 mm_cid_task_work_clear_old: 6205 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1224303 mm_cid_get_alloc: 1792 mm_cid_get_put_lazy: 101 mm_cid_put_lazy: 44 mm_cid_put: 80 mm_cid_migrate_steal: 13973 mm_cid_migrate_clear: 3581 mm_cid_migrate_move: 10392
+domain0 00000000,00800000,00000000,00000000,00000080,00000000,00000000 8570 8018 12 600 571 0 0 8018 571 518 8 140 47 0 0 518 9415 9304 7 112 104 0 0 8979 0 0 0 0 0 0 0 0 0 7673 5819 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 906 562 150 518 277 0 2 78 1 1 0 0 0 0 0 0 4145 2093 1854 2152 198 0 80 1984 2 0 2 0 0 0 0 0 0 982859 630470 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 381 381 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1356 330 797 12197741 229 0 186 127 0 0 0 0 0 0 0 0 0 2102 951 0
+cpu184 2 0 2233010 1048996 1129210 9717 70537395135 25201551533 1182482 mm_cid_task_work_nr_run: 17 mm_cid_task_work_clear_old: 6217 mm_cid_task_work_clear_compact: 35 mm_cid_get_cached: 1180091 mm_cid_get_alloc: 1401 mm_cid_get_put_lazy: 61 mm_cid_put_lazy: 31 mm_cid_put: 41 mm_cid_migrate_steal: 11688 mm_cid_migrate_clear: 2371 mm_cid_migrate_move: 9317
+domain0 00000000,01000000,00000000,00000000,00000100,00000000,00000000 8453 7877 7 627 597 0 0 7877 557 500 14 669 44 0 0 500 12095 12010 6 86 79 0 0 11514 0 0 0 0 0 0 0 0 0 8259 6063 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 900 569 154 492 250 2 2 62 2 2 0 0 0 0 0 0 3895 1754 2013 2224 128 0 135 1589 0 0 0 0 0 0 0 0 0 1108867 734885 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 374 374 0 0 0 0 0 1 1 1 0 0 0 0 0 0 1223 319 693 11202628 211 0 172 140 0 0 0 0 0 0 0 0 0 2365 1181 0
+cpu185 0 0 2143195 1003815 1117797 9987 72220673110 25556503977 1138104 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6215 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1135908 mm_cid_get_alloc: 1219 mm_cid_get_put_lazy: 34 mm_cid_put_lazy: 31 mm_cid_put: 79 mm_cid_migrate_steal: 11426 mm_cid_migrate_clear: 1650 mm_cid_migrate_move: 9776
+domain0 00000000,02000000,00000000,00000000,00000200,00000000,00000000 8539 7999 9 585 567 0 0 7999 601 547 12 142 44 0 0 547 13121 12970 15 156 136 0 0 12472 0 0 0 0 0 0 0 0 0 8744 6636 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 895 554 141 499 280 3 3 64 1 1 0 0 0 0 0 0 4567 2448 1798 2255 321 0 86 2316 0 0 0 0 0 0 0 0 0 1096509 714356 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 377 377 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1337 366 733 13258415 238 0 191 167 0 0 0 0 0 0 0 0 0 2555 1403 0
+cpu186 3 0 2010942 937944 1185290 9921 72598876943 25535525977 1071684 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6242 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1069702 mm_cid_get_alloc: 1019 mm_cid_get_put_lazy: 32 mm_cid_put_lazy: 30 mm_cid_put: 60 mm_cid_migrate_steal: 9616 mm_cid_migrate_clear: 1146 mm_cid_migrate_move: 8470
+domain0 00000000,04000000,00000000,00000000,00000400,00000000,00000000 8349 7827 13 584 542 0 0 7827 655 603 13 124 41 0 0 603 11549 11435 8 117 106 0 0 11044 0 0 0 0 0 0 0 0 0 8597 6333 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 894 553 137 516 293 3 3 65 5 5 0 0 0 0 0 0 3414 1779 1345 1825 290 1 52 1702 1 0 1 0 0 0 0 0 0 1164442 791036 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 373 373 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1273 372 735 13668511 166 0 181 182 0 0 0 0 0 0 0 0 0 2328 1113 0
+cpu187 0 0 2181624 1023170 1189993 10073 74334386181 26042955156 1157232 mm_cid_task_work_nr_run: 27 mm_cid_task_work_clear_old: 6219 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1155470 mm_cid_get_alloc: 758 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 27 mm_cid_put: 86 mm_cid_migrate_steal: 7511 mm_cid_migrate_clear: 599 mm_cid_migrate_move: 6912
+domain0 00000000,08000000,00000000,00000000,00000800,00000000,00000000 8283 7738 7 597 564 0 0 7738 639 582 15 137 44 0 0 582 10527 10401 6 128 120 0 0 10009 0 0 0 0 0 0 0 0 0 8730 6397 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 897 543 164 517 276 4 4 60 1 1 0 0 0 0 0 0 4640 2240 2123 2543 277 0 60 2140 0 0 0 0 0 0 0 0 0 1168384 780924 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 369 369 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1425 369 816 15182800 240 0 219 140 0 0 0 0 0 0 0 0 0 2804 1429 0
+cpu188 6 0 2366314 1115159 1045679 10891 73051075970 25628656055 1249844 mm_cid_task_work_nr_run: 84 mm_cid_task_work_clear_old: 6128 mm_cid_task_work_clear_compact: 42 mm_cid_get_cached: 1248044 mm_cid_get_alloc: 656 mm_cid_get_put_lazy: 26 mm_cid_put_lazy: 38 mm_cid_put: 121 mm_cid_migrate_steal: 6443 mm_cid_migrate_clear: 336 mm_cid_migrate_move: 6107
+domain0 00000000,10000000,00000000,00000000,00001000,00000000,00000000 9002 8493 12 572 532 0 0 8493 659 604 14 125 41 0 0 604 13912 13767 9 149 136 0 0 13293 0 0 0 0 0 0 0 0 0 12272 10227 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1086 721 168 535 273 4 3 70 18 18 0 0 0 0 0 0 6919 3394 3071 3775 454 1 136 3184 3 0 3 0 0 0 0 0 0 1020163 656650 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 422 422 0 0 0 0 0 1 13 13 0 0 0 0 0 0 1833 541 1031 17200645 261 0 221 312 0 0 0 0 0 0 0 0 0 2351 1118 0
+cpu189 21 0 2051906 958578 1075814 10844 69649183070 25890736374 1091953 mm_cid_task_work_nr_run: 57 mm_cid_task_work_clear_old: 6170 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1090383 mm_cid_get_alloc: 512 mm_cid_get_put_lazy: 15 mm_cid_put_lazy: 25 mm_cid_put: 85 mm_cid_migrate_steal: 5541 mm_cid_migrate_clear: 213 mm_cid_migrate_move: 5328
+domain0 00000000,20000000,00000000,00000000,00002000,00000000,00000000 8657 8133 16 586 539 0 0 8133 645 596 14 138 37 0 0 596 13281 13127 8 155 146 0 0 12698 0 0 0 0 0 0 0 0 0 8188 5950 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 960 629 152 468 241 1 4 62 35 35 0 0 0 0 0 0 6850 3494 2964 3553 392 0 72 3343 0 0 0 0 0 0 0 0 0 1054758 681303 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 408 407 0 1 1 0 0 0 12 12 0 0 0 0 0 0 1567 465 898 13768715 204 0 209 247 0 0 0 0 0 0 0 0 0 2022 1046 0
+cpu190 0 0 2124363 995219 1112369 10057 70732698575 25134628313 1127848 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6213 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1126100 mm_cid_get_alloc: 514 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 25 mm_cid_put: 129 mm_cid_migrate_steal: 7198 mm_cid_migrate_clear: 195 mm_cid_migrate_move: 7003
+domain0 00000000,40000000,00000000,00000000,00004000,00000000,00000000 8653 8150 9 582 543 0 0 8150 610 565 12 115 33 0 0 565 11887 11728 11 164 148 0 0 11339 0 0 0 0 0 0 0 0 0 8948 6519 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 927 602 134 482 271 2 2 64 11 11 0 0 0 0 0 0 5392 2694 2504 2802 194 1 115 2505 0 0 0 0 0 0 0 0 0 1091072 707295 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 395 395 0 0 0 0 0 0 4 4 0 0 0 0 0 0 906 345 447 7600796 114 0 106 234 0 0 0 0 0 0 0 0 0 2289 1098 0
+cpu191 2 0 2157384 1010270 1059930 10074 68637655719 25142577868 1145764 mm_cid_task_work_nr_run: 36 mm_cid_task_work_clear_old: 6198 mm_cid_task_work_clear_compact: 3 mm_cid_get_cached: 1144196 mm_cid_get_alloc: 406 mm_cid_get_put_lazy: 13 mm_cid_put_lazy: 21 mm_cid_put: 106 mm_cid_migrate_steal: 4997 mm_cid_migrate_clear: 151 mm_cid_migrate_move: 4846
+domain0 00000000,80000000,00000000,00000000,00008000,00000000,00000000 8754 8164 10 645 611 0 0 8164 597 536 22 123 40 0 0 536 12165 12038 7 128 120 0 0 11636 0 0 0 0 0 0 0 0 0 7623 5614 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 936 587 159 514 268 1 4 73 7 7 0 0 0 0 0 0 6758 3380 2953 3527 425 0 109 3219 1 0 1 0 0 0 0 0 0 1040108 667409 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 416 416 0 0 0 0 0 0 3 3 0 0 0 0 0 0 1824 492 993 15768382 339 0 278 203 0 0 0 0 0 0 0 0 0 2123 2225 0
+cpu192 0 0 1989377 927845 1163879 9883 72334301590 25468376218 1060248 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6241 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1058759 mm_cid_get_alloc: 430 mm_cid_get_put_lazy: 14 mm_cid_put_lazy: 38 mm_cid_put: 128 mm_cid_migrate_steal: 4672 mm_cid_migrate_clear: 205 mm_cid_migrate_move: 4467
+domain0 00000001,00000000,00000000,00000000,00010000,00000000,00000000 8067 7509 11 624 584 0 0 7509 671 632 8 100 31 0 0 632 6112 6037 8 75 67 0 0 5792 0 0 0 0 0 0 0 0 0 10532 7610 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 870 560 136 455 240 1 5 43 4 4 0 0 0 0 0 0 2807 1277 1369 1626 161 0 43 1213 1 0 1 0 0 0 0 0 0 1140178 762612 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 377 377 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1239 363 681 10142300 195 0 151 208 0 0 0 0 0 0 0 0 0 3283 1666 0
+cpu193 5 0 2057767 961247 1150617 11409 73220215130 25479413328 1095194 mm_cid_task_work_nr_run: 34 mm_cid_task_work_clear_old: 6209 mm_cid_task_work_clear_compact: 16 mm_cid_get_cached: 1092994 mm_cid_get_alloc: 452 mm_cid_get_put_lazy: 14 mm_cid_put_lazy: 35 mm_cid_put: 177 mm_cid_migrate_steal: 5940 mm_cid_migrate_clear: 175 mm_cid_migrate_move: 5765
+domain0 00000002,00000000,00000000,00000000,00020000,00000000,00000000 8690 8161 5 609 556 0 0 8161 659 606 11 169 45 0 0 606 9241 9084 11 160 146 0 0 8765 0 0 0 0 0 0 0 0 0 8745 6220 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1093 738 131 526 319 2 1 60 9 9 0 0 0 0 0 0 5285 2697 2125 2820 463 0 81 2571 1 0 1 0 0 0 0 0 0 1121567 731724 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 467 467 0 0 0 0 0 0 5 5 0 0 0 0 0 0 1462 589 704 11944882 169 0 170 412 0 0 0 0 0 0 0 0 0 8894 4009 0
+cpu194 5 0 1993539 929112 1210591 9979 72890765559 24824850374 1063166 mm_cid_task_work_nr_run: 27 mm_cid_task_work_clear_old: 6263 mm_cid_task_work_clear_compact: 18 mm_cid_get_cached: 1061744 mm_cid_get_alloc: 372 mm_cid_get_put_lazy: 5 mm_cid_put_lazy: 25 mm_cid_put: 89 mm_cid_migrate_steal: 2233 mm_cid_migrate_clear: 133 mm_cid_migrate_move: 2100
+domain0 00000004,00000000,00000000,00000000,00040000,00000000,00000000 8015 7490 8 651 561 0 0 7490 643 604 10 107 29 0 0 604 4395 4304 5 98 86 0 0 4130 0 0 0 0 0 0 0 0 0 9820 7230 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 869 536 129 512 297 3 3 44 4 4 0 0 0 0 0 0 2836 1323 1251 1690 262 1 46 1253 0 0 0 0 0 0 0 0 0 1172400 778742 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 366 366 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1181 280 681 15068512 220 0 165 110 0 0 0 0 0 0 0 0 0 18390 12503 0
+cpu195 0 0 2002061 932739 1077654 9847 70334249308 24956086770 1068080 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6262 mm_cid_task_work_clear_compact: 6 mm_cid_get_cached: 1066443 mm_cid_get_alloc: 624 mm_cid_get_put_lazy: 40 mm_cid_put_lazy: 63 mm_cid_put: 160 mm_cid_migrate_steal: 3525 mm_cid_migrate_clear: 527 mm_cid_migrate_move: 2998
+domain0 00000008,00000000,00000000,00000000,00080000,00000000,00000000 8396 7865 12 596 550 0 0 7865 590 543 16 95 31 0 0 543 14133 14016 5 121 112 0 0 13432 0 0 0 0 0 0 0 0 0 8332 6237 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 897 571 143 470 256 0 4 53 1 1 0 0 0 0 0 0 5846 1792 3781 4243 273 1 71 1642 4 0 4 0 0 0 0 0 0 1056691 685202 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 378 378 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1408 362 750 13013665 296 0 204 148 0 0 0 0 0 0 0 0 0 2782 1336 0
+cpu196 6 0 1980629 922543 1112550 9741 71050570424 25386073774 1056715 mm_cid_task_work_nr_run: 26 mm_cid_task_work_clear_old: 6239 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1055264 mm_cid_get_alloc: 404 mm_cid_get_put_lazy: 17 mm_cid_put_lazy: 29 mm_cid_put: 142 mm_cid_migrate_steal: 707 mm_cid_migrate_clear: 149 mm_cid_migrate_move: 558
+domain0 00000010,00000000,00000000,00000000,00100000,00000000,00000000 8346 7822 13 576 531 0 1 7822 620 566 16 147 40 0 0 566 5230 5094 3 139 133 0 0 4935 0 0 0 0 0 0 0 0 0 7586 5273 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 902 546 157 535 286 2 2 62 3 3 0 0 0 0 0 0 3102 1483 1287 1870 332 0 51 1395 4 0 4 0 0 0 0 0 0 1092587 720077 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 379 379 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1146 305 659 10689855 182 0 153 143 0 0 0 0 0 0 0 0 0 2634 1373 0
+cpu197 0 0 2055348 959534 1031238 9916 69544678159 25417425099 1094495 mm_cid_task_work_nr_run: 21 mm_cid_task_work_clear_old: 6246 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1093043 mm_cid_get_alloc: 449 mm_cid_get_put_lazy: 22 mm_cid_put_lazy: 23 mm_cid_put: 163 mm_cid_migrate_steal: 917 mm_cid_migrate_clear: 176 mm_cid_migrate_move: 741
+domain0 00000020,00000000,00000000,00000000,00200000,00000000,00000000 8537 8014 13 582 532 0 0 8014 592 546 11 119 36 0 0 546 5944 5880 6 64 58 0 0 5719 0 0 0 0 0 0 0 0 0 9299 6487 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 895 583 150 469 232 2 2 48 1 1 0 0 0 0 0 0 3780 1882 1769 1995 129 2 80 1754 1 0 1 0 0 0 0 0 0 1009700 648346 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 368 368 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1273 349 724 12816979 200 0 200 144 0 0 0 0 0 0 0 0 0 2321 1027 0
+cpu198 0 0 1981061 922700 1046959 9795 70045941921 25605833196 1056927 mm_cid_task_work_nr_run: 19 mm_cid_task_work_clear_old: 6260 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1055274 mm_cid_get_alloc: 461 mm_cid_get_put_lazy: 15 mm_cid_put_lazy: 30 mm_cid_put: 154 mm_cid_migrate_steal: 2068 mm_cid_migrate_clear: 251 mm_cid_migrate_move: 1817
+domain0 00000040,00000000,00000000,00000000,00400000,00000000,00000000 8642 8078 16 622 579 0 0 8078 603 550 20 113 35 0 0 550 8765 8629 12 142 124 0 0 8311 0 0 0 0 0 0 0 0 0 7787 5387 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 949 596 141 525 307 0 2 53 2 2 0 0 0 0 0 0 6243 2096 3952 4271 195 0 77 1943 2 0 2 0 0 0 0 0 0 1027987 662063 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 377 377 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1517 415 830 11231542 272 0 231 180 0 0 0 0 0 0 0 0 0 1388 764 0
+cpu199 0 0 2081342 971924 973774 9634 70103892984 25474891063 1108022 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6243 mm_cid_task_work_clear_compact: 20 mm_cid_get_cached: 1106586 mm_cid_get_alloc: 451 mm_cid_get_put_lazy: 22 mm_cid_put_lazy: 22 mm_cid_put: 172 mm_cid_migrate_steal: 2004 mm_cid_migrate_clear: 222 mm_cid_migrate_move: 1782
+domain0 00000080,00000000,00000000,00000000,00800000,00000000,00000000 8845 8290 11 602 570 0 0 8290 589 540 11 124 40 0 0 540 9726 9622 4 106 100 0 0 9242 0 0 0 0 0 0 0 0 0 7065 4932 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 895 567 130 476 266 1 4 52 2 2 0 0 0 0 0 0 6216 2241 3851 4063 124 1 77 2073 0 0 0 0 0 0 0 0 0 954921 602251 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 376 376 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1539 371 856 11878850 312 0 231 125 0 0 0 0 0 0 0 0 0 2152 1121 0
+cpu200 4 0 2174876 1020741 1058294 9644 71665813908 24887215668 1152775 mm_cid_task_work_nr_run: 27 mm_cid_task_work_clear_old: 6244 mm_cid_task_work_clear_compact: 4 mm_cid_get_cached: 1151188 mm_cid_get_alloc: 443 mm_cid_get_put_lazy: 11 mm_cid_put_lazy: 23 mm_cid_put: 163 mm_cid_migrate_steal: 959 mm_cid_migrate_clear: 163 mm_cid_migrate_move: 796
+domain0 00000100,00000000,00000000,00000000,01000000,00000000,00000000 8701 8177 13 591 549 0 0 8177 604 557 15 130 36 0 1 556 8148 8023 12 126 113 0 0 7803 0 0 0 0 0 0 0 0 0 7325 5268 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 890 563 129 485 281 0 4 60 0 0 0 0 0 0 0 0 4194 1865 2033 2520 296 2 71 1732 0 0 0 0 0 0 0 0 0 1038992 684513 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 370 370 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1356 424 727 14834220 205 0 203 214 0 0 0 0 0 0 0 0 0 2331 1234 0
+cpu201 2 0 2277092 1070149 1007778 10804 71532044710 25454692032 1205611 mm_cid_task_work_nr_run: 42 mm_cid_task_work_clear_old: 6236 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1202497 mm_cid_get_alloc: 435 mm_cid_get_put_lazy: 3 mm_cid_put_lazy: 20 mm_cid_put: 180 mm_cid_migrate_steal: 1064 mm_cid_migrate_clear: 161 mm_cid_migrate_move: 903
+domain0 00000200,00000000,00000000,00000000,02000000,00000000,00000000 9445 8922 15 600 543 0 0 8922 571 524 12 119 35 0 0 524 6997 6919 4 78 74 0 0 6717 0 0 0 0 0 0 0 0 0 7534 5440 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1113 792 139 463 264 2 1 78 1 1 0 0 0 0 0 0 4615 2165 2019 2656 431 1 43 2083 0 0 0 0 0 0 0 0 0 987316 635024 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 485 485 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1601 698 686 13639057 217 0 183 507 0 0 0 0 0 0 0 0 0 2122 1204 0
+cpu202 1 0 1979558 922932 1087457 10554 70068282752 25420590299 1055282 mm_cid_task_work_nr_run: 32 mm_cid_task_work_clear_old: 6233 mm_cid_task_work_clear_compact: 8 mm_cid_get_cached: 1053788 mm_cid_get_alloc: 464 mm_cid_get_put_lazy: 18 mm_cid_put_lazy: 38 mm_cid_put: 143 mm_cid_migrate_steal: 3154 mm_cid_migrate_clear: 218 mm_cid_migrate_move: 2936
+domain0 00000400,00000000,00000000,00000000,04000000,00000000,00000000 8600 8016 19 661 592 0 0 8016 643 587 16 176 42 0 0 587 12210 12076 7 139 127 0 0 11560 0 0 0 0 0 0 0 0 0 7971 5743 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 923 569 149 505 275 2 8 69 7 7 0 0 0 0 0 0 7108 2844 4124 4320 140 1 103 2665 0 0 0 0 0 0 0 0 0 1058437 679300 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 389 389 0 0 0 0 0 0 3 3 0 0 0 0 0 0 1834 509 986 17939855 339 0 287 208 0 0 0 0 0 0 0 0 0 10493 4415 0
+cpu203 0 0 2043095 954144 1135923 11141 70989078069 24982621788 1087624 mm_cid_task_work_nr_run: 35 mm_cid_task_work_clear_old: 6219 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1084765 mm_cid_get_alloc: 322 mm_cid_get_put_lazy: 15 mm_cid_put_lazy: 30 mm_cid_put: 39 mm_cid_migrate_steal: 1582 mm_cid_migrate_clear: 200 mm_cid_migrate_move: 1382
+domain0 00000800,00000000,00000000,00000000,08000000,00000000,00000000 9267 8724 10 621 567 0 0 8724 588 545 11 129 33 0 0 545 9366 9287 4 80 75 0 0 8858 0 0 0 0 0 0 0 0 0 8260 5940 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1362 1043 141 473 253 4 1 61 1 1 0 0 0 0 0 0 4461 2091 2251 2467 119 0 61 1983 1 0 1 0 0 0 0 0 0 1113879 738134 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 544 544 0 0 0 0 0 0 2 2 0 0 0 0 0 0 1684 664 780 11294196 240 0 209 445 0 0 0 0 0 0 0 0 0 2641 1365 0
+cpu204 0 0 1991304 929081 989828 10039 67915571819 25283311862 1060826 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6261 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1059353 mm_cid_get_alloc: 391 mm_cid_get_put_lazy: 14 mm_cid_put_lazy: 19 mm_cid_put: 132 mm_cid_migrate_steal: 1118 mm_cid_migrate_clear: 134 mm_cid_migrate_move: 984
+domain0 00001000,00000000,00000000,00000000,10000000,00000000,00000000 8900 8387 11 593 536 0 0 8387 555 506 12 110 39 0 0 506 6845 6730 5 119 110 0 0 6424 0 0 0 0 0 0 0 0 0 8139 5927 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 956 623 154 474 239 1 4 81 1 1 0 0 0 0 0 0 5672 2370 3150 3370 152 0 93 2219 2 0 2 0 0 0 0 0 0 969849 613677 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 406 406 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1545 398 876 14146996 271 0 220 169 0 0 0 0 0 0 0 0 0 1799 922 0
+cpu205 0 0 2063928 964376 1006489 10173 69657071863 25604827638 1098147 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6250 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1096687 mm_cid_get_alloc: 426 mm_cid_get_put_lazy: 16 mm_cid_put_lazy: 22 mm_cid_put: 153 mm_cid_migrate_steal: 882 mm_cid_migrate_clear: 153 mm_cid_migrate_move: 729
+domain0 00002000,00000000,00000000,00000000,20000000,00000000,00000000 8657 8132 7 591 548 0 0 8132 648 596 13 134 40 0 0 596 10375 10159 9 221 207 0 0 9668 0 0 0 0 0 0 0 0 0 7838 5654 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 900 548 138 497 302 1 4 69 0 0 0 0 0 0 0 0 6780 2289 4036 4763 455 0 124 2104 0 0 0 0 0 0 0 0 0 986789 618489 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 370 370 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1455 363 870 14500075 222 0 195 152 0 0 0 0 0 0 0 0 0 1687 920 0
+cpu206 0 0 2138247 1001828 1078889 9868 71642213395 25066968550 1134984 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6241 mm_cid_task_work_clear_compact: 9 mm_cid_get_cached: 1133481 mm_cid_get_alloc: 447 mm_cid_get_put_lazy: 8 mm_cid_put_lazy: 28 mm_cid_put: 175 mm_cid_migrate_steal: 809 mm_cid_migrate_clear: 169 mm_cid_migrate_move: 640
+domain0 00004000,00000000,00000000,00000000,40000000,00000000,00000000 8610 8116 7 541 518 0 0 8116 598 539 13 175 46 0 0 539 5100 4954 9 149 137 0 0 4795 0 0 0 0 0 0 0 0 0 8167 5817 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 890 565 134 481 268 0 0 81 0 0 0 0 0 0 0 0 3948 1789 1956 2223 203 0 72 1696 2 0 2 0 0 0 0 0 0 1059286 690239 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 370 370 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1323 371 735 12241211 217 0 195 168 0 0 0 0 0 0 0 0 0 1566 795 0
+cpu207 2 0 2077773 971739 996898 9526 69626538057 24843406547 1104669 mm_cid_task_work_nr_run: 25 mm_cid_task_work_clear_old: 6256 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 1103369 mm_cid_get_alloc: 312 mm_cid_get_put_lazy: 17 mm_cid_put_lazy: 16 mm_cid_put: 85 mm_cid_migrate_steal: 674 mm_cid_migrate_clear: 124 mm_cid_migrate_move: 550
+domain0 00008000,00000000,00000000,00000000,80000000,00000000,00000000 8456 7941 12 564 540 0 0 7941 538 492 13 140 35 0 0 492 6151 6062 4 90 85 0 0 5808 0 0 0 0 0 0 0 0 0 8409 6010 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 894 545 142 523 302 1 5 73 0 0 0 0 0 0 0 0 5211 1853 3095 3503 263 0 91 1705 0 0 0 0 0 0 0 0 0 977189 623723 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 374 374 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1258 353 706 12583079 199 0 191 154 0 0 0 0 0 0 0 0 0 1772 840 0
+cpu208 0 0 2041592 953217 1006065 9823 67915865482 24994981332 1087086 mm_cid_task_work_nr_run: 13 mm_cid_task_work_clear_old: 6266 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1085760 mm_cid_get_alloc: 371 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 23 mm_cid_put: 112 mm_cid_migrate_steal: 993 mm_cid_migrate_clear: 145 mm_cid_migrate_move: 848
+domain0 00010000,00000000,00000000,00000001,00000000,00000000,00000000 8454 7966 11 579 500 0 0 7966 554 509 12 130 33 0 1 508 8028 7903 4 125 121 0 0 7572 0 0 0 0 0 0 0 0 0 7844 5649 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 894 562 143 498 283 0 3 89 0 0 0 0 0 0 0 0 5948 2040 3520 4070 388 0 95 1896 3 0 3 0 0 0 0 0 0 986423 634148 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 375 375 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1443 370 793 13427127 280 0 197 163 0 0 0 0 0 0 0 0 0 1973 929 0
+cpu209 0 0 2071124 968291 1058205 9846 69974539586 25337778990 1101414 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6250 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1100037 mm_cid_get_alloc: 313 mm_cid_get_put_lazy: 12 mm_cid_put_lazy: 10 mm_cid_put: 127 mm_cid_migrate_steal: 551 mm_cid_migrate_clear: 85 mm_cid_migrate_move: 466
+domain0 00020000,00000000,00000000,00000002,00000000,00000000,00000000 8224 7699 16 591 536 0 0 7698 554 509 17 102 29 0 0 509 7913 7784 24 130 105 0 0 7497 1 0 1 0 0 0 0 0 0 7666 5514 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 893 558 137 493 272 1 4 78 1 1 0 0 0 0 0 0 4959 1820 2934 3238 205 0 88 1703 2 0 2 0 0 0 0 0 0 1038223 674029 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 370 370 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1324 369 712 10955990 243 0 181 180 0 0 0 0 0 0 0 0 0 2468 1315 0
+cpu210 0 0 2060360 962735 1068691 9999 67541520849 25252493129 1096284 mm_cid_task_work_nr_run: 15 mm_cid_task_work_clear_old: 6257 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1094981 mm_cid_get_alloc: 307 mm_cid_get_put_lazy: 11 mm_cid_put_lazy: 17 mm_cid_put: 62 mm_cid_migrate_steal: 1048 mm_cid_migrate_clear: 130 mm_cid_migrate_move: 918
+domain0 00040000,00000000,00000000,00000004,00000000,00000000,00000000 7873 7298 8 642 596 0 0 7296 534 493 12 117 29 0 0 493 8849 8699 11 151 139 0 0 8310 0 0 0 0 0 0 0 0 0 8256 6053 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 909 564 152 520 279 3 3 93 1 1 0 0 0 0 0 0 6074 2007 3739 4243 328 0 78 1866 3 0 3 0 0 0 0 0 0 1046447 676584 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 362 362 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1161 334 643 10329469 184 0 162 160 0 0 0 0 0 0 0 0 0 3987 2287 0
+cpu211 0 0 2014513 939945 1212552 9861 71011118367 25072985784 1073222 mm_cid_task_work_nr_run: 18 mm_cid_task_work_clear_old: 6244 mm_cid_task_work_clear_compact: 5 mm_cid_get_cached: 1071895 mm_cid_get_alloc: 324 mm_cid_get_put_lazy: 13 mm_cid_put_lazy: 26 mm_cid_put: 78 mm_cid_migrate_steal: 990 mm_cid_migrate_clear: 154 mm_cid_migrate_move: 836
+domain0 00080000,00000000,00000000,00000008,00000000,00000000,00000000 8358 7815 13 605 561 0 0 7815 586 530 16 223 42 0 1 529 7888 7777 6 112 105 0 0 7483 0 0 0 0 0 0 0 0 0 8238 6021 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 887 535 156 517 273 2 7 50 0 0 0 0 0 0 0 0 3103 1131 1818 2061 154 0 44 1054 1 0 1 0 0 0 0 0 0 1186841 812587 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 369 369 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1091 308 605 9728045 178 0 143 153 0 0 0 0 0 0 0 0 0 7610 3164 0
+cpu212 0 0 2100015 982976 1071797 10582 69439952166 25955879449 1115669 mm_cid_task_work_nr_run: 22 mm_cid_task_work_clear_old: 6214 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 1114048 mm_cid_get_alloc: 430 mm_cid_get_put_lazy: 21 mm_cid_put_lazy: 21 mm_cid_put: 79 mm_cid_migrate_steal: 1763 mm_cid_migrate_clear: 230 mm_cid_migrate_move: 1533
+domain0 00100000,00000000,00000000,00000010,00000000,00000000,00000000 8518 8012 8 558 521 0 0 8012 594 524 14 194 56 0 1 523 9460 9252 10 211 198 0 0 8906 0 0 0 0 0 0 0 0 0 7860 5654 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 909 576 132 468 266 1 2 77 1 1 0 0 0 0 0 0 7570 2645 4671 5035 254 0 92 2499 0 0 0 0 0 0 0 0 0 1037644 634732 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 389 389 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1597 432 880 10528409 285 0 204 221 0 0 0 0 0 0 0 0 0 15709 18987 0
+cpu213 0 0 2020808 942811 1024878 10041 68902194179 25377633244 1076734 mm_cid_task_work_nr_run: 29 mm_cid_task_work_clear_old: 6233 mm_cid_task_work_clear_compact: 1 mm_cid_get_cached: 1075159 mm_cid_get_alloc: 574 mm_cid_get_put_lazy: 57 mm_cid_put_lazy: 64 mm_cid_put: 77 mm_cid_migrate_steal: 4951 mm_cid_migrate_clear: 804 mm_cid_migrate_move: 4147
+domain0 00200000,00000000,00000000,00000020,00000000,00000000,00000000 8458 7917 8 587 560 0 0 7917 550 503 8 147 44 0 1 502 12613 12523 6 90 84 0 0 11896 0 0 0 0 0 0 0 0 0 8544 6354 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 904 564 145 498 274 2 3 67 0 0 0 0 0 0 0 0 5649 2733 2634 3075 282 0 86 2578 0 0 0 0 0 0 0 0 0 1003849 631999 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 385 385 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1559 433 851 14240622 275 0 256 163 0 0 0 0 0 0 0 0 0 2442 1281 0
+cpu214 0 0 2163844 1013832 1047130 9852 70158307275 25121129071 1148637 mm_cid_task_work_nr_run: 34 mm_cid_task_work_clear_old: 6203 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1146999 mm_cid_get_alloc: 621 mm_cid_get_put_lazy: 51 mm_cid_put_lazy: 63 mm_cid_put: 128 mm_cid_migrate_steal: 4908 mm_cid_migrate_clear: 702 mm_cid_migrate_move: 4206
+domain0 00400000,00000000,00000000,00000040,00000000,00000000,00000000 8829 8315 3 551 542 0 0 8315 554 508 19 108 27 0 0 508 6544 6458 4 89 82 0 0 6195 0 0 0 0 0 0 0 0 0 8367 6165 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 900 566 143 496 274 2 3 59 1 1 0 0 0 0 0 0 5524 2463 2842 3148 219 1 42 2382 0 0 0 0 0 0 0 0 0 1026818 661966 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 385 385 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1260 328 726 12206734 206 0 186 132 0 0 0 0 0 0 0 0 0 2091 1162 0
+cpu215 24 0 2096732 980094 979798 10592 68641844351 25121930134 1115129 mm_cid_task_work_nr_run: 47 mm_cid_task_work_clear_old: 6176 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1113546 mm_cid_get_alloc: 527 mm_cid_get_put_lazy: 31 mm_cid_put_lazy: 39 mm_cid_put: 122 mm_cid_migrate_steal: 3399 mm_cid_migrate_clear: 403 mm_cid_migrate_move: 2996
+domain0 00800000,00000000,00000000,00000080,00000000,00000000,00000000 8935 8397 4 610 558 0 0 8397 606 553 13 134 43 0 0 553 12118 11970 8 148 140 0 0 11480 0 0 0 0 0 0 0 0 0 7896 5790 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 934 580 158 510 272 3 2 71 27 27 0 0 0 0 0 0 3450 1904 1434 1627 112 0 43 1837 1 0 1 0 0 0 0 0 0 952129 593164 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 391 391 0 0 0 0 0 0 8 8 0 0 0 0 0 0 1394 433 702 11929779 259 0 203 228 0 0 0 0 0 0 0 0 0 9179 3614 0
+cpu216 17 0 1979769 921992 1036289 10056 68002479449 24700300062 1056491 mm_cid_task_work_nr_run: 27 mm_cid_task_work_clear_old: 6223 mm_cid_task_work_clear_compact: 13 mm_cid_get_cached: 1055049 mm_cid_get_alloc: 368 mm_cid_get_put_lazy: 16 mm_cid_put_lazy: 26 mm_cid_put: 88 mm_cid_migrate_steal: 957 mm_cid_migrate_clear: 143 mm_cid_migrate_move: 814
+domain0 01000000,00000000,00000000,00000100,00000000,00000000,00000000 8399 7836 10 636 599 0 0 7836 592 546 12 133 36 0 0 546 8910 8832 6 78 72 0 0 8498 0 0 0 0 0 0 0 0 0 8173 6002 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 905 553 135 514 301 1 1 66 13 13 0 0 0 0 0 0 5117 2093 2653 3216 371 0 83 1967 0 0 0 0 0 0 0 0 0 1006953 644839 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 380 380 0 0 0 0 0 0 2 2 0 0 0 0 0 0 1450 405 780 15591116 265 0 228 171 0 0 0 0 0 0 0 0 0 11105 4719 0
+cpu217 3 0 1997683 930516 1121231 10479 68312203929 25213195664 1065910 mm_cid_task_work_nr_run: 23 mm_cid_task_work_clear_old: 6224 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1064423 mm_cid_get_alloc: 407 mm_cid_get_put_lazy: 24 mm_cid_put_lazy: 33 mm_cid_put: 92 mm_cid_migrate_steal: 1833 mm_cid_migrate_clear: 222 mm_cid_migrate_move: 1611
+domain0 02000000,00000000,00000000,00000200,00000000,00000000,00000000 8433 7886 8 640 573 0 0 7886 617 555 16 157 49 0 0 555 10039 9898 3 143 138 0 0 9525 0 0 0 0 0 0 0 0 0 7917 5793 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 897 570 134 451 248 2 3 69 10 10 0 0 0 0 0 0 3042 1387 1527 1694 128 0 58 1303 1 0 1 0 0 0 0 0 0 1098790 724249 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 376 376 0 0 0 0 0 0 5 5 0 0 0 0 0 0 1291 366 712 12281911 213 0 179 180 0 0 0 0 0 0 0 0 0 4043 1924 0
+cpu218 61 0 1964673 914691 1097352 10266 68667357125 25457653031 1048542 mm_cid_task_work_nr_run: 36 mm_cid_task_work_clear_old: 6241 mm_cid_task_work_clear_compact: 31 mm_cid_get_cached: 1047149 mm_cid_get_alloc: 337 mm_cid_get_put_lazy: 13 mm_cid_put_lazy: 42 mm_cid_put: 64 mm_cid_migrate_steal: 1256 mm_cid_migrate_clear: 165 mm_cid_migrate_move: 1091
+domain0 04000000,00000000,00000000,00000400,00000000,00000000,00000000 8262 7740 13 573 533 0 0 7740 640 594 9 129 38 0 0 594 8851 8672 7 184 172 0 0 8375 0 0 0 0 0 0 0 0 0 9272 6663 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 899 570 151 489 255 1 2 78 14 14 0 0 0 0 0 0 3771 1759 1782 2166 230 0 59 1671 2 0 2 0 0 0 0 0 0 1064471 677700 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 385 385 0 0 0 0 0 0 5 5 0 0 0 0 0 0 1187 389 589 13481043 209 0 205 176 0 0 0 0 0 0 0 0 0 13341 5662 0
+cpu219 58 0 2008282 936510 1238709 11191 71705718388 25476865674 1070582 mm_cid_task_work_nr_run: 24 mm_cid_task_work_clear_old: 6250 mm_cid_task_work_clear_compact: 0 mm_cid_get_cached: 1067986 mm_cid_get_alloc: 323 mm_cid_get_put_lazy: 16 mm_cid_put_lazy: 24 mm_cid_put: 54 mm_cid_migrate_steal: 641 mm_cid_migrate_clear: 133 mm_cid_migrate_move: 508
+domain0 08000000,00000000,00000000,00000800,00000000,00000000,00000000 8825 8294 8 590 561 0 0 8294 657 599 11 193 49 0 0 599 7410 7308 8 105 94 0 0 7071 0 0 0 0 0 0 0 0 0 8901 6608 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1246 917 139 470 258 3 3 67 14 14 0 0 0 0 0 0 3630 1843 1548 1955 239 0 39 1781 0 0 0 0 0 0 0 0 0 1213768 799121 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 537 537 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1461 737 567 12569855 157 0 163 568 0 0 0 0 0 0 0 0 0 4847 18592 0
+cpu220 15 0 2120712 991991 1157044 10882 70678850271 25683119507 1127356 mm_cid_task_work_nr_run: 20 mm_cid_task_work_clear_old: 6227 mm_cid_task_work_clear_compact: 2 mm_cid_get_cached: 1124831 mm_cid_get_alloc: 411 mm_cid_get_put_lazy: 14 mm_cid_put_lazy: 27 mm_cid_put: 70 mm_cid_migrate_steal: 1941 mm_cid_migrate_clear: 227 mm_cid_migrate_move: 1714
+domain0 10000000,00000000,00000000,00001000,00000000,00000000,00000000 8473 7955 7 569 539 0 0 7955 630 581 9 183 44 0 0 581 7527 7439 10 90 78 0 0 7243 0 0 0 0 0 0 0 0 0 9421 6772 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 951 611 130 518 298 0 3 80 15 15 0 0 0 0 0 0 4871 2362 2145 2686 364 0 74 2258 2 0 2 0 0 0 0 0 0 1132522 744271 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 405 405 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1439 649 620 10671678 170 0 154 489 0 0 0 0 0 0 0 0 0 4217 2121 0
+cpu221 23 0 2048479 955807 1051703 13140 68644849004 25476408427 1091307 mm_cid_task_work_nr_run: 38 mm_cid_task_work_clear_old: 6189 mm_cid_task_work_clear_compact: 7 mm_cid_get_cached: 1086047 mm_cid_get_alloc: 556 mm_cid_get_put_lazy: 29 mm_cid_put_lazy: 34 mm_cid_put: 92 mm_cid_migrate_steal: 4936 mm_cid_migrate_clear: 498 mm_cid_migrate_move: 4438
+domain0 20000000,00000000,00000000,00002000,00000000,00000000,00000000 10232 9697 9 628 561 0 0 9697 601 550 11 151 44 0 0 550 5980 5907 6 73 67 0 0 5726 0 0 0 0 0 0 0 0 0 9153 6537 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1616 1289 133 488 277 2 4 70 29 29 0 0 0 0 0 0 4179 2375 1608 1913 196 0 53 2301 1 0 1 0 0 0 0 0 0 1026618 655611 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 720 720 0 0 0 0 0 0 7 7 0 0 0 0 0 0 2192 1327 682 14027591 183 0 192 1130 0 0 0 0 0 0 0 0 0 2790 1498 0
+cpu222 5 0 2086182 974314 1087685 11631 70776945552 24618100296 1110555 mm_cid_task_work_nr_run: 52 mm_cid_task_work_clear_old: 6189 mm_cid_task_work_clear_compact: 17 mm_cid_get_cached: 1107412 mm_cid_get_alloc: 479 mm_cid_get_put_lazy: 19 mm_cid_put_lazy: 52 mm_cid_put: 70 mm_cid_migrate_steal: 3468 mm_cid_migrate_clear: 371 mm_cid_migrate_move: 3097
+domain0 40000000,00000000,00000000,00004000,00000000,00000000,00000000 9226 8725 10 562 514 0 0 8725 669 616 17 140 37 0 0 616 12537 12336 9 207 192 0 0 11947 0 0 0 0 0 0 0 0 0 7990 5894 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1287 963 132 483 268 2 3 73 10 10 0 0 0 0 0 0 6828 3264 3225 3784 339 0 71 3147 1 0 1 0 0 0 0 0 0 1063817 711682 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 567 567 0 0 0 0 0 0 4 4 0 0 0 0 0 0 1787 883 674 11418305 230 0 220 659 0 0 0 0 0 0 0 0 0 4246 2217 0
+cpu223 36 0 2087097 975665 1041403 11727 69261524209 26022073012 1110130 mm_cid_task_work_nr_run: 83 mm_cid_task_work_clear_old: 6098 mm_cid_task_work_clear_compact: 18 mm_cid_get_cached: 1108230 mm_cid_get_alloc: 559 mm_cid_get_put_lazy: 29 mm_cid_put_lazy: 49 mm_cid_put: 88 mm_cid_migrate_steal: 3220 mm_cid_migrate_clear: 385 mm_cid_migrate_move: 2835
+domain0 80000000,00000000,00000000,00008000,00000000,00000000,00000000 8241 7713 10 593 557 0 0 7711 657 607 10 142 41 0 0 607 10874 10682 11 202 181 0 0 10355 0 0 0 0 0 0 0 0 0 7869 5644 0
+domain1 ffffffff,ffffff00,00000000,0000ffff,ffffffff,ff000000,00000000 1223 892 136 488 283 1 6 90 37 37 0 0 0 0 0 0 5618 1908 3333 4009 377 0 65 1811 0 0 0 0 0 0 0 0 0 1017460 649068 0
+domain2 ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff 455 455 0 0 0 0 0 0 28 28 0 0 0 0 0 0 1375 429 700 14079833 246 0 193 234 0 0 0 0 0 0 0 0 0 4345 2232 0
+
+--EvAQijjP7Lwp4IW7--
