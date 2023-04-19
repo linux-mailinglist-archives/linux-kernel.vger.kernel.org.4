@@ -2,233 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07F36E7663
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9F96E7660
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232937AbjDSJfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 05:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60250 "EHLO
+        id S232916AbjDSJfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 05:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232942AbjDSJfE (ORCPT
+        with ESMTP id S230467AbjDSJe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:35:04 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168C0BBBC;
-        Wed, 19 Apr 2023 02:35:03 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id k65-20020a17090a3ec700b00247131783f7so686315pjc.0;
-        Wed, 19 Apr 2023 02:35:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681896902; x=1684488902;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ni3X7P4dZXBekYRyqkTdHj8UUMyWtiyS+2JS0EZfGlg=;
-        b=dg6kIcJPHrX0R56xrkOpDTeo2BY6dvLXFUWQz1E3e1u3nPD2eInCHM9y3kERXUK0GU
-         qA6PcAGU09Sas7CGzZ5i2TzmL2/3+OMeO1WPMfZkWc4AUoxuRBqgxSweAw3k4RYhbWqS
-         rItx/mG0xzy0GUMYlHjaM6DhlHl5MP0yE8CXRO3yTSUR/gKfdz7y/SEkLW2qYp8vxiXZ
-         rqbTNXjUtff/yOUF9ATaaAYoR0mUP37ZLP93EdSDT9/5fo5vsNRQH5RaZHFtepsnWnGU
-         f+bec05VjvtlNBS+/A8FHN0KieyRNdZwUKGZC1tVNgq67moMhA9k0T30kWjhzITdEA0Z
-         lp/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681896902; x=1684488902;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ni3X7P4dZXBekYRyqkTdHj8UUMyWtiyS+2JS0EZfGlg=;
-        b=g4XMIlZ/sBbMZIhDyuxHJ0u844Vff7zC5SaVn+Ao0UsXviAGbRUn281Xl5OrazV78l
-         ACKmJD32lRPXRyiu4SVm/upFi4agjtMChkyy63CRcDKyDmc4PwgN9uNvPlrSfVl7Dhw5
-         r9hx3nhgrpvu6l+nfys29Sqi4QoVU9p22eysIM5WfPrga7b6nRc2M+CEbkjX5ugML+PU
-         yDSN0zqQhx/P8czIURHyoKY2LfLdlSFhb0TdPgJcQECdQcvlFBG3NXBnRaVoyEjnqcJo
-         Lgi1RuCShswPY+fZHFv+m4mbGwtAVHiAOwpe5dY26tEhMecyjgwJD+CZnpLrESz4uLPH
-         p7ew==
-X-Gm-Message-State: AAQBX9cnoTJjrz4reXfHk06ycyXapRTpFmChKhQ+J7tgKmLaywGRT36p
-        8ekLvPWgbX3lkeHykZEYu0U=
-X-Google-Smtp-Source: AKy350bzQVq7j8tU18oHwzj3k7clVdTCSje9lUunNFg+wYTVMIPd9hVB2abT88j/B45F971N6EPPlQ==
-X-Received: by 2002:a05:6a21:78a2:b0:f0:dedb:83b8 with SMTP id bf34-20020a056a2178a200b000f0dedb83b8mr3598635pzc.19.1681896902187;
-        Wed, 19 Apr 2023 02:35:02 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id y23-20020a63fa17000000b0051b93103665sm6734957pgh.63.2023.04.19.02.35.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 02:35:01 -0700 (PDT)
-Message-ID: <f4ef3b07-d2f2-5cfc-6783-49e9b6be7a95@gmail.com>
-Date:   Wed, 19 Apr 2023 17:34:55 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH V5 05/10] KVM: x86/pmu: Disable vPMU if the minimum num of
- counters isn't met
+        Wed, 19 Apr 2023 05:34:59 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2075.outbound.protection.outlook.com [40.107.223.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F90C10D2;
+        Wed, 19 Apr 2023 02:34:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FyRp3N5MwqXkY2mcuZ1KPN9ScgULpADuxAOlrbXD3MFaG+NGPLS/x1n1PHA4f2wayQF1TkK5ZfF2ls8eYoLDuZNGLaQUhw6NvbC3HoGUspEp2jcBOJIKghYcXjB7F1y/qyE/m2SUFt08bNhi3RStr8l7fZvHjAiLX0Xb7dPCUx6gknKH8V/QvXzR95Nz6s69wrDhIt7scVYnssuXcK3ZakXI0tfLkxRXRf6avhJATN/IrYFOU8YDIyEIEi108v6OlmCc+ouDsgwZrBStxPocXTAls874BLjgeygBGSRwLsxocVbA3JCHpeFYn/4o4aja1bFaCjKN6ESKgAaJepGp1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jPr6GAjFx0KQRkZf0MXPBIcPapd9YT6OAspJ/FX0SqU=;
+ b=mUjXEGbSC5psX0S/LTJc1fx+GKJdzxcKlOu3pH1olqs5dzuJuw++C8qjoXuRxBMIaugRiBTtNBrH2LyWrXGsftdUoSdKOCmqMPUA11AYEU50kSzU/dW8gQd09ZIJN8qoNaYR3KOWvwm+0iDq51BdrQi13vjOMjeIbAF0UxphpOGRO2lDzltFrWbGJnpTaPlT9ii+itGVTqO89LBwSC8ATdNKGAFmRBv/wyaxzGTQ4QNr1NPJRcjSKdVbbd/Exnr91tMGmH3jOwLXLl+UWMFXPqcX6rmpOYDmoKilN5M+EVfTMpopUfXVgF/Sm0SUC6Bg1jiGJHlGSR71cM229AeCNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jPr6GAjFx0KQRkZf0MXPBIcPapd9YT6OAspJ/FX0SqU=;
+ b=cmLGFz0JDRlQaNtDjKP3z1dfrVvECwMYremsI5UAr0I+jsnyQfP6Ygw2t57HsT/oSXjD5vrvQYpwKUPIdX3gQaoPw7IiU2sWOAC3oiZeFxqT45R9+7hVn78bvF8mNxc+5CBUCq4Fr1T/6oM6WziBDiXW6XhRjYzrZvMm8m063d3PBc3bn3cqzBueG3HsQsWFx2+nbqbnvSUga4MApvuSBRXLohhhEiHKImcMTH2FQsNdMyMHKIgeCQhFqp5LvckbAqj1JPQ2TExJMVOygn55eb5q1MiJ4I3X0OL1qgFGZjbquHAhzSmOLfQ2A5aq1xOYaAG4KgYxkEQvG/rq2cHQbg==
+Received: from BL0PR12MB4659.namprd12.prod.outlook.com (2603:10b6:207:1d::33)
+ by CY8PR12MB8213.namprd12.prod.outlook.com (2603:10b6:930:71::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
+ 2023 09:34:55 +0000
+Received: from BL0PR12MB4659.namprd12.prod.outlook.com
+ ([fe80::bff7:b47d:5567:71c1]) by BL0PR12MB4659.namprd12.prod.outlook.com
+ ([fe80::bff7:b47d:5567:71c1%3]) with mapi id 15.20.6298.045; Wed, 19 Apr 2023
+ 09:34:55 +0000
+From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To:     Daniel Wagner <dwagner@suse.de>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Shin'ichiro Kawasaki <shinichiro@fastmail.com>
+Subject: Re: [RFC v1 0/1] nvme testsuite runtime optimization
+Thread-Topic: [RFC v1 0/1] nvme testsuite runtime optimization
+Thread-Index: AQHZcpzgQRAsytyJiEWmAIUqEW+1V68yXyyA
+Date:   Wed, 19 Apr 2023 09:34:55 +0000
+Message-ID: <f0d2ddd5-37d6-8fba-a5e3-965fb9f41474@nvidia.com>
+References: <20230419085643.25714-1-dwagner@suse.de>
+In-Reply-To: <20230419085643.25714-1-dwagner@suse.de>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230410105056.60973-1-likexu@tencent.com>
- <20230410105056.60973-6-likexu@tencent.com>
- <CALMp9eTLvJ6GW1mfgjO7CL7tW-79asykyz9=Fb=FfT74VRkDVA@mail.gmail.com>
- <9a7d5814-9eb1-d7af-7968-a6e3ebb90248@gmail.com>
- <CALMp9eR6DwY0EjAb1hcV9XGWQizN6R0dXtLaC4NXDgtCqv5cTA@mail.gmail.com>
- <81bbb700-9346-3d0d-ab86-6e684b185772@gmail.com>
- <CALMp9eSKnE8+jMpp0KzBRC7NDjT+S2cRz9CcBNDKB7JCU8dmTg@mail.gmail.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <CALMp9eSKnE8+jMpp0KzBRC7NDjT+S2cRz9CcBNDKB7JCU8dmTg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL0PR12MB4659:EE_|CY8PR12MB8213:EE_
+x-ms-office365-filtering-correlation-id: 96762fbd-2f7d-416f-505d-08db40b955ea
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +/3lRZR5qFEKIT5OGlg2A89cN195dVJNUUEb969IRNTuXqfK88nZROpWZPGyI/ieVb8LdPrBTpFtKq8EwMF7nIyzUPs2fWr2LLW0DuGucv6ykAmNt4//Kz/y4HKtMobkGELYG5VRrMsY/ENw40MHzPOs5NTpuRU6brpbuRC0O4Jnhji0PXvO31QUXvZvylB73uGxg0f5G3iGXuQxbncbknVxGRFbuYRC3ytpfiD23XYEEba43c1w8NXs5bsi7vJmMPwTByG8XWQ6zuxObpkH9sJAOFZCj3neU97TusSjCl+Ww6HJ6ksXY81H1POAYvejctUnuocZRbEqgBmy2eLJRPJyHilbNmHwcJhRuKciyk+LMxtENNzJJ33bTJaK43TrjCpVvpGIYEdQFnvrGO7qwUgQ2BxhDzLsuuWYblKUHC87olNWcF8NjxYuNog2UM4AXxPa8VBvF22/tvS2V0EF8V3FL5Keaa8As2YfmwEozUjtR/LvkjdxgBxRqzINV8R78mRPzoeKo5Nmry9Dwsuz6VWS1XJnkxSYr/CXdeiUl6kV6h02JD3SB4fvDXMgBsQTdDsw5m9s8W6QuQir/RWprCFxY9J2kl/iI49slwo3kk+L4F61xSkycQ77XqurmshjcbTr8iOO99sx7SLFiOUYmKDHtN8hJD5qQZo5JY6wrRzKSJ8Uhn6351iQlOIQTXl8Hitz2iK7D9frVT8ZrRYWZg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB4659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(346002)(396003)(39860400002)(136003)(451199021)(86362001)(31696002)(36756003)(83380400001)(66476007)(4326008)(110136005)(316002)(91956017)(66446008)(6486002)(66946007)(54906003)(64756008)(76116006)(8676002)(66556008)(41300700001)(478600001)(71200400001)(8936002)(5660300002)(2906002)(38070700005)(186003)(122000001)(38100700002)(53546011)(6506007)(6512007)(2616005)(31686004)(21314003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZSt6RWVkTXc5ZEFtMlpmY3BzTGxSTm9TRFpmZFNjQjA1Ym13cmxpdHBSOGdM?=
+ =?utf-8?B?bTduaFlLcDJuTlMyenZ6VWJrUitER1JRSUZTT2VTT1J5M2ljc2s4NnFQTVk2?=
+ =?utf-8?B?R2JWVzlIa1pENW9EcnU0dFhKR3FYdGFkODBCR0JHZnhVVWRZdVhMRVNMTnFY?=
+ =?utf-8?B?dG94c2tFbmkwV1JkY01kckRzMWliNmlxU3NRUCtMQURYR1E1enoyWXVZY3FK?=
+ =?utf-8?B?and6dVhZRkVLWG00RXUxSy9naTljOUVkZVJmK3NGSTZtUGdzWXh3UXp6WHBU?=
+ =?utf-8?B?cndZRm1VblVSdkY5VngwbEdzRmNibWFXbElkdGZ2ZjFFdFBycEZmK3NRcldx?=
+ =?utf-8?B?TkhLQjErTzdkOW5nVU14QWhES251ZnkyU1Znb2NEb0x5bXJLdlAzbzhSSWZm?=
+ =?utf-8?B?ZWl0YVVudWRkNkZWQU8xVVVtbmkwWGRpSHprdW9SQlNYMUJLT0kxd0c2c3F4?=
+ =?utf-8?B?V3F3T1NHeGhtV3BscjFJaC91ajZHSWYvTU4vNnNtTUJIVnpiZURnQzNESi85?=
+ =?utf-8?B?dDFsQ0RUaDFhYVlFTndoU2F6bldNTGdFM29vajd1dEt0d2ZHZ3V1by9YRVUr?=
+ =?utf-8?B?NzdGKzVwZEVXcDNkNGR2dk4xcjFyRXNCUGZUbDM3bkJUc0NsT051Y0gvUEFR?=
+ =?utf-8?B?WG1URnlEZ2RuZ2NzZWI3SEtHK3BaTEgrMDhQcmg1WSsvRDBPYU9aZGF4WjR2?=
+ =?utf-8?B?WVFoQTFyRysxUzdQVGpKUTRWTVR4RjNMa0hQVThDMEdLNkorcWRmUXQ5ZkFS?=
+ =?utf-8?B?dzdTcGxDakVpbHpqVWRlUVhrRGFUWFV0enlQalU2THkwbytzRDh2dzY2MWx6?=
+ =?utf-8?B?d1ZRRGxnZ2pVbUhiSi9hV2ZxSnpBUGtFWVE1T1FEV0hkREhlcmhRMUpublF4?=
+ =?utf-8?B?dHFVSWYrSFZ4UGd3YXR3TkwvNDZteU44TUpqdmJISEdDNlM5QTV0ajVoMHJi?=
+ =?utf-8?B?STJRK1BhdFg4R3lUR3JNTTVhc1Q0RXNsNXprY3Q0TUQ4bFFRNDhiNWhESjJw?=
+ =?utf-8?B?a1hhbjA2NS9KWTZqSFI1ajBMNVZLbXJmSWU4NG1pSVl6MjUzZUxTRW93eXVz?=
+ =?utf-8?B?WnpZTEd0NG13TCs3NlY1YUtSYk1ia3R5YlY0c2R3YjFVNFdXOTJoK0ZaS0Jt?=
+ =?utf-8?B?UlFYbmNxSW44RzVxYTRjQ2FINXl6ampMUnFVMkRrNjJEejR4TjdNdU5pTUxT?=
+ =?utf-8?B?cUU5dHlkL0hWcDdBZ05KU2d3OWdub3h5YUtWcU9TdnIxcDVqeUQ4bTNPRmc0?=
+ =?utf-8?B?dVRibjMvV3BrZTBSNVMvcUNGTTVDOENpYnRhTmtaWG1qSkkwK285MWZKUkEy?=
+ =?utf-8?B?NitqVS9iUWl1R1hjL1l6WjZiam1va0RBNnpMazFabnRjbkJxdWJ1MlBsanFy?=
+ =?utf-8?B?czArMnQ0c1locis2dnErdkYrTXJTOHg4T3p0VXBmcUx0QjR6N0V6Z1ZqK1dL?=
+ =?utf-8?B?T0FUVTQwUUlrWjV1RUJERHFpWDZtN1pPR3BQZnVQRDBOd3RDSGphZlNJM2NN?=
+ =?utf-8?B?ZVdldi84dG1IUTdLUEF0cGZZU1hVQ3pobDJxWUhZVTFUeGE0cTg1Sk82OG9n?=
+ =?utf-8?B?dzdlUUZXR1VjYnVOV3B2eEN6RGMzdytUK2h5ZkJrWnhJZW5VQnVveDFvVWEv?=
+ =?utf-8?B?bWxsbjJaMTdCN3VhcmxkUnk2UEJkRjI5VkhoVzdFVTM5U1UzbVRVU2ZxQzVB?=
+ =?utf-8?B?bjlRTTdCMlMwMTM0YS9LS1hacUwveDYzV3dua0tZVFJmWnNyNGx5SkhOaHAx?=
+ =?utf-8?B?eDFZc0VnOXRMUzROWk5Kc0FjN3pZclpUZmNNbndiWmlBTFZjZWYxT3ZBSDJt?=
+ =?utf-8?B?MUtyUXpzRTVCKzhvVy9KdWhTb25sbmFhYllTSU5EcHYzSUV6NGJMelN0YVF5?=
+ =?utf-8?B?dXJQaEVrRnJKT3BsN0VSZmRXd0dxYllaZFVYTkYwY3d6TERIaTAzS0FobGVt?=
+ =?utf-8?B?NlBwZkhzc1NyREpESEYrMlBJZFl4dGpZaWo1RjRzSXBRcmVHVGgyOEFZb05w?=
+ =?utf-8?B?M3RIVVlwUk0wRnhxc3JieGNRdVFLdUxPT2g2SHBwckRENGdqUXY0Z0cxOFd0?=
+ =?utf-8?B?RVZWVkJLeFBhbVNTYnorZlRnUnVjb05halRpcm9jUXBxdWJLWmFZdlZqem5a?=
+ =?utf-8?B?eUs2Z2VGOWoxQm4yM2djTStxNk41TnVNMm1yZ29rc2hOdU5tM0E3TjN6TzlT?=
+ =?utf-8?Q?ieiUyAsvEhobjqjXx3MSZ8k7IVPBgmlivdMldTEE+KLh?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0BA1D988530FE9489E6A048E44ECB386@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB4659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96762fbd-2f7d-416f-505d-08db40b955ea
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Apr 2023 09:34:55.7002
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: n23OrlTRXPXBLNECs5Z1vdYYJKQV2qnN5z2SFKdo8fuNhfI7oytN3oljN3Ebf0oVbKgwt5AH3KBULn5yH3NGGw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8213
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jim, sorry for the late reply.
-
-On 11/4/2023 10:58 pm, Jim Mattson wrote:
-> On Tue, Apr 11, 2023 at 6:18 AM Like Xu <like.xu.linux@gmail.com> wrote:
->>
->> On 11/4/2023 8:58 pm, Jim Mattson wrote:
->>> On Mon, Apr 10, 2023 at 11:17 PM Like Xu <like.xu.linux@gmail.com> wrote:
->>>>
->>>> On 11/4/2023 1:36 pm, Jim Mattson wrote:
->>>>> On Mon, Apr 10, 2023 at 3:51 AM Like Xu <like.xu.linux@gmail.com> wrote:
->>>>>>
->>>>>> From: Like Xu <likexu@tencent.com>
->>>>>>
->>>>>> Disable PMU support when running on AMD and perf reports fewer than four
->>>>>> general purpose counters. All AMD PMUs must define at least four counters
->>>>>> due to AMD's legacy architecture hardcoding the number of counters
->>>>>> without providing a way to enumerate the number of counters to software,
->>>>>> e.g. from AMD's APM:
->>>>>>
->>>>>>     The legacy architecture defines four performance counters (PerfCtrn)
->>>>>>     and corresponding event-select registers (PerfEvtSeln).
->>>>>>
->>>>>> Virtualizing fewer than four counters can lead to guest instability as
->>>>>> software expects four counters to be available.
->>>>>
->>>>> I'm confused. Isn't zero less than four?
->>>>
->>>> As I understand it, you are saying that virtualization of zero counter is also
->>>> reasonable.
->>>> If so, the above statement could be refined as:
->>>>
->>>>           Virtualizing fewer than four counters when vPMU is enabled may lead to guest
->>>> instability
->>>>           as software expects at least four counters to be available, thus the vPMU is
->>>> disabled if the
->>>>           minimum number of KVM supported counters is not reached during initialization.
->>>>
->>>> Jim, does this help you or could you explain more about your confusion ?
->>>
->>> You say that "fewer than four counters can lead to guest instability
->>> as software expects four counters to be available." Your solution is
->>> to disable the PMU, which leaves zero counters available. Zero is less
->>> than four. Hence, by your claim, disabling the PMU can lead to guest
->>> instability. I don't see how this is an improvement over one, two, or
->>> three counters.
->>
->> As you know, AMD pmu lacks an architected method (such as CPUID) to
->> indicate that the VM does not have any pmu counters available for the
->> current platform. Guests like Linux tend to check if their first counters
->> exist and work properly to infer that other pmu counters exist.
-> 
-> "Guests like Linux," or just Linux? What do you mean by "tend"? When
-> do they perform this check, and when do they not?
-
-We do not know how guests that do not disclose their source code
-will detect the presence of pmu counters.
-
-For upstream Linux guests, such a check is implemented in the check_hw_exists(),
-which checks the counters one by one, often with an error on the first counter,
-and then disables pmu from the kernel perspective.
-
-The key point is that the KVM implementation cannot rely on assumptions about
-the guest kernel version, and considering that the above check was added very early,
-existing Linux guest instances will most likely (tend to) check the first 
-counter and
-error out (a VM could also check all of the possible counters and use a bitmap with
-holes to track any functional counters).
-
-> 
->> If KVM chooses to emulate greater than 1 less than 4 counters, then the
->> AMD guest PMU agent may assume that there are legacy 4 counters all
->> present (it's what the APM specifies), which requires the legacy code
->> to add #GP error handling for counters that should exist but actually not.
-> 
-> I would argue that regardless of the number of counters emulated, a
-> guest PMU agent may assume that the 4 legacy counters are present,
-> since that's what the APM specifies.
-
-I certainly agree that, for example, a particular cpu model is stated in the spec
-to have certain features (e.g. uncore pmu), but the KVM does not or chooses
-not ro emulate them, for security reasons (e.g. side channel attacks), which
-does violate the defined behavior of the hardware spec, such as here where
-enable_pmu is false, which is not possible on almost all real hardware today.
-
-> 
->> So at Sean's suggestion, we took a conservative approach. If KVM detects
->> less than 4 counters, we think KVM (under the current configuration and
->> platform) is not capable of emulating the most basic AMD pmu capability.
->> A large number of legacy instances are ready for 0 or 4+ ctrs, not 2 or 3
-> 
-> Which specific guest operating systems is this change intended for?
-> 
->> Does this help you ? I wouldn't mind a better move.
-> 
-> Which AMD platforms have less than 4 counters available?
-
-All this is for L2 Linux guest, as pmu on L1 Linux guest will be disabled by L0.
-
-> 
->>
->>>
->>>>>
->>>>>> Suggested-by: Sean Christopherson <seanjc@google.com>
->>>>>> Signed-off-by: Like Xu <likexu@tencent.com>
->>>>>> ---
->>>>>>     arch/x86/kvm/pmu.h | 3 +++
->>>>>>     1 file changed, 3 insertions(+)
->>>>>>
->>>>>> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
->>>>>> index dd7c7d4ffe3b..002b527360f4 100644
->>>>>> --- a/arch/x86/kvm/pmu.h
->>>>>> +++ b/arch/x86/kvm/pmu.h
->>>>>> @@ -182,6 +182,9 @@ static inline void kvm_init_pmu_capability(const struct kvm_pmu_ops *pmu_ops)
->>>>>>                            enable_pmu = false;
->>>>>>            }
->>>>>>
->>>>>> +       if (!is_intel && kvm_pmu_cap.num_counters_gp < AMD64_NUM_COUNTERS)
-> 
-> Does this actually guarantee that the requisite number of counters are
-> available and will always be available while the guest is running?
-
-Not 100%, the scheduling of physical counters depends on the host perf scheduler.
-
-I noticed that many cloud vendors want to make sure that hardware resources
-are given exclusively to VMs, but for upstream, the availability of resources
-should depend entirely on the host administrators, and a VMM should take away
-access to resources at any time, such as vcpu time slice.
-
-Any attempts in the direction of exclusive use will be thwarted.
-
-> What happens if some other client of the host perf subsystem requests
-> a CPU-pinned counter after this checck?
-
-Normal perf use does not grab the counters allocated for kvm, NMI-watchdog
-maybe one, but it will be moved to other timer hardware like HPET.
-
-Of interest is that some ebpf programs that access the pmu hardware directly
-use the interface that perf sub-system presents to KVM in the kernel.
-
-> 
->>>>>> +               enable_pmu = false;
->>>>>> +
->>>>>>            if (!enable_pmu) {
->>>>>>                    memset(&kvm_pmu_cap, 0, sizeof(kvm_pmu_cap));
->>>>>>                    return;
->>>>>> --
->>>>>> 2.40.0
->>>>>>
-> 
+T24gNC8xOS8yMyAwMTo1NiwgRGFuaWVsIFdhZ25lciB3cm90ZToNCj4gV2hpbGUgdGVzdGluZyB0
+aGUgZmMgdHJhbnNwb3J0IEkgZ290IGEgYml0IHRpcmVkIG9mIHdhaXQgZm9yIHRoZSBJL08gam9i
+cyB0bw0KPiBmaW5pc2guIFRodXMgaGVyZSBzb21lIHJ1bnRpbWUgb3B0aW1pemF0aW9uLg0KPg0K
+PiBXaXRoIGEgc21hbGwvc2xvdyBWTSBJIGdvdCBmb2xsb3dpbmcgdmFsdWVzOg0KPg0KPiB3aXRo
+ICdvcHRpbWl6YXRpb25zJw0KPiAgICBsb29wOg0KPiAgICAgIHJlYWwgICAgNG00My45ODFzDQo+
+ICAgICAgdXNlciAgICAwbTE3Ljc1NHMNCj4gICAgICBzeXMgICAgIDJtNi4yNDlzDQo+DQo+ICAg
+IHJkbWE6DQo+ICAgICAgcmVhbCAgICAybTM1LjE2MHMNCj4gICAgICB1c2VyICAgIDBtNi4yNjRz
+DQo+ICAgICAgc3lzICAgICAwbTU2LjIzMHMNCj4NCj4gICAgdGNwOg0KPiAgICAgIHJlYWwgICAg
+Mm0zMC4zOTFzDQo+ICAgICAgdXNlciAgICAwbTUuNzcwcw0KPiAgICAgIHN5cyAgICAgMG00Ni4w
+MDdzDQo+DQo+ICAgIGZjOg0KPiAgICAgIHJlYWwgICAgMm0xOS43MzhzDQo+ICAgICAgdXNlciAg
+ICAwbTYuMDEycw0KPiAgICAgIHN5cyAgICAgMG00Mi4yMDFzDQo+DQo+IGJhc2U6DQo+ICAgIGxv
+b3A6DQo+ICAgICAgcmVhbCAgICA3bTM1LjA2MXMNCj4gICAgICB1c2VyICAgIDBtMjMuNDkzcw0K
+PiAgICAgIHN5cyAgICAgMm01NC44NjZzDQo+DQo+ICAgIHJkbWE6DQo+ICAgICAgcmVhbCAgICA4
+bTI5LjM0N3MNCj4gICAgICB1c2VyICAgIDBtMTMuMDc4cw0KPiAgICAgIHN5cyAgICAgMW01My4x
+NThzDQo+DQo+ICAgIHRjcDoNCj4gICAgICByZWFsICAgIDhtMTEuMzU3cw0KPiAgICAgIHVzZXIg
+ICAgMG0xMy4wMzNzDQo+ICAgICAgc3lzICAgICAybTQzLjE1NnMNCj4NCj4gICAgZmM6DQo+ICAg
+ICAgcmVhbCAgICA1bTQ2LjYxNXMNCj4gICAgICB1c2VyICAgIDBtMTIuODE5cw0KPiAgICAgIHN5
+cyAgICAgMW00Ni4zMzhzDQo+DQo+DQoNClRob3NlIGpvYnMgYXJlIG1lYW50IHRvIGJlIHJ1biBm
+b3IgYXQgbGVhc3QgMUcgdG8gZXN0YWJsaXNoDQpjb25maWRlbmNlIG9uIHRoZSBkYXRhIHNldCBh
+bmQgdGhlIHN5c3RlbSB1bmRlciB0ZXN0IHNpbmNlIFNTRHMNCmFyZSBpbiBUQnMgbm93YWRheXMg
+YW5kIHdlIGRvbid0IGV2ZW4gZ2V0IGFueXdoZXJlIGNsb3NlIHRvIHRoYXQsDQp3aXRoIHlvdXIg
+c3VnZ2VzdGlvbiB3ZSBhcmUgZ29pbmcgZXZlbiBsb3dlciAuLi4NCg0Kd2UgY2Fubm90IGNoYW5n
+ZSB0aGUgZGF0YXNldCBzaXplIGZvciBzbG93IFZNcywgaW5zdGVhZCBhZGQNCmEgY29tbWFuZCBs
+aW5lIGFyZ3VtZW50IGFuZCBwYXNzIGl0IHRvIHRlc3RzIGUuZy4NCm52bWVfdmVyaWZpY2F0aW9u
+X3NpemU9WFhYIHNpbWlsYXIgdG8gbnZtZV90cnR5cGUgYnV0IGRvbid0IGNoYW5nZQ0KdGhlIGRl
+ZmF1bHQgdmFsdWVzIHdoaWNoIHdlIGhhdmUgYmVlbiB0ZXN0aW5nIGZvciB5ZWFycyBub3cNCg0K
+VGVzdGluZyBpcyBzdXBwb3NlZCB0byBiZSB0aW1lIGNvbnN1bWluZyBlc3BlY2lhbGx5IHZlcmlm
+aWNhdGlvbiBqb2JzLi4NCg0KLWNrDQoNCg0K
