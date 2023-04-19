@@ -2,213 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE0A6E8203
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48236E8206
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjDSTmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 15:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
+        id S231354AbjDSTmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 15:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDSTmL (ORCPT
+        with ESMTP id S229781AbjDSTmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 15:42:11 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F215FDD;
-        Wed, 19 Apr 2023 12:42:08 -0700 (PDT)
-Received: from [192.168.2.142] (p4fdf4348.dip0.t-ipconnect.de [79.223.67.72])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: buczek)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id E4DDC61E4052B;
-        Wed, 19 Apr 2023 21:42:04 +0200 (CEST)
-Message-ID: <955ede49-bb69-2ab2-d256-a329fe1b728c@molgen.mpg.de>
-Date:   Wed, 19 Apr 2023 21:42:04 +0200
+        Wed, 19 Apr 2023 15:42:45 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75C1359A
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:42:43 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-95369921f8eso11962466b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:42:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681933362; x=1684525362;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kabpnjTCjqP45slsIo1+rdV4uXUZnlZBAEyWTGefmrU=;
+        b=gq3s9X5ikbqCGzliFi7nIlnmW31Ify5ixO5hPtad1QUB8mqOPEckD2+xG9t4KQ9a05
+         iC8ce3WvsNqQrBIOf/9G+liCWflGly5Bd//qfw9g/ySnfc4loFGCmelwKfYc8zigSslw
+         XqULE6Y0BShT5AEpnMQmzDQPIi0vN6Zv8eT+iUH78EsWdhWeaSu4DQ+C8yCFMytRK67Z
+         3zbec/wPdWd90sUGxE2dLK9O+bguvb2JeKoJkdqUCdOcOJ1Bdfzk/zLn7O3AejJfAaHT
+         3Z1CmL5U+LWtj8WtftgA8vA3Ua3+74D2Fuj2QVpeKDobiNi5Mcu2SjieSg3YzTiofWIY
+         MhIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681933362; x=1684525362;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kabpnjTCjqP45slsIo1+rdV4uXUZnlZBAEyWTGefmrU=;
+        b=IX8/AQR0Cv06Ri+06rQCtxG9uXDsqUVNWY3fowc4adUNkTEaAO4FGfW6aXJ9KqSRiC
+         el2S43NNgrs0IDDI+E2077lZAhnCzK2PpSOWUH5dgNgdjgf7XN9HU0BNMTx2GxKe8uvt
+         D5dna2kLBqX02p/tzyNh7E53cbILkqOPwCGnEUlh3mAFF1Ll911waMd1mPya3fjwSS7G
+         WwZCIfeWXpm6LucJGAimtGklnngNgicIYgJ7sGPmFrXH0g3nhwLoFTIKG6sdMF7GfNzX
+         8elHrZkdTSh0zzSWgF7kYI+/7+xpS0pTHNJnDi6Xy2LkoQcka4hYeXd55/0rCLw3pS+R
+         h1PQ==
+X-Gm-Message-State: AAQBX9ePG7yFzVhx01RKbPiAuHvi94QmmlL067pDQUAeanvTs3NSvmLL
+        IQ/Fb13/cJLIpOQij7OsDVVB0g==
+X-Google-Smtp-Source: AKy350bc3GWY3VPzEuT8jJUkQFSPKSNrIhp44xSKlRK8k+SiL3FGI4ilYR5RzlkLUN29gcUPYIyOSg==
+X-Received: by 2002:a05:6402:342:b0:504:ecfa:fa6c with SMTP id r2-20020a056402034200b00504ecfafa6cmr6323605edw.1.1681933362301;
+        Wed, 19 Apr 2023 12:42:42 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:976c:1d6c:6ed0:8935? ([2a02:810d:15c0:828:976c:1d6c:6ed0:8935])
+        by smtp.gmail.com with ESMTPSA id fl3-20020a1709072a8300b0094f396c7a7asm6021574ejc.214.2023.04.19.12.42.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 12:42:41 -0700 (PDT)
+Message-ID: <ef3fe52f-c6d0-b74d-e37e-0d0129990ef7@linaro.org>
+Date:   Wed, 19 Apr 2023 21:42:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v3 03/11] documentation: Block Devices Snapshots Module
+Subject: Re: [PATCH] net: nfc: nci: fix for UBSAN: shift-out-of-bounds in
+ nci_activate_target
+To:     Anup Sharma <anupnewsmail@gmail.com>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, linma@zju.edu.cn,
+        dvyukov@google.com, Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <ZD9A5Krm+ZoFEFWZ@yoga>
+ <3aeac99f-aef3-ee22-f307-3871b141dc7b@linaro.org>
+ <76d5df65-c0c9-9702-8037-4c1d3b2255f3@linaro.org> <ZEA/N5SAFHd2UjS8@yoga>
 Content-Language: en-US
-To:     Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk,
-        hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
-Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org,
-        kch@nvidia.com, martin.petersen@oracle.com, vkoul@kernel.org,
-        ming.lei@redhat.com, gregkh@linuxfoundation.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-References: <20230404140835.25166-1-sergei.shtepa@veeam.com>
- <20230404140835.25166-4-sergei.shtepa@veeam.com>
- <cb0cc2f1-48cb-8b15-35af-33a31ccc922c@molgen.mpg.de>
- <86068780-bab3-2fc2-3f6f-1868be119b38@veeam.com>
- <a1854604-cec1-abd5-1d49-6cf6a19ee7a1@veeam.com>
- <1dc227d0-9528-9b77-63ff-b49b0579caa1@molgen.mpg.de>
- <c05fd3e7-5610-4f63-9012-df1b808d9536@veeam.com>
-From:   Donald Buczek <buczek@molgen.mpg.de>
-In-Reply-To: <c05fd3e7-5610-4f63-9012-df1b808d9536@veeam.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZEA/N5SAFHd2UjS8@yoga>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Sergei,
+On 19/04/2023 21:21, Anup Sharma wrote:
 
-On 4/19/23 15:05, Sergei Shtepa wrote:
 > 
+>>>> +		pr_err("Too many supported protocol by the device\n");
+>>>> +		return -EINVAL;
+>>>
+>>> I am pretty sure that you broke now NFC. Test the patches first and
+>>> share your test scenario.
 > 
-> On 4/18/23 16:48, Donald Buczek wrote:
->> Subject:
->> Re: [PATCH v3 03/11] documentation: Block Devices Snapshots Module
->> From:
->> Donald Buczek <buczek@molgen.mpg.de>
->> Date:
->> 4/18/23, 16:48
->>
->> To:
->> Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk, hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
->> CC:
->> viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org, kch@nvidia.com, martin.petersen@oracle.com, vkoul@kernel.org, ming.lei@redhat.com, gregkh@linuxfoundation.org, linux-block@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
->>
->>
->> On 4/18/23 12:31, Sergei Shtepa wrote:
->>>
->>>
->>> On 4/14/23 14:34, Sergei Shtepa wrote:
->>>> Subject:
->>>> Re: [PATCH v3 03/11] documentation: Block Devices Snapshots Module
->>>> From:
->>>> Sergei Shtepa <sergei.shtepa@veeam.com>
->>>> Date:
->>>> 4/14/23, 14:34
->>>>
->>>> To:
->>>> Donald Buczek <buczek@molgen.mpg.de>, axboe@kernel.dk, hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
->>>> CC:
->>>> viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org, kch@nvidia.com, martin.petersen@oracle.com, vkoul@kernel.org, ming.lei@redhat.com, gregkh@linuxfoundation.org, linux-block@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
->>>>
->>>>
->>>>
->>>> On 4/12/23 21:38, Donald Buczek wrote:
->>>>> Subject:
->>>>> Re: [PATCH v3 03/11] documentation: Block Devices Snapshots Module
->>>>> From:
->>>>> Donald Buczek <buczek@molgen.mpg.de>
->>>>> Date:
->>>>> 4/12/23, 21:38
->>>>>
->>>>> To:
->>>>> Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk, hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
->>>>> CC:
->>>>> viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org, kch@nvidia.com, martin.petersen@oracle.com, vkoul@kernel.org, ming.lei@redhat.com, gregkh@linuxfoundation.org, linux-block@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
->>>>>
->>>>>
->>>>> I think, you can trigger all kind of user-after-free when userspace deletes a snapshot image or the snapshot image and the tracker while the disk device snapshot image is kept alive (mounted or just opened) and doing I/O.
->>>>>
->>>>> Here is what I did to provoke that:
->>>>>
->>>>> root@dose:~# s=$(blksnap snapshot_create -d /dev/vdb)
->>>>> root@dose:~# blksnap snapshot_appendstorage -i $s -f /scratch/local/test.dat
->>>>> device path: '/dev/block/253:2'
->>>>> allocate range: ofs=11264624 cnt=2097152
->>>>> root@dose:~# blksnap snapshot_take -i $s
->>>>> root@dose:~# mount /dev/blksnap-image_253\:16 /mnt
->>>>> root@dose:~# dd if=/dev/zero of=/mnt/x.x &
->>>>> [1] 2514
->>>>> root@dose:~# blksnap snapshot_destroy -i $s
->>>>> dd: writing to '/mnt/x.x': No space left on device
->>>>> 1996041+0 records in
->>>>> 1996040+0 records out
->>>>> 1021972480 bytes (1.0 GB, 975 MiB) copied, 8.48923 s, 120 MB/s
->>>>> [1]+  Exit 1                  dd if=/dev/zero of=/mnt/x.x
->>>>>
->>>> Thanks!
->>>> I am very glad that the blksnap tool turned out to be useful in the review.
->>>> This snapshot deletion scenario is not the most typical, but of course it is
->>>> quite possible.
->>>> I will need to solve this problem and add such a scenario to the test suite.
->>>>
->>>
->>> Hi!
->>>
->>> I have redesign the logic of ownership of the diff_area structure.
->>> See patch in attach or commit.
->>> Link: https://github.com/SergeiShtepa/linux/commit/7e927c381dcd2b2293be8315897a224d111b6f88
->>> A test script for such a scenario has been added.
->>> Link: https://github.com/veeam/blksnap/commit/fd0559dfedf094901d08bbf185fed288f0156433
->>>
->>> I will be glad of any feedback.
->>
->> Great, Thanks!
->>
->> However, there are two leftover calls to diff_area_free() with its old prototype:
->>
->>   CC [M]  drivers/block/blksnap/diff_area.o
->> drivers/block/blksnap/diff_area.c: In function ‘diff_area_new’:
->> drivers/block/blksnap/diff_area.c:283:18: error: passing argument 1 of ‘diff_area_free’ from incompatible pointer type [-Werror=incompatible-pointer-types]
->>    283 |   diff_area_free(diff_area);
->>        |                  ^~~~~~~~~
->>        |                  |
->>        |                  struct diff_area *
->> drivers/block/blksnap/diff_area.c:110:34: note: expected ‘struct kref *’ but argument is of type ‘struct diff_area *’
->>    110 | void diff_area_free(struct kref *kref)
->>        |                     ~~~~~~~~~~~~~^~~~
->> cc1: some warnings being treated as errors
->> make[4]: *** [scripts/Makefile.build:252: drivers/block/blksnap/diff_area.o] Error 1
->> make[3]: *** [scripts/Makefile.build:494: drivers/block/blksnap] Error 2
->> make[2]: *** [scripts/Makefile.build:494: drivers/block] Error 2
->> make[1]: *** [scripts/Makefile.build:494: drivers] Error 2
->> make: *** [Makefile:2025: .] Error 2
->>
->> The other one:
->>
->> buczek@dose:/scratch/local/linux (blksnap-test)$ make drivers/block/blksnap/tracker.o
->>    CALL    scripts/checksyscalls.sh
->>    DESCEND objtool
->>    INSTALL libsubcmd_headers
->>    CC [M]  drivers/block/blksnap/tracker.o
->> drivers/block/blksnap/tracker.c: In function ‘tracker_free’:
->> drivers/block/blksnap/tracker.c:26:25: error: passing argument 1 of ‘diff_area_free’ from incompatible pointer type [-Werror=incompatible-pointer-types]
->>     26 |   diff_area_free(tracker->diff_area);
->>        |                  ~~~~~~~^~~~~~~~~~~
->>        |                         |
->>        |                         struct diff_area *
->> In file included from drivers/block/blksnap/tracker.c:12:
->> drivers/block/blksnap/diff_area.h:116:34: note: expected ‘struct kref *’ but argument is of type ‘struct diff_area *’
->>    116 | void diff_area_free(struct kref *kref);
->>        |                     ~~~~~~~~~~~~~^~~~
->> cc1: some warnings being treated as errors
->> make[4]: *** [scripts/Makefile.build:252: drivers/block/blksnap/tracker.o] Error 1
->> make[3]: *** [scripts/Makefile.build:494: drivers/block/blksnap] Error 2
->> make[2]: *** [scripts/Makefile.build:494: drivers/block] Error 2
->> make[1]: *** [scripts/Makefile.build:494: drivers] Error 2
->> make: *** [Makefile:2025: .] Error 2
->>
->> Am I missing something?
+> Since a reproducer for this bug is not available, I am unable to test it locally
+> or through syzbot before submitting the patch. 
+
+Reproducer is only to test the actual issue, not test the code. Code can
+be tested with real device and maybe with virtual NCI driver.
+
+> Are there any other tests that
+> I can perform before submitting the patch, apart from simply compiling the kernel?
+
+Compiling a kernel is not tested. Maybe you can test this part
+successfully with virtual NCI driver, maybe not, I don't know.
+
 > 
-> Thanks!
+>>
+>> BTW, ISO15693 is here protocol 128, so definitely more than 32.
 > 
-> It seems to me that I missed something.
-> The biggest mystery for me is why I was able to build and test the kernel.
-> I think it's some kind of incremental build effect.
-> I was only able to see the problem after 'make clean'.
+> Thank you for your feedback. I would like to address the UBSAN bug and I have
+> thought of a potential solution which involves adding a check statement for the
+> minimum and maximum values of the protocol before net/nfc/nci/core.c +912:
 > 
-> Patches in attach and https://github.com/SergeiShtepa/linux/tree/blksnap-master
+> if (!(nci_target->supported_protocols & (1 << protocol)))
+> 
+> Could you please assist me in determining the correct approach?
 
-Thanks. I can confirm that this fixes the reported problem and I no longer can trigger the UAF. :-)
+I would first propose to check whether the UBSAN report is an actual
+real issue to fix.
 
-Tested-Bny: Donald Buczek <buczek@molgen.mpg.de>
 
-Maybe you can add me to the cc list for v4 as I'm not subscribed to the lists.
+Best regards,
+Krzysztof
 
-Best
-
-   Donald
--- 
-Donald Buczek
-buczek@molgen.mpg.de
-Tel: +49 30 8413 1433
