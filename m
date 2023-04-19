@@ -2,118 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FDC6E7C95
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB196E7C99
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbjDSO1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 10:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
+        id S232891AbjDSO1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 10:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232125AbjDSO1e (ORCPT
+        with ESMTP id S232125AbjDSO1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 10:27:34 -0400
-Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5F172A8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:26:59 -0700 (PDT)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 2615A100410D8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:26:31 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id p8lTpfK8ikRKkp8lTpcUxL; Wed, 19 Apr 2023 14:26:31 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=cJglDnSN c=1 sm=1 tr=0 ts=643ffa17
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=dKHAf1wccvYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=a51n++N4c2DpGZ+VF/HvtzBGGCbBO5LE/9y4zyob3dM=; b=G6/Lg4cX9LU+QCM33lrqaAwYRP
-        0HWBwfavo67UJvo8bfmRHzAt1d5irBpUOZDPT7eSwvRzPX2GsmHSmn0wuDBz1fYgmnPbd1LFxgOOu
-        gep7oBzgG0JJhZ78nL7f5A9tm5rplWn8Ljl8fINFuWOVwrAYpXm6tkISWGhCb5EnBHZRptLA2Dh40
-        M9GriHuhp2gryTxgg7CZesiOfKFhsaEGPxJTNmtwgMHMhbbXvL/TiZAXSn+gVvtjr+gyjUwNU24S0
-        Ka80Gqk0Db4bidj7AFclKE6Fc2DMLiPzXTwX+b+8TdyTm22IJI0fUWMt0Mc28ZtZMNB4m0zETwZuc
-        uPzYMMJg==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:35460 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pp8lS-002jCg-2X;
-        Wed, 19 Apr 2023 08:26:30 -0600
-Subject: Re: [PATCH 6.2 000/135] 6.2.12-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230419132054.228391649@linuxfoundation.org>
-In-Reply-To: <20230419132054.228391649@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <f7848c64-8abc-60c1-51e9-e0af7bb0801f@w6rz.net>
-Date:   Wed, 19 Apr 2023 07:26:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 19 Apr 2023 10:27:40 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3778310CB
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:27:11 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f086770a50so23475125e9.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:27:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681914427; x=1684506427;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pMc7fQBWe3Bi35jcVdXtRtvRDvXrcOa0szVfpwPrY64=;
+        b=BcWZUFJCqODc0M0FT5cCKCyz2EiZMOm0KE0JFo7V1mXSKSXmBpLF70JtQmsutdDLCD
+         WvDnVzkzICHEhVq+O4+XmnKQbybPAs+A89umGecQ8Dy1Qc1bF/skddnE3qR189uDM1JA
+         7WaAshMHtFUv13tmKlFDN35bcRXO4cGbyht4e0WJ+BIalvWUyZwYkdynviGD25781O+C
+         AxhW2dTfMcwhMfpcnEFc7qs4KdaStHRdFmRxyExj/0jM1y4QMKDNWTVS2yrERaTPucdl
+         RJ8udrHkxvWBqGzZzw9Q12isHHIDPbdz9DAd+Wt4mZfJnpwftKRCAZ2TR8B8M66WH71z
+         BTWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681914427; x=1684506427;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pMc7fQBWe3Bi35jcVdXtRtvRDvXrcOa0szVfpwPrY64=;
+        b=Rxk9dzbNFzyPfliCXFJzI5raqWA5NH1k/VccKpaglDl+jXni0gfEEzlhru0PL7E8ew
+         tSYYEvFnPIy08SDq+V6uFGSX2vIgkQ5ZkgCr/v8p2rpn2I7HTV/3s9jd58WAFekehHxH
+         zrY4cZI+gUCbEjj6B605zytsCZeduZcgThtJxu4wDWpZgV8+i4pfejpJ2FljTNseCzq0
+         PVmAKRzwQ0+2WE8zjR6IIHCZLixMtleqkbDGVNYQECELi23um/ej1ag22BOCCtMLUehP
+         7B6WcIzIZjuYqmOwp9FxB+x5nHxOERcSz5L+1Kv2FhN7TQegnWzGgR8mXdMDCpIrbrN5
+         kHjg==
+X-Gm-Message-State: AAQBX9fae8BqU00f8O6fl531lZQ1TbqLlVYUetUFCBfsSt5bxqZhsVaS
+        clso0dgd/mA8uhyZY+wfWgzlUw==
+X-Google-Smtp-Source: AKy350btsIWsdW3cryVOdG6OR9UGS2MvnHBvrrbxUcJhqkZzqkyawjYBfWu10M6GgYZN7A6x7c0yUA==
+X-Received: by 2002:a5d:66ca:0:b0:2fa:6e37:3d97 with SMTP id k10-20020a5d66ca000000b002fa6e373d97mr4382802wrw.54.1681914426881;
+        Wed, 19 Apr 2023 07:27:06 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id h16-20020a05600c351000b003eddc6aa5fasm2392223wmq.39.2023.04.19.07.27.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 07:27:06 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 17:27:03 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Richard Gong <richard.gong@intel.com>
+Cc:     Dinh Nguyen <dinguyen@kernel.org>, Alan Tull <atull@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Richard Gong <richard.gong@intel.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] firmware: stratix10-svc: Fix an NULL vs IS_ERR() bug in probe
+Message-ID: <5f9a8cb4-5a4f-460b-9cdc-2fae6c5b7922@kili.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pp8lS-002jCg-2X
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:35460
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 6:22 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.12 release.
-> There are 135 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 21 Apr 2023 13:20:25 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.12-rc3.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+The svc_create_memory_pool() function returns error pointers.  It never
+returns NULL.  Fix the check.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Fixes: 7ca5ce896524 ("firmware: add Intel Stratix10 service layer driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ drivers/firmware/stratix10-svc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Tested-by: Ron Economos <re@w6rz.net>
+diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
+index bde1f543f529..80f4e2d14e04 100644
+--- a/drivers/firmware/stratix10-svc.c
++++ b/drivers/firmware/stratix10-svc.c
+@@ -1133,8 +1133,8 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
+ 		return ret;
+ 
+ 	genpool = svc_create_memory_pool(pdev, sh_memory);
+-	if (!genpool)
+-		return -ENOMEM;
++	if (IS_ERR(genpool))
++		return PTR_ERR(genpool);
+ 
+ 	/* allocate service controller and supporting channel */
+ 	controller = devm_kzalloc(dev, sizeof(*controller), GFP_KERNEL);
+-- 
+2.39.2
 
