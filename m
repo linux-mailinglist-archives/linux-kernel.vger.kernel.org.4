@@ -2,68 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539486E7A81
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7139C6E7A83
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbjDSNVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 09:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57044 "EHLO
+        id S233438AbjDSNVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 09:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbjDSNVJ (ORCPT
+        with ESMTP id S233409AbjDSNVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 09:21:09 -0400
+        Wed, 19 Apr 2023 09:21:15 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12B615464;
-        Wed, 19 Apr 2023 06:21:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC581544C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:21:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681910462; x=1713446462;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=dwsCK/g+yR3m/NRJzizD8LYI/UOtsmhYlgVedbUwfzc=;
-  b=gDvIf1JW1D+Bi5t8rXt/sX9f/iktC/Q7YcKNCqLc41uqmuP7TcWIpdUR
-   7aqmhemVaKfsFUMyyEYi9WHX2Tczo+TmRoyUlj1XDxfd9odUd3wJ/hGfD
-   luOHOne9kUAb8GgIDU5m9qeyRkvWIgEmayG0rB9+aQ8S43DWGxASA29iw
-   YzgQQYyPfR1P0gpZ9NErhdw7OPKEgWRatp4O0czJUGT/wyT5QreQu1Hbl
-   /quDoSuJyVWmSbp2OmAGp7Bopz1b+inWMCzWEdMKIz0Bmgw3dr1oKituC
-   rdtYqWcIq+ZuxKsYBdf2DcNWV8lQp+lwKzO4E+QS9fSuoCFH9BcUfy/E7
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="345445495"
+  t=1681910467; x=1713446467;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=sQu+EGztomOf0wJcq47X3hsD6fAQUa1otr26HmJHEN4=;
+  b=nqV5bYaB161Clgn7aMvT7Dv6lVH4/R1s2SuDead70LNPrUX1b5Qg8AM3
+   lWJWZAjdQSCYBLRODm4Dgg8oMBt2AuM3Z7cgUDrsmV9cPSP5bEes9Orrb
+   8o1eeSDVXCFCc3e/FvAfBTQ+KGTcDailzCIh/wnQQBWWf51+0zMfOH91W
+   /D0W/haK3RkrHs3pVuO644uRpwKRAauCuyj/xT58Ei+3kGX3b1VDoja9X
+   7dvleQOVWqFqt3yKLrCp9wRgXgNKk23+O+du8SEu3X65qxljOpTRMBYsM
+   MCxk7MrSv2s2Mu8Iw0qSTOKJzzLRAq8oAPa8LSNP2wDRsvvtZ7TadIxpM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="345445526"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="345445495"
+   d="scan'208";a="345445526"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 06:21:02 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 06:21:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="802916016"
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="802916028"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="802916016"
-Received: from hbourgeo-mobl2.ger.corp.intel.com ([10.249.34.207])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 06:20:53 -0700
-Date:   Wed, 19 Apr 2023 16:20:50 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Babu Moger <babu.moger@amd.com>
-cc:     corbet@lwn.net, Reinette Chatre <reinette.chatre@intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
-        quic_neeraju@quicinc.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
-        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
-        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
-        jmattson@google.com, daniel.sneddon@linux.intel.com,
-        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
-        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        bagasdotme@gmail.com, eranian@google.com,
-        christophe.leroy@csgroup.eu, pawan.kumar.gupta@linux.intel.com,
-        jarkko@kernel.org, adrian.hunter@intel.com, quic_jiles@quicinc.com,
-        peternewman@google.com
-Subject: Re: [PATCH v4 7/7] x86/resctrl: Add debug files when mounted with
- debug option
-In-Reply-To: <168177451010.1758847.568218491528297451.stgit@bmoger-ubuntu>
-Message-ID: <56497126-8f60-e590-bb13-b3739114375@linux.intel.com>
-References: <168177435378.1758847.8317743523931859131.stgit@bmoger-ubuntu> <168177451010.1758847.568218491528297451.stgit@bmoger-ubuntu>
+   d="scan'208";a="802916028"
+Received: from yedidyal-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.47.37])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 06:21:04 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Jeff Layton <jlayton@kernel.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Wayne.Lin@amd.com, lyude@redhat.com, alexdeucher@gmail.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] drm: use mgr->dev in drm_dbg_kms in
+ drm_dp_add_payload_part2
+In-Reply-To: <20230419112447.18471-1-jlayton@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230419112447.18471-1-jlayton@kernel.org>
+Date:   Wed, 19 Apr 2023 16:21:03 +0300
+Message-ID: <87o7nkypmo.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -74,126 +63,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023, Babu Moger wrote:
+On Wed, 19 Apr 2023, Jeff Layton <jlayton@kernel.org> wrote:
+> I've been experiencing some intermittent crashes down in the display
+> driver code. The symptoms are ususally a line like this in dmesg:
+>
+>     amdgpu 0000:30:00.0: [drm] Failed to create MST payload for port 000000006d3a3885: -5
+>
+> ...followed by an Oops due to a NULL pointer dereference.
+>
+> Switch to using mgr->dev instead of state->dev since "state" can be
+> NULL in some cases.
+>
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2184855
+> Suggested-by: Jani Nikula <jani.nikula@linux.intel.com>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-> Add the debug files to the resctrl hierarchy.
-> 
-> Signed-off-by: Babu Moger <babu.moger@amd.com>
+Thanks,
+
+Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+
+
 > ---
->  arch/x86/kernel/cpu/resctrl/internal.h |    1 +
->  arch/x86/kernel/cpu/resctrl/rdtgroup.c |   54 +++++++++++++++++++++++++++++++-
->  2 files changed, 54 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-> index 1eac07ebc31b..855109abb480 100644
-> --- a/arch/x86/kernel/cpu/resctrl/internal.h
-> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
-> @@ -288,6 +288,7 @@ struct rdtgroup {
->  #define RFTYPE_TOP			BIT(4)
->  #define RFTYPE_RES_CACHE		BIT(5)
->  #define RFTYPE_RES_MB			BIT(6)
-> +#define RFTYPE_DEBUG			BIT(7)
->  #define RFTYPE_CTRL_INFO		(RFTYPE_INFO | RFTYPE_CTRL)
->  #define RFTYPE_MON_INFO			(RFTYPE_INFO | RFTYPE_MON)
->  #define RFTYPE_TOP_INFO			(RFTYPE_INFO | RFTYPE_TOP)
-> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> index 15ded0dd5b09..1ec4359348c2 100644
-> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> @@ -1880,6 +1880,7 @@ static struct rftype res_common_files[] = {
->  		.mode		= 0444,
->  		.kf_ops		= &rdtgroup_kf_single_ops,
->  		.seq_show	= rdtgroup_rmid_show,
-> +		.fflags		= RFTYPE_BASE | RFTYPE_DEBUG,
->  	},
->  	{
->  		.name		= "schemata",
-> @@ -1909,6 +1910,7 @@ static struct rftype res_common_files[] = {
->  		.mode		= 0444,
->  		.kf_ops		= &rdtgroup_kf_single_ops,
->  		.seq_show	= rdtgroup_closid_show,
-> +		.fflags		= RFTYPE_CTRL_BASE | RFTYPE_DEBUG,
->  	},
+>  drivers/gpu/drm/display/drm_dp_mst_topology.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> I've been running this patch for a couple of days, but the problem
+> hasn't occurred again as of yet. It seems sane though as long as we can
+> assume that mgr->dev will be valid even when "state" is a NULL pointer.
+>
+> diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> index 38dab76ae69e..e2e21ce79510 100644
+> --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> @@ -3404,7 +3404,7 @@ int drm_dp_add_payload_part2(struct drm_dp_mst_topology_mgr *mgr,
 >  
->  };
-> @@ -2420,6 +2422,49 @@ static int mkdir_mondata_all(struct kernfs_node *parent_kn,
->  			     struct rdtgroup *prgrp,
->  			     struct kernfs_node **mon_data_kn);
->  
-> +static void resctrl_add_debug_files(void)
-> +{
-> +	struct rftype *rfts, *rft;
-> +	int len;
-> +
-> +	rfts = res_common_files;
-> +	len = ARRAY_SIZE(res_common_files);
-> +
-> +	lockdep_assert_held(&rdtgroup_mutex);
-> +
-> +	for (rft = rfts; rft < rfts + len; rft++) {
-> +		if (rft->fflags & RFTYPE_DEBUG) {
-> +			rft->fflags &= ~RFTYPE_DEBUG;
-
-I don't fully follow why you need to play with ->fflags like this.
-
-Is it for the ->fflags test in rdtgroup_add_files()? Can't you just do 
-some extra masking there for RFTYPE_DEBUG based on resctrl_debug which 
-you already keep?
-
-> +			rdtgroup_add_file(rdtgroup_default.kn, rft);
-> +		}
-> +	}
-> +
-> +	kernfs_activate(rdtgroup_default.kn);
-> +}
-> +
-> +static void resctrl_remove_debug_files(void)
-> +{
-> +	struct rftype *rfts, *rft;
-> +	int len;
-> +
-> +	rfts = res_common_files;
-> +	len = ARRAY_SIZE(res_common_files);
-> +
-> +	lockdep_assert_held(&rdtgroup_mutex);
-> +
-> +	for (rft = rfts; rft < rfts + len; rft++) {
-> +		if (!strcmp(rft->name, "mon_hw_id")) {
-> +			rft->fflags |= RFTYPE_DEBUG;
-> +			kernfs_remove_by_name(rdtgroup_default.kn, rft->name);
-> +		} else if (!strcmp(rft->name, "ctrl_hw_id")) {
-> +			rft->fflags |= RFTYPE_DEBUG;
-> +			kernfs_remove_by_name(rdtgroup_default.kn, rft->name);
-> +		}
-> +	}
-> +
-> +	kernfs_activate(rdtgroup_default.kn);
-> +}
-> +
->  static int rdt_enable_ctx(struct rdt_fs_context *ctx)
->  {
->  	int ret = 0;
-> @@ -2433,8 +2478,10 @@ static int rdt_enable_ctx(struct rdt_fs_context *ctx)
->  	if (!ret && ctx->enable_mba_mbps)
->  		ret = set_mba_sc(true);
->  
-> -	if (!ret && ctx->enable_debug)
-> +	if (!ret && ctx->enable_debug) {
->  		resctrl_debug = true;
-> +		resctrl_add_debug_files();
-> +	}
->  
->  	return ret;
->  }
-> @@ -2851,6 +2898,11 @@ static void rdt_kill_sb(struct super_block *sb)
->  
->  	set_mba_sc(false);
->  
-> +	if (resctrl_debug) {
-> +		resctrl_remove_debug_files();
-> +		resctrl_debug = false;
-
-Logically, this false assignment belongs to the earlier patch.
+>  	/* Skip failed payloads */
+>  	if (payload->vc_start_slot == -1) {
+> -		drm_dbg_kms(state->dev, "Part 1 of payload creation for %s failed, skipping part 2\n",
+> +		drm_dbg_kms(mgr->dev, "Part 1 of payload creation for %s failed, skipping part 2\n",
+>  			    payload->port->connector->name);
+>  		return -EIO;
+>  	}
 
 -- 
- i.
+Jani Nikula, Intel Open Source Graphics Center
