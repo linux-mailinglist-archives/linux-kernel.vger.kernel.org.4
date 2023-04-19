@@ -2,60 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163466E72E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBAB36E72E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbjDSGKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 02:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
+        id S231612AbjDSGKv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Apr 2023 02:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbjDSGKo (ORCPT
+        with ESMTP id S231532AbjDSGKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 02:10:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F79A59F5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:10:43 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pp11Q-0006RU-9L; Wed, 19 Apr 2023 08:10:28 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id DEC751B2A81;
-        Wed, 19 Apr 2023 06:10:25 +0000 (UTC)
-Date:   Wed, 19 Apr 2023 08:10:24 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     "Mendez, Judith" <jm@ti.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Andrew Davis <afd@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH 0/5] Enable multiple MCAN on AM62x
-Message-ID: <20230419-stretch-tarantula-e0d21d067483-mkl@pengutronix.de>
-References: <20230413223051.24455-1-jm@ti.com>
- <20230414-tubular-service-3404c64c6c62-mkl@pengutronix.de>
- <6eb588ef-ab12-186d-b0d3-35fc505a225a@ti.com>
+        Wed, 19 Apr 2023 02:10:47 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F075FFB;
+        Tue, 18 Apr 2023 23:10:45 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 6094224E25E;
+        Wed, 19 Apr 2023 14:10:43 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 19 Apr
+ 2023 14:10:43 +0800
+Received: from [192.168.125.106] (113.72.144.253) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 19 Apr
+ 2023 14:10:42 +0800
+Message-ID: <bf04808b-5988-c3d2-e2c4-4e8cdbaec838@starfivetech.com>
+Date:   Wed, 19 Apr 2023 14:10:41 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qu67lay6cc3reoxa"
-Content-Disposition: inline
-In-Reply-To: <6eb588ef-ab12-186d-b0d3-35fc505a225a@ti.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 1/3] dt-bindings: phy: Add starfive,jh7110-dphy-rx
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+References: <20230412084540.295411-1-changhuang.liang@starfivetech.com>
+ <20230412084540.295411-2-changhuang.liang@starfivetech.com>
+ <8dd0dc63-e0df-8764-f756-da032d9d671c@linaro.org>
+ <eb47b7c7-bdbb-92d9-ba39-604ce487f297@starfivetech.com>
+ <f6a4fb28-d635-4d99-44bb-d929cb41eef2@linaro.org>
+ <b34a8d59-34e4-8358-9d2b-367f4707ca7c@starfivetech.com>
+ <f0d82428-aaa5-3dd4-bc29-f1057fe749bc@linaro.org>
+ <20230418184246.GA2103246-robh@kernel.org>
+ <CAL_JsqKVa+XHkoDbDLaD+haC2J7QDJ_oLr9RAT=7Pvwa-rWHLg@mail.gmail.com>
+From:   Changhuang Liang <changhuang.liang@starfivetech.com>
+In-Reply-To: <CAL_JsqKVa+XHkoDbDLaD+haC2J7QDJ_oLr9RAT=7Pvwa-rWHLg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [113.72.144.253]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,83 +74,44 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---qu67lay6cc3reoxa
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 18.04.2023 11:15:35, Mendez, Judith wrote:
-> Hello Marc,
->=20
-> On 4/14/2023 12:49 PM, Marc Kleine-Budde wrote:
-> > On 13.04.2023 17:30:46, Judith Mendez wrote:
-> > > On AM62x there is one MCAN in MAIN domain and two in MCU domain.
-> > > The MCANs in MCU domain were not enabled since there is no
-> > > hardware interrupt routed to A53 GIC interrupt controller.
-> > > Therefore A53 Linux cannot be interrupted by MCU MCANs.
-> >=20
-> > Is this a general hardware limitation, that effects all MCU domain
-> > peripherals? Is there a mailbox mechanism between the MCU and the MAIN
-> > domain, would it be possible to pass the IRQ with a small firmware on
-> > the MCU? Anyways, that's future optimization.
->=20
-> This is a hardware limitation that affects AM62x SoC and has been carried
-> over to at least 1 other SoC. Using the MCU is an idea that we have juggl=
-ed
-> around for a while, we will definitely keep it in mind for future
-> optimization. Thanks for your feedback.
+On 2023/4/19 2:46, Rob Herring wrote:
+> On Tue, Apr 18, 2023 at 1:42 PM Rob Herring <robh@kernel.org> wrote:
+>>
+>> On Thu, Apr 13, 2023 at 10:41:23AM +0200, Krzysztof Kozlowski wrote:
+>>> On 13/04/2023 04:34, Changhuang Liang wrote:
+>>>>>>>> +  lane_maps:
+>>>>>>>
+>>>>>>> Why did this appear? Underscores are not allowed. It looks like you
+>>>>>>> re-implement some standard property.
+>>>>>>>
+>>>>>>
+>>>>>> Will change to lane-maps.
+>>>>>> Yes, according to Vinod advice, lane mapping table use device tree
+>>>>>> to parse makes sense.
+>>>>>
+>>>>> Hm, I have a feeling that I saw such property, so you should dig into
+>>>>> existing and in-flight bindings.
+>>>>>
+>>>>> Best regards,
+>>>>> Krzysztof
+>>>>>
+>>>>
+>>>> A standard property? Like "clocks" or "resets"?
+>>>
+>>> Like lane-polarities now submitted to one MIPI.
+>>>
+>>
+>> data-lanes perhaps?
+> 
+> Except that is for the controller's endpoint rather than the phy.
+> Presumably if the controller knows the mapping, then it can tell the
+> phy if it needs the information. IOW, don't just copy 'data-lanes' to
+> the phy. Follow the normal patterns.
+> 
+> Rob
 
-Once you have a proper IRQ de-multiplexer, you can integrate it into the
-system with a DT change only. No need for changes in the m_can driver.
-
-> > > This solution instantiates a hrtimer with 1 ms polling interval
-> > > for a MCAN when there is no hardware interrupt. This hrtimer
-> > > generates a recurring software interrupt which allows to call the
-> > > isr. The isr will check if there is pending transaction by reading
-> > > a register and proceed normally if there is.
-> > >=20
-> > > On AM62x this series enables two MCU MCAN which will use the hrtimer
-> > > implementation. MCANs with hardware interrupt routed to A53 Linux
-> > > will continue to use the hardware interrupt as expected.
-> > >=20
-> > > Timer polling method was tested on both classic CAN and CAN-FD
-> > > at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
-> > > switching.
-> > >=20
-> > > Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
-> > > 1 MBPS timer polling interval is the better timer polling interval
-> > > since it has comparable latency to hardware interrupt with the worse
-> > > case being 1ms + CAN frame propagation time and CPU load is not
-> > > substantial. Latency can be improved further with less than 1 ms
-> > > polling intervals, howerver it is at the cost of CPU usage since CPU
-> > > load increases at 0.5 ms and lower polling periods than 1ms.
-
-Have you seen my suggestion of the poll-interval?
-
-Some Linux input drivers have the property poll-interval, would it make
-sense to ass this here too?
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---qu67lay6cc3reoxa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQ/hc0ACgkQvlAcSiqK
-BOiAWQgAjh1+EBUoAAUPx2ZOawWvxaMJ29t7nK75GAf+/TYlKVR0v4S1Mv1Z/qnM
-rK65q4JaAcNgYSqxJso/6F9hwXxuLGZqhyitmfOPE5Wb3Gk9lP11h4GwfhSMBece
-3Q/Bf0nvujl699psPIJq2vLZknERGkSGaMpsV1QsClPMxiPOAwlkk9GeYynvqkHo
-9On1oPYV/SOtC23zV/h+v0etNxww+uXlgy3W7HNxDBzTfUpeiXf4R+X2TH99qjDZ
-Uk8Zw8Htg/rhiYAGvOYZVTPeHKtTu6HQL3kh400kcqh2kJA0PI1DGQd353XQhXvf
-DN8cR/kl4t5PaUITQ7WWYn777ZJp6g==
-=+SWM
------END PGP SIGNATURE-----
-
---qu67lay6cc3reoxa--
+I am not sure if phy can fetch from the other controller's endpoint. In 
+addition, like our JH7110 SoC, it have data-lanes configure (data-lanes = <1 2>)
+in csi2rx controller, but this data-lanes configure is not appropriate to phy, 
+maybe they are independent. 
