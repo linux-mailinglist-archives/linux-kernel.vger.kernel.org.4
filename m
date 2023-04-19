@@ -2,92 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920446E8247
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4773E6E8249
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjDSUBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 16:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
+        id S231280AbjDSUCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 16:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjDSUBa (ORCPT
+        with ESMTP id S229514AbjDSUCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 16:01:30 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FC32135
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:01:29 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id xd13so1258070ejb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:01:28 -0700 (PDT)
+        Wed, 19 Apr 2023 16:02:15 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FD0468C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:02:14 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a652700c36so232875ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:02:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681934487; x=1684526487;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uR1sg37u4yLqstygNFNs5VOG/aJjyMp9p6EHpt4xrlU=;
-        b=t8UO6709ej90L404wmD+d6lwQDgZJ3lnbmCFTtcjX2lYbOOp6jCA8/PNdrpn+g+Dz5
-         /ufKN1PjfmQNz8C5jLDjv7sCFtpttLjH8Isk1T90rZGK2qeJquSTpMuT/qCxfmU8V5oP
-         wbrnjdvQ+Jq8Zo4PBL172EiONjNMF9HbAxCdqXkrEdMEsAZN77ahqq3iQa0J2jBffHfu
-         D5rloRoTmMyjdkp0dBPkN50iwhKXYLlnJW+5uXikYZwSxCla0reblEDRbmdsepE9w0GM
-         P9KWA5G0Y4vPtQVAcrqNRGu4mU2zmmqjkFNqioPaovUJnb4YEoPDJJdaMtMfY/HA+DeK
-         zYUg==
+        d=google.com; s=20221208; t=1681934534; x=1684526534;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=56W2W/X8fkj8VZX3/1DTAaK9+j9FvXQXuYPz0XAniuc=;
+        b=Tm+PqrTiBoRJA04/Kl60G2CqwjByx5la8XcHF9okQZRzsClYBxiJTHt0YG5c7Ih8mT
+         LqiugknROCpyehmf+fFE2yLXzkxa7RRDDerSCmGNO6gj8wHE1MUCc2qXLU1NwoxWHQTN
+         PB/mAP8j6XUow6402YryLB5jYviHopAJ4iYiURfF9qoPqv16Riw+InNihTXtwAWmPte2
+         WzvgnJ1CLUIbSsA3WkAuSE2s+YmMzyBgHqf77zkPrj56JYAOdVHMo01j2j2szEV7YTIA
+         39nPjEODCVxQsypbfnaq1e0jji5goKJ9EUboMoqyesJEob+LeW9h6gbLFLLBA+vTiinI
+         dJgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681934487; x=1684526487;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uR1sg37u4yLqstygNFNs5VOG/aJjyMp9p6EHpt4xrlU=;
-        b=bO4P45cNEvimmMKZwm6cc8qozLZmFmV5r7lpZb7Yp+RPpn7+vjdAZLrSqZtTs07X/N
-         feHaLRqQ2dj7lzA8oQow5vG6BeP0jVDPg2foRqPmx8t94kMm78lS08kVk2GMW6nFqrtS
-         dH8NvvC15PEmv2CKAWZPfRDlQCSmgud2MxsOBBgtpygrBcklT98bwI0G/3H/6u/yveXA
-         XvRTKOnE4w0XTUZnyKHE0x04pAZqE40sdBMktr0dLU+t+clAjjmkEkLUkOSB7svwR0db
-         2jG5MgudLlS7HPy9Vww36n3PK2SSGGOiQptuyY7WWvZr5JwdQxffvSj28/Hr1Y1Xcqbs
-         arrA==
-X-Gm-Message-State: AAQBX9fcbNyie1x69/oqBvR+aE1eAC/uP/8AWnIAKLJWiWe5ty7yDUXU
-        kLjz8qY4rqcjJ3tnFOdjCg2dMA==
-X-Google-Smtp-Source: AKy350Ymx4qFw5Wb5XaUf2ClN/hYaKBoxle02tqUxYWB3N1hLco5TfUFJFyOd9eaddTXOetVPigRsg==
-X-Received: by 2002:a17:906:7006:b0:94a:44bc:31e7 with SMTP id n6-20020a170906700600b0094a44bc31e7mr17921518ejj.60.1681934487403;
-        Wed, 19 Apr 2023 13:01:27 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:976c:1d6c:6ed0:8935? ([2a02:810d:15c0:828:976c:1d6c:6ed0:8935])
-        by smtp.gmail.com with ESMTPSA id v15-20020a17090606cf00b0095336e8e012sm1922174ejb.176.2023.04.19.13.01.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 13:01:26 -0700 (PDT)
-Message-ID: <172c46b7-256e-b09d-3940-880fa8989b49@linaro.org>
-Date:   Wed, 19 Apr 2023 22:01:25 +0200
+        d=1e100.net; s=20221208; t=1681934534; x=1684526534;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=56W2W/X8fkj8VZX3/1DTAaK9+j9FvXQXuYPz0XAniuc=;
+        b=SnldDf3qOyRO9HC80ZAbBXApkUaFeuaObHBYGawYdzD+WnwCT6LE0rjXxNu5Bigw/G
+         ndtSZdGHPHSCbLpuT7xE9hYe/FqIoohJP7mT94HXVhGupdRcExE5gDt/Xhs2sd5JrCsF
+         gjxFQyRFvTlljRwt/2PP07vYqTRxD3X3y10HNhNdTYYwoz1ca2qWSKG7ZMSTtE3/UZ9d
+         hIc0PKSKakNrfJbd0JmIUYLA1z6MkikXZS8/nNlELJr9UBlEL4eQrkfuB3w9ARqSs81/
+         EaRqI+ARVPRsRfqBjFKuqMkTU6B7LLtaxl9BmSdzWFZj776lulw+v75M46gd13zHffxh
+         wiYQ==
+X-Gm-Message-State: AAQBX9e8Kwq+WfVqAHsHdEz3FQ5FKWdYPPl0EVT8JBgIBeShmsjvyrM7
+        Ggb9GK7e2yin9ANuddz6Qnzaf8eZNIUOFs+Sr7v/1vhzd0Vz079ozt7VyQ==
+X-Google-Smtp-Source: AKy350bP2Be/0rsmuq+XyQQsawPtRMQK0eA/jETVaSN8vBy4wBas0Titboop37b7IKAN7OP4R+HvW5JzRwQ8J+LMRZI=
+X-Received: by 2002:a17:903:228c:b0:198:af4f:de12 with SMTP id
+ b12-20020a170903228c00b00198af4fde12mr49157plh.18.1681934534077; Wed, 19 Apr
+ 2023 13:02:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 06/11] dt-bindings: PCI: Update the RK3399 example to a
- valid one
-Content-Language: en-US
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
-        alberto.dassatti@heig-vd.ch
-Cc:     xxm@rock-chips.com, dlemoal@kernel.org,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Hugh Cole-Baker <sigmaris@gmail.com>,
-        Arnaud Ferraris <arnaud.ferraris@collabora.com>,
-        linux-pci@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230418074700.1083505-1-rick.wertenbroek@gmail.com>
- <20230418074700.1083505-7-rick.wertenbroek@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230418074700.1083505-7-rick.wertenbroek@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230414005309.GA2198310@google.com> <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
+ <CAKwvOdk+D6HuWwAH3EJtwDyPqoiP+2z62ek2hnmbhDV2CJwnbw@mail.gmail.com> <CALGbS4V+x1JkiPL2o59LgtbSQhzg_RKM5TYE7i7qZx0qz23y-g@mail.gmail.com>
+In-Reply-To: <CALGbS4V+x1JkiPL2o59LgtbSQhzg_RKM5TYE7i7qZx0qz23y-g@mail.gmail.com>
+From:   Fangrui Song <maskray@google.com>
+Date:   Wed, 19 Apr 2023 13:02:02 -0700
+Message-ID: <CAFP8O3KQRbmgyvuyuxNOa6TZ7MawN7YoGHvpFQ=oibEo3aUfDQ@mail.gmail.com>
+Subject: Re: clangd cannot handle tree_nocb.h
+To:     Florent Revest <revest@google.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        nathan@kernel.org, trix@redhat.com, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, paulmck@kernel.org,
+        "revest@chromium.org" <revest@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,45 +74,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/04/2023 09:46, Rick Wertenbroek wrote:
-> Update the example in the documentation to a valid example.
-> Address for mem-base was invalid, it pointed to address
-> 0x8000'0000 which is the upper region of the DDR which
-> is not necessarily populated depending on the board.
-> This address should point to the base of the memory
-> window region of the controller which is 0xfa00'0000.
-> Add missing pinctrl.
-> 
-> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
-> ---
->  .../devicetree/bindings/pci/rockchip,rk3399-pcie-ep.yaml      | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/rockchip,rk3399-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/rockchip,rk3399-pcie-ep.yaml
-> index 88386a6d7011..6b62f6f58efe 100644
-> --- a/Documentation/devicetree/bindings/pci/rockchip,rk3399-pcie-ep.yaml
-> +++ b/Documentation/devicetree/bindings/pci/rockchip,rk3399-pcie-ep.yaml
-> @@ -47,7 +47,7 @@ examples:
->  
->          pcie-ep@f8000000 {
->              compatible = "rockchip,rk3399-pcie-ep";
-> -            reg = <0x0 0xfd000000 0x0 0x1000000>, <0x0 0x80000000 0x0 0x20000>;
-> +            reg = <0x0 0xfd000000 0x0 0x1000000>, <0x0 0xfa000000 0x0 0x2000000>;
->              reg-names = "apb-base", "mem-base";
->              clocks = <&cru ACLK_PCIE>, <&cru ACLK_PERF_PCIE>,
->                <&cru PCLK_PCIE>, <&cru SCLK_PCIE_PM>;
-> @@ -63,6 +63,8 @@ examples:
->              phys = <&pcie_phy 0>, <&pcie_phy 1>, <&pcie_phy 2>, <&pcie_phy 3>;
->              phy-names = "pcie-phy-0", "pcie-phy-1", "pcie-phy-2", "pcie-phy-3";
->              rockchip,max-outbound-regions = <16>;
-> +            pinctrl-names = "default";
-> +            pinctrl-0 = <&pcie_clkreqnb_cpm>;
+On Wed, Apr 19, 2023 at 6:00=E2=80=AFAM Florent Revest <revest@google.com> =
+wrote:
+>
+> On Tue, Apr 18, 2023 at 6:28=E2=80=AFPM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > + Florent
+>
+> Hi there!
+>
+> > Joel, Florent is doing some cool stuff with clangd and kernels (check
+> > out the demo at go/linux-kernel-vscode).  I'm pushing Florent to
+>
+> Apologies for folks outside Google, this is an internal link to a
+> kernel dev setup I originally created for myself, then for my team and
+> apparently more and more people are starting to use it internally. :)
+> If there's enough appetite for it externally too, I'll try to
+> open-source it someday. Anyway, in the context of this conversation,
+> it's just something that uses clangd. :)
+>
+> > publish some of the cool stuff he's been working on externally because
+> > it is awesome. ;)
+> >
+> > Florent, have you seen any such issues such as what Joel reported below=
+?
+>
+> Yes, I've seen this problem a bunch of times. Afaiu, Clangd operates
+> under the assumption that every source file is a valid compilation
+> unit. My understanding is that it's generally a good practice to keep
+> things that way and I wouldn't be surprised if the userspace Chrome
+> code-base Joel saw enforces this (iirc, it's a rule for
+> Google-internal C++ too, all headers must be interpretable
+> independently).
+>
+> However, from the perspective of the C spec, anything can be included
+> anywhere and a C file can only make sense if it's included
+> after/before certain other things are defined/included. Spontaneously,
+> I would call these ".inc" rather than ".h" or ".c" because I would
+> expect a source file to be always valid and this suffix makes it
+> clearer they depend on their context, but as a matter of fact source
+> files that don't compile when interpreted individually are quite
+> common in the kernel tree. Other examples that have been reported to
+> me include a lot of kernel/sched/*, since many of these files
+> (including .c files) are included from kernel/sched/build_policy.c in
+> a specific order to form one big compilation unit.
+>
+> Unfortunately, I don't know of any solution. :( This feels like a
+> limit of C or compile_commands.json to me. "compile commands" can not
+> be enough to interpret any file, clangd would need a way to express
+> "interpret this file as if it were included in that spot of that
+> compilation unit" and maybe even need a bunch of heuristics to choose
+> one such include spot.
+>
+> I don't know if clangd has any plan to address this and so far I've
+> just lived with these error squiggles.
+>
 
-This is just example of the binding, you do not need to fill all
-unrelated (generic) properties like pinctrl.
+Some information about Clang based language servers
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+It's good practice to ensure that a header file is self-contained. If
+not, for example, if a.c includes a.h, which is not self-contained,
+a.h is generally compiled on its own (as if using clang [options] a.h)
+to confine diagnostics/completion results to a.h and not to other
+headers included by a.c.
 
-Best regards,
-Krzysztof
+However, this design choice may cause language servers to emit
+diagnostics that you don't see when building the project.
 
+For my tool ccls, the index file for an included file (e.g. a.h) is
+computed when compiling the main source file (a.c). Therefore, if the
+project builds successfully, the index is always accurate.
+
+Language servers usually have the limitation that only one
+configuration of a main source file is recorded, e.g., you only get
+index data for either clang -DA=3D1 a.c or clang -DA=3D2 a.c, not both.
+This limitation exists due to technical challenges and practicality.
+If a main source file has 10 configurations, when you edit the file,
+do you compile it 10 times to get all indexes?
+
+---
+
+My setup is like this. I have been doing it since about 2019, though I
+rarely read Linux kernel code :(
+
+Ensure you have the following Clang and LLVM tools. If you build them
+by yourself, create a llvm-project build directory, say, /tmp/Rel
+```
+ninja -C /tmp/Rel clang lld
+llvm-{ar,nm,objcopy,objdump,ranlib,readelf,strings,strip}
+```
+
+In a Linux kernel source directory,
+(https://github.com/MaskRay/ccls/wiki/Example-Projects)
+```
+PATH=3D/tmp/Rel/bin:$PATH make O=3D/tmp/out/x86_64 ARCH=3Dx86_64 LLVM=3D1 d=
+efconfig
+PATH=3D/tmp/Rel/bin:$PATH make O=3D/tmp/out/x86_64 ARCH=3Dx86_64 LLVM=3D1 -=
+k
+bzImage modules  # generate .<target>.cmd files
+
+scripts/clang-tools/gen_compile_commands.py -d /tmp/out/x86_64
+```
+
+emacs -nw fs/binfmt_elf.c   # check out lsp-mode and eglot
+
+For neovim, use https://github.com/neoclide/coc.nvim or the built-in
+client. I prefer coc.nvim.
+
+
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
