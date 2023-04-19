@@ -2,132 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795E96E83BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1E06E83CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjDSVaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 17:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
+        id S232486AbjDSVbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 17:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbjDSVaU (ORCPT
+        with ESMTP id S231882AbjDSVba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 17:30:20 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3E8170E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:30:18 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-54fa9da5e5bso19426277b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:30:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1681939817; x=1684531817;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tx1Xtiel3L2MFB89VNbAU04okPQRWERynTRZmp6tgiw=;
-        b=G5iwDX6cweWlz7Hf/pWh3HZS0MCCKDqZaqiYEt8GSmqwknO5x99+IPiI+KaHzG7GfM
-         IHZZ8igfORP5yCbkf+YffzupwfG28YpDFBzq9wN9Y9FNZmkUWxUY6cvo8MiK4s6/vRXn
-         68ZvnMOrcjLQtABq9ZPjbLEExe+cCRUIH9V81ZVptk3OKJpnL/UCoJNTIMFfIYo75V6m
-         1BL3DOZon01TCLK2Czb54chOelLdVIByC1eDjixd5dyAQa47G64TbcOy/i2FlH313i9L
-         JcQ2ln8E2jbIcis5rTTX+Ws5jJYtRb87sa/kdURclYJ9X82cVdTht8VGfvxQ7MviXANU
-         IpYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681939817; x=1684531817;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Tx1Xtiel3L2MFB89VNbAU04okPQRWERynTRZmp6tgiw=;
-        b=EHA4uZBoo8Sjl2RXfG2r+46Yr9jZyNQtVzCVBk+VgPBnRceSQP2zPydQRkSQc9Whtn
-         xC9APNPjP8HnP5D/IIUhVhmlSkmoOusOlRKK+Q5Lyft2rhPtCrK+7eymxVlHR8E3bqnD
-         akWOxyP1jo/5uSg3cfcTM7NY3nx8rr4VazqBhxPXh3vELUZJ7RQwb4X/ekVksnXVHYXh
-         +mFWq5ZIxSXujW/6pV+aabUToO1QkQPiwsLU6/3UvHvZwW0RRXl6Z0CXRdCFLEd85GSQ
-         HB59ToByUOrRdh1k/r7zQq+Uuz0vzDWLK9oZaCCAXSzbn2jGXMkU+r7AQMra+qZly72b
-         DbBQ==
-X-Gm-Message-State: AAQBX9eAIBds6Woqacks1vlnJjNNStMBBH0FoVCltPt55nfwSjLPgXgH
-        Er9L0ZoND0C+kJgJET8weB7aRMSqvVed/+jYhLfS
-X-Google-Smtp-Source: AKy350bIAwMPchN3cTyQgOT+YhMsccxTx95EhggySeUzeKO4Y7jWYi2JXXVLLYKlYtMqIXcC0YkgMw9DA9HBK0XY1vA=
-X-Received: by 2002:a81:12c9:0:b0:54c:65b:9314 with SMTP id
- 192-20020a8112c9000000b0054c065b9314mr3618294yws.19.1681939817566; Wed, 19
- Apr 2023 14:30:17 -0700 (PDT)
+        Wed, 19 Apr 2023 17:31:30 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA529766;
+        Wed, 19 Apr 2023 14:31:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681939868; x=1713475868;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uzaEvtKF/wb+BpZHv45rlTavjENU0eMCTHpvxq+55cw=;
+  b=cBzO+UZukpQmV8H79i1QE1aJb16knkvmRD8Jhu4KyfYmNinUuPaIVQGk
+   EotCIs2v3vM3tZfZ3XsUohFVRR8apEh2PhGUUl7X348RP8xDfwYAGijQU
+   YHFGQAztSq0a9ciXeYv3EQHhzaebrCyWQY+00gv0jDFfKoKR11/aAsxcm
+   6XO0MhFMosJ1Uq+nSdIemHDYioewdpjfbmuwIs2cu826bfOJnz+kxiAgW
+   3tvZRaWOYfpiFt6S20VDphy6GX+G2VUKW8WZHNdT8ZwIVJik6vOMXr9kj
+   HQ+KY1m6VLXFKt0YAPU/k5U+Cav/X9MeWamAxCkBoKkCy731oUUyvjapa
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="334382342"
+X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
+   d="scan'208";a="334382342"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 14:31:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="756241128"
+X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
+   d="scan'208";a="756241128"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Apr 2023 14:31:05 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppFOK-000fCq-0s;
+        Wed, 19 Apr 2023 21:31:04 +0000
+Date:   Thu, 20 Apr 2023 05:30:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     luhongfei <luhongfei@vivo.com>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "open list:IO_URING" <io-uring@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        opensource.kernel@vivo.com, luhongfei <luhongfei@vivo.com>
+Subject: Re: [PATCH] io_uring: Optimization of buffered random write
+Message-ID: <202304200502.T4Waeqad-lkp@intel.com>
+References: <20230419092233.56338-1-luhongfei@vivo.com>
 MIME-Version: 1.0
-References: <20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-v1-0-9d4064cb0075@tessares.net>
-In-Reply-To: <20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-v1-0-9d4064cb0075@tessares.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 19 Apr 2023 17:30:06 -0400
-Message-ID: <CAHC9VhR68fw+0oaenL08tRecLEC_oCdYcfGaN_m6PW3KZYtdTQ@mail.gmail.com>
-Subject: Re: [PATCH LSM 0/2] security: SELinux/LSM label with MPTCP and accept
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ondrej Mosnacek <omosnace@redhat.com>, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419092233.56338-1-luhongfei@vivo.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 1:44=E2=80=AFPM Matthieu Baerts
-<matthieu.baerts@tessares.net> wrote:
->
-> In [1], Ondrej Mosnacek explained they discovered the (userspace-facing)
-> sockets returned by accept(2) when using MPTCP always end up with the
-> label representing the kernel (typically system_u:system_r:kernel_t:s0),
-> while it would make more sense to inherit the context from the parent
-> socket (the one that is passed to accept(2)). Thanks to the
-> participation of Paul Moore in the discussions, modifications on MPTCP
-> side have started and the result is available here.
->
-> Paolo Abeni worked hard to refactor the initialisation of the first
-> subflow of a listen socket. The first subflow allocation is no longer
-> done at the initialisation of the socket but later, when the connection
-> request is received or when requested by the userspace. This was a
-> prerequisite to proper support of SELinux/LSM labels with MPTCP and
-> accept. The last batch containing the commit ddb1a072f858 ("mptcp: move
-> first subflow allocation at mpc access time") [2] has been recently
-> accepted and applied in netdev/net-next repo [3].
->
-> This series of 2 patches is based on top of the lsm/next branch. Despite
-> the fact they depend on commits that are in netdev/net-next repo to
-> support the new feature, they can be applied in lsm/next without
-> creating conflicts with net-next or causing build issues. These two
-> patches on top of lsm/next still passes all the MPTCP-specific tests.
-> The only thing is that the new feature only works properly with the
-> patches that are on netdev/net-next. The tests with the new labels have
-> been done on top of them.
->
-> It then looks OK to us to send these patches for review on your side. We
-> hope that's OK for you as well. If the patches look good to you and if
-> you prefer, it is fine to apply these patches before or after having
-> synced the lsm/next branch with Linus' tree when it will include the
-> modifications from the netdev/net-next repo.
->
-> Regarding the two patches, the first one introduces a new LSM hook
-> called from MPTCP side when creating a new subflow socket. This hook
-> allows the security module to relabel the subflow according to the owing
-> process. The second one implements this new hook on the SELinux side.
+Hi luhongfei,
 
-Thank you so much for working on this, I really appreciate the help!
+kernel test robot noticed the following build errors:
 
-As far as potential merge issues with netdev/net-next and lsm/next, I
-think we'll be okay.  I have a general policy[1] of not accepting new
-patchsets, unless critical bugfixes, past rc5/rc6 so this would be
-merged into lsm/next *after* the current merge window closes and
-presumably after the netdev/net-next branch finds its way into Linus'
-tree.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.3-rc7 next-20230418]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-[1] https://github.com/LinuxSecurityModule/kernel/blob/main/README.md
+url:    https://github.com/intel-lab-lkp/linux/commits/luhongfei/io_uring-Optimization-of-buffered-random-write/20230419-172539
+patch link:    https://lore.kernel.org/r/20230419092233.56338-1-luhongfei%40vivo.com
+patch subject: [PATCH] io_uring: Optimization of buffered random write
+config: i386-randconfig-a012-20230417 (https://download.01.org/0day-ci/archive/20230420/202304200502.T4Waeqad-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/620dbcc5ab192992f08035fd9d271ffffb8ff043
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review luhongfei/io_uring-Optimization-of-buffered-random-write/20230419-172539
+        git checkout 620dbcc5ab192992f08035fd9d271ffffb8ff043
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
---
-paul-moore.com
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304200502.T4Waeqad-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> io_uring/io_uring.c:2091:25: error: no member named 'rw' in 'struct io_kiocb'
+           if (!is_write || (req->rw.kiocb.ki_flags & IOCB_DIRECT))
+                             ~~~  ^
+   1 error generated.
+
+
+vim +2091 io_uring/io_uring.c
+
+  2073	
+  2074	static inline void io_queue_sqe(struct io_kiocb *req)
+  2075		__must_hold(&req->ctx->uring_lock)
+  2076	{
+  2077		int ret;
+  2078		bool is_write;
+  2079	
+  2080		switch (req->opcode) {
+  2081		case IORING_OP_WRITEV:
+  2082		case IORING_OP_WRITE_FIXED:
+  2083		case IORING_OP_WRITE:
+  2084			is_write = true;
+  2085			break;
+  2086		default:
+  2087			is_write = false;
+  2088			break;
+  2089		}
+  2090	
+> 2091		if (!is_write || (req->rw.kiocb.ki_flags & IOCB_DIRECT))
+  2092			ret = io_issue_sqe(req, IO_URING_F_NONBLOCK|IO_URING_F_COMPLETE_DEFER);
+  2093		else
+  2094			ret = io_issue_sqe(req, 0);
+  2095	
+  2096		/*
+  2097		 * We async punt it if the file wasn't marked NOWAIT, or if the file
+  2098		 * doesn't support non-blocking read/write attempts
+  2099		 */
+  2100		if (likely(!ret))
+  2101			io_arm_ltimeout(req);
+  2102		else
+  2103			io_queue_async(req, ret);
+  2104	}
+  2105	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
