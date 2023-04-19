@@ -2,66 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B5F6E75BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4248E6E75B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232815AbjDSIzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
+        id S232406AbjDSIyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232650AbjDSIzE (ORCPT
+        with ESMTP id S229618AbjDSIye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:55:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF324C2C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:54:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681894457;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=J099iEeGas8X+c0Ugwu2YYwSR8o/a4NF1OsG1hAhZcc=;
-        b=E1NxjYf//Dyhe34vdpIDycJkEsXgLmnhsduRP5H+RdrVxE35yRS1qs6AlV5n9FlMQpTEhQ
-        vf4ZyM/SIcMEsz74DD0fUXW9r4ri46WH+9eLUY/Vn6FD5gtk8wTV4gKJ8xUd0/PswStvoe
-        p4YypG+37HREIjMuh8uA6eMEwUpgpb8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-538-1ikd473jN-q5I59GX08wYA-1; Wed, 19 Apr 2023 04:54:14 -0400
-X-MC-Unique: 1ikd473jN-q5I59GX08wYA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 532FE101A557;
-        Wed, 19 Apr 2023 08:54:13 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A32BA1121314;
-        Wed, 19 Apr 2023 08:54:11 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-cc:     dhowells@redhat.com, Ayush Jain <ayush.jain3@amd.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        David Hildenbrand <david@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Steve French <stfrench@microsoft.com>, linux-mm@kvack.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] splice: Fix filemap of a blockdev
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1770754.1681894451.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 19 Apr 2023 09:54:11 +0100
-Message-ID: <1770755.1681894451@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        Wed, 19 Apr 2023 04:54:34 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEBC4220
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:54:32 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id u188-20020a2560c5000000b00b8f15f2111dso22886095ybb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:54:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681894472; x=1684486472;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=EuxYuWlS9hmgllFa5Y4ge5RSLAeCGI0qG9xInGWh4Ro=;
+        b=cE9nE1n72Kn5bHCXKXQlgGmbw3IOWLOSk6RamJ6u9TWsrspBENjtZ2S9Ieqe8Q4ywJ
+         uWaDkNlrOmkvlOYLGvbbVD/XHQs/lU0IRkpm3hzdAzl6T7bJKezOXuGB7tjFKUaChprT
+         i7uIiIaqkmcLmp8h0R4WgMRbsmkep7UwYv2JUMJP9UtaAjxSr9wFWI43ZNj0QFPBm/88
+         JptOcu+v+1GQzNmtHy+bzmoGJ4kQYrREcCAPChlII3ffhAPezmLWo3eT8zLmUwPPRG9S
+         3vYADKiWYdBcR4+mgpT+kZzoH5kBOKcxtjHnMjFjMLZVi9TOKZOOunG7xO1n+X2Hn143
+         /RWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681894472; x=1684486472;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EuxYuWlS9hmgllFa5Y4ge5RSLAeCGI0qG9xInGWh4Ro=;
+        b=d1Ncvm8ZkRzLgZm+PFjeMqCxjt237ckg1dJ08ET4QDTzA/6bJTlFVlp7FWFRtsS0rD
+         5iB+8khHCdn0wutA4rD3DbX1bolfmPhRTsHXyntXKp+nxwoSdn3vMtGtCVV3N2+QdL1s
+         XGFJ9/+MLRN4H6Fdq+FxBK+8wl+HJPRmBG+OzEQp3+CQgjPXlfRRmmocn1RXgxfIeKN0
+         9dEXPDmXF6J49ZdbSYqMzY9VKQ7+ESzACLyKX42QOyb5tiZt4nOfGCGs6JxoM1vE/9YT
+         dl05D4/z3trlDVyseopF98x59qFXfYPLJVoXpCziV2/+9IQ3XvkYotBlvwOAQMlc/SrO
+         4Lgg==
+X-Gm-Message-State: AAQBX9dT6OJHblbXf74ASk14UK0dTmBuT3UX29Vweai/4z3ZxRaA8mOq
+        6IY2QH7dgDZwRNNRHIIcXaCFVoWK4apapQ==
+X-Google-Smtp-Source: AKy350YMVnCHPNkwtrZScJ/kXXz27Dk8pqoxWRoqrVGbkL/ZYtUR4Kdy+awK3eYEJ45ir+lIISXz2u9ULmrHqA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:d617:0:b0:b96:3344:c211 with SMTP id
+ n23-20020a25d617000000b00b963344c211mr1700228ybg.10.1681894472175; Wed, 19
+ Apr 2023 01:54:32 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 16:54:24 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <20230419085426.1671703-1-davidgow@google.com>
+Subject: [PATCH v2 1/3] kunit: Always run cleanup from a test kthread
+From:   David Gow <davidgow@google.com>
+To:     Benjamin Berg <benjamin@sipsolutions.net>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Rae Moar <rmoar@google.com>,
+        Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>, maxime@cerno.tech,
+        Stephen Boyd <sboyd@kernel.org>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sadiya Kazi <sadiyakazi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,52 +72,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the new filemap_splice_read() function to get i_size from
-in->f_mapping->host, not in->f_inode so that it works with block devices
-too (in->f_inode points to the device file, which is typically zero size).
+KUnit tests run in a kthread, with the current->kunit_test pointer set
+to the test's context. This allows the kunit_get_current_test() and
+kunit_fail_current_test() macros to work. Normally, this pointer is
+still valid during test shutdown (i.e., the suite->exit function, and
+any resource cleanup). However, if the test has exited early (e.g., due
+to a failed assertion), the cleanup is done in the parent KUnit thread,
+which does not have an active context.
 
-Fixes: 07073eb01c5f ("splice: Add a func to do a splice from a buffered fi=
-le without ITER_PIPE")
-Link: https://lore.kernel.org/r/0c6b661c-f7ff-cf12-b7f0-00b6b2f1317b@amd.c=
-om/
-Reported-by: Ayush Jain <ayush.jain3@amd.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: David Hildenbrand <david@redhat.com>
-cc: John Hubbard <jhubbard@nvidia.com>
-cc: Steve French <stfrench@microsoft.com>
-cc: linux-mm@kvack.org
-cc: linux-block@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
+Instead, in the event test terminates early, run the test exit and
+cleanup from a new 'cleanup' kthread, which sets current->kunit_test,
+and better isolates the rest of KUnit from issues which arise in test
+cleanup.
+
+If a test cleanup function itself aborts (e.g., due to an assertion
+failing), there will be no further attempts to clean up: an error will
+be logged and the test failed.
+
+This should also make it easier to get access to the KUnit context,
+particularly from within resource cleanup functions, which may, for
+example, need access to data in test->priv.
+
+Signed-off-by: David Gow <davidgow@google.com>
 ---
- mm/filemap.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This is an updated version of / replacement of "kunit: Set the current
+KUnit context when cleaning up", which instead creates a new kthread
+for cleanup tasks if the original test kthread is aborted. This protects
+us from failed assertions during cleanup, if the test exited early.
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 470be06b6096..f86cc8acf33a 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2902,7 +2902,7 @@ ssize_t filemap_splice_read(struct file *in, loff_t =
-*ppos,
- 	do {
- 		cond_resched();
- =
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20230415091401.681395-1-davidgow@google.com/
+- Move cleanup execution to another kthread
+  - (Thanks, Benjamin, for pointing out the assertion issues)
 
--		if (*ppos >=3D i_size_read(file_inode(in)))
-+		if (*ppos >=3D i_size_read(in->f_mapping->host))
- 			break;
- =
+---
+ lib/kunit/test.c | 54 ++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 52 insertions(+), 2 deletions(-)
 
- 		iocb.ki_pos =3D *ppos;
-@@ -2918,7 +2918,7 @@ ssize_t filemap_splice_read(struct file *in, loff_t =
-*ppos,
- 		 * part of the page is not copied back to userspace (unless
- 		 * another truncate extends the file - this is desired though).
- 		 */
--		isize =3D i_size_read(file_inode(in));
-+		isize =3D i_size_read(in->f_mapping->host);
- 		if (unlikely(*ppos >=3D isize))
- 			break;
- 		end_offset =3D min_t(loff_t, isize, *ppos + len);
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index e2910b261112..caeae0dfd82b 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -423,8 +423,51 @@ static void kunit_try_run_case(void *data)
+ 	kunit_run_case_cleanup(test, suite);
+ }
+ 
++static void kunit_try_run_case_cleanup(void *data)
++{
++	struct kunit_try_catch_context *ctx = data;
++	struct kunit *test = ctx->test;
++	struct kunit_suite *suite = ctx->suite;
++
++	current->kunit_test = test;
++
++	kunit_run_case_cleanup(test, suite);
++}
++
++static void kunit_catch_run_case_cleanup(void *data)
++{
++	struct kunit_try_catch_context *ctx = data;
++	struct kunit *test = ctx->test;
++	int try_exit_code = kunit_try_catch_get_result(&test->try_catch);
++
++	/* It is always a failure if cleanup aborts. */
++	kunit_set_failure(test);
++
++	if (try_exit_code) {
++		/*
++		 * Test case could not finish, we have no idea what state it is
++		 * in, so don't do clean up.
++		 */
++		if (try_exit_code == -ETIMEDOUT) {
++			kunit_err(test, "test case cleanup timed out\n");
++		/*
++		 * Unknown internal error occurred preventing test case from
++		 * running, so there is nothing to clean up.
++		 */
++		} else {
++			kunit_err(test, "internal error occurred during test case cleanup: %d\n",
++				  try_exit_code);
++		}
++		return;
++	}
++
++	kunit_err(test, "test aborted during cleanup. continuing without cleaning up\n");
++}
++
++
+ static void kunit_catch_run_case(void *data)
+ {
++	struct kunit_try_catch cleanup;
+ 	struct kunit_try_catch_context *ctx = data;
+ 	struct kunit *test = ctx->test;
+ 	struct kunit_suite *suite = ctx->suite;
+@@ -451,9 +494,16 @@ static void kunit_catch_run_case(void *data)
+ 
+ 	/*
+ 	 * Test case was run, but aborted. It is the test case's business as to
+-	 * whether it failed or not, we just need to clean up.
++	 * whether it failed or not, we just need to clean up. Do this in a new
++	 * try / catch context, in case it asserts, too.
+ 	 */
+-	kunit_run_case_cleanup(test, suite);
++	kunit_try_catch_init(&cleanup,
++			     test,
++			     kunit_try_run_case_cleanup,
++			     kunit_catch_run_case_cleanup);
++	ctx->test = test;
++	ctx->suite = suite;
++	kunit_try_catch_run(&cleanup, ctx);
+ }
+ 
+ /*
+-- 
+2.40.0.634.g4ca3ef3211-goog
 
