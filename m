@@ -2,106 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4886E7B26
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C84336E7B31
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233277AbjDSNn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 09:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
+        id S232539AbjDSNom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 09:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233226AbjDSNnZ (ORCPT
+        with ESMTP id S233169AbjDSNoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 09:43:25 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F914146EA;
-        Wed, 19 Apr 2023 06:43:23 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681911801;
+        Wed, 19 Apr 2023 09:44:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF5015606
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:43:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681911833;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jFu1BiBIiZJxXn+1gDPlWVAOg5qQuCy99rAdIveUYFI=;
-        b=GioJJVLP3xsJ8meXcrDWG5s5gdc8c0v+E+hPsGfax24KRpT161PXreAJ6xSi1/ffGHB7Ig
-        QiBx1CCi33pppdwmwttJl7f18G3nqG0JMirkvI2B/KLs1tu2KE0oys4tguZIBjdpC698x5
-        qJxDi+HpdhZXd4d+95gQdCA+EcnPYPHRun+2UdCS7FOBBh/HuWgOjO1wzT9vOvsEMfGXhZ
-        Bp60sCQp4nsgLMYaR72tlHdyX8qr1HW2HBQ6txx5eUn8Q1HfGVvmcQX/+2gPF1pOlVbSvA
-        J67MiipF05Kzmx+7IpQU6gIRKBAfRvBEfF5UQtkBc9rk1oQMLK4aT2yGkLma2g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681911801;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jFu1BiBIiZJxXn+1gDPlWVAOg5qQuCy99rAdIveUYFI=;
-        b=PpcgZgskhULkL7/jgakP7Wurg7G56yGaYp+uPBAUp/opltoRjM69gQ7OhILB+Kv0LHnaHA
-        BEEUccjsOmhHz0CA==
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>
-Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-In-Reply-To: <877cu83v45.ffs@tglx>
-References: <20230414225551.858160935@linutronix.de>
- <8247ce4d-15b7-03b2-0c9b-74f8cd6cad50@molgen.mpg.de> <87wn2a4la5.ffs@tglx>
- <bd5a6a93-def1-9248-2258-c3d3b40071ef@molgen.mpg.de> <87ttxd4qxz.ffs@tglx>
- <87r0sh4m7a.ffs@tglx> <8592a301-9933-1cad-bd61-8d97e7c7493b@molgen.mpg.de>
- <87a5z443g2.ffs@tglx> <877cu83v45.ffs@tglx>
-Date:   Wed, 19 Apr 2023 15:43:20 +0200
-Message-ID: <874jpc3s3r.ffs@tglx>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MK0UGxGV6JsBO8AYL7soTcS9wXMNV0whUDQXJnSnGMA=;
+        b=E/Z1giyboWmWIUuHyi0+9SARPUavcONUdUx+9/04iV80Lr9ZQg2TLCdUxFhBagYRvReJcB
+        BuQv+ppZQTKgNLT3UivSK+iX9hS8jRE2xiopMEWS+tyTw3jm5FaPMVFdf2kAZp+aLnEKS/
+        +XEUC5z7GfETTB32Rr/VfCacp3SRJo4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-612-4rw8mCRpPNme_IUbRr3wmA-1; Wed, 19 Apr 2023 09:43:50 -0400
+X-MC-Unique: 4rw8mCRpPNme_IUbRr3wmA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CC1B2101A554;
+        Wed, 19 Apr 2023 13:43:49 +0000 (UTC)
+Received: from max-t490s.redhat.com (unknown [10.39.208.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BDAB6492B04;
+        Wed, 19 Apr 2023 13:43:47 +0000 (UTC)
+From:   Maxime Coquelin <maxime.coquelin@redhat.com>
+To:     xieyongji@bytedance.com, jasowang@redhat.com, mst@redhat.com,
+        david.marchand@redhat.com
+Cc:     linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, eperezma@redhat.com,
+        Maxime Coquelin <maxime.coquelin@redhat.com>
+Subject: [RFC 0/2] vduse: add support for networking devices
+Date:   Wed, 19 Apr 2023 15:43:27 +0200
+Message-Id: <20230419134329.346825-1-maxime.coquelin@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19 2023 at 14:38, Thomas Gleixner wrote:
-> On Wed, Apr 19 2023 at 11:38, Thomas Gleixner wrote:
-> IOW, the BIOS assignes random numbers to the AP APICs for whatever
-> raisins, which leaves the parallel startup low level code up a creek
-> without a paddle, except for actually reading the APICID back from the
-> APIC. *SHUDDER*
+This small series enables virtio-net device type in VDUSE.
+With it, basic operation have been tested, both with
+virtio-vdpa and vhost-vdpa using DPDK Vhost library series
+adding VDUSE support [0] using split rings layout.
 
-So Andrew just pointed out on IRC that this might be related to the
-ancient issue of the 3-wire APIC bus where IO/APIC and APIC shared the
-ID space, but that system is definitely post 3-wire APIC :)
+Control queue support (and so multiqueue) has also been
+tested, but require a Kernel series from Jason Wang
+relaxing control queue polling [1] to function reliably.
 
-Thanks,
+Other than that, we have identified a few gaps:
 
-        tglx
+1. Reconnection:
+ a. VDUSE_VQ_GET_INFO ioctl() returns always 0 for avail
+    index, even after the virtqueue has already been
+    processed. Is that expected? I have tried instead to
+    get the driver's avail index directly from the avail
+    ring, but it does not seem reliable as I sometimes get
+    "id %u is not a head!\n" warnings. Also such solution
+    would not be possible with packed ring, as we need to
+    know the wrap counters values.
 
+ b. Missing IOCTLs: it would be handy to have new IOCTLs to
+    query Virtio device status, and retrieve the config
+    space set at VDUSE_CREATE_DEV time.
+
+2. VDUSE application as non-root:
+  We need to run the VDUSE application as non-root. There
+  is some race between the time the UDEV rule is applied
+  and the time the device starts being used. Discussing
+  with Jason, he suggested we may have a VDUSE daemon run
+  as root that would create the VDUSE device, manages its
+  rights and then pass its file descriptor to the VDUSE
+  app. However, with current IOCTLs, it means the VDUSE
+  daemon would need to know several information that
+  belongs to the VDUSE app implementing the device such
+  as supported Virtio features, config space, etc...
+  If we go that route, maybe we should have a control
+  IOCTL to create the device which would just pass the
+  device type. Then another device IOCTL to perform the
+  initialization. Would that make sense?
+
+3. Coredump:
+  In order to be able to perform post-mortem analysis, DPDK
+  Vhost library marks pages used for vrings and descriptors
+  buffers as MADV_DODUMP using madvise(). However with
+  VDUSE it fails with -EINVAL. My understanding is that we
+  set VM_DONTEXPAND flag to the VMAs and madvise's
+  MADV_DODUMP fails if it is present. I'm not sure to
+  understand why madvise would prevent MADV_DODUMP if
+  VM_DONTEXPAND is set. Any thoughts?
+
+[0]: https://patchwork.dpdk.org/project/dpdk/list/?series=27594&state=%2A&archive=both
+[1]: https://lore.kernel.org/lkml/CACGkMEtgrxN3PPwsDo4oOsnsSLJfEmBEZ0WvjGRr3whU+QasUg@mail.gmail.com/T/
+
+Maxime Coquelin (2):
+  vduse: validate block features only with block devices
+  vduse: enable Virtio-net device type
+
+ drivers/vdpa/vdpa_user/vduse_dev.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+-- 
+2.39.2
 
