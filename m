@@ -2,225 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297286E72F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04CF76E7305
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbjDSGQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 02:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
+        id S231878AbjDSGRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 02:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbjDSGQe (ORCPT
+        with ESMTP id S231663AbjDSGR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 02:16:34 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5ABE0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:16:32 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F0547660318E;
-        Wed, 19 Apr 2023 07:16:30 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681884991;
-        bh=bWxInygmnDUySp/Z/CBRWlkSud/aUMTg/zbRKc98Frc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MY2upY96vakUBLWHLlC00twx9VhBCWVBU+yzuFoHgsVG8oKB6WduOFyn1T9y/Bmm2
-         kmQ1XB0oL3pBxImyRBgLzdz57OzoMk5D2M+6IRsR5tG4RySWMHxrDINFIMJUWsKNgJ
-         OzTwhvn9RggX3Xb3LLOkQuIjdsExNjSI6xniH7R8DO0XhK+/3J29E9EvwG1bSRSTfv
-         4SzeeKKg/tSz3GUkopxHUWIa6dOC/NhdV7PlwZapCgMYx4MCO/fjEc5d405aElQyKv
-         TyRFNlQwoUS02Vv3/1YCr0Xtw+WJ8oTA9tPyz1SSwKkqd2h4D+JOuDfe3AvVQWnQAt
-         u0+Uxigp3npFg==
-Message-ID: <fcb6638b-0298-74b7-c375-f563a8115596@collabora.com>
-Date:   Wed, 19 Apr 2023 08:16:28 +0200
+        Wed, 19 Apr 2023 02:17:28 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D4D5249;
+        Tue, 18 Apr 2023 23:17:27 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33J6HBju124832;
+        Wed, 19 Apr 2023 01:17:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681885031;
+        bh=VGHbi0oJgL1qmQOp3YO+KPZ9VWHxOlwOKogoET5tOWo=;
+        h=From:To:CC:Subject:Date;
+        b=xFf2xvyfT7KHpvAOu/5NO3grnYDgOBaR3DBd8j7YHALRShTQozu2M3PTB17Pkut+w
+         A3LvdWrZb9t83v7mSz7RnOETkw+ktBjyfOowk/SwQ38EdyPwxHVbSoMEg3eXbBKcM0
+         OINYgPRV6dCil+88yXaQNvq/9BbwVyO4ngSqTBas=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33J6HBcA125717
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 19 Apr 2023 01:17:11 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
+ Apr 2023 01:17:11 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 19 Apr 2023 01:17:11 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33J6HAoJ045391;
+        Wed, 19 Apr 2023 01:17:11 -0500
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+To:     <nm@ti.com>, <vigneshr@ti.com>, <afd@ti.com>
+CC:     <s-vadapalli@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <a-bhatia1@ti.com>, <j-choudhary@ti.com>
+Subject: [PATCH v3 0/5] Add peripherals for J784S4
+Date:   Wed, 19 Apr 2023 11:47:05 +0530
+Message-ID: <20230419061710.290068-1-j-choudhary@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] drm/mediatek: Clarify/finish documentation for some
- driver structures
-Content-Language: en-US
-To:     chunkuang.hu@kernel.org
-Cc:     lee@kernel.org, p.zabel@pengutronix.de, airlied@gmail.com,
-        daniel@ffwll.ch, matthias.bgg@gmail.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-References: <20230321111448.270110-1-angelogioacchino.delregno@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230321111448.270110-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/03/23 12:14, AngeloGioacchino Del Regno ha scritto:
-> The documentation for some of the driver structures in mediatek-drm
-> was set to be kerneldoc but some code additions didn't actually update
-> the comments accordingly and this caused triggering some warnings.
-> 
-> Add comments for the remaining undocumented entries; while at it, also
-> clarify some acronyms for various display HW blocks and fix some comment
-> blocks to actually get parsed as kerneldoc.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+This series adds support for:
+- SERDES, WIZ DT nodes, Serdes lane control mux
+- MAIN CPSW2G nodes
+- DSS and DisplayPort-0 nodes
 
-Hello CK,
-I just noticed that this patch is getting stale and forgotten.
+This series depends on DMA support patches for J784S4[1] which are
+applied to linux-next.
 
-Please take a look at it, as this solves kerneldoc warnings during kernel build.
+DisplayPort has been tested on local J784S4 EVM. Test log:
+<https://gist.github.com/Jayesh2000/b1465fc170cd97db4f0956770fafbc50>
 
-Regards,
-Angelo
+Changelog v3->v2:
+- fix dtc warnings for 'scm_conf' and 'serdes_ln_ctrl' nodes
+  (Checked all the changes of the series with W=12 option during build)
+- added clock-frequency for serdes_refclk along with other EVM changes
+  This refclk is being used by all the instances of serdes_wiz which
+  are disabled by default. So configuring refclk when the serdes nodes
+  are used for the first time is okay.
 
-> --- >   drivers/gpu/drm/mediatek/mtk_disp_aal.c   |  8 +++++---
->   drivers/gpu/drm/mediatek/mtk_disp_ccorr.c |  8 +++++---
->   drivers/gpu/drm/mediatek/mtk_disp_color.c | 11 +++++++----
->   drivers/gpu/drm/mediatek/mtk_disp_gamma.c |  8 ++++++--
->   drivers/gpu/drm/mediatek/mtk_disp_ovl.c   | 13 +++++++++----
->   drivers/gpu/drm/mediatek/mtk_disp_rdma.c  | 12 +++++++++---
->   6 files changed, 41 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_aal.c b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
-> index 434e8a9ce8ab..12d1800c1d34 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_aal.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
-> @@ -27,9 +27,11 @@ struct mtk_disp_aal_data {
->   };
->   
->   /**
-> - * struct mtk_disp_aal - DISP_AAL driver structure
-> - * @ddp_comp - structure containing type enum and hardware resources
-> - * @crtc - associated crtc to report irq events to
-> + * struct mtk_disp_aal - Display Adaptive Ambient Light driver structure
-> + * @clk:      clock for DISP_AAL controller
-> + * @regs:     MMIO registers base
-> + * @cmdq_reg: CMDQ Client register
-> + * @data:     platform specific data for DISP_AAL
->    */
->   struct mtk_disp_aal {
->   	struct clk *clk;
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c b/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c
-> index 1773379b2439..b173aa058573 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c
-> @@ -35,9 +35,11 @@ struct mtk_disp_ccorr_data {
->   };
->   
->   /**
-> - * struct mtk_disp_ccorr - DISP_CCORR driver structure
-> - * @ddp_comp - structure containing type enum and hardware resources
-> - * @crtc - associated crtc to report irq events to
-> + * struct mtk_disp_ccorr - Display Color Correction driver structure
-> + * @clk:      clock for DISP_CCORR block
-> + * @regs:     MMIO registers base
-> + * @cmdq_reg: CMDQ Client register
-> + * @data:     platform specific data for DISP_CCORR
->    */
->   struct mtk_disp_ccorr {
->   	struct clk *clk;
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_color.c b/drivers/gpu/drm/mediatek/mtk_disp_color.c
-> index cac9206079e7..7884f4736b7c 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_color.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_color.c
-> @@ -31,10 +31,13 @@ struct mtk_disp_color_data {
->   	unsigned int color_offset;
->   };
->   
-> -/*
-> - * struct mtk_disp_color - DISP_COLOR driver structure
-> - * @crtc: associated crtc to report irq events to
-> - * @data: platform colour driver data
-> +/**
-> + * struct mtk_disp_color - DISP_COLOR (Display Color) driver structure
-> + * @crtc:     associated crtc to report irq events to
-> + * @clk:      clock for DISP_COLOR block
-> + * @regs:     MMIO registers base
-> + * @cmdq_reg: CMDQ Client register
-> + * @data:     platform specific data for DISP_COLOR
->    */
->   struct mtk_disp_color {
->   	struct drm_crtc				*crtc;
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-> index c844942603f7..7e748613fccb 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-> @@ -31,8 +31,12 @@ struct mtk_disp_gamma_data {
->   	bool lut_diff;
->   };
->   
-> -/*
-> - * struct mtk_disp_gamma - DISP_GAMMA driver structure
-> +/**
-> + * struct mtk_disp_gamma - Display Gamma driver structure
-> + * @clk:      clock for DISP_GAMMA block
-> + * @regs:     MMIO registers base
-> + * @cmdq_reg: CMDQ Client register
-> + * @data:     platform data for DISP_GAMMA
->    */
->   struct mtk_disp_gamma {
->   	struct clk *clk;
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
-> index 9d8c986700ee..00f2871fd1a4 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
-> @@ -76,10 +76,15 @@ struct mtk_disp_ovl_data {
->   	bool supports_afbc;
->   };
->   
-> -/*
-> - * struct mtk_disp_ovl - DISP_OVL driver structure
-> - * @crtc: associated crtc to report vblank events to
-> - * @data: platform data
-> +/**
-> + * struct mtk_disp_ovl - Display Overlay driver structure
-> + * @crtc:           associated crtc to report vblank events to
-> + * @clk:            clock for DISP_OVL block
-> + * @regs:           MMIO registers base
-> + * @cmdq_reg:       CMDQ Client register
-> + * @data:           platform data
-> + * @vblank_cb:      vblank callback function
-> + * @vblank_cb_data: pointer to data that will be passed to vblank_cb()
->    */
->   struct mtk_disp_ovl {
->   	struct drm_crtc			*crtc;
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_rdma.c b/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
-> index e8e337903b0d..74f4a0bce5cc 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
-> @@ -59,9 +59,15 @@ struct mtk_disp_rdma_data {
->   	unsigned int fifo_size;
->   };
->   
-> -/*
-> - * struct mtk_disp_rdma - DISP_RDMA driver structure
-> - * @data: local driver data
-> +/**
-> + * struct mtk_disp_rdma - Display Read DMA driver structure
-> + * @clk:            clock for DISP_RDMA block
-> + * @regs:           MMIO registers base
-> + * @cmdq_reg:       CMDQ Client register
-> + * @data:           platform data
-> + * @vblank_cb:      vblank callback function
-> + * @vblank_cb_data: pointer to data that will be passed to vblank_cb()
-> + * @fifo_size:      size of DISP_RDMA block's FIFO
->    */
->   struct mtk_disp_rdma {
->   	struct clk			*clk;
+Changelog v1->v2:
+- Moved J784S4 EVM changes together to the last patch
+  (Suggested by Andrew)
+
+v2 patch link:
+<https://lore.kernel.org/all/20230414151553.339599-1-j-choudhary@ti.com/>
+
+[1]:
+<https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=00e34c94987e4fe866f12ad8eac17268c936880c>
+<https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=82e6051a48957a89066d15b17bb85d2f662f2bad>
+<https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=436b288687176bf4d2c1cd25b86173e5a1649a60>
+
+
+Rahul T R (2):
+  arm64: dts: ti: k3-j784s4-main: Add DSS and DP-bridge node
+  arm64: dts: ti: k3-j784s4-evm: Enable DisplayPort-0
+
+Siddharth Vadapalli (3):
+  arm64: dts: ti: k3-j784s4-main: Add system controller and SERDES lane
+    mux
+  arm64: dts: ti: k3-j784s4: Add Main CPSW2G node
+  arm64: dts: ti: k3-j784s4: Add WIZ and SERDES PHY nodes
+
+ arch/arm64/boot/dts/ti/k3-j784s4-evm.dts   | 164 ++++++++++
+ arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 338 +++++++++++++++++++++
+ 2 files changed, 502 insertions(+)
 
 -- 
-AngeloGioacchino Del Regno
-Software Engineer
-
-Collabora Ltd.
-Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
-Registered in England & Wales, no. 5513718
+2.25.1
 
