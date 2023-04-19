@@ -2,115 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074C16E79E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93276E79E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232859AbjDSMoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58490 "EHLO
+        id S232607AbjDSMpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232607AbjDSMon (ORCPT
+        with ESMTP id S232019AbjDSMpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:44:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052CA3C1E;
-        Wed, 19 Apr 2023 05:44:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681908283; x=1713444283;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=6B/yWg6hmnuhemiHCCm7Th3yqadpTRIk5dtsS7F24aI=;
-  b=fXevyc0VpN2ON/5XNdeBZKtLRhHUM1ffGJvQAb9grbcHCvjhaTsHlmC3
-   Um2WUhMQWLHlupvxB2c3FTTTpGHgZHeGX+Tz2ObVRk3Io6N1nYyydaNsD
-   hrZI/OgVjRch+5Lg7KN7VsNWimU6Ok1WcuqgLWPBhxKBmaoL+HRsYglp6
-   iuCCy/DRbK/NINU4f2MNYjfIoPj2a8JkqbNbTmziNNGRlHp1Uxo2xT7Y0
-   KSk5XZG8B59MUDsyrX8I+tDz4mrw52Oxs7cRg0XOjvh6jfBPuaObJWpJ6
-   HsVP6ctP2YTFvoE4riAsvFnkE3IzEC+s4UJa5oG4lv2APHBKwMeAytpOY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="334244588"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="334244588"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 05:44:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="641739533"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="641739533"
-Received: from hbourgeo-mobl2.ger.corp.intel.com ([10.249.34.207])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 05:44:33 -0700
-Date:   Wed, 19 Apr 2023 15:44:30 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Babu Moger <babu.moger@amd.com>
-cc:     corbet@lwn.net, Reinette Chatre <reinette.chatre@intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
-        quic_neeraju@quicinc.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
-        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
-        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
-        jmattson@google.com, daniel.sneddon@linux.intel.com,
-        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
-        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        bagasdotme@gmail.com, eranian@google.com,
-        christophe.leroy@csgroup.eu, pawan.kumar.gupta@linux.intel.com,
-        jarkko@kernel.org, adrian.hunter@intel.com, quic_jiles@quicinc.com,
-        peternewman@google.com
-Subject: Re: [PATCH v4 3/7] x86/resctrl: Rename rftype flags for
- consistency
-In-Reply-To: <168177446947.1758847.11380042804869155387.stgit@bmoger-ubuntu>
-Message-ID: <6cf118d1-efbb-6c6e-225d-c93a1875eb0@linux.intel.com>
-References: <168177435378.1758847.8317743523931859131.stgit@bmoger-ubuntu> <168177446947.1758847.11380042804869155387.stgit@bmoger-ubuntu>
+        Wed, 19 Apr 2023 08:45:42 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB5A3C15
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:45:41 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63b78525ac5so1315886b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:45:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681908340; x=1684500340;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UWkATxwUI54Wjf29X1y6InilmbSwGYCaupz7wL2xoYA=;
+        b=V/Zcy6Qn3ntP2MHoNED004N6bQmV9wF3ftWYZh6tBptsdhl634WOoMOrhxWZa09I0E
+         BhbUDuv3/vLqZQ3/fuC0QJi4YYd6uwouwggm+7jdkzU9qjrzbrWNa2UORInkpFcnVCHg
+         xIqXThcvzQMSqo6MOmPMDbyGP2XRWEalPvVi47srhbKaPo3iKAIPhFnkLhPeO9q8LvFb
+         CdDM9FLOXiV0XIhZiQOKkbwjfp3Ycbb6kxNdOikLX/rI2yPmTfRO0OBIbLaFAI1ybmvr
+         x1JzceTadJIKEShma9KMfX8wo/OeN/RW3l74s5Wl3nxYqBfCwilA6DnJG9f4VeyL0Vzo
+         Mx0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681908340; x=1684500340;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UWkATxwUI54Wjf29X1y6InilmbSwGYCaupz7wL2xoYA=;
+        b=lAiydtpTxI2/5YLhukleuLQU5E3qPC7Bqt7e1xFnPuPKtHqYi5udo8+e2x4W6fZDmn
+         jBmxNs8JO8dLbxDHzpfaHVn1VgK+rGa0AOjB5+GEXqHYmo8+85ZUj13ukDRnNloM1VRM
+         CPjdnajU5ZIbEra/lZfy5mVT2a37SDTHXvTuRVi3TWebRFrMj5zJYaByP7Qm5T9YLvfr
+         cdqBwZ27H4RkzAa/d4Q3TL4ijNmlqa5bemPvPX/7tC0rQKPBEbFddVmwjXE6KvgosSbq
+         1Fk7yu/nj9yzBj2l+r8JEtBJSSAlAL7Y7cJ+ugiBuUw//xXHwY6+9Sh+MLPNhfAmMFn1
+         k+dw==
+X-Gm-Message-State: AAQBX9dZmAzo8ml0wEZgWZWMncQfjOBh6FBcjcPeh0DyioU/mBNs33yV
+        g71/lmzcxN8ccblAr41iIKD+/Q==
+X-Google-Smtp-Source: AKy350YZ068gLQ817k+Ij6jge/IubKk6mC1ANeALBOZN7osif6ym1dK+BGMD9/8chbAcO3bPTjBUtQ==
+X-Received: by 2002:a05:6a20:3c92:b0:f1:1ab5:5076 with SMTP id b18-20020a056a203c9200b000f11ab55076mr3391077pzj.2.1681908340445;
+        Wed, 19 Apr 2023 05:45:40 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id e17-20020aa78c51000000b0063b79bae907sm7731602pfd.122.2023.04.19.05.45.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 05:45:40 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Ayush Jain <ayush.jain3@amd.com>, Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        David Hildenbrand <david@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Steve French <stfrench@microsoft.com>, linux-mm@kvack.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <1770755.1681894451@warthog.procyon.org.uk>
+References: <1770755.1681894451@warthog.procyon.org.uk>
+Subject: Re: [PATCH] splice: Fix filemap of a blockdev
+Message-Id: <168190833944.417103.14222689199936898089.b4-ty@kernel.dk>
+Date:   Wed, 19 Apr 2023 06:45:39 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023, Babu Moger wrote:
 
-> The rftype flags have two different prefixes even though they are used
-> for the same purpose. Change the prefix to RFTYPE_ for all the flags.
+On Wed, 19 Apr 2023 09:54:11 +0100, David Howells wrote:
+> Fix the new filemap_splice_read() function to get i_size from
+> in->f_mapping->host, not in->f_inode so that it works with block devices
+> too (in->f_inode points to the device file, which is typically zero size).
 > 
-> Signed-off-by: Babu Moger <babu.moger@amd.com>
-> ---
->  arch/x86/kernel/cpu/resctrl/internal.h |    8 +++---
->  arch/x86/kernel/cpu/resctrl/rdtgroup.c |   42 ++++++++++++++++----------------
->  2 files changed, 25 insertions(+), 25 deletions(-)
 > 
-> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-> index 62767774810d..c4fc5a1c630c 100644
-> --- a/arch/x86/kernel/cpu/resctrl/internal.h
-> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
-> @@ -248,10 +248,10 @@ struct rdtgroup {
->  #define RFTYPE_TOP			BIT(6)
->  #define RFTYPE_RES_CACHE		BIT(8)
->  #define RFTYPE_RES_MB			BIT(9)
-> -#define RF_CTRL_INFO			(RFTYPE_INFO | RFTYPE_CTRL)
-> -#define RF_MON_INFO			(RFTYPE_INFO | RFTYPE_MON)
-> -#define RF_TOP_INFO			(RFTYPE_INFO | RFTYPE_TOP)
-> -#define RF_CTRL_BASE			(RFTYPE_BASE | RFTYPE_CTRL)
-> +#define RFTYPE_CTRL_INFO		(RFTYPE_INFO | RFTYPE_CTRL)
-> +#define RFTYPE_MON_INFO			(RFTYPE_INFO | RFTYPE_MON)
-> +#define RFTYPE_TOP_INFO			(RFTYPE_INFO | RFTYPE_TOP)
-> +#define RFTYPE_CTRL_BASE		(RFTYPE_BASE | RFTYPE_CTRL)
->  
->  /* List of all resource groups */
->  extern struct list_head rdt_all_groups;
 
-This needs to be changed as well:
+Applied, thanks!
 
- * @fflags:  File specific RF_* or RFTYPE_* flags
+[1/1] splice: Fix filemap of a blockdev
+      commit: 5a9515a407d1aec1dd76c24fe99d9981730b74fb
 
-
+Best regards,
 -- 
- i.
+Jens Axboe
+
+
 
