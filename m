@@ -2,348 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61ACA6E74E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D28D6E74E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbjDSIVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
+        id S232422AbjDSIWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232385AbjDSIVe (ORCPT
+        with ESMTP id S232410AbjDSIV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:21:34 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7E9B472;
-        Wed, 19 Apr 2023 01:21:32 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-63b7588005fso2324282b3a.0;
-        Wed, 19 Apr 2023 01:21:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681892492; x=1684484492;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xj0CU7p1W+dCxHqd7qwerjxTqPilnCLLBMGuZMUC06Q=;
-        b=j5Gu3XgJYeVdaIZ6qMWbsi/SCCTXKJ3m36sul8TYmTSAEaOy1zORd9Gk0YfUMMWvmZ
-         1AAVq49GD/pu6pqXrm3rqXHEGOkjwsQhON0gQkoZu4JlX2Nah+T7P+Q/9wHXsNwECzwO
-         JQMYR5Ywjy2MGQOG84odabyL/Kfki/0bqhOSNQFperDXkenLEq0HldRGWsmi0KbEf3wa
-         3G/eIOXg+NOzuFowh0jS7XZ/T3BGuu0vcPECoff2xgWOUcyVJHvNg3uSdRtTRMiclx/z
-         kl+roAsOEY9dhvlMcxAdkSetJEd0LcApap4geILOZBvYLM8aA+2CwzFa21UD5htdBlex
-         QVoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681892492; x=1684484492;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xj0CU7p1W+dCxHqd7qwerjxTqPilnCLLBMGuZMUC06Q=;
-        b=M3tIlQj0l040v+t/3owwpQ+UoFVekuQOe81ZrdFZ5rwmjcu6Dn39iSfZS+qUOF6GFZ
-         ebbXX7h+6f6Uzb2rWJM1wgn1qhbRlaCVGUt0hDDtZXP9KsSkvpA2za62D/EqfTV6PWgt
-         /3eGFU/9Zm2oqplKmtMlRHhMnxll3CIQ/L4048NLqAIFmkQ8sR6A451Km+0+PCfkApju
-         BDeTEIeCWhH525+tI7+ddqF1CRBYf66a6mfLo0fNGvTl+5WSwsYOTM5D7kJWvVqLGh9Q
-         JTiQ9Zm/EptpZScNAxwHHsh0oil9xciWTLleOKXew22ptBXjAfePrEWpixjkmPpzK5qV
-         fOLA==
-X-Gm-Message-State: AAQBX9fR3iWGhcin9GgblkZWppXXVMslpaMcnyW8bki0Arq2rfkxN8hh
-        XHzxDfwc4ML8fwZuBsCNtW0=
-X-Google-Smtp-Source: AKy350YL/kUFUfM07Me+wCmJGs1fo4I5TW3i/TLJBepX0TYQUTVw6TqF7jpJfrHo6opFJf1nnGB1LQ==
-X-Received: by 2002:a05:6a00:2d1c:b0:63d:4407:b6c with SMTP id fa28-20020a056a002d1c00b0063d44070b6cmr3240298pfb.7.1681892491562;
-        Wed, 19 Apr 2023 01:21:31 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id j22-20020aa79296000000b0062a7462d398sm10867911pfa.170.2023.04.19.01.21.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 01:21:31 -0700 (PDT)
-Message-ID: <36fb638a-c9ff-0139-3e8e-7e8ff0bbff1f@gmail.com>
-Date:   Wed, 19 Apr 2023 16:21:21 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v13 021/113] KVM: TDX: Make pmu_intel.c ignore guest TD
- case
+        Wed, 19 Apr 2023 04:21:58 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2078.outbound.protection.outlook.com [40.107.104.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498FDC66A
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:21:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mCTtJxcthvxwoUcdsIYc1UxM7/R8ECtdaiCy/WXr1W/bIocmu472XYdj1Bvke5ng1nX5hBEMHBRaeuRXz0faPiiVqVKBfy+9H/kjMW27xSaTHmHQLHifrvNpyDM/9IDLXXW+raV3Ur4exRBdLRM0iN+GQWg8XiinjO4tunL93Cu+Aty/fWuOIRxL9rGZKk3RjvbGYrm6dqVhUEg9dv86wp3Oalmsx0n+Pso4I7FnjOf8YTFG4CXZLX8PxEFeGVfuni2QXhXFnC8kgXtPvL35F3xyfSrhWDl+T8AUZU7so4dqnVc/UZDxaFjvd8TO21Jpcnelx8xPttYrjuENevfuNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FfmLBMUXbtZubXb305pb389gS3q7FcVhk5nxqkVXu0Q=;
+ b=D0H5E9+arZ/naZJ+y0kydke8JkaTK5HF3XMTTXKI99ibPwvoCbW5YbS9qMHrXK1Yy2ZnpLDiBau+WFNdapjSOg/+dwVbzkzfWzOf1mbqfoYx1RvLgNcAK873XfPQ4FDJmZXsm2tFGPSnJtYTGS8xW216TQ8CXgqDR0dabLGrn0cg+LPLw59fur/+F1hppbC5qC/5o1SRzEya59rQHV84CfhrTaIya1n6qtNKOLLBipYAo6Lm3ffQ2JKUDjQTYX5jLntOvKEGGb+n5QLip0Mnpelb3Vaxnv3G6lzfTOQcT7ql6pH294Ifn4qi5k2Qq8BtUo9NTrbmHasBKHgr+kR1iA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FfmLBMUXbtZubXb305pb389gS3q7FcVhk5nxqkVXu0Q=;
+ b=YzsRkWM+8pvHqS7+O8jyrDUeMG2PzTOosndmBRp1tFVn+/fR5KpuwitRdp6+CeOQultLeZJvI4kAtdhuNQFDTPM87RANrQLHpFQ4HIM+MBjdV2v+sn/QJCDl+3XAp++80cbmmNy7vwuoUaJAvbNQg/u2M7iHbMChGCCUEV5gAEs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8774.eurprd04.prod.outlook.com (2603:10a6:10:2e1::21)
+ by AS8PR04MB8820.eurprd04.prod.outlook.com (2603:10a6:20b:42f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.21; Wed, 19 Apr
+ 2023 08:21:47 +0000
+Received: from DU2PR04MB8774.eurprd04.prod.outlook.com
+ ([fe80::b6a5:b35f:94f8:ff53]) by DU2PR04MB8774.eurprd04.prod.outlook.com
+ ([fe80::b6a5:b35f:94f8:ff53%8]) with mapi id 15.20.6319.022; Wed, 19 Apr 2023
+ 08:21:47 +0000
+Message-ID: <b98ca138-c020-cfd0-510d-30916120734d@nxp.com>
+Date:   Wed, 19 Apr 2023 11:21:44 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] ASoC: fsl_sai: Fix pins setting for i.MX8QM platform
+To:     Chancel Liu <chancel.liu@nxp.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, shengjiu.wang@gmail.com,
+        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com
+References: <20230418094259.4150771-1-chancel.liu@nxp.com>
 Content-Language: en-US
-To:     Zhi Wang <zhi.wang.linux@gmail.com>, isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>
-References: <cover.1678643051.git.isaku.yamahata@intel.com>
- <017a06174fa054ae264a2caba6f7f55e00f258e8.1678643052.git.isaku.yamahata@intel.com>
- <20230402115019.000046fd@gmail.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <20230402115019.000046fd@gmail.com>
+From:   Iuliana Prodan <iuliana.prodan@nxp.com>
+In-Reply-To: <20230418094259.4150771-1-chancel.liu@nxp.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS9PR07CA0033.eurprd07.prod.outlook.com
+ (2603:10a6:20b:46b::19) To DU2PR04MB8774.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8774:EE_|AS8PR04MB8820:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3134499d-58e0-4d92-7f60-08db40af1e53
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xrAxSNLgzPGB9WBS/AkFR9S+FYqg6kQKSVJ7K3eH1vzq6ZKwdTPZBwWlYzhTs61L804EVVV2dORa6wJyxuWxh+Ef1kWV7ttTIGDFhALJjdSKmZYWOZkiay4wiHRCDXlfJpFEi3PuruonB/GrRr8kucU7Az3JxpO3sPURCgotk/n46x8HnrEYWMFTSt+Dt/5/S6bYg8RXCgyw41JnWXFIrr7nFm/kmvw5wp/HhCub5Gl4G6HCwg1aLL0PE6rIBsfrT8evJupGkFbUlFkvhGwtFO4+TdZJzpWCWLSGRjCMCQHUwl0mGLZLxAAIfaFRxAhjbPcAN2e58MKQaWCUpL11MGe3WxwYFVwWLkbqfYm6QYfxO80YR1ptCwxUZbrvMwoc3xDm1HBrn1VM0OJxQvmaS86sRpojDG8Arzu11Cfc5MPRShBovKY1FXRRjH2B7eqi7QAxVM2oIHBHWbUiowyzx6ASD6WQbyFfWkQkKVIpt/YKfIFfIhCRDPRzwXi/qdVnGvjTaHNoHI+qTZbMJsAoGJXSjPpGzieOmNJhOrALmJCb9I/luytY47NxhyCXw1cVGP2FI62nGdpBcfdudUfgIbyibwXnyxyswJIxYo0pPjpGFZbz4r7ofWwdICoOjijfg2YLWt6yHUQ8BSnIZc7QplV11LFsJwaISOHQBUiyc8s=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8774.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(346002)(366004)(396003)(39860400002)(451199021)(316002)(26005)(186003)(41300700001)(31696002)(6506007)(6512007)(53546011)(6666004)(478600001)(66476007)(66556008)(66946007)(6486002)(2906002)(4744005)(38100700002)(36756003)(921005)(31686004)(2616005)(44832011)(7416002)(8676002)(5660300002)(86362001)(8936002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aGFseG5ubmd6S0lmeXZ3anF1UUZQQmNta29UV0doZTBxazNoMy9ieXhxOUM5?=
+ =?utf-8?B?YVpNK3ExT0l2VkRWYkVEdDdQRTlWdDFYdDBRdzJqa2crZ1BIWUpCZUJkdWFI?=
+ =?utf-8?B?c2llemtxOTRaaEMwRytMQlVwRFJDcUpkQWpvZElxYURmQjhCNnVKWW9SUlZ5?=
+ =?utf-8?B?bTR3ZkhYQWY3YisxMFZXd3hCWnFXY3lOT1gwMC9GbFpqelo0RXE3UzFGekxj?=
+ =?utf-8?B?U0JYVXZDUjJUakVlZWJvNG9DTkVSbkJmTnQxakFXSTIyaitZS1F6cTJnYmNH?=
+ =?utf-8?B?Rm11bmtkRERmb2JkY2xaRlRvRE4reFk1TmlTUjRqb0dJTWVHSnFZVGg0WHJR?=
+ =?utf-8?B?SWdrQjNVZno2d1A1UVlCMzVoeG85MlFOTysxUnVWd3BRZjZ5Mlp1K2d5S2tj?=
+ =?utf-8?B?MWVLaCt1cWcvYzBmYmNsNkZ3L2l4Ui9xazBxREJnSUR0dFBaenZ4eTlDUncx?=
+ =?utf-8?B?dXJCdmFQTjRUVlRsem9JdDNRdzlYcmhod2VPMnpCcEZxdFRhRGpuQ281ZUN0?=
+ =?utf-8?B?N1U2VVBpUCswNml3QW9KVTVBdERJNExNckM4Nk05Nkp6WithRGlGQ3JONE5R?=
+ =?utf-8?B?MHdVQXVkeDVmcHZwNC9jNjBkbnBBZVdZVkI5bUowdFFaR2oyYlNXSUFHdmFS?=
+ =?utf-8?B?R2dtVk81SmV1ZEd1bEdXaWVMTFhmeklSMnBBTjNOM2sxT2FRMWJWdFY3a2F5?=
+ =?utf-8?B?eHNlVXlZck1pT3BsNEhBVFFaWHZJblNFSGhYWVZ3cGFhNS9uVzlORUpjL2li?=
+ =?utf-8?B?QnhhZUp5RUF2Sk9oMldvczJkUG1WOWprTitxdDZGMzFsbzMzOUJ6cnpXbTcv?=
+ =?utf-8?B?NzZTblVrK0FTa2ZoTnYvSFBEZzloNFZjSU1hN3F6YXRRcnRHYjJsSkxpRTJq?=
+ =?utf-8?B?S041SVFMZTJuQWY3b1B1ZlZHcW8zbGV4NWNUbnQ4VG5ML2VkVkhxdXROaGJK?=
+ =?utf-8?B?OWF0MFdVaEFmc3lVd0YxdDRxd0NPcEFqRnhxZllvM0QrSlgzclEzYXlMOFg0?=
+ =?utf-8?B?aGVrbTNYM1dwbU9qaGdBQ1kzVnk5ZnV6Q1lNc3NHRjlyS0hKNlc1S1NGS0pK?=
+ =?utf-8?B?UkxMd2owQzZxTkZxWkc2R2dtZytNcFlXbFdGVS9NaXdqZjFTcVNZQXJ3RWkv?=
+ =?utf-8?B?RjZwZ2ZWWFVCWDZScTdzQ1Z3SlpWZk1BMmQzSzdQMzdvTXRDenZjQ0VGclBV?=
+ =?utf-8?B?NGV0WUJYSmdqcE5jd0lBWkR1RGdJRGVDTkZUSWlXRkZRZWxiZW8xYnJZaWIv?=
+ =?utf-8?B?OWorTlBjblFxY3AybjR6Y2FObzRnUnFXL3g2NmxweVRKZjBCUHB4WWZtdkRW?=
+ =?utf-8?B?clpzQnNKZk1IcUQ3ZFdCOU9rMEY3WnRjWTNoVzN2a1N4RTNZa2o0UzdGampz?=
+ =?utf-8?B?bExWaHFMejQ5ajdocTRVdmdPZEhUSis5WWl5cnYwSFR3Ym8rY1o2bUtiQU9N?=
+ =?utf-8?B?eGhyanlDNlBuT3NNcmszWUVLMVhWSUFobVlmYkRaaUU3WFNTWFYvZmxIOTB2?=
+ =?utf-8?B?NkZVMW96c0Q0RkY3elllczREcTJkak9KbWRYNXZRYi90ZUJNa1d3WmtrelFC?=
+ =?utf-8?B?dS9VYUt1U3lscTE1a21IZ1YwVDlMdDBtKzFqMnd6N2VMTWhiUVB6S2d1MVBN?=
+ =?utf-8?B?VGlIdVE4MDJEVzl3M25zU2pYbi9HSUlRWlc4OGZJZGhzNWlwcWZ4QmZBMGc4?=
+ =?utf-8?B?eXYrUmpSeDlwMHpIWGQ3L1B0dy9UeHdJbDhuQzFIUXQrK2kzZklrdHgxaTB6?=
+ =?utf-8?B?dHl5VmxmVGw0UTJZVDNRbW4xTXRLTE1pVk9DVk5KTVUxL25pQkZTMU1JM0VM?=
+ =?utf-8?B?TFhxL3FrWjFoWjViV1AzZy8wQUFSZFpKSjZwTm9TZllRb2JyZkhubW92cGhT?=
+ =?utf-8?B?WFhsbUpCZ3dvQ0Vzc0ZUVjEvc0dEOWRPRW5hMmxaUTd0NnlQZ2x6elVWdDFq?=
+ =?utf-8?B?Qmk3bmZlR2oyWU5xNUlvaXJRS20vSE4yYTk4czZUbmFqaW5SQW83bEtRcVo5?=
+ =?utf-8?B?NTMxZ1JkWVJWQVFyaDJYSUJ6QUFtK0FtNllWOVMxNGx5a05RUFY3R3F3aVlI?=
+ =?utf-8?B?MjhUa0t0US9WV3U0Q3ZaeFNXV0F0K21xazhPUEx2cHY0QStUUEZGTnVlUzR3?=
+ =?utf-8?B?L01wcE9jOGtzV0htWUd6OTFRTGRRanVaRGo1QWFESStpeHE4NkZJeUFuZFdW?=
+ =?utf-8?B?bHc9PQ==?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3134499d-58e0-4d92-7f60-08db40af1e53
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8774.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 08:21:47.6673
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wzgx3Q1j2+SM5GPX4ErImQQZ8ngZKn24HgSfl0+TlC0/9ecRBVh2bIGNBwrRyogihL/zaxzRQuTYrtfTpThOog==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8820
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/2023 4:50 pm, Zhi Wang wrote:
-> Hi Like:
-> 
-> Would you mind to take a look on this patch? It would be nice to have
-> a r-b also from you. :)
-> 
-> On Sun, 12 Mar 2023 10:55:45 -0700
-> isaku.yamahata@intel.com wrote:
-> 
->> From: Isaku Yamahata <isaku.yamahata@intel.com>
->>
->> Because TDX KVM doesn't support PMU yet (it's future work of TDX KVM
->> support as another patch series) and pmu_intel.c touches vmx specific
+On 4/18/2023 12:42 PM, Chancel Liu wrote:
+> SAI on i.MX8QM platform supports the data lines up to 4. So the pins
+> setting should be corrected to 4.
+>
+> Fixes: eba0f0077519 ("ASoC: fsl_sai: Enable combine mode soft")
+> Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
+> ---
 
-It would be nice to have pmu support for tdx-guest from the very beginning.
-If you guys are more open on the tdx development model, I'd like to help on 
-those features.
+Reviewed-by: Iuliana Prodan <iuliana.prodan@nxp.com>
 
->> structure in vcpu initialization, as workaround add dummy structure to
->> struct vcpu_tdx and pmu_intel.c can ignore TDX case.
+Thanks,
+Iulia
 
-If the target is not to provide a workaround, how about other variants:
-	- struct lbr_desc lbr_desc;
-	- pebs ds_buffer;
-?
-
-We also need tdx selftest to verify the unavailability of these features.
-Also, it would be great to have TDX's "System Profiling Mode" featue back in the 
-specification.
-
->>
->> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
->> ---
->>   arch/x86/kvm/vmx/pmu_intel.c | 46 +++++++++++++++++++++++++++++++++++-
->>   arch/x86/kvm/vmx/pmu_intel.h | 28 ++++++++++++++++++++++
->>   arch/x86/kvm/vmx/tdx.h       |  8 ++++++-
->>   arch/x86/kvm/vmx/vmx.c       |  2 +-
->>   arch/x86/kvm/vmx/vmx.h       | 32 +------------------------
->>   5 files changed, 82 insertions(+), 34 deletions(-)
->>   create mode 100644 arch/x86/kvm/vmx/pmu_intel.h
->>
->> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
->> index e8a3be0b9df9..df1f4ddfa72d 100644
->> --- a/arch/x86/kvm/vmx/pmu_intel.c
->> +++ b/arch/x86/kvm/vmx/pmu_intel.c
->> @@ -19,6 +19,7 @@
->>   #include "lapic.h"
->>   #include "nested.h"
->>   #include "pmu.h"
->> +#include "tdx.h"
->>   
->>   #define MSR_PMC_FULL_WIDTH_BIT      (MSR_IA32_PMC0 - MSR_IA32_PERFCTR0)
->>   
->> @@ -40,6 +41,26 @@ static struct {
->>   /* mapping between fixed pmc index and intel_arch_events array */
->>   static int fixed_pmc_events[] = {1, 0, 7};
->>   
->> +struct lbr_desc *vcpu_to_lbr_desc(struct kvm_vcpu *vcpu)
->> +{
->> +#ifdef CONFIG_INTEL_TDX_HOST
->> +	if (is_td_vcpu(vcpu))
->> +		return &to_tdx(vcpu)->lbr_desc;
->> +#endif
->> +
->> +	return &to_vmx(vcpu)->lbr_desc;
->> +}
->> +
->> +struct x86_pmu_lbr *vcpu_to_lbr_records(struct kvm_vcpu *vcpu)
->> +{
->> +#ifdef CONFIG_INTEL_TDX_HOST
->> +	if (is_td_vcpu(vcpu))
->> +		return &to_tdx(vcpu)->lbr_desc.records;
->> +#endif
->> +
->> +	return &to_vmx(vcpu)->lbr_desc.records;
->> +}
->> +
->>   static void reprogram_fixed_counters(struct kvm_pmu *pmu, u64 data)
->>   {
->>   	struct kvm_pmc *pmc;
->> @@ -172,6 +193,23 @@ static inline struct kvm_pmc *get_fw_gp_pmc(struct kvm_pmu *pmu, u32 msr)
->>   	return get_gp_pmc(pmu, msr, MSR_IA32_PMC0);
->>   }
->>   
->> +bool intel_pmu_lbr_is_compatible(struct kvm_vcpu *vcpu)
->> +{
->> +	if (is_td_vcpu(vcpu))
->> +		return false;
->> +	return cpuid_model_is_consistent(vcpu);
->> +}
->> +
->> +bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu)
->> +{
->> +	struct x86_pmu_lbr *lbr = vcpu_to_lbr_records(vcpu);
->> +
->> +	if (is_td_vcpu(vcpu))
->> +		return false;
->> +
->> +	return lbr->nr && (vcpu_get_perf_capabilities(vcpu) & PMU_CAP_LBR_FMT);
->> +}
->> +
->>   static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
->>   {
->>   	struct x86_pmu_lbr *records = vcpu_to_lbr_records(vcpu);
->> @@ -282,6 +320,9 @@ int intel_pmu_create_guest_lbr_event(struct kvm_vcpu *vcpu)
->>   					PERF_SAMPLE_BRANCH_USER,
->>   	};
->>   
->> +	if (WARN_ON_ONCE(is_td_vcpu(vcpu)))
->> +		return 0;
->> +
->>   	if (unlikely(lbr_desc->event)) {
->>   		__set_bit(INTEL_PMC_IDX_FIXED_VLBR, pmu->pmc_in_use);
->>   		return 0;
->> @@ -591,7 +632,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->>   		INTEL_PMC_MAX_GENERIC, pmu->nr_arch_fixed_counters);
->>   
->>   	perf_capabilities = vcpu_get_perf_capabilities(vcpu);
->> -	if (cpuid_model_is_consistent(vcpu) &&
->> +	if (intel_pmu_lbr_is_compatible(vcpu) &&
->>   	    (perf_capabilities & PMU_CAP_LBR_FMT))
->>   		x86_perf_get_lbr(&lbr_desc->records);
->>   	else
->> @@ -647,6 +688,9 @@ static void intel_pmu_reset(struct kvm_vcpu *vcpu)
->>   	struct kvm_pmc *pmc = NULL;
->>   	int i;
->>   
->> +	if (is_td_vcpu(vcpu))
->> +		return;
->> +
->>   	for (i = 0; i < KVM_INTEL_PMC_MAX_GENERIC; i++) {
->>   		pmc = &pmu->gp_counters[i];
->>   
->> diff --git a/arch/x86/kvm/vmx/pmu_intel.h b/arch/x86/kvm/vmx/pmu_intel.h
->> new file mode 100644
->> index 000000000000..66bba47c1269
->> --- /dev/null
->> +++ b/arch/x86/kvm/vmx/pmu_intel.h
->> @@ -0,0 +1,28 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +#ifndef __KVM_X86_VMX_PMU_INTEL_H
->> +#define  __KVM_X86_VMX_PMU_INTEL_H
->> +
->> +struct lbr_desc *vcpu_to_lbr_desc(struct kvm_vcpu *vcpu);
->> +struct x86_pmu_lbr *vcpu_to_lbr_records(struct kvm_vcpu *vcpu);
->> +
->> +bool intel_pmu_lbr_is_compatible(struct kvm_vcpu *vcpu);
->> +bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu);
->> +int intel_pmu_create_guest_lbr_event(struct kvm_vcpu *vcpu);
->> +
->> +struct lbr_desc {
->> +	/* Basic info about guest LBR records. */
->> +	struct x86_pmu_lbr records;
->> +
->> +	/*
->> +	 * Emulate LBR feature via passthrough LBR registers when the
->> +	 * per-vcpu guest LBR event is scheduled on the current pcpu.
->> +	 *
->> +	 * The records may be inaccurate if the host reclaims the LBR.
->> +	 */
->> +	struct perf_event *event;
->> +
->> +	/* True if LBRs are marked as not intercepted in the MSR bitmap */
->> +	bool msr_passthrough;
->> +};
->> +
->> +#endif /* __KVM_X86_VMX_PMU_INTEL_H */
->> diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
->> index 1e00e75b1c5e..5728820fed5e 100644
->> --- a/arch/x86/kvm/vmx/tdx.h
->> +++ b/arch/x86/kvm/vmx/tdx.h
->> @@ -4,6 +4,7 @@
->>   
->>   #ifdef CONFIG_INTEL_TDX_HOST
->>   
->> +#include "pmu_intel.h"
->>   #include "tdx_ops.h"
->>   
->>   struct kvm_tdx {
->> @@ -21,7 +22,12 @@ struct kvm_tdx {
->>   
->>   struct vcpu_tdx {
->>   	struct kvm_vcpu	vcpu;
->> -	/* TDX specific members follow. */
->> +
->> +	/*
->> +	 * Dummy to make pmu_intel not corrupt memory.
->> +	 * TODO: Support PMU for TDX.  Future work.
->> +	 */
->> +	struct lbr_desc lbr_desc;
->>   };
->>   
->>   static inline bool is_td(struct kvm *kvm)
->> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->> index d23830d92f61..f9e9fd7fde2c 100644
->> --- a/arch/x86/kvm/vmx/vmx.c
->> +++ b/arch/x86/kvm/vmx/vmx.c
->> @@ -2432,7 +2432,7 @@ int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->>   			if ((data & PMU_CAP_LBR_FMT) !=
->>   			    (kvm_caps.supported_perf_cap & PMU_CAP_LBR_FMT))
->>   				return 1;
->> -			if (!cpuid_model_is_consistent(vcpu))
->> +			if (!intel_pmu_lbr_is_compatible(vcpu))
->>   				return 1;
->>   		}
->>   		if (data & PERF_CAP_PEBS_FORMAT) {
->> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
->> index 2acdc54bc34b..1d15c3c2751b 100644
->> --- a/arch/x86/kvm/vmx/vmx.h
->> +++ b/arch/x86/kvm/vmx/vmx.h
->> @@ -11,6 +11,7 @@
->>   #include "capabilities.h"
->>   #include "../kvm_cache_regs.h"
->>   #include "posted_intr.h"
->> +#include "pmu_intel.h"
->>   #include "vmcs.h"
->>   #include "vmx_ops.h"
->>   #include "../cpuid.h"
->> @@ -105,22 +106,6 @@ static inline bool intel_pmu_has_perf_global_ctrl(struct kvm_pmu *pmu)
->>   	return pmu->version > 1;
->>   }
->>   
->> -struct lbr_desc {
->> -	/* Basic info about guest LBR records. */
->> -	struct x86_pmu_lbr records;
->> -
->> -	/*
->> -	 * Emulate LBR feature via passthrough LBR registers when the
->> -	 * per-vcpu guest LBR event is scheduled on the current pcpu.
->> -	 *
->> -	 * The records may be inaccurate if the host reclaims the LBR.
->> -	 */
->> -	struct perf_event *event;
->> -
->> -	/* True if LBRs are marked as not intercepted in the MSR bitmap */
->> -	bool msr_passthrough;
->> -};
->> -
->>   /*
->>    * The nested_vmx structure is part of vcpu_vmx, and holds information we need
->>    * for correct emulation of VMX (i.e., nested VMX) on this vcpu.
->> @@ -650,21 +635,6 @@ static __always_inline struct vcpu_vmx *to_vmx(struct kvm_vcpu *vcpu)
->>   	return container_of(vcpu, struct vcpu_vmx, vcpu);
->>   }
->>   
->> -static inline struct lbr_desc *vcpu_to_lbr_desc(struct kvm_vcpu *vcpu)
->> -{
->> -	return &to_vmx(vcpu)->lbr_desc;
->> -}
->> -
->> -static inline struct x86_pmu_lbr *vcpu_to_lbr_records(struct kvm_vcpu *vcpu)
->> -{
->> -	return &vcpu_to_lbr_desc(vcpu)->records;
->> -}
->> -
->> -static inline bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu)
->> -{
->> -	return !!vcpu_to_lbr_records(vcpu)->nr;
->> -}
->> -
->>   void intel_pmu_cross_mapped_check(struct kvm_pmu *pmu);
->>   int intel_pmu_create_guest_lbr_event(struct kvm_vcpu *vcpu);
->>   void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu);
-> 
-> 
+>   sound/soc/fsl/fsl_sai.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
+> index 07d13dca852e..abdaffb00fbd 100644
+> --- a/sound/soc/fsl/fsl_sai.c
+> +++ b/sound/soc/fsl/fsl_sai.c
+> @@ -1544,7 +1544,7 @@ static const struct fsl_sai_soc_data fsl_sai_imx8qm_data = {
+>   	.use_imx_pcm = true,
+>   	.use_edma = true,
+>   	.fifo_depth = 64,
+> -	.pins = 1,
+> +	.pins = 4,
+>   	.reg_offset = 0,
+>   	.mclk0_is_mclk1 = false,
+>   	.flags = 0,
