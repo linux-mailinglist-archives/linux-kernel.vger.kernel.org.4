@@ -2,120 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3B36E7167
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDA46E715A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbjDSDE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 23:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
+        id S231743AbjDSCwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 22:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjDSDEU (ORCPT
+        with ESMTP id S231618AbjDSCww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 23:04:20 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9CCDA;
-        Tue, 18 Apr 2023 20:04:18 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-38e0a003abdso938935b6e.3;
-        Tue, 18 Apr 2023 20:04:18 -0700 (PDT)
+        Tue, 18 Apr 2023 22:52:52 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553FB468E
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 19:52:23 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-517ca8972c5so464191a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 19:52:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681873458; x=1684465458;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=bytedance.com; s=google; t=1681872743; x=1684464743;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BZz6i90ANSJNgGgyhyyDzRsyGMboVoftdzyUn+nlq38=;
-        b=f1Ju3t7tMOnR01DfyqMznkIKJVQ0iTwOqES2zUGkyyOdIsYbY1wU/rNCN76G6sh8cj
-         XUdolT6KDcC1fL+mM+f55MW1PTfIWVHP0asirXp0i//JnmMiicUMNgQ4EtCxVRXus5t3
-         kBwiCIyBMXpEvao3Gg2qztOANNJ0hvPW0oOTXbDVTz6AACvap3SCaEitTVmmnimRA7Ep
-         iqkFwe6DfReOwdV+ctY5rW5C3Jw3pwBTahptLcwcibjGf1KhP7M6SXnqV8U5Xxd6JU6K
-         ZtX7lsgLv1haHU9tT0HDQJ9cqB2wZfcDHJF0+ZhMcbCk14UsdaWvguqKwTj8tOeCmYxd
-         68ng==
+        bh=9zzMcMOPEpfr5THwWMh35gYibbv6uY1wVkSMdB4TPrg=;
+        b=UBXsagd+dw1wo0aza96JkCJ+jMbx2wsqarK7EOSD3eF1gayZSOkm7zij9HGVOEHltl
+         Z8hBxcxuYFsdw0OPL73ub/s+GPU0ppzLaM+O9iZItq/csF2eh9t2SbOwYLQOl+R3Z/Hf
+         2CpgVBQqztQyK1RIId6pPdeguB5a9+K+YYMtEFp4U4KQKx5nXAOCrQOmFwiOlEz2kejY
+         KnZz1zKvL7k1phmcw0GJnkwQKPYRbOHcf95ZWqrBVMCP+zOzXqqNHgmGRo7swaKs4q/4
+         z/2pL9t8Qm8EbBRql30BYqZJt7eHD2kz+QQ1u8mU9xNKfBd/CDu4livihoDlEq2a/hvm
+         1KTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681873458; x=1684465458;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1681872743; x=1684464743;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BZz6i90ANSJNgGgyhyyDzRsyGMboVoftdzyUn+nlq38=;
-        b=ix7OJ/8dWQQs3CfH8mJHptYSJt2dIX9bzClqJhpzfcWGXPDEEnMfanjBUgkwcz22qS
-         c08Gv5eumkztxWbFcmVTznhDAGOFBNWCsRAK0VcVRME5zynF6Ek+satHi8nk+fAcWGBq
-         bXFUXeW4329mu7xfeWnQFSzhIGdghRRl3ZvicmTr6jmw4mTEeUnr1ikAhf2dO0U2QQqs
-         9dWElJ4PwXvI2bOW9s0VKv8YfYer7ZUWq3Uz/JJoMip9NjWDgK65sj26HLaPL0A78fv2
-         Tfrx4RL0uixMAiav2dcYGnP92mf3XZQ01THuJDoGv3JshCt3jdN/R9lr5GDq7+78LKsT
-         /2VQ==
-X-Gm-Message-State: AAQBX9cil8pIet+svnw1gqKnzGis+mshHaYNctNaXW1v+Ut9kyKIe35G
-        76o+CMq+rPP+EU4H/n6HzW0=
-X-Google-Smtp-Source: AKy350YIz34xLTEyr0mRlCYOMVaBn45XWhTy9z47u+61z8vbKc8AvNm/axZZabVX4nZ/QjP+YZgneA==
-X-Received: by 2002:a54:4386:0:b0:38b:e6:3d95 with SMTP id u6-20020a544386000000b0038b00e63d95mr2002371oiv.40.1681873457848;
-        Tue, 18 Apr 2023 20:04:17 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id bo34-20020a05680822a200b0038e29fb9ac9sm1533969oib.44.2023.04.18.20.04.14
+        bh=9zzMcMOPEpfr5THwWMh35gYibbv6uY1wVkSMdB4TPrg=;
+        b=N2pRZkzxtCtv+RAJNimW1yR6E0pxNkIR/UCPX1OYqeawsSVWFCOGwx3lNWYGD2Gd7/
+         TNXbOTdC4sjlgdMxmIkKn0cgPTrtnm3RMpUsl6WrxJKK5fbN9c+vIQZMTAW4yXWwWeS1
+         UwUxLX6VYWRlxtKh6RqmrkI/FlrAFZWGCoTREDYO91wsBAb6wJPX6SnkCJRcjkKeXwB8
+         ZXCdpaqg+DkVryDNPTDgEB/iStSboAAQgm2Q4wRXn1Chw+b7mq/xfOUfiauUrl4pJxgd
+         dflCHCkfle09eklmtCvKyCxOZHJcUWHnpc9vIQgwWmI2Fc1NBh2JoZCCvLB5B3/CZvM9
+         5PRg==
+X-Gm-Message-State: AAQBX9fjw7LQDrBUZaXhxUO0JVUxzmg1C5/A81ZM9jhBT5hFEO7YejZb
+        fkVB0WPbfQbilg08EHcDZv/d3w==
+X-Google-Smtp-Source: AKy350Zls27gYnhf8aXr76dGe3pxd8p9gTZUWGbHrFmiU0uyWWKo8vnuPYw6zJRt75YJTQdcpmo+lA==
+X-Received: by 2002:a17:903:11c9:b0:1a6:6bdb:b548 with SMTP id q9-20020a17090311c900b001a66bdbb548mr19768853plh.1.1681872742749;
+        Tue, 18 Apr 2023 19:52:22 -0700 (PDT)
+Received: from [10.70.252.135] ([139.177.225.245])
+        by smtp.gmail.com with ESMTPSA id jf1-20020a170903268100b001a245b49731sm10255632plb.128.2023.04.18.19.52.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 20:04:17 -0700 (PDT)
-Message-ID: <1a52e123-3cda-83cb-64ee-580b306badb7@gmail.com>
-Date:   Tue, 18 Apr 2023 23:51:52 -0300
+        Tue, 18 Apr 2023 19:52:22 -0700 (PDT)
+Message-ID: <f16db6f6-2699-bb8f-d34c-2ce3d37a6498@bytedance.com>
+Date:   Wed, 19 Apr 2023 10:52:15 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/3] rust: arc: fix intra-doc link in `Arc<T>::init`
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH v2] kasan: Fix lockdep report invalid wait context
+To:     Zqiang <qiang1.zhang@intel.com>, elver@google.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, akpm@linux-foundation.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Cc:     kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230327120019.1027640-1-qiang1.zhang@intel.com>
 Content-Language: en-US
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Josh Stone <jistone@redhat.com>,
-        William Brown <william.brown@suse.com>,
-        Georgy Yakovlev <gyakovlev@gentoo.org>,
-        Jan Alexander Steffens <jan.steffens@gmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-References: <20230418214347.324156-1-ojeda@kernel.org>
- <20230418214347.324156-3-ojeda@kernel.org>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230418214347.324156-3-ojeda@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <20230327120019.1027640-1-qiang1.zhang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/18/23 18:43, Miguel Ojeda wrote:
-> `Arc<T>::init` refers to `Arc<T>::pin_init` via an intra-doc link
-> using the text `pin_init`, rather than more explicitly, which makes
-> `rustdoc` point it to the `pin_init!` macro instead.
-> 
-> This is required for the compiler upgrade since the newer `rustdoc`
-> would trigger the `broken_intra_doc_links` lint [1], but in this case
-> the macro was not the intended target to begin with, and so the actual
-> fix is to make it point to the right place, regardless of the upgrade.
-> 
-> Thus make it more explicit.
-> 
-> Fixes: 92c4a1e7e81c ("rust: init/sync: add `InPlaceInit` trait to pin-initialize smart pointers")
-> Link: https://github.com/rust-lang/rust/issues/106142 [1]
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  rust/kernel/sync/arc.rs | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> index e6d206242465..1b0734fdf6a7 100644
-> --- a/rust/kernel/sync/arc.rs
-> +++ b/rust/kernel/sync/arc.rs
-> @@ -185,7 +185,7 @@ impl<T> Arc<T> {
->  
->      /// Use the given initializer to in-place initialize a `T`.
->      ///
-> -    /// This is equivalent to [`pin_init`], since an [`Arc`] is always pinned.
-> +    /// This is equivalent to [`Arc<T>::pin_init`], since an [`Arc`] is always pinned.
->      #[inline]
->      pub fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
->      where
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+
+On 2023/3/27 20:00, Zqiang wrote:
+> For kernels built with the following options and booting
+> 
+> CONFIG_SLUB=y
+> CONFIG_DEBUG_LOCKDEP=y
+> CONFIG_PROVE_LOCKING=y
+> CONFIG_PROVE_RAW_LOCK_NESTING=y
+> 
+> [    0.523115] [ BUG: Invalid wait context ]
+> [    0.523315] 6.3.0-rc1-yocto-standard+ #739 Not tainted
+> [    0.523649] -----------------------------
+> [    0.523663] swapper/0/0 is trying to lock:
+> [    0.523663] ffff888035611360 (&c->lock){....}-{3:3}, at: put_cpu_partial+0x2e/0x1e0
+> [    0.523663] other info that might help us debug this:
+> [    0.523663] context-{2:2}
+> [    0.523663] no locks held by swapper/0/0.
+> [    0.523663] stack backtrace:
+> [    0.523663] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-rc1-yocto-standard+ #739
+> [    0.523663] Call Trace:
+> [    0.523663]  <IRQ>
+> [    0.523663]  dump_stack_lvl+0x64/0xb0
+> [    0.523663]  dump_stack+0x10/0x20
+> [    0.523663]  __lock_acquire+0x6c4/0x3c10
+> [    0.523663]  lock_acquire+0x188/0x460
+> [    0.523663]  put_cpu_partial+0x5a/0x1e0
+> [    0.523663]  __slab_free+0x39a/0x520
+> [    0.523663]  ___cache_free+0xa9/0xc0
+> [    0.523663]  qlist_free_all+0x7a/0x160
+> [    0.523663]  per_cpu_remove_cache+0x5c/0x70
+> [    0.523663]  __flush_smp_call_function_queue+0xfc/0x330
+> [    0.523663]  generic_smp_call_function_single_interrupt+0x13/0x20
+> [    0.523663]  __sysvec_call_function+0x86/0x2e0
+> [    0.523663]  sysvec_call_function+0x73/0x90
+> [    0.523663]  </IRQ>
+> [    0.523663]  <TASK>
+> [    0.523663]  asm_sysvec_call_function+0x1b/0x20
+> [    0.523663] RIP: 0010:default_idle+0x13/0x20
+> [    0.523663] RSP: 0000:ffffffff83e07dc0 EFLAGS: 00000246
+> [    0.523663] RAX: 0000000000000000 RBX: ffffffff83e1e200 RCX: ffffffff82a83293
+> [    0.523663] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffff8119a6b1
+> [    0.523663] RBP: ffffffff83e07dc8 R08: 0000000000000001 R09: ffffed1006ac0d66
+> [    0.523663] R10: ffff888035606b2b R11: ffffed1006ac0d65 R12: 0000000000000000
+> [    0.523663] R13: ffffffff83e1e200 R14: ffffffff84a7d980 R15: 0000000000000000
+> [    0.523663]  default_idle_call+0x6c/0xa0
+> [    0.523663]  do_idle+0x2e1/0x330
+> [    0.523663]  cpu_startup_entry+0x20/0x30
+> [    0.523663]  rest_init+0x152/0x240
+> [    0.523663]  arch_call_rest_init+0x13/0x40
+> [    0.523663]  start_kernel+0x331/0x470
+> [    0.523663]  x86_64_start_reservations+0x18/0x40
+> [    0.523663]  x86_64_start_kernel+0xbb/0x120
+> [    0.523663]  secondary_startup_64_no_verify+0xe0/0xeb
+> [    0.523663]  </TASK>
+> 
+> The local_lock_irqsave() is invoked in put_cpu_partial() and happens
+> in IPI context, due to the CONFIG_PROVE_RAW_LOCK_NESTING=y (the
+> LD_WAIT_CONFIG not equal to LD_WAIT_SPIN), so acquire local_lock in
+> IPI context will trigger above calltrace.
+
+Just to add another similar case:
+
+Call Trace:
+  <IRQ>
+  dump_stack_lvl+0x69/0x97
+  __lock_acquire+0x4a0/0x1b50
+  lock_acquire+0x261/0x2c0
+  ? restore_bytes+0x40/0x40
+  local_lock_acquire+0x21/0x70
+  ? restore_bytes+0x40/0x40
+  put_cpu_partial+0x41/0x130
+  ? flush_smp_call_function_queue+0x125/0x4d0
+  kfree+0x250/0x2c0
+  flush_smp_call_function_queue+0x125/0x4d0
+  __sysvec_call_function_single+0x3a/0x100
+  sysvec_call_function_single+0x4b/0x90
+  </IRQ>
+  <TASK>
+  asm_sysvec_call_function_single+0x16/0x20
+
+So we can't call kfree() and its friends in interrupt context?
+
+Also +Vlastimil Babka.
+
+Thanks,
+Qi
+
+> 
+> This commit therefore move qlist_free_all() from hard-irq context to
+> task context.
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>   v1->v2:
+>   Modify the commit information and add Cc.
+> 
+>   mm/kasan/quarantine.c | 34 ++++++++--------------------------
+>   1 file changed, 8 insertions(+), 26 deletions(-)
+> 
+> diff --git a/mm/kasan/quarantine.c b/mm/kasan/quarantine.c
+> index 75585077eb6d..152dca73f398 100644
+> --- a/mm/kasan/quarantine.c
+> +++ b/mm/kasan/quarantine.c
+> @@ -99,7 +99,6 @@ static unsigned long quarantine_size;
+>   static DEFINE_RAW_SPINLOCK(quarantine_lock);
+>   DEFINE_STATIC_SRCU(remove_cache_srcu);
+>   
+> -#ifdef CONFIG_PREEMPT_RT
+>   struct cpu_shrink_qlist {
+>   	raw_spinlock_t lock;
+>   	struct qlist_head qlist;
+> @@ -108,7 +107,6 @@ struct cpu_shrink_qlist {
+>   static DEFINE_PER_CPU(struct cpu_shrink_qlist, shrink_qlist) = {
+>   	.lock = __RAW_SPIN_LOCK_UNLOCKED(shrink_qlist.lock),
+>   };
+> -#endif
+>   
+>   /* Maximum size of the global queue. */
+>   static unsigned long quarantine_max_size;
+> @@ -319,16 +317,6 @@ static void qlist_move_cache(struct qlist_head *from,
+>   	}
+>   }
+>   
+> -#ifndef CONFIG_PREEMPT_RT
+> -static void __per_cpu_remove_cache(struct qlist_head *q, void *arg)
+> -{
+> -	struct kmem_cache *cache = arg;
+> -	struct qlist_head to_free = QLIST_INIT;
+> -
+> -	qlist_move_cache(q, &to_free, cache);
+> -	qlist_free_all(&to_free, cache);
+> -}
+> -#else
+>   static void __per_cpu_remove_cache(struct qlist_head *q, void *arg)
+>   {
+>   	struct kmem_cache *cache = arg;
+> @@ -340,7 +328,6 @@ static void __per_cpu_remove_cache(struct qlist_head *q, void *arg)
+>   	qlist_move_cache(q, &sq->qlist, cache);
+>   	raw_spin_unlock_irqrestore(&sq->lock, flags);
+>   }
+> -#endif
+>   
+>   static void per_cpu_remove_cache(void *arg)
+>   {
+> @@ -362,6 +349,8 @@ void kasan_quarantine_remove_cache(struct kmem_cache *cache)
+>   {
+>   	unsigned long flags, i;
+>   	struct qlist_head to_free = QLIST_INIT;
+> +	int cpu;
+> +	struct cpu_shrink_qlist *sq;
+>   
+>   	/*
+>   	 * Must be careful to not miss any objects that are being moved from
+> @@ -372,20 +361,13 @@ void kasan_quarantine_remove_cache(struct kmem_cache *cache)
+>   	 */
+>   	on_each_cpu(per_cpu_remove_cache, cache, 1);
+>   
+> -#ifdef CONFIG_PREEMPT_RT
+> -	{
+> -		int cpu;
+> -		struct cpu_shrink_qlist *sq;
+> -
+> -		for_each_online_cpu(cpu) {
+> -			sq = per_cpu_ptr(&shrink_qlist, cpu);
+> -			raw_spin_lock_irqsave(&sq->lock, flags);
+> -			qlist_move_cache(&sq->qlist, &to_free, cache);
+> -			raw_spin_unlock_irqrestore(&sq->lock, flags);
+> -		}
+> -		qlist_free_all(&to_free, cache);
+> +	for_each_online_cpu(cpu) {
+> +		sq = per_cpu_ptr(&shrink_qlist, cpu);
+> +		raw_spin_lock_irqsave(&sq->lock, flags);
+> +		qlist_move_cache(&sq->qlist, &to_free, cache);
+> +		raw_spin_unlock_irqrestore(&sq->lock, flags);
+>   	}
+> -#endif
+> +	qlist_free_all(&to_free, cache);
+>   
+>   	raw_spin_lock_irqsave(&quarantine_lock, flags);
+>   	for (i = 0; i < QUARANTINE_BATCHES; i++) {
+
+-- 
+Thanks,
+Qi
