@@ -2,73 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104466E7486
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 477966E7489
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbjDSH6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 03:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
+        id S231513AbjDSH7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 03:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbjDSH6w (ORCPT
+        with ESMTP id S229599AbjDSH7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 03:58:52 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC8D49D2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:58:51 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id d8-20020a05600c3ac800b003ee6e324b19so969479wms.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:58:51 -0700 (PDT)
+        Wed, 19 Apr 2023 03:59:40 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122E74C35
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:59:39 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so27226926a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:59:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681891130; x=1684483130;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=linaro.org; s=google; t=1681891177; x=1684483177;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=v9nhWTNFUot8DhVxJTGVf8U7r1UFd9xR4G2cjz6ra5U=;
-        b=EGBfyPyJHJotUnoVy1IkY/z6izta25ZfsN2JEoy7WTUfA2I/BsJnN1O/cGBb9O6axs
-         Q+SZT3mKAnoCtliZ+TRB+QWM9K5ES5jHA2a6j9xIpoo+tWdQvuF4XBrDs3085yMn2ajB
-         XI5+iIOwoaCrXk1FmUiH+A4Sf9SnQvAjRjfzbKH2gFO5cCvpjvfRKxsXtSRaCJfGjG0I
-         AaYKERq25347rd+waTxa58Ifxf5rRW5e+g8Q48fpTjblXj1heahw1x+1JG4b80FE2k33
-         Q70fMZmKlNPuox0UJjNcIVPNS2gW0xmt+EN73JafKqhsrE8EFhtyP/MXLWBtBhEBXQEM
-         vK9Q==
+        bh=2QDSFk1bWw84sERed1okCfC1U1gkUcGVMuz8bB1DTOE=;
+        b=ri1qD4pNuoEqenaRtPy+mtzIvFSYEmqdGT3CQkTzBC+gBrKe4RlYKWhxTp5/3qG9d/
+         GwkE8L0UiXu4pVqIooATkKl0p4ep81U1F3kjG9dUV+JHdAQie/aVD4bRTuDwuHtU2MLS
+         URJvHGEq9iRNjHwuBMf/NmKmEPOSsV8CB9D2cD9vtt3WLeYixPnJuaVocjC88OmoD7xD
+         HRFINRe+6Npzvs3kwSBhGQD9XhrmBkhgIVAFxp0a8xLidE3e527hijgaJtRFzbkqwb91
+         P4j3p1jWm4RSjNKB/YrMP8L4oprGyHeMhj/zaZcjoZxe3JiMYv0hGWwRjDRh4szra11/
+         4ONA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681891130; x=1684483130;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1681891177; x=1684483177;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v9nhWTNFUot8DhVxJTGVf8U7r1UFd9xR4G2cjz6ra5U=;
-        b=EI1orF2CrrXvuhGrJBOvipvm1iQWNEiFIScdhQVhtpaBj1oZ0TAoxSQr2p3JiPOiOu
-         Nwxv1k6cMe1tIuPpSJssoGRHioCEOWN7SjxHKJ2BlZZO7hzL/mP0HNyjjT0sSSBYoPyJ
-         YTIUTWeiukjeDWNlgyyp+PVaKwnAXvp2t+bYHmBnfrzjSCkKXKxUQNG3zTjFwOvVZNpw
-         v3VJ9OnWDD+GLe4HQmKrZxh73QIcFmCQvVVq/b472DDGPOH/MpQMwARs5ePphdADnOBg
-         p+sHkFOHk7GIClUwgsN2F2KL+JZlSC3q5QiXezPpkUvxmwc7YRcrUm/5KUfNx+BmF621
-         JzkA==
-X-Gm-Message-State: AAQBX9e84i8iTgr31iXp53+S7+Zz+ErSiBmtWbaCX/kAxdtEMZ/SfMge
-        RXb52ivbEEDT4ZswUGIcDfo7Cg==
-X-Google-Smtp-Source: AKy350YWB4M+Tend0JFwwajhPdp0/tpo8ptDFpbt4km0eviie9q/Xfu+JpYBnj4Dy9cuZ/Ktki9wBA==
-X-Received: by 2002:a7b:cbd0:0:b0:3f1:75b3:60df with SMTP id n16-20020a7bcbd0000000b003f175b360dfmr5955964wmi.41.1681891129997;
-        Wed, 19 Apr 2023 00:58:49 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id p19-20020a05600c205300b003f173a00304sm1330043wmg.17.2023.04.19.00.58.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 00:58:49 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 10:58:43 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     James Morse <james.morse@arm.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Kristina Martsenko <kristina.martsenko@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Liu Song <liusong@linux.alibaba.com>,
-        D Scott Phillips <scott@os.amperecomputing.com>,
-        James Morse <james.morse@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: [PATCH] arm64: delete dead code in this_cpu_set_vectors()
-Message-ID: <73859c9e-dea0-4764-bf01-7ae694fa2e37@kili.mountain>
+        bh=2QDSFk1bWw84sERed1okCfC1U1gkUcGVMuz8bB1DTOE=;
+        b=FJk39shdytP4EPpDPetVoto2d6YWkxalkJwwJAc8BkvOGRsYE7Ocpy2qzSQYDEcC74
+         cYV3GgNjys6LgNAHbfq5MUQLJYCDjbcV40CkpEGP5UrCCwUxdimRt8NmeXZ0BfNNiDu8
+         t9GcCe4KG+lCsPWzOjn7XZJCD4ETuEV1AFkpodzL/toS0h6/HCRGVMpDK2UKvcv6saml
+         mXzzFeqLXHlzewV68GS/OD8cBHmPCI00fIEikgI+HrgRlg2iwVvwlvOgNJNUB/H9ychF
+         hg/FfaGg6eHy1cahhoKfzt8GraT/qhLkpDeHg9CH11tSL/Z4Wickfpl8UzxfNa8QXxsC
+         85Wg==
+X-Gm-Message-State: AAQBX9cZIci8wiUdUC6v+uUj74+fPUmRg05i/fsiYLZWi1tIPWifk6aW
+        Q0whQ9vDc/XapNpG+VS9LE29RA==
+X-Google-Smtp-Source: AKy350bCvHDzh0UHjTTOlBryMDQj0HoSj2qsUlEWGW1bmvg2ZgvGWYCNVj2CW35qxXc8yZEbof1nxQ==
+X-Received: by 2002:a05:6402:2694:b0:506:b94f:3d8f with SMTP id w20-20020a056402269400b00506b94f3d8fmr1950820edd.5.1681891177517;
+        Wed, 19 Apr 2023 00:59:37 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:62f5:eb43:f726:5fee? ([2a02:810d:15c0:828:62f5:eb43:f726:5fee])
+        by smtp.gmail.com with ESMTPSA id b10-20020aa7c6ca000000b00506a5606343sm3736335eds.14.2023.04.19.00.59.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 00:59:37 -0700 (PDT)
+Message-ID: <c49881dc-f283-6981-3e03-02fb02b5ce54@linaro.org>
+Date:   Wed, 19 Apr 2023 09:59:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 0/4] Improves polling mode of s3c64xx driver
+Content-Language: en-US
+To:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
+References: <CGME20230419062755epcas2p4c3c7c1e0d58e964f6e884f75ae120d91@epcas2p4.samsung.com>
+ <20230419060639.38853-1-jaewon02.kim@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230419060639.38853-1-jaewon02.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,30 +79,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "slot" variable is an enum, and in this context it is an unsigned
-int.  So the type means it can never be negative and also we never pass
-invalid data to this function.  If something did pass invalid data then
-this check would be insufficient protection.
+On 19/04/2023 08:06, Jaewon Kim wrote:
+> 1.
+> s3cx64xx driver was supporting polling mode using quirk for SOC without DMA.
+> However, in order to use PIO mode as an optional rather than a quirk, when DMA
+> is not described, spi operates with pio mode rather than probe fail.
+> 
+> 2.
+> Fixed the problem of high CPU usage in PIO mode.
+> 
+> 3. 
+> If the transfer data size is larger than 32-bit, IRQ base PIO mode used.
+> 
 
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- arch/arm64/kernel/proton-pack.c | 3 ---
- 1 file changed, 3 deletions(-)
+What changed in the patches? You need to provide changelog.
 
-diff --git a/arch/arm64/kernel/proton-pack.c b/arch/arm64/kernel/proton-pack.c
-index fca9cc6f5581..05f40c4e18fd 100644
---- a/arch/arm64/kernel/proton-pack.c
-+++ b/arch/arm64/kernel/proton-pack.c
-@@ -966,9 +966,6 @@ static void this_cpu_set_vectors(enum arm64_bp_harden_el1_vectors slot)
- {
- 	const char *v = arm64_get_bp_hardening_vector(slot);
- 
--	if (slot < 0)
--		return;
--
- 	__this_cpu_write(this_cpu_vector, v);
- 
- 	/*
--- 
-2.39.2
+Best regards,
+Krzysztof
 
