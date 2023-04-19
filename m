@@ -2,120 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2996E7298
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD176E729E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbjDSFWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 01:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
+        id S231483AbjDSF2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 01:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbjDSFWV (ORCPT
+        with ESMTP id S231186AbjDSF2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 01:22:21 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E3659D5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:22:20 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id n193so8456026ybf.12
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:22:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681881740; x=1684473740;
-        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vsilJRm3n3f0oPJ2h9sspFYqHtbv7ku0fM9SdrcDCj8=;
-        b=hj4EKxmQkVBjeHFrYiX7OIFcERVkkm20q7aY8LG40YNwmqdoPSyqvOdb0/0VfE1HZF
-         1wxaXil9DYJpM9FfY+3v1j5YdDlMBhRqjOSQqV4mR/oeTrfbP3jWVWO06L2fYMwHFG/W
-         GYfKckQve5I0/GA5Mr0muOMEUQb1Kii27Lg526hjbrkSn0+XQUDEzq92zWBS/wJDbdyb
-         0l+ZllTmJe+ZeMEplq6HV9LkRdyiO60luNh5CdjNGdHXp6TauzpYRbpE1Ce6e/jbxGQt
-         vhIT6k8BIJJzk6DLkWkrjPkLyIyAnPJx+fHf7SaAjCwZqbdA7ZpgSPBHDfZh5Z0fVBUJ
-         /4Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681881740; x=1684473740;
-        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vsilJRm3n3f0oPJ2h9sspFYqHtbv7ku0fM9SdrcDCj8=;
-        b=eYYbbgZjvw9lWduyhG68VpAQeDkPhxB0PR8ZWUoPP/8eqyUMSHnjeO6iSpFttuLFsj
-         XMjcvoOmsPrhZJw2sxuF07/kehzHvMGqcn6U3K5kWaRojrKoGyOnNNYIfQsvcuzzHqr1
-         YqiSv6Ni2UvkYwFFHwBd+p5CQ5cd1YVqLQGjuIh7jxFmVxaIdfX72ChzjL6EuGub4Wli
-         JLMtZRy1L/2cWcX3/f8GJX4cPpkWCQcn5QikZgu8ibPll5yiAYToB71o8gWA9Hjktyi5
-         fs27ZBEXUUr1B69oZEMG3e2SK3WopOAV4LgEHGy0ziLmuIxKIYf4S+0/viln3/3Xs8Mk
-         ladA==
-X-Gm-Message-State: AAQBX9cu5fdl79ZOLVW+mK2h7s7pfdKEVOctfaKEtQmrm1D/wAGn77h9
-        X6+jbsejocX6Klhox318IqFGI/s7ks/GLw+VckTtuQ==
-X-Google-Smtp-Source: AKy350Z4PF4zy3c1rTsiOTRbkNvu2a0h9Py9+yH8dop+BTUO2eEpHa0CbiPxrZt0Z7LgGEs/pHl/wA==
-X-Received: by 2002:a25:4987:0:b0:b8f:2d6f:1f0b with SMTP id w129-20020a254987000000b00b8f2d6f1f0bmr21036178yba.49.1681881739920;
-        Tue, 18 Apr 2023 22:22:19 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id j185-20020a8155c2000000b00545a08184fdsm4238243ywb.141.2023.04.18.22.22.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 22:22:19 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 22:22:02 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH next] hugetlb: pte_alloc_huge() to replace huge
- pte_alloc_map()
-Message-ID: <ae9e7d98-8a3a-cfd9-4762-bcddffdf96cf@google.com>
+        Wed, 19 Apr 2023 01:28:13 -0400
+Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8C659E8
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:28:11 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id p0MRpZaTeV6zQp0MSpuMmN; Wed, 19 Apr 2023 07:28:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+        s=t20230301; t=1681882089;
+        bh=jC61ievN8K0lZul4ppyD2rNmFatQL2HAWgkWwqbudT8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=TNshuw7F7d0G7Paxh6aHXOd6LSAqwbWrBaZePemtxzGdjyuWE40w23q+dyxZWNAFT
+         IMgiYRkp30RpW2ME6YXV9mno+wtjdYC/TD0vOZgAv/x5PsvWYvguzVWccLP+EJL4V+
+         wfS5fnGA1rwmLzmpR77uJU4JzByxFGmRZKNG5P0Z2rtigu+iZv7U9onUWUTVzTXgZY
+         /ab7ij2IhImZVKq1p5pRPHkIGZUUOTsqWvKng8djZrWwO8NUVmdrMFZRL6uMwRvpP9
+         XOn/IaJYqsc4FITkpSAPFThgEpUzdaRfy+KQh/kBWefttthUH+mTYXZTh3XyFynBoW
+         EYDLKZjulzleA==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 19 Apr 2023 07:28:09 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <5f749397-d701-a83c-757b-cad38f74735f@wanadoo.fr>
+Date:   Wed, 19 Apr 2023 07:28:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] video: fbdev: mmp: Fix deferred clk handling in
+ mmphw_probe()
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     Helge Deller <deller@gmx.de>, Cai Huoqing <cai.huoqing@linux.dev>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <685f452cacc74f4983aaff2bc28a02a95e8aa8b7.1681414375.git.christophe.jaillet@wanadoo.fr>
+ <67353089-4966-424c-99c2-8524818f0e37@kili.mountain>
+ <a7c75eb0-857c-4755-aa23-0a4a96a6d2ca@kili.mountain>
+Content-Language: fr, en-US
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <a7c75eb0-857c-4755-aa23-0a4a96a6d2ca@kili.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some architectures can have their hugetlb pages down at the lowest PTE
-level: their huge_pte_alloc() using pte_alloc_map(), but without any
-following pte_unmap().  Since none of these arches uses CONFIG_HIGHPTE,
-this is not seen as a problem at present; but would become a problem if
-forthcoming changes were to add an rcu_read_lock() into pte_offset_map(),
-with the rcu_read_unlock() expected in pte_unmap().
+Le 19/04/2023 à 06:59, Dan Carpenter a écrit :
+> On Sat, Apr 15, 2023 at 04:09:03PM +0300, Dan Carpenter wrote:
+>> On Thu, Apr 13, 2023 at 09:33:17PM +0200, Christophe JAILLET wrote:
+>>> When dev_err_probe() is called, 'ret' holds the value of the previous
+>>> successful devm_request_irq() call.
+>>> 'ret' should be assigned with a meaningful value before being used in
+>>> dev_err_probe().
+>>>
+>>> While at it, use and return "PTR_ERR(ctrl->clk)" instead of a hard-coded
+>>> "-ENOENT" so that -EPROBE_DEFER is handled and propagated correctly.
+>>>
+>>> Fixes: 81b63420564d ("video: fbdev: mmp: Make use of the helper function dev_err_probe()")
+>>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>>> ---
+>>
+>> Presumably you already wrote a Coccinelle script for this but I've added
+>> it to Smatch as well.
 
-Similarly in their huge_pte_offset(): pte_offset_kernel() is good enough
-for that, but it's probably less confusing if we define pte_offset_huge()
-along with pte_alloc_huge().  Only define them without CONFIG_HIGHPTE:
-so there would be a build error to signal if ever more work is needed.
+No I haven't.
+I've spotted it while looking at some devm_clk_get_optional() candidate 
+with grep.
 
-For ease of development, define these now for 6.4-rc1, ahead of any use:
-then architectures can integrate patches using them, independent from mm.
+	git grep -A5 devm_clk_get | grep -B5 ENOENT
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
+Not perfect, but sometimes this kind of approach can find interesting 
+things coccinelle would miss.
 
- include/linux/hugetlb.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+As an example, the bitmap_alloc patch on sh4 was found this way, with grep.
 
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -183,6 +183,23 @@ extern struct list_head huge_boot_pages;
- 
- /* arch callbacks */
- 
-+#ifndef CONFIG_HIGHPTE
-+/*
-+ * pte_offset_huge() and pte_alloc_huge() are helpers for those architectures
-+ * which may go down to the lowest PTE level in their huge_pte_offset() and
-+ * huge_pte_alloc(): to avoid reliance on pte_offset_map() without pte_unmap().
-+ */
-+static inline pte_t *pte_offset_huge(pmd_t *pmd, unsigned long address)
-+{
-+	return pte_offset_kernel(pmd, address);
-+}
-+static inline pte_t *pte_alloc_huge(struct mm_struct *mm, pmd_t *pmd,
-+				    unsigned long address)
-+{
-+	return pte_alloc(mm, pmd) ? NULL : pte_offset_huge(pmd, address);
-+}
-+#endif
-+
- pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
- 			unsigned long addr, unsigned long sz);
- /*
+
+
+So nice to have it in smatch, ;-)
+
+CJ
+
+> 
+> Here is this warning:
+> drivers/video/fbdev/mmp/hw/mmp_ctrl.c:518 mmphw_probe() warn: passing zero to 'dev_err_probe'
+> 
+> Other warnings.  All five are interesting.
+> drivers/power/supply/rt9467-charger.c:1026 rt9467_request_interrupt() warn: passing zero to 'dev_err_probe'
+> drivers/pci/controller/dwc/pcie-bt1.c:601 bt1_pcie_add_port() warn: passing zero to 'dev_err_probe'
+> drivers/spi/spi-sprd-adi.c:570 sprd_adi_probe() warn: passing zero to 'dev_err_probe'
+> drivers/soc/qcom/icc-bwmon.c:776 bwmon_probe() warn: passing zero to 'dev_err_probe'
+> drivers/soc/qcom/icc-bwmon.c:781 bwmon_probe() warn: passing zero to 'dev_err_probe'
+> 
+> regards,
+> dan carpenter
+> 
+> 
+
