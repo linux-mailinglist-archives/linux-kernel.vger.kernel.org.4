@@ -2,97 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93276E79E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6A36E79EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbjDSMpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
+        id S232683AbjDSMqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbjDSMpm (ORCPT
+        with ESMTP id S232459AbjDSMqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:45:42 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB5A3C15
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:45:41 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63b78525ac5so1315886b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:45:41 -0700 (PDT)
+        Wed, 19 Apr 2023 08:46:49 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4904688
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:46:48 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id vc20so26396780ejc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:46:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681908340; x=1684500340;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UWkATxwUI54Wjf29X1y6InilmbSwGYCaupz7wL2xoYA=;
-        b=V/Zcy6Qn3ntP2MHoNED004N6bQmV9wF3ftWYZh6tBptsdhl634WOoMOrhxWZa09I0E
-         BhbUDuv3/vLqZQ3/fuC0QJi4YYd6uwouwggm+7jdkzU9qjrzbrWNa2UORInkpFcnVCHg
-         xIqXThcvzQMSqo6MOmPMDbyGP2XRWEalPvVi47srhbKaPo3iKAIPhFnkLhPeO9q8LvFb
-         CdDM9FLOXiV0XIhZiQOKkbwjfp3Ycbb6kxNdOikLX/rI2yPmTfRO0OBIbLaFAI1ybmvr
-         x1JzceTadJIKEShma9KMfX8wo/OeN/RW3l74s5Wl3nxYqBfCwilA6DnJG9f4VeyL0Vzo
-         Mx0Q==
+        d=linaro.org; s=google; t=1681908406; x=1684500406;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7aC9QJVuBevcboA/BflNZ1RlmayRbwZ7HK/k/lxZnPM=;
+        b=fte+W3khVB7Nunis5EJJJxCuWIDON4bWzUASAqX1LDHPQtIdTrYFFNDFQcNC5zLa5U
+         6AII/xLy4pSmLVowVDwCUaEyblFIfh69FPW4zMlmDquXOnkfEUjs6n5UHNBJs0AC84PJ
+         FQ3Hy7xnL6DA5Non9JnW5N9fYi0c0jRuW7kV41D8w+upHOaxcp/D8n9lJsjK9k6Wotrc
+         +pS4bu1gZ/jKYuxG1mNY+88q0fLguwNZECvbC4Gnr+3Kfxo7nLPhF4DnrXxRS0JmMG+B
+         n/auVOQZ0o7aBTWSt1Hy0c323kDirlxUo1i7fSf7W60EU8OJTxaRXiF2cB6EudK0TCd+
+         e84g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681908340; x=1684500340;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UWkATxwUI54Wjf29X1y6InilmbSwGYCaupz7wL2xoYA=;
-        b=lAiydtpTxI2/5YLhukleuLQU5E3qPC7Bqt7e1xFnPuPKtHqYi5udo8+e2x4W6fZDmn
-         jBmxNs8JO8dLbxDHzpfaHVn1VgK+rGa0AOjB5+GEXqHYmo8+85ZUj13ukDRnNloM1VRM
-         CPjdnajU5ZIbEra/lZfy5mVT2a37SDTHXvTuRVi3TWebRFrMj5zJYaByP7Qm5T9YLvfr
-         cdqBwZ27H4RkzAa/d4Q3TL4ijNmlqa5bemPvPX/7tC0rQKPBEbFddVmwjXE6KvgosSbq
-         1Fk7yu/nj9yzBj2l+r8JEtBJSSAlAL7Y7cJ+ugiBuUw//xXHwY6+9Sh+MLPNhfAmMFn1
-         k+dw==
-X-Gm-Message-State: AAQBX9dZmAzo8ml0wEZgWZWMncQfjOBh6FBcjcPeh0DyioU/mBNs33yV
-        g71/lmzcxN8ccblAr41iIKD+/Q==
-X-Google-Smtp-Source: AKy350YZ068gLQ817k+Ij6jge/IubKk6mC1ANeALBOZN7osif6ym1dK+BGMD9/8chbAcO3bPTjBUtQ==
-X-Received: by 2002:a05:6a20:3c92:b0:f1:1ab5:5076 with SMTP id b18-20020a056a203c9200b000f11ab55076mr3391077pzj.2.1681908340445;
-        Wed, 19 Apr 2023 05:45:40 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id e17-20020aa78c51000000b0063b79bae907sm7731602pfd.122.2023.04.19.05.45.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 05:45:40 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Ayush Jain <ayush.jain3@amd.com>, Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        David Hildenbrand <david@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Steve French <stfrench@microsoft.com>, linux-mm@kvack.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <1770755.1681894451@warthog.procyon.org.uk>
-References: <1770755.1681894451@warthog.procyon.org.uk>
-Subject: Re: [PATCH] splice: Fix filemap of a blockdev
-Message-Id: <168190833944.417103.14222689199936898089.b4-ty@kernel.dk>
-Date:   Wed, 19 Apr 2023 06:45:39 -0600
+        d=1e100.net; s=20221208; t=1681908406; x=1684500406;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7aC9QJVuBevcboA/BflNZ1RlmayRbwZ7HK/k/lxZnPM=;
+        b=D0aaNDWwIyZS3rdna7ochy0QeRaiwNKcBJtp4Cpndr+7IHj8p1eoq7WuUfWPgyAG9L
+         S36zPVDW4u7BsfEiUg4Bkin46BN5hYDHVlYg+hbPiv5TqwqSSLI2Qym3kBLN2RY2qd1q
+         5IWxv+6038cbgC0j8b6VYLjYVvBmIOnEtrgW39oArK4inLu2akeQqG9QE23rtD8eUuK+
+         RaljcHPjGWO/4dJDasJ6v+F20BYFu1X+iwdPshX8fKdKocMmFwTHmZlIohdo76oUbC4c
+         9BLMnGHj0hQVDvBzVx1cD3ZtmEeqjIZitu8TWzzWRiETCiWEPqXm2jfLyMRynLCD1KCE
+         v3gw==
+X-Gm-Message-State: AAQBX9eRcY0BrsFmjUybri/l7pxIpZtsmITD70MFUHv4+IIK12jVY6le
+        6Jz4LhHLRGiGMKCFPTPrhZNhsg==
+X-Google-Smtp-Source: AKy350ZMwOuWqQxCAIS+0nah/aDzoumU1LrPPa2y+0kQgJJnXaUJi2vAA/WtVdpbsllwiaweARGZ6A==
+X-Received: by 2002:a17:907:3e1c:b0:94f:3728:7047 with SMTP id hp28-20020a1709073e1c00b0094f37287047mr13216088ejc.6.1681908406654;
+        Wed, 19 Apr 2023 05:46:46 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:b7d8:d88b:1fac:c802? ([2a02:810d:15c0:828:b7d8:d88b:1fac:c802])
+        by smtp.gmail.com with ESMTPSA id me15-20020a170906aecf00b0094f4e914f67sm5128812ejb.66.2023.04.19.05.46.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 05:46:46 -0700 (PDT)
+Message-ID: <9a2ed4b6-13b7-9e65-263c-d2b08e11da00@linaro.org>
+Date:   Wed, 19 Apr 2023 14:46:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] arm64: defconfig: enable TI K3 R5 and DSP remote proc
+ drivers
+To:     Hari Nagalla <hnagalla@ti.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org,
+        quic_bjorande@quicinc.com, arnd@arndb.de, treding@nvidia.com,
+        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, rafal@milecki.pl
+References: <20230419113958.17141-1-hnagalla@ti.com>
+ <20230419113958.17141-3-hnagalla@ti.com>
+ <70b6f997-d420-0e59-0be5-6ae9db7aed66@linaro.org>
+ <ae49267f-4534-e489-4bb7-946944a9a04c@ti.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ae49267f-4534-e489-4bb7-946944a9a04c@ti.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 19/04/2023 13:52, Hari Nagalla wrote:
+> On 4/19/23 06:43, Krzysztof Kozlowski wrote:
+>> Why two separate patches for simple defconfig change?
+> The intention is to separate commits for enabling mailbox driver from 
+> remote proc drivers. The mailbox driver is used by the TI K3 system 
+> controller interface (SCI) driver as well, which is independent of 
+> remote proc drivers.
 
-On Wed, 19 Apr 2023 09:54:11 +0100, David Howells wrote:
-> Fix the new filemap_splice_read() function to get i_size from
-> in->f_mapping->host, not in->f_inode so that it works with block devices
-> too (in->f_inode points to the device file, which is typically zero size).
-> 
-> 
-
-Applied, thanks!
-
-[1/1] splice: Fix filemap of a blockdev
-      commit: 5a9515a407d1aec1dd76c24fe99d9981730b74fb
+Yeah, but why? This is simple defconfig change, just enabling drivers
+for same platform. With such arguments are we going to enable all
+drivers everywhere one-by-one?
 
 Best regards,
--- 
-Jens Axboe
-
-
+Krzysztof
 
