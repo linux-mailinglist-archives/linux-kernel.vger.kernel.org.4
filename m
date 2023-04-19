@@ -2,70 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B176E70C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 03:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A986E70CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 03:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbjDSBhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 21:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36058 "EHLO
+        id S231618AbjDSBjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 21:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjDSBg7 (ORCPT
+        with ESMTP id S230377AbjDSBjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 21:36:59 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25602100
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 18:36:58 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-54fe3cd445aso176407757b3.5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 18:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681868217; x=1684460217;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SnOVojuWZvjCGvKm6g2ZvT3BFVBOe3FpgKuoK70Vuw8=;
-        b=5s+OJ9T9UsUhZ7DfeIrljal3DDwwl9lStbUBW/eV2Oo3pQ6TguokiFUdiPo9WmlSzv
-         U619T1L2qQXjvKytIr5XDq7TWW+taW8XItZISk3jEe6pIAUddKt7h0zfYLVdj1UfaTHV
-         GQGCMnAoVazHwzX85do2aJI/7gJaJMCcaR23sQZZHlwNGbElriM2ExyUp4+tTieSDmsy
-         mxpl1pUa043IcVai65aZ1+oJRNSvNDXzZOQJ5+n5Lisai4CfAB5bR8ubvWJK9P5tjL89
-         4PZGEtQvuvP6ORl7WFDdaWnwrTgyIEQaf28rjUt9xzB1YJejS+8bRfDt3TRsMEDRZ+Tq
-         8Z0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681868217; x=1684460217;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SnOVojuWZvjCGvKm6g2ZvT3BFVBOe3FpgKuoK70Vuw8=;
-        b=CpSqU7Je2MP0SuMbh+1/pGPVz8c/H477Tib+tNI6CG1dKcVDgKcef4yiv9SXskf7fO
-         hAKut48DtrwExOKEJsYUAx35WIJ5OyI1P2YOc78FRCHA4pPxua7wlCrWMtiVkDeheAhY
-         f8pXwFtur4epZIdieq85XQla6e1SjdkEyTVJCXw9ET9ijI/M7qu45pBS3kVMkQbJoKry
-         V259VQKympFzNX//DrcQpCcuasRYMIWMyaCFmajWqUb+8OgWNGLu6FJDfBG7IwCoY9sC
-         0qR1YMe0VZFPthaMsoKAt19muR16mmEGkE7MnEgREMggw0dGw/P9biqGYzCT+QJaEmoW
-         Jrxg==
-X-Gm-Message-State: AAQBX9dSzk5kWoMlAXxpHGJi3vV8ruOxXdohYEgQBYWz+dalM0id8oNv
-        EuNRdy5ZsxQIFdy8Kkspz/AawA==
-X-Google-Smtp-Source: AKy350Y1HpjyFvNoanRn8jl5X5F27JdYIEha60PvD72lMQbkfwEtMRv9nSrEYo/6ZDyok87hqZtS2A==
-X-Received: by 2002:a81:918c:0:b0:552:ae45:6e0f with SMTP id i134-20020a81918c000000b00552ae456e0fmr1837025ywg.26.1681868217241;
-        Tue, 18 Apr 2023 18:36:57 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id l72-20020a81704b000000b0054f88e5858esm4195396ywc.78.2023.04.18.18.36.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 18:36:56 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 18:36:43 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Waiman Long <longman@redhat.com>
-cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Joe Mario <jmario@redhat.com>,
-        Barry Marson <bmarson@redhat.com>,
-        Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH] mm/mmap: Map MAP_STACK to VM_STACK
-In-Reply-To: <6c3c68b1-c4d4-dd82-58e8-f7013fb6c8e5@redhat.com>
-Message-ID: <cffc7454-614-1939-f235-7b139dc46b41@google.com>
-References: <20230418210230.3495922-1-longman@redhat.com> <20230418141852.75e551e57e97f4b522957c5c@linux-foundation.org> <6c3c68b1-c4d4-dd82-58e8-f7013fb6c8e5@redhat.com>
+        Tue, 18 Apr 2023 21:39:35 -0400
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BC81FD3;
+        Tue, 18 Apr 2023 18:39:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VgSP52n_1681868370;
+Received: from 30.97.56.117(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VgSP52n_1681868370)
+          by smtp.aliyun-inc.com;
+          Wed, 19 Apr 2023 09:39:31 +0800
+Message-ID: <2dc023c9-7805-3dfa-f902-31468a2d3f7e@linux.alibaba.com>
+Date:   Wed, 19 Apr 2023 09:39:28 +0800
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-1463760895-397833526-1681868216=:9821"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/3] drivers/perf: add DesignWare PCIe PMU driver
+Content-Language: en-US
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>, helgaas@kernel.org,
+        yangyicong@huawei.com, will@kernel.org, Jonathan.Cameron@huawei.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, rdunlap@infradead.org,
+        robin.murphy@arm.com, mark.rutland@arm.com,
+        zhuo.song@linux.alibaba.com
+References: <20220917121036.14864-1-xueshuai@linux.alibaba.com>
+ <20230410031702.68355-3-xueshuai@linux.alibaba.com>
+ <713d8162-dd3c-483c-b984-7707ef8aaa36@linux.alibaba.com>
+ <ca46be9a-77f2-80ee-62e8-a3ce3eb02097@linux.alibaba.com>
+ <e2397b81-ec19-25e4-ee47-29da29984f9c@linux.alibaba.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <e2397b81-ec19-25e4-ee47-29da29984f9c@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,60 +51,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
----1463760895-397833526-1681868216=:9821
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-On Tue, 18 Apr 2023, Waiman Long wrote:
-> On 4/18/23 17:18, Andrew Morton wrote:
-> > On Tue, 18 Apr 2023 17:02:30 -0400 Waiman Long <longman@redhat.com> wro=
-te:
-> >
-> >> One of the flags of mmap(2) is MAP_STACK to request a memory segment
-> >> suitable for a process or thread stack. The kernel currently ignores
-> >> this flags. Glibc uses MAP_STACK when mmapping a thread stack. However=
-,
-> >> selinux has an execstack check in selinux_file_mprotect() which disall=
-ows
-> >> a stack VMA to be made executable.
-> >>
-> >> Since MAP_STACK is a noop, it is possible for a stack VMA to be merged
-> >> with an adjacent anonymous VMA. With that merging, using mprotect(2)
-> >> to change a part of the merged anonymous VMA to make it executable may
-> >> fail. This can lead to sporadic failure of applications that need to
-> >> make those changes.
-> > "Sporadic failure of applications" sounds quite serious.  Can you
-> > provide more details?
->=20
-> The problem boils down to the fact that it is possible for user code to m=
-map a
-> region of memory and then for the kernel to merge the VMA for that memory=
- with
-> the VMA for one of the application's thread stacks. This is causing rando=
-m
-> SEGVs with one of our large customer application.
->=20
-> At a high level, this is what's happening:
->=20
-> =C2=A01) App runs creating lots of threads.
-> =C2=A02) It mmap's 256K pages of anonymous memory.
-> =C2=A03) It writes executable code to that memory.
-> =C2=A04) It calls mprotect() with PROT_EXEC on that memory so
-> =C2=A0=C2=A0=C2=A0 it can subsequently execute the code.
->=20
-> The above mprotect() will fail if the mmap'd region's VMA gets merged wit=
-h the
-> VMA for one of the thread stacks.=C2=A0 That's because the default RHEL S=
-ELinux
-> policy is to not allow executable stacks.
+On 2023/4/18 AM9:51, Baolin Wang wrote:
+> 
+> 
+> On 4/17/2023 9:16 AM, Shuai Xue wrote:
+> 
+> [snip]
+> 
+>>>> +
+>>>> +static void dwc_pcie_pmu_event_update(struct perf_event *event)
+>>>> +{
+>>>> +    u64 counter;
+>>>> +    struct dwc_pcie_pmu *pcie_pmu = to_dwc_pcie_pmu(event->pmu);
+>>>> +    struct dwc_pcie_rp_info *rp_info = pmu_to_pcie_info(event->pmu);
+>>>> +    struct pci_dev *pdev = rp_info->pdev;
+>>>> +    u16 ras_des = rp_info->ras_des;
+>>>> +    struct hw_perf_event *hwc = &event->hw;
+>>>> +    enum dwc_pcie_event_type type = DWC_PCIE_EVENT_TYPE(event);
+>>>> +    u64 delta, prev, now;
+>>>> +
+>>>> +    do {
+>>>> +        prev = local64_read(&hwc->prev_count);
+>>>> +
+>>>> +        if (type == DWC_PCIE_LANE_EVENT)
+>>>> +            dwc_pcie_pmu_read_event_counter(pdev, ras_des, &counter);
+>>>> +        else if (type == DWC_PCIE_TIME_BASE_EVENT)
+>>>> +            dwc_pcie_pmu_read_base_time_counter(pdev, ras_des,
+>>>> +                                &counter);
+>>>> +        else
+>>>> +            dev_err(pcie_pmu->dev, "invalid event type: 0x%x\n", type);
+>>>> +
+>>>> +        now = counter;
+>>>> +    } while (local64_cmpxchg(&hwc->prev_count, prev, now) != prev);
+>>>> +
+>>>> +    delta = now - prev;
+>>>
+>>> This can be overflow? better to add a mask to avoid possible overflow.
+>>
+>> I think it can not. This Root Complex supports up to PCIe Gen5 (32 GT/s)
+>> and one root port support up to x16 lanes, with peek bandwidth 64 GB/s.
+>> On Yitian 710, one root port is x4 lane with peak bandwidth 16 GB/s.
+>> The counter is 64 bit width with 16 bytes unit.
+>>
+>>     2^64*16/(64*10^9)/60/60/24/365 = 146 years
+>>
+>> For x16 root port, it will not overflow within 146 yeasr and for yitian 710,
+>> it will never overflow in my life too.
+> 
+> However the lane event counter is 32bit, so still a maximum counter mask is preferable.
 
-Then wouldn't the bug be at the SELinux end?  VMAs may have been merged
-already, but the mprotect() with PROT_EXEC of the good non-stack range
-will then split that area off from the stack again - maybe the SELinux
-check does not understand that must happen?
+You are right, will mask it in next version.
 
-Hugh
----1463760895-397833526-1681868216=:9821--
+Thank you.
+Best Regards,
+Shuai
