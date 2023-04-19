@@ -2,178 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7014C6E756B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 299DD6E756F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232634AbjDSIht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48170 "EHLO
+        id S232385AbjDSIi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbjDSIhq (ORCPT
+        with ESMTP id S231308AbjDSIi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:37:46 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on20601.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e83::601])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AB75FF7;
-        Wed, 19 Apr 2023 01:37:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QZue3oY4CrEWJe86AsvIrfYBHgz+O+GUIdaFmQlA+kOci3eCqdIFpJzn9pfX5yr1FRRe2R5tZjhHQjWADnWB9KJGp/Pn0zBzdRqexjQmT+JnMaXZGgfclF3m8iYi2I5Gew1jaFsLBio8kePN3IakGBzcdHqRh+wK13llagzkv5GvVZ2wYKwRbrEcOSXDg26lRdPhHZ6sKU+VVVxxJSgCg4AsneKlMFm6dKHk6Du11wubi8gR80gEWW6slsmFdqw1hQX4DBhT8ef1o5FhIDJSWvmXFsRdEHeMk35Mpdo/M/oQquDIx6NVtGJzBfK0O++Pe5na17r68iOaryYIsVHFrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zYIrE53+UxAVrpxR8AYB9zix3SA3xyc5LH4x12x81A0=;
- b=Qg8B3FFUmC1drsGqo/lZtQxkYuyXDErtfHekE+45AERFT/eEnUTtFc8+fa2Wp13UdHyXMGjfJrcos3b1cVrQjRIXsjaqUKiSm6z/06Ixv82xfe56kY44mNZEtiNGRn9GJ9E5/In6zZd+NhDES1bX0rx2taAfn4kDtvkwbVBGH/utgerJTeA4UOES4JMT4oDcCOHQrJ67uDiuNLbDatCIDN714azWQ1bYtnnpixZPlnXi5ENMfAfhcCkCfJ0okfI7nXW4GmOC+PNj9w0yBblKxvzP43CX/gAu3YXl0uAamIg45agtsvAYgT5G4dXqdYFRVgFPBgDEVT2/iKkZ6irP0w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zYIrE53+UxAVrpxR8AYB9zix3SA3xyc5LH4x12x81A0=;
- b=y/0Ls6anrPg1PmP4M7QukLkKndHmgZr+6aZi24vN+BHDIxSD9XfHxMVaToMzUtAU1/7AacPqAhxmjWmY8PAfN5nKnolt9SU8q2FtWbfUCd6/exITGf6EyWWCrgoh1KF0yrvuNHfmO7gVucPZjLU2hXDbDdHu7U8FoI4YfuPsz8s=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by MW3PR12MB4427.namprd12.prod.outlook.com (2603:10b6:303:52::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.49; Wed, 19 Apr
- 2023 08:37:39 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d2f8:7388:39c1:bbed]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d2f8:7388:39c1:bbed%3]) with mapi id 15.20.6319.020; Wed, 19 Apr 2023
- 08:37:39 +0000
-Message-ID: <e3005eb6-e37f-bbb1-446b-15b2bc02b69f@amd.com>
-Date:   Wed, 19 Apr 2023 10:37:34 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/2] drm/radeon: Fix integer overflow in
- radeon_cs_parser_init
-Content-Language: en-US
-To:     hackyzh002 <hackyzh002@gmail.com>, alexander.deucher@amd.com
-Cc:     Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        sumit.semwal@linaro.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-References: <20230419042407.69001-1-hackyzh002@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230419042407.69001-1-hackyzh002@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0005.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1d::19) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Wed, 19 Apr 2023 04:38:26 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A712D5BA1;
+        Wed, 19 Apr 2023 01:38:23 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pp3KA-00089X-Gl; Wed, 19 Apr 2023 16:38:00 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 19 Apr 2023 16:37:59 +0800
+Date:   Wed, 19 Apr 2023 16:37:59 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     kernel test robot <lkp@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org,
+        Sean Wang <sean.wang@mediatek.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>
+Subject: [PATCH] hwrng: Kconfig - Add HAS_IOMEM dependencies for
+ exynos/meson/mtk/npcm
+Message-ID: <ZD+oZ9DWiTxeo3RY@gondor.apana.org.au>
+References: <202304191106.swKbBeDh-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|MW3PR12MB4427:EE_
-X-MS-Office365-Filtering-Correlation-Id: 36a85e92-eedc-4bf7-04ee-08db40b15580
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tBbxSzJYQXBr1t1QyruQWsBoTdF74M5PS3i0oVHTWUNxGWgJqAZW0HNor0wQIr0sztCjzRkl6+h6WoKA7CRT0JGPmeAg1UfPMdv+4BIC2R/Ev4IZAVqWPIUFwZcoHm+CcmCsZGgjecaXNlZF3Njv1SrY+7EAXHZZvJT61IbB1TAsxznC3MbUkql8NwsQrdo2ZQ/5LZZXEM9yJUCIuKeZ4ZbHZqt/xVwSX3v77SNist+bGUBH0ACpTiKlKpGtEUZH3Ar+nYFXFJOy9HYvtE4KEAJqlVhHTNl+VuI72p2d3+Ys2sKDkGzePtefcTIUc0ouqUufSQmIGVXSFMJZLA1VyOJj3GNaYMb3La7oSMLmJJ19y4vJBLrbQkvmT366oPYfPjt62jYnDUQxKwLIR1SsRdlFq1XWQOumAcqP2iRHi9jtblnjhkPvV1IE4wZIJUi+TyNhRfo0DbjokZGAAN+SO/JTu0YUwEvKrletaONWv1IUJQrmzTJADE/PHl51jz3vU50srD9KE7bWXFegHKQ3uxOM9w//GuFaJZ/se6u1IZ7ocusacKNwOK4KY0hQktXfarTpj6AB1CepTjy9Rgm/8UbRrjJdty3PhSUkZLXFbjIBnKmQgUyNp8B/AeG5IA3mr5WSRnppzD7aSigbGGEGOw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(366004)(136003)(396003)(376002)(451199021)(31686004)(36756003)(5660300002)(38100700002)(2906002)(8936002)(86362001)(31696002)(66556008)(4326008)(66946007)(66476007)(41300700001)(8676002)(6486002)(83380400001)(6506007)(478600001)(316002)(6512007)(6666004)(186003)(6636002)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bXVRSklyWHgxdDJ2QmZzTzJoNmtZMUdHUnNIZEtpYnBkbk9BVTViZ1p6M2Uw?=
- =?utf-8?B?K3RVNzN0NFdpMjFxVmlwMDRkRDRzT0FHeXNsaEZEZVJjWXlmcmx6a29Vcmll?=
- =?utf-8?B?VllwdU5Tc21KZFFPZy9ZZm1mcmZadkRiWmlOeTcrNFVicHJBNHRDTnF3Q2U2?=
- =?utf-8?B?SjFmRnAzN2tJR091Q3lnVU4wN09rYUZvVHZXNWtyRkUxa2dyTVZ0LzMxS1Z1?=
- =?utf-8?B?TVQ3Y09xZEcwNkFVR3NxcWh5RlJHODZqTTg2dkRSbXJVa2Q1Q01hM01rRmNG?=
- =?utf-8?B?eW5HUTFtV3BiWG5TWG5Qa2NlY2M4TzFiREU4SHl6c0VTUUZ5cmlpNWFFYmpB?=
- =?utf-8?B?dWFiRCs1QlFaei9NMEJPdU0rR08vcmV4Ty93dnhFbURkWEc5VVgrb29aZm8r?=
- =?utf-8?B?dWIxYU92VXg0NHNjOE82bEtkVjRsUlJIbGRXcUJFZmI5WDhzRnY3aDNWY3JS?=
- =?utf-8?B?UzFJeCtNLzBYTWlQSmNCcHJkOUs3WjJNTzNHU202T0VWSjJPQUdQMWNWU0VH?=
- =?utf-8?B?dEYwNmRHZW5TWmdoVkZNYkJGWFR0QXJIR1BqQlFSdDljQ0lTa0ZRS05vT0VE?=
- =?utf-8?B?T25FR3hOQVVha2U4Y0JZdURwd21mcFJobFhWdXl5SE1MOVFBU0xmNmJ2cTVh?=
- =?utf-8?B?cExsTkhzUzIrM25QOW9sMVhlcm55ekpndk52d0V2bnhYcDRiUmQrSndxQjJn?=
- =?utf-8?B?TTlFeE8yWnNaRXpHYWtEVkQvVEtCVkpydDVKRkp3dlcyZngvUE13K2Z6dW12?=
- =?utf-8?B?L1U4M21RNXkvbGl0QUVvd2ppU1BhSkZqSDlIaURDcjVRWHg2aGJrVk9BRFM0?=
- =?utf-8?B?WjNCcUZqY1JCYTlGNE8rYUs1S3JHV01OY3RLMzdacDhROStLc3dVOWFkcWdL?=
- =?utf-8?B?VlhQQWlZckRUd25wZmtYamJwN09GWGlmWWtJYzVlWnlMVE5UbTFhMG9DdjNy?=
- =?utf-8?B?c0x4TWEyQVRKK0RaR1VTeGNXOGh5SkljV0t3VXpueVB0SUkwWEdFRXVFQmxt?=
- =?utf-8?B?bE1WeURBc3NEaXRSb1pKb1FTdUlINGxDSGFtaitwdGMyV2MyTlVtdmZEYnlY?=
- =?utf-8?B?VjZPUHByczcwSVVpbVRNTW9kYUxGbEpDM2NaNWZRYU9HUlJ0UFBnMk5uS0dG?=
- =?utf-8?B?TnMrb3QwNFh6NmkyRGd0c3k0c2pIdyt3cC81SGZSK0JKUjJQY3d2Yi8xUjhP?=
- =?utf-8?B?bzVleVdQUWp2d092cW9EalpoSjZiMVVHNXBuT3F5V0J3Wmd2L0V0TVA2TnM4?=
- =?utf-8?B?NzRkNmxrVzdMMHdaQ0dKd3U2bWVybmwwRnVDRUJiV1RNeWtiOFQ0SHpFSFJS?=
- =?utf-8?B?WGtZSE1iWHd4anVsY2ZtdlI3eWV6Rzk2Yk5tN3Bxd1NPQmkzNVR6OUJtSE16?=
- =?utf-8?B?LzBuVTZoVFZoUzVCTjBLKzhDcmxzVEhKcUx0VTRCWGZEenNqMFFTR1hnQnZh?=
- =?utf-8?B?dFZQbTNrWGU4MWM2YklQcHl1ZEdsZUZTME1zQlBLSzRCeUwvOTZPWkpCaUQv?=
- =?utf-8?B?aHRISnZiL29Uc3VsS2hqWXRNSDRqSVE2N0RKb1ZxMVEvR2VicG5BeW1UTkg5?=
- =?utf-8?B?MWV1TDVHQ2YyRHNXaTU0Q2N6NEFIZ3RmcElZanE0bERmYlg3U1ZQaFdwbEVQ?=
- =?utf-8?B?aEJxRTY4TFNPRXlwSGo2emtjVWcxdDNOanEraUdRZE9sRGpPeFUvcnFWbXpz?=
- =?utf-8?B?cHNWdjRwSHNCK0dHMmxOVG5DKzlkNk4zMS9YQkplVnM3WTJsL1J4OCtNUFg2?=
- =?utf-8?B?Z3JpTUJWaUJXOEFsSG9CTVBBckw5TUxKRmRVTzRBRHBWbHAxN3BjK0pGWjdT?=
- =?utf-8?B?UW40aWZnejFiZTRGaWxIWjRuZ04yeFJPei9iUEgxVXVoSWhmZitLUzYvQmph?=
- =?utf-8?B?U3IrVk50QUF6MVowRmVEK3VnZ2pqbjdmakxxQS9NN2MxcWlZZndFOU1CNFda?=
- =?utf-8?B?WUs5UEcvNCt5NGxQZ0p3TDFVZitWamJJYlk2UnZ0L0tYKy9rbEFEZTBENXRP?=
- =?utf-8?B?cmRkNE1pallxT0ZQQ3EyVFREUEt0TjZYcVBFUkt1a0FDK2N0N0Q2Si9YUkVG?=
- =?utf-8?B?ZGl3N2lxM0pvS3Y4dmlEcXhtTkd5UlVnOGxOb2NWME1RK215S0hxbm9OZjFU?=
- =?utf-8?B?TTFVazhUVTFsVm10MWZIMjJyVnlUSzhPd3ZZT3l6dFhTYVJOZ3Q4ZmlWNGpq?=
- =?utf-8?Q?Em7RQIqgwkmeui33N0+JLaKaROJebhNZkWhqXg76VoTz?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 36a85e92-eedc-4bf7-04ee-08db40b15580
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 08:37:39.3433
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PRoOPCWI+KpoVj8vb8z4db7RsmsQiuSHyYTnbrz0E5rvkuEw2b1cr/81NqApBM3e
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4427
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202304191106.swKbBeDh-lkp@intel.com>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 19.04.23 um 06:24 schrieb hackyzh002:
-> The type of size is unsigned, if size is 0x40000000, there will be an
-> integer overflow, size will be zero after size *= sizeof(uint32_t),
-> will cause uninitialized memory to be referenced later
-
-Well good catch, but this is actually harmless.
-
-Userspace can control the memory which is referenced here anyway and 
-since the size would be zero when copying anything back to userspace 
-this is also not an information leak.
-
+On Wed, Apr 19, 2023 at 11:43:42AM +0800, kernel test robot wrote:
 >
-> Signed-off-by: hackyzh002 <hackyzh002@gmail.com>
-> ---
->   drivers/gpu/drm/radeon/radeon_cs.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/radeon/radeon_cs.c b/drivers/gpu/drm/radeon/radeon_cs.c
-> index 46a27ebf4..472c29050 100644
-> --- a/drivers/gpu/drm/radeon/radeon_cs.c
-> +++ b/drivers/gpu/drm/radeon/radeon_cs.c
-> @@ -270,7 +270,7 @@ int radeon_cs_parser_init(struct radeon_cs_parser *p, void *data)
->   {
->   	struct drm_radeon_cs *cs = data;
->   	uint64_t *chunk_array_ptr;
-> -	unsigned size, i;
-> +	u64 size, i;
+>    s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
+>    exynos-trng.c:(.text+0x39e): undefined reference to `devm_platform_ioremap_resource'
+>    s390-linux-ld: drivers/char/hw_random/meson-rng.o: in function `meson_rng_probe':
+>    meson-rng.c:(.text+0x10a): undefined reference to `devm_platform_ioremap_resource'
+>    s390-linux-ld: drivers/char/hw_random/mtk-rng.o: in function `mtk_rng_probe':
+>    mtk-rng.c:(.text+0x40e): undefined reference to `devm_platform_ioremap_resource'
+>    s390-linux-ld: drivers/char/hw_random/npcm-rng.o: in function `npcm_rng_probe':
+>    npcm-rng.c:(.text+0x2ca): undefined reference to `devm_platform_ioremap_resource'
 
-Please use size_t for size only and not "i".
+OK, this patch should fix these ones at least:
 
->   	u32 ring = RADEON_CS_RING_GFX;
->   	s32 priority = 0;
->   
-> @@ -347,7 +347,7 @@ int radeon_cs_parser_init(struct radeon_cs_parser *p, void *data)
->   				continue;
->   		}
->   
-> -		p->chunks[i].kdata = kvmalloc_array(size, sizeof(uint32_t), GFP_KERNEL);
-> +		p->chunks[i].kdata = kvcalloc(size, sizeof(uint32_t), GFP_KERNEL);
+---8<---
+Add missing dependencies on HAS_IOMEM as otherwise they will trigger
+failed builds with COMPILE_TEST enabled.
 
-Please drop that chunk.
+Also add dependencies on OF where appropriate.
 
-Regards,
-Christian.
+Change the default so that these drivers are not enabled just because
+COMPILE_TEST is turned on.
 
->   		size *= sizeof(uint32_t);
->   		if (p->chunks[i].kdata == NULL) {
->   			return -ENOMEM;
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202304191106.swKbBeDh-lkp@intel.com/
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
+diff --git a/drivers/char/hw_random/Kconfig b/drivers/char/hw_random/Kconfig
+index ae508e96cfc2..f3146470ce88 100644
+--- a/drivers/char/hw_random/Kconfig
++++ b/drivers/char/hw_random/Kconfig
+@@ -400,9 +400,9 @@ config HW_RANDOM_POLARFIRE_SOC
+ 
+ config HW_RANDOM_MESON
+ 	tristate "Amlogic Meson Random Number Generator support"
+-	depends on HW_RANDOM
+ 	depends on ARCH_MESON || COMPILE_TEST
+-	default y
++	depends on HAS_IOMEM && OF
++	default HW_RANDOM if ARCH_MESON
+ 	help
+ 	  This driver provides kernel-side support for the Random Number
+ 	  Generator hardware found on Amlogic Meson SoCs.
+@@ -427,9 +427,9 @@ config HW_RANDOM_CAVIUM
+ 
+ config HW_RANDOM_MTK
+ 	tristate "Mediatek Random Number Generator support"
+-	depends on HW_RANDOM
+ 	depends on ARCH_MEDIATEK || COMPILE_TEST
+-	default y
++	depends on HAS_IOMEM && OF
++	default HW_RANDOM if ARCH_MEDIATEK
+ 	help
+ 	  This driver provides kernel-side support for the Random Number
+ 	  Generator hardware found on Mediatek SoCs.
+@@ -456,7 +456,8 @@ config HW_RANDOM_S390
+ config HW_RANDOM_EXYNOS
+ 	tristate "Samsung Exynos True Random Number Generator support"
+ 	depends on ARCH_EXYNOS || COMPILE_TEST
+-	default HW_RANDOM
++	depends on HAS_IOMEM
++	default HW_RANDOM if ARCH_EXYNOS
+ 	help
+ 	  This driver provides support for the True Random Number
+ 	  Generator available in Exynos SoCs.
+@@ -483,7 +484,8 @@ config HW_RANDOM_OPTEE
+ config HW_RANDOM_NPCM
+ 	tristate "NPCM Random Number Generator support"
+ 	depends on ARCH_NPCM || COMPILE_TEST
+-	default HW_RANDOM
++	depends on HAS_IOMEM
++	default HW_RANDOM if ARCH_NPCM
+ 	help
+ 	  This driver provides support for the Random Number
+ 	  Generator hardware available in Nuvoton NPCM SoCs.
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
