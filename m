@@ -2,620 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0816E7646
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4F26E764D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232892AbjDSJag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 05:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
+        id S232916AbjDSJbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 05:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbjDSJa3 (ORCPT
+        with ESMTP id S232901AbjDSJb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:30:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECDD6A65
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:29:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681896589;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WvR3JPWIp9wuQH3zOF8Rv6ul51i66dksb5BPsB4V1Gw=;
-        b=LD0o8Yp+kC5LUTjq5JRURXE9T57u875acOWLUxOqh2Kpo445WQdr+f0fQSVl5KfCLOzQJh
-        04dYOf2GfRif6gp1cj0dAfF6ZKSt9RTs7rjfW55miYDB+1G7wo153mhwYQc5RE0Kym4L8J
-        oYzJxheIDHVHjMYMwnlWOD9/+elZZZk=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-672-QfByfaREM0G-YtcI8r3ZeQ-1; Wed, 19 Apr 2023 05:29:48 -0400
-X-MC-Unique: QfByfaREM0G-YtcI8r3ZeQ-1
-Received: by mail-qt1-f197.google.com with SMTP id d22-20020a05622a101600b003ef3a12c431so3270896qte.10
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:29:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681896586; x=1684488586;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WvR3JPWIp9wuQH3zOF8Rv6ul51i66dksb5BPsB4V1Gw=;
-        b=I1HvIMamtli1LIsXRW6DcNdtr4giBeFt0GyU9u+qLZkzuiKZFJC6tRyNCTJhINu7fX
-         YNCXPuWRiww0nsRvDAlW1Cje7zTFhIPZnQULmdzL45/T8Rygh+UQGaoWaolgsi+sBc/K
-         T2ycOM6KbRE4CATHFflB/bW6yQjDHV7yeSfbLlFgZILCAw75NoyxqfOdE3a5Otf6C1cc
-         XFSEzcZkADq8xeHfe85bmOJeGIikBfqS1QK0zVuX9eQuWSpbIU3ZdyyHizH3L2lSgyxI
-         HYCv1xgh6nP9t9z0OBg8X9UvWZttVf2S28/i0FxkOmuUctXx/FT80E3WdRA9IzpV1XXx
-         uxLQ==
-X-Gm-Message-State: AAQBX9cgihgX1HZA+0XcEpbjbWbELI6VIhVsCLLEm8uQtSBeZpplsjRz
-        g9D5mueqHiAakvoytzqyLzC8nP9CXDsAHaNK9qOrC+6KEEZMDtUaBt9tfQ+n4NUKBXe40x2Ylmr
-        Q4TQjkUCm3+F6+5a9kLsfKDdD
-X-Received: by 2002:a05:6214:d0e:b0:5a9:129:c704 with SMTP id 14-20020a0562140d0e00b005a90129c704mr25890987qvh.9.1681896586258;
-        Wed, 19 Apr 2023 02:29:46 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aoy1eznJk1Xj2YSx1QTmr2ufEeqKPzq0VaEzKUvzmBibzdxmLbJHc60kduX12q2m3kSa1QIw==
-X-Received: by 2002:a05:6214:d0e:b0:5a9:129:c704 with SMTP id 14-20020a0562140d0e00b005a90129c704mr25890960qvh.9.1681896585937;
-        Wed, 19 Apr 2023 02:29:45 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-53-134-157.retail.telecomitalia.it. [82.53.134.157])
-        by smtp.gmail.com with ESMTPSA id nc7-20020a0562142dc700b005dd8b9345absm4253720qvb.67.2023.04.19.02.29.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 02:29:45 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 11:29:38 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH RFC net-next v2 1/4] virtio/vsock: support dgram
-Message-ID: <ahwt3aa4hjdljkxwyl6brxhb353pr6dgduoaehttulaix5h5zc@k25kmjit6yim>
-References: <20230413-b4-vsock-dgram-v2-0-079cc7cee62e@bytedance.com>
- <20230413-b4-vsock-dgram-v2-1-079cc7cee62e@bytedance.com>
+        Wed, 19 Apr 2023 05:31:29 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Apr 2023 02:31:21 PDT
+Received: from alln-iport-1.cisco.com (alln-iport-1.cisco.com [173.37.142.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7945D118CC
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:31:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=9378; q=dns/txt; s=iport;
+  t=1681896682; x=1683106282;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/fR/nh2jewOctfzkM0zGV6bWFCdyeSG1xDmEGIQgCeE=;
+  b=jf6hqpIJ8abIojukD1LjdyeomolNSTJTzl8Mz3Tzp/cz9ApsV+hIZNnU
+   9xX1jN7GHpzJUEtHqBlvYrTfwEkIDYDUBVaicwZg7UQ3+8c8WRT13d4QX
+   T8FWfexMgp1AWHJEzIsSKziCnsZyJ80n7pP/2KD99VwKPbNMJ6mNy6Cc8
+   I=;
+X-IronPort-AV: E=Sophos;i="5.99,208,1677542400"; 
+   d="scan'208";a="102064421"
+Received: from alln-core-9.cisco.com ([173.36.13.129])
+  by alln-iport-1.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 19 Apr 2023 09:30:17 +0000
+Received: from sjc-ads-7449.cisco.com (sjc-ads-7449.cisco.com [10.30.220.234])
+        by alln-core-9.cisco.com (8.15.2/8.15.2) with ESMTPS id 33J9UCwM005352
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 19 Apr 2023 09:30:15 GMT
+Received: by sjc-ads-7449.cisco.com (Postfix, from userid 1777032)
+        id 944A9CCD0B2; Wed, 19 Apr 2023 02:30:11 -0700 (PDT)
+From:   Marcin Wierzbicki <mawierzb@cisco.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Marcin Wierzbicki <mawierzb@cisco.com>,
+        Bartosz Wawrzyniak <bwawrzyn@cisco.com>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     xe-linux-external@cisco.com, danielwa@cisco.com, olicht@cisco.com
+Subject: [PATCH] phy: cadence: Sierra: Add support for SGMII
+Date:   Wed, 19 Apr 2023 02:30:07 -0700
+Message-Id: <20230419093008.195094-1-mawierzb@cisco.com>
+X-Mailer: git-send-email 2.35.6
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230413-b4-vsock-dgram-v2-1-079cc7cee62e@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 10.30.220.234, sjc-ads-7449.cisco.com
+X-Outbound-Node: alln-core-9.cisco.com
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 12:25:57AM +0000, Bobby Eshleman wrote:
->This commit adds support for datagrams over virtio/vsock.
->
->Message boundaries are preserved on a per-skb and per-vq entry basis.
->Messages are copied in whole from the user to an SKB, which in turn is
->added to the scatterlist for the virtqueue in whole for the device.
->Messages do not straddle skbs and they do not straddle packets.
->Messages may be truncated by the receiving user if their buffer is
->shorter than the message.
->
->Other properties of vsock datagrams:
->- Datagrams self-throttle at the per-socket sk_sndbuf threshold.
->- The same virtqueue is used as is used for streams and seqpacket flows
->- Credits are not used for datagrams
->- Packets are dropped silently by the device, which means the virtqueue
->  will still get kicked even during high packet loss, so long as the
->  socket does not exceed sk_sndbuf.
+Added SGMII link support for cdns,sierra-phy-t0 compatibility string.
+The configuration is based on Sierra Programming Guide and
+validated in Cisco CrayAR SoC.
 
-So, IIUC the device will allocate the skb, then in
-virtio_transport_recv_dgram(), when we call sock_queue_rcv_skb(),
-if sk_rcvbuf is full, the skb is freed, right?
+Co-developed-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+Signed-off-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+Signed-off-by: Marcin Wierzbicki <mawierzb@cisco.com>
+---
+ drivers/phy/cadence/phy-cadence-sierra.c | 112 ++++++++++++++++++++++-
+ 1 file changed, 110 insertions(+), 2 deletions(-)
 
->
->Future work might include finding a way to reduce the virtqueue kick
->rate for datagram flows with high packet loss.
->
->One outstanding issue with this commit is that it re-uses the stream
->binding code and table, which means that there can not simultaneously be
->VSOCK dgram and VSOCK stream/seqpacket of same port and CID. This should
->be changed before undoing the RFC tag.
-
-Okay, thanks for mentioning!
-
->
->Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->---
-> drivers/vhost/vsock.c                   |   2 +-
-> include/net/af_vsock.h                  |   1 +
-> include/uapi/linux/virtio_vsock.h       |   1 +
-> net/vmw_vsock/af_vsock.c                |  26 ++++-
-> net/vmw_vsock/virtio_transport.c        |   2 +-
-> net/vmw_vsock/virtio_transport_common.c | 199 ++++++++++++++++++++++++++++----
-> 6 files changed, 204 insertions(+), 27 deletions(-)
->
->diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
->index 6578db78f0ae..dff6ee1c479b 100644
->--- a/drivers/vhost/vsock.c
->+++ b/drivers/vhost/vsock.c
->@@ -921,7 +921,7 @@ static int __init vhost_vsock_init(void)
-> 	int ret;
->
-> 	ret = vsock_core_register(&vhost_transport.transport,
->-				  VSOCK_TRANSPORT_F_H2G);
->+				  VSOCK_TRANSPORT_F_H2G | VSOCK_TRANSPORT_F_DGRAM);
-
-IIRC we don't support multiple VSOCK_TRANSPORT_F_DGRAM transports, so I
-think we need to address also this case.
-
-The problem with stream was that vmci_transport uses
-MODULE_ALIAS_NETPROTO(PF_VSOCK). So, if a vsock socket is created before
-any transports loaded, vmci_transport is automatically loaded, then we
-can't laod any other transport providing F_DGRAM.
-
-Maybe we can move vsock_core_register(..., VSOCK_TRANSPORT_F_DGRAM) in
-vmci_vsock_transport_cb() for VMCI, but we need to think carefully
-about it.
-
-> 	if (ret < 0)
-> 		return ret;
->
->diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
->index 0e7504a42925..57af28fede19 100644
->--- a/include/net/af_vsock.h
->+++ b/include/net/af_vsock.h
->@@ -80,6 +80,7 @@ s64 vsock_stream_has_data(struct vsock_sock *vsk);
-> s64 vsock_stream_has_space(struct vsock_sock *vsk);
-> struct sock *vsock_create_connected(struct sock *parent);
-> void vsock_data_ready(struct sock *sk);
->+int vsock_bind_stream(struct vsock_sock *vsk, struct sockaddr_vm *addr);
->
-> /**** TRANSPORT ****/
->
->diff --git a/include/uapi/linux/virtio_vsock.h b/include/uapi/linux/virtio_vsock.h
->index 64738838bee5..331be28b1d30 100644
->--- a/include/uapi/linux/virtio_vsock.h
->+++ b/include/uapi/linux/virtio_vsock.h
->@@ -69,6 +69,7 @@ struct virtio_vsock_hdr {
-> enum virtio_vsock_type {
-> 	VIRTIO_VSOCK_TYPE_STREAM = 1,
-> 	VIRTIO_VSOCK_TYPE_SEQPACKET = 2,
->+	VIRTIO_VSOCK_TYPE_DGRAM = 3,
-> };
->
-> enum virtio_vsock_op {
->diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->index 413407bb646c..46b3f35e3adc 100644
->--- a/net/vmw_vsock/af_vsock.c
->+++ b/net/vmw_vsock/af_vsock.c
->@@ -677,6 +677,19 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
-> 	return 0;
-> }
->
->+int vsock_bind_stream(struct vsock_sock *vsk,
->+		      struct sockaddr_vm *addr)
->+{
->+	int retval;
->+
->+	spin_lock_bh(&vsock_table_lock);
->+	retval = __vsock_bind_connectible(vsk, addr);
->+	spin_unlock_bh(&vsock_table_lock);
->+
->+	return retval;
->+}
->+EXPORT_SYMBOL(vsock_bind_stream);
->+
-> static int __vsock_bind_dgram(struct vsock_sock *vsk,
-> 			      struct sockaddr_vm *addr)
-> {
->@@ -2453,11 +2466,16 @@ int vsock_core_register(const struct vsock_transport *t, int features)
-> 	}
->
-> 	if (features & VSOCK_TRANSPORT_F_DGRAM) {
->-		if (t_dgram) {
->-			err = -EBUSY;
->-			goto err_busy;
->+		/* XXX: always chose the G2H variant over others, support nesting later */
-
-Okay, please mention also in the commit description that we will fix
-this before removing RFC.
-
->+		if (features & VSOCK_TRANSPORT_F_G2H) {
->+			if (t_dgram)
->+				pr_warn("vsock: preferring g2h transport for dgram\n");
->+			t_dgram = t;
->+		}
->+
->+		if (!t_dgram) {
->+			t_dgram = t;
-> 		}
->-		t_dgram = t;
-> 	}
-
-Would be better to split this patch in 2 (changes in the core, changes
-in virtio/vhost-vsock).
-
->
-> 	if (features & VSOCK_TRANSPORT_F_LOCAL) {
->diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
->index e95df847176b..582c6c0f788f 100644
->--- a/net/vmw_vsock/virtio_transport.c
->+++ b/net/vmw_vsock/virtio_transport.c
->@@ -775,7 +775,7 @@ static int __init virtio_vsock_init(void)
-> 		return -ENOMEM;
->
-> 	ret = vsock_core_register(&virtio_transport.transport,
->-				  VSOCK_TRANSPORT_F_G2H);
->+				  VSOCK_TRANSPORT_F_G2H | VSOCK_TRANSPORT_F_DGRAM);
-> 	if (ret)
-> 		goto out_wq;
->
->diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->index e4878551f140..925acface893 100644
->--- a/net/vmw_vsock/virtio_transport_common.c
->+++ b/net/vmw_vsock/virtio_transport_common.c
->@@ -37,6 +37,35 @@ virtio_transport_get_ops(struct vsock_sock *vsk)
-> 	return container_of(t, struct virtio_transport, transport);
-> }
->
->+/* Requires info->msg and info->vsk */
->+static struct sk_buff *
->+virtio_transport_sock_alloc_send_skb(struct virtio_vsock_pkt_info *info, unsigned int size,
->+				     gfp_t mask, int *err)
->+{
->+	struct sk_buff *skb;
->+	struct sock *sk;
->+	int noblock;
->+
->+	if (size < VIRTIO_VSOCK_SKB_HEADROOM) {
->+		*err = -EINVAL;
-
-What about using ERR_PTR, instead of passing *err?
-
->+		return NULL;
->+	}
->+
->+	if (info->msg)
->+		noblock = info->msg->msg_flags & MSG_DONTWAIT;
->+	else
->+		noblock = 1;
->+
->+	sk = sk_vsock(info->vsk);
->+	sk->sk_allocation = mask;
->+	skb = sock_alloc_send_skb(sk, size, noblock, err);
->+	if (!skb)
->+		return NULL;
->+
->+	skb_reserve(skb, VIRTIO_VSOCK_SKB_HEADROOM);
->+	return skb;
->+}
->+
-> /* Returns a new packet on success, otherwise returns NULL.
->  *
->  * If NULL is returned, errp is set to a negative errno.
->@@ -47,7 +76,8 @@ virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
-> 			   u32 src_cid,
-> 			   u32 src_port,
-> 			   u32 dst_cid,
->-			   u32 dst_port)
->+			   u32 dst_port,
->+			   int *errp)
-> {
-> 	const size_t skb_len = VIRTIO_VSOCK_SKB_HEADROOM + len;
-> 	struct virtio_vsock_hdr *hdr;
->@@ -55,9 +85,21 @@ virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
-> 	void *payload;
-> 	int err;
->
->-	skb = virtio_vsock_alloc_skb(skb_len, GFP_KERNEL);
->-	if (!skb)
->+	/* dgrams do not use credits, self-throttle according to sk_sndbuf
->+	 * using sock_alloc_send_skb. This helps avoid triggering the OOM.
->+	 */
->+	if (info->vsk && info->type == VIRTIO_VSOCK_TYPE_DGRAM) {
->+		skb = virtio_transport_sock_alloc_send_skb(info, skb_len, GFP_KERNEL, &err);
->+	} else {
->+		skb = virtio_vsock_alloc_skb(skb_len, GFP_KERNEL);
->+		if (!skb)
->+			err = -ENOMEM;
->+	}
->+
->+	if (!skb) {
->+		*errp = err;
-> 		return NULL;
->+	}
->
-> 	hdr = virtio_vsock_hdr(skb);
-> 	hdr->type	= cpu_to_le16(info->type);
->@@ -102,6 +144,7 @@ virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
-> 	return skb;
->
-> out:
->+	*errp = err;
-> 	kfree_skb(skb);
-> 	return NULL;
-> }
->@@ -183,7 +226,9 @@ EXPORT_SYMBOL_GPL(virtio_transport_deliver_tap_pkt);
->
-> static u16 virtio_transport_get_type(struct sock *sk)
-> {
->-	if (sk->sk_type == SOCK_STREAM)
->+	if (sk->sk_type == SOCK_DGRAM)
->+		return VIRTIO_VSOCK_TYPE_DGRAM;
->+	else if (sk->sk_type == SOCK_STREAM)
-> 		return VIRTIO_VSOCK_TYPE_STREAM;
-> 	else
-> 		return VIRTIO_VSOCK_TYPE_SEQPACKET;
->@@ -239,11 +284,10 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
->
-> 		skb = virtio_transport_alloc_skb(info, skb_len,
-> 						 src_cid, src_port,
->-						 dst_cid, dst_port);
->-		if (!skb) {
->-			ret = -ENOMEM;
->+						 dst_cid, dst_port,
->+						 &ret);
->+		if (!skb)
-> 			break;
->-		}
->
-> 		virtio_transport_inc_tx_pkt(vvs, skb);
->
->@@ -588,7 +632,56 @@ virtio_transport_dgram_dequeue(struct vsock_sock *vsk,
-> 			       struct msghdr *msg,
-> 			       size_t len, int flags)
-> {
->-	return -EOPNOTSUPP;
->+	struct sk_buff *skb;
->+	struct sock *sk;
->+	size_t bytes;
->+	int err;
->+
->+	if (flags & MSG_OOB || flags & MSG_ERRQUEUE)
->+		return -EOPNOTSUPP;
->+
->+	sk = sk_vsock(vsk);
->+	err = 0;
->+
->+	skb = skb_recv_datagram(sk, flags, &err);
->+	if (!skb)
->+		goto out;
->+
->+	/* If the user buffer is too short then truncate the message and set
->+	 * MSG_TRUNC. The remainder will be discarded when the skb is freed.
->+	 */
->+	if (len < skb->len) {
->+		bytes = len;
->+		msg->msg_flags |= MSG_TRUNC;
->+	} else {
->+		bytes = skb->len;
->+	}
->+
->+	/* Copy to msg from skb->data.
->+	 * virtio_vsock_alloc_skb() should have already set
->+	 * the skb pointers correctly. That is, skb->data
->+	 * should not still be at skb->head.
->+	 */
->+	WARN_ON(skb->data == skb->head);
->+	err = skb_copy_datagram_msg(skb, 0, msg, bytes);
->+	if (err)
->+		goto out;
->+
->+	/* On success, return the number bytes copied to the user buffer */
->+	err = bytes;
->+
->+	if (msg->msg_name) {
->+		/* Provide the address of the sender. */
->+		DECLARE_SOCKADDR(struct sockaddr_vm *, vm_addr, msg->msg_name);
->+
->+		vsock_addr_init(vm_addr, le64_to_cpu(virtio_vsock_hdr(skb)->src_cid),
->+				le32_to_cpu(virtio_vsock_hdr(skb)->src_port));
->+		msg->msg_namelen = sizeof(*vm_addr);
->+	}
->+
->+out:
->+	skb_free_datagram(&vsk->sk, skb);
->+	return err;
-> }
-> EXPORT_SYMBOL_GPL(virtio_transport_dgram_dequeue);
->
->@@ -793,13 +886,13 @@ EXPORT_SYMBOL_GPL(virtio_transport_stream_allow);
-> int virtio_transport_dgram_bind(struct vsock_sock *vsk,
-> 				struct sockaddr_vm *addr)
-> {
->-	return -EOPNOTSUPP;
->+	return vsock_bind_stream(vsk, addr);
-> }
-> EXPORT_SYMBOL_GPL(virtio_transport_dgram_bind);
->
-> bool virtio_transport_dgram_allow(u32 cid, u32 port)
-> {
->-	return false;
->+	return true;
-
-Should we check if F_DGRAM is negotiated?
-
-> }
-> EXPORT_SYMBOL_GPL(virtio_transport_dgram_allow);
->
->@@ -835,7 +928,37 @@ virtio_transport_dgram_enqueue(struct vsock_sock *vsk,
-> 			       struct msghdr *msg,
-> 			       size_t dgram_len)
-> {
->-	return -EOPNOTSUPP;
->+	struct virtio_vsock_pkt_info info = {
->+		.op = VIRTIO_VSOCK_OP_RW,
->+		.msg = msg,
->+		.vsk = vsk,
->+		.type = VIRTIO_VSOCK_TYPE_DGRAM,
->+	};
->+	const struct virtio_transport *t_ops;
->+	u32 src_cid, src_port;
->+	struct sk_buff *skb;
->+	int err;
->+
->+	if (dgram_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
->+		return -EMSGSIZE;
->+
->+	t_ops = virtio_transport_get_ops(vsk);
->+	if (unlikely(!t_ops))
->+		return -EFAULT;
->+
->+	src_cid = t_ops->transport.get_local_cid();
->+	src_port = vsk->local_addr.svm_port;
->+
->+	skb = virtio_transport_alloc_skb(&info, dgram_len,
->+					 src_cid, src_port,
->+					 remote_addr->svm_cid,
->+					 remote_addr->svm_port,
->+					 &err);
->+
->+	if (!skb)
->+		return err;
->+
->+	return t_ops->send_pkt(skb);
-> }
-> EXPORT_SYMBOL_GPL(virtio_transport_dgram_enqueue);
->
->@@ -892,6 +1015,7 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
-> 		.reply = true,
-> 	};
-> 	struct sk_buff *reply;
->+	int err;
->
-> 	/* Send RST only if the original pkt is not a RST pkt */
-> 	if (le16_to_cpu(hdr->op) == VIRTIO_VSOCK_OP_RST)
->@@ -904,9 +1028,10 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
-> 					   le64_to_cpu(hdr->dst_cid),
-> 					   le32_to_cpu(hdr->dst_port),
-> 					   le64_to_cpu(hdr->src_cid),
->-					   le32_to_cpu(hdr->src_port));
->+					   le32_to_cpu(hdr->src_port),
->+					   &err);
-> 	if (!reply)
->-		return -ENOMEM;
->+		return err;
->
-> 	return t->send_pkt(reply);
-> }
->@@ -1126,6 +1251,25 @@ virtio_transport_recv_enqueue(struct vsock_sock *vsk,
-> 		kfree_skb(skb);
-> }
->
->+/* This function takes ownership of the skb.
->+ *
->+ * It either places the skb on the sk_receive_queue or frees it.
->+ */
->+static int
->+virtio_transport_recv_dgram(struct sock *sk, struct sk_buff *skb)
-
-We don't use the return value, so this can be void.
-
->+{
->+	int err;
->+
->+	err = sock_queue_rcv_skb(sk, skb);
->+	if (err < 0) {
->+		kfree_skb(skb);
->+		return err;
->+	}
->+
->+	sk->sk_data_ready(sk);
->+	return 0;
->+}
->+
-> static int
-> virtio_transport_recv_connected(struct sock *sk,
-> 				struct sk_buff *skb)
->@@ -1289,7 +1433,8 @@ virtio_transport_recv_listen(struct sock *sk, struct sk_buff *skb,
-> static bool virtio_transport_valid_type(u16 type)
-> {
-> 	return (type == VIRTIO_VSOCK_TYPE_STREAM) ||
->-	       (type == VIRTIO_VSOCK_TYPE_SEQPACKET);
->+	       (type == VIRTIO_VSOCK_TYPE_SEQPACKET) ||
->+	       (type == VIRTIO_VSOCK_TYPE_DGRAM);
-> }
->
-> /* We are under the virtio-vsock's vsock->rx_lock or vhost-vsock's vq->mutex
->@@ -1303,22 +1448,25 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
-> 	struct vsock_sock *vsk;
-> 	struct sock *sk;
-> 	bool space_available;
->+	u16 type;
->
-> 	vsock_addr_init(&src, le64_to_cpu(hdr->src_cid),
-> 			le32_to_cpu(hdr->src_port));
-> 	vsock_addr_init(&dst, le64_to_cpu(hdr->dst_cid),
-> 			le32_to_cpu(hdr->dst_port));
->
->+	type = le16_to_cpu(hdr->type);
->+
-> 	trace_virtio_transport_recv_pkt(src.svm_cid, src.svm_port,
-> 					dst.svm_cid, dst.svm_port,
-> 					le32_to_cpu(hdr->len),
->-					le16_to_cpu(hdr->type),
->+					type,
-> 					le16_to_cpu(hdr->op),
-> 					le32_to_cpu(hdr->flags),
-> 					le32_to_cpu(hdr->buf_alloc),
-> 					le32_to_cpu(hdr->fwd_cnt));
->
->-	if (!virtio_transport_valid_type(le16_to_cpu(hdr->type))) {
->+	if (!virtio_transport_valid_type(type)) {
-> 		(void)virtio_transport_reset_no_sock(t, skb);
-> 		goto free_pkt;
-> 	}
->@@ -1330,13 +1478,15 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
-> 	if (!sk) {
-> 		sk = vsock_find_bound_socket(&dst);
-> 		if (!sk) {
->-			(void)virtio_transport_reset_no_sock(t, skb);
->+			if (type != VIRTIO_VSOCK_TYPE_DGRAM)
->+				(void)virtio_transport_reset_no_sock(t, skb);
-> 			goto free_pkt;
-> 		}
-> 	}
->
->-	if (virtio_transport_get_type(sk) != le16_to_cpu(hdr->type)) {
->-		(void)virtio_transport_reset_no_sock(t, skb);
->+	if (virtio_transport_get_type(sk) != type) {
->+		if (type != VIRTIO_VSOCK_TYPE_DGRAM)
->+			(void)virtio_transport_reset_no_sock(t, skb);
-> 		sock_put(sk);
-> 		goto free_pkt;
-> 	}
->@@ -1352,12 +1502,18 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
->
-> 	/* Check if sk has been closed before lock_sock */
-> 	if (sock_flag(sk, SOCK_DONE)) {
->-		(void)virtio_transport_reset_no_sock(t, skb);
->+		if (type != VIRTIO_VSOCK_TYPE_DGRAM)
->+			(void)virtio_transport_reset_no_sock(t, skb);
-> 		release_sock(sk);
-> 		sock_put(sk);
-> 		goto free_pkt;
-> 	}
->
->+	if (sk->sk_type == SOCK_DGRAM) {
->+		virtio_transport_recv_dgram(sk, skb);
->+		goto out;
->+	}
->+
-> 	space_available = virtio_transport_space_update(sk, skb);
->
-> 	/* Update CID in case it has changed after a transport reset event */
->@@ -1389,6 +1545,7 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
-> 		break;
-> 	}
->
->+out:
-> 	release_sock(sk);
->
-> 	/* Release refcnt obtained when we fetched this socket out of the
->
->-- 
->2.30.2
->
+diff --git a/drivers/phy/cadence/phy-cadence-sierra.c b/drivers/phy/cadence/phy-cadence-sierra.c
+index 6e86a6517f37..9d00a45ef092 100644
+--- a/drivers/phy/cadence/phy-cadence-sierra.c
++++ b/drivers/phy/cadence/phy-cadence-sierra.c
+@@ -24,32 +24,44 @@
+ #include <dt-bindings/phy/phy-cadence.h>
+ 
+ #define NUM_SSC_MODE		3
+-#define NUM_PHY_TYPE		4
++#define NUM_PHY_TYPE		5
+ 
+ /* PHY register offsets */
+ #define SIERRA_COMMON_CDB_OFFSET			0x0
+ #define SIERRA_MACRO_ID_REG				0x0
+ #define SIERRA_CMN_PLLLC_GEN_PREG			0x42
++#define SIERRA_CMN_PLLLC_FBDIV_INT_MODE0_PREG		0x43
++#define SIERRA_CMN_PLLLC_DCOCAL_CTRL_PREG		0x45
++#define SIERRA_CMN_PLLLC_INIT_PREG			0x46
++#define SIERRA_CMN_PLLLC_ITERTMR_PREG			0x47
+ #define SIERRA_CMN_PLLLC_MODE_PREG			0x48
+ #define SIERRA_CMN_PLLLC_LF_COEFF_MODE1_PREG		0x49
+ #define SIERRA_CMN_PLLLC_LF_COEFF_MODE0_PREG		0x4A
+ #define SIERRA_CMN_PLLLC_LOCK_CNTSTART_PREG		0x4B
++#define SIERRA_CMN_PLLLC_LOCKSEARCH_PREG		0x4C
+ #define SIERRA_CMN_PLLLC_CLK1_PREG			0x4D
++#define SIERRA_CMN_PLLLC_CLK0_PREG			0x4E
+ #define SIERRA_CMN_PLLLC_BWCAL_MODE1_PREG		0x4F
+ #define SIERRA_CMN_PLLLC_BWCAL_MODE0_PREG		0x50
+ #define SIERRA_CMN_PLLLC_DSMCORR_PREG			0x51
+ #define SIERRA_CMN_PLLLC_SS_PREG			0x52
+ #define SIERRA_CMN_PLLLC_SS_AMP_STEP_SIZE_PREG		0x53
+ #define SIERRA_CMN_PLLLC_SSTWOPT_PREG			0x54
++#define SIERRA_CMN_PLLCSM_PLLEN_TMR_PREG		0x5D
++#define SIERRA_CMN_PLLCSM_PLLPRE_TMR_PREG		0x5E
+ #define SIERRA_CMN_PLLLC_SS_TIME_STEPSIZE_MODE_PREG	0x62
+ #define SIERRA_CMN_PLLLC_LOCK_DELAY_CTRL_PREG		0x63
++#define SIERRA_SDOSCCAL_CLK_CNT_PREG			0x6E
+ #define SIERRA_CMN_REFRCV_PREG				0x98
++#define SIERRA_CMN_RESCAL_CTRLA_PREG			0xA0
+ #define SIERRA_CMN_REFRCV1_PREG				0xB8
+ #define SIERRA_CMN_PLLLC1_GEN_PREG			0xC2
++#define SIERRA_CMN_PLLLC1_DCOCAL_CTRL_PREG		0xC5
+ #define SIERRA_CMN_PLLLC1_LF_COEFF_MODE0_PREG		0xCA
+ #define SIERRA_CMN_PLLLC1_BWCAL_MODE0_PREG		0xD0
+ #define SIERRA_CMN_PLLLC1_SS_TIME_STEPSIZE_MODE_PREG	0xE2
+ 
++
+ #define SIERRA_LANE_CDB_OFFSET(ln, block_offset, reg_offset)	\
+ 				((0x4000 << (block_offset)) + \
+ 				 (((ln) << 9) << (reg_offset)))
+@@ -74,6 +86,7 @@
+ #define SIERRA_PSC_RX_A1_PREG				0x031
+ #define SIERRA_PSC_RX_A2_PREG				0x032
+ #define SIERRA_PSC_RX_A3_PREG				0x033
++#define SIERRA_PLLCTRL_FBDIV_MODE01_PREG		0x039
+ #define SIERRA_PLLCTRL_SUBRATE_PREG			0x03A
+ #define SIERRA_PLLCTRL_GEN_A_PREG			0x03B
+ #define SIERRA_PLLCTRL_GEN_D_PREG			0x03E
+@@ -83,6 +96,7 @@
+ #define SIERRA_DFE_BIASTRIM_PREG			0x04C
+ #define SIERRA_DRVCTRL_ATTEN_PREG			0x06A
+ #define SIERRA_DRVCTRL_BOOST_PREG			0x06F
++#define SIERRA_LANE_TX_RECEIVER_DETECT_PREG		0x071
+ #define SIERRA_TX_RCVDET_OVRD_PREG			0x072
+ #define SIERRA_CLKPATHCTRL_TMR_PREG			0x081
+ #define SIERRA_RX_CREQ_FLTR_A_MODE3_PREG		0x085
+@@ -98,6 +112,8 @@
+ #define SIERRA_CREQ_SPARE_PREG				0x096
+ #define SIERRA_CREQ_EQ_OPEN_EYE_THRESH_PREG		0x097
+ #define SIERRA_CTLELUT_CTRL_PREG			0x098
++#define SIERRA_DEQ_BLK_TAU_CTRL1_PREG			0x0AC
++#define SIERRA_DEQ_BLK_TAU_CTRL4_PREG			0x0AF
+ #define SIERRA_DFE_ECMP_RATESEL_PREG			0x0C0
+ #define SIERRA_DFE_SMP_RATESEL_PREG			0x0C1
+ #define SIERRA_DEQ_PHALIGN_CTRL				0x0C4
+@@ -126,6 +142,9 @@
+ #define SIERRA_DEQ_GLUT14				0x0F6
+ #define SIERRA_DEQ_GLUT15				0x0F7
+ #define SIERRA_DEQ_GLUT16				0x0F8
++#define SIERRA_POSTPRECUR_EN_CEPH_CTRL_PREG		0x0F9
++#define SIERRA_TAU_EN_CEPH2TO0_PREG			0x0FB
++#define SIERRA_TAU_EN_CEPH5TO3_PREG			0x0FC
+ #define SIERRA_DEQ_ALUT0				0x108
+ #define SIERRA_DEQ_ALUT1				0x109
+ #define SIERRA_DEQ_ALUT2				0x10A
+@@ -140,6 +159,7 @@
+ #define SIERRA_DEQ_ALUT11				0x113
+ #define SIERRA_DEQ_ALUT12				0x114
+ #define SIERRA_DEQ_ALUT13				0x115
++#define SIERRA_OEPH_EN_CTRL_PREG			0x124
+ #define SIERRA_DEQ_DFETAP_CTRL_PREG			0x128
+ #define SIERRA_DEQ_DFETAP0				0x129
+ #define SIERRA_DEQ_DFETAP1				0x12B
+@@ -154,6 +174,7 @@
+ #define SIERRA_DEQ_TAU_CTRL2_PREG			0x151
+ #define SIERRA_DEQ_TAU_CTRL3_PREG			0x152
+ #define SIERRA_DEQ_OPENEYE_CTRL_PREG			0x158
++#define SIERRA_DEQ_CONCUR_EPIOFFSET_MODE_PREG		0x159
+ #define SIERRA_DEQ_PICTRL_PREG				0x161
+ #define SIERRA_CPICAL_TMRVAL_MODE1_PREG			0x170
+ #define SIERRA_CPICAL_TMRVAL_MODE0_PREG			0x171
+@@ -162,6 +183,7 @@
+ #define SIERRA_CPI_RESBIAS_BIN_PREG			0x17E
+ #define SIERRA_CPI_TRIM_PREG				0x17F
+ #define SIERRA_CPICAL_RES_STARTCODE_MODE23_PREG		0x183
++#define SIERRA_CPICAL_RES_STARTCODE_MODE01_PREG		0x184
+ #define SIERRA_EPI_CTRL_PREG				0x187
+ #define SIERRA_LFPSDET_SUPPORT_PREG			0x188
+ #define SIERRA_LFPSFILT_NS_PREG				0x18A
+@@ -173,6 +195,7 @@
+ #define SIERRA_RXBUFFER_CTLECTRL_PREG			0x19E
+ #define SIERRA_RXBUFFER_RCDFECTRL_PREG			0x19F
+ #define SIERRA_RXBUFFER_DFECTRL_PREG			0x1A0
++#define SIERRA_LN_SPARE_REG_PREG			0x1B0
+ #define SIERRA_DEQ_TAU_CTRL1_FAST_MAINT_PREG		0x14F
+ #define SIERRA_DEQ_TAU_CTRL1_SLOW_MAINT_PREG		0x150
+ 
+@@ -298,7 +321,8 @@ enum cdns_sierra_phy_type {
+ 	TYPE_NONE,
+ 	TYPE_PCIE,
+ 	TYPE_USB,
+-	TYPE_QSGMII
++	TYPE_QSGMII,
++	TYPE_SGMII
+ };
+ 
+ enum cdns_sierra_ssc_mode {
+@@ -939,6 +963,9 @@ static int cdns_sierra_get_optional(struct cdns_sierra_inst *inst,
+ 	case PHY_TYPE_QSGMII:
+ 		inst->phy_type = TYPE_QSGMII;
+ 		break;
++	case PHY_TYPE_SGMII:
++		inst->phy_type = TYPE_SGMII;
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -2352,6 +2379,77 @@ static struct cdns_sierra_vals usb_100_ext_ssc_ln_vals = {
+ 	.num_regs = ARRAY_SIZE(cdns_usb_ln_regs_ext_ssc),
+ };
+ 
++/* SGMII PHY common configuration */
++static const struct cdns_reg_pairs sgmii_cmn_regs[] = {
++	{0x0180, SIERRA_SDOSCCAL_CLK_CNT_PREG},
++	{0x6000, SIERRA_CMN_REFRCV_PREG},
++	{0x0031, SIERRA_CMN_RESCAL_CTRLA_PREG},
++	{0x001C, SIERRA_CMN_PLLLC_FBDIV_INT_MODE0_PREG},
++	{0x2106, SIERRA_CMN_PLLLC_LF_COEFF_MODE0_PREG},
++	{0x0000, SIERRA_CMN_PLLLC_LOCKSEARCH_PREG},
++	{0x8103, SIERRA_CMN_PLLLC_CLK0_PREG},
++	{0x0000, SIERRA_CMN_PLLLC_BWCAL_MODE0_PREG},
++	{0x0027, SIERRA_CMN_PLLCSM_PLLEN_TMR_PREG},
++	{0x0062, SIERRA_CMN_PLLCSM_PLLPRE_TMR_PREG},
++	{0x0800, SIERRA_CMN_PLLLC_SS_TIME_STEPSIZE_MODE_PREG},
++	{0x0000, SIERRA_CMN_PLLLC_INIT_PREG},
++	{0x0000, SIERRA_CMN_PLLLC_ITERTMR_PREG},
++	{0x0020, SIERRA_CMN_PLLLC_LOCK_CNTSTART_PREG},
++	{0x0013, SIERRA_CMN_PLLLC_DCOCAL_CTRL_PREG},
++	{0x0013, SIERRA_CMN_PLLLC1_DCOCAL_CTRL_PREG},
++};
++
++static struct cdns_sierra_vals sgmii_cmn_vals = {
++	.reg_pairs = sgmii_cmn_regs,
++	.num_regs = ARRAY_SIZE(sgmii_cmn_regs),
++};
++
++/* SGMII PHY lane configuration */
++static const struct cdns_reg_pairs sgmii_ln_regs[] = {
++	{0x691E, SIERRA_DET_STANDEC_D_PREG},
++	{0x0FFE, SIERRA_PSC_RX_A0_PREG},
++	{0x0104, SIERRA_PLLCTRL_FBDIV_MODE01_PREG},
++	{0x0013, SIERRA_PLLCTRL_SUBRATE_PREG},
++	{0x0106, SIERRA_PLLCTRL_GEN_D_PREG},
++	{0x5234, SIERRA_PLLCTRL_CPGAIN_MODE_PREG},
++	{0x0000, SIERRA_DRVCTRL_ATTEN_PREG},
++	{0x00AB, SIERRA_RX_CREQ_FLTR_A_MODE0_PREG},
++	{0x3C0E, SIERRA_CREQ_CCLKDET_MODE01_PREG},
++	{0x3220, SIERRA_CREQ_FSMCLK_SEL_PREG},
++	{0x0000, SIERRA_CREQ_EQ_CTRL_PREG},
++	{0x6320, SIERRA_DEQ_CONCUR_EPIOFFSET_MODE_PREG},
++	{0x0000, SIERRA_CPI_OUTBUF_RATESEL_PREG},
++	{0x15A2, SIERRA_LN_SPARE_REG_PREG},
++	{0x7900, SIERRA_DEQ_BLK_TAU_CTRL1_PREG},
++	{0x2202, SIERRA_DEQ_BLK_TAU_CTRL4_PREG},
++	{0x2206, SIERRA_DEQ_TAU_CTRL2_PREG},
++	{0x0005, SIERRA_LANE_TX_RECEIVER_DETECT_PREG},
++	{0x8001, SIERRA_CREQ_SPARE_PREG},
++	{0x0000, SIERRA_DEQ_CONCUR_CTRL1_PREG},
++	{0xD004, SIERRA_DEQ_CONCUR_CTRL2_PREG},
++	{0x0101, SIERRA_DEQ_GLUT9},
++	{0x0101, SIERRA_DEQ_GLUT10},
++	{0x0101, SIERRA_DEQ_GLUT11},
++	{0x0101, SIERRA_DEQ_GLUT12},
++	{0x0000, SIERRA_DEQ_GLUT13},
++	{0x0000, SIERRA_DEQ_GLUT16},
++	{0x0000, SIERRA_POSTPRECUR_EN_CEPH_CTRL_PREG},
++	{0x0000, SIERRA_TAU_EN_CEPH2TO0_PREG},
++	{0x0003, SIERRA_TAU_EN_CEPH5TO3_PREG},
++	{0x0101, SIERRA_DEQ_ALUT8},
++	{0x0101, SIERRA_DEQ_ALUT9},
++	{0x0100, SIERRA_DEQ_ALUT10},
++	{0x0000, SIERRA_OEPH_EN_CTRL_PREG},
++	{0x5425, SIERRA_DEQ_OPENEYE_CTRL_PREG},
++	{0x7458, SIERRA_CPICAL_RES_STARTCODE_MODE23_PREG},
++	{0x321F, SIERRA_CPICAL_RES_STARTCODE_MODE01_PREG},
++};
++
++static struct cdns_sierra_vals sgmii_ln_vals = {
++	.reg_pairs = sgmii_ln_regs,
++	.num_regs = ARRAY_SIZE(sgmii_ln_regs),
++};
++
+ static const struct cdns_sierra_data cdns_map_sierra = {
+ 	.id_value = SIERRA_MACRO_ID,
+ 	.block_offset_shift = 0x2,
+@@ -2395,6 +2493,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
+ 				[INTERNAL_SSC] = &qsgmii_100_no_ssc_plllc1_cmn_vals,
+ 			},
+ 		},
++		[TYPE_SGMII] = {
++			[TYPE_NONE] = {
++				[NO_SSC] = &sgmii_cmn_vals,
++			},
++		},
+ 	},
+ 	.pma_ln_vals = {
+ 		[TYPE_PCIE] = {
+@@ -2421,6 +2524,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
+ 				[INTERNAL_SSC] = &qsgmii_100_no_ssc_plllc1_ln_vals,
+ 			},
+ 		},
++		[TYPE_SGMII] = {
++			[TYPE_NONE] = {
++				[NO_SSC] = &sgmii_ln_vals,
++			},
++		},
+ 	},
+ };
+ 
+-- 
+2.35.6
 
