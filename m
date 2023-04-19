@@ -2,199 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A20186E83DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0DC76E83DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjDSVjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 17:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
+        id S230404AbjDSVkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 17:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjDSVjA (ORCPT
+        with ESMTP id S229542AbjDSVkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 17:39:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2621BEB
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:38:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681940290;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AqqRZHP28AKreJPHuhkGouAT+TmrF/0x0xX/UpbfWDw=;
-        b=dIUb5Dbae62OgZ1tLvBDdW1z0E2b5fEG9w/iD3qJbuSSVV+ym1NswxIz9kPQ3N3Ee3EJf/
-        2sH8CYUrERJni3kVOU8VYoKmsb6Si6XqMDfRmZeilY6N+mZFOE1srTLabjNsgUqXuEKkuc
-        aUkTFU74b7SY4RyGNU9k43YbEJbCS6I=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-657-BvnyrE23PNCYCayXLjZEyQ-1; Wed, 19 Apr 2023 17:38:08 -0400
-X-MC-Unique: BvnyrE23PNCYCayXLjZEyQ-1
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-32b65428489so1374005ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:38:08 -0700 (PDT)
+        Wed, 19 Apr 2023 17:40:07 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B1E1BEB
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:40:06 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-63b875d0027so85249b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:40:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681940406; x=1684532406;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZB8eTY6M3oiRedyQgfwIJCc4kKSXMHKsW02R7RxDv3Q=;
+        b=d1r7398swJYsZ+wrA2NnvLLJESNHoK4twLvhd+h5uHZE7PyKI/51IzgmkHAgrm96t3
+         wpZ6P1YArcMO5909+KEEi7BskNNXtONSa2zd7yNDDzZ4Y+Qvj8q+1sh/dKjOPiVe+d3y
+         hxszklfwt1yg/7JeKNyJrrSUEGOU1BYOzImVH37RyjoDEs3uFbpm8QqYZNVWI2KOtRN9
+         sMcl00Psve+2PIGuJu9r7EF34iU3pMTMiLRADhxGIe62ELMh+UIuRgCBQWH/FachcO6B
+         bDIjWJUXCV6sRlfW7xTHEFgqf7QPNc7XX1IWX9VJlrXwOBvpqSNhg4XIyS/1QO0rLX++
+         kacA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681940288; x=1684532288;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AqqRZHP28AKreJPHuhkGouAT+TmrF/0x0xX/UpbfWDw=;
-        b=geKYVFa6WyBU37Sle7Ag/SwmvcfCEH7eVsz0vMm3Hzyq+4jX6B5yqO7efszQOxhrz9
-         5C7Xo1zLxNzzt/EOBuizdE0TUFSh5CU1eZNuXUaNoJkvQz2ul4+Mwv5b5zf7iJL+GTyn
-         sb2dxRgfSEWsdW30mYiKFGIIBGA0OIGn2hzbbQ0weQ0ivHOh2GxKQ95mwXSALgJ0IeSs
-         e0SmS1DEQuvLPWpmVaHXYZJWmb6PwOjqgUlsPqwATAZxO9i4uJhP06YiBlAVoJzGJ4kL
-         9Ea9rw1DR+RaSdJj97l+8pMZ7txdiuNU6WDrACs0vWKSj3PQ12Ue+htIUBNNO+4gXm9Z
-         LhiA==
-X-Gm-Message-State: AAQBX9frdD2Bc+SsdOskBMrH+yZvvEYTHbaNhnapizJCTe7tLQc896nz
-        JkxjkBkLhKW/s/z8NdGB6aGwl6nw24UwxC+Y+oTRmDvVMgolrPq1+fzS4pDrCLuo224N8bGlsBn
-        vJlFDcDfgI6IqW3cy6UZ/JV0H
-X-Received: by 2002:a05:6e02:5d2:b0:324:7d63:8622 with SMTP id l18-20020a056e0205d200b003247d638622mr1145197ils.2.1681940288049;
-        Wed, 19 Apr 2023 14:38:08 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b0jIdF8z68z0PYApH3f58gNSV3vui25zvEUqgVcQEqVvklD9dHd4IZDMWM8Sq/nH1vfP2PVg==
-X-Received: by 2002:a05:6e02:5d2:b0:324:7d63:8622 with SMTP id l18-20020a056e0205d200b003247d638622mr1145181ils.2.1681940287751;
-        Wed, 19 Apr 2023 14:38:07 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056638210400b0040d9a3d54desm4743jaj.170.2023.04.19.14.38.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 14:38:06 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 15:38:04 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     <jgg@nvidia.com>, <yishaih@nvidia.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <kevin.tian@intel.com>,
-        <tglx@linutronix.de>, <darwi@linutronix.de>, <kvm@vger.kernel.org>,
-        <dave.jiang@intel.com>, <jing2.liu@intel.com>,
-        <ashok.raj@intel.com>, <fenghua.yu@intel.com>,
-        <tom.zanussi@linux.intel.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V3 09/10] vfio/pci: Support dynamic MSI-X
-Message-ID: <20230419153804.7ad0b122.alex.williamson@redhat.com>
-In-Reply-To: <f0d22db8-213d-92f7-963a-9d015c0a9d79@intel.com>
-References: <cover.1681837892.git.reinette.chatre@intel.com>
-        <86cda5cf2742feff3b14954284fb509863355050.1681837892.git.reinette.chatre@intel.com>
-        <20230418163829.149e8881.alex.williamson@redhat.com>
-        <f0d22db8-213d-92f7-963a-9d015c0a9d79@intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        d=1e100.net; s=20221208; t=1681940406; x=1684532406;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZB8eTY6M3oiRedyQgfwIJCc4kKSXMHKsW02R7RxDv3Q=;
+        b=Z0eR+kYPMg1aLYTpDPntFlUiB/Iv4J1VKOLoRxLIxIERi25x8+ehCMDO2Il/O+qIzD
+         9dFUVbPIUpW93nFGWbz+fl9XXiRfU8UIlNV2NtSnuopyu/2GO1f/j9XxOxaW1Bwtf3iD
+         LDPWTG0XuF+vsAM42fkgbKNVV8hnOIH4xnSDDQCg3h7erf2zZ9ZUF25CB6NB/2GRGCaz
+         atppR/hQQIxocSegRdDV9BOoP/b5W7m5LfTkvb1OTVZ8z73mxuPk3JrQZj/dQyaXOfGv
+         aHvj1aX/yVu3LiJbnQAk3/LSAtYoE/6iaMjA0MC/RCT6XHQ+q6Y2h7EmsTVgHbpQqCFk
+         q9lg==
+X-Gm-Message-State: AAQBX9dk2vcJnCycLrHoKqMplXmCMKJUb0vFQtG/HtmYNo4G8LFM0sQQ
+        hqcmFPwtFKc0EIYSjNHDepZoN3a5PWuVpF3AQEE=
+X-Google-Smtp-Source: AKy350Zf411n/HMKw4bVqadJgpWvyBJv77sj8iNEmtP+64p1e+FJeBU480pFT3LS8bMMHH45LXyhLA==
+X-Received: by 2002:a05:6a00:1c9e:b0:63d:344c:f123 with SMTP id y30-20020a056a001c9e00b0063d344cf123mr7557891pfw.1.1681940405950;
+        Wed, 19 Apr 2023 14:40:05 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 23-20020aa79117000000b0062dd8809d6esm11375470pfh.150.2023.04.19.14.40.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 14:40:05 -0700 (PDT)
+Message-ID: <45ec1616-e8fa-19e3-deae-78a40e6b2ffa@kernel.dk>
+Date:   Wed, 19 Apr 2023 15:40:04 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] io_uring: Optimization of buffered random write
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>, luhongfei <luhongfei@vivo.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "open list:IO_URING" <io-uring@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        opensource.kernel@vivo.com
+References: <20230419092233.56338-1-luhongfei@vivo.com>
+ <202304200502.T4Waeqad-lkp@intel.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <202304200502.T4Waeqad-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Apr 2023 11:13:29 -0700
-Reinette Chatre <reinette.chatre@intel.com> wrote:
-
-> Hi Alex,
+On 4/19/23 3:30?PM, kernel test robot wrote:
+> Hi luhongfei,
 > 
-> On 4/18/2023 3:38 PM, Alex Williamson wrote:
-> > On Tue, 18 Apr 2023 10:29:20 -0700
-> > Reinette Chatre <reinette.chatre@intel.com> wrote:
-> >   
-> >> Recently introduced pci_msix_alloc_irq_at() and pci_msix_free_irq()
-> >> enables an individual MSI-X interrupt to be allocated and freed after
-> >> MSI-X enabling.
-> >>
-> >> Use dynamic MSI-X (if supported by the device) to allocate an interrupt
-> >> after MSI-X is enabled. An MSI-X interrupt is dynamically allocated at
-> >> the time a valid eventfd is assigned. This is different behavior from
-> >> a range provided during MSI-X enabling where interrupts are allocated
-> >> for the entire range whether a valid eventfd is provided for each
-> >> interrupt or not.
-> >>
-> >> Do not dynamically free interrupts, leave that to when MSI-X is
-> >> disabled.  
-> > 
-> > But we do, sometimes, even if essentially only on the error path.  Is
-> > that worthwhile?  It seems like we could entirely remove
-> > vfio_msi_free_irq() and rely only on pci_free_irq_vectors() on MSI/X
-> > teardown.  
+> kernel test robot noticed the following build errors:
 > 
-> Yes, it is only on the error path where dynamic MSI-X interrupts are
-> removed. I do not know how to determine if it is worthwhile. On the
-> kernel side failure seems unlikely since it would mean memory cannot
-> be allocated or request_irq() failed. In these cases it may not be
-> worthwhile since user space may try again and having the interrupt
-> already allocated would be helpful. The remaining error seems to be
-> if user space provided an invalid eventfd. An allocation in response
-> to wrong user input is a concern to me. Should we consider
-> buggy/malicious users? I am uncertain here so would defer to your
-> guidance.
-
-I don't really see that a malicious user can exploit anything here,
-their irq allocation is bound by the device support and they're
-entitled to make use of the full vector set of the device by virtue of
-having ownership of the device.  All the MSI-X allocated irqs are freed
-when the interrupt mode is changed or the device is released regardless.
-
-The end result is also no different than if the user had not configured
-the vector when enabling MSI-X or configured it and later de-configured
-with a -1 eventfd.  The irq is allocated but not attached to a ctx.
-We're intentionally using this as a cache.
-
-Also, as implemented here in v3, we might be freeing from the original
-allocation rather than a new, dynamically allocated irq.
-
-My thinking is that if we think there's a benefit to caching any
-allocated irqs, we should do so consistently.  We don't currently know
-if the irq was allocated now or previously.  Tracking that would add
-complexity for little benefit.  The user can get to the same end result
-of an allocated, unused irq in numerous way, the state itself is not
-erroneous, and is actually in support of caching irq allocations.
-Removing the de-allocation of a single vector further simplifies the
-code as there exists only one path where irqs are freed, ie.
-pci_free_irq_vectors().
-
-So I'd lean towards removing vfio_msi_free_irq().
- 
-> > I'd probably also add a comment in the commit log about the theory
-> > behind not dynamically freeing irqs, ie. latency, reliability, and
-> > whatever else we used to justify it.  Thanks,  
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on v6.3-rc7 next-20230418]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
-> Sure. How about something like below to replace the final sentence of
-> the changelog:
+> url:    https://github.com/intel-lab-lkp/linux/commits/luhongfei/io_uring-Optimization-of-buffered-random-write/20230419-172539
+> patch link:    https://lore.kernel.org/r/20230419092233.56338-1-luhongfei%40vivo.com
+> patch subject: [PATCH] io_uring: Optimization of buffered random write
+> config: i386-randconfig-a012-20230417 (https://download.01.org/0day-ci/archive/20230420/202304200502.T4Waeqad-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/620dbcc5ab192992f08035fd9d271ffffb8ff043
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review luhongfei/io_uring-Optimization-of-buffered-random-write/20230419-172539
+>         git checkout 620dbcc5ab192992f08035fd9d271ffffb8ff043
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 > 
-> "When a guest disables an interrupt, user space (Qemu) does not
-> disable the interrupt but instead assigns it a different trigger. A
-> common flow is thus for the VFIO_DEVICE_SET_IRQS ioctl() to be 
-> used to assign a new eventfd to an already enabled interrupt. Freeing
-> and re-allocating an interrupt in this scenario would add unnecessary
-> latency as well as uncertainty since the re-allocation may fail. Do
-> not dynamically free interrupts when an interrupt is disabled, instead
-> support a subsequent re-enable to draw from the initial allocation when
-> possible. Leave freeing of interrupts to when MSI-X is disabled."
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202304200502.T4Waeqad-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> io_uring/io_uring.c:2091:25: error: no member named 'rw' in 'struct io_kiocb'
+>            if (!is_write || (req->rw.kiocb.ki_flags & IOCB_DIRECT))
+>                              ~~~  ^
+>    1 error generated.
 
-There are other means besides caching irqs that could achieve the above,
-for instance if a trigger is simply swapped from one eventfd to another,
-that all happens within vfio_msi_set_vector_signal() where we could
-hold the irq for the transition.
+The patch just can't work. Looks like it was forward ported on an older
+kernel, but not even compiled on a recent kernel. There's no
+req->rw.kiocb, hasn't been the case since 5.19. And you also can't do
+layering violations like this, req->rw is rw.c private and cannot even
+be used in io_uring.c.
 
-I think I might justify it as:
-
-	The PCI-MSIX API requires that some number of irqs are
-	allocated for an initial set of vectors when enabling MSI-X on
-	the device.  When dynamic MSIX allocation is not supported, the
-	vector table, and thus the allocated irq set can only be resized
-	by disabling and re-enabling MSIX with a different range.  In
-	that case the irq allocation is essentially a cache for
-	configuring vectors within the previously allocated vector
-	range.  When dynamic MSIX allocation is supported, the API
-	still requires some initial set of irqs to be allocated, but
-	also supports allocating and freeing specific irq vectors both
-	within and beyond the initially allocated range.
-
-	For consistency between modes, as well as to reduce latency and
-	improve reliability of allocations, and also simplicity, this
-	implementation only releases irqs via pci_free_irq_vectors()
-	when either the interrupt mode changes or the device is
-	released.
-
-Does that cover the key points for someone that might want to revisit
-this decision later?  Thanks,
-
-Alex
+-- 
+Jens Axboe
 
