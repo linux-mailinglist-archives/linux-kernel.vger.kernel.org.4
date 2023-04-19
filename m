@@ -2,79 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B8D6E7A34
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393D56E7A38
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232938AbjDSNCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 09:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
+        id S233106AbjDSNCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 09:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbjDSNCN (ORCPT
+        with ESMTP id S233023AbjDSNCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 09:02:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE745FC7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:01:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681909284;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f16w+eV0+2Sr0OvGkfcho9W3kJDfX6onkCcXskuyqPs=;
-        b=LS0DFvvP3JAvbrGDqanGPRgIt2r0K8PbecLsaiC0LmBWpUuvzkgC3r/+Xp4FgclBwfxyh2
-        xqZ/AtEMxsn/YJXUm8n7X3fkQ9mAhK6sbrdqdaGGceGZJKy33Do0WSaxvhI7oqMkyHfW0j
-        +OXiVdHq0t6Z2nWoKFzrwRqk5wZ4Qik=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-99--ci2SF8-NGKZHk1uBniPUg-1; Wed, 19 Apr 2023 09:01:23 -0400
-X-MC-Unique: -ci2SF8-NGKZHk1uBniPUg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 58F453815EF4;
-        Wed, 19 Apr 2023 13:01:22 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1937C1121314;
-        Wed, 19 Apr 2023 13:01:21 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <168190833944.417103.14222689199936898089.b4-ty@kernel.dk>
-References: <168190833944.417103.14222689199936898089.b4-ty@kernel.dk> <1770755.1681894451@warthog.procyon.org.uk>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     dhowells@redhat.com, Ayush Jain <ayush.jain3@amd.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        David Hildenbrand <david@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Steve French <stfrench@microsoft.com>, linux-mm@kvack.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Wed, 19 Apr 2023 09:02:49 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7065B445
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:02:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=wQ1t3KQ2eAPlhZ6OlpW0kwKFvpz
+        SO9/aAnVf2UMgqWk=; b=Bh00Nw/SOS/ZpINn81N59Y66+mR3DVkNf/7Bk3s4Psx
+        6shp9BXgNKfZQ7R0gL+Dust34QUYIObeTA2zFCgsqKudUT/J4IdqojizKMSL1Dpd
+        4BzFr40EQnvCQqu2tm1zprUb8jjTuIRQbmp6STvLWInhEZGFL15h+NBagnZ467F4
+        =
+Received: (qmail 3697267 invoked from network); 19 Apr 2023 15:02:41 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Apr 2023 15:02:41 +0200
+X-UD-Smtp-Session: l3s3148p1@a7UFCrD5zM0ujnsI
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Cong Dang <cong.dang.xn@renesas.com>,
+        Hai Pham <hai.pham.ud@renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] splice: Fix filemap of a blockdev
+Subject: [PATCH v4] memory: renesas-rpc-if: Fix PHYCNT.STRTIM setting
+Date:   Wed, 19 Apr 2023 15:02:34 +0200
+Message-Id: <20230419130234.44321-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1842477.1681909280.1@warthog.procyon.org.uk>
-Date:   Wed, 19 Apr 2023 14:01:20 +0100
-Message-ID: <1842478.1681909280@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Note that this shouldn't affect direct_splice_read() as that doesn't look at
-the size of the file, but rather just keeps reading from it until the
-requested amount is read, the pipe is full or ->read_iter() indicates EOF by
-returning 0 (so it could work for copy-splicing from a pipe/socket/chardev
-too).
+According to the datasheets, the Strobe Timing Adjustment bit (STRTIM)
+setting is different on R-Car SoCs, i.e.
 
-David
+R-Car M3 ES1.*  : STRTIM[2:0] is set to 0x6
+other R-Car Gen3: STRTIM[2:0] is set to 0x7
+other R-Car Gen4: STRTIM[3:0] is set to 0xf
+
+To fix this issue, a DT match data was added to specify the setting
+for special use cases.
+
+Signed-off-by: Cong Dang <cong.dang.xn@renesas.com>
+Signed-off-by: Hai Pham  <hai.pham.ud@renesas.com>
+[wsa: rebased, restructured, added Gen4 support]
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+
+Change since v3:
+* rebased to latest changes in the driver
+
+The previous version was already reviewed by Geert and tested by
+Prabhakar. Since the rebase for v4 was not super trivial, I decided to
+drop the tags. It would be great if you could have another look. Thank
+you already. Happy hacking!
+
+
+ drivers/memory/renesas-rpc-if.c | 53 ++++++++++++++++++++++++---------
+ 1 file changed, 39 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+index 025bb628aaf3..75fcba45ec1b 100644
+--- a/drivers/memory/renesas-rpc-if.c
++++ b/drivers/memory/renesas-rpc-if.c
+@@ -7,6 +7,7 @@
+  * Copyright (C) 2019-2020 Cogent Embedded, Inc.
+  */
+ 
++#include <linux/bitops.h>
+ #include <linux/clk.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+@@ -163,6 +164,11 @@ static const struct regmap_access_table rpcif_volatile_table = {
+ 	.n_yes_ranges	= ARRAY_SIZE(rpcif_volatile_ranges),
+ };
+ 
++struct rpcif_info {
++	enum rpcif_type type;
++	u8 strtim;
++};
++
+ struct rpcif_priv {
+ 	struct device *dev;
+ 	void __iomem *base;
+@@ -171,7 +177,7 @@ struct rpcif_priv {
+ 	struct reset_control *rstc;
+ 	struct platform_device *vdev;
+ 	size_t size;
+-	enum rpcif_type type;
++	const struct rpcif_info *info;
+ 	enum rpcif_data_dir dir;
+ 	u8 bus_size;
+ 	u8 xfer_size;
+@@ -186,6 +192,26 @@ struct rpcif_priv {
+ 	u32 ddr;		/* DRDRENR or SMDRENR */
+ };
+ 
++static const struct rpcif_info rpcif_info_r8a7796 = {
++	.type = RPCIF_RCAR_GEN3,
++	.strtim = 6,
++};
++
++static const struct rpcif_info rpcif_info_gen3 = {
++	.type = RPCIF_RCAR_GEN3,
++	.strtim = 7,
++};
++
++static const struct rpcif_info rpcif_info_rz_g2l = {
++	.type = RPCIF_RZ_G2L,
++	.strtim = 7,
++};
++
++static const struct rpcif_info rpcif_info_gen4 = {
++	.type = RPCIF_RCAR_GEN4,
++	.strtim = 15,
++};
++
+ /*
+  * Custom accessor functions to ensure SM[RW]DR[01] are always accessed with
+  * proper width.  Requires rpcif_priv.xfer_size to be correctly set before!
+@@ -310,7 +336,7 @@ int rpcif_hw_init(struct device *dev, bool hyperflash)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (rpc->type == RPCIF_RZ_G2L) {
++	if (rpc->info->type == RPCIF_RZ_G2L) {
+ 		ret = reset_control_reset(rpc->rstc);
+ 		if (ret)
+ 			return ret;
+@@ -324,12 +350,10 @@ int rpcif_hw_init(struct device *dev, bool hyperflash)
+ 	/* DMA Transfer is not supported */
+ 	regmap_update_bits(rpc->regmap, RPCIF_PHYCNT, RPCIF_PHYCNT_HS, 0);
+ 
+-	if (rpc->type == RPCIF_RCAR_GEN3)
+-		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
+-				   RPCIF_PHYCNT_STRTIM(7), RPCIF_PHYCNT_STRTIM(7));
+-	else if (rpc->type == RPCIF_RCAR_GEN4)
+-		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
+-				   RPCIF_PHYCNT_STRTIM(15), RPCIF_PHYCNT_STRTIM(15));
++	regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
++			   /* create mask with all affected bits set */
++			   RPCIF_PHYCNT_STRTIM(BIT(fls(rpc->info->strtim)) - 1),
++			   RPCIF_PHYCNT_STRTIM(rpc->info->strtim));
+ 
+ 	regmap_update_bits(rpc->regmap, RPCIF_PHYOFFSET1, RPCIF_PHYOFFSET1_DDRTMG(3),
+ 			   RPCIF_PHYOFFSET1_DDRTMG(3));
+@@ -340,7 +364,7 @@ int rpcif_hw_init(struct device *dev, bool hyperflash)
+ 		regmap_update_bits(rpc->regmap, RPCIF_PHYINT,
+ 				   RPCIF_PHYINT_WPVAL, 0);
+ 
+-	if (rpc->type == RPCIF_RZ_G2L)
++	if (rpc->info->type == RPCIF_RZ_G2L)
+ 		regmap_update_bits(rpc->regmap, RPCIF_CMNCR,
+ 				   RPCIF_CMNCR_MOIIO(3) | RPCIF_CMNCR_IOFV(3) |
+ 				   RPCIF_CMNCR_BSZ(3),
+@@ -729,9 +753,9 @@ static int rpcif_probe(struct platform_device *pdev)
+ 	rpc->dirmap = devm_ioremap_resource(dev, res);
+ 	if (IS_ERR(rpc->dirmap))
+ 		return PTR_ERR(rpc->dirmap);
+-	rpc->size = resource_size(res);
+ 
+-	rpc->type = (uintptr_t)of_device_get_match_data(dev);
++	rpc->size = resource_size(res);
++	rpc->info = of_device_get_match_data(dev);
+ 	rpc->rstc = devm_reset_control_get_exclusive(dev, NULL);
+ 	if (IS_ERR(rpc->rstc))
+ 		return PTR_ERR(rpc->rstc);
+@@ -764,9 +788,10 @@ static int rpcif_remove(struct platform_device *pdev)
+ }
+ 
+ static const struct of_device_id rpcif_of_match[] = {
+-	{ .compatible = "renesas,rcar-gen3-rpc-if", .data = (void *)RPCIF_RCAR_GEN3 },
+-	{ .compatible = "renesas,rcar-gen4-rpc-if", .data = (void *)RPCIF_RCAR_GEN4 },
+-	{ .compatible = "renesas,rzg2l-rpc-if", .data = (void *)RPCIF_RZ_G2L },
++	{ .compatible = "renesas,r8a7796-rpc-if", .data = &rpcif_info_r8a7796 },
++	{ .compatible = "renesas,rcar-gen3-rpc-if", .data = &rpcif_info_gen3 },
++	{ .compatible = "renesas,rcar-gen4-rpc-if", .data = &rpcif_info_gen4 },
++	{ .compatible = "renesas,rzg2l-rpc-if", .data = &rpcif_info_rz_g2l },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, rpcif_of_match);
+-- 
+2.30.2
 
