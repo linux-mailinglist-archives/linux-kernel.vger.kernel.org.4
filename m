@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D946E84B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D833A6E84B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232915AbjDSWUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 18:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+        id S232460AbjDSWUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 18:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbjDSWUM (ORCPT
+        with ESMTP id S232904AbjDSWUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 18:20:12 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711EDA5EF
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:19:03 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-63b46186c03so455443b3a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:19:03 -0700 (PDT)
+        Wed, 19 Apr 2023 18:20:13 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552F1A26F
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:19:07 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a66911f5faso4696335ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:19:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942707; x=1684534707;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942709; x=1684534709;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WztMTyUU5RnTeRMzQjXOG7tTAHmGJecGpWKfqq8b0LY=;
-        b=JM/4VdTUHWchd0agtBcZMVxlzWz+xlNHvW3+YRV1BgFp8SzvOalMG8gKSVRQwN23lF
-         /HaZUXiHN5WGp4Li2ns1uHUPekHEfh3C+xw1tqVd+IJGR2EtpE3yOA/YQtJ1ZYeUVJ/l
-         7gjUeS7TILHwQHaL9l5Fnqsci5dyPD6ZQhESjL0jYTR+yEk6eIszpIH5SlasnHwxJ7Ky
-         wlJDpXRoqS0jyG2/jEwfH6PNHHxv4wzD8drzVC/Q8h9ghskwb1QRJA40nqZUrBtk1qK0
-         ooViUN4xyDeEoBWE1iz1aXlci22pk9Oc7YzeXphdmUjkGiDah9tsQrhCdZR8NGP6os1O
-         4yYQ==
+        bh=e0F6tHm2quQwLEvcCl5FI5ypn8ePvTg03kiPuCNoeNw=;
+        b=B0z1LKxRqo0N/+B1Zq8uNd+jORsnBmdASeazIE6ba9jOD7NNAm6Y6Ydluna+vSisdS
+         Ns9+QkyzZkHLKpqekwlR8LOXx0SmdbLDH70zYIU2tu7Ppm7uTfxUiNTzbORQk6jDkpwT
+         wou9JJMc8eyykdjw9eDblXGrXRv3fHzY2QDwRPmwO1RqTVCF9ZjGycORqBMV7BBhXY2c
+         4MNxDLzeWD+U/vLAXIW8MKmvELAjO/f9B7KULqHL5O/X2CES/rwKUq+7tYosSOcZcHDe
+         RrEGZ8I2t0oPTTiBYWoZFiRl6ej+YFgKxG/VdR1RjRUQssQeFPlAP7g8lmfAqRhNq39Y
+         qB8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681942707; x=1684534707;
+        d=1e100.net; s=20221208; t=1681942709; x=1684534709;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WztMTyUU5RnTeRMzQjXOG7tTAHmGJecGpWKfqq8b0LY=;
-        b=lYLt3+G1jG1Ndnf4ZeYcTs7rCw6XBUMu1i5Vt7WH47kWd6r+tox+2lRQtDQHFBU13W
-         VgxUuQ3D5GNm/Us5VFeNffhUoXQ47RUoAr4lufdlZtnYFgQVdaBvSsHNjgjZsH097oQN
-         KSaXrELHFynhP2cSSI9V6bFtTOtx4E50gkmGl6Ye7mtAwWiWjJSj1pc9uHu4jjQqNs69
-         G5v5nRtDy2CcL+gITjqIEhbmb7ZcdujGhF71g2mRgdanVYNT/CkbcPDFyGh2NAIdZvdP
-         iNE2XP6F7KRd1i4l1bw28WZjkzcJZT8vopldDL0ulpmBiIPT5sEhHNFxK6/29qroRw0e
-         8O7Q==
-X-Gm-Message-State: AAQBX9e5nUrQsih6BmruMVSIiFXcNg5w27ovIB6RQvSjCWaxXRgQ+4eQ
-        HJWbmOe0Wda6RplVSvhrRZlYsdM3IUPS9tEWsjY=
-X-Google-Smtp-Source: AKy350am1y3CAd0kzsPnqccpnVuquygqNjOFE27i75PzlAcwaRULYItnkTY6+2qQuafZtBMoWXv5YA==
-X-Received: by 2002:a17:902:b087:b0:1a6:9363:1632 with SMTP id p7-20020a170902b08700b001a693631632mr6436484plr.25.1681942707075;
-        Wed, 19 Apr 2023 15:18:27 -0700 (PDT)
+        bh=e0F6tHm2quQwLEvcCl5FI5ypn8ePvTg03kiPuCNoeNw=;
+        b=jc4mL1XKn7UvrzLLA1OqhZG7mvMXBPmBwFrbF/LdqDb0RiN17V3HVKS/sOOr6xJJ/w
+         5LyLHTpYYPsumEom1kBX/j/GM102D0VutkJuiOMi86+QP25BUCdg33q4nR2j8cYfNlEl
+         qVxS0TTDIstcMkuHoGstR1L+GvQufmsbaEzevTJjWSZXp0cH3vg+MsdV5x6zHf0rgD8F
+         P0kmJY5YIJx1oQn3067UuhYZqeNVEdBgcdUCkJzMp6eR8VvdaLplg1bdlxCsSLU5CDDx
+         i22gpxab1Tih0/GXNB4AsQraBabZxYuOlkhwMKYHhiOW8FpcoOQThUC8Bte1+cJ00Rvd
+         YjOg==
+X-Gm-Message-State: AAQBX9eTeg3/igyTiNOuSLuyd5EU5RRTFKMx88Ap6r8xv1tbB/zoBzHP
+        FcaGsmefyHrk6GK6mxbRp0KeDFU2nYiKcdfv6tk=
+X-Google-Smtp-Source: AKy350aSSLZmcJ6EGd9ViVcCgExeh8NfbY776YNFamx7qI4QWXSDqSo7VY1vzDz6CmaJhnexr4tP0w==
+X-Received: by 2002:a17:902:be02:b0:1a3:c8c2:c322 with SMTP id r2-20020a170902be0200b001a3c8c2c322mr6340185pls.29.1681942709189;
+        Wed, 19 Apr 2023 15:18:29 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.18.25
+        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.18.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 15:18:26 -0700 (PDT)
+        Wed, 19 Apr 2023 15:18:28 -0700 (PDT)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Atish Patra <atishp@rivosinc.com>,
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        Rajnesh Kanwal <rkanwal@rivosinc.com>,
         Alexandre Ghiti <alex@ghiti.fr>,
         Andrew Jones <ajones@ventanamicro.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -77,9 +77,9 @@ Cc:     Rajnesh Kanwal <rkanwal@rivosinc.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Uladzislau Rezki <urezki@gmail.com>
-Subject: [RFC 26/48] RISC-V: Add COVI extension definitions
-Date:   Wed, 19 Apr 2023 15:16:54 -0700
-Message-Id: <20230419221716.3603068-27-atishp@rivosinc.com>
+Subject: [RFC 27/48] RISC-V: KVM: Implement COVI SBI extension
+Date:   Wed, 19 Apr 2023 15:16:55 -0700
+Message-Id: <20230419221716.3603068-28-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230419221716.3603068-1-atishp@rivosinc.com>
 References: <20230419221716.3603068-1-atishp@rivosinc.com>
@@ -95,72 +95,231 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rajnesh Kanwal <rkanwal@rivosinc.com>
+CoVE specification defines a separate SBI extension to manage interrupts
+in TVM. This extension is known as COVI as both host & guest
+interface access these functions.
 
-This patch adds the CoVE interrupt management extension(COVI) details
-to the sbi header file.
+This patch implements the functions defined by COVI.
 
-Signed-off-by: Atish Patra <atishp@rivosinc.com>
+Co-developed-by: Rajnesh Kanwal <rkanwal@rivosinc.com>
 Signed-off-by: Rajnesh Kanwal <rkanwal@rivosinc.com>
+Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/include/asm/sbi.h | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ arch/riscv/include/asm/kvm_cove_sbi.h |  20 ++++
+ arch/riscv/kvm/cove_sbi.c             | 164 ++++++++++++++++++++++++++
+ 2 files changed, 184 insertions(+)
 
-diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-index c5a5526..bbea922 100644
---- a/arch/riscv/include/asm/sbi.h
-+++ b/arch/riscv/include/asm/sbi.h
-@@ -33,6 +33,7 @@ enum sbi_ext_id {
- 	SBI_EXT_DBCN = 0x4442434E,
- 	SBI_EXT_NACL = 0x4E41434C,
- 	SBI_EXT_COVH = 0x434F5648,
-+	SBI_EXT_COVI = 0x434F5649,
+diff --git a/arch/riscv/include/asm/kvm_cove_sbi.h b/arch/riscv/include/asm/kvm_cove_sbi.h
+index df7d88c..0759f70 100644
+--- a/arch/riscv/include/asm/kvm_cove_sbi.h
++++ b/arch/riscv/include/asm/kvm_cove_sbi.h
+@@ -32,6 +32,7 @@
+ #define nacl_shmem_gpr_read_cove(__s, __g) \
+ 	nacl_shmem_scratch_read_long(__s, get_scratch_gpr_offset(__g))
  
- 	/* Experimentals extensions must lie within this range */
- 	SBI_EXT_EXPERIMENTAL_START = 0x08000000,
-@@ -369,6 +370,20 @@ enum sbi_ext_covh_fid {
- 	SBI_EXT_COVH_TVM_INITIATE_FENCE,
- };
++/* Functions related to CoVE Host Interface (COVH) Extension */
+ int sbi_covh_tsm_get_info(struct sbi_cove_tsm_info *tinfo_addr);
+ int sbi_covh_tvm_initiate_fence(unsigned long tvmid);
+ int sbi_covh_tsm_initiate_fence(void);
+@@ -58,4 +59,23 @@ int sbi_covh_create_tvm_vcpu(unsigned long tvmid, unsigned long tvm_vcpuid,
  
-+enum sbi_ext_covi_fid {
-+	SBI_EXT_COVI_TVM_AIA_INIT,
-+	SBI_EXT_COVI_TVM_CPU_SET_IMSIC_ADDR,
-+	SBI_EXT_COVI_TVM_CONVERT_IMSIC,
-+	SBI_EXT_COVI_TVM_RECLAIM_IMSIC,
-+	SBI_EXT_COVI_TVM_CPU_BIND_IMSIC,
-+	SBI_EXT_COVI_TVM_CPU_UNBIND_IMSIC_BEGIN,
-+	SBI_EXT_COVI_TVM_CPU_UNBIND_IMSIC_END,
-+	SBI_EXT_COVI_TVM_CPU_INJECT_EXT_INTERRUPT,
-+	SBI_EXT_COVI_TVM_REBIND_IMSIC_BEGIN,
-+	SBI_EXT_COVI_TVM_REBIND_IMSIC_CLONE,
-+	SBI_EXT_COVI_TVM_REBIND_IMSIC_END,
-+};
+ int sbi_covh_run_tvm_vcpu(unsigned long tvmid, unsigned long tvm_vcpuid);
+ 
++/* Functions related to CoVE Interrupt Management(COVI) Extension */
++int sbi_covi_tvm_aia_init(unsigned long tvm_gid, struct sbi_cove_tvm_aia_params *tvm_aia_params);
++int sbi_covi_set_vcpu_imsic_addr(unsigned long tvm_gid, unsigned long vcpu_id,
++				 unsigned long imsic_addr);
++int sbi_covi_convert_imsic(unsigned long imsic_addr);
++int sbi_covi_reclaim_imsic(unsigned long imsic_addr);
++int sbi_covi_bind_vcpu_imsic(unsigned long tvm_gid, unsigned long vcpu_id,
++			     unsigned long imsic_mask);
++int sbi_covi_unbind_vcpu_imsic_begin(unsigned long tvm_gid, unsigned long vcpu_id);
++int sbi_covi_unbind_vcpu_imsic_end(unsigned long tvm_gid, unsigned long vcpu_id);
++int sbi_covi_inject_external_interrupt(unsigned long tvm_gid, unsigned long vcpu_id,
++					unsigned long interrupt_id);
++int sbi_covi_rebind_vcpu_imsic_begin(unsigned long tvm_gid, unsigned long vcpu_id,
++				      unsigned long imsic_mask);
++int sbi_covi_rebind_vcpu_imsic_clone(unsigned long tvm_gid, unsigned long vcpu_id);
++int sbi_covi_rebind_vcpu_imsic_end(unsigned long tvm_gid, unsigned long vcpu_id);
 +
- enum sbi_cove_page_type {
- 	SBI_COVE_PAGE_4K,
- 	SBI_COVE_PAGE_2MB,
-@@ -409,6 +424,21 @@ struct sbi_cove_tvm_create_params {
- 	unsigned long tvm_state_addr;
- };
- 
-+struct sbi_cove_tvm_aia_params {
-+	/* The base address is the address of the IMSIC with group ID, hart ID, and guest ID of 0 */
-+	uint64_t imsic_base_addr;
-+	/* The number of group index bits in an IMSIC address */
-+	uint32_t group_index_bits;
-+	/* The location of the group index in an IMSIC address. Must be >= 24i. */
-+	uint32_t group_index_shift;
-+	/* The number of hart index bits in an IMSIC address */
-+	uint32_t hart_index_bits;
-+	/* The number of guest index bits in an IMSIC address. Must be >= log2(guests/hart + 1) */
-+	uint32_t guest_index_bits;
-+	/* The number of guest interrupt files to be implemented per vCPU */
-+	uint32_t guests_per_hart;
-+};
 +
- #define SBI_SPEC_VERSION_DEFAULT	0x1
- #define SBI_SPEC_VERSION_MAJOR_SHIFT	24
- #define SBI_SPEC_VERSION_MAJOR_MASK	0x7f
++
+ #endif
+diff --git a/arch/riscv/kvm/cove_sbi.c b/arch/riscv/kvm/cove_sbi.c
+index bf037f6..a8901ac 100644
+--- a/arch/riscv/kvm/cove_sbi.c
++++ b/arch/riscv/kvm/cove_sbi.c
+@@ -18,6 +18,170 @@
+ 
+ #define RISCV_COVE_ALIGN_4KB (1UL << 12)
+ 
++int sbi_covi_tvm_aia_init(unsigned long tvm_gid,
++			  struct sbi_cove_tvm_aia_params *tvm_aia_params)
++{
++	struct sbiret ret;
++
++	unsigned long pa = __pa(tvm_aia_params);
++
++	ret = sbi_ecall(SBI_EXT_COVI, SBI_EXT_COVI_TVM_AIA_INIT, tvm_gid, pa,
++			sizeof(*tvm_aia_params), 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++int sbi_covi_set_vcpu_imsic_addr(unsigned long tvm_gid, unsigned long vcpu_id,
++				 unsigned long imsic_addr)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVI, SBI_EXT_COVI_TVM_CPU_SET_IMSIC_ADDR,
++			tvm_gid, vcpu_id, imsic_addr, 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++/*
++ * Converts the guest interrupt file at `imsic_addr` for use with a TVM.
++ * The guest interrupt file must not be used by the caller until reclaim.
++ */
++int sbi_covi_convert_imsic(unsigned long imsic_addr)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVI, SBI_EXT_COVI_TVM_CONVERT_IMSIC,
++			imsic_addr, 0, 0, 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++int sbi_covi_reclaim_imsic(unsigned long imsic_addr)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVI, SBI_EXT_COVI_TVM_RECLAIM_IMSIC,
++			imsic_addr, 0, 0, 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++/*
++ * Binds a vCPU to this physical CPU and the specified set of confidential guest
++ * interrupt files.
++ */
++int sbi_covi_bind_vcpu_imsic(unsigned long tvm_gid, unsigned long vcpu_id,
++			     unsigned long imsic_mask)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVI, SBI_EXT_COVI_TVM_CPU_BIND_IMSIC, tvm_gid,
++			vcpu_id, imsic_mask, 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++/*
++ * Begins the unbind process for the specified vCPU from this physical CPU and its guest
++ * interrupt files. The host must complete a TLB invalidation sequence for the TVM before
++ * completing the unbind with `unbind_vcpu_imsic_end()`.
++ */
++int sbi_covi_unbind_vcpu_imsic_begin(unsigned long tvm_gid,
++				     unsigned long vcpu_id)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVI, SBI_EXT_COVI_TVM_CPU_UNBIND_IMSIC_BEGIN,
++			tvm_gid, vcpu_id, 0, 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++/*
++ * Completes the unbind process for the specified vCPU from this physical CPU and its guest
++ * interrupt files.
++ */
++int sbi_covi_unbind_vcpu_imsic_end(unsigned long tvm_gid, unsigned long vcpu_id)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVI, SBI_EXT_COVI_TVM_CPU_UNBIND_IMSIC_END,
++			tvm_gid, vcpu_id, 0, 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++/*
++ * Injects an external interrupt into the specified vCPU. The interrupt ID must
++ * have been allowed with `allow_external_interrupt()` by the guest.
++ */
++int sbi_covi_inject_external_interrupt(unsigned long tvm_gid,
++				       unsigned long vcpu_id,
++				       unsigned long interrupt_id)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVI, SBI_EXT_COVI_TVM_CPU_INJECT_EXT_INTERRUPT,
++			tvm_gid, vcpu_id, interrupt_id, 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++int sbi_covi_rebind_vcpu_imsic_begin(unsigned long tvm_gid,
++				     unsigned long vcpu_id,
++				     unsigned long imsic_mask)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVI, SBI_EXT_COVI_TVM_REBIND_IMSIC_BEGIN,
++			tvm_gid, vcpu_id, imsic_mask, 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++int sbi_covi_rebind_vcpu_imsic_clone(unsigned long tvm_gid,
++				     unsigned long vcpu_id)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVI, SBI_EXT_COVI_TVM_REBIND_IMSIC_CLONE,
++			tvm_gid, vcpu_id, 0, 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++int sbi_covi_rebind_vcpu_imsic_end(unsigned long tvm_gid, unsigned long vcpu_id)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVI, SBI_EXT_COVI_TVM_REBIND_IMSIC_END,
++			tvm_gid, vcpu_id, 0, 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
+ int sbi_covh_tsm_get_info(struct sbi_cove_tsm_info *tinfo_addr)
+ {
+ 	struct sbiret ret;
 -- 
 2.25.1
 
