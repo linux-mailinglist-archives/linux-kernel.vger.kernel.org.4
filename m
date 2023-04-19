@@ -2,110 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB326E71C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE45E6E71CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231795AbjDSDoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 23:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S231249AbjDSDqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 23:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231623AbjDSDoJ (ORCPT
+        with ESMTP id S229879AbjDSDqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 23:44:09 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CFC449F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 20:44:06 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id fv6so18466254qtb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 20:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1681875846; x=1684467846;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OPSq3OfLNyZvC33KlnI/fZAdJg9MqJ41VHFlSsDteiw=;
-        b=Oz1b+xidKfkZ0OMWMQKzx1T9LpaIo45kYON8P97GoVjax1G5TaNVqIbWBUrV5n6Vjw
-         Rr6R7wWWaZXfsE71gJENz4Lv9x5JGrEytG/1et3/7iT+R+vljNxwYXWG9P7Ws2ejoxq0
-         lOFcM9fH2+ri41+Z5w4dq7gLsCo49XSuvy/Ow8BK9QtTLc3gYs9Q8kMOIEq0Phge2hb0
-         H2WPB+gqHnrIAAcysTCawLVxTfDvvhl/SlF9ICVKW6YmSXxoFvTHWwnqgF5/WBtwN2Oi
-         5qg51R63kUW5QdWWKKrgx+SFzMy1ea+CxARgSKuvwfrxg2z9m6FjOuIVsirrh57Et3uH
-         JnGw==
+        Tue, 18 Apr 2023 23:46:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB71619C
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 20:45:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681875916;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1YuuAJn1OCoUYnZzUOuo4+29qTgUEGG9kBKj+L9J4Ys=;
+        b=N/38go9zuXn/9q/LRUd+mbpEaXk1FVSh9b9XtXuQF+oDuBxZwPeZ5IAXB4MjAiKFEJIiqo
+        Inll+9ANPPcI0554T6q6akvkVhfmRV1nLVQcUA0tONXkMCj3Ec2EfxrRv6t2uw8I3PCyjW
+        +IonzEX/HxxGstrfR/7gUPyJ8rBMa/k=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
+ [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-626-SHAW4dhNMLS6fPlXcjwO5Q-1; Tue, 18 Apr 2023 23:45:14 -0400
+X-MC-Unique: SHAW4dhNMLS6fPlXcjwO5Q-1
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-18aec3062c3so169244fac.2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 20:45:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681875846; x=1684467846;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OPSq3OfLNyZvC33KlnI/fZAdJg9MqJ41VHFlSsDteiw=;
-        b=LNg2ymmfyoGnFBrw7iCX18Ypj9FrR96LXIMvAHhFVeDfv3YgdS/aXS701Dhh0xWDwp
-         s/LzioWCCIAyfem0NLncMFpntMacGfv8UwMqrGqr/iQM2cAmF0A3VZJ+p5Ic4XbfJfZq
-         F5Sz5GXNpFfFFma/Sd5AkiFkME1iOCce6G7CHtw+uyokd8dnNkOIjnGRgDCoPrdxZlxv
-         9P3zspgGbC8CuHb5ynpM0AZnTe2ftksfcD7457iL4LUCFyNkgX04towl808ipwfNaQ/d
-         Gt33ZkJrnI04CvORZiPPv/OYLDxMQQp4vhPv16CHvRXeJJ2icM65EEh+gM0qL3TUD2BN
-         Q1BQ==
-X-Gm-Message-State: AAQBX9fP1IoQzr+MQZOifEWsOcuaE3vxckKzdnd/L4o9pEvF4AH1AnbO
-        vbV9773GVZMlAY7//6raMJLz5w==
-X-Google-Smtp-Source: AKy350YVNyCiOt3CzXLsb9tHi20H0nSSNRhfsIZ3DJ6ORcb7ixVCRnNwomFBlwI1xxFmc4CG9XxwZw==
-X-Received: by 2002:a05:622a:14a:b0:3e8:b9a0:babf with SMTP id v10-20020a05622a014a00b003e8b9a0babfmr4167713qtw.12.1681875845919;
-        Tue, 18 Apr 2023 20:44:05 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:e646])
-        by smtp.gmail.com with ESMTPSA id q9-20020a05620a0d8900b00706b09b16fasm4401719qkl.11.2023.04.18.20.44.05
+        d=1e100.net; s=20221208; t=1681875914; x=1684467914;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1YuuAJn1OCoUYnZzUOuo4+29qTgUEGG9kBKj+L9J4Ys=;
+        b=huyAEpWVgxV23DTSQ0ga7/w6Mit5DmRiTT5NlOO7UBB3D+XTjRDsy/mjeY5dLmPNCJ
+         ki+ctpp/Hn10taqxJL5SEnoWjRcZsnlUEhHxMv2RISNfG5FNBdzbJUbQI9Z9pXIxQi4O
+         lwGc/ukcFJiVSufdmv7qTb1UqtDT/A+W+HDAt4YgUoXX1m6bTZqbrZmIUrqYrLeEH6cE
+         dzvjl1m0u0v/VAWDAxYsAPzf3eHhf7jxsAEQx1hlEvzxVwuvuDSkUw/qhwkJDUwrD218
+         8mSMSGvZwDwIQIlXmVt/auzCuBkTF1TFAFN1ZTt2RJq44yo09W7u1g3Q2xOwOZtr3taH
+         DYFg==
+X-Gm-Message-State: AAQBX9e8jTCblUsf/Rg25cE1GR1lus80+gCIFoSP/3FE078/MnSgRsFe
+        XXuRSVE818mXbJQaoXTfW+v/bIhzjmfLvk6dMc8Sbm3xsnJU4T390a3B0ZS96BdfNumyvr/Ebld
+        niSnypZuLg2ayGpFfyElF1ESgNQ7HSF/I
+X-Received: by 2002:a05:6870:a10e:b0:180:13a4:4256 with SMTP id m14-20020a056870a10e00b0018013a44256mr3219167oae.36.1681875913982;
+        Tue, 18 Apr 2023 20:45:13 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Zc/n0XS5LBqwVMuTKQ0TMzDYd+d6AXCJnHrNrZG1OgEaTKc8AHKb0V0BCzMHgpOmku1E/Azg==
+X-Received: by 2002:a05:6870:a10e:b0:180:13a4:4256 with SMTP id m14-20020a056870a10e00b0018013a44256mr3219155oae.36.1681875913749;
+        Tue, 18 Apr 2023 20:45:13 -0700 (PDT)
+Received: from ?IPv6:2804:1b3:a802:873a:dbfb:e929:5eb5:6a2c? ([2804:1b3:a802:873a:dbfb:e929:5eb5:6a2c])
+        by smtp.gmail.com with ESMTPSA id 26-20020aca101a000000b0038e34b0a0ecsm1249499oiq.8.2023.04.18.20.45.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 20:44:05 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 23:44:04 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 03/26] mm: make pageblock_order 2M per default
-Message-ID: <20230419034404.GA274690@cmpxchg.org>
-References: <20230418191313.268131-1-hannes@cmpxchg.org>
- <20230418191313.268131-4-hannes@cmpxchg.org>
- <20230419000105.matz43p6ihrqmado@box.shutemov.name>
- <20230419025552.GB272256@cmpxchg.org>
+        Tue, 18 Apr 2023 20:45:13 -0700 (PDT)
+Message-ID: <f294a74cd17bf932621a6a746d592f49770d25ec.camel@redhat.com>
+Subject: Re: [RFC PATCH 1/1] smp: Add tracepoints for functions called with
+ smp_call_function*()
+From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yury Norov <yury.norov@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Nadav Amit <namit@vmware.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Date:   Wed, 19 Apr 2023 00:45:08 -0300
+In-Reply-To: <20230406095519.GG386572@hirez.programming.kicks-ass.net>
+References: <20230406075718.68672-1-leobras@redhat.com>
+         <20230406095519.GG386572@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419025552.GB272256@cmpxchg.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 10:55:53PM -0400, Johannes Weiner wrote:
-> On Wed, Apr 19, 2023 at 03:01:05AM +0300, Kirill A. Shutemov wrote:
-> > On Tue, Apr 18, 2023 at 03:12:50PM -0400, Johannes Weiner wrote:
-> > > pageblock_order can be of various sizes, depending on configuration,
-> > > but the default is MAX_ORDER-1.
-> > 
-> > Note that MAX_ORDER got redefined in -mm tree recently.
-> > 
-> > > Given 4k pages, that comes out to
-> > > 4M. This is a large chunk for the allocator/reclaim/compaction to try
-> > > to keep grouped per migratetype. It's also unnecessary as the majority
-> > > of higher order allocations - THP and slab - are smaller than that.
-> > 
-> > This seems way to x86-specific.
-> > Other arches have larger THP sizes. I believe 16M is common.
-> >
-> > Maybe define it as min(MAX_ORDER, PMD_ORDER)?
-> 
-> Hm, let me play around with larger pageblocks.
-> 
-> The thing that gives me pause is that this seems quite aggressive as a
-> default block size for the allocator and reclaim/compaction - if you
-> consider the implications for internal fragmentation and the amount of
-> ongoing defragmentation work it would require.
-> 
-> IOW, it's not just a function of physical page size supported by the
-> CPU. It's also a function of overall memory capacity. Independent of
-> architecture, 2MB seems like a more reasonable step up than 16M.
+On Thu, 2023-04-06 at 11:55 +0200, Peter Zijlstra wrote:
+> On Thu, Apr 06, 2023 at 04:57:18AM -0300, Leonardo Bras wrote:
+> > When running RT workloads in isolated CPUs, many cases of deadline miss=
+es
+> > are caused by remote CPU requests such as smp_call_function*().
+> >=20
+> > For those cases, having the names of those functions running around the
+> > deadline miss moment could help finding a target for the next improveme=
+nts.
+> >=20
+> > Add tracepoints for acquiring the funtion name & argument before entry =
+and
+> > after exitting the called function.
+> >=20
+> > Signed-off-by: Leonardo Bras <leobras@redhat.com>
+>=20
+> How are the patches queued there not sufficient?
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=3Dsmp/=
+core
+>=20
 
-[ Quick addition: on those other archs, these patches would still help
-  with other, non-THP sources of compound allocations, such as slub,
-  variable-order cache folios, and really any orders up to 2M. So it's
-  not like we *have* to raise it to PMD_ORDER for them to benefit. ]
+IIUC the last commits add tracepoints that are collected in the
+requesting CPU, at the moment of scheduling the IPI, which are also useful =
+in
+some scenarios.
+
+On my scenario, it could help a little,=C2=A0since it makes possible to fil=
+ter what
+all other cpus are scheduling on the requested cpu. OTOH it could be also b=
+e
+misleading, as the requested cpu could be running something that was schedu=
+led
+way before.
+
+The change I propose does exactly what my scenario need: track exactly whic=
+h
+function was running at given time in the requested CPU. With this info, we=
+ can
+check which (if any) remotely requested function was running on given time
+window.
+
+(An unrelated thing I just thought: We could even use the commits you point=
+ed
+together with my proposed change in order to measure how long does it take =
+for a
+requested function to run / complete in the requested cpu)
+
+Thanks for reviewing!
+
+Leo
+
