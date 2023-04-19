@@ -2,79 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0916E7109
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B646E7111
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbjDSCPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 22:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
+        id S231268AbjDSCQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 22:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjDSCPH (ORCPT
+        with ESMTP id S231159AbjDSCQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 22:15:07 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B455124
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 19:15:05 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63d32d21f95so400529b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 19:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681870505; x=1684462505;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=omaGeiilnWY8neqCu1aYblokWGcDA5y3QiHgOwpl4SY=;
-        b=jDO842tOQzUGfFMlpnl+0xVX3t6R3u7QMAu+s1WrMuaCVxUVgycP/Phvb0HoNh58iV
-         xLOhkc8EW1Ikvbi+/i+Dg6fvhkyMeYlA+FTVKE2RrVK3A7rpc+FzJHUxR0wTQ7QQ26t8
-         L2EaQEaUlrIPN0uaaIg3XDMhAKNjBJvO8Eea6E4VzoBpfKrX4OSVA4FK7j2bOxK6lK/H
-         E4/tztiAvNCbQPn0euQIadpatwx8hSQCAS1/vzs89ylaAlw3oJekdbSEM5Fm92E+AwLm
-         6hoKbSPftzXTPPbgVF0j/C7FHTHfnxNNnOccSwEzcnySOyWOL8bIUJZfLr1m5oTSOXTu
-         9U0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681870505; x=1684462505;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=omaGeiilnWY8neqCu1aYblokWGcDA5y3QiHgOwpl4SY=;
-        b=L3r5SBcKBZ7kIqPZaHQJgX+AEzYhSYdVTiQW+INhT+CmAL2M6d7IpOAOEnTRhX7j4K
-         TCSaJkO37jCeIyntog81H7tyrC7x7dF+H7gtW9u3rwINSlVvy9BIJiyABOrYE+ZTnNNY
-         +Xcut868E01bYUQnuKccz4CJICHuk2En8nOAZvL72bjixRKkkfqwqxZbdrZTs5TXi5Fi
-         bjTqQ+FIg3CoKqUUCUQ9uCqmhlfh0h8ALkbf/JFM04ickDz3FitAhTUd6skAGXjn3WHf
-         Sae6lvB5c4i/eWUMRme3hI84Y1jp7+d5n4ctpc34OxUCeFZWPhXhsf/u3IsMWmeSruK/
-         8UQg==
-X-Gm-Message-State: AAQBX9e7tMM3pa7ieDMCUS2nmTBY4JnoO5H0MUr97m+mucSWPxU6mUAB
-        ShrCYeI5pU6FaFVkvfEvwcL+IA==
-X-Google-Smtp-Source: AKy350Zy3gIP/wJlOTrxIJOZjD1BKAKhDNMPB17EIgaujgA65bwcNbe8U/3vRZImIHTIB+BoiThlzA==
-X-Received: by 2002:a05:6a00:44c6:b0:638:2493:1710 with SMTP id cv6-20020a056a0044c600b0063824931710mr16865100pfb.3.1681870505004;
-        Tue, 18 Apr 2023 19:15:05 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id c18-20020aa78812000000b0063b73e69ea2sm7275709pfo.42.2023.04.18.19.15.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 19:15:04 -0700 (PDT)
-Message-ID: <7dded5a8-32c1-e994-52a0-ce32011d5e6b@kernel.dk>
-Date:   Tue, 18 Apr 2023 20:15:03 -0600
+        Tue, 18 Apr 2023 22:16:57 -0400
+Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3609D2681;
+        Tue, 18 Apr 2023 19:16:53 -0700 (PDT)
+Message-ID: <03d46708ca8adaf2fe98689e04c98541.pc@manguebit.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
+        s=dkim; t=1681870610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xwuO365E3uWJjHSCA6WvcUrrebXU0puVdAVof+NAIBk=;
+        b=prf48IjvaTQG15ExjQ/iMTOUBexRi1XKhmRMZWqjIfwDnPeBw5B81xfseexaew9Q1TfKtv
+        eZ7CljqWYTnugydnfn9aUtYvvl4dW7wIIMUqgg8FUbfW/POzf1ryjQVdJv/hyQTNM63Ag6
+        ygygP9aIImvP6OGEv2/oykEvw1zfpSozjFkrMzbjkPxkqkLXg8N6E6P2Kr3QvwyiksAk04
+        UBDW0NpTKc2dSAk8v6Tb1Gy5gadJbU92BgsZB35Ha+IiknBdwXWO4hq6aclO4eMZP97hvS
+        IYmnhZvSmxbclMK9UxJDPCsoS0j2j/1iVwaby70TV941cWK4HmWrs68ouhQuUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
+        s=dkim; t=1681870610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xwuO365E3uWJjHSCA6WvcUrrebXU0puVdAVof+NAIBk=;
+        b=CuhbOYftU+3lzams5OIgKou8sm6usykvy8iEAiiO0vhMDTt40Tb+feXmEV3jyMFTNwm2Zi
+        rN0tcEhXYzdcBGbXc8P8Ug+KR2iqjVIY+noKPYBvEO2A+71B/uowYCBCfTBTsVpKuM5a9D
+        cCCpF1OwGULVDgT3Y3ti78l9gFJ3643mL27/8Ym/sAMeEBFuUaOJ/bylZKD/j5Vb16rz7U
+        zWp2BefO4C/kFClXizk/HLhmTPPIPjQ6xubcRRhjMOD/fzCyq8nKeyDnKx8FZlYvw1T41e
+        eb4RAQXYRqtsI3Zv7zvSpnKWQAjtnPpSoyTpcZAqVcPJKEmcphOR0ThdaHYHww==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=pc@manguebit.com smtp.mailfrom=pc@manguebit.com
+ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1681870610; a=rsa-sha256;
+        cv=none;
+        b=izNevIs0sGaspWAvKtlZKGm8XHoRXRhjpwxfC36SVd//nNpIKJlJoUrHAeapwgyQRFjwe0
+        Itnk5ePF+56GcN6KX9YTvzM93EDVCnIzUiKlvn5QZTSO25tcr3XTNvOiA6CLRMdeayYoDJ
+        3JYPFWXWqhjYAuQtRMSEizFY/t+CY0MAvLmevReQvXBIDUUMPY7jz7f92FSu+4FhYMWwbs
+        8RYspDbxN5vmhXiAJ/yxQwD3hafu49ledalfHUg+4EiK+sOVVzKC3OVZyU2fKUpQVLHiwj
+        UXiwn7LTGgNwMMrLRngmF26yVWrATDyzKu6NoHGEILMYssC5yzG51ArwZ7PH3A==
+From:   Paulo Alcantara <pc@manguebit.com>
+To:     David Howells <dhowells@redhat.com>,
+        Steve French <smfrench@gmail.com>
+Cc:     dhowells@redhat.com,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        Long Li <longli@microsoft.com>,
+        Enzo Matsumiya <ematsumiya@suse.de>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cifs: Fix unbuffered read
+In-Reply-To: <1692048.1681857607@warthog.procyon.org.uk>
+References: <1692048.1681857607@warthog.procyon.org.uk>
+Date:   Tue, 18 Apr 2023 23:16:45 -0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] eventfd: support delayed wakeup for non-semaphore eventfd
- to reduce cpu utilization
-Content-Language: en-US
-To:     Wen Yang <wenyang.linux@foxmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>, Dylan Yudaken <dylany@fb.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Paolo Bonzini <pbonzini@redhat.com>, Fu Wei <wefu@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <tencent_AF886EF226FD9F39D28FE4D9A94A95FA2605@qq.com>
- <817984a2-570c-cb23-4121-0d75005ebd4d@kernel.dk>
- <tencent_9D8583482619D25B9953FCA89E69AA92A909@qq.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <tencent_9D8583482619D25B9953FCA89E69AA92A909@qq.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,47 +78,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/17/23 10:32?AM, Wen Yang wrote:
-> 
-> ? 2023/4/17 22:38, Jens Axboe ??:
->> On 4/16/23 5:31?AM, wenyang.linux@foxmail.com wrote:
->>> From: Wen Yang <wenyang.linux@foxmail.com>
->>>
->>> For the NON SEMAPHORE eventfd, if it's counter has a nonzero value,
->>> then a read(2) returns 8 bytes containing that value, and the counter's
->>> value is reset to zero. Therefore, in the NON SEMAPHORE scenario,
->>> N event_writes vs ONE event_read is possible.
->>>
->>> However, the current implementation wakes up the read thread immediately
->>> in eventfd_write so that the cpu utilization increases unnecessarily.
->>>
->>> By adding a configurable delay after eventfd_write, these unnecessary
->>> wakeup operations are avoided, thereby reducing cpu utilization.
->> What's the real world use case of this, and what would the expected
->> delay be there? With using a delayed work item for this, there's
->> certainly a pretty wide grey zone in terms of delay where this would
->> perform considerably worse than not doing any delayed wakeups at all.
-> 
-> 
-> Thanks for your comments.
-> 
-> We have found that the CPU usage of the message middleware is high in
-> our environment, because sensor messages from MCU are very frequent
-> and constantly reported, possibly several hundred thousand times per
-> second. As a result, the message receiving thread is frequently
-> awakened to process short messages.
-> 
-> The following is the simplified test code:
-> https://github.com/w-simon/tests/blob/master/src/test.c
-> 
-> And the test code in this patch is further simplified.
-> 
-> Finally, only a configuration item has been added here, allowing users
-> to make more choices.
+David Howells <dhowells@redhat.com> writes:
 
-I think you'd have a higher chance of getting this in if the delay
-setting was per eventfd context, rather than a global thing.
+> If read() is done in an unbuffered manner, such that, say,
+> cifs_strict_readv() goes through cifs_user_readv() and thence
+> __cifs_readv(), it doesn't recognise the EOF and keeps indicating to
+> userspace that it returning full buffers of data.
+>
+> This is due to ctx->iter being advanced in cifs_send_async_read() as the
+> buffer is split up amongst a number of rdata objects.  The iterator count
+> is then used in collect_uncached_read_data() in the non-DIO case to set t=
+he
+> total length read - and thus the return value of sys_read().  But since t=
+he
+> iterator normally gets used up completely during splitting, ctx->total_len
+> gets overridden to the full amount.
+>
+> However, prior to that in collect_uncached_read_data(), we've gone through
+> the list of rdatas and added up the amount of data we actually received
+> (which we then throw away).
+>
+> Fix this by removing the bit that overrides the amount read in the non-DIO
+> case and just going with the total added up in the aforementioned loop.
+>
+> This was observed by mounting a cifs share with multiple channels, e.g.:
+>
+> 	mount //192.168.6.1/test /test/ -o user=3Dshares,pass=3D...,max_channels=
+=3D6
+>
+> and then reading a 1MiB file on the share:
+>
+> 	strace cat /xfstest.test/1M  >/dev/null
+>
+> Through strace, the same data can be seen being read again and again.
+>=20=20=20=20=20
+> Fixes: d08089f649a0 ("cifs: Change the I/O paths to use an iterator rathe=
+r than a page list")
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Steve French <smfrench@gmail.com>
+> cc: Paulo Alcantara <pc@manguebit.com>
+> cc: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+> cc: Long Li <longli@microsoft.com>
+> cc: Enzo Matsumiya <ematsumiya@suse.de>
+> cc: Shyam Prasad N <nspmangalore@gmail.com>
+> cc: Rohith Surabattula <rohiths.msft@gmail.com>
+> cc: Jeff Layton <jlayton@kernel.org>
+> cc: linux-cifs@vger.kernel.org
+> ---
+>  fs/cifs/file.c |    4 ----
+>  1 file changed, 4 deletions(-)
 
--- 
-Jens Axboe
-
+Acked-by: Paulo Alcantara (SUSE) <pc@manguebit.com>
