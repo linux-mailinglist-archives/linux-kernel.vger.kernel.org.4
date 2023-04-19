@@ -2,177 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B2A6E8313
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1408F6E8306
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbjDSVIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 17:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
+        id S231297AbjDSVIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 17:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231509AbjDSVI3 (ORCPT
+        with ESMTP id S231279AbjDSVII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 17:08:29 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E5A7685;
-        Wed, 19 Apr 2023 14:08:21 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id gw13so306195wmb.3;
-        Wed, 19 Apr 2023 14:08:21 -0700 (PDT)
+        Wed, 19 Apr 2023 17:08:08 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530CC4C1A
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:08:05 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2a8b1b51dbdso887031fa.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:08:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681938500; x=1684530500;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c+oYU3lOVwUqdc9f48/HeSPXnQKzJbbtYLzabFYj4Ws=;
-        b=BuDSRqMaEJTl61ZYicLdsY4+v9WOMRr+MgGP9ia9GWl1BAycE7/qeanWqp+FhEhrYV
-         PE5ksBPFnV5X/w7cJD8dd90m1ruEa0uXUzI/INH5poc3ZtuTv+wHT3K9w4TM+i0vP44r
-         rEvaIWWBZrLTlatRkRWhe/FEOCEjNL96GDSGxom2bTr3afkXavy98r0eTpT9fZgdey8Q
-         ktipViLPk4HDt3+pK1FZ32FM+O7jsbLfMAfjahn1nVZ87j5UNKr+evYcTbq7yhG4hmB/
-         BCg33CYFJ8u9OD0DmpiIui+JovZfZlpv4tWCbkLCZ5aRhW76WhFCMiOYYGzBAfyrAh/A
-         DOwA==
+        d=linaro.org; s=google; t=1681938483; x=1684530483;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y4Qr1DXe1yvvm/vxNEQkt+SEuJu0KzbnH1GeDOIlXyQ=;
+        b=hC5WFtDnayfS8GWsFSCr2rWJ952sK2ZuuSjzPTBUweoBJYnzyc2+eTgmkgOhIxUf6S
+         BDUeCh7ucPblx5vCU3jh+xHT7Ufl8nN568uL5OmBnUcENBwm8bURgtNWq1VHsGfHoQUI
+         ao+7dER7M8FSI9y9EZ9ygtz4MVXj+UtJo1J/wkLA5md3YI1VllMsFuxHqDOoAv3Q/9eq
+         pKf1KX9NK63kJsc6Lw4xl+brmE4IpG3DC+/l8nMljCwNPA2FnaRThvXhgBlOpuVAso6f
+         HVSuaVmL/BsETOwLRgDgVwyJFI+rsgciODVoEphuGnhlT6K2XNQYlcHlybGlaxaYDPjF
+         6pAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681938500; x=1684530500;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c+oYU3lOVwUqdc9f48/HeSPXnQKzJbbtYLzabFYj4Ws=;
-        b=hENbgPUJxmKOlmRT/Kytp7kq5Ygrb4D36Y9G9dPIXU2Y0wteKqvfYwakoY29Hmz1IU
-         VuVOTvteMCCkPE4K2HnpEURX5WEsoTNqoYRmxWIy0ulaXEvCBgrLXhCwP+hhbBX4E4yv
-         PNrnbIDHCFLQJ7QYiEMc+xpDQSv1f5NYCWR1UROzgM2vzqO2HExV4XjbRjinKVoccV63
-         nwCZBkcR+XMwDIhpBOinG6poGmIJjG6Q9e4CZfdLD5A+9eJL3q5TEmswzPOhs5xOJaZT
-         gKMvQIeVV6Dt2C9qqOGA9ZKaGKApmoD72AD2j84bVE3TbGMabcNGgyOqPIDyabD6lIkr
-         +Jtw==
-X-Gm-Message-State: AAQBX9cY004eZ0/bMWpKvGc7xHkPab1UNHlIi8/+Cp7VE+h5ND3B1Jat
-        EedJu4Ukfy/HNrpovqg1MDQ=
-X-Google-Smtp-Source: AKy350a6wDsjwvOxSC8Zyndl1DXpPFa7gsGtGhdwyXRUSws8LefGRWW/fboA5OgAt4Wr+w2CXAh7vw==
-X-Received: by 2002:a1c:7c05:0:b0:3f1:6eb5:6e6a with SMTP id x5-20020a1c7c05000000b003f16eb56e6amr11421930wmc.28.1681938499918;
-        Wed, 19 Apr 2023 14:08:19 -0700 (PDT)
-Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.googlemail.com with ESMTPSA id g3-20020a5d5543000000b002fe254f6c33sm81295wrw.92.2023.04.19.14.08.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 14:08:19 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Martin Schiller <ms@dev.tdt.de>, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
-Subject: [PATCH 5/5] leds: trigger: netdev: use mutex instead of spinlocks
-Date:   Wed, 19 Apr 2023 23:07:43 +0200
-Message-Id: <20230419210743.3594-6-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230419210743.3594-1-ansuelsmth@gmail.com>
-References: <20230419210743.3594-1-ansuelsmth@gmail.com>
+        d=1e100.net; s=20221208; t=1681938483; x=1684530483;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y4Qr1DXe1yvvm/vxNEQkt+SEuJu0KzbnH1GeDOIlXyQ=;
+        b=DWD5J4hhzzCRHWEyQg7wYyVhHGqqCT3/K28OcSjp4yWSTUAH83gdnpyWTg0QZL4oxx
+         aQujLu5SVGl6TzyIHnHTgGzZaJ+5Ozf5juUeMzxGWudXsEPY9nMQgVhgDRdqWi9b1l3Y
+         H9/y8LyczeL0Q7CTdErZ1PeaplWrPpusLvN+kr23ddqIVkU/p8nnYE3U/u0i6rqG6fhm
+         5SC/Qj3GCk1O+zj63Ob6S6gMcnlzUsDU/hZ/iR/qj4xv++QE6XLXd3TwkUlbzdCrVDmp
+         tvDaqj/v0eBALHlTshkmPncHKmnziJdWIzz6ROIbHO6/SKLXHV0jSBoMuv0KykmILp7M
+         9yqw==
+X-Gm-Message-State: AAQBX9cqqI84U4c2kiaK8TYv+ZkqeR+RMMVM+UFjA+1LkuZrgknWY4Oz
+        6HiKxX56DFQ4XMclqCrKdpP67g==
+X-Google-Smtp-Source: AKy350bRPbKgT0N5fxItGxuOvv+MyhtWesynq8EjEf51YmaoGEZIZO4bHS/rGvjxJZSOp9eSI5UMZA==
+X-Received: by 2002:ac2:4833:0:b0:4cc:96f8:f9c6 with SMTP id 19-20020ac24833000000b004cc96f8f9c6mr4457459lft.5.1681938483555;
+        Wed, 19 Apr 2023 14:08:03 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id r4-20020ac24d04000000b004db0a7ce483sm11410lfi.162.2023.04.19.14.08.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 14:08:03 -0700 (PDT)
+Message-ID: <6e55d3fa-744e-1f85-7642-6138f4e6e5a5@linaro.org>
+Date:   Wed, 19 Apr 2023 23:08:01 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH RFT v2 01/14] dt-bindings: clock: qcom,rpmcc: Add a way to
+ enable unused clock cleanup
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org
+References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
+ <20230303-topic-rpmcc_sleep-v2-1-ae80a325fe94@linaro.org>
+ <ZD2YYrOdQMD3pi7u@gerhold.net>
+ <d63d4896afe8a1a901470f88862ce608.sboyd@kernel.org>
+ <3873483f-7f7d-a146-cca9-b50f054289d4@linaro.org>
+ <6407af2a-18c6-9baf-cc9b-dcf7001812b7@linaro.org>
+ <ZD_0AmYU-N5vzv8f@gerhold.net>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <ZD_0AmYU-N5vzv8f@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some LEDs may require to sleep while doing some operation like setting
-brightness and other cleanup.
 
-For this reason, using a spinlock will cause a sleep under spinlock
-warning.
 
-It should be safe to convert this to a sleepable lock since:
-- sysfs read/write can sleep
-- netdev_trig_work is a work queue and can sleep
-- netdev _trig_notify can sleep
+On 19.04.2023 16:00, Stephan Gerhold wrote:
+> On Wed, Apr 19, 2023 at 01:31:01PM +0200, Konrad Dybcio wrote:
+>> What should we do about the non-bus RPM clocks though? I don't fancy
+>> IPA_CLK running 24/7.. And Stephan Gerhold was able to achieve VDD_MIN
+>> on msm8909 with these clocks shut down (albeit with a very basic dt setup)!
+>>
+>> Taking into account the old interconnect-enabled DTs, some of the
+>> clocks would need to be on so that the QoS writes can succeed
+>> (e.g. the MAS_IPA endpoint needs IPA_CLK), it gets complicated again..
+>>
+> 
+> I guess MSM8996 is the only platform affected by this? sdm630.dtsi seems
+> to list the clock already in the a2noc and all others don't seem to have
+> an interconnect driver yet.
+> 
+> This will be subjective and someone will surely disagree but...
+> 
+> IMO forcing all RPM clocks on during boot and keeping them enabled is
+> not part of the DT ABI. If you don't describe the hardware correctly and
+> are missing necessary clocks in the description (like the IPA_CLK on the
+> interconnect node) then your DT is wrong and should be fixed.
+> 
+> I would see this a bit like typical optimizing C compilers nowadays. If
+> you write correct code it can optimize, e.g. drop unnecessary function
+> calls. But if you write incorrect code with undefined behavior it's not
+> the fault of the compiler if you run into trouble. The code must be
+> fixed.
+> 
+> The DT bindings don't specify that unused resources (clocks, ...) stay
+> "magically" active. They specify that that the resources you reference
+> are available. As such, I would say the OS is free to optimize here and
+> turn off unused resources.
+> 
+> The more important point IMO is not breaking all platforms without
+> interconnect drivers. This goes beyond just adding a missing clock to
+> the DT, you need to write the driver first. But having the max vote in
+> icc_smd_rpm (somehow) should hopefully take care of that.
+Hm, interesting argument.
 
-The spinlock was used when brightness didn't support sleeping, but this
-changed and now it supported with brightness_set_blocking().
+Krzysztof, Bjorn, what's your stance on this?
 
-Convert to mutex lock to permit sleeping using brightness_set_blocking().
+We *need* to add unused cleanup to rpmcc for feature completion and
+there's no good way of discerning whether it's safe to do so..
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/leds/trigger/ledtrig-netdev.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+Doing so will make clk_ignore_unused necessary to boot with legacy DTs.
 
-diff --git a/drivers/leds/trigger/ledtrig-netdev.c b/drivers/leds/trigger/ledtrig-netdev.c
-index 5a47913c813c..115f2bae9eee 100644
---- a/drivers/leds/trigger/ledtrig-netdev.c
-+++ b/drivers/leds/trigger/ledtrig-netdev.c
-@@ -20,7 +20,7 @@
- #include <linux/list.h>
- #include <linux/module.h>
- #include <linux/netdevice.h>
--#include <linux/spinlock.h>
-+#include <linux/mutex.h>
- #include <linux/timer.h>
- #include "../leds.h"
- 
-@@ -37,7 +37,7 @@
-  */
- 
- struct led_netdev_data {
--	spinlock_t lock;
-+	struct mutex lock;
- 
- 	struct delayed_work work;
- 	struct notifier_block notifier;
-@@ -97,9 +97,9 @@ static ssize_t device_name_show(struct device *dev,
- 	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
- 	ssize_t len;
- 
--	spin_lock_bh(&trigger_data->lock);
-+	mutex_lock(&trigger_data->lock);
- 	len = sprintf(buf, "%s\n", trigger_data->device_name);
--	spin_unlock_bh(&trigger_data->lock);
-+	mutex_unlock(&trigger_data->lock);
- 
- 	return len;
- }
-@@ -115,7 +115,7 @@ static ssize_t device_name_store(struct device *dev,
- 
- 	cancel_delayed_work_sync(&trigger_data->work);
- 
--	spin_lock_bh(&trigger_data->lock);
-+	mutex_lock(&trigger_data->lock);
- 
- 	if (trigger_data->net_dev) {
- 		dev_put(trigger_data->net_dev);
-@@ -138,7 +138,7 @@ static ssize_t device_name_store(struct device *dev,
- 	trigger_data->last_activity = 0;
- 
- 	set_baseline_state(trigger_data);
--	spin_unlock_bh(&trigger_data->lock);
-+	mutex_unlock(&trigger_data->lock);
- 
- 	return size;
- }
-@@ -279,7 +279,7 @@ static int netdev_trig_notify(struct notifier_block *nb,
- 
- 	cancel_delayed_work_sync(&trigger_data->work);
- 
--	spin_lock_bh(&trigger_data->lock);
-+	mutex_lock(&trigger_data->lock);
- 
- 	trigger_data->carrier_link_up = false;
- 	switch (evt) {
-@@ -304,7 +304,7 @@ static int netdev_trig_notify(struct notifier_block *nb,
- 
- 	set_baseline_state(trigger_data);
- 
--	spin_unlock_bh(&trigger_data->lock);
-+	mutex_unlock(&trigger_data->lock);
- 
- 	return NOTIFY_DONE;
- }
-@@ -365,7 +365,7 @@ static int netdev_trig_activate(struct led_classdev *led_cdev)
- 	if (!trigger_data)
- 		return -ENOMEM;
- 
--	spin_lock_init(&trigger_data->lock);
-+	mutex_init(&trigger_data->lock);
- 
- 	trigger_data->notifier.notifier_call = netdev_trig_notify;
- 	trigger_data->notifier.priority = 10;
--- 
-2.39.2
+Stephan argues the DTs were incomplete from the start and the breakage
+is only a result of us previously abusing what's essentially undefined
+behavior.. I think I second this, but it is *a* breakage so I want to
+know your opinion.
 
+FWIW the same happens when we have simple-framebuffer enabled and then
+introduce dispcc on a given platform without adding the clocks under
+the simplefb node and we've not been frowning upon that too much, so I'd
+be willing to give it a pass if you're okay with it..
+
+Not caring about this would make things far, far easier really..
+
+Konrad
+> 
+>> I suppose something like this would work-ish:
+>>
+>> 0. remove clock handles as they're now contained within icc and
+>>    use them as a "legacy marker"
+>> 1. add:
+>> 	if (qp->bus_clocks)
+>> 		// skip qos writes
+> 
+> Maybe you can just check if all necessary clocks for QOS are there or
+> not? I don't think it's a problem to skip it on broken DTs. I think it
+> would be even fine to refuse loading the interconnect driver completely
+> and just have the standard max vote (as long as that results in a
+> booting system).
+> 
+>>
+>> This will:
+>> - let us add is_enabled so that all RPM clocks bar XO_A will be cleaned up
+>> - save massively on code complexity
+>>
+> 
+> +1
+> 
+>> at the cost of retroactively removing features (QoS settings) for people
+>> with old DTs and new kernels (don't tell Torvalds!)
+>>
+> 
+> I doubt anyone will notice :p
+> 
+>> This DTB ABI stuff really gets in the way sometimes :/ We're only now
+>> fixing up U-Boot to be able to use upstream Linux DTs and other than
+>> that I think only OpenBSD uses it with 8280.. Wish we could get rid of
+>> all old junk once and then establish immutability but oh well..
+> 
+> Nice, thanks a lot for working on addressing the Qualcomm DT mess in
+> U-Boot. I've been meaning to work this myself for a long time but never
+> found the time to start... :')
+> 
+> Thanks,
+> Stephan
