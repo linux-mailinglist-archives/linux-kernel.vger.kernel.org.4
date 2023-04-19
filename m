@@ -2,88 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F5C6E84D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A996E8534
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:48:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233684AbjDSWWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 18:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
+        id S231678AbjDSWsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 18:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233283AbjDSWWD (ORCPT
+        with ESMTP id S229567AbjDSWsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 18:22:03 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09D89ECE
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:20:31 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1a5197f00e9so4663835ad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:20:31 -0700 (PDT)
+        Wed, 19 Apr 2023 18:48:35 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A518C1701
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:48:33 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-b9246a5f3feso351862276.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:48:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942756; x=1684534756;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P8D5qQaAsWRyihppL8lxgNE7a17gNAwjOwZEXYQRMgE=;
-        b=KY3qeDkuqx7ojUE9edJo91m4yJkLaFWv5WBr0z1XBW37m3Ugju5gvpwIFDQff0jKms
-         +hgKcILxSjrfAbaSn/gsJas5jFwQYwJwvq++pUZKG2L4GsKhyqTPcUu6xp5ypSE2166a
-         M9MbN1bFoVVAdPgWpFhugIMpkrykve+HvKmx+0rzvYuv5b7fjLguHE92nxuCMfaazyT0
-         EjqjUkf7F7QIDOnYykXPXccd7CL3t2WBS+Rd2ML5ADa2yHIE2iBIctAwVUyHJ5XwQDtq
-         3t1dyXic09IH7MeVfo82H9l2jXFUHVEBVSeBHFYy8QxMmo1hXkdwnKJUN8t2qaLHF1ux
-         +z5w==
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1681944513; x=1684536513;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/ZrPULhZIKJV34C2bhX8PcgMIHgEG0C+dg13xBQhh0w=;
+        b=F7GBcIivSB+Wmf1Z3p+w8J2Hxy7qQC9L7nY8DL7VWPSIqtwXlT7rQ6MXwmgVnYlL5f
+         14pS4WOOw+pNUXRuJquc9qeBx+2OWkWTDKtjmqazGEEOO+qP3GqDj9zs+eDm6BBEovQB
+         GV/lhy0lCWiCr8uS+leAHiHC8/UV5CSx85lJjrcD41rjgjh+8UymqtYI58nq9rN7pIhK
+         6VPG1Q+FNT5/92jZjwfcg+uSRYozJWDlWIZPfIcfIdfbleWzElHTYbO6L024eP+Ea7WQ
+         1f3htZG5zLtvdcvSGCEfqWToaG7t2fAScHdNORg8bPhOkYmiUF81lwpyAf/7X6YVJP3s
+         s7Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681942756; x=1684534756;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P8D5qQaAsWRyihppL8lxgNE7a17gNAwjOwZEXYQRMgE=;
-        b=SyMR+Ta5LKGWhgY6UhjWW3oVwuyguxlYikXGyvDIqHcAyWIFpG2MmgRtpI6SKvWqA/
-         1CvM/hvQtRYTIgDq+bSROaQCG4U42eWM0vtOIX0BGXjFt2tEDUd2eCP9A50fZaEqN+zy
-         QsSw9nH++4paKTyhQfJ23bkOWG6hLgF3VsGsDtRsDrYjyEayk2E58qQa7+/NCwlutPS7
-         3mG1Og2yQMQpHdzDtWNq9lPZeG4h9Yz54NOAcImtei4YNfsVU0msM15rs228rZMsjWfU
-         dmJXnB4AVoUt1MSbZaYYltF/nQThmuVxiET76qQEhiQAYJ1Ja91eAnWbEYBTLrsAZZWz
-         Dodg==
-X-Gm-Message-State: AAQBX9fNRCuccd+0OAljabtBVZRqOmeg+sxtrYf2eQDUnllr6N+i087t
-        aZWi10Sn0HKYe9+VPEJ/Sq/c0vDBpgcUHnlO1PI=
-X-Google-Smtp-Source: AKy350ZigrT04ztZNfYo7vxPOIAk65YMZhdMrGeFS26zGyCIXgxICUZh5tguDmZpxCxB9++y2y9iww==
-X-Received: by 2002:a17:903:2288:b0:1a5:2db2:2bb with SMTP id b8-20020a170903228800b001a52db202bbmr8899588plh.15.1681942756356;
-        Wed, 19 Apr 2023 15:19:16 -0700 (PDT)
-Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.19.14
+        d=1e100.net; s=20221208; t=1681944513; x=1684536513;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/ZrPULhZIKJV34C2bhX8PcgMIHgEG0C+dg13xBQhh0w=;
+        b=OdSfHm+AiJDsD0do9T0EJM3aeTlNuNDiz9YxDQ95QvL4gtHXDDgyZ7xc2k7v2HDXZ5
+         XIJHjr27Z+XrDU5hVmIMSS3ZIEjMMiM0g4819Hm/YfJw4KtrA+sa2Iy7UvypFD0noV+t
+         pJExoZsdFtQzBDgAyLh/DDYG0KLEgYvF3j6lqQIcLsz4BIw8NvlqtbHPIDLjyEBBxQ9t
+         LQKj6LZbdyEPoxj+okoJTIcNFUtSX9diB7VMQhkltQANPtbwteo9/76fpZoemta1mL8P
+         s10fY8uoNl/SH05ElM+V5RKcTDdN4jwLW8PaBGaWvihY5O6VPvZLIebMCWyuJGmjbIEf
+         WA1A==
+X-Gm-Message-State: AAQBX9dIODjaNATYTRZUHDVMx/grqfeN1xFQJG5j4nRXLIzFldbLbbSe
+        ARQVUDcnj023fwHL/gVshYWIcksGiMCuU6Yo1Wc=
+X-Google-Smtp-Source: AKy350Yn+z+rdiDG8ySW4WCMw+0zQ/ws73YT2f1f1XxWKOrSMbU2byidZa3yVOwPBeUzkNz7+7uMJA==
+X-Received: by 2002:a17:902:654a:b0:1a8:1c9a:f68 with SMTP id d10-20020a170902654a00b001a81c9a0f68mr3322962pln.36.1681942790785;
+        Wed, 19 Apr 2023 15:19:50 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-41-174.pa.nsw.optusnet.com.au. [49.180.41.174])
+        by smtp.gmail.com with ESMTPSA id ji2-20020a170903324200b001a4ee6ec809sm11964287plb.46.2023.04.19.15.19.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 15:19:16 -0700 (PDT)
-From:   Atish Patra <atishp@rivosinc.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Atish Patra <atishp@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
-        abrestic@rivosinc.com, Samuel Ortiz <sameo@rivosinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Uladzislau Rezki <urezki@gmail.com>
-Subject: [RFC 48/48] drivers/hvc: sbi: Disable HVC console for TVMs
-Date:   Wed, 19 Apr 2023 15:17:16 -0700
-Message-Id: <20230419221716.3603068-49-atishp@rivosinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230419221716.3603068-1-atishp@rivosinc.com>
-References: <20230419221716.3603068-1-atishp@rivosinc.com>
+        Wed, 19 Apr 2023 15:19:50 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1ppG9T-005QFi-2w; Thu, 20 Apr 2023 08:19:47 +1000
+Date:   Thu, 20 Apr 2023 08:19:47 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux XFS Development <linux-xfs@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH] Documentation: xfs: Extend table marker on deprecated
+ mount options table
+Message-ID: <20230419221947.GU3223426@dread.disaster.area>
+References: <20230419094921.27279-1-bagasdotme@gmail.com>
+ <20230419151536.GM360895@frogsfrogsfrogs>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419151536.GM360895@frogsfrogsfrogs>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
@@ -94,50 +79,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If two same type of console is used in command line, kernel
-picks up the first registered one instead of the preferred one.
-The fix was proposed and NACK'ed due to a possible regression
-for other users.
+On Wed, Apr 19, 2023 at 08:15:36AM -0700, Darrick J. Wong wrote:
+> On Wed, Apr 19, 2023 at 04:49:21PM +0700, Bagas Sanjaya wrote:
+> > Sphinx reports htmldocs warning on deprecated mount options table:
+> > 
+> > /home/bagas/repo/linux-kernel/Documentation/admin-guide/xfs.rst:243: WARNING: Malformed table.
+> > Text in column margin in table line 5.
+> > 
+> > ===========================     ================
+> >   Name                          Removal Schedule
+> > ===========================     ================
+> > Mounting with V4 filesystem     September 2030
+> > Mounting ascii-ci filesystem    September 2030
+> > ikeep/noikeep                   September 2025
+> > attr2/noattr2                   September 2025
+> > ===========================     ================
+> > 
+> > Extend the table markers to take account of the second name entry
+> > ("Mounting ascii-ci filesystem"), which is now the widest and
+> > to fix the above warning.
+> > 
+> > Fixes: 7ba83850ca2691 ("xfs: deprecate the ascii-ci feature")
+> > Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> 
+> Looks good.  Dave, could you take this through the xfs tree whenever you
+> push the duplicate #include fixes, please?
+> 
+> Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
-https://lore.kernel.org/all/Y+tziG0Uo5ey+Ocy@alley/
+Applied.
 
-HVC sbi console makes it impossible to use virtio console
-which is preferred anyways. We could have disabled HVC console
-for TVMs but same kernel image must work on both host and the
-the guest. There are genuine reasons for requiring the hvc sbi
-cosnole for the host.
-
-Do not initialize the hvc console for the TVMs so that virtio
-console can be used.
-
-Signed-off-by: Atish Patra <atishp@rivosinc.com>
----
- drivers/tty/hvc/hvc_riscv_sbi.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/tty/hvc/hvc_riscv_sbi.c b/drivers/tty/hvc/hvc_riscv_sbi.c
-index 83cfe00..dee96c5 100644
---- a/drivers/tty/hvc/hvc_riscv_sbi.c
-+++ b/drivers/tty/hvc/hvc_riscv_sbi.c
-@@ -11,6 +11,7 @@
- #include <linux/moduleparam.h>
- #include <linux/types.h>
- 
-+#include <asm/cove.h>
- #include <asm/sbi.h>
- 
- #include "hvc_console.h"
-@@ -103,6 +104,10 @@ static int __init hvc_sbi_init(void)
- {
- 	int err;
- 
-+	/* Prefer virtio console as hvc console for guests */
-+	if (is_cove_guest())
-+		return 0;
-+
- 	if ((sbi_spec_version >= sbi_mk_version(1, 0)) &&
- 	    (sbi_probe_extension(SBI_EXT_DBCN) > 0)) {
- 		err = PTR_ERR_OR_ZERO(hvc_alloc(0, 0, &hvc_sbi_dbcn_ops, 16));
+-Dave.
 -- 
-2.25.1
-
+Dave Chinner
+david@fromorbit.com
