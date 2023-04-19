@@ -2,159 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39906E7950
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F7E6E7954
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233122AbjDSMGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
+        id S233121AbjDSMHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbjDSMGW (ORCPT
+        with ESMTP id S229448AbjDSMHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:06:22 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583F21991;
-        Wed, 19 Apr 2023 05:06:21 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33JBmiVs034942;
-        Wed, 19 Apr 2023 12:05:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=XxQyWGNU20y3Wnv7oBYdxQVoyeJRqhv7cvwcPncLqqk=;
- b=MaUkKBXx8iVhZnQfi2RDt8faEETMnMKAbEzNZO+lpYZA4Qzm/42cfcABcujSIwghRV0X
- 3PeqNDRd4IaTppWUkLe9WhVR7DHaK67napzSWb0/fyAY5su8TJWCvhMrkWNBKYnZzWpL
- nrZow2Y7r/vmn90Ku0+11UMeCHt4krQqymOUrwysBfKhQ3gB8XVNTfmR2AisCvruWOoC
- HGrgnECisFQCMRlF+rKjlvt0AJiiXkbKhxoPOW9SAl/j9H94nYFHqgnk9sLjyUqIjTb9
- M4kh5I4Iraa1TWc6fPCqKtgixwG8fAM688OISqzSFuM22pbbenILF8ksGHq+DRGoNVxP lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q2apmt6hp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 12:05:38 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33JBoDWh003607;
-        Wed, 19 Apr 2023 12:05:37 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q2apmt6g9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 12:05:37 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33J0WAFx000870;
-        Wed, 19 Apr 2023 12:05:34 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3pykj6jqcr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 12:05:34 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33JC5V2D45941078
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Apr 2023 12:05:31 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4647620040;
-        Wed, 19 Apr 2023 12:05:31 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 91F6F20043;
-        Wed, 19 Apr 2023 12:05:27 +0000 (GMT)
-Received: from [9.171.27.132] (unknown [9.171.27.132])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Apr 2023 12:05:27 +0000 (GMT)
-Message-ID: <ab586b59-7d62-2ea1-a617-ffbcf91f4037@linux.ibm.com>
-Date:   Wed, 19 Apr 2023 14:05:26 +0200
+        Wed, 19 Apr 2023 08:07:02 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E13DC172;
+        Wed, 19 Apr 2023 05:07:01 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33JAffKk016288;
+        Wed, 19 Apr 2023 05:06:43 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=Bgdb/hrTjHuJn/1SOfm2FVObXma7/i2K9WZQV6U0ZCw=;
+ b=dP0cWmKPdO5JGyuQDMX6MiOpYvzZ7kYiVvDKLeb+5z277dmtuDMsfDWY5GKdcKFsgVIm
+ 6nHxDrwF7rg1Xmp7Ped0Q4IOTcmqcJQDwUqAFFAn9ZEmZx23pxRxahP5U2MRvdwG5r3+
+ lugGmpV53NWhd7XBIY/Y45EqfGp7ysq/4DNuTH94US5OGnBUKGAmAYIT0RU5RfhTKqCS
+ kN0/NVhxb+TAvVwgaNZeb2/sdGYK3tTU9oa1jUrMkHUeInnnXSFUTIjhFusvzRBs5BsK
+ m/hfbQLZnTlCNsIzIfhWTeksat+nI4UndJQABAInIqEp4/b7qg7sH7eQ70rdeYQQ1XXM Nw== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3q2917su0m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 05:06:43 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 19 Apr
+ 2023 05:06:41 -0700
+Received: from bbhushan2.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Wed, 19 Apr 2023 05:06:38 -0700
+From:   Bharat Bhushan <bbhushan2@marvell.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>
+CC:     Bharat Bhushan <bbhushan2@marvell.com>
+Subject: [PATCH 1/2 v2] dt-bindings: watchdog: marvell octeonTX2 GTI system watchdog driver
+Date:   Wed, 19 Apr 2023 17:36:34 +0530
+Message-ID: <20230419120635.3736-1-bbhushan2@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 3/6] mm/gup: remove vmas parameter from
- get_user_pages_remote()
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <cover.1681831798.git.lstoakes@gmail.com>
- <7c6f1ae88320bf11d2f583178a3d9e653e06ac63.1681831798.git.lstoakes@gmail.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <7c6f1ae88320bf11d2f583178a3d9e653e06ac63.1681831798.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: YoUBdd5kWLHDb-6WjYvIk2NpjLH1WX8c
-X-Proofpoint-GUID: aezbm9zbIzDKmcuHzP9oULlrIcksYyaJ
+Content-Type: text/plain
+X-Proofpoint-GUID: Gu8GpDd9KkJECGpu5ZeZEWvNhA2mIwqf
+X-Proofpoint-ORIG-GUID: Gu8GpDd9KkJECGpu5ZeZEWvNhA2mIwqf
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-19_06,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- suspectscore=0 priorityscore=1501 mlxlogscore=566 adultscore=0
- lowpriorityscore=0 mlxscore=0 impostorscore=0 bulkscore=0 malwarescore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304190108
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/18/23 17:49, Lorenzo Stoakes wrote:
-> The only instances of get_user_pages_remote() invocations which used the
-> vmas parameter were for a single page which can instead simply look up the
-> VMA directly. In particular:-
-> 
-> - __update_ref_ctr() looked up the VMA but did nothing with it so we simply
->    remove it.
-> 
-> - __access_remote_vm() was already using vma_lookup() when the original
->    lookup failed so by doing the lookup directly this also de-duplicates the
->    code.
-> 
-> We are able to perform these VMA operations as we already hold the
-> mmap_lock in order to be able to call get_user_pages_remote().
-> 
-> As part of this work we add get_user_page_vma_remote() which abstracts the
-> VMA lookup, error handling and decrementing the page reference count should
-> the VMA lookup fail.
-> 
-> This forms part of a broader set of patches intended to eliminate the vmas
-> parameter altogether.
-> 
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com> (for arm64)
-> Acked-by: David Hildenbrand <david@redhat.com>
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> ---
+Add binding documentation for the Marvell octeonTX2
+GTI system watchdog driver.
 
-For the s390 part:
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+---
+v2:
+ - compatible changed from marvell-octeontx2-wdt to marvell,octeontx2-wdt
+ - corrected type atchdog to watchdog 
+ - Replaced hardcoding to use IRQ_TYPE_EDGE_RISING flag
+
+ .../watchdog/marvell,octeontx2-wdt.yaml       | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+
+diff --git a/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+new file mode 100644
+index 000000000000..96a979c4082d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+@@ -0,0 +1,46 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/marvell,octeontx2-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Marvell OcteonTX2 GTI system watchdog
++
++allOf:
++  - $ref: watchdog.yaml#
++
++maintainers:
++  - Bharat Bhushan <bbhushan2@marvell.com>
++
++properties:
++  compatible:
++    const: marvell,octeontx2-wdt
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        watchdog@802000040000 {
++          compatible = "marvell,octeontx2-wdt";
++          reg = <0x00008020 0x00040000 0x00000000 0x00020000>;
++          interrupts = <0 38 IRQ_TYPE_EDGE_RISING>;
++        };
++    };
++
++...
+-- 
+2.17.1
 
