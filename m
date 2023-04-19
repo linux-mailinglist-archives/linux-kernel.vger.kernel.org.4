@@ -2,145 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE936E81E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C016E81E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjDST1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 15:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
+        id S231203AbjDST1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 15:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjDST1K (ORCPT
+        with ESMTP id S229692AbjDST1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 15:27:10 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1CF5FDD;
-        Wed, 19 Apr 2023 12:27:09 -0700 (PDT)
+        Wed, 19 Apr 2023 15:27:05 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACCD55B8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:27:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681932429; x=1713468429;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7frGXROc0MT874Q+MjeIB9HRPtgS95QE0EOYR0PppuM=;
-  b=IjIZijVDMDSnCxI9kmuYlpR7HHpnpWsKS33l1loEBEPxV4+BqDiHdw/3
-   E9e03OiUiSFIAbaDvd4psm20giE+PJwQZktsOnG7mxz96U8Qn2haGW1+R
-   xEejd1XsRKc2NG+YZU0AH6jWz3YW4Po/HvhayjpasdJlaTLZ2VzuBMDoi
-   BFWBDdRC6/DjxUwc7yKX6MeG+AMhGPoExPtvEurThKIkUbvX99te6LW9r
-   ehiGLADrXfDN/tH0lou6c2OWFyKaFjyBcN7uXMzD6rN77q8shnr7SY5Hj
-   wZqrzaJVjC9zSCtD+lR1rLCOiVGysWZ6J94FRNx2JyiOa9yZiEw8NLDmD
+  t=1681932424; x=1713468424;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZWiNmTCDGpUoboFsO/71XKPs6g4kgDxgWArRXM16kRs=;
+  b=gzdDoMi8e8/KyFdbSxZf4l7WVTWf75qAP8Ewf6UCSxcuD0C7pXGo5Bzt
+   UEglYwd1hfBPv0FxR8Wnv8QXLoEyAKll0HL0fGIEixekDKW8VyNXynWaE
+   CQfeDv8XgZpv0Ui1DEzuYLiYhaw1cMXRdsahpDgDV/EWC/e08qPKRrMlK
+   l9EdZSX8qN8ltybvvhmh7EkicNxcAb9I0pKcEP5s3yCX5KR4IS5uIG2Pl
+   RidZI22su6zdbs93Ut+fr1mOnKy2JzExWsOcgrY9q6J0X7hdSHvCPrM+3
+   itYp0s8TpshyD6eOpCSdaWUWy/L6pipcBTZQfDBv4q5ugMuyI3iWqVDFh
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="334357811"
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="343021788"
 X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
-   d="scan'208";a="334357811"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 12:27:09 -0700
+   d="scan'208";a="343021788"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 12:27:04 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="756217021"
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="724155517"
 X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
-   d="scan'208";a="756217021"
+   d="scan'208";a="724155517"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Apr 2023 12:27:07 -0700
+  by orsmga001.jf.intel.com with ESMTP; 19 Apr 2023 12:27:02 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1ppDSH-000f7f-1N;
+        id 1ppDSH-000f7c-1J;
         Wed, 19 Apr 2023 19:27:01 +0000
-Date:   Thu, 20 Apr 2023 03:26:36 +0800
+Date:   Thu, 20 Apr 2023 03:26:37 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     luhongfei <luhongfei@vivo.com>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "open list:IO_URING" <io-uring@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, opensource.kernel@vivo.com,
-        luhongfei <luhongfei@vivo.com>
-Subject: Re: [PATCH] io_uring: Optimization of buffered random write
-Message-ID: <202304200351.LIOui4Xc-lkp@intel.com>
-References: <20230419092233.56338-1-luhongfei@vivo.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: [tip:timers/core 13/13] kernel/time/posix-cpu-timers.c:1310:19:
+ error: use of undeclared identifier 'timer'
+Message-ID: <202304200309.F6HbUeCE-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230419092233.56338-1-luhongfei@vivo.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi luhongfei,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.3-rc7 next-20230418]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/luhongfei/io_uring-Optimization-of-buffered-random-write/20230419-172539
-patch link:    https://lore.kernel.org/r/20230419092233.56338-1-luhongfei%40vivo.com
-patch subject: [PATCH] io_uring: Optimization of buffered random write
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20230420/202304200351.LIOui4Xc-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
+head:   1bb5b68fd3aabb6b9d6b9e9bb092bb8f3c2ade62
+commit: 1bb5b68fd3aabb6b9d6b9e9bb092bb8f3c2ade62 [13/13] posix-cpu-timers: Implement the missing timer_wait_running callback
+config: arm-randconfig-r046-20230416 (https://download.01.org/0day-ci/archive/20230420/202304200309.F6HbUeCE-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/620dbcc5ab192992f08035fd9d271ffffb8ff043
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review luhongfei/io_uring-Optimization-of-buffered-random-write/20230419-172539
-        git checkout 620dbcc5ab192992f08035fd9d271ffffb8ff043
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=1bb5b68fd3aabb6b9d6b9e9bb092bb8f3c2ade62
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip timers/core
+        git checkout 1bb5b68fd3aabb6b9d6b9e9bb092bb8f3c2ade62
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/time/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304200351.LIOui4Xc-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304200309.F6HbUeCE-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   io_uring/io_uring.c: In function 'io_queue_sqe':
->> io_uring/io_uring.c:2091:30: error: 'struct io_kiocb' has no member named 'rw'
-    2091 |         if (!is_write || (req->rw.kiocb.ki_flags & IOCB_DIRECT))
-         |                              ^~
+>> kernel/time/posix-cpu-timers.c:1310:19: error: use of undeclared identifier 'timer'
+           spin_unlock_irq(&timer.it_lock);
+                            ^
+   kernel/time/posix-cpu-timers.c:1312:17: error: use of undeclared identifier 'timer'
+           spin_lock_irq(&timer.it_lock);
+                          ^
+   2 errors generated.
 
 
-vim +2091 io_uring/io_uring.c
+vim +/timer +1310 kernel/time/posix-cpu-timers.c
 
-  2073	
-  2074	static inline void io_queue_sqe(struct io_kiocb *req)
-  2075		__must_hold(&req->ctx->uring_lock)
-  2076	{
-  2077		int ret;
-  2078		bool is_write;
-  2079	
-  2080		switch (req->opcode) {
-  2081		case IORING_OP_WRITEV:
-  2082		case IORING_OP_WRITE_FIXED:
-  2083		case IORING_OP_WRITE:
-  2084			is_write = true;
-  2085			break;
-  2086		default:
-  2087			is_write = false;
-  2088			break;
-  2089		}
-  2090	
-> 2091		if (!is_write || (req->rw.kiocb.ki_flags & IOCB_DIRECT))
-  2092			ret = io_issue_sqe(req, IO_URING_F_NONBLOCK|IO_URING_F_COMPLETE_DEFER);
-  2093		else
-  2094			ret = io_issue_sqe(req, 0);
-  2095	
-  2096		/*
-  2097		 * We async punt it if the file wasn't marked NOWAIT, or if the file
-  2098		 * doesn't support non-blocking read/write attempts
-  2099		 */
-  2100		if (likely(!ret))
-  2101			io_arm_ltimeout(req);
-  2102		else
-  2103			io_queue_async(req, ret);
-  2104	}
-  2105	
+  1307	
+  1308	static void posix_cpu_timer_wait_running_nsleep(struct k_itimer *timr)
+  1309	{
+> 1310		spin_unlock_irq(&timer.it_lock);
+  1311		cpu_relax();
+  1312		spin_lock_irq(&timer.it_lock);
+  1313	}
+  1314	
 
 -- 
 0-DAY CI Kernel Test Service
