@@ -2,219 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3B96E79DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F2C6E79D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbjDSMjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
+        id S233015AbjDSMiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbjDSMi7 (ORCPT
+        with ESMTP id S231592AbjDSMiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:38:59 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F269D10E0;
-        Wed, 19 Apr 2023 05:38:56 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33JBcBBD006002;
-        Wed, 19 Apr 2023 12:38:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=hkKf4jFVTvtRGmCzpUjxImyib3yggEThApp/wkd/e/0=;
- b=hSWyd+JxH+XUdjMegh3TJQUdMYhN62pubUgUJb9LPCG49wUBH0GGT1bWoWFtiYW2NEKx
- G4CizChw3Ty32mLAFsebIrygS3R0tggK6dqY1IFuotktx+OW0MDQY+oW1frkzp+u463o
- vNJv1lKJEVhnSOTqlpLltvXF95w8GQobXlsrZFrCeVN+qieUXROE5AsqohlajZFJa9ex
- XjybFtFhgb/fBeM10lkYDR95XTJdLPhYrQxbpb/OY9CmtpS6AQNs0FKIt6c4hpYY1Wvc
- voWcmkgBQR+wYSI/2L2RC/bcT2efKt9EByNz/6qsvher1olBLb40jk84Ni4Fdsh66Ey0 sA== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pyjq486wv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Apr 2023 12:38:19 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33JBweeM015699;
-        Wed, 19 Apr 2023 12:38:19 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2174.outbound.protection.outlook.com [104.47.55.174])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pyjccwbs5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Apr 2023 12:38:18 +0000
+        Wed, 19 Apr 2023 08:38:08 -0400
+Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2100.outbound.protection.outlook.com [40.107.10.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A5183;
+        Wed, 19 Apr 2023 05:38:05 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ksO8ZrAJaNaWv1UJD629p+TPKHV8+o7M32TGtDEe3PY5PY/C+bq/v9cThx8rdNOiQasAmixUTIiWcCS4JeC7Jajb15Cl8JAsQBBbgSlc0Nz3AbgJwQmol6KStnfFQXIQI6jvQSGI4p6GhIfjR7IHMEkIX1bP/+v/j01GJSLjhvH49Q527mFKhT5MXkmu7i1qND3Bd7gdLOmkLjLBE9aHA/IJqWdKQ7PowKqa+YO6VNP/gGegcg93OHiOInE1dAMeeKp0jYMZoC8+eJO//4omLNJ8QmSRYW/HjsvcXqdeXU1bswk9EPp4NlSxAmythx/aGfQmjxYYRVD1sXqkGvLuXQ==
+ b=Sy91eoBkl5smra0SrJG3tci97AzaC8/gJzFa3OSvKEOQyyewORFGuiDCLu164aQLmzs4KWj3YtOJSbknhbYo60g5GIj0VW2nhU2m94D0VLkSB4ZeZtqFA/PwQbMvEYOgsx25NRkG1dXTFP+/xtjD4y6EyAum46Kv61Nrp7BPmRqUJqlYawJ8fXk7+ngOXKrwGxP3Zi6+fWr0SWAjBdYeKRKV7FZBNjcZOO4MNC6vBSCwwKRDVEy9ZIf4HkN4Q0L8K8EGKFy0nEjrHl9zKKH4YHJBHSinNIkyhbSMRxw9AKSHXRXd+y5wOBChkzjaz5uvAmyWjmsXJjIm2b5bzZiHTg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hkKf4jFVTvtRGmCzpUjxImyib3yggEThApp/wkd/e/0=;
- b=G+lt1vnUgLYfF+Xb15zQSrmrOcV07btMFUeSgNHPkNqlY5hyDlcX1LJn51rxQK5V/5QxvRU1C31Ja6ePPiMfeBcTlVwbktazERY5ALSwnJ9fGzpirdQ8Qxng5DCO1JTFutERsEGluDEK2IGYx7sYeM4WT1QjtNOLotJhQ0TGJAk4ABaXjtPh7s/WuYIXQq0oJvNb0TCO/ZhqGQCW81s3BPh+qTwv8+gm7L2aXgiJuqOoFXF6hl6DSjM85G3vQi8+Fjb33+nW+0nDpiDogvWclPPmogV4qMQX316RHVZclJC9empkEa1h4Bw64zipDuraCuHVl/E9oYvFuXWnKjY/KQ==
+ bh=96CxkOnVD7MyCxUKu39s8yzmocls13zxOdopgrCIdDI=;
+ b=ak/uFp8Kfq5yRvKgtCcLpPA1NeOPD40P73PUHakLeQveP1yt1nz7Zc3C9Y/dJqDf+ptIToJrgd3ydsO66ABw5g6js/8cgRagZXlrLuyQJkIDikIaqNgu0QKpXAr6PT3JvGJOPNoWj22FYfLj6a9QcxcHHrPJDo+uWhSVm38SmE5UrKyHucevmfgPtYKS5xpRmgdz3xN9N6g0hBnpVQ8IXf71GxYI/TDBXt7VJkMtsesCX+3qvwm79eg7MSzZn2QZOJuWMPAbAk3ixolYEVV1DIYP4e6SUnSeKySp225DXklBYszNsv9i1TQRrdoCU89YUmuDsgaLdmDUrPsa9Ilo1Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hkKf4jFVTvtRGmCzpUjxImyib3yggEThApp/wkd/e/0=;
- b=gy5We5hBh4ud1qoWYzM/6UMO3eu/WV7K8W+ofmTUz6BEHn/QYKOJOexKc87nh6drg8saX6biCZC+BknOFGTEYYVzknd2rzO08TmjaexiprKU4SPjOR8UA1WYoUGGdnrv93kAfpfaAtLb+J+ZoMMJ5HDeeRaJiZPvj7YHPfB6pW4=
-Received: from PH8PR10MB6290.namprd10.prod.outlook.com (2603:10b6:510:1c1::7)
- by IA1PR10MB6147.namprd10.prod.outlook.com (2603:10b6:208:3a9::10) with
+ bh=96CxkOnVD7MyCxUKu39s8yzmocls13zxOdopgrCIdDI=;
+ b=CdnIx+qe4vWTnAflx4OdtD/eLISnUWJCExty8ryU2Jj1RXeiirbsh4J+El6VqlSi2fcfZxqilxbUoK4XVsZSznLCMm8v8zxjI06vxTvYlHXZtaMvdKAR0CzsmzHbsY9/a2T7sU8ttUBm9qcatCmrGOiYYGEpy1/FQ+QVWKAYaVE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:15f::14)
+ by CWLP265MB4971.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:13e::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
- 2023 12:38:05 +0000
-Received: from PH8PR10MB6290.namprd10.prod.outlook.com
- ([fe80::68c5:330c:d234:3834]) by PH8PR10MB6290.namprd10.prod.outlook.com
- ([fe80::68c5:330c:d234:3834%6]) with mapi id 15.20.6319.020; Wed, 19 Apr 2023
- 12:38:05 +0000
-Message-ID: <ea871b8f-c61b-57df-382a-b61e1377634c@oracle.com>
-Date:   Wed, 19 Apr 2023 18:07:53 +0530
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH 5.4 00/92] 5.4.241-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230418120304.658273364@linuxfoundation.org>
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-In-Reply-To: <20230418120304.658273364@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Wed, 19 Apr
+ 2023 12:38:03 +0000
+Received: from CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1b25:7ea3:7339:6a0f]) by CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1b25:7ea3:7339:6a0f%4]) with mapi id 15.20.6319.020; Wed, 19 Apr 2023
+ 12:38:03 +0000
+Date:   Wed, 19 Apr 2023 13:38:00 +0100
+From:   Gary Guo <gary@garyguo.net>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Josh Stone <jistone@redhat.com>,
+        William Brown <william.brown@suse.com>,
+        Georgy Yakovlev <gyakovlev@gentoo.org>,
+        Jan Alexander Steffens <jan.steffens@gmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: Re: [PATCH 3/3] rust: upgrade to Rust 1.68.2
+Message-ID: <20230419133800.0da0857a.gary@garyguo.net>
+In-Reply-To: <20230418214347.324156-4-ojeda@kernel.org>
+References: <20230418214347.324156-1-ojeda@kernel.org>
+        <20230418214347.324156-4-ojeda@kernel.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TYWPR01CA0049.jpnprd01.prod.outlook.com
- (2603:1096:400:17f::20) To PH8PR10MB6290.namprd10.prod.outlook.com
- (2603:10b6:510:1c1::7)
+X-ClientProxiedBy: LO4P123CA0411.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:189::20) To CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:400:15f::14)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR10MB6290:EE_|IA1PR10MB6147:EE_
-X-MS-Office365-Filtering-Correlation-Id: ab15a9dc-601b-4d99-3d1e-08db40d2ebc7
+X-MS-TrafficTypeDiagnostic: CWLP265MB5186:EE_|CWLP265MB4971:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a8787f0-8fbc-465d-38b9-08db40d2eab7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fW76T4sjN1fZ0olII2zeCqw86DE+wYHQMEXe2F3OBCgTe49i4V2I2+RpsV+FSI6/VTRRUALtu7lszQDr3gGWTDSzhUZVXVFlnNYelW8xnMTwyvihbpyKmfzXe1kdbYxHcWQYIHQ7qkY5Wso631NfRLiZ3zwlAQZUcQwVYmJybQpZUyMAnxoauPMl7RQqH5V8pOlNaxjSaPpQd/USewBdeSoAjF481FaOyURgeHk+oajNSOEbTiGFib6DqzlWyN5F8y6KCEe2llVO0dPjhtBKSc5zLCdpCfM/zQSFpasak6+GdtOWYBKDxwlALBwg0CnM1258iqscHCbsCtg48rnv35jjH5lyNY/HtzjjpQmwP7a9YspRLhuNTCc8RAWNgrRoiHiQZcGTqVklWSRg0uC5d6DTr+4RalZiY17oikLwVMgzBqhiFhWFyvVuOzCWgCutaU9+1Km/tbSaO5tNJ+Y7U2uUJISRP60Gez9A9l0Na+/w6FMPltdlp9lVKrHs/E6c83rd/PffyxU3T/t/wPQbuimHXbHy+hRHfXc6Aaj3A1i93JCH+tseJFsGWYoJfsNVCTAxTBwK2b5NQF0pm/+OqL2KtnJ1oxZGfvTkmAOHXX/pmfgzPzy8BjaybrnzS2xw1iKW2Ez5B5JqmQVW8OlN+g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR10MB6290.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(346002)(39860400002)(396003)(136003)(451199021)(478600001)(6666004)(38100700002)(8936002)(8676002)(316002)(4326008)(41300700001)(66476007)(66556008)(66946007)(186003)(36756003)(4744005)(2906002)(53546011)(6506007)(6512007)(26005)(86362001)(31686004)(2616005)(5660300002)(966005)(31696002)(6486002)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: mzDZRhGWlroJvRboNUMaiIZKwVF2X92exqbq9sKMgyjqWLmudsrLjVWlnMA27pfaGKYtbpnN9wERRG/RofX/6yPbPaDXPcnAfoSeiokehdqQsLNgaWGYa1OuOmj/Us7YDLB2VlEyS/qx0uxvq+z+nKZrhUxoez+LkHsOLOjShI8qa0sVPVOFwyMhVms7L+Ak/+iGz4Dd6WNEhdT+qO0ZChq1UfgUUEh4Jr/WNq9b83NpPRdMSvCtW9xdlMBMHc4RbxMPk/U8qlHQh/0qkVM3Est9JtmIGNBN9yV7MRD3ScX62mPjFN9pzgKLnbgoGOR/OCDbbs65IXWdpx7xGNPjbpPtT9nqGqbYfCiuJcngCbGiTxpyYkZmjE6A2u2JpJ5/MWXzJCAZcAq0N58ad5uc4SM7iKnZGqUdsM4P44EWawDUQa86chIAR/3GV6N2lzGkP3l1pg5y8fVNewRed9exILeEKsBydgt53Vsqp9icgAjDteRTrwI7gvWOjQpLGC1fnDAfigg0sFfTJ6cuaQrcq5jdOSUiene8FM2xAk8oiiA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(39830400003)(136003)(346002)(366004)(396003)(376002)(451199021)(5660300002)(7416002)(8676002)(8936002)(41300700001)(6916009)(316002)(4326008)(66476007)(66556008)(66946007)(2906002)(66899021)(54906003)(478600001)(86362001)(26005)(38100700002)(966005)(36756003)(6486002)(83380400001)(6506007)(1076003)(186003)(6512007)(2616005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFFiREV4SXZ5QlBtTHJlU0U2bEFmbzg2bUVzc2V2YUdIT0YzMW9WaVpEOGw0?=
- =?utf-8?B?Vnc1TE5zL05aenZKcHJaUnk4cll1UkNTQUxTd3FYS3hKTWt2YUhmdXFObGFV?=
- =?utf-8?B?WkhyR1lTTmFiN1FRMXV3KzdDWWhLaDNGUXRIemdxMDN0OEs4dExsRXU3RWRL?=
- =?utf-8?B?SHp5VXJvWDQ5TGg0ZnVZTFc4eXh5bytXVHROS2tFaHZRdWJQTnd3YkxXOWtu?=
- =?utf-8?B?S0NjT0k3dGtFM1c4dFUvSHllRmJsUDN5VklPVkV0TWt3S2xidHdLMnZRNmty?=
- =?utf-8?B?ejN4SlhNcWhyVGlVS2RYVldiSUh6NzZoclBaK3g1MWF5U0EyazdrS3dCRnpk?=
- =?utf-8?B?L2ZaR2cycTdzbVRxSXlUMUQ1N1JOcWdQSXVYU2ZkaksxK0dldTlOQUhyQkM1?=
- =?utf-8?B?MllHeVdLbXp4bkpCTjVZcHVtRlZ4WitDa1JJNGtjdTFZeGx6aXdwOW1JaXpZ?=
- =?utf-8?B?QVJOL2NEdjZtS0I2ZVVIOTlHUnhDNHNLOU9hY3FEazB4Ykx1Q1c4Ulg1b0VU?=
- =?utf-8?B?bEV6ZnArazN0RnlyN1AyL0hmZGZzUlVjY01ZRFU3aG1TWXhJUy8rRUNwZ1ZD?=
- =?utf-8?B?bjc1aGNjTCtGVytlckFDSTdZYUFiaHQ1Nnlad1hoczFKYWVKcFI2b2tRYXRB?=
- =?utf-8?B?akdBNFhYMk11c0grSEtYNERuNFB6MGx5L0FvU3lpVEcrekpmVFFGWGlVeEVq?=
- =?utf-8?B?R0toRXNUM1YrOFNtQ0R5K1Jmem9nekhtdGxqWGxkanpScXlkeVdxUzhMWU5x?=
- =?utf-8?B?QTk4ZUxBNElHV0d2TWJ6MXRDU1NHQkJNTnB5S0JuTk0xQkI1bDgvVkZ2Q1o5?=
- =?utf-8?B?a2xvOGkvMHp6b1J5WGFWbm1tazFDazlJb0tNWWhlaW9SeFZuaERuMTdIN0ZR?=
- =?utf-8?B?U0RKV0N1MWw2V2JwcDdDM2xDT21TTFN0SmNvN1Qyai9ZZjlQNmFQSkhkeHZ5?=
- =?utf-8?B?RTRuc1d2WHkrZWkxc1h6K2JkMU9FaEJ6a2hwcGlvRTQ4RkZId3F0VjU3YjZW?=
- =?utf-8?B?dkxVYTNaWm80NmJzSUNhNHVxVCtUaWhjSmplZE8wTU8vakMvVHB0OEc2V2w5?=
- =?utf-8?B?RW0zMjd4eU41ZmVpMlZ4bFV3M3IrNzg2cmZjN255Q09oUkV6eWQ1N1JYMFBj?=
- =?utf-8?B?Uk5zYTJudTlKaFpSMitOeEdpd0xmTXltZ0JuOWhTcXJVa1U4d08zSTlLN1Mv?=
- =?utf-8?B?UlhNMXF1ZWdXb3dKeHAzNkQxOEJMT1dsSHVEellTcXk2dEFxTkw0ZklmbGJM?=
- =?utf-8?B?YklGV3RFdnlFemxkdHpQczYxZ0V3Q2dzRWg3Qlp1ZnZkTkNQdjFFTXZmM2Iy?=
- =?utf-8?B?ZStuWjNxM0QwQko0aUFmeHBoRlJjWmlRa0xBZDc1OEd5ZVp2QS80Ly9oNXJt?=
- =?utf-8?B?UUR3NWtYVTVkYmY3TVRsbGtENElacXRUclZJMWQzblhQRklVcWlXRHZLc011?=
- =?utf-8?B?cmtWRHVPb0t4STcvNkk2NkhqVlBTYW1LZStIYkQyWTNBMkJJbW1RVXJxSDNm?=
- =?utf-8?B?ZzZsWTVEK2pNaWVsbkJyMys2U2ZZVU80MkJhTlVsSVBhcHJReVVxQ0NIdEN3?=
- =?utf-8?B?L2JabTNXaUd0emJPRXNqTGpzOGZHamprZXN5ZFVvcVJmS2ZyQkk4Qmt1TDNQ?=
- =?utf-8?B?Z2c0QlpHaDZzSXZzUDZJTjhzSTRMT0JoTjZCOHRkRUw1RHYyVk5CajNxakI4?=
- =?utf-8?B?cFJWRGkzYzJOQ091Zml6bm00clEwMDdDaUhPeXZKNWdBbTFXZ0tQSzZxdzZh?=
- =?utf-8?B?blVRMG5hb01OSzhYcHlZa3hQcGtSSVVldmtGQmxHM1QyMHFXRTFQaUc2Yys5?=
- =?utf-8?B?Q2p1Wjc2dTNtVVVabGFkQ25tZzV0N1QrZEFTeVYyVTk2TGVWWUM2OVFkQTVV?=
- =?utf-8?B?bmpNL0RPYUhmcFZnM25GWVJZN1NiZ2JSOGdLalJXZ3Y1MXQyYXlGSlgxYUVN?=
- =?utf-8?B?OUtqbEpJU0lWR2RsQXBhKzFZcnhqMWk4cmtiODdiRG5NRXhWOVJUSGNNVHJL?=
- =?utf-8?B?REpSb0hLZG1RUjl6Z1hCTjFuY2N2KzJRQTE4UmJrTy8weFY2M0dJek42by9E?=
- =?utf-8?B?WGFFVkdYa2FoSXo5bml4Zndiamwvb1RUR2cwZy9JZFRia01wM0lXMVpFNDht?=
- =?utf-8?B?aVVUcDYrYThIeFdYeEpKYTByd29TRmJSdnRLOEcrN0NIRXI0WGhsOFlUS295?=
- =?utf-8?Q?QmECICHy9duZ0JdtLnxPO2Q=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?bmNNaEEwdXMvQVhpNDBpU2pScWIxYUh3ZHlTK3V6RUhJYklPVmJsWkl0NFZP?=
- =?utf-8?B?ZWpSMk13TFdqdEgycU9YYWEwTEM0a1d0RDFvZUNmSFZHeEgvMmhNWDhweXVh?=
- =?utf-8?B?RlA0TERkbmYzNEJBaDIxR3lwTFErb0VyWFd3MS92SlJaVEhHWmRiMExSY3FX?=
- =?utf-8?B?dXFqcThXdXg5emtSb29TNnYzbGZwb2FJSjJwQWVvTmp1TFVkVnc2NWpuOC9t?=
- =?utf-8?B?VGZqYzNDdWxRRWEyMjArRVkvazlBVFJZTXdLREI1SzZLVmsxcjYyeWVGUTVH?=
- =?utf-8?B?ZVNIcmxuZW5sNUowN0ZlVEd2cmhZS3FJWVViaFM5V2ZuWlB0Kys4NS8zLzBF?=
- =?utf-8?B?b2JJeFdWVTE1Nmc1UldydnZPQmo3VlFNVXhjWmVreUdmQjliRC81dVJmZkE3?=
- =?utf-8?B?OHhhV0hxNkZ4T0llcWk3a3U5YW9UZkY1VXJvL05JcE43Uk43MmVXNTBucHlV?=
- =?utf-8?B?ME9qQkh1MFV0cXA1RkhVR296UjhVempFUHVKOU1RV1AvV3I0cS9ENEYxVTJL?=
- =?utf-8?B?bnJ2eXhjeElNcmkxdmtuUlQ1VHh5TFk3eVVXTXZ2ZWpHZlp3RGY1UGd4dXZi?=
- =?utf-8?B?WTFhTm9jaUYyNnlVQUp3V2J1eXI1NSs1eHVIRndSbGxHelRDZU5BTWhscVUr?=
- =?utf-8?B?bmJYeS9PTjkza1dwZ1UzaE9qeGszamlFYWFoVitGQjVoODkvbWlJVnhoR0Jm?=
- =?utf-8?B?cldkSHVIQ0Y2VUhTS3VVWCtZenBqNm1tK1lUUHFKWHNRR0xvQzVxNmVBV01w?=
- =?utf-8?B?MjhmOXBvdzY3UE14bWFnblZzNmFFRy9va2NkZHE5SzRXeEhrRE9qMllDaitm?=
- =?utf-8?B?Z0pXanJSdmU3T2FYRGFDeFNYQlVwZ1lQTWZyNGdqRjRTN2o0Z1NEQXdqanJt?=
- =?utf-8?B?dEJSaWJBUi9kRDljdUpMYm9MS3FDWjFzUFZ0dEw0RXlWZEwyL2ovZEw0NnBJ?=
- =?utf-8?B?Z0s3VUVlc3FiYTY1c3BnTEFOeW5td0FDY0dZaEtvVUh4Vm9jdnp2MFVxbEp3?=
- =?utf-8?B?YWVScEVIdk1kYk5MUHNRdlI0M0h4ZTRVNVRMTzZnL3BrZ0dOKzZOODZmc3l6?=
- =?utf-8?B?Q0lEeXFkNiszakhsRE1adVdmTHZyS0czVDZXV2IyOEtydkpQbWlodStpR1Rl?=
- =?utf-8?B?aXhVOUtqSmNlcUpzOUp4ZVI3QzAwN2l4MXROa09vSWNtSlVBeFF3WDVEdk9U?=
- =?utf-8?B?VzhrR2d5WjdPV2ZrYTVNRExFUnpkSDBnaDBlYmxhRlV2VnRhYXNoTVdZL3hj?=
- =?utf-8?B?UE5mUTkyeXpJSWlXWUJoL0N5SmRXRmRmVk9UMDBaQytJTDczYWw0Q05pQ1h6?=
- =?utf-8?B?eDZVMGpabjJqSjh0Zkh2cnhWZi9mVDlZaXZSeG1QOW83dHZLL3ZwZ25pMEt1?=
- =?utf-8?B?YkJQbGdoUnByVlIzaGVvUmlVZDBVajdTMmFVR29PUS8zd2VacEY0ZitIdFl2?=
- =?utf-8?B?UXZEVGhTUjVxWHZlMWE1RGthN091QncxV1U2VU81OWRudHJPSkEvZXptSkpH?=
- =?utf-8?B?eEpuOGEwSmZNZTNQV0ZUMkg5MWxuU0Y0Mm5UZ1VKWDFpVSs1VmlxWHJjakJ6?=
- =?utf-8?Q?aVbR/7E2O2GhK1qOjwmw8+WG/4er80nWqyoD5ZwpZr0Aa7?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab15a9dc-601b-4d99-3d1e-08db40d2ebc7
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR10MB6290.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?J0fLGQiH3VguQt8O14zXtuwC0M3JRN3X6+mYu08aLqECWayV4NoCITsGwDR3?=
+ =?us-ascii?Q?VwlY4nynPM9pc2tk8kI6WdTfoQXp6S0f+zyoAiGSj/YQkIaTZBDiWuWd5Muk?=
+ =?us-ascii?Q?eG3N5qr36v3Bb5EmlqiyeUWRVPeyUXdg245uAbMwp4pNAPjwRGrsP2Ccn76E?=
+ =?us-ascii?Q?0EP/ITWKncBgI8lfDw+Q6gf2MgGNZC5e2BdQq7q9aynkU7/NQsmRJqHwNT1G?=
+ =?us-ascii?Q?8/BMfhn4+G+Hqa+w27BmDzCEyfcerPrp0SOeC6J5nq71OuelZ5vIK8fBiFEH?=
+ =?us-ascii?Q?OTC0HGD54cn3H7Oydz7Mx5yST4WV6gd9X+2WOnoX07LAno8RTYOe1AMiZQom?=
+ =?us-ascii?Q?afId+itn5a54JeO8GTYyY5LbzbNTlkqpCuo1du14j9cZ3INtxzfMSAs+9f1w?=
+ =?us-ascii?Q?qpKlNzHbLeOT9GmOO5FSQoG+fQ4t18L5qR+dCsx9SSeHkP/+/fZYT8O1pLou?=
+ =?us-ascii?Q?/PMOPSGRAUcF9iH3cwB6L9Ax7Pd6SBqYftqLwjCKJaL6yfYtZ/oyoLGA74pm?=
+ =?us-ascii?Q?KaF7gjmZ6oLtmP52PNDpRjrod5LaipVbLSiAdpsGiYCSyP8cHTGjDI2Bzx9w?=
+ =?us-ascii?Q?9TglLN+c+cjVjFewcLa0jyu9SRQsOCwTEkY9h03ZLBlL9H/xV9OqkV9KPFPF?=
+ =?us-ascii?Q?66t+WJFg4sQ/wgvD5uhyI38ptHBaRj23AbI5UsfYT1b9l4xiI/oFQXGa6ZaI?=
+ =?us-ascii?Q?Q69tOUz/QUa9aVe4+wbo5GOcDuZiLZ7vD+/uStrpZXkozaaESva9MmbiC51F?=
+ =?us-ascii?Q?c6zXj9Pga3kVub938BuGqdN6t4ID4Qy+up17cupvFQnuJLHa3NglG4zHgKFT?=
+ =?us-ascii?Q?tK2ZJEY+sOhRk7uoyjRyrNlVPuF1wcw4qUj7P9Fm3AqbiTdRLmD2tm8w7GXC?=
+ =?us-ascii?Q?/SkTpADN+E/lpd9ZgZmc+dPNn8Tzz1ClvOMw28QOjlk3J1jTOYeknxwxHosD?=
+ =?us-ascii?Q?TrUjC3u4MsrwZFMg+8xXP/5ruTqkmz80mHXAgsXvdbqbPiYQi3P639+jKoJt?=
+ =?us-ascii?Q?3d5UIt5bz8mlXlJLEJJAEGRC/vPQNOxG2nRjzcDPqlktDcDIdN7uwgmuYHED?=
+ =?us-ascii?Q?ajHyR7EaF7GeBAPqlNQcAD20SMrxLHqR7hU7JKYTx0DOScUPozyILKLEKnY3?=
+ =?us-ascii?Q?kXCU7/20glGKUauSE89khxsa3Qq/AvnFcR6e1GiNfz/98V7LN+BXPRx6Dazx?=
+ =?us-ascii?Q?932GxLvO96yQv1yoalfe4vvMx+fkfLmqftv+isXAfdlp9KnuIGdTvxnmYViU?=
+ =?us-ascii?Q?2xOkcrlCDuQCK71B0Wg7y9kQ4GDeiFqDVSpi9VWHFNJPTljZAQPjfmPC8Inz?=
+ =?us-ascii?Q?I0zD9yvzQT8nIiPNRIT6H8ALqRtn44NTXMaEFWFpXfT6pMr8Nau1YdH+kLiS?=
+ =?us-ascii?Q?h19Jb0KfkQUAByViXyaoI4fRv1GVNW58QtsTvGPqkZdo7z854u/TX9v5ko0e?=
+ =?us-ascii?Q?I0k8roaBior5j/AM7+R1PUyeS8GyQp5uYSCRzr65VznGnyOIkHqOIHn06Fgc?=
+ =?us-ascii?Q?y9GEuZ0qcVu8o3V1E0zep6ct7CCwCz+jRElXKAz6viOFnqGO+qk8d5YXCkVF?=
+ =?us-ascii?Q?UfDJ8vR05bNy/xaWACCMybKneLsUAIWw07s6kCvt?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a8787f0-8fbc-465d-38b9-08db40d2eab7
+X-MS-Exchange-CrossTenant-AuthSource: CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 12:38:04.9476
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 12:38:02.9619
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 06NVM3ktZhYYwdsIKImY5cyqtP5Qvf2w0JyNmlmJUVrBFAgauTbtfZMFD/LbLgN1YptmthF3838v9TgSIddgKPJAlF6JIY/23+9RvQ97pUAs7HPZLAvzkvPSIa9Q3W4D
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6147
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-19_08,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=967 adultscore=0
- phishscore=0 malwarescore=0 spamscore=0 bulkscore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304190113
-X-Proofpoint-GUID: R3tG0CUxqu8rEGM5h7Z8zwhkiRV0ukMV
-X-Proofpoint-ORIG-GUID: R3tG0CUxqu8rEGM5h7Z8zwhkiRV0ukMV
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: DVecpYUTmOYAoGmuDw/ibTKaMsHKXcKaV+s2DefjoZNQO2NdC/RkTXLVLMbKXuAAUJe8O8z+RwRol/2+ttAAug==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB4971
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Tue, 18 Apr 2023 23:43:47 +0200
+Miguel Ojeda <ojeda@kernel.org> wrote:
 
-On 18/04/23 5:50 pm, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.241 release.
-> There are 92 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> This is the first upgrade to the Rust toolchain since the initial Rust
+> merge, from 1.62.0 to 1.68.2 (i.e. the latest).
 > 
+> # Context
+> 
+> The kernel currently supports only a single Rust version [1] (rather
+> than a minimum) given our usage of some "unstable" Rust features [2]
+> which do not promise backwards compatibility.
+> 
+> The goal is to reach a point where we can declare a minimum version for
+> the toolchain. For instance, by waiting for some of the features to be
+> stabilized. Therefore, the first minimum Rust version that the kernel
+> will support is "in the future".
+> 
+> # Upgrade policy
+> 
+> Given we will eventually need to reach that minimum version, it would be
+> ideal to upgrade the compiler from time to time to be as close as
+> possible to that goal and find any issues sooner. In the extreme, we
+> could upgrade as soon as a new Rust release is out. Of course, upgrading
+> so often is in stark contrast to what one normally would need for GCC
+> and LLVM, especially given the release schedule: 6 weeks for Rust vs.
+> half a year for LLVM and a year for GCC.
+> 
+> Having said that, there is no particular advantage to updating slowly
+> either: kernel developers in "stable" distributions are unlikely to be
+> able to use their distribution-provided Rust toolchain for the kernel
+> anyway [3]. Instead, by routinely upgrading to the latest instead,
+> kernel developers using Linux distributions that track the latest Rust
+> release may be able to use those rather than Rust-provided ones,
+> especially if their package manager allows to pin / hold back /
+> downgrade the version for some days during windows where the version may
+> not match. For instance, Arch, Fedora, Gentoo and openSUSE all provide
+> and track the latest version of Rust as they get released every 6 weeks.
+> 
+> Then, when the minimum version is reached, we will stop upgrading and
+> decide how wide the window of support will be. For instance, a year of
+> Rust versions. We will probably want to start small, and then widen it
+> over time, just like the kernel did originally for LLVM, see commit
+> 3519c4d6e08e ("Documentation: add minimum clang/llvm version").
+> 
+> # Unstable features stabilized
+> 
+> This upgrade allows us to remove the following unstable features since
+> they were stabilized:
+> 
+>   - `feature(explicit_generic_args_with_impl_trait)` (1.63).
+>   - `feature(core_ffi_c)` (1.64).
+>   - `feature(generic_associated_types)` (1.65).
+>   - `feature(const_ptr_offset_from)` (1.65, *).
+>   - `feature(bench_black_box)` (1.66, *).
+>   - `feature(pin_macro)` (1.68).
+> 
+> The ones marked with `*` apply only to our old `rust` branch, not
+> mainline yet, i.e. only for code that we may potentially upstream.
+> 
+> With this patch applied, the only unstable feature allowed to be used
+> outside the `kernel` crate is `new_uninit`, though other code to be
+> upstreamed may increase the list.
+> 
+> Please see [2] for details.
+> 
+> # Other required changes
+> 
+> Since 1.63, `rustdoc` triggers the `broken_intra_doc_links` lint for
+> links pointing to exported (`#[macro_export]`) `macro_rules`. An issue
+> was opened upstream [4], but it turns out it is intended behavior. For
+> the moment, just add an explicit reference for each link. Later we can
+> revisit this if `rustdoc` removes the compatibility measure.
+> 
+> Nevertheless, this was helpful to discover a link that was pointing to
+> the wrong place unintentionally. Since that one was actually wrong, it
+> is fixed in a previous commit independently.
+> 
+> Another change was the addition of `cfg(no_rc)` and `cfg(no_sync)` in
+> upstream [5], thus remove our original changes for that.
+> 
+> Similarly, upstream now tests that it compiles successfully with
+> `#[cfg(not(no_global_oom_handling))]` [6], which allow us to get rid
+> of some changes, such as an `#[allow(dead_code)]`.
+> 
+> In addition, remove another `#[allow(dead_code)]` due to new uses
+> within the standard library.
+> 
+> Finally, add `try_extend_trusted` and move the code in `spec_extend.rs`
+> since upstream moved it for the infallible version.
+> 
+> # `alloc` upgrade and reviewing
+> 
+> There are a large amount of changes, but the vast majority of them are
+> due to our `alloc` fork being upgraded at once.
+> 
+> There are two kinds of changes to be aware of: the ones coming from
+> upstream, which we should follow as closely as possible, and the updates
+> needed in our added fallible APIs to keep them matching the newer
+> infallible APIs coming from upstream.
+> 
+> Instead of taking a look at the diff of this patch, an alternative
+> approach is reviewing a diff of the changes between upstream `alloc` and
+> the kernel's. This allows to easily inspect the kernel additions only,
+> especially to check if the fallible methods we already have still match
+> the infallible ones in the new version coming from upstream.
+> 
+> Another approach is reviewing the changes introduced in the additions in
+> the kernel fork between the two versions. This is useful to spot
+> potentially unintended changes to our additions.
+> 
+> To apply these approaches, one may follow steps similar to the following
+> to generate a pair of patches that show the differences between upstream
+> Rust and the kernel (for the subset of `alloc` we use) before and after
+> applying this patch:
+> 
+>     # Get the difference with respect to the old version.
+>     git -C rust checkout $(linux/scripts/min-tool-version.sh rustc)
+>     git -C linux ls-tree -r --name-only HEAD -- rust/alloc |
+>         cut -d/ -f3- |
+>         grep -Fv README.md |
+>         xargs -IPATH cp rust/library/alloc/src/PATH linux/rust/alloc/PATH
+>     git -C linux diff --patch-with-stat --summary -R > old.patch
+>     git -C linux restore rust/alloc
+> 
+>     # Apply this patch.
+>     git -C linux am rust-upgrade.patch
+> 
+>     # Get the difference with respect to the new version.
+>     git -C rust checkout $(linux/scripts/min-tool-version.sh rustc)
+>     git -C linux ls-tree -r --name-only HEAD -- rust/alloc |
+>         cut -d/ -f3- |
+>         grep -Fv README.md |
+>         xargs -IPATH cp rust/library/alloc/src/PATH linux/rust/alloc/PATH
+>     git -C linux diff --patch-with-stat --summary -R > new.patch
+>     git -C linux restore rust/alloc
+> 
+> Now one may check the `new.patch` to take a look at the additions (first
+> approach) or at the difference between those two patches (second
+> approach). For the latter, a side-by-side tool is recommended.
+> 
+> Link: https://rust-for-linux.com/rust-version-policy [1]
+> Link: https://github.com/Rust-for-Linux/linux/issues/2 [2]
+> Link: https://lore.kernel.org/rust-for-linux/CANiq72mT3bVDKdHgaea-6WiZazd8Mvurqmqegbe5JZxVyLR8Yg@mail.gmail.com/ [3]
+> Link: https://github.com/rust-lang/rust/issues/106142 [4]
+> Link: https://github.com/rust-lang/rust/pull/89891 [5]
+> Link: https://github.com/rust-lang/rust/pull/98652 [6]
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-No problems seen on x86_64 and aarch64.
+I took this opportunity to re-review our diff with upstream alloc crate.
 
-Tested-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+All the try_ series methods added to `Vec` and `RawVec` looks correct to
+me.
 
-Thanks,
-Harshit
+Reviewed-by: Gary Guo <gary@garyguo.net>
 
-> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.241-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> ---
+>  Documentation/process/changes.rst |   2 +-
+>  rust/alloc/alloc.rs               |  55 ++--
+>  rust/alloc/boxed.rs               | 446 ++++++++++++++++++++++++++--
+>  rust/alloc/collections/mod.rs     |   5 +-
+>  rust/alloc/lib.rs                 |  71 +++--
+>  rust/alloc/raw_vec.rs             |  16 +-
+>  rust/alloc/slice.rs               | 447 ++++------------------------
+>  rust/alloc/vec/drain.rs           |  81 +++++-
+>  rust/alloc/vec/drain_filter.rs    |  60 +++-
+>  rust/alloc/vec/into_iter.rs       | 125 ++++++--
+>  rust/alloc/vec/is_zero.rs         |  96 ++++++-
+>  rust/alloc/vec/mod.rs             | 464 +++++++++++++++++++++++-------
+>  rust/alloc/vec/set_len_on_drop.rs |   5 +
+>  rust/alloc/vec/spec_extend.rs     |  63 +---
+>  rust/bindings/lib.rs              |   1 -
+>  rust/kernel/build_assert.rs       |   2 +
+>  rust/kernel/init.rs               |   5 +
+>  rust/kernel/lib.rs                |   4 -
+>  rust/kernel/std_vendor.rs         |   2 +
+>  scripts/Makefile.build            |   2 +-
+>  scripts/min-tool-version.sh       |   2 +-
+>  21 files changed, 1274 insertions(+), 680 deletions(-)
