@@ -2,43 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBBC86E7E2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9626E7DFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233071AbjDSPYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47514 "EHLO
+        id S233708AbjDSPRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 11:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232643AbjDSPYI (ORCPT
+        with ESMTP id S233658AbjDSPQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:24:08 -0400
-X-Greylist: delayed 503 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Apr 2023 08:23:28 PDT
-Received: from synguard (unknown [212.29.212.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A3749DB;
-        Wed, 19 Apr 2023 08:23:28 -0700 (PDT)
-Received: from dali.siklu.local (dali.siklu.local [192.168.42.30])
-        by synguard (Postfix) with ESMTP id 81FB64DFC8;
-        Wed, 19 Apr 2023 18:14:59 +0300 (IDT)
-From:   Shmuel Hazan <shmuel.h@siklu.com>
-To:     Russell King <linux@armlinux.org.uk>
-Cc:     Marcin Wojtas <mw@semihalf.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        horatiu.vultur@microchip.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Shmuel Hazan <shmuel.h@siklu.com>
-Subject: [PATCH v3 3/3] dt-bindings: net: marvell,pp2: add extts docs
-Date:   Wed, 19 Apr 2023 18:14:57 +0300
-Message-Id: <20230419151457.22411-4-shmuel.h@siklu.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230419151457.22411-1-shmuel.h@siklu.com>
-References: <20230419151457.22411-1-shmuel.h@siklu.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,FSL_HELO_NON_FQDN_1,
-        HELO_NO_DOMAIN,RDNS_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Wed, 19 Apr 2023 11:16:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30EC6E8A;
+        Wed, 19 Apr 2023 08:15:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 500CB64006;
+        Wed, 19 Apr 2023 15:15:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1D6CC433EF;
+        Wed, 19 Apr 2023 15:15:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681917336;
+        bh=44/RLJgBhHOZGIwLNoEJUmann7+cQNh1BW8DCRhpiVk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fpvULUDTcguLhzUwAICULq59GIWWlMInlwCFViRFt2x9PLa+OwvIAlS3hESi54gCQ
+         jqsglTd8Y3sDnQgsARYtoAB0OJIb2krRW7I0ye1NP+GPorsD+EpE53nheb61j1WEBX
+         aBg7FeUghgkj2ZYzvbFU2C8TydV4cUmvOomHOn8wcgv5H5u9TTAJA9vYPr2obDgkdN
+         L7zMLeivzdLX11F1DUeCYvmzCIbCnQVp8UtlZhKE067oo58OtxUq5csm7TzEqP2Rbe
+         0mkk1vVkAj1mhEqZnMDz38yGtWI/kCVjSSFWBWVZyPMapwrZiozCRFfBgtkGTDBHVR
+         VstuiRYTwi9OQ==
+Date:   Wed, 19 Apr 2023 08:15:36 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Dave Chinner <david@fromorbit.com>
+Cc:     Linux XFS Development <linux-xfs@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH] Documentation: xfs: Extend table marker on deprecated
+ mount options table
+Message-ID: <20230419151536.GM360895@frogsfrogsfrogs>
+References: <20230419094921.27279-1-bagasdotme@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419094921.27279-1-bagasdotme@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,50 +58,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add some documentation and example for enabling extts on the marvell
-mvpp2 TAI.
+On Wed, Apr 19, 2023 at 04:49:21PM +0700, Bagas Sanjaya wrote:
+> Sphinx reports htmldocs warning on deprecated mount options table:
+> 
+> /home/bagas/repo/linux-kernel/Documentation/admin-guide/xfs.rst:243: WARNING: Malformed table.
+> Text in column margin in table line 5.
+> 
+> ===========================     ================
+>   Name                          Removal Schedule
+> ===========================     ================
+> Mounting with V4 filesystem     September 2030
+> Mounting ascii-ci filesystem    September 2030
+> ikeep/noikeep                   September 2025
+> attr2/noattr2                   September 2025
+> ===========================     ================
+> 
+> Extend the table markers to take account of the second name entry
+> ("Mounting ascii-ci filesystem"), which is now the widest and
+> to fix the above warning.
+> 
+> Fixes: 7ba83850ca2691 ("xfs: deprecate the ascii-ci feature")
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Signed-off-by: Shmuel Hazan <shmuel.h@siklu.com>
----
- .../devicetree/bindings/net/marvell,pp2.yaml   | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Looks good.  Dave, could you take this through the xfs tree whenever you
+push the duplicate #include fixes, please?
 
-diff --git a/Documentation/devicetree/bindings/net/marvell,pp2.yaml b/Documentation/devicetree/bindings/net/marvell,pp2.yaml
-index 4eadafc43d4f..5e4fc9c5dc92 100644
---- a/Documentation/devicetree/bindings/net/marvell,pp2.yaml
-+++ b/Documentation/devicetree/bindings/net/marvell,pp2.yaml
-@@ -31,6 +31,21 @@ properties:
-   "#size-cells":
-     const: 0
- 
-+  pinctrl-0: true
-+  pinctrl-1: true
-+
-+  pinctrl-names:
-+    description:
-+      When present, must have one state named "default",
-+      and may contain a second name named "extts". The former
-+      state sets up pins for ordinary operation without extts
-+      support whereas the latter state will enable receiving
-+      external timestamp events.
-+    minItems: 1
-+    items:
-+      - const: default
-+      - const: extts
-+
-   clocks:
-     minItems: 2
-     items:
-@@ -241,6 +256,9 @@ examples:
-                  <&cp0_clk 1 5>, <&cp0_clk 1 6>, <&cp0_clk 1 18>;
-         clock-names = "pp_clk", "gop_clk", "mg_clk", "mg_core_clk", "axi_clk";
-         marvell,system-controller = <&cp0_syscon0>;
-+        pinctrl-names = "default", "extts";
-+        pinctrl-0 = <&cp1_mpp6_gpio>;
-+        pinctrl-1 = <&cp1_mpp6_ptp>;
- 
-         ethernet-port@0 {
-             interrupts = <ICU_GRP_NSR 39 IRQ_TYPE_LEVEL_HIGH>,
--- 
-2.40.0
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
+--D
+
+> ---
+>  This patch is targeted for next merge window (6.4-rc1).
+> 
+>  Documentation/admin-guide/xfs.rst | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/xfs.rst b/Documentation/admin-guide/xfs.rst
+> index e85a9404d5c082..3a9c041d7f6c31 100644
+> --- a/Documentation/admin-guide/xfs.rst
+> +++ b/Documentation/admin-guide/xfs.rst
+> @@ -236,14 +236,14 @@ the dates listed above.
+>  Deprecated Mount Options
+>  ========================
+>  
+> -===========================     ================
+> +============================    ================
+>    Name				Removal Schedule
+> -===========================     ================
+> +============================    ================
+>  Mounting with V4 filesystem     September 2030
+>  Mounting ascii-ci filesystem    September 2030
+>  ikeep/noikeep			September 2025
+>  attr2/noattr2			September 2025
+> -===========================     ================
+> +============================    ================
+>  
+>  
+>  Removed Mount Options
+> 
+> base-commit: 798352cb25d2c27affbb5c733ed28430057228ca
+> -- 
+> An old man doll... just what I always wanted! - Clara
+> 
