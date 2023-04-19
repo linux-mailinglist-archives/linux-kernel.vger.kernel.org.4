@@ -2,53 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0BE86E70D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 03:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C7F6E70D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 03:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbjDSBrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 21:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S231654AbjDSBwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 21:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbjDSBrJ (ORCPT
+        with ESMTP id S229633AbjDSBwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 21:47:09 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346327AB9;
-        Tue, 18 Apr 2023 18:47:08 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [7.193.23.202])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Q1NpW3cNNzSswL;
-        Wed, 19 Apr 2023 09:42:59 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 19 Apr 2023 09:47:05 +0800
-Subject: Re: [PATCH] perf/core: Fix perf_sample_data not properly initialized
- for different swevents in perf_tp_event()
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-        <namhyung@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230412095240.181516-1-yangjihong1@huawei.com>
- <20230417114512.GK83892@hirez.programming.kicks-ass.net>
- <15805714-27c0-b8ff-143a-8f768704a673@huawei.com>
- <20230418102545.GX4253@hirez.programming.kicks-ass.net>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <e01e3e5c-0a48-2394-ac59-2c0541fa181a@huawei.com>
-Date:   Wed, 19 Apr 2023 09:47:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Tue, 18 Apr 2023 21:52:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4293C0D
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 18:51:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681869108;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nm+Uhj6RHTkYm3b6JjoRshvkHqJVCbr9ria5liA5ewk=;
+        b=fYZ/nWl0gTwqz8PxqSp3r7OsfTjWzaAA1rNek7C60xC688QYHoj2r0lwVYRGUkpm4VE7xk
+        jMqTfR4p1+1hzryWZtBsRPyvOznUaBD9RlaWBOd7Q+xprPWo5zeSRXT02u4LTIkJiXDOwX
+        pI+n98gkWEdzpn77TWxUe6+4tkP5nco=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-107-bp3ltgHBOdelkEkuJ4WAlQ-1; Tue, 18 Apr 2023 21:51:45 -0400
+X-MC-Unique: bp3ltgHBOdelkEkuJ4WAlQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8CC6D2999B23;
+        Wed, 19 Apr 2023 01:51:44 +0000 (UTC)
+Received: from ovpn-8-18.pek2.redhat.com (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EF8EE483EC4;
+        Wed, 19 Apr 2023 01:51:36 +0000 (UTC)
+Date:   Wed, 19 Apr 2023 09:51:31 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Bernd Schubert <bschubert@ddn.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Amir Goldstein <amir73il@gmail.com>, ming.lei@redhat.com
+Subject: Re: [PATCH V6 00/17] io_uring/ublk: add generic IORING_OP_FUSED_CMD
+Message-ID: <ZD9JI/JlwrzXQPZ7@ovpn-8-18.pek2.redhat.com>
+References: <20230330113630.1388860-1-ming.lei@redhat.com>
+ <78fe6617-2f5e-3e8e-d853-6dc8ffb5f82c@ddn.com>
 MIME-Version: 1.0
-In-Reply-To: <20230418102545.GX4253@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <78fe6617-2f5e-3e8e-d853-6dc8ffb5f82c@ddn.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,46 +70,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Apr 18, 2023 at 07:38:03PM +0000, Bernd Schubert wrote:
+> On 3/30/23 13:36, Ming Lei wrote:
+> [...]
+> > V6:
+> > 	- re-design fused command, and make it more generic, moving sharing buffer
+> > 	as one plugin of fused command, so in future we can implement more plugins
+> > 	- document potential other use cases of fused command
+> > 	- drop support for builtin secondary sqe in SQE128, so all secondary
+> > 	  requests has standalone SQE
+> > 	- make fused command as one feature
+> > 	- cleanup & improve naming
+> 
+> Hi Ming, et al.,
+> 
+> I started to wonder if fused SQE could be extended to combine multiple 
+> syscalls, for example open/read/close.  Which would be another solution 
+> for the readfile syscall Miklos had proposed some time ago.
+> 
+> https://lore.kernel.org/lkml/CAJfpegusi8BjWFzEi05926d4RsEQvPnRW-w7My=ibBHQ8NgCuw@mail.gmail.com/
+> 
+> If fused SQEs could be extended, I think it would be quite helpful for 
+> many other patterns. Another similar examples would open/write/close, 
+> but ideal would be also to allow to have it more complex like 
+> "open/write/sync_file_range/close" - open/write/close might be the 
+> fastest and could possibly return before sync_file_range. Use case for 
+> the latter would be a file server that wants to give notifications to 
+> client when pages have been written out.
 
-On 2023/4/18 18:25, Peter Zijlstra wrote:
-> On Tue, Apr 18, 2023 at 09:35:23AM +0800, Yang Jihong wrote:
-> 
->>> I'm thinking perhaps those flags that update ->dyn_size are the problem?
->>> At the same time, Should you not also then clear dyn_size?
-> 
->> Yes, according to the code, dyn_size should also be cleared.
->> Maybe we need to change it to the following, which would be more
->> appropriate?
->>
->> --- a/kernel/events/core.c
->> +++ b/kernel/events/core.c
->> @@ -10144,14 +10144,14 @@ void perf_tp_event(u16 event_type, u64 count, void
->> *record, int entry_size,
->>                  },
->>          };
->>
->> -       perf_sample_data_init(&data, 0, 0);
->> -       perf_sample_save_raw_data(&data, &raw);
->> -
->>          perf_trace_buf_update(record, event_type);
->>
->>          hlist_for_each_entry_rcu(event, head, hlist_entry) {
->> -               if (perf_tp_event_match(event, &data, regs))
->> +               if (perf_tp_event_match(event, &data, regs)) {
->> +                       perf_sample_data_init(&data, 0, 0);
->> +                       perf_sample_save_raw_data(&data, &raw);
->>                          perf_swevent_event(event, count, &data, regs);
->> +               }
->>          }
-> 
-> That is certainly the safe option. I just went through the list and
-> while there's certainly a number of options we'll recompute for naught,
-> most of them are indeed either dyn_size or event specific :/
-> 
-> So yeah, please send the above as v2.
-> 
-OK, will send v2 according to above fix solution.
+The above pattern needn't fused command, and it can be done by plain
+SQEs chain, follows the usage:
 
-Thanks,
-Yang.
+1) suppose you get one command from /dev/fuse, then FUSE daemon
+needs to handle the command as open/write/sync/close
+2) get sqe1, prepare it for open syscall, mark it as IOSQE_IO_LINK;
+3) get sqe2, prepare it for write syscall, mark it as IOSQE_IO_LINK;
+4) get sqe3, prepare it for sync file range syscall, mark it as IOSQE_IO_LINK;
+5) get sqe4, prepare it for close syscall
+6) io_uring_enter();	//for submit and get events
+
+Then all the four OPs are done one by one by io_uring internal
+machinery, and you can choose to get successful CQE for each OP.
+
+Is the above what you want to do?
+
+The fused command proposal is actually for zero copy(but not limited to zc).
+
+If the above write OP need to write to file with in-kernel buffer
+of /dev/fuse directly, you can get one sqe0 and prepare it for primary command
+before 1), and set sqe2->addr to offet of the buffer in 3).
+
+However, fused command is usually used in the following way, such as FUSE daemon
+gets one READ request from /dev/fuse, FUSE userspace can handle the READ request
+as io_uring fused command:
+
+1) get sqe0 and prepare it for primary command, in which you need to
+provide info for retrieving kernel buffer/pages of this READ request
+
+2) suppose this READ request needs to be handled by translating it to
+READs to two files/devices, considering it as one mirror:
+
+- get sqe1, prepare it for read from file1, and set sqe->addr to offset
+  of the buffer in 1), set sqe->len as length for read; this READ OP
+  uses the kernel buffer in 1) directly 
+
+- get sqe2, prepare it for read from file2, and set sqe->addr to offset
+  of buffer in 1), set sqe->len as length for read;  this READ OP
+  uses the kernel buffer in 1) directly 
+
+3) submit the three sqe by io_uring_enter()
+
+sqe1 and sqe2 can be submitted concurrently or be issued one by one
+in order, fused command supports both, and depends on user requirement.
+But io_uring linked OPs is usually slower.
+
+Also file1/file2 needs to be opened beforehand in this example, and FD is
+passed to sqe1/sqe2, another choice is to use fixed File; Also you can
+add the open/close() OPs into above steps, which need these open/close/READ
+to be linked in order, usually slower tnan non-linked OPs.
+
+
+Thanks, 
+Ming
+
