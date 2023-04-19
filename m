@@ -2,260 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6AF56E816D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897506E816F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjDSSrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
+        id S230516AbjDSSsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDSSrb (ORCPT
+        with ESMTP id S229458AbjDSSsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 14:47:31 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCDAE30DB;
-        Wed, 19 Apr 2023 11:47:28 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:37384.762674106
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 139B7100295;
-        Thu, 20 Apr 2023 02:47:25 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 0c3658d8c1b14043811ce1ce3dd1f3fa for tzimmermann@suse.de;
-        Thu, 20 Apr 2023 02:47:28 CST
-X-Transaction-ID: 0c3658d8c1b14043811ce1ce3dd1f3fa
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <95ef7589-9775-5ad4-f09c-43bcd696823a@189.cn>
-Date:   Thu, 20 Apr 2023 02:47:24 +0800
+        Wed, 19 Apr 2023 14:48:17 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD173C1F;
+        Wed, 19 Apr 2023 11:48:16 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-63b52ad6311so231433b3a.2;
+        Wed, 19 Apr 2023 11:48:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681930096; x=1684522096;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uPdfMQM+igp57twLAUnBlkRXz47rDYSPWUgNdtjLI0U=;
+        b=i/xtk/7WwEVyJ9JMSlY4KHg0+8snK3xFoagZ5fo4m0jkGf7OBUZOpixHy5jmcqHVaw
+         BR1ICW8nz/R2zvKS4Mwk0yt5nmqeGIoJ5RZFV2NInhgyyLz1wbqP0nkn10Pj/CtG+Z04
+         jX1uUKSnJvilPoz/T8O5b5wKvzaE01cHuLvKJ6/tLgANKRguLciEFhzn08TxFCXLrMrJ
+         XrjWiWpNo+27ulKG7D9CKEMil0zhziXsyY1OiCVvpFholOGQR86ejlageWmUSCNieM3x
+         mI50GkhzqQuadOOI//xx+Dji4ci9f1D9u47cp0rLY0LSdo7AdnA2Tn1kXWLvX4sCn3e1
+         QPlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681930096; x=1684522096;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uPdfMQM+igp57twLAUnBlkRXz47rDYSPWUgNdtjLI0U=;
+        b=b2qz61DO0J5XowyEfGUciSRoD1BpQh8js898RjtlLjWzCxLLJlUh2cOp4QNT2pzq9k
+         lTfWn2bWb4IFJWCfOUDaXC41ub58Dfbfr9JNIBTel9P4uOqXNhNZvVwyShJoZirYReLG
+         Vlpn3Jznx3Ucknbp7HUdI/E9Z8L/sfo4DfDzg6NsSdAarfGp14CXiLnILu+2fV5enwmO
+         vX0scg65cnBXA6sDEE2qWJuBHYobTVb/cyau7s7ZHgLfUFcB7fZOlcRAfsM2KapqJwD0
+         VWCMTkCqVeCebRmbZcO/xe9mPssud2JzsP1Cj3kZPF4dAwhKQCz08IcyFUkJkWU6l6IQ
+         T6pg==
+X-Gm-Message-State: AAQBX9ffpFHYQO1k1hUO08l+XG+zPs24BzgFQRI2Sj09+VnBoqIY70hB
+        Xi0Zb4A9xgiiq0TOl4j20xs=
+X-Google-Smtp-Source: AKy350a6qk6kYCdM6r1/OJejXUnaMoExvrlktQCaZ7cSvuTlOjAb4vvDFn/EG2vvwElm+A9ciJTgzg==
+X-Received: by 2002:a05:6a00:181c:b0:63b:84a2:6f54 with SMTP id y28-20020a056a00181c00b0063b84a26f54mr5062725pfa.26.1681930095707;
+        Wed, 19 Apr 2023 11:48:15 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id fe16-20020a056a002f1000b0063b7bd920b3sm8092449pfb.15.2023.04.19.11.48.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 11:48:15 -0700 (PDT)
+Message-ID: <ae80b632-65df-eee9-11d5-03dc957c8a3a@gmail.com>
+Date:   Wed, 19 Apr 2023 11:48:11 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2] drm/fbdev-generic: prohibit potential out-of-bounds
- access
+Subject: Re: [PATCH 1/7] PCI: meson: Add 'Amlogic' to Kconfig prompt
 Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Li Yi <liyi@loongson.cn>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-References: <20230413180622.1014016-1-15330273260@189.cn>
- <fccc494f-0e52-5fdf-0e40-acc29177c73c@suse.de>
- <32a1510e-d38a-ffb6-8e8d-026f8b3aa17a@189.cn>
- <fab85750-dcb7-0eeb-cabc-8fcfcc84b11c@suse.de>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <fab85750-dcb7-0eeb-cabc-8fcfcc84b11c@suse.de>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Yue Wang <yue.wang@Amlogic.com>
+References: <20230418184002.GA148053@bhelgaas>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230418184002.GA148053@bhelgaas>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2023/4/17 15:29, Thomas Zimmermann wrote:
-> Hi
->
-> Am 14.04.23 um 12:58 schrieb Sui Jingfeng:
->> Hi,
->>
->> On 2023/4/14 03:16, Thomas Zimmermann wrote:
->>> Hi,
+On 4/18/23 11:40, Bjorn Helgaas wrote:
+> On Tue, Apr 18, 2023 at 11:10:39AM -0700, Florian Fainelli wrote:
+>> On 4/18/23 10:43, Bjorn Helgaas wrote:
+>>> From: Bjorn Helgaas <bhelgaas@google.com>
 >>>
->>> thanks for the patch. This is effectively a revert of commit 
->>> 8fbc9af55de0 ("drm/fbdev-generic: Set screen size to size of GEM 
->>> buffer"). Please add a Fixes tag.
->>>
->>> Am 13.04.23 um 20:06 schrieb Sui Jingfeng:
->>>> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>>>
->>>> The crazy fbdev test of IGT may write after EOF, which lead to 
->>>> out-of-bound
->>>
->>> Please drop 'crazy'. :)
+>>> Add the "Amlogic" vendor name to the CONFIG_PCI_MESON Kconfig prompt to
+>>> match other PCIe drivers.  Capitalize "Meson" to match other Meson Kconfig
+>>> prompts.
 >>
->> This is OK.
->>
->> By using the world 'crazy',
->>
->> I meant that the test is very good and maybe it is written by 
->> professional  peoples
->>
->> with the guidance by  experienced  engineer. So that even the corner 
->> get tested.
->>
->>
->>>
->>>> access for the drm drivers using fbdev-generic. For example, run 
->>>> fbdev test
->>>> on a x86-64+ast2400 platform with 1680x1050 resolution will cause 
->>>> the linux
->>>> kernel hang with following call trace:
->>>>
->>>>    Oops: 0000 [#1] PREEMPT SMP PTI
->>>>    [IGT] fbdev: starting subtest eof
->>>>    Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
->>>>    [IGT] fbdev: starting subtest nullptr
->>>>
->>>>    RIP: 0010:memcpy_erms+0xa/0x20
->>>>    RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
->>>>    RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
->>>>    RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
->>>>    RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
->>>>    R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
->>>>    R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
->>>>    FS:  0000000000000000(0000) GS:ffff895257380000(0000) 
->>>> knlGS:0000000000000000
->>>>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>    CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
->>>>    Call Trace:
->>>>     <TASK>
->>>>     ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
->>>>     drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
->>>>     process_one_work+0x21f/0x430
->>>>     worker_thread+0x4e/0x3c0
->>>>     ? __pfx_worker_thread+0x10/0x10
->>>>     kthread+0xf4/0x120
->>>>     ? __pfx_kthread+0x10/0x10
->>>>     ret_from_fork+0x2c/0x50
->>>>     </TASK>
->>>>    CR2: ffffa17d40e0b000
->>>>    ---[ end trace 0000000000000000 ]---
->>>>
->>>> The indirect reason is drm_fb_helper_memory_range_to_clip() 
->>>> generate damage
->>>> rectangles which partially or completely go out of the active 
->>>> display area.
->>>> The second of argument 'off' is passing from the user-space, this 
->>>> will lead
->>>> to the out-of-bound if it is large than (fb_height + 1) * 
->>>> fb_pitches; while
->>>> DIV_ROUND_UP() may also controbute to error by 1.
->>>>
->>>> This patch will add code to restrict the damage rect computed go 
->>>> beyond of
->>>> the last line of the framebuffer.
->>>>
->>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->>>> ---
->>>>   drivers/gpu/drm/drm_fb_helper.c     | 16 ++++++++++++----
->>>>   drivers/gpu/drm/drm_fbdev_generic.c |  2 +-
->>>>   2 files changed, 13 insertions(+), 5 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/drm_fb_helper.c 
->>>> b/drivers/gpu/drm/drm_fb_helper.c
->>>> index 64458982be40..6bb1b8b27d7a 100644
->>>> --- a/drivers/gpu/drm/drm_fb_helper.c
->>>> +++ b/drivers/gpu/drm/drm_fb_helper.c
->>>> @@ -641,19 +641,27 @@ static void drm_fb_helper_damage(struct 
->>>> drm_fb_helper *helper, u32 x, u32 y,
->>>>   static void drm_fb_helper_memory_range_to_clip(struct fb_info 
->>>> *info, off_t off, size_t len,
->>>>                              struct drm_rect *clip)
->>>>   {
->>>> +    u32 line_length = info->fix.line_length;
->>>> +    u32 fb_height = info->var.yres;
->>>>       off_t end = off + len;
->>>>       u32 x1 = 0;
->>>> -    u32 y1 = off / info->fix.line_length;
->>>> +    u32 y1 = off / line_length;
->>>>       u32 x2 = info->var.xres;
->>>> -    u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
->>>> +    u32 y2 = DIV_ROUND_UP(end, line_length);
->>>> +
->>>> +    /* Don't allow any of them beyond the bottom bound of display 
->>>> area */
->>>> +    if (y1 > fb_height)
->>>> +        y1 = fb_height;
->>>> +    if (y2 > fb_height)
->>>> +        y2 = fb_height;
->>>>         if ((y2 - y1) == 1) {
->>>>           /*
->>>>            * We've only written to a single scanline. Try to reduce
->>>>            * the number of horizontal pixels that need an update.
->>>>            */
->>>> -        off_t bit_off = (off % info->fix.line_length) * 8;
->>>> -        off_t bit_end = (end % info->fix.line_length) * 8;
->>>> +        off_t bit_off = (off % line_length) * 8;
->>>> +        off_t bit_end = (end % line_length) * 8;
->>>
->>> Please scratch all these changes. The current code should work as 
->>> intended. Only the generic fbdev emulation uses this code and it 
->>> should really be moved there at some point.
->>
->>
->> Are you meant  that we should remove all these changes in 
->> drivers/gpu/drm/drm_fb_helper.c ?
->
-> As Daniel mentioned, there's the discussion in the other thread. I 
-> don't want to reopen it here. Just to summarize: I'm not convinced 
-> that this should be DRM code because it can be shared with other fbdev 
-> drivers.
->
-> [...]
->
->>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c 
->>>> b/drivers/gpu/drm/drm_fbdev_generic.c
->>>> index 8e5148bf40bb..b057cfbba938 100644
->>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
->>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
->>>> @@ -94,7 +94,7 @@ static int 
->>>> drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
->>>>       fb_helper->buffer = buffer;
->>>>       fb_helper->fb = buffer->fb;
->>>>   -    screen_size = buffer->gem->size;
->>>> +    screen_size = sizes->surface_height * buffer->fb->pitches[0];
->
-> This has been bothering me over the weekend. And I think it's because 
-> what we want the screen_size to be heigth * pitch,  but the mmap'ed 
-> memory is still at page granularity. Therefore...
->
-> [...]
->>>
->>>>       screen_buffer = vzalloc(screen_size);
->
-> ... this line should explicitly allocate multiples of pages. Something 
-> like
->
->     /* allocate page-size multiples for mmap */
->     vzalloc(PAGE_ALIGN(screen_size))
->
-I just thought about your instruction at here, thanks!
+>> Did you mean, do not capitalize "Meson" or did you intend to preserve the
+>> previous hunk that had "Meson" capitalized?
+> 
+> I made it match other Meson prompts:
+> 
+>    arch/arm/mach-meson/Kconfig-    bool "Amlogic Meson6 (8726MX) SoCs support"
+>    drivers/char/hw_random/Kconfig- tristate "Amlogic Meson Random Number Generator support"
+>    drivers/clk/meson/Kconfig-      bool "Meson8 SoC Clock controller support"
+>    drivers/gpu/drm/meson/Kconfig-  tristate "DRM Support for Amlogic Meson Display Controller"
+>    drivers/i2c/busses/Kconfig-     tristate "Amlogic Meson I2C controller"
+>    drivers/iio/adc/Kconfig-        tristate "Amlogic Meson SAR ADC driver"
+>    drivers/media/cec/platform/Kconfig-     tristate "Amlogic Meson AO CEC driver"
+> 
+> So I guess could have described as "style Meson with initial cap only
+> instead of all caps" or something.
 
-But it is already page size aligned if we don't tough it.
+This is fine, I was just reading it wrong, as meaning all capital 
+letters. Thanks.
+-- 
+Florian
 
-It is guaranteed by the GEM memory manger,
-
-so a previous patch tested by me, is turn out to be a extremely correct?
-
-We exposed a  page size aligned buffer(even though it is larger than 
-needed) is actually for mmap ?
-
-
-> It has not been a bug so far because vzalloc() always returns full 
-> pages IIRC. It's still worth fixing.
->
-
-> Best regards
-> Thomas
->
->
->>>>       if (!screen_buffer) {
->>>>           ret = -ENOMEM;
->>>
->
