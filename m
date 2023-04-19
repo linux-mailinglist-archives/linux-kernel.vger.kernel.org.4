@@ -2,144 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 010C86E8266
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BD26E826C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbjDSUKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 16:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
+        id S231649AbjDSUL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 16:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbjDSUKv (ORCPT
+        with ESMTP id S230077AbjDSUL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 16:10:51 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790D14C33;
-        Wed, 19 Apr 2023 13:10:49 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:199e::580])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7137B6603247;
-        Wed, 19 Apr 2023 21:10:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681935048;
-        bh=p6Bh6e7Qjn7BRm0mOG9dNdfJlWO9r4yzoXFJ/eJ0NLA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=StBvdoqAOlrplsSJyWzXdLylHd8PoDk0WZX0t7NOZfSaPPlvSygbXsF/lg2S+aCUl
-         EjZRlkrCSC5KYrsaH/StH7w0yFe1Ixcjrpq62C52CQ5VeJtlJT/Pa28mv4Idy45jt1
-         ySjCHuTDKukocIt+tMOF+6QYcGeVRpihONrUFnLGbVVQGM0d7dnsUFPFXfnzypCGKz
-         cHD40EKWsTuDuNqLRKq3zjobxJh3Gu6Qr6zmJwMFcmviN+rYmCiAIHgpt9e87AGahn
-         a9EPRJ+4vQZdzBysAvWRYmm3ByeJefq+O2NwlXX8q+m6F1bZY687sIlULnvti/645f
-         ifTx9G6gq8BBw==
-Message-ID: <511c900070050a5cac317279ee4208cdc1d8d1af.camel@collabora.com>
-Subject: Re: [PATCH] media: uapi: HEVC: Add num_delta_pocs_of_ref_rps_idx
- field
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Date:   Wed, 19 Apr 2023 16:10:38 -0400
-In-Reply-To: <20230418160717.743517-1-benjamin.gaignard@collabora.com>
-References: <20230418160717.743517-1-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 19 Apr 2023 16:11:56 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D8F4C33;
+        Wed, 19 Apr 2023 13:11:54 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33JIxtmO018870;
+        Wed, 19 Apr 2023 20:11:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=4lRYuddyzyOZ7T7y8ZQegTBdQ60Z0hvBn21Sa+GzYxQ=;
+ b=HvRchAgw02Ch8X+g29yHnN9vf5u/PuEGXhDu3jNbwFNO1KnGHGWzqFDlFNrQzsLQ5fGg
+ QJ6noOXZa1j0gQxbICLW9KK8XTyMfJ0K7pYuXdTABeJ+wRj3ZzKxVTvmMoRda0wQ0U5f
+ t4Em5ru1v5xW8DVsEnuPMpzltCDUnj5WjB6zlhgCqCC1PQTY4njXrc80FsRmNvAkB18Z
+ YI4AHEWD+Rl7IzANQzuveqt2Pm7DSzYY7MtJ7sIYOL84ykMKMhiNZjEHOvOqwyVde2nK
+ MRsYQ/xNFnjJX2RQoDrfajVUwH8Kn6mz8bxDpxAI5IQ6PlZ8HN54yh12G3VwCMCQPWgH Jg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q2nn807cf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 20:11:46 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33JKBjHY024484
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 20:11:46 GMT
+Received: from [10.134.71.70] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 19 Apr
+ 2023 13:11:44 -0700
+Message-ID: <77bb1b3c-09cb-310a-be34-166e573a13a7@quicinc.com>
+Date:   Wed, 19 Apr 2023 13:11:43 -0700
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [Freedreno] [PATCH 5/5] drm/msm/dpu1: Handle the reg bus ICC path
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        "Marijn Suijten" <marijn.suijten@somainline.org>,
+        <freedreno@lists.freedesktop.org>
+References: <20230417-topic-dpu_regbus-v1-0-06fbdc1643c0@linaro.org>
+ <20230417-topic-dpu_regbus-v1-5-06fbdc1643c0@linaro.org>
+ <11c72462-b256-d0db-a666-9615da4420f6@quicinc.com>
+ <e15ec005-ef52-c14c-bdeb-faaca207d39b@linaro.org>
+From:   Jeykumar Sankaran <quic_jeykumar@quicinc.com>
+In-Reply-To: <e15ec005-ef52-c14c-bdeb-faaca207d39b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: QGMhDy7ReST1ODUAfKQWCbU9L5K7e2AZ
+X-Proofpoint-GUID: QGMhDy7ReST1ODUAfKQWCbU9L5K7e2AZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-19_14,2023-04-18_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ spamscore=0 impostorscore=0 clxscore=1015 phishscore=0 mlxlogscore=999
+ bulkscore=0 priorityscore=1501 adultscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304190174
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mardi 18 avril 2023 =C3=A0 18:07 +0200, Benjamin Gaignard a =C3=A9crit=
-=C2=A0:
-> Some drivers firmwares parse by themselves slice header and need
-> num_delta_pocs_of_ref_rps_idx value to parse slice header
-> short_term_ref_pic_set().
-> Use one of the 4 reserved bytes to store this value without
-> changing the v4l2_ctrl_hevc_decode_params structure size and padding.
->=20
-> This value also exist in DXVA API.
->=20
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->=20
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-For the info, this is in preparation for MTK VCODEC HEVC driver. It makes o=
-ur
-API (hopefully) on par with DXVA, which has always been the goal, we simply
-missed it during review.
+On 4/19/2023 12:48 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 19.04.2023 21:06, Jeykumar Sankaran wrote:
+>>
+>>
+>> On 4/17/2023 8:30 AM, Konrad Dybcio wrote:
+>>> Apart from the already handled data bus (MAS_MDP_Pn<->DDR), there's
+>>> another path that needs to be handled to ensure MDSS functions properly,
+>>> namely the "reg bus", a.k.a the CPU-MDSS interconnect.
+>>>
+>>> Gating that path may have a variety of effects.. from none to otherwise
+>>> inexplicable DSI timeouts..
+>>>
+>>> On the DPU side, we need to keep the bus alive. The vendor driver
+>>> kickstarts it to max (300Mbps) throughput on first commit, but in
+>>> exchange for some battery life in rare DPU-enabled-panel-disabled
+>>> usecases, we can request it at DPU init and gate it at suspend.
+>>>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 22 ++++++++++++++++++++--
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h |  1 +
+>>>    2 files changed, 21 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> index dd6c1c40ab9e..d1f77faebbc0 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> @@ -384,15 +384,17 @@ static int dpu_kms_global_obj_init(struct dpu_kms *dpu_kms)
+>>>        return 0;
+>>>    }
+>>>    -static int dpu_kms_parse_data_bus_icc_path(struct dpu_kms *dpu_kms)
+>>> +static int dpu_kms_parse_icc_paths(struct dpu_kms *dpu_kms)
+>>>    {
+>>>        struct icc_path *path0;
+>>>        struct icc_path *path1;
+>>> +    struct icc_path *reg_bus_path;
+>>>        struct drm_device *dev = dpu_kms->dev;
+>>>        struct device *dpu_dev = dev->dev;
+>>>          path0 = msm_icc_get(dpu_dev, "mdp0-mem");
+>>>        path1 = msm_icc_get(dpu_dev, "mdp1-mem");
+>>> +    reg_bus_path = msm_icc_get(dpu_dev, "cpu-cfg");
+>>>          if (IS_ERR_OR_NULL(path0))
+>>>            return PTR_ERR_OR_ZERO(path0);
+>>> @@ -404,6 +406,10 @@ static int dpu_kms_parse_data_bus_icc_path(struct dpu_kms *dpu_kms)
+>>>            dpu_kms->mdp_path[1] = path1;
+>>>            dpu_kms->num_mdp_paths++;
+>>>        }
+>>> +
+>>> +    if (!IS_ERR_OR_NULL(reg_bus_path))
+>>> +        dpu_kms->reg_bus_path = reg_bus_path;
+>>> +
+>>>        return 0;
+>>>    }
+>>>    @@ -1039,7 +1045,7 @@ static int dpu_kms_hw_init(struct msm_kms *kms)
+>>>            DPU_DEBUG("REG_DMA is not defined");
+>>>        }
+>>>    -    dpu_kms_parse_data_bus_icc_path(dpu_kms);
+>>> +    dpu_kms_parse_icc_paths(dpu_kms);
+>>>          rc = pm_runtime_resume_and_get(&dpu_kms->pdev->dev);
+>>>        if (rc < 0)
+>>> @@ -1241,6 +1247,9 @@ static int __maybe_unused dpu_runtime_suspend(struct device *dev)
+>>>        for (i = 0; i < dpu_kms->num_mdp_paths; i++)
+>>>            icc_set_bw(dpu_kms->mdp_path[i], 0, 0);
+>>>    +    if (dpu_kms->reg_bus_path)
+>>> +        icc_set_bw(dpu_kms->reg_bus_path, 0, 0);
+>>> +
+>>>        return 0;
+>>>    }
+>>>    @@ -1261,6 +1270,15 @@ static int __maybe_unused dpu_runtime_resume(struct device *dev)
+>>>            return rc;
+>>>        }
+>>>    +    /*
+>>> +     * The vendor driver supports setting 76.8 / 150 / 300 Mbps on this
+>> How do you arrive at these distint BW values? Are they provided by the ICC fwk for the given path?
+> They're hardcoded in the SDE driver.
+> 
+> Konrad
+These bandwidths are derived from the scaling frequencies of all the 
+buses participating in the icc-path. So they cannot be constants. 
+Ideally they should be read from the hw catalog data of the respective 
+platform.
 
-regards,
-Nicolas
-
-> ---
->  .../userspace-api/media/v4l/ext-ctrls-codec-stateless.rst  | 7 +++++++
->  include/uapi/linux/v4l2-controls.h                         | 6 +++++-
->  2 files changed, 12 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-statel=
-ess.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.r=
-st
-> index 3d8411acd5b8..92ce3e126929 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-> @@ -2923,6 +2923,13 @@ This structure contains all loop filter related pa=
-rameters. See sections
->        - ``poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
->        - PocLtCurr as described in section 8.3.2 "Decoding process for re=
-ference
->          picture set": provides the index of the long term references in =
-DPB array.
-> +    * - __u8
-> +      - ``num_delta_pocs_of_ref_rps_idx``
-> +      - When the short_term_ref_pic_set_sps_flag in the slice header is =
-equal to 0,
-> +        it is the same than derived value NumDeltaPocs[RefRpsIdx]. It ca=
-n be used to parse
-> +        the RPS data in slice headers instead of skipping it with @short=
-_term_ref_pic_set_size.
-> +        When the value of short_term_ref_pic_set_sps_flag in the slice h=
-eader is
-> +        equal to 1, num_delta_pocs_of_ref_rps_idx shall be set to 0.
->      * - struct :c:type:`v4l2_hevc_dpb_entry`
->        - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
->        - The decoded picture buffer, for meta-data about reference frames=
-.
-> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2=
--controls.h
-> index 5e80daa4ffe0..7bf59a87a1bf 100644
-> --- a/include/uapi/linux/v4l2-controls.h
-> +++ b/include/uapi/linux/v4l2-controls.h
-> @@ -2385,6 +2385,9 @@ struct v4l2_ctrl_hevc_slice_params {
->   * @poc_st_curr_after: provides the index of the short term after refere=
-nces
->   *		       in DPB array
->   * @poc_lt_curr: provides the index of the long term references in DPB a=
-rray
-> + * @num_delta_pocs_of_ref_rps_idx: same as the derived value NumDeltaPoc=
-s[RefRpsIdx],
-> + *				   can be used to parse the RPS data in slice headers
-> + *				   instead of skipping it with @short_term_ref_pic_set_size.
->   * @reserved: padding field. Should be zeroed by applications.
->   * @dpb: the decoded picture buffer, for meta-data about reference frame=
-s
->   * @flags: see V4L2_HEVC_DECODE_PARAM_FLAG_{}
-> @@ -2400,7 +2403,8 @@ struct v4l2_ctrl_hevc_decode_params {
->  	__u8	poc_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u8	poc_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u8	poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
-> -	__u8	reserved[4];
-> +	__u8	num_delta_pocs_of_ref_rps_idx;
-> +	__u8	reserved[3];
->  	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u64	flags;
->  };
-
+Jeykumar S.
+>>> +     * path, but it seems to go for the highest level when display output
+>>> +     * is enabled and zero otherwise. For simplicity, we can assume that
+>>> +     * DPU being enabled and running implies that.
+>>> +     */
+>>> +    if (dpu_kms->reg_bus_path)
+>>> +        icc_set_bw(dpu_kms->reg_bus_path, 0, MBps_to_icc(300));
+>>> +
+>>>        dpu_vbif_init_memtypes(dpu_kms);
+>>>          drm_for_each_encoder(encoder, ddev)
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
+>>> index d5d9bec90705..c332381d58c4 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
+>>> @@ -111,6 +111,7 @@ struct dpu_kms {
+>>>        atomic_t bandwidth_ref;
+>>>        struct icc_path *mdp_path[2];
+>>>        u32 num_mdp_paths;
+>>> +    struct icc_path *reg_bus_path;
+>>>    };
+>>>      struct vsync_info {
+>>>
