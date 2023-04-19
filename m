@@ -2,174 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD8F6E7A3F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7756E7A45
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbjDSNFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 09:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
+        id S232676AbjDSNFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 09:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232896AbjDSNFW (ORCPT
+        with ESMTP id S232784AbjDSNFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 09:05:22 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631F27EE4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:05:20 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id vc20so26540129ejc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:05:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681909519; x=1684501519;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hi3fgFRhMB+S3dlh3roixUjoWYSplX6ENDKFiGEt44s=;
-        b=rb1Bms81I/ziLmKbwd/v+cz02jqm3Gq1oJRkwXmWPC6yFC48TkkrGOh5ij+cD/3JrX
-         WdnJs8urDCYfw6zy867Ux3vUdUEN2GBHtYQl9u0LtgKLgw3CqodwNLQJx2CrdROMn6Xv
-         t3UIbDR8BWaIyaDmapy44ivnVmMqeUOBRocyOTOF/H1ErVfRD+AfhHbAjWF6W2Kc1yhX
-         Z2URsG4GCJrF7MrwzpxPqRwgcJXNv4XZrZahypdJGq98el1NvJaezLvnBNHoV0JadFKw
-         MrSzS/H/W2+6HjWN4canOaNgqO5SSFY3tyo8BabOyy7Ghwhj7mM5oxKd2v6eQwXQqSeT
-         O53Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681909519; x=1684501519;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hi3fgFRhMB+S3dlh3roixUjoWYSplX6ENDKFiGEt44s=;
-        b=Cpxhc3ib152zb9FPzsLFtEP0DME8Z6ZSvJ7seezufms9sYewj+nRUUvNzRClMJA3Tq
-         kxujKp0lwK6PxiMbW4Yjzkz1fjVtyQHFZW2IYT076hTU6cWhmdF/Q3w6AuGIUzgpoJBr
-         tK2tAlQirUXUDohR/L+n6L1xj1OmgGEzTfSyaHChoT0Cr+Gmh9FWns6/YhRcdOof++va
-         6asi0W38afUN6+mh6IA6v6SW4JzoQHGr39q91gQoqbvpH0fpnkSjxgHa0IMCnhvK9Bn5
-         tsC57djEJ6S9VdxeLAvb1jRKU4GisKLyS8eAD5zp1FqslCtVzt0aGzF1Rs2mZaffu1TG
-         c0Bg==
-X-Gm-Message-State: AAQBX9eFKsAgPBs+uTuMK/UBGuBWmtaTiApMrsZ913icUekOXg8FCldU
-        HltdHsC1mR/yUdkHSZaqfyTcdA==
-X-Google-Smtp-Source: AKy350aUdyUtTTZAbTCtx75ZVrYOCUfdp/gOoEHJVNnO1QgfIx++OeGz6GvOhM7t7WeEhJ40a4rRPg==
-X-Received: by 2002:a17:907:a08d:b0:94f:8f37:d4e with SMTP id hu13-20020a170907a08d00b0094f8f370d4emr7915556ejc.65.1681909518851;
-        Wed, 19 Apr 2023 06:05:18 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:b7d8:d88b:1fac:c802? ([2a02:810d:15c0:828:b7d8:d88b:1fac:c802])
-        by smtp.gmail.com with ESMTPSA id n19-20020a170906725300b0095334355a34sm1569509ejk.96.2023.04.19.06.05.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 06:05:18 -0700 (PDT)
-Message-ID: <b84537c0-cb58-621a-2b6d-3bbaac5091de@linaro.org>
-Date:   Wed, 19 Apr 2023 15:05:17 +0200
+        Wed, 19 Apr 2023 09:05:45 -0400
+Received: from mx2.veeam.com (mx2.veeam.com [64.129.123.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F0259D5;
+        Wed, 19 Apr 2023 06:05:42 -0700 (PDT)
+Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx2.veeam.com (Postfix) with ESMTPS id 80B4240927;
+        Wed, 19 Apr 2023 09:05:39 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
+        s=mx2-2022; t=1681909539;
+        bh=PBdvaByQFO7/eGwjYwOju/3gTuH/19py1gOtnj75fJo=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
+        b=i+2WsxP00NUx+Vg+041BDKHE0UMxTbgobVdKBcnT0C7SZ28Nw9G2M8msObK8B3Wyi
+         Q2JjhMeTKvsiU07tI6lZuMO1UaXuAedQ1+FWBcqWHjnVRs0etegnHFq0W7d1b42E6k
+         uGwXmAbotzMN+Md4Q/NSe52kUnk0oxBas80k+z/2D2tiqeqziljJThh7Xu7jYSXFQ9
+         BP/bQQmHE7rWbMovonPXi1qZjvbZ1Y4cY7O97BpU/DzfOzYlfyUcltTxv6HOZv2Me7
+         6ARSGZbhnVFxtLflkm6fVsfWBzz0T8KCBAQbavdyiFpHr4SrjpVK12dmqbBAaQg4Gj
+         IqbOJdBrDwYzA==
+Received: from [172.24.10.107] (172.24.10.107) by prgmbx01.amust.local
+ (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 19 Apr
+ 2023 15:05:32 +0200
+Content-Type: multipart/mixed;
+        boundary="------------PiDQm2ZJ7J9tIkTJ66DMrhJd"
+Message-ID: <c05fd3e7-5610-4f63-9012-df1b808d9536@veeam.com>
+Date:   Wed, 19 Apr 2023 15:05:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/1] arm: dts: sunxi: Add ICnova A20 ADB4006 board
- support
+Subject: Re: [PATCH v3 03/11] documentation: Block Devices Snapshots Module
 Content-Language: en-US
-To:     Ludwig Kormann <ludwig.kormann@in-circuit.de>, samuel@sholland.org,
-        jernej.skrabec@gmail.com, wens@csie.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andre.przywara@arm.com
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20230419121229.1384024-1-ludwig.kormann@in-circuit.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230419121229.1384024-1-ludwig.kormann@in-circuit.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Donald Buczek <buczek@molgen.mpg.de>, <axboe@kernel.dk>,
+        <hch@infradead.org>, <corbet@lwn.net>, <snitzer@kernel.org>
+CC:     <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
+        <willy@infradead.org>, <kch@nvidia.com>,
+        <martin.petersen@oracle.com>, <vkoul@kernel.org>,
+        <ming.lei@redhat.com>, <gregkh@linuxfoundation.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+References: <20230404140835.25166-1-sergei.shtepa@veeam.com>
+ <20230404140835.25166-4-sergei.shtepa@veeam.com>
+ <cb0cc2f1-48cb-8b15-35af-33a31ccc922c@molgen.mpg.de>
+ <86068780-bab3-2fc2-3f6f-1868be119b38@veeam.com>
+ <a1854604-cec1-abd5-1d49-6cf6a19ee7a1@veeam.com>
+ <1dc227d0-9528-9b77-63ff-b49b0579caa1@molgen.mpg.de>
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+In-Reply-To: <1dc227d0-9528-9b77-63ff-b49b0579caa1@molgen.mpg.de>
+X-Originating-IP: [172.24.10.107]
+X-ClientProxiedBy: atlmbx02.amust.local (172.18.32.172) To
+ prgmbx01.amust.local (172.24.128.102)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A292403155467776B
+X-Veeam-MMEX: True
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2023 14:12, Ludwig Kormann wrote:
-> Add board support for ICnova A20 SomPi compute module on
-> ICnova ADB4006 development board.
-> 
-> Specification:
-> SoM
-> - Processor: Allwinner A20 Cortex-A7 Dual Core at 1GHz
-> - 512MB DDR3 RAM
-> - Fast Ethernet (Phy: Realtek RTL8201CP)
-> ADB4006
-> - I2C
-> - 2x USB 2.0
-> - 1x Fast Ethernet port
-> - 1x SATA
-> - 2x buttons (PWRON, Boot)
-> - 2x LEDS
-> - serial console
-> - HDMI
-> - µSD-Card slot
-> - Audio Line-In / Line-Out
-> - GPIO pinheaders
-> 
-> https://wiki.in-circuit.de/index.php5?title=ICnova_ADB4006
-> https://wiki.in-circuit.de/index.php5?title=ICnova_A20_SODIMM
-> 
-> ---
-> 
-> changes in v2:
-> - use short licensing header
-> - remove deprecated elements from led nodes
-> - disable csi power supply
-> - add missing pins in usbphy node
-> - split dts into SoM dtsi and carrier board dts
-> 
-> v1 of this patch was sent to the uboot mailing list [1].
-> 
-> [1] https://lists.denx.de/pipermail/u-boot/2023-April/514605.html
-> 
-> Signed-off-by: Ludwig Kormann <ludwig.kormann@in-circuit.de>
-> ---
->  .../devicetree/bindings/arm/sunxi.yaml        |   6 +
+--------------PiDQm2ZJ7J9tIkTJ66DMrhJd
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Bindings are always separate patches. checkpatch did not complain?
 
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/sun7i-a20-icnova-a20-adb4006.dts | 137 ++++++++++++++++++
->  arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi   |  63 ++++++++
->  4 files changed, 207 insertions(+)
->  create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
->  create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
+
+On 4/18/23 16:48, Donald Buczek wrote:
+> Subject:
+> Re: [PATCH v3 03/11] documentation: Block Devices Snapshots Module
+> From:
+> Donald Buczek <buczek@molgen.mpg.de>
+> Date:
+> 4/18/23, 16:48
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
-> index 013821f4a7b8..12f0c236f17b 100644
-> --- a/Documentation/devicetree/bindings/arm/sunxi.yaml
-> +++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
-> @@ -305,6 +305,12 @@ properties:
->            - const: allwinner,i12-tvbox
->            - const: allwinner,sun7i-a20
->  
-> +      - description: ICNova A20 ADB4006
-> +        items:
-> +          - const: incircuit,icnova-a20-adb4006
-> +          - const: incircuit,icnova-a20
-> +          - const: allwinner,sun7i-a20
-> +
->        - description: ICNova A20 SWAC
->          items:
->            - const: incircuit,icnova-a20-swac
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 3cc32722c394..b6b408417261 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1321,6 +1321,7 @@ dtb-$(CONFIG_MACH_SUN7I) += \
->  	sun7i-a20-hummingbird.dtb \
->  	sun7i-a20-itead-ibox.dtb \
->  	sun7i-a20-i12-tvbox.dtb \
-> +	sun7i-a20-icnova-a20-adb4006.dtb \
->  	sun7i-a20-icnova-swac.dtb \
->  	sun7i-a20-lamobo-r1.dtb \
->  	sun7i-a20-linutronix-testbox-v2.dtb \
-> diff --git a/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts b/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
-> new file mode 100644
-> index 000000000000..c1606c085e4e
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
-> @@ -0,0 +1,137 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> To:
+> Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk, hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
+> CC:
+> viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org, kch@nvidia.com, martin.petersen@oracle.com, vkoul@kernel.org, ming.lei@redhat.com, gregkh@linuxfoundation.org, linux-block@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+> 
+> 
+> On 4/18/23 12:31, Sergei Shtepa wrote:
+>>
+>>
+>> On 4/14/23 14:34, Sergei Shtepa wrote:
+>>> Subject:
+>>> Re: [PATCH v3 03/11] documentation: Block Devices Snapshots Module
+>>> From:
+>>> Sergei Shtepa <sergei.shtepa@veeam.com>
+>>> Date:
+>>> 4/14/23, 14:34
+>>>
+>>> To:
+>>> Donald Buczek <buczek@molgen.mpg.de>, axboe@kernel.dk, hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
+>>> CC:
+>>> viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org, kch@nvidia.com, martin.petersen@oracle.com, vkoul@kernel.org, ming.lei@redhat.com, gregkh@linuxfoundation.org, linux-block@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+>>>
+>>>
+>>>
+>>> On 4/12/23 21:38, Donald Buczek wrote:
+>>>> Subject:
+>>>> Re: [PATCH v3 03/11] documentation: Block Devices Snapshots Module
+>>>> From:
+>>>> Donald Buczek <buczek@molgen.mpg.de>
+>>>> Date:
+>>>> 4/12/23, 21:38
+>>>>
+>>>> To:
+>>>> Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk, hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
+>>>> CC:
+>>>> viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org, kch@nvidia.com, martin.petersen@oracle.com, vkoul@kernel.org, ming.lei@redhat.com, gregkh@linuxfoundation.org, linux-block@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+>>>>
+>>>>
+>>>> I think, you can trigger all kind of user-after-free when userspace deletes a snapshot image or the snapshot image and the tracker while the disk device snapshot image is kept alive (mounted or just opened) and doing I/O.
+>>>>
+>>>> Here is what I did to provoke that:
+>>>>
+>>>> root@dose:~# s=$(blksnap snapshot_create -d /dev/vdb)
+>>>> root@dose:~# blksnap snapshot_appendstorage -i $s -f /scratch/local/test.dat
+>>>> device path: '/dev/block/253:2'
+>>>> allocate range: ofs=11264624 cnt=2097152
+>>>> root@dose:~# blksnap snapshot_take -i $s
+>>>> root@dose:~# mount /dev/blksnap-image_253\:16 /mnt
+>>>> root@dose:~# dd if=/dev/zero of=/mnt/x.x &
+>>>> [1] 2514
+>>>> root@dose:~# blksnap snapshot_destroy -i $s
+>>>> dd: writing to '/mnt/x.x': No space left on device
+>>>> 1996041+0 records in
+>>>> 1996040+0 records out
+>>>> 1021972480 bytes (1.0 GB, 975 MiB) copied, 8.48923 s, 120 MB/s
+>>>> [1]+  Exit 1                  dd if=/dev/zero of=/mnt/x.x
+>>>>
+>>> Thanks!
+>>> I am very glad that the blksnap tool turned out to be useful in the review.
+>>> This snapshot deletion scenario is not the most typical, but of course it is
+>>> quite possible.
+>>> I will need to solve this problem and add such a scenario to the test suite.
+>>>
+>>
+>> Hi!
+>>
+>> I have redesign the logic of ownership of the diff_area structure.
+>> See patch in attach or commit.
+>> Link: https://github.com/SergeiShtepa/linux/commit/7e927c381dcd2b2293be8315897a224d111b6f88
+>> A test script for such a scenario has been added.
+>> Link: https://github.com/veeam/blksnap/commit/fd0559dfedf094901d08bbf185fed288f0156433
+>>
+>> I will be glad of any feedback.
+> 
+> Great, Thanks!
+> 
+> However, there are two leftover calls to diff_area_free() with its old prototype:
+> 
+>  CC [M]  drivers/block/blksnap/diff_area.o
+> drivers/block/blksnap/diff_area.c: In function ‘diff_area_new’:
+> drivers/block/blksnap/diff_area.c:283:18: error: passing argument 1 of ‘diff_area_free’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+>   283 |   diff_area_free(diff_area);
+>       |                  ^~~~~~~~~
+>       |                  |
+>       |                  struct diff_area *
+> drivers/block/blksnap/diff_area.c:110:34: note: expected ‘struct kref *’ but argument is of type ‘struct diff_area *’
+>   110 | void diff_area_free(struct kref *kref)
+>       |                     ~~~~~~~~~~~~~^~~~
+> cc1: some warnings being treated as errors
+> make[4]: *** [scripts/Makefile.build:252: drivers/block/blksnap/diff_area.o] Error 1
+> make[3]: *** [scripts/Makefile.build:494: drivers/block/blksnap] Error 2
+> make[2]: *** [scripts/Makefile.build:494: drivers/block] Error 2
+> make[1]: *** [scripts/Makefile.build:494: drivers] Error 2
+> make: *** [Makefile:2025: .] Error 2
+> 
+> The other one:
+> 
+> buczek@dose:/scratch/local/linux (blksnap-test)$ make drivers/block/blksnap/tracker.o
+>   CALL    scripts/checksyscalls.sh
+>   DESCEND objtool
+>   INSTALL libsubcmd_headers
+>   CC [M]  drivers/block/blksnap/tracker.o
+> drivers/block/blksnap/tracker.c: In function ‘tracker_free’:
+> drivers/block/blksnap/tracker.c:26:25: error: passing argument 1 of ‘diff_area_free’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+>    26 |   diff_area_free(tracker->diff_area);
+>       |                  ~~~~~~~^~~~~~~~~~~
+>       |                         |
+>       |                         struct diff_area *
+> In file included from drivers/block/blksnap/tracker.c:12:
+> drivers/block/blksnap/diff_area.h:116:34: note: expected ‘struct kref *’ but argument is of type ‘struct diff_area *’
+>   116 | void diff_area_free(struct kref *kref);
+>       |                     ~~~~~~~~~~~~~^~~~
+> cc1: some warnings being treated as errors
+> make[4]: *** [scripts/Makefile.build:252: drivers/block/blksnap/tracker.o] Error 1
+> make[3]: *** [scripts/Makefile.build:494: drivers/block/blksnap] Error 2
+> make[2]: *** [scripts/Makefile.build:494: drivers/block] Error 2
+> make[1]: *** [scripts/Makefile.build:494: drivers] Error 2
+> make: *** [Makefile:2025: .] Error 2
+> 
+> Am I missing something?
 
-Unusual license. Are you sure you are ok with GPLv5.0?
+Thanks!
 
-Also, at the end of your files - drop stray blank lines.
+It seems to me that I missed something.
+The biggest mystery for me is why I was able to build and test the kernel.
+I think it's some kind of incremental build effect.
+I was only able to see the problem after 'make clean'.
 
-Best regards,
-Krzysztof
+Patches in attach and https://github.com/SergeiShtepa/linux/tree/blksnap-master
+--------------PiDQm2ZJ7J9tIkTJ66DMrhJd
+Content-Type: text/x-patch; charset="UTF-8";
+	name="blksnap_cleanup_comment.patch"
+Content-Disposition: attachment; filename="blksnap_cleanup_comment.patch"
+Content-Transfer-Encoding: base64
 
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvYmxvY2svYmxrc25hcC9kaWZmX2FyZWEuaCBiL2RyaXZl
+cnMvYmxvY2svYmxrc25hcC9kaWZmX2FyZWEuaAppbmRleCBjYjNlMDk4MDljMGYuLjg4MzEx
+N2RiYTc2MiAxMDA2NDQKLS0tIGEvZHJpdmVycy9ibG9jay9ibGtzbmFwL2RpZmZfYXJlYS5o
+CisrKyBiL2RyaXZlcnMvYmxvY2svYmxrc25hcC9kaWZmX2FyZWEuaApAQCAtMTM4LDYgKzEz
+OCw1IEBAIGJvb2wgZGlmZl9hcmVhX2NvdyhzdHJ1Y3QgYmlvICpiaW8sIHN0cnVjdCBkaWZm
+X2FyZWEgKmRpZmZfYXJlYSwKIAogYm9vbCBkaWZmX2FyZWFfc3VibWl0X2NodW5rKHN0cnVj
+dCBkaWZmX2FyZWEgKmRpZmZfYXJlYSwgc3RydWN0IGJpbyAqYmlvKTsKIHZvaWQgZGlmZl9h
+cmVhX3J3X2NodW5rKHN0cnVjdCBrcmVmICprcmVmKTsKLS8vdm9pZCBkaWZmX2FyZWFfdGhy
+b3R0bGluZ19pbyhzdHJ1Y3QgZGlmZl9hcmVhICpkaWZmX2FyZWEpOwogCiAjZW5kaWYgLyog
+X19CTEtTTkFQX0RJRkZfQVJFQV9IICovCg==
+--------------PiDQm2ZJ7J9tIkTJ66DMrhJd
+Content-Type: text/x-patch; charset="UTF-8";
+	name="blksnap_fix_diff_area_put.patch"
+Content-Disposition: attachment; filename="blksnap_fix_diff_area_put.patch"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvYmxvY2svYmxrc25hcC9kaWZmX2FyZWEuYyBiL2RyaXZl
+cnMvYmxvY2svYmxrc25hcC9kaWZmX2FyZWEuYwppbmRleCA1YTNmNGQ3NGE5MmYuLjBlNTMw
+ZDI0ZDU2MyAxMDA2NDQKLS0tIGEvZHJpdmVycy9ibG9jay9ibGtzbmFwL2RpZmZfYXJlYS5j
+CisrKyBiL2RyaXZlcnMvYmxvY2svYmxrc25hcC9kaWZmX2FyZWEuYwpAQCAtMjgwLDcgKzI4
+MCw3IEBAIHN0cnVjdCBkaWZmX2FyZWEgKmRpZmZfYXJlYV9uZXcoZGV2X3QgZGV2X2lkLCBz
+dHJ1Y3QgZGlmZl9zdG9yYWdlICpkaWZmX3N0b3JhZ2UpCiAJfQogCiAJaWYgKHJldCkgewot
+CQlkaWZmX2FyZWFfZnJlZShkaWZmX2FyZWEpOworCQlkaWZmX2FyZWFfcHV0KGRpZmZfYXJl
+YSk7CiAJCXJldHVybiBFUlJfUFRSKHJldCk7CiAJfQogCmRpZmYgLS1naXQgYS9kcml2ZXJz
+L2Jsb2NrL2Jsa3NuYXAvdHJhY2tlci5jIGIvZHJpdmVycy9ibG9jay9ibGtzbmFwL3RyYWNr
+ZXIuYwppbmRleCA2ZDJjNzdlNGM5MGYuLmQ5ODA0OGRjNWJlZCAxMDA2NDQKLS0tIGEvZHJp
+dmVycy9ibG9jay9ibGtzbmFwL3RyYWNrZXIuYworKysgYi9kcml2ZXJzL2Jsb2NrL2Jsa3Nu
+YXAvdHJhY2tlci5jCkBAIC0yMyw3ICsyMyw3IEBAIHZvaWQgdHJhY2tlcl9mcmVlKHN0cnVj
+dCBrcmVmICprcmVmKQogCQkgTUlOT1IodHJhY2tlci0+ZGV2X2lkKSk7CiAKIAlpZiAodHJh
+Y2tlci0+ZGlmZl9hcmVhKQotCQlkaWZmX2FyZWFfZnJlZSh0cmFja2VyLT5kaWZmX2FyZWEp
+OworCQlkaWZmX2FyZWFfcHV0KHRyYWNrZXItPmRpZmZfYXJlYSk7CiAJaWYgKHRyYWNrZXIt
+PmNidF9tYXApCiAJCWNidF9tYXBfZGVzdHJveSh0cmFja2VyLT5jYnRfbWFwKTsKIAo=
+
+--------------PiDQm2ZJ7J9tIkTJ66DMrhJd--
