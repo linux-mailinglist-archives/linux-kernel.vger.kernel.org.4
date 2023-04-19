@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584916E734C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26BD6E734E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbjDSG3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 02:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
+        id S232177AbjDSGaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 02:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbjDSG3c (ORCPT
+        with ESMTP id S231892AbjDSGaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 02:29:32 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B768E9778;
-        Tue, 18 Apr 2023 23:28:55 -0700 (PDT)
+        Wed, 19 Apr 2023 02:30:18 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9264EF9;
+        Tue, 18 Apr 2023 23:29:46 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 15E291FD84;
-        Wed, 19 Apr 2023 06:28:48 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6F48621220;
+        Wed, 19 Apr 2023 06:29:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681885728; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1681885760; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=sacuHrbOUS6+cQyU7TKPM4wfq6Bszs3UYCL4nwf7Amo=;
-        b=zK7vdgGj2z3zmOTNykONnpJVYaDhVZSOaa4Wp5UbzUE6kMy5slhIMGx2kbYp+1xkTisTz1
-        GIr4/D4uXfkGZ70/E687e0KWJ4T8LMS3pI0Q2LRSlRg2zELKwcvC1xlaBB9AxaD0vndWVG
-        lyK3oyXV+jSyax8lltpQS91fP0q0s/4=
+        bh=gYtOar5Cvk/OSF3i6DTvzxZxVbcvFFJlgOSwnvSnqWs=;
+        b=oJJm8BPI0g4Wcqio3OnZVUkJkZ3fIg5RSUiFV8qeE6ceGbF5vlNT/W59WQgH3yb3NsuoHz
+        j4xyVXv/x5yDrFIhQX9QkeDNtzVbN5KctROglBEkJQXzK7dyOxVht0kpU+s/64naDs6qdd
+        HuQ7vXVseBzJbsBR5pdACxbWXkmkHmM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681885728;
+        s=susede2_ed25519; t=1681885760;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=sacuHrbOUS6+cQyU7TKPM4wfq6Bszs3UYCL4nwf7Amo=;
-        b=XAyNhlNt9ap4AKRey2cFAw7iMXNaDIg8CPLgb88mv9JPdRDCXmR/3q0rhgGjMnREVK0w1+
-        Y3UYoMhk8RDvyiAQ==
+        bh=gYtOar5Cvk/OSF3i6DTvzxZxVbcvFFJlgOSwnvSnqWs=;
+        b=beR7wJfCJrHN5zIEi2/6alAEUrTcyJLW7RRIZMchJwObNPo6nrU3QFOLSRZcxhbpkrgERo
+        iqFFhFek91ELXoDw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E58EF1390E;
-        Wed, 19 Apr 2023 06:28:47 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 48DB01390E;
+        Wed, 19 Apr 2023 06:29:20 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id tCk7Nx+KP2RmJgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 19 Apr 2023 06:28:47 +0000
-Date:   Wed, 19 Apr 2023 08:28:47 +0200
-Message-ID: <87leio2xnk.wl-tiwai@suse.de>
+        id fWz/EECKP2SvJgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 19 Apr 2023 06:29:20 +0000
+Date:   Wed, 19 Apr 2023 08:29:19 +0200
+Message-ID: <87jzy82xmo.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Rob Herring <robh@kernel.org>
 Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] ALSA: Use of_property_read_bool() for boolean properties
-In-Reply-To: <20230310144734.1546587-1-robh@kernel.org>
+In-Reply-To: <20230418162557.GD1764573-robh@kernel.org>
 References: <20230310144734.1546587-1-robh@kernel.org>
+        <20230418162557.GD1764573-robh@kernel.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -70,18 +71,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023 15:47:33 +0100,
+On Tue, 18 Apr 2023 18:25:57 +0200,
 Rob Herring wrote:
 > 
-> It is preferred to use typed property access functions (i.e.
-> of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties.
-> Convert reading boolean properties to to of_property_read_bool().
+> On Fri, Mar 10, 2023 at 08:47:33AM -0600, Rob Herring wrote:
+> > It is preferred to use typed property access functions (i.e.
+> > of_property_read_<type> functions) rather than low-level
+> > of_get_property/of_find_property functions for reading properties.
+> > Convert reading boolean properties to to of_property_read_bool().
+> > 
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  sound/ppc/tumbler.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Ping!
 
-Applied to for-next branch.
+Sorry for the oversight.  Now both patches are applied.
 
-thanks,
 
 Takashi
