@@ -2,47 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335386E7282
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9800A6E7295
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbjDSFDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 01:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
+        id S231513AbjDSFTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 01:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjDSFDj (ORCPT
+        with ESMTP id S230435AbjDSFS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 01:03:39 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51E04EE2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:03:37 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pozyf-0005Aq-O8; Wed, 19 Apr 2023 07:03:33 +0200
-Message-ID: <d1b7b62d-bec8-e290-d12c-0b641ab382dd@leemhuis.info>
-Date:   Wed, 19 Apr 2023 07:03:31 +0200
+        Wed, 19 Apr 2023 01:18:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2399E469F
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:18:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1CEFD143D;
+        Tue, 18 Apr 2023 22:19:40 -0700 (PDT)
+Received: from [192.168.189.178] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1EEA03F587;
+        Tue, 18 Apr 2023 22:18:52 -0700 (PDT)
+Message-ID: <d83950c4-7458-aeea-f341-327c163704a8@arm.com>
+Date:   Wed, 19 Apr 2023 07:18:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: Linux regressions report for mainline [2023-04-16]
-Content-Language: en-US, de-DE
-To:     Neal Gompa <neal@gompa.dev>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Sterba <dsterba@suse.com>, David Sterba <dsterba@suse.cz>,
-        linux-kernel@vger.kernel.org, Rafael Wysocki <rafael@kernel.org>,
-        Chris Mason <clm@meta.com>, Boris Burkov <boris@bur.io>,
-        regressions@lists.linux.dev
-References: <CAHk-=wjL7GG9s9Y2+u2725M+Ru=bUXnzOnXRwoSktY0fVdhhzw@mail.gmail.com>
- <20230418213228.1273218-1-neal@gompa.dev>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <20230418213228.1273218-1-neal@gompa.dev>
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH v1] sched/uclamp: Introduce
+ SCHED_FLAG_RESET_UCLAMP_ON_FORK flag
+Content-Language: en-US
+To:     David Dai <davidai@google.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Cc:     Qais Yousef <qyousef@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+References: <20230416213406.2966521-1-davidai@google.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230416213406.2966521-1-davidai@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1681880617;932e380e;
-X-HE-SMSGID: 1pozyf-0005Aq-O8
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,37 +55,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.04.23 23:32, Neal Gompa wrote:
-> 
-> I'm the guy that sort of kickstarted this whole thing a year ago.
->>From my perspective in Fedora-land, we've been running automatic
-> weekly fstrim on every Fedora system for three years now[1] and
-> have not received any complaints about SSDs pushing daises from
-> that.
-> 
-> When we started discussing btrfs discard=async within Fedora
-> two years ago[2], I started soliciting feedback and information
-> from the Btrfs developers I was regularly working with at the time.
-> 
-> Last year, I had a face-to-face with Chris Mason and we discussed
-> the idea in depth and decided to go for this, based on both Fedora's
-> data with consumer disks and Facebook's data with their datacenters.
-> 
-> The only real surprise we had was the so-called "discard storm",
-> which Boris Burkov made adjustments to resolve a couple weeks ago[3].
-> [...]
-> [3]: https://lore.kernel.org/linux-btrfs/cover.1680723651.git.boris@bur.io/T/#t
+On 16/04/2023 23:34, David Dai wrote:
+> A userspace service may manage uclamp dynamically for individual tasks and
+> a child task will unintentionally inherit a pesudo-random uclamp setting.
+> This could result in the child task being stuck with a static uclamp value
 
-Wait, what? Argh. Sorry, if I had seen that patch, I wouldn't have
-brought this up in my report at all. I missed it, as I wasn't CCed; and
-regzbot missed it, because the patch uses a odd format for the lore link
-(but not totally uncommon, will change regzbot to ensure that doesn't
-happen again).
+Could you explain this with a little bit more detail? Why isn't the
+child task also managed by the userspace service?
 
-Ciao, Thorsten
+The child task will only make a difference if it's on the rq.
 
-P.S.: /me meanwhile yet again wonders if we should tell people to add a
-"CC: <regressions@lists.linux.dev>" on patches fixing regressions. Then
-in this case I would have become aware of the patch. And it makes it
-obvious for anybody handling patches that the patch is fixing a
-regression. But whatever, might not be worth it.
+Does this issue happen with uclamp mainline or only with Android's
+slightly different version (max- vs. sum aggregation)?
+
+> that results in poor performance or poor power.
+> 
+> Using SCHED_FLAG_RESET_ON_FORK is too coarse for this usecase and will
+> reset other useful scheduler attributes. Adding a
+> SCHED_FLAG_RESET_UCLAMP_ON_FORK will allow userspace to have finer control
+> over scheduler attributes of child processes.
+
+[...]
+
