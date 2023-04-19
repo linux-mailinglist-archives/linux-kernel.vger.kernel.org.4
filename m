@@ -2,165 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CE16E8132
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3176E813B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232948AbjDSSZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
+        id S229898AbjDSS12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbjDSSY7 (ORCPT
+        with ESMTP id S229477AbjDSS10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 14:24:59 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2076.outbound.protection.outlook.com [40.107.223.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA84D2;
-        Wed, 19 Apr 2023 11:24:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q3R7qZS8ToH3UieY55ygamU4taIsm5ciPm9rqGCIpZa0itdF4XAcSqDapTpJx/4oTZwFo3MeLJzQgspVXXd9QVf79vXHGs/aVIFI/jAzV0FHCeHHxl+v7pvUPAK7CLm1455GUEdR8xy+9aI0wdLZsf7cUPnmQpzKEbT4zEn3NpkLWCwmj+uXoNbpRB+mjfobeCcccw+31M75gqL8eauqZPHGVkQ/P9tVg8wJvi8RPs6P8UTrsx30/SYiZLi+FDioCBjjVp2PDTl/UbcWr5XQ+m66eMlbILb3bNplVDvB/I8/PYzCoGo+N2/6QbToae6UD8T8A297XZFj5wlZ7YbjVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ookcfr4+6fRejK93NaqAwI93uhgv3VxYqlXTFteVxMU=;
- b=MU5b++hmA1ReeQxVE5l11kJn96NZP/J3k4Wsp/m857Jrkhmi24DNH+S/zdiD2qdkO3mWfINSd7uRW2oYR2HNB8HF1FUMqeWEK41lupBEVgYLx/JguzCRKjsxwpnPj8Lkd3m6vD/qc5yZN2MaHmHUNJwqVw6tWxN48DfKsQWsduXBAfMouPjmBjx/XNvdP3/zpe08gXEFXvJS/Di6ySSm3o9wE3s5l7F2mhfJUerEiBbOyLyizGrZh0iAi0lJ3eXPbhHGdjX+ev0EpjHHvhVAoW6D8577e23TSNBAbA6uZjlXxKKl/DYBKfbe+gxYAHbSQLpiig7hq6kZxNborT60wQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ookcfr4+6fRejK93NaqAwI93uhgv3VxYqlXTFteVxMU=;
- b=WNyXrf9F1z90w9EukMDYgherYiROcCsk42/Ko3izCQ1JAs5vw3/1e/Hb47ZxzUVsCJN+8mnHJhsymixGWPQHQnyeeb4Fk6x8bU/5HC7g6wfqZhk8D8DuJVPUkgzjLiUZ7PqVCFuJw0y1JlhWNjIBF+qkiREcbnQQZ3o7pse8gb9Htdvr10B2LBp0/7+SP1zKq9HV0sK+7p+BHrWjOczpauhXAcUdXtOF+X8JIHDGrl+VZR8TY/ffDBLXevnJuiGqKTjXFPP2BG5i5kok8QI52NbuyqcxwrbaWaxG8N+RqL1jnqHSdEJ+80Is1QqhQiwSqBQAc3ek8nbX42GB6Ugntw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by IA1PR12MB8538.namprd12.prod.outlook.com (2603:10b6:208:455::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
- 2023 18:24:56 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6319.020; Wed, 19 Apr 2023
- 18:24:56 +0000
-Date:   Wed, 19 Apr 2023 15:24:55 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org
-Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
- pin_user_pages()
-Message-ID: <ZEAx90C2lDMJIux1@nvidia.com>
-References: <cover.1681831798.git.lstoakes@gmail.com>
- <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
- <936e8f52-00be-6721-cb3e-42338f2ecc2f@kernel.dk>
- <c2e22383-43ee-5cf0-9dc7-7cd05d01ecfb@kernel.dk>
- <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
- <69f48cc6-8fc6-0c49-5a79-6c7d248e4ad5@kernel.dk>
- <bec03e0f-a0f9-43c3-870b-be406ca848b9@lucifer.local>
- <8af483d2-0d3d-5ece-fb1d-a3654411752b@kernel.dk>
- <d601ca0c-d9b8-4e5d-a047-98f2d1c65eb9@lucifer.local>
- <ZEAxhHx/4Ql6AMt2@casper.infradead.org>
+        Wed, 19 Apr 2023 14:27:26 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE832D70;
+        Wed, 19 Apr 2023 11:27:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681928844; x=1713464844;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hMwknj2fnthEuseGk77ISBlfTv6f5/iv+yEnHLXoIAw=;
+  b=enySk25qFvEgyqJuaqDTOT4XNft8bVq+RrUoLT/U7i+TNAn4V0BKnIT0
+   pbIp6cNfelMQUCYRwB2fB7fStfuAXKu1KtsUIW9UwSwTDhsBDdDuemOez
+   pAJPt8OnBb1D6KeYvJyBIf6i190rjdZ8X0ci/r26lD6ur8IoUqdDqpaJZ
+   S9W1GNnmAmgBlHTFcKlu98MzaBiKN5JaTlcwFEhNyrreVYzOd/uDfHvBq
+   OA00H2CWNqFd4ytUkctpOPy+AwILBldaafIb98l/3Orc/BTPSXn3zPZe1
+   IszqjTv/Sf6sJK89uyi5QTtZD48MDrAAkbHSvRzsHCbkVUJ5Beq2Zx1Ca
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="410757548"
+X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
+   d="scan'208";a="410757548"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 11:26:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="937765285"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="937765285"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 19 Apr 2023 11:26:00 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppCVD-000f5y-2o;
+        Wed, 19 Apr 2023 18:25:59 +0000
+Date:   Thu, 20 Apr 2023 02:25:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Mao Jinlong <quic_jinlmao@quicinc.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+Subject: Re: [PATCH v2] stm: class: Add MIPI OST protocol support
+Message-ID: <202304200216.kvZgZcao-lkp@intel.com>
+References: <20230419141328.37472-1-quic_jinlmao@quicinc.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZEAxhHx/4Ql6AMt2@casper.infradead.org>
-X-ClientProxiedBy: MN2PR10CA0006.namprd10.prod.outlook.com
- (2603:10b6:208:120::19) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB8538:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6dbb8113-35e5-4f3c-1f10-08db41036057
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V6Vjl8o3Y1EZZkIeBEg6H537sIeHBSJdRrHSsvsNGRqO4jSlnjanoiBJo5jYEXMN0fA2ZB9igiFDQqQAf0Cba5IK+WoT3MRv7pxznhGN+/b964Xxa3E8hb14fR/+q6+Grb3bXwuFLyCMIYXZ/HRy1GaFyk4/ojimJHub85AFEJOHvC39LTdW47qphruyCHtqY7VBzN9FTzV9umvbw07OOqS3NT0ZWBuq8UjZho5vpCKmFl1BZ3hlfYdRFxSr/6cRoZHnahgkwsPWqiiXadCjGATvaFEH29Yl+dcReTpHMVkDwA+T/+9Y4aXXLzLoXmBH/N2x6mNbK8HLqR5Z1MWNnJ3H+wqYZTBZmWVwZm7n7bolbbOtO4cy1qjap9EoQC/1C3SyNueW7QYqzvaE/seb02Ia57HwAA6l9CioGCV7fUy1Ho0oMazKcQRY/Xfi7vz67Vgw8MPIk7Tun9N7OblGYoB5YgURUnxli/xyZvkRcKNs9iGy/80Gd9HB+Udq3zR9Lxfa7vguAazlAzMZqr1Z1ol3KRZMLHk1Txsh707QwK7DSaRIp7eKGiNlAwhO5AN5l8IKlqXgKb2FDftqf/ioF+Rn3I5LMD0iIgydZ7wcUVo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(376002)(366004)(346002)(451199021)(66476007)(83380400001)(6916009)(8676002)(66556008)(41300700001)(66946007)(54906003)(966005)(6486002)(478600001)(4326008)(316002)(86362001)(36756003)(6506007)(26005)(2616005)(6512007)(8936002)(2906002)(5660300002)(186003)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?C/LZYgJzxExkJlxNRDJ69P7alsXHhgWVgMEApHNVrJagXsH3NcEuxvBVxMu4?=
- =?us-ascii?Q?w+siMdL04iqzYIXVXdEkn3zcUlfO6An3C9Yw6sPe/MQUNoMYECsN1kDdv5T/?=
- =?us-ascii?Q?jMnXYae0PEDpTFPddCbKUSTUco/6PyXRgkPp2WYSPnWM8dtaP7cY+HOdn5Y1?=
- =?us-ascii?Q?lKwThlwTzl3U9mzoAsUTB9d9JWqVQ90dunPsC/cn0TyEp+RuMD3Flf0iaPzE?=
- =?us-ascii?Q?WidnbKhHNJP0E/NhhxxESQNBYDCSgsflEc68K3LEOgCHJNhbjHsGx/po75h8?=
- =?us-ascii?Q?wjWGHlXzChRmk2etzqmnXwibfUcyI3AttyGsSH2H2BYs1bQT3vTNwOSu90WE?=
- =?us-ascii?Q?sqq7m5iuWiXQJtT5ZhUg1Ml00F37J8ufTicj1q/nk+uvsxm3E805UNGI/+Oq?=
- =?us-ascii?Q?skdkIaSQxKzpTACPQgKCcCME9I0BplsLn+7qOeH2WQCKSjsOHi8xmP9ACYwn?=
- =?us-ascii?Q?T343SCpLKEr805Mv21wuZO6SMMqIuftGjOqQ/dXkwEpNswrIAZj0sk3z5F0Y?=
- =?us-ascii?Q?xyExluJgF1wFsXMBlyl5p3jmf4q3yZqyDNdNJFRdgB8TjgfnDEtVvjjARvgz?=
- =?us-ascii?Q?tkIy9Z5yuSmSMRKOpk975WI06u5CubfoVVbjUKNXcV8WX+Q3OJebQooZcvtY?=
- =?us-ascii?Q?RFbdSTcfi56+mm+pYw1mvvWrXXgaganXVzsDrTO3Gk1/fJKOU8QuosI832Sb?=
- =?us-ascii?Q?NUxD7mmdybj3Sd7xX4BDGUjbxJLnKIWCO0zH5Z9/H96LAW71HNcVl+m9nBpS?=
- =?us-ascii?Q?BcYVzOtCCw1aY5nqLGchctE7cAm198sGfw1d3Lo4xBsdVQ1piCJRBGkoLnKD?=
- =?us-ascii?Q?yozR55M8ySqccHw/1lpfTQtP9OlXPzlfzMtcVhopmfOTqJ5oSpQ1Z3ruHvHn?=
- =?us-ascii?Q?FvAnKzDVqFT0/31nfUC9HcpQC2sOoiD4HgxT+TvkMQ4keSMZ7k0uULSk9MW+?=
- =?us-ascii?Q?RowbMYBX6FsT4Tqg9CUItoMUG0FtcMct4gVPnSM+t3HfIlLO+Fr060y5vAEN?=
- =?us-ascii?Q?8isykYdN5vc5gFb0VcvXOwP25d35j5XaWYQF0YVPjS7rzuRkfjkuXl+36i1S?=
- =?us-ascii?Q?7n69aTu+cozi4esOvO/+4Q9nZH9YBODjPWysRYhZvkrnKyjVK8QWzWaJHlO+?=
- =?us-ascii?Q?OtFjvW+vv9jadGKXTg3UxDYXhiCax+WRVvUSIXd10ME76FYnGHbjc1chask2?=
- =?us-ascii?Q?BC7OJDAhbcGADGnBER6JRZHrZQLsXkdCTkOxzmEEvQ1GBfT2YY9IxiGms5kW?=
- =?us-ascii?Q?5jHLz2nm1Gpal1K/KIFgix3PDXUK199a7QJMhFFlxQvkmk3oXyb4DcsR1ilH?=
- =?us-ascii?Q?/es/BWbI/CpdolPJuMqTaHx9+2K9FQec4E5M7xbogzH6vs5reRzKQsC1HpcI?=
- =?us-ascii?Q?aqIfaXKXPNmrDVRqYptnpuFhqsfcb0LaDZlAvjDj4TeIbUZb+TiRz7ekb9du?=
- =?us-ascii?Q?qL9GVtKqoz4bGaIZV5B0YxS5kDjbW3qG+t8e7kBJs5676jNT6WoPNWLHu9b2?=
- =?us-ascii?Q?5tThGUBVy3slA7AYdKDMOqROCpBY+WQUOwH8bEzgE+uW5EYsp0W7ncUIBDv4?=
- =?us-ascii?Q?GHek1OyARQMfQ3na3EqrwtFDHxWLWaZMrYqN4fV1?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6dbb8113-35e5-4f3c-1f10-08db41036057
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 18:24:56.1459
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1n+4X2mM1EaTOIiMjjnoozSM6yswZr9V9ydVg4F0E2Kym+1yaLFlkYvX2124bYRn
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8538
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230419141328.37472-1-quic_jinlmao@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 07:23:00PM +0100, Matthew Wilcox wrote:
-> On Wed, Apr 19, 2023 at 07:18:26PM +0100, Lorenzo Stoakes wrote:
-> > So even if I did the FOLL_ALLOW_BROKEN_FILE_MAPPING patch series first, I
-> > would still need to come along and delete a bunch of your code
-> > afterwards. And unfortunately Pavel's recent change which insists on not
-> > having different vm_file's across VMAs for the buffer would have to be
-> > reverted so I expect it might not be entirely without discussion.
-> 
-> I don't even understand why Pavel wanted to make this change.  The
-> commit log really doesn't say.
-> 
-> commit edd478269640
-> Author: Pavel Begunkov <asml.silence@gmail.com>
-> Date:   Wed Feb 22 14:36:48 2023 +0000
-> 
->     io_uring/rsrc: disallow multi-source reg buffers
-> 
->     If two or more mappings go back to back to each other they can be passed
->     into io_uring to be registered as a single registered buffer. That would
->     even work if mappings came from different sources, e.g. it's possible to
->     mix in this way anon pages and pages from shmem or hugetlb. That is not
->     a problem but it'd rather be less prone if we forbid such mixing.
-> 
->     Cc: <stable@vger.kernel.org>
->     Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->     Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> 
-> It even says "That is not a problem"!  So why was this patch merged
-> if it's not fixing a problem?
-> 
-> It's now standing in the way of an actual cleanup.  So why don't we
-> revert it?  There must be more to it than this ...
+Hi Mao,
 
-https://lore.kernel.org/all/61ded378-51a8-1dcb-b631-fda1903248a9@gmail.com/
+kernel test robot noticed the following build errors:
 
-Jason
+[auto build test ERROR on atorgue-stm32/stm32-next]
+[also build test ERROR on linus/master v6.3-rc7 next-20230418]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mao-Jinlong/stm-class-Add-MIPI-OST-protocol-support/20230419-221653
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git stm32-next
+patch link:    https://lore.kernel.org/r/20230419141328.37472-1-quic_jinlmao%40quicinc.com
+patch subject: [PATCH v2] stm: class: Add MIPI OST protocol support
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230420/202304200216.kvZgZcao-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/54db7d137859caf5a14de2b166d80913b0c80218
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mao-Jinlong/stm-class-Add-MIPI-OST-protocol-support/20230419-221653
+        git checkout 54db7d137859caf5a14de2b166d80913b0c80218
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304200216.kvZgZcao-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   drivers/hwtracing/stm/p_ost.c: In function 'ost_write':
+>> drivers/hwtracing/stm/p_ost.c:174:46: error: implicit declaration of function 'get_current'; did you mean 'get_cred'? [-Werror=implicit-function-declaration]
+     174 |         *(u64 *)(trc_hdr + 8) = task_tgid_nr(get_current());
+         |                                              ^~~~~~~~~~~
+         |                                              get_cred
+>> drivers/hwtracing/stm/p_ost.c:174:46: warning: passing argument 1 of 'task_tgid_nr' makes pointer from integer without a cast [-Wint-conversion]
+     174 |         *(u64 *)(trc_hdr + 8) = task_tgid_nr(get_current());
+         |                                              ^~~~~~~~~~~~~
+         |                                              |
+         |                                              int
+   In file included from include/linux/sched/mm.h:7,
+                    from include/linux/xarray.h:19,
+                    from include/linux/radix-tree.h:21,
+                    from include/linux/idr.h:15,
+                    from include/linux/kernfs.h:12,
+                    from include/linux/sysfs.h:16,
+                    from include/linux/kobject.h:20,
+                    from include/linux/module.h:21,
+                    from drivers/hwtracing/stm/p_ost.c:9:
+   include/linux/sched.h:1582:54: note: expected 'struct task_struct *' but argument is of type 'int'
+    1582 | static inline pid_t task_tgid_nr(struct task_struct *tsk)
+         |                                  ~~~~~~~~~~~~~~~~~~~~^~~
+   cc1: some warnings being treated as errors
+
+
+vim +174 drivers/hwtracing/stm/p_ost.c
+
+   131	
+   132	static ssize_t notrace ost_write(struct stm_data *data,
+   133			struct stm_output *output, unsigned int chan,
+   134			const char *buf, size_t count)
+   135	{
+   136		unsigned int c = output->channel + chan;
+   137		unsigned int m = output->master;
+   138		const unsigned char nil = 0;
+   139		u32 header = DATA_HEADER;
+   140		u8 trc_hdr[16];
+   141		ssize_t sz;
+   142	
+   143		struct ost_output *op = output->pdrv_private;
+   144	
+   145		/*
+   146		 * Identify the source by entity type.
+   147		 * If entity type is not set, return error value.
+   148		 */
+   149		if (op->node.entity_type == OST_ENTITY_TYPE_FTRACE) {
+   150			header |= OST_ENTITY_FTRACE;
+   151		} else if (op->node.entity_type == OST_ENTITY_TYPE_CONSOLE) {
+   152			header |= OST_ENTITY_CONSOLE;
+   153		} else {
+   154			pr_debug("p_ost: Entity must be set for trace data.");
+   155			return -EINVAL;
+   156		}
+   157	
+   158		/*
+   159		 * STP framing rules for OST frames:
+   160		 *   * the first packet of the OST frame is marked;
+   161		 *   * the last packet is a FLAG with timestamped tag.
+   162		 */
+   163		/* Message layout: HEADER / DATA / TAIL */
+   164		/* HEADER */
+   165		sz = data->packet(data, m, c, STP_PACKET_DATA, STP_PACKET_MARKED,
+   166				  4, (u8 *)&header);
+   167		if (sz <= 0)
+   168			return sz;
+   169	
+   170		/* DATA */
+   171		*(u16 *)(trc_hdr) = STM_MAKE_VERSION(0, 4);
+   172		*(u16 *)(trc_hdr + 2) = STM_HEADER_MAGIC;
+   173		*(u32 *)(trc_hdr + 4) = raw_smp_processor_id();
+ > 174		*(u64 *)(trc_hdr + 8) = task_tgid_nr(get_current());
+   175		sz = stm_data_write(data, m, c, false, trc_hdr, sizeof(trc_hdr));
+   176		if (sz <= 0)
+   177			return sz;
+   178	
+   179		sz = stm_data_write(data, m, c, false, buf, count);
+   180	
+   181		/* TAIL */
+   182		if (sz > 0)
+   183			data->packet(data, m, c, STP_PACKET_FLAG,
+   184				STP_PACKET_TIMESTAMPED, 0, &nil);
+   185	
+   186		return sz;
+   187	}
+   188	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
