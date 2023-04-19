@@ -2,89 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8096D6E76ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17526E76F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbjDSJ5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 05:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
+        id S232428AbjDSKBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 06:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232798AbjDSJ5Y (ORCPT
+        with ESMTP id S232041AbjDSKBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:57:24 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31693A5CE
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:57:23 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8DxE0wCuz9k_OEeAA--.48602S3;
-        Wed, 19 Apr 2023 17:57:22 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxbb78uj9kXuguAA--.15680S8;
-        Wed, 19 Apr 2023 17:57:21 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v3 6/6] LoongArch: Remove five DIE_* definitions in kdebug.h
-Date:   Wed, 19 Apr 2023 17:57:01 +0800
-Message-Id: <1681898221-27828-7-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1681898221-27828-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1681898221-27828-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8Bxbb78uj9kXuguAA--.15680S8
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoWrZFWkZFy5Cw4UJF4kWF43GFg_yoW3XrgEva
-        4fGw4rW3y8XFW7Zw17Xr4fG3W7Xw4xJFn5u3Z3Xr4xu3Z09w1rJrWrJa1kZr1jkrWkurs5
-        XFWFkr17CrykKjkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        q7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS
-        14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY6Fy7McIj6I8E87Iv
-        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
-        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAq
-        x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r
-        1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF
-        7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxV
-        W8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU
-        VCD7UUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 19 Apr 2023 06:01:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34166E8B
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:00:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681898427;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XQ6sCjmuWnVFb8UpDGaTI+MOdoOd+qfctALNM5m0k+g=;
+        b=hyV+3+J5NOvASYRXZY6sjWgrk7FeoYvE6+CJOzZoFDjGnwiGxVV0k3Y0d8d11g+VL747i9
+        XvPHjJCbgG/xxvbT/7Hv4d1ntscg1J1AvE5eN+J7sssgzasev3DVDknt2vfHSX9uyU5RW9
+        tgcpXAucWBlnRf/xDCV6+ws4/JufQXY=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-297-zEShlqKRMsOgeCk8EmDMOg-1; Wed, 19 Apr 2023 06:00:25 -0400
+X-MC-Unique: zEShlqKRMsOgeCk8EmDMOg-1
+Received: by mail-qk1-f199.google.com with SMTP id q30-20020a05620a025e00b007468c560e1bso15073011qkn.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:00:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681898425; x=1684490425;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XQ6sCjmuWnVFb8UpDGaTI+MOdoOd+qfctALNM5m0k+g=;
+        b=N+4rPdOPLxUdGBxKdWH2Evj1/w+e7gkKcPOcgvBNH4rSiEooxUHTZhwNWT594vkm2s
+         4Tl9AKu24tqQ+Ui0I+3+nrhAnxmRsf3jxggTefhNMtykyf+hDBPGNLWt3EMtlTP595rA
+         g5yEEpJqKDOcSRyBp+GZxPYyIVHY1J0HsGuVb+vzfurkZ6dYq2MecyFFLb8DEeHvAeqE
+         GScwb6neUwH4ECZaQ0XUVkQn92waI7XkWN4f+QyNeFBiNtL6uuRpr0oEZH/fW3V+KmPl
+         V+16WnZuRQOIN/mzRgbuAE8pIsCSoTppuWL4HgDxuSbK3Aw/CiGJIPAF7UdOOh++lgzz
+         4RfA==
+X-Gm-Message-State: AAQBX9fpFcldnC078UDaGzXjU/amQlQ63r4sCntyLvhn8blFJ2R89W9z
+        YoLFuaJLDqbci954irBrgaHxA5vadkTWIWoj/yxVgpgRxY+Xxy0x4DgTx3w15elgZbfYrFzWPwN
+        rgWAncNqVnse84g0ayC1505vg
+X-Received: by 2002:a05:622a:44e:b0:3ef:437e:c828 with SMTP id o14-20020a05622a044e00b003ef437ec828mr1647537qtx.54.1681898424520;
+        Wed, 19 Apr 2023 03:00:24 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bx/DlObVliHPvUfPOoqrhYKHpZuPyTlGGGIslCUKrTunefbYRtBDLkw2QCfpHp8ro/QNbCag==
+X-Received: by 2002:a05:622a:44e:b0:3ef:437e:c828 with SMTP id o14-20020a05622a044e00b003ef437ec828mr1647485qtx.54.1681898424062;
+        Wed, 19 Apr 2023 03:00:24 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-53-134-157.retail.telecomitalia.it. [82.53.134.157])
+        by smtp.gmail.com with ESMTPSA id bq16-20020a05620a469000b007484d284cdasm4564029qkb.93.2023.04.19.03.00.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 03:00:23 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 12:00:17 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH RFC net-next v2 0/4] virtio/vsock: support datagrams
+Message-ID: <r6oxanmhwlonb7lcrrowpitlgobivzp7pcwk7snqvfnzudi6pb@4rnio5wef3qu>
+References: <20230413-b4-vsock-dgram-v2-0-079cc7cee62e@bytedance.com>
+ <ZDk2kOVnUvyLMLKE@bullseye>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <ZDk2kOVnUvyLMLKE@bullseye>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For now, DIE_PAGE_FAULT, DIE_BREAK, DIE_SSTEPBP, DIE_UPROBE
-and DIE_UPROBE_XOL are not used by any code, remove them.
+Hi Bobby,
 
-Suggested-by: Youling Tang <tangyouling@loongson.cn>
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/include/asm/kdebug.h | 5 -----
- 1 file changed, 5 deletions(-)
+On Fri, Apr 14, 2023 at 11:18:40AM +0000, Bobby Eshleman wrote:
+>CC'ing Cong.
+>
+>On Fri, Apr 14, 2023 at 12:25:56AM +0000, Bobby Eshleman wrote:
+>> Hey all!
+>>
+>> This series introduces support for datagrams to virtio/vsock.
 
-diff --git a/arch/loongarch/include/asm/kdebug.h b/arch/loongarch/include/asm/kdebug.h
-index d721b4b..c00ed87 100644
---- a/arch/loongarch/include/asm/kdebug.h
-+++ b/arch/loongarch/include/asm/kdebug.h
-@@ -13,11 +13,6 @@ enum die_val {
- 	DIE_FP,
- 	DIE_SIMD,
- 	DIE_TRAP,
--	DIE_PAGE_FAULT,
--	DIE_BREAK,
--	DIE_SSTEPBP,
--	DIE_UPROBE,
--	DIE_UPROBE_XOL,
- };
- 
- #endif /* _ASM_LOONGARCH_KDEBUG_H */
--- 
-2.1.0
+Great! Thanks for restarting this work!
+
+>>
+>> It is a spin-off (and smaller version) of this series from the summer:
+>>   https://lore.kernel.org/all/cover.1660362668.git.bobby.eshleman@bytedance.com/
+>>
+>> Please note that this is an RFC and should not be merged until
+>> associated changes are made to the virtio specification, which will
+>> follow after discussion from this series.
+>>
+>> This series first supports datagrams in a basic form for virtio, and
+>> then optimizes the sendpath for all transports.
+>>
+>> The result is a very fast datagram communication protocol that
+>> outperforms even UDP on multi-queue virtio-net w/ vhost on a variety
+>> of multi-threaded workload samples.
+>>
+>> For those that are curious, some summary data comparing UDP and VSOCK
+>> DGRAM (N=5):
+>>
+>> 	vCPUS: 16
+>> 	virtio-net queues: 16
+>> 	payload size: 4KB
+>> 	Setup: bare metal + vm (non-nested)
+>>
+>> 	UDP: 287.59 MB/s
+>> 	VSOCK DGRAM: 509.2 MB/s
+>>
+>> Some notes about the implementation...
+>>
+>> This datagram implementation forces datagrams to self-throttle according
+>> to the threshold set by sk_sndbuf. It behaves similar to the credits
+>> used by streams in its effect on throughput and memory consumption, but
+>> it is not influenced by the receiving socket as credits are.
+
+So, sk_sndbuf influece the sender and sk_rcvbuf the receiver, right?
+
+We should check if VMCI behaves the same.
+
+>>
+>> The device drops packets silently. There is room for improvement by
+>> building into the device and driver some intelligence around how to
+>> reduce frequency of kicking the virtqueue when packet loss is high. I
+>> think there is a good discussion to be had on this.
+
+Can you elaborate a bit here?
+
+Do you mean some mechanism to report to the sender that a destination
+(cid, port) is full so the packet will be dropped?
+
+Can we adapt the credit mechanism?
+
+>>
+>> In this series I am also proposing that fairness be reexamined as an
+>> issue separate from datagrams, which differs from my previous series
+>> that coupled these issues. After further testing and reflection on the
+>> design, I do not believe that these need to be coupled and I do not
+>> believe this implementation introduces additional unfairness or
+>> exacerbates pre-existing unfairness.
+
+I see.
+
+>>
+>> I attempted to characterize vsock fairness by using a pool of processes
+>> to stress test the shared resources while measuring the performance of a
+>> lone stream socket. Given unfair preference for datagrams, we would
+>> assume that a lone stream socket would degrade much more when a pool of
+>> datagram sockets was stressing the system than when a pool of stream
+>> sockets are stressing the system. The result, however, showed no
+>> significant difference between the degradation of throughput of the lone
+>> stream socket when using a pool of datagrams to stress the queue over
+>> using a pool of streams. The absolute difference in throughput actually
+>> favored datagrams as interfering least as the mean difference was +16%
+>> compared to using streams to stress test (N=7), but it was not
+>> statistically significant. Workloads were matched for payload size and
+>> buffer size (to approximate memory consumption) and process count, and
+>> stress workloads were configured to start before and last long after the
+>> lifetime of the "lone" stream socket flow to ensure that competing flows
+>> were continuously hot.
+>>
+>> Given the above data, I propose that vsock fairness be addressed
+>> independent of datagrams and to defer its implementation to a future
+>> series.
+
+Makes sense to me.
+
+I left some preliminary comments, anyway now it seems reasonable to use
+the same virtqueues, so we can go head with the spec proposal.
+
+Thanks,
+Stefano
 
