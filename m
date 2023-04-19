@@ -2,116 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7CAC6E85C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 01:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0846E85CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 01:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232221AbjDSXTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 19:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
+        id S231671AbjDSXVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 19:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjDSXTG (ORCPT
+        with ESMTP id S229479AbjDSXVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 19:19:06 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C871FF6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 16:18:59 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4ec8133c59eso202871e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 16:18:59 -0700 (PDT)
+        Wed, 19 Apr 2023 19:21:23 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632F31BD6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 16:21:22 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-51b5490c6f0so310752a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 16:21:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681946338; x=1684538338;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+wdq0P8U8MGiTGVZIVQ7vaI+OvTE8h6U0BpG3f9uUAk=;
-        b=IJigncWb9EWcQl3A6d88q5mSsCJYdQmggTgHA1WKw3mvBEnyhf4PJNWk22ZQ7R+cZE
-         1NrH9cfHNyIjR5OkOuKptJlKDJDEKZn5bkG95BOlTeALMtnewj83sj1hyhjY6F6K93W7
-         yrEsGy68U468ViQpfgbxyl3rrOLxwo0uuko3AbPOiVVMCSKlZhdp70Ec3CGDfVgFaQOk
-         YIta8MciphZXh+JZt/nEfDhHruKkdDAYfxpDalB27ppKvOrxkhODIEV0aLV1wgL2YwiV
-         Ageb9gKryWJTnh3XZOg6DRIcv9pSDRVvgQpbywD2XuSXo80QT+rnQGBNo/5G2wNFDYO/
-         rKKw==
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1681946482; x=1684538482;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4EzLlnke++OBfC+QU/8848E+9V2OKTR6syW6axwlV8=;
+        b=1rSGerHklr5JAXi27oI/uAKbIpnzmbhuAcqtkq9Ewpy+oxiEbVyn+NXg0Nte1Jz5gb
+         Jddew7juj8EN4LNPm7rX/98XzjawOZWNBXgYRDT4svPbR6SgKWYB3DBdvEC6M5GMrfwT
+         NVGwJGMv68WQml94zJmFq7eiIKhhHdqtvpReJGsxvaD7E+Q5v+/9MtrHrCKvxTmZ6EDY
+         BasRW6aVsh4KPRIad1iWbms6wcLJVor1YOWpS9y4GmXYAKYprdaeppUQ33xbvQC/eBjL
+         dLUjVVOrNBmfM3cIFzadvXJVlSI7PHUWmH/8OBSUCDMgpYod0Y/sBth54czPU5qQiJoJ
+         NrDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681946338; x=1684538338;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+wdq0P8U8MGiTGVZIVQ7vaI+OvTE8h6U0BpG3f9uUAk=;
-        b=IHvHob/aBxgWLQcAUxYCwqAP9X89f0hj2QbtVX6DXq7K+R+cENWP/mEV80nGaH+gLf
-         haJqDh6q3ACRjE1dRHNKH0zHRSibed3EfcHKCbt39UepQOLYR1i/s91/wSB75yR5p9xY
-         lMM3unVMxL92e2dSLGuWa53H4RLuxBhKl0tRHiM2yjlOB3JFMIjQiggcRPt2MRkEZ38/
-         IdllDLUq7e+l/N5e4dr70jSlBCye3qvfLtn3b7CnWOnDzcEOUviEfrNof6DuieQumEYA
-         CEkgAuqgYO5WPaO6E/9JTiDBfuVTNSVJkwA4psEd+v7vSxAL+lpr/h/Tp4RlROYQ1WfW
-         /tyg==
-X-Gm-Message-State: AAQBX9fiXUBQYrb+/hU1JSiDRejqurRRo6tubj1IlSDT/66NkqV8bLrw
-        CYngOVjBwpUSSaGd7iyejepXcQ==
-X-Google-Smtp-Source: AKy350bOIyYXKa0fdwi85GvVfLkfqOtAP38hPIJi97ZpdTN8D/CTgttmmrFWABpVOGmBJJEY7o3qBw==
-X-Received: by 2002:a19:760e:0:b0:4cb:13d7:77e2 with SMTP id c14-20020a19760e000000b004cb13d777e2mr5274677lff.26.1681946337815;
-        Wed, 19 Apr 2023 16:18:57 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id m10-20020a19520a000000b0048a982ad0a8sm40430lfb.23.2023.04.19.16.18.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 16:18:57 -0700 (PDT)
-Message-ID: <08e79278-ad30-73e3-a56c-f569b3fea407@linaro.org>
-Date:   Thu, 20 Apr 2023 02:18:56 +0300
+        d=1e100.net; s=20221208; t=1681946482; x=1684538482;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O4EzLlnke++OBfC+QU/8848E+9V2OKTR6syW6axwlV8=;
+        b=BofKD7li6JC4pitpeLeRTYPWB38y21oavVumyVsdRjmvt+a/RXdsm1K+lV+CDwV6+d
+         ZCOCh05Q57XBFNbDIJoB+ax/j6eWfdIgomwOE9tAX3YDD62cyoYhaRpX0pLXyQKIav5L
+         9n7qFsD+CorfVC8lxG+2jj1s7jeQxKDu+Hio5qzT0D5Xe2TAaHiPxhq2cLV1VcZyST0f
+         ncJAduKylRzAPFmcM1UxtunqYjVDZHY8vLCP/eUwwnfM/Dq3uPH4O4+KR1EQGDpV96Ek
+         5yV6QJUHxVHGJfdfy3Z2de4k30kWqQ8MkeecwzUQrd+bNajAZDIcwy6MnuJivIUpWbXv
+         9x4w==
+X-Gm-Message-State: AAQBX9cHj4ve+RUM/EBM3JD8x9XEpp9Ngf8qvDZNFCixPNqSDO1x1z8b
+        QfbMpaAi6PafP+jQwzYXgeYbtQ==
+X-Google-Smtp-Source: AKy350Z4u0R970I4rdGzZzRQmNJeDe7b2z6B1qSAUlPIrkwDXPChvEc+qQO8pUmxrKDtn7iIylQMpQ==
+X-Received: by 2002:a17:902:b089:b0:19d:611:2815 with SMTP id p9-20020a170902b08900b0019d06112815mr6659257plr.42.1681946481873;
+        Wed, 19 Apr 2023 16:21:21 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-41-174.pa.nsw.optusnet.com.au. [49.180.41.174])
+        by smtp.gmail.com with ESMTPSA id ja13-20020a170902efcd00b0019682e27995sm6226725plb.223.2023.04.19.16.21.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 16:21:21 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1ppH70-005RJM-QK; Thu, 20 Apr 2023 09:21:18 +1000
+Date:   Thu, 20 Apr 2023 09:21:18 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Mike Snitzer <snitzer@kernel.org>,
+        Sarthak Kukreti <sarthakkukreti@chromium.org>,
+        dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Daniil Lunev <dlunev@google.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v4 1/4] block: Introduce provisioning primitives
+Message-ID: <20230419232118.GL447837@dread.disaster.area>
+References: <20230414000219.92640-1-sarthakkukreti@chromium.org>
+ <20230418221207.244685-1-sarthakkukreti@chromium.org>
+ <20230418221207.244685-2-sarthakkukreti@chromium.org>
+ <20230419153611.GE360885@frogsfrogsfrogs>
+ <ZEAUHnWqt9cIiJRb@redhat.com>
+ <20230419172602.GE360881@frogsfrogsfrogs>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 11/11] drm/msm/dpu: do not use mixer that supports dspp
- when not required
-Content-Language: en-GB
-To:     Arnaud Vrac <avrac@freebox.fr>, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
- <20230419-dpu-tweaks-v1-11-d1bac46db075@freebox.fr>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230419-dpu-tweaks-v1-11-d1bac46db075@freebox.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419172602.GE360881@frogsfrogsfrogs>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2023 17:41, Arnaud Vrac wrote:
-> This avoids using lm blocks that support DSPP when not needed, to
-> keep those resources available.
-
-This will break some of the platforms. Consider qcm2290 which has a 
-single LM with DSPP. So, _dpu_rm_check_lm_and_get_connected_blks should 
-be performed in two steps: first skip non-DSPP-enabled LMs when DSPP is 
-not required. Then, if the LM (pair) is not found, look for any suitable 
-LM(pair).
-
+On Wed, Apr 19, 2023 at 10:26:02AM -0700, Darrick J. Wong wrote:
+> On Wed, Apr 19, 2023 at 12:17:34PM -0400, Mike Snitzer wrote:
+> > (And obviously needs fixing independent of this patchset)
+> > 
+> > Shouldn't mkfs first check that the underlying storage supports
+> > REQ_OP_PROVISION by verifying
+> > /sys/block/<dev>/queue/provision_max_bytes exists and is not 0?
+> > (Just saying, we need to add new features more defensively.. you just
+> > made the case based on this scenario's implications alone)
 > 
-> Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-> index f4dda88a73f7d..4b393d46c743f 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-> @@ -362,7 +362,7 @@ static bool _dpu_rm_check_lm_and_get_connected_blks(struct dpu_rm *rm,
->   	*pp_idx = idx;
->   
->   	if (!reqs->topology.num_dspp)
-> -		return true;
-> +		return !lm_cfg->dspp;
->   
->   	idx = lm_cfg->dspp - DSPP_0;
->   	if (idx < 0 || idx >= ARRAY_SIZE(rm->dspp_blks)) {
-> 
+> Not for fallocate -- for regular files, there's no way to check if the
+> filesystem actually supports the operation requested other than to try
+> it and see if it succeeds.  We probably should've defined a DRY_RUN flag
+> for that purpose back when it was introduced.
 
+That ignores the fact that fallocate() was never intended to
+guarantee it will work in all contexts - it's an advisory interface
+at it's most basic level. If the call succeeds, then great, it does
+what is says on the box, but if it fails then it should have no
+visible effect on user data at all and the application still needs
+to perform whatever modification it needed done in some other way.
+
+IOWs, calling it one a block device without first checking if the
+block device supports that fallocate operation is exactly how it is
+supposed to be used. If the kernel can't handle this gracefully
+without corrupting data, then that's a kernel bug and not an
+application problem.
+
+> For fallocate calls to block devices, yes, the program can check the
+> queue limits in sysfs if fstat says the supplied path is a block device,
+> but I don't know that most programs are that thorough.  The fallocate(1)
+> CLI program does not check.
+
+Right. fallocate() was intended to just do the right thing without
+the application having to jump thrown an unknown number of hoops to
+determine if fallocate() can be used or not in the context it is
+executing in.  The kernel implementation is supposed to abstract all that
+context-dependent behaviour away from the application; all the
+application has to do is implement the fallocate() fast path and a
+single generic "do the right thing the slow way" fallback when the
+fallocate() method it called is not supported...
+
+-Dave.
 -- 
-With best wishes
-Dmitry
-
+Dave Chinner
+david@fromorbit.com
