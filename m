@@ -2,150 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DED6E850A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EACD6E8510
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233254AbjDSWhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 18:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
+        id S233464AbjDSWjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 18:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232970AbjDSWhE (ORCPT
+        with ESMTP id S233493AbjDSWi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 18:37:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A73358A
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:35:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681943676;
+        Wed, 19 Apr 2023 18:38:58 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D842D67
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:38:19 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DB4621EC0441;
+        Thu, 20 Apr 2023 00:37:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1681943832;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oV6dPbj6v5bxxtQ0bf2vQ9h1B33hpQZo734sVJEIFy0=;
-        b=M/2RRnTHCLgO8tb1FJOwt41dcvVmyBTy0Dww+ZX0HlOe3RvZvhe1IhBPrV6nmIcpi3zbxe
-        Gp8gVyKQk4uSCQLrsSNRtn66dXQu/DIXUk7irhcuK2BjuTRuQIuBWZRqCvnMpODezwOpKM
-        WzIvOgb5WNhrMD+LpKxrDWUTn8SdZoI=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-527-jD99-eJjOBie0gy8u25sMA-1; Wed, 19 Apr 2023 18:34:35 -0400
-X-MC-Unique: jD99-eJjOBie0gy8u25sMA-1
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-1a52677bd54so2317675ad.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:34:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681943674; x=1684535674;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oV6dPbj6v5bxxtQ0bf2vQ9h1B33hpQZo734sVJEIFy0=;
-        b=VigpuBXGUYQe/envSN9Gp6XAJwi+45/c8+0+tS/S4gMvLMvH7Dp53J8A4sBDOLFn7W
-         st0FtoCYixg1/GMJUnAIlrUzeZht4nvGjcAmQvIDc6GfQBzjB6DpR5BwgltoeQ5H48+s
-         Up/yn8xvms5DUkQd0Dmzzkb8ScO/MPceFIOdzPlf4uYA+j9rPLOgKzJKp+rf0/ZSWSYs
-         CTNRePDmUuCtRzp5blfu24GEwyR428Fd0W66ox5/ZsmunaT9AzVK2yt2/3EAuAxpDGBT
-         YXXyaklj3/FhplGRLVl4Z+3klnHp8anivnoDteUcVmnw7nJQNAFiwZTzgUTpOvxVgk4t
-         r6PA==
-X-Gm-Message-State: AAQBX9dg5LRIfcJCxflvDV31Ug9+qIcEYJu829XjZkT5FqsykkVBe25L
-        jDOG88Yhmka37fl6bA/Ts3b0rkcWaG4fAqJI1xKj+LV+7uLzgSknNlbdUgFfS/QQA37AlY5nf5T
-        8dhlgTaOiZw18DLuCvy+yaYib
-X-Received: by 2002:a17:902:e80a:b0:1a2:9051:f09e with SMTP id u10-20020a170902e80a00b001a29051f09emr7910431plg.21.1681943674333;
-        Wed, 19 Apr 2023 15:34:34 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YRcOJA9m4//sCD7nyS42bqaIK5+K28VX9KwVstfAjYABbGiPZuMs419sXFFAlB2owlcVEoOw==
-X-Received: by 2002:a17:902:e80a:b0:1a2:9051:f09e with SMTP id u10-20020a170902e80a00b001a29051f09emr7910402plg.21.1681943673995;
-        Wed, 19 Apr 2023 15:34:33 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id je13-20020a170903264d00b001a1b808c1d8sm11889776plb.245.2023.04.19.15.34.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 15:34:33 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 15:34:31 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
-        jgg@ziepe.ca, jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [Patch V8 1/3] spi: Add TPM HW flow flag
-Message-ID: <ipj7gegcsrrha6xy5otn5afauskg7e6gv3aj4f52ee2fzuosmb@mr6nr6gsebtw>
-References: <20230302041804.24718-1-kyarlagadda@nvidia.com>
- <20230302041804.24718-2-kyarlagadda@nvidia.com>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=e2nxhtM7sdVgJkzeRNHHbRxRGhYfRsAKbHTG5fXaiKo=;
+        b=b0gnktga5O8oFwmeE8fK4bFfjt3JNydK9X+gQnTky9WjYRrrB+WgX4jRq1UdkbdCMuS4OL
+        IH1V3EyR/GgEsP8mDdOqKcXnpRW/ZddQ+Dp6x7r0TAxDDX9y/AR6U5fupQXizslz6k44oQ
+        4q+sS4M7f+PCXfpBUxOQ3l7KOh81C6k=
+Date:   Thu, 20 Apr 2023 00:37:07 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     kernel test robot <lkp@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: arch/mips/include/asm/timex.h:75:10: error: instruction requires
+ a CPU feature not currently enabled
+Message-ID: <20230419223707.GAZEBtE1vZGy5B4EUR@fat_crate.local>
+References: <202304170748.Fg9VIgGd-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230302041804.24718-2-kyarlagadda@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202304170748.Fg9VIgGd-lkp@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 09:48:02AM +0530, Krishna Yarlagadda wrote:
-> TPM specification [1] defines flow control over SPI. Client device can
-> insert a wait state on MISO when address is transmitted by controller
-> on MOSI. Detecting the wait state in software is only possible for
-> full duplex controllers. For controllers that support only half-
-> duplex, the wait state detection needs to be implemented in hardware.
++ Thomas.
+
+On Mon, Apr 17, 2023 at 07:57:04AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
+> commit: aba5b397cad7d398b385aaf5029f99f41b690466 hamradio: baycom_epp: Do not use x86-specific rdtsc()
+> date:   4 months ago
+> config: mips-buildonly-randconfig-r001-20230417 (https://download.01.org/0day-ci/archive/20230417/202304170748.Fg9VIgGd-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
+
+Where do I get clang 17?
+
+In any case, this
+
+"error: instruction requires a CPU feature not currently enabled"
+
+sounds like clang is trying to generate invalid code for the wrong
+target. .config issue?
+
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install mips cross compiling tool for clang build
+>         # apt-get install binutils-mipsel-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aba5b397cad7d398b385aaf5029f99f41b690466
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout aba5b397cad7d398b385aaf5029f99f41b690466
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/hamradio/
 > 
-> Add a flag SPI_TPM_HW_FLOW for TPM device to set when software flow
-> control is not possible and hardware flow control is expected from
-> SPI controller.
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202304170748.Fg9VIgGd-lkp@intel.com/
 > 
-> Reference:
-> [1] https://trustedcomputinggroup.org/resource/pc-client-work-group-
-> pc-client-specific-tpm-interface-specification-tis/
+> All errors (new ones prefixed by >>):
 > 
-
-Minor thing, but should this reference the newer specification [1]?
-
-[1] https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-profile-ptp-specification/
-
-
-Regards,
-Jerry
-
-> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> ---
->  include/linux/spi/spi.h | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
+>    In file included from drivers/net/hamradio/baycom_epp.c:29:
+>    In file included from include/linux/module.h:13:
+>    In file included from include/linux/stat.h:19:
+>    In file included from include/linux/time.h:60:
+>    In file included from include/linux/time32.h:13:
+>    In file included from include/linux/timex.h:67:
+> >> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
+>                    return read_c0_count();
+>                           ^
+>    arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
+>    #define read_c0_count()         __read_32bit_c0_register($9, 0)
+>                                    ^
+>    arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
+>            ___read_32bit_c0_register(source, sel, __volatile__)
+>            ^
+>    arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
+>                            "mfc0\t%0, " #source "\n\t"                     \
+>                            ^
+>    <inline asm>:1:2: note: instantiated into assembly here
+>            mfc0    $4, $9
+>            ^
+>    In file included from drivers/net/hamradio/baycom_epp.c:29:
+>    In file included from include/linux/module.h:13:
+>    In file included from include/linux/stat.h:19:
+>    In file included from include/linux/time.h:60:
+>    In file included from include/linux/time32.h:13:
+>    In file included from include/linux/timex.h:67:
+> >> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
+>                    return read_c0_count();
+>                           ^
+>    arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
+>    #define read_c0_count()         __read_32bit_c0_register($9, 0)
+>                                    ^
+>    arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
+>            ___read_32bit_c0_register(source, sel, __volatile__)
+>            ^
+>    arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
+>                            "mfc0\t%0, " #source "\n\t"                     \
+>                            ^
+>    <inline asm>:1:2: note: instantiated into assembly here
+>            mfc0    $2, $9
+>            ^
+>    In file included from drivers/net/hamradio/baycom_epp.c:29:
+>    In file included from include/linux/module.h:13:
+>    In file included from include/linux/stat.h:19:
+>    In file included from include/linux/time.h:60:
+>    In file included from include/linux/time32.h:13:
+>    In file included from include/linux/timex.h:67:
+> >> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
+>                    return read_c0_count();
+>                           ^
+>    arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
+>    #define read_c0_count()         __read_32bit_c0_register($9, 0)
+>                                    ^
+>    arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
+>            ___read_32bit_c0_register(source, sel, __volatile__)
+>            ^
+>    arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
+>                            "mfc0\t%0, " #source "\n\t"                     \
+>                            ^
+>    <inline asm>:1:2: note: instantiated into assembly here
+>            mfc0    $2, $9
+>            ^
+>    In file included from drivers/net/hamradio/baycom_epp.c:29:
+>    In file included from include/linux/module.h:13:
+>    In file included from include/linux/stat.h:19:
+>    In file included from include/linux/time.h:60:
+>    In file included from include/linux/time32.h:13:
+>    In file included from include/linux/timex.h:67:
+> >> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
+>                    return read_c0_count();
+>                           ^
+>    arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
+>    #define read_c0_count()         __read_32bit_c0_register($9, 0)
+>                                    ^
+>    arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
+>            ___read_32bit_c0_register(source, sel, __volatile__)
+>            ^
+>    arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
+>                            "mfc0\t%0, " #source "\n\t"                     \
+>                            ^
+>    <inline asm>:1:2: note: instantiated into assembly here
+>            mfc0    $2, $9
+>            ^
+>    4 errors generated.
 > 
-> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> index 4fa26b9a3572..b9e49ed42955 100644
-> --- a/include/linux/spi/spi.h
-> +++ b/include/linux/spi/spi.h
-> @@ -184,8 +184,18 @@ struct spi_device {
->  	u8			chip_select;
->  	u8			bits_per_word;
->  	bool			rt;
-> -#define SPI_NO_TX	BIT(31)		/* No transmit wire */
-> -#define SPI_NO_RX	BIT(30)		/* No receive wire */
-> +#define SPI_NO_TX		BIT(31)		/* No transmit wire */
-> +#define SPI_NO_RX		BIT(30)		/* No receive wire */
-> +	/*
-> +	 * TPM specification defines flow control over SPI. Client device
-> +	 * can insert a wait state on MISO when address is transmitted by
-> +	 * controller on MOSI. Detecting the wait state in software is only
-> +	 * possible for full duplex controllers. For controllers that support
-> +	 * only half-duplex, the wait state detection needs to be implemented
-> +	 * in hardware. TPM devices would set this flag when hardware flow
-> +	 * control is expected from SPI controller.
-> +	 */
-> +#define SPI_TPM_HW_FLOW		BIT(29)		/* TPM HW flow control */
->  	/*
->  	 * All bits defined above should be covered by SPI_MODE_KERNEL_MASK.
->  	 * The SPI_MODE_KERNEL_MASK has the SPI_MODE_USER_MASK counterpart,
-> @@ -195,7 +205,7 @@ struct spi_device {
->  	 * These bits must not overlap. A static assert check should make sure of that.
->  	 * If adding extra bits, make sure to decrease the bit index below as well.
->  	 */
-> -#define SPI_MODE_KERNEL_MASK	(~(BIT(30) - 1))
-> +#define SPI_MODE_KERNEL_MASK	(~(BIT(29) - 1))
->  	u32			mode;
->  	int			irq;
->  	void			*controller_state;
+> 
+> vim +75 arch/mips/include/asm/timex.h
+> 
+> 9c9b415c50bc29 Ralf Baechle       2013-09-12  71  
+> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  72  static inline cycles_t get_cycles(void)
+> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  73  {
+> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  74  	if (can_use_mips_counter(read_c0_prid()))
+> 9c9b415c50bc29 Ralf Baechle       2013-09-12 @75  		return read_c0_count();
+> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  76  	else
+> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  77  		return 0;	/* no usable counter */
+> 9c9b415c50bc29 Ralf Baechle       2013-09-12  78  }
+> 1c99c6a7c3c599 Jason A. Donenfeld 2022-04-08  79  #define get_cycles get_cycles
+> 9c9b415c50bc29 Ralf Baechle       2013-09-12  80  
+> 
+> :::::: The code at line 75 was first introduced by commit
+> :::::: 9c9b415c50bc298ac61412dff856eae2f54889ee MIPS: Reimplement get_cycles().
+> 
+> :::::: TO: Ralf Baechle <ralf@linux-mips.org>
+> :::::: CC: Ralf Baechle <ralf@linux-mips.org>
+> 
 > -- 
-> 2.17.1
-> 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
 
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
