@@ -2,137 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FC46E7791
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7FBE6E7797
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbjDSKlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 06:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
+        id S232327AbjDSKmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 06:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbjDSKlO (ORCPT
+        with ESMTP id S231574AbjDSKmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 06:41:14 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84383132
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:41:12 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id h8so17786170ljf.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:41:12 -0700 (PDT)
+        Wed, 19 Apr 2023 06:42:03 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EBC106;
+        Wed, 19 Apr 2023 03:42:02 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63b5c830d5eso2511450b3a.2;
+        Wed, 19 Apr 2023 03:42:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681900871; x=1684492871;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RZxVMEh9KILGtkcQBVWxPt1W9P5HUJPkp/aglLZNmOE=;
-        b=n4N1GlsvUd4WzaLAEqR7DCy6mNV5YcQWHtXQSpD0o9fyo+f5USa+0NaskB4HS23XfY
-         TJ5kQjndnbQp7dk3/WMn1+jD1yM+dheGRwmAH3MCPo82AZxtoJrefR9U68Z53W1Vc7n/
-         RCAZfUpwRdC2szu9jm7SCSOrW4wTlA0evAU0Zq9cbv2aFrezWntoASFqdAi+wyQUWuS+
-         9KkAhMzYRFlXLkgoLyEe9sdINnE/r9xROkMeEXFEDaYQIcfMIbcnhAh0iaP0P4D0PGms
-         1KgIDRoKb98HNts75g2pYAPPnRpHSX7Mb5Ui0HDUqC5hPfBm66p+j0z3j2ls3ALKproV
-         k/oA==
+        d=gmail.com; s=20221208; t=1681900922; x=1684492922;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5MdNpSS+OOI19jq0uYTZJnCcJQUPASUIXiKZhUZv1Dk=;
+        b=qPRkEGyJsDCSaZp4ogPYKDiohjMXJ0vzEVw3ywT3uU/GKNXrfLhJZ6WO/RujYYRmnF
+         PIWdYM8XUTae0Uwqo7K/BsM/m71gYS2qAaYZAovPC1ozzLxvbFBxNBj2itCjIfsdCZJz
+         oYXRbDEc4jvuxTsiYF9N+36SWDKzN6YFkfpmByLMKoupMARS4SESLcF10sB+s5JNHtH+
+         eU6mOiWuF6DAzFXziTij97EURj0NDOKUoNwtwn7c6F8otf7HQY66n+v+ABnb1PuUo9vp
+         1st/sxXJ8d2dMZe0h1UZDcj5KiM9BY58WSMtHv03DVWR0PY6UdrnmgJzZ4HyJLaQfrvf
+         4SnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681900871; x=1684492871;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RZxVMEh9KILGtkcQBVWxPt1W9P5HUJPkp/aglLZNmOE=;
-        b=c7M/AWwzu+ku+GZf83ELmeH7+Y6hyDX+674UPwOeKCwLOoQW/G2WoJjgv05IxW2PHW
-         pjZdujCE+c2w5h2RupuQv0ekxWDoQxdhwL6nTqHR44Hn/BiMaOX4k3SdgsGtIWZpbPCZ
-         ZVHn45tKR/D8oJq8lXnldjfNkbA0KJUUlVqt9Y51Ez7ei4a0zTPSncJ/GQXQkew9Wa45
-         wqehwPPkf/x9NQy/SGHj6A3XpulT2w5HZ93JtihEyZjjXwT96dkNeRjaXOX30I7slQGH
-         EVcIHV8beBOGbGGKkQW7i7umwc9qih6M6K9qvjKiagIuxHyjY2IpzXr8yC+70kCXOjYD
-         FNAQ==
-X-Gm-Message-State: AAQBX9eku9touavaGu9fUQsQjK4g97F5QU8wh+2l3M9va/VmcOwrYEvt
-        k+NZX9/0fbAMV5L90v4nMTTPAg==
-X-Google-Smtp-Source: AKy350aP60fgBEJ41q0RaTQf5isT0wekpXkkSe9MGe+zXxSmg86QKN6MWT3LJpA9S7GifYiAAE1Hlg==
-X-Received: by 2002:a2e:b5d2:0:b0:2a8:be0a:9c52 with SMTP id g18-20020a2eb5d2000000b002a8be0a9c52mr683657ljn.21.1681900870772;
-        Wed, 19 Apr 2023 03:41:10 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id s12-20020a2e9c0c000000b00295a583a20bsm2863366lji.74.2023.04.19.03.41.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 03:41:10 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 19 Apr 2023 12:41:06 +0200
-Subject: [PATCH] dt-bindings: power: reset: qcom-pon: Only allow
- reboot-mode pre-pmk8350
+        d=1e100.net; s=20221208; t=1681900922; x=1684492922;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5MdNpSS+OOI19jq0uYTZJnCcJQUPASUIXiKZhUZv1Dk=;
+        b=a9+oF9oZ90DwII8B5NcDhmPWznPe+EAnOYGEN5NxZq1aRtt+y9Zm3iMaofA26qofK5
+         uF/rgXTVpSvBRvjSWRByYG9Yxgv4k/UvcAIzvEyQSGIVAkcvmkqkpR+vbqOgsIKN3HX/
+         ge8VYf5SDjRxEw91qBslF73oLKOQId8K1N6VHD+UyzPKpXuc2WTtJhly+JWjnpPhNrvM
+         ZAo01O86ro+xdnH2/H3M9kRc1ACgijIJkvNTNjeblfyh6X2iyVE2njUoB+E+D+q5vHIw
+         nWXc5zs4hkNAQ8Wa0AN9q22yw4Y1tyF/CCZrKb9RJZGELpx17tytTwKY8b0YXSsqNe0B
+         Mtdg==
+X-Gm-Message-State: AAQBX9eHIEteHoUtHJIdnBWLJVI8PBpR5rCfeWOzNXx+ae6FTyEw7+8d
+        nm5nfvxU5GiI+HkFeMZxF5O4yYAFaqnEPlHUtGo=
+X-Google-Smtp-Source: AKy350YK8qcAcZopioCgqzrCcc04oP+3g3LHqjy7As6Hr0znMSBB+LYIyMZez9fjGSi2RP7eMP/QK1WXZ/RF5wuQ8GQ=
+X-Received: by 2002:a17:90a:9802:b0:247:160d:3a8e with SMTP id
+ z2-20020a17090a980200b00247160d3a8emr2278200pjo.22.1681900921522; Wed, 19 Apr
+ 2023 03:42:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230419-topic-pmic_pon_bindings-v1-1-ea233dae0117@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAEHFP2QC/x2NWwqDMBAAryL73UDUUtJepRTJY6MLdhOytgji3
- bv0cwaGOUCwEQo8ugMafkmosEJ/6SAunmc0lJRhsMNor/3dbKVSNPVNcaqFp0CciGcxOad0i9a
- 57BC0Dl7QhOY5LtrzZ11V1oaZ9v/u+TrPH3td+xp+AAAA
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+References: <20230415104104.5537-1-aford173@gmail.com> <20230415104104.5537-3-aford173@gmail.com>
+ <7eed74e8-9f67-a410-3cec-f61a6db85238@denx.de> <CAHCN7xKw26TQ=t75TEDbEkA0mb9rnEwNW=7ei1=WFBZjiJMf=g@mail.gmail.com>
+ <56085a0f-02f7-6f45-f351-1f9ee612b748@denx.de> <426e901f14254cfcff87ba1747534f9b856ef738.camel@pengutronix.de>
+In-Reply-To: <426e901f14254cfcff87ba1747534f9b856ef738.camel@pengutronix.de>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Wed, 19 Apr 2023 05:41:49 -0500
+Message-ID: <CAHCN7xLL+VBYfL_si07zhdLgV431H7XSxf6U_50mtAH-BZL=SA@mail.gmail.com>
+Subject: Re: [PATCH 3/6] drm: bridge: samsung-dsim: Fetch pll-clock-frequency automatically
+To:     Lucas Stach <l.stach@pengutronix.de>
+Cc:     Marek Vasut <marex@denx.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Anjelique Melendez <quic_amelende@quicinc.com>,
-        David Collins <quic_collinsd@quicinc.com>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        aford@beaconembedded.com, dri-devel@lists.freedesktop.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        m.szyprowski@samsung.com, Robert Foss <rfoss@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, Jonas Karlman <jonas@kwiboo.se>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
         linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681900869; l=1540;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=2aZ3HfQSYlnBEwHgH5XeH4h3AP9+DA2PwArsm4RGbHw=;
- b=Bs5hfZVu7ebswkV4EDCAyX0cgv0zVPAUv5NXngn6UIZljq16V4jurBCK8qraiJRe8dhdl4Q3HUpQ
- X6HJvO46An7tRyuvIFg+fPiEc4TcfI79zuM1XBhZcqJRBg7qSMWO
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As pointed out by Shazad [1], PMICs using a separate HLOS+PBS scheme
-(so PMK8350 and newer) are expected to pass reboot mode data through SDAM,
-as the reboot mode registers are absent in the HLOS reg space.
+On Tue, Apr 18, 2023 at 3:47=E2=80=AFAM Lucas Stach <l.stach@pengutronix.de=
+> wrote:
+>
+> Am Dienstag, dem 18.04.2023 um 10:30 +0200 schrieb Marek Vasut:
+> > On 4/18/23 04:29, Adam Ford wrote:
+> > > On Sun, Apr 16, 2023 at 5:08=E2=80=AFPM Marek Vasut <marex@denx.de> w=
+rote:
+> > > >
+> > > > On 4/15/23 12:41, Adam Ford wrote:
+> > > > > Fetch the clock rate of "sclk_mipi" (or "pll_clk") instead of
+> > > > > having an entry in the device tree for samsung,pll-clock-frequenc=
+y.
+> > > > >
+> > > > > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > > > > ---
+> > > > >    drivers/gpu/drm/bridge/samsung-dsim.c | 12 ++++++------
+> > > > >    1 file changed, 6 insertions(+), 6 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/=
+drm/bridge/samsung-dsim.c
+> > > > > index 9fec32b44e05..73f0c3fbbdf5 100644
+> > > > > --- a/drivers/gpu/drm/bridge/samsung-dsim.c
+> > > > > +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+> > > > > @@ -1744,11 +1744,6 @@ static int samsung_dsim_parse_dt(struct sa=
+msung_dsim *dsi)
+> > > > >        struct device_node *node =3D dev->of_node;
+> > > > >        int ret;
+> > > > >
+> > > > > -     ret =3D samsung_dsim_of_read_u32(node, "samsung,pll-clock-f=
+requency",
+> > > > > -                                    &dsi->pll_clk_rate);
+> > > > > -     if (ret < 0)
+> > > > > -             return ret;
+> > > > > -
+> > > > >        ret =3D samsung_dsim_of_read_u32(node, "samsung,burst-cloc=
+k-frequency",
+> > > > >                                       &dsi->burst_clk_rate);
+> > > > >        if (ret < 0)
+> > > >
+> > > > Does this break compatibility with old samsung DTs ?
+> > >
+> > > My goal here was to declutter the device tree stuff and fetch data
+> > > automatically if possible. What if I changed this to make them
+> > > optional?  If they exist, we can use them, if they don't exist, we
+> > > could read the clock rate.  Would that be acceptable?
+> >
+> > If you do not see any potential problem with ignoring the DT property
+> > altogether, that would be better of course, but I think you cannot do
+> > that with old DTs, so you should retain backward compatibility fallback=
+,
+> > yes. What do you think ?
+>
+> I'm very much in favor of this patch, but I also think we shouldn't
+> risk breaking Samsung devices, where we don't now 100% that the input
+> clock rate provided by the clock driver is correct.
+>
+> So I think the right approach is to use "samsung,pll-clock-frequency"
+> when present in DT and get it from the clock provider otherwise. Then
+> just remove the property from the DTs where we can validate that the
+> input clock rate is correct, i.e. all i.MX8M*.
 
-Limit the reboot-mode.yaml inclusion to PMICs without a separate PBS
-region.
+I'll update this accordingly when I do a V2 of this series.
 
-[1] https://lore.kernel.org/linux-arm-msm/12f13183-c381-25f7-459e-62e0c2b19498@quicinc.com/
-
-Fixes: 03fccdc76dce ("dt-bindings: power: reset: qcom-pon: Add new compatible "qcom,pmk8350-pon"")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-index d96170eecbd2..0b1eca734d3b 100644
---- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-+++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-@@ -56,7 +56,6 @@ required:
- unevaluatedProperties: false
- 
- allOf:
--  - $ref: reboot-mode.yaml#
-   - if:
-       properties:
-         compatible:
-@@ -66,6 +65,9 @@ allOf:
-               - qcom,pms405-pon
-               - qcom,pm8998-pon
-     then:
-+      allOf:
-+        - $ref: reboot-mode.yaml#
-+
-       properties:
-         reg:
-           maxItems: 1
-
----
-base-commit: 67d5d9f013d6c3829383c08162939cabff14fccc
-change-id: 20230419-topic-pmic_pon_bindings-ffdd6c088f8e
-
-Best regards,
--- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
-
+adam
+>
+> Regards,
+> Lucas
