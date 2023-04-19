@@ -2,126 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713C46E8168
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C59986E8166
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbjDSSpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
+        id S230492AbjDSSpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDSSpo (ORCPT
+        with ESMTP id S230346AbjDSSpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 14:45:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C05940C6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 11:45:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A79D64002
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:45:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3575BC433EF;
-        Wed, 19 Apr 2023 18:45:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681929941;
-        bh=U44OvH5Ba58JqAqXvvAptgXEcVgFiFaDJocylAIsjEw=;
-        h=From:Date:Subject:To:Cc:From;
-        b=rrqPiMPa0m8jDWIt+4EzPhmtaJyahMqr3j0Z9eNMh6wKuHNgtZPhgrtmpvAcTxgZv
-         b4AcGEgypFNRi9nLtCXRjRwWijS785hZZeZ9yyisgOzZ/n3Q6grlS8DVQ8Q5jyFftP
-         N23UBew9w4rEGqiuCfljKP919DboANEGsw2L5ZKVyyGVpvSZJsJ1S6+jZreN66ls4K
-         Wr+RTv4dErGt6yJ8IcNHpoczk/yX2vGW4U2xMi1UZm5Cp00/OiR7FeciyRL+y4YMYx
-         aZvc1eGnqKOIPAh/qKiAG2y1jtQXdZRTSeGLKRuFFaxI7zLeJXfC8oebQA23I1dEVu
-         BKVMj2MeOdKpw==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Wed, 19 Apr 2023 19:45:06 +0100
-Subject: [PATCH] ASoC: es8316: Don't use ranges based register lookup for a
- single register
+        Wed, 19 Apr 2023 14:45:50 -0400
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980015B94;
+        Wed, 19 Apr 2023 11:45:49 -0700 (PDT)
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-546dad86345so24126eaf.0;
+        Wed, 19 Apr 2023 11:45:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681929949; x=1684521949;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j1u6wDxEFqR3nc6mJ3LnzSqMuNsw7ywTC5vr5ltaIYE=;
+        b=EnBHRGivCscuuUaZmAPe+RUmmO/9vv1gBwh4vQyhZ6JIwSG+7ZJNsGZRhBqm2jpFD0
+         xypN5PLW9bm69fnBmT43nYLzGUfaX7nqq1+WOuEiBKXGyx+VqwK5h0I9kxw4vo/jlzKB
+         9l19bQvfBbkoPI1vK5oKdF9UJAB/NrgyodOueDZZVs+ezr4+7V8Gk0Zl9hiO8nA6pPtN
+         H8CK2DUUgZszgPL85p5aznR8ZPqxAUaoXozBp67AFB27JyTHIgEXoY1/7Lb9FVGzibdk
+         HzFgYmjfV5yE/mdyK8e6YTApi9KHiHR9RWJYxgvYMsHvuRBhM2vNiayFjK+6qTUAZW7p
+         T0rA==
+X-Gm-Message-State: AAQBX9cYPAR9mPRSrRaWkig3mKnrneIzUBB2rM/R1UigvW/98CquPDwn
+        /yubfLv/8O5afkn1pSDBPg==
+X-Google-Smtp-Source: AKy350axA4KSuP1rGO4qpDY6pI13A7IRsrcc2RYlSrdOQlat0tH+KBoNonedj/aMdVHHSE2OXUdVHA==
+X-Received: by 2002:a05:6808:1382:b0:387:1a46:8317 with SMTP id c2-20020a056808138200b003871a468317mr4028314oiw.13.1681929948854;
+        Wed, 19 Apr 2023 11:45:48 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z9-20020a4a9849000000b005413682e16dsm7390043ooi.3.2023.04.19.11.45.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 11:45:48 -0700 (PDT)
+Received: (nullmailer pid 513861 invoked by uid 1000);
+        Wed, 19 Apr 2023 18:45:47 -0000
+Date:   Wed, 19 Apr 2023 13:45:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] edac: cpc925: Use of_get_cpu_hwid() to read CPU node
+ 'reg'
+Message-ID: <20230419184547.GA4013083-robh@kernel.org>
+References: <20230319150141.67824-1-robh@kernel.org>
+ <20230319150141.67824-2-robh@kernel.org>
+ <20230418175000.GLZD7YSNkIKk8ltGIw@fat_crate.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230419-asoc-es8316-volatile-v1-1-2074ec93d8f1@kernel.org>
-X-B4-Tracking: v=1; b=H4sIALE2QGQC/x2NywrCMBAAf6Xs2YU8tEZ/pXjYpqtdLIlkpS2U/
- rupxxkYZgPlIqxwbzYoPItKThXsqYE4UnoxylAZnHHenO0NSXNE1uBti3Oe6CsT48UEH0Mwrbs
- OUNOelLEvlOJ4xEsu70N/Cj9l/d+6x77/AM269It9AAAA
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-00e42
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1698; i=broonie@kernel.org;
- h=from:subject:message-id; bh=U44OvH5Ba58JqAqXvvAptgXEcVgFiFaDJocylAIsjEw=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkQDbTBrzfPW8GLzUpQVLW+r1bLaSED4/APH3/R7KL
- Cd+7hCWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZEA20wAKCRAk1otyXVSH0L4RB/
- 9RLomTJLcuU96AbE8AES8DrrDVdPC6WIdLv5PabHOI2Bl+nSmiKUCuHshMOkxWMck42uSoU/xKcTIo
- Mnz++ONSpPjkkyDpo5/4UG0pLdymyQPXSclEbWuyNTlzoNCv32uoh1ZQygUSurGpD7NnupqxNQ1Kt7
- 2O7K+fQYzkumFb1IOf4aSHTwTlNNbJR86x7ma2qo2vyRTiI0G4KPCu8rdzpzppDryUY9laRvgx0arg
- 4rXh5CpopOjuX8aG9Abv3cVKqOxHgtPjgJNh0tQ2CfyQ/ElCZUaCFMGFi3Q0RButADRM/wZKka8Qmy
- Jm5/GH+PXH9PCt1aUlC5TpqBiSY+19
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418175000.GLZD7YSNkIKk8ltGIw@fat_crate.local>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The es8316 driver uses a register range to specify the single volatile
-register it has. While the cost will be in the noise this is a bunch of
-overhead compared to just having a volatile_reg() callback so switch to
-the callback.
+On Tue, Apr 18, 2023 at 07:50:00PM +0200, Borislav Petkov wrote:
+> On Sun, Mar 19, 2023 at 10:01:41AM -0500, Rob Herring wrote:
+> > Replace open coded reading of CPU nodes' "reg" properties with
+> > of_get_cpu_hwid() dedicated for this purpose.
+> > 
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  drivers/edac/cpc925_edac.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/edac/cpc925_edac.c b/drivers/edac/cpc925_edac.c
+> > index ee193aae8e14..0182436c1b5a 100644
+> > --- a/drivers/edac/cpc925_edac.c
+> > +++ b/drivers/edac/cpc925_edac.c
+> > @@ -557,13 +557,13 @@ static u32 cpc925_cpu_mask_disabled(void)
+> >  	mask = APIMASK_ADI0 | APIMASK_ADI1;
+> >  
+> >  	for_each_of_cpu_node(cpunode) {
+> > -		const u32 *reg = of_get_property(cpunode, "reg", NULL);
+> > -		if (reg == NULL || *reg > 2) {
+> > +		int hwid = of_get_cpu_hwid(cpunode, 0);
+> > +		if ((hwid < 0) || (hwid > 2)) {
+> >  			cpc925_printk(KERN_ERR, "Bad reg value at %pOF\n", cpunode);
+> >  			continue;
+> >  		}
+> >  
+> > -		mask &= ~APIMASK_ADI(*reg);
+> > +		mask &= ~APIMASK_ADI(hwid);
+> >  	}
+> >  
+> >  	if (mask != (APIMASK_ADI0 | APIMASK_ADI1)) {
+> > -- 
+> 
+> $ grep CPC925 .config
+> CONFIG_EDAC_CPC925=m
+> 
+> $ make ARCH=powerpc CROSS_COMPILE=/home/boris/src/crosstool/gcc-11.1.0-nolibc/powerpc64-linux/bin/powerpc64-linux-
+> ...
+> ERROR: modpost: ".of_get_cpu_hwid" [drivers/edac/cpc925_edac.ko] undefined!
+> make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
+> make: *** [Makefile:1980: modpost] Error 2
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- sound/soc/codecs/es8316.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+I'd rather not export of_get_cpu_hwid() which is otherwise only used in 
+arch code. I think I'll rewrite this in terms of for_each_possible_cpu() 
+and topology_core_id(). Though that would make a UP build not enable 
+core 1, but that seems undesirable anyways. 
 
-diff --git a/sound/soc/codecs/es8316.c b/sound/soc/codecs/es8316.c
-index 056c3082fe02..1736a905abdb 100644
---- a/sound/soc/codecs/es8316.c
-+++ b/sound/soc/codecs/es8316.c
-@@ -803,14 +803,15 @@ static const struct snd_soc_component_driver soc_component_dev_es8316 = {
- 	.endianness		= 1,
- };
- 
--static const struct regmap_range es8316_volatile_ranges[] = {
--	regmap_reg_range(ES8316_GPIO_FLAG, ES8316_GPIO_FLAG),
--};
--
--static const struct regmap_access_table es8316_volatile_table = {
--	.yes_ranges	= es8316_volatile_ranges,
--	.n_yes_ranges	= ARRAY_SIZE(es8316_volatile_ranges),
--};
-+static bool es8316_volatile_reg(struct device *dev, unsigned int reg)
-+{
-+	switch (reg) {
-+	case ES8316_GPIO_FLAG:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
- 
- static const struct regmap_config es8316_regmap = {
- 	.reg_bits = 8,
-@@ -818,7 +819,7 @@ static const struct regmap_config es8316_regmap = {
- 	.use_single_read = true,
- 	.use_single_write = true,
- 	.max_register = 0x53,
--	.volatile_table	= &es8316_volatile_table,
-+	.volatile_reg = es8316_volatile_reg,
- 	.cache_type = REGCACHE_RBTREE,
- };
- 
-
----
-base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
-change-id: 20230419-asoc-es8316-volatile-5083c880627d
-
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
-
+Rob
