@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFED6E8371
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACBC36E8375
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbjDSVUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 17:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
+        id S232286AbjDSVUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 17:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbjDSVTf (ORCPT
+        with ESMTP id S232411AbjDSVTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 17:19:35 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893CD9011
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:19:20 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id c9so1776984ejz.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:19:20 -0700 (PDT)
+        Wed, 19 Apr 2023 17:19:47 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306F49ED6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:19:22 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id fy21so1598831ejb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:19:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681939160; x=1684531160;
+        d=linaro.org; s=google; t=1681939161; x=1684531161;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EZpUWeUVKH+p0X4MguuCyyKht/jzX/fPrrtUBUOQBf0=;
-        b=MNNkhDAkW76yal/Dy6RscYKx4VOnSTsP3k24rg5RWdA74Fo1UT/g16HpSQ8C8SaKN3
-         sgB/VoUutgymctDUclo5htn5bcX+NVWKSOj78aIvYh9Qsb/XYTMBEbcO//RlNgjb79Ls
-         1XPSVcshCUqfcAlT9OVXXGtb7WhLTY5mAF6ScPwJpOdZrlEzWi4Z6CxUoht4oEsDx+S5
-         hvLXG/DClKZdgIosL/EQngwoIvHeNWjl7DxuJ/CAfP22SlnAr6wNkzlnInirqpTCbWdy
-         69aPxTo1tlK3pFfCvmyGiKZc7eNX+2mNFs/qjXNun+50vauP3r4kWVwBtYfg1Adgmucp
-         r6cA==
+        bh=/uCLIGeLxQr9ljzwadfVn/99q0kinYdKnpUPlrBXw6M=;
+        b=plsYe56jM4BTEpAPwPFtRxzoF0uw6lH28hj+jyAvb/+vWoK9T9fAPwly5EXPrcxUny
+         IvXf/mPkuPB4e412PchPlMoXjoSC/6yHOpPqY/USeCejhzH37B2SIGFG1lUPOTb8Xqeq
+         XA8+WIrPgjKBj8ktLn3PbVQXvv862wFBX5gDkTJ1AgdrzfHP9isFmF8Ys0jOQ7wh5XT1
+         /fbSUwVgGcphlot/23gZwYZj6P2nA9U0wXen8Ddpxqfn4yXig9pkhw6drIqcCxG2Al02
+         qIarZsr0pCdyOW8WaSyzghoczXluIUH8XT0cvz6izw21L6daBngdytvXq0eT0CTec1eq
+         lRBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681939160; x=1684531160;
+        d=1e100.net; s=20221208; t=1681939161; x=1684531161;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EZpUWeUVKH+p0X4MguuCyyKht/jzX/fPrrtUBUOQBf0=;
-        b=ElN0Gubr4i+NS9mYutR0LM0Z0kKc7VmWX10AWSlZZdTr+KEyTtl0DYw0QZJUAliFe/
-         ATjwlaSU7jRT8eLAkQ2K9lb/QUbj5Ubk7AsXIReIb3ytCQArui2t9hZPW0x6Miwuia+2
-         B6UmOt0Ph+sXG+PeQaRQnio6TS0ajv+I2t84qVPxbRKFR70AYi+MLnNqdJGG7nBBcsWD
-         6bG3m9Xh4oqVSHbw9oQe5t96K6822ndxXYQMyYwUmdCHlbBOBpWhxqgwt5nYXAnU0IMp
-         Om/Sa/78aAOULSc1arfcdgjJAmyO9AlpfTLjq6ArDLps1ZYZUgxXLE+Wq99es23CogMD
-         X36w==
-X-Gm-Message-State: AAQBX9dU/Zn4tG+ApyJDquLZeiBYa/k5VtNpSCZl7nJV18pW6DnNRZz7
-        kmrAvU67himKCWEh3d9Ir2Vk6w==
-X-Google-Smtp-Source: AKy350Yki2rlI0mwM0v88c/sT8/P/mTALW317G6mGzjfFHZUJNu5XVANhloAzAHnZJLDZtp+JmZ5VA==
-X-Received: by 2002:a17:906:fa18:b0:93e:8791:7d8e with SMTP id lo24-20020a170906fa1800b0093e87917d8emr15199079ejb.2.1681939159885;
-        Wed, 19 Apr 2023 14:19:19 -0700 (PDT)
+        bh=/uCLIGeLxQr9ljzwadfVn/99q0kinYdKnpUPlrBXw6M=;
+        b=TdabuXsh5Big77OfsBysj+Py7vsaoOghbtlwOK426IMglbc7qMTr5lZO3rf0tyPIxB
+         wFBOc+wYctMuagd8r5L0/ZgZk8Cj0BfQXvZkYUo1N/Ec5OBvU/qs8d8mo1hOYylsQpiS
+         li7Y2yatpaMr3JSfYo14NMH3nQBhI2JKOi5W9IftBjq3EVrNiuiJLyfwtp4hWUMU1fAU
+         SjUqdWVCW9LkGwRHjWpSHH4PpGdzGU5751a6DzpP+0F+atlhJRAyLqskGImVbZ1y0wgc
+         FtwpmwgAbmY/lH93f3xERzeTq4Ig9Bzk9IN+R9IkUCBfElSYzquOT4Y3Apz/IoKlv5nd
+         LS9Q==
+X-Gm-Message-State: AAQBX9fTKGgl63IvujoarRr2vzKMPmTx5LGLrHVKzCa+ws9vPiZaXLga
+        bE00tb48US/hXb3lbzWUBw/Aig==
+X-Google-Smtp-Source: AKy350ZsXMfBW8xu0aKbrc7ii5ZdXgJGWFfpsRPt7t6kwi0b2JRq7VVGs3QRyN0lEZtYKmBeg0Yg2g==
+X-Received: by 2002:a17:906:d9b:b0:93f:505b:9742 with SMTP id m27-20020a1709060d9b00b0093f505b9742mr16512098eji.65.1681939161405;
+        Wed, 19 Apr 2023 14:19:21 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:976c:1d6c:6ed0:8935])
-        by smtp.gmail.com with ESMTPSA id a12-20020a17090682cc00b0094f109a5b3asm7092739ejy.135.2023.04.19.14.19.18
+        by smtp.gmail.com with ESMTPSA id a12-20020a17090682cc00b0094f109a5b3asm7092739ejy.135.2023.04.19.14.19.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 14:19:19 -0700 (PDT)
+        Wed, 19 Apr 2023 14:19:21 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -77,9 +77,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 13/18] arm64: dts: qcom: sm8350: correct DMA controller unit address
-Date:   Wed, 19 Apr 2023 23:18:51 +0200
-Message-Id: <20230419211856.79332-13-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 14/18] arm64: dts: qcom: sm8350: correct PCI phy unit address
+Date:   Wed, 19 Apr 2023 23:18:52 +0200
+Message-Id: <20230419211856.79332-14-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230419211856.79332-1-krzysztof.kozlowski@linaro.org>
 References: <20230419211856.79332-1-krzysztof.kozlowski@linaro.org>
@@ -97,27 +97,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Match unit-address to reg entry to fix dtbs W=1 warnings:
 
-  Warning (simple_bus_reg): /soc@0/dma-controller@900000: simple-bus unit address format error, expected "9800000"
+  Warning (simple_bus_reg): /soc@0/phy@1c0f000: simple-bus unit address format error, expected "1c0e000"
 
-Fixes: bc08fbf49bc8 ("arm64: dts: qcom: sm8350: Define GPI DMA engines")
+Fixes: 6daee40678a0 ("arm64: dts: qcom: sm8350: add PCIe devices")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
  arch/arm64/boot/dts/qcom/sm8350.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index 3efdc03ed0f1..a9af730e0b1c 100644
+index a9af730e0b1c..5ca21cd1cbec 100644
 --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -907,7 +907,7 @@ spi19: spi@894000 {
- 			};
+@@ -1638,7 +1638,7 @@ pcie1: pci@1c08000 {
+ 			status = "disabled";
  		};
  
--		gpi_dma0: dma-controller@900000 {
-+		gpi_dma0: dma-controller@9800000 {
- 			compatible = "qcom,sm8350-gpi-dma", "qcom,sm6350-gpi-dma";
- 			reg = <0 0x09800000 0 0x60000>;
- 			interrupts = <GIC_SPI 244 IRQ_TYPE_LEVEL_HIGH>,
+-		pcie1_phy: phy@1c0f000 {
++		pcie1_phy: phy@1c0e000 {
+ 			compatible = "qcom,sm8350-qmp-gen3x2-pcie-phy";
+ 			reg = <0 0x01c0e000 0 0x2000>;
+ 			clocks = <&gcc GCC_PCIE_1_AUX_CLK>,
 -- 
 2.34.1
 
