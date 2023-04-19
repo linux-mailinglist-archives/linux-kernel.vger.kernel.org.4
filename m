@@ -2,125 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4806E75E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FEE6E75EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232806AbjDSJBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 05:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
+        id S232333AbjDSJBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 05:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbjDSJBB (ORCPT
+        with ESMTP id S232825AbjDSJBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:01:01 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69C812C96
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:00:58 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-51f597c97c5so1235149a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:00:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1681894858; x=1684486858;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4Ri0q2/V4tp17Jo0FXn5qCoZ/hu41lgkAXDj8GUCjG4=;
-        b=e6FJpg1/lSg6Fzj64vBbsl3hJAjBsz1G6UqWuw88c4fCh0Ew+10L4n3OelrDuC/FYl
-         T9bPIjDBNkK8VJgcBXm/Y44QI7KGymGCU8jRiql7yqxtIn6E5UtgM9PN2lBQQ35k6Hii
-         MxFmS5MtHJzoqeTTkVde59z2lr+YDlX1hvdSMPFsG2qt6rJmJ/IKVwnRYVMalzsQMndr
-         WfvI7BkSiEvkIKby0wY4PP407ZIZfBlD+SilDCXTaVRheNk19wY8jBX7r4u1M0WeeoRp
-         Lqp/1jduTdNNC2GmwNkkWoktbumIo8+SLEGDZeLo2Df88eg2DxTrKyykm4Zv7/JnMJ5R
-         MZMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681894858; x=1684486858;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4Ri0q2/V4tp17Jo0FXn5qCoZ/hu41lgkAXDj8GUCjG4=;
-        b=fYJGE04NFwG5oibPl/8HZcgsB1eCzNJr+LPo5SiXL4H35YCwBIJFbky9ocUjKrMnVH
-         FuKppTgzH4RvT0rhiBGdS1UmVC+sNxqGoKep2j2HTTINC27K/RO7LxDYdmuPj96Se/3N
-         Gmv8DdmSJS0hEEc6JplLdsa4pzUHQs8NOwytAdvuqVJaGTEM3RiHMca6DMaxMSLIdlr9
-         ZWU+w9BsWMoPnxZcYDcRpoQTcupJCS1w4/UZthCCFE/dcuixUOIt3ZfTgn7bEWzAR6GC
-         QqvWckRpHLudErMjdugqP0xzIY1OdilzcPEcvafvYLhFPhF/1bpg29qhiKhfjEWq7taI
-         6/Nw==
-X-Gm-Message-State: AAQBX9cTOje26Jjug39ZSvqMkOLZlUOJT5zyvVXMPHauDVBWBRx0MqnJ
-        W0SuHj4aALTiDuKcz2srHo5Tww==
-X-Google-Smtp-Source: AKy350b6IXvh1v6ck6A/sCyMXZ3FN45V2eFT0zulVRY/vapMyIBlskFX9zTC4ovnUc9DmdwJuOK7Bw==
-X-Received: by 2002:a17:902:f683:b0:1a9:20d6:3c3f with SMTP id l3-20020a170902f68300b001a920d63c3fmr631660plg.55.1681894858066;
-        Wed, 19 Apr 2023 02:00:58 -0700 (PDT)
-Received: from ?IPV6:2405:201:d02f:d855:461d:14be:2cce:b776? ([2405:201:d02f:d855:461d:14be:2cce:b776])
-        by smtp.gmail.com with ESMTPSA id iz17-20020a170902ef9100b001a19f2f81a3sm10976492plb.175.2023.04.19.02.00.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 02:00:57 -0700 (PDT)
-Message-ID: <e63bba13-05f0-7d1b-bf11-04ef5eda3afd@9elements.com>
-Date:   Wed, 19 Apr 2023 14:30:54 +0530
+        Wed, 19 Apr 2023 05:01:41 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988FE19AA;
+        Wed, 19 Apr 2023 02:01:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681894891; x=1713430891;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IiznyOV15KEk7yghNEwufQGnmpRCJqkzx0uQeGij21E=;
+  b=OGO/tN7e3/6m/v3VEZ54eWFCHA0j2nlFHSTGXM8UX5EKQFe9Ekqnhgxc
+   oqSI7DxtYu+CTs41t8Fz7alrlxqdSX+qYD1Lf4zKC9unZR08syecZ00Fi
+   nNxIot9v4ljWlBxJePHp6Bwb3WbUyHKFEVnDl8cjnSRCS6FB4Nx2tAu5+
+   yfNJPsShzzyxCWMhSt5zI/wWssM1APST+DbRXsDTw5EC+FZsojiur2X27
+   3muuDr/8A1352tXSZOQNq38wBUZMBcFNbocZxVjXltJLkTRcMP8oWmToD
+   R/qn6XCxGzSLw9yG9JY+gI3/m8Qh6M/XMVUmp56qIFghNz5/nMATqQLDn
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="373276200"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="373276200"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 02:01:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="756028824"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="756028824"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 02:01:28 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id D7E2311FAD0;
+        Wed, 19 Apr 2023 12:01:25 +0300 (EEST)
+Date:   Wed, 19 Apr 2023 12:01:25 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Riesch via B4 Relay 
+        <devnull+michael.riesch.wolfvision.net@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Matthias Fend <Matthias.Fend@wolfvision.net>,
+        libcamera-devel@lists.libcamera.org, linux-media@vger.kernel.org,
+        hverkuil@xs4all.nl,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [libcamera-devel] [PATCH RFC 1/4] media: v4l2-ctrls: add lens
+ group status controls for zoom and focus
+Message-ID: <ZD+t5QYH20Y8+8MV@kekkonen.localdomain>
+References: <20230406-feature-controls-lens-v1-0-543189a680de@wolfvision.net>
+ <20230406-feature-controls-lens-v1-1-543189a680de@wolfvision.net>
+ <CAPY8ntArOOqPQzvkJrQEyuVFfb6j8x6WODTMHOn1qHPU588mbQ@mail.gmail.com>
+ <0f1baf5e-2ff6-e10b-5c3e-0a82c71d0ce6@wolfvision.net>
+ <CAPY8ntAjBEFfeV6nnQs34Y22QM-irT13ALDv4ksP8AYK=jWsKg@mail.gmail.com>
+ <3ab7bfc4-aaae-2e39-b420-40ad8d71dda4@wolfvision.net>
+ <CAPY8ntCNuvgmF37kDvVh1kuepbLqy2hWcz9HOi8iub9trHmi2g@mail.gmail.com>
+ <ZDbKU5kwcb7RGeCo@kekkonen.localdomain>
+ <ccae3994-3b1b-4050-ea34-98f97cf886e0@wolfvision.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add binding for max6639
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230418113217.781524-1-Naresh.Solanki@9elements.com>
- <742f546b-3952-32f4-9f20-3a355785d162@linaro.org>
-Content-Language: en-US
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <742f546b-3952-32f4-9f20-3a355785d162@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ccae3994-3b1b-4050-ea34-98f97cf886e0@wolfvision.net>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krysztof,
+Hi Michael,
 
-On 18-04-2023 09:47 pm, Krzysztof Kozlowski wrote:
-> On 18/04/2023 13:32, Naresh Solanki wrote:
->> Add Devicetree binding documentation for Maxim MAX6639 temperature
->> monitor with PWM fan-speed controller.
+On Mon, Apr 17, 2023 at 02:38:20PM +0200, Michael Riesch wrote:
+> Hi Sakari,
 > 
-> Subject: drop second/last, redundant "binding for". The "dt-bindings"
-> prefix is already stating that these are bindings.
-Ack
+> On 4/12/23 17:12, Sakari Ailus wrote:
+> > Hi Dave, Michael,
+> > 
+> > On Wed, Apr 12, 2023 at 02:55:56PM +0100, Dave Stevenson wrote:
+> >>>> If the ranges aren't updated, where should that out-of-range lens
+> >>>> movement leave the lens?
+> >>>
+> >>> This is up to the hardware controller, but I would guess it typically
+> >>> stops one step before disaster. Wherever that may be, the error
+> >>> condition and the current position can be read out via this new STATUS
+> >>> control.
+> >>>
+> >>> Does this sound good so far?
+> >>
+> >> Sounds reasonable, but I'm not the gatekeeper (that would be Sakari or
+> >> Laurent), and I'm just expressing my views based on the lenses I've
+> >> encountered.
+> >> All of my lenses have a single drive for focus, a single drive for
+> >> zoom, and where there are multiple elements they are all connected
+> >> mechanically. Your setup sounds far more complex and is likely to need
+> >> a more extensive driver, but it'd be nice to not unnecessarily
+> >> overcomplicate the interface.
+> > 
+> > Could we also have a driver that uses these new controls?
 > 
->>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->>   .../bindings/hwmon/maxim,max6639.yaml         | 55 +++++++++++++++++++
->>   1 file changed, 55 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->> new file mode 100644
->> index 000000000000..20b28cd36555
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->> @@ -0,0 +1,55 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +
+> If you are referring to the driver for our custom lens controller, then
+> I have to say that it is under development and simply not ready for
+> release yet. Also, the decision has not yet been made whether or not
+> this will be an open-source driver.
 > 
-> Drop blank line
-Ack
+> A different approach could be the adaptation of the vimc-lens driver,
+> which currently only supports FOCUS_ABSOLUTE. But this would raise
+> several implementation questions and at least for me this would be a
+> nontrivial task.
 > 
-> This is v9. Where is the changelog? Where is previous authorship? At
-> least some parts of it? Why this has less properties than old one? Why
-> this has more mistakes than the old one? Go to previous patch... or fix
-> everything which was already fixed.
-This patch is to add basic dt support only hence no additional properties.
+> Is it required to have a driver for this interface (in the sense that
+> the patches cannot be accepted otherwise)?
+
+That has been traditionally required, and a virtual driver isn't usually
+considered enough. There are at least two reasons for this. The first one
+being that if the driver isn't reviewable and targetting upstream it may be
+difficult to figure out whether the interface changes are the right ones
+for that driver. This is perhaps a lesser concern here. Secondly, there is
+also unwillingness to add interface elements that might never be supported
+by the kernel itself --- this is effectively just dead code.
+
+Also cc Hans and Laurent.
 
 > 
-> Best regards,
-> Krzysztof
+> > The controls themselves appear reasonable to me as well. I guess there are
+> > changes to be made based on the discussion?
 > 
-Regards,
-Naresh
+> I'd summarize that whether or not the status controls are compound
+> controls of the type V4L2_CTRL_TYPE_LENS_STATUS is the open question.
+> 
+> As a potential follow-up question I recently asked myself if the struct
+> v4l2_ctrl_lens_status should contain trailing reserved bytes for future
+> extension (no idea, though, what this could be).
+> 
+> Alternatively, we could come up with "V4L2_CID_FOCUS_CURRENT (integer)"
+> for the current position and "V4L2_CID_FOCUS_STATUS (bitmask)" (and add
+> further controls when they are needed. Here, we lose atomicity but maybe
+> this can be ignored. One could assume that all relevant controls are
+> read out with a single ioctl which provides at least some level of
+> atomicity.
+
+There might be something that could be done in the control framework to
+address this. But it's not something that can be expected to happen soon.
+
+I'd perhaps keep them separate, not to make it a compound control just for
+the access reason. But I certainly don't have a strong opinion about it.
+
+> 
+> Any comments and/or recommendations to this open question would be much
+> appreciated.
+> 
+> Other review comments will be incorporated in the next iteration of this
+> series as well, but they are quite straightforward.
+
+-- 
+Kind regards,
+
+Sakari Ailus
