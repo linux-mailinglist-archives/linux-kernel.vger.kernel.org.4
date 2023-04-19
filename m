@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAF66E726E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 06:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03BF56E7271
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 06:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbjDSEuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 00:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
+        id S231560AbjDSEua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 00:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbjDSEuU (ORCPT
+        with ESMTP id S231362AbjDSEuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Apr 2023 00:50:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC9C3C0A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F04A61A1;
         Tue, 18 Apr 2023 21:50:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BADA263AE2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D94EC63B06;
         Wed, 19 Apr 2023 04:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1ABD1C4339B;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3295EC4339E;
         Wed, 19 Apr 2023 04:50:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1681879818;
-        bh=heaxAGW8BqkyV5Xaxa7qN+YraeK/8HWCjkrKGdPZiXA=;
+        bh=69Tud3bSSGNHl0lC6ZBQofnTfR5CiybZ4tvETIL9Nz0=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=qCxqNten3hwWo85osv8Jjdhgxd9D4Q8vCwJw+ap6VvL3/7Yw+ms1pDO4M44Jc84Ti
-         XNEbgtb8zSHDxPABQqSiHSXJ3pC1yQySkvrimcHPCfIxYoQVkyqL/ZHTQrMtVMNHAH
-         LAYU34mVJvptJAyaXLWBfXaP+qjRHL5P05hh27EyXYaQYUDz/TzahBoCtqZEwOht8/
-         askD/N4vnZ0NtiiVggE8WJBLxw23uRK6nt9rXcgoXOcW3237c8TT1JJZulaDJI1Wie
-         x/N2LKzMhfbk1RwKJyaAqZjQxwAnDXHGpPhvyRA9phyaCCI/yDikbr4pJaCSh3crNs
-         BYRq5kYG8kSxw==
+        b=gQxfCyBAGlwYOBB1+JBZD/k+7HcjZpACEwUTdlEfpU7Ncv+8U+f0G/bWBbsoCeGsm
+         wsl8IepB0W+cyAJDrf+m00vVKKyPRXykgpLw7+2LQAhnR9nGIDAHNFcHFvsv/pqbjP
+         spaanqSwVGRkLFoFg6Vf0h1agKMXqlE2WLgyAusfhh6zBKsTVKIvIsh++oIgI/t3s/
+         o8QIhKmMyzxWCYE4HxiVHRTCu8mgkcA7tAX4LE+2nAWPEjv1CtgvagL9bVf88WKo4e
+         HJCYPUVp95UCqohZmahFGuGyaeW94HOaVEWkuaKFTAFYc7e4R1uGHjXeGyx60r7RVb
+         FIKt6MdXufpZg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F2CAFE270E4;
-        Wed, 19 Apr 2023 04:50:17 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 106CDE50D63;
+        Wed, 19 Apr 2023 04:50:18 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: mscc: ocelot: remove incompatible prototypes
+Subject: Re: [PATCH] net: ethernet: stmmac: dwmac-sti: remove
+ stih415/stih416/stid127
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168187981798.31004.11296646882244575250.git-patchwork-notify@kernel.org>
-Date:   Wed, 19 Apr 2023 04:50:17 +0000
-References: <20230417205531.1880657-1-arnd@kernel.org>
-In-Reply-To: <20230417205531.1880657-1-arnd@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, jacob.e.keller@intel.com, arnd@arndb.de,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <168187981806.31004.15139314026801382632.git-patchwork-notify@kernel.org>
+Date:   Wed, 19 Apr 2023 04:50:18 +0000
+References: <20230416195523.61075-1-avolmat@me.com>
+In-Reply-To: <20230416195523.61075-1-avolmat@me.com>
+To:     Alain Volmat <avolmat@me.com>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+        patrice.chotard@foss.st.com, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,23 +67,19 @@ Hello:
 This patch was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 17 Apr 2023 22:55:25 +0200 you wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Sun, 16 Apr 2023 21:55:23 +0200 you wrote:
+> Remove no more supported platforms (stih415/stih416 and stid127)
 > 
-> The types for the register argument changed recently, but there are
-> still incompatible prototypes that got left behind, and gcc-13 warns
-> about these:
-> 
-> In file included from drivers/net/ethernet/mscc/ocelot.c:13:
-> drivers/net/ethernet/mscc/ocelot.h:97:5: error: conflicting types for 'ocelot_port_readl' due to enum/integer mismatch; have 'u32(struct ocelot_port *, u32)' {aka 'unsigned int(struct ocelot_port *, unsigned int)'} [-Werror=enum-int-mismatch]
->    97 | u32 ocelot_port_readl(struct ocelot_port *port, u32 reg);
->       |     ^~~~~~~~~~~~~~~~~
+> Signed-off-by: Alain Volmat <avolmat@me.com>
+> Acked-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> Patch sent previously as part of serie: https://lore.kernel.org/all/20230209091659.1409-8-avolmat@me.com/
 > 
 > [...]
 
 Here is the summary with links:
-  - net: mscc: ocelot: remove incompatible prototypes
-    https://git.kernel.org/netdev/net-next/c/33d74c8ff5ce
+  - net: ethernet: stmmac: dwmac-sti: remove stih415/stih416/stid127
+    https://git.kernel.org/netdev/net-next/c/14cac662235e
 
 You are awesome, thank you!
 -- 
