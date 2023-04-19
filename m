@@ -2,130 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FE06E7E1C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7CF6E7E33
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233530AbjDSPUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        id S233472AbjDSPZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 11:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233550AbjDSPUf (ORCPT
+        with ESMTP id S233362AbjDSPZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:20:35 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20614.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::614])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0522349D2;
-        Wed, 19 Apr 2023 08:19:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cxZ9ybCwqAIFuZUE6hkm51YqIF8lhRSU8aICI2NJFfFqQdGfOd/dsOSqGXkWyLq9YaISWzvfI+242tJXAh8wFNtpZ8Bt+ZD+N+gOvgB5KO2hmIoes9oLA3f1Mv7ts7tPZctmA9ztBhF63S9iWx1PDZUUwjQcGcDRgZrpm8UF/YT0aVnnmO6Yniaig8IyQbM9LQORa/3K3ikMwNeIs59lyZx4rmebiNyp8wPw29LanFIDe/eZqxVbiESY2KanHZFdm4JvnbciHjiB6Z88bH1UqrVs9FqhDOtAAbTWmZ64yMJ+vBNvaU7r5XRPRur5bxNVJaxnelptwwh2LUyzHzDZqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IIIyPCFGCyq1xAaTYAeFtZuSQc4ahvT962Tvey5+jQ4=;
- b=kaA1TPRo+bjgoMOXxYGFoxnGm+e0Qh+HhPgdhahSIqWejoaoxWOhYTsVORGjNMAQD/taqN6p/PX5Eex14WPSXcnWeNiFU+mOc0ttJWWUBTl/gIP0CHe1cTalqSKEj1kgB3vrs1l31mctiVD0rKGMfN8+qgeQ9rnK7O+nlkzyNXo+A5uPF8MF3di5jwQnK2WmB9c9woMbrqRQnIHMcKHr8Ftr6OyZcaIU3TpSL0ePuxlQDEvCgKgDOtqBD2LuhXmAVexfYfZEPjm3yDzt3yxn9y/rO6IOOFA7BaV69jjpFfzTtoB6slbNtfaHWyC3B0SZVJbvLHcIlDdk8zc+53ma8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
- dkim=pass header.d=labundy.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IIIyPCFGCyq1xAaTYAeFtZuSQc4ahvT962Tvey5+jQ4=;
- b=LAex7n5suRKX5FQ4Ychjpe3yAmXoK/9AQcJFEywy7Nlfe+IjYP50+8UXpYgcQeMsjtLOvA1AF+yN7iloRrNf4LvA2ttW3xUmy0XghM+0DLqEEy9z1va5CwCbXfLLbFoTnFsTMla0umVnOJ1Sr7LqPNAbEOAYXu4S1bvHTdhPF98=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=labundy.com;
-Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
- (2603:10b6:803:43::21) by CO3PR08MB7958.namprd08.prod.outlook.com
- (2603:10b6:303:166::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.21; Wed, 19 Apr
- 2023 15:18:44 +0000
-Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
- ([fe80::d2d1:7af4:ef32:542]) by SN4PR0801MB3774.namprd08.prod.outlook.com
- ([fe80::d2d1:7af4:ef32:542%6]) with mapi id 15.20.6298.045; Wed, 19 Apr 2023
- 15:18:44 +0000
-Date:   Wed, 19 Apr 2023 10:18:38 -0500
-From:   Jeff LaBundy <jeff@labundy.com>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Fei Shao <fshao@chromium.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: input: goodix: Add powered-in-suspend
- property
-Message-ID: <ZEAGTiGyvynGA9P1@nixie71>
-References: <20230418124953.3170028-1-fshao@chromium.org>
- <20230418124953.3170028-2-fshao@chromium.org>
- <ZD8z57MBvcfExJx8@nixie71>
- <CAC=S1ngBt9DmBobMkQXWhqE1UUxFv2U6iFd42nT=1N7r8+pFUg@mail.gmail.com>
- <CAD=FV=U_i26a8uJYmqYf6PUgmTUgmEB5L2DkVga0zDX_iDcGQg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=U_i26a8uJYmqYf6PUgmTUgmEB5L2DkVga0zDX_iDcGQg@mail.gmail.com>
-X-ClientProxiedBy: SA1P222CA0003.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:22c::31) To SN4PR0801MB3774.namprd08.prod.outlook.com
- (2603:10b6:803:43::21)
+        Wed, 19 Apr 2023 11:25:16 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C42A275;
+        Wed, 19 Apr 2023 08:24:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681917868; x=1713453868;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FyoNEuewRSZF8EIv9CVEenpq/Tgf8iahWbqzpdIszVs=;
+  b=LvzGqd3fxxptJUfr7uNAEQhWltjBoKTeclVWQDFKGhoMP5XyOUdNqbW4
+   ZxZrQZQkiWNKXj2nRbesKEtRbXTnWXA2v35GFLjFIp5LcasZGdoaGTee6
+   3Zw55We8ajRqUpPYt4qBRyH4DoGGZt97dMxCDZDaEid6I2zl4IBBP7kOm
+   rPrEKM1PRCTMvOJt7qPCrS0rsCP2VFPF201zZwK0vr6JSn8ZMtmHbCxba
+   5f1IHE963iITvRpiazaZJIUJVmJzzwTSf4CZyzS8aytDrp4OQBPoUAOnH
+   up9MSijg6zFpB95IVIjA1KagyT57FXXLejW+IF5/cecbfnyseQ0dWtaRh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="329652262"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="329652262"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 08:23:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="641814765"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="641814765"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 19 Apr 2023 08:22:54 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pp9e0-000ewp-2j;
+        Wed, 19 Apr 2023 15:22:52 +0000
+Date:   Wed, 19 Apr 2023 23:21:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
+Subject: Re: [PATCH v15 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <202304192347.QsBHpCUb-lkp@intel.com>
+References: <20230419110716.4113627-3-usama.anjum@collabora.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4PR0801MB3774:EE_|CO3PR08MB7958:EE_
-X-MS-Office365-Filtering-Correlation-Id: a739dad0-d2d6-4fad-607b-08db40e95d3a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7jp4YFX5W5TF2pnu2k690+I6QTM2ocNY14SYOVSzV9TpF+MmvruQml1cb9qnh0Trpz233lCzX4HUzB8i7OC35x9X6IuA3Lv9jRsxGmxnkU5BLYIICb40JMs5uvTvcsNT5UUzyA9ffo58sQCsRrJXjRYx9pW0aIeHJSg1KA+NR7wX6gfg8P16rsXF9f9fBGHHp9l+jo5QsvG3DRy4fk+BtPiY0gzaNFa8oOAoyrXLYqTE+yV7vqoqtla1j7CKU6XXt4nW4RX53vNkHC9BYoFpjN5yIiBhL/05iMUmuWiGtqsifN4eoDxjjTvUkTaRV8z2ptaBSuKBvQpXNdlt2NA0LD0nT0Jo9RifS9QM1feqYb64AHYxARwhllPeHsPnlaTPSWUk9B4Miq/3YipWeVecvWWsd7bBHkR1GMXyRIAVIp7FxRW4IpzrSAEMj8humtBIxGFHr96euh/J1fUZV91l2FFeRJTrA95FLnsIOwnwK8x0YCvS+Wf+9zDZgzGTRmJXrqUQWGcMXUSicemq/TnVq4WYJuG1Fr/hBY9usILH4KY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0801MB3774.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(366004)(346002)(136003)(39830400003)(396003)(376002)(451199021)(186003)(9686003)(6512007)(6506007)(26005)(53546011)(966005)(38100700002)(41300700001)(6666004)(6486002)(83380400001)(478600001)(66899021)(7416002)(15650500001)(4326008)(6916009)(66556008)(66476007)(66946007)(316002)(5660300002)(54906003)(33716001)(86362001)(2906002)(8676002)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a0V5MXRMRW42ZHUvbXV2NGF3RnQ0MlBBZzBxM0hlb0NZWTFQaEd2dnVaUHB5?=
- =?utf-8?B?ZTJZckNyUVJzeTVvNkJOSjRXOWh1TmFFbStNWFRlRW9zMCtqNndVeXpmdHcz?=
- =?utf-8?B?Y29WOWFDeC9vL0Vtc2lhRWY3UndGc3NLU0FLaTdERCs4c0dXM0ZLQytSY3I1?=
- =?utf-8?B?RHErbStSbVVUSVI4bFJjRUZWR05nNWFhYi9icHlrTjNINXZQb2lzT1pLb2ox?=
- =?utf-8?B?TjFIdkdZWVRSTW5wNHhKaVNIYXlUbmxzR3hQTllyck0zT3pHRGlhVGpDeFVl?=
- =?utf-8?B?eVZDODAzWTdLWlBwQ2U1a1Y1VTVjN3BEU1gzR3dDMGdzT3NFL1B4NDhydEtW?=
- =?utf-8?B?OVh4Q3dMVzluRUFWYXpYN0p1ZU5saVJKdWxneHZ6V3hYMnI0aTFmb01UaXhN?=
- =?utf-8?B?aFFVaGZuOElUYzJuQjJ4OE05VTFaOWNNYTRwam9qUFg1Z3NKRzVEMFVFdVpy?=
- =?utf-8?B?RTdQclNFbEp0Y0QrMUhENXFrQjhlRXVUbWlqR0hZbjFwUngzOWJmM3hTakFo?=
- =?utf-8?B?RUE3NGxBRnhJNlFraGxmQWM3aDFRc1JnOWVjSXo4S3dqNnRGSlhpMDJYL29G?=
- =?utf-8?B?ZmJUY2Q2UXFkOEwzZnVXaHJEaDJOWkZ0S0F6UStjMitma0xNUW8rTmlyRXJN?=
- =?utf-8?B?OUVHWkd1REZTMGhTNzg4dUExZVkxNWNFeGxLaE1rZTFtR25qRW02YjBXMHBV?=
- =?utf-8?B?amJXWGRIZ0lFZ2lPOWE2OUx2OFBFbnJHRy91V2FDNW53YkNDdzN1Nys3aHE1?=
- =?utf-8?B?U0NpODlTYXlOQ0hyeXVza1JMSGo4ZjBBUVBsb2hyTFh0VG1WTkg0MkJGSCtj?=
- =?utf-8?B?aGpIVUJXNm1mQXQ2eUd1ZVFKQ0trWUdsbVB4UnpidWhiT1NhalZzQUUwcUJW?=
- =?utf-8?B?UEdKcEpKVUVMak5nclhxYzhSSmNGNmF5Z0dEM2o0NFdZMXB0SzBTY0Nmc0sw?=
- =?utf-8?B?WWdjbVg4bVd2YWNJTnlZaEoxVDV5ZmdrcWx1SDVLNmNidXVVMW0zTnZ6TlM2?=
- =?utf-8?B?NjFZVG9DaE51eU9OR0l6WlFMT2F1aWh2NENORDlnZFFCM0duR2IyMlpERWQ1?=
- =?utf-8?B?bVZxcG9MbXVKdm91K25tWFllSDFnTDFYUW9WK3AxT1FhRms3TUlkdi9zNDgw?=
- =?utf-8?B?V3VHZlVQdWVQOEtFRE1jTFNQOVBwcWY5Nks2ZmhSaVZTZjQ2eE5nVXgvOEQ1?=
- =?utf-8?B?bFdnVjV1a3A1ZWJsUzRiUGJwTmtCZDEyV2VleDd1aGNnanRqN1hjNGwwLzVC?=
- =?utf-8?B?a2s2bmxicHJZNkcvY3pJK0pMeTdQL01aMFhBV284empOMmNjRGtyZGFFREFU?=
- =?utf-8?B?QWY2eXlqWllVc0ZGSzUvMnFsbGtoYW5HSUs0Z0tidnpuK0VVT2txRFhuZjVB?=
- =?utf-8?B?TWZBZU44UzY2MWgxYk91eGdCN3hYQVBLTjAyNFRnWHhaTGhYbDRNYjB3MVNG?=
- =?utf-8?B?aFA0czZTdkw4cGlyMGUyKzRVWFhKbnZtSERBV3kwYTNHUUw5dVNNblU2cDA4?=
- =?utf-8?B?THU1eVArYm9LRTBKTG4xcVZaK3IvOUF5U2ZlTlRycEtxYzh6ZnlvMENLZHFq?=
- =?utf-8?B?UXVueWdHTW0wRXVsM0pLZG9ZYWQyNDJwbXhjYVVIdHhkS3ZYMjNUZXk1ZXNw?=
- =?utf-8?B?ZTVPd2JBelR0TmlVVFprMDVJSUFna3hiQVZQZlY5Q3dRWHBwUitrQlZua1d5?=
- =?utf-8?B?TlozN3JETzRXZTFwVkN4d0JoOC9XNnNaS0hxQ3lzWWlNNW13eFE3eTZmVEsx?=
- =?utf-8?B?dTVWNU5sQ3ZuTndFQjBWSlIzSEhMdnRYNkdVVWhveDUwSnZuL2JGLy94MTFZ?=
- =?utf-8?B?MWthTW9SV1JBVkZNVmpSYWtIT3k1WmxhNnl0bG5jWDByaHQxTUNDeVBsWkpW?=
- =?utf-8?B?aTlyWWE4UDVNKzgxNTZORzEwaGludGljcEhiQUFNeTh5djVyOEpXWmpVOVZR?=
- =?utf-8?B?VE9pWFVTZ0NPSlRzZWo5b0x3YjNtUXl2bUIxR1BIVVFGZWhWM0QwQXlaR3V3?=
- =?utf-8?B?MXR0ZDlBaHord3hyUmZ2Z1NMekV3NUlPbld6L0lQS3BDQlg0U2ZuOU1LSk80?=
- =?utf-8?B?dktwN2NFUzhJSDY3cXZCZUdDa2d5cDVMQ0ZBM29QaFRHaHMrSFlNQm52TXor?=
- =?utf-8?Q?FM9wOWEUUNmiBuo1+afuhTYES?=
-X-OriginatorOrg: labundy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a739dad0-d2d6-4fad-607b-08db40e95d3a
-X-MS-Exchange-CrossTenant-AuthSource: SN4PR0801MB3774.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 15:18:44.0385
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M776EARZ1t6ix5d/ojHLbEEUHo9oIrjNeP3S97LTXbh91YlAN5dRot2lZXuv2uA+WILznfFh1JRvDEKvgD+QwA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO3PR08MB7958
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419110716.4113627-3-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,105 +92,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Doug and Fei,
+Hi Muhammad,
 
-Thank you for the informative discussion; I can empathize with the pain
-these issues bring.
+kernel test robot noticed the following build errors:
 
-On Wed, Apr 19, 2023 at 07:38:13AM -0700, Doug Anderson wrote:
-> Hi,
-> 
-> On Wed, Apr 19, 2023 at 3:44 AM Fei Shao <fshao@chromium.org> wrote:
-> >
-> > Hi Jeff,
-> >
-> > On Wed, Apr 19, 2023 at 8:21 AM Jeff LaBundy <jeff@labundy.com> wrote:
-> > >
-> > > Hi Fei,
-> > >
-> > > On Tue, Apr 18, 2023 at 08:49:51PM +0800, Fei Shao wrote:
-> > > > We observed that on Chromebook device Steelix, if Goodix GT7375P
-> > > > touchscreen is powered in suspend (because, for example, it connects to
-> > > > an always-on regulator) and with the reset GPIO asserted, it will
-> > > > introduce about 14mW power leakage.
-> > > >
-> > > > This property is used to indicate that the touchscreen is powered in
-> > > > suspend. If it's set, the driver will stop asserting the reset GPIO in
-> > > > power-down, and it will do it in power-up instead to ensure that the
-> > > > state is always reset after resuming.
-> > > >
-> > > > Signed-off-by: Fei Shao <fshao@chromium.org>
-> > > > ---
-> > >
-> > > This is an interesting problem; were you able to root-cause why the silicon
-> > > exhibits this behavior? Simply asserting reset should not cause it to draw
-> > > additional power, let alone 14 mW. This almost sounds like a back-powering
-> > > problem during suspend.
-> > >
-> > There was a fix for this behavior before so I didn't dig into it on
-> > the silicon side.
-> > I can ask internally and see if we can have Goodix to confirm this is
-> > a known HW erratum.
-> 
-> Certainly it doesn't hurt to check, but it's not really that shocking
-> to me that asserting reset could cause a power draw on some hardware.
-> Reset puts hardware into a default state and that's not necessarily
-> low power. I guess ideally hardware would act like it's "off" when
-> reset is asserted and then then init to the default state on the edge
-> as reset was deasserted, but I not all hardware is designed in an
-> ideal way.
+[auto build test ERROR on next-20230418]
+[cannot apply to akpm-mm/mm-everything linus/master v6.3-rc7 v6.3-rc6 v6.3-rc5 v6.3-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-While that is true in theory, I have never, ever seen that to be the case
-when there is not some other underlying problem.
+url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230419-190920
+patch link:    https://lore.kernel.org/r/20230419110716.4113627-3-usama.anjum%40collabora.com
+patch subject: [PATCH v15 2/5] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
+config: s390-randconfig-r044-20230416 (https://download.01.org/0day-ci/archive/20230419/202304192347.QsBHpCUb-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b4a176ae0c875b07b49d2e3539699065438be9b1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230419-190920
+        git checkout b4a176ae0c875b07b49d2e3539699065438be9b1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash fs/
 
-What I have seen, however, is that asserting reset actually causes the GPIO
-to sink current from some other supply and through the IC. I loosely suspect
-that if you probe the IC's rails and digital I/O during the failure condition,
-you may find one of them resting at some mid-rail voltage or diode drop. It
-seems you have a similar suspicion.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304192347.QsBHpCUb-lkp@intel.com/
 
-In that case, it may mean that some other supply in the system should actually
-be kept on, or that supplies are being brought down out of order. In which
-case, the solution should actually be a patch to the affected platform(s) dts
-and not the mainline driver.
+All errors (new ones prefixed by >>):
 
-> 
-> 
-> > > If this is truly expected behavior, is it sufficient to use the always_on
-> > > constraint of the relevant regulator(s) to make this decision as opposed to
-> > > introducing a new property?
-> > >
-> > That sounds good to me. IIUC, for the existing designs, the boards
-> > that would set this property would also exclusively set
-> > `regulator-always-on` in their supply, so that should suffice.
-> > Let me revise the patch. Thanks!
-> 
-> Yeah, I thought about this too and talked about it in my original
-> reply. It doesn't handle the shared-rail case, but then again neither
-> does ${SUBJECT} patch. ...then I guess the only argument against it is
-> my argument that the regulator could be marked "always-on" in the
-> device tree but still turned off by an external entity (PMIC or EC) in
-> S3. In theory this should be specified by
-> "regulator-state-(standby|mem|disk)", but I could believe it being
-> tricky to figure out (what if a parent regulator gets turned off
-> automatically but the child isn't explicit?). Specifically, if a
-> regulator is always-on but somehow gets shut off in suspend then we
-> _do_ want to assert reset (active low) during suspend, otherwise we'll
-> have a power leak through the reset GPIO... :-P
+   fs/proc/task_mmu.c: In function 'do_pagemap_scan':
+>> fs/proc/task_mmu.c:2177:41: error: 'vma' undeclared (first use in this function)
+    2177 |                                         vma->vm_mm, start, end);
+         |                                         ^~~
+   fs/proc/task_mmu.c:2177:41: note: each undeclared identifier is reported only once for each function it appears in
 
-D'oh! Sorry I missed your original reply. My concern is that either solution
-is a band-aid and does not address the root cause. I would rather see a patch
-that addresses what seems to be a back-powering problem so that the driver may
-freely assert reset. That is just my $.02; let me know if I have misunderstood
-or there are other factors that prevent that path from being viable.
 
-> 
-> ...so I guess I'll continue to assert that I don't think peeking at
-> the regulator's "always-on" property is the best way to go. If
-> everyone else disagrees with me then I won't stand in the way, but IMO
-> the extra property like Fei's patch adds is better.
-> 
-> [1] https://lore.kernel.org/r/CAD=FV=V8ZN3969RrPu2-zZYoEE=LDxpi8K_E8EziiDpGOSsq1w@mail.gmail.com
+vim +/vma +2177 fs/proc/task_mmu.c
 
-Kind regards,
-Jeff LaBundy
+  2128	
+  2129	static long do_pagemap_scan(struct mm_struct *mm,
+  2130				   struct pm_scan_arg __user *uarg)
+  2131	{
+  2132		unsigned long start, end, walk_start, walk_end;
+  2133		unsigned long empty_slots, vec_index = 0;
+  2134		struct mmu_notifier_range range;
+  2135		struct page_region __user *vec;
+  2136		struct pagemap_scan_private p;
+  2137		struct pm_scan_arg arg;
+  2138		int ret = 0;
+  2139	
+  2140		if (copy_from_user(&arg, uarg, sizeof(arg)))
+  2141			return -EFAULT;
+  2142	
+  2143		start = untagged_addr((unsigned long)arg.start);
+  2144		vec = (struct page_region *)untagged_addr((unsigned long)arg.vec);
+  2145	
+  2146		ret = pagemap_scan_args_valid(&arg, start, vec);
+  2147		if (ret)
+  2148			return ret;
+  2149	
+  2150		end = start + arg.len;
+  2151		p.max_pages = arg.max_pages;
+  2152		p.found_pages = 0;
+  2153		p.flags = arg.flags;
+  2154		p.required_mask = arg.required_mask;
+  2155		p.anyof_mask = arg.anyof_mask;
+  2156		p.excluded_mask = arg.excluded_mask;
+  2157		p.return_mask = arg.return_mask;
+  2158		p.cur.len = 0;
+  2159		p.cur.start = 0;
+  2160		p.vec = NULL;
+  2161		p.vec_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
+  2162	
+  2163		/*
+  2164		 * Allocate smaller buffer to get output from inside the page walk
+  2165		 * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
+  2166		 * we want to return output to user in compact form where no two
+  2167		 * consecutive regions should be continuous and have the same flags.
+  2168		 * So store the latest element in p.cur between different walks and
+  2169		 * store the p.cur at the end of the walk to the user buffer.
+  2170		 */
+  2171		p.vec = kmalloc_array(p.vec_len, sizeof(*p.vec), GFP_KERNEL);
+  2172		if (!p.vec)
+  2173			return -ENOMEM;
+  2174	
+  2175		if (p.flags & PM_SCAN_OP_WP) {
+  2176			mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
+> 2177						vma->vm_mm, start, end);
+  2178			mmu_notifier_invalidate_range_start(&range);
+  2179		}
+  2180	
+  2181		walk_start = walk_end = start;
+  2182		while (walk_end < end && !ret) {
+  2183			p.vec_index = 0;
+  2184	
+  2185			empty_slots = arg.vec_len - vec_index;
+  2186			p.vec_len = min(p.vec_len, empty_slots);
+  2187	
+  2188			walk_end = (walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK;
+  2189			if (walk_end > end)
+  2190				walk_end = end;
+  2191	
+  2192			ret = mmap_read_lock_killable(mm);
+  2193			if (ret)
+  2194				goto free_data;
+  2195			ret = walk_page_range(mm, walk_start, walk_end,
+  2196					      &pagemap_scan_ops, &p);
+  2197			mmap_read_unlock(mm);
+  2198	
+  2199			if (ret && ret != -ENOSPC && ret != PM_SCAN_FOUND_MAX_PAGES)
+  2200				goto free_data;
+  2201	
+  2202			walk_start = walk_end;
+  2203			if (p.vec_index) {
+  2204				if (copy_to_user(&vec[vec_index], p.vec,
+  2205						 p.vec_index * sizeof(*p.vec))) {
+  2206					/*
+  2207					 * Return error even though the OP succeeded
+  2208					 */
+  2209					ret = -EFAULT;
+  2210					goto free_data;
+  2211				}
+  2212				vec_index += p.vec_index;
+  2213			}
+  2214		}
+  2215	
+  2216		if (p.flags & PM_SCAN_OP_WP)
+  2217			mmu_notifier_invalidate_range_end(&range);
+  2218	
+  2219		if (p.cur.len) {
+  2220			if (copy_to_user(&vec[vec_index], &p.cur, sizeof(*p.vec))) {
+  2221				ret = -EFAULT;
+  2222				goto free_data;
+  2223			}
+  2224			vec_index++;
+  2225		}
+  2226	
+  2227		ret = vec_index;
+  2228	
+  2229	free_data:
+  2230		kfree(p.vec);
+  2231		return ret;
+  2232	}
+  2233	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
