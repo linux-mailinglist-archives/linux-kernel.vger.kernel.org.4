@@ -2,204 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1AB6E80A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9EA6E80AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233017AbjDSRvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 13:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50236 "EHLO
+        id S232543AbjDSRy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 13:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbjDSRvd (ORCPT
+        with ESMTP id S229617AbjDSRyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 13:51:33 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3EB40FE
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:51:31 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-63d32d21f95so29841b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:51:31 -0700 (PDT)
+        Wed, 19 Apr 2023 13:54:23 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692BB2D56
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:54:21 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-2f625d52275so3468592f8f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:54:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681926691; x=1684518691;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7/q8cJ9Qt44yJA/0rDh4+g7HN0YJHtvTInO2OuaJ3mY=;
-        b=cwoFJPgT7nwOViKlcuQPukO04ZVRLClIdjlVxCmC4pnAsImARQW+z6JpQ+qrGVkWf8
-         WihJ+Ulxfm+51a7Ct2tCg8pvD0hnQS5+weUCeSURGJoVOr6RLG2MioZKMGOTY2J+GC1R
-         AhNxkjFGJAiqjKONJkM8dTICDVN9fMU6iohDRZaMyirsDSnp9d3ZeyNKCv3GYphCPNKo
-         M/lkx1UU9qKJPKlPBPEkyys6Ghkt9PZADKPtnLx9Ao6YNYOvGbdJZDIBDB9LY4Uv00kJ
-         nH+R2OOiyo6Myto0UpfgzneJsydPj7nplBuf4CsA5or/emEZgA4K4zEheQ2RjDEb97GZ
-         n+sg==
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1681926860; x=1684518860;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yj8PvCkjhqlGLpJgZC/Q2Bpv2VR5GOR+cVFRYANmF9w=;
+        b=tCM9O56kNnHzXWe9/6XSrxEfZ0NJbNQPHtKUnEr1krjp80qJqtuAFEmUKCT4g9lFZd
+         vRIlA+qPPw91grXR5DWu+2Th7pEt4fFIoe9fxeAKvdLwoj6Uwb7lx6y7TovoIhXtdTOc
+         IDbQLzZhWBlwX8b1h3u4/NC7dtGJU7FfReEfsq1F0e1mluIOtaprVWl2YDuezxT1WPoA
+         qPcaSaTRpMaC9qqDPZgM9371FJ23xgMiF/HMXxNqNYnCrZ4eWjSPrHXSigdlsbbrp4yP
+         +IwVSXWwsgJ3BltcO15sIqNKmLPTXO95ZmO7ij9+3nJMk+auxmY4brp6HCatqKgGGJcT
+         lrPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681926691; x=1684518691;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7/q8cJ9Qt44yJA/0rDh4+g7HN0YJHtvTInO2OuaJ3mY=;
-        b=I/Sdg/nIv5KvgfnWd7ZN19YbS/gnEmwPCcDO7ZgyMpb3QnyDAFCladj2GTSoO3qgk1
-         rVx8N2v1t2ELidVFqSw2DwwPpn04r4fzpYAdF+PlkeYq2w3FJOTzUX0MV7IYGkggK8Gs
-         mcNBSuhwJWwVFcIKPAARW/iDEF+h53o0gatjwM7gonryn/B4hvHuvp7UD9w5r1hK7uhq
-         5PlxOZDQhhsIfLTDfqIp3x4xyFrGfGmTb+/TGnCEXDiOd805FQM30qDvOFtj3lqkhiCB
-         CzWXNKF+AshZ0egwDHUfOgyW8ZPek/ou1FjUieHCGUq+befkQzy9etJeHlcoXIgYJlo0
-         HuUg==
-X-Gm-Message-State: AAQBX9eW2aR6yU2gLAXex6Q/3BDf1oahNr96KF2DfnFZtpWR5ChBssrW
-        LDmundwVTiBTvhIMjarHeX2j5A==
-X-Google-Smtp-Source: AKy350Y3j8tmoGCXFfV+RtZYpzzHbIgkWtMT3eW+y8zGh/LXBSEmxJrCExZ4sGYZzQm72/pMCA0SMQ==
-X-Received: by 2002:a05:6a00:4ac8:b0:633:4c01:58b4 with SMTP id ds8-20020a056a004ac800b006334c0158b4mr19325177pfb.2.1681926691066;
-        Wed, 19 Apr 2023 10:51:31 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id t26-20020a62ea1a000000b0063a1e7d7439sm11312135pfh.69.2023.04.19.10.51.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 10:51:30 -0700 (PDT)
-Message-ID: <8af483d2-0d3d-5ece-fb1d-a3654411752b@kernel.dk>
-Date:   Wed, 19 Apr 2023 11:51:29 -0600
+        d=1e100.net; s=20221208; t=1681926860; x=1684518860;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Yj8PvCkjhqlGLpJgZC/Q2Bpv2VR5GOR+cVFRYANmF9w=;
+        b=FPBoCGzTvLjdm3WZTJm2G5wCv0Kjow9EXAZ8JgrnqrZrVKpSKomD80i4aI5u56s1GM
+         qgY99ylh6gn8C/bxd5FKdr9JDHA4PwOtrZbPLgS2NGLgQe3kRzTKNMhbe7qKbtNge/Pl
+         0hiZzTA0IStnYsmEDg8tqEGygIlycG6d4180MvlSbtJ5rJAZuzzrDP75emxSycLu3Cpt
+         iEmDWeSTJ+cVbxaHrqKQspHd2teUBXzl0Fw/lXzU7mEywl2PIywD6ernW/kc2bHO15ZU
+         vxYKRudxjnUh2EWc5/SQl06XwCVKRFRNjgBwLZuVKHcPeDI9t0vbWazTk8uR1G623ERO
+         CsQQ==
+X-Gm-Message-State: AAQBX9f/Bbj8wMgIgs/MObeOTRql81ojiu7cxVpVVmCapN2ocH5POeOL
+        vfhOwtpc2l/3wp33efmAyLIpxw==
+X-Google-Smtp-Source: AKy350b7N3K1PIsDxip1YeFxObxVGjVJMIaPkVDiKdgvKCFeHAbPsk5En/D9eoavfPRnvFWU4Iib7Q==
+X-Received: by 2002:adf:ee86:0:b0:2f8:3225:2bc2 with SMTP id b6-20020adfee86000000b002f832252bc2mr5337794wro.41.1681926859842;
+        Wed, 19 Apr 2023 10:54:19 -0700 (PDT)
+Received: from airbuntu (host109-154-46-114.range109-154.btcentralplus.com. [109.154.46.114])
+        by smtp.gmail.com with ESMTPSA id y14-20020adffa4e000000b002f5fbc6ffb2sm16248915wrr.23.2023.04.19.10.54.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 10:54:19 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 18:54:14 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     David Dai <davidai@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Qais Yousef <qyousef@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1] sched/uclamp: Introduce
+ SCHED_FLAG_RESET_UCLAMP_ON_FORK flag
+Message-ID: <20230419175414.ycnlaperdkjxgypx@airbuntu>
+References: <20230416213406.2966521-1-davidai@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
- pin_user_pages()
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>
-References: <cover.1681831798.git.lstoakes@gmail.com>
- <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
- <936e8f52-00be-6721-cb3e-42338f2ecc2f@kernel.dk>
- <c2e22383-43ee-5cf0-9dc7-7cd05d01ecfb@kernel.dk>
- <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
- <69f48cc6-8fc6-0c49-5a79-6c7d248e4ad5@kernel.dk>
- <bec03e0f-a0f9-43c3-870b-be406ca848b9@lucifer.local>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <bec03e0f-a0f9-43c3-870b-be406ca848b9@lucifer.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230416213406.2966521-1-davidai@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 11:47?AM, Lorenzo Stoakes wrote:
-> On Wed, Apr 19, 2023 at 11:35:58AM -0600, Jens Axboe wrote:
->> On 4/19/23 11:23?AM, Lorenzo Stoakes wrote:
->>> On Wed, Apr 19, 2023 at 10:59:27AM -0600, Jens Axboe wrote:
->>>> On 4/19/23 10:35?AM, Jens Axboe wrote:
->>>>> On 4/18/23 9:49?AM, Lorenzo Stoakes wrote:
->>>>>> We are shortly to remove pin_user_pages(), and instead perform the required
->>>>>> VMA checks ourselves. In most cases there will be a single VMA so this
->>>>>> should caues no undue impact on an already slow path.
->>>>>>
->>>>>> Doing this eliminates the one instance of vmas being used by
->>>>>> pin_user_pages().
->>>>>
->>>>> First up, please don't just send single patches from a series. It's
->>>>> really annoying when you are trying to get the full picture. Just CC the
->>>>> whole series, so reviews don't have to look it up separately.
->>>>>
->>>>> So when you're doing a respin for what I'll mention below and the issue
->>>>> that David found, please don't just show us patch 4+5 of the series.
->>>>
->>>> I'll reply here too rather than keep some of this conversaion
->>>> out-of-band.
->>>>
->>>> I don't necessarily think that making io buffer registration dumber and
->>>> less efficient by needing a separate vma lookup after the fact is a huge
->>>> deal, as I would imagine most workloads register buffers at setup time
->>>> and then don't change them. But if people do switch sets at runtime,
->>>> it's not necessarily a slow path. That said, I suspect the other bits
->>>> that we do in here, like the GUP, is going to dominate the overhead
->>>> anyway.
->>>
->>> Thanks, and indeed I expect the GUP will dominate.
->>
->> Unless you have a lot of vmas... Point is, it's _probably_ not a
->> problem, but it might and it's making things worse for no real gain as
->> far as I can tell outside of some notion of "cleaning up the code".
->>
->>>> My main question is, why don't we just have a __pin_user_pages or
->>>> something helper that still takes the vmas argument, and drop it from
->>>> pin_user_pages() only? That'd still allow the cleanup of the other users
->>>> that don't care about the vma at all, while retaining the bundled
->>>> functionality for the case/cases that do? That would avoid needing
->>>> explicit vma iteration in io_uring.
->>>>
->>>
->>> The desire here is to completely eliminate vmas as an externally available
->>> parameter from GUP. While we do have a newly introduced helper that returns
->>> a VMA, doing the lookup manually for all other vma cases (which look up a
->>> single page and vma), that is more so a helper that sits outside of GUP.
->>>
->>> Having a separate function that still bundled the vmas would essentially
->>> undermine the purpose of the series altogether which is not just to clean
->>> up some NULL's but rather to eliminate vmas as part of the GUP interface
->>> altogether.
->>>
->>> The reason for this is that by doing so we simplify the GUP interface,
->>> eliminate a whole class of possible future bugs with people holding onto
->>> pointers to vmas which may dangle and lead the way to future changes in GUP
->>> which might be more impactful, such as trying to find means to use the fast
->>> paths in more areas with an eye to gradual eradication of the use of
->>> mmap_lock.
->>>
->>> While we return VMAs, none of this is possible and it also makes the
->>> interface more confusing - without vmas GUP takes flags which define its
->>> behaviour and in most cases returns page objects. The odd rules about what
->>> can and cannot return vmas under what circumstances are not helpful for new
->>> users.
->>>
->>> Another point here is that Jason suggested adding a new
->>> FOLL_ALLOW_BROKEN_FILE_MAPPINGS flag which would, by default, not be
->>> set. This could assert that only shmem/hugetlb file mappings are permitted
->>> which would eliminate the need for you to perform this check at all.
->>>
->>> This leads into the larger point that GUP-writing file mappings is
->>> fundamentally broken due to e.g. GUP not honouring write notify so this
->>> check should at least in theory not be necessary.
->>>
->>> So it may be the case that should such a flag be added this code will
->>> simply be deleted at a future point :)
->>
->> Why don't we do that first then? There's nothing more permanent than a
->> temporary workaround/fix. Once it's in there, motivation to get rid of
->> it for most people is zero because they just never see it. Seems like
->> that'd be a much saner approach rather than the other way around, and
->> make this patchset simpler/cleaner too as it'd only be removing code in
->> all of the callers.
->>
+Hi David!
+
+On 04/16/23 14:34, David Dai wrote:
+> A userspace service may manage uclamp dynamically for individual tasks and
+> a child task will unintentionally inherit a pesudo-random uclamp setting.
+> This could result in the child task being stuck with a static uclamp value
+> that results in poor performance or poor power.
 > 
-> Because I'd then need to audit all GUP callers to see whether they in some
-> way brokenly access files in order to know which should and should not use
-> this new flag. It'd change this series from 'remove the vmas parameter' to
-> something a lot more involved.
+> Using SCHED_FLAG_RESET_ON_FORK is too coarse for this usecase and will
+> reset other useful scheduler attributes. Adding a
+> SCHED_FLAG_RESET_UCLAMP_ON_FORK will allow userspace to have finer control
+> over scheduler attributes of child processes.
+
+Thanks a lot for the patch. This has a been a known limitation for a while but
+didn't manage to find the time to push anything yet.
+
+ADPF (Android Dynamic Performance Framework) exposes APIs to manage performance
+for a set of pids [1]. Only these tasks belong to the session and any forked
+tasked is expected to have its uclamp values reset. But as you pointed out, the
+current RESET_ON_FORK resets everything, but we don't want that as these
+attributes don't belong to ADPF to decide whether they should be reset too or
+not. And not resetting them means we can end up with tasks inheriting random
+uclamp values unintentionally. We can't tell these tasks not to fork anything.
+If the forked tasks are expected to be part of the session, then their pids
+must be added explicitly.
+
+[1] https://developer.android.com/reference/android/os/PerformanceHintManager#createHintSession(int%5B%5D,%20long)
+
 > 
-> I think it's much safer to do the two separately, as I feel that change
-> would need quite a bit of scrutiny too.
+> Cc: Qais Yousef <qyousef@google.com>
+> Cc: Quentin Perret <qperret@google.com>
+> Cc: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: David Dai <davidai@google.com>
+> ---
+>  include/linux/sched.h            | 3 +++
+>  include/uapi/linux/sched.h       | 4 +++-
+>  kernel/sched/core.c              | 6 +++++-
+>  tools/include/uapi/linux/sched.h | 4 +++-
+>  4 files changed, 14 insertions(+), 3 deletions(-)
 > 
-> As for temporary, I can assure you I will be looking at introducing this
-> flag, for what it's worth :) and Jason is certainly minded to do work in
-> this area also.
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 63d242164b1a..b1676b9381f9 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -885,6 +885,9 @@ struct task_struct {
+>  	unsigned			sched_reset_on_fork:1;
 
-It's either feasible or it's not, and it didn't sound too bad in terms
-of getting it done to remove the temporary addition. Since we're now
-days away from the merge window and any of this would need to soak in
-for-next anyway for a bit, why not just do that other series first? It
-really is backward. And this happens sometimes when developing
-patchsets, at some point you realize that things would be easier/cleaner
-with another prep series first. Nothing wrong with that, but let's not
-be hesitant to shift direction a bit when it makes sense to do so.
+nit: can't we convert to a flag and re-use?
 
-I keep getting this sense of urgency for a cleanup series. Why not just
-do it right from the get-go and make this series simpler? At that point
-there would be no discussion on it at all, as it would be a straight
-forward cleanup without adding an intermediate step that'd get deleted
-later anyway.
+>  	unsigned			sched_contributes_to_load:1;
+>  	unsigned			sched_migrated:1;
+> +#ifdef CONFIG_UCLAMP_TASK
+> +	unsigned			sched_reset_uclamp_on_fork:1;
+> +#endif
+>  
+>  	/* Force alignment to the next boundary: */
+>  	unsigned			:0;
+> diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
+> index 3bac0a8ceab2..7515106e1f1a 100644
+> --- a/include/uapi/linux/sched.h
+> +++ b/include/uapi/linux/sched.h
+> @@ -132,12 +132,14 @@ struct clone_args {
+>  #define SCHED_FLAG_KEEP_PARAMS		0x10
+>  #define SCHED_FLAG_UTIL_CLAMP_MIN	0x20
+>  #define SCHED_FLAG_UTIL_CLAMP_MAX	0x40
+> +#define SCHED_FLAG_RESET_UCLAMP_ON_FORK	0x80
+>  
+>  #define SCHED_FLAG_KEEP_ALL	(SCHED_FLAG_KEEP_POLICY | \
+>  				 SCHED_FLAG_KEEP_PARAMS)
+>  
+>  #define SCHED_FLAG_UTIL_CLAMP	(SCHED_FLAG_UTIL_CLAMP_MIN | \
+> -				 SCHED_FLAG_UTIL_CLAMP_MAX)
+> +				 SCHED_FLAG_UTIL_CLAMP_MAX | \
+> +				 SCHED_FLAG_RESET_UCLAMP_ON_FORK)
 
--- 
-Jens Axboe
+I was considering to have something a bit more generic that allows selecting
+which attributes to reset.
 
+For example a syscall with SCHED_FLAG_RESET_ON_FORK_SEL combined with
+SCHED_FLAG_UCLAMP_MIN/MAX will only reset those. This should make it extensible
+if we have other similar use cases in the future. The downside it *might*
+require to be done in a separate syscall to the one that sets these parameter.
+But it should be done once.
+
+Maybe there's a better interface, but I think it makes sense to do it in a way
+that we won't have to do this again. Would be good to hear from maintainers
+first before you take my word for it ;-)
+
+
+Cheers
+
+--
+Qais Yousef
+
+>  
+>  #define SCHED_FLAG_ALL	(SCHED_FLAG_RESET_ON_FORK	| \
+>  			 SCHED_FLAG_RECLAIM		| \
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 0d18c3969f90..f2d5f7911855 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -1943,6 +1943,10 @@ static void __setscheduler_uclamp(struct task_struct *p,
+>  		uclamp_se_set(&p->uclamp_req[UCLAMP_MAX],
+>  			      attr->sched_util_max, true);
+>  	}
+> +
+> +	p->sched_reset_uclamp_on_fork = !!(attr->sched_flags &
+> +				     SCHED_FLAG_RESET_UCLAMP_ON_FORK);
+> +
+>  }
+>  
+>  static void uclamp_fork(struct task_struct *p)
+> @@ -1956,7 +1960,7 @@ static void uclamp_fork(struct task_struct *p)
+>  	for_each_clamp_id(clamp_id)
+>  		p->uclamp[clamp_id].active = false;
+>  
+> -	if (likely(!p->sched_reset_on_fork))
+> +	if (likely(!p->sched_reset_on_fork && !p->sched_reset_uclamp_on_fork))
+>  		return;
+>  
+>  	for_each_clamp_id(clamp_id) {
+> diff --git a/tools/include/uapi/linux/sched.h b/tools/include/uapi/linux/sched.h
+> index 3bac0a8ceab2..d52c59a2e0d0 100644
+> --- a/tools/include/uapi/linux/sched.h
+> +++ b/tools/include/uapi/linux/sched.h
+> @@ -132,12 +132,14 @@ struct clone_args {
+>  #define SCHED_FLAG_KEEP_PARAMS		0x10
+>  #define SCHED_FLAG_UTIL_CLAMP_MIN	0x20
+>  #define SCHED_FLAG_UTIL_CLAMP_MAX	0x40
+> +#define SCHED_FLAG_RESET_UCLAMP_ON_FORK 0x80
+>  
+>  #define SCHED_FLAG_KEEP_ALL	(SCHED_FLAG_KEEP_POLICY | \
+>  				 SCHED_FLAG_KEEP_PARAMS)
+>  
+>  #define SCHED_FLAG_UTIL_CLAMP	(SCHED_FLAG_UTIL_CLAMP_MIN | \
+> -				 SCHED_FLAG_UTIL_CLAMP_MAX)
+> +				 SCHED_FLAG_UTIL_CLAMP_MAX | \
+> +				 SCHED_FLAG_RESET_UCLAMP_ON_FORK)
+>  
+>  #define SCHED_FLAG_ALL	(SCHED_FLAG_RESET_ON_FORK	| \
+>  			 SCHED_FLAG_RECLAIM		| \
+> -- 
+> 2.40.0.634.g4ca3ef3211-goog
+> 
