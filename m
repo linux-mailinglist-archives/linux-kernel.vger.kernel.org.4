@@ -2,169 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3DD6E7468
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324596E7482
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbjDSHwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 03:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38928 "EHLO
+        id S231524AbjDSH5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 03:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232623AbjDSHwe (ORCPT
+        with ESMTP id S231208AbjDSH5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 03:52:34 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A8F118D6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:51:57 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id dm2so79452102ejc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681890710; x=1684482710;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fDlxSPCrAX4Nl9Tp9ky3UcOflYJp7M8armR9xRbnOzc=;
-        b=Ok8e+/8gGGf3Sa6VRx391vR3zJfaYlDBevI4ECtzvfcpTjvGwPZ9LtNnTj6mSrBogi
-         jbYaCmWh4YZThAmp4u/PY1t9VQgCPIcuFOXBfoJoZ9rQ9aMasEc4EZBHhxXuh7/1xykQ
-         qPWnGey5Gp59fchiFiOBeLqnJt2p9Z2+HHc822a1HfsEcqWrZNYUyf6wMjKMHQ4EF+Rp
-         /FSzBzuaVCx5p3AC7CJdtsDShQb59/TlyCgKu1NDluOqRzVCdgt6s9qv2YyaPASuJkA2
-         gaBdcGw1QGrR1HoLibzvwgoeaVoDwwOmHtFSQW1Dv6dcVr7A+wNWAuQP9f2WhrY8maS6
-         bhCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681890710; x=1684482710;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fDlxSPCrAX4Nl9Tp9ky3UcOflYJp7M8armR9xRbnOzc=;
-        b=jHJNAhcuBopGlYrsBt1etPKinqbDbYamJWidj4bHxL1KPmv14c3Tyeo0eIJFDNosUJ
-         S0LDFzyZ08Xm6X7gMPZgzWilYxt3qWGC9t+gdFNsL+DSmGl7pwPQqfIYIyccvCg3V3w7
-         Fz/Hs61YYPWY7g+O1EpiH2UIPr19rD1Cy/vBMoJ2Z4K1dHO73xIrYzA3L3zau2Xyumto
-         m7qcCWbu6QbePuxfg6xRSnFqTd2JfmuDqTSExrobDoMeWdJu616KhijefvmHkf5EIk6w
-         0dy8w8jmSy7Sa3DazgJ7qJKYANyOxbW7EHlcWh4IvhazPRGgPMnP44AuWhoOveAkpCQF
-         a3Gg==
-X-Gm-Message-State: AAQBX9frzswLTyoyK+LTvKw1hyaKY9GWDMYCfYJB+brP4/nYMNugqybo
-        G3LWe4TMwpJffprygTf/+YyC1A==
-X-Google-Smtp-Source: AKy350ZRTyS4+GTp8Pj7HoAthP042Am2UGVyUuHn7lPYpES4AgScsdDSfBMWEMGre6ktSarvslITpQ==
-X-Received: by 2002:a17:906:149b:b0:92f:924b:e8f4 with SMTP id x27-20020a170906149b00b0092f924be8f4mr14128126ejc.4.1681890709967;
-        Wed, 19 Apr 2023 00:51:49 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:62f5:eb43:f726:5fee? ([2a02:810d:15c0:828:62f5:eb43:f726:5fee])
-        by smtp.gmail.com with ESMTPSA id xg12-20020a170907320c00b0094ee99eeb01sm7389793ejb.150.2023.04.19.00.51.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 00:51:49 -0700 (PDT)
-Message-ID: <83c8bce1-f4e2-899e-46a9-0ba9da702572@linaro.org>
-Date:   Wed, 19 Apr 2023 09:51:48 +0200
+        Wed, 19 Apr 2023 03:57:05 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6A2A8;
+        Wed, 19 Apr 2023 00:57:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EDD5021905;
+        Wed, 19 Apr 2023 07:57:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681891022; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cD0t6NezfCDx0oKUGN4T+tmhx6pXCtbhV9oaU4kpHdY=;
+        b=EPo0mk3BYne87vJI2zTBTtu9HzS4K8UbNwODrdDrEwQJGbnYjH3YQTJx4RWm4FFRnOCoww
+        a9QvMkMj7anBtRkY0XyvEgzQZSjaaA6G9nFXIvmFRp2KtO3dTF9nt6Cc2dmQWxTbNQCmIs
+        K1rSdWq9+rcLTqbeZcDXns+lwZ/YlOc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681891022;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cD0t6NezfCDx0oKUGN4T+tmhx6pXCtbhV9oaU4kpHdY=;
+        b=+gYItwCqq24saD8UfWri5YBsxgw894Q6hcBVfdc0fyTmvyoLsJxZ4eF2YY54L5w+xyvX2q
+        EyI2j8KhVW4BrrAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8357B1390E;
+        Wed, 19 Apr 2023 07:57:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id UooJIM6eP2QlVAAAMHmgww
+        (envelope-from <chrubis@suse.cz>); Wed, 19 Apr 2023 07:57:02 +0000
+Date:   Wed, 19 Apr 2023 09:58:05 +0200
+From:   Cyril Hrubis <chrubis@suse.cz>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        LTP List <ltp@lists.linux.it>, Petr Vorel <pvorel@suse.cz>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 5.4 00/92] 5.4.241-rc1 review
+Message-ID: <ZD+fDeWVOXklD01f@yuki>
+References: <20230418120304.658273364@linuxfoundation.org>
+ <CA+G9fYuT3N0LFaJGzQW2SYPJxEbEWLONDZO2OfBbeHNrsowy2w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 4/5] arm64: dts: ti: k3-j784s4-main: Add DSS and
- DP-bridge node
-Content-Language: en-US
-To:     Jayesh Choudhary <j-choudhary@ti.com>, nm@ti.com, vigneshr@ti.com,
-        afd@ti.com
-Cc:     s-vadapalli@ti.com, kristo@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, a-bhatia1@ti.com
-References: <20230419061710.290068-1-j-choudhary@ti.com>
- <20230419061710.290068-5-j-choudhary@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230419061710.290068-5-j-choudhary@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYuT3N0LFaJGzQW2SYPJxEbEWLONDZO2OfBbeHNrsowy2w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2023 08:17, Jayesh Choudhary wrote:
-> From: Rahul T R <r-ravikumar@ti.com>
+Hi!
+> > This is the start of the stable review cycle for the 5.4.241 release.
+> > There are 92 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.241-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
 > 
-> Add DSS and DP-bridge node for J784S4 SoC. DSS IP in J784S4 is
-> same as DSS IP in J721E, so same compatible is being used.
-> The DP is Cadence MHDP8546.
 > 
-> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-> [j-choudhary@ti.com: move all k3-j784s4-main.dtsi changes together]
-> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+> Recently we have upgraded the LTP test suite version and started noticing
+> these test failures on 5.4.
+> Test getting skipped on 4.19 and 4.14 as not supported features.
+> 
+> Need to investigate test case issues or kernel issues.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> NOTE:
+> 
 > ---
->  arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 77 ++++++++++++++++++++++
->  1 file changed, 77 insertions(+)
+> creat09.c:73: TINFO: User nobody: uid = 65534, gid = 65534
+> creat09.c:75: TINFO: Found unused GID 11: SUCCESS (0)
+> creat09.c:120: TINFO: File created with umask(0)
+> creat09.c:106: TPASS: mntpoint/testdir/creat.tmp: Owned by correct group
+> creat09.c:112: TPASS: mntpoint/testdir/creat.tmp: Setgid bit not set
+> creat09.c:106: TPASS: mntpoint/testdir/open.tmp: Owned by correct group
+> creat09.c:112: TPASS: mntpoint/testdir/open.tmp: Setgid bit not set
+> creat09.c:120: TINFO: File created with umask(S_IXGRP)
+> creat09.c:106: TPASS: mntpoint/testdir/creat.tmp: Owned by correct group
+> creat09.c:110: TFAIL: mntpoint/testdir/creat.tmp: Setgid bit is set
+> creat09.c:106: TPASS: mntpoint/testdir/open.tmp: Owned by correct group
+> creat09.c:110: TFAIL: mntpoint/testdir/open.tmp: Setgid bit is set
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-> index 51aa476dedba..739741e93bc1 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-> @@ -1373,4 +1373,81 @@ main_spi7: spi@2170000 {
->  		clocks = <&k3_clks 383 1>;
->  		status = "disabled";
->  	};
-> +
-> +	mhdp: dp-bridge@a000000 {
-> +		compatible = "ti,j721e-mhdp8546";
-> +
-> +		reg = <0x0 0xa000000 0x0 0x30a00>,
-> +		      <0x0 0x4f40000 0x0 0x20>;
-> +		reg-names = "mhdptx", "j721e-intg";
-> +
-> +		clocks = <&k3_clks 217 11>;
-> +
-> +		interrupt-parent = <&gic500>;
-> +		interrupts = <GIC_SPI 614 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +		power-domains = <&k3_pds 217 TI_SCI_PD_EXCLUSIVE>;
-> +
-> +		status = "disabled";
-> +
-> +		dp0_ports: ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +	};
-> +
-> +	dss: dss@4a00000 {
-> +		compatible = "ti,j721e-dss";
-> +		reg =
-> +			<0x00 0x04a00000 0x00 0x10000>,
+> Test history links,
+>  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.238-199-g230f1bde44b6/testrun/16338751/suite/ltp-syscalls/test/creat09/history/
+>  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.238-199-g230f1bde44b6/testrun/16337895/suite/ltp-cve/test/cve-2018-13405/history/
+>  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.238-199-g230f1bde44b6/testrun/16338751/suite/ltp-syscalls/test/creat09/log
 
-Fix indent/stray line break.
+That's likely a missing kernel patch, as this is a regression test there
+should have been links to the patches and CVE referencies in the test
+output as the test is tagged with kernel commits and CVE numbers:
 
-> +			<0x00 0x04a10000 0x00 0x10000>,
-> +			<0x00 0x04b00000 0x00 0x10000>,
-> +			<0x00 0x04b10000 0x00 0x10000>,
-> +
-> +			<0x00 0x04a20000 0x00 0x10000>,
-> +			<0x00 0x04a30000 0x00 0x10000>,
-> +			<0x00 0x04a50000 0x00 0x10000>,
-> +			<0x00 0x04a60000 0x00 0x10000>,
-> +
-> +			<0x00 0x04a70000 0x00 0x10000>,
-> +			<0x00 0x04a90000 0x00 0x10000>,
-> +			<0x00 0x04ab0000 0x00 0x10000>,
-> +			<0x00 0x04ad0000 0x00 0x10000>,
-> +
-> +			<0x00 0x04a80000 0x00 0x10000>,
-> +			<0x00 0x04aa0000 0x00 0x10000>,
-> +			<0x00 0x04ac0000 0x00 0x10000>,
-> +			<0x00 0x04ae0000 0x00 0x10000>,
-> +			<0x00 0x04af0000 0x00 0x10000>;
-> +
-> +		reg-names = "common_m", "common_s0",
-> +			"common_s1", "common_s2",
-> +			"vidl1", "vidl2","vid1","vid2",
-> +			"ovr1", "ovr2", "ovr3", "ovr4",
-> +			"vp1", "vp2", "vp3", "vp4",
-> +			"wb";
-> +
-> +		clocks =	<&k3_clks 218 0>,
+        .tags = (const struct tst_tag[]) {
+                {"linux-git", "0fa3ecd87848"},
+                {"CVE", "2018-13405"},
+                {"CVE", "2021-4037"},
+                {"linux-git", "01ea173e103e"},
+                {"linux-git", "1639a49ccdce"},
+                {"linux-git", "426b4ca2d6a5"},
+                {}
+        },
 
-Broken indentation.
+> ---
+> 
+> fanotify14.c:161: TCONF: FAN_REPORT_TARGET_FID not supported in kernel?
+> fanotify14.c:157: TINFO: Test case 7: fanotify_init(FAN_CLASS_NOTIF |
+> FAN_REPORT_TARGET_FID | FAN_REPORT_DFID_FID, O_RDONLY)
+> fanotify14.c:161: TCONF: FAN_REPORT_TARGET_FID not supported in kernel?
+> [  377.081993] EXT4-fs (loop0): mounting ext3 file system using the
+> ext4 subsystem
+> fanotify14.c:157: TINFO: Test case 8: fanotify_init(FAN_CLASS_NOTIF |
+> FAN_REPORT_DFID_FID, O_RDONLY)
+> [  377.099137] EXT4-fs (loop0): mounted filesystem with ordered data
+> mode. Opts: (null)
+> fanotify14.c:175: TFAIL: fanotify_init(tc->init.flags, O_RDONLY)
+> failed: EINVAL (22)
 
+Possibly like the test may be missing check for a FAN_REPORT_DFID_FID
+support.
 
-
-Best regards,
-Krzysztof
-
+-- 
+Cyril Hrubis
+chrubis@suse.cz
