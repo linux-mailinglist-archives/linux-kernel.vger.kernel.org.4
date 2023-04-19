@@ -2,107 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FDE6E8125
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 829E36E8126
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233487AbjDSSVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S230101AbjDSSVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbjDSSVT (ORCPT
+        with ESMTP id S232791AbjDSSVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 14:21:19 -0400
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B795558A;
-        Wed, 19 Apr 2023 11:21:18 -0700 (PDT)
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-541f2112f82so3228eaf.1;
-        Wed, 19 Apr 2023 11:21:18 -0700 (PDT)
+        Wed, 19 Apr 2023 14:21:30 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1DE7A81;
+        Wed, 19 Apr 2023 11:21:28 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id a15so602068qvn.2;
+        Wed, 19 Apr 2023 11:21:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681928488; x=1684520488;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9JQ4YYXDHsdgydwwSkAz6HZEvZ1oP7JFBvoxDwJAvLY=;
+        b=YKVGS+JSlMdc4XLuJlnixrMr1IveWypUVQwZ/1x19W+QvHciP8XMfIfR44MjzwRrXz
+         zgHVkC1yIbmwdH9bugckqffWMIIowwshWYY95KMSlRZNFpIQ48Weri2SlRaFlr3LtyZw
+         azJO7NTDtHzAFnK9KzB+U3fVHUQp00R8rK8/eN4FSx5tmNcDXuEGF0jHmiPp5nixo42C
+         ANOMAA7IS1KQNZO0ktM2KiSBjEyiZvkAcmdevFqT0cPB2PS5etZZtlPG8lCOiumxLKzl
+         G1Z4jTK8unTFlGcV+czLYDsnGXjvtQC1SFNIAWquio7CH5IaIXlKagT89nbUt7Yila9W
+         Jrlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681928478; x=1684520478;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=BytL5fcLKRsxYJZE+iS1QqeRvdEysPc/md0SBratCqA=;
-        b=Udpihy7IEJkBMAc7IFf4sDFKyICbJK/tZ/Nv5gd2hwHfnumUT3LbAf+82kI1So/D1T
-         /TA6GP7N62pBoxy/tmv+O5LXrfVMtqUhZ+XxmiRB8eaoSahhxqH0pQ7o7hHt0SCpR6jm
-         H3LMwBlPyXTULJC/byOX9D9U+dwK0zHl8hzIyqYqQw0wdM259w1Ct28yzfAt8dx8lO+4
-         9yBqWEKU5K3yhvHspLNG9OCjk6gp7oMpvWY+EnOKAWipM9BVSVQ5j6bgS5cga30BNxnu
-         ELEmDCnGVIlXobk4fqsyl8vPiKzgiPDHsCw3S6k+1PbCAvBxXzvOIEVrRL2fQw83SOu6
-         L4WQ==
-X-Gm-Message-State: AAQBX9dXrQTbvB7IURi3ea8UmSk6Dqj86DTNs+IiUmYMIw3AQHgSsvUF
-        d5R9itkRELLKFRXuehrRH/lJSP9KeQ==
-X-Google-Smtp-Source: AKy350Yt9qsTaasoCcDlU7nudwLXTG30d0LR9e18XdhMiTcCh9n5QexGpq/0F5we9s7EdYumgsduYA==
-X-Received: by 2002:aca:130a:0:b0:38d:edc1:92 with SMTP id e10-20020aca130a000000b0038dedc10092mr3679092oii.45.1681928477829;
-        Wed, 19 Apr 2023 11:21:17 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n131-20020acabd89000000b0038c06ae307asm7336832oif.52.2023.04.19.11.21.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 11:21:17 -0700 (PDT)
-Received: (nullmailer pid 480920 invoked by uid 1000);
-        Wed, 19 Apr 2023 18:21:16 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20221208; t=1681928488; x=1684520488;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9JQ4YYXDHsdgydwwSkAz6HZEvZ1oP7JFBvoxDwJAvLY=;
+        b=f88/JzBspqHbjvU34hCX8vVixACAOXzZDvDopWxH7thIktJeYjfJ5WrEHpM63jxPxF
+         ccEGZV3kybsBsZbIgK7H6rsmDwnsM9dwrEzKeh1WS387qF1PashmsaRWqp1wa9MxMwyw
+         KzC6ejqVZg9zXpx3DIz2o//3lDpdFq8soJyE7WJngioLncd/XOwn8UQjPSuHX0cBd6Kx
+         UcRn+0w7CcLJ/L7SLYsRBSahiK1rNEyD2cNwLcksSqOclvaqaPOEhZz8gYBAJoMZzorI
+         RM24YyJvXidvVO82qfl96Zi0WdS/ef05Wfc0sQeYVUtqQZ9LKV8FFVScrPNFgWtlewk+
+         p6mQ==
+X-Gm-Message-State: AAQBX9e3L6fPM+hgbdsFXiOKxDGjVJU9ya4QDcoP+YxkvlXfujPR3bR7
+        mMxGVv/fb3lkAm3J2xlNGV0=
+X-Google-Smtp-Source: AKy350a+dfIVVyli8FYMG1z89l9XMpH9g4QdD4/ZdUFCps1ZR6oAiKCc9JeOXuxK1TT0wvcWhGHZdQ==
+X-Received: by 2002:a05:6214:2622:b0:572:6e81:ae89 with SMTP id gv2-20020a056214262200b005726e81ae89mr32408165qvb.40.1681928488047;
+        Wed, 19 Apr 2023 11:21:28 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id c11-20020ac8110b000000b003e699f278dasm384193qtj.7.2023.04.19.11.21.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 11:21:27 -0700 (PDT)
+Message-ID: <483c9166-5266-91a5-3cfb-bbca3a0a80f7@gmail.com>
+Date:   Wed, 19 Apr 2023 11:21:21 -0700
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Pankaj Gupta <pankaj.gupta@nxp.com>
-Cc:     festevam@gmail.com, V.Sethi@nxp.com, kernel@pengutronix.de,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, aisheng.dong@nxp.com, shawnguo@kernel.org,
-        linux-arm-kernel@lists.infradead.org, gaurav.jain@nxp.com,
-        devicetree@vger.kernel.org, s.hauer@pengutronix.de,
-        sahil.malhotra@nxp.com, robh+dt@kernel.org
-In-Reply-To: <20230419175538.855493-2-pankaj.gupta@nxp.com>
-References: <20230419175538.855493-1-pankaj.gupta@nxp.com>
- <20230419175538.855493-2-pankaj.gupta@nxp.com>
-Message-Id: <168192843988.479874.10918604277415401966.robh@kernel.org>
-Subject: Re: [PATCH v2 1/7] doc: device tree binding addition for ele MU
-Date:   Wed, 19 Apr 2023 13:21:16 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 5.15 00/84] 5.15.108-rc4 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230419132034.475843587@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230419132034.475843587@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Wed, 19 Apr 2023 23:25:32 +0530, Pankaj Gupta wrote:
-> Documentation update with addition of new device tree
-> for NXP ele-mu (Edgelock Enclave Message Unit), driver.
+On 4/19/23 06:22, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.108 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Pankaj Gupta <pankaj.gupta@nxp.com>
-> ---
->  .../bindings/arm/freescale/fsl,ele_mu.yaml    | 139 ++++++++++++++++++
->  1 file changed, 139 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,ele_mu.yaml
+> Responses should be made by Fri, 21 Apr 2023 13:20:15 +0000.
+> Anything received after that time might be too late.
 > 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.108-rc4.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/freescale/fsl,ele_mu.example.dtb: ele_mu: mboxes: [[4294967295, 2, 0], [4294967295, 3, 0]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/freescale/fsl,ele_mu.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230419175538.855493-2-pankaj.gupta@nxp.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
