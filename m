@@ -2,183 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE856E79EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECD16E79F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232459AbjDSMr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
+        id S232993AbjDSMsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDSMr4 (ORCPT
+        with ESMTP id S229448AbjDSMsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:47:56 -0400
-Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D1C1BD3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:47:55 -0700 (PDT)
-Received: from outbound-ss-761.bluehost.com (outbound-ss-761.bluehost.com [74.220.211.250])
-        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 1B7298027E83
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:47:55 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway8.mail.pro1.eigbox.com (Postfix) with ESMTP id 0E2CC100454D8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:46:55 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id p7D4plMB0NX2ap7D4pNiDU; Wed, 19 Apr 2023 12:46:55 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=643fe2bf
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=dKHAf1wccvYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=XYAwZIGsAAAA:8
- a=VwQbUJbxAAAA:8 a=KpfOZQ45AAAA:8 a=h0uksLzaAAAA:8 a=puOezyK_5uT_Nh3Qo0QA:9
- a=QEXdDO2ut3YA:10:nop_charset_2 a=E8ToXWR_bxluHZ7gmE-Z:22
- a=AjGcO6oz07-iQ99wixmX:22 a=KHlNn528OWJD8b-aQ5dU:22 a=MSi_79tMYmZZG2gvAgS0:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9uJmgAn6Mve8eWQ9U34OqXIpdjTnTjK8C6E0nTYFjnA=; b=KVpms3xFDJDMIq1nCk4AI1nLfX
-        rXU4ejipU6A7Ft5c56YE32maQlsB9qUU1UQX++nbBU+0TKEigZSTvTNl+3nt0KNxkElzAq7dmFmJ5
-        CJhJBFeJq+bvtFJ29/TuR3Rq5J/ni+KVEQ2WYHoz8VLAK+/TcNUYC1ZJc6yGMA8jtjVSHW1CEtv5n
-        YkU0unTC1DQJhHAemQnI4q+G1kVY0hsToT49736bhLcNn0y6hi7HETF9FMwxjUgaLBTAqPwDbg8Dy
-        WxH6dwnLw/aztWwCGC2Hv5+Ly0qTyO8qCVVhmtZZBmmQt8lUPDwGMz10BqNMFzHwyfMExAbxZ3Bjr
-        n8PMQfjA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:35400 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pp7D3-0021EP-DU;
-        Wed, 19 Apr 2023 06:46:53 -0600
-Subject: Re: [PATCH 6.1 000/132] 6.1.25-rc2 review
-To:     Conor.Dooley@microchip.com, gregkh@linuxfoundation.org,
-        stable@vger.kernel.org, hi@alyssa.is
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230419093701.194867488@linuxfoundation.org>
- <306005cd-b4a0-44d3-c9b4-f3c238e1cde7@microchip.com>
-In-Reply-To: <306005cd-b4a0-44d3-c9b4-f3c238e1cde7@microchip.com>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <5e3d78ec-40fb-70fa-2d25-a465c823fb1c@w6rz.net>
-Date:   Wed, 19 Apr 2023 05:46:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 19 Apr 2023 08:48:17 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41F81BD3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:48:15 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-54fb615ac3dso285936227b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:48:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681908495; x=1684500495;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZaAeFzRpz5toFW8WHRABnZ5unkwbSe8FbOyXO8KgxYA=;
+        b=gYL8wGqziSP9DqJQZuStwo0bb3Xgt1vxCNKDj4VnWB7uxsC8dDbX940zSsRC42p35u
+         AO78aCAJCMJjwWYlLk/ToNBwVg7SzbPOd4y3Th4iWNa+u9/dj+KHg/4w44kyBXFXVAFe
+         IFn+bBxFjkBfNEE1arNPK2BVvDgTUIcAGji5PcAB2MrPro0rC6HNuPY3nlPxF6PW2fx9
+         Pm154bse+0A79L+l3/SayNKCAt5nXaz/WzLoPzTGw30XWtKIqh/nVyaAXk0+87mzZ7TR
+         SrH3UcZNnZNXo9H0S2uzOk+k4R6NtNeTUH5DQ4K6ZNaFzpXw/tDP3D216F2iyDLnIubR
+         iPOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681908495; x=1684500495;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZaAeFzRpz5toFW8WHRABnZ5unkwbSe8FbOyXO8KgxYA=;
+        b=DJ+kfjdDgKOo7nCN1w3Pue4Kr5gnjZR+1SpxenjSyVnCThRVE7ylL70YglEelXgBs9
+         L5V553AIgZ3bpjP7/2g0z5/AmPUT925U4aQg1F5557t9RWyZhwo2buYJur+umOZh5DVe
+         ZWqr+w+aUGk+dmKPuywkfcixaFAuNPpKMvau7bwP/5sc0VY4SJSam1lZljiXD462uBg1
+         hzyizWwsQ2oUKYMy64tCGSQXqs0a0tmtKoAZRLGXwS3kdUGONCGdsA1hn+17qIJCQOPf
+         4UCbGHdG1r3VXghPi0irRNFe2lQHZDek82s4BwZTunw8sg0c913vONzydppZTv8/jS/q
+         UA/A==
+X-Gm-Message-State: AAQBX9d1AXyAwIjN7ji7j948MKNX+bp+j4FFPuDkK5EPu98mwBbLD/4g
+        tfyZFd++zet3QctYjoVqhlBbvCeFRVP8EahswEXcUQ==
+X-Google-Smtp-Source: AKy350ac6G5w/+o+4Ymp6NChFH7f0TfAm0b94WeoDBjRy57fozX4E16cBg9CVHPXWKWYT2jKfYIjpS9uqc/6xFf4bLo=
+X-Received: by 2002:a81:a157:0:b0:54c:956:e070 with SMTP id
+ y84-20020a81a157000000b0054c0956e070mr3028598ywg.9.1681908494934; Wed, 19 Apr
+ 2023 05:48:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pp7D3-0021EP-DU
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:35400
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 6
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230418052902.1336866-1-joychakr@google.com> <20230418052902.1336866-5-joychakr@google.com>
+ <ZD5JC7BdN1usn6Kd@smile.fi.intel.com> <CAOSNQF2sXHFCx9ZfrtfmxHfKrAE0XGP8SRvW6wyYco+FKSPmDw@mail.gmail.com>
+ <ZD/VO1cuBYGCP4O2@smile.fi.intel.com>
+In-Reply-To: <ZD/VO1cuBYGCP4O2@smile.fi.intel.com>
+From:   Joy Chakraborty <joychakr@google.com>
+Date:   Wed, 19 Apr 2023 18:18:04 +0530
+Message-ID: <CAOSNQF1wf3m+YTmh5qQWCM6+x3j2whvG6F=dW6Hd7zW0Y+E_1g@mail.gmail.com>
+Subject: Re: [PATCH v7 4/5] spi: dw: Add DMA address widths capability check
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com,
+        rohitner@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 4:58 AM, Conor.Dooley@microchip.com wrote:
-> On 19/04/2023 10:40, Greg Kroah-Hartman wrote:
+On Wed, Apr 19, 2023 at 5:19=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@intel.com> wrote:
 >
->> This is the start of the stable review cycle for the 6.1.25 release.
->> There are 132 patches in this series, all will be posted as a response
->> to this one.  If anyone has any issues with these being applied, please
->> let me know.
->>
->> Responses should be made by Fri, 21 Apr 2023 09:36:33 +0000.
->> Anything received after that time might be too late.
->>
->> The whole patch series can be found in one patch at:
->>           https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.25-rc2.gz
->> or in the git tree and branch at:
->>           git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
->> and the diffstat can be found below.
->>
->> thanks,
->>
->> greg k-h
->>
->> Alyssa Ross <hi@alyssa.is>
->>       purgatory: fix disabling debug info
-> Alyssa provided a custom backport of this that did not require
-> picking up Heiko's patch below, but it did not seem to get
-> picked up.
-> Lore is ~dead for me, so all I can give you here is her message-id
-> for the custom backport: <20230418155237.2ubcusqc52nufmow@x220>
+> On Wed, Apr 19, 2023 at 11:18:25AM +0530, Joy Chakraborty wrote:
+> > On Tue, Apr 18, 2023 at 1:08=E2=80=AFPM Andy Shevchenko
+> > <andriy.shevchenko@intel.com> wrote:
+> > > On Tue, Apr 18, 2023 at 05:29:01AM +0000, Joy Chakraborty wrote:
 >
-> Heiko's patch is dead code as you've (rightly) not backported
-> any of the users.
->    
->> Heiko Stuebner <heiko.stuebner@vrull.eu>
->>       RISC-V: add infrastructure to allow different str* implementations
+> ...
 >
+> > > > +     /*
+> > > > +      * Assuming both channels belong to the same DMA controller h=
+ence the
+> > > > +      * address width capabilities most likely would be the same.
+> > > > +      */
+> > >
+> > > I had a small comment on this In v6 thread.
+> >
+> > Sure,
+> >
+> > Your comment in V6 thread:
+> > "
+> > I would add something to explain the side of these address width, like
+> >
+> >          * Assuming both channels belong to the same DMA controller hen=
+ce
+> >          * the peripheral side address width capabilities most likely w=
+ould
+> >          * be the same.
+> > "
+> >
+> > I do not think the address width capabilities are dependent on the
+> > side of generation like memory or peripheral.
 >
->> Alexandre Ghiti <alexghiti@rivosinc.com>
->>       riscv: Do not set initial_boot_params to the linear address of the dtb
-> This one should also be dropped, either the whole series or
-> none of it please!
+> Yes, they are independent. Memory could do with 4 bytes, while peripheral=
+ with
+> 1 byte and so on.
 >
-> Alex has said he'll send the lot in a way that avoids confusion.
+> > From what I understand,
+> > address width capabilities are solely dependent on the transaction
+> > generation capability of the DMA controller towards the system bus.
 >
-> Otherwise, my testing passed.
->
-> Thanks,
-> Conor.
+> What do you mean by a SB in the above? Memory? Peripheral?
 
-The "riscv: Do not set initial_boot_params to the linear address of the 
-dtb" patch is fatal. Definitely needs to be dropped.
+By system bus I mean anything that is connecting the Memory, DMA and
+the peripheral.
+Something like :
 
-[    0.000000] Hardware name: SiFive HiFive Unmatched A00 (DT)
-[    0.000000] epc : fdt_check_header+0xe/0x230
-[    0.000000]  ra : __unflatten_device_tree+0x4e/0x320
-[    0.000000] epc : ffffffff80ae48e6 ra : ffffffff808bba16 sp : 
-ffffffff81803e0
-[    0.000000]  gp : ffffffff81a3d390 tp : ffffffff81811200 t0 : 
-ffffffc6fefff00
-[    0.000000]  t1 : 000000047fff0000 t2 : 65736552203a616d s0 : 
-ffffffff81803e0
-[    0.000000]  s1 : 0000000040000000 a0 : 0000000040000000 a1 : 
-000000000000000
-[    0.000000]  a2 : ffffffff81a43188 a3 : ffffffff80c3fbd0 a4 : 
-000000000000000
-[    0.000000]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 
-000000000000000
-[    0.000000]  s2 : 00000000fff63036 s3 : ffffffff81a43188 s4 : 
-000000000000000
-[    0.000000]  s5 : ffffffff80c3fbd0 s6 : 0000000000000000 s7 : 
-000000000000000
-[    0.000000]  s8 : 00000000fff63036 s9 : 00000000fffcbf60 s10: 
-000000000000000
-[    0.000000]  s11: 00000000fffcbf60 t3 : ffffffff80e12288 t4 : 
-ffffffff80e1228
-[    0.000000]  t5 : ffffffff80e12288 t6 : ffffffff80e122a0
-[    0.000000] status: 0000000200000100 badaddr: 0000000040000001 cause: 
-000000d
-[    0.000000] [<ffffffff80ae48e6>] fdt_check_header+0xe/0x230
-[    0.000000] ---[ end trace 0000000000000000 ]---
-[    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
-[    0.000000] ---[ end Kernel panic - not syncing: Attempted to kill 
-the idle -
+          +-----------+          +-------------------+
+          |               |           |                        |
+          |   DMA    |           | PERIPHERAL |
+          |               |           |                         |
+          +----^-+---+          +-----+--^---------+
+        *** -->| |                         |    |
+                  | |                         |    |
+<------------+-v--------------------v---+------------->
+                    SYSTEM BUS
+<---------------------+--^----------------------------->
+                            |   |
+                            |   |
+                     +----v--+-----+
+                     |                   |
+                     |  MEMORY |
+                     |                   |
+                     +--------------+
+*** : Address width capabilities should be the capability of the DMA
+to generate transactions to the system bus on the marked interface
+irrespective of whether it is destined for Peripheral or memory is
+what I understand.
 
+>
+> > What we intend to highlight here is the assumption that both tx and rx
+> > channel would belong to the same DMA controller hence the transaction
+> > generation capabilities would be the same both for read and write
+> > (e.g. if the DMA controller is able to generate 32 bit sized reads
+> > then it should also be able to generate 32 bit sized writes).
+> > With this assumption we are doing a bitwise and of both tx and rx capab=
+ilities.
+> >
+> > Please let me know if you think otherwise.
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
