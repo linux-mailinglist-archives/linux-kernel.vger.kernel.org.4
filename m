@@ -2,310 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C506E79AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 729826E79AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233242AbjDSMXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41848 "EHLO
+        id S233228AbjDSMYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233222AbjDSMX3 (ORCPT
+        with ESMTP id S232779AbjDSMYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:23:29 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97F646BA
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:23:26 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4eed6ddcae1so443120e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681907004; x=1684499004;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hPGiz4DXUUF5zE7ZJa4E2i3DA9cmsr64t3sVkYUckak=;
-        b=liweVwjeZd7xiUNUU9zSgIRvEd1QCTNjuqzxoeX9TEHvyHiNNBNiR0e3gHsie/cHn7
-         tytPvmq/2aRPMSyQsMoRatN9WJPmT32IRi1IqPR3Yd30conXLsEBUq963Q3uH1zXyikq
-         B66qwJtFeR0Des9gLUgVhbTinlsOHTGergRmJrezE8Y9Hy5B3pys1EvCZz615lB+hN43
-         SoH+5I/JkJeWrshWdACjjDcGiTkGZUs+MZmtFiximpfCqUqUrG4y6S3AHOYD8Iq2Y+32
-         c18AmPAH0rlAZV4A+IHE4m9EYql2nOCLbZei3WGWZatpPubZYCaexVDH4mfQ+/K1vK/a
-         vgRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681907004; x=1684499004;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hPGiz4DXUUF5zE7ZJa4E2i3DA9cmsr64t3sVkYUckak=;
-        b=CSTCkkb6h0rfabw/NOneGMTw4WdMUHL6jhZtEwIdK36cKCCeSS/hIIITEzucsPZdhG
-         jM1Wb6dyiM5j1PxGI2kTPvjOrff1I1It5Lsuq973pb6xwwgh8c0RvoBx43SpVzuTqEbE
-         5h/Knweqfy/+qRMAbDUK5JgfnwPEE9OeB3u5PwR159orwnzYwpfYwazyD7hLomvrOHsB
-         rGFgYXcTFnuEWcIXqc8KFvMyqv0g/pY/gp/W7eVOitOeEdCc36g7APuum2eQLJ37Wr2k
-         yt/Cw3KSbUgMf+ftRTncY2kPlQUUKnyHQUBCHYSzxyf254yZ7zUrPf7mKXP8kRYg8UtV
-         dUBw==
-X-Gm-Message-State: AAQBX9cQiqirhNYZ93LbdgUAVMN9ty+D2kM+F2dyRedSZCV60k1nQALA
-        N2lx8J2OqryUwRG2b0uRjlAuzA==
-X-Google-Smtp-Source: AKy350bdUfr8EjCujHXiRsqGF2LhxlRAxkbhMDVdNFdrT5yw1pr7XoVoVvGL938plWbYX6jFJ7nTDA==
-X-Received: by 2002:a05:6512:3b9e:b0:4eb:2b62:134f with SMTP id g30-20020a0565123b9e00b004eb2b62134fmr839280lfv.16.1681907004648;
-        Wed, 19 Apr 2023 05:23:24 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id a23-20020a2e8317000000b002a79d7ceb93sm2925550ljh.9.2023.04.19.05.23.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 05:23:24 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 19 Apr 2023 14:23:21 +0200
-Subject: [PATCH v5 2/2] soc: qcom: Introduce RPM master stats driver
+        Wed, 19 Apr 2023 08:24:05 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2043.outbound.protection.outlook.com [40.107.243.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE9614F50;
+        Wed, 19 Apr 2023 05:23:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ePrukuU6MYVsCZ7jztdaaduXJCBHjDDB8RLTs6m5/hgcGBr9PMCGOw49Yha8vRnkPJkQkI8v3j4SOfonC0LYKpB1Ln4xTu19SV7kLT/xuHTbHufpCN/aloR3iMtrE0Kiqz1CLOg/EwjEaBil6Y11zcpCmZ1xvfLtThLVpOwJFMbL69hgm+cYGpQVAj8Yfz3LkXyrbXm2rHbdYOaechLrDwxdu+X6N0uju3hh2Ma424V9UKu6n5hk4l4aqwxGPneT95N74wgbe2wi5hGEJF96EmQvy8Z83YbD5vtWWxnt8RXLUVBk5qgMFzfjazKzcUQ3SCmLIOzLn2hlRks5Ft9/Vw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OMOgPBKlG1ui4XqzOmPKAEix97cRLrKEn4w4syOFHRM=;
+ b=NBYu+3XcREbz+X2GbVAPRBlPHcW0mAXDXyzbvA/sM0QnhpfessAzmT3tDToXisMm8pUnF2WX9jQDbUOkx7lVT0bClbjxCg2o5iTimtFHFlbzgKaOz0V3AhCPO882x/KdwXeZBwKUQ+DLx/mHJhTagiGCiAndmtZwAydrvPWnL6kosr8HQ9qy0m8ahOmmF1cvMd3+frXPUSHJBw8d9ogkq98fsCH96p9Cfv1fFk77zfnQD5TVApYs6shhndbFM+tZ6Lgh8lHytzs9sjKbpFkgtaKOnfNOCpEEQERgyx53aNC5f+T5+4CMV8CwaxESal+lFQ5ZFhIG7bD13uQwYl2ocw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OMOgPBKlG1ui4XqzOmPKAEix97cRLrKEn4w4syOFHRM=;
+ b=inV7iwwDHSXgksM/PvNPilJ9s5S9+Kcof//Q6DiWMp0iFe9wWfwRK0NgP9rsAtxDu0gP/qLCut4UKuaue2YJ9vM0zoLGCfibP2NcLpjQ4O78j6vNj90t1MfIjeTP6A4KqCIUpsbXH8kcxpXe6vqt97kJFrPdjvzPe3yHVfNS85o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SA0PR12MB4558.namprd12.prod.outlook.com (2603:10b6:806:72::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
+ 2023 12:23:56 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d2f8:7388:39c1:bbed]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d2f8:7388:39c1:bbed%3]) with mapi id 15.20.6319.020; Wed, 19 Apr 2023
+ 12:23:56 +0000
+Message-ID: <62ae58cb-9fec-37ca-fd40-12bf0c1c5ba3@amd.com>
+Date:   Wed, 19 Apr 2023 14:23:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V3 1/2] drm/radeon: Fix integer overflow in
+ radeon_cs_parser_init
+Content-Language: en-US
+To:     hackyzh002 <hackyzh002@gmail.com>, alexander.deucher@amd.com
+Cc:     Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        sumit.semwal@linaro.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+References: <20230419122058.3420-1-hackyzh002@gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230419122058.3420-1-hackyzh002@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0133.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:97::11) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230405-topic-master_stats-v5-2-2e1c98a8b63e@linaro.org>
-References: <20230405-topic-master_stats-v5-0-2e1c98a8b63e@linaro.org>
-In-Reply-To: <20230405-topic-master_stats-v5-0-2e1c98a8b63e@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681907001; l=7371;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=lu9hWbptuXcs6u63YrwqzkyEo5+uuMeZ/4yHbAj3l0A=;
- b=JAQ5Kizlv6bz0d4E19ajASoRzr3M3/5CffPL428gGFhxafH9fvfZyDhfXTDNeF1tBkySs1C4lb60
- fL2bN+UEBeGI49nJCd3wdWk6AovX5zdLPXIyK4loILH+XdLdSN51
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SA0PR12MB4558:EE_
+X-MS-Office365-Filtering-Correlation-Id: cd612fe6-04b4-4bb8-f82d-08db40d0f1c6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W+lsjVkH4CGZHza0arSKpBs5Re3wSP3QwejS5bjWGlX8RtNPAoMh20MPlZdZcHqKX/lgELkXnjNA+oZMJaIKdkHQg0H9BSjzYsAHlQcW72G2KUKeVSmGkfRV5JuKof1GOstaGaF05SVFa05wzw0fr8v/fqsK17zkIpLl0J5Ksp6j4WMem0D1i4zWvscHq8Kw+MtrGeHKdiprs3Dc0E7rMxfvWHhyr7AXO/fKtdBwZRZfCvjn8Ah+r6axh6VMLFfj2qZkRUlu5OQyjLq7WfzzRzpa7M/okIYviL0N/KCT/nl8mKGff7JOGgNOTc6Hfj6bBpcwA8xy6pIUn0rMYb+m3shtepVi7PsUts9QKg4QvFSN54DHozddBkajggxE+X+gebDMq6v4Ytk/sgInhcu+4JWZW3zCeVSL3vJ8K+4ODMP5neLtiVk41I/62WLxs+lbfHba/GJdvWjVrOPMEqzm4sarNbkIUPW96Bps5pweFqE5ndQOp9OFLqS8cLeudxN9e65rB4UE0i65hltKmkGr4gaf305hLhiIO8kOmaPmA/Z6qimKro0hbX+iLC2SK9socgtnG+mT2iskQtt0/qR+BTyKuC4yQc2lEPskAiSxOE6Q111SFLBotiMbiDZhOTcuamylFSR7X5TP52pOXBvpLg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(366004)(346002)(39860400002)(451199021)(36756003)(86362001)(31696002)(38100700002)(478600001)(6506007)(6666004)(6512007)(6486002)(5660300002)(41300700001)(66556008)(4326008)(316002)(8676002)(8936002)(2906002)(6636002)(66476007)(66946007)(4744005)(31686004)(83380400001)(2616005)(66574015)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cUd1L1hrUGt4RWZuRnZDMGtQN3J4WHRqTnQ1NksyUzRpNkFJSUlWOEd1U3FQ?=
+ =?utf-8?B?WFgyMWdGRWJLUUVYYUdIajFSZi9ZSTVsRFVURU5jRVlzbGhwMy9iZHFNVVg3?=
+ =?utf-8?B?RVROcVpNL1pIVGRFZ2pIbWtRNmFqYnozSm5Dd09SUzMrVnRvMHdNMjV0MU85?=
+ =?utf-8?B?ZXpBWmVJUnZFeUkzWFNMaEZFeVh2bXNWYlVqMVFKWlpTR1dhQ0dmU1EvWFI0?=
+ =?utf-8?B?bnFHVnFIL0YwSUR3SzRPejRUR2JsWEtHT21vS2c0QlFlNDgxZmVDUlFsblg4?=
+ =?utf-8?B?TEh1UEp0cDNzakNNOHdmeUFSTjkydzllVzZnYzJESGtPYThpVkZlcjR3Zy9v?=
+ =?utf-8?B?SlpVWTd6cWo5SGo5emNUSE5KdnFqOTVEbDgwUFVmeUJ3QWtiZzFidDErQVpQ?=
+ =?utf-8?B?MENFUTBRYS81S25hVlUrMmxldHlSLzltc2xnYXUwa2R5K1hpZVZqUjRHSFhI?=
+ =?utf-8?B?cTZhd1JxZ0M5YUVkZTF4bG40TTA2R1R6bmtRQjlZYi9oTWJDbW9CUjRTdWtJ?=
+ =?utf-8?B?RjBrWkxyaGN5OU9MUm9NR1h6cW5EcjJ0UlZsa09NbDM4SHd4MGREeVEyQnJi?=
+ =?utf-8?B?b2IvZVhtdFZuRnVaTUkrVUZhamRoRFJVc29SazREZXFWM2UyTEVBNGFYUEZB?=
+ =?utf-8?B?ZDBySWdXTUp6cjFxVmROUXQybHhyV3dDMzZNUEF3RTdPWU9PWC9QOGx4RUVQ?=
+ =?utf-8?B?dWtFMWtSaVFydFVRcWNKdEVkYzN6bGN1UUxqK0o5dWdocDd6Y2I1RDZINFps?=
+ =?utf-8?B?Ui91TEFqaXRCZk9DNldPQXkyNXdKSHlxZm93Zk5aMTl2UitUQURmcFU5RmlB?=
+ =?utf-8?B?Uk5lbHFqcDlYMngyRG8rMXVWOGJxLytXN3pKbi9DcFRlOWhrM3M3emdkVDNj?=
+ =?utf-8?B?WFRlbmRhSHROZWI3dGMrZUU1RnJlVlU1L0x6WDExcXhaNDJpNStNZTBVVDVT?=
+ =?utf-8?B?T1QvRTdKSFlLUXZMOFZoRFNJQjFPZEtjQW1iTDFZTTliZ2hJZW1yYUtmU0hY?=
+ =?utf-8?B?UEMwZzNMNDhmN2dlN2h0c2lkL1A3WFNjQklobzhCbHZQN0oyc3B0MnBYeWZj?=
+ =?utf-8?B?QlpyVkxScXZ5MW44enBGWjRWUnppTnJiWklIN0RmUzQyNUxuMktTY28xUUVT?=
+ =?utf-8?B?eGlyQ3JtMUVnU3hMQ2c0cU5HSENXZUhnTTJGTGtaRWxVRzdtbk5MRHgxYkJY?=
+ =?utf-8?B?S2JQTTBoRytINzJHN2RjOUtCOHNMdjhlVFltUEZNdkI4VytCTFhpWjZXN09w?=
+ =?utf-8?B?RU5kUjdyYVBYa1hPd3BPS0Zta1dsZlRpTHFldkw2M3p5ZTZmSTIxalpSSElu?=
+ =?utf-8?B?NEIrOVNIVHE5c09kdU9veDJKaHpvSUZOdHVzVU8xT2hORHcvbUJRQnhzejBp?=
+ =?utf-8?B?UDBPdGVuYjh5UG5KSkFVUkVjWldLdFRTZEVjNERxZ0p6UHlEc1RlWXJoRXNk?=
+ =?utf-8?B?b2xIOWY5a1RQeUp6R2xOcWZ2eHRnRFpYNU83dlBvK2Y2MjF0U1lsN0t6elRX?=
+ =?utf-8?B?M3pqemQvWFZzekZmREpHeFhhRXFvbDVMekwrVWZ5c0FkSXdWaHBXdmhXYTVn?=
+ =?utf-8?B?M0YyZWF6UHdLdEZKSVZMNWJueE1tbEhDMTk4OWhXZFVHNUc1Rm1NcWlybHBu?=
+ =?utf-8?B?OWc2VGRUL0ViRjRSZjZVOFVuNDdyRnZ3bjR1Z0pXSEh2cHF3NG9tRGw5QXhy?=
+ =?utf-8?B?bkliSlBZNGx4Zkk4Mk1Jc29JMERqaFdzc3JKSHBBTHEwMkV5ai8rM0dueUdQ?=
+ =?utf-8?B?eStVNjNucmZ5TWRnZEZQNkZWaUNMV2ZiZFYwNEh4N0lWMFFpWWxYUFh1bEhZ?=
+ =?utf-8?B?UTB2Vm41U1hSRlNmeHU0NE1SM1dvMVErbUFIWmRZY1ZpKy9WMkpJaEs3WHFu?=
+ =?utf-8?B?QzVLdnVjVzYrK2Y5Uml0WnlwUWpYd2psQm81MWJ4aEl0bThXbys3OGFlZ0pK?=
+ =?utf-8?B?Y0xrTHlZeDlndWM3aUZPR2ptelhVVXd0bWdUTlh2VEloNkI3Mkh3aDJYT0VB?=
+ =?utf-8?B?dGsrVU42UEVYcHRhL0t6T2hpNitEWE9NamRoc2tLQVhDL3cycUE1TGVUMjJH?=
+ =?utf-8?B?bEFHZlNnbFNHZWNqdU9iYVV4UjNta1BhbnhsTFRjdGJ2amk0ZUVuaVZYSDMz?=
+ =?utf-8?B?MXpyS082bjd6dVlRc1pVc0hOUWJYMTlrYTZ5M1J6ME43RTBlUGV6ZTdxc3Rm?=
+ =?utf-8?Q?Ke5APOLAfZUYehj57I618+R0rn6GrvkwsGREdrEyW9xP?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd612fe6-04b4-4bb8-f82d-08db40d0f1c6
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 12:23:55.9863
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JnPSZlcEs/j3ltlFDAi4Kkn3yHRiMY7GQJXahg4Cm8DRYEnCpU6cRG6lCMjsK08k
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4558
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a driver to query and expose detailed, per-subsystem (as opposed
-to the existing qcom_stats driver which exposes SoC-wide data) about low
-power mode states of a given RPM master. That includes the APSS (ARM),
-MPSS (modem) and other remote cores, depending on the platform
-configuration.
+Am 19.04.23 um 14:20 schrieb hackyzh002:
+> The type of size is unsigned, if size is 0x40000000, there will be an
+> integer overflow, size will be zero after size *= sizeof(uint32_t),
+> will cause uninitialized memory to be referenced later
+>
+> Signed-off-by: hackyzh002 <hackyzh002@gmail.com>
 
-This is a vastly cleaned up and restructured version of a similar
-driver found in msm-5.4.
+Reviewed-by: Christian König <christian.koenig@amd.com> for the series.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/soc/qcom/Kconfig            |  11 +++
- drivers/soc/qcom/Makefile           |   1 +
- drivers/soc/qcom/rpm_master_stats.c | 163 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 175 insertions(+)
-
-diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-index a491718f8064..e597799e8121 100644
---- a/drivers/soc/qcom/Kconfig
-+++ b/drivers/soc/qcom/Kconfig
-@@ -135,6 +135,17 @@ config QCOM_RMTFS_MEM
- 
- 	  Say y here if you intend to boot the modem remoteproc.
- 
-+config QCOM_RPM_MASTER_STATS
-+	tristate "Qualcomm RPM Master stats"
-+	depends on ARCH_QCOM || COMPILE_TEST
-+	help
-+	  The RPM Master sleep stats driver provides detailed per-subsystem
-+	  sleep/wake data, read from the RPM message RAM. It can be used to
-+	  assess whether all the low-power modes available are entered as
-+	  expected or to check which part of the SoC prevents it from sleeping.
-+
-+	  Say y here if you intend to debug or monitor platform sleep.
-+
- config QCOM_RPMH
- 	tristate "Qualcomm RPM-Hardened (RPMH) Communication"
- 	depends on ARCH_QCOM || COMPILE_TEST
-diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-index 0f43a88b4894..7349371fdea1 100644
---- a/drivers/soc/qcom/Makefile
-+++ b/drivers/soc/qcom/Makefile
-@@ -14,6 +14,7 @@ obj-$(CONFIG_QCOM_QMI_HELPERS)	+= qmi_helpers.o
- qmi_helpers-y	+= qmi_encdec.o qmi_interface.o
- obj-$(CONFIG_QCOM_RAMP_CTRL)	+= ramp_controller.o
- obj-$(CONFIG_QCOM_RMTFS_MEM)	+= rmtfs_mem.o
-+obj-$(CONFIG_QCOM_RPM_MASTER_STATS)	+= rpm_master_stats.o
- obj-$(CONFIG_QCOM_RPMH)		+= qcom_rpmh.o
- qcom_rpmh-y			+= rpmh-rsc.o
- qcom_rpmh-y			+= rpmh.o
-diff --git a/drivers/soc/qcom/rpm_master_stats.c b/drivers/soc/qcom/rpm_master_stats.c
-new file mode 100644
-index 000000000000..6dd98b9f7129
---- /dev/null
-+++ b/drivers/soc/qcom/rpm_master_stats.c
-@@ -0,0 +1,163 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2012-2020, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2023, Linaro Limited
-+ *
-+ * This driver supports what is known as "Master Stats v2" in Qualcomm
-+ * downstream kernel terms, which seems to be the only version which has
-+ * ever shipped, all the way from 2013 to 2023.
-+ */
-+
-+#include <linux/debugfs.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_address.h>
-+#include <linux/platform_device.h>
-+
-+struct master_stats_data {
-+	void __iomem *base;
-+	const char *label;
-+};
-+
-+struct rpm_master_stats {
-+	u32 active_cores;
-+	u32 num_shutdowns;
-+	u64 shutdown_req;
-+	u64 wakeup_idx;
-+	u64 bringup_req;
-+	u64 bringup_ack;
-+	u32 wakeup_reason; /* 0 = "rude wakeup", 1 = scheduled wakeup */
-+	u32 last_sleep_trans_dur;
-+	u32 last_wake_trans_dur;
-+
-+	/* Per-subsystem (*not necessarily* SoC-wide) XO shutdown stats */
-+	u32 xo_count;
-+	u64 xo_last_enter;
-+	u64 last_exit;
-+	u64 xo_total_dur;
-+} __packed;
-+
-+static int master_stats_show(struct seq_file *s, void *unused)
-+{
-+	struct master_stats_data *data = s->private;
-+	struct rpm_master_stats stat;
-+
-+	memcpy_fromio(&stat, data->base, sizeof(stat));
-+
-+	seq_printf(s, "%s:\n", data->label);
-+
-+	seq_printf(s, "\tLast shutdown @ %llu\n", stat.shutdown_req);
-+	seq_printf(s, "\tLast bringup req @ %llu\n", stat.bringup_req);
-+	seq_printf(s, "\tLast bringup ack @ %llu\n", stat.bringup_ack);
-+	seq_printf(s, "\tLast wakeup idx: %llu\n", stat.wakeup_idx);
-+	seq_printf(s, "\tLast XO shutdown enter @ %llu\n", stat.xo_last_enter);
-+	seq_printf(s, "\tLast XO shutdown exit @ %llu\n", stat.last_exit);
-+	seq_printf(s, "\tXO total duration: %llu\n", stat.xo_total_dur);
-+	seq_printf(s, "\tLast sleep transition duration: %u\n", stat.last_sleep_trans_dur);
-+	seq_printf(s, "\tLast wake transition duration: %u\n", stat.last_wake_trans_dur);
-+	seq_printf(s, "\tXO shutdown count: %u\n", stat.xo_count);
-+	seq_printf(s, "\tWakeup reason: 0x%x\n", stat.wakeup_reason);
-+	seq_printf(s, "\tShutdown count: %u\n", stat.num_shutdowns);
-+	seq_printf(s, "\tActive cores bitmask: 0x%x\n", stat.active_cores);
-+
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(master_stats);
-+
-+static int master_stats_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct master_stats_data *data;
-+	struct device_node *msgram_np;
-+	struct dentry *dent, *root;
-+	struct resource res;
-+	int count, i, ret;
-+
-+	count = of_property_count_strings(dev->of_node, "qcom,master-names");
-+	if (count < 0)
-+		return count;
-+
-+	data = devm_kzalloc(dev, count * sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	root = debugfs_create_dir("qcom_rpm_master_stats", NULL);
-+	platform_set_drvdata(pdev, root);
-+
-+	for (i = 0; i < count; i++) {
-+		msgram_np = of_parse_phandle(dev->of_node, "qcom,rpm-msg-ram", i);
-+		if (!msgram_np) {
-+			debugfs_remove_recursive(root);
-+			return dev_err_probe(dev, -ENODEV,
-+					     "Couldn't parse MSG RAM phandle idx %d", i);
-+		}
-+
-+		/*
-+		 * Purposefully skip devm_platform helpers as we're using a
-+		 * shared resource.
-+		 */
-+		ret = of_address_to_resource(msgram_np, 0, &res);
-+		of_node_put(msgram_np);
-+		if (ret < 0) {
-+			debugfs_remove_recursive(root);
-+			return ret;
-+		}
-+
-+		data[i].base = devm_ioremap(dev, res.start, resource_size(&res));
-+		if (IS_ERR(data[i].base)) {
-+			debugfs_remove_recursive(root);
-+			return dev_err_probe(dev, -EINVAL,
-+					     "Could not map the MSG RAM slice idx %d!\n", i);
-+		}
-+
-+		ret = of_property_read_string_index(dev->of_node, "qcom,master-names", i,
-+						    &data[i].label);
-+		if (ret < 0) {
-+			debugfs_remove_recursive(root);
-+			return dev_err_probe(dev, ret,
-+					     "Could not read name idx %d!\n", i);
-+		}
-+
-+		/*
-+		 * Generally it's not advised to fail on debugfs errors, but this
-+		 * driver's only job is exposing data therein.
-+		 */
-+		dent = debugfs_create_file(data[i].label, 0444, root,
-+					   &data[i], &master_stats_fops);
-+		if (IS_ERR(dent)) {
-+			debugfs_remove_recursive(root);
-+			return dev_err_probe(dev, PTR_ERR(dent),
-+					     "Failed to create debugfs file %s!\n", data[i].label);
-+		}
-+	}
-+
-+	device_set_pm_not_required(dev);
-+
-+	return 0;
-+}
-+
-+static void master_stats_remove(struct platform_device *pdev)
-+{
-+	struct dentry *root = platform_get_drvdata(pdev);
-+
-+	debugfs_remove_recursive(root);
-+}
-+
-+static const struct of_device_id rpm_master_table[] = {
-+	{ .compatible = "qcom,rpm-master-stats" },
-+	{ },
-+};
-+
-+static struct platform_driver master_stats_driver = {
-+	.probe = master_stats_probe,
-+	.remove_new = master_stats_remove,
-+	.driver = {
-+		.name = "qcom_rpm_master_stats",
-+		.of_match_table = rpm_master_table,
-+	},
-+};
-+module_platform_driver(master_stats_driver);
-+
-+MODULE_DESCRIPTION("Qualcomm RPM Master Statistics driver");
-+MODULE_LICENSE("GPL");
-
--- 
-2.40.0
+> ---
+>   drivers/gpu/drm/radeon/radeon_cs.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/radeon/radeon_cs.c b/drivers/gpu/drm/radeon/radeon_cs.c
+> index 46a27ebf4..a6700d727 100644
+> --- a/drivers/gpu/drm/radeon/radeon_cs.c
+> +++ b/drivers/gpu/drm/radeon/radeon_cs.c
+> @@ -270,7 +270,8 @@ int radeon_cs_parser_init(struct radeon_cs_parser *p, void *data)
+>   {
+>   	struct drm_radeon_cs *cs = data;
+>   	uint64_t *chunk_array_ptr;
+> -	unsigned size, i;
+> +	u64 size;
+> +	unsigned i;
+>   	u32 ring = RADEON_CS_RING_GFX;
+>   	s32 priority = 0;
+>   
 
