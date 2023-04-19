@@ -2,124 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7EB6E7990
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E67476E799C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233223AbjDSMUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
+        id S232774AbjDSMWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbjDSMU0 (ORCPT
+        with ESMTP id S233252AbjDSMW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:20:26 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E526A66;
-        Wed, 19 Apr 2023 05:20:24 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1878f1ebf46so865897fac.1;
-        Wed, 19 Apr 2023 05:20:24 -0700 (PDT)
+        Wed, 19 Apr 2023 08:22:27 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D69E173B;
+        Wed, 19 Apr 2023 05:22:23 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id n17so12541377pln.8;
+        Wed, 19 Apr 2023 05:22:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681906943; x=1684498943;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cvi/8BFVMUmJHt4WjuHDaXoszJBRcvvbnSWyynNb4dw=;
+        b=M3A9a6WtOWXdYHHcfybW8ymSEnpEjD5R0HfAB1fZbrJ4eb18z3BbaIQkiZch+E3XFN
+         gtImBttegWoB8LCoLFNJDhiiSl267YU1V1Nsc33I4Y18p03z0gGfjf/VdKUhfjZcBXD5
+         aq+woQSFxs2Vu2JdQq610eO1TMJ0DviQoiqjfPoAGc/JAkBZ7fiCJzgpbt/FhH5BE7Zm
+         0vjqLsxUHKPd4lYUtp5GXOSKExiXmujz3dv9bAp68j4aoXlww1GZg/PJ3faT06bwcuTO
+         4QQaNsK1vvXfQuNxUKLhbD5rkeXzfHeIk527XpKrudr38a8q5hrfpyRQWEWtLb0bfx1u
+         1w9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681906824; x=1684498824;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vDWn7LWX55rdAgK8lkZTjI/cl/gmcQIjVsQZmuaFPok=;
-        b=S4OebHC6bPZWBCttDxrOlO33hLtezQgy1kZr5K65sj8zuJu/c85gJ53084t19Y5/r4
-         Bh5x6ly3VyTl8CnZhOaW+kc1+tfvmjmrwKYhwq7T6EutbagKz90GDREXK2uOJJCtUNSh
-         mvwtK5TmtZZBCHCQAt+cbapxWSRiOINqgPF0zUG7Wbu0UBUkfw1DcfrgxRMifMn/tJgz
-         6tZXrjSxmul3ilK06n1SQGhv44NrlbMlcZgRE2TFhJyYIvZ7pplZl5QBrRZVyw0/m9V3
-         ZZ9sPOq7LoWgLryii/Yxx+PXZFQZ9oOzAjdrKXH1Zs+eJLTY+2483fiitEGdDWusfJHg
-         sXsg==
-X-Gm-Message-State: AAQBX9cg75J4xmV5erjPb8OPUdJTTCICEkIvAsLZXHbF/QKH2rEbheNh
-        aUz+ezwuQm1uKMID3d4qiw==
-X-Google-Smtp-Source: AKy350achMGLsukLbt5lzLwN1OM7sY4Y18eDzdY5EhXFZgcfFGxbh3Xvp0buod3QAyAniCdmJL8Ycg==
-X-Received: by 2002:a05:6870:f295:b0:17f:e768:60fb with SMTP id u21-20020a056870f29500b0017fe76860fbmr3024069oap.54.1681906823992;
-        Wed, 19 Apr 2023 05:20:23 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 64-20020a4a0143000000b00529cc3986c8sm6920510oor.40.2023.04.19.05.20.22
+        d=1e100.net; s=20221208; t=1681906943; x=1684498943;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Cvi/8BFVMUmJHt4WjuHDaXoszJBRcvvbnSWyynNb4dw=;
+        b=dEL2psCi52nerBPpJYJmIxPgx4rE5Yxnrg5tG/AJ3kCpo6QcLIvlAl4Qh1n/O4ovt9
+         yKThd1Cx0Ae/te8Bnkd4XqAe3E/DkA6tEhs7tC3tuNhjN48zvS/ajx87dI/H4aNVPfyA
+         Jtdg9UzInBsY4/ZbO/e6OBQ7P2FkVNZRM1spev9goItJg0WXf5zblHh/jog3ftH+wgvm
+         NltPyCTgp/TbHPKgd+aGZjpBc9mFMtfa1cl1u14B91ZPj35pYmJsXF8DSw4fkW4fydAx
+         6RSeuCPzrxkwHtN65SWU9lb67PIoNCNEHu/9+CpW8u/f9CdHgr8I7L2+EQU1D0x7MEmp
+         H51Q==
+X-Gm-Message-State: AAQBX9c4EgsfXqzZqB08brvB89AOzmR2lw54/nYnoldFZW3jJHFme5yB
+        wtszhiHzQYdlkzoG+nEz+zs=
+X-Google-Smtp-Source: AKy350YunIiQ3rSxoOx6P/gwromJ6KqxNFKy+BHVTeuXJi6xVHlbz9D1gBHrAJqbGAdA5qNa2rmVAg==
+X-Received: by 2002:a05:6a20:3d1a:b0:ee:7694:f069 with SMTP id y26-20020a056a203d1a00b000ee7694f069mr3643470pzi.41.1681906942789;
+        Wed, 19 Apr 2023 05:22:22 -0700 (PDT)
+Received: from hackyzh-virtual-machine.localdomain ([112.64.53.154])
+        by smtp.gmail.com with ESMTPSA id ft2-20020a17090b0f8200b002471f34d5ddsm1279106pjb.55.2023.04.19.05.22.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 05:20:23 -0700 (PDT)
-Received: (nullmailer pid 3779626 invoked by uid 1000);
-        Wed, 19 Apr 2023 12:20:22 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Wed, 19 Apr 2023 05:22:22 -0700 (PDT)
+From:   hackyzh002 <hackyzh002@gmail.com>
+To:     alexander.deucher@amd.com
+Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, sumit.semwal@linaro.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, hackyzh002 <hackyzh002@gmail.com>
+Subject: [PATCH V3 1/2] drm/radeon: Fix integer overflow in radeon_cs_parser_init
+Date:   Wed, 19 Apr 2023 20:20:58 +0800
+Message-Id: <20230419122058.3420-1-hackyzh002@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Justin Chen <justinpopo6@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, hkallweit1@gmail.com,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        dri-devel@lists.freedesktop.org, linux@armlinux.org.uk,
-        f.fainelli@gmail.com, opendmb@gmail.com,
-        linaro-mm-sig@lists.linaro.org, pabeni@redhat.com,
-        edumazet@google.com, robh+dt@kernel.org, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, andrew@lunn.ch, richardcochran@gmail.com,
-        kuba@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        justin.chen@broadcom.com
-In-Reply-To: <1681863018-28006-2-git-send-email-justinpopo6@gmail.com>
-References: <1681863018-28006-1-git-send-email-justinpopo6@gmail.com>
- <1681863018-28006-2-git-send-email-justinpopo6@gmail.com>
-Message-Id: <168190678873.3778743.3635324500677416742.robh@kernel.org>
-Subject: Re: [PATCH net-next 1/6] dt-bindings: net: Brcm ASP 2.0 Ethernet
- controller
-Date:   Wed, 19 Apr 2023 07:20:22 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The type of size is unsigned, if size is 0x40000000, there will be an
+integer overflow, size will be zero after size *= sizeof(uint32_t),
+will cause uninitialized memory to be referenced later
 
-On Tue, 18 Apr 2023 17:10:13 -0700, Justin Chen wrote:
-> From: Florian Fainelli <f.fainelli@gmail.com>
-> 
-> Add a binding document for the Broadcom ASP 2.0 Ethernet
-> controller.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> Signed-off-by: Justin Chen <justinpopo6@gmail.com>
-> ---
->  .../devicetree/bindings/net/brcm,asp-v2.0.yaml     | 146 +++++++++++++++++++++
->  1 file changed, 146 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
-> 
+Signed-off-by: hackyzh002 <hackyzh002@gmail.com>
+---
+ drivers/gpu/drm/radeon/radeon_cs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/brcm,asp-v2.0.example.dtb: asp@9c00000: mdio@c614:compatible:0: 'brcm,asp-v2.0-mdio' is not one of ['brcm,genet-mdio-v1', 'brcm,genet-mdio-v2', 'brcm,genet-mdio-v3', 'brcm,genet-mdio-v4', 'brcm,genet-mdio-v5', 'brcm,unimac-mdio']
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/brcm,asp-v2.0.example.dtb: asp@9c00000: mdio@c614: Unevaluated properties are not allowed ('compatible' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/brcm,asp-v2.0.example.dtb: asp@9c00000: mdio@ce14:compatible:0: 'brcm,asp-v2.0-mdio' is not one of ['brcm,genet-mdio-v1', 'brcm,genet-mdio-v2', 'brcm,genet-mdio-v3', 'brcm,genet-mdio-v4', 'brcm,genet-mdio-v5', 'brcm,unimac-mdio']
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/brcm,asp-v2.0.example.dtb: asp@9c00000: mdio@ce14: Unevaluated properties are not allowed ('compatible' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
-Documentation/devicetree/bindings/net/brcm,asp-v2.0.example.dtb: /example-0/asp@9c00000/mdio@c614: failed to match any schema with compatible: ['brcm,asp-v2.0-mdio']
-Documentation/devicetree/bindings/net/brcm,asp-v2.0.example.dtb: /example-0/asp@9c00000/mdio@ce14: failed to match any schema with compatible: ['brcm,asp-v2.0-mdio']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1681863018-28006-2-git-send-email-justinpopo6@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/drivers/gpu/drm/radeon/radeon_cs.c b/drivers/gpu/drm/radeon/radeon_cs.c
+index 46a27ebf4..a6700d727 100644
+--- a/drivers/gpu/drm/radeon/radeon_cs.c
++++ b/drivers/gpu/drm/radeon/radeon_cs.c
+@@ -270,7 +270,8 @@ int radeon_cs_parser_init(struct radeon_cs_parser *p, void *data)
+ {
+ 	struct drm_radeon_cs *cs = data;
+ 	uint64_t *chunk_array_ptr;
+-	unsigned size, i;
++	u64 size;
++	unsigned i;
+ 	u32 ring = RADEON_CS_RING_GFX;
+ 	s32 priority = 0;
+ 
+-- 
+2.34.1
 
