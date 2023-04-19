@@ -2,88 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB1A6E757E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0DF6E7586
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232677AbjDSIkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
+        id S232626AbjDSIlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbjDSIkU (ORCPT
+        with ESMTP id S230179AbjDSIln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:40:20 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2F3D334;
-        Wed, 19 Apr 2023 01:40:15 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id u3so27614583ejj.12;
-        Wed, 19 Apr 2023 01:40:15 -0700 (PDT)
+        Wed, 19 Apr 2023 04:41:43 -0400
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DA36A4E
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:41:41 -0700 (PDT)
+Received: by mail-ua1-x933.google.com with SMTP id x8so13585871uau.9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:41:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681893614; x=1684485614;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=11sl8AqwZce1ertKq6Ztt8iuR+fB42Oex6pJ+U7xw2I=;
-        b=DxJtLunx5h16pRRZ84LYqFPi6EJHNEhDJ/4M06dgxM2ur0kqsRc/6YtsMxfHQkzoDi
-         ylakpROJRFG1jWkLkiLWH6m6zs8oZIVmbqf6QE9Rh/UhnpnDwyUZLPXmRvssJpYoZDq4
-         dA3oUTNV0tBOII15372NBzNp9bOvYkzlTfEGJZxIKEZikoq9gVKGcJkNHYO6vsl30gna
-         Gw8nQ26WHKu+rcmyKVnUkkkfKQfl1+bOO1WVUamcinpol0p8Vo9pbY75wEeWdU0DqoDB
-         dgYTurZ1swwpQk3ZMlRno2Rs8y2I93xbBQuelN2GGxgHUd1i/SzDDEWa3kQT/R19xDwt
-         vpiQ==
+        d=linaro.org; s=google; t=1681893700; x=1684485700;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=emy47ve69M61/H+lOFyGeFQpmRwakkEYlvCbnQMqfZc=;
+        b=ENnv+X68dCRBEv06msiX8E/szw1zR4jEO2EWzjTUvTeuOAAdhKX6tczSGLo6x3t+hv
+         73PlTnk0PUtOCULsF/s9pyuiddkUrgUR1CDZWe/q1jDJbj+5WUFURaQW610rQZZ3twru
+         m9Zz5oThv/KOTV+pyWaNb12SV8LTwk8dBR6WZHmIDB07gyhmOLjSptO+JCQU9vWFvfmZ
+         TDc8EGRIWixLk2vKpZeEprTKhGcSJHQhdeSiZPeRKA6Zv44QDXQiKR/o/R6GH4MsZ/Lm
+         UFObZ7UcA9iMzGcqC2MZfCsX8lO/APWIuo02j0lC2nlql/yBp3syxTi4bTPLp4XwwUtR
+         mUoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681893614; x=1684485614;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=11sl8AqwZce1ertKq6Ztt8iuR+fB42Oex6pJ+U7xw2I=;
-        b=VJek+dCecDi6MZ6wfuq+jTloHisdaMNTSpk7jE6lAISZIsjXpCRDhmLE2CVJ/6hteH
-         vJxi7VHmi11WB43/FVO5GdYIAbu4P4YMprPWfXnaYNio0TWr3JpCLBEvWO2J8ZhFzu8X
-         CS8xMpVakdDloJwXFJmpJPYeKK63Xcnq0ENvsjaQac49pZXl1TlDanXzsC6wg7Dd36xS
-         WMobdf8zI0BmiQ5qkGuXxQt8glx5kvRw5X/A+3eWtGUcGfX/ryg5ZbcWh4kVQJO7XewH
-         Xaynexr6BbU+Bcynee+AXC7bgIZ9lJE1yarCG8YowbeKnZHJq/C5yui9UzyM+kUTjB2f
-         s3CA==
-X-Gm-Message-State: AAQBX9fVcHT2+Vz96ZKJ3BNnFs37GKk2EAQoKyVbwtuhXsBcFAh6MNoq
-        dIyfAClgcKMWslTzTYDN3mg=
-X-Google-Smtp-Source: AKy350aFo85fWHrw1usKNUqmGwHdN9xEddgt1lB/ijvfifKCIrYYuxvdWJI7HS4UtLXKs9qddbPlAw==
-X-Received: by 2002:a17:906:9153:b0:94e:6504:d134 with SMTP id y19-20020a170906915300b0094e6504d134mr13768717ejw.42.1681893613729;
-        Wed, 19 Apr 2023 01:40:13 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1256:79a0:6273:6c76:9697:9b4c? ([2a02:908:1256:79a0:6273:6c76:9697:9b4c])
-        by smtp.gmail.com with ESMTPSA id qm5-20020a170907674500b0094e3ddcf153sm8949825ejc.115.2023.04.19.01.40.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 01:40:13 -0700 (PDT)
-Message-ID: <6703b9b2-539f-9a1b-82b8-244328472640@gmail.com>
-Date:   Wed, 19 Apr 2023 10:40:12 +0200
+        d=1e100.net; s=20221208; t=1681893700; x=1684485700;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=emy47ve69M61/H+lOFyGeFQpmRwakkEYlvCbnQMqfZc=;
+        b=W6VDXJX6f4MccY5Q3PqXeNBFHwbSK1I0T16bIsIpN4+A3ZAyXONwQVR8xbuKVslYwA
+         mOZ38s1JlL8JCgb4rcHNW/BR/NZswYf+RSBWNzYPMUv8B55/2WlQ77pjz9gbg4bQExVl
+         lgL9eFwEsDexkTGmAOXkaWMOj0ccMTn3HqWEdkMMM9TyQlIPKFXfNCguqENkrBTb5FEq
+         F51SDPax6PhBS0rL8k0s02ahAFc8Wjsys20QnRmjCWyGr9fYFO5Uiduump5Wd/FKLJIn
+         lwH/csIH+jjOBnyCGMhNVCtvLm6uwvrTw4oXguFw8e29dlFsD7Ta0m9Xpa5cbmGg3+xu
+         6G3w==
+X-Gm-Message-State: AAQBX9d2DvV5QQe/g//s6HrG/GrMDtEfqtaYejNfBC/B3j7LVnenIR5o
+        ApF0UlWSf+cFrUrRaS4StCGD56mvKG67sTvoghbPCw==
+X-Google-Smtp-Source: AKy350Z3Ni0SSbMTDkN3mmzu1eRZR47Vg3M1yERQUS0xI3yjYTmv0WF06K5Cir25APo9u7T2XdG4FFNMTxTkCObeuhY=
+X-Received: by 2002:a1f:6045:0:b0:432:6ec5:69a5 with SMTP id
+ u66-20020a1f6045000000b004326ec569a5mr7179757vkb.3.1681893700274; Wed, 19 Apr
+ 2023 01:41:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 1/6] mm/gup: remove unused vmas parameter from
- get_user_pages()
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, kvm@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Xinhui Pan <Xinhui.Pan@amd.com>, x86@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, Jason Gunthorpe <jgg@nvidia.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        amd-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Airlie <airlied@gmail.com>, linux-sgx@vger.kernel.org
-References: <cover.1681831798.git.lstoakes@gmail.com>
- <cd05b41d6d15ee9ff94273bc116ed3db3f5125bf.1681831798.git.lstoakes@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <cd05b41d6d15ee9ff94273bc116ed3db3f5125bf.1681831798.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230418120254.687480980@linuxfoundation.org>
+In-Reply-To: <20230418120254.687480980@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 19 Apr 2023 14:11:29 +0530
+Message-ID: <CA+G9fYvuJFV8bJNO5qObtZzvPDJwNdwjkgmPBo1GfCnL35GFtQ@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/37] 4.14.313-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        LTP List <ltp@lists.linux.it>, chrubis <chrubis@suse.cz>,
+        Petr Vorel <pvorel@suse.cz>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,168 +75,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 18.04.23 um 17:49 schrieb Lorenzo Stoakes:
-> No invocation of get_user_pages() uses the vmas parameter, so remove
-> it.
+On Tue, 18 Apr 2023 at 17:54, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> The GUP API is confusing and caveated. Recent changes have done much to
-> improve that, however there is more we can do. Exporting vmas is a prime
-> target as the caller has to be extremely careful to preclude their use
-> after the mmap_lock has expired or otherwise be left with dangling
-> pointers.
+> This is the start of the stable review cycle for the 4.14.313 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> Removing the vmas parameter focuses the GUP functions upon their primary
-> purpose - pinning (and outputting) pages as well as performing the actions
-> implied by the input flags.
+> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
+> Anything received after that time might be too late.
 >
-> This is part of a patch series aiming to remove the vmas parameter
-> altogether.
-
-Astonishing that there are so few users of the original get_user_pages() 
-API left.
-
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.313-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
+> and the diffstat can be found below.
 >
-> Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Acked-by: David Hildenbrand <david@redhat.com>
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-
-Acked-by: Christian König <christian.koenig@amd.com> for the radeon parts.
-
-Regards,
-Christian.
-
-> ---
->   arch/x86/kernel/cpu/sgx/ioctl.c     | 2 +-
->   drivers/gpu/drm/radeon/radeon_ttm.c | 2 +-
->   drivers/misc/sgi-gru/grufault.c     | 2 +-
->   include/linux/mm.h                  | 3 +--
->   mm/gup.c                            | 9 +++------
->   mm/gup_test.c                       | 5 ++---
->   virt/kvm/kvm_main.c                 | 2 +-
->   7 files changed, 10 insertions(+), 15 deletions(-)
+> thanks,
 >
-> diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-> index 21ca0a831b70..5d390df21440 100644
-> --- a/arch/x86/kernel/cpu/sgx/ioctl.c
-> +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-> @@ -214,7 +214,7 @@ static int __sgx_encl_add_page(struct sgx_encl *encl,
->   	if (!(vma->vm_flags & VM_MAYEXEC))
->   		return -EACCES;
->   
-> -	ret = get_user_pages(src, 1, 0, &src_page, NULL);
-> +	ret = get_user_pages(src, 1, 0, &src_page);
->   	if (ret < 1)
->   		return -EFAULT;
->   
-> diff --git a/drivers/gpu/drm/radeon/radeon_ttm.c b/drivers/gpu/drm/radeon/radeon_ttm.c
-> index 1e8e287e113c..0597540f0dde 100644
-> --- a/drivers/gpu/drm/radeon/radeon_ttm.c
-> +++ b/drivers/gpu/drm/radeon/radeon_ttm.c
-> @@ -362,7 +362,7 @@ static int radeon_ttm_tt_pin_userptr(struct ttm_device *bdev, struct ttm_tt *ttm
->   		struct page **pages = ttm->pages + pinned;
->   
->   		r = get_user_pages(userptr, num_pages, write ? FOLL_WRITE : 0,
-> -				   pages, NULL);
-> +				   pages);
->   		if (r < 0)
->   			goto release_pages;
->   
-> diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
-> index b836936e9747..378cf02a2aa1 100644
-> --- a/drivers/misc/sgi-gru/grufault.c
-> +++ b/drivers/misc/sgi-gru/grufault.c
-> @@ -185,7 +185,7 @@ static int non_atomic_pte_lookup(struct vm_area_struct *vma,
->   #else
->   	*pageshift = PAGE_SHIFT;
->   #endif
-> -	if (get_user_pages(vaddr, 1, write ? FOLL_WRITE : 0, &page, NULL) <= 0)
-> +	if (get_user_pages(vaddr, 1, write ? FOLL_WRITE : 0, &page) <= 0)
->   		return -EFAULT;
->   	*paddr = page_to_phys(page);
->   	put_page(page);
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 37554b08bb28..b14cc4972d0b 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2380,8 +2380,7 @@ long pin_user_pages_remote(struct mm_struct *mm,
->   			   unsigned int gup_flags, struct page **pages,
->   			   struct vm_area_struct **vmas, int *locked);
->   long get_user_pages(unsigned long start, unsigned long nr_pages,
-> -			    unsigned int gup_flags, struct page **pages,
-> -			    struct vm_area_struct **vmas);
-> +		    unsigned int gup_flags, struct page **pages);
->   long pin_user_pages(unsigned long start, unsigned long nr_pages,
->   		    unsigned int gup_flags, struct page **pages,
->   		    struct vm_area_struct **vmas);
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 1f72a717232b..7e454d6b157e 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -2251,8 +2251,6 @@ long get_user_pages_remote(struct mm_struct *mm,
->    * @pages:      array that receives pointers to the pages pinned.
->    *              Should be at least nr_pages long. Or NULL, if caller
->    *              only intends to ensure the pages are faulted in.
-> - * @vmas:       array of pointers to vmas corresponding to each page.
-> - *              Or NULL if the caller does not require them.
->    *
->    * This is the same as get_user_pages_remote(), just with a less-flexible
->    * calling convention where we assume that the mm being operated on belongs to
-> @@ -2260,16 +2258,15 @@ long get_user_pages_remote(struct mm_struct *mm,
->    * obviously don't pass FOLL_REMOTE in here.
->    */
->   long get_user_pages(unsigned long start, unsigned long nr_pages,
-> -		unsigned int gup_flags, struct page **pages,
-> -		struct vm_area_struct **vmas)
-> +		    unsigned int gup_flags, struct page **pages)
->   {
->   	int locked = 1;
->   
-> -	if (!is_valid_gup_args(pages, vmas, NULL, &gup_flags, FOLL_TOUCH))
-> +	if (!is_valid_gup_args(pages, NULL, NULL, &gup_flags, FOLL_TOUCH))
->   		return -EINVAL;
->   
->   	return __get_user_pages_locked(current->mm, start, nr_pages, pages,
-> -				       vmas, &locked, gup_flags);
-> +				       NULL, &locked, gup_flags);
->   }
->   EXPORT_SYMBOL(get_user_pages);
->   
-> diff --git a/mm/gup_test.c b/mm/gup_test.c
-> index 8ae7307a1bb6..9ba8ea23f84e 100644
-> --- a/mm/gup_test.c
-> +++ b/mm/gup_test.c
-> @@ -139,8 +139,7 @@ static int __gup_test_ioctl(unsigned int cmd,
->   						 pages + i);
->   			break;
->   		case GUP_BASIC_TEST:
-> -			nr = get_user_pages(addr, nr, gup->gup_flags, pages + i,
-> -					    NULL);
-> +			nr = get_user_pages(addr, nr, gup->gup_flags, pages + i);
->   			break;
->   		case PIN_FAST_BENCHMARK:
->   			nr = pin_user_pages_fast(addr, nr, gup->gup_flags,
-> @@ -161,7 +160,7 @@ static int __gup_test_ioctl(unsigned int cmd,
->   						    pages + i, NULL);
->   			else
->   				nr = get_user_pages(addr, nr, gup->gup_flags,
-> -						    pages + i, NULL);
-> +						    pages + i);
->   			break;
->   		default:
->   			ret = -EINVAL;
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index d255964ec331..7f31e0a4adb5 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -2474,7 +2474,7 @@ static inline int check_user_page_hwpoison(unsigned long addr)
->   {
->   	int rc, flags = FOLL_HWPOISON | FOLL_WRITE;
->   
-> -	rc = get_user_pages(addr, 1, flags, NULL, NULL);
-> +	rc = get_user_pages(addr, 1, flags, NULL);
->   	return rc == -EHWPOISON;
->   }
->   
+> greg k-h
 
+
+Recently we have upgraded the LTP test suite version and started noticing
+these test failures on 4.14, 4.19 and 5.4 only on arm64.
+
+Need to investigate test case issues or kernel issues.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+NOTE:
+-----
+creat09.c:73: TINFO: User nobody: uid = 65534, gid = 65534
+creat09.c:75: TINFO: Found unused GID 11: SUCCESS (0)
+creat09.c:120: TINFO: File created with umask(0)
+creat09.c:106: TPASS: mntpoint/testdir/creat.tmp: Owned by correct group
+creat09.c:112: TPASS: mntpoint/testdir/creat.tmp: Setgid bit not set
+creat09.c:106: TPASS: mntpoint/testdir/open.tmp: Owned by correct group
+creat09.c:112: TPASS: mntpoint/testdir/open.tmp: Setgid bit not set
+creat09.c:120: TINFO: File created with umask(S_IXGRP)
+creat09.c:106: TPASS: mntpoint/testdir/creat.tmp: Owned by correct group
+creat09.c:110: TFAIL: mntpoint/testdir/creat.tmp: Setgid bit is set
+creat09.c:106: TPASS: mntpoint/testdir/open.tmp: Owned by correct group
+creat09.c:110: TFAIL: mntpoint/testdir/open.tmp: Setgid bit is set
+
+links:
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14.311-105-gcdc53f89dfa8/testrun/16316521/suite/ltp-syscalls/test/creat09/log
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14.311-105-gcdc53f89dfa8/testrun/16316521/suite/ltp-syscalls/test/creat09/history/
+
+## Build
+* kernel: 4.14.313-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: cdc53f89dfa8e80182c9539a962df6c330a69931
+* git describe: v4.14.311-105-gcdc53f89dfa8
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14.311-105-gcdc53f89dfa8
+
+## Test Regressions (compared to v4.14.311-67-gf4c3927dd933)
+
+* qemu-arm64, ltp-cve
+  - cve-2018-13405 ( creat09 )
+
+* qemu-arm64, ltp-syscalls
+  - creat09
+
+## Metric Regressions (compared to v4.14.311-67-gf4c3927dd933)
+
+## Test Fixes (compared to v4.14.311-67-gf4c3927dd933)
+
+## Metric Fixes (compared to v4.14.311-67-gf4c3927dd933)
+
+## Test result summary
+total: 65426, pass: 54434, fail: 2998, skip: 7868, xfail: 126
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 106 total, 104 passed, 2 failed
+* arm64: 33 total, 32 passed, 1 failed
+* i386: 20 total, 19 passed, 1 failed
+* mips: 21 total, 21 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 8 total, 7 passed, 1 failed
+* s390: 6 total, 5 passed, 1 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 25 total, 24 passed, 1 failed
+
+## Test suites summary
+* boot
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-membarrier
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-zram
+* kunit
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktBroadcast
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
