@@ -2,51 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739266E7F07
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3446E7F0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233296AbjDSQAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 12:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
+        id S233338AbjDSQBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 12:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbjDSQAi (ORCPT
+        with ESMTP id S229833AbjDSQBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 12:00:38 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F45B11A;
-        Wed, 19 Apr 2023 09:00:37 -0700 (PDT)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id B6E72CCC24;
-        Wed, 19 Apr 2023 16:00:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1681920035; bh=Kvp+y1PlgCtZ/H7c3YDNPiFv1aZtJPEuqKzBkTmEB2E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Btyge/ZRpJOT+0+JVsBPYpXC8khmH2HpUfJI+qgJYFweAnWSPf5yzl7TdoKfcK5FT
-         WHNl7VnV8diSwjBGwmX58RN1RsgxsBs6y4qpZ+XiCBMH6TqRCpiG4y0k5K1/OXyNWF
-         dWjEWr9+GDBuDLeE9LEx349hO0RrkahdzXSq0zQk=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Craig Tatlor <ctatlor97@gmail.com>
-Subject: Re: [PATCH] ARM: dts: qcom: msm8974: correct qfprom node reg
-Date:   Wed, 19 Apr 2023 18:00:35 +0200
-Message-ID: <5664419.DvuYhMxLoT@z3ntu.xyz>
-In-Reply-To: <2401830.jE0xQCEvom@z3ntu.xyz>
-References: <20230130-msm8974-qfprom-v1-1-975aa0e5e083@z3ntu.xyz>
- <568ebb75-5cb2-af97-bfae-c1e1e6174a45@linaro.org>
- <2401830.jE0xQCEvom@z3ntu.xyz>
+        Wed, 19 Apr 2023 12:01:00 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61A5B86AC;
+        Wed, 19 Apr 2023 09:00:54 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:60812.1889620050
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id 3E71E1001F7;
+        Thu, 20 Apr 2023 00:00:43 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-ljp89 with ESMTP id 3eeb43b13fa24365b32365172a6ade10 for daniel@ffwll.ch;
+        Thu, 20 Apr 2023 00:00:46 CST
+X-Transaction-ID: 3eeb43b13fa24365b32365172a6ade10
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <ad44df29-3241-0d9e-e708-b0338bf3c623@189.cn>
+Date:   Thu, 20 Apr 2023 00:00:41 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3] drm/fbdev-generic: prohibit potential out-of-bounds
+ access
+Content-Language: en-US
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Li Yi <liyi@loongson.cn>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230417113219.1354078-1-suijingfeng@loongson.cn>
+ <ZD5Vgx9Txaiz7Bun@phenom.ffwll.local>
+ <139c9398-488d-df19-9ae2-2b4b47ef64f4@189.cn>
+ <86a8b262-cbf2-b75f-9972-491f557edf74@189.cn>
+ <CAKMK7uE-azFT02Sp2FDfMGTc57eYJEn8iM8Wk1mt5ucPs1qM-w@mail.gmail.com>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <CAKMK7uE-azFT02Sp2FDfMGTc57eYJEn8iM8Wk1mt5ucPs1qM-w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,LOTS_OF_MONEY,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,138 +66,277 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Konrad,
+Hi,
 
-On Montag, 30. J=E4nner 2023 21:37:29 CEST Luca Weiss wrote:
-> On Montag, 30. J=E4nner 2023 19:42:51 CET Konrad Dybcio wrote:
-> > On 30.01.2023 19:36, Luca Weiss wrote:
-> > > On Montag, 30. J=E4nner 2023 19:30:04 CET Konrad Dybcio wrote:
-> > >> On 30.01.2023 19:20, luca@z3ntu.xyz wrote:
-> > >>> From: Craig Tatlor <ctatlor97@gmail.com>
-> > >>>=20
-> > >>> The qfprom actually starts at 0xfc4b8000 instead of 0xfc4bc000 as
-> > >>> defined previously. Adjust the tsens offsets accordingly.
-> > >>>=20
-> > >>> [luca@z3ntu.xyz: extract to standalone patch]
-> > >>>=20
-> > >>> Fixes: c59ffb519357 ("arm: dts: msm8974: Add thermal zones, tsens a=
-nd
-> > >>> qfprom nodes") Signed-off-by: Craig Tatlor <ctatlor97@gmail.com>
-> > >>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > >>> ---
-> > >>=20
-> > >> Isn't this a raw vs ecc-corrected values problem?
-> > >=20
-> > > Not quite sure what you mean.
-> >=20
-> > The QFPROM is split into two parts: one where raw values
-> > are stored, and the other one where ECC-corrected copies
-> > of them reside. Usually it's at offset of 0x4000. We should
-> > generally be using the ECC-corrected ones, because.. well..
-> > they are ECC-corrected.. You may want to check if the
-> > fuse you're adding reads the same value at +0x4000.
->=20
-> Yeah that actually seems to work...
->=20
-> But downstream's using this +0x4000 only for tsens it seems
->=20
->    <0xfc4bc000 0x1000> as "tsens_eeprom_physical"
->=20
-> qcom,clock-krait-8974 is using this:
->=20
->     <0xfc4b80b0 0x08> as "efuse"
->=20
-> Also seems HDMI driver is using a mix for HDCP stuff
->=20
->   drivers/video/msm/mdss/mdss_hdmi_util.h:
->=20
->     /* QFPROM Registers for HDMI/HDCP */
->     #define QFPROM_RAW_FEAT_CONFIG_ROW0_LSB  (0x000000F8)
->     #define QFPROM_RAW_FEAT_CONFIG_ROW0_MSB  (0x000000FC)
->     #define HDCP_KSV_LSB                     (0x000060D8)
->     #define HDCP_KSV_MSB                     (0x000060DC)
->=20
-> Any clue why Qualcomm used it this way in downstream? I'd rather not devi=
-ate
-> too much if not for a good reason...
+Sorry about reply to you so late,
 
-Any comments on the above?
+our  downstream (product kernel side) userspace GPU/DC driver
 
-Regards
-Luca
+has been tested out a few bugs, I'm asking to fulfill my duty to that 
+part all days.
 
->=20
-> Regards
-> Luca
->=20
-> > Konrad
-> >=20
-> > > The original intention behind this patch is to allow to use the pvs f=
-use
-> > > at
-> > > (now) 0xb0 which was inaccessible with the former definition.
-> > >=20
-> > >     pvs: pvs@b0 {
-> > >    =20
-> > >         reg =3D <0xb0 0x8>;
-> > >    =20
-> > >     };
-> > >=20
-> > > Regards
-> > > Luca
-> > >=20
-> > >> Konrad
-> > >>=20
-> > >>>  arch/arm/boot/dts/qcom-msm8974.dtsi | 12 ++++++------
-> > >>>  1 file changed, 6 insertions(+), 6 deletions(-)
-> > >>>=20
-> > >>> diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi
-> > >>> b/arch/arm/boot/dts/qcom-msm8974.dtsi index 8d216a3c0851..922d235c6=
-065
-> > >>> 100644
-> > >>> --- a/arch/arm/boot/dts/qcom-msm8974.dtsi
-> > >>> +++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
-> > >>> @@ -1132,16 +1132,16 @@ restart@fc4ab000 {
-> > >>>=20
-> > >>>  			reg =3D <0xfc4ab000 0x4>;
-> > >>>  	=09
-> > >>>  		};
-> > >>>=20
-> > >>> -		qfprom: qfprom@fc4bc000 {
-> > >>> +		qfprom: qfprom@fc4b8000 {
-> > >>>=20
-> > >>>  			compatible =3D "qcom,msm8974-qfprom",
-> > >=20
-> > > "qcom,qfprom";
-> > >=20
-> > >>> -			reg =3D <0xfc4bc000 0x1000>;
-> > >>> +			reg =3D <0xfc4b8000 0x7000>;
-> > >>>=20
-> > >>>  			#address-cells =3D <1>;
-> > >>>  			#size-cells =3D <1>;
-> > >>>=20
-> > >>> -			tsens_calib: calib@d0 {
-> > >>> -				reg =3D <0xd0 0x18>;
-> > >>> +			tsens_calib: calib@40d0 {
-> > >>> +				reg =3D <0x40d0 0x18>;
-> > >>>=20
-> > >>>  			};
-> > >>>=20
-> > >>> -			tsens_backup: backup@440 {
-> > >>> -				reg =3D <0x440 0x10>;
-> > >>> +			tsens_backup: backup@4440 {
-> > >>> +				reg =3D <0x4440 0x10>;
-> > >>>=20
-> > >>>  			};
-> > >>>  	=09
-> > >>>  		};
-> > >>>=20
-> > >>> ---
-> > >>> base-commit: 6d796c50f84ca79f1722bb131799e5a5710c4700
-> > >>> change-id: 20230130-msm8974-qfprom-619c0e8f26eb
-> > >>>=20
-> > >>> Best regards,
+I may slow to reply, but I really love to reply.
 
 
+On 2023/4/19 23:09, Daniel Vetter wrote:
+> On Tue, 18 Apr 2023 at 20:16, Sui Jingfeng <15330273260@189.cn> wrote:
+>> Hi,
+>>
+>> On 2023/4/19 01:52, Sui Jingfeng wrote:
+>>> Hi,
+>>>
+>>> On 2023/4/18 16:32, Daniel Vetter wrote:
+>>>> On Mon, Apr 17, 2023 at 07:32:19PM +0800, Sui Jingfeng wrote:
+>>>>> The fbdev test of IGT may write after EOF, which lead to out-of-bound
+>>>>> access for the drm drivers using fbdev-generic. For example, on a x86
+>>>>> + aspeed bmc card platform, with a 1680x1050 resolution display,
+>>>>> running
+>>>>> fbdev test if IGT will cause the linux kernel hang with the following
+>>>>> call trace:
+>>>>>
+>>>>>     Oops: 0000 [#1] PREEMPT SMP PTI
+>>>>>     [IGT] fbdev: starting subtest eof
+>>>>>     Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
+>>>>>     [IGT] fbdev: starting subtest nullptr
+>>>>>
+>>>>>     RIP: 0010:memcpy_erms+0xa/0x20
+>>>>>     RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
+>>>>>     RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
+>>>>>     RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
+>>>>>     RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
+>>>>>     R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
+>>>>>     R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
+>>>>>     FS:  0000000000000000(0000) GS:ffff895257380000(0000)
+>>>>> knlGS:0000000000000000
+>>>>>     CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>>>     CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
+>>>>>     Call Trace:
+>>>>>      <TASK>
+>>>>>      ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
+>>>>>      drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
+>>>>>      process_one_work+0x21f/0x430
+>>>>>      worker_thread+0x4e/0x3c0
+>>>>>      ? __pfx_worker_thread+0x10/0x10
+>>>>>      kthread+0xf4/0x120
+>>>>>      ? __pfx_kthread+0x10/0x10
+>>>>>      ret_from_fork+0x2c/0x50
+>>>>>      </TASK>
+>>>>>     CR2: ffffa17d40e0b000
+>>>>>     ---[ end trace 0000000000000000 ]---
+>>>>>
+>>>>> The direct reason is that damage rectange computed by
+>>>>> drm_fb_helper_memory_range_to_clip() does not guaranteed to be
+>>>>> in-bound.
+>>>>> It is already results in workaround code populate to elsewhere. Another
+>>>>> reason is that exposing a larger buffer size than the actual needed
+>>>>> help
+>>>>> to trigger this bug intrinsic in drm_fb_helper_memory_range_to_clip().
+>>>>>
+>>>>> Others fbdev emulation solutions write to the GEM buffer directly, they
+>>>>> won't reproduce this bug because the .fb_dirty function callback do not
+>>>>> being hooked, so no chance is given to
+>>>>> drm_fb_helper_memory_range_to_clip()
+>>>>> to generate a out-of-bound when drm_fb_helper_sys_write() is called.
+>>>>>
+>>>>> This patch break the trigger condition of this bug by shrinking the
+>>>>> shadow
+>>>>> buffer size to sizes->surface_height * buffer->fb->pitches[0].
+>>>>>
+>>>>> Fixes: '8fbc9af55de0 ("drm/fbdev-generic: Set screen size to size of
+>>>>> GEM
+>>>>> buffer")'
+>>>>>
+>>>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>>>>> ---
+>>>>>    drivers/gpu/drm/drm_fbdev_generic.c | 2 +-
+>>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>> b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>> index 8e5148bf40bb..b057cfbba938 100644
+>>>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>> @@ -94,7 +94,7 @@ static int
+>>>>> drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
+>>>>>        fb_helper->buffer = buffer;
+>>>>>        fb_helper->fb = buffer->fb;
+>>>>>    -    screen_size = buffer->gem->size;
+>>>>> +    screen_size = sizes->surface_height * buffer->fb->pitches[0];
+>>>> So I read core some more and stumbled over drm_fb_helper_deferred_io().
+>>>> Which has all the code and comments about this, including limiting.
+>>>>
+>>>> I think it would be clearer if we fix the issue there, instead of
+>>>> passing
+>>>> limits around in obscure places that then again get broken?
+>>> No, it is more obscure doing that way...
+>>>
+>>>
+>>> As the size of the shadow screen buffer will be exposed to userspace.
+>>>
+>>> The size 'helper->fb->height * helper->fb->pitches[0]' is a
+>>> exactly(best) fit,
+>>>
+>>> You are guaranteed to waste at lease one byte by increasing one byte,
+>>>
+>>> and can not store all pixels by decreasing one byte (In the case where
+>>> `helper->fb->pitches[0] = helper->fb->width * 4`).
+>>>
+>>> It implicitly tell the userspace do not go beyond that boundary.
+>>>
+>>> although userspace program can still choose to write  after EOF,
+>>>
+>>> But it is for test purpose, to test the kernel if it can return a
+>>> -EFBIG or not.
+>>>
+>>>> The thing is,
+>>>> Thomas both authored the limit checks in drm_fb_helper_deferred_io() and
+>>>> the patch which broken them again, so clearly this isn't very
+>>>> obvious. I'm
+>>>> thinking of something like this:
+>>>>
+>>>>
+>>>> diff --git a/drivers/gpu/drm/drm_fb_helper.c
+>>>> b/drivers/gpu/drm/drm_fb_helper.c
+>>>> index ef4eb8b12766..726dab67c359 100644
+>>>> --- a/drivers/gpu/drm/drm_fb_helper.c
+>>>> +++ b/drivers/gpu/drm/drm_fb_helper.c
+>>>> @@ -697,10 +697,7 @@ void drm_fb_helper_deferred_io(struct fb_info
+>>>> *info, struct list_head *pagerefli
+>>>>         * of the screen and account for non-existing scanlines. Hence,
+>>>>         * keep the covered memory area within the screen buffer.
+>>>>         */
+>>>> -    if (info->screen_size)
+>>>> -        total_size = info->screen_size;
+>>>> -    else
+>>>> -        total_size = info->fix.smem_len;
+>>>> +    total_size = helper->fb->height * helper->fb->pitches[0];
+>>> This is just to mitigate the mistakes already has been made,
+>>>
+>>> because it  do not do a good splitting between the *clip* part and the
+>>> *damage update* part.
+>>>
+>>> An ideal clipping do not obscure its updating backend with a
+>>> out-of-bound damage rectangle.
+>>>
+>>> Why did the drm_fb_helper_memory_range_to_clip() can not do a good job
+>>> in all case
+>>>
+>>> to pass its backend a always meaningful damage rect ?
+>>>
+>>>>        max_off = min(max_off, total_size);
+>>>>          if (min_off < max_off) {
+>>>>
+>>>>
+>>>> I think that would make it utmost clear on what we're doing and why.
+>>>> Otherwise we're just going to re-create the same bug again, like we've
+>>>> done already :-)
+>>> No, we create no bugs, we fix one.
+>>>
+>>> Thanks.
+>>>
+>> But honestly I do not have strong feel toward this, I just type what I'm
+>> understand without seeing you resend a V3.
+>>
+>> It's OK in overall,  I will help to test this tomorrow.  :-)
+> Apologies for making you jump around all the time and doing different
+> versions of the same bugfix :-/
+
+No,  I do not mind.  I'm wondering if you are testing me.
+
+> I think this one here is ok to merge,
+
+NO,  to be honest,  this version is not ok.
+
+I have just tested it on LoongArch . It does not prevent out-of-bound on 
+LoongArch.
+
+bellow is the call trace when running the fbdev test of IGT.
 
 
+[  369.628841] Console: switching to colour dummy device 80x25
+[  369.634440] [IGT] fbdev: executing
+[  369.654684] [IGT] fbdev: starting subtest info
+[  369.659173] [IGT] fbdev: starting subtest pan
+[  369.722093] [IGT] fbdev: starting subtest read
+[  369.737795] [IGT] fbdev: starting subtest unaligned-read
+[  369.745695] [IGT] fbdev: starting subtest write
+[  369.753154] CPU 3 Unable to handle kernel paging request at virtual address ffff800034bd0000, era == 9000000000223d5c, ra == ffff8000020d75a8
+[  369.774570] [IGT] fbdev: starting subtest unaligned-write
+[  369.779960] Oops[#1]:
+[  369.782215] CPU: 3 PID: 504 Comm: kworker/3:3 Not tainted 6.3.0-rc5+ #377
+[  369.782219] Hardware name: Loongson Loongson-3A5000-HV-7A2000-1w-V0.1-EVB/Loongson-LS3A5000-7A2000-1w-EVB-V1.21, BIOS Loongson-UDK2018-V4.0.05383-beta10 1
+[  369.782223] Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
+[  369.802706] $ 0   : 0000000000000000 ffff8000020d75a8 90000001367fc000 90000001367ffcf0
+[  369.809368] $ 4   : ffff80003a3ec000 ffff800034bcee00 0000000000001e00 9000000001160000
+[  369.825275] $ 8   : ffff80003a3ebfff 0000000000000040 0000000000000000 ffff80000214f20c
+[  369.825280] $12   : ffff80003a3ecc00 ffff800034bd0000 0000000000000000 0000000000001e00
+[  369.841188] $16   : 9000000107490800 9000000001a24000 9000000001a28000 00000e00207ec000
+[  369.849152] $20   : fffffffffe000000 900000010684cec0 0000000000000439 90000001367ffd90
+[  369.849165] $24   : 9000000106bc5200 ffff8000020de000 ffff800034bcee00 0000000000001e00
+[  369.865072] $28   : 90000001076d4400 0000000000000001 900000010553c000 ffff80003a3eae00
+[  369.865078] era   : 9000000000223d5c __memcpy_toio+0x4c/0x90
+[  369.878651] ra    : ffff8000020d75a8 drm_fbdev_generic_helper_fb_dirty+0x1cc/0x300 [drm_kms_helper]
+[  369.878762] [IGT] fbdev: starting subtest eof
+[  369.887679] CSR crmd: 000000b0
+[  369.887680] CSR prmd: 00000004
+[  369.887682] CSR euen: 00000000
+[  369.887683] CSR ecfg: 00071c1c
+[  369.901340] CSR estat: 00010000
+[  369.901342] ExcCode : 1 (SubCode 0)
+[  369.901344] BadVA : ffff800034bd0000
+[  369.914659] PrId  : 0014c011 (Loongson-64bit)
+[  369.914660] Modules linked in: uas usb_storage snd_seq_dummy snd_seq snd_seq_device ip_set rfkill nf_tables nfnetlink vfat fat loongson ttm acpi_ipmi drm_kms_helper syscopyarea sysfillrect ipmi_si ipmi_devintf sysimgblt ipmi_msghandler fuse efivarfs
+[  369.919013] Process kworker/3:3 (pid: 504, threadinfo=00000000a1234af0, task=000000004e2cde6f)
+[  369.949519] Stack : 9000000106bc5318 900000010684cec0 9000000107afd470 ffff800039c00000
+[  369.949535] [IGT] fbdev: starting subtest nullptr
+[  369.957476]         0000000000000001 0000000000000000 0000000000000000 76e0ff420f8eaeab
+[  369.957481]         9000000001712000 fffffffffffffffb 9000000100161080 0000000000000003
+[  369.970105]         900000000980ba05 900000000980ba00 9000000106bc5200 9000000106bc52d4
+[  369.978062]         ffff8000020de000 9000000106bc52d8 9000000110664b40 ffff8000020d78e4
+[  369.986018]         043a078000000000 76e0ff420f8eaeab 900000000980be00 9000000009807400
+[  370.001926]         0000000000000000 9000000110664b40 9000000106bc52d8 9000000000256dbc
+[  370.001931]         900000000170e000 9000000107afce00 0000000000000001 900000000170e000
+[  370.009888]         9000000009807428 9000000110664b70 9000000009807400 900000000025737c
+[  370.025797]         9000000100161080 9000000001148080 9000000107afce00 0000000000000003
+[  370.026543] [IGT] fbdev: exiting, ret=0
+[  370.033753]         ...
+[  370.033756] Call Trace:
+[  370.033757] [<9000000000223d5c>] __memcpy_toio+0x4c/0x90
+[  370.047681] [<ffff8000020d75a8>] drm_fbdev_generic_helper_fb_dirty+0x1cc/0x300 [drm_kms_helper]
+[  370.056354] [<ffff8000020d78e4>] drm_fb_helper_damage_work+0xa4/0x1d0 [drm_kms_helper]
+[  370.056381] [<9000000000256dbc>] process_one_work+0x1ec/0x35c
+[  370.056385] [<900000000025737c>] worker_thread+0x88/0x428
+[  370.056387] [<900000000025f4bc>] kthread+0x114/0x120
+[  370.056392] [<90000000002215a8>] ret_from_kernel_thread+0xc/0xa4
+[  370.056395]
+[  370.056396] Code: 00410def  0010bc8c  001500ad <260001ae> 02c02084  02c021ad  29ffe08e  5ffff184  03401cc6
+[  370.056406]
+[  370.056421] fbcon_init: detected unhandled fb_set_par error, error code -16
+[  370.056482] ---[ end trace 0000000000000000 ]---
+[  370.066620] Console: switching to colour frame buffer device 240x67
+
+
+> I just thought when looking at
+> the history that we revert the exact patch without any other changes
+> or comments,
+Other part of that patch(except this line) may still useful, at least 
+for cleanup purpose.
+> and usually that means someone will come up with the same
+> cleanup idea again, and then we'll have a bug again. So maybe a
+> comment or a WARN_ON or something else would be good.
+
+A  WARN_ON is acceptable.
+
+> I guess we could also do your patch, but put a WARN_ON that the
+> computed total_size is never bigger than the drm_fb size into
+> drm_fb_helper_deferred_io()? That would also make sure that this bug
+> doesn't get resurrected again.
+
+Best to merge V2 [1] of this series, that is what I am really fixed.
+
+Maybe somebody can help to refine it, to add a better description about 
+this question and so on.
+
+[1] https://patchwork.freedesktop.org/patch/532143/?series=116454&rev=1
+
+> -Daniel
