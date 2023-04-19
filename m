@@ -2,52 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9800A6E7295
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2996E7298
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbjDSFTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 01:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
+        id S231527AbjDSFWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 01:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjDSFS6 (ORCPT
+        with ESMTP id S231128AbjDSFWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 01:18:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2399E469F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:18:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1CEFD143D;
-        Tue, 18 Apr 2023 22:19:40 -0700 (PDT)
-Received: from [192.168.189.178] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1EEA03F587;
-        Tue, 18 Apr 2023 22:18:52 -0700 (PDT)
-Message-ID: <d83950c4-7458-aeea-f341-327c163704a8@arm.com>
-Date:   Wed, 19 Apr 2023 07:18:51 +0200
+        Wed, 19 Apr 2023 01:22:21 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E3659D5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:22:20 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id n193so8456026ybf.12
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:22:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681881740; x=1684473740;
+        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vsilJRm3n3f0oPJ2h9sspFYqHtbv7ku0fM9SdrcDCj8=;
+        b=hj4EKxmQkVBjeHFrYiX7OIFcERVkkm20q7aY8LG40YNwmqdoPSyqvOdb0/0VfE1HZF
+         1wxaXil9DYJpM9FfY+3v1j5YdDlMBhRqjOSQqV4mR/oeTrfbP3jWVWO06L2fYMwHFG/W
+         GYfKckQve5I0/GA5Mr0muOMEUQb1Kii27Lg526hjbrkSn0+XQUDEzq92zWBS/wJDbdyb
+         0l+ZllTmJe+ZeMEplq6HV9LkRdyiO60luNh5CdjNGdHXp6TauzpYRbpE1Ce6e/jbxGQt
+         vhIT6k8BIJJzk6DLkWkrjPkLyIyAnPJx+fHf7SaAjCwZqbdA7ZpgSPBHDfZh5Z0fVBUJ
+         /4Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681881740; x=1684473740;
+        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vsilJRm3n3f0oPJ2h9sspFYqHtbv7ku0fM9SdrcDCj8=;
+        b=eYYbbgZjvw9lWduyhG68VpAQeDkPhxB0PR8ZWUoPP/8eqyUMSHnjeO6iSpFttuLFsj
+         XMjcvoOmsPrhZJw2sxuF07/kehzHvMGqcn6U3K5kWaRojrKoGyOnNNYIfQsvcuzzHqr1
+         YqiSv6Ni2UvkYwFFHwBd+p5CQ5cd1YVqLQGjuIh7jxFmVxaIdfX72ChzjL6EuGub4Wli
+         JLMtZRy1L/2cWcX3/f8GJX4cPpkWCQcn5QikZgu8ibPll5yiAYToB71o8gWA9Hjktyi5
+         fs27ZBEXUUr1B69oZEMG3e2SK3WopOAV4LgEHGy0ziLmuIxKIYf4S+0/viln3/3Xs8Mk
+         ladA==
+X-Gm-Message-State: AAQBX9cu5fdl79ZOLVW+mK2h7s7pfdKEVOctfaKEtQmrm1D/wAGn77h9
+        X6+jbsejocX6Klhox318IqFGI/s7ks/GLw+VckTtuQ==
+X-Google-Smtp-Source: AKy350Z4PF4zy3c1rTsiOTRbkNvu2a0h9Py9+yH8dop+BTUO2eEpHa0CbiPxrZt0Z7LgGEs/pHl/wA==
+X-Received: by 2002:a25:4987:0:b0:b8f:2d6f:1f0b with SMTP id w129-20020a254987000000b00b8f2d6f1f0bmr21036178yba.49.1681881739920;
+        Tue, 18 Apr 2023 22:22:19 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id j185-20020a8155c2000000b00545a08184fdsm4238243ywb.141.2023.04.18.22.22.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 22:22:19 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 22:22:02 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH next] hugetlb: pte_alloc_huge() to replace huge
+ pte_alloc_map()
+Message-ID: <ae9e7d98-8a3a-cfd9-4762-bcddffdf96cf@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH v1] sched/uclamp: Introduce
- SCHED_FLAG_RESET_UCLAMP_ON_FORK flag
-Content-Language: en-US
-To:     David Dai <davidai@google.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Cc:     Qais Yousef <qyousef@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-References: <20230416213406.2966521-1-davidai@google.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230416213406.2966521-1-davidai@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,25 +72,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/04/2023 23:34, David Dai wrote:
-> A userspace service may manage uclamp dynamically for individual tasks and
-> a child task will unintentionally inherit a pesudo-random uclamp setting.
-> This could result in the child task being stuck with a static uclamp value
+Some architectures can have their hugetlb pages down at the lowest PTE
+level: their huge_pte_alloc() using pte_alloc_map(), but without any
+following pte_unmap().  Since none of these arches uses CONFIG_HIGHPTE,
+this is not seen as a problem at present; but would become a problem if
+forthcoming changes were to add an rcu_read_lock() into pte_offset_map(),
+with the rcu_read_unlock() expected in pte_unmap().
 
-Could you explain this with a little bit more detail? Why isn't the
-child task also managed by the userspace service?
+Similarly in their huge_pte_offset(): pte_offset_kernel() is good enough
+for that, but it's probably less confusing if we define pte_offset_huge()
+along with pte_alloc_huge().  Only define them without CONFIG_HIGHPTE:
+so there would be a build error to signal if ever more work is needed.
 
-The child task will only make a difference if it's on the rq.
+For ease of development, define these now for 6.4-rc1, ahead of any use:
+then architectures can integrate patches using them, independent from mm.
 
-Does this issue happen with uclamp mainline or only with Android's
-slightly different version (max- vs. sum aggregation)?
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
 
-> that results in poor performance or poor power.
-> 
-> Using SCHED_FLAG_RESET_ON_FORK is too coarse for this usecase and will
-> reset other useful scheduler attributes. Adding a
-> SCHED_FLAG_RESET_UCLAMP_ON_FORK will allow userspace to have finer control
-> over scheduler attributes of child processes.
+ include/linux/hugetlb.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-[...]
-
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -183,6 +183,23 @@ extern struct list_head huge_boot_pages;
+ 
+ /* arch callbacks */
+ 
++#ifndef CONFIG_HIGHPTE
++/*
++ * pte_offset_huge() and pte_alloc_huge() are helpers for those architectures
++ * which may go down to the lowest PTE level in their huge_pte_offset() and
++ * huge_pte_alloc(): to avoid reliance on pte_offset_map() without pte_unmap().
++ */
++static inline pte_t *pte_offset_huge(pmd_t *pmd, unsigned long address)
++{
++	return pte_offset_kernel(pmd, address);
++}
++static inline pte_t *pte_alloc_huge(struct mm_struct *mm, pmd_t *pmd,
++				    unsigned long address)
++{
++	return pte_alloc(mm, pmd) ? NULL : pte_offset_huge(pmd, address);
++}
++#endif
++
+ pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
+ 			unsigned long addr, unsigned long sz);
+ /*
