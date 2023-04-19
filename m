@@ -2,182 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6B36E820D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7C66E81F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjDSTpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 15:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
+        id S230301AbjDSTgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 15:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbjDSTpf (ORCPT
+        with ESMTP id S229485AbjDSTgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 15:45:35 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3009740F9;
-        Wed, 19 Apr 2023 12:45:34 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6a5f8e1f6d1so106762a34.0;
-        Wed, 19 Apr 2023 12:45:34 -0700 (PDT)
+        Wed, 19 Apr 2023 15:36:45 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF774C25;
+        Wed, 19 Apr 2023 12:36:44 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6a606135408so155446a34.0;
+        Wed, 19 Apr 2023 12:36:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681933003; x=1684525003;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TVCZIlNhtdCXAt4hoR3tnnBgtwHzJao5D1y0UvS0R0Q=;
+        b=GrYZqph7PqaNy/epNrxJAewS4RVu6uFuF/gL805TnO8xF9W3fkm6Gssax0fUCNeZq/
+         whNdIU4l8TJIiy7rHXeXtLIzAsG9u6v5Jn8/Su06LM/lP4bEwN2dw5a0AVIr6K+jc9Cu
+         /VjCV55I5JjHw3nTa27Ib+hsb9T3ZDrajAA1dHtpOFeNvfjznBxZDgoDVqLhhcbBusAd
+         2iHeQtnu9MKJvsX2KeRmRZAWQzChZUGr/5dtPZNu0bbfnY8+2ZUgO7kR9IIp6Tcjc1e5
+         1WHcodKdTa2l6fkCq4bAFHpKdA0ZAljVFwNA900jPU68IdcheREo7wZfqP7ECiyUjklM
+         BH1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681933533; x=1684525533;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/631JTKEftCEl7U0RJYhImjUppejEtL4G7lWmxhVT0k=;
-        b=lOVpdG+dgmWSGal+5sb5fZNPGemmycwhU9BSPS/jYeZvutZ/yrM97gQn3lkfO4EfVi
-         fNS6FRR4KOMx20BkAO5bfmxbdF1mM9ox4UP1U2LrlXPmVquXobeas79PALwJA8PnLjaa
-         UHqRz3AGmkk0IXMsgks8jM5tWzeiXiuJyxKHkX/Bc7StvRe13dCGi6T2S39ao6ntuYre
-         dVa6bJFnWn9esZcE4IZSQsAZBRt7TaMmHu+Q7zx93oABQPC0lGQnN5txLB5SyRv36mK9
-         8ji805J3I1ubSd+CLmAJo8XkLfzO58AlXBtbqVrFUFurXWRxYwlXMA1EMl5T20qgULFw
-         fx1g==
-X-Gm-Message-State: AAQBX9elBvCz2me6FAsDj5vdzpwrldhbqNXIaABk1uZMVRDxRrkg7kmD
-        JMdSCpoZYkssLtL9Vds/8A==
-X-Google-Smtp-Source: AKy350ZhHG7jL9fgTZrKNE0S8W/JtB1boKT5IJduWDlB+oTDDfPakxGs3BL63VwcT51+kXrRt9N15A==
-X-Received: by 2002:a05:6830:1e04:b0:6a3:df63:59b4 with SMTP id s4-20020a0568301e0400b006a3df6359b4mr476793otr.14.1681933533325;
-        Wed, 19 Apr 2023 12:45:33 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z10-20020a9d7a4a000000b006a4244d2a7asm6948049otm.9.2023.04.19.12.45.32
+        d=1e100.net; s=20221208; t=1681933003; x=1684525003;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TVCZIlNhtdCXAt4hoR3tnnBgtwHzJao5D1y0UvS0R0Q=;
+        b=Ts9bdSSDDCcKwCvVVZxavCcMakhftY2VoZXR2QcAWk5JhNoSerQMzcUZM5cybzebHY
+         JPmcCmO7DBWa7Z9VVD1DZpvboKycytlyB4mICjL6nBZvV5vfwfr2H7VZB898Pec7WOPV
+         2+Ur0PS7qCJfHR1sqA8yQSp5TEvgwqszOz0qFTQ3e/YqaC1w79nnIgoQQkxKgAf8B+wt
+         LLCcildBsXlmAN5wGS/9sH9YipOj5PgA5TdAVA9/adYAaPEuzUbsqF4wUx7NxMmwPZ4X
+         qYTDr+tHxz5BLTRA4c6niuVejvS6MaT57yQ7dYzVhWbYVp5w6oZQS02MYhH19/UnR4Df
+         VLfg==
+X-Gm-Message-State: AAQBX9d8VmIKGaqVZvgokggY8PSX5J2hWa+Da4dF9qZPqMfigSRprgAP
+        53Uz6M/1YPoYFBLDsYMDnutCjYNxOhw=
+X-Google-Smtp-Source: AKy350Y2v74z8xy4JM/OptdxSfm9Nk1VvXMee/J10OwXUF6B5zxsYYTnaJF7kunpRP2O02Xd77AylQ==
+X-Received: by 2002:a05:6830:1dab:b0:6a5:e673:1243 with SMTP id z11-20020a0568301dab00b006a5e6731243mr323743oti.31.1681933003649;
+        Wed, 19 Apr 2023 12:36:43 -0700 (PDT)
+Received: from quaco.ghostprotocols.net ([187.19.238.117])
+        by smtp.gmail.com with ESMTPSA id y6-20020a9d6346000000b006a17bbe32f8sm6971849otk.51.2023.04.19.12.36.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 12:45:32 -0700 (PDT)
-Received: (nullmailer pid 722598 invoked by uid 1000);
-        Wed, 19 Apr 2023 19:45:32 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Donald Hunter <donald.hunter@gmail.com>,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] PCI: Restrict device disabled status check to DT
-Date:   Wed, 19 Apr 2023 14:35:13 -0500
-Message-Id: <20230419193513.708818-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Wed, 19 Apr 2023 12:36:43 -0700 (PDT)
+From:   arnaldo.melo@gmail.com
+X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4A05F403B5; Wed, 19 Apr 2023 16:36:40 -0300 (-03)
+Date:   Wed, 19 Apr 2023 16:36:40 -0300
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 1/1] perf probe: Add missing 0x prefix for addresses printed
+ in hexadecimal
+Message-ID: <ZEBCyFu2GjTw6qOi@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6fffbc7ae137 ("PCI: Honor firmware's device disabled status")
-checked the firmware device status for both DT and ACPI devices. That
-caused a regression in some ACPI systems. The exact reason isn't clear.
-It's possibly a firmware bug. For now, at least, refactor the check to
-be for DT based systems only.
+Hi Masami,
 
-Note that the original implementation leaked a refcount which is now
-correctly handled.
+	I'm carrying this one in my tree, FYI.
 
-Fixes: 6fffbc7ae137 ("PCI: Honor firmware's device disabled status")
-Link: https://lore.kernel.org/all/m2fs9lgndw.fsf@gmail.com/
-Reported-by: Donald Hunter <donald.hunter@gmail.com>
-Cc: Binbin Zhou <zhoubinbin@loongson.cn>
-Cc: Liu Peibao <liupeibao@loongson.cn>
-Cc: Huacai Chen <chenhuacai@loongson.cn>
-Signed-off-by: Rob Herring <robh@kernel.org>
+- Arnaldo
+
 ---
- drivers/pci/of.c    | 30 ++++++++++++++++++++++++------
- drivers/pci/pci.h   |  4 ++--
- drivers/pci/probe.c |  8 ++++----
- 3 files changed, 30 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-index 196834ed44fe..4c2ef2e28fb5 100644
---- a/drivers/pci/of.c
-+++ b/drivers/pci/of.c
-@@ -16,14 +16,32 @@
- #include "pci.h"
- 
- #ifdef CONFIG_PCI
--void pci_set_of_node(struct pci_dev *dev)
-+/**
-+ * pci_set_of_node - Find and set device's DT device_node
-+ * @dev: the PCI device structure to fill
-+ *
-+ * Returns 0 on success with of_node set or when no device is described in the
-+ * DT. Returns -ENODEV if the device is present, but disabled in the DT.
-+ */
-+int pci_set_of_node(struct pci_dev *dev)
- {
-+	struct device_node *node;
-+
- 	if (!dev->bus->dev.of_node)
--		return;
--	dev->dev.of_node = of_pci_find_child_device(dev->bus->dev.of_node,
--						    dev->devfn);
--	if (dev->dev.of_node)
--		dev->dev.fwnode = &dev->dev.of_node->fwnode;
-+		return 0;
-+
-+	node = of_pci_find_child_device(dev->bus->dev.of_node, dev->devfn);
-+	if (!node)
-+		return 0;
-+
-+	if (!of_device_is_available(node)) {
-+		of_node_put(node);
-+		return -ENODEV;
-+	}
-+
-+	dev->dev.of_node = node;
-+	dev->dev.fwnode = &node->fwnode;
-+	return 0;
- }
- 
- void pci_release_of_node(struct pci_dev *dev)
-diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-index d2c08670a20e..2b48a0aa8008 100644
---- a/drivers/pci/pci.h
-+++ b/drivers/pci/pci.h
-@@ -624,7 +624,7 @@ int of_pci_get_max_link_speed(struct device_node *node);
- u32 of_pci_get_slot_power_limit(struct device_node *node,
- 				u8 *slot_power_limit_value,
- 				u8 *slot_power_limit_scale);
--void pci_set_of_node(struct pci_dev *dev);
-+int pci_set_of_node(struct pci_dev *dev);
- void pci_release_of_node(struct pci_dev *dev);
- void pci_set_bus_of_node(struct pci_bus *bus);
- void pci_release_bus_of_node(struct pci_bus *bus);
-@@ -662,7 +662,7 @@ of_pci_get_slot_power_limit(struct device_node *node,
- 	return 0;
- }
- 
--static inline void pci_set_of_node(struct pci_dev *dev) { }
-+static inline int pci_set_of_node(struct pci_dev *dev) { return 0; }
- static inline void pci_release_of_node(struct pci_dev *dev) { }
- static inline void pci_set_bus_of_node(struct pci_bus *bus) { }
- static inline void pci_release_bus_of_node(struct pci_bus *bus) { }
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index a3f68b6ba6ac..f96fa83f2627 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -1826,7 +1826,7 @@ int pci_setup_device(struct pci_dev *dev)
- 	u32 class;
- 	u16 cmd;
- 	u8 hdr_type;
--	int pos = 0;
-+	int err, pos = 0;
- 	struct pci_bus_region region;
- 	struct resource *res;
- 
-@@ -1840,10 +1840,10 @@ int pci_setup_device(struct pci_dev *dev)
- 	dev->error_state = pci_channel_io_normal;
- 	set_pcie_port_type(dev);
- 
--	pci_set_of_node(dev);
-+	err = pci_set_of_node(dev);
-+	if (err)
-+		return err;
- 	pci_set_acpi_fwnode(dev);
--	if (dev->dev.fwnode && !fwnode_device_is_available(dev->dev.fwnode))
--		return -ENODEV;
- 
- 	pci_dev_assign_slot(dev);
- 
+To fix this confusing warning:
+
+  # perf probe -l
+  Failed to find debug information for address 798240
+    probe_main:prometheus_new_counter__return (on github.com/prometheus/client_golang/prometheus.NewCounter%return in /home/acme/git/prometheus-uprobes/main with counter)
+  #
+
+As that 798240 is printed with PRIx64 but has no letters, better print
+the 0x prefix to disambiguate.
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Link: https://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/perf/util/probe-finder.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/perf/util/probe-finder.c b/tools/perf/util/probe-finder.c
+index 54b49ce85c9f2214..f171360b0ef4db06 100644
+--- a/tools/perf/util/probe-finder.c
++++ b/tools/perf/util/probe-finder.c
+@@ -1729,7 +1729,7 @@ int debuginfo__find_probe_point(struct debuginfo *dbg, u64 addr,
+ 		addr += baseaddr;
+ 	/* Find cu die */
+ 	if (!dwarf_addrdie(dbg->dbg, (Dwarf_Addr)addr, &cudie)) {
+-		pr_warning("Failed to find debug information for address %" PRIx64 "\n",
++		pr_warning("Failed to find debug information for address %#" PRIx64 "\n",
+ 			   addr);
+ 		ret = -EINVAL;
+ 		goto end;
 -- 
 2.39.2
 
