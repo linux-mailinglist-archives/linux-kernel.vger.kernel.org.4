@@ -2,177 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DF26E7FF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C926E7FFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232823AbjDSRA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 13:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
+        id S233003AbjDSRBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 13:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjDSRA1 (ORCPT
+        with ESMTP id S232937AbjDSRA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 13:00:27 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2088.outbound.protection.outlook.com [40.107.105.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D485C6E85;
-        Wed, 19 Apr 2023 10:00:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YciTBWSx2SHpbIr5JzO5W73bPNPNS69LLwNM56ykbm2zBmH1bf1cLvxcipjWNmpGteUn/RL9KEWyJd52DjnfvGt/R27ctJbkOXYk9WMUZmw9HCgiRrSvy9/rqDoT5airxY4nZ7DH7ttEz/sjkCi41JCMDxTreZAspCqX6qaP0lm4Kk5TJ/zyourVLRS7fvuFPGWvfamEnD/r5CwiAA62Tu37cwFv+5j/Mx4iULKLLKv1T6Vt7w0DEw2SZA8Ol1IoZ0vp7ujyKvFkQ54I8onLeRsN3u8uU+BTedRYfZZvDS4ZUE7eTc+sK+rO/X8O2MHZyg1BBplFA/q02bjIgr1WXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PNcZZjQDcdAxgGK9W6b7pD/tlBt19yBAg+qk1pNrOJU=;
- b=QmwFVqq2WWRpeZx3L7NGMoALwp0Yf29oKx4CFx5A7DD+tsrChF/ZD1V5fW3xPK7A0aoasRYvF8u3jlJJ7CgJVJXl3qkyvlk9dzETBlnZ8lF9T7JIP3O3z4eMZsMxQOHhX9+X0QajxS44bsZTap1tZZ2P0qeL2qw5IfoLynODGuFB0TCDT1XEyTrhixenj8AtJwsXOq/T8cqxyF5oBnHc311hNA8ysrj+sVcI1/2p0audqLmuQiK6jiUlQdb/TwnnwIeUgZw6oKGE9GtChB+xelIH7/Dcebv1q5nzy/7N7ONz/3qHbq+UvvE49uYqV9rdN6p78G+n34Rtzf/ni82qwA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PNcZZjQDcdAxgGK9W6b7pD/tlBt19yBAg+qk1pNrOJU=;
- b=BPBGfGXFyxy4TwebZWg8+v8iQbjqidj4Yrb8t9xdvS6wsDLtvoEL0iDzlHlE7wl6hLVyz4iwG3OiCcE56NU2hv6uiFgvD4MG+IP4VeQWvc30RNQBxFK5NDl/ZZwfudKkaJFtpUx5DPbJ77Ip9Fw+d0X8NPwAxyXfqsBi2d0ZqB8=
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by AM9PR04MB8907.eurprd04.prod.outlook.com (2603:10a6:20b:40a::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.21; Wed, 19 Apr
- 2023 17:00:23 +0000
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::f1d6:f05f:b8c6:4353]) by AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::f1d6:f05f:b8c6:4353%6]) with mapi id 15.20.6319.021; Wed, 19 Apr 2023
- 17:00:23 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     Manivannan Sadhasivam <mani@kernel.org>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>
-CC:     "allenbh@gmail.com" <allenbh@gmail.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "dave.jiang@intel.com" <dave.jiang@intel.com>,
-        "helgaas@kernel.org" <helgaas@kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        "jdmason@kudzu.us" <jdmason@kudzu.us>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "ntb@lists.linux.dev" <ntb@lists.linux.dev>
-Subject: RE: [EXT] Re: [PATCH 1/1] PCI: endpoint: pci-epf-vntb: fix typo span
- in comments
-Thread-Topic: [EXT] Re: [PATCH 1/1] PCI: endpoint: pci-epf-vntb: fix typo span
- in comments
-Thread-Index: AQHZD+C/PN18RSdcf02dRof7zAQM1K8h24EAgBHFQkA=
-Date:   Wed, 19 Apr 2023 17:00:23 +0000
-Message-ID: <AM6PR04MB48382B6FDA347EE8A0E65F7B88629@AM6PR04MB4838.eurprd04.prod.outlook.com>
-References: <20221214172254.668282-1-Frank.Li@nxp.com>
- <20230408093644.GG11124@thinkpad>
-In-Reply-To: <20230408093644.GG11124@thinkpad>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM6PR04MB4838:EE_|AM9PR04MB8907:EE_
-x-ms-office365-filtering-correlation-id: 0383dc2b-fc42-4693-06bc-08db40f790da
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: eY+8GyB4aEoSUnKlIIa/cwPuchRrdGQrbpFCVomK2V5FYbX/Sa02StsY9tx/M+GLLEm63p7S3lYAeNGu6J0iZG4bwu1ed87/UZQxg7oR1FcxnDq9e/DoI7iiTWtrDgqmmCFbq+SZ8EeJOu2CmrpKZqjO87ST9ny8ximXL/KkhghP5BtW1app3hRAwQCZBOXoPjXsa/yiOnuRqVkv2KfGbvdL0Px2swXUqzFznVP12MYr/RhlUeZikTV/LL3Bh0kgZW09NZtwHiAwu8x/Rrdk3vHx5uPcL88DM9G8RmpGd+yMlfYUHdK5Law0HxaVxunf8KhMaELHJU3w6K4imlHlfdcmbi5EgvInwREHNMynq4KNq9WUHxQgXBF0lUNlLbyORn2jT0rgLkqT4I7fdbahYSL6RchTSGOeSQaAF+Woo1IDIclV73R3/tZHkOqGhzem7UjMMQJ8lilxFva4nsJA+bZKUvlppC7q/ZE22pDZfxZpDvCzseydilkmBdqCY4xFZzO2u4LxIO2rKzeWPNMDmsPMdLqZ76FCDc1u3Vwsd0/KptWDM7/AHaO60tbofXHd5LwzSVlFeqoESgV60iNAZ31vqQLxs3B4Xg9thVL5urrOTeKoLWemCsZvVgmZfI/P
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(346002)(39860400002)(136003)(396003)(451199021)(66946007)(76116006)(66476007)(7696005)(110136005)(83380400001)(4326008)(66446008)(71200400001)(52536014)(5660300002)(64756008)(7416002)(2906002)(316002)(66556008)(186003)(122000001)(41300700001)(86362001)(54906003)(33656002)(38100700002)(8936002)(8676002)(6506007)(9686003)(26005)(55236004)(38070700005)(478600001)(55016003)(44832011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OWRNcHJsS1lwTytFWlhaajh4enF3SEZRbW5wa1lqZEpZaVp6S1I5L2U1c0dn?=
- =?utf-8?B?Nk85ZUYxV1RRK0NiOTduMU1obEhkaXJVRllTaEtQUlVBU3AyajhiTFBtUkVx?=
- =?utf-8?B?amZPNDVFc2JhNzBCeXdGeWZ3Y2EvWEltbVE0aGNobEM0dnlxdVhZRGIrS0hQ?=
- =?utf-8?B?WjlhejhMclo3TjAzemtkMFpkcFZldEFyKzI2TFc4WFhzZXZETTFid3lvS0NJ?=
- =?utf-8?B?M2VGakthK1psSUlZSDlhTjZHNmdiRG1UWXhFeThJNzI3L1AxUWh4ZFo3aElS?=
- =?utf-8?B?bEluNmgzRDd0c3VZVWFlQXlQNFBVMVhsek4xVld2emd4UTd2MzR5TDAxd2Rm?=
- =?utf-8?B?cnBEbGZuckhhQ3JwMjM2UHNxWVVPbmYrOE5xYVUrZXg1bXY3a1N3SXJQV0ZU?=
- =?utf-8?B?bGRNY2wwUEVPWG0vQ0x4bys4WHluVkIxMUhSbTRyNkxwMnVlSjJGaFRVbUxK?=
- =?utf-8?B?L1VTa0U1U0doeTFiNjFQMVlHZFRRZEt2ZHpFWEFteVNXbTlvZHgzWFIxNUJL?=
- =?utf-8?B?a01xY2RvcHJBTEhNQlNIeHllV3dscDFpWGlLa2ZtL3A1STdIRHgzVXh4NHFn?=
- =?utf-8?B?M0J4cVF2SXJ2TVFEUVJnTzhEeFU1aHFYYUJWa2ZkSUYzbjhzbzVHeXM2cHRJ?=
- =?utf-8?B?cDUwMmQrMUovNnBIUGRUODBVZGV5cnBuY2Ftd3dlNWZIcmc0MVo1b04rSWV4?=
- =?utf-8?B?QW9aek9JaWFaOXMxalJraS9zMmUxNUtoalVPSG8zSTF2OWp6ZklReitVWFRW?=
- =?utf-8?B?TkxTaklzcTdoN1F0MUl6NHpnN3JLbklpZnN2d2FDUTdqSjBkT2ttTlQ2bjd0?=
- =?utf-8?B?WDRlVGxlWmRwVWoyeFAveVlxdzdQeUZlU0c2RFRyUFBIUEVIcTdUcnNRUmlX?=
- =?utf-8?B?UGRaOUNwczZ4UG1Kd0NFbEo1U2UrMFhPeVg1TC9TRFFvbGJaTFJ5NC9JK05m?=
- =?utf-8?B?cHlubWVOY2N4OGFFWTQydy9kVUJxellWRmttblR0a1k3NGVsUUQ5MkdYWmR3?=
- =?utf-8?B?b1Ewdm5ydmE2YTNJWDdoV3d6OXpsTGU3YTdaUnBBOGJGSExhNkZUanhqQkla?=
- =?utf-8?B?MDVORTZtSWFYMWZlN0I0WUtwOFEvVFZRR0EvdjVzd3dEZ2VyQlRNL1UvSE94?=
- =?utf-8?B?RkJZR1BKVWtXa3djSUErMVJObngxa1krS05IdktuRXM1U25iZE0xUGpwRmVS?=
- =?utf-8?B?SWJDazhlc2dIM0JxczFCMlltWkRUL1g5akRGQkxpNXdwWU1BRzFjNW1HWUxE?=
- =?utf-8?B?d0FXQVZvQ2NmRG1teWNLR1JNRHdLd1U5ZDl5d2xORVBKaWlIb3JTeUxYUk9K?=
- =?utf-8?B?NmIydnl3eWdBU280SjlrUXArSTduQVhXTE5jSkZmV21ORHpUeXVncWdoUmVq?=
- =?utf-8?B?TlNMRE1STDFHeUFCUHQ2VnVIVEVPOVdvOFBqeEVjZmd6Y2VlL0lhMWVlVnpG?=
- =?utf-8?B?bFltYVJRd3V0VFhxcU82eWd0L2FhdFJSS2R3V3g3OC9OS3NDTE1oK3lwS0ti?=
- =?utf-8?B?ak9tWWdnNitqU1dsN1NQeEN6M0dmT3llSVJwUUZ0NG5tSC9oelBpMSt3eUdQ?=
- =?utf-8?B?TE4xY0JXZ2kwNm41NWUwdDZUakU0NXBicHZlUFZaUDU0bnk0ZkNYTzZkU2R2?=
- =?utf-8?B?MEl0MzJTNHVJZmxWNGNJVFU5aW90S0JoTURNYVVDSmVhZk9weEdUQVZRaUtE?=
- =?utf-8?B?MVVFejBEQXNsTmN0WHkxdkpKNkVYZ3BkTWNVL0pYTjh0OW5ScWJUdUt2cER0?=
- =?utf-8?B?N2dzaWpoMkpRNElrd1lBQU55Q2thaVZGdTNDYi9qejB4WGMvVEQ0MzVJM2xB?=
- =?utf-8?B?K3RvanRPZWJsbFVQTDBzaUFEbmpnU0QwZS9Qb2NRSVltOTB4Vms4R0tZdjFI?=
- =?utf-8?B?RkhPU3JudFpsbWxBSkUwMEt0aUo1OS9PYVdEWWU0MVpWWFJwQk1pbk1BU3lT?=
- =?utf-8?B?SnlvYjhORG9ma1h1WTJmQkJzaE5YaHJ3YWRBRnYxVWdtZm8xV21VV3h0TXpk?=
- =?utf-8?B?S1ROWW5FRS9pSGRDWXI2ZFVxNGUreWdEenRLNDNPcCtZZDJnL1dNMmY5OXdu?=
- =?utf-8?B?a2JaQ1d2Tm9keWFiVm42REZsWDBvQ2ZMYUFqOW0xbmxMVkgyQUhrQzVRUk9L?=
- =?utf-8?Q?c/eA=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 19 Apr 2023 13:00:59 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9237699;
+        Wed, 19 Apr 2023 10:00:52 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 26B1A5FD90;
+        Wed, 19 Apr 2023 20:00:50 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1681923650;
+        bh=OU1NLvRUb+HCxU4lSgffvUw8fBAqCHnX3pFNeD8icRc=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=fAlgunqHuIq2ORPE9XrSBxjsOi6AH149QQIKo3TWZKZiA7QHDR5N5zpH3W1Y95TlD
+         we2qrtaIxkZY+2jbRZqGbJ5y979PRIASi4Mym40S16rAqyxqYz1YhnAOpiN7Z9kgcZ
+         4LlJ4d/UfQutIXxk64iwPhJ3qWojTMcC20QPa7fV8gg9rdFbHb9O2A+IOtBEiIjUDb
+         c8riV2VMvytNa3mAcfkQrqSasVePEDtKj5kHhm9KHKZDpIRpe8cmCJtFkkWUTF7G+c
+         RjeCAfxdmYr0Ygsp7W73JiI1CwWli5aX6r3rJUsOUZzL8l0Zz3Y+XY3JGpyOCM/ERr
+         ek3fRzKrrpemw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 19 Apr 2023 20:00:48 +0300 (MSK)
+Date:   Wed, 19 Apr 2023 20:00:43 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+CC:     =Xianwei Zhao <xianwei.zhao@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [RFC PATCH 1/2] arm64: amlogic: add new ARCH_AMLIPC for IPC SoC
+Message-ID: <20230419170043.auzfa32weevmrt4e@CAB-WSD-L081021>
+References: <20230419073834.972273-1-xianwei.zhao@amlogic.com>
+ <20230419073834.972273-2-xianwei.zhao@amlogic.com>
+ <20230419131416.cns3xvkbzjeyrnux@CAB-WSD-L081021>
+ <661cea17-a4dd-75d1-6a7e-16efa5aea52b@linaro.org>
+ <20230419160405.d7qfir3nv6tlxx2a@CAB-WSD-L081021>
+ <427e79ef-156d-027e-9296-6f4e6513a04d@linaro.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0383dc2b-fc42-4693-06bc-08db40f790da
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Apr 2023 17:00:23.4277
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mNQmvvSo4wEc3fR0RY4IxPLsM5qWOL+YIg5dTxY0NCClQKIQ8kwzz4E39MGCmmn5BNB08oQw27at//9+XPPRXg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8907
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <427e79ef-156d-027e-9296-6f4e6513a04d@linaro.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/19 15:29:00 #21128497
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBNYW5pdmFubmFuIFNhZGhhc2l2
-YW0gPG1hbmlAa2VybmVsLm9yZz4NCj4gDQo+IE9uIFdlZCwgRGVjIDE0LCAyMDIyIGF0IDEyOjIy
-OjU0UE0gLTA1MDAsIEZyYW5rIExpIHdyb3RlOg0KPiA+IFJlcGxhY2Ugc3BhbiB3aXRoIHNwYWQu
-DQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBGcmFuayBMaSA8RnJhbmsuTGlAbnhwLmNvbT4NCj4g
-DQo+IFJldmlld2VkLWJ5OiBNYW5pdmFubmFuIFNhZGhhc2l2YW0gPG1hbmlAa2VybmVsLm9yZz4N
-Cg0KW0ZyYW5rIExpXSBGcmllbmRseSBQaW5nLCBqdXN0IGNvbW1lbnRzIGNoYW5nZS4gDQoNCj4g
-DQo+IC0gTWFuaQ0KPiANCj4gPiAtLS0NCj4gPiAgZHJpdmVycy9wY2kvZW5kcG9pbnQvZnVuY3Rp
-b25zL3BjaS1lcGYtdm50Yi5jIHwgMTAgKysrKystLS0tLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwg
-NSBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvcGNpL2VuZHBvaW50L2Z1bmN0aW9ucy9wY2ktZXBmLXZudGIuYw0KPiBiL2RyaXZlcnMv
-cGNpL2VuZHBvaW50L2Z1bmN0aW9ucy9wY2ktZXBmLXZudGIuYw0KPiA+IGluZGV4IDU4YTIzZWY0
-YjU3Mi4uOTM1NzQ4MjQ0MDc4IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvcGNpL2VuZHBvaW50
-L2Z1bmN0aW9ucy9wY2ktZXBmLXZudGIuYw0KPiA+ICsrKyBiL2RyaXZlcnMvcGNpL2VuZHBvaW50
-L2Z1bmN0aW9ucy9wY2ktZXBmLXZudGIuYw0KPiA+IEBAIC04NCwxNSArODQsMTUgQEAgZW51bSBl
-cGZfbnRiX2JhciB7DQo+ID4gICAqIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIHwNCj4gPiAgICogfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgfA0KPiA+ICAgKiB8ICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICB8DQo+ID4gLSAqICstLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSsgQmFzZStzcGFuX29mZnNldA0KPiA+ICsg
-KiArLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rIEJh
-c2Urc3BhZF9vZmZzZXQNCj4gPiAgICogfCAgICAgICAgICAgICAgICAgICAgICAgfCAgICAgICAg
-ICAgICAgICAgICAgICAgICAgfA0KPiA+IC0gKiB8ICAgIFBlZXIgU3BhbiBTcGFjZSAgICB8ICAg
-IFNwYW4gU3BhY2UgICAgICAgICAgICB8DQo+ID4gKyAqIHwgICAgUGVlciBTcGFkIFNwYWNlICAg
-IHwgICAgU3BhZCBTcGFjZSAgICAgICAgICAgIHwNCj4gPiAgICogfCAgICAgICAgICAgICAgICAg
-ICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgfA0KPiA+ICAgKiB8ICAgICAgICAgICAg
-ICAgICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICB8DQo+ID4gLSAqICstLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSsgQmFzZStzcGFuX29m
-ZnNldA0KPiA+IC0gKiB8ICAgICAgICAgICAgICAgICAgICAgICB8ICAgICAgICAgICAgICAgICAg
-ICAgICAgICB8ICAgICArc3Bhbl9jb3VudCAqIDQNCj4gPiArICogKy0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKyBCYXNlK3NwYWRfb2Zmc2V0DQo+ID4g
-KyAqIHwgICAgICAgICAgICAgICAgICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgIHwg
-ICAgICtzcGFkX2NvdW50ICogNA0KPiA+ICAgKiB8ICAgICAgICAgICAgICAgICAgICAgICB8ICAg
-ICAgICAgICAgICAgICAgICAgICAgICB8DQo+ID4gLSAqIHwgICAgIFNwYW4gU3BhY2UgICAgICAg
-IHwgICBQZWVyIFNwYW4gU3BhY2UgICAgICAgIHwNCj4gPiArICogfCAgICAgU3BhZCBTcGFjZSAg
-ICAgICAgfCAgIFBlZXIgU3BhZCBTcGFjZSAgICAgICAgfA0KPiA+ICAgKiB8ICAgICAgICAgICAg
-ICAgICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICB8DQo+ID4gICAqICstLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSsNCj4gPiAgICogICAg
-ICAgVmlydHVhbCBQQ0kgICAgICAgICAgICAgUENJZSBFbmRwb2ludA0KPiA+IC0tDQo+ID4gMi4z
-NC4xDQo+ID4NCj4gDQo+IC0tDQo+IOCuruCuo+Cuv+CuteCuo+CvjeCuo+CuqeCvjSDgrprgrqTg
-rr7grprgrr/grrXgrq7gr40NCg==
+On Wed, Apr 19, 2023 at 06:25:07PM +0200, Neil Armstrong wrote:
+> On 19/04/2023 18:04, Dmitry Rokosov wrote:
+> > On Wed, Apr 19, 2023 at 03:43:12PM +0200, Neil Armstrong wrote:
+> > > On 19/04/2023 15:14, Dmitry Rokosov wrote:
+> > > > On Wed, Apr 19, 2023 at 03:38:33PM +0800, =Xianwei Zhao wrote:
+> > > > > From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+> > > > > 
+> > > > > The C series SoCs are designed for smart IP camera
+> > > > > applications, which does not belong to Meson series.
+> > > > > So, Add ARCH_AMLIPC for the new series.
+> > > > > 
+> > > > > There are now multiple amlogic SoC seies supported, so group them under
+> > > > > their own menu. we can easily add new platforms there in the future.
+> > > > > Introduce ARCH_AMLOGIC to cover all Amlogic SoC series.
+> > > > > 
+> > > > > No functional changes introduced.
+> > > > > 
+> > > > > Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+> > > > > ---
+> > > > >    arch/arm64/Kconfig.platforms | 12 ++++++++++++
+> > > > >    arch/arm64/configs/defconfig |  2 ++
+> > > > >    2 files changed, 14 insertions(+)
+> > > > > 
+> > > > > diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> > > > > index 89a0b13b058d..bfbc817eef8f 100644
+> > > > > --- a/arch/arm64/Kconfig.platforms
+> > > > > +++ b/arch/arm64/Kconfig.platforms
+> > > > > @@ -162,12 +162,24 @@ config ARCH_MEDIATEK
+> > > > >    	  This enables support for MediaTek MT27xx, MT65xx, MT76xx
+> > > > >    	  & MT81xx ARMv8 SoCs
+> > > > > +menuconfig ARCH_AMLOGIC
+> > > > > +	bool "NXP SoC support"
+> > > > 
+> > > > NXP? Did you mean "Amlogic"?
+> > > > 
+> > > > > +
+> > > > > +if ARCH_AMLOGIC
+> > > > > +
+> > > > >    config ARCH_MESON
+> > > > >    	bool "Amlogic Platforms"
+> > > > >    	help
+> > > > >    	  This enables support for the arm64 based Amlogic SoCs
+> > > > >    	  such as the s905, S905X/D, S912, A113X/D or S905X/D2
+> > > > > +config ARCH_AMLIPC
+> > > > 
+> > > > Do we really need a different ARCH for Amlogic IPC?
+> > > > I can imagine that it's not the Meson architecture at all.
+> > > > But maybe a better solution is just to rename ARCH_MESON to ARCH_AMLOGIC?
+> > > 
+> > > It should be changed treewide, and is it worth it ?
+> > 
+> > As far as I understand, the A1 and S4 families are not fully compatible
+> > with the Meson architecture, and we haven't provided additional ARCH_*
+> > for them.
+> 
+> The GXBB, GXL/GXM, G12A, G12B & SM1 are also not fully compatible,
+> but they lie under the "MESON" umbrella which covers SoC since the
+> Meson6 architecture. It's a facility to include/exclude Amlogic
+> drivers/DT, nothing else.
+> 
+> If you compare it to BCM or NXP, it's different situation, the
+> different ARCH_* actually targets totally different SoCs from
+> completely different Business Units or from companies acquisitions.
+> 
+> We should have named it ARCH_AMLOGIC since the beginning, but we
+> can't change history.
+> 
+> > In my opinion, it's a good time to split the Meson architecture into
+> > proper subsets, or rename it treewide (maybe only config option
+> > ARCH_MESON => ARCH_AMLOGIC).
+> 
+> MESON is only a codename to differentiate from other SoC vendors
+> because Amlogic used it as a codename for a long time.
+> Compare this to Allwinner's "sunxi" or Qualcomm's "msm".
+> 
+> This config has no functional mean, it's only a config namespace.
+> 
+> Renaming it would need renaming it in all subsystems Kconfig/Makefiles
+> and will certainly break builds with custom kernel configs
+> in various publicly used builds like Armbian, meta-meson, LibreELEC,
+> Debian, Suse, ...
+> 
+> So it's pointless to change, and even add a different one since
+> it's not a family differentiator since the Kernel is modular
+> and works around DT to determine which drivers to probe.
+> 
+> Neil
+> 
+
+Thank you for the detailed explanation; it makes sense!
+Actually, I disagree with creating a separate ARCH without first reworking
+all of its subsets - that's why I started this discussion.
+Now, I see that you share my perspective and believe that C3
+should be added to the ARCH_MESON subset, so I have no objections.
+
+[...]
+
+-- 
+Thank you,
+Dmitry
