@@ -2,128 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126D36E7EEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBFD6E7EEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233696AbjDSPzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S233674AbjDSPzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 11:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233605AbjDSPzM (ORCPT
+        with ESMTP id S233626AbjDSPzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:55:12 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEB08A45;
-        Wed, 19 Apr 2023 08:55:09 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33JFss9r030988;
-        Wed, 19 Apr 2023 10:54:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681919694;
-        bh=ECtls6r4zEewHNfldLF5yv4pxr43zudpJBOSpDVJGfg=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=JReNgkWpOFq1h7lmPDRvI52P8AbO5xrJCuAqp0aohMJCqKcqwPuetVVe51SNbqwgJ
-         tPlGxLvUYs1YX2PQIbOIFcDg2UANBqSWwIRPokg7aYDpjaXFoLcCZ1SduK1dy21Tfe
-         9kQvqltZIH+b0M+5pTnTbIzdKHEKwsFei/4geHBQ=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33JFssTi062585
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 19 Apr 2023 10:54:54 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
- Apr 2023 10:54:54 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 19 Apr 2023 10:54:54 -0500
-Received: from [128.247.81.102] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33JFsrYx113397;
-        Wed, 19 Apr 2023 10:54:53 -0500
-Message-ID: <43daed81-fe38-60c6-bdd6-8ab15869c511@ti.com>
-Date:   Wed, 19 Apr 2023 10:54:53 -0500
+        Wed, 19 Apr 2023 11:55:01 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A2297;
+        Wed, 19 Apr 2023 08:55:00 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1a8097c1ccfso1243785ad.1;
+        Wed, 19 Apr 2023 08:55:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681919700; x=1684511700;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nhXUoh34NamNvTQH69I9zjDnkS1EScZkwBBLHJJcaJk=;
+        b=f3766/jpxvMh6aWx2CivzNNam5DgFVbmQyH3f7bEDmr9Q4bv9yXc1ziup1VpH2H7ss
+         xnMq3u8CeBo/U0DLNumhUPeIrccMettPew0fPl6yUvYgYFiC4Czk71xjMbmGyp2QTLGb
+         QnzCmKv8bTi/RNKP+VXwCJRLPyTvH1vrJxDXWPhppBRGQCTVxAgAKeGPoT74VqxaWmA9
+         7yP79UX3TcdWjVv8glS7I1eJsYVIeQs1WXhILqE/U81vflaFOhzdKjTexYyBI8jdV3sE
+         jTHFC/cyYlNiIPO95tdGfRzytC2uCuXR7posQXs3LLO9kLff4M7v3P8JYVOeV24NQSEp
+         5pYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681919700; x=1684511700;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nhXUoh34NamNvTQH69I9zjDnkS1EScZkwBBLHJJcaJk=;
+        b=AVdtc1ztKqFRVnXH/O3Mh5BA6h1FsDlC84kYZE6UzvEgqnyz2J8B1B0an8dQioTmXF
+         B/v+ayDlzhzhGzcdah4Smx9+YY+ypr3MTZe6vp0wDk7uS4y5ZbWaJqCIzechFB9dV8ht
+         4u7V/FdZqisqkp4zpOkYV4IeLemIDYW92ndPN7sbtf4mFCFPw3ceEmrtaj+Ped5uYu6H
+         zJgakHmzr5UjjYc1dI0YnJtCTKJNPgNPnhn/QjVjiPARybxHInyw/E1i7wOnO3X7mkyf
+         cHPYInZO5QY6v+CvdfcMoOe1ZBvors5LFycpuWdf/u9xP1jLyHyE10Tkkh4ts6naPC1z
+         WFgw==
+X-Gm-Message-State: AAQBX9dHKWZBReCbRU1giDP6AWikmRPhQ7cq+c5tDxcqHH90qEF94B3k
+        hM6VnAyDXPV3r8iXqU53Jj8=
+X-Google-Smtp-Source: AKy350Z93mFy+nER+454siOpfIUydCEDlSjhWndLlNj+1tW9UKJbJFmdRJLQQEUHP6w/pT3U2qjrFw==
+X-Received: by 2002:a17:903:22cc:b0:1a6:7570:5370 with SMTP id y12-20020a17090322cc00b001a675705370mr6705160plg.10.1681919699833;
+        Wed, 19 Apr 2023 08:54:59 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x24-20020a1709027c1800b001a50ede5086sm11593130pll.51.2023.04.19.08.54.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 08:54:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 19 Apr 2023 08:54:57 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     jdelvare@suse.com, manio@skyboo.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] hwmon: (adt7475) Use device_property APIs when
+ configuring polarity
+Message-ID: <a0723d7a-c8db-4a9d-bb6e-57bf3d76484b@roeck-us.net>
+References: <20230418233656.869055-1-chris.packham@alliedtelesis.co.nz>
+ <20230418233656.869055-2-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH 4/5] arm64: dts: ti: Enable multiple MCAN for AM62x in
- MCU MCAN overlay
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andrew Davis <afd@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Schuyler Patton <spatton@ti.com>
-References: <20230413223051.24455-1-jm@ti.com>
- <20230413223051.24455-5-jm@ti.com>
- <9ab56180-328e-1416-56cb-bbf71af0c26d@linaro.org>
- <20230414182925.ya3fe2n6mtyuqotb@detached>
- <342dd9b0-35cd-1715-ee67-6a6628a3a9a6@linaro.org>
- <20230414221135.vifinqboqndxdxzw@embark>
-From:   "Mendez, Judith" <jm@ti.com>
-In-Reply-To: <20230414221135.vifinqboqndxdxzw@embark>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230418233656.869055-2-chris.packham@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, all
+On Wed, Apr 19, 2023 at 11:36:55AM +1200, Chris Packham wrote:
+> On DT unaware platforms of_property_read_u32_array() returns -ENOSYS
+> which wasn't handled by the code treating adi,pwm-active-state as
+> optional. Update the code to use device_property_read_u32_array() which
+> deals gracefully with DT unaware platforms.
+> 
+> Fixes: 86da28eed4fb ("hwmon: (adt7475) Add support for inverting pwm output")
+> Reported-by: Mariusz Białończyk <manio@skyboo.net>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-On 4/14/2023 5:11 PM, Nishanth Menon wrote:
-> On 22:44-20230414, Krzysztof Kozlowski wrote:
->> On 14/04/2023 20:29, Nishanth Menon wrote:
->>>>> +
->>>>> +&cbass_mcu {
->>>>> +	mcu_mcan1: can@4e00000 {
->>>>> +		compatible = "bosch,m_can";
->>>>> +		reg = <0x00 0x4e00000 0x00 0x8000>,
->>>>> +			  <0x00 0x4e08000 0x00 0x200>;
->>>>> +		reg-names = "message_ram", "m_can";
->>>>> +		power-domains = <&k3_pds 188 TI_SCI_PD_EXCLUSIVE>;
->>>>> +		clocks = <&k3_clks 188 6>, <&k3_clks 188 1>;
->>>>> +		clock-names = "hclk", "cclk";
->>>>> +		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
->>>>> +		pinctrl-names = "default";
->>>>> +		pinctrl-0 = <&mcu_mcan1_pins_default>;
->>>>> +		phys = <&transceiver2>;
->>>>> +		status = "okay";
->>>>
->>>> okay is by default. Why do you need it?
->>>
->>> mcan is not functional without pinmux, so it has been disabled by
->>> default in SoC. this overlay is supposed to enable it. But this is done
->>> entirely wrongly.
->>
->> Ah, so this is override of existing node? Why not overriding by
->> label/phandle?
-> 
-> Yep, that is how it should be done (as every other node is done for
-> mcan):
-> a) SoC.dtsi -> introduce mcu_mcan1, disabled since no transciever or
-> pinmux, set status = "disabled";
-> b) overlay -> use the label and provide the missing properties, set
-> status = "okay";
-> 
-> The series definitely needs a respin.
-> 
-
-Thanks for your feedback, I will definitely fix and send out a v2 with 
-this update.
+Applied.
 
 Thanks,
-Judith
+Guenter
 
+> ---
+> 
+> Notes:
+>     I've not currently got access to a DT unaware platform with an ADT7475
+>     chip so I'm not 100% sure that this will fix the problem Mariusz
+>     reported but looking at drivers I think this approach is correct.
+>     
+>     Changes in v2:
+>     - use device_property_read_u32_array instead of checking for -ENOSYS
+> 
+>  drivers/hwmon/adt7475.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+> index 6e4c92b500b8..6a6ebcc896b1 100644
+> --- a/drivers/hwmon/adt7475.c
+> +++ b/drivers/hwmon/adt7475.c
+> @@ -1604,9 +1604,9 @@ static int adt7475_set_pwm_polarity(struct i2c_client *client)
+>  	int ret, i;
+>  	u8 val;
+>  
+> -	ret = of_property_read_u32_array(client->dev.of_node,
+> -					 "adi,pwm-active-state", states,
+> -					 ARRAY_SIZE(states));
+> +	ret = device_property_read_u32_array(&client->dev,
+> +					     "adi,pwm-active-state", states,
+> +					     ARRAY_SIZE(states));
+>  	if (ret)
+>  		return ret;
+>  
