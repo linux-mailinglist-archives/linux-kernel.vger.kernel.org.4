@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE966E7846
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB926E7844
 	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbjDSLL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 07:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
+        id S233085AbjDSLMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 07:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232949AbjDSLLU (ORCPT
+        with ESMTP id S232953AbjDSLLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 07:11:20 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6193B13F9F
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:10:38 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-63b73203e0aso15253989b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:10:38 -0700 (PDT)
+        Wed, 19 Apr 2023 07:11:21 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E6E13FAD
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:10:40 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1a52667955dso35501915ad.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:10:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1681902630; x=1684494630;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1681902632; x=1684494632;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z6zQom7c9ZPxaL0AlvEMhKoZ47HVwA0KXR3RYZHyFgk=;
-        b=way4ScdIS96YRKdHcgBpyse+tOSSXOie7JmzQ3ruykWd+bvImdobFO37hhT77+L3/U
-         kaqojTkCN3wGLtbhwA90MgVOAgFVGf4Dedela1TNzHBvJRZjXQSXWFwPwduhVj6TPdzX
-         GIc+Nuk7F+h6MKBmdyl2qvDlk02/j2I47Ppo5mo1ZpuQIvpD572EFN7U+sOSUY8XSxOw
-         WOi4FCrreEQEdHwpWijIg+JK2+Lnl3ALjpm7l3mTxtaHBsOCVR7Bn5fo01aFxF/GJUow
-         MnGtG2IiDAagEyhqLKjTxyj+uGdYLVG4BA2My74jN6jA7ZYKA/Gg5Wy1kJphb7t+NVe8
-         GiJw==
+        bh=hTUdiTLb+sfXCVtetWlAgKKAKfkEOw5o717LduaEZcE=;
+        b=xsELkwofXkO/cQsRhRzGSc4LNBA8d5ZwB4JnQLYCH4ZaGVuBP+nbM8feALhCz/sIMz
+         MyuAV7iJQoGOCditkX7ry8YYdS0Nawh0XkuVc25RdlnISTlsepB5DEmsSviF6P1Gq8W4
+         sluFvFa7S6qFMHylgIRnoWU+6wHZRBJBUaeX7Sg9yxxQWXO1Q99it5uMYgycZZad/mrL
+         L8gpu72e7D0hEFnYS3yPVgIo9Q/KR5HvUJJ8GoySwWCZyTXYyPT6AAPNupIgcX6fR6M5
+         jjYX2ppBNUoKa7qiG/Pd8D5X9175xTqsx/8xUD1d+dBmEDXhg71wkyYYTOIWDsckkHdb
+         50sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681902630; x=1684494630;
+        d=1e100.net; s=20221208; t=1681902632; x=1684494632;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=z6zQom7c9ZPxaL0AlvEMhKoZ47HVwA0KXR3RYZHyFgk=;
-        b=Fw6yQt10IeI7NtFy+ZHFZSQ3V6hWjQpRbrL/3ftJRYBKF0BGxeZzGpbx9L3l1zKc5a
-         r79WBkjbVPppV0tCtcRQm/qGiPS35/8TmPqlPT8efRJMYGvtL+6NZM2pNh1IaY1EEQSP
-         a1UrNUD52AnH/gw7m6s107Tl+WBRc+sz8sXS6/b6iwmgR2EEBXRTMaJINUCp0cgSiv9U
-         7N638RPC/l+kbgQRHi97hCuLfP9AcLR+FAZR7UeEW1b8hHGwDuMh2+a/0cHMaiJ6Epd4
-         EnsGm+rGLle0UrcRlDSK6VjUnXCVvHz1RwtW0KlLNwn+MpfpIHVcZlr8E0Qv//4vLuX3
-         hcSQ==
-X-Gm-Message-State: AAQBX9frQqR6Y8662fCT5ZaCPk1aXUm7yW3pet4rBFhn8GAeU8dwGKYF
-        j2qtgUERXCGaipORU5yy9IGmlQ==
-X-Google-Smtp-Source: AKy350ZMyASO/6WHrB2YnJ1c5qAAic0H4uqyutx85aVkcy8OYWscNutmT//7hNt7yI5Yb0peas0zAA==
-X-Received: by 2002:a17:902:dad0:b0:1a2:a904:c42e with SMTP id q16-20020a170902dad000b001a2a904c42emr1574829plx.24.1681902630432;
-        Wed, 19 Apr 2023 04:10:30 -0700 (PDT)
+        bh=hTUdiTLb+sfXCVtetWlAgKKAKfkEOw5o717LduaEZcE=;
+        b=k6ZKBUWBof64kBxTSyCMk/O3cG4vjLI0OU3i/zOKExiIgQQW3TRGX3sNTJJ7rylBN2
+         GbsOfqGNpyKvlb7syq9j9eh+KlNB8bf34SndEjNeEQLrPH+uxA+H7bg2zD9fOUVtTkcY
+         yD/7u9RVWM0MDi70lOfK7fZXsShz+ZzFvSCzLwCZZ6ll3zLx1rG5v0BVLVdvGYuvrS4J
+         BShHm70AcY+yeoHFvsOilZC8hzpMU0MEtudrQKe0F08WvUCWYU1xRfLpxvuamZ8KlocV
+         YPFGgTSt7dJks43X4p1qw8zKTNBTDf1Cawk//h2ftwZyf92kkuXboesGvfjBwAorOau5
+         +iOQ==
+X-Gm-Message-State: AAQBX9cMxrkE4c6TnSlgdOFhcSkaUm0uvAqEa90P/U0k1rk2GH/DXyaB
+        qEtXrEXDFkrgBdNILyKOB+H98YHQZWrn7z9iEQM=
+X-Google-Smtp-Source: AKy350brfXXAlUzH+qw561taTYPU1WAFCWw0yqnL0lAKNxrOpHa9fu+9+OhVuIBQrfZgZmagCJ0UZw==
+X-Received: by 2002:a17:902:b60a:b0:1a5:5e7:a1cc with SMTP id b10-20020a170902b60a00b001a505e7a1ccmr4412371pls.58.1681902631792;
+        Wed, 19 Apr 2023 04:10:31 -0700 (PDT)
 Received: from x1.hsd1.or.comcast.net ([2601:1c2:1800:f680:eaf2:1d7a:7338:16cb])
-        by smtp.gmail.com with ESMTPSA id g12-20020a1709026b4c00b001a24cded097sm11180774plt.236.2023.04.19.04.10.29
+        by smtp.gmail.com with ESMTPSA id g12-20020a1709026b4c00b001a24cded097sm11180774plt.236.2023.04.19.04.10.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 04:10:29 -0700 (PDT)
+        Wed, 19 Apr 2023 04:10:31 -0700 (PDT)
 From:   Drew Fustini <dfustini@baylibre.com>
 To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -66,9 +66,9 @@ To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         James Morse <james.morse@arm.com>
 Cc:     Drew Fustini <dfustini@baylibre.com>
-Subject: [RFC PATCH 14/21] DO_NOT_MERGE dt-bindings: soc: add Foobar SoC cache controller
-Date:   Wed, 19 Apr 2023 04:11:04 -0700
-Message-Id: <20230419111111.477118-15-dfustini@baylibre.com>
+Subject: [RFC PATCH 15/21] DO_NOT_MERGE dt-bindings: soc: add Foobar SoC memory controller
+Date:   Wed, 19 Apr 2023 04:11:05 -0700
+Message-Id: <20230419111111.477118-16-dfustini@baylibre.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230419111111.477118-1-dfustini@baylibre.com>
 References: <20230419111111.477118-1-dfustini@baylibre.com>
@@ -84,45 +84,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for an example SoC cache controller that implements CBQRI.
+Add bindings for an example SoC memory controller that implements CBQRI.
 
 Co-developed-by: Adrien Ricciardi <aricciardi@baylibre.com>
 Signed-off-by: Adrien Ricciardi <aricciardi@baylibre.com>
 Signed-off-by: Drew Fustini <dfustini@baylibre.com>
 ---
- .../soc/foobar/foobar,cache-controller.yaml   | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/foobar/foobar,cache-controller.yaml
+ .../soc/foobar/foobar,memory-controller.yaml  | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/foobar/foobar,memory-controller.yaml
 
-diff --git a/Documentation/devicetree/bindings/soc/foobar/foobar,cache-controller.yaml b/Documentation/devicetree/bindings/soc/foobar/foobar,cache-controller.yaml
+diff --git a/Documentation/devicetree/bindings/soc/foobar/foobar,memory-controller.yaml b/Documentation/devicetree/bindings/soc/foobar/foobar,memory-controller.yaml
 new file mode 100644
-index 000000000000..6348483bbe09
+index 000000000000..859ee52680d5
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/foobar/foobar,cache-controller.yaml
-@@ -0,0 +1,51 @@
++++ b/Documentation/devicetree/bindings/soc/foobar/foobar,memory-controller.yaml
+@@ -0,0 +1,49 @@
 +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/soc/foobar/foobar,cache-controller.yaml#
++$id: http://devicetree.org/schemas/soc/foobar/foobar,memory-controller.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Foobar SoC Cache Controller
++title: Foobar SoC Memory Controller
 +
 +maintainers:
 +  - Drew Fustini <dfustini@baylibre.com>
 +
 +description:
-+  Foobar SoC cache controller implements the RISC-V CBQRI interface for
++  Foobar SoC memory controller implements the RISC-V CBQRI interface for
 +  capacity allocaiton and usage monitoring.
 +
 +allOf:
-+  - $ref: /schemas/cache-controller.yaml#
 +  - $ref: /schemas/riscv/riscv,cbqri.yaml#
 +
 +properties:
 +  compatible:
 +    items:
-+      - const: foobar,cache-controller
++      - const: foobar,memory-controller
 +  reg:
 +    maxItems: 1
 +    description: A memory region containing registers as defined in CBQRI spec
@@ -142,10 +141,9 @@ index 000000000000..6348483bbe09
 +examples:
 +  - |
 +
-+    cache-controller@fff12000 {
-+        compatible = "foobar,cache-controller";
++    memory-controller@fff12000 {
++        compatible = "foobar,memory-controller";
 +        reg = <0xfff12000 0x2000>;
-+        cache-level = <2>;
 +        riscv,cbqri-rcid = <64>;
 +        riscv,cbqri-mcid = <256>;
 +    };
