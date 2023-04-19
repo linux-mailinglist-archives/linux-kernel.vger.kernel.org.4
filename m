@@ -2,79 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EEC6E7667
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0C26E766F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbjDSJf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 05:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
+        id S232987AbjDSJgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 05:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232952AbjDSJfX (ORCPT
+        with ESMTP id S232509AbjDSJgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:35:23 -0400
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA4113846;
-        Wed, 19 Apr 2023 02:35:12 -0700 (PDT)
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-2f4d0fc8df4so853382f8f.0;
-        Wed, 19 Apr 2023 02:35:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681896910; x=1684488910;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0sWY1I1ouoHv+2nnWuzegkDW1CdXzXe2ZWoPGTCpomo=;
-        b=VPB06pad+ipYRd1BBTBcHytzm4WTXOJygQVAbbeu0IeMmR/GQEJbl2rPcI6GF5oJK7
-         U2mdaEIOZimtyyJP2j4O5CYoXXXiA0WqKZcrbIUKvKKxp7jKdjx/FzpZEJPZvT2bqxOJ
-         XJiq0XhoSpNnIAVVxJ1qYe6uSnC4acw/y+TihbP6bLdHTqQTCj8ZKELs9qdoRafZxMVP
-         Wn9mzUaGq2bfaVHmm4B47cnJu9/wsnljql1dyHw2vAfPK0gGAg2/Onh4uCYL1MsBf1D2
-         wl8omScuTHy+4O/ueW+BOYDBMe9IlpZ+KonNTlPV1V80PTg8ObxeTx4Yvy1PrFKa8EBl
-         AgoQ==
-X-Gm-Message-State: AAQBX9dZ6NyjBeEmA3zfh5vqsAxns+SGgM8U4zrMCgwI0ukpn9lMvjsJ
-        ScHrgQo6h1nA6RZCg0lYfjA=
-X-Google-Smtp-Source: AKy350ZwhuxxJWTKUjlgixT4N2ciSdmd6sKtnqLbDals7lQi48bSv7DKA2JD7JxtmJFBt1aMbuu8Hw==
-X-Received: by 2002:a05:6000:112:b0:2f9:ee11:e5c3 with SMTP id o18-20020a056000011200b002f9ee11e5c3mr6340073wrx.2.1681896910530;
-        Wed, 19 Apr 2023 02:35:10 -0700 (PDT)
-Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id o3-20020a5d4743000000b002f9e04459desm8458477wrs.109.2023.04.19.02.35.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 02:35:10 -0700 (PDT)
-Message-ID: <088e9b60-3092-2642-b3c3-2248e2e51cd6@grimberg.me>
-Date:   Wed, 19 Apr 2023 12:35:08 +0300
+        Wed, 19 Apr 2023 05:36:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC2D12C8F
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:35:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681896940;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=L4v7zrylHwuRp2YWTbCpqw/6xWeZNu0GBQgJfjNAz/Y=;
+        b=I2K9l2hTV0XPs4+EOH9eD3YONC8cCFM4XCcKS1iFmV0MFGTsHMHdCu0Z3CEWiCBDkZnwu2
+        AJnrabPEF+XaOCQ36juAFDi47J/+4tsT9rsP4muUAWhMSKI9Bv0yYIk5Xqhst68talBVRn
+        TcFIJo6o4wkG7tB6/pDzOr1+4ffAsMA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-259-J12118u3OJ-DeEPOVg5lvA-1; Wed, 19 Apr 2023 05:35:37 -0400
+X-MC-Unique: J12118u3OJ-DeEPOVg5lvA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D6BF91C0755E;
+        Wed, 19 Apr 2023 09:35:36 +0000 (UTC)
+Received: from ws.net.home (ovpn-192-7.brq.redhat.com [10.40.192.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3D05C2166B33;
+        Wed, 19 Apr 2023 09:35:36 +0000 (UTC)
+Date:   Wed, 19 Apr 2023 11:35:34 +0200
+From:   Karel Zak <kzak@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        util-linux@vger.kernel.org
+Subject: [ANNOUNCE] util-linux v2.39-rc3
+Message-ID: <20230419093534.hdksjs3jp4nsbmlo@ws.net.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 0/4] nvmet-fcloop: unblock module removal
-Content-Language: en-US
-To:     Daniel Wagner <dwagner@suse.de>, linux-nvme@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Martin Belanger <Martin.Belanger@dell.com>,
-        Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-References: <20230418130159.11075-1-dwagner@suse.de>
- <nlogr5rdxqvilsz4iolktfpdvflvvithwaoa3vrx2fsjqlho4q@4upw7jq3aem2>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <nlogr5rdxqvilsz4iolktfpdvflvvithwaoa3vrx2fsjqlho4q@4upw7jq3aem2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The util-linux release v2.39-rc3 is available at
+ 
+  http://www.kernel.org/pub/linux/utils/util-linux/v2.39
+ 
+Feedback and bug reports, as always, are welcomed.
+ 
+  Karel
 
->> nvme/041 (Create authenticated connections)                  [failed]
->> nvme/042 (Test dhchap key types for authenticated connections) [failed]
->> nvme/043 (Test hash and DH group variations for authenticated connections) [passed]
->> nvme/044 (Test bi-directional authentication)                [failed]
->> nvme/045 (Test re-authentication)                            [passed]
-> 
-> I suppose these should be disabled for fc as all this is tcp specific.
+-- 
+ Karel Zak  <kzak@redhat.com>
+ http://karelzak.blogspot.com
 
-Umm, no their not...
