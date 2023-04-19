@@ -2,268 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DB06E7497
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBC46E7498
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbjDSID3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
+        id S232019AbjDSIDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231719AbjDSIDU (ORCPT
+        with ESMTP id S231355AbjDSIDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:03:20 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E93C30F8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:03:19 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C9E8D1FD87;
-        Wed, 19 Apr 2023 08:03:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681891397; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JlSYbYryU4jjk+BGdngS93om7BXz5+VfainCEWdrZZY=;
-        b=hf2iFPF5Hn50QE1fOamw1ZlHAK42J5yzoTsydNl4kHhV3qAwIPXByYxDmWfHEX9gUbUISP
-        vWh+UKnbhcP//0Wrw7s99EA3Kkc6oSP3Z/+MR7l1EA1oz1izXDpDyhO6H16zM0938HwwnP
-        pU6Wdos463O6mv4/XRpJh7K8b3homgg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681891397;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JlSYbYryU4jjk+BGdngS93om7BXz5+VfainCEWdrZZY=;
-        b=9bZuRAexrUicuQ6GrXi6eO/ZsVRjuCYg/Q+RzVRXrycCiiRXRMgF1Z/TknfrlEvjN8MKSW
-        T9aOBgD9HzUIhZDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 97D7B1390E;
-        Wed, 19 Apr 2023 08:03:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id PWcDJEWgP2SEVwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 19 Apr 2023 08:03:17 +0000
-Message-ID: <6f183ff4-f23e-b82a-3524-2d1f5d833a2d@suse.cz>
-Date:   Wed, 19 Apr 2023 10:03:17 +0200
+        Wed, 19 Apr 2023 04:03:24 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CEE19BF
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:03:22 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5051abd03a7so4750374a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:03:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681891401; x=1684483401;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EI1YComog4rA7OF+HOwhO9/TQv8utz9ZLP9QGa/GLwE=;
+        b=r/ucemiZJuDiA5vpi5XomiHMtv/lGO0GnkLNm4C53kw4jG6ytb+TGNdHO9XTDoGOUs
+         VvYJ1X1JtgzaYGi9XgFWXkQ3A+ApT7soIbcGRKyYgdohgGSHg+FXQBGVi2lYvtHABEpB
+         clVNwJi+jbDlFxKf3VLEKLlopi/ANA0Fmv3NF92L4LYORYz9mZzAnTOX8y3TzutoC5sj
+         Fn8rziK56HOhgMn2XwKJHaiF212rbqN0QSH90ElfqeUrQE3rHGbkZkj3it0VXmJLrWWu
+         PX1nELYa8XnMgJIhn+12WFmJ6KBycvtQdJhhwnNq+jL2ndof1UUT6jt92itNAsVCJQmy
+         bJPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681891401; x=1684483401;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EI1YComog4rA7OF+HOwhO9/TQv8utz9ZLP9QGa/GLwE=;
+        b=Y/Y19LsGlXuguoOA/qsP0b6n9QCPOxAgi1CqLEZCgdZQICGJWqfnaq+dJHA/qlpKax
+         lRdDNAaCIrBdbU/AnKHu7S8wB+c9rG6CTxg/43lrmlxxHDkJr5ohynneaQBSj7leydUe
+         pFWYwdDyTdCu/4NYuHn+0t+fjfiDhgTltv4AG1rNJJO0+rnlb8aCLQsn+Nm9F9UWws1o
+         jKAgAjqntWDcRMnH8aazMWFaQAuLBE7c0GvFFMFLsu1BOGs3jKzHN6cakJVggkMtePhs
+         OmqFXaiPSCO5FYmu8PVQrgQRmatnfTO/WKUKoPCWqvQD/WymAyd+RFTCfLI58tyU7o4y
+         ZFLw==
+X-Gm-Message-State: AAQBX9dgBT8p2uJ1PLeQF/+yrkc0IoJP5GtlRglNcFt98MMejU+jraK5
+        Q1IDikOBcUsOsJrE6BLSEMnbQQ==
+X-Google-Smtp-Source: AKy350Z89TV9b5CQ5dMks6JPzzIhSrjODtafrwNBlmUmpvdcv/16ARInRyjVls8RymMBKO3tlwL4KQ==
+X-Received: by 2002:aa7:c3c8:0:b0:506:85b4:b14b with SMTP id l8-20020aa7c3c8000000b0050685b4b14bmr4800801edr.29.1681891401444;
+        Wed, 19 Apr 2023 01:03:21 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:62f5:eb43:f726:5fee? ([2a02:810d:15c0:828:62f5:eb43:f726:5fee])
+        by smtp.gmail.com with ESMTPSA id l12-20020a056402344c00b00504803f4071sm7861606edc.44.2023.04.19.01.03.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 01:03:21 -0700 (PDT)
+Message-ID: <41ebe41f-d773-7cc3-dcad-8574c858645e@linaro.org>
+Date:   Wed, 19 Apr 2023 10:03:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2] kasan: Fix lockdep report invalid wait context
+Subject: Re: [PATCH v2 1/4] spi: s3c64xx: changed to PIO mode if there is no
+ DMA
 Content-Language: en-US
-To:     Qi Zheng <zhengqi.arch@bytedance.com>,
-        Zqiang <qiang1.zhang@intel.com>, elver@google.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, akpm@linux-foundation.org
-Cc:     kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230327120019.1027640-1-qiang1.zhang@intel.com>
- <f16db6f6-2699-bb8f-d34c-2ce3d37a6498@bytedance.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <f16db6f6-2699-bb8f-d34c-2ce3d37a6498@bytedance.com>
+To:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
+References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
+ <CGME20230419062755epcas2p1370c1ca60d88d6b114a7c7c1de3f15c0@epcas2p1.samsung.com>
+ <20230419060639.38853-2-jaewon02.kim@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230419060639.38853-2-jaewon02.kim@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 04:52, Qi Zheng wrote:
-> 
-> 
-> On 2023/3/27 20:00, Zqiang wrote:
->> For kernels built with the following options and booting
->> 
->> CONFIG_SLUB=y
->> CONFIG_DEBUG_LOCKDEP=y
->> CONFIG_PROVE_LOCKING=y
->> CONFIG_PROVE_RAW_LOCK_NESTING=y
->> 
->> [    0.523115] [ BUG: Invalid wait context ]
->> [    0.523315] 6.3.0-rc1-yocto-standard+ #739 Not tainted
->> [    0.523649] -----------------------------
->> [    0.523663] swapper/0/0 is trying to lock:
->> [    0.523663] ffff888035611360 (&c->lock){....}-{3:3}, at: put_cpu_partial+0x2e/0x1e0
->> [    0.523663] other info that might help us debug this:
->> [    0.523663] context-{2:2}
->> [    0.523663] no locks held by swapper/0/0.
->> [    0.523663] stack backtrace:
->> [    0.523663] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-rc1-yocto-standard+ #739
->> [    0.523663] Call Trace:
->> [    0.523663]  <IRQ>
->> [    0.523663]  dump_stack_lvl+0x64/0xb0
->> [    0.523663]  dump_stack+0x10/0x20
->> [    0.523663]  __lock_acquire+0x6c4/0x3c10
->> [    0.523663]  lock_acquire+0x188/0x460
->> [    0.523663]  put_cpu_partial+0x5a/0x1e0
->> [    0.523663]  __slab_free+0x39a/0x520
->> [    0.523663]  ___cache_free+0xa9/0xc0
->> [    0.523663]  qlist_free_all+0x7a/0x160
->> [    0.523663]  per_cpu_remove_cache+0x5c/0x70
->> [    0.523663]  __flush_smp_call_function_queue+0xfc/0x330
->> [    0.523663]  generic_smp_call_function_single_interrupt+0x13/0x20
->> [    0.523663]  __sysvec_call_function+0x86/0x2e0
->> [    0.523663]  sysvec_call_function+0x73/0x90
->> [    0.523663]  </IRQ>
->> [    0.523663]  <TASK>
->> [    0.523663]  asm_sysvec_call_function+0x1b/0x20
->> [    0.523663] RIP: 0010:default_idle+0x13/0x20
->> [    0.523663] RSP: 0000:ffffffff83e07dc0 EFLAGS: 00000246
->> [    0.523663] RAX: 0000000000000000 RBX: ffffffff83e1e200 RCX: ffffffff82a83293
->> [    0.523663] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffff8119a6b1
->> [    0.523663] RBP: ffffffff83e07dc8 R08: 0000000000000001 R09: ffffed1006ac0d66
->> [    0.523663] R10: ffff888035606b2b R11: ffffed1006ac0d65 R12: 0000000000000000
->> [    0.523663] R13: ffffffff83e1e200 R14: ffffffff84a7d980 R15: 0000000000000000
->> [    0.523663]  default_idle_call+0x6c/0xa0
->> [    0.523663]  do_idle+0x2e1/0x330
->> [    0.523663]  cpu_startup_entry+0x20/0x30
->> [    0.523663]  rest_init+0x152/0x240
->> [    0.523663]  arch_call_rest_init+0x13/0x40
->> [    0.523663]  start_kernel+0x331/0x470
->> [    0.523663]  x86_64_start_reservations+0x18/0x40
->> [    0.523663]  x86_64_start_kernel+0xbb/0x120
->> [    0.523663]  secondary_startup_64_no_verify+0xe0/0xeb
->> [    0.523663]  </TASK>
->> 
->> The local_lock_irqsave() is invoked in put_cpu_partial() and happens
->> in IPI context, due to the CONFIG_PROVE_RAW_LOCK_NESTING=y (the
->> LD_WAIT_CONFIG not equal to LD_WAIT_SPIN), so acquire local_lock in
->> IPI context will trigger above calltrace.
-> 
-> Just to add another similar case:
-> 
-> Call Trace:
->   <IRQ>
->   dump_stack_lvl+0x69/0x97
->   __lock_acquire+0x4a0/0x1b50
->   lock_acquire+0x261/0x2c0
->   ? restore_bytes+0x40/0x40
->   local_lock_acquire+0x21/0x70
->   ? restore_bytes+0x40/0x40
->   put_cpu_partial+0x41/0x130
->   ? flush_smp_call_function_queue+0x125/0x4d0
->   kfree+0x250/0x2c0
->   flush_smp_call_function_queue+0x125/0x4d0
->   __sysvec_call_function_single+0x3a/0x100
->   sysvec_call_function_single+0x4b/0x90
->   </IRQ>
->   <TASK>
->   asm_sysvec_call_function_single+0x16/0x20
-> 
-> So we can't call kfree() and its friends in interrupt context?
+On 19/04/2023 08:06, Jaewon Kim wrote:
+> Polling mode supported with qurik if there was no DMA in the SOC.
 
-We can (well not RT "hard IRQ" context AFAIK, but that shouldn't be the case
-here), although I don't see from the part that you posted if it's again
-CONFIG_PROVE_RAW_LOCK_NESTING clashing with something else (no KASAN in the
-trace or I'm missing it?)
+typo: quirk
+You missed verb in your first part of sentence. I don't understand it.
 
-> Also +Vlastimil Babka.
+> However, there are cased where we cannot or do not want to use DMA.
+> To support this case, if DMA is not set, it is switched to polling mode.
 > 
-> Thanks,
-> Qi
+> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+> ---
+>  drivers/spi/spi-s3c64xx.c                 | 8 ++++++--
+>  include/linux/platform_data/spi-s3c64xx.h | 1 +
+>  2 files changed, 7 insertions(+), 2 deletions(-)
 > 
->> 
->> This commit therefore move qlist_free_all() from hard-irq context to
->> task context.
->> 
->> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
->> ---
->>   v1->v2:
->>   Modify the commit information and add Cc.
->> 
->>   mm/kasan/quarantine.c | 34 ++++++++--------------------------
->>   1 file changed, 8 insertions(+), 26 deletions(-)
->> 
->> diff --git a/mm/kasan/quarantine.c b/mm/kasan/quarantine.c
->> index 75585077eb6d..152dca73f398 100644
->> --- a/mm/kasan/quarantine.c
->> +++ b/mm/kasan/quarantine.c
->> @@ -99,7 +99,6 @@ static unsigned long quarantine_size;
->>   static DEFINE_RAW_SPINLOCK(quarantine_lock);
->>   DEFINE_STATIC_SRCU(remove_cache_srcu);
->>   
->> -#ifdef CONFIG_PREEMPT_RT
->>   struct cpu_shrink_qlist {
->>   	raw_spinlock_t lock;
->>   	struct qlist_head qlist;
->> @@ -108,7 +107,6 @@ struct cpu_shrink_qlist {
->>   static DEFINE_PER_CPU(struct cpu_shrink_qlist, shrink_qlist) = {
->>   	.lock = __RAW_SPIN_LOCK_UNLOCKED(shrink_qlist.lock),
->>   };
->> -#endif
->>   
->>   /* Maximum size of the global queue. */
->>   static unsigned long quarantine_max_size;
->> @@ -319,16 +317,6 @@ static void qlist_move_cache(struct qlist_head *from,
->>   	}
->>   }
->>   
->> -#ifndef CONFIG_PREEMPT_RT
->> -static void __per_cpu_remove_cache(struct qlist_head *q, void *arg)
->> -{
->> -	struct kmem_cache *cache = arg;
->> -	struct qlist_head to_free = QLIST_INIT;
->> -
->> -	qlist_move_cache(q, &to_free, cache);
->> -	qlist_free_all(&to_free, cache);
->> -}
->> -#else
->>   static void __per_cpu_remove_cache(struct qlist_head *q, void *arg)
->>   {
->>   	struct kmem_cache *cache = arg;
->> @@ -340,7 +328,6 @@ static void __per_cpu_remove_cache(struct qlist_head *q, void *arg)
->>   	qlist_move_cache(q, &sq->qlist, cache);
->>   	raw_spin_unlock_irqrestore(&sq->lock, flags);
->>   }
->> -#endif
->>   
->>   static void per_cpu_remove_cache(void *arg)
->>   {
->> @@ -362,6 +349,8 @@ void kasan_quarantine_remove_cache(struct kmem_cache *cache)
->>   {
->>   	unsigned long flags, i;
->>   	struct qlist_head to_free = QLIST_INIT;
->> +	int cpu;
->> +	struct cpu_shrink_qlist *sq;
->>   
->>   	/*
->>   	 * Must be careful to not miss any objects that are being moved from
->> @@ -372,20 +361,13 @@ void kasan_quarantine_remove_cache(struct kmem_cache *cache)
->>   	 */
->>   	on_each_cpu(per_cpu_remove_cache, cache, 1);
->>   
->> -#ifdef CONFIG_PREEMPT_RT
->> -	{
->> -		int cpu;
->> -		struct cpu_shrink_qlist *sq;
->> -
->> -		for_each_online_cpu(cpu) {
->> -			sq = per_cpu_ptr(&shrink_qlist, cpu);
->> -			raw_spin_lock_irqsave(&sq->lock, flags);
->> -			qlist_move_cache(&sq->qlist, &to_free, cache);
->> -			raw_spin_unlock_irqrestore(&sq->lock, flags);
->> -		}
->> -		qlist_free_all(&to_free, cache);
->> +	for_each_online_cpu(cpu) {
->> +		sq = per_cpu_ptr(&shrink_qlist, cpu);
->> +		raw_spin_lock_irqsave(&sq->lock, flags);
->> +		qlist_move_cache(&sq->qlist, &to_free, cache);
->> +		raw_spin_unlock_irqrestore(&sq->lock, flags);
->>   	}
->> -#endif
->> +	qlist_free_all(&to_free, cache);
->>   
->>   	raw_spin_lock_irqsave(&quarantine_lock, flags);
->>   	for (i = 0; i < QUARANTINE_BATCHES; i++) {
-> 
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 71d324ec9a70..273aa02322d9 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -19,7 +19,6 @@
+>  #include <linux/platform_data/spi-s3c64xx.h>
+>  
+>  #define MAX_SPI_PORTS		12
+> -#define S3C64XX_SPI_QUIRK_POLL		(1 << 0)
+>  #define S3C64XX_SPI_QUIRK_CS_AUTO	(1 << 1)
+>  #define AUTOSUSPEND_TIMEOUT	2000
+>  
+> @@ -116,7 +115,7 @@
+>  #define S3C64XX_SPI_TRAILCNT		S3C64XX_SPI_MAX_TRAILCNT
+>  
+>  #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
+> -#define is_polling(x)	(x->port_conf->quirks & S3C64XX_SPI_QUIRK_POLL)
+> +#define is_polling(x)	(x->cntrlr_info->polling)
+>  
+>  #define RXBUSY    (1<<2)
+>  #define TXBUSY    (1<<3)
+> @@ -1067,6 +1066,11 @@ static struct s3c64xx_spi_info *s3c64xx_spi_parse_dt(struct device *dev)
+>  		sci->num_cs = temp;
+>  	}
+>  
+> +	if (!of_find_property(dev->of_node, "dmas", NULL)) {
+> +		dev_warn(dev, "cannot find DMA, changed to PIO mode\n");
+
+You said it is desired option, so should not be a warning. I would make
+it debug at most.
+
+> +		sci->polling = 1;
+
+
+
+Best regards,
+Krzysztof
 
