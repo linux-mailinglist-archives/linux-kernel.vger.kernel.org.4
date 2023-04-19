@@ -2,102 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8BD6E8213
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FA56E8217
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbjDSTqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 15:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
+        id S231272AbjDSTrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 15:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjDSTqT (ORCPT
+        with ESMTP id S229504AbjDSTrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 15:46:19 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69FC524B
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:46:08 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id xi5so967146ejb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:46:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681933567; x=1684525567;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xnojFPy5RTEqRDct+HdyhHqsL+VmjmztLl0PLEw/hhE=;
-        b=G4zRGoAv5Q40HURFW1PVwlBZ9n4aW/FztTLI1kq2TGWD8hxZfrOWbxWWdGVK/M43P8
-         thq3OUWBRBj96Lr3teS+Ff5xZyY1Upc6N3MZyR1pS/b55gPjOTpzakRwYlsNC3/yq5EA
-         RHo/wLpe4p3E9hnHIrrZJ4aRvFGhR5cgf5YQE0CpeMYCXkOuQr1I6cHAHt4JiKxOaK0R
-         R10vbzugJdEKL2z+VRQizWV+1wvzOVAn4iNB775qbJ8nthn+Y3q573B4hYsk4mugUdYi
-         ZkEBAymhzRybR+EZQwBQ1WCXGtAEB3maTu2+mJ/HP3KmXpk+UmnjzfschH8xAYRfyaCa
-         CkiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681933567; x=1684525567;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xnojFPy5RTEqRDct+HdyhHqsL+VmjmztLl0PLEw/hhE=;
-        b=kD5XOyRW+KCk5YgChgCfvSd7wQG1NDB34xbsvBytm/YnkkdfMAzneaO/nlN/QL833i
-         pAhcyWmve6IxJtGEn0XBSWZQs3ncona6rhFDyEpUqpZ2vbo7qOUWFdGiABACrZLLxLw5
-         VNoIqMkkr+PEpAqIimepy2KNVD3GFWd3lw8BKRe0j2J8Yu2SglNs+oAMO8sYzhmS+tyr
-         D8j+Xs3vyJIwmRnGEmEbSHRPGbPDRCWxZE2BfXFf7oD9bFWf65J4kmgxl7Le+xY+YuZn
-         bWpL6luDuoEWuhpiwb6mgo11fYDzHpJdKb6ik7EL65SluvcWc/qrjuvh5zyDwgzz38Uw
-         GtRA==
-X-Gm-Message-State: AAQBX9c/srq7SoCuLm8liSeCLVUAZSuZzhBCRy/zZmJx3UXAgPhWOvtU
-        B8OtvFNobbxYg2oPZ+Aa0BePww==
-X-Google-Smtp-Source: AKy350a48tYBtw6AgdUuQuyA2+jKVWfuCW1oUOTTZQ6v9GJcRr/W2CyIfEVv6HZSYkFNR7wDckiLUg==
-X-Received: by 2002:a17:906:71c5:b0:94e:e5fe:b54f with SMTP id i5-20020a17090671c500b0094ee5feb54fmr18322784ejk.23.1681933567148;
-        Wed, 19 Apr 2023 12:46:07 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:976c:1d6c:6ed0:8935? ([2a02:810d:15c0:828:976c:1d6c:6ed0:8935])
-        by smtp.gmail.com with ESMTPSA id s24-20020a170906779800b0094edbe5c7ddsm8366821ejm.38.2023.04.19.12.46.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 12:46:06 -0700 (PDT)
-Message-ID: <689e05e5-5c1f-9417-b2be-988c6a6d4c5a@linaro.org>
-Date:   Wed, 19 Apr 2023 21:46:05 +0200
+        Wed, 19 Apr 2023 15:47:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0174030EA;
+        Wed, 19 Apr 2023 12:47:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 904EB616BC;
+        Wed, 19 Apr 2023 19:47:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 421A2C433EF;
+        Wed, 19 Apr 2023 19:47:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681933642;
+        bh=l1Q7oCF14DVP3ipcVSVnQEnQCTmxyt6/pkIzHmBixoA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=s7mt1ay9Kzr2mcYDOJysoGdPUbofsZkzhymvlGzCBYTrhhImBGqS0KbAHL/yeY7cB
+         zC5O9T3YuZDoFZy3DgcMCh7iv1pJuij0d9g/TxoO7f7S8V+tzS681d1o7QiTXSxYnY
+         NmHtpRj+FnSSofD/iJwsjGUyB2B9/FDDtbcMluTxkgliM35jBu3Ur8aIE+FUufL+hG
+         G8E2RX9+Ng5WebWwf3KZ2WLPwSO3LqH8AyOINmtys4AXiqSizJWiQvQz+uSWkZyqJs
+         t27bimDNF/K6s+UPjx9+IGfXUj7hmJHuDmmf0vd+D7pzumTKyLYnOJq1kwMb7G+U9Y
+         HcbNLygcKO12g==
+From:   broonie@kernel.org
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Apr 19
+Date:   Wed, 19 Apr 2023 20:47:18 +0100
+Message-Id: <20230419194718.194843-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RESEND v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
-Content-Language: en-US
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Walker Chen <walker.chen@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <20230419035646.43702-1-changhuang.liang@starfivetech.com>
- <20230419035646.43702-2-changhuang.liang@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230419035646.43702-2-changhuang.liang@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2023 05:56, Changhuang Liang wrote:
-> Add AON PMU for StarFive JH7110 SoC, it can be used to turn on/off DPHY
-> rx/tx power switch, and it don't need the properties of reg and
-> interrupts.
-> 
-> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
-> ---
->  .../bindings/power/starfive,jh7110-pmu.yaml       | 15 +++++++++++++--
->  include/dt-bindings/power/starfive,jh7110-pmu.h   |  3 +++
+Hi all,
 
-I have impression I just reviewed your v2... Apply the comments,
-reviews/acks etc from that email.
+Changes since 20230418:
 
-Best regards,
-Krzysztof
+The net-next tree gained a conflict against the clock tree.
 
+The block tree gained a conflict against the origin tree.
+
+The tip tree gained a build failure through interaction with the mm tree
+which I fixed up.
+
+The cxl tree gained a conflict against the pci tree.
+
+A merge fixup for an issue between mm and ext4 that was found in testing
+was applied.
+
+Non-merge commits (relative to Linus' tree): 11893
+ 12145 files changed, 794577 insertions(+), 411773 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There is also the merge.log file in the Next
+directory.  Between each merge, the tree was built with a ppc64_defconfig
+for powerpc, an allmodconfig for x86_64, a multi_v7_defconfig for arm
+and a native build of tools/perf. After the final fixups (if any), I do
+an x86_64 modules_install followed by builds for x86_64 allnoconfig,
+powerpc allnoconfig (32 and 64 bit), ppc44x_defconfig, allyesconfig
+and pseries_le_defconfig and i386, arm64, s390, sparc and sparc64
+defconfig and htmldocs. And finally, a simple boot test of the powerpc
+pseries_le_defconfig kernel in qemu (with and without kvm enabled).
+
+Below is a summary of the state of the merge.
+
+I am currently merging 357 trees (counting Linus' and 102 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.
