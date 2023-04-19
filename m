@@ -2,217 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0AAC6E79F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E65D6E79F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbjDSMtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        id S233035AbjDSMuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDSMtg (ORCPT
+        with ESMTP id S229448AbjDSMt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:49:36 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F933C15
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:49:34 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id m65so2911064vsm.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:49:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1681908574; x=1684500574;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w9ZPopfYb851oejNmrAcF7O0IByv+Fq2MPAPsJJ/DqQ=;
-        b=RT7+HX3qWB3xYcDjZFMsz6lztVqMmovaSB2+eFCV8Nzl5nAQ1Vz585FD3QMl/Sw+ZV
-         dcR5RKk8OjDOYIuYxqEeZgMZRPACYkBFCvQoPfsU3pFNTc3LzpB6owfYwVaZS5Ar/bL7
-         mHtOK4e0H7uv8Ys6coMENmrNr66T3gNbMes97xmdbau/bPANiVaiB1YgyWlYmi+EfSzf
-         gDwwqLXdcQKpcSeeEk87vAPVfqi9La6sic8Oubx5NR7ItiddnTO/rN5MgXZJMhOopnLY
-         v4cGnN91EtXKuUuxRUQvDl1qtieuvgbEXnidmfe2j5DCiZXH8gANBZhwBXZaBhhLap9p
-         lxyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681908574; x=1684500574;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w9ZPopfYb851oejNmrAcF7O0IByv+Fq2MPAPsJJ/DqQ=;
-        b=TowQJT46mGw4Rkyf79LVePce+yCEacqR4sRN0b82rLhHnljpTSd2zCEX1BJbdum3VB
-         8t2XeSB1stkL0QJ9aJepF1gFTOtIokdzAfqm7N0OwyWPjkWtVKHn7uEp/a5I58+3kSFn
-         2ubEytUedZv5NOoAo6MHgQXoDFCo3TcFk14M3o845u/1/f/TH4C80as9WANUWuSjZwGo
-         WTWBcnYvH47l+CLu/lc0EJKHKEflA1HqY9rHQtG1Jr0XPy7eO6pjf/O0iaTwa/6I7kqn
-         BWWNWJQtJvCfxDbaf2wISJgpHoeL8P1qEHHAfjUkMBbAEOV6Dz3aJjpIBmqByyF1IvHb
-         ksKQ==
-X-Gm-Message-State: AAQBX9e+JuUnf9d7aZdokYqWPe2k9X3wPpAPUwo3kvfmmnhZpKOURSKo
-        +ZJUeq6SjjnxUiQ2XXGvWi6u+WLB1iAFhJ1EHDtUCg==
-X-Google-Smtp-Source: AKy350aq1mhGLE4hoHadZ/gc4EutmzjUTgZamR0AicY3syq8d/SzTnWNCtDlNqSDaz2Uiq3lekb/FJ6jmGHzVvJ+dLg=
-X-Received: by 2002:a05:6102:3003:b0:42f:e8d9:989 with SMTP id
- s3-20020a056102300300b0042fe8d90989mr4668084vsa.14.1681908573976; Wed, 19 Apr
- 2023 05:49:33 -0700 (PDT)
+        Wed, 19 Apr 2023 08:49:59 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2072.outbound.protection.outlook.com [40.107.223.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B97C163;
+        Wed, 19 Apr 2023 05:49:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dL1i3Htem2ZIeSpyp186f4lcpr4PtblzTJHCjl351sVkf5fz79qBfVRQ+ly7G9c3takk3cn/goy5jDBWA/KRo0F3jcaORLSJqH5bD3AT2rE9aEG3Ro5UVFZ4XFzi3xEe7wE02LzlYXHbctloz/pW15eu5k5ySyVfORdSdsc2QYehtfyokP9RDXJ1aHPfm1CqGeI7qsk6zFeBKtFas7dqtzmAI1a4j4FPJpVPQ8ywoNh2npY7/r3Ut6lT71dO5fnnGPMfwc9xon3JK1MhYw9Y1LOZDHSFqgDUPwMFpHnhTJ9hbO0aWbEEBpOoGSY3MckJx3nZHJV/bfclKYuGdxQ0og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=idQAA3su+OjiYiO4q6bH1uj+J+94UC8KjOQwOLnM8q4=;
+ b=lyDXcrOULwYDANajTI+QzdewhNCKnRM3X8eh38O1ctOBglkxzybvjg5OpTQ28dyDObMm7Dcc3jO1u5s3yXzLuNtf3MFi3rHQEq/IIVb323s9rKBshzeoqseTzT1QG6cr+v2Dj4vc4jLtvyZdaE+bIUb30i34w6r1+RPSpdnMf/fufnh7f958mI0hYYF8zkhc1XzafUSKK39jcOpi5hn2aiEJatI0n87EtY4agkNmKWX3UE6cpFEmJLSuD5g3FN3CMZBqqWmIkkgxkcbk6PBwgBu2e972TPqv+JB5Bc1JSuyWPRmyeLGIST3JlMG2Iy0JoD2bIWE5A+1j23BAAWrMqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=idQAA3su+OjiYiO4q6bH1uj+J+94UC8KjOQwOLnM8q4=;
+ b=qiZPqYbAf/xyR7k2sZ8pXfy1JYHj3nKwWteMhG5cM2TZBhI9DrWTsN+rrx9Ufdj0PE/4p5Y6nWr/fCKN4PHVfSsDgFGEUXb/J6n69yfcDevZSXf9YO5qoRLk1uY414n+vmsW+H4PVmgqnItgQ6PJZNJeA9IGfbK2JkTVDnzcjJWURpg+hWlX8aBh7DgB7Dz0HSRVqp8hR1i8cy84mmGp+Wyfd5zz2CzjQZm8lQGuqYuNcT1Y14ZzHz2EHmxSjeRXa2RJuUq9QWHeFsA26vvVvFZR4PSMInGGQ3WPfPWQfixd2n8SRWKo9hyJ80wQDbrf+F1ou8vzA6UagB4f8sb6/g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by SN7PR12MB7835.namprd12.prod.outlook.com (2603:10b6:806:328::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
+ 2023 12:49:52 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::66d8:40d2:14ed:7697]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::66d8:40d2:14ed:7697%5]) with mapi id 15.20.6319.022; Wed, 19 Apr 2023
+ 12:49:52 +0000
+Date:   Wed, 19 Apr 2023 15:49:44 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Hans J. Schultz" <netdev@kapio-technology.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        bridge@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 net] net: bridge: switchdev: don't notify FDB entries
+ with "master dynamic"
+Message-ID: <ZD/jaASktd2cBlnI@shredder>
+References: <20230418155902.898627-1-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418155902.898627-1-vladimir.oltean@nxp.com>
+X-ClientProxiedBy: VI1PR0202CA0015.eurprd02.prod.outlook.com
+ (2603:10a6:803:14::28) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
 MIME-Version: 1.0
-References: <20230406-feature-controls-lens-v1-0-543189a680de@wolfvision.net>
- <20230406-feature-controls-lens-v1-1-543189a680de@wolfvision.net>
- <CAPY8ntArOOqPQzvkJrQEyuVFfb6j8x6WODTMHOn1qHPU588mbQ@mail.gmail.com>
- <0f1baf5e-2ff6-e10b-5c3e-0a82c71d0ce6@wolfvision.net> <CAPY8ntAjBEFfeV6nnQs34Y22QM-irT13ALDv4ksP8AYK=jWsKg@mail.gmail.com>
- <3ab7bfc4-aaae-2e39-b420-40ad8d71dda4@wolfvision.net> <CAPY8ntCNuvgmF37kDvVh1kuepbLqy2hWcz9HOi8iub9trHmi2g@mail.gmail.com>
- <ZDbKU5kwcb7RGeCo@kekkonen.localdomain> <ccae3994-3b1b-4050-ea34-98f97cf886e0@wolfvision.net>
- <ZD+t5QYH20Y8+8MV@kekkonen.localdomain> <45fea085-54c3-157e-6459-adaaf1edebf5@wolfvision.net>
-In-Reply-To: <45fea085-54c3-157e-6459-adaaf1edebf5@wolfvision.net>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Wed, 19 Apr 2023 13:49:18 +0100
-Message-ID: <CAPY8ntAYiCVM7gr2pU12CEDtRfTZOVYn0t-CPD7FA9DDq+mz4w@mail.gmail.com>
-Subject: Re: [libcamera-devel] [PATCH RFC 1/4] media: v4l2-ctrls: add lens
- group status controls for zoom and focus
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Riesch via B4 Relay 
-        <devnull+michael.riesch.wolfvision.net@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Matthias Fend <Matthias.Fend@wolfvision.net>,
-        libcamera-devel@lists.libcamera.org, linux-media@vger.kernel.org,
-        hverkuil@xs4all.nl,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Alexander Brotzge <Alexander.Brotzge@wolfvision.net>,
-        Dieter Mathis <Dieter.Mathis@wolfvision.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|SN7PR12MB7835:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8b604d04-f8c8-4568-01f5-08db40d4916a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mDfj+gKEJ5yBgXSY5D1SwOolcRqH82e1Di/78nG8KWlSQ7vPIzeg6rAuCR/2U69z+WL8i9KuZB+hP86OU+w8qSCeBSzU/jog3TrgXmkOj6dUQMc4Dbr8gx5YC/lnV+eRg+WdHruc8ZzlyapXxMZlORiKjwb7i21nz8jdJnWu0PJQ1tAAx8b4fjvc5opkV8xxzZ7hwAgX5zjK+Saqoml1sbV1EcGGX2NSNerZC9ccTUbZaHDgKBqizNvXDjJlrn3UfyDu59jkE3dk2sPtVhfa1PYCs7gHhj3kLCHc9VtCKa5ckezBE2+LqKdt09Mp5JoI25zaN0rTua5NpnlZeJHm9bDSde7B0UfYawATZFfyYC1jhHivv5V4f6RWzTswoto6k/u9yq/fQeH/Qe538OqfvPNiB92ZlWJ1x5b+cFchk9KCBvVtOp6UsflQ/4sK/106ngOzU09AJYz8WchPnxEP1Vgg+wksEeWaPLNot+ofQYpH8XALjMd3u6IEaTaC6dnp56vDPPsSPUCy49GNHT7UjNC4NxM3Z19MRhc8aGAunNNzaQvf184LGfkww/W2B+2l
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(39860400002)(366004)(396003)(346002)(136003)(376002)(451199021)(26005)(186003)(9686003)(41300700001)(6506007)(6512007)(54906003)(6916009)(86362001)(83380400001)(66899021)(316002)(4326008)(66946007)(66556008)(66476007)(2906002)(8676002)(7416002)(8936002)(6666004)(6486002)(38100700002)(33716001)(5660300002)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Szv2TJjo9HYHZS1wEvTQjPFKkixZtbRfm5lddE9NVyiH9Zazn7YzFSWcYMH+?=
+ =?us-ascii?Q?vYzfR3fGKVF2fIAqrfslqZyygO/LkMgHFZlDHKx/brqSb4waKHcwkcok2cn2?=
+ =?us-ascii?Q?GdRQeTzYamPa9KXvOqDYORQvZvMscA7cxoLy2ujbarl5jysH2qH16a7ye36n?=
+ =?us-ascii?Q?djiYLDLqeGfF6jaLRFCdzaFOyV8NVMJFkx8c00TrofXuXEgicpvwMGa/VrY4?=
+ =?us-ascii?Q?vOFV2YsNmlvD8aqG5x28mgy47qWG8+1Z+uULmcWVntc9gt6KGCdkopWX/Xqg?=
+ =?us-ascii?Q?KIY9pXEyOir7NjWLr1m6lapN9lmP0rEhf+1eu+b/W6HoNLXGQxzSXj8JHryY?=
+ =?us-ascii?Q?sVOsBXvshgeYDX54Xg6xDDMUhj+P2OQY2EmLehpH4GyCz7vlwDFNmOdy1gtv?=
+ =?us-ascii?Q?0GxPET4MWefOPR1Djdt/GIhhBq6rNINt9Aoa//m/7KHbZ9Qki1StuaxtqFE8?=
+ =?us-ascii?Q?a5EvHelmfjtFWwXAx4NbWzGhn9akzTEHJKelHeV/zrwUnAoaxklt5RAKHKie?=
+ =?us-ascii?Q?m90o/4qwqYBgeeEmymi9g5MJZO0PkHs2Ms7/hn9eRpcdzvQmk3pVkLyzzro9?=
+ =?us-ascii?Q?kBSDMhg3XugEyRsVnH/I+hkuCmxFGJQUTmh6zu8QvmCM8WaVueVB5A4Ix6vw?=
+ =?us-ascii?Q?2SWwfgMjTF4rYYYDuO9tH/RCtRXd7jxcukVXsIy1564ku7QpqLX/qj4Musfk?=
+ =?us-ascii?Q?Wfm7fdryKIx9mh9o3PsMR8IwDWTvcTRffa/CZedSMRYGRMcR9z0uu+AybXp4?=
+ =?us-ascii?Q?mzUaGbls8y29LwYOKoQci4GLxXAQCFhl4NZ4Sdu/Ima0ka5QNr3WYjTvpqjU?=
+ =?us-ascii?Q?BAxhYbSSzSMgIcQdeMgBQkkaBPvUFd9IBw+TsW0TmUELm+iyXS12vPNQCCvZ?=
+ =?us-ascii?Q?8chpLp3us1KmjtqSUCWXwwLYVp0voD2tg6H/AMGsCI81SN3G1p73rzoRO/nZ?=
+ =?us-ascii?Q?UqNqaA7ISQcsoQhSAG8UCYgHexV9ihQaiAP4QEBlRVgGSwGxxJt6JKPg8Hye?=
+ =?us-ascii?Q?+XKElMQo6PfNU4/GCQ6f+Q8+oTQOrJWraQFM7AgZcVl2PDKP0hGD/pmei0ds?=
+ =?us-ascii?Q?Aq4AkTWLbNMyDaSOWleiWCF49SGMFPcWnDmK8gzDl98Py7yrH4qdMtHEgPHy?=
+ =?us-ascii?Q?CijE4trWqc8mKjhikT2dkaQbTIS8LcdYYmQKh6CwLVEDRTzAKknSsw8OroZv?=
+ =?us-ascii?Q?jcYLcG8RaISmXORpwc2k3VPnr+X/u7XeeGjTloJ6aCIEvbTHMbOyzKH6WFi6?=
+ =?us-ascii?Q?JavUVrBjrV3IeWV1r4toeDnjhuNnJUq2GA1ael/NdcbALeKcg07eaPFaU4ao?=
+ =?us-ascii?Q?Gotmsyjf6hzJ3kJTAhqkLCTxI5aITccNYOF/9i7SgRYgUEQcWV7NSEjDa3rO?=
+ =?us-ascii?Q?LgF9+Ei2zYE+Mw39a1uu4rgbIEuoI1rWHsIgfFvFXDuI41y8QZoW3fiKf4BY?=
+ =?us-ascii?Q?ivNjnQhFz4zXC2WaiwMjhVZFT8+HksJ3wlx1/dZenDY85l6HjcXfNwcHuDaJ?=
+ =?us-ascii?Q?z4g/pb1moxbjkta5h7KfHyC+uJxxCXDjKh4BrksPZy+05S/jzWK49F2toWsP?=
+ =?us-ascii?Q?3N/T4nvlxPwHEbo7CukDys+mtKLCuDLDL71G374f?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b604d04-f8c8-4568-01f5-08db40d4916a
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 12:49:52.2983
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jbH3YO2xEU14cGttEv3yINThYs0iRJ5oUjLY52Tq16BZHj1UfVlIOUWRacQSbGHPmd7hRtbS/7yIc62Rvym3tA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7835
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael
+On Tue, Apr 18, 2023 at 06:59:02PM +0300, Vladimir Oltean wrote:
+> diff --git a/net/bridge/br_switchdev.c b/net/bridge/br_switchdev.c
+> index de18e9c1d7a7..ba95c4d74a60 100644
+> --- a/net/bridge/br_switchdev.c
+> +++ b/net/bridge/br_switchdev.c
+> @@ -148,6 +148,17 @@ br_switchdev_fdb_notify(struct net_bridge *br,
+>  	if (test_bit(BR_FDB_LOCKED, &fdb->flags))
+>  		return;
 
-On Wed, 19 Apr 2023 at 12:25, Michael Riesch
-<michael.riesch@wolfvision.net> wrote:
->
-> Hi Sakari,
->
-> On 4/19/23 11:01, Sakari Ailus wrote:
-> > Hi Michael,
-> >
-> > On Mon, Apr 17, 2023 at 02:38:20PM +0200, Michael Riesch wrote:
-> >> Hi Sakari,
-> >>
-> >> On 4/12/23 17:12, Sakari Ailus wrote:
-> >>> Hi Dave, Michael,
-> >>>
-> >>> On Wed, Apr 12, 2023 at 02:55:56PM +0100, Dave Stevenson wrote:
-> >>>>>> If the ranges aren't updated, where should that out-of-range lens
-> >>>>>> movement leave the lens?
-> >>>>>
-> >>>>> This is up to the hardware controller, but I would guess it typically
-> >>>>> stops one step before disaster. Wherever that may be, the error
-> >>>>> condition and the current position can be read out via this new STATUS
-> >>>>> control.
-> >>>>>
-> >>>>> Does this sound good so far?
-> >>>>
-> >>>> Sounds reasonable, but I'm not the gatekeeper (that would be Sakari or
-> >>>> Laurent), and I'm just expressing my views based on the lenses I've
-> >>>> encountered.
-> >>>> All of my lenses have a single drive for focus, a single drive for
-> >>>> zoom, and where there are multiple elements they are all connected
-> >>>> mechanically. Your setup sounds far more complex and is likely to need
-> >>>> a more extensive driver, but it'd be nice to not unnecessarily
-> >>>> overcomplicate the interface.
-> >>>
-> >>> Could we also have a driver that uses these new controls?
-> >>
-> >> If you are referring to the driver for our custom lens controller, then
-> >> I have to say that it is under development and simply not ready for
-> >> release yet. Also, the decision has not yet been made whether or not
-> >> this will be an open-source driver.
-> >>
-> >> A different approach could be the adaptation of the vimc-lens driver,
-> >> which currently only supports FOCUS_ABSOLUTE. But this would raise
-> >> several implementation questions and at least for me this would be a
-> >> nontrivial task.
-> >>
-> >> Is it required to have a driver for this interface (in the sense that
-> >> the patches cannot be accepted otherwise)?
-> >
-> > That has been traditionally required, and a virtual driver isn't usually
-> > considered enough. There are at least two reasons for this. The first one
-> > being that if the driver isn't reviewable and targetting upstream it may be
-> > difficult to figure out whether the interface changes are the right ones
-> > for that driver. This is perhaps a lesser concern here. Secondly, there is
-> > also unwillingness to add interface elements that might never be supported
-> > by the kernel itself --- this is effectively just dead code.
-> >
-> > Also cc Hans and Laurent.
->
-> I understand your concerns. Cc: Alexander and Dieter
->
-> We aim to be an open-source friendly company. If you are OK with us
-> submitting a driver that targets very custom hardware that is only
-> available in integrated form in our products (and not, for instance,
-> available for sale as a standalone device), then we are prepared to
-> submit the driver sources for consideration for inclusion in mainline
-> Linux. Would this be acceptable?
+Thanks for the patch. Ran a few tests and looks fine. Will report full
+results tomorrow morning.
 
-My plan with the motor drive is far simpler with a Pi RP2040
-microcontroller on I2C running an ADC for the potentiometers, PWM for
-motor control, and a PID loop driving it. The MCU code will be open
-source.
-It is a spare time project rather than work, so I can't guarantee
-timescales, but I'll see if I can find some time to progress it.
-
-(It could all be driven from the kernel with ADC and PWM, but I don't
-see such a driver being accepted. Offloading it to an MCU seems to be
-the easier option).
-
-> As I already stated above, it will take us some time to prepare
-> everything in a form that is suitable for submission. Now should I
-> submit the next iteration(s) of the series at hand as RFC or as regular
-> patch series?
->
-> >>> The controls themselves appear reasonable to me as well. I guess there are
-> >>> changes to be made based on the discussion?
-> >>
-> >> I'd summarize that whether or not the status controls are compound
-> >> controls of the type V4L2_CTRL_TYPE_LENS_STATUS is the open question.
-> >>
-> >> As a potential follow-up question I recently asked myself if the struct
-> >> v4l2_ctrl_lens_status should contain trailing reserved bytes for future
-> >> extension (no idea, though, what this could be).
-> >>
-> >> Alternatively, we could come up with "V4L2_CID_FOCUS_CURRENT (integer)"
-> >> for the current position and "V4L2_CID_FOCUS_STATUS (bitmask)" (and add
-> >> further controls when they are needed. Here, we lose atomicity but maybe
-> >> this can be ignored. One could assume that all relevant controls are
-> >> read out with a single ioctl which provides at least some level of
-> >> atomicity.
-
-VIDIOC_G_EXT_CTRLS should allow you to read multiple controls in one ioctl call.
-It would be multiple calls to your g_volatile_ctrl handler, so
-potentially multiple I2C calls to your lens controller.
-There is the option of cluster controls, but I think that is largely
-only applicable for setting controls rather than reading them.
-
-  Dave
-
-> > There might be something that could be done in the control framework to
-> > address this. But it's not something that can be expected to happen soon.
-> >
-> > I'd perhaps keep them separate, not to make it a compound control just for
-> > the access reason. But I certainly don't have a strong opinion about it.
->
-> After some further considerations, and following Dave's and your
-> comments, I'll keep them separate.
->
-> Discussion to be continued with v2.
->
-> Best regards,
-> Michael
->
-> >
-> >>
-> >> Any comments and/or recommendations to this open question would be much
-> >> appreciated.
-> >>
-> >> Other review comments will be incorporated in the next iteration of this
-> >> series as well, but they are quite straightforward.
-> >
+>  
+> +	/* Entries with these flags were created using ndm_state == NUD_REACHABLE,
+> +	 * ndm_flags == NTF_MASTER( | NTF_STICKY), ext_flags == 0 by something
+> +	 * equivalent to 'bridge fdb add ... master dynamic (sticky)'.
+> +	 * Drivers don't know how to deal with these, so don't notify them to
+> +	 * avoid confusing them.
+> +	 */
+> +	if (test_bit(BR_FDB_ADDED_BY_USER, &fdb->flags) &&
+> +	    !test_bit(BR_FDB_STATIC, &fdb->flags) &&
+> +	    !test_bit(BR_FDB_ADDED_BY_EXT_LEARN, &fdb->flags))
+> +		return;
+> +
+>  	br_switchdev_fdb_populate(br, &item, fdb, NULL);
+>  
+>  	switch (type) {
+> -- 
+> 2.34.1
+> 
