@@ -2,143 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BE36E755B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 528D66E755E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbjDSIe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
+        id S231881AbjDSIek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232698AbjDSIeL (ORCPT
+        with ESMTP id S232664AbjDSIeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:34:11 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FED448A
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:33:55 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f09b9ac51dso85857155e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681893234; x=1684485234;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2iK+POleBc/byLDVWHTc7+1oZoRzGsPyfNa6vjT15MA=;
-        b=hDC/3pV2pCYg9oQ01G9q6YLUoP6cci4sRaJx3Sm5aYj4inrNFdmQ0mTiaMAmkpYqm9
-         0xkuWur4JvIUEUoV3CFBiJ+DLWUI3zMbQNrNGoPySCbgHu3PXFnRA3fJxnrD2GgIQiW9
-         yp93aq1KKEn3xocQvrR9R1rG0h4yZQDeJ1Bs/2V12tAVzCd6z5j9zhb8zZNGmg6i8XVe
-         M6JQEM+p1lUwGJQPxu0Xzs9Q5gASTJUEGdNBC9QIkdOA9t8kohMjsPc0AeUEWzC4EaXq
-         +bozF8bHPsJ/OyG9sxp0agODo83vJjFcmO0NYgxTTgda9dvsjLHYR2fcEUOcBmDXU821
-         /HEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681893234; x=1684485234;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2iK+POleBc/byLDVWHTc7+1oZoRzGsPyfNa6vjT15MA=;
-        b=Y0Y8Br5OR8qsIvZ7Ok+Zojb+mezlkLdOxwAn9FoPyJz1v310QpK+hLrNZ9Stgaq02y
-         iQXn9HeMaNvwUuoavDeGwSCm4dhfnjfcnEDoyh8jsDXEhb6W2829teFeePr6EI7s93Li
-         TxVhCO+jbuZdG0axSjuHRu4HOQABUzqzMN85c5WRKyCvVCTY4Y+i07b1dDsfNIG65zqM
-         +qTryN2BPgZJQR9wwSOfRbfLMbP101AGnBunU8orZ+paHZmEuZY13Ed8IQn0AYvarHiK
-         sYjYe5msM1xLV7eO1FVAaJbV4Vta7MX66SrkVHP2w+wOHelLls9g0xCcaPoAehV2cpkk
-         lSxg==
-X-Gm-Message-State: AAQBX9fpKwC/MCOFdFHL0Sxwbg+dGAxzu1SmfRxfb+7KiJ0L82EfPGNe
-        lnDiIqAwT0d5zPkTBTZPzUaxGg==
-X-Google-Smtp-Source: AKy350Z0vLK/BVPhd0fv9yEhIp66hfcg8Jnye9y9U1dRBnP+hcAFpjOBAiRmf5V3xMdhwyW+fny/sQ==
-X-Received: by 2002:adf:ec86:0:b0:2d0:58f9:a6b with SMTP id z6-20020adfec86000000b002d058f90a6bmr1143426wrn.13.1681893234264;
-        Wed, 19 Apr 2023 01:33:54 -0700 (PDT)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:a794:9fb2:29fb:606d])
-        by smtp.gmail.com with ESMTPSA id s5-20020a1cf205000000b003ed1ff06faasm1442033wmc.19.2023.04.19.01.33.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 01:33:53 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Sujith Thomas <sujith.thomas@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v4 6/6] thermal/drivers/intel_menlow: Make additionnal sysfs information optional
-Date:   Wed, 19 Apr 2023 10:33:43 +0200
-Message-Id: <20230419083343.505780-7-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230419083343.505780-1-daniel.lezcano@linaro.org>
-References: <20230419083343.505780-1-daniel.lezcano@linaro.org>
+        Wed, 19 Apr 2023 04:34:18 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C030D6A63;
+        Wed, 19 Apr 2023 01:33:58 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 08:33:55 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681893236;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vdsbrh7FdIhP1wb9imiviwOB+uVZ3EupVTF1jcm/rRE=;
+        b=qNlghMZZeq+L1mMqnenjXEmNevoIaV349ntILSxNup80hbFtx6FImzqqJ8pnj5rCom3J6i
+        aoG/CHm995DzYaAVMPq1LVwDrq/1wPcWYNjC3fqMAPNBUjwQeVBIE4pacOOiEQxa66DVQN
+        UlUFqFmSVKWare7pgNP675AStHIAi1DVyZKynUHbFaieyzzDuWSsrmOlmW8bSCqsRNb8MM
+        wl2Hrf3e3Gx7Y87yUv813O8tfYQt+sdJyr/Howl/zFiHPoSxizfl5fSsov4t6dtdD+C1J6
+        EAzWp2EqYQknD/k9SJnwLh3oou76KvhE4y8V4fWM1VylfKSZJHAJkIyozrh4OQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681893236;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vdsbrh7FdIhP1wb9imiviwOB+uVZ3EupVTF1jcm/rRE=;
+        b=6KwxoS/XYkitWjfU935ghaCejiJDrkwMPnNmpPMdrZdjO4cBYCZGB12W8ltTxqO+ijsXpI
+        MkEQjITHnG34E2Bw==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: timers/core] posix-cpu-timers: Implement the missing
+ timer_wait_running callback
+Cc:     Marco Elver <elver@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        stable@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <87zg764ojw.ffs@tglx>
+References: <87zg764ojw.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <168189323577.404.1408682841393463765.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Menlon thermal driver creates auxiliary trip points in the thermal
-zone sysfs directory. It is specific to Menlon. Actually these trip
-points could be generalized with the generic trip points in the future.
+The following commit has been merged into the timers/core branch of tip:
 
-Let's make the code optional and disable it by default so we have a
-consistency with the attributes in the thermal zone sysfs
-directories. If that hurts we will enable by default this option
-instead of disabling it.
+Commit-ID:     1bb5b68fd3aabb6b9d6b9e9bb092bb8f3c2ade62
+Gitweb:        https://git.kernel.org/tip/1bb5b68fd3aabb6b9d6b9e9bb092bb8f3c2ade62
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Mon, 17 Apr 2023 15:37:55 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Wed, 19 Apr 2023 10:29:00 +02:00
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+posix-cpu-timers: Implement the missing timer_wait_running callback
+
+For some unknown reason the introduction of the timer_wait_running callback
+missed to fixup posix CPU timers, which went unnoticed for almost four years.
+Marco reported recently that the WARN_ON() in timer_wait_running()
+triggers with a posix CPU timer test case.
+
+Posix CPU timers have two execution models for expiring timers depending on
+CONFIG_POSIX_CPU_TIMERS_TASK_WORK:
+
+1) If not enabled, the expiry happens in hard interrupt context so
+   spin waiting on the remote CPU is reasonably time bound.
+
+   Implement an empty stub function for that case.
+
+2) If enabled, the expiry happens in task work before returning to user
+   space or guest mode. The expired timers are marked as firing and moved
+   from the timer queue to a local list head with sighand lock held. Once
+   the timers are moved, sighand lock is dropped and the expiry happens in
+   fully preemptible context. That means the expiring task can be scheduled
+   out, migrated, interrupted etc. So spin waiting on it is more than
+   suboptimal.
+
+   The timer wheel has a timer_wait_running() mechanism for RT, which uses
+   a per CPU timer-base expiry lock which is held by the expiry code and the
+   task waiting for the timer function to complete blocks on that lock.
+
+   This does not work in the same way for posix CPU timers as there is no
+   timer base and expiry for process wide timers can run on any task
+   belonging to that process, but the concept of waiting on an expiry lock
+   can be used too in a slightly different way:
+
+    - Add a mutex to struct posix_cputimers_work. This struct is per task
+      and used to schedule the expiry task work from the timer interrupt.
+
+    - Add a task_struct pointer to struct cpu_timer which is used to store
+      a the task which runs the expiry. That's filled in when the task
+      moves the expired timers to the local expiry list. That's not
+      affecting the size of the k_itimer union as there are bigger union
+      members already
+
+    - Let the task take the expiry mutex around the expiry function
+
+    - Let the waiter acquire a task reference with rcu_read_lock() held and
+      block on the expiry mutex
+
+   This avoids spin-waiting on a task which might not even be on a CPU and
+   works nicely for RT too.
+
+Fixes: ec8f954a40da ("posix-timers: Use a callback for cancel synchronization on PREEMPT_RT")
+Reported-by: Marco Elver <elver@google.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Marco Elver <elver@google.com>
+Tested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/87zg764ojw.ffs@tglx
 ---
- drivers/thermal/intel/Kconfig        | 11 +++++++++++
- drivers/thermal/intel/intel_menlow.c |  9 +++++++++
- 2 files changed, 20 insertions(+)
+ include/linux/posix-timers.h   | 17 ++++---
+ kernel/time/posix-cpu-timers.c | 81 +++++++++++++++++++++++++++------
+ kernel/time/posix-timers.c     |  4 ++-
+ 3 files changed, 82 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
-index cb7e7697cf1e..ef7ffe6b56a0 100644
---- a/drivers/thermal/intel/Kconfig
-+++ b/drivers/thermal/intel/Kconfig
-@@ -112,6 +112,17 @@ config INTEL_MENLOW
+diff --git a/include/linux/posix-timers.h b/include/linux/posix-timers.h
+index 2c6e99c..d607f51 100644
+--- a/include/linux/posix-timers.h
++++ b/include/linux/posix-timers.h
+@@ -4,6 +4,7 @@
  
- 	  If unsure, say N.
+ #include <linux/spinlock.h>
+ #include <linux/list.h>
++#include <linux/mutex.h>
+ #include <linux/alarmtimer.h>
+ #include <linux/timerqueue.h>
  
-+config INTEL_MENLOW_SYSFS_ADDON
-+       bool "Enable extra sysfs attributes in the thermal zone"
-+       depends on INTEL_MENLOW
-+       def_bool n
-+       help
-+	 Create auxiliary trip points in the thermal zone sysfs
-+	 directory. This is specific to this driver. By default those
-+	 are disabled and are candidate for removal, if you need these
-+	 information anyway, enable the option or upgrade the
-+	 userspace program using them.
+@@ -62,16 +63,18 @@ static inline int clockid_to_fd(const clockid_t clk)
+  * cpu_timer - Posix CPU timer representation for k_itimer
+  * @node:	timerqueue node to queue in the task/sig
+  * @head:	timerqueue head on which this timer is queued
+- * @task:	Pointer to target task
++ * @pid:	Pointer to target task PID
+  * @elist:	List head for the expiry list
+  * @firing:	Timer is currently firing
++ * @handling:	Pointer to the task which handles expiry
+  */
+ struct cpu_timer {
+-	struct timerqueue_node	node;
+-	struct timerqueue_head	*head;
+-	struct pid		*pid;
+-	struct list_head	elist;
+-	int			firing;
++	struct timerqueue_node		node;
++	struct timerqueue_head		*head;
++	struct pid			*pid;
++	struct list_head		elist;
++	int				firing;
++	struct task_struct __rcu	*handling;
+ };
+ 
+ static inline bool cpu_timer_enqueue(struct timerqueue_head *head,
+@@ -135,10 +138,12 @@ struct posix_cputimers {
+ /**
+  * posix_cputimers_work - Container for task work based posix CPU timer expiry
+  * @work:	The task work to be scheduled
++ * @mutex:	Mutex held around expiry in context of this task work
+  * @scheduled:  @work has been scheduled already, no further processing
+  */
+ struct posix_cputimers_work {
+ 	struct callback_head	work;
++	struct mutex		mutex;
+ 	unsigned int		scheduled;
+ };
+ 
+diff --git a/kernel/time/posix-cpu-timers.c b/kernel/time/posix-cpu-timers.c
+index 2f5e9b3..fb56e02 100644
+--- a/kernel/time/posix-cpu-timers.c
++++ b/kernel/time/posix-cpu-timers.c
+@@ -846,6 +846,8 @@ static u64 collect_timerqueue(struct timerqueue_head *head,
+ 			return expires;
+ 
+ 		ctmr->firing = 1;
++		/* See posix_cpu_timer_wait_running() */
++		rcu_assign_pointer(ctmr->handling, current);
+ 		cpu_timer_dequeue(ctmr);
+ 		list_add_tail(&ctmr->elist, firing);
+ 	}
+@@ -1161,7 +1163,49 @@ static void handle_posix_cpu_timers(struct task_struct *tsk);
+ #ifdef CONFIG_POSIX_CPU_TIMERS_TASK_WORK
+ static void posix_cpu_timers_work(struct callback_head *work)
+ {
++	struct posix_cputimers_work *cw = container_of(work, typeof(*cw), work);
 +
- config INTEL_HFI_THERMAL
- 	bool "Intel Hardware Feedback Interface"
- 	depends on NET
-diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
-index d720add918ff..605983be516c 100644
---- a/drivers/thermal/intel/intel_menlow.c
-+++ b/drivers/thermal/intel/intel_menlow.c
-@@ -367,6 +367,7 @@ static ssize_t bios_enabled_show(struct device *dev,
- 	return sprintf(buf, "%s\n", bios_enabled ? "enabled" : "disabled");
- }
- 
-+#ifdef CONFIG_INTEL_MENLOW_SYSFS_ADDON
- static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
- 					  void *store, struct device *dev,
- 					  acpi_handle handle)
-@@ -398,6 +399,14 @@ static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
- 
- 	return 0;
- }
-+#else
-+static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
-+					  void *store, struct device *dev,
-+					  acpi_handle handle)
-+{
-+	return 0;
++	mutex_lock(&cw->mutex);
+ 	handle_posix_cpu_timers(current);
++	mutex_unlock(&cw->mutex);
 +}
-+#endif
++
++/*
++ * Invoked from the posix-timer core when a cancel operation failed because
++ * the timer is marked firing. The caller holds rcu_read_lock(), which
++ * protects the timer and the task which is expiring it from being freed.
++ */
++static void posix_cpu_timer_wait_running(struct k_itimer *timr)
++{
++	struct task_struct *tsk = rcu_dereference(timr->it.cpu.handling);
++
++	/* Has the handling task completed expiry already? */
++	if (!tsk)
++		return;
++
++	/* Ensure that the task cannot go away */
++	get_task_struct(tsk);
++	/* Now drop the RCU protection so the mutex can be locked */
++	rcu_read_unlock();
++	/* Wait on the expiry mutex */
++	mutex_lock(&tsk->posix_cputimers_work.mutex);
++	/* Release it immediately again. */
++	mutex_unlock(&tsk->posix_cputimers_work.mutex);
++	/* Drop the task reference. */
++	put_task_struct(tsk);
++	/* Relock RCU so the callsite is balanced */
++	rcu_read_lock();
++}
++
++static void posix_cpu_timer_wait_running_nsleep(struct k_itimer *timr)
++{
++	/* Ensure that timr->it.cpu.handling task cannot go away */
++	rcu_read_lock();
++	spin_unlock_irq(&timr->it_lock);
++	posix_cpu_timer_wait_running(timr);
++	rcu_read_unlock();
++	/* @timr is on stack and is valid */
++	spin_lock_irq(&timr->it_lock);
+ }
  
- static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
- 						void *context, void **rv)
--- 
-2.34.1
-
+ /*
+@@ -1177,6 +1221,7 @@ void clear_posix_cputimers_work(struct task_struct *p)
+ 	       sizeof(p->posix_cputimers_work.work));
+ 	init_task_work(&p->posix_cputimers_work.work,
+ 		       posix_cpu_timers_work);
++	mutex_init(&p->posix_cputimers_work.mutex);
+ 	p->posix_cputimers_work.scheduled = false;
+ }
+ 
+@@ -1255,6 +1300,18 @@ static inline void __run_posix_cpu_timers(struct task_struct *tsk)
+ 	lockdep_posixtimer_exit();
+ }
+ 
++static void posix_cpu_timer_wait_running(struct k_itimer *timr)
++{
++	cpu_relax();
++}
++
++static void posix_cpu_timer_wait_running_nsleep(struct k_itimer *timr)
++{
++	spin_unlock_irq(&timer.it_lock);
++	cpu_relax();
++	spin_lock_irq(&timer.it_lock);
++}
++
+ static inline bool posix_cpu_timers_work_scheduled(struct task_struct *tsk)
+ {
+ 	return false;
+@@ -1363,6 +1420,8 @@ static void handle_posix_cpu_timers(struct task_struct *tsk)
+ 		 */
+ 		if (likely(cpu_firing >= 0))
+ 			cpu_timer_fire(timer);
++		/* See posix_cpu_timer_wait_running() */
++		rcu_assign_pointer(timer->it.cpu.handling, NULL);
+ 		spin_unlock(&timer->it_lock);
+ 	}
+ }
+@@ -1497,23 +1556,16 @@ static int do_cpu_nanosleep(const clockid_t which_clock, int flags,
+ 		expires = cpu_timer_getexpires(&timer.it.cpu);
+ 		error = posix_cpu_timer_set(&timer, 0, &zero_it, &it);
+ 		if (!error) {
+-			/*
+-			 * Timer is now unarmed, deletion can not fail.
+-			 */
++			/* Timer is now unarmed, deletion can not fail. */
+ 			posix_cpu_timer_del(&timer);
++		} else {
++			while (error == TIMER_RETRY) {
++				posix_cpu_timer_wait_running_nsleep(&timer);
++				error = posix_cpu_timer_del(&timer);
++			}
+ 		}
+-		spin_unlock_irq(&timer.it_lock);
+ 
+-		while (error == TIMER_RETRY) {
+-			/*
+-			 * We need to handle case when timer was or is in the
+-			 * middle of firing. In other cases we already freed
+-			 * resources.
+-			 */
+-			spin_lock_irq(&timer.it_lock);
+-			error = posix_cpu_timer_del(&timer);
+-			spin_unlock_irq(&timer.it_lock);
+-		}
++		spin_unlock_irq(&timer.it_lock);
+ 
+ 		if ((it.it_value.tv_sec | it.it_value.tv_nsec) == 0) {
+ 			/*
+@@ -1623,6 +1675,7 @@ const struct k_clock clock_posix_cpu = {
+ 	.timer_del		= posix_cpu_timer_del,
+ 	.timer_get		= posix_cpu_timer_get,
+ 	.timer_rearm		= posix_cpu_timer_rearm,
++	.timer_wait_running	= posix_cpu_timer_wait_running,
+ };
+ 
+ const struct k_clock clock_process = {
+diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
+index 0c8a87a..808a247 100644
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -846,6 +846,10 @@ static struct k_itimer *timer_wait_running(struct k_itimer *timer,
+ 	rcu_read_lock();
+ 	unlock_timer(timer, *flags);
+ 
++	/*
++	 * kc->timer_wait_running() might drop RCU lock. So @timer
++	 * cannot be touched anymore after the function returns!
++	 */
+ 	if (!WARN_ON_ONCE(!kc->timer_wait_running))
+ 		kc->timer_wait_running(timer);
+ 
