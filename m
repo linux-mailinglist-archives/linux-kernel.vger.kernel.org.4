@@ -2,80 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB826E82E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4326E82E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjDSUz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 16:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
+        id S229967AbjDSUzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 16:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbjDSUzY (ORCPT
+        with ESMTP id S229479AbjDSUzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 16:55:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273A33C0D
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:54:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681937674;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NwC/+o9d6wvrtiLeiNvOscHp+/u8nRn/PrEmgvt3fZ8=;
-        b=FL9cS9/pOw6Bh3LaF9o0I+aC2GfyhV23PEB8nuK7qyvpvM27dp+gO1GcvkfXsURDgJHEOA
-        Y8C9q+JRLKbhi3hwOx5cQwxUVtvA2ZcZeKWEKo8wfdMuky0RfLu2x7F3TknvTeHv8sMnCm
-        SGfLAaw0ARGQpCtD4Q0M9Kq2SkWJC78=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-20-TbPmwvlaO7mf8UYL0sJp5Q-1; Wed, 19 Apr 2023 16:54:33 -0400
-X-MC-Unique: TbPmwvlaO7mf8UYL0sJp5Q-1
-Received: by mail-qk1-f197.google.com with SMTP id o6-20020a374106000000b007467b5765d2so700273qka.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:54:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681937672; x=1684529672;
-        h=mime-version:user-agent:content-transfer-encoding:organization
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NwC/+o9d6wvrtiLeiNvOscHp+/u8nRn/PrEmgvt3fZ8=;
-        b=eGaiGZFEo7C/fGMJ3Ypc+aEJMJuAXIS2cpHUhJ5TVl9eYODk8kuLo3TaXAg/buVOBF
-         TwNDPTCR1SZhl8enBI62eOa6TvOYe8OOyoSYaF41Uwox6cKF3L92daTkEODS6hs8nxZN
-         cMUmsjz8o45dt2phMkijAj/JWqp3fFXYCUnthwIr+Jms9W11poFz3vPeIdWkM3kQdBya
-         Jr3zQleU0gWwcaJzlUrr4ftKXhMCDDPQOlCP/X3uXyiNui/iGUoP54S7aY4taNcEPNYN
-         gapOU9baFBsjtl2ZT2OBbdo0zLgKjDfI5POBOnL1/9uet6lzWKv/iBq2pXfIWnQIpSK3
-         xYBw==
-X-Gm-Message-State: AAQBX9cYEQZYYvXYexcAH8OjWBCGTsKqcU8bTmLeQfBa+zUbDaV4Rfvm
-        BtOA644ek+lmCbgM+bd2AvznMLoQgmnlWwvsj3kwv3txUo+30c12C6cZ3aWNBbJyWPlP2GToX+S
-        Umv7OLgNwhJrGD+jg3NETDug9
-X-Received: by 2002:ac8:5910:0:b0:3ee:c749:ef6a with SMTP id 16-20020ac85910000000b003eec749ef6amr8266982qty.7.1681937672554;
-        Wed, 19 Apr 2023 13:54:32 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b3829jv2r254VCx6kpqm7ULHjkMhhvujywKwLYY5dhb3sKHN4WPrlOjqpEmuMgq3oHObuJiA==
-X-Received: by 2002:ac8:5910:0:b0:3ee:c749:ef6a with SMTP id 16-20020ac85910000000b003eec749ef6amr8266967qty.7.1681937672329;
-        Wed, 19 Apr 2023 13:54:32 -0700 (PDT)
-Received: from ?IPv6:2600:4040:5c62:8200::feb? ([2600:4040:5c62:8200::feb])
-        by smtp.gmail.com with ESMTPSA id b34-20020a05620a272200b007435a646354sm4932800qkp.0.2023.04.19.13.54.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 13:54:31 -0700 (PDT)
-Message-ID: <d0b9654c756069a6f0edcca6f4d410f7af592784.camel@redhat.com>
-Subject: Re: [PATCH v2] drm: use mgr->dev in drm_dbg_kms in
- drm_dp_add_payload_part2
-From:   Lyude Paul <lyude@redhat.com>
-To:     Jeff Layton <jlayton@kernel.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Wayne.Lin@amd.com, alexdeucher@gmail.com,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Date:   Wed, 19 Apr 2023 16:54:31 -0400
-In-Reply-To: <20230419112447.18471-1-jlayton@kernel.org>
-References: <20230419112447.18471-1-jlayton@kernel.org>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Wed, 19 Apr 2023 16:55:14 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7020210E0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:55:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1681937698; i=j.neuschaefer@gmx.net;
+        bh=+kT0YP3mQuFkxvRs3dKBwmFcwoMeGEjZwsAtrVLnaQE=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=NMwY9aqoeq8XQ0fWvlzFFccAh5Z94ZRLlk5xDdZJInsph3AHas3GhJEHqNUPdEJvj
+         62OwaUN9js78ucaxkOlyfqNsn/O8TnPNCHjaklmlso0YO58oVKam/HmGNZ3c7ghRwk
+         h2vHIzjWrVsYjz1OongStsqmMeXDIkE9zyeEaJ70WTkRc3xeIkTkRASyPeQHvVi4KG
+         NJUQohSPXa7NVI/iNKWZrk5phVNwrq+Q9dqWEAsHSNXn1LtZlSyZCAdqEdMI/zpFnj
+         b18iiOvVbIwu9kWwjXEUkKIXMlrJcMgfeR4uNR2ynX6Bi/YvBAuYLht0faEeZ7jiI3
+         cwq47gjqSQCJg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MryXH-1qd9y31nOf-00o0iM; Wed, 19
+ Apr 2023 22:54:58 +0200
+Date:   Wed, 19 Apr 2023 22:55:01 +0200
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Joel Stanley <joel@jms.id.au>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v3 1/2] soc: nuvoton: Add a menu for Nuvoton SoC drivers
+Message-ID: <ZEBVJYow7iOTXysB@probook>
+References: <20230412183834.3769519-1-j.neuschaefer@gmx.net>
+ <CAMuHMdVdJooFiLfttxeRVZO_0doWiurwg3ZkxEbyO7D8eaDeKw@mail.gmail.com>
+ <CAMuHMdV_y3ctAWAWSU-PjdE_hwBJjkgwFhpBQ84WFrhcXU8_2Q@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1l5oiu4Z09MgQTIH"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdV_y3ctAWAWSU-PjdE_hwBJjkgwFhpBQ84WFrhcXU8_2Q@mail.gmail.com>
+X-Provags-ID: V03:K1:LLUl0iQYg1kGBBSPdFJK3e7xC60v+e7fB3mx1XpP4p7JkI2HHRH
+ SAzqJwYspI4HC9xQqvOHD/d3KoOBynrTklUEML8+ZMQuncAdzgH9eAeAWFRm0zEJD3xE2aP
+ V/bc6Dz/Xu42NnI8KtSpQt4HiJV+J823BJPZQjjIbNdvRNFgI7RVJEeAwdE/Gr/Ewy1qflF
+ IJW+8rxohKxE4NNUTmSpw==
+UI-OutboundReport: notjunk:1;M01:P0:tJdq248S/CQ=;W4M+pD7C9TxCj+5iz+XlrIFbZXU
+ 4+EATc/gPcZOcbG3Io5hO4my8NtKn76KnOgJ8ZN7TJX0Ol/GxOFye/+o6CuqQJWl6Ar80PJKa
+ dNAQvmZeD1z6AFgfy2vA6tDgA/fUaj4rNYKJe8d5WpCnPAJiZ23AUdzXeDuzbdhUBBou3Y/Fo
+ KtbcNh34JqLeDZsYkdiZDAodb4BxW+6apcOUtXvhwvxNGd1ocYKUrRfDHWKvS+c8NndbTGhgO
+ /O9mfUl9nP7EE4c6SnRGolaQNcY04HDbjWQHlCtAHoLEdyhwu39/Me+lPGulGG7Tngo52Pahh
+ y1kmaLeCh9FneBN3pZXFl70W7O7fOiFKQ5YUy47AVvdWOyR6Zz5eP9aqdnKIox8p42M5DfwBa
+ 4Rkk0Z0gK52ndE0yaFrVFkw0zbaQigxZCdZ1Z2NI12yUMEE1SKK21RG6J43h5sradhA3GNQgv
+ Ukxgsd5jjqCiKx7raXgzxN1xoI+ILlAl0UvTSCy83QGvudeL600FCDeZozN75PPuX4oSR0LM4
+ DWgP91dRz12xtd6syz16RkvUCSciEcBNoRy/QFsKwzr5AMNS7Y1UxL8yl3gO+7pXuwHF5mi1U
+ 0ceZ3bPVyDCK23rUJmD5ai78Qfuven08DJCTRjrDuc5ZUtejL9GIm12bmsUx2+m7e0yMiDIQy
+ SWbFCHl/671cp2IAu2qjwA6M1+Ytgckfw5YLf1devaB6Foa3lM/HWawj493boaSmq7byeYcKx
+ tLfu5UUxLif6Uo0ujDHL1/vxD7GgiJw68h/L3+B43wkNhdJ+2dX6VckzflFgTCG/rlRy+jgLQ
+ opy8623E4LrhWcQ93i5lcOYb+j8LqQm9l8drsHLTojKmaLV4151pJl2IpYDsDPM6DPiqIY7CP
+ l/MxrLMybpxRcx1xIPhiOZnDekENhtR/vqeJrYQ+ZqzuXcJgE/A6uW9k+4cGJ4g+CG5wfrmuH
+ OUC9eHpdaAjvNy4mcMh/PRqVPro=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,53 +76,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-Thanks!
+--1l5oiu4Z09MgQTIH
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2023-04-19 at 07:24 -0400, Jeff Layton wrote:
-> I've been experiencing some intermittent crashes down in the display
-> driver code. The symptoms are ususally a line like this in dmesg:
+On Mon, Apr 17, 2023 at 09:28:47AM +0200, Geert Uytterhoeven wrote:
+> On Mon, Apr 17, 2023 at 9:25=E2=80=AFAM Geert Uytterhoeven <geert@linux-m=
+68k.org> wrote:
+> > On Wed, Apr 12, 2023 at 8:38=E2=80=AFPM Jonathan Neusch=C3=A4fer
+> > <j.neuschaefer@gmx.net> wrote:
+> > > Add a menu "Nuvoton SoC drivers" to make it easier to add other Nuvot=
+on
+> > > SoC drivers later on and to prevent asking about the Nuvoton WPCM450 =
+SoC
+> > > driver when configuring a kernel without support for Nuvoton SoCs.
+> > >
+> > > Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > Link: https://lore.kernel.org/lkml/CAMuHMdWo5vHCeE6BeSHrUy12uT7_wFhW-=
+VbQmQ5u+4Q8c7-wYQ@mail.gmail.com/
+> > > Fixes: 77b8c67b5637 ("soc: nuvoton: Add SoC info driver for WPCM450")
 >=20
->     amdgpu 0000:30:00.0: [drm] Failed to create MST payload for port 0000=
-00006d3a3885: -5
->=20
-> ...followed by an Oops due to a NULL pointer dereference.
->=20
-> Switch to using mgr->dev instead of state->dev since "state" can be
-> NULL in some cases.
->=20
-> Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D2184855
-> Suggested-by: Jani Nikula <jani.nikula@linux.intel.com>
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  drivers/gpu/drm/display/drm_dp_mst_topology.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> I've been running this patch for a couple of days, but the problem
-> hasn't occurred again as of yet. It seems sane though as long as we can
-> assume that mgr->dev will be valid even when "state" is a NULL pointer.
->=20
-> diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/=
-drm/display/drm_dp_mst_topology.c
-> index 38dab76ae69e..e2e21ce79510 100644
-> --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
-> +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-> @@ -3404,7 +3404,7 @@ int drm_dp_add_payload_part2(struct drm_dp_mst_topo=
-logy_mgr *mgr,
-> =20
->  	/* Skip failed payloads */
->  	if (payload->vc_start_slot =3D=3D -1) {
-> -		drm_dbg_kms(state->dev, "Part 1 of payload creation for %s failed, ski=
-pping part 2\n",
-> +		drm_dbg_kms(mgr->dev, "Part 1 of payload creation for %s failed, skipp=
-ing part 2\n",
->  			    payload->port->connector->name);
->  		return -EIO;
->  	}
+> This reference is wrong, it should be 7dbb4a38bff3.
 
---=20
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+Good catch, I picked a local copy of the patch/commit by accident.
 
+
+Thanks,
+Jonathan
+
+--1l5oiu4Z09MgQTIH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmRAVN4ACgkQCDBEmo7z
+X9tu4xAAmGQ42qqJcLh6LVuKMZ8N6ZIQRL0McYPi70/KrfcsZUvHNIe3iekQudcg
+KaNINuOwVjbxbB1nb+YVBqB3HtFG0gPC0TCLNpbRsP5Nt5I157OEdq9jsxNHOIZj
+1Tb82a83EEgpylxG7HTsIuwrSzaN6YFhNhkx7td1/tyYSdjLLMAeLaYBFtdDVXDA
+qe/GvAH4tLPxaWzqhKmYAUj7l2jzzYYa5rqN02i1RB4SqiPpxvCSNqhFNsBlIryu
+PJt3JAx4tt3vcFn4SfWut8lkmII/xh1fYCnomkF5BST3rPtbJgllsC3g+XsgX1bq
+FX5Us2Uz3xB2NkxMpNCy+HN00BEEXV4L1DJa04UwD6Ub9n2uSbnD/eeKYXqFK2Wv
+l52F9kGJygGIzPXzIrJ2Q7Gkc54igy3WMRZg0qB2mAFTCRxeqtryXEomxhK1lrQQ
+2SBFP/867iiblf4L80Q6njrHOw5rr3q2snguVwypiZtLq4C62KGk9ESktnEY78xG
+gi1VQNsRNaPg2/zGqObBNQWkCzCTPAxdCKxpm9hEbeCTVsjnfGdbAoX2FM3yiDs7
+dHhhBYZoacQIIKLDrNDaHpGFfnfB5tsTx1M8/A6pjCcHBFqZn8q3fo5KD9B6RRi/
+RV0fphbs+sGqqmoh7WHjOV5QRLptAYXVjOXNB7SpDEVuxJEix5M=
+=H+ey
+-----END PGP SIGNATURE-----
+
+--1l5oiu4Z09MgQTIH--
