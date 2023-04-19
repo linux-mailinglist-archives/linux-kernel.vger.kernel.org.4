@@ -2,233 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CAC86E711B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6626E7123
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbjDSC0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 22:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
+        id S229879AbjDSCcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 22:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjDSC0a (ORCPT
+        with ESMTP id S229978AbjDSCcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 22:26:30 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FCD273C;
-        Tue, 18 Apr 2023 19:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681871188; x=1713407188;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=k5o+e9OFDKx8HbGbYH4eChwwHrJNFCKaDwBuFDiOPqU=;
-  b=HkxAr/7wxteLKrwJPWbrAcv1uPq4OcxXsgaYFgV8BQbv0RjLXcbfbsQW
-   3QRFLm4a3yrd/0QPOdnx5syjy7KcrS6gJPR7dM0/hDlL4xzjwGDOYfQMY
-   a3H7rEWrpIySp1u58Nq6/lqOCSL2VoWrIP8U3u3hxWEYhfIKcmK9hRRD/
-   y/1T8/LNua7RqJGTQEt2A9C6F5CC9ngP7lu+LdzS4QoRB+iNLQd9afQd6
-   WV1w67qJcrQdcG2vsGPQLes9pf401mB5LCe8qG9DeOIQgCcTqHre0/FBq
-   sZtZUhyNhJiPw9FJyy8T7MtyNMRiuYrvGyGlroYL/bYfl1GP81vywmlOb
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="373211999"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="373211999"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 19:26:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="780699282"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="780699282"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 Apr 2023 19:26:24 -0700
-Message-ID: <dfe89fc9-f73d-7cbd-7475-e4f4170d1a1c@linux.intel.com>
-Date:   Wed, 19 Apr 2023 10:26:21 +0800
+        Tue, 18 Apr 2023 22:32:53 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4986558D;
+        Tue, 18 Apr 2023 19:32:51 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id sz19so20945676ejc.2;
+        Tue, 18 Apr 2023 19:32:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681871570; x=1684463570;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0TaPgyYc5LCwXFDaFlL9r5C+qVCPDLXFVp+9NMWeidw=;
+        b=r5kzeAunCjJuN2Dq4kSAOdxDGwFe5Sxk2kM2h2kqCOT1MZEu9XhvXWzHwnZgl3Pqmf
+         PZPmZ0RcILRmB0BNOLaVht5hfhy0f9w9/7a0PRcqV+U2zcDn24lCffCXG7OXQVce/Qgo
+         c4npiJj3V272byyhCGn+PsbBU+0FKAmlAcdqMCHm0aRxRd6AynWevFX3o88/ZgOZBGqN
+         XABLcJuYJXHX2bu9SHr29bW6C+eLneXwtxMxj2bAIm0vx2RiNn2RVhS70HmpUmbWa/TX
+         c+mEvxzl9nWH/YVOOR9+t7ccsEwCkCE9EDmF8aMC3/o4cZMqtAjdCsSrYe2xDEVuZmmL
+         wQxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681871570; x=1684463570;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0TaPgyYc5LCwXFDaFlL9r5C+qVCPDLXFVp+9NMWeidw=;
+        b=fxtCyo/9dXdvNpLWFuvcc6o+xvmsKV10cMD/FQji7OCk+05M3kq7vhzCsK5o2+DjuS
+         znoUcc/yFYNVYt8mWcxVIRamWtS/sghstYAD0JmoJWJj2pD4X8TLYelpacHLLGoybMir
+         hoah7yIhW20/nwm4shS+AErZDCTYgxHwtccDMWWTb0/3xwk08ZgmFQXgXbVTQXPo9NKP
+         KUkJu7iwOsYhfhAZ87CGUOBBk/PJq8r4+YQl76Ups5klup4HzqecMm2sNwiKxGxEEMrQ
+         l0RR0hbTmmpacVkGH8u04xzHbQNDaDItPaEG47fdYQpvB4i5Nyu/5wpmaeKA2GRtPXpt
+         qoCA==
+X-Gm-Message-State: AAQBX9fiW5tH1mQaVP0NpGSD/6bM96YkddYf9kxK5B5J3FD9Bbzg1yDa
+        zyuGS+eR5GYTNZBxekQhZxz9bhdesnqHyTPrVm8=
+X-Google-Smtp-Source: AKy350b7eUC/jFKQN19JOsCv+H6gVnpvCzmNKwIp8wPEfKZ7cV7C/opFnmuH3qgLv7kpz1KOniP32bnImOCOHxJe2hs=
+X-Received: by 2002:a17:906:57d8:b0:94e:e574:6021 with SMTP id
+ u24-20020a17090657d800b0094ee5746021mr11786849ejr.7.1681871570149; Tue, 18
+ Apr 2023 19:32:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     baolu.lu@linux.intel.com, LKML <linux-kernel@vger.kernel.org>,
-        iommu@lists.linux.dev, Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>
-Subject: Re: [PATCH v4 5/7] iommu/vt-d: Make device pasid attachment explicit
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-References: <20230407180554.2784285-1-jacob.jun.pan@linux.intel.com>
- <20230407180554.2784285-6-jacob.jun.pan@linux.intel.com>
- <54591e4f-682b-cd4e-ee6b-9c9395d9c526@linux.intel.com>
- <20230418143254.064933d8@jacob-builder>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230418143254.064933d8@jacob-builder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1692048.1681857607@warthog.procyon.org.uk>
+In-Reply-To: <1692048.1681857607@warthog.procyon.org.uk>
+From:   Steve French <smfrench@gmail.com>
+Date:   Tue, 18 Apr 2023 21:32:38 -0500
+Message-ID: <CAH2r5mudRezz-9wcHN+dcZmApeZ4L--CmTpCaaMAL6RDNihZtw@mail.gmail.com>
+Subject: Re: [PATCH] cifs: Fix unbuffered read
+To:     David Howells <dhowells@redhat.com>
+Cc:     Paulo Alcantara <pc@manguebit.com>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Long Li <longli@microsoft.com>,
+        Enzo Matsumiya <ematsumiya@suse.de>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: multipart/mixed; boundary="0000000000007f50d805f9a73dd3"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 5:32 AM, Jacob Pan wrote:
-> On Mon, 10 Apr 2023 10:46:02 +0800, Baolu Lu<baolu.lu@linux.intel.com>
-> wrote:
-> 
->> On 4/8/23 2:05 AM, Jacob Pan wrote:
->>> @@ -2429,10 +2475,11 @@ static int __init si_domain_init(int hw)
->>>    	return 0;
->>>    }
->>>    
->>> -static int dmar_domain_attach_device(struct dmar_domain *domain,
->>> -				     struct device *dev)
->>> +static int dmar_domain_attach_device_pasid(struct dmar_domain *domain,
->>> +				     struct device *dev, ioasid_t
->>> pasid) {
->>>    	struct device_domain_info *info = dev_iommu_priv_get(dev);
->>> +	struct device_pasid_info *dev_pasid;
->>>    	struct intel_iommu *iommu;
->>>    	unsigned long flags;
->>>    	u8 bus, devfn;
->>> @@ -2442,43 +2489,57 @@ static int dmar_domain_attach_device(struct
->>> dmar_domain *domain, if (!iommu)
->>>    		return -ENODEV;
->>>    
->>> +	dev_pasid = kzalloc(sizeof(*dev_pasid), GFP_KERNEL);
->>> +	if (!dev_pasid)
->>> +		return -ENOMEM;
->>> +
->>>    	ret = domain_attach_iommu(domain, iommu);
->>>    	if (ret)
->>> -		return ret;
->>> +		goto exit_free;
->>> +
->>>    	info->domain = domain;
->>> +	dev_pasid->pasid = pasid;
->>> +	dev_pasid->dev = dev;
->>>    	spin_lock_irqsave(&domain->lock, flags);
->>> -	list_add(&info->link, &domain->devices);
->>> +	if (!info->dev_attached)
->>> +		list_add(&info->link, &domain->devices);
->>> +
->>> +	list_add(&dev_pasid->link_domain, &domain->dev_pasids);
->>>    	spin_unlock_irqrestore(&domain->lock, flags);
->>>    
->>>    	/* PASID table is mandatory for a PCI device in scalable
->>> mode. */ if (sm_supported(iommu) && !dev_is_real_dma_subdevice(dev)) {
->>>    		/* Setup the PASID entry for requests without PASID:
->>> */ if (hw_pass_through && domain_type_is_si(domain))
->>> -			ret = intel_pasid_setup_pass_through(iommu,
->>> domain,
->>> -					dev, PASID_RID2PASID);
->>> +			ret = intel_pasid_setup_pass_through(iommu,
->>> domain, dev, pasid); else if (domain->use_first_level)
->>> -			ret = domain_setup_first_level(iommu, domain,
->>> dev,
->>> -					PASID_RID2PASID);
->>> +			ret = domain_setup_first_level(iommu, domain,
->>> dev, pasid); else
->>> -			ret = intel_pasid_setup_second_level(iommu,
->>> domain,
->>> -					dev, PASID_RID2PASID);
->>> +			ret = intel_pasid_setup_second_level(iommu,
->>> domain, dev, pasid); if (ret) {
->>> -			dev_err(dev, "Setup RID2PASID failed\n");
->>> +			dev_err(dev, "Setup PASID %d failed\n", pasid);
->>>    			device_block_translation(dev);
->>> -			return ret;
->>> +			goto exit_free;
->>>    		}
->>>    	}
->>> +	/* device context already activated,  we are done */
->>> +	if (info->dev_attached)
->>> +		goto exit;
->>>    
->>>    	ret = domain_context_mapping(domain, dev);
->>>    	if (ret) {
->>>    		dev_err(dev, "Domain context map failed\n");
->>>    		device_block_translation(dev);
->>> -		return ret;
->>> +		goto exit_free;
->>>    	}
->>>    
->>>    	iommu_enable_pci_caps(info);
->>> -
->>> +	info->dev_attached = 1;
->>> +exit:
->>>    	return 0;
->>> +exit_free:
->>> +	kfree(dev_pasid);
->>> +	return ret;
->>>    }
->>>    
->>>    static bool device_has_rmrr(struct device *dev)
->>> @@ -4029,8 +4090,7 @@ static void device_block_translation(struct
->>> device *dev) iommu_disable_pci_caps(info);
->>>    	if (!dev_is_real_dma_subdevice(dev)) {
->>>    		if (sm_supported(iommu))
->>> -			intel_pasid_tear_down_entry(iommu, dev,
->>> -						    PASID_RID2PASID,
->>> false);
->>> +
->>> intel_iommu_detach_device_pasid(&info->domain->domain, dev,
->>> PASID_RID2PASID); else domain_context_clear(info);
->>>    	}
->>> @@ -4040,6 +4100,7 @@ static void device_block_translation(struct
->>> device *dev)
->>>    	spin_lock_irqsave(&info->domain->lock, flags);
->>>    	list_del(&info->link);
->>> +	info->dev_attached = 0;
->>>    	spin_unlock_irqrestore(&info->domain->lock, flags);
->>>    
->>>    	domain_detach_iommu(info->domain, iommu);
->>> @@ -4186,7 +4247,7 @@ static int intel_iommu_attach_device(struct
->>> iommu_domain *domain, if (ret)
->>>    		return ret;
->>>    
->>> -	return dmar_domain_attach_device(to_dmar_domain(domain), dev);
->>> +	return dmar_domain_attach_device_pasid(to_dmar_domain(domain),
->>> dev, PASID_RID2PASID); }
->> For VT-d driver, attach_dev and attach_dev_pasid have different
->> meanings. Merging them into one helper may lead to confusion. What do
->> you think of the following code? The dmar_domain_attach_device_pasid()
->> helper could be reused for attach_dev_pasid path.
-> Per our previous discussion
-> https://lore.kernel.org/lkml/ZAY4zd4OlgSz+puZ@nvidia.com/
-> We wanted to remove the ordering dependency between attaching device and
-> device_pasid. i.e. making the two equal at IOMMU API level.
+--0000000000007f50d805f9a73dd3
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Yes. That still holds.
+Updated to add Paulo's Acked-by and also attached the other fix. Let
+me know if any additional feedback/review/testing results
 
-> 
-> So from that perspective, attach_dev_pasid will include attach_dev if the
-> device has not been attached. i.e.
+    cifs: Reapply lost fix from commit 30b2b2196d6e
 
-I don't follow here. attach_dev and attach_dev_pasid are independent of
-each other. So in any case, attach_dev_pasid shouldn't include
-attach_dev.
+    Reapply the fix from
+       30b2b2196d6e ("cifs: do not include page data when checking signatur=
+e")
+    that got lost in the iteratorisation of the cifs driver.
 
-> attach_dev includes set up device context and RID_PASID
-> attach_dev_pasid also include set up device context and another PASID.
+On Tue, Apr 18, 2023 at 5:40=E2=80=AFPM David Howells <dhowells@redhat.com>=
+ wrote:
+>
+>
+> If read() is done in an unbuffered manner, such that, say,
+> cifs_strict_readv() goes through cifs_user_readv() and thence
+> __cifs_readv(), it doesn't recognise the EOF and keeps indicating to
+> userspace that it returning full buffers of data.
+>
+> This is due to ctx->iter being advanced in cifs_send_async_read() as the
+> buffer is split up amongst a number of rdata objects.  The iterator count
+> is then used in collect_uncached_read_data() in the non-DIO case to set t=
+he
+> total length read - and thus the return value of sys_read().  But since t=
+he
+> iterator normally gets used up completely during splitting, ctx->total_le=
+n
+> gets overridden to the full amount.
+>
+> However, prior to that in collect_uncached_read_data(), we've gone throug=
+h
+> the list of rdatas and added up the amount of data we actually received
+> (which we then throw away).
+>
+> Fix this by removing the bit that overrides the amount read in the non-DI=
+O
+> case and just going with the total added up in the aforementioned loop.
+>
+> This was observed by mounting a cifs share with multiple channels, e.g.:
+>
+>         mount //192.168.6.1/test /test/ -o user=3Dshares,pass=3D...,max_c=
+hannels=3D6
+>
+> and then reading a 1MiB file on the share:
+>
+>         strace cat /xfstest.test/1M  >/dev/null
+>
+> Through strace, the same data can be seen being read again and again.
+>
+> Fixes: d08089f649a0 ("cifs: Change the I/O paths to use an iterator rathe=
+r than a page list")
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Steve French <smfrench@gmail.com>
+> cc: Paulo Alcantara <pc@manguebit.com>
+> cc: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+> cc: Long Li <longli@microsoft.com>
+> cc: Enzo Matsumiya <ematsumiya@suse.de>
+> cc: Shyam Prasad N <nspmangalore@gmail.com>
+> cc: Rohith Surabattula <rohiths.msft@gmail.com>
+> cc: Jeff Layton <jlayton@kernel.org>
+> cc: linux-cifs@vger.kernel.org
+> ---
+>  fs/cifs/file.c |    4 ----
+>  1 file changed, 4 deletions(-)
+>
+> diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+> index 321f9b7c84c9..f8877dc91cc5 100644
+> --- a/fs/cifs/file.c
+> +++ b/fs/cifs/file.c
+> @@ -4010,7 +4010,6 @@ static void
+>  collect_uncached_read_data(struct cifs_aio_ctx *ctx)
+>  {
+>         struct cifs_readdata *rdata, *tmp;
+> -       struct iov_iter *to =3D &ctx->iter;
+>         struct cifs_sb_info *cifs_sb;
+>         int rc;
+>
+> @@ -4076,9 +4075,6 @@ collect_uncached_read_data(struct cifs_aio_ctx *ctx=
+)
+>                 kref_put(&rdata->refcount, cifs_readdata_release);
+>         }
+>
+> -       if (!ctx->direct_io)
+> -               ctx->total_len =3D ctx->len - iov_iter_count(to);
+> -
+>         /* mask nodata case */
+>         if (rc =3D=3D -ENODATA)
+>                 rc =3D 0;
+>
 
-I guess that you are worrying about the case where the context entry and
-pasid table are not setup yet in attach_dev_pasid path? In theory yes,
-but not exist in reality. The best case is that we setup context entry
-in probe_device path, but at present, perhaps we can simply check and
-return failure in this case.
 
-Any way, I'd suggest not mix two ops in a single function.
+--=20
+Thanks,
 
-> 
-> No ordering requirement.
-> 
+Steve
 
-Best regards,
-baolu
+--0000000000007f50d805f9a73dd3
+Content-Type: text/x-patch; charset="UTF-8"; name="0002-cifs-Fix-unbuffered-read.patch"
+Content-Disposition: attachment; 
+	filename="0002-cifs-Fix-unbuffered-read.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_lgn2vpjg0>
+X-Attachment-Id: f_lgn2vpjg0
+
+RnJvbSBhYzEzNjkyODQ0ZjJmYjIzYzUwMzA2NmMwY2IyMzEyNDMyMThhN2M4IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBEYXZpZCBIb3dlbGxzIDxkaG93ZWxsc0ByZWRoYXQuY29tPgpE
+YXRlOiBUdWUsIDE4IEFwciAyMDIzIDIzOjQwOjA3ICswMTAwClN1YmplY3Q6IFtQQVRDSCAyLzNd
+IGNpZnM6IEZpeCB1bmJ1ZmZlcmVkIHJlYWQKTUlNRS1WZXJzaW9uOiAxLjAKQ29udGVudC1UeXBl
+OiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04CkNvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhi
+aXQKCklmIHJlYWQoKSBpcyBkb25lIGluIGFuIHVuYnVmZmVyZWQgbWFubmVyLCBzdWNoIHRoYXQs
+IHNheSwKY2lmc19zdHJpY3RfcmVhZHYoKSBnb2VzIHRocm91Z2ggY2lmc191c2VyX3JlYWR2KCkg
+YW5kIHRoZW5jZQpfX2NpZnNfcmVhZHYoKSwgaXQgZG9lc24ndCByZWNvZ25pc2UgdGhlIEVPRiBh
+bmQga2VlcHMgaW5kaWNhdGluZyB0bwp1c2Vyc3BhY2UgdGhhdCBpdCByZXR1cm5pbmcgZnVsbCBi
+dWZmZXJzIG9mIGRhdGEuCgpUaGlzIGlzIGR1ZSB0byBjdHgtPml0ZXIgYmVpbmcgYWR2YW5jZWQg
+aW4gY2lmc19zZW5kX2FzeW5jX3JlYWQoKSBhcyB0aGUKYnVmZmVyIGlzIHNwbGl0IHVwIGFtb25n
+c3QgYSBudW1iZXIgb2YgcmRhdGEgb2JqZWN0cy4gIFRoZSBpdGVyYXRvciBjb3VudAppcyB0aGVu
+IHVzZWQgaW4gY29sbGVjdF91bmNhY2hlZF9yZWFkX2RhdGEoKSBpbiB0aGUgbm9uLURJTyBjYXNl
+IHRvIHNldCB0aGUKdG90YWwgbGVuZ3RoIHJlYWQgLSBhbmQgdGh1cyB0aGUgcmV0dXJuIHZhbHVl
+IG9mIHN5c19yZWFkKCkuICBCdXQgc2luY2UgdGhlCml0ZXJhdG9yIG5vcm1hbGx5IGdldHMgdXNl
+ZCB1cCBjb21wbGV0ZWx5IGR1cmluZyBzcGxpdHRpbmcsIGN0eC0+dG90YWxfbGVuCmdldHMgb3Zl
+cnJpZGRlbiB0byB0aGUgZnVsbCBhbW91bnQuCgpIb3dldmVyLCBwcmlvciB0byB0aGF0IGluIGNv
+bGxlY3RfdW5jYWNoZWRfcmVhZF9kYXRhKCksIHdlJ3ZlIGdvbmUgdGhyb3VnaAp0aGUgbGlzdCBv
+ZiByZGF0YXMgYW5kIGFkZGVkIHVwIHRoZSBhbW91bnQgb2YgZGF0YSB3ZSBhY3R1YWxseSByZWNl
+aXZlZAood2hpY2ggd2UgdGhlbiB0aHJvdyBhd2F5KS4KCkZpeCB0aGlzIGJ5IHJlbW92aW5nIHRo
+ZSBiaXQgdGhhdCBvdmVycmlkZXMgdGhlIGFtb3VudCByZWFkIGluIHRoZSBub24tRElPCmNhc2Ug
+YW5kIGp1c3QgZ29pbmcgd2l0aCB0aGUgdG90YWwgYWRkZWQgdXAgaW4gdGhlIGFmb3JlbWVudGlv
+bmVkIGxvb3AuCgpUaGlzIHdhcyBvYnNlcnZlZCBieSBtb3VudGluZyBhIGNpZnMgc2hhcmUgd2l0
+aCBtdWx0aXBsZSBjaGFubmVscywgZS5nLjoKCgltb3VudCAvLzE5Mi4xNjguNi4xL3Rlc3QgL3Rl
+c3QvIC1vIHVzZXI9c2hhcmVzLHBhc3M9Li4uLG1heF9jaGFubmVscz02CgphbmQgdGhlbiByZWFk
+aW5nIGEgMU1pQiBmaWxlIG9uIHRoZSBzaGFyZToKCglzdHJhY2UgY2F0IC94ZnN0ZXN0LnRlc3Qv
+MU0gID4vZGV2L251bGwKClRocm91Z2ggc3RyYWNlLCB0aGUgc2FtZSBkYXRhIGNhbiBiZSBzZWVu
+IGJlaW5nIHJlYWQgYWdhaW4gYW5kIGFnYWluLgoKRml4ZXM6IGQwODA4OWY2NDlhMCAoImNpZnM6
+IENoYW5nZSB0aGUgSS9PIHBhdGhzIHRvIHVzZSBhbiBpdGVyYXRvciByYXRoZXIgdGhhbiBhIHBh
+Z2UgbGlzdCIpClNpZ25lZC1vZmYtYnk6IERhdmlkIEhvd2VsbHMgPGRob3dlbGxzQHJlZGhhdC5j
+b20+CkFja2VkLWJ5OiBQYXVsbyBBbGNhbnRhcmEgKFNVU0UpIDxwY0BtYW5ndWViaXQuY29tPgpj
+YzogSsOpcsO0bWUgR2xpc3NlIDxqZ2xpc3NlQHJlZGhhdC5jb20+CmNjOiBMb25nIExpIDxsb25n
+bGlAbWljcm9zb2Z0LmNvbT4KY2M6IEVuem8gTWF0c3VtaXlhIDxlbWF0c3VtaXlhQHN1c2UuZGU+
+CmNjOiBTaHlhbSBQcmFzYWQgTiA8bnNwbWFuZ2Fsb3JlQGdtYWlsLmNvbT4KY2M6IFJvaGl0aCBT
+dXJhYmF0dHVsYSA8cm9oaXRocy5tc2Z0QGdtYWlsLmNvbT4KY2M6IEplZmYgTGF5dG9uIDxqbGF5
+dG9uQGtlcm5lbC5vcmc+CmNjOiBsaW51eC1jaWZzQHZnZXIua2VybmVsLm9yZwpTaWduZWQtb2Zm
+LWJ5OiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+Ci0tLQogZnMvY2lmcy9m
+aWxlLmMgfCA0IC0tLS0KIDEgZmlsZSBjaGFuZ2VkLCA0IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdp
+dCBhL2ZzL2NpZnMvZmlsZS5jIGIvZnMvY2lmcy9maWxlLmMKaW5kZXggNjgzMWE5OTQ5YzQzLi5i
+MzNkMmU3YjBmOTggMTAwNjQ0Ci0tLSBhL2ZzL2NpZnMvZmlsZS5jCisrKyBiL2ZzL2NpZnMvZmls
+ZS5jCkBAIC00MDEwLDcgKzQwMTAsNiBAQCBzdGF0aWMgdm9pZAogY29sbGVjdF91bmNhY2hlZF9y
+ZWFkX2RhdGEoc3RydWN0IGNpZnNfYWlvX2N0eCAqY3R4KQogewogCXN0cnVjdCBjaWZzX3JlYWRk
+YXRhICpyZGF0YSwgKnRtcDsKLQlzdHJ1Y3QgaW92X2l0ZXIgKnRvID0gJmN0eC0+aXRlcjsKIAlz
+dHJ1Y3QgY2lmc19zYl9pbmZvICpjaWZzX3NiOwogCWludCByYzsKIApAQCAtNDA3Niw5ICs0MDc1
+LDYgQEAgY29sbGVjdF91bmNhY2hlZF9yZWFkX2RhdGEoc3RydWN0IGNpZnNfYWlvX2N0eCAqY3R4
+KQogCQlrcmVmX3B1dCgmcmRhdGEtPnJlZmNvdW50LCBjaWZzX3JlYWRkYXRhX3JlbGVhc2UpOwog
+CX0KIAotCWlmICghY3R4LT5kaXJlY3RfaW8pCi0JCWN0eC0+dG90YWxfbGVuID0gY3R4LT5sZW4g
+LSBpb3ZfaXRlcl9jb3VudCh0byk7Ci0KIAkvKiBtYXNrIG5vZGF0YSBjYXNlICovCiAJaWYgKHJj
+ID09IC1FTk9EQVRBKQogCQlyYyA9IDA7Ci0tIAoyLjM0LjEKCg==
+--0000000000007f50d805f9a73dd3
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0003-cifs-Reapply-lost-fix-from-commit-30b2b2196d6e.patch"
+Content-Disposition: attachment; 
+	filename="0003-cifs-Reapply-lost-fix-from-commit-30b2b2196d6e.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_lgn2vyyh1>
+X-Attachment-Id: f_lgn2vyyh1
+
+RnJvbSAwMjNmYzE1MGEzOWZmZTY1NmRhM2U0NTlhZDgwMWViMWM3ZmRmYWQ5IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBEYXZpZCBIb3dlbGxzIDxkaG93ZWxsc0ByZWRoYXQuY29tPgpE
+YXRlOiBUdWUsIDE4IEFwciAyMDIzIDIzOjQ5OjEyICswMTAwClN1YmplY3Q6IFtQQVRDSCAzLzNd
+IGNpZnM6IFJlYXBwbHkgbG9zdCBmaXggZnJvbSBjb21taXQgMzBiMmIyMTk2ZDZlCgpSZWFwcGx5
+IHRoZSBmaXggZnJvbToKCiAgIDMwYjJiMjE5NmQ2ZSAoImNpZnM6IGRvIG5vdCBpbmNsdWRlIHBh
+Z2UgZGF0YSB3aGVuIGNoZWNraW5nIHNpZ25hdHVyZSIpCgp0aGF0IGdvdCBsb3N0IGluIHRoZSBp
+dGVyYXRvcmlzYXRpb24gb2YgdGhlIGNpZnMgZHJpdmVyLgoKRml4ZXM6IGQwODA4OWY2NDlhMCAo
+ImNpZnM6IENoYW5nZSB0aGUgSS9PIHBhdGhzIHRvIHVzZSBhbiBpdGVyYXRvciByYXRoZXIgdGhh
+biBhIHBhZ2UgbGlzdCIpCkFja2VkLWJ5OiBQYXVsbyBBbGNhbnRhcmEgKFNVU0UpIDxwY0BtYW5n
+dWViaXQuY29tPgpSZXBvcnRlZC1ieTogUGF1bG8gQWxjYW50YXJhIDxwY0BtYW5ndWViaXQuY29t
+PgpTaWduZWQtb2ZmLWJ5OiBEYXZpZCBIb3dlbGxzIDxkaG93ZWxsc0ByZWRoYXQuY29tPgpjYzog
+UGF1bG8gQWxjYW50YXJhIDxwY0BjanIubno+CmNjOiBTaHlhbSBQcmFzYWQgTiA8bnNwbWFuZ2Fs
+b3JlQGdtYWlsLmNvbT4KY2M6IEJoYXJhdGggUyBNIDxiaGFyYXRoc21AbWljcm9zb2Z0LmNvbT4K
+Y2M6IEVuem8gTWF0c3VtaXlhIDxlbWF0c3VtaXlhQHN1c2UuZGU+CmNjOiBsaW51eC1jaWZzQHZn
+ZXIua2VybmVsLm9yZwpTaWduZWQtb2ZmLWJ5OiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jv
+c29mdC5jb20+Ci0tLQogZnMvY2lmcy9zbWIycGR1LmMgfCAxMCArKysrKystLS0tCiAxIGZpbGUg
+Y2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2Zz
+L2NpZnMvc21iMnBkdS5jIGIvZnMvY2lmcy9zbWIycGR1LmMKaW5kZXggNDI0NTI0OWRiYmE4Li4z
+NjZmMGMzYjc5OWIgMTAwNjQ0Ci0tLSBhL2ZzL2NpZnMvc21iMnBkdS5jCisrKyBiL2ZzL2NpZnMv
+c21iMnBkdS5jCkBAIC00MTgwLDEwICs0MTgwLDEyIEBAIHNtYjJfcmVhZHZfY2FsbGJhY2soc3Ry
+dWN0IG1pZF9xX2VudHJ5ICptaWQpCiAJc3RydWN0IHNtYjJfaGRyICpzaGRyID0KIAkJCQkoc3Ry
+dWN0IHNtYjJfaGRyICopcmRhdGEtPmlvdlswXS5pb3ZfYmFzZTsKIAlzdHJ1Y3QgY2lmc19jcmVk
+aXRzIGNyZWRpdHMgPSB7IC52YWx1ZSA9IDAsIC5pbnN0YW5jZSA9IDAgfTsKLQlzdHJ1Y3Qgc21i
+X3Jxc3QgcnFzdCA9IHsgLnJxX2lvdiA9ICZyZGF0YS0+aW92WzFdLAotCQkJCSAucnFfbnZlYyA9
+IDEsCi0JCQkJIC5ycV9pdGVyID0gcmRhdGEtPml0ZXIsCi0JCQkJIC5ycV9pdGVyX3NpemUgPSBp
+b3ZfaXRlcl9jb3VudCgmcmRhdGEtPml0ZXIpLCB9OworCXN0cnVjdCBzbWJfcnFzdCBycXN0ID0g
+eyAucnFfaW92ID0gJnJkYXRhLT5pb3ZbMV0sIC5ycV9udmVjID0gMSB9OworCisJaWYgKHJkYXRh
+LT5nb3RfYnl0ZXMpIHsKKwkJcnFzdC5ycV9pdGVyCSAgPSByZGF0YS0+aXRlcjsKKwkJcnFzdC5y
+cV9pdGVyX3NpemUgPSBpb3ZfaXRlcl9jb3VudCgmcmRhdGEtPml0ZXIpOworCX07CiAKIAlXQVJO
+X09OQ0UocmRhdGEtPnNlcnZlciAhPSBtaWQtPnNlcnZlciwKIAkJICAicmRhdGEgc2VydmVyICVw
+ICE9IG1pZCBzZXJ2ZXIgJXAiLAotLSAKMi4zNC4xCgo=
+--0000000000007f50d805f9a73dd3--
