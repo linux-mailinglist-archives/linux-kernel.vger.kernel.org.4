@@ -2,168 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A136E825F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C47F6E8264
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbjDSUID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 16:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
+        id S231485AbjDSUJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 16:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbjDSUIB (ORCPT
+        with ESMTP id S231572AbjDSUJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 16:08:01 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AB44526F;
-        Wed, 19 Apr 2023 13:07:56 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8CxjdobSkBkLhcfAA--.37226S3;
-        Thu, 20 Apr 2023 04:07:55 +0800 (CST)
-Received: from openarena.loongson.cn (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxfb4XSkBkM88vAA--.17264S2;
-        Thu, 20 Apr 2023 04:07:51 +0800 (CST)
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Li Yi <liyi@loongson.cn>, Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v4] drm/fbdev-generic: prohibit potential out-of-bounds access
-Date:   Thu, 20 Apr 2023 04:07:42 +0800
-Message-Id: <20230419200742.1571818-1-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 19 Apr 2023 16:09:47 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E06B524B
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:09:45 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-506b2a08877so279543a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:09:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681934984; x=1684526984;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Xw+KJbFyACMkRJGroXOI3BeGOTCCUWrYEe/1oBLkoRQ=;
+        b=zxLiR99eSsw7BjcTYQ5S8E/CLIhKw3VB5JtlrC3z5U9ubcd67bhgmEL6qhgyiYHXnN
+         1FKFTMdCsvP8cWawQqMJH8WcsJXs7jKvHzVzsgZjss3z7mRJuhEnp2MklmWlA5gMjRXG
+         mAUhXVOcM/JlvX7vsTfyiWiz3Rmwe3D+OhArJEsHNLImFAO2I3OTIlHXI/TCRRyyhFR7
+         fgT92UqMmmJC/mx078VhIgAqtju+3rvlsQx52kdYVGRerlNjhFJv2cUxNcROuWBOjM+a
+         eR1UeOFNXCkXI1ObwK1mMXi0GZI7DEGzgsoWiT7tdYkbkrHnV27T/TMX25BRd/GWv2DD
+         1tug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681934984; x=1684526984;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xw+KJbFyACMkRJGroXOI3BeGOTCCUWrYEe/1oBLkoRQ=;
+        b=iEGSidzrKK/3gOEmOi7NsRfp3j4fhlKbrhh3SCjqx6e+alUtj8dGSjuEGr20KjwwDj
+         2/ubPuYbSyPBIssUgCCoXG72dFg615//HUrJGgofBPOouI+8cqHEWmopujT4MNtCLqOO
+         ickEr9OF0uDZzSJMch9dEy45MFJ5HUX3v5phh80JdJ+so6D/epcvg66euDFCeUmcJZil
+         LZXz14vOuc2MzHVGlHv4ZeNRWDzjdlquVnKZZ2jJ75/9vXPa7z8jloWXdwf+3eChlZX4
+         gFcBexcQzq4XJF34c+HbsqRYgSVEYdKYsyER3Vv/ZcvZff4IcBigsnoHtfAOPaAknS3B
+         MsDg==
+X-Gm-Message-State: AAQBX9fdcagTX9NGcFn97rIKvk/WseprETINKGei6UJna4XlmaKcArOK
+        RXjHZ6kbD6cLNoYehkExy+O3Ug==
+X-Google-Smtp-Source: AKy350a3Apxx+KuNFbakTzHCxKVnVUVMPDVeV2R93lEsA74lMQBPm+5IF/g1O8tqNFYYN6/peDtnqw==
+X-Received: by 2002:a05:6402:650:b0:504:b313:5898 with SMTP id u16-20020a056402065000b00504b3135898mr7270539edx.27.1681934983797;
+        Wed, 19 Apr 2023 13:09:43 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:976c:1d6c:6ed0:8935? ([2a02:810d:15c0:828:976c:1d6c:6ed0:8935])
+        by smtp.gmail.com with ESMTPSA id i10-20020aa7dd0a000000b0050685927971sm6858485edv.30.2023.04.19.13.09.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 13:09:43 -0700 (PDT)
+Message-ID: <f9b62f48-5c8b-2674-313d-4552c61c4302@linaro.org>
+Date:   Wed, 19 Apr 2023 22:09:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cxfb4XSkBkM88vAA--.17264S2
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxCF1rXFWUCw1DtrWrZF13Jwb_yoWrAr4fpF
-        W7GayDKr4kJFn8WrWxA3WUAw15Zan7ZFWIqrZ7G348ZF45A3ZF9F1UGF4UWry5Jr1xZr13
-        twn0yw1jkr1qkaDanT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
-        14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv
-        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2
-        AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_
-        Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
-        CTnIWIevJa73UjIFyTuYvjxUstxhDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V3 1/2] dt-bindings: interrupt-controller: Add Loongson
+ EIOINTC
+Content-Language: en-US
+To:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+References: <cover.1681887790.git.zhoubinbin@loongson.cn>
+ <3b9c4f05eaf14bc3b16aebec3ff84c8a2d52c4a5.1681887790.git.zhoubinbin@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3b9c4f05eaf14bc3b16aebec3ff84c8a2d52c4a5.1681887790.git.zhoubinbin@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The fbdev test of IGT may write after EOF, which lead to out-of-bound
-access for the drm drivers hire fbdev-generic. However, run fbdev test
-on x86 +ast2400 platform, with 1680x1050 resolution, will cause the
-linux kernel hang with the following call trace:
+On 19/04/2023 09:17, Binbin Zhou wrote:
+> Add Loongson Extended I/O Interrupt controller binding with DT schema
+> format using json-schema.
+> 
+> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> ---
+>  .../loongson,eiointc.yaml                     | 74 +++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+> new file mode 100644
+> index 000000000000..4ab4efb061e1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+> @@ -0,0 +1,74 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interrupt-controller/loongson,eiointc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson Extended I/O Interrupt Controller
+> +
+> +maintainers:
+> +  - Binbin Zhou <zhoubinbin@loongson.cn>
+> +
+> +description: |
+> +  This interrupt controller is found on the Loongson-3 family chips and
+> +  Loongson-2K series chips and is used to distribute interrupts directly to
+> +  individual cores without forwarding them through the HT's interrupt line.
+> +
+> +allOf:
+> +  - $ref: /schemas/interrupt-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - loongson,ls2k0500-eiointc
+> +      - loongson,ls2k2000-eiointc
+> +
+> +  reg:
+> +    items:
+> +      - description: Interrupt enable registers
+> +      - description: Interrupt status registers
+> +      - description: Interrupt clear registers
+> +      - description: Interrupt routing configuration registers
+> +
+> +  reg-names:
+> +    items:
+> +      - const: enable
+> +      - const: status
+> +      - const: clear
+> +      - const: route
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  '#interrupt-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-controller
+> +  - '#interrupt-cells'
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    eiointc: interrupt-controller@1fe11600 {
+> +      compatible = "loongson,ls2k0500-eiointc";
+> +      reg = <0x1fe11600 0x10>,
+> +            <0x1fe11700 0x10>,
+> +            <0x1fe11800 0x10>,
+> +            <0x1fe114c0 0x4>;
 
-  Oops: 0000 [#1] PREEMPT SMP PTI
-  [IGT] fbdev: starting subtest eof
-  Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
-  [IGT] fbdev: starting subtest nullptr
+Binding is OK, but are you sure you want to split the address space like
+this? It looks like two address spaces (enable+clear+status should be
+one). Are you sure this is correct?
 
-  RIP: 0010:memcpy_erms+0xa/0x20
-  RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
-  RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
-  RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
-  RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
-  R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
-  R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
-  FS:  0000000000000000(0000) GS:ffff895257380000(0000) knlGS:0000000000000000
-  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
-  Call Trace:
-   <TASK>
-   ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
-   drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
-   process_one_work+0x21f/0x430
-   worker_thread+0x4e/0x3c0
-   ? __pfx_worker_thread+0x10/0x10
-   kthread+0xf4/0x120
-   ? __pfx_kthread+0x10/0x10
-   ret_from_fork+0x2c/0x50
-   </TASK>
-  CR2: ffffa17d40e0b000
-  ---[ end trace 0000000000000000 ]---
-
-The is because damage rectangle rectange computed by
-drm_fb_helper_memory_range_to_clip() does not guaranteed to be bound in the
-screen's active display area. In details, we typically allocate buffers in
-the granularity of the page-size for mmap system call support.
-
-Exporting bit larger buffer in size than the size of active display to user
-space do allow the userspace write below the bottom of the display, it is
-not a big issue because there still have memory resolve the access.
-
-Yet, draft too far from the boundary is dangerious. Because such a access
-put the system in the situation of out-of-bound access. The root cause is
-that we do not do the validation, also DIV_ROUND_UP() may also introduce
-off-by-one error.
-
-This patch add logic to restrict the damage rectangle dract out of the
-visiable boundary.
-
-Fixes: aa15c677cc34 ("drm/fb-helper: Fix vertical damage clipping")
-
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/dri-devel/ad44df29-3241-0d9e-e708-b0338bf3c623@189.cn/
----
- drivers/gpu/drm/drm_fb_helper.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-index 64458982be40..6bb1b8b27d7a 100644
---- a/drivers/gpu/drm/drm_fb_helper.c
-+++ b/drivers/gpu/drm/drm_fb_helper.c
-@@ -641,19 +641,27 @@ static void drm_fb_helper_damage(struct drm_fb_helper *helper, u32 x, u32 y,
- static void drm_fb_helper_memory_range_to_clip(struct fb_info *info, off_t off, size_t len,
- 					       struct drm_rect *clip)
- {
-+	u32 line_length = info->fix.line_length;
-+	u32 fb_height = info->var.yres;
- 	off_t end = off + len;
- 	u32 x1 = 0;
--	u32 y1 = off / info->fix.line_length;
-+	u32 y1 = off / line_length;
- 	u32 x2 = info->var.xres;
--	u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
-+	u32 y2 = DIV_ROUND_UP(end, line_length);
-+
-+	/* Don't allow any of them beyond the bottom bound of display area */
-+	if (y1 > fb_height)
-+		y1 = fb_height;
-+	if (y2 > fb_height)
-+		y2 = fb_height;
- 
- 	if ((y2 - y1) == 1) {
- 		/*
- 		 * We've only written to a single scanline. Try to reduce
- 		 * the number of horizontal pixels that need an update.
- 		 */
--		off_t bit_off = (off % info->fix.line_length) * 8;
--		off_t bit_end = (end % info->fix.line_length) * 8;
-+		off_t bit_off = (off % line_length) * 8;
-+		off_t bit_end = (end % line_length) * 8;
- 
- 		x1 = bit_off / info->var.bits_per_pixel;
- 		x2 = DIV_ROUND_UP(bit_end, info->var.bits_per_pixel);
--- 
-2.25.1
+Best regards,
+Krzysztof
 
