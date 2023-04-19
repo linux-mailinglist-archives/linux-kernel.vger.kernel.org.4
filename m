@@ -2,138 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556166E858B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 01:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124426E8585
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 01:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233797AbjDSXAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 19:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        id S233767AbjDSXAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 19:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233850AbjDSW7y (ORCPT
+        with ESMTP id S233742AbjDSW7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 18:59:54 -0400
-Received: from CY4PR02CU008.outbound.protection.outlook.com (mail-westcentralusazon11012004.outbound.protection.outlook.com [40.93.200.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662F14699
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:59:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hbuJfXHtF4rUrT7JC+ze+03xc4Akl+AN2J6EXCUTSFhgRllhf3ZPY1/hlTaADzLlequUBZs8KmH1ZwfB4ysJqe90R12j7bjDQxOI8+cinoswkMmvKB0ZLEJjrfDc98Srk2zynkNJK2cjxHG785m//cwSXI4D/URQqKI6yumP5wmO2/6UWKsFlRi1vU4RgbUlJ/GVSxQ8bI7tReih5XsvTVC973w4zJiKF1apTw2BeYyN8ECa/fidvD1NMnltnt4AjXbeGB7JyOfQos+kK2VOXU7Cjs6B9hMrl/c8YP62Q1c8RjKimFev76FsIvOF94j7R+U5KEJkPqKbd1icj6xPmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jc79i78fEf8MAZ0K+lxu5CSbC9iXyNWUVr0mwxA4nPA=;
- b=QesX8Bv0uH3MzOa2j0d2Rbu4qmGN+7zNgrTDv1m6pxy4bk3KlZbIYaJi36Aq/Dm3c23pBBWi84pHVz7spkyYwbLRDYemMeklAsDCgLzZwProQB0XMB6BZfPQxiq/rmEpcdBhcUGTODuPtmuLel5DUinPrDG20noUfQ1mTwKZY6uXKq4OobIA2mL34xpGj/mZpd8+B3lW7rTKbI98RnPeLXbUMmpIi4SoHMWOVrmyZSIVFYSK876woJ9f07SfOmRwYxsvl3gNigV6l7N8JHYhuwnC+LSqwMRS3rg2QeAADIKBshWMU3xZ33S/cBbNSPnnARY+mDIOb3wafm7xRxb/bQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jc79i78fEf8MAZ0K+lxu5CSbC9iXyNWUVr0mwxA4nPA=;
- b=bzbtW5OGafCQWT+/GUXdATTNajSytWbbw9aIDczi5mnPq4AvKTOKn9KBaMT25yAEqRlqLQHeEFmFivsc2v94zgOSEBr87PtZTcAN5zpkrmtcXH/mTdfpzlK38F8echqzlolHxzjCD3dPkjp1Aqq8lHXKAuijxcT2cRdjR40DgSI=
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
- by MN2PR05MB6494.namprd05.prod.outlook.com (2603:10b6:208:d9::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
- 2023 22:58:18 +0000
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::f1bc:4933:8701:7ff0]) by BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::f1bc:4933:8701:7ff0%7]) with mapi id 15.20.6319.022; Wed, 19 Apr 2023
- 22:58:18 +0000
-From:   Nadav Amit <namit@vmware.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel test robot <yujie.liu@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Hugh Dickins <hughd@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH] mm,unmap: avoid flushing TLB in batch if PTE is
- inaccessible
-Thread-Topic: [PATCH] mm,unmap: avoid flushing TLB in batch if PTE is
- inaccessible
-Thread-Index: AQHZa4FwosvoCxZx+kWFav90J+Ui/a8k84GAgABgfg+AARGUgIAAhiWJgAD94QCACIhzfoAC28CA
-Date:   Wed, 19 Apr 2023 22:58:17 +0000
-Message-ID: <A7009B2B-8480-4AEB-8924-7E520A95386A@vmware.com>
-References: <20230410075224.827740-1-ying.huang@intel.com>
- <402A3E9D-5136-4747-91FF-C3AA2D557784@vmware.com>
- <87zg7f19xu.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <D432368D-7E3F-47C8-8BE3-A0D11BC6EA2D@vmware.com>
- <87sfd5zx5b.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <03BCE979-33B1-486F-A969-0475A35DEBB5@vmware.com>
- <87a5z5vpy7.fsf@yhuang6-desk2.ccr.corp.intel.com>
-In-Reply-To: <87a5z5vpy7.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3731.500.231)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BY3PR05MB8531:EE_|MN2PR05MB6494:EE_
-x-ms-office365-filtering-correlation-id: a00064ae-db07-47af-ea21-08db412990a5
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3uDfhT6tlsF9ZNTX3cIzEGMpolstSVmuuePu/9uRrU5GluKdLaRMEQEL76xUdvgs221gAO2uRaCHiv1zsT9tiZHWwOzAJQj/zYGQjwWOWmQ57oOyTPPFGDac+KgmIeIctKHoEvIx3GNyd/V/QwrkBtjbFP4EPQcX22UtLyTFh7Hhgy+FVU1b9xLhHMRVDW1fiLj0CoCeXnl39KvGCE5ujl9bJxe9eCBdqReLxuNmiJuDyvnklMh3cTd+8PQEuy31PKFZCIF2HJmDZcAzyX3rOtr53/VNJhtHGdiHYz4+rl57WGs9GEhzVmqqLUq94V6/Bd6w2/LxipDKwyC5BeF1raVtcATuRf2qu8EJAu7FRz1EGUw2eq4NdVPiJztkgThnpb++QVx11wSxgucQfmX6NTG3vmvDaT7u0RNUVQ50rgzXh5c27lXS+9S+fQj67djO2ZI0BcqkKAz1UQrvziHruDRUDOc5Xbhp2y3NTbnhQT4vZ8lSpiLoFFbr77h9AosxWkO844pjuVVCgVtYLAY1UMaAnqKMtcJC2qkr85XVQAXNimErJq0B0nfM/QpyHmb2qYjNit0XAmWedXYXjiYc1fPv7kZLru/di6FmELF3OuWIWYQzZvu+W1ljXbtxWFOdnsjktN3TnGtsbZ1WbslnkQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(346002)(376002)(136003)(39860400002)(451199021)(2616005)(6512007)(6506007)(26005)(478600001)(86362001)(54906003)(66946007)(66556008)(316002)(66446008)(66476007)(64756008)(4326008)(6916009)(186003)(6486002)(71200400001)(53546011)(76116006)(122000001)(41300700001)(38100700002)(5660300002)(2906002)(4744005)(8936002)(8676002)(38070700005)(36756003)(33656002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OUhjUS8wbXVIc2JIWmRuVXNJSkdiN1BYSXhVWDVmbmZMcmlicFROTlhwMkx1?=
- =?utf-8?B?UlFUMHRRbGVDSU1qWWpPeGNqNFYyTTdrK05jUjREdmhyVW1DQjUraDhvKzNG?=
- =?utf-8?B?azUrM21Rekd4cVhkbE9sT1dSUmE4SDdpT1I5SE41K3d1LzJqRVVmbFNjTnND?=
- =?utf-8?B?Uzk4dXkyczZpRkFXc2pRVXhZd2dZekdyQjFzeGUrM2toaDBsb1o5VUtTcndE?=
- =?utf-8?B?YTNmK1EvN0RrR2t6bkFRSFp3RXllSUdLV1hEbk9SamVkem5oTkxjY0J5RkRk?=
- =?utf-8?B?YllCSXEvcDg5cWxibmJvNk9BOG5Bc0dQWTJhdjJBeWdpdjdNUkxNdWlLOG41?=
- =?utf-8?B?djRIckhtaTM5blpvSmI2clBMMlp4MWRTVnpwcWFxVWxiTUliTnptNVV4MjVs?=
- =?utf-8?B?UmZNOEtPS1o1V3R5WkFXNTl3SlFURVJxUkdlM0taVzNQckY2bTh3MHdJalY5?=
- =?utf-8?B?Y0x0NlE4WFQ5UDE1UWo1TVBPNE10Tlp1T2ZoTFdDaGMyeS9MV0kreUxmc1V2?=
- =?utf-8?B?VERQY05pMTR1emU1M3VzdksrL3JnNEJFdTM4TWY5dUtEZ3Z5MkJQRmVnRVQy?=
- =?utf-8?B?Rkl4cTAxSU9BeCtiMGVVNFY4cmZTN1lWcFJqL1ZyWFFRd3YzNldkNGxzamxr?=
- =?utf-8?B?ek9MZmhBREw2RjNZUGxjQytyNjYrZWRMYWkxTm5NYmlGWHhvaXBvUWNlcGdW?=
- =?utf-8?B?ZVdVRzA2d1VTdlo3czlNcElyb2ZhTlFUS1dhQzFNRDJQL0U0NlRiZDNZVFpm?=
- =?utf-8?B?S1MySFZWT1JYNlcvZzdtSEc4WGFSVGJOcklsaEhhNllpSTM1MTF3dzdqZFpL?=
- =?utf-8?B?VTVEK0ptMkYzV1A1NzRhNkp3K2N4b2VweFBxSjNHRU40RlZNZWYvV2FMaDBX?=
- =?utf-8?B?d1l0ZU1USFhrQzh1Z0NtbDl1Y1R6U1RGRjJobC9hMStDdC9aVGVXbU1BUG9p?=
- =?utf-8?B?VWdYR2hGeEFUVTdFbkYrNVV2V3JlZWJPYVJGV3VVNjhKcE1nNE5YMjk0TEdo?=
- =?utf-8?B?YS9FOWxoZTJNcXFScFE3RzhnNmV5NGE0Y0dJYzVJS3craFVxUzBPME85UmNY?=
- =?utf-8?B?VkhsM0ttR0VQTGpxQmVWKzczZEdQT0pKTE1zb09CVitLcmcxZjBjTm45QUtz?=
- =?utf-8?B?YWFxc2Z4REpHRFZ6OE9MemkwMitoRW9vd045WEZmeWlyNWhNWmZmK1NySUc5?=
- =?utf-8?B?R0Q2MU9SdVRSYU5YYitjZVlkTy9mdXpkSXVJODVQejNVK0s4MFNlMFJhTmds?=
- =?utf-8?B?NUY2SkJwaExIa3c2anlrV3Mwb05VNHJ6SDJ3WldyY0RJSThvTGNDZ24ySk5V?=
- =?utf-8?B?U0dRT2owNGVrcXRpbU1RemF4S1VMR2djN0I0MnZFbWVKOVBuS2xBaTVPcFJ3?=
- =?utf-8?B?bE5zM2NWWXZpcnFicm5hUTZvZU1HeEJpVVcrVExDMENpSTkxdFhHMWRTVWtF?=
- =?utf-8?B?c1o5RlBLSnd5R1p1WDhsNlo4TVZkb1hCV0x0TGl3UXFNMGhwdWNJbUwyelcw?=
- =?utf-8?B?TFRZVnNWdzJPS0VEMThjMitJUTBvRDVZNmFoNXFGNlBZa3lHK0RqdE8rTm42?=
- =?utf-8?B?M3MvNTYzODVhRlZIRXF0UEdOMHFGbUpEYzI4YTE1d2dEak5sWk9IY1hKZFpx?=
- =?utf-8?B?Zml2d28wUnhpdFJjZkRFMUFoanpRZTBBZVBIWEFBZHV2OGpXdlJGN051NCtI?=
- =?utf-8?B?U1VHUzJteDZSUDBlTU14S0QzQzV3OXNaRkVHKzJKN0dvK1pzWFZFRDltNml2?=
- =?utf-8?B?bHA0NnFiSTZvTU5kdXh3L05tR0I1OVVramYvOCtmQngyZUtsalQzQnlyeVI1?=
- =?utf-8?B?TG80RERsOFRwaVltbEM2T3BPNGpTU3FHek8wWGczRHRhSU1DVUJFajZwdG5x?=
- =?utf-8?B?Nk9NWjJjbDVjek1XRDRjL0lSSWd2eVlJc1VpcnNTaGtkR2lKQ3IvK1dTanQ5?=
- =?utf-8?B?MnRzRzlucVJ0Q1lQcnpKWlZmM3lxQzFBWEViZzhtNDJ0cTA0Mkczem85RVYv?=
- =?utf-8?B?cXc4U05sd0F5R1lOZUt2MnZFSkthQ2RFaGN3ZFFOaGdVNlBNVmVoQ3czNHNL?=
- =?utf-8?B?QjhZZ0wrOFdHeTJKVE96ZVh1MVFMYWVvcWJTSm5lTC83Q1pwYldkVkpqRFdz?=
- =?utf-8?Q?fIsiJIKDw3aypCRTLKd65IXpS?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C27B42A43B4CA34C8BE7B0855E187060@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 19 Apr 2023 18:59:49 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52AB10CC
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:59:05 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-2f4c431f69cso100088f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:59:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google; t=1681945132; x=1684537132;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PjJblP9HCkjjIHo/kU13fc9iYLloCG3Uuh6D23kY0vc=;
+        b=nTk5f6CtLS/MmLtoHpyDlyW+ywbfxxdVCuXwmJOTzwXYyDPkGOuS2+FJiplYKW4vfq
+         2y+93CRuk37q7ZPee0JEjfCwgeHxkKBUPfZ4VXbHOEMh8IzOGDJ+Wufw5CKFh6ZaTkaw
+         SNpNdFDXJjtLhYFr8f61fbFqSReetcTliElB4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681945132; x=1684537132;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PjJblP9HCkjjIHo/kU13fc9iYLloCG3Uuh6D23kY0vc=;
+        b=icwLwnUKgfAadVi3gvHzMjkU6r+/43k/6NUlF3jiHyzhnM+zlFbSpm8BuNZTJkOked
+         /lRBDdzcVpJXDPL5lgPPmxXamobaquevuO5z8VlYpPV6fIZMH3QUBoQtlVJHIu/5V+tN
+         sALwjS5biCgPzZygyK8/THucZEoipDhwJnvXEBcpDkaECtUG8azqCLhkjUMDhHlw1ppo
+         vnCGc1LAwnYf5P4HwfrIPhdIa7442rk9Zv4bd74SQefvE2ptm/gprGreNFo0POxFVwxY
+         +H649LdR/WEnmGon9F7IMU5V4VNk4jsTdfpD0kcWk3XuFk0WdSGGsuFfjn6qOPMJHJqL
+         TDzw==
+X-Gm-Message-State: AAQBX9eskS0VPz1J1qDBE8A+c4NWHgeXpFlsqbkMbkllhAxzwqemKYuc
+        /B81/IWUnF4TQrylgCk9CVSwTLv9lwf+fCZ+B2u/
+X-Google-Smtp-Source: AKy350YGt6aXJXp62u5I8xT8xPtUVknVoOUPrfBGt4PF7Wd246sH3tBryeH+s7U5kG98p8Nx/gb2kd7YBmEFvW0W2YQ=
+X-Received: by 2002:a05:6000:c8:b0:2f8:e652:dc04 with SMTP id
+ q8-20020a05600000c800b002f8e652dc04mr5505780wrx.45.1681945132022; Wed, 19 Apr
+ 2023 15:58:52 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a00064ae-db07-47af-ea21-08db412990a5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Apr 2023 22:58:17.9119
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aCie5j8DC+qCrH+tbPl7ARISe1K8+6ZOSzKnSgvRKMuaD56FvU4nbHmwrDcjjj2i6MBQlNJufr1AAhj1OSACPA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR05MB6494
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230419221716.3603068-1-atishp@rivosinc.com>
+In-Reply-To: <20230419221716.3603068-1-atishp@rivosinc.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Thu, 20 Apr 2023 04:28:38 +0530
+Message-ID: <CAOnJCUK8RB+UJkOSZP=4G7Gx1KtQ-QrW6WamTF86gPmRshfVsA@mail.gmail.com>
+Subject: Re: [RFC 00/48] RISC-V CoVE support
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org, Alexandre Ghiti <alex@ghiti.fr>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <anup@brainfault.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
+        abrestic@rivosinc.com, Samuel Ortiz <sameo@rivosinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rajnesh Kanwal <rkanwal@rivosinc.com>,
+        Uladzislau Rezki <urezki@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -141,11 +87,507 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gT24gQXByIDE3LCAyMDIzLCBhdCA4OjE3IFBNLCBIdWFuZywgWWluZyA8eWluZy5odWFu
-Z0BpbnRlbC5jb20+IHdyb3RlOg0KPiANCj4gISEgRXh0ZXJuYWwgRW1haWwNCj4gDQo+IE5hZGF2
-IEFtaXQgPG5hbWl0QHZtd2FyZS5jb20+IHdyaXRlczoNCj4+IA0KPj4gWW91IGRpZG7igJl0IG1p
-c3MgYW55dGhpbmcuIEkgd2VudCBvdmVyIHRoZSBjb21tZW50IG9uDQo+PiBpbmNfdGxiX2ZsdXNo
-X3BlbmRpbmcoKSBhbmQgeW91IGZvbGxvdyB0aGUgc2NoZW1lLg0KPiANCj4gVGhhbmtzISAgQ2Fu
-IEkgZ2V0IHlvdXIgYWNrZWQtYnkgb3IgcmV2aWV3ZWQtYnkgZm9yIHRoaXMgcGF0Y2g/DQoNClJl
-dmlld2VkLWJ5OiBOYWRhdiBBbWl0IDxuYW1pdEB2bXdhcmUuY29tPg0KDQpUaGFua3MsDQpOYWRh
-dg==
+On Thu, Apr 20, 2023 at 3:47=E2=80=AFAM Atish Patra <atishp@rivosinc.com> w=
+rote:
+>
+> This patch series adds the RISC-V Confidential VM Extension (CoVE) suppor=
+t to
+> Linux kernel. The RISC-V CoVE specification introduces non-ISA, SBI APIs.=
+ These
+> APIs enable a confidential environment in which a guest VM's data can be =
+isolated
+> from the host while the host retains control of guest VM management and p=
+latform
+> resources(memory, CPU, I/O).
+>
+> This is a very early WIP work. We want to share this with the community t=
+o get any
+> feedback on overall architecture and direction. Any other feedback is wel=
+come too.
+>
+> The detailed CoVE architecture document can be found here [0]. It used to=
+ be
+> called AP-TEE and renamed to CoVE recently to avoid overloading term of T=
+EE in
+> general. The specification is in the draft stages and is subjected to cha=
+nge based
+> on the feedback from the community.
+>
+> The CoVE specification introduces 3 new SBI extensions.
+> COVH - CoVE Host side interface
+> COVG - CoVE Guest side interface
+> COVI - CoVE Secure Interrupt management extension
+>
+> Some key acronyms introduced:
+>
+> TSM - TEE Security Manager
+> TVM - TEE VM (aka Confidential VM)
+>
+> CoVE Architecture:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> The CoVE APIs are designed to be implementation and architecture agnostic=
+,
+> allowing for different deployment models while retaining common host and =
+guest
+> kernel code. Two examples are shown in Figure 1 and Figure 2.
+> As shown in both figures, the architecture introduces a new software comp=
+onent
+> called the "TEE Security Manager" (TSM) that runs in HS mode. The TSM has=
+ minimal
+> hw attested footprint on TCB as it is a passive component that doesn't su=
+pport
+> scheduling or timer interrupts. Both example deployment models provide me=
+mory
+> isolation between the host and the TEE VM (TVM).
+>
+>
+>         Non secure world       |         Secure world         |
+>                                |                              |
+>         Non                    |                              |
+>     Virtualized |  Virtualized |   Virtualized  Virtualized   |
+>         Env     |      Env     |       Env          Env       |
+>    +----------+ | +----------+ |  +----------+ +----------+   |  --------=
+------
+>    |          | | |          | |  |          | |          |   |
+>    | Host Apps| | |   Apps   | |  |   Apps   | |   Apps   |   |        VU=
+-Mode
+>    |  (VMM)   | | |          | |  |          | |          |   |
+>    +----------+ | +----------+ |  +----------+ +----------+   |  --------=
+------
+>         |       | +----------+ |  +----------+ +----------+   |
+>         |       | |          | |  |          | |          |   |
+>         |       | |          | |  |    TVM   | |    TVM   |   |
+>         |       | |   Guest  | |  |   Guest  | |   Guest  |   |       VS-=
+Mode
+>      Syscalls   | +----------+ |  +----------+ +----------+   |
+>         |              |       |        |                     |
+>         |             SBI      |   SBI(COVG + COVI)           |
+>         |              |       |        |                     |
+>   +--------------------------+ |  +---------------------------+  --------=
+------
+>   |     Host (Linux)         | |  |       TSM (Salus)         |
+>   +--------------------------+ |  +---------------------------+
+>              |                 |            |                       HS-Mo=
+de
+>      SBI (COVH + COVI)         |     SBI (COVH + COVI)
+>              |                 |            |
+>   +-----------------------------------------------------------+  --------=
+------
+>   |                    Firmware(OpenSBI) + TSM Driver         |        M-=
+Mode
+>   +-----------------------------------------------------------+  --------=
+------
+>  +-----------------------------------------------------------------------=
+------
+>   |                    Hardware (RISC-V CPU + RoT + IOMMU)
+>   +----------------------------------------------------------------------=
+------
+>                 Figure 1: Host in HS model
+>
+>
+> The deployment model shown in Figure 1 runs the host in HS mode where it =
+is peer
+> to the TSM which also runs in HS mode. It requires another component know=
+n as TSM
+> Driver running in higher privilege mode than host/TSM. It is responsible =
+for switching
+> the context between the host and the TSM. TSM driver also manages the pla=
+tform
+> specific hardware solution via confidential domain bit as described in th=
+e specification[0]
+> to provide the required memory isolation.
+>
+>
+>              Non secure world  |         Secure world
+>                                |
+>          Virtualized Env       |   Virtualized   Virtualized  |
+>                                       Env           Env       |
+>    +-------------------------+ |  +----------+  +----------+  |    ------=
+------
+>    |          | | |          | |  |          |  |          |  |
+>    | Host Apps| | |   Apps   | |  |   Apps   |  |   Apps   |  |        VU=
+-Mode
+>    +----------+ | +----------+ |  +----------+  +----------+  |    ------=
+------
+>         |                      |        |             |       |
+>     Syscalls             SBI   |        |             |       |
+>         |                      |        |             |       |
+>   +--------------------------+ |  +-----------+ +-----------+ |
+>   |     Host (Linux)         | |  |  TVM Guest| |  TVM Guest| |       VS-=
+Mode
+>   +--------------------------+ |  +-----------+ +-----------+ |
+>              |                 |        |             |       |
+>      SBI (COVH + COVI)         |       SBI           SBI      |
+>              |                 |   (COVG + COVI) (COVG + COVI)|
+>              |                 |        |             |       |
+>   +-----------------------------------------------------------+    ------=
+--------
+>   |                    TSM(Salus)                             |        HS=
+-Mode
+>   +-----------------------------------------------------------+    ------=
+--------
+>                               |
+>                              SBI
+>                               |
+>   +---------------------------------------------------------+    --------=
+------
+>   |                    Firmware(OpenSBI)                  |        M-Mode
+>   +---------------------------------------------------------+    --------=
+------
+>  +-----------------------------------------------------------------------=
+------
+>   |                    Hardware (RISC-V CPU + RoT + IOMMU)
+>   +----------------------------------------------------------------------=
+------
+>                         Figure 2: Host in VS model
+>
+>
+> The deployment model shown in Figure 2 simplifies the context switch and =
+memory isolation
+> by running the host in VS mode as a guest of TSM. Thus, the memory isolat=
+ion is
+> achieved by gstage mapping by the TSM. We don't need any additional hardw=
+are confidential
+> domain bit to provide memory isolation. The downside of this model the ho=
+st has to run the
+> non-confidential VMs in nested environment which may have lower performan=
+ce (yet to be measured).
+> The current implementation Salus(TSM) doesn't support full nested virtual=
+ization yet.
+>
+> The platform must have a RoT to provide attestation in either model.
+> This patch series implements the APIs defined by CoVE. The current TSM im=
+plementation
+> allows the host to run TVMs as shown in figure 2. We are working on deplo=
+yment
+> model 1 in parallel. We do not expect any significant changes in either h=
+ost/guest side
+> ABI due to that.
+>
+> Shared memory between the host & TSM:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> To accelerate the H-mode CSR/GPR access, CoVE also reuses the Nested Acce=
+leration (NACL)
+> SBI extension[1]. NACL defines a per physical cpu shared memory area that=
+ is allocated
+> at the boot. It allows the host running in VS mode to access H-mode CSR/G=
+PR easily
+> without trapping into the TSM. The CoVE specification clearly defines the=
+ exact
+> state of the shared memory with r/w permissions at every call.
+>
+> Secure Interrupt management:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> The CoVE specification relies on the MSI based interrupt scheme defined i=
+n Advanced Interrupt
+> Architecture specification[2]. The COVI SBI extension adds functions to b=
+ind
+> a guest interrupt file to a TVMs. After that, only TCB components (TSM, T=
+VM, TSM driver)
+> can modify that. The host can inject an interrupt via TSM only.
+> The TVMs are also in complete control of which interrupts it can receive.=
+ By default,
+> all interrupts are denied. In this proof-of-concept implementation, all t=
+he interrupts
+> are allowed by the guest at boot time to keep it simple.
+>
+> Device I/O:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> In order to support paravirt I/O devices, SWIOTLB bounce buffer must be u=
+sed by the
+> guest. As the host can not access confidential memory, this buffer memory
+> must be shared with the host via share/unshare functions defined in COVG =
+SBI extension.
+> RISC-V implementation achieves this generalizing mem_encrypt_init() simil=
+ar to TDX/SEV/CCA.
+> That's why, the CoVE Guest is only allowed to use virtio devices with VIR=
+TIO_F_ACCESS_PLATFORM
+> and VIRTIO_F_VERSION_1 as they force virtio drivers to use the DMA API.
+>
+> MMIO emulation:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> TVM can register regions of address space as MMIO regions to be emulated =
+by
+> the host. TSM provides explicit SBI functions i.e. SBI_EXT_COVG_[ADD/REMO=
+VE]_MMIO_REGION
+> to request/remove MMIO regions. Any reads or writes to those MMIO region =
+after
+> SBI_EXT_COVG_ADD_MMIO_REGION call are forwarded to the host for emulation=
+.
+>
+> This series allows any ioremapped memory to be emulated as MMIO region wi=
+th
+> above APIs via arch hookups inspired from pKVM work. We are aware that th=
+is model
+> doesn't address all the threat vectors. We have also implemented the devi=
+ce
+> filtering/authorization approach adopted by TDX[4]. However, those patche=
+s are not
+> part of this series as the base TDX patches are still under active develo=
+pment.
+> RISC-V CoVE will also adapt the revamped device filtering work once it is=
+ accepted
+> by the Linux community in the future.
+>
+> The direct assignment of devices are a work in progress and will be added=
+ in the future[4].
+>
+> VMM support:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> This series is only tested with kvmtool support. Other VMM support (qemu-=
+kvm, crossvm/rust-vmm)
+> will be added later.
+>
+> Test cases:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> We are working on kvm selftest for CoVE. We will post them as soon as the=
+y are ready.
+> We haven't started any work on kvm unit-tests as RISC-V doesn't have basi=
+c infrastructure
+> to support that. Once the kvm uni-test infrastructure is in place, we wil=
+l add
+> support for CoVE as well.
+>
+> Open design questions:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> 1. The current implementation has two separate configs for guest(CONFIG_R=
+ISCV_COVE_GUEST)
+> and the host (RISCV_COVE_HOST). The default defconfig will enable both so=
+ that
+> same unified image works as both host & guest. Most likely distro prefer =
+this way
+> to minimize the maintenance burden but some may want a minimal CoVE guest=
+ image
+> that has only hardened drivers. In addition to that, Android runs a micro=
+droid instance
+> in the confidential guests. A separate config will help in those case. Pl=
+ease let us
+> know if there is any concern with two configs.
+>
+> 2. Lazy gstage page allocation vs upfront allocation with page pool.
+> Currently, all gstage mappings happen at runtime during the fault. This i=
+s expensive
+> as we need to convert that page to confidential memory as well. A page po=
+ol framework
+> may be a better choice which can hold all the confidential pages which ca=
+n be
+> pre-allocated upfront. A generic page pool infrastructure may benefit oth=
+er CC solutions ?
+>
+> 3. In order to allow both confidential VM and non-confidential VM, the se=
+ries
+> uses regular branching instead of static branches for CoVE VM specific ca=
+ses through
+> out KVM. That may cause a few more branch penalties while running regular=
+ VMs.
+> The alternate option is to use function pointers for any function that ne=
+eds to
+> take a different path. As per my understanding, that would be worse than =
+branches.
+>
+> Patch organization:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> This series depends on quite a few RISC-V patches that are not upstream y=
+et.
+> Here are the dependencies.
+>
+> 1. RISC-V IPI improvement series
+> 2. RISC-V AIA support series.
+> 3. RISC-V NACL support series
+>
+> In this series, PATCH [0-5] are generic improvement and cleanup patches w=
+hich
+> can be merged independently.
+>
+> PATCH [6-26, 34-37] adds host side for CoVE.
+> PATCH [27-33] adds the interrupt related changes.
+> PATCH [34-49] Adds the guest side changes for CoVE.
+>
+> The TSM project is written in rust and can be found here:
+> https://github.com/rivosinc/salus
+>
+> Running the stack
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> To run/test the stack, you would need the following components :
+>
+> 1) Qemu
+> 2) Common Host & Guest Kernel
+> 3) kvmtool
+> 4) Host RootFS with KVMTOOL and Guest Kernel
+> 5) Salus
+>
+> The detailed steps are available at[6]
+>
+> The Linux kernel patches are also available at [7] and the kvmtool patche=
+s
+> are available at [8].
+>
+> TODOs
+> =3D=3D=3D=3D=3D=3D=3D
+> As this is a very early work, the todo list is quite long :).
+> Here are some of them (not in any specific order)
+>
+> 1. Support fd based private memory interface proposed in
+>    https://lkml.org/lkml/2022/1/18/395
+> 2. Align with updated guest runtime device filtering approach.
+> 3. IOMMU integration
+> 4. Dedicated device assignment via TDSIP & SPDM[4]
+> 5. Support huge pages
+> 6. Page pool allocator to avoid convert/reclaim at every fault
+> 7. Other VMM support (qemu-kvm, crossvm)
+> 8. Complete the PoC for the deployment model 1 where host runs in HS mode
+> 9. Attestation integration
+> 10. Harden the interrupt allowed list
+> 11. kvm self-tests support for CoVE
+> 11. kvm unit-tests support for CoVE
+> 12. Guest hardening
+> 13. Port pKVM on RISC-V using CoVE
+> 14. Any other ?
+>
+> Links
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> [0] CoVE architecture Specification.
+>     https://github.com/riscv-non-isa/riscv-ap-tee/blob/main/specification=
+/riscv-aptee-spec.pdf
+
+I just noticed that this link is broken due to a recent PR merge. Here
+is the updated link
+https://github.com/riscv-non-isa/riscv-ap-tee/blob/main/specification/riscv=
+-cove.pdf
+
+Sorry for the noise.
+
+> [1] https://lists.riscv.org/g/sig-hypervisors/message/260
+> [2] https://github.com/riscv/riscv-aia/releases/download/1.0-RC2/riscv-in=
+terrupts-1.0-RC2.pdf
+> [3] https://github.com/rivosinc/linux/tree/cove_integration_device_filter=
+ing1
+> [4] https://github.com/intel/tdx/commits/guest-filter-upstream
+> [5] https://lists.riscv.org/g/tech-ap-tee/message/83
+> [6] https://github.com/rivosinc/cove/wiki/CoVE-KVM-RISCV64-on-QEMU
+> [7] https://github.com/rivosinc/linux/commits/cove-integration
+> [8] https://github.com/rivosinc/kvmtool/tree/cove-integration-03072023
+>
+> Atish Patra (33):
+> RISC-V: KVM: Improve KVM error reporting to the user space
+> RISC-V: KVM: Invoke aia_update with preempt disabled/irq enabled
+> RISC-V: KVM: Add a helper function to get pgd size
+> RISC-V: Add COVH SBI extensions definitions
+> RISC-V: KVM: Implement COVH SBI extension
+> RISC-V: KVM: Add a barebone CoVE implementation
+> RISC-V: KVM: Add UABI to support static memory region attestation
+> RISC-V: KVM: Add CoVE related nacl helpers
+> RISC-V: KVM: Implement static memory region measurement
+> RISC-V: KVM: Use the new VM IOCTL for measuring pages
+> RISC-V: KVM: Exit to the user space for trap redirection
+> RISC-V: KVM: Return early for gstage modifications
+> RISC-V: KVM: Skip dirty logging updates for TVM
+> RISC-V: KVM: Add a helper function to trigger fence ops
+> RISC-V: KVM: Skip most VCPU requests for TVMs
+> RISC-V : KVM: Skip vmid/hgatp management for TVMs
+> RISC-V: KVM: Skip TLB management for TVMs
+> RISC-V: KVM: Register memory regions as confidential for TVMs
+> RISC-V: KVM: Add gstage mapping for TVMs
+> RISC-V: KVM: Handle SBI call forward from the TSM
+> RISC-V: KVM: Implement vcpu load/put functions for CoVE guests
+> RISC-V: KVM: Wireup TVM world switch
+> RISC-V: KVM: Skip HVIP update for TVMs
+> RISC-V: KVM: Implement COVI SBI extension
+> RISC-V: KVM: Add interrupt management functions for TVM
+> RISC-V: KVM: Skip AIA CSR updates for TVMs
+> RISC-V: KVM: Perform limited operations in hardware enable/disable
+> RISC-V: KVM: Indicate no support user space emulated IRQCHIP
+> RISC-V: KVM: Add AIA support for TVMs
+> RISC-V: KVM: Hookup TVM VCPU init/destroy
+> RISC-V: KVM: Initialize CoVE
+> RISC-V: KVM: Add TVM init/destroy calls
+> drivers/hvc: sbi: Disable HVC console for TVMs
+>
+> Rajnesh Kanwal (15):
+> mm/vmalloc: Introduce arch hooks to notify ioremap/unmap changes
+> RISC-V: KVM: Update timer functionality for TVMs.
+> RISC-V: Add COVI extension definitions
+> RISC-V: KVM: Read/write gprs from/to shmem in case of TVM VCPU.
+> RISC-V: Add COVG SBI extension definitions
+> RISC-V: Add CoVE guest config and helper functions
+> RISC-V: Implement COVG SBI extension
+> RISC-V: COVE: Add COVH invalidate, validate, promote, demote and
+> remove APIs.
+> RISC-V: KVM: Add host side support to handle COVG SBI calls.
+> RISC-V: Allow host to inject any ext interrupt id to a CoVE guest.
+> RISC-V: Add base memory encryption functions.
+> RISC-V: Add cc_platform_has() for RISC-V for CoVE
+> RISC-V: ioremap: Implement for arch specific ioremap hooks
+> riscv/virtio: Have CoVE guests enforce restricted virtio memory
+> access.
+> RISC-V: Add shared bounce buffer to support DBCN for CoVE Guest.
+>
+> arch/riscv/Kbuild                       |    2 +
+> arch/riscv/Kconfig                      |   27 +
+> arch/riscv/cove/Makefile                |    2 +
+> arch/riscv/cove/core.c                  |   40 +
+> arch/riscv/cove/cove_guest_sbi.c        |  109 +++
+> arch/riscv/include/asm/cove.h           |   27 +
+> arch/riscv/include/asm/covg_sbi.h       |   38 +
+> arch/riscv/include/asm/csr.h            |    2 +
+> arch/riscv/include/asm/kvm_cove.h       |  206 +++++
+> arch/riscv/include/asm/kvm_cove_sbi.h   |  101 +++
+> arch/riscv/include/asm/kvm_host.h       |   10 +-
+> arch/riscv/include/asm/kvm_vcpu_sbi.h   |    3 +
+> arch/riscv/include/asm/mem_encrypt.h    |   26 +
+> arch/riscv/include/asm/sbi.h            |  107 +++
+> arch/riscv/include/uapi/asm/kvm.h       |   17 +
+> arch/riscv/kernel/irq.c                 |   12 +
+> arch/riscv/kernel/setup.c               |    2 +
+> arch/riscv/kvm/Makefile                 |    1 +
+> arch/riscv/kvm/aia.c                    |  101 ++-
+> arch/riscv/kvm/aia_device.c             |   41 +-
+> arch/riscv/kvm/aia_imsic.c              |  127 ++-
+> arch/riscv/kvm/cove.c                   | 1005 +++++++++++++++++++++++
+> arch/riscv/kvm/cove_sbi.c               |  490 +++++++++++
+> arch/riscv/kvm/main.c                   |   30 +-
+> arch/riscv/kvm/mmu.c                    |   45 +-
+> arch/riscv/kvm/tlb.c                    |   11 +-
+> arch/riscv/kvm/vcpu.c                   |   69 +-
+> arch/riscv/kvm/vcpu_exit.c              |   34 +-
+> arch/riscv/kvm/vcpu_insn.c              |  115 ++-
+> arch/riscv/kvm/vcpu_sbi.c               |   16 +
+> arch/riscv/kvm/vcpu_sbi_covg.c          |  232 ++++++
+> arch/riscv/kvm/vcpu_timer.c             |   26 +-
+> arch/riscv/kvm/vm.c                     |   34 +-
+> arch/riscv/kvm/vmid.c                   |   17 +-
+> arch/riscv/mm/Makefile                  |    3 +
+> arch/riscv/mm/init.c                    |   17 +-
+> arch/riscv/mm/ioremap.c                 |   45 +
+> arch/riscv/mm/mem_encrypt.c             |   61 ++
+> drivers/tty/hvc/hvc_riscv_sbi.c         |    5 +
+> drivers/tty/serial/earlycon-riscv-sbi.c |   51 +-
+> include/uapi/linux/kvm.h                |    8 +
+> mm/vmalloc.c                            |   16 +
+> 42 files changed, 3222 insertions(+), 109 deletions(-)
+> create mode 100644 arch/riscv/cove/Makefile
+> create mode 100644 arch/riscv/cove/core.c
+> create mode 100644 arch/riscv/cove/cove_guest_sbi.c
+> create mode 100644 arch/riscv/include/asm/cove.h
+> create mode 100644 arch/riscv/include/asm/covg_sbi.h
+> create mode 100644 arch/riscv/include/asm/kvm_cove.h
+> create mode 100644 arch/riscv/include/asm/kvm_cove_sbi.h
+> create mode 100644 arch/riscv/include/asm/mem_encrypt.h
+> create mode 100644 arch/riscv/kvm/cove.c
+> create mode 100644 arch/riscv/kvm/cove_sbi.c
+> create mode 100644 arch/riscv/kvm/vcpu_sbi_covg.c
+> create mode 100644 arch/riscv/mm/ioremap.c
+> create mode 100644 arch/riscv/mm/mem_encrypt.c
+>
+> --
+> 2.25.1
+>
+
+
+--=20
+Regards,
+Atish
