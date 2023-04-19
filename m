@@ -2,144 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D6C6E7158
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A08626E7166
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbjDSCul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 22:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36304 "EHLO
+        id S231376AbjDSDET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 23:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbjDSCuj (ORCPT
+        with ESMTP id S231174AbjDSDEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 22:50:39 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EC6E66;
-        Tue, 18 Apr 2023 19:50:33 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [7.193.23.202])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q1QGh6HrjzsRNd;
-        Wed, 19 Apr 2023 10:49:00 +0800 (CST)
-Received: from localhost.localdomain (10.67.174.95) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 19 Apr 2023 10:50:30 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH v2] perf/core: Fix perf_sample_data not properly initialized for different swevents in perf_tp_event()
-Date:   Wed, 19 Apr 2023 02:48:32 +0000
-Message-ID: <20230419024832.181874-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        Tue, 18 Apr 2023 23:04:15 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654051999;
+        Tue, 18 Apr 2023 20:04:12 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6a5f765d595so881801a34.0;
+        Tue, 18 Apr 2023 20:04:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681873451; x=1684465451;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vqy9obDZIsKYRaRdBaeKmhCuZAq4kt0Nx5h/9mD9nOE=;
+        b=A64I/55zfIX2eYL+tHsfpsyxyfgA2xV5F3MS0SNYQswNukj4eB6KIIlmgLRfpcAqU9
+         pR7BuUAgrPi44s5prY4B4GzdMpWASzgt2JzlE0suzXJtxqjwesWGcQdy8oTB0BG+uGBg
+         jxB8F/ss4HIxsiYf8jhyP0jbY3FL/Ovynxka2eXx5KZggmGXr77mhxUv/jMl52FRWO8P
+         esSVv+kauIhzSA/V3sPnW9wABzFQHh5DhRa8x61okbcHMm89ewhC8O4COCJfONREw/CI
+         I2cpqev2uPqgFeQzXmXSo6C9gBZyE6x66oXlT5fyI7TsTrRMQLd9+LxUWjJICRY7Zkoa
+         dg2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681873451; x=1684465451;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vqy9obDZIsKYRaRdBaeKmhCuZAq4kt0Nx5h/9mD9nOE=;
+        b=K9BJvsTokXuFzzqPNmvSmNKrgJ6A76NM8vS4h3kEeRZbOM3N8KmHqgD4mFIoxJNw+x
+         IHQy0xIfwwtgqpHy3/34vDOdpKSdPcMro98HX6dVW0uUPG/G/bx917FCFSsJLGe5d4Ek
+         RgccERxRlgayLVuplSdMbwf1z0t7I+yzUv01qXmrIiOUotSZhVN/CCQGbx0uX4c4lQ6M
+         oDKT8vLcvf2BMmbO/SwvffNzOhLOJ4lT02orKORttWyvIOWwgOWjcWD6KYmUAK9IP+tm
+         h64AfzIVp+Y2bm9fL1yWJrXhuPfqtvqXUnjQUt+T/bn2m+yPKVq+COdAPUdzlaNu8eHL
+         O9Qw==
+X-Gm-Message-State: AAQBX9d9rt215JX4m6ogMSzPlbA9tDzXKOV5eCoWdcUm/Cvu20eHabzV
+        lmVUK6faoXViYnoaebZz6vDU/l+Et2E=
+X-Google-Smtp-Source: AKy350YFiI0NAWpwFzIrAkC63w04jgUXNL65RJ+sEzA6dY6uIMTvDW8Is0ssPCsKpreiaWSlI48ExQ==
+X-Received: by 2002:a05:6830:4da:b0:6a5:f6f6:4ebf with SMTP id s26-20020a05683004da00b006a5f6f64ebfmr2356875otd.37.1681873451795;
+        Tue, 18 Apr 2023 20:04:11 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id v16-20020a05683011d000b0069457b86060sm6391395otq.47.2023.04.18.20.04.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 20:04:11 -0700 (PDT)
+Message-ID: <d96b061f-737c-5f8c-0856-47faa3852074@gmail.com>
+Date:   Tue, 18 Apr 2023 23:51:34 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.95]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/3] rust: alloc: clarify what is the upstream version
+Content-Language: en-US
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Josh Stone <jistone@redhat.com>,
+        William Brown <william.brown@suse.com>,
+        Georgy Yakovlev <gyakovlev@gentoo.org>,
+        Jan Alexander Steffens <jan.steffens@gmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+References: <20230418214347.324156-1-ojeda@kernel.org>
+ <20230418214347.324156-2-ojeda@kernel.org>
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230418214347.324156-2-ojeda@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-data->sample_flags may be modified in perf_prepare_sample(),
-in perf_tp_event(), different swevents use the same on-stack
-perf_sample_data, the previous swevent may change sample_flags in
-perf_prepare_sample(), as a result, some members of perf_sample_data are
-not correctly initialized when next swevent_event preparing sample
-(for example data->id, the value varies according to swevent).
+On 4/18/23 18:43, Miguel Ojeda wrote:
+> It may be unclear for readers which upstream Rust version these files
+> are based on. They may be unaware that they are intended to match the
+> minimum (and only, so far) supported version of Rust in the kernel.
+> 
+> Thus clarify it.
+> 
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  rust/alloc/README.md | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/rust/alloc/README.md b/rust/alloc/README.md
+> index c89c753720b5..eb6f22e94ebf 100644
+> --- a/rust/alloc/README.md
+> +++ b/rust/alloc/README.md
+> @@ -10,6 +10,9 @@ upstream. In general, only additions should be performed (e.g. new
+>  methods). Eventually, changes should make it into upstream so that,
+>  at some point, this fork can be dropped from the kernel tree.
+>  
+> +The Rust upstream version on top of which these files are based matches
+> +the output of `scripts/min-tool-version.sh rustc`.
+> +
+>  
+>  ## Rationale
+>  
 
-A simple scenario triggers this problem is as follows:
-
-  # perf record -e sched:sched_switch --switch-output-event sched:sched_switch -a sleep 1
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209014396 ]
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209014662 ]
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209014910 ]
-  [ perf record: Woken up 0 times to write data ]
-  [ perf record: Dump perf.data.2023041209015164 ]
-  [ perf record: Captured and wrote 0.069 MB perf.data.<timestamp> ]
-  # ls -l
-  total 860
-  -rw------- 1 root root  95694 Apr 12 09:01 perf.data.2023041209014396
-  -rw------- 1 root root 606430 Apr 12 09:01 perf.data.2023041209014662
-  -rw------- 1 root root  82246 Apr 12 09:01 perf.data.2023041209014910
-  -rw------- 1 root root  82342 Apr 12 09:01 perf.data.2023041209015164
-  # perf script -i perf.data.2023041209014396
-  0x11d58 [0x80]: failed to process type: 9 [Bad address]
-
-Solution: Re-initialize perf_sample_data before processing different swevents.
-
-After fix:
-
-  # perf record -e sched:sched_switch --switch-output-event sched:sched_switch -a sleep 1
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209442259 ]
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209442514 ]
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209442760 ]
-  [ perf record: Woken up 0 times to write data ]
-  [ perf record: Dump perf.data.2023041209443003 ]
-  [ perf record: Captured and wrote 0.069 MB perf.data.<timestamp> ]
-  # ls -l
-  total 864
-  -rw------- 1 root root 100166 Apr 12 09:44 perf.data.2023041209442259
-  -rw------- 1 root root 606438 Apr 12 09:44 perf.data.2023041209442514
-  -rw------- 1 root root  82246 Apr 12 09:44 perf.data.2023041209442760
-  -rw------- 1 root root  82342 Apr 12 09:44 perf.data.2023041209443003
-  # perf script -i perf.data.2023041209442259 | head -n 5
-              perf   232 [000]    66.846217: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=D ==> next_comm=perf next_pid=234 next_prio=120
-              perf   234 [000]    66.846449: sched:sched_switch: prev_comm=perf prev_pid=234 prev_prio=120 prev_state=S ==> next_comm=perf next_pid=232 next_prio=120
-              perf   232 [000]    66.846546: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=R ==> next_comm=perf next_pid=234 next_prio=120
-              perf   234 [000]    66.846606: sched:sched_switch: prev_comm=perf prev_pid=234 prev_prio=120 prev_state=S ==> next_comm=perf next_pid=232 next_prio=120
-              perf   232 [000]    66.846646: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=R ==> next_comm=perf next_pid=234 next_prio=120
-
-Fixes: bb447c27a467 ("perf/core: Set data->sample_flags in perf_prepare_sample()")
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- kernel/events/core.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 435815d3be3f..6c4356ad453f 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -10144,14 +10144,22 @@ void perf_tp_event(u16 event_type, u64 count, void *record, int entry_size,
- 		},
- 	};
- 
--	perf_sample_data_init(&data, 0, 0);
--	perf_sample_save_raw_data(&data, &raw);
--
- 	perf_trace_buf_update(record, event_type);
- 
- 	hlist_for_each_entry_rcu(event, head, hlist_entry) {
--		if (perf_tp_event_match(event, &data, regs))
-+		if (perf_tp_event_match(event, &data, regs)) {
-+			/*
-+			 * Here use the same on-stack perf_sample_data,
-+			 * some members in data are event-specific and
-+			 * need to be re-computed for different sweveents.
-+			 * Re-initialize data->sample_flags each time safely
-+			 * to avoid the problem that next event skips preparing
-+			 * data because data->sample_flags is set.
-+			 */
-+			perf_sample_data_init(&data, 0, 0);
-+			perf_sample_save_raw_data(&data, &raw);
- 			perf_swevent_event(event, count, &data, regs);
-+		}
- 	}
- 
- 	/*
--- 
-2.30.GIT
-
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
