@@ -2,228 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9EA6E80AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B69A76E80AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232543AbjDSRy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 13:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
+        id S233044AbjDSRzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 13:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjDSRyX (ORCPT
+        with ESMTP id S230346AbjDSRzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 13:54:23 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692BB2D56
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:54:21 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-2f625d52275so3468592f8f.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:54:21 -0700 (PDT)
+        Wed, 19 Apr 2023 13:55:17 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA594ECB
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:55:16 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id d10-20020a25cd0a000000b00b956d4a5a04so183533ybf.22
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:55:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1681926860; x=1684518860;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yj8PvCkjhqlGLpJgZC/Q2Bpv2VR5GOR+cVFRYANmF9w=;
-        b=tCM9O56kNnHzXWe9/6XSrxEfZ0NJbNQPHtKUnEr1krjp80qJqtuAFEmUKCT4g9lFZd
-         vRIlA+qPPw91grXR5DWu+2Th7pEt4fFIoe9fxeAKvdLwoj6Uwb7lx6y7TovoIhXtdTOc
-         IDbQLzZhWBlwX8b1h3u4/NC7dtGJU7FfReEfsq1F0e1mluIOtaprVWl2YDuezxT1WPoA
-         qPcaSaTRpMaC9qqDPZgM9371FJ23xgMiF/HMXxNqNYnCrZ4eWjSPrHXSigdlsbbrp4yP
-         +IwVSXWwsgJ3BltcO15sIqNKmLPTXO95ZmO7ij9+3nJMk+auxmY4brp6HCatqKgGGJcT
-         lrPQ==
+        d=google.com; s=20221208; t=1681926915; x=1684518915;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hfKbsTvYMuDBJ3f8L2RgBa2t3+n8sbG5Rzd4mp8z1KE=;
+        b=0pVIsViMHhkGqQpcek7+vhQ9W+oXFYe2LJRj96FsB7BgMi5SHS8QW+hLSYNgTqPtxn
+         JqAsWl3L5h4nCg4EsUZXeKVPpMirFYNYyvmtzfqPP/ExjsfGXKM9nW1XUOTSAMzEOk8t
+         OS07Yr4msyQd4vett/5WwJ/HRb/IN6AqQKI53ZJpfpOzYe1aJ3x+3vOOchmscpaJA7YA
+         mDrn0KgKwCfHiunTE3uSxpmLMGMLZ1nuzM38wmnvF8u1BXlcWpRyG7aRALIShGn5RUWx
+         CISnbxXrKjnph1jESJ6/0zWPu8yafJ5p+coupXok/+zO06hgDI2Ys5G1i52+zf6nuXX6
+         1c0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681926860; x=1684518860;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Yj8PvCkjhqlGLpJgZC/Q2Bpv2VR5GOR+cVFRYANmF9w=;
-        b=FPBoCGzTvLjdm3WZTJm2G5wCv0Kjow9EXAZ8JgrnqrZrVKpSKomD80i4aI5u56s1GM
-         qgY99ylh6gn8C/bxd5FKdr9JDHA4PwOtrZbPLgS2NGLgQe3kRzTKNMhbe7qKbtNge/Pl
-         0hiZzTA0IStnYsmEDg8tqEGygIlycG6d4180MvlSbtJ5rJAZuzzrDP75emxSycLu3Cpt
-         iEmDWeSTJ+cVbxaHrqKQspHd2teUBXzl0Fw/lXzU7mEywl2PIywD6ernW/kc2bHO15ZU
-         vxYKRudxjnUh2EWc5/SQl06XwCVKRFRNjgBwLZuVKHcPeDI9t0vbWazTk8uR1G623ERO
-         CsQQ==
-X-Gm-Message-State: AAQBX9f/Bbj8wMgIgs/MObeOTRql81ojiu7cxVpVVmCapN2ocH5POeOL
-        vfhOwtpc2l/3wp33efmAyLIpxw==
-X-Google-Smtp-Source: AKy350b7N3K1PIsDxip1YeFxObxVGjVJMIaPkVDiKdgvKCFeHAbPsk5En/D9eoavfPRnvFWU4Iib7Q==
-X-Received: by 2002:adf:ee86:0:b0:2f8:3225:2bc2 with SMTP id b6-20020adfee86000000b002f832252bc2mr5337794wro.41.1681926859842;
-        Wed, 19 Apr 2023 10:54:19 -0700 (PDT)
-Received: from airbuntu (host109-154-46-114.range109-154.btcentralplus.com. [109.154.46.114])
-        by smtp.gmail.com with ESMTPSA id y14-20020adffa4e000000b002f5fbc6ffb2sm16248915wrr.23.2023.04.19.10.54.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 10:54:19 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 18:54:14 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     David Dai <davidai@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Qais Yousef <qyousef@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1] sched/uclamp: Introduce
- SCHED_FLAG_RESET_UCLAMP_ON_FORK flag
-Message-ID: <20230419175414.ycnlaperdkjxgypx@airbuntu>
-References: <20230416213406.2966521-1-davidai@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230416213406.2966521-1-davidai@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1681926915; x=1684518915;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hfKbsTvYMuDBJ3f8L2RgBa2t3+n8sbG5Rzd4mp8z1KE=;
+        b=ChjaE87DJR7RdSv0Pbosu+HADov8hOp4VXMJdxUrcCUrb/AWa3P+6BjZGhjsEUs39B
+         8aVRbxa4mBK7uLPA4XWWDulWON1udhTYuRO34jzXBQGFJl2YGieHgE9sANl5GhQZ1GeX
+         d1NvsVkatZfbAYWnO/hQVdQAD97XbZPfCdDhRPmJYzuhdEuIVG/kikaXNZc6zwlDWhOV
+         QC30CQoIIrwNXNfUzK3uRRxFBsxEnJJwY2iAej6cYcwuIhawmTmf3pCENBvkVzUF4x6C
+         44x8Vc2lIsxxJvFOD/3kNkgSE3JUcYI2L1eg4fGP+hl/r0+PWkzSwXpCbSLAq1O8XiOT
+         A/mQ==
+X-Gm-Message-State: AAQBX9colqxV6MZAhn7qa/lM7L/y/Xrb8jA1wjPuEj/9zkNrJJ3Pq80X
+        O6ctPRTR3bHJksMQvgNWV6YwJauAnfe4iw==
+X-Google-Smtp-Source: AKy350ZnW4FMeGR7MYtF5Mj6A5GrZFl9LH1s+yJ9nRosIkTgHK6BQTU8w1BwI09rAqNvtLTH2oaG5zjMKLs9LQ==
+X-Received: from pranav-first.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:390b])
+ (user=pranavpp job=sendgmr) by 2002:a25:d0d2:0:b0:b92:5a75:9f55 with SMTP id
+ h201-20020a25d0d2000000b00b925a759f55mr377324ybg.1.1681926915241; Wed, 19 Apr
+ 2023 10:55:15 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 17:55:02 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <20230419175502.919999-1-pranavpp@google.com>
+Subject: [PATCH] scsi: pm80xx: Add GET_NVMD timeout during probe
+From:   Pranav Prasad <pranavpp@google.com>
+To:     Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Changyuan Lyu <changyuanl@google.com>,
+        Pranav Prasad <pranavpp@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David!
+From: Changyuan Lyu <changyuanl@google.com>
 
-On 04/16/23 14:34, David Dai wrote:
-> A userspace service may manage uclamp dynamically for individual tasks and
-> a child task will unintentionally inherit a pesudo-random uclamp setting.
-> This could result in the child task being stuck with a static uclamp value
-> that results in poor performance or poor power.
-> 
-> Using SCHED_FLAG_RESET_ON_FORK is too coarse for this usecase and will
-> reset other useful scheduler attributes. Adding a
-> SCHED_FLAG_RESET_UCLAMP_ON_FORK will allow userspace to have finer control
-> over scheduler attributes of child processes.
+Added a wait timeout to prevent the kernel from waiting for the 
+GET_NVMD response forever during probe. Added a check for the
+controller state before issuing GET_NVMD request.
 
-Thanks a lot for the patch. This has a been a known limitation for a while but
-didn't manage to find the time to push anything yet.
+Signed-off-by: Changyuan Lyu <changyuanl@google.com>
+Signed-off-by: Pranav Prasad <pranavpp@google.com>
+---
+ drivers/scsi/pm8001/pm8001_init.c | 29 ++++++++++++++++++++++-------
+ 1 file changed, 22 insertions(+), 7 deletions(-)
 
-ADPF (Android Dynamic Performance Framework) exposes APIs to manage performance
-for a set of pids [1]. Only these tasks belong to the session and any forked
-tasked is expected to have its uclamp values reset. But as you pointed out, the
-current RESET_ON_FORK resets everything, but we don't want that as these
-attributes don't belong to ADPF to decide whether they should be reset too or
-not. And not resetting them means we can end up with tasks inheriting random
-uclamp values unintentionally. We can't tell these tasks not to fork anything.
-If the forked tasks are expected to be part of the session, then their pids
-must be added explicitly.
+diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
+index 7e589fe3e010..5ca20ccdce34 100644
+--- a/drivers/scsi/pm8001/pm8001_init.c
++++ b/drivers/scsi/pm8001/pm8001_init.c
+@@ -666,7 +666,7 @@ static void  pm8001_post_sas_ha_init(struct Scsi_Host *shost,
+  * Currently we just set the fixed SAS address to our HBA, for manufacture,
+  * it should read from the EEPROM
+  */
+-static void pm8001_init_sas_add(struct pm8001_hba_info *pm8001_ha)
++static int pm8001_init_sas_add(struct pm8001_hba_info *pm8001_ha)
+ {
+ 	u8 i, j;
+ 	u8 sas_add[8];
+@@ -679,6 +679,12 @@ static void pm8001_init_sas_add(struct pm8001_hba_info *pm8001_ha)
+ 	struct pm8001_ioctl_payload payload;
+ 	u16 deviceid;
+ 	int rc;
++	unsigned long time_remaining;
++
++	if (PM8001_CHIP_DISP->fatal_errors(pm8001_ha)) {
++		pm8001_dbg(pm8001_ha, FAIL, "controller is in fatal error state\n");
++		return -EIO;
++	}
+ 
+ 	pci_read_config_word(pm8001_ha->pdev, PCI_DEVICE_ID, &deviceid);
+ 	pm8001_ha->nvmd_completion = &completion;
+@@ -703,16 +709,23 @@ static void pm8001_init_sas_add(struct pm8001_hba_info *pm8001_ha)
+ 	payload.offset = 0;
+ 	payload.func_specific = kzalloc(payload.rd_length, GFP_KERNEL);
+ 	if (!payload.func_specific) {
+-		pm8001_dbg(pm8001_ha, INIT, "mem alloc fail\n");
+-		return;
++		pm8001_dbg(pm8001_ha, FAIL, "mem alloc fail\n");
++		return -ENOMEM;
+ 	}
+ 	rc = PM8001_CHIP_DISP->get_nvmd_req(pm8001_ha, &payload);
+ 	if (rc) {
+ 		kfree(payload.func_specific);
+-		pm8001_dbg(pm8001_ha, INIT, "nvmd failed\n");
+-		return;
++		pm8001_dbg(pm8001_ha, FAIL, "nvmd failed\n");
++		return -EIO;
++	}
++	time_remaining = wait_for_completion_timeout(&completion,
++				msecs_to_jiffies(60*1000)); // 1 min
++	if (!time_remaining) {
++		kfree(payload.func_specific);
++		pm8001_dbg(pm8001_ha, FAIL, "get_nvmd_req timeout\n");
++		return -EIO;
+ 	}
+-	wait_for_completion(&completion);
++
+ 
+ 	for (i = 0, j = 0; i <= 7; i++, j++) {
+ 		if (pm8001_ha->chip_id == chip_8001) {
+@@ -751,6 +764,7 @@ static void pm8001_init_sas_add(struct pm8001_hba_info *pm8001_ha)
+ 	memcpy(pm8001_ha->sas_addr, &pm8001_ha->phy[0].dev_sas_addr,
+ 		SAS_ADDR_SIZE);
+ #endif
++	return 0;
+ }
+ 
+ /*
+@@ -1166,7 +1180,8 @@ static int pm8001_pci_probe(struct pci_dev *pdev,
+ 		pm80xx_set_thermal_config(pm8001_ha);
+ 	}
+ 
+-	pm8001_init_sas_add(pm8001_ha);
++	if (pm8001_init_sas_add(pm8001_ha))
++		goto err_out_shost;
+ 	/* phy setting support for motherboard controller */
+ 	rc = pm8001_configure_phy_settings(pm8001_ha);
+ 	if (rc)
+-- 
+2.40.0.634.g4ca3ef3211-goog
 
-[1] https://developer.android.com/reference/android/os/PerformanceHintManager#createHintSession(int%5B%5D,%20long)
-
-> 
-> Cc: Qais Yousef <qyousef@google.com>
-> Cc: Quentin Perret <qperret@google.com>
-> Cc: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: David Dai <davidai@google.com>
-> ---
->  include/linux/sched.h            | 3 +++
->  include/uapi/linux/sched.h       | 4 +++-
->  kernel/sched/core.c              | 6 +++++-
->  tools/include/uapi/linux/sched.h | 4 +++-
->  4 files changed, 14 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 63d242164b1a..b1676b9381f9 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -885,6 +885,9 @@ struct task_struct {
->  	unsigned			sched_reset_on_fork:1;
-
-nit: can't we convert to a flag and re-use?
-
->  	unsigned			sched_contributes_to_load:1;
->  	unsigned			sched_migrated:1;
-> +#ifdef CONFIG_UCLAMP_TASK
-> +	unsigned			sched_reset_uclamp_on_fork:1;
-> +#endif
->  
->  	/* Force alignment to the next boundary: */
->  	unsigned			:0;
-> diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
-> index 3bac0a8ceab2..7515106e1f1a 100644
-> --- a/include/uapi/linux/sched.h
-> +++ b/include/uapi/linux/sched.h
-> @@ -132,12 +132,14 @@ struct clone_args {
->  #define SCHED_FLAG_KEEP_PARAMS		0x10
->  #define SCHED_FLAG_UTIL_CLAMP_MIN	0x20
->  #define SCHED_FLAG_UTIL_CLAMP_MAX	0x40
-> +#define SCHED_FLAG_RESET_UCLAMP_ON_FORK	0x80
->  
->  #define SCHED_FLAG_KEEP_ALL	(SCHED_FLAG_KEEP_POLICY | \
->  				 SCHED_FLAG_KEEP_PARAMS)
->  
->  #define SCHED_FLAG_UTIL_CLAMP	(SCHED_FLAG_UTIL_CLAMP_MIN | \
-> -				 SCHED_FLAG_UTIL_CLAMP_MAX)
-> +				 SCHED_FLAG_UTIL_CLAMP_MAX | \
-> +				 SCHED_FLAG_RESET_UCLAMP_ON_FORK)
-
-I was considering to have something a bit more generic that allows selecting
-which attributes to reset.
-
-For example a syscall with SCHED_FLAG_RESET_ON_FORK_SEL combined with
-SCHED_FLAG_UCLAMP_MIN/MAX will only reset those. This should make it extensible
-if we have other similar use cases in the future. The downside it *might*
-require to be done in a separate syscall to the one that sets these parameter.
-But it should be done once.
-
-Maybe there's a better interface, but I think it makes sense to do it in a way
-that we won't have to do this again. Would be good to hear from maintainers
-first before you take my word for it ;-)
-
-
-Cheers
-
---
-Qais Yousef
-
->  
->  #define SCHED_FLAG_ALL	(SCHED_FLAG_RESET_ON_FORK	| \
->  			 SCHED_FLAG_RECLAIM		| \
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 0d18c3969f90..f2d5f7911855 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -1943,6 +1943,10 @@ static void __setscheduler_uclamp(struct task_struct *p,
->  		uclamp_se_set(&p->uclamp_req[UCLAMP_MAX],
->  			      attr->sched_util_max, true);
->  	}
-> +
-> +	p->sched_reset_uclamp_on_fork = !!(attr->sched_flags &
-> +				     SCHED_FLAG_RESET_UCLAMP_ON_FORK);
-> +
->  }
->  
->  static void uclamp_fork(struct task_struct *p)
-> @@ -1956,7 +1960,7 @@ static void uclamp_fork(struct task_struct *p)
->  	for_each_clamp_id(clamp_id)
->  		p->uclamp[clamp_id].active = false;
->  
-> -	if (likely(!p->sched_reset_on_fork))
-> +	if (likely(!p->sched_reset_on_fork && !p->sched_reset_uclamp_on_fork))
->  		return;
->  
->  	for_each_clamp_id(clamp_id) {
-> diff --git a/tools/include/uapi/linux/sched.h b/tools/include/uapi/linux/sched.h
-> index 3bac0a8ceab2..d52c59a2e0d0 100644
-> --- a/tools/include/uapi/linux/sched.h
-> +++ b/tools/include/uapi/linux/sched.h
-> @@ -132,12 +132,14 @@ struct clone_args {
->  #define SCHED_FLAG_KEEP_PARAMS		0x10
->  #define SCHED_FLAG_UTIL_CLAMP_MIN	0x20
->  #define SCHED_FLAG_UTIL_CLAMP_MAX	0x40
-> +#define SCHED_FLAG_RESET_UCLAMP_ON_FORK 0x80
->  
->  #define SCHED_FLAG_KEEP_ALL	(SCHED_FLAG_KEEP_POLICY | \
->  				 SCHED_FLAG_KEEP_PARAMS)
->  
->  #define SCHED_FLAG_UTIL_CLAMP	(SCHED_FLAG_UTIL_CLAMP_MIN | \
-> -				 SCHED_FLAG_UTIL_CLAMP_MAX)
-> +				 SCHED_FLAG_UTIL_CLAMP_MAX | \
-> +				 SCHED_FLAG_RESET_UCLAMP_ON_FORK)
->  
->  #define SCHED_FLAG_ALL	(SCHED_FLAG_RESET_ON_FORK	| \
->  			 SCHED_FLAG_RECLAIM		| \
-> -- 
-> 2.40.0.634.g4ca3ef3211-goog
-> 
