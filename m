@@ -2,154 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FBE6E7797
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CBE06E7799
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232327AbjDSKmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 06:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
+        id S232555AbjDSKmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 06:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbjDSKmD (ORCPT
+        with ESMTP id S232677AbjDSKm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 06:42:03 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EBC106;
-        Wed, 19 Apr 2023 03:42:02 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63b5c830d5eso2511450b3a.2;
-        Wed, 19 Apr 2023 03:42:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681900922; x=1684492922;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5MdNpSS+OOI19jq0uYTZJnCcJQUPASUIXiKZhUZv1Dk=;
-        b=qPRkEGyJsDCSaZp4ogPYKDiohjMXJ0vzEVw3ywT3uU/GKNXrfLhJZ6WO/RujYYRmnF
-         PIWdYM8XUTae0Uwqo7K/BsM/m71gYS2qAaYZAovPC1ozzLxvbFBxNBj2itCjIfsdCZJz
-         oYXRbDEc4jvuxTsiYF9N+36SWDKzN6YFkfpmByLMKoupMARS4SESLcF10sB+s5JNHtH+
-         eU6mOiWuF6DAzFXziTij97EURj0NDOKUoNwtwn7c6F8otf7HQY66n+v+ABnb1PuUo9vp
-         1st/sxXJ8d2dMZe0h1UZDcj5KiM9BY58WSMtHv03DVWR0PY6UdrnmgJzZ4HyJLaQfrvf
-         4SnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681900922; x=1684492922;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5MdNpSS+OOI19jq0uYTZJnCcJQUPASUIXiKZhUZv1Dk=;
-        b=a9+oF9oZ90DwII8B5NcDhmPWznPe+EAnOYGEN5NxZq1aRtt+y9Zm3iMaofA26qofK5
-         uF/rgXTVpSvBRvjSWRByYG9Yxgv4k/UvcAIzvEyQSGIVAkcvmkqkpR+vbqOgsIKN3HX/
-         ge8VYf5SDjRxEw91qBslF73oLKOQId8K1N6VHD+UyzPKpXuc2WTtJhly+JWjnpPhNrvM
-         ZAo01O86ro+xdnH2/H3M9kRc1ACgijIJkvNTNjeblfyh6X2iyVE2njUoB+E+D+q5vHIw
-         nWXc5zs4hkNAQ8Wa0AN9q22yw4Y1tyF/CCZrKb9RJZGELpx17tytTwKY8b0YXSsqNe0B
-         Mtdg==
-X-Gm-Message-State: AAQBX9eHIEteHoUtHJIdnBWLJVI8PBpR5rCfeWOzNXx+ae6FTyEw7+8d
-        nm5nfvxU5GiI+HkFeMZxF5O4yYAFaqnEPlHUtGo=
-X-Google-Smtp-Source: AKy350YK8qcAcZopioCgqzrCcc04oP+3g3LHqjy7As6Hr0znMSBB+LYIyMZez9fjGSi2RP7eMP/QK1WXZ/RF5wuQ8GQ=
-X-Received: by 2002:a17:90a:9802:b0:247:160d:3a8e with SMTP id
- z2-20020a17090a980200b00247160d3a8emr2278200pjo.22.1681900921522; Wed, 19 Apr
- 2023 03:42:01 -0700 (PDT)
+        Wed, 19 Apr 2023 06:42:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1032118D4;
+        Wed, 19 Apr 2023 03:42:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B04152198F;
+        Wed, 19 Apr 2023 10:42:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681900944; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8qfmxrU7rqgnnhieg7x5c1b8MRuikfwddv02sfKrFJY=;
+        b=nLgX070cza+RuPu4YZP37+VLVfH6ak/LLTFRb/U1HF6XzHVeH/fW1RwLUU8a/vUEtx0iNT
+        XNL+akAOACz4WakiT2lbQeYw0TzJXfv5b/gyUtRcV9sKI+UYHrNMshYJdmHhJMSbZfSIZA
+        xgeADsGl1K8qpCfPZlS9GKDWq4wCx60=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681900944;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8qfmxrU7rqgnnhieg7x5c1b8MRuikfwddv02sfKrFJY=;
+        b=yl6kT564O47BeIeAbbUCpKJIOf6nSvnKUnH3AjGY0NHAr9fldXgBeIQXbQGRLfO9SwDait
+        fcMkPOs9l6w35EAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A115F1390E;
+        Wed, 19 Apr 2023 10:42:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2OBCJ5DFP2TENQAAMHmgww
+        (envelope-from <dwagner@suse.de>); Wed, 19 Apr 2023 10:42:24 +0000
+Date:   Wed, 19 Apr 2023 12:42:24 +0200
+From:   Daniel Wagner <dwagner@suse.de>
+To:     Sagi Grimberg <sagi@grimberg.me>
+Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
+        Shin'ichiro Kawasaki <shinichiro@fastmail.com>
+Subject: Re: [PATCH blktests v2 2/2] nvme-rc: Cleanup fc resource before
+ module unloading
+Message-ID: <3euieyvxpsww5p4m457pzupfipbnbv3atxauh2lrp54gqmqcco@hs7ytoop5osf>
+References: <20230419084757.24846-1-dwagner@suse.de>
+ <20230419084757.24846-3-dwagner@suse.de>
+ <3ec250a9-54c7-3e0d-2463-f8faf15cdb58@grimberg.me>
 MIME-Version: 1.0
-References: <20230415104104.5537-1-aford173@gmail.com> <20230415104104.5537-3-aford173@gmail.com>
- <7eed74e8-9f67-a410-3cec-f61a6db85238@denx.de> <CAHCN7xKw26TQ=t75TEDbEkA0mb9rnEwNW=7ei1=WFBZjiJMf=g@mail.gmail.com>
- <56085a0f-02f7-6f45-f351-1f9ee612b748@denx.de> <426e901f14254cfcff87ba1747534f9b856ef738.camel@pengutronix.de>
-In-Reply-To: <426e901f14254cfcff87ba1747534f9b856ef738.camel@pengutronix.de>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Wed, 19 Apr 2023 05:41:49 -0500
-Message-ID: <CAHCN7xLL+VBYfL_si07zhdLgV431H7XSxf6U_50mtAH-BZL=SA@mail.gmail.com>
-Subject: Re: [PATCH 3/6] drm: bridge: samsung-dsim: Fetch pll-clock-frequency automatically
-To:     Lucas Stach <l.stach@pengutronix.de>
-Cc:     Marek Vasut <marex@denx.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        aford@beaconembedded.com, dri-devel@lists.freedesktop.org,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        m.szyprowski@samsung.com, Robert Foss <rfoss@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, Jonas Karlman <jonas@kwiboo.se>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3ec250a9-54c7-3e0d-2463-f8faf15cdb58@grimberg.me>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 3:47=E2=80=AFAM Lucas Stach <l.stach@pengutronix.de=
-> wrote:
->
-> Am Dienstag, dem 18.04.2023 um 10:30 +0200 schrieb Marek Vasut:
-> > On 4/18/23 04:29, Adam Ford wrote:
-> > > On Sun, Apr 16, 2023 at 5:08=E2=80=AFPM Marek Vasut <marex@denx.de> w=
-rote:
-> > > >
-> > > > On 4/15/23 12:41, Adam Ford wrote:
-> > > > > Fetch the clock rate of "sclk_mipi" (or "pll_clk") instead of
-> > > > > having an entry in the device tree for samsung,pll-clock-frequenc=
-y.
-> > > > >
-> > > > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > > > > ---
-> > > > >    drivers/gpu/drm/bridge/samsung-dsim.c | 12 ++++++------
-> > > > >    1 file changed, 6 insertions(+), 6 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/=
-drm/bridge/samsung-dsim.c
-> > > > > index 9fec32b44e05..73f0c3fbbdf5 100644
-> > > > > --- a/drivers/gpu/drm/bridge/samsung-dsim.c
-> > > > > +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-> > > > > @@ -1744,11 +1744,6 @@ static int samsung_dsim_parse_dt(struct sa=
-msung_dsim *dsi)
-> > > > >        struct device_node *node =3D dev->of_node;
-> > > > >        int ret;
-> > > > >
-> > > > > -     ret =3D samsung_dsim_of_read_u32(node, "samsung,pll-clock-f=
-requency",
-> > > > > -                                    &dsi->pll_clk_rate);
-> > > > > -     if (ret < 0)
-> > > > > -             return ret;
-> > > > > -
-> > > > >        ret =3D samsung_dsim_of_read_u32(node, "samsung,burst-cloc=
-k-frequency",
-> > > > >                                       &dsi->burst_clk_rate);
-> > > > >        if (ret < 0)
-> > > >
-> > > > Does this break compatibility with old samsung DTs ?
-> > >
-> > > My goal here was to declutter the device tree stuff and fetch data
-> > > automatically if possible. What if I changed this to make them
-> > > optional?  If they exist, we can use them, if they don't exist, we
-> > > could read the clock rate.  Would that be acceptable?
-> >
-> > If you do not see any potential problem with ignoring the DT property
-> > altogether, that would be better of course, but I think you cannot do
-> > that with old DTs, so you should retain backward compatibility fallback=
-,
-> > yes. What do you think ?
->
-> I'm very much in favor of this patch, but I also think we shouldn't
-> risk breaking Samsung devices, where we don't now 100% that the input
-> clock rate provided by the clock driver is correct.
->
-> So I think the right approach is to use "samsung,pll-clock-frequency"
-> when present in DT and get it from the clock provider otherwise. Then
-> just remove the property from the DTs where we can validate that the
-> input clock rate is correct, i.e. all i.MX8M*.
+On Wed, Apr 19, 2023 at 12:44:42PM +0300, Sagi Grimberg wrote:
+> 
+> > Before we unload the module we should cleanup the fc resources first,
+> > basically reorder the shutdown sequence to be in reverse order of the
+> > setup path.
+> 
+> If this triggers a bug, then I think it is a good idea to have a
+> dedicated test that reproduces it if we are changing the default
+> behavior.
 
-I'll update this accordingly when I do a V2 of this series.
+Right, though I would like to tackle one problem after the other, first get fc
+working with the 'correct' order.
 
-adam
->
-> Regards,
-> Lucas
+> > While at it also update the rdma stop_soft_rdma before the module
+> > unloading for the same reasoning.
+> 
+> Why? it creates the wrong reverse ordering.
+> 
+> 1. setup soft-rdma
+> 2. setup nvme-rdma
+> 
+> 2. teardown nvme-rdma
+> 1. teardown soft-rdma
+> 
+> I don't think we need this change. I mean it is a good test
+> to have that the rdma device goes away underneath nvme-rdma
+> but it is good for a dedicated test.
+
+I was woried about this setup sequence here:
+
+	modprobe -q nvme-"${nvme_trtype}"
+	if [[ "${nvme_trtype}" == "rdma" ]]; then
+		start_soft_rdma
+
+The module is loaded before start_soft_rdma is started, thus I thought we should
+do the reverse, first call stop_soft_rdma and the unload the module.
