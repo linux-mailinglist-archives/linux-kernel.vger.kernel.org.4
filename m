@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D996E84D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F06D16E84C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbjDSWXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 18:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
+        id S231537AbjDSWWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 18:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233561AbjDSWW6 (ORCPT
+        with ESMTP id S233156AbjDSWVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 18:22:58 -0400
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99750BB91
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:21:10 -0700 (PDT)
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-63b73203e0aso2787340b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:21:10 -0700 (PDT)
+        Wed, 19 Apr 2023 18:21:33 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B7EB44C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:20:06 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-51b603bb360so252173a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:20:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942734; x=1684534734;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942736; x=1684534736;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wI5JEqEayPS5t0DearmNB32dGieY2Rp85qRqyRU4954=;
-        b=c61/p77dAtF7ITFaJtJ2ThSiNokGE55QUnDMhiyOWQfpvPZA4LwEm0dNNepuTh8/vI
-         ETC0NUKHH0B7ioWMNIOCRl7AjZHuiWQCd9YRt/w8gX3X03F0aRKluujbAxJMyKQ218iz
-         HyGwjvHTZ57PibWhtCDK2NRKMiLlH7ybE/Z877P0tsYOxOH43juir+xqANUqGBHB7/WR
-         aQibBdjDGfMJsGQ2duTavnD7648VTHs+6zw4IzdBl5zGyzuHnyd08ri5ZAx79ZyGdHPQ
-         +HVr9NAcGBE4GY7Q3b9IwiUkw1Xx2A9JUqYVhhUubWWiX//8s8ew3EPoW97k6emKoi+z
-         u1mQ==
+        bh=HpkP1wnIrltbLZeAb/TZzxnsq9NvqWT39c9WofSyiOk=;
+        b=Nzsbq++D21vwA8dGs2TEhUmfLPFSaig0puRkykWSASC64dxd/vGkpSKeFxQXOJxyon
+         5Ou4PoViyNfDX1Gfoq/jlBl1G1RhaiR4JLXaKzD7kt+niF6AKE+yOb7DVxkMfV9AiHsx
+         mTPuZ/MAZl6BEVu8xpX5HBzOXWWYp6VQYr3Mp0sTKgkIRgLhxoSPyTdHc4vxQBKRTjC6
+         nzaETrxZRtdvV7d/S3g19DaIk1Y5S0BgV4Ei7fF0jUB1ujpfDWT04dllTpouA2v7Akvc
+         l3myGSmdOxw+gPB2lOjj2aqYoHDlOR0Rr4q6kW0PPflSvA1d+iZ7docwAXBz+likDSY4
+         tCOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681942734; x=1684534734;
+        d=1e100.net; s=20221208; t=1681942736; x=1684534736;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wI5JEqEayPS5t0DearmNB32dGieY2Rp85qRqyRU4954=;
-        b=FAIx4eATNwM7tMYU4QYfiP4jgNcB1OkIqiMMpsFNQNcg1cJX3/K4OQ8rpTtLbIFr7B
-         k4hE/rWIw5cgQGFR7O2bmk9H6VHm6MrjHHlZlGP2YlP7+Mza5wiwbtVJH941uPVBqIZQ
-         w0FJiq3U95vgNoHJs3ldr65QJesnr4kjmaD9MR1MBMxSUSU2c+vmFpEm5m37U0j6fnsA
-         u0PJvtuo8UpR3dgpakiBtAUoRFXAREcmDuHwa6/LmkZtIVJ1sLWP2kVW5qrOQ2gEO7Sh
-         sjCQFgSyN1gQjSNsGVippCH+e2HZxwIm63NxCRUk3WXyBUL7adL30SNguVTFuXrqQtr6
-         6CsQ==
-X-Gm-Message-State: AAQBX9elrxZEkowS7Vi9bysqAiXklHl2cg7BhapGCcgyFdLFYf5GvZf1
-        ZCLXnU+1lpEXcQVTSferyTNlA7wOcDsE9YPCIdw=
-X-Google-Smtp-Source: AKy350bHPqgey3c6g8HqkR9B9xlgHTWq+fR92XQNeVK1lT0G63M1RyCGum2kegw8LaA3eJtSnsnKXQ==
-X-Received: by 2002:a17:90a:6002:b0:246:865d:419a with SMTP id y2-20020a17090a600200b00246865d419amr3928528pji.6.1681942733866;
-        Wed, 19 Apr 2023 15:18:53 -0700 (PDT)
+        bh=HpkP1wnIrltbLZeAb/TZzxnsq9NvqWT39c9WofSyiOk=;
+        b=Xi/ZQk+3LLibdCoAVSrmyKIsQQymeWnRxPnc0uHJnzb/Z1HSD8JYNLrJfnRph8aFxT
+         5uHRiA5N2GlbYcoNFgz4VzHEXEPLYjY6lFePi0FssfzN2xNEP6T9jumJ1miYn2aqDOp+
+         SxK13oHR7V2y145H4aInJ+ZqEtGXNYiNMohtiLT3j24QSGX7N2KqZrz/x4HOtRMErcrw
+         CNYNOsnUB1cyJ6XW94SJ6W/2f5PXxLRkAC7ZmSkbSKEHGSzvaPheKwo4u/0zuViCR3zK
+         fxt2PofpAatZKX9jojed0ybdJad2XNi0jQPn3/MVj0+ZGrOMhQ2VD6QvZNMD71ovaY6K
+         htZw==
+X-Gm-Message-State: AAQBX9ceTvF6PFjVOpY8LlZ+N8wRqBzP2OOzxF+9+BgBKN39VsFRRwKD
+        nKgi1ftnJtFL10ZFvBPi08oKPN3F8Agod6DnOnU=
+X-Google-Smtp-Source: AKy350bCoBKIrFcroX21XtHTuZqvJehyqLN918v9CE2Osbf4jkMqvKMUa5z+Sio4RKf3jpe/KHP4Bg==
+X-Received: by 2002:a17:90a:f415:b0:247:6be7:8cc0 with SMTP id ch21-20020a17090af41500b002476be78cc0mr3832862pjb.35.1681942736133;
+        Wed, 19 Apr 2023 15:18:56 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.18.51
+        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.18.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 15:18:53 -0700 (PDT)
+        Wed, 19 Apr 2023 15:18:55 -0700 (PDT)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Rajnesh Kanwal <rkanwal@rivosinc.com>,
@@ -77,16 +77,16 @@ Cc:     Rajnesh Kanwal <rkanwal@rivosinc.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Uladzislau Rezki <urezki@gmail.com>
-Subject: [RFC 38/48] RISC-V: Add CoVE guest config and helper functions
-Date:   Wed, 19 Apr 2023 15:17:06 -0700
-Message-Id: <20230419221716.3603068-39-atishp@rivosinc.com>
+Subject: [RFC 39/48] RISC-V: Implement COVG SBI extension
+Date:   Wed, 19 Apr 2023 15:17:07 -0700
+Message-Id: <20230419221716.3603068-40-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230419221716.3603068-1-atishp@rivosinc.com>
 References: <20230419221716.3603068-1-atishp@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,74 +96,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rajnesh Kanwal <rkanwal@rivosinc.com>
 
-Introduce a separate config for the guest running in CoVE so that
-it can be enabled separately if required. However, the default config
-will enable both CoVE host & guest configs in order to make single
-image work as both host & guest. Introduce a helper function to
-detect if a guest is TVM or not at run time. The TSM only enables
-the CoVE guest SBI extension for TVMs.
+COVG extension defines the guest side interface for running a guest
+in CoVE. These functions allow a CoVE guest to share/unshare memory, ask
+host to trap and emulate MMIO regions and allow/deny
+injection of interrupts from host.
 
 Signed-off-by: Rajnesh Kanwal <rkanwal@rivosinc.com>
-Co-developed-by: Atish Patra <atishp@rivosinc.com>
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/Kbuild             |  2 ++
- arch/riscv/Kconfig            |  6 ++++++
- arch/riscv/cove/Makefile      |  2 ++
- arch/riscv/cove/core.c        | 28 ++++++++++++++++++++++++++++
- arch/riscv/include/asm/cove.h | 27 +++++++++++++++++++++++++++
- arch/riscv/kernel/setup.c     |  2 ++
- 6 files changed, 67 insertions(+)
- create mode 100644 arch/riscv/cove/Makefile
- create mode 100644 arch/riscv/cove/core.c
- create mode 100644 arch/riscv/include/asm/cove.h
+ arch/riscv/cove/Makefile          |   2 +-
+ arch/riscv/cove/cove_guest_sbi.c  | 109 ++++++++++++++++++++++++++++++
+ arch/riscv/include/asm/covg_sbi.h |  38 +++++++++++
+ 3 files changed, 148 insertions(+), 1 deletion(-)
+ create mode 100644 arch/riscv/cove/cove_guest_sbi.c
+ create mode 100644 arch/riscv/include/asm/covg_sbi.h
 
-diff --git a/arch/riscv/Kbuild b/arch/riscv/Kbuild
-index afa83e3..ecd661e 100644
---- a/arch/riscv/Kbuild
-+++ b/arch/riscv/Kbuild
-@@ -1,5 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- 
-+obj-$(CONFIG_RISCV_COVE_GUEST) += cove/
-+
- obj-y += kernel/ mm/ net/
- obj-$(CONFIG_BUILTIN_DTB) += boot/dts/
- obj-y += errata/
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 8462941..49c3006 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -512,6 +512,12 @@ config RISCV_COVE_HOST
- 	    That means the platform should be capable of running TEE VM (TVM)
- 	    using KVM and TEE Security Manager (TSM).
- 
-+config RISCV_COVE_GUEST
-+	bool "Guest Support for Confidential VM Extension(CoVE)"
-+	default n
-+	help
-+	  Enables support for running TVMs on platforms supporting CoVE.
-+
- endmenu # "Confidential VM Extension(CoVE) Support"
- 
- endmenu # "Platform type"
 diff --git a/arch/riscv/cove/Makefile b/arch/riscv/cove/Makefile
-new file mode 100644
-index 0000000..03a0cac
---- /dev/null
+index 03a0cac..a95043b 100644
+--- a/arch/riscv/cove/Makefile
 +++ b/arch/riscv/cove/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_RISCV_COVE_GUEST)	+= core.o
-diff --git a/arch/riscv/cove/core.c b/arch/riscv/cove/core.c
+@@ -1,2 +1,2 @@
+ # SPDX-License-Identifier: GPL-2.0
+-obj-$(CONFIG_RISCV_COVE_GUEST)	+= core.o
++obj-$(CONFIG_RISCV_COVE_GUEST)	+= core.o cove_guest_sbi.o
+diff --git a/arch/riscv/cove/cove_guest_sbi.c b/arch/riscv/cove/cove_guest_sbi.c
 new file mode 100644
-index 0000000..7218fe7
+index 0000000..af22d5e
 --- /dev/null
-+++ b/arch/riscv/cove/core.c
-@@ -0,0 +1,28 @@
++++ b/arch/riscv/cove/cove_guest_sbi.c
+@@ -0,0 +1,109 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Confidential Computing Platform Capability checks
++ * COVG SBI extensions related helper functions.
 + *
 + * Copyright (c) 2023 Rivos Inc.
 + *
@@ -171,33 +135,114 @@ index 0000000..7218fe7
 + *     Rajnesh Kanwal <rkanwal@rivosinc.com>
 + */
 +
-+#include <linux/export.h>
-+#include <linux/cc_platform.h>
++#include <linux/errno.h>
 +#include <asm/sbi.h>
-+#include <asm/cove.h>
++#include <asm/covg_sbi.h>
 +
-+static bool is_tvm;
-+
-+bool is_cove_guest(void)
++int sbi_covg_add_mmio_region(unsigned long addr, unsigned long len)
 +{
-+	return is_tvm;
-+}
-+EXPORT_SYMBOL_GPL(is_cove_guest);
++	struct sbiret ret;
 +
-+void riscv_cove_sbi_init(void)
-+{
-+	if (sbi_probe_extension(SBI_EXT_COVG) > 0)
-+		is_tvm = true;
++	ret = sbi_ecall(SBI_EXT_COVG, SBI_EXT_COVG_ADD_MMIO_REGION, addr, len,
++			0, 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
 +}
-diff --git a/arch/riscv/include/asm/cove.h b/arch/riscv/include/asm/cove.h
++
++int sbi_covg_remove_mmio_region(unsigned long addr, unsigned long len)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVG, SBI_EXT_COVG_REMOVE_MMIO_REGION, addr,
++			len, 0, 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++int sbi_covg_share_memory(unsigned long addr, unsigned long len)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVG, SBI_EXT_COVG_SHARE_MEMORY, addr, len, 0,
++			0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++int sbi_covg_unshare_memory(unsigned long addr, unsigned long len)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVG, SBI_EXT_COVG_UNSHARE_MEMORY, addr, len, 0,
++			0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++int sbi_covg_allow_external_interrupt(unsigned long id)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVG, SBI_EXT_COVG_ALLOW_EXT_INTERRUPT, id, 0,
++			0, 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++int sbi_covg_allow_all_external_interrupt(void)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVG, SBI_EXT_COVG_ALLOW_EXT_INTERRUPT, -1, 0,
++			0, 0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++int sbi_covg_deny_external_interrupt(unsigned long id)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVG, SBI_EXT_COVG_DENY_EXT_INTERRUPT, id, 0, 0,
++			0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
++
++int sbi_covg_deny_all_external_interrupt(void)
++{
++	struct sbiret ret;
++
++	ret = sbi_ecall(SBI_EXT_COVG, SBI_EXT_COVG_DENY_EXT_INTERRUPT, -1, 0, 0,
++			0, 0, 0);
++	if (ret.error)
++		return sbi_err_map_linux_errno(ret.error);
++
++	return 0;
++}
+diff --git a/arch/riscv/include/asm/covg_sbi.h b/arch/riscv/include/asm/covg_sbi.h
 new file mode 100644
-index 0000000..c4d609d
+index 0000000..31283de
 --- /dev/null
-+++ b/arch/riscv/include/asm/cove.h
-@@ -0,0 +1,27 @@
++++ b/arch/riscv/include/asm/covg_sbi.h
+@@ -0,0 +1,38 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * TVM helper functions
++ * COVG SBI extension related header file.
 + *
 + * Copyright (c) 2023 Rivos Inc.
 + *
@@ -205,43 +250,34 @@ index 0000000..c4d609d
 + *     Rajnesh Kanwal <rkanwal@rivosinc.com>
 + */
 +
-+#ifndef __RISCV_COVE_H__
-+#define __RISCV_COVE_H__
++#ifndef __RISCV_COVG_SBI_H__
++#define __RISCV_COVG_SBI_H__
 +
 +#ifdef CONFIG_RISCV_COVE_GUEST
-+void riscv_cove_sbi_init(void);
-+bool is_cove_guest(void);
-+#else /* CONFIG_RISCV_COVE_GUEST */
-+static inline bool is_cove_guest(void)
-+{
-+	return false;
-+}
-+static inline void riscv_cove_sbi_init(void)
-+{
-+}
-+#endif /* CONFIG_RISCV_COVE_GUEST */
 +
-+#endif /* __RISCV_COVE_H__ */
-diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-index 7b2b065..20b0280 100644
---- a/arch/riscv/kernel/setup.c
-+++ b/arch/riscv/kernel/setup.c
-@@ -35,6 +35,7 @@
- #include <asm/thread_info.h>
- #include <asm/kasan.h>
- #include <asm/efi.h>
-+#include <asm/cove.h>
- 
- #include "head.h"
- 
-@@ -272,6 +273,7 @@ void __init setup_arch(char **cmdline_p)
- 
- 	early_ioremap_setup();
- 	sbi_init();
-+	riscv_cove_sbi_init();
- 	jump_label_init();
- 	parse_early_param();
- 
++int sbi_covg_add_mmio_region(unsigned long addr, unsigned long len);
++int sbi_covg_remove_mmio_region(unsigned long addr, unsigned long len);
++int sbi_covg_share_memory(unsigned long addr, unsigned long len);
++int sbi_covg_unshare_memory(unsigned long addr, unsigned long len);
++int sbi_covg_allow_external_interrupt(unsigned long id);
++int sbi_covg_allow_all_external_interrupt(void);
++int sbi_covg_deny_external_interrupt(unsigned long id);
++int sbi_covg_deny_all_external_interrupt(void);
++
++#else
++
++static inline int sbi_covg_add_mmio_region(unsigned long addr, unsigned long len) { return 0; }
++static inline int sbi_covg_remove_mmio_region(unsigned long addr, unsigned long len) { return 0; }
++static inline int sbi_covg_share_memory(unsigned long addr, unsigned long len) { return 0; }
++static inline int sbi_covg_unshare_memory(unsigned long addr, unsigned long len) { return 0; }
++static inline int sbi_covg_allow_external_interrupt(unsigned long id) { return 0; }
++static inline int sbi_covg_allow_all_external_interrupt(void) { return 0; }
++static inline int sbi_covg_deny_external_interrupt(unsigned long id) { return 0; }
++static inline int sbi_covg_deny_all_external_interrupt(void) { return 0; }
++
++#endif
++
++#endif /* __RISCV_COVG_SBI_H__ */
 -- 
 2.25.1
 
