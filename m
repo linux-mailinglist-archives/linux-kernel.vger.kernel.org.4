@@ -2,177 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5A66E76D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6926E76CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbjDSJyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 05:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48890 "EHLO
+        id S231790AbjDSJy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 05:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjDSJy3 (ORCPT
+        with ESMTP id S229617AbjDSJy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:54:29 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FB7106;
-        Wed, 19 Apr 2023 02:54:27 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33J8Zxxm024719;
-        Wed, 19 Apr 2023 11:53:57 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=r5fGeSW1qloHrllhhlo+1StgRSiMEfN93pArR9r/3Tk=;
- b=HebYnIq01lJcOXuvSb6RCmdS3d553pbOold+KHzM7/njzlKhUMWDYAkX6aVqQ975v+Vj
- X8jHNdye9JJRG40kMPAN+TazC0zMOKqCMFoZv8P/W8bMkCDhADTCRamoOfsl4BpiY8s6
- r3S9eITTMbqm1OWVFKYv92iDOSHA5nOd+qm5/bUETdzF66FNpJ2LwItwschptBjrhHhM
- N6cLo9svfpz6whnKOWkOd8GO9+AU4Tcu28ObLK0/I9eyhilLr/akeKBry53qzWEr4gd1
- KRGmbEnuLx6q53idk1hfN3SnC5EFwqz/pAOyqqIP8l6k6G85CE1srq4Ne3fun1lfyFry Ww== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3q10ve8k1h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 11:53:57 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DF6FF10002A;
-        Wed, 19 Apr 2023 11:53:50 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B8D7C214D29;
-        Wed, 19 Apr 2023 11:53:50 +0200 (CEST)
-Received: from [10.201.21.178] (10.201.21.178) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 19 Apr
- 2023 11:53:49 +0200
-Message-ID: <0543735a-5f0c-bdf4-2a89-e94841bd4a68@foss.st.com>
-Date:   Wed, 19 Apr 2023 11:53:49 +0200
+        Wed, 19 Apr 2023 05:54:26 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A56E2103
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:54:25 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id vc20so25114295ejc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:54:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google; t=1681898064; x=1684490064;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=muwelnoIGuFTrNlkvI5AZYcYnQRcg63hFkIGB0cnf90=;
+        b=gzM8VZXmrQVbczHknCfQVIIH0PP8rJwpRMXa+7n/DdbVq9IQiguv3GBX8MciP04CUi
+         T+7Cmz2cGI8fcnNRYhKnxvLZ+kPie4pE1WnyhSVkJc1GbrI6wxi1aJ5nZ+06UI6d8zSc
+         O9aYGg30Ct2E6l9T8GnwaFHOZ0C2S4fXTgU1uxgv1hLlZ0qop2H3xntFLNiKDWOmJWOy
+         NnFlKJQDqM5cYd6H2GeC6TIbdNQmX5MBRUfulWHZUSgaGAxyWMwW4Iaod307My3EA/DZ
+         5C3SCtmb/uz6WZWkj/cmMFI7Lsba9ZW0vbJnfY/T1j2T6gDPsyX5bUlbPh2lGk3Qebkp
+         bheA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681898064; x=1684490064;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=muwelnoIGuFTrNlkvI5AZYcYnQRcg63hFkIGB0cnf90=;
+        b=DhUOkvYMfsw3vHrzKrKfsNYPi9M2UhNwdingVU6qBdEYdn7pvyQ5lGRA+WEJewCa74
+         LQsPnTd7tCR7jvedPK3LqtNhza+/PAFZrnrsqDNBRuq8AEinkDVdourr3UfWzU3cJDYR
+         H+1ZJ6Y2fEMAgPtfc4JoYGIYiH9lQGxUFsLrT3Y/k/NPaKsYX1T0zP9gfA/2CQcX62Qx
+         5+Caa8YjUxhNP2EJFmdJM24r9oV8s7ZDW5jDaZeihPSw+DQkheFx4kqdLWF0TnPCpNZb
+         +B5iyXJRbm3vLNclHVLMqwdTDkhkxxWvTAsShW92ZVhzZvqaZsGoVvC1oZumZ4V+FLOD
+         WZkg==
+X-Gm-Message-State: AAQBX9dSZU+cSucBG5hXQmMDH/yLwXM+hIQxYjYOAF8W3tL7hAIaxyEe
+        FFJomxFfHN5uLrBQVnhV/YvfsOsHkVaEo4WRAZFztsTBDOPkWHtF/0c=
+X-Google-Smtp-Source: AKy350bsBSTOu8+wY/bXEm/jYTvdWs4BL2wUN0qr/cy8bJaonNIv0NZsz1T6AxAoVSyZSaiqFBJi24TMlMB7tqUhMfw=
+X-Received: by 2002:a17:906:57c6:b0:87f:e5af:416e with SMTP id
+ u6-20020a17090657c600b0087fe5af416emr6912678ejr.7.1681898063810; Wed, 19 Apr
+ 2023 02:54:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V5 1/3] rpmsg: core: Add signal API support
-Content-Language: en-US
-To:     Sarannya S <quic_sarannya@quicinc.com>,
-        <quic_bjorande@quicinc.com>, <swboyd@chromium.org>,
-        <quic_clew@quicinc.com>, <mathieu.poirier@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        Deepak Kumar Singh <quic_deesin@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>
-References: <1681807721-32343-1-git-send-email-quic_sarannya@quicinc.com>
- <1681807721-32343-2-git-send-email-quic_sarannya@quicinc.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Organization: STMicroelectronics
-In-Reply-To: <1681807721-32343-2-git-send-email-quic_sarannya@quicinc.com>
+From:   Jinpu Wang <jinpu.wang@ionos.com>
+Date:   Wed, 19 Apr 2023 11:54:12 +0200
+Message-ID: <CAMGffE=65we13bDe=iOkkefF4PrNBNg96qi=ebU7nCs=GA6cCw@mail.gmail.com>
+Subject: k10temp show over 100 degrees temperature on EPYC Milan servers from
+ DELL and SMC
+To:     linux-hwmon@vger.kernel.org, clemens@ladisch.de,
+        Guenter Roeck <linux@roeck-us.net>, mario.limonciello@amd.com,
+        babu.moger@amd.com
+Cc:     open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.178]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-19_06,2023-04-18_01,2023-02-09_01
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Dear experts on the list,
 
+We've noticed many of our EPYC Milan servers from different vendors
+(DELL  and SMC) show 100 degrees, eg
 
-On 4/18/23 10:48, Sarannya S wrote:
-> From: Deepak Kumar Singh <quic_deesin@quicinc.com>
-> 
-> Some transports like Glink support the state notifications between
-> clients using flow control signals similar to serial protocol signals.
-> Local glink client drivers can send and receive flow control status
-> to glink clients running on remote processors.
-> 
-> Add APIs to support sending and receiving of flow control status by
-> rpmsg clients.
-> 
-> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
-> Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
-> ---
->  drivers/rpmsg/rpmsg_core.c     | 20 ++++++++++++++++++++
->  drivers/rpmsg/rpmsg_internal.h |  2 ++
->  2 files changed, 22 insertions(+)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> index a2207c0..86b4912 100644
-> --- a/drivers/rpmsg/rpmsg_core.c
-> +++ b/drivers/rpmsg/rpmsg_core.c
-> @@ -331,6 +331,24 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
->  EXPORT_SYMBOL(rpmsg_trysend_offchannel);
->  
->  /**
-> + * rpmsg_set_flow_control() - sets/clears serial flow control signals
-> + * @ept:	the rpmsg endpoint
-> + * @enable:	pause/resume incoming data flow
-> + *
-> + * Return: 0 on success and an appropriate error value on failure.
-> + */
-> +int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable)
+sudo sensors
+k10temp-pci-00c3
+Adapter: PCI adapter
+Tctl:        +117.5=C2=B0C
+Tdie:        +117.5=C2=B0C
+Tccd1:        +67.0=C2=B0C
+Tccd2:        +65.2=C2=B0C
+Tccd3:        +63.2=C2=B0C
+Tccd4:        +63.8=C2=B0C
+Tccd5:        +67.2=C2=B0C
+Tccd6:        +63.5=C2=B0C
+Tccd7:        +64.2=C2=B0C
+Tccd8:        +64.8=C2=B0C
 
+ sudo lscpu
+Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Byte Order:                      Little Endian
+Address sizes:                   48 bits physical, 48 bits virtual
+CPU(s):                          128
+On-line CPU(s) list:             0-127
+Thread(s) per core:              2
+Core(s) per socket:              64
+Socket(s):                       1
+NUMA node(s):                    1
+Vendor ID:                       AuthenticAMD
+CPU family:                      25
+Model:                           1
+Model name:                      AMD EPYC 7713P 64-Core Processor
+Stepping:                        1
+Frequency boost:                 enabled
+CPU MHz:                         2479.705
+CPU max MHz:                     3720,7029
+CPU min MHz:                     1500,0000
+BogoMIPS:                        3992.43
+Virtualization:                  AMD-V
+L1d cache:                       2 MiB
+L1i cache:                       2 MiB
+L2 cache:                        32 MiB
+L3 cache:                        256 MiB
+NUMA node0 CPU(s):               0-127
 
-Regression since V4[1]
+We've seen such high temperatures even on  idle servers.
 
-In V4 version the function was:
+We are running LTS kernel 5.10.136, but checking the git history for
+k10temp driver, I don't find any missing fix.
+My questions are:
+1. Is it normal to have such high temperatures for tctl?  can we trust
+the value?
+2  Do we need to worry about such high temperatures?
 
-int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst)
-
-Following comments on V3 [2]
-
-Without dst parameter it is not compatible with the rpmsg_virtio backend
-
-
-[1]https://lkml.org/lkml/2022/12/7/506
-[2]https://www.spinics.net/lists/kernel/msg4573082.html
-
-Regards
-Arnaud
-
-> +{
-> +	if (WARN_ON(!ept))
-> +		return -EINVAL;
-> +	if (!ept->ops->set_flow_control)
-> +		return -ENXIO;
-> +
-> +	return ept->ops->set_flow_control(ept, enable);
-> +}
-> +EXPORT_SYMBOL(rpmsg_set_flow_control);
-> +
-> +/**
->   * rpmsg_get_mtu() - get maximum transmission buffer size for sending message.
->   * @ept: the rpmsg endpoint
->   *
-> @@ -539,6 +557,8 @@ static int rpmsg_dev_probe(struct device *dev)
->  
->  		rpdev->ept = ept;
->  		rpdev->src = ept->addr;
-> +
-> +		ept->flow_cb = rpdrv->flowcontrol;
->  	}
->  
->  	err = rpdrv->probe(rpdev);
-> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-> index 39b646d..4fea45a 100644
-> --- a/drivers/rpmsg/rpmsg_internal.h
-> +++ b/drivers/rpmsg/rpmsg_internal.h
-> @@ -55,6 +55,7 @@ struct rpmsg_device_ops {
->   * @trysendto:		see @rpmsg_trysendto(), optional
->   * @trysend_offchannel:	see @rpmsg_trysend_offchannel(), optional
->   * @poll:		see @rpmsg_poll(), optional
-> + * @set_flow_control:	see @rpmsg_set_flow_control(), optional
->   * @get_mtu:		see @rpmsg_get_mtu(), optional
->   *
->   * Indirection table for the operations that a rpmsg backend should implement.
-> @@ -75,6 +76,7 @@ struct rpmsg_endpoint_ops {
->  			     void *data, int len);
->  	__poll_t (*poll)(struct rpmsg_endpoint *ept, struct file *filp,
->  			     poll_table *wait);
-> +	int (*set_flow_control)(struct rpmsg_endpoint *ept, bool enable);
->  	ssize_t (*get_mtu)(struct rpmsg_endpoint *ept);
->  };
->  
+Thx!
+Jinpu Wang @ IONOS Cloud.
