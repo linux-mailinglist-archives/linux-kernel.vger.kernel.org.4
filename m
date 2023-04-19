@@ -2,80 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079676E80C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A78AB6E80C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233263AbjDSSA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
+        id S233355AbjDSSAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbjDSSAY (ORCPT
+        with ESMTP id S233220AbjDSSA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 14:00:24 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161F85254
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 11:00:23 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54c12009c30so9726427b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 11:00:23 -0700 (PDT)
+        Wed, 19 Apr 2023 14:00:27 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47334EC3;
+        Wed, 19 Apr 2023 11:00:24 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id m21so197385qtg.0;
+        Wed, 19 Apr 2023 11:00:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681927222; x=1684519222;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JF8zWEECq6y59xFQqCF9TSLTw1U808D+I6SwxrtHJ08=;
-        b=dkoGLjEMM8NAdDtKNRiFkIDW8qDzerjNU2waWt6rcJddnac2GNHA+bzRz/bvxEmDbt
-         2SV9wmtJSv1LIwzAVA5w5TbZtsVnWHYoUSW+OrkF/2RCPO9rLYcgj16w6kQfNORvjhhL
-         JWTm1TUZE+Qjbq9Vqd6DhhbAEqurbe6r9lUdcCHItrCZkD1SU19URrg3FzKSUclt9/m+
-         AJbUY9ugnpi2pQ0/1vo9nZl3Qw7FhF0DaB/5+iIOVZ0u3PAwCDHnWhWrsUQlaqWEvPwY
-         xQaH40v6JCG81ixJ/v1So0kGQx+rVBU3+nxIHk0o6way+d32sHv+WWYEiZUQVXqQfMGd
-         GAbg==
+        d=gmail.com; s=20221208; t=1681927224; x=1684519224;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lN15mI3Cv09qV6UOUeaICwKgmo1oUV8ffmv3hGFot/o=;
+        b=ASVs8v2lab3prOG+mAph/fJrQ4OUgsvLf91EXLMJS4ZXl5GNoWGkUYU3uydH6poUfh
+         IU5NiQ0Zs4tULBOqPPHWYqbHDDR1V5bkVAufY9L6/+KQpDiPtyAyZDKYa/HQvhWVtu5o
+         c9/uMAF0TDs80j/KzdFP9gE9e4fy2Mn2VFr688mWwkofNaicTAr1QtaHwaJXMI1LT1Us
+         wXMoNuPAs6CAIdKWksRWXWVU72o6AGZf75j4vKGQ5tVCr2eL3GJGwklaVpm8N1ogNvVr
+         X5mRTUhDnC8LyWDai0Y9xF8qQzdTkDaGWLo3/UXWzRB46sE+YkU0N5iaaFrjJiW0SZkR
+         y6Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681927222; x=1684519222;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JF8zWEECq6y59xFQqCF9TSLTw1U808D+I6SwxrtHJ08=;
-        b=Og4k3r7T+jje/cJ9ccdPBfC/Pn+y1AV8xM5g2tl+SprxubRw3MNkcuF/BEie+vtPvJ
-         aJQ8spIZn6QjR6ze8gOMH7muCrWdBshDS9QVc5l1G3o9h03AYfVXg4V06fTQ/kscqr7r
-         qR2XXpcg5LCu0bHsFOUAR2FG+2QbbGC77OBw+aWvn+Usc+sqB+wYzvlDwxtztK+Lr5w2
-         DXRjTMo0GpDyMf8knvO6Z78mVgOZm8GcEzDwEsCBaGXm6KSdqwz/mgdx1BaGs0Hr3Tha
-         Ac6UuWiBHWlj9GYsRwKayoJz4espc3nL6hmr4E2Hvv/Akswl9+ZXIbw7inSZzYYKuStR
-         QuIQ==
-X-Gm-Message-State: AAQBX9cvnWKa3Jnu3zVQFCxuz4z2mxhLZ+1DbDYoabvUD616+EhrlUsl
-        zrqoRO1BYeCq0auOPg2tmlN7TischKmUCgJWxdWlBA==
-X-Google-Smtp-Source: AKy350Yb7cLtNx5IEZ4I9bEcR3hs2rytKzneRqInyFgN4hI0lZmftku7jfGdSl9+//WSuaHuuu5nTeRtZYakkjrmKZ0=
-X-Received: by 2002:a0d:ca08:0:b0:54f:d538:cdde with SMTP id
- m8-20020a0dca08000000b0054fd538cddemr3909763ywd.39.1681927221873; Wed, 19 Apr
- 2023 11:00:21 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681927224; x=1684519224;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lN15mI3Cv09qV6UOUeaICwKgmo1oUV8ffmv3hGFot/o=;
+        b=CtwZvdmXmiOy4ZcHL3pgtsVUWA1BUgaCNrD56yQ5hXm0xweGdPwl3ZwOxcLlSXTjbn
+         Qpx7VeD8DOMyBvMuMlGILMD0l78HxYuPjhk7XCQkOvdB4mJ+j82TcMZADl9Bb0/mbpDo
+         e2OBfl+7n/e/XbkQMDPYP6Vo2FXzBAKHK/VCNt1t3iQvBg+xhh88B/mCfH+IzZP4Q/42
+         GVhfZZvkxsDtAhGXamMghIu+xxJ7GaSJN9Z3f658WBDY8QJJFb5GZcW6yF1vkvH+i6AW
+         0+nFGxW+qNMkcor3Zs6TqEqsldBR1qUZr2sS5tQ8GaGo1BFyxbHpIwLrVCxzYjgdbn0W
+         hbvg==
+X-Gm-Message-State: AAQBX9eZ4sJOq3BHl4FgqXcqz5Bj95Yl20tGERJcu4SZrn21FDgoYmVL
+        M83vxEivM6WE9Gh23wpoA7Q=
+X-Google-Smtp-Source: AKy350YjYV1Ywb4vJYyHzNg3Ly09+OuNQLwtsiR3jNBm4GylYgI7vUhrnytxYXEnj2ZExqekBB9bDw==
+X-Received: by 2002:a05:622a:14a:b0:3e3:88e0:88c3 with SMTP id v10-20020a05622a014a00b003e388e088c3mr8619755qtw.26.1681927223919;
+        Wed, 19 Apr 2023 11:00:23 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id h17-20020ac87451000000b003ef239e3d5csm2625351qtr.17.2023.04.19.11.00.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 11:00:23 -0700 (PDT)
+Message-ID: <05f88554-e705-db87-8c12-7e74aefaa44c@gmail.com>
+Date:   Wed, 19 Apr 2023 11:00:18 -0700
 MIME-Version: 1.0
-References: <ZD3Nk0u+nxOT4snZ@casper.infradead.org> <CAJuCfpFPziNK65qpzd5dEYSnoE-94UHAsM-CX080VTTJC5ZZKA@mail.gmail.com>
- <ZD6oVgIi/yY1+t1L@casper.infradead.org> <CAJuCfpFJ0owZELS2COukb0rHCOpqNMW-x9vVonkhknReZb=Zsg@mail.gmail.com>
- <ZD6yirD6Ob+1xG32@casper.infradead.org> <ZD6/805XpvfZde0Y@x1n>
- <CAJuCfpGZAALQbPFGymJOgkMp2knKoos697L8jd1v2jDyBSbdYA@mail.gmail.com>
- <CAJuCfpFFsKkdnHLSojSo0pP-=nQFiY408tpVDHVy6TpGSv1B9g@mail.gmail.com>
- <ZD8dj3Tk2b1TWVK5@x1n> <CAJuCfpFyetOXEMB2+b3LRO9-ESdDTdEyOyfUGsr0FbsWJi1-kA@mail.gmail.com>
- <ZD8p3+XyvCiq9RJW@x1n>
-In-Reply-To: <ZD8p3+XyvCiq9RJW@x1n>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 19 Apr 2023 11:00:10 -0700
-Message-ID: <CAJuCfpG8+99WpKfZ0skd50P3PUrQ80KuNyJoyCy4dkWybYLR9Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] mm: do not increment pgfault stats when page fault
- handler retries
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
-        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 5.10 000/120] 5.10.178-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230419072207.996418578@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230419072207.996418578@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,25 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 4:38=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
->
-> On Tue, Apr 18, 2023 at 03:58:26PM -0700, Suren Baghdasaryan wrote:
-> > Sure. How about replacing my prior "Register both successful and
-> > failed faults in PGFAULT counters." comment with "To preserve the
-> > behavior of older kernels, PGFAULT counters record both successful and
-> > failed faults, as opposed to perf counters which ignore failed cases"
->
-> Looks good here, thanks!
+On 4/19/23 00:23, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.178 release.
+> There are 120 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 21 Apr 2023 07:21:43 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.178-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-v3 is posted at:
-https://lore.kernel.org/all/20230419175836.3857458-1-surenb@google.com/
-Thanks!
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
->
-> --
-> Peter Xu
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
+
