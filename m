@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3203C6E84AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C516E84AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbjDSWUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 18:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42134 "EHLO
+        id S232563AbjDSWUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 18:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbjDSWTg (ORCPT
+        with ESMTP id S232558AbjDSWTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 18:19:36 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A61C6E85
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:41 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a920d484bdso4576465ad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:41 -0700 (PDT)
+        Wed, 19 Apr 2023 18:19:42 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD0F93F4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:46 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a80d827179so4505435ad.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942700; x=1684534700;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942703; x=1684534703;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Nt9qr+Ng8JBl/RErKCxn2q3deom0MBnPuCU/gT00P20=;
-        b=jzzLlLFeiMsuZ9XUDLcOQDkvHl7c/vkCVuAH/Y4TphDSd5Mc9u3gD9w9H9CFYzB5dB
-         VNJgXnI5oLZMEQ3VG1XPXo2sPYkG3mVd4jlqIeNIyytoZFK4U8o75fSdl6rlgSdH8yDf
-         9+C6A4ccVfr/Y6QMC1xbEc1A2Zj6A2nip5LOQdKpRlwCaJZa6zrc37kKkf6MblV8d0h+
-         SCrca1krwloO92QhHfZeNzDRzfTX4CH3FwSkQPPGyJ+li1uF4S8MDV8rlQs97XcIZPKM
-         ki/SaLm60kl0sQ2WGkbdIBtaAJDxWkY52gy3+Wk0TvSwU5O4fxtQHmdRQz9B0d/5bKvD
-         GE7Q==
+        bh=vFCr/CCby/ixIZR1vcNNYtJI+Hn/JpPKkTFrcmf/240=;
+        b=o8cl3vLFW0T/UgdJpNmsgqy/trLWjUKDtYhD18vtn6zFmKJnhCVb3UEfS7g11Yxo6v
+         70pgYAJ/oiEoiEaIzaXTTARUDuEe0wemxcSCjeDS0me1n4QkzpJpeXfeqrgbXd5cjW+8
+         mPLL2Zixb1wKKpwdABmEKJb6AdfFo9aF/CARiWba1a9ZO3iyrr6WtwnggyEbtMKiFH3H
+         d5ALpqRY6NcLK/kvZ5gIdFQLtEIiUaW/W6h18t9SJVK+nkmzEtEqwMweSnvDyUAtFakX
+         ItHgUeBEX6SFRd5as2TzksX5YG1nm8yDIWTd3Rsk2EmExawcoSXVI008NBflAu//NIVj
+         OPxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681942700; x=1684534700;
+        d=1e100.net; s=20221208; t=1681942703; x=1684534703;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Nt9qr+Ng8JBl/RErKCxn2q3deom0MBnPuCU/gT00P20=;
-        b=k3LC/p19T53Gi74UFuP364ZjMZVBn/C2zkCteoBy4nc2X6QwIYrWvwHsXfZXBEXwwc
-         fWd4+n+yve+L6mXIY5gL8kQKQJ71vOvCVB/yqs1Pwxnef3OzY2cxNXHCBEX1iC+5RUxj
-         +LaETQLu0PXyQArCer5QxEXRCDoiNKG7k1uWex9Oo7NbB/fLCJ0gyao/1QDv5DL6ymWB
-         CVsY8L0rx7ahAcUxG141TzMGDCdWGTrn7Qya77IQIjy7EAciJUmIMhWGagKlyDWC5z/Z
-         jEWJkGrvfbwa5owW8znQ9eGRl912G342yVaurZ/+vO1JNvzVPbJeAqUa6eXy+4kHV5KG
-         2/Zw==
-X-Gm-Message-State: AAQBX9fD6Jlv7vaI0WSNljBES3WNTGLVsdZ5H3S11Q55ZwCFa6KgYA6m
-        H3HfKvxcgpc/YXsw4TfIc6MNaGzUVrkc9LYhq3Q=
-X-Google-Smtp-Source: AKy350bclXeDaJm5NGd+baLQjNm1etLX+lLDzeTXzfOcBiZB99+UVCqjhPXny+Rg6qaFMwVObWbhvw==
-X-Received: by 2002:a17:903:110e:b0:1a6:6fe3:df91 with SMTP id n14-20020a170903110e00b001a66fe3df91mr7814057plh.50.1681942700098;
-        Wed, 19 Apr 2023 15:18:20 -0700 (PDT)
+        bh=vFCr/CCby/ixIZR1vcNNYtJI+Hn/JpPKkTFrcmf/240=;
+        b=KeWuNCFQtE6LRSKgJ8bXUohOCACjPrZiZxO6GS9/R7wYbg+KgI3j12kSQ89vhz0SWa
+         DLdJTAImXZ4YIhRsLhR4zu+dM0bR5v9h7RUSj1ObIpipmdAZZe+qPHF8YpXpG9ZXSQ8J
+         Y8d8bbiEziywxvaAViC69a33B8F1WoHs8xJlPTqmzVVq96og0hAQRaaAWJqEM+bWUIul
+         XjtbqLyBN27jnj3l2rlz2qPJJm8BpA2hOFL2dnb/GkIbMY0Tuj20PrP/37VrLtPVcdw5
+         2vs6g760DXIzLx3Ean/PRAFegbaGe/vuSTLcBDG0OEGJaKd1HcP03c/UGFLolK8a+izs
+         ETnQ==
+X-Gm-Message-State: AAQBX9dCMD+3oLBU5JsVKkRIzgsEUf9z57gkH7W0QRSxpDCaLw9xzFL3
+        kG/R/iapeinME516Kqoc/xPQLt3m05AhlYFVv4Q=
+X-Google-Smtp-Source: AKy350YqF/4+akV7tQXSVqBJeeYYqMrxklqGFMYEM4KYqKrP5PB2sjQSY1CZVqN7qH3odtWcRYYeog==
+X-Received: by 2002:a17:903:290:b0:19d:b02:cca5 with SMTP id j16-20020a170903029000b0019d0b02cca5mr6589575plr.12.1681942702695;
+        Wed, 19 Apr 2023 15:18:22 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.18.18
+        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.18.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 15:18:19 -0700 (PDT)
+        Wed, 19 Apr 2023 15:18:22 -0700 (PDT)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     Atish Patra <atishp@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
+Cc:     Rajnesh Kanwal <rkanwal@rivosinc.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Alexandre Ghiti <alex@ghiti.fr>,
         Andrew Jones <ajones@ventanamicro.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Anup Patel <anup@brainfault.org>,
@@ -74,11 +76,10 @@ Cc:     Atish Patra <atishp@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Rajnesh Kanwal <rkanwal@rivosinc.com>,
         Uladzislau Rezki <urezki@gmail.com>
-Subject: [RFC 23/48] RISC-V: KVM: Wireup TVM world switch
-Date:   Wed, 19 Apr 2023 15:16:51 -0700
-Message-Id: <20230419221716.3603068-24-atishp@rivosinc.com>
+Subject: [RFC 24/48] RISC-V: KVM: Update timer functionality for TVMs.
+Date:   Wed, 19 Apr 2023 15:16:52 -0700
+Message-Id: <20230419221716.3603068-25-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230419221716.3603068-1-atishp@rivosinc.com>
 References: <20230419221716.3603068-1-atishp@rivosinc.com>
@@ -94,120 +95,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TVM worlds switch takes a different path from regular VM world switch as
-it needs to make an ecall to TSM and TSM actually does the world switch.
-The host doesn't need to save/restore any context as TSM is expected
-to do that on behalf of the host. The TSM updatess the trap
-information in the shared memory which host uses to figure out the
-cause of the guest exit.
+From: Rajnesh Kanwal <rkanwal@rivosinc.com>
 
+TSM manages the htimedelta/vstimecmp for the TVM and shares it
+with the host to properly schedule hrtimer to keep timer interrupt ticking.
+TSM only sets htimedetla when first VCPU is run to make sure host
+is not able to control the start time of the VM. TSM updates vstimemcp
+at every vmexit and ignores any write to vstimecmp from the host.
+
+Signed-off-by: Rajnesh Kanwal <rkanwal@rivosinc.com>
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/kvm/cove.c      | 31 +++++++++++++++++++++++++++++--
- arch/riscv/kvm/vcpu.c      | 11 +++++++++++
- arch/riscv/kvm/vcpu_exit.c | 10 ++++++++++
- 3 files changed, 50 insertions(+), 2 deletions(-)
+ arch/riscv/kvm/cove.c       |  8 ++++++++
+ arch/riscv/kvm/vcpu_timer.c | 26 +++++++++++++++++++++++++-
+ 2 files changed, 33 insertions(+), 1 deletion(-)
 
 diff --git a/arch/riscv/kvm/cove.c b/arch/riscv/kvm/cove.c
-index c93de9b..c11db7a 100644
+index c11db7a..4a8a8db 100644
 --- a/arch/riscv/kvm/cove.c
 +++ b/arch/riscv/kvm/cove.c
-@@ -275,9 +275,36 @@ int kvm_riscv_cove_gstage_map(struct kvm_vcpu *vcpu, gpa_t gpa, unsigned long hv
- 	return rc;
- }
+@@ -282,6 +282,7 @@ void noinstr kvm_riscv_cove_vcpu_switchto(struct kvm_vcpu *vcpu, struct kvm_cpu_
+ 	struct kvm_cove_tvm_context *tvmc;
+ 	struct kvm_cpu_context *cntx = &vcpu->arch.guest_context;
+ 	void *nshmem;
++	struct kvm_guest_timer *gt = &kvm->arch.timer;
  
--void kvm_riscv_cove_vcpu_switchto(struct kvm_vcpu *vcpu, struct kvm_cpu_trap *trap)
-+void noinstr kvm_riscv_cove_vcpu_switchto(struct kvm_vcpu *vcpu, struct kvm_cpu_trap *trap)
- {
--	/* TODO */
-+	int rc;
-+	struct kvm *kvm = vcpu->kvm;
-+	struct kvm_cove_tvm_context *tvmc;
-+	struct kvm_cpu_context *cntx = &vcpu->arch.guest_context;
-+	void *nshmem;
+ 	if (!kvm->arch.tvmc)
+ 		return;
+@@ -305,6 +306,13 @@ void noinstr kvm_riscv_cove_vcpu_switchto(struct kvm_vcpu *vcpu, struct kvm_cpu_
+ 		trap->scause = EXC_CUSTOM_KVM_COVE_RUN_FAIL;
+ 		return;
+ 	}
 +
-+	if (!kvm->arch.tvmc)
-+		return;
-+
-+	tvmc = kvm->arch.tvmc;
-+
-+	nshmem = nacl_shmem();
-+	/* Invoke finalize to mark TVM is ready run for the first time */
-+	if (unlikely(!tvmc->finalized_done)) {
-+
-+		rc = sbi_covh_tsm_finalize_tvm(tvmc->tvm_guest_id, cntx->sepc, cntx->a1);
-+		if (rc) {
-+			kvm_err("TVM Finalized failed with %d\n", rc);
-+			return;
-+		}
-+		tvmc->finalized_done = true;
-+	}
-+
-+	rc = sbi_covh_run_tvm_vcpu(tvmc->tvm_guest_id, vcpu->vcpu_idx);
-+	if (rc) {
-+		trap->scause = EXC_CUSTOM_KVM_COVE_RUN_FAIL;
-+		return;
-+	}
++	/* Read htimedelta from shmem. Given it's written by TSM only when we
++	 * run first VCPU, we need to update this here rather than in timer
++	 * init.
++	 */
++	if (unlikely(!gt->time_delta))
++		gt->time_delta = nacl_shmem_csr_read(nshmem, CSR_HTIMEDELTA);
  }
  
  void kvm_riscv_cove_vcpu_destroy(struct kvm_vcpu *vcpu)
-diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-index 3e04b78..43a0b8c 100644
---- a/arch/riscv/kvm/vcpu.c
-+++ b/arch/riscv/kvm/vcpu.c
-@@ -1042,6 +1042,11 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
- 	kvm_riscv_vcpu_timer_save(vcpu);
+diff --git a/arch/riscv/kvm/vcpu_timer.c b/arch/riscv/kvm/vcpu_timer.c
+index 71a4560..f059e14 100644
+--- a/arch/riscv/kvm/vcpu_timer.c
++++ b/arch/riscv/kvm/vcpu_timer.c
+@@ -14,6 +14,7 @@
+ #include <asm/delay.h>
+ #include <asm/kvm_nacl.h>
+ #include <asm/kvm_vcpu_timer.h>
++#include <asm/kvm_cove.h>
  
- 	if (kvm_riscv_nacl_available()) {
-+		/**
-+		 * For TVMs, we don't need a separate case as TSM only updates
-+		 * the required CSRs during the world switch. All other CSR
-+		 * value should be zeroed out by TSM anyways.
-+		 */
- 		nshmem = nacl_shmem();
- 		csr->vsstatus = nacl_shmem_csr_read(nshmem, CSR_VSSTATUS);
- 		csr->vsie = nacl_shmem_csr_read(nshmem, CSR_VSIE);
-@@ -1191,6 +1196,12 @@ static void noinstr kvm_riscv_vcpu_enter_exit(struct kvm_vcpu *vcpu,
- 			gcntx->hstatus = csr_swap(CSR_HSTATUS, hcntx->hstatus);
- 		}
+ static u64 kvm_riscv_current_cycles(struct kvm_guest_timer *gt)
+ {
+@@ -71,6 +72,10 @@ static int kvm_riscv_vcpu_timer_cancel(struct kvm_vcpu_timer *t)
  
-+		trap->htval = nacl_shmem_csr_read(nshmem, CSR_HTVAL);
-+		trap->htinst = nacl_shmem_csr_read(nshmem, CSR_HTINST);
-+	} else if (is_cove_vcpu(vcpu)) {
-+		nshmem = nacl_shmem();
-+		kvm_riscv_cove_vcpu_switchto(vcpu, trap);
+ static int kvm_riscv_vcpu_update_vstimecmp(struct kvm_vcpu *vcpu, u64 ncycles)
+ {
++	/* Host is not allowed to update the vstimecmp for the TVM */
++	if (is_cove_vcpu(vcpu))
++		return 0;
 +
- 		trap->htval = nacl_shmem_csr_read(nshmem, CSR_HTVAL);
- 		trap->htinst = nacl_shmem_csr_read(nshmem, CSR_HTINST);
- 	} else {
-diff --git a/arch/riscv/kvm/vcpu_exit.c b/arch/riscv/kvm/vcpu_exit.c
-index 8944e29..c46e7f2 100644
---- a/arch/riscv/kvm/vcpu_exit.c
-+++ b/arch/riscv/kvm/vcpu_exit.c
-@@ -218,6 +218,15 @@ int kvm_riscv_vcpu_exit(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 		else if (vcpu->arch.guest_context.hstatus & HSTATUS_SPV)
- 			ret = kvm_riscv_vcpu_sbi_ecall(vcpu, run);
+ #if defined(CONFIG_32BIT)
+ 	nacl_csr_write(CSR_VSTIMECMP, ncycles & 0xFFFFFFFF);
+ 	nacl_csr_write(CSR_VSTIMECMPH, ncycles >> 32);
+@@ -221,6 +226,11 @@ int kvm_riscv_vcpu_set_reg_timer(struct kvm_vcpu *vcpu,
+ 		ret = -EOPNOTSUPP;
  		break;
-+	case EXC_CUSTOM_KVM_COVE_RUN_FAIL:
-+		if (likely(is_cove_vcpu(vcpu))) {
-+			ret = -EACCES;
-+			run->fail_entry.hardware_entry_failure_reason =
-+				KVM_EXIT_FAIL_ENTRY_COVE_RUN_VCPU;
-+			run->fail_entry.cpu = vcpu->cpu;
-+			run->exit_reason = KVM_EXIT_FAIL_ENTRY;
-+		}
-+		break;
- 	default:
+ 	case KVM_REG_RISCV_TIMER_REG(time):
++		/* For trusted VMs we can not update htimedelta. We can just
++		 * read it from shared memory.
++		 */
++		if (is_cove_vcpu(vcpu))
++			return -EOPNOTSUPP;
+ 		gt->time_delta = reg_val - get_cycles64();
  		break;
- 	}
-@@ -225,6 +234,7 @@ int kvm_riscv_vcpu_exit(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 	/* Print details in-case of error */
- 	if (ret < 0) {
- 		kvm_err("VCPU exit error %d\n", ret);
-+		//TODO: These values are bogus/stale for a TVM. Improve it
- 		kvm_err("SEPC=0x%lx SSTATUS=0x%lx HSTATUS=0x%lx\n",
- 			vcpu->arch.guest_context.sepc,
- 			vcpu->arch.guest_context.sstatus,
+ 	case KVM_REG_RISCV_TIMER_REG(compare):
+@@ -287,6 +297,7 @@ static void kvm_riscv_vcpu_update_timedelta(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_guest_timer *gt = &vcpu->kvm->arch.timer;
+ 
++
+ #if defined(CONFIG_32BIT)
+ 	nacl_csr_write(CSR_HTIMEDELTA, (u32)(gt->time_delta));
+ 	nacl_csr_write(CSR_HTIMEDELTAH, (u32)(gt->time_delta >> 32));
+@@ -299,6 +310,10 @@ void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_vcpu_timer *t = &vcpu->arch.timer;
+ 
++	/* While in CoVE, HOST must not manage HTIMEDELTA or VSTIMECMP for TVM */
++	if (is_cove_vcpu(vcpu))
++		goto skip_hcsr_update;
++
+ 	kvm_riscv_vcpu_update_timedelta(vcpu);
+ 
+ 	if (!t->sstc_enabled)
+@@ -311,6 +326,7 @@ void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
+ 	nacl_csr_write(CSR_VSTIMECMP, t->next_cycles);
+ #endif
+ 
++skip_hcsr_update:
+ 	/* timer should be enabled for the remaining operations */
+ 	if (unlikely(!t->init_done))
+ 		return;
+@@ -358,5 +374,13 @@ void kvm_riscv_guest_timer_init(struct kvm *kvm)
+ 	struct kvm_guest_timer *gt = &kvm->arch.timer;
+ 
+ 	riscv_cs_get_mult_shift(&gt->nsec_mult, &gt->nsec_shift);
+-	gt->time_delta = -get_cycles64();
++	if (is_cove_vm(kvm)) {
++		/* For TVMs htimedelta is managed by TSM and it's communicated using
++		 * NACL shmem interface when first time VCPU is run. so we read it in
++		 * kvm_riscv_cove_vcpu_switchto() where we enter VCPUs.
++		 */
++		gt->time_delta = 0;
++	} else {
++		gt->time_delta = -get_cycles64();
++	}
+ }
 -- 
 2.25.1
 
