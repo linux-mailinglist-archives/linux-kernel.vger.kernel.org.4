@@ -2,177 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C926E7FFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E146E8009
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233003AbjDSRBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 13:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+        id S233417AbjDSREJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 13:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232937AbjDSRA7 (ORCPT
+        with ESMTP id S233437AbjDSREE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 13:00:59 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9237699;
-        Wed, 19 Apr 2023 10:00:52 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 26B1A5FD90;
-        Wed, 19 Apr 2023 20:00:50 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1681923650;
-        bh=OU1NLvRUb+HCxU4lSgffvUw8fBAqCHnX3pFNeD8icRc=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=fAlgunqHuIq2ORPE9XrSBxjsOi6AH149QQIKo3TWZKZiA7QHDR5N5zpH3W1Y95TlD
-         we2qrtaIxkZY+2jbRZqGbJ5y979PRIASi4Mym40S16rAqyxqYz1YhnAOpiN7Z9kgcZ
-         4LlJ4d/UfQutIXxk64iwPhJ3qWojTMcC20QPa7fV8gg9rdFbHb9O2A+IOtBEiIjUDb
-         c8riV2VMvytNa3mAcfkQrqSasVePEDtKj5kHhm9KHKZDpIRpe8cmCJtFkkWUTF7G+c
-         RjeCAfxdmYr0Ygsp7W73JiI1CwWli5aX6r3rJUsOUZzL8l0Zz3Y+XY3JGpyOCM/ERr
-         ek3fRzKrrpemw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 19 Apr 2023 20:00:48 +0300 (MSK)
-Date:   Wed, 19 Apr 2023 20:00:43 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-CC:     =Xianwei Zhao <xianwei.zhao@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [RFC PATCH 1/2] arm64: amlogic: add new ARCH_AMLIPC for IPC SoC
-Message-ID: <20230419170043.auzfa32weevmrt4e@CAB-WSD-L081021>
-References: <20230419073834.972273-1-xianwei.zhao@amlogic.com>
- <20230419073834.972273-2-xianwei.zhao@amlogic.com>
- <20230419131416.cns3xvkbzjeyrnux@CAB-WSD-L081021>
- <661cea17-a4dd-75d1-6a7e-16efa5aea52b@linaro.org>
- <20230419160405.d7qfir3nv6tlxx2a@CAB-WSD-L081021>
- <427e79ef-156d-027e-9296-6f4e6513a04d@linaro.org>
+        Wed, 19 Apr 2023 13:04:04 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9697EF6;
+        Wed, 19 Apr 2023 10:04:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681923842; x=1713459842;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YWEFkjk4Tn32C8B9bIF5tMsJFwcjS2BBCkRcNPRL1DQ=;
+  b=Yz2T8buo5MzkVoHNGVFWq5aJXUDeimuw72EhY38eDy7iIgpGJRhabyGW
+   5q2reARDYKTqOXv20FYSbwszv8ckH6Ryv+D7e3j1Zlzjdb79ZXh2K+4CY
+   ULE3PtNKh5EdD2HDbxbapxcajh48Nh2OvUH7bNkmB6jPcEaqo3BMryD44
+   UDWvkYM3DRbD6hAh7cVJR/g5yrZxCKXOnVL1n6GRi4/NuvA0Iep+YFJpJ
+   /mD5lkAUE5PCPqSUWN1eeFlDd3N2EIP/nQ07/9NhoZ/QUi+QSuWBYIJA5
+   80WP9NLMkDSxiTgUCCP03mHwkKXFsjKEYJXTDx/NcUa/5/aLhOq2hnJF7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="325117127"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="325117127"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 10:04:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="756171542"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="756171542"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Apr 2023 10:03:57 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppBDp-000f2M-0Q;
+        Wed, 19 Apr 2023 17:03:57 +0000
+Date:   Thu, 20 Apr 2023 01:03:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sarannya S <quic_sarannya@quicinc.com>, quic_bjorande@quicinc.com,
+        arnaud.pouliquen@foss.st.com, swboyd@chromium.org,
+        quic_clew@quicinc.com, mathieu.poirier@linaro.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Sarannya S <quic_sarannya@quicinc.com>,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH V6 3/3] rpmsg: char: Add RPMSG GET/SET FLOWCONTROL IOCTL
+ support
+Message-ID: <202304200018.ik0k7dKN-lkp@intel.com>
+References: <1681912409-25248-4-git-send-email-quic_sarannya@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <427e79ef-156d-027e-9296-6f4e6513a04d@linaro.org>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/19 15:29:00 #21128497
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1681912409-25248-4-git-send-email-quic_sarannya@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 06:25:07PM +0200, Neil Armstrong wrote:
-> On 19/04/2023 18:04, Dmitry Rokosov wrote:
-> > On Wed, Apr 19, 2023 at 03:43:12PM +0200, Neil Armstrong wrote:
-> > > On 19/04/2023 15:14, Dmitry Rokosov wrote:
-> > > > On Wed, Apr 19, 2023 at 03:38:33PM +0800, =Xianwei Zhao wrote:
-> > > > > From: Xianwei Zhao <xianwei.zhao@amlogic.com>
-> > > > > 
-> > > > > The C series SoCs are designed for smart IP camera
-> > > > > applications, which does not belong to Meson series.
-> > > > > So, Add ARCH_AMLIPC for the new series.
-> > > > > 
-> > > > > There are now multiple amlogic SoC seies supported, so group them under
-> > > > > their own menu. we can easily add new platforms there in the future.
-> > > > > Introduce ARCH_AMLOGIC to cover all Amlogic SoC series.
-> > > > > 
-> > > > > No functional changes introduced.
-> > > > > 
-> > > > > Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
-> > > > > ---
-> > > > >    arch/arm64/Kconfig.platforms | 12 ++++++++++++
-> > > > >    arch/arm64/configs/defconfig |  2 ++
-> > > > >    2 files changed, 14 insertions(+)
-> > > > > 
-> > > > > diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-> > > > > index 89a0b13b058d..bfbc817eef8f 100644
-> > > > > --- a/arch/arm64/Kconfig.platforms
-> > > > > +++ b/arch/arm64/Kconfig.platforms
-> > > > > @@ -162,12 +162,24 @@ config ARCH_MEDIATEK
-> > > > >    	  This enables support for MediaTek MT27xx, MT65xx, MT76xx
-> > > > >    	  & MT81xx ARMv8 SoCs
-> > > > > +menuconfig ARCH_AMLOGIC
-> > > > > +	bool "NXP SoC support"
-> > > > 
-> > > > NXP? Did you mean "Amlogic"?
-> > > > 
-> > > > > +
-> > > > > +if ARCH_AMLOGIC
-> > > > > +
-> > > > >    config ARCH_MESON
-> > > > >    	bool "Amlogic Platforms"
-> > > > >    	help
-> > > > >    	  This enables support for the arm64 based Amlogic SoCs
-> > > > >    	  such as the s905, S905X/D, S912, A113X/D or S905X/D2
-> > > > > +config ARCH_AMLIPC
-> > > > 
-> > > > Do we really need a different ARCH for Amlogic IPC?
-> > > > I can imagine that it's not the Meson architecture at all.
-> > > > But maybe a better solution is just to rename ARCH_MESON to ARCH_AMLOGIC?
-> > > 
-> > > It should be changed treewide, and is it worth it ?
-> > 
-> > As far as I understand, the A1 and S4 families are not fully compatible
-> > with the Meson architecture, and we haven't provided additional ARCH_*
-> > for them.
-> 
-> The GXBB, GXL/GXM, G12A, G12B & SM1 are also not fully compatible,
-> but they lie under the "MESON" umbrella which covers SoC since the
-> Meson6 architecture. It's a facility to include/exclude Amlogic
-> drivers/DT, nothing else.
-> 
-> If you compare it to BCM or NXP, it's different situation, the
-> different ARCH_* actually targets totally different SoCs from
-> completely different Business Units or from companies acquisitions.
-> 
-> We should have named it ARCH_AMLOGIC since the beginning, but we
-> can't change history.
-> 
-> > In my opinion, it's a good time to split the Meson architecture into
-> > proper subsets, or rename it treewide (maybe only config option
-> > ARCH_MESON => ARCH_AMLOGIC).
-> 
-> MESON is only a codename to differentiate from other SoC vendors
-> because Amlogic used it as a codename for a long time.
-> Compare this to Allwinner's "sunxi" or Qualcomm's "msm".
-> 
-> This config has no functional mean, it's only a config namespace.
-> 
-> Renaming it would need renaming it in all subsystems Kconfig/Makefiles
-> and will certainly break builds with custom kernel configs
-> in various publicly used builds like Armbian, meta-meson, LibreELEC,
-> Debian, Suse, ...
-> 
-> So it's pointless to change, and even add a different one since
-> it's not a family differentiator since the Kernel is modular
-> and works around DT to determine which drivers to probe.
-> 
-> Neil
-> 
+Hi Sarannya,
 
-Thank you for the detailed explanation; it makes sense!
-Actually, I disagree with creating a separate ARCH without first reworking
-all of its subsets - that's why I started this discussion.
-Now, I see that you share my perspective and believe that C3
-should be added to the ARCH_MESON subset, so I have no objections.
+kernel test robot noticed the following build errors:
 
-[...]
+[auto build test ERROR on v6.3-rc7]
+[also build test ERROR on linus/master next-20230418]
+[cannot apply to remoteproc/rpmsg-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sarannya-S/rpmsg-core-Add-signal-API-support/20230419-220040
+patch link:    https://lore.kernel.org/r/1681912409-25248-4-git-send-email-quic_sarannya%40quicinc.com
+patch subject: [PATCH V6 3/3] rpmsg: char: Add RPMSG GET/SET FLOWCONTROL IOCTL support
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230420/202304200018.ik0k7dKN-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4f765ede8c129f07c522ef4a7c6aee27cb466be6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sarannya-S/rpmsg-core-Add-signal-API-support/20230419-220040
+        git checkout 4f765ede8c129f07c522ef4a7c6aee27cb466be6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304200018.ik0k7dKN-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   drivers/rpmsg/rpmsg_char.c: In function 'rpmsg_eptdev_ioctl':
+>> drivers/rpmsg/rpmsg_char.c:334:23: error: too few arguments to function 'rpmsg_set_flow_control'
+     334 |                 ret = rpmsg_set_flow_control(eptdev->ept, set);
+         |                       ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/rpmsg/rpmsg_char.c:23:
+   include/linux/rpmsg.h:200:5: note: declared here
+     200 | int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst);
+         |     ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/rpmsg/rpmsg_char.c:321:13: warning: variable 'val' set but not used [-Wunused-but-set-variable]
+     321 |         u32 val;
+         |             ^~~
+
+
+vim +/rpmsg_set_flow_control +334 drivers/rpmsg/rpmsg_char.c
+
+   314	
+   315	static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
+   316				       unsigned long arg)
+   317	{
+   318		struct rpmsg_eptdev *eptdev = fp->private_data;
+   319	
+   320		bool set;
+ > 321		u32 val;
+   322		int ret;
+   323	
+   324		switch (cmd) {
+   325		case RPMSG_GET_OUTGOING_FLOWCONTROL:
+   326			eptdev->remote_flow_updated = false;
+   327			ret = put_user(eptdev->remote_flow, (int __user *)arg);
+   328			break;
+   329		case RPMSG_SET_INCOMING_FLOWCONTROL:
+   330			ret = get_user(val, (int __user *)arg);
+   331			if (ret)
+   332				break;
+   333			set = !!arg;
+ > 334			ret = rpmsg_set_flow_control(eptdev->ept, set);
+   335			break;
+   336		case RPMSG_DESTROY_EPT_IOCTL:
+   337			/* Don't allow to destroy a default endpoint. */
+   338			if (eptdev->default_ept) {
+   339				ret = -EINVAL;
+   340				break;
+   341			}
+   342			ret = rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
+   343			break;
+   344		default:
+   345			ret = -EINVAL;
+   346		}
+   347	
+   348		return ret;
+   349	}
+   350	
 
 -- 
-Thank you,
-Dmitry
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
