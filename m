@@ -2,128 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D519B6E815D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DAEC6E8163
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjDSSnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
+        id S230332AbjDSSpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDSSnK (ORCPT
+        with ESMTP id S229458AbjDSSpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 14:43:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E813C32;
-        Wed, 19 Apr 2023 11:43:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 113E16419A;
-        Wed, 19 Apr 2023 18:43:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC37BC433EF;
-        Wed, 19 Apr 2023 18:43:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681929788;
-        bh=5RTCILtLjE6PslW82/bAKw5NGHNOYNqtdIPg3yeeo2g=;
-        h=From:Date:Subject:To:Cc:From;
-        b=qrXVnJOByhNAA5zjYye9gYnVfeqD6b7nxk1duWNiS4OdnIlIjlHAVY3Z+B8HNPXPg
-         l5a5wnty2Tszlt/9szdX8eIIKGdvs4ZNnd8QeafkbqSL/oB7lRMRz3hDuHoZOKlnVD
-         yPUZRyVlROqpCqZ88BbsRXHxQKtU9wrGOF13xIj7Sh65Pw2emCsgJj4mTQncPCBAK/
-         sSQKbPXnVrO2HPYucZCxin078KtedZuLSD3N5sUTa1Ur1OvZraHpMSKlverwQQ+MjK
-         OjRZlhzJp3dmmQf6UHBnsetNvs3NNaJw3rU0OhKSrWVQHPTD+T7TZUOT29IPl/sDFJ
-         4K29CbAJMlI/w==
-From:   Nathan Chancellor <nathan@kernel.org>
-Date:   Wed, 19 Apr 2023 11:42:54 -0700
-Subject: [PATCH] MIPS: Mark check_bugs{,_early}() as __init
+        Wed, 19 Apr 2023 14:45:12 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA404680;
+        Wed, 19 Apr 2023 11:45:09 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id o29-20020a05600c511d00b003f1739de43cso10525wms.4;
+        Wed, 19 Apr 2023 11:45:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681929908; x=1684521908;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xfA92ZDWa3tFrZEqbNbZTNF9MWgNQXkklE0ML2qGCi8=;
+        b=bR1dkYt4Ga9qoGYOjrE1JO+w2XRcZejVe/7lGlkWQI19Ddb80Wmyr8oVnJCBh2EJr0
+         kPBHPHrumApNAfxu4PjCNlzv2fuKy1Sh1ZrkJWc/cd2mjQN1gStgblOU+zk6erYMDf7/
+         5C+iCLszgCC15OQ9vSQI7isnvi51p78CWC54EPuJsV4au/7yOE6d0s6Ehl5bN456mSmZ
+         gQLzgoUnjjToQNvCFSGWoL3h1noAIP/5ETYQa+IIApUcHT4uTOsqrvKcM7KTmTC5J6HJ
+         LAujbpJDDEbJqtXqw/AbLlLXdzPInzR/HsFpleDe5mwl+2aLNeW9NBqdQdEH1PT+PO5W
+         WY8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681929908; x=1684521908;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xfA92ZDWa3tFrZEqbNbZTNF9MWgNQXkklE0ML2qGCi8=;
+        b=k8rVIbeFK6Ms6xsdFLoWFb7YVVmb3aiAxvz6BONv1L3b6BLm853bmNRK6m6qSk3aLR
+         EXiIx/BuWT08GwgsVCJiLRrpKn/X7bPONrBgKiGOfxqyWA8DrtStGkscwc/9HlMXlanc
+         7swXx3a/B3I27PWn2EZe1J/hem3a9D1i3eHrgT2E1UhPucxO5q84hWTqoM1KPtQpd/1c
+         5MCLzkdD73gZtCRkSuKGHYB2sUKJE4jMAilN2Pt3rGc4pOUhaQyH4QtyZmk0zzz5eOTV
+         fPRDwCN8EBp5jBFovm9FQ8qBV3BgJX5cdAbRlVxjhQdts8rDFxPtnvA6l3RJOjs19Frp
+         jnRg==
+X-Gm-Message-State: AAQBX9cZgJuq6EBnEYqW670r6q0SG9/E+bz3MgHxt+gb+G9DBD5ZeV63
+        XRAPuplYu7PnMED2bpl1m6U=
+X-Google-Smtp-Source: AKy350aoV810DLoDWAD0ai0Hb41gGEXLSlJwB5TdjddxVt+yFuIRAfMXTSpF67oE5LJ4PfVb77lGoA==
+X-Received: by 2002:a7b:cbd1:0:b0:3f1:6836:5db5 with SMTP id n17-20020a7bcbd1000000b003f168365db5mr2707956wmi.5.1681929907613;
+        Wed, 19 Apr 2023 11:45:07 -0700 (PDT)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id h16-20020a05600c351000b003eddc6aa5fasm3014514wmq.39.2023.04.19.11.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 11:45:06 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 19:45:06 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org
+Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
+ pin_user_pages()
+Message-ID: <8bf0df41-27ef-4305-b424-e43045a6d68d@lucifer.local>
+References: <936e8f52-00be-6721-cb3e-42338f2ecc2f@kernel.dk>
+ <c2e22383-43ee-5cf0-9dc7-7cd05d01ecfb@kernel.dk>
+ <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
+ <69f48cc6-8fc6-0c49-5a79-6c7d248e4ad5@kernel.dk>
+ <bec03e0f-a0f9-43c3-870b-be406ca848b9@lucifer.local>
+ <8af483d2-0d3d-5ece-fb1d-a3654411752b@kernel.dk>
+ <d601ca0c-d9b8-4e5d-a047-98f2d1c65eb9@lucifer.local>
+ <ZEAxhHx/4Ql6AMt2@casper.infradead.org>
+ <ZEAx90C2lDMJIux1@nvidia.com>
+ <ZEA0dbV+qIBSD0mG@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAC02QGQC/x2N0QrCMAwAf2Xk2UDbOUF/RWQ0XVyDrI6kE2Hs3
- 918PA7uVjBWYYNbs4LyR0zeZQd/aiDlWEZGGXaG4ELrzv6Kk8yGKXN69bSMhlKkYqxVhZbK6ML
- Fu5YGCl0He4SiMZLGkvKRmaJV1kPMyk/5/s/3x7b9AM63U+CJAAAA
-To:     tsbogend@alpha.franken.de
-Cc:     ndesaulniers@google.com, jpoimboe@kernel.org, peterz@infradead.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2451; i=nathan@kernel.org;
- h=from:subject:message-id; bh=5RTCILtLjE6PslW82/bAKw5NGHNOYNqtdIPg3yeeo2g=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCkOZtZiVTXtbxMjXzFuv7FMe9NhA/vfM3q0ZjyoP7XhM
- Wc8x9WtHaUsDGIcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAi128w/M+5PHXGmS0xvmt/
- ye9RCA5WXHzHQax+ndPinrxTqw7G3l/IyHBUsa+Y68MvTUXH+1Eiy5urcm5+WVWZ/pX9+nrH0m9
- 781gA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZEA0dbV+qIBSD0mG@casper.infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit ac7c3e4ff401 ("compiler: enable CONFIG_OPTIMIZE_INLINING
-forcibly"), a compiler may choose not to inline a function marked with
-just 'inline'. If check_bugs() is not inlined into start_kernel(), which
-occurs when building with clang after commit 9ea7e6b62c2b ("init: Mark
-[arch_call_]rest_init() __noreturn"), modpost complains with:
+On Wed, Apr 19, 2023 at 07:35:33PM +0100, Matthew Wilcox wrote:
+> On Wed, Apr 19, 2023 at 03:24:55PM -0300, Jason Gunthorpe wrote:
+> > On Wed, Apr 19, 2023 at 07:23:00PM +0100, Matthew Wilcox wrote:
+> > > On Wed, Apr 19, 2023 at 07:18:26PM +0100, Lorenzo Stoakes wrote:
+> > > > So even if I did the FOLL_ALLOW_BROKEN_FILE_MAPPING patch series first, I
+> > > > would still need to come along and delete a bunch of your code
+> > > > afterwards. And unfortunately Pavel's recent change which insists on not
+> > > > having different vm_file's across VMAs for the buffer would have to be
+> > > > reverted so I expect it might not be entirely without discussion.
+> > >
+> > > I don't even understand why Pavel wanted to make this change.  The
+> > > commit log really doesn't say.
+> > >
+> > > commit edd478269640
+> > > Author: Pavel Begunkov <asml.silence@gmail.com>
+> > > Date:   Wed Feb 22 14:36:48 2023 +0000
+> > >
+> > >     io_uring/rsrc: disallow multi-source reg buffers
+> > >
+> > >     If two or more mappings go back to back to each other they can be passed
+> > >     into io_uring to be registered as a single registered buffer. That would
+> > >     even work if mappings came from different sources, e.g. it's possible to
+> > >     mix in this way anon pages and pages from shmem or hugetlb. That is not
+> > >     a problem but it'd rather be less prone if we forbid such mixing.
+> > >
+> > >     Cc: <stable@vger.kernel.org>
+> > >     Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> > >     Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> > >
+> > > It even says "That is not a problem"!  So why was this patch merged
+> > > if it's not fixing a problem?
+> > >
+> > > It's now standing in the way of an actual cleanup.  So why don't we
+> > > revert it?  There must be more to it than this ...
+> >
+> > https://lore.kernel.org/all/61ded378-51a8-1dcb-b631-fda1903248a9@gmail.com/
+>
+> So um, it's disallowed because Pavel couldn't understand why it
+> should be allowed?  This gets less and less convincing.
+>
+> FWIW, what I was suggesting was that we should have a FOLL_SINGLE_VMA
+> flag, which would use our shiny new VMA lock infrastructure to look
+> up and lock _one_ VMA instead of having the caller take the mmap_lock.
+> Passing that flag would be a tighter restriction that Pavel implemented,
+> but would certainly relieve some of his mental load.
+>
+> By the way, even if all pages are from the same VMA, they may still be a
+> mixture of anon and file pages; think a MAP_PRIVATE of a file when
+> only some pages have been written to.  Or an anon MAP_SHARED which is
+> accessible by a child process.
 
-  WARNING: modpost: vmlinux.o: section mismatch in reference: check_bugs (section: .text) -> check_bugs32 (section: .init.text)
+Indeed, my motive for the series came out of a conversation with you about
+vmas being odd (thanks! :), however I did end up feeling FOLL_SINGLE_VMA
+would be too restricted and would break the uAPI.
 
-check_bugs() is only called from start_kernel(), which itself is marked
-__init, so mark check_bugs() as __init as well to clear up the warning
-and make everything work properly.
+For example, imagine if a user (yes it'd be weird) mlock'd some pages in a
+buffer and not others, then we'd break their use case. Also (perhaps?) more
+feasibly, a user might mix hugetlb and anon pages. So I think that'd be too
+restrictive here.
 
-While there is currently no warning about check_bugs_early(), it could
-have the same problem, as it is called from arch_setup() and calls
-check_bugs64_early(), both marked __init. Mark it as __init for the same
-reason as above.
+However the idea of just essentially taking what Jens has had to do
+open-coded and putting it into GUP as a whole really feels like the right
+thing to do.
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-NOTE: This is based on v6.3-rc7, as the issue shows up due to a patch in
-the tip tree, but this appears to be an ancient issue that could have
-showed up at any point (hence why no explicit Fixes tag), so I chose a
-base that should allow either the MIPS or tip folks to apply this patch.
+I do like the idea of a FOLL_SINGLE_VMA for other use cases though, the
+majority of which want one and one page only. Perhaps worth taking the
+helper added in this series (get_user_page_vma_remote() from [1]) and
+replacing it with an a full GUP function which has an interface explicitly
+for this common single page/vma case.
 
-Additionally, I was tempted to remove the explicit 'inline' since the
-compiler is free to do whatever it wants anyways but this is a static
-function in a header so we would need to add '__maybe_unused', which is
-already added with 'inline' in a normal build so I just left it alone.
----
- arch/mips/include/asm/bugs.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/include/asm/bugs.h b/arch/mips/include/asm/bugs.h
-index d72dc6e1cf3c..9b9bf9bc7d24 100644
---- a/arch/mips/include/asm/bugs.h
-+++ b/arch/mips/include/asm/bugs.h
-@@ -24,13 +24,13 @@ extern void check_bugs64_early(void);
- extern void check_bugs32(void);
- extern void check_bugs64(void);
- 
--static inline void check_bugs_early(void)
-+static inline void __init check_bugs_early(void)
- {
- 	if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
- 		check_bugs64_early();
- }
- 
--static inline void check_bugs(void)
-+static inline void __init check_bugs(void)
- {
- 	unsigned int cpu = smp_processor_id();
- 
-
----
-base-commit: 6a8f57ae2eb07ab39a6f0ccad60c760743051026
-change-id: 20230419-mips-check_bugs-init-attribute-026103bdb255
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+[1]:https://lore.kernel.org/linux-mm/7c6f1ae88320bf11d2f583178a3d9e653e06ac63.1681831798.git.lstoakes@gmail.com/
