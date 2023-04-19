@@ -2,59 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C216E7CD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C266E7CD9
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232383AbjDSOfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 10:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
+        id S232894AbjDSOgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 10:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjDSOfQ (ORCPT
+        with ESMTP id S232635AbjDSOgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 10:35:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF15CE;
-        Wed, 19 Apr 2023 07:35:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 19 Apr 2023 10:36:00 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86167ECD
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:35:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F35FF6238A;
-        Wed, 19 Apr 2023 14:35:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2F1C433D2;
-        Wed, 19 Apr 2023 14:35:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681914914;
-        bh=sBYbUiJ6GlCWj4lYqLlaskm6OAopEbc4bQC5luPU9Tg=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=OKKeavw9KAKCyJMFID/gsexph94AvBnlqXJYcXH8ScMbhtZRBm/XzDjUamvrscn/t
-         lANg4Ig3Te4XIhTywIcanyOf0gdNLui07r9YSDxXwHHcizz7wYdUMimUisEQPCW/23
-         WUB3ETEuam2/O71qFvPHRLhTZpJpYqDEQxCDZiaaCGn3tPN954phonD8c/xtOLzIru
-         vs1kpvSYFr0JcIH5xwQRmgs7lkDCW4I9qVMuMupi6bq0UnxRcLK2urzhE69QvPoZ5u
-         stDFtMNvNMyomVbDSe/XFbJmTDRhtP6RaMFYB1M2xewMzPslHBcyl+kEtV/lmE+CLn
-         9a/JSMhue0uTA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org
-In-Reply-To: <c167c16a535049d56f817bbede9c9f6f0a0f4c68.1681626553.git.christophe.jaillet@wanadoo.fr>
-References: <c167c16a535049d56f817bbede9c9f6f0a0f4c68.1681626553.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] ASoC: fsl: Simplify an error message
-Message-Id: <168191491177.87831.11926959447891085887.b4-ty@kernel.org>
-Date:   Wed, 19 Apr 2023 15:35:11 +0100
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E64971FD93;
+        Wed, 19 Apr 2023 14:35:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681914952; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0zceTr3IJvZAOP6+2eeC0vH3EC5khW0Gmy792chY32s=;
+        b=ogvZyIAjdJEHmhNihYmNWEk4ZzZW3kDWQU/3MM6QbERZwdcEHpaEx3D40HQHSaLZlGzH0J
+        +xqSkOoVowITwW3e24rleVA7FbWaqvuYtngTcpoifDjW2h7SRi9HhEYJ9Wn/XZp4FQ7+o8
+        qSr3pYdK/GRyC7PFofYV3Lkg7+rS7mc=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BFB1613580;
+        Wed, 19 Apr 2023 14:35:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id UKqnK0j8P2QhdgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 19 Apr 2023 14:35:52 +0000
+Date:   Wed, 19 Apr 2023 16:35:51 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Russell King <linux@armlinux.org.uk>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v7 00/13] fold per-CPU vmstats remotely
+Message-ID: <ZD/8R6sacS45ggyt@dhcp22.suse.cz>
+References: <20230320180332.102837832@redhat.com>
+ <20230418150200.027528c155853fea8e4f58b2@linux-foundation.org>
+ <ZD/NAaa5TVcL7Mxm@tpad>
+ <ZD/Qq9v0EDxUn7HW@tpad>
+ <ZD/XoBTqJBL2G+Dk@tpad>
+ <ZD/dYXJD2xcoWFoQ@localhost.localdomain>
+ <ZD/xE6kR4RSOvUlR@tpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZD/xE6kR4RSOvUlR@tpad>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,37 +74,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 16 Apr 2023 08:29:34 +0200, Christophe JAILLET wrote:
-> dev_err_probe() already display the error code. There is no need to
-> duplicate it explicitly in the error message.
+On Wed 19-04-23 10:48:03, Marcelo Tosatti wrote:
+> On Wed, Apr 19, 2023 at 02:24:01PM +0200, Frederic Weisbecker wrote:
+[...]
+> > 2) Run critical code
+> > 3) Optionally do something once you're done
+> > 
+> > If vmstat is going to be the only thing to wait for on 1), then the remote
+> > solution looks good enough (although I leave that to -mm guys as I'm too
+> > clueless about those matters), 
 > 
-> 
+> I am mostly clueless too, but i don't see a problem with the proposed
+> patch (and no one has pointed any problem either).
 
-Applied to
+I really hate to repeat myself again. The biggest pushback has been on
+a) justification and b) single purpose solution which is very likely
+incomplete. For a) we are getting the story piece by piece which doesn't
+speed up the process. You are proposing a non-trivial change to an
+already convoluted code so having a solid justification is something
+that shouldn't be all that surprising.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+b) is what concerns me more though. There are other per-cpu specific
+things going on that require some regular flushing. Just to mention
+another one that your group has been brought up was the memcg pcp
+caches. Again with a non-trivial proposal to deal with that problem
+[1]. It has turned out that we can do a simpler thing [2]. I do not
+think it is a stretch to expect that similar things will pop out every
+now and then and rather than dealing with each one in its own way it
+kinda makes sense to come up with a more general concept so that all
+those cases can be handled at a single place at least. All I hear about
+that is that the code of those special applications would need to be
+changed to use that. Well, true but is that bar so impractical that we
+are going to grow kernel complexity and therefore a maintenance burden?
+Everything for a very specialized workloads?
 
-Thanks!
-
-[1/1] ASoC: fsl: Simplify an error message
-      commit: 574399f4c997ad71fab95dd875a9ff55424f9a3d
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+[1] http://lkml.kernel.org/r/20221102020243.522358-1-leobras@redhat.com
+[2] http://lkml.kernel.org/r/20230317134448.11082-1-mhocko@kernel.org
+-- 
+Michal Hocko
+SUSE Labs
