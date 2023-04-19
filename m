@@ -2,178 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82716E808D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D72226E8096
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233351AbjDSRov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 13:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
+        id S233523AbjDSRpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 13:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233194AbjDSRok (ORCPT
+        with ESMTP id S233263AbjDSRpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 13:44:40 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501A37A88
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:44:34 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-2fa0ce30ac2so2494715f8f.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:44:34 -0700 (PDT)
+        Wed, 19 Apr 2023 13:45:02 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E09472A0;
+        Wed, 19 Apr 2023 10:44:51 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-18777914805so297825fac.1;
+        Wed, 19 Apr 2023 10:44:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1681926273; x=1684518273;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ROUAJ3vebc3B58gonFIlZLfyJgCy1SquuVeVRDPgo4k=;
-        b=rV1SY1HjqfZJWS95ixllED1SyOQI0mACYJ32SA6LKdtge1H/PSycfXoER6k3XdUuR/
-         K3nM9X6KUTRx04ctCucbjxNvHDcesjAfCQMxwcAW8YbNOYkp8zLOHdAnAjPWfUDHfayd
-         JGY8gduOocq1g+el6OYLsGZnf3WAAxRDecfE9i0dOjPJPEo8tbvC6eR24yuTju7IZSKD
-         3aehtu4ijyGcOwRmPHv79DHEwf1jW+AB2xHRnzOMzBsyCKb2IdWqmIvhWV03ScMtIXDm
-         pjVhOlKnEHciMSa36NihrFnbbMC/fASgJggdRQJ02QX5ZwfkfGlvq+7GPX0cEoiRTn0H
-         e6pg==
+        d=gmail.com; s=20221208; t=1681926291; x=1684518291;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ROxF1m2E3+7Rhy4bCnkyAJPHzO/m6/QTfEY4C+9JAc=;
+        b=AjM8E+kpHI+BtRFpFjJD8UQlP+oaY81H6l5eDMl0Zh+vOMI6VbCELcfvLZIJHrBsO9
+         8tFoiW/pbq8FdbtECcdG+zZCT1DBZlGsuXLstQIEQ1S20pKtmgd3tthlBLbNT0iFPX4H
+         0fJQfQAtLzuMNHTUXpo1lmey/1ThxoxRHwvcWIlBSsHKAGIwgJT4fWvCjDqkagQ9l02f
+         7TmlFGkxthw0Sx3/MqCT2DyK1RBvoUzpAszVYoX5oJKo8P2P55af7/5aW8lqOI5ySlBO
+         ABJWmDdMfPxx8g4aJiiA/+/i+9bDNHdm0JqNSqIvmEo6oMXceazrT+loPSgQ3ELOQW5F
+         8sVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681926273; x=1684518273;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ROUAJ3vebc3B58gonFIlZLfyJgCy1SquuVeVRDPgo4k=;
-        b=hSF0F+7V7WSUa7k7I43iOsY+/Th5tO3RbGtyGRbMDsraSNVuSb+IRv4QB2o7OrcxaT
-         iAGWLdOsvhtqiaIwAnuIMMkYC5NXcDM3FmHFLr64t3bxYCNl9yUUGGYaRKOSxaZQNDb9
-         DUVkvavZMB3bUgk64CVKnAGM3XvPKhGMkL/sq0GVQ7+MKad8PN35Vphu7OOtpixHEDCb
-         h64l/s2O8UPP0AdVsQdZ4XIVoem0V1ex94UR4E3lmwjXl+uMCsoojUQ0fzGV9KTPWWf2
-         XOj1ciVTAMpFH801nw2CB0HD6t7VObDaSLa3BFcnybhWe5kaDUSWs85+CwVXmJrMbxwu
-         Qtow==
-X-Gm-Message-State: AAQBX9cCKiGX/5bGdarPks28NPK/VUhqMaGAdpRTAe/rbtlBil5+dIDf
-        ObjOYgT+je7V7Hy8Rlv7WZr1ZQ==
-X-Google-Smtp-Source: AKy350b03Y5l3VuqIxjLj42ubMpzPeiZCCz96qX/fps7NotRYfqZdIH7jpaBCeK2CQIwst/c0gJ4Lw==
-X-Received: by 2002:a05:6000:1c8:b0:2ff:4904:c377 with SMTP id t8-20020a05600001c800b002ff4904c377mr1806523wrx.25.1681926272692;
-        Wed, 19 Apr 2023 10:44:32 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id o18-20020a5d4092000000b002fe87e0706bsm3027879wrp.97.2023.04.19.10.44.31
+        d=1e100.net; s=20221208; t=1681926291; x=1684518291;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+ROxF1m2E3+7Rhy4bCnkyAJPHzO/m6/QTfEY4C+9JAc=;
+        b=E76JXRM7DUgFMKBKowpOzucLIX335nMlPM7xjznb/0xCka7XkB7ds7qoxIl6t6iU31
+         cKkrpL2VJBGP9y6oL/t76Vvv6diEKcMZWj6jL/qCmPMktsUpnlTRHfb7ZRuLwYfI45GZ
+         O8SCdEnhFb1nJcwzJWlqKjG7c8ZaFtvHMIloA8KEHv2CjiEmnUNfFJ76tKx09ePAJg+I
+         BWdMBPgh6CFRrp0WXBzqJDHBW8jaC+kTzGP+VY6T4K4j3Uq9fiz2ufF6iLvFmM4Vg4QE
+         U06eNPlW625QTMtbMgOS1TIH9GoeRYlqHrlczqm3JnJv0iM11s/wKdog5JGM2bVY4zCf
+         qmSQ==
+X-Gm-Message-State: AAQBX9etjOHUuoMXKxR2rm72UtKtNw2OmZkAf0eny+8K6qsXc4vw4m/y
+        OgTfE2VFnmeLfS9kF6soEXP5n0PRVCk=
+X-Google-Smtp-Source: AKy350YmNJ+gaYDWISkFj7OVb0ZtcGGu6qc0dfvsLYGxq02UG/b+4kbd6TPguNtreqZbDycVumqXXg==
+X-Received: by 2002:a05:6870:c0d0:b0:184:4216:4cb4 with SMTP id e16-20020a056870c0d000b0018442164cb4mr232989oad.21.1681926290815;
+        Wed, 19 Apr 2023 10:44:50 -0700 (PDT)
+Received: from wedsonaf-dev.home.lan ([189.124.190.154])
+        by smtp.googlemail.com with ESMTPSA id du3-20020a0568703a0300b001723a2e84b6sm6987585oab.6.2023.04.19.10.44.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 10:44:32 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Wed, 19 Apr 2023 19:44:05 +0200
-Subject: [PATCH LSM 2/2] selinux: Implement mptcp_add_subflow hook
+        Wed, 19 Apr 2023 10:44:50 -0700 (PDT)
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+To:     rust-for-linux@vger.kernel.org
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Subject: [PATCH v4.1] rust: lock: introduce `SpinLock`
+Date:   Wed, 19 Apr 2023 14:44:26 -0300
+Message-Id: <20230419174426.132207-1-wedsonaf@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-v1-2-9d4064cb0075@tessares.net>
-References: <20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-v1-0-9d4064cb0075@tessares.net>
-In-Reply-To: <20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-v1-0-9d4064cb0075@tessares.net>
-To:     Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ondrej Mosnacek <omosnace@redhat.com>, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2936;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=mqr2BGqHqewUUPR1OCVjrPaTiiM4zt6T6l/x3JibBwM=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkQCh9Ojvp++qr8MSZ7mbE4nq4WiFrlXM05/A7K
- yVFNIdEH6iJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZEAofQAKCRD2t4JPQmmg
- c9LJD/4s7Mgv6rEvplVwimrhxteV4tT/cc+JAKks+NedETm2aWSdjhgSwxJaxoS4sdYz4HOu8x6
- wG+Gt3I6TOCxlYGI+2AGOpJ7dDN0XJO+hmOsIo7LY+el7LC64eSLZgSeq4kN3pKFT48zS5bdjjE
- fRMekhhhIp9+foseeTlMcY+Swdghpg2EphVcY4zJSNaJ3rxai900o8F5ey2MTO9VIW98pPhAQ+J
- aKUOSviER5SnJ+QlTvxXGdlHAr05NpOCv/NzFzpAhDuiEu8fXqO61br7PHDG2wF7CP0bOJ8X1cy
- uw9PcQhaqPMIo+rZx7QdD9xjPYndmrNS3XX3DmM2fnTkomvg0EJ+givdU8oiYgYY/Bx+0riSGBf
- k8WJUe23qyfvKoluqcO6KjsgmS7kVU2hYB9jGiGgEWb9FxryGSZMRLn9ysV+Lg0OtO8A0l1RBEx
- iuCin6uQxQMZsCtUDOsjteDr7lq+DcfgreakHSfRPqvPlcE/gurYM9LGtI9fltkryVy7f6kBHTB
- cURGSeQDof0R858t1Z5S0AKQ1vmLtHoBMIcKCwwcWlWiSL1xu3ptTFyiuXjNn+y6X0155MvM7WU
- EXer4DIlV5ZGy4vmWOWUbS2LHdlI+pPnpR6XB1P3SLhnaCaX3SLOVcxcDBzehO0Kg0IvI8/wnHt
- Iw+9Ay7f8DP3vdg==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: Wedson Almeida Filho <walmeida@microsoft.com>
 
-Newly added subflows should inherit the LSM label from the associated
-msk socket regarless current context.
+This is the `spinlock_t` lock backend and allows Rust code to use the
+kernel spinlock idiomatically.
 
-This patch implements the above copying sid and class from the msk
-context, deleting the existing subflow label, if any, and then
-re-creating a new one.
-
-The new helper reuses the selinux_netlbl_sk_security_free() function,
-and the latter can end-up being called multiple times with the same
-argument; we additionally need to make it idempotent.
-
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Waiman Long <longman@redhat.com>
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
 ---
- security/selinux/hooks.c    | 16 ++++++++++++++++
- security/selinux/netlabel.c |  8 ++++++--
- 2 files changed, 22 insertions(+), 2 deletions(-)
+v1 -> v2: No changes
+v2 -> v3: No changes
+v3 -> v4: No changes
+v4 -> v4.1:
+- Use __raw_spin_lock_init instead of spin_lock_init_with_key 
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 9a5bdfc21314..53cfc1cb67d2 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -5476,6 +5476,21 @@ static void selinux_sctp_sk_clone(struct sctp_association *asoc, struct sock *sk
- 	selinux_netlbl_sctp_sk_clone(sk, newsk);
- }
+ rust/helpers.c                    |  24 +++++++
+ rust/kernel/sync.rs               |   2 +-
+ rust/kernel/sync/lock.rs          |   1 +
+ rust/kernel/sync/lock/spinlock.rs | 116 ++++++++++++++++++++++++++++++
+ 4 files changed, 142 insertions(+), 1 deletion(-)
+ create mode 100644 rust/kernel/sync/lock/spinlock.rs
+
+diff --git a/rust/helpers.c b/rust/helpers.c
+index 86af099d2d66..1af5fcbd7f72 100644
+--- a/rust/helpers.c
++++ b/rust/helpers.c
+@@ -23,6 +23,7 @@
+ #include <linux/err.h>
+ #include <linux/refcount.h>
+ #include <linux/mutex.h>
++#include <linux/spinlock.h>
  
-+static int selinux_mptcp_add_subflow(struct sock *sk, struct sock *ssk)
+ __noreturn void rust_helper_BUG(void)
+ {
+@@ -36,6 +37,29 @@ void rust_helper_mutex_lock(struct mutex *lock)
+ }
+ EXPORT_SYMBOL_GPL(rust_helper_mutex_lock);
+ 
++void rust_helper___spin_lock_init(spinlock_t *lock, const char *name,
++				  struct lock_class_key *key)
 +{
-+	struct sk_security_struct *ssksec = ssk->sk_security;
-+	struct sk_security_struct *sksec = sk->sk_security;
++#ifdef CONFIG_DEBUG_SPINLOCK
++	 __raw_spin_lock_init(spinlock_check(lock), name, key, LD_WAIT_CONFIG);
++#else
++	spin_lock_init(lock);
++#endif
++}
++EXPORT_SYMBOL_GPL(rust_helper___spin_lock_init);
 +
-+	ssksec->sclass = sksec->sclass;
-+	ssksec->sid = sksec->sid;
++void rust_helper_spin_lock(spinlock_t *lock)
++{
++	spin_lock(lock);
++}
++EXPORT_SYMBOL_GPL(rust_helper_spin_lock);
 +
-+	/* replace the existing subflow label deleting the existing one
-+	 * and re-recrating a new label using the current context
-+	 */
-+	selinux_netlbl_sk_security_free(ssksec);
-+	return selinux_netlbl_socket_post_create(ssk, ssk->sk_family);
++void rust_helper_spin_unlock(spinlock_t *lock)
++{
++	spin_unlock(lock);
++}
++EXPORT_SYMBOL_GPL(rust_helper_spin_unlock);
++
+ refcount_t rust_helper_REFCOUNT_INIT(int n)
+ {
+ 	return (refcount_t)REFCOUNT_INIT(n);
+diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
+index 693f0b7f4e4f..c997ff7e951e 100644
+--- a/rust/kernel/sync.rs
++++ b/rust/kernel/sync.rs
+@@ -11,7 +11,7 @@ mod arc;
+ pub mod lock;
+ 
+ pub use arc::{Arc, ArcBorrow, UniqueArc};
+-pub use lock::mutex::Mutex;
++pub use lock::{mutex::Mutex, spinlock::SpinLock};
+ 
+ /// Represents a lockdep class. It's a wrapper around C's `lock_class_key`.
+ #[repr(transparent)]
+diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
+index 98de109d9e40..08adc3747033 100644
+--- a/rust/kernel/sync/lock.rs
++++ b/rust/kernel/sync/lock.rs
+@@ -11,6 +11,7 @@ use core::{cell::UnsafeCell, marker::PhantomData, marker::PhantomPinned};
+ use macros::pin_data;
+ 
+ pub mod mutex;
++pub mod spinlock;
+ 
+ /// The "backend" of a lock.
+ ///
+diff --git a/rust/kernel/sync/lock/spinlock.rs b/rust/kernel/sync/lock/spinlock.rs
+new file mode 100644
+index 000000000000..a52d20fc9755
+--- /dev/null
++++ b/rust/kernel/sync/lock/spinlock.rs
+@@ -0,0 +1,116 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! A kernel spinlock.
++//!
++//! This module allows Rust code to use the kernel's `spinlock_t`.
++
++use crate::bindings;
++
++/// Creates a [`SpinLock`] initialiser with the given name and a newly-created lock class.
++///
++/// It uses the name if one is given, otherwise it generates one based on the file name and line
++/// number.
++#[macro_export]
++macro_rules! new_spinlock {
++    ($inner:expr $(, $name:literal)? $(,)?) => {
++        $crate::sync::SpinLock::new(
++            $inner, $crate::optional_name!($($name)?), $crate::static_lock_class!())
++    };
 +}
 +
- static int selinux_inet_conn_request(const struct sock *sk, struct sk_buff *skb,
- 				     struct request_sock *req)
- {
-@@ -7216,6 +7231,7 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
- 	LSM_HOOK_INIT(sctp_sk_clone, selinux_sctp_sk_clone),
- 	LSM_HOOK_INIT(sctp_bind_connect, selinux_sctp_bind_connect),
- 	LSM_HOOK_INIT(sctp_assoc_established, selinux_sctp_assoc_established),
-+	LSM_HOOK_INIT(mptcp_add_subflow, selinux_mptcp_add_subflow),
- 	LSM_HOOK_INIT(inet_conn_request, selinux_inet_conn_request),
- 	LSM_HOOK_INIT(inet_csk_clone, selinux_inet_csk_clone),
- 	LSM_HOOK_INIT(inet_conn_established, selinux_inet_conn_established),
-diff --git a/security/selinux/netlabel.c b/security/selinux/netlabel.c
-index 1321f15799e2..33187e38def7 100644
---- a/security/selinux/netlabel.c
-+++ b/security/selinux/netlabel.c
-@@ -155,8 +155,12 @@ void selinux_netlbl_err(struct sk_buff *skb, u16 family, int error, int gateway)
-  */
- void selinux_netlbl_sk_security_free(struct sk_security_struct *sksec)
- {
--	if (sksec->nlbl_secattr != NULL)
--		netlbl_secattr_free(sksec->nlbl_secattr);
-+	if (!sksec->nlbl_secattr)
-+		return;
++/// A spinlock.
++///
++/// Exposes the kernel's [`spinlock_t`]. When multiple CPUs attempt to lock the same spinlock, only
++/// one at a time is allowed to progress, the others will block (spinning) until the spinlock is
++/// unlocked, at which point another CPU will be allowed to make progress.
++///
++/// Instances of [`SpinLock`] need a lock class and to be pinned. The recommended way to create such
++/// instances is with the [`pin_init`](crate::pin_init) and [`new_spinlock`] macros.
++///
++/// # Examples
++///
++/// The following example shows how to declare, allocate and initialise a struct (`Example`) that
++/// contains an inner struct (`Inner`) that is protected by a spinlock.
++///
++/// ```
++/// use kernel::{init::InPlaceInit, init::PinInit, new_spinlock, pin_init, sync::SpinLock};
++///
++/// struct Inner {
++///     a: u32,
++///     b: u32,
++/// }
++///
++/// #[pin_data]
++/// struct Example {
++///     c: u32,
++///     #[pin]
++///     d: SpinLock<Inner>,
++/// }
++///
++/// impl Example {
++///     fn new() -> impl PinInit<Self> {
++///         pin_init!(Self {
++///             c: 10,
++///             d <- new_spinlock!(Inner { a: 20, b: 30 }),
++///         })
++///     }
++/// }
++///
++/// // Allocate a boxed `Example`.
++/// let e = Box::pin_init(Example::new())?;
++/// assert_eq!(e.c, 10);
++/// assert_eq!(e.d.lock().a, 20);
++/// assert_eq!(e.d.lock().b, 30);
++/// ```
++///
++/// The following example shows how to use interior mutability to modify the contents of a struct
++/// protected by a spinlock despite only having a shared reference:
++///
++/// ```
++/// use kernel::sync::SpinLock;
++///
++/// struct Example {
++///     a: u32,
++///     b: u32,
++/// }
++///
++/// fn example(m: &SpinLock<Example>) {
++///     let mut guard = m.lock();
++///     guard.a += 10;
++///     guard.b += 20;
++/// }
++/// ```
++///
++/// [`spinlock_t`]: ../../../../include/linux/spinlock.h
++pub type SpinLock<T> = super::Lock<T, SpinLockBackend>;
 +
-+	netlbl_secattr_free(sksec->nlbl_secattr);
-+	sksec->nlbl_secattr = NULL;
-+	sksec->nlbl_state = NLBL_UNSET;
- }
- 
- /**
-
++/// A kernel `spinlock_t` lock backend.
++pub struct SpinLockBackend;
++
++// SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion.
++unsafe impl super::Backend for SpinLockBackend {
++    type State = bindings::spinlock_t;
++    type GuardState = ();
++
++    unsafe fn init(
++        ptr: *mut Self::State,
++        name: *const core::ffi::c_char,
++        key: *mut bindings::lock_class_key,
++    ) {
++        // SAFETY: The safety requirements ensure that `ptr` is valid for writes, and `name` and
++        // `key` are valid for read indefinitely.
++        unsafe { bindings::__spin_lock_init(ptr, name, key) }
++    }
++
++    unsafe fn lock(ptr: *mut Self::State) -> Self::GuardState {
++        // SAFETY: The safety requirements of this function ensure that `ptr` points to valid
++        // memory, and that it has been initialised before.
++        unsafe { bindings::spin_lock(ptr) }
++    }
++
++    unsafe fn unlock(ptr: *mut Self::State, _guard_state: &Self::GuardState) {
++        // SAFETY: The safety requirements of this function ensure that `ptr` is valid and that the
++        // caller is the owner of the mutex.
++        unsafe { bindings::spin_unlock(ptr) }
++    }
++}
 -- 
-2.39.2
+2.34.1
 
