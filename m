@@ -2,139 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2BF6E8279
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02996E827B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbjDSUSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 16:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
+        id S231769AbjDSUTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 16:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbjDSUSf (ORCPT
+        with ESMTP id S229847AbjDSUTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 16:18:35 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C215FD2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:18:33 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-5144427bad7so18845a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:18:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681935513; x=1684527513;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bvZWJ1N6yNvRBqGXQz8TnJs0OJnTiWfSHlO4iBrhO8M=;
-        b=BEliT26iov9LcAPuQgrau9zf1VtcgOoB1JsGu12bU6DGQ5+WFUv0KRukD0OpYmnVvW
-         bJyaxfMfmViOdXx6wc3UJ7Tl7saJ4tzfR1KyR4lYZ+9nPSd3hydd1hBHSBjYFxdeeRnK
-         U7ergnMoNOJvl+jcQf7j+hjaBJl510TU9dJX5QRDHxWicyKaPh8GqibO+HASM8u9nVUL
-         vhXzZuhS4YquTc8x60ayp+d9VYF+SOyXnKdT4L23S0GMTgRF1t+D/tjfn53RGfvc65Il
-         zCi/YGVSPNgqzLUTY6ANxDqAyg0p6WilaYat+wOZ+PgSODlmvhjdPSZu+BvjWoZBHrE7
-         K+dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681935513; x=1684527513;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bvZWJ1N6yNvRBqGXQz8TnJs0OJnTiWfSHlO4iBrhO8M=;
-        b=l59l5I0Szj/1Z1SKGjabIHlwf47QQ1mO2h0LWRmpWySrb8R2jHDgjwwAN4MIYPqkeY
-         qtTjDlF8bw4fKOmpk744uaK90+ZdkD/Mvrge8Za+EgG2uyrO9Z4KcAZ5+Uqd16n5Bqw7
-         MFi5YJ3X7UB+z+GuLJkDagoKAKubC3QFPpzxeY0FJlnAR/64YgzIUeNs3iRYQHo0UGTf
-         S3elTP0hhFnZnhhR1D1j719rJ8XCmYrpkUAsu61M4ZqVfWicgYi9OYFXBChgOipg4CsZ
-         ZEwTKdqEeMi0iYbHHHmkADJBD9IA+TtA5CSSngaGYd9lGDYrDSAdMgcIiuKgbeL8DGrm
-         xBBA==
-X-Gm-Message-State: AAQBX9cPb8nqvdKFTqAXD2f6s4HS9z/OGxN/VilaO0qzebOQ7IRm+dS5
-        /UTnOxMjfwmxvl2f5H0GreB+Ug==
-X-Google-Smtp-Source: AKy350aG0Hna+djHmBzENfUMBVtPE6gQ/3CtrN793ZrG4uogFpDSa5BVa2GWvgXVQVDVBNR025EUAg==
-X-Received: by 2002:a17:903:2308:b0:19a:a815:2877 with SMTP id d8-20020a170903230800b0019aa8152877mr23336646plh.6.1681935513184;
-        Wed, 19 Apr 2023 13:18:33 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id iz17-20020a170902ef9100b001a19f2f81a3sm11825243plb.175.2023.04.19.13.18.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 13:18:32 -0700 (PDT)
-Message-ID: <c4e95c1b-43da-30b2-b120-e59fa5b68b18@kernel.dk>
-Date:   Wed, 19 Apr 2023 14:18:31 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
- pin_user_pages()
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        Wed, 19 Apr 2023 16:19:10 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733313C0D;
+        Wed, 19 Apr 2023 13:19:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681935546; x=1713471546;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=VY84knn+qne8QfA5OMOBL73+DU9BMrIqscEw4mQ6kCw=;
+  b=iv8parqA+H2edF+Rzmn/1PYL6kWx6UthrdRFTeTJpS5i2uZ2nqySlHQ/
+   dJAB+XUSOcggoZJfVnmlWRSYpYF9ilYDqvvKD44Gq0K/VgAI00cGAndQL
+   pZU/PhPq9W+WwAPlWgjN3Wn1QTu1CiUxHAObJ7DvJe04wgrXIBmV/hcIw
+   CRqPKP+750sagN3AmeeE/sRpyqJRgpxx9H2KlzLEMd5iWYDGMxZFNCCrx
+   QYr2tmioZ4d7fyR/7SEC1C7pcBJSjTf0QvVyZ9PUpbVAjSmWMpUKj1O4M
+   E5vnkN7UIAxUcmsGwWgGPwx/HMC3y/TxVo+0Xv1jnEzqbBcYusRn5SI09
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="347407272"
+X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
+   d="scan'208";a="347407272"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 13:19:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="756229394"
+X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
+   d="scan'208";a="756229394"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Apr 2023 13:19:03 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppEGd-000fAa-0C;
+        Wed, 19 Apr 2023 20:19:03 +0000
+Date:   Thu, 20 Apr 2023 04:18:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org
-References: <cover.1681831798.git.lstoakes@gmail.com>
- <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
- <936e8f52-00be-6721-cb3e-42338f2ecc2f@kernel.dk>
- <c2e22383-43ee-5cf0-9dc7-7cd05d01ecfb@kernel.dk>
- <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
- <69f48cc6-8fc6-0c49-5a79-6c7d248e4ad5@kernel.dk>
- <bec03e0f-a0f9-43c3-870b-be406ca848b9@lucifer.local>
- <8af483d2-0d3d-5ece-fb1d-a3654411752b@kernel.dk>
- <d601ca0c-d9b8-4e5d-a047-98f2d1c65eb9@lucifer.local>
- <ZEAxhHx/4Ql6AMt2@casper.infradead.org> <ZEAx90C2lDMJIux1@nvidia.com>
- <567b593e-2ad0-9bec-4e6f-4bbb3301524c@kernel.dk>
-In-Reply-To: <567b593e-2ad0-9bec-4e6f-4bbb3301524c@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH 1/4] block: constify partition prober array
+Message-ID: <202304200454.r3d73iaw-lkp@intel.com>
+References: <20230419-const-partition-v1-1-2d66f2d83873@weissschuh.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230419-const-partition-v1-1-2d66f2d83873@weissschuh.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 2:15‚ÄØPM, Jens Axboe wrote:
-> On 4/19/23 12:24?PM, Jason Gunthorpe wrote:
->> On Wed, Apr 19, 2023 at 07:23:00PM +0100, Matthew Wilcox wrote:
->>> On Wed, Apr 19, 2023 at 07:18:26PM +0100, Lorenzo Stoakes wrote:
->>>> So even if I did the FOLL_ALLOW_BROKEN_FILE_MAPPING patch series first, I
->>>> would still need to come along and delete a bunch of your code
->>>> afterwards. And unfortunately Pavel's recent change which insists on not
->>>> having different vm_file's across VMAs for the buffer would have to be
->>>> reverted so I expect it might not be entirely without discussion.
->>>
->>> I don't even understand why Pavel wanted to make this change.  The
->>> commit log really doesn't say.
->>>
->>> commit edd478269640
->>> Author: Pavel Begunkov <asml.silence@gmail.com>
->>> Date:   Wed Feb 22 14:36:48 2023 +0000
->>>
->>>     io_uring/rsrc: disallow multi-source reg buffers
->>>
->>>     If two or more mappings go back to back to each other they can be passed
->>>     into io_uring to be registered as a single registered buffer. That would
->>>     even work if mappings came from different sources, e.g. it's possible to
->>>     mix in this way anon pages and pages from shmem or hugetlb. That is not
->>>     a problem but it'd rather be less prone if we forbid such mixing.
->>>
->>>     Cc: <stable@vger.kernel.org>
->>>     Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->>>     Signed-off-by: Jens Axboe <axboe@kernel.dk>
->>>
->>> It even says "That is not a problem"!  So why was this patch merged
->>> if it's not fixing a problem?
->>>
->>> It's now standing in the way of an actual cleanup.  So why don't we
->>> revert it?  There must be more to it than this ...
->>
->> https://lore.kernel.org/all/61ded378-51a8-1dcb-b631-fda1903248a9@gmail.com/
-> 
-> Let's just kill that patch that, I can add a revert for 6.4. I had
-> forgotten about that patch and guess I didn't realize that most of the
-> issue do in fact just stem from that.
+Hi Thomas,
 
-https://git.kernel.dk/cgit/linux-block/commit/?h=for-6.4/io_uring&id=fbd3aaf37886d3645b1bd6920f6298f5884049f8
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on af67688dca57999fd848f051eeea1d375ba546b2]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/block-constify-partition-prober-array/20230419-155356
+base:   af67688dca57999fd848f051eeea1d375ba546b2
+patch link:    https://lore.kernel.org/r/20230419-const-partition-v1-1-2d66f2d83873%40weissschuh.net
+patch subject: [PATCH 1/4] block: constify partition prober array
+config: x86_64-randconfig-s023 (https://download.01.org/0day-ci/archive/20230420/202304200454.r3d73iaw-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/9bc1f4308c10322c327c9e86ede6bb9e862440aa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Thomas-Wei-schuh/block-constify-partition-prober-array/20230419-155356
+        git checkout 9bc1f4308c10322c327c9e86ede6bb9e862440aa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304200454.r3d73iaw-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> block/partitions/core.c:24:9: sparse: sparse: incorrect type in initializer (different modifiers) @@     expected int ( const * )( ... ) @@     got int ( * )( ... ) @@
+   block/partitions/core.c:24:9: sparse:     expected int ( const * )( ... )
+   block/partitions/core.c:24:9: sparse:     got int ( * )( ... )
+   block/partitions/core.c:47:9: sparse: sparse: incorrect type in initializer (different modifiers) @@     expected int ( const * )( ... ) @@     got int ( * )( ... ) @@
+   block/partitions/core.c:47:9: sparse:     expected int ( const * )( ... )
+   block/partitions/core.c:47:9: sparse:     got int ( * )( ... )
+   block/partitions/core.c:53:9: sparse: sparse: incorrect type in initializer (different modifiers) @@     expected int ( const * )( ... ) @@     got int ( * )( ... ) @@
+   block/partitions/core.c:53:9: sparse:     expected int ( const * )( ... )
+   block/partitions/core.c:53:9: sparse:     got int ( * )( ... )
+   block/partitions/core.c:56:9: sparse: sparse: incorrect type in initializer (different modifiers) @@     expected int ( const * )( ... ) @@     got int ( * )( ... ) @@
+   block/partitions/core.c:56:9: sparse:     expected int ( const * )( ... )
+   block/partitions/core.c:56:9: sparse:     got int ( * )( ... )
+   block/partitions/core.c:68:9: sparse: sparse: incorrect type in initializer (different modifiers) @@     expected int ( const * )( ... ) @@     got int ( * )( ... ) @@
+   block/partitions/core.c:68:9: sparse:     expected int ( const * )( ... )
+   block/partitions/core.c:68:9: sparse:     got int ( * )( ... )
+   block/partitions/core.c:71:9: sparse: sparse: incorrect type in initializer (different modifiers) @@     expected int ( const * )( ... ) @@     got int ( * )( ... ) @@
+   block/partitions/core.c:71:9: sparse:     expected int ( const * )( ... )
+   block/partitions/core.c:71:9: sparse:     got int ( * )( ... )
+
+vim +24 block/partitions/core.c
+
+387048bf67eeff Christoph Hellwig 2020-03-24  14  
+9bc1f4308c1032 Thomas Weiﬂschuh  2023-04-19  15  static const int (*check_part[])(struct parsed_partitions *) = {
+387048bf67eeff Christoph Hellwig 2020-03-24  16  	/*
+387048bf67eeff Christoph Hellwig 2020-03-24  17  	 * Probe partition formats with tables at disk address 0
+387048bf67eeff Christoph Hellwig 2020-03-24  18  	 * that also have an ADFS boot block at 0xdc0.
+387048bf67eeff Christoph Hellwig 2020-03-24  19  	 */
+387048bf67eeff Christoph Hellwig 2020-03-24  20  #ifdef CONFIG_ACORN_PARTITION_ICS
+387048bf67eeff Christoph Hellwig 2020-03-24  21  	adfspart_check_ICS,
+387048bf67eeff Christoph Hellwig 2020-03-24  22  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  23  #ifdef CONFIG_ACORN_PARTITION_POWERTEC
+387048bf67eeff Christoph Hellwig 2020-03-24 @24  	adfspart_check_POWERTEC,
+387048bf67eeff Christoph Hellwig 2020-03-24  25  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  26  #ifdef CONFIG_ACORN_PARTITION_EESOX
+387048bf67eeff Christoph Hellwig 2020-03-24  27  	adfspart_check_EESOX,
+387048bf67eeff Christoph Hellwig 2020-03-24  28  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  29  
+387048bf67eeff Christoph Hellwig 2020-03-24  30  	/*
+387048bf67eeff Christoph Hellwig 2020-03-24  31  	 * Now move on to formats that only have partition info at
+387048bf67eeff Christoph Hellwig 2020-03-24  32  	 * disk address 0xdc0.  Since these may also have stale
+387048bf67eeff Christoph Hellwig 2020-03-24  33  	 * PC/BIOS partition tables, they need to come before
+387048bf67eeff Christoph Hellwig 2020-03-24  34  	 * the msdos entry.
+387048bf67eeff Christoph Hellwig 2020-03-24  35  	 */
+387048bf67eeff Christoph Hellwig 2020-03-24  36  #ifdef CONFIG_ACORN_PARTITION_CUMANA
+387048bf67eeff Christoph Hellwig 2020-03-24  37  	adfspart_check_CUMANA,
+387048bf67eeff Christoph Hellwig 2020-03-24  38  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  39  #ifdef CONFIG_ACORN_PARTITION_ADFS
+387048bf67eeff Christoph Hellwig 2020-03-24  40  	adfspart_check_ADFS,
+387048bf67eeff Christoph Hellwig 2020-03-24  41  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  42  
 
 -- 
-Jens Axboe
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
