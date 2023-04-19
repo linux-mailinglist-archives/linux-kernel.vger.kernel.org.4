@@ -2,81 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948AE6E7992
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2FB6E7987
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbjDSMUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233213AbjDSMUX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233209AbjDSMUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 19 Apr 2023 08:20:23 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447325FDF;
-        Wed, 19 Apr 2023 05:20:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=tdgAKK/gYzuoiQCUdGhjbA+MZqUGxSXIKXMiOdNq7UI=; b=OKzubX8YBDGiER5gWN/c5zLmad
-        iAFJFJdWpI6cgx+vojAcFYJjGEKTvLs7I8eivhaAQNz7p7xGIlAPP0ruyG7Yr0v3SVJlOdCIGNzO3
-        p5eS5RznAdYEd/OWuiptl4yqk51mwTaT1aul48JafVCGz4HSYVvyoufJjswqHECXVPOU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pp6n4-00Ah32-7d; Wed, 19 Apr 2023 14:20:02 +0200
-Date:   Wed, 19 Apr 2023 14:20:02 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [net-next PATCH v7 00/16] net: Add basic LED support for
- switch/phy
-Message-ID: <ceb81b05-caf7-4738-b288-02aa662ccd49@lunn.ch>
-References: <20230417151738.19426-1-ansuelsmth@gmail.com>
- <20230418212746.7db8096e@kernel.org>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232465AbjDSMUV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 19 Apr 2023 08:20:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0786A66;
+        Wed, 19 Apr 2023 05:20:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C18A63E6C;
+        Wed, 19 Apr 2023 12:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6D818C433A4;
+        Wed, 19 Apr 2023 12:20:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681906819;
+        bh=oRWKJqZGtXQhpEUp1SFIs9JNjZRFi/VkKFDRpIPot54=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=G9HLOrnoHlKZzBddrpSH3/T4EG0tEoUIZeW73Jh1gpsk8Q6p2knQsUCfplPoWWAiS
+         OxawlJTEWQIqFnJ6pi6f1alCpiWOIYgwNNICd5+Et/mjGm4+B9Z4XxDrmiE0TFXgju
+         OrEU1kZFGHcAEoFBKANjI2VN42isn6Jl0vDm21RNztdwJAdghxNVrrSIw2b0yr2DN6
+         i5broajjxnyWbVTi6xUdYeovr2IQlmUbnBFbNZ8qqPyQKMZ3mVapUVOaw11cbqcmKo
+         yDOyXJiGYtaAhZNjdviz3cWRkiIlTLMSNUzx4MwrxQnE+Upp1oAEzu1DxZ+7aAK72c
+         HIM+DYrrGzXKQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 50C0DC395EA;
+        Wed, 19 Apr 2023 12:20:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418212746.7db8096e@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] hamradio: drop ISA_DMA_API dependency
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168190681932.14108.5713928630159726637.git-patchwork-notify@kernel.org>
+Date:   Wed, 19 Apr 2023 12:20:19 +0000
+References: <20230417205103.1526375-1-arnd@kernel.org>
+In-Reply-To: <20230417205103.1526375-1-arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, arnd@arndb.de, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> IIRC we were supposed to take these via netdev with acks from Pavel/Lee.
-> So we need acks on patches 4/5/16 ? If there is a repost, could you
-> take out the arch/arm patches? They should not go via netdev, we'll try
-> to filter them out when applying but mistakes happen.
+Hello:
 
-The 370rd patch could in theory go via netdev. I maintain it, both at
-the board and mvebu SoC level, so can give my Acked-by:, in addition
-to my Signed-off-by:. It is very unlikely there will be any sort of
-merge conflict.
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-      Andrew
+On Mon, 17 Apr 2023 22:50:55 +0200 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> It looks like the dependency got added accidentally in commit a553260618d8
+> ("[PATCH] ISA DMA Kconfig fixes - part 3"). Unlike the previously removed
+> dmascc driver, the scc driver never used DMA.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> [...]
+
+Here is the summary with links:
+  - hamradio: drop ISA_DMA_API dependency
+    https://git.kernel.org/netdev/net/c/fcd4843a19d5
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
