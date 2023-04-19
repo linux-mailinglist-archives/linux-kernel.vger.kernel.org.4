@@ -2,247 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C29B6E804D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7AD6E804F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbjDSR0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 13:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
+        id S232632AbjDSR13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 13:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbjDSR0F (ORCPT
+        with ESMTP id S229739AbjDSR10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 13:26:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDEA659B;
-        Wed, 19 Apr 2023 10:26:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53B6A64122;
-        Wed, 19 Apr 2023 17:26:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD6ABC433EF;
-        Wed, 19 Apr 2023 17:26:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681925162;
-        bh=VFRws15p+q59RSTrU0VATjC0LQ6eFGIpuOjxTTSlgZA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UycFIy4d7bCijEj9Km8Xjqeq9Y7EDL81kXO55cTmYZWaCoWU32Dc670Zrnc7oLZIE
-         zohoopB6vvjwHWAIgZi2HjslXGgNOIJNhWwyycPnyOYwJZEXyC3u+30gOvOxZSPYmz
-         UoBxqtx/hq9Yb4HYkTl/ePo7blbSjZczejMiqCwIcKJRmGoEgpFxw635kJIa5LL6cK
-         fj7fBUFeirx+lzm/NNEwcg+rYsJHgsDOwXoE9yDM1+xQ7Vq0YueKHyzojjw0y6iVIo
-         MzRSXQLJPb3cF4Xqo1ry0NuHAPTGe48TEIN9UMSK0LxFIaOB2wSFR2bO9Zr4jBxkZj
-         6EldBf3ubjw1Q==
-Date:   Wed, 19 Apr 2023 10:26:02 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Mike Snitzer <snitzer@kernel.org>
-Cc:     Sarthak Kukreti <sarthakkukreti@chromium.org>, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Theodore Ts'o <tytso@mit.edu>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Daniil Lunev <dlunev@google.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [PATCH v4 1/4] block: Introduce provisioning primitives
-Message-ID: <20230419172602.GE360881@frogsfrogsfrogs>
-References: <20230414000219.92640-1-sarthakkukreti@chromium.org>
- <20230418221207.244685-1-sarthakkukreti@chromium.org>
- <20230418221207.244685-2-sarthakkukreti@chromium.org>
- <20230419153611.GE360885@frogsfrogsfrogs>
- <ZEAUHnWqt9cIiJRb@redhat.com>
+        Wed, 19 Apr 2023 13:27:26 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C0B4EE3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:27:25 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id kt6so370145ejb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:27:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681925244; x=1684517244;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8OV/LLS+mB3Bj9QYvC63i1cWwzFoTwZYWF4g6IjNVeI=;
+        b=aq1puqB9I5d1jEGu0LgwCV257GxZgaUfaaaHHNDozghKO9EAoK88d7YfcCGMhOjrQf
+         WAvCbVGVUCD17u6DurCiZYiyGF0arsh8d4TXzpidbCw1K3Ne+9DywQ6aGDG+GZdLZTWL
+         89FiyV1wQV6VP2D4OJTaYz0SB2jloJrSqM+dAg2smvTPDPh2VVxe2cUGCZYOuQF67260
+         Wne4MnP704dCem/hjMhLmdHYrG8nkWldN4d2h7pzJqaFzKOLBpZ7VhxczakfPEEzS5yI
+         nporAxCOFVGSIPlKulaFS58rwg4Y5KFIRydcLvuw7RtZmXeRQUiXNjeIZhai8V1pdaWb
+         Dd/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681925244; x=1684517244;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8OV/LLS+mB3Bj9QYvC63i1cWwzFoTwZYWF4g6IjNVeI=;
+        b=HJ4sY/EdSymQQnKnQOpfsDtpa0UjlnF3tyLMeLnciUf090QESeAwjBkHrTd4DiEKKN
+         egGIYBgYlPB0KPaTTVbcfZezuiHaU9+tb6uRz7MzPfNK9S3DKK1ZuBhqL/igzan5i8kk
+         BO9TLAjpB+b7PEHFoUMXzZWum8IgvMixSdfuqjLhgbul+GpLwvxkba5l+FJLDB5rJvxp
+         uhU9rBlxteKOtFeqZT5yEDS+7OzmQxzA1nGDjwXh+ff4B1KVIfqrx5ADW9eJxMFT60Qu
+         qIkXEkdo6o7DE74FEYxvGtrnDnLHQOgTfcrJGlk+ibY+ZGnouh32W8L9vG1LKcqgui2N
+         Ex7Q==
+X-Gm-Message-State: AAQBX9dC8tQ9GSi96zIcZBmMAHygHA3cGbQbyksA8kTrI4qgyooJi8og
+        lAl3CIuk64hgCq4TjMaxfARyrtyqWoMGZEcY3dLVqg==
+X-Google-Smtp-Source: AKy350Y2hm9UUZwFtCtGE9F6Wp6As2TFMg6Vomy2gQVL/IpicmtV5V+x1ViujkPcGWgtwbL74Mjaa6vt/7PQ8Aal9c4=
+X-Received: by 2002:a17:907:7d9e:b0:94f:8f46:b286 with SMTP id
+ oz30-20020a1709077d9e00b0094f8f46b286mr4498183ejc.15.1681925243656; Wed, 19
+ Apr 2023 10:27:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEAUHnWqt9cIiJRb@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <e6cd1f1e-e54c-87ae-ed23-cc1eca26837c@quicinc.com>
+ <20230418172942.740769-1-fvdl@google.com> <20230419041926.GA99028@hu-pkondeti-hyd.qualcomm.com>
+In-Reply-To: <20230419041926.GA99028@hu-pkondeti-hyd.qualcomm.com>
+From:   Frank van der Linden <fvdl@google.com>
+Date:   Wed, 19 Apr 2023 10:27:12 -0700
+Message-ID: <CAPTztWZcHzOYpO21hF5FyH6xR_4NahfZLp8K_YXqbzrV89tWDQ@mail.gmail.com>
+Subject: Re: [PATCH V7 0/2] mm: shmem: support POSIX_FADV_[WILL|DONT]NEED for
+ shmem files
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     quic_charante@quicinc.com, akpm@linux-foundation.org,
+        hughd@google.com, willy@infradead.org, markhemm@googlemail.com,
+        rientjes@google.com, surenb@google.com, shakeelb@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 12:17:34PM -0400, Mike Snitzer wrote:
-> On Wed, Apr 19 2023 at 11:36P -0400,
-> Darrick J. Wong <djwong@kernel.org> wrote:
-> 
-> > On Tue, Apr 18, 2023 at 03:12:04PM -0700, Sarthak Kukreti wrote:
-> > > Introduce block request REQ_OP_PROVISION. The intent of this request
-> > > is to request underlying storage to preallocate disk space for the given
-> > > block range. Block devices that support this capability will export
-> > > a provision limit within their request queues.
-> > > 
-> > > This patch also adds the capability to call fallocate() in mode 0
-> > > on block devices, which will send REQ_OP_PROVISION to the block
-> > > device for the specified range,
-> > > 
-> > > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> > > ---
-> > >  block/blk-core.c          |  5 ++++
-> > >  block/blk-lib.c           | 53 +++++++++++++++++++++++++++++++++++++++
-> > >  block/blk-merge.c         | 18 +++++++++++++
-> > >  block/blk-settings.c      | 19 ++++++++++++++
-> > >  block/blk-sysfs.c         |  8 ++++++
-> > >  block/bounce.c            |  1 +
-> > >  block/fops.c              | 25 +++++++++++++-----
-> > >  include/linux/bio.h       |  6 +++--
-> > >  include/linux/blk_types.h |  5 +++-
-> > >  include/linux/blkdev.h    | 16 ++++++++++++
-> > >  10 files changed, 147 insertions(+), 9 deletions(-)
-> > > 
-> > 
-> > <cut to the fallocate part; the block/ changes look fine to /me/ at
-> > first glance, but what do I know... ;)>
-> > 
-> > > diff --git a/block/fops.c b/block/fops.c
-> > > index d2e6be4e3d1c..e1775269654a 100644
-> > > --- a/block/fops.c
-> > > +++ b/block/fops.c
-> > > @@ -611,9 +611,13 @@ static ssize_t blkdev_read_iter(struct kiocb *iocb, struct iov_iter *to)
-> > >  	return ret;
-> > >  }
-> > >  
-> > > +#define	BLKDEV_FALLOC_FL_TRUNCATE				\
-> > 
-> > At first I thought from this name that you were defining a new truncate
-> > mode for fallocate, then I realized that this is mask for deciding if we
-> > /want/ to truncate the pagecache.
-> > 
-> > #define		BLKDEV_FALLOC_TRUNCATE_MASK ?
-> > 
-> > > +		(FALLOC_FL_PUNCH_HOLE |	FALLOC_FL_ZERO_RANGE |	\
-> > 
-> > Ok, so discarding and writing zeroes truncates the page cache, makes
-> > sense since we're "writing" directly to the block device.
-> > 
-> > > +		 FALLOC_FL_NO_HIDE_STALE)
-> > 
-> > Here things get tricky -- some of the FALLOC_FL mode bits are really an
-> > opcode and cannot be specified together, whereas others select optional
-> > behavior for certain opcodes.
-> > 
-> > IIRC, the mutually exclusive opcodes are:
-> > 
-> > 	PUNCH_HOLE
-> > 	ZERO_RANGE
-> > 	COLLAPSE_RANGE
-> > 	INSERT_RANGE
-> > 	(none of the above, for allocation)
-> > 
-> > and the "variants on a theme are":
-> > 
-> > 	KEEP_SIZE
-> > 	NO_HIDE_STALE
-> > 	UNSHARE_RANGE
-> > 
-> > not all of which are supported by all the opcodes.
-> > 
-> > Does it make sense to truncate the page cache if userspace passes in
-> > mode == NO_HIDE_STALE?  There's currently no defined meaning for this
-> > combination, but I think this means we'll truncate the pagecache before
-> > deciding if we're actually going to issue any commands.
-> > 
-> > I think that's just a bug in the existing code -- it should be
-> > validating that @mode is any of the supported combinations *before*
-> > truncating the pagecache.
-> > 
-> > Otherwise you could have a mkfs program that starts writing new fs
-> > metadata, decides to provision the storage (say for a logging region),
-> > doesn't realize it's running on an old kernel, and then oops the
-> > provision attempt fails but have we now shredded the pagecache and lost
-> > all the writes?
-> 
-> While that just caused me to have an "oh shit, that's crazy" (in a
-> scary way) belly laugh...
+On Tue, Apr 18, 2023 at 9:19=E2=80=AFPM Pavan Kondeti <quic_pkondeti@quicin=
+c.com> wrote:
+>
+> On Tue, Apr 18, 2023 at 05:29:42PM +0000, Frank van der Linden wrote:
+> > Below is a quick patch to allow FADVISE_DONTNEED for shmem to reclaim
+> > mapped pages too. This would fit our usecase, and matches MADV_PAGEOUT
+> > more closely.
+> >
+> > The patch series as posted skips mapped pages even if you remove
+> > the folio_mapped() check, because page_referenced() in
+> > shrink_page_list() will find page tables with the page mapped,
+> > and ignore_references is not set when called from reclaim_pages().
+> >
+> > You can make this work in a similar fashion to MADV_PAGEOUT by
+> > first unmapping a page, but only if the mapping belongs to
+> > the caller. You just have to change the check for "is there
+> > only one mapping and am I the owner". To do that, change a few
+> > lines in try_to_unmap to allow for checking the mm the mapping
+> > belongs to, and pass in current->mm (NULL still unmaps all mappings).
+> >
+> > I lightly tested this in a somewhat older codebase, so the diff
+> > below isn't fully tested. But if there are no objections to
+> > this approach, we could add it on top of your patchset after
+> > better testing.
+> >
+> > - Frank
+> >
+> > diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+> > index b87d01660412..4403cc2ccc4c 100644
+> > --- a/include/linux/rmap.h
+> > +++ b/include/linux/rmap.h
+> > @@ -368,6 +368,8 @@ int folio_referenced(struct folio *, int is_locked,
+> >
+> >  void try_to_migrate(struct folio *folio, enum ttu_flags flags);
+> >  void try_to_unmap(struct folio *, enum ttu_flags flags);
+> > +void try_to_unmap_mm(struct mm_struct *mm, struct folio *folio,
+> > +                     enum ttu_flags flags);
+> >
+> >  int make_device_exclusive_range(struct mm_struct *mm, unsigned long st=
+art,
+> >                               unsigned long end, struct page **pages,
+> > diff --git a/mm/rmap.c b/mm/rmap.c
+> > index 8632e02661ac..4d30e8f5afe2 100644
+> > --- a/mm/rmap.c
+> > +++ b/mm/rmap.c
+> > @@ -1443,6 +1443,11 @@ void page_remove_rmap(struct page *page, struct =
+vm_area_struct *vma,
+> >       munlock_vma_folio(folio, vma, compound);
+> >  }
+> >
+> > +struct unmap_arg {
+> > +     enum ttu_flags flags;
+> > +     struct mm_struct *mm;
+> > +};
+> > +
+> >  /*
+> >   * @arg: enum ttu_flags will be passed to this argument
+> >   */
+> > @@ -1455,7 +1460,11 @@ static bool try_to_unmap_one(struct folio *folio=
+, struct vm_area_struct *vma,
+> >       struct page *subpage;
+> >       bool anon_exclusive, ret =3D true;
+> >       struct mmu_notifier_range range;
+> > -     enum ttu_flags flags =3D (enum ttu_flags)(long)arg;
+> > +     struct unmap_arg *uap =3D (struct unmap_arg *)arg;
+> > +     enum ttu_flags flags =3D uap->flags;
+> > +
+> > +     if (uap->mm && uap->mm !=3D mm)
+> > +             return true;
+> >
+> >       /*
+> >        * When racing against e.g. zap_pte_range() on another cpu,
+> > @@ -1776,6 +1785,7 @@ static int folio_not_mapped(struct folio *folio)
+> >
+> >  /**
+> >   * try_to_unmap - Try to remove all page table mappings to a folio.
+> > + * @mm: mm to unmap from (NULL to unmap from all)
+> >   * @folio: The folio to unmap.
+> >   * @flags: action and flags
+> >   *
+> > @@ -1785,11 +1795,16 @@ static int folio_not_mapped(struct folio *folio=
+)
+> >   *
+> >   * Context: Caller must hold the folio lock.
+> >   */
+> > -void try_to_unmap(struct folio *folio, enum ttu_flags flags)
+> > +void try_to_unmap_mm(struct mm_struct *mm, struct folio *folio,
+> > +             enum ttu_flags flags)
+> >  {
+> > +     struct unmap_arg ua =3D {
+> > +             .flags =3D flags,
+> > +             .mm =3D mm,
+> > +     };
+> >       struct rmap_walk_control rwc =3D {
+> >               .rmap_one =3D try_to_unmap_one,
+> > -             .arg =3D (void *)flags,
+> > +             .arg =3D (void *)&ua,
+> >               .done =3D folio_not_mapped,
+> >               .anon_lock =3D folio_lock_anon_vma_read,
+> >       };
+> > @@ -1800,6 +1815,11 @@ void try_to_unmap(struct folio *folio, enum ttu_=
+flags flags)
+> >               rmap_walk(folio, &rwc);
+> >  }
+> >
+> > +void try_to_unmap(struct folio *folio, enum ttu_flags flags)
+> > +{
+> > +     try_to_unmap_mm(NULL, folio, flags);
+> > +}
+> > +
+> >  /*
+> >   * @arg: enum ttu_flags will be passed to this argument.
+> >   *
+> > diff --git a/mm/shmem.c b/mm/shmem.c
+> > index 1af85259b6fc..b24af2fb3378 100644
+> > --- a/mm/shmem.c
+> > +++ b/mm/shmem.c
+> > @@ -2362,8 +2362,24 @@ static void shmem_isolate_pages_range(struct add=
+ress_space *mapping, loff_t star
+> >
+> >               if (!folio_try_get(folio))
+> >                       continue;
+> > -             if (folio_test_unevictable(folio) || folio_mapped(folio) =
+||
+> > -                             folio_isolate_lru(folio)) {
+> > +
+> > +             if (folio_test_unevictable(folio)) {
+> > +                     folio_put(folio);
+> > +                     continue;
+> > +             }
+> > +
+> > +             /*
+> > +              * If the folio is mapped once, try to unmap it from the
+> > +              * caller's page table. If it's still mapped afterwards,
+> > +              * it belongs to someone else, and we're not going to
+> > +              * change someone else's mapping.
+> > +              */
+> > +             if (folio_mapcount(folio) =3D=3D 1 && folio_trylock(folio=
+)) {
+> > +                     try_to_unmap_mm(current->mm, folio, TTU_BATCH_FLU=
+SH);
+> > +                     folio_unlock(folio);
+> > +             }
+>
+> Is rmap walk can be done from a RCU read critical section which does not
+> allow explicit blocking?
+>
+> Thanks,
+> Pavan
 
-I just tried this and:
+True, yes, rmap_walk may block, so it the try_to_unmap calls should be
+outside the loop. The easiest thing to do there is to add all mapped
+pages to a separate list, walk that list outside of the rcu lock for
+i_mapping, and add all pages that could be unmapped to the return
+list.
 
-# xfs_io -c 'pwrite -S 0x58 1m 1m' -c fsync -c 'pwrite -S 0x59 1m 4096' -c 'pread -v 1m 64' -c 'falloc 1m 4096' -c 'pread -v 1m 64' /dev/sda
-wrote 1048576/1048576 bytes at offset 1048576
-1 MiB, 256 ops; 0.0013 sec (723.589 MiB/sec and 185238.7844 ops/sec)
-wrote 4096/4096 bytes at offset 1048576
-4 KiB, 1 ops; 0.0000 sec (355.114 MiB/sec and 90909.0909 ops/sec)
-00100000:  59 59 59 59 59 59 59 59 59 59 59 59 59 59 59 59  YYYYYYYYYYYYYYYY
-00100010:  59 59 59 59 59 59 59 59 59 59 59 59 59 59 59 59  YYYYYYYYYYYYYYYY
-00100020:  59 59 59 59 59 59 59 59 59 59 59 59 59 59 59 59  YYYYYYYYYYYYYYYY
-00100030:  59 59 59 59 59 59 59 59 59 59 59 59 59 59 59 59  YYYYYYYYYYYYYYYY
-read 64/64 bytes at offset 1048576
-64.000000 bytes, 1 ops; 0.0000 sec (1.565 MiB/sec and 25641.0256 ops/sec)
-fallocate: Operation not supported
-00100000:  58 58 58 58 58 58 58 58 58 58 58 58 58 58 58 58  XXXXXXXXXXXXXXXX
-00100010:  58 58 58 58 58 58 58 58 58 58 58 58 58 58 58 58  XXXXXXXXXXXXXXXX
-00100020:  58 58 58 58 58 58 58 58 58 58 58 58 58 58 58 58  XXXXXXXXXXXXXXXX
-00100030:  58 58 58 58 58 58 58 58 58 58 58 58 58 58 58 58  XXXXXXXXXXXXXXXX
-read 64/64 bytes at offset 1048576
-64.000000 bytes, 1 ops; 0.0003 sec (176.554 KiB/sec and 2824.8588 ops/sec)
-
-(Write 1MB of Xs, flush it to disk, write 4k of Ys, confirm the Y's are
-in the page cache, fail to fallocate, reread and spot the Xs that we
-supposedly overwrote.)
-
-oops.
-
-> (And obviously needs fixing independent of this patchset)
-> 
-> Shouldn't mkfs first check that the underlying storage supports
-> REQ_OP_PROVISION by verifying
-> /sys/block/<dev>/queue/provision_max_bytes exists and is not 0?
-> (Just saying, we need to add new features more defensively.. you just
-> made the case based on this scenario's implications alone)
-
-Not for fallocate -- for regular files, there's no way to check if the
-filesystem actually supports the operation requested other than to try
-it and see if it succeeds.  We probably should've defined a DRY_RUN flag
-for that purpose back when it was introduced.
-
-For fallocate calls to block devices, yes, the program can check the
-queue limits in sysfs if fstat says the supplied path is a block device,
-but I don't know that most programs are that thorough.  The fallocate(1)
-CLI program does not check.
-
-Then I moved on to fs utilities:
-
-ext4: For discard, mke2fs calls BLKDISCARD if it detects a block device
-via fstat, and falloc(PUNCH|KEEP_SIZE) for anything else.  For zeroing,
-it only uses falloc(ZERO) or falloc(PUNCH|KEEP_SIZE) and does not try to
-use BLKZEROOUT.  It does not check sysfs queue limits at all.
-
-XFS: mkfs.xfs issues BLKDISCARD before writing anything to the device,
-so that's fine.  It uses falloc(ZERO) to erase the log, but since
-xfsprogs provides its own buffer cache and uses O_DIRECT, pagecache
-coherency problems aren't an issue.
-
-btrfs: mkfs.btrfs only issues BLKDISCARD, and only before it starts
-writing the new fs, so no problems there.
-
---D
-
-> Sarthak, please note I said "provision_max_bytes": all other ops
-> (e.g. DISCARD, WRITE_ZEROES, etc) have <op>_max_bytes exported through
-> sysfs, not <op>_max_sectors.  Please export provision_max_bytes, e.g.:
-> 
-> diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
-> index 202aa78f933e..2e5ac7b1ffbd 100644
-> --- a/block/blk-sysfs.c
-> +++ b/block/blk-sysfs.c
-> @@ -605,12 +605,12 @@ QUEUE_RO_ENTRY(queue_io_min, "minimum_io_size");
->  QUEUE_RO_ENTRY(queue_io_opt, "optimal_io_size");
->  
->  QUEUE_RO_ENTRY(queue_max_discard_segments, "max_discard_segments");
-> -QUEUE_RO_ENTRY(queue_max_provision_sectors, "max_provision_sectors");
->  QUEUE_RO_ENTRY(queue_discard_granularity, "discard_granularity");
->  QUEUE_RO_ENTRY(queue_discard_max_hw, "discard_max_hw_bytes");
->  QUEUE_RW_ENTRY(queue_discard_max, "discard_max_bytes");
->  QUEUE_RO_ENTRY(queue_discard_zeroes_data, "discard_zeroes_data");
->  
-> +QUEUE_RO_ENTRY(queue_provision_max, "provision_max_bytes");
->  QUEUE_RO_ENTRY(queue_write_same_max, "write_same_max_bytes");
->  QUEUE_RO_ENTRY(queue_write_zeroes_max, "write_zeroes_max_bytes");
->  QUEUE_RO_ENTRY(queue_zone_append_max, "zone_append_max_bytes");
+- Frank
