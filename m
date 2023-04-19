@@ -2,154 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3756E7766
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C94AB6E7823
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232327AbjDSK2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 06:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
+        id S232804AbjDSLIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 07:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbjDSK2o (ORCPT
+        with ESMTP id S232739AbjDSLIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 06:28:44 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F0B5FFB
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:28:42 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4ec816d64afso12952106e87.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681900120; x=1684492120;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/VybvqKxQBBjDVUhiroFfMYUdC6zzghkLtNDu/WEbXQ=;
-        b=F1g1LfaupkHvYGX4hXRemCRjRdU9QpJizHsTb6EnZ7xTEl05oERKa1+MylQD+Ud17I
-         3s609V08kX1xd6CeIueDdxQwHlujSJIKLLCmtbycbPoMyhi7imo87c07ekSD7YDpihwv
-         gNbPYVGLXRGd008MdDx7rkJFBD7ojIgbzqt7NCAMmqtlqnyUFQrsbWXNnlk7/B6e9IN/
-         PyQQ2WBqMAB1fC07FGM+vvnjRhmhuEINNqbZILQJZvCYgiWS/skaT+N7v2O4WJR4/yXU
-         1Or1Om0Gg4u4fh88HKcZAUdeMTusLaV6fKMnpXghFi2yA378BoyAedaxKo3/HsqcAvid
-         obKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681900120; x=1684492120;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/VybvqKxQBBjDVUhiroFfMYUdC6zzghkLtNDu/WEbXQ=;
-        b=R5qip5FXqgvMYIl5Ep4d2wlKtyEnFV9wl1ImYsxk6OcP6LF3kmrbso/62C/YZLArsL
-         JHjhLqV3N7HUcPc+q3TXTgjxgBo9YTCxVACHrXFUXGdqm7VnINkzeHntE2Ajv6oMNFPQ
-         jyHFltDnDJlMBlE7vPwLnop6cq17djlOJpdjexNZylOHHal0EVtaXl11yitTqxypmR4K
-         U+01tsk8cfSXyXQjg0OsgAAd7+hK7xycr8gTR9RErOCsX3QXCmKvh4ywq5PVlxDD15RP
-         xdxA81p8PHZUmg4UYGMut1KXNbwrHVkimQd420cOEvZ4GVVFuw+zE542jAJCyaqef6WO
-         PpOg==
-X-Gm-Message-State: AAQBX9cqKlGXKvzdSnzPm6i9lBpFyil8krMj/JzmvC90FzojbsMf7+VN
-        P46+5QIlY/JiTakdV5zyViaf9g==
-X-Google-Smtp-Source: AKy350bR2i4Ob8duVzV3tJMTy/E3Eui8ihwuBJFLOmUXsND88vLrHCUaWPcS+3HzXFhjrd13jx5MGg==
-X-Received: by 2002:ac2:55b2:0:b0:4ec:7973:1ac with SMTP id y18-20020ac255b2000000b004ec797301acmr777061lfg.22.1681900120711;
-        Wed, 19 Apr 2023 03:28:40 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id p11-20020ac246cb000000b004edd84f4646sm194670lfo.91.2023.04.19.03.28.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 03:28:40 -0700 (PDT)
-Message-ID: <4b9e8dba-aeb7-092b-ebec-6c1fd7bbaa12@linaro.org>
-Date:   Wed, 19 Apr 2023 12:28:38 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 7/8] arm64: dts: qcom: sdm632-fairphone-fp3: Add
- notification LED
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230414-pmi632-v2-0-98bafa909c36@z3ntu.xyz>
- <20230414-pmi632-v2-7-98bafa909c36@z3ntu.xyz>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230414-pmi632-v2-7-98bafa909c36@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Wed, 19 Apr 2023 07:08:04 -0400
+X-Greylist: delayed 552 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Apr 2023 04:08:02 PDT
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8887A88
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:08:02 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 7ACAD1A11F6;
+        Wed, 19 Apr 2023 12:58:49 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 168121A0F1F;
+        Wed, 19 Apr 2023 12:58:49 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 1F73D1800254;
+        Wed, 19 Apr 2023 18:58:47 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     kuninori.morimoto.gx@renesas.com, shengjiu.wang@gmail.com,
+        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
+        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, linux-imx@nxp.com,
+        alsa-devel@alsa-project.org
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Revert "ASoC: fsl: remove unnecessary dai_link->platform"
+Date:   Wed, 19 Apr 2023 18:29:18 +0800
+Message-Id: <1681900158-17428-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This reverts commit 33683cbf49b5412061cb1e4c876063fdef86def4.
 
+dai_link->platform is needed. The platform component is
+"snd_dmaengine_pcm", which is registered from cpu driver,
 
-On 18.04.2023 18:43, Luca Weiss wrote:
-> The phone features a notification LED connected to the pmi632. Configure
-> the RGB led found on it.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+If dai_link->platform is not assigned, then platform
+component will not be probed, then there will be issue:
 
-Konrad
->  arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts | 29 +++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-> index 70e683b7e4fc..301eca9a4f31 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-> @@ -4,8 +4,10 @@
->   */
->  /dts-v1/;
->  
-> +#include <dt-bindings/leds/common.h>
->  #include "sdm632.dtsi"
->  #include "pm8953.dtsi"
-> +#include "pmi632.dtsi"
->  
->  / {
->  	model = "Fairphone 3";
-> @@ -83,6 +85,33 @@ &pm8953_resin {
->  	linux,code = <KEY_VOLUMEDOWN>;
->  };
->  
-> +&pmi632_lpg {
-> +	status = "okay";
-> +
-> +	multi-led {
-> +		color = <LED_COLOR_ID_RGB>;
-> +		function = LED_FUNCTION_STATUS;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		led@1 {
-> +			reg = <1>;
-> +			color = <LED_COLOR_ID_RED>;
-> +		};
-> +
-> +		led@2 {
-> +			reg = <2>;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +		};
-> +
-> +		led@3 {
-> +			reg = <3>;
-> +			color = <LED_COLOR_ID_BLUE>;
-> +		};
-> +	};
-> +};
-> +
->  &sdhc_1 {
->  	status = "okay";
->  	vmmc-supply = <&pm8953_l8>;
-> 
+aplay: main:831: audio open error: Invalid argument
+
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+ sound/soc/fsl/imx-audmix.c | 14 ++++++++++----
+ sound/soc/fsl/imx-spdif.c  |  5 ++++-
+ 2 files changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/sound/soc/fsl/imx-audmix.c b/sound/soc/fsl/imx-audmix.c
+index 2c57fe9d2d08..1292a845c424 100644
+--- a/sound/soc/fsl/imx-audmix.c
++++ b/sound/soc/fsl/imx-audmix.c
+@@ -207,8 +207,8 @@ static int imx_audmix_probe(struct platform_device *pdev)
+ 	for (i = 0; i < num_dai; i++) {
+ 		struct snd_soc_dai_link_component *dlc;
+ 
+-		/* for CPU/Codec x 2 */
+-		dlc = devm_kcalloc(&pdev->dev, 4, sizeof(*dlc), GFP_KERNEL);
++		/* for CPU/Codec/Platform x 2 */
++		dlc = devm_kcalloc(&pdev->dev, 6, sizeof(*dlc), GFP_KERNEL);
+ 		if (!dlc)
+ 			return -ENOMEM;
+ 
+@@ -240,9 +240,11 @@ static int imx_audmix_probe(struct platform_device *pdev)
+ 
+ 		priv->dai[i].cpus = &dlc[0];
+ 		priv->dai[i].codecs = &dlc[1];
++		priv->dai[i].platforms = &dlc[2];
+ 
+ 		priv->dai[i].num_cpus = 1;
+ 		priv->dai[i].num_codecs = 1;
++		priv->dai[i].num_platforms = 1;
+ 
+ 		priv->dai[i].name = dai_name;
+ 		priv->dai[i].stream_name = "HiFi-AUDMIX-FE";
+@@ -250,6 +252,7 @@ static int imx_audmix_probe(struct platform_device *pdev)
+ 		priv->dai[i].codecs->name = "snd-soc-dummy";
+ 		priv->dai[i].cpus->of_node = args.np;
+ 		priv->dai[i].cpus->dai_name = dev_name(&cpu_pdev->dev);
++		priv->dai[i].platforms->of_node = args.np;
+ 		priv->dai[i].dynamic = 1;
+ 		priv->dai[i].dpcm_playback = 1;
+ 		priv->dai[i].dpcm_capture = (i == 0 ? 1 : 0);
+@@ -264,17 +267,20 @@ static int imx_audmix_probe(struct platform_device *pdev)
+ 		be_cp = devm_kasprintf(&pdev->dev, GFP_KERNEL,
+ 				       "AUDMIX-Capture-%d", i);
+ 
+-		priv->dai[num_dai + i].cpus = &dlc[2];
+-		priv->dai[num_dai + i].codecs = &dlc[3];
++		priv->dai[num_dai + i].cpus = &dlc[3];
++		priv->dai[num_dai + i].codecs = &dlc[4];
++		priv->dai[num_dai + i].platforms = &dlc[5];
+ 
+ 		priv->dai[num_dai + i].num_cpus = 1;
+ 		priv->dai[num_dai + i].num_codecs = 1;
++		priv->dai[num_dai + i].num_platforms = 1;
+ 
+ 		priv->dai[num_dai + i].name = be_name;
+ 		priv->dai[num_dai + i].codecs->dai_name = "snd-soc-dummy-dai";
+ 		priv->dai[num_dai + i].codecs->name = "snd-soc-dummy";
+ 		priv->dai[num_dai + i].cpus->of_node = audmix_np;
+ 		priv->dai[num_dai + i].cpus->dai_name = be_name;
++		priv->dai[num_dai + i].platforms->name = "snd-soc-dummy";
+ 		priv->dai[num_dai + i].no_pcm = 1;
+ 		priv->dai[num_dai + i].dpcm_playback = 1;
+ 		priv->dai[num_dai + i].dpcm_capture  = 1;
+diff --git a/sound/soc/fsl/imx-spdif.c b/sound/soc/fsl/imx-spdif.c
+index 114b49660193..4446fba755b9 100644
+--- a/sound/soc/fsl/imx-spdif.c
++++ b/sound/soc/fsl/imx-spdif.c
+@@ -26,7 +26,7 @@ static int imx_spdif_audio_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+-	comp = devm_kzalloc(&pdev->dev, 2 * sizeof(*comp), GFP_KERNEL);
++	comp = devm_kzalloc(&pdev->dev, 3 * sizeof(*comp), GFP_KERNEL);
+ 	if (!data || !comp) {
+ 		ret = -ENOMEM;
+ 		goto end;
+@@ -34,15 +34,18 @@ static int imx_spdif_audio_probe(struct platform_device *pdev)
+ 
+ 	data->dai.cpus		= &comp[0];
+ 	data->dai.codecs	= &comp[1];
++	data->dai.platforms	= &comp[2];
+ 
+ 	data->dai.num_cpus	= 1;
+ 	data->dai.num_codecs	= 1;
++	data->dai.num_platforms	= 1;
+ 
+ 	data->dai.name = "S/PDIF PCM";
+ 	data->dai.stream_name = "S/PDIF PCM";
+ 	data->dai.codecs->dai_name = "snd-soc-dummy-dai";
+ 	data->dai.codecs->name = "snd-soc-dummy";
+ 	data->dai.cpus->of_node = spdif_np;
++	data->dai.platforms->of_node = spdif_np;
+ 	data->dai.playback_only = true;
+ 	data->dai.capture_only = true;
+ 
+-- 
+2.34.1
+
