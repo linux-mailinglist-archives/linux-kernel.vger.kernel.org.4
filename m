@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352646E7855
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0DA6E7856
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:17:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbjDSLRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 07:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
+        id S232879AbjDSLRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 07:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbjDSLRH (ORCPT
+        with ESMTP id S231391AbjDSLRM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 07:17:07 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B3214478;
-        Wed, 19 Apr 2023 04:16:33 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b78b344d5so2210180b3a.1;
-        Wed, 19 Apr 2023 04:16:33 -0700 (PDT)
+        Wed, 19 Apr 2023 07:17:12 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96132146E5;
+        Wed, 19 Apr 2023 04:16:39 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63d4595d60fso6135296b3a.0;
+        Wed, 19 Apr 2023 04:16:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681902933; x=1684494933;
+        d=gmail.com; s=20221208; t=1681902939; x=1684494939;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4qJ0quS8PSmcOSKHlL8+ZsUIniTqrOGEBBq6bjBNxf0=;
-        b=Z5Q5tE1GLgm4wm3YWrNt4E+8IlHzviPDJAEPbQU/+E8/RAaqgG+gqOBlL9ZGwGHb5G
-         ME5NefLIzmK408Lre3SEK75QOOaPcvunXL3eq/b/+kJ252xTopqnqfmbmR01H1bDD3M1
-         wRmcFJqIEG/2sIkVL6j5E3G0AzGkxSjAMt1UXw5ZW4knVTMugvgDppz+7vItmdWPCheh
-         HMN6mhK2UNk1OjVFul+nf5MxMJjghQsj8nY8/vrKYUGVKKCR63pTvz5jc0sgkQyGYRbC
-         2EeR9ajKXTxZK8bInDFHXgDJJQ7Y1KDbDiAeTMz1U2BvXBAA0OqwvbivdTlvtgZfd4/D
-         NMtQ==
+        bh=F7+u9xQhLDQrqjy4o4RJRJ8DCzaXxJZlsawnZVjNt3s=;
+        b=g9tElXFhLI2LM3U0SMnA9tTDN79NflMAFeMM9JwZPuAOPASC90wunJ5LWNPooTMYiS
+         vF8A7X2qZOHB20OaZ/1ijX+qPlMQ6IT2p1hywRhTTfbAlxDPuEnv00wTz/egUeIlhBjG
+         xNhRby8s6DEaPxyd8Gr8tbAf86GO6e4CASaVDK22oSY2LYWtpczKVLqFYYkQ7N+63xWw
+         TJO6BMTg2ToYvs8a5YCrzcXKGVZ/bTr2QXjx6L0yHXkCWo3d5grS7KCHBrfmu3hSevM6
+         NDf53OeVEnZyKw0plNIl/u9jk4gMZL/YFQXxE+Aja7Kh4+PeeyW6DoiSGeUt/kRHRg6S
+         mifw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681902933; x=1684494933;
+        d=1e100.net; s=20221208; t=1681902939; x=1684494939;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4qJ0quS8PSmcOSKHlL8+ZsUIniTqrOGEBBq6bjBNxf0=;
-        b=g8Y+BfYmrF7JCTx3XSD8EtluG5ggfZZjZl9pq4bdSaXZELIza5Ffla/Ig/fgL1ahBT
-         ASUA7qpaTcVweRjusXwY/3V59l6EUX9dpZoVpdFNsI5yEvQl2YnPsaetMTwL8ldWJr5G
-         ugQsC4WTbUsb25N+V0gPPlwK8gJQsqAVMVHfhww73nva1HAinY5RCiSXhcdu71d1nCE5
-         D3Thf9TvogL7qIVSnjwOVhztyHGZ5c9tQFS4BElBRtzPe++1pLaJzUHgr/VG6FCYOYYi
-         Z9Rp/xpm6AvCWBriox32aK36OnFh+hPGHtosxdz7/aVCaQO6gTcJudbTxRImYfJSSJhF
-         gP+w==
-X-Gm-Message-State: AAQBX9ehD36t2MLEugzuDs6PZTeepAzYdh+qD3gwpKLpOyt/HT3V6NDM
-        iAmlyAL7yyu8N4PCs02ETiho3gzAh64=
-X-Google-Smtp-Source: AKy350bG4AYtxLuwGUlX5AcJqEu6yQpwW6OC2sqIZKSpq8IDRXsVeQIJI5UtSm7kkibPb0jck5rJHw==
-X-Received: by 2002:a17:902:e84e:b0:1a2:296:9355 with SMTP id t14-20020a170902e84e00b001a202969355mr5518861plg.16.1681902932888;
-        Wed, 19 Apr 2023 04:15:32 -0700 (PDT)
+        bh=F7+u9xQhLDQrqjy4o4RJRJ8DCzaXxJZlsawnZVjNt3s=;
+        b=NFd0v6UPfbZUdgOvioEFSyR/hTE3z9j4Pjr6zyvmqBCixqLRvNShAYoQWdrdHi8Toh
+         p25BtXZQiz6XyIeg7QxjejVG6tvl4MJU/zRhxuL3RmK63iz0FsS8i5MF3PbQ57V/H2KG
+         4IDgMm430DZhi5DrHlnn+qNq1TR0L89Yd1V8n9eTtzTFs1REQ7mVnlsFlg4BNH/AvTNg
+         d0psIWLSmI1HJxjhh+wyxZC0kUt9rz3MhquFbfluLfXUQ5yEBooz0NjlWssx7j0tSa+W
+         LsIBrAinJvJM4CCH2B2NvGt+oiQctkKQGn/p+iJWke87sjWEJUmygIcGbXwDpmXsBamF
+         8IIA==
+X-Gm-Message-State: AAQBX9d9oi4t5dPO7PmFPRG3/uC3RWFFZgua01FD5tjjQQoFnrzr64DB
+        eTH8Rm3uodSladcRn+EO65NSBgJjTFs=
+X-Google-Smtp-Source: AKy350a21cL08vpppTtL6kpNrYMoThyva9XUw3uT0DzkomW6MhBVlSDcxusUPZevt8anqS9NlY5sww==
+X-Received: by 2002:a17:902:c40f:b0:1a6:6edc:c884 with SMTP id k15-20020a170902c40f00b001a66edcc884mr2856114plk.16.1681902938762;
+        Wed, 19 Apr 2023 04:15:38 -0700 (PDT)
 Received: from cxl-test.. ([103.181.222.211])
-        by smtp.gmail.com with ESMTPSA id o4-20020a170902bcc400b001a6566045ccsm11194914pls.192.2023.04.19.04.15.30
+        by smtp.gmail.com with ESMTPSA id o4-20020a170902bcc400b001a6566045ccsm11194914pls.192.2023.04.19.04.15.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 04:15:32 -0700 (PDT)
+        Wed, 19 Apr 2023 04:15:38 -0700 (PDT)
 From:   Raghu H <raghuhack78@gmail.com>
 To:     linux-cxl@vger.kernel.org,
         Alison Schofield <alison.schofield@intel.com>,
@@ -58,9 +58,9 @@ To:     linux-cxl@vger.kernel.org,
         Ben Widawsky <bwidawsk@kernel.org>,
         Dan Williams <dan.j.williams@intel.com>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [STYLE v1 1/3] cxl/mbox: remove redundant debug msg
-Date:   Wed, 19 Apr 2023 11:14:41 +0000
-Message-Id: <20230419111443.231151-2-raghuhack78@gmail.com>
+Subject: [STYLE v1 2/3] cxl/core/port: Use tabs to fix styling errors
+Date:   Wed, 19 Apr 2023 11:14:42 +0000
+Message-Id: <20230419111443.231151-3-raghuhack78@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230419111443.231151-1-raghuhack78@gmail.com>
 References: <20230419111443.231151-1-raghuhack78@gmail.com>
@@ -76,30 +76,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A return of errno should be good enough if the memory allocation fails,
-the debug message here is redundatant as per the coding style, removing it.
+Styling errors due to linux of unwanted spaces in the definition,
+modified the definition to use tab to fix the styling issue.
 
 Signed-off-by: Raghu H <raghuhack78@gmail.com>
 ---
- drivers/cxl/core/mbox.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/cxl/core/port.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-index f2addb457172..11ea145b4b1f 100644
---- a/drivers/cxl/core/mbox.c
-+++ b/drivers/cxl/core/mbox.c
-@@ -1112,10 +1112,8 @@ struct cxl_dev_state *cxl_dev_state_create(struct device *dev)
- 	struct cxl_dev_state *cxlds;
+diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
+index 8ee6b6e2e2a4..7c3aaed180ca 100644
+--- a/drivers/cxl/core/port.c
++++ b/drivers/cxl/core/port.c
+@@ -95,15 +95,15 @@ static ssize_t size_show(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RO(size);
  
- 	cxlds = devm_kzalloc(dev, sizeof(*cxlds), GFP_KERNEL);
--	if (!cxlds) {
--		dev_err(dev, "No memory available\n");
-+	if (!cxlds)
- 		return ERR_PTR(-ENOMEM);
--	}
+-#define CXL_DECODER_FLAG_ATTR(name, flag)                            \
+-static ssize_t name##_show(struct device *dev,                       \
+-			   struct device_attribute *attr, char *buf) \
+-{                                                                    \
+-	struct cxl_decoder *cxld = to_cxl_decoder(dev);              \
+-                                                                     \
+-	return sysfs_emit(buf, "%s\n",                               \
+-			  (cxld->flags & (flag)) ? "1" : "0");       \
+-}                                                                    \
++#define CXL_DECODER_FLAG_ATTR(name, flag)				\
++static ssize_t name##_show(struct device *dev,				\
++			   struct device_attribute *attr, char *buf)	\
++{									\
++	struct cxl_decoder *cxld = to_cxl_decoder(dev);			\
++									\
++	return sysfs_emit(buf, "%s\n",					\
++			  (cxld->flags & (flag)) ? "1" : "0");		\
++}									\
+ static DEVICE_ATTR_RO(name)
  
- 	mutex_init(&cxlds->mbox_mutex);
- 	mutex_init(&cxlds->event.log_lock);
+ CXL_DECODER_FLAG_ATTR(cap_pmem, CXL_DECODER_F_PMEM);
 -- 
 2.39.2
 
