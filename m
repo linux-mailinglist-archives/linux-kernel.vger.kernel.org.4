@@ -2,99 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D40966E742D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098CA6E7436
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjDSHlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 03:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
+        id S231309AbjDSHmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 03:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232519AbjDSHlA (ORCPT
+        with ESMTP id S232431AbjDSHlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 03:41:00 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B579EEE
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:40:39 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f09b9ac51dso84807525e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:40:39 -0700 (PDT)
+        Wed, 19 Apr 2023 03:41:55 -0400
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37830C155
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:41:47 -0700 (PDT)
+Received: by mail-ua1-x933.google.com with SMTP id r10so13107529uat.6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:41:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681890037; x=1684482037;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TdAF+ibqcFz4f6UdI5r5abisS6qF8hg1G7lhZkeAXYk=;
-        b=BfbLruzbZXWfqzZ3zxLzyF8TUbZEB/dqtePUEBJC9VGlEGntmEqBL8S43nzFefkEHo
-         1XS6njc7OJKnT6PmsgBi3jLJTsoas3icCqyD8cL2pGM5bS2K4aOejmYpm0AB4+J/NaCL
-         Z8ROYe6XwwMaqUZ42rnlDmWzID/rNw57tFSURGS0qM5OdKtzbn8QkgTdncMAgjPPMk8D
-         UYoIpME+xD+PtmLkeU389Z0wL+18w2FhaCH30zqkwFt8LZQjgA5oLrnRTkbKG3UYebpi
-         pTQFvjulMDHNFeurQy5b3a/Zzz23KPbi7YdgXKNdmNt7m0dq224Ty0ug/KZOwR8vz+Kk
-         3qEQ==
+        d=linaro.org; s=google; t=1681890106; x=1684482106;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1YAu+pywxG/pg2UAfwsrQ9Qv3idmw5UfJ5YDGI+D73s=;
+        b=sRUAu/qNvd546ZDE0sBLCP2o/VV/LtSaipRGsARp5ip/Y4m0V2b94fa2MbfpQYXzZZ
+         HaxUpXi6uFS2m1GLjDdiCFxNL1yrmjFYoBoPA+telXHwxCLqGMIZ+h042X0ne7jwqcAW
+         tpE5PC1t+ah3pxDoiuEP5QhVN6u0hAaIm17MiW2fopDX8EF7DorynxI9rqEtQ7tziGFE
+         h6/+ewoe/SigB5ryqo7kdr5FbZQsvmeBG1HklAJACTLMx5ymGeucKc2swir5eWt+s5Vv
+         ekcleYfch6VRwlbzQXR5G4uT6hWpcbu8hQk4eAjLTqkpNR+qmzcNvcL5uIm0KzVKqrLM
+         mafg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681890037; x=1684482037;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TdAF+ibqcFz4f6UdI5r5abisS6qF8hg1G7lhZkeAXYk=;
-        b=gY2vQ/SGZB3IGTnTkx+zh8F3mR8Odip2qloYP7eEWzDclIEx9kpFCdS2BobJ4RalO5
-         rp+8JfJhFXm7AacLQdXcLzb7K6bF/amdqKUZ/gA3CVW7U7F9sG/+1mMkYsHMh0uqgkY8
-         JABWLGKHREKsAOTc80pA34JdXPA94F/o7I7lr0jgYjGFFJLD6iWrQwiGW1/w2yKC169A
-         +tRiIF1Ex367GnTFI0g6xYDa+SmhXuKIcL+iGj+xMUqPjnnNag1wjyIiA8MpF3VsgHq/
-         FlrO1hMuoUGe72tCcwEbQKvG8HgeXss5v+Q1AM3IAnv2ItKQo8/923h2A9HUeiw9o2Wg
-         bPTw==
-X-Gm-Message-State: AAQBX9fmJX33R2GBugAHmQbIcPs3e33QcrIgfjqsNTReru2VTgYh9I0z
-        r8jZIIi0V8DI8Uoh0HywK9/3VA==
-X-Google-Smtp-Source: AKy350aqsESRxHSlCOW+FSrqiu4xHkLPIZBcls/gKehP6GtGDpV1jQDp02cCciwOdN4V0BccDQ0Iwg==
-X-Received: by 2002:adf:ffc1:0:b0:2db:9c64:f759 with SMTP id x1-20020adfffc1000000b002db9c64f759mr1213937wrs.1.1681890037542;
-        Wed, 19 Apr 2023 00:40:37 -0700 (PDT)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id i15-20020a05600c354f00b003f180d6dbebsm968171wmq.48.2023.04.19.00.40.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 00:40:37 -0700 (PDT)
-Message-ID: <d825230e-4265-6c3b-a9ea-c8ba5f13449b@linaro.org>
-Date:   Wed, 19 Apr 2023 09:40:35 +0200
+        d=1e100.net; s=20221208; t=1681890106; x=1684482106;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1YAu+pywxG/pg2UAfwsrQ9Qv3idmw5UfJ5YDGI+D73s=;
+        b=Mt+8jkTo1Nz42q3HUbJhMWwGkQJoSAVuCmLwRndmJSWylm9eosc+26cYwJIAYPA7MM
+         k5V8bsJTHJb3F6BaR/57X664RZXkSrwtfkpfWboltC5tYkqLNJeDNem3MdVa2ObRpEy/
+         HY4qDBXqVpBcKHyddjS4yeFTHwLU3kIDjEySgFc8VIcBbt4Bs58CDNLZEGm2V/iXBFFp
+         RYpaX/9DowpYAaQDa0SvYRVuV6iD7G2pyVy6Unhty11mqD5OOTM69iSxeRcEsEnh9ciW
+         xVRUCEQgHufHjoNwItSjr1BTxMiWCrlKCeiFgLh2jUDQ+cdSNOJbLug6C2/Yfd6tGCjb
+         P3RA==
+X-Gm-Message-State: AAQBX9e+bVMFZ5nVqrrih3dpuT1GAI5h+nzsD5aDupzCziDyvh+tsLRm
+        njsCZXXq5IlOUCeYQbcJL2od6DaqRwlh+h6aIZAJsw==
+X-Google-Smtp-Source: AKy350ZC9Z4o5gD0Go8LdlZXTSzHHSWR2dHzFHpIEhqi82FNdtApHLdtu+/mFcLbkJNT/Bt6Dw21q0Ty6r163PZOlQI=
+X-Received: by 2002:a1f:3d44:0:b0:43f:f268:660f with SMTP id
+ k65-20020a1f3d44000000b0043ff268660fmr7278740vka.1.1681890106042; Wed, 19 Apr
+ 2023 00:41:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] thermal: mediatek: Use of_address_to_resource()
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230319163231.226738-1-robh@kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230319163231.226738-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230418120304.658273364@linuxfoundation.org>
+In-Reply-To: <20230418120304.658273364@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 19 Apr 2023 13:11:34 +0530
+Message-ID: <CA+G9fYuT3N0LFaJGzQW2SYPJxEbEWLONDZO2OfBbeHNrsowy2w@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/92] 5.4.241-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        LTP List <ltp@lists.linux.it>, chrubis <chrubis@suse.cz>,
+        Petr Vorel <pvorel@suse.cz>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/03/2023 17:32, Rob Herring wrote:
-> Replace of_get_address() and of_translate_address() calls with single
-> call to of_address_to_resource().
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+On Tue, 18 Apr 2023 at 17:59, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.241 release.
+> There are 92 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.241-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Applied, thanks
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Recently we have upgraded the LTP test suite version and started noticing
+these test failures on 5.4.
+Test getting skipped on 4.19 and 4.14 as not supported features.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Need to investigate test case issues or kernel issues.
 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+NOTE:
+
+---
+creat09.c:73: TINFO: User nobody: uid = 65534, gid = 65534
+creat09.c:75: TINFO: Found unused GID 11: SUCCESS (0)
+creat09.c:120: TINFO: File created with umask(0)
+creat09.c:106: TPASS: mntpoint/testdir/creat.tmp: Owned by correct group
+creat09.c:112: TPASS: mntpoint/testdir/creat.tmp: Setgid bit not set
+creat09.c:106: TPASS: mntpoint/testdir/open.tmp: Owned by correct group
+creat09.c:112: TPASS: mntpoint/testdir/open.tmp: Setgid bit not set
+creat09.c:120: TINFO: File created with umask(S_IXGRP)
+creat09.c:106: TPASS: mntpoint/testdir/creat.tmp: Owned by correct group
+creat09.c:110: TFAIL: mntpoint/testdir/creat.tmp: Setgid bit is set
+creat09.c:106: TPASS: mntpoint/testdir/open.tmp: Owned by correct group
+creat09.c:110: TFAIL: mntpoint/testdir/open.tmp: Setgid bit is set
+
+Test history links,
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.238-199-g230f1bde44b6/testrun/16338751/suite/ltp-syscalls/test/creat09/history/
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.238-199-g230f1bde44b6/testrun/16337895/suite/ltp-cve/test/cve-2018-13405/history/
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.238-199-g230f1bde44b6/testrun/16338751/suite/ltp-syscalls/test/creat09/log
+
+---
+
+fanotify14.c:161: TCONF: FAN_REPORT_TARGET_FID not supported in kernel?
+fanotify14.c:157: TINFO: Test case 7: fanotify_init(FAN_CLASS_NOTIF |
+FAN_REPORT_TARGET_FID | FAN_REPORT_DFID_FID, O_RDONLY)
+fanotify14.c:161: TCONF: FAN_REPORT_TARGET_FID not supported in kernel?
+[  377.081993] EXT4-fs (loop0): mounting ext3 file system using the
+ext4 subsystem
+fanotify14.c:157: TINFO: Test case 8: fanotify_init(FAN_CLASS_NOTIF |
+FAN_REPORT_DFID_FID, O_RDONLY)
+[  377.099137] EXT4-fs (loop0): mounted filesystem with ordered data
+mode. Opts: (null)
+fanotify14.c:175: TFAIL: fanotify_init(tc->init.flags, O_RDONLY)
+failed: EINVAL (22)
+
+Test results compare:
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.238-199-g230f1bde44b6/testrun/16339099/suite/ltp-syscalls/test/fanotify14/history/
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.238-199-g230f1bde44b6/testrun/16326877/suite/ltp-syscalls/test/fanotify14/log
+
+
+
+## Build
+* kernel: 5.4.241-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: 230f1bde44b6ca667cdddf6634ea4adc0bbcd0ef
+* git describe: v5.4.238-199-g230f1bde44b6
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.238-199-g230f1bde44b6
+
+## Test Regressions (compared to v5.4.238-107-g73330daa3393)
+
+* qemu-arm64, ltp-cve
+  - cve-2018-13405 ( creat09 )
+
+* qemu-arm64, ltp-cve
+  - creat09
+
+* qemu_arm64,  qemu-armv7, qemu-x86_64, qemu-i386, ltp-syscalls
+  - fanotify14
+
+## Metric Regressions (compared to v5.4.238-107-g73330daa3393)
+
+## Test Fixes (compared to v5.4.238-107-g73330daa3393)
+
+## Metric Fixes (compared to v5.4.238-107-g73330daa3393)
+
+## Test result summary
+total: 127111, pass: 101779, fail: 3337, skip: 21744, xfail: 251
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 143 total, 142 passed, 1 failed
+* arm64: 43 total, 39 passed, 4 failed
+* i386: 26 total, 20 passed, 6 failed
+* mips: 27 total, 27 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 30 total, 30 passed, 0 failed
+* riscv: 12 total, 10 passed, 2 failed
+* s390: 6 total, 6 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 36 total, 34 passed, 2 failed
+
+## Test suites summary
+* boot
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
