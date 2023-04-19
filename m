@@ -2,174 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAAFE6E77E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 740B56E7874
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbjDSLA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 07:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
+        id S232444AbjDSLUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 07:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231208AbjDSLAZ (ORCPT
+        with ESMTP id S232357AbjDSLUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 07:00:25 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA61891
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:00:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1681902021; bh=b1S7VJTLIRifd308ZQCu1pgx8j+nrYSNjvqtm9fCDZ0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qt/nkV1qlcmzYXM5lAtGyfya/IffhNNuZp7fuDPWC3sQL5rOpD3cDXMnm9NbaPexZ
-         7j72+2BiB23Mo9DhpUGyiN5UT7BPUI0HqnJUg5/jsnJfC4ePUTSE5pmkucrBVl0IMZ
-         i0oc8AAKSgSVJhUqGWY9Pn+StgGdUKrB6L1k4tlc=
-Received: from [100.100.33.167] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 19 Apr 2023 07:20:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D8D146D7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:19:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681903133;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yk2MXIcMGsqVm4bpeyyiPIAlxJgEs4vB5F4slfGpqbs=;
+        b=T84gPzenBLipwWXMLyNLS8wHcJboOQDcZ+hiP+T24usAlnwF7o6OgfSWEp4+y0lVdVIPCJ
+        2xDR4mWyKrE/s5woLjia87k2xcCDjxR0mplC9BlKi/NJhgFlqfOIesCapTKCuPK0gUVByT
+        3Yn1vnt1py8nyRQ61rPIWuEylgtLW7Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-169-jmHSCGkANleXDaHYHeFrNA-1; Wed, 19 Apr 2023 07:18:51 -0400
+X-MC-Unique: jmHSCGkANleXDaHYHeFrNA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id E23D86011E;
-        Wed, 19 Apr 2023 19:00:20 +0800 (CST)
-Message-ID: <899085c1-7a74-8bab-1429-1b6e9e4c2c30@xen0n.name>
-Date:   Wed, 19 Apr 2023 19:00:20 +0800
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 59BDC101A54F;
+        Wed, 19 Apr 2023 11:18:49 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 75C83492B05;
+        Wed, 19 Apr 2023 11:18:48 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id C0514401344A1; Wed, 19 Apr 2023 08:01:41 -0300 (-03)
+Date:   Wed, 19 Apr 2023 08:01:41 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, arnd@arndb.de, keescook@chromium.org,
+        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
+        ardb@kernel.org, juerg.haefliger@canonical.com,
+        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
+        tony@atomide.com, linus.walleij@linaro.org,
+        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, vschneid@redhat.com, dhildenb@redhat.com,
+        alougovs@redhat.com
+Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
+ only to CPUs in kernel mode
+Message-ID: <ZD/KFW0BaG1qJr0l@tpad>
+References: <20230404134224.137038-1-ypodemsk@redhat.com>
+ <20230404134224.137038-4-ypodemsk@redhat.com>
+ <ZC1Q7uX4rNLg3vEg@lothringen>
+ <ZC3PUkI7N2uEKy6v@tpad>
+ <20230405195457.GC365912@hirez.programming.kicks-ass.net>
+ <ZC6/0hRXztNwqXg0@tpad>
+ <20230406133206.GN386572@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH 1/2] LoongArch: Add pad structure members for explicit
- alignment
-Content-Language: en-US
-To:     Xi Ruoyao <xry111@xry111.site>, Qing Zhang <zhangqing@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230418091348.9239-1-zhangqing@loongson.cn>
- <a7fa32c3af68083855e7690f67824d060d5c6135.camel@xry111.site>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <a7fa32c3af68083855e7690f67824d060d5c6135.camel@xry111.site>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406133206.GN386572@hirez.programming.kicks-ass.net>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/19 18:42, Xi Ruoyao wrote:
-> On Tue, 2023-04-18 at 17:13 +0800, Qing Zhang wrote:
->> This is done in order to easily calculate the number of breakpoints
->> in hw_break_get.
->>
->> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
->> ---
->>   arch/loongarch/include/uapi/asm/ptrace.h |  3 ++-
->>   arch/loongarch/kernel/ptrace.c           | 13 +++++++++----
->>   2 files changed, 11 insertions(+), 5 deletions(-)
->>
->> diff --git a/arch/loongarch/include/uapi/asm/ptrace.h
->> b/arch/loongarch/include/uapi/asm/ptrace.h
->> index 2282ae1fd3b6..06e3be52cb04 100644
->> --- a/arch/loongarch/include/uapi/asm/ptrace.h
->> +++ b/arch/loongarch/include/uapi/asm/ptrace.h
->> @@ -57,11 +57,12 @@ struct user_lasx_state {
-
-Drive-by comment to the patch author: there is no "user_lasx_state" yet. 
-Please always state your base commit if not obvious, or you should start 
-from some well-known upstream HEAD (e.g. Linus' rc tags, 
-loongarch-fixes, or loongarch-next).
-
->>   };
->>   
->>   struct user_watch_state {
->> -       uint16_t dbg_info;
->> +       uint64_t dbg_info;
+On Thu, Apr 06, 2023 at 03:32:06PM +0200, Peter Zijlstra wrote:
+> On Thu, Apr 06, 2023 at 09:49:22AM -0300, Marcelo Tosatti wrote:
 > 
-> Ouch.  This is a breaking change when we consider user code like
-> `printf(PRIu16 "\n", ptr->dbg_info);`.  Is it really necessary?
-
-Ah right. This is UAPI so without *very* concrete and convicing reason 
-why the change is not going to impact any potential users, it's gonna be 
-a presumed NAK. In other words you must demonstrate (1) why it's 
-absolutely necessary to make the change and (2) that it's impossible to 
-impact anyone, before any such changes can even be considered.
-
+> > > > 2) Depends on the application and the definition of "occasional".
+> > > > 
+> > > > For certain types of applications (for example PLC software or
+> > > > RAN processing), upon occurrence of an event, it is necessary to
+> > > > complete a certain task in a maximum amount of time (deadline).
+> > > 
+> > > If the application is properly NOHZ_FULL and never does a kernel entry,
+> > > it will never get that IPI. If it is a pile of shit and does kernel
+> > > entries while it pretends to be NOHZ_FULL it gets to keep the pieces and
+> > > no amount of crying will get me to care.
+> > 
+> > I suppose its common practice to use certain system calls in latency
+> > sensitive applications, for example nanosleep. Some examples:
+> > 
+> > 1) cyclictest		(nanosleep)
 > 
->>          struct {
->>                  uint64_t    addr;
->>                  uint64_t    mask;
->>                  uint32_t    ctrl;
->> +               uint32_t    pad;
->>          } dbg_regs[8];
->>   };
->>   
->> diff --git a/arch/loongarch/kernel/ptrace.c
->> b/arch/loongarch/kernel/ptrace.c
->> index 0c7c41e41cad..9c3bc1bbf2ff 100644
->> --- a/arch/loongarch/kernel/ptrace.c
->> +++ b/arch/loongarch/kernel/ptrace.c
->> @@ -475,10 +475,10 @@ static int ptrace_hbp_fill_attr_ctrl(unsigned
->> int note_type,
->>          return 0;
->>   }
->>   
->> -static int ptrace_hbp_get_resource_info(unsigned int note_type, u16
->> *info)
->> +static int ptrace_hbp_get_resource_info(unsigned int note_type, u64
->> *info)
->>   {
->>          u8 num;
->> -       u16 reg = 0;
->> +       u64 reg = 0;
->>   
->>          switch (note_type) {
->>          case NT_LOONGARCH_HW_BREAK:
->> @@ -616,7 +616,7 @@ static int hw_break_get(struct task_struct
->> *target,
->>                          const struct user_regset *regset,
->>                          struct membuf to)
->>   {
->> -       u16 info;
->> +       u64 info;
->>          u32 ctrl;
->>          u64 addr, mask;
->>          int ret, idx = 0;
->> @@ -646,6 +646,7 @@ static int hw_break_get(struct task_struct
->> *target,
->>                  membuf_store(&to, addr);
->>                  membuf_store(&to, mask);
->>                  membuf_store(&to, ctrl);
->> +               membuf_zero(&to, sizeof(u32));
->>                  idx++;
->>          }
->>   
->> @@ -662,7 +663,7 @@ static int hw_break_set(struct task_struct
->> *target,
->>          int ret, idx = 0, offset, limit;
->>          unsigned int note_type = regset->core_note_type;
->>   
->> -       /* Resource info */
->> +       /* Resource info and pad */
->>          offset = offsetof(struct user_watch_state, dbg_regs);
->>          user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf, 0,
->> offset);
->>   
->> @@ -704,6 +705,10 @@ static int hw_break_set(struct task_struct
->> *target,
->>                  if (ret)
->>                          return ret;
->>                  offset += PTRACE_HBP_CTRL_SZ;
->> +
->> +               user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
->> +                                         offset, offset +
->> PTRACE_HBP_PAD_SZ);
->> +               offset += PTRACE_HBP_PAD_SZ;
->>                  idx++;
->>          }
->>   
+> cyclictest is not a NOHZ_FULL application, if you tihnk it is, you're
+> deluded.
+
+On the field (what end-users do on production):
+
+cyclictest runs on NOHZ_FULL cores.
+PLC type programs run on NOHZ_FULL cores.
+
+So accordingly to physical reality i observe, i am not deluded.
+
+> > 2) PLC programs		(nanosleep)
 > 
+> What's a PLC? Programmable Logic Circuit?
 
--- 
-WANG "xen0n" Xuerui
+Programmable logic controller.
 
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+> > A system call does not necessarily have to take locks, does it ?
+> 
+> This all is unrelated to locks
+
+OK.
+
+> > Or even if application does system calls, but runs under a VM,
+> > then you are requiring it to never VM-exit.
+> 
+> That seems to be a goal for performance anyway.
+
+Not sure what you mean.
+
+> > This reduces the flexibility of developing such applications.
+> 
+> Yeah, that's the cards you're dealt, deal with it.
+
+This is not what happens on the field. 
 
