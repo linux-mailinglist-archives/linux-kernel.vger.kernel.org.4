@@ -2,163 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110896E72B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7DB6E72C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbjDSFvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 01:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
+        id S231464AbjDSFzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 01:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjDSFvM (ORCPT
+        with ESMTP id S231352AbjDSFz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 01:51:12 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2132.outbound.protection.outlook.com [40.107.93.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB60E5FD2;
-        Tue, 18 Apr 2023 22:51:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IzQF/CgJhZyD+Av414nDnIAeDIhzKwd7dKdaYXE4VC+JTLIHkyfe5aoAiuIoZu7SBY0gorf0TWcmrjAxq8c04PYJfveIqQ+YTfmEgSz6PlyhH/GoBxRyZM3gHDounCf800mRuJmATExA/0FG/sgk/wsAo3Yeuc2RdKueWOM3u5sS8g9zVPY0NGAYr331S36TmLCkmY5CJMqK7gQ92Q7YMhErXMMAgxwouoJ6K6MX8OZJ5DDml2Vumod2WPPCXfBfY+ClVgLm5v3TbcGXQlZZE2zApzsnM2u7XkhzJde9pSfEaLOiAN4roPI57ZD9VRbI/NfJdSSHyGAcoKWsZ3gvMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5dWf4Dl7jViZwaM4G1qUPctIrIC4UTWUnKSGPKIUkU4=;
- b=lEbrUrpa+9rapjxSfgXn/9iZEBQMtEihZr1lZIXpp/PYOAsGWkPuFR0smU6jH02brchBiMgphyeuLWxPcWIYX8nDcwDX8cIR2yhkyNEGAsZhr/gEhQr01dvu9Q3D4UelXt+W4hBf3L60py1OPKVGgVle9YTcAZC3sO4p99oYFTwrYhNPopDotTaJ4kcPuvzuL8tTr3rgKaiV3sE4yVhk54azeCwby7DLM+nVD2vrWdeEfLOZoKr9XJSpImxJ8T9w5gwqdfDGFIJF5o7/mHokxuMDCXGFSR2mrSTW4A5dhNP0MbjAJNs16UtieXRy9GPNmjR6u2kAHzcVCUdMYgnbaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5dWf4Dl7jViZwaM4G1qUPctIrIC4UTWUnKSGPKIUkU4=;
- b=LVD9bb9vo4jA+UYVrDajdWg5dIHh7qQ4juI+Yssw5WmakTqyoWf5Zi7MOIY/gYMb25ggxJ2LUgi+T+FKjGV0uViQ/SW87xanUNQz5uCsz5+Uf4Xd3DMKXlj6Dwtl3RH8FqY0zOULMRNk4VjKacfCfAyHbQbWR2WzanhL1yXwwGc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from BY3PR13MB4834.namprd13.prod.outlook.com (2603:10b6:a03:36b::10)
- by PH0PR13MB5793.namprd13.prod.outlook.com (2603:10b6:510:11c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
- 2023 05:51:02 +0000
-Received: from BY3PR13MB4834.namprd13.prod.outlook.com
- ([fe80::d98b:da1b:b1f0:d4d7]) by BY3PR13MB4834.namprd13.prod.outlook.com
- ([fe80::d98b:da1b:b1f0:d4d7%5]) with mapi id 15.20.6298.045; Wed, 19 Apr 2023
- 05:51:02 +0000
-Date:   Wed, 19 Apr 2023 07:50:54 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Ding Hui <dinghui@sangfor.com.cn>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        keescook@chromium.org, grzegorzx.szczurek@intel.com,
-        mateusz.palczewski@intel.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn
-Subject: Re: [RESEND PATCH net 1/2] iavf: Fix use-after-free in free_netdev
-Message-ID: <ZD+BPjGImmvwVd3G@corigine.com>
-References: <20230417074016.3920-1-dinghui@sangfor.com.cn>
- <20230417074016.3920-2-dinghui@sangfor.com.cn>
- <ZD70DKC3+K6gngTh@corigine.com>
- <ff2e0a06-abbb-213a-40ed-20c8e8b2f429@sangfor.com.cn>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ff2e0a06-abbb-213a-40ed-20c8e8b2f429@sangfor.com.cn>
-X-ClientProxiedBy: AM3PR07CA0057.eurprd07.prod.outlook.com
- (2603:10a6:207:4::15) To BY3PR13MB4834.namprd13.prod.outlook.com
- (2603:10b6:a03:36b::10)
+        Wed, 19 Apr 2023 01:55:29 -0400
+Received: from esa3.hc1455-7.c3s2.iphmx.com (esa3.hc1455-7.c3s2.iphmx.com [207.54.90.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22B47EE8;
+        Tue, 18 Apr 2023 22:54:59 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="114046869"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677510000"; 
+   d="scan'208";a="114046869"
+Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
+  by esa3.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 14:52:49 +0900
+Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
+        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id A9595D66B1;
+        Wed, 19 Apr 2023 14:52:46 +0900 (JST)
+Received: from m3003.s.css.fujitsu.com (m3003.s.css.fujitsu.com [10.128.233.114])
+        by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id E31F111C5F;
+        Wed, 19 Apr 2023 14:52:45 +0900 (JST)
+Received: from localhost.localdomain (unknown [10.118.237.106])
+        by m3003.s.css.fujitsu.com (Postfix) with ESMTP id B070B2043C64;
+        Wed, 19 Apr 2023 14:52:45 +0900 (JST)
+From:   Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
+To:     linux-rdma@vger.kernel.org, leonro@nvidia.com, jgg@nvidia.com,
+        zyjzyj2000@gmail.com
+Cc:     linux-kernel@vger.kernel.org, rpearsonhpe@gmail.com,
+        yangx.jy@fujitsu.com, lizhijian@fujitsu.com,
+        Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
+Subject: [PATCH for-next v4 0/8] On-Demand Paging on SoftRoCE
+Date:   Wed, 19 Apr 2023 14:51:52 +0900
+Message-Id: <cover.1681882651.git.matsuda-daisuke@fujitsu.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY3PR13MB4834:EE_|PH0PR13MB5793:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2d3ab707-c7ce-43ec-82bc-08db409a0ed9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PckZ4utMuxhNGN9HsuzIRirRMf3W/vtRMuCpeg46S3VmZaDD9QMt9YKDPIAp9DJpe0ISq4lCeTdvCp2P3/HFC9VV7gt14plZAXBqBIXpwTSAqtDamLwp5Sue6Xx10bpZ0fl0Fao3BV42FjoZEsvE/lNLHUIaz9NhrVrKrW2inGnW5GCMDJ3u2ckNdLN8DdKFeVJLJkz+CL7qJFnJ5n6a98wrVg13Y5m1lWLYAdjb65Ydettf78fO2/HK+lJ2QIGJSa7W9oz4eaCgIDVTFSKbE2MkBR5wAGIhm2Nq1yVjJS2BtPag1U7+nWXIx1rftJt5AqcAiTKQ4RsuJRSYScfZ46UbBcqA6RVA0YXEHca+Pqu/FGm6TzfrCBdyaRDQiHSsMcTJv5w6VRWVos31+rAc5GRsFAOb3UsOQC7tUrEOKN/FnNUBJZFNuoU2GqKI+K3gWQSEEYVv+PVmov7G/zO2FlugEiURQIOAz2eIaUV+bGhHfoPMxjWFYG0uINMRIS0Q32/ve6oboOL+Xw5GAlon2XdJoY+W5CzGMGb7jDtvm92GrwvJcmnE2fyXOGETmyXn1617MJwCek4c9HeQ3cphuGaCvvimicoV1y4+pre7NXQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR13MB4834.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(396003)(366004)(39840400004)(451199021)(8936002)(38100700002)(36756003)(8676002)(7416002)(44832011)(2906002)(86362001)(5660300002)(478600001)(6486002)(6666004)(186003)(2616005)(6506007)(53546011)(66946007)(66476007)(6512007)(316002)(6916009)(83380400001)(66556008)(41300700001)(4326008)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?T4fnGLk57hHcpSvp8o/ZMd7USJFcklQrHR0H8MoiJBejT0VvfNjl4i77LLUq?=
- =?us-ascii?Q?pIAP54+pJOgV0wPx13xtW2Oh9LUhKnAGXmWKUFNSr+y8Ofz06JChrkb2fQ8F?=
- =?us-ascii?Q?aklbXXzgjdSNY9fLs8GYYJRxSR9mG0NRKeI+0aJGCCGbT+I9fl7YggmFuWNF?=
- =?us-ascii?Q?m1zgxfOtgVIhV8a1XnQKUIqyzZm0f4HBn/zdDcaDWpMGJtxIXAbBjlnKG72H?=
- =?us-ascii?Q?c6HPfKYFjHH0L9QdYT6xOuXoJB6iZrSD0z6rnZuwCW6NeLC01yOOd14dRWZL?=
- =?us-ascii?Q?acveaFAXg2Y+6U7C0RiIUCGpqw95LjfmQSGQ5MtIv3wC9RRlIkEyHU6F5O8Y?=
- =?us-ascii?Q?AG//t3VzB+t4Aom6ATo5ZssRU6Os5nV10cGizBgbZaZqVhG2ENRgglc33ebf?=
- =?us-ascii?Q?pXrUYc1n+YIeH+ZJz1EnY32Y3OTtJJk0Izd8gO0PYXxLzk54/TFLbAGXLZNN?=
- =?us-ascii?Q?tRooGhc2i9JMXiXvCZbXP9BW6jtxFq0AZ9jR2Mb527m86kD1s/MNGgrQ12Ud?=
- =?us-ascii?Q?P9Inf1o7fwMaXvZNaiBkuIG8NgIOJ7ZLBqFpmOJCQ2tdw8JQoVWa2svn1x4k?=
- =?us-ascii?Q?y/RZ18fQ4eGHB4vkplSDyzxJZ0hWxCA58OD/SccvXgzm5aKQQ34wjN73ak4C?=
- =?us-ascii?Q?xoDpbpytmNK9wSD0srF0XWQfMK3Vrv1kiKe5TAvEYv9piSsX0OwL3dMwTNQP?=
- =?us-ascii?Q?n2AkKar4if9tx7Kaj+trZ1ZAyqpUad9+sFuX5vb6koB8IEjb4i6panCAZbJE?=
- =?us-ascii?Q?lYBoRfiy2RJ+g5w8OncXWIx4X176PBkM8kwbqFwOxF2CruvcMqCHn4rf6vxk?=
- =?us-ascii?Q?cdmJwQfPRehz3/VSw4Rudbq7I1A2/3M7usyqBKOu7ulGwRmTgXCTrmdIwZVq?=
- =?us-ascii?Q?sSjtrM28xt+flgPUJjG0KfRgkSxsN7wGSU+1oMFkz41opB6MOMATOSHM0X+K?=
- =?us-ascii?Q?bcuqcR+mNfwEN6FPl3meP4nEsDfII70wIn1eXoF0W5dD57GycymqAm6P8h50?=
- =?us-ascii?Q?K54+KtAQaqrh4whIu2aS9G0sedZv21EeLjMtf/fI8e+tUkAM1PYgTA+ISQj8?=
- =?us-ascii?Q?1LpnkC2YKpOdZ6CvlMBn0ynJ443mQLDXYTIowGvAYcYcdrS6id6Ud8nbkA4L?=
- =?us-ascii?Q?BZY8qj0DeaWY+LKNUvOfceg7lkEXTGcr+R9wfjUWNkNIOqOZvu5AB2d4JEYg?=
- =?us-ascii?Q?3xSE0bsQKVP2vVpMGrnZ2Dxp43+IQr1tFoXlp4PM6tnwD0lhGB4YGLuRQi5a?=
- =?us-ascii?Q?1ApX8y6IZM9aD7cwz1hS65edi+h4UDBPgEABC9Ya6NpE+IBWRQ5jtt+yi5Lb?=
- =?us-ascii?Q?GGR17gz33Ru2MDXkQyno2rzhQUY3keUnUr2hloDjQweWQ0gv/KvpF7HiIHp4?=
- =?us-ascii?Q?cXx7DXTYKfrgEeWasSVqXcGBN9UzQcM3Ce56tGPvElq/6IpuTIzKthen9jen?=
- =?us-ascii?Q?mQyBImpGct9U70KfTq1IvlYwysYjJ1oEuROAJgAK0hDNHPLOpimYEobqxAnf?=
- =?us-ascii?Q?u9aLq4yEqFyV+pWXJ2yXytY+VZeh0YaxWR/duGSPgEzLNJdc5gP6X2kqAwy1?=
- =?us-ascii?Q?vWvvloSGzM28aNPR8ZKJg1Di02emByneClQOG7OC1OpPnCsKgF0H+5eqJjb7?=
- =?us-ascii?Q?A1DNh6DClXHntnO5mM4Q4rUq1UoRpGnaIUW1COWRqd9Yuz0J5cDTIZl7hn/d?=
- =?us-ascii?Q?hhv0tg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d3ab707-c7ce-43ec-82bc-08db409a0ed9
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR13MB4834.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 05:51:02.2883
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0uv2OsaMkble8jF4G1KkDiDcmyzru55/6T4k+FwsTnaUqMzFrKqo1oODFS23bvARRLtCXT777QeEcBNwbZUhXfEk4Sprzb3hQl5UOkVJuCk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5793
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 09:11:37AM +0800, Ding Hui wrote:
-> On 2023/4/19 3:48, Simon Horman wrote:
-> > Hi Ding Hui,
-> > 
-> > On Mon, Apr 17, 2023 at 03:40:15PM +0800, Ding Hui wrote:
-> > > We do netif_napi_add() for all allocated q_vectors[], but potentially
-> > > do netif_napi_del() for part of them, then kfree q_vectors and lefted
-> > 
-> > nit: lefted -> leave
-> > 
-> 
-> Thanks, I'll update in v2.
-> 
-> > > invalid pointers at dev->napi_list.
-> > > 
-> > > If num_active_queues is changed to less than allocated q_vectors[] by
-> > > unexpected, when iavf_remove, we might see UAF in free_netdev like this:
-> > > 
-> 
-> ...
-> 
-> > > 
-> > > Fix it by letting netif_napi_del() match to netif_napi_add().
-> > > 
-> > > Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
-> > > Cc: Donglin Peng <pengdonglin@sangfor.com.cn>
-> > > CC: Huang Cun <huangcun@sangfor.com.cn>
-> > 
-> > as this is a fix it probably should have a fixes tag.
-> > I wonder if it should be:
-> > 
-> > Fixes: cc0529271f23 ("i40evf: don't use more queues than CPUs")
-> 
-> I don't think so.
-> I searched the git log, and found that the mismatched usage was
-> introduced since the beginning of i40evf_main.c, so I'll add
-> 
-> Fixes: 5eae00c57f5e ("i40evf: main driver core")
+This patch series implements the On-Demand Paging feature on SoftRoCE(rxe)
+driver, which has been available only in mlx5 driver[1] so far.
 
-Yes, agreed, that is the right tag.
+The first patch of this series is provided for testing purpose, and it
+should be dropped in the end. It converts triple tasklets to use workqueue
+in order to let them sleep during page-fault. Bob Pearson says he will post
+the patch to do this, and I think we can adopt that. The other patches in
+this series are, I believe, completed works.
+
+I omitted some contents like the motive behind this series for simplicity.
+Please see the cover letter of v3 for more details[2].
+
+[Overview]
+When applications register a memory region(MR), RDMA drivers normally pin
+pages in the MR so that physical addresses are never changed during RDMA
+communication. This requires the MR to fit in physical memory and
+inevitably leads to memory pressure. On the other hand, On-Demand Paging
+(ODP) allows applications to register MRs without pinning pages. They are
+paged-in when the driver requires and paged-out when the OS reclaims. As a
+result, it is possible to register a large MR that does not fit in physical
+memory without taking up so much physical memory.
+
+[How does ODP work?]
+"struct ib_umem_odp" is used to manage pages. It is created for each
+ODP-enabled MR on its registration. This struct holds a pair of arrays
+(dma_list/pfn_list) that serve as a driver page table. DMA addresses and
+PFNs are stored in the driver page table. They are updated on page-in and
+page-out, both of which use the common interfaces in the ib_uverbs layer.
+
+Page-in can occur when requester, responder or completer access an MR in
+order to process RDMA operations. If they find that the pages being
+accessed are not present on physical memory or requisite permissions are
+not set on the pages, they provoke page fault to make the pages present
+with proper permissions and at the same time update the driver page table.
+After confirming the presence of the pages, they execute memory access such
+as read, write or atomic operations.
+
+Page-out is triggered by page reclaim or filesystem events (e.g. metadata
+update of a file that is being used as an MR). When creating an ODP-enabled
+MR, the driver registers an MMU notifier callback. When the kernel issues a
+page invalidation notification, the callback is provoked to unmap DMA
+addresses and update the driver page table. After that, the kernel releases
+the pages.
+
+[Supported operations]
+All traditional operations are supported on RC connection. The new Atomic
+write[3] and RDMA Flush[4] operations are not included in this patchset. I
+will post them later after this patchset is merged. On UD connection, Send,
+Recv, and SRQ-Recv are supported.
+
+[How to test ODP?]
+There are only a few resources available for testing. pyverbs testcases in
+rdma-core and perftest[5] are recommendable ones. Other than them, the
+ibv_rc_pingpong command can also used for testing. Note that you may have
+to build perftest from upstream because older versions do not handle ODP
+capabilities correctly.
+
+The tree is available from github:
+https://github.com/daimatsuda/linux/tree/odp_v4
+While this series is based on commit f605f26ea196, the tree includes an
+additional bugfix, which is yet to be merged as of today (Apr 19th, 2023).
+https://lore.kernel.org/linux-rdma/20230418090642.1849358-1-matsuda-daisuke@fujitsu.com/
+
+[Future work]
+My next work is to enable the new Atomic write[3] and RDMA Flush[4]
+operations with ODP. After that, I am going to implement the prefetch
+feature. It allows applications to trigger page fault using
+ibv_advise_mr(3) to optimize performance. Some existing software like
+librpma[6] use this feature. Additionally, I think we can also add the
+implicit ODP feature in the future.
+
+[1] [RFC 00/20] On demand paging
+https://www.spinics.net/lists/linux-rdma/msg18906.html
+
+[2] [PATCH for-next v3 0/7] On-Demand Paging on SoftRoCE
+https://lore.kernel.org/lkml/cover.1671772917.git.matsuda-daisuke@fujitsu.com/
+
+[3] [PATCH v7 0/8] RDMA/rxe: Add atomic write operation
+https://lore.kernel.org/linux-rdma/1669905432-14-1-git-send-email-yangx.jy@fujitsu.com/
+
+[4] [for-next PATCH 00/10] RDMA/rxe: Add RDMA FLUSH operation
+https://lore.kernel.org/lkml/20221206130201.30986-1-lizhijian@fujitsu.com/
+
+[5] linux-rdma/perftest: Infiniband Verbs Performance Tests
+https://github.com/linux-rdma/perftest
+
+[6] librpma: Remote Persistent Memory Access Library
+https://github.com/pmem/rpma
+
+v3->v4:
+ 1) Re-designed functions that access MRs to use the MR xarray.
+ 2) Rebased onto the latest jgg-for-next tree.
+
+v2->v3:
+ 1) Removed a patch that changes the common ib_uverbs layer.
+ 2) Re-implemented patches for conversion to workqueue.
+ 3) Fixed compile errors (happened when CONFIG_INFINIBAND_ON_DEMAND_PAGING=n).
+ 4) Fixed some functions that returned incorrect errors.
+ 5) Temporarily disabled ODP for RDMA Flush and Atomic Write.
+
+v1->v2:
+ 1) Fixed a crash issue reported by Haris Iqbal.
+ 2) Tried to make lock patters clearer as pointed out by Romanovsky.
+ 3) Minor clean ups and fixes.
+
+Daisuke Matsuda (8):
+  RDMA/rxe: Tentative workqueue implementation
+  RDMA/rxe: Always schedule works before accessing user MRs
+  RDMA/rxe: Make MR functions accessible from other rxe source code
+  RDMA/rxe: Move resp_states definition to rxe_verbs.h
+  RDMA/rxe: Add page invalidation support
+  RDMA/rxe: Allow registering MRs for On-Demand Paging
+  RDMA/rxe: Add support for Send/Recv/Write/Read with ODP
+  RDMA/rxe: Add support for the traditional Atomic operations with ODP
+
+ drivers/infiniband/sw/rxe/Makefile    |   2 +
+ drivers/infiniband/sw/rxe/rxe.c       |  27 ++-
+ drivers/infiniband/sw/rxe/rxe.h       |  37 ---
+ drivers/infiniband/sw/rxe/rxe_comp.c  |  12 +-
+ drivers/infiniband/sw/rxe/rxe_loc.h   |  49 +++-
+ drivers/infiniband/sw/rxe/rxe_mr.c    |  27 +--
+ drivers/infiniband/sw/rxe/rxe_odp.c   | 311 ++++++++++++++++++++++++++
+ drivers/infiniband/sw/rxe/rxe_recv.c  |   4 +-
+ drivers/infiniband/sw/rxe/rxe_resp.c  |  32 ++-
+ drivers/infiniband/sw/rxe/rxe_task.c  |  84 ++++---
+ drivers/infiniband/sw/rxe/rxe_task.h  |   6 +-
+ drivers/infiniband/sw/rxe/rxe_verbs.c |   5 +-
+ drivers/infiniband/sw/rxe/rxe_verbs.h |  39 ++++
+ 13 files changed, 535 insertions(+), 100 deletions(-)
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_odp.c
+
+base-commit: f605f26ea196a3b49bea249330cbd18dba61a33e
+
+-- 
+2.39.1
+
