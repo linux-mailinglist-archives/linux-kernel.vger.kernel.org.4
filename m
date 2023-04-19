@@ -2,143 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F696E7128
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954CB6E7133
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbjDSCk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 22:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55496 "EHLO
+        id S231516AbjDSCnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 22:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbjDSCkz (ORCPT
+        with ESMTP id S230033AbjDSCna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 22:40:55 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68EF469F;
-        Tue, 18 Apr 2023 19:40:54 -0700 (PDT)
+        Tue, 18 Apr 2023 22:43:30 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD639619B
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 19:43:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681872054; x=1713408054;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=s1n4TUCaTvsj1tO3ERxhVhLwpHBq/J7NSZHIspGt7hw=;
-  b=XPWi3I/BBnk3hfmZk8+jUobC1vKSEcwSPQeRlpFQjKAu0/YgqnGw/mKx
-   1l9rIC1BCn19FB2eVIyBOMxEtYSztKrcVmNzKnZ8Nh5tN0gtjtPNhmQU9
-   IBEbPA4wMzOKXdcA2fu34cLHZo6dTxJ0ubuanPHeosS1DOWWTekhhFf77
-   GvTkRk+qLmAH9wEpbjXkus5gQ6jIx2/b3pWy9Usw5zS3r+H3ZFqc8GPQX
-   b/09FWKU/VJaMzp/g+McxDamAvl9EG/ii/c92rsrdEzwLHeOsXKBCLq6r
-   r114ReSHRgLElVN+6mzkcp9Wej09f3vB0zHoid1sbX/HatsEWLAAfvgtJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="373214546"
+  t=1681872207; x=1713408207;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ljxSHJURgT27vKhSROYonyITA0KaHaRnept4ArbLVcM=;
+  b=Mo16PsWRgGbS8GFghd8Df4tGNnLu99AGzjbMPYw9nVRYecPP4Mp2auiY
+   O0csniSeUIhUI7B3MpbrBgvMSuR4ZO9hebuaFr/7BReQt5fIx+DvI8iyj
+   fAznODQsdCWDN1wGbeS2LumfT6Wz6PCZcmo6Bmy5k44d1DiFvlLpYc8wY
+   Z8pzK+k6REdQYYcgJcWflwmNEJIldRPcCcQj3LN0pEjrRcmfULkqQHRwY
+   V1PRMdOphPeHkjt9GcJEXjj/Gh+m8+/n7AGbU4GFMDN1hrgNUrCP5OA47
+   sGEEaLtmCjOtMv6/xRgERDGUhS5pxWNS+VWSSTvFVFRAhyoUMyW2jjm0g
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="345336312"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="373214546"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 19:40:54 -0700
+   d="scan'208";a="345336312"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 19:43:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="780703605"
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="835109330"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="780703605"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 Apr 2023 19:40:50 -0700
-Message-ID: <7e182125-f5ab-3201-e69d-b6c96eeede01@linux.intel.com>
-Date:   Wed, 19 Apr 2023 10:40:46 +0800
+   d="scan'208";a="835109330"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 18 Apr 2023 19:43:24 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1poxn1-000eOc-2z;
+        Wed, 19 Apr 2023 02:43:23 +0000
+Date:   Wed, 19 Apr 2023 10:42:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Pierre Asselin <pa@panix.com>, dri-devel@lists.freedesktop.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Pierre Asselin <pa@panix.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH] firmware/sysfb: Fix VESA format selection
+Message-ID: <202304191058.FrwRGYyD-lkp@intel.com>
+References: <20230418183325.2327-1-pa@panix.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     baolu.lu@linux.intel.com, "Tian, Kevin" <kevin.tian@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>
-Subject: Re: [PATCH v4 3/7] iommu: Support allocation of global PASIDs outside
- SVA
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-References: <20230407180554.2784285-1-jacob.jun.pan@linux.intel.com>
- <20230407180554.2784285-4-jacob.jun.pan@linux.intel.com>
- <BN9PR11MB5276D09F18BA65AD074777948C9A9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <5882ee52-9657-250d-0474-13edffa7b6b9@linux.intel.com>
- <20230417094629.59fcfde6@jacob-builder>
- <a1a82bc0-9a7a-5363-cda8-a0226eff0073@linux.intel.com>
- <20230418160450.4ea7fb7d@jacob-builder>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230418160450.4ea7fb7d@jacob-builder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418183325.2327-1-pa@panix.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 7:04 AM, Jacob Pan wrote:
-> On Tue, 18 Apr 2023 10:06:12 +0800, Baolu Lu<baolu.lu@linux.intel.com>
-> wrote:
-> 
->> On 4/18/23 12:46 AM, Jacob Pan wrote:
->>> On Wed, 12 Apr 2023 09:37:48 +0800, Baolu Lu<baolu.lu@linux.intel.com>
->>> wrote:
->>>    
->>>> On 4/11/23 4:02 PM, Tian, Kevin wrote:
->>>>>> From: Jacob Pan<jacob.jun.pan@linux.intel.com>
->>>>>> Sent: Saturday, April 8, 2023 2:06 AM
->>>>>> @@ -28,8 +26,8 @@ static int iommu_sva_alloc_pasid(struct mm_struct
->>>>>> *mm, ioasid_t min, ioasid_t ma
->>>>>>     		goto out;
->>>>>>     	}
->>>>>>
->>>>>> -	ret = ida_alloc_range(&iommu_global_pasid_ida, min, max,
->>>>>> GFP_KERNEL);
->>>>>> -	if (ret < min)
->>>>>> +	ret = iommu_alloc_global_pasid(min, max);
->>>>> I wonder whether this can take a device pointer so
->>>>> dev->iommu->max_pasids is enforced inside the alloc function.
->>>> Agreed. Instead of using the open code, it looks better to have a
->>>> helper like dev_iommu_max_pasids().
->>> yes, probably export dev_iommu_get_max_pasids(dev)?
->>>
->>> But if I understood Kevin correctly, he's also suggesting that the
->>> interface should be changed to iommu_alloc_global_pasid(dev), my
->>> concern is that how do we use this function to reserve RID_PASID which
->>> is not specific to a device?
->> Probably we can introduce a counterpart dev->iommu->min_pasids, so that
->> there's no need to reserve the RID_PASID. At present, we can set it to 1
->> in the core as ARM/AMD/Intel all treat PASID 0 as a special pasid.
->>
->> In the future, if VT-d supports using arbitrary number as RID_PASID for
->> any specific device, we can call iommu_alloc_global_pasid() for that
->> device.
->>
->> The device drivers don't know and don't need to know the range of viable
->> PASIDs, so the @min, @max parameters seem to be unreasonable.
-> Sure, that is reasonable. Another question is whether global PASID
-> allocation is always for a single device, if not I prefer to keep the
-> current iommu_alloc_global_pasid() and add a wrapper
-> iommu_alloc_global_pasid_dev(dev) to extract the @min, @max. OK?
+Hi Pierre,
 
-No problem from the code perspective. But we only need one API.
+kernel test robot noticed the following build warnings:
 
-We can now add the kAPI that we really need. In this series, the idxd
-driver wants to allocate a global PASID for its kernel dma with pasid
-purpose. So, iommu_alloc_global_pasid_dev() seems to be sufficient.
+[auto build test WARNING on drm-tip/drm-tip]
+[also build test WARNING on drm-misc/drm-misc-next linus/master v6.3-rc7 next-20230418]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-If, in the future, we will have a need to provide global pasid
-allocation other than device drivers, we can easily add the variants.
+url:    https://github.com/intel-lab-lkp/linux/commits/Pierre-Asselin/firmware-sysfb-Fix-VESA-format-selection/20230419-023522
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20230418183325.2327-1-pa%40panix.com
+patch subject: [PATCH] firmware/sysfb: Fix VESA format selection
+config: x86_64-randconfig-a014-20230417 (https://download.01.org/0day-ci/archive/20230419/202304191058.FrwRGYyD-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/294e6879474c9528bcd0f652056d29ca3d1d473f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Pierre-Asselin/firmware-sysfb-Fix-VESA-format-selection/20230419-023522
+        git checkout 294e6879474c9528bcd0f652056d29ca3d1d473f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/firmware/
 
-Best regards,
-baolu
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304191058.FrwRGYyD-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/firmware/sysfb_simplefb.c:60:20: warning: comparison of distinct pointer types ('typeof ((typeof (__builtin_choose_expr(((!!(sizeof ((typeof ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) *)1 == (typeof (si->blue_size + si->blue_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->blue_size + si->blue_pos) * 0L)) : (int *)8))))), (((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) > (si->blue_size + si->blue_pos) ? ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) : (si->blue_size + si->blue_pos)), ({
+       typeof ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) __UNIQUE_ID___x285 = ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+           typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+           typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+           ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+       })));
+       typeof (si->blue_size + si->blue_pos) __UNIQUE_ID___y286 = (si->blue_size + si->blue_pos);
+       ((__UNIQUE_ID___x285) > (__UNIQUE_ID___y286) ? (__UNIQUE_ID___x285) : (__UNIQUE_ID___y286));
+   }))))__builtin_choose_expr(((!!(sizeof ((typeof (__builtin_choose_expr(((!!(sizeof ((typeof ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) *)1 == (typeof (si->blue_size + si->blue_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->blue_size + si->blue_pos) * 0L)) : (int *)8))))), (((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) > (si->blue_size + si->blue_pos) ? ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) : (si->blue_size + si->blue_pos)), ({
+       typeof ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) __UNIQUE_ID___x285 = ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+           typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+           typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+           ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+       })));
+       typeof (si->blue_size + si->blue_pos) __UNIQUE_ID___y286 = (si->blue_size + si->blue_pos);
+       ((__UNIQUE_ID___x285) > (__UNIQUE_ID___y286) ? (__UNIQUE_ID___x285) : (__UNIQUE_ID___y286));
+   }))) *)1 == (typeof (si->rsvd_size + si->rsvd_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(__builtin_choose_expr(((!!(sizeof ((typeof ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) *)1 == (typeof (si->blue_size + si->blue_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->blue_size + si->blue_pos) * 0L)) : (int *)8))))), (((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) > (si->blue_size + si->blue_pos) ? ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) : (si->blue_size + si->blue_pos)), ({
+       typeof ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) __UNIQUE_ID___x285 = ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+           typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+           typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+           ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+       })));
+       typeof (si->blue_size + si->blue_pos) __UNIQUE_ID___y286 = (si->blue_size + si->blue_pos);
+       ((__UNIQUE_ID___x285) > (__UNIQUE_ID___y286) ? (__UNIQUE_ID___x285) : (__UNIQUE_ID___y286));
+   }))) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->rsvd_size + si->rsvd_pos) * 0L)) : (int *)8))))), ((__builtin_choose_expr(((!!(sizeof ((typeof ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) *)1 == (typeof (si->blue_size + si->blue_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->blue_size + si->blue_pos) * 0L)) : (int *)8))))), (((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) > (si->blue_size + si->blue_pos) ? ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) : (si->blue_size + si->blue_pos)), ({
+
+
+vim +60 drivers/firmware/sysfb_simplefb.c
+
+    25	
+    26	/* try parsing screen_info into a simple-framebuffer mode struct */
+    27	__init bool sysfb_parse_mode(const struct screen_info *si,
+    28				     struct simplefb_platform_data *mode)
+    29	{
+    30		__u8 type;
+    31		u32 bits_per_pixel;
+    32		unsigned int i;
+    33	
+    34		type = si->orig_video_isVGA;
+    35		if (type != VIDEO_TYPE_VLFB && type != VIDEO_TYPE_EFI)
+    36			return false;
+    37	
+    38		/*
+    39		 * The meaning of depth and bpp for direct-color formats is
+    40		 * inconsistent:
+    41		 *
+    42		 *  - DRM format info specifies depth as the number of color
+    43		 *    bits; including alpha, but not including filler bits.
+    44		 *  - Linux' EFI platform code computes lfb_depth from the
+    45		 *    individual color channels, including the reserved bits.
+    46		 *  - VBE 1.1 defines lfb_depth for XRGB1555 as 16, but later
+    47		 *    versions use 15.
+    48		 *  - On the kernel command line, 'bpp' of 32 is usually
+    49		 *    XRGB8888 including the filler bits, but 15 is XRGB1555
+    50		 *    not including the filler bit.
+    51		 *
+    52		 * It's not easily possible to fix this in struct screen_info,
+    53		 * as this could break UAPI. The best solution is to compute
+    54		 * bits_per_pixel from the color bits, reserved bits and
+    55		 * reported lfb_depth, whichever is highest.  In the loop below,
+    56		 * ignore simplefb formats with alpha bits, as EFI and VESA
+    57		 * don't specify alpha channels.
+    58		 */
+    59		if (si->lfb_depth > 8) {
+  > 60			bits_per_pixel = max3(max3(si->red_size + si->red_pos,
+    61						  si->green_size + si->green_pos,
+    62						  si->blue_size + si->blue_pos),
+    63					     si->rsvd_size + si->rsvd_pos,
+    64					     si->lfb_depth);
+    65		} else {
+    66			bits_per_pixel = si->lfb_depth;
+    67		}
+    68	
+    69		for (i = 0; i < ARRAY_SIZE(formats); ++i) {
+    70			const struct simplefb_format *f = &formats[i];
+    71	
+    72			if (f->transp.length)
+    73				continue; /* transparent formats are unsupported by VESA/EFI */
+    74	
+    75			if (bits_per_pixel == f->bits_per_pixel &&
+    76			    si->red_size == f->red.length &&
+    77			    si->red_pos == f->red.offset &&
+    78			    si->green_size == f->green.length &&
+    79			    si->green_pos == f->green.offset &&
+    80			    si->blue_size == f->blue.length &&
+    81			    si->blue_pos == f->blue.offset) {
+    82				mode->format = f->name;
+    83				mode->width = si->lfb_width;
+    84				mode->height = si->lfb_height;
+    85				mode->stride = si->lfb_linelength;
+    86				return true;
+    87			}
+    88		}
+    89	
+    90		return false;
+    91	}
+    92	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
