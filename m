@@ -2,126 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392366E79C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3706E79CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbjDSMbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
+        id S233280AbjDSMbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjDSMbI (ORCPT
+        with ESMTP id S232564AbjDSMbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:31:08 -0400
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8705CE50
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:31:06 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 12:30:53 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1681907464; x=1682166664;
-        bh=LbKgikniMFbDyFN2g7zWAoErWCoMlEFPq1fVjDbUYh8=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=W+vrUebuJp1hiaq5J6Yn0guavbN34v+IU5fOapkRumgszhzjBMXFFFHcpMEbT0G4C
-         ZXKilDurS+3o5ptA5jQS/Mt0ddLeJJBmW66gZWd/IhQLVTt/XKOrWBEDEdp25Tzi+O
-         d9L3k23CouM0jZ6YjIHmogFZOgMjFN2oIEiAgM+FYH5osEj8L3xQ19wsYl9Vzp96KQ
-         kih/4GNsISO83sMmwiCenYVPMcDdca1S3NCmDJGv+ATJSXKPCGJzPOyNNtSM8BPwi6
-         HtNPG/fSeY2uDPVpPbRM2d1B73iFMPTDYxCGPwS8TiyMojBNzdU1dYChuOMz6y7F6j
-         pZtB11+AvOD4Q==
-To:     Miguel Ojeda <ojeda@kernel.org>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH] .gitattributes: set diff driver for Rust source code files
-Message-ID: <n1uzeazgD17rPkhbZbkXpMaba7JXVdm5YIzUzi18_8UKwUYtXOPgBBJePJ0VMMc4X8pEoLtA4ypsco4CQ1WPC_PIoPmQB9m1S3cAQOC5p_M=@proton.me>
-In-Reply-To: <20230418233048.335281-1-ojeda@kernel.org>
-References: <20230418233048.335281-1-ojeda@kernel.org>
-Feedback-ID: 71780778:user:proton
+        Wed, 19 Apr 2023 08:31:21 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F04883D8;
+        Wed, 19 Apr 2023 05:31:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681907479; x=1713443479;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ms4CryhYtDp4tIqhE0yt+qiaJQ9HXwQjuuAqzSeax4k=;
+  b=lLoyqxtAL+CWa4/u0ELkPtFkaNvbxvZqPit02YKXtLwPu5Ry0iIzuBXI
+   Yih91wntsErpYh9YxVfGVzhZqQATi1fOixFudzk8045K+NmUy5UeN/y5z
+   iiGGE3zXJzSzXC1LTYQSK1f/2ERKzhDlgG41/Ioi61686nFtGrMawpz2B
+   6unZTclwoTumiCwhC7JjR3gjnqXkn4QR95UmVMdrAeeyomsZPbOrxwRBX
+   8AMXXN5S+GRmZlrritV+dafMh0UbLR4T0kFS6hoLmlV+6lrU9d22whmkT
+   JBFPReCKb48pb1awmhhny3IYbEP8KYsa4ePwt/RBQusJJQplekmCEcUrJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="408342794"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="408342794"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 05:31:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="684962247"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="684962247"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga007.jf.intel.com with ESMTP; 19 Apr 2023 05:31:18 -0700
+Received: from [10.209.41.10] (kliang2-mobl1.ccr.corp.intel.com [10.209.41.10])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id E92EB580C4C;
+        Wed, 19 Apr 2023 05:31:16 -0700 (PDT)
+Message-ID: <84b19053-2e9f-5251-6816-26d2475894c0@linux.intel.com>
+Date:   Wed, 19 Apr 2023 08:31:15 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] perf stat: Introduce skippable evsels
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230414051922.3625666-1-irogers@google.com>
+ <56ac61a0-ccf0-210e-e429-11062a07b8bf@linux.intel.com>
+ <CAP-5=fXz1vw48A2tWgcNDSZsnvnOO7_jA+py3p_Khi_igz0hJw@mail.gmail.com>
+ <5031f492-9734-be75-3283-5961771d87c8@linux.intel.com>
+ <CAP-5=fW2aAijt8tqydszQHQFmsfeQO2S0hb7Z27RtXxG4Zmm-w@mail.gmail.com>
+ <ce92dd1b-23f6-ea52-a47d-fccc24fa20ea@linux.intel.com>
+ <CAP-5=fWRy4NEqhB6-b98+m7SV5=oyBOMVuOHwmvKZCJuXcsQEg@mail.gmail.com>
+ <d1fe801a-22d0-1f9b-b127-227b21635bd5@linux.intel.com>
+ <CAP-5=fXCmKAUn24r0YYHaO63mabZCXae-hAT2WCtk+YYmvS9xg@mail.gmail.com>
+ <99150cb1-fe50-97cf-ad80-cceb9194eb9a@linux.intel.com>
+ <CAP-5=fXZSACj=kGM5t3pBHkQ-W1i0eJayAQ77_ToEp4zXWzJnw@mail.gmail.com>
+ <ea899096-0599-f2a0-04a3-d90a3aa7d45d@linux.intel.com>
+ <CAP-5=fVVFjKgUGV8zVurd99BOhASQ9mMaZqOyw13PYLhZWpsOA@mail.gmail.com>
+ <CAP-5=fW_JwabjEUqSLaJn+tuHXLoyRWqJVVCh_z1dhXJ6On=MQ@mail.gmail.com>
+Content-Language: en-US
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <CAP-5=fW_JwabjEUqSLaJn+tuHXLoyRWqJVVCh_z1dhXJ6On=MQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.04.23 01:30, Miguel Ojeda wrote:
-> Git supports a builtin Rust diff driver [1] since v2.23.0 (2019).
->=20
-> It improves the choice of hunk headers in some cases, such as
-> diffs within methods, since those are indented in Rust within
-> an `impl` block, and therefore the default diff driver would
-> pick the outer `impl` block instead (rather than the method
-> where the changed code is).
->=20
-> For instance, with the default diff driver:
->=20
->      @@ -455,6 +455,8 @@ impl fmt::Write for RawFormatter {
->               // Amount that we can copy. `saturating_sub` ensures we get=
- 0 if `pos` goes past `end`.
->               let len_to_copy =3D core::cmp::min(pos_new, self.end).satur=
-ating_sub(self.pos);
->=20
->      +        test_diff_driver();
->      +
->               if len_to_copy > 0 {
->                   // SAFETY: If `len_to_copy` is non-zero, then we know `=
-pos` has not gone past `end`
->                   // yet, so it is valid for write per the type invariant=
-s.
->=20
-> With the Rust diff driver:
->=20
->      @@ -455,6 +455,8 @@ fn write_str(&mut self, s: &str) -> fmt::Result =
-{
->               // Amount that we can copy. `saturating_sub` ensures we get=
- 0 if `pos` goes past `end`.
->               let len_to_copy =3D core::cmp::min(pos_new, self.end).satur=
-ating_sub(self.pos);
->=20
->      +        test_diff_driver();
->      +
->               if len_to_copy > 0 {
->                   // SAFETY: If `len_to_copy` is non-zero, then we know `=
-pos` has not gone past `end`
->                   // yet, so it is valid for write per the type invariant=
-s.
->=20
-> Thus set the `rust` diff driver for `*.rs` source files.
->=20
-> Link: https://git-scm.com/docs/gitattributes#_defining_a_custom_hunk_head=
-er [1]
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
 
-> ---
->   .gitattributes | 1 +
->   1 file changed, 1 insertion(+)
->=20
-> diff --git a/.gitattributes b/.gitattributes
-> index c9ba5bfc4036..2325c529e185 100644
-> --- a/.gitattributes
-> +++ b/.gitattributes
-> @@ -2,3 +2,4 @@
->   *.[ch] diff=3Dcpp
->   *.dts diff=3Ddts
->   *.dts[io] diff=3Ddts
-> +*.rs diff=3Drust
->=20
-> base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
-> --
-> 2.40.0
+On 2023-04-18 9:00 p.m., Ian Rogers wrote:
+> On Tue, Apr 18, 2023 at 5:12 PM Ian Rogers <irogers@google.com> wrote:
+>>
+>> On Tue, Apr 18, 2023 at 2:51 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
+>>>
+>>>
+>>>
+>>> On 2023-04-18 4:08 p.m., Ian Rogers wrote:
+>>>> On Tue, Apr 18, 2023 at 11:19 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
+>>>>>
+>>>>>
+>>>>>
+>>>>> On 2023-04-18 11:43 a.m., Ian Rogers wrote:
+>>>>>> On Tue, Apr 18, 2023 at 6:03 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> On 2023-04-17 2:13 p.m., Ian Rogers wrote:
+>>>>>>>> The json TopdownL1 is enabled if present unconditionally for perf stat
+>>>>>>>> default. Enabling it on Skylake has multiplexing as TopdownL1 on
+>>>>>>>> Skylake has multiplexing unrelated to this change - at least on the
+>>>>>>>> machine I was testing on. We can remove the metric group TopdownL1 on
+>>>>>>>> Skylake so that we don't enable it by default, there is still the
+>>>>>>>> group TmaL1. To me, disabling TopdownL1 seems less desirable than
+>>>>>>>> running with multiplexing - previously to get into topdown analysis
+>>>>>>>> there has to be knowledge that "perf stat -M TopdownL1" is the way to
+>>>>>>>> do this.
+>>>>>>>
+>>>>>>> To be honest, I don't think it's a good idea to remove the TopdownL1. We
+>>>>>>> cannot remove it just because the new way cannot handle it. The perf
+>>>>>>> stat default works well until 6.3-rc7. It's a regression issue of the
+>>>>>>> current perf-tools-next.
+>>>>>>
+>>>>>> I'm not so clear it is a regression to consistently add TopdownL1 for
+>>>>>> all architectures supporting it.
+>>>>>
+>>>>>
+>>>>> Breaking the perf stat default is a regression.
+>>>>
+>>>> Breaking is overstating the use of multiplexing. The impact is less
+>>>> accuracy in the IPC and branch misses default metrics,
+>>>
+>>> Inaccuracy is a breakage for the default.
+>>
+>> Can you present a case where this matters? The events are already not
+>> grouped and so inaccurate for metrics.
 > 
+> Removing CPUs without perf metrics from the TopdownL1 metric group is
+> implemented here:
+> https://lore.kernel.org/lkml/20230419005423.343862-6-irogers@google.com/
+> Note, this applies to pre-Icelake and atom CPUs as these also lack
+> perf metric (aka topdown) events.
+>
+
+That may give the end user the impression that the pre-Icelake doesn't
+support the Topdown Level1 events, which is not true.
+
+I think perf should either keep it for all Intel platforms which
+supports tma_L1_group, or remove the TopdownL1 name entirely for Intel
+platform (let the end user use the tma_L1_group and the name exposed by
+the kernel as before.).
+
+
+> With that change I don't have a case that requires skippable evsels,
+> and so we can take that series with patch 6 over the v1 of that series
+> with this change.
+> 
+
+I'm afraid this is not the only problem the commit 94b1a603fca7 ("perf
+stat: Add TopdownL1 metric as a default if present") in the
+perf-tools-next branch introduced.
+
+The topdown L2 in the perf stat default on SPR and big core of the ADL
+is still missed. I don't see a possible fix for this on the current
+perf-tools-next branch.
+
+Thanks,
+Kan
