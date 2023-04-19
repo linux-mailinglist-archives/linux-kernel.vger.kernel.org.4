@@ -2,171 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727306E722B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 06:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C236E722E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 06:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbjDSESO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 00:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+        id S231264AbjDSETz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 00:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbjDSESL (ORCPT
+        with ESMTP id S229577AbjDSETv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 00:18:11 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85530448C;
-        Tue, 18 Apr 2023 21:18:10 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63b5c4c769aso3073996b3a.3;
-        Tue, 18 Apr 2023 21:18:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681877890; x=1684469890;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1yOlmeuohL1y9HWwOAFFBHf0wIhbGMAUILl4Etf+xaM=;
-        b=g9XFVOwTjnRDWpVUdboPuxWJfvxBkfOMlRJdLs9teGzJRpKulIKhsyauD7KhA8Ekg2
-         mpPKfY4w28TdgGzFsqhbszZNyiZHeH3PVlhT0PjAM0m97jmt358oN79pKoypnHqbDEFW
-         xPM6hdmSmji/hkD50tsDFj2qW2tvsi04D+2rcKCRvABqOXJ7A7XN4NLZtZWGVfIptKJl
-         uI+1KCTyVW3gZE5bbHZR9ubkFBED5fPPch7D1SDUAdBYmLnQesJC8OuR3Sgh8VApXRMc
-         29Tco9juXr+sEfqjS6TXxmZ6WYjjhLZEph2N4epdjC1fFbEL31fAFbbnBjNtZxUI3oLt
-         rPcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681877890; x=1684469890;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1yOlmeuohL1y9HWwOAFFBHf0wIhbGMAUILl4Etf+xaM=;
-        b=PkHe5L2ef3fsCQxu5wPnyaV7eVG3KrPPfqcR1PviPVWbARaBATHX0Sbqdm8SKfNORZ
-         oIa5L3LBBfn9ohuOvD/mz79MFQkucmuI8jOesoQIs2kmeRoz8OrLIjQlnf72eRMaKooA
-         cKkpybxtQ60DVlUpQ4qnpI9YjRX/8Y1S1D/teSLBOX/lQ1Uuvcu4SLh97/QI2A9qvmpK
-         VK0PhchfRDeGibMVFR/5CVu8KydYNrKS2oH6HZ9j+vtnZlD7UneK0j+/YHsoChAur3fR
-         HcGOTFKCcALmqNOW7Orr9e/rBGVEPPR3TkYfwtWvyNP7iSE7HObmxFJ3XUIcIaYv5Itk
-         l4Gw==
-X-Gm-Message-State: AAQBX9ed1BIViw4kENM7H4tjlvtij/XfORUYPJ89wuG9r57D/4sSKR6M
-        sJKWjq1lzkK/ZltONM2hE8s=
-X-Google-Smtp-Source: AKy350atE/YK8xeOWPxEnBYau7lN2rbNThIlRZKxpoHVtBY0Iq/1BSox5hJ7WghB/cEHT2XXDpa4Jw==
-X-Received: by 2002:a05:6a00:139f:b0:63b:8e12:7075 with SMTP id t31-20020a056a00139f00b0063b8e127075mr2246843pfg.31.1681877889814;
-        Tue, 18 Apr 2023 21:18:09 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-1.three.co.id. [116.206.28.1])
-        by smtp.gmail.com with ESMTPSA id e18-20020a62aa12000000b0063d37a45829sm1167463pff.63.2023.04.18.21.18.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 21:18:09 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 82DFE10673E; Wed, 19 Apr 2023 11:18:06 +0700 (WIB)
-Date:   Wed, 19 Apr 2023 11:18:06 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Tom Saeger <tom.saeger@oracle.com>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Yu Zhao <yuzhao@google.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Waiman Long <longman@redhat.com>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, Tejun Heo <tj@kernel.org>,
-        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-        Daniel =?utf-8?B?RMOtYXo=?= <daniel.diaz@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Darren Kenny <darren.kenny@oracle.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>
-Subject: Re: [PATCH 5.15 00/91] 5.15.108-rc1 review
-Message-ID: <ZD9rfsteIrXIwezR@debian.me>
-References: <20230418120305.520719816@linuxfoundation.org>
- <CA+G9fYs9sHnfhn4hSFP=AmOfgj-zvoK9vmBejRvzKPj4uXx+VA@mail.gmail.com>
- <bd46521c-a167-2872-fecb-2b0f32855a24@oracle.com>
- <20230418165105.q5s77yew2imkamsb@oracle.com>
+        Wed, 19 Apr 2023 00:19:51 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847341705
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 21:19:50 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33J45ixm023745;
+        Wed, 19 Apr 2023 04:19:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=fxFKsrUL3l9DMaDGWHS5NCZlebiGDfNwYCxNcetUNBI=;
+ b=V5FMRvugaf4bdoIHuEk4KuRgC7bMQNKKqgTlvbx6HKkvG9eZU54T3NzwdXP7kCtREiId
+ vnWLL8tXV7pEHyQi9PUBRGBvCQWtGXXjQ2y1lqtPR5axa587orvJLe1PaOCyO+ccp5sv
+ kv0oQOu6fCxzY2rJ7eFjatIjD2pvQQr5tuy9tXg9IGZmrp5Kn1MyXmfOWqftwKzQBoeX
+ d/URtWKr82IlNUrqRCYqw8aQbB8ap+5LUhm5ZkmVXBnZCZzvtC1DnsoGunFN1IphRpBQ
+ QlbL9aFwh492XL8q2ODLbQL++Nn4VrkaBGraWfG+WVXgOfB4PTO7KhuTlsVj6Ye0QouR mQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1w219s5t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 04:19:35 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33J4JYU4001769
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 04:19:34 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 18 Apr 2023 21:19:30 -0700
+Date:   Wed, 19 Apr 2023 09:49:26 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Frank van der Linden <fvdl@google.com>
+CC:     <quic_charante@quicinc.com>, <akpm@linux-foundation.org>,
+        <hughd@google.com>, <willy@infradead.org>,
+        <markhemm@googlemail.com>, <rientjes@google.com>,
+        <surenb@google.com>, <shakeelb@google.com>,
+        <quic_pkondeti@quicinc.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V7 0/2] mm: shmem: support POSIX_FADV_[WILL|DONT]NEED for
+ shmem files
+Message-ID: <20230419041926.GA99028@hu-pkondeti-hyd.qualcomm.com>
+References: <e6cd1f1e-e54c-87ae-ed23-cc1eca26837c@quicinc.com>
+ <20230418172942.740769-1-fvdl@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1l6DxsxNS5bMd6S1"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230418165105.q5s77yew2imkamsb@oracle.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230418172942.740769-1-fvdl@google.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 6612H3_FDH4H_60UzHBow5lb_5Einqbp
+X-Proofpoint-GUID: 6612H3_FDH4H_60UzHBow5lb_5Einqbp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-18_17,2023-04-18_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 phishscore=0
+ mlxscore=0 mlxlogscore=845 malwarescore=0 suspectscore=0 clxscore=1011
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304190039
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---1l6DxsxNS5bMd6S1
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Apr 18, 2023 at 10:51:05AM -0600, Tom Saeger wrote:
-> > Tom Saeger identified that the below commit moves it out of ifdef.
-> >=20
-> > commit 354ed597442952fb680c9cafc7e4eb8a76f9514c
-> > Author: Yu Zhao <yuzhao@google.com>
-> > Date:   Sun Sep 18 02:00:07 2022 -0600
-> >=20
-> >     mm: multi-gen LRU: kill switch
-> >=20
-> FWIW - partially backporting (location of cgroup_mutex extern) from:
-> 354ed5974429 ("mm: multi-gen LRU: kill switch")
->=20
-> fixes x86_64 build for me.
->=20
-> Regards,
->=20
-> --Tom
->=20
-> diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-> index 45cdb12243e3..460ba084888a 100644
-> --- a/include/linux/cgroup.h
-> +++ b/include/linux/cgroup.h
-> @@ -433,6 +433,8 @@ static inline void cgroup_put(struct cgroup *cgrp)
->         css_put(&cgrp->self);
+On Tue, Apr 18, 2023 at 05:29:42PM +0000, Frank van der Linden wrote:
+> Below is a quick patch to allow FADVISE_DONTNEED for shmem to reclaim
+> mapped pages too. This would fit our usecase, and matches MADV_PAGEOUT
+> more closely.
+> 
+> The patch series as posted skips mapped pages even if you remove
+> the folio_mapped() check, because page_referenced() in
+> shrink_page_list() will find page tables with the page mapped,
+> and ignore_references is not set when called from reclaim_pages().
+> 
+> You can make this work in a similar fashion to MADV_PAGEOUT by
+> first unmapping a page, but only if the mapping belongs to
+> the caller. You just have to change the check for "is there
+> only one mapping and am I the owner". To do that, change a few
+> lines in try_to_unmap to allow for checking the mm the mapping
+> belongs to, and pass in current->mm (NULL still unmaps all mappings).
+> 
+> I lightly tested this in a somewhat older codebase, so the diff
+> below isn't fully tested. But if there are no objections to
+> this approach, we could add it on top of your patchset after
+> better testing.
+> 
+> - Frank
+> 
+> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+> index b87d01660412..4403cc2ccc4c 100644
+> --- a/include/linux/rmap.h
+> +++ b/include/linux/rmap.h
+> @@ -368,6 +368,8 @@ int folio_referenced(struct folio *, int is_locked,
+>  
+>  void try_to_migrate(struct folio *folio, enum ttu_flags flags);
+>  void try_to_unmap(struct folio *, enum ttu_flags flags);
+> +void try_to_unmap_mm(struct mm_struct *mm, struct folio *folio,
+> +			enum ttu_flags flags);
+>  
+>  int make_device_exclusive_range(struct mm_struct *mm, unsigned long start,
+>  				unsigned long end, struct page **pages,
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index 8632e02661ac..4d30e8f5afe2 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -1443,6 +1443,11 @@ void page_remove_rmap(struct page *page, struct vm_area_struct *vma,
+>  	munlock_vma_folio(folio, vma, compound);
 >  }
->=20
-> +extern struct mutex cgroup_mutex;
+>  
+> +struct unmap_arg {
+> +	enum ttu_flags flags;
+> +	struct mm_struct *mm;
+> +};
 > +
->  /**
->   * task_css_set_check - obtain a task's css_set with extra access condit=
-ions
->   * @task: the task to obtain css_set for
-> @@ -447,7 +449,6 @@ static inline void cgroup_put(struct cgroup *cgrp)
->   * as locks used during the cgroup_subsys::attach() methods.
+>  /*
+>   * @arg: enum ttu_flags will be passed to this argument
 >   */
->  #ifdef CONFIG_PROVE_RCU
-> -extern struct mutex cgroup_mutex;
->  extern spinlock_t css_set_lock;
->  #define task_css_set_check(task, __c)                                  \
->         rcu_dereference_check((task)->cgroups,                          \
-> diff --git a/kernel/cgroup/cgroup-internal.h b/kernel/cgroup/cgroup-inter=
-nal.h
-> index d8fcc139ac05..28c32a01da7d 100644
-> --- a/kernel/cgroup/cgroup-internal.h
-> +++ b/kernel/cgroup/cgroup-internal.h
-> @@ -165,7 +165,6 @@ struct cgroup_mgctx {
->  #define DEFINE_CGROUP_MGCTX(name)                                       =
-       \
->         struct cgroup_mgctx name =3D CGROUP_MGCTX_INIT(name)
->=20
-> -extern struct mutex cgroup_mutex;
->  extern spinlock_t css_set_lock;
->  extern struct cgroup_subsys *cgroup_subsys[];
->  extern struct list_head cgroup_roots;
+> @@ -1455,7 +1460,11 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+>  	struct page *subpage;
+>  	bool anon_exclusive, ret = true;
+>  	struct mmu_notifier_range range;
+> -	enum ttu_flags flags = (enum ttu_flags)(long)arg;
+> +	struct unmap_arg *uap = (struct unmap_arg *)arg;
+> +	enum ttu_flags flags = uap->flags;
+> +
+> +	if (uap->mm && uap->mm != mm)
+> +		return true;
+>  
+>  	/*
+>  	 * When racing against e.g. zap_pte_range() on another cpu,
+> @@ -1776,6 +1785,7 @@ static int folio_not_mapped(struct folio *folio)
+>  
+>  /**
+>   * try_to_unmap - Try to remove all page table mappings to a folio.
+> + * @mm: mm to unmap from (NULL to unmap from all)
+>   * @folio: The folio to unmap.
+>   * @flags: action and flags
+>   *
+> @@ -1785,11 +1795,16 @@ static int folio_not_mapped(struct folio *folio)
+>   *
+>   * Context: Caller must hold the folio lock.
+>   */
+> -void try_to_unmap(struct folio *folio, enum ttu_flags flags)
+> +void try_to_unmap_mm(struct mm_struct *mm, struct folio *folio,
+> +		enum ttu_flags flags)
+>  {
+> +	struct unmap_arg ua = {
+> +		.flags = flags,
+> +		.mm = mm,
+> +	};
+>  	struct rmap_walk_control rwc = {
+>  		.rmap_one = try_to_unmap_one,
+> -		.arg = (void *)flags,
+> +		.arg = (void *)&ua,
+>  		.done = folio_not_mapped,
+>  		.anon_lock = folio_lock_anon_vma_read,
+>  	};
+> @@ -1800,6 +1815,11 @@ void try_to_unmap(struct folio *folio, enum ttu_flags flags)
+>  		rmap_walk(folio, &rwc);
+>  }
+>  
+> +void try_to_unmap(struct folio *folio, enum ttu_flags flags)
+> +{
+> +	try_to_unmap_mm(NULL, folio, flags);
+> +}
+> +
+>  /*
+>   * @arg: enum ttu_flags will be passed to this argument.
+>   *
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 1af85259b6fc..b24af2fb3378 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -2362,8 +2362,24 @@ static void shmem_isolate_pages_range(struct address_space *mapping, loff_t star
+>  
+>  		if (!folio_try_get(folio))
+>  			continue;
+> -		if (folio_test_unevictable(folio) || folio_mapped(folio) ||
+> -				folio_isolate_lru(folio)) {
+> +
+> +		if (folio_test_unevictable(folio)) {
+> +			folio_put(folio);
+> +			continue;
+> +		}
+> +
+> +		/*
+> +		 * If the folio is mapped once, try to unmap it from the
+> +		 * caller's page table. If it's still mapped afterwards,
+> +		 * it belongs to someone else, and we're not going to
+> +		 * change someone else's mapping.
+> +		 */
+> +		if (folio_mapcount(folio) == 1 && folio_trylock(folio)) {
+> +			try_to_unmap_mm(current->mm, folio, TTU_BATCH_FLUSH);
+> +			folio_unlock(folio);
+> +		}
 
-Yu, would you like to provide formal backport? Or maybe take Tom's
-diff above and ACK it?
+Is rmap walk can be done from a RCU read critical section which does not
+allow explicit blocking? 
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---1l6DxsxNS5bMd6S1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZD9rfgAKCRD2uYlJVVFO
-oxE1AP4/yqKP+7NfVKxZa3LJ3PAlg3lg8WKyBlBEhDzI2U/cWwD/a/+Hgb0Y/fqS
-4SDj9K66itlA57r83DXzZFh4U2pXbAc=
-=vtL5
------END PGP SIGNATURE-----
-
---1l6DxsxNS5bMd6S1--
+Thanks,
+Pavan
