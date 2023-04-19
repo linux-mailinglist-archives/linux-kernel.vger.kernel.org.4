@@ -2,148 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1E06E83CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5D76E83C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbjDSVbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 17:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
+        id S231958AbjDSVae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 17:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbjDSVba (ORCPT
+        with ESMTP id S231157AbjDSVac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 17:31:30 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA529766;
-        Wed, 19 Apr 2023 14:31:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681939868; x=1713475868;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uzaEvtKF/wb+BpZHv45rlTavjENU0eMCTHpvxq+55cw=;
-  b=cBzO+UZukpQmV8H79i1QE1aJb16knkvmRD8Jhu4KyfYmNinUuPaIVQGk
-   EotCIs2v3vM3tZfZ3XsUohFVRR8apEh2PhGUUl7X348RP8xDfwYAGijQU
-   YHFGQAztSq0a9ciXeYv3EQHhzaebrCyWQY+00gv0jDFfKoKR11/aAsxcm
-   6XO0MhFMosJ1Uq+nSdIemHDYioewdpjfbmuwIs2cu826bfOJnz+kxiAgW
-   3tvZRaWOYfpiFt6S20VDphy6GX+G2VUKW8WZHNdT8ZwIVJik6vOMXr9kj
-   HQ+KY1m6VLXFKt0YAPU/k5U+Cav/X9MeWamAxCkBoKkCy731oUUyvjapa
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="334382342"
-X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
-   d="scan'208";a="334382342"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 14:31:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="756241128"
-X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
-   d="scan'208";a="756241128"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Apr 2023 14:31:05 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ppFOK-000fCq-0s;
-        Wed, 19 Apr 2023 21:31:04 +0000
-Date:   Thu, 20 Apr 2023 05:30:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     luhongfei <luhongfei@vivo.com>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "open list:IO_URING" <io-uring@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        opensource.kernel@vivo.com, luhongfei <luhongfei@vivo.com>
-Subject: Re: [PATCH] io_uring: Optimization of buffered random write
-Message-ID: <202304200502.T4Waeqad-lkp@intel.com>
-References: <20230419092233.56338-1-luhongfei@vivo.com>
+        Wed, 19 Apr 2023 17:30:32 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AD776B0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:30:30 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id l5so782117ybe.7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:30:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1681939829; x=1684531829;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wQu0mN/FgD6XFymkM6bnNZhxdrbRxxLlBGzvH5ZIfR4=;
+        b=b/FfQZsCRJa6do1l6J7aORvknuMn8CTcVm6qMfuSiMTMpWJrE7xYxuJ+Wvz8th6e7N
+         oeBlv+DHmD9GcpbKuZfRfiDBbsi+Nke1V4pDBSGPji7J5S1B4z1V7aIAsEngBkoNmyA0
+         spJWoJ6KCvrO7FeQJj1T2sdsnoxUvzE0WFoShZxTyoAeN2lT2u95lDWDHJdmBmdtT6Ax
+         tfBk2WWdQG7oSyLWiR0UjaLw4yHvdiB1dxmQ1luYYRdn61GjOVzzTVSccleFyqTh6P6N
+         d1iaGxWwlMXIn1xwXGk4KQlvxbZ+XwEa2MVZbOkK6Fcx6/myhwmjAZKEqpDaqM47WB1i
+         KGuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681939829; x=1684531829;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wQu0mN/FgD6XFymkM6bnNZhxdrbRxxLlBGzvH5ZIfR4=;
+        b=D5pOZ5S8EeNs8sCODNMKvhNtdgZSfIAymaXd27iCcj3gVcsUw9c/PLmZHUHwMUmOgd
+         iwPvwlen3LAYxPN1sqiVK61giZ4DNYBWeSCTqYlr+KZn0biSEEFsRETtSERlMFhcpxgl
+         S7w4Y9oYEu4Gl+8e/6WxMGTUzFbY7sxRoen6e0ELqi27OYk5wKDB6iSvILKFzYKSWly0
+         kOpIsdeXINEWgwKExyQK1LGVue4ibAxFl6Y45A1I0Ajudm0SQIjFzpbD2eUIk+oImLVE
+         mLtrAWhjhIJESd18w7zohp7JMqxvpKGTtcmrPg8goMyhFjPTI4SnBKS5XyqcfoikGmok
+         eZpQ==
+X-Gm-Message-State: AAQBX9dkiggAyar2k9T1IyyshMftNArellAWVmaP/qEm0UQXEbQAm0ty
+        Ix7wAJXXzcaM9KsBnQXuoxGZ8fne02CDONdp/rqX
+X-Google-Smtp-Source: AKy350a7nHcqYyWU4VZcvtBsSLeV6EvDSxEIgfjTR8AbKaviQKyh8+I7NGxVtMaW2OKcydp+tf/BcO8TIBQ8eQZpif0=
+X-Received: by 2002:a25:ac23:0:b0:b8f:5196:3c8f with SMTP id
+ w35-20020a25ac23000000b00b8f51963c8fmr1085621ybi.28.1681939829245; Wed, 19
+ Apr 2023 14:30:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419092233.56338-1-luhongfei@vivo.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-v1-0-9d4064cb0075@tessares.net>
+ <20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-v1-1-9d4064cb0075@tessares.net>
+In-Reply-To: <20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-v1-1-9d4064cb0075@tessares.net>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 19 Apr 2023 17:30:18 -0400
+Message-ID: <CAHC9VhQsbSO5o+hVT-Tae-HyWMTjh2ffqQvz+pQQXkrMty7NYQ@mail.gmail.com>
+Subject: Re: [PATCH LSM 1/2] security, lsm: Introduce security_mptcp_add_subflow()
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ondrej Mosnacek <omosnace@redhat.com>, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi luhongfei,
+On Wed, Apr 19, 2023 at 1:44=E2=80=AFPM Matthieu Baerts
+<matthieu.baerts@tessares.net> wrote:
+>
+> From: Paolo Abeni <pabeni@redhat.com>
+>
+> MPTCP can create subflows in kernel context, and later indirectly
+> expose them to user-space, via the owning mptcp socket.
+>
+> As discussed in the reported link, the above causes unexpected failures
+> for server, MPTCP-enabled applications.
+>
+> Let's introduce a new LSM hook to allow the security module to relabel
+> the subflow according to the owing process.
 
-kernel test robot noticed the following build errors:
+"... according to the main MPTCP socket."
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.3-rc7 next-20230418]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+You might also want to stick with a consistent capitalization of
+"MPTCP" in the commit description, but that is being *really* nitpicky
+on my part ;)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/luhongfei/io_uring-Optimization-of-buffered-random-write/20230419-172539
-patch link:    https://lore.kernel.org/r/20230419092233.56338-1-luhongfei%40vivo.com
-patch subject: [PATCH] io_uring: Optimization of buffered random write
-config: i386-randconfig-a012-20230417 (https://download.01.org/0day-ci/archive/20230420/202304200502.T4Waeqad-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/620dbcc5ab192992f08035fd9d271ffffb8ff043
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review luhongfei/io_uring-Optimization-of-buffered-random-write/20230419-172539
-        git checkout 620dbcc5ab192992f08035fd9d271ffffb8ff043
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+There is a suggestion for some additional comments in the hook's
+description below, but otherwise this looks good to me.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304200502.T4Waeqad-lkp@intel.com/
+> Note that the new hook requires both the mptcp socket and the new
+> subflow. This could allow future extensions, e.g. explicitly validating
+> the mptcp <-> subflow linkage.
+>
+> Link: https://lore.kernel.org/mptcp/CAHC9VhTNh-YwiyTds=3DP1e3rixEDqbRTFj2=
+2bpya=3D+qJqfcaMfg@mail.gmail.com/
+> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+> Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> ---
+>  include/linux/lsm_hook_defs.h |  1 +
+>  include/linux/security.h      |  6 ++++++
+>  net/mptcp/subflow.c           |  6 ++++++
+>  security/security.c           | 15 +++++++++++++++
+>  4 files changed, 28 insertions(+)
 
-All errors (new ones prefixed by >>):
+...
 
->> io_uring/io_uring.c:2091:25: error: no member named 'rw' in 'struct io_kiocb'
-           if (!is_write || (req->rw.kiocb.ki_flags & IOCB_DIRECT))
-                             ~~~  ^
-   1 error generated.
+> diff --git a/security/security.c b/security/security.c
+> index f4170efcddda..24cf2644a4b9 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -4667,6 +4667,21 @@ int security_sctp_assoc_established(struct sctp_as=
+sociation *asoc,
+>  }
+>  EXPORT_SYMBOL(security_sctp_assoc_established);
+>
+> +/**
+> + * security_mptcp_add_subflow() - Inherit the LSM label from the MPTCP s=
+ocket
+> + * @sk: the owning MPTCP socket
+> + * @ssk: the new subflow
+> + *
+> + * Update the labeling for the given MPTCP subflow, to match the one of =
+the
+> + * owning MPTCP socket.
 
+I would add a sentence at the end making it clear that this hook is
+called after the socket has been created and initialized via the
+security_socket_create() and security_socket_post_create() LSM hooks.
 
-vim +2091 io_uring/io_uring.c
+> + *
+> + * Return: Returns 0 on success or a negative error code on failure.
+> + */
+> +int security_mptcp_add_subflow(struct sock *sk, struct sock *ssk)
+> +{
+> +       return call_int_hook(mptcp_add_subflow, 0, sk, ssk);
+> +}
+> +
+>  #endif /* CONFIG_SECURITY_NETWORK */
+>
+>  #ifdef CONFIG_SECURITY_INFINIBAND
+>
+> --
+> 2.39.2
 
-  2073	
-  2074	static inline void io_queue_sqe(struct io_kiocb *req)
-  2075		__must_hold(&req->ctx->uring_lock)
-  2076	{
-  2077		int ret;
-  2078		bool is_write;
-  2079	
-  2080		switch (req->opcode) {
-  2081		case IORING_OP_WRITEV:
-  2082		case IORING_OP_WRITE_FIXED:
-  2083		case IORING_OP_WRITE:
-  2084			is_write = true;
-  2085			break;
-  2086		default:
-  2087			is_write = false;
-  2088			break;
-  2089		}
-  2090	
-> 2091		if (!is_write || (req->rw.kiocb.ki_flags & IOCB_DIRECT))
-  2092			ret = io_issue_sqe(req, IO_URING_F_NONBLOCK|IO_URING_F_COMPLETE_DEFER);
-  2093		else
-  2094			ret = io_issue_sqe(req, 0);
-  2095	
-  2096		/*
-  2097		 * We async punt it if the file wasn't marked NOWAIT, or if the file
-  2098		 * doesn't support non-blocking read/write attempts
-  2099		 */
-  2100		if (likely(!ret))
-  2101			io_arm_ltimeout(req);
-  2102		else
-  2103			io_queue_async(req, ret);
-  2104	}
-  2105	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--
+paul-moore.com
