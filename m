@@ -2,163 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4086E7454
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E9D6E7457
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232391AbjDSHuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 03:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37568 "EHLO
+        id S232597AbjDSHug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 03:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232526AbjDSHt4 (ORCPT
+        with ESMTP id S232455AbjDSHuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 03:49:56 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FE67AB9
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:49:54 -0700 (PDT)
-X-UUID: c34bfc68de8611eda9a90f0bb45854f4-20230419
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=IHhBOfUYeT77YquBREt22vcfy911MiykLSdiMpD9Yo0=;
-        b=rFcmb5xMxej7NRtBhk/SzLJTLmt+c2Cxowdk2S98KjpUHk/hl3u3dgms1J8fArLLXPBArfSgMsIVTmKL8Z/T6KtjEdQ3T2dnc1q2RUzc74U9qW+wGBlDGYxDqGE4PJJ87Q2u3ENhbzzqcwikCgY1EjGD2zsBserZ7wyITvAqafk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:b47f5395-83c6-4a88-954c-d51b21018799,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.22,REQID:b47f5395-83c6-4a88-954c-d51b21018799,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:120426c,CLOUDID:b0429084-cd9c-45f5-8134-710979e3df0e,B
-        ulkID:23041915495126IH8NNF,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: c34bfc68de8611eda9a90f0bb45854f4-20230419
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <walter.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 668331487; Wed, 19 Apr 2023 15:49:50 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Wed, 19 Apr 2023 15:49:48 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Wed, 19 Apr 2023 15:49:48 +0800
-From:   <walter.chang@mediatek.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        John Stultz <jstultz@google.com>
-CC:     <wsd_upstream@mediatek.com>, <stanley.chu@mediatek.com>,
-        <Chun-hung.Wu@mediatek.com>, <Freddy.Hsin@mediatek.com>,
-        <walter.chang@mediatek.com>,
-        Chun-Hung Wu <chun-hung.wu@mediatek.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH linux-next v3 4/4] clocksource/drivers/timer-mediatek: Make timer-mediatek become loadable module
-Date:   Wed, 19 Apr 2023 15:49:08 +0800
-Message-ID: <20230419074910.10809-5-walter.chang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230419074910.10809-1-walter.chang@mediatek.com>
-References: <20230419074910.10809-1-walter.chang@mediatek.com>
+        Wed, 19 Apr 2023 03:50:23 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4E35FD1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:50:02 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id fy21so36352115ejb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:50:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681890601; x=1684482601;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ex3FQYwjZBBRU/xF477+zVlaZW3BxZIMIDLhGEELcuU=;
+        b=OxZ/WQz01SXrYObce2yJW9CAy2aOw6dw2vSElL7HKxUuk6uGq/tUS3XjmdGqD8R0Fe
+         3TfD9gBNBUJINE8p0WuEWKVWP+PCyhkWR8VMXbgVM5CVR/RXSxzH6vSQUni/Faz/KNEh
+         0FEmMLaRbbktdhDWVqgJXkRFOUaNf+e/etuOsL1JIfkBwtEDXYcRqmR8/ian+fA4mIGD
+         jy1XUrPECRYhO1cceH2E2EG/7dZ9zGfGvzkBzsIpJnCq5wm2X4YkaA2u7v3SrTGTi1KO
+         qRUjSNFgwocgx7ymMBA3u8xElw0q0TV389JWtVwsWbxsL68Hq9Y4zUvrbGERaWHvV7lH
+         kRZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681890601; x=1684482601;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ex3FQYwjZBBRU/xF477+zVlaZW3BxZIMIDLhGEELcuU=;
+        b=hxUQbCRJ86AaoNYJq/06fHgBH4mUl8Tp2oy6+Ex9lkZJgSv3i6jRVBiGrSW+P36Y/U
+         YcVa0wNMd+Brqq9SU8Fl2AEPCId3RN3sOgM4m1CFuXmSOT3lpDn+TJYppcQ1wST7fzCt
+         VF624bQRHJmsYaVF0HKJmAx7Pu26etv7Mk3ZRkQaC/HZBiWJ87TEUAsli8JD8y9Lbkwv
+         8/mZiyEm84px241Wor2qkRkbvWGSkaxZq40TlsbIC6/x8KIq6L9hQUnXxzKiU0kuJYSG
+         p9ZLlZ/a5wBZRsedRCsfB8gFeOYeTS1NtmGToWfoEUTkT6woD7jE+3Oi5423D/aVrl0i
+         yVBg==
+X-Gm-Message-State: AAQBX9ca0BCEdmBYxo6PSa5J0kSqOZndN8k8jR9rP5Oj71svigyShIJj
+        ev91gSUK2tEdRaPEneLY/Yqj4g==
+X-Google-Smtp-Source: AKy350bYKg9848d4KXFH0IJZHSCHAmJ520zePJffoeMH2aWJrINnNuprN0NuepCabPPLCIjbLSbRtQ==
+X-Received: by 2002:a17:906:f14f:b0:94a:a6f0:876a with SMTP id gw15-20020a170906f14f00b0094aa6f0876amr13715223ejb.1.1681890600844;
+        Wed, 19 Apr 2023 00:50:00 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:62f5:eb43:f726:5fee? ([2a02:810d:15c0:828:62f5:eb43:f726:5fee])
+        by smtp.gmail.com with ESMTPSA id rp26-20020a170906d97a00b0094f3132cb86sm5647711ejb.40.2023.04.19.00.50.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 00:50:00 -0700 (PDT)
+Message-ID: <eb2540e6-6768-aa38-ec3e-d0f9bb75d797@linaro.org>
+Date:   Wed, 19 Apr 2023 09:49:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 1/5] arm64: dts: ti: k3-j784s4-main: Add system
+ controller and SERDES lane mux
+Content-Language: en-US
+To:     Jayesh Choudhary <j-choudhary@ti.com>, nm@ti.com, vigneshr@ti.com,
+        afd@ti.com
+Cc:     s-vadapalli@ti.com, kristo@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, a-bhatia1@ti.com
+References: <20230419061710.290068-1-j-choudhary@ti.com>
+ <20230419061710.290068-2-j-choudhary@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230419061710.290068-2-j-choudhary@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chun-Hung Wu <chun-hung.wu@mediatek.com>
+On 19/04/2023 08:17, Jayesh Choudhary wrote:
+> From: Siddharth Vadapalli <s-vadapalli@ti.com>
+> 
+> The system controller node manages the CTRL_MMR0 region.
+> Add serdes_ln_ctrl node which is used for controlling the SERDES lane mux.
+> 
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> [j-choudhary@ti.com: Minor cleanup to fix dtc warnings]
+> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
+> index e9169eb358c1..5fb7edf4f5a0 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
+> @@ -5,6 +5,9 @@
+>   * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
+>   */
+>  
+> +#include <dt-bindings/mux/mux.h>
+> +#include <dt-bindings/mux/ti-serdes.h>
+> +
+>  &cbass_main {
+>  	msmc_ram: sram@70000000 {
+>  		compatible = "mmio-sram";
+> @@ -26,6 +29,25 @@ l3cache-sram@200000 {
+>  		};
+>  	};
+>  
+> +	scm_conf: syscon@100000 {
+> +		compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
+> +		reg = <0x00 0x00100000 0x00 0x1c000>;
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges = <0x00 0x00 0x00100000 0x1c000>;
+> +
+> +		serdes_ln_ctrl: mux-controller-4080 {
 
-Make the timer-mediatek driver which can register
-an always-on timer as tick_broadcast_device on
-MediaTek SoCs become loadable module in GKI.
+Does not look like you tested the DTS against bindings. Please run `make
+dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+for instructions).
 
-Tested-by: Walter Chang <walter.chang@mediatek.com>
-Signed-off-by: Chun-Hung Wu <chun-hung.wu@mediatek.com>
----
- drivers/clocksource/Kconfig          |  2 +-
- drivers/clocksource/timer-mediatek.c | 39 ++++++++++++++++++++++++++++
- 2 files changed, 40 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-index 526382dc7482..a7413ad7b6ad 100644
---- a/drivers/clocksource/Kconfig
-+++ b/drivers/clocksource/Kconfig
-@@ -472,7 +472,7 @@ config SYS_SUPPORTS_SH_CMT
- 	bool
- 
- config MTK_TIMER
--	bool "Mediatek timer driver" if COMPILE_TEST
-+	tristate "Mediatek timer driver"
- 	depends on HAS_IOMEM
- 	select TIMER_OF
- 	select CLKSRC_MMIO
-diff --git a/drivers/clocksource/timer-mediatek.c b/drivers/clocksource/timer-mediatek.c
-index 7bcb4a3f26fb..3448848682c0 100644
---- a/drivers/clocksource/timer-mediatek.c
-+++ b/drivers/clocksource/timer-mediatek.c
-@@ -13,6 +13,9 @@
- #include <linux/clocksource.h>
- #include <linux/interrupt.h>
- #include <linux/irqreturn.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
- #include <linux/sched_clock.h>
- #include <linux/slab.h>
- #include "timer-of.h"
-@@ -337,5 +340,41 @@ static int __init mtk_gpt_init(struct device_node *node)
- 
- 	return 0;
- }
-+
-+#ifdef MODULE
-+static int mtk_timer_probe(struct platform_device *pdev)
-+{
-+	int (*timer_init)(struct device_node *node);
-+	struct device_node *np = pdev->dev.of_node;
-+
-+	timer_init = of_device_get_match_data(&pdev->dev);
-+	return timer_init(np);
-+}
-+
-+static const struct of_device_id mtk_timer_match_table[] = {
-+	{
-+		.compatible = "mediatek,mt6577-timer",
-+		.data = mtk_gpt_init,
-+	},
-+	{
-+		.compatible = "mediatek,mt6765-timer",
-+		.data = mtk_syst_init,
-+	},
-+	{}
-+};
-+
-+static struct platform_driver mtk_timer_driver = {
-+	.probe = mtk_timer_probe,
-+	.driver = {
-+		.name = "mtk-timer",
-+		.of_match_table = mtk_timer_match_table,
-+	},
-+};
-+module_platform_driver(mtk_timer_driver);
-+
-+MODULE_DESCRIPTION("MediaTek Module Timer driver");
-+MODULE_LICENSE("GPL v2");
-+#else
- TIMER_OF_DECLARE(mtk_mt6577, "mediatek,mt6577-timer", mtk_gpt_init);
- TIMER_OF_DECLARE(mtk_mt6765, "mediatek,mt6765-timer", mtk_syst_init);
-+#endif
--- 
-2.18.0
+Best regards,
+Krzysztof
 
