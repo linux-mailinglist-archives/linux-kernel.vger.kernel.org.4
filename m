@@ -2,284 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 073F96E7867
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426166E7879
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbjDSLTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 07:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
+        id S232627AbjDSLV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 07:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233004AbjDSLS5 (ORCPT
+        with ESMTP id S232357AbjDSLVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 07:18:57 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B8C13FA9;
-        Wed, 19 Apr 2023 04:18:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:To:From:Sender:Reply-To:Cc:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=eirZBr5whbQ/5LkAsBUpkmGGeegnaxrngCRkV0JwBOU=; b=EYjBabI/BPcPt2YCxGnsstbmWa
-        wBJ4BGqQ50tJYktcPLPBrbP+SCrBfu9B2nCxWiuFec3hMnxf4cAeFPbOm+9AwL4A/BK6+DR5Db1eB
-        voeGSNzwUF4NBqSHaCylu7dMhpVGOqStiS/PwFvFgqX0vN3xUacpFgiHiDTezssAfa9lwWBT/YOtt
-        QNt8Ec4vwn0GljOaOgqyMPgZ3b1cMnm6LE4BAQuWY9EPQmH/Grarn2R6IXIGTjv6PpB72rmi25LHO
-        DKQlxksjHeK8Zv/QrJ0UdDiZVs9nHl+uc2ONcjHQwZ8LWfdDCjt32w0fDcvoc0DMG0L3nH1Qpoa9U
-        HstaYu3Q==;
-Received: from p200300ccff0a67001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0a:6700:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pp5pH-00085w-24; Wed, 19 Apr 2023 13:18:15 +0200
-Received: from andi by aktux with local (Exim 4.96)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pp5pG-004cHP-2g;
-        Wed, 19 Apr 2023 13:18:14 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     pavel@ucw.cz, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andreas@kemnade.info,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: [PATCH v6 2/2] leds: bd2606mvv: Driver for the Rohm 6 Channel i2c LED driver
-Date:   Wed, 19 Apr 2023 13:18:06 +0200
-Message-Id: <20230419111806.1100437-3-andreas@kemnade.info>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230419111806.1100437-1-andreas@kemnade.info>
-References: <20230419111806.1100437-1-andreas@kemnade.info>
+        Wed, 19 Apr 2023 07:21:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1051B15616
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:20:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681903173;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GgOW5sQn+ypCHeLUClWbKQUCBoyTE44G8sVc+d/AfFM=;
+        b=bfFppWg5XxoiSkxzdj3IniDeYYUEy5xu4T1JQW5T4DgU+hy6vTMYza4VhmnytxQVMA1CMJ
+        cZUT1OpdwGKbtIkyJ90CoBhJL+KXhcUjfaK6BWpCfEbFB839TMdXqhE9b+ZFzA+k1UIPLN
+        vwdGsUl09S0VvrmSa3+lHPJBO/35Buo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-378-4E60WAUyMYqrGp0YHZij5Q-1; Wed, 19 Apr 2023 07:19:30 -0400
+X-MC-Unique: 4E60WAUyMYqrGp0YHZij5Q-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EDF8C885623;
+        Wed, 19 Apr 2023 11:19:29 +0000 (UTC)
+Received: from ovpn-8-18.pek2.redhat.com (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6445C51E3;
+        Wed, 19 Apr 2023 11:19:21 +0000 (UTC)
+Date:   Wed, 19 Apr 2023 19:19:16 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Bernd Schubert <bschubert@ddn.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Amir Goldstein <amir73il@gmail.com>, ming.lei@redhat.com
+Subject: Re: [PATCH V6 00/17] io_uring/ublk: add generic IORING_OP_FUSED_CMD
+Message-ID: <ZD/ONON4AzwvtlLB@ovpn-8-18.pek2.redhat.com>
+References: <20230330113630.1388860-1-ming.lei@redhat.com>
+ <78fe6617-2f5e-3e8e-d853-6dc8ffb5f82c@ddn.com>
+ <ZD9JI/JlwrzXQPZ7@ovpn-8-18.pek2.redhat.com>
+ <b6188050-1b12-703c-57e8-67fd27adb85c@ddn.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6188050-1b12-703c-57e8-67fd27adb85c@ddn.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device provides 6 channels which can be individually
-turned off and on but groups of two channels share a common brightness
-register.
+On Wed, Apr 19, 2023 at 09:56:43AM +0000, Bernd Schubert wrote:
+> On 4/19/23 03:51, Ming Lei wrote:
+> > On Tue, Apr 18, 2023 at 07:38:03PM +0000, Bernd Schubert wrote:
+> >> On 3/30/23 13:36, Ming Lei wrote:
+> >> [...]
+> >>> V6:
+> >>> 	- re-design fused command, and make it more generic, moving sharing buffer
+> >>> 	as one plugin of fused command, so in future we can implement more plugins
+> >>> 	- document potential other use cases of fused command
+> >>> 	- drop support for builtin secondary sqe in SQE128, so all secondary
+> >>> 	  requests has standalone SQE
+> >>> 	- make fused command as one feature
+> >>> 	- cleanup & improve naming
+> >>
+> >> Hi Ming, et al.,
+> >>
+> >> I started to wonder if fused SQE could be extended to combine multiple
+> >> syscalls, for example open/read/close.  Which would be another solution
+> >> for the readfile syscall Miklos had proposed some time ago.
+> >>
+> >> https://lore.kernel.org/lkml/CAJfpegusi8BjWFzEi05926d4RsEQvPnRW-w7My=ibBHQ8NgCuw@mail.gmail.com/
+> >>
+> >> If fused SQEs could be extended, I think it would be quite helpful for
+> >> many other patterns. Another similar examples would open/write/close,
+> >> but ideal would be also to allow to have it more complex like
+> >> "open/write/sync_file_range/close" - open/write/close might be the
+> >> fastest and could possibly return before sync_file_range. Use case for
+> >> the latter would be a file server that wants to give notifications to
+> >> client when pages have been written out.
+> > 
+> > The above pattern needn't fused command, and it can be done by plain
+> > SQEs chain, follows the usage:
+> > 
+> > 1) suppose you get one command from /dev/fuse, then FUSE daemon
+> > needs to handle the command as open/write/sync/close
+> > 2) get sqe1, prepare it for open syscall, mark it as IOSQE_IO_LINK;
+> > 3) get sqe2, prepare it for write syscall, mark it as IOSQE_IO_LINK;
+> > 4) get sqe3, prepare it for sync file range syscall, mark it as IOSQE_IO_LINK;
+> > 5) get sqe4, prepare it for close syscall
+> > 6) io_uring_enter();	//for submit and get events
+> 
+> Oh, I was not aware that IOSQE_IO_LINK could pass the result of open 
+> down to the others. Hmm, the example I find for open is 
+> io_uring_prep_openat_direct in test_open_fixed(). It probably gets off 
+> topic here, but one needs to have ring prepared with 
+> io_uring_register_files_sparse, then manually manages available indexes 
+> and can then link commands? Interesting!
 
-Limitation: The GPIO to enable the device is not used yet.
+Yeah,  see test/fixed-reuse.c of liburing
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Acked-by: Pavel Machek <pavel@ucw.cz>
----
- drivers/leds/Kconfig          |  14 +++
- drivers/leds/Makefile         |   1 +
- drivers/leds/leds-bd2606mvv.c | 160 ++++++++++++++++++++++++++++++++++
- 3 files changed, 175 insertions(+)
- create mode 100644 drivers/leds/leds-bd2606mvv.c
+> 
+> > 
+> > Then all the four OPs are done one by one by io_uring internal
+> > machinery, and you can choose to get successful CQE for each OP.
+> > 
+> > Is the above what you want to do?
+> > 
+> > The fused command proposal is actually for zero copy(but not limited to zc).
+> 
+> Yeah, I had just thought that IORING_OP_FUSED_CMD could be modified to 
+> support generic passing, as it kind of hands data (buffers) from one sqe 
+> to the other. I.e. instead of buffers it would have passed the fd, but 
+> if this is already possible - no need to make IORING_OP_FUSED_CMD more 
+> complex.man
 
-diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
-index 9dbce09eabacf..09afc56f54f16 100644
---- a/drivers/leds/Kconfig
-+++ b/drivers/leds/Kconfig
-@@ -551,6 +551,20 @@ config LEDS_REGULATOR
- 	help
- 	  This option enables support for regulator driven LEDs.
- 
-+config LEDS_BD2606MVV
-+	tristate "LED driver for BD2606MVV"
-+	depends on LEDS_CLASS
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  This option enables support for BD2606MVV LED driver chips
-+	  accessed via the I2C bus. It supports setting brightness, with
-+	  the limitiation that there are groups of two channels sharing
-+	  a brightness setting, but not the on/off setting.
-+
-+	  To compile this driver as a module, choose M here: the module will
-+	  be called leds-bd2606mvv.
-+
- config LEDS_BD2802
- 	tristate "LED driver for BD2802 RGB LED"
- 	depends on LEDS_CLASS
-diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
-index d30395d11fd84..c07d1512c745a 100644
---- a/drivers/leds/Makefile
-+++ b/drivers/leds/Makefile
-@@ -17,6 +17,7 @@ obj-$(CONFIG_LEDS_ARIEL)		+= leds-ariel.o
- obj-$(CONFIG_LEDS_AW2013)		+= leds-aw2013.o
- obj-$(CONFIG_LEDS_BCM6328)		+= leds-bcm6328.o
- obj-$(CONFIG_LEDS_BCM6358)		+= leds-bcm6358.o
-+obj-$(CONFIG_LEDS_BD2606MVV)		+= leds-bd2606mvv.o
- obj-$(CONFIG_LEDS_BD2802)		+= leds-bd2802.o
- obj-$(CONFIG_LEDS_BLINKM)		+= leds-blinkm.o
- obj-$(CONFIG_LEDS_CLEVO_MAIL)		+= leds-clevo-mail.o
-diff --git a/drivers/leds/leds-bd2606mvv.c b/drivers/leds/leds-bd2606mvv.c
-new file mode 100644
-index 0000000000000..76f9d4d70f9a6
---- /dev/null
-+++ b/drivers/leds/leds-bd2606mvv.c
-@@ -0,0 +1,160 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2023 Andreas Kemnade
-+ *
-+ * Datasheet:
-+ * https://fscdn.rohm.com/en/products/databook/datasheet/ic/power/led_driver/bd2606mvv_1-e.pdf
-+ *
-+ * If LED brightness cannot be controlled independently due to shared
-+ * brightness registers, max_brightness is set to 1 and only on/off
-+ * is possible for the affected LED pair.
-+ */
-+
-+#include <linux/i2c.h>
-+#include <linux/leds.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+
-+#define BD2606_MAX_LEDS 6
-+#define BD2606_MAX_BRIGHTNESS 63
-+#define BD2606_REG_PWRCNT 3
-+#define ldev_to_led(c)	container_of(c, struct bd2606mvv_led, ldev)
-+
-+struct bd2606mvv_led {
-+	unsigned int led_no;
-+	struct led_classdev ldev;
-+	struct bd2606mvv_priv *priv;
-+};
-+
-+struct bd2606mvv_priv {
-+	struct bd2606mvv_led leds[BD2606_MAX_LEDS];
-+	struct regmap *regmap;
-+};
-+
-+static int
-+bd2606mvv_brightness_set(struct led_classdev *led_cdev,
-+		      enum led_brightness brightness)
-+{
-+	struct bd2606mvv_led *led = ldev_to_led(led_cdev);
-+	struct bd2606mvv_priv *priv = led->priv;
-+	int err;
-+
-+	if (brightness == 0)
-+		return regmap_update_bits(priv->regmap,
-+					  BD2606_REG_PWRCNT,
-+					  1 << led->led_no,
-+					  0);
-+
-+	/* shared brightness register */
-+	err = regmap_write(priv->regmap, led->led_no / 2,
-+			   led_cdev->max_brightness == 1 ?
-+			   BD2606_MAX_BRIGHTNESS : brightness);
-+	if (err)
-+		return err;
-+
-+	return regmap_update_bits(priv->regmap,
-+				  BD2606_REG_PWRCNT,
-+				  1 << led->led_no,
-+				  1 << led->led_no);
-+}
-+
-+static const struct regmap_config bd2606mvv_regmap = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = 0x3,
-+};
-+
-+static int bd2606mvv_probe(struct i2c_client *client)
-+{
-+	struct fwnode_handle *np, *child;
-+	struct device *dev = &client->dev;
-+	struct bd2606mvv_priv *priv;
-+	struct fwnode_handle *led_fwnodes[BD2606_MAX_LEDS] = { 0 };
-+	int active_pairs[BD2606_MAX_LEDS / 2] = { 0 };
-+	int err, reg;
-+	int i;
-+
-+	np = dev_fwnode(dev);
-+	if (!np)
-+		return -ENODEV;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->regmap = devm_regmap_init_i2c(client, &bd2606mvv_regmap);
-+	if (IS_ERR(priv->regmap)) {
-+		err = PTR_ERR(priv->regmap);
-+		dev_err(dev, "Failed to allocate register map: %d\n", err);
-+		return err;
-+	}
-+
-+	i2c_set_clientdata(client, priv);
-+
-+	fwnode_for_each_available_child_node(np, child) {
-+		struct bd2606mvv_led *led;
-+
-+		err = fwnode_property_read_u32(child, "reg", &reg);
-+		if (err) {
-+			fwnode_handle_put(child);
-+			return err;
-+		}
-+		if (reg < 0 || reg >= BD2606_MAX_LEDS || led_fwnodes[reg]) {
-+			fwnode_handle_put(child);
-+			return -EINVAL;
-+		}
-+		led = &priv->leds[reg];
-+		led_fwnodes[reg] = child;
-+		active_pairs[reg / 2]++;
-+		led->priv = priv;
-+		led->led_no = reg;
-+		led->ldev.brightness_set_blocking = bd2606mvv_brightness_set;
-+		led->ldev.max_brightness = BD2606_MAX_BRIGHTNESS;
-+	}
-+
-+	for (i = 0; i < BD2606_MAX_LEDS; i++) {
-+		struct led_init_data init_data = {};
-+
-+		if (!led_fwnodes[i])
-+			continue;
-+
-+		init_data.fwnode = led_fwnodes[i];
-+		/* Check whether brightness can be independently adjusted. */
-+		if (active_pairs[i / 2] == 2)
-+			priv->leds[i].ldev.max_brightness = 1;
-+
-+		err = devm_led_classdev_register_ext(dev,
-+						     &priv->leds[i].ldev,
-+						     &init_data);
-+		if (err < 0) {
-+			fwnode_handle_put(child);
-+			return dev_err_probe(dev, err,
-+					     "couldn't register LED %s\n",
-+					     priv->leds[i].ldev.name);
-+		}
-+	}
-+	return 0;
-+}
-+
-+static const struct of_device_id __maybe_unused of_bd2606mvv_leds_match[] = {
-+	{ .compatible = "rohm,bd2606mvv", },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, of_bd2606mvv_leds_match);
-+
-+static struct i2c_driver bd2606mvv_driver = {
-+	.driver   = {
-+		.name    = "leds-bd2606mvv",
-+		.of_match_table = of_match_ptr(of_bd2606mvv_leds_match),
-+	},
-+	.probe_new = bd2606mvv_probe,
-+};
-+
-+module_i2c_driver(bd2606mvv_driver);
-+
-+MODULE_AUTHOR("Andreas Kemnade <andreas@kemnade.info>");
-+MODULE_DESCRIPTION("BD2606 LED driver");
-+MODULE_LICENSE("GPL");
--- 
-2.39.2
+The way of passing FD introduces other cost, read op running into async,
+and adding it into global table, which introduces runtime cost.
+
+That is the reason why fused command is designed in the following way:
+
+- link can be avoided, so OPs needn't to be run in async
+- no need to add buffer into global table
+
+Cause it is really in fast io path.
+
+> 
+> > 
+> > If the above write OP need to write to file with in-kernel buffer
+> > of /dev/fuse directly, you can get one sqe0 and prepare it for primary command
+> > before 1), and set sqe2->addr to offet of the buffer in 3).
+> > 
+> > However, fused command is usually used in the following way, such as FUSE daemon
+> > gets one READ request from /dev/fuse, FUSE userspace can handle the READ request
+> > as io_uring fused command:
+> > 
+> > 1) get sqe0 and prepare it for primary command, in which you need to
+> > provide info for retrieving kernel buffer/pages of this READ request
+> > 
+> > 2) suppose this READ request needs to be handled by translating it to
+> > READs to two files/devices, considering it as one mirror:
+> > 
+> > - get sqe1, prepare it for read from file1, and set sqe->addr to offset
+> >    of the buffer in 1), set sqe->len as length for read; this READ OP
+> >    uses the kernel buffer in 1) directly
+> > 
+> > - get sqe2, prepare it for read from file2, and set sqe->addr to offset
+> >    of buffer in 1), set sqe->len as length for read;  this READ OP
+> >    uses the kernel buffer in 1) directly
+> > 
+> > 3) submit the three sqe by io_uring_enter()
+> > 
+> > sqe1 and sqe2 can be submitted concurrently or be issued one by one
+> > in order, fused command supports both, and depends on user requirement.
+> > But io_uring linked OPs is usually slower.
+> > 
+> > Also file1/file2 needs to be opened beforehand in this example, and FD is
+> > passed to sqe1/sqe2, another choice is to use fixed File; Also you can
+> > add the open/close() OPs into above steps, which need these open/close/READ
+> > to be linked in order, usually slower tnan non-linked OPs.
+> 
+> 
+> Yes thanks, I'm going to prepare this in an branch, otherwise current 
+> fuse-uring would have a ZC regression (although my target ddn projects 
+> cannot make use of it, as we need access to the buffer for checksums, etc).
+
+storage has similar use case too, such as encrypt, nvme tcp data digest,
+..., if the checksum/encrypt approach is standard, maybe one new OP or
+syscall can be added for doing that on kernel buffer directly.
+
+
+Thanks
+Ming
 
