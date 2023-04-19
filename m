@@ -2,95 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0906E7EB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6ED6E7EC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbjDSPnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
+        id S232129AbjDSPo0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Apr 2023 11:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233406AbjDSPnn (ORCPT
+        with ESMTP id S233630AbjDSPoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:43:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992C69775
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:43:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22ABA63FC4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:43:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04DBCC433D2;
-        Wed, 19 Apr 2023 15:43:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681919017;
-        bh=kod3aeyjs9KPBA0J3b/X9AKxEmGR0GKnOHbwVB3G+3Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NvbTI7+5OqSKT1NK0O5sCaCwaU33Yz01LEC96ftaJ4rglBbLR68p/TFwM6h79TSI8
-         OZaKXho7IgQvEm8fgrUVZGvLbbT0UJsD9WEyLqRZ9XBMe611D16MOJUvzesrhQHcd6
-         Iact9m4uE4RdUMuSdGOcJUpheKmY6x2SUsZqDeecGr+s1l7zBM2UO6/YDnlLhP+3Kx
-         3zIRbacDK2T/LxrkFBFobJ0kTkW7WQXpGjslqPPDS2+jK/zeVvJtjNuGdAgJhKNtZy
-         dqkNG2WGjhQ7lMLrnr1JB7BTsRJCBfApkwLjBmPbKa4W2P/j+ZT2IQk1II7gGSzGVr
-         cwrI8cNmEky1g==
-Date:   Wed, 19 Apr 2023 08:43:35 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, akpm@linux-foudation.org, ben-linux@fluff.org,
-        wuchi.zero@gmail.com
-Subject: Re: [PATCH 1/2] x86: profiling: remove lock functions hack for
- !FRAME_POINTER
-Message-ID: <20230419154335.4vc7rouxl4gsynzm@treble>
-References: <20230410022226.181812-1-chenzhongjin@huawei.com>
- <20230410022226.181812-2-chenzhongjin@huawei.com>
+        Wed, 19 Apr 2023 11:44:09 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163BEAD2D
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:43:48 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-66-8kzx0OtrNuu2tXAPYOXeXQ-1; Wed, 19 Apr 2023 16:43:45 +0100
+X-MC-Unique: 8kzx0OtrNuu2tXAPYOXeXQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 19 Apr
+ 2023 16:43:45 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Wed, 19 Apr 2023 16:43:45 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Brad Spencer' <bspencer@blackberry.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: netlink getsockopt() sets only one byte?
+Thread-Topic: netlink getsockopt() sets only one byte?
+Thread-Index: AQHZciCdeGKq7qWD/UKbta8L5WEwQ68yxwaw
+Date:   Wed, 19 Apr 2023 15:43:45 +0000
+Message-ID: <0c2ea86d55454b55a88db716f967dda4@AcuMS.aculab.com>
+References: <ZD7VkNWFfp22kTDt@datsun.rim.net>
+In-Reply-To: <ZD7VkNWFfp22kTDt@datsun.rim.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230410022226.181812-2-chenzhongjin@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 10:22:25AM +0800, Chen Zhongjin wrote:
-> Syzbot has been reporting the problem of stack-out-of-bounds in
-> profile_pc for a long time:
-> https://syzkaller.appspot.com/bug?extid=84fe685c02cd112a2ac3
+From: Brad Spencer <bspencer@blackberry.com>
+> Sent: 18 April 2023 18:38
 > 
-> profile_pc tries to get pc if current regs is inside lock function. For
-> !CONFIG_FRAME_POINTER it used a hack way to get the pc from stack, which
-> is not work with ORC. It makes profile_pc read illeagal address, return
-> wrong result, and frequently triggers KASAN.
+> Calling getsockopt() on a netlink socket with SOL_NETLINK options that
+> use type int only sets the first byte of the int value but returns an
+> optlen equal to sizeof(int), at least on x86_64.
 > 
-> Since lock profiling can be handled with much better other tools, It's
-> reasonable to remove lock functions hack for !FRAME_POINTER kernel.
 > 
-> Suggested-by: Andi Kleen <ak@linux.intel.com>
-> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
-> ---
->  arch/x86/kernel/time.c | 14 +-------------
->  1 file changed, 1 insertion(+), 13 deletions(-)
+> The detailed description:
 > 
-> diff --git a/arch/x86/kernel/time.c b/arch/x86/kernel/time.c
-> index e42faa792c07..e08fac7bb71e 100644
-> --- a/arch/x86/kernel/time.c
-> +++ b/arch/x86/kernel/time.c
-> @@ -29,22 +29,10 @@ unsigned long profile_pc(struct pt_regs *regs)
->  {
->  	unsigned long pc = instruction_pointer(regs);
->  
-> -	if (!user_mode(regs) && in_lock_functions(pc)) {
->  #ifdef CONFIG_FRAME_POINTER
-> +	if (!user_mode(regs) && in_lock_functions(pc))
+> It looks like netlink_getsockopt() calls put_user() with a char*
+> pointer, and I think that causes it to copy only one byte from the val
+> result, despite len being sizeof(int).
+> 
+> Is this the expected behaviour?  The returned size is 4, after all,
+> and other int-sized socket options (outside of netlink) like
+> SO_REUSEADDR set all bytes of the int.
 
-If lock profiling is no longer useful then we should just remove it
-altogether, not just for ORC.
+It will be horribly broken on anything big-endian.
 
--- 
-Josh
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
