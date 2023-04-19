@@ -2,173 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF6C6E7ABF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8546E7AD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233481AbjDSN3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 09:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
+        id S233551AbjDSNbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 09:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbjDSN3q (ORCPT
+        with ESMTP id S233527AbjDSNa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 09:29:46 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn2052.outbound.protection.outlook.com [40.92.53.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527721544C;
-        Wed, 19 Apr 2023 06:29:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MwkaxYNHukXj7gbfaBaV2Qh04a+NAZbLgAQcsWP9aDkwCvlpQAsUexhx63DBP+Ul2cW6BD6rRBNSyXKfCU2P4oVFR+Axzx8Gap7lI3yw0gxXr5HuvO25fIL1v9MtKELpxPXXDkIyBapplv3/q4BbYqvkKDrhgnytBUQo3Eknr0RzPAGwgbbveZmJ31h3AGAEmo/VOav/jxZCj6Wv+THTSpKfQ5fPTY/5MGis1yxUA+6E98zfQLTAeoHzXfVDhEVa+B8vTX1zBZO30knGu3O4b1tnxzxcySNmqHc0VrjzN3VQouOTz6+1mcdCsptWiBbpXomWmg2lx8gSJr+7JuLjGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=33GUqICiCnkF6JRlgP5XU19Spt09i0olFYBr0mpwcFA=;
- b=iTA0UU0SCMSmHBg3oACh3PG1WA9c47coOTpsjrNRTE9vhOse6RJR73kh/BlZT7NONqp+Lq2FunNtAq3Y+rCv2KBT4af0qQWKjyAjzNuNggri7I4HnaX0KG+vFY4vcmnKAmeu6qpxrFwEM8c8zP82spHsTrrb4dGxJaOkFeEPYlFTNkuAif5htp7HDMNmXVqpDqciEapi82RfEe873qgSh8k8bfFOHzR9CCCLhHgPpj3So60vqzory5AJ0Xfx4qYq0Imt2UJgzSvRfzZMTjtopsAm8NbaG4c/U5utEYFhZR1/BWCHXyr0xJUtYHzgDI0m7GBRFVtkRyntFv7wy9jczA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=33GUqICiCnkF6JRlgP5XU19Spt09i0olFYBr0mpwcFA=;
- b=LenzCRyItFX1/vGqrvubQDZXRIdUIASGDGGNBSLn0wp9dQrP4ytIjCUhrN/0SiGrg4nQu2opM9Qki4YElIpOeYh3y6bla+/1WbGAswDFd5j4Ytnkrv4kmruA38a8FRf+Chn6yuLNaKQ7JdYY/t+SDOHTbGc8xcgEo/Qs5zbYVNEbrOeRItxRviPG3lgdOfWl47iujsgy44P1Vow+GsRkaAUFgnsg9PFREFXHb6l7ZisHmrcOupfwyEqsU8MKp5ez1e6rgVeILWmHczUi0/HDjx6u7gwxBTFbU8+6kRFJq3Oqaxt1Nn+QChXHnaNX5FZtjOn6rX1PgWsNtHXQh3PliA==
-Received: from TYZPR04MB6321.apcprd04.prod.outlook.com (2603:1096:400:28a::14)
- by TYZPR04MB6428.apcprd04.prod.outlook.com (2603:1096:400:28e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
- 2023 13:28:37 +0000
-Received: from TYZPR04MB6321.apcprd04.prod.outlook.com
- ([fe80::4705:d219:7cf0:46f4]) by TYZPR04MB6321.apcprd04.prod.outlook.com
- ([fe80::4705:d219:7cf0:46f4%3]) with mapi id 15.20.6298.045; Wed, 19 Apr 2023
- 13:28:37 +0000
-Message-ID: <TYZPR04MB6321F7B16354AD78B491C20096629@TYZPR04MB6321.apcprd04.prod.outlook.com>
-Date:   Wed, 19 Apr 2023 21:28:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH RFC v4 0/4] mmc: add support for the dw-mmc controller on
- Hi3798MV200
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     tianshuliang <tianshuliang@hisilicon.com>,
-        Jiancheng Xue <xuejiancheng@hisilicon.com>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        David Yang <mmyangfl@gmail.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230415-mmc-hi3798mv200-v4-0-44096e187f53@outlook.com>
-Content-Language: en-US
-From:   Yang Xiwen <forbidden405@outlook.com>
-In-Reply-To: <20230415-mmc-hi3798mv200-v4-0-44096e187f53@outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TMN:  [ZwYAkDZUZNeEqZ90XtI4mprkTeL4Yp9tmoR4x4y2bXXXWqMYHCtohU5CNpWAudCe]
-X-ClientProxiedBy: SJ0PR03CA0208.namprd03.prod.outlook.com
- (2603:10b6:a03:2ef::33) To TYZPR04MB6321.apcprd04.prod.outlook.com
- (2603:1096:400:28a::14)
-X-Microsoft-Original-Message-ID: <3cd40781-fd8b-c9c8-e8e6-ffc6b274a31e@outlook.com>
+        Wed, 19 Apr 2023 09:30:56 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CD549C1;
+        Wed, 19 Apr 2023 06:30:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681911055; x=1713447055;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N/GSlYqreKAXPu9B0lGYZfv80oraXkzW4fyW3/FG+wQ=;
+  b=brt7qoQAhklTou6CPSiTL97Ycejns7sjBu8bNAF/42G31XXU8+KVZBZX
+   7J6aXiaDoS1mgmnDcc906PZY+5ZeSlxDdBQpk4yhz9buvpOE9CLwNvNTj
+   D+70aaDlFEkIioo1JAMZYj04jLbmhIJTgP3Nk0Wxfz6ar0s656Udbdbo+
+   Jun7k/I5lrzZOMrzO9eP+O9kOYQM2uiA+rfXr90y9+2QX7QuNWgQOo+l7
+   cK9dxhI4m3VPGgtGTWzfiPk12AsGIt/iUTI1tabnkx9sV+WUbVT42hJg9
+   vMYzVUK6HtvTdkvbwba7OWIySnSQVe625eTCjw32RpYnVQ/LjHbXzXdC1
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="325062178"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="325062178"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 06:30:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="684981964"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="684981964"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 19 Apr 2023 06:30:51 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pp7tb-000euR-0p;
+        Wed, 19 Apr 2023 13:30:51 +0000
+Date:   Wed, 19 Apr 2023 21:29:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH 1/4] block: constify partition prober array
+Message-ID: <202304192132.a6MR0cFR-lkp@intel.com>
+References: <20230419-const-partition-v1-1-2d66f2d83873@weissschuh.net>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR04MB6321:EE_|TYZPR04MB6428:EE_
-X-MS-Office365-Filtering-Correlation-Id: 39d18946-109b-4b26-d3f4-08db40d9fb85
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aUcBwpMdV+nT2YNhfEb0z7O5K1ab0zSqcYfBLX7O3N3ySOQnEWRa00ecjANREd6haQHhaLW+CPoKYpcq/7BAfkrBEzdGfZGNYplphurELqvnS9NgcCf6+Ll1TseLZEKn9nq6jouPTFQnH4+1erD8WSx4YjbAcEafyEoKVbVFCnIPpR7MRnpLrOmeE6NYfIYeLX2hBuVP2rkl0WmZeNAtq7wO/vloDcAxLjV2LJZg2h9LN98TOnInsMge8lx64GX96seIuItv8KkushAIMbpdVzKy2+JmHjXPcySD1c/q4ZTjcKu7J9WMWOgNJqULaBj/D3orJZ2i1w2kSQ29fSslt2LK9wiUS8sfggAZhyU9ghLF7aytk2+jnSSh2VzNEukHfPDF3xyFlWOgBDR5KqKxnkkWzAaZt0XL4bwkoSq55/QJZSkVfyTMgd5fyXyeWfxuuZhKX4ysMZaMRiNZIH3ntNR9QdWb4naBbTC+LdlsqU5Op1LLOVzEuLiQMadhCEOCciyRz0BJnKbwkakbE2ewh/BDXAFMkFUMmsDYoIea5Ee+Vlm77ZlTkbWV6q/anhBv5wYrxe9xdp71UMRvWpcofi7l2mIFHPlIMaMYR3GNh5d34thgYk+5YgPB2UR8jjUcCByGFzzlwZv9VKvyocsYpw==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aDR3YW81dDRJZU9iYTcyUEJZTFZRRllrZzFjZU1UWS8yb0JYMzlLZ1ZMcTdS?=
- =?utf-8?B?THVRUUZtNzVCZXFjdHZMMGROMmdzdFUzb3BGQXlLUEJJaTVXNDJpR3BKS0Zz?=
- =?utf-8?B?UjNVQ1pzQXBOdG02L1dQemxqM3FKQnhXSUd0UU1keWhJL1NWYnNjR21LdC9J?=
- =?utf-8?B?U0NxZGNRMFFkZ1U0ajFKVUthYXREelNNM2pybWdxdXBhMlBrYVNoQ1JFQ2gw?=
- =?utf-8?B?NEtNTFJRT2dKSktyQmR6NDVZeUdFMXBLeE51UHpNZUhGWlRqOEM1WlIvWUtQ?=
- =?utf-8?B?OEllN3pZZ1g0OENUSWNwcHRQYjRHM0M1Y2FTMy9LSXMyOUVDbWxlcVJQWjlV?=
- =?utf-8?B?QThzbHJiZmhXNi9uV0xFTHFreS84SFZsY3EyVnZIQy9Edk45S2ZxVnhxUVpX?=
- =?utf-8?B?RUZCMXFoekEwWm9vbGdRU3p1L3ZNR211VGxiQU1RdXZIMzVKdGY0ME9ES3N0?=
- =?utf-8?B?RE1zZmxKM2VKT2JhZW1GVERQaWtuMDZqemlyWisrTXFNb0lnSmFoYklZMElN?=
- =?utf-8?B?YW1uV0xiN1ZxQzNYeXZLb3RTS1Nnc3JKYmtJSHhEd2xTUXVnNWdEV21RTWxK?=
- =?utf-8?B?ejJEQ3lwbCs3ZlgzYVU3NXhocmdjeEJqRDBVVE5WR29CZXg5SDM1dG5UMUFn?=
- =?utf-8?B?VFUwaHdiMkpRWGxRb3FSd1N6Q3BXQjRPbTlWVnYwRHRuRS84Ui83bHNQMTVL?=
- =?utf-8?B?WlFIV1VwWWFDZHFGNy9ZUGF0VDEwN1FLVThhamxjUTV6TG5xa005aHYxRllP?=
- =?utf-8?B?RithWnNIR2QvY2NLTnJWenllU2FDcktLYWsyTys0WWZmMUF6QVhsSmJZOWlr?=
- =?utf-8?B?QjlMemUydk9acytCaThoL0tjcm96NjdVNUs0Mmt0VXhHdGNEOFNoSVlQSVlw?=
- =?utf-8?B?dXdFTkR5cUpPWHZYbUJ3S2k0NWNzaGtOVlEzdzArY05zYnZoOHh4NUNaVXVM?=
- =?utf-8?B?UHJ4SkdmQURWcW92bW0rZXlXbUZUSGFDVjJpR3lLdjFNUnl1YVk5MldRQXA5?=
- =?utf-8?B?TW1TMGNWREQyQTNMaEJrckpjalRFYjhRb3dSdFhHTVgrTGxkNXI4RWRFTWJ0?=
- =?utf-8?B?ZFMvMmEzR0dHd2MvK3M2ZDRHMGxVMTVRVW0vSHh6Nzg0d3dRWGtTM2VYejZz?=
- =?utf-8?B?VnhsdGNJRlF6UHRoTmU4bFhEcWRKbHJWMkM1Zm1jc1UyTlhyNEtUbmxacE5h?=
- =?utf-8?B?TFBuOGhJL1l5OVNOZzh1ZXJ4c3RNeWI5Y3p6amxkdDF5d213N0NDcU1JMG1X?=
- =?utf-8?B?WmQyVlVFRkRsRjIwak5RNHhDY1pyeFJndHFZRUZwOW14YTBQM3pTbVQ5ODA2?=
- =?utf-8?B?Unc0cVZMVnF5bGUraEhqcS9vRXVkNnNkSm9FR2dTbkRQMWhlNmJ3aEpGWDF1?=
- =?utf-8?B?MDUwNlFBRjFLME1wcXdGMTU2b0NtamUzYmlXamVDa0x6UndpSDJ3TmhxVUxG?=
- =?utf-8?B?V1NUbS9GUDdkUThPVXdvVXVkak5MMktnSWo2dXZXQnJUZ3NsZGM0ZzU0dVdZ?=
- =?utf-8?B?SFZSMzNQT1kvSVZMb05Tc0grQ1JCTW11a0tTOGkwNTA2cXJZcGdkQThEWWdF?=
- =?utf-8?B?Q202T2dkcTQ0d2tDQlhPY2ZNYVNIdGZBRTRRUHM4THJVMnpQTUZUWFdzZWZG?=
- =?utf-8?B?ZXUvZExzQjNqRW9wK0hDMEc4c1FPS29IMUNXTDA5Z2VpZzNkZVVuR1hMS1dQ?=
- =?utf-8?B?RXZEdi9idFgzRFRMZTc3dWorOFh5eCt6eXZ4S3RYUWVEMnVHUVRkcGRlQmxX?=
- =?utf-8?Q?wo3gTDWHAyoT+JyHdw=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39d18946-109b-4b26-d3f4-08db40d9fb85
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR04MB6321.apcprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 13:28:37.8756
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR04MB6428
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419-const-partition-v1-1-2d66f2d83873@weissschuh.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/16/2023 5:19 PM, Yang Xiwen via B4 Relay wrote:
-> The dw-mmc controller found on Hi3798MV200 is like the one found on
-> Hi3798CV200, but has some tweaks.
-> Also refreshed the dt-binding and converted it to YAML.
-> 
-> Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
-> ---
-> Changes in v4:
-> - fix license of dt-binding document.
-> - some other fixes to dt-binding document.
-> - Link to v3: https://lore.kernel.org/r/20230415-mmc-hi3798mv200-v3-0-00e2368c0709@outlook.com
-> 
-> Changes in v3:
-> - split dt-binding commit into 2 parts, one for renaming, the other for
->   new compatible string.
-> - some other fixes to dt-binding document.
-> - Link to v2: https://lore.kernel.org/r/20230415-mmc-hi3798mv200-v2-0-1d274f9b71da@outlook.com
-> 
-> Changes in v2:
-> - add DDR52 support
-> - edit dt-binding, substitude all hi3798cv200 with histb
-> - send email to more people
-> - Link to v1: https://lore.kernel.org/r/20230415-mmc-hi3798mv200-v1-0-db5b91d939d4@outlook.com
-> 
-> ---
-> Yang Xiwen (4):
->       mmc: dw_mmc: hi3798cv200: rename to dw_mmc-histb
->       mmc: dw_mmc: histb: add support for hi3798mv200
->       dt-binding: mmc: hi3798cv200-dw-mshc: convert to YAML and rename to histb-dw-mshc
->       dt-binding: mmc: histb-dw-mshc: Add Hi3798MV200 compatible string
-> 
->  .../bindings/mmc/hi3798cv200-dw-mshc.txt           |  40 ---
->  .../bindings/mmc/hisilicon,histb-dw-mshc.yaml      |  93 ++++++
->  drivers/mmc/host/Kconfig                           |   8 +-
->  drivers/mmc/host/Makefile                          |   2 +-
->  drivers/mmc/host/dw_mmc-hi3798cv200.c              | 206 -------------
->  drivers/mmc/host/dw_mmc-histb.c                    | 339 +++++++++++++++++++++
->  6 files changed, 437 insertions(+), 251 deletions(-)
-> ---
-> base-commit: 76f598ba7d8e2bfb4855b5298caedd5af0c374a8
-> change-id: 20230415-mmc-hi3798mv200-ce15e9b96866
-> 
-> Best regards,
-Sorry for wasting your time, but please don't review this patchset
-anymore. I decided to rewrite it.
--- 
-Best regards,
-Yang Xiwen
+Hi Thomas,
 
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on af67688dca57999fd848f051eeea1d375ba546b2]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/block-constify-partition-prober-array/20230419-155356
+base:   af67688dca57999fd848f051eeea1d375ba546b2
+patch link:    https://lore.kernel.org/r/20230419-const-partition-v1-1-2d66f2d83873%40weissschuh.net
+patch subject: [PATCH 1/4] block: constify partition prober array
+config: arm64-randconfig-r001-20230416 (https://download.01.org/0day-ci/archive/20230419/202304192132.a6MR0cFR-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/9bc1f4308c10322c327c9e86ede6bb9e862440aa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Thomas-Wei-schuh/block-constify-partition-prober-array/20230419-155356
+        git checkout 9bc1f4308c10322c327c9e86ede6bb9e862440aa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash block/partitions/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304192132.a6MR0cFR-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> block/partitions/core.c:15:8: warning: 'const' type qualifier on return type has no effect [-Wignored-qualifiers]
+   static const int (*check_part[])(struct parsed_partitions *) = {
+          ^~~~~~
+   block/partitions/core.c:47:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           efi_partition,          /* this must come before msdos */
+           ^~~~~~~~~~~~~
+   block/partitions/core.c:50:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           sgi_partition,
+           ^~~~~~~~~~~~~
+   block/partitions/core.c:56:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           msdos_partition,
+           ^~~~~~~~~~~~~~~
+   block/partitions/core.c:59:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           osf_partition,
+           ^~~~~~~~~~~~~
+   block/partitions/core.c:62:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           sun_partition,
+           ^~~~~~~~~~~~~
+   block/partitions/core.c:65:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           amiga_partition,
+           ^~~~~~~~~~~~~~~
+   block/partitions/core.c:71:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           mac_partition,
+           ^~~~~~~~~~~~~
+   1 warning and 7 errors generated.
+
+
+vim +/const +15 block/partitions/core.c
+
+    14	
+  > 15	static const int (*check_part[])(struct parsed_partitions *) = {
+    16		/*
+    17		 * Probe partition formats with tables at disk address 0
+    18		 * that also have an ADFS boot block at 0xdc0.
+    19		 */
+    20	#ifdef CONFIG_ACORN_PARTITION_ICS
+    21		adfspart_check_ICS,
+    22	#endif
+    23	#ifdef CONFIG_ACORN_PARTITION_POWERTEC
+    24		adfspart_check_POWERTEC,
+    25	#endif
+    26	#ifdef CONFIG_ACORN_PARTITION_EESOX
+    27		adfspart_check_EESOX,
+    28	#endif
+    29	
+    30		/*
+    31		 * Now move on to formats that only have partition info at
+    32		 * disk address 0xdc0.  Since these may also have stale
+    33		 * PC/BIOS partition tables, they need to come before
+    34		 * the msdos entry.
+    35		 */
+    36	#ifdef CONFIG_ACORN_PARTITION_CUMANA
+    37		adfspart_check_CUMANA,
+    38	#endif
+    39	#ifdef CONFIG_ACORN_PARTITION_ADFS
+    40		adfspart_check_ADFS,
+    41	#endif
+    42	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
