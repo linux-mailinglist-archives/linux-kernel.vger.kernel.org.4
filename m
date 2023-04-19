@@ -2,145 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F395B6E718E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3486E7190
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbjDSD0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 23:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
+        id S231591AbjDSD13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 23:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbjDSD0r (ORCPT
+        with ESMTP id S231600AbjDSD1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 23:26:47 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2112.outbound.protection.outlook.com [40.107.215.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C7CD2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 20:26:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OOE+dzP9MVmKv8ZVuY3O8dwg+EX18mToTNXPMvtXdhbcmht1OGj1Ra6XaN01adfo5BHsNLTD3EzWC/587HPbls6nQ74MnmcT0VdECwLA7mxKv1UOYEtgh+ROQ+BliheRXMpqsEjaCsDWUP7EVrgB6TziBFKtP16MOg5s3NJU5wSZhTie4exq6Mywo6+1uIspevQyaQNz11rTKMPWNrOAX9n1P+igppAdTRZx3nrRUDxGCOvWTgap3k1d7wa4y0d3wTpPIuXkQroR8CW8IE7MW2kiV1y0f3Mfp1zSCZYAspf1jTDP4d4SnAX9XI3SOIUuw7csFfOfu8TOQ7S66Uw1kA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OjHzi9FD0wWlg8TEYTy6ZQDafhjTGwCfezsR+jsv0Tw=;
- b=Kog3Y9vGQrBg04NQzMipfoMRfQyyKNHB5owrYjPrmbnIcGhzy/TR4t6WuC/6Tjwef+8InfLVAVQcs7Wj5heTOfl2yHmj0jjvBHyI8isbRAOWkPeZHWEuWd4vBoJoI9R7mxnnDJyJDfYlp4JZxwkBYlFK6pINgg0bpb0gq2BT12kWOiQ6rCg1oE3MVEW4+UZQsGPJ60GYl19sDmlazhjQGkwtOcFklI/WPyIOKNhG9w69vwbQrRrTWE257u6H1uBFjfE3wyBYaXeM+vSFZL52PQAenAISm2eGtKuoG8CDXaqOaMOA4BbgmRItry9F1nINSfsJanb6wlqfgD5JA0FhMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OjHzi9FD0wWlg8TEYTy6ZQDafhjTGwCfezsR+jsv0Tw=;
- b=qihesdGykmB0i020UD7vBudSKusn5YvdXAxeGZyNUWNrCbarCcBApWlynRvqjb0KXpCmWFXBQsyfnlImB5pNX8wSmS8/pQWziSKjWkiiOG0rcKJub69bO8zPz2B0rD+8Ch5xavyq+9CMdpdfQQoKxvv/a5fg9JDl4LIMI1WfItfKxNEOPJC8LkKfrp9g9CnBecYcvaUJM9df/BYO4fZoGQCJnk3Oo/8mNb7JGzJ6GI28yF7e0gT8FABnxjf32Gyl9g+9SZ3hIbWhyvqw+voyAHAgUyoJbQvm1AcqPOIzG1kJbiMcYplHNqTuY4yW87LzWdTcrBC9GNHPESog1eqgbw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by PSAPR06MB4151.apcprd06.prod.outlook.com (2603:1096:301:2b::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
- 2023 03:26:40 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::76d6:4828:7e80:2965%6]) with mapi id 15.20.6298.045; Wed, 19 Apr 2023
- 03:26:40 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] f2fs: fix typo
-Date:   Wed, 19 Apr 2023 11:26:26 +0800
-Message-Id: <20230419032627.15421-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
+        Tue, 18 Apr 2023 23:27:25 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3341D7EC0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 20:27:12 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-2466f65d7e0so1926363a91.2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 20:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1681874831; x=1684466831;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UNPYSUMahgAyXZXRtPSa/FHx7hsSNLc7er8SypYXEE0=;
+        b=V4DT7iyyMQk9hHL1OmZVid6pnWukKrSwK6E8gzwjCU/tnzzCMf5eYYpN6aMHJsNMHx
+         pNXolNAOD7N2oJOK5tkA2uSndkcdl6gbHb4CfeTnSTV3ehy4LBLViRQcgoxYDStlrnR8
+         xCv8UEBC66+JGz4EYv8PSulabzkaXPKWV5MKou2vj//nyIdoqIvtu/7GVmYmH8i6etVj
+         A9qJmmWXHcDq8eJ0hG/o1Yobx7PRkfAjfeZ2I44RoY3RwFJ1U4mVOqiVvEOPqis7zwTb
+         Z7WmwM01SW94AxWdaO82OtygctICR8cYj0hQaNUnhUG/VKY854W8eQYBeE8LwRlG11Kx
+         mL7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681874831; x=1684466831;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UNPYSUMahgAyXZXRtPSa/FHx7hsSNLc7er8SypYXEE0=;
+        b=SXUFXRvr/KIwg6rrz/SmcnDjBQmeFPTJd3Wl4Fu4lmnW0DC4fwo/WbRFbALdlz6ROk
+         WpiuV2zK+7r8MfHMEHskZ/BB7kFpKh4bKoWUx5woa3Bq/JlApUGxvDoYXnH+6WGB+DTw
+         nV/Uc6Pheb2XMnkbgRr4WQvWOwRrWr6UmL2LKYQow/zQxwq8fQSoDOVit9/Ecz53OKs9
+         Um9XdVlBZKQu/bxqWz2v5NC3vzRnRD00EQUlIJOpgQZIrtAnQNOqK0J64d0UBvLtOkW8
+         zt+d7JaY1oIT5BZskjtB6hyq9jYURgLoG4c8CpgSd+e6y+lZyWoZX1MExA1RkOYuGOc3
+         OU4A==
+X-Gm-Message-State: AAQBX9fJa+h8RlPH418MGeyaQXb2sBsBrM6XC/7BQne7pJ67JpJmnSQB
+        IAMCevSMAD57vidDE7qJ1Z2XMg==
+X-Google-Smtp-Source: AKy350bO5eCRO2oTDoKnVbIgbWmrg60BOMhAdOU8Eo/INK0dKi0uDVZTOyfy49E1Gf0PrPF7ZTYe2g==
+X-Received: by 2002:a17:90b:392:b0:247:601c:20fa with SMTP id ga18-20020a17090b039200b00247601c20famr1484491pjb.5.1681874831418;
+        Tue, 18 Apr 2023 20:27:11 -0700 (PDT)
+Received: from localhost ([135.180.227.0])
+        by smtp.gmail.com with ESMTPSA id m23-20020a170902bb9700b001a66e6bb66esm10328642pls.162.2023.04.18.20.27.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 20:27:10 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 20:27:10 -0700 (PDT)
+X-Google-Original-Date: Tue, 18 Apr 2023 20:27:06 PDT (-0700)
+Subject:     Re: [PATCH 1/2] binfmt_elf_fdpic: support 64-bit systems
+In-Reply-To: <ab995c62-e537-a57e-062e-28aea2a4e6e5@kernel.org>
+CC:     viro@zeniv.linux.org.uk, brauner@kernel.org, ebiederm@xmission.com,
+        keescook@chromium.org, linux-riscv@lists.infradead.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     gerg@kernel.org
+Message-ID: <mhng-1c4cae76-4390-420e-8668-374aa8a967ff@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0041.apcprd02.prod.outlook.com
- (2603:1096:4:1f6::18) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|PSAPR06MB4151:EE_
-X-MS-Office365-Filtering-Correlation-Id: e6d489d3-5c9c-4818-8fd5-08db4085e3ab
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CUP56xiZ6KiEg3/RgNyHVqHPwzGggOQbR5VdsOlKcSwqsShVx1dfcuexqRr8B2H1/92lMvjGPDDX/xlwksQ/8C2Y7wDeWQYksqnLwaKiFJS1SB431yXTxY41FdhWiI/vPEzgTCIveL1Yz3DOeXXebjYhJarxDNv6WR8RVibITcuIKE2RyieO0OE/yBQP4kzvpiUbSfkGAvk0+KxDHL9/qMkVvKuO/3G05k8Sw4MQtyEsp3CVmg1Va2J4O41VqhMOQUJgEsxlsqwJcxFxPSzxHZtJNn+6GbE/sKHGlR3yYU1J1lrPn1hGFI6rNilCh3UmMQWpf+BZ/Q7RDxIKPltcY5L7+m6IDyci9Dy2eQgkRMU3JDR5hsGmKkXBIPtA8rvamZqX15TkzV3aLrot0cCpDNXvKiDvCrPyANSJUAPmgPj/WOxnj9eOrHqNxrN91Fp4YWv7p+Pjv7Xmto+wzETM/RNh41k5c0OOnGbVRM3J6Hdh47E7yj5+35C7J9EbXjQGu/0l2KTHm8eLynQqGwBhh9qzNBC5d4LTVIBAEL2hJ8xVgQFPgmBS4legjeoLiK2atK3mFMV+m3zQEx1kzC4QMmY19OWCkaYJKa3VGC4jV141Pd1+atrUBQxN410R/J30
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(366004)(346002)(136003)(451199021)(6666004)(6486002)(110136005)(86362001)(478600001)(2616005)(26005)(83380400001)(6506007)(6512007)(186003)(38350700002)(38100700002)(52116002)(1076003)(4744005)(66556008)(66946007)(66476007)(316002)(2906002)(4326008)(5660300002)(8936002)(36756003)(8676002)(41300700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?i33j5wdNWCxEsOFmhHqhW3TJnd3jhMADr8lU1TL0iqgtnp4EAoaVUjz9tu5j?=
- =?us-ascii?Q?s+XGWscLNGvW3PHD67xulQE3KR3ODi3d2MzzjONYEq+E1NL38BXFCLV1KBfc?=
- =?us-ascii?Q?Ir1Rdgv3YxHiQDgfhUeao3X4kwg3kxaxvpJ3ec+3Kd8tSduo2+cTosQB7Yjv?=
- =?us-ascii?Q?mThEDXgnAMmzKpLSn3b0tCeZk4U/G0WvoJlPx6uirDh8d1Ujp7WkDXy/y2ro?=
- =?us-ascii?Q?ci9YZbAVQ5VsWT3iVWvEYRTe97P4R9bMqDVRDZ4SaK4FItQVACSEUXXY5xWx?=
- =?us-ascii?Q?rehZdh8DravJ9tRiystOqaGabtuygr2iNmwWXMxuz+wA/iqmf4Uid2l67fjb?=
- =?us-ascii?Q?XT60ZhdE1XnzPx00/zBY9+Lsi+dhPajo7Xjm/Bwz1egPTDjcnDjR4THW/R6j?=
- =?us-ascii?Q?F8qLcMCrG9vD29Jh00pfB3fIUhymkFJLtLjGsikT5fa4hshp7nl8j7Cgff3C?=
- =?us-ascii?Q?qcCvgoj07ekcdfqHK4i82bJe0+H2DDVKmdhmqjj57ZJ8UfsVBprNzfL5pGX8?=
- =?us-ascii?Q?qaBEMN+c0EPdwivb42PQe3j8qLTRVvJJ7keVrUVj1zVUVJ8s1dL/QN908gXh?=
- =?us-ascii?Q?y/oZ1l2I+A9V4o+3f3Nmd+DwhQHVFRmOvhi22vz07gg4kZoke+EDz0ai0Len?=
- =?us-ascii?Q?O0mQUt07Zsb2N0ZmIGK6rjiSVwj8rc9xzN183RCjfA6IXc0Y1XOB7FUxAzUe?=
- =?us-ascii?Q?cr+erZrG2fxFamgsEdAfaZ1BRlfjeG1eDDw5KaGv1Mvjj/D3qHTLDHInhUbS?=
- =?us-ascii?Q?6qLiNRHp7r93im77YHxVf7wdClWWBgKo0eiAsjyJvJXQWnQXnclRKXGauraG?=
- =?us-ascii?Q?N9SEx3JXhMBqeQPck/TZ/gedvpdDpTVpbUU3mzRaKQIkDEYLIfUR+AjSmNbw?=
- =?us-ascii?Q?OJW45VyfTrGNoipzbHvhEKe82GYDeCDZq/Zf4klF0SrcyzY0tPi50ZZSkL8C?=
- =?us-ascii?Q?i+MimLFkn9emqwdQsJ+G01l6UkGYi6jrwG1WVNYDBTTLj7kh+UwXIS4mXTqQ?=
- =?us-ascii?Q?t92wizSRbsZ2gXnWxKyzu/TeeA9KHzNLewuTfxHfWGOBaS5rvwl0YuQ6S36V?=
- =?us-ascii?Q?YGZy/r01CSMBes4u+LBYylRv05vagP/tWU+lLEcOKH2Aj0INg/zwn8zQBKeI?=
- =?us-ascii?Q?W1jWosV/IMRbqtaEZUwvgaRuDST7ANSuNI4hfyOpRRIMus0ltLSZsvxckDAC?=
- =?us-ascii?Q?lMqEiHU3NnCf313b58+i7C6jzo9hNOHiWebUKyEqk/98jh/eL8LYAvSXEwgq?=
- =?us-ascii?Q?ZynoWAu22OZzWLrRSMmhozNVxq1E3wwwgj/vbjI6bR52ODqxNKP78yNUbVrX?=
- =?us-ascii?Q?DaCYfHHXkh5CVhd/HD5xugwjilgR0XHgPhhdMFpKwIa8JVkBOhDpliDcyyNp?=
- =?us-ascii?Q?RCnPYGIoUypZftctCiARMcZSmHS8crGZQ+IPhzItz85oQOAYZMpe3O/clArW?=
- =?us-ascii?Q?ghQniXaQAOiqyRlswBvd17tT9t5haJm0ejC2XE3X5uFTRkA/L+wuWY9fifmo?=
- =?us-ascii?Q?6C5V2cLmeQ2euKGgl533q3aKX00lpvgJHcrqwJpWX8AmAnlysLPY4Y2rw7nU?=
- =?us-ascii?Q?UZmUZ7u/dOJo3+TVkSS2t4B6igD1CfXz+kYnN0ws?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6d489d3-5c9c-4818-8fd5-08db4085e3ab
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 03:26:39.9841
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mLt0GLn/0OG/2nVjMjb2/c3MYIfGeqExFCmCfN8+HfETvxj6xTB7kiptbNMXCtOTOYlILrsP9/7KNP0tr+hpVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4151
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing 'is'.
+On Wed, 29 Mar 2023 06:48:55 PDT (-0700), gerg@kernel.org wrote:
+>
+> On 22/3/23 08:49, Palmer Dabbelt wrote:
+>> On Tue, 28 Feb 2023 05:51:25 PST (-0800), gerg@kernel.org wrote:
+>>> The binfmt_flat_fdpic code has a number of 32-bit specific data
+>>> structures associated with it. Extend it to be able to support and
+>>> be used on 64-bit systems as well.
+>>>
+>>> The new code defines a number of key 64-bit variants of the core
+>>> elf-fdpic data structures - along side the existing 32-bit sized ones.
+>>> A common set of generic named structures are defined to be either
+>>> the 32-bit or 64-bit ones as required at compile time. This is a
+>>> similar technique to that used in the ELF binfmt loader.
+>>>
+>>> For example:
+>>>
+>>>   elf_fdpic_loadseg is either elf32_fdpic_loadseg or elf64_fdpic_loadseg
+>>>   elf_fdpic_loadmap is either elf32_fdpic_loadmap or elf64_fdpic_loadmap
+>>>
+>>> the choice based on ELFCLASS32 or ELFCLASS64.
+>>>
+>>> Signed-off-by: Greg Ungerer <gerg@kernel.org>
+>>> ---
+>>>  fs/binfmt_elf_fdpic.c          | 38 +++++++++++++++++-----------------
+>>>  include/linux/elf-fdpic.h      | 14 ++++++++++++-
+>>>  include/uapi/linux/elf-fdpic.h | 15 ++++++++++++++
+>>>  3 files changed, 47 insertions(+), 20 deletions(-)
+>>
+>> Adding some of the binfmt/fs folks, who weren't directly on the mail. It's looking like we're generally OK with this in RISC-V land, though there's still no userspace posted.  I don't think there's any rush here and it might be prudent to wait for userspace to start going through a bit of a review, but figured I'd at least poke everyone to see if there's any thoughts.
+>>
+>> I'm fine either way, so
+>> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>
+>> if that helps any.  Also happy to take this through the RISC-V tree along with the other if that's easier, but again no rush.
+>
+> Just following up. I haven't seen any feedback on this - did I miss any?
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/f2fs/super.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+If you did then I did too.  I'm not really sure what to do here: it 
+looks fine to me, but it's not really my area so I'd prefer to have 
+someone who understands this stuff a bit better chime in.
 
-diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-index 9f15b03037db..357d45e49635 100644
---- a/fs/f2fs/super.c
-+++ b/fs/f2fs/super.c
-@@ -1362,7 +1362,7 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
- 	}
- 
- 	if (f2fs_is_readonly(sbi) && test_opt(sbi, FLUSH_MERGE)) {
--		f2fs_err(sbi, "FLUSH_MERGE not compatible with readonly mode");
-+		f2fs_err(sbi, "FLUSH_MERGE is not compatible with readonly mode");
- 		return -EINVAL;
- 	}
- 
-@@ -2356,7 +2356,7 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
- 
- 	if ((*flags & SB_RDONLY) && test_opt(sbi, DISABLE_CHECKPOINT)) {
- 		err = -EINVAL;
--		f2fs_warn(sbi, "disabling checkpoint not compatible with read-only");
-+		f2fs_warn(sbi, "disabling checkpoint is not compatible with read-only");
- 		goto restore_opts;
- 	}
- 
--- 
-2.39.0
+It looks like some Arm patches recently went in through that tree, 
+though, so maybe that's how things are supposed to go here?
 
+>
+> Regards
+> Greg
+>
+>
+>>> diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
+>>> index a05eafcacfb27..2eea6dd429fd6 100644
+>>> --- a/fs/binfmt_elf_fdpic.c
+>>> +++ b/fs/binfmt_elf_fdpic.c
+>>> @@ -138,7 +138,7 @@ static int is_constdisp(struct elfhdr *hdr)
+>>>  static int elf_fdpic_fetch_phdrs(struct elf_fdpic_params *params,
+>>>                   struct file *file)
+>>>  {
+>>> -    struct elf32_phdr *phdr;
+>>> +    struct elf_phdr *phdr;
+>>>      unsigned long size;
+>>>      int retval, loop;
+>>>      loff_t pos = params->hdr.e_phoff;
+>>> @@ -560,8 +560,8 @@ static int create_elf_fdpic_tables(struct linux_binprm *bprm,
+>>>      sp &= ~7UL;
+>>>
+>>>      /* stack the load map(s) */
+>>> -    len = sizeof(struct elf32_fdpic_loadmap);
+>>> -    len += sizeof(struct elf32_fdpic_loadseg) * exec_params->loadmap->nsegs;
+>>> +    len = sizeof(struct elf_fdpic_loadmap);
+>>> +    len += sizeof(struct elf_fdpic_loadseg) * exec_params->loadmap->nsegs;
+>>>      sp = (sp - len) & ~7UL;
+>>>      exec_params->map_addr = sp;
+>>>
+>>> @@ -571,8 +571,8 @@ static int create_elf_fdpic_tables(struct linux_binprm *bprm,
+>>>      current->mm->context.exec_fdpic_loadmap = (unsigned long) sp;
+>>>
+>>>      if (interp_params->loadmap) {
+>>> -        len = sizeof(struct elf32_fdpic_loadmap);
+>>> -        len += sizeof(struct elf32_fdpic_loadseg) *
+>>> +        len = sizeof(struct elf_fdpic_loadmap);
+>>> +        len += sizeof(struct elf_fdpic_loadseg) *
+>>>              interp_params->loadmap->nsegs;
+>>>          sp = (sp - len) & ~7UL;
+>>>          interp_params->map_addr = sp;
+>>> @@ -740,12 +740,12 @@ static int elf_fdpic_map_file(struct elf_fdpic_params *params,
+>>>                    struct mm_struct *mm,
+>>>                    const char *what)
+>>>  {
+>>> -    struct elf32_fdpic_loadmap *loadmap;
+>>> +    struct elf_fdpic_loadmap *loadmap;
+>>>  #ifdef CONFIG_MMU
+>>> -    struct elf32_fdpic_loadseg *mseg;
+>>> +    struct elf_fdpic_loadseg *mseg;
+>>>  #endif
+>>> -    struct elf32_fdpic_loadseg *seg;
+>>> -    struct elf32_phdr *phdr;
+>>> +    struct elf_fdpic_loadseg *seg;
+>>> +    struct elf_phdr *phdr;
+>>>      unsigned long load_addr, stop;
+>>>      unsigned nloads, tmp;
+>>>      size_t size;
+>>> @@ -767,7 +767,7 @@ static int elf_fdpic_map_file(struct elf_fdpic_params *params,
+>>>
+>>>      params->loadmap = loadmap;
+>>>
+>>> -    loadmap->version = ELF32_FDPIC_LOADMAP_VERSION;
+>>> +    loadmap->version = ELF_FDPIC_LOADMAP_VERSION;
+>>>      loadmap->nsegs = nloads;
+>>>
+>>>      load_addr = params->load_addr;
+>>> @@ -843,8 +843,8 @@ static int elf_fdpic_map_file(struct elf_fdpic_params *params,
+>>>              if (phdr->p_vaddr >= seg->p_vaddr &&
+>>>                  phdr->p_vaddr + phdr->p_memsz <=
+>>>                  seg->p_vaddr + seg->p_memsz) {
+>>> -                Elf32_Dyn __user *dyn;
+>>> -                Elf32_Sword d_tag;
+>>> +                Elf_Dyn __user *dyn;
+>>> +                Elf_Sword d_tag;
+>>>
+>>>                  params->dynamic_addr =
+>>>                      (phdr->p_vaddr - seg->p_vaddr) +
+>>> @@ -854,11 +854,11 @@ static int elf_fdpic_map_file(struct elf_fdpic_params *params,
+>>>                   * one item, and that the last item is a NULL
+>>>                   * entry */
+>>>                  if (phdr->p_memsz == 0 ||
+>>> -                    phdr->p_memsz % sizeof(Elf32_Dyn) != 0)
+>>> +                    phdr->p_memsz % sizeof(Elf_Dyn) != 0)
+>>>                      goto dynamic_error;
+>>>
+>>> -                tmp = phdr->p_memsz / sizeof(Elf32_Dyn);
+>>> -                dyn = (Elf32_Dyn __user *)params->dynamic_addr;
+>>> +                tmp = phdr->p_memsz / sizeof(Elf_Dyn);
+>>> +                dyn = (Elf_Dyn __user *)params->dynamic_addr;
+>>>                  if (get_user(d_tag, &dyn[tmp - 1].d_tag) ||
+>>>                      d_tag != 0)
+>>>                      goto dynamic_error;
+>>> @@ -927,8 +927,8 @@ static int elf_fdpic_map_file_constdisp_on_uclinux(
+>>>      struct file *file,
+>>>      struct mm_struct *mm)
+>>>  {
+>>> -    struct elf32_fdpic_loadseg *seg;
+>>> -    struct elf32_phdr *phdr;
+>>> +    struct elf_fdpic_loadseg *seg;
+>>> +    struct elf_phdr *phdr;
+>>>      unsigned long load_addr, base = ULONG_MAX, top = 0, maddr = 0;
+>>>      int loop, ret;
+>>>
+>>> @@ -1011,8 +1011,8 @@ static int elf_fdpic_map_file_by_direct_mmap(struct elf_fdpic_params *params,
+>>>                           struct file *file,
+>>>                           struct mm_struct *mm)
+>>>  {
+>>> -    struct elf32_fdpic_loadseg *seg;
+>>> -    struct elf32_phdr *phdr;
+>>> +    struct elf_fdpic_loadseg *seg;
+>>> +    struct elf_phdr *phdr;
+>>>      unsigned long load_addr, delta_vaddr;
+>>>      int loop, dvset;
+>>>
+>>> diff --git a/include/linux/elf-fdpic.h b/include/linux/elf-fdpic.h
+>>> index 3bea95a1af537..e533f45131945 100644
+>>> --- a/include/linux/elf-fdpic.h
+>>> +++ b/include/linux/elf-fdpic.h
+>>> @@ -10,13 +10,25 @@
+>>>
+>>>  #include <uapi/linux/elf-fdpic.h>
+>>>
+>>> +#if ELF_CLASS == ELFCLASS32
+>>> +#define Elf_Sword            Elf32_Sword
+>>> +#define elf_fdpic_loadseg        elf32_fdpic_loadseg
+>>> +#define elf_fdpic_loadmap        elf32_fdpic_loadmap
+>>> +#define ELF_FDPIC_LOADMAP_VERSION    ELF32_FDPIC_LOADMAP_VERSION
+>>> +#else
+>>> +#define Elf_Sword            Elf64_Sxword
+>>> +#define elf_fdpic_loadmap        elf64_fdpic_loadmap
+>>> +#define elf_fdpic_loadseg        elf64_fdpic_loadseg
+>>> +#define ELF_FDPIC_LOADMAP_VERSION    ELF64_FDPIC_LOADMAP_VERSION
+>>> +#endif
+>>> +
+>>>  /*
+>>>   * binfmt binary parameters structure
+>>>   */
+>>>  struct elf_fdpic_params {
+>>>      struct elfhdr            hdr;        /* ref copy of ELF header */
+>>>      struct elf_phdr            *phdrs;        /* ref copy of PT_PHDR table */
+>>> -    struct elf32_fdpic_loadmap    *loadmap;    /* loadmap to be passed to userspace */
+>>> +    struct elf_fdpic_loadmap    *loadmap;    /* loadmap to be passed to userspace */
+>>>      unsigned long            elfhdr_addr;    /* mapped ELF header user address */
+>>>      unsigned long            ph_addr;    /* mapped PT_PHDR user address */
+>>>      unsigned long            map_addr;    /* mapped loadmap user address */
+>>> diff --git a/include/uapi/linux/elf-fdpic.h b/include/uapi/linux/elf-fdpic.h
+>>> index 4fcc6cfebe185..ec23f08711292 100644
+>>> --- a/include/uapi/linux/elf-fdpic.h
+>>> +++ b/include/uapi/linux/elf-fdpic.h
+>>> @@ -32,4 +32,19 @@ struct elf32_fdpic_loadmap {
+>>>
+>>>  #define ELF32_FDPIC_LOADMAP_VERSION    0x0000
+>>>
+>>> +/* segment mappings for ELF FDPIC libraries/executables/interpreters */
+>>> +struct elf64_fdpic_loadseg {
+>>> +    Elf64_Addr    addr;        /* core address to which mapped */
+>>> +    Elf64_Addr    p_vaddr;    /* VMA recorded in file */
+>>> +    Elf64_Word    p_memsz;    /* allocation size recorded in file */
+>>> +};
+>>> +
+>>> +struct elf64_fdpic_loadmap {
+>>> +    Elf64_Half    version;    /* version of these structures, just in case... */
+>>> +    Elf64_Half    nsegs;        /* number of segments */
+>>> +    struct elf64_fdpic_loadseg segs[];
+>>> +};
+>>> +
+>>> +#define ELF64_FDPIC_LOADMAP_VERSION    0x0000
+>>> +
+>>>  #endif /* _UAPI_LINUX_ELF_FDPIC_H */
+>>
