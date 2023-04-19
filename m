@@ -2,83 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63656E8524
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216586E8505
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233317AbjDSWoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 18:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44948 "EHLO
+        id S233215AbjDSWeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 18:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbjDSWoT (ORCPT
+        with ESMTP id S233254AbjDSWeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 18:44:19 -0400
-Received: from sonic310-31.consmr.mail.ne1.yahoo.com (sonic310-31.consmr.mail.ne1.yahoo.com [66.163.186.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D433426A2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681944194; bh=aSold790iIFBdC8z4K+bYyXd6pqgIE8gjXw+bOy50tI=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=B/cP7IIwF5RVu8HdDhqOXtNn9L4W69IaJCXAAD8vILz89TBbDJbwZOgMFv/pemg72wyCpXNV6+2/+PB9JC5bialXeWfEJZz24ms+vlb0sQXxYR3YMb8Ete9XzsPx9mVW4dyOBXUeIPImCSb54iK7jknsLCnMqRiI4ndbNOjBNtqE9rLEhjj/6E9loFBv0Q46UKVVDYwIamJR6W9VSoo8q4W56WmrhEhaKNvJ4lPaxSKfu+D0NvHVpb38x3DCidGCy7jUb+Idkn3uid50lYIBblU53/QSBbtH2VsfkfN8AhmwIQKZn7cf0vfVa7mZEaEP7ksXKVAf4qVzFdnFh/bnAQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681944194; bh=XbTz+XVt07a0Vae6EW6gqggew345TBi1HU33eu+Bmal=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=ecwyFbs8Ml9TxTyEQVTLrWhzr2ad3OQ7SQllVffd/Xtb/TvUx5V9c8aukVFk+TXuh88H3yZcsPhO/mJyx0igYhiCqudMwsCLnw9Mx4ZIlc3AVgqbUwg089t+0hcKya7+mIFT/W1WObo9FbrFx5XE3+yV1uUZq3DvzRd3j5Rl7oIDbUt8NYiDR3CzwbHBHvpOIHeofpJ6lPuaV18tDJcHY4kIdS5IHyG0Cq9ZvouhvXp836l9PcssxZiRqy34+ZmIxUShm8MGHGVUD5K8e+k1HVblJg//lreH4qph0kHLf6xWQTF3uTJcF6mtyThVkd3R06FWJmwZ1YA4Rr/niHvtrg==
-X-YMail-OSG: WAmE6TUVM1nuSeBfV_IcibnQZnRaewdcD9OKlw2SZsT9YZ8QhtH_Ztt07XO7_Dj
- 3cuhXBlZWLY4HnBAwALciM6Sd7UyAGVkz46waOJct0HbPDH0e55NWo_54ol23BCS7nNgfO5zXAwE
- 5SJOvqiIs7NLIwmpLDyeR0fL9sF_vuw8OmfvIK6_KT7Difoh92A77VnkFbqDudW2MTR6wU2Yxeqm
- dLLxThBGwRS3H17hmuTIrkYo31ZYSNCkbJaRUQX0GdrMXVuER6SdsQTZN2GBwalP7X1wkUM2m9lW
- g6.66XyaNw_rPbda7BEoF606QoKW1kstDCNHF8xAgXfxaTQchrHzSeXqmkTZsPdfDJOeTFeq1Hb1
- 5I1WeCdsJ2GrktOtr3pK4zCFekroQsxBgphZUo4eMhhZEUyysmUNR.WlFkm.dmRVrQkot.8YJ6mr
- DuHMNs.KGFnxG4oz4mcuxfjJjupYtEW_nyp883KUg3Z7WqoyI_md3WW3hY6WYjlgYelXvedwJy4s
- PZDDJwGPUqOIvMG4quEqkO47Sg1chZ0cFKoswI.b2h8NJwdIFEfld0pTF6jkOvV_dopExN8ooiEF
- kHIgcYIjD__i1eD5G9DHS3uHY3Wu.x8xCNptMOvBUvcE3_9Vtgbtqfz9EbsUWVE6RY1KYocghep0
- AOMtfWHl1.VWCjGML72T.toEE_gH9ygXeRag1LaOEVbQD.6L4QaGZpLZ6mo2ASajWA_l7dubzDw_
- jxpBeTc8eIT5ANM0zYCs3bRWHN5lF3wRwkrj5K6.qKcAlQLpRV5UjrWJ46w0fqjVu29Qr9lBDz4e
- GzlKxuyV1tRERKE.My2PYTy7p3hbrO_KXf8RUigENH6dZWnvM7qrDGtxDPRisUWObS3NJ2sxOa.g
- nGVqh_KLXy_5ExCud4v4ZOXL.VC1vdN6Q.JkzfmD_nFQy5uWRjXxMOpfrd2naT3oi2ObW03i6lko
- cch12D6SEKKphtwbg91Ynd9il1L2gCTDqorS63Qpm.gxR_FHDTkjVeEySAD7wRCm5j6yyFNqhOEl
- ltAuQWnxLqMBGdTJVjm4iAQjRNOfYKBRdzhasQhHfyL8rPBAqbusYNeQ420rcWLzgtynsUGtL55H
- 0z8wVinlN5QDIC5UsobnWI4_N5JILlG3cFSHENGBSQJtIAoPqFQ.7fAKrGlJ0xia3WY..ck8G1wK
- 8HosnqORofLtpcYwqL8gLxsT0MZa.I3z6VQvEUeDfAMe_jZu5dGMs04s8_9BW3fJ4.hNAWBn3bCL
- Ls6soTT8ZmO4EfY0IyjD7Bx4SMizO4lIt1u9wOTMJ0mA3MZUdNwyJ3mIpGxKqSoKZMDc303T7_GJ
- CKWgf5uWepkzOWmXX5.IFxCJ6HDu45n6FsVRYETjj2s9sFbe5mW.uB20xvso8GSvBFzzZAhFbI_S
- V4VO2QjgKfzQsBYfgsGn43sBEb0aQNRDZQbh.zWq7xJ.5xyp5qgj4cUy3KgbjtAHmMVSpfgBSAXv
- S0Xa7Wq2hflqcFsd8FfgFGi.JSassOJ5J1r7lnKDgTv5DvrwwTOdgc8VxKScgyh98LEdB94nJMrm
- .Sp6HQP3ITTrN_MBtsGcyVwwsaRiZhLOviJOymzln87G_3gJUSlXD6iejI6Wf1fdbfwMPNKlnYAh
- xyIKjAWc_HJFZAlp53CJtIC6vtIRQ.IqPcGLNkoe98PPgtu5DfHc5SHTtw6b7TT70MaZFeyFqf4J
- tr.mLFh.VcY0cKJgHvMh3hLbh_XAQuTg186_OoQjj0ZBdAf3V6Lq3_lokv5VkLHDsc_NL3QHpf5I
- KVfHeLuOZgl2pejQpO3_.2rPOzUcq97pDRZqhH6JohHxM_lPgkwKGQK.oSStE_RMhh0jofl.82xH
- kLYgHUsK46zUuJp61Phe8OMxliJiOoJg3GBgzqACmCJ9RUYoB3OuE17fH13_7lThB6W1P1aHx3HN
- sC.F75q3XcZEYkkQr8a4MEeQl7TgGBYFDnrlNhjkd2bq8HzCocXi2xoxAqRDGb75h2JK_.3Iq1F0
- Kq4s7ZD5F12Jdw853rwAG8KD7pKtvcIKppQJDURTW1GwChimA8FOgW2TBGOdOcqaKI9yXleNcRR3
- IGPHdS5w2eesC3pocAIX3p1w86KnVBlyhSVAxpLbskkxl_uBxdTIBgSW3AXux62JmTA2d4dBs.N6
- KBvh5qmegp4kmXUXCRdKbG0IulhZ8DzQ_KDRYE9tgAHrylxnKLE9vbB7COEH0SLepdFe2PMMgi7.
- 7Kc9F8X4IVmoz_Uc3M2NwaaVB.l9O8TsvV4aFqopnOwuRzeDdB5DY8LJR6g4PZItMnzmKGfHJoXp
- 5CqSm3sLqv_Y-
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 34405ddd-e74d-4453-9a33-fb61d41c6ac2
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Wed, 19 Apr 2023 22:43:14 +0000
-Received: by hermes--production-bf1-5f9df5c5c4-p5s6l (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID d7e3d8c07fd19407715f678c13c2aa39;
-          Wed, 19 Apr 2023 22:19:52 +0000 (UTC)
-Message-ID: <4894d787-9849-91e0-7fa8-566dc42dd85e@schaufler-ca.com>
-Date:   Wed, 19 Apr 2023 15:19:49 -0700
+        Wed, 19 Apr 2023 18:34:03 -0400
+Received: from sonic307-7.consmr.mail.ir2.yahoo.com (sonic307-7.consmr.mail.ir2.yahoo.com [87.248.110.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A6E30E9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:33:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1681943520; bh=QgwEvaxznVhbwwwaHbod/jvh/kKZgXY3lH4q0rCY3ds=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=VwI0AQbt4Q21SVAwfqoq19LalICgTCbX2sgLECExRwMLEHwxowDFT6xzfQvYzdkRXbk1pGHIO007UVxsqKF8HyIPf1LGjg0NFMfaBmhNIQlifY4t0WsdF1tYMpJmWrLiqGd9rK2eQYl4KTrn0gvMEIyyzqKbR5vT4nKutyCbq0XZpp/ybaaucqqQsZZkDZjcZBfmrfkYr/MNTVefezzPSq+LxLYlVuf4dNkoEDtoq1OYwPWj9CGJas+tDJJiLw5hZIow4Y6qO1MOfCx2QqV5CuprBz7G+4FTlTUDK9YuZu9CJt+ttSFfjiKeMbvArEDpEPBy4mYPNM5bdKYPgu8Viw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681943520; bh=fEJRsbrGtVafMywGT85HUetpJNrzOlG6WcV6QruQtH2=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=of0Ao8iE4VdHcab7LaWXt2AUaHhDsSJ0SGD0i+Qp9VBhnKluva/2YM9gFEyCJIDZvJQ3ZoASQDlvfkNP5cvHQIxios9r38UmOrK88E6KmR+1lwnFG9SWdaw5wBzhe68cspHBgpAq0Jf16bGvkJ7V0CgydteZ5TYo2jutqeWP+tzcPpbuxkGYJSk0WBovjMoiEjCE7krIn81hyC66XXOnvsFws0MfwGRZMQA5eBwYfWTFuC/R+2x5+7/Q8Ky5qOs86RZPWINoo7onGyjhyNriIQcJTdKg2LuMT/oLAg0HR7RqnUnIrSrL742B44tIWeRWvDlUyDtNLvDV+LlTwFy5Zw==
+X-YMail-OSG: VxESa2YVM1l1UBi7CnVMMdeUyMabjI2yhujSfxTI15FY8xVT9nXwAEQ2N41OhRg
+ EL.LdobvcowL3ITCt2mH_WldyMsB9B9ctIbnYUEauVKmyCb9c3HOEXOJjnqJMKE1V3H2Ulqg5bVy
+ .XMcr6d3kKLi5Fn142rDiJHSLI0qzwMuT8Y6T.m7GRn4kGQwQ_l3B7TH47MAA8hH26TVRYrYbxa4
+ HFcef6KaKUwoaVvn_9zv3d0pb7yZ0N_4qoL9bPY0RrFet4mt8Uquv3xP6JdCmbImHrec0_08_XVW
+ 80jXdeLetLq0nO4EuVvw1TZQIQ8MoZWL8YEMPuOhbkqbMPBKvB5lvfZxbTKn9TtyTajRiL4JXyL.
+ nVmG1d6uHdCCv06xEOQ5AWL5H9UrV_XZ.Qm10ixKTnbtl9b1z1HaAWPlm9tUJocjwyTmbXiZqf.0
+ lZf1vfySnAYtXFvUi.FyzGPSlfsO770.7mK4bH1fb18CbXBkidflUFKsykRgliwr12lCIia9ZlB6
+ AGYF1iqWgy_k7neFDhr6FocV2fB5M_2u7r3NqVTW7q8.wI3o7WrPjm4c3_ZDLvXmLDOrVNgnnLKf
+ FyXVsHr.OJyASBSGGRA1gatXmS7zSwLDh4egK3ZRRIX1ucS_6ZIJDlQ1fdj1AaQsnNnx..t7XXhf
+ 1KZ7o7bz9Q6m6lMJfPkS5AN1CZ9gDd0AXZZ8F3lmVQjjRjzUwnkpOtU1I70tCMPl8EITXNdUtZCf
+ TdBAqf5eQTHgWHcKnqzbP_Z18PBISYMyQWU4oOZ2ADWAmCtHRFHFADy3jm0F2cyjpxO9gQ1lAi1b
+ umhGfuoJHHNoY9BdMRzT2dI_3D4fW3QMbQuy5clMDwvuq1ZThxKR.5eu0fOVimKfTRhRbCFqAlva
+ YLwIVSVnNVSUTbtS2VepiX_Fu8FF77LCUn508HgtpDm1Fy7Yc4yvatkYV6Zalyq3ZRxRcXvJcO0X
+ X0RaKDOAVTM4LHsuWpA_KpopSVxxCVWLOaKK419w7LeILxdMtS62zK6VKdmsVf516gnnhOSIZZy1
+ lslymiUCony4TKa47sragF8rMP1mVvfw6zoe9e._E.Bgnc7CYloW8aHABWbJKJiTwz5y2M4ll11E
+ aDehcX6D7jG.QUw2RUbO_9_.SdaddRhcbovYrXr4KakXZSGjhbGSnLybZPwSs3xEQq_VKBbQzv0j
+ NK1_ECBxWqytqk3cEcCVcmJkOwAsDCn1R645K.9xGaqpjbm6y4n7Znq6jhKLWOptxRg40gsgQsMP
+ ZqPT51QRCLzU1rJOywZIQ7RZruXVv.BXAqeym4rtINfIG6pLQb3OB1lD4mjaOypLouITexynJTzc
+ 4H26ZJnQT7_Ch2ZB5UwyxMag3mOy.KOJhybeqRWa0.GEu5uKjR45Pcg1gVAYoRA8gBei6iTg8b9b
+ fwGOS2sOFo2opWnx2NaN7SCZczx5xv7Dfct3Sr1k52rrIrCSbT2WKTxXXsNF6G1wocx47EMMvCL5
+ PUmoa8_1tmQ4H3VyPdhMbg2MedMNQrqww1.vl6tPKLBpbIvMsgCcEW3R.AhM03Z6koVDXv2FXc7U
+ GlopzlDyUb_bNhybuavz1bCF7kXqgrKkIEthT1x38P5Z9hg.FaV6hjhfWsNMBpet9vSAdEKqWvL5
+ QeOmMJPiXz1OUYVo0aa3DUj3.3rXk1t8mh4t8EH69QavAbgswPIfCSjldRESfxjAHDVmAIYqcBE7
+ f6cfKBazKUZt_RJuHDa82FMsxcpT5XLWaf49XqQxnylVWb6eXkZX98Kmurh0fwbTRzUyEEy_4eHj
+ cnLQ_gtHm82izJqlffIGWhxE5p7XYnaD9gI.hV2h3J6lOs5aKXBRc.EWJfQsxbF6rt1..GfjqFYY
+ DOjF1DUJPjQKVz7uWKtxwgIJhk8SVwGOr0Gfcf4jJqfJucOcUEbUh0_6CPWPQrkrIJMt2vbmFbjk
+ gF9Wbskeyk_3qDO_VPGyTXkk8RJ10eC3GInssPsXFbXzJyAfrWucI6orJa2qC1OJpqPlXGKjdV9J
+ wpX9qt0lVyzty0jT4HcVKnpIGBCD.bUI7uSNPjVvOl1SZbF_u6eL.8Q23HDy_neMrI7xM1KiaaMY
+ A7DEPos7sr2XvgALthc2N9f24YYN96m_ticET7IduPGToB01Z5p5e.8YWz9M1RNXNpHjSqopU9YR
+ 4RRw2PPzJUo21iRzIbmVgsazpNfOCWCbdr44W3DClOfdG.wm3KIyzb6MIQmKxgE8GtRaBMqjj04h
+ zm4BwTbpuCtG9BHsESXkht6rJlEtpC77dRD2xLKl3ERbqbcAWlllfNoguaVI8plqEi2uwOsdYChC
+ _0sWpVxBE_lESUb5R68_MZ7Gilf0DsUsw
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: dc59d37e-63ac-409d-9792-67e4d82a1f8b
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ir2.yahoo.com with HTTP; Wed, 19 Apr 2023 22:32:00 +0000
+Received: by hermes--production-ir2-74cd8fc864-jl5bm (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 318f31df962c705776d30bee69907fb4;
+          Wed, 19 Apr 2023 22:21:27 +0000 (UTC)
+Message-ID: <b044de68-e9d7-ae23-a2da-96df78f95821@rocketmail.com>
+Date:   Thu, 20 Apr 2023 00:21:26 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v8 07/11] LSM: Helpers for attribute names and filling an
- lsm_ctx
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 5/9] regulator: rt5033: Change regulator names to
+ lowercase
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <cover.1681646904.git.jahau@rocketmail.com>
+ <d4218947e354aee45589acb1060ce41727a26750.1681646904.git.jahau@rocketmail.com>
+ <19ceb0f6-1225-c8cb-1469-3d657e66d171@linaro.org>
+ <e6cc8658-fe93-c2c0-603e-093cdafb3cca@rocketmail.com>
+ <f80fcbeb-f916-63da-a5c3-f80f6315f3e0@linaro.org>
 Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     linux-security-module@vger.kernel.org, jmorris@namei.org,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        mic@digikod.net, Casey Schaufler <casey@schaufler-ca.com>
-References: <20230411155921.14716-1-casey@schaufler-ca.com>
- <20230411155921.14716-8-casey@schaufler-ca.com>
- <CAHC9VhTX-JnS11Ywfwf2aTvh1J3KBdsfCp3k1C=8WyLcgRNDig@mail.gmail.com>
- <5acc0c6c-0ef6-bc92-0af9-dc33d8a21afa@schaufler-ca.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <5acc0c6c-0ef6-bc92-0af9-dc33d8a21afa@schaufler-ca.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From:   Jakob Hauser <jahau@rocketmail.com>
+In-Reply-To: <f80fcbeb-f916-63da-a5c3-f80f6315f3e0@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Mailer: WebService/1.1.21365 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,176 +96,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/18/2023 3:43 PM, Casey Schaufler wrote:
-> On 4/18/2023 2:51 PM, Paul Moore wrote:
->> On Tue, Apr 11, 2023 at 12:02 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->>> Add lsm_name_to_attr(), which translates a text string to a
->>> LSM_ATTR value if one is available.
->>>
->>> Add lsm_fill_user_ctx(), which fills a struct lsm_ctx, including
->>> the trailing attribute value. The .len value is padded to a multiple
->>> of the size of the structure for alignment.
->>>
->>> All are used in module specific components of LSM system calls.
->>>
->>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
->>> ---
->>>  include/linux/security.h | 13 +++++++++++
->>>  security/lsm_syscalls.c  | 24 ++++++++++++++++++++
->>>  security/security.c      | 48 ++++++++++++++++++++++++++++++++++++++++
->>>  3 files changed, 85 insertions(+)
->> ..
->>
->>> diff --git a/security/lsm_syscalls.c b/security/lsm_syscalls.c
->>> index 6efbe244d304..67106f642422 100644
->>> --- a/security/lsm_syscalls.c
->>> +++ b/security/lsm_syscalls.c
->>> @@ -17,6 +17,30 @@
->>>  #include <linux/lsm_hooks.h>
->>>  #include <uapi/linux/lsm.h>
->>>
->>> +/**
->>> + * lsm_name_to_attr - map an LSM attribute name to its ID
->>> + * @name: name of the attribute
->>> + *
->>> + * Returns the LSM attribute value associated with @name, or 0 if
->>> + * there is no mapping.
->>> + */
->>> +u64 lsm_name_to_attr(const char *name)
->>> +{
->>> +       if (!strcmp(name, "current"))
->>> +               return LSM_ATTR_CURRENT;
->>> +       if (!strcmp(name, "exec"))
->>> +               return LSM_ATTR_EXEC;
->>> +       if (!strcmp(name, "fscreate"))
->>> +               return LSM_ATTR_FSCREATE;
->>> +       if (!strcmp(name, "keycreate"))
->>> +               return LSM_ATTR_KEYCREATE;
->>> +       if (!strcmp(name, "prev"))
->>> +               return LSM_ATTR_PREV;
->>> +       if (!strcmp(name, "sockcreate"))
->>> +               return LSM_ATTR_SOCKCREATE;
->>> +       return 0;
->>> +}
->> Thank you :)
-> It didn't hurt all that badly.
->
->>>  /**
->>>   * sys_lsm_set_self_attr - Set current task's security module attribute
->>>   * @attr: which attribute to set
->>> diff --git a/security/security.c b/security/security.c
->>> index bfe9a1a426b2..453f3ff591ec 100644
->>> --- a/security/security.c
->>> +++ b/security/security.c
->>> @@ -752,6 +752,54 @@ static int lsm_superblock_alloc(struct super_block *sb)
->>>         return 0;
->>>  }
->>>
->>> +/**
->>> + * lsm_fill_user_ctx - Fill a user space lsm_ctx structure
->>> + * @ctx: an LSM context to be filled
->>> + * @context: the new context value
->>> + * @context_size: the size of the new context value
->>> + * @id: LSM id
->>> + * @flags: LSM defined flags
->>> + *
->>> + * Fill all of the fields in a user space lsm_ctx structure.
->>> + * Caller is assumed to have verified that @ctx has enough space
->>> + * for @context.
->>> + *
->>> + * The total length is padded to an integral number of lsm_ctx.
->> Considering that lsm_ctx is variable length I'm not sure that makes a
->> lot of sense, how about we pad the total length so that the @ctx entry
->> is a multiple of 64-bits?
-> 64 is fine.
->
->>   If needed we can always change this later
->> as the lsm_ctx struct is inherently variable in length and userspace
->> will need to deal with the buffer regardless of alignment.
->>
->>> + * Returns 0 on success, -EFAULT on a copyout error.
->>> + */
->>> +int lsm_fill_user_ctx(struct lsm_ctx __user *ctx, void *context,
->>> +                     size_t context_size, u64 id, u64 flags)
->>> +{
->>> +       struct lsm_ctx *lctx;
->>> +       size_t locallen;
->>> +       u8 *composite;
->>> +       int rc = 0;
->>> +
->>> +       locallen = sizeof(*ctx);
->>> +       if (context_size)
->>> +               locallen += sizeof(*ctx) * ((context_size / sizeof(*ctx)) + 1);
->> It seems cleaner to use the kernel's ALIGN() macro:
-> Indeed. I'll do it.
->
->>   /* ensure the lsm_ctx length is a multiple of 64-bits */
->>   locallen = ALIGN(sizeof(*ctx) + context_size, 8);
->>   lctx = kzalloc(locallen, GFP_KERNEL)
->>   if (!lctx)
->>     return -ENOMEM;
->>
->>> +       composite = kzalloc(locallen, GFP_KERNEL);
->>> +       if (composite == NULL)
->>> +               return -ENOMEM;
->>> +
->>> +       lctx = (struct lsm_ctx *)composite;
->>> +       lctx->id = id;
->>> +       lctx->flags = flags;
->>> +       lctx->ctx_len = context_size;
->>> +       lctx->len = locallen;
->>> +
->>> +       memcpy(composite + sizeof(*lctx), context, context_size);
->> Is there a problem with doing `memcpy(lctx->ctx, context,
->> context_size)` in place of the memcpy above?
-> Nope.
->
->>   That is easier to read
->> and we can get rid of @composite.
-> Point.
->
->>> +       if (copy_to_user(ctx, composite, locallen))
->>> +               rc = -EFAULT;
->>> +
->>> +       kfree(composite);
->>> +
->>> +       return rc;
->>> +}
->> I understand Mickaël asked you to do a single copy_to_user(), but I'm
->> not sure it is worth it if we have to add a temporary buffer
->> allocation like that.  How about something like below (v7 with some
->> tweaks/padding)?  You could be a bit more clever with the memset if
->> you want, I was just typing this up quickly ...
-> I prefer two copies to the allocation myself. I'll incorporate this.
+Hi Krzysztof,
 
-After further review ...
+On 19.04.23 10:40, Krzysztof Kozlowski wrote:
+> On 18/04/2023 23:24, Jakob Hauser wrote:
+>> On 16.04.23 20:32, Krzysztof Kozlowski wrote:
+>>> On 16/04/2023 14:44, Jakob Hauser wrote:
+>>>> Lowercase is preferred for node names.
+>>>
+>>> This will break all existing users. In-tree and out-of-tree. Where is
+>>> the binding update?
+>>
+>> In my reply to Rob's comments in v1 I was pointing out that this will
+>> affect an existing driver. There was no reaction.
+>>
+>> As far as I can see, there is no in-tree usage yet. Though I can't tell
+>> about out-of-tree usage. Although if there is, adding the rt5033-charger
+>> driver might already causes the need for changes.
+>>
+>> Well, to stay on the safe side, I'll drop this patch in v3 and will
+>> change the bindings (patch 9) back to uppercase.
+> 
+> Your v1 binding patch did not explain that you document existing ABI, so
+> you got comments like for a new binding. This is not really new binding,
+> is it?
 
-The tweaks required for padding aren't as clean as all that, and memset()
-isn't going to work for __user memory. I'm having trouble coming up with a
-way to deal with the padding that doesn't require either allocation or a
-third copy_to_user(). The inclusion of padding makes the kzalloc() and
-single copy_to_user() pretty attractive. 
+The bindings for the mfd and regulator are new, even though the drivers 
+are already existing. Sorry for not being clear on this in v1. This is 
+due to historic reasons of the old patchset, more information on that 
+further down.
 
->
->> int lsm_fill_user_ctx(...)
->> {
->>   struct lsm_ctx lctx;
->>
->>   /* ensure the lctx length is a multiple of 64-bits */
->>   lctx.len = ALIGN(sizeof(lctx) + context_size, 8);
->>
->>   lctx.id = id;
->>   lctx.flags = flags;
->>   lctx.ctx_len = context_size;
->>
->>   memset(ctx, 0, lctx.len);
->>   if (copy_to_user(ctx, &lctx, sizeof(lctx))
->>     return -EFAULT;
->>   if (copy_to_user(&ctx[1], context, context_size)
->>     return -EFAULT;
->>
->>   return 0;
->> }
->>
->> --
->> paul-moore.com
+The current situation in the mainline kernel is as follows.
+
+drivers
+-------
+rt5033:            drivers/mfd/rt5033.c
+rt5033-regulator:  drivers/regulator/rt5033-regulator.c
+rt5033-charger:    not existent
+rt5033-battery:    drivers/power/supply/rt5033_battery.c
+rt5033-leds:       not existent
+
+bindings
+--------
+rt5033:            not existent
+rt5033-regulator:  not existent
+rt5033-charger:    not existent
+rt5033-battery:    .../bindings/power/supply/richtek,rt5033-battery.yaml
+rt5033-leds:       not existent
+
+The reason for that discrepancy:
+RT5033 mfd, regulator and fuelgauge drivers were applied but charger & 
+documentation didn't make [1]. They were submitted again but it phased 
+out at that point, last known state is [2]. The LEDs are also a phased 
+out patchset [3]. The fuelgauge binding was added not so long ago by 
+Stephan [4].
+
+[1] 
+https://lore.kernel.org/all/1421899601-19327-1-git-send-email-beomho.seo@samsung.com/T/#t
+[2] 
+https://lore.kernel.org/lkml/1425864191-4121-1-git-send-email-beomho.seo@samsung.com/T/#t
+[3] 
+https://lore.kernel.org/linux-leds/1448446948-13729-1-git-send-email-ingi2.kim@samsung.com/T/#u
+[4] 
+https://lore.kernel.org/linux-devicetree/20210517105113.240379-1-stephan@gerhold.net/T/#m197b5719a5d37b17ba4ff9f3b3ff4bd4efcda71e
+
+Kind regards,
+Jakob
