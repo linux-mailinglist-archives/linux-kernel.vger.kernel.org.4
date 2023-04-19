@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D976E8064
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5486C6E8078
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233064AbjDSRaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 13:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
+        id S230513AbjDSRfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 13:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232218AbjDSRaL (ORCPT
+        with ESMTP id S229575AbjDSRfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 13:30:11 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1774F4EE3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:30:10 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id sz19so272785ejc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681925408; x=1684517408;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AwrZY0pgCdzEc7aFEGuhclWzcw83alOrnGULAtMEf8k=;
-        b=WGyvoSa4PiiAL6SnZPfK97mFYuzHCsMkjUabO80rr7uE12CeVQVuqbarRk/9PcMee8
-         zVkKT++wRDnI/eYzeAAhx4Dyn7cnTfGm/SQJKKEym4zBFHKihTC7iswHm/l6OWYaYg1x
-         vxxRAsdE8mArXUOAytdYBin/OC5oA+mhRCqlkxQrRyaKSqRdbj/ORqm8pE9FPJ6cTgpE
-         O45PNVhv72BF93MTYhwDPaKFgriVMH3y7Wr9KrWppDUuwaHcYMrslZFeH652/+sazl5m
-         vpgZIY7QEi3fwxwcZsl6u9x0Pucz1sBn8lhMgLAJyRC08oDwkjee4RP2JmOR2vYaqwcU
-         xjrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681925408; x=1684517408;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AwrZY0pgCdzEc7aFEGuhclWzcw83alOrnGULAtMEf8k=;
-        b=E0RpW33ww0lvjb5xGdI/B2CHPXIRP6mVbbyapKcE+MHI/SaX863+zUWcM8SvQFMj6J
-         MQ7oJPstMQGYtjQnHfd2OVlYUCPSoIf0cisTM+L2QmfaithhuPllqyU0Is0ser02IGUk
-         3beGe4g27mTqG8Ie2VT6k/TdEMQnvHhH3dZZMQ1Ox3UZKUxQBVV8sNP1rN4LNhDNNUsU
-         ZaPDJbXrXqB/askrNtMgDhNXp5cM0g6F97aW83iFceQE54exBpLVKW7XcsGhT9h8iF1q
-         M+XSZpYmbPDcyoe2oku/iryk9wHdPlxGL8mxuoU+JtBWxFF2xP4uh8x+6URfZKeQ+Mij
-         KkHA==
-X-Gm-Message-State: AAQBX9fCT2CYndhUZa53fYzU0M/zOMBKQAWAnlKTYxPnbFMZ0Utlodm4
-        Bb0ocB6pPp8pKsh+T+27+cLmVisI+RffziTHpo11+g==
-X-Google-Smtp-Source: AKy350bWQHHd6Tx3nuTtYCGYg3TYinENAeNOxLAWyW6t6uMKf07bzLM4g41t9XFsZsLVN8UvY/1YXzsaQBKxpXXVKE8=
-X-Received: by 2002:a17:907:7d9e:b0:94f:8f46:b286 with SMTP id
- oz30-20020a1709077d9e00b0094f8f46b286mr4500836ejc.15.1681925408411; Wed, 19
- Apr 2023 10:30:08 -0700 (PDT)
+        Wed, 19 Apr 2023 13:35:12 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E268A6A6E;
+        Wed, 19 Apr 2023 10:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681925711; x=1713461711;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=4qXm5eWpcBEMDu4cseUDl5qOFRKxr2ED5XonItnH7PA=;
+  b=oCDaDlKTEN/8FUQjfUg1Zqw8UKbZkDprPZyrUiIWy8zE0Zuh4zKDIENL
+   u84UdS5xmiiSC+WwH+68n/7XTM9R920gBLcPkdB2Ls3V3x2aBGsjI05uY
+   sAM74zSvmNkkwf5WArV4VRZeWpiqFYqfQOE/bAxi62XND6RUsjUpy6PfJ
+   A0ox9j8WVUDYViqUV3oFMqkFOG90z0YiWdXC54z3dqAMCDjRHNRmv0Rnb
+   1Q3nSZLtMNUdci90IpmZTvd1ZDHUXivDBrzQ6kOVgowRYSyQUtRRmrZ0G
+   2CIBrINQvt0DYsZsDMewFRnUDVoWBBrb8L2UVapD1cl33BTj9hfTYTRqK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="342993840"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="342993840"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 10:35:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="937755813"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="937755813"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 19 Apr 2023 10:35:09 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1ppBhz-002KRH-2A;
+        Wed, 19 Apr 2023 20:35:07 +0300
+Date:   Wed, 19 Apr 2023 20:35:07 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Joy Chakraborty <joychakr@google.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com,
+        rohitner@google.com
+Subject: Re: [PATCH v7 4/5] spi: dw: Add DMA address widths capability check
+Message-ID: <ZEAmS3huMHla7Ifo@smile.fi.intel.com>
+References: <20230418052902.1336866-1-joychakr@google.com>
+ <20230418052902.1336866-5-joychakr@google.com>
+ <ZD5JC7BdN1usn6Kd@smile.fi.intel.com>
+ <CAOSNQF2sXHFCx9ZfrtfmxHfKrAE0XGP8SRvW6wyYco+FKSPmDw@mail.gmail.com>
+ <ZD/VO1cuBYGCP4O2@smile.fi.intel.com>
+ <CAOSNQF1wf3m+YTmh5qQWCM6+x3j2whvG6F=dW6Hd7zW0Y+E_1g@mail.gmail.com>
 MIME-Version: 1.0
-References: <e6cd1f1e-e54c-87ae-ed23-cc1eca26837c@quicinc.com>
- <20230418172942.740769-1-fvdl@google.com> <4b8b370b-fc8e-0c5f-910d-552ccebf0e08@quicinc.com>
-In-Reply-To: <4b8b370b-fc8e-0c5f-910d-552ccebf0e08@quicinc.com>
-From:   Frank van der Linden <fvdl@google.com>
-Date:   Wed, 19 Apr 2023 10:29:57 -0700
-Message-ID: <CAPTztWYkB45M=8z97VvM2H1M6GbQkZZFjFW0izYQKCUZsCjmiA@mail.gmail.com>
-Subject: Re: [PATCH V7 0/2] mm: shmem: support POSIX_FADV_[WILL|DONT]NEED for
- shmem files
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     akpm@linux-foundation.org, hughd@google.com, willy@infradead.org,
-        markhemm@googlemail.com, rientjes@google.com, surenb@google.com,
-        shakeelb@google.com, quic_pkondeti@quicinc.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOSNQF1wf3m+YTmh5qQWCM6+x3j2whvG6F=dW6Hd7zW0Y+E_1g@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,186 +74,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sure, we can add a separate thread. I can send a more formal version
-of my quick diff (one that has actually been tested more thoroughly)
-to kick it off.
+On Wed, Apr 19, 2023 at 06:18:04PM +0530, Joy Chakraborty wrote:
+> On Wed, Apr 19, 2023 at 5:19 PM Andy Shevchenko
+> <andriy.shevchenko@intel.com> wrote:
+> > On Wed, Apr 19, 2023 at 11:18:25AM +0530, Joy Chakraborty wrote:
+> > > On Tue, Apr 18, 2023 at 1:08 PM Andy Shevchenko
+> > > <andriy.shevchenko@intel.com> wrote:
+> > > > On Tue, Apr 18, 2023 at 05:29:01AM +0000, Joy Chakraborty wrote:
 
-Basically, using madvise() would work, but then I realized you'd have
-to first explicitly map all regions and touch them to get them in your
-page table, after which you then call MADV_PAGEOUT to get rid of them
-again. Which is just .. silly :)
+...
 
-- Frank
+> > > > > +     /*
+> > > > > +      * Assuming both channels belong to the same DMA controller hence the
+> > > > > +      * address width capabilities most likely would be the same.
+> > > > > +      */
+> > > >
+> > > > I had a small comment on this In v6 thread.
+> > >
+> > > Sure,
+> > >
+> > > Your comment in V6 thread:
+> > > "
+> > > I would add something to explain the side of these address width, like
+> > >
+> > >          * Assuming both channels belong to the same DMA controller hence
+> > >          * the peripheral side address width capabilities most likely would
+> > >          * be the same.
+> > > "
+> > >
+> > > I do not think the address width capabilities are dependent on the
+> > > side of generation like memory or peripheral.
+> >
+> > Yes, they are independent. Memory could do with 4 bytes, while peripheral with
+> > 1 byte and so on.
+> >
+> > > From what I understand,
+> > > address width capabilities are solely dependent on the transaction
+> > > generation capability of the DMA controller towards the system bus.
+> >
+> > What do you mean by a SB in the above? Memory? Peripheral?
+> 
+> By system bus I mean anything that is connecting the Memory, DMA and
+> the peripheral.
+> Something like :
+> 
+>           +-----------+          +-------------------+
+>           |               |           |                        |
+>           |   DMA    |           | PERIPHERAL |
+>           |               |           |                         |
+>           +----^-+---+          +-----+--^---------+
+>         *** -->| |                         |    |
+>                   | |                         |    |
+> <------------+-v--------------------v---+------------->
+>                     SYSTEM BUS
+> <---------------------+--^----------------------------->
+>                             |   |
+>                             |   |
+>                      +----v--+-----+
+>                      |                   |
+>                      |  MEMORY |
+>                      |                   |
+>                      +--------------+
+> *** : Address width capabilities should be the capability of the DMA
+> to generate transactions to the system bus on the marked interface
+> irrespective of whether it is destined for Peripheral or memory is
+> what I understand.
 
-On Wed, Apr 19, 2023 at 7:39=E2=80=AFAM Charan Teja Kalla
-<quic_charante@quicinc.com> wrote:
->
-> Hi Frank,
->
-> Lets start a separate thread to add the support for mapped pages. I
-> think one question that can come while review is: "what is the overhead
-> an application has in collecting the memory regions and issuing the
-> MADV_PAGEOUT, that made to add this support?". Let me try to get details
-> for this from my side too.
->
-> BTW, thanks for this POC code!!
->
-> Thanks,
-> Charan
->
-> On 4/18/2023 10:59 PM, Frank van der Linden wrote:
-> > Below is a quick patch to allow FADVISE_DONTNEED for shmem to reclaim
-> > mapped pages too. This would fit our usecase, and matches MADV_PAGEOUT
-> > more closely.
-> >
-> > The patch series as posted skips mapped pages even if you remove
-> > the folio_mapped() check, because page_referenced() in
-> > shrink_page_list() will find page tables with the page mapped,
-> > and ignore_references is not set when called from reclaim_pages().
-> >
-> > You can make this work in a similar fashion to MADV_PAGEOUT by
-> > first unmapping a page, but only if the mapping belongs to
-> > the caller. You just have to change the check for "is there
-> > only one mapping and am I the owner". To do that, change a few
-> > lines in try_to_unmap to allow for checking the mm the mapping
-> > belongs to, and pass in current->mm (NULL still unmaps all mappings).
-> >
-> > I lightly tested this in a somewhat older codebase, so the diff
-> > below isn't fully tested. But if there are no objections to
-> > this approach, we could add it on top of your patchset after
-> > better testing.
-> >
-> > - Frank
-> >
-> > diff --git a/include/linux/rmap.h b/include/linux/rmap.h
-> > index b87d01660412..4403cc2ccc4c 100644
-> > --- a/include/linux/rmap.h
-> > +++ b/include/linux/rmap.h
-> > @@ -368,6 +368,8 @@ int folio_referenced(struct folio *, int is_locked,
-> >
-> >  void try_to_migrate(struct folio *folio, enum ttu_flags flags);
-> >  void try_to_unmap(struct folio *, enum ttu_flags flags);
-> > +void try_to_unmap_mm(struct mm_struct *mm, struct folio *folio,
-> > +                     enum ttu_flags flags);
-> >
-> >  int make_device_exclusive_range(struct mm_struct *mm, unsigned long st=
-art,
-> >                               unsigned long end, struct page **pages,
-> > diff --git a/mm/rmap.c b/mm/rmap.c
-> > index 8632e02661ac..4d30e8f5afe2 100644
-> > --- a/mm/rmap.c
-> > +++ b/mm/rmap.c
-> > @@ -1443,6 +1443,11 @@ void page_remove_rmap(struct page *page, struct =
-vm_area_struct *vma,
-> >       munlock_vma_folio(folio, vma, compound);
-> >  }
-> >
-> > +struct unmap_arg {
-> > +     enum ttu_flags flags;
-> > +     struct mm_struct *mm;
-> > +};
-> > +
-> >  /*
-> >   * @arg: enum ttu_flags will be passed to this argument
-> >   */
-> > @@ -1455,7 +1460,11 @@ static bool try_to_unmap_one(struct folio *folio=
-, struct vm_area_struct *vma,
-> >       struct page *subpage;
-> >       bool anon_exclusive, ret =3D true;
-> >       struct mmu_notifier_range range;
-> > -     enum ttu_flags flags =3D (enum ttu_flags)(long)arg;
-> > +     struct unmap_arg *uap =3D (struct unmap_arg *)arg;
-> > +     enum ttu_flags flags =3D uap->flags;
-> > +
-> > +     if (uap->mm && uap->mm !=3D mm)
-> > +             return true;
-> >
-> >       /*
-> >        * When racing against e.g. zap_pte_range() on another cpu,
-> > @@ -1776,6 +1785,7 @@ static int folio_not_mapped(struct folio *folio)
-> >
-> >  /**
-> >   * try_to_unmap - Try to remove all page table mappings to a folio.
-> > + * @mm: mm to unmap from (NULL to unmap from all)
-> >   * @folio: The folio to unmap.
-> >   * @flags: action and flags
-> >   *
-> > @@ -1785,11 +1795,16 @@ static int folio_not_mapped(struct folio *folio=
-)
-> >   *
-> >   * Context: Caller must hold the folio lock.
-> >   */
-> > -void try_to_unmap(struct folio *folio, enum ttu_flags flags)
-> > +void try_to_unmap_mm(struct mm_struct *mm, struct folio *folio,
-> > +             enum ttu_flags flags)
-> >  {
-> > +     struct unmap_arg ua =3D {
-> > +             .flags =3D flags,
-> > +             .mm =3D mm,
-> > +     };
-> >       struct rmap_walk_control rwc =3D {
-> >               .rmap_one =3D try_to_unmap_one,
-> > -             .arg =3D (void *)flags,
-> > +             .arg =3D (void *)&ua,
-> >               .done =3D folio_not_mapped,
-> >               .anon_lock =3D folio_lock_anon_vma_read,
-> >       };
-> > @@ -1800,6 +1815,11 @@ void try_to_unmap(struct folio *folio, enum ttu_=
-flags flags)
-> >               rmap_walk(folio, &rwc);
-> >  }
-> >
-> > +void try_to_unmap(struct folio *folio, enum ttu_flags flags)
-> > +{
-> > +     try_to_unmap_mm(NULL, folio, flags);
-> > +}
-> > +
-> >  /*
-> >   * @arg: enum ttu_flags will be passed to this argument.
-> >   *
-> > diff --git a/mm/shmem.c b/mm/shmem.c
-> > index 1af85259b6fc..b24af2fb3378 100644
-> > --- a/mm/shmem.c
-> > +++ b/mm/shmem.c
-> > @@ -2362,8 +2362,24 @@ static void shmem_isolate_pages_range(struct add=
-ress_space *mapping, loff_t star
-> >
-> >               if (!folio_try_get(folio))
-> >                       continue;
-> > -             if (folio_test_unevictable(folio) || folio_mapped(folio) =
-||
-> > -                             folio_isolate_lru(folio)) {
-> > +
-> > +             if (folio_test_unevictable(folio)) {
-> > +                     folio_put(folio);
-> > +                     continue;
-> > +             }
-> > +
-> > +             /*
-> > +              * If the folio is mapped once, try to unmap it from the
-> > +              * caller's page table. If it's still mapped afterwards,
-> > +              * it belongs to someone else, and we're not going to
-> > +              * change someone else's mapping.
-> > +              */
-> > +             if (folio_mapcount(folio) =3D=3D 1 && folio_trylock(folio=
-)) {
-> > +                     try_to_unmap_mm(current->mm, folio, TTU_BATCH_FLU=
-SH);
-> > +                     folio_unlock(folio);
-> > +             }
-> > +
-> > +             if (folio_mapped(folio) || folio_isolate_lru(folio)) {
-> >                       folio_put(folio);
-> >                       continue;
-> >               }
-> > @@ -2383,6 +2399,8 @@ static void shmem_isolate_pages_range(struct addr=
-ess_space *mapping, loff_t star
-> >               }
-> >       }
-> >       rcu_read_unlock();
-> > +
-> > +     try_to_unmap_flush();
-> >  }
-> >
-> >  static int shmem_fadvise_dontneed(struct address_space *mapping, loff_=
-t start,
+That's misunderstanding. You used only one possible HW design, there may be
+more. For example we have Synopsys DesignWare DMA that has a lot of parameters
+to configure bus mastering. One of such a case, where it makes a lot of sense,
+is DesignWare SATA with the above mentioned DMA controller where it has two
+masters and they are connected towards memory and towards peripheral "buses".
+They have _different_ configurations.
+
+So, generally speaking what you are saying is not true.
+
+> > > What we intend to highlight here is the assumption that both tx and rx
+> > > channel would belong to the same DMA controller hence the transaction
+> > > generation capabilities would be the same both for read and write
+> > > (e.g. if the DMA controller is able to generate 32 bit sized reads
+> > > then it should also be able to generate 32 bit sized writes).
+> > > With this assumption we are doing a bitwise and of both tx and rx capabilities.
+> > >
+> > > Please let me know if you think otherwise.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
