@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535226E7655
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF996E7656
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjDSJcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 05:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
+        id S232627AbjDSJdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 05:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232298AbjDSJcr (ORCPT
+        with ESMTP id S232803AbjDSJdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:32:47 -0400
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE51512CBE
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:32:25 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-3f1754e6ac2so4805115e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:32:25 -0700 (PDT)
+        Wed, 19 Apr 2023 05:33:01 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A72AF1B
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:32:37 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1a66911f5faso23483885ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:32:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com; t=1681896756; x=1684488756;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QXsVaUvbQp1yfAD4IIToN0aYGCJ2kKjYgYVm3E9naLY=;
+        b=BXEKgOUrCX05j7qiFwwrzCmL4QuEmnEdaORFGDoIN5R3iGiMZYhgB4sj4RUTPaONFU
+         96oxVufvNlJGU7M5PZw0UEPU63t815pXvWwcL/+BDyitUi5ZvCBCGiacdh6vBzwcojCJ
+         kYeRVH2VMnTTMBu7I4rz6NPB9keGY1mzZDV9vQBC8R9KaTPCwIqDqP7zM6JRyOGjTnfw
+         lSUUCKtz8hMHVU/4y0sZ3gvtP0rIf73C3bRKXIYGoDlMvXUGNCqYBwCpHJBnjwsLXRH8
+         B5TDCYk8K0Cq5VRbksz5KZhjb0uL3rMlhZZEzONdC4vhVy95wAYNQZ0fkAqc2guylPEi
+         rk7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681896744; x=1684488744;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5a1BeLDyhZNZilZ/KK2GAKnGHlOBBbp1X8Ya2E3EHwU=;
-        b=EOwZu2N21gCTz5E0gkFz52RgI9c586Pm3PnjJJe/NY3ArsxQPxMYu+oF/RV1vuzsYP
-         U2XlivcfUX1T/rHMlXuRQXeX91kDMxESkarZupYAoDemFwZPQFU9y1pKf/fCxD9ar+cp
-         JlcllXzpW26EG7GhAfR0c62uWZFEs5L6OPLrhBj/GzubSWDdfZVAiyecE6yFfCnFBaHd
-         Yiq9OKytLadXgD+xZvEbHBPA/Fd9w8WH4jlcB/xpaO4+EjXw5m1+xgLq9+73hPO1I11B
-         x5nNVJhk3hwvZCMIwmkd8y9XmG5g3iJulxHwRClkLgaNCQCiskEtaVkU6w3ORCIOWe1V
-         XRDw==
-X-Gm-Message-State: AAQBX9c3JaMAFsf0ueEbsJhzx9zeVa6usu3rSfqogDi5RXLJgyomCwY6
-        azNgroFyqKgn8MDuoU5emV0=
-X-Google-Smtp-Source: AKy350bvi3g5YtM/nCwPxpFZIzGbqVFhyRT4L17VakLrN1VwX/A9A90OQPmROaptfGqwrGiPG+6evw==
-X-Received: by 2002:a05:600c:4ece:b0:3f1:7a4b:bf17 with SMTP id g14-20020a05600c4ece00b003f17a4bbf17mr4120868wmq.1.1681896744341;
-        Wed, 19 Apr 2023 02:32:24 -0700 (PDT)
-Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id m12-20020a7bca4c000000b003f173419e7asm1554214wml.43.2023.04.19.02.32.23
+        d=1e100.net; s=20221208; t=1681896756; x=1684488756;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QXsVaUvbQp1yfAD4IIToN0aYGCJ2kKjYgYVm3E9naLY=;
+        b=QnH/xbAGyFGtkVDuX1/L9ve1JYOO6ILY7eVxzB1+aTTwuBF9Eyomw3VVLohA2UqAb8
+         NRY7o4mtlEScZECddougoSig7O15tX+SS8ewuik2MgnIuWjpMeuL8uI2OPcwE12FvlbM
+         u7nIixMJFHlBahbG3kYCkpARISGKrFaiI8RKaSSZIaF5LG5CKK0Fl2UuwRNGCjQavehh
+         VFUYQHqapxMtYUjWjwPh8BSFJXSdAOy35ZckY441hxErzkyt7QPHPeoezHpoGPmt+QAO
+         ES7EN9IFdqc2hy+X8xoWLY+LGOg1Rl2wdbDlhQgCLiwavoGC4pzUO31IOP/MCNFSmLl/
+         NkZw==
+X-Gm-Message-State: AAQBX9fofBIm1wTT6NklysQcLuns7vbbTwRs+0+P5/UTuCqgTrQd/cLW
+        zl2GAVaYBBOCSNPTQRJIKCSHDvFcu8f8IrqvGVjDKQ==
+X-Google-Smtp-Source: AKy350b3vkOtIJwELys4kl8n3V2IRLGI21Wne9SCaN1H7Lqjz9bzFAJ232fnooLWPegjPrypMwKW8Q==
+X-Received: by 2002:a17:902:e892:b0:1a8:13fc:a654 with SMTP id w18-20020a170902e89200b001a813fca654mr3555501plg.25.1681896756526;
+        Wed, 19 Apr 2023 02:32:36 -0700 (PDT)
+Received: from [10.54.24.141] ([143.92.118.3])
+        by smtp.gmail.com with ESMTPSA id b9-20020a1709027e0900b001a6db2bef16sm5231179plm.303.2023.04.19.02.32.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 02:32:24 -0700 (PDT)
-Message-ID: <03a47920-9165-1d49-1380-fb4c5061df67@grimberg.me>
-Date:   Wed, 19 Apr 2023 12:32:22 +0300
+        Wed, 19 Apr 2023 02:32:36 -0700 (PDT)
+Message-ID: <9413fc25-e7d6-718f-18f2-cf0b9ac60b9c@shopee.com>
+Date:   Wed, 19 Apr 2023 17:32:32 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] nvme/tcp: Add support to set the tcp worker cpu affinity
-Content-Language: en-US
-To:     Li Feng <fengli@smartx.com>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20230413062339.2454616-1-fengli@smartx.com>
- <20230413063317.2455680-1-fengli@smartx.com>
- <7f553d34-9ada-426c-4847-c7cd1aba64a8@grimberg.me>
- <E23A9D5C-35CF-412C-AE35-37389242BC71@smartx.com>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <E23A9D5C-35CF-412C-AE35-37389242BC71@smartx.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH 2/2] vfs: clean up d_backing_inode() function
+To:     Miklos Szeredi <mszeredi@redhat.com>
+Cc:     viro@zeniv.linux.org.uk, bigeasy@linutronix.de, mcgrof@kernel.org,
+        xiubli@redhat.com, linux-kernel@vger.kernel.org
+References: <20230419072736.172593-2-haifeng.xu@shopee.com>
+ <CAOssrKfCiByavRNekRUOCv==AEvWAO6B6=tAASyYdvWj9XRhBw@mail.gmail.com>
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+In-Reply-To: <CAOssrKfCiByavRNekRUOCv==AEvWAO6B6=tAASyYdvWj9XRhBw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,49 +76,42 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
->> Hey Li,
->>
->>> The default worker affinity policy is using all online cpus, e.g. from 0
->>> to N-1. However, some cpus are busy for other jobs, then the nvme-tcp will
->>> have a bad performance.
->>> This patch adds a module parameter to set the cpu affinity for the nvme-tcp
->>> socket worker threads.  The parameter is a comma separated list of CPU
->>> numbers.  The list is parsed and the resulting cpumask is used to set the
->>> affinity of the socket worker threads.  If the list is empty or the
->>> parsing fails, the default affinity is used.
->>
->> I can see how this may benefit a specific set of workloads, but I have a
->> few issues with this.
->>
->> - This is exposing a user interface for something that is really
->> internal to the driver.
->>
->> - This is something that can be misleading and could be tricky to get
->> right, my concern is that this would only benefit a very niche case.
-> Our storage products needs this feature~
-> If the user doesn’t know what this is, they can keep it default, so I thinks this is
-> not unacceptable.
 
-It doesn't work like that. A user interface is not something exposed to
-a specific consumer.
-
->> - If the setting should exist, it should not be global.
-> V2 has fixed it.
+On 2023/4/19 16:05, Miklos Szeredi wrote:
+> If we are touching that function, I'd just get rid of it completely
+> (s/d_backing_inode/d_inode/).
+> 
+> Thanks,
+> Miklos
+> 
+> On Wed, Apr 19, 2023 at 9:27 AM Haifeng Xu <haifeng.xu@shopee.com> wrote:
 >>
->> - I prefer not to introduce new modparams.
+>> Using an extra variable to record the inode is unnecessary, return it
+>> directly.
 >>
->> - I'd prefer to find a way to support your use-case without introducing
->> a config knob for it.
+>> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+>> ---
+>>  include/linux/dcache.h | 4 +---
+>>  1 file changed, 1 insertion(+), 3 deletions(-)
 >>
-> I’m looking forward to it.
+>> diff --git a/include/linux/dcache.h b/include/linux/dcache.h
+>> index 13023c7211d6..97324b6434e5 100644
+>> --- a/include/linux/dcache.h
+>> +++ b/include/linux/dcache.h
+>> @@ -540,9 +540,7 @@ static inline struct inode *d_inode_rcu(const struct dentry *dentry)
+>>   */
+>>  static inline struct inode *d_backing_inode(const struct dentry *upper)
+>>  {
+>> -       struct inode *inode = upper->d_inode;
+>> -
+>> -       return inode;
+>> +       return upper->d_inode;
+>>  }
+>>
+>>  /**
+>> --
+>> 2.25.1
+>>
+> 
 
-If you change queue_work_on to queue_work, ignoring the io_cpu, does it
-address your problem?
-
-Not saying that this should be a solution though.
-
-How many queues does your controller support that you happen to use
-queue 0 ?
-
-Also, what happens if you don't pin your process to a specific cpu, does
-that change anything?
+Yes, d_backing_inode() does the same thing with d_inode(). Thanks for your suggestion.
