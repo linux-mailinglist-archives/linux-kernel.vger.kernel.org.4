@@ -2,113 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3BBA6E73BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3430D6E73BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjDSHNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 03:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
+        id S232084AbjDSHOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 03:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232054AbjDSHNp (ORCPT
+        with ESMTP id S231644AbjDSHOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 03:13:45 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B89959FB;
-        Wed, 19 Apr 2023 00:13:43 -0700 (PDT)
-Received: from booty (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 603041BF211;
-        Wed, 19 Apr 2023 07:13:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1681888422;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 19 Apr 2023 03:14:22 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7125F55B2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:14:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8350C2198F;
+        Wed, 19 Apr 2023 07:14:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681888443; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=xViPwui2V2INwWz4a6zCPiRO3Q6gRw7wmbsayresJqU=;
-        b=YiK2JyXm5djqU98UUeEy4mY5W4C1ZjQjb9kt2r3nB382rkfXE8tprE5s/Df2bAvC5yF1AS
-        T3bxp6b2wA8sOiAzwMP6kUpiU7d9PL7Lqvdyq8szL+IoA5DM2ZS/zcqFq7mmTqFHDxDK4Q
-        zDuvpbev+AZgPCkJhJY+NrMDExi+lcrevlhRqHKS+VT0cFkBgh17x5rpkhKH8KZ6OgpmLo
-        JioMwhqBWRCVkEz2/LtaJ4Ph7A/Q3kOBpHHskKcKdZ97vntv4iluVafIOcV9lbKH9B2k5Z
-        5OGm21FziLhEDKIcun4n7ukDSMI3J6p4gQFMQe/ZwHuvDo1xrInAGDOunsAd+Q==
-Date:   Wed, 19 Apr 2023 09:13:36 +0200
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?UTF-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Rob Herring <robh@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v10 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link
- III Deserializer
-Message-ID: <20230419091336.4e10ba65@booty>
-In-Reply-To: <ZD6VwpRya6SGBAt5@shikoro>
-References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
-        <20230222132907.594690-6-tomi.valkeinen@ideasonboard.com>
-        <ZD6VwpRya6SGBAt5@shikoro>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        bh=Rz+Hn077Yo3kPFhUAFdbkJbkADKkrlMPX0EwRrAGNsw=;
+        b=1fD5wgmiThlJOx0yt3xZv7iZOELP9U1zd3RaFCpqW5rgBvpHWxPvZJ14s3UGFmGomBkPlG
+        faBrLRD/QVGXhKZNbltkb5N9Q+Cc62qHqJLGNfgWHaBc8wqPsVzcJ5TX+uX/+yqrda/Ukr
+        XiRxcR5Mzwbm+5WJt/Eit6DhkW7dTC8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681888443;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rz+Hn077Yo3kPFhUAFdbkJbkADKkrlMPX0EwRrAGNsw=;
+        b=76YeVVr+NXo/2Xzxg/r0XPnYrCQCdyiTumht9RO2OfOf4IuBOMWB+5vbmLzszSBkUY4uw/
+        GfQWhUMh4Lsd0vBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 58F5E13580;
+        Wed, 19 Apr 2023 07:14:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id E/p9FLuUP2RAPQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 19 Apr 2023 07:14:03 +0000
+Message-ID: <26277a0c-abda-c13a-80bf-528b9e167c21@suse.de>
+Date:   Wed, 19 Apr 2023 09:14:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] firmware/sysfb: Fix VESA format selection
+Content-Language: en-US
+To:     Pierre Asselin <pa@panix.com>, dri-devel@lists.freedesktop.org
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org
+References: <20230419044834.10816-1-pa@panix.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230419044834.10816-1-pa@panix.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------8hFjLRHSEtUGM507fAL0vDGP"
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram, Tomi,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------8hFjLRHSEtUGM507fAL0vDGP
+Content-Type: multipart/mixed; boundary="------------uEqFfAA6VaqII6pN10crJEvB";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Pierre Asselin <pa@panix.com>, dri-devel@lists.freedesktop.org
+Cc: Javier Martinez Canillas <javierm@redhat.com>,
+ Daniel Vetter <daniel.vetter@ffwll.ch>, Ard Biesheuvel <ardb@kernel.org>,
+ Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org
+Message-ID: <26277a0c-abda-c13a-80bf-528b9e167c21@suse.de>
+Subject: Re: [PATCH v2] firmware/sysfb: Fix VESA format selection
+References: <20230419044834.10816-1-pa@panix.com>
+In-Reply-To: <20230419044834.10816-1-pa@panix.com>
 
-On Tue, 18 Apr 2023 15:06:10 +0200
-Wolfram Sang <wsa@kernel.org> wrote:
+--------------uEqFfAA6VaqII6pN10crJEvB
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> > +  i2c-alias-pool:
-> > +    $ref: /schemas/types.yaml#/definitions/uint16-array
-> > +    description:
-> > +      I2C alias pool is a pool of I2C addresses on the main I2C bus that can be
-> > +      used to access the remote peripherals on the serializer's I2C bus. The
-> > +      addresses must be available, not used by any other peripheral. Each
-> > +      remote peripheral is assigned an alias from the pool, and transactions to
-> > +      that address will be forwarded to the remote peripheral, with the address
-> > +      translated to the remote peripheral's real address. This property is not
-> > +      needed if there are no I2C addressable remote peripherals.  
-> 
-> After some initial discussion with Tomi on IRC, this question is
-> probably more for Luca:
-> 
-> Why is "i2c-alias-pool" in the drivers binding and not a regular i2c
-> binding? Same question for the implementation of the alias-pool
-> handling. Shouldn't this be in the i2c-atr library? I'd think managing
-> the list of aliases would look all the same in the drivers otherwise?
+SGkNCg0KQW0gMTkuMDQuMjMgdW0gMDY6NDggc2NocmllYiBQaWVycmUgQXNzZWxpbjoNCj4g
+U29tZSBsZWdhY3kgQklPU2VzIHJlcG9ydCBubyByZXNlcnZlZCBiaXRzIGluIHRoZWlyIDMy
+LWJpdCByZ2IgbW9kZSwNCj4gYnJlYWtpbmcgdGhlIGNhbGN1bGF0aW9uIG9mIGJpdHNfcGVy
+X3BpeGVsIGluIGNvbW1pdCBmMzVjZDNmYTc3MjkNCj4gW2Zpcm13YXJlL3N5c2ZiOiBGaXgg
+RUZJL1ZFU0EgZm9ybWF0IHNlbGVjdGlvbl0uICBIb3dldmVyIHRoZXkgcmVwb3J0DQo+IGxm
+Yl9kZXB0aCBjb3JyZWN0bHkgZm9yIHRob3NlIG1vZGVzLiAgS2VlcCB0aGUgY29tcHV0YXRp
+b24gYnV0DQo+IHNldCBiaXRzX3Blcl9waXhlbCB0byBsZmJfZGVwdGggaWYgdGhlIGxhdHRl
+ciBpcyBsYXJnZXIuDQo+IA0KPiB2MiBmaXhlcyB0aGUgd2FybmluZ3MgZnJvbSBhIG1heDMo
+KSBtYWNybyB3aXRoIGFyZ3VtZW50cyBvZiBkaWZmZXJlbnQNCj4gdHlwZXM7ICBzcGxpdCB0
+aGUgYml0c19wZXJfcGl4ZWwgYXNzaWdubWVudCB0byBhdm9pZCB1Z2x5ZmluZyB0aGUgY29k
+ZQ0KPiB3aXRoIHRvbyBtYW55IHR5cGVjYXN0cy4NCg0KV2hhdCBleGFjdGx5IHdhcyB0aGF0
+IHdhcm5pbmc/DQoNCj4gDQo+IExpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3IvNFBz
+bTZCNkxxa3oxUVhNQHBhbml4My5wYW5peC5jb20NCj4gTGluazogaHR0cHM6Ly9sb3JlLmtl
+cm5lbC5vcmcvci8yMDIzMDQxMjE1MDIyNS4zNzU3MjIzLTEtamF2aWVybUByZWRoYXQuY29t
+DQo+IEZpeGVzOiBmMzVjZDNmYTc3MjkgW2Zpcm13YXJlL3N5c2ZiOiBGaXggRUZJL1ZFU0Eg
+Zm9ybWF0IHNlbGVjdGlvbl0NCj4gU2lnbmVkLW9mZi1ieTogUGllcnJlIEFzc2VsaW4gPHBh
+QHBhbml4LmNvbT4NCj4gLS0tDQo+ICAgZHJpdmVycy9maXJtd2FyZS9zeXNmYl9zaW1wbGVm
+Yi5jIHwgNCArKystDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMSBk
+ZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZmlybXdhcmUvc3lzZmJf
+c2ltcGxlZmIuYyBiL2RyaXZlcnMvZmlybXdhcmUvc3lzZmJfc2ltcGxlZmIuYw0KPiBpbmRl
+eCA4MmM2NGNiOWY1MzEuLjM1OGI3OTJhODg0NSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9m
+aXJtd2FyZS9zeXNmYl9zaW1wbGVmYi5jDQo+ICsrKyBiL2RyaXZlcnMvZmlybXdhcmUvc3lz
+ZmJfc2ltcGxlZmIuYw0KPiBAQCAtNTEsNyArNTEsOCBAQCBfX2luaXQgYm9vbCBzeXNmYl9w
+YXJzZV9tb2RlKGNvbnN0IHN0cnVjdCBzY3JlZW5faW5mbyAqc2ksDQo+ICAgCSAqDQo+ICAg
+CSAqIEl0J3Mgbm90IGVhc2lseSBwb3NzaWJsZSB0byBmaXggdGhpcyBpbiBzdHJ1Y3Qgc2Ny
+ZWVuX2luZm8sDQo+ICAgCSAqIGFzIHRoaXMgY291bGQgYnJlYWsgVUFQSS4gVGhlIGJlc3Qg
+c29sdXRpb24gaXMgdG8gY29tcHV0ZQ0KPiAtCSAqIGJpdHNfcGVyX3BpeGVsIGhlcmUgYW5k
+IGlnbm9yZSBsZmJfZGVwdGguIEluIHRoZSBsb29wIGJlbG93LA0KPiArCSAqIGJpdHNfcGVy
+X3BpeGVsIGZyb20gdGhlIGNvbG9yIGJpdHMsIHJlc2VydmVkIGJpdHMgYW5kDQo+ICsJICog
+cmVwb3J0ZWQgbGZiX2RlcHRoLCB3aGljaGV2ZXIgaXMgaGlnaGVzdC4gIEluIHRoZSBsb29w
+IGJlbG93LA0KPiAgIAkgKiBpZ25vcmUgc2ltcGxlZmIgZm9ybWF0cyB3aXRoIGFscGhhIGJp
+dHMsIGFzIEVGSSBhbmQgVkVTQQ0KPiAgIAkgKiBkb24ndCBzcGVjaWZ5IGFscGhhIGNoYW5u
+ZWxzLg0KPiAgIAkgKi8NCj4gQEAgLTYwLDYgKzYxLDcgQEAgX19pbml0IGJvb2wgc3lzZmJf
+cGFyc2VfbW9kZShjb25zdCBzdHJ1Y3Qgc2NyZWVuX2luZm8gKnNpLA0KPiAgIAkJCQkJICBz
+aS0+Z3JlZW5fc2l6ZSArIHNpLT5ncmVlbl9wb3MsDQo+ICAgCQkJCQkgIHNpLT5ibHVlX3Np
+emUgKyBzaS0+Ymx1ZV9wb3MpLA0KPiAgIAkJCQkgICAgIHNpLT5yc3ZkX3NpemUgKyBzaS0+
+cnN2ZF9wb3MpOw0KPiArCQliaXRzX3Blcl9waXhlbD0gbWF4KGJpdHNfcGVyX3BpeGVsLCAo
+dTMyKXNpLT5sZmJfZGVwdGgpOw0KDQpJIGxpa2VkIHRoZSBhbGwtaW4tb25lIGFzc2lnbm1l
+bnQgb2YgdGhlIG9yaWdpbmFsIHBhdGNoLiBTbyBJJ2QgcmF0aGVyIA0KZ28gYmFjayB0byB2
+MSBhbmQgY29weSBzaS0+bGZiX2RlcHRoIHRvIHRoZSBjb3JyZWN0IHR5cGUsIGxpa2UgdGhp
+czoNCg0KICAgdTMyIGRlcHRoID0gc2ktPmxmYl9kZXB0aDsNCg0KICAgYml0c19wZXJfcGl4
+ZWwgPSBtYXgzKG1heDMoY29sb3JzKSwNCiAgIAkJICAgICAgICByc3ZkLA0KICAgICAgICAg
+ICAgICAgICAgICAgICAgIGRlcHRoKTsNCg0KT3IsIGlmIHlvdSB3YW50IHRvIGdldCBmYW5j
+eSwgeW91IGNvdWxkIGFkZCBtYXgzX3QoKSB0byA8bGludXgvbWlubWF4Lmg+DQoNCiAgICNk
+ZWZpbmUgbWF4M190KHR5cGUsIHgsIHksIHopICAgbWF4X3QodHlwZSwgbWF4X3QodHlwZSwg
+eCwgeSksIHopDQoNCmFuZCBkbw0KDQogICBiaXRzX3Blcl9waXhlbCA9IG1heDNfdCh1MzIs
+DQogICAgICAgICAgICAgICAgICAgICAgICAgICBtYXgzKGNvbG9ycyksDQogICAgICAgICAg
+ICAgICAgICAgICAgICAgICByc3ZkLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgc2kt
+PmxmYl9kZXB0aCkNCg0KWW91IGNvdWxkIGFsc28gYWRkIGEgbWF4NF90KHR5cGUsIHgsIHks
+IHosIHcpIHRvIDxsaW51eC9taW5tYXguaD4gYW5kIA0KY29tcGFyZSBhbGwgdmFsdWVzIHdp
+dGggbWF4NF90KCkuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCg0KPiAgIAl9IGVsc2Ug
+ew0KPiAgIAkJYml0c19wZXJfcGl4ZWwgPSBzaS0+bGZiX2RlcHRoOw0KPiAgIAl9DQo+IA0K
+PiBiYXNlLWNvbW1pdDogNmE4ZjU3YWUyZWIwN2FiMzlhNmYwY2NhZDYwYzc2MDc0MzA1MTAy
+Ng0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVy
+DQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUs
+IDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0K
+R2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-I think that this _was_ the plan, as it looks obviously cleaner, but
-then we agreed that we should remove the pool entirely, so I didn't
-bother moving it.
+--------------uEqFfAA6VaqII6pN10crJEvB--
 
-Best regards,
-Luca
+--------------8hFjLRHSEtUGM507fAL0vDGP
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQ/lLoFAwAAAAAACgkQlh/E3EQov+BY
+oxAAzjC6iA2t7ZP+PBptKOIzS5c43hAl0mIxLUL9lmAdJ61FCpJqZOXl2D/TmJZZBZ/bLOlLwUoh
+SdeY2HtpHE5OZ1GStAfIKcH5Kv6+j2xI6mpk17jCiFw30LyAt+IRwPF71Be82+ApvMyYxdtBpK99
+9WX5F9Rjw5Jv2WS1wTFYA7tYl/UEVyBVPbwE7jau/W6Wtz//r2h7FZ6XyIAQPGrNvVoO7leVomgB
+lOQqSxbtc0erSvgTAYGS5I9NYIlZMcFupN1K1aaQREMdGLjDzIl0MQnb/X2FpYKcfQ4nYCP4Vq3+
+aY2JQZc4IPZUDa1cok2n6YoKlemjdIdIEwdcf9WdC8PPr9MJamXEUEfG5FtTOqyP5SJlic4ClwLm
+Y1hI6vzGalq/r0YgJq7AtJtSOjGAPPaGDd1NxoZIq7sBy5lnrsod6uimyMQt5rLTPRiXW10zqBx/
+KXkJPGf6v5QPurxVFLJX3fpuikVqZJH9Gc1zH0WyA7M6i0G2f8XE0F41G83z95qe18VnTB7KZOZF
+sbjMQj+gstUPVuMtSgqFQUCpJqsbDhlDj0wX9g6WtWhDH5jVFZt28IrvmTN9zJCQNrxel6CC0d/m
+7IYDrcbXhnUmdXA9YLttz93Yr1h0xSxNRd9vrUUXavGAvb2ocHvKslYTsCF4f2iuxiijhX0whAIk
+s60=
+=eP7d
+-----END PGP SIGNATURE-----
+
+--------------8hFjLRHSEtUGM507fAL0vDGP--
