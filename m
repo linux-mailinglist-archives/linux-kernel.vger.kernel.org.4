@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1586E82A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D9A6E82A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbjDSUZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 16:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S231434AbjDSUZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 16:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbjDSUY7 (ORCPT
+        with ESMTP id S229637AbjDSUZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 16:24:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F2B7A87
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:24:42 -0700 (PDT)
+        Wed, 19 Apr 2023 16:25:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70321718;
+        Wed, 19 Apr 2023 13:25:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C486F62344
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 20:24:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B2BCC433D2;
-        Wed, 19 Apr 2023 20:24:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53F356426C;
+        Wed, 19 Apr 2023 20:25:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECA19C433AE;
+        Wed, 19 Apr 2023 20:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681935881;
-        bh=gk3VTIenmeX8r8Y0damkCedE0wM1wlE1FiP/sF6YWG8=;
+        s=k20201202; t=1681935899;
+        bh=8P4CPN9OqFnaiBi4G6pIKfKJWl0J8d1dnTf3yGFKnTQ=;
         h=From:To:Cc:Subject:Date:From;
-        b=eoN97+qCaUonB6I+yDbCbp718MV9g+llA7n8VrSfQ36pqno13Mikv7Q6QqdoC0L9w
-         hoDdQED7SDiQNmnKPOwnL47MfFBoapjyKKx/3RiVMZp4cLPN+4hnPEVsHsRwfuBRd0
-         MBgiwN5zL2sfUrmpIekM9NvU6yjaSYKfV+MfwzC7eT62B57GiuCq1uzeq+e5l3tBl1
-         48R2hk50pmtEzlqM0dUWPQSvJvlgjGTn553MxnESNWs45ycIIkRI1vDDHPFEiigxlf
-         lKug3o8XGijm4X5WKMyIhZIcccyo3y/NT6KkEljgrwnvKhXbItNrodCAzZdxfX0h8v
-         bM6vrO1kfa0ig==
+        b=tT5KwaHi2wzE10RuzKch5ikIFRKtw7donx2ZaglNaf9hsH94eCzGlHuwqzKTYRXkL
+         hm7IOHmikOHvkqDwxiVsroQvPw4rotX3YJs72I+7GLUgtv1U086UCJ1ah38BtrbVAc
+         sXDfZMILf2zjS0KM64t00BL6Pl5x3m44x4RXS7/Cq6OP3f7BbEihiutZQq6TOxVYPE
+         swdBBI/AawTnRylNfXzWK8B8MbZ6qr4dMPTb7VK3Qk+dSP/HzmdhZ/xArsMWydTlHs
+         m9J0NGs25IpdPQij6JgKY8FqLuhB1EeeatL+s5MBzf+PduDfhN1P5vS40MJr6lnY2l
+         al/9YgBZwBZSg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] regulator fixes for v6.3-rc7
-Date:   Wed, 19 Apr 2023 21:24:31 +0100
-Message-Id: <20230419202440.9B2BCC433D2@smtp.kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Subject: [GIT PULL] SPI fixes for v6.3-rc7
+Date:   Wed, 19 Apr 2023 21:24:47 +0100
+Message-Id: <20230419202458.ECA19C433AE@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,33 +49,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 7e364e56293bb98cae1b55fd835f5991c4e96e7d:
+The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
 
-  Linux 6.3-rc5 (2023-04-02 14:29:29 -0700)
+  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v6.3-rc7
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.3-rc7
 
-for you to fetch changes up to 7c7504067c709905fc188c61ac3072d6022d1209:
+for you to fetch changes up to 359f5b0d4e26b7a7bcc574d6148b31a17cefe47d:
 
-  regulator: sm5703: Fix missing n_voltages for fixed regulators (2023-04-11 12:41:59 +0100)
-
-----------------------------------------------------------------
-regulator: Fixes for v6.3
-
-A few driver specific fixes, one build coverage issue and a couple of
-"someone typed in the wrong number" style errors in describing devices
-to the subsystem.
+  spi: spi-rockchip: Fix missing unwind goto in rockchip_sfc_probe() (2023-04-19 13:42:59 +0100)
 
 ----------------------------------------------------------------
-Axel Lin (1):
-      regulator: sm5703: Fix missing n_voltages for fixed regulators
+spi: One small fix for v6.3
 
-Cristian Ciocaltea (2):
-      regulator: fan53555: Explicitly include bits header
-      regulator: fan53555: Fix wrong TCS_SLEW_MASK
+A small fix in the error handling for the rockchip driver, ensuring we
+don't leak clock enables if we fail to request the interrupt for the
+device.
 
- drivers/regulator/fan53555.c         | 13 +++++++------
- drivers/regulator/sm5703-regulator.c |  2 ++
- 2 files changed, 9 insertions(+), 6 deletions(-)
+----------------------------------------------------------------
+Li Lanzhe (1):
+      spi: spi-rockchip: Fix missing unwind goto in rockchip_sfc_probe()
+
+ drivers/spi/spi-rockchip-sfc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
