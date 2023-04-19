@@ -2,75 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D9A6E82A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09DA6E82A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbjDSUZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 16:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41490 "EHLO
+        id S229750AbjDSU14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 16:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjDSUZB (ORCPT
+        with ESMTP id S229888AbjDSU1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 16:25:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70321718;
-        Wed, 19 Apr 2023 13:25:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53F356426C;
-        Wed, 19 Apr 2023 20:25:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECA19C433AE;
-        Wed, 19 Apr 2023 20:24:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681935899;
-        bh=8P4CPN9OqFnaiBi4G6pIKfKJWl0J8d1dnTf3yGFKnTQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tT5KwaHi2wzE10RuzKch5ikIFRKtw7donx2ZaglNaf9hsH94eCzGlHuwqzKTYRXkL
-         hm7IOHmikOHvkqDwxiVsroQvPw4rotX3YJs72I+7GLUgtv1U086UCJ1ah38BtrbVAc
-         sXDfZMILf2zjS0KM64t00BL6Pl5x3m44x4RXS7/Cq6OP3f7BbEihiutZQq6TOxVYPE
-         swdBBI/AawTnRylNfXzWK8B8MbZ6qr4dMPTb7VK3Qk+dSP/HzmdhZ/xArsMWydTlHs
-         m9J0NGs25IpdPQij6JgKY8FqLuhB1EeeatL+s5MBzf+PduDfhN1P5vS40MJr6lnY2l
-         al/9YgBZwBZSg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.3-rc7
-Date:   Wed, 19 Apr 2023 21:24:47 +0100
-Message-Id: <20230419202458.ECA19C433AE@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 19 Apr 2023 16:27:49 -0400
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C8C5276
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:27:47 -0700 (PDT)
+Received: from mail.panix.com (localhost [127.0.0.1])
+        by mailbackend.panix.com (Postfix) with ESMTPA id 4Q1smL5FPDzFNP;
+        Wed, 19 Apr 2023 16:27:46 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+        t=1681936067; bh=GjM/a7H6efiLBvvqsD4nsaHXm6aNEQAZP0z1TtVlniU=;
+        h=In-Reply-To:References:Date:Subject:From:To:Cc;
+        b=vsm551HGZ0Kc6IUGpAJl6DYZk1N1GQ+YO3n9GsDcUbXvVRskV8jQY+UyFpvodzJat
+         IQQEc/6DrZyxW12sDRw5At4wVc2GiJ5vH0HIWxXFGM69wpzhxxTSuZiiAbtZilOqUb
+         wf7tymtor4S6s+agG+1DyrNWAzZvbNhfv5Rn+a30=
+X-Panix-Received: from 166.84.1.1
+        (SquirrelMail authenticated user pa@panix.com)
+        by mail.panix.com with HTTP;
+        Wed, 19 Apr 2023 16:27:46 -0400
+Message-ID: <f201c5490b4c8001fd0599118aad4292.squirrel@mail.panix.com>
+In-Reply-To: <26277a0c-abda-c13a-80bf-528b9e167c21@suse.de>
+References: <20230419044834.10816-1-pa@panix.com>
+    <26277a0c-abda-c13a-80bf-528b9e167c21@suse.de>
+Date:   Wed, 19 Apr 2023 16:27:46 -0400
+Subject: Re: [PATCH v2] firmware/sysfb: Fix VESA format selection
+From:   "Pierre Asselin" <pa@panix.com>
+To:     "Thomas Zimmermann" <tzimmermann@suse.de>
+Cc:     "Pierre Asselin" <pa@panix.com>, dri-devel@lists.freedesktop.org,
+        "Javier Martinez Canillas" <javierm@redhat.com>,
+        "Daniel Vetter" <daniel.vetter@ffwll.ch>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        "Hans de Goede" <hdegoede@redhat.com>, linux-kernel@vger.kernel.org
+User-Agent: SquirrelMail/1.4.23-p1
+MIME-Version: 1.0
+Content-Type: text/plain;charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+X-Priority: 3 (Normal)
+Importance: Normal
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
+Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> Am 19.04.23 um 06:48 schrieb Pierre Asselin:
+>>
+>> v2 fixes the warnings from a max3() macro with arguments of different
+>> types;  split the bits_per_pixel assignment to avoid uglyfing the code
+>> with too many typecasts.
+>
+> What exactly was that warning?
 
-  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
+A friendly note from a robot; make W=1 sysfb_simplefb.o .
+https://lore.kernel.org/dri-devel/20230418183325.2327-1-pa@panix.com/T/#m38e859354329ab9f756da91e99b546e3b140fa91
 
-are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.3-rc7
+> I liked the all-in-one assignment of the original patch. So I'd rather
+> go back to v1 and copy si->lfb_depth to the correct type, like this:
+>
+>    u32 depth = si->lfb_depth;
+>    bits_per_pixel = max3(max3(colors),
+>    		        rsvd,
+>                          depth);
 
-for you to fetch changes up to 359f5b0d4e26b7a7bcc574d6148b31a17cefe47d:
+Would that work?  If I understand correctly max3() checks that all args
+have the same type.  {red,green,blue,rsvd}.{size,pos} are all u8 while
+lfb_depth is u16.  The best I can do is
 
-  spi: spi-rockchip: Fix missing unwind goto in rockchip_sfc_probe() (2023-04-19 13:42:59 +0100)
+    bits_per_pixel = max3((u16)max3(si->red_size + si->red_pos,
+                                    si->green_size + si->green_pos,
+                                    si->blue_size + si->blue_pos),
+                          (u16)(si->rsvd_size + si->rsvd_pos),
+                          si->lfb_depth);
 
-----------------------------------------------------------------
-spi: One small fix for v6.3
+That compiles quietly with W=1 but those two casts are ugly.
+If I do that, would K&R-on-parentheses read better ?
 
-A small fix in the error handling for the rockchip driver, ensuring we
-don't leak clock enables if we fail to request the interrupt for the
-device.
+    bits_per_pixel = max3(
+                          (u16)max3(
+                                  si->red_size + si->red_pos,
+                                  si->green_size + si->green_pos,
+                                  si->blue_size + si->blue_pos
+                          ),
+                          (u16)(si->rsvd_size + si->rsvd_pos),
+                          si->lfb_depth
+                     );
 
-----------------------------------------------------------------
-Li Lanzhe (1):
-      spi: spi-rockchip: Fix missing unwind goto in rockchip_sfc_probe()
+I think it's clearer, but not kernel style and still ugly.
 
- drivers/spi/spi-rockchip-sfc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Or, if you want to get fancy, you could add max3_t() to <linux/minmax.h>
+>
+>    #define max3_t(type, x, y, z)   max_t(type, max_t(type, x, y), z)
+>
+> and do
+>
+>    bits_per_pixel = max3_t(u32,
+>                            max3(colors),
+>                            rsvd,
+>                            si->lfb_depth)
+>
+> You could also add a max4_t(type, x, y, z, w) to <linux/minmax.h> and
+> compare all values with max4_t().
+
+That would be a two-patch series.  I'd rather keep it to the strict
+minimum that fixes the regression.  (You trust me to even *look* at a
+kernel header and not break it ?  Dangerous assumption!)
+
+I'm new at this.  Two months ago I didn't know what to type a the
+command line after "git".
+
+Incidentally, should I send v3 as a new email or reply to the chain?
+
+--PA
+
