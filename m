@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CF76E7305
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD45B6E7304
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbjDSGRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 02:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
+        id S231464AbjDSGRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 02:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231663AbjDSGR2 (ORCPT
+        with ESMTP id S231642AbjDSGR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Apr 2023 02:17:28 -0400
 Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D4D5249;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215BF5257;
         Tue, 18 Apr 2023 23:17:27 -0700 (PDT)
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33J6HBju124832;
-        Wed, 19 Apr 2023 01:17:11 -0500
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33J6HDMw124874;
+        Wed, 19 Apr 2023 01:17:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681885031;
-        bh=VGHbi0oJgL1qmQOp3YO+KPZ9VWHxOlwOKogoET5tOWo=;
-        h=From:To:CC:Subject:Date;
-        b=xFf2xvyfT7KHpvAOu/5NO3grnYDgOBaR3DBd8j7YHALRShTQozu2M3PTB17Pkut+w
-         A3LvdWrZb9t83v7mSz7RnOETkw+ktBjyfOowk/SwQ38EdyPwxHVbSoMEg3eXbBKcM0
-         OINYgPRV6dCil+88yXaQNvq/9BbwVyO4ngSqTBas=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33J6HBcA125717
+        s=ti-com-17Q1; t=1681885033;
+        bh=Fm0aTVswfF119yj8u2DtQRLssdzWg+pA7dI7E0KBRYA=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=LOPajOsjiDebkDoW8RBBKJKi89/KEypHSE+CY7q5mABQfPO6bW4acfN0ejz6gmv+i
+         XhqBrB4lZAZbaIGVFmZZPXoCUmHUXv4GBp1Sqy6k1WuCmFmvujZdiUlQVaeqFSzi5B
+         LebDNhrheO1zeGl9Jyg72by8GbMqwXi0YmRQbgkg=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33J6HDAo125729
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 19 Apr 2023 01:17:11 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 19 Apr 2023 01:17:13 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
- Apr 2023 01:17:11 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2023 01:17:12 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 19 Apr 2023 01:17:11 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33J6HAoJ045391;
-        Wed, 19 Apr 2023 01:17:11 -0500
+ Frontend Transport; Wed, 19 Apr 2023 01:17:12 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33J6HCoW040858;
+        Wed, 19 Apr 2023 01:17:12 -0500
 From:   Jayesh Choudhary <j-choudhary@ti.com>
 To:     <nm@ti.com>, <vigneshr@ti.com>, <afd@ti.com>
 CC:     <s-vadapalli@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
@@ -47,10 +47,12 @@ CC:     <s-vadapalli@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <a-bhatia1@ti.com>, <j-choudhary@ti.com>
-Subject: [PATCH v3 0/5] Add peripherals for J784S4
-Date:   Wed, 19 Apr 2023 11:47:05 +0530
-Message-ID: <20230419061710.290068-1-j-choudhary@ti.com>
+Subject: [PATCH v3 1/5] arm64: dts: ti: k3-j784s4-main: Add system controller and SERDES lane mux
+Date:   Wed, 19 Apr 2023 11:47:06 +0530
+Message-ID: <20230419061710.290068-2-j-choudhary@ti.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230419061710.290068-1-j-choudhary@ti.com>
+References: <20230419061710.290068-1-j-choudhary@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -65,52 +67,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds support for:
-- SERDES, WIZ DT nodes, Serdes lane control mux
-- MAIN CPSW2G nodes
-- DSS and DisplayPort-0 nodes
+From: Siddharth Vadapalli <s-vadapalli@ti.com>
 
-This series depends on DMA support patches for J784S4[1] which are
-applied to linux-next.
+The system controller node manages the CTRL_MMR0 region.
+Add serdes_ln_ctrl node which is used for controlling the SERDES lane mux.
 
-DisplayPort has been tested on local J784S4 EVM. Test log:
-<https://gist.github.com/Jayesh2000/b1465fc170cd97db4f0956770fafbc50>
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+[j-choudhary@ti.com: Minor cleanup to fix dtc warnings]
+Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-Changelog v3->v2:
-- fix dtc warnings for 'scm_conf' and 'serdes_ln_ctrl' nodes
-  (Checked all the changes of the series with W=12 option during build)
-- added clock-frequency for serdes_refclk along with other EVM changes
-  This refclk is being used by all the instances of serdes_wiz which
-  are disabled by default. So configuring refclk when the serdes nodes
-  are used for the first time is okay.
-
-Changelog v1->v2:
-- Moved J784S4 EVM changes together to the last patch
-  (Suggested by Andrew)
-
-v2 patch link:
-<https://lore.kernel.org/all/20230414151553.339599-1-j-choudhary@ti.com/>
-
-[1]:
-<https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=00e34c94987e4fe866f12ad8eac17268c936880c>
-<https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=82e6051a48957a89066d15b17bb85d2f662f2bad>
-<https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=436b288687176bf4d2c1cd25b86173e5a1649a60>
-
-
-Rahul T R (2):
-  arm64: dts: ti: k3-j784s4-main: Add DSS and DP-bridge node
-  arm64: dts: ti: k3-j784s4-evm: Enable DisplayPort-0
-
-Siddharth Vadapalli (3):
-  arm64: dts: ti: k3-j784s4-main: Add system controller and SERDES lane
-    mux
-  arm64: dts: ti: k3-j784s4: Add Main CPSW2G node
-  arm64: dts: ti: k3-j784s4: Add WIZ and SERDES PHY nodes
-
- arch/arm64/boot/dts/ti/k3-j784s4-evm.dts   | 164 ++++++++++
- arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 338 +++++++++++++++++++++
- 2 files changed, 502 insertions(+)
-
+diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
+index e9169eb358c1..5fb7edf4f5a0 100644
+--- a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
+@@ -5,6 +5,9 @@
+  * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
+  */
+ 
++#include <dt-bindings/mux/mux.h>
++#include <dt-bindings/mux/ti-serdes.h>
++
+ &cbass_main {
+ 	msmc_ram: sram@70000000 {
+ 		compatible = "mmio-sram";
+@@ -26,6 +29,25 @@ l3cache-sram@200000 {
+ 		};
+ 	};
+ 
++	scm_conf: syscon@100000 {
++		compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
++		reg = <0x00 0x00100000 0x00 0x1c000>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0x00 0x00 0x00100000 0x1c000>;
++
++		serdes_ln_ctrl: mux-controller-4080 {
++			compatible = "mmio-mux";
++			#mux-control-cells = <1>;
++			mux-reg-masks = <0x4080 0x3>, <0x4084 0x3>, /* SERDES0 lane0/1 select */
++					<0x4088 0x3>, <0x408c 0x3>, /* SERDES0 lane2/3 select */
++					<0x4090 0x3>, <0x4094 0x3>, /* SERDES1 lane0/1 select */
++					<0x4098 0x3>, <0x409c 0x3>, /* SERDES1 lane2/3 select */
++					<0x40a0 0x3>, <0x40a4 0x3>, /* SERDES2 lane0/1 select */
++					<0x40a8 0x3>, <0x40ac 0x3>; /* SERDES2 lane2/3 select */
++		};
++	};
++
+ 	gic500: interrupt-controller@1800000 {
+ 		compatible = "arm,gic-v3";
+ 		#address-cells = <2>;
 -- 
 2.25.1
 
