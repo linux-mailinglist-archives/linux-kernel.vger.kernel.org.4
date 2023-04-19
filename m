@@ -2,90 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007BA6E74BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E0B6E74C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232288AbjDSINk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
+        id S232324AbjDSIOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbjDSINi (ORCPT
+        with ESMTP id S232277AbjDSIOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:13:38 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB30E100
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:13:37 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-32addcf3a73so121727165ab.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:13:37 -0700 (PDT)
+        Wed, 19 Apr 2023 04:14:06 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C72B173F
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:14:04 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id sz19so22415517ejc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:14:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681892043; x=1684484043;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KhQTFUqxL/O6643fDSSoSsETDXYAv4dskz8SOtwED14=;
+        b=qm7L/uI38hNO7K25hIzjljA6TS3z+1GhbX80s9u0+gsCU9gjC1yqzZjjZ6IrI8TLj9
+         +6tPFvEx4YXyENHA4uSqT1ex09scO3tE9K7gX47/XUxyi2tO3oURSdFmWiU212hAcZWF
+         6fLNFS9h7QDXY2fGJQGgGEwKMN1ElDy2x/CWZSHP2CeNSUEacMJvBK+6zi18UZuHp2H0
+         mbC3cuSd7nrdW1hU7zfHf71wq4S9lEdLYYmow8f3R8yBeZKy/3fI2gAXNPDD7UDEBQFf
+         0Vsg/LPhP8sr3XAhZUraMq8Yek2ee2mF+QiOUxwI2pxvIm6O7psUBSof41456nfrkGul
+         7cEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681892017; x=1684484017;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        d=1e100.net; s=20221208; t=1681892043; x=1684484043;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7RRpr/2enZpSN+Pqs5p0qwijporxRiSMR0agGaaar/U=;
-        b=mAAEb26fDgpyZgubXmSFTbTJm98s+4xEiBh/a5CzRUsZqV/C5JF1euWwY3Mn7HPhvZ
-         LH7Sg27DBAJoRwVeRvUajZjhToc8YHktXuRB2i9BDVn3to1ohsiSoDQCoPvnNxwC08k4
-         17we7QH89SFytIMIiC0J7nsdEnqoJH207yOXzzziDW66hsmUNyvq6zVUwWs4qqnI+tGM
-         +XQVv+R9MC5JplNrgWjiZ+nbAF19Wbfecd6uY9MnEDNJTwhbfxyDtmgPcNHhXxAOJXfq
-         gmYy/9mi/u0w/LT4ZODp0bQnMKfBQFeBv4ohgxO8QP0qmQQuz3k1KkboKu1EGdM5M6AG
-         BPhw==
-X-Gm-Message-State: AAQBX9du1rSxA0pYIus7D1Oo9dHb7sEfo2rTVIs6HxU2XbxDomboTVa1
-        xJ4irccau2KhS0Zs3pY9XCB822DmvsiDMc9CaMg2QM/I3A+a
-X-Google-Smtp-Source: AKy350ZxM+Xb9GNBN83504bkL3uq/X7S37Mg6zCrCUERbs9vz+Iu5OHFeTeyO3L39/R+jUYeAVh6qHLpNsIhMXAdoXULMXlBIadJ
+        bh=KhQTFUqxL/O6643fDSSoSsETDXYAv4dskz8SOtwED14=;
+        b=SROBNv9AIzuWmcHFKAoyDlF3b8DinZf+aM086vStF+Huuyl3Ma1Gx8Tqet/lH0raTq
+         H/MnVLvRwl+nsqJKMGH2nrsqYdt0ymdoB9hz7qu7O3gRQ4v8iOZlXok9gGAWhx6DvX2s
+         i1eJBcUvrcn8U8d91/Ao+bohQx/lJhJDcfLJNDM/cW0ZMSAdTZkwQctnNIlUph5UJpbC
+         Ids69nZwfAkhHcuEtq5wEg3MT/IZ5bw6fvLoSi8xpuLEOeBjiDgA5HUj2SQqUDawZ2rS
+         GE80T9JtYTJgs+fvs8LU26NW0pZNwyF7XBcPxsB82+guCK6ZJtODkYUUZqLT8RCRABBl
+         ZWSg==
+X-Gm-Message-State: AAQBX9d6Rb8DM3GZcxe0DCo0UMN/fo6jpisYN+n/JYhQEYXdUIMccU0H
+        DZ42Yrk1th60ANojmIGl7Nk1tA==
+X-Google-Smtp-Source: AKy350b9AjsV58l2IRVNhBCH2Z5PcQLEDPMWjJpw05daiSBTBqGXMNL+pH2zgPhEYJ9tmvxyeb/0tw==
+X-Received: by 2002:a17:906:a408:b0:94f:236b:9e3a with SMTP id l8-20020a170906a40800b0094f236b9e3amr1516618ejz.3.1681892042992;
+        Wed, 19 Apr 2023 01:14:02 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:62f5:eb43:f726:5fee? ([2a02:810d:15c0:828:62f5:eb43:f726:5fee])
+        by smtp.gmail.com with ESMTPSA id ss2-20020a170907c00200b0094f4b7e2dc5sm5036143ejc.142.2023.04.19.01.14.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 01:14:02 -0700 (PDT)
+Message-ID: <36f37a18-0022-0368-bf7c-ebdd724b1558@linaro.org>
+Date:   Wed, 19 Apr 2023 10:14:01 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a6b:cd4c:0:b0:760:ea29:2594 with SMTP id
- d73-20020a6bcd4c000000b00760ea292594mr1190040iog.0.1681892017330; Wed, 19 Apr
- 2023 01:13:37 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 01:13:37 -0700
-In-Reply-To: <000000000000ea3c3105ef377a12@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003e62ab05f9ac0071@google.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ntfs_listxattr
-From:   syzbot <syzbot+9fcea5ef6dc4dc72d334@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com, dvyukov@google.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com,
-        zengheng4@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 2/4] spi: s3c64xx: add cpu_relax in polling loop
+Content-Language: en-US
+To:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
+References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
+ <CGME20230419062755epcas2p43a646bbae5f01e3120331407ad873318@epcas2p4.samsung.com>
+ <20230419060639.38853-3-jaewon02.kim@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230419060639.38853-3-jaewon02.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-ntfs: fix panic about slab-out-of-bounds caused by ntfs_listxattr()
+On 19/04/2023 08:06, Jaewon Kim wrote:
+> Adds cpu_relax() to prevent long busy-wait.
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+How cpu_relax prevents long waiting?
 
-#syz fix: exact-commit-title
+> There is busy-wait loop to check data transfer completion in polling mode.
+> 
+> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+> ---
+>  drivers/spi/spi-s3c64xx.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 273aa02322d9..886722fb40ea 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -568,6 +568,7 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
+>  
+>  	val = msecs_to_loops(ms);
+>  	do {
+> +		cpu_relax();
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+Shouldn't this be just readl_poll_timeout()? Or the syntax would be too
+complicated?
 
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=9fcea5ef6dc4dc72d334
+>  		status = readl(regs + S3C64XX_SPI_STATUS);
+>  	} while (RX_FIFO_LVL(status, sdd) < xfer->len && --val);
+>  
 
----
-[1] I expect the commit to be present in:
+Best regards,
+Krzysztof
 
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. main branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 10 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
