@@ -2,167 +2,570 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD66D6E7690
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CD36E7692
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232346AbjDSJmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 05:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
+        id S232199AbjDSJnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 05:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbjDSJl4 (ORCPT
+        with ESMTP id S231349AbjDSJm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:41:56 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2073.outbound.protection.outlook.com [40.107.220.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A1F1BC5;
-        Wed, 19 Apr 2023 02:41:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AUAdvd/AR9YgdE5MHIxwl6V1uP5CP/gRIXmNYpqt0kJ8YQ1wBdigV3uEJRrR84bNmjnPVsJFhTejk9f1JpZxhJKqNWs2M/D5/WfcUddVaVvjv3WYamu9TvgNTSIJAQQEBBWKuIxSOhYKh5ZN+shH1dpcRmxPZkVbTEmTcCGrSXLzPChS+1O5MqiWlroh+BG6JY0f5jvFmIZS4gQYE4nac6fzW/VlOONgOvwZXjWmTQgIblbPWH4ReJLG8kJ8ajq66oTpfmCzn9FKz4qFHjViW2epXAL9XgEEHivMzeiEoHHcO48pG5rYfTBzx3xT5GBH5RHHF72tWaU9sR6ES5rRZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VJiNBe8wuin6Xnk/CuRX01gzk1fCG3OJZ1LQof6LznA=;
- b=U5GH1SSPuCaR3T4t2JFBIIHDmQafeQld9eBEtfMi9FiZAAAGdgQudQqJ7D+khfnacQddVdov5/7QkUtv9YT93LIUSb0tyjgWFBS2RbQHvzZdrGreGmkzQWrCqk9snU0eLUGwJ3iRG2o2LvLECjYBb0YI4w3kTRSeKCep+LPMzqIeZ951+09Dw+Ui128ZKp4cNRhXdngkvU4NWf6FmB/misWLliKx3rtZHI21yzs22aHW0mUquPlnlSyT41SK5XEwS0sjREMX83+v2TTzpbgty6xRGwyPSL/1JfETFdBqiuIe4dZ4n3S/30Li5JgGMQWOOwu0yHUSHXIm7966R6nIqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VJiNBe8wuin6Xnk/CuRX01gzk1fCG3OJZ1LQof6LznA=;
- b=kAxb9J+BalJBOJWMvg+Z+SJKBqLMXpuW6e053cHx/2/H5Y5yCz/kLklADZ4Q8s4RhpWorsxMq3dSiqUVIuzNemQRRmQ/XQu3kgGvOyezdL7O02+EZ6ONCQn1V4PGY4vhDMsvDYwkf4hztVcqzFIHZ9zGMVxvGaSODaRbnky1QkN/u12gV8Q2h1om4FW5aavkWmNz+kYW1Y/8bVJI0kKNBQ7Gc8wEDInFOK7a2sJ7xzzQ4mF6lu2PTYfFBKdTnpO8DABFbR4E7qOI7nbvz6jQUgeEy1p9rb0aLt8c9kGG397zOIpyQXIm9Lg+8hRqiWy2vTyEhfZ9MArgaHCkwl5WpA==
-Received: from BL0PR12MB4659.namprd12.prod.outlook.com (2603:10b6:207:1d::33)
- by PH7PR12MB5687.namprd12.prod.outlook.com (2603:10b6:510:13e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.21; Wed, 19 Apr
- 2023 09:41:29 +0000
-Received: from BL0PR12MB4659.namprd12.prod.outlook.com
- ([fe80::bff7:b47d:5567:71c1]) by BL0PR12MB4659.namprd12.prod.outlook.com
- ([fe80::bff7:b47d:5567:71c1%3]) with mapi id 15.20.6298.045; Wed, 19 Apr 2023
- 09:41:28 +0000
-From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
-To:     Daniel Wagner <dwagner@suse.de>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>
-Subject: Re: [PATCH blktests v2 2/2] nvme-rc: Cleanup fc resource before
- module unloading
-Thread-Topic: [PATCH blktests v2 2/2] nvme-rc: Cleanup fc resource before
- module unloading
-Thread-Index: AQHZcpuo2+Eqx2a4MU+xtBGjjFI9R68yYQMA
-Date:   Wed, 19 Apr 2023 09:41:28 +0000
-Message-ID: <dd3850e3-045f-75a0-4980-9f44a05fd397@nvidia.com>
-References: <20230419084757.24846-1-dwagner@suse.de>
- <20230419084757.24846-3-dwagner@suse.de>
-In-Reply-To: <20230419084757.24846-3-dwagner@suse.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL0PR12MB4659:EE_|PH7PR12MB5687:EE_
-x-ms-office365-filtering-correlation-id: 658469c0-0c02-4e59-639f-08db40ba3fe2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6CuZoVYGLKH4PH24SOuDjgccACraAx+pZrhhFaYwD4ScL9i7rZ9w69FN5I5EWJukizHZudML6LvDSY0EeOvRz6rcTrTZoUTLI+8ksNA4EywRain0/MnwgZVpOqfcU0T3XUi+5/hlhJv6G78FR+gCV2YjhtaPHNf/hYdPBTAIHR4GS0ARA9uCF70jhGQ2yyZMWQI8Oc+Z4/RaP8ViGHxZJHK57NH8I6uZrkJsuELyduOuYouQw3cyxXaqV8QSF7zIOS8ox0zW/cgmnh0JdFlY9+Yp6fO/xEKQxaeLGCD+znLlYlV9Kbtl8FJtfa8GzAaaCIy7wZE4THg0gG490TMFGLdI4n5QI+UVK6qmUsT1vbSnL8TPEQi7SfkkNhbK6nJHCmpd8A4l5ac3CjCesOr+oL3HKhJUx6M0LC+xr+DYxpflg3atPAuTV4DqjIepbOll0CL2DRl+4env8NTXXZNLkqh9eVhF0vkyzQuqxgG2wuybuAKhOhxooVbGmEEAbNZ20DGAfssxnstilXsBtTIphXjYKkpOTLhaGIBpOAThuZWC9f4xbfkNHEs9BQem8lF+nylrlDaSUO4MLABCDNR11CYqLMcHRW4QuB5HX5wpRKQstjKNWrK7eV5fKC2CWvMZlhfganoQaEuF/FQkhC5VBavavfjDGfcmwuckX0HDOMThTS1SXURMHVvVOSTrcSLO
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB4659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(376002)(346002)(39860400002)(136003)(451199021)(31686004)(4326008)(316002)(110136005)(54906003)(66476007)(66946007)(66446008)(64756008)(91956017)(66556008)(76116006)(53546011)(6506007)(6512007)(38100700002)(2616005)(186003)(83380400001)(41300700001)(8676002)(5660300002)(478600001)(71200400001)(6486002)(2906002)(36756003)(38070700005)(86362001)(31696002)(8936002)(122000001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?djhQVkFrY0ZpUnFSemJYTFhrcHVBQXNXdzQvMzJNdDlsdDNFckkwY2gxWUdq?=
- =?utf-8?B?RktNRVMzVGQ1dlkxbkJieDF2UzM5VkhwNUQvWjByU2tSWWhZRVRvbzl5M0o1?=
- =?utf-8?B?ZlNCR3Rkb0RTYnkxbUdVbVlDSGQ2TnVRUnhZYTRQemd2N1d5SXB5cTNrUk5r?=
- =?utf-8?B?YkZsclVOV1F1N1k3ckp2SDIxOUp4ZVBjNkI5N1FIR1A5MENHK0JEQlJoZlJI?=
- =?utf-8?B?emhBNFMvNnM2aVUwU2hWYS9rc1Vabmh5bWlIR0JTZ1N3SGZNUWtOK2R6MVB3?=
- =?utf-8?B?THV2SmM1U1FvRDBuT05pRThYdUwzNDhsRnpQUER4dEdvK24rUzNYT0phS1Bk?=
- =?utf-8?B?Qy9hN1pzRytNc2txeWRYc3pTc0hLR3VFRmZwdGw1SXZKc01rZlRaNjVlSUR0?=
- =?utf-8?B?akZYeCtmbkh6WTNVUFJ4UmxNWFN2SDJmSmxkMGRSVUdwdlFtNWJpc001bjBV?=
- =?utf-8?B?ZXY5QjdlcmQ1bC9mSjJDd2c3a3hrUU95WnorZE5kb3J6VnRORjAxb3g3N3RV?=
- =?utf-8?B?TysraWk5aXk2Z3FEeTQwd3NMRjBQaW96akcrV3FnWjhRclRySmcyMnJaMEFq?=
- =?utf-8?B?MEg4ZEtPTUc2cjdCMXh1b1VkSUw0NjR6TURCc2ZrY1BDaEdzNGlPZTV0YTk3?=
- =?utf-8?B?STNiaTdTSC9JZ2pHaEhnVWdoU1pKL3JaRjhsT3Q2VGVpZzlPQ2wzbTR5QUM2?=
- =?utf-8?B?bzhhUTlqWXJxYXE4Q1dhUHpOMHpSN0RGdlgwTmplY0dxTjdzcVhOSDdHOTF1?=
- =?utf-8?B?emJ3U3hIN3BncTRoZzZNWmNrZXJvbHlFKzZQaklMOTkvWWMyUXJSdzNzdkdu?=
- =?utf-8?B?N3VLTDRWS3czSHlOOXBHcFpBYTVQYlh0azZmcnBhWVZuRER4L094TmtwbnR1?=
- =?utf-8?B?enVaZU95R3QvWVROYTFZcU83TGY3Z1doU2ZMdGVDYW9XOGNkSmhjVFh0R094?=
- =?utf-8?B?QUdHaU5OQngzclNTb2hLTkNXZjNHOGhNR1FwMTVOZkRuZXZFN3Z1Y1BoUllI?=
- =?utf-8?B?TWVEQ3h5NlVFYlpTZ2tZeVFjVXV3Z0wrb2pINFBMamc3SDFnM3l1TUJWL2tG?=
- =?utf-8?B?MWs3QjZCTU5MY3Z2Y1M0RHhFVjVMMkpYellwNmc1bU1XSFh6a3lodUN5czJK?=
- =?utf-8?B?akhON3ljdlRNcVNoMHpxQU5VMUFBWE9OMGJvSEJ3b21WUStzc2wvVVV0UGNy?=
- =?utf-8?B?T0lERytvUEhWRUc3dE9OcytPOERQdEZScy9qeHZ4VnY0MSs0RkhENlNDS3dG?=
- =?utf-8?B?ZFBQenFIYlNzK0NHWkVnOXVSNUdCdS9tUGtqQXZSalBvSUpnYzhkVTMyWUVi?=
- =?utf-8?B?eU5JSWJWWUdpWWs2WC9kdXlVQkxjSXNqTVFUTHJzQVlvNHNDUTVLdUxmUmFI?=
- =?utf-8?B?emdrWVRIdDRQcTNhTE9VU0owYUVQQ1NQRytCTXZSQitKK2ZuSEtLbUJWQWQ4?=
- =?utf-8?B?ci85dGlZQmRBU0Zvb0JySWt3MWNPWTlvdlBDbkQ0a2hrdU5IVVd5eW9TdG94?=
- =?utf-8?B?Qk9VMWovcVowMWQ0K1labHVuSWNua1N4dlMvTEVOY2NiQTRFenNWa0FrNlBj?=
- =?utf-8?B?ZXM5TWlWSUd2YXI1dWh5N1RnWnBXSjdaQUtrOHVWYWRlTmxndU9qdzJBa3Ix?=
- =?utf-8?B?M0NodWYwRnZOQ0IrNGZSNmJXa012ZGM5ZDVYakVjQkdNSUtXNTVJUE9vRUp2?=
- =?utf-8?B?QXAxWmV2QmoyRy9kaXBsWFp6b0RvakREVHRCcXFyZGoyZk9uM1hObWpUaTFV?=
- =?utf-8?B?anhvWHEzOFBzbnhMWHZVeHZnKzVmZmFlVDE4OXl3WENZc2o3OEZ4aGI1alNx?=
- =?utf-8?B?dXhHR1AxYnhVaHh2WGdCUEY1M0FzQWNBUlg1clFFTzJyaDh0bnVWTWhvSXRV?=
- =?utf-8?B?NzhMMmx0VTNCaVNXRnU3UGlBK25FWHQ2RFVDMEFXS1BWb01YMTdWbEdtSGJD?=
- =?utf-8?B?Q1ArWXNheDFmeFllb2E2c0hvR3p6dGhiL2dsMkMwSUJTcDFrYlZrWVE4d0Rh?=
- =?utf-8?B?V1Jiak1oN01JYlBjeWFhZHJsakJ2emRtK3lqeGhmVkNleU1GVlZNR1ZvdkI1?=
- =?utf-8?B?c2p4TFoweU9sYXd3Tm43MTBqb2tqL3VBNzVudFEyRWRSdXYxejhETmYxY24z?=
- =?utf-8?B?bytOeXFUZWFRbFNwS3Q2eGtZelRmMERLVENITnFOU0xuLzNDREV2SitXRlZy?=
- =?utf-8?Q?9Bt6UCncX9pgJAw3HJjPflGPMenMhTu8YVgfbSR3k4pN?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C125D47E9C0B244DAF68B9F7464F3ED3@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 19 Apr 2023 05:42:57 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB018118FF;
+        Wed, 19 Apr 2023 02:42:23 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33J9X0UW022640;
+        Wed, 19 Apr 2023 09:42:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=enV3Ou49TQ0tLJ+4BRLx5tgiLXn3WtfctN4VoKv5ZXk=;
+ b=OmvWWNK3ldt1sr+pmRdd4TbjCG/mQ3VkSfpBoLevlI1SeCC8WNZkuB9LZySMxbokIjkt
+ 4KcrertNWPpEV6ZaEINdWoYO86jSxCvEnzCIafAEgDySyNyHpRFGsCFdbZRFytzx5C6/
+ WF8XLuZI2qeUtK/IyISqoKKgYdllYi58wZ9W+1wBmHe+lSW/SBmxYsIN3qoh/t8yk9Cw
+ qwUGmnnXCSMx5DKbt6kJvBVzQyZ+9KoMuDRHL6ByR4EJ5+BGas38wDSlJ1jVygGwdqtc
+ 1leVUvXH4dmzPnlFQOjkTKJKRi9WJlcprtbngiJOYdBRrOg3xME5syKYqA81PGp7ehwS VQ== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q26wy0t84-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 09:41:59 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33J9fxap009876
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 09:41:59 GMT
+Received: from [10.201.3.104] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 19 Apr
+ 2023 02:41:55 -0700
+Message-ID: <525bd97f-df56-a1bc-06d5-9b4e453810e5@quicinc.com>
+Date:   Wed, 19 Apr 2023 15:11:51 +0530
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB4659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 658469c0-0c02-4e59-639f-08db40ba3fe2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Apr 2023 09:41:28.2778
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HU/1SqvX3fBJuGJ+1lcUCYUKrOx4ZOmlo/erN0KZrxxvwIZSHX5ihXONPMoNVMtOdUoilUdUJF/XyC2Re8No+w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5687
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] mtd: rawnand: qcom: Implement exec_op()
+Content-Language: en-US
+To:     Manivannan Sadhasivam <mani@kernel.org>
+CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_srichara@quicinc.com>
+References: <1654273498-31998-1-git-send-email-quic_mdalam@quicinc.com>
+ <20220915134328.GD4550@workstation>
+From:   Md Sadre Alam <quic_mdalam@quicinc.com>
+In-Reply-To: <20220915134328.GD4550@workstation>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: W4Z73tbOUoyOXUb7dZg7mfDjT-f1ubCa
+X-Proofpoint-ORIG-GUID: W4Z73tbOUoyOXUb7dZg7mfDjT-f1ubCa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-19_05,2023-04-18_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 clxscore=1015 mlxscore=0 malwarescore=0 spamscore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304190086
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gNC8xOS8yMyAwMTo0NywgRGFuaWVsIFdhZ25lciB3cm90ZToNCj4gQmVmb3JlIHdlIHVubG9h
-ZCB0aGUgbW9kdWxlIHdlIHNob3VsZCBjbGVhbnVwIHRoZSBmYyByZXNvdXJjZXMgZmlyc3QsDQo+
-IGJhc2ljYWxseSByZW9yZGVyIHRoZSBzaHV0ZG93biBzZXF1ZW5jZSB0byBiZSBpbiByZXZlcnNl
-IG9yZGVyIG9mIHRoZQ0KPiBzZXR1cCBwYXRoLg0KPg0KPiBBbHNvIHVubG9hZCB0aGUgbnZtZS1m
-Y2xvb3AgYWZ0ZXIgdXNhZ2UuDQo+DQo+IFdoaWxlIGF0IGl0IGFsc28gdXBkYXRlIHRoZSByZG1h
-IHN0b3Bfc29mdF9yZG1hIGJlZm9yZSB0aGUgbW9kdWxlDQo+IHVubG9hZGluZyBmb3IgdGhlIHNh
-bWUgcmVhc29uaW5nLg0KPg0KPiBTaWduZWQtb2ZmLWJ5OiBEYW5pZWwgV2FnbmVyIDxkd2FnbmVy
-QHN1c2UuZGU+DQo+IC0tLQ0KPiAgIHRlc3RzL252bWUvcmMgfCAxMiArKysrKysrLS0tLS0NCj4g
-ICAxIGZpbGUgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQ0KPg0KPiBk
-aWZmIC0tZ2l0IGEvdGVzdHMvbnZtZS9yYyBiL3Rlc3RzL252bWUvcmMNCj4gaW5kZXggZWMwY2My
-ZDhkOGNjLi40MWYxOTZiMDM3ZDYgMTAwNjQ0DQo+IC0tLSBhL3Rlc3RzL252bWUvcmMNCj4gKysr
-IGIvdGVzdHMvbnZtZS9yYw0KPiBAQCAtMjYwLDE4ICsyNjAsMjAgQEAgX2NsZWFudXBfbnZtZXQo
-KSB7DQo+ICAgCXNob3B0IC11IG51bGxnbG9iDQo+ICAgCXRyYXAgU0lHSU5UDQo+ICAgDQo+IC0J
-bW9kcHJvYmUgLXJxIG52bWUtIiR7bnZtZV90cnR5cGV9IiAyPi9kZXYvbnVsbA0KPiAtCWlmIFtb
-ICIke252bWVfdHJ0eXBlfSIgIT0gImxvb3AiIF1dOyB0aGVuDQo+IC0JCW1vZHByb2JlIC1ycSBu
-dm1ldC0iJHtudm1lX3RydHlwZX0iIDI+L2Rldi9udWxsDQo+IC0JZmkNCj4gLQltb2Rwcm9iZSAt
-cnEgbnZtZXQgMj4vZGV2L251bGwNCj4gICAJaWYgW1sgIiR7bnZtZV90cnR5cGV9IiA9PSAicmRt
-YSIgXV07IHRoZW4NCj4gICAJCXN0b3Bfc29mdF9yZG1hDQo+ICAgCWZpDQo+ICAgCWlmIFtbICIk
-e252bWVfdHJ0eXBlfSIgPT0gImZjIiBdXTsgdGhlbg0KPiAgIAkJX2NsZWFudXBfZmNsb29wICIk
-e2RlZl9sb2NhbF93d25ufSIgIiR7ZGVmX2xvY2FsX3d3cG59IiBcDQo+ICAgCQkJICAgICAgICAi
-JHtkZWZfcmVtb3RlX3d3bm59IiAiJHtkZWZfcmVtb3RlX3d3cG59Ig0KPiArCQltb2Rwcm9iZSAt
-cnEgbnZtZS1mY2xvb3ANCj4gICAJZmkNCj4gKw0KPiArCW1vZHByb2JlIC1ycSBudm1lLSIke252
-bWVfdHJ0eXBlfSIgMj4vZGV2L251bGwNCj4gKwlpZiBbWyAiJHtudm1lX3RydHlwZX0iICE9ICJs
-b29wIiBdXTsgdGhlbg0KPiArCQltb2Rwcm9iZSAtcnEgbnZtZXQtIiR7bnZtZV90cnR5cGV9IiAy
-Pi9kZXYvbnVsbA0KPiArCWZpDQo+ICsJbW9kcHJvYmUgLXJxIG52bWV0IDI+L2Rldi9udWxsDQo+
-ICAgfQ0KPiAgIA0KPiAgIF9zZXR1cF9udm1ldCgpIHsNCg0Kd2VyZSB5b3UgYWJsZSB0byB0ZXN0
-IHRoaXMgd2l0aCBSRE1BID8NCg0KanVzdCB3YW50IHRvIG1ha2Ugc3VyZSB3ZSBhcmUgbm90IGJy
-ZWFraW5nIGFueXRoaW5nIHNpbmNlIHdlIGFyZSBjaGFuZ2luZw0KdGhlIG9yZGVyIG9mIG1vZHVs
-ZSB1bmxvYWQgYW5kIHN0b3Bfc29mdF9yZG1hKCkgaW4gdGhpcyBwYXRjaCAuLi4NCg0KLWNrDQoN
-Cg0K
+
+
+On 9/15/2022 7:13 PM, Manivannan Sadhasivam wrote:
+> On Fri, Jun 03, 2022 at 09:54:58PM +0530, Md Sadre Alam wrote:
+>> Implement exec_op() so we can later get rid of the legacy interface
+>> implementation.
+>>
+>> Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
+>> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
+>> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+> 
+> Sadre, Sri, any update on this patch?
+> 
+> Thanks,
+> Mani
+>
+
+Hi Mani,
+
+I have sent V2 patch and address all the comments from patch V1.
+
+https://lore.kernel.org/lkml/20230419093617.27134-1-quic_mdalam@quicinc.com/
+
+Thanks,
+Alam.
+
+>> ---
+>>   drivers/mtd/nand/raw/qcom_nandc.c | 368 +++++++++++++++++++++-----------------
+>>   1 file changed, 204 insertions(+), 164 deletions(-)
+>>
+>> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
+>> index 048b255..507921b 100644
+>> --- a/drivers/mtd/nand/raw/qcom_nandc.c
+>> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
+>> @@ -14,6 +14,7 @@
+>>   #include <linux/of.h>
+>>   #include <linux/of_device.h>
+>>   #include <linux/delay.h>
+>> +#include <linux/iopoll.h>
+>>   #include <linux/dma/qcom_bam_dma.h>
+>>   
+>>   /* NANDc reg offsets */
+>> @@ -1305,15 +1306,13 @@ static int nandc_param(struct qcom_nand_host *host)
+>>   }
+>>   
+>>   /* sets up descriptors for NAND_CMD_ERASE1 */
+>> -static int erase_block(struct qcom_nand_host *host, int page_addr)
+>> +static int erase_block(struct qcom_nand_host *host)
+>>   {
+>>   	struct nand_chip *chip = &host->chip;
+>>   	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+>>   
+>>   	nandc_set_reg(chip, NAND_FLASH_CMD,
+>>   		      OP_BLOCK_ERASE | PAGE_ACC | LAST_PAGE);
+>> -	nandc_set_reg(chip, NAND_ADDR0, page_addr);
+>> -	nandc_set_reg(chip, NAND_ADDR1, 0);
+>>   	nandc_set_reg(chip, NAND_DEV0_CFG0,
+>>   		      host->cfg0_raw & ~(7 << CW_PER_PAGE));
+>>   	nandc_set_reg(chip, NAND_DEV0_CFG1, host->cfg1_raw);
+>> @@ -1321,14 +1320,8 @@ static int erase_block(struct qcom_nand_host *host, int page_addr)
+>>   	nandc_set_reg(chip, NAND_FLASH_STATUS, host->clrflashstatus);
+>>   	nandc_set_reg(chip, NAND_READ_STATUS, host->clrreadstatus);
+>>   
+>> -	write_reg_dma(nandc, NAND_FLASH_CMD, 3, NAND_BAM_NEXT_SGL);
+>> +	write_reg_dma(nandc, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
+>>   	write_reg_dma(nandc, NAND_DEV0_CFG0, 2, NAND_BAM_NEXT_SGL);
+>> -	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
+>> -
+>> -	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
+>> -
+>> -	write_reg_dma(nandc, NAND_FLASH_STATUS, 1, 0);
+>> -	write_reg_dma(nandc, NAND_READ_STATUS, 1, NAND_BAM_NEXT_SGL);
+>>   
+>>   	return 0;
+>>   }
+>> @@ -1343,16 +1336,12 @@ static int read_id(struct qcom_nand_host *host, int column)
+>>   		return 0;
+>>   
+>>   	nandc_set_reg(chip, NAND_FLASH_CMD, OP_FETCH_ID);
+>> -	nandc_set_reg(chip, NAND_ADDR0, column);
+>> -	nandc_set_reg(chip, NAND_ADDR1, 0);
+>>   	nandc_set_reg(chip, NAND_FLASH_CHIP_SELECT,
+>>   		      nandc->props->is_bam ? 0 : DM_EN);
+>>   	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
+>>   
+>> -	write_reg_dma(nandc, NAND_FLASH_CMD, 4, NAND_BAM_NEXT_SGL);
+>> -	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
+>> -
+>> -	read_reg_dma(nandc, NAND_READ_ID, 1, NAND_BAM_NEXT_SGL);
+>> +	write_reg_dma(nandc, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
+>> +	write_reg_dma(nandc, NAND_FLASH_CHIP_SELECT, 1, NAND_BAM_NEXT_SGL);
+>>   
+>>   	return 0;
+>>   }
+>> @@ -1491,7 +1480,6 @@ static void parse_erase_write_errors(struct qcom_nand_host *host, int command)
+>>   
+>>   	for (i = 0; i < num_cw; i++) {
+>>   		u32 flash_status = le32_to_cpu(nandc->reg_read_buf[i]);
+>> -
+>>   		if (flash_status & FS_MPU_ERR)
+>>   			host->status &= ~NAND_STATUS_WP;
+>>   
+>> @@ -1523,86 +1511,6 @@ static void post_command(struct qcom_nand_host *host, int command)
+>>   }
+>>   
+>>   /*
+>> - * Implements chip->legacy.cmdfunc. It's  only used for a limited set of
+>> - * commands. The rest of the commands wouldn't be called by upper layers.
+>> - * For example, NAND_CMD_READOOB would never be called because we have our own
+>> - * versions of read_oob ops for nand_ecc_ctrl.
+>> - */
+>> -static void qcom_nandc_command(struct nand_chip *chip, unsigned int command,
+>> -			       int column, int page_addr)
+>> -{
+>> -	struct qcom_nand_host *host = to_qcom_nand_host(chip);
+>> -	struct nand_ecc_ctrl *ecc = &chip->ecc;
+>> -	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+>> -	bool wait = false;
+>> -	int ret = 0;
+>> -
+>> -	pre_command(host, command);
+>> -
+>> -	switch (command) {
+>> -	case NAND_CMD_RESET:
+>> -		ret = reset(host);
+>> -		wait = true;
+>> -		break;
+>> -
+>> -	case NAND_CMD_READID:
+>> -		nandc->buf_count = 4;
+>> -		ret = read_id(host, column);
+>> -		wait = true;
+>> -		break;
+>> -
+>> -	case NAND_CMD_PARAM:
+>> -		ret = nandc_param(host);
+>> -		wait = true;
+>> -		break;
+>> -
+>> -	case NAND_CMD_ERASE1:
+>> -		ret = erase_block(host, page_addr);
+>> -		wait = true;
+>> -		break;
+>> -
+>> -	case NAND_CMD_READ0:
+>> -		/* we read the entire page for now */
+>> -		WARN_ON(column != 0);
+>> -
+>> -		host->use_ecc = true;
+>> -		set_address(host, 0, page_addr);
+>> -		update_rw_regs(host, ecc->steps, true, 0);
+>> -		break;
+>> -
+>> -	case NAND_CMD_SEQIN:
+>> -		WARN_ON(column != 0);
+>> -		set_address(host, 0, page_addr);
+>> -		break;
+>> -
+>> -	case NAND_CMD_PAGEPROG:
+>> -	case NAND_CMD_STATUS:
+>> -	case NAND_CMD_NONE:
+>> -	default:
+>> -		break;
+>> -	}
+>> -
+>> -	if (ret) {
+>> -		dev_err(nandc->dev, "failure executing command %d\n",
+>> -			command);
+>> -		free_descs(nandc);
+>> -		return;
+>> -	}
+>> -
+>> -	if (wait) {
+>> -		ret = submit_descs(nandc);
+>> -		if (ret)
+>> -			dev_err(nandc->dev,
+>> -				"failure submitting descs for command %d\n",
+>> -				command);
+>> -	}
+>> -
+>> -	free_descs(nandc);
+>> -
+>> -	post_command(host, command);
+>> -}
+>> -
+>> -/*
+>>    * when using BCH ECC, the HW flags an error in NAND_FLASH_STATUS if it read
+>>    * an erased CW, and reports an erased CW in NAND_ERASED_CW_DETECT_STATUS.
+>>    *
+>> @@ -2044,7 +1952,6 @@ static int qcom_nandc_read_page(struct nand_chip *chip, uint8_t *buf,
+>>   	struct qcom_nand_host *host = to_qcom_nand_host(chip);
+>>   	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+>>   	u8 *data_buf, *oob_buf = NULL;
+>> -
+>>   	nand_read_page_op(chip, page, 0, NULL, 0);
+>>   	data_buf = buf;
+>>   	oob_buf = oob_required ? chip->oob_poi : NULL;
+>> @@ -2366,64 +2273,6 @@ static int qcom_nandc_block_markbad(struct nand_chip *chip, loff_t ofs)
+>>   }
+>>   
+>>   /*
+>> - * the three functions below implement chip->legacy.read_byte(),
+>> - * chip->legacy.read_buf() and chip->legacy.write_buf() respectively. these
+>> - * aren't used for reading/writing page data, they are used for smaller data
+>> - * like reading	id, status etc
+>> - */
+>> -static uint8_t qcom_nandc_read_byte(struct nand_chip *chip)
+>> -{
+>> -	struct qcom_nand_host *host = to_qcom_nand_host(chip);
+>> -	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+>> -	u8 *buf = nandc->data_buffer;
+>> -	u8 ret = 0x0;
+>> -
+>> -	if (host->last_command == NAND_CMD_STATUS) {
+>> -		ret = host->status;
+>> -
+>> -		host->status = NAND_STATUS_READY | NAND_STATUS_WP;
+>> -
+>> -		return ret;
+>> -	}
+>> -
+>> -	if (nandc->buf_start < nandc->buf_count)
+>> -		ret = buf[nandc->buf_start++];
+>> -
+>> -	return ret;
+>> -}
+>> -
+>> -static void qcom_nandc_read_buf(struct nand_chip *chip, uint8_t *buf, int len)
+>> -{
+>> -	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+>> -	int real_len = min_t(size_t, len, nandc->buf_count - nandc->buf_start);
+>> -
+>> -	memcpy(buf, nandc->data_buffer + nandc->buf_start, real_len);
+>> -	nandc->buf_start += real_len;
+>> -}
+>> -
+>> -static void qcom_nandc_write_buf(struct nand_chip *chip, const uint8_t *buf,
+>> -				 int len)
+>> -{
+>> -	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+>> -	int real_len = min_t(size_t, len, nandc->buf_count - nandc->buf_start);
+>> -
+>> -	memcpy(nandc->data_buffer + nandc->buf_start, buf, real_len);
+>> -
+>> -	nandc->buf_start += real_len;
+>> -}
+>> -
+>> -/* we support only one external chip for now */
+>> -static void qcom_nandc_select_chip(struct nand_chip *chip, int chipnr)
+>> -{
+>> -	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+>> -
+>> -	if (chipnr <= 0)
+>> -		return;
+>> -
+>> -	dev_warn(nandc->dev, "invalid chip select\n");
+>> -}
+>> -
+>> -/*
+>>    * NAND controller page layout info
+>>    *
+>>    * Layout with ECC enabled:
+>> @@ -2738,8 +2587,207 @@ static int qcom_nand_attach_chip(struct nand_chip *chip)
+>>   	return 0;
+>>   }
+>>   
+>> +static int nandc_status(struct nand_chip *chip)
+>> +{
+>> +	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+>> +	struct qcom_nand_host *host = to_qcom_nand_host(chip);
+>> +
+>> +	memcpy(nandc->data_buffer, &host->status, 1);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int qcom_nand_send_command(struct nand_chip *chip, u8 command)
+>> +{
+>> +	struct qcom_nand_host *host = to_qcom_nand_host(chip);
+>> +	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+>> +	struct nand_ecc_ctrl *ecc = &chip->ecc;
+>> +
+>> +	int ret = 0;
+>> +
+>> +	pre_command(host, command);
+>> +
+>> +	switch (command) {
+>> +	case NAND_CMD_RESET:
+>> +		ret = reset(host);
+>> +		break;
+>> +	case NAND_CMD_READID:
+>> +		nandc->buf_count = 4;
+>> +		ret = read_id(host, 0);
+>> +		break;
+>> +	case NAND_CMD_PARAM:
+>> +		ret = nandc_param(host);
+>> +		break;
+>> +	case NAND_CMD_ERASE1:
+>> +		ret = erase_block(host);
+>> +		break;
+>> +	case NAND_CMD_STATUS:
+>> +		ret = nandc_status(chip);
+>> +		break;
+>> +	case NAND_CMD_READ0:
+>> +		host->use_ecc = true;
+>> +		update_rw_regs(host, ecc->steps, true, 0);
+>> +		break;
+>> +	case NAND_CMD_ERASE2:
+>> +		break;
+>> +	case NAND_CMD_SEQIN:
+>> +		break;
+>> +	case NAND_CMD_PAGEPROG:
+>> +		break;
+>> +	default:
+>> +		break;
+>> +	}
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int qcom_nand_send_address(struct nand_chip *chip,
+>> +				  const struct nand_op_instr *instr, int cmd)
+>> +{
+>> +	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+>> +	u32 page_addr = 0x0, page_mask = 0x0;
+>> +
+>> +	page_addr = instr->ctx.addr.addrs[0];
+>> +
+>> +	/*
+>> +	 *Form page address for erase, read, write to using existing api
+>> +	 */
+>> +
+>> +	switch (cmd) {
+>> +	case NAND_CMD_ERASE1:
+>> +		page_addr = instr->ctx.addr.addrs[0];
+>> +		page_mask = instr->ctx.addr.addrs[1];
+>> +		page_mask <<= 8;
+>> +		page_addr = (page_addr | page_mask);
+>> +		page_mask = instr->ctx.addr.addrs[2];
+>> +		page_mask <<= 16;
+>> +		page_addr = (page_addr | page_mask);
+>> +		page_mask = instr->ctx.addr.addrs[3];
+>> +		page_mask <<= 24;
+>> +		page_addr = (page_addr | page_mask);
+>> +		break;
+>> +	case NAND_CMD_READ0:
+>> +	case NAND_CMD_SEQIN:
+>> +		page_addr = instr->ctx.addr.addrs[3];
+>> +		page_addr <<= 24;
+>> +		page_mask = instr->ctx.addr.addrs[2];
+>> +		page_mask <<= 16;
+>> +		page_addr |= page_mask;
+>> +		page_mask = instr->ctx.addr.addrs[1];
+>> +		page_mask <<= 8;
+>> +		page_addr |= page_mask;
+>> +		page_mask = instr->ctx.addr.addrs[0];
+>> +		page_addr |= page_mask;
+>> +		break;
+>> +	default:
+>> +		break;
+>> +	}
+>> +
+>> +	if (cmd == NAND_CMD_PARAM)
+>> +		return 0;
+>> +
+>> +	nandc_set_reg(chip, NAND_ADDR0, page_addr);
+>> +	nandc_set_reg(chip, NAND_ADDR1, 0);
+>> +
+>> +	if (cmd != NAND_CMD_SEQIN)
+>> +		write_reg_dma(nandc, NAND_ADDR0, 2, 0);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void qcom_nand_read_buf(struct nand_chip *chip, u8 *buf, int len)
+>> +{
+>> +	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+>> +
+>> +	memcpy(buf, nandc->data_buffer, len);
+>> +}
+>> +
+>> +static int qcom_nand_exec_instr(struct nand_chip *chip,
+>> +				const struct nand_op_instr *instr)
+>> +{
+>> +	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+>> +	struct qcom_nand_host *host = to_qcom_nand_host(chip);
+>> +	u32 status;
+>> +	int ret = 0;
+>> +	bool wait = false;
+>> +	static int opcode;
+>> +
+>> +	switch (instr->type) {
+>> +	case NAND_OP_CMD_INSTR:
+>> +		ret = qcom_nand_send_command(chip, instr->ctx.cmd.opcode);
+>> +		if (instr->ctx.cmd.opcode == NAND_CMD_RESET)
+>> +			wait = true;
+>> +		opcode = instr->ctx.cmd.opcode;
+>> +		break;
+>> +	case NAND_OP_ADDR_INSTR:
+>> +		qcom_nand_send_address(chip, instr, opcode);
+>> +		if (opcode != NAND_CMD_READ0 && opcode != NAND_CMD_READSTART &&
+>> +		    opcode != NAND_CMD_PARAM && opcode != NAND_CMD_SEQIN)
+>> +			wait = true;
+>> +		break;
+>> +	case NAND_OP_DATA_IN_INSTR:
+>> +		qcom_nand_read_buf(chip, instr->ctx.data.buf.in, instr->ctx.data.len);
+>> +		break;
+>> +	case NAND_OP_DATA_OUT_INSTR:
+>> +		wait = false;
+>> +		break;
+>> +	case NAND_OP_WAITRDY_INSTR:
+>> +		ret = readl_poll_timeout(nandc->base + NAND_FLASH_STATUS, status,
+>> +					 (status & FS_READY_BSY_N), 20,
+>> +					 instr->ctx.waitrdy.timeout_ms * 1000);
+>> +		if (opcode == NAND_CMD_PARAM)
+>> +			wait = true;
+>> +	default:
+>> +		break;
+>> +	}
+>> +
+>> +	if (wait) {
+>> +		if (opcode != NAND_CMD_PARAM)
+>> +			write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
+>> +
+>> +		if (opcode == NAND_CMD_READID)
+>> +			read_reg_dma(nandc, NAND_READ_ID, 1, NAND_BAM_NEXT_SGL);
+>> +
+>> +		if (opcode == NAND_CMD_ERASE1) {
+>> +			read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
+>> +			write_reg_dma(nandc, NAND_FLASH_STATUS, 1, 0);
+>> +			write_reg_dma(nandc, NAND_READ_STATUS, 1, NAND_BAM_NEXT_SGL);
+>> +		}
+>> +
+>> +		ret = submit_descs(nandc);
+>> +		if (ret)
+>> +			dev_err(nandc->dev, "failure submitting descs for command 0x%02x\n",
+>> +				opcode);
+>> +
+>> +		free_descs(nandc);
+>> +		post_command(host, opcode);
+>> +	}
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int qcom_nand_exec_op(struct nand_chip *chip,
+>> +			     const struct nand_operation *op,
+>> +				bool check_only)
+>> +{
+>> +	unsigned int i;
+>> +	int ret = 0;
+>> +
+>> +	if (check_only)
+>> +		return 0;
+>> +
+>> +	for (i = 0; i < op->ninstrs; i++) {
+>> +		ret = qcom_nand_exec_instr(chip, &op->instrs[i]);
+>> +		if (ret)
+>> +			break;
+>> +	}
+>> +
+>> +	return ret;
+>> +}
+>> +
+>>   static const struct nand_controller_ops qcom_nandc_ops = {
+>>   	.attach_chip = qcom_nand_attach_chip,
+>> +	.exec_op = qcom_nand_exec_op,
+>>   };
+>>   
+>>   static void qcom_nandc_unalloc(struct qcom_nand_controller *nandc)
+>> @@ -2938,14 +2986,6 @@ static int qcom_nand_host_init_and_register(struct qcom_nand_controller *nandc,
+>>   	mtd->owner = THIS_MODULE;
+>>   	mtd->dev.parent = dev;
+>>   
+>> -	chip->legacy.cmdfunc	= qcom_nandc_command;
+>> -	chip->legacy.select_chip	= qcom_nandc_select_chip;
+>> -	chip->legacy.read_byte	= qcom_nandc_read_byte;
+>> -	chip->legacy.read_buf	= qcom_nandc_read_buf;
+>> -	chip->legacy.write_buf	= qcom_nandc_write_buf;
+>> -	chip->legacy.set_features	= nand_get_set_features_notsupp;
+>> -	chip->legacy.get_features	= nand_get_set_features_notsupp;
+>> -
+>>   	/*
+>>   	 * the bad block marker is readable only when we read the last codeword
+>>   	 * of a page with ECC disabled. currently, the nand_base and nand_bbt
+>> -- 
+>> 2.7.4
+>>
