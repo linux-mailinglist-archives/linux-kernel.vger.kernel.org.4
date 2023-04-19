@@ -2,90 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D4B6E8385
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:21:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE416E8391
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232617AbjDSVVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 17:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
+        id S230514AbjDSVXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 17:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232649AbjDSVVb (ORCPT
+        with ESMTP id S232008AbjDSVXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 17:21:31 -0400
+        Wed, 19 Apr 2023 17:23:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26097AD35;
-        Wed, 19 Apr 2023 14:21:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA246EB5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:22:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 867056306A;
-        Wed, 19 Apr 2023 21:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E3A8BC433D2;
-        Wed, 19 Apr 2023 21:20:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681939218;
-        bh=IZje+2r+GnRqX9Nu6Qa+XAyYOT6tBOuoqnWCr7UOMjE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=r4LfYUKvfz9Z9fUzoVZtkNVrrxHe793IfAF2rgPvPdg1qc/V7N2EDPzCarj7gglQ8
-         POimW8R3ACtXXIbILzlGRHxJ0ddXvApX7s5lWPXfOl/CZfXW5VF9Vj0o8ORNB7wf58
-         KMrYn8wS7P6hAhhdQJSWcKROZHUhl9kDqU2UPt4oKr4Nwotp/6AxeAszdWR5PwIm2N
-         rSn1yLANPmIR2WONurP693MHh00CF8C2nYzV0eADrruXvq89VDtZ5Bb/kCMlEky2lz
-         J3zAqTdNC7yQxPKK42N88efOWtMQSpMXEgX64788fPSCraGWdwbHPMLkPzTR/NgrP8
-         2mElmz372vHfA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C61F3E4D033;
-        Wed, 19 Apr 2023 21:20:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: dsa: microchip: ksz8795: Correctly handle huge frame
- configuration
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168193921880.10989.3291332705872506866.git-patchwork-notify@kernel.org>
-Date:   Wed, 19 Apr 2023 21:20:18 +0000
-References: <43107d9e8b5b8b05f0cbd4e1f47a2bb88c8747b2.1681755535.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <43107d9e8b5b8b05f0cbd4e1f47a2bb88c8747b2.1681755535.git.christophe.jaillet@wanadoo.fr>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, arun.ramadoss@microchip.com,
-        linux@rempel-privat.de, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7617A642E3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 21:22:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82A44C433EF;
+        Wed, 19 Apr 2023 21:22:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1681939320;
+        bh=8FeQtFAQmPMVFM6tlsPfxwIQGqlujFEHWXaf5ZMyDsM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=O6ocRganDUAI/lV4ZCyRbchU+HXxtFyVbREH3btuT0gjfzXgwtyv7D43AyPRMzXyA
+         EQ6Pd2R4k+DRhAtQvNH3oWtdQ82oY/hINPkXCHmrPVdxYHYJVGSb2YkAasQvskU9w6
+         mcADFIq4WPfezFJM+igySqjMcS2Us4tmG7ZULkt8=
+Date:   Wed, 19 Apr 2023 14:21:59 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Joseph Qi <joseph.qi@linux.alibaba.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        ocfs2-devel <ocfs2-devel@oss.oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ocfs2: reduce ioctl stack usage
+Message-Id: <20230419142159.fd5ca2e91658fe304e317a72@linux-foundation.org>
+In-Reply-To: <d1e719ea-95bf-bb96-62db-e550cefe0a80@linux.alibaba.com>
+References: <20230417205631.1956027-1-arnd@kernel.org>
+        <20230418-fortgehen-inkubationszeit-5d3db3f0c2b1@brauner>
+        <7555eaf9-b195-5189-3928-c7292e4a0ba5@linux.alibaba.com>
+        <20230418-vielmehr-nominieren-7f2adb0f6703@brauner>
+        <d1e719ea-95bf-bb96-62db-e550cefe0a80@linux.alibaba.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Wed, 19 Apr 2023 10:00:15 +0800 Joseph Qi <joseph.qi@linux.alibaba.com> wrote:
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon, 17 Apr 2023 20:19:33 +0200 you wrote:
-> Because of the logic in place, SW_HUGE_PACKET can never be set.
-> (If the first condition is true, then the 2nd one is also true, but is not
-> executed)
 > 
-> Change the logic and update each bit individually.
 > 
-> Fixes: 29d1e85f45e0 ("net: dsa: microchip: ksz8: add MTU configuration support")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> On 4/18/23 8:56 PM, Christian Brauner wrote:
+> > On Tue, Apr 18, 2023 at 05:37:06PM +0800, Joseph Qi wrote:
+> >> Andrew picked ocfs2 patches into -mm tree before.
+> > Yup and that's fine obviously, but this belongs to fs/ and we're aiming
+> > to take fs/ stuff through the dedicated fs trees going forward.
 > 
-> [...]
+> Either is fine for me.
+> Hi Andrew, what's your opinion?
 
-Here is the summary with links:
-  - [net] net: dsa: microchip: ksz8795: Correctly handle huge frame configuration
-    https://git.kernel.org/netdev/net/c/3d2f8f1f184c
+I've been wrangling ocfs2 for over a decade and this is the first I've
+heard of this proposal.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Who is "we", above?  What was their reasoning?
 
+Who will be responsible for ocfs2 patches?  What will be their workflow
+and review and test processes?
 
+Overall, what benefit does this proposal offer the ocfs2 project?
