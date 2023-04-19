@@ -2,94 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5886E7502
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C91B56E7509
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbjDSI1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
+        id S232536AbjDSI1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232460AbjDSI1M (ORCPT
+        with ESMTP id S232561AbjDSI1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:27:12 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F30E51;
-        Wed, 19 Apr 2023 01:27:11 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33J8R6Ej028178;
-        Wed, 19 Apr 2023 03:27:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681892826;
-        bh=fpxwJ4UuCMRbCcS/k/rtxuIckU067HMuYB3fKrjP3yc=;
-        h=Date:To:CC:From:Subject;
-        b=mL8Dy4ulpeN+pLr9vNqZNsgRC0yE11hf8R1fsONMiUgciDhgrA6l2Au4LrO02Pc/M
-         MlphJdC7ERymUWdRboD79MyEymnXyCuhN5xBMv4QcV9BWg/0gw/r0N3G7VQrOFwYZU
-         hpO9PK4CEHLle9XyBXxgS71pIeFwkxUQr0ivALTc=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33J8R6dw104653
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 19 Apr 2023 03:27:06 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
- Apr 2023 03:27:05 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 19 Apr 2023 03:27:05 -0500
-Received: from [10.24.69.141] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33J8R2Sp017432;
-        Wed, 19 Apr 2023 03:27:03 -0500
-Message-ID: <291807c9-8d1c-56f0-ee39-4d221e18bd1a@ti.com>
-Date:   Wed, 19 Apr 2023 13:57:02 +0530
+        Wed, 19 Apr 2023 04:27:39 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FAB1025A;
+        Wed, 19 Apr 2023 01:27:32 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63b5465fb99so2668292b3a.1;
+        Wed, 19 Apr 2023 01:27:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681892852; x=1684484852;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZ6u9/CgweQ6jEZks/xNcF/T3qE4BW1KJoYmfltjmnY=;
+        b=jDdzGmKUWx25EHLZZrgXq7aDt3wKPN6KbvpQblP4OzUqawFkruB9AZ0pTXtxj5uflb
+         0Eg93b+jYxUjYMmYx/jMH4zSUgSvb3+F7scJZWp3r5jgRL+FYxXVDlT3UnX/DsD7JWyg
+         2qfZvuXWGG4yxj7YwEr76JeXl8kZVrx7j2kLXxEZs4Ak6V9SYdtll2nEamGBQ2zh4sF5
+         g/c4562wmL3t06jZ6GIixFAYw2GwQaEHdKqyq+QRcx+tpC6GAqm5xe9aetaBF9Fdrr5i
+         sTEuBvnoZQr7Pm+C8xZTSVDKZS0eBfi7066zLUowoXXFsrwf36jV7pidMne/kJfXRRKB
+         nmqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681892852; x=1684484852;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DZ6u9/CgweQ6jEZks/xNcF/T3qE4BW1KJoYmfltjmnY=;
+        b=O6pFu9XaPxFNKAZ1S5qUK8aAUp3P+p2FSHZxUXIdQf30Jz2e/kY9a8msbeQYEwK54X
+         bRJjzdUnQD/o3+tbOGhN5xOPN31svmN6vwP84qBFJtp1cIzLZIa56DbSQvotz5e/UiAN
+         UYMGmZzIEBZnkzaRNEDUi9ANEwl7Ojkmn9IBAjcKJ9h0YOCh2YSCaQ7Cgg5i3hrehjEH
+         oyxx2Sc/ps9t6iaBIELg4kMxSlkml6LytqFlHbeITRbtLSStls851JxgLAcYQXA/ZtLC
+         I16tI7kOeLeBZHeXOE4UyZttzqIgQbkqrIdL6LPE5rOm1+ytJ/9Zk2l0USyIKfZzp0Mi
+         oclg==
+X-Gm-Message-State: AAQBX9c89e8WS/5cFKqjXpEHOEeuVoaUmE5qI/1hF/oUaAi8jJ/Cs5KV
+        TZYlTKseOm6KxPqb4NbX9jI=
+X-Google-Smtp-Source: AKy350ag1YslGcDUesBAO6cVpS0tdiEfRtWuJuAlBJdYCw1S/UrhRm6CndcjR0xKt+ywr/rYXpxrtg==
+X-Received: by 2002:a17:903:708:b0:1a6:a375:cb49 with SMTP id kk8-20020a170903070800b001a6a375cb49mr3818668plb.39.1681892851691;
+        Wed, 19 Apr 2023 01:27:31 -0700 (PDT)
+Received: from hackyzh-virtual-machine.localdomain ([58.34.53.146])
+        by smtp.gmail.com with ESMTPSA id d19-20020a170902b71300b001a6ebc39fd9sm4411339pls.309.2023.04.19.01.27.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 01:27:31 -0700 (PDT)
+From:   hackyzh002 <hackyzh002@gmail.com>
+To:     alexander.deucher@amd.com
+Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, sumit.semwal@linaro.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, hackyzh002 <hackyzh002@gmail.com>
+Subject: [PATCH V2 2/2] drm/amdgpu: Fix integer overflow in amdgpu_cs_pass1
+Date:   Wed, 19 Apr 2023 16:27:05 +0800
+Message-Id: <20230419082705.4110-1-hackyzh002@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <vkoul@kernel.org>,
-        =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        "J, KEERTHY" <j-keerthy@ti.com>, <u-kumar1@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>,
-        "Menon, Nishanth" <nm@ti.com>
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-Subject: Question: dmaengine: dma_request_chan_by_mask() and DMA controller
- probe order
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The type of size is unsigned int, if size is 0x40000000, there will
+be an integer overflow, size will be zero after size *= sizeof(uint32_t),
+will cause uninitialized memory to be referenced later.
 
-In dma_request_chan_by_mask() , the probe defer logic returns -EPROBE_DEFER if
-there are no DMA devices registered yet. But in case of multiple DMA controllers
-in an SoC and when only one(or a subset) of the controllers have finished probe
-dma_request_chan_by_mask() can return -ENODEV incorrectly since the first DMA
-device probed might not support the particular mask requested.
+Signed-off-by: hackyzh002 <hackyzh002@gmail.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-What is the recommended solution to avoid situation like these?
-
-Consider the following scenario for example:
-
-SoC has two DMA controllers, one instance of system DMA, one dedicated for
-Camera subsytem which does not support DMA_MEMCPY and has lesser number of channels.
-
-* Camera subsystem DMA is probed first.
-* Another peripheral requests dma_request_chan_by_mask(DMA_MEMCPY)
-* dmaengine returns -ENODEV for above as the controller with DMA_MEMCPY support
-is not ready yet.
-* System DMA is probed later but peripheral driver failed to start with DMA.
-
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+index 08eced097..c17b3af85 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+@@ -192,7 +192,7 @@ static int amdgpu_cs_pass1(struct amdgpu_cs_parser *p,
+ 	uint64_t *chunk_array_user;
+ 	uint64_t *chunk_array;
+ 	uint32_t uf_offset = 0;
+-	unsigned int size;
++	size_t size;
+ 	int ret;
+ 	int i;
+ 
+@@ -235,7 +235,7 @@ static int amdgpu_cs_pass1(struct amdgpu_cs_parser *p,
+ 		size = p->chunks[i].length_dw;
+ 		cdata = u64_to_user_ptr(user_chunk.chunk_data);
+ 
+-		p->chunks[i].kdata = kvmalloc_array(size, sizeof(uint32_t),
++		p->chunks[i].kdata = kvcalloc(size, sizeof(uint32_t),
+ 						    GFP_KERNEL);
+ 		if (p->chunks[i].kdata == NULL) {
+ 			ret = -ENOMEM;
 -- 
-Thanks and Regards,
-Vaishnav
+2.34.1
+
