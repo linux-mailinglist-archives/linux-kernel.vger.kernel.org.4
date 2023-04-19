@@ -2,44 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280B56E7385
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBE56E7386
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbjDSGwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 02:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59534 "EHLO
+        id S231872AbjDSGw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 02:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjDSGwa (ORCPT
+        with ESMTP id S231836AbjDSGw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 02:52:30 -0400
-Received: from out0-213.mail.aliyun.com (out0-213.mail.aliyun.com [140.205.0.213])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519E62698;
-        Tue, 18 Apr 2023 23:52:27 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047212;MF=amy.saq@antgroup.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---.SKIPqvP_1681887140;
-Received: from 30.230.59.187(mailfrom:amy.saq@antgroup.com fp:SMTPD_---.SKIPqvP_1681887140)
-          by smtp.aliyun-inc.com;
-          Wed, 19 Apr 2023 14:52:21 +0800
-Message-ID: <f6a3a72d-495b-d1f1-9013-9be2faf67798@antgroup.com>
-Date:   Wed, 19 Apr 2023 14:52:20 +0800
+        Wed, 19 Apr 2023 02:52:57 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A193B55BE
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:52:49 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id a10so16362815ljr.5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:52:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681887168; x=1684479168;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NYgO2qxPOOmxEYT1A6CGSiRDNU0p1E1acMevYr1zcBg=;
+        b=UpgJHSVFaB78lC7zhT1pQ4EDjU0oRHZaCw1y/byZY/Xd2OmeUX8++qwnQm39W8/gzB
+         Z0LknLeQtyhuOJDHD058YuSvBBRi52v8r7zyFjeRYHSxlUEQUqQvY2n1hJFJhkZG2rek
+         5Hmq42C76Q7ZWrifgtqf1HDzk6ncUkPrmLSwHiHRR10a9s92C9AaFJK/jCFapMILKQTY
+         mlkeRqOFaV8mHW3LjpGouJaHJNA4iZKzf8RnVw8wXDdROi43dbHrS5nrAQ2mVNAN7Sn4
+         XSFR1m3TxgkmdbEaWkuy4le5l20gw4wAsvVXjIwZOtdMO9FXDwU6KW4bfcMuReZM5S96
+         hGXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681887168; x=1684479168;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NYgO2qxPOOmxEYT1A6CGSiRDNU0p1E1acMevYr1zcBg=;
+        b=afp/7Bp4mnDG7OhvJqF/MDAAukAobriUVMuU/0mGiapIdKwMLE0yypeHjL5Wab/Ujg
+         WKRuaGTNCkmGnnIi8LP0v5PclV7/AP4GSg67AgPgwe4EHLCYwiHHl146ajI2AIYakwji
+         boHTXZQmxIFscTfuGQT2bdGjDlx8wvdchpLA9rOdLxUprUZtsTgoQyBL2nPGrrC4psaU
+         H3mU6JucdYpg8lQ3CWFx81LFk8VIQPEXSeI4MdxBFrN697+FpCTtRP9L2iwjDvCAfPCG
+         cABBCLv2aE0wbytts+FkJKcvQKGYr8DFv0lWTy0O5w3CHafMvFkkjTEn/t7mD6NgNkPr
+         IaKw==
+X-Gm-Message-State: AAQBX9d/xw/HzB1VSirTPURNbDDdtdfJNR+BqpFszdZe14gAGOaag7VT
+        h8irygFCXPP4HPnA/N/RIUk4AHFYODezJFM9yjO44iiH5Gk=
+X-Google-Smtp-Source: AKy350Z63Q73FBkxmsGhsu7wFmJXYeWQ/E8UAk5YJJ84OmTZMwSzx6CiDFA8VURtd+xfPoUfpXwX3srnTbddTqFRWbo=
+X-Received: by 2002:a2e:91c8:0:b0:2a8:bca1:bfa6 with SMTP id
+ u8-20020a2e91c8000000b002a8bca1bfa6mr1763135ljg.24.1681887167607; Tue, 18 Apr
+ 2023 23:52:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v8] net/packet: support mergeable feature of virtio
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     "=?UTF-8?B?6LCI6Ym06ZSL?=" <henry.tjf@antgroup.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, <netdev@vger.kernel.org>
-References: <20230413114402.50225-1-amy.saq@antgroup.com>
- <64387b25619ba_1479cd29457@willemb.c.googlers.com.notmuch>
-From:   "=?UTF-8?B?5rKI5a6J55CqKOWHm+eOpSk=?=" <amy.saq@antgroup.com>
-In-Reply-To: <64387b25619ba_1479cd29457@willemb.c.googlers.com.notmuch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+References: <1681882824-17532-1-git-send-email-zhaoyang.huang@unisoc.com> <87pm80tnhu.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87pm80tnhu.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Wed, 19 Apr 2023 14:52:25 +0800
+Message-ID: <CAGWkznFbQARfoDpdUXbR6BOO9TU_-pkHtm7Q9M0x2=4KWcAqpg@mail.gmail.com>
+Subject: Re: [PATCH] mm: skip CMA pages when they are not available
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,137 +70,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 19, 2023 at 2:07=E2=80=AFPM Huang, Ying <ying.huang@intel.com> =
+wrote:
+>
+> "zhaoyang.huang" <zhaoyang.huang@unisoc.com> writes:
+>
+> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> >
+> > It is wasting of effort to reclaim CMA pages if they are not availabe
+> > for current context during direct reclaim. Skip them when under corresp=
+onding
+> > circumstance.
+>
+> Do you have any performance number for this change?
+Sorry, No. This patch arised from bellowing OOM issue which is caused
+by MIGRATE_CMA occupying almost 100 percent of zones free pages and
+solved by "168676649 mm,page_alloc,cma: conditionally prefer cma
+pageblocks for movable allocations". This could be a common scenario
+for a zone that has a large proportion of CMA reserved page blocks
+which need to be considered in both allocation and reclaiming
+perspective.
 
-在 2023/4/14 上午5:59, Willem de Bruijn 写道:
-> 沈安琪(凛玥) wrote:
->> From: Jianfeng Tan <henry.tjf@antgroup.com>
->>
->> Packet sockets, like tap, can be used as the backend for kernel vhost.
->> In packet sockets, virtio net header size is currently hardcoded to be
->> the size of struct virtio_net_hdr, which is 10 bytes; however, it is not
->> always the case: some virtio features, such as mrg_rxbuf, need virtio
->> net header to be 12-byte long.
->>
->> Mergeable buffers, as a virtio feature, is worthy of supporting: packets
->> that are larger than one-mbuf size will be dropped in vhost worker's
->> handle_rx if mrg_rxbuf feature is not used, but large packets
->> cannot be avoided and increasing mbuf's size is not economical.
->>
->> With this virtio feature enabled by virtio-user, packet sockets with
->> hardcoded 10-byte virtio net header will parse mac head incorrectly in
->> packet_snd by taking the last two bytes of virtio net header as part of
->> mac header.
->> This incorrect mac header parsing will cause packet to be dropped due to
->> invalid ether head checking in later under-layer device packet receiving.
->>
->> By adding extra field vnet_hdr_sz with utilizing holes in struct
->> packet_sock to record currently used virtio net header size and supporting
->> extra sockopt PACKET_VNET_HDR_SZ to set specified vnet_hdr_sz, packet
->> sockets can know the exact length of virtio net header that virtio user
->> gives.
->> In packet_snd, tpacket_snd and packet_recvmsg, instead of using
->> hardcoded virtio net header size, it can get the exact vnet_hdr_sz from
->> corresponding packet_sock, and parse mac header correctly based on this
->> information to avoid the packets being mistakenly dropped.
->>
->> Signed-off-by: Jianfeng Tan <henry.tjf@antgroup.com>
->> Co-developed-by: Anqi Shen <amy.saq@antgroup.com>
->> Signed-off-by: Anqi Shen <amy.saq@antgroup.com>
->> ---
->>
->> Changelog
->>
->> V7 -> V8:
->> * remove redundant variables;
->> * resolve KCSAN warning.
->>
->> V6 -> V7:
->> * addresses coding style comments.
->>
->> V5 -> V6:
->> * rebase patch based on 6.3-rc2.
->>
->> V4 -> V5:
->> * add READ_ONCE() macro when initializing local vnet_hdr_sz variable;
->> * fix some nits.
->>
->> V3 -> V4:
->> * read po->vnet_hdr_sz once during vnet_hdr_sz and use vnet_hdr_sz locally
->> to avoid race condition;
->> * modify how to check non-zero po->vnet_hdr_sz;
->> * separate vnet_hdr_sz as a u8 field in struct packet_sock instead of 8-bit
->> in an int field.
->>
->> V2 -> V3:
->> * remove has_vnet_hdr field and use vnet_hdr_sz to indicate whether
->> there is a vnet header;
->> * refactor PACKET_VNET_HDR and PACKET_VNET_HDR_SZ sockopt to remove
->> redundant code.
->>
->> V1 -> V2:
->> * refactor the implementation of PACKET_VNET_HDR and PACKET_VNET_HDR_SZ
->> socketopts to get rid of redundate code;
->> * amend packet_rcv_vnet in af_packet.c to avoid extra function invocation.
->>
->>   include/uapi/linux/if_packet.h |  1 +
->>   net/packet/af_packet.c         | 93 ++++++++++++++++++++--------------
->>   net/packet/diag.c              |  2 +-
->>   net/packet/internal.h          |  2 +-
->>   4 files changed, 58 insertions(+), 40 deletions(-)
->>
->> @@ -2250,7 +2250,7 @@ static int tpacket_rcv(struct sk_buff *skb, struct net_device *dev,
->>   	__u32 ts_status;
->>   	bool is_drop_n_account = false;
->>   	unsigned int slot_id = 0;
->> -	bool do_vnet = false;
->> +	int vnet_hdr_sz = 0;
->>   
->>   	/* struct tpacket{2,3}_hdr is aligned to a multiple of TPACKET_ALIGNMENT.
->>   	 * We may add members to them until current aligned size without forcing
->> @@ -2308,10 +2308,9 @@ static int tpacket_rcv(struct sk_buff *skb, struct net_device *dev,
->>   		netoff = TPACKET_ALIGN(po->tp_hdrlen +
->>   				       (maclen < 16 ? 16 : maclen)) +
->>   				       po->tp_reserve;
->> -		if (packet_sock_flag(po, PACKET_SOCK_HAS_VNET_HDR)) {
->> -			netoff += sizeof(struct virtio_net_hdr);
->> -			do_vnet = true;
->> -		}
->> +		vnet_hdr_sz = READ_ONCE(po->vnet_hdr_sz);
->> +		if (vnet_hdr_sz)
->> +			netoff += vnet_hdr_sz;
->>   		macoff = netoff - maclen;
->>   	}
->>   	if (netoff > USHRT_MAX) {
->> @@ -2337,7 +2336,6 @@ static int tpacket_rcv(struct sk_buff *skb, struct net_device *dev,
->>   			snaplen = po->rx_ring.frame_size - macoff;
->>   			if ((int)snaplen < 0) {
->>   				snaplen = 0;
->> -				do_vnet = false;
->>   			}
->>   		}
->>   	} else if (unlikely(macoff + snaplen >
->> @@ -2351,7 +2349,6 @@ static int tpacket_rcv(struct sk_buff *skb, struct net_device *dev,
->>   		if (unlikely((int)snaplen < 0)) {
->>   			snaplen = 0;
->>   			macoff = GET_PBDQC_FROM_RB(&po->rx_ring)->max_frame_len;
->> -			do_vnet = false;
-> here and in the block above the existing behavior must be maintained:
-> vnet_hdr_sz must be reset to zero in these cases.
-
-
-Thanks for pointing out. You're right and we will address it in the next 
-version which will be sent out soon.
-
-
->>   		}
->>   	}
->>   	spin_lock(&sk->sk_receive_queue.lock);
->> @@ -2367,7 +2364,7 @@ static int tpacket_rcv(struct sk_buff *skb, struct net_device *dev,
->>   		__set_bit(slot_id, po->rx_ring.rx_owner_map);
->>   	}
->>   
->> -	if (do_vnet &&
->> +	if (vnet_hdr_sz &&
->>   	    virtio_net_hdr_from_skb(skb, h.raw + macoff -
->>   				    sizeof(struct virtio_net_hdr),
->>   				    vio_le(), true, 0)) {
+04166 < 4> [   36.172486] [03-19 10:05:52.172] ActivityManager: page
+allocation failure: order:0, mode:0xc00(GFP_NOIO),
+nodemask=3D(null),cpuset=3Dforeground,mems_allowed=3D0
+0419C < 4> [   36.189447] [03-19 10:05:52.189] DMA32: 0*4kB 447*8kB
+(C) 217*16kB (C) 124*32kB (C) 136*64kB (C) 70*128kB (C) 22*256kB (C)
+3*512kB (C) 0*1024kB 0*2048kB 0*4096kB =3D 35848kB
+0419D < 4> [   36.193125] [03-19 10:05:52.193] Normal: 231*4kB (UMEH)
+49*8kB (MEH) 14*16kB (H) 13*32kB (H) 8*64kB (H) 2*128kB (H) 0*256kB
+1*512kB (H) 0*1024kB 0*2048kB 0*4096kB =3D 3236kB
+......
+041EA < 4> [   36.234447] [03-19 10:05:52.234] SLUB: Unable to
+allocate memory on node -1, gfp=3D0xa20(GFP_ATOMIC)
+041EB < 4> [   36.234455] [03-19 10:05:52.234] cache: ext4_io_end,
+object size: 64, buffer size: 64, default order: 0, min order: 0
+041EC < 4> [   36.234459] [03-19 10:05:52.234] node 0: slabs: 53,
+objs: 3392, free: 0
+>
+> Best Regards,
+> Huang, Ying
+>
+> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > ---
+> >  mm/vmscan.c | 11 ++++++++++-
+> >  1 file changed, 10 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > index bd6637f..04424d9 100644
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -2225,10 +2225,16 @@ static unsigned long isolate_lru_folios(unsigne=
+d long nr_to_scan,
+> >       unsigned long nr_skipped[MAX_NR_ZONES] =3D { 0, };
+> >       unsigned long skipped =3D 0;
+> >       unsigned long scan, total_scan, nr_pages;
+> > +     bool cma_cap =3D true;
+> > +     struct page *page;
+> >       LIST_HEAD(folios_skipped);
+> >
+> >       total_scan =3D 0;
+> >       scan =3D 0;
+> > +     if ((IS_ENABLED(CONFIG_CMA)) && !current_is_kswapd()
+> > +             && (gfp_migratetype(sc->gfp_mask) !=3D MIGRATE_MOVABLE))
+> > +             cma_cap =3D false;
+> > +
+> >       while (scan < nr_to_scan && !list_empty(src)) {
+> >               struct list_head *move_to =3D src;
+> >               struct folio *folio;
+> > @@ -2239,7 +2245,10 @@ static unsigned long isolate_lru_folios(unsigned=
+ long nr_to_scan,
+> >               nr_pages =3D folio_nr_pages(folio);
+> >               total_scan +=3D nr_pages;
+> >
+> > -             if (folio_zonenum(folio) > sc->reclaim_idx) {
+> > +             page =3D &folio->page;
+> > +
+> > +             if (folio_zonenum(folio) > sc->reclaim_idx ||
+> > +                     (get_pageblock_migratetype(page) =3D=3D MIGRATE_C=
+MA && !cma_cap)) {
+> >                       nr_skipped[folio_zonenum(folio)] +=3D nr_pages;
+> >                       move_to =3D &folios_skipped;
+> >                       goto move;
