@@ -2,134 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1146E72EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65C96E72ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbjDSGMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 02:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
+        id S231605AbjDSGON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 02:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231642AbjDSGL5 (ORCPT
+        with ESMTP id S231264AbjDSGOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 02:11:57 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D7459F5;
-        Tue, 18 Apr 2023 23:11:56 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        Wed, 19 Apr 2023 02:14:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D681B5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:14:09 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pp14k-000742-Qv; Wed, 19 Apr 2023 08:13:54 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 92E6A660320D;
-        Wed, 19 Apr 2023 07:11:53 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681884714;
-        bh=nTpGrftsRIa7La3Ejz06bZ6jB8zQMnXxmXPyKaNjl/c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M74pTcM2OYwN/86mnbjQC8NtUEu1+y2BszQaVWA5XmA58kF/QX36GJS5PufvkkNDK
-         W/xIK9tgxVMdjwSF3zgk+KSoLSjAZ8HSSniKJ7krsOM/67iEjr6/ApL4v8rdMWCtP1
-         DZPI2v+REMfaovVo1BIJHqYFb/F7aFEXou/FOxisRP9C72l0SJI9N8CE7zNOdTcpdU
-         FIZ30HuKz+bNUqZTuS14AMGZxC3yZo9zML61T4dhuQDdMwpIHbdS/MXv5KofNmAu6D
-         S9Oizd5d7KETbIdFVbLbBloacfuYcr6xrd3KJNEJhbFgdnMsSQINIIqnSYfpT/RYW5
-         Om0+KjwDsCTsQ==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     rafael@kernel.org
-Cc:     daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        aouledameur@baylibre.com, bchihi@baylibre.com,
-        daniel@makrotopia.org, ye.xingchen@zte.com.cn, hsinyi@chromium.org,
-        michael.kao@mediatek.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 2/2] thermal/drivers/mediatek: Add temperature constraints to validate read
-Date:   Wed, 19 Apr 2023 08:11:46 +0200
-Message-Id: <20230419061146.22246-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230419061146.22246-1-angelogioacchino.delregno@collabora.com>
-References: <20230419061146.22246-1-angelogioacchino.delregno@collabora.com>
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D371B1B2AA2;
+        Wed, 19 Apr 2023 06:13:53 +0000 (UTC)
+Date:   Wed, 19 Apr 2023 08:13:52 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     "Mendez, Judith" <jm@ti.com>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Davis <afd@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Schuyler Patton <spatton@ti.com>
+Subject: Re: [RFC PATCH 5/5] can: m_can: Add hrtimer to generate software
+ interrupt
+Message-ID: <20230419-trimmer-fasting-928868e8cb81-mkl@pengutronix.de>
+References: <20230413223051.24455-1-jm@ti.com>
+ <20230413223051.24455-6-jm@ti.com>
+ <20230414-bounding-guidance-262dffacd05c-mkl@pengutronix.de>
+ <4a6c66eb-2ccf-fc42-a6fc-9f411861fcef@hartkopp.net>
+ <20230416-failing-washbasin-e4fa5caea267-mkl@pengutronix.de>
+ <f58e8dce-898c-8797-5293-1001c9a75381@hartkopp.net>
+ <20230417-taking-relieving-f2c8532864c0-mkl@pengutronix.de>
+ <25806ec7-64c5-3421-aea1-c0d431e3f27f@hartkopp.net>
+ <20230417-unsafe-porridge-0b712d137530-mkl@pengutronix.de>
+ <5ece3561-4690-a721-aa83-adf80d0be9f5@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cggld5pyystbuhs6"
+Content-Disposition: inline
+In-Reply-To: <5ece3561-4690-a721-aa83-adf80d0be9f5@ti.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AUXADC thermal v1 allows reading temperature range between -20°C to
-150°C and any value out of this range is invalid.
 
-Add new definitions for MT8173_TEMP_{MIN_MAX} and a new small helper
-mtk_thermal_temp_is_valid() to check if new readings are in range: if
-not, we tell to the API that the reading is invalid by returning
-THERMAL_TEMP_INVALID.
+--cggld5pyystbuhs6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It was chosen to introduce the helper function because, even though this
-temperature range is realistically ok for all, it comes from a downstream
-kernel driver for version 1, but here we also support v2 and v3 which may
-may have wider constraints.
+On 18.04.2023 15:59:57, Mendez, Judith wrote:
+> > > > > > > The "shortest" 11 bit CAN ID CAN frame is a Classical CAN fra=
+me with DLC =3D 0
+> > > > > > > and 1 Mbit/s (arbitration) bitrate. This should be 48 bits @1=
+Mbit =3D> ~50
+> > > > > > > usecs
+> > > > > > >=20
+> > > > > > > So it should be something about
+> > > > > > >=20
+> > > > > > >        50 usecs * (FIFO queue len - 2)
+> > > > > >=20
+> > > > > > Where does the "2" come from?
+> > > > >=20
+> > > > > I thought about handling the FIFO earlier than it gets completely=
+ "full".
+> > > > >=20
+> > > > > The fetching routine would need some time too and the hrtimer cou=
+ld also
+> > > > > jitter to some extend.
+> > > >=20
+> > > > I was assuming something like this.
+> > > >=20
+> > > > I would argue that the polling time should be:
+> > > >=20
+> > > >       50 =C2=B5s * FIFO length - IRQ overhead.
+> > > >=20
+> > > > The max IRQ overhead depends on your SoC and kernel configuration.
+> > >=20
+> > > I just tried an educated guess to prevent the FIFO to be filled up
+> > > completely. How can you estimate the "IRQ overhead"? And how do you c=
+atch
+> > > the CAN frames that are received while the IRQ is handled?
+> >=20
+> > We're talking about polling, better call it "overhead" or "latency from
+> > timer expiration until FIFO has at least one frame room". This value
+> > depends on your system.
+> >=20
+> > It depends on many, many factors, SoC, Kernel configuration (preempt RT,
+> > powersaving, frequency scaling, system load. In your example it's 100
+> > =C2=B5s. I wanted to say there's an overhead (or latency) and we need e=
+nough
+> > space in the FIFO, to cover it.
+> >=20
+>=20
+> I am not sure how to estimate IRQ overhead, but FIFO length should be 64
+> elements.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/thermal/mediatek/auxadc_thermal.c | 24 +++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+Ok
 
-diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
-index 3c959a827451..e908c8e9d558 100644
---- a/drivers/thermal/mediatek/auxadc_thermal.c
-+++ b/drivers/thermal/mediatek/auxadc_thermal.c
-@@ -116,6 +116,10 @@
- /* The calibration coefficient of sensor  */
- #define MT8173_CALIBRATION	165
- 
-+/* Valid temperatures range */
-+#define MT8173_TEMP_MIN		-20000
-+#define MT8173_TEMP_MAX		150000
-+
- /*
-  * Layout of the fuses providing the calibration data
-  * These macros could be used for MT8183, MT8173, MT2701, and MT2712.
-@@ -689,6 +693,11 @@ static const struct mtk_thermal_data mt7986_thermal_data = {
- 	.version = MTK_THERMAL_V3,
- };
- 
-+static bool mtk_thermal_temp_is_valid(int temp)
-+{
-+	return (temp >= MT8173_TEMP_MIN) && (temp <= MT8173_TEMP_MAX);
-+}
-+
- /**
-  * raw_to_mcelsius_v1 - convert a raw ADC value to mcelsius
-  * @mt:	The thermal controller
-@@ -815,14 +824,17 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 		temp = mt->raw_to_mcelsius(
- 			mt, conf->bank_data[bank->id].sensors[i], raw);
- 
--
- 		/*
--		 * The first read of a sensor often contains very high bogus
--		 * temperature value. Filter these out so that the system does
--		 * not immediately shut down.
-+		 * Depending on the filt/sen intervals and ADC polling time,
-+		 * we may need up to 60 milliseconds after initialization: this
-+		 * will result in the first reading containing an out of range
-+		 * temperature value.
-+		 * Validate the reading to both address the aforementioned issue
-+		 * and to eventually avoid bogus readings during runtime in the
-+		 * event that the AUXADC gets unstable due to high EMI, etc.
- 		 */
--		if (temp > 200000)
--			temp = 0;
-+		if (!mtk_thermal_temp_is_valid(temp))
-+			temp = THERMAL_TEMP_INVALID;
- 
- 		if (temp > max)
- 			max = temp;
--- 
-2.40.0
+> 50 us * 62 is about 3.1 ms and we are using 1 ms timer polling interval.
 
+Sounds good.
+
+> Running a few benchmarks showed that using 0.5 ms timer polling interval
+> starts to take a toll on CPU load, that is why I chose 1 ms polling
+> interval.
+
+However in the code you use 5 ms.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--cggld5pyystbuhs6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQ/hp0ACgkQvlAcSiqK
+BOjeFwf/UaNEfsSOA9OPls69RXd4P4lR2cQibXWCABAg/B1OHkD9BdLDKqR+mS8S
+G+PG//Ot9k8CwPoFFt+xZ0TrxIj/CakDJzawuMoJvSpToSX84V0eYZgh2oH0JBmd
+m8ocOGnz3dPGaIH+UQ6sUZQN3JxE/oeDV8AgLyD86tE6NDc4BxPARTdiH3oJP1mj
+Wn109juOs0zfj+BftxgtfvfTPcYcDxmR/8Skvy7lWi/6Oir5lpRcyVRuo6zd4wfh
+KfsuBSJ0TgdVwntMN8R/P6UXAkvburMAZZj1p3Nv91DweeiJCX7T4K07B1tGWWpu
+1iKTXZ4x3NzwMww5oizIjKx+Mjhkhg==
+=CtTc
+-----END PGP SIGNATURE-----
+
+--cggld5pyystbuhs6--
