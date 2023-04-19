@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B906E8498
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E49766E849B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbjDSWTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 18:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
+        id S232672AbjDSWTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 18:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbjDSWS1 (ORCPT
+        with ESMTP id S231845AbjDSWS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 18:18:27 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1112C55B7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:08 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a68d61579bso4143585ad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:08 -0700 (PDT)
+        Wed, 19 Apr 2023 18:18:29 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979ED900C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:11 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a9253d4551so4765445ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942680; x=1684534680;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942682; x=1684534682;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UvoLTFH11lm+jG4OLKr6/L5S3PiYUonU+A7E1tEIRKo=;
-        b=N4XtdIUPBSqsJPJi86uCyaF35SsvQqKIOljuRP/nM3GeL5PnC+sHwcgW+t5y7DrxbF
-         5TpNpwBssHKlVMD0+rR0V581oyy3Tas3sY/32xO2PA8Waej/gLWBYShGPmuxBhpf6re5
-         DdBOslqLXNOPSWtzW2KMHDPcIh6b83lTPIBfFraWIh9OIpnFYzRRhBid7+FKOFDAgg76
-         TSEZFYh5jipl2xgrex0+4e/qWmzQSgGTsJyLQHLHYVjRsdnpfnSpQ74r0gthMKcWw1bC
-         bNIhm8IsywbFNoO4sfJHPMRDxwvnuXKEz2kBcBAbp8YppTYmN0JgS+/GNdHTRqrvAGAB
-         SHNw==
+        bh=gRHTy1c+Pl7OVrg4l834g5VjRWcSWQwGhgEvJAPkg+w=;
+        b=kmEcD4YfOAFXGG17QX3KsyUFIzwyUfrsKZ1wYGSvZgqODlY6mzST437Sn9HGEmF2e4
+         2a2a47FJD8fRdSNkrzKWkWk+t1hYBGWo5RKv/QKbDEChEI7DPntySLvvhVENeLXEvAzZ
+         Yi9hf+mn4OFq02nwK3TFnSe2tJbzQbrAKkpWS2zkyUDSsMGzPeY61HsFbh3a25B058l+
+         uUA1pt3+Fbza1RQ2lPxN0ghz2+DhS82u09mOfYSZt3cX82Z63iV2DNRddUax6jZ/SlYZ
+         5R7VI8q/CylWQy7dmPwpqmG5M0g3aSf6g2QGsKHX2ECmbls1SK5jLS9FX181LfzlvClk
+         L9rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681942680; x=1684534680;
+        d=1e100.net; s=20221208; t=1681942682; x=1684534682;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UvoLTFH11lm+jG4OLKr6/L5S3PiYUonU+A7E1tEIRKo=;
-        b=P5d+iZoO0mJDZVkkab2nkUeRQncZ1H+1i15GYGbsmsw/h0ze1TQ1HvNktOhJ0nnj70
-         IFpPvJTjHBMSTJWcKQL3CTTwhTeMjI60cj5ih+TvQqRcpUlYg6qjPyqZtI7Vs0okd013
-         AVh1R/tCs0HDisJz26CubJBfzayG9ZlCwQDjxCIMb1Aa7LxXemPYge9nxu3S+1HAf+5A
-         lYtdF9qPhRjWGlAuJOq3QjKDBYHN4W2s0cZkTF8bdUzek1jogeIsGwn6mQZFCJ0c4xiv
-         Xq4TW+MfgJmjNoTvwJlfCnTP1MTHl9YxKFvBCgXdkFDrHfhXp2PIfMxL6M6xHkVk2k7e
-         XFxQ==
-X-Gm-Message-State: AAQBX9eRKoo7edVOoJP00oa/+uQYJLVe2MGWBy2qxKYKEejXbBJC4zbG
-        o2gG9P2numOyJr0GaDpfnTapPZsRuT2pIwfRwB4=
-X-Google-Smtp-Source: AKy350Z88ZumXUVLTXNRcg1zbdln/2qU8CAI5Xlijd5PgR7U+e9fUdXEuzGKHFP/DBsSEjOZB75l1A==
-X-Received: by 2002:a17:903:2287:b0:1a9:2951:7753 with SMTP id b7-20020a170903228700b001a929517753mr1272548plh.45.1681942680495;
-        Wed, 19 Apr 2023 15:18:00 -0700 (PDT)
+        bh=gRHTy1c+Pl7OVrg4l834g5VjRWcSWQwGhgEvJAPkg+w=;
+        b=duQy1O/l3YAs4e1Sf1hAe45Z59ceFuyBKePQ/C86akwNgdxXETp37mO42kzZq1F+lj
+         zOuIzdpoqmyliKKQZgaktK50W/GMEBEqvilRI8jUWeB5mHwzhFuVSSZ5SoWylEHiCom5
+         0qlhs3NPtRGV2r2dIVk3446UY0m3laiCa8Sv313KT/USuXxros0Bj83VvBSN1ahqFP+h
+         apPbGZz+ohWDogf5a+ouHS0t4ZXv3gQUf7y6fOXrytgi8zSHdIutBS8cIp4k/Sd05x68
+         zDse1U6j080dx8vqQuLQy0q00up8stQGqKGCQ7ejIkzAgRbWwxNzme02KIAwTCfrc4Mr
+         MD0g==
+X-Gm-Message-State: AAQBX9c9kHeMDpPfJ5qrZatguxdfnlrsMZWRY6l+W87E4RT2VnEclufr
+        /Q9sKijLkD5r1oBJvbSCjlPN0lzcLemdo1/DaYE=
+X-Google-Smtp-Source: AKy350YWY4zn6DitmSoPXPvjQSlrg5vxaeh3mQBYR6TvOk3ni0Mxh3KE27JFZrBKZBdZgegUV17R1Q==
+X-Received: by 2002:a17:902:ec8b:b0:1a9:23b7:9182 with SMTP id x11-20020a170902ec8b00b001a923b79182mr2673903plg.27.1681942682652;
+        Wed, 19 Apr 2023 15:18:02 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.17.58
+        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.18.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 15:18:00 -0700 (PDT)
+        Wed, 19 Apr 2023 15:18:02 -0700 (PDT)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Atish Patra <atishp@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
@@ -76,9 +76,9 @@ Cc:     Atish Patra <atishp@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Rajnesh Kanwal <rkanwal@rivosinc.com>,
         Uladzislau Rezki <urezki@gmail.com>
-Subject: [RFC 14/48] RISC-V: KVM: Skip dirty logging updates for TVM
-Date:   Wed, 19 Apr 2023 15:16:42 -0700
-Message-Id: <20230419221716.3603068-15-atishp@rivosinc.com>
+Subject: [RFC 15/48] RISC-V: KVM: Add a helper function to trigger fence ops
+Date:   Wed, 19 Apr 2023 15:16:43 -0700
+Message-Id: <20230419221716.3603068-16-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230419221716.3603068-1-atishp@rivosinc.com>
 References: <20230419221716.3603068-1-atishp@rivosinc.com>
@@ -86,35 +86,86 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CoVE doesn't support dirty logging for TVMs yet.
-Skip for now.
+When Cove is enabled in RISC-V, the TLB shootdown happens in co-ordination
+with TSM. The host must not issue hfence directly. It relies on TSM
+to do that instead. It just needs to initiate the process and make
+sure that all the running vcpus exit the guest mode. As a result, it
+traps to TSM and TSM issues hfence on behalf of the host.
 
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/kvm/mmu.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/riscv/include/asm/kvm_cove.h |  2 ++
+ arch/riscv/kvm/cove.c             | 36 +++++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-index 9693897..1d5e4ed 100644
---- a/arch/riscv/kvm/mmu.c
-+++ b/arch/riscv/kvm/mmu.c
-@@ -457,6 +457,9 @@ void kvm_arch_commit_memory_region(struct kvm *kvm,
- 				const struct kvm_memory_slot *new,
- 				enum kvm_mr_change change)
+diff --git a/arch/riscv/include/asm/kvm_cove.h b/arch/riscv/include/asm/kvm_cove.h
+index 4ea1df1..fc8633d 100644
+--- a/arch/riscv/include/asm/kvm_cove.h
++++ b/arch/riscv/include/asm/kvm_cove.h
+@@ -130,6 +130,8 @@ void kvm_riscv_cove_vcpu_switchto(struct kvm_vcpu *vcpu, struct kvm_cpu_trap *tr
+ int kvm_riscv_cove_vm_measure_pages(struct kvm *kvm, struct kvm_riscv_cove_measure_region *mr);
+ int kvm_riscv_cove_vm_add_memreg(struct kvm *kvm, unsigned long gpa, unsigned long size);
+ int kvm_riscv_cove_gstage_map(struct kvm_vcpu *vcpu, gpa_t gpa, unsigned long hva);
++/* Fence related function */
++int kvm_riscv_cove_tvm_fence(struct kvm_vcpu *vcpu);
+ #else
+ static inline bool kvm_riscv_cove_enabled(void) {return false; };
+ static inline int kvm_riscv_cove_init(void) { return -1; }
+diff --git a/arch/riscv/kvm/cove.c b/arch/riscv/kvm/cove.c
+index 5b4d9ba..4efcae3 100644
+--- a/arch/riscv/kvm/cove.c
++++ b/arch/riscv/kvm/cove.c
+@@ -78,6 +78,42 @@ static int kvm_riscv_cove_fence(void)
+ 	return rc;
+ }
+ 
++int kvm_riscv_cove_tvm_fence(struct kvm_vcpu *vcpu)
++{
++	struct kvm *kvm = vcpu->kvm;
++	struct kvm_cove_tvm_context *tvmc = kvm->arch.tvmc;
++	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
++	unsigned long i;
++	struct kvm_vcpu *temp_vcpu;
++	int ret;
++
++	if (!tvmc)
++		return -EINVAL;
++
++	spin_lock(&tvmc->tvm_fence_lock);
++	ret = sbi_covh_tvm_initiate_fence(tvmc->tvm_guest_id);
++	if (ret) {
++		spin_unlock(&tvmc->tvm_fence_lock);
++		return ret;
++	}
++
++	bitmap_clear(vcpu_mask, 0, KVM_MAX_VCPUS);
++	kvm_for_each_vcpu(i, temp_vcpu, kvm) {
++		if (temp_vcpu != vcpu)
++			bitmap_set(vcpu_mask, i, 1);
++	}
++
++	/*
++	 * The host just needs to make sure that the running vcpus exit the
++	 * guest mode and traps into TSM so that it can issue hfence.
++	 */
++	kvm_make_vcpus_request_mask(kvm, KVM_REQ_OUTSIDE_GUEST_MODE, vcpu_mask);
++	spin_unlock(&tvmc->tvm_fence_lock);
++
++	return 0;
++}
++
++
+ static int cove_convert_pages(unsigned long phys_addr, unsigned long npages, bool fence)
  {
-+	/* We don't support dirty logging for CoVE guests yet */
-+	if (is_cove_vm(kvm))
-+		return;
- 	/*
- 	 * At this point memslot has been committed and there is an
- 	 * allocated dirty_bitmap[], dirty pages will be tracked while
+ 	int rc;
 -- 
 2.25.1
 
