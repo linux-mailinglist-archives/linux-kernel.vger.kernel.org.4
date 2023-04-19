@@ -2,147 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3FF26E732D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 717AC6E7333
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbjDSGZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 02:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
+        id S231892AbjDSG1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 02:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232173AbjDSGZE (ORCPT
+        with ESMTP id S231787AbjDSG1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 02:25:04 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F906A241;
-        Tue, 18 Apr 2023 23:24:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681885475; x=1713421475;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8/urAO3cr38Q500Q7Zd86j88a9lBzovlp1Wn4tiEqAs=;
-  b=iw13tOXQUUoQyU9o4NJ2dlxh+uKMaSE11GaCdUpK4XsJwMZdTmHnOOqC
-   ckfzSJJjd6pj4HIiVii3bxnBwnOpfD+tUaXgrXF/5B3wyr9dlwt7myJgj
-   Y/UDS+m5EDSyK2Vo6Inb4nP4Zhvtr1ZcYo+4gwpcQv1NKq2y/1NqCP/bW
-   BJVw4kNXviPIEOR4QLGPBLlVJRMWFrTuacOpmNJ/+Wkn2U8aF5aAnR4V+
-   CVV4m3VsEJfa1dfNYOEHHXJNo9U1qoJT/eFfSChueHzHTr+qPVPu1J6XC
-   BCGxI8P9vPh9wYBB/kIUN9IlT1UZFtaazOjQEAcHem41c2DkJcXr6QlgO
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,208,1677567600"; 
-   d="asc'?scan'208";a="221576825"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Apr 2023 23:24:08 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 18 Apr 2023 23:24:08 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 18 Apr 2023 23:24:05 -0700
-Date:   Wed, 19 Apr 2023 07:23:49 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
+        Wed, 19 Apr 2023 02:27:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06ED993C7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:26:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681885558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bqr63rdBNJW6MJxcSz6TUxSygJeiGgSztBtqTvNWdFg=;
+        b=S7uG2kPa8CfmGclxm5ulKqNBskILe2cpxElfd1353UaUuELutyDFqIB+dvjJ9VOuOeEE78
+        BiQraveZPz16RSWFAx2o+vMUwvi7m6AAH0s6p+ABlhgnW9OexARX0EtTjvt3yZFtoi59AF
+        zVneSdXjx8dEvQ7ICwd8iVOzth0bQAI=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
+ [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-470-t2gZM8hkNdedVffY5wcs9Q-1; Wed, 19 Apr 2023 02:25:57 -0400
+X-MC-Unique: t2gZM8hkNdedVffY5wcs9Q-1
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-18486cd43d7so8761496fac.1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:25:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681885556; x=1684477556;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bqr63rdBNJW6MJxcSz6TUxSygJeiGgSztBtqTvNWdFg=;
+        b=AkHJlE5gevKwlG10YCZ1/R1FkBn6F0fCFshf9C5Z3+kUxzpJP60/NRbMpZuL+Bu9Wm
+         lrZwXaxfCewe/cqZ2+1wYTuQc9Js8Kt4ql5lDTQd0hS3hhZwWgPYZrk18qSWo9gxjCXE
+         TEcw3QnDc/G1xr2nC3ppfFz0GfY/lmr0qP0oSrFQ54nQkEWWcpf/Q756WcUrq+np6+ro
+         TlkrYmF+CdEXtHP1T4uzR7ZYq7FFB0e9nKM7wNY6zsaBmXaOj5II4ZFDeJ1ZQ0PmbYNm
+         jUSoctVMQntqiE7V2D7xazAk4iudYJwMXBQkvV17dSnTlbDrm6EI6NXoj3v0gTedpm2P
+         Vgmg==
+X-Gm-Message-State: AAQBX9cDZK/nMo7JZO5W/ETi6U5lKEWSzBq4N7ih/pIgLjIXydbHeIYH
+        YT32BwV/MlK+cGsjt+NbPndIUD8sR4k8Smmoyv0ChxdUSznPQd/hfBonsT8MKCXSGuG2PKiBYhz
+        bgmJgH2vbszkr8fSRxuDqi76i
+X-Received: by 2002:a9d:66c2:0:b0:684:ac9d:1a17 with SMTP id t2-20020a9d66c2000000b00684ac9d1a17mr780828otm.3.1681885556474;
+        Tue, 18 Apr 2023 23:25:56 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bKqCcNO2hix2PAQ0Js4/U/l3iu/UbIueif/kSkvexkCNyDPR3W7BSse6fcLfLJEK8fENU1ZQ==
+X-Received: by 2002:a9d:66c2:0:b0:684:ac9d:1a17 with SMTP id t2-20020a9d66c2000000b00684ac9d1a17mr780819otm.3.1681885556236;
+        Tue, 18 Apr 2023 23:25:56 -0700 (PDT)
+Received: from localhost.localdomain ([2804:1b3:a802:873a:dbfb:e929:5eb5:6a2c])
+        by smtp.gmail.com with ESMTPSA id y20-20020a056830209400b006a305c68617sm6304916otq.53.2023.04.18.23.25.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 23:25:55 -0700 (PDT)
+From:   Leonardo Bras <leobras@redhat.com>
+To:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [RESEND v2 0/6] Add JH7110 AON PMU support
-Message-ID: <20230419-subway-itinerary-9f5532929c14@wendy>
-References: <20230419035646.43702-1-changhuang.liang@starfivetech.com>
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>
+Cc:     Leonardo Bras <leobras@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [RFC PATCH 1/1] riscv/atomic.h: Deduplicate arch_atomic.*
+Date:   Wed, 19 Apr 2023 03:25:06 -0300
+Message-Id: <20230419062505.257231-1-leobras@redhat.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zrWAbWhImwI++znI"
-Content-Disposition: inline
-In-Reply-To: <20230419035646.43702-1-changhuang.liang@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---zrWAbWhImwI++znI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Some functions use mostly the same asm for 32-bit and 64-bit versions.
 
-On Tue, Apr 18, 2023 at 08:56:40PM -0700, Changhuang Liang wrote:
-> This patchset adds aon power domain driver for the StarFive JH7110 SoC.
-> It is used to turn on/off dphy rx/tx power switch. The series has been
-> tested on the VisionFive 2 board.
->=20
-> This patchset should be applied after the patchset [1]:
-> [1] https://lore.kernel.org/all/20230414024157.53203-1-xingyu.wu@starfive=
-tech.com/
->=20
-> changes since v1:
-> - Updated commit message.
-> - Changed "starfive,jh7110-pmu-dphy" to "starfive,jh7110-aon-pmu".
-> - Put if condition under allOf in .yaml file.
-> - Updated spelling error.
-> - Dropped patch 4: Add pmu type operation.
-> - Changed "jh71xx_pmu_general_set_state" to "jh7110_pmu_set_state" and mo=
-ved it in call back.
-> - Changed "jh7110_pmu_general_parse_dt" to "jh7110_pmu_parse_dt" and move=
-d it in call back.
-> - Used pmu_status save the pmu status offset.
-> - Changed "JH71XX_PMU_DPHY_SWITCH" to "JH71XX_AON_PMU_SWITCH"
-> - Changed copyright to "2022-2023"
+Make a macro that is generic enough and avoid code duplication.
 
-For the future, when you resend, please say why you did.
+Signed-off-by: Leonardo Bras <leobras@redhat.com>
+---
+ arch/riscv/include/asm/atomic.h | 164 +++++++++++++++-----------------
+ 1 file changed, 76 insertions(+), 88 deletions(-)
 
->=20
-> v1: https://lore.kernel.org/all/20230411064743.273388-1-changhuang.liang@=
-starfivetech.com/
->=20
-> Changhuang Liang (6):
->   dt-bindings: power: Add JH7110 AON PMU support
->   soc: starfive: Replace SOC_STARFIVE with ARCH_STARFIVE
->   soc: starfive: Modify ioremap to regmap
->   soc: starfive: Extract JH7110 pmu private operations
->   soc: starfive: Add JH7110 AON PMU support
->   riscv: dts: starfive: jh7110: Add AON PMU node
->=20
->  .../bindings/power/starfive,jh7110-pmu.yaml   |  15 +-
->  MAINTAINERS                                   |   1 +
->  arch/riscv/boot/dts/starfive/jh7110.dtsi      |   5 +
->  drivers/soc/starfive/Kconfig                  |   4 +-
->  drivers/soc/starfive/jh71xx_pmu.c             | 200 +++++++++++++-----
->  .../dt-bindings/power/starfive,jh7110-pmu.h   |   3 +
->  6 files changed, 174 insertions(+), 54 deletions(-)
->=20
->=20
-> base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
-> prerequisite-patch-id: 388b8adbb0fe2daf4d07a21eafd4f1bd50ce2403
+diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
+index 0dfe9d857a762..85eb2edbc8219 100644
+--- a/arch/riscv/include/asm/atomic.h
++++ b/arch/riscv/include/asm/atomic.h
+@@ -196,22 +196,28 @@ ATOMIC_OPS(xor, xor, i)
+ #undef ATOMIC_FETCH_OP
+ #undef ATOMIC_OP_RETURN
+ 
++#define _arch_atomic_fetch_add_unless(_prev, _rc, counter, _a, _u, sfx)	\
++({									\
++	__asm__ __volatile__ (						\
++		"0:	lr." sfx "     %[p],  %[c]\n"			\
++		"	beq	       %[p],  %[u], 1f\n"		\
++		"	add            %[rc], %[p], %[a]\n"		\
++		"	sc." sfx ".rl  %[rc], %[rc], %[c]\n"		\
++		"	bnez           %[rc], 0b\n"			\
++		"	fence          rw, rw\n"			\
++		"1:\n"							\
++		: [p]"=&r" (_prev), [rc]"=&r" (_rc), [c]"+A" (counter)	\
++		: [a]"r" (_a), [u]"r" (_u)				\
++		: "memory");						\
++})
++
+ /* This is required to provide a full barrier on success. */
+ static __always_inline int arch_atomic_fetch_add_unless(atomic_t *v, int a, int u)
+ {
+        int prev, rc;
+ 
+-	__asm__ __volatile__ (
+-		"0:	lr.w     %[p],  %[c]\n"
+-		"	beq      %[p],  %[u], 1f\n"
+-		"	add      %[rc], %[p], %[a]\n"
+-		"	sc.w.rl  %[rc], %[rc], %[c]\n"
+-		"	bnez     %[rc], 0b\n"
+-		"	fence    rw, rw\n"
+-		"1:\n"
+-		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+-		: [a]"r" (a), [u]"r" (u)
+-		: "memory");
++	_arch_atomic_fetch_add_unless(prev, rc, v->counter, a, u, "w");
++
+ 	return prev;
+ }
+ #define arch_atomic_fetch_add_unless arch_atomic_fetch_add_unless
+@@ -222,17 +228,8 @@ static __always_inline s64 arch_atomic64_fetch_add_unless(atomic64_t *v, s64 a,
+        s64 prev;
+        long rc;
+ 
+-	__asm__ __volatile__ (
+-		"0:	lr.d     %[p],  %[c]\n"
+-		"	beq      %[p],  %[u], 1f\n"
+-		"	add      %[rc], %[p], %[a]\n"
+-		"	sc.d.rl  %[rc], %[rc], %[c]\n"
+-		"	bnez     %[rc], 0b\n"
+-		"	fence    rw, rw\n"
+-		"1:\n"
+-		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+-		: [a]"r" (a), [u]"r" (u)
+-		: "memory");
++	_arch_atomic_fetch_add_unless(prev, rc, v->counter, a, u, "d");
++
+ 	return prev;
+ }
+ #define arch_atomic64_fetch_add_unless arch_atomic64_fetch_add_unless
+@@ -310,61 +307,79 @@ ATOMIC_OPS()
+ #undef ATOMIC_OPS
+ #undef ATOMIC_OP
+ 
++#define _arch_atomic_inc_unless_negative(_prev, _rc, counter, sfx)	\
++({									\
++	__asm__ __volatile__ (						\
++		"0:	lr." sfx "      %[p],  %[c]\n"			\
++		"	bltz            %[p],  1f\n"			\
++		"	addi            %[rc], %[p], 1\n"		\
++		"	sc." sfx ".rl   %[rc], %[rc], %[c]\n"		\
++		"	bnez            %[rc], 0b\n"			\
++		"	fence           rw, rw\n"			\
++		"1:\n"							\
++		: [p]"=&r" (_prev), [rc]"=&r" (_rc), [c]"+A" (counter)	\
++		:							\
++		: "memory");						\
++})
++
+ static __always_inline bool arch_atomic_inc_unless_negative(atomic_t *v)
+ {
+ 	int prev, rc;
+ 
+-	__asm__ __volatile__ (
+-		"0:	lr.w      %[p],  %[c]\n"
+-		"	bltz      %[p],  1f\n"
+-		"	addi      %[rc], %[p], 1\n"
+-		"	sc.w.rl   %[rc], %[rc], %[c]\n"
+-		"	bnez      %[rc], 0b\n"
+-		"	fence     rw, rw\n"
+-		"1:\n"
+-		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+-		:
+-		: "memory");
++	_arch_atomic_inc_unless_negative(prev, rc, v->counter, "w");
++
+ 	return !(prev < 0);
+ }
+ 
+ #define arch_atomic_inc_unless_negative arch_atomic_inc_unless_negative
+ 
++#define _arch_atomic_dec_unless_positive(_prev, _rc, counter, sfx)	\
++({									\
++	__asm__ __volatile__ (						\
++		"0:	lr." sfx "      %[p],  %[c]\n"			\
++		"	bgtz            %[p],  1f\n"			\
++		"	addi            %[rc], %[p], -1\n"		\
++		"	sc." sfx ".rl   %[rc], %[rc], %[c]\n"		\
++		"	bnez            %[rc], 0b\n"			\
++		"	fence           rw, rw\n"			\
++		"1:\n"							\
++		: [p]"=&r" (_prev), [rc]"=&r" (_rc), [c]"+A" (counter)	\
++		:							\
++		: "memory");						\
++})
++
+ static __always_inline bool arch_atomic_dec_unless_positive(atomic_t *v)
+ {
+ 	int prev, rc;
+ 
+-	__asm__ __volatile__ (
+-		"0:	lr.w      %[p],  %[c]\n"
+-		"	bgtz      %[p],  1f\n"
+-		"	addi      %[rc], %[p], -1\n"
+-		"	sc.w.rl   %[rc], %[rc], %[c]\n"
+-		"	bnez      %[rc], 0b\n"
+-		"	fence     rw, rw\n"
+-		"1:\n"
+-		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+-		:
+-		: "memory");
++	_arch_atomic_dec_unless_positive(prev, rc, v->counter, "w");
++
+ 	return !(prev > 0);
+ }
+ 
+ #define arch_atomic_dec_unless_positive arch_atomic_dec_unless_positive
+ 
++#define _arch_atomic_dec_if_positive(_prev, _rc, counter, sfx)		\
++({									\
++	__asm__ __volatile__ (						\
++		"0:	lr." sfx "     %[p],  %[c]\n"			\
++		"	addi           %[rc], %[p], -1\n"		\
++		"	bltz           %[rc], 1f\n"			\
++		"	sc." sfx ".rl  %[rc], %[rc], %[c]\n"		\
++		"	bnez           %[rc], 0b\n"			\
++		"	fence          rw, rw\n"			\
++		"1:\n"							\
++		: [p]"=&r" (_prev), [rc]"=&r" (_rc), [c]"+A" (counter)	\
++		:							\
++		: "memory");						\
++})
++
+ static __always_inline int arch_atomic_dec_if_positive(atomic_t *v)
+ {
+        int prev, rc;
+ 
+-	__asm__ __volatile__ (
+-		"0:	lr.w     %[p],  %[c]\n"
+-		"	addi     %[rc], %[p], -1\n"
+-		"	bltz     %[rc], 1f\n"
+-		"	sc.w.rl  %[rc], %[rc], %[c]\n"
+-		"	bnez     %[rc], 0b\n"
+-		"	fence    rw, rw\n"
+-		"1:\n"
+-		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+-		:
+-		: "memory");
++	_arch_atomic_dec_if_positive(prev, rc, v->counter, "w");
++
+ 	return prev - 1;
+ }
+ 
+@@ -376,17 +391,8 @@ static __always_inline bool arch_atomic64_inc_unless_negative(atomic64_t *v)
+ 	s64 prev;
+ 	long rc;
+ 
+-	__asm__ __volatile__ (
+-		"0:	lr.d      %[p],  %[c]\n"
+-		"	bltz      %[p],  1f\n"
+-		"	addi      %[rc], %[p], 1\n"
+-		"	sc.d.rl   %[rc], %[rc], %[c]\n"
+-		"	bnez      %[rc], 0b\n"
+-		"	fence     rw, rw\n"
+-		"1:\n"
+-		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+-		:
+-		: "memory");
++	_arch_atomic_inc_unless_negative(prev, rc, v->counter, "d");
++
+ 	return !(prev < 0);
+ }
+ 
+@@ -397,17 +403,8 @@ static __always_inline bool arch_atomic64_dec_unless_positive(atomic64_t *v)
+ 	s64 prev;
+ 	long rc;
+ 
+-	__asm__ __volatile__ (
+-		"0:	lr.d      %[p],  %[c]\n"
+-		"	bgtz      %[p],  1f\n"
+-		"	addi      %[rc], %[p], -1\n"
+-		"	sc.d.rl   %[rc], %[rc], %[c]\n"
+-		"	bnez      %[rc], 0b\n"
+-		"	fence     rw, rw\n"
+-		"1:\n"
+-		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+-		:
+-		: "memory");
++	_arch_atomic_dec_unless_positive(prev, rc, v->counter, "d");
++
+ 	return !(prev > 0);
+ }
+ 
+@@ -418,17 +415,8 @@ static __always_inline s64 arch_atomic64_dec_if_positive(atomic64_t *v)
+        s64 prev;
+        long rc;
+ 
+-	__asm__ __volatile__ (
+-		"0:	lr.d     %[p],  %[c]\n"
+-		"	addi      %[rc], %[p], -1\n"
+-		"	bltz     %[rc], 1f\n"
+-		"	sc.d.rl  %[rc], %[rc], %[c]\n"
+-		"	bnez     %[rc], 0b\n"
+-		"	fence    rw, rw\n"
+-		"1:\n"
+-		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+-		:
+-		: "memory");
++	_arch_atomic_dec_if_positive(prev, rc, v->counter, "d");
++
+ 	return prev - 1;
+ }
+ 
+-- 
+2.40.0
 
-Also, all of this pre-req patch id stuff is pretty useless. You've
-already pointed out the patches that this is based on, so IMO this
-information isn't helpful & is probably more likely confuse tooling
-than anything else.
-
-Cheers,
-Conor.
-
---zrWAbWhImwI++znI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZD+I8QAKCRB4tDGHoIJi
-0ttKAP9MGaU90RWek8EkqCX6COe90cvlPNNwd1wpPoa0MMPaRgD7BlV2IUkTi7c/
-TP3qPPR4Hx170gDBCArFJpLuCzUmYAg=
-=yE96
------END PGP SIGNATURE-----
-
---zrWAbWhImwI++znI--
