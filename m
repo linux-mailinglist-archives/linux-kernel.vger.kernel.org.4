@@ -2,115 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2376E718D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F395B6E718E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbjDSDYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 23:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50572 "EHLO
+        id S231566AbjDSD0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 23:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjDSDYq (ORCPT
+        with ESMTP id S231362AbjDSD0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 23:24:46 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9914D2;
-        Tue, 18 Apr 2023 20:24:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=Y0jC6pG5iyPnBukJ2foYlHjpDWbyen476EaJAQv4Kk0=; b=Fh61qubkIA4NQ/t+TuAGmvG6/Z
-        8ae3FW5/kyHKxUStAxLa7mpvkzLtwMNYgJQbnpb+2CAPczsqmR4FOhqqXBgjrj3RsvK6cBbn2Z23m
-        y1eMdPe58ajYGb7XwBpgtdn2A0zmspDoqqDjOG9EbGqZzF0c2i0KcZMghhQK1Rnk3/CMPeBof4m/8
-        PNA4p/h1AHaAGp0lUFAhoFL0Uyxc8DKnpiw1DPdsayJ4imPlaJRwJ2XRbzFpJFCymq5GNcX8nyqlY
-        882ux3LVtdcusDvul2SLTD2YkUiZ6PGrENVpWkanrH7HMAJKUBMiU2CalsAYoac+84Z/fgVGzFWyd
-        9PPgBDkQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1poyQm-00CvFm-U9; Wed, 19 Apr 2023 03:24:28 +0000
-Date:   Wed, 19 Apr 2023 04:24:28 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Joe Mario <jmario@redhat.com>,
-        Barry Marson <bmarson@redhat.com>,
-        Rafael Aquini <aquini@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH] mm/mmap: Map MAP_STACK to VM_STACK
-Message-ID: <ZD9e7A4gaZ6qkGhy@casper.infradead.org>
-References: <20230418210230.3495922-1-longman@redhat.com>
- <20230418141852.75e551e57e97f4b522957c5c@linux-foundation.org>
- <6c3c68b1-c4d4-dd82-58e8-f7013fb6c8e5@redhat.com>
- <cffc7454-614-1939-f235-7b139dc46b41@google.com>
- <22aee5ea-dd6b-ac2b-0b28-a25ee6602b48@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Tue, 18 Apr 2023 23:26:47 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2112.outbound.protection.outlook.com [40.107.215.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C7CD2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 20:26:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OOE+dzP9MVmKv8ZVuY3O8dwg+EX18mToTNXPMvtXdhbcmht1OGj1Ra6XaN01adfo5BHsNLTD3EzWC/587HPbls6nQ74MnmcT0VdECwLA7mxKv1UOYEtgh+ROQ+BliheRXMpqsEjaCsDWUP7EVrgB6TziBFKtP16MOg5s3NJU5wSZhTie4exq6Mywo6+1uIspevQyaQNz11rTKMPWNrOAX9n1P+igppAdTRZx3nrRUDxGCOvWTgap3k1d7wa4y0d3wTpPIuXkQroR8CW8IE7MW2kiV1y0f3Mfp1zSCZYAspf1jTDP4d4SnAX9XI3SOIUuw7csFfOfu8TOQ7S66Uw1kA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OjHzi9FD0wWlg8TEYTy6ZQDafhjTGwCfezsR+jsv0Tw=;
+ b=Kog3Y9vGQrBg04NQzMipfoMRfQyyKNHB5owrYjPrmbnIcGhzy/TR4t6WuC/6Tjwef+8InfLVAVQcs7Wj5heTOfl2yHmj0jjvBHyI8isbRAOWkPeZHWEuWd4vBoJoI9R7mxnnDJyJDfYlp4JZxwkBYlFK6pINgg0bpb0gq2BT12kWOiQ6rCg1oE3MVEW4+UZQsGPJ60GYl19sDmlazhjQGkwtOcFklI/WPyIOKNhG9w69vwbQrRrTWE257u6H1uBFjfE3wyBYaXeM+vSFZL52PQAenAISm2eGtKuoG8CDXaqOaMOA4BbgmRItry9F1nINSfsJanb6wlqfgD5JA0FhMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OjHzi9FD0wWlg8TEYTy6ZQDafhjTGwCfezsR+jsv0Tw=;
+ b=qihesdGykmB0i020UD7vBudSKusn5YvdXAxeGZyNUWNrCbarCcBApWlynRvqjb0KXpCmWFXBQsyfnlImB5pNX8wSmS8/pQWziSKjWkiiOG0rcKJub69bO8zPz2B0rD+8Ch5xavyq+9CMdpdfQQoKxvv/a5fg9JDl4LIMI1WfItfKxNEOPJC8LkKfrp9g9CnBecYcvaUJM9df/BYO4fZoGQCJnk3Oo/8mNb7JGzJ6GI28yF7e0gT8FABnxjf32Gyl9g+9SZ3hIbWhyvqw+voyAHAgUyoJbQvm1AcqPOIzG1kJbiMcYplHNqTuY4yW87LzWdTcrBC9GNHPESog1eqgbw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by PSAPR06MB4151.apcprd06.prod.outlook.com (2603:1096:301:2b::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
+ 2023 03:26:40 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965%6]) with mapi id 15.20.6298.045; Wed, 19 Apr 2023
+ 03:26:40 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] f2fs: fix typo
+Date:   Wed, 19 Apr 2023 11:26:26 +0800
+Message-Id: <20230419032627.15421-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <22aee5ea-dd6b-ac2b-0b28-a25ee6602b48@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0041.apcprd02.prod.outlook.com
+ (2603:1096:4:1f6::18) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|PSAPR06MB4151:EE_
+X-MS-Office365-Filtering-Correlation-Id: e6d489d3-5c9c-4818-8fd5-08db4085e3ab
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CUP56xiZ6KiEg3/RgNyHVqHPwzGggOQbR5VdsOlKcSwqsShVx1dfcuexqRr8B2H1/92lMvjGPDDX/xlwksQ/8C2Y7wDeWQYksqnLwaKiFJS1SB431yXTxY41FdhWiI/vPEzgTCIveL1Yz3DOeXXebjYhJarxDNv6WR8RVibITcuIKE2RyieO0OE/yBQP4kzvpiUbSfkGAvk0+KxDHL9/qMkVvKuO/3G05k8Sw4MQtyEsp3CVmg1Va2J4O41VqhMOQUJgEsxlsqwJcxFxPSzxHZtJNn+6GbE/sKHGlR3yYU1J1lrPn1hGFI6rNilCh3UmMQWpf+BZ/Q7RDxIKPltcY5L7+m6IDyci9Dy2eQgkRMU3JDR5hsGmKkXBIPtA8rvamZqX15TkzV3aLrot0cCpDNXvKiDvCrPyANSJUAPmgPj/WOxnj9eOrHqNxrN91Fp4YWv7p+Pjv7Xmto+wzETM/RNh41k5c0OOnGbVRM3J6Hdh47E7yj5+35C7J9EbXjQGu/0l2KTHm8eLynQqGwBhh9qzNBC5d4LTVIBAEL2hJ8xVgQFPgmBS4legjeoLiK2atK3mFMV+m3zQEx1kzC4QMmY19OWCkaYJKa3VGC4jV141Pd1+atrUBQxN410R/J30
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(366004)(346002)(136003)(451199021)(6666004)(6486002)(110136005)(86362001)(478600001)(2616005)(26005)(83380400001)(6506007)(6512007)(186003)(38350700002)(38100700002)(52116002)(1076003)(4744005)(66556008)(66946007)(66476007)(316002)(2906002)(4326008)(5660300002)(8936002)(36756003)(8676002)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?i33j5wdNWCxEsOFmhHqhW3TJnd3jhMADr8lU1TL0iqgtnp4EAoaVUjz9tu5j?=
+ =?us-ascii?Q?s+XGWscLNGvW3PHD67xulQE3KR3ODi3d2MzzjONYEq+E1NL38BXFCLV1KBfc?=
+ =?us-ascii?Q?Ir1Rdgv3YxHiQDgfhUeao3X4kwg3kxaxvpJ3ec+3Kd8tSduo2+cTosQB7Yjv?=
+ =?us-ascii?Q?mThEDXgnAMmzKpLSn3b0tCeZk4U/G0WvoJlPx6uirDh8d1Ujp7WkDXy/y2ro?=
+ =?us-ascii?Q?ci9YZbAVQ5VsWT3iVWvEYRTe97P4R9bMqDVRDZ4SaK4FItQVACSEUXXY5xWx?=
+ =?us-ascii?Q?rehZdh8DravJ9tRiystOqaGabtuygr2iNmwWXMxuz+wA/iqmf4Uid2l67fjb?=
+ =?us-ascii?Q?XT60ZhdE1XnzPx00/zBY9+Lsi+dhPajo7Xjm/Bwz1egPTDjcnDjR4THW/R6j?=
+ =?us-ascii?Q?F8qLcMCrG9vD29Jh00pfB3fIUhymkFJLtLjGsikT5fa4hshp7nl8j7Cgff3C?=
+ =?us-ascii?Q?qcCvgoj07ekcdfqHK4i82bJe0+H2DDVKmdhmqjj57ZJ8UfsVBprNzfL5pGX8?=
+ =?us-ascii?Q?qaBEMN+c0EPdwivb42PQe3j8qLTRVvJJ7keVrUVj1zVUVJ8s1dL/QN908gXh?=
+ =?us-ascii?Q?y/oZ1l2I+A9V4o+3f3Nmd+DwhQHVFRmOvhi22vz07gg4kZoke+EDz0ai0Len?=
+ =?us-ascii?Q?O0mQUt07Zsb2N0ZmIGK6rjiSVwj8rc9xzN183RCjfA6IXc0Y1XOB7FUxAzUe?=
+ =?us-ascii?Q?cr+erZrG2fxFamgsEdAfaZ1BRlfjeG1eDDw5KaGv1Mvjj/D3qHTLDHInhUbS?=
+ =?us-ascii?Q?6qLiNRHp7r93im77YHxVf7wdClWWBgKo0eiAsjyJvJXQWnQXnclRKXGauraG?=
+ =?us-ascii?Q?N9SEx3JXhMBqeQPck/TZ/gedvpdDpTVpbUU3mzRaKQIkDEYLIfUR+AjSmNbw?=
+ =?us-ascii?Q?OJW45VyfTrGNoipzbHvhEKe82GYDeCDZq/Zf4klF0SrcyzY0tPi50ZZSkL8C?=
+ =?us-ascii?Q?i+MimLFkn9emqwdQsJ+G01l6UkGYi6jrwG1WVNYDBTTLj7kh+UwXIS4mXTqQ?=
+ =?us-ascii?Q?t92wizSRbsZ2gXnWxKyzu/TeeA9KHzNLewuTfxHfWGOBaS5rvwl0YuQ6S36V?=
+ =?us-ascii?Q?YGZy/r01CSMBes4u+LBYylRv05vagP/tWU+lLEcOKH2Aj0INg/zwn8zQBKeI?=
+ =?us-ascii?Q?W1jWosV/IMRbqtaEZUwvgaRuDST7ANSuNI4hfyOpRRIMus0ltLSZsvxckDAC?=
+ =?us-ascii?Q?lMqEiHU3NnCf313b58+i7C6jzo9hNOHiWebUKyEqk/98jh/eL8LYAvSXEwgq?=
+ =?us-ascii?Q?ZynoWAu22OZzWLrRSMmhozNVxq1E3wwwgj/vbjI6bR52ODqxNKP78yNUbVrX?=
+ =?us-ascii?Q?DaCYfHHXkh5CVhd/HD5xugwjilgR0XHgPhhdMFpKwIa8JVkBOhDpliDcyyNp?=
+ =?us-ascii?Q?RCnPYGIoUypZftctCiARMcZSmHS8crGZQ+IPhzItz85oQOAYZMpe3O/clArW?=
+ =?us-ascii?Q?ghQniXaQAOiqyRlswBvd17tT9t5haJm0ejC2XE3X5uFTRkA/L+wuWY9fifmo?=
+ =?us-ascii?Q?6C5V2cLmeQ2euKGgl533q3aKX00lpvgJHcrqwJpWX8AmAnlysLPY4Y2rw7nU?=
+ =?us-ascii?Q?UZmUZ7u/dOJo3+TVkSS2t4B6igD1CfXz+kYnN0ws?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e6d489d3-5c9c-4818-8fd5-08db4085e3ab
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 03:26:39.9841
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mLt0GLn/0OG/2nVjMjb2/c3MYIfGeqExFCmCfN8+HfETvxj6xTB7kiptbNMXCtOTOYlILrsP9/7KNP0tr+hpVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4151
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 09:45:34PM -0400, Waiman Long wrote:
-> 
-> On 4/18/23 21:36, Hugh Dickins wrote:
-> > On Tue, 18 Apr 2023, Waiman Long wrote:
-> > > On 4/18/23 17:18, Andrew Morton wrote:
-> > > > On Tue, 18 Apr 2023 17:02:30 -0400 Waiman Long <longman@redhat.com> wrote:
-> > > > 
-> > > > > One of the flags of mmap(2) is MAP_STACK to request a memory segment
-> > > > > suitable for a process or thread stack. The kernel currently ignores
-> > > > > this flags. Glibc uses MAP_STACK when mmapping a thread stack. However,
-> > > > > selinux has an execstack check in selinux_file_mprotect() which disallows
-> > > > > a stack VMA to be made executable.
-> > > > > 
-> > > > > Since MAP_STACK is a noop, it is possible for a stack VMA to be merged
-> > > > > with an adjacent anonymous VMA. With that merging, using mprotect(2)
-> > > > > to change a part of the merged anonymous VMA to make it executable may
-> > > > > fail. This can lead to sporadic failure of applications that need to
-> > > > > make those changes.
-> > > > "Sporadic failure of applications" sounds quite serious.  Can you
-> > > > provide more details?
-> > > The problem boils down to the fact that it is possible for user code to mmap a
-> > > region of memory and then for the kernel to merge the VMA for that memory with
-> > > the VMA for one of the application's thread stacks. This is causing random
-> > > SEGVs with one of our large customer application.
-> > > 
-> > > At a high level, this is what's happening:
-> > > 
-> > >   1) App runs creating lots of threads.
-> > >   2) It mmap's 256K pages of anonymous memory.
-> > >   3) It writes executable code to that memory.
-> > >   4) It calls mprotect() with PROT_EXEC on that memory so
-> > >      it can subsequently execute the code.
-> > > 
-> > > The above mprotect() will fail if the mmap'd region's VMA gets merged with the
-> > > VMA for one of the thread stacks.  That's because the default RHEL SELinux
-> > > policy is to not allow executable stacks.
-> > Then wouldn't the bug be at the SELinux end?  VMAs may have been merged
-> > already, but the mprotect() with PROT_EXEC of the good non-stack range
-> > will then split that area off from the stack again - maybe the SELinux
-> > check does not understand that must happen?
-> 
-> The SELinux check is done per VMA, not a region within a VMA. After VMA
-> merging, SELinux is probably not able to determine which part of a VMA is a
-> stack unless we keep that information somewhere and provide an API for
-> SELinux to query. That can be quite a lot of work. So the easiest way to
-> prevent this problem is to avoid merging a stack VMA with a regular
-> anonymous VMA.
+Add missing 'is'.
 
-To paraphrase you, "Yes, SELinux is buggy, but we don't want to fix it".
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/super.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Cc'ing the SELinux people so it can be fixed properly.
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index 9f15b03037db..357d45e49635 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -1362,7 +1362,7 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+ 	}
+ 
+ 	if (f2fs_is_readonly(sbi) && test_opt(sbi, FLUSH_MERGE)) {
+-		f2fs_err(sbi, "FLUSH_MERGE not compatible with readonly mode");
++		f2fs_err(sbi, "FLUSH_MERGE is not compatible with readonly mode");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -2356,7 +2356,7 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
+ 
+ 	if ((*flags & SB_RDONLY) && test_opt(sbi, DISABLE_CHECKPOINT)) {
+ 		err = -EINVAL;
+-		f2fs_warn(sbi, "disabling checkpoint not compatible with read-only");
++		f2fs_warn(sbi, "disabling checkpoint is not compatible with read-only");
+ 		goto restore_opts;
+ 	}
+ 
+-- 
+2.39.0
+
