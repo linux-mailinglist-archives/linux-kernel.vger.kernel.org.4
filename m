@@ -2,156 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCFC6E78BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9506E78C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232446AbjDSLiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 07:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
+        id S232779AbjDSLmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 07:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjDSLiR (ORCPT
+        with ESMTP id S232622AbjDSLmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 07:38:17 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708CB4231;
-        Wed, 19 Apr 2023 04:38:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 26D8021996;
-        Wed, 19 Apr 2023 11:38:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1681904293; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CawZP8F8+xYMOVFHt2q5TqVfXamwgFnKSbMRqGDkkis=;
-        b=GL5fAGiWO2P5IiS5km6lqEZciICNE40kwVeLHDhHCVOZVt8jDUYanFIa1YaVUirxyzdxNF
-        AemECDuu3TqA6SneZwBNJ3xttSlMUd3KMgmbg2ZfxFhIB73Azy1a5wAUPUd/zTbVMBZYbe
-        ROOnf24qNyDC+lbl2/LAR9jU4dAfhI8=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E0F4613580;
-        Wed, 19 Apr 2023 11:38:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jWkQNqTSP2TZXAAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 19 Apr 2023 11:38:12 +0000
-Date:   Wed, 19 Apr 2023 13:38:11 +0200
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH mm-unstable RFC 1/5] writeback: move wb_over_bg_thresh()
- call outside lock section
-Message-ID: <7woe6ljcarqsr6uep7uns7bc3hm6xqog6ufk4rhwfo4vxixczw@tdjkdhx2euok>
-References: <20230403220337.443510-1-yosryahmed@google.com>
- <20230403220337.443510-2-yosryahmed@google.com>
+        Wed, 19 Apr 2023 07:42:14 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0058115466;
+        Wed, 19 Apr 2023 04:41:45 -0700 (PDT)
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33JB0dfo004586;
+        Wed, 19 Apr 2023 11:39:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=jvitvu8tNatkgoZLUb/7EoCBqdtrYk/17qPZfc3bgOs=;
+ b=MpyF3S6oqeISAqJTKFHWOZSHNSFkagp15cThaXAR/6EDJIFO8nVhFdUkVQYAcV0mi9i2
+ SFohJ8tWX8lFUDubvQJDYoEfFUTDOgHePuwokQoKz14heJ/e75QPbDc6VwgXM097MU1w
+ nlBx8GpVfKDmidp/tb6a04dzRkqlE5hEKgHM4zgxReb5stBFGN/Xl1CQZQyuLI3PdHll
+ lsVufL+QTZsjDakCy73FQyJZqNFN+hz5oj17IEwYpEPo0V3jXal+bzOKK0BUwDJcM7r4
+ +9SlxeicI+xv4byXMAxQWCSRGcUU8RTwQzE2j4ZINuYhgjtkeen3ojfymyCfx9uw8U3+ lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q20x17775-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 11:39:19 +0000
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33JBDnC9023064;
+        Wed, 19 Apr 2023 11:39:19 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q20x1776s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 11:39:19 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33J6Q5Jx003283;
+        Wed, 19 Apr 2023 11:39:17 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3pykj6j7sm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 11:39:17 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33JBdD9I20709964
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Apr 2023 11:39:13 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C46A920043;
+        Wed, 19 Apr 2023 11:39:13 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DDE5520040;
+        Wed, 19 Apr 2023 11:39:12 +0000 (GMT)
+Received: from [9.171.27.132] (unknown [9.171.27.132])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Apr 2023 11:39:12 +0000 (GMT)
+Message-ID: <42df1c58-f0bf-5dd8-03db-ee2fa28d7c1b@linux.ibm.com>
+Date:   Wed, 19 Apr 2023 13:39:12 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="um3hlfownhi7iyh5"
-Content-Disposition: inline
-In-Reply-To: <20230403220337.443510-2-yosryahmed@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stefan Roesch <shr@devkernel.io>,
+        Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>
+References: <20230418051342.1919757-1-shr@devkernel.io>
+ <20230418152849.505124-1-david@redhat.com>
+ <20230418152849.505124-4-david@redhat.com>
+Content-Language: en-US
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [PATCH v1 3/3] mm/ksm: move disabling KSM from s390/gmap code to
+ KSM code
+In-Reply-To: <20230418152849.505124-4-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 6IxnLG2-LMktCbzW90tov6FIPqZB3dRQ
+X-Proofpoint-GUID: jvs1HAeEVjkq_CnN1R30R2G2A3flzTM1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-19_06,2023-04-18_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 adultscore=0 impostorscore=0 mlxlogscore=580
+ priorityscore=1501 spamscore=0 phishscore=0 clxscore=1011 mlxscore=0
+ suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304190103
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---um3hlfownhi7iyh5
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Apr 03, 2023 at 10:03:33PM +0000, Yosry Ahmed <yosryahmed@google.co=
-m> wrote:
-> wb_over_bg_thresh() calls mem_cgroup_wb_stats() which invokes an rstat
-> flush, which can be expensive on large systems. Currently,
-> wb_writeback() calls wb_over_bg_thresh() within a lock section, so we
-> have to make the rstat flush atomically. On systems with a lot of
-> cpus/cgroups, this can cause us to disable irqs for a long time,
-> potentially causing problems.
->=20
-> Move the call to wb_over_bg_thresh() outside the lock section in
-> preparation to make the rstat flush in mem_cgroup_wb_stats() non-atomic.
-> The list_empty(&wb->work_list) should be okay outside the lock section
-> of wb->list_lock as it is protected by a separate lock (wb->work_lock),
-> and wb_over_bg_thresh() doesn't seem like it is modifying any of the b_*
-> lists the wb->list_lock is protecting. Also, the loop seems to be
-> already releasing and reacquring the lock, so this refactoring looks
-> safe.
->=20
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+On 4/18/23 17:28, David Hildenbrand wrote:
+> Let's factor out actual disabling of KSM. The existing
+> "mm->def_flags &= ~VM_MERGEABLE;" was essentially a NOP and can be dropped,
+> because def_flags should never include VM_MERGEABLE. Note that we don't
+> currently prevent re-enabling KSM.
+> 
+> This should now be faster in case KSM was never enabled, because we only
+> conditionally iterate all VMAs. Further, it certainly looks cleaner.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 > ---
->  fs/fs-writeback.c | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
->=20
-> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-> index 195dc23e0d831..012357bc8daa3 100644
-> --- a/fs/fs-writeback.c
-> +++ b/fs/fs-writeback.c
-> @@ -2021,7 +2021,6 @@ static long wb_writeback(struct bdi_writeback *wb,
->  	struct blk_plug plug;
-> =20
->  	blk_start_plug(&plug);
-> -	spin_lock(&wb->list_lock);
->  	for (;;) {
->  		/*
->  		 * Stop writeback when nr_pages has been consumed
-> @@ -2046,6 +2045,9 @@ static long wb_writeback(struct bdi_writeback *wb,
->  		if (work->for_background && !wb_over_bg_thresh(wb))
->  			break;
-> =20
-> +
-> +		spin_lock(&wb->list_lock);
-> +
->  		/*
->  		 * Kupdate and background works are special and we want to
->  		 * include all inodes that need writing. Livelock avoidance is
-> @@ -2075,13 +2077,19 @@ static long wb_writeback(struct bdi_writeback *wb,
->  		 * mean the overall work is done. So we keep looping as long
->  		 * as made some progress on cleaning pages or inodes.
->  		 */
-> -		if (progress)
-> +		if (progress) {
-> +			spin_unlock(&wb->list_lock);
->  			continue;
-> +		}
-> +
+>   arch/s390/mm/gmap.c | 20 +-------------------
+>   include/linux/ksm.h |  6 ++++++
+>   mm/ksm.c            | 11 +++++++++++
+>   3 files changed, 18 insertions(+), 19 deletions(-)
+> 
+> diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
+> index 0949811761e6..dfe905c7bd8e 100644
+> --- a/arch/s390/mm/gmap.c
+> +++ b/arch/s390/mm/gmap.c
+> @@ -2585,30 +2585,12 @@ EXPORT_SYMBOL_GPL(s390_enable_sie);
+>   
+>   int gmap_mark_unmergeable(void)
+>   {
+> -	struct mm_struct *mm = current->mm;
+> -	struct vm_area_struct *vma;
+> -	unsigned long vm_flags;
+> -	int ret;
+> -	VMA_ITERATOR(vmi, mm, 0);
+> -
+>   	/*
+>   	 * Make sure to disable KSM (if enabled for the whole process or
+>   	 * individual VMAs). Note that nothing currently hinders user space
+>   	 * from re-enabling it.
+>   	 */
 
-This would release wb->list_lock temporarily with progress but that's
-already not held continuously due to writeback_sb_inodes().
-Holding the lock could even be shortened by taking it later after
-trace_writeback_start().
+Is that still true?
 
-Altogether, the change looks OK,
-Reviewed-by: Michal Koutn=FD <mkoutny@suse.com>
+My KSM knowledge is nearly zero but from what I can see the patch looks 
+ok to me:
+Acked-by: Janosch Frank <frankja@linux.ibm.net>
 
 
---um3hlfownhi7iyh5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZD/SoAAKCRAkDQmsBEOq
-ud9HAQDjyg6QsqLgZUGry6hNbONC5QVd0E2+HvxdLRrVBbVMTwD/dXaHa+QsVZiZ
-ADTParKHoShcH9b0N7u/scBSdpKHhgM=
-=xwT4
------END PGP SIGNATURE-----
-
---um3hlfownhi7iyh5--
