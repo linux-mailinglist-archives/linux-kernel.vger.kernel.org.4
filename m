@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49766E849B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F536E849D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232672AbjDSWTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 18:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
+        id S231572AbjDSWTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 18:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbjDSWS3 (ORCPT
+        with ESMTP id S231847AbjDSWSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 18:18:29 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979ED900C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:11 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a9253d4551so4765445ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:11 -0700 (PDT)
+        Wed, 19 Apr 2023 18:18:31 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE5B49E7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:13 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1a66e7a52d3so4246585ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942682; x=1684534682;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942685; x=1684534685;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gRHTy1c+Pl7OVrg4l834g5VjRWcSWQwGhgEvJAPkg+w=;
-        b=kmEcD4YfOAFXGG17QX3KsyUFIzwyUfrsKZ1wYGSvZgqODlY6mzST437Sn9HGEmF2e4
-         2a2a47FJD8fRdSNkrzKWkWk+t1hYBGWo5RKv/QKbDEChEI7DPntySLvvhVENeLXEvAzZ
-         Yi9hf+mn4OFq02nwK3TFnSe2tJbzQbrAKkpWS2zkyUDSsMGzPeY61HsFbh3a25B058l+
-         uUA1pt3+Fbza1RQ2lPxN0ghz2+DhS82u09mOfYSZt3cX82Z63iV2DNRddUax6jZ/SlYZ
-         5R7VI8q/CylWQy7dmPwpqmG5M0g3aSf6g2QGsKHX2ECmbls1SK5jLS9FX181LfzlvClk
-         L9rA==
+        bh=ojiAvkB2QjgGX0WuePfTk5AH+Ftof3ihRnPYCRhXfys=;
+        b=GI5HHNoDfnv7Xt2dXdQVsSPXXrf8xeXQpNWlFXZorCsInUO+7v9NY0aJ61Wq3Jrs8E
+         kGQwH76ph9khKWrUeXzvPLglMXDgMZIIY54cSF/xDKTI2B+6z40RBNIFJsJyIqLBi2Tp
+         /4IjX7V/Nl9JV0ZKRW6w1rRtjDB7U9hS1o72B3bA9f1kQsnaasLnan0u04D8EJ66o/lT
+         QRUjYtEUOZzmooLboK7oxd2ALtGFHtLnXQq0cGS3gCSZ9ykQyEYPx3B41T0RJmlLxBu3
+         0pGJgbLQ8aYagsnC8EaV+V6QeE9vVfhTJFm18qhaheSKMiu2Zw5f5PQymgLHdTXWDrLv
+         QNiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681942682; x=1684534682;
+        d=1e100.net; s=20221208; t=1681942685; x=1684534685;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gRHTy1c+Pl7OVrg4l834g5VjRWcSWQwGhgEvJAPkg+w=;
-        b=duQy1O/l3YAs4e1Sf1hAe45Z59ceFuyBKePQ/C86akwNgdxXETp37mO42kzZq1F+lj
-         zOuIzdpoqmyliKKQZgaktK50W/GMEBEqvilRI8jUWeB5mHwzhFuVSSZ5SoWylEHiCom5
-         0qlhs3NPtRGV2r2dIVk3446UY0m3laiCa8Sv313KT/USuXxros0Bj83VvBSN1ahqFP+h
-         apPbGZz+ohWDogf5a+ouHS0t4ZXv3gQUf7y6fOXrytgi8zSHdIutBS8cIp4k/Sd05x68
-         zDse1U6j080dx8vqQuLQy0q00up8stQGqKGCQ7ejIkzAgRbWwxNzme02KIAwTCfrc4Mr
-         MD0g==
-X-Gm-Message-State: AAQBX9c9kHeMDpPfJ5qrZatguxdfnlrsMZWRY6l+W87E4RT2VnEclufr
-        /Q9sKijLkD5r1oBJvbSCjlPN0lzcLemdo1/DaYE=
-X-Google-Smtp-Source: AKy350YWY4zn6DitmSoPXPvjQSlrg5vxaeh3mQBYR6TvOk3ni0Mxh3KE27JFZrBKZBdZgegUV17R1Q==
-X-Received: by 2002:a17:902:ec8b:b0:1a9:23b7:9182 with SMTP id x11-20020a170902ec8b00b001a923b79182mr2673903plg.27.1681942682652;
-        Wed, 19 Apr 2023 15:18:02 -0700 (PDT)
+        bh=ojiAvkB2QjgGX0WuePfTk5AH+Ftof3ihRnPYCRhXfys=;
+        b=R4UrdmVVYAoA2iRMLi0i4mDtJojoiuhjh9xkVwe0Oc2ObcdfNHZMe2LAuDdAwPwZj1
+         ztVIPkGRJEBZBgfhljEndcCjY+brAW7//npP5/MRuspLQQHxOLj4bOef0mP8N9GDyg3t
+         g9omq0x36//lHJlYaBiLLnTcp+KX0gkE+Z+CpHp0H4pkUZNXNraeUZiNY+bhxWZxry35
+         wUq4tvcok01mS9+PxTPj/qJzNkONmqjkz/UpnDxoWTUNMgbhrHRoL2x6Lo0X5CYvSzS/
+         hlyDmyfpw84A7eJSplePSW6AK4mr91YoS6fKcMYUR7RI32xVX1nRv/O2a90UDDL0pbon
+         F+Pg==
+X-Gm-Message-State: AAQBX9ez2sVovqNwm3LsZaOwnSpD93kccgTYFom+yu5+nxCSVG+48EJz
+        Hytu+olkabmrJI/exJ+CxVpdi0l1rEglOJgsnbM=
+X-Google-Smtp-Source: AKy350aUmxK/wzp1xvJIpKWslK3gwGr/UxzJX5snN5ZgZlPl8MyALzkERpVzHjZpOuQ6botaKIIVqg==
+X-Received: by 2002:a17:903:22c1:b0:1a1:c3eb:afd with SMTP id y1-20020a17090322c100b001a1c3eb0afdmr7315223plg.65.1681942684832;
+        Wed, 19 Apr 2023 15:18:04 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.18.00
+        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.18.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 15:18:02 -0700 (PDT)
+        Wed, 19 Apr 2023 15:18:04 -0700 (PDT)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Atish Patra <atishp@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
@@ -76,9 +76,9 @@ Cc:     Atish Patra <atishp@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Rajnesh Kanwal <rkanwal@rivosinc.com>,
         Uladzislau Rezki <urezki@gmail.com>
-Subject: [RFC 15/48] RISC-V: KVM: Add a helper function to trigger fence ops
-Date:   Wed, 19 Apr 2023 15:16:43 -0700
-Message-Id: <20230419221716.3603068-16-atishp@rivosinc.com>
+Subject: [RFC 16/48] RISC-V: KVM: Skip most VCPU requests for TVMs
+Date:   Wed, 19 Apr 2023 15:16:44 -0700
+Message-Id: <20230419221716.3603068-17-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230419221716.3603068-1-atishp@rivosinc.com>
 References: <20230419221716.3603068-1-atishp@rivosinc.com>
@@ -94,78 +94,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When Cove is enabled in RISC-V, the TLB shootdown happens in co-ordination
-with TSM. The host must not issue hfence directly. It relies on TSM
-to do that instead. It just needs to initiate the process and make
-sure that all the running vcpus exit the guest mode. As a result, it
-traps to TSM and TSM issues hfence on behalf of the host.
+Currently, KVM manages TLB shootdown, hgatp updates and
+fence.i through vcpu requests.
+
+TLB shootdown for the TVMs happens in co-ordination with TSM.
+The fence.i & hgatp updates are directly managed by the TSM.
+There is no need to issue these requests directly for TVMs.
 
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/include/asm/kvm_cove.h |  2 ++
- arch/riscv/kvm/cove.c             | 36 +++++++++++++++++++++++++++++++
- 2 files changed, 38 insertions(+)
+ arch/riscv/kvm/vcpu.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/riscv/include/asm/kvm_cove.h b/arch/riscv/include/asm/kvm_cove.h
-index 4ea1df1..fc8633d 100644
---- a/arch/riscv/include/asm/kvm_cove.h
-+++ b/arch/riscv/include/asm/kvm_cove.h
-@@ -130,6 +130,8 @@ void kvm_riscv_cove_vcpu_switchto(struct kvm_vcpu *vcpu, struct kvm_cpu_trap *tr
- int kvm_riscv_cove_vm_measure_pages(struct kvm *kvm, struct kvm_riscv_cove_measure_region *mr);
- int kvm_riscv_cove_vm_add_memreg(struct kvm *kvm, unsigned long gpa, unsigned long size);
- int kvm_riscv_cove_gstage_map(struct kvm_vcpu *vcpu, gpa_t gpa, unsigned long hva);
-+/* Fence related function */
-+int kvm_riscv_cove_tvm_fence(struct kvm_vcpu *vcpu);
- #else
- static inline bool kvm_riscv_cove_enabled(void) {return false; };
- static inline int kvm_riscv_cove_init(void) { return -1; }
-diff --git a/arch/riscv/kvm/cove.c b/arch/riscv/kvm/cove.c
-index 5b4d9ba..4efcae3 100644
---- a/arch/riscv/kvm/cove.c
-+++ b/arch/riscv/kvm/cove.c
-@@ -78,6 +78,42 @@ static int kvm_riscv_cove_fence(void)
- 	return rc;
- }
+diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+index c53bf98..3b600c6 100644
+--- a/arch/riscv/kvm/vcpu.c
++++ b/arch/riscv/kvm/vcpu.c
+@@ -22,6 +22,7 @@
+ #include <asm/kvm_nacl.h>
+ #include <asm/hwcap.h>
+ #include <asm/sbi.h>
++#include <asm/kvm_cove.h>
  
-+int kvm_riscv_cove_tvm_fence(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm *kvm = vcpu->kvm;
-+	struct kvm_cove_tvm_context *tvmc = kvm->arch.tvmc;
-+	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
-+	unsigned long i;
-+	struct kvm_vcpu *temp_vcpu;
-+	int ret;
+ const struct _kvm_stats_desc kvm_vcpu_stats_desc[] = {
+ 	KVM_GENERIC_VCPU_STATS(),
+@@ -1078,6 +1079,15 @@ static void kvm_riscv_check_vcpu_requests(struct kvm_vcpu *vcpu)
+ 		if (kvm_check_request(KVM_REQ_VCPU_RESET, vcpu))
+ 			kvm_riscv_reset_vcpu(vcpu);
+ 
++		if (is_cove_vcpu(vcpu)) {
++			/*
++			 * KVM doesn't need to do anything special here
++			 * as the TSM is expected track the tlb version and issue
++			 * hfence when vcpu is scheduled again.
++			 */
++			return;
++		}
 +
-+	if (!tvmc)
-+		return -EINVAL;
-+
-+	spin_lock(&tvmc->tvm_fence_lock);
-+	ret = sbi_covh_tvm_initiate_fence(tvmc->tvm_guest_id);
-+	if (ret) {
-+		spin_unlock(&tvmc->tvm_fence_lock);
-+		return ret;
-+	}
-+
-+	bitmap_clear(vcpu_mask, 0, KVM_MAX_VCPUS);
-+	kvm_for_each_vcpu(i, temp_vcpu, kvm) {
-+		if (temp_vcpu != vcpu)
-+			bitmap_set(vcpu_mask, i, 1);
-+	}
-+
-+	/*
-+	 * The host just needs to make sure that the running vcpus exit the
-+	 * guest mode and traps into TSM so that it can issue hfence.
-+	 */
-+	kvm_make_vcpus_request_mask(kvm, KVM_REQ_OUTSIDE_GUEST_MODE, vcpu_mask);
-+	spin_unlock(&tvmc->tvm_fence_lock);
-+
-+	return 0;
-+}
-+
-+
- static int cove_convert_pages(unsigned long phys_addr, unsigned long npages, bool fence)
- {
- 	int rc;
+ 		if (kvm_check_request(KVM_REQ_UPDATE_HGATP, vcpu))
+ 			kvm_riscv_gstage_update_hgatp(vcpu);
+ 
 -- 
 2.25.1
 
