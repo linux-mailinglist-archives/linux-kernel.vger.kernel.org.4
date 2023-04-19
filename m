@@ -2,143 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68416E7433
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3FF26E732D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232547AbjDSHm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 03:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
+        id S230377AbjDSGZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 02:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232525AbjDSHlh (ORCPT
+        with ESMTP id S232173AbjDSGZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 03:41:37 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A59A61B4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:41:26 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33J3RQbB001533;
-        Wed, 19 Apr 2023 08:23:07 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=Jb24vqkm7QNVgz8klwd5wuo/hDO+thEdH5s8jJRSG7w=;
- b=rjHAqIvPi+695bUJyJIl0SHVB5KdrPUSWiSmn6yTpAJNOFMiINS8KTlck7eK8yV/biFS
- 7cjZqEwn+ffxIPRCxucagVtvGQPZ4hj9Ea9Y7C2zK7CDwbD9GEjRieo3Qr3OlNtlW8sR
- ELwaXv1GjTUOuTf1RNz3N/DqbzPgUuIsjXncJ0r5AnYwRrNXKypnSwh2hkP8Y8/b4QeN
- sLhfV0nM26QRqle0hqYq770qtCt8nI1S4GEXCxCW+ZKtgw7jXvK+do3ZUmBdc1nZJ18q
- es7sSb4QNbHRLwJhDw3m2bn58dHPMzYyYmtYAisHRfoC4TbF97O8sQ1aMhgKie1F7dnG PA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3q1rq2e3nd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 08:23:07 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C16CD10002A;
-        Wed, 19 Apr 2023 08:23:06 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AEF6B20FA2D;
-        Wed, 19 Apr 2023 08:23:06 +0200 (CEST)
-Received: from [10.201.21.26] (10.201.21.26) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 19 Apr
- 2023 08:23:06 +0200
-Message-ID: <4df7e577-044f-b6bb-cfc8-4d2c225ae7f7@foss.st.com>
-Date:   Wed, 19 Apr 2023 08:23:05 +0200
+        Wed, 19 Apr 2023 02:25:04 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F906A241;
+        Tue, 18 Apr 2023 23:24:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1681885475; x=1713421475;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8/urAO3cr38Q500Q7Zd86j88a9lBzovlp1Wn4tiEqAs=;
+  b=iw13tOXQUUoQyU9o4NJ2dlxh+uKMaSE11GaCdUpK4XsJwMZdTmHnOOqC
+   ckfzSJJjd6pj4HIiVii3bxnBwnOpfD+tUaXgrXF/5B3wyr9dlwt7myJgj
+   Y/UDS+m5EDSyK2Vo6Inb4nP4Zhvtr1ZcYo+4gwpcQv1NKq2y/1NqCP/bW
+   BJVw4kNXviPIEOR4QLGPBLlVJRMWFrTuacOpmNJ/+Wkn2U8aF5aAnR4V+
+   CVV4m3VsEJfa1dfNYOEHHXJNo9U1qoJT/eFfSChueHzHTr+qPVPu1J6XC
+   BCGxI8P9vPh9wYBB/kIUN9IlT1UZFtaazOjQEAcHem41c2DkJcXr6QlgO
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,208,1677567600"; 
+   d="asc'?scan'208";a="221576825"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Apr 2023 23:24:08 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 18 Apr 2023 23:24:08 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 18 Apr 2023 23:24:05 -0700
+Date:   Wed, 19 Apr 2023 07:23:49 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Changhuang Liang <changhuang.liang@starfivetech.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [RESEND v2 0/6] Add JH7110 AON PMU support
+Message-ID: <20230419-subway-itinerary-9f5532929c14@wendy>
+References: <20230419035646.43702-1-changhuang.liang@starfivetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] ARM: sti: removal of stih415/stih416 related entries
-Content-Language: en-US
-To:     Alain Volmat <avolmat@me.com>, Russell King <linux@armlinux.org.uk>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230416185939.18497-1-avolmat@me.com>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <20230416185939.18497-1-avolmat@me.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.26]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-19_02,2023-04-18_01,2023-02-09_01
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zrWAbWhImwI++znI"
+Content-Disposition: inline
+In-Reply-To: <20230419035646.43702-1-changhuang.liang@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alain
+--zrWAbWhImwI++znI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 4/16/23 20:59, Alain Volmat wrote:
-> ST's STiH415 and STiH416 platforms have already been removed since
-> a while.  Remove some remaining bits within the mach-sti.
-> 
-> Signed-off-by: Alain Volmat <avolmat@me.com>
-> Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> ---
-> Patch sent previously as part of serie: https://lore.kernel.org/all/20230209091659.1409-3-avolmat@me.com/
-> 
->  arch/arm/mach-sti/Kconfig    | 20 +-------------------
->  arch/arm/mach-sti/board-dt.c |  2 --
->  2 files changed, 1 insertion(+), 21 deletions(-)
-> 
-> diff --git a/arch/arm/mach-sti/Kconfig b/arch/arm/mach-sti/Kconfig
-> index b2d45cf10a3c..609957dead98 100644
-> --- a/arch/arm/mach-sti/Kconfig
-> +++ b/arch/arm/mach-sti/Kconfig
-> @@ -19,31 +19,13 @@ menuconfig ARCH_STI
->  	select PL310_ERRATA_769419 if CACHE_L2X0
->  	select RESET_CONTROLLER
->  	help
-> -	  Include support for STMicroelectronics' STiH415/416, STiH407/10 and
-> +	  Include support for STMicroelectronics' STiH407/10 and
->  	  STiH418 family SoCs using the Device Tree for discovery.  More
->  	  information can be found in Documentation/arm/sti/ and
->  	  Documentation/devicetree.
->  
->  if ARCH_STI
->  
-> -config SOC_STIH415
-> -	bool "STiH415 STMicroelectronics Consumer Electronics family"
-> -	default y
-> -	help
-> -	  This enables support for STMicroelectronics Digital Consumer
-> -	  Electronics family StiH415 parts, primarily targeted at set-top-box
-> -	  and other digital audio/video applications using Flattned Device
-> -	  Trees.
-> -
-> -config SOC_STIH416
-> -	bool "STiH416 STMicroelectronics Consumer Electronics family"
-> -	default y
-> -	help
-> -	  This enables support for STMicroelectronics Digital Consumer
-> -	  Electronics family StiH416 parts, primarily targeted at set-top-box
-> -	  and other digital audio/video applications using Flattened Device
-> -	  Trees.
-> -
->  config SOC_STIH407
->  	bool "STiH407 STMicroelectronics Consumer Electronics family"
->  	default y
-> diff --git a/arch/arm/mach-sti/board-dt.c b/arch/arm/mach-sti/board-dt.c
-> index ffecbf29646f..8c313f07bd02 100644
-> --- a/arch/arm/mach-sti/board-dt.c
-> +++ b/arch/arm/mach-sti/board-dt.c
-> @@ -12,8 +12,6 @@
->  #include "smp.h"
->  
->  static const char *const stih41x_dt_match[] __initconst = {
-> -	"st,stih415",
-> -	"st,stih416",
->  	"st,stih407",
->  	"st,stih410",
->  	"st,stih418",
+On Tue, Apr 18, 2023 at 08:56:40PM -0700, Changhuang Liang wrote:
+> This patchset adds aon power domain driver for the StarFive JH7110 SoC.
+> It is used to turn on/off dphy rx/tx power switch. The series has been
+> tested on the VisionFive 2 board.
+>=20
+> This patchset should be applied after the patchset [1]:
+> [1] https://lore.kernel.org/all/20230414024157.53203-1-xingyu.wu@starfive=
+tech.com/
+>=20
+> changes since v1:
+> - Updated commit message.
+> - Changed "starfive,jh7110-pmu-dphy" to "starfive,jh7110-aon-pmu".
+> - Put if condition under allOf in .yaml file.
+> - Updated spelling error.
+> - Dropped patch 4: Add pmu type operation.
+> - Changed "jh71xx_pmu_general_set_state" to "jh7110_pmu_set_state" and mo=
+ved it in call back.
+> - Changed "jh7110_pmu_general_parse_dt" to "jh7110_pmu_parse_dt" and move=
+d it in call back.
+> - Used pmu_status save the pmu status offset.
+> - Changed "JH71XX_PMU_DPHY_SWITCH" to "JH71XX_AON_PMU_SWITCH"
+> - Changed copyright to "2022-2023"
 
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+For the future, when you resend, please say why you did.
 
-Thanks
-Patrice
+>=20
+> v1: https://lore.kernel.org/all/20230411064743.273388-1-changhuang.liang@=
+starfivetech.com/
+>=20
+> Changhuang Liang (6):
+>   dt-bindings: power: Add JH7110 AON PMU support
+>   soc: starfive: Replace SOC_STARFIVE with ARCH_STARFIVE
+>   soc: starfive: Modify ioremap to regmap
+>   soc: starfive: Extract JH7110 pmu private operations
+>   soc: starfive: Add JH7110 AON PMU support
+>   riscv: dts: starfive: jh7110: Add AON PMU node
+>=20
+>  .../bindings/power/starfive,jh7110-pmu.yaml   |  15 +-
+>  MAINTAINERS                                   |   1 +
+>  arch/riscv/boot/dts/starfive/jh7110.dtsi      |   5 +
+>  drivers/soc/starfive/Kconfig                  |   4 +-
+>  drivers/soc/starfive/jh71xx_pmu.c             | 200 +++++++++++++-----
+>  .../dt-bindings/power/starfive,jh7110-pmu.h   |   3 +
+>  6 files changed, 174 insertions(+), 54 deletions(-)
+>=20
+>=20
+> base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
+> prerequisite-patch-id: 388b8adbb0fe2daf4d07a21eafd4f1bd50ce2403
+
+Also, all of this pre-req patch id stuff is pretty useless. You've
+already pointed out the patches that this is based on, so IMO this
+information isn't helpful & is probably more likely confuse tooling
+than anything else.
+
+Cheers,
+Conor.
+
+--zrWAbWhImwI++znI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZD+I8QAKCRB4tDGHoIJi
+0ttKAP9MGaU90RWek8EkqCX6COe90cvlPNNwd1wpPoa0MMPaRgD7BlV2IUkTi7c/
+TP3qPPR4Hx170gDBCArFJpLuCzUmYAg=
+=yE96
+-----END PGP SIGNATURE-----
+
+--zrWAbWhImwI++znI--
