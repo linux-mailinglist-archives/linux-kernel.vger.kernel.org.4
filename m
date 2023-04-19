@@ -2,115 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723F16E7FB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3CC6E7FBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbjDSQeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 12:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
+        id S233420AbjDSQfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 12:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233420AbjDSQeE (ORCPT
+        with ESMTP id S232588AbjDSQfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 12:34:04 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65382421C;
-        Wed, 19 Apr 2023 09:33:59 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a682eee3baso1545325ad.0;
-        Wed, 19 Apr 2023 09:33:59 -0700 (PDT)
+        Wed, 19 Apr 2023 12:35:15 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECB810CC
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:35:14 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-63b875d0027so15412b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:35:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681922039; x=1684514039;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681922114; x=1684514114;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Hejd87Jll0E8NOGuMljt4taTMik1yKpFSOJV8ogm+QU=;
-        b=otvUaF7ejsijSly4r1bE5p0DcDAEY+dCK+KVYM+TKOnGIRDPkokhlWhv1Y4lwB+ZkJ
-         J+rF08EQd1xv3uuCAYfuKfepDM3Eusu6Uzl+SkCDbVx4j8Kn6sz+XuG7ALq2caYTgvj8
-         08wPhYvwIHTxLDZdYdxa2Xd5iDpIHEpZDQQLzd8+mvwCpOCz+WsrdOTTJ2/6cA9LYgzN
-         7NDAmo86b0SDi1sLACOkw9YxuxQHprwevC+PiLw6AfCihrx2IR9ovUWUsBFPeUWvsix0
-         FhdUPHDgv7r1UhOtdh8KkQQQN/cNQEWYyJrQZ1/9O7ON5XBMjvxAcMuAzNGWcDRBFKOz
-         QhGA==
+        bh=SUGaDOOmXNYN2yHd8jG9FzTaVM1k9cQjYdodgvTsUtw=;
+        b=4G5AVCis88GRFMkQH7k33qpndsa8jiW1+hkXHkB855AulFlcz9sIUdBnvtVl0EfH8u
+         yhAB/jb56huXnr7MeumIhfLTOi5WGTDmEiWxjNr0gKwSg/1eYNn2Y03tLkrJRwUaUdP/
+         R6RrUZ7g2af+Qc8aK/gYFN6Xiq6/y5Syf1dZ2dCrAr23ECOUl1JbRHCKN/cIEJW1ZR9T
+         w4aBrFkOTvlmVuPQC2ZlKhL4x1V3buvqx95T7wNM6Aw5QyjbK88huTsrH3NAjAc+VQbd
+         aG/5brt4HAVaXjEYnvvqp/Y0raUcrqaCo2EpOOicMDXS1aVMT2Mc3X1EQ2U8VCneA0lK
+         uifw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681922039; x=1684514039;
+        d=1e100.net; s=20221208; t=1681922114; x=1684514114;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hejd87Jll0E8NOGuMljt4taTMik1yKpFSOJV8ogm+QU=;
-        b=SkD3fujLoSe/rbrQEzHt9fmQ/uapgcltvPA8LfqBZq65QvvXKWlwJx7A9rkJS2xxU8
-         Pyn3vSrT1R/69qETu5ctUGQYCzpgCWvEbeqSJrOpbw9TWAHpJprXmK1EMW4m6LKxeowU
-         jVsPNPTdf1tm2CtwR1UFCG5zmyKOWSM3ZSGD0+Hq+VAHCJLq+3N9oKJiol41f2+We73u
-         GbornskRAj3qUAFu/fsQg8FCiOodLvGnABSBelGARWoAJVxaK3ex8k2cGZv3OryGhzjF
-         rIRhvRbZODudUooXZqlF4CqF9y0QcQFXX0yOdDUW7SS8+UbHhCPIPatcjsQ1yeDYpbIX
-         yflQ==
-X-Gm-Message-State: AAQBX9dbAFpJFulHlOaAjUcXoJ3/jPpIFJoy76zlhFVvJ6dlICK8TpR+
-        RbiUKhmhD7tIbP+mLUv5TMY=
-X-Google-Smtp-Source: AKy350Yh+6NbKPw4KD+UsFvenBCaCDaUcheuDcqPn53EST9vXg5qyuw0UcOKYiNkqaXz2dPOz64XMQ==
-X-Received: by 2002:a17:902:f689:b0:1a6:f5d5:b80a with SMTP id l9-20020a170902f68900b001a6f5d5b80amr7744678plg.38.1681922038707;
-        Wed, 19 Apr 2023 09:33:58 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id p10-20020a1709026b8a00b0019a6cce2060sm11631338plk.57.2023.04.19.09.33.52
+        bh=SUGaDOOmXNYN2yHd8jG9FzTaVM1k9cQjYdodgvTsUtw=;
+        b=MtZ82JySOvdKJ9YcBxYFgVDkEf6q/uBVILiKtJrJHR+nPZeBzFleE9T7INlQ+2gCcR
+         4sSEpxKNZkRtLVSunMGiAiQNKdhanNhPEOlymCgsmyZS7LmhGbDe2arbl9KXrjZIzGoL
+         1vJqUFgnD5Y2ll2CwnoXwtCmqLL4AtUhd83T6pVvdSPJvfjcMt4otPcYaBo56BCVbsOP
+         SUgAtUsXT4VqtG0A0d53hfT+eew7wDkU8YoHo6QpNFHcz+Ln/HU092IuBZ8Dmbx4oeTf
+         ahlOUj9SlmRORZv9tDbKoaVki0NiicBjdOqK3+UQJDfW1/Fbm9gbo2iKevY+GE1AY/3X
+         HZjg==
+X-Gm-Message-State: AAQBX9dcXM3fG3skoLy3hAGCuNNxGpN/oj1Z6DxN/G+CbtwqxUFKTyIT
+        uYkcSvB+PqhKa7l2m7ZVBfFiYA==
+X-Google-Smtp-Source: AKy350Y932E9xmmBE5e8pOSX4ZKSOAjNxtsTMF8OQ+EM9gzlSgibHjZjdv62HJqD9m7AT2/OGwS7Cg==
+X-Received: by 2002:a17:902:e751:b0:1a0:7663:731b with SMTP id p17-20020a170902e75100b001a07663731bmr22364437plf.5.1681922113778;
+        Wed, 19 Apr 2023 09:35:13 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id m3-20020a17090a920300b00230ffcb2e24sm1603926pjo.13.2023.04.19.09.35.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 09:33:58 -0700 (PDT)
-Message-ID: <932bb2c6-71ce-525f-fbb2-a0a742ee8e12@gmail.com>
-Date:   Wed, 19 Apr 2023 09:33:50 -0700
+        Wed, 19 Apr 2023 09:35:13 -0700 (PDT)
+Message-ID: <936e8f52-00be-6721-cb3e-42338f2ecc2f@kernel.dk>
+Date:   Wed, 19 Apr 2023 10:35:12 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH net-next 3/6] net: bcmasp: Add support for ASP2.0 Ethernet
- controller
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
+ pin_user_pages()
 Content-Language: en-US
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Justin Chen <justinpopo6@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        bcm-kernel-feedback-list@broadcom.com
-Cc:     justin.chen@broadcom.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, opendmb@gmail.com,
-        andrew@lunn.ch, linux@armlinux.org.uk, richardcochran@gmail.com,
-        sumit.semwal@linaro.org, christian.koenig@amd.com
-References: <1681863018-28006-1-git-send-email-justinpopo6@gmail.com>
- <1681863018-28006-4-git-send-email-justinpopo6@gmail.com>
- <03dadae3-3a89-cdb0-7cd1-591d62735836@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <03dadae3-3a89-cdb0-7cd1-591d62735836@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org
+References: <cover.1681831798.git.lstoakes@gmail.com>
+ <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/18/23 23:35, Heiner Kallweit wrote:
-> On 19.04.2023 02:10, Justin Chen wrote:
->> Add support for the Broadcom ASP 2.0 Ethernet controller which is first
->> introduced with 72165. This controller features two distinct Ethernet
->> ports that can be independently operated.
->>
->> This patch supports:
-[snip]
->> +	intf->tx_spb_index = spb_index;
->> +	intf->tx_spb_dma_valid = valid;
->> +	bcmasp_intf_tx_write(intf, intf->tx_spb_dma_valid);
->> +
->> +	if (tx_spb_ring_full(intf, MAX_SKB_FRAGS + 1))
->> +		netif_stop_queue(dev);
->> +
+On 4/18/23 9:49?AM, Lorenzo Stoakes wrote:
+> We are shortly to remove pin_user_pages(), and instead perform the required
+> VMA checks ourselves. In most cases there will be a single VMA so this
+> should caues no undue impact on an already slow path.
 > 
-> Here it may be better to use the new macros from include/net/netdev_queues.h.
-> It seems your code (together with the related part in tx_poll) doesn't consider
-> the queue restart case.
-> In addition you should check whether using READ_ONCE()/WRITE_ONCE() is needed,
-> e.g. in ring_full().
+> Doing this eliminates the one instance of vmas being used by
+> pin_user_pages().
 
-Thanks Heiner. Can you trim the parts you are not quoting otherwise one 
-has to scroll all the way down to where you responded. Thanks!
+First up, please don't just send single patches from a series. It's
+really annoying when you are trying to get the full picture. Just CC the
+whole series, so reviews don't have to look it up separately.
+
+So when you're doing a respin for what I'll mention below and the issue
+that David found, please don't just show us patch 4+5 of the series.
+
+> diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+> index 7a43aed8e395..3a927df9d913 100644
+> --- a/io_uring/rsrc.c
+> +++ b/io_uring/rsrc.c
+> @@ -1138,12 +1138,37 @@ static int io_buffer_account_pin(struct io_ring_ctx *ctx, struct page **pages,
+>  	return ret;
+>  }
+>  
+> +static int check_vmas_locked(unsigned long addr, unsigned long len)
+> +{
+> +	struct file *file;
+> +	VMA_ITERATOR(vmi, current->mm, addr);
+> +	struct vm_area_struct *vma = vma_next(&vmi);
+> +	unsigned long end = addr + len;
+> +
+> +	if (WARN_ON_ONCE(!vma))
+> +		return -EINVAL;
+> +
+> +	file = vma->vm_file;
+> +	if (file && !is_file_hugepages(file))
+> +		return -EOPNOTSUPP;
+> +
+> +	/* don't support file backed memory */
+> +	for_each_vma_range(vmi, vma, end) {
+> +		if (vma->vm_file != file)
+> +			return -EINVAL;
+> +
+> +		if (file && !vma_is_shmem(vma))
+> +			return -EOPNOTSUPP;
+> +	}
+> +
+> +	return 0;
+> +}
+
+I really dislike this naming. There's no point to doing locked in the
+naming here, it just makes people think it's checking whether the vmas
+are locked. Which is not at all what it does. Because what else would we
+think, there's nothing else in the name that suggests what it is
+actually checking.
+
+Don't put implied locking in the naming, the way to do that is to do
+something ala:
+
+lockdep_assert_held_read(&current->mm->mmap_lock);
+
+though I don't think it's needed here at all, as there's just one caller
+and it's clearly inside. You could even just make a comment instead.
+
+So please rename this to indicate what it's ACTUALLY checking.
+
 -- 
-Florian
+Jens Axboe
 
