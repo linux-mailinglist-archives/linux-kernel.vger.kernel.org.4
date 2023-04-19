@@ -2,247 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 470446E7332
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A08D6E7347
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbjDSG10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 02:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
+        id S232289AbjDSG3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 02:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjDSG1Y (ORCPT
+        with ESMTP id S231667AbjDSG2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 02:27:24 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401F1B2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:27:22 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id cu36so2641666vsb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681885641; x=1684477641;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5gR9QnevZIFqUAZcTVV7xSwBhCO/82rP3S5b5X8dnr0=;
-        b=RmZTqAOcCoDoIqt61oczB49mPHVd4tcrIvsFTwgdtX4TB1vDgEQTlsUFpbtTFd3IWz
-         77e3J7BxCgYhcyXnqdzhTfsEXGwqS2BfL3kPWMPMQh0tk2CGzLan/G/hoYbIKY+2+rYR
-         dMshhoJYmTutbU8S2AOiBo3aU+LZn5bTwVhWxTNo7bG+0+6lxADtO0FDyueGNLfOOFf4
-         pAcvf8ZDzT4uINNX9VKwEbJhC5oIl8+5V5KjVokJTDmMm5uCM/oMrkexblHhcSY40tmV
-         bwtFnSG5ztU8gdJ2hxAfu8ZkL9zwmUXE9kTrFTTINBhLeBjEy5HRKAl6jqyEAW4rwkF3
-         Kppg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681885641; x=1684477641;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5gR9QnevZIFqUAZcTVV7xSwBhCO/82rP3S5b5X8dnr0=;
-        b=gY2pP7IZa6+3GcCg1FI4kLfRPGvceyIEzWlzDTRJZOIq7kLN3+brqn43ZcMpCrcJAm
-         8utlizxbdWDnxdVWOQ5ZZ+H79mF2KRAeVA+xKk4lWzGlZHU5US3JoGN42dl/v7GtjmvN
-         UQqrtUQzWFNS4FtUL95+yQPS7rsEN+XADFmoJmPcvHJ4SUNRVOEQ5Mqs7Q5i8Jr9xvtY
-         z4HS3Op5+9VQQYhtHbMIzzwptIH9BbAFBmMmzkF/4ebbM6SCg05M43xM+/THaVhBXC1s
-         jZFpBH3EoAnvaQin0VRrYR+UQaCWja0uy/Gy409l4wVR1yoL7YT/xnoedBjaRz9Xfo7u
-         7GhA==
-X-Gm-Message-State: AAQBX9dDYHrqq06gMSmZlbx6NKrz11SsKWOyWvYk15OGc1PNQiM8aI1M
-        svubCGxv4OIviS/jnxKjL6OWSY+EqHJiXz1WDGCNKw==
-X-Google-Smtp-Source: AKy350Z2jTarge6T7Fg6F92eSYQwrCeUEPgApVB/FUoppRFSd/tmjwqy5p/H6N2QNosLJ9vV771ylia+o/4y6DqXpzU=
-X-Received: by 2002:a05:6102:533:b0:42e:7c42:7ff3 with SMTP id
- m19-20020a056102053300b0042e7c427ff3mr4087630vsa.6.1681885641213; Tue, 18 Apr
- 2023 23:27:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230418120313.725598495@linuxfoundation.org>
-In-Reply-To: <20230418120313.725598495@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 19 Apr 2023 11:57:09 +0530
-Message-ID: <CA+G9fYuF56sONXmw0OHiv82KEaYLAT46FrOFePLOGGWfa1jt5g@mail.gmail.com>
-Subject: Re: [PATCH 6.2 000/139] 6.2.12-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 19 Apr 2023 02:28:54 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C999D618A;
+        Tue, 18 Apr 2023 23:28:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 47CC4219A4;
+        Wed, 19 Apr 2023 06:28:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1681885712; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WDZk9ptfe7tbUXycBmi8ymyKPOJ3g9Qe7BcZTpGDyuE=;
+        b=oxwafQ2ccV7f7lVYioIxDUV8J+79F/Hzy+DIwUxLlyyH27arC5FHAUaS84Mw+XJWc/jyr2
+        HEANx4UeTbiXx1QzuAjHtHJrysd/fD/5vYljBqmySsFYASAlnxKviZTKCpAELsaZjyGmUX
+        Qkxil6KIB3yu440jrX4DATXS1g8XodI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1681885712;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WDZk9ptfe7tbUXycBmi8ymyKPOJ3g9Qe7BcZTpGDyuE=;
+        b=xSvNkokDqkNKt6RLNKbJdBIFLqV/S2CkVOHgoj3OjMy99drKd3PYyy5JDeLLUi3OqFM0BS
+        WF36gQuXFp5NFkDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 161701390E;
+        Wed, 19 Apr 2023 06:28:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YTH2AxCKP2RJJgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 19 Apr 2023 06:28:32 +0000
+Date:   Wed, 19 Apr 2023 08:28:31 +0200
+Message-ID: <87mt342xo0.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: ppc/tumbler: Use of_property_present() for testing DT property presence
+In-Reply-To: <20230310144733.1546500-1-robh@kernel.org>
+References: <20230310144733.1546500-1-robh@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Apr 2023 at 18:17, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.2.12 release.
-> There are 139 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.2.12-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.2.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Fri, 10 Mar 2023 15:47:33 +0100,
+Rob Herring wrote:
+> 
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties. As
+> part of this, convert of_get_property/of_find_property calls to the
+> recently added of_property_present() helper when we just want to test
+> for presence of a property and nothing more.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
+Applied now to for-next branch.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+thanks,
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 6.2.12-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.2.y
-* git commit: 0b816653f21b8d3be558317406fcc5ab1f6a5bfb
-* git describe: v6.2.9-501-g0b816653f21b
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.2.y/build/v6.2.9=
--501-g0b816653f21b
-
-## Test Regressions (compared to v6.2.9-361-g5f50ce97de71)
-
-## Metric Regressions (compared to v6.2.9-361-g5f50ce97de71)
-
-## Test Fixes (compared to v6.2.9-361-g5f50ce97de71)
-
-## Metric Fixes (compared to v6.2.9-361-g5f50ce97de71)
-
-## Test result summary
-total: 185409, pass: 158309, fail: 3947, skip: 22855, xfail: 298
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 145 total, 142 passed, 3 failed
-* arm64: 54 total, 53 passed, 1 failed
-* i386: 41 total, 38 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 36 passed, 2 failed
-* riscv: 26 total, 25 passed, 1 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 7 passed, 1 failed
-* x86_64: 46 total, 46 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-vm
-* kselftest-watchdog
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Takashi
