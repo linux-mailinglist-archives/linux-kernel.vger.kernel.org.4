@@ -2,132 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087966E72AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110896E72B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjDSFsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 01:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
+        id S231612AbjDSFvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 01:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjDSFsi (ORCPT
+        with ESMTP id S229633AbjDSFvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 01:48:38 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF53C59F5
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:48:36 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54f6a796bd0so371911547b3.12
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:48:36 -0700 (PDT)
+        Wed, 19 Apr 2023 01:51:12 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2132.outbound.protection.outlook.com [40.107.93.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB60E5FD2;
+        Tue, 18 Apr 2023 22:51:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IzQF/CgJhZyD+Av414nDnIAeDIhzKwd7dKdaYXE4VC+JTLIHkyfe5aoAiuIoZu7SBY0gorf0TWcmrjAxq8c04PYJfveIqQ+YTfmEgSz6PlyhH/GoBxRyZM3gHDounCf800mRuJmATExA/0FG/sgk/wsAo3Yeuc2RdKueWOM3u5sS8g9zVPY0NGAYr331S36TmLCkmY5CJMqK7gQ92Q7YMhErXMMAgxwouoJ6K6MX8OZJ5DDml2Vumod2WPPCXfBfY+ClVgLm5v3TbcGXQlZZE2zApzsnM2u7XkhzJde9pSfEaLOiAN4roPI57ZD9VRbI/NfJdSSHyGAcoKWsZ3gvMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5dWf4Dl7jViZwaM4G1qUPctIrIC4UTWUnKSGPKIUkU4=;
+ b=lEbrUrpa+9rapjxSfgXn/9iZEBQMtEihZr1lZIXpp/PYOAsGWkPuFR0smU6jH02brchBiMgphyeuLWxPcWIYX8nDcwDX8cIR2yhkyNEGAsZhr/gEhQr01dvu9Q3D4UelXt+W4hBf3L60py1OPKVGgVle9YTcAZC3sO4p99oYFTwrYhNPopDotTaJ4kcPuvzuL8tTr3rgKaiV3sE4yVhk54azeCwby7DLM+nVD2vrWdeEfLOZoKr9XJSpImxJ8T9w5gwqdfDGFIJF5o7/mHokxuMDCXGFSR2mrSTW4A5dhNP0MbjAJNs16UtieXRy9GPNmjR6u2kAHzcVCUdMYgnbaw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681883316; x=1684475316;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K4bx1lrPt7EkQTFUhn+tnnmLkUflOfyoDdf2Nh8k7go=;
-        b=NDSSkGY3R//+h2GDgeukfHv1wKB990ASuIBacYtJi7akdl78oBCgfqzUJSPDugRLP0
-         0SwZh70QC4aV55zP/QS7QkjuUt+R/ftbL/uF2Uvid7vhacEKXQFCH6wEhHW4boT5OtuW
-         xD0WPLgd7ZlmSDufqrlyOgVVME77octjjqZX44WnJ24tKUDAT4uSYHEYsYF6PNvjv6BR
-         4auPLOMSJpbnUiMUvuFrdPMwEvIgY/oTN0QZGZlEg6K1s/BwCpDpANXd1ujfq7E9ajb5
-         9KwkFc7neUNclkx4vZ19h+J+5kQrwLtE5HtAYjkm34KK9f1bk5DV4YiDkvODL8yig6/h
-         LN2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681883316; x=1684475316;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K4bx1lrPt7EkQTFUhn+tnnmLkUflOfyoDdf2Nh8k7go=;
-        b=dmQJ14d+DAz72RNqb9xI/mQuiEYIE6H3mRpAxP3NkRYJKS+PLMuoQynxZK4XHGE9NX
-         gcmurizEQGisMIG7in8uCp4Y8savkNHsagdCFQ5s3F6WTIEeMQ3PMcellYrVodSyvDl1
-         4NGI7dg+/oF7inYK4ZuqZenrO6bL/Dn0Z/f9NPv1ia9X38AOw7l7F/WRjaJjjC127kPI
-         Zjz1DDarjLrzHqEYwf7OXUKG3woFmWdZOTKC6NGr3udcg+GfWwYlMjp+hNOv7SdrVlFW
-         2uqieNDS5tpieZkqzbxzKqb1J82hsFLnGqBLydusQEFZwI050tEg8ZfYLYugPg2qNiOH
-         YXRA==
-X-Gm-Message-State: AAQBX9fnhlvOtDFh4fJRshSMWSdr+QlkMQDyAiFKr0q+agah+UDH/Moz
-        Flaxk1iP4etigsLuKCQUYSDDhHfTujn2pVHBFnbGjw==
-X-Google-Smtp-Source: AKy350bhgIZfl+76ufNilmmY2MnTYA9MZXAIWAcOr78M6MH58CYU9cGj3mCALecz83+OYF4IuRIUELBQPUaCYMkEDnc=
-X-Received: by 2002:a0d:eb08:0:b0:555:d266:acc5 with SMTP id
- u8-20020a0deb08000000b00555d266acc5mr678715ywe.29.1681883315944; Tue, 18 Apr
- 2023 22:48:35 -0700 (PDT)
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5dWf4Dl7jViZwaM4G1qUPctIrIC4UTWUnKSGPKIUkU4=;
+ b=LVD9bb9vo4jA+UYVrDajdWg5dIHh7qQ4juI+Yssw5WmakTqyoWf5Zi7MOIY/gYMb25ggxJ2LUgi+T+FKjGV0uViQ/SW87xanUNQz5uCsz5+Uf4Xd3DMKXlj6Dwtl3RH8FqY0zOULMRNk4VjKacfCfAyHbQbWR2WzanhL1yXwwGc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from BY3PR13MB4834.namprd13.prod.outlook.com (2603:10b6:a03:36b::10)
+ by PH0PR13MB5793.namprd13.prod.outlook.com (2603:10b6:510:11c::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
+ 2023 05:51:02 +0000
+Received: from BY3PR13MB4834.namprd13.prod.outlook.com
+ ([fe80::d98b:da1b:b1f0:d4d7]) by BY3PR13MB4834.namprd13.prod.outlook.com
+ ([fe80::d98b:da1b:b1f0:d4d7%5]) with mapi id 15.20.6298.045; Wed, 19 Apr 2023
+ 05:51:02 +0000
+Date:   Wed, 19 Apr 2023 07:50:54 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Ding Hui <dinghui@sangfor.com.cn>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        keescook@chromium.org, grzegorzx.szczurek@intel.com,
+        mateusz.palczewski@intel.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn
+Subject: Re: [RESEND PATCH net 1/2] iavf: Fix use-after-free in free_netdev
+Message-ID: <ZD+BPjGImmvwVd3G@corigine.com>
+References: <20230417074016.3920-1-dinghui@sangfor.com.cn>
+ <20230417074016.3920-2-dinghui@sangfor.com.cn>
+ <ZD70DKC3+K6gngTh@corigine.com>
+ <ff2e0a06-abbb-213a-40ed-20c8e8b2f429@sangfor.com.cn>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ff2e0a06-abbb-213a-40ed-20c8e8b2f429@sangfor.com.cn>
+X-ClientProxiedBy: AM3PR07CA0057.eurprd07.prod.outlook.com
+ (2603:10a6:207:4::15) To BY3PR13MB4834.namprd13.prod.outlook.com
+ (2603:10b6:a03:36b::10)
 MIME-Version: 1.0
-References: <20230418052902.1336866-1-joychakr@google.com> <20230418052902.1336866-5-joychakr@google.com>
- <ZD5JC7BdN1usn6Kd@smile.fi.intel.com>
-In-Reply-To: <ZD5JC7BdN1usn6Kd@smile.fi.intel.com>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Wed, 19 Apr 2023 11:18:25 +0530
-Message-ID: <CAOSNQF2sXHFCx9ZfrtfmxHfKrAE0XGP8SRvW6wyYco+FKSPmDw@mail.gmail.com>
-Subject: Re: [PATCH v7 4/5] spi: dw: Add DMA address widths capability check
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        rohitner@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY3PR13MB4834:EE_|PH0PR13MB5793:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2d3ab707-c7ce-43ec-82bc-08db409a0ed9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PckZ4utMuxhNGN9HsuzIRirRMf3W/vtRMuCpeg46S3VmZaDD9QMt9YKDPIAp9DJpe0ISq4lCeTdvCp2P3/HFC9VV7gt14plZAXBqBIXpwTSAqtDamLwp5Sue6Xx10bpZ0fl0Fao3BV42FjoZEsvE/lNLHUIaz9NhrVrKrW2inGnW5GCMDJ3u2ckNdLN8DdKFeVJLJkz+CL7qJFnJ5n6a98wrVg13Y5m1lWLYAdjb65Ydettf78fO2/HK+lJ2QIGJSa7W9oz4eaCgIDVTFSKbE2MkBR5wAGIhm2Nq1yVjJS2BtPag1U7+nWXIx1rftJt5AqcAiTKQ4RsuJRSYScfZ46UbBcqA6RVA0YXEHca+Pqu/FGm6TzfrCBdyaRDQiHSsMcTJv5w6VRWVos31+rAc5GRsFAOb3UsOQC7tUrEOKN/FnNUBJZFNuoU2GqKI+K3gWQSEEYVv+PVmov7G/zO2FlugEiURQIOAz2eIaUV+bGhHfoPMxjWFYG0uINMRIS0Q32/ve6oboOL+Xw5GAlon2XdJoY+W5CzGMGb7jDtvm92GrwvJcmnE2fyXOGETmyXn1617MJwCek4c9HeQ3cphuGaCvvimicoV1y4+pre7NXQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR13MB4834.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(396003)(366004)(39840400004)(451199021)(8936002)(38100700002)(36756003)(8676002)(7416002)(44832011)(2906002)(86362001)(5660300002)(478600001)(6486002)(6666004)(186003)(2616005)(6506007)(53546011)(66946007)(66476007)(6512007)(316002)(6916009)(83380400001)(66556008)(41300700001)(4326008)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?T4fnGLk57hHcpSvp8o/ZMd7USJFcklQrHR0H8MoiJBejT0VvfNjl4i77LLUq?=
+ =?us-ascii?Q?pIAP54+pJOgV0wPx13xtW2Oh9LUhKnAGXmWKUFNSr+y8Ofz06JChrkb2fQ8F?=
+ =?us-ascii?Q?aklbXXzgjdSNY9fLs8GYYJRxSR9mG0NRKeI+0aJGCCGbT+I9fl7YggmFuWNF?=
+ =?us-ascii?Q?m1zgxfOtgVIhV8a1XnQKUIqyzZm0f4HBn/zdDcaDWpMGJtxIXAbBjlnKG72H?=
+ =?us-ascii?Q?c6HPfKYFjHH0L9QdYT6xOuXoJB6iZrSD0z6rnZuwCW6NeLC01yOOd14dRWZL?=
+ =?us-ascii?Q?acveaFAXg2Y+6U7C0RiIUCGpqw95LjfmQSGQ5MtIv3wC9RRlIkEyHU6F5O8Y?=
+ =?us-ascii?Q?AG//t3VzB+t4Aom6ATo5ZssRU6Os5nV10cGizBgbZaZqVhG2ENRgglc33ebf?=
+ =?us-ascii?Q?pXrUYc1n+YIeH+ZJz1EnY32Y3OTtJJk0Izd8gO0PYXxLzk54/TFLbAGXLZNN?=
+ =?us-ascii?Q?tRooGhc2i9JMXiXvCZbXP9BW6jtxFq0AZ9jR2Mb527m86kD1s/MNGgrQ12Ud?=
+ =?us-ascii?Q?P9Inf1o7fwMaXvZNaiBkuIG8NgIOJ7ZLBqFpmOJCQ2tdw8JQoVWa2svn1x4k?=
+ =?us-ascii?Q?y/RZ18fQ4eGHB4vkplSDyzxJZ0hWxCA58OD/SccvXgzm5aKQQ34wjN73ak4C?=
+ =?us-ascii?Q?xoDpbpytmNK9wSD0srF0XWQfMK3Vrv1kiKe5TAvEYv9piSsX0OwL3dMwTNQP?=
+ =?us-ascii?Q?n2AkKar4if9tx7Kaj+trZ1ZAyqpUad9+sFuX5vb6koB8IEjb4i6panCAZbJE?=
+ =?us-ascii?Q?lYBoRfiy2RJ+g5w8OncXWIx4X176PBkM8kwbqFwOxF2CruvcMqCHn4rf6vxk?=
+ =?us-ascii?Q?cdmJwQfPRehz3/VSw4Rudbq7I1A2/3M7usyqBKOu7ulGwRmTgXCTrmdIwZVq?=
+ =?us-ascii?Q?sSjtrM28xt+flgPUJjG0KfRgkSxsN7wGSU+1oMFkz41opB6MOMATOSHM0X+K?=
+ =?us-ascii?Q?bcuqcR+mNfwEN6FPl3meP4nEsDfII70wIn1eXoF0W5dD57GycymqAm6P8h50?=
+ =?us-ascii?Q?K54+KtAQaqrh4whIu2aS9G0sedZv21EeLjMtf/fI8e+tUkAM1PYgTA+ISQj8?=
+ =?us-ascii?Q?1LpnkC2YKpOdZ6CvlMBn0ynJ443mQLDXYTIowGvAYcYcdrS6id6Ud8nbkA4L?=
+ =?us-ascii?Q?BZY8qj0DeaWY+LKNUvOfceg7lkEXTGcr+R9wfjUWNkNIOqOZvu5AB2d4JEYg?=
+ =?us-ascii?Q?3xSE0bsQKVP2vVpMGrnZ2Dxp43+IQr1tFoXlp4PM6tnwD0lhGB4YGLuRQi5a?=
+ =?us-ascii?Q?1ApX8y6IZM9aD7cwz1hS65edi+h4UDBPgEABC9Ya6NpE+IBWRQ5jtt+yi5Lb?=
+ =?us-ascii?Q?GGR17gz33Ru2MDXkQyno2rzhQUY3keUnUr2hloDjQweWQ0gv/KvpF7HiIHp4?=
+ =?us-ascii?Q?cXx7DXTYKfrgEeWasSVqXcGBN9UzQcM3Ce56tGPvElq/6IpuTIzKthen9jen?=
+ =?us-ascii?Q?mQyBImpGct9U70KfTq1IvlYwysYjJ1oEuROAJgAK0hDNHPLOpimYEobqxAnf?=
+ =?us-ascii?Q?u9aLq4yEqFyV+pWXJ2yXytY+VZeh0YaxWR/duGSPgEzLNJdc5gP6X2kqAwy1?=
+ =?us-ascii?Q?vWvvloSGzM28aNPR8ZKJg1Di02emByneClQOG7OC1OpPnCsKgF0H+5eqJjb7?=
+ =?us-ascii?Q?A1DNh6DClXHntnO5mM4Q4rUq1UoRpGnaIUW1COWRqd9Yuz0J5cDTIZl7hn/d?=
+ =?us-ascii?Q?hhv0tg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d3ab707-c7ce-43ec-82bc-08db409a0ed9
+X-MS-Exchange-CrossTenant-AuthSource: BY3PR13MB4834.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 05:51:02.2883
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0uv2OsaMkble8jF4G1KkDiDcmyzru55/6T4k+FwsTnaUqMzFrKqo1oODFS23bvARRLtCXT777QeEcBNwbZUhXfEk4Sprzb3hQl5UOkVJuCk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5793
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 1:08=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@intel.com> wrote:
->
-> On Tue, Apr 18, 2023 at 05:29:01AM +0000, Joy Chakraborty wrote:
-> > Store address width capabilities of DMA controller during init and chec=
-k
-> > the same per transfer to make sure the bits/word requirement can be met=
-.
-> >
-> > Current DW DMA driver requires both tx and rx channel to be configured
-> > and functional hence a subset of both tx and rx channel address width
-> > capability is checked with the width requirement(n_bytes) for a
-> > transfer.
->
+On Wed, Apr 19, 2023 at 09:11:37AM +0800, Ding Hui wrote:
+> On 2023/4/19 3:48, Simon Horman wrote:
+> > Hi Ding Hui,
+> > 
+> > On Mon, Apr 17, 2023 at 03:40:15PM +0800, Ding Hui wrote:
+> > > We do netif_napi_add() for all allocated q_vectors[], but potentially
+> > > do netif_napi_del() for part of them, then kfree q_vectors and lefted
+> > 
+> > nit: lefted -> leave
+> > 
+> 
+> Thanks, I'll update in v2.
+> 
+> > > invalid pointers at dev->napi_list.
+> > > 
+> > > If num_active_queues is changed to less than allocated q_vectors[] by
+> > > unexpected, when iavf_remove, we might see UAF in free_netdev like this:
+> > > 
+> 
 > ...
->
-> > +     /*
-> > +      * Assuming both channels belong to the same DMA controller hence=
- the
-> > +      * address width capabilities most likely would be the same.
-> > +      */
->
-> I had a small comment on this In v6 thread.
+> 
+> > > 
+> > > Fix it by letting netif_napi_del() match to netif_napi_add().
+> > > 
+> > > Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+> > > Cc: Donglin Peng <pengdonglin@sangfor.com.cn>
+> > > CC: Huang Cun <huangcun@sangfor.com.cn>
+> > 
+> > as this is a fix it probably should have a fixes tag.
+> > I wonder if it should be:
+> > 
+> > Fixes: cc0529271f23 ("i40evf: don't use more queues than CPUs")
+> 
+> I don't think so.
+> I searched the git log, and found that the mismatched usage was
+> introduced since the beginning of i40evf_main.c, so I'll add
+> 
+> Fixes: 5eae00c57f5e ("i40evf: main driver core")
 
-Sure,
-
-Your comment in V6 thread:
-"
-I would add something to explain the side of these address width, like
-
-         * Assuming both channels belong to the same DMA controller hence
-         * the peripheral side address width capabilities most likely would
-         * be the same.
-"
-
-I do not think the address width capabilities are dependent on the
-side of generation like memory or peripheral. From what I understand,
-address width capabilities are solely dependent on the transaction
-generation capability of the DMA controller towards the system bus.
-What we intend to highlight here is the assumption that both tx and rx
-channel would belong to the same DMA controller hence the transaction
-generation capabilities would be the same both for read and write
-(e.g. if the DMA controller is able to generate 32 bit sized reads
-then it should also be able to generate 32 bit sized writes).
-With this assumption we are doing a bitwise and of both tx and rx capabilit=
-ies.
-
-Please let me know if you think otherwise.
-
-Thanks
-Joy
-
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+Yes, agreed, that is the right tag.
