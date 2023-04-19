@@ -2,172 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC2D6E807A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:36:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D64B6E8087
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbjDSRgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 13:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43562 "EHLO
+        id S232037AbjDSRnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 13:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjDSRgB (ORCPT
+        with ESMTP id S229739AbjDSRnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 13:36:01 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C9C46B3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:36:00 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-63b78525ac5so32539b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:36:00 -0700 (PDT)
+        Wed, 19 Apr 2023 13:43:18 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C397F72A0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:43:16 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f048b144eeso147985e9.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:43:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681925760; x=1684517760;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lmO38VAM37rREvey7UoSOou6N388un70Vf6aBhszREY=;
-        b=z/iFo4N29sXIdiv1sY4QI9CNza3JqdfEZW150D4CJIyqs1ftdbuyC35lNkAkp8OIHw
-         FNH/iNpv40tp9PaqWqjijJTveL3b5HpsywAKFu+NXKt/C8ueBJnMRfskUMFxudaPVNIp
-         kCIkoO8IWDzaXtbHl9fycm6UjiCF7sVT5BJ5r9GYti6tjakHnx2OfmLJyt7gXEmbtohV
-         ySDWqn/WS98cIV+84UiYqFj9Rj5GDlNaOafgCPKp5H4qsl/dug8Vwen37K5r4XpdX4q/
-         ors2vzE7K+LQzdnH59H3Hk42tcHrIqRSJVQ9NBXcEKzTcsvJKl1bGe9AEY/IN1eVMPQ1
-         CnbQ==
+        d=google.com; s=20221208; t=1681926195; x=1684518195;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LbIeXSReCQMbeb4ih3GQD4yHVI+ajegh0q6OiBbZIxg=;
+        b=LHTaEdOyIBlJsLLfw3G2QpQk9naWCaRk8oWpTNM0nZZIFvxvmevcqE+gjM3vs8Z2K1
+         W1/HmoG0GqrXpeu7HU4/kVSdSuIC/t20E0hmzPxn6WMRZZQJJT9iiCM2GtzumIUp4not
+         A/dcKgPcYslPWtn2WW1dtqXLgWCYpMms6B975bbHGb5DeRjzAr2LuDtkz7HJxUomtpME
+         VRvxUAxvB2QKGXpVagWuNojmw1PV2Ezvd6bvJp27ClTT1V9Leh50cY+ZYSQ+HQAEKD36
+         kYK1SY8TPmFQuJ6BPtefi+ZeHkknOvp5/pFlQ6pW+AzeOfRl5c1IvxophtdEkpqrcV1I
+         zR1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681925760; x=1684517760;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lmO38VAM37rREvey7UoSOou6N388un70Vf6aBhszREY=;
-        b=l7F7IuF8YSlFStU+qukkJgryPYZ+589lqOXitSluJD8ns23/iA7KnAZVPM6KfEKrOs
-         G2dIZfPruia/4IHslpU+FN2pVDE3tOwqs59eJQzt2NCKpkA1tmUGbPiZH+9iYd3/5Gib
-         EEKaTzT1+rVXRQ1d1xiS+SOFiTmt4PAFbnfVVKj/IhCGCcmWT0UL++DVNoW74RwaSXwb
-         6R5DQ+3FLwOlBn00lDAGoU3OkNj0cXuGykvW2Fs9HrOTCoseWaKzcnw+zsOhu1Dk8vAH
-         oq8aGwTdhYfgbCjO1IMKykYXUsJJt3unHE2Hs3dIHUCPbquFlPqH9JpaBQ97aOSCpXWD
-         slbw==
-X-Gm-Message-State: AAQBX9cEu0pcTwyp2r+8qy4gFXlrCZ35L0KBhux+XZskNtKUza02Xf2u
-        yy/rxI/lQjhskBdU07OD0/A78w==
-X-Google-Smtp-Source: AKy350azjREW+qIem/g1t7Qyf3FDL/wCTe61ppZquIOiZUWzxLxOfqTXaZiTcn3AdljAFh3tJFhQQw==
-X-Received: by 2002:a17:902:dad1:b0:1a1:956d:2281 with SMTP id q17-20020a170902dad100b001a1956d2281mr22828705plx.3.1681925759947;
-        Wed, 19 Apr 2023 10:35:59 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id jf7-20020a170903268700b001a2135e7eabsm11700385plb.16.2023.04.19.10.35.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 10:35:59 -0700 (PDT)
-Message-ID: <69f48cc6-8fc6-0c49-5a79-6c7d248e4ad5@kernel.dk>
-Date:   Wed, 19 Apr 2023 11:35:58 -0600
+        d=1e100.net; s=20221208; t=1681926195; x=1684518195;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LbIeXSReCQMbeb4ih3GQD4yHVI+ajegh0q6OiBbZIxg=;
+        b=EFyhvKJP/1Gn0ubLvAw/WfRBwvRfa3Ry8TnkwiqpktuKm91AfEgbK7ADBJo3+iO6+V
+         2jaqyeSr7di5qgiOv0OilqJQFjZ2JScf6A4S74t6dqjChY90WW+1hJn6E4KOmiQnYw13
+         CmoRkT1M7OmNfA2h4ZAhtmPm/DXk+JWSCGDF9mQg9gNNUKl2uOSgyTt4BZgqEU5BNZTs
+         mfLboGWjCYJp6DJjV3k+oeB8YynvKRVRVYRkFYsra8j7PRFnpICdq4azFWYvA1acXK1Z
+         owo0b0gbUYReNtBaqVhS5fB0G6/Em0WDP5uAuxYOfVklXu2qS227fRFHxzQuwkMZCv1e
+         hY4g==
+X-Gm-Message-State: AAQBX9dUoHyW1DfU/1xSVB1tMkU8lOH5HglK0VPIhVhEYejKTAiqu551
+        Iqep9VvuZsr+QE/OJzcoFjvd4weHP2hEY4awYYh5Yg==
+X-Google-Smtp-Source: AKy350ZmpzQ1uY1BUEeMEpoys5h/UnF5v4KOvTi+J/OoxZA1ul+8Bb2MgOls4JOxVXqW2oCoz86I5D2zEW2FeB5MdWA=
+X-Received: by 2002:a05:600c:4e8a:b0:3f1:73b8:b5fe with SMTP id
+ f10-20020a05600c4e8a00b003f173b8b5femr4192wmq.3.1681926195026; Wed, 19 Apr
+ 2023 10:43:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
- pin_user_pages()
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>
-References: <cover.1681831798.git.lstoakes@gmail.com>
- <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
- <936e8f52-00be-6721-cb3e-42338f2ecc2f@kernel.dk>
- <c2e22383-43ee-5cf0-9dc7-7cd05d01ecfb@kernel.dk>
- <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230413161725.195417-1-alexghiti@rivosinc.com>
+ <CAOnJCU+72PV1=o1c_TpogkmBT36278BneVWEMr1=tqX0CZi+ag@mail.gmail.com>
+ <aadca595b4a24e36932ba41e61f4e263@AcuMS.aculab.com> <CAOnJCUJ7mY+fh9VqE4dRntnVAEAc26=NnOCPUqkXk6ky__cUZQ@mail.gmail.com>
+ <CAP-5=fUYJEecmhQVuvbM4ZoDP_Hj=2RKOgR4cKepU072Uy3xyw@mail.gmail.com>
+ <CAOnJCULJfSN79MzAwhCrbVzG1rYyrPB3OraFmoZFBxuRCwq01w@mail.gmail.com> <CAHVXubjhORBEDok_Zhq5p_Yv4Ty4Hct84dWJZXzo48+40N=CGg@mail.gmail.com>
+In-Reply-To: <CAHVXubjhORBEDok_Zhq5p_Yv4Ty4Hct84dWJZXzo48+40N=CGg@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 19 Apr 2023 10:42:58 -0700
+Message-ID: <CAP-5=fX6kaZt68UbMMZzW-zs0RyRWoOS-Tq5NwekWj8k9Shx6g@mail.gmail.com>
+Subject: Re: [PATCH 0/4] riscv: Allow userspace to directly access perf counters
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        paranlee <p4ranlee@gmail.com>
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        David Laight <David.Laight@aculab.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 11:23?AM, Lorenzo Stoakes wrote:
-> On Wed, Apr 19, 2023 at 10:59:27AM -0600, Jens Axboe wrote:
->> On 4/19/23 10:35?AM, Jens Axboe wrote:
->>> On 4/18/23 9:49?AM, Lorenzo Stoakes wrote:
->>>> We are shortly to remove pin_user_pages(), and instead perform the required
->>>> VMA checks ourselves. In most cases there will be a single VMA so this
->>>> should caues no undue impact on an already slow path.
->>>>
->>>> Doing this eliminates the one instance of vmas being used by
->>>> pin_user_pages().
->>>
->>> First up, please don't just send single patches from a series. It's
->>> really annoying when you are trying to get the full picture. Just CC the
->>> whole series, so reviews don't have to look it up separately.
->>>
->>> So when you're doing a respin for what I'll mention below and the issue
->>> that David found, please don't just show us patch 4+5 of the series.
->>
->> I'll reply here too rather than keep some of this conversaion
->> out-of-band.
->>
->> I don't necessarily think that making io buffer registration dumber and
->> less efficient by needing a separate vma lookup after the fact is a huge
->> deal, as I would imagine most workloads register buffers at setup time
->> and then don't change them. But if people do switch sets at runtime,
->> it's not necessarily a slow path. That said, I suspect the other bits
->> that we do in here, like the GUP, is going to dominate the overhead
->> anyway.
-> 
-> Thanks, and indeed I expect the GUP will dominate.
+On Wed, Apr 19, 2023 at 2:21=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosinc=
+.com> wrote:
+>
+> Hi Ian,
+>
+> On Tue, Apr 18, 2023 at 10:30=E2=80=AFPM Atish Patra <atishp@atishpatra.o=
+rg> wrote:
+> >
+> > On Tue, Apr 18, 2023 at 11:46=E2=80=AFPM Ian Rogers <irogers@google.com=
+> wrote:
+> > >
+> > > On Tue, Apr 18, 2023 at 9:43=E2=80=AFAM Atish Patra <atishp@atishpatr=
+a.org> wrote:
+> > > >
+> > > > On Fri, Apr 14, 2023 at 2:40=E2=80=AFAM David Laight <David.Laight@=
+aculab.com> wrote:
+> > > > >
+> > > > > From: Atish Patra
+> > > > > > Sent: 13 April 2023 20:18
+> > > > > >
+> > > > > > On Thu, Apr 13, 2023 at 9:47=E2=80=AFPM Alexandre Ghiti <alexgh=
+iti@rivosinc.com> wrote:
+> > > > > > >
+> > > > > > > riscv used to allow direct access to cycle/time/instret count=
+ers,
+> > > > > > > bypassing the perf framework, this patchset intends to allow =
+the user to
+> > > > > > > mmap any counter when accessed through perf. But we can't bre=
+ak the
+> > > > > > > existing behaviour so we introduce a sysctl perf_user_access =
+like arm64
+> > > > > > > does, which defaults to the legacy mode described above.
+> > > > > > >
+> > > > > >
+> > > > > > It would be good provide additional direction for user space pa=
+ckages:
+> > > > > >
+> > > > > > The legacy behavior is supported for now in order to avoid brea=
+king
+> > > > > > existing software.
+> > > > > > However, reading counters directly without perf interaction may
+> > > > > > provide incorrect values which
+> > > > > > the userspace software must avoid. We are hoping that the user =
+space
+> > > > > > packages which
+> > > > > > read the cycle/instret directly, will move to the proper interf=
+ace
+> > > > > > eventually if they actually need it.
+> > > > > > Most of the users are supposed to read "time" instead of "cycle=
+" if
+> > > > > > they intend to read timestamps.
+> > > > >
+> > > > > If you are trying to measure the performance of short code
+> > > > > fragments then you need pretty much raw access directly to
+> > > > > the cycle/clock count register.
+> > > > >
+> > > > > I've done this on x86 to compare the actual cycle times
+> > > > > of different implementations of the IP checksum loop
+> > > > > (and compare them to the theoretical limit).
+> > > > > The perf framework just added far too much latency,
+> > > > > only directly reading the cpu registers gave anything
+> > > > > like reliable (and consistent) answers.
+> > > > >
+> > > >
+> > > > This series allows direct access to the counters once configured
+> > > > through the perf.
+> > > > Earlier the cycle/instret counters are directly exposed to the
+> > > > userspace without kernel/perf frameworking knowing
+> > > > when/which user space application is reading it. That has security =
+implications.
+> > > >
+> > > > With this series applied, the user space application just needs to
+> > > > configure the event (cycle/instret) through perf syscall.
+> > > > Once configured, the userspace application can find out the counter
+> > > > information from the mmap & directly
+> > > > read the counter. There is no latency while reading the counters.
+> > > >
+> > > > This mechanism allows stop/clear the counters when the requesting t=
+ask
+> > > > is not running. It also takes care of context switching
+> > > > which may result in invalid values as you mentioned below. This is
+> > > > nothing new and all other arch (x86, ARM64) allow user space
+> > > > counter read through the same mechanism.
+> > > >
+> > > > Here is the relevant upstream discussion:
+> > > > https://lore.kernel.org/lkml/Y7wLa7I2hlz3rKw%2F@hirez.programming.k=
+icks-ass.net/T/
+> > > >
+> > > > ARM64:
+> > > > https://docs.kernel.org/arm64/perf.html?highlight=3Dperf_user_acces=
+s#perf-userspace-pmu-hardware-counter-access
+> > > >
+> > > > example usage in x86:
+> > > > https://github.com/andikleen/pmu-tools/blob/master/jevents/rdpmc.c
+> > >
+> > > The canonical implementation of this should be:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
+ee/tools/lib/perf/mmap.c#n400
+> >
+> > Thanks for sharing the libperf implementation.
+> >
+> > > which is updated in these patches but the tests are not:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
+ee/tools/perf/tests/mmap-basic.c#n287
+> > > Which appears to be an oversight. The tests display some differences
+> >
+> > Yes. It's an oversight. We should make sure that perf mmap tests pass
+> > for RISC-V as well.
+>
+> Yes, that's an oversight, I had a local test adapted from this one but
+> forgot to update it afterwards, I'll do that in the next version.
+>
+> Thanks for your quick feedbacks and sorry for being late,
+>
+> Alex
 
-Unless you have a lot of vmas... Point is, it's _probably_ not a
-problem, but it might and it's making things worse for no real gain as
-far as I can tell outside of some notion of "cleaning up the code".
+Thanks Alex, there was an equally likely chance that I wasn't
+understanding things :-) Is there any information on RISC-V PMU
+testing? I know ParanLee is interested. It'd be awesome to have
+something say on:
+https://perf.wiki.kernel.org/index.php/Main_Page
+on how to run tests, perhaps on QEMU or known to work boards. We can
+also just drop a link on there if there is information. We can also
+add the RISC-V PMU information to the links here:
+https://perf.wiki.kernel.org/index.php/Useful_Links
 
->> My main question is, why don't we just have a __pin_user_pages or
->> something helper that still takes the vmas argument, and drop it from
->> pin_user_pages() only? That'd still allow the cleanup of the other users
->> that don't care about the vma at all, while retaining the bundled
->> functionality for the case/cases that do? That would avoid needing
->> explicit vma iteration in io_uring.
->>
-> 
-> The desire here is to completely eliminate vmas as an externally available
-> parameter from GUP. While we do have a newly introduced helper that returns
-> a VMA, doing the lookup manually for all other vma cases (which look up a
-> single page and vma), that is more so a helper that sits outside of GUP.
-> 
-> Having a separate function that still bundled the vmas would essentially
-> undermine the purpose of the series altogether which is not just to clean
-> up some NULL's but rather to eliminate vmas as part of the GUP interface
-> altogether.
-> 
-> The reason for this is that by doing so we simplify the GUP interface,
-> eliminate a whole class of possible future bugs with people holding onto
-> pointers to vmas which may dangle and lead the way to future changes in GUP
-> which might be more impactful, such as trying to find means to use the fast
-> paths in more areas with an eye to gradual eradication of the use of
-> mmap_lock.
-> 
-> While we return VMAs, none of this is possible and it also makes the
-> interface more confusing - without vmas GUP takes flags which define its
-> behaviour and in most cases returns page objects. The odd rules about what
-> can and cannot return vmas under what circumstances are not helpful for new
-> users.
-> 
-> Another point here is that Jason suggested adding a new
-> FOLL_ALLOW_BROKEN_FILE_MAPPINGS flag which would, by default, not be
-> set. This could assert that only shmem/hugetlb file mappings are permitted
-> which would eliminate the need for you to perform this check at all.
-> 
-> This leads into the larger point that GUP-writing file mappings is
-> fundamentally broken due to e.g. GUP not honouring write notify so this
-> check should at least in theory not be necessary.
-> 
-> So it may be the case that should such a flag be added this code will
-> simply be deleted at a future point :)
+Thanks,
+Ian
 
-Why don't we do that first then? There's nothing more permanent than a
-temporary workaround/fix. Once it's in there, motivation to get rid of
-it for most people is zero because they just never see it. Seems like
-that'd be a much saner approach rather than the other way around, and
-make this patchset simpler/cleaner too as it'd only be removing code in
-all of the callers.
-
--- 
-Jens Axboe
-
+>
+> >
+> >
+> > > between x86 and aarch64 that have assumed userspace hardware counter
+> > > access, and everything else that it is assumed don't.
+> > >
+> > > Thanks,
+> > > Ian
+> > >
+> > > > > Clearly process switches (especially cpu migrations) cause
+> > > > > problems, but they are obviously invalid values and can
+> > > > > be ignored.
+> > > > >
+> > > > > So while a lot of uses may be 'happy' with the values the
+> > > > > perf framework gives, sometimes you do need to directly
+> > > > > read the relevant registers.
+> > > > >
+> > > > >         David
+> > > > >
+> > > > > -
+> > > > > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Key=
+nes, MK1 1PT, UK
+> > > > > Registration No: 1397386 (Wales)
+> > > >
+> > > >
+> > > >
+> > > > --
+> > > > Regards,
+> > > > Atish
+> >
+> >
+> >
+> > --
+> > Regards,
+> > Atish
