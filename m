@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6986E7F5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4498F6E7F6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbjDSQRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 12:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S233451AbjDSQS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 12:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbjDSQRR (ORCPT
+        with ESMTP id S233088AbjDSQS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 12:17:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E0C2698
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:17:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4652640C0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 16:17:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89CE2C433D2;
-        Wed, 19 Apr 2023 16:17:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681921036;
-        bh=dMNtXuqea4V7TaN2gT5Bxv8+XCBlK0wjj+o7l4xp8Eo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MCT+TGX3lYp3+3+VGx7WXJzgLflD/TA03tHGZv1KD8Gyj1Jk+AaBI9WMGEBwcVsBO
-         rXwabFayRVmfcHKmuWiURJkpsxnGXIJ2ayNxvBnMvlo0aJHxZv4HMC5CPejveILe9X
-         6hDgllcj/KxBPgSRnxpnZX44C2kk/HYcefAAMVMWLcLv/CUVo6XTdnhhoixXPwBs+T
-         ItCNPGun0doCP5bjWHQakNr2q+F6d8ag9KYsCt9IC+F+0JwODUscvJuwhfbPGJkqVq
-         6WECRO7lMgwRbRJRd1fZ2vfBFeVFaEHF8hV+2yrYatQHzE+4VOC8lfvy3WuLld7MWT
-         ySc0oKPJU6Y0w==
-Date:   Wed, 19 Apr 2023 09:17:13 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Chen Zhongjin' <chenzhongjin@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "akpm@linux-foudation.org" <akpm@linux-foudation.org>,
-        "ben-linux@fluff.org" <ben-linux@fluff.org>,
-        "wuchi.zero@gmail.com" <wuchi.zero@gmail.com>
-Subject: Re: [PATCH 1/2] x86: profiling: remove lock functions hack for
- !FRAME_POINTER
-Message-ID: <20230419161713.qtmnnt5n64c2vvmm@treble>
-References: <20230410022226.181812-1-chenzhongjin@huawei.com>
- <20230410022226.181812-2-chenzhongjin@huawei.com>
- <d416428f-c846-b6b9-74da-f3571d92d38a@intel.com>
- <1ceb1769-f01b-c417-e912-4ee1149dd0cb@huawei.com>
- <4c601a93e55341fc8cff766af43cb5e6@AcuMS.aculab.com>
+        Wed, 19 Apr 2023 12:18:27 -0400
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7521980
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:17:37 -0700 (PDT)
+Received: by mail-qv1-f43.google.com with SMTP id dd8so40581qvb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:17:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681921056; x=1684513056;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z+h5fwYkvTPr/F+On2Hs94r2JzzOUgRtGOCFJcgB1Q4=;
+        b=VUb9JPXzOjoWbiq7r6KqrCWAKnj0Kvoxe+DFoOGJfp6Ku/eXq8IwLe5kvxsle+HIun
+         NfmtmI2rgICSYbZaIMpHkaoBijdzsbR8UleQ5V7Q3r5JUrA3L3v5JNi6/3cGaDSEOz+q
+         A/jDlxRAHBiO4wxaTHP3mR5GB/ixfifd2+vU7fULNg2vhVHYT8hYZ5j8fi7L+qR2moLG
+         w16VFjjrn/hdTmo5WGUoCoAzJNPvx63k2Kx3GE3pWE90MOMUu2mzrIwvlmYO0Eyt8T/A
+         8eJgiWLRQJofOHdE56gFHU8T9xsi279SKp8xSRTJslyub7qxlqpKHcyFA3HlT6Tq+xgy
+         YdsQ==
+X-Gm-Message-State: AAQBX9dhqz/2HGsuxn1EVhc+3kiV1nxak/oZX/f/QXkPH9eY72Is1PBH
+        oLN8FYXFKc57ZM7QT+K7Frko
+X-Google-Smtp-Source: AKy350ZIve4mrPgTdbna5Cjf8hcJps/K5ObL3J7QcbMVD+OWL/kHf3+Ovv9X5lr5nNp8ov9iF7wtcw==
+X-Received: by 2002:a05:6214:252a:b0:5ef:8004:e0b4 with SMTP id gg10-20020a056214252a00b005ef8004e0b4mr17326482qvb.48.1681921056440;
+        Wed, 19 Apr 2023 09:17:36 -0700 (PDT)
+Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
+        by smtp.gmail.com with ESMTPSA id b1-20020ac86bc1000000b003e65228ef54sm4902201qtt.86.2023.04.19.09.17.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 09:17:36 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 12:17:34 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     "Darrick J. Wong" <djwong@kernel.org>,
+        Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Daniil Lunev <dlunev@google.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v4 1/4] block: Introduce provisioning primitives
+Message-ID: <ZEAUHnWqt9cIiJRb@redhat.com>
+References: <20230414000219.92640-1-sarthakkukreti@chromium.org>
+ <20230418221207.244685-1-sarthakkukreti@chromium.org>
+ <20230418221207.244685-2-sarthakkukreti@chromium.org>
+ <20230419153611.GE360885@frogsfrogsfrogs>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4c601a93e55341fc8cff766af43cb5e6@AcuMS.aculab.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230419153611.GE360885@frogsfrogsfrogs>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,21 +75,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 10:01:18AM +0000, David Laight wrote:
-> From: Chen Zhongjin
-> > Sent: 12 April 2023 08:02
-> ...
-> > > 4. !CONFIG_FRAME_POINTER is probably even more rare today than it was in
-> > >     2006
-> >
-> > No. !CONFIG_FRAME_POINTER is more common today because of UNWINDER_ORC.
-> > And that is why the bug is triggered more frequently.
+On Wed, Apr 19 2023 at 11:36P -0400,
+Darrick J. Wong <djwong@kernel.org> wrote:
+
+> On Tue, Apr 18, 2023 at 03:12:04PM -0700, Sarthak Kukreti wrote:
+> > Introduce block request REQ_OP_PROVISION. The intent of this request
+> > is to request underlying storage to preallocate disk space for the given
+> > block range. Block devices that support this capability will export
+> > a provision limit within their request queues.
+> > 
+> > This patch also adds the capability to call fallocate() in mode 0
+> > on block devices, which will send REQ_OP_PROVISION to the block
+> > device for the specified range,
+> > 
+> > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> > ---
+> >  block/blk-core.c          |  5 ++++
+> >  block/blk-lib.c           | 53 +++++++++++++++++++++++++++++++++++++++
+> >  block/blk-merge.c         | 18 +++++++++++++
+> >  block/blk-settings.c      | 19 ++++++++++++++
+> >  block/blk-sysfs.c         |  8 ++++++
+> >  block/bounce.c            |  1 +
+> >  block/fops.c              | 25 +++++++++++++-----
+> >  include/linux/bio.h       |  6 +++--
+> >  include/linux/blk_types.h |  5 +++-
+> >  include/linux/blkdev.h    | 16 ++++++++++++
+> >  10 files changed, 147 insertions(+), 9 deletions(-)
+> > 
 > 
-> CONFIG_FRAME_POINTER is pretty much required (on x86-64)
-> for the user copy checks that are enabled in distro kernels.
+> <cut to the fallocate part; the block/ changes look fine to /me/ at
+> first glance, but what do I know... ;)>
+> 
+> > diff --git a/block/fops.c b/block/fops.c
+> > index d2e6be4e3d1c..e1775269654a 100644
+> > --- a/block/fops.c
+> > +++ b/block/fops.c
+> > @@ -611,9 +611,13 @@ static ssize_t blkdev_read_iter(struct kiocb *iocb, struct iov_iter *to)
+> >  	return ret;
+> >  }
+> >  
+> > +#define	BLKDEV_FALLOC_FL_TRUNCATE				\
+> 
+> At first I thought from this name that you were defining a new truncate
+> mode for fallocate, then I realized that this is mask for deciding if we
+> /want/ to truncate the pagecache.
+> 
+> #define		BLKDEV_FALLOC_TRUNCATE_MASK ?
+> 
+> > +		(FALLOC_FL_PUNCH_HOLE |	FALLOC_FL_ZERO_RANGE |	\
+> 
+> Ok, so discarding and writing zeroes truncates the page cache, makes
+> sense since we're "writing" directly to the block device.
+> 
+> > +		 FALLOC_FL_NO_HIDE_STALE)
+> 
+> Here things get tricky -- some of the FALLOC_FL mode bits are really an
+> opcode and cannot be specified together, whereas others select optional
+> behavior for certain opcodes.
+> 
+> IIRC, the mutually exclusive opcodes are:
+> 
+> 	PUNCH_HOLE
+> 	ZERO_RANGE
+> 	COLLAPSE_RANGE
+> 	INSERT_RANGE
+> 	(none of the above, for allocation)
+> 
+> and the "variants on a theme are":
+> 
+> 	KEEP_SIZE
+> 	NO_HIDE_STALE
+> 	UNSHARE_RANGE
+> 
+> not all of which are supported by all the opcodes.
+> 
+> Does it make sense to truncate the page cache if userspace passes in
+> mode == NO_HIDE_STALE?  There's currently no defined meaning for this
+> combination, but I think this means we'll truncate the pagecache before
+> deciding if we're actually going to issue any commands.
+> 
+> I think that's just a bug in the existing code -- it should be
+> validating that @mode is any of the supported combinations *before*
+> truncating the pagecache.
+> 
+> Otherwise you could have a mkfs program that starts writing new fs
+> metadata, decides to provision the storage (say for a logging region),
+> doesn't realize it's running on an old kernel, and then oops the
+> provision attempt fails but have we now shredded the pagecache and lost
+> all the writes?
 
-CONFIG_FRAME_POINTER is pretty much deprecated.  The only distro still
-using it (that I know of) is Ubuntu.
+While that just caused me to have an "oh shit, that's crazy" (in a
+scary way) belly laugh...
+(And obviously needs fixing independent of this patchset)
 
--- 
-Josh
+Shouldn't mkfs first check that the underlying storage supports
+REQ_OP_PROVISION by verifying
+/sys/block/<dev>/queue/provision_max_bytes exists and is not 0?
+(Just saying, we need to add new features more defensively.. you just
+made the case based on this scenario's implications alone)
+
+Sarthak, please note I said "provision_max_bytes": all other ops
+(e.g. DISCARD, WRITE_ZEROES, etc) have <op>_max_bytes exported through
+sysfs, not <op>_max_sectors.  Please export provision_max_bytes, e.g.:
+
+diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+index 202aa78f933e..2e5ac7b1ffbd 100644
+--- a/block/blk-sysfs.c
++++ b/block/blk-sysfs.c
+@@ -605,12 +605,12 @@ QUEUE_RO_ENTRY(queue_io_min, "minimum_io_size");
+ QUEUE_RO_ENTRY(queue_io_opt, "optimal_io_size");
+ 
+ QUEUE_RO_ENTRY(queue_max_discard_segments, "max_discard_segments");
+-QUEUE_RO_ENTRY(queue_max_provision_sectors, "max_provision_sectors");
+ QUEUE_RO_ENTRY(queue_discard_granularity, "discard_granularity");
+ QUEUE_RO_ENTRY(queue_discard_max_hw, "discard_max_hw_bytes");
+ QUEUE_RW_ENTRY(queue_discard_max, "discard_max_bytes");
+ QUEUE_RO_ENTRY(queue_discard_zeroes_data, "discard_zeroes_data");
+ 
++QUEUE_RO_ENTRY(queue_provision_max, "provision_max_bytes");
+ QUEUE_RO_ENTRY(queue_write_same_max, "write_same_max_bytes");
+ QUEUE_RO_ENTRY(queue_write_zeroes_max, "write_zeroes_max_bytes");
+ QUEUE_RO_ENTRY(queue_zone_append_max, "zone_append_max_bytes");
