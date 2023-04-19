@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A144F6E7D38
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E5C6E7D3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbjDSOmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 10:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
+        id S233593AbjDSOmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 10:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233443AbjDSOmN (ORCPT
+        with ESMTP id S233448AbjDSOmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Apr 2023 10:42:13 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B910B4200
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:42:01 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id a8-20020a05600c348800b003f17ddb04e3so1489566wmq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:42:01 -0700 (PDT)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6B76595
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:42:02 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id he13so22242043wmb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:42:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=freebox-fr.20221208.gappssmtp.com; s=20221208; t=1681915320; x=1684507320;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=skGYkFK59/ukAv0WKnmVB0D2Vf4WzLOkmRLP20Jah6Y=;
-        b=S/SHCet7T6o1bzniNlVL7gE5UJCdDdK+tx35QCxV16Avx1ks+QhmoPpYR2iSn97x+8
-         fLji34fU/fXE0o9jI7a/N8JijPFVvqqy33aYjQH6LNCt+o9Vh5M+YN3Y8fwYvncGyt/k
-         CvzAoGf3BF8d8zcZ9hSQalXdd+vEIQdtb5NX4XhU0KoH7+kq4jEmFjjT7DxbQeMPiyoD
-         BhdopBmJJVZx9a8sn6P+g4em3ROBjSNsIpQ8MPCDoxkla+SchV8YnH6VR00JiVfzBL0v
-         qCnngF6JauL//7bl8cIVDhEeqgtCeG2Sa0DG9focJRhG2jVIUOgYXOWQgCMuaC9lTYf4
-         hHVg==
+        bh=fy+0cJCJMoy6q1lt77Xw630BaQNJm0bVoX1TCrs3OHc=;
+        b=TzNkV/S3zFklfY2UCSUJJ8GaXQEK01Ig7lF3ptkDh7sr3gmXJ0YtaAtQE06vGXZaHX
+         j/OVRey0YO0AksedTMCLzJTj85LrZ2G/vsgQaYgnFPrsmyitzLq3atec/uX4/Cv+ZPOS
+         Rhu9fJQgcS58K/Wgv/w+GuXnwPuHG5MGJiJgBULg+t1oZWYef74qhBWDQvrXR9xippis
+         lK7t1uqEDmGanbf8ABGrVfSqFgjbHqGfvC5O9R/906X3UYQ6SaEqvjY/JL4XsudvYZ0M
+         qEGUUBcigDPecKfDHIjvy7AsPi9Fq/wAYwQfdsX3mN5WOWkBV4Qi1oxBAKGrMsPHXR96
+         BUlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1681915320; x=1684507320;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=skGYkFK59/ukAv0WKnmVB0D2Vf4WzLOkmRLP20Jah6Y=;
-        b=JBIFD1uLzIR9Fqpsv0XPZjgfwXyzY1Zhi0TuoDubkX79tgnLw5rVXWUIHXzHgcTj3L
-         SD/SBvlvBaRk9FS3TxD04uoYj/vSMgWCeRBp+5sM2UVNFQBjlaMcTyWAQtXUPi4tGwcK
-         ReSRHosVYLv+IY1aATlc8p1qo9tzOUVO+NSiRMvwx/vEwyrzzSnVCsNTezvbGCZaSnOD
-         LzrscHyzpb+NmHbrkIgqOSA01ke3CvASuebSV/CPtn8ZQN9/yEcSRq1RUkwiBWAn+Gin
-         llyEGBMUIaSG72Z6UmtKbDmSmYgp73+39tnMYULz7wKFC2epP3tu7pdXb8AhAtEAiEvt
-         NNjg==
-X-Gm-Message-State: AAQBX9erdN2FR80rRPwE2ged1nRWHHrUt9oIbCVlO7R5jk9jEf1HQIqT
-        uFsMe7lHawfJ1uYoIQ44mg3Kmd4oOAya2aarHw==
-X-Google-Smtp-Source: AKy350YmaKK3EqTA0/QScooY92hdt3OuAEvnHBAhCJTAnTZTSLhDQXZTU2KFdA8T7mH+W4Fg2s5lLw==
-X-Received: by 2002:a7b:c8cd:0:b0:3f0:3a57:f01e with SMTP id f13-20020a7bc8cd000000b003f03a57f01emr16543670wml.4.1681915320333;
+        bh=fy+0cJCJMoy6q1lt77Xw630BaQNJm0bVoX1TCrs3OHc=;
+        b=dXtI3M6tDlK5An1PS1szNaxRDSPU9dYMFEM8yph9MPwlKUAlKNlr/MmWIY7/OmHwaw
+         qrNT0De6BfIKMYbNwQtRSV0lbIo8H27ahN0QfhIomSwWAuZeX0ADwwFPmAmfl4nBYZGj
+         lL3XL+hmdPE8I+l/VIp1T0gjJSFYlNSQcY4GLfXStK28Uz7KozuLxGKvkMaUmKMn2mUK
+         8rusdNQybfkf4DyEi+YUQI2cjIbz5nd+a1+Sa7aK/nA7+ZgiZ0gHwuB7QeZMn394so3S
+         G6FhugP4TOEkjnGnea3K7ounE0oZfRtiS2rAsVv+ViL3YCp1OLtzMTaVhR+hX6l7bM/x
+         HewA==
+X-Gm-Message-State: AAQBX9cYnZ9ZxBOjSnSEcwV7IoO1OUywqjinwmLN3MExXAh6Cu5WvCBP
+        GBijtaGnimjkFglK2ng2xA7Q
+X-Google-Smtp-Source: AKy350bb1NXI+uElCaT8lhQg1emtnFFKn0pOu68118BMLxyYhN1FaTa9Dxc9OVnIZR5V+JRxT0jpGw==
+X-Received: by 2002:a05:600c:329a:b0:3f1:7382:b59a with SMTP id t26-20020a05600c329a00b003f17382b59amr2551876wmp.15.1681915320689;
         Wed, 19 Apr 2023 07:42:00 -0700 (PDT)
 Received: from [127.0.1.1] (freebox.vlq16.iliad.fr. [213.36.7.13])
-        by smtp.gmail.com with ESMTPSA id m22-20020a7bcb96000000b003f17131952fsm2388519wmi.29.2023.04.19.07.41.59
+        by smtp.gmail.com with ESMTPSA id m22-20020a7bcb96000000b003f17131952fsm2388519wmi.29.2023.04.19.07.42.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 19 Apr 2023 07:42:00 -0700 (PDT)
 From:   Arnaud Vrac <avrac@freebox.fr>
-Date:   Wed, 19 Apr 2023 16:41:16 +0200
-Subject: [PATCH 09/11] drm/msm/dpu: set max cursor width to 512x512
+Date:   Wed, 19 Apr 2023 16:41:17 +0200
+Subject: [PATCH 10/11] drm/msm/dpu: tweak lm pairings in msm8998 hw catalog
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230419-dpu-tweaks-v1-9-d1bac46db075@freebox.fr>
+Message-Id: <20230419-dpu-tweaks-v1-10-d1bac46db075@freebox.fr>
 References: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
 In-Reply-To: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
 To:     Rob Clark <robdclark@gmail.com>,
@@ -68,20 +68,20 @@ Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Arnaud Vrac <avrac@freebox.fr>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=817; i=avrac@freebox.fr;
- h=from:subject:message-id; bh=U2sKqdlLf08vu1Eh26+MgGM86CFL68O4zQFfb4I2ZHM=;
- b=owEBbQKS/ZANAwAIAXED/9m7NDSrAcsmYgBkP/2qdLhQ8jKSue86pVPaOBEUFNXXjoToVNKG6
- 6b62FiMnMWJAjMEAAEIAB0WIQSUwb/ndwkXHdZ/QQZxA//ZuzQ0qwUCZD/9qgAKCRBxA//ZuzQ0
- q300EACs6Y5bbGsrBx9QQIpO3qcIvxHHO1/cU4aapUC4FXaAFZVZH1fnBncMrhExDQFjg/pzDEf
- 9Kfbd7OJCwa3PRdB37UedeKukA4Vl2Bb3TrTSDrHEwX/OOWvM6ZI55NBCf7mStf2JpJNmbaKZ4b
- wCPtIN449OPMeLeKzEh1idAWQCqb68+irLQAXWku1EHOSOYKr6vRvd30fSKzsRCRW96zeuhz4OR
- YU0KZ7M8h/zHbY33ZfizVVwrM/UtF+akktNYosbuzVCoQyz8Tad8czriIVuZn9OTXojW1gJBRE7
- 5EBP6GtskcsCrgjkG92vETqb+RXhrBD76QW40hxCpPi0Y8CDlkf28NG/C3m3Z4dZ1Qfw9o0dCwS
- 4DZSkWvrCSgGx1zNxRbYmgfgBadzncfRdqdxSs3sJjdTcpHl1GU66Ukd4i5lY3sBETLCQLCtrEK
- KV4YjGVROZWU/tiTTZ8hsoPTc47Tk6DOVe/RCO5RhxH16g6Fsyxj9yu9L3Df5q1Cluxzrkvy02Y
- Dxmd9IDwtOVqZCR9dTpJMR01jD+Ls42Ql/Jg9DU9Dcilgs9u79tmQOWji5YsuLGKYjpsntX/ZtY
- 4YA2J/5XL5LCURB9R/Ys0VjFRcBq33Jhyw0aEoiKmicnqzS9xfhzHQK0L9C8mLwg3KZHMh2ePVk
- XVKyDtMoSZPQ/fg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1837; i=avrac@freebox.fr;
+ h=from:subject:message-id; bh=RJf9+pkwKnpAj0n2TU3Q6xrSZUQHiMRxoj2hVwg/D2M=;
+ b=owEBbQKS/ZANAwAIAXED/9m7NDSrAcsmYgBkP/2tJVIeIaiPZf6H3y1PL945iCKPGqC5XoDbK
+ VcSUvP5HoeJAjMEAAEIAB0WIQSUwb/ndwkXHdZ/QQZxA//ZuzQ0qwUCZD/9rQAKCRBxA//ZuzQ0
+ q3kWEACrjFf+j8o/Ef0fbuwzpaWOroIhsFLQ666cwtToMvHEcF84UQvLMywCIwuYoeuN8TBhQiY
+ g01vQtCeGnPg6/d/ZN10aYjVVxhZuooBA8B2c0sbNDrM2YgjIpJEKrLmqgXlXXT5zQvYHhKb2NS
+ 0hN1Odqd3m+C/oI9yrHWeZXMjE+ollCpLPwYxV56R6P2Dtzu51Vn5HGDzlVPFqvunCUvATTALei
+ i/0BuGL90b7BrYpAhdCewFRtz6lWaV4UHmrpx+51BD9pw8pto1wdz8TTQczi5UWzns75ZRTXx7a
+ LbAjWXCezkAOvfbjYh12wamJ2qde1Ea0WjzyjRZ3sHgPD6Q1SrMoePqs1prrNPxEK+g8DBTTPCj
+ EnyCpixENCuF03h8cc2Tb+WqBxGTAghRF2IrUrq6pOxGZw8IZbLEGZyBH7Xk5BW0kK0k7CjCyzX
+ bz8qW8P4deWATI9s2LCqzep56XCI8pZRtojfWoF4/88cecgiLZgEZfk7wmJSVXYE/DebFuSMIcN
+ 3C5jhV251DaYkRhD7H+TM7/1BlUDDZlB4Yu+hYMTFfZ2RJx2ML4tJBwl6wEqjoirVf2wSreup3Q
+ W1dTG4AqleGljnyPIb6L3EjZLo+PXcCsAuT4EmX2dFzuKc0p8ZayIIHzfyHY40eXrWhu1JedzFd
+ I6VtSRypg1lRpJw==
 X-Developer-Key: i=avrac@freebox.fr; a=openpgp;
  fpr=6225092072BB58E3CEEC091E75392A176D952DB4
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,29 +93,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Override the default max cursor size reported to userspace of 64x64.
-MSM8998 hw cursor planes support 512x512 size, and other chips use DMA
-SSPPs.
+Change lm blocks pairs so that lm blocks with the same features are
+paired together:
+
+LM_0 and LM_1 with PP and DSPP
+LM_2 and LM_5 with PP
+LM_3 and LM_4
+
+This matches the sdm845 configuration and allows using pp or dspp when 2
+lm blocks are needed in the topology. In the previous config the
+reservation code could never find an lm pair without a matching feature
+set.
 
 Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index 6cce0f6cfcb01..2dd19b7aca0f8 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -1014,6 +1014,9 @@ static int dpu_kms_hw_init(struct msm_kms *kms)
- 	dpu_kms = to_dpu_kms(kms);
- 	dev = dpu_kms->dev;
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+index 5ae1d41e3fa92..90db622eff4fa 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+@@ -102,17 +102,17 @@ static const struct dpu_sspp_cfg msm8998_sspp[] = {
  
-+	dev->mode_config.cursor_width = 512;
-+	dev->mode_config.cursor_height = 512;
-+
- 	rc = dpu_kms_global_obj_init(dpu_kms);
- 	if (rc)
- 		return rc;
+ static const struct dpu_lm_cfg msm8998_lm[] = {
+ 	LM_BLK("lm_0", LM_0, 0x44000, MIXER_MSM8998_MASK,
+-		&msm8998_lm_sblk, PINGPONG_0, LM_2, DSPP_0),
++		&msm8998_lm_sblk, PINGPONG_0, LM_1, DSPP_0),
+ 	LM_BLK("lm_1", LM_1, 0x45000, MIXER_MSM8998_MASK,
+-		&msm8998_lm_sblk, PINGPONG_1, LM_5, DSPP_1),
++		&msm8998_lm_sblk, PINGPONG_1, LM_0, DSPP_1),
+ 	LM_BLK("lm_2", LM_2, 0x46000, MIXER_MSM8998_MASK,
+-		&msm8998_lm_sblk, PINGPONG_2, LM_0, 0),
++		&msm8998_lm_sblk, PINGPONG_2, LM_5, 0),
+ 	LM_BLK("lm_3", LM_3, 0x47000, MIXER_MSM8998_MASK,
+ 		&msm8998_lm_sblk, PINGPONG_MAX, 0, 0),
+ 	LM_BLK("lm_4", LM_4, 0x48000, MIXER_MSM8998_MASK,
+ 		&msm8998_lm_sblk, PINGPONG_MAX, 0, 0),
+ 	LM_BLK("lm_5", LM_5, 0x49000, MIXER_MSM8998_MASK,
+-		&msm8998_lm_sblk, PINGPONG_3, LM_1, 0),
++		&msm8998_lm_sblk, PINGPONG_3, LM_2, 0),
+ };
+ 
+ static const struct dpu_pingpong_cfg msm8998_pp[] = {
 
 -- 
 2.40.0
