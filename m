@@ -2,95 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5400B6E7269
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 06:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BAF66E726E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 06:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjDSEtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 00:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
+        id S231578AbjDSEuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 00:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjDSEs6 (ORCPT
+        with ESMTP id S231355AbjDSEuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 00:48:58 -0400
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A18358C
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 21:48:57 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-acs-24-144-188-133.zoominternet.net [24.144.188.133])
-        by mailbackend.panix.com (Postfix) with ESMTPSA id 4Q1Sx32wmTz4QRl;
-        Wed, 19 Apr 2023 00:48:55 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-        t=1681879736; bh=Gmfd0VH07ebAbJo5N2MdbESb+FaZWQBUQcf1HmlmM8M=;
-        h=From:To:Cc:Subject:Date;
-        b=uzaf9emRxRU2ahzTOh4zJ0M8P5ra1LWvPArt+QGcZCyvVU/S8V6D8uJClq9pVdZPx
-         y5yOeO7+JU5b1pdeihTS9TgzF0F6cPcUsYJ2bODEDAslOBAABAij1Ap6orpYlNIYMY
-         sVYZhHRdx/uAzMEn5kWLIQ4pb21iebkDx0XmAhvU=
-From:   Pierre Asselin <pa@panix.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Pierre Asselin <pa@panix.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] firmware/sysfb: Fix VESA format selection
-Date:   Wed, 19 Apr 2023 00:48:34 -0400
-Message-Id: <20230419044834.10816-1-pa@panix.com>
-X-Mailer: git-send-email 2.39.2
+        Wed, 19 Apr 2023 00:50:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC9C3C0A;
+        Tue, 18 Apr 2023 21:50:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BADA263AE2;
+        Wed, 19 Apr 2023 04:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1ABD1C4339B;
+        Wed, 19 Apr 2023 04:50:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681879818;
+        bh=heaxAGW8BqkyV5Xaxa7qN+YraeK/8HWCjkrKGdPZiXA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=qCxqNten3hwWo85osv8Jjdhgxd9D4Q8vCwJw+ap6VvL3/7Yw+ms1pDO4M44Jc84Ti
+         XNEbgtb8zSHDxPABQqSiHSXJ3pC1yQySkvrimcHPCfIxYoQVkyqL/ZHTQrMtVMNHAH
+         LAYU34mVJvptJAyaXLWBfXaP+qjRHL5P05hh27EyXYaQYUDz/TzahBoCtqZEwOht8/
+         askD/N4vnZ0NtiiVggE8WJBLxw23uRK6nt9rXcgoXOcW3237c8TT1JJZulaDJI1Wie
+         x/N2LKzMhfbk1RwKJyaAqZjQxwAnDXHGpPhvyRA9phyaCCI/yDikbr4pJaCSh3crNs
+         BYRq5kYG8kSxw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F2CAFE270E4;
+        Wed, 19 Apr 2023 04:50:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] net: mscc: ocelot: remove incompatible prototypes
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168187981798.31004.11296646882244575250.git-patchwork-notify@kernel.org>
+Date:   Wed, 19 Apr 2023 04:50:17 +0000
+References: <20230417205531.1880657-1-arnd@kernel.org>
+In-Reply-To: <20230417205531.1880657-1-arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, jacob.e.keller@intel.com, arnd@arndb.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some legacy BIOSes report no reserved bits in their 32-bit rgb mode,
-breaking the calculation of bits_per_pixel in commit f35cd3fa7729
-[firmware/sysfb: Fix EFI/VESA format selection].  However they report
-lfb_depth correctly for those modes.  Keep the computation but
-set bits_per_pixel to lfb_depth if the latter is larger.
+Hello:
 
-v2 fixes the warnings from a max3() macro with arguments of different
-types;  split the bits_per_pixel assignment to avoid uglyfing the code
-with too many typecasts.
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Link: https://lore.kernel.org/r/4Psm6B6Lqkz1QXM@panix3.panix.com
-Link: https://lore.kernel.org/r/20230412150225.3757223-1-javierm@redhat.com
-Fixes: f35cd3fa7729 [firmware/sysfb: Fix EFI/VESA format selection]
-Signed-off-by: Pierre Asselin <pa@panix.com>
----
- drivers/firmware/sysfb_simplefb.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On Mon, 17 Apr 2023 22:55:25 +0200 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The types for the register argument changed recently, but there are
+> still incompatible prototypes that got left behind, and gcc-13 warns
+> about these:
+> 
+> In file included from drivers/net/ethernet/mscc/ocelot.c:13:
+> drivers/net/ethernet/mscc/ocelot.h:97:5: error: conflicting types for 'ocelot_port_readl' due to enum/integer mismatch; have 'u32(struct ocelot_port *, u32)' {aka 'unsigned int(struct ocelot_port *, unsigned int)'} [-Werror=enum-int-mismatch]
+>    97 | u32 ocelot_port_readl(struct ocelot_port *port, u32 reg);
+>       |     ^~~~~~~~~~~~~~~~~
+> 
+> [...]
 
-diff --git a/drivers/firmware/sysfb_simplefb.c b/drivers/firmware/sysfb_simplefb.c
-index 82c64cb9f531..358b792a8845 100644
---- a/drivers/firmware/sysfb_simplefb.c
-+++ b/drivers/firmware/sysfb_simplefb.c
-@@ -51,7 +51,8 @@ __init bool sysfb_parse_mode(const struct screen_info *si,
- 	 *
- 	 * It's not easily possible to fix this in struct screen_info,
- 	 * as this could break UAPI. The best solution is to compute
--	 * bits_per_pixel here and ignore lfb_depth. In the loop below,
-+	 * bits_per_pixel from the color bits, reserved bits and
-+	 * reported lfb_depth, whichever is highest.  In the loop below,
- 	 * ignore simplefb formats with alpha bits, as EFI and VESA
- 	 * don't specify alpha channels.
- 	 */
-@@ -60,6 +61,7 @@ __init bool sysfb_parse_mode(const struct screen_info *si,
- 					  si->green_size + si->green_pos,
- 					  si->blue_size + si->blue_pos),
- 				     si->rsvd_size + si->rsvd_pos);
-+		bits_per_pixel= max(bits_per_pixel, (u32)si->lfb_depth);
- 	} else {
- 		bits_per_pixel = si->lfb_depth;
- 	}
+Here is the summary with links:
+  - net: mscc: ocelot: remove incompatible prototypes
+    https://git.kernel.org/netdev/net-next/c/33d74c8ff5ce
 
-base-commit: 6a8f57ae2eb07ab39a6f0ccad60c760743051026
+You are awesome, thank you!
 -- 
-2.39.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
