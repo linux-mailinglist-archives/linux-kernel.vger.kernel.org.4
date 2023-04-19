@@ -2,204 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 393D56E7A38
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C6E6E7A3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbjDSNCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 09:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
+        id S233217AbjDSNC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 09:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233023AbjDSNCt (ORCPT
+        with ESMTP id S233060AbjDSNCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Apr 2023 09:02:49 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7065B445
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:02:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=wQ1t3KQ2eAPlhZ6OlpW0kwKFvpz
-        SO9/aAnVf2UMgqWk=; b=Bh00Nw/SOS/ZpINn81N59Y66+mR3DVkNf/7Bk3s4Psx
-        6shp9BXgNKfZQ7R0gL+Dust34QUYIObeTA2zFCgsqKudUT/J4IdqojizKMSL1Dpd
-        4BzFr40EQnvCQqu2tm1zprUb8jjTuIRQbmp6STvLWInhEZGFL15h+NBagnZ467F4
-        =
-Received: (qmail 3697267 invoked from network); 19 Apr 2023 15:02:41 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Apr 2023 15:02:41 +0200
-X-UD-Smtp-Session: l3s3148p1@a7UFCrD5zM0ujnsI
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Cong Dang <cong.dang.xn@renesas.com>,
-        Hai Pham <hai.pham.ud@renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] memory: renesas-rpc-if: Fix PHYCNT.STRTIM setting
-Date:   Wed, 19 Apr 2023 15:02:34 +0200
-Message-Id: <20230419130234.44321-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.30.2
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6585B740
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:02:47 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id b16so6180167ejz.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681909366; x=1684501366;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8km01v+AsIzRKdAlrr0KvdJekH9kf5ltyq2aXyHrieo=;
+        b=D5O1qyYGjSQa+JcJwDfFlH9YdTiHAPcBDMKcQLbRXflYJ7RR8V49omri0rgWes/mjM
+         zDbapRCM8PgTdMpoXbXZ132R3h5Juf/1sNcIUhnlIy9YplcDJMQaGuFsnk4U1/Lx39B5
+         9KrNsRlwIv6GjLrisG/CUAYyYGphYAxU2VQThBe3H/7/3wZjakiuOT7jbWPVmS1PIu8A
+         Yvtt6Gvv26X1Kn91RD4O1ARdCnEQb11MSmS3lznTpdq8Vc2NcprYF9ZOBkWIiMI0v94w
+         Eo3vT+3LSQQQZdMF726HqGFTL2mZ3rUJVMbz/rQQjUjrOEYpguC+Ij0/uC0UN+jLczjU
+         Wakw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681909366; x=1684501366;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8km01v+AsIzRKdAlrr0KvdJekH9kf5ltyq2aXyHrieo=;
+        b=dEutgstZejT1d+fyVOVQNyEKutEsaMDZkkX9LVeO8whjQghFjCgEZ+XWPEJYtQuN/V
+         JwtnTuAx2ReLidiunZQwv7iKxXNFY0Q4tE6xBo17mmZdx9JQKPh8kzfUCqk8vwCTMLHr
+         8eC+IaqF/h/fQZmKWPO0Oz8SgnRKXBSrzuuicrn6X/WD88406ZWctZ4Sx1vx1VhJ9LSk
+         mVn7rokpvxQfWcvfnSdQK3KzYKg5DRcnyqLhuAXoGnidMDPbmEpQw/PjFAQfBRfSHd4C
+         o97QnJWGgNff7LfVcIJXrdtfxWHDdJCpBTOFmHe0dUUFlVZ0xsl/80q5YdxFg94pXiWR
+         kuag==
+X-Gm-Message-State: AAQBX9cQD0/Zpp6T/a9X2Ja+1sSDJR99iHkFGHy7Fwk7/NjnM3ih0itW
+        GRMp0DDKrUWjwjwh8cVzs7+Lwmoh0cUlClIAhkgXtg==
+X-Google-Smtp-Source: AKy350bQj5ebLuFff0NLlfexWn17JrgpMNYHvclyn0mKtEsAvSL3yB1BiISTdmAZ7D0RmkSMgxP4uw==
+X-Received: by 2002:a17:906:82c5:b0:94b:88c6:9282 with SMTP id a5-20020a17090682c500b0094b88c69282mr17830189ejy.22.1681909366372;
+        Wed, 19 Apr 2023 06:02:46 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:b7d8:d88b:1fac:c802? ([2a02:810d:15c0:828:b7d8:d88b:1fac:c802])
+        by smtp.gmail.com with ESMTPSA id f10-20020a1709064dca00b0094f2dca017fsm5971762ejw.50.2023.04.19.06.02.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 06:02:46 -0700 (PDT)
+Message-ID: <c568f571-22ee-0d85-043f-4673d76bf364@linaro.org>
+Date:   Wed, 19 Apr 2023 15:02:44 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 2/7] arm64: dts: imx93-11x11-evk: added ele-mu
+Content-Language: en-US
+To:     Pankaj Gupta <pankaj.gupta@nxp.com>, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        gaurav.jain@nxp.com, sahil.malhotra@nxp.com, aisheng.dong@nxp.com,
+        V.Sethi@nxp.com
+References: <20230419175538.855493-1-pankaj.gupta@nxp.com>
+ <20230419175538.855493-3-pankaj.gupta@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230419175538.855493-3-pankaj.gupta@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the datasheets, the Strobe Timing Adjustment bit (STRTIM)
-setting is different on R-Car SoCs, i.e.
+On 19/04/2023 19:55, Pankaj Gupta wrote:
+> adde support for ele-mu for imx93-11x11-evk.
 
-R-Car M3 ES1.*  : STRTIM[2:0] is set to 0x6
-other R-Car Gen3: STRTIM[2:0] is set to 0x7
-other R-Car Gen4: STRTIM[3:0] is set to 0xf
+Typo, missing capital letter.
 
-To fix this issue, a DT match data was added to specify the setting
-for special use cases.
+> 
+> Signed-off-by: Pankaj Gupta <pankaj.gupta@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/imx93.dtsi | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx93.dtsi b/arch/arm64/boot/dts/freescale/imx93.dtsi
+> index 41efd97dd6d6..ffb7cb8ed228 100644
+> --- a/arch/arm64/boot/dts/freescale/imx93.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx93.dtsi
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>  /*
+> - * Copyright 2022 NXP
+> + * Copyright 2022-2022 NXP
 
-Signed-off-by: Cong Dang <cong.dang.xn@renesas.com>
-Signed-off-by: Hai Pham  <hai.pham.ud@renesas.com>
-[wsa: rebased, restructured, added Gen4 support]
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
-
-Change since v3:
-* rebased to latest changes in the driver
-
-The previous version was already reviewed by Geert and tested by
-Prabhakar. Since the rebase for v4 was not super trivial, I decided to
-drop the tags. It would be great if you could have another look. Thank
-you already. Happy hacking!
+?
 
 
- drivers/memory/renesas-rpc-if.c | 53 ++++++++++++++++++++++++---------
- 1 file changed, 39 insertions(+), 14 deletions(-)
+>   */
+>  
+>  #include <dt-bindings/clock/imx93-clock.h>
+> @@ -741,5 +741,14 @@ media_blk_ctrl: system-controller@4ac10000 {
+>  			#power-domain-cells = <1>;
+>  			status = "disabled";
+>  		};
 
-diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
-index 025bb628aaf3..75fcba45ec1b 100644
---- a/drivers/memory/renesas-rpc-if.c
-+++ b/drivers/memory/renesas-rpc-if.c
-@@ -7,6 +7,7 @@
-  * Copyright (C) 2019-2020 Cogent Embedded, Inc.
-  */
- 
-+#include <linux/bitops.h>
- #include <linux/clk.h>
- #include <linux/io.h>
- #include <linux/module.h>
-@@ -163,6 +164,11 @@ static const struct regmap_access_table rpcif_volatile_table = {
- 	.n_yes_ranges	= ARRAY_SIZE(rpcif_volatile_ranges),
- };
- 
-+struct rpcif_info {
-+	enum rpcif_type type;
-+	u8 strtim;
-+};
-+
- struct rpcif_priv {
- 	struct device *dev;
- 	void __iomem *base;
-@@ -171,7 +177,7 @@ struct rpcif_priv {
- 	struct reset_control *rstc;
- 	struct platform_device *vdev;
- 	size_t size;
--	enum rpcif_type type;
-+	const struct rpcif_info *info;
- 	enum rpcif_data_dir dir;
- 	u8 bus_size;
- 	u8 xfer_size;
-@@ -186,6 +192,26 @@ struct rpcif_priv {
- 	u32 ddr;		/* DRDRENR or SMDRENR */
- };
- 
-+static const struct rpcif_info rpcif_info_r8a7796 = {
-+	.type = RPCIF_RCAR_GEN3,
-+	.strtim = 6,
-+};
-+
-+static const struct rpcif_info rpcif_info_gen3 = {
-+	.type = RPCIF_RCAR_GEN3,
-+	.strtim = 7,
-+};
-+
-+static const struct rpcif_info rpcif_info_rz_g2l = {
-+	.type = RPCIF_RZ_G2L,
-+	.strtim = 7,
-+};
-+
-+static const struct rpcif_info rpcif_info_gen4 = {
-+	.type = RPCIF_RCAR_GEN4,
-+	.strtim = 15,
-+};
-+
- /*
-  * Custom accessor functions to ensure SM[RW]DR[01] are always accessed with
-  * proper width.  Requires rpcif_priv.xfer_size to be correctly set before!
-@@ -310,7 +336,7 @@ int rpcif_hw_init(struct device *dev, bool hyperflash)
- 	if (ret)
- 		return ret;
- 
--	if (rpc->type == RPCIF_RZ_G2L) {
-+	if (rpc->info->type == RPCIF_RZ_G2L) {
- 		ret = reset_control_reset(rpc->rstc);
- 		if (ret)
- 			return ret;
-@@ -324,12 +350,10 @@ int rpcif_hw_init(struct device *dev, bool hyperflash)
- 	/* DMA Transfer is not supported */
- 	regmap_update_bits(rpc->regmap, RPCIF_PHYCNT, RPCIF_PHYCNT_HS, 0);
- 
--	if (rpc->type == RPCIF_RCAR_GEN3)
--		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
--				   RPCIF_PHYCNT_STRTIM(7), RPCIF_PHYCNT_STRTIM(7));
--	else if (rpc->type == RPCIF_RCAR_GEN4)
--		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
--				   RPCIF_PHYCNT_STRTIM(15), RPCIF_PHYCNT_STRTIM(15));
-+	regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
-+			   /* create mask with all affected bits set */
-+			   RPCIF_PHYCNT_STRTIM(BIT(fls(rpc->info->strtim)) - 1),
-+			   RPCIF_PHYCNT_STRTIM(rpc->info->strtim));
- 
- 	regmap_update_bits(rpc->regmap, RPCIF_PHYOFFSET1, RPCIF_PHYOFFSET1_DDRTMG(3),
- 			   RPCIF_PHYOFFSET1_DDRTMG(3));
-@@ -340,7 +364,7 @@ int rpcif_hw_init(struct device *dev, bool hyperflash)
- 		regmap_update_bits(rpc->regmap, RPCIF_PHYINT,
- 				   RPCIF_PHYINT_WPVAL, 0);
- 
--	if (rpc->type == RPCIF_RZ_G2L)
-+	if (rpc->info->type == RPCIF_RZ_G2L)
- 		regmap_update_bits(rpc->regmap, RPCIF_CMNCR,
- 				   RPCIF_CMNCR_MOIIO(3) | RPCIF_CMNCR_IOFV(3) |
- 				   RPCIF_CMNCR_BSZ(3),
-@@ -729,9 +753,9 @@ static int rpcif_probe(struct platform_device *pdev)
- 	rpc->dirmap = devm_ioremap_resource(dev, res);
- 	if (IS_ERR(rpc->dirmap))
- 		return PTR_ERR(rpc->dirmap);
--	rpc->size = resource_size(res);
- 
--	rpc->type = (uintptr_t)of_device_get_match_data(dev);
-+	rpc->size = resource_size(res);
-+	rpc->info = of_device_get_match_data(dev);
- 	rpc->rstc = devm_reset_control_get_exclusive(dev, NULL);
- 	if (IS_ERR(rpc->rstc))
- 		return PTR_ERR(rpc->rstc);
-@@ -764,9 +788,10 @@ static int rpcif_remove(struct platform_device *pdev)
- }
- 
- static const struct of_device_id rpcif_of_match[] = {
--	{ .compatible = "renesas,rcar-gen3-rpc-if", .data = (void *)RPCIF_RCAR_GEN3 },
--	{ .compatible = "renesas,rcar-gen4-rpc-if", .data = (void *)RPCIF_RCAR_GEN4 },
--	{ .compatible = "renesas,rzg2l-rpc-if", .data = (void *)RPCIF_RZ_G2L },
-+	{ .compatible = "renesas,r8a7796-rpc-if", .data = &rpcif_info_r8a7796 },
-+	{ .compatible = "renesas,rcar-gen3-rpc-if", .data = &rpcif_info_gen3 },
-+	{ .compatible = "renesas,rcar-gen4-rpc-if", .data = &rpcif_info_gen4 },
-+	{ .compatible = "renesas,rzg2l-rpc-if", .data = &rpcif_info_rz_g2l },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, rpcif_of_match);
--- 
-2.30.2
+Missing blank line.
+
+> +		ele_mu: ele-mu {
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +			compatible = "fsl,imx93-ele";
+> +			mboxes = <&s4muap 0 0 &s4muap 1 0>;
+
+Two phandles, not one.
+
+> +			mbox-names = "tx", "rx";
+> +			fsl,ele_mu_did = <3>;
+> +			fsl,ele_mu_id = <2>;
+> +			fsl,ele_mu_max_users = <4>;
+> +			status = "okay";
+
+Why do you need it?
+
+Run your patches through internal review to fix such obvious mistakes.
+There is entire NXP to help you, instead of relying on us to fix trivial
+code style.
+
+> +		};
+>  	};
+>  };
+
+Best regards,
+Krzysztof
 
