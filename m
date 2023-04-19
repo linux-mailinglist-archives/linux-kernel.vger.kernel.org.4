@@ -2,187 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 348276E7D83
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F0D6EB1ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 20:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbjDSO4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 10:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
+        id S233412AbjDUS7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 14:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjDSO4A (ORCPT
+        with ESMTP id S233213AbjDUS7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 10:56:00 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F80191
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:55:58 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id o11so12900352ybk.11
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:55:58 -0700 (PDT)
+        Fri, 21 Apr 2023 14:59:31 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF6030D7
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 11:59:24 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1a50cb65c92so22244475ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Apr 2023 11:59:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681916157; x=1684508157;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NsAnyIg0tja7z/MHVd1oLlFsDX2n0uEj29cmVpgYxuc=;
-        b=Yjyr2NLxfwCkZ2ONh23Vb4RYnMb0t263toOyB3WYTAtzM+vdMqlZysuUlahSuFR9pE
-         bOvJhB6GKi9DhpwU+gTWQbC6Gf37cZpX0CvLh0w2F7FSaSFqZYt3pAxfyALlAelyvsZe
-         stmaK/2DsyifEBSEA1fRs0hk1MxzaDqpBwaIfrtEijxdwErtaeLJ0D/hOmGZruUcI62m
-         jJ5os5Xwhtn5X9VtkHFFRqrJ5WpfWLRfF8/eTR22aho2NOjzxdi9/29VTH8FU/L8yRmP
-         s96wBhILfwczB2AiEyxhNoDy0pVfVZxWN7QEk4utG5+S9OWnjFIAiDuauI1oqiPIWqyC
-         qCmg==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682103563; x=1684695563;
+        h=to:from:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JnRCEEUMbL4VHxSaKuZGWLgXCAjCR6wrwzaIjE1iCNc=;
+        b=1eyKirCqpN+P2lDW1Kog6EOhR4gZSK1257YOtYnrvSWxujPo0TJy3JM4uEJj4Oaqtp
+         Giv3pKWxeTYVsJqwu+nGvVA1SQYfCzggSSa5nGFeC82PQy8yuK0+/fQEZexJUsZC+5xH
+         Kx98Bl4+CWxaMKvtCMOqSR/ZKFkElFGgGQe9Dpxyn3d9pXmNvqQUKtbpHhmyRL14Ul7l
+         2CYj0EJ0+5lW0vVZvPceEE97h6ySo1LzU3iHEuVjsQ39buzCHkmf17WhYkXQj0q+OAEc
+         T2LLeAZxdZHGuSRl+oNzRF3z3Yx/dhcIb9ON78i3JpHr8KdfMR5NybhjcazsT5FnP5op
+         JOvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681916157; x=1684508157;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682103563; x=1684695563;
+        h=to:from:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NsAnyIg0tja7z/MHVd1oLlFsDX2n0uEj29cmVpgYxuc=;
-        b=DARTs9JuzGo3IUq557Z5FS/e22Kv1k/hr0Pp+wno8nwSKWXCJO/alSO410HF0Os/um
-         keGAaLbiUa8y6X9ReDkitWCxio3N73g6AxEHKuaBQpcGJlakka2DrmpH/hYIdI7tuLZY
-         ySTzUb8sv33KCfl0hhCBgfCVlpQLt9pqH2NOaWhAhpJC2N7PkbVPe35Z4yuRz3uxO3pB
-         jqu23RvAy7RetWoCena23UDXW13P+2z9sPRCmJ7SsEGwt+0tb+lDS+j6FGUglueQGs6r
-         RgJ84Wl0FaZe4iHNplvmEFIpCF8yKo7VyIdZPR90FAF72UO9yGGlNini4Pl2sFiVbhBk
-         foeQ==
-X-Gm-Message-State: AAQBX9em3JmrZQacOVK205J9ea6xbjYK3p+C486wxiO/ERbOJBVuUwav
-        IELJ8T7edJJI9IaXDfljF946EpAN+G0R/UH68xnycQ==
-X-Google-Smtp-Source: AKy350btuammnNCPIH2gq9ooigjmRSZ8jv694MOoj+DgIaXVDrl3EJBXLaFHIMlj9Gj4EFRl4NNiry9gyIH9XLjEj9g=
-X-Received: by 2002:a25:218a:0:b0:b8f:648d:4bf9 with SMTP id
- h132-20020a25218a000000b00b8f648d4bf9mr2653122ybh.24.1681916157524; Wed, 19
- Apr 2023 07:55:57 -0700 (PDT)
+        bh=JnRCEEUMbL4VHxSaKuZGWLgXCAjCR6wrwzaIjE1iCNc=;
+        b=D00dJHFL5XtLOBIkGnwpEMRXUSHHfnuSlRvGR5/I9PI3EmIHENT2o01LdICRZP9257
+         PqMEpjBYbhlmMET+67RW/Ybz7i89/Xoi+1APlaKlHLVqaA915WkctJ0l+77PPY93rQGh
+         xRuGNYr5aTRBxeknHlo93q0WOmMkJTztGQanLMkTZLvudTCsRxWnfTbH+EH9qIDjdHHW
+         3x2Kw5wDHISU+9qBVFLvfD08rTkLOgqOxOg96WH9zzzpwZNXBKc+iUjDiYv+HMjDglXn
+         v3c8DK5ObdLt7VSj4TJtq3ZAmK0o8Z+3Qnf3i1DfNBR1QRXV2rep1lrw6zTRcuv1UwuD
+         vHEg==
+X-Gm-Message-State: AAQBX9fZPyHkKKob9EaPeOkl3kX4iuUTyZJeCMaR3Qd/LTn1ju8I7orY
+        o6oyQB+XtPS3TEwjptMDPyfIVg==
+X-Google-Smtp-Source: AKy350abIyt+aghs8+DVHIwBTnjeSWu6DXV0RCHJyPgTF8tnDrFlXaBH+mvfis5bh8pk2PcPF+EjFA==
+X-Received: by 2002:a17:903:41d1:b0:1a6:492c:df22 with SMTP id u17-20020a17090341d100b001a6492cdf22mr7006809ple.17.1682103563482;
+        Fri, 21 Apr 2023 11:59:23 -0700 (PDT)
+Received: from localhost ([135.180.227.0])
+        by smtp.gmail.com with ESMTPSA id k9-20020a170902ba8900b001a0742b0806sm3055707pls.108.2023.04.21.11.59.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 11:59:22 -0700 (PDT)
+In-Reply-To: <20230203075232.274282-1-alexghiti@rivosinc.com>
+References: <20230203075232.274282-1-alexghiti@rivosinc.com>
+Subject: Re: [PATCH v4 0/6] RISC-V kasan rework
+Message-Id: <168191616322.7488.11200893464689398522.b4-ty@rivosinc.com>
+Date:   Wed, 19 Apr 2023 07:56:03 -0700
 MIME-Version: 1.0
-References: <20230418052902.1336866-1-joychakr@google.com> <20230418052902.1336866-5-joychakr@google.com>
- <ZD5JC7BdN1usn6Kd@smile.fi.intel.com> <CAOSNQF2sXHFCx9ZfrtfmxHfKrAE0XGP8SRvW6wyYco+FKSPmDw@mail.gmail.com>
- <ZD/VO1cuBYGCP4O2@smile.fi.intel.com> <CAOSNQF1wf3m+YTmh5qQWCM6+x3j2whvG6F=dW6Hd7zW0Y+E_1g@mail.gmail.com>
-In-Reply-To: <CAOSNQF1wf3m+YTmh5qQWCM6+x3j2whvG6F=dW6Hd7zW0Y+E_1g@mail.gmail.com>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Wed, 19 Apr 2023 20:25:46 +0530
-Message-ID: <CAOSNQF0ATN5AdJsgQ4CzxyD_eOFyjbd9p5j3JcV7+GxQa1bnog@mail.gmail.com>
-Subject: Re: [PATCH v7 4/5] spi: dw: Add DMA address widths capability check
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        rohitner@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-901c5
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 6:18=E2=80=AFPM Joy Chakraborty <joychakr@google.co=
-m> wrote:
->
-> On Wed, Apr 19, 2023 at 5:19=E2=80=AFPM Andy Shevchenko
-> <andriy.shevchenko@intel.com> wrote:
-> >
-> > On Wed, Apr 19, 2023 at 11:18:25AM +0530, Joy Chakraborty wrote:
-> > > On Tue, Apr 18, 2023 at 1:08=E2=80=AFPM Andy Shevchenko
-> > > <andriy.shevchenko@intel.com> wrote:
-> > > > On Tue, Apr 18, 2023 at 05:29:01AM +0000, Joy Chakraborty wrote:
-> >
-> > ...
-> >
-> > > > > +     /*
-> > > > > +      * Assuming both channels belong to the same DMA controller=
- hence the
-> > > > > +      * address width capabilities most likely would be the same=
-.
-> > > > > +      */
-> > > >
-> > > > I had a small comment on this In v6 thread.
-> > >
-> > > Sure,
-> > >
-> > > Your comment in V6 thread:
-> > > "
-> > > I would add something to explain the side of these address width, lik=
-e
-> > >
-> > >          * Assuming both channels belong to the same DMA controller h=
-ence
-> > >          * the peripheral side address width capabilities most likely=
- would
-> > >          * be the same.
-> > > "
-> > >
-> > > I do not think the address width capabilities are dependent on the
-> > > side of generation like memory or peripheral.
-> >
-> > Yes, they are independent. Memory could do with 4 bytes, while peripher=
-al with
-> > 1 byte and so on.
-> >
-> > > From what I understand,
-> > > address width capabilities are solely dependent on the transaction
-> > > generation capability of the DMA controller towards the system bus.
-> >
-> > What do you mean by a SB in the above? Memory? Peripheral?
->
-> By system bus I mean anything that is connecting the Memory, DMA and
-> the peripheral.
-> Something like :
->
->           +-----------+          +-------------------+
->           |               |           |                        |
->           |   DMA    |           | PERIPHERAL |
->           |               |           |                         |
->           +----^-+---+          +-----+--^---------+
->         *** -->| |                         |    |
->                   | |                         |    |
-> <------------+-v--------------------v---+------------->
->                     SYSTEM BUS
-> <---------------------+--^----------------------------->
->                             |   |
->                             |   |
->                      +----v--+-----+
->                      |                   |
->                      |  MEMORY |
->                      |                   |
->                      +--------------+
-> *** : Address width capabilities should be the capability of the DMA
-> to generate transactions to the system bus on the marked interface
-> irrespective of whether it is destined for Peripheral or memory is
-> what I understand.
->
-Looks like the diagram did not come correctly, repasting:
-        +----------+          +---------------+
-        |          |          |               |
-        |   DMA    |          |  PERIPHERAL   |
-        |          |          |               |
-        +----^-+---+          +-----+--^------+
-       ***-->| |                    |  |
-             | |                    |  |
-             | |                    |  |
-<------------+-v--------------------v--+--------------->
-                    SYSTEM BUS
-<---------------------+--^----------------------------->
-                      |  |
-                      |  |
-                      |  |
-                 +----v--+-----+
-                 |   MEMORY    |
-                 |             |
-                 +-------------+
 
-> >
-> > > What we intend to highlight here is the assumption that both tx and r=
-x
-> > > channel would belong to the same DMA controller hence the transaction
-> > > generation capabilities would be the same both for read and write
-> > > (e.g. if the DMA controller is able to generate 32 bit sized reads
-> > > then it should also be able to generate 32 bit sized writes).
-> > > With this assumption we are doing a bitwise and of both tx and rx cap=
-abilities.
-> > >
-> > > Please let me know if you think otherwise.
-> >
-> > --
-> > With Best Regards,
-> > Andy Shevchenko
-> >
-> >
+On Fri, 03 Feb 2023 08:52:26 +0100, Alexandre Ghiti wrote:
+> As described in patch 2, our current kasan implementation is intricate,
+> so I tried to simplify the implementation and mimic what arm64/x86 are
+> doing.
+> 
+> In addition it fixes UEFI bootflow with a kasan kernel and kasan inline
+> instrumentation: all kasan configurations were tested on a large ubuntu
+> kernel with success with KASAN_KUNIT_TEST and KASAN_MODULE_TEST.
+> 
+> [...]
+
+Applied, thanks!
+
+[1/6] riscv: Split early and final KASAN population functions
+      https://git.kernel.org/palmer/c/cd0334e1c091
+[2/6] riscv: Rework kasan population functions
+      https://git.kernel.org/palmer/c/96f9d4daf745
+[3/6] riscv: Move DTB_EARLY_BASE_VA to the kernel address space
+      https://git.kernel.org/palmer/c/401e84488800
+[4/6] riscv: Fix EFI stub usage of KASAN instrumented strcmp function
+      https://git.kernel.org/palmer/c/617955ca6e27
+[5/6] riscv: Fix ptdump when KASAN is enabled
+      https://git.kernel.org/palmer/c/ecd7ebaf0b5a
+[6/6] riscv: Unconditionnally select KASAN_VMALLOC if KASAN
+      https://git.kernel.org/palmer/c/864046c512c2
+
+Best regards,
+-- 
+Palmer Dabbelt <palmer@rivosinc.com>
+
