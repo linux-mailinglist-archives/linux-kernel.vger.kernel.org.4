@@ -2,53 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D396E8049
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C29B6E804D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232271AbjDSRYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 13:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
+        id S232897AbjDSR0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 13:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232321AbjDSRYa (ORCPT
+        with ESMTP id S230346AbjDSR0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 13:24:30 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F192365B5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:24:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1681925065; bh=UyddDLaSnHim8LvLfZeMZsuxwKd9NlUs6I+vTPaquA8=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=x4QuBhvrOVumU6lfmBATy7YcNq7Tt4ewJHbz9/HPgMIR6VUWSNmzp8NjZKD+QTkD/
-         +6G3U0woQCjF0LaMUeejFEfk+8s4aLN18oAOl5tUla9wfOJYvZ2R3pTzjzJArE6rui
-         njab+fTPihLz2H19NWoSu5CX4yep5VFHIzeHSeGI=
-Received: from [192.168.9.172] (unknown [101.228.138.124])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 19 Apr 2023 13:26:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDEA659B;
+        Wed, 19 Apr 2023 10:26:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 3460D6011C;
-        Thu, 20 Apr 2023 01:24:25 +0800 (CST)
-Message-ID: <48bc7236-638d-9086-daaf-62eacea80dd2@xen0n.name>
-Date:   Thu, 20 Apr 2023 01:24:24 +0800
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53B6A64122;
+        Wed, 19 Apr 2023 17:26:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD6ABC433EF;
+        Wed, 19 Apr 2023 17:26:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681925162;
+        bh=VFRws15p+q59RSTrU0VATjC0LQ6eFGIpuOjxTTSlgZA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UycFIy4d7bCijEj9Km8Xjqeq9Y7EDL81kXO55cTmYZWaCoWU32Dc670Zrnc7oLZIE
+         zohoopB6vvjwHWAIgZi2HjslXGgNOIJNhWwyycPnyOYwJZEXyC3u+30gOvOxZSPYmz
+         UoBxqtx/hq9Yb4HYkTl/ePo7blbSjZczejMiqCwIcKJRmGoEgpFxw635kJIa5LL6cK
+         fj7fBUFeirx+lzm/NNEwcg+rYsJHgsDOwXoE9yDM1+xQ7Vq0YueKHyzojjw0y6iVIo
+         MzRSXQLJPb3cF4Xqo1ry0NuHAPTGe48TEIN9UMSK0LxFIaOB2wSFR2bO9Zr4jBxkZj
+         6EldBf3ubjw1Q==
+Date:   Wed, 19 Apr 2023 10:26:02 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Mike Snitzer <snitzer@kernel.org>
+Cc:     Sarthak Kukreti <sarthakkukreti@chromium.org>, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Theodore Ts'o <tytso@mit.edu>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Daniil Lunev <dlunev@google.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v4 1/4] block: Introduce provisioning primitives
+Message-ID: <20230419172602.GE360881@frogsfrogsfrogs>
+References: <20230414000219.92640-1-sarthakkukreti@chromium.org>
+ <20230418221207.244685-1-sarthakkukreti@chromium.org>
+ <20230418221207.244685-2-sarthakkukreti@chromium.org>
+ <20230419153611.GE360885@frogsfrogsfrogs>
+ <ZEAUHnWqt9cIiJRb@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/2] LoongArch: Add pad structure members for explicit
- alignment
-Content-Language: en-US
-From:   WANG Xuerui <kernel@xen0n.name>
-To:     Xi Ruoyao <xry111@xry111.site>, Qing Zhang <zhangqing@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230418091348.9239-1-zhangqing@loongson.cn>
- <a7fa32c3af68083855e7690f67824d060d5c6135.camel@xry111.site>
- <899085c1-7a74-8bab-1429-1b6e9e4c2c30@xen0n.name>
-In-Reply-To: <899085c1-7a74-8bab-1429-1b6e9e4c2c30@xen0n.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZEAUHnWqt9cIiJRb@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,120 +69,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 19:00, WANG Xuerui wrote:
-> On 2023/4/19 18:42, Xi Ruoyao wrote:
->> On Tue, 2023-04-18 at 17:13 +0800, Qing Zhang wrote:
->>> This is done in order to easily calculate the number of breakpoints
->>> in hw_break_get.
->>>
->>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
->>> ---
->>>   arch/loongarch/include/uapi/asm/ptrace.h |  3 ++-
->>>   arch/loongarch/kernel/ptrace.c           | 13 +++++++++----
->>>   2 files changed, 11 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/arch/loongarch/include/uapi/asm/ptrace.h
->>> b/arch/loongarch/include/uapi/asm/ptrace.h
->>> index 2282ae1fd3b6..06e3be52cb04 100644
->>> --- a/arch/loongarch/include/uapi/asm/ptrace.h
->>> +++ b/arch/loongarch/include/uapi/asm/ptrace.h
->>> @@ -57,11 +57,12 @@ struct user_lasx_state {
->
-> Drive-by comment to the patch author: there is no "user_lasx_state" 
-> yet. Please always state your base commit if not obvious, or you 
-> should start from some well-known upstream HEAD (e.g. Linus' rc tags, 
-> loongarch-fixes, or loongarch-next).
->
->>>   };
->>>     struct user_watch_state {
->>> -       uint16_t dbg_info;
->>> +       uint64_t dbg_info;
->>
->> Ouch.  This is a breaking change when we consider user code like
->> `printf(PRIu16 "\n", ptr->dbg_info);`.  Is it really necessary?
->
-> Ah right. This is UAPI so without *very* concrete and convicing reason 
-> why the change is not going to impact any potential users, it's gonna 
-> be a presumed NAK. In other words you must demonstrate (1) why it's 
-> absolutely necessary to make the change and (2) that it's impossible 
-> to impact anyone, before any such changes can even be considered.
-Please ignore all of this. The memory layout is actually the same after 
-the change due to the padding, I was somehow thinking in big-endian a 
-few hours ago. (The commit message didn't help either, I think both 
-Ruoyao and me got into the habitual thinking that changes like this are 
-most likely just churn without real benefits, after *not* seeing the 
-rationale in the commit message which was kinda expected.)
->
->>
->>>          struct {
->>>                  uint64_t    addr;
->>>                  uint64_t    mask;
->>>                  uint32_t    ctrl;
->>> +               uint32_t    pad;
->>>          } dbg_regs[8];
->>>   };
->>>   diff --git a/arch/loongarch/kernel/ptrace.c
->>> b/arch/loongarch/kernel/ptrace.c
->>> index 0c7c41e41cad..9c3bc1bbf2ff 100644
->>> --- a/arch/loongarch/kernel/ptrace.c
->>> +++ b/arch/loongarch/kernel/ptrace.c
->>> @@ -475,10 +475,10 @@ static int ptrace_hbp_fill_attr_ctrl(unsigned
->>> int note_type,
->>>          return 0;
->>>   }
->>>   -static int ptrace_hbp_get_resource_info(unsigned int note_type, u16
->>> *info)
->>> +static int ptrace_hbp_get_resource_info(unsigned int note_type, u64
->>> *info)
->>>   {
->>>          u8 num;
->>> -       u16 reg = 0;
->>> +       u64 reg = 0;
->>>            switch (note_type) {
->>>          case NT_LOONGARCH_HW_BREAK:
->>> @@ -616,7 +616,7 @@ static int hw_break_get(struct task_struct
->>> *target,
->>>                          const struct user_regset *regset,
->>>                          struct membuf to)
->>>   {
->>> -       u16 info;
->>> +       u64 info;
->>>          u32 ctrl;
->>>          u64 addr, mask;
->>>          int ret, idx = 0;
->>> @@ -646,6 +646,7 @@ static int hw_break_get(struct task_struct
->>> *target,
->>>                  membuf_store(&to, addr);
->>>                  membuf_store(&to, mask);
->>>                  membuf_store(&to, ctrl);
->>> +               membuf_zero(&to, sizeof(u32));
->>>                  idx++;
->>>          }
->>>   @@ -662,7 +663,7 @@ static int hw_break_set(struct task_struct
->>> *target,
->>>          int ret, idx = 0, offset, limit;
->>>          unsigned int note_type = regset->core_note_type;
->>>   -       /* Resource info */
->>> +       /* Resource info and pad */
->>>          offset = offsetof(struct user_watch_state, dbg_regs);
->>>          user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf, 0,
->>> offset);
->>>   @@ -704,6 +705,10 @@ static int hw_break_set(struct task_struct
->>> *target,
->>>                  if (ret)
->>>                          return ret;
->>>                  offset += PTRACE_HBP_CTRL_SZ;
->>> +
->>> +               user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
->>> +                                         offset, offset +
->>> PTRACE_HBP_PAD_SZ);
->>> +               offset += PTRACE_HBP_PAD_SZ;
->>>                  idx++;
->>>          }
->>
->
--- 
-WANG "xen0n" Xuerui
+On Wed, Apr 19, 2023 at 12:17:34PM -0400, Mike Snitzer wrote:
+> On Wed, Apr 19 2023 at 11:36P -0400,
+> Darrick J. Wong <djwong@kernel.org> wrote:
+> 
+> > On Tue, Apr 18, 2023 at 03:12:04PM -0700, Sarthak Kukreti wrote:
+> > > Introduce block request REQ_OP_PROVISION. The intent of this request
+> > > is to request underlying storage to preallocate disk space for the given
+> > > block range. Block devices that support this capability will export
+> > > a provision limit within their request queues.
+> > > 
+> > > This patch also adds the capability to call fallocate() in mode 0
+> > > on block devices, which will send REQ_OP_PROVISION to the block
+> > > device for the specified range,
+> > > 
+> > > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> > > ---
+> > >  block/blk-core.c          |  5 ++++
+> > >  block/blk-lib.c           | 53 +++++++++++++++++++++++++++++++++++++++
+> > >  block/blk-merge.c         | 18 +++++++++++++
+> > >  block/blk-settings.c      | 19 ++++++++++++++
+> > >  block/blk-sysfs.c         |  8 ++++++
+> > >  block/bounce.c            |  1 +
+> > >  block/fops.c              | 25 +++++++++++++-----
+> > >  include/linux/bio.h       |  6 +++--
+> > >  include/linux/blk_types.h |  5 +++-
+> > >  include/linux/blkdev.h    | 16 ++++++++++++
+> > >  10 files changed, 147 insertions(+), 9 deletions(-)
+> > > 
+> > 
+> > <cut to the fallocate part; the block/ changes look fine to /me/ at
+> > first glance, but what do I know... ;)>
+> > 
+> > > diff --git a/block/fops.c b/block/fops.c
+> > > index d2e6be4e3d1c..e1775269654a 100644
+> > > --- a/block/fops.c
+> > > +++ b/block/fops.c
+> > > @@ -611,9 +611,13 @@ static ssize_t blkdev_read_iter(struct kiocb *iocb, struct iov_iter *to)
+> > >  	return ret;
+> > >  }
+> > >  
+> > > +#define	BLKDEV_FALLOC_FL_TRUNCATE				\
+> > 
+> > At first I thought from this name that you were defining a new truncate
+> > mode for fallocate, then I realized that this is mask for deciding if we
+> > /want/ to truncate the pagecache.
+> > 
+> > #define		BLKDEV_FALLOC_TRUNCATE_MASK ?
+> > 
+> > > +		(FALLOC_FL_PUNCH_HOLE |	FALLOC_FL_ZERO_RANGE |	\
+> > 
+> > Ok, so discarding and writing zeroes truncates the page cache, makes
+> > sense since we're "writing" directly to the block device.
+> > 
+> > > +		 FALLOC_FL_NO_HIDE_STALE)
+> > 
+> > Here things get tricky -- some of the FALLOC_FL mode bits are really an
+> > opcode and cannot be specified together, whereas others select optional
+> > behavior for certain opcodes.
+> > 
+> > IIRC, the mutually exclusive opcodes are:
+> > 
+> > 	PUNCH_HOLE
+> > 	ZERO_RANGE
+> > 	COLLAPSE_RANGE
+> > 	INSERT_RANGE
+> > 	(none of the above, for allocation)
+> > 
+> > and the "variants on a theme are":
+> > 
+> > 	KEEP_SIZE
+> > 	NO_HIDE_STALE
+> > 	UNSHARE_RANGE
+> > 
+> > not all of which are supported by all the opcodes.
+> > 
+> > Does it make sense to truncate the page cache if userspace passes in
+> > mode == NO_HIDE_STALE?  There's currently no defined meaning for this
+> > combination, but I think this means we'll truncate the pagecache before
+> > deciding if we're actually going to issue any commands.
+> > 
+> > I think that's just a bug in the existing code -- it should be
+> > validating that @mode is any of the supported combinations *before*
+> > truncating the pagecache.
+> > 
+> > Otherwise you could have a mkfs program that starts writing new fs
+> > metadata, decides to provision the storage (say for a logging region),
+> > doesn't realize it's running on an old kernel, and then oops the
+> > provision attempt fails but have we now shredded the pagecache and lost
+> > all the writes?
+> 
+> While that just caused me to have an "oh shit, that's crazy" (in a
+> scary way) belly laugh...
 
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+I just tried this and:
 
+# xfs_io -c 'pwrite -S 0x58 1m 1m' -c fsync -c 'pwrite -S 0x59 1m 4096' -c 'pread -v 1m 64' -c 'falloc 1m 4096' -c 'pread -v 1m 64' /dev/sda
+wrote 1048576/1048576 bytes at offset 1048576
+1 MiB, 256 ops; 0.0013 sec (723.589 MiB/sec and 185238.7844 ops/sec)
+wrote 4096/4096 bytes at offset 1048576
+4 KiB, 1 ops; 0.0000 sec (355.114 MiB/sec and 90909.0909 ops/sec)
+00100000:  59 59 59 59 59 59 59 59 59 59 59 59 59 59 59 59  YYYYYYYYYYYYYYYY
+00100010:  59 59 59 59 59 59 59 59 59 59 59 59 59 59 59 59  YYYYYYYYYYYYYYYY
+00100020:  59 59 59 59 59 59 59 59 59 59 59 59 59 59 59 59  YYYYYYYYYYYYYYYY
+00100030:  59 59 59 59 59 59 59 59 59 59 59 59 59 59 59 59  YYYYYYYYYYYYYYYY
+read 64/64 bytes at offset 1048576
+64.000000 bytes, 1 ops; 0.0000 sec (1.565 MiB/sec and 25641.0256 ops/sec)
+fallocate: Operation not supported
+00100000:  58 58 58 58 58 58 58 58 58 58 58 58 58 58 58 58  XXXXXXXXXXXXXXXX
+00100010:  58 58 58 58 58 58 58 58 58 58 58 58 58 58 58 58  XXXXXXXXXXXXXXXX
+00100020:  58 58 58 58 58 58 58 58 58 58 58 58 58 58 58 58  XXXXXXXXXXXXXXXX
+00100030:  58 58 58 58 58 58 58 58 58 58 58 58 58 58 58 58  XXXXXXXXXXXXXXXX
+read 64/64 bytes at offset 1048576
+64.000000 bytes, 1 ops; 0.0003 sec (176.554 KiB/sec and 2824.8588 ops/sec)
+
+(Write 1MB of Xs, flush it to disk, write 4k of Ys, confirm the Y's are
+in the page cache, fail to fallocate, reread and spot the Xs that we
+supposedly overwrote.)
+
+oops.
+
+> (And obviously needs fixing independent of this patchset)
+> 
+> Shouldn't mkfs first check that the underlying storage supports
+> REQ_OP_PROVISION by verifying
+> /sys/block/<dev>/queue/provision_max_bytes exists and is not 0?
+> (Just saying, we need to add new features more defensively.. you just
+> made the case based on this scenario's implications alone)
+
+Not for fallocate -- for regular files, there's no way to check if the
+filesystem actually supports the operation requested other than to try
+it and see if it succeeds.  We probably should've defined a DRY_RUN flag
+for that purpose back when it was introduced.
+
+For fallocate calls to block devices, yes, the program can check the
+queue limits in sysfs if fstat says the supplied path is a block device,
+but I don't know that most programs are that thorough.  The fallocate(1)
+CLI program does not check.
+
+Then I moved on to fs utilities:
+
+ext4: For discard, mke2fs calls BLKDISCARD if it detects a block device
+via fstat, and falloc(PUNCH|KEEP_SIZE) for anything else.  For zeroing,
+it only uses falloc(ZERO) or falloc(PUNCH|KEEP_SIZE) and does not try to
+use BLKZEROOUT.  It does not check sysfs queue limits at all.
+
+XFS: mkfs.xfs issues BLKDISCARD before writing anything to the device,
+so that's fine.  It uses falloc(ZERO) to erase the log, but since
+xfsprogs provides its own buffer cache and uses O_DIRECT, pagecache
+coherency problems aren't an issue.
+
+btrfs: mkfs.btrfs only issues BLKDISCARD, and only before it starts
+writing the new fs, so no problems there.
+
+--D
+
+> Sarthak, please note I said "provision_max_bytes": all other ops
+> (e.g. DISCARD, WRITE_ZEROES, etc) have <op>_max_bytes exported through
+> sysfs, not <op>_max_sectors.  Please export provision_max_bytes, e.g.:
+> 
+> diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+> index 202aa78f933e..2e5ac7b1ffbd 100644
+> --- a/block/blk-sysfs.c
+> +++ b/block/blk-sysfs.c
+> @@ -605,12 +605,12 @@ QUEUE_RO_ENTRY(queue_io_min, "minimum_io_size");
+>  QUEUE_RO_ENTRY(queue_io_opt, "optimal_io_size");
+>  
+>  QUEUE_RO_ENTRY(queue_max_discard_segments, "max_discard_segments");
+> -QUEUE_RO_ENTRY(queue_max_provision_sectors, "max_provision_sectors");
+>  QUEUE_RO_ENTRY(queue_discard_granularity, "discard_granularity");
+>  QUEUE_RO_ENTRY(queue_discard_max_hw, "discard_max_hw_bytes");
+>  QUEUE_RW_ENTRY(queue_discard_max, "discard_max_bytes");
+>  QUEUE_RO_ENTRY(queue_discard_zeroes_data, "discard_zeroes_data");
+>  
+> +QUEUE_RO_ENTRY(queue_provision_max, "provision_max_bytes");
+>  QUEUE_RO_ENTRY(queue_write_same_max, "write_same_max_bytes");
+>  QUEUE_RO_ENTRY(queue_write_zeroes_max, "write_zeroes_max_bytes");
+>  QUEUE_RO_ENTRY(queue_zone_append_max, "zone_append_max_bytes");
