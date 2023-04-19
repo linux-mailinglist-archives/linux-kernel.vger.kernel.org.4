@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269406E75ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9ADB6E75EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbjDSJCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 05:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
+        id S232829AbjDSJC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 05:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232804AbjDSJCJ (ORCPT
+        with ESMTP id S232815AbjDSJCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:02:09 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5587F268A;
-        Wed, 19 Apr 2023 02:02:00 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.120])
-        by gateway (Coremail) with SMTP id _____8BxttgHrj9kPt0eAA--.53054S3;
-        Wed, 19 Apr 2023 17:01:59 +0800 (CST)
-Received: from [10.20.42.120] (unknown [10.20.42.120])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxdbwDrj9k29YuAA--.54148S3;
-        Wed, 19 Apr 2023 17:01:55 +0800 (CST)
-Subject: Re: [PATCH v7 29/30] LoongArch: KVM: Enable kvm config and add the
- makefile
-To:     Huacai Chen <chenhuacai@kernel.org>
-References: <20230417095950.875228-1-zhaotianrui@loongson.cn>
- <20230417095950.875228-30-zhaotianrui@loongson.cn>
- <CAAhV-H5nxRLzLn65OEnPQJi6CQtFhQOYNZjEE9ZoouM8Ug5hOw@mail.gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>,
-        kernel test robot <lkp@intel.com>
-From:   Tianrui Zhao <zhaotianrui@loongson.cn>
-Message-ID: <d27a853f-5972-56c2-fdb7-aad7e6be9a8c@loongson.cn>
-Date:   Wed, 19 Apr 2023 17:01:55 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Wed, 19 Apr 2023 05:02:45 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2E530E0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:02:12 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-246f856d751so2105975a91.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1681894932; x=1684486932;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=79PwKIpTwwaVU82r+U4/sK48h5bR61sbuArdiDnpPEo=;
+        b=VqMdtfuj6C2mrAI6yBezO+vvPulybbVN53rDsaeUShooyCwrV3Iz0fFfj07Utjp0cY
+         mYqM4WGvsXfcjOFUlDUGwRwLZlh5xRogbtYBDh4E/TL2IDVIS8BKmwOiSIHdvXKIeXFK
+         niMvIVIXWrzMxiw3/LcIdW4lZn4NgUZIw0i/1225WGpyMnIBrkJceWOg2AmJFiV4vS38
+         W/b7q/KIVcvEsgGBkn4BChla5oOdA6TcS2a9WEH2+j6HLVg2qgVTU5O/1B0WjRcPeCK+
+         lzmmBh+gaTXkzrb48EVnC1+V/aznAVBNVBY8QVw/fUDIH3JiZ9k3TRmmvhi5cp3XgjI8
+         KMqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681894932; x=1684486932;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=79PwKIpTwwaVU82r+U4/sK48h5bR61sbuArdiDnpPEo=;
+        b=YY7TRfPwzDOcuJDfG3OiCf9aiqWm/g2wlxyM7Htp5BL6/KQC7T6mHlcpjJHHRzQa01
+         6GTt51PPjImE1u9OGV7/VlSJV9chxBjtRHLcsQTA1mB0up0ybSvOLDZj0oLFTS7EwT8j
+         B+FClrlNyYOMN+WJ643CzWhDX3xbUillk519gPJ2LXVk50GucSPOj8DOVD6vfUzfvrIw
+         5brW+q/rsVc2CZ7haf3LuM/2Pto7JDwAoXnuhbranLTvtnWxYZ+miR4BWZ2bZTbL3PRr
+         dB6KPQn8R6+S4K7okaF9h5nr78v+ltWUxCrzbjVS+wpoc941fRh5tS1jzIki/SWxwDAK
+         BJFg==
+X-Gm-Message-State: AAQBX9ev2CUHqVAEgGax2WiXr5s3InacFgRzQJcnrgBnDSDkBVVONSFh
+        rHQZ4/Q3huoZBKHQ5+lCq/iHdw==
+X-Google-Smtp-Source: AKy350Zyon11ZRmLF1eWKBAifnjG/I/XA1S6Cs0fCVKPdxotC+oeh4/lZy4dm+NPRfZHbcK23TeLMw==
+X-Received: by 2002:a17:90a:38a5:b0:246:818c:d8e4 with SMTP id x34-20020a17090a38a500b00246818cd8e4mr2493452pjb.11.1681894931889;
+        Wed, 19 Apr 2023 02:02:11 -0700 (PDT)
+Received: from [10.200.10.217] ([139.177.225.248])
+        by smtp.gmail.com with ESMTPSA id lx3-20020a17090b4b0300b00246cc751c6bsm929701pjb.46.2023.04.19.02.02.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 02:02:11 -0700 (PDT)
+Message-ID: <90fd5cfa-5ed9-495f-fdef-0130adaf591b@bytedance.com>
+Date:   Wed, 19 Apr 2023 17:02:06 +0800
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H5nxRLzLn65OEnPQJi6CQtFhQOYNZjEE9ZoouM8Ug5hOw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH 1/3] maple_tree: Make maple state reusable after
+ mas_empty_area_rev()
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230414145728.4067069-1-Liam.Howlett@oracle.com>
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+In-Reply-To: <20230414145728.4067069-1-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxdbwDrj9k29YuAA--.54148S3
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWFW7uFyrAr47uFWxXFyUGFg_yoWrCw4kpF
-        WxZr1kGr4xWFn3JrZ3t34kWrsIyrn7Kr17uF1aqa4UCF9rZrykur18tryDWFyDJws5JrW0
-        gF1rGF1aga15Ja7anT9S1TB71UUUUbUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCa
-        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8XTm3UUUUU==
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,148 +77,104 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-在 2023年04月19日 10:10, Huacai Chen 写道:
-> Hi, Tianrui,
+在 2023/4/14 22:57, Liam R. Howlett 写道:
+> Stop using maple state min/max for the range by passing through pointers
+> for those values.  This will allow the maple state to be reused without
+> resetting.
 >
-> On Mon, Apr 17, 2023 at 6:00 PM Tianrui Zhao <zhaotianrui@loongson.cn> wrote:
->> Enable loongarch kvm config and add the makefile to support build kvm
->> module.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Link: https://lore.kernel.org/oe-kbuild-all/202304131526.iXfLaVZc-lkp@intel.com/
->> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
->> ---
->>   arch/loongarch/Kbuild                      |  1 +
->>   arch/loongarch/Kconfig                     |  2 ++
->>   arch/loongarch/configs/loongson3_defconfig |  2 ++
->>   arch/loongarch/kvm/Kconfig                 | 38 ++++++++++++++++++++++
->>   arch/loongarch/kvm/Makefile                | 22 +++++++++++++
->>   5 files changed, 65 insertions(+)
->>   create mode 100644 arch/loongarch/kvm/Kconfig
->>   create mode 100644 arch/loongarch/kvm/Makefile
->>
->> diff --git a/arch/loongarch/Kbuild b/arch/loongarch/Kbuild
->> index b01f5cdb27e0..40be8a1696f9 100644
->> --- a/arch/loongarch/Kbuild
->> +++ b/arch/loongarch/Kbuild
->> @@ -2,6 +2,7 @@ obj-y += kernel/
->>   obj-y += mm/
->>   obj-y += net/
->>   obj-y += vdso/
->> +obj-y += kvm/
->>
->>   # for cleaning
->>   subdir- += boot
->> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
->> index 7fd51257e0ed..f9beeb2e0cc9 100644
->> --- a/arch/loongarch/Kconfig
->> +++ b/arch/loongarch/Kconfig
->> @@ -148,6 +148,7 @@ config LOONGARCH
->>          select USE_PERCPU_NUMA_NODE_ID
->>          select USER_STACKTRACE_SUPPORT
->>          select ZONE_DMA32
->> +       select HAVE_KVM
-> Use alpha-betical order, please.
+> Also add some logic to fail out early on searching with invalid
+> arguments.
 >
-> Huacai
-Thanks, I will move it to the suitable place.
+> Fixes: 54a611b60590 ("Maple Tree: add new data structure")
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> ---
+>   lib/maple_tree.c | 27 +++++++++++++--------------
+>   1 file changed, 13 insertions(+), 14 deletions(-)
+>
+> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+> index 4df6a0ce1c1b..ed350aa293b2 100644
+> --- a/lib/maple_tree.c
+> +++ b/lib/maple_tree.c
+> @@ -4938,7 +4938,8 @@ static inline void *mas_prev_entry(struct ma_state *mas, unsigned long min)
+>    * Return: True if found in a leaf, false otherwise.
+>    *
+>    */
+> -static bool mas_rev_awalk(struct ma_state *mas, unsigned long size)
+> +static bool mas_rev_awalk(struct ma_state *mas, unsigned long size,
+> +		unsigned long *gap_min, unsigned long *gap_max)
+>   {
+>   	enum maple_type type = mte_node_type(mas->node);
+>   	struct maple_node *node = mas_mn(mas);
+> @@ -5003,8 +5004,8 @@ static bool mas_rev_awalk(struct ma_state *mas, unsigned long size)
+>   
+>   	if (unlikely(ma_is_leaf(type))) {
+>   		mas->offset = offset;
+> -		mas->min = min;
+> -		mas->max = min + gap - 1;
+> +		*gap_min = min;
+> +		*gap_max = min + gap - 1;
+>   		return true;
+>   	}
+>   
+> @@ -5280,6 +5281,9 @@ int mas_empty_area(struct ma_state *mas, unsigned long min,
+>   	unsigned long *pivots;
+>   	enum maple_type mt;
+>   
+> +	if (min >= max)
+This can lead to errors, min == max is valid.
+I think it's better to change it to this:
+if (min > max || size == 0 || max - min < size - 1)
+> +		return -EINVAL;
+> +
+>   	if (mas_is_start(mas))
+>   		mas_start(mas);
+>   	else if (mas->offset >= 2)
+> @@ -5334,6 +5338,9 @@ int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
+>   {
+>   	struct maple_enode *last = mas->node;
+>   
+> +	if (min >= max)
+ditto.
+> +		return -EINVAL;
+> +
+>   	if (mas_is_start(mas)) {
+>   		mas_start(mas);
+>   		mas->offset = mas_data_end(mas);
+> @@ -5353,7 +5360,7 @@ int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
+>   	mas->index = min;
+>   	mas->last = max;
+>   
+> -	while (!mas_rev_awalk(mas, size)) {
+> +	while (!mas_rev_awalk(mas, size, &min, &max)) {
+>   		if (last == mas->node) {
+>   			if (!mas_rewind_node(mas))
+>   				return -EBUSY;
+> @@ -5368,17 +5375,9 @@ int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
+>   	if (unlikely(mas->offset == MAPLE_NODE_SLOTS))
+>   		return -EBUSY;
+>   
+> -	/*
+> -	 * mas_rev_awalk() has set mas->min and mas->max to the gap values.  If
+> -	 * the maximum is outside the window we are searching, then use the last
+> -	 * location in the search.
+> -	 * mas->max and mas->min is the range of the gap.
+> -	 * mas->index and mas->last are currently set to the search range.
+> -	 */
+> -
+>   	/* Trim the upper limit to the max. */
+> -	if (mas->max <= mas->last)
+> -		mas->last = mas->max;
+> +	if (max <= mas->last)
+> +		mas->last = max;
 
-Thanks
-Tianrui Zhao
->>   config 32BIT
->>          bool
->> @@ -588,3 +589,4 @@ source "drivers/acpi/Kconfig"
->>   endmenu
->>
->>   source "drivers/firmware/Kconfig"
->> +source "arch/loongarch/kvm/Kconfig"
->> diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
->> index e18213f01cc4..c99520374aef 100644
->> --- a/arch/loongarch/configs/loongson3_defconfig
->> +++ b/arch/loongarch/configs/loongson3_defconfig
->> @@ -63,6 +63,8 @@ CONFIG_EFI_ZBOOT=y
->>   CONFIG_EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER=y
->>   CONFIG_EFI_CAPSULE_LOADER=m
->>   CONFIG_EFI_TEST=m
->> +CONFIG_VIRTUALIZATION=y
->> +CONFIG_KVM=m
->>   CONFIG_MODULES=y
->>   CONFIG_MODULE_FORCE_LOAD=y
->>   CONFIG_MODULE_UNLOAD=y
->> diff --git a/arch/loongarch/kvm/Kconfig b/arch/loongarch/kvm/Kconfig
->> new file mode 100644
->> index 000000000000..8a999b4c0232
->> --- /dev/null
->> +++ b/arch/loongarch/kvm/Kconfig
->> @@ -0,0 +1,38 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +#
->> +# KVM configuration
->> +#
->> +
->> +source "virt/kvm/Kconfig"
->> +
->> +menuconfig VIRTUALIZATION
->> +       bool "Virtualization"
->> +       help
->> +         Say Y here to get to see options for using your Linux host to run
->> +         other operating systems inside virtual machines (guests).
->> +         This option alone does not add any kernel code.
->> +
->> +         If you say N, all options in this submenu will be skipped and
->> +         disabled.
->> +
->> +if VIRTUALIZATION
->> +
->> +config KVM
->> +       tristate "Kernel-based Virtual Machine (KVM) support"
->> +       depends on HAVE_KVM
->> +       select MMU_NOTIFIER
->> +       select ANON_INODES
->> +       select PREEMPT_NOTIFIERS
->> +       select KVM_MMIO
->> +       select KVM_GENERIC_DIRTYLOG_READ_PROTECT
->> +       select HAVE_KVM_VCPU_ASYNC_IOCTL
->> +       select HAVE_KVM_EVENTFD
->> +       select SRCU
->> +       help
->> +         Support hosting virtualized guest machines using hardware
->> +         virtualization extensions. You will need a fairly processor
->> +         equipped with virtualization extensions.
->> +
->> +         If unsure, say N.
->> +
->> +endif # VIRTUALIZATION
->> diff --git a/arch/loongarch/kvm/Makefile b/arch/loongarch/kvm/Makefile
->> new file mode 100644
->> index 000000000000..2335e873a6ef
->> --- /dev/null
->> +++ b/arch/loongarch/kvm/Makefile
->> @@ -0,0 +1,22 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +#
->> +# Makefile for LOONGARCH KVM support
->> +#
->> +
->> +ccflags-y += -I $(srctree)/$(src)
->> +
->> +include $(srctree)/virt/kvm/Makefile.kvm
->> +
->> +obj-$(CONFIG_KVM) += kvm.o
->> +
->> +kvm-y += main.o
->> +kvm-y += vm.o
->> +kvm-y += vmid.o
->> +kvm-y += tlb.o
->> +kvm-y += mmu.o
->> +kvm-y += vcpu.o
->> +kvm-y += exit.o
->> +kvm-y += interrupt.o
->> +kvm-y += timer.o
->> +kvm-y += switch.o
->> +kvm-y += csr_ops.o
->> --
->> 2.31.1
->>
+We can get max as follows, without using pointers to track min, max in 
+mas_rev_awalk().
 
+mt = mte_node_type(mas->node); pivots = ma_pivots(mas_mn(mas), mt); max 
+= mas_logical_pivot(mas, pivots, mas->offset, mt);
+	if (max < mas->last) /* The equal sign here can be removed */
+		mas->last = max;
+
+>   
+>   	mas->index = mas->last - size + 1;
+>   	return 0;
