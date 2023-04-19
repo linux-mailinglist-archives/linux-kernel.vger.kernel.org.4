@@ -2,74 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B646E7111
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9619D6E710C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbjDSCQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 22:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbjDSCQ5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231262AbjDSCQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 18 Apr 2023 22:16:57 -0400
-Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3609D2681;
-        Tue, 18 Apr 2023 19:16:53 -0700 (PDT)
-Message-ID: <03d46708ca8adaf2fe98689e04c98541.pc@manguebit.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1681870610;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xwuO365E3uWJjHSCA6WvcUrrebXU0puVdAVof+NAIBk=;
-        b=prf48IjvaTQG15ExjQ/iMTOUBexRi1XKhmRMZWqjIfwDnPeBw5B81xfseexaew9Q1TfKtv
-        eZ7CljqWYTnugydnfn9aUtYvvl4dW7wIIMUqgg8FUbfW/POzf1ryjQVdJv/hyQTNM63Ag6
-        ygygP9aIImvP6OGEv2/oykEvw1zfpSozjFkrMzbjkPxkqkLXg8N6E6P2Kr3QvwyiksAk04
-        UBDW0NpTKc2dSAk8v6Tb1Gy5gadJbU92BgsZB35Ha+IiknBdwXWO4hq6aclO4eMZP97hvS
-        IYmnhZvSmxbclMK9UxJDPCsoS0j2j/1iVwaby70TV941cWK4HmWrs68ouhQuUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1681870610;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xwuO365E3uWJjHSCA6WvcUrrebXU0puVdAVof+NAIBk=;
-        b=CuhbOYftU+3lzams5OIgKou8sm6usykvy8iEAiiO0vhMDTt40Tb+feXmEV3jyMFTNwm2Zi
-        rN0tcEhXYzdcBGbXc8P8Ug+KR2iqjVIY+noKPYBvEO2A+71B/uowYCBCfTBTsVpKuM5a9D
-        cCCpF1OwGULVDgT3Y3ti78l9gFJ3643mL27/8Ym/sAMeEBFuUaOJ/bylZKD/j5Vb16rz7U
-        zWp2BefO4C/kFClXizk/HLhmTPPIPjQ6xubcRRhjMOD/fzCyq8nKeyDnKx8FZlYvw1T41e
-        eb4RAQXYRqtsI3Zv7zvSpnKWQAjtnPpSoyTpcZAqVcPJKEmcphOR0ThdaHYHww==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=pc@manguebit.com smtp.mailfrom=pc@manguebit.com
-ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1681870610; a=rsa-sha256;
-        cv=none;
-        b=izNevIs0sGaspWAvKtlZKGm8XHoRXRhjpwxfC36SVd//nNpIKJlJoUrHAeapwgyQRFjwe0
-        Itnk5ePF+56GcN6KX9YTvzM93EDVCnIzUiKlvn5QZTSO25tcr3XTNvOiA6CLRMdeayYoDJ
-        3JYPFWXWqhjYAuQtRMSEizFY/t+CY0MAvLmevReQvXBIDUUMPY7jz7f92FSu+4FhYMWwbs
-        8RYspDbxN5vmhXiAJ/yxQwD3hafu49ledalfHUg+4EiK+sOVVzKC3OVZyU2fKUpQVLHiwj
-        UXiwn7LTGgNwMMrLRngmF26yVWrATDyzKu6NoHGEILMYssC5yzG51ArwZ7PH3A==
-From:   Paulo Alcantara <pc@manguebit.com>
-To:     David Howells <dhowells@redhat.com>,
-        Steve French <smfrench@gmail.com>
-Cc:     dhowells@redhat.com,
-        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
-        Long Li <longli@microsoft.com>,
-        Enzo Matsumiya <ematsumiya@suse.de>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cifs: Fix unbuffered read
-In-Reply-To: <1692048.1681857607@warthog.procyon.org.uk>
-References: <1692048.1681857607@warthog.procyon.org.uk>
-Date:   Tue, 18 Apr 2023 23:16:45 -0300
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229598AbjDSCQz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 18 Apr 2023 22:16:55 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2086.outbound.protection.outlook.com [40.107.223.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2059124
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 19:16:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OWHOvrHiGGYI8BEdkWv2XrmplfDYkekAeeG4dsB7oiKswFAccEZ7VinNYc6HwPK0TVQJ5aVsFcfS+QJe5cSGAqSzLh+iaoaJuS1rKx0v3jYGeI5NSNsco+lt23qbu5IQTVzMUMFUprg3bicwVfPo4eyOnUdEaHRFnDXeJcPs11QiRkSo9Sd28dmIi7foqiCnfQeKu+7JwfYOsiYuHxteJ1wcsFVoED8wBgUchoCCTXPOdqhZRHq3dag2DFsvnp6ocP7qm/NQYWi2b9/VUamcxNKicbxAlcqwzJSBRG8E8PybEeSPBgzlkDTeItIPvV/EtNB78ALlTTkJEDOHSJPplQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qoVCC4favVBl4QAdc0nKl5ElABctBuUm777GvBvDrPI=;
+ b=k3odseICZIwa7mp8fXvxcT1jSxdKn5lB6sPBtGrpm826QUQIrsjfUir/vX4mBgXfbopTMxmp0PWkBvRxe4NKLHhUAlgyyXxm9NDjE24OkPXI0CkCmqzGwLj57Abuya6WZP76UXg2vFbtohab0AKVAmBGw7KPRyrY9hYiFELnlgoqmdUeBxitGgH3F9U3gncD1GyHk12KxciZsYnOID3AcBzYtsHw4JMAFeDZ653IvOkmYtMLgmT214Qoy55dHg4rbQNeieMvG4z7GVJj4MpUbjERgYrxKGQs1u0lTUMlmxL1qaTANJkMwFzZrGSCLTYHmY1ffg8w7/iSqeVr0G1nKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qoVCC4favVBl4QAdc0nKl5ElABctBuUm777GvBvDrPI=;
+ b=vANHcpHKO68ekqR3XyoX/Lvqeo0r+PRfcjQ6m+OgV25oLQnZGR8RqDW1ccLh8/oh+4OEzkCNiqrhxvTcOSQs0R4sGGQswzGqTNnLv5aVRAeEtL3SWTfaH44NcuhPV5ZoCHi+0juIMqqqkaFI6rtNky4UK10H8Ftv+wUogHhhcYw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
+ SA3PR12MB8023.namprd12.prod.outlook.com (2603:10b6:806:320::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.20; Wed, 19 Apr 2023 02:16:48 +0000
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::8299:158a:c296:de80]) by DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::8299:158a:c296:de80%6]) with mapi id 15.20.6298.045; Wed, 19 Apr 2023
+ 02:16:47 +0000
+Message-ID: <475a9394-c9ca-b549-1d2d-d6d49b08082d@amd.com>
+Date:   Tue, 18 Apr 2023 22:16:45 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-CA
+To:     Danilo Krummrich <dakr@redhat.com>, airlied@gmail.com,
+        daniel@ffwll.ch, l.stach@pengutronix.de, christian.koenig@amd.com
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230418100453.4433-1-dakr@redhat.com>
+From:   Luben Tuikov <luben.tuikov@amd.com>
+Subject: Re: [PATCH v2] drm/scheduler: set entity to NULL in
+ drm_sched_entity_pop_job()
+In-Reply-To: <20230418100453.4433-1-dakr@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT1PR01CA0058.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2e::27) To DM6PR12MB3370.namprd12.prod.outlook.com
+ (2603:10b6:5:38::25)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|SA3PR12MB8023:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1b591410-8819-47cb-15ec-08db407c20a2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XYs2/OUFUq8/oZp1kVe81Y6efFwuZC1nNVvgAIAq0b1tcJYpLWghbvnfzrdc2KWiKm7Nqhzsb6a6fsqem3eyJit+cvFa+G6cAD/NyO0la5aOfBi6c9zyJltKfD67wCIZEWhAOLwXUxIbRog87To1JqO5HhJ3DHQcDAqITX9D2ffOu0Z0UvQ+HwzNFvbbtpHHnCg5YuX6TIOOsQis3c6BnbJsJ6P7Ai+aGKEsAWLDRT71ksArtp7cWV5ZMnLAyF1dH6IVtEQ7n4MgllhhgiPIS3pItLtyhV6oGZEBV1DeV07FW+V45dMa+Znqy4vOFCd0qZzxpukY4lkEFa2TeGxhsx4aPUjTGKQ04Z06WtAqFYC70ndLQhQiOIrupjeN4U7dTgLfFxzZ+e3NtVzgDGbPnEwZLz+etbLJO8m4OEQyb9uInUdcZua8A4pggLVytrwZd0pE/MKOWloPEmnjx2x3LDWyEpB8VoL11lvjGvHANmtSOtyq1Bl5Mk9aH2N8e+JZnG02Sd32K5RLuhrHTTy5FmKy/0BHWGfeyO/9hlMWkNAgknqE8tzb0PtuECTjnEuLM22xPMS9cnqUcFcthXjXn6G3sNM3WvnNE/tI3ThpbHnqcXD/cBXxi7b9hJmJFdQ2/lxlPb0teJn5rjD2j9aONA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(376002)(396003)(346002)(136003)(451199021)(31686004)(316002)(6636002)(66556008)(66476007)(66946007)(4326008)(186003)(53546011)(6506007)(6512007)(26005)(38100700002)(2616005)(83380400001)(8676002)(5660300002)(41300700001)(8936002)(6486002)(478600001)(86362001)(36756003)(31696002)(2906002)(44832011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZmlqQkh3cG5Md3RyVHhKbjFMaXIwWXJGM0dGRVlBQ0lTd2RBWFo1aHhtd2h2?=
+ =?utf-8?B?MmZiUUFTVXBRTlY2NUVYelFkUnQwcDlQZ2Qxei9HaU5TRmJhLy95ZkR3ZmRQ?=
+ =?utf-8?B?NUJhWWNiN1hKK0d4Rzc5ZU1Eb2VTbTJkN2xudGdsTUVSSWhXb1BzcHRMNDU1?=
+ =?utf-8?B?UDZ1azN3d3JQRmpPTzBGbmdTYmpCWi9pajJaOTlGd3czaUZjWFl4UCs4U1Jk?=
+ =?utf-8?B?NC9rS01PSDNiZ2MzTUkxVHVlMWhUdVV5Z1hUWFRVTjBwalZUb1Yvd28zQ2pm?=
+ =?utf-8?B?NHZSeEtwejN2SnFqb3FIaGllRWhtU0htVC9NbDYwK0FFVWZmZEpjTURlV1lj?=
+ =?utf-8?B?cTBneWVVemZRV21UdHVOL2dwSXVpb0RUcExEV3FxQy9QdlNpUFA1NkJtbCtv?=
+ =?utf-8?B?dkc0bktCUStwdE1Ndmp4amVnMVBLcWpZS3hVcDJkUnp2Q3JOdHhoa253T1Fv?=
+ =?utf-8?B?M3pkMWJHRWE3SEtKRmZpU3NTZEJQNGYxczUwY255ck5nMTNHaXVUc0FINUpJ?=
+ =?utf-8?B?RFRORUdRbWt6WmpVRXdBYzRMY2xoQlhjQmVMNEhMa2J0WUgzNkJuTUhoRktE?=
+ =?utf-8?B?V0FVSlBldGI4Q2F6bmVPV2U5MUI5cXNSd2llZmROWjV4aHVHcno5OG9rZGRk?=
+ =?utf-8?B?RlBHMGVIb3E4ZTI0TFRzL3AwRE81RGVndGY3Mzl6VVVlSll4Mm5PcmNoQ3F2?=
+ =?utf-8?B?eEVJK282TFY2WW5XYmYyZ05jT25FQmVGK0hQWXFHbjZTMmJ2N2x2aERDL2R0?=
+ =?utf-8?B?VitIKzk4dE54aVh3eDFhazNtUDZQZWdGK1creHRsbCt0N1Jva2FtYVdYVVVv?=
+ =?utf-8?B?OC9MUjI4N0ZNOEZpWXlNdXZsTDdhakFhZU55UWFSMFZVV0djSEJLMjNRaWdz?=
+ =?utf-8?B?YXp3TnVLcEU2UzhpRTlaOFNFU01JamFnUUlaRlNFZE1yYmU3VnIxNmg4RWND?=
+ =?utf-8?B?cVdhTnBHSndFUU1zYkY2UHBRbEtwaHV5TjcvcVpDZlVtbUtTOHJSZ0xna2VV?=
+ =?utf-8?B?aDMyOFZvQzlYOTAweE96bEtrRHJPQTZoOUh2UEdBMEFwNFpCVmRQREFhK0du?=
+ =?utf-8?B?UjVzSEZHQVZTUnJ6a0p3ZkZkTkpWc0FNMkViM1ZiWGRVaWNObGpZdmQ5Z2dn?=
+ =?utf-8?B?UWVxU2VvSFVSWExCSHVMM1NmUHpLZmU4L2pudU10NU9hNDMydkMwcHFnZXh1?=
+ =?utf-8?B?RE9pUC9za0RoU25Pd1I5TDV3aXdibjVPR0Z4RmFCUFhwK1NSa0VmRmpSMG0z?=
+ =?utf-8?B?Rm1Pb1VmZmtBaXl3dG44R1lpbGZNZW9QMlF5OVZicngvWGx4cGZTWGhGYTFH?=
+ =?utf-8?B?V2lydzgxNFFPWFFONVZsQjVDU05kY1VHL3F5VE9NeHoySEtkcWZtQlBuVURF?=
+ =?utf-8?B?YzE5R2RsUGtWQk5taG56a2Q4OC9OMGVKU3YvTGlmUGZHZnNtQis5K2phOHQ4?=
+ =?utf-8?B?ZDBKSVpYYjdtOTVkTEg0UG1DQzhQUEdZTXptY3FaN0orZTBSWVJyTUZRMjll?=
+ =?utf-8?B?Ujk0cEdCUGdmdzdjeTB1Ky9NSVM3Ni9VaGJYb2R6WW9Nem14MTJnNXlqcmxq?=
+ =?utf-8?B?TWE5Zzd1b2c2UUlER0ptVmpBSlBlM1YwakhzWFlSbkFsZm45R1NrWERmWkZh?=
+ =?utf-8?B?VzduTjlhS2YrMlMvNW1HZFpoWVFLT3RtOE10RkovWTlPU2thUXdtdXBZMENU?=
+ =?utf-8?B?MVNlNzVOdG1sQTJhMUZvSXY3ekU1eSs3OXdOUnBhaWpHR3FqN21SNzZmZGti?=
+ =?utf-8?B?WlhxN2RyZkpYd08yaitqM0pnRnA1dVRjODFyUkdUQ0MrUDYyVTFOUmZ6M1NX?=
+ =?utf-8?B?Wk9ockNIRXpIQTVzL01KMy8vUGNmT0hXSmpkNFZZRC9tNXlKaDh6d0U3dFB3?=
+ =?utf-8?B?dGpqNjZjQjhOMHlKYlR3aENWdTFtNjNEbGxhQVJnbklZdWtjOXFvSnhkaThN?=
+ =?utf-8?B?ZzFIeC9EMDd6Z1JvU3J6MHBTcHFLYVNPZ0s0QTFjQmhnUkljQlBTZ2F5dzdY?=
+ =?utf-8?B?RWVFWGJyQVQzL0V4M2hCdURqU1lxcVFkMGg2Tk9HbWFRUkNGTGtvdjBCNGFM?=
+ =?utf-8?B?ekk0dWNFeHZFS2hWa2d5bEl5dVdDbDNmcWs4dTcwcEJ1eVhmQW5CQlpPOVpE?=
+ =?utf-8?Q?xtIJcvVsoWiLHGIVVCWQp2XmG?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b591410-8819-47cb-15ec-08db407c20a2
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 02:16:47.7092
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mvuYZOfhB8wf2goxjpShzuvmaMmKhbdennOLdaaww/QXkZ7C12CEPubSS/DJdDc2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8023
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,54 +125,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Howells <dhowells@redhat.com> writes:
+Reviewed-by: Luben Tuikov <luben.tuikov@amd.com>
 
-> If read() is done in an unbuffered manner, such that, say,
-> cifs_strict_readv() goes through cifs_user_readv() and thence
-> __cifs_readv(), it doesn't recognise the EOF and keeps indicating to
-> userspace that it returning full buffers of data.
->
-> This is due to ctx->iter being advanced in cifs_send_async_read() as the
-> buffer is split up amongst a number of rdata objects.  The iterator count
-> is then used in collect_uncached_read_data() in the non-DIO case to set t=
-he
-> total length read - and thus the return value of sys_read().  But since t=
-he
-> iterator normally gets used up completely during splitting, ctx->total_len
-> gets overridden to the full amount.
->
-> However, prior to that in collect_uncached_read_data(), we've gone through
-> the list of rdatas and added up the amount of data we actually received
-> (which we then throw away).
->
-> Fix this by removing the bit that overrides the amount read in the non-DIO
-> case and just going with the total added up in the aforementioned loop.
->
-> This was observed by mounting a cifs share with multiple channels, e.g.:
->
-> 	mount //192.168.6.1/test /test/ -o user=3Dshares,pass=3D...,max_channels=
-=3D6
->
-> and then reading a 1MiB file on the share:
->
-> 	strace cat /xfstest.test/1M  >/dev/null
->
-> Through strace, the same data can be seen being read again and again.
->=20=20=20=20=20
-> Fixes: d08089f649a0 ("cifs: Change the I/O paths to use an iterator rathe=
-r than a page list")
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Steve French <smfrench@gmail.com>
-> cc: Paulo Alcantara <pc@manguebit.com>
-> cc: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
-> cc: Long Li <longli@microsoft.com>
-> cc: Enzo Matsumiya <ematsumiya@suse.de>
-> cc: Shyam Prasad N <nspmangalore@gmail.com>
-> cc: Rohith Surabattula <rohiths.msft@gmail.com>
-> cc: Jeff Layton <jlayton@kernel.org>
-> cc: linux-cifs@vger.kernel.org
+and applied to drm-misc-next.
+
+Thanks!
+
+Regards,
+Luben
+
+On 2023-04-18 06:04, Danilo Krummrich wrote:
+> It already happend a few times that patches slipped through which
+> implemented access to an entity through a job that was already removed
+> from the entities queue. Since jobs and entities might have different
+> lifecycles, this can potentially cause UAF bugs.
+> 
+> In order to make it obvious that a jobs entity pointer shouldn't be
+> accessed after drm_sched_entity_pop_job() was called successfully, set
+> the jobs entity pointer to NULL once the job is removed from the entity
+> queue.
+> 
+> Moreover, debugging a potential NULL pointer dereference is way easier
+> than potentially corrupted memory through a UAF.
+> 
+> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
 > ---
->  fs/cifs/file.c |    4 ----
->  1 file changed, 4 deletions(-)
+>  drivers/gpu/drm/scheduler/sched_entity.c | 6 ++++++
+>  drivers/gpu/drm/scheduler/sched_main.c   | 4 ++++
+>  2 files changed, 10 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
+> index 15d04a0ec623..a9c6118e534b 100644
+> --- a/drivers/gpu/drm/scheduler/sched_entity.c
+> +++ b/drivers/gpu/drm/scheduler/sched_entity.c
+> @@ -448,6 +448,12 @@ struct drm_sched_job *drm_sched_entity_pop_job(struct drm_sched_entity *entity)
+>  			drm_sched_rq_update_fifo(entity, next->submit_ts);
+>  	}
+>  
+> +	/* Jobs and entities might have different lifecycles. Since we're
+> +	 * removing the job from the entities queue, set the jobs entity pointer
+> +	 * to NULL to prevent any future access of the entity through this job.
+> +	 */
+> +	sched_job->entity = NULL;
+> +
+>  	return sched_job;
+>  }
+>  
+> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+> index 9b16480686f6..e89a3e469cd5 100644
+> --- a/drivers/gpu/drm/scheduler/sched_main.c
+> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+> @@ -42,6 +42,10 @@
+>   *    the hardware.
+>   *
+>   * The jobs in a entity are always scheduled in the order that they were pushed.
+> + *
+> + * Note that once a job was taken from the entities queue and pushed to the
+> + * hardware, i.e. the pending queue, the entity must not be referenced anymore
+> + * through the jobs entity pointer.
+>   */
+>  
+>  #include <linux/kthread.h>
 
-Acked-by: Paulo Alcantara (SUSE) <pc@manguebit.com>
