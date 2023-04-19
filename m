@@ -2,105 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 885D36E70EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4B06E70F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjDSCBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 22:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
+        id S230390AbjDSCBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 22:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjDSCBA (ORCPT
+        with ESMTP id S230514AbjDSCBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 22:01:00 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6E16EAB;
-        Tue, 18 Apr 2023 19:00:58 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33J20jaP6021960, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33J20jaP6021960
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Wed, 19 Apr 2023 10:00:45 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Wed, 19 Apr 2023 10:00:45 +0800
-Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Wed, 19 Apr 2023 10:00:44 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
- 15.1.2375.32 via Frontend Transport; Wed, 19 Apr 2023 10:00:44 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 2/2] dt-bindings: usb: snps,dwc3: Add 'snps,parkmode-disable-hs-quirk' quirk
-Date:   Wed, 19 Apr 2023 10:00:43 +0800
-Message-ID: <20230419020044.15475-2-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230419020044.15475-1-stanley_chang@realtek.com>
-References: <20230419020044.15475-1-stanley_chang@realtek.com>
+        Tue, 18 Apr 2023 22:01:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882A0AF2D;
+        Tue, 18 Apr 2023 19:01:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8028B637E9;
+        Wed, 19 Apr 2023 02:01:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E115EC433AA;
+        Wed, 19 Apr 2023 02:01:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681869679;
+        bh=iBlh28TwhAfAOpQn0iW0qTVueiUBFG1Clgv9DyctZHo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nBLK5fqU1LDEehg+DUn+8wqvQeFgzRhdmsKIebUyJNu2Sm2FMG9N+etejYXsbDcS2
+         riyZzENUZWM1kT682uapI0Oo8u9oAPCb/YUhfzb71BBg9pBzHvcQ+ndxjgPdRsExaq
+         4z604ACa5OQbe8pDpo7QSEqOPm8hWEgMKRWSi2u4AsvHSGyOd3oDmF6bdHQJNhsn4B
+         qxfv5gcREwaJusAy4B/V4qsXAx1Lpw0bLnJXILBvHpMSHqazkYUCKfVJjjDaSQHdz4
+         uV9dmdRuzSUPzOouiBp1/Jh7+AfD0LIyK0/lEoA7go+QRdZWcKZDdieBaRgpuV1axK
+         A1z3+nKPY560g==
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-953343581a4so53314166b.3;
+        Tue, 18 Apr 2023 19:01:19 -0700 (PDT)
+X-Gm-Message-State: AAQBX9eXOPBhegkwt5JnobQVmGRf7oViypyqi2xZ+WIr+LRe83ZFxIsy
+        hQpBQLyI5zF0iZKtWe9X0xG9aRNfKmwOOHkfEeE=
+X-Google-Smtp-Source: AKy350YzCPsEuU/QgPldRByN8AxiTqkiTIMjJ1d08L4FjwW/8MzcbGwJ+sIMbOKRGKHaryaFuxSIJF5py0mx76OJbmA=
+X-Received: by 2002:a50:d482:0:b0:505:47d:29b5 with SMTP id
+ s2-20020a50d482000000b00505047d29b5mr2088158edi.1.1681869678082; Tue, 18 Apr
+ 2023 19:01:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS03.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230417094649.874671-1-zhaotianrui@loongson.cn> <20230417094649.874671-17-zhaotianrui@loongson.cn>
+In-Reply-To: <20230417094649.874671-17-zhaotianrui@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 19 Apr 2023 10:01:05 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4pyBi=0ckNDLErz6G_b5G7ti2wVDXF3a7xv-MiJtF_tA@mail.gmail.com>
+Message-ID: <CAAhV-H4pyBi=0ckNDLErz6G_b5G7ti2wVDXF3a7xv-MiJtF_tA@mail.gmail.com>
+Subject: Re: [PATCH v7 16/30] LoongArch: KVM: Implement update VM id function
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
+        Xi Ruoyao <xry111@xry111.site>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new 'snps,parkmode-disable-hs-quirk' DT quirk to dwc3 core for
-disable the high-speed parkmode.
+Hi, Tianrui,
 
-For some USB wifi devices, if enable this feature it will reduce the
-performance. Therefore, add an option for disabling HS park mode by
-device-tree.
+On Mon, Apr 17, 2023 at 5:47=E2=80=AFPM Tianrui Zhao <zhaotianrui@loongson.=
+cn> wrote:
+>
+> Implement kvm check vmid and update vmid, the vmid should be checked befo=
+re
+> vcpu enter guest.
+>
+> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+> ---
+>  arch/loongarch/kvm/vmid.c | 65 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>  create mode 100644 arch/loongarch/kvm/vmid.c
+>
+> diff --git a/arch/loongarch/kvm/vmid.c b/arch/loongarch/kvm/vmid.c
+> new file mode 100644
+> index 000000000000..7d9688c24184
+> --- /dev/null
+> +++ b/arch/loongarch/kvm/vmid.c
+> @@ -0,0 +1,65 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/kvm_host.h>
+> +#include <asm/kvm_host.h>
+linux/kvm_host.h already include asm/kvm_host.h
 
-In Synopsys's dwc3 data book:
-In a few high speed devices when an IN request is sent within 900ns of the
-ACK of the previous packet, these devices send a NAK. When connected to
-these devices, if required, the software can disable the park mode if you
-see performance drop in your system. When park mode is disabled,
-pipelining of multiple packet is disabled and instead one packet at a time
-is requested by the scheduler. This allows up to 12 NAKs in a micro-frame
-and improves performance of these slow devices.
-
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-Acked-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index be36956af53b..45ca967b8d14 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -232,6 +232,11 @@ properties:
-       When set, all SuperSpeed bus instances in park mode are disabled.
-     type: boolean
- 
-+  snps,parkmode-disable-hs-quirk:
-+    description:
-+      When set, all HighSpeed bus instances in park mode are disabled.
-+    type: boolean
-+
-   snps,dis_metastability_quirk:
-     description:
-       When set, disable metastability workaround. CAUTION! Use only if you are
--- 
-2.34.1
-
+Huacai
+> +#include "trace.h"
+> +
+> +static void _kvm_update_vpid(struct kvm_vcpu *vcpu, int cpu)
+> +{
+> +       struct kvm_context *context;
+> +       unsigned long vpid;
+> +
+> +       context =3D per_cpu_ptr(vcpu->kvm->arch.vmcs, cpu);
+> +       vpid =3D context->vpid_cache + 1;
+> +       if (!(vpid & vpid_mask)) {
+> +               /* finish round of 64 bit loop */
+> +               if (unlikely(!vpid))
+> +                       vpid =3D vpid_mask + 1;
+> +
+> +               /* vpid 0 reserved for root */
+> +               ++vpid;
+> +
+> +               /* start new vpid cycle */
+> +               kvm_flush_tlb_all();
+> +       }
+> +
+> +       context->vpid_cache =3D vpid;
+> +       vcpu->arch.vpid =3D vpid;
+> +}
+> +
+> +void _kvm_check_vmid(struct kvm_vcpu *vcpu, int cpu)
+> +{
+> +       struct kvm_context *context;
+> +       bool migrated;
+> +       unsigned long ver, old, vpid;
+> +
+> +       /*
+> +        * Are we entering guest context on a different CPU to last time?
+> +        * If so, the VCPU's guest TLB state on this CPU may be stale.
+> +        */
+> +       context =3D per_cpu_ptr(vcpu->kvm->arch.vmcs, cpu);
+> +       migrated =3D (vcpu->arch.last_exec_cpu !=3D cpu);
+> +       vcpu->arch.last_exec_cpu =3D cpu;
+> +
+> +       /*
+> +        * Check if our vpid is of an older version
+> +        *
+> +        * We also discard the stored vpid if we've executed on
+> +        * another CPU, as the guest mappings may have changed without
+> +        * hypervisor knowledge.
+> +        */
+> +       ver =3D vcpu->arch.vpid & ~vpid_mask;
+> +       old =3D context->vpid_cache  & ~vpid_mask;
+> +       if (migrated || (ver !=3D old)) {
+> +               _kvm_update_vpid(vcpu, cpu);
+> +               trace_kvm_vpid_change(vcpu, vcpu->arch.vpid);
+> +       }
+> +
+> +       /* Restore GSTAT(0x50).vpid */
+> +       vpid =3D (vcpu->arch.vpid & vpid_mask)
+> +               << CSR_GSTAT_GID_SHIFT;
+> +       change_csr_gstat(vpid_mask << CSR_GSTAT_GID_SHIFT, vpid);
+> +}
+> --
+> 2.31.1
+>
