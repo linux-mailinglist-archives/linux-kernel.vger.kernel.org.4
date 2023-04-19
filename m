@@ -2,119 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847BA6E753F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D19366E7532
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbjDSIcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
+        id S232539AbjDSIax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbjDSIcT (ORCPT
+        with ESMTP id S231577AbjDSIau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:32:19 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B38D10271
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:31:46 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230419083144epoutp015de33e3a264d18d8d8a08031fd5d664f~XSN4uQWYF0224102241epoutp010
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:31:44 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230419083144epoutp015de33e3a264d18d8d8a08031fd5d664f~XSN4uQWYF0224102241epoutp010
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1681893104;
-        bh=HdmfS/CTf2VtyHRtOzatd6OOK769CkZgw5DVqgOlFTE=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=mzWzMUtEyjUAPrB/6BrnteO5+fIhCAuUfuMhPvrEOD1QumC1vXu6VL3nF/MVppc87
-         uQBGNMzxOaT04u6JsixFR8FyU2w3r2DCxXN+i11gOZYIjoE6ppzI2UNoOO2DHxT8c9
-         tWd0GLM+nRovy0FsXDuJBUlWaqMP/jimlC3Ky91U=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230419083143epcas2p42b65783fbefb10097daf1e2843aa961a~XSN30NPa80144001440epcas2p4e;
-        Wed, 19 Apr 2023 08:31:43 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.68]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4Q1Yt74RxSz4x9QM; Wed, 19 Apr
-        2023 08:31:43 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1E.59.09650.FE6AF346; Wed, 19 Apr 2023 17:31:43 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230419083143epcas2p1b8a04a72e602714b72f1541acb41b8af~XSN3FVLpI0953109531epcas2p10;
-        Wed, 19 Apr 2023 08:31:43 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230419083143epsmtrp125863126573399ecb707e4c38baaab15~XSN3EltQ93154631546epsmtrp1j;
-        Wed, 19 Apr 2023 08:31:43 +0000 (GMT)
-X-AuditID: b6c32a48-023fa700000025b2-74-643fa6ef7fb1
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        79.00.08609.EE6AF346; Wed, 19 Apr 2023 17:31:43 +0900 (KST)
-Received: from [10.229.8.168] (unknown [10.229.8.168]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230419083142epsmtip12d0e29281d16f57a5d4fd5175e5e4f8a~XSN21r-YI0112801128epsmtip1X;
-        Wed, 19 Apr 2023 08:31:42 +0000 (GMT)
-Message-ID: <a8541b6c-953f-adf5-2f39-f35a8162657f@samsung.com>
-Date:   Wed, 19 Apr 2023 17:29:18 +0900
+        Wed, 19 Apr 2023 04:30:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FF012582;
+        Wed, 19 Apr 2023 01:30:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23DFD63C81;
+        Wed, 19 Apr 2023 08:30:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91AF2C433EF;
+        Wed, 19 Apr 2023 08:30:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681893013;
+        bh=jcrD/MAqpsfteSxcrKJQtY6pksCSFUz4k6hypV9cW7I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GUlfmzAac1xNbniOW+9sTcn+D51raTUKPS47ZwRVE0bQSvC6ZMhwZyI4seWoAszOs
+         dI8qjMwileJSg0S3nHgT7At7aZ2exrs23CjAt26gaSKvr6lK+7UyJ4DYH+cTStdCdv
+         l+LJ2u8v//8RTDDiirAHC7MRuX7HNTijYtoxdRQ1UGU1utqpVcDw5PIHxqsDdqHIlC
+         zFoDv1hARCjt0NHV+1a8aPm1ch7VvJq+rJfqvWmW5BYgK3OGJpuE++V+o3oeQemMcx
+         dTkykrgRGHk1v8rIbaO0egj/zk3jR9uCB8kTaYySO+xQzHlO+iyVziqx7juWEimRjL
+         9Jrf+qrir6/Ag==
+Date:   Wed, 19 Apr 2023 10:29:59 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Hugh Dickins <hughd@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Pankaj Gupta <pankaj.gupta@amd.com>,
+        linux-arch@vger.kernel.org, arnd@arndb.de, linmiaohe@huawei.com,
+        naoya.horiguchi@nec.com, tabba@google.com, wei.w.wang@intel.com
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20230418-anfallen-irdisch-6993a61be10b@brauner>
+References: <20220818132421.6xmjqduempmxnnu2@box>
+ <diqzlej60z57.fsf@ackerleytng-cloudtop.c.googlers.com>
+ <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
+ <20230413-anlegen-ergibt-cbefffe0b3de@brauner>
+ <ZDiCG/7OgDI0SwMR@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.10.0
-Subject: Re: [PATCH v2 0/4] Improves polling mode of s3c64xx driver
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-Content-Language: en-US
-From:   Jaewon Kim <jaewon02.kim@samsung.com>
-In-Reply-To: <c49881dc-f283-6981-3e03-02fb02b5ce54@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEJsWRmVeSWpSXmKPExsWy7bCmue77ZfYpBkffylk8mLeNzWLxj+dM
-        FlMfPmGzuLxf22Lv663sFpseX2O1uLxrDpvFjPP7mCwaP95kd+D0uL7kE7PHplWdbB53ru1h
-        89i8pN6jb8sqRo/Pm+QC2KKybTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwMdQ0tLcyVFPIS
-        c1NtlVx8AnTdMnOAblJSKEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTkFJgX6BUn5haX
-        5qXr5aWWWBkaGBiZAhUmZGfMv3+eueAcW8WCvbtZGhg7WbsYOTgkBEwkbq506mLk4hAS2MEo
-        cXXxR3YI5xOjRPvOFkYI5zOjxNTNLWxdjJxgHU+/PWeBSOxilDjU8Biq5TWjxN+p7xhBqngF
-        7CReXbnLBGKzCKhK3Fr3khUiLihxcuYTFhBbVCBaYvG+KWC2sICzxLSHm8GmiggsZpToe/yJ
-        DcRhFtjIKLG5aSo7SBWzgLjErSfzwaayCWhLfF+/GGwqJ9C2B0+WMUPUyEtsfzuHGeLWmRwS
-        d/+wQXzqIrGkjwUiLCzx6vgWdghbSuJlfxuUnS3RPv0PK4RdIXFxw2yol40lZj1rZwQZwyyg
-        KbF+lz7ERGWJI7dYIJbySXQc/ssOEeaV6GgTgmhUk7g/9RzUEBmJSUdWMkGUeEi82lw1gVFx
-        FlKYzELy4Swkn8xCWLuAkWUVo1hqQXFuemqxUYEJPKqT83M3MYITq5bHDsbZbz/oHWJk4mA8
-        xCjBwawkwnvG1SpFiDclsbIqtSg/vqg0J7X4EKMpMGYmMkuJJucDU3teSbyhiaWBiZmZobmR
-        qYG5kjjvxw7lFCGB9MSS1OzU1ILUIpg+Jg5OqQamsg/+L867TT/UqyfFfNng6O7Qa6nbdv75
-        z+WhGXM06ttsw7q8w6af9zPqHJMr/9CTZzd377r2YplFUjPWpe2yPRHo/G6i4o3nu+w+z0re
-        mPJnn9ls8bhPGov3FiSrnUtWPbP9VbbzFG7xzX3inPa7P1Rn3bgVdUAwcrnIq78fuu31f5zq
-        aBNvD1J1Czwt907k3HROvcZdrIq7VXuN53WHyVvct/LYda7P1ueFgEx90G7uGes05obMTf3F
-        saTq+XpeUaP8U9HHhHS4bh6eWrIx+nX6XMU7Dn5Hputt2H47yPT1j06Ge/Ojta7PzdOdvNxs
-        x9G1X9ZJvux1+h2/k0nn5/Kek2f1XkbtfNNho7O0XImlOCPRUIu5qDgRALu93fQ1BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjkeLIzCtJLcpLzFFi42LZdlhJTvf9MvsUg57ZzBYP5m1js1j84zmT
-        xdSHT9gsLu/Xttj7eiu7xabH11gtLu+aw2Yx4/w+JovGjzfZHTg9ri/5xOyxaVUnm8eda3vY
-        PDYvqffo27KK0ePzJrkAtigum5TUnMyy1CJ9uwSujPn3zzMXnGOrWLB3N0sDYydrFyMnh4SA
-        icTTb89ZQGwhgR2MEs3z5CDiMhLLn/WxQdjCEvdbjgDVcwHVvGSUuNm1BayZV8BO4tWVu0wg
-        NouAqsStdS+h4oISJ2c+ARsqKhAtcWP5N7AaYQFniWkPN7OADBIRWMwo0XHpLTuIwyywkVFi
-        5fX1zBArjgKtWHEUrJ1ZQFzi1pP5YO1sAtoS39cvBlvBCbT6wZNlzBA1ZhJdW7sYIWx5ie1v
-        5zBPYBSaheSSWUhGzULSMgtJywJGllWMkqkFxbnpucWGBUZ5qeV6xYm5xaV56XrJ+bmbGMFR
-        paW1g3HPqg96hxiZOBgPMUpwMCuJ8J5xtUoR4k1JrKxKLcqPLyrNSS0+xCjNwaIkznuh62S8
-        kEB6YklqdmpqQWoRTJaJg1Oqgckt0XcuQ4qi8NtDvzvPO1r9cklfxf00Z/4tw1kO/+61ZK7g
-        OCgwuWeW81wJ1w+1B1ZemGB1yIHDWuF4yMVfXjdtBFz9el3ktbi9eLzza5065CZo6ihVnL8n
-        ZJIrmO7Rtoy33Cyh1Jc58KAKU/scPnHtBo9Sy8tTHzR/SM9Y8URDNHKuwPRFPul3VGu52pke
-        TX960fAem1LoJYm9rm86fdYKbP/k+6JKtlCYwyX9Oc/k84eLvz4vfah67/sD3WmzxSReFTb4
-        vIjU/h13zOPVnMXmNertXWtvitSmKIVZ7HqwUdhC4XzalumLA45tEtLecd74z9wDz1RF+tae
-        /DVXIXfhhPvaUUE80q89rrh5K7EUZyQaajEXFScCAIma6cUZAwAA
-X-CMS-MailID: 20230419083143epcas2p1b8a04a72e602714b72f1541acb41b8af
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230419062755epcas2p4c3c7c1e0d58e964f6e884f75ae120d91
-References: <CGME20230419062755epcas2p4c3c7c1e0d58e964f6e884f75ae120d91@epcas2p4.samsung.com>
-        <20230419060639.38853-1-jaewon02.kim@samsung.com>
-        <c49881dc-f283-6981-3e03-02fb02b5ce54@linaro.org>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZDiCG/7OgDI0SwMR@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,39 +91,215 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 13, 2023 at 03:28:43PM -0700, Sean Christopherson wrote:
+> On Thu, Apr 13, 2023, Christian Brauner wrote:
+> > On Thu, Aug 18, 2022 at 04:24:21PM +0300, Kirill A . Shutemov wrote:
+> > > On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
+> > > > Here's what I would prefer, and imagine much easier for you to maintain;
+> > > > but I'm no system designer, and may be misunderstanding throughout.
+> > > > 
+> > > > QEMU gets fd from opening /dev/kvm_something, uses ioctls (or perhaps
+> > > > the fallocate syscall interface itself) to allocate and free the memory,
+> > > > ioctl for initializing some of it too.  KVM in control of whether that
+> > > > fd can be read or written or mmap'ed or whatever, no need to prevent it
+> > > > in shmem.c, no need for flags, seals, notifications to and fro because
+> > > > KVM is already in control and knows the history.  If shmem actually has
+> > > > value, call into it underneath - somewhat like SysV SHM, and /dev/zero
+> > > > mmap, and i915/gem make use of it underneath.  If shmem has nothing to
+> > > > add, just allocate and free kernel memory directly, recorded in your
+> > > > own xarray.
+> > > 
+> > > I guess shim layer on top of shmem *can* work. I don't see immediately why
+> > > it would not. But I'm not sure it is right direction. We risk creating yet
+> > > another parallel VM with own rules/locking/accounting that opaque to
+> > > core-mm.
+> > 
+> > Sorry for necrobumping this thread but I've been reviewing the
+> 
+> No worries, I'm just stoked someone who actually knows what they're doing is
+> chiming in :-)
 
-On 23. 4. 19. 16:59, Krzysztof Kozlowski wrote:
-> On 19/04/2023 08:06, Jaewon Kim wrote:
->> 1.
->> s3cx64xx driver was supporting polling mode using quirk for SOC without DMA.
->> However, in order to use PIO mode as an optional rather than a quirk, when DMA
->> is not described, spi operates with pio mode rather than probe fail.
->>
->> 2.
->> Fixed the problem of high CPU usage in PIO mode.
->>
->> 3.
->> If the transfer data size is larger than 32-bit, IRQ base PIO mode used.
->>
-> What changed in the patches? You need to provide changelog.
+It's a dangerous business, going out of your subsystem. You step into
+code, and if you don't watch your hands, there is no knowing where you
+might be swept off to.
 
+That saying goes for me here specifically...
 
-Oh, I missed changes while copy/pasting.
+> 
+> > memfd_restricted() extension that Ackerley is currently working on. I
+> > was pointed to this thread as this is what the extension is building
+> > on but I'll reply to both threads here.
+> > 
+> > From a glance at v10, memfd_restricted() is currently implemented as an
+> > in-kernel stacking filesystem. A call to memfd_restricted() creates a
+> > new restricted memfd file and a new unlinked tmpfs file and stashes the
+> > tmpfs file into the memfd file's private data member. It then uses the
+> > tmpfs file's f_ops and i_ops to perform the relevant file and inode
+> > operations. So it has the same callstack as a general stacking
+> > filesystem like overlayfs in some cases:
+> > 
+> >         memfd_restricted->getattr()
+> >         -> tmpfs->getattr()
+> 
+> ...
+> 
+> > Since you're effectively acting like a stacking filesystem you should
+> > really use the device number of your memfd restricted filesystem. IOW,
+> > sm like:
+> > 
+> >         stat->dev = memfd_restricted_dentry->d_sb->s_dev;
+> > 
+> > But then you run into trouble if you want to go forward with Ackerley's
+> > extension that allows to explicitly pass in tmpfs fds to
+> > memfd_restricted(). Afaict, two tmpfs instances might allocate the same
+> > inode number. So now the inode and device number pair isn't unique
+> > anymore.
+> > 
+> > So you might best be served by allocating and reporting your own inode
+> > numbers as well.
+> > 
+> > But if you want to preserve the inode number and device number of the
+> > relevant tmpfs instance but still report memfd restricted as your
+> > filesystem type
+> 
+> Unless I missed something along the way, reporting memfd_restricted as a distinct
+> filesystem is very much a non-goal.  AFAIK it's purely a side effect of the
+> proposed implementation.
 
-I will add changes v2 from v3 together.
+In the current implementation you would have to put in effort to fake
+this. For example, you would need to also implement ->statfs
+super_operation where you'd need to fill in the details of the tmpfs
+instance. At that point all that memfd_restricted fs code that you've
+written is nothing but deadweight, I would reckon.
 
-Changes in V2.
-- DeviceTree property not used to change PIO mod.
-- Add cpu_releax() in polling loop
-- Add lower limit in IRQ mode
+> 
+> > then I think it's reasonable to ask whether a stacking implementation really
+> > makes sense here.
+> > 
+> > If you extend memfd_restricted() or even consider extending it in the
+> > future to take tmpfs file descriptors as arguments to identify the tmpfs
+> > instance in which to allocate the underlying tmpfs file for the new
+> > restricted memfd file you should really consider a tmpfs based
+> > implementation.
+> > 
+> > Because at that point it just feels like a pointless wrapper to get
+> > custom f_ops and i_ops. Plus it's wasteful because you allocate dentries
+> > and inodes that you don't really care about at all.
+> > 
+> > Just off the top of my hat you might be better served:
+> > * by a new ioctl() on tmpfs instances that
+> >   yield regular tmpfs file descriptors with restricted f_ops and i_ops.
+> >   That's not that different from btrfs subvolumes which effectively are
+> >   directories but are created through an ioctl().
+> 
+> I think this is more or less what we want to do, except via a dedicated syscall
+> instead of an ioctl() so that the primary interface isn't strictly tied to tmpfs,
+> e.g. so that it can be extended to other backing types in the future.
 
+Ok. But just to point this out, this would make memfd_restricted()
+a multiplexer on types of memory. And my wild guess is that not all
+memory types you might reasonably want to use will have a filesystem
+like interface such. So in the future you might end up with multiple
+ways of specifying the type of memory:
 
->
-> Best regards,
-> Krzysztof
->
->
-Thanks
+// use tmpfs backing
+memfd_restricted(fd_tmpfs, 0);
 
-Jaewon Kim
+// use hugetlbfs backing
+memfd_restricted(fd_hugetlbfs, 0);
 
+// use non-fs type memory backing
+memfd_restricted(-EBADF, MEMFD_SUPER_FANCY_MEMORY_TYPE);
+
+interface wise I find an unpleasant design. But that multi-memory-open
+goal also makes it a bit hard to come up with a clean design (On
+possibility would be to use an extensible struct - versioned by size -
+similar to openat2() and clone3() such that you can specify all types of
+options on the memory in the future.).
+
+> 
+> > * by a mount option to tmpfs that makes it act
+> >   in this restricted manner then you don't need an ioctl() and can get
+> >   away with regular open calls. Such a tmpfs instance would only create
+> >   regular, restricted memfds.
+> 
+> I'd prefer to not go this route, becuase IIUC, it would require relatively invasive
+> changes to shmem code, and IIUC would require similar changes to other support
+> backings in the future, e.g. hugetlbfs?  And as above, I don't think any of the
+> potential use cases need restrictedmem to be a uniquely identifiable mount.
+
+Ok, see my comment above then.
+
+> 
+> One of the goals (hopefully not a pipe dream) is to design restrictmem in such a
+> way that extending it to support other backing types isn't terribly difficult.
+
+Not necessarily difficult, just difficult to do tastefully imho. But
+it's not that has traditionally held people back. ;)
+
+> In case it's not obvious, most of us working on this stuff aren't filesystems
+> experts, and many of us aren't mm experts either.  The more we (KVM folks for the
+> most part) can leverage existing code to do the heavy lifting, the better.
+
+Well, hopefully we can complement each other's knowledge here.
+
+> 
+> After giving myself a bit of a crash course in file systems, would something like
+> the below have any chance of (a) working, (b) getting merged, and (c) being
+> maintainable?
+> 
+> The idea is similar to a stacking filesystem, but instead of stacking, restrictedmem
+> hijacks a f_ops and a_ops to create a lightweight shim around tmpfs.  There are
+> undoubtedly issues and edge cases, I'm just looking for a quick "yes, this might
+> be doable" or a "no, that's absolutely bonkers, don't try it".
+
+Maybe, but I think it's weird. _Replacing_ f_ops isn't something that's
+unprecedented. It happens everytime a character device is opened (see
+fs/char_dev.c:chrdev_open()). And debugfs does a similar (much more
+involved) thing where it replaces it's proxy f_ops with the relevant
+subsystem's f_ops. The difference is that in both cases the replace
+happens at ->open() time; and the replace is done once. Afterwards only
+the newly added f_ops are relevant.
+
+In your case you'd be keeping two sets of {f,a}_ops; one usable by
+userspace and another only usable by in-kernel consumers. And there are
+some concerns (non-exhaustive list), I think:
+
+* {f,a}_ops weren't designed for this. IOW, one set of {f,a}_ops is
+  authoritative per @file and it is left to the individual subsystems to
+  maintain driver specific ops (see the sunrpc stuff or sockets).
+* lifetime management for the two sets of {f,a}_ops: If the ops belong
+  to a module then you need to make sure that the module can't get
+  unloaded while you're using the fops. Might not be a concern in this
+  case.
+* brittleness: Not all f_ops for example deal with userspace
+  functionality some deal with cleanup when the file is closed like
+  ->release(). So it's delicate to override that functionality with
+  custom f_ops. Restricted memfds could easily forget to cleanup
+  resources.
+* Potential for confusion why there's two sets of {f,a}_ops.
+* f_ops specifically are generic across a vast amount of consumers and
+  are subject to change. If memfd_restricted() has specific requirements
+  because of this weird double-use they won't be taken into account.
+
+I find this hard to navigate tbh and it feels like taking a shortcut to
+avoid building a proper api. If you only care about a specific set of
+operations specific to memfd restricte that needs to be available to
+in-kernel consumers, I wonder if you shouldn't just go one step further
+then your proposal below and build a dedicated minimal ops api. Idk,
+sketching like a madman on a drawning board here with no claim to
+feasibility from a mm perspective whatsoever:
+
+struct restrictedmem_ops {
+	// only contains very limited stuff you need or special stuff
+	// you nee, similar to struct proto_ops (sockets) and so on
+};
+
+struct restrictedmem {
+	const struct restrictedmem_ops ops;
+};
+
+This would avoid fuzzing with two different set of {f,a}_ops in this
+brittle way. It would force you to clarify the semantics that you need
+and the operations that you need or don't need implemented. And it would
+get rid of the ambiguity inherent to using two sets of {f,a}_ops.
