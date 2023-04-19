@@ -2,91 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CF06E7638
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 430CB6E763B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbjDSJ2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 05:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
+        id S232609AbjDSJ21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 05:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbjDSJ2D (ORCPT
+        with ESMTP id S232628AbjDSJ2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:28:03 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02757AB9;
-        Wed, 19 Apr 2023 02:28:00 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pp46F-00091g-Ap; Wed, 19 Apr 2023 17:27:41 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 19 Apr 2023 17:27:40 +0800
-Date:   Wed, 19 Apr 2023 17:27:40 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Robert Elliott <elliott@hpe.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Subject: [PATCH] crypto: arm/sha1-neon - Fix clang function cast warnings
-Message-ID: <ZD+0DJq1NHmMSSja@gondor.apana.org.au>
-References: <202304081828.zjGcFUyE-lkp@intel.com>
+        Wed, 19 Apr 2023 05:28:24 -0400
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE1F83E2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:28:21 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id EC70D203CD;
+        Wed, 19 Apr 2023 11:28:18 +0200 (CEST)
+Date:   Wed, 19 Apr 2023 11:28:16 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] drm/msm/dpu: Assign missing writeback log_mask
+Message-ID: <p5b6zwgbrxbhs7hgo4sh2btwmbjgoyxp5mxdutt4fkh2hjv7dz@6dq5ug5l2ohu>
+References: <20230418-dpu-drop-useless-for-lookup-v1-0-b9897ceb6f3e@somainline.org>
+ <20230418-dpu-drop-useless-for-lookup-v1-2-b9897ceb6f3e@somainline.org>
+ <60bb4a4a-f414-e926-df53-d6d1a01fc221@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202304081828.zjGcFUyE-lkp@intel.com>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+In-Reply-To: <60bb4a4a-f414-e926-df53-d6d1a01fc221@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of casting the function which upsets clang for some reason,
-change the assembly function siganture instead.
+On 2023-04-18 09:06:34, Abhinav Kumar wrote:
+> 
+> On 4/17/2023 4:14 PM, Marijn Suijten wrote:
+> > The WB debug log mask ended up never being assigned, leading to writes
+> > to this block to never be logged even if the mask is enabled in
+> > dpu_hw_util_log_mask via sysfs.
+> 
+> This should be debugfs not sysfs.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202304081828.zjGcFUyE-lkp@intel.com/
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Good catch!  I've queued this up for v2 if it comes to it, otherwise it
+can perhaps be fixed up while applying for msm-fixes?
 
-diff --git a/arch/arm/crypto/sha1_neon_glue.c b/arch/arm/crypto/sha1_neon_glue.c
-index cfe36ae0f3f5..9c70b87e69f7 100644
---- a/arch/arm/crypto/sha1_neon_glue.c
-+++ b/arch/arm/crypto/sha1_neon_glue.c
-@@ -26,8 +26,8 @@
- 
- #include "sha1.h"
- 
--asmlinkage void sha1_transform_neon(void *state_h, const char *data,
--				    unsigned int rounds);
-+asmlinkage void sha1_transform_neon(struct sha1_state *state_h,
-+				    const u8 *data, int rounds);
- 
- static int sha1_neon_update(struct shash_desc *desc, const u8 *data,
- 			  unsigned int len)
-@@ -39,8 +39,7 @@ static int sha1_neon_update(struct shash_desc *desc, const u8 *data,
- 		return sha1_update_arm(desc, data, len);
- 
- 	kernel_neon_begin();
--	sha1_base_do_update(desc, data, len,
--			    (sha1_block_fn *)sha1_transform_neon);
-+	sha1_base_do_update(desc, data, len, sha1_transform_neon);
- 	kernel_neon_end();
- 
- 	return 0;
-@@ -54,9 +53,8 @@ static int sha1_neon_finup(struct shash_desc *desc, const u8 *data,
- 
- 	kernel_neon_begin();
- 	if (len)
--		sha1_base_do_update(desc, data, len,
--				    (sha1_block_fn *)sha1_transform_neon);
--	sha1_base_do_finalize(desc, (sha1_block_fn *)sha1_transform_neon);
-+		sha1_base_do_update(desc, data, len, sha1_transform_neon);
-+	sha1_base_do_finalize(desc, sha1_transform_neon);
- 	kernel_neon_end();
- 
- 	return sha1_base_finish(desc, out);
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+> > Fixes: 84a33d0fd921 ("drm/msm/dpu: add dpu_hw_wb abstraction for writeback blocks")
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > ---
+> 
+> With that fixed,
+> 
+> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+
+Thanks!
+
+- Marijn
