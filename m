@@ -2,126 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208266E71FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B86B6E7204
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 06:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232305AbjDSD5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 23:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
+        id S231980AbjDSEA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 00:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbjDSD5j (ORCPT
+        with ESMTP id S231362AbjDSEAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 23:57:39 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985E618D;
-        Tue, 18 Apr 2023 20:57:09 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63b73203e0aso13373752b3a.1;
-        Tue, 18 Apr 2023 20:57:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681876628; x=1684468628;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=grc+ub6ijDlFnEvTScV9a0JXsVYmXuW0YDqW8bPTTxA=;
-        b=sg0qDVyj7ncELAnlDx/lX9rtsRNxPX6piPkYXBpO6EMQlvVTLJ0A14gEhXS61SKqqF
-         c5nB2Zd2JlaKmxsDxecI0OcSH7PUTvirh9xZM1guVJNHGV+vh/9yZoAEhxHAVJyv/GMS
-         Gg987wsYDkenge12wtyUMIvVV1hojoKc2tugYW5tikKsLxm3x0V6b0JP6QzAPC3BnAdc
-         xTOCX4+SbzbvMVfPbq3sA8rD7RTKBhdC9/GVu1fd8ith9GN6b7U9XwTMsCQeuGNxQPcf
-         HvfaEiUMGg8i7XwmkCFp4VZE7PDiu9cIZjy5sO+BkP/c3Len/hkYZM2QGnq48Lco/Yh+
-         XqIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681876628; x=1684468628;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=grc+ub6ijDlFnEvTScV9a0JXsVYmXuW0YDqW8bPTTxA=;
-        b=HSe+c/9hSHUipIYsYT6whEtHIPRO6XYj5UXDgUCRpPlfUKt9/JqpZJGn5OZsIo+mlg
-         6CMWGxq9Dbdq5rbD3jafkdPNbQUvR0RcRhsFsJrblXEo8c8xczBAX+i4gmSlMBK3URDv
-         nQd2xr/ARNQPWNVaGHla6X+/2KrQWlC3ZG4R0nBPl7R6U+ASKImWgnoacmtcmSKXbIZ1
-         p+FqR9RJXv5j1K86GqwbrOtLVHgtpt98KZKZlJ+84DjKjDzXafWPJ4A1Sk/GwFLXh8UI
-         UcrfHQD4LLxrMxot1QnSAWcbNwS56ddnS0yHwwq0jA9p0xsG+EZir/yNoJdrMxlXk88s
-         Lnrw==
-X-Gm-Message-State: AAQBX9en81G4Y6MjvYYyW7Zb16vomPOqtm5cXJSZYZtZjF1sAfkNHi0P
-        atNGWxzNo3aXkbfLRZeqm0fHOTF2aVc=
-X-Google-Smtp-Source: AKy350alx0Kv3OCpTXkKHT49l4ihSjQWmIkJPoVmq+M/ZGlZ0bPBLL4s09v7ve2StIWHDvxIS1G/GQ==
-X-Received: by 2002:a05:6a00:4489:b0:63b:7bab:26ff with SMTP id cu9-20020a056a00448900b0063b7bab26ffmr1063217pfb.16.1681876628243;
-        Tue, 18 Apr 2023 20:57:08 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q22-20020a62ae16000000b0063b778f0952sm6984420pff.70.2023.04.18.20.57.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 20:57:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 18 Apr 2023 20:57:06 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     jdelvare@suse.com, manio@skyboo.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] hwmon: (adt7475) Use device_property APIs when
- configuring polarity
-Message-ID: <3b4b7e11-9df5-489a-8e72-86ab6bbecab7@roeck-us.net>
-References: <20230418233656.869055-1-chris.packham@alliedtelesis.co.nz>
- <20230418233656.869055-2-chris.packham@alliedtelesis.co.nz>
+        Wed, 19 Apr 2023 00:00:23 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC34ABD;
+        Tue, 18 Apr 2023 21:00:22 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33J40E13107323;
+        Tue, 18 Apr 2023 23:00:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681876814;
+        bh=D7N9oEiMeH0cs8Jb4a+GvCOLQmW6tz03TJAssHRZGHk=;
+        h=From:To:CC:Subject:Date;
+        b=jzgueHFP5iq32t3Nry3vFnh5E6B0DXnXlIllxoy3ulMvleCAFM2a7Cc8egF2hJ5lr
+         CaHcxy1Nup+1QdCaV+G8rJ01Wc4dgAd5ELx+YwD41Pi+QaZBrJt9HVoo4Oeov5Lmdu
+         q8u8KyOByeYv2LTHcZh15A0r2fR+8BbTQj58PPSs=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33J40EtC113377
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 18 Apr 2023 23:00:14 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 18
+ Apr 2023 23:00:13 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 18 Apr 2023 23:00:13 -0500
+Received: from udit-HP-Z2-Tower-G9-Workstation-Desktop-PC.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33J4098U025277;
+        Tue, 18 Apr 2023 23:00:10 -0500
+From:   Udit Kumar <u-kumar1@ti.com>
+To:     <linux-arm-kernel@lists.infradead.org>, <afd@ti.com>, <bb@ti.com>,
+        <vaishnav.a@ti.com>, <j-choudhary@ti.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     Udit Kumar <u-kumar1@ti.com>
+Subject: [PATCH v3 0/2] arm64: dts: ti: k3-j7200-common-proc-board fixes
+Date:   Wed, 19 Apr 2023 09:30:05 +0530
+Message-ID: <20230419040007.3022780-1-u-kumar1@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230418233656.869055-2-chris.packham@alliedtelesis.co.nz>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 11:36:55AM +1200, Chris Packham wrote:
-> On DT unaware platforms of_property_read_u32_array() returns -ENOSYS
-> which wasn't handled by the code treating adi,pwm-active-state as
-> optional. Update the code to use device_property_read_u32_array() which
-> deals gracefully with DT unaware platforms.
-> 
-> Fixes: 86da28eed4fb ("hwmon: (adt7475) Add support for inverting pwm output")
-> Reported-by: Mariusz Białończyk <manio@skyboo.net>
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     I've not currently got access to a DT unaware platform with an ADT7475
->     chip so I'm not 100% sure that this will fix the problem Mariusz
->     reported but looking at drivers I think this approach is correct.
->     
+This patch series fixes the pin mux configuration and enable
+wkup_i2c0 at board level.
 
-What happens if there is no such property anywhere, neither in
-devicetree nor in acpi ?
+Note to self: in u-boot i2c pin mux is set in R5 board file.
+which will moved to som file, Fix that too when syncing kernel
+and uboot DTS files.
 
-Guenter
+Changes since v2:
+https://lore.kernel.org/all/20230418050514.2392717-1-u-kumar1@ti.com/
+Pin Mux (Patch 1/1):
+- No Change
 
->     Changes in v2:
->     - use device_property_read_u32_array instead of checking for -ENOSYS
-> 
->  drivers/hwmon/adt7475.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index 6e4c92b500b8..6a6ebcc896b1 100644
-> --- a/drivers/hwmon/adt7475.c
-> +++ b/drivers/hwmon/adt7475.c
-> @@ -1604,9 +1604,9 @@ static int adt7475_set_pwm_polarity(struct i2c_client *client)
->  	int ret, i;
->  	u8 val;
->  
-> -	ret = of_property_read_u32_array(client->dev.of_node,
-> -					 "adi,pwm-active-state", states,
-> -					 ARRAY_SIZE(states));
-> +	ret = device_property_read_u32_array(&client->dev,
-> +					     "adi,pwm-active-state", states,
-> +					     ARRAY_SIZE(states));
->  	if (ret)
->  		return ret;
->  
-> -- 
-> 2.40.0
-> 
+wkup_i2c:
+- Added pin mux
+- Added speed
+
+Changes since v1:
+https://lore.kernel.org/all/20230414181434.2046049-1-u-kumar1@ti.com/
+Pin mux:
+- Fixed commit message and author
+
+wkup_i2c:
+- Removed Fixes tag in commit message
+- Moved wkup_i2c in som instead of common board
+- Added eeprom as child device
+
+
+Keerthy (1):
+  arm64: dts: ti: k3-j7200: Fix  physical address of pin
+
+Udit Kumar (1):
+  arm64: dts: ti: k3-j7200-som: Enable I2C
+
+ .../dts/ti/k3-j7200-common-proc-board.dts     | 28 +++++++++----------
+ arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi   | 21 ++++++++++++++
+ 2 files changed, 35 insertions(+), 14 deletions(-)
+
+-- 
+2.34.1
+
