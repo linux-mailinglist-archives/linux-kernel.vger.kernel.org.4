@@ -2,197 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4498F6E7F6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD016E7F65
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbjDSQS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 12:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
+        id S233082AbjDSQSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 12:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233088AbjDSQS1 (ORCPT
+        with ESMTP id S232399AbjDSQSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 12:18:27 -0400
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7521980
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:17:37 -0700 (PDT)
-Received: by mail-qv1-f43.google.com with SMTP id dd8so40581qvb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:17:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681921056; x=1684513056;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z+h5fwYkvTPr/F+On2Hs94r2JzzOUgRtGOCFJcgB1Q4=;
-        b=VUb9JPXzOjoWbiq7r6KqrCWAKnj0Kvoxe+DFoOGJfp6Ku/eXq8IwLe5kvxsle+HIun
-         NfmtmI2rgICSYbZaIMpHkaoBijdzsbR8UleQ5V7Q3r5JUrA3L3v5JNi6/3cGaDSEOz+q
-         A/jDlxRAHBiO4wxaTHP3mR5GB/ixfifd2+vU7fULNg2vhVHYT8hYZ5j8fi7L+qR2moLG
-         w16VFjjrn/hdTmo5WGUoCoAzJNPvx63k2Kx3GE3pWE90MOMUu2mzrIwvlmYO0Eyt8T/A
-         8eJgiWLRQJofOHdE56gFHU8T9xsi279SKp8xSRTJslyub7qxlqpKHcyFA3HlT6Tq+xgy
-         YdsQ==
-X-Gm-Message-State: AAQBX9dhqz/2HGsuxn1EVhc+3kiV1nxak/oZX/f/QXkPH9eY72Is1PBH
-        oLN8FYXFKc57ZM7QT+K7Frko
-X-Google-Smtp-Source: AKy350ZIve4mrPgTdbna5Cjf8hcJps/K5ObL3J7QcbMVD+OWL/kHf3+Ovv9X5lr5nNp8ov9iF7wtcw==
-X-Received: by 2002:a05:6214:252a:b0:5ef:8004:e0b4 with SMTP id gg10-20020a056214252a00b005ef8004e0b4mr17326482qvb.48.1681921056440;
-        Wed, 19 Apr 2023 09:17:36 -0700 (PDT)
-Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
-        by smtp.gmail.com with ESMTPSA id b1-20020ac86bc1000000b003e65228ef54sm4902201qtt.86.2023.04.19.09.17.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 09:17:36 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 12:17:34 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     "Darrick J. Wong" <djwong@kernel.org>,
-        Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Daniil Lunev <dlunev@google.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [PATCH v4 1/4] block: Introduce provisioning primitives
-Message-ID: <ZEAUHnWqt9cIiJRb@redhat.com>
-References: <20230414000219.92640-1-sarthakkukreti@chromium.org>
- <20230418221207.244685-1-sarthakkukreti@chromium.org>
- <20230418221207.244685-2-sarthakkukreti@chromium.org>
- <20230419153611.GE360885@frogsfrogsfrogs>
+        Wed, 19 Apr 2023 12:18:05 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719E419A3;
+        Wed, 19 Apr 2023 09:18:04 -0700 (PDT)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id B83CFC6E13;
+        Wed, 19 Apr 2023 16:18:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1681921082; bh=/fXev4EJCHlSFuLfMgc8DULhsUVCUngGI8FvP7ThQic=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=ul/NIajw6Y6NsmjLGNAPH+4mHN529xc6Dx6BcS9eyLgHpJwztqsxWUBI+UDfuWxkJ
+         UXuFhFKG+2Qif/ylXoPtZ37gVCi0AYmy9jp6VVa1wANlgqsVYgAQ8Exh5ID1g9t/6i
+         fAYb6HP7EuoIZZDSok0kfCk6h5Lic22qxf4BztWk=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Craig Tatlor <ctatlor97@gmail.com>
+Subject: Re: [PATCH] ARM: dts: qcom: msm8974: correct qfprom node reg
+Date:   Wed, 19 Apr 2023 18:18:01 +0200
+Message-ID: <4820647.31r3eYUQgx@z3ntu.xyz>
+In-Reply-To: <383f6aa0-6150-22b5-425a-f9cf13bdbc50@linaro.org>
+References: <20230130-msm8974-qfprom-v1-1-975aa0e5e083@z3ntu.xyz>
+ <5664419.DvuYhMxLoT@z3ntu.xyz>
+ <383f6aa0-6150-22b5-425a-f9cf13bdbc50@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419153611.GE360885@frogsfrogsfrogs>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19 2023 at 11:36P -0400,
-Darrick J. Wong <djwong@kernel.org> wrote:
+On Mittwoch, 19. April 2023 18:12:04 CEST Konrad Dybcio wrote:
+> On 19.04.2023 18:00, Luca Weiss wrote:
+> > Hi Konrad,
+> >=20
+> > On Montag, 30. J=E4nner 2023 21:37:29 CEST Luca Weiss wrote:
+> >> On Montag, 30. J=E4nner 2023 19:42:51 CET Konrad Dybcio wrote:
+> >>> On 30.01.2023 19:36, Luca Weiss wrote:
+> >>>> On Montag, 30. J=E4nner 2023 19:30:04 CET Konrad Dybcio wrote:
+> >>>>> On 30.01.2023 19:20, luca@z3ntu.xyz wrote:
+> >>>>>> From: Craig Tatlor <ctatlor97@gmail.com>
+> >>>>>>=20
+> >>>>>> The qfprom actually starts at 0xfc4b8000 instead of 0xfc4bc000 as
+> >>>>>> defined previously. Adjust the tsens offsets accordingly.
+> >>>>>>=20
+> >>>>>> [luca@z3ntu.xyz: extract to standalone patch]
+> >>>>>>=20
+> >>>>>> Fixes: c59ffb519357 ("arm: dts: msm8974: Add thermal zones, tsens =
+and
+> >>>>>> qfprom nodes") Signed-off-by: Craig Tatlor <ctatlor97@gmail.com>
+> >>>>>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> >>>>>> ---
+> >>>>>=20
+> >>>>> Isn't this a raw vs ecc-corrected values problem?
+> >>>>=20
+> >>>> Not quite sure what you mean.
+> >>>=20
+> >>> The QFPROM is split into two parts: one where raw values
+> >>> are stored, and the other one where ECC-corrected copies
+> >>> of them reside. Usually it's at offset of 0x4000. We should
+> >>> generally be using the ECC-corrected ones, because.. well..
+> >>> they are ECC-corrected.. You may want to check if the
+> >>> fuse you're adding reads the same value at +0x4000.
+> >>=20
+> >> Yeah that actually seems to work...
+> >>=20
+> >> But downstream's using this +0x4000 only for tsens it seems
+> >>=20
+> >>    <0xfc4bc000 0x1000> as "tsens_eeprom_physical"
+> >>=20
+> >> qcom,clock-krait-8974 is using this:
+> >>     <0xfc4b80b0 0x08> as "efuse"
+> >>=20
+> >> Also seems HDMI driver is using a mix for HDCP stuff
+> >>=20
+> >>   drivers/video/msm/mdss/mdss_hdmi_util.h:
+> >>     /* QFPROM Registers for HDMI/HDCP */
+> >>     #define QFPROM_RAW_FEAT_CONFIG_ROW0_LSB  (0x000000F8)
+> >>     #define QFPROM_RAW_FEAT_CONFIG_ROW0_MSB  (0x000000FC)
+> >>     #define HDCP_KSV_LSB                     (0x000060D8)
+> >>     #define HDCP_KSV_MSB                     (0x000060DC)
+> >>=20
+> >> Any clue why Qualcomm used it this way in downstream? I'd rather not
+> >> deviate too much if not for a good reason...
+> >=20
+> > Any comments on the above?
+>=20
+> This thread got burried to deep in the mailbox!
+>=20
+> I see two reasons why they could be using the uncorrected region:
+> - their generators are messed up in general
+>=20
+> - they may have had an early chip revision once where there were
+>   problems with this and their generators were messed up to
+>   accommodate for it and everybody forgot to fix that
+>=20
+> No other good explanations as far as I'm aware!
 
-> On Tue, Apr 18, 2023 at 03:12:04PM -0700, Sarthak Kukreti wrote:
-> > Introduce block request REQ_OP_PROVISION. The intent of this request
-> > is to request underlying storage to preallocate disk space for the given
-> > block range. Block devices that support this capability will export
-> > a provision limit within their request queues.
-> > 
-> > This patch also adds the capability to call fallocate() in mode 0
-> > on block devices, which will send REQ_OP_PROVISION to the block
-> > device for the specified range,
-> > 
-> > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> > ---
-> >  block/blk-core.c          |  5 ++++
-> >  block/blk-lib.c           | 53 +++++++++++++++++++++++++++++++++++++++
-> >  block/blk-merge.c         | 18 +++++++++++++
-> >  block/blk-settings.c      | 19 ++++++++++++++
-> >  block/blk-sysfs.c         |  8 ++++++
-> >  block/bounce.c            |  1 +
-> >  block/fops.c              | 25 +++++++++++++-----
-> >  include/linux/bio.h       |  6 +++--
-> >  include/linux/blk_types.h |  5 +++-
-> >  include/linux/blkdev.h    | 16 ++++++++++++
-> >  10 files changed, 147 insertions(+), 9 deletions(-)
-> > 
-> 
-> <cut to the fallocate part; the block/ changes look fine to /me/ at
-> first glance, but what do I know... ;)>
-> 
-> > diff --git a/block/fops.c b/block/fops.c
-> > index d2e6be4e3d1c..e1775269654a 100644
-> > --- a/block/fops.c
-> > +++ b/block/fops.c
-> > @@ -611,9 +611,13 @@ static ssize_t blkdev_read_iter(struct kiocb *iocb, struct iov_iter *to)
-> >  	return ret;
-> >  }
-> >  
-> > +#define	BLKDEV_FALLOC_FL_TRUNCATE				\
-> 
-> At first I thought from this name that you were defining a new truncate
-> mode for fallocate, then I realized that this is mask for deciding if we
-> /want/ to truncate the pagecache.
-> 
-> #define		BLKDEV_FALLOC_TRUNCATE_MASK ?
-> 
-> > +		(FALLOC_FL_PUNCH_HOLE |	FALLOC_FL_ZERO_RANGE |	\
-> 
-> Ok, so discarding and writing zeroes truncates the page cache, makes
-> sense since we're "writing" directly to the block device.
-> 
-> > +		 FALLOC_FL_NO_HIDE_STALE)
-> 
-> Here things get tricky -- some of the FALLOC_FL mode bits are really an
-> opcode and cannot be specified together, whereas others select optional
-> behavior for certain opcodes.
-> 
-> IIRC, the mutually exclusive opcodes are:
-> 
-> 	PUNCH_HOLE
-> 	ZERO_RANGE
-> 	COLLAPSE_RANGE
-> 	INSERT_RANGE
-> 	(none of the above, for allocation)
-> 
-> and the "variants on a theme are":
-> 
-> 	KEEP_SIZE
-> 	NO_HIDE_STALE
-> 	UNSHARE_RANGE
-> 
-> not all of which are supported by all the opcodes.
-> 
-> Does it make sense to truncate the page cache if userspace passes in
-> mode == NO_HIDE_STALE?  There's currently no defined meaning for this
-> combination, but I think this means we'll truncate the pagecache before
-> deciding if we're actually going to issue any commands.
-> 
-> I think that's just a bug in the existing code -- it should be
-> validating that @mode is any of the supported combinations *before*
-> truncating the pagecache.
-> 
-> Otherwise you could have a mkfs program that starts writing new fs
-> metadata, decides to provision the storage (say for a logging region),
-> doesn't realize it's running on an old kernel, and then oops the
-> provision attempt fails but have we now shredded the pagecache and lost
-> all the writes?
+So, resolution is to use the offsets as declared in downstream, so take thi=
+s=20
+patch to have the full range available?
 
-While that just caused me to have an "oh shit, that's crazy" (in a
-scary way) belly laugh...
-(And obviously needs fixing independent of this patchset)
+Regards
+Luca
 
-Shouldn't mkfs first check that the underlying storage supports
-REQ_OP_PROVISION by verifying
-/sys/block/<dev>/queue/provision_max_bytes exists and is not 0?
-(Just saying, we need to add new features more defensively.. you just
-made the case based on this scenario's implications alone)
 
-Sarthak, please note I said "provision_max_bytes": all other ops
-(e.g. DISCARD, WRITE_ZEROES, etc) have <op>_max_bytes exported through
-sysfs, not <op>_max_sectors.  Please export provision_max_bytes, e.g.:
 
-diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
-index 202aa78f933e..2e5ac7b1ffbd 100644
---- a/block/blk-sysfs.c
-+++ b/block/blk-sysfs.c
-@@ -605,12 +605,12 @@ QUEUE_RO_ENTRY(queue_io_min, "minimum_io_size");
- QUEUE_RO_ENTRY(queue_io_opt, "optimal_io_size");
- 
- QUEUE_RO_ENTRY(queue_max_discard_segments, "max_discard_segments");
--QUEUE_RO_ENTRY(queue_max_provision_sectors, "max_provision_sectors");
- QUEUE_RO_ENTRY(queue_discard_granularity, "discard_granularity");
- QUEUE_RO_ENTRY(queue_discard_max_hw, "discard_max_hw_bytes");
- QUEUE_RW_ENTRY(queue_discard_max, "discard_max_bytes");
- QUEUE_RO_ENTRY(queue_discard_zeroes_data, "discard_zeroes_data");
- 
-+QUEUE_RO_ENTRY(queue_provision_max, "provision_max_bytes");
- QUEUE_RO_ENTRY(queue_write_same_max, "write_same_max_bytes");
- QUEUE_RO_ENTRY(queue_write_zeroes_max, "write_zeroes_max_bytes");
- QUEUE_RO_ENTRY(queue_zone_append_max, "zone_append_max_bytes");
