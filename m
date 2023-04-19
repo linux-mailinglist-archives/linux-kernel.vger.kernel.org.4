@@ -2,118 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8A36E8046
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D15FA6E803F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232675AbjDSRX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 13:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
+        id S232415AbjDSRX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 13:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbjDSRXZ (ORCPT
+        with ESMTP id S229558AbjDSRXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 13:23:25 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB90A659B;
+        Wed, 19 Apr 2023 13:23:24 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B8346B1;
         Wed, 19 Apr 2023 10:23:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1681924974; i=deller@gmx.de;
-        bh=C5yrQi1O5H/ZJ6i2wZhc9S+TYhhPSe8koYmOSkrsxpg=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=refzFEX/nVgK8/0c/yNY2CyfC3AdkpdTH+IYk+xIV5Q+38dlY1vRhZEFTmpMyUDc/
-         9kvkEZP0kVR01Hn28FwdYcvQkmsX1L9UWL+i8vZhz0goEWhOLvIAIfwTtlVmCjbgUD
-         u0lHmNPk61xpVh/6OWDJbveUXhuyj8lAjtP3C/VV7CHk+16/4VihPYwuUHEvivlYBw
-         UlL1VdmKWD8uIdo0Aoh5XASGCGmlY7GyOYsX3ffFnBo5KedAYvGh4FHhvglxT+KgCd
-         xQN6ABCnavylRmWcBFmE/lQHqF7hO3CioLhryov1vpJhVvImQ4wtSXMt4z9yTImXug
-         5i3ajdU7cJ5LA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.144.134]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MatVb-1qRYCj0P8t-00cRzi; Wed, 19
- Apr 2023 19:22:54 +0200
-Message-ID: <b1f90fa4-85c7-e785-ba14-f32962f87d5e@gmx.de>
-Date:   Wed, 19 Apr 2023 19:22:50 +0200
+Received: by mail-wm1-x330.google.com with SMTP id ay3-20020a05600c1e0300b003f17289710aso1804931wmb.5;
+        Wed, 19 Apr 2023 10:23:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681925001; x=1684517001;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PbdVv88DWDlVS6fOv6CfQ4TcqHKZBvuBMSO1VZVRUV4=;
+        b=Wy6Ctj0Kprf1YVYrpduGBmN1bUBvf8KbeRZJyo4EitncylaSdNDMYth80L7gMZxSye
+         VM9mrr7bqRnT+5Lvwf+bDkBk1J96oB17wAC57D08Ps2MDPRQwCS44vgX0Ww/0WPM2q1r
+         7/RfPFf2BWzksrskehryWdUKgBr46y2+FzE09QdNroXyWGdnggeciRYPZYHLTjaTyFRc
+         GL03RUd+Qb6LPHxVFrtI0zAX2Nq0IKiZckjyowf1j/813S6ymxPBjFoojauQGOKs8Vnr
+         bR892VqSwfFyqbm2HDlUOJN+O9x9QRgbar+yr2MLpmrFHx2KkRKJDhHbd01QFlTJsLHr
+         YHFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681925001; x=1684517001;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PbdVv88DWDlVS6fOv6CfQ4TcqHKZBvuBMSO1VZVRUV4=;
+        b=APLP9xXKBaW4baHoKBszrlX4ywWM8XSMScJu74UsAXwQmLVrUWyEjeKZ8KXvuM8ReK
+         KqHHQG+jVicbfO2mvSXX01FNsJVc4oPRXMFegmebObgzlWX8/jhjAHjLCtleWP6qUY5u
+         1wsNZPyR4n87eA1HyBTXCjYZU6PGUWFgTViVduxvMWoJl++KRMjIDQNiJG2wmpI9xOgI
+         FyYwqJI0Q87b4XV8SlBhjaJUrk2Q3pT1Hcn/2usomE2TrCorJoihnjHLRBjlLdTBeL92
+         km0zw4vpW0aEzdrS1beRu7t7OYabvU9KAtzjN9tvUDaO30B9QM5IxyL9K3ZHPrfbQAyG
+         u+XA==
+X-Gm-Message-State: AAQBX9f/6/RnzNy+2wuTDiV0ru9MAPYG21bxX6CXU/OZAsfj2bGyeL62
+        m/beU9q7fozFXucbW20Byuo=
+X-Google-Smtp-Source: AKy350bUR51nnMmwbXx1xt4z86WrUUpbxvFDqBTSzEFf/0HbReZDU/Z0j0yKNf0EiJ8HmzCkI8JMtQ==
+X-Received: by 2002:a7b:cd0b:0:b0:3eb:37ce:4c3d with SMTP id f11-20020a7bcd0b000000b003eb37ce4c3dmr17068957wmj.38.1681925001356;
+        Wed, 19 Apr 2023 10:23:21 -0700 (PDT)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id c10-20020a7bc2aa000000b003f080b2f9f4sm2760084wmk.27.2023.04.19.10.23.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 10:23:20 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 18:23:19 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
+ pin_user_pages()
+Message-ID: <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
+References: <cover.1681831798.git.lstoakes@gmail.com>
+ <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
+ <936e8f52-00be-6721-cb3e-42338f2ecc2f@kernel.dk>
+ <c2e22383-43ee-5cf0-9dc7-7cd05d01ecfb@kernel.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 00/19] arch: Consolidate <asm/fb.h>
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
-        sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-References: <20230417125651.25126-1-tzimmermann@suse.de>
- <1641007d-7953-426a-a3de-ca9c90f6c5a9@app.fastmail.com>
- <5fa98536-a4b0-7b71-7342-9ba05158062f@suse.de>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <5fa98536-a4b0-7b71-7342-9ba05158062f@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:H9qZXkCOPDN+3vsO7z+9ttDKPCRSFaiF/4cDmiO5ovofGlBxTzT
- kMlRPG3r4Q6KYGeHBb//fU40kwtmWj1gVkdx7p7FELLCFOD5Nql8qYPGjnWefhzsS88zNIK
- xaqD2s84khdceDbFsitlOpU2HidQYYXlykQQ9SD+p1IgyfdLRLZnqUmFoBDr2Oq3uB/Hpmu
- vy6bniwylk05WNGd4sCJg==
-UI-OutboundReport: notjunk:1;M01:P0:5ox/8AYo9cY=;DXfWBLw0Wfb00Me5ctwgZzfIUZ/
- 1GcLaW7zyF+rDR6gv5OFGKt/ECtMI2VLnGHaGgup0zhzHr7BbEMURzdNk4ut1hQ/I1Ur1dsc0
- 1JvQBABCmnEIVKxSHIzxSDISBJC4Qap+OiyTLFMWZ9un0xA1yRdsUs2M1yt+a2EqGcCluQlae
- 19JYqGAwJcB9zy4M2luWaDfLR+ZKhj9ZKj8YSY34zxXwBPDgYmXrjwHYmJ4VTpPq9lQoP7XYz
- zFNmrhEsoPBmtBzXWAha6jdgOhp/DgbHDRiAP61aoHFFNbzRmhAGM4NsKuWZgVMGEWTXl21UX
- RWqLtp/2wf2qeOu3egFZaXc8jYCWg1NlAIcF9HZ3295DdF25gExyuV9did7VXP77oNQQ+QXPc
- fhCOeNGtft8Mand8MEWSS+3kWNhuIfz07igr9+fsGtxP3ysYKTaY3WPhXV0YMVT8Bep0brJsz
- it0ElaUn+GMQsDuKpgWJIn6dE2RbkRjrP0KTWEny7DHSk8JEWgia6+A8qE0EY++w+1sCntVun
- q6L6YvL6bob4Q1BUg6FQGSTaWbEOj1aXk0c3aEh6x+vXVvTOLaLYYUvW1lFtPoRMygYgZx4wQ
- rJN3kennM/9oLujbd5BqjhpxyFEKAHVCVXS45wO+oSJnirRTWt+IU+XGjNEY0ptfkn3mN4x/q
- kvGcY6cnurtogkHbIzoeA9JDtK7wJr1dYuVhIbxaw4ROiwNGBzb/BR3lIpmxi2xnCf7zxwLP8
- po9pTOMtKhkJLo/DaIoVdM7R07TLStHRQWeCtVEbKyLKDvKxPjppGZ6s5Tz5A6AXYgiSFhuW4
- cGKpK8tRgRhTmcAGp6W5xqVoysF2XWyW46xmjytoEwKEd8r8g4J//wzQ3dLfMvZ9GduabVyKy
- Tq5+OYpXodvPTj/P2JbKEivhf9ZtS7PrHr8f0DO4nsV7nYIV9I/xwMZ3jymGdPYzWNpnTiyox
- UXVSng==
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c2e22383-43ee-5cf0-9dc7-7cd05d01ecfb@kernel.dk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
-
-> Am 17.04.23 um 16:12 schrieb Arnd Bergmann:>> On Mon, Apr 17, 2023, at 1=
-4:56, Thomas Zimmermann wrote:
->>> Various architectures provide <asm/fb.h> with helpers for fbdev
->>> framebuffer devices. Share the contained code where possible. There
->>> is already <asm-generic/fb.h>, which implements generic (as in
->>> 'empty') functions of the fbdev helpers. The header was added in
->>> commit aafe4dbed0bf ("asm-generic: add generic versions of common
->>> headers"), but never used.
->>>
->>> Each per-architecture header file declares and/or implements fbdev
->>> helpers and defines a preprocessor token for each. The generic
->>> header then provides the remaining helpers. It works like the I/O
->>> helpers in <asm/io.h>.
->>
->> Looks all good to me,
->>
->> Acked-by: Arnd Bergmann <arnd@arndb.de>
+On Wed, Apr 19, 2023 at 10:59:27AM -0600, Jens Axboe wrote:
+> On 4/19/23 10:35?AM, Jens Axboe wrote:
+> > On 4/18/23 9:49?AM, Lorenzo Stoakes wrote:
+> >> We are shortly to remove pin_user_pages(), and instead perform the required
+> >> VMA checks ourselves. In most cases there will be a single VMA so this
+> >> should caues no undue impact on an already slow path.
+> >>
+> >> Doing this eliminates the one instance of vmas being used by
+> >> pin_user_pages().
+> >
+> > First up, please don't just send single patches from a series. It's
+> > really annoying when you are trying to get the full picture. Just CC the
+> > whole series, so reviews don't have to look it up separately.
+> >
+> > So when you're doing a respin for what I'll mention below and the issue
+> > that David found, please don't just show us patch 4+5 of the series.
 >
-> Thanks a lot. I know that Helge wants to test the PARISC changes, so
-> I'll keep this series pending for a bit longer. I'd like to merge the
-> patches through the DRM tree, if no one objects.
+> I'll reply here too rather than keep some of this conversaion
+> out-of-band.
+>
+> I don't necessarily think that making io buffer registration dumber and
+> less efficient by needing a separate vma lookup after the fact is a huge
+> deal, as I would imagine most workloads register buffers at setup time
+> and then don't change them. But if people do switch sets at runtime,
+> it's not necessarily a slow path. That said, I suspect the other bits
+> that we do in here, like the GUP, is going to dominate the overhead
+> anyway.
 
-Yes, patch is good and I've tested it on parisc. Thanks!
+Thanks, and indeed I expect the GUP will dominate.
 
-You may add:
-Acked-by: Helge Deller <deller@gmx.de>
-to the series and take it through the drm tree.
+>
+> My main question is, why don't we just have a __pin_user_pages or
+> something helper that still takes the vmas argument, and drop it from
+> pin_user_pages() only? That'd still allow the cleanup of the other users
+> that don't care about the vma at all, while retaining the bundled
+> functionality for the case/cases that do? That would avoid needing
+> explicit vma iteration in io_uring.
+>
 
-Helge
+The desire here is to completely eliminate vmas as an externally available
+parameter from GUP. While we do have a newly introduced helper that returns
+a VMA, doing the lookup manually for all other vma cases (which look up a
+single page and vma), that is more so a helper that sits outside of GUP.
+
+Having a separate function that still bundled the vmas would essentially
+undermine the purpose of the series altogether which is not just to clean
+up some NULL's but rather to eliminate vmas as part of the GUP interface
+altogether.
+
+The reason for this is that by doing so we simplify the GUP interface,
+eliminate a whole class of possible future bugs with people holding onto
+pointers to vmas which may dangle and lead the way to future changes in GUP
+which might be more impactful, such as trying to find means to use the fast
+paths in more areas with an eye to gradual eradication of the use of
+mmap_lock.
+
+While we return VMAs, none of this is possible and it also makes the
+interface more confusing - without vmas GUP takes flags which define its
+behaviour and in most cases returns page objects. The odd rules about what
+can and cannot return vmas under what circumstances are not helpful for new
+users.
+
+Another point here is that Jason suggested adding a new
+FOLL_ALLOW_BROKEN_FILE_MAPPINGS flag which would, by default, not be
+set. This could assert that only shmem/hugetlb file mappings are permitted
+which would eliminate the need for you to perform this check at all.
+
+This leads into the larger point that GUP-writing file mappings is
+fundamentally broken due to e.g. GUP not honouring write notify so this
+check should at least in theory not be necessary.
+
+So it may be the case that should such a flag be added this code will
+simply be deleted at a future point :)
+
+> --
+> Jens Axboe
+>
