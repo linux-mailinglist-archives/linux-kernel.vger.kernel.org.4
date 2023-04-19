@@ -2,88 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5836E7934
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1588C6E793D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233043AbjDSMBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53214 "EHLO
+        id S231741AbjDSMCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232662AbjDSMA5 (ORCPT
+        with ESMTP id S232465AbjDSMCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:00:57 -0400
+        Wed, 19 Apr 2023 08:02:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083DC15639;
-        Wed, 19 Apr 2023 05:00:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF04D336;
+        Wed, 19 Apr 2023 05:02:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF0E563E39;
-        Wed, 19 Apr 2023 12:00:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 359B1C433EF;
-        Wed, 19 Apr 2023 12:00:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A8B863E39;
+        Wed, 19 Apr 2023 12:02:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF269C433EF;
+        Wed, 19 Apr 2023 12:02:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681905624;
-        bh=zGbUZiACjiQ5xDCuVGbZ/qeo8/UvZ7o2Azhml3u3dks=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QS0P1L0MAHyIdXKX8jx0oVC5pTplxf7xfKlwlFjwd2keQYXvoAnGyA9j4WyTKxxWW
-         vSat4h2/DqkKkAmbf3oZibe+qzRg5iLwoUlIbcV7wk2CP2Et5tA+O0gYA96KMu4fSz
-         tm38rEjXefHbYPEoqQ3i9cIrih6cZzUqgKREMCJ19xVBqlVVdCsyQoX01nUkR/Jf46
-         egfCNAFI0WNv95ZbEBVmSRqKLEtSt5CBo8utW6YYI3LhNOLB/1dNhSOUldyrBckgfN
-         hp3pdYGt5fuV8TDAOw4AIN+oYP1nci55/f23Ec1VUtdOmCiCjg2nKwn2VeedilccDP
-         BX+v2TjOZCSPw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0F2D1E270E7;
-        Wed, 19 Apr 2023 12:00:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1681905734;
+        bh=ZI2jxO0g5yp47daWZtUuG8EFrHfj96WR/LFnKZ1hjLo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pAEbQOf/1xQI1VyTOJz1PSQ+VH3LYyHZVQgwW6vdSWIapYNpuHnBGWX83YND9LZYc
+         VHIImidFFo5bDw0bjx8PuR9fxSbJdNQGjL5dTsb/Su/WsnHxfBznW8Ka4f27Tq0KUs
+         nJgwCqHes9+4bgUUdSKM/aF6gp9PvMOUeSCazXBhWS7GzjrMzMrOLlLFQaAzub6dAD
+         qF/J5l4rK/+myqHayTyE1vuzp2PSAcDdgtwqSAb6g6ljbMxLsj9DoyHpGJhDH4T8bt
+         t97dQBashNYWFmuVpVzrQ7I18nX3Ffsozbzn0uvalhGeNff9d2PQBC9UiAHzrLCJ4T
+         6VNzkLNG+srKA==
+Message-ID: <e59482e9-6d27-8e1e-82a7-51e059b6ae8e@kernel.org>
+Date:   Wed, 19 Apr 2023 15:02:10 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2] net: wwan: Expose secondary AT port on DATA1
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168190562405.2268.16080660591226497806.git-patchwork-notify@kernel.org>
-Date:   Wed, 19 Apr 2023 12:00:24 +0000
-References: <20230414-rpmsg-wwan-secondary-at-port-v2-1-9a92ee5fdce2@nayarsystems.com>
-In-Reply-To: <20230414-rpmsg-wwan-secondary-at-port-v2-1-9a92ee5fdce2@nayarsystems.com>
-To:     Jaime Breva via B4 Relay 
-        <devnull+jbreva.nayarsystems.com@kernel.org>
-Cc:     stephan@gerhold.net, loic.poulain@linaro.org,
-        ryazanov.s.a@gmail.com, johannes@sipsolutions.net,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jbreva@nayarsystems.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 0/5] arm64: dts: ti: Drop bootargs
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Tero Kristo <kristo@kernel.org>
+References: <20230418165212.1456415-1-nm@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230418165212.1456415-1-nm@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
 
-On Mon, 17 Apr 2023 08:07:24 +0200 you wrote:
-> From: Jaime Breva <jbreva@nayarsystems.com>
+On 18/04/2023 19:52, Nishanth Menon wrote:
+> Hi,
 > 
-> Our use-case needs two AT ports available:
-> One for running a ppp daemon, and another one for management
+> This has come up multiple times, so cleaning it all up.
+> See [1] for context. AM64 is covered in [2].
 > 
-> This patch enables a second AT port on DATA1
+> Nishanth Menon (5):
+>   arm64: dts: ti: k3-am62x-sk-common: Drop bootargs
+>   arm64: dts: ti: k3-am65*: Drop bootargs
+>   arm64: dts: ti: k3-j721e-*: Drop bootargs
+>   arm64: dts: ti: k3-j7200-common-proc-board: Drop bootargs
+>   arm64: dts: ti: k3-j721s2-common-proc-board: Drop bootargs
 > 
-> [...]
+>  arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi         | 1 -
+>  arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi     | 1 -
+>  arch/arm64/boot/dts/ti/k3-am654-base-board.dts         | 1 -
+>  arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts  | 1 -
+>  arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts  | 1 -
+>  arch/arm64/boot/dts/ti/k3-j721e-sk.dts                 | 1 -
+>  arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts | 1 -
+>  7 files changed, 7 deletions(-)
+> 
+> [1] https://lore.kernel.org/linux-arm-kernel/81134eb9-2b7d-05bc-3035-a47f020861a8@linaro.org/
+> [2] https://lore.kernel.org/all/20230414073328.381336-1-nm@ti.com/
 
-Here is the summary with links:
-  - [net-next,v2] net: wwan: Expose secondary AT port on DATA1
-    https://git.kernel.org/netdev/net-next/c/158441884772
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
