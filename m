@@ -2,134 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 345296E758C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 782EB6E7594
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232695AbjDSInC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
+        id S232701AbjDSIog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbjDSInA (ORCPT
+        with ESMTP id S232535AbjDSIof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:43:00 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED727EE2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:42:58 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id dm2so79733547ejc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:42:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681893777; x=1684485777;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lutJ4X10eErUILwsgkdH5WmRxdvwhCW95FNaPAQ5mOk=;
-        b=XbNu4/AzTzgi+SMPQbP1NKUwDL7qbs11pGCy3FlTuVDrB/tkONF99YDMYrFTgCJZay
-         nm5867HkR9801Y9X4hWeCqe5CmHroUf2Kod7fd6qsN23Y3EvR3dPJTyVNo5HqhYYBcVR
-         ow/fFAOkxWUXfF5523e1xd0js0doDLYk5AsAAauarp+XpDTLOL7ddupMCOJDOLcKyyJW
-         VKN/GmVEio11aMHMf6KZHD+hTmMh/J/l9EklGPyax9AsgN+DieOlu7SErLZf7z91Abtp
-         i6BtWpdkeIzo2AI05bfzBuwZM621bN+jpV6+sdeQv6nfbvQDKk25ymPadmRcAShLFdJt
-         pi5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681893777; x=1684485777;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lutJ4X10eErUILwsgkdH5WmRxdvwhCW95FNaPAQ5mOk=;
-        b=P0in3/s+W0xfGWzbLh2DQkg2oRHfPECEfqLeXTDmCs1DkUbfiWcR7LCLu7etqCNm7z
-         7gctQXq2VzfT3T1lEpwimnta15K8MPVGdKQlV7vSrjw6+pW4F7648Npi8l6Siz5LsesO
-         QnpimymwBEADZ/6EiAHZZWrw11r0aD1/WMv1dG4qTIqbsWUQiRkAOfwFNsBBhz8abvo/
-         DcdlEylLAyFiwCkP2TzyIc7fxnbA4vkO8tzxzHO1icSFmNXwslAn9T2SMMUbY2IHXW+w
-         1x3dV9NmzLkKyA5gJOddPBITNBrrvlmFD1QOOE6skEVUNpUmFnNQQAztaa7KqHmt9dnP
-         5dkg==
-X-Gm-Message-State: AAQBX9eOtzoc/5CrruvPMzOTczK0Q0yKUbyZrrx6OkvgsU88fyrNjR6G
-        vxMKnPe6HwhQ/LPcAMUROyq8Qg==
-X-Google-Smtp-Source: AKy350YJCPwQqKeOuuIlGNWHxL0ygBdn8cM/uUi2NRApm7KlPPSaGoSd3IH6gCkL818yCt8UV4dZCw==
-X-Received: by 2002:a17:906:70d1:b0:94e:e859:8721 with SMTP id g17-20020a17090670d100b0094ee8598721mr17212622ejk.22.1681893777250;
-        Wed, 19 Apr 2023 01:42:57 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:62f5:eb43:f726:5fee? ([2a02:810d:15c0:828:62f5:eb43:f726:5fee])
-        by smtp.gmail.com with ESMTPSA id ww1-20020a170907084100b0094f2a03486esm5871556ejb.224.2023.04.19.01.42.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 01:42:56 -0700 (PDT)
-Message-ID: <a638055a-97c2-49ce-f301-45d0ce897df4@linaro.org>
-Date:   Wed, 19 Apr 2023 10:42:55 +0200
+        Wed, 19 Apr 2023 04:44:35 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76ACE7EDD;
+        Wed, 19 Apr 2023 01:44:33 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 843F81C0AB3; Wed, 19 Apr 2023 10:44:31 +0200 (CEST)
+Date:   Wed, 19 Apr 2023 10:44:30 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yu Zhao <yuzhao@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>,
+        Tom Saeger <tom.saeger@oracle.com>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Waiman Long <longman@redhat.com>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, Tejun Heo <tj@kernel.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Darren Kenny <darren.kenny@oracle.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>
+Subject: Re: [PATCH 5.15 00/91] 5.15.108-rc1 review
+Message-ID: <ZD+p7rQoYoOa0e+T@duo.ucw.cz>
+References: <20230418120305.520719816@linuxfoundation.org>
+ <CA+G9fYs9sHnfhn4hSFP=AmOfgj-zvoK9vmBejRvzKPj4uXx+VA@mail.gmail.com>
+ <bd46521c-a167-2872-fecb-2b0f32855a24@oracle.com>
+ <20230418165105.q5s77yew2imkamsb@oracle.com>
+ <ZD9rfsteIrXIwezR@debian.me>
+ <CAOUHufa9-AKwwx7oVpQkV355TTmVSfi8roBKEsRjRNbeuGUkbw@mail.gmail.com>
+ <2023041918-gravitate-reformat-9a34@gregkh>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 9/9] dt-bindings: Add documentation for rt5033 mfd,
- regulator and charger
-Content-Language: en-US
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <cover.1681646904.git.jahau@rocketmail.com>
- <9275af790e6e21b5cf661a2444effe4caf2be02e.1681646904.git.jahau@rocketmail.com>
- <5b41b54c-88d0-3666-9db2-9cbb90ba8183@linaro.org>
- <acb209ce-7cb6-9a07-c913-9931b980c8c7@rocketmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <acb209ce-7cb6-9a07-c913-9931b980c8c7@rocketmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="Os7mj2m62qSU4dtk"
+Content-Disposition: inline
+In-Reply-To: <2023041918-gravitate-reformat-9a34@gregkh>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/04/2023 23:37, Jakob Hauser wrote:
 
->>> +properties:
->>> +  compatible:
->>> +    const: richtek,rt5033-charger
->>> +
->>> +  richtek,pre-microamp:
->>> +    description:
->>> +      Current of pre-charge mode. The pre-charge current levels are 350 mA to
->>> +      650 mA programmed by I2C per 100 mA.
->>
->> minimum:
->> maximum:
->> multipleOf: 100
->>
->> Same for other cases.
-> 
-> The "multipleOf: 100" doesn't seen appropriate to me when the choice is 
-> 350, 450, 550, 650. Those are not multiples of 100. It's more of a step 
-> size. I didn't find a general property for step size. Listing them as 
-> "enum" would be another possibility, I guess, but not an elegant one. 
-> Especially for property "richtek,const-microvolt" there are 30 
-> possibilities.
+--Os7mj2m62qSU4dtk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Ahh, right. You can use enum here and min/max for other cases, where
-multipleOf cannot be used.
+Hi!
 
->>> +  richtek,eoc-microamp:
->>> +    description:
->>> +      This property is end of charge current. Its level ranges from 150 mA to
->>> +      600 mA. Between 150 mA and 300 mA in 50 mA steps, between 300 mA and 600 mA
->>> +      in 100 mA steps.
->>> +    maxItems: 1
-> 
-> Here are two different step sizes. The first few are 50 mA steps (150, 
-> 200, 250, 300 mA) and then it changes to 100 mA steps (300, 400, 500, 
-> 600 mA). How to deal with that? Again I guess "enum" would be a 
-> possibility, but again not a nice one.
+> I'm just going to drop all of these patches from the queues now, and let
+> the original submitter resend them after they are fixed up properly.
 
-enum
+Build errors are gone in 5.10.178-rc2:
+
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
+41747700
+
+and 5.15108-rc2 is okay too:
+
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
+41747822
 
 Best regards,
-Krzysztof
+								Pavel
+--=20
+DENX Software Engineering GmbH,        Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
+--Os7mj2m62qSU4dtk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZD+p7gAKCRAw5/Bqldv6
+8oz4AKDCesRM3AuO3l/WpQixZiluQjiW2ACfYbZAZja+eQ7wWdDWkc/bREMynp8=
+=V96E
+-----END PGP SIGNATURE-----
+
+--Os7mj2m62qSU4dtk--
