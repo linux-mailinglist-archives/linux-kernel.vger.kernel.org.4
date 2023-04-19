@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7EBF6E72A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 557226E72A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbjDSFaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 01:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
+        id S231580AbjDSFmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 01:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjDSFaS (ORCPT
+        with ESMTP id S229633AbjDSFmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 01:30:18 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07954697;
-        Tue, 18 Apr 2023 22:30:16 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-63b4bf2d74aso2443512b3a.2;
-        Tue, 18 Apr 2023 22:30:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681882216; x=1684474216;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2OSQxrSfo9g2PRmFaM8khgvUPSinJ6+/aFBwzvj216c=;
-        b=reV/gURgFVvnY0EcU+e/bKuk2FWHgQw7hdLeo13u0ORgheCdKGB6tX34/Mnj/9VHrp
-         DnEYZIQgvmwq2zSKyc3Z3ABTJAmopgxw5jkcKWTOHSoQdh0yEnhkwn5S0JPoOOKnJxN1
-         g+a7NYaePRNCBi7MDG1kk9qSYYRi2j4w9DWK/LOpY/RIS6DfJY0GuVMrsbn8F6xq3Ofc
-         ucXWdYbyauvbZ3VfFY2pKEpMXSTw7OwihS5RcyNnsE89U9u9M/PlsfRaXfFkVurAbJNr
-         GhhAYRrJf4eDN8vkzYytZ7d+BHALju5zYmab2lvTZCQNtD62ao8LWndELg4G+28z3qHV
-         8nBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681882216; x=1684474216;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2OSQxrSfo9g2PRmFaM8khgvUPSinJ6+/aFBwzvj216c=;
-        b=iJ6o69WwT85TCGoRbyIrS0d+6d4ZvmQwV45tpTTSan6tAWvOdDIRms10ClXMPXIWPc
-         up13z+mop4pYvzKS6AAEjx80ffogFaZXCLi1gVjqCukdba5vHVuWhW4X3dbHCpglJvIK
-         c8xfnubx74uYuYDUZUgp7qoLhmIq8DwNKromYr17U3eovj8LI+sUZ/alXYo+s7vHWO0D
-         Gf1TliBtUdfdl9J3seZKUIxLNhahs4szAVzECDUcA5Lbe/6LFbep6REcOZTQcMpSTLML
-         WGG+VHWzlPXltaZxd+fX/Y9gdsAGU5yMvY+/fw096ArWS8g3SJgGGEbiIPRNN+SvAl0s
-         ZV3g==
-X-Gm-Message-State: AAQBX9dNlMGdVn/QSiv0K1pykFbghya0O0SjVB5T3TDciIgiSumB7/0o
-        4YwqmSZJo8Sb6Y8ECRKZ+7Ucw22SEEFz1BJwCyk=
-X-Google-Smtp-Source: AKy350b5S4mPAHJk106Cu3+gvWK+Mf/tyMH7pgXtlxkOeNgW8Wa0O0oofvog8ZgsISTiZOd18rZjlRJyDWiBvcVpw/c=
-X-Received: by 2002:a17:90a:51e6:b0:233:c301:32b3 with SMTP id
- u93-20020a17090a51e600b00233c30132b3mr1711226pjh.3.1681882216318; Tue, 18 Apr
- 2023 22:30:16 -0700 (PDT)
+        Wed, 19 Apr 2023 01:42:31 -0400
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16E440E7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:42:25 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTP id 33J5ed12070031;
+        Wed, 19 Apr 2023 13:40:39 +0800 (+08)
+        (envelope-from zhaoyang.huang@unisoc.com)
+Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Wed, 19 Apr 2023 13:40:39 +0800
+From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, <ke.wang@unisoc.com>
+Subject: [PATCH] mm: skip CMA pages when they are not available
+Date:   Wed, 19 Apr 2023 13:40:24 +0800
+Message-ID: <1681882824-17532-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-References: <20230417013107.360888-1-zyytlz.wz@163.com> <20230418213340.153529d7@kernel.org>
-In-Reply-To: <20230418213340.153529d7@kernel.org>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Wed, 19 Apr 2023 13:30:05 +0800
-Message-ID: <CAJedcCx3B58NaBHYZ_xurKjp=7DjmMgHvSta2axCu5ToQObwMg@mail.gmail.com>
-Subject: Re: [PATCH net v3] net: ethernet: fix use after free bug in
- ns83820_remove_one due to race condition
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, davem@davemloft.net,
-        horatiu.vultur@microchip.com, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
-        alex000young@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.65]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 33J5ed12070031
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=8819=E6=97=
-=A5=E5=91=A8=E4=B8=89 12:33=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Mon, 17 Apr 2023 09:31:07 +0800 Zheng Wang wrote:
-> > +     netif_carrier_off(ndev);
-> > +     netif_tx_disable(ndev);
-> > +
-> >       unregister_netdev(ndev
->
-> It's not immediately obvious to me why disabling carrier and tx
-> are supposed to help. Please elaborate in the commit message if
-> you're confident that this is right.
->
+From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-Hi Jakub,
+It is wasting of effort to reclaim CMA pages if they are not availabe
+for current context during direct reclaim. Skip them when under corresponding
+circumstance.
 
-Thanks for your reply. I'll figure it out to see if it's really necessary.
+Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+---
+ mm/vmscan.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-Best regards,
-Zheng
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index bd6637f..04424d9 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -2225,10 +2225,16 @@ static unsigned long isolate_lru_folios(unsigned long nr_to_scan,
+ 	unsigned long nr_skipped[MAX_NR_ZONES] = { 0, };
+ 	unsigned long skipped = 0;
+ 	unsigned long scan, total_scan, nr_pages;
++	bool cma_cap = true;
++	struct page *page;
+ 	LIST_HEAD(folios_skipped);
+ 
+ 	total_scan = 0;
+ 	scan = 0;
++	if ((IS_ENABLED(CONFIG_CMA)) && !current_is_kswapd()
++		&& (gfp_migratetype(sc->gfp_mask) != MIGRATE_MOVABLE))
++		cma_cap = false;
++
+ 	while (scan < nr_to_scan && !list_empty(src)) {
+ 		struct list_head *move_to = src;
+ 		struct folio *folio;
+@@ -2239,7 +2245,10 @@ static unsigned long isolate_lru_folios(unsigned long nr_to_scan,
+ 		nr_pages = folio_nr_pages(folio);
+ 		total_scan += nr_pages;
+ 
+-		if (folio_zonenum(folio) > sc->reclaim_idx) {
++		page = &folio->page;
++
++		if (folio_zonenum(folio) > sc->reclaim_idx ||
++			(get_pageblock_migratetype(page) == MIGRATE_CMA && !cma_cap)) {
+ 			nr_skipped[folio_zonenum(folio)] += nr_pages;
+ 			move_to = &folios_skipped;
+ 			goto move;
+-- 
+1.9.1
 
-> --
-> pw-bot: cr
