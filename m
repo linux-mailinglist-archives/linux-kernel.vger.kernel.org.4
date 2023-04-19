@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4546E73FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 343506E7400
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232210AbjDSH1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 03:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51854 "EHLO
+        id S230153AbjDSH2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 03:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbjDSH1x (ORCPT
+        with ESMTP id S232226AbjDSH2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 03:27:53 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A557A88
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:27:48 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-63b73203e0aso14180128b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:27:48 -0700 (PDT)
+        Wed, 19 Apr 2023 03:28:02 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315EB7A87
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:27:53 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1a6f0d8cdfeso13842005ad.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:27:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1681889268; x=1684481268;
+        d=shopee.com; s=shopee.com; t=1681889272; x=1684481272;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gSoHVlZS36edCYjU/v/RuuwOO4uL+FEpJ+Bh/7CgMHo=;
-        b=FunZNdOtmCdb8makcm5N4dCGZq0Ujrm0Ao0FiH8HYK2cw5V6ehNUkJ9Mlrvjxb4Bqf
-         OCVRK827rDA9/2X1G62L0Y6pKmnwYPGsIno4UCDmNmetu2UtA1RJRwbQ9D/0RhIKhNTB
-         cUR2IEOb9k94mV9lDgy73bF9jLMAz++SBRbWbk657njW9M3QVMI0Pa6vn4/iciR3JOwL
-         4DHOlvZayBbO57GdHouJPd+oODUKgWpeP9BkmbpvEGsnnmzEdqSoHGKfIIdf1jwYAV89
-         c6SdwK06LotXS3gYIQ8Qa0N9Yza+dNmsEjrikXJNFDqQJl+VW5YwrQ3AdqEEaV8sXgqv
-         g8+Q==
+        bh=bD/SvEkfhf+lVwF/ikMxaAtATUdOMTpwagzMnJrn3YE=;
+        b=iRYzVjWclaREWqyJvQkvfResoHZcSCSPO7asLuN4ys0u4MNm8hMoIyc7WTcS+9UigZ
+         HF3y5Va2WpldD/F7sXNF3xsXHSl5LakN3XG8QjdPk2qE2CI3IGp2etkWTq6Yio/kMQgc
+         edgTJ6tT4adPzwVtrS1ZFut8uGFn7AEZI9BNeocs8sHm0QjhAM+L37W5lCgnFz6LuKpw
+         t3buqzv9dakHh9POeb1ZMfYq8ydMKWgfg02FG4lINEbfBv08ZP1RntdnY/36JR4DhJ+I
+         DtSjYNtdX7NO5bb5FHVJUxAYp1MasNqiWbXBPHDapHAh1qO+qPrqKB/mfazCw9qxTE0a
+         6ekg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681889268; x=1684481268;
+        d=1e100.net; s=20221208; t=1681889272; x=1684481272;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gSoHVlZS36edCYjU/v/RuuwOO4uL+FEpJ+Bh/7CgMHo=;
-        b=TWdnAQoN0k8kVgk7b0DVfY/5BI+pVq1EjXmZQy4suxwOgY6vSHxbZ3ljLIkt2eIDrs
-         F8j3m6MOUaoCyzsBNoFLPFQxUnUi+gFCkNHyRAn4nVsHFZlIZdR15+41KlLWMJuMBBWn
-         QN8DEtoMACSRi7UVe5VARynvOfbwBdgSQmsTkzMDa/kQp8f5lB5f2lmTIjQtw1Id/3gv
-         +jvpVsS0/4grr7uwd/XpYOfTYkKhfoRu2zbo0YMjyMVpotLIBNlHow77wrN4vKIfNrdZ
-         GWnGhiT1yVCLVm8uA3UVKgRoKR3iiL389jXT7w4MwRK5rN4qdx/d8O6eYjdkT01oxNt0
-         ReEQ==
-X-Gm-Message-State: AAQBX9c5Aotzm3dP3AOr1B1dRz60n4Y45C2vm1GPCk4uaACnaRMSmU7d
-        l8GdBCtt17pATXKgSLdf2x2NPoV+oPLK8P8bsxZ0nQ==
-X-Google-Smtp-Source: AKy350bTm31lpb8UyGijbHK6avlBhqzZVGNzJcNxNvoJ5rPHpg3wANW9I7Dk4XyUFqcWtv800WyMNQ==
-X-Received: by 2002:a17:902:d2cb:b0:1a6:3def:5ff6 with SMTP id n11-20020a170902d2cb00b001a63def5ff6mr1835136plc.4.1681889268302;
-        Wed, 19 Apr 2023 00:27:48 -0700 (PDT)
+        bh=bD/SvEkfhf+lVwF/ikMxaAtATUdOMTpwagzMnJrn3YE=;
+        b=NAo7lk7oleKf1jFtElSjIdgU78FkACJBCuqGpNzLRB3D9zUxtDrFHx8IUFL6j+4Wnp
+         YS4A1buUuhdgcQSVzPZua7iBrxyyaL//yOZ8alcTmzK9vMUSn+Y+4r0eduxOVczgk+Qn
+         WOe+4hDlZY0B6Jjl/GgzJt8IbwKqVHIl1tXLmYBKgk5NlxraD2iIUDobJAt5qOSR+t7x
+         UNkrNpu4VHkHfhr6SfkUpnyBGh+z4Xt+XxAFaq0wM0m+KrBrrHid+JN+Sjtq1TOAyrFy
+         PYsNJSQVWCUtViVXcOYBd8c7sNrk3W0ZD6Z6MFypfr2BAOujPo6CywO2Om2IcbHzmMuf
+         GzUw==
+X-Gm-Message-State: AAQBX9cXqgrBSd2+yOP/FU7RKCNpzW+5jkU1dxITSMoyBLR6LxP+ETr2
+        6fnfumim9zAQhEiZ8AUGeYWhXw==
+X-Google-Smtp-Source: AKy350YCr2jblDnngZ/tnwDmsUWu4GqzhoY4TYEXUrENPvDWVt4YeUyj55NN5WEV42prQIs/IU08DQ==
+X-Received: by 2002:a17:903:1c5:b0:1a6:a1ec:53a3 with SMTP id e5-20020a17090301c500b001a6a1ec53a3mr5926551plh.3.1681889272613;
+        Wed, 19 Apr 2023 00:27:52 -0700 (PDT)
 Received: from ubuntu-haifeng.default.svc.cluster.local ([101.127.248.173])
-        by smtp.gmail.com with ESMTPSA id i5-20020a170902eb4500b0019abd4ddbf2sm10762587pli.179.2023.04.19.00.27.46
+        by smtp.gmail.com with ESMTPSA id i5-20020a170902eb4500b0019abd4ddbf2sm10762587pli.179.2023.04.19.00.27.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 00:27:47 -0700 (PDT)
+        Wed, 19 Apr 2023 00:27:52 -0700 (PDT)
 From:   Haifeng Xu <haifeng.xu@shopee.com>
 To:     viro@zeniv.linux.org.uk
 Cc:     bigeasy@linutronix.de, mcgrof@kernel.org, mszeredi@redhat.com,
         xiubli@redhat.com, linux-kernel@vger.kernel.org,
         Haifeng Xu <haifeng.xu@shopee.com>
-Subject: [PATCH 1/2] vfs: remove unused d_backing_dentry() function
-Date:   Wed, 19 Apr 2023 07:27:35 +0000
-Message-Id: <20230419072736.172593-1-haifeng.xu@shopee.com>
+Subject: [PATCH 2/2] vfs: clean up d_backing_inode() function
+Date:   Wed, 19 Apr 2023 07:27:36 +0000
+Message-Id: <20230419072736.172593-2-haifeng.xu@shopee.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,39 +70,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-d_backing_dentry() isn't used by anyone, so remove it.
+Using an extra variable to record the inode is unnecessary, return it
+directly.
 
 Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
 ---
- include/linux/dcache.h | 15 ---------------
- 1 file changed, 15 deletions(-)
+ include/linux/dcache.h | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/include/linux/dcache.h b/include/linux/dcache.h
-index 6b351e009f59..13023c7211d6 100644
+index 13023c7211d6..97324b6434e5 100644
 --- a/include/linux/dcache.h
 +++ b/include/linux/dcache.h
-@@ -545,21 +545,6 @@ static inline struct inode *d_backing_inode(const struct dentry *upper)
- 	return inode;
+@@ -540,9 +540,7 @@ static inline struct inode *d_inode_rcu(const struct dentry *dentry)
+  */
+ static inline struct inode *d_backing_inode(const struct dentry *upper)
+ {
+-	struct inode *inode = upper->d_inode;
+-
+-	return inode;
++	return upper->d_inode;
  }
  
--/**
-- * d_backing_dentry - Get upper or lower dentry we should be using
-- * @upper: The upper layer
-- *
-- * This is the helper that should be used to get the dentry of the inode that
-- * will be used if this dentry were opened as a file.  It may be the upper
-- * dentry or it may be a lower dentry pinned by the upper.
-- *
-- * Normal filesystems should not use this to access their own dentries.
-- */
--static inline struct dentry *d_backing_dentry(struct dentry *upper)
--{
--	return upper;
--}
--
  /**
-  * d_real - Return the real dentry
-  * @dentry: the dentry to query
 -- 
 2.25.1
 
