@@ -2,102 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDEC6E8177
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC016E817C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjDSSuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
+        id S230515AbjDSSvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjDSSuN (ORCPT
+        with ESMTP id S229572AbjDSSvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 14:50:13 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281C83C1F;
-        Wed, 19 Apr 2023 11:50:12 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AC6901EC04CC;
-        Wed, 19 Apr 2023 20:50:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1681930210;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=SVVPfMePTugNQXZr+bgsRgFqkCGg3mE6MBdeVlBoODA=;
-        b=KXBwS68F4KAcG/GqVEvBT7wIz7lMKDfx7TxeX9FCQ3izpDOo3TqLQeyMHfO2HWbHuqPo8B
-        poVubrwJJOpHO0TeCFos7ECY2VW3KlRtUh3Z52GGzDKs8lD5WZr83iolRJU5Ksk3CU5D2o
-        E64Ec3jygBPHThdr7twGqWWdNWtmU2o=
-Date:   Wed, 19 Apr 2023 20:50:05 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     broonie@kernel.org
-Cc:     David Hildenbrand <david@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
+        Wed, 19 Apr 2023 14:51:02 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE363C1F;
+        Wed, 19 Apr 2023 11:51:00 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id v3so193402wml.0;
+        Wed, 19 Apr 2023 11:51:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681930259; x=1684522259;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ezek+yGdnnG3GJVW/T1zFXIXfyJ7BG3LMN7NClKXUQI=;
+        b=TW+V7PnGQiMShWp6b+GsPudVaJ/F5vEozWItp02wq0Bg4V0pcfX96UMs/PnfoK3SxO
+         AA7blAs+JWp9bQGXg1PYOB38yvBy5xKaelzUF1J630FyAzfzv4vkn2IwmYgUk2CdJRUf
+         l2x5jxLtTsKESRkIszJoguNMoFjZN3DK078oo1zvm0hwtskDRNXJNSHJkOyVsyA9tEaJ
+         gsxl5EX94C04ZfuiRAmKJaIJdX0FCyMCczMlcZVlJjL2JXlzGwIrWVzWk6nMCC9bIrAC
+         RnBeSjIDg3GIODW3DZgqjM6tV+/MO6cI6fk8unPAnID1TfQaOiTyqVyDl/Ou3gwG4S6F
+         uH0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681930259; x=1684522259;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ezek+yGdnnG3GJVW/T1zFXIXfyJ7BG3LMN7NClKXUQI=;
+        b=k95rgveD7EWiUBZfSb345eGuHQa7K+he82NWGo6HB5yz5+EJZiVIWJMcx/9R2DD9GD
+         P8Gkhf/+4p9maqpEPRSmhRjTpC1hbG2W9cZ0h41P2oCC0PtqA/Sf1B2ci7v8fXrSxrCh
+         yDvmVfoxQtFMgkLLZ0t2gDvf1sPgnejBPTXtFqwlcVNTtgfhRZM0zMu7Tad5sFMyRnl4
+         05inUskLmockOdarTlsxOJfwWuGsuIWZs0lRfIrLU9v8gB5fm60r4y392oRXoLi2DZSa
+         HkqJdo/Jhm7F8Fnc+rOJWYXxv2EzQui9U4jljRd7dS9i4ipObZuLXa7vf6+ATx5vMYcw
+         y74w==
+X-Gm-Message-State: AAQBX9dOLUpjTai89FOeZ0ObUciCnPYWYu3DNe/N5kKjWrPIigl++PTb
+        7+1HfAg4gIyN++hvFeV7DS8=
+X-Google-Smtp-Source: AKy350aCMKl7s7ZFuKxcGSpTyd5/sxX+RcpUIQUj2w0/TyGo8VroRs/8PwT6ZDtQmXhJ4xZMnD94Bw==
+X-Received: by 2002:a1c:ed19:0:b0:3f0:a0bb:58ef with SMTP id l25-20020a1ced19000000b003f0a0bb58efmr17698094wmh.25.1681930258816;
+        Wed, 19 Apr 2023 11:50:58 -0700 (PDT)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id z21-20020a7bc7d5000000b003f17848673fsm2974811wmk.27.2023.04.19.11.50.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 11:50:58 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 19:50:57 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Build failure after merge of the tip tree
-Message-ID: <20230419185005.GFZEA33e2h2jgF/ll5@fat_crate.local>
-References: <20230419182136.112974-1-broonie@kernel.org>
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org
+Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
+ pin_user_pages()
+Message-ID: <0a41fd0e-39ce-48a4-b47b-53cf4cbb050b@lucifer.local>
+References: <cover.1681831798.git.lstoakes@gmail.com>
+ <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
+ <936e8f52-00be-6721-cb3e-42338f2ecc2f@kernel.dk>
+ <c2e22383-43ee-5cf0-9dc7-7cd05d01ecfb@kernel.dk>
+ <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
+ <69f48cc6-8fc6-0c49-5a79-6c7d248e4ad5@kernel.dk>
+ <bec03e0f-a0f9-43c3-870b-be406ca848b9@lucifer.local>
+ <8af483d2-0d3d-5ece-fb1d-a3654411752b@kernel.dk>
+ <d601ca0c-d9b8-4e5d-a047-98f2d1c65eb9@lucifer.local>
+ <ZEAxW/yR3LCNSmjT@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230419182136.112974-1-broonie@kernel.org>
+In-Reply-To: <ZEAxW/yR3LCNSmjT@nvidia.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 07:21:36PM +0100, broonie@kernel.org wrote:
-> Hi all,
-> 
-> After merging the rcu tree, today's linux-next build (arm64 defconfig)
-> failed like this:
-> 
-> /tmp/next/build/mm/migrate.c: In function 'remove_migration_pte':
-> /tmp/next/build/mm/migrate.c:222:31: error: too few arguments to function 'pte_mkwrite'
->   222 |                         pte = pte_mkwrite(pte);
->       |                               ^~~~~~~~~~~
-> In file included from /tmp/next/build/include/linux/pgtable.h:6,
->                  from /tmp/next/build/include/linux/mm.h:29,
->                  from /tmp/next/build/include/linux/migrate.h:5,
->                  from /tmp/next/build/mm/migrate.c:16:
-> /tmp/next/build/arch/arm64/include/asm/pgtable.h:190:21: note: declared here
->   190 | static inline pte_t pte_mkwrite(pte_t pte, struct vm_area_struct *vma)
->       |                     ^~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   717f95b494ac36 ("mm: don't check VMA write permissions if the PTE/PMD indicates write permissions")
-> 
-> from the mm tree interacting with
-> 
->   74fd30bd28e4c7 ("mm: Make pte_mkwrite() take a VMA")
-> 
-> from the tip tree.  I've applied the fixup below
+On Wed, Apr 19, 2023 at 03:22:19PM -0300, Jason Gunthorpe wrote:
+> On Wed, Apr 19, 2023 at 07:18:26PM +0100, Lorenzo Stoakes wrote:
+>
+> > I'd also argue that we are doing things right with this patch series as-is,
+> > io_uring is the only sticking point because, believe it or not, it is the
+> > only place in the kernel that uses multiple vmas (it has been interesting
+> > to get a view on GUP use as a whole here).
+>
+> I would say io_uring is the only place trying to open-code bug fixes
+> for MM problems :\ As Jens says, these sorts of temporary work arounds become
+> lingering problems that nobody wants to fix properly.
+>
+> > So even if I did the FOLL_ALLOW_BROKEN_FILE_MAPPING patch series first, I
+> > would still need to come along and delete a bunch of your code
+> > afterwards. And unfortunately Pavel's recent change which insists on not
+> > having different vm_file's across VMAs for the buffer would have to be
+> > reverted so I expect it might not be entirely without discussion.
+>
+> Yeah, that should just be reverted.
+>
+> > However, if you really do feel that you can't accept this change as-is, I
+> > can put this series on hold and look at FOLL_ALLOW_BROKEN_FILE_MAPPING and
+> > we can return to this afterwards.
+>
+> It is probably not as bad as you think, I suspect only RDMA really
+> wants to set the flag. Maybe something in media too, maybe.
+>
+> Then again that stuff doesn't work so incredibly badly maybe there
+> really is no user of it and we should just block it completely.
+>
+> Jason
 
-Thanks for letting us know - we'll keep this in mind when sending the
-piles of patches to Linus next week.
+OK in this case I think we're all agreed that it's best to do this first
+then revisit this series afterwards. I will switch to working on this!
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+And I will make sure to cc- everyone in :)
