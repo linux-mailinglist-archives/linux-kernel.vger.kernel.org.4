@@ -2,581 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710856E7DC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D466E7DC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbjDSPN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
+        id S232926AbjDSPNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 11:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233082AbjDSPNG (ORCPT
+        with ESMTP id S232643AbjDSPNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:13:06 -0400
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3A91988;
-        Wed, 19 Apr 2023 08:13:03 -0700 (PDT)
-Received: by mail-oo1-xc2e.google.com with SMTP id w5-20020a4ae9e5000000b0054711c8ad6fso758136ooc.1;
-        Wed, 19 Apr 2023 08:13:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681917183; x=1684509183;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ozalp3KCLsv/1XGFew3iV1PCSC100UuMGxEjJVQkDCM=;
-        b=Zvx9BSFPu88+oMDbmj19SIyNMG2OaPkOmrq2Ful32HyvPvPbu+Uug1IAQEHnzlpgvL
-         oOihRcGLkc4WbVYEbHQsjNlKTQtsgKEfkrcO6uRUfKldtoJAxj9OGdKR4NoD3HPDjOPN
-         lwYmxLjibUyeIYe6dnkl/cIp4PW+S8zW6snf6i8V6JntQcTtBuf7jWWYsRfb8Xac1BFI
-         wF/mDQVrfpo26rCdUXI6rzKmGJpSo3u69rS5+Mgk1IdCgWWdr1KAmuk72DHSMQWD/Jvc
-         pb+GFDeI7hWJdYTzGfbiulsDQfnG5tTey1+7wFirZjbdI+o4hzIkHt+HosVamGyixMvP
-         Je4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681917183; x=1684509183;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ozalp3KCLsv/1XGFew3iV1PCSC100UuMGxEjJVQkDCM=;
-        b=W/R+pOv1/bV2OCo7jCAQlVQcP72Fg2OUKrRRL8RSTOy8UcntEL75TYALUkBAS7fehY
-         +gsQp9yKaM3Mc41z7usY3xbnsZE6lk8rR5V/E1Avo969ZRrJleyPWOwqLB083rKeq2Do
-         BvqNT8fNbnr63pyxINsbjh7UrktZjB5q/UetgYJ87b6f0mphfK8rIH5lMSyAInBY46Z4
-         I6k2AJ/HCYlty02xn8S4KNo50dkKbhPqHV6myxKRmgh+bPmgsEbwlKDYpjLnRwddWSYy
-         r+1jmTntvY4IA99kf5G20lETSJ7+iyLiFKknwHnEvGd2+B26NHZPPNIh8GybsIwYGFSp
-         jAaQ==
-X-Gm-Message-State: AAQBX9f5cGIrPFtoHyAV2LG8vUHH5jLFJlENaZ+femXE/4Bd6aCQ4k8r
-        wggGv1RwEOntKp0s8Y60AWs=
-X-Google-Smtp-Source: AKy350ZuCF8tXMm9VCM6l46M3r994LDNkV4ujuFvk3DxxEUCG6mMW0AyP6+W2Tk6L/QfEO5ml23uDg==
-X-Received: by 2002:a4a:88c7:0:b0:537:f9d4:a44c with SMTP id q7-20020a4a88c7000000b00537f9d4a44cmr106642ooh.5.1681917182429;
-        Wed, 19 Apr 2023 08:13:02 -0700 (PDT)
-Received: from grumpy-VECTOR.hsd1.tx.comcast.net ([2601:2c3:480:7390:e175:6963:338:7453])
-        by smtp.gmail.com with ESMTPSA id o10-20020acad70a000000b0038bae910f7bsm5766847oig.1.2023.04.19.08.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 08:13:02 -0700 (PDT)
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-X-Google-Original-From: Jorge Lopez <jorge.lopez2@hp.com>
-To:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v10 07/14] HP BIOSCFG driver  - string-attributes
-Date:   Wed, 19 Apr 2023 10:12:47 -0500
-Message-Id: <20230419151249.6126-8-jorge.lopez2@hp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230419151249.6126-1-jorge.lopez2@hp.com>
-References: <20230419151249.6126-1-jorge.lopez2@hp.com>
-MIME-Version: 1.0
+        Wed, 19 Apr 2023 11:13:01 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2082.outbound.protection.outlook.com [40.107.220.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4300919AF
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:12:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dIVgMt6kruTKx7vkWyTkRDd/grknYFKFD1H467K3G2yop4YTinOA984ec3bBY8Q0o2VniE6c0LmXqq59Np6jLCTxqmgZkvMghI3YumsbzIFT09rmW4opLeGbqDbEmL8navb7b/xsO1c2JYkEuq6Xyn7/2oXUO7EZUvOGqgfD0zaTy3S9aPnzKSB0yLVYa6wp3QYC/cBKDPlXFYteG99B7IZ2xZ4bRId0RJ6MwrosYGgstufrTJ0pHDG/4YHT3ZkG81AtpLQjpyo5Kljk9AtUtYMtrVhwOlU5c0p0BQaxcSt2LKwR3HKKaj3kBrS0I75F8lLk+I/Zx2aOnAnTy2agnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LSzT5WrC7iecR37ejyyExxSkb6YvlrAgAw6XLwPTTQc=;
+ b=iVFd/1dtgzBXtt98sYB4z9IfCiqH7QAPv77IjtQokjvKllr8Fo87UxLpzLqxS3qTuHEO86/n7BOCPEefzqCFrcw71d0ax9VLdfxj1ovkRyGSV6pAe2qEbmmPA08b3RJvi2pgf/bLg1tYGrzPJlfrBPY9kC1hLv4jDx8v/jEiU9wEhsB08qG73R9hq/0GmnfSugAML+tWY0lj73OEvYsAoBN0/JvOe6nSNxZTbphWFBxmldMqW8I/8oJUQxM/23aIF+VqrMEfDANTMCVOnHylBnvQHT0bGZQ8tirwuPdEDUlC5g18tT5bTy6q0wTY2NUzGkuTyzduh9q1lcP2hO60MQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LSzT5WrC7iecR37ejyyExxSkb6YvlrAgAw6XLwPTTQc=;
+ b=SEIF0KRsRZFFremRfNQjYl0kF9hvAxxfehPFk3Tg97gdZ+aFs4tq5n6cmrKm7LM5MYqVJUifOek5Tk/+VId3E3UGOvIDRqrXRJITlAl81GjobqIBRQ8NW5oycbtsFHrzcFp5EnuJhsYoP1TglBkLBXpnLUt+H1q2ely1axAfeIY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by CY5PR12MB6155.namprd12.prod.outlook.com (2603:10b6:930:25::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
+ 2023 15:12:53 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::441:3118:e408:9ddc]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::441:3118:e408:9ddc%6]) with mapi id 15.20.6319.021; Wed, 19 Apr 2023
+ 15:12:53 +0000
+Message-ID: <91654bbb-4bc1-2218-14e7-99fed3a3408b@amd.com>
+Date:   Wed, 19 Apr 2023 11:12:48 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] drm/display: Add missing OLED Vesa brightnesses
+ definitions
+Content-Language: en-US
+To:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, airlied@gmail.com,
+        daniel@ffwll.ch
+Cc:     Anthony Koo <anthony.koo@amd.com>,
+        Iswara Negulendran <iswara.nagulendran@amd.com>,
+        Felipe Clark <felipe.clark@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230412000943.429031-1-Rodrigo.Siqueira@amd.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20230412000943.429031-1-Rodrigo.Siqueira@amd.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR01CA0124.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:1::24) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|CY5PR12MB6155:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5ae2978e-3ea6-493b-1ff1-08db40e88c3d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mtEGSZZ0CZDt7riQvNsAZ/zzn/62r8AU+/fXWezayih2YwbbRPbFaOGkt9AVboSxhhBcREyI14C2jTEdR8QoI/p71+bLpzq6WPp8eW9HMUzg+FxN746mRE5rGoheDwatNh8AOsf5CwxyfD4ZJha+kdFSrkjB4zvrgI80AC5CUv9wvQtMQFj2fECyiHsw50ftej6ulW/38j4CSLYKkxgP3iZOdoPY5cZoaZZXKSc0s4az1ckLsnZLxwV6nLBekYmWD6o+9j8/qSqhROJUnX8efINP/QE8TaFWpeg1spQeNx8MlYF4dhXux89roqv0J3OPfvmC5rlXvJt4Jclkwme71QPckRdiUKZYObTB5TPW7wD+NfOhRr/wnopGZzNrigMnWajEjFpL163hvFH1gBdgfYq+Tk9CvtHvGMkD/dRqQtxmz26wAHTS2kgk5gu/224LylBn5Sgv0TRZxFzuv+eIGf/bn4tYSD6lf6mlvq/AA3m/5KLVvB7eApFHTRM1yVtcOwuAsXyBtrJcSlrDxkfcpylqjmCEvpkJLqtw2W41YM1LxpGN50qPqPEpAC0FBeSFE9RTfljT+BXt/LldCwea4zy/tBEc+rLqZAiZD9sY1ST/vcI9XC5I98I4JZhFS8quiGJ2xRT4TIpjnZKSapJ8fA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(346002)(39860400002)(366004)(451199021)(36756003)(4326008)(54906003)(316002)(66946007)(66556008)(66476007)(53546011)(6486002)(41300700001)(478600001)(6666004)(5660300002)(8936002)(8676002)(2906002)(44832011)(86362001)(31696002)(38100700002)(2616005)(6506007)(26005)(83380400001)(186003)(6512007)(31686004)(66899021)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NSt2bTkzMlJISndScmZEVkh1MjNjU2pOOFIwYUNyaEhQODJvNUxKQm1BUkVI?=
+ =?utf-8?B?UWZldmNRS0o4eU4yT1ZFMTIwQlE1V2FqTTM0czA1TEdlbm40c2xJUGR0TFFC?=
+ =?utf-8?B?Uy9yM0pzWFNxNzhjM3lzTkNDMkl4ckkxUjkzTC9peWl0emQvWElRYTE2UzRv?=
+ =?utf-8?B?eWg5YzJhenFXMjJpZ0tuckNaK2dsSDVpbHcxbjJiNFVBeFlvc21GakpOdVBV?=
+ =?utf-8?B?dmdMb2hvUHZ6WWxKYWhPM0RZNEZoejRkazB2eG5FUjJiNWhNanBHQS9DTHNi?=
+ =?utf-8?B?UTlMTHZMbWdNMTRUL01EeW4xTGwyVGoxWXpWUUhvMFZyMHcyTm5RSSt4dnZv?=
+ =?utf-8?B?dEZMVkZ1bEpKK1VPak0xUm1YK2VUcjF6a0NYdHdUamordjE0N0pRNW1DeVZh?=
+ =?utf-8?B?YktDeDI2UGtRU3c0U1MvSkttc1VqNkhOd1B1WlZKZkdQNWxtMTdlMDN3MWlY?=
+ =?utf-8?B?ZWp0WUc4UmtvdTYrR0dMMGUzMjZTNE9WS0hXS25oazlHN1laYjM1WnhZa1JZ?=
+ =?utf-8?B?dWZnMTBoNUpXNitxTG0wY25kWUlLZUl0L09iWFhVdldHemJOMkdvVUVZb0Fh?=
+ =?utf-8?B?VVBMRFFDdmNRVkdDS1dqbzNFODR3SjYwYmh3OXd4d1hxOWpUdUdHblBZS21V?=
+ =?utf-8?B?TFV1K1pKM1lMLzNyZ2krSFNEckdpc2VOMTV6OGRuOEdjZUJsWVdSQzkydGNy?=
+ =?utf-8?B?SFNOTFJYck5ONXNmaHlUVWV2VXpUNEgxVnBsMVlJZGxkT09nS2dXRkU4VnNW?=
+ =?utf-8?B?QXYzYk1jeGJzaGZvZ2xuckVHWFFGcmRxRnVaRFBXNU5tVmxvWDZEOFcySHpB?=
+ =?utf-8?B?ZDAySk9zUXkzTTNGbmh0aUhVY1hTMUJXaG1UeDZrdkVKTFN2Q1Zjb0Vrd29D?=
+ =?utf-8?B?Q0ZIdVdJQURZMWIrYTVoNkhjVzNZOEFzVkV5cjVLbjdjNjNMVnJDSThuTW90?=
+ =?utf-8?B?UVNtVG45YWxmby90SnIxK2ZRU2oxdnE0RjVNMUJlZ0RsMWxyV2JuVzlIUFgy?=
+ =?utf-8?B?T1J3ak0wZ1NlMDVXMGhJQlpDbi9ueFhZdFZacyt4dlJvMEY5cDZTcGJOQno4?=
+ =?utf-8?B?OElOVmVweW1Wc1Fvd1krOGR6OTloVjdCTWpnNE4ramJKNnJKZDdhNUpxSmJK?=
+ =?utf-8?B?ellvQ2FvUE9pbHYwSDBkZGJiM2tUcDdUakJxN3FxaXV3S3RiS0c1VEFZVXpy?=
+ =?utf-8?B?VFJwUXRHSVhxYnAzYmNrN1JVMm1NYko1dWxMTHpxYjZEUEVhZUE0dzc2N1dO?=
+ =?utf-8?B?RDF4NlVGUHYrZXBNNk5DWEZmK1NlY0pEdUx2WGVHd0Z3YTRkTXo2UHd5MHQw?=
+ =?utf-8?B?NjRyUUZYWi8wcm9LWFFYVHF6dEhxZ1ZhWlBMV3R6cHJldjNDV3crTlZZS3Bx?=
+ =?utf-8?B?SXJua1lCOVFaSCtEM21Tc0Z6b2tLR3lmS2tXbVlRSGswZWRZUkpBbVRjeWJn?=
+ =?utf-8?B?UFJ5NFBoQWhEUkp1a0dsa3JqVFBCWUp5M09LRitvZHBrQXZVNS9MQlM3U2s5?=
+ =?utf-8?B?TzZJV3hMdXU1ekEzUCs5MXdXZDM4bFBvQkRlaVhnZHN6TWREdGNMV2VGTldQ?=
+ =?utf-8?B?ZVU4NGpJeVNUTHRQczN2NzFiTEgvN0cxQTRFQTRaN1FLVVJhY2ZzdmxUeEdW?=
+ =?utf-8?B?NUdYajNVVUlBbzZUQmNQSUFaTjVDd2dHNkNOelV5Q21ObnNPUTVjK0hDM3cw?=
+ =?utf-8?B?MDltZEI1SUxicG5ua1FTT1dncjBJZkwvNVdIM1hLOFNETThBWElHdUphMVJ0?=
+ =?utf-8?B?bDY5dW0rY0czK2JxWW5Cbms1Rm94L3o0TmVSODVGT1BjK3I2YVZRS3N2cUtk?=
+ =?utf-8?B?U1I0ak4wU241dGZXaEZKUUNhVmxLbGJvK0ZkMS9SRkYydDg0OFordjlrU0t6?=
+ =?utf-8?B?UjdSblhvaVNWQ0ZSL2lKb0dXbHd3SktvVVBwNWprenRmWjQzR2NvMW9NZkFX?=
+ =?utf-8?B?bEdibEhJcmVSQVNaYlVsWXZHbUdpMHhObjREQ0VEdlJUeGM5bHdtQ00wVXJH?=
+ =?utf-8?B?RW9NcFFMREU3dlNCd1h3OGhvM3F3V3hrNWpZajNqV1VYOG5KbEdhREE5Wk9Z?=
+ =?utf-8?B?TXlMUDNZYWh6bkx2VnFsTlV4a1ZHaGJMT3d1RHg0QUFUdTROcU5TM1o1M2d1?=
+ =?utf-8?Q?uJUV24s5lqRFR1f2AUsX0Mfrn?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ae2978e-3ea6-493b-1ff1-08db40e88c3d
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 15:12:53.6073
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JvWCeCW75ZzibbD7A6kwPPEdXAIBn4X4+fvG8WGXI2vx5Y3C8LrGJvFWy6cRCVPeR5k6Lz73AP7qHZ0uuxvi9g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6155
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HP BIOS Configuration driver purpose is to provide a driver supporting
-the latest sysfs class firmware attributes framework allowing the user
-to change BIOS settings and security solutions on HP Inc.’s commercial
-notebooks.
+On 4/11/23 20:09, Rodrigo Siqueira wrote:
+> This commit adds missing luminance control registers to enable a more
+> standard way (VESA) to deal with eDP luminance control.
+> 
+> Cc: Anthony Koo <anthony.koo@amd.com>
+> Cc: Iswara Negulendran <iswara.nagulendran@amd.com>
+> Cc: Felipe Clark <felipe.clark@amd.com>
+> Cc: Harry Wentland <Harry.Wentland@amd.com>
+> Signed-off-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
 
-Many features of HP Commercial notebooks can be managed using Windows
-Management Instrumentation (WMI). WMI is an implementation of Web-Based
-Enterprise Management (WBEM) that provides a standards-based interface
-for changing and monitoring system settings. HP BIOSCFG driver provides
-a native Linux solution and the exposed features facilitates the
-migration to Linux environments.
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 
-The Linux security features to be provided in hp-bioscfg driver enables
-managing the BIOS settings and security solutions via sysfs, a virtual
-filesystem that can be used by user-mode applications. The new
-documentation cover HP-specific firmware sysfs attributes such Secure
-Platform Management and Sure Start. Each section provides security
-feature description and identifies sysfs directories and files exposed
-by the driver.
+Harry
 
-Many HP Commercial notebooks include a feature called Secure Platform
-Management (SPM), which replaces older password-based BIOS settings
-management with public key cryptography. PC secure product management
-begins when a target system is provisioned with cryptographic keys
-that are used to ensure the integrity of communications between system
-management utilities and the BIOS.
-
-HP Commercial notebooks have several BIOS settings that control its
-behaviour and capabilities, many of which are related to security.
-To prevent unauthorized changes to these settings, the system can
-be configured to use a cryptographic signature-based authorization
-string that the BIOS will use to verify authorization to modify the
-setting.
-
-Linux Security components are under development and not published yet.
-The only linux component is the driver (hp bioscfg) at this time.
-Other published security components are under Windows.
-
-Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
-
----
-Based on the latest platform-drivers-x86.git/for-next
----
- .../x86/hp/hp-bioscfg/string-attributes.c     | 451 ++++++++++++++++++
- 1 file changed, 451 insertions(+)
- create mode 100644 drivers/platform/x86/hp/hp-bioscfg/string-attributes.c
-
-diff --git a/drivers/platform/x86/hp/hp-bioscfg/string-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/string-attributes.c
-new file mode 100644
-index 000000000000..7a14585d5506
---- /dev/null
-+++ b/drivers/platform/x86/hp/hp-bioscfg/string-attributes.c
-@@ -0,0 +1,451 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Functions corresponding to string type attributes under
-+ * HP_WMI_BIOS_STRING_GUID for use with hp-bioscfg driver.
-+ *
-+ * Copyright (c) 2022 HP Development Company, L.P.
-+ */
-+
-+#include "bioscfg.h"
-+
-+#define WMI_STRING_TYPE "HPBIOS_BIOSString"
-+
-+GET_INSTANCE_ID(string);
-+
-+static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
-+{
-+	int instance_id = get_string_instance_id(kobj);
-+
-+	if (instance_id < 0)
-+		return -EIO;
-+
-+	return  sysfs_emit(buf, "%s\n",
-+			 bioscfg_drv.string_data[instance_id].current_value);
-+}
-+
-+/*
-+ * validate_string_input() -
-+ * Validate input of current_value against min and max lengths
-+ *
-+ * @instance_id: The instance on which input is validated
-+ * @buf: Input value
-+ */
-+static int validate_string_input(int instance_id, const char *buf)
-+{
-+	int in_len = strlen(buf);
-+
-+	/* BIOS treats it as a read only attribute */
-+	if (bioscfg_drv.string_data[instance_id].common.is_readonly)
-+		return -EIO;
-+
-+	if ((in_len < bioscfg_drv.string_data[instance_id].min_length) ||
-+	    (in_len > bioscfg_drv.string_data[instance_id].max_length))
-+		return -ERANGE;
-+
-+	/*
-+	 * set pending reboot flag depending on
-+	 * "RequiresPhysicalPresence" value
-+	 */
-+	if (bioscfg_drv.string_data[instance_id].common.requires_physical_presence)
-+		bioscfg_drv.pending_reboot = true;
-+	return 0;
-+}
-+
-+static void update_string_value(int instance_id, char *attr_value)
-+{
-+	/* Write settings to BIOS */
-+	strscpy(bioscfg_drv.string_data[instance_id].current_value,
-+		attr_value,
-+		sizeof(bioscfg_drv.string_data[instance_id].current_value));
-+}
-+
-+ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name_language_code, string);
-+static struct kobj_attribute string_display_langcode =
-+	__ATTR_RO(display_name_language_code);
-+
-+ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name, string);
-+static struct kobj_attribute string_display_name =
-+	__ATTR_RO(display_name);
-+
-+ATTRIBUTE_PROPERTY_STORE(current_value, string);
-+static struct kobj_attribute string_current_val =
-+	__ATTR_RW_MODE(current_value, 0644);
-+
-+ATTRIBUTE_N_PROPERTY_SHOW(min_length, string);
-+static struct kobj_attribute string_min_length =
-+	__ATTR_RO(min_length);
-+
-+ATTRIBUTE_N_PROPERTY_SHOW(max_length, string);
-+static struct kobj_attribute string_max_length =
-+	__ATTR_RO(max_length);
-+
-+ATTRIBUTE_N_COMMON_PROPERTY_SHOW(prerequisites_size, string);
-+static struct kobj_attribute  string_prerequisites_size_val =
-+		__ATTR_RO(prerequisites_size);
-+
-+ATTRIBUTE_V_COMMON_PROPERTY_SHOW(prerequisites, string);
-+static struct kobj_attribute  string_prerequisites_val =
-+		__ATTR_RO(prerequisites);
-+
-+static ssize_t type_show(struct kobject *kobj, struct kobj_attribute *attr,
-+			 char *buf)
-+{
-+	return sysfs_emit(buf, "string\n");
-+}
-+static struct kobj_attribute string_type =
-+	__ATTR_RO(type);
-+
-+static struct attribute *string_attrs[] = {
-+	&string_display_langcode.attr,
-+	&string_display_name.attr,
-+	&string_current_val.attr,
-+	&string_min_length.attr,
-+	&string_max_length.attr,
-+	&string_prerequisites_size_val.attr,
-+	&string_prerequisites_val.attr,
-+	&string_type.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group string_attr_group = {
-+	.attrs = string_attrs,
-+};
-+
-+int alloc_string_data(void)
-+{
-+	int ret = 0;
-+
-+	bioscfg_drv.string_instances_count = get_instance_count(HP_WMI_BIOS_STRING_GUID);
-+	bioscfg_drv.string_data = kcalloc(bioscfg_drv.string_instances_count,
-+					  sizeof(struct string_data), GFP_KERNEL);
-+	if (!bioscfg_drv.string_data) {
-+		bioscfg_drv.string_instances_count = 0;
-+		ret = -ENOMEM;
-+	}
-+	return ret;
-+}
-+
-+/* Expected Values types associated with each element */
-+static const acpi_object_type expected_string_types[] = {
-+	[NAME] = ACPI_TYPE_STRING,
-+	[VALUE] = ACPI_TYPE_STRING,
-+	[PATH] = ACPI_TYPE_STRING,
-+	[IS_READONLY] = ACPI_TYPE_INTEGER,
-+	[DISPLAY_IN_UI] = ACPI_TYPE_INTEGER,
-+	[REQUIRES_PHYSICAL_PRESENCE] = ACPI_TYPE_INTEGER,
-+	[SEQUENCE] = ACPI_TYPE_INTEGER,
-+	[PREREQUISITES_SIZE] = ACPI_TYPE_INTEGER,
-+	[PREREQUISITES] = ACPI_TYPE_STRING,
-+	[SECURITY_LEVEL] = ACPI_TYPE_INTEGER,
-+	[STR_MIN_LENGTH] = ACPI_TYPE_INTEGER,
-+	[STR_MAX_LENGTH] = ACPI_TYPE_INTEGER
-+};
-+
-+/*
-+ * populate_string_package_data() -
-+ * Populate all properties of an instance under string attribute
-+ *
-+ * @string_obj: ACPI object with string data
-+ * @instance_id: The instance to enumerate
-+ * @attr_name_kobj: The parent kernel object
-+ */
-+int populate_string_package_data(union acpi_object *string_obj,
-+				 int instance_id,
-+				 struct kobject *attr_name_kobj)
-+{
-+	bioscfg_drv.string_data[instance_id].attr_name_kobj = attr_name_kobj;
-+
-+	populate_string_elements_from_package(string_obj,
-+					      string_obj->package.count,
-+					      instance_id);
-+
-+	update_attribute_permissions(bioscfg_drv.string_data[instance_id].common.is_readonly,
-+				     &string_current_val);
-+	friendly_user_name_update(bioscfg_drv.string_data[instance_id].common.path,
-+				  attr_name_kobj->name,
-+				  bioscfg_drv.string_data[instance_id].common.display_name,
-+				  sizeof(bioscfg_drv.string_data[instance_id].common.display_name));
-+	return sysfs_create_group(attr_name_kobj, &string_attr_group);
-+}
-+
-+int populate_string_elements_from_package(union acpi_object *string_obj,
-+					  int string_obj_count,
-+					  int instance_id)
-+{
-+	char *str_value = NULL;
-+	int value_len;
-+	int ret = 0;
-+	u32 size = 0;
-+	u32 int_value;
-+	int elem = 0;
-+	int reqs;
-+	int eloc;
-+
-+	if (!string_obj)
-+		return -EINVAL;
-+
-+	strscpy(bioscfg_drv.string_data[instance_id].common.display_name_language_code,
-+		LANG_CODE_STR,
-+		sizeof(bioscfg_drv.string_data[instance_id].common.display_name_language_code));
-+
-+	for (elem = 1, eloc = 1; elem < string_obj_count; elem++, eloc++) {
-+
-+		/* ONLY look at the first STRING_ELEM_CNT elements */
-+		if (eloc == STRING_ELEM_CNT)
-+			goto exit_string_package;
-+
-+		switch (string_obj[elem].type) {
-+		case ACPI_TYPE_STRING:
-+
-+			if (elem != PREREQUISITES) {
-+				ret = convert_hexstr_to_str(string_obj[elem].string.pointer,
-+							    string_obj[elem].string.length,
-+							    &str_value, &value_len);
-+
-+				if (ret)
-+					continue;
-+			}
-+			break;
-+		case ACPI_TYPE_INTEGER:
-+			int_value = (u32)string_obj[elem].integer.value;
-+			break;
-+		default:
-+			pr_warn("Unsupported object type [%d]\n", string_obj[elem].type);
-+			continue;
-+		}
-+
-+		/* Check that both expected and read object type match */
-+		if (expected_string_types[eloc] != string_obj[elem].type) {
-+			pr_err("Error expected type %d for elem  %d, but got type %d instead\n",
-+			       expected_string_types[eloc], elem, string_obj[elem].type);
-+			return -EIO;
-+		}
-+
-+		/* Assign appropriate element value to corresponding field*/
-+		switch (eloc) {
-+		case VALUE:
-+			strscpy(bioscfg_drv.string_data[instance_id].current_value,
-+				str_value, sizeof(bioscfg_drv.string_data[instance_id].current_value));
-+			break;
-+		case PATH:
-+			strscpy(bioscfg_drv.string_data[instance_id].common.path, str_value,
-+				sizeof(bioscfg_drv.string_data[instance_id].common.path));
-+			break;
-+		case IS_READONLY:
-+			bioscfg_drv.string_data[instance_id].common.is_readonly = int_value;
-+			break;
-+		case DISPLAY_IN_UI:
-+			bioscfg_drv.string_data[instance_id].common.display_in_ui = int_value;
-+			break;
-+		case REQUIRES_PHYSICAL_PRESENCE:
-+			bioscfg_drv.string_data[instance_id].common.requires_physical_presence = int_value;
-+			break;
-+		case SEQUENCE:
-+			bioscfg_drv.string_data[instance_id].common.sequence = int_value;
-+			break;
-+		case PREREQUISITES_SIZE:
-+			bioscfg_drv.string_data[instance_id].common.prerequisites_size = int_value;
-+			if (size > MAX_PREREQUISITES_SIZE)
-+				pr_warn("Prerequisites size value exceeded the maximum number of elements supported or data may be malformed\n");
-+			/*
-+			 * This HACK is needed to keep the expected
-+			 * element list pointing to the right obj[elem].type
-+			 * when the size is zero.  PREREQUISITES
-+			 * object is omitted by BIOS when the size is
-+			 * zero.
-+			 */
-+			if (int_value == 0)
-+				eloc++;
-+			break;
-+		case PREREQUISITES:
-+			size = bioscfg_drv.string_data[instance_id].common.prerequisites_size;
-+
-+			for (reqs = 0; reqs < size && reqs < MAX_PREREQUISITES_SIZE; reqs++) {
-+				if (elem >= string_obj_count) {
-+					pr_err("Error elem-objects package is too small\n");
-+					return -EINVAL;
-+				}
-+
-+				ret = convert_hexstr_to_str(string_obj[elem + reqs].string.pointer,
-+							    string_obj[elem + reqs].string.length,
-+							    &str_value, &value_len);
-+
-+				if (ret)
-+					continue;
-+
-+				strscpy(bioscfg_drv.string_data[instance_id].common.prerequisites[reqs],
-+					str_value,
-+					sizeof(bioscfg_drv.string_data[instance_id].common.prerequisites[reqs]));
-+				kfree(str_value);
-+			}
-+			break;
-+
-+		case SECURITY_LEVEL:
-+			bioscfg_drv.string_data[instance_id].common.security_level = int_value;
-+			break;
-+		case STR_MIN_LENGTH:
-+			bioscfg_drv.string_data[instance_id].min_length = int_value;
-+			break;
-+		case STR_MAX_LENGTH:
-+			bioscfg_drv.string_data[instance_id].max_length = int_value;
-+			break;
-+		default:
-+			pr_warn("Invalid element: %d found in String attribute or data may be malformed\n", elem);
-+			break;
-+		}
-+
-+		kfree(str_value);
-+	}
-+
-+exit_string_package:
-+	kfree(str_value);
-+	return 0;
-+}
-+
-+/*
-+ * populate_string_data() -
-+ * Populate all properties of an instance under string attribute
-+ *
-+ * @buffer_ptr: Buffer pointer
-+ * @buffer_size: Buffer size
-+ * @instance_id: The instance to enumerate
-+ * @attr_name_kobj: The parent kernel object
-+ */
-+int populate_string_buffer_data(u8 *buffer_ptr, u32 *buffer_size,
-+				int instance_id,
-+				struct kobject *attr_name_kobj)
-+{
-+	bioscfg_drv.string_data[instance_id].attr_name_kobj = attr_name_kobj;
-+
-+	populate_string_elements_from_buffer(buffer_ptr, buffer_size,
-+					     instance_id);
-+
-+	update_attribute_permissions(bioscfg_drv.string_data[instance_id].common.is_readonly,
-+				     &string_current_val);
-+	friendly_user_name_update(bioscfg_drv.string_data[instance_id].common.path,
-+				  attr_name_kobj->name,
-+				  bioscfg_drv.string_data[instance_id].common.display_name,
-+				  sizeof(bioscfg_drv.string_data[instance_id].common.display_name));
-+
-+	return sysfs_create_group(attr_name_kobj, &string_attr_group);
-+}
-+
-+int populate_string_elements_from_buffer(u8 *buffer_ptr, u32 *buffer_size,
-+					 int instance_id)
-+{
-+	int ret;
-+	char *dst = NULL;
-+	int elem;
-+	int reqs;
-+	int int_value;
-+	int size = 0;
-+	int dst_size = *buffer_size / sizeof(u16);
-+
-+	dst = kcalloc(dst_size, sizeof(char), GFP_KERNEL);
-+	if (!dst)
-+		return -ENOMEM;
-+
-+	strscpy(bioscfg_drv.string_data[instance_id].common.display_name_language_code,
-+		LANG_CODE_STR,
-+		sizeof(bioscfg_drv.string_data[instance_id].common.display_name_language_code));
-+
-+	for (elem = 1; elem < 3; elem++) {
-+		ret = get_string_from_buffer(&buffer_ptr, buffer_size, dst, dst_size);
-+		/* Ignore. Zero length string values */
-+		if (ret < 0)
-+			continue;
-+
-+		switch (elem) {
-+		case VALUE:
-+			strscpy(bioscfg_drv.string_data[instance_id].current_value,
-+				dst, sizeof(bioscfg_drv.string_data[instance_id].current_value));
-+			break;
-+		case PATH:
-+			strscpy(bioscfg_drv.string_data[instance_id].common.path, dst,
-+				sizeof(bioscfg_drv.string_data[instance_id].common.path));
-+			break;
-+		default:
-+			pr_warn("Invalid element: %d found in String attribute or data may be malformed\n", elem);
-+			break;
-+		}
-+	}
-+
-+	for (elem = 3; elem < STRING_ELEM_CNT; elem++) {
-+		if (elem != PREREQUISITES) {
-+			ret = get_integer_from_buffer((int **)&buffer_ptr,
-+						      buffer_size,
-+						      (int *)&int_value);
-+			if (ret < 0)
-+				continue;
-+		}
-+
-+		switch (elem) {
-+		case IS_READONLY:
-+			bioscfg_drv.string_data[instance_id].common.is_readonly = int_value;
-+			break;
-+		case DISPLAY_IN_UI:
-+			bioscfg_drv.string_data[instance_id].common.display_in_ui = int_value;
-+			break;
-+		case REQUIRES_PHYSICAL_PRESENCE:
-+			bioscfg_drv.string_data[instance_id].common.requires_physical_presence = int_value;
-+			break;
-+		case SEQUENCE:
-+			bioscfg_drv.string_data[instance_id].common.sequence = int_value;
-+			break;
-+		case PREREQUISITES_SIZE:
-+			bioscfg_drv.string_data[instance_id].common.prerequisites_size = int_value;
-+			if (int_value > MAX_PREREQUISITES_SIZE)
-+				pr_warn("Prerequisites size value exceeded the maximum number of elements supported or data may be malformed\n");
-+			break;
-+
-+		case PREREQUISITES:
-+			size = bioscfg_drv.string_data[instance_id].common.prerequisites_size;
-+			for (reqs = 0; reqs < size && reqs < MAX_PREREQUISITES_SIZE; reqs++) {
-+				ret = get_string_from_buffer(&buffer_ptr, buffer_size, dst, dst_size);
-+				/* Ignore. Zero length string values */
-+				if (ret < 0)
-+					continue;
-+				strscpy(bioscfg_drv.string_data[instance_id].common.prerequisites[reqs],
-+					dst,
-+					sizeof(bioscfg_drv.string_data[instance_id].common.prerequisites[reqs]));
-+			}
-+			break;
-+		case SECURITY_LEVEL:
-+			bioscfg_drv.string_data[instance_id].common.security_level = int_value;
-+			break;
-+		case STR_MIN_LENGTH:
-+			bioscfg_drv.string_data[instance_id].min_length = int_value;
-+			break;
-+		case STR_MAX_LENGTH:
-+			bioscfg_drv.string_data[instance_id].max_length = int_value;
-+			break;
-+		default:
-+			pr_warn("Invalid element: %d found in String attribute or data may be malformed\n", elem);
-+			break;
-+		}
-+	}
-+	kfree(dst);
-+	return 0;
-+}
-+
-+/*
-+ * exit_string_attributes() - Clear all attribute data
-+ *
-+ * Clears all data allocated for this group of attributes
-+ */
-+void exit_string_attributes(void)
-+{
-+	int instance_id;
-+
-+	for (instance_id = 0; instance_id < bioscfg_drv.string_instances_count; instance_id++) {
-+
-+		struct kobject *attr_name_kobj = bioscfg_drv.string_data[instance_id].attr_name_kobj;
-+
-+		if (attr_name_kobj)
-+			sysfs_remove_group(attr_name_kobj, &string_attr_group);
-+	}
-+	bioscfg_drv.string_instances_count = 0;
-+
-+	kfree(bioscfg_drv.string_data);
-+	bioscfg_drv.string_data = NULL;
-+}
--- 
-2.34.1
+> ---
+>  include/drm/display/drm_dp.h | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/include/drm/display/drm_dp.h b/include/drm/display/drm_dp.h
+> index ed10e6b6f99d..7ad749423a48 100644
+> --- a/include/drm/display/drm_dp.h
+> +++ b/include/drm/display/drm_dp.h
+> @@ -973,6 +973,7 @@
+>  
+>  #define DP_EDP_GENERAL_CAP_2		    0x703
+>  # define DP_EDP_OVERDRIVE_ENGINE_ENABLED		(1 << 0)
+> +# define DP_EDP_PANEL_LUMINANCE_CONTROL_CAPABLE		(1<<4)
+>  
+>  #define DP_EDP_GENERAL_CAP_3		    0x704    /* eDP 1.4 */
+>  # define DP_EDP_X_REGION_CAP_MASK			(0xf << 0)
+> @@ -998,6 +999,7 @@
+>  # define DP_EDP_DYNAMIC_BACKLIGHT_ENABLE		(1 << 4)
+>  # define DP_EDP_REGIONAL_BACKLIGHT_ENABLE		(1 << 5)
+>  # define DP_EDP_UPDATE_REGION_BRIGHTNESS		(1 << 6) /* eDP 1.4 */
+> +# define DP_EDP_PANEL_LUMINANCE_CONTROL_ENABLE		(1<<7)
+>  
+>  #define DP_EDP_BACKLIGHT_BRIGHTNESS_MSB     0x722
+>  #define DP_EDP_BACKLIGHT_BRIGHTNESS_LSB     0x723
+> @@ -1022,6 +1024,7 @@
+>  
+>  #define DP_EDP_DBC_MINIMUM_BRIGHTNESS_SET   0x732
+>  #define DP_EDP_DBC_MAXIMUM_BRIGHTNESS_SET   0x733
+> +#define DP_EDP_PANEL_TARGET_LUMINANCE_VALUE 0x734
+>  
+>  #define DP_EDP_REGIONAL_BACKLIGHT_BASE      0x740    /* eDP 1.4 */
+>  #define DP_EDP_REGIONAL_BACKLIGHT_0	    0x741    /* eDP 1.4 */
 
