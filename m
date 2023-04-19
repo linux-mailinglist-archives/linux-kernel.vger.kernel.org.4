@@ -2,106 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB6E6E8172
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBDEC6E8177
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbjDSSsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
+        id S230036AbjDSSuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjDSSsi (ORCPT
+        with ESMTP id S229572AbjDSSuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 14:48:38 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4194682;
-        Wed, 19 Apr 2023 11:48:31 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id k9so35589pjf.4;
-        Wed, 19 Apr 2023 11:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681930110; x=1684522110;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D+SqyhX+3FqHam7C3q5QGtUBNfi8q4FZTru56mM6qbE=;
-        b=RzC9ADprsx/h8HXKtQDNfM8dxoNlVlh09sxEpOYd+VfMAAg6p8i0BmSyuFYXupcKoE
-         l2NnD9c0WnohldgQE0x+N4xn6jAYjQW/bbaG5wlPOaibUIOX337opAIZ0ymZfm3EvY0f
-         JqzsKLZVfe/dzf+egRGzFyUVkbYXdCuTZDl9gJkfqAJLIrM7FGK/7++RsbrVBO6pyZjC
-         wNj8KCThgJsaBL9E18Qj6jIQQ8eCPaqgFGQvP8SqZt+7dk4/Ri/8HbTUaTpEUlzC747F
-         gcLg4D2UWmueyGYyvNL1wWkxkcC5i999zdEHD9+ekqBB/jKFR9DcocprDjfQChlqaNUA
-         v2qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681930110; x=1684522110;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D+SqyhX+3FqHam7C3q5QGtUBNfi8q4FZTru56mM6qbE=;
-        b=JTSKzi+70klQ0Q0+kXaGN1pPLCDmiHQXrj34LCSioRC8Jb4pvrB/TG0m9LiCcY3BDf
-         kzc3IiRU74uHMkfiCmnBtq067ge5WdI8+TN8vYE4CAD8TLIzv+QSYuKiHNGXzGdCghq/
-         qvCBf7a0ym6WDzWZXrDxvRox9OPsubZhQXd5v6O27VnooCbYzgZkg00g3mFzchD1v/gd
-         mfYIcqJoH435Z2C+hf58ateJODLdjUihvV03Yp1R0IBGgRqW+1DshJf6acWEwRw1Flv4
-         GW9P+qnbtyrN9SXRyj2Lpc1QkN7L2uD2UForXg/k3lAzSAKXomaWvxS1JelpMU2VQj1h
-         tpmQ==
-X-Gm-Message-State: AAQBX9eunIDAo/NwJAYn6Bf4GJyG80R9lRmDKNBI/E6tO14DgFViKsdI
-        kl5BNJFNT1UcKzew7m94O+A=
-X-Google-Smtp-Source: AKy350avFjskgNR3WRTTklTxIYMSEHrgekcU1SuOqrQwD8V74+LOBJcu3Gt4aFNfPV8NLLUuZG9wHA==
-X-Received: by 2002:a05:6a20:2619:b0:ec:7696:ee96 with SMTP id i25-20020a056a20261900b000ec7696ee96mr3218648pze.38.1681930110495;
-        Wed, 19 Apr 2023 11:48:30 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id r10-20020a63d90a000000b0051b72ef978fsm8829366pgg.20.2023.04.19.11.48.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 11:48:29 -0700 (PDT)
-Message-ID: <e40e811d-51fc-d7c2-c3a8-69f22e8663b6@gmail.com>
-Date:   Wed, 19 Apr 2023 11:48:24 -0700
+        Wed, 19 Apr 2023 14:50:13 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281C83C1F;
+        Wed, 19 Apr 2023 11:50:12 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AC6901EC04CC;
+        Wed, 19 Apr 2023 20:50:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1681930210;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=SVVPfMePTugNQXZr+bgsRgFqkCGg3mE6MBdeVlBoODA=;
+        b=KXBwS68F4KAcG/GqVEvBT7wIz7lMKDfx7TxeX9FCQ3izpDOo3TqLQeyMHfO2HWbHuqPo8B
+        poVubrwJJOpHO0TeCFos7ECY2VW3KlRtUh3Z52GGzDKs8lD5WZr83iolRJU5Ksk3CU5D2o
+        E64Ec3jygBPHThdr7twGqWWdNWtmU2o=
+Date:   Wed, 19 Apr 2023 20:50:05 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     broonie@kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Build failure after merge of the tip tree
+Message-ID: <20230419185005.GFZEA33e2h2jgF/ll5@fat_crate.local>
+References: <20230419182136.112974-1-broonie@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 6.1 000/129] 6.1.25-rc3 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230419132048.193275637@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230419132048.193275637@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230419182136.112974-1-broonie@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 06:21, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.25 release.
-> There are 129 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, Apr 19, 2023 at 07:21:36PM +0100, broonie@kernel.org wrote:
+> Hi all,
 > 
-> Responses should be made by Fri, 21 Apr 2023 13:20:20 +0000.
-> Anything received after that time might be too late.
+> After merging the rcu tree, today's linux-next build (arm64 defconfig)
+> failed like this:
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.25-rc3.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
+> /tmp/next/build/mm/migrate.c: In function 'remove_migration_pte':
+> /tmp/next/build/mm/migrate.c:222:31: error: too few arguments to function 'pte_mkwrite'
+>   222 |                         pte = pte_mkwrite(pte);
+>       |                               ^~~~~~~~~~~
+> In file included from /tmp/next/build/include/linux/pgtable.h:6,
+>                  from /tmp/next/build/include/linux/mm.h:29,
+>                  from /tmp/next/build/include/linux/migrate.h:5,
+>                  from /tmp/next/build/mm/migrate.c:16:
+> /tmp/next/build/arch/arm64/include/asm/pgtable.h:190:21: note: declared here
+>   190 | static inline pte_t pte_mkwrite(pte_t pte, struct vm_area_struct *vma)
+>       |                     ^~~~~~~~~~~
 > 
-> thanks,
+> Caused by commit
 > 
-> greg k-h
+>   717f95b494ac36 ("mm: don't check VMA write permissions if the PTE/PMD indicates write permissions")
+> 
+> from the mm tree interacting with
+> 
+>   74fd30bd28e4c7 ("mm: Make pte_mkwrite() take a VMA")
+> 
+> from the tip tree.  I've applied the fixup below
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+Thanks for letting us know - we'll keep this in mind when sending the
+piles of patches to Linus next week.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Florian
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
