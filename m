@@ -2,62 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8D56E721F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 06:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 690D26E7220
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 06:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbjDSEL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 00:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
+        id S232172AbjDSEL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 00:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbjDSELW (ORCPT
+        with ESMTP id S231349AbjDSELy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 00:11:22 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151506583;
-        Tue, 18 Apr 2023 21:11:21 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7CB95660318E;
-        Wed, 19 Apr 2023 05:11:18 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681877479;
-        bh=+hanj7Q1swnKed11IeyTq8b1CM+HtKVvSWiDT+29coU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aJiO3fMKzh9JimsXRIro2BeBxQ6xW5z93Tbb3JJKwH7kv/j5Jq3yeVElsL20nYOuu
-         P5AslUsgkveiQtPvqGo0LxG14Re9yQvg8ioid682ih3AhaYU1kl0V3kohUm401xCn/
-         zjsxQ9TjKcDD1kIES9I00cvLtjw2vVpID3RTOy2Vw7PjZ+8H8Svax2zqrgrcwvAvLW
-         WFGymcXcyKwX0zVzCpxqWWoFQUbZXQ1b8lNp38W+ZD/HIxEwaEi63JGAuEdpWSHTGQ
-         icWlwtoso6iq77QpolG1Gx1a507om9+vAYnPfJiJA8gm96B1kYDdTzvjviD5B4E2fS
-         Lb0e8CXArgTGw==
-Message-ID: <6f4a2c1b-4e37-a760-e6fd-2af285190a76@collabora.com>
-Date:   Wed, 19 Apr 2023 06:11:16 +0200
+        Wed, 19 Apr 2023 00:11:54 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE90C61AF
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 21:11:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fCirft2EQ+qvGc6ZahSkKa47nK3OVYtgm30zMVksWYc=; b=F3Mm3LpsRGSooA3ZUYSX/vadVw
+        EshdMvO850KSZucpjBZNG0dxxMQ4GcYMsf37mR31oDQ3tChovu8d7vEWh+p/dTuE+de3LbPSHWX8k
+        GZ9kFmHyWUiylFE1d4OH1/2uZCDlJMtFCN8ZVXpZf67VXzFMtZ8vp7IxgCNtNx9sZJeyW/qY/S/R/
+        Sgr3SNuJbsuhYpmmhqsOe3q5CGP29fgV7AkWR6RuOwpavFhcdRL6FGLPLbtU762JGe0T83XrVpnT4
+        dasscrClOZkYmjmUUM/9bJNkupRhq75tUoquhJpA4kUP1wh20nEqSQfjnq3o2Z47sOZwwl1glhsU+
+        pM5XMY4w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pozAX-00Cwu9-Co; Wed, 19 Apr 2023 04:11:45 +0000
+Date:   Wed, 19 Apr 2023 05:11:45 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 00/26] mm: reliable huge page allocator
+Message-ID: <ZD9qATZcdyW/UGgI@casper.infradead.org>
+References: <20230418191313.268131-1-hannes@cmpxchg.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] Revert "media: mediatek: vcodec: Fix bitstream crop
- information error"
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     kernel@collabora.com, Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230418215052.2371755-1-nfraprado@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230418215052.2371755-1-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418191313.268131-1-hannes@cmpxchg.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,37 +52,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 18/04/23 23:50, Nícolas F. R. A. Prado ha scritto:
-> This reverts commit cd61f3c6794bea2b717fe6083ca2ad189db75418. That
-> commit's purpose was to prevent the padding from being decoded when
-> userspace didn't set a selection, relying on the default one.
+On Tue, Apr 18, 2023 at 03:12:47PM -0400, Johannes Weiner wrote:
+> This series proposes to make THP allocations reliable by enforcing
+> pageblock hygiene, and aligning the allocator, reclaim and compaction
+> on the pageblock as the base unit for managing free memory. All orders
+> up to and including the pageblock are made first-class requests that
+> (outside of OOM situations) are expected to succeed without
+> exceptional investment by the allocating thread.
 > 
-> However, as described in the Step 6 of the Initialization procedure for
-> the Memory-to-Memory Stateful Video Encoder Interface [1]:
-> 
-> "Set the visible resolution for the stream metadata via
-> VIDIOC_S_SELECTION() on the OUTPUT queue if it is desired to be
-> different than the full OUTPUT resolution."
-> 
-> And from the Note:
-> 
-> "To avoid encoding the padding, the client needs to explicitly configure
-> this selection target"
-> 
-> Hence the behavior in the original commit doesn't follow the interface
-> and needs to be reverted.
-> 
-> This fixes the following v4l2-compliance failure observed on
-> mt8192-asurada-spherion:
-> 
-> 		fail: v4l2-test-formats.cpp(924): sel.r.width != fmt.g_width()
-> 	test VIDIOC_S_FMT: FAIL
-> 
-> [1] https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dev-encoder.html#initialization
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> A neutral pageblock type is introduced, MIGRATE_FREE. The first
+> allocation to be placed into such a block claims it exclusively for
+> the allocation's migratetype. Fallbacks from a different type are no
+> longer allowed, and the block is "kept open" for more allocations of
+> the same type to ensure tight grouping. A pageblock becomes neutral
+> again only once all its pages have been freed.
 
-On MT8192 Asurada Spherion and MT8195 Cherry Tomato:
-
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+YES!  This is exactly what I've been thinking is the right solution
+for some time.  Thank you for doing it.
 
