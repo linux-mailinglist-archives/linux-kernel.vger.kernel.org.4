@@ -2,96 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98AD86E8236
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61586E823B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjDST57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 15:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
+        id S230224AbjDST6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 15:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjDST55 (ORCPT
+        with ESMTP id S229554AbjDST6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 15:57:57 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E213426B5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:57:55 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id vc20so1104928ejc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:57:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681934274; x=1684526274;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QStVBT8Fo+0q7XfSVeUTQvruEN5UNY1t/XQiKMnzwNs=;
-        b=g+4OJ9XeTAYXp7Mo9G1xc+pajMUg2awcJuYLhTQC4EoG2GdK1cgz9uKlY/EMyFuvVd
-         nqxzeIhS08Wba8luhyeEsWuhppD2bNoGHCkKo2n/Ib/TuTCaxFKWFnP0wSU29ikXhwgy
-         xB5/2EYP8d600Q/Mzw3MYcdshjwZo843v5I8b2o1Vylb2Im/YfE1eDYD+Ig/HLLv4hMg
-         nKAg/mYdzquRdmfEprv7NTnnsvfjaW2ZgUu9TGUL4Ge3viFhF8TxyRyoB88fnKbxdR5l
-         YExH40C9ots6iQEO0rXhtc4GVGZppUophp6QdatRoRBSx6vIcm54tzxTr9xFAHeL9nFe
-         qsFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681934274; x=1684526274;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QStVBT8Fo+0q7XfSVeUTQvruEN5UNY1t/XQiKMnzwNs=;
-        b=l3X6smcc91nTPPBEESWOT18AlFs7WCZ1mjFeufMn31VfgsICoTWiS2WVmsB59lxt0J
-         WBM8LDy7QKf576xAM2cNPygJvP/pCk+JMEd3aaOB/2VCZBbZM94F6JhuMyUgnTSTbP8v
-         6E5Za5KUgTW9rBceMkuwILgGrFdyWZatWPXMo6f1PGrrqK/X9fjkfmecZgG9pOAPVUyh
-         X+lQVhZ7slwIlUeEUIfhch2koTTfqshfzBz+Z24DzJai07zG3wbpcS9m42olqrGOkEKl
-         s4qjZFci5rSB8maZBzgr/w5RzIbXK/OJzNayj+dfD3LGFm68BMJ5IbaEsujZT1zScbt2
-         Rxow==
-X-Gm-Message-State: AAQBX9cCTzoEFQU2dD/F+1C4Uxr0ohfrOPoORiWXGxHNm78lh2iwynB7
-        8oewE2fVV/SAuXKLYFHj2yhhHg==
-X-Google-Smtp-Source: AKy350bd9rGROaDLjeW164+cgbfte4quNOdy5zEwI6FGqz7iZxE4bjvP2EuL76GKHtsqtZeFNIDTnQ==
-X-Received: by 2002:a17:906:2a45:b0:94f:1ac0:850b with SMTP id k5-20020a1709062a4500b0094f1ac0850bmr16253833eje.71.1681934274369;
-        Wed, 19 Apr 2023 12:57:54 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:976c:1d6c:6ed0:8935? ([2a02:810d:15c0:828:976c:1d6c:6ed0:8935])
-        by smtp.gmail.com with ESMTPSA id l26-20020a170906231a00b0094f23a3c81bsm6603043eja.23.2023.04.19.12.57.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 12:57:53 -0700 (PDT)
-Message-ID: <0978f227-1a6c-60c2-a537-98b8f2914a3b@linaro.org>
-Date:   Wed, 19 Apr 2023 21:57:52 +0200
+        Wed, 19 Apr 2023 15:58:40 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7781326B5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:58:39 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ppDwR-0005x6-CV; Wed, 19 Apr 2023 21:58:11 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ppDwM-00CPGS-AB; Wed, 19 Apr 2023 21:58:06 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ppDwL-00Eat3-Ez; Wed, 19 Apr 2023 21:58:05 +0200
+Date:   Wed, 19 Apr 2023 21:58:05 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        David Lin <CTLIN0@nuvoton.com>, Arnd Bergmann <arnd@arndb.de>,
+        Tom Rix <trix@redhat.com>, Peter Rosin <peda@axentia.se>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] ASoC: nau8825: fix delay time range check
+Message-ID: <20230419195805.fpil775pw2wsrav4@pengutronix.de>
+References: <20230419114546.820921-1-arnd@kernel.org>
+ <c6bc42c6-4a98-4bb6-9639-acf4c2010b68@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 1/2] dt-bindings: arm: amlogic: add Xiaomi Mi box 3
- binding
-Content-Language: en-US
-To:     Karl Chan <exkcmailist@inbox.lv>, linux-amlogic@lists.infradead.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        neil.armstrong@linaro.org, khilman@baylibre.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Karl Chan <exxxxkc@getgoogleoff.me>
-References: <20230418145515.19547-1-exkcmailist@inbox.lv>
- <20230418145515.19547-2-exkcmailist@inbox.lv>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230418145515.19547-2-exkcmailist@inbox.lv>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="k7olzqvscnyzsee5"
+Content-Disposition: inline
+In-Reply-To: <c6bc42c6-4a98-4bb6-9639-acf4c2010b68@sirena.org.uk>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/04/2023 16:55, Karl Chan wrote:
-> From: "Karl Chan"  <exkcmailist@inbox.lv>
-> 
-> Add the board binding for the Xiaomi Mi box 3 Android Set-Top Box device.
-> 
-> Signed-off-by: Karl Chan <exxxxkc@getgoogleoff.me>
 
-Your SoB does not match From. You have been told last time to which you
-did not respond, not fix it.
+--k7olzqvscnyzsee5
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-NAK.
+On Wed, Apr 19, 2023 at 12:48:52PM +0100, Mark Brown wrote:
+> On Wed, Apr 19, 2023 at 01:45:39PM +0200, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >=20
+> > clang points out that the recently added range check is nonsensical:
+>=20
+> Someone already sent a patch for tihs.
 
-Best regards,
-Krzysztof
+FTR: https://lore.kernel.org/r/20230418120955.3230705-1-trix@redhat.com
 
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--k7olzqvscnyzsee5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRAR8wACgkQj4D7WH0S
+/k4TkQf/T0DEUGoTk9H/hfDu9v/xHFjLghN1ZIsuA02IHW/nDmfHyCGX1I51xV/d
+5zX4GHGk4AyO+qJ27KYo9K0Fj/TJKQEuR8cws86p8uqLztxDuRSLFhusRKpCjcpU
+33uann83bN3tSs3cvFUuRLt/bJ/Juc4SHKKWicYvraDRHnLCKgKTZwEQDBhBFa1f
+TfVZ7m1RnqSLvv4dpJ+I1IwMCVh7Q01wBM1EHSDDoit/OeyVlrkdQb13Ojz1sYs2
+yzhWzY+pEEY/X+1pHmsOZUO+IWHDnlQRf2AsqDhFbA3DEf1QTqb0SWZBZeIeffeE
+T7gPx9FOH5kgFoPxHly+IWO1SLLXLg==
+=SxS9
+-----END PGP SIGNATURE-----
+
+--k7olzqvscnyzsee5--
