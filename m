@@ -2,128 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DC76E83DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45ED06E83E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbjDSVkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 17:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
+        id S231254AbjDSVlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 17:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjDSVkH (ORCPT
+        with ESMTP id S229542AbjDSVlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 17:40:07 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B1E1BEB
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:40:06 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-63b875d0027so85249b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:40:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681940406; x=1684532406;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZB8eTY6M3oiRedyQgfwIJCc4kKSXMHKsW02R7RxDv3Q=;
-        b=d1r7398swJYsZ+wrA2NnvLLJESNHoK4twLvhd+h5uHZE7PyKI/51IzgmkHAgrm96t3
-         wpZ6P1YArcMO5909+KEEi7BskNNXtONSa2zd7yNDDzZ4Y+Qvj8q+1sh/dKjOPiVe+d3y
-         hxszklfwt1yg/7JeKNyJrrSUEGOU1BYOzImVH37RyjoDEs3uFbpm8QqYZNVWI2KOtRN9
-         sMcl00Psve+2PIGuJu9r7EF34iU3pMTMiLRADhxGIe62ELMh+UIuRgCBQWH/FachcO6B
-         bDIjWJUXCV6sRlfW7xTHEFgqf7QPNc7XX1IWX9VJlrXwOBvpqSNhg4XIyS/1QO0rLX++
-         kacA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681940406; x=1684532406;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZB8eTY6M3oiRedyQgfwIJCc4kKSXMHKsW02R7RxDv3Q=;
-        b=Z0eR+kYPMg1aLYTpDPntFlUiB/Iv4J1VKOLoRxLIxIERi25x8+ehCMDO2Il/O+qIzD
-         9dFUVbPIUpW93nFGWbz+fl9XXiRfU8UIlNV2NtSnuopyu/2GO1f/j9XxOxaW1Bwtf3iD
-         LDPWTG0XuF+vsAM42fkgbKNVV8hnOIH4xnSDDQCg3h7erf2zZ9ZUF25CB6NB/2GRGCaz
-         atppR/hQQIxocSegRdDV9BOoP/b5W7m5LfTkvb1OTVZ8z73mxuPk3JrQZj/dQyaXOfGv
-         aHvj1aX/yVu3LiJbnQAk3/LSAtYoE/6iaMjA0MC/RCT6XHQ+q6Y2h7EmsTVgHbpQqCFk
-         q9lg==
-X-Gm-Message-State: AAQBX9dk2vcJnCycLrHoKqMplXmCMKJUb0vFQtG/HtmYNo4G8LFM0sQQ
-        hqcmFPwtFKc0EIYSjNHDepZoN3a5PWuVpF3AQEE=
-X-Google-Smtp-Source: AKy350Zf411n/HMKw4bVqadJgpWvyBJv77sj8iNEmtP+64p1e+FJeBU480pFT3LS8bMMHH45LXyhLA==
-X-Received: by 2002:a05:6a00:1c9e:b0:63d:344c:f123 with SMTP id y30-20020a056a001c9e00b0063d344cf123mr7557891pfw.1.1681940405950;
-        Wed, 19 Apr 2023 14:40:05 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 23-20020aa79117000000b0062dd8809d6esm11375470pfh.150.2023.04.19.14.40.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 14:40:05 -0700 (PDT)
-Message-ID: <45ec1616-e8fa-19e3-deae-78a40e6b2ffa@kernel.dk>
-Date:   Wed, 19 Apr 2023 15:40:04 -0600
+        Wed, 19 Apr 2023 17:41:49 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E30221736;
+        Wed, 19 Apr 2023 14:41:48 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 34BFB21C204E;
+        Wed, 19 Apr 2023 14:41:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 34BFB21C204E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1681940508;
+        bh=sgTNp5eSBPHwEMtDp0lZS2PRQR1YHnD6Cy4riRcqsQk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cb+7k6itM4fiMWaLmgo4Zo0Hly8Ap/5mT/nDt7SLnLDnCUMgqe/PZKgMly3poSdgH
+         0MDDKOMZtnR0HFAmAGH1Oa7khXXoHBzeArfUlQMj/e6gx6yA8nTjpZ5JmfutxxuwcP
+         vXuo9E1CSnnv/T8GbPgihZNCGUE8O8tSNb4LfojA=
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org,
+        dcook@linux.microsoft.com, alanau@linux.microsoft.com
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: [PATCH 0/2] tracing: Fix print_fields() and use best filter
+Date:   Wed, 19 Apr 2023 14:41:38 -0700
+Message-Id: <20230419214140.4158-1-beaub@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] io_uring: Optimization of buffered random write
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, luhongfei <luhongfei@vivo.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "open list:IO_URING" <io-uring@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        opensource.kernel@vivo.com
-References: <20230419092233.56338-1-luhongfei@vivo.com>
- <202304200502.T4Waeqad-lkp@intel.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <202304200502.T4Waeqad-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 3:30?PM, kernel test robot wrote:
-> Hi luhongfei,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on v6.3-rc7 next-20230418]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/luhongfei/io_uring-Optimization-of-buffered-random-write/20230419-172539
-> patch link:    https://lore.kernel.org/r/20230419092233.56338-1-luhongfei%40vivo.com
-> patch subject: [PATCH] io_uring: Optimization of buffered random write
-> config: i386-randconfig-a012-20230417 (https://download.01.org/0day-ci/archive/20230420/202304200502.T4Waeqad-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/620dbcc5ab192992f08035fd9d271ffffb8ff043
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review luhongfei/io_uring-Optimization-of-buffered-random-write/20230419-172539
->         git checkout 620dbcc5ab192992f08035fd9d271ffffb8ff043
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202304200502.T4Waeqad-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> io_uring/io_uring.c:2091:25: error: no member named 'rw' in 'struct io_kiocb'
->            if (!is_write || (req->rw.kiocb.ki_flags & IOCB_DIRECT))
->                              ~~~  ^
->    1 error generated.
+When using user_events along with the new print_fields() functionality
+a few issues were discovered. When printing out fields, the __rel_loc
+field types were printing out the wrong array values. Also, user_events
+wasn't setting the best filter type, so __rel_loc data was marked as
+FILTER_OTHER vs FILTER_RDYN_STRING when chars were used. This resulted
+in strings being printed out as array of bytes vs a string.
 
-The patch just can't work. Looks like it was forward ported on an older
-kernel, but not even compiled on a recent kernel. There's no
-req->rw.kiocb, hasn't been the case since 5.19. And you also can't do
-layering violations like this, req->rw is rw.c private and cannot even
-be used in io_uring.c.
+After applying this series user_events will output strings correctly
+for __rel_loc via /sys/kernel/tracing/trace outputs. All events that
+utilize print_fields() will print the correct array/string for
+__data_loc and __rel_loc data, when it's enabled.
 
+Beau Belgrave (2):
+  tracing/user_events: Set event filter_type from type
+  tracing: Fix print_fields() for __dyn_loc/__rel_loc
+
+ kernel/trace/trace_events_user.c |  3 +++
+ kernel/trace/trace_output.c      | 10 ++++++----
+ 2 files changed, 9 insertions(+), 4 deletions(-)
+
+
+base-commit: 88fe1ec75fcb296579e05eaf3807da3ee83137e4
 -- 
-Jens Axboe
+2.25.1
 
