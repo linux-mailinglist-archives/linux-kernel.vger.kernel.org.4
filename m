@@ -2,117 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C12C6E7F59
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6986E7F5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbjDSQOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 12:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
+        id S233301AbjDSQRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 12:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233156AbjDSQOo (ORCPT
+        with ESMTP id S232772AbjDSQRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 12:14:44 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12FB3593;
-        Wed, 19 Apr 2023 09:14:42 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id u3so31176952ejj.12;
-        Wed, 19 Apr 2023 09:14:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681920881; x=1684512881;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M5cwJ0UmCYArDsKBv05I7BkZrL0WgHeOIlgOTNM8h1M=;
-        b=PIOuCXQikALwZjhYwOzEXVtrq8sHXxLDIrvxY4661QPnS83FREhv0Usz9dziDf3kk3
-         9YamjbKA+Z0Njtd7jv7XDpdjo9VOktQWi0+3mVYw+qDXUnwWpd8lu5cszVSBpG5Vuj1R
-         xXoQLMULOCf04qMdmkCLRoKr3sPNSvODC4vWx55VBRT/xCXuST9N9iCJA1RJdqUvFnXz
-         rGAel1L6OfC+g7kA3FAekIMl0DxXAqDsQjtlM3VzHS/z2XKOLmC/rISKuMOwuvDzssit
-         Ut3yyWDgJETeeZG4lYPQlnKL2daY4EbCGTft6MYWXuKoQTC4ZTyPhSf+Tpau7XSgW3Pu
-         CuwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681920881; x=1684512881;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M5cwJ0UmCYArDsKBv05I7BkZrL0WgHeOIlgOTNM8h1M=;
-        b=PzZSbg45A6jpoOCgbkmvHs1v4AL8GA/b49b0gSiSjWvMyUtsg0RXdVSPTr7BEDOFlv
-         ZsR90MnUESsTtZggkdfy7AT5OPnOtASYb8rxP75HYxfFbaKPCyCSqafoee52DfzTTrOl
-         xNB+RMg2fYpAeg/owoSsbqnyTkBgmNLyGWbIjck5P3hJZM4/ppJlf+sVDczece1YyqgO
-         r5CgDXM6ST7hzDoIVWSmZH5eTlfwaGjbZ0kKsHGTHKdbXPbQKs+UWyo1z0sqVhmU1Ogu
-         AbiOkn6Dvb1L97AbXvM0N/DPAWKJ+83ki9dCCMlnLhfNVZaaZe2xNRKzghnd1ylHLIai
-         /Svg==
-X-Gm-Message-State: AAQBX9cCBEsExNu8w62cwDeumv2yQrYB4wnVDiWJEcvj+0qhk+9YKRoD
-        5/4wE+3epX0GfTnvwic/WSc=
-X-Google-Smtp-Source: AKy350Yqw2aIathrGyjGnmUW1U4n2MeS1w8MmXVb/utKcOpm+RBnyEpkE3yuEZplw2i8N5+CHoIlcw==
-X-Received: by 2002:a17:906:e2cd:b0:94a:6de2:ba9 with SMTP id gr13-20020a170906e2cd00b0094a6de20ba9mr14004683ejb.68.1681920880956;
-        Wed, 19 Apr 2023 09:14:40 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id b17-20020a1709063f9100b00953331b086csm1795401ejj.91.2023.04.19.09.14.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 09:14:40 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 19:14:38 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net] net: dsa: microchip: ksz8795: Correctly handle huge
- frame configuration
-Message-ID: <20230419161438.lasmfqboy77evbn3@skbuf>
-References: <43107d9e8b5b8b05f0cbd4e1f47a2bb88c8747b2.1681755535.git.christophe.jaillet@wanadoo.fr>
+        Wed, 19 Apr 2023 12:17:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E0C2698
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:17:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4652640C0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 16:17:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89CE2C433D2;
+        Wed, 19 Apr 2023 16:17:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681921036;
+        bh=dMNtXuqea4V7TaN2gT5Bxv8+XCBlK0wjj+o7l4xp8Eo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MCT+TGX3lYp3+3+VGx7WXJzgLflD/TA03tHGZv1KD8Gyj1Jk+AaBI9WMGEBwcVsBO
+         rXwabFayRVmfcHKmuWiURJkpsxnGXIJ2ayNxvBnMvlo0aJHxZv4HMC5CPejveILe9X
+         6hDgllcj/KxBPgSRnxpnZX44C2kk/HYcefAAMVMWLcLv/CUVo6XTdnhhoixXPwBs+T
+         ItCNPGun0doCP5bjWHQakNr2q+F6d8ag9KYsCt9IC+F+0JwODUscvJuwhfbPGJkqVq
+         6WECRO7lMgwRbRJRd1fZ2vfBFeVFaEHF8hV+2yrYatQHzE+4VOC8lfvy3WuLld7MWT
+         ySc0oKPJU6Y0w==
+Date:   Wed, 19 Apr 2023 09:17:13 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     'Chen Zhongjin' <chenzhongjin@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "akpm@linux-foudation.org" <akpm@linux-foudation.org>,
+        "ben-linux@fluff.org" <ben-linux@fluff.org>,
+        "wuchi.zero@gmail.com" <wuchi.zero@gmail.com>
+Subject: Re: [PATCH 1/2] x86: profiling: remove lock functions hack for
+ !FRAME_POINTER
+Message-ID: <20230419161713.qtmnnt5n64c2vvmm@treble>
+References: <20230410022226.181812-1-chenzhongjin@huawei.com>
+ <20230410022226.181812-2-chenzhongjin@huawei.com>
+ <d416428f-c846-b6b9-74da-f3571d92d38a@intel.com>
+ <1ceb1769-f01b-c417-e912-4ee1149dd0cb@huawei.com>
+ <4c601a93e55341fc8cff766af43cb5e6@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <43107d9e8b5b8b05f0cbd4e1f47a2bb88c8747b2.1681755535.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4c601a93e55341fc8cff766af43cb5e6@AcuMS.aculab.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 08:19:33PM +0200, Christophe JAILLET wrote:
-> Because of the logic in place, SW_HUGE_PACKET can never be set.
-> (If the first condition is true, then the 2nd one is also true, but is not
-> executed)
+On Wed, Apr 12, 2023 at 10:01:18AM +0000, David Laight wrote:
+> From: Chen Zhongjin
+> > Sent: 12 April 2023 08:02
+> ...
+> > > 4. !CONFIG_FRAME_POINTER is probably even more rare today than it was in
+> > >     2006
+> >
+> > No. !CONFIG_FRAME_POINTER is more common today because of UNWINDER_ORC.
+> > And that is why the bug is triggered more frequently.
 > 
-> Change the logic and update each bit individually.
-> 
-> Fixes: 29d1e85f45e0 ("net: dsa: microchip: ksz8: add MTU configuration support")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> Untested.
-> ---
->  drivers/net/dsa/microchip/ksz8795.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
-> index 23614a937cc3..f56fca1b1a22 100644
-> --- a/drivers/net/dsa/microchip/ksz8795.c
-> +++ b/drivers/net/dsa/microchip/ksz8795.c
-> @@ -96,7 +96,7 @@ static int ksz8795_change_mtu(struct ksz_device *dev, int frame_size)
->  
->  	if (frame_size > KSZ8_LEGAL_PACKET_SIZE)
->  		ctrl2 |= SW_LEGAL_PACKET_DISABLE;
-> -	else if (frame_size > KSZ8863_NORMAL_PACKET_SIZE)
-> +	if (frame_size > KSZ8863_NORMAL_PACKET_SIZE)
->  		ctrl1 |= SW_HUGE_PACKET;
->  
->  	ret = ksz_rmw8(dev, REG_SW_CTRL_1, SW_HUGE_PACKET, ctrl1);
-> -- 
-> 2.34.1
-> 
+> CONFIG_FRAME_POINTER is pretty much required (on x86-64)
+> for the user copy checks that are enabled in distro kernels.
 
-After checking with the datasheet, the change looks indeed correct.
+CONFIG_FRAME_POINTER is pretty much deprecated.  The only distro still
+using it (that I know of) is Ubuntu.
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+-- 
+Josh
