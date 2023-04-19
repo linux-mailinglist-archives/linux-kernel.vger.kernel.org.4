@@ -2,109 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EF06E73E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079CF6E73E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjDSHVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 03:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
+        id S232240AbjDSHW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 03:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbjDSHVM (ORCPT
+        with ESMTP id S231651AbjDSHWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 03:21:12 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8454E65BF
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:21:08 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94eee951c70so293944166b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:21:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google; t=1681888867; x=1684480867;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wjTbhACbGlqLOGJe8zhnxXVfb1D2+8xDV6pHc1d4gkk=;
-        b=Be0iN/cXzsadqwCFCMu+3qQ35WGQWqYF+Z+kH48YjLOdMfVtHewDrqzEc94+TrpG+p
-         H4dpNITRv3BML0rgmjiya8w8GGDynn85cbT8uw8wkIvWGE/dnKSVYv61BWgBIR8f3eCF
-         jL8Oy4fQj2/l3IYJdTmKs29AEIPv1FoVMNIz3aMkF/Q3LdE2YHYOSCwR6gXD2ewJuPQs
-         ynoa4Lkmzpby36o3S/URJ7h8YWs5T/0HOufgl50RpD6OA8B/9Er65KNbkMz+TlhF4glG
-         wew+B2DhhNtwq3j8RhT/cordx2eoM0qulWfFKOYzrSwiNcLIhZh1J7BloHfUzcjO9j3W
-         NM6Q==
+        Wed, 19 Apr 2023 03:22:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6015247
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:22:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681888923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FCCYf58WbiV7ZwiVXeHUCjynN8kwG+K1Gw0EryKxlNA=;
+        b=WfZehMATuXWzT50T29C0tmnzTsKu7KR9G3mnYIFMnGdtyH+uOzG/C3pXO6D2930usow23Q
+        qSF23Crhzyq99ffbiElroWCgYYf2Xi1DPIcnQ137831DPgCVjSvHenkdYcAf1AjLOGlGSo
+        kH4aGAQgciTQazD9gIAfKrWQ5Ni8jNs=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-496-S_4x5xmwNNerxEPXImfMFQ-1; Wed, 19 Apr 2023 03:22:01 -0400
+X-MC-Unique: S_4x5xmwNNerxEPXImfMFQ-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f173bd0fc9so12184965e9.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:22:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681888867; x=1684480867;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wjTbhACbGlqLOGJe8zhnxXVfb1D2+8xDV6pHc1d4gkk=;
-        b=WinrFvjFaFVO2M/VkCoudjkWAz/HHjzrpmt6ziiWuxRa7qt666O0bp8ufqFxg0Zo1F
-         Cvz6KJgaKeAnwOll6q2s3s42Rui8RqLS46QEWir13Bf11YszuLj56qyEQNOi86xohg1h
-         wrtLjuKusY+8z0aysIaV2bw9bIBpcfiC0NdrdmEa0WQMygv4dwieiW1vhaYKkMy2WzCO
-         qlYU3+Zbjx99Y//XvZPMMgut5abGW0jOK4CcE00WRu/HfDarVCJLmJzR1eaj7mrG+IyW
-         vlCiZ3QYUp+PCQsOXFBwThea1DMK7PUm6sFvbZUZ7Vrql49ZUF6MRRAfd3qYc9e/ecwr
-         2q6A==
-X-Gm-Message-State: AAQBX9fJqzYb1W5/aT2d5Fe83eEer7Fk58sp+01iyOjFtpomZr0CleZF
-        8NqRRKPDfnmug4y/6alqKbvvVo9Y9VYnnzhNSzTviA==
-X-Google-Smtp-Source: AKy350aGpYXev9uUy94N5sxa2rYQ1wBIP+aXOx8CWgfE5++c2w3OBNmiH3x+55Mlp0rXYfQlKvVafIadMZr83L/0lWA=
-X-Received: by 2002:a50:ab4f:0:b0:4fb:9f5:b994 with SMTP id
- t15-20020a50ab4f000000b004fb09f5b994mr2420197edc.0.1681888866838; Wed, 19 Apr
- 2023 00:21:06 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681888920; x=1684480920;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FCCYf58WbiV7ZwiVXeHUCjynN8kwG+K1Gw0EryKxlNA=;
+        b=cyiK29rUXH3e7kVgueA4xcvQRr4FygHRcxxwxTHxCAWZCt8Qy0ZtBBB6/+TYF+sdeC
+         HTrVOc75RC2d5nrZ4DpIukVGJ7bb0iejzlqiF347JL8f8Li1EzWUnFmjTesqeODfP9jz
+         MZ74h21Pc2+GFV66mtkeZw/Zw0ZkZs6PMJEJ5w8F+uDrCpIEaf35tgwejL5rk0tTlhtX
+         z+3E7N6l/ce8HVrrTGMhmWBpkF7JgXF30c1F37XyHUj9uC80bie5dokeDBCXtxAlNPn4
+         dwDP8QshOrChstulHKfe9o9jdhexssLAlrC++1of5MAw5z6NSODDG6Fya5wd0PBHayS6
+         eLGQ==
+X-Gm-Message-State: AAQBX9eFzoT7FDRvHXPnqUW+2u1V22I9KbEfiXcBKIUwX2vOMafa+nAS
+        7TPOLRyi66Er0j9/d9zn/dOI8GlGMgvdG96UV6p2khr83NJFBtiYaofgsDNyG8Bc7pH5wJWQepu
+        FEFgaT1IMyyzYXUBcJY11ZesO
+X-Received: by 2002:adf:ea4f:0:b0:2da:2aa0:13e8 with SMTP id j15-20020adfea4f000000b002da2aa013e8mr3873867wrn.26.1681888920569;
+        Wed, 19 Apr 2023 00:22:00 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aNwuzmpbvYRPHoSltgT3RyKQDrpmpgLNn+Tljmbr7T+NCiG+eylILlLmRgC0uK/hpojLTqCA==
+X-Received: by 2002:adf:ea4f:0:b0:2da:2aa0:13e8 with SMTP id j15-20020adfea4f000000b002da2aa013e8mr3873828wrn.26.1681888920083;
+        Wed, 19 Apr 2023 00:22:00 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70b:7b00:7c52:a5fa:8004:96fd? (p200300cbc70b7b007c52a5fa800496fd.dip0.t-ipconnect.de. [2003:cb:c70b:7b00:7c52:a5fa:8004:96fd])
+        by smtp.gmail.com with ESMTPSA id s9-20020a5d6a89000000b002cf1c435afcsm15031069wru.11.2023.04.19.00.21.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 00:21:59 -0700 (PDT)
+Message-ID: <5869f50f-0858-ab0c-9049-4345abcf5641@redhat.com>
+Date:   Wed, 19 Apr 2023 09:21:58 +0200
 MIME-Version: 1.0
-References: <20230418190101.696345-1-pranavpp@google.com> <20230418190101.696345-5-pranavpp@google.com>
-In-Reply-To: <20230418190101.696345-5-pranavpp@google.com>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Wed, 19 Apr 2023 09:20:56 +0200
-Message-ID: <CAMGffEny-k6Wvukza7xpZaTDp4otsfiHNAUkAuro0W4_nn06ww@mail.gmail.com>
-Subject: Re: [PATCH 4/6] scsi: pm80xx: Log phy_id and port_id in the device
- registration request
-To:     Pranav Prasad <pranavpp@google.com>
-Cc:     Jack Wang <jinpu.wang@cloud.ionos.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Akshat Jain <akshatzen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        tabba@google.com, Michael Roth <michael.roth@amd.com>,
+        wei.w.wang@intel.com, Mike Rapoport <rppt@kernel.org>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <ZD1oevE8iHsi66T2@google.com>
+ <658018f9-581c-7786-795a-85227c712be0@redhat.com>
+ <ZD12htq6dWg0tg2e@google.com>
+ <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
+ <ZD2bBB00eKP6F8kz@google.com>
+ <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
+ <ZD86E23gyzF6Q7AF@google.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
+ KVM: mm: fd-based approach for supporting KVM)
+In-Reply-To: <ZD86E23gyzF6Q7AF@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 9:01=E2=80=AFPM Pranav Prasad <pranavpp@google.com>=
- wrote:
->
-> From: Akshat Jain <akshatzen@google.com>
->
-> Print phy_id and port_id sent as part of device registration
-> request.
->
-> Signed-off-by: Akshat Jain <akshatzen@google.com>
-> Signed-off-by: Pranav Prasad <pranavpp@google.com>
-Acked-by: Jack Wang <jinpu.wang@ionos.com>
-> ---
->  drivers/scsi/pm8001/pm80xx_hwi.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80x=
-x_hwi.c
-> index c5bf65d0ad14..8571f6222eb8 100644
-> --- a/drivers/scsi/pm8001/pm80xx_hwi.c
-> +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-> @@ -4756,6 +4756,9 @@ static int pm80xx_chip_reg_dev_req(struct pm8001_hb=
-a_info *pm8001_ha,
->         memcpy(payload.sas_addr, pm8001_dev->sas_device->sas_addr,
->                 SAS_ADDR_SIZE);
->
-> +       pm8001_dbg(pm8001_ha, INIT,
-> +                  "register device req phy_id 0x%x port_id 0x%x\n", phy_=
-id,
-> +                  (port->port_id & 0xFF));
->         rc =3D pm8001_mpi_build_cmd(pm8001_ha, 0, opc, &payload,
->                         sizeof(payload), 0);
->         if (rc)
-> --
-> 2.40.0.634.g4ca3ef3211-goog
->
+On 19.04.23 02:47, Sean Christopherson wrote:
+> On Tue, Apr 18, 2023, David Hildenbrand wrote:
+>> On 17.04.23 21:16, Sean Christopherson wrote:
+>>> Hidden/Concealed/etc - Too close to secretmem, suffers the "hidden from whom" problem,
+>>> and depending on the use case, the memory may not actually be concealed from the
+>>> user that controls the VMM.
+>>>
+>>> Restricted - "rmem" collides with "reserved memory" in code.
+>>>
+>>> Guarded - Conflicts with s390's "guarded storage", has the "from whom" problem.
+>>>
+>>> Inaccessible - Many of the same problems as "hidden".
+>>>
+>>> Unmappable - Doesn't cover things like read/write, and is wrong in the sense that
+>>> the memory is still mappable, just not via mmap().
+>>>
+>>> Secured - I'm not getting anywhere near this one :-)
+>>
+>> The think about "secretmem" that I kind-of like (a little) is that it
+>> explains what it's used for: storing secrets. We don't call it "unmapped"
+>> memory because we unmap it from the directmap or "unpinnable" memory or
+>> "inaccessible" memory ... or even "restricted" because it has restrictions
+>> ... how the secrets are protected is kind of an implementation detail.
+>>
+>> So instead of describing *why*/*how* restrictedmem is the weird kid
+>> (restricted/guarded/hidden/restricted/inaccessible/ ...), maybe rather
+>> describe what it's used for?
+>>
+>> I know, I know, "there are other use cases where it will be used outside of
+>> VM context". I really don't care.
+> 
+> Heh, we originally proposed F_SEAL_GUEST, but that was also sub-optimal[1] ;-)
+> 
+>> "memfd_vm" / "vm_mem" would be sooo (feel free to add some more o's here)
+>> much easier to get. It's a special fd to be used to back VM memory. Depending
+>> on the VM type (encrypted/protected/whatever), restrictions might apply (not
+>> able to mmap, not able to read/write ...). For example, there really is no
+>> need to disallow mmap/read/write when using that memory to back a simple VM
+>> where all we want to do is avoid user-space page tables.
+> 
+> In seriousness, I do agree with Jason's very explicit objection[2] against naming
+> a non-KVM uAPI "guest", or any variation thereof.
+
+While I agree, it's all better than the naming we use right now ...
+
+
+Let me throw "tee_mem" / "memfd_tee" into the picture. That could 
+eventually catch what we want to have.
+
+Or "coco_mem" / "memfd_coco".
+
+Of course, both expect that people know the terminology (just like what 
+"vm" stands for), but it's IMHO significantly better than 
+restricted/guarded/opaque/whatsoever.
+
+Again, expresses what it's used for, not why it behaves in weird ways.
+
+
+> 
+> An alternative that we haven't considered since the very early days is making the
+> uAPI a KVM ioctl() instead of a memfd() flag or dedicated syscall.  Looking at the
+> code for "pure shim" implementation[3], that's actually not that crazy of an idea.
+
+Yes.
+
+> 
+> I don't know that I love the idea of burying this in KVM, but there are benefits
+> to coupling restrictedmem to KVM (aside from getting out from behind this bikeshed
+> that I created).
+
+Yes, it's all better than jumping through hoops to come up with a bad 
+name like "restrictedmem".
+
+> 
+> The big benefit is that the layer of indirection goes away.  That simplifies things
+> like enhancing restrictedmem to allow host userspace access for debug purposes,
+> batching TLB flushes if a PUNCH_HOLE spans multiple memslots, enforcing exclusive
+> access, likely the whole "share with a device" story if/when we get there, etc.
+> 
+> The obvious downsides are that (a) maintenance falls under the KVM umbrella, but
+> that's likely to be true in practice regardless of where the code lands, and
+
+Yes.
+
+> (b) if another use case comes along, e.g. the Gunyah hypervisor[4][5], we risk
+> someone reinventing a similar solution.
+
+I agree. But if it's as simple as providing an ioctl for that hypervisor 
+that simply wires up the existing implementation, it's not too bad.
+
+> 
+> If we can get Gunyah on board and they don't need substantial changes to the
+> restrictedmem implementation, then I'm all for continuing on the path we're on.
+> But if Gunyah wants to do their own thing, and the lightweight shim approach is
+> viable, then it's awfully tempting to put this all behind a KVM ioctl().
+
+Right. Or we still succeed in finding a name that's not as bad as what 
+we had so far.
+
+-- 
+Thanks,
+
+David / dhildenb
+
