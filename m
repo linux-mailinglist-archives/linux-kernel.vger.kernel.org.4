@@ -2,80 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3D46E73A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031F16E73AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbjDSHIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 03:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
+        id S231902AbjDSHJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 03:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbjDSHIS (ORCPT
+        with ESMTP id S230153AbjDSHJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 03:08:18 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA4BC7;
-        Wed, 19 Apr 2023 00:08:16 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2a7a54303afso3191051fa.1;
-        Wed, 19 Apr 2023 00:08:16 -0700 (PDT)
+        Wed, 19 Apr 2023 03:09:29 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1632710;
+        Wed, 19 Apr 2023 00:09:27 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f17eb6b10fso2456625e9.3;
+        Wed, 19 Apr 2023 00:09:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681888095; x=1684480095;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xFdV/aZNB5s27u9laUjFRCNUzAEvMQJQhcf4tydPiWI=;
-        b=XJnh5CXFx1jKI0FEpWnbjVkPGkkjBbhMfsnpE/eXSTPUL8ZrCZ4T1yh6OY9oUx67Fh
-         sgDhX5SZwxSKb0O2tckhDEtQ0h7wpV/66yYPUu6G3syHNj1ZUqptDFJ+U4WiQPxe1VSn
-         eP2H8jmE+bjsCc+AtDqcoCyMxLnzpvZSHSUT3tUpFUrvht/7fLS1fOsIGIpPXtezblBe
-         zmcdjvghji+mplFxcmq8+DOqYpi1YtHE2nFgYrjaQJNDmpKpOwnZU9PiIPaivI4S4vwF
-         pG1e5RADcg/aELOlUEjQyfxNQ8GGgtPXUNIOx/dXKwCGqJcYc1wNxPaO0uW0a2eZR4Sl
-         kXwg==
+        d=gmail.com; s=20221208; t=1681888166; x=1684480166;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gncw5NSYKJdC+oXb5vIMmABpBB/w2kQIQqkwx1G7ip0=;
+        b=jE/02GvCWwsIBkkZC7nqWL71z3VWDSjb0p+VqxANr0zdhwqFx3PMsodzHk6g1kS+sa
+         u1dlw35nt3ABDoU5sCnbd1mF92h+XdLlAM1W+TzPi0OAnazAyN4Lg5l23Ga0Bn8JyCTH
+         EqKuPdfswmFGbTvPYCGrp6MnFf70HKr2lXONtTEyO0c9rhEtYOWACU2vGaSkMg+gM6ML
+         RV8sFwI6oe1E6q9Jh1ZyN4CbSeuABf5114iupLWs+UHvF1FOEixYyvqyIEuVwuEvkoKP
+         JsA1fMr6BevonVOiJGG7hkXTjLC0nggIzQRKPsbHtpt+E7Lc0nzZS47wzFl4cI1+knFU
+         ngKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681888095; x=1684480095;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xFdV/aZNB5s27u9laUjFRCNUzAEvMQJQhcf4tydPiWI=;
-        b=WFLmKufmP58yeiTK54oUHbRAZj0sddi1NUhfAtciGTnqhAi7jZ47y8WEc5+5Tfy3DZ
-         H3elHhF8Wxl1IAYWsmeEVcX+BU/ZACQE/RwDImcYCyU2kUvkilzMVTE4IrpX72Ou0egE
-         cIaXMZ8WDp8ouR18hdugI50GIjzGiuq773yO8el3oRDS2R6IdVZijaImi0Gwu0GPnUIs
-         GtoFADLcfzjkG/IFi6WsnAtkEScR2jPWHS1UZhI2GRI7DU1KPQQ1xUwvkeN2X49fO/On
-         xksEheu7yrrOmnSrRzL2379oZsPDiQgUxZQrQVdQgSlWR4EuApngOUY0c0rYogWnZPlk
-         CdhQ==
-X-Gm-Message-State: AAQBX9fx8aDu+aqNZqrqFZpvDVxdQiS66QLbajifkhBM6y1MstYJciaI
-        JfkGmTJDI53a+xKcyP23p5I=
-X-Google-Smtp-Source: AKy350aAMti/yPJ0I+V+gY4/IGWnHjXQBLY9YwVa62ihlEO/e9THIsbUhHdrLAmmhA7DlH+bG0f0Pg==
-X-Received: by 2002:ac2:443a:0:b0:4db:1e4a:749c with SMTP id w26-20020ac2443a000000b004db1e4a749cmr3778431lfl.0.1681888094805;
-        Wed, 19 Apr 2023 00:08:14 -0700 (PDT)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05651211f000b004d8546456c6sm2595758lfs.195.2023.04.19.00.08.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 00:08:14 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 10:08:01 +0300
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Sagi Shahar <sagis@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [RFC PATCH 5/5] KVM: TDX: Add core logic for TDX intra-host
- migration
-Message-ID: <20230419100801.00007d20.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230407201921.2703758-6-sagis@google.com>
-References: <20230407201921.2703758-1-sagis@google.com>
-        <20230407201921.2703758-6-sagis@google.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        d=1e100.net; s=20221208; t=1681888166; x=1684480166;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gncw5NSYKJdC+oXb5vIMmABpBB/w2kQIQqkwx1G7ip0=;
+        b=QLuo7NdP7sfB2vGnXUW1sgY7pJr8BjuMn9vg6XdotTtPI4ZmghECvMeuJuiQUYvywk
+         VaJ7Yz2Lh9l4XUBqDAmgNX5ZdEPs8sH58JoZ0Z/jSCx3O7snyHfj3635na/SAmwkAMe0
+         KA4bJFgmYjsSarx3j6c4RII8KsNWx9+2qSaKiIaFgXL9Txw6lKlqrI9KiaD9Y5Tb9t5r
+         kGcbcd2jWMCSvAUA1DT/MlEgweNMCFKxoWMtX63p8W+prlGQbizv6SCjN8rF2rCBYptj
+         KL4hCvFd9Pof6wzf2cJWDEvbKOmU418qfYWhqIwd6Cv1AkLF2qATZbDKPiciXkf6fKxE
+         mS7Q==
+X-Gm-Message-State: AAQBX9dn1fi5u0d4MEtwsb63wutF6fvsMBDGedndM1vv+ofcj01wtXIu
+        bcXa+Fj/HQyJoDUXh1cfH40=
+X-Google-Smtp-Source: AKy350YV8zET0vM4q6+vXD1E7cJckJiUb0/Ni6CnVlFipLUT0QudslX6e3wYbpWqftH/rcdvPj/pDQ==
+X-Received: by 2002:adf:e58a:0:b0:2ef:1c8c:1113 with SMTP id l10-20020adfe58a000000b002ef1c8c1113mr4361586wrm.9.1681888166283;
+        Wed, 19 Apr 2023 00:09:26 -0700 (PDT)
+Received: from [192.168.0.103] ([77.124.103.108])
+        by smtp.gmail.com with ESMTPSA id f14-20020a5d58ee000000b002f3e1122c1asm14963527wrd.15.2023.04.19.00.09.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 00:09:25 -0700 (PDT)
+Message-ID: <9975669b-27bf-6903-f908-184946960c25@gmail.com>
+Date:   Wed, 19 Apr 2023 10:09:21 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 2/2] net/mlx4: avoid overloading user/kernel pointers
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, Yishai Hadas <yishaih@nvidia.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <20230418114730.3674657-1-arnd@kernel.org>
+ <20230418114730.3674657-2-arnd@kernel.org>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <20230418114730.3674657-2-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,228 +82,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  7 Apr 2023 20:19:21 +0000
-Sagi Shahar <sagis@google.com> wrote:
 
-> Adds the core logic for transferring state between source and
-> destination TDs during intra-host migration.
+
+On 18/04/2023 14:47, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Signed-off-by: Sagi Shahar <sagis@google.com>
+> The mlx4_ib_create_cq() and mlx4_init_user_cqes() functions cast
+> between kernel pointers and user pointers, which is confusing
+> and can easily hide bugs.
+> 
+> Change the code to use use the correct address spaces consistently
+> and use separate pointer variables in mlx4_cq_alloc() to avoid
+> mixing them.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  arch/x86/kvm/vmx/tdx.c | 191 ++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 190 insertions(+), 1 deletion(-)
+> I ran into this while fixing the link error in the first
+> patch, and decided it would be useful to clean up.
+> ---
+>   drivers/infiniband/hw/mlx4/cq.c         | 11 +++++++----
+>   drivers/net/ethernet/mellanox/mlx4/cq.c | 17 ++++++++---------
+>   include/linux/mlx4/device.h             |  2 +-
+
+missed the mlx4_cq_alloc usage in
+drivers/net/ethernet/mellanox/mlx4/en_cq.c.
+
+>   3 files changed, 16 insertions(+), 14 deletions(-)
 > 
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index 0999a6d827c99..05b164a91437b 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -2834,9 +2834,198 @@ static __always_inline bool tdx_guest(struct kvm *kvm)
->  	return tdx_kvm->finalized;
->  }
->  
-> +#define for_each_memslot_pair(memslots_1, memslots_2, memslot_iter_1, \
-> +			      memslot_iter_2)                         \
-> +	for (memslot_iter_1 = rb_first(&memslots_1->gfn_tree),        \
-> +	    memslot_iter_2 = rb_first(&memslots_2->gfn_tree);         \
-> +	     memslot_iter_1 && memslot_iter_2;                        \
-> +	     memslot_iter_1 = rb_next(memslot_iter_1),                \
-> +	    memslot_iter_2 = rb_next(memslot_iter_2))
-> +
+> diff --git a/drivers/infiniband/hw/mlx4/cq.c b/drivers/infiniband/hw/mlx4/cq.c
+> index 4cd738aae53c..b12713fdde99 100644
+> --- a/drivers/infiniband/hw/mlx4/cq.c
+> +++ b/drivers/infiniband/hw/mlx4/cq.c
+> @@ -180,7 +180,8 @@ int mlx4_ib_create_cq(struct ib_cq *ibcq, const struct ib_cq_init_attr *attr,
+>   	struct mlx4_ib_dev *dev = to_mdev(ibdev);
+>   	struct mlx4_ib_cq *cq = to_mcq(ibcq);
+>   	struct mlx4_uar *uar;
+> -	void *buf_addr;
+> +	void __user *ubuf_addr;
+> +	void *kbuf_addr;
+>   	int err;
+>   	struct mlx4_ib_ucontext *context = rdma_udata_to_drv_context(
+>   		udata, struct mlx4_ib_ucontext, ibucontext);
+> @@ -209,7 +210,8 @@ int mlx4_ib_create_cq(struct ib_cq *ibcq, const struct ib_cq_init_attr *attr,
+>   			goto err_cq;
+>   		}
+>   
+> -		buf_addr = (void *)(unsigned long)ucmd.buf_addr;
+> +		ubuf_addr = u64_to_user_ptr(ucmd.buf_addr);
+> +		kbuf_addr = NULL;
+>   		err = mlx4_ib_get_cq_umem(dev, &cq->buf, &cq->umem,
+>   					  ucmd.buf_addr, entries);
+>   		if (err)
+> @@ -235,7 +237,8 @@ int mlx4_ib_create_cq(struct ib_cq *ibcq, const struct ib_cq_init_attr *attr,
+>   		if (err)
+>   			goto err_db;
+>   
+> -		buf_addr = &cq->buf.buf;
+> +		ubuf_addr = NULL;
+> +		kbuf_addr = &cq->buf.buf;
 
-If it is a pair, using suffix *_a, *_b would be better.
+Now we should maintain the values of the two pointers before any call. 
+I'm not sure this is less error-prune. One can mistakenly update 
+kbuf_addr for example without nullifying ubuf_addr.
 
->  static int tdx_migrate_from(struct kvm *dst, struct kvm *src)
->  {
-> -	return -EINVAL;
-> +	struct rb_node *src_memslot_iter, *dst_memslot_iter;
-> +	struct vcpu_tdx *dst_tdx_vcpu, *src_tdx_vcpu;
-> +	struct kvm_memslots *src_slots, *dst_slots;
-> +	struct kvm_vcpu *dst_vcpu, *src_vcpu;
-> +	struct kvm_tdx *src_tdx, *dst_tdx;
-> +	unsigned long i, j;
-> +	int ret;
-> +
-> +	src_tdx = to_kvm_tdx(src);
-> +	dst_tdx = to_kvm_tdx(dst);
-> +
-> +	src_slots = __kvm_memslots(src, 0);
-> +	dst_slots = __kvm_memslots(dst, 0);
-> +
-> +	ret = -EINVAL;
-> +
-> +	if (!src_tdx->finalized) {
-> +		pr_warn("Cannot migrate from a non finalized VM\n");
-> +		goto abort;
-> +	}
-> +
+Also, I'm not a big fan of passing two pointers when exactly one of them 
+is effectively used.
+We can think maybe of passing a union of both types, and a boolean 
+indicating which pointer type is to be used.
 
-Let's use the existing inline function is_td_finalized().
-
-> +	// Traverse both memslots in gfn order and compare them
-> +	for_each_memslot_pair(src_slots, dst_slots, src_memslot_iter, dst_memslot_iter) {
-> +		struct kvm_memory_slot *src_slot, *dst_slot;
-> +
-> +		src_slot =
-> +			container_of(src_memslot_iter, struct kvm_memory_slot,
-> +				     gfn_node[src_slots->node_idx]);
-> +		dst_slot =
-> +			container_of(src_memslot_iter, struct kvm_memory_slot,
-> +				     gfn_node[dst_slots->node_idx]);
-> +
-                                       ^dst_memslot_iter? So does the other one below.
-> +		if (src_slot->base_gfn != dst_slot->base_gfn ||
-> +		    src_slot->npages != dst_slot->npages) {
-> +			pr_warn("Cannot migrate between VMs with different memory slots configurations\n");
-> +			goto abort;
-> +		}
-> +
-> +		if (src_slot->flags != dst_slot->flags) {
-> +			pr_warn("Cannot migrate between VMs with different memory slots configurations\n");
-> +			goto abort;
-> +		}
-> +
-> +		if (src_slot->flags & KVM_MEM_PRIVATE) {
-> +			if (src_slot->restrictedmem.file->f_inode->i_ino !=
-> +			    dst_slot->restrictedmem.file->f_inode->i_ino) {
-> +				pr_warn("Private memslots points to different restricted files\n");
-> +				goto abort;
-> +			}
-> +
-> +			if (src_slot->restrictedmem.index != dst_slot->restrictedmem.index) {
-> +				pr_warn("Private memslots points to the restricted file at different offsets\n");
-> +				goto abort;
-> +			}
-> +		}
-> +	}
-> +
-> +	if (src_memslot_iter || dst_memslot_iter) {
-> +		pr_warn("Cannot migrate between VMs with different memory slots configurations\n");
-> +		goto abort;
-> +	}
-> +
-> +	dst_tdx->hkid = src_tdx->hkid;
-> +	dst_tdx->tdr_pa = src_tdx->tdr_pa;
-> +
-> +	dst_tdx->tdcs_pa = kcalloc(tdx_info.nr_tdcs_pages, sizeof(*dst_tdx->tdcs_pa),
-> +			  GFP_KERNEL_ACCOUNT | __GFP_ZERO);
-> +	if (!dst_tdx->tdcs_pa) {
-> +		ret = -ENOMEM;
-> +		goto late_abort;
-> +	}
-> +	memcpy(dst_tdx->tdcs_pa, src_tdx->tdcs_pa,
-> +	       tdx_info.nr_tdcs_pages * sizeof(*dst_tdx->tdcs_pa));
-> +
-> +	dst_tdx->tsc_offset = src_tdx->tsc_offset;
-> +	dst_tdx->attributes = src_tdx->attributes;
-> +	dst_tdx->xfam = src_tdx->xfam;
-> +	dst_tdx->kvm.arch.gfn_shared_mask = src_tdx->kvm.arch.gfn_shared_mask;
-> +
-> +	kvm_for_each_vcpu(i, src_vcpu, src)
-> +		tdx_flush_vp_on_cpu(src_vcpu);
-> +
-> +	/* Copy per-vCPU state */
-> +	kvm_for_each_vcpu(i, src_vcpu, src) {
-> +		src_tdx_vcpu = to_tdx(src_vcpu);
-> +		dst_vcpu = kvm_get_vcpu(dst, i);
-> +		dst_tdx_vcpu = to_tdx(dst_vcpu);
-> +
-> +		vcpu_load(dst_vcpu);
-> +
-> +		memcpy(dst_vcpu->arch.regs, src_vcpu->arch.regs,
-> +		       NR_VCPU_REGS * sizeof(src_vcpu->arch.regs[0]));
-> +		dst_vcpu->arch.regs_avail = src_vcpu->arch.regs_avail;
-> +		dst_vcpu->arch.regs_dirty = src_vcpu->arch.regs_dirty;
-> +
-> +		dst_vcpu->arch.tsc_offset = dst_tdx->tsc_offset;
-> +
-> +		dst_tdx_vcpu->interrupt_disabled_hlt = src_tdx_vcpu->interrupt_disabled_hlt;
-> +		dst_tdx_vcpu->buggy_hlt_workaround = src_tdx_vcpu->buggy_hlt_workaround;
-> +
-> +		dst_tdx_vcpu->tdvpr_pa = src_tdx_vcpu->tdvpr_pa;
-> +		dst_tdx_vcpu->tdvpx_pa = kcalloc(tdx_info.nr_tdvpx_pages,
-> +						 sizeof(*dst_tdx_vcpu->tdvpx_pa),
-> +						 GFP_KERNEL_ACCOUNT);
-> +		if (!dst_tdx_vcpu->tdvpx_pa) {
-> +			ret = -ENOMEM;
-> +			vcpu_put(dst_vcpu);
-> +			goto late_abort;
-> +		}
-> +		memcpy(dst_tdx_vcpu->tdvpx_pa, src_tdx_vcpu->tdvpx_pa,
-> +		       tdx_info.nr_tdvpx_pages * sizeof(*dst_tdx_vcpu->tdvpx_pa));
-> +
-> +		td_vmcs_write64(dst_tdx_vcpu, POSTED_INTR_DESC_ADDR, __pa(&dst_tdx_vcpu->pi_desc));
-> +
-> +		/* Copy private EPT tables */
-> +		if (kvm_mmu_move_private_pages_from(dst_vcpu, src_vcpu)) {
-> +			ret = -EINVAL;
-> +			vcpu_put(dst_vcpu);
-> +			goto late_abort;
-> +		}
-> +
-> +		for (j = 0; j < tdx_info.nr_tdvpx_pages; j++)
-> +			src_tdx_vcpu->tdvpx_pa[j] = 0;
-> +
-> +		src_tdx_vcpu->tdvpr_pa = 0;
-> +
-> +		vcpu_put(dst_vcpu);
-> +	}
-> +
-> +	for_each_memslot_pair(src_slots, dst_slots, src_memslot_iter,
-> +			      dst_memslot_iter) {
-> +		struct kvm_memory_slot *src_slot, *dst_slot;
-> +
-> +		src_slot = container_of(src_memslot_iter,
-> +					struct kvm_memory_slot,
-> +					gfn_node[src_slots->node_idx]);
-> +		dst_slot = container_of(src_memslot_iter,
-> +					struct kvm_memory_slot,
-> +					gfn_node[dst_slots->node_idx]);
-> +
-> +		for (i = 1; i < KVM_NR_PAGE_SIZES; ++i) {
-> +			unsigned long ugfn;
-> +			int level = i + 1;
-> +
-> +			/*
-> +			 * If the gfn and userspace address are not aligned wrt each other, then
-> +			 * large page support should already be disabled at this level.
-> +			 */
-> +			ugfn = dst_slot->userspace_addr >> PAGE_SHIFT;
-> +			if ((dst_slot->base_gfn ^ ugfn) & (KVM_PAGES_PER_HPAGE(level) - 1))
-> +				continue;
-> +
-> +			dst_slot->arch.lpage_info[i - 1] =
-> +				src_slot->arch.lpage_info[i - 1];
-> +			src_slot->arch.lpage_info[i - 1] = NULL;
-> +		}
-> +	}
-> +
-> +	dst->mem_attr_array.xa_head = src->mem_attr_array.xa_head;
-> +	src->mem_attr_array.xa_head = NULL;
-> +
-> +	dst_tdx->finalized = true;
-> +
-> +	/* Clear source VM to avoid freeing the hkid and pages on VM put */
-> +	src_tdx->hkid = -1;
-> +	src_tdx->tdr_pa = 0;
-> +	for (i = 0; i < tdx_info.nr_tdcs_pages; i++)
-> +		src_tdx->tdcs_pa[i] = 0;
-> +
-> +	return 0;
-> +
-> +late_abort:
-> +	/* If we aborted after the state transfer already started, the src VM
-> +	 * is no longer valid.
-> +	 */
-> +	kvm_vm_dead(src);
-> +
-> +abort:
-> +	dst_tdx->hkid = -1;
-> +	dst_tdx->tdr_pa = 0;
-> +
-> +	return ret;
->  }
->
-This function is quite long. It would be better to split some parts into
-separate functions.
->  int tdx_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+>   
+>   		uar = &dev->priv_uar;
+>   		cq->mcq.usage = MLX4_RES_USAGE_DRIVER;
+> @@ -248,7 +251,7 @@ int mlx4_ib_create_cq(struct ib_cq *ibcq, const struct ib_cq_init_attr *attr,
+>   			    &cq->mcq, vector, 0,
+>   			    !!(cq->create_flags &
+>   			       IB_UVERBS_CQ_FLAGS_TIMESTAMP_COMPLETION),
+> -			    buf_addr, !!udata);
+> +			    ubuf_addr, kbuf_addr);
+>   	if (err)
+>   		goto err_dbmap;
+>   
+> diff --git a/drivers/net/ethernet/mellanox/mlx4/cq.c b/drivers/net/ethernet/mellanox/mlx4/cq.c
+> index 020cb8e2883f..22216f4e409b 100644
+> --- a/drivers/net/ethernet/mellanox/mlx4/cq.c
+> +++ b/drivers/net/ethernet/mellanox/mlx4/cq.c
+> @@ -287,7 +287,7 @@ static void mlx4_cq_free_icm(struct mlx4_dev *dev, int cqn)
+>   		__mlx4_cq_free_icm(dev, cqn);
+>   }
+>   
+> -static int mlx4_init_user_cqes(void *buf, int entries, int cqe_size)
+> +static int mlx4_init_user_cqes(void __user *buf, int entries, int cqe_size)
+>   {
+>   	int entries_per_copy = PAGE_SIZE / cqe_size;
+>   	size_t copy_size = array_size(entries, cqe_size);
+> @@ -307,7 +307,7 @@ static int mlx4_init_user_cqes(void *buf, int entries, int cqe_size)
+>   
+>   	if (copy_size > PAGE_SIZE) {
+>   		for (i = 0; i < entries / entries_per_copy; i++) {
+> -			err = copy_to_user((void __user *)buf, init_ents, PAGE_SIZE) ?
+> +			err = copy_to_user(buf, init_ents, PAGE_SIZE) ?
+>   				-EFAULT : 0;
+>   			if (err)
+>   				goto out;
+> @@ -315,8 +315,7 @@ static int mlx4_init_user_cqes(void *buf, int entries, int cqe_size)
+>   			buf += PAGE_SIZE;
+>   		}
+>   	} else {
+> -		err = copy_to_user((void __user *)buf, init_ents,
+> -				   copy_size) ?
+> +		err = copy_to_user(buf, init_ents, copy_size) ?
+>   			-EFAULT : 0;
+>   	}
+>   
+> @@ -343,7 +342,7 @@ static void mlx4_init_kernel_cqes(struct mlx4_buf *buf,
+>   int mlx4_cq_alloc(struct mlx4_dev *dev, int nent,
+>   		  struct mlx4_mtt *mtt, struct mlx4_uar *uar, u64 db_rec,
+>   		  struct mlx4_cq *cq, unsigned vector, int collapsed,
+> -		  int timestamp_en, void *buf_addr, bool user_cq)
+> +		  int timestamp_en, void __user *ubuf_addr, void *kbuf_addr)
+>   {
+>   	bool sw_cq_init = dev->caps.flags2 & MLX4_DEV_CAP_FLAG2_SW_CQ_INIT;
+>   	struct mlx4_priv *priv = mlx4_priv(dev);
+> @@ -391,13 +390,13 @@ int mlx4_cq_alloc(struct mlx4_dev *dev, int nent,
+>   	cq_context->db_rec_addr     = cpu_to_be64(db_rec);
+>   
+>   	if (sw_cq_init) {
+> -		if (user_cq) {
+> -			err = mlx4_init_user_cqes(buf_addr, nent,
+> +		if (ubuf_addr) {
+> +			err = mlx4_init_user_cqes(ubuf_addr, nent,
+>   						  dev->caps.cqe_size);
+>   			if (err)
+>   				sw_cq_init = false;
+> -		} else {
+> -			mlx4_init_kernel_cqes(buf_addr, nent,
+> +		} else if (kbuf_addr) {
+> +			mlx4_init_kernel_cqes(kbuf_addr, nent,
+>   					      dev->caps.cqe_size);
+>   		}
+>   	}
+> diff --git a/include/linux/mlx4/device.h b/include/linux/mlx4/device.h
+> index 6646634a0b9d..dd8f3396dcba 100644
+> --- a/include/linux/mlx4/device.h
+> +++ b/include/linux/mlx4/device.h
+> @@ -1126,7 +1126,7 @@ void mlx4_free_hwq_res(struct mlx4_dev *mdev, struct mlx4_hwq_resources *wqres,
+>   int mlx4_cq_alloc(struct mlx4_dev *dev, int nent, struct mlx4_mtt *mtt,
+>   		  struct mlx4_uar *uar, u64 db_rec, struct mlx4_cq *cq,
+>   		  unsigned int vector, int collapsed, int timestamp_en,
+> -		  void *buf_addr, bool user_cq);
+> +		  void __user *ubuf_addr, void *kbuf_addr);
+>   void mlx4_cq_free(struct mlx4_dev *dev, struct mlx4_cq *cq);
+>   int mlx4_qp_reserve_range(struct mlx4_dev *dev, int cnt, int align,
+>   			  int *base, u8 flags, u8 usage);
 
