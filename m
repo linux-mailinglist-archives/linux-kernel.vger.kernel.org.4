@@ -2,164 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5486C6E8078
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC2D6E807A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbjDSRfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 13:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
+        id S231830AbjDSRgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 13:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjDSRfM (ORCPT
+        with ESMTP id S229575AbjDSRgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 13:35:12 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E268A6A6E;
-        Wed, 19 Apr 2023 10:35:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681925711; x=1713461711;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=4qXm5eWpcBEMDu4cseUDl5qOFRKxr2ED5XonItnH7PA=;
-  b=oCDaDlKTEN/8FUQjfUg1Zqw8UKbZkDprPZyrUiIWy8zE0Zuh4zKDIENL
-   u84UdS5xmiiSC+WwH+68n/7XTM9R920gBLcPkdB2Ls3V3x2aBGsjI05uY
-   sAM74zSvmNkkwf5WArV4VRZeWpiqFYqfQOE/bAxi62XND6RUsjUpy6PfJ
-   A0ox9j8WVUDYViqUV3oFMqkFOG90z0YiWdXC54z3dqAMCDjRHNRmv0Rnb
-   1Q3nSZLtMNUdci90IpmZTvd1ZDHUXivDBrzQ6kOVgowRYSyQUtRRmrZ0G
-   2CIBrINQvt0DYsZsDMewFRnUDVoWBBrb8L2UVapD1cl33BTj9hfTYTRqK
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="342993840"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="342993840"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 10:35:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="937755813"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="937755813"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 19 Apr 2023 10:35:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1ppBhz-002KRH-2A;
-        Wed, 19 Apr 2023 20:35:07 +0300
-Date:   Wed, 19 Apr 2023 20:35:07 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Joy Chakraborty <joychakr@google.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, manugautam@google.com,
-        rohitner@google.com
-Subject: Re: [PATCH v7 4/5] spi: dw: Add DMA address widths capability check
-Message-ID: <ZEAmS3huMHla7Ifo@smile.fi.intel.com>
-References: <20230418052902.1336866-1-joychakr@google.com>
- <20230418052902.1336866-5-joychakr@google.com>
- <ZD5JC7BdN1usn6Kd@smile.fi.intel.com>
- <CAOSNQF2sXHFCx9ZfrtfmxHfKrAE0XGP8SRvW6wyYco+FKSPmDw@mail.gmail.com>
- <ZD/VO1cuBYGCP4O2@smile.fi.intel.com>
- <CAOSNQF1wf3m+YTmh5qQWCM6+x3j2whvG6F=dW6Hd7zW0Y+E_1g@mail.gmail.com>
+        Wed, 19 Apr 2023 13:36:01 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C9C46B3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:36:00 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-63b78525ac5so32539b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681925760; x=1684517760;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lmO38VAM37rREvey7UoSOou6N388un70Vf6aBhszREY=;
+        b=z/iFo4N29sXIdiv1sY4QI9CNza3JqdfEZW150D4CJIyqs1ftdbuyC35lNkAkp8OIHw
+         FNH/iNpv40tp9PaqWqjijJTveL3b5HpsywAKFu+NXKt/C8ueBJnMRfskUMFxudaPVNIp
+         kCIkoO8IWDzaXtbHl9fycm6UjiCF7sVT5BJ5r9GYti6tjakHnx2OfmLJyt7gXEmbtohV
+         ySDWqn/WS98cIV+84UiYqFj9Rj5GDlNaOafgCPKp5H4qsl/dug8Vwen37K5r4XpdX4q/
+         ors2vzE7K+LQzdnH59H3Hk42tcHrIqRSJVQ9NBXcEKzTcsvJKl1bGe9AEY/IN1eVMPQ1
+         CnbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681925760; x=1684517760;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lmO38VAM37rREvey7UoSOou6N388un70Vf6aBhszREY=;
+        b=l7F7IuF8YSlFStU+qukkJgryPYZ+589lqOXitSluJD8ns23/iA7KnAZVPM6KfEKrOs
+         G2dIZfPruia/4IHslpU+FN2pVDE3tOwqs59eJQzt2NCKpkA1tmUGbPiZH+9iYd3/5Gib
+         EEKaTzT1+rVXRQ1d1xiS+SOFiTmt4PAFbnfVVKj/IhCGCcmWT0UL++DVNoW74RwaSXwb
+         6R5DQ+3FLwOlBn00lDAGoU3OkNj0cXuGykvW2Fs9HrOTCoseWaKzcnw+zsOhu1Dk8vAH
+         oq8aGwTdhYfgbCjO1IMKykYXUsJJt3unHE2Hs3dIHUCPbquFlPqH9JpaBQ97aOSCpXWD
+         slbw==
+X-Gm-Message-State: AAQBX9cEu0pcTwyp2r+8qy4gFXlrCZ35L0KBhux+XZskNtKUza02Xf2u
+        yy/rxI/lQjhskBdU07OD0/A78w==
+X-Google-Smtp-Source: AKy350azjREW+qIem/g1t7Qyf3FDL/wCTe61ppZquIOiZUWzxLxOfqTXaZiTcn3AdljAFh3tJFhQQw==
+X-Received: by 2002:a17:902:dad1:b0:1a1:956d:2281 with SMTP id q17-20020a170902dad100b001a1956d2281mr22828705plx.3.1681925759947;
+        Wed, 19 Apr 2023 10:35:59 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id jf7-20020a170903268700b001a2135e7eabsm11700385plb.16.2023.04.19.10.35.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 10:35:59 -0700 (PDT)
+Message-ID: <69f48cc6-8fc6-0c49-5a79-6c7d248e4ad5@kernel.dk>
+Date:   Wed, 19 Apr 2023 11:35:58 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOSNQF1wf3m+YTmh5qQWCM6+x3j2whvG6F=dW6Hd7zW0Y+E_1g@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
+ pin_user_pages()
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>
+References: <cover.1681831798.git.lstoakes@gmail.com>
+ <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
+ <936e8f52-00be-6721-cb3e-42338f2ecc2f@kernel.dk>
+ <c2e22383-43ee-5cf0-9dc7-7cd05d01ecfb@kernel.dk>
+ <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 06:18:04PM +0530, Joy Chakraborty wrote:
-> On Wed, Apr 19, 2023 at 5:19 PM Andy Shevchenko
-> <andriy.shevchenko@intel.com> wrote:
-> > On Wed, Apr 19, 2023 at 11:18:25AM +0530, Joy Chakraborty wrote:
-> > > On Tue, Apr 18, 2023 at 1:08 PM Andy Shevchenko
-> > > <andriy.shevchenko@intel.com> wrote:
-> > > > On Tue, Apr 18, 2023 at 05:29:01AM +0000, Joy Chakraborty wrote:
-
-...
-
-> > > > > +     /*
-> > > > > +      * Assuming both channels belong to the same DMA controller hence the
-> > > > > +      * address width capabilities most likely would be the same.
-> > > > > +      */
-> > > >
-> > > > I had a small comment on this In v6 thread.
-> > >
-> > > Sure,
-> > >
-> > > Your comment in V6 thread:
-> > > "
-> > > I would add something to explain the side of these address width, like
-> > >
-> > >          * Assuming both channels belong to the same DMA controller hence
-> > >          * the peripheral side address width capabilities most likely would
-> > >          * be the same.
-> > > "
-> > >
-> > > I do not think the address width capabilities are dependent on the
-> > > side of generation like memory or peripheral.
-> >
-> > Yes, they are independent. Memory could do with 4 bytes, while peripheral with
-> > 1 byte and so on.
-> >
-> > > From what I understand,
-> > > address width capabilities are solely dependent on the transaction
-> > > generation capability of the DMA controller towards the system bus.
-> >
-> > What do you mean by a SB in the above? Memory? Peripheral?
+On 4/19/23 11:23?AM, Lorenzo Stoakes wrote:
+> On Wed, Apr 19, 2023 at 10:59:27AM -0600, Jens Axboe wrote:
+>> On 4/19/23 10:35?AM, Jens Axboe wrote:
+>>> On 4/18/23 9:49?AM, Lorenzo Stoakes wrote:
+>>>> We are shortly to remove pin_user_pages(), and instead perform the required
+>>>> VMA checks ourselves. In most cases there will be a single VMA so this
+>>>> should caues no undue impact on an already slow path.
+>>>>
+>>>> Doing this eliminates the one instance of vmas being used by
+>>>> pin_user_pages().
+>>>
+>>> First up, please don't just send single patches from a series. It's
+>>> really annoying when you are trying to get the full picture. Just CC the
+>>> whole series, so reviews don't have to look it up separately.
+>>>
+>>> So when you're doing a respin for what I'll mention below and the issue
+>>> that David found, please don't just show us patch 4+5 of the series.
+>>
+>> I'll reply here too rather than keep some of this conversaion
+>> out-of-band.
+>>
+>> I don't necessarily think that making io buffer registration dumber and
+>> less efficient by needing a separate vma lookup after the fact is a huge
+>> deal, as I would imagine most workloads register buffers at setup time
+>> and then don't change them. But if people do switch sets at runtime,
+>> it's not necessarily a slow path. That said, I suspect the other bits
+>> that we do in here, like the GUP, is going to dominate the overhead
+>> anyway.
 > 
-> By system bus I mean anything that is connecting the Memory, DMA and
-> the peripheral.
-> Something like :
+> Thanks, and indeed I expect the GUP will dominate.
+
+Unless you have a lot of vmas... Point is, it's _probably_ not a
+problem, but it might and it's making things worse for no real gain as
+far as I can tell outside of some notion of "cleaning up the code".
+
+>> My main question is, why don't we just have a __pin_user_pages or
+>> something helper that still takes the vmas argument, and drop it from
+>> pin_user_pages() only? That'd still allow the cleanup of the other users
+>> that don't care about the vma at all, while retaining the bundled
+>> functionality for the case/cases that do? That would avoid needing
+>> explicit vma iteration in io_uring.
+>>
 > 
->           +-----------+          +-------------------+
->           |               |           |                        |
->           |   DMA    |           | PERIPHERAL |
->           |               |           |                         |
->           +----^-+---+          +-----+--^---------+
->         *** -->| |                         |    |
->                   | |                         |    |
-> <------------+-v--------------------v---+------------->
->                     SYSTEM BUS
-> <---------------------+--^----------------------------->
->                             |   |
->                             |   |
->                      +----v--+-----+
->                      |                   |
->                      |  MEMORY |
->                      |                   |
->                      +--------------+
-> *** : Address width capabilities should be the capability of the DMA
-> to generate transactions to the system bus on the marked interface
-> irrespective of whether it is destined for Peripheral or memory is
-> what I understand.
+> The desire here is to completely eliminate vmas as an externally available
+> parameter from GUP. While we do have a newly introduced helper that returns
+> a VMA, doing the lookup manually for all other vma cases (which look up a
+> single page and vma), that is more so a helper that sits outside of GUP.
+> 
+> Having a separate function that still bundled the vmas would essentially
+> undermine the purpose of the series altogether which is not just to clean
+> up some NULL's but rather to eliminate vmas as part of the GUP interface
+> altogether.
+> 
+> The reason for this is that by doing so we simplify the GUP interface,
+> eliminate a whole class of possible future bugs with people holding onto
+> pointers to vmas which may dangle and lead the way to future changes in GUP
+> which might be more impactful, such as trying to find means to use the fast
+> paths in more areas with an eye to gradual eradication of the use of
+> mmap_lock.
+> 
+> While we return VMAs, none of this is possible and it also makes the
+> interface more confusing - without vmas GUP takes flags which define its
+> behaviour and in most cases returns page objects. The odd rules about what
+> can and cannot return vmas under what circumstances are not helpful for new
+> users.
+> 
+> Another point here is that Jason suggested adding a new
+> FOLL_ALLOW_BROKEN_FILE_MAPPINGS flag which would, by default, not be
+> set. This could assert that only shmem/hugetlb file mappings are permitted
+> which would eliminate the need for you to perform this check at all.
+> 
+> This leads into the larger point that GUP-writing file mappings is
+> fundamentally broken due to e.g. GUP not honouring write notify so this
+> check should at least in theory not be necessary.
+> 
+> So it may be the case that should such a flag be added this code will
+> simply be deleted at a future point :)
 
-That's misunderstanding. You used only one possible HW design, there may be
-more. For example we have Synopsys DesignWare DMA that has a lot of parameters
-to configure bus mastering. One of such a case, where it makes a lot of sense,
-is DesignWare SATA with the above mentioned DMA controller where it has two
-masters and they are connected towards memory and towards peripheral "buses".
-They have _different_ configurations.
-
-So, generally speaking what you are saying is not true.
-
-> > > What we intend to highlight here is the assumption that both tx and rx
-> > > channel would belong to the same DMA controller hence the transaction
-> > > generation capabilities would be the same both for read and write
-> > > (e.g. if the DMA controller is able to generate 32 bit sized reads
-> > > then it should also be able to generate 32 bit sized writes).
-> > > With this assumption we are doing a bitwise and of both tx and rx capabilities.
-> > >
-> > > Please let me know if you think otherwise.
+Why don't we do that first then? There's nothing more permanent than a
+temporary workaround/fix. Once it's in there, motivation to get rid of
+it for most people is zero because they just never see it. Seems like
+that'd be a much saner approach rather than the other way around, and
+make this patchset simpler/cleaner too as it'd only be removing code in
+all of the callers.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Jens Axboe
 
