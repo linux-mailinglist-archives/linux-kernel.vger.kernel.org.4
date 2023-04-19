@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A92A46E7B55
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C286E7B58
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbjDSNyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 09:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
+        id S232346AbjDSNye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 09:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232847AbjDSNyM (ORCPT
+        with ESMTP id S232082AbjDSNyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 09:54:12 -0400
+        Wed, 19 Apr 2023 09:54:31 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F17416B30;
-        Wed, 19 Apr 2023 06:54:07 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33JAWEBW005815;
-        Wed, 19 Apr 2023 13:54:01 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AA583CE;
+        Wed, 19 Apr 2023 06:54:13 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33JDeuVe016748;
+        Wed, 19 Apr 2023 13:54:07 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=FWT+UZ2wRIPfTA7YLn6I8VVtHEVjDWrhLRJlCY4ebFA=;
- b=HXSiV3j6Wt50YYJTZrFQ/vAT6Rz0KcAiofx9NqcxhGUS4muUQoxO5W7yWk4GGxOpJ4A/
- Nh3avjrjcF33+H/2qYexfU9fMQZ0acDu5FmuSxV1UkfsTtMvt/Ngr77B00ROBytTbEXG
- /3X/ygqjwZ9jC7qiHiCXcNnSHT4hpt0qCNQTwr3lVvsYnvOIKMTWd7vBVK3o0Dbp7u8Q
- acNfzYgmtVoG+J2vWsqLOO34mNda/FLcIebWSqIAkw4rwNGiX9H4u14/sTGhKtXgsPXm
- AMSbvGEYBHVv+s4u6+Gdlgrc7lOTPArGfm8BiL7SYynD5s7FURy7BVoPts+ntNvDELm/ xA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q28g2h9cb-1
+ bh=6TNjAJ/QaHXcCW463HjEVwRZ1N1IO/vqzz6yW+uu1jM=;
+ b=J8zh7G0KWcsbCpMRoiZvjU8gJIGawNVC7T9SC1EAMP9POws1BJ8YHhjEbhVbQo43JESr
+ jlGPWw9Q++84oWhAnCWpSb4tfgzCFqTMyQEx9hehiIJe8GJ6r95JUWHAf2R6eSngNYFf
+ jxFjiVgnMn1ftb2J2gGlWu9uZbay+Bpu7NYyjGnCiosaQaAhl9wD2ysUUTIZj4h5mCo9
+ fV1HnVuJz89LxQxlJquAn7pPJJ778D0SMbqBuxXI9xHRNkSsa2wSE9YBTW2+N0x4vJeV
+ uZ0avJwSQ4SH2bCZk0TE0RtRzmPFo5AJCVXcD3aZn1lswn7WGQLOBUUtTIm0ki8MK4H3 RA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q2hd9g11p-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 13:54:00 +0000
+        Wed, 19 Apr 2023 13:54:07 +0000
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33JDrxaV021475
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33JDs6Uv020283
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 13:53:59 GMT
+        Wed, 19 Apr 2023 13:54:06 GMT
 Received: from sarannya-linux.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 19 Apr 2023 06:53:55 -0700
+ 15.2.986.42; Wed, 19 Apr 2023 06:54:01 -0700
 From:   Sarannya S <quic_sarannya@quicinc.com>
 To:     <quic_bjorande@quicinc.com>, <arnaud.pouliquen@foss.st.com>,
         <swboyd@chromium.org>, <quic_clew@quicinc.com>,
@@ -47,10 +47,12 @@ CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <linux-remoteproc@vger.kernel.org>,
         Deepak Kumar Singh <quic_deesin@quicinc.com>,
         Sarannya S <quic_sarannya@quicinc.com>,
-        "Bjorn Andersson" <andersson@kernel.org>
-Subject: [PATCH V6 1/3] rpmsg: core: Add signal API support
-Date:   Wed, 19 Apr 2023 19:23:26 +0530
-Message-ID: <1681912409-25248-2-git-send-email-quic_sarannya@quicinc.com>
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH V6 2/3] rpmsg: glink: Add support to handle signals command
+Date:   Wed, 19 Apr 2023 19:23:27 +0530
+Message-ID: <1681912409-25248-3-git-send-email-quic_sarannya@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1681912409-25248-1-git-send-email-quic_sarannya@quicinc.com>
 References: <1681912409-25248-1-git-send-email-quic_sarannya@quicinc.com>
@@ -61,15 +63,15 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: A3MjKj36fl389yzk7KLlqamJc_rseNcV
-X-Proofpoint-GUID: A3MjKj36fl389yzk7KLlqamJc_rseNcV
+X-Proofpoint-GUID: AM74TqVOkp_zdHRxqASWaV-5QY5uWzmF
+X-Proofpoint-ORIG-GUID: AM74TqVOkp_zdHRxqASWaV-5QY5uWzmF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-19_08,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- mlxlogscore=999 phishscore=0 spamscore=0 priorityscore=1501 adultscore=0
- lowpriorityscore=0 mlxscore=0 malwarescore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 impostorscore=0 adultscore=0 spamscore=0 clxscore=1015
+ mlxscore=0 mlxlogscore=999 phishscore=0 bulkscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303200000 definitions=main-2304190123
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
@@ -81,150 +83,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Deepak Kumar Singh <quic_deesin@quicinc.com>
+From: Chris Lew <quic_clew@quicinc.com>
 
-Some transports like Glink support the state notifications between
-clients using flow control signals similar to serial protocol signals.
-Local glink client drivers can send and receive flow control status
-to glink clients running on remote processors.
+Remote peripherals send signal notifications over glink with commandID 15.
 
-Add APIs to support sending and receiving of flow control status by
-rpmsg clients.
+Add support to send and receive the signal command and based signals
+enable or disable flow control with remote host.
 
+Signed-off-by: Chris Lew <quic_clew@quicinc.com>
 Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
 Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
 ---
- drivers/rpmsg/rpmsg_core.c     | 21 +++++++++++++++++++++
- drivers/rpmsg/rpmsg_internal.h |  2 ++
- include/linux/rpmsg.h          | 15 +++++++++++++++
- 3 files changed, 38 insertions(+)
+ drivers/rpmsg/qcom_glink_native.c | 64 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
-diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-index a2207c0..cd71a6a 100644
---- a/drivers/rpmsg/rpmsg_core.c
-+++ b/drivers/rpmsg/rpmsg_core.c
-@@ -331,6 +331,25 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
- EXPORT_SYMBOL(rpmsg_trysend_offchannel);
+diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+index 01d2805..ff5e926 100644
+--- a/drivers/rpmsg/qcom_glink_native.c
++++ b/drivers/rpmsg/qcom_glink_native.c
+@@ -16,6 +16,7 @@
+ #include <linux/rpmsg.h>
+ #include <linux/sizes.h>
+ #include <linux/slab.h>
++#include <linux/termios.h>
+ #include <linux/workqueue.h>
+ #include <linux/mailbox_client.h>
  
- /**
-+ * rpmsg_set_flow_control() - sets/clears serial flow control signals
-+ * @ept:	the rpmsg endpoint
-+ * @enable:	pause/resume incoming data flow	
-+ * @dst:	destination address of the endpoint
-+ *
-+ * Return: 0 on success and an appropriate error value on failure.
-+ */
-+int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst)
-+{
-+	if (WARN_ON(!ept))
-+		return -EINVAL;
-+	if (!ept->ops->set_flow_control)
-+		return -ENXIO;
+@@ -197,9 +198,15 @@ static const struct rpmsg_endpoint_ops glink_endpoint_ops;
+ #define GLINK_CMD_TX_DATA_CONT		12
+ #define GLINK_CMD_READ_NOTIF		13
+ #define GLINK_CMD_RX_DONE_W_REUSE	14
++#define GLINK_CMD_SIGNALS		15
+ 
+ #define GLINK_FEATURE_INTENTLESS	BIT(1)
+ 
++#define NATIVE_DTR_SIG			NATIVE_DSR_SIG
++#define NATIVE_DSR_SIG			BIT(31)
++#define NATIVE_RTS_SIG			NATIVE_CTS_SIG
++#define NATIVE_CTS_SIG			BIT(30)
 +
-+	return ept->ops->set_flow_control(ept, enable, dst);
-+}
-+EXPORT_SYMBOL(rpmsg_set_flow_control);
-+
-+/**
-  * rpmsg_get_mtu() - get maximum transmission buffer size for sending message.
-  * @ept: the rpmsg endpoint
-  *
-@@ -539,6 +558,8 @@ static int rpmsg_dev_probe(struct device *dev)
+ static void qcom_glink_rx_done_work(struct work_struct *work);
  
- 		rpdev->ept = ept;
- 		rpdev->src = ept->addr;
-+
-+		ept->flow_cb = rpdrv->flowcontrol;
- 	}
- 
- 	err = rpdrv->probe(rpdev);
-diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-index 39b646d..b6efd3e 100644
---- a/drivers/rpmsg/rpmsg_internal.h
-+++ b/drivers/rpmsg/rpmsg_internal.h
-@@ -55,6 +55,7 @@ struct rpmsg_device_ops {
-  * @trysendto:		see @rpmsg_trysendto(), optional
-  * @trysend_offchannel:	see @rpmsg_trysend_offchannel(), optional
-  * @poll:		see @rpmsg_poll(), optional
-+ * @set_flow_control:	see @rpmsg_set_flow_control(), optional
-  * @get_mtu:		see @rpmsg_get_mtu(), optional
-  *
-  * Indirection table for the operations that a rpmsg backend should implement.
-@@ -75,6 +76,7 @@ struct rpmsg_endpoint_ops {
- 			     void *data, int len);
- 	__poll_t (*poll)(struct rpmsg_endpoint *ept, struct file *filp,
- 			     poll_table *wait);
-+	int (*set_flow_control)(struct rpmsg_endpoint *ept, bool enable, u32 dst);
- 	ssize_t (*get_mtu)(struct rpmsg_endpoint *ept);
- };
- 
-diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
-index 523c98b..a0e9d38 100644
---- a/include/linux/rpmsg.h
-+++ b/include/linux/rpmsg.h
-@@ -64,12 +64,14 @@ struct rpmsg_device {
- };
- 
- typedef int (*rpmsg_rx_cb_t)(struct rpmsg_device *, void *, int, void *, u32);
-+typedef int (*rpmsg_flowcontrol_cb_t)(struct rpmsg_device *, void *, bool);
- 
- /**
-  * struct rpmsg_endpoint - binds a local rpmsg address to its user
-  * @rpdev: rpmsg channel device
-  * @refcount: when this drops to zero, the ept is deallocated
-  * @cb: rx callback handler
-+ * @flow_cb: remote flow control callback handler
-  * @cb_lock: must be taken before accessing/changing @cb
-  * @addr: local rpmsg address
-  * @priv: private data for the driver's use
-@@ -92,6 +94,7 @@ struct rpmsg_endpoint {
- 	struct rpmsg_device *rpdev;
- 	struct kref refcount;
- 	rpmsg_rx_cb_t cb;
-+	rpmsg_flowcontrol_cb_t flow_cb;
- 	struct mutex cb_lock;
- 	u32 addr;
- 	void *priv;
-@@ -106,6 +109,7 @@ struct rpmsg_endpoint {
-  * @probe: invoked when a matching rpmsg channel (i.e. device) is found
-  * @remove: invoked when the rpmsg channel is removed
-  * @callback: invoked when an inbound message is received on the channel
-+ * @flowcontrol: invoked when remote side flow control status is received
-  */
- struct rpmsg_driver {
- 	struct device_driver drv;
-@@ -113,6 +117,7 @@ struct rpmsg_driver {
- 	int (*probe)(struct rpmsg_device *dev);
- 	void (*remove)(struct rpmsg_device *dev);
- 	int (*callback)(struct rpmsg_device *, void *, int, void *, u32);
-+	int (*flowcontrol)(struct rpmsg_device *, void *, bool);
- };
- 
- static inline u16 rpmsg16_to_cpu(struct rpmsg_device *rpdev, __rpmsg16 val)
-@@ -192,6 +197,8 @@ __poll_t rpmsg_poll(struct rpmsg_endpoint *ept, struct file *filp,
- 
- ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept);
- 
-+int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst);
-+
- #else
- 
- static inline int rpmsg_register_device_override(struct rpmsg_device *rpdev,
-@@ -316,6 +323,14 @@ static inline ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept)
- 	return -ENXIO;
+ static struct glink_channel *qcom_glink_alloc_channel(struct qcom_glink *glink,
+@@ -1014,6 +1021,58 @@ static int qcom_glink_rx_open_ack(struct qcom_glink *glink, unsigned int lcid)
+ 	return 0;
  }
  
-+static inline int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst)
++/**
++ * qcom_glink_set_flow_control() - convert a signal cmd to wire format and
++ * 				   transmit
++ * @ept:	Rpmsg endpoint for channel.
++ * @enable:	True/False - enable or disable flow control
++ * @dst:	destination address of the endpoint
++ *
++ * Return: 0 on success or standard Linux error code.
++ */
++static int qcom_glink_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst)
 +{
-+	/* This shouldn't be possible */
-+	WARN_ON(1);
++	struct glink_channel *channel = to_glink_channel(ept);
++	struct qcom_glink *glink = channel->glink;
++	struct glink_msg msg;
++	u32 sigs = 0;
 +
-+	return -ENXIO;
++	if (enable)
++		sigs |= NATIVE_DTR_SIG | NATIVE_RTS_SIG;
++
++	msg.cmd = cpu_to_le16(GLINK_CMD_SIGNALS);
++	msg.param1 = cpu_to_le16(channel->lcid);
++	msg.param2 = cpu_to_le32(sigs);
++
++	return qcom_glink_tx(glink, &msg, sizeof(msg), NULL, 0, true);
 +}
 +
- #endif /* IS_ENABLED(CONFIG_RPMSG) */
++static int qcom_glink_handle_signals(struct qcom_glink *glink,
++				     unsigned int rcid, unsigned int sigs)
++{
++	struct glink_channel *channel;
++	unsigned long flags;
++	bool enable = false;
++
++	spin_lock_irqsave(&glink->idr_lock, flags);
++	channel = idr_find(&glink->rcids, rcid);
++	spin_unlock_irqrestore(&glink->idr_lock, flags);
++	if (!channel) {
++		dev_err(glink->dev, "signal for non-existing channel\n");
++		return -EINVAL;
++	}
++
++	if (!channel->ept.flow_cb)
++		return 0;
++
++	if (sigs & (NATIVE_DSR_SIG | NATIVE_CTS_SIG))
++		enable = true;
++
++	channel->ept.flow_cb(channel->ept.rpdev, channel->ept.priv, enable);
++
++	return 0;
++}
++
+ void qcom_glink_native_rx(struct qcom_glink *glink)
+ {
+ 	struct glink_msg msg;
+@@ -1075,6 +1134,10 @@ void qcom_glink_native_rx(struct qcom_glink *glink)
+ 			qcom_glink_handle_intent_req_ack(glink, param1, param2);
+ 			qcom_glink_rx_advance(glink, ALIGN(sizeof(msg), 8));
+ 			break;
++		case GLINK_CMD_SIGNALS:
++			qcom_glink_handle_signals(glink, param1, param2);
++			qcom_glink_rx_advance(glink, ALIGN(sizeof(msg), 8));
++			break;
+ 		default:
+ 			dev_err(glink->dev, "unhandled rx cmd: %d\n", cmd);
+ 			ret = -EINVAL;
+@@ -1449,6 +1512,7 @@ static const struct rpmsg_endpoint_ops glink_endpoint_ops = {
+ 	.sendto = qcom_glink_sendto,
+ 	.trysend = qcom_glink_trysend,
+ 	.trysendto = qcom_glink_trysendto,
++	.set_flow_control = qcom_glink_set_flow_control,
+ };
  
- /* use a macro to avoid include chaining to get THIS_MODULE */
+ static void qcom_glink_rpdev_release(struct device *dev)
 -- 
 The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
 a Linux Foundation Collaborative Project
