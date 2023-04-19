@@ -2,132 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247986E791F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2D66E78D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233118AbjDSLz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 07:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
+        id S232605AbjDSLn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 07:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233108AbjDSLzO (ORCPT
+        with ESMTP id S231797AbjDSLnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 07:55:14 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176A715603
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:54:59 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230419115457epoutp016af18ed6b6a7f073f3f18a505d89c7d1~XU-T7N-Ab1494314943epoutp01n
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 11:54:57 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230419115457epoutp016af18ed6b6a7f073f3f18a505d89c7d1~XU-T7N-Ab1494314943epoutp01n
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1681905297;
-        bh=/MVZrDYgNIh/mjvCvKoJUXnOyDfXEO11lYxG5YriEZA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GK2s24DISr8KuidwXO1T2DqTNYOmvHPFeThTGJS0iUeAkwqwzMBaWoFyvf1i+Sfuq
-         uS0lUdNYFIBe1NNb6uwmcS0VYOZpgMmk+CSdkRiR3HIS01nknMzhB2JnpNeF4jdRSE
-         FIOOPvPae8BpPrTQByCmQNoS+wVBp0nZfdDu5PdQ=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20230419115456epcas5p2fe3ba66a84ae572af0d21e62bc772135~XU-TbEuka1844418444epcas5p26;
-        Wed, 19 Apr 2023 11:54:56 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.177]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Q1fNb2m7sz4x9Py; Wed, 19 Apr
-        2023 11:54:55 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C6.34.09987.F86DF346; Wed, 19 Apr 2023 20:54:55 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230419114810epcas5p3b10b7eddf9dae9ddc41940f09b483813~XU5Yporf_0874908749epcas5p3G;
-        Wed, 19 Apr 2023 11:48:10 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230419114810epsmtrp142f95b564da6872f61544594de8071cf~XU5YofKW61896418964epsmtrp1C;
-        Wed, 19 Apr 2023 11:48:10 +0000 (GMT)
-X-AuditID: b6c32a4b-a67fd70000002703-72-643fd68fccb9
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4E.97.08279.AF4DF346; Wed, 19 Apr 2023 20:48:10 +0900 (KST)
-Received: from green245.sa.corp.samsungelectronics.net (unknown
-        [107.99.41.245]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230419114806epsmtip15324f8047867f14d72c9bdf9f1f60c86~XU5VStBYa2332323323epsmtip1n;
-        Wed, 19 Apr 2023 11:48:06 +0000 (GMT)
-From:   Nitesh Shetty <nj.shetty@samsung.com>
-To:     Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     bvanassche@acm.org, hare@suse.de, ming.lei@redhat.com,
-        dlemoal@kernel.org, anuj20.g@samsung.com, joshi.k@samsung.com,
-        nitheshshetty@gmail.com, gost.dev@samsung.com,
-        Nitesh Shetty <nj.shetty@samsung.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Vincent Fu <vincent.fu@samsung.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Subject: [PATCH v10 9/9] null_blk: add support for copy offload
-Date:   Wed, 19 Apr 2023 17:13:14 +0530
-Message-Id: <20230419114320.13674-10-nj.shetty@samsung.com>
-X-Mailer: git-send-email 2.35.1.500.gb896f729e2
-In-Reply-To: <20230419114320.13674-1-nj.shetty@samsung.com>
+        Wed, 19 Apr 2023 07:43:55 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0605413FA1;
+        Wed, 19 Apr 2023 04:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681904632; x=1713440632;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=InYCDECiPrr8G3JKUeCdYI/qPo5X0FpU9UuG9Pd8u/Y=;
+  b=SUnEz3Tl2rY4iLXcvMp/Sa67u0jUprJfUrv0FiygHpbXT3CPh8MVj9D3
+   y/RxQPxnna/0DeY8d1B6ZdD5D5rRyDLHEeTuHTEMxNTjSxBOqRD8es2Lt
+   OKAIIwa3dwt+xijXp6x11ucY/AIE+eitVOwLuV5W2ZapKQhp3F3i/racN
+   +Zvbng8o1RR3fR8d1cLLhD2OLAlYxRpidNhLQ9CbNnTd8M8lTuACwaJIk
+   DqtZqjFOo3SPhhpLsTXgCjdqkbpnLWOszNpwSv+rkWVLEvxeGwh9fOPQ6
+   8TSXb/3cSbmVoVhNkxBV2hbhY3sUFtp0RO0HXi10Mielninj+v3HSN8Ik
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="325038299"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="325038299"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 04:43:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="835273558"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="835273558"
+Received: from hbourgeo-mobl2.ger.corp.intel.com ([10.249.34.207])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 04:43:44 -0700
+Date:   Wed, 19 Apr 2023 14:43:38 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Brenda Streiff <brenda.streiff@ni.com>
+cc:     Gratian Crisan <gratian.crisan@ni.com>,
+        Jason Smith <jason.smith@ni.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 tty-next 2/2] serial: 8250: add driver for NI UARTs
+In-Reply-To: <20230418223800.284601-3-brenda.streiff@ni.com>
+Message-ID: <9cd84bb0-864a-af70-986a-841ac1f522e@linux.intel.com>
+References: <20230410211152.94332-1-brenda.streiff@ni.com> <20230418223800.284601-1-brenda.streiff@ni.com> <20230418223800.284601-3-brenda.streiff@ni.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xbZRTPd297W3CFy8P4DZnDmmU85FFWygeOIQ7wEtSQLCZmQbChN4UA
-        bW3pcBId7zAYYzDArMzR6RwUykNgjJWHGwR5CwkDBeQhDze3DFj3ILMCtlzQ/ff7/c453znn
-        9+VwcfvLHCdugiyFVsrESXzCmtXa43bYs2gyWOJj7LBBDYM/4yjzwiaOameLCPSwxwhQ+foL
-        HJlGRnG08FMw6lytYKOp27cw1PFdCYZ0tb0Yar/6GEO9248IVNI9CdDKhAZDndMeqKNzgIXG
-        DZcJVHl9hYO6L2ZhqG05A6BWUyWO6h+usVD/9OtoqSAPoNHNPva7TtT43UhKMz9CULc0sxxq
-        dO5HFjU+oqaaas4SVPO1M1T7VDpBFWatmhNy5tnUWtcEQZ1vqQFU81Aa9aTpDapp+REWZXsy
-        8Wg8LZbQShdaFieXJMikQfzIE7HHY/1EPgJPQQDy57vIxMl0ED/0gyjP8IQksyF8l1PiJLVZ
-        ihKrVHzvY0eVcnUK7RIvV6UE8WmFJEkhVHipxMkqtUzqJaNTAgU+Pr5+5sTPEuPv11WxFd8G
-        f5GdN4qngxVhPrDiQlIIx/4Z5+QDa6492Q7glDaXzRAjgBV5dwBDngO4/EMmsVeSUfcbwQQ6
-        AZzRGHGG5GBwVL/FygdcLkF6wKFtrkV3JHNx+HjlLMtCcFKPw4V1E7A85UAGwxddZSwLZpGH
-        oK7iHMeCeeQ7sHp6BbM8BElvWDRvZ5GtzHJV10WcSbGDA5eWd0px8iDMulGxMwQkm63gXPaf
-        bGbUUPi3qYXFYAf4oK+Fw2An+FdR7i5OhbrSaoIpzgZQ86sGMIFgmDNYhFuGwEk32GDwZuQD
-        sGywHmMa28BC0zLG6DzYdmUPvwX1Ddpdu/bDyY2MXUzBkmc5uwafB1B3bQZcAC6alxbSvLSQ
-        5v/WWoDXgP20QpUspVV+iiMyOvW/f46TJzeBnTNxj2wDiwvrXt0A44JuALk435E3HBYosedJ
-        xKe/pJXyWKU6iVZ1Az+z4cW406txcvOdyVJiBcIAH6FIJBIGHBEJ+K/xDgcNxNmTUnEKnUjT
-        Clq5V4dxrZzSMfu3i4lGf35Irr7g3r6bDc6+gVfebz02vRBeVfv75xNd4eWNlbdfic5zfR5z
-        AeW2xGgXP+nvaSrNsbmrhalrb+rqn6TBG6cChALOmW3pgW+eHgoYc/7jl5D0j+fC+13j7qgf
-        0Lw5laeo3HV4yXEpsjE+ctNoJ6sN/cgdi0itc19Uv6d/aviKN+w/FJXe67BqWLW6et9F4FHY
-        9SGh8/16ONr/2RQdRri2xxSknjgXlpNh083S62yr08Y2JBEzUyHVtupE6b1Y0F+6NXvSmdto
-        6FMWa/dJRxsK2J/a6Oc1Gb1sg9H6Zual69+bTi+7FcUG5G95lx3sj4vmqjd0DhFt8mQ+SxUv
-        FrjjSpX4XzyXjwevBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Ra0hTcRjG+59zdnYcLc+m0V8lq0FSRqZk9ceGMyo7dKOwL2ZSSw/mfWxa
-        WVRbWtk0My3DWWgqLq+lZrq8VFMrK5l5KyWdkqNE5iwpMVFzjsBvz/v8nvd9PrwULuwgnKnw
-        mDhWHiONEpE84nmzyHXz325JqGfqKImevH+Do6vpszgqHbhNorHmXwBlTUzjaKbdgKOhlxLU
-        OJ7DQX2vdBhqyM/AUHFpK4bqH/3EUOu8mUQZ+l6ATD0aDDX2b0INjW0E6nrxgES5RSYu0mcm
-        YqhuRAXQ85lcHFWMWQj0rt8FfUtJBsgw+5bj58x0dR9gNMZ2ktFpBriMYbCSYLra45mqkpsk
-        U114hanvU5LMrcTxhcA1I4exNPWQTNqzEsBUf7jITFa5MlUjZuyI/XGeOJSNCj/Lyrf4nuKd
-        +VGu5cgeSs4nJRtwJTB5q4EdBWlvqCr/QqoBjxLS9QA2t01xbcAJFs224DbtAIvnvnNtoUQM
-        ZtaqFwaKIulN8MM8ZfUd6XQcdhqVpHUBpxtwWJy3y6odaAmcbrpHWDVBr4fFOamLBXx6J3zc
-        b8KsdyC9Bd42Cqy23YKtbcpc7BXSPjBVPwdscQFsyx4hbOfXwMSaHDwd0JolSLME5QGsBDix
-        MkV0WLTCS+YVw57zUEijFfExYR4hsdFVYPHp7hvrQG3JhIceYBTQA0jhIkf+PrFvqJAfKk24
-        wMpjT8rjo1iFHrhQhGgVv0PddlJIh0nj2EiWlbHy/xSj7JyVWNqpG/LA1kP+E8I66d1cex/0
-        60bOdp9PQ5Eha0V8nRepTcjMsjMOtFfMsC2/z1eeHr+8p2Zq9bJgUeClr70rXCTm6d4f+UEf
-        C7PPqTIEY/al3Y6elQJVSM+qmnXu/uSwutBNpjV4kBnkn9jlh7UJrkYsJWD/DoeAhGCZZ++h
-        j4LG0b3cstTfZjytLMjk6J2XJubyXr9O4URYfLFa3VFjXOw+3bA2r3tr/aibr2inf+SJyXdh
-        k9UbjsbrAgqcWhuOPJWYx7XK8Cmx3qewYHfSSnFdCieOf+zzEGO5479rSnXB0nF9c74f96Bx
-        /Tx0v9+5tnrw8l7hNj+niCD9ntVcEaE4I/Vyx+UK6T+V/wzJYwMAAA==
-X-CMS-MailID: 20230419114810epcas5p3b10b7eddf9dae9ddc41940f09b483813
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230419114810epcas5p3b10b7eddf9dae9ddc41940f09b483813
-References: <20230419114320.13674-1-nj.shetty@samsung.com>
-        <CGME20230419114810epcas5p3b10b7eddf9dae9ddc41940f09b483813@epcas5p3.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,230 +66,591 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implementaion is based on existing read and write infrastructure.
-copy_max_bytes: A new configfs and module parameter is introduced, which
-can be used to set hardware/driver supported maximum copy limit.
+On Tue, 18 Apr 2023, Brenda Streiff wrote:
 
-Suggested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
-Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
-Signed-off-by: Vincent Fu <vincent.fu@samsung.com>
----
- drivers/block/null_blk/main.c     | 108 ++++++++++++++++++++++++++++--
- drivers/block/null_blk/null_blk.h |   8 +++
- 2 files changed, 111 insertions(+), 5 deletions(-)
+> The National Instruments (NI) 16550 is a 16550-like UART with larger
+> FIFOs and embedded RS-232/RS-485 transceiver control circuitry. This
+> patch adds a driver that can operate this UART, which is used for
+> onboard serial ports in several NI embedded controller designs.
+> 
+> Portions of this driver were originally written by Jaeden Amero and
+> Karthik Manamcheri, with extensive cleanups and refactors since.
+> 
+> Signed-off-by: Brenda Streiff <brenda.streiff@ni.com>
+> Cc: Gratian Crisan <gratian.crisan@ni.com>
+> Cc: Jason Smith <jason.smith@ni.com>
+> ---
+>  MAINTAINERS                       |   7 +
+>  drivers/tty/serial/8250/8250_ni.c | 468 ++++++++++++++++++++++++++++++
+>  drivers/tty/serial/8250/Kconfig   |  13 +
+>  drivers/tty/serial/8250/Makefile  |   1 +
+>  4 files changed, 489 insertions(+)
+>  create mode 100644 drivers/tty/serial/8250/8250_ni.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 90abe83c02f3..4d44622da6cb 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14323,6 +14323,13 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
+>  F:	drivers/mtd/nand/
+>  F:	include/linux/mtd/*nand*.h
+>  
+> +NATIONAL INSTRUMENTS SERIAL DRIVER
+> +M:	Brenda Streiff <brenda.streiff@ni.com>
+> +L:	linux-serial@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/serial/ni,ni16550.yaml
+> +F:	drivers/tty/serial/8250/8250_ni.c
+> +
+>  NATIVE INSTRUMENTS USB SOUND INTERFACE DRIVER
+>  M:	Daniel Mack <zonque@gmail.com>
+>  L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+> diff --git a/drivers/tty/serial/8250/8250_ni.c b/drivers/tty/serial/8250/8250_ni.c
+> new file mode 100644
+> index 000000000000..92e8912c4875
+> --- /dev/null
+> +++ b/drivers/tty/serial/8250/8250_ni.c
+> @@ -0,0 +1,468 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * NI 16550 UART Driver
+> + *
+> + * The National Instruments (NI) 16550 is a UART that is compatible with the
+> + * TL16C550C and OX16C950B register interfaces, but has additional functions
+> + * for RS-485 transceiver control. This driver implements support for the
+> + * additional functionality on top of the standard serial8250 core.
+> + *
+> + * Copyright 2012-2023 National Instruments Corporation
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/device.h>
+> +#include <linux/io.h>
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/property.h>
+> +#include <linux/clk.h>
+> +
+> +#include "8250.h"
+> +
+> +/* Extra bits in UART_ACR */
+> +#define NI16550_ACR_AUTO_DTR_EN			BIT(4)
+> +
+> +/* TFS - TX FIFO Size */
+> +#define NI16550_TFS_OFFSET	0x0C
+> +/* RFS - RX FIFO Size */
+> +#define NI16550_RFS_OFFSET	0x0D
+> +
+> +/* PMR - Port Mode Register */
+> +#define NI16550_PMR_OFFSET	0x0E
+> +/* PMR[1:0] - Port Capabilities */
+> +#define NI16550_PMR_CAP_MASK			0x03
 
-diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
-index 5d54834d8690..9028aae1efbd 100644
---- a/drivers/block/null_blk/main.c
-+++ b/drivers/block/null_blk/main.c
-@@ -157,6 +157,10 @@ static int g_max_sectors;
- module_param_named(max_sectors, g_max_sectors, int, 0444);
- MODULE_PARM_DESC(max_sectors, "Maximum size of a command (in 512B sectors)");
- 
-+static unsigned long g_copy_max_bytes = COPY_MAX_BYTES;
-+module_param_named(copy_max_bytes, g_copy_max_bytes, ulong, 0444);
-+MODULE_PARM_DESC(copy_max_bytes, "Maximum size of a copy command (in bytes)");
-+
- static unsigned int nr_devices = 1;
- module_param(nr_devices, uint, 0444);
- MODULE_PARM_DESC(nr_devices, "Number of devices to register");
-@@ -409,6 +413,7 @@ NULLB_DEVICE_ATTR(home_node, uint, NULL);
- NULLB_DEVICE_ATTR(queue_mode, uint, NULL);
- NULLB_DEVICE_ATTR(blocksize, uint, NULL);
- NULLB_DEVICE_ATTR(max_sectors, uint, NULL);
-+NULLB_DEVICE_ATTR(copy_max_bytes, uint, NULL);
- NULLB_DEVICE_ATTR(irqmode, uint, NULL);
- NULLB_DEVICE_ATTR(hw_queue_depth, uint, NULL);
- NULLB_DEVICE_ATTR(index, uint, NULL);
-@@ -550,6 +555,7 @@ static struct configfs_attribute *nullb_device_attrs[] = {
- 	&nullb_device_attr_queue_mode,
- 	&nullb_device_attr_blocksize,
- 	&nullb_device_attr_max_sectors,
-+	&nullb_device_attr_copy_max_bytes,
- 	&nullb_device_attr_irqmode,
- 	&nullb_device_attr_hw_queue_depth,
- 	&nullb_device_attr_index,
-@@ -656,7 +662,8 @@ static ssize_t memb_group_features_show(struct config_item *item, char *page)
- 			"poll_queues,power,queue_mode,shared_tag_bitmap,size,"
- 			"submit_queues,use_per_node_hctx,virt_boundary,zoned,"
- 			"zone_capacity,zone_max_active,zone_max_open,"
--			"zone_nr_conv,zone_offline,zone_readonly,zone_size\n");
-+			"zone_nr_conv,zone_offline,zone_readonly,zone_size,"
-+			"copy_max_bytes\n");
- }
- 
- CONFIGFS_ATTR_RO(memb_group_, features);
-@@ -722,6 +729,7 @@ static struct nullb_device *null_alloc_dev(void)
- 	dev->queue_mode = g_queue_mode;
- 	dev->blocksize = g_bs;
- 	dev->max_sectors = g_max_sectors;
-+	dev->copy_max_bytes = g_copy_max_bytes;
- 	dev->irqmode = g_irqmode;
- 	dev->hw_queue_depth = g_hw_queue_depth;
- 	dev->blocking = g_blocking;
-@@ -1271,6 +1279,78 @@ static int null_transfer(struct nullb *nullb, struct page *page,
- 	return err;
- }
- 
-+static inline void nullb_setup_copy_read(struct nullb *nullb, struct bio *bio)
-+{
-+	struct nullb_copy_token *token = bvec_kmap_local(&bio->bi_io_vec[0]);
-+
-+	token->subsys = "nullb";
-+	token->sector_in = bio->bi_iter.bi_sector;
-+	token->nullb = nullb;
-+	token->sectors = bio->bi_iter.bi_size >> SECTOR_SHIFT;
-+}
-+
-+static inline int nullb_setup_copy_write(struct nullb *nullb,
-+		struct bio *bio, bool is_fua)
-+{
-+	struct nullb_copy_token *token = bvec_kmap_local(&bio->bi_io_vec[0]);
-+	sector_t sector_in, sector_out;
-+	void *in, *out;
-+	size_t rem, temp;
-+	unsigned long offset_in, offset_out;
-+	struct nullb_page *t_page_in, *t_page_out;
-+	int ret = -EIO;
-+
-+	if (unlikely(memcmp(token->subsys, "nullb", 5)))
-+		return -EINVAL;
-+	if (unlikely(token->nullb != nullb))
-+		return -EINVAL;
-+	if (WARN_ON(token->sectors != bio->bi_iter.bi_size >> SECTOR_SHIFT))
-+		return -EINVAL;
-+
-+	sector_in = token->sector_in;
-+	sector_out = bio->bi_iter.bi_sector;
-+	rem = token->sectors << SECTOR_SHIFT;
-+
-+	spin_lock_irq(&nullb->lock);
-+	while (rem > 0) {
-+		temp = min_t(size_t, nullb->dev->blocksize, rem);
-+		offset_in = (sector_in & SECTOR_MASK) << SECTOR_SHIFT;
-+		offset_out = (sector_out & SECTOR_MASK) << SECTOR_SHIFT;
-+
-+		if (null_cache_active(nullb) && !is_fua)
-+			null_make_cache_space(nullb, PAGE_SIZE);
-+
-+		t_page_in = null_lookup_page(nullb, sector_in, false,
-+			!null_cache_active(nullb));
-+		if (!t_page_in)
-+			goto err;
-+		t_page_out = null_insert_page(nullb, sector_out,
-+			!null_cache_active(nullb) || is_fua);
-+		if (!t_page_out)
-+			goto err;
-+
-+		in = kmap_local_page(t_page_in->page);
-+		out = kmap_local_page(t_page_out->page);
-+
-+		memcpy(out + offset_out, in + offset_in, temp);
-+		kunmap_local(out);
-+		kunmap_local(in);
-+		__set_bit(sector_out & SECTOR_MASK, t_page_out->bitmap);
-+
-+		if (is_fua)
-+			null_free_sector(nullb, sector_out, true);
-+
-+		rem -= temp;
-+		sector_in += temp >> SECTOR_SHIFT;
-+		sector_out += temp >> SECTOR_SHIFT;
-+	}
-+
-+	ret = 0;
-+err:
-+	spin_unlock_irq(&nullb->lock);
-+	return ret;
-+}
-+
- static int null_handle_rq(struct nullb_cmd *cmd)
- {
- 	struct request *rq = cmd->rq;
-@@ -1280,13 +1360,20 @@ static int null_handle_rq(struct nullb_cmd *cmd)
- 	sector_t sector = blk_rq_pos(rq);
- 	struct req_iterator iter;
- 	struct bio_vec bvec;
-+	bool fua = rq->cmd_flags & REQ_FUA;
-+
-+	if (rq->cmd_flags & REQ_COPY) {
-+		if (op_is_write(req_op(rq)))
-+			return nullb_setup_copy_write(nullb, rq->bio, fua);
-+		nullb_setup_copy_read(nullb, rq->bio);
-+		return 0;
-+	}
- 
- 	spin_lock_irq(&nullb->lock);
- 	rq_for_each_segment(bvec, rq, iter) {
- 		len = bvec.bv_len;
- 		err = null_transfer(nullb, bvec.bv_page, len, bvec.bv_offset,
--				     op_is_write(req_op(rq)), sector,
--				     rq->cmd_flags & REQ_FUA);
-+				     op_is_write(req_op(rq)), sector, fua);
- 		if (err) {
- 			spin_unlock_irq(&nullb->lock);
- 			return err;
-@@ -1307,13 +1394,20 @@ static int null_handle_bio(struct nullb_cmd *cmd)
- 	sector_t sector = bio->bi_iter.bi_sector;
- 	struct bio_vec bvec;
- 	struct bvec_iter iter;
-+	bool fua = bio->bi_opf & REQ_FUA;
-+
-+	if (bio->bi_opf & REQ_COPY) {
-+		if (op_is_write(bio_op(bio)))
-+			return nullb_setup_copy_write(nullb, bio, fua);
-+		nullb_setup_copy_read(nullb, bio);
-+		return 0;
-+	}
- 
- 	spin_lock_irq(&nullb->lock);
- 	bio_for_each_segment(bvec, bio, iter) {
- 		len = bvec.bv_len;
- 		err = null_transfer(nullb, bvec.bv_page, len, bvec.bv_offset,
--				     op_is_write(bio_op(bio)), sector,
--				     bio->bi_opf & REQ_FUA);
-+				     op_is_write(bio_op(bio)), sector, fua);
- 		if (err) {
- 			spin_unlock_irq(&nullb->lock);
- 			return err;
-@@ -2157,6 +2251,10 @@ static int null_add_dev(struct nullb_device *dev)
- 		dev->max_sectors = queue_max_hw_sectors(nullb->q);
- 	dev->max_sectors = min(dev->max_sectors, BLK_DEF_MAX_SECTORS);
- 	blk_queue_max_hw_sectors(nullb->q, dev->max_sectors);
-+	blk_queue_max_copy_sectors_hw(nullb->q,
-+			       dev->copy_max_bytes >> SECTOR_SHIFT);
-+	if (dev->copy_max_bytes)
-+		blk_queue_flag_set(QUEUE_FLAG_COPY, nullb->disk->queue);
- 
- 	if (dev->virt_boundary)
- 		blk_queue_virt_boundary(nullb->q, PAGE_SIZE - 1);
-diff --git a/drivers/block/null_blk/null_blk.h b/drivers/block/null_blk/null_blk.h
-index 929f659dd255..3dda593b0747 100644
---- a/drivers/block/null_blk/null_blk.h
-+++ b/drivers/block/null_blk/null_blk.h
-@@ -67,6 +67,13 @@ enum {
- 	NULL_Q_MQ	= 2,
- };
- 
-+struct nullb_copy_token {
-+	char *subsys;
-+	struct nullb *nullb;
-+	sector_t sector_in;
-+	sector_t sectors;
-+};
-+
- struct nullb_device {
- 	struct nullb *nullb;
- 	struct config_group group;
-@@ -107,6 +114,7 @@ struct nullb_device {
- 	unsigned int queue_mode; /* block interface */
- 	unsigned int blocksize; /* block size */
- 	unsigned int max_sectors; /* Max sectors per command */
-+	unsigned long copy_max_bytes; /* Max copy offload length in bytes */
- 	unsigned int irqmode; /* IRQ completion handler */
- 	unsigned int hw_queue_depth; /* queue depth */
- 	unsigned int index; /* index of the disk, only valid with a disk */
+Ah, checking the comment, this is GENMASK(1, 0). Remember to add the 
+include for it too.
+
+> +#define NI16550_PMR_NOT_IMPL			0x00 /* not implemented */
+> +#define NI16550_PMR_CAP_RS232			0x01 /* RS-232 capable */
+> +#define NI16550_PMR_CAP_RS485			0x02 /* RS-485 capable */
+> +#define NI16550_PMR_CAP_DUAL			0x03 /* dual-port */
+> +/* PMR[4] - Interface Mode */
+> +#define NI16550_PMR_MODE_MASK			0x10
+> +#define NI16550_PMR_MODE_RS232			0x00 /* currently 232 */
+> +#define NI16550_PMR_MODE_RS485			0x10 /* currently 485 */
+> +
+> +/* PCR - Port Control Register */
+> +#define NI16550_PCR_OFFSET	0x0F
+> +#define NI16550_PCR_RS422			0x00
+> +#define NI16550_PCR_ECHO_RS485			0x01
+> +#define NI16550_PCR_DTR_RS485			0x02
+> +#define NI16550_PCR_AUTO_RS485			0x03
+> +#define NI16550_PCR_WIRE_MODE_MASK		0x03
+
+GENMASK()
+
+> +#define NI16550_PCR_TXVR_ENABLE_BIT		BIT(3)
+> +#define NI16550_PCR_RS485_TERMINATION_BIT	BIT(6)
+> +
+> +/* flags for ni16550_device_info */
+> +#define NI_HAS_PMR		BIT(0)
+> +
+> +struct ni16550_device_info {
+> +	u32 uartclk;
+> +	u8 prescaler;
+> +	u8 flags;
+> +};
+> +
+> +struct ni16550_data {
+> +	int line;
+> +	struct clk *clk;
+> +};
+> +
+> +static int ni16550_enable_transceivers(struct uart_port *port)
+> +{
+> +	u8 pcr;
+> +
+> +	pcr = port->serial_in(port, NI16550_PCR_OFFSET);
+> +	pcr |= NI16550_PCR_TXVR_ENABLE_BIT;
+> +	dev_dbg(port->dev, "enable transceivers: write pcr: 0x%02x\n", pcr);
+> +	port->serial_out(port, NI16550_PCR_OFFSET, pcr);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ni16550_disable_transceivers(struct uart_port *port)
+> +{
+> +	u8 pcr;
+> +
+> +	pcr = port->serial_in(port, NI16550_PCR_OFFSET);
+> +	pcr &= ~NI16550_PCR_TXVR_ENABLE_BIT;
+> +	dev_dbg(port->dev, "disable transceivers: write pcr: 0x%02x\n", pcr);
+> +	port->serial_out(port, NI16550_PCR_OFFSET, pcr);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ni16550_rs485_config(struct uart_port *port,
+> +				struct ktermios *termios,
+> +				struct serial_rs485 *rs485)
+> +{
+> +	struct uart_8250_port *up = container_of(port, struct uart_8250_port,
+> +						 port);
+
+Just put these on the same line.
+
+> +	u8 pcr;
+> +
+> +	/* "rs485" should be given to us non-NULL. */
+> +	if (WARN_ON(rs485 == NULL))
+> +		return -EINVAL;
+
+Remove this sanity check.
+
+> +	pcr = serial_in(up, NI16550_PCR_OFFSET);
+> +	pcr &= ~NI16550_PCR_WIRE_MODE_MASK;
+> +
+> +	if (rs485->flags & SER_RS485_ENABLED) {
+> +		/* RS-485 */
+> +		dev_dbg(port->dev, "2-wire Auto\n");
+> +		pcr |= NI16550_PCR_AUTO_RS485;
+> +		up->acr |= NI16550_ACR_AUTO_DTR_EN;
+> +	} else {
+> +		/* RS-422 */
+> +		dev_dbg(port->dev, "4-wire\n");
+> +		pcr |= NI16550_PCR_RS422;
+> +		up->acr &= ~NI16550_ACR_AUTO_DTR_EN;
+> +	}
+
+Does this difference also mean the UART's RS485 could support 
+SER_RS485_RX_DURING_TX? (half-duplex vs full-duplex RS-485)
+
+> +
+> +	dev_dbg(port->dev, "config rs485: write pcr: 0x%02x, acr: %02x\n", pcr, up->acr);
+> +	serial_out(up, NI16550_PCR_OFFSET, pcr);
+> +	serial_icr_write(up, UART_ACR, up->acr);
+> +
+> +	return 0;
+> +}
+> +
+> +static bool is_pmr_rs232_mode(struct uart_8250_port *up)
+> +{
+> +	u8 pmr = serial_in(up, NI16550_PMR_OFFSET);
+> +	u8 pmr_mode = pmr & NI16550_PMR_MODE_MASK;
+> +	u8 pmr_cap = pmr & NI16550_PMR_CAP_MASK;
+> +
+> +	/*
+> +	 * If the PMR is not implemented, then by default NI UARTs are
+> +	 * connected to RS-485 transceivers
+> +	 */
+> +	if (pmr_cap == NI16550_PMR_NOT_IMPL)
+> +		return false;
+> +
+> +	if (pmr_cap == NI16550_PMR_CAP_DUAL)
+> +		/*
+> +		 * If the port is dual-mode capable, then read the mode bit
+> +		 * to know the current mode
+> +		 */
+> +		return pmr_mode == NI16550_PMR_MODE_RS232;
+> +	/*
+> +	 * If it is not dual-mode capable, then decide based on the
+> +	 * capability
+> +	 */
+> +	return pmr_cap == NI16550_PMR_CAP_RS232;
+> +}
+> +
+> +static void ni16550_config_prescaler(struct uart_8250_port *up,
+> +				     u8 prescaler)
+> +{
+> +	/*
+> +	 * Page in the Enhanced Mode Registers
+> +	 * Sets EFR[4] for Enhanced Mode.
+> +	 */
+> +	u8 lcr_value;
+> +	u8 efr_value;
+> +
+> +	lcr_value = serial_in(up, UART_LCR);
+> +	serial_out(up, UART_LCR, UART_LCR_CONF_MODE_B);
+> +
+> +	efr_value = serial_in(up, UART_EFR);
+> +	efr_value |= UART_EFR_ECB;
+> +
+> +	serial_out(up, UART_EFR, efr_value);
+> +
+> +	/* Page out the Enhanced Mode Registers */
+> +	serial_out(up, UART_LCR, lcr_value);
+> +
+> +	/* Set prescaler to CPR register. */
+> +	serial_out(up, UART_SCR, UART_CPR);
+> +	serial_out(up, UART_ICR, prescaler);
+> +}
+> +
+> +static const struct serial_rs485 ni16550_rs485_supported = {
+> +	.flags = SER_RS485_ENABLED | SER_RS485_RTS_ON_SEND | SER_RS485_RTS_AFTER_SEND,
+
+The driver does not seem to change anything based on the value of
+SER_RS485_RTS_ON_SEND, was this an oversight or is RTS on/off on/after 
+send not supported?
+
+> +};
+> +
+> +static void ni16550_rs485_setup(struct uart_port *port)
+> +{
+> +	port->rs485_config = ni16550_rs485_config;
+> +	port->rs485_supported = ni16550_rs485_supported;
+> +	/*
+> +	 * The hardware comes up by default in 2-wire auto mode and we
+> +	 * set the flags to represent that
+> +	 */
+> +	port->rs485.flags = SER_RS485_ENABLED | SER_RS485_RTS_ON_SEND;
+> +}
+> +
+> +static int ni16550_port_startup(struct uart_port *port)
+> +{
+> +	int ret;
+> +
+> +	ret = serial8250_do_startup(port);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return ni16550_enable_transceivers(port);
+> +}
+> +
+> +static void ni16550_port_shutdown(struct uart_port *port)
+> +{
+> +	ni16550_disable_transceivers(port);
+> +
+> +	serial8250_do_shutdown(port);
+> +}
+> +
+> +static int ni16550_get_regs(struct platform_device *pdev,
+> +			    struct uart_port *port)
+> +{
+> +	struct resource *regs;
+> +
+> +	regs = platform_get_resource(pdev, IORESOURCE_IO, 0);
+> +	if (regs) {
+> +		port->iotype = UPIO_PORT;
+> +		port->iobase = regs->start;
+> +
+> +		return 0;
+> +	}
+> +
+> +	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (regs) {
+> +		port->iotype  = UPIO_MEM;
+> +		port->mapbase = regs->start;
+> +		port->mapsize = resource_size(regs);
+> +		port->flags   |= UPF_IOREMAP;
+
+Remove the extra alignment, it didn't help much anyway as 1 out of 4 had 
+that |.
+
+> +
+> +		port->membase = devm_ioremap(&pdev->dev, port->mapbase,
+> +					     port->mapsize);
+> +		if (!port->membase)
+> +			return -ENOMEM;
+> +
+> +		return 0;
+> +	}
+> +
+> +	dev_err(&pdev->dev, "no registers defined\n");
+> +	return -EINVAL;
+> +}
+> +
+> +static u8 ni16550_read_fifo_size(struct uart_8250_port *uart, int reg)
+> +{
+> +	/*
+> +	 * Very old implementations don't have the TFS or RFS registers
+> +	 * defined, so we may read all-0s or all-1s. For such devices,
+> +	 * assume a FIFO size of 128.
+> +	 */
+> +	u8 value = serial_in(uart, reg);
+> +
+> +	if (value == 0x00 || value == 0xFF)
+> +		return 128;
+> +
+> +	return value;
+> +}
+> +
+> +static void ni16550_set_mctrl(struct uart_port *port, unsigned int mctrl)
+> +{
+> +	mctrl |= UART_MCR_CLKSEL;
+> +
+> +	serial8250_do_set_mctrl(port, mctrl);
+> +}
+> +
+> +static int ni16550_probe(struct platform_device *pdev)
+> +{
+> +	const struct ni16550_device_info *info;
+> +	struct device *dev = &pdev->dev;
+> +	struct uart_8250_port uart = {};
+> +	struct ni16550_data *data;
+> +	const char *portmode;
+> +	unsigned int prescaler;
+> +	int txfifosz, rxfifosz;
+> +	int rs232_property;
+> +	int ret;
+> +	int irq;
+> +
+> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	spin_lock_init(&uart.port.lock);
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return irq;
+> +
+> +	ret = ni16550_get_regs(pdev, &uart.port);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* early setup so that serial_in()/serial_out() work */
+> +	serial8250_set_defaults(&uart);
+> +
+> +	info = device_get_match_data(dev);
+> +
+> +	uart.port.dev		= dev;
+> +	uart.port.irq		= irq;
+> +	uart.port.irqflags	= IRQF_SHARED;
+> +	uart.port.flags		= UPF_SHARE_IRQ | UPF_BOOT_AUTOCONF
+> +					| UPF_FIXED_PORT | UPF_FIXED_TYPE;
+> +	uart.port.startup	= ni16550_port_startup;
+> +	uart.port.shutdown	= ni16550_port_shutdown;
+> +
+> +	/*
+> +	 * Hardware instantiation of FIFO sizes are held in registers.
+> +	 */
+> +	txfifosz = ni16550_read_fifo_size(&uart, NI16550_TFS_OFFSET);
+> +	rxfifosz = ni16550_read_fifo_size(&uart, NI16550_RFS_OFFSET);
+> +
+> +	dev_dbg(dev, "NI 16550 has TX FIFO size %d, RX FIFO size %d\n",
+> +		txfifosz, rxfifosz);
+> +
+> +	uart.port.type		= PORT_16550A;
+> +	uart.port.fifosize	= txfifosz;
+> +	uart.tx_loadsz		= txfifosz;
+> +	uart.fcr		= UART_FCR_ENABLE_FIFO | UART_FCR_R_TRIG_10;
+> +	uart.capabilities	= UART_CAP_FIFO | UART_CAP_AFE | UART_CAP_EFR;
+> +
+> +	/*
+> +	 * Declaration of the base clock frequency can come from one of:
+> +	 * - static declaration in this driver (for older ACPI IDs)
+> +	 * - a "clock-frquency" ACPI or OF device property
+> +	 * - an associated OF clock definition
+> +	 */
+> +	if (info->uartclk)
+> +		uart.port.uartclk = info->uartclk;
+> +	if (device_property_read_u32(dev, "clock-frequency",
+> +				     &uart.port.uartclk)) {
+> +		data->clk = devm_clk_get_optional_enabled(dev, "baudclk");
+> +		if (data->clk)
+> +			uart.port.uartclk = clk_get_rate(data->clk);
+> +	}
+> +
+> +	if (!uart.port.uartclk) {
+> +		dev_err(dev, "unable to determine clock frequency!\n");
+> +		ret = -ENODEV;
+> +		goto err;
+> +	}
+> +
+> +	if (info->prescaler)
+> +		prescaler = info->prescaler;
+> +	device_property_read_u32(dev, "clock-prescaler", &prescaler);
+> +
+> +	if (prescaler != 0) {
+> +		uart.port.set_mctrl = ni16550_set_mctrl;
+> +		ni16550_config_prescaler(&uart, (u8)prescaler);
+> +	}
+> +
+> +	/*
+> +	 * The determination of whether or not this is an RS-485 or RS-232 port
+> +	 * can come from a device property (if present), or it can come from
+> +	 * the PMR (if present), and otherwise we're solely an RS-485 port.
+> +	 *
+> +	 * This is a device-specific property, and thus has a vendor-prefixed
+> +	 * "ni,serial-port-mode" form as a devicetree binding. However, there
+> +	 * are old devices in the field using "transceiver" as an ACPI device
+> +	 * property, so we have to check for that as well.
+> +	 */
+> +	if (!device_property_read_string(dev, "ni,serial-port-mode",
+> +					 &portmode) ||
+> +	    !device_property_read_string(dev, "transceiver", &portmode)) {
+> +		rs232_property = strncmp(portmode, "RS-232", 6) == 0;
+> +
+> +		dev_dbg(dev, "port is in %s mode (via device property)",
+> +			(rs232_property ? "RS-232" : "RS-485"));
+> +	} else if (info->flags & NI_HAS_PMR) {
+> +		rs232_property = is_pmr_rs232_mode(&uart);
+> +
+> +		dev_dbg(dev, "port is in %s mode (via PMR)",
+> +			(rs232_property ? "RS-232" : "RS-485"));
+> +	} else {
+> +		rs232_property = 0;
+> +
+> +		dev_dbg(dev, "port is fixed as RS-485");
+> +	}
+> +
+> +	if (!rs232_property) {
+> +		/*
+> +		 * Neither the 'transceiver' property nor the PMR indicate
+> +		 * that this is an RS-232 port, so it must be an RS-485 one.
+> +		 */
+> +		ni16550_rs485_setup(&uart.port);
+> +	}
+> +
+> +	ret = serial8250_register_8250_port(&uart);
+> +	if (ret < 0)
+> +		goto err;
+> +	data->line = ret;
+> +
+> +	platform_set_drvdata(pdev, data);
+> +	return 0;
+> +
+> +err:
+> +	clk_disable_unprepare(data->clk);
+> +	return ret;
+> +}
+> +
+> +static int ni16550_remove(struct platform_device *pdev)
+> +{
+> +	struct ni16550_data *data = platform_get_drvdata(pdev);
+> +
+> +	clk_disable_unprepare(data->clk);
+> +	serial8250_unregister_port(data->line);
+> +	return 0;
+> +}
+> +
+> +static const struct ni16550_device_info ni16550_default = { };
+> +
+> +static const struct of_device_id ni16550_of_match[] = {
+> +	{ .compatible = "ni,ni16550", .data = &ni16550_default },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, ni16550_of_match);
+> +
+> +/* NI 16550 RS-485 Interface */
+> +static const struct ni16550_device_info nic7750 = {
+> +	.uartclk = 33333333,
+> +};
+> +
+> +/* NI CVS-145x RS-485 Interface */
+> +static const struct ni16550_device_info nic7772 = {
+> +	.uartclk = 1843200,
+> +	.flags = NI_HAS_PMR,
+> +};
+> +
+> +/* NI cRIO-904x RS-485 Interface */
+> +static const struct ni16550_device_info nic792b = {
+> +	/* Sets UART clock rate to 22.222 MHz with 1.125 prescale */
+> +	.uartclk = 25000000,
+> +	.prescaler = 0x09,
+> +};
+> +
+> +/* NI sbRIO 96x8 RS-232/485 Interfaces */
+> +static const struct ni16550_device_info nic7a69 = {
+> +	/* Set UART clock rate to 29.629 MHz with 1.125 prescale */
+> +	.uartclk = 29629629,
+> +	.prescaler = 0x09,
+
+To me these two comments don't seemingly agree, one states 22.222MHz and 
+defines 25M clk, whereas the other states 29.629MHz and defines 29.629M 
+clk. I guess one of them comes from prescaled and the other from 
+postscaled frequency?
+
+> +};
+> +
+> +#ifdef CONFIG_ACPI
+> +static const struct acpi_device_id ni16550_acpi_match[] = {
+> +	{ "NIC7750",	(kernel_ulong_t)&nic7750 },
+> +	{ "NIC7772",	(kernel_ulong_t)&nic7772 },
+> +	{ "NIC792B",	(kernel_ulong_t)&nic792b },
+> +	{ "NIC7A69",	(kernel_ulong_t)&nic7a69 },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(acpi, ni16550_acpi_match);
+> +#endif
+> +
+> +static struct platform_driver ni16550_driver = {
+> +	.driver = {
+> +		.name = "ni16550",
+> +		.of_match_table = ni16550_of_match,
+> +		.acpi_match_table = ACPI_PTR(ni16550_acpi_match),
+> +	},
+> +	.probe = ni16550_probe,
+> +	.remove = ni16550_remove,
+> +};
+> +
+> +module_platform_driver(ni16550_driver);
+> +
+> +MODULE_AUTHOR("Jaeden Amero <jaeden.amero@ni.com>");
+> +MODULE_AUTHOR("Karthik Manamcheri <karthik.manamcheri@ni.com>");
+> +MODULE_DESCRIPTION("NI 16550 Driver");
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
+> index 5313aa31930f..c650566fc71d 100644
+> --- a/drivers/tty/serial/8250/Kconfig
+> +++ b/drivers/tty/serial/8250/Kconfig
+> @@ -565,6 +565,19 @@ config SERIAL_8250_BCM7271
+>  	  including DMA support and high accuracy BAUD rates, say
+>  	  Y to this option. If unsure, say N.
+>  
+> +config SERIAL_8250_NI
+> +	tristate "NI 16550 based serial port"
+> +	depends on SERIAL_8250
+> +	depends on (X86 && ACPI) || (ARCH_ZYNQ && OF) || COMPILE_TEST
+> +	help
+> +	  This driver supports the integrated serial ports on National
+> +          Instruments (NI) controller hardware. This is required for all NI
+> +          controller models with onboard RS-485 or dual-mode RS-485/RS-232
+> +          ports.
+
+Check that the indent is same for all these lines (tab + 2 spaces).
+
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called 8250_ni.
+> +
+>  config SERIAL_OF_PLATFORM
+>  	tristate "Devicetree based probing for 8250 ports"
+>  	depends on SERIAL_8250 && OF
+> diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
+> index 4fc2fc1f41b6..58dc1b5ff054 100644
+> --- a/drivers/tty/serial/8250/Makefile
+> +++ b/drivers/tty/serial/8250/Makefile
+> @@ -45,6 +45,7 @@ obj-$(CONFIG_SERIAL_8250_PERICOM)	+= 8250_pericom.o
+>  obj-$(CONFIG_SERIAL_8250_PXA)		+= 8250_pxa.o
+>  obj-$(CONFIG_SERIAL_8250_TEGRA)		+= 8250_tegra.o
+>  obj-$(CONFIG_SERIAL_8250_BCM7271)	+= 8250_bcm7271.o
+> +obj-$(CONFIG_SERIAL_8250_NI)		+= 8250_ni.o
+>  obj-$(CONFIG_SERIAL_OF_PLATFORM)	+= 8250_of.o
+>  
+>  CFLAGS_8250_ingenic.o += -I$(srctree)/scripts/dtc/libfdt
+> 
+
 -- 
-2.35.1.500.gb896f729e2
+ i.
 
