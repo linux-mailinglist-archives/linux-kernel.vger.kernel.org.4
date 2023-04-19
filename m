@@ -2,105 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E626E727B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 06:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335386E7282
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjDSE7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 00:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
+        id S231362AbjDSFDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 01:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjDSE7c (ORCPT
+        with ESMTP id S230035AbjDSFDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 00:59:32 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FBC49F2;
-        Tue, 18 Apr 2023 21:59:31 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f178da21afso8623725e9.1;
-        Tue, 18 Apr 2023 21:59:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681880369; x=1684472369;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=x4h9mgi4PzKesSJC7XIsTMZkcYL8dBVXESTqkBCdQKM=;
-        b=m82flReCGw1X6m+CoV2VKD+wwl0j8lhmJJMb1tzlpP7xDwbIRKqHgdxpEyWmt/mY4c
-         XTijt6KK4i7rlCf0Bnj157U2I6rx/K8al9Ebeg7iTvyf4oiJEfF60ppFAsaF5FjDVEeA
-         zB1HnTygglUtV62FVkt9TLP/s+qGZZ6saHHf9USTP8BR5TUYQHvSugtytraVJzt0LFcB
-         cGFIDy9zaPi/LVaLiTLtbxuqs/itW/h8gqKWGs95B1OkGL6j+zzs7EGYRt1iHO2ErVZ2
-         V4Q97TWS3RGDSmi08ihhwflvQ09RLq8kjZ37HMbANMMr16yhhlrrhYdDEX1neMaNBNeo
-         kLeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681880369; x=1684472369;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x4h9mgi4PzKesSJC7XIsTMZkcYL8dBVXESTqkBCdQKM=;
-        b=MQB0pD5tAMxkR4U/NAjOVaFCuXYxVEBHHj6zGhTkduTFkXm5ZF0GIWpQMs95tOnc6g
-         haI/M8mkD4FubgVjiYGYzIh4aX2mTngkSSVd5MvxUm5L/8S37yRbWJaThBI/NnWP/V4h
-         dIxmfKIbO4g0sQdJXInjHHejqzXJ5UQo/SfJes8UAAXtl5DtcUMUAHo662qhn6m7xFJW
-         K8OLyj8/a35ZDQZUQ30I70XylrmMbr0klLuHIBTvn/JpKjPO8075pJypKLTRp4L5a0Cd
-         bStIdVNxDKeRKM8iX4jxxU4IIuChl2owT7+TBJtWmmr/M4+3je0GMbOrdmKYY/MQKm1f
-         4tcw==
-X-Gm-Message-State: AAQBX9evQPVJkh+ZusyQwk/AIvLF2fz2JxGrmBEiAdBmgvDl6av2DEaA
-        x91C1yE+Tm0pArJU4EYeRq0=
-X-Google-Smtp-Source: AKy350bukf4oJKo+btPlV5rCqL74IzCRSna9IqwXsdE6vXBZNGYK2s177m//3AXWr3mxuIcjhn5NNw==
-X-Received: by 2002:adf:cd05:0:b0:2f0:df59:1ea7 with SMTP id w5-20020adfcd05000000b002f0df591ea7mr3621918wrm.31.1681880369662;
-        Tue, 18 Apr 2023 21:59:29 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id i15-20020a5d630f000000b002f27dd92643sm14487616wru.99.2023.04.18.21.59.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 21:59:29 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 07:59:25 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Helge Deller <deller@gmx.de>, Cai Huoqing <cai.huoqing@linux.dev>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] video: fbdev: mmp: Fix deferred clk handling in
- mmphw_probe()
-Message-ID: <a7c75eb0-857c-4755-aa23-0a4a96a6d2ca@kili.mountain>
-References: <685f452cacc74f4983aaff2bc28a02a95e8aa8b7.1681414375.git.christophe.jaillet@wanadoo.fr>
- <67353089-4966-424c-99c2-8524818f0e37@kili.mountain>
+        Wed, 19 Apr 2023 01:03:39 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51E04EE2
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:03:37 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pozyf-0005Aq-O8; Wed, 19 Apr 2023 07:03:33 +0200
+Message-ID: <d1b7b62d-bec8-e290-d12c-0b641ab382dd@leemhuis.info>
+Date:   Wed, 19 Apr 2023 07:03:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <67353089-4966-424c-99c2-8524818f0e37@kili.mountain>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: Linux regressions report for mainline [2023-04-16]
+Content-Language: en-US, de-DE
+To:     Neal Gompa <neal@gompa.dev>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Sterba <dsterba@suse.com>, David Sterba <dsterba@suse.cz>,
+        linux-kernel@vger.kernel.org, Rafael Wysocki <rafael@kernel.org>,
+        Chris Mason <clm@meta.com>, Boris Burkov <boris@bur.io>,
+        regressions@lists.linux.dev
+References: <CAHk-=wjL7GG9s9Y2+u2725M+Ru=bUXnzOnXRwoSktY0fVdhhzw@mail.gmail.com>
+ <20230418213228.1273218-1-neal@gompa.dev>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <20230418213228.1273218-1-neal@gompa.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1681880617;932e380e;
+X-HE-SMSGID: 1pozyf-0005Aq-O8
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 15, 2023 at 04:09:03PM +0300, Dan Carpenter wrote:
-> On Thu, Apr 13, 2023 at 09:33:17PM +0200, Christophe JAILLET wrote:
-> > When dev_err_probe() is called, 'ret' holds the value of the previous
-> > successful devm_request_irq() call.
-> > 'ret' should be assigned with a meaningful value before being used in
-> > dev_err_probe().
-> > 
-> > While at it, use and return "PTR_ERR(ctrl->clk)" instead of a hard-coded
-> > "-ENOENT" so that -EPROBE_DEFER is handled and propagated correctly.
-> > 
-> > Fixes: 81b63420564d ("video: fbdev: mmp: Make use of the helper function dev_err_probe()")
-> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> > ---
+On 18.04.23 23:32, Neal Gompa wrote:
 > 
-> Presumably you already wrote a Coccinelle script for this but I've added
-> it to Smatch as well.
+> I'm the guy that sort of kickstarted this whole thing a year ago.
+>>From my perspective in Fedora-land, we've been running automatic
+> weekly fstrim on every Fedora system for three years now[1] and
+> have not received any complaints about SSDs pushing daises from
+> that.
+> 
+> When we started discussing btrfs discard=async within Fedora
+> two years ago[2], I started soliciting feedback and information
+> from the Btrfs developers I was regularly working with at the time.
+> 
+> Last year, I had a face-to-face with Chris Mason and we discussed
+> the idea in depth and decided to go for this, based on both Fedora's
+> data with consumer disks and Facebook's data with their datacenters.
+> 
+> The only real surprise we had was the so-called "discard storm",
+> which Boris Burkov made adjustments to resolve a couple weeks ago[3].
+> [...]
+> [3]: https://lore.kernel.org/linux-btrfs/cover.1680723651.git.boris@bur.io/T/#t
 
-Here is this warning:
-drivers/video/fbdev/mmp/hw/mmp_ctrl.c:518 mmphw_probe() warn: passing zero to 'dev_err_probe'
+Wait, what? Argh. Sorry, if I had seen that patch, I wouldn't have
+brought this up in my report at all. I missed it, as I wasn't CCed; and
+regzbot missed it, because the patch uses a odd format for the lore link
+(but not totally uncommon, will change regzbot to ensure that doesn't
+happen again).
 
-Other warnings.  All five are interesting.
-drivers/power/supply/rt9467-charger.c:1026 rt9467_request_interrupt() warn: passing zero to 'dev_err_probe'
-drivers/pci/controller/dwc/pcie-bt1.c:601 bt1_pcie_add_port() warn: passing zero to 'dev_err_probe'
-drivers/spi/spi-sprd-adi.c:570 sprd_adi_probe() warn: passing zero to 'dev_err_probe'
-drivers/soc/qcom/icc-bwmon.c:776 bwmon_probe() warn: passing zero to 'dev_err_probe'
-drivers/soc/qcom/icc-bwmon.c:781 bwmon_probe() warn: passing zero to 'dev_err_probe'
+Ciao, Thorsten
 
-regards,
-dan carpenter
-
+P.S.: /me meanwhile yet again wonders if we should tell people to add a
+"CC: <regressions@lists.linux.dev>" on patches fixing regressions. Then
+in this case I would have become aware of the patch. And it makes it
+obvious for anybody handling patches that the patch is fixing a
+regression. But whatever, might not be worth it.
