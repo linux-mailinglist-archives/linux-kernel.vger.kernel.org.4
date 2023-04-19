@@ -2,171 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46016E7782
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24976E7784
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbjDSKfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 06:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
+        id S232506AbjDSKhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 06:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbjDSKfm (ORCPT
+        with ESMTP id S232210AbjDSKgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 06:35:42 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBC95FD2;
-        Wed, 19 Apr 2023 03:35:40 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33JAZW9l058843;
-        Wed, 19 Apr 2023 05:35:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681900532;
-        bh=FH17H7KKtGPSsc0jpS9WI6drpuyTQIl/Hov80h2U7MQ=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=xPOATEyt/vrN714FxUdZcb/yQsuBv/3wnPS0hnLTlHKx5WuCh22Ptdehp2Q/APzv+
-         lo/wczYrn96fBe6ek7p6EsQ8z7voD4SgsTzzWYbQPRvw8s4wmvbjbY0GGFHOQCAt5r
-         fFktfJfRtacfaLi/QJQsg4UV2amiCccoAygNaOwI=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33JAZW5k079299
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 19 Apr 2023 05:35:32 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
- Apr 2023 05:35:31 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 19 Apr 2023 05:35:32 -0500
-Received: from [172.24.145.7] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33JAZST3028110;
-        Wed, 19 Apr 2023 05:35:28 -0500
-Message-ID: <bc58b9cc-f1a1-9c60-341c-9a00777e7142@ti.com>
-Date:   Wed, 19 Apr 2023 16:05:27 +0530
+        Wed, 19 Apr 2023 06:36:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2550D5FD2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:36:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D54021FD8A;
+        Wed, 19 Apr 2023 10:36:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1681900601; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gdyX8kI8XXJB7Kozt+QOaoi6TEEVqf68DYnEw4ZZsqY=;
+        b=W74GjSFR7Wm1d017njf6UREeGFnxEc/fiTELUNeWmtZPztZH3rcROXlWK9l4hawgFp6176
+        4p7Msg8bDOUncaF0oxGgio/4sRop1XsV2JhCatXa9uZ164CtC9IKp7lDlk/myqMQ5iX+ZX
+        pLvh21Je8lwcLv+upRhhhmXsMc0D4Ew=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1681900601;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gdyX8kI8XXJB7Kozt+QOaoi6TEEVqf68DYnEw4ZZsqY=;
+        b=3mfp79+Sn57/jWe3/FRLjCb/RaavWS5YvogdwU2XPRDDkYaSC2IDax2RUk6QDMPDh5MfsY
+        VX1Jh2ShqTyuGEDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AB2391390E;
+        Wed, 19 Apr 2023 10:36:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KWOUKDnEP2SlMgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 19 Apr 2023 10:36:41 +0000
+Message-ID: <804dd674-6078-7455-8dda-1bd921bed828@suse.cz>
+Date:   Wed, 19 Apr 2023 12:36:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v3 4/5] arm64: dts: ti: k3-j784s4-main: Add DSS and
- DP-bridge node
+Subject: Re: [RFC PATCH 03/26] mm: make pageblock_order 2M per default
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, <nm@ti.com>,
-        <vigneshr@ti.com>, <afd@ti.com>
-CC:     <s-vadapalli@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <a-bhatia1@ti.com>
-References: <20230419061710.290068-1-j-choudhary@ti.com>
- <20230419061710.290068-5-j-choudhary@ti.com>
- <83c8bce1-f4e2-899e-46a9-0ba9da702572@linaro.org>
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-In-Reply-To: <83c8bce1-f4e2-899e-46a9-0ba9da702572@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Johannes Weiner <hannes@cmpxchg.org>, linux-mm@kvack.org
+Cc:     Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20230418191313.268131-1-hannes@cmpxchg.org>
+ <20230418191313.268131-4-hannes@cmpxchg.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230418191313.268131-4-hannes@cmpxchg.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/18/23 21:12, Johannes Weiner wrote:
+> pageblock_order can be of various sizes, depending on configuration,
+> but the default is MAX_ORDER-1. Given 4k pages, that comes out to
+> 4M. This is a large chunk for the allocator/reclaim/compaction to try
+> to keep grouped per migratetype. It's also unnecessary as the majority
+> of higher order allocations - THP and slab - are smaller than that.
 
+Well in my experience the kernel usually has hugetlbfs config-enabled so it
+uses 2MB pageblocks (on x86) even if hugetlbfs is unused at runtime and THP
+is used instead. But sure, we can set a better default that's not tied to
+hugetlbfs.
 
-On 19/04/23 13:21, Krzysztof Kozlowski wrote:
-> On 19/04/2023 08:17, Jayesh Choudhary wrote:
->> From: Rahul T R <r-ravikumar@ti.com>
->>
->> Add DSS and DP-bridge node for J784S4 SoC. DSS IP in J784S4 is
->> same as DSS IP in J721E, so same compatible is being used.
->> The DP is Cadence MHDP8546.
->>
->> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
->> [j-choudhary@ti.com: move all k3-j784s4-main.dtsi changes together]
->> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
->> ---
->>   arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 77 ++++++++++++++++++++++
->>   1 file changed, 77 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
->> index 51aa476dedba..739741e93bc1 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
->> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
->> @@ -1373,4 +1373,81 @@ main_spi7: spi@2170000 {
->>   		clocks = <&k3_clks 383 1>;
->>   		status = "disabled";
->>   	};
->> +
->> +	mhdp: dp-bridge@a000000 {
->> +		compatible = "ti,j721e-mhdp8546";
->> +
->> +		reg = <0x0 0xa000000 0x0 0x30a00>,
->> +		      <0x0 0x4f40000 0x0 0x20>;
->> +		reg-names = "mhdptx", "j721e-intg";
->> +
->> +		clocks = <&k3_clks 217 11>;
->> +
->> +		interrupt-parent = <&gic500>;
->> +		interrupts = <GIC_SPI 614 IRQ_TYPE_LEVEL_HIGH>;
->> +
->> +		power-domains = <&k3_pds 217 TI_SCI_PD_EXCLUSIVE>;
->> +
->> +		status = "disabled";
->> +
->> +		dp0_ports: ports {
->> +			#address-cells = <1>;
->> +			#size-cells = <0>;
->> +		};
->> +	};
->> +
->> +	dss: dss@4a00000 {
->> +		compatible = "ti,j721e-dss";
->> +		reg =
->> +			<0x00 0x04a00000 0x00 0x10000>,
+> Before subsequent patches increase the effort that goes into
+> maintaining migratetype isolation, it's important to first set the
+> defrag block size to what's likely to have common consumers.
 > 
-> Fix indent/stray line break.
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> ---
+>  include/linux/pageblock-flags.h | 4 ++--
+>  mm/page_alloc.c                 | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
->> +			<0x00 0x04a10000 0x00 0x10000>,
->> +			<0x00 0x04b00000 0x00 0x10000>,
->> +			<0x00 0x04b10000 0x00 0x10000>,
->> +
->> +			<0x00 0x04a20000 0x00 0x10000>,
->> +			<0x00 0x04a30000 0x00 0x10000>,
->> +			<0x00 0x04a50000 0x00 0x10000>,
->> +			<0x00 0x04a60000 0x00 0x10000>,
->> +
->> +			<0x00 0x04a70000 0x00 0x10000>,
->> +			<0x00 0x04a90000 0x00 0x10000>,
->> +			<0x00 0x04ab0000 0x00 0x10000>,
->> +			<0x00 0x04ad0000 0x00 0x10000>,
->> +
->> +			<0x00 0x04a80000 0x00 0x10000>,
->> +			<0x00 0x04aa0000 0x00 0x10000>,
->> +			<0x00 0x04ac0000 0x00 0x10000>,
->> +			<0x00 0x04ae0000 0x00 0x10000>,
->> +			<0x00 0x04af0000 0x00 0x10000>;
->> +
->> +		reg-names = "common_m", "common_s0",
->> +			"common_s1", "common_s2",
->> +			"vidl1", "vidl2","vid1","vid2",
->> +			"ovr1", "ovr2", "ovr3", "ovr4",
->> +			"vp1", "vp2", "vp3", "vp4",
->> +			"wb";
->> +
->> +		clocks =	<&k3_clks 218 0>,
-> 
-> Broken indentation.
+> diff --git a/include/linux/pageblock-flags.h b/include/linux/pageblock-flags.h
+> index 5f1ae07d724b..05b6811f8cee 100644
+> --- a/include/linux/pageblock-flags.h
+> +++ b/include/linux/pageblock-flags.h
+> @@ -47,8 +47,8 @@ extern unsigned int pageblock_order;
+>  
+>  #else /* CONFIG_HUGETLB_PAGE */
+>  
+> -/* If huge pages are not used, group by MAX_ORDER_NR_PAGES */
+> -#define pageblock_order		(MAX_ORDER-1)
+> +/* Manage fragmentation at the 2M level */
+> +#define pageblock_order		ilog2(2U << (20 - PAGE_SHIFT))
+>  
+>  #endif /* CONFIG_HUGETLB_PAGE */
+>  
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index ac03571e0532..5e04a69f6a26 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -7634,7 +7634,7 @@ static inline void setup_usemap(struct zone *zone) {}
+>  /* Initialise the number of pages represented by NR_PAGEBLOCK_BITS */
+>  void __init set_pageblock_order(void)
+>  {
+> -	unsigned int order = MAX_ORDER - 1;
+> +	unsigned int order = ilog2(2U << (20 - PAGE_SHIFT));
+>  
+>  	/* Check that pageblock_nr_pages has not already been setup */
+>  	if (pageblock_order)
 
-Indentation at both places are similar to j721e dss node.
-Changes are needed in both?
-
--Jayesh
-
-> 
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
