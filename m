@@ -2,50 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 016D16E72C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3066E72CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231942AbjDSFx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 01:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
+        id S231590AbjDSF4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 01:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbjDSFxI (ORCPT
+        with ESMTP id S229688AbjDSF4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 01:53:08 -0400
-Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A80C5FEC;
-        Tue, 18 Apr 2023 22:53:05 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="102053531"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677510000"; 
-   d="scan'208";a="102053531"
-Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
-  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 14:53:02 +0900
-Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
-        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 869B1DE527;
-        Wed, 19 Apr 2023 14:53:00 +0900 (JST)
-Received: from m3003.s.css.fujitsu.com (m3003.s.css.fujitsu.com [10.128.233.114])
-        by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id A99B8D3F23;
-        Wed, 19 Apr 2023 14:52:59 +0900 (JST)
-Received: from localhost.localdomain (unknown [10.118.237.106])
-        by m3003.s.css.fujitsu.com (Postfix) with ESMTP id 79A962043C64;
-        Wed, 19 Apr 2023 14:52:59 +0900 (JST)
-From:   Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
-To:     linux-rdma@vger.kernel.org, leonro@nvidia.com, jgg@nvidia.com,
-        zyjzyj2000@gmail.com
-Cc:     linux-kernel@vger.kernel.org, rpearsonhpe@gmail.com,
-        yangx.jy@fujitsu.com, lizhijian@fujitsu.com,
-        Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
-Subject: [PATCH for-next v4 8/8] RDMA/rxe: Add support for the traditional Atomic operations with ODP
-Date:   Wed, 19 Apr 2023 14:52:00 +0900
-Message-Id: <eeeb742361e234507d7879b18f11af50f80b339f.1681882651.git.matsuda-daisuke@fujitsu.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <cover.1681882651.git.matsuda-daisuke@fujitsu.com>
-References: <cover.1681882651.git.matsuda-daisuke@fujitsu.com>
+        Wed, 19 Apr 2023 01:56:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541DE7EDD
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:54:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681883678;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wrwcQ1LtG/ywUFl9VgsqvEPGlNpBK1rDtlIAlfMmnew=;
+        b=eclPq2OES/1PFXaL76CaUo13kY7N6nNRY4sgBzBx2FlzAGS9AtVuxl/57oqJ9ZEV+Nadsj
+        FqKdtWHONaYI9mtbE602TSIqfSZFZA6lshdF3CRW1P53Lj4qIEoW9S6pADO/RVFdHCO8sI
+        0B/4vm4MTDQ6d2S3ZFVjNDOwerLx1BA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-416-pRiaoT1kMi6p4ABgcWtnRg-1; Wed, 19 Apr 2023 01:54:35 -0400
+X-MC-Unique: pRiaoT1kMi6p4ABgcWtnRg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8DFB5293249A;
+        Wed, 19 Apr 2023 05:54:34 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.192.59])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2E81C40444C0;
+        Wed, 19 Apr 2023 05:54:34 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id 69ABA18009A9; Wed, 19 Apr 2023 07:54:32 +0200 (CEST)
+Date:   Wed, 19 Apr 2023 07:54:32 +0200
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Evgeniy Baskov <baskov@ispras.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [RFC PATCH 0/3] efi: Implement generic zboot support
+Message-ID: <jwvybt4sro56aiqvddn6jxdjpdelasdhl747c25kzv4vbjr7ph@fbtheokrtxce>
+References: <20230416120729.2470762-1-ardb@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230416120729.2470762-1-ardb@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,115 +76,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable 'fetch and add' and 'compare and swap' operations to manipulate
-data in an ODP-enabled MR. This is comprised of the following steps:
- 1. Check the driver page table(umem_odp->dma_list) to see if the target
-    page is both readable and writable.
- 2. If not, then trigger page fault to map the page.
- 3. Update the entry in the MR xarray.
- 4. Execute the operation.
+On Sun, Apr 16, 2023 at 02:07:26PM +0200, Ard Biesheuvel wrote:
+> This series is a proof-of-concept that implements support for the EFI
+> zboot decompressor for x86. It replaces the ordinary decompressor, and
+> instead, performs the decompression, KASLR randomization and the 4/5
+> level paging switch while running in the execution context of EFI.
+> 
+> This simplifies things substantially, and makes it straight-forward to
+> abide by stricter future requirements related to the use of writable and
+> executable memory under EFI, which will come into effect on x86 systems
+> that are certified as being 'more secure', and ship with an even shinier
+> Windows sticker.
+> 
+> This is an alternative approach to the work being proposed by Evgeny [0]
+> that makes rather radical changes to the existing decompressor, which
+> has accumulated too many features already, e.g., related to confidential
+> compute etc.
+> 
+> EFI zboot images can be booted in two ways:
+> - by EFI firmware, which loads and starts it as an ordinary EFI
+>   application, just like the existing EFI stub (with which it shares
+>   most of its code);
+> - by a non-EFI loader that parses the image header for the compression
+>   metadata, and decompresses the image into memory and boots it.
 
-umem_mutex is used to ensure that dma_list (an array of addresses of an MR)
-is not changed while it is being checked and that the target page is not
-invalidated before data access completes.
+I like the idea to have all EFI archs handle compressed kernels the same
+way.
 
-Signed-off-by: Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
----
- drivers/infiniband/sw/rxe/rxe.c      |  1 +
- drivers/infiniband/sw/rxe/rxe_loc.h  |  9 +++++++++
- drivers/infiniband/sw/rxe/rxe_odp.c  | 26 ++++++++++++++++++++++++++
- drivers/infiniband/sw/rxe/rxe_resp.c |  5 ++++-
- 4 files changed, 40 insertions(+), 1 deletion(-)
+But given that going EFI-only on x86 isn't a realistic option for
+distros today this isn't really an alternative for Evgeny's patch
+series, we have to fix the existing bzImage decompressor too.
 
-diff --git a/drivers/infiniband/sw/rxe/rxe.c b/drivers/infiniband/sw/rxe/rxe.c
-index 207a022156f0..abd3267c2873 100644
---- a/drivers/infiniband/sw/rxe/rxe.c
-+++ b/drivers/infiniband/sw/rxe/rxe.c
-@@ -88,6 +88,7 @@ static void rxe_init_device_param(struct rxe_dev *rxe)
- 		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_RECV;
- 		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_WRITE;
- 		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_READ;
-+		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_ATOMIC;
- 		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_SRQ_RECV;
- 	}
- }
-diff --git a/drivers/infiniband/sw/rxe/rxe_loc.h b/drivers/infiniband/sw/rxe/rxe_loc.h
-index 35c2ccb2fdd9..6ff10b15fa32 100644
---- a/drivers/infiniband/sw/rxe/rxe_loc.h
-+++ b/drivers/infiniband/sw/rxe/rxe_loc.h
-@@ -208,6 +208,9 @@ int rxe_odp_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length,
- 			 u64 iova, int access_flags, struct rxe_mr *mr);
- int rxe_odp_mr_copy(struct rxe_mr *mr, u64 iova, void *addr, int length,
- 		    enum rxe_mr_copy_dir dir);
-+int rxe_odp_mr_atomic_op(struct rxe_mr *mr, u64 iova, int opcode,
-+			 u64 compare, u64 swap_add, u64 *orig_val);
-+
- #else /* CONFIG_INFINIBAND_ON_DEMAND_PAGING */
- static inline int
- rxe_odp_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
-@@ -221,6 +224,12 @@ rxe_odp_mr_copy(struct rxe_mr *mr, u64 iova, void *addr,
- {
- 	return -EOPNOTSUPP;
- }
-+static inline int
-+rxe_odp_mr_atomic_op(struct rxe_mr *mr, u64 iova, int opcode,
-+		     u64 compare, u64 swap_add, u64 *orig_val)
-+{
-+	return RESPST_ERR_UNSUPPORTED_OPCODE;
-+}
- 
- #endif /* CONFIG_INFINIBAND_ON_DEMAND_PAGING */
- 
-diff --git a/drivers/infiniband/sw/rxe/rxe_odp.c b/drivers/infiniband/sw/rxe/rxe_odp.c
-index cbe5d0c3fcc4..194b1fab98b7 100644
---- a/drivers/infiniband/sw/rxe/rxe_odp.c
-+++ b/drivers/infiniband/sw/rxe/rxe_odp.c
-@@ -283,3 +283,29 @@ int rxe_odp_mr_copy(struct rxe_mr *mr, u64 iova, void *addr, int length,
- 
- 	return err;
- }
-+
-+int rxe_odp_mr_atomic_op(struct rxe_mr *mr, u64 iova, int opcode,
-+			 u64 compare, u64 swap_add, u64 *orig_val)
-+{
-+	int err;
-+	struct ib_umem_odp *umem_odp = to_ib_umem_odp(mr->umem);
-+
-+	/* If pagefault is not required, umem mutex will be held until the
-+	 * atomic operation completes. Otherwise, it is released and locked
-+	 * again in rxe_odp_map_range() to let invalidation handler do its
-+	 * work meanwhile.
-+	 */
-+	mutex_lock(&umem_odp->umem_mutex);
-+
-+	/* Atomic operations manipulate a single char. */
-+	err = rxe_odp_map_range(mr, iova, sizeof(char), 0);
-+	if (err)
-+		return err;
-+
-+	err = rxe_mr_do_atomic_op(mr, iova, opcode, compare,
-+				  swap_add, orig_val);
-+
-+	mutex_unlock(&umem_odp->umem_mutex);
-+
-+	return err;
-+}
-diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
-index b40c47477be3..99ad1dec10c7 100644
---- a/drivers/infiniband/sw/rxe/rxe_resp.c
-+++ b/drivers/infiniband/sw/rxe/rxe_resp.c
-@@ -699,7 +699,10 @@ static enum resp_states atomic_reply(struct rxe_qp *qp,
- 		u64 iova = qp->resp.va + qp->resp.offset;
- 
- 		if (mr->odp_enabled)
--			err = RESPST_ERR_UNSUPPORTED_OPCODE;
-+			err = rxe_odp_mr_atomic_op(mr, iova, pkt->opcode,
-+						   atmeth_comp(pkt),
-+						   atmeth_swap_add(pkt),
-+						   &res->atomic.orig_val);
- 		else
- 			err = rxe_mr_do_atomic_op(mr, iova, pkt->opcode,
- 						  atmeth_comp(pkt),
--- 
-2.39.1
+> Realistically, the second option is unlikely to ever be used on x86,
+
+What would be needed to do so?  Teach kexec-tools and grub2 parse and
+load zboot kernels I guess?
+
+take care,
+  Gerd
 
