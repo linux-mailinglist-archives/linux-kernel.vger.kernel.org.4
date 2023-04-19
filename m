@@ -2,82 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FFC6E7A7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA73C6E7A7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233403AbjDSNUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 09:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        id S233419AbjDSNUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 09:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233412AbjDSNTt (ORCPT
+        with ESMTP id S233409AbjDSNUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 09:19:49 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560481544C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:19:47 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f08b6a9f8aso127745e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:19:47 -0700 (PDT)
+        Wed, 19 Apr 2023 09:20:46 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953921447C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:20:44 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id fy21so38625252ejb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:20:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681910386; x=1684502386;
+        d=ionos.com; s=google; t=1681910443; x=1684502443;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j983YFludd/GyMTEasQelz3+1RiLp31tfO0wT/ETbtM=;
-        b=o3ZP9xclPR9616VadFNj8rnyYb4qGniegdajvA77WQzJe4XoEmbMNMavaf3w9qQx+C
-         CosjpVtrISjbAjuUgq0rbTY7iR3WuHeK5tosWKU+uhz3VNygtE47jDk7cs+flnw/gUJk
-         J9VnV1+AQyaEuNBd+eGR6X7nPsnDIIn9IlI6FjZnGUfRYFB+YmyC28DSWxISCpG0W+bT
-         HO2qd7JVqQiQPFJ+70ZGuziAMp3qLisW5JrP8OhVENc8AsQqghQXr++bdg5+ezgJa9NK
-         HX4MiHTunwFsOJgyrx7+gCvwt0zXE3TO9+3iK35AI1JNKoW3XXRUYDC6RvE52Z07XcZ2
-         uLqw==
+        bh=9BOf4Zg0kdc2uD8MLclq66ftf4z+xtdTTtzT11zmAto=;
+        b=Bx4lVV0tvF3WZNIAelGjK2Fe+WI2d9jhv4hTkmv62eBzI9a/2SAR4dqgAn5V4KHmWy
+         tUe1yBOyBENkTO1ZJZE/Wqsakw2MvM+nvhJx0OKc4NWLjxNQYJ2InIMWkPIRjXBDuKkz
+         e6EtIOKn0RZ4GgricZEiFYzN4TFvkJxAFNgYkngh7m2IHhPgvCGc7ei4bWF/AvddiQ32
+         99C+cJGLz/OzXEm81i4oDmgjV5e4TJKDXvxRTaN8E6jgSJiVRvtY8u/HD63urcp3w15o
+         fNb42RRJXzlSYFcydYXJ2Hipv8L6jXYh73Y2dtvayKBmKN2+3VtDMAr2WVx6sKXBx7+r
+         twfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681910386; x=1684502386;
+        d=1e100.net; s=20221208; t=1681910443; x=1684502443;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j983YFludd/GyMTEasQelz3+1RiLp31tfO0wT/ETbtM=;
-        b=c+AXLRINDaB6513K++tpZMws8rk2EjIQ3cpNZY2fVtJp7tA1eJHxTTNB8rQ6i9LObV
-         yR5BmUK7eifouUlMFOIQQS8YLZV8pCQ2zBWYaxc9KJMDReJEvOejnGKUva/vD2Kl+Jxh
-         UXMmR/2qCC7f0LOKnrYJJlXhtnYgl90PyKj2NH1DK2wPJ5beu2loGXys79+ZWN2lwIH3
-         KBnwfobhOb1X/j/XfMwM/P4QtueyT6PC+dXd4r6V+ZHe7ypt6G/dFzwBNmNlZYjyKfkp
-         SFLT86Nd78bWJ5HIXDcKQonv5Dm9XeFH6HBX27cNTYu5R/0WPWCxoksIchEBGYI0SjHN
-         PQJw==
-X-Gm-Message-State: AAQBX9fkXMyKeylxmrSWdNlsV0j6nlm+gZSnIjgWU9CM1uJTpxqERXdY
-        oxlY/i5YBbg/OXymsxhDo+B1w8dy8YpwtkZeE0NGsA==
-X-Google-Smtp-Source: AKy350bxeStL2sqZdJTM0uS74kWxjTyWkgtDGK4eJo2trp3qCazP4s142SML6zxLZUufbEynbEAxDaqQhH17tJD2OZY=
-X-Received: by 2002:a05:600c:1c27:b0:3f1:6fe9:4a98 with SMTP id
- j39-20020a05600c1c2700b003f16fe94a98mr146850wms.5.1681910385676; Wed, 19 Apr
- 2023 06:19:45 -0700 (PDT)
+        bh=9BOf4Zg0kdc2uD8MLclq66ftf4z+xtdTTtzT11zmAto=;
+        b=O+kdNOIEgT83n4f2ISQ4j/yJBzhLAvBe5HDsgtGskzaKMuUZYlZGl8ysJ6qbugHNUY
+         iiaOGj3nvel8k6ROSTKxCy/AsR4orlLwLw4zw7JDVoncbUM4eq2j1mfT4OvgHb+BNSZK
+         u4yits51eGmjAwmKrFn0JRm9rmkODWE/vKDuswus7NBdKdouLaU/m+knyu77YHkEidRy
+         P9+D6X/Buu+Go6Zt4nnCl4QNqY6N+xuynfdiNTMPQBlv4PNK4xDke+avHiF7N+4Yyj25
+         1zmnv5kqMtTwiJUlYzUmywVQbZ9Iwnu8rlxk4cv9WU7+R9+NTGUWvZFZ+FmmZDiyMOiY
+         jaIg==
+X-Gm-Message-State: AAQBX9f3ov/qGayxhz5uWu5158gkHWhhY4Mu6pMn8LOSo9WSV1XTc/I1
+        lQNa2pbOhmVwa4ljrjPFjv97m8Ww09UM4gdDvOK8MQ==
+X-Google-Smtp-Source: AKy350ZS/VAoCFqSysya9w50kf/t7vPS6iqTROEf96vSkCdYeDzCfqM9kpC+uErEFHpSWSXH+eYquB5PBONij/tPjVw=
+X-Received: by 2002:a17:906:8448:b0:94f:2d5e:1909 with SMTP id
+ e8-20020a170906844800b0094f2d5e1909mr5449280ejy.7.1681910443027; Wed, 19 Apr
+ 2023 06:20:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230414051922.3625666-1-irogers@google.com> <56ac61a0-ccf0-210e-e429-11062a07b8bf@linux.intel.com>
- <CAP-5=fXz1vw48A2tWgcNDSZsnvnOO7_jA+py3p_Khi_igz0hJw@mail.gmail.com>
- <5031f492-9734-be75-3283-5961771d87c8@linux.intel.com> <CAP-5=fW2aAijt8tqydszQHQFmsfeQO2S0hb7Z27RtXxG4Zmm-w@mail.gmail.com>
- <ce92dd1b-23f6-ea52-a47d-fccc24fa20ea@linux.intel.com> <CAP-5=fWRy4NEqhB6-b98+m7SV5=oyBOMVuOHwmvKZCJuXcsQEg@mail.gmail.com>
- <d1fe801a-22d0-1f9b-b127-227b21635bd5@linux.intel.com> <CAP-5=fXCmKAUn24r0YYHaO63mabZCXae-hAT2WCtk+YYmvS9xg@mail.gmail.com>
- <99150cb1-fe50-97cf-ad80-cceb9194eb9a@linux.intel.com> <CAP-5=fXZSACj=kGM5t3pBHkQ-W1i0eJayAQ77_ToEp4zXWzJnw@mail.gmail.com>
- <ea899096-0599-f2a0-04a3-d90a3aa7d45d@linux.intel.com> <CAP-5=fVVFjKgUGV8zVurd99BOhASQ9mMaZqOyw13PYLhZWpsOA@mail.gmail.com>
- <CAP-5=fW_JwabjEUqSLaJn+tuHXLoyRWqJVVCh_z1dhXJ6On=MQ@mail.gmail.com> <84b19053-2e9f-5251-6816-26d2475894c0@linux.intel.com>
-In-Reply-To: <84b19053-2e9f-5251-6816-26d2475894c0@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 19 Apr 2023 06:19:29 -0700
-Message-ID: <CAP-5=fWJKmo4eLKe9+=3pKGe7g+xfA+YxOz7AOgqLfcRNzNaLw@mail.gmail.com>
-Subject: Re: [PATCH v2] perf stat: Introduce skippable evsels
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <85323eb2-cfc7-d1b8-3a75-3fa63dde29db@fujitsu.com>
+ <20230411122651.GV182481@unreal> <aa43746f-77f9-8592-5370-2a5042506ee5@fujitsu.com>
+ <8fe62e38-e43d-3d6c-624f-1c8ce5859788@linux.dev> <f85cdaaa-b1d6-bc89-e963-8b611ae3667d@fujitsu.com>
+ <20230413132418.GR17993@unreal> <4d1cacbf-f9b2-07c7-75bf-61f34abc1841@linux.dev>
+ <7656e04c-1adc-6621-0e45-e2b282e6c143@fujitsu.com> <20230417180452.GG15386@unreal>
+ <0985e0a9-fe19-1c07-0da7-48ec88eb77c6@fujitsu.com> <20230418075706.GB9740@unreal>
+ <65860af3-7d48-5a26-f916-50450633a893@fujitsu.com>
+In-Reply-To: <65860af3-7d48-5a26-f916-50450633a893@fujitsu.com>
+From:   Jinpu Wang <jinpu.wang@ionos.com>
+Date:   Wed, 19 Apr 2023 15:20:32 +0200
+Message-ID: <CAMGffEkyNnSXDfwuzCQ_ERZ-53OnoJ7gOF4eL1MAPYc74V43iQ@mail.gmail.com>
+Subject: Re: [PATCH for-next 2/3] RDMA/rtrs: Fix rxe_dealloc_pd warning
+To:     "Zhijian Li (Fujitsu)" <lizhijian@fujitsu.com>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        Zhu Yanjun <yanjun.zhu@linux.dev>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        "haris.iqbal@ionos.com" <haris.iqbal@ionos.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,121 +80,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 5:31=E2=80=AFAM Liang, Kan <kan.liang@linux.intel.c=
-om> wrote:
+On Wed, Apr 19, 2023 at 11:53=E2=80=AFAM Zhijian Li (Fujitsu)
+<lizhijian@fujitsu.com> wrote:
+>
+> Leon, Guoqing
 >
 >
->
-> On 2023-04-18 9:00 p.m., Ian Rogers wrote:
-> > On Tue, Apr 18, 2023 at 5:12=E2=80=AFPM Ian Rogers <irogers@google.com>=
- wrote:
-> >>
-> >> On Tue, Apr 18, 2023 at 2:51=E2=80=AFPM Liang, Kan <kan.liang@linux.in=
-tel.com> wrote:
-> >>>
-> >>>
-> >>>
-> >>> On 2023-04-18 4:08 p.m., Ian Rogers wrote:
-> >>>> On Tue, Apr 18, 2023 at 11:19=E2=80=AFAM Liang, Kan <kan.liang@linux=
-.intel.com> wrote:
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>> On 2023-04-18 11:43 a.m., Ian Rogers wrote:
-> >>>>>> On Tue, Apr 18, 2023 at 6:03=E2=80=AFAM Liang, Kan <kan.liang@linu=
-x.intel.com> wrote:
-> >>>>>>>
-> >>>>>>>
-> >>>>>>>
-> >>>>>>> On 2023-04-17 2:13 p.m., Ian Rogers wrote:
-> >>>>>>>> The json TopdownL1 is enabled if present unconditionally for per=
-f stat
-> >>>>>>>> default. Enabling it on Skylake has multiplexing as TopdownL1 on
-> >>>>>>>> Skylake has multiplexing unrelated to this change - at least on =
-the
-> >>>>>>>> machine I was testing on. We can remove the metric group Topdown=
-L1 on
-> >>>>>>>> Skylake so that we don't enable it by default, there is still th=
-e
-> >>>>>>>> group TmaL1. To me, disabling TopdownL1 seems less desirable tha=
-n
-> >>>>>>>> running with multiplexing - previously to get into topdown analy=
-sis
-> >>>>>>>> there has to be knowledge that "perf stat -M TopdownL1" is the w=
-ay to
-> >>>>>>>> do this.
-> >>>>>>>
-> >>>>>>> To be honest, I don't think it's a good idea to remove the Topdow=
-nL1. We
-> >>>>>>> cannot remove it just because the new way cannot handle it. The p=
-erf
-> >>>>>>> stat default works well until 6.3-rc7. It's a regression issue of=
- the
-> >>>>>>> current perf-tools-next.
-> >>>>>>
-> >>>>>> I'm not so clear it is a regression to consistently add TopdownL1 =
-for
-> >>>>>> all architectures supporting it.
-> >>>>>
-> >>>>>
-> >>>>> Breaking the perf stat default is a regression.
-> >>>>
-> >>>> Breaking is overstating the use of multiplexing. The impact is less
-> >>>> accuracy in the IPC and branch misses default metrics,
-> >>>
-> >>> Inaccuracy is a breakage for the default.
-> >>
-> >> Can you present a case where this matters? The events are already not
-> >> grouped and so inaccurate for metrics.
+> On 18/04/2023 15:57, Leon Romanovsky wrote:
+> >>>> Currently, without this patch:
+> >>>> 1. PD and clt_path->s.dev are shared among connections.
+> >>>> 2. every con[n]'s cleanup phase will call destroy_con_cq_qp()
+> >>>> 3. clt_path->s.dev will be always decreased in destroy_con_cq_qp(), =
+and when
+> >>>>       clt_path->s.dev become zero, it will destroy PD.
+> >>>> 4. when con[1] failed to create, con[1] will not take clt_path->s.de=
+v, but it try to decreased clt_path->s.dev <<< it's wrong to do that.
+> >>> So please fix it by making sure that failure to create con[1] will
+> >>> release resources which were allocated. If con[1] didn't increase
+> >>> s.dev_ref, it shouldn't decrease it either.
+> >> You are right, the current patch did exactly that.
+> >> It introduced a con owning flag 'has_dev' to indicate whether this con=
+ has taken s.dev.
+> >> so that its cleanup phase will only decrease its s.dev properly.
+> > The has_dev is a workaround and not a solution. In proper error unwind
+> > sequence, you won't need extra flag.
 > >
-> > Removing CPUs without perf metrics from the TopdownL1 metric group is
-> > implemented here:
-> > https://lore.kernel.org/lkml/20230419005423.343862-6-irogers@google.com=
-/
-> > Note, this applies to pre-Icelake and atom CPUs as these also lack
-> > perf metric (aka topdown) events.
+> > Thanks
 > >
 >
-> That may give the end user the impression that the pre-Icelake doesn't
-> support the Topdown Level1 events, which is not true.
+> how about below changes
 >
-> I think perf should either keep it for all Intel platforms which
-> supports tma_L1_group, or remove the TopdownL1 name entirely for Intel
-> platform (let the end user use the tma_L1_group and the name exposed by
-> the kernel as before.).
-
-How does this work on hybrid systems? We will enable TopdownL1 because
-of the presence of perf metric (aka topdown) events but this will also
-enable TopdownL1 on the atom core.
-
+> commit 61dba725384e226d472b8142d70d40d4103df87a
+> Author: Li Zhijian <lizhijian@fujitsu.com>
+> Date:   Wed Apr 19 17:42:26 2023 +0800
 >
-> > With that change I don't have a case that requires skippable evsels,
-> > and so we can take that series with patch 6 over the v1 of that series
-> > with this change.
-> >
+>      RDMA/rtrs: Fix rxe_dealloc_pd warning
 >
-> I'm afraid this is not the only problem the commit 94b1a603fca7 ("perf
-> stat: Add TopdownL1 metric as a default if present") in the
-> perf-tools-next branch introduced.
+>      con[0] always sets s.dev to 1, correspondingly, we should let it to
+>      release the last dev.
 >
-> The topdown L2 in the perf stat default on SPR and big core of the ADL
-> is still missed. I don't see a possible fix for this on the current
-> perf-tools-next branch.
+>      Previously,
+>      1. PD and clt_path->s.dev are shared among connections.
+>      2. every con[n]'s cleanup phase will call destroy_con_cq_qp()
+>      3. clt_path->s.dev will be always decreased in destroy_con_cq_qp(), =
+and when
+>         clt_path->s.dev become zero, it will destroy PD.
+>      4. when con[1] failed to create, con[1] will not take clt_path->s.de=
+v,
+>         but it try to decreased clt_path->s.dev <<< it's wrong to do that=
+.
+>
+>      The warning occurs when destroying PD whose reference count is not z=
+ero.
+>      Precodition: clt_path->s.con_num is 2.
+>      So 2 cm connection will be created as below:
+>      CPU0                                              CPU1
+>      init_conns {                              |
+>        create_cm() // a. con[0] created        |
+>                                                |  a'. rtrs_clt_rdma_cm_ha=
+ndler() {
+>                                                |    rtrs_rdma_addr_resolv=
+ed()
+>                                                |      create_con_cq_qp(co=
+n); << con[0]
+>                                                |  }
+>                                                | in this moment, refcnt o=
+f PD was increased to 2+
+>                                                |
+>        create_cm() // b. cid =3D 1, failed       |
+>          destroy_con_cq_qp()                   |
+>            rtrs_ib_dev_put()                   |
+>              dev_free()                        |
+>                ib_dealloc_pd(dev->ib_pd) << PD |
+>                 is destroyed, but refcnt is    |
+>                 still greater than 0           |
+>      }
+>
+> diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/=
+ulp/rtrs/rtrs-clt.c
+> index 80abf45a197a..1eb652dedca3 100644
+> --- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+> +++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+> @@ -1743,6 +1743,15 @@ static void destroy_con_cq_qp(struct rtrs_clt_con =
+*con)
+>                  con->rsp_ius =3D NULL;
+>                  con->queue_num =3D 0;
+>          }
+> +
+> +       /*
+> +        * Every con will try to decreased s.dev_ref, but we should
+> +        * reserve the last s.dev_ref for con[0]. In case con[1+]'s
+> +        * cleanup phase call rtrs_ib_dev_put(clt_path->s.dev) early.
+> +        */
+> +       if (con->c.cid !=3D 0 && clt_path->s.dev_ref =3D=3D 1)
+> +               return;
+> +
+>          if (clt_path->s.dev_ref && !--clt_path->s.dev_ref) {
+>                  rtrs_ib_dev_put(clt_path->s.dev);
+>                  clt_path->s.dev =3D NULL;
 
-I thought in its current state the json metrics for TopdownL2 on SPR
-have multiplexing. Given L1 is used to drill down to L2, it seems odd
-to start on L2, but given L1 is used to compute the thresholds for L2,
-this should be to have both L1 and L2 on these platforms. However,
-that doesn't work as you don't want multiplexing.
+I run a regression test in our test env, it triggers a warning on
 
-This all seems backward to avoid potential multiplexing on branch miss
-rate and IPC, just always having TopdownL1 seems cleanest with the
-skippable evsels working around the permissions issue - as put forward
-in this patch. Possibly adding L2 metrics on ADL/SPR, but only once
-the multiplexing issue is resolved.
+1681                 if (WARN_ON(clt_path->s.dev))
 
-Thanks,
-Ian
-
-> Thanks,
-> Kan
+[ 1333.042633] ------------[ cut here ]------------
+[ 1333.042650] WARNING: CPU: 8 PID: 559 at
+/root/kernel-test/ibnbd2/rtrs/rtrs-clt.c:1681
+rtrs_clt_rdma_cm_handler+0x864/0x8a0 [rtrs_client]
+[ 1333.042651] Modules linked in: loop rnbd_client(O) rtrs_client(O)
+rtrs_core(O) kvm_amd kvm input_leds led_class irqbypass crc32_pclmul
+aesni_intel sp5100_tco evdev libaes watchdog sg k10temp crypto_simd
+fam15h_power ipmi_si serio_raw cryptd ipmi_devintf glue_helper
+ipmi_msghandler acpi_cpufreq button ib_ipoib ib_umad null_blk brd
+rdma_cm iw_cm ib_cm ip_tables x_tables autofs4 raid10 raid456
+async_raid6_recov async_memcpy async_pq async_xor async_tx xor
+raid6_pq libcrc32c raid1 raid0 linear mlx4_ib md_mod ib_uverbs ib_core
+sd_mod t10_pi crc_t10dif crct10dif_generic ahci libahci
+crct10dif_pclmul crct10dif_common crc32c_intel igb libata usb_storage
+psmouse i2c_piix4 i2c_algo_bit mlx4_core dca scsi_mod i2c_core ptp
+pps_core
+[ 1333.042737] CPU: 8 PID: 559 Comm: kworker/u128:1 Tainted: G
+  O      5.10.136-pserver-develop-5.10 #257
+[ 1333.042738] Hardware name: Supermicro H8QG6/H8QG6, BIOS 3.00       09/04=
+/2012
+[ 1333.042752] Workqueue: rdma_cm cma_work_handler [rdma_cm]
+[ 1333.042758] RIP: 0010:rtrs_clt_rdma_cm_handler+0x864/0x8a0 [rtrs_client]
+[ 1333.042761] Code: ff bb ea ff ff ff e8 db a5 24 fc 49 8d b4 24 10
+01 00 00 89 da 48 c7 c7 40 93 5b c0 e8 4b 47 21 fc 4d 8b 65 00 e9 15
+fe ff ff <0f> 0b 4c 89 ff bb ea ff ff ff e8 ad a5 24 fc eb d0 0f 0b 4c
+89 ff
+[ 1333.042763] RSP: 0018:ffffaff68e57bdb0 EFLAGS: 00010286
+[ 1333.042765] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff9eddc00=
+51420
+[ 1333.042767] RDX: ffff9ee4ef716e40 RSI: ffff9f14ea288f30 RDI: ffff9eddc88=
+db240
+[ 1333.042768] RBP: ffffaff68e57be50 R08: 0000000000000000 R09: 006d635f616=
+d6472
+[ 1333.042769] R10: ffffaff68e57be68 R11: 0000000000000000 R12: ffff9edde13=
+88000
+[ 1333.042771] R13: ffff9eddc88db200 R14: ffff9edde1388000 R15: ffff9eddc88=
+db240
+[ 1333.042773] FS:  0000000000000000(0000) GS:ffff9eecc7c00000(0000)
+knlGS:0000000000000000
+[ 1333.042774] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1333.042776] CR2: 00007f0ac4ed4004 CR3: 0000002b5040a000 CR4: 00000000000=
+406e0
+[ 1333.042777] Call Trace:
+[ 1333.042790]  ? newidle_balance+0x25e/0x3c0
+[ 1333.042795]  ? psi_group_change+0x43/0x230
+[ 1333.042801]  ? cma_cm_event_handler+0x23/0xb0 [rdma_cm]
+[ 1333.042807]  cma_cm_event_handler+0x23/0xb0 [rdma_cm]
+[ 1333.042814]  cma_work_handler+0x5a/0xb0 [rdma_cm]
+[ 1333.042819]  process_one_work+0x1f3/0x390
+[ 1333.042822]  worker_thread+0x2d/0x3c0
