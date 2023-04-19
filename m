@@ -2,170 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FEE6E75EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 269406E75ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbjDSJBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 05:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
+        id S232796AbjDSJCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 05:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232825AbjDSJBl (ORCPT
+        with ESMTP id S232804AbjDSJCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:01:41 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988FE19AA;
-        Wed, 19 Apr 2023 02:01:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681894891; x=1713430891;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IiznyOV15KEk7yghNEwufQGnmpRCJqkzx0uQeGij21E=;
-  b=OGO/tN7e3/6m/v3VEZ54eWFCHA0j2nlFHSTGXM8UX5EKQFe9Ekqnhgxc
-   oqSI7DxtYu+CTs41t8Fz7alrlxqdSX+qYD1Lf4zKC9unZR08syecZ00Fi
-   nNxIot9v4ljWlBxJePHp6Bwb3WbUyHKFEVnDl8cjnSRCS6FB4Nx2tAu5+
-   yfNJPsShzzyxCWMhSt5zI/wWssM1APST+DbRXsDTw5EC+FZsojiur2X27
-   3muuDr/8A1352tXSZOQNq38wBUZMBcFNbocZxVjXltJLkTRcMP8oWmToD
-   R/qn6XCxGzSLw9yG9JY+gI3/m8Qh6M/XMVUmp56qIFghNz5/nMATqQLDn
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="373276200"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="373276200"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 02:01:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="756028824"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="756028824"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 02:01:28 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id D7E2311FAD0;
-        Wed, 19 Apr 2023 12:01:25 +0300 (EEST)
-Date:   Wed, 19 Apr 2023 12:01:25 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Riesch via B4 Relay 
-        <devnull+michael.riesch.wolfvision.net@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Matthias Fend <Matthias.Fend@wolfvision.net>,
-        libcamera-devel@lists.libcamera.org, linux-media@vger.kernel.org,
-        hverkuil@xs4all.nl,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [libcamera-devel] [PATCH RFC 1/4] media: v4l2-ctrls: add lens
- group status controls for zoom and focus
-Message-ID: <ZD+t5QYH20Y8+8MV@kekkonen.localdomain>
-References: <20230406-feature-controls-lens-v1-0-543189a680de@wolfvision.net>
- <20230406-feature-controls-lens-v1-1-543189a680de@wolfvision.net>
- <CAPY8ntArOOqPQzvkJrQEyuVFfb6j8x6WODTMHOn1qHPU588mbQ@mail.gmail.com>
- <0f1baf5e-2ff6-e10b-5c3e-0a82c71d0ce6@wolfvision.net>
- <CAPY8ntAjBEFfeV6nnQs34Y22QM-irT13ALDv4ksP8AYK=jWsKg@mail.gmail.com>
- <3ab7bfc4-aaae-2e39-b420-40ad8d71dda4@wolfvision.net>
- <CAPY8ntCNuvgmF37kDvVh1kuepbLqy2hWcz9HOi8iub9trHmi2g@mail.gmail.com>
- <ZDbKU5kwcb7RGeCo@kekkonen.localdomain>
- <ccae3994-3b1b-4050-ea34-98f97cf886e0@wolfvision.net>
+        Wed, 19 Apr 2023 05:02:09 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5587F268A;
+        Wed, 19 Apr 2023 02:02:00 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.120])
+        by gateway (Coremail) with SMTP id _____8BxttgHrj9kPt0eAA--.53054S3;
+        Wed, 19 Apr 2023 17:01:59 +0800 (CST)
+Received: from [10.20.42.120] (unknown [10.20.42.120])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxdbwDrj9k29YuAA--.54148S3;
+        Wed, 19 Apr 2023 17:01:55 +0800 (CST)
+Subject: Re: [PATCH v7 29/30] LoongArch: KVM: Enable kvm config and add the
+ makefile
+To:     Huacai Chen <chenhuacai@kernel.org>
+References: <20230417095950.875228-1-zhaotianrui@loongson.cn>
+ <20230417095950.875228-30-zhaotianrui@loongson.cn>
+ <CAAhV-H5nxRLzLn65OEnPQJi6CQtFhQOYNZjEE9ZoouM8Ug5hOw@mail.gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
+        Xi Ruoyao <xry111@xry111.site>,
+        kernel test robot <lkp@intel.com>
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+Message-ID: <d27a853f-5972-56c2-fdb7-aad7e6be9a8c@loongson.cn>
+Date:   Wed, 19 Apr 2023 17:01:55 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ccae3994-3b1b-4050-ea34-98f97cf886e0@wolfvision.net>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAAhV-H5nxRLzLn65OEnPQJi6CQtFhQOYNZjEE9ZoouM8Ug5hOw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxdbwDrj9k29YuAA--.54148S3
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWFW7uFyrAr47uFWxXFyUGFg_yoWrCw4kpF
+        WxZr1kGr4xWFn3JrZ3t34kWrsIyrn7Kr17uF1aqa4UCF9rZrykur18tryDWFyDJws5JrW0
+        gF1rGF1aga15Ja7anT9S1TB71UUUUbUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCa
+        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8XTm3UUUUU==
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
 
-On Mon, Apr 17, 2023 at 02:38:20PM +0200, Michael Riesch wrote:
-> Hi Sakari,
-> 
-> On 4/12/23 17:12, Sakari Ailus wrote:
-> > Hi Dave, Michael,
-> > 
-> > On Wed, Apr 12, 2023 at 02:55:56PM +0100, Dave Stevenson wrote:
-> >>>> If the ranges aren't updated, where should that out-of-range lens
-> >>>> movement leave the lens?
-> >>>
-> >>> This is up to the hardware controller, but I would guess it typically
-> >>> stops one step before disaster. Wherever that may be, the error
-> >>> condition and the current position can be read out via this new STATUS
-> >>> control.
-> >>>
-> >>> Does this sound good so far?
-> >>
-> >> Sounds reasonable, but I'm not the gatekeeper (that would be Sakari or
-> >> Laurent), and I'm just expressing my views based on the lenses I've
-> >> encountered.
-> >> All of my lenses have a single drive for focus, a single drive for
-> >> zoom, and where there are multiple elements they are all connected
-> >> mechanically. Your setup sounds far more complex and is likely to need
-> >> a more extensive driver, but it'd be nice to not unnecessarily
-> >> overcomplicate the interface.
-> > 
-> > Could we also have a driver that uses these new controls?
-> 
-> If you are referring to the driver for our custom lens controller, then
-> I have to say that it is under development and simply not ready for
-> release yet. Also, the decision has not yet been made whether or not
-> this will be an open-source driver.
-> 
-> A different approach could be the adaptation of the vimc-lens driver,
-> which currently only supports FOCUS_ABSOLUTE. But this would raise
-> several implementation questions and at least for me this would be a
-> nontrivial task.
-> 
-> Is it required to have a driver for this interface (in the sense that
-> the patches cannot be accepted otherwise)?
 
-That has been traditionally required, and a virtual driver isn't usually
-considered enough. There are at least two reasons for this. The first one
-being that if the driver isn't reviewable and targetting upstream it may be
-difficult to figure out whether the interface changes are the right ones
-for that driver. This is perhaps a lesser concern here. Secondly, there is
-also unwillingness to add interface elements that might never be supported
-by the kernel itself --- this is effectively just dead code.
+在 2023年04月19日 10:10, Huacai Chen 写道:
+> Hi, Tianrui,
+>
+> On Mon, Apr 17, 2023 at 6:00 PM Tianrui Zhao <zhaotianrui@loongson.cn> wrote:
+>> Enable loongarch kvm config and add the makefile to support build kvm
+>> module.
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Link: https://lore.kernel.org/oe-kbuild-all/202304131526.iXfLaVZc-lkp@intel.com/
+>> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+>> ---
+>>   arch/loongarch/Kbuild                      |  1 +
+>>   arch/loongarch/Kconfig                     |  2 ++
+>>   arch/loongarch/configs/loongson3_defconfig |  2 ++
+>>   arch/loongarch/kvm/Kconfig                 | 38 ++++++++++++++++++++++
+>>   arch/loongarch/kvm/Makefile                | 22 +++++++++++++
+>>   5 files changed, 65 insertions(+)
+>>   create mode 100644 arch/loongarch/kvm/Kconfig
+>>   create mode 100644 arch/loongarch/kvm/Makefile
+>>
+>> diff --git a/arch/loongarch/Kbuild b/arch/loongarch/Kbuild
+>> index b01f5cdb27e0..40be8a1696f9 100644
+>> --- a/arch/loongarch/Kbuild
+>> +++ b/arch/loongarch/Kbuild
+>> @@ -2,6 +2,7 @@ obj-y += kernel/
+>>   obj-y += mm/
+>>   obj-y += net/
+>>   obj-y += vdso/
+>> +obj-y += kvm/
+>>
+>>   # for cleaning
+>>   subdir- += boot
+>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+>> index 7fd51257e0ed..f9beeb2e0cc9 100644
+>> --- a/arch/loongarch/Kconfig
+>> +++ b/arch/loongarch/Kconfig
+>> @@ -148,6 +148,7 @@ config LOONGARCH
+>>          select USE_PERCPU_NUMA_NODE_ID
+>>          select USER_STACKTRACE_SUPPORT
+>>          select ZONE_DMA32
+>> +       select HAVE_KVM
+> Use alpha-betical order, please.
+>
+> Huacai
+Thanks, I will move it to the suitable place.
 
-Also cc Hans and Laurent.
+Thanks
+Tianrui Zhao
+>>   config 32BIT
+>>          bool
+>> @@ -588,3 +589,4 @@ source "drivers/acpi/Kconfig"
+>>   endmenu
+>>
+>>   source "drivers/firmware/Kconfig"
+>> +source "arch/loongarch/kvm/Kconfig"
+>> diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
+>> index e18213f01cc4..c99520374aef 100644
+>> --- a/arch/loongarch/configs/loongson3_defconfig
+>> +++ b/arch/loongarch/configs/loongson3_defconfig
+>> @@ -63,6 +63,8 @@ CONFIG_EFI_ZBOOT=y
+>>   CONFIG_EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER=y
+>>   CONFIG_EFI_CAPSULE_LOADER=m
+>>   CONFIG_EFI_TEST=m
+>> +CONFIG_VIRTUALIZATION=y
+>> +CONFIG_KVM=m
+>>   CONFIG_MODULES=y
+>>   CONFIG_MODULE_FORCE_LOAD=y
+>>   CONFIG_MODULE_UNLOAD=y
+>> diff --git a/arch/loongarch/kvm/Kconfig b/arch/loongarch/kvm/Kconfig
+>> new file mode 100644
+>> index 000000000000..8a999b4c0232
+>> --- /dev/null
+>> +++ b/arch/loongarch/kvm/Kconfig
+>> @@ -0,0 +1,38 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +#
+>> +# KVM configuration
+>> +#
+>> +
+>> +source "virt/kvm/Kconfig"
+>> +
+>> +menuconfig VIRTUALIZATION
+>> +       bool "Virtualization"
+>> +       help
+>> +         Say Y here to get to see options for using your Linux host to run
+>> +         other operating systems inside virtual machines (guests).
+>> +         This option alone does not add any kernel code.
+>> +
+>> +         If you say N, all options in this submenu will be skipped and
+>> +         disabled.
+>> +
+>> +if VIRTUALIZATION
+>> +
+>> +config KVM
+>> +       tristate "Kernel-based Virtual Machine (KVM) support"
+>> +       depends on HAVE_KVM
+>> +       select MMU_NOTIFIER
+>> +       select ANON_INODES
+>> +       select PREEMPT_NOTIFIERS
+>> +       select KVM_MMIO
+>> +       select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+>> +       select HAVE_KVM_VCPU_ASYNC_IOCTL
+>> +       select HAVE_KVM_EVENTFD
+>> +       select SRCU
+>> +       help
+>> +         Support hosting virtualized guest machines using hardware
+>> +         virtualization extensions. You will need a fairly processor
+>> +         equipped with virtualization extensions.
+>> +
+>> +         If unsure, say N.
+>> +
+>> +endif # VIRTUALIZATION
+>> diff --git a/arch/loongarch/kvm/Makefile b/arch/loongarch/kvm/Makefile
+>> new file mode 100644
+>> index 000000000000..2335e873a6ef
+>> --- /dev/null
+>> +++ b/arch/loongarch/kvm/Makefile
+>> @@ -0,0 +1,22 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +#
+>> +# Makefile for LOONGARCH KVM support
+>> +#
+>> +
+>> +ccflags-y += -I $(srctree)/$(src)
+>> +
+>> +include $(srctree)/virt/kvm/Makefile.kvm
+>> +
+>> +obj-$(CONFIG_KVM) += kvm.o
+>> +
+>> +kvm-y += main.o
+>> +kvm-y += vm.o
+>> +kvm-y += vmid.o
+>> +kvm-y += tlb.o
+>> +kvm-y += mmu.o
+>> +kvm-y += vcpu.o
+>> +kvm-y += exit.o
+>> +kvm-y += interrupt.o
+>> +kvm-y += timer.o
+>> +kvm-y += switch.o
+>> +kvm-y += csr_ops.o
+>> --
+>> 2.31.1
+>>
 
-> 
-> > The controls themselves appear reasonable to me as well. I guess there are
-> > changes to be made based on the discussion?
-> 
-> I'd summarize that whether or not the status controls are compound
-> controls of the type V4L2_CTRL_TYPE_LENS_STATUS is the open question.
-> 
-> As a potential follow-up question I recently asked myself if the struct
-> v4l2_ctrl_lens_status should contain trailing reserved bytes for future
-> extension (no idea, though, what this could be).
-> 
-> Alternatively, we could come up with "V4L2_CID_FOCUS_CURRENT (integer)"
-> for the current position and "V4L2_CID_FOCUS_STATUS (bitmask)" (and add
-> further controls when they are needed. Here, we lose atomicity but maybe
-> this can be ignored. One could assume that all relevant controls are
-> read out with a single ioctl which provides at least some level of
-> atomicity.
-
-There might be something that could be done in the control framework to
-address this. But it's not something that can be expected to happen soon.
-
-I'd perhaps keep them separate, not to make it a compound control just for
-the access reason. But I certainly don't have a strong opinion about it.
-
-> 
-> Any comments and/or recommendations to this open question would be much
-> appreciated.
-> 
-> Other review comments will be incorporated in the next iteration of this
-> series as well, but they are quite straightforward.
-
--- 
-Kind regards,
-
-Sakari Ailus
