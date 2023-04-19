@@ -2,94 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E246E810A
+	by mail.lfdr.de (Postfix) with ESMTP id A85686E8109
 	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbjDSSNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
+        id S233604AbjDSSNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233597AbjDSSNZ (ORCPT
+        with ESMTP id S233543AbjDSSNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Apr 2023 14:13:25 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E090F93CD;
-        Wed, 19 Apr 2023 11:13:23 -0700 (PDT)
-Received: from localhost (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 74CEC6603278;
-        Wed, 19 Apr 2023 19:13:22 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681928002;
-        bh=TQcB5X4iZIViJGyWOJ/d+KxnISkUh4MekvbHwYmTdXk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EPHgdn9xYEw+TX61HqfarA0k01TqnECySqCCmWkz3UmAaDCrMvYF6LjC8aB4T5qck
-         1oKz31mHEYnIUdMTn0BHWz1C40TL9BZL286XofQrvMK3/qgIBFad5UEtATGU9CNjHy
-         U1qVrKOyLM6ivpzWQUWxiHvZmkpc+xbjPy9OZQjOR6xGTnGa2MfRsLhBA3FItQz33b
-         Fm0LlYDAMHqq1CKtsji1uSBrVW1OfQRvSaSFZ6cJeDU7TLQKw4PbD2uvRXQp9Rj6WN
-         pABD7bQuKmdlu7nl0/Do1gB8jd7SODIZzjd9YqV+U5vbmFFZAsxluiad9ySuWaU63J
-         X66EgPO5uW9fA==
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sugar Zhang <sugar.zhang@rock-chips.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Johan Jonker <jbx6244@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH v3 3/3] arm64: dts: rockchip: Add rk3588 timer
-Date:   Wed, 19 Apr 2023 21:13:09 +0300
-Message-Id: <20230419181309.338354-4-cristian.ciocaltea@collabora.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230419181309.338354-1-cristian.ciocaltea@collabora.com>
-References: <20230419181309.338354-1-cristian.ciocaltea@collabora.com>
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8360B86A6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 11:13:22 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-94f0dd117dcso4540166b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 11:13:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681928000; x=1684520000;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rE6/qx7CvlPWxm3WAA8STmrK00/5TaEUc8FrjlCK5Gw=;
+        b=UMQTOuY8fYpH74N3z0PciOZRGA8e7QfKPrJrhWY8lU37dYwFFViKIcj/3gRe8tunNY
+         60QxGsIfRsIyNL7drZoxKX8I60ktSdPMJI7wTWEv7t4JbYcOjzMerBJBWYtPdbagtCjG
+         21zhH+g2Gb08GJISV65Ev5avU81+DfUFZyJBJnITFq8vSvrxtiMyc9Mkh/wNGbyaH0aD
+         yioK2U4X2H2YPjfxVTxK9oMJhvSQ7b0xBT2YOSTmmLrJcssiZQeckqf84Q6T7+Xuf92S
+         06gwMSG8J3KVC5SROg73D52EZWQF4w1ciXsK90r3vQGtSEyQZJc14siQ7vlb9TT70Z31
+         VSww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681928000; x=1684520000;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rE6/qx7CvlPWxm3WAA8STmrK00/5TaEUc8FrjlCK5Gw=;
+        b=EgV33kMJW0G1FGoFeKYM/zJ2STEpTn3Ff3ItrB1UWQMP5YCdC5gBCZlH4CDPTwQ2/a
+         LRVWEDPd1Az+zam/BCmHPgptjRaOHaPtelVk0zfqkReQcPZs97uAtfdWPvs0w6ZKrjoa
+         /7nsv9tRjtJOK3qn0zxxYpEGze10CvKpiDOnxCrxoPUsCwPKITLnARfB4DnmIp03M4o0
+         PMzUuEkwpi6b9U8Zg2DhpoJoYI4weiUwTE5wC24o+FO5p6lFyTWDGinaBJ327cx/jZDt
+         27OaPQsuL1qauf6a7SgxN4rbkTQGQtXFlqIJM8GIrTVCgvk2WfauF/pQ0iUV/hNJEf3j
+         PM6g==
+X-Gm-Message-State: AAQBX9clnKVNUWH6GzbmdFdVVA65WquCBSC6Abc9fmdizsY/HJDr3Ppr
+        NgKB2dDBX1GLMLhsDn0Vz56xBw==
+X-Google-Smtp-Source: AKy350Yh3kVFzvB+Rb4D6qnkoCW5liXK5d8vO2KzvC76eHuvw0U4VneErqKYBsVxGpj7Y+FuvEXvRA==
+X-Received: by 2002:a50:ed18:0:b0:504:8905:5218 with SMTP id j24-20020a50ed18000000b0050489055218mr6853084eds.1.1681928000490;
+        Wed, 19 Apr 2023 11:13:20 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:b7d8:d88b:1fac:c802? ([2a02:810d:15c0:828:b7d8:d88b:1fac:c802])
+        by smtp.gmail.com with ESMTPSA id t18-20020aa7d4d2000000b005083db60635sm641202edr.34.2023.04.19.11.13.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 11:13:20 -0700 (PDT)
+Message-ID: <1b569c7c-3ee5-54e8-c158-f7900eaa246a@linaro.org>
+Date:   Wed, 19 Apr 2023 20:13:18 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v13 1/4] dt-bindings: i2c: pca954x: Correct interrupt
+ support
+Content-Language: en-US
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Peter Rosin <peda@axentia.se>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230418103430.966278-1-patrick.rudolph@9elements.com>
+ <20230418103430.966278-2-patrick.rudolph@9elements.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230418103430.966278-2-patrick.rudolph@9elements.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DT node for Rockchip RK3588/RK3588S SoC timer.
+On 18/04/2023 12:34, Patrick Rudolph wrote:
+> Only some of the PCA954x compatible ICs have interrupt
+> capability, but the binding advertises it on all ICs.
+> 
+> Sync the dt-binding with the driver and only advertise it on:
+>  - nxp,pca9542
+>  - nxp,pca9543
+>  - nxp,pca9544
+>  - nxp,pca9545
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
----
- arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-index 657c019d27fa..767084a1ec43 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-@@ -1400,6 +1400,14 @@ i2c5: i2c@fead0000 {
- 		status = "disabled";
- 	};
- 
-+	timer0: timer@feae0000 {
-+		compatible = "rockchip,rk3588-timer", "rockchip,rk3288-timer";
-+		reg = <0x0 0xfeae0000 0x0 0x20>;
-+		interrupts = <GIC_SPI 289 IRQ_TYPE_LEVEL_HIGH 0>;
-+		clocks = <&cru PCLK_BUSTIMER0>, <&cru CLK_BUSTIMER0>;
-+		clock-names = "pclk", "timer";
-+	};
-+
- 	wdt: watchdog@feaf0000 {
- 		compatible = "rockchip,rk3588-wdt", "snps,dw-wdt";
- 		reg = <0x0 0xfeaf0000 0x0 0x100>;
--- 
-2.40.0
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+I really hope this was tested this time.
+
+Best regards,
+Krzysztof
 
