@@ -2,163 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216586E8505
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 379046E84DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233215AbjDSWeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 18:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
+        id S232070AbjDSW1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 18:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233254AbjDSWeD (ORCPT
+        with ESMTP id S233606AbjDSW0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 18:34:03 -0400
-Received: from sonic307-7.consmr.mail.ir2.yahoo.com (sonic307-7.consmr.mail.ir2.yahoo.com [87.248.110.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A6E30E9
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:33:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1681943520; bh=QgwEvaxznVhbwwwaHbod/jvh/kKZgXY3lH4q0rCY3ds=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=VwI0AQbt4Q21SVAwfqoq19LalICgTCbX2sgLECExRwMLEHwxowDFT6xzfQvYzdkRXbk1pGHIO007UVxsqKF8HyIPf1LGjg0NFMfaBmhNIQlifY4t0WsdF1tYMpJmWrLiqGd9rK2eQYl4KTrn0gvMEIyyzqKbR5vT4nKutyCbq0XZpp/ybaaucqqQsZZkDZjcZBfmrfkYr/MNTVefezzPSq+LxLYlVuf4dNkoEDtoq1OYwPWj9CGJas+tDJJiLw5hZIow4Y6qO1MOfCx2QqV5CuprBz7G+4FTlTUDK9YuZu9CJt+ttSFfjiKeMbvArEDpEPBy4mYPNM5bdKYPgu8Viw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681943520; bh=fEJRsbrGtVafMywGT85HUetpJNrzOlG6WcV6QruQtH2=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=of0Ao8iE4VdHcab7LaWXt2AUaHhDsSJ0SGD0i+Qp9VBhnKluva/2YM9gFEyCJIDZvJQ3ZoASQDlvfkNP5cvHQIxios9r38UmOrK88E6KmR+1lwnFG9SWdaw5wBzhe68cspHBgpAq0Jf16bGvkJ7V0CgydteZ5TYo2jutqeWP+tzcPpbuxkGYJSk0WBovjMoiEjCE7krIn81hyC66XXOnvsFws0MfwGRZMQA5eBwYfWTFuC/R+2x5+7/Q8Ky5qOs86RZPWINoo7onGyjhyNriIQcJTdKg2LuMT/oLAg0HR7RqnUnIrSrL742B44tIWeRWvDlUyDtNLvDV+LlTwFy5Zw==
-X-YMail-OSG: VxESa2YVM1l1UBi7CnVMMdeUyMabjI2yhujSfxTI15FY8xVT9nXwAEQ2N41OhRg
- EL.LdobvcowL3ITCt2mH_WldyMsB9B9ctIbnYUEauVKmyCb9c3HOEXOJjnqJMKE1V3H2Ulqg5bVy
- .XMcr6d3kKLi5Fn142rDiJHSLI0qzwMuT8Y6T.m7GRn4kGQwQ_l3B7TH47MAA8hH26TVRYrYbxa4
- HFcef6KaKUwoaVvn_9zv3d0pb7yZ0N_4qoL9bPY0RrFet4mt8Uquv3xP6JdCmbImHrec0_08_XVW
- 80jXdeLetLq0nO4EuVvw1TZQIQ8MoZWL8YEMPuOhbkqbMPBKvB5lvfZxbTKn9TtyTajRiL4JXyL.
- nVmG1d6uHdCCv06xEOQ5AWL5H9UrV_XZ.Qm10ixKTnbtl9b1z1HaAWPlm9tUJocjwyTmbXiZqf.0
- lZf1vfySnAYtXFvUi.FyzGPSlfsO770.7mK4bH1fb18CbXBkidflUFKsykRgliwr12lCIia9ZlB6
- AGYF1iqWgy_k7neFDhr6FocV2fB5M_2u7r3NqVTW7q8.wI3o7WrPjm4c3_ZDLvXmLDOrVNgnnLKf
- FyXVsHr.OJyASBSGGRA1gatXmS7zSwLDh4egK3ZRRIX1ucS_6ZIJDlQ1fdj1AaQsnNnx..t7XXhf
- 1KZ7o7bz9Q6m6lMJfPkS5AN1CZ9gDd0AXZZ8F3lmVQjjRjzUwnkpOtU1I70tCMPl8EITXNdUtZCf
- TdBAqf5eQTHgWHcKnqzbP_Z18PBISYMyQWU4oOZ2ADWAmCtHRFHFADy3jm0F2cyjpxO9gQ1lAi1b
- umhGfuoJHHNoY9BdMRzT2dI_3D4fW3QMbQuy5clMDwvuq1ZThxKR.5eu0fOVimKfTRhRbCFqAlva
- YLwIVSVnNVSUTbtS2VepiX_Fu8FF77LCUn508HgtpDm1Fy7Yc4yvatkYV6Zalyq3ZRxRcXvJcO0X
- X0RaKDOAVTM4LHsuWpA_KpopSVxxCVWLOaKK419w7LeILxdMtS62zK6VKdmsVf516gnnhOSIZZy1
- lslymiUCony4TKa47sragF8rMP1mVvfw6zoe9e._E.Bgnc7CYloW8aHABWbJKJiTwz5y2M4ll11E
- aDehcX6D7jG.QUw2RUbO_9_.SdaddRhcbovYrXr4KakXZSGjhbGSnLybZPwSs3xEQq_VKBbQzv0j
- NK1_ECBxWqytqk3cEcCVcmJkOwAsDCn1R645K.9xGaqpjbm6y4n7Znq6jhKLWOptxRg40gsgQsMP
- ZqPT51QRCLzU1rJOywZIQ7RZruXVv.BXAqeym4rtINfIG6pLQb3OB1lD4mjaOypLouITexynJTzc
- 4H26ZJnQT7_Ch2ZB5UwyxMag3mOy.KOJhybeqRWa0.GEu5uKjR45Pcg1gVAYoRA8gBei6iTg8b9b
- fwGOS2sOFo2opWnx2NaN7SCZczx5xv7Dfct3Sr1k52rrIrCSbT2WKTxXXsNF6G1wocx47EMMvCL5
- PUmoa8_1tmQ4H3VyPdhMbg2MedMNQrqww1.vl6tPKLBpbIvMsgCcEW3R.AhM03Z6koVDXv2FXc7U
- GlopzlDyUb_bNhybuavz1bCF7kXqgrKkIEthT1x38P5Z9hg.FaV6hjhfWsNMBpet9vSAdEKqWvL5
- QeOmMJPiXz1OUYVo0aa3DUj3.3rXk1t8mh4t8EH69QavAbgswPIfCSjldRESfxjAHDVmAIYqcBE7
- f6cfKBazKUZt_RJuHDa82FMsxcpT5XLWaf49XqQxnylVWb6eXkZX98Kmurh0fwbTRzUyEEy_4eHj
- cnLQ_gtHm82izJqlffIGWhxE5p7XYnaD9gI.hV2h3J6lOs5aKXBRc.EWJfQsxbF6rt1..GfjqFYY
- DOjF1DUJPjQKVz7uWKtxwgIJhk8SVwGOr0Gfcf4jJqfJucOcUEbUh0_6CPWPQrkrIJMt2vbmFbjk
- gF9Wbskeyk_3qDO_VPGyTXkk8RJ10eC3GInssPsXFbXzJyAfrWucI6orJa2qC1OJpqPlXGKjdV9J
- wpX9qt0lVyzty0jT4HcVKnpIGBCD.bUI7uSNPjVvOl1SZbF_u6eL.8Q23HDy_neMrI7xM1KiaaMY
- A7DEPos7sr2XvgALthc2N9f24YYN96m_ticET7IduPGToB01Z5p5e.8YWz9M1RNXNpHjSqopU9YR
- 4RRw2PPzJUo21iRzIbmVgsazpNfOCWCbdr44W3DClOfdG.wm3KIyzb6MIQmKxgE8GtRaBMqjj04h
- zm4BwTbpuCtG9BHsESXkht6rJlEtpC77dRD2xLKl3ERbqbcAWlllfNoguaVI8plqEi2uwOsdYChC
- _0sWpVxBE_lESUb5R68_MZ7Gilf0DsUsw
-X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: dc59d37e-63ac-409d-9792-67e4d82a1f8b
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ir2.yahoo.com with HTTP; Wed, 19 Apr 2023 22:32:00 +0000
-Received: by hermes--production-ir2-74cd8fc864-jl5bm (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 318f31df962c705776d30bee69907fb4;
-          Wed, 19 Apr 2023 22:21:27 +0000 (UTC)
-Message-ID: <b044de68-e9d7-ae23-a2da-96df78f95821@rocketmail.com>
-Date:   Thu, 20 Apr 2023 00:21:26 +0200
+        Wed, 19 Apr 2023 18:26:49 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21497EF3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:25:23 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-63b4dfead1bso379563b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:25:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681943042; x=1684535042;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9TyRM4nmtqohXFcwttydo/M979fjFpXSQwmt1QhEq7M=;
+        b=o6BPf3mJiKmzHDTQduMjlUPZ224ynCQVPjqAxFiYl/xtjQhTUbKlM14FTeWvmNMg/L
+         l0DrouIryk3u/EqI3byzcjbrgz+G8kwOXpTd0QZK3d3sEG9AOlbIPNTOq+DH6PD+Epo3
+         zKe9QwsowdLs42oiVJKkIvYtT/MItZZgmSKR5C8Ea2x67PbxuR6leIH+i/b17jseR8bM
+         VBwwA8Z195NKwe50pkO3mLwwTJ4OtkL6UCepduj0leLb4C5T7elpUTzmBMMBASJjF094
+         bjxf9OSnAjUqLeAmsOa6EGQ0N3vUcmm6xctjwRZKzfkPZSzkZvKP3toboLwrlJYiGk9k
+         5odA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681943042; x=1684535042;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9TyRM4nmtqohXFcwttydo/M979fjFpXSQwmt1QhEq7M=;
+        b=H53PX1aDfcL8EfvuTp9l+S0m0i56fY/THg85rU0F4Tn1f4mjxkd++RIDKi0fVcnanD
+         VCZHyCiIF4WnVp19IevFAIMWYOpdWnGMChG95H8JC2fzQYQv7ag9pHBgX1zxOtobrl1Y
+         cwk+aKWO+W6TEnTe/UAP6yC4u2oa3P2PyvyE6LmsL1LFvfv17iOWlr9hFLT1nJ+f7+K4
+         9XlBggR0uny/6c3L1E8DW7RJ90a311/z8vpl52Kuvx3po2GRCL8i//0hIfJzxsbwQ2QR
+         bhgaRcV1an5ICM2dI0tNZo5+CLYg+Q3at9bPAWPaC59KvPz88dyEk17icAxNmMnU9Z3y
+         Kw/g==
+X-Gm-Message-State: AAQBX9fOzOmWEfVQVcFevjTl6GhLS88Vf9p2NYWou/OdmOeUZs8/r2cQ
+        23vyxJLPL6mUI869c4mzoLGe6OYO7WuRJ3frh2Y=
+X-Google-Smtp-Source: AKy350Zx1dYLas0QCJpvJzHJgHFaFLbK94X4eX2SqTOZj0B0MjJMPmSVHt7a/giQTdAZWOuX7bdQng==
+X-Received: by 2002:a17:902:7244:b0:1a2:37fc:b5e2 with SMTP id c4-20020a170902724400b001a237fcb5e2mr5966265pll.7.1681943042538;
+        Wed, 19 Apr 2023 15:24:02 -0700 (PDT)
+Received: from atishp.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id e4-20020a170902744400b001a681fb3e77sm11867810plt.44.2023.04.19.15.24.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 15:24:02 -0700 (PDT)
+From:   Atish Patra <atishp@rivosinc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atishp@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
+        abrestic@rivosinc.com, Samuel Ortiz <sameo@rivosinc.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Rajnesh Kanwal <rkanwal@rivosinc.com>,
+        Uladzislau Rezki <urezki@gmail.com>
+Subject: [RFC kvmtool 00/10] RISC-V CoVE support
+Date:   Wed, 19 Apr 2023 15:23:40 -0700
+Message-Id: <20230419222350.3604274-1-atishp@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 5/9] regulator: rt5033: Change regulator names to
- lowercase
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <cover.1681646904.git.jahau@rocketmail.com>
- <d4218947e354aee45589acb1060ce41727a26750.1681646904.git.jahau@rocketmail.com>
- <19ceb0f6-1225-c8cb-1469-3d657e66d171@linaro.org>
- <e6cc8658-fe93-c2c0-603e-093cdafb3cca@rocketmail.com>
- <f80fcbeb-f916-63da-a5c3-f80f6315f3e0@linaro.org>
-Content-Language: en-US
-From:   Jakob Hauser <jahau@rocketmail.com>
-In-Reply-To: <f80fcbeb-f916-63da-a5c3-f80f6315f3e0@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21365 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+This series is an initial version of the support for running confidential VMs on
+riscv architecture. This is to get feedback on the proposed COVH, COVI and COVG
+extensions for running Confidential VMs on riscv. The specification is available
+here [0]. Make sure to build it to get the latest changes as it gets updated
+from time to time.
 
-On 19.04.23 10:40, Krzysztof Kozlowski wrote:
-> On 18/04/2023 23:24, Jakob Hauser wrote:
->> On 16.04.23 20:32, Krzysztof Kozlowski wrote:
->>> On 16/04/2023 14:44, Jakob Hauser wrote:
->>>> Lowercase is preferred for node names.
->>>
->>> This will break all existing users. In-tree and out-of-tree. Where is
->>> the binding update?
->>
->> In my reply to Rob's comments in v1 I was pointing out that this will
->> affect an existing driver. There was no reaction.
->>
->> As far as I can see, there is no in-tree usage yet. Though I can't tell
->> about out-of-tree usage. Although if there is, adding the rt5033-charger
->> driver might already causes the need for changes.
->>
->> Well, to stay on the safe side, I'll drop this patch in v3 and will
->> change the bindings (patch 9) back to uppercase.
-> 
-> Your v1 binding patch did not explain that you document existing ABI, so
-> you got comments like for a new binding. This is not really new binding,
-> is it?
+We have added a new option, `--cove-vm` to the `run` command to mark the VM as
+a confidential VM.
 
-The bindings for the mfd and regulator are new, even though the drivers 
-are already existing. Sorry for not being clear on this in v1. This is 
-due to historic reasons of the old patchset, more information on that 
-further down.
+The host including the kernel and kvmtool, must not access any memory allocated
+to the confidential VM. The TSM is responsible for providing all the required
+information to handle faults and emulate devices.
 
-The current situation in the mainline kernel is as follows.
+The series adds support to manage CoVE VMs, which includes:
+   * Configuration
+   * Creation of CoVE VM and VCPUs.
+   * Load initial memory images using measurement ioctls.
+   * Virtio support for CoVE VMs.
 
-drivers
--------
-rt5033:            drivers/mfd/rt5033.c
-rt5033-regulator:  drivers/regulator/rt5033-regulator.c
-rt5033-charger:    not existent
-rt5033-battery:    drivers/power/supply/rt5033_battery.c
-rt5033-leds:       not existent
+We don't yet support APLIC and thus no line based interrupts. So we use pci
+transport for all the virtio devices. As serial and rtc devices are only mmio
+based so we don't yet support those as well.
 
-bindings
---------
-rt5033:            not existent
-rt5033-regulator:  not existent
-rt5033-charger:    not existent
-rt5033-battery:    .../bindings/power/supply/richtek,rt5033-battery.yaml
-rt5033-leds:       not existent
+virtio for the CoVE enforces VIRTIO_F_ACCESS_PLATFORM flag to force SWIOTLB
+bounce buffers in confidential linux guest. The SWIOTLB buffers are shared
+with the host using share/unshare calls in COVG extension. Thus host can
+directly write to those buffers without TSM involvement.
 
-The reason for that discrepancy:
-RT5033 mfd, regulator and fuelgauge drivers were applied but charger & 
-documentation didn't make [1]. They were submitted again but it phased 
-out at that point, last known state is [2]. The LEDs are also a phased 
-out patchset [3]. The fuelgauge binding was added not so long ago by 
-Stephan [4].
+This series depends on few RISC-V series which are not yet upstream.
 
-[1] 
-https://lore.kernel.org/all/1421899601-19327-1-git-send-email-beomho.seo@samsung.com/T/#t
-[2] 
-https://lore.kernel.org/lkml/1425864191-4121-1-git-send-email-beomho.seo@samsung.com/T/#t
-[3] 
-https://lore.kernel.org/linux-leds/1448446948-13729-1-git-send-email-ingi2.kim@samsung.com/T/#u
-[4] 
-https://lore.kernel.org/linux-devicetree/20210517105113.240379-1-stephan@gerhold.net/T/#m197b5719a5d37b17ba4ff9f3b3ff4bd4efcda71e
+* AIA support[1]
+* SBI DBCN extension[2] 
 
-Kind regards,
-Jakob
+It also reuses the arch specific virtio host flag hook from CCA series[4].
+
+The patches are also available here:
+
+	https://github.com/rivosinc/kvmtool/commits/cove-integration-03072023
+
+The corresponding linux patches are also available here:
+https://github.com/rivosinc/linux/tree/cove-integration
+
+Running a CoVE VM
+------------------
+
+Extra options needed:
+--cove-vm: Launches a confidential VM.
+--virtio-transport: We don't yet support MMIO devices so we need to
+                    force virtio device to use pci transport.
+
+
+ $ lkvm run						\
+	 --cove-vm					\
+	 --virtio-transport=pci                         \
+	 <normal-VM options>
+
+The details instructions can be found at [5]
+
+Links
+============
+[0] CoVE architecture Specification.
+    https://github.com/riscv-non-isa/riscv-ap-tee/blob/main/specification/riscv-aptee-spec.pdf
+[1] https://github.com/avpatel/kvmtool/tree/riscv_aia_v1
+[2] https://github.com/avpatel/kvmtool/tree/riscv_sbi_dbcn_v1
+[4] https://lore.kernel.org/lkml/20230127113932.166089-28-suzuki.poulose@arm.com/
+[5] https://github.com/rivosinc/cove/wiki/CoVE-KVM-RISCV64-on-QEMU
+
+Atish Patra (7):
+riscv: Add a CoVE VM type.
+riscv: Define a command line option for CoVE VM
+riscv: Define a measure region IOCTL
+riscv: Invoke measure region for VM images
+riscv: Do not create APLIC for TVMs
+riscv: Change initrd alignment to a page size
+riscv: Define riscv specific vm_type function
+
+Rajnesh Kanwal (3):
+riscv: virtio: Enforce VIRTIO_F_ACCESS_PLATFORM feature flag.
+riscv: Don't emit MMIO devices for CoVE VM.
+riscv: cove: Don't emit interrupt_map for pci devices in fdt.
+
+include/linux/kvm.h                 |  4 ++
+riscv/aia.c                         | 31 +++++++----
+riscv/fdt.c                         | 38 +++++++------
+riscv/include/asm/kvm.h             |  6 +++
+riscv/include/kvm/kvm-arch.h        |  4 +-
+riscv/include/kvm/kvm-config-arch.h |  4 +-
+riscv/kvm.c                         | 51 +++++++++++++++++-
+riscv/pci.c                         | 83 +++++++++++++++--------------
+8 files changed, 152 insertions(+), 69 deletions(-)
+
+--
+2.25.1
+
