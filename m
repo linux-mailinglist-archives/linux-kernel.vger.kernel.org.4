@@ -2,184 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B652F6E7059
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 02:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245A86E7060
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 02:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbjDSANv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 20:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
+        id S231652AbjDSAUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 20:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjDSANt (ORCPT
+        with ESMTP id S229597AbjDSAT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 20:13:49 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE80AD3F
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 17:13:13 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3ee6c339cceso89605e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 17:13:12 -0700 (PDT)
+        Tue, 18 Apr 2023 20:19:59 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085475B9D;
+        Tue, 18 Apr 2023 17:19:58 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54f6a796bd0so365566557b3.12;
+        Tue, 18 Apr 2023 17:19:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681863191; x=1684455191;
+        d=gmail.com; s=20221208; t=1681863597; x=1684455597;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=30wOLT4ycxLcYb5XVz+B1y4IKVwXHj38OMrB1JGE1Do=;
-        b=1ZBDoDBbvxJcpBbcIzz4pmnQnXkD6tcGj4GAP2nfbE1cDOy57IgYRJ7WHxVoDMHTZX
-         uUkNWz+Hyg/636iN5Dm63t/7YoX/16+OHXoNrqZArPPOolH7UwFa8tFM7LmBdxyTk8G0
-         owH20Iq5th5iK0QGv4nwOrXpabGnH2oi4K76HigHNzmvcMfaqOoHf5p+rI4SZDFb31Re
-         RArXiZgukoxLScKEinUPQZi6/kAZ8GkxD0T9ZlVnd4+7UjxoeL1zuT8X0oHQi+1KIw+T
-         aXWMGw08S3TDU2ltRaU9duiGLJfbYwUk/3hqeUcl+By9BekIKiNf718n3VOwBRcrYZa7
-         zbGA==
+        bh=vLuO0FT5ni9AWAkx5yPjYHqfEIyb0XFRqoQb1KsSeWo=;
+        b=S8BVArrwZ18B3H56hONoNjBqSY2GxUdofcqWqzJDOYmkUDgGj9IW9Fss+xIx24ZCkH
+         rWKWKRmOLpsNysUka+G3yQGMXlun/SmG15M859txABUKhY436kINzZCjVnYWXCndLvM4
+         8KHJOYNMZqXDxbtjVZZM4j1GHgZRjuLWqaGnqf9DY6jWHCfIOcFQ0TWDGxJ4w2OBlCG9
+         +JSdnkA9SIGgRIB5iqkgxNZ8A6iA/rheFVlWl6EFk9RcFCmKMMxW30OA4WDvr6Rym5YX
+         IJCZboifMX1RPOAQv9vwqjSmJmFipGblaFwRTXNZ/3pg3QqIN44HhZanluq4/gRMiX6b
+         fR7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681863191; x=1684455191;
+        d=1e100.net; s=20221208; t=1681863597; x=1684455597;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=30wOLT4ycxLcYb5XVz+B1y4IKVwXHj38OMrB1JGE1Do=;
-        b=PTXwFXWpnvNYBp9FePAosXD/QBFjWCKOC4Jt+6xz7rfOq7ZZaUecsRmcTNtwPbbwC7
-         ScU6q62m2+iNyhyvQuAdR51B2lV3+mcxTJ2ylfAeo9oFnKwmoXSdzXjF4E0I3FPrIBeq
-         +1TBRWJn/zE+3YUMMNY5s8yFjE2XGxyCCpXmm8IYbfm9/+gkcWA2ID1NNoMBVRFddSkk
-         H3IVv4NcKJBfIrmG+K/yeMN+aNHYDBtiLRE2IvIc4dcTAaUBCMPRBVYFpU7HnE3Jk1MD
-         i17jhD0UA0kV8VcN+1C+5ZZNkcmmA7d6p4/t3FyLyhGLxIaIu6Wxo8dEEINPtcz2hJ3u
-         Hcmg==
-X-Gm-Message-State: AAQBX9fvGAd+I6pwq9RUARnIPmiPV5uOPQboMgFuppz2JUUpBxstujgp
-        YGJlgKXhVl2aCpx43uMRTqcrb8ODmi1/xVlRbbw7qQ==
-X-Google-Smtp-Source: AKy350bBDW6TeMYpQ+Z29C2uptou80f2x8hInvfpMkEJEvHUxSspZ6TUxS6DR7FCSSVU1iWHJ2CGuKrCglKT0vPTHvE=
-X-Received: by 2002:a05:600c:1c27:b0:3f1:74cf:8563 with SMTP id
- j39-20020a05600c1c2700b003f174cf8563mr32957wms.5.1681863191071; Tue, 18 Apr
- 2023 17:13:11 -0700 (PDT)
+        bh=vLuO0FT5ni9AWAkx5yPjYHqfEIyb0XFRqoQb1KsSeWo=;
+        b=GxJ24GfShAisU4iWiRoZkUOBl9RbEHnWAhqCQaMB1qA5eSf37ZXVyKRs7KC4fv108L
+         gC7I0uxa2nHe3SSOV3lg8TQIi5zwURkeInuAUsvWJg5sRBepiiSiv65pE8j9Sbxoy/x7
+         jpw5bofUaeT9oD4e/6AFuNbdvqak77qnwz5QssuGRsShQKz9xlTKpZQ24UTchW6Jia37
+         VAdUEEWKDdsaFb/jxh8AzCbUbK8YQyXESYMHdFmhdkXmIYf75Od3zjrDSNMbcnZvgW2b
+         z0Yu7eFYJs4z/wdzX2lCas8Gdm2Yqs6yNAfmvjxt3Uxb/Sbnh11gjlKHNvcjQ5RA3kWF
+         BBgA==
+X-Gm-Message-State: AAQBX9eauiWnToI6D0RxF9iyqluxG/Ixe9O59kyaz9EyYb+ePbsi4fij
+        mJpjMlpsSuBj1vp+Wx0uwLE5ekGmVqfhjPiI6TEes56dCfI=
+X-Google-Smtp-Source: AKy350acuABH35eqRI4cUGE5NLDSP0MyKmWLUWy3oJ4G7KYUoSorueyUHRaoZPEgopF3hbuWqZbe4hQVaXr24b3Qtd0=
+X-Received: by 2002:a81:17d0:0:b0:552:ae41:50a2 with SMTP id
+ 199-20020a8117d0000000b00552ae4150a2mr693540ywx.21.1681863596964; Tue, 18 Apr
+ 2023 17:19:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230414051922.3625666-1-irogers@google.com> <56ac61a0-ccf0-210e-e429-11062a07b8bf@linux.intel.com>
- <CAP-5=fXz1vw48A2tWgcNDSZsnvnOO7_jA+py3p_Khi_igz0hJw@mail.gmail.com>
- <5031f492-9734-be75-3283-5961771d87c8@linux.intel.com> <CAP-5=fW2aAijt8tqydszQHQFmsfeQO2S0hb7Z27RtXxG4Zmm-w@mail.gmail.com>
- <ce92dd1b-23f6-ea52-a47d-fccc24fa20ea@linux.intel.com> <CAP-5=fWRy4NEqhB6-b98+m7SV5=oyBOMVuOHwmvKZCJuXcsQEg@mail.gmail.com>
- <d1fe801a-22d0-1f9b-b127-227b21635bd5@linux.intel.com> <CAP-5=fXCmKAUn24r0YYHaO63mabZCXae-hAT2WCtk+YYmvS9xg@mail.gmail.com>
- <99150cb1-fe50-97cf-ad80-cceb9194eb9a@linux.intel.com> <CAP-5=fXZSACj=kGM5t3pBHkQ-W1i0eJayAQ77_ToEp4zXWzJnw@mail.gmail.com>
- <ea899096-0599-f2a0-04a3-d90a3aa7d45d@linux.intel.com>
-In-Reply-To: <ea899096-0599-f2a0-04a3-d90a3aa7d45d@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 18 Apr 2023 17:12:55 -0700
-Message-ID: <CAP-5=fVVFjKgUGV8zVurd99BOhASQ9mMaZqOyw13PYLhZWpsOA@mail.gmail.com>
-Subject: Re: [PATCH v2] perf stat: Introduce skippable evsels
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1681863018-28006-1-git-send-email-justinpopo6@gmail.com>
+In-Reply-To: <1681863018-28006-1-git-send-email-justinpopo6@gmail.com>
+From:   Justin Chen <justinpopo6@gmail.com>
+Date:   Tue, 18 Apr 2023 17:19:46 -0700
+Message-ID: <CAJx26kUvry0pTKmuqmt4ZK+wFg9-bWpi871jsUJWmVBRw1wuEA@mail.gmail.com>
+Subject: Re: [PATCH net-next 0/6] Brcm ASP 2.0 Ethernet controller
+To:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     justin.chen@broadcom.com, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, opendmb@gmail.com,
+        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        richardcochran@gmail.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 2:51=E2=80=AFPM Liang, Kan <kan.liang@linux.intel.c=
-om> wrote:
+On Tue, Apr 18, 2023 at 5:10=E2=80=AFPM Justin Chen <justinpopo6@gmail.com>=
+ wrote:
 >
->
->
-> On 2023-04-18 4:08 p.m., Ian Rogers wrote:
-> > On Tue, Apr 18, 2023 at 11:19=E2=80=AFAM Liang, Kan <kan.liang@linux.in=
-tel.com> wrote:
-> >>
-> >>
-> >>
-> >> On 2023-04-18 11:43 a.m., Ian Rogers wrote:
-> >>> On Tue, Apr 18, 2023 at 6:03=E2=80=AFAM Liang, Kan <kan.liang@linux.i=
-ntel.com> wrote:
-> >>>>
-> >>>>
-> >>>>
-> >>>> On 2023-04-17 2:13 p.m., Ian Rogers wrote:
-> >>>>> The json TopdownL1 is enabled if present unconditionally for perf s=
-tat
-> >>>>> default. Enabling it on Skylake has multiplexing as TopdownL1 on
-> >>>>> Skylake has multiplexing unrelated to this change - at least on the
-> >>>>> machine I was testing on. We can remove the metric group TopdownL1 =
-on
-> >>>>> Skylake so that we don't enable it by default, there is still the
-> >>>>> group TmaL1. To me, disabling TopdownL1 seems less desirable than
-> >>>>> running with multiplexing - previously to get into topdown analysis
-> >>>>> there has to be knowledge that "perf stat -M TopdownL1" is the way =
-to
-> >>>>> do this.
-> >>>>
-> >>>> To be honest, I don't think it's a good idea to remove the TopdownL1=
-. We
-> >>>> cannot remove it just because the new way cannot handle it. The perf
-> >>>> stat default works well until 6.3-rc7. It's a regression issue of th=
-e
-> >>>> current perf-tools-next.
-> >>>
-> >>> I'm not so clear it is a regression to consistently add TopdownL1 for
-> >>> all architectures supporting it.
-> >>
-> >>
-> >> Breaking the perf stat default is a regression.
-> >
-> > Breaking is overstating the use of multiplexing. The impact is less
-> > accuracy in the IPC and branch misses default metrics,
->
-> Inaccuracy is a breakage for the default.
+> From: Justin Chen <justin.chen@broadcom.com>
+Woops, looks like I screwed up on some of my email addresses in the
+patch set. Will fix in v2 after first round of reviews.
 
-Can you present a case where this matters? The events are already not
-grouped and so inaccurate for metrics.
-
-> > if multiplexing
-> > is necessary on your Intel architecture. I believe TopdownL1 is more
-> > useful than either of these metrics and so having TopdownL1 be a
-> > default is an improvement. We can add a patch, as I keep repeating
-> > this is off-topic for this patch, to make it so that TopdownL1 isn't
-> > enabled on Intel CPUs pre-Icelake, but I would discourage this.
+Justin
 >
+> Add support for the Broadcom ASP 2.0 Ethernet controller which is first
+> introduced with 72165.
 >
-> We need the TopdownL1. We just don't need TopdownL1 in the perf stat
-> default when perf metrics feature is not available.
-
-Perf metrics is an Intel only Icelake+ feature. I suggest the simplest
-way to achieve this would be to remove the TopdownL1 metric group from
-all Intel metrics before Icelake. This will mean on these
-architectures the group TmaL1 will need using instead.
-
-Thanks,
-Ian
-
-> >
-> >> The reason we once added the TopdownL1 for ICL and later platform is
-> >> that it doesn't break the original design (a *clean* output).
-> >
-> > Right, and in 6.3-rc7 the aggregation of counts was broken because of
-> > duplicated counts and hard coded metrics (I did a last minute partial
-> > fix). In perf-tools-next aggregation was fixed and we switched to the
-> > json metrics, that are accurate and up-to-date with the latest TMA
-> > metrics, so that we wouldn't need to maintain a duplicate code path.
-> > What keys enabling TopdownL1 in 6.3 is the presence of topdown events
-> > whilst in perf-tools-next it is the presence of TopdownL1 metric
-> > group, as this is a more consistent approach and had first been
-> > proposed by ARM.
+> Add support for 74165 10/100 integrated Ethernet PHY which also uses
+> the ASP 2.0 Ethernet controller.
 >
-> A consistent approach is good only when it can benefits all parties
-> rather than sacrifices any of them.
+> Florian Fainelli (2):
+>   dt-bindings: net: Brcm ASP 2.0 Ethernet controller
+>   net: phy: bcm7xxx: Add EPHY entry for 74165
 >
-> Apparently, the approach in the perf-tools-next brings all kinds of
-> issues, multiplexing/inaccuracy in the perf stat default on Intel
-> platforms. Why cannot we fix it properly before applying the approach?
+> Justin Chen (4):
+>   dt-bindings: net: brcm,unimac-mdio: Add asp-v2.0
+>   net: bcmasp: Add support for ASP2.0 Ethernet controller
+>   net: phy: mdio-bcm-unimac: Add asp v2.0 support
+>   MAINTAINERS: ASP 2.0 Ethernet driver maintainers
 >
-> I think Andi also mentioned the similar request when ARM introduced the
-> TopdownL1 metrics.
-> https://lore.kernel.org/linux-perf-users/12e0deef-08db-445f-4958-bcd5c3e1=
-0367@linux.intel.com/
+>  .../devicetree/bindings/net/brcm,asp-v2.0.yaml     |  146 ++
+>  .../devicetree/bindings/net/brcm,unimac-mdio.yaml  |    2 +
+>  MAINTAINERS                                        |    9 +
+>  drivers/net/ethernet/broadcom/Kconfig              |   11 +
+>  drivers/net/ethernet/broadcom/Makefile             |    1 +
+>  drivers/net/ethernet/broadcom/asp2/Makefile        |    2 +
+>  drivers/net/ethernet/broadcom/asp2/bcmasp.c        | 1527 ++++++++++++++=
+++++++
+>  drivers/net/ethernet/broadcom/asp2/bcmasp.h        |  636 ++++++++
+>  .../net/ethernet/broadcom/asp2/bcmasp_ethtool.c    |  620 ++++++++
+>  drivers/net/ethernet/broadcom/asp2/bcmasp_intf.c   | 1425 ++++++++++++++=
+++++
+>  .../net/ethernet/broadcom/asp2/bcmasp_intf_defs.h  |  238 +++
+>  drivers/net/mdio/mdio-bcm-unimac.c                 |    2 +
+>  drivers/net/phy/bcm7xxx.c                          |    1 +
+>  include/linux/brcmphy.h                            |    1 +
+>  14 files changed, 4621 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/brcm,asp-v2.0.y=
+aml
+>  create mode 100644 drivers/net/ethernet/broadcom/asp2/Makefile
+>  create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp.c
+>  create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp.h
+>  create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp_ethtool.c
+>  create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp_intf.c
+>  create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp_intf_defs.h
 >
-> Thanks,
-> Kan
+> --
+> 2.7.4
+>
