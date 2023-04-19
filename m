@@ -2,255 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD626E7FC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7846E7FD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232753AbjDSQk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 12:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
+        id S233550AbjDSQls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 12:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjDSQk5 (ORCPT
+        with ESMTP id S231226AbjDSQlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 12:40:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A210524B
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681922407;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gXUuv+N623PwXzIE9Rxtipi189EMDtbCL0zmp70YW88=;
-        b=Lhr2C7k69ZsW9lzAVJaXM0Vaj9n+TH0tEavlcWpf7+778QZCNGMHn8zaym7F5rclD39Lfi
-        6f32SGt5KAd98JV77VL/wHwY6EhHOK4IVtuViGlDmyvhYv2ACz5pPNc4st0z4eAUYl14IY
-        uErH6Wt415ZkWlnwu+n+SlHKEMELoQc=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-553-sRopubdnPLmZ3Dz7CLkRjA-1; Wed, 19 Apr 2023 12:40:06 -0400
-X-MC-Unique: sRopubdnPLmZ3Dz7CLkRjA-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-5066c9c2ed6so83121a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:40:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681922405; x=1684514405;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gXUuv+N623PwXzIE9Rxtipi189EMDtbCL0zmp70YW88=;
-        b=WvFtJgE3J9yHDKaJe+b1cSQxSoP/9Jnc2jNbJkrsFLv7NZIq7Tu64aWd+JC31RlC64
-         X+Q6WxAzoO64Ogp1XEUvwgU8KyA0CtzGcQVmYXnxWAp1oo4APWajbovKScLrmGFA45Fj
-         oSuMOHUDVViUW6qgKrmJMJCkotQFTUEj7xA7FevB6kf8WSEieBaotN0aeqZCaLb3YWhT
-         3wHbcEbaE2lVWjNElHpibepQxb+e25/WTkYx8kktqmBvY4rjYE/icfDmfwZxGLyCxFBN
-         a8kIf1Jl/aftPuF75oaGgGMsb1Lh2adqdfBQ2dy3IwtthQ90elrG+1sZ+PVT3Da+sAw3
-         FwrQ==
-X-Gm-Message-State: AAQBX9db7393IvX44vI4vZ61M0atzlIOcE19PaKQulRzLd7qnvp+N4EH
-        Xi49mw81/JcMly6idNeDY1aAN8dkJbVx85704wJH06MGtrVNhTx4hMlCW/MGI2kOyp5nZH7r+qL
-        Rw6ZPMomGvfdDNmUT8nFLONrj3T+kokE/
-X-Received: by 2002:a50:ec92:0:b0:502:1cae:8b11 with SMTP id e18-20020a50ec92000000b005021cae8b11mr5785520edr.23.1681922405229;
-        Wed, 19 Apr 2023 09:40:05 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bIlSVT95rW1hj8ejmytg93v7b25J08Hbj6/OoScTlUZFaWN54H/62fG3YYEFY+rLfh7S97zA==
-X-Received: by 2002:a50:ec92:0:b0:502:1cae:8b11 with SMTP id e18-20020a50ec92000000b005021cae8b11mr5785504edr.23.1681922404904;
-        Wed, 19 Apr 2023 09:40:04 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id g12-20020a056402180c00b00508480633bdsm94685edy.74.2023.04.19.09.40.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 09:40:04 -0700 (PDT)
-Message-ID: <07f2417e-9d47-3e73-cae5-3e7c95856f72@redhat.com>
-Date:   Wed, 19 Apr 2023 18:40:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [regression] Bug 216946 - Toshiba satellite click mini l9w-b:
- touchscreen: no touch events with kernel 6.1.4
-Content-Language: en-US, nl
-To:     =?UTF-8?Q?G=c3=a9_Koerkamp?= <ge.koerkamp@gmail.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <993dd537-2f74-3657-1dd3-c3a0a74e37e1@leemhuis.info>
- <E4123C4B-D6C0-4CB2-8328-E0D03599ED16@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <E4123C4B-D6C0-4CB2-8328-E0D03599ED16@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Wed, 19 Apr 2023 12:41:46 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2076.outbound.protection.outlook.com [40.107.22.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1415FFB;
+        Wed, 19 Apr 2023 09:41:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WyurcoVdgs8zy4y7BtoxNzvKz2QB5ZsmkP8r2oiNsQrfnXgCNvrHs2ZvoxdCE9ErYXA8m6o/FRBa1rv/7f6ETyrPA3AyljL1oe9h6+5nUCvE4gnhdqLKCgTUYd723qYmpbTLSDiaz+ouKU3VnoytAKORY1PCgBx1AOorOpqmpr1TDxaFM2DKgT8w+Ex+/0OKX9lvNVNSMGEat4uDs6oX8OYQBIM+5iA2Eh6t9yt792ge4ioMH/rKU93h0aWWvQ9ALDVfJfvHdVNSOheYPbjFyHLlDGix8S0Hs0VPSGF+U+LwvGojPBHKKQ1fBi9RbEjm1KsSQgWsfcMxwvG3wRtDiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0Vap6u+EpxdzKeyIWaF2meftUjVAxJFs8PYN10EWWXA=;
+ b=g7tjhdcY8uMOd8KtDQLzYZIG7IPIicmIVfH7nfQXB316i/3lI4kPDJSmMMNho4DZpVRTpJy2MdqAd6zoi5AUfRrDhEV22xfe/0ZegvWCjzKCyFpA5qakHCh8Y/uC+E9fbLmiFcEx0+NkwtZbUFciBp6Kdqn5N/bGC+wUi0SZ80DL9pTACCvjOa2C5AskxI/xjAAggoIt1Lz5/phkEzivFVBiXY8Pqg4n3dB9sZkNj0Uxo571xyKzjMFsIf+LfRlr9wZasbut23jJIHTz3sCf1u8dfvIfv6dGeCTalcMYNYz1hc1GUMhXSZYgcQ5LrbO2Mt+UQfSkEP3pBejYIMzXiw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0Vap6u+EpxdzKeyIWaF2meftUjVAxJFs8PYN10EWWXA=;
+ b=JJzCZEZ7A3J0hSqYqhOhaG3bO3m4Ewkd7PI6tdvbmigMsiaoWNVNV70V3mIObs9QZIzMV00XU5CgHUGLc5D2PcT3HObHG9ZfOW+8bFNeFH4y+x4C2poPZu67O0+3ZAYlKXcBC/1B+RndCiTlVQ1Brxq9o12gjWV3wlvQZRrTwnY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by PA4PR04MB7535.eurprd04.prod.outlook.com (2603:10a6:102:e2::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Wed, 19 Apr
+ 2023 16:41:42 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::f1d6:f05f:b8c6:4353]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::f1d6:f05f:b8c6:4353%6]) with mapi id 15.20.6319.021; Wed, 19 Apr 2023
+ 16:41:42 +0000
+From:   Frank Li <Frank.Li@nxp.com>
+To:     helgaas@kernel.org
+Cc:     imx@lists.linux.dev, bhelgaas@google.com,
+        devicetree@vger.kernel.org, frank.li@nxp.com,
+        gustavo.pimentel@synopsys.com, kw@linux.com, leoyang.li@nxp.com,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        lorenzo.pieralisi@arm.com, minghuan.lian@nxp.com,
+        mingkai.hu@nxp.com, robh+dt@kernel.org, roy.zang@nxp.com,
+        shawnguo@kernel.org, zhiqiang.hou@nxp.com
+Subject: [PATCH v3 1/2] PCI: dwc: Implement general suspend/resume functionality for L2/L3 transitions
+Date:   Wed, 19 Apr 2023 12:41:17 -0400
+Message-Id: <20230419164118.596300-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR13CA0163.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c7::18) To AM6PR04MB4838.eurprd04.prod.outlook.com
+ (2603:10a6:20b:4::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|PA4PR04MB7535:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9cbf5b88-9d24-4602-48bf-08db40f4f463
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: H5aT+idE54p5Fz+KJjcoPs2bb5VlwOX1w74LeEpbWRGzA77s4kWClrLFdKahfU7WuwjYh/fgrlnmqspN+qvSnzqf+E6emJsIGIkUIQIM3tEsQQPdXyxCmnA/ZT7sX+BWnGIIpDDxVxDQ2+SE6m2NVv9K1aP3WjnbH3g1ZtJn8Hia4vXZU0Kkf48G0pJkkWpBbFjWesJj1+0xTeqy6EsQb5YsrvzTAPCdtFhjDDWcCJ6RjPDP8mr++iO6xPQ+q8mrRoNYDR9k9wuPCIyKyXaTC1fh96fO10tBlWHOoJUtO3Z7awo4Exmv1E88mmr77M6w77FNB9XY88rRV3Pv0ApkEXVqhYK7oUGB7LywMf3QM7okfRADHyDOgMSuILBBYQyw5aWMWq+U/uoza4BFhoro53/KBgkD4ZQQYf881y/PjHIXh4Q+agMI2TDRC14C1Lorr/VfXYHkUDQpwPXoW8j0lJEGXAhHCL8FIpJHxxqXVTLyQAfEfs7XIQNgZ91i85rMWgZSx7nNBmNKZmPvtuq+4wCB3gRxCel54l1tNDJIQQKa3ZonC87kLPdk4AVYzUK44rX3qvCoftzeUCg4OMQeP11qDmhG3iClfAR97l/C4Om8D80ENCNf8Ly8ksBIxMY/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(366004)(346002)(376002)(451199021)(66946007)(66556008)(66476007)(6916009)(4326008)(478600001)(316002)(8936002)(8676002)(5660300002)(15650500001)(7416002)(41300700001)(38100700002)(38350700002)(186003)(2616005)(83380400001)(6486002)(6666004)(52116002)(6512007)(6506007)(1076003)(26005)(86362001)(36756003)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sFU0t0irwSa7KAfSAD3sUK2dvpA+qHtDbccJzOZTBr7sqbY/HLC5JRsnPrYV?=
+ =?us-ascii?Q?fNui1DkvI0r55vsW6QnnRgh98NVF/NYq04ZJiLCQR/Rk7ByZw6Brx3MJ4Ku9?=
+ =?us-ascii?Q?v/chdhK2dxPl8VK00gEq7J1e7/FS6IZQWn+Us7gsEBQKZIWz92YnaH00k5CW?=
+ =?us-ascii?Q?dfXSqJegCbXQTprzB1mZ/BzIwmme+ezr67axOdKyFBL1KrnUw6HHMpq1aZtV?=
+ =?us-ascii?Q?EIKMTNlh8AHRVg6ob3LwBXG7xblQBwJuT8Hx0isgjSM4mjAKf+hLzbQXEV23?=
+ =?us-ascii?Q?Qb0iafHyFs31j8WLtV93bkZUeYaQq6+Uq2Pd6dAclkCIvxfM6tKvZSGc/9pB?=
+ =?us-ascii?Q?FikstIhuxq2c7A0cpnzpe/wt0BW5eUkbo+CZWd4eN2cKF5ljxD/BOp9NUCLY?=
+ =?us-ascii?Q?dSyO/Re9DG0jzT/TUQu/aTpqP+tqk98ElyZJnmFpZYCe5SX7CkazSNJDlgz/?=
+ =?us-ascii?Q?RefjEbcAmqcEoXl0D1ZNWLOzqPM6ypnfObeB6t/xGayox8s1EYKUkLYfcF57?=
+ =?us-ascii?Q?sAWIkp3vIx56VJYKvUDyE6bDV34jnr2+W9hDBdfX07l62ni60bb4CoCzwy39?=
+ =?us-ascii?Q?fHQ+KXl+vbWD3s0Hd7O2cJlCqgr8DlKMVcaxZJue/CoYLeO1nk6jao6tUcZF?=
+ =?us-ascii?Q?8NqjmxAFbv5yRwcrZBz0kK0jHPLgUpMEtnLGV03YUX7zHaoqjuoz01pkP/21?=
+ =?us-ascii?Q?UxJk6KKZImXy30pd/2nlixvdNoo3L6bbEvKkCvJ7ww9o5Oq9hNddW6L/I8AZ?=
+ =?us-ascii?Q?CWYC4+DE4hY6HuoP+jAh9hNwdtHQHjsIf8K6uhly2A6IQDScV6w0xxXtJoqG?=
+ =?us-ascii?Q?nCwLsx8sGQuGlkHdGqpxnXiJeSpATrGUawFhsOnzEpI+lprKpHd0Zah9phgV?=
+ =?us-ascii?Q?hgVzf7Jl9lQHvV5eA5wkGg9wvN+xseUeWElNOiF4XGNLHTITITazZppCYisp?=
+ =?us-ascii?Q?3I9lcoZ1HeLkhRWyhzpm6tjuiEWnT+t+sVUATWmgBEegIyVrpdMGJVywmoIM?=
+ =?us-ascii?Q?OQRT61E1e7Dgjd1p3BKWJhGjEgwcxFkeqYCSWJHUFH3p78QRM2IT7eGae22E?=
+ =?us-ascii?Q?+spDOEbhB3A5pQUFPHag8UoKjo2qxlPXa2Ab6z4z5Z1ZAme6AcreUnON1OZ5?=
+ =?us-ascii?Q?x3afEHPZxuhdwOByfVKxzJ+yJyoju2agFsD1KURbfxwa8ig4W75+OFgIcifv?=
+ =?us-ascii?Q?GMVOIjmATQlxxbLY1mDevdNI1XPOtR+/GVVY5HazGmB8lEp2Q7xGHiM1zOm+?=
+ =?us-ascii?Q?3cW9TB1ORBThOOsS42ETwN3qpgfwLBr8dBFDXjtDsSGmt69q3uMLv2HB5RI9?=
+ =?us-ascii?Q?EOM3lmABZWGcoZ2KEFCmnx0Zm8Sg1o4Gnk0r7SHiOYN2iczCmhDpmA+Zeehr?=
+ =?us-ascii?Q?h7Qsy7gPW4nzZd72hr/cxrKe3RoJ6vBV1jseZJeD457uxPeDfczoZ+dP1/61?=
+ =?us-ascii?Q?xvVZitxwYtSva0he4nbeRW2OrT74suyG7MHWYZC3RRCLRW64UJNCMbDmRI9Y?=
+ =?us-ascii?Q?ellp+lz7y/P7w5SirVjvmV5QuO5YOPLn1dwsLpHTZ+e0KUPAqTWhCmSkmnhi?=
+ =?us-ascii?Q?dIQoNcbDGp+8c+wqAOcxvPQteLKlpN6tyfUgdtd4?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9cbf5b88-9d24-4602-48bf-08db40f4f463
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 16:41:42.1006
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vnbelfTXd3MJE59kC5PfAQM1mlV2Gd7uGFwhcRToR0gNIPqb/0iEd4vP3qE6SQkB/35gAfXEOKyVBdRY0pzQAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7535
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gé,
+Introduced helper function dw_pcie_get_ltssm to retrieve SMLH_LTSS_STATE.
+Added API pme_turn_off and exit_from_l2 for managing L2/L3 state transitions.
 
-On 4/19/23 18:21, Gé Koerkamp wrote:
-> Hi Thorsten,
-> 
-> travelling at the moment, but I’ll try. Not really into bisecting kernel issues, but let’s see where this goes. Another issue is, that I don’t have a Toshiba Mini Click myself, so I need to build the test Volumio images (volumio.org) with the different 5.16-rc kernel patch versions for a colleague to work with, hopefully  he has time to do this.
+Typical L2 entry workflow:
 
-I have just dug my own Toshiba Mini Click up from the bottom of the storage box it was in.
+1. Transmit PME turn off signal to PCI devices.
+2. Await link entering L2_IDLE state.
+3. Transition Root complex to D3 state.
 
-It is currently charging since the battery was fully flat.
+Typical L2 exit workflow:
 
-So I suggest you give me a couple of days to take a look before you go to all this trouble.
+1. Transition Root complex to D0 state.
+2. Issue exit from L2 command.
+3. Reinitialize PCI host.
+4. Wait for link to become active.
 
-Regards,
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+Change from v2 to v3: 
+- Basic rewrite whole patch according rob herry suggestion. 
+  put common function into dwc, so more soc can share the same logic.
+  
+ .../pci/controller/dwc/pcie-designware-host.c | 80 +++++++++++++++++++
+ drivers/pci/controller/dwc/pcie-designware.h  | 28 +++++++
+ 2 files changed, 108 insertions(+)
 
-Hans
-
-
-
-
-> 
-> Thanks - Gé
-> 
-> Sent from my iPhone
-> 
->> On 17 Apr 2023, at 13:55, Linux regression tracking (Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
->>
->> ﻿
->>
->>> On 01.03.23 12:41, Hans de Goede wrote:
->>>> On 2/28/23 14:26, Benjamin Tissoires wrote:
->>>> On Tue, Feb 28, 2023 at 12:32 PM Thorsten Leemhuis
->>>> <regressions@leemhuis.info> wrote:
->>>>>
->>>>> On 19.01.23 16:06, Linux kernel regression tracking (Thorsten Leemhuis)
->>>>> wrote:
->>>>>> Hi, this is your Linux kernel regression tracker.
->>>>>>
->>>>>> I noticed a regression report in bugzilla.kernel.org. As many (most?)
->>>>>> kernel developer don't keep an eye on it, I decided to forward it by
->>>>>> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216946 :
->>>>>
->>>>> The reporter recently confirmed in the ticket that the issue still
->>>>> happens with 6.2.
->>>>>
->>>>> There wasn't any reply from any of the input developers here or in
->>>>> bugzilla afaics. :-/ Hmmm. Could someone from that camp maybe please
->>>>> take a minute and at least briefly look into this as answer something
->>>>> like "that might be due to a problem in subsystem 'foo'", "maybe ask bar
->>>>> for an option", or "we have no idea what might cause this, this needs to
->>>>> be bisected"? That would help a lot.
->>>>
->>>> The working dmesg shows a line with:
->>>> hid-generic 0018:0457:10FB.0002: input,hidraw1: I2C HID v1.00 Device
->>>> [SIS0817:00 0457:10FB] on i2c-SIS0817:00
->>>> and then
->>>> hid-multitouch 0018:0457:10FB.0002: input,hidraw1: I2C HID v1.00
->>>> Device [SIS0817:00 0457:10FB] on i2c-SIS0817:00
->>>>
->>>> But these 2 lines do not appear on the 6.1.4 logs.
->>>>
->>>> So the device is not properly enumerated by ACPI or I2C. Hans might
->>>> have an idea on how to debug/solve that issue.
->>>
->>> I actually have a Toshiba satellite click mini l9w-b lying around
->>> myself. I already made a note to try and reproduce this
->>>
->>> But I'm very much swamped with too much kernel work, so no promises
->>> when I will get around to this ...
->>
->> Has anyone made any progress with this? Doesn't look like it, hence I
->> wondered if this fall through the cracks; but maybe I'm just missing
->> something.
->>
->> Gé Koerkamp: with a bit of luck Hans sooner or later will have time to
->> look into this, but it might speed things up if you could try to bisect
->> this.
->>
->> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->> --
->> Everything you wanna know about Linux kernel regression tracking:
->> https://linux-regtracking.leemhuis.info/about/#tldr
->> If I did something stupid, please tell me, as explained on that page.
->>
->> #regzbot poke
->>
->>>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->>>>> --
->>>>> Everything you wanna know about Linux kernel regression tracking:
->>>>> https://linux-regtracking.leemhuis.info/about/#tldr
->>>>> If I did something stupid, please tell me, as explained on that page.
->>>>>
->>>>> #regzbot poke
->>>>>>> Gé Koerkamp 2023-01-17 20:21:51 UTC
->>>>>>>
->>>>>>> Created attachment 303619 [details]
->>>>>>> Kernel configuration for v6.1.4/ journalctl (dmesg)/ ACPIdump/lsmod
->>>>>>>
->>>>>>> Overview:
->>>>>>> The touchscreen does not react on touch events.
->>>>>>> Touchscreen display and touchpad are working.
->>>>>>>
->>>>>>> Step to reproduce:
->>>>>>> Open any UI page
->>>>>>> Try to use touch on relevant UI controls (buttons etc.)
->>>>>>>
->>>>>>> Result:
->>>>>>> No reaction on screen touches
->>>>>>>
->>>>>>> Expected result:
->>>>>>> Reaction on touched control, same as when using the touch pad or connected mouse (which do work).
->>>>>>>
->>>>>>> Build information:
->>>>>>> The error happens with kernel version 6.1.4
->>>>>>> After rebuilding with different kernel versions, it appears that it first fails with kernel 5.16
->>>>>>>
->>>>>>> Additional builds:
->>>>>>> The click mini l9w-b still works with kernel 5.10.y LTS and 5.15.y LTS.
->>>>>>>
->>>>>>> Important remark:
->>>>>>> Touchscreen still works fine with kernel 6.1.4 using
->>>>>>> - an HP x2 detachable 10-p0xx or
->>>>>>> - a Lenovo yoga 520-14ikb
->>>>>>>
->>>>>>> So it could be a hardware dependent issue
->>>>>>
->>>>>> See the ticket for more details.
->>>>>>
->>>>>>
->>>>>> [TLDR for the rest of this mail: I'm adding this report to the list of
->>>>>> tracked Linux kernel regressions; the text you find below is based on a
->>>>>> few templates paragraphs you might have encountered already in similar
->>>>>> form.]
->>>>>>
->>>>>> BTW, let me use this mail to also add the report to the list of tracked
->>>>>> regressions to ensure it's doesn't fall through the cracks:
->>>>>>
->>>>>> #regzbot introduced: v5.15..v5.16
->>>>>> https://bugzilla.kernel.org/show_bug.cgi?id=216946
->>>>>> #regzbot title: hid: touchscreen broken with Toshiba satellite click
->>>>>> mini l9w-b
->>>>>> #regzbot ignore-activity
->>>>>>
->>>>>> This isn't a regression? This issue or a fix for it are already
->>>>>> discussed somewhere else? It was fixed already? You want to clarify when
->>>>>> the regression started to happen? Or point out I got the title or
->>>>>> something else totally wrong? Then just reply and tell me -- ideally
->>>>>> while also telling regzbot about it, as explained by the page listed in
->>>>>> the footer of this mail.
->>>>>>
->>>>>> Developers: When fixing the issue, remember to add 'Link:' tags pointing
->>>>>> to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
->>>>>> this thread sees some discussion). See page linked in footer for details.
->>>>>>
->>>>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->>>>>> --
->>>>>> Everything you wanna know about Linux kernel regression tracking:
->>>>>> https://linux-regtracking.leemhuis.info/about/#tldr
->>>>>> If I did something stupid, please tell me, as explained on that page.
->>>>>
->>>>
->>>
->>>
->>>
-> 
+diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+index 9952057c8819..ef6869488bde 100644
+--- a/drivers/pci/controller/dwc/pcie-designware-host.c
++++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+@@ -8,6 +8,7 @@
+  * Author: Jingoo Han <jg1.han@samsung.com>
+  */
+ 
++#include <linux/iopoll.h>
+ #include <linux/irqchip/chained_irq.h>
+ #include <linux/irqdomain.h>
+ #include <linux/msi.h>
+@@ -807,3 +808,82 @@ int dw_pcie_setup_rc(struct dw_pcie_rp *pp)
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(dw_pcie_setup_rc);
++
++/*
++ * There are for configuring host controllers, which are bridges *to* PCI devices
++ * but are not PCI devices themselves.
++ */
++static void dw_pcie_set_dstate(struct dw_pcie *pci, u32 dstate)
++{
++	u8 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_PM);
++	u32 val;
++
++	val = dw_pcie_readw_dbi(pci, offset + PCI_PM_CTRL);
++	val &= ~PCI_PM_CTRL_STATE_MASK;
++	val |= dstate;
++	dw_pcie_writew_dbi(pci, offset + PCI_PM_CTRL, val);
++}
++
++int dw_pcie_suspend_noirq(struct dw_pcie *pci)
++{
++	u32 val;
++	int ret;
++
++	if (dw_pcie_get_ltssm(pci) <= DW_PCIE_LTSSM_DETECT_ACT)
++		return 0;
++
++	pci->pp.ops->pme_turn_off(&pci->pp);
++
++	/*
++	 * PCI Express Base Specification Rev 4.0
++	 * 5.3.3.2.1 PME Synchronization
++	 * Recommand 1ms to 10ms timeout to check L2 ready
++	 */
++	ret = read_poll_timeout(dw_pcie_get_ltssm, val, val == DW_PCIE_LTSSM_L2_IDLE,
++				100, 10000, false, pci);
++	if (ret) {
++		dev_err(pci->dev, "PCIe link enter L2 timeout! ltssm = 0x%x\n", val);
++		return ret;
++	}
++
++	dw_pcie_set_dstate(pci, 0x3);
++
++	pci->suspended = true;
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(dw_pcie_suspend_noirq);
++
++int dw_pcie_resume_noirq(struct dw_pcie *pci)
++{
++	int ret;
++
++	if (!pci->suspended)
++		return 0;
++
++	pci->suspended = false;
++
++	dw_pcie_set_dstate(pci, 0x0);
++
++	pci->pp.ops->exit_from_l2(&pci->pp);
++
++	/* delay 10 ms to access EP */
++	mdelay(10);
++
++	ret = pci->pp.ops->host_init(&pci->pp);
++	if (ret) {
++		dev_err(pci->dev, "ls_pcie_host_init failed! ret = 0x%x\n", ret);
++		return ret;
++	}
++
++	dw_pcie_setup_rc(&pci->pp);
++
++	ret = dw_pcie_wait_for_link(pci);
++	if (ret) {
++		dev_err(pci->dev, "wait link up timeout! ret = 0x%x\n", ret);
++		return ret;
++	}
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(dw_pcie_resume_noirq);
+diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+index 79713ce075cc..effb07a506e4 100644
+--- a/drivers/pci/controller/dwc/pcie-designware.h
++++ b/drivers/pci/controller/dwc/pcie-designware.h
+@@ -288,10 +288,21 @@ enum dw_pcie_core_rst {
+ 	DW_PCIE_NUM_CORE_RSTS
+ };
+ 
++enum dw_pcie_ltssm {
++	DW_PCIE_LTSSM_UNKNOWN = 0xFFFFFFFF,
++	/* Need align PCIE_PORT_DEBUG0 bit0:5 */
++	DW_PCIE_LTSSM_DETECT_QUIET = 0x0,
++	DW_PCIE_LTSSM_DETECT_ACT = 0x1,
++	DW_PCIE_LTSSM_L0 = 0x11,
++	DW_PCIE_LTSSM_L2_IDLE = 0x15,
++};
++
+ struct dw_pcie_host_ops {
+ 	int (*host_init)(struct dw_pcie_rp *pp);
+ 	void (*host_deinit)(struct dw_pcie_rp *pp);
+ 	int (*msi_host_init)(struct dw_pcie_rp *pp);
++	void (*pme_turn_off)(struct dw_pcie_rp *pp);
++	void (*exit_from_l2)(struct dw_pcie_rp *pp);
+ };
+ 
+ struct dw_pcie_rp {
+@@ -364,6 +375,7 @@ struct dw_pcie_ops {
+ 	void    (*write_dbi2)(struct dw_pcie *pcie, void __iomem *base, u32 reg,
+ 			      size_t size, u32 val);
+ 	int	(*link_up)(struct dw_pcie *pcie);
++	enum dw_pcie_ltssm (*get_ltssm)(struct dw_pcie *pcie);
+ 	int	(*start_link)(struct dw_pcie *pcie);
+ 	void	(*stop_link)(struct dw_pcie *pcie);
+ };
+@@ -393,6 +405,7 @@ struct dw_pcie {
+ 	struct reset_control_bulk_data	app_rsts[DW_PCIE_NUM_APP_RSTS];
+ 	struct reset_control_bulk_data	core_rsts[DW_PCIE_NUM_CORE_RSTS];
+ 	struct gpio_desc		*pe_rst;
++	bool			suspended;
+ };
+ 
+ #define to_dw_pcie_from_pp(port) container_of((port), struct dw_pcie, pp)
+@@ -430,6 +443,9 @@ void dw_pcie_iatu_detect(struct dw_pcie *pci);
+ int dw_pcie_edma_detect(struct dw_pcie *pci);
+ void dw_pcie_edma_remove(struct dw_pcie *pci);
+ 
++int dw_pcie_suspend_noirq(struct dw_pcie *pci);
++int dw_pcie_resume_noirq(struct dw_pcie *pci);
++
+ static inline void dw_pcie_writel_dbi(struct dw_pcie *pci, u32 reg, u32 val)
+ {
+ 	dw_pcie_write_dbi(pci, reg, 0x4, val);
+@@ -501,6 +517,18 @@ static inline void dw_pcie_stop_link(struct dw_pcie *pci)
+ 		pci->ops->stop_link(pci);
+ }
+ 
++static inline enum dw_pcie_ltssm dw_pcie_get_ltssm(struct dw_pcie *pci)
++{
++	u32 val;
++
++	if (pci->ops && pci->ops->get_ltssm)
++		return pci->ops->get_ltssm(pci);
++
++	val = dw_pcie_readl_dbi(pci, PCIE_PORT_DEBUG0);
++
++	return (enum dw_pcie_ltssm)FIELD_GET(PORT_LOGIC_LTSSM_STATE_MASK, val);
++}
++
+ #ifdef CONFIG_PCIE_DW_HOST
+ irqreturn_t dw_handle_msi_irq(struct dw_pcie_rp *pp);
+ int dw_pcie_setup_rc(struct dw_pcie_rp *pp);
+-- 
+2.34.1
 
