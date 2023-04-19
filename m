@@ -2,92 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17526E76F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE396E7703
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbjDSKBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 06:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55092 "EHLO
+        id S232860AbjDSKCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 06:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232041AbjDSKBL (ORCPT
+        with ESMTP id S231741AbjDSKCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 06:01:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34166E8B
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:00:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681898427;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XQ6sCjmuWnVFb8UpDGaTI+MOdoOd+qfctALNM5m0k+g=;
-        b=hyV+3+J5NOvASYRXZY6sjWgrk7FeoYvE6+CJOzZoFDjGnwiGxVV0k3Y0d8d11g+VL747i9
-        XvPHjJCbgG/xxvbT/7Hv4d1ntscg1J1AvE5eN+J7sssgzasev3DVDknt2vfHSX9uyU5RW9
-        tgcpXAucWBlnRf/xDCV6+ws4/JufQXY=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-297-zEShlqKRMsOgeCk8EmDMOg-1; Wed, 19 Apr 2023 06:00:25 -0400
-X-MC-Unique: zEShlqKRMsOgeCk8EmDMOg-1
-Received: by mail-qk1-f199.google.com with SMTP id q30-20020a05620a025e00b007468c560e1bso15073011qkn.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:00:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681898425; x=1684490425;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XQ6sCjmuWnVFb8UpDGaTI+MOdoOd+qfctALNM5m0k+g=;
-        b=N+4rPdOPLxUdGBxKdWH2Evj1/w+e7gkKcPOcgvBNH4rSiEooxUHTZhwNWT594vkm2s
-         4Tl9AKu24tqQ+Ui0I+3+nrhAnxmRsf3jxggTefhNMtykyf+hDBPGNLWt3EMtlTP595rA
-         g5yEEpJqKDOcSRyBp+GZxPYyIVHY1J0HsGuVb+vzfurkZ6dYq2MecyFFLb8DEeHvAeqE
-         GScwb6neUwH4ECZaQ0XUVkQn92waI7XkWN4f+QyNeFBiNtL6uuRpr0oEZH/fW3V+KmPl
-         V+16WnZuRQOIN/mzRgbuAE8pIsCSoTppuWL4HgDxuSbK3Aw/CiGJIPAF7UdOOh++lgzz
-         4RfA==
-X-Gm-Message-State: AAQBX9fpFcldnC078UDaGzXjU/amQlQ63r4sCntyLvhn8blFJ2R89W9z
-        YoLFuaJLDqbci954irBrgaHxA5vadkTWIWoj/yxVgpgRxY+Xxy0x4DgTx3w15elgZbfYrFzWPwN
-        rgWAncNqVnse84g0ayC1505vg
-X-Received: by 2002:a05:622a:44e:b0:3ef:437e:c828 with SMTP id o14-20020a05622a044e00b003ef437ec828mr1647537qtx.54.1681898424520;
-        Wed, 19 Apr 2023 03:00:24 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bx/DlObVliHPvUfPOoqrhYKHpZuPyTlGGGIslCUKrTunefbYRtBDLkw2QCfpHp8ro/QNbCag==
-X-Received: by 2002:a05:622a:44e:b0:3ef:437e:c828 with SMTP id o14-20020a05622a044e00b003ef437ec828mr1647485qtx.54.1681898424062;
-        Wed, 19 Apr 2023 03:00:24 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-53-134-157.retail.telecomitalia.it. [82.53.134.157])
-        by smtp.gmail.com with ESMTPSA id bq16-20020a05620a469000b007484d284cdasm4564029qkb.93.2023.04.19.03.00.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 03:00:23 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 12:00:17 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH RFC net-next v2 0/4] virtio/vsock: support datagrams
-Message-ID: <r6oxanmhwlonb7lcrrowpitlgobivzp7pcwk7snqvfnzudi6pb@4rnio5wef3qu>
-References: <20230413-b4-vsock-dgram-v2-0-079cc7cee62e@bytedance.com>
- <ZDk2kOVnUvyLMLKE@bullseye>
+        Wed, 19 Apr 2023 06:02:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DA1E83D9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:02:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BDF9A2F4;
+        Wed, 19 Apr 2023 03:03:02 -0700 (PDT)
+Received: from bogus (unknown [10.57.57.81])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F8233F6C4;
+        Wed, 19 Apr 2023 03:02:17 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 11:02:14 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org,
+        jpoimboe@kernel.org, rafael.j.wysocki@intel.com,
+        vschneid@redhat.com, ben-linux@fluff.org, Pierre.Gondois@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH] arm64: kernel: smp: ignore disabled cpu node
+Message-ID: <20230419100214.x6y6jgpvnupmgplr@bogus>
+References: <20230419094039.3140521-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZDk2kOVnUvyLMLKE@bullseye>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20230419094039.3140521-1-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,105 +45,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bobby,
-
-On Fri, Apr 14, 2023 at 11:18:40AM +0000, Bobby Eshleman wrote:
->CC'ing Cong.
+On Wed, Apr 19, 2023 at 05:40:39PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> If the cpu node is set disabled in device tree, we should ignore the
+> node. i.MX8MP has some variants, which have one or two or four A53 cores.
+> The current imx8mp device tree use the full feature SoC. With such
+> device tree to bring the variant with one or two A53 cores will cause
+> issue.
 >
->On Fri, Apr 14, 2023 at 12:25:56AM +0000, Bobby Eshleman wrote:
->> Hey all!
->>
->> This series introduces support for datagrams to virtio/vsock.
+> The firmware will update the status property, and kernel will check the
+> property before bring up the core.
+>
 
-Great! Thanks for restarting this work!
+IIRC it has been discussed in the past[1][2], has anything changed now ?
 
->>
->> It is a spin-off (and smaller version) of this series from the summer:
->>   https://lore.kernel.org/all/cover.1660362668.git.bobby.eshleman@bytedance.com/
->>
->> Please note that this is an RFC and should not be merged until
->> associated changes are made to the virtio specification, which will
->> follow after discussion from this series.
->>
->> This series first supports datagrams in a basic form for virtio, and
->> then optimizes the sendpath for all transports.
->>
->> The result is a very fast datagram communication protocol that
->> outperforms even UDP on multi-queue virtio-net w/ vhost on a variety
->> of multi-threaded workload samples.
->>
->> For those that are curious, some summary data comparing UDP and VSOCK
->> DGRAM (N=5):
->>
->> 	vCPUS: 16
->> 	virtio-net queues: 16
->> 	payload size: 4KB
->> 	Setup: bare metal + vm (non-nested)
->>
->> 	UDP: 287.59 MB/s
->> 	VSOCK DGRAM: 509.2 MB/s
->>
->> Some notes about the implementation...
->>
->> This datagram implementation forces datagrams to self-throttle according
->> to the threshold set by sk_sndbuf. It behaves similar to the credits
->> used by streams in its effect on throughput and memory consumption, but
->> it is not influenced by the receiving socket as credits are.
+--
+Regards,
+Sudeep
 
-So, sk_sndbuf influece the sender and sk_rcvbuf the receiver, right?
-
-We should check if VMCI behaves the same.
-
->>
->> The device drops packets silently. There is room for improvement by
->> building into the device and driver some intelligence around how to
->> reduce frequency of kicking the virtqueue when packet loss is high. I
->> think there is a good discussion to be had on this.
-
-Can you elaborate a bit here?
-
-Do you mean some mechanism to report to the sender that a destination
-(cid, port) is full so the packet will be dropped?
-
-Can we adapt the credit mechanism?
-
->>
->> In this series I am also proposing that fairness be reexamined as an
->> issue separate from datagrams, which differs from my previous series
->> that coupled these issues. After further testing and reflection on the
->> design, I do not believe that these need to be coupled and I do not
->> believe this implementation introduces additional unfairness or
->> exacerbates pre-existing unfairness.
-
-I see.
-
->>
->> I attempted to characterize vsock fairness by using a pool of processes
->> to stress test the shared resources while measuring the performance of a
->> lone stream socket. Given unfair preference for datagrams, we would
->> assume that a lone stream socket would degrade much more when a pool of
->> datagram sockets was stressing the system than when a pool of stream
->> sockets are stressing the system. The result, however, showed no
->> significant difference between the degradation of throughput of the lone
->> stream socket when using a pool of datagrams to stress the queue over
->> using a pool of streams. The absolute difference in throughput actually
->> favored datagrams as interfering least as the mean difference was +16%
->> compared to using streams to stress test (N=7), but it was not
->> statistically significant. Workloads were matched for payload size and
->> buffer size (to approximate memory consumption) and process count, and
->> stress workloads were configured to start before and last long after the
->> lifetime of the "lone" stream socket flow to ensure that competing flows
->> were continuously hot.
->>
->> Given the above data, I propose that vsock fairness be addressed
->> independent of datagrams and to defer its implementation to a future
->> series.
-
-Makes sense to me.
-
-I left some preliminary comments, anyway now it seems reasonable to use
-the same virtqueues, so we can go head with the spec proposal.
-
-Thanks,
-Stefano
-
+[1] http://lists.infradead.org/pipermail/linux-arm-kernel/2013-June/174324.html
+[2] https://yhbt.net/lore/all/1524697712-20208-1-git-send-email-rokhanna@nvidia.com/
