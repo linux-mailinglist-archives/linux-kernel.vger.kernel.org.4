@@ -2,185 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53ED26E8032
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F1D6E8036
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbjDSRR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 13:17:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
+        id S231931AbjDSRTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 13:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjDSRR4 (ORCPT
+        with ESMTP id S229558AbjDSRTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 13:17:56 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EF165B5;
-        Wed, 19 Apr 2023 10:17:54 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f178da21b2so278215e9.1;
-        Wed, 19 Apr 2023 10:17:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681924673; x=1684516673;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xBoqLsLFILpUeqaQAwB4b5qUgereH6wIMwsI7Fa/SsY=;
-        b=EK+rvPhTQN0/qi3dNdP2dEsmCTVhxtE+gr9YKuIDcjBI7O53jFUlcILeDZiRZrI2Ta
-         2qM7ie1i2kzb1TLqtZgJ+xhhcyrGriDgSgpI4vcOMq9bKh5odcNFFd25SLNDdCs/iUBd
-         Y00Wc4yHg6kkGZDJj9aKKp+B6Io3fj6Ec0bw3p5kA+boKNZHRK8vtzp9dIOTn+iWtNsJ
-         BhB1SVzLmGkBbweQ0bl97Az5asa+O6PJGPpx727RgeeSMho0919dd3iU+qPAFWkk1Oh7
-         0dstp3k6FhPhGklkYvin8Ocw+F4E+BnTKIuF1HjfMSkmJGygT9zTwfEPcE7TAjf7JGmx
-         9g6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681924673; x=1684516673;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xBoqLsLFILpUeqaQAwB4b5qUgereH6wIMwsI7Fa/SsY=;
-        b=PL43iCADts3q17awKom0oodsKdUhVmRe13EY6CvF1kQmifhHI5s2NlhR6ZbkizVuYb
-         lKUbTPKMQnEun/zaBiaU4LYgXJ2nGItk8rM6cZmXtKA+7liiqH8+ZWWQHfR4JtIvBMsn
-         S1ydOdAAZXKBTIVSb/weAvh24UkRgEA8qxhsqnOknJ040UYD6CcpHsD0si9xUq+qrCXj
-         x85WPTBJxF90UtVGLCOs8uHTuh4d9xrROEwNTDkyCX4r3c6VBgEXvTpwsEo2k/HR1gz6
-         P+xeOmxy/YxWjRhCNY8rzJAu8uPGxVnDK3z/pQXJCwoZrQaTd7onZ9cF6VgMuUCmGlpw
-         HYww==
-X-Gm-Message-State: AAQBX9f0yf1Vb+2GbZX3zRcaEWx1dai+BbcMKbmqAzgdsTZUaiOLpdE6
-        aeg2Ev09U9wnHmClUpvmmqw=
-X-Google-Smtp-Source: AKy350bwMT9R/pz2b9g2K/44mP9753047Xgad1tVmPzf1Qt31ES4WXB8r6Kt+BKO1skqHoHGuE6VpA==
-X-Received: by 2002:a5d:500d:0:b0:2f6:9bc4:76f1 with SMTP id e13-20020a5d500d000000b002f69bc476f1mr5721779wrt.1.1681924672646;
-        Wed, 19 Apr 2023 10:17:52 -0700 (PDT)
-Received: from archbox.v.cablecom.net (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id t3-20020a5d5343000000b002c55521903bsm16304136wrv.51.2023.04.19.10.17.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 10:17:52 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
+        Wed, 19 Apr 2023 13:19:00 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B58769D;
+        Wed, 19 Apr 2023 10:18:57 -0700 (PDT)
+Received: from booty.fritz.box (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 25DB11C0003;
+        Wed, 19 Apr 2023 17:18:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1681924736;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=IKopK6ySs5davKjamt5/6SrPTUXqWy10uMvUkbDLpMw=;
+        b=opbBz3i4AlnSeXYPRzVoCf/grp9GjMYTtivQDNZDLVgCVm2kcMxsrWz7UkG95gNA5IbwPR
+        RH9tC1I5NRjBPKbef++M45g259SeHE4cjL9XUrE+Oi26zlxSh+qu9jnwmC/4zx4xxcgnse
+        NGeziyfdGb3Z5tGbW/wDSJPA+RSfxgRgKw+MehLb592JbWDBji9uiUBwGDrbT6jYYoQO1A
+        PZx+C7d0GHxeJ12x8JS/AY+e4404RskSWuVQB3Kz7wjmt5ijldXyAd6EJ97N2PoDAosDz7
+        2cl3oCUwZhL+SqCJLiChkGMnxDMQ/oi3wDYsUOejQ6//5yzaJQxuQImSCLcqUA==
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        devicetree@vger.kernel.org
+Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: rockchip: fix nEXTRST on SOQuartz
-Date:   Wed, 19 Apr 2023 19:17:31 +0200
-Message-Id: <20230419171731.28641-1-frattaroli.nicolas@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        Stephen Boyd <sboyd@kernel.org>,
+        Jarrah Gosbell <kernel@undef.tools>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH] dt-bindings: input: touchscreen: goodix: clarify irq-gpios misleading text
+Date:   Wed, 19 Apr 2023 19:18:49 +0200
+Message-Id: <20230419171849.946986-1-luca.ceresoli@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In pre-production prototypes (of which I only know one person
-having one, Peter Geis), GPIO0 pin A5 was tied to the SDMMC
-power enable pin on the CM4 connector. On all production models,
-this is not the case; instead, this pin is used for the nEXTRST
-signal, and the SDMMC power enable pin is always pulled high.
+The irq-gpios description misleading, apparently saying that driving the
+IRQ GPIO resets the device, which is even more puzzling as there is a reset
+GPIO as well.
 
-Since everyone currently using the SOQuartz device trees will
-want this change, it is made to the tree without splitting the
-trees into two separate ones of which users will then inevitably
-choose the wrong one.
+In reality the IRQ pin can be driven during the reset sequence to configure
+the client address, as it becomes clear after checking both the datasheet
+and the driver code. Improve the text to clarify that.
 
-This fixes USB and PCIe on a wide variety of CM4IO-compatible
-boards which either rely on the 3.3V being there or use the
-nEXTRST signal.
+Also rephrase to remove reference to the driver, which is not appropriate
+in the bindings.
 
-Fixes: 5859b5a9c3ac ("arm64: dts: rockchip: add SoQuartz CM4IO dts")
-Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- .../boot/dts/rockchip/rk3566-soquartz-cm4.dts | 18 +++++++------
- .../boot/dts/rockchip/rk3566-soquartz.dtsi    | 25 ++++++++++---------
- 2 files changed, 24 insertions(+), 19 deletions(-)
+ .../devicetree/bindings/input/touchscreen/goodix.yaml         | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-index 263ce40770dd..cddf6cd2fecb 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-@@ -28,6 +28,16 @@ vcc_5v: vcc-5v-regulator {
- 		regulator-max-microvolt = <5000000>;
- 		vin-supply = <&vcc12v_dcin>;
- 	};
-+
-+	vcc_sd_pwr: vcc-sd-pwr-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc_sd_pwr";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vcc3v3_sys>;
-+	};
- };
+diff --git a/Documentation/devicetree/bindings/input/touchscreen/goodix.yaml b/Documentation/devicetree/bindings/input/touchscreen/goodix.yaml
+index 3d016b87c8df..26ad104052ba 100644
+--- a/Documentation/devicetree/bindings/input/touchscreen/goodix.yaml
++++ b/Documentation/devicetree/bindings/input/touchscreen/goodix.yaml
+@@ -37,8 +37,8 @@ properties:
+     maxItems: 1
  
- /* phy for pcie */
-@@ -130,13 +140,7 @@ &saradc {
- };
+   irq-gpios:
+-    description: GPIO pin used for IRQ. The driver uses the interrupt gpio pin
+-      as output to reset the device.
++    description: GPIO pin used for IRQ. The IRQ line can be driven during the
++      reset sequence to configure the client address.
+     maxItems: 1
  
- &sdmmc0 {
--	vmmc-supply = <&sdmmc_pwr>;
--	status = "okay";
--};
--
--&sdmmc_pwr {
--	regulator-min-microvolt = <3300000>;
--	regulator-max-microvolt = <3300000>;
-+	vmmc-supply = <&vcc_sd_pwr>;
- 	status = "okay";
- };
- 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-index ce7165d7f1a1..f589a4fdaccb 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-@@ -65,6 +65,17 @@ led_work: led-work {
- 		};
- 	};
- 
-+	nextrst_pin: nextrst-pin-regulator {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio0 RK_PA5 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&nextrst_h>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-name = "nextrst";
-+	};
-+
- 	sdio_pwrseq: sdio-pwrseq {
- 		status = "okay";
- 		compatible = "mmc-pwrseq-simple";
-@@ -104,16 +115,6 @@ vcc3v3_sys: vcc3v3-sys-regulator {
- 		regulator-max-microvolt = <3300000>;
- 		vin-supply = <&vcc5v0_sys>;
- 	};
--
--	sdmmc_pwr: sdmmc-pwr-regulator {
--		compatible = "regulator-fixed";
--		enable-active-high;
--		gpio = <&gpio0 RK_PA5 GPIO_ACTIVE_HIGH>;
--		pinctrl-names = "default";
--		pinctrl-0 = <&sdmmc_pwr_h>;
--		regulator-name = "sdmmc_pwr";
--		status = "disabled";
--	};
- };
- 
- &cpu0 {
-@@ -539,8 +540,8 @@ wifi_enable_h: wifi-enable-h {
- 		};
- 	};
- 
--	sdmmc-pwr {
--		sdmmc_pwr_h: sdmmc-pwr-h {
-+	nextrst {
-+		nextrst_h: nextrst-h {
- 			rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;
- 		};
- 	};
+   reset-gpios:
 -- 
-2.40.0
+2.34.1
 
