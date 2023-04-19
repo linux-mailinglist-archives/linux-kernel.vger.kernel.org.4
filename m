@@ -2,129 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D736E75E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4806E75E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 11:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbjDSJAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 05:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
+        id S232806AbjDSJBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 05:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbjDSJAw (ORCPT
+        with ESMTP id S232814AbjDSJBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 05:00:52 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E4B5B9D;
-        Wed, 19 Apr 2023 02:00:43 -0700 (PDT)
-Received: from [192.168.1.103] (178.176.73.14) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 19 Apr
- 2023 12:00:35 +0300
-Subject: Re: [PATCH] usb: phy: phy-tahvo: fix memory leak in tahvo_usb_probe()
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     Li Yang <lidaxian@hust.edu.cn>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     Dongliang Mu <dzm91@hust.edu.cn>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230418090758.18756-1-lidaxian@hust.edu.cn>
- <96c7edf5-e1cc-03f6-ee52-ef373ae9d820@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <eb33b694-b422-a9d5-35dc-2f8af79d47f1@omp.ru>
-Date:   Wed, 19 Apr 2023 12:00:32 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 19 Apr 2023 05:01:01 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69C812C96
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:00:58 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-51f597c97c5so1235149a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 02:00:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1681894858; x=1684486858;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4Ri0q2/V4tp17Jo0FXn5qCoZ/hu41lgkAXDj8GUCjG4=;
+        b=e6FJpg1/lSg6Fzj64vBbsl3hJAjBsz1G6UqWuw88c4fCh0Ew+10L4n3OelrDuC/FYl
+         T9bPIjDBNkK8VJgcBXm/Y44QI7KGymGCU8jRiql7yqxtIn6E5UtgM9PN2lBQQ35k6Hii
+         MxFmS5MtHJzoqeTTkVde59z2lr+YDlX1hvdSMPFsG2qt6rJmJ/IKVwnRYVMalzsQMndr
+         WfvI7BkSiEvkIKby0wY4PP407ZIZfBlD+SilDCXTaVRheNk19wY8jBX7r4u1M0WeeoRp
+         Lqp/1jduTdNNC2GmwNkkWoktbumIo8+SLEGDZeLo2Df88eg2DxTrKyykm4Zv7/JnMJ5R
+         MZMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681894858; x=1684486858;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Ri0q2/V4tp17Jo0FXn5qCoZ/hu41lgkAXDj8GUCjG4=;
+        b=fYJGE04NFwG5oibPl/8HZcgsB1eCzNJr+LPo5SiXL4H35YCwBIJFbky9ocUjKrMnVH
+         FuKppTgzH4RvT0rhiBGdS1UmVC+sNxqGoKep2j2HTTINC27K/RO7LxDYdmuPj96Se/3N
+         Gmv8DdmSJS0hEEc6JplLdsa4pzUHQs8NOwytAdvuqVJaGTEM3RiHMca6DMaxMSLIdlr9
+         ZWU+w9BsWMoPnxZcYDcRpoQTcupJCS1w4/UZthCCFE/dcuixUOIt3ZfTgn7bEWzAR6GC
+         QqvWckRpHLudErMjdugqP0xzIY1OdilzcPEcvafvYLhFPhF/1bpg29qhiKhfjEWq7taI
+         6/Nw==
+X-Gm-Message-State: AAQBX9cTOje26Jjug39ZSvqMkOLZlUOJT5zyvVXMPHauDVBWBRx0MqnJ
+        W0SuHj4aALTiDuKcz2srHo5Tww==
+X-Google-Smtp-Source: AKy350b6IXvh1v6ck6A/sCyMXZ3FN45V2eFT0zulVRY/vapMyIBlskFX9zTC4ovnUc9DmdwJuOK7Bw==
+X-Received: by 2002:a17:902:f683:b0:1a9:20d6:3c3f with SMTP id l3-20020a170902f68300b001a920d63c3fmr631660plg.55.1681894858066;
+        Wed, 19 Apr 2023 02:00:58 -0700 (PDT)
+Received: from ?IPV6:2405:201:d02f:d855:461d:14be:2cce:b776? ([2405:201:d02f:d855:461d:14be:2cce:b776])
+        by smtp.gmail.com with ESMTPSA id iz17-20020a170902ef9100b001a19f2f81a3sm10976492plb.175.2023.04.19.02.00.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 02:00:57 -0700 (PDT)
+Message-ID: <e63bba13-05f0-7d1b-bf11-04ef5eda3afd@9elements.com>
+Date:   Wed, 19 Apr 2023 14:30:54 +0530
 MIME-Version: 1.0
-In-Reply-To: <96c7edf5-e1cc-03f6-ee52-ef373ae9d820@omp.ru>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add binding for max6639
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230418113217.781524-1-Naresh.Solanki@9elements.com>
+ <742f546b-3952-32f4-9f20-3a355785d162@linaro.org>
 Content-Language: en-US
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <742f546b-3952-32f4-9f20-3a355785d162@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.73.14]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 04/19/2023 08:49:37
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 176827 [Apr 19 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 509 509 b12bcaa7ba85624b485f2b6b92324b70964a1c65
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.14 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.14 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2;178.176.73.14:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.14
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/19/2023 08:53:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 4/19/2023 6:14:00 AM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/18/23 2:17 PM, Sergey Shtylyov wrote:
-[...]
->> Smatch reports:
->> drivers/usb/phy/phy-tahvo.c: tahvo_usb_probe()
->> warn: missing unwind goto?
+Hi Krysztof,
+
+On 18-04-2023 09:47 pm, Krzysztof Kozlowski wrote:
+> On 18/04/2023 13:32, Naresh Solanki wrote:
+>> Add Devicetree binding documentation for Maxim MAX6639 temperature
+>> monitor with PWM fan-speed controller.
+> 
+> Subject: drop second/last, redundant "binding for". The "dt-bindings"
+> prefix is already stating that these are bindings.
+Ack
+> 
 >>
->> After geting irq, if ret < 0, it will return without error handling to
->> free memory.
->> Just add error handling to fix this problem.
-> 
->    Oops, I'm sorry for missing that one...
-> 
->> Fixes: 0d45a1373e66 ("usb: phy: tahvo: add IRQ check")
->> Signed-off-by: Li Yang <lidaxian@hust.edu.cn>
->> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 >> ---
->> The issue is found by static analysis, and the patch remains untest.
->> ---
->>  drivers/usb/phy/phy-tahvo.c | 7 +++++--
->>  1 file changed, 5 insertions(+), 2 deletions(-)
+>>   .../bindings/hwmon/maxim,max6639.yaml         | 55 +++++++++++++++++++
+>>   1 file changed, 55 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
 >>
->> diff --git a/drivers/usb/phy/phy-tahvo.c b/drivers/usb/phy/phy-tahvo.c
->> index f2d2cc586c5b..184a5f3d7473 100644
->> --- a/drivers/usb/phy/phy-tahvo.c
->> +++ b/drivers/usb/phy/phy-tahvo.c
->> @@ -390,8 +390,11 @@ static int tahvo_usb_probe(struct platform_device *pdev)
->>  	dev_set_drvdata(&pdev->dev, tu);
->>  
->>  	tu->irq = ret = platform_get_irq(pdev, 0);
->> -	if (ret < 0)
->> -		return ret;
->> +	if (ret < 0) {
->> +		dev_err(&pdev->dev, "could not get irq: %d\n",
->> +				ret);
+>> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>> new file mode 100644
+>> index 000000000000..20b28cd36555
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>> @@ -0,0 +1,55 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +
 > 
->    Adding the error message needs another patch, strictly speaking...
+> Drop blank line
+Ack
+> 
+> This is v9. Where is the changelog? Where is previous authorship? At
+> least some parts of it? Why this has less properties than old one? Why
+> this has more mistakes than the old one? Go to previous patch... or fix
+> everything which was already fixed.
+This patch is to add basic dt support only hence no additional properties.
 
-   And if you look at platform_get_irq(), you'll see that it prints an error msg
-itself...
-
-[...]
-
-MBR, Sergey
+> 
+> Best regards,
+> Krzysztof
+> 
+Regards,
+Naresh
