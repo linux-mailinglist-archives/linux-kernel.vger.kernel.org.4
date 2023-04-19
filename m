@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438336E7C06
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A599A6E7C00
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232097AbjDSON4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 10:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
+        id S232243AbjDSONt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 10:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbjDSON1 (ORCPT
+        with ESMTP id S232791AbjDSON1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Apr 2023 10:13:27 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5E4183B4;
-        Wed, 19 Apr 2023 07:12:40 -0700 (PDT)
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C295516DE4;
+        Wed, 19 Apr 2023 07:12:38 -0700 (PDT)
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33JECOq0098862;
-        Wed, 19 Apr 2023 09:12:24 -0500
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33JECPn5005232;
+        Wed, 19 Apr 2023 09:12:25 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681913544;
-        bh=HROvAV9iDzoJW7qiSmGpYMTUtqgV7MOJ9HNwcaAVwnc=;
+        s=ti-com-17Q1; t=1681913545;
+        bh=7JMr6UAfOcI9OnbSghx8XaEHzCwn8lowWb622/8bltk=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=PQhK42reJnRttc+hPdGn8KSgRyZ1IEkozD8/QCjjx9JKSAGlf4SDMNj3v6JOFncYA
-         B1sOWENdRgmh27NZHrKu31PAxV6CPIPxcrllWgbgYiBzUx+aa30NmHhAyG0aRWJd7B
-         Mq+ePT2b/5PnKSTlKMpwF69mfFcXFdixb2Ta2SEE=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33JECOlc095435
+        b=BQSvv3jKCtSwZf+k0TmUoAOPjrTuxmfuPuFdUdJcM8pp8AlBvMj5k7iS6javZBb6m
+         exeMiBTry1Svpu9oxEcCgXRah0p8W8RZEp2hZeTNNPsLQsP5jCN3bqdvQ2fhWePiKM
+         BYgWkVXcfTSt/BVc3MEBDLrkFdodt2YhVD5LcTTo=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33JECPwO095449
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 19 Apr 2023 09:12:24 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 19 Apr 2023 09:12:25 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
- Apr 2023 09:12:24 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2023 09:12:25 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
  Frontend Transport; Wed, 19 Apr 2023 09:12:24 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33JECOht030198;
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33JECOrX021105;
         Wed, 19 Apr 2023 09:12:24 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -49,9 +49,9 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH V2 3/5] arm64: dts: ti: k3-j721e-*: Drop bootargs
-Date:   Wed, 19 Apr 2023 09:12:20 -0500
-Message-ID: <20230419141222.383567-4-nm@ti.com>
+Subject: [PATCH V2 4/5] arm64: dts: ti: k3-j7200-common-proc-board: Drop bootargs
+Date:   Wed, 19 Apr 2023 09:12:21 -0500
+Message-ID: <20230419141222.383567-5-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230419141222.383567-1-nm@ti.com>
 References: <20230419141222.383567-1-nm@ti.com>
@@ -85,16 +85,15 @@ Changes since v1:
 - improved commit message
 - picked up acks and reviews from Roger and Krzysztof
 
-V1: https://lore.kernel.org/r/20230418165212.1456415-4-nm@ti.com
+V1: https://lore.kernel.org/r/20230418165212.1456415-5-nm@ti.com
 
- arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts | 1 -
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts                | 1 -
- 2 files changed, 2 deletions(-)
+ arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-index 7db0603125aa..c11c092c1ce0 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+diff --git a/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
+index 0d39d6b8cc0c..5506341aae21 100644
+--- a/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
++++ b/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
 @@ -17,7 +17,6 @@ / {
  
  	chosen {
@@ -102,19 +101,7 @@ index 7db0603125aa..c11c092c1ce0 100644
 -		bootargs = "console=ttyS2,115200n8 earlycon=ns16550a,mmio32,0x02800000";
  	};
  
- 	gpio_keys: gpio-keys {
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-index f650a7fd66b4..ad7b45aeed0a 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-@@ -18,7 +18,6 @@ / {
- 
- 	chosen {
- 		stdout-path = "serial2:115200n8";
--		bootargs = "console=ttyS2,115200n8 earlycon=ns16550a,mmio32,0x02800000";
- 	};
- 
- 	memory@80000000 {
+ 	evm_12v0: fixedregulator-evm12v0 {
 -- 
 2.40.0
 
