@@ -2,242 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2A06E7368
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AF16E736F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbjDSGkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 02:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
+        id S232129AbjDSGn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 02:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjDSGkx (ORCPT
+        with ESMTP id S229821AbjDSGnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 02:40:53 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30754118
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:40:52 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id f39so3629179vsv.4
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:40:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681886451; x=1684478451;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aWd5qP19PrDA8a5+jMOmLR8wXhUw04LKJ7XceEnbX9s=;
-        b=e3FPsHJmPlWD61qtzCukUCAKypIZTK6Y7WrWfeYnRzmQBinus8xKq4RdcGvHK3U4xv
-         UtPJSIZnvNfdaDgXZN1mgIjdtLZttzYUWdJRn1rIVddpfnms+BSH82EbkBFqUzHrF8OG
-         j64WYz09bhlob0qpRjoWh37imAJLKzwrQxA++/F6a27GCGu/XiWbAHbLed5J9VPd8u6m
-         clp0QvvESMVuUHKPnkQpbwkRTCS3VSE3vfwpAlW/+yFgANhB5nlr+mquDXaxdt6ArDUi
-         2dh7qvYdsnJHxRP/6vT0iz6Z/INCm6YBFqrOChs2IXxmI5I86tOQQM0Yq8BvJoamaOnV
-         Te9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681886451; x=1684478451;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aWd5qP19PrDA8a5+jMOmLR8wXhUw04LKJ7XceEnbX9s=;
-        b=HBB9ycGWF+i5Efo56C5Lmqxrkx22XqIiWHupPzjXl1QvCt11yKufzkn8pC3KEmkfbp
-         9w3TARU5v3NX94Z6lXsn+5jYXdegirFCSEC/HG9OkQKu60WijkBWRmGZohg8h0g+wB2s
-         mNJtgNa12bs6lpgWQW8JBeq/fANQ0hCKNScjPrbjLwdsqoeXe/lIthPvpyM4cq2zSy04
-         dnLrrpHVmj9Ih2nVLQEu1CjBnF7AWFqNT5WimRMHlpRfMwWfbdzVapK/Ny/aICcI6oKD
-         bYT3tcfzRSXQBNxo8eYXzhOizBwlN9z3OFpp621bCWv4I0noQ7he37yMNg+Y6WrvTFyb
-         GrhA==
-X-Gm-Message-State: AAQBX9dkZ0rQhaZwakfMx6TJXziZGW1hm6Sp//KbfmH+7IIveBAH67W5
-        0OzForM5Zy4rnVmrYF2rxFE9N//tvHR8x3A+EimHvw==
-X-Google-Smtp-Source: AKy350aPR9dTPodpYzT0iWfP5z+C0pG2685nhsjTHPlCI6dyQnDcK0ipkvjgGhXUg4kT025T4T7EWVhWrXcsZuibbXQ=
-X-Received: by 2002:a67:f7cb:0:b0:42f:e169:b759 with SMTP id
- a11-20020a67f7cb000000b0042fe169b759mr3664374vsp.15.1681886451085; Tue, 18
- Apr 2023 23:40:51 -0700 (PDT)
+        Wed, 19 Apr 2023 02:43:53 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797EE4EDC;
+        Tue, 18 Apr 2023 23:43:52 -0700 (PDT)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33IM7K6S031642;
+        Wed, 19 Apr 2023 06:43:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2023-03-30; bh=lBTeLt7LT0x/iBEEIHBs4tFbuRchxfp3k+pqmGKU+Pw=;
+ b=wToHpURwOR4OXKxZrS9xK7hUj37n2tgeBq59T0hYtG8MDV0WM2IQC3lMhjiv9yocD0Nn
+ FjVVWhRYOnAqLFWYoEIXS88uxHMgdtyWFIlebvWlR6PqRcDMmUS5BSGxI1eEPTPOpsnq
+ LWttBOT48IEL7fCO+zPpqnlW4X2l5Yx5JFqglI5of6TvWZB7JnDI09NrmPGELnqsIFKA
+ w38VT4FZYxosfJlNcelUSC3qEVv4eZjieKSexRWQGDdIVWnLn93eec8RzS3en9ygKK7F
+ XgvEsEqAaUaLwZjCKbddyuccsNu44LgPlpjEhabLXnwo2tW8Ifvni0pXGIIJ21tfD9K8 aA== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pykycyhs2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Apr 2023 06:43:40 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33J5oTGe037808;
+        Wed, 19 Apr 2023 06:43:39 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3pyjc6gqkb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Apr 2023 06:43:39 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33J6hcqG034995;
+        Wed, 19 Apr 2023 06:43:38 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3pyjc6gq69-1;
+        Wed, 19 Apr 2023 06:43:38 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@oracle.com, error27@gmail.com,
+        kernel test robot <lkp@intel.com>,
+        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        mpi3mr-linuxdrv.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: mpi3mr: Use -ENOMEM instead of -1 in mpi3mr_expander_add()
+Date:   Tue, 18 Apr 2023 23:42:56 -0700
+Message-Id: <20230419064256.2532069-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230418120313.001025904@linuxfoundation.org>
-In-Reply-To: <20230418120313.001025904@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 19 Apr 2023 12:10:39 +0530
-Message-ID: <CA+G9fYsXat98YZAOe6geqmffe4H9XW05n6ThLYoEMRLqXHKNxw@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/134] 6.1.25-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-19_03,2023-04-18_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ spamscore=0 malwarescore=0 suspectscore=0 mlxscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304190061
+X-Proofpoint-GUID: ad7DWTn37xQImdXzdCNln8r3hbAjGhGn
+X-Proofpoint-ORIG-GUID: ad7DWTn37xQImdXzdCNln8r3hbAjGhGn
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Apr 2023 at 18:12, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.1.25 release.
-> There are 134 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.1.25-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+smatch warnings:
+drivers/scsi/mpi3mr/mpi3mr_transport.c:1449 mpi3mr_expander_add() warn:
+	returning -1 instead of -ENOMEM is sloppy
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+No functional change.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://lore.kernel.org/r/202303202027.ZeDQE5Ug-lkp@intel.com/
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+ drivers/scsi/mpi3mr/mpi3mr_transport.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-## Build
-* kernel: 6.1.25-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.1.y
-* git commit: 90c08f549ee77571625a1b42bbb3fcc956181801
-* git describe: v6.1.22-480-g90c08f549ee7
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.2=
-2-480-g90c08f549ee7
+diff --git a/drivers/scsi/mpi3mr/mpi3mr_transport.c b/drivers/scsi/mpi3mr/mpi3mr_transport.c
+index 4d84d5bd173f..82b55e955730 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr_transport.c
++++ b/drivers/scsi/mpi3mr/mpi3mr_transport.c
+@@ -2058,7 +2058,7 @@ int mpi3mr_expander_add(struct mpi3mr_ioc *mrioc, u16 handle)
+ 	sas_expander = kzalloc(sizeof(struct mpi3mr_sas_node),
+ 	    GFP_KERNEL);
+ 	if (!sas_expander)
+-		return -1;
++		return -ENOMEM;
+ 
+ 	sas_expander->handle = handle;
+ 	sas_expander->num_phys = expander_pg0.num_phys;
+-- 
+2.38.1
 
-## Test Regressions (compared to v6.1.22)
-
-## Metric Regressions (compared to v6.1.22)
-
-## Test Fixes (compared to v6.1.22)
-
-## Metric Fixes (compared to v6.1.22)
-
-## Test result summary
-total: 156939, pass: 136263, fail: 3904, skip: 16450, xfail: 322
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 149 total, 148 passed, 1 failed
-* arm64: 52 total, 51 passed, 1 failed
-* i386: 39 total, 36 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 36 passed, 2 failed
-* riscv: 16 total, 15 passed, 1 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 44 total, 44 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
