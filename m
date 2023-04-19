@@ -2,105 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D886E894F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 06:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A191A6E85FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 01:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbjDTEya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 00:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
+        id S231290AbjDSXel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 19:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjDTEy0 (ORCPT
+        with ESMTP id S229714AbjDSXek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 00:54:26 -0400
-Received: from mail.heimpalkorhaz.hu (mail.heimpalkorhaz.hu [193.224.51.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B384216
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 21:54:24 -0700 (PDT)
-Received: from mail.heimpalkorhaz.hu (localhost [127.0.0.1])
-        (Authenticated sender: lmateisz@heimpalkorhaz.hu)
-        by mail.heimpalkorhaz.hu (Postfix) with ESMTPA id 2BF8E384A1BD2B;
-        Thu, 20 Apr 2023 01:33:19 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.heimpalkorhaz.hu 2BF8E384A1BD2B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heimpalkorhaz.hu;
-        s=default; t=1681947199;
-        bh=LEWDfe5clYWR/anetNytqk2Tau87lBu9j8JASq5xF+Y=;
-        h=Date:From:To:Subject:Reply-To:From;
-        b=boH0GA0scSMq5WMWngIbwPnCdEhFQxrGFt5oFjNC2dBBRmbfARYuPGriGUL5GMRqw
-         9sj85fKsrQKis9CBQRk/YQWhQPcDw+N+oJj1PY5oR1eOKJJmXqUPqsfNhB4HGIcnXc
-         ijCiY+0AatNMHyNCB3+mBRM5JwMqXBGcV9GMGLLEQg2munzSEp8DQnshaAxJUCIhzo
-         K/R+6HKDezxV+WxQ59jypFAQ7gEJWii4rMKM2jyF16VKHB37cOIETO6LWMRV2f6pjI
-         GQPXbenluccKMaLF8P38qhN0TIs4FbEqeJZlqlqXQKmCnY/RZfqLPWF1ad8qy8sqBf
-         TZyVLouCMWQ1Q==
+        Wed, 19 Apr 2023 19:34:40 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9302D62
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 16:34:38 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-24704a7bf34so281457a91.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 16:34:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google; t=1681947278; x=1684539278;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=42V/4d2g4SmvVdtXXthexb+5Ubl/6v371AotGfmaixU=;
+        b=lgrWN3ZYYUvxafsTOzwbZWiNtrbe8XhcGEd/r4vVw8GtLnvll+Mvinro9WIVnR7cdr
+         +Lt9LcEQFlrJuCxKy5W0tkjkWAFuV2ex9CCpzHsX848xUdkxfhWlrizQarsdW2RFRqP6
+         Nf/+gtcblODAJ/oIEwPw4g6tRzhkn6C6Q46r0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681947278; x=1684539278;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=42V/4d2g4SmvVdtXXthexb+5Ubl/6v371AotGfmaixU=;
+        b=jyxqhZQSCSuizCkbhayI6kZTlcnKd1dAmmMnh2F33J6QmKb3V/QY/F32FYexVkOOHW
+         fLFjELJFNpQo1LAvWXR/g5s1Eqg4gTw3Tx/tABFlrQxBkVDjk3cnY6NQKQv1bCS8lLNI
+         eCumVkx+bmMFjUoAAe45CiQVw4MqU6EdA5brdWXkJtywqc1S9rGr9HyDL75UCjhYLku2
+         5OocKblANJppaeU0JOW90ZwzhMbH7RsWbV4gXdoOSc5ZFoHDwYc4d1X7qv/OjdD5NO2N
+         5CQ+wUU1qP/9gQkzJmaNgSi1McgeH2j1IjY1cBdgAVuRNOYqMNouEVg/WM23sBBKqARQ
+         IzYg==
+X-Gm-Message-State: AAQBX9d43TWKqxwlPg86urkxEDOGafcK2Ft4TtgkYLBAzJ3k7ieWoYTo
+        MjKhOkODWZCIGN1onzUQ6gu/cIfeUWaz1IEa5rkC
+X-Google-Smtp-Source: AKy350aBH0VEPcP2Qh/Eoox3kPORS1HQObKPOJMrnSxK+FdPS8mYZv3TNtyW5xMB6xiXuJwilswkqt/c7AoWpmH4+5o=
+X-Received: by 2002:a17:90b:180f:b0:247:eae:1787 with SMTP id
+ lw15-20020a17090b180f00b002470eae1787mr4273120pjb.36.1681947278172; Wed, 19
+ Apr 2023 16:34:38 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Wed, 19 Apr 2023 23:33:18 +0000
-From:   mk <mk@heimpalkorhaz.hu>
-To:     undisclosed-recipients:;
-Subject: Salaiselta ihailijaltasi
-Reply-To: marionn.k99@gmail.com
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <68c818f4d10f544279357b18612e6092@heimpalkorhaz.hu>
-X-Sender: mk@heimpalkorhaz.hu
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [4.31 / 20.00];
-        R_UNDISC_RCPT(3.00)[];
-        FORGED_RECIPIENTS(2.00)[m:,s:liisaropponen@gmail.com,s:liisa.rumpunen@odl.fi,s:liisaruotsalainen@gmail.com,s:liisa.ruusukallio@evl.fi,s:liisasm@gmail.com,s:liisa.saarelainen@turku.fi,s:liisasaarilampi@gmail.com,s:liisasaarto@gmail.com,s:liisa.salmivaara@luukku.com,s:liisa.santasaari@luukku.com,s:liisa.sopanen@savonlinna.fi,s:liisasoranta@gmail.com,s:liisa.suila@luukku.com,s:liisa.summanen@leonino.fi,s:liisasunila@gmail.com,s:liisa.suominen@uef.fi,s:liisa.survo@fimnet.fi,s:liisa.tainio@helsinki.fi,s:liisatammisto@gmail.com,s:liisa.temiseva@luukku.com,s:liisa.teraslahti@soivahoiva.fi,s:liisa.tervo@luukku.com,s:liisa.tiittula@uta.fi,s:liisa.timonen@pkamk.fi,s:liisa.tolvanen@kolumbus.fi,s:liisatorikka@gmail.com,s:liisa.toroska@luukku.com,s:liisa.tuominen@pp.inet.fi,s:liisa.ulmanen@rovaniemi.fi,s:liisa.vaananen@rovaniemi.fi,s:liisa.vahamaki@hotmail.com,s:liisa.valikangas@fimnet.fi,s:liisa.valila@evl.fi,s:liisavallenius@gmail.com,s:liisa.varjola@kouvola.fi,s:liisavesma@gmail.com,s:liisa.v
- ihmanen@yle.fi,s:liisa.wikstrom@posiva.fi,s:liisa1kosonen@gmail.com,s:liisa2karkkainen@gmail.com,s:liisa2005@netti.fi,s:liisa2802@gmail.com,s:liisa@liisaahonen.fi,s:liisa@liisajokinen.com,s:liisa@nirha.fi,s:liisa@nurmentaus.net,s:liisa_korhonen@welho.com,s:liisaelinaviitanen@gmail.com,s:liisaeveliina@gmail.com,s:liisahelenapalo@gmail.com,s:liisajinkinen@gmail.com,s:liisajajp.halmeenmaki@hotmail.fi,s:liisakarvinen@gmail.com,s:liisakkunnas@gmail.com,s:liisakukkonen@gmail.com,s:liisamankinen@windowslive.com,s:liisamanu@luukku.com,s:liisamjokela@gmail.com,s:liisamyllynen@gmail.com,s:liisankotona@luukku.com,s:liisanmarja@gmail.com,s:liisanmeili@gmail.com,s:liisaojantakanen@gmail.com,s:liisapalonen@gmail.com,s:liisapeippo@gmail.com,s:liisapeltonen@gmail.com,s:liisapennanen81@gmail.com,s:liisasuorsa@hotmail.com,s:liisatiitola@gmail.com,s:liisatommila@gmail.com,s:liisatuomiranta@hotmail.com,s:liisatuppurainen@gmail.com,s:liisikoivu@gmail.com,s:liisij@gmail.com,s:liisvasemagi@gmail.com,s:lii
- tto@steinerkasvatus.fi,s:liituinen@gmail.com,s:liivisoppi@sirunliivisoppi.fi,s:lijunwang@mail.xjtu.edu.cn,s:likanentappi@gmail.com,s:likealady@windowslive.com,s:likuokka@gmail.com,s:liljdean@gmail.com,s:lila.camilla@kolumbus.fi,s:lila.kongas-saarikko@via-ok.net,s:lilamarianne@gmail.com,s:lilatech@gmail.com,s:lilipihlis@gmail.com,s:lili.rose@gmx.de,s:lilisrdic@gmail.com,s:liliamielonen@gmail.com,s:liliatikko@gmail.com,s:liliana.cristina.moraru@uol.de,s:lilianaloikkanen@gmail.com,s:liliankurt@hotmail.com,s:lilianpromet@gmail.com,s:lilinlae@gmail.com,s:lilith.weber@helsinki.fi,s:lilith@lilith.fi];
-        GENERIC_REPUTATION(-0.59)[-0.58897743231492];
-        MIME_GOOD(-0.10)[text/plain];
-        TAGGED_RCPT(0.00)[];
-        FROM_EQ_ENVFROM(0.00)[];
-        RCVD_COUNT_ZERO(0.00)[0];
-        MIME_TRACE(0.00)[0:+];
-        FROM_HAS_DN(0.00)[];
-        FREEMAIL_ENVRCPT(0.00)[gmail.com,luukku.com,hotmail.com,windowslive.com,gmx.de,icloud.com,ukr.net,yahoo.com,outlook.com,live.se,bigpond.com,hanmail.net,comcast.net,me.com,yahoo.dk,yahoo.co.uk,charter.net,ymail.com,web.de,netscape.net];
-        TO_DN_ALL(0.00)[];
-        MID_RHS_MATCH_FROM(0.00)[];
-        RCPT_COUNT_ONE(0.00)[1];
-        FREEMAIL_REPLYTO(0.00)[gmail.com];
-        REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-        HAS_REPLYTO(0.00)[marionn.k99@gmail.com]
-X-Rspamd-Queue-Id: 2BF8E384A1BD2B
-X-Rspamd-Server: mail.heimpalkorhaz.hu
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230303133647.845095-1-sunilvl@ventanamicro.com>
+ <16007014-c5f2-4b07-baec-e19952236aa5@spud> <ZAbGSA6F0kfv9YYw@sunil-laptop>
+ <E7FB4927-1FE6-435A-914E-9615C2AD9D34@kernel.org> <a9823561-2e32-49e8-b6c9-73e4b8f8cf8d@spud>
+ <ZAfeaO52pnYhiyLN@sunil-laptop> <CAFiDJ58bRo6R1qOFaSSNgAdbQJZ3xDY6Wth-t8M8XKRFbig2hA@mail.gmail.com>
+ <ZCvJpnNZYzrIcfPe@sunil-laptop> <CAHBxVyHA8ZouSUnqHaZTa=uMQxx61RqZuSBHx15Hg8+AVYLXZg@mail.gmail.com>
+ <CAFiDJ5-7qY2vQvbcTU7QPLmqrbCmXWkCxmswO4OqeYtsNOiOFw@mail.gmail.com>
+In-Reply-To: <CAFiDJ5-7qY2vQvbcTU7QPLmqrbCmXWkCxmswO4OqeYtsNOiOFw@mail.gmail.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Thu, 20 Apr 2023 05:04:26 +0530
+Message-ID: <CAOnJCUJT+kdFRn=3nZA6P6JatyN0anbKd0ufbQ_Zs9DSAoaC6A@mail.gmail.com>
+Subject: Re: [PATCH V3 00/20] Add basic ACPI support for RISC-V
+To:     Ley Foon Tan <lftan@kernel.org>
+Cc:     Atish Kumar Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-doc@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, llvm@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Conor Dooley <conor@kernel.org>, linux-acpi@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Len Brown <lenb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hei rakas,
+On Wed, Apr 19, 2023 at 1:38=E2=80=AFPM Ley Foon Tan <lftan@kernel.org> wro=
+te:
+>
+> On Thu, Apr 6, 2023 at 10:45=E2=80=AFAM Atish Kumar Patra <atishp@rivosin=
+c.com> wrote:
+> >
+>
+> > > >
+> > > > Hi Sunil
+> > > >
+> > > > One question regarding PMU in ACPI flow.
+> > > >
+> > > > We use DT to decode the supported HPM counters/events for the
+> > > > different platforms now.
+> > > > How do we enable PMU (drivers/perf/riscv_pmu_sbi.c) when using ACPI=
+ method?
+> > > > Note, this might be in separate patch series.
+> > > >
+> > > Hi Lay Foon,
+> > >
+> > > This driver uses SBI calls and hence should work in case of ACPI also=
+.
+> > >
+> > > There is one minor change required in this driver for overflow
+> > > interrupt. I have a patch for that in future series.
+> >
+> > Just to add further clarification: OpenSBI will continue to use the
+> > device tree so that
+> > the firmware will have access to all the PMU details.
+> >
+> Sorry for the late reply, missed out on this email in my kernel.org mailb=
+ox.
+>
+> Do you mean OpenSBI still using the device tree, but EDK II and Linux
+> using the ACPI table? Normally Linux shouldn't mix between ACPI and
 
-Olen pahoillani, että loukkasin sinua ja loukkaan yksityisyyttäsi. olen 
-sinkku
-  Yksinäinen ja tarvitsee välittävän, rakastavan ja romanttisen 
-kumppanin.
-
-Olen salainen ihailija ja haluaisin tutkia mahdollisuutta
-oppia lisää toisistaan. Tiedän, että on outoa ottaa sinuun yhteyttä
-tällä tavalla ja toivon, että voit antaa minulle anteeksi. Olen ujo 
-ihminen ja
-Tämä on ainoa tapa saada huomiosi. Haluan vain
-tietää, mitä ajattelet, enkä tarkoitukseni ole loukata sinua.
-Toivon, että voimme olla ystäviä, jos niin haluat, vaikka haluaisinkin
-olla enemmän kuin vain ystävä. Tiedän, että sinulla on muutama kysymys
-kysy ja toivon, että voin tyydyttää uteliaisuuttasi muutamalla
-vastauksia.
-
-Uskon sanontaan, että maailmalle olet vain yksi henkilö,
-mutta jollekin erityiselle sinä olet maailma'. Haluan vain rakkautta
-romanttinen hoito ja huomio erityiseltä kumppanilta, jota olen
-toivottavasti olisit sinä.
-
-Toivon, että tämä viesti on pitkän aikavälin alku
-välistä viestintää, lähetä vain vastaus tähän viestiin, se
-tekee minut onnelliseksi.
+Yes. For Linux, it will only be ACPI. Otherwise, we have to define all
+those bindings in ACPI as well.
+In the future, we will have supervisor counter delegation ISA
+extension(in progress) that allows the kernel to directly program
+the hpmevents & modify counters without needing SBI PMU extension.
 
 
-Haleja ja pusuja,
+> device tree.
+>
 
-M.K
+
+> Regards
+> Ley Foon
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+
+
+--=20
+Regards,
+Atish
