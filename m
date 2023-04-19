@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F2A6E7546
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4603A6E754D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbjDSIda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
+        id S232642AbjDSId5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbjDSId3 (ORCPT
+        with ESMTP id S232557AbjDSIdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:33:29 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82CFCE
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:33:26 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id l13so6882016uan.10
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:33:26 -0700 (PDT)
+        Wed, 19 Apr 2023 04:33:55 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582F146B9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:33:49 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id bi21-20020a05600c3d9500b003f17a8eaedbso1039387wmb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:33:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681893205; x=1684485205;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TFh8cKtmQeLzdNqi85aci1KA8iIgD65gwTL6N4mvUb4=;
-        b=bQfRm00TH335URMWMoIjUAnRVREHVpYBP5fzrRr2WpfOwN1TgW1GKkHzAMlacfepea
-         SCBUZRbUt587K6Vtuz5woZ6IKg0vEyy0mT7SmCTjNkdwKQb33cE5FQsv4hQv8WO7M65s
-         XOtV8Lj0kFMVi3yNlEhGHuzXrwgYuHQmWhyud8dckS+lNdzpTe5aAAp94YcJzA6LCoeA
-         oXFA56Qwo+PmpNv2trpwRsM/1wEISKkFIvkofQL/QkLGU6uUpgge9Uajz7kbsBg6Kc+/
-         VgqlAQHRU9B/5J7t7C0haLx8PXj6qmh0EBW/0UKPiodL5A+k1FrySaqprMviSljrLQ3O
-         q2Jw==
+        d=linaro.org; s=google; t=1681893228; x=1684485228;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C41B6yV2DJm6e0BljcJPziM6mJfMowYxUum5pceV41s=;
+        b=uUjaFebkViAcB5GlgI0TxnmKtBjlyHFn/R6izh0Gg+8XmTOW3wCws0gJS6syvgTReO
+         1Za8uNuElZNYpk6Rz+PG0VE+lsVTmRQ/uSCIm6aP06da6p9hWElRYATrvDPejdDM4nwm
+         sOQmMbIj8491eDvxH44mDH6a4Dg9o5X1cjUf4Lu9SQBvNzU4wp3y9jtAG7MpdCBwZ3O6
+         /TtvcXiGR0trp+DS6vhvIojBWAzpvLR+S0Gmg8F4pHcE12STOK4FHPpzOLBXFxN+ml6s
+         UyCqlMLqoBP5CZepRpDMWTMcsO2mlrDlNkFSNlKmKtZVQCl+ecC7pFB/IzaHy2y8JwX7
+         2NMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681893205; x=1684485205;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1681893228; x=1684485228;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TFh8cKtmQeLzdNqi85aci1KA8iIgD65gwTL6N4mvUb4=;
-        b=IJuhKMUCk2yy2DtAV/MNsYpIUS1tASYVynMzeMOpuIdWHmHWk0IHgg3gCgmAQcBGjg
-         dcW6O2+DMlZX5qdo1i6w8w410kSpAuRUSfQ67XbvaJWIxuxb4TwwhIrZxs2Mx5y3i2O1
-         6qOviqSHWId2vJxoNRUo3Lh2YfirRbz8oSgVqDwOg5xmWb/yG29kUEmLsPQtXibsl93M
-         PGLV6jscs/xvP39m4H7bYkRhqY51HSB4wdYPDMqynok2un7FkrtjYL6OdLYUFTWUqWxr
-         TWpqpeTbfRydp+ORhVB0hcxaEGuhb6JJoxNJ26TXkcxtqSOultX05XEOcrP0P0CxH2zS
-         Y2DQ==
-X-Gm-Message-State: AAQBX9e5g3EezLaN7pujScgPZ1r8MI3n1cZ4htxdktlyWJgOQAt8lC76
-        FXjpqCFc90yA3XV2XLtFH+gULj9KOsh+k/xR3Yzzww==
-X-Google-Smtp-Source: AKy350aCAj0CmufVadvfZKn2S5DZRP2Jm81ER6UwRvOh7xB9fgGw8ImZRwGXf0ybp4mARVbrEA1jcZXOXojFkttjavs=
-X-Received: by 2002:a1f:5c43:0:b0:440:3629:846 with SMTP id
- q64-20020a1f5c43000000b0044036290846mr7225925vkb.2.1681893205569; Wed, 19 Apr
- 2023 01:33:25 -0700 (PDT)
+        bh=C41B6yV2DJm6e0BljcJPziM6mJfMowYxUum5pceV41s=;
+        b=Vk4EoZJI6LN3blI0wUSNw1VDAln+oQzQxslb4exicH6iCQkJboO6FFaxdXifmpZubZ
+         R3RLkkcXJQuRiVnhZpypjASTvwj72vO58PrwLhlm2KamMeiRmoTZ6spW+tcreg9c1dEw
+         Hx8zU1Xssu4g4s1APmBvFwYI80ZxQsSEP9SLds/LxNt3L236BIv2eaj5+pEpVcoSZPe3
+         d/ulB3rUDgmlyHoq44pBsGayLxGXld4uWW2OBJUl33iQnCfzLMsbuzFmvDe5ACYGavL9
+         tQaWUsxu6kUwY9sbu/7dkpOczA+OYg66O8kSxTWc+silfTH6tEHITYxCobRkJxhL3pyt
+         95Mg==
+X-Gm-Message-State: AAQBX9fiXM5asiMYznu0I35IatETVtydaSqn3QUezn03nbZ4OT03SM5z
+        hhGOCTxg4k7CDmjY559Y545uDQ==
+X-Google-Smtp-Source: AKy350ZALBs5FVUlKysuCSOzozRkBp5mf5W7ytrLdB4Oj6YB4nBUU3r4ksnFVSFjUFX7w2g1lNBD3A==
+X-Received: by 2002:a05:600c:2184:b0:3f1:82a0:1993 with SMTP id e4-20020a05600c218400b003f182a01993mr21210wme.21.1681893227757;
+        Wed, 19 Apr 2023 01:33:47 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:a794:9fb2:29fb:606d])
+        by smtp.gmail.com with ESMTPSA id s5-20020a1cf205000000b003ed1ff06faasm1442033wmc.19.2023.04.19.01.33.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 01:33:47 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v4 0/6] Thermal zone device structure encapsulation
+Date:   Wed, 19 Apr 2023 10:33:37 +0200
+Message-Id: <20230419083343.505780-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230418120258.713853188@linuxfoundation.org>
-In-Reply-To: <20230418120258.713853188@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 19 Apr 2023 14:03:14 +0530
-Message-ID: <CA+G9fYtQZpMB=uuEj9QFVXRp-JteNLd2N7ezpbfOP_ee080DaQ@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/57] 4.19.281-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        LTP List <ltp@lists.linux.it>, chrubis <chrubis@suse.cz>,
-        Petr Vorel <pvorel@suse.cz>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -75,191 +69,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Apr 2023 at 17:55, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.281 release.
-> There are 57 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.281-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+The thermal zone device structure is defined in the exported thermal
+header include/linux/thermal.h
 
-Recently we have upgraded the LTP test suite version and started noticing
-these test failures on 4.19 and 4.14 only on arm64.
+Given the definition being public, the structure is exposed to the
+external components other than the thermal framework core code. It
+results the drivers are tampering the structure internals like taking
+the lock or changing the field values.
 
-Need to investigate test case issues or kernel issues.
+Obviously that is bad for several reasons as the drivers can hook the
+thermal framework behavior and makes very difficult the changes in the
+core code as external components depend on it directly.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Moreover, the thermal trip points being reworked, we don't want the
+drivers to access the trips array directly in the thermal zone
+structure and doing assumptions on how they are organized.
 
-NOTE:
-creat09.c:73: TINFO: User nobody: uid = 65534, gid = 65534
-creat09.c:75: TINFO: Found unused GID 11: SUCCESS (0)
-creat09.c:120: TINFO: File created with umask(0)
-creat09.c:106: TPASS: mntpoint/testdir/creat.tmp: Owned by correct group
-creat09.c:112: TPASS: mntpoint/testdir/creat.tmp: Setgid bit not set
-creat09.c:106: TPASS: mntpoint/testdir/open.tmp: Owned by correct group
-creat09.c:112: TPASS: mntpoint/testdir/open.tmp: Setgid bit not set
-creat09.c:120: TINFO: File created with umask(S_IXGRP)
-creat09.c:106: TPASS: mntpoint/testdir/creat.tmp: Owned by correct group
-creat09.c:110: TFAIL: mntpoint/testdir/creat.tmp: Setgid bit is set
-creat09.c:106: TPASS: mntpoint/testdir/open.tmp: Owned by correct group
-creat09.c:110: TFAIL: mntpoint/testdir/open.tmp: Setgid bit is set
+This series provides a second set of changes moving to the thermal
+zone device structure self-encapsulation.
 
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19.279-143-gcc0a9b81697f/testrun/16319970/suite/ltp-syscalls/test/creat09/log
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19.279-143-gcc0a9b81697f/testrun/16319970/suite/ltp-syscalls/test/creat09/history/
+The ACPI and the Menlon drivers are using the thermal zone's device
+fields to create symlinks and new attributes in the sysfs thermal zone
+directory. These changes provide a hopefully temporary wrapper to
+access it in order to allow moving forward in the thermal zone device
+self-encapsulation and a Kconfig option to disable by default such a
+extra sysfs information.
 
+Changelog:
+	v4:
+	- Encapsulate extra sysfs information inside a function for
+          ACPI but remove the Kconfig option
+	- Encapsulate extra sysfs information inside a function,
+          create the stubs and put that conditionnal to a Kconfig
+          option for Menlow
+	v3:
+	- Split the Kconfig option to be driver related when disabling
+          the specific attributes
+	- Use the thermal zone's device wrapper to write a trace in
+          the pch intel driver
+	v2:
+	- Add the Kconfig option to remove specific attributes
+	- Add a thermal_zone_device() wrapper to access tz->device
 
-## Build
-* kernel: 4.19.281-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: cc0a9b81697f7222c51d17365c5960680ba00260
-* git describe: v4.19.279-143-gcc0a9b81697f
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19.279-143-gcc0a9b81697f
+Daniel Lezcano (6):
+  thermal/core: Encapsulate tz->device field
+  thermal/drivers/intel_pch_thermal: Use thermal driver device to write
+    a trace
+  thermal/drivers/acpi: Use thermal_zone_device()
+  thermal/drivers/menlow: Use thermal_zone_device()
+  thermal/drivers/acpi: Move to dedicated function sysfs extra attr
+    creation
+  thermal/drivers/intel_menlow: Make additionnal sysfs information
+    optional
 
-## Test Regressions (compared to v4.19.279-85-ge4a87ad39c98)
+ drivers/acpi/thermal.c                    | 47 +++++++++++++++--------
+ drivers/thermal/intel/Kconfig             | 11 ++++++
+ drivers/thermal/intel/intel_menlow.c      | 18 +++++++--
+ drivers/thermal/intel/intel_pch_thermal.c |  3 +-
+ drivers/thermal/thermal_core.c            |  6 +++
+ include/linux/thermal.h                   |  1 +
+ 6 files changed, 67 insertions(+), 19 deletions(-)
 
-* qemu-arm64, ltp-cve
-  - cve-2018-13405 ( creat09 )
+-- 
+2.34.1
 
-* qemu-arm64, ltp-syscalls
-  - creat09
-
-## Metric Regressions (compared to v4.19.279-85-ge4a87ad39c98)
-
-## Test Fixes (compared to v4.19.279-85-ge4a87ad39c98)
-
-## Metric Fixes (compared to v4.19.279-85-ge4a87ad39c98)
-
-## Test result summary
-total: 96758, pass: 71960, fail: 3568, skip: 21047, xfail: 183
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 108 total, 107 passed, 1 failed
-* arm64: 34 total, 33 passed, 1 failed
-* i386: 20 total, 19 passed, 1 failed
-* mips: 22 total, 22 passed, 0 failed
-* parisc: 6 total, 6 passed, 0 failed
-* powerpc: 24 total, 24 passed, 0 failed
-* s390: 6 total, 6 passed, 0 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 28 total, 27 passed, 1 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
