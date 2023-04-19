@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71066E8309
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCDA6E830C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbjDSVIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 17:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
+        id S229533AbjDSVIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 17:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjDSVIS (ORCPT
+        with ESMTP id S231347AbjDSVIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 17:08:18 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E11961BE;
-        Wed, 19 Apr 2023 14:08:16 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso2769649wmo.0;
-        Wed, 19 Apr 2023 14:08:16 -0700 (PDT)
+        Wed, 19 Apr 2023 17:08:20 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59ADE659F;
+        Wed, 19 Apr 2023 14:08:17 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id m39-20020a05600c3b2700b003f170e75bd3so2606459wms.1;
+        Wed, 19 Apr 2023 14:08:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681938494; x=1684530494;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9hKavX6galpUw3m8pjNHJAGofqqTil5bnA94vuO7DqA=;
-        b=NDFyOEJPl/51+YYFqyOkBgZKjTCR3wPUDyaVN/Ru9RzFucqvwRc9HKxNXsP/EIYZfI
-         fQqnUeiuJ15yHuNghA0OllKU33BbPqV5po5S+8/xKLi0RbO6gzV/AysijkCFpxPuwnsQ
-         sY17N9n4TV3vfFYGwNYEuVGkSBrxHNaeXbTsstSYfaj6TXksmb++rw7+jT2IhPE796bF
-         fWGesTnLTsM6lPTyMO23+TJKzqJ/Wrm0igYDfjV7X6uB5eDoREDQ3Div50JkusM7uStS
-         h1iq5DCKlVo5PEbDWyBGHuJRst78vvk0rvDfW7dBIOIfRUS5R3xYmXbKDb6mKc1qVsuM
-         0zqw==
+        d=gmail.com; s=20221208; t=1681938496; x=1684530496;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ehYDxVU02fn2ZkXnUcD0JtMkdqmb9th/dYG75X055ng=;
+        b=JwRafYxks4ZW9UecZY4eqmo5FKHyDxwuYi5VAsPf6UWl4eR8eRczTFuc6KvqIPoc12
+         RbTqA4mT9JS0NlX7sCEvvhwWdGvWglMMZwc9juIZoL444AKX0vkKIXMfJ1t1YX/lmJoF
+         2m80rXDfg0ov2r4d2fCDUh/VwAvR0J+LQdrLvDxxn4uglHr2bMhNOpHSnDAhEWoEINAr
+         Sburf4C1ltCzrl/J8s9aoPYt0be7fxt/tg/K5aYaLbn975xzIPn0n49Hj8LSxN0NMhtf
+         KIqQdGQJSvt6VRD876+BSgsU6kZfxQbMQXT/9D6o9fKG7gnNtU5xUWUL1VIUpmNJJOVs
+         YknA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681938494; x=1684530494;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9hKavX6galpUw3m8pjNHJAGofqqTil5bnA94vuO7DqA=;
-        b=Jh6TjEzDPwEfg6BpBzIkFxvgVsekzJsWnZigk1ipncVFkQZk7G/gUJingOq3621EO5
-         9TP/tRPjzuy/XjQPaRK5ElOcRVeuEGMEV6Zwo8aw5IblbwDtlMBAjxk1ocRwAtGCpDXQ
-         /ySpFI0agEHipr4gHos1ZFHUHeE4Jl8ds6hnUunsTxFqitLY09MqIcMxAXQvWLY+If94
-         7ZPHQP5WeUg96Jcshc9ubZZ/lCqFCoKIDrri8vyNlkaBJd1dcq/lgYc8Hw+/Ezx02LI8
-         iZ/q0X0E0q4DSFvysB9zqqiCrg1sPEpVSmu9/qPZVNzgV6uKSynoEjkuSilbJeY1L62I
-         dXqg==
-X-Gm-Message-State: AAQBX9dlXveHZgxvUEnwQFq3+iSS4Xbi5YifvQCPtQQ0v9hzGa22OB5b
-        bjuD/0yjw777Uj0QVcz7U6A=
-X-Google-Smtp-Source: AKy350aXzBzXaBqYHErmjat8ng5mULX8rNlKT+FVMAxugo7/Jbj11yWOl/A2C3Zsh6kJmbLmb7cJhQ==
-X-Received: by 2002:a1c:7207:0:b0:3f1:72fb:461a with SMTP id n7-20020a1c7207000000b003f172fb461amr10046696wmc.2.1681938494445;
-        Wed, 19 Apr 2023 14:08:14 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681938496; x=1684530496;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ehYDxVU02fn2ZkXnUcD0JtMkdqmb9th/dYG75X055ng=;
+        b=PBSss+wZkr9w8mwhJq4z3olMdQPqQteFDJWZ6v0Dyi8XGUekaZuU95pOOaDrmKNIul
+         TPBIZ5YAM6uipOFmttA+L/w2gsm/Y/vNsZJk0RxMcjP7zWGStXvvpds1gk3V0hYFzp8/
+         InH9DwBMwU3qBtfIQO3yj8csEWx8pXzfphSY+iOPkcsp4cPdQgusAmluFKUlhwDLSWCq
+         MKoYvKhL/JzW2lEOXm/azATacUyQcSXIHWff2lJd4AcLx+Uda+DjBG9pgWvYD1iyFSwM
+         jXpukn5NNb2eF02VwJOqDjoLKUy9VQWePYVc6fMZsSNyENPw911YG9t5eIrb0EukGq7O
+         68Og==
+X-Gm-Message-State: AAQBX9dAu0GtEHFNkb1nzHSdPm6dzNnL2Jg/TZ0HwJhYGWI5OrAFO5//
+        wdnSq712RBOjRbLNVx6mTFs=
+X-Google-Smtp-Source: AKy350bpR2ntMHwK5Uj+zwSpTPl5Escd1GXHcMe/lfkEefigenjs1F+0v7UETpJWgm+TbiA54PNpPw==
+X-Received: by 2002:a05:600c:221a:b0:3f0:a798:2757 with SMTP id z26-20020a05600c221a00b003f0a7982757mr17039715wml.25.1681938495512;
+        Wed, 19 Apr 2023 14:08:15 -0700 (PDT)
 Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.googlemail.com with ESMTPSA id g3-20020a5d5543000000b002fe254f6c33sm81295wrw.92.2023.04.19.14.08.13
+        by smtp.googlemail.com with ESMTPSA id g3-20020a5d5543000000b002fe254f6c33sm81295wrw.92.2023.04.19.14.08.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 14:08:14 -0700 (PDT)
+        Wed, 19 Apr 2023 14:08:15 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
         Christian Marangi <ansuelsmth@gmail.com>,
         Martin Schiller <ms@dev.tdt.de>, linux-leds@vger.kernel.org,
         linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
-Subject: [PATCH 0/5] leds: trigger: netdev: fixup preparation for LEDs hw control
-Date:   Wed, 19 Apr 2023 23:07:38 +0200
-Message-Id: <20230419210743.3594-1-ansuelsmth@gmail.com>
+Cc:     stable@vger.kernel.org
+Subject: [PATCH 1/5] leds: trigger: netdev: recheck NETDEV_LED_MODE_LINKUP on dev rename
+Date:   Wed, 19 Apr 2023 23:07:39 +0200
+Message-Id: <20230419210743.3594-2-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230419210743.3594-1-ansuelsmth@gmail.com>
+References: <20230419210743.3594-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,40 +74,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a continue of [1]. It was decided to take a more gradual
-approach to implement LEDs support for switch and phy starting with
-basic support and then implementing the hw control part when we have all
-the prereq done.
+Dev can be renamed also while up for supported device. We currently
+wrongly clear the NETDEV_LED_MODE_LINKUP flag on NETDEV_CHANGENAME
+event.
 
-This is a small series in preparation for a bigger change adding support
-for LEDs hw control.
+Fix this by rechecking if the carrier is ok on NETDEV_CHANGENAME and
+correctly set the NETDEV_LED_MODE_LINKUP bit.
 
-Some minor fixup and improvements are required to add support for LEDs hw
-control for the netdev trigger.
+Fixes: 5f820ed52371 ("leds: trigger: netdev: fix handling on interface rename")
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Cc: stable@vger.kernel.org # v5.5+
+---
+ drivers/leds/trigger/ledtrig-netdev.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-The main fixes are switching to mutex from spinlocks and adding namespace
-to netdev trigger enum modes. These will be exposed in the future in the
-generic linux include folder so LEDs driver may supports these specific
-modes.
-
-While working on htis it was also discovered a bug addressed in the first
-patch of this series.
-
-Changes from the old v8 series:
-- Reword some commits and add more info on why the changes is needed
-- Add fixup patch on dev rename
-
-Christian Marangi (5):
-  leds: trigger: netdev: recheck NETDEV_LED_MODE_LINKUP on dev rename
-  leds: trigger: netdev: drop NETDEV_LED_MODE_LINKUP from mode
-  leds: trigger: netdev: rename add namespace to netdev trigger enum
-    modes
-  leds: trigger: netdev: convert device attr to macro
-  leds: trigger: netdev: use mutex instead of spinlocks
-
- drivers/leds/trigger/ledtrig-netdev.c | 151 ++++++++++----------------
- 1 file changed, 59 insertions(+), 92 deletions(-)
-
+diff --git a/drivers/leds/trigger/ledtrig-netdev.c b/drivers/leds/trigger/ledtrig-netdev.c
+index d5e774d83021..f4d670ec30bc 100644
+--- a/drivers/leds/trigger/ledtrig-netdev.c
++++ b/drivers/leds/trigger/ledtrig-netdev.c
+@@ -318,6 +318,9 @@ static int netdev_trig_notify(struct notifier_block *nb,
+ 	clear_bit(NETDEV_LED_MODE_LINKUP, &trigger_data->mode);
+ 	switch (evt) {
+ 	case NETDEV_CHANGENAME:
++		if (netif_carrier_ok(dev))
++			set_bit(NETDEV_LED_MODE_LINKUP, &trigger_data->mode);
++		fallthrough;
+ 	case NETDEV_REGISTER:
+ 		if (trigger_data->net_dev)
+ 			dev_put(trigger_data->net_dev);
 -- 
 2.39.2
 
