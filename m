@@ -2,92 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 086206E78D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20616E78D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbjDSLnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 07:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
+        id S232861AbjDSLop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 07:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231797AbjDSLno (ORCPT
+        with ESMTP id S231797AbjDSLoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 07:43:44 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2800118CD
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:43:42 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-94a342f7c4cso747427466b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:43:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681904621; x=1684496621;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k7qkpoQ8OJU53FLfeOLWfZR335FdmCeupcypvuWDG7E=;
-        b=z1g3GUpccO0jK8+eEoXERxUVo2G2iTysb2LWYEoDxZteaZZRtP8n2NQSMyAtA3nzYw
-         bD+uYiXu6x3g12j8GKEXYx9BD4/pZaYv47S1j9heizsZOvdrovGDeayZsWoEM0rAxJX0
-         dsr5qTUB8PBtuvWjf+AK8hjpIM55Ya1jtOfv/jHngc+YJ1qZZHNQvCkTA30kBTDWVo+P
-         p6gGJgGiILZNsMkn9rfJ7FSMHkpgZX2O1pC+xNwjIyr3q1iFhChtxeUXK9fa3IbMplot
-         CBYLwIEeK0vIt4PUW3dQ0CtJ1ZF2ISf8TyxWeWdmD4SWu4UAQW5beF4c3C26rL9ct+xh
-         edXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681904621; x=1684496621;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k7qkpoQ8OJU53FLfeOLWfZR335FdmCeupcypvuWDG7E=;
-        b=b4g3F1O4+X0/WzRaKBsQQFe+3JpuEedqiDa+AWxoKkint1Imq5qHzK4QPyKKMkVvI6
-         wkAvGB863rxT1mnsMv2/qhFNFHnntr4u/Q1eWtLkEjfU6sCcuR508oXRpBWUdkMPUMHG
-         9ylUNCt3qY7N2m5CDZibsqXY5Pd9ZvvD50oPOyJ4M/EOwZUra4FVHb+aKlODBqw/G9oO
-         nMPT3Kxq3s+czEgpeEgIehX4rKNQsh2+Bul53vGNR3V4//NG2St8zCykwOT/8b/F42oX
-         x+Fk4TVl7lRqIuFxo18uWYEYoHWpHq7CaLgJzLYbCS5FMe1s2xqlxsZwf+2V8WKR2/k7
-         9jZQ==
-X-Gm-Message-State: AAQBX9djcd59SA51SWknzzZ/d+NyN8Tn5qdCpU4mgt128YBRY1JNv7C6
-        xVOJ5bU93Pncn+iF+HLT5jaS25W4dLlTyqEVnhpSfQ==
-X-Google-Smtp-Source: AKy350Yptnx7kRfQsWEmcEnug3fgPHfaw4MIsiW4TpgZOyGo9JRp3DfFj4mUlPhPi4cnqttaenXSug==
-X-Received: by 2002:a05:6402:31e8:b0:504:9393:18b1 with SMTP id dy8-20020a05640231e800b00504939318b1mr5382162edb.9.1681904621353;
-        Wed, 19 Apr 2023 04:43:41 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:b7d8:d88b:1fac:c802? ([2a02:810d:15c0:828:b7d8:d88b:1fac:c802])
-        by smtp.gmail.com with ESMTPSA id u11-20020aa7d98b000000b004ad601533a3sm7972045eds.55.2023.04.19.04.43.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 04:43:40 -0700 (PDT)
-Message-ID: <70b6f997-d420-0e59-0be5-6ae9db7aed66@linaro.org>
-Date:   Wed, 19 Apr 2023 13:43:39 +0200
+        Wed, 19 Apr 2023 07:44:44 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA62D4231;
+        Wed, 19 Apr 2023 04:44:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 569231FD8A;
+        Wed, 19 Apr 2023 11:44:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1681904681; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0zDQDkGE+9vuGnAAMyp+Znl0fdBKE7XNVtwBU2+M3G8=;
+        b=L1c1XBQWg0zfnc1ZlLr5NC2ZiL4OhHV8ZPPfGePt2lWqMqOCK7PpdvtAzWjM1IVSJ97UKS
+        Ow/DimNzfFpB3GccFVDp/mCqgwckdUZZOTZXxYoO7o+ihnvHX1hWCrLjJCl3kipob72hGB
+        tpDNhcDAMCvOMANT0sPJo0dIDzJIJmQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1C85613580;
+        Wed, 19 Apr 2023 11:44:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KhLRBCnUP2S/ZAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 19 Apr 2023 11:44:41 +0000
+Date:   Wed, 19 Apr 2023 13:44:39 +0200
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH mm-unstable RFC 2/5] memcg: flush stats non-atomically in
+ mem_cgroup_wb_stats()
+Message-ID: <cqc5gdh4yfh3m3inpm455rgsd55hh543biogpoip6mufr6axh5@z5w6rljgvvpb>
+References: <20230403220337.443510-1-yosryahmed@google.com>
+ <20230403220337.443510-3-yosryahmed@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/2] arm64: defconfig: enable TI K3 R5 and DSP remote proc
- drivers
-To:     Hari Nagalla <hnagalla@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will@kernel.org,
-        quic_bjorande@quicinc.com, arnd@arndb.de, treding@nvidia.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, rafal@milecki.pl
-References: <20230419113958.17141-1-hnagalla@ti.com>
- <20230419113958.17141-3-hnagalla@ti.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230419113958.17141-3-hnagalla@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4c7lxtjmc74hxkg5"
+Content-Disposition: inline
+In-Reply-To: <20230403220337.443510-3-yosryahmed@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2023 13:39, Hari Nagalla wrote:
-> Enable Cortex R5 and TI DSP (C66x,C71x) remote proc drivers as modules
-> for K3 platforms.
-> 
-> Signed-off-by: Hari Nagalla <hnagalla@ti.com>
 
-Why two separate patches for simple defconfig change?
+--4c7lxtjmc74hxkg5
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+On Mon, Apr 03, 2023 at 10:03:34PM +0000, Yosry Ahmed <yosryahmed@google.co=
+m> wrote:
+>  mm/memcontrol.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
 
+Reviewed-by: Michal Koutn=FD <mkoutny@suse.com>
+
+--4c7lxtjmc74hxkg5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZD/UIwAKCRAkDQmsBEOq
+ubusAQDpyzbgmh2mOJdPSwZsaNGY368cPzgmuzn5NvkS1ukAewD+NuwrN3Kx3JM9
+MfK4fKoWXWwu5X0+LDN+fUY8dakRawo=
+=ztJP
+-----END PGP SIGNATURE-----
+
+--4c7lxtjmc74hxkg5--
