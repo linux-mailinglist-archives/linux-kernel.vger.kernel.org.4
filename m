@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3650C6E723E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 06:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B196E7240
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 06:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbjDSEX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 00:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
+        id S231743AbjDSEYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 00:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjDSEXx (ORCPT
+        with ESMTP id S230211AbjDSEYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 00:23:53 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B9A1705;
-        Tue, 18 Apr 2023 21:23:52 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id b14so388718pll.10;
-        Tue, 18 Apr 2023 21:23:52 -0700 (PDT)
+        Wed, 19 Apr 2023 00:24:37 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D920A1705;
+        Tue, 18 Apr 2023 21:24:36 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-51f597c97c5so1115044a12.0;
+        Tue, 18 Apr 2023 21:24:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681878232; x=1684470232;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/PeCUCoOm5EhpEKpIU7t6XGEzaaPVIfEbFGJ8Ltf0/g=;
-        b=jGrreaywInXNQSQYd9Zh+ZtQZFmQDZY9Vj9jRE59f5jpWbUmi9GEPjZUfKjLUALbha
-         yTcQKl60yBquQpx4vWNPrvI5IaQ7Tt710qSJu0ShsB9eDVb9MzEXsFpf8J9FsEXOXQk9
-         xihZmIGP9uhV6mZiSHg82ucM2AcHHU83uA93TDMlKqtuaetg+QByxt4A9IUDKe2kFXvl
-         TCSBa9iTEaYfOjpmmpiVxgw9NhOdGP5xsksxPe2ACcmhG6Eh0ROejElwY0ZCl0sfyVJT
-         nFSnZ/bmQSiWT1XGESTrLWNK6/77MMBjvrRQzjxwctlBg/ouUH6bkpB0jkN/fHB9+WeZ
-         qSsQ==
+        d=gmail.com; s=20221208; t=1681878276; x=1684470276;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZRDCjTOkWMGElxrmUMljuv7R6aYKvTg/GiQ2WWUQLjA=;
+        b=P5QTikUGscbdQb7TFjUgKjgzxn/e9+eeyH2qxNQSgYuuAoEj9snd9v+RzKmYKdaFYB
+         Z/F/DpJQo7e8vEFO5QQAdNK5pRF0eVSc2Z3LToHwQitYaPnV9WaYhsT+3QPwbYhyhWOo
+         LLd698154Ty28I+Z3s6QzAars6oTGXtMF7Mwz23ALjlPE+FLwQNJQD57d2bRIjRKQo5K
+         /eSJRxR5Num3TxuE6t60Tjk67JJ/vq5KGCBAlfuitq8wGNFR2BDk07PJ23mAZyYwBO0C
+         /IzcPoTQ+SQ5jhA4iU8jpMFsg82p0U9KavFJC2lv3+aIkursUeNhKZ+71h5Piq67P6Qi
+         338g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681878232; x=1684470232;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/PeCUCoOm5EhpEKpIU7t6XGEzaaPVIfEbFGJ8Ltf0/g=;
-        b=QS/kEryvZONJPpO1UEV3mTMpRhwU24Gr4BW9HUauvsGnjCpDaAjuPeVwwV3D2Al/xQ
-         7V28g4SAG2bwcfWGC4A+jIgFX9q3MbGUJLwMwyiy99wUl1sjmTKObjUEgGkSNT7BRNnW
-         TeooyoZHtFp2LbgkX8I1Vd8pz4W+mVoVjoAgHIvG8X7N0JUzHtJDounjYBFAKn+mpabG
-         5gXZh5jR+ANye7lRL6jsn515a6XZikvAAQtvSQeDB0tjmo082R8a3skC9Yhtvqoqj6TH
-         0euoBuOy5LzpxRABwlgpEpz+0XqL3NI0cu0nO3QUNhBzhSr1JxjDoqI0Ek4nsvn6B48u
-         WD/A==
-X-Gm-Message-State: AAQBX9ecSytS9AkJdkIJJlGk+dqV5l9D2NWnFqjhNfmpd2qmIHb86W3f
-        3DWzaF858hhpdE0ZtMqwyaQ=
-X-Google-Smtp-Source: AKy350Y9AoiopbDgdbaP0ocGGffqIsx9hYk3F9jc6N0Rc+cBsrSb1ZUOXFJfhTMMDISKMGcPH29q8g==
-X-Received: by 2002:a05:6a20:5496:b0:ef:bd:3b with SMTP id i22-20020a056a20549600b000ef00bd003bmr1844212pzk.55.1681878232316;
-        Tue, 18 Apr 2023 21:23:52 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-1.three.co.id. [116.206.28.1])
-        by smtp.gmail.com with ESMTPSA id i7-20020aa78d87000000b0063d336629e5sm2551262pfr.59.2023.04.18.21.23.51
+        d=1e100.net; s=20221208; t=1681878276; x=1684470276;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZRDCjTOkWMGElxrmUMljuv7R6aYKvTg/GiQ2WWUQLjA=;
+        b=Zz6o4KDTj0zFNfNWeyt9mQ5gWEhQGJo7bYDJag5Se9Nh8LjgNJN3vYHHxKHfVLENC0
+         zPGxKkOU0q4Od30NTlai8FpnHd+IHuvjvBC+mx9xRlhIZejp3U8oQx9mojZLkrN71PPf
+         zZoEPjA8Whw1UW8LsVNV1O7t/WyATe6QtANGHiJtCU2gb6CLzSXBJogX+LsqWXoUzd3x
+         OYfs1Eccw0EMiXYfW5M/6L3UWSk+B6dqSdCPVesPHq6HK49ML7eETmWyxGU9Q1V9uKrZ
+         2vKdwDnBojkSjm7UaHo4bkAyxydRqQ0TE8YaZo4p+D2ehodKmub6HWDWPqSyTIRliqoP
+         fJMA==
+X-Gm-Message-State: AAQBX9d7w0XB2A4H+N3ljnDojGC1TXuLCJ78OxJrFgwwapMu6QWa+Y/8
+        644PkQ/5PLxTUUNlbp466aU=
+X-Google-Smtp-Source: AKy350afI02Fa3Acq0DNx6nJUWrX6aI7RY4q/vg2eOyv/5uPkMM5pF1SRDx4yrymqaBjzv9oWxjrTg==
+X-Received: by 2002:a17:90a:fe8c:b0:246:f73c:3aba with SMTP id co12-20020a17090afe8c00b00246f73c3abamr1522019pjb.39.1681878276254;
+        Tue, 18 Apr 2023 21:24:36 -0700 (PDT)
+Received: from hackyzh-virtual-machine.localdomain ([58.34.53.146])
+        by smtp.gmail.com with ESMTPSA id v8-20020a17090a088800b0024779068491sm380205pjc.26.2023.04.18.21.24.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 21:23:51 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id EAA53106692; Wed, 19 Apr 2023 11:23:48 +0700 (WIB)
-Date:   Wed, 19 Apr 2023 11:23:48 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 00/91] 5.15.108-rc1 review
-Message-ID: <ZD9s1Ms7OXVQZb8b@debian.me>
-References: <20230418120305.520719816@linuxfoundation.org>
+        Tue, 18 Apr 2023 21:24:35 -0700 (PDT)
+From:   hackyzh002 <hackyzh002@gmail.com>
+To:     alexander.deucher@amd.com
+Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, sumit.semwal@linaro.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, hackyzh002 <hackyzh002@gmail.com>
+Subject: [PATCH 1/2] drm/radeon: Fix integer overflow in radeon_cs_parser_init
+Date:   Wed, 19 Apr 2023 12:24:07 +0800
+Message-Id: <20230419042407.69001-1-hackyzh002@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oJkdrppsHe4zHKKj"
-Content-Disposition: inline
-In-Reply-To: <20230418120305.520719816@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The type of size is unsigned, if size is 0x40000000, there will be an
+integer overflow, size will be zero after size *= sizeof(uint32_t),
+will cause uninitialized memory to be referenced later
 
---oJkdrppsHe4zHKKj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: hackyzh002 <hackyzh002@gmail.com>
+---
+ drivers/gpu/drm/radeon/radeon_cs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, Apr 18, 2023 at 02:21:04PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.108 release.
-> There are 91 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+diff --git a/drivers/gpu/drm/radeon/radeon_cs.c b/drivers/gpu/drm/radeon/radeon_cs.c
+index 46a27ebf4..472c29050 100644
+--- a/drivers/gpu/drm/radeon/radeon_cs.c
++++ b/drivers/gpu/drm/radeon/radeon_cs.c
+@@ -270,7 +270,7 @@ int radeon_cs_parser_init(struct radeon_cs_parser *p, void *data)
+ {
+ 	struct drm_radeon_cs *cs = data;
+ 	uint64_t *chunk_array_ptr;
+-	unsigned size, i;
++	u64 size, i;
+ 	u32 ring = RADEON_CS_RING_GFX;
+ 	s32 priority = 0;
+ 
+@@ -347,7 +347,7 @@ int radeon_cs_parser_init(struct radeon_cs_parser *p, void *data)
+ 				continue;
+ 		}
+ 
+-		p->chunks[i].kdata = kvmalloc_array(size, sizeof(uint32_t), GFP_KERNEL);
++		p->chunks[i].kdata = kvcalloc(size, sizeof(uint32_t), GFP_KERNEL);
+ 		size *= sizeof(uint32_t);
+ 		if (p->chunks[i].kdata == NULL) {
+ 			return -ENOMEM;
+-- 
+2.34.1
 
-I have also encountered the same build error as Naresh has reported [1]
-when cross-compiling for arm64 (bcm2711_defconfig, GCC 10.2.0).
-powerpc (ps3_defconfig, GCC 12.2.0) build isn't affected.
-
-Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
-[1]: https://lore.kernel.org/lkml/CA+G9fYs9sHnfhn4hSFP=3DAmOfgj-zvoK9vmBejR=
-vzKPj4uXx+VA@mail.gmail.com/=20
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---oJkdrppsHe4zHKKj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZD9s1AAKCRD2uYlJVVFO
-o4CEAP9cusbW3XkvfeuE7trwAgRGlAImwmbvNRT/oJEts65tRAEA7rVUc0VrzUVI
-aHfUF95MUgi7i2B00d9aziLN7e6WbAI=
-=fEN9
------END PGP SIGNATURE-----
-
---oJkdrppsHe4zHKKj--
