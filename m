@@ -2,238 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E866E8841
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 04:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDDC6E7FC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232935AbjDTCrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 22:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
+        id S233654AbjDSQiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 12:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjDTCrh (ORCPT
+        with ESMTP id S231580AbjDSQiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 22:47:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245455591
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 19:46:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681958761;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QBHgiDj+95EzAOotDC3ydO7WWfEOGMVmeF30APsbfiE=;
-        b=E2K02cWH9aYE8sN4c6xF3r6U7OfN6HzbHMQduGcu1A6CXsDn2dzPem4Es1FNBnxd2HPU9J
-        yNGYzsL9rW9H6NF64dyHbDY7XLBF/P6YvaiyVz8v+IjspuIR8Ypyeq+fnJwXGTx4ddr1cu
-        awe2aZhhd9s4BxXNXLEsWW29WJXNzoQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-522-k_H-sxnrOnW8IgJPLsr2-g-1; Wed, 19 Apr 2023 22:42:00 -0400
-X-MC-Unique: k_H-sxnrOnW8IgJPLsr2-g-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83214811E7D;
-        Thu, 20 Apr 2023 02:41:59 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0C8492026D16;
-        Thu, 20 Apr 2023 02:41:59 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id AED50403D6B55; Wed, 19 Apr 2023 13:35:12 -0300 (-03)
-Date:   Wed, 19 Apr 2023 13:35:12 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v7 00/13] fold per-CPU vmstats remotely
-Message-ID: <ZEAYQBJmVwsjpjGY@tpad>
-References: <20230320180332.102837832@redhat.com>
- <20230418150200.027528c155853fea8e4f58b2@linux-foundation.org>
- <ZD/NAaa5TVcL7Mxm@tpad>
- <ZD/Qq9v0EDxUn7HW@tpad>
- <ZD/XoBTqJBL2G+Dk@tpad>
- <ZD/dYXJD2xcoWFoQ@localhost.localdomain>
- <ZD/xE6kR4RSOvUlR@tpad>
- <ZD/8R6sacS45ggyt@dhcp22.suse.cz>
+        Wed, 19 Apr 2023 12:38:03 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35204498
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:38:01 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-94f161ee14fso73625166b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:38:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1681922280; x=1684514280;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N5zzUvtufJ3eigi8dDFUvHUQC/l/1L/lCMl3qMEDwpA=;
+        b=K4oJI6Ff80Jpz9IgyXsis/Cz/4nGl18b3vCNG+r2UsSKG96Z5KDmga5aKo8UQO+LK4
+         GEZqoyVEi+xqXMeapoXdf7DemfUZOpaXW5TIxDo0wjKyNkQao2CqJ9jCbPa49gVG8tOG
+         /1t2iM/TYNJ7/Dt3IrK/GKDAb1oT53J45YaOo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681922280; x=1684514280;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N5zzUvtufJ3eigi8dDFUvHUQC/l/1L/lCMl3qMEDwpA=;
+        b=kG4JSxxWY4N/v+G5HWZeoFHyyUuSrFqkXZrL32R09skduiwH8MHQUprQ7jnDN9iQBo
+         2ulzcgw+ugXNm/89svABTnFsFMQGlDahIN7q+woqvBk6ocQ4IrZE7kBWtrpJnaAyOFN0
+         E/w5/cZSUKowc0/yxftuWmADDSG+MOSnbJoMtyjV2YqyADnBz4z8Xjuv9K5jos5ev9b0
+         XL/lIHz/caZJTp1G/hwWGBa5YVOqIVbdDmuxQ0Drs6f7MkUT7D14L6mMsscfdOb6He2J
+         7LEcxeHvSSqPO8iNOlAURM51+dZdTwNAIZswjyenUQ0PF2HBsFWK+5JicpMPdORIdm5M
+         lsdA==
+X-Gm-Message-State: AAQBX9cahQ1/3ShTtEXXBLdKidRiiKcloDPX+2Uk63Bq1++PUfpdF79z
+        PaL3EdVc4t7dvdsZhmag3yPCkWeRZqRV1TEjpZo=
+X-Google-Smtp-Source: AKy350ZHiD1Lzmm2D/49Uq4yaW7v0gvUX/Cw4RwJO2/o1VSbh2lDapTUCoSiRl/GpVhDglYCUzOGnQ==
+X-Received: by 2002:a17:906:72dd:b0:92f:27c2:13c0 with SMTP id m29-20020a17090672dd00b0092f27c213c0mr17371020ejl.6.1681922280180;
+        Wed, 19 Apr 2023 09:38:00 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id t16-20020a170906269000b00932ba722482sm9759815ejc.149.2023.04.19.09.37.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 09:37:59 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 18:37:57 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/fb-helper: Fix height, width, and accel_flags in
+ fb_var
+Message-ID: <ZEAY5Sf/V10ipDZk@phenom.ffwll.local>
+Mail-Followup-To: Geert Uytterhoeven <geert+renesas@glider.be>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <2b6073d9c2d869c6a4eac6edebd616e0568dec91.1681843245.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZD/8R6sacS45ggyt@dhcp22.suse.cz>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <2b6073d9c2d869c6a4eac6edebd616e0568dec91.1681843245.git.geert+renesas@glider.be>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
-
-On Wed, Apr 19, 2023 at 04:35:51PM +0200, Michal Hocko wrote:
-> On Wed 19-04-23 10:48:03, Marcelo Tosatti wrote:
-> > On Wed, Apr 19, 2023 at 02:24:01PM +0200, Frederic Weisbecker wrote:
-> [...]
-> > > 2) Run critical code
-> > > 3) Optionally do something once you're done
-> > > 
-> > > If vmstat is going to be the only thing to wait for on 1), then the remote
-> > > solution looks good enough (although I leave that to -mm guys as I'm too
-> > > clueless about those matters), 
-> > 
-> > I am mostly clueless too, but i don't see a problem with the proposed
-> > patch (and no one has pointed any problem either).
+On Tue, Apr 18, 2023 at 08:42:46PM +0200, Geert Uytterhoeven wrote:
+> Fbtest contains some very simple validation of the fbdev userspace API
+> contract.  When used with shmob-drm, it reports the following warnings
+> and errors:
 > 
-> I really hate to repeat myself again. The biggest pushback has been on
-> a) justification and b) single purpose solution which is very likely
-> incomplete. For a) we are getting the story piece by piece which doesn't
-> speed up the process. You are proposing a non-trivial change to an
-> already convoluted code so having a solid justification is something
-> that shouldn't be all that surprising.
+>     height changed from 68 to 0
+>     height was rounded down
+>     width changed from 111 to 0
+>     width was rounded down
+>     accel_flags changed from 0 to 1
+> 
+> The first part happens because __fill_var() resets the physical
+> dimensions of the first connector, as filled in by drm_setup_crtcs_fb().
+> Fix this by retaining the original values.
+> 
+> The last part happens because __fill_var() forces the FB_ACCELF_TEXT
+> flag on, while fbtest disables all acceleration on purpose, so it can
+> draw safely to the frame buffer.  Fix this by setting accel_flags to
+> zero, as DRM does not implement any text console acceleration.
+> Note that this issue can also be seen in the output of fbset, which
+> reports "accel true".
+> 
+> Fixes: ee4cce0a8f03a333 ("drm/fb-helper: fix input validation gaps in check_var")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/gpu/drm/drm_fb_helper.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
+> index 64458982be40c468..ed6ad787915f0b8f 100644
+> --- a/drivers/gpu/drm/drm_fb_helper.c
+> +++ b/drivers/gpu/drm/drm_fb_helper.c
+> @@ -1537,17 +1537,19 @@ static void drm_fb_helper_fill_pixel_fmt(struct fb_var_screeninfo *var,
+>  	}
+>  }
+>  
+> -static void __fill_var(struct fb_var_screeninfo *var,
+> +static void __fill_var(struct fb_var_screeninfo *var, struct fb_info *info,
+>  		       struct drm_framebuffer *fb)
+>  {
+>  	int i;
+>  
+>  	var->xres_virtual = fb->width;
+>  	var->yres_virtual = fb->height;
+> -	var->accel_flags = FB_ACCELF_TEXT;
+> +	var->accel_flags = 0;
+>  	var->bits_per_pixel = drm_format_info_bpp(fb->format, 0);
+>  
+> -	var->height = var->width = 0;
+> +	var->height = info->var.height;
+> +	var->width = info->var.width;
+> +
+>  	var->left_margin = var->right_margin = 0;
+>  	var->upper_margin = var->lower_margin = 0;
+>  	var->hsync_len = var->vsync_len = 0;
+> @@ -1610,7 +1612,7 @@ int drm_fb_helper_check_var(struct fb_var_screeninfo *var,
+>  		return -EINVAL;
+>  	}
+>  
+> -	__fill_var(var, fb);
+> +	__fill_var(var, info, fb);
+>  
+>  	/*
+>  	 * fb_pan_display() validates this, but fb_set_par() doesn't and just
+> @@ -2066,7 +2068,7 @@ static void drm_fb_helper_fill_var(struct fb_info *info,
+>  	info->pseudo_palette = fb_helper->pseudo_palette;
+>  	info->var.xoffset = 0;
+>  	info->var.yoffset = 0;
+> -	__fill_var(&info->var, fb);
+> +	__fill_var(&info->var, info, fb);
 
-The justification is simple and concise:
+Bit a bikeshed since it zeroed-allocated anyway, but I'd pass NULL here
+for info and catch that in __fill_var and then keep the explicit = 0;
 
- 2. With a task that busy loops on a given CPU,
-    the kworker interruption to execute vmstat_update
-    is undesired and may exceed latency thresholds
-    for certain applications.
+Either way Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-Performance details for the kworker interruption:   
-
-oslat   1094.456862: sys_mlock(start: 7f7ed0000b60, len: 1000)
-oslat   1094.456971: workqueue_queue_work: ... function=vmstat_update ...
-oslat   1094.456974: sched_switch: prev_comm=oslat ... ==> next_comm=kworker/5:1 ...
-kworker 1094.456978: sched_switch: prev_comm=kworker/5:1 ==> next_comm=oslat ...
-
-The example above shows an additional 7us for the
-
-       	oslat -> kworker -> oslat
-
-switches. In the case of a virtualized CPU, and the vmstat_update
-interruption in the host (of a qemu-kvm vcpu), the latency penalty
-observed in the guest is higher than 50us, violating the acceptable 
-latency threshold for certain applications.
-
----
-
-An additional use-case is what has been noted by Andrew Theurer:
-
-Nearly every telco we work with for 5G RAN is demanding <20 usec CPU latency
-as measured by cyclictest & oslat.  We cannot achieve under 20 usec with 
-the vmstats interruption.
-
----
-
-It seems to me this is solid justification (it seems you want 
-particular microsecond values, but those depend on application
-and the CPU). The point is there are several applications which do not
-want to be interrupted (we can ignore the specifics and focus on
-that fact).
-
-Moreover, unrelated interruptions might occur close in time
-(for example, random function call IPIs generated by other
-kernel subsystems), which renders the "lets just consider this 
-one application, running on this CPU, to decide what to do" 
-short sighted.
-
-> b) is what concerns me more though. There are other per-cpu specific
-> things going on that require some regular flushing. Just to mention
-> another one that your group has been brought up was the memcg pcp
-> caches. Again with a non-trivial proposal to deal with that problem
-> [1]. 
-
-Yes.
-
-> It has turned out that we can do a simpler thing [2]. 
-
-For the particular memcg case, there was a simpler fix.
-
-For the vmstat_update case, i don't see a simpler fix. 
-
-> I do not think it is a stretch to expect that similar things will pop
-> out every now and then
-
-Agree.
-
-> and rather than dealing with each one in its own way it
-> kinda makes sense to come up with a more general concept so that all
-> those cases can be handled at a single place at least. 
-
-I can understand where you are coming from. Unfortunately,
-for some cases it is appropriate to perform the work from a
-remote CPU (and i think this is one such case).
-
-> All I hear about
-> that is that the code of those special applications would need to be
-> changed to use that. 
-
-This is a burden for application writers and for system configuration.
-
-Or it could be done automatically (from outside of the application).
-Which is what is described and implemented here:
-
-https://lore.kernel.org/lkml/20220204173537.429902988@fedora.localdomain/
-
-"Task isolation is divided in two main steps: configuration and
-activation.
-
-Each step can be performed by an external tool or the latency
-sensitive application itself. util-linux contains the "chisol" tool
-for this purpose."
-
-But not only that, the second thing is:
-
-"> Another important point is this: if an application dirties                                                                          
-> its own per-CPU vmstat cache, while performing a system call,                                                                       
-
-Or while handling a VM-exit from a vCPU.
-
-This are, in my mind, sufficient reasons to discard the "flush per-cpu
-caches" idea. This is also why i chose to abandon the prctrl interface
-patchset.
-
-> and a vmstat sync event is triggered on a different CPU, you'd have to:                                                             
->                                                                                                                                     
-> 1) Wait for that CPU to return to userspace and sync its stats                                                                      
-> (unfeasible).                                                                                                                       
->                                                                                                                                     
-> 2) Queue work to execute on that CPU (undesirable, as that causes                                                                   
-> an interruption).                                                                                                                   
->                                                                                                                                     
-> 3) Remotely sync the vmstat for that CPU."
-
-So the only option is to remotely sync vmstat for the CPU
-(unless you have a better suggestion).
-
-> Well, true but is that bar so impractical that we
-> are going to grow kernel complexity and therefore a maintenance burden?
-
-Honestly, this patchset is just using cmpxchg to transfer data from
-per-CPU counters to global counters. I don't see why its that 
-complicated.
-
-If you have a suggestion on how to reduce the apparent complexity,
-that would be great.
-
-> Everything for a very specialized workloads?
-
-Well the kernel has been increasing in complexity, and the maintenance
-burden has increased as a side-effect, to accomodate more workloads
-than it was initially designed for.
-
-> [1] http://lkml.kernel.org/r/20221102020243.522358-1-leobras@redhat.com
-> [2] http://lkml.kernel.org/r/20230317134448.11082-1-mhocko@kernel.org
+>  	info->var.activate = FB_ACTIVATE_NOW;
+>  
+>  	drm_fb_helper_fill_pixel_fmt(&info->var, format);
 > -- 
-> Michal Hocko
-> SUSE Labs
-> 
+> 2.34.1
 > 
 
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
