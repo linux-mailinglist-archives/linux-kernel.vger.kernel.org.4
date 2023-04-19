@@ -2,38 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45ED06E83E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 462CE6E83E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbjDSVlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 17:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
+        id S231640AbjDSVly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 17:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjDSVlt (ORCPT
+        with ESMTP id S229701AbjDSVlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 17:41:49 -0400
+        Wed, 19 Apr 2023 17:41:50 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E30221736;
-        Wed, 19 Apr 2023 14:41:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 160861BEB;
+        Wed, 19 Apr 2023 14:41:49 -0700 (PDT)
 Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 34BFB21C204E;
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7842121C2057;
         Wed, 19 Apr 2023 14:41:48 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 34BFB21C204E
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7842121C2057
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1681940508;
-        bh=sgTNp5eSBPHwEMtDp0lZS2PRQR1YHnD6Cy4riRcqsQk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cb+7k6itM4fiMWaLmgo4Zo0Hly8Ap/5mT/nDt7SLnLDnCUMgqe/PZKgMly3poSdgH
-         0MDDKOMZtnR0HFAmAGH1Oa7khXXoHBzeArfUlQMj/e6gx6yA8nTjpZ5JmfutxxuwcP
-         vXuo9E1CSnnv/T8GbPgihZNCGUE8O8tSNb4LfojA=
+        bh=At02062WqVBPFH5DXB8GaOuC2yKzAnMYYo2tjBSjyqg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HWAjdMn1ofGLAeYetRgxVoZ9998/Ls/oJmCP29Izqe6vHpioyRdlXvqs4gZ4/bXMW
+         fTP5Dh3jnlPMuu3iu+JNFBq5m0InOehhnZGlLFIzT6vYh/VIJJWpJwZ8HzbtGLQ493
+         OwH3+hiXH3R78qCIKElgMDPVzotF6mc8riib9w0A=
 From:   Beau Belgrave <beaub@linux.microsoft.com>
 To:     rostedt@goodmis.org, mhiramat@kernel.org,
         dcook@linux.microsoft.com, alanau@linux.microsoft.com
 Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: [PATCH 0/2] tracing: Fix print_fields() and use best filter
-Date:   Wed, 19 Apr 2023 14:41:38 -0700
-Message-Id: <20230419214140.4158-1-beaub@linux.microsoft.com>
+Subject: [PATCH 1/2] tracing/user_events: Set event filter_type from type
+Date:   Wed, 19 Apr 2023 14:41:39 -0700
+Message-Id: <20230419214140.4158-2-beaub@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230419214140.4158-1-beaub@linux.microsoft.com>
+References: <20230419214140.4158-1-beaub@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -46,28 +48,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using user_events along with the new print_fields() functionality
-a few issues were discovered. When printing out fields, the __rel_loc
-field types were printing out the wrong array values. Also, user_events
-wasn't setting the best filter type, so __rel_loc data was marked as
-FILTER_OTHER vs FILTER_RDYN_STRING when chars were used. This resulted
-in strings being printed out as array of bytes vs a string.
+Users expect that events can be filtered by the kernel. User events
+currently sets all event fields as FILTER_OTHER which limits to binary
+filters only. When strings are being used, functionality is reduced.
 
-After applying this series user_events will output strings correctly
-for __rel_loc via /sys/kernel/tracing/trace outputs. All events that
-utilize print_fields() will print the correct array/string for
-__data_loc and __rel_loc data, when it's enabled.
+Use filter_assign_type() to find the most appropriate filter
+type for each field in user events to ensure full kernel capabilities.
 
-Beau Belgrave (2):
-  tracing/user_events: Set event filter_type from type
-  tracing: Fix print_fields() for __dyn_loc/__rel_loc
+Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+---
+ kernel/trace/trace_events_user.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
- kernel/trace/trace_events_user.c |  3 +++
- kernel/trace/trace_output.c      | 10 ++++++----
- 2 files changed, 9 insertions(+), 4 deletions(-)
-
-
-base-commit: 88fe1ec75fcb296579e05eaf3807da3ee83137e4
+diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+index cc8c6d8b69b5..eadb58a3efba 100644
+--- a/kernel/trace/trace_events_user.c
++++ b/kernel/trace/trace_events_user.c
+@@ -918,6 +918,9 @@ static int user_event_add_field(struct user_event *user, const char *type,
+ 	field->is_signed = is_signed;
+ 	field->filter_type = filter_type;
+ 
++	if (filter_type == FILTER_OTHER)
++		field->filter_type = filter_assign_type(type);
++
+ 	list_add(&field->link, &user->fields);
+ 
+ 	/*
 -- 
 2.25.1
 
