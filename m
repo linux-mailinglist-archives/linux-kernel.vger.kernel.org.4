@@ -2,69 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4686E7027
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 02:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB1A6E702B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 02:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbjDSAGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 20:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
+        id S229750AbjDSAGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 20:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjDSAGQ (ORCPT
+        with ESMTP id S229597AbjDSAGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 20:06:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584985FD1
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 17:05:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681862728;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iqYcQJ7RxHLqq2m5mcHetAO2yttoUlP/01PDG9Z2dnM=;
-        b=TcPPxWOMEUGbYOp37hYfFCjyIrjQLN+0h6yjA5WWFbAIKT5H7wqK5Eu7FX8OJeB9RIskTS
-        +VBEGCxEujvf0DgED1SqIv6o0VQrYTGJ3usIPOopJBQsLs0Hu87AMk5Pa010ofnSpWTU3T
-        FNRD9XGHA59FcepqozjPjPa7lYt/ybA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-618-lhN3jzYlOMG7_cdy7DrwjA-1; Tue, 18 Apr 2023 20:05:22 -0400
-X-MC-Unique: lhN3jzYlOMG7_cdy7DrwjA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 81B788996E0;
-        Wed, 19 Apr 2023 00:05:21 +0000 (UTC)
-Received: from localhost (ovpn-12-26.pek2.redhat.com [10.72.12.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 434E12958;
-        Wed, 19 Apr 2023 00:05:20 +0000 (UTC)
-Date:   Wed, 19 Apr 2023 08:05:16 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>, bp@alien8.de,
-        x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        ebiederm@xmission.com, dyoung@redhat.com, vgoyal@redhat.com,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
-        boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v21 2/7] crash: add generic infrastructure for crash
- hotplug support
-Message-ID: <ZD8wPOPxvh7cGJun@MiWiFi-R3L-srv>
-References: <20230404180326.6890-1-eric.devolder@oracle.com>
- <20230404180326.6890-3-eric.devolder@oracle.com>
- <ZC6nWzPuIWOxmvv2@MiWiFi-R3L-srv>
- <80767ccc-ffd4-9cb9-44e4-a8d4f0e13853@oracle.com>
- <ZC9cp5RLyNNx0DMG@MiWiFi-R3L-srv>
- <7b25449b-72e9-3eca-73a9-592d7400b746@oracle.com>
+        Tue, 18 Apr 2023 20:06:53 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FCF5FD1
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 17:06:51 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id m21so20583302qtg.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 17:06:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1681862810; x=1684454810;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CpuY+WskmAn+VVWJJI2pgXSztphoZSgNLq8dJrlS3IM=;
+        b=HVrJI9fXJg8c8a2nI+ZnBYLNhaxub1sGuEKORhbVoArXG359MV+i5So3frfRU4utOK
+         6DVBx9PubjftuRhVfNHR7qDljpkH3F65UNnT5J0ka7oIbNjqG56z3khWQMOXQDhhOgn0
+         B488pcKAgtKc9seA4PcGbZGX+EaVQv9PtejbYOsabMa1M3JZcEPK+pcAd2EJeyc4znmD
+         kf56XG24XH1SkyrvKXIcpGxKt+uVtC2+XSTtFJWXs1elytDy05JyHHKWwKUrV/7Mj55x
+         UAI32OXvU9VvN2LEZzU67ITzMkdbN3p1HphjwdBd8CvOaQc6T2/lEgBFf6LQYdycA/5z
+         yefg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681862810; x=1684454810;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CpuY+WskmAn+VVWJJI2pgXSztphoZSgNLq8dJrlS3IM=;
+        b=Da8traEl639CgmRnUfXgdrLjUGNw3nnfqv8YlBMD0VfBE76VKo+5CWcirDkfpaeKE5
+         zBmFc8bbcMYoybJ0CoVjXnmDt5mE9O/58C5w9eMPgiJBp7QN6ZaO5kTCC/f9wO7uYOw4
+         JYz5kjQPr+pkL0s3atE4aIkxQjdkfm1s/m0w06qzUHMdfpmKN3I/P+RVjP8B9cQs/nWm
+         NzNE/YPPTGfwQP6D64OQBR91znDDflT2T8PkvtS4T/mpzUxuTmBnbSBiu5CnINk0RVlE
+         Xcw468zL02Pczkgq4NcrIs7pqj3KMYXi4qMUl0Jx9+aEaivI8x5LgXPVLX2drJBfEYYt
+         HSPQ==
+X-Gm-Message-State: AAQBX9dd7+PoZceNZbcPcpEq2ocWdqBB8A9e+nIlP2omqb5M0Uu3BUcF
+        EPD4GnOIBKCv8mhPrz5VNegpWQ==
+X-Google-Smtp-Source: AKy350ZhaCe4sJbWTtYSSixblUX61kgUSsqtrRHdPbEKDZ69Z7vRe1LMsv/eS9ckRD6Ye7NC/FkmRw==
+X-Received: by 2002:a05:622a:1a9d:b0:3bd:140c:91ed with SMTP id s29-20020a05622a1a9d00b003bd140c91edmr3371586qtc.52.1681862810557;
+        Tue, 18 Apr 2023 17:06:50 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id m13-20020ac807cd000000b003ec47cc3613sm854892qth.85.2023.04.18.17.06.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 17:06:49 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1povLU-00CL50-I7;
+        Tue, 18 Apr 2023 21:06:48 -0300
+Date:   Tue, 18 Apr 2023 21:06:48 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     "Gupta, Nipun" <Nipun.Gupta@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "nicolas@fjasle.eu" <nicolas@fjasle.eu>,
+        "git (AMD-Xilinx)" <git@amd.com>,
+        "Anand, Harpreet" <harpreet.anand@amd.com>,
+        "Jansen Van Vuuren, Pieter" <pieter.jansen-van-vuuren@amd.com>,
+        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>
+Subject: Re: [PATCH v4] vfio/cdx: add support for CDX bus
+Message-ID: <ZD8wmF4DALTRyWmO@ziepe.ca>
+References: <20230418113655.25207-1-nipun.gupta@amd.com>
+ <ZD6IiHjWQOv47ZMg@ziepe.ca>
+ <CH3PR12MB8308DE1607789063D04B3529E89D9@CH3PR12MB8308.namprd12.prod.outlook.com>
+ <20230418144020.6b8368db.alex.williamson@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7b25449b-72e9-3eca-73a9-592d7400b746@oracle.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20230418144020.6b8368db.alex.williamson@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,66 +88,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/18/23 at 08:55am, Eric DeVolder wrote:
-......
-> > > > Seems we passed in the cpu number just for printing here. Wondering why
-> > > > we don't print out hot added/removed memory ranges. Is the cpu number
-> > > > printing necessary?
-> > > > 
-> > > Baoquan,
+On Tue, Apr 18, 2023 at 02:40:20PM -0600, Alex Williamson wrote:
+> On Tue, 18 Apr 2023 12:50:13 +0000
+> "Gupta, Nipun" <Nipun.Gupta@amd.com> wrote:
+> 
+> > > -----Original Message-----
+> > > From: Jason Gunthorpe <jgg@ziepe.ca>
+> > > Sent: Tuesday, April 18, 2023 5:40 PM
+> > > To: Gupta, Nipun <Nipun.Gupta@amd.com>
+> > > Cc: alex.williamson@redhat.com; linux-kernel@vger.kernel.org;
+> > > kvm@vger.kernel.org; masahiroy@kernel.org; nathan@kernel.org;
+> > > ndesaulniers@google.com; nicolas@fjasle.eu; git (AMD-Xilinx) <git@amd.com>;
+> > > Anand, Harpreet <harpreet.anand@amd.com>; Jansen Van Vuuren, Pieter
+> > > <pieter.jansen-van-vuuren@amd.com>; Agarwal, Nikhil
+> > > <nikhil.agarwal@amd.com>; Simek, Michal <michal.simek@amd.com>
+> > > Subject: Re: [PATCH v4] vfio/cdx: add support for CDX bus
 > > > 
-> > > Ah, actually until recently it was used to track the 'offlinecpu' in this
-> > > function, but tglx pointed out that was un-necessary. That resulted in
-> > > dropping the code in this function dealing with offlinecpu, leaving this as
-> > > its only use in this function.
+> > > Caution: This message originated from an External Source. Use proper caution
+> > > when opening attachments, clicking links, or responding.
 > > > 
-> > > The printing of cpu number is not necessary, but helpful; I use it for debugging.
+> > > 
+> > > On Tue, Apr 18, 2023 at 05:06:55PM +0530, Nipun Gupta wrote:
+> > >   
+> > > > diff --git a/drivers/vfio/Kconfig b/drivers/vfio/Kconfig
+> > > > index 89e06c981e43..aba36f5be4ec 100644
+> > > > --- a/drivers/vfio/Kconfig
+> > > > +++ b/drivers/vfio/Kconfig
+> > > > @@ -57,6 +57,7 @@ source "drivers/vfio/pci/Kconfig"
+> > > >  source "drivers/vfio/platform/Kconfig"
+> > > >  source "drivers/vfio/mdev/Kconfig"
+> > > >  source "drivers/vfio/fsl-mc/Kconfig"
+> > > > +source "drivers/vfio/cdx/Kconfig"  
+> > > 
+> > > keep sorted  
 > > 
-> > OK, I see. I am not requesting memory range printing, just try to prove
-> > cpu number printing is not so justified. If it's helpful, I am OK with
-> > it. Let's see if other people have concern about this.
-> > 
+> > Since it is not sorted as of now, should a separate patch to be created for
+> > sorting, before adding vfio-cdx?
 > 
-> I do not plan on adding the memory range printing.
-> 
-> > > 
-> > > The printing of memory range is also not necessary, but in order to do that,
-> > > should we choose to do so, requires passing in the memory range to this
-> > > function. This patch series did do this early on, and by v7 I dropped it at
-> > > your urging (https://lore.kernel.org/lkml/20220401183040.1624-1-eric.devolder@oracle.com/).
-> > > At the time, I provided it since I considered this generic infrastructure,
-> > > but I could not defend it since x86 didn't need it. However, PPC now needs
-> > > this, and is now carrying this as part of PPC support of CRASH_HOTPLUG (https://lore.kernel.org/linuxppc-dev/20230312181154.278900-6-sourabhjain@linux.ibm.com/T/#u).
-> > > 
-> > > If you'd rather I pickup the memory range handling again, I can do that. I
-> > > think I'd likely change this function to be:
-> > > 
-> > >    void crash_handle_hotplug_event(unsigned int hp_action, unsigned int cpu,
-> > >       struct memory_notify *mhp);
-> > > 
-> > > where on a CPU op the 'cpu' parameter would be valid and 'mhp' NULL, and on a memory op,
-> > > the 'mhp' would be valid and 'cpu' parameter invalid(0).
-> > > 
-> > > I'd likely then stuff these two parameters into struct kimage so that it can
-> > > be utilized by arch-specific handler, if needed.
-> > > 
-> > > And of course, would print out the memory range for debug purposes.
-> > > 
-> > > Let me know what you think.
-> > 
-> 
-> I do not plan on adding the memory range handling; I'll let Sourabh do that as he has a use case for it.
-> 
-> As such, I don't see any other request for changes.
+> These are essentially in chronological order rather than alphabetical,
+> so I don't really understand this request from Jason.  Perhaps if it
+> was already alphabetical the request would be justified, but I don't
+> see any obligation here.
 
-OK, then I have no concern about this patchset. Thanks a lot for all
-these effort, Eric.
+Ah, well knee jerk, I keep sorting these things, guess I haven't go
+here yet.
 
-Hi x86 maintainers,
+Best practice is to sort lists like this.
 
-Could you help check if there's anything we need improve, or consider
-taking this patchset?
-
-Thanks
-Baoquan
-
+Jason
