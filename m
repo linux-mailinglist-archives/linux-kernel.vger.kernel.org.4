@@ -2,199 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBCB6E81DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02E86E81DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 21:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjDSTZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 15:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S231159AbjDST0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 15:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjDSTZr (ORCPT
+        with ESMTP id S230217AbjDSTZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 15:25:47 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387535BBA;
-        Wed, 19 Apr 2023 12:25:40 -0700 (PDT)
+        Wed, 19 Apr 2023 15:25:58 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2103.outbound.protection.outlook.com [40.107.94.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AEF6EA7;
+        Wed, 19 Apr 2023 12:25:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iokWZPZrSN+WFi38Seu4xjKEjAJkWxwgBMj83ms2mYfVgChRBKPtXbvlPhq8mWrVdUhFc8rpPT5NFNPUh1eyHjt5VT5xH10lApEnRxcJNbmU2PVqwOZCNl26sqMcSob/AliS0HV8SVcQZvFXkl9Cucp7ZUXR9MByq68pe0ZMoXhR4OsgVew9/3t5ie7Ybugq4JmDJeRxo0oSn1vTu2F5RJ1/DirlZooazSs9varTWMgy0xUfthtqWDl5pzzrq2/fy2Erd78Wf56CuDIPibVfdpf4dPrfxaDwXiVoxT2f83rWtQQ4z1LbUNTBljAfKDXXhUNrC/sLklqwJNBZYhE2cA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=f53QQ0GaY8O9nn5Ne6zaGgTPznW/39NUV3Ki2pcXd98=;
+ b=A3SRpJJ59X4niL6paEOhzs1RMsLCh7CEPmo7rdsbGiQK57tseYE5gOxY7MM6OnPESU0REcXXIDuMQm4G7LN75qMDWGl84+utjZsGM7OWzu5aN21pAVnRDBdxgBV4SSvSm6cadCdAvcAQozxx/Zql87+X0UFlRumOYJqwy8OZXI+6mcH4SSyUUnMtyhz1+u8QCjQJB60cuYsrvfPqSX4lvPRkOz+K/20KaY7LtA/zJZpy6iTzydp40ElHGNqEoQeYmYx1ZjoM4VthNnHQ28Q+zbhiYG9WB3n5aDNhLlAGA2QlzcaJnWDyTDKZvbhFELjb4txe9T1rjiMvPVbqQPmOhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1681932340; x=1713468340;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=SsYQyINsS1Fk4lVA4C/fRqc9lh6pGxoW0r4tOSla9cU=;
-  b=XrnsG0+RtLL63yP7qQ4MRLL2cN2IvQusmgEI+sKdrqt0x5S/6v0aMuKf
-   CPS7fLS74VXiLf2TCePdYTIy/bOpSzncmDV3EmsEQdlYRRzrn62ZZV1Kb
-   PJABhafS0BHzigVlvfTDeyWTnY6+nnqtKw9i+uy3Ws6NmG4aIJL07TJs2
-   I=;
-X-IronPort-AV: E=Sophos;i="5.99,210,1677542400"; 
-   d="scan'208";a="1124137496"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-9694bb9e.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 19:25:36 +0000
-Received: from EX19MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1e-m6i4x-9694bb9e.us-east-1.amazon.com (Postfix) with ESMTPS id 5FDA8818D0;
-        Wed, 19 Apr 2023 19:25:30 +0000 (UTC)
-Received: from EX19D028UWA002.ant.amazon.com (10.13.138.248) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Wed, 19 Apr 2023 19:25:29 +0000
-Received: from uda95858fd22f53.ant.amazon.com (10.106.101.53) by
- EX19D028UWA002.ant.amazon.com (10.13.138.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.26;
- Wed, 19 Apr 2023 19:25:27 +0000
-From:   Mengchi Cheng <mengcc@amazon.com>
-To:     <roberto.sassu@huaweicloud.com>
-CC:     <bpf@vger.kernel.org>, <casey@schaufler-ca.com>,
-        <dmitry.kasatkin@gmail.com>, <eparis@parisplace.org>,
-        <jmorris@namei.org>, <kamatam@amazon.com>, <keescook@chromium.org>,
-        <kpsingh@kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-unionfs@vger.kernel.org>, <mengcc@amazon.com>,
-        <miklos@szeredi.hu>, <nicolas.bouchinet@clip-os.org>,
-        <paul@paul-moore.com>, <reiserfs-devel@vger.kernel.org>,
-        <roberto.sassu@huawei.com>, <selinux@vger.kernel.org>,
-        <serge@hallyn.com>, <stephen.smalley.work@gmail.com>,
-        <yoonjaeh@amazon.com>, <zohar@linux.ibm.com>
-Subject: Re: [PATCH] Smack modifications for: security: Allow all LSMs to provide xattrs for inode_init_security hook
-Date:   Wed, 19 Apr 2023 12:25:16 -0700
-Message-ID: <20230419192516.757220-1-mengcc@amazon.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <0fccab67e496f10f4ee7bf2220e70a655013935f.camel@huaweicloud.com>
-References: <0fccab67e496f10f4ee7bf2220e70a655013935f.camel@huaweicloud.com>
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=f53QQ0GaY8O9nn5Ne6zaGgTPznW/39NUV3Ki2pcXd98=;
+ b=bOAA/NYj5CNt8unVStJy4yaZlogitezlEtau5zUu5ttZ0z0pv7ZZ+uGQP4a58eJDiW9zJ0utGnUeCo/v/xORVSHZ+9Y12LOzJRoN51lyHjHCrZBM1hhzogctARXDU8XeOalBz/v4Ua6rcEMoVULRqaLWkBnZ+4CDHR0BiYpiPvY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CH0PR13MB4682.namprd13.prod.outlook.com (2603:10b6:610:de::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Wed, 19 Apr
+ 2023 19:25:50 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%4]) with mapi id 15.20.6319.022; Wed, 19 Apr 2023
+ 19:25:49 +0000
+Date:   Wed, 19 Apr 2023 21:25:41 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Saurabh Sengar <ssengar@linux.microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: hyperv: select CONFIG_NLS for mac address setting
+Message-ID: <ZEBANRDxW+yod7yA@corigine.com>
+References: <20230417205553.1910749-1-arnd@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230417205553.1910749-1-arnd@kernel.org>
+X-ClientProxiedBy: AM0PR06CA0127.eurprd06.prod.outlook.com
+ (2603:10a6:208:ab::32) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.106.101.53]
-X-ClientProxiedBy: EX19D035UWA001.ant.amazon.com (10.13.139.101) To
- EX19D028UWA002.ant.amazon.com (10.13.138.248)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH0PR13MB4682:EE_
+X-MS-Office365-Filtering-Correlation-Id: 11b874f4-5286-4df8-5a37-08db410be1e1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5EhNkA2TElgnpkoRTEpcEg0I47x99hTjdHpVlXKPXBLHsxciztUDAH5caUdZKJQ4Aorw5Wj1k8V+KLAQS96BS8mYdqvtHRlzveNGAsAKOymrct1q+raGYMRtVmPQ61uMK8IOMGkpfC9gyb/sHopKinULVmf8y7uTDLS7Hhz+Clc/HT6VlFDPz7/QOE2QA3Z8p2tDSNz3A84LkQ3ZWpx1ON2zxhPMoMH3Zz3mZzwm/wKbcNFzGYcrOITTMsGIj5JpZehfPQkXWiCYs80D/9rS9JOzmRB/e5bIOQo5jsal4a70yZ6IpdLomhoaqJtsPnI/PXVYhSAtXGdLxsWZzlWJHzyC9YDVHL5Dufp3QHOG1LR3pU5xbC/WCDDFzDaXIXJIsDybB95NMTQDX89T5IiUwzeXE/aE9czTsiwtEUiQQUKeWdzaOFXGDU8octwChgZRVaHLRJyaI/wM7j0+D69gEffUec/3SsOm1hX/Kh7yqmeEBKZk4rylfUSwevn98ixnFJHqNqKT4SpCbcoolIfUFU7yQ1J3L2IPpk+ioOzVaaADOVpTjHKZoS2/LQgHem5J6TWIW/nuQkQqEutMltD+6lcTrzL2s6nKnskqjBNvsJc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(376002)(39840400004)(346002)(366004)(451199021)(6506007)(6512007)(478600001)(86362001)(2616005)(186003)(6666004)(6486002)(4326008)(66946007)(8676002)(6916009)(5660300002)(7416002)(66556008)(8936002)(66476007)(4744005)(2906002)(44832011)(38100700002)(316002)(41300700001)(36756003)(54906003)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZdQrVrwjknTteEEYoiTSONlYUse9de0sBryeL4TdnUdF+kuspWNgzlVW+CMx?=
+ =?us-ascii?Q?aonOTe71rji6rq8W6vW9q5Uyj3ZEMrsWRHtGmKftZEHyAtgrUGZVxHTWUd3Q?=
+ =?us-ascii?Q?BzqY8I5TvA9IWndHm1EiP1haTmJNcdPERUs8Tuk8Tm2qmbUwO/1dLi34Su4s?=
+ =?us-ascii?Q?mUn78a4e3SIYnFExV9EPd5M3DLp3StWCjb5+MMDxuckFLzxmmHmsZW9uabtD?=
+ =?us-ascii?Q?ElxgAY5SSo5Cknkx4QlyCcalGn0jsAvlz5uKrP0iCvNz1fmNtB4WxvkTVD8F?=
+ =?us-ascii?Q?X9yJDpSOhGEUjhHw3SXhDNTkcfEM+yXvGu8udXaJhbn3Mhao76swA9yxzLkZ?=
+ =?us-ascii?Q?bf0jqaVUYeMpCSzfZxRYaZ0NNF2JTwxOIGYuU8ndzXls+RFKFZVH0rEtI2uc?=
+ =?us-ascii?Q?E/AfGMpR26Pjv1fuXB3xx5BY/TP8XGMJ7uO97YDbD8pULwj+4AVsQNzSj+wr?=
+ =?us-ascii?Q?V17/ry3JNQzH/gNYx0sCtjr5owfpEVOLb1rx6FFLXMTGE1L05ub5V/WfwNoI?=
+ =?us-ascii?Q?+S1IzS1Fo+v45p/AaOsjrnsnicO754GacJLKouzOegjT6tlh/1HPCu/sdLcj?=
+ =?us-ascii?Q?mhhuj3wj8bm27aqZnZb4mwcnBFit4yzKY4mCaUUcZP2w/rPosHT2fIEnW/RA?=
+ =?us-ascii?Q?JjaGCJhQ66NNWWqgJh73W3xBb6IqdaT3QwmECHsurzPScm+RYxn+obk34Zy4?=
+ =?us-ascii?Q?/u3TvVlk87rfaW+k77fYJx9Ei1AmR1KbBSeOpa0gM+oFNjt5abEIQFdYADfG?=
+ =?us-ascii?Q?tbzzsqA5g2ynhB+zPedUgYga/tSE2NvmDb+nEdjXhVQj2OZMBqSGYFJHlcw+?=
+ =?us-ascii?Q?N3xecYacx2MfPvLSig8oemYkuYSXP0EQWoH99jPPuUC12lQESiHgkqEnC0Bb?=
+ =?us-ascii?Q?jUEpazMTyx4Djnqz5efWLqeWmtipeepi9bW8IaUiHAEAJDJ9C63lbu64KuOU?=
+ =?us-ascii?Q?7STiUi9o00sXJu3RSCilMv7rDoiRCs7RPGyfEfj+6/NB081RnFUWWas15nPq?=
+ =?us-ascii?Q?m6qn2zp+v6bMkJheJjzNzMJ0z4ekwEkCQwy2GpFEFZjWSfr50BnuCp+NKTk8?=
+ =?us-ascii?Q?C90He7WckTbXI9SYd0Fr9TWYEpIOirnSXvN/aFQsmNU0YxjVyyjBp3QW9KDs?=
+ =?us-ascii?Q?5KfRnwocV7aqdT9zkbufnkUReKUQkhpsQHy11+AHeBbqA1WFoAp4Co4ahJyk?=
+ =?us-ascii?Q?t8k3aSYhLGVAQbhlNK2OvUTu9oggfbX8EvJMAmQT+rKj8QNoKeOrheNlyxef?=
+ =?us-ascii?Q?lZHgZ/lcGfGDOUeL+XxrfIG+3eUTIbcYoIeusovMLzMpZ8DOg2fR3+1nkBSm?=
+ =?us-ascii?Q?KY+C28353g7KPwbSXdS5dCajOz0xZ62K3Wk8JOPHKCUT+kNu6Z3S8dJbBxup?=
+ =?us-ascii?Q?mj82KsN744oDoD0UaBY2/Vjie9vIaE7z+nXk866iWTEIOyxyx1JFSI3UyhpP?=
+ =?us-ascii?Q?yJNVH6wUyFvLENL6NoHD+1+YriSBcqZExBHOjd3bHmMZe5ovf/jNvqOIiw37?=
+ =?us-ascii?Q?qTarhqcXL28yMzc93MvwVi5Ff+Jy2ny+qe/ef3QzglpFYjFrbW4XWnQtw9Ra?=
+ =?us-ascii?Q?YBh6QPvcmx6Q6R3oK87+dbgK8h9a0jtmDBKKyZpws6v6g1EzLwm6cUmOBFtk?=
+ =?us-ascii?Q?fz3ciowCbDGfi3PCZn1ZwOMGxM1k+prEHEPwylvObBZ9MCzqFQCKjp5I/5Wl?=
+ =?us-ascii?Q?D0hapw=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11b874f4-5286-4df8-5a37-08db410be1e1
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 19:25:49.6610
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1LpBZTATXmmUE7rs40gDS2hvqnqL1OSYy84QotF3XcAvhow+6GJKqSyyrVIShbwDnkBi6tFOnNxd76vb8xvH6Xjeb2f7MwG7arH2w3ZBGnk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR13MB4682
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 17, 2023 at 10:55:48PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> I got some errors during xattr removal, so not sure if my patch was
-> working properly or not (it happened also without it, didn't
-> investigate more).
+> A rare randconfig build error happens when this driver is
+> enabled, but nothing else enables NLS support:
 > 
-> However, I saw another discussion related to transmute:
+> x86_64-linux-ld: drivers/net/hyperv/rndis_filter.o: in function `rndis_filter_set_device_mac':
+> rndis_filter.c:(.text+0x1536): undefined reference to `utf8s_to_utf16s'
 > 
-> https://lore.kernel.org/linux-security-module/20230419002338.566487-1-mengcc@amazon.com/
+> This is normally selected by PCI, USB, ACPI, or common file systems.
+> Since the dependency on ACPI is now gone, NLS has to be selected
+> here directly.
 > 
-> I add the people in CC.
-> 
-> The steps described were so easy to understand and executed, I tried
-> without and with overlayfs.
-> 
-> Without:
-> 
-> # echo "_ system rwxatl" > /sys/fs/smackfs/load2
-> # mkdir /data
-> # chsmack -a "system" /data
-> # chsmack -t /data
-> # mkdir -p /data/dir1/dir2
-> # chsmack /data/dir1
-> /data/dir1 access="system" transmute="TRUE"
-> # chsmack /data/dir1/dir2
-> /data/dir1/dir2 access="system" transmute="TRUE"
-> 
-> It seems to work, right?
-> 
-> With overlay fs it didn't work, same result as the one Mengchi
-> reported. Since Mengchi's solution was to set SMK_INODE_CHANGED, and I
-> want to get rid of it, I thought to investigate more.
-> 
-> Looking at smack_dentry_create_files_as(), I see that the label of the
-> process is overwritten with the label of the transmuting directory.
-> 
-> That causes smack_inode_init_security() to lookup the transmuting rule
-> on the overridden credential, and not on the original one.
-> 
-> In the example above, it means that, when overlayfs is creating the new
-> inode, the label of the process is system, not _. So no transmute
-> permission, and also the xattr will not be added, as observed by
-> Mengchi.
-> 
-> Hopefully I undertood the code, so in this particular case we would not
-> need to override the label of the process in smack_dentry_create_files_
-> as().
-> 
-> If you see smack_inode_init_security():
-> 
-> 	struct smack_known *skp = smk_of_current();
-> 	struct smack_known *isp = smk_of_inode(inode);
-> 	struct smack_known *dsp = smk_of_inode(dir);
-> 
-> [...]
-> 
-> 		if (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
-> 		    smk_inode_transmutable(dir)) {
-> 			isp = dsp;
-> [...]
-> 
-> 		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
-> 
-> This code is telling, if there is a transmute rule, and the directory
-> is transmuting, set the label of the new inode to the label of the
-> directory. That should be already the result that we wanted to obtain.
-> 
-> The current code should have been doing it by overriding the label of
-> the process in smack_dentry_create_files_as() with the label of the
-> parent directory, and letting the inode being created with the
-> overridden label of the process. The transmute xattr is not set due to
-> the problem described above.
-> 
-> So, as a quick test, I kept this patch with the change to xattr2->name, 
-> and skipped the label override in smack_dentry_create_files_as(). It
-> worked, I get the same result as without overlayfs. Wondering if the
-> process label override is necessary in other cases.
+> Fixes: 38299f300c12 ("Driver: VMBus: Add Devicetree support")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-If I understand correctly, removing the if block below is what you suggested.
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index cfcbb748da25..a867288e9de9 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -4769,8 +4769,8 @@ static int smack_dentry_create_files_as(struct dentry *dentry, int mode,
-                 * providing access is transmuting use the containing
-                 * directory label instead of the process label.
-                 */
--               if (may > 0 && (may & MAY_TRANSMUTE))
--                       ntsp->smk_task = isp->smk_inode;
-+//             if (may > 0 && (may & MAY_TRANSMUTE))
-+//                     ntsp->smk_task = isp->smk_inode;
-        }
-        return 0;
- }
-
-This way will have issue in the following situation on the vanila kernel.
-data in the lowerdir has "_" label before overlay and dir1 is already
-created in the lowerdir.
-# chsmack /data
-/data access="_"
-# chsmack /data/dir1
-/data/dir1 access="system" transmute="TRUE"
-Apply overlay on data directory and set the smack rule in the same way.
-data has the same smack label.
-# chsmack /data
-/data access="system" transmute="TRUE"
-After that, remove dir1 and mkdir dir1 again. dir1 did not get the correct
-label.
-# rm -r /data/dir1
-# mkdir -p /data/dir1
-# chsmack /data/dir1
-/data/dir1 access="_"
-
-Since I am not very familiar your change. Could you help check with your
-patch will this issue also happen? 
-
-
-Best,
-Mengchi
-
->  
-> Roberto
