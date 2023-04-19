@@ -2,259 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D64B6E8087
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7314E6E8092
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbjDSRnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 13:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        id S233120AbjDSRoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 13:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjDSRnS (ORCPT
+        with ESMTP id S229739AbjDSRog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 13:43:18 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C397F72A0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:43:16 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f048b144eeso147985e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:43:16 -0700 (PDT)
+        Wed, 19 Apr 2023 13:44:36 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3857280
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:44:32 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-2f87c5b4635so3053620f8f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:44:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681926195; x=1684518195;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LbIeXSReCQMbeb4ih3GQD4yHVI+ajegh0q6OiBbZIxg=;
-        b=LHTaEdOyIBlJsLLfw3G2QpQk9naWCaRk8oWpTNM0nZZIFvxvmevcqE+gjM3vs8Z2K1
-         W1/HmoG0GqrXpeu7HU4/kVSdSuIC/t20E0hmzPxn6WMRZZQJJT9iiCM2GtzumIUp4not
-         A/dcKgPcYslPWtn2WW1dtqXLgWCYpMms6B975bbHGb5DeRjzAr2LuDtkz7HJxUomtpME
-         VRvxUAxvB2QKGXpVagWuNojmw1PV2Ezvd6bvJp27ClTT1V9Leh50cY+ZYSQ+HQAEKD36
-         kYK1SY8TPmFQuJ6BPtefi+ZeHkknOvp5/pFlQ6pW+AzeOfRl5c1IvxophtdEkpqrcV1I
-         zR1A==
+        d=tessares.net; s=google; t=1681926270; x=1684518270;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cekCW+SqV/BFx5znWNnA1xPGxJLXH0PS1n/sZ8CHAHc=;
+        b=M4vPROgbnjX5wvsvoBVlCGhAl97U6yDSb8O3HKWgF2vJ8IeRxgM0J0N8PATq0bTdHr
+         b7s18BOLvfXBi49sesz1T8vrHZXv1E+L7iba7AMvvqkx8sxG7RQ8twu6snNgInwvbapp
+         Fuy7AF2b+9U9jEKO5ZmQgWMRnwqPIF3+hxzoRH+SR6LlXQbDc0MXjIqnF3itk41+hyA3
+         SFYpv5kPTfINHhvZeKDb6rW0HPFrSXyYr8PE2hm0Qun97QoiyeqgTppWPN/VRjLFBFiE
+         E6rLGadxRsuPxNqAaaGMS0cuGOsnAZVbmKuuTzG4J/gLSWRJ58vDNPgm5cjW+RoeqJJs
+         LBhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681926195; x=1684518195;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LbIeXSReCQMbeb4ih3GQD4yHVI+ajegh0q6OiBbZIxg=;
-        b=EFyhvKJP/1Gn0ubLvAw/WfRBwvRfa3Ry8TnkwiqpktuKm91AfEgbK7ADBJo3+iO6+V
-         2jaqyeSr7di5qgiOv0OilqJQFjZ2JScf6A4S74t6dqjChY90WW+1hJn6E4KOmiQnYw13
-         CmoRkT1M7OmNfA2h4ZAhtmPm/DXk+JWSCGDF9mQg9gNNUKl2uOSgyTt4BZgqEU5BNZTs
-         mfLboGWjCYJp6DJjV3k+oeB8YynvKRVRVYRkFYsra8j7PRFnpICdq4azFWYvA1acXK1Z
-         owo0b0gbUYReNtBaqVhS5fB0G6/Em0WDP5uAuxYOfVklXu2qS227fRFHxzQuwkMZCv1e
-         hY4g==
-X-Gm-Message-State: AAQBX9dUoHyW1DfU/1xSVB1tMkU8lOH5HglK0VPIhVhEYejKTAiqu551
-        Iqep9VvuZsr+QE/OJzcoFjvd4weHP2hEY4awYYh5Yg==
-X-Google-Smtp-Source: AKy350ZmpzQ1uY1BUEeMEpoys5h/UnF5v4KOvTi+J/OoxZA1ul+8Bb2MgOls4JOxVXqW2oCoz86I5D2zEW2FeB5MdWA=
-X-Received: by 2002:a05:600c:4e8a:b0:3f1:73b8:b5fe with SMTP id
- f10-20020a05600c4e8a00b003f173b8b5femr4192wmq.3.1681926195026; Wed, 19 Apr
- 2023 10:43:15 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681926270; x=1684518270;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cekCW+SqV/BFx5znWNnA1xPGxJLXH0PS1n/sZ8CHAHc=;
+        b=kuRnUOlcVWBxdBLOvDnuZh2+bNvmcqrvfV9lb5LofbY2FUrMIL5OjkXyLpGBVsII5f
+         lJ6vYzCsa5Rfxp8gy3tgJVD39NIeRztwzij3QEOL4Zg/iOh7zDG18qHCv9Tc+TcrmNgj
+         jXjt65AGyKahYVhQ2p0kmHTD5C6qC8mB8BcD1p1Bj6HWFL9RiLgc0cm+TKgZ2rnl9O+O
+         L0UbddOT/VyeW9EDObf8lMdWlfyPmBsepttG6Ihq8Rqa2FMBHFQLfB+L35w9VkBvNQ/k
+         sVnh7Jp3TE1mSoFHfroxs6XPAiaQPfKXy5UZenEbAMvBFtnnaHxmGF/m+bgSirubtGof
+         Y3NA==
+X-Gm-Message-State: AAQBX9c7IclLNckluMmVL+4azlGbnpKuFQOdpWh953v7S7m0YgUcyHdS
+        CQmTHSDamBuap65HOklbxSjrwA==
+X-Google-Smtp-Source: AKy350ZoEi+fS+LUYvy1NEQODgr6EfXOnXZZDsYvWL+IrBTTzRuno/1y5jP6qVHtFe7LEio6+0WB0A==
+X-Received: by 2002:a05:6000:11cb:b0:2f0:bab2:dc3c with SMTP id i11-20020a05600011cb00b002f0bab2dc3cmr5534481wrx.27.1681926270546;
+        Wed, 19 Apr 2023 10:44:30 -0700 (PDT)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id o18-20020a5d4092000000b002fe87e0706bsm3027879wrp.97.2023.04.19.10.44.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 10:44:30 -0700 (PDT)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: [PATCH LSM 0/2] security: SELinux/LSM label with MPTCP and accept
+Date:   Wed, 19 Apr 2023 19:44:03 +0200
+Message-Id: <20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-v1-0-9d4064cb0075@tessares.net>
 MIME-Version: 1.0
-References: <20230413161725.195417-1-alexghiti@rivosinc.com>
- <CAOnJCU+72PV1=o1c_TpogkmBT36278BneVWEMr1=tqX0CZi+ag@mail.gmail.com>
- <aadca595b4a24e36932ba41e61f4e263@AcuMS.aculab.com> <CAOnJCUJ7mY+fh9VqE4dRntnVAEAc26=NnOCPUqkXk6ky__cUZQ@mail.gmail.com>
- <CAP-5=fUYJEecmhQVuvbM4ZoDP_Hj=2RKOgR4cKepU072Uy3xyw@mail.gmail.com>
- <CAOnJCULJfSN79MzAwhCrbVzG1rYyrPB3OraFmoZFBxuRCwq01w@mail.gmail.com> <CAHVXubjhORBEDok_Zhq5p_Yv4Ty4Hct84dWJZXzo48+40N=CGg@mail.gmail.com>
-In-Reply-To: <CAHVXubjhORBEDok_Zhq5p_Yv4Ty4Hct84dWJZXzo48+40N=CGg@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 19 Apr 2023 10:42:58 -0700
-Message-ID: <CAP-5=fX6kaZt68UbMMZzW-zs0RyRWoOS-Tq5NwekWj8k9Shx6g@mail.gmail.com>
-Subject: Re: [PATCH 0/4] riscv: Allow userspace to directly access perf counters
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        paranlee <p4ranlee@gmail.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        David Laight <David.Laight@aculab.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGQoQGQC/z3OywrCMBCF4Vcps3agrRfUZ7Arl+JiEic20KQhk
+ 2ih9N1NBV3+HPg4MwhHywLnaobILyt29CWaTQW6J/9ktI/S0Nbttt41J8xBUmRyOIhDz1PC/+R
+ C0gElq2F8C+Yio04TMvNhfzRktCIoriJhVJG87lf556xTiGzs9L1zg8u1g/uyfAB5Ce4+owAAA
+ A==
+To:     Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ondrej Mosnacek <omosnace@redhat.com>, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3225;
+ i=matthieu.baerts@tessares.net; h=from:subject:message-id;
+ bh=Rl5GtGwq+L7wyDWK7TEacZMevn8jICzh9/ucI2yapPY=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkQCh9PbGJu9bdgZRzN41wd9bdr7geV1tmVBs6h
+ MEEW5+fktaJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZEAofQAKCRD2t4JPQmmg
+ cxTMD/0UsSFEDeb9i0olgkNDk55w5NjuaDc8AfJoA6yuknO6m5Jdg74k+wA9ZlsdHNyle3AtBHv
+ CcOhw7aGerioF14LEJ+E9rUjmZFqMrdaV2Ut317M7Vfk5LTq3dceQZc16RE1slC8MngZfWsJeRJ
+ FfdBhvnhxYRXXDOLVGrCpm7wn8ZQcva4hOJ5qF5aK/WM6gyFw6V20MhMogTN+Be84S3raNH6ywi
+ G5n+o7FLiGGQ+e0M0kgd7aBR8TFPyvAlKlrj7h4mqdvQkkWjL7h64W17/tzp1wU6+6B8U38blK5
+ cr7wOrMBWfmknZiJfrFwsDDB2FyityI/8Gu7UimzRIy/a8OPq8bL3kURS2WSd8NVfn/ecWTee/v
+ FPqMkxf9fcFZI6tBSu1uNedS9v6qios+adtBdVC120Swt5eUEuuNqMI+A8InmN1dt7v5Zz7h++7
+ 37rsJqh1e8GJ0aU5km/6QLLDUb3mo0anp3KFNE6N6+oyIpVd23ws7pFT6VCFglBka5JAPrazrOM
+ s3R+bV/y8PGIPTWEGfdY3TQDBjULKnlNodOud8kXmkgzcvgE9VtQL/WhXoYt4FTmsejmB08IwMa
+ lzETZGYL1ZwxQ8AN3bw83zjySShptQnaqndReUGDD5cbMtY6FUVBnwtPquDBkPVjJgmZmd+xWok
+ lHoTOyvdY0UHDuQ==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 2:21=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosinc=
-.com> wrote:
->
-> Hi Ian,
->
-> On Tue, Apr 18, 2023 at 10:30=E2=80=AFPM Atish Patra <atishp@atishpatra.o=
-rg> wrote:
-> >
-> > On Tue, Apr 18, 2023 at 11:46=E2=80=AFPM Ian Rogers <irogers@google.com=
-> wrote:
-> > >
-> > > On Tue, Apr 18, 2023 at 9:43=E2=80=AFAM Atish Patra <atishp@atishpatr=
-a.org> wrote:
-> > > >
-> > > > On Fri, Apr 14, 2023 at 2:40=E2=80=AFAM David Laight <David.Laight@=
-aculab.com> wrote:
-> > > > >
-> > > > > From: Atish Patra
-> > > > > > Sent: 13 April 2023 20:18
-> > > > > >
-> > > > > > On Thu, Apr 13, 2023 at 9:47=E2=80=AFPM Alexandre Ghiti <alexgh=
-iti@rivosinc.com> wrote:
-> > > > > > >
-> > > > > > > riscv used to allow direct access to cycle/time/instret count=
-ers,
-> > > > > > > bypassing the perf framework, this patchset intends to allow =
-the user to
-> > > > > > > mmap any counter when accessed through perf. But we can't bre=
-ak the
-> > > > > > > existing behaviour so we introduce a sysctl perf_user_access =
-like arm64
-> > > > > > > does, which defaults to the legacy mode described above.
-> > > > > > >
-> > > > > >
-> > > > > > It would be good provide additional direction for user space pa=
-ckages:
-> > > > > >
-> > > > > > The legacy behavior is supported for now in order to avoid brea=
-king
-> > > > > > existing software.
-> > > > > > However, reading counters directly without perf interaction may
-> > > > > > provide incorrect values which
-> > > > > > the userspace software must avoid. We are hoping that the user =
-space
-> > > > > > packages which
-> > > > > > read the cycle/instret directly, will move to the proper interf=
-ace
-> > > > > > eventually if they actually need it.
-> > > > > > Most of the users are supposed to read "time" instead of "cycle=
-" if
-> > > > > > they intend to read timestamps.
-> > > > >
-> > > > > If you are trying to measure the performance of short code
-> > > > > fragments then you need pretty much raw access directly to
-> > > > > the cycle/clock count register.
-> > > > >
-> > > > > I've done this on x86 to compare the actual cycle times
-> > > > > of different implementations of the IP checksum loop
-> > > > > (and compare them to the theoretical limit).
-> > > > > The perf framework just added far too much latency,
-> > > > > only directly reading the cpu registers gave anything
-> > > > > like reliable (and consistent) answers.
-> > > > >
-> > > >
-> > > > This series allows direct access to the counters once configured
-> > > > through the perf.
-> > > > Earlier the cycle/instret counters are directly exposed to the
-> > > > userspace without kernel/perf frameworking knowing
-> > > > when/which user space application is reading it. That has security =
-implications.
-> > > >
-> > > > With this series applied, the user space application just needs to
-> > > > configure the event (cycle/instret) through perf syscall.
-> > > > Once configured, the userspace application can find out the counter
-> > > > information from the mmap & directly
-> > > > read the counter. There is no latency while reading the counters.
-> > > >
-> > > > This mechanism allows stop/clear the counters when the requesting t=
-ask
-> > > > is not running. It also takes care of context switching
-> > > > which may result in invalid values as you mentioned below. This is
-> > > > nothing new and all other arch (x86, ARM64) allow user space
-> > > > counter read through the same mechanism.
-> > > >
-> > > > Here is the relevant upstream discussion:
-> > > > https://lore.kernel.org/lkml/Y7wLa7I2hlz3rKw%2F@hirez.programming.k=
-icks-ass.net/T/
-> > > >
-> > > > ARM64:
-> > > > https://docs.kernel.org/arm64/perf.html?highlight=3Dperf_user_acces=
-s#perf-userspace-pmu-hardware-counter-access
-> > > >
-> > > > example usage in x86:
-> > > > https://github.com/andikleen/pmu-tools/blob/master/jevents/rdpmc.c
-> > >
-> > > The canonical implementation of this should be:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/tools/lib/perf/mmap.c#n400
-> >
-> > Thanks for sharing the libperf implementation.
-> >
-> > > which is updated in these patches but the tests are not:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/tools/perf/tests/mmap-basic.c#n287
-> > > Which appears to be an oversight. The tests display some differences
-> >
-> > Yes. It's an oversight. We should make sure that perf mmap tests pass
-> > for RISC-V as well.
->
-> Yes, that's an oversight, I had a local test adapted from this one but
-> forgot to update it afterwards, I'll do that in the next version.
->
-> Thanks for your quick feedbacks and sorry for being late,
->
-> Alex
+In [1], Ondrej Mosnacek explained they discovered the (userspace-facing)
+sockets returned by accept(2) when using MPTCP always end up with the
+label representing the kernel (typically system_u:system_r:kernel_t:s0),
+while it would make more sense to inherit the context from the parent
+socket (the one that is passed to accept(2)). Thanks to the
+participation of Paul Moore in the discussions, modifications on MPTCP
+side have started and the result is available here.
 
-Thanks Alex, there was an equally likely chance that I wasn't
-understanding things :-) Is there any information on RISC-V PMU
-testing? I know ParanLee is interested. It'd be awesome to have
-something say on:
-https://perf.wiki.kernel.org/index.php/Main_Page
-on how to run tests, perhaps on QEMU or known to work boards. We can
-also just drop a link on there if there is information. We can also
-add the RISC-V PMU information to the links here:
-https://perf.wiki.kernel.org/index.php/Useful_Links
+Paolo Abeni worked hard to refactor the initialisation of the first
+subflow of a listen socket. The first subflow allocation is no longer
+done at the initialisation of the socket but later, when the connection
+request is received or when requested by the userspace. This was a
+prerequisite to proper support of SELinux/LSM labels with MPTCP and
+accept. The last batch containing the commit ddb1a072f858 ("mptcp: move
+first subflow allocation at mpc access time") [2] has been recently
+accepted and applied in netdev/net-next repo [3].
 
-Thanks,
-Ian
+This series of 2 patches is based on top of the lsm/next branch. Despite
+the fact they depend on commits that are in netdev/net-next repo to
+support the new feature, they can be applied in lsm/next without
+creating conflicts with net-next or causing build issues. These two
+patches on top of lsm/next still passes all the MPTCP-specific tests.
+The only thing is that the new feature only works properly with the
+patches that are on netdev/net-next. The tests with the new labels have
+been done on top of them.
 
->
-> >
-> >
-> > > between x86 and aarch64 that have assumed userspace hardware counter
-> > > access, and everything else that it is assumed don't.
-> > >
-> > > Thanks,
-> > > Ian
-> > >
-> > > > > Clearly process switches (especially cpu migrations) cause
-> > > > > problems, but they are obviously invalid values and can
-> > > > > be ignored.
-> > > > >
-> > > > > So while a lot of uses may be 'happy' with the values the
-> > > > > perf framework gives, sometimes you do need to directly
-> > > > > read the relevant registers.
-> > > > >
-> > > > >         David
-> > > > >
-> > > > > -
-> > > > > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Key=
-nes, MK1 1PT, UK
-> > > > > Registration No: 1397386 (Wales)
-> > > >
-> > > >
-> > > >
-> > > > --
-> > > > Regards,
-> > > > Atish
-> >
-> >
-> >
-> > --
-> > Regards,
-> > Atish
+It then looks OK to us to send these patches for review on your side. We
+hope that's OK for you as well. If the patches look good to you and if
+you prefer, it is fine to apply these patches before or after having
+synced the lsm/next branch with Linus' tree when it will include the
+modifications from the netdev/net-next repo.
+
+Regarding the two patches, the first one introduces a new LSM hook
+called from MPTCP side when creating a new subflow socket. This hook
+allows the security module to relabel the subflow according to the owing
+process. The second one implements this new hook on the SELinux side.
+
+Link: https://lore.kernel.org/netdev/CAFqZXNs2LF-OoQBUiiSEyranJUXkPLcCfBkMkwFeM6qEwMKCTw@mail.gmail.com/ [1]
+Link: https://git.kernel.org/netdev/net-next/c/ddb1a072f858 [2]
+Link: https://lore.kernel.org/netdev/20230414-upstream-net-next-20230414-mptcp-refactor-first-subflow-init-v1-0-04d177057eb9@tessares.net/ [3]
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+Paolo Abeni (2):
+      security, lsm: Introduce security_mptcp_add_subflow()
+      selinux: Implement mptcp_add_subflow hook
+
+ include/linux/lsm_hook_defs.h |  1 +
+ include/linux/security.h      |  6 ++++++
+ net/mptcp/subflow.c           |  6 ++++++
+ security/security.c           | 15 +++++++++++++++
+ security/selinux/hooks.c      | 16 ++++++++++++++++
+ security/selinux/netlabel.c   |  8 ++++++--
+ 6 files changed, 50 insertions(+), 2 deletions(-)
+---
+base-commit: d82dcd9e21b77d338dc4875f3d4111f0db314a7c
+change-id: 20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-eee658fafcba
+
+Best regards,
+-- 
+Matthieu Baerts <matthieu.baerts@tessares.net>
+
