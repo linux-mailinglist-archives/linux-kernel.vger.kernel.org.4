@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737BC6E745F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7109D6E7463
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbjDSHvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 03:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S232675AbjDSHvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 03:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232398AbjDSHuj (ORCPT
+        with ESMTP id S232468AbjDSHuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Apr 2023 03:50:39 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1749C175;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC828AF35;
         Wed, 19 Apr 2023 00:50:09 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1681890606;
-        bh=kSlTxie2Ksev8vTGCDWHXnNc4gL+EGM1NG1+H1a+m6E=;
+        bh=PhuKSVM+kLkzr4vVCFko648fBsxNsNBCoE+R9yckFfk=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=l8DYAJVtorw7L4oqC+eL7xArCxF0pNZgDiJh5GTlfkWKPhqU3+9dyZEB5ePCv4+VD
-         Rl0xSBuODwChxCxKuoWOWqxnzlPqZD5y44QD/iH97YYQOfZBaAQCVCMfpwcNpiAzna
-         YgEb+VMGmvp69gQCYdFJMZt8IhD8ozmqO6boHrfw=
-Date:   Wed, 19 Apr 2023 09:50:01 +0200
-Subject: [PATCH 1/4] block: constify partition prober array
+        b=g8M6e0S0q91u4AQ+9aU5tjzS+twC2zUotiDRCFi4HscFAA1cEXUHMYBWgfosZNu47
+         SK8r0RvA8AzhmKIkejOWNSxJD8nJI4zVVzfHpR5K9F9b4QOfPxytmKi2yYHLw1PQYW
+         SS3SMB9h43XXOxEKIDqLzkaWON/J4KE5fDACtx7g=
+Date:   Wed, 19 Apr 2023 09:50:02 +0200
+Subject: [PATCH 2/4] block: constify struct part_type part_type
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230419-const-partition-v1-1-2d66f2d83873@weissschuh.net>
+Message-Id: <20230419-const-partition-v1-2-2d66f2d83873@weissschuh.net>
 References: <20230419-const-partition-v1-0-2d66f2d83873@weissschuh.net>
 In-Reply-To: <20230419-const-partition-v1-0-2d66f2d83873@weissschuh.net>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681890605; l=698;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681890605; l=1158;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=kSlTxie2Ksev8vTGCDWHXnNc4gL+EGM1NG1+H1a+m6E=;
- b=DjdLzIs3C9Vi612gPssij7yXcJOt4k/kQJmuexW0wQ7fSreII52rD8l2eI00RFP7uk3Udg0Tq
- joRXaGTK8QDAKCsrAasX3qd78urpEuX/9fQCfnv/27kCSKmCm7m3uym
+ bh=PhuKSVM+kLkzr4vVCFko648fBsxNsNBCoE+R9yckFfk=;
+ b=bM12H6NWeGSf35qtpumgJNsGsDZvkNlMhGe1dE92A+yhS7RAAbo1knoQIpfAJJIF4KoDRplPq
+ VoqD3UbC4PiAhaBbkpAfBbLtYk6cW6L0MLvdkNOgt97sLlfGDr26cD/
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -52,26 +52,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The array is never modified so it can be const.
+The struct is never modified so it can be const.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
  block/partitions/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/blkdev.h  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/block/partitions/core.c b/block/partitions/core.c
-index 7b8ef6296abd..667f3dcebd59 100644
+index 667f3dcebd59..812407ea38e9 100644
 --- a/block/partitions/core.c
 +++ b/block/partitions/core.c
-@@ -12,7 +12,7 @@
- #include <linux/raid/detect.h>
- #include "check.h"
+@@ -264,7 +264,7 @@ static int part_uevent(const struct device *dev, struct kobj_uevent_env *env)
+ 	return 0;
+ }
  
--static int (*check_part[])(struct parsed_partitions *) = {
-+static const int (*check_part[])(struct parsed_partitions *) = {
- 	/*
- 	 * Probe partition formats with tables at disk address 0
- 	 * that also have an ADFS boot block at 0xdc0.
+-struct device_type part_type = {
++const struct device_type part_type = {
+ 	.name		= "partition",
+ 	.groups		= part_attr_groups,
+ 	.release	= part_release,
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index 941304f17492..de783481ec71 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -41,7 +41,7 @@ struct blk_stat_callback;
+ struct blk_crypto_profile;
+ 
+ extern const struct device_type disk_type;
+-extern struct device_type part_type;
++extern const struct device_type part_type;
+ extern struct class block_class;
+ 
+ /* Must be consistent with blk_mq_poll_stats_bkt() */
 
 -- 
 2.40.0
