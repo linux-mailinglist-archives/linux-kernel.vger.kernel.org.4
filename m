@@ -2,88 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3706E79CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CC96E79D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233280AbjDSMbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
+        id S232788AbjDSMgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbjDSMbV (ORCPT
+        with ESMTP id S231592AbjDSMgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:31:21 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F04883D8;
-        Wed, 19 Apr 2023 05:31:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681907479; x=1713443479;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ms4CryhYtDp4tIqhE0yt+qiaJQ9HXwQjuuAqzSeax4k=;
-  b=lLoyqxtAL+CWa4/u0ELkPtFkaNvbxvZqPit02YKXtLwPu5Ry0iIzuBXI
-   Yih91wntsErpYh9YxVfGVzhZqQATi1fOixFudzk8045K+NmUy5UeN/y5z
-   iiGGE3zXJzSzXC1LTYQSK1f/2ERKzhDlgG41/Ioi61686nFtGrMawpz2B
-   6unZTclwoTumiCwhC7JjR3gjnqXkn4QR95UmVMdrAeeyomsZPbOrxwRBX
-   8AMXXN5S+GRmZlrritV+dafMh0UbLR4T0kFS6hoLmlV+6lrU9d22whmkT
-   JBFPReCKb48pb1awmhhny3IYbEP8KYsa4ePwt/RBQusJJQplekmCEcUrJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="408342794"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="408342794"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 05:31:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="684962247"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="684962247"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga007.jf.intel.com with ESMTP; 19 Apr 2023 05:31:18 -0700
-Received: from [10.209.41.10] (kliang2-mobl1.ccr.corp.intel.com [10.209.41.10])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Wed, 19 Apr 2023 08:36:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA025E50;
+        Wed, 19 Apr 2023 05:36:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id E92EB580C4C;
-        Wed, 19 Apr 2023 05:31:16 -0700 (PDT)
-Message-ID: <84b19053-2e9f-5251-6816-26d2475894c0@linux.intel.com>
-Date:   Wed, 19 Apr 2023 08:31:15 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 496EE63643;
+        Wed, 19 Apr 2023 12:36:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCAAEC433D2;
+        Wed, 19 Apr 2023 12:36:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681907774;
+        bh=zLBNrnGTS7PfXsbReuF8yNgt/hxvun5C/cZPrBU/CSw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TJQRX6bqVXlEh0BHEpwDcce45PLXeFw1aEKh6SbRv1HWjjPMJvn0Loxo0bEg9WvG1
+         9Q/ucLIH+iAKcumTIy/dOF56okqDGd6c0Ex83XKG8ScsrxuzYMP6dTeMMEW3DaHT/P
+         uVh7wfQHdHrLdUsHj6m728kRMkFmlH2WTv6q3xRhU9/V/sYpThvyQ2PAv5QJ9HcHjB
+         xNp/8j5US+ehIlqeYZx7ilsbeieyScNJDN820HnixqzNkAZRGu0Wt47BW9CAqnh+Ei
+         2iMVb9goliJ+2oNfU0T995yAUkCLGCajdjcDwrzhOJfHLS8r0Fre65vAVhlLf6YfH5
+         P8yBDCCBe/oRA==
+Date:   Wed, 19 Apr 2023 13:36:07 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v8 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+Message-ID: <c24f8a28-23d4-46e3-8ff2-4b6f4e39b493@sirena.org.uk>
+References: <20230419062202.28749-1-zhuyinbo@loongson.cn>
+ <20230419062202.28749-3-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] perf stat: Introduce skippable evsels
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230414051922.3625666-1-irogers@google.com>
- <56ac61a0-ccf0-210e-e429-11062a07b8bf@linux.intel.com>
- <CAP-5=fXz1vw48A2tWgcNDSZsnvnOO7_jA+py3p_Khi_igz0hJw@mail.gmail.com>
- <5031f492-9734-be75-3283-5961771d87c8@linux.intel.com>
- <CAP-5=fW2aAijt8tqydszQHQFmsfeQO2S0hb7Z27RtXxG4Zmm-w@mail.gmail.com>
- <ce92dd1b-23f6-ea52-a47d-fccc24fa20ea@linux.intel.com>
- <CAP-5=fWRy4NEqhB6-b98+m7SV5=oyBOMVuOHwmvKZCJuXcsQEg@mail.gmail.com>
- <d1fe801a-22d0-1f9b-b127-227b21635bd5@linux.intel.com>
- <CAP-5=fXCmKAUn24r0YYHaO63mabZCXae-hAT2WCtk+YYmvS9xg@mail.gmail.com>
- <99150cb1-fe50-97cf-ad80-cceb9194eb9a@linux.intel.com>
- <CAP-5=fXZSACj=kGM5t3pBHkQ-W1i0eJayAQ77_ToEp4zXWzJnw@mail.gmail.com>
- <ea899096-0599-f2a0-04a3-d90a3aa7d45d@linux.intel.com>
- <CAP-5=fVVFjKgUGV8zVurd99BOhASQ9mMaZqOyw13PYLhZWpsOA@mail.gmail.com>
- <CAP-5=fW_JwabjEUqSLaJn+tuHXLoyRWqJVVCh_z1dhXJ6On=MQ@mail.gmail.com>
-Content-Language: en-US
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CAP-5=fW_JwabjEUqSLaJn+tuHXLoyRWqJVVCh_z1dhXJ6On=MQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NVSAr3jEmrWbbgVZ"
+Content-Disposition: inline
+In-Reply-To: <20230419062202.28749-3-zhuyinbo@loongson.cn>
+X-Cookie: This is your fortune.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,82 +63,57 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--NVSAr3jEmrWbbgVZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 2023-04-18 9:00 p.m., Ian Rogers wrote:
-> On Tue, Apr 18, 2023 at 5:12 PM Ian Rogers <irogers@google.com> wrote:
->>
->> On Tue, Apr 18, 2023 at 2:51 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
->>>
->>>
->>>
->>> On 2023-04-18 4:08 p.m., Ian Rogers wrote:
->>>> On Tue, Apr 18, 2023 at 11:19 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
->>>>>
->>>>>
->>>>>
->>>>> On 2023-04-18 11:43 a.m., Ian Rogers wrote:
->>>>>> On Tue, Apr 18, 2023 at 6:03 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
->>>>>>>
->>>>>>>
->>>>>>>
->>>>>>> On 2023-04-17 2:13 p.m., Ian Rogers wrote:
->>>>>>>> The json TopdownL1 is enabled if present unconditionally for perf stat
->>>>>>>> default. Enabling it on Skylake has multiplexing as TopdownL1 on
->>>>>>>> Skylake has multiplexing unrelated to this change - at least on the
->>>>>>>> machine I was testing on. We can remove the metric group TopdownL1 on
->>>>>>>> Skylake so that we don't enable it by default, there is still the
->>>>>>>> group TmaL1. To me, disabling TopdownL1 seems less desirable than
->>>>>>>> running with multiplexing - previously to get into topdown analysis
->>>>>>>> there has to be knowledge that "perf stat -M TopdownL1" is the way to
->>>>>>>> do this.
->>>>>>>
->>>>>>> To be honest, I don't think it's a good idea to remove the TopdownL1. We
->>>>>>> cannot remove it just because the new way cannot handle it. The perf
->>>>>>> stat default works well until 6.3-rc7. It's a regression issue of the
->>>>>>> current perf-tools-next.
->>>>>>
->>>>>> I'm not so clear it is a regression to consistently add TopdownL1 for
->>>>>> all architectures supporting it.
->>>>>
->>>>>
->>>>> Breaking the perf stat default is a regression.
->>>>
->>>> Breaking is overstating the use of multiplexing. The impact is less
->>>> accuracy in the IPC and branch misses default metrics,
->>>
->>> Inaccuracy is a breakage for the default.
->>
->> Can you present a case where this matters? The events are already not
->> grouped and so inaccurate for metrics.
-> 
-> Removing CPUs without perf metrics from the TopdownL1 metric group is
-> implemented here:
-> https://lore.kernel.org/lkml/20230419005423.343862-6-irogers@google.com/
-> Note, this applies to pre-Icelake and atom CPUs as these also lack
-> perf metric (aka topdown) events.
->
+On Wed, Apr 19, 2023 at 02:22:02PM +0800, Yinbo Zhu wrote:
 
-That may give the end user the impression that the pre-Icelake doesn't
-support the Topdown Level1 events, which is not true.
+> +       clk = devm_clk_get(dev, NULL);
+> +       if (!IS_ERR(clk))
+> +               spi->clk_rate = clk_get_rate(clk);
 
-I think perf should either keep it for all Intel platforms which
-supports tma_L1_group, or remove the TopdownL1 name entirely for Intel
-platform (let the end user use the tma_L1_group and the name exposed by
-the kernel as before.).
+I notice we never actually enable this clock.  I guess it's some system
+clock which is needed for basic system functionality which is always on
+and we just need the rate but it looks a bit off.
 
+> +static int __maybe_unused loongson_spi_suspend(struct device *dev)
+> +{
+> +	struct loongson_spi *loongson_spi;
+> +	struct spi_master *master;
+> +
+> +	master = dev_get_drvdata(dev);
+> +	loongson_spi = spi_master_get_devdata(master);
+> +
+> +	loongson_spi->spcr = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
+> +	loongson_spi->sper = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPER_REG);
+> +	loongson_spi->spsr = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPSR_REG);
+> +	loongson_spi->para = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_PARA_REG);
+> +	loongson_spi->sfcs = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SFCS_REG);
+> +	loongson_spi->timi = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_TIMI_REG);
+> +
+> +	spi_master_suspend(master);
 
-> With that change I don't have a case that requires skippable evsels,
-> and so we can take that series with patch 6 over the v1 of that series
-> with this change.
-> 
+This saves the register state before suspending at the SPI level but
+that means that if there were any transfers in progress then the
+register state might be changed by the active transfers after we've
+saved the state, meaning we might restore a state for an active
+transfer.  The spi_master_suspend() should go first, then save the
+register state.  The resume is OK, it's just the suspend.
 
-I'm afraid this is not the only problem the commit 94b1a603fca7 ("perf
-stat: Add TopdownL1 metric as a default if present") in the
-perf-tools-next branch introduced.
+--NVSAr3jEmrWbbgVZ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The topdown L2 in the perf stat default on SPR and big core of the ADL
-is still missed. I don't see a possible fix for this on the current
-perf-tools-next branch.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Kan
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ/4DcACgkQJNaLcl1U
+h9A0hQf7BHmvHA2QmbUR7lbb9AQGd+7eHamujsA+9a+BEsCykdhf6qhZpsPDPBHn
+iSMfk+EvhYzgETram9i92BRsRk6246qOgrXI0okifQUzIr8SnKW+HGKPYfcu1tB9
+0OoX41xcRkL4sxS/ScF35N2MzNw3i7Y7071JOjAvhoiLbYlTKYRpDPwmHPfrgbsl
+CjVvtBNemnLTKKlrNy1VeejNey+HNo1ahRPRmz5kyNToZyPlIIxuabmqO1BDHOe4
+NP9Ihdo01mzJkBnbufA/+d52OjiFOhNWjqVlZa9XXEv5D49K7Ua+eq/WS8NJk643
+IhcP6AaWaI1gAlw0T1LDLkvwN1qbgQ==
+=VLa1
+-----END PGP SIGNATURE-----
+
+--NVSAr3jEmrWbbgVZ--
