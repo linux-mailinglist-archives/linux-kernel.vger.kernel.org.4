@@ -2,107 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7716E7EE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126D36E7EEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233558AbjDSPyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44976 "EHLO
+        id S233696AbjDSPzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 11:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjDSPye (ORCPT
+        with ESMTP id S233605AbjDSPzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:54:34 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F5A97;
-        Wed, 19 Apr 2023 08:54:32 -0700 (PDT)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 9C064C6E13;
-        Wed, 19 Apr 2023 15:54:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1681919670; bh=B8kuaxrbAOudg29ZKx0Ja65ggx/7tCW1jdSRrEzOEg8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=OOf2krUf0GDXjRktD6QuRvtJJ11p9hXbPfBUtkQjMk/ZQRgKptb5l2R9CC12R0lz7
-         9JJsrSoQUUXFAswTxYZ69jw9RFrtfilFDmoOq6DA1yjJ4gbHXnAvcDJ6ooS+FYdzfg
-         J+aWTWAdC2GzEK05IVBAyyuK62qU/evrKI6Y5cAw=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 2/3] media: dt-bindings: ov2685: convert to dtschema
-Date:   Wed, 19 Apr 2023 17:54:29 +0200
-Message-ID: <2675347.mvXUDI8C0e@z3ntu.xyz>
-In-Reply-To: <CAL_JsqLB37Y-V-8uWPdnc_YaActtQUhJArv50Rz8K_CF5cbNhw@mail.gmail.com>
-References: <20230129-ov2685-improvements-v4-0-e71985c5c848@z3ntu.xyz>
- <20230129-ov2685-improvements-v4-2-e71985c5c848@z3ntu.xyz>
- <CAL_JsqLB37Y-V-8uWPdnc_YaActtQUhJArv50Rz8K_CF5cbNhw@mail.gmail.com>
+        Wed, 19 Apr 2023 11:55:12 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEB08A45;
+        Wed, 19 Apr 2023 08:55:09 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33JFss9r030988;
+        Wed, 19 Apr 2023 10:54:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681919694;
+        bh=ECtls6r4zEewHNfldLF5yv4pxr43zudpJBOSpDVJGfg=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=JReNgkWpOFq1h7lmPDRvI52P8AbO5xrJCuAqp0aohMJCqKcqwPuetVVe51SNbqwgJ
+         tPlGxLvUYs1YX2PQIbOIFcDg2UANBqSWwIRPokg7aYDpjaXFoLcCZ1SduK1dy21Tfe
+         9kQvqltZIH+b0M+5pTnTbIzdKHEKwsFei/4geHBQ=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33JFssTi062585
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 19 Apr 2023 10:54:54 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
+ Apr 2023 10:54:54 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 19 Apr 2023 10:54:54 -0500
+Received: from [128.247.81.102] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33JFsrYx113397;
+        Wed, 19 Apr 2023 10:54:53 -0500
+Message-ID: <43daed81-fe38-60c6-bdd6-8ab15869c511@ti.com>
+Date:   Wed, 19 Apr 2023 10:54:53 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH 4/5] arm64: dts: ti: Enable multiple MCAN for AM62x in
+ MCU MCAN overlay
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Davis <afd@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Schuyler Patton <spatton@ti.com>
+References: <20230413223051.24455-1-jm@ti.com>
+ <20230413223051.24455-5-jm@ti.com>
+ <9ab56180-328e-1416-56cb-bbf71af0c26d@linaro.org>
+ <20230414182925.ya3fe2n6mtyuqotb@detached>
+ <342dd9b0-35cd-1715-ee67-6a6628a3a9a6@linaro.org>
+ <20230414221135.vifinqboqndxdxzw@embark>
+From:   "Mendez, Judith" <jm@ti.com>
+In-Reply-To: <20230414221135.vifinqboqndxdxzw@embark>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mittwoch, 19. April 2023 01:54:18 CEST Rob Herring wrote:
-> On Thu, Mar 23, 2023 at 12:58=E2=80=AFPM Luca Weiss <luca@z3ntu.xyz> wrot=
-e:
-> > Convert the text-based dt-bindings to yaml.
-> >=20
-> > Changes from original txt:
-> > * Take wording for various properties from other yaml bindings, this
-> >=20
-> >   removes e.g. volt amount from schema since it isn't really relevant
-> >   and the datasheet is a better source.
-> >=20
-> > * Don't make reset-gpios a required property since it can be tied to
-> >=20
-> >   DOVDD instead.
-> >=20
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > ---
-> >=20
-> >  .../devicetree/bindings/media/i2c/ov2685.txt       |  41 ---------
-> >  .../devicetree/bindings/media/i2c/ovti,ov2685.yaml | 101
-> >  +++++++++++++++++++++ MAINTAINERS                                     =
- =20
-> >  |   1 +
-> >  3 files changed, 102 insertions(+), 41 deletions(-)
->=20
-> Now warning in linux-next:
->=20
-> /builds/robherring/linux-dt/Documentation/devicetree/bindings/media/rockc=
-hip
-> -isp1.example.dtb: camera@3c: port:endpoint:data-lanes: [[1]] is too short
->         From schema:
-> /builds/robherring/linux-dt/Documentation/devicetree/bindings/media/i2c/o=
-vti
-> ,ov2685.yaml
-> /builds/robherring/linux-dt/Documentation/devicetree/bindings/media/i2c/o=
-vt
-> i,ov2685.example.dtb: camera-sensor@3c: port:endpoint:data-lanes: [[1]] is
-> too short
->         From schema:
-> /builds/robherring/linux-dt/Documentation/devicetree/bindings/media/i2c/o=
-vti
-> ,ov2685.yaml
+Hello, all
 
-Right, since Sakari changed maxItems=3D1 to maxItems=3D2, now minItems is a=
-lso 2=20
-but it should be 1. I'll send a patch to fix this.
+On 4/14/2023 5:11 PM, Nishanth Menon wrote:
+> On 22:44-20230414, Krzysztof Kozlowski wrote:
+>> On 14/04/2023 20:29, Nishanth Menon wrote:
+>>>>> +
+>>>>> +&cbass_mcu {
+>>>>> +	mcu_mcan1: can@4e00000 {
+>>>>> +		compatible = "bosch,m_can";
+>>>>> +		reg = <0x00 0x4e00000 0x00 0x8000>,
+>>>>> +			  <0x00 0x4e08000 0x00 0x200>;
+>>>>> +		reg-names = "message_ram", "m_can";
+>>>>> +		power-domains = <&k3_pds 188 TI_SCI_PD_EXCLUSIVE>;
+>>>>> +		clocks = <&k3_clks 188 6>, <&k3_clks 188 1>;
+>>>>> +		clock-names = "hclk", "cclk";
+>>>>> +		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
+>>>>> +		pinctrl-names = "default";
+>>>>> +		pinctrl-0 = <&mcu_mcan1_pins_default>;
+>>>>> +		phys = <&transceiver2>;
+>>>>> +		status = "okay";
+>>>>
+>>>> okay is by default. Why do you need it?
+>>>
+>>> mcan is not functional without pinmux, so it has been disabled by
+>>> default in SoC. this overlay is supposed to enable it. But this is done
+>>> entirely wrongly.
+>>
+>> Ah, so this is override of existing node? Why not overriding by
+>> label/phandle?
+> 
+> Yep, that is how it should be done (as every other node is done for
+> mcan):
+> a) SoC.dtsi -> introduce mcu_mcan1, disabled since no transciever or
+> pinmux, set status = "disabled";
+> b) overlay -> use the label and provide the missing properties, set
+> status = "okay";
+> 
+> The series definitely needs a respin.
+> 
 
-Regards
-Luca
+Thanks for your feedback, I will definitely fix and send out a v2 with 
+this update.
 
+Thanks,
+Judith
 
