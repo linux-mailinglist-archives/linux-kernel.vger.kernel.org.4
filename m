@@ -2,98 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6A36E79EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE856E79EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbjDSMqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
+        id S232459AbjDSMr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232459AbjDSMqt (ORCPT
+        with ESMTP id S229448AbjDSMr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:46:49 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4904688
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:46:48 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id vc20so26396780ejc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681908406; x=1684500406;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7aC9QJVuBevcboA/BflNZ1RlmayRbwZ7HK/k/lxZnPM=;
-        b=fte+W3khVB7Nunis5EJJJxCuWIDON4bWzUASAqX1LDHPQtIdTrYFFNDFQcNC5zLa5U
-         6AII/xLy4pSmLVowVDwCUaEyblFIfh69FPW4zMlmDquXOnkfEUjs6n5UHNBJs0AC84PJ
-         FQ3Hy7xnL6DA5Non9JnW5N9fYi0c0jRuW7kV41D8w+upHOaxcp/D8n9lJsjK9k6Wotrc
-         +pS4bu1gZ/jKYuxG1mNY+88q0fLguwNZECvbC4Gnr+3Kfxo7nLPhF4DnrXxRS0JmMG+B
-         n/auVOQZ0o7aBTWSt1Hy0c323kDirlxUo1i7fSf7W60EU8OJTxaRXiF2cB6EudK0TCd+
-         e84g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681908406; x=1684500406;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7aC9QJVuBevcboA/BflNZ1RlmayRbwZ7HK/k/lxZnPM=;
-        b=D0aaNDWwIyZS3rdna7ochy0QeRaiwNKcBJtp4Cpndr+7IHj8p1eoq7WuUfWPgyAG9L
-         S36zPVDW4u7BsfEiUg4Bkin46BN5hYDHVlYg+hbPiv5TqwqSSLI2Qym3kBLN2RY2qd1q
-         5IWxv+6038cbgC0j8b6VYLjYVvBmIOnEtrgW39oArK4inLu2akeQqG9QE23rtD8eUuK+
-         RaljcHPjGWO/4dJDasJ6v+F20BYFu1X+iwdPshX8fKdKocMmFwTHmZlIohdo76oUbC4c
-         9BLMnGHj0hQVDvBzVx1cD3ZtmEeqjIZitu8TWzzWRiETCiWEPqXm2jfLyMRynLCD1KCE
-         v3gw==
-X-Gm-Message-State: AAQBX9eRcY0BrsFmjUybri/l7pxIpZtsmITD70MFUHv4+IIK12jVY6le
-        6Jz4LhHLRGiGMKCFPTPrhZNhsg==
-X-Google-Smtp-Source: AKy350ZMwOuWqQxCAIS+0nah/aDzoumU1LrPPa2y+0kQgJJnXaUJi2vAA/WtVdpbsllwiaweARGZ6A==
-X-Received: by 2002:a17:907:3e1c:b0:94f:3728:7047 with SMTP id hp28-20020a1709073e1c00b0094f37287047mr13216088ejc.6.1681908406654;
-        Wed, 19 Apr 2023 05:46:46 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:b7d8:d88b:1fac:c802? ([2a02:810d:15c0:828:b7d8:d88b:1fac:c802])
-        by smtp.gmail.com with ESMTPSA id me15-20020a170906aecf00b0094f4e914f67sm5128812ejb.66.2023.04.19.05.46.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 05:46:46 -0700 (PDT)
-Message-ID: <9a2ed4b6-13b7-9e65-263c-d2b08e11da00@linaro.org>
-Date:   Wed, 19 Apr 2023 14:46:45 +0200
+        Wed, 19 Apr 2023 08:47:56 -0400
+Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D1C1BD3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:47:55 -0700 (PDT)
+Received: from outbound-ss-761.bluehost.com (outbound-ss-761.bluehost.com [74.220.211.250])
+        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 1B7298027E83
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:47:55 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway8.mail.pro1.eigbox.com (Postfix) with ESMTP id 0E2CC100454D8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 12:46:55 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id p7D4plMB0NX2ap7D4pNiDU; Wed, 19 Apr 2023 12:46:55 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=643fe2bf
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=dKHAf1wccvYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=XYAwZIGsAAAA:8
+ a=VwQbUJbxAAAA:8 a=KpfOZQ45AAAA:8 a=h0uksLzaAAAA:8 a=puOezyK_5uT_Nh3Qo0QA:9
+ a=QEXdDO2ut3YA:10:nop_charset_2 a=E8ToXWR_bxluHZ7gmE-Z:22
+ a=AjGcO6oz07-iQ99wixmX:22 a=KHlNn528OWJD8b-aQ5dU:22 a=MSi_79tMYmZZG2gvAgS0:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=9uJmgAn6Mve8eWQ9U34OqXIpdjTnTjK8C6E0nTYFjnA=; b=KVpms3xFDJDMIq1nCk4AI1nLfX
+        rXU4ejipU6A7Ft5c56YE32maQlsB9qUU1UQX++nbBU+0TKEigZSTvTNl+3nt0KNxkElzAq7dmFmJ5
+        CJhJBFeJq+bvtFJ29/TuR3Rq5J/ni+KVEQ2WYHoz8VLAK+/TcNUYC1ZJc6yGMA8jtjVSHW1CEtv5n
+        YkU0unTC1DQJhHAemQnI4q+G1kVY0hsToT49736bhLcNn0y6hi7HETF9FMwxjUgaLBTAqPwDbg8Dy
+        WxH6dwnLw/aztWwCGC2Hv5+Ly0qTyO8qCVVhmtZZBmmQt8lUPDwGMz10BqNMFzHwyfMExAbxZ3Bjr
+        n8PMQfjA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:35400 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pp7D3-0021EP-DU;
+        Wed, 19 Apr 2023 06:46:53 -0600
+Subject: Re: [PATCH 6.1 000/132] 6.1.25-rc2 review
+To:     Conor.Dooley@microchip.com, gregkh@linuxfoundation.org,
+        stable@vger.kernel.org, hi@alyssa.is
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230419093701.194867488@linuxfoundation.org>
+ <306005cd-b4a0-44d3-c9b4-f3c238e1cde7@microchip.com>
+In-Reply-To: <306005cd-b4a0-44d3-c9b4-f3c238e1cde7@microchip.com>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <5e3d78ec-40fb-70fa-2d25-a465c823fb1c@w6rz.net>
+Date:   Wed, 19 Apr 2023 05:46:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/2] arm64: defconfig: enable TI K3 R5 and DSP remote proc
- drivers
-To:     Hari Nagalla <hnagalla@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will@kernel.org,
-        quic_bjorande@quicinc.com, arnd@arndb.de, treding@nvidia.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, rafal@milecki.pl
-References: <20230419113958.17141-1-hnagalla@ti.com>
- <20230419113958.17141-3-hnagalla@ti.com>
- <70b6f997-d420-0e59-0be5-6ae9db7aed66@linaro.org>
- <ae49267f-4534-e489-4bb7-946944a9a04c@ti.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ae49267f-4534-e489-4bb7-946944a9a04c@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pp7D3-0021EP-DU
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:35400
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 6
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2023 13:52, Hari Nagalla wrote:
-> On 4/19/23 06:43, Krzysztof Kozlowski wrote:
->> Why two separate patches for simple defconfig change?
-> The intention is to separate commits for enabling mailbox driver from 
-> remote proc drivers. The mailbox driver is used by the TI K3 system 
-> controller interface (SCI) driver as well, which is independent of 
-> remote proc drivers.
+On 4/19/23 4:58 AM, Conor.Dooley@microchip.com wrote:
+> On 19/04/2023 10:40, Greg Kroah-Hartman wrote:
+>
+>> This is the start of the stable review cycle for the 6.1.25 release.
+>> There are 132 patches in this series, all will be posted as a response
+>> to this one.  If anyone has any issues with these being applied, please
+>> let me know.
+>>
+>> Responses should be made by Fri, 21 Apr 2023 09:36:33 +0000.
+>> Anything received after that time might be too late.
+>>
+>> The whole patch series can be found in one patch at:
+>>           https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.25-rc2.gz
+>> or in the git tree and branch at:
+>>           git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+>> and the diffstat can be found below.
+>>
+>> thanks,
+>>
+>> greg k-h
+>>
+>> Alyssa Ross <hi@alyssa.is>
+>>       purgatory: fix disabling debug info
+> Alyssa provided a custom backport of this that did not require
+> picking up Heiko's patch below, but it did not seem to get
+> picked up.
+> Lore is ~dead for me, so all I can give you here is her message-id
+> for the custom backport: <20230418155237.2ubcusqc52nufmow@x220>
+>
+> Heiko's patch is dead code as you've (rightly) not backported
+> any of the users.
+>    
+>> Heiko Stuebner <heiko.stuebner@vrull.eu>
+>>       RISC-V: add infrastructure to allow different str* implementations
+>
+>
+>> Alexandre Ghiti <alexghiti@rivosinc.com>
+>>       riscv: Do not set initial_boot_params to the linear address of the dtb
+> This one should also be dropped, either the whole series or
+> none of it please!
+>
+> Alex has said he'll send the lot in a way that avoids confusion.
+>
+> Otherwise, my testing passed.
+>
+> Thanks,
+> Conor.
 
-Yeah, but why? This is simple defconfig change, just enabling drivers
-for same platform. With such arguments are we going to enable all
-drivers everywhere one-by-one?
+The "riscv: Do not set initial_boot_params to the linear address of the 
+dtb" patch is fatal. Definitely needs to be dropped.
 
-Best regards,
-Krzysztof
+[    0.000000] Hardware name: SiFive HiFive Unmatched A00 (DT)
+[    0.000000] epc : fdt_check_header+0xe/0x230
+[    0.000000]  ra : __unflatten_device_tree+0x4e/0x320
+[    0.000000] epc : ffffffff80ae48e6 ra : ffffffff808bba16 sp : 
+ffffffff81803e0
+[    0.000000]  gp : ffffffff81a3d390 tp : ffffffff81811200 t0 : 
+ffffffc6fefff00
+[    0.000000]  t1 : 000000047fff0000 t2 : 65736552203a616d s0 : 
+ffffffff81803e0
+[    0.000000]  s1 : 0000000040000000 a0 : 0000000040000000 a1 : 
+000000000000000
+[    0.000000]  a2 : ffffffff81a43188 a3 : ffffffff80c3fbd0 a4 : 
+000000000000000
+[    0.000000]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 
+000000000000000
+[    0.000000]  s2 : 00000000fff63036 s3 : ffffffff81a43188 s4 : 
+000000000000000
+[    0.000000]  s5 : ffffffff80c3fbd0 s6 : 0000000000000000 s7 : 
+000000000000000
+[    0.000000]  s8 : 00000000fff63036 s9 : 00000000fffcbf60 s10: 
+000000000000000
+[    0.000000]  s11: 00000000fffcbf60 t3 : ffffffff80e12288 t4 : 
+ffffffff80e1228
+[    0.000000]  t5 : ffffffff80e12288 t6 : ffffffff80e122a0
+[    0.000000] status: 0000000200000100 badaddr: 0000000040000001 cause: 
+000000d
+[    0.000000] [<ffffffff80ae48e6>] fdt_check_header+0xe/0x230
+[    0.000000] ---[ end trace 0000000000000000 ]---
+[    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
+[    0.000000] ---[ end Kernel panic - not syncing: Attempted to kill 
+the idle -
 
