@@ -2,92 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D0C6E78BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1764F6E78C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbjDSLke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 07:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
+        id S232446AbjDSLlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 07:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbjDSLkd (ORCPT
+        with ESMTP id S231215AbjDSLlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 07:40:33 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB8D4231
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:40:30 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33JBdxf1071739;
-        Wed, 19 Apr 2023 06:39:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681904399;
-        bh=z3QfCJHJ+xMDCCYMheyFjn8CgzH80h8euWLXAW+J17o=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=gcuW2bLo4whRc1oNr+qjzdJlYgGTigJQ0KE5Ej7lc6IuQLIvzoA+0f4BA5vYt67hg
-         YK+ITb8As8w3uKduRyI3Z8QAluX8NngTQe6JoaM5a9x+L7zssVrnslhDBieZVRRLXi
-         vTb2u2FDPK7IP5xQ/9e+l6Ya2zc3XiQhMlVPC9k4=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33JBdx9R013941
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 19 Apr 2023 06:39:59 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
- Apr 2023 06:39:58 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 19 Apr 2023 06:39:58 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33JBdw1a110342;
-        Wed, 19 Apr 2023 06:39:58 -0500
-From:   Hari Nagalla <hnagalla@ti.com>
-To:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <quic_bjorande@quicinc.com>, <arnd@arndb.de>,
-        <krzysztof.kozlowski@linaro.org>, <treding@nvidia.com>,
-        <dmitry.baryshkov@linaro.org>, <nfraprado@collabora.com>,
-        <broonie@kernel.org>, <rafal@milecki.pl>
-Subject: [PATCH 2/2] arm64: defconfig: enable TI K3 R5 and DSP remote proc drivers
-Date:   Wed, 19 Apr 2023 06:39:58 -0500
-Message-ID: <20230419113958.17141-3-hnagalla@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230419113958.17141-1-hnagalla@ti.com>
-References: <20230419113958.17141-1-hnagalla@ti.com>
+        Wed, 19 Apr 2023 07:41:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2371999
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:40:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681904422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d94kMyGvyZL17XK7WKirw3h92EHgohkqQ/7jeLjX7+U=;
+        b=RStd1pjj0sWU/Vfgzkb5oQpz76DGWeIy1DNBZwXsburYYmYqT9uXVlDjILVkIWbnAiuiAw
+        JGTWghniQTXJgmip2M4EztVy68M0lUinzw47oihJTa1z7B4H3ZjL2Nuip5xSOMwfLGyPYY
+        ClgeFgPqE7KQQudXTr/0TZlkWpsJnXc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-640-dyzpp2QsP7iKVgW7WnCUXA-1; Wed, 19 Apr 2023 07:40:21 -0400
+X-MC-Unique: dyzpp2QsP7iKVgW7WnCUXA-1
+Received: by mail-wm1-f71.google.com with SMTP id bd16-20020a05600c1f1000b003f172e02edbso1004536wmb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 04:40:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681904420; x=1684496420;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d94kMyGvyZL17XK7WKirw3h92EHgohkqQ/7jeLjX7+U=;
+        b=AP/yGh+CpRVZiv2Rq7e/m0zejDzUTrowFqUsf8xiULBBN0SqUi1GZihPucftt7uxEA
+         vkOMdzcfPOa+CWeFXUDHvsRJzmFcZaPrW0771fOiOKTJN2RCVyDdSCXaVgZ1DsmyULK6
+         lsMExhRtCj8HQzre05E3qDQtCU4OJ2zDOiLh0Xp1GEn0NLFYcJ4rFI+QWMBcd0mF0YyR
+         qwXTIhQN0xUElPya/EaVN9qycj/Cq4dfrnVU9ItarALq7Y75LPPPrvfIFXeyAa/zd53w
+         tEfJVf8+6qd+YAS80427JGt2532DWAYsEaCfssKYyz6GmBI1APBStdCVP2k9ZzenXwEb
+         G5Qg==
+X-Gm-Message-State: AAQBX9dh8vSAobIfkCuEV07dgK3Aoh0AV73EfwYJOBj9GERx71cI+gjn
+        s2S8q6mUplmfYPtCbF1Pg+dF3ffjxajJ8Bi42ydic1Kp3wO3e7Cc/JaX0pqkRAFhG1meJKRTofM
+        NG9dzMtbUxxpzN8nIgANuGE0C
+X-Received: by 2002:a05:600c:ac4:b0:3f1:6ead:34fe with SMTP id c4-20020a05600c0ac400b003f16ead34femr11020929wmr.26.1681904419994;
+        Wed, 19 Apr 2023 04:40:19 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YgwHEzMmaB06GSpMni85LlmtPmKFDMOVPBAvCAxul+liaggVeQse0nWLU2InZIpdyZOr8tAg==
+X-Received: by 2002:a05:600c:ac4:b0:3f1:6ead:34fe with SMTP id c4-20020a05600c0ac400b003f16ead34femr11020914wmr.26.1681904419705;
+        Wed, 19 Apr 2023 04:40:19 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70b:7b00:7c52:a5fa:8004:96fd? (p200300cbc70b7b007c52a5fa800496fd.dip0.t-ipconnect.de. [2003:cb:c70b:7b00:7c52:a5fa:8004:96fd])
+        by smtp.gmail.com with ESMTPSA id d17-20020a056000115100b002fa6929eb83sm7870151wrx.21.2023.04.19.04.40.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 04:40:19 -0700 (PDT)
+Message-ID: <743c4686-43aa-15fa-5989-af9a43a783f9@redhat.com>
+Date:   Wed, 19 Apr 2023 13:40:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1 3/3] mm/ksm: move disabling KSM from s390/gmap code to
+ KSM code
+To:     Janosch Frank <frankja@linux.ibm.com>, linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stefan Roesch <shr@devkernel.io>,
+        Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>
+References: <20230418051342.1919757-1-shr@devkernel.io>
+ <20230418152849.505124-1-david@redhat.com>
+ <20230418152849.505124-4-david@redhat.com>
+ <42df1c58-f0bf-5dd8-03db-ee2fa28d7c1b@linux.ibm.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <42df1c58-f0bf-5dd8-03db-ee2fa28d7c1b@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable Cortex R5 and TI DSP (C66x,C71x) remote proc drivers as modules
-for K3 platforms.
+On 19.04.23 13:39, Janosch Frank wrote:
+> On 4/18/23 17:28, David Hildenbrand wrote:
+>> Let's factor out actual disabling of KSM. The existing
+>> "mm->def_flags &= ~VM_MERGEABLE;" was essentially a NOP and can be dropped,
+>> because def_flags should never include VM_MERGEABLE. Note that we don't
+>> currently prevent re-enabling KSM.
+>>
+>> This should now be faster in case KSM was never enabled, because we only
+>> conditionally iterate all VMAs. Further, it certainly looks cleaner.
+>>
+>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>> ---
+>>    arch/s390/mm/gmap.c | 20 +-------------------
+>>    include/linux/ksm.h |  6 ++++++
+>>    mm/ksm.c            | 11 +++++++++++
+>>    3 files changed, 18 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
+>> index 0949811761e6..dfe905c7bd8e 100644
+>> --- a/arch/s390/mm/gmap.c
+>> +++ b/arch/s390/mm/gmap.c
+>> @@ -2585,30 +2585,12 @@ EXPORT_SYMBOL_GPL(s390_enable_sie);
+>>    
+>>    int gmap_mark_unmergeable(void)
+>>    {
+>> -	struct mm_struct *mm = current->mm;
+>> -	struct vm_area_struct *vma;
+>> -	unsigned long vm_flags;
+>> -	int ret;
+>> -	VMA_ITERATOR(vmi, mm, 0);
+>> -
+>>    	/*
+>>    	 * Make sure to disable KSM (if enabled for the whole process or
+>>    	 * individual VMAs). Note that nothing currently hinders user space
+>>    	 * from re-enabling it.
+>>    	 */
+> 
+> Is that still true?
 
-Signed-off-by: Hari Nagalla <hnagalla@ti.com>
----
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+Yes. We'd need another per-MM bit to stop it from getting re-enabled.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 52da7bad8ef9..d8e0ae85485f 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1173,6 +1173,8 @@ CONFIG_ARM_SMMU_V3=y
- CONFIG_MTK_IOMMU=y
- CONFIG_QCOM_IOMMU=y
- CONFIG_REMOTEPROC=y
-+CONFIG_TI_K3_R5_REMOTEPROC=m
-+CONFIG_TI_K3_DSP_REMOTEPROC=m
- CONFIG_MTK_SCP=m
- CONFIG_QCOM_Q6V5_ADSP=m
- CONFIG_QCOM_Q6V5_MSS=m
+> 
+> My KSM knowledge is nearly zero but from what I can see the patch looks
+> ok to me:
+> Acked-by: Janosch Frank <frankja@linux.ibm.net>
+
+
+Thanks!
+
 -- 
-2.34.1
+Thanks,
+
+David / dhildenb
 
