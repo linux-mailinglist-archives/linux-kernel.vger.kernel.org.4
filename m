@@ -2,264 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDA46E715A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C056E715B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbjDSCwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 22:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
+        id S231713AbjDSCz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 22:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjDSCww (ORCPT
+        with ESMTP id S231208AbjDSCz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 22:52:52 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553FB468E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 19:52:23 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-517ca8972c5so464191a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 19:52:23 -0700 (PDT)
+        Tue, 18 Apr 2023 22:55:56 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9842468E
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 19:55:54 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id a23so26990518qtj.8
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 19:55:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681872743; x=1684464743;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9zzMcMOPEpfr5THwWMh35gYibbv6uY1wVkSMdB4TPrg=;
-        b=UBXsagd+dw1wo0aza96JkCJ+jMbx2wsqarK7EOSD3eF1gayZSOkm7zij9HGVOEHltl
-         Z8hBxcxuYFsdw0OPL73ub/s+GPU0ppzLaM+O9iZItq/csF2eh9t2SbOwYLQOl+R3Z/Hf
-         2CpgVBQqztQyK1RIId6pPdeguB5a9+K+YYMtEFp4U4KQKx5nXAOCrQOmFwiOlEz2kejY
-         KnZz1zKvL7k1phmcw0GJnkwQKPYRbOHcf95ZWqrBVMCP+zOzXqqNHgmGRo7swaKs4q/4
-         z/2pL9t8Qm8EbBRql30BYqZJt7eHD2kz+QQ1u8mU9xNKfBd/CDu4livihoDlEq2a/hvm
-         1KTQ==
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1681872954; x=1684464954;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LcgMWY9Egw7upTgiRyX9Ji+eQ7ZeBYypgCETacQZMO4=;
+        b=XM39AUliYsnb3m2d6jTi1Ke0fqpB6LqbRk8Py1DEzIC4JG2a58fvM9VWLh6P3XySe+
+         YJD5aF8prsuEJQ9gwy1UZiJSzN8E87gSv/2sBJfGXmmHeMe3LP2btSQ9f/PA1U/dlF+T
+         65/vHxEfZ3ZC177MorXwTXUqJIjYf3wGPT/ldiiofrNyY1o7TiMBzNQBxJ1CQrl6KT3b
+         CPe0/CgtCn67rqB2fgPoG+LMykLKLtp2WJFh90BsaPX4redKQn8I3QqYxXxCNhNojA30
+         1uTJ17lGO5DwCRpm1NNVC/PtNH9ugDi8p1BeA1F8/78NtnBixkWqaLIYdqNbDtsfq8TU
+         S91A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681872743; x=1684464743;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9zzMcMOPEpfr5THwWMh35gYibbv6uY1wVkSMdB4TPrg=;
-        b=N2pRZkzxtCtv+RAJNimW1yR6E0pxNkIR/UCPX1OYqeawsSVWFCOGwx3lNWYGD2Gd7/
-         TNXbOTdC4sjlgdMxmIkKn0cgPTrtnm3RMpUsl6WrxJKK5fbN9c+vIQZMTAW4yXWwWeS1
-         UwUxLX6VYWRlxtKh6RqmrkI/FlrAFZWGCoTREDYO91wsBAb6wJPX6SnkCJRcjkKeXwB8
-         ZXCdpaqg+DkVryDNPTDgEB/iStSboAAQgm2Q4wRXn1Chw+b7mq/xfOUfiauUrl4pJxgd
-         dflCHCkfle09eklmtCvKyCxOZHJcUWHnpc9vIQgwWmI2Fc1NBh2JoZCCvLB5B3/CZvM9
-         5PRg==
-X-Gm-Message-State: AAQBX9fjw7LQDrBUZaXhxUO0JVUxzmg1C5/A81ZM9jhBT5hFEO7YejZb
-        fkVB0WPbfQbilg08EHcDZv/d3w==
-X-Google-Smtp-Source: AKy350Zls27gYnhf8aXr76dGe3pxd8p9gTZUWGbHrFmiU0uyWWKo8vnuPYw6zJRt75YJTQdcpmo+lA==
-X-Received: by 2002:a17:903:11c9:b0:1a6:6bdb:b548 with SMTP id q9-20020a17090311c900b001a66bdbb548mr19768853plh.1.1681872742749;
-        Tue, 18 Apr 2023 19:52:22 -0700 (PDT)
-Received: from [10.70.252.135] ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id jf1-20020a170903268100b001a245b49731sm10255632plb.128.2023.04.18.19.52.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 19:52:22 -0700 (PDT)
-Message-ID: <f16db6f6-2699-bb8f-d34c-2ce3d37a6498@bytedance.com>
-Date:   Wed, 19 Apr 2023 10:52:15 +0800
+        d=1e100.net; s=20221208; t=1681872954; x=1684464954;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LcgMWY9Egw7upTgiRyX9Ji+eQ7ZeBYypgCETacQZMO4=;
+        b=jyo0Lb+57IpXBgX5oK3nECt/3pLRjpyPMBLSpD7BtxmQUf2vfEkfUt2cp3xscYzwcz
+         +VQ36IvvRcTxYeiL2XvG2PcnobVkU+DtzSMZAcpBtg63e9cNJhDiif3oCyvMxZm/4SFI
+         lUz1eXhsV2Rije6ssQ0k6A1cWXHLniksvwGTf6oqQZsmF6VxLL+aPHxCt62MGyuD5XHw
+         ryuXC2fK2/fZ7SVb2/Tr2yO0KLbj9Cu5WKS17dN8J/HYJPMTS77T/fY1ZWCOFR+puT16
+         F1rscV5CG4yTrYcUAk9G+ThddcVjWiGzi7gnmGU/8gNMb04v9OXpdMF59LLLosFEZ+PD
+         Agyw==
+X-Gm-Message-State: AAQBX9chGgZI9zXExQjiM1Phrx0dpb0u/GB2yHbeMB/ECWk3kqp1ZagX
+        xhQ/omlTRezOVQyn4/y9hjrBPw==
+X-Google-Smtp-Source: AKy350aTwN5NADIBxWpDONKKP92OfmBIrgt7goEPYjvtgMWJHQujIfXZRHcTEgy6Kq/EftdB6TL2IA==
+X-Received: by 2002:ac8:590b:0:b0:3ef:3fcd:3c1c with SMTP id 11-20020ac8590b000000b003ef3fcd3c1cmr3125596qty.63.1681872953863;
+        Tue, 18 Apr 2023 19:55:53 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:e646])
+        by smtp.gmail.com with ESMTPSA id k15-20020a05620a414f00b007463509f94asm4325549qko.55.2023.04.18.19.55.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 19:55:53 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 22:55:52 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 03/26] mm: make pageblock_order 2M per default
+Message-ID: <20230419025552.GB272256@cmpxchg.org>
+References: <20230418191313.268131-1-hannes@cmpxchg.org>
+ <20230418191313.268131-4-hannes@cmpxchg.org>
+ <20230419000105.matz43p6ihrqmado@box.shutemov.name>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v2] kasan: Fix lockdep report invalid wait context
-To:     Zqiang <qiang1.zhang@intel.com>, elver@google.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, akpm@linux-foundation.org,
-        Vlastimil Babka <vbabka@suse.cz>
-Cc:     kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230327120019.1027640-1-qiang1.zhang@intel.com>
-Content-Language: en-US
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20230327120019.1027640-1-qiang1.zhang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419000105.matz43p6ihrqmado@box.shutemov.name>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/3/27 20:00, Zqiang wrote:
-> For kernels built with the following options and booting
+On Wed, Apr 19, 2023 at 03:01:05AM +0300, Kirill A. Shutemov wrote:
+> On Tue, Apr 18, 2023 at 03:12:50PM -0400, Johannes Weiner wrote:
+> > pageblock_order can be of various sizes, depending on configuration,
+> > but the default is MAX_ORDER-1.
 > 
-> CONFIG_SLUB=y
-> CONFIG_DEBUG_LOCKDEP=y
-> CONFIG_PROVE_LOCKING=y
-> CONFIG_PROVE_RAW_LOCK_NESTING=y
+> Note that MAX_ORDER got redefined in -mm tree recently.
 > 
-> [    0.523115] [ BUG: Invalid wait context ]
-> [    0.523315] 6.3.0-rc1-yocto-standard+ #739 Not tainted
-> [    0.523649] -----------------------------
-> [    0.523663] swapper/0/0 is trying to lock:
-> [    0.523663] ffff888035611360 (&c->lock){....}-{3:3}, at: put_cpu_partial+0x2e/0x1e0
-> [    0.523663] other info that might help us debug this:
-> [    0.523663] context-{2:2}
-> [    0.523663] no locks held by swapper/0/0.
-> [    0.523663] stack backtrace:
-> [    0.523663] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-rc1-yocto-standard+ #739
-> [    0.523663] Call Trace:
-> [    0.523663]  <IRQ>
-> [    0.523663]  dump_stack_lvl+0x64/0xb0
-> [    0.523663]  dump_stack+0x10/0x20
-> [    0.523663]  __lock_acquire+0x6c4/0x3c10
-> [    0.523663]  lock_acquire+0x188/0x460
-> [    0.523663]  put_cpu_partial+0x5a/0x1e0
-> [    0.523663]  __slab_free+0x39a/0x520
-> [    0.523663]  ___cache_free+0xa9/0xc0
-> [    0.523663]  qlist_free_all+0x7a/0x160
-> [    0.523663]  per_cpu_remove_cache+0x5c/0x70
-> [    0.523663]  __flush_smp_call_function_queue+0xfc/0x330
-> [    0.523663]  generic_smp_call_function_single_interrupt+0x13/0x20
-> [    0.523663]  __sysvec_call_function+0x86/0x2e0
-> [    0.523663]  sysvec_call_function+0x73/0x90
-> [    0.523663]  </IRQ>
-> [    0.523663]  <TASK>
-> [    0.523663]  asm_sysvec_call_function+0x1b/0x20
-> [    0.523663] RIP: 0010:default_idle+0x13/0x20
-> [    0.523663] RSP: 0000:ffffffff83e07dc0 EFLAGS: 00000246
-> [    0.523663] RAX: 0000000000000000 RBX: ffffffff83e1e200 RCX: ffffffff82a83293
-> [    0.523663] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffff8119a6b1
-> [    0.523663] RBP: ffffffff83e07dc8 R08: 0000000000000001 R09: ffffed1006ac0d66
-> [    0.523663] R10: ffff888035606b2b R11: ffffed1006ac0d65 R12: 0000000000000000
-> [    0.523663] R13: ffffffff83e1e200 R14: ffffffff84a7d980 R15: 0000000000000000
-> [    0.523663]  default_idle_call+0x6c/0xa0
-> [    0.523663]  do_idle+0x2e1/0x330
-> [    0.523663]  cpu_startup_entry+0x20/0x30
-> [    0.523663]  rest_init+0x152/0x240
-> [    0.523663]  arch_call_rest_init+0x13/0x40
-> [    0.523663]  start_kernel+0x331/0x470
-> [    0.523663]  x86_64_start_reservations+0x18/0x40
-> [    0.523663]  x86_64_start_kernel+0xbb/0x120
-> [    0.523663]  secondary_startup_64_no_verify+0xe0/0xeb
-> [    0.523663]  </TASK>
+> > Given 4k pages, that comes out to
+> > 4M. This is a large chunk for the allocator/reclaim/compaction to try
+> > to keep grouped per migratetype. It's also unnecessary as the majority
+> > of higher order allocations - THP and slab - are smaller than that.
 > 
-> The local_lock_irqsave() is invoked in put_cpu_partial() and happens
-> in IPI context, due to the CONFIG_PROVE_RAW_LOCK_NESTING=y (the
-> LD_WAIT_CONFIG not equal to LD_WAIT_SPIN), so acquire local_lock in
-> IPI context will trigger above calltrace.
+> This seems way to x86-specific.
 
-Just to add another similar case:
+Hey, that's the machines I have access to ;)
 
-Call Trace:
-  <IRQ>
-  dump_stack_lvl+0x69/0x97
-  __lock_acquire+0x4a0/0x1b50
-  lock_acquire+0x261/0x2c0
-  ? restore_bytes+0x40/0x40
-  local_lock_acquire+0x21/0x70
-  ? restore_bytes+0x40/0x40
-  put_cpu_partial+0x41/0x130
-  ? flush_smp_call_function_queue+0x125/0x4d0
-  kfree+0x250/0x2c0
-  flush_smp_call_function_queue+0x125/0x4d0
-  __sysvec_call_function_single+0x3a/0x100
-  sysvec_call_function_single+0x4b/0x90
-  </IRQ>
-  <TASK>
-  asm_sysvec_call_function_single+0x16/0x20
+> Other arches have larger THP sizes. I believe 16M is common.
+>
+> Maybe define it as min(MAX_ORDER, PMD_ORDER)?
 
-So we can't call kfree() and its friends in interrupt context?
+Hm, let me play around with larger pageblocks.
 
-Also +Vlastimil Babka.
+The thing that gives me pause is that this seems quite aggressive as a
+default block size for the allocator and reclaim/compaction - if you
+consider the implications for internal fragmentation and the amount of
+ongoing defragmentation work it would require.
 
-Thanks,
-Qi
+IOW, it's not just a function of physical page size supported by the
+CPU. It's also a function of overall memory capacity. Independent of
+architecture, 2MB seems like a more reasonable step up than 16M.
 
-> 
-> This commit therefore move qlist_free_all() from hard-irq context to
-> task context.
-> 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
->   v1->v2:
->   Modify the commit information and add Cc.
-> 
->   mm/kasan/quarantine.c | 34 ++++++++--------------------------
->   1 file changed, 8 insertions(+), 26 deletions(-)
-> 
-> diff --git a/mm/kasan/quarantine.c b/mm/kasan/quarantine.c
-> index 75585077eb6d..152dca73f398 100644
-> --- a/mm/kasan/quarantine.c
-> +++ b/mm/kasan/quarantine.c
-> @@ -99,7 +99,6 @@ static unsigned long quarantine_size;
->   static DEFINE_RAW_SPINLOCK(quarantine_lock);
->   DEFINE_STATIC_SRCU(remove_cache_srcu);
->   
-> -#ifdef CONFIG_PREEMPT_RT
->   struct cpu_shrink_qlist {
->   	raw_spinlock_t lock;
->   	struct qlist_head qlist;
-> @@ -108,7 +107,6 @@ struct cpu_shrink_qlist {
->   static DEFINE_PER_CPU(struct cpu_shrink_qlist, shrink_qlist) = {
->   	.lock = __RAW_SPIN_LOCK_UNLOCKED(shrink_qlist.lock),
->   };
-> -#endif
->   
->   /* Maximum size of the global queue. */
->   static unsigned long quarantine_max_size;
-> @@ -319,16 +317,6 @@ static void qlist_move_cache(struct qlist_head *from,
->   	}
->   }
->   
-> -#ifndef CONFIG_PREEMPT_RT
-> -static void __per_cpu_remove_cache(struct qlist_head *q, void *arg)
-> -{
-> -	struct kmem_cache *cache = arg;
-> -	struct qlist_head to_free = QLIST_INIT;
-> -
-> -	qlist_move_cache(q, &to_free, cache);
-> -	qlist_free_all(&to_free, cache);
-> -}
-> -#else
->   static void __per_cpu_remove_cache(struct qlist_head *q, void *arg)
->   {
->   	struct kmem_cache *cache = arg;
-> @@ -340,7 +328,6 @@ static void __per_cpu_remove_cache(struct qlist_head *q, void *arg)
->   	qlist_move_cache(q, &sq->qlist, cache);
->   	raw_spin_unlock_irqrestore(&sq->lock, flags);
->   }
-> -#endif
->   
->   static void per_cpu_remove_cache(void *arg)
->   {
-> @@ -362,6 +349,8 @@ void kasan_quarantine_remove_cache(struct kmem_cache *cache)
->   {
->   	unsigned long flags, i;
->   	struct qlist_head to_free = QLIST_INIT;
-> +	int cpu;
-> +	struct cpu_shrink_qlist *sq;
->   
->   	/*
->   	 * Must be careful to not miss any objects that are being moved from
-> @@ -372,20 +361,13 @@ void kasan_quarantine_remove_cache(struct kmem_cache *cache)
->   	 */
->   	on_each_cpu(per_cpu_remove_cache, cache, 1);
->   
-> -#ifdef CONFIG_PREEMPT_RT
-> -	{
-> -		int cpu;
-> -		struct cpu_shrink_qlist *sq;
-> -
-> -		for_each_online_cpu(cpu) {
-> -			sq = per_cpu_ptr(&shrink_qlist, cpu);
-> -			raw_spin_lock_irqsave(&sq->lock, flags);
-> -			qlist_move_cache(&sq->qlist, &to_free, cache);
-> -			raw_spin_unlock_irqrestore(&sq->lock, flags);
-> -		}
-> -		qlist_free_all(&to_free, cache);
-> +	for_each_online_cpu(cpu) {
-> +		sq = per_cpu_ptr(&shrink_qlist, cpu);
-> +		raw_spin_lock_irqsave(&sq->lock, flags);
-> +		qlist_move_cache(&sq->qlist, &to_free, cache);
-> +		raw_spin_unlock_irqrestore(&sq->lock, flags);
->   	}
-> -#endif
-> +	qlist_free_all(&to_free, cache);
->   
->   	raw_spin_lock_irqsave(&quarantine_lock, flags);
->   	for (i = 0; i < QUARANTINE_BATCHES; i++) {
-
--- 
-Thanks,
-Qi
+16M is great for TLB coverage, and in our DCs we're getting a lot of
+use out of 1G hugetlb pages as well. The question is if those archs
+are willing to pay the cost of serving such page sizes quickly and
+reliably during runtime; or if that's something better left to setups
+with explicit preallocations and stuff like hugetlb_cma reservations.
