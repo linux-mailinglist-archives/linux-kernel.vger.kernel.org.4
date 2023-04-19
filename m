@@ -2,113 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F366E814E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD906E8151
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjDSSfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47230 "EHLO
+        id S230035AbjDSShL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjDSSfk (ORCPT
+        with ESMTP id S229490AbjDSShI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 14:35:40 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49570122;
-        Wed, 19 Apr 2023 11:35:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=J+e8Y5sVsLCpZ8zZrbcZwsxzd3npeKq9qMhgQw1OPbQ=; b=qxsnrLgHRIvUBWqr4Xx3LZq7P6
-        Qp2XXU3fs8HrlrJE75NHo8J7K7fgbknc7DTc+5kGyxGo+D+HA/mGPbeT1JDcmspnMAkjd/gzijwOj
-        307c16xkj+f4elD7HuC0BcNyenFEn17uElUnGKpzcIdbHsIzCepVXlP6wcc97bhWMZQqdfosWNmeb
-        gyCApIopSpMvac+SgmQ1p836Mm2qihQPhcRJvUXfdXvZPNylPDIZM3t/bICFZFYkIRV3SmJy8gg5s
-        6ZNi5XEKsRj1i3fh5bczWib8ADNLcoBWb4l5mR9xuISTnkLA2pj1RfdGuk3nilkvWwg8ohyBbH6tV
-        32Pt1ZIw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ppCeT-00DUSu-7J; Wed, 19 Apr 2023 18:35:33 +0000
-Date:   Wed, 19 Apr 2023 19:35:33 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org
-Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
- pin_user_pages()
-Message-ID: <ZEA0dbV+qIBSD0mG@casper.infradead.org>
-References: <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
- <936e8f52-00be-6721-cb3e-42338f2ecc2f@kernel.dk>
- <c2e22383-43ee-5cf0-9dc7-7cd05d01ecfb@kernel.dk>
- <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
- <69f48cc6-8fc6-0c49-5a79-6c7d248e4ad5@kernel.dk>
- <bec03e0f-a0f9-43c3-870b-be406ca848b9@lucifer.local>
- <8af483d2-0d3d-5ece-fb1d-a3654411752b@kernel.dk>
- <d601ca0c-d9b8-4e5d-a047-98f2d1c65eb9@lucifer.local>
- <ZEAxhHx/4Ql6AMt2@casper.infradead.org>
- <ZEAx90C2lDMJIux1@nvidia.com>
+        Wed, 19 Apr 2023 14:37:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C8E122;
+        Wed, 19 Apr 2023 11:37:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4021363692;
+        Wed, 19 Apr 2023 18:37:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 773D3C433D2;
+        Wed, 19 Apr 2023 18:37:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681929426;
+        bh=WvcAdd5nlPqNohhCXFOiHzOhi+SADKfXYzqWqMwWQd8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=JXb4yB4h47ZW7wioaGqGMN/Ao/YndkMiYDh+rtEnrAkp1JNAk1ONzho3pRYp2fG87
+         2Vc77F/r17AMejNcnnqJ1o0LaJXoc8QmZPwUsqVW96l5MmW1Lp/WG2ZQtm+1R7Wd1k
+         nHZN5v7V74AUhzW2MROTboAjQYEUaX/pmAAI1TlHvLXgsvH29ZWv8SiIxlWAtLKrWH
+         ewNnXzO8yA3z60e4zUlTJZy+Exdzg5EGwKDVhz01//gWVhLvfvwt79eBpXHq2YQVny
+         md+hoNq98GvLGN244rd0vwb3t76uO0Io2JpsbnYCvYFplrTmkuWUS0uAgQsLGcFNCB
+         j8vux79kQVkmg==
+Date:   Wed, 19 Apr 2023 13:37:04 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Patrick McLean <chutzpah@gentoo.org>,
+        Dave Airlie <airlied@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:DRM DRIVER FOR AST SERVER GRAPHICS CHIPS" 
+        <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH] PCI: Add ASPEED vendor ID
+Message-ID: <20230419183704.GA216848@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ZEAx90C2lDMJIux1@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d1f776e1-8489-010f-a500-ba68b45ad3a3@suse.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 03:24:55PM -0300, Jason Gunthorpe wrote:
-> On Wed, Apr 19, 2023 at 07:23:00PM +0100, Matthew Wilcox wrote:
-> > On Wed, Apr 19, 2023 at 07:18:26PM +0100, Lorenzo Stoakes wrote:
-> > > So even if I did the FOLL_ALLOW_BROKEN_FILE_MAPPING patch series first, I
-> > > would still need to come along and delete a bunch of your code
-> > > afterwards. And unfortunately Pavel's recent change which insists on not
-> > > having different vm_file's across VMAs for the buffer would have to be
-> > > reverted so I expect it might not be entirely without discussion.
-> > 
-> > I don't even understand why Pavel wanted to make this change.  The
-> > commit log really doesn't say.
-> > 
-> > commit edd478269640
-> > Author: Pavel Begunkov <asml.silence@gmail.com>
-> > Date:   Wed Feb 22 14:36:48 2023 +0000
-> > 
-> >     io_uring/rsrc: disallow multi-source reg buffers
-> > 
-> >     If two or more mappings go back to back to each other they can be passed
-> >     into io_uring to be registered as a single registered buffer. That would
-> >     even work if mappings came from different sources, e.g. it's possible to
-> >     mix in this way anon pages and pages from shmem or hugetlb. That is not
-> >     a problem but it'd rather be less prone if we forbid such mixing.
-> > 
-> >     Cc: <stable@vger.kernel.org>
-> >     Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-> >     Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> > 
-> > It even says "That is not a problem"!  So why was this patch merged
-> > if it's not fixing a problem?
-> > 
-> > It's now standing in the way of an actual cleanup.  So why don't we
-> > revert it?  There must be more to it than this ...
+On Wed, Apr 19, 2023 at 09:00:15AM +0200, Thomas Zimmermann wrote:
+> Am 19.04.23 um 00:57 schrieb Patrick McLean:
+> > Currently the ASPEED PCI vendor ID is defined in
+> > drivers/gpu/drm/ast/ast_drv.c, move that to include/linux/pci_ids.h
+> > with all the rest of the PCI vendor ID definitions. Rename the definition
+> > to follow the format that the other definitions follow.
 > 
-> https://lore.kernel.org/all/61ded378-51a8-1dcb-b631-fda1903248a9@gmail.com/
+> Thanks a lot. Can you please also move and rename the PCI device ids? [1]
 
-So um, it's disallowed because Pavel couldn't understand why it
-should be allowed?  This gets less and less convincing.
+Generally we move things to pci_ids.h only when they are shared
+between multiple drivers.  This is mostly to make backports easier.
 
-FWIW, what I was suggesting was that we should have a FOLL_SINGLE_VMA
-flag, which would use our shiny new VMA lock infrastructure to look
-up and lock _one_ VMA instead of having the caller take the mmap_lock.
-Passing that flag would be a tighter restriction that Pavel implemented,
-but would certainly relieve some of his mental load.
+PCI_VENDOR_ID_ASPEED is (or will be) used in both ast_drv.c and
+libata-core.c, so it qualifies.
 
-By the way, even if all pages are from the same VMA, they may still be a
-mixture of anon and file pages; think a MAP_PRIVATE of a file when
-only some pages have been written to.  Or an anon MAP_SHARED which is
-accessible by a child process.
+It doesn't look like PCI_CHIP_AST2000 and PCI_CHIP_AST2100 would
+qualify since they're only used in ast_drv.c and ast_main.c, which are
+part of the same driver.
+
+> [1] https://elixir.bootlin.com/linux/v6.2/source/drivers/gpu/drm/ast/ast_drv.h#L52
+> 
+> > 
+> > Signed-off-by: Patrick McLean <chutzpah@gentoo.org>
+> > ---
+> >   drivers/gpu/drm/ast/ast_drv.c | 4 +---
+> >   include/linux/pci_ids.h       | 2 ++
+> >   2 files changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
+> > index d78852c7cf5b..232e797793b6 100644
+> > --- a/drivers/gpu/drm/ast/ast_drv.c
+> > +++ b/drivers/gpu/drm/ast/ast_drv.c
+> > @@ -70,12 +70,10 @@ static const struct drm_driver ast_driver = {
+> >    * PCI driver
+> >    */
+> > -#define PCI_VENDOR_ASPEED 0x1a03
+> > -
+> >   #define AST_VGA_DEVICE(id, info) {		\
+> >   	.class = PCI_BASE_CLASS_DISPLAY << 16,	\
+> >   	.class_mask = 0xff0000,			\
+> > -	.vendor = PCI_VENDOR_ASPEED,			\
+> > +	.vendor = PCI_VENDOR_ID_ASPEED,			\
+> >   	.device = id,				\
+> >   	.subvendor = PCI_ANY_ID,		\
+> >   	.subdevice = PCI_ANY_ID,		\
+> > diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> > index 45c3d62e616d..40e04e88ca5a 100644
+> > --- a/include/linux/pci_ids.h
+> > +++ b/include/linux/pci_ids.h
+> > @@ -2553,6 +2553,8 @@
+> >   #define PCI_DEVICE_ID_NETRONOME_NFP3800_VF	0x3803
+> >   #define PCI_DEVICE_ID_NETRONOME_NFP6000_VF	0x6003
+> > +#define PCI_VENDOR_ID_ASPEED		0x1a03
+> > +
+> >   #define PCI_VENDOR_ID_QMI		0x1a32
+> >   #define PCI_VENDOR_ID_AZWAVE		0x1a3b
+> 
+> -- 
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 Nürnberg, Germany
+> (HRB 36809, AG Nürnberg)
+> Geschäftsführer: Ivo Totev
+
+
+
