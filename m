@@ -2,106 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829E36E8126
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B556E812A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjDSSVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
+        id S232690AbjDSSWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbjDSSVa (ORCPT
+        with ESMTP id S231482AbjDSSWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 14:21:30 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1DE7A81;
-        Wed, 19 Apr 2023 11:21:28 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id a15so602068qvn.2;
-        Wed, 19 Apr 2023 11:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681928488; x=1684520488;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9JQ4YYXDHsdgydwwSkAz6HZEvZ1oP7JFBvoxDwJAvLY=;
-        b=YKVGS+JSlMdc4XLuJlnixrMr1IveWypUVQwZ/1x19W+QvHciP8XMfIfR44MjzwRrXz
-         zgHVkC1yIbmwdH9bugckqffWMIIowwshWYY95KMSlRZNFpIQ48Weri2SlRaFlr3LtyZw
-         azJO7NTDtHzAFnK9KzB+U3fVHUQp00R8rK8/eN4FSx5tmNcDXuEGF0jHmiPp5nixo42C
-         ANOMAA7IS1KQNZO0ktM2KiSBjEyiZvkAcmdevFqT0cPB2PS5etZZtlPG8lCOiumxLKzl
-         G1Z4jTK8unTFlGcV+czLYDsnGXjvtQC1SFNIAWquio7CH5IaIXlKagT89nbUt7Yila9W
-         Jrlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681928488; x=1684520488;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9JQ4YYXDHsdgydwwSkAz6HZEvZ1oP7JFBvoxDwJAvLY=;
-        b=f88/JzBspqHbjvU34hCX8vVixACAOXzZDvDopWxH7thIktJeYjfJ5WrEHpM63jxPxF
-         ccEGZV3kybsBsZbIgK7H6rsmDwnsM9dwrEzKeh1WS387qF1PashmsaRWqp1wa9MxMwyw
-         KzC6ejqVZg9zXpx3DIz2o//3lDpdFq8soJyE7WJngioLncd/XOwn8UQjPSuHX0cBd6Kx
-         UcRn+0w7CcLJ/L7SLYsRBSahiK1rNEyD2cNwLcksSqOclvaqaPOEhZz8gYBAJoMZzorI
-         RM24YyJvXidvVO82qfl96Zi0WdS/ef05Wfc0sQeYVUtqQZ9LKV8FFVScrPNFgWtlewk+
-         p6mQ==
-X-Gm-Message-State: AAQBX9e3L6fPM+hgbdsFXiOKxDGjVJU9ya4QDcoP+YxkvlXfujPR3bR7
-        mMxGVv/fb3lkAm3J2xlNGV0=
-X-Google-Smtp-Source: AKy350a+dfIVVyli8FYMG1z89l9XMpH9g4QdD4/ZdUFCps1ZR6oAiKCc9JeOXuxK1TT0wvcWhGHZdQ==
-X-Received: by 2002:a05:6214:2622:b0:572:6e81:ae89 with SMTP id gv2-20020a056214262200b005726e81ae89mr32408165qvb.40.1681928488047;
-        Wed, 19 Apr 2023 11:21:28 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id c11-20020ac8110b000000b003e699f278dasm384193qtj.7.2023.04.19.11.21.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 11:21:27 -0700 (PDT)
-Message-ID: <483c9166-5266-91a5-3cfb-bbca3a0a80f7@gmail.com>
-Date:   Wed, 19 Apr 2023 11:21:21 -0700
+        Wed, 19 Apr 2023 14:22:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7B983F6;
+        Wed, 19 Apr 2023 11:21:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 180566417A;
+        Wed, 19 Apr 2023 18:21:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D79A1C433D2;
+        Wed, 19 Apr 2023 18:21:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681928509;
+        bh=uXSdIo80daIsIj3rcz4D58UVn7dC1eLHNlCvy7csydk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QGhMALOjpQjkIlfYbhy254oioZ4ITd59f35AIwY11yMJcj6rQCI0fpuAk9F8ZGaWU
+         +RcJYqF191I/sPZswjuCx0cf2IEBkzZMiHPI4sv87LO82N6gEcPoEZwaqEvQo4SQMn
+         oWZ5zsieRgZakR2lwsGtG2/Q31lNKYNpnrYilRM5JdHDXaC0MQYWM8jvs5blATZv7R
+         zvvVqISjTcF7yntQidLVON4Yg6RCaSgv62LUaXS/Xd/JqB+tl72WnLcy+BL+EZqLVA
+         XwrKRLmRudmwujTCKFtMdONQKJxd41+bnYpBSKmjLQaJxMhbPo7JUWcXL0zjRGhsZO
+         30asrtav1XADw==
+From:   broonie@kernel.org
+To:     David Hildenbrand <david@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Mike Rapoport <rppt@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Build failure after merge of the tip tree
+Date:   Wed, 19 Apr 2023 19:21:36 +0100
+Message-Id: <20230419182136.112974-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 5.15 00/84] 5.15.108-rc4 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230419132034.475843587@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230419132034.475843587@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 06:22, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.108 release.
-> There are 84 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 21 Apr 2023 13:20:15 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.108-rc4.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hi all,
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+After merging the rcu tree, today's linux-next build (arm64 defconfig)
+failed like this:
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+/tmp/next/build/mm/migrate.c: In function 'remove_migration_pte':
+/tmp/next/build/mm/migrate.c:222:31: error: too few arguments to function 'pte_mkwrite'
+  222 |                         pte = pte_mkwrite(pte);
+      |                               ^~~~~~~~~~~
+In file included from /tmp/next/build/include/linux/pgtable.h:6,
+                 from /tmp/next/build/include/linux/mm.h:29,
+                 from /tmp/next/build/include/linux/migrate.h:5,
+                 from /tmp/next/build/mm/migrate.c:16:
+/tmp/next/build/arch/arm64/include/asm/pgtable.h:190:21: note: declared here
+  190 | static inline pte_t pte_mkwrite(pte_t pte, struct vm_area_struct *vma)
+      |                     ^~~~~~~~~~~
+
+Caused by commit
+
+  717f95b494ac36 ("mm: don't check VMA write permissions if the PTE/PMD indicates write permissions")
+
+from the mm tree interacting with
+
+  74fd30bd28e4c7 ("mm: Make pte_mkwrite() take a VMA")
+
+from the tip tree.  I've applied the fixup below
+
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 1cc86d0a669e8..c3cc20c1b26cb 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2235,7 +2235,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+ 		} else {
+ 			entry = mk_pte(page + i, READ_ONCE(vma->vm_page_prot));
+ 			if (write)
+-				entry = pte_mkwrite(entry);
++				entry = pte_mkwrite(entry, vma);
+ 			if (anon_exclusive)
+ 				SetPageAnonExclusive(page + i);
+ 			if (!young)
+@@ -3272,7 +3272,7 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
+ 	if (pmd_swp_soft_dirty(*pvmw->pmd))
+ 		pmde = pmd_mksoft_dirty(pmde);
+ 	if (is_writable_migration_entry(entry))
+-		pmde = pmd_mkwrite(pmde);
++		pmde = pmd_mkwrite(pmde, vma);
+ 	if (pmd_swp_uffd_wp(*pvmw->pmd))
+ 		pmde = pmd_mkuffd_wp(pmde);
+ 	if (!is_migration_entry_young(entry))
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 01cac26a31279..8b46b722f1a44 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -219,7 +219,7 @@ static bool remove_migration_pte(struct folio *folio,
+ 		if (folio_test_dirty(folio) && is_migration_entry_dirty(entry))
+ 			pte = pte_mkdirty(pte);
+ 		if (is_writable_migration_entry(entry))
+-			pte = pte_mkwrite(pte);
++			pte = pte_mkwrite(pte, vma);
+ 		else if (pte_swp_uffd_wp(*pvmw.pte))
+ 			pte = pte_mkuffd_wp(pte);
+ 
 -- 
-Florian
+2.30.2
 
