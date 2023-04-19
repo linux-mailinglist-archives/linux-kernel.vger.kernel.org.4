@@ -2,208 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EACD6E8510
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 867206E851E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbjDSWjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 18:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
+        id S231788AbjDSWnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 18:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233493AbjDSWi6 (ORCPT
+        with ESMTP id S231712AbjDSWna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 18:38:58 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D842D67
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:38:19 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DB4621EC0441;
-        Thu, 20 Apr 2023 00:37:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1681943832;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=e2nxhtM7sdVgJkzeRNHHbRxRGhYfRsAKbHTG5fXaiKo=;
-        b=b0gnktga5O8oFwmeE8fK4bFfjt3JNydK9X+gQnTky9WjYRrrB+WgX4jRq1UdkbdCMuS4OL
-        IH1V3EyR/GgEsP8mDdOqKcXnpRW/ZddQ+Dp6x7r0TAxDDX9y/AR6U5fupQXizslz6k44oQ
-        4q+sS4M7f+PCXfpBUxOQ3l7KOh81C6k=
-Date:   Thu, 20 Apr 2023 00:37:07 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     kernel test robot <lkp@intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: arch/mips/include/asm/timex.h:75:10: error: instruction requires
- a CPU feature not currently enabled
-Message-ID: <20230419223707.GAZEBtE1vZGy5B4EUR@fat_crate.local>
-References: <202304170748.Fg9VIgGd-lkp@intel.com>
+        Wed, 19 Apr 2023 18:43:30 -0400
+Received: from sonic310-12.consmr.mail.ir2.yahoo.com (sonic310-12.consmr.mail.ir2.yahoo.com [77.238.177.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D0259C0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:43:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1681944121; bh=DiXiE/1gerU+3DYKDimYWGfxbF+vuI55TlPqE/rlYqU=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=SpzDdu0UZ/fGMv4/o4nLhY81fqstVeN+cyaiHe1Kz0AOYFuex8a7SPhZ4OTq2bhihEpDiEp2jdE3qOW0IQRZ8hXsfpyKqXUNdrcU5gQl5TCYSMGCpJWGFcaJixwWrWxySKS6zQONuqUCeuW6xnPSFVbuyh6bmgq2SI9MA7EtThCZWrhBPlGraDLr6/YFi1+G9hYVwmkG3XQvAQxwffF0EXyVv9HPTLgSWnBSXtt+6Wn4BkzZ4AxYHAtulQZS0shP5XMNsXOGrQogFuPV7qsja5O4JJNzD8izKqGtKBx2E9yG2nDe8dCgDR+QzQSYc1plavKNbO7QxXM1wMOJBhqTEg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1681944121; bh=ev/rs8vyiV8vNxalCiSkN1YU4QbzUCepxWOTZOTl8q8=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=W+LZEFMA0tYPRbt/JA6w2EgbpO3y8VGSj6p56dDNGhY0PH6uYB0bbcMAz/yK6pTRd3vc4XiOW0N2If9boBCJ5NWYgFHCoaZof/nYqU41QcmBgX16ZxIpgxEBDJQ/qN2OB0Z6YU/K8NOmLlKo/ENd6Wc73RHSRhMSdBnLebeZKrlqjbkCubO1TQA96OrsS8gEvKR1coqagLbHmxgqNH44NVPZq7A93TLUpbE3JoWvUof0DpJ8HvaJ2TajJwPbQnCg4SOuWpRiv6A/POLUYmaXfjoJqlk+OFvkBlR8o+yLiT8wJMz9d300tAV6Tl+sFKabX7oZc61HzxWLnOlMkHUgmw==
+X-YMail-OSG: fyVOcfEVM1m96XlvCFfN_FXkulnUCMmxIH0jD.3iNQ7unHvweOujjzZIy6mThZo
+ xSY0_BzsNNE9c12d0cyVB0A.DdyQ.ZFfEtmqzxBFTCWaTkIL6h1fHx_YMo_FT.yRIe.WOIchlJHi
+ FMeD29Oji1SuYAvWY_nV7avoliRzJb0Aqm9BNBXjiBu_pLW6NtC3q9w_sPgIdom86Oth7MR0XKgw
+ 6zuXESmZ1dubygpgfrE.klu0qLIU7__RCF0LdDOazUdbjaiGb4uH3EF.VQG.fAstM22FlQmnyygd
+ rj.dqx5D84Y7liPhx0Z6jRyZWSL47G9CfCOWXGuerh_TQCuIl7Qmd0BWQgIK.qQo.FBHsPp9UQxM
+ TuVENCZtpv5YxC0EwHYb2N5mEN4kZWNRTRm6jyyVBGHsuMc_15ocnvDlM9vrxfgoy6ltP1_Na90k
+ h2fGzzCP716mHhCC..jkGXQF5h13UeHd0Ftf3PKtMskqWsf7GJIX7fc.E1Ovxj0ronRq_yay.QCb
+ t6ufg35vN6kVikMxmjaM_lHvKD7JtmQVhmP.EE0RyLv5SckmVoxRA_eTpQgjS.YtqP.S9UR5DS6E
+ bsQ6GnDth28GwPdqABhMi03k5EOSUpWa8cHL1tmPB3EXk5XUyf9izD6zTf17W5wdwlaoaCm8qjZU
+ Rjw1kF6hK1c4961HgIONBMtxUN9NyKxu6rClzaOCQl1DrhYkjmC_N6RpgBAxhvo.8y9zjPdrIFrt
+ RLNH9M19SyXoOV9BAxTII4RVhu.2YxKwAOVcSuRPpoeVpnLcW1Ln6Q1F9Pk6JG_biBqebMyrW0Yy
+ glUtBD6o3w8Pz.582XNrLdPzHB4gGduT8zGew5_RVRRrDmITyDJDIAt_2HQeguFDvfEubVo2T2Un
+ l0zrrZh6diqtPXLq2mE8fE8xQ6rsUtrynlctpaMOZvEmFrmt81DIRXd5.hK6uK.ckdSPFhtXRtiq
+ jAB6xmAwonqhek38XaxbyN3ZBW_bwNZC0aCVaXa2ZNt3kaHbtPGSS4wrNbpK5440c0sb615b68Wh
+ ZR4FB4RWasU6tbVEYPl3iPo3Cs0FU9fI4n4ipL0Q8iPPy4mdMGeoBI3n8bbeBaS2dVr0K3IkYYVm
+ iqOxZHtZUX1AUcakdKTme5qnNqLEts5qTcCWNkRVQ22stahttqn2VxJL2SWPBj5zhwRi9wys8NsV
+ gHQhf.Y5npV2OFm9r1ScA_uGK8QBJoe4rKT9nv.UsnUUNpecZXDycDyZk54.DDPl8ka8Kdelb1GV
+ CYaL04yS87FkeHc2XCCWtBz6bNrwpVR0vVRqDtM38oifgXrApU.eEGVxX8Ag2Igw_mZyYeymmNWh
+ xnSEF.Nglr4_jqlnZ6EKAmaSwApAS2J5stKewaaDomX_jRSpErdIC9YwfwM__oaV34.SqkOuzvs4
+ YA9ptg8psZrT1Vtl5HJRwulX6puxJjBjMoVe2a.Ljcrf0Qob.505QJ9WyTo1OrzSuzUH_yobuKFd
+ req9DaDgYp7qvrNJSvrzxePeka3YDuaWFtGzwHcAKcoxkGsGivkkDcsOMZO_S6.4Nhcurf9bbVCH
+ HSumaz4JvJ5M6wKl_zFJqJJrbfKu3fzmRXwLDp3t8ZkbGTxpYFjrAQcz73qlSGsXi8A.MPUW.tjl
+ e14DWbF17Uc_FbsT3ggE3z3Ngr7Im7vGBaBzx72vntUTM3GhuKBDLqZGW1SFoYOTatRGEtk6YSOD
+ Y3tGJdB09qbKiXSbmIkLJ0ANKzAm5Qu2ENT4BVKj3GlZqR2YlNqKVHd5o_SdRLEFtlvc2apK38gE
+ oreOPQvdRLXihvpI4QL5yJJH9FnMOIQhMNiaUYMI7sHXTUdQ4WX9Da6yn3DXeP5hY4M3eHqz.ilP
+ TjuH9BAVx9Kim7MyuqJfrHQWioA3owvWO5gilx0QlAOTNC6Azy9eajgDoM7SL8hVtNeFE_5XP9vW
+ VH0GaFzWSV5YFbpcd.bwYwc4tIjlCTb8qRQFGmFmC6akePXMXeUtkkh22SRAklkp9OMETf.UFk4o
+ F_fkRBFeZ0ZGer9PC6Jo7zgVcqrtlrBTLHd6SQEC6vo.tjzUaqcezaksonQSTQeTrUTHBpjeytNW
+ xDk_w6tk8anEM5gNsxwdQa7lgYz6z6x_FgZVsOAqsxou8nIWuvaTe7JGD2Aupkhm2MPtywa.nKAb
+ z1.LcgIGTRIqsSgDjnbUO2itzZDs_AIewFT3xYdVdyfEEVFtQLGwuq5Avv0dgJp52uclOP8sPXxB
+ ZrBpAoRJy_PxBxdoXV5MGmQvmpJzRs.99jMgQcxnLqnCalqZekT_D4d4g7GvtlOu_Jmvb7nPSEa0
+ e8aID.YQTayNoBB7OHUyrhC2U8ISuUSs-
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: 1a39f33d-85a9-4766-b6a1-28c18b0e86e4
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ir2.yahoo.com with HTTP; Wed, 19 Apr 2023 22:42:01 +0000
+Received: by hermes--production-ir2-74cd8fc864-qfvhg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 1848f5b565d7088490b56d0999a0e274;
+          Wed, 19 Apr 2023 22:41:59 +0000 (UTC)
+Message-ID: <457244a7-9d28-a19d-40a5-8d45861b709d@rocketmail.com>
+Date:   Thu, 20 Apr 2023 00:41:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202304170748.Fg9VIgGd-lkp@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 9/9] dt-bindings: Add documentation for rt5033 mfd,
+ regulator and charger
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <cover.1681646904.git.jahau@rocketmail.com>
+ <9275af790e6e21b5cf661a2444effe4caf2be02e.1681646904.git.jahau@rocketmail.com>
+ <5b41b54c-88d0-3666-9db2-9cbb90ba8183@linaro.org>
+ <acb209ce-7cb6-9a07-c913-9931b980c8c7@rocketmail.com>
+ <a638055a-97c2-49ce-f301-45d0ce897df4@linaro.org>
+Content-Language: en-US
+From:   Jakob Hauser <jahau@rocketmail.com>
+In-Reply-To: <a638055a-97c2-49ce-f301-45d0ce897df4@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21416 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Thomas.
+Hi Krzysztof,
 
-On Mon, Apr 17, 2023 at 07:57:04AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
-> commit: aba5b397cad7d398b385aaf5029f99f41b690466 hamradio: baycom_epp: Do not use x86-specific rdtsc()
-> date:   4 months ago
-> config: mips-buildonly-randconfig-r001-20230417 (https://download.01.org/0day-ci/archive/20230417/202304170748.Fg9VIgGd-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
+On 19.04.23 10:42, Krzysztof Kozlowski wrote:
+> On 18/04/2023 23:37, Jakob Hauser wrote:
+> 
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: richtek,rt5033-charger
+>>>> +
+>>>> +  richtek,pre-microamp:
+>>>> +    description:
+>>>> +      Current of pre-charge mode. The pre-charge current levels are 350 mA to
+>>>> +      650 mA programmed by I2C per 100 mA.
+>>>
+>>> minimum:
+>>> maximum:
+>>> multipleOf: 100
+>>>
+>>> Same for other cases.
+>>
+>> The "multipleOf: 100" doesn't seen appropriate to me when the choice is
+>> 350, 450, 550, 650. Those are not multiples of 100. It's more of a step
+>> size. I didn't find a general property for step size. Listing them as
+>> "enum" would be another possibility, I guess, but not an elegant one.
+>> Especially for property "richtek,const-microvolt" there are 30
+>> possibilities.
+> 
+> Ahh, right. You can use enum here and min/max for other cases, where
+> multipleOf cannot be used.
+> 
+>>>> +  richtek,eoc-microamp:
+>>>> +    description:
+>>>> +      This property is end of charge current. Its level ranges from 150 mA to
+>>>> +      600 mA. Between 150 mA and 300 mA in 50 mA steps, between 300 mA and 600 mA
+>>>> +      in 100 mA steps.
+>>>> +    maxItems: 1
+>>
+>> Here are two different step sizes. The first few are 50 mA steps (150,
+>> 200, 250, 300 mA) and then it changes to 100 mA steps (300, 400, 500,
+>> 600 mA). How to deal with that? Again I guess "enum" would be a
+>> possibility, but again not a nice one.
+> 
+> enum
 
-Where do I get clang 17?
+Thanks for the reply. Looking through the properties, I get the 
+following result.
 
-In any case, this
+   richtek,pre-microamp:
+     description:
+       Current of pre-charge mode. The pre-charge current levels are
+       350 mA to 650 mA programmed by I2C per 100 mA.
+     maxItems: 1
+     enum: [350000, 450000, 550000, 650000]
 
-"error: instruction requires a CPU feature not currently enabled"
+   richtek,fast-microamp:
+     description:
+       Current of fast-charge mode. The fast-charge current levels are
+       700 mA to 2000 mA programmed by I2C per 100 mA.
+     maxItems: 1
+     minimum: 700000
+     maximum: 2000000
+     multipleOf: 100000
 
-sounds like clang is trying to generate invalid code for the wrong
-target. .config issue?
+   richtek,eoc-microamp:
+     description:
+       This property is end of charge current. Its level ranges from
+       150 mA to 600 mA. Between 150 mA and 300 mA in 50 mA steps,
+       between 300 mA and 600 mA in 100 mA steps.
+     maxItems: 1
+     enum: [150000, 200000, 250000, 300000, 400000, 500000, 600000]
 
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mipsel-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aba5b397cad7d398b385aaf5029f99f41b690466
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout aba5b397cad7d398b385aaf5029f99f41b690466
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/hamradio/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202304170748.Fg9VIgGd-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from drivers/net/hamradio/baycom_epp.c:29:
->    In file included from include/linux/module.h:13:
->    In file included from include/linux/stat.h:19:
->    In file included from include/linux/time.h:60:
->    In file included from include/linux/time32.h:13:
->    In file included from include/linux/timex.h:67:
-> >> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
->                    return read_c0_count();
->                           ^
->    arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
->    #define read_c0_count()         __read_32bit_c0_register($9, 0)
->                                    ^
->    arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
->            ___read_32bit_c0_register(source, sel, __volatile__)
->            ^
->    arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
->                            "mfc0\t%0, " #source "\n\t"                     \
->                            ^
->    <inline asm>:1:2: note: instantiated into assembly here
->            mfc0    $4, $9
->            ^
->    In file included from drivers/net/hamradio/baycom_epp.c:29:
->    In file included from include/linux/module.h:13:
->    In file included from include/linux/stat.h:19:
->    In file included from include/linux/time.h:60:
->    In file included from include/linux/time32.h:13:
->    In file included from include/linux/timex.h:67:
-> >> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
->                    return read_c0_count();
->                           ^
->    arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
->    #define read_c0_count()         __read_32bit_c0_register($9, 0)
->                                    ^
->    arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
->            ___read_32bit_c0_register(source, sel, __volatile__)
->            ^
->    arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
->                            "mfc0\t%0, " #source "\n\t"                     \
->                            ^
->    <inline asm>:1:2: note: instantiated into assembly here
->            mfc0    $2, $9
->            ^
->    In file included from drivers/net/hamradio/baycom_epp.c:29:
->    In file included from include/linux/module.h:13:
->    In file included from include/linux/stat.h:19:
->    In file included from include/linux/time.h:60:
->    In file included from include/linux/time32.h:13:
->    In file included from include/linux/timex.h:67:
-> >> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
->                    return read_c0_count();
->                           ^
->    arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
->    #define read_c0_count()         __read_32bit_c0_register($9, 0)
->                                    ^
->    arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
->            ___read_32bit_c0_register(source, sel, __volatile__)
->            ^
->    arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
->                            "mfc0\t%0, " #source "\n\t"                     \
->                            ^
->    <inline asm>:1:2: note: instantiated into assembly here
->            mfc0    $2, $9
->            ^
->    In file included from drivers/net/hamradio/baycom_epp.c:29:
->    In file included from include/linux/module.h:13:
->    In file included from include/linux/stat.h:19:
->    In file included from include/linux/time.h:60:
->    In file included from include/linux/time32.h:13:
->    In file included from include/linux/timex.h:67:
-> >> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
->                    return read_c0_count();
->                           ^
->    arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
->    #define read_c0_count()         __read_32bit_c0_register($9, 0)
->                                    ^
->    arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
->            ___read_32bit_c0_register(source, sel, __volatile__)
->            ^
->    arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
->                            "mfc0\t%0, " #source "\n\t"                     \
->                            ^
->    <inline asm>:1:2: note: instantiated into assembly here
->            mfc0    $2, $9
->            ^
->    4 errors generated.
-> 
-> 
-> vim +75 arch/mips/include/asm/timex.h
-> 
-> 9c9b415c50bc29 Ralf Baechle       2013-09-12  71  
-> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  72  static inline cycles_t get_cycles(void)
-> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  73  {
-> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  74  	if (can_use_mips_counter(read_c0_prid()))
-> 9c9b415c50bc29 Ralf Baechle       2013-09-12 @75  		return read_c0_count();
-> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  76  	else
-> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  77  		return 0;	/* no usable counter */
-> 9c9b415c50bc29 Ralf Baechle       2013-09-12  78  }
-> 1c99c6a7c3c599 Jason A. Donenfeld 2022-04-08  79  #define get_cycles get_cycles
-> 9c9b415c50bc29 Ralf Baechle       2013-09-12  80  
-> 
-> :::::: The code at line 75 was first introduced by commit
-> :::::: 9c9b415c50bc298ac61412dff856eae2f54889ee MIPS: Reimplement get_cycles().
-> 
-> :::::: TO: Ralf Baechle <ralf@linux-mips.org>
-> :::::: CC: Ralf Baechle <ralf@linux-mips.org>
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+   richtek,pre-threshold-microvolt:
+     description:
+       Voltage of pre-charge mode. If the battery voltage is below the
+       pre-charge threshold voltage, the charger is in pre-charge mode
+       with pre-charge current. Its levels are 2.3 V to 3.8 V programmed
+       by I2C per 0.1 V.
+     maxItems: 1
+     minimum: 2300000
+     maximum: 3800000
+     multipleOf: 100000
 
--- 
-Regards/Gruss,
-    Boris.
+   richtek,const-microvolt:
+     description:
+       Battery regulation voltage of constant voltage mode. This voltage
+       levels from 3.65 V to 4.4 V by I2C per 0.025 V.
+     maxItems: 1
+     minimum: 3650000
+     maximum: 4400000
+     multipleOf: 25000
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Kind regards,
+Jakob
