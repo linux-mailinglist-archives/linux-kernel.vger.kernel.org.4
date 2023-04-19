@@ -2,109 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 824CE6E811D
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9046E8122
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbjDSSR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
+        id S232930AbjDSSSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjDSSR0 (ORCPT
+        with ESMTP id S231640AbjDSSS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 14:17:26 -0400
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB2546BD;
-        Wed, 19 Apr 2023 11:17:25 -0700 (PDT)
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-24781e23c27so36254a91.0;
-        Wed, 19 Apr 2023 11:17:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681928245; x=1684520245;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PeBdK+aOX5WklXzp1wDCp3VluwO0S4t7q6gfKuWPg94=;
-        b=TAKCN/n47iXERHfLzbJcs8NNmia6bZ/p1ZbAVo/4UW1iGvzWQjlGFHaH+ukiqI+vN2
-         BrVcKK3dLprYjx+crfWHAiXDaRtAWPrTIih8l5wn+MZOfAdcfWms30zXErZTOC3Eczt8
-         65v/j/oS8Np4E5wVW47qM5LlnrA0kEdGNg03zUf4KLlh2twDjkEQVD14a4wNtz62kwfh
-         ginJeF2aFn0lWAItEWxogvUFrtJ8DUDkkcMXUNoGCojzP4pidMoEXIksSZTRjey+dp9F
-         /ORDRHEPOBRirskQmUecQ0FJjYn5TdC10iUd5Qny9vRB1kHlwoEmOq7GWDoYmeZ9mXrg
-         9OlQ==
-X-Gm-Message-State: AAQBX9ftMixXDUo5LVPtji3Bvz1CoCz1HezcDQca9irrICUfc4TdWbp/
-        hCpwsfsbd5PLAftsoejLMdE=
-X-Google-Smtp-Source: AKy350ZY847hKaLR9XgVdkaH33Rw1uv2+wMeSMUe1kmJeki6pghFcGewUpJDIYZzogtWqpQAM2QFsw==
-X-Received: by 2002:a17:90a:9c0a:b0:247:529f:92d7 with SMTP id h10-20020a17090a9c0a00b00247529f92d7mr3440902pjp.8.1681928244780;
-        Wed, 19 Apr 2023 11:17:24 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id r11-20020a65498b000000b004e28be19d1csm10761414pgs.32.2023.04.19.11.17.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 11:17:24 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 18:17:22 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        "K . Y . Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>
-Subject: Re: [PATCH 2/7] PCI: hv: Add 'Microsoft' to Kconfig prompt
-Message-ID: <ZEAwMkmDBXKRkvIU@liuwe-devbox-debian-v2>
-References: <20230418174336.145585-1-helgaas@kernel.org>
- <20230418174336.145585-3-helgaas@kernel.org>
+        Wed, 19 Apr 2023 14:18:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45072558A
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 11:18:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D780164174
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:18:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C89FC433D2;
+        Wed, 19 Apr 2023 18:18:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681928307;
+        bh=vukysRz5NaE4LWG2Afd718xz2x+dfOXM5QhEspRpdV4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mttGhr1fE3I4rQPspXFezgqjHKtEFBHw2zgAsS/d2nixmB8nbZEpr1d8eZELF2LWU
+         hBhV8h3aK/Ni1erlpop8dgsSU0yL+4ZObYry16T8eXE8TXWljLiEZTUS73kdmH+KXO
+         JUeeXS63T0EKBUvm+Yuf3IHrFOqux5kU/nOIAo5IDEdNfWr9VTYeT9/BjAqWTUv8lM
+         5qWJS/ghcvRK3YDmgq5uknqCQetmV2JxhIXN0dURTP0SgEpv3QnK9I4V77BKrJJe5r
+         CUsE7nRN4dMiByr5/QJqUxjapMkSD7iHlibTHm1243YT3WdqBTMK0x/quopK7qJ86y
+         5HmA5IoUTp0DA==
+Date:   Wed, 19 Apr 2023 11:18:25 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     Wu Bo <bo.wu@vivo.com>, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, wubo.oduw@gmail.com
+Subject: Re: [PATCH 1/1] f2fs: allocate trace path buffer from names_cache
+Message-ID: <ZEAwcaVlYq+PNwEK@google.com>
+References: <20230414104308.6591-1-bo.wu@vivo.com>
+ <e2ec7e19-634c-a065-fe7a-b052d02d4752@kernel.org>
+ <ZD7AJT7ZYPji8TWk@google.com>
+ <91a05857-c916-cae5-d61d-bbec6f1ae052@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230418174336.145585-3-helgaas@kernel.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <91a05857-c916-cae5-d61d-bbec6f1ae052@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 12:43:31PM -0500, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
+On 04/19, Chao Yu wrote:
+> On 2023/4/19 0:07, Jaegeuk Kim wrote:
+> > On 04/18, Chao Yu wrote:
+> > > On 2023/4/14 18:43, Wu Bo wrote:
+> > > > It would be better to use the dedicated slab to store path.
+> > > > 
+> > > > Signed-off-by: Wu Bo <bo.wu@vivo.com>
+> > > > ---
+> > > >    fs/f2fs/file.c | 4 ++--
+> > > >    1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> > > > index 15dabeac4690..27137873958f 100644
+> > > > --- a/fs/f2fs/file.c
+> > > > +++ b/fs/f2fs/file.c
+> > > > @@ -4361,7 +4361,7 @@ static void f2fs_trace_rw_file_path(struct kiocb *iocb, size_t count, int rw)
+> > > >    	struct inode *inode = file_inode(iocb->ki_filp);
+> > > >    	char *buf, *path;
+> > > > -	buf = f2fs_kmalloc(F2FS_I_SB(inode), PATH_MAX, GFP_KERNEL);
+> > > > +	buf = __getname();
+> > > 
+> > > How about:
+> > > 
+> > > buf = f2fs_kmem_cache_alloc(names_cachep, GFP_KERNEL, NULL, F2FS_I_SB(inode));
+> > 
+> > This looks like a hack using names_cachep?
 > 
-> Add the "Microsoft" vendor name to the CONFIG_PCI_HYPERV_INTERFACE Kconfig
-> prompt so it matches other PCIe drivers and other Hyper-V prompts.
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: K. Y. Srinivasan <kys@microsoft.com>
-> Cc: Haiyang Zhang <haiyangz@microsoft.com>
-> Cc: Wei Liu <wei.liu@kernel.org>
-> Cc: Dexuan Cui <decui@microsoft.com>
+> names_cachep was exported in fs.h.
 
-Acked-by: Wei Liu <wei.liu@kernel.org>
+I think that's for __getname() in general, which doesn't indicate you can hack.
+No one is using like that.
 
-> ---
->  drivers/pci/controller/Kconfig | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+$ grep names_cachep fs/* -R
+fs/dcache.c:struct kmem_cache *names_cachep __read_mostly;
+fs/dcache.c:EXPORT_SYMBOL(names_cachep);
+fs/dcache.c:	names_cachep = kmem_cache_create_usercopy("names_cache", PATH_MAX, 0,
+
+$ grep __getname fs/* -R
+fs/ceph/mds_client.c:	path = __getname();
+fs/cifs/cifsproto.h:	return __getname();
+fs/dcache.c:/* SLAB cache for __getname() consumers */
+fs/d_path.c:	char *page = __getname();
+fs/exfat/dir.c:	nb->lfn = __getname();
+fs/f2fs/file.c:	buf = __getname();
+fs/fat/dir.c:		*unicode = __getname();
+fs/fat/namei_vfat.c:	uname = __getname();
+fs/hostfs/hostfs_kern.c:	char *name = __getname();
+fs/namei.c:	result = __getname();
+fs/namei.c:	result = __getname();
+fs/ntfs3/dir.c:	name = __getname();
+fs/ntfs3/xattr.c:	buf = __getname();
+fs/ntfs3/inode.c:	new_de = __getname();
+fs/ntfs3/inode.c:	de = __getname();
+fs/ntfs3/inode.c:	de = __getname();
+fs/ntfs3/namei.c:	struct cpu_str *uni = __getname();
+fs/ntfs3/namei.c:	de = __getname();
+fs/ntfs3/namei.c:	struct cpu_str *uni = __getname();
+fs/ntfs3/namei.c:	uni = __getname();
+fs/ntfs3/namei.c:	uni1 = __getname();
+fs/vboxsf/utils.c: * Returns a shfl_string allocated through __getname (must be freed using
+fs/vboxsf/utils.c:	buf = __getname();
+fs/vboxsf/utils.c:		shfl_path = __getname();
+
 > 
-> diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-> index 42654035654a..8b1f9a3f83ea 100644
-> --- a/drivers/pci/controller/Kconfig
-> +++ b/drivers/pci/controller/Kconfig
-> @@ -285,11 +285,12 @@ config PCIE_BRCMSTB
->  	  Broadcom STB based SoCs, like the Raspberry Pi 4.
->  
->  config PCI_HYPERV_INTERFACE
-> -	tristate "Hyper-V PCI Interface"
-> +	tristate "Microsoft Hyper-V PCI Interface"
->  	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI
->  	help
-> -	  The Hyper-V PCI Interface is a helper driver allows other drivers to
-> -	  have a common interface with the Hyper-V PCI frontend driver.
-> +	  The Hyper-V PCI Interface is a helper driver that allows other
-> +	  drivers to have a common interface with the Hyper-V PCI frontend
-> +	  driver.
->  
->  config PCI_LOONGSON
->  	bool "LOONGSON PCI Controller"
-> -- 
-> 2.25.1
+> > Using f2fs_kmem_cache_alloc is able to inject malloc error.
+> > But here is a trace event, is it ok to inject error in a trace path?
 > 
+> Yes, the fail path handling is very simple, so it's fine to leave it
+> as it is.
+> 
+> Reviewed-by: Chao Yu <chao@kernel.org>
+
+What is this for?
+
+> 
+> Thanks,
+> 
+> > 
+> > > 
+> > > >    	if (!buf)
+> > > >    		return;
+> > > >    	path = dentry_path_raw(file_dentry(iocb->ki_filp), buf, PATH_MAX);
+> > > > @@ -4374,7 +4374,7 @@ static void f2fs_trace_rw_file_path(struct kiocb *iocb, size_t count, int rw)
+> > > >    		trace_f2fs_dataread_start(inode, iocb->ki_pos, count,
+> > > >    				current->pid, path, current->comm);
+> > > >    free_buf:
+> > > > -	kfree(buf);
+> > > > +	__putname(buf);
+> > > 
+> > > kmem_cache_free(names_cachep, buf);
+> > > 
+> > > Thanks,
+> > > 
+> > > >    }
+> > > >    static ssize_t f2fs_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
