@@ -2,48 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D736E83B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C51B76E83AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjDSV1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 17:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
+        id S232132AbjDSVZm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Apr 2023 17:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbjDSV1B (ORCPT
+        with ESMTP id S231217AbjDSVZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 17:27:01 -0400
-Received: from mail.antaris-organics.com (mail.antaris-organics.com [91.227.220.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8523046AE;
-        Wed, 19 Apr 2023 14:26:55 -0700 (PDT)
-Received: by mail.antaris-organics.com (Postfix, from userid 200)
-        id 04FBC45BD4; Wed, 19 Apr 2023 23:28:06 +0200 (CEST)
-Date:   Wed, 19 Apr 2023 23:22:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mareichelt.com;
-        s=202107; t=1681939356;
-        bh=CNwHvJhep2rCN7e2S9ZMgUs0dpxJi4R9pffDoLTm29g=;
-        h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To:Cc:Cc:content-type:content-type:date:date:
-         From:from:in-reply-to:in-reply-to:message-id:mime-version:
-         references:reply-to:Sender:Subject:Subject:To:To;
-        b=ty+x6MKThPR8IYffFHuxXMPuXzEI98Xrq9xDR6d324HQhk0APk5bsFM6PBQQAN5T9
-         MGXJKHepYCgZe59he0/BI1feikX+rMRqNpw/uv6P1Gq4GqAjWOWY5GAYaL97hJhKHR
-         D2Np8A8rnJFpF05xPeLF3CQj1CGILJSmNQdr05Rb2PY3tSac8HjG93gwYl4u8bMTqD
-         vS6Z4HfdGjQx+yWxqQqNTOwuxaJYLjQYW9mke+BvthMzvTsfLLpu7XdYeOeIflIKi3
-         P8HB+ryKP5L8gh7nL+7SF9sEKD1Q6frQ5yIc3wiS7F83FThQUxFPg0mGVtjZhWp3VN
-         d6EkIo/FL56gA==
-From:   Markus Reichelt <lkt+2023@mareichelt.com>
-To:     stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6.1 000/129] 6.1.25-rc3 review
-Message-ID: <20230419212235.GF3871@pc21.mareichelt.com>
-Mail-Followup-To: stable@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230419132048.193275637@linuxfoundation.org>
+        Wed, 19 Apr 2023 17:25:39 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79C6974B;
+        Wed, 19 Apr 2023 14:25:12 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1ppFIV-003hnW-FK; Wed, 19 Apr 2023 23:25:03 +0200
+Received: from p5b13a017.dip0.t-ipconnect.de ([91.19.160.23] helo=suse-laptop.fritz.box)
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1ppFIV-0002on-88; Wed, 19 Apr 2023 23:25:03 +0200
+Message-ID: <149653ffbfa13e508777214174341f9c1263a487.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH RESEND] sh: sq: Use the bitmap API when applicable
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-sh@vger.kernel.org
+Date:   Wed, 19 Apr 2023 23:25:01 +0200
+In-Reply-To: <d2b2baca-589d-83ef-04b0-0f64b18f9d95@wanadoo.fr>
+References: <071e9f32c19a007f4922903282c9121898641400.1681671848.git.christophe.jaillet@wanadoo.fr>
+         <b5fea49d68e1e2a702b0050f73582526e205cfa2.camel@physik.fu-berlin.de>
+         <CAMuHMdWz7YJ4ifkxU2GGdoj46fTsjS5WE66R0YzvOYr1ZKY=4w@mail.gmail.com>
+         <d2b2baca-589d-83ef-04b0-0f64b18f9d95@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.0 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419132048.193275637@linuxfoundation.org>
-Organization: still stuck in reorganization mode
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 91.19.160.23
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,21 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+Hi Christophe!
 
-> This is the start of the stable review cycle for the 6.1.25 release.
-> There are 129 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, 2023-04-18 at 20:05 +0200, Christophe JAILLET wrote:
+> Le 18/04/2023 à 09:14, Geert Uytterhoeven a écrit :
+> > 
+> > Nice catch!
+> > 
+> > Looking more deeply at the code, the intention is to allocate a bitmap
+> > with nr_pages bits, so the code fater Christophe's patch is correct.
+> > However, the old code is indeed wrong:
+> > 
+> >      (nr_pages + (BITS_PER_LONG - 1)) / BITS_PER_LONG
+> > 
+> > The aim is to calculate the size in bytes, rounded up to an integral
+> > number of longs, but it lacks a final multiplication by BITS_PER_BYTE,
+> > so it's off by a factor of 4.
+> > 
+> > Fixes: d7c30c682a278abe ("sh: Store Queue API rework.")
+> > 
+> > As we didn't have bitmap_zalloc() until commit c42b65e363ce97a8
+> > ("bitmap: Add bitmap_alloc(), bitmap_zalloc() and bitmap_free()")
+> > in v4.19, it would be good to fix the bug first in a separate patch,
+> > not using
+> > 
+> > BTW, interesting how this got missed when fixing the other out-of-range
+> > bug in commit 9f650cf2b811cfb6 ("sh: Fix store queue bitmap end.",
+> > s/marc.theaimsgroup.com/marc.info/ when following the link).
 > 
-> Responses should be made by Fri, 21 Apr 2023 13:20:20 +0000.
-> Anything received after that time might be too late.
+> So, this means that this got unnoticed for 16 years?
+> Waouh!
+> 
+> I would never have thought that a "trivial" clean-up that I took time to 
+> repost could trigger such a thing!
 
-Hi Greg
+I have fixed the original bug in my for-next branch [1] now. Would you mind
+rebasing your patch on top of that branch and resend it?
 
-6.1.25-rc3
+The reason why we're doing this is because we want to be able to backport the
+fix to older kernel versions such as 4.14 which don't have the bitmap API yet.
 
-compiles, boots and runs here on x86_64
-(AMD Ryzen 5 PRO 4650G, Slackware64-15.0)
+Thanks,
+Adrian
 
-Tested-by: Markus Reichelt <lkt+2023@mareichelt.com>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/glaubitz/sh-linux.git/log/?h=for-next
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
