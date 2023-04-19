@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416696E80B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 19:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE5D6E80BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbjDSR6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 13:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
+        id S232848AbjDSSAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjDSR6m (ORCPT
+        with ESMTP id S229784AbjDSSAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 13:58:42 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29874EC3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:58:40 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id c64-20020a254e43000000b00b92530ded91so225881ybb.17
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 10:58:40 -0700 (PDT)
+        Wed, 19 Apr 2023 14:00:14 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41E34ECD
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 11:00:12 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-54fb615ac3dso10916277b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 11:00:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681927120; x=1684519120;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=GcWrIDO6GH5yJpHF/uWaF8jYk6l7KP2l0HcvbP0QLVU=;
-        b=b8KAmYXrp9C9kGB31W/3uEQ+Go+Y0JBvLAJeq/hVhD34sd3sj8TtC7ZXZQomTcS79z
-         koWqV9IeWVnH/KWCpZlkKCsuaTOCwJm9EwDVc5CZ3QdsTUQmOfZQpORT0i7eUSBKD2eH
-         OVaH5Ru0DnYgzfXdR5pSiU6XEfHSftrrUL0zGt1TgtHvVXBbUO5c8c+f3zgcf+pSna7P
-         us5hy2jwo/mFvr12D5Aa5lQWPb7AA4sqTbKPHPdE2N/Ee4VwO2ToiQKyRjcvxi9Nn8fL
-         NJV4S5ZWjgNkLxP5R0+W8acutV2PTpe4E4PxUw7DNfFo7G8DukmtLRhxWIiy8l6PWihV
-         06aw==
+        d=paul-moore.com; s=google; t=1681927212; x=1684519212;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ohhihngiiHUModOekO8OzmWnKuYyRR5eDyeTIuWRDlk=;
+        b=LUTGeHTfwzcWPm81gFkMAQyfTBKB7YiMlUfUYND+zPnNFGZaZJIKe0jwyMu67MVn96
+         4689DhCrbR7XmxEoV18yp3dE3A2DlpEZHouKRmQknq+wXNYx7xKO8nuWYgj4vWnuKowx
+         A/N2mIiuwYwYgUdj8EyjwbrBtE0KKjOmIlRiVTgCw9a7xeegNlfF7GPm9lTIOgd/BOOP
+         Af8b88fcqTMNswnBKqAOXb1befia2yKmp6lIjyJ5gv4cQnh0l7GfDhkIVrn4rBexeVtD
+         kLfuk0Jo3oQTKb7jByBPzZA9SgqMr7StgsSu90wE1zTjocLybCzTjQ+SLWKvS/x4xHpH
+         7pNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681927120; x=1684519120;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GcWrIDO6GH5yJpHF/uWaF8jYk6l7KP2l0HcvbP0QLVU=;
-        b=Kchh/ODkjSpLPU0xnL7540ilxx9QHz2W58evKqQhm/Hrxo0RoV/yggOVGhPV3HOMhU
-         R/S5KwBZq9dhHG4cwwoZv+HvSQYuyc0bljez/rc8wgdhWo6/PcGDJpShFppzxj5CwhjR
-         ochahB+iM7kkp2mXe/F08oC2ELzm1gI0fc0aT9sS5plpNeWr4Ubk0rkZfT2489pq1WB2
-         tm1NUsh22UUpS/ul5boBVfEPSMky7KWu2sBuGjKd3E8fWaTd2ysInq09HroX2euj94j2
-         WU9sezmP2Ie09VC+2OPzI5zLUzDK3WM42ysxjXhuUs92q76ZcYrfsZ+kPYHTlLQ9BQk5
-         SwVw==
-X-Gm-Message-State: AAQBX9dylddXENBMQ6a7lISBF/cYPkPbHWr4Hj0bMBt5xXzXJtxAJVWE
-        CcPSHibOWocnD+QrMm0aG0aS0zLgWF8=
-X-Google-Smtp-Source: AKy350ZN/NekAmaDhc7GI/R22C6mGO6MT6c2t8KbzwLAGZNIGAMtX16FRUineRnh4JOkeMeU/vb6XaN+afo=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:4b5f:8e2f:d0bb:d3cf])
- (user=surenb job=sendgmr) by 2002:a25:cac1:0:b0:b6c:48c3:3c1c with SMTP id
- a184-20020a25cac1000000b00b6c48c33c1cmr336892ybg.13.1681927120024; Wed, 19
- Apr 2023 10:58:40 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 10:58:36 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230419175836.3857458-1-surenb@google.com>
-Subject: [PATCH v3 1/1] mm: do not increment pgfault stats when page fault
- handler retries
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     willy@infradead.org, hannes@cmpxchg.org, mhocko@suse.com,
-        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
-        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
-        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, surenb@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
+        d=1e100.net; s=20221208; t=1681927212; x=1684519212;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ohhihngiiHUModOekO8OzmWnKuYyRR5eDyeTIuWRDlk=;
+        b=UwCPQYkMmvlsjoMVv4ULG1tbmjqxAA2Da8ycYxTnZzgStI/FBcoKpNVfytOt6b4RNS
+         9kZlJ9P6FxAJ/4gCysVqyr+i9SW+AgFgrv43DZy9+ZvbsXDEuHbstpJAJoDnzT+9WQvM
+         P5Va+OYpXIfc4czxafS40ujmAMi2xM1Ltpc7L3mJW9QVIfp/rc14TMlmSaOTIQpdZDYE
+         0+J/cJ5B9MRBJVSjUbolfc+r2p6QZo/oKP3jxbteHzQjMoF4FegEOT6VNmf+I9rmzeNE
+         xBvlmY7JjWKD7aKzK21s79fiGsNAG57r0oQx3Uz+PbAXAeZm/68ErCWAuhaIMfJTQvTU
+         oNoA==
+X-Gm-Message-State: AAQBX9fN+ALurtIEOLYHUUFU1xU361QqDez8qO65ywBJiWzz6tfx8mQ1
+        fKmy6dUC2QkkZZUVKyQUJAXXoDToFPkIIbKwDJpN
+X-Google-Smtp-Source: AKy350ZvDtMUbJjFH3OLohUCe5RvRTmzuBwXXKLfvC3rBwecsJ/pOto2y+FYaKZNsIe/cp23U+UDF0xXGnYUcaWWrDE=
+X-Received: by 2002:a81:ab50:0:b0:544:9b15:e197 with SMTP id
+ d16-20020a81ab50000000b005449b15e197mr3310247ywk.20.1681927211731; Wed, 19
+ Apr 2023 11:00:11 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230418172656.33583-1-junxiao.bi@oracle.com>
+In-Reply-To: <20230418172656.33583-1-junxiao.bi@oracle.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 19 Apr 2023 14:00:00 -0400
+Message-ID: <CAHC9VhTNoVTHMLwu0S5xVrNLe5cQcTpAEMb3fdn+GmoNuyNY1A@mail.gmail.com>
+Subject: Re: [PATCH V3] debugfs: allow access blktrace trace files in lockdown mode
+To:     Junxiao Bi <junxiao.bi@oracle.com>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, nathanl@linux.ibm.com,
+        axboe@kernel.dk, jmorris@namei.org, serge@hallyn.com,
+        konrad.wilk@oracle.com, joe.jin@oracle.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,111 +71,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the page fault handler requests a retry, we will count the fault
-multiple times. This is a relatively harmless problem as the retry paths
-are not often requested, and the only user-visible problem is that the
-fault counter will be slightly higher than it should be.  Nevertheless,
-userspace only took one fault, and should not see the fact that the
-kernel had to retry the fault multiple times.
-Move page fault accounting into mm_account_fault() and skip incomplete
-faults which will be accounted upon completion.
+On Tue, Apr 18, 2023 at 1:27=E2=80=AFPM Junxiao Bi <junxiao.bi@oracle.com> =
+wrote:
+>
+> blktrace trace files are per-cpu relay files that are used by kernel to
+> export IO metadata(IO events, type, target disk, offset and len etc.) to
+> userspace, no data from IO itself will be exported. These trace files hav=
+e
+> permission 0400, but mmap is supported, so they are blocked by lockdown.
+> Skip lockdown for these files to allow blktrace work in lockdown mode.
+>
+> v3 <- v2:
+> allow only blktrace trace file instead of relay files
+> https://lore.kernel.org/lkml/b68c9e1d-71c8-adf9-f7da-1b56a3d4bfbc@oracle.=
+com/T/
+>
+> v2 <- v1:
+> Fix build error when CONFIG_RELAY is not defined.
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202304121714.6mahd9EW-lkp@int=
+el.com/
+> Signed-off-by: Junxiao Bi <junxiao.bi@oracle.com>
+> ---
+>  fs/debugfs/file.c            | 10 ++++++++++
+>  include/linux/blktrace_api.h |  3 +++
+>  include/linux/relay.h        |  3 +++
+>  kernel/relay.c               | 16 ++++++++++++++++
+>  kernel/trace/blktrace.c      |  7 +++++++
+>  5 files changed, 39 insertions(+)
+>
+> diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
+> index 1f971c880dde..973e38f3e8a1 100644
+> --- a/fs/debugfs/file.c
+> +++ b/fs/debugfs/file.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/pm_runtime.h>
+>  #include <linux/poll.h>
+>  #include <linux/security.h>
+> +#include <linux/blktrace_api.h>
+>
+>  #include "internal.h"
+>
+> @@ -142,6 +143,12 @@ EXPORT_SYMBOL_GPL(debugfs_file_put);
+>   * Only permit access to world-readable files when the kernel is locked =
+down.
+>   * We also need to exclude any file that has ways to write or alter it a=
+s root
+>   * can bypass the permissions check.
+> + * Exception:
+> + * blktrace trace files are per-cpu relay files that are used by kernel =
+to
+> + * export IO metadata(IO events, type, target disk, offset and len etc.)=
+ to
+> + * userspace, no data from IO itself will be exported. These trace files=
+ have
+> + * permission 0400, but mmap is supported, so they are blocked by lockdo=
+wn.
+> + * Skip lockdown for these files to allow blktrace work in lockdown mode=
+.
+>   */
+>  static int debugfs_locked_down(struct inode *inode,
+>                                struct file *filp,
+> @@ -154,6 +161,9 @@ static int debugfs_locked_down(struct inode *inode,
+>             !real_fops->mmap)
+>                 return 0;
+>
+> +       if (blk_trace_is_tracefile(inode, real_fops))
+> +               return 0;
 
-Fixes: d065bd810b6d ("mm: retry page fault when blocking on disk transfer")
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
----
-Changes from v2 (https://lore.kernel.org/all/20230415000818.1955007-1-surenb@google.com/):
-- Updated comments per Matthew Wilcox and Peter Xu
+I think it would be a little more foolproof if we made the connection
+to lockdown a bit more explicit in the relay/blktrace code.  How about
+something like this here, borrowing your previously defined
+'is_relay_file()' function:
 
- mm/memory.c | 46 +++++++++++++++++++++++++++-------------------
- 1 file changed, 27 insertions(+), 19 deletions(-)
+  if (is_relay_file(real_fops) && relay_bypass_lockdown(inode, real_fops))
+    return 0;
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 01a23ad48a04..7ce9286ee4d4 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -5080,24 +5080,31 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
-  * updates.  However, note that the handling of PERF_COUNT_SW_PAGE_FAULTS should
-  * still be in per-arch page fault handlers at the entry of page fault.
-  */
--static inline void mm_account_fault(struct pt_regs *regs,
-+static inline void mm_account_fault(struct mm_struct *mm, struct pt_regs *regs,
- 				    unsigned long address, unsigned int flags,
- 				    vm_fault_t ret)
- {
- 	bool major;
- 
-+	/* Incomplete faults will be accounted upon completion. */
-+	if (ret & VM_FAULT_RETRY)
-+		return;
-+
- 	/*
--	 * We don't do accounting for some specific faults:
--	 *
--	 * - Unsuccessful faults (e.g. when the address wasn't valid).  That
--	 *   includes arch_vma_access_permitted() failing before reaching here.
--	 *   So this is not a "this many hardware page faults" counter.  We
--	 *   should use the hw profiling for that.
--	 *
--	 * - Incomplete faults (VM_FAULT_RETRY).  They will only be counted
--	 *   once they're completed.
-+	 * To preserve the behavior of older kernels, PGFAULT counters record
-+	 * both successful and failed faults, as opposed to perf counters,
-+	 * which ignore failed cases.
- 	 */
--	if (ret & (VM_FAULT_ERROR | VM_FAULT_RETRY))
-+	count_vm_event(PGFAULT);
-+	count_memcg_event_mm(mm, PGFAULT);
-+
-+	/*
-+	 * Do not account for unsuccessful faults (e.g. when the address wasn't
-+	 * valid).  That includes arch_vma_access_permitted() failing before
-+	 * reaching here. So this is not a "this many hardware page faults"
-+	 * counter.  We should use the hw profiling for that.
-+	 */
-+	if (ret & VM_FAULT_ERROR)
- 		return;
- 
- 	/*
-@@ -5180,21 +5187,22 @@ static vm_fault_t sanitize_fault_flags(struct vm_area_struct *vma,
- vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
- 			   unsigned int flags, struct pt_regs *regs)
- {
-+	/* If the fault handler drops the mmap_lock, vma may be freed */
-+	struct mm_struct *mm = vma->vm_mm;
- 	vm_fault_t ret;
- 
- 	__set_current_state(TASK_RUNNING);
- 
--	count_vm_event(PGFAULT);
--	count_memcg_event_mm(vma->vm_mm, PGFAULT);
--
- 	ret = sanitize_fault_flags(vma, &flags);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	if (!arch_vma_access_permitted(vma, flags & FAULT_FLAG_WRITE,
- 					    flags & FAULT_FLAG_INSTRUCTION,
--					    flags & FAULT_FLAG_REMOTE))
--		return VM_FAULT_SIGSEGV;
-+					    flags & FAULT_FLAG_REMOTE)) {
-+		ret = VM_FAULT_SIGSEGV;
-+		goto out;
-+	}
- 
- 	/*
- 	 * Enable the memcg OOM handling for faults triggered in user
-@@ -5223,8 +5231,8 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
- 		if (task_in_memcg_oom(current) && !(ret & VM_FAULT_OOM))
- 			mem_cgroup_oom_synchronize(false);
- 	}
--
--	mm_account_fault(regs, address, flags, ret);
-+out:
-+	mm_account_fault(mm, regs, address, flags, ret);
- 
- 	return ret;
- }
--- 
-2.40.0.634.g4ca3ef3211-goog
+... and in the relay code we would have something like this, borrowing
+from your logic in this patch, and using some shortcut-y pseudo-code:
 
+  bool relay_bypass_lockdown(struct inode *inode,
+                             const struct file_operations *fops)
+  {
+    struct rchan_buf *buf =3D inode->i_private;
+
+    if (buf->chan->cb->bypass_lockdown)
+      return buf->chan->cb->bypass_lockdown(inode);
+
+    return false;
+  }
+
+... where in the case of blktrace rchan_callbacks::bypass_lockdown
+would be a simple "true", assuming it is safe to do so (we need some
+ACKs from the blktrace folks):
+
+  bool blk_trace_bypass_lockdown(struct inode *inode)
+  {
+    return true;
+  }
+
+--=20
+paul-moore.com
