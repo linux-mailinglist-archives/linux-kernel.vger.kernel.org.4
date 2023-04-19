@@ -2,107 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37ADB6E7A76
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA3C6E7A77
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbjDSNRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 09:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54864 "EHLO
+        id S232976AbjDSNS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 09:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233378AbjDSNRS (ORCPT
+        with ESMTP id S232553AbjDSNS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 09:17:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6ED614472;
-        Wed, 19 Apr 2023 06:17:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 647ED63EF8;
-        Wed, 19 Apr 2023 13:17:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FAF6C433EF;
-        Wed, 19 Apr 2023 13:17:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681910235;
-        bh=iE7BNBBGCWRG/2DR7rqlRVpNkn0RTXZ5B8iTUcViCog=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zX7S8a/WgHEoKpcRqqD6SDeDIrdWec864eScvaqoe3B4l5rzaOPva3GpR+tItx9Db
-         pycPlfBlZB1rV6iU/axHMsT2835GsNywfyoZifIOZtiOnvrDp+GikxLn30HdeoXYbi
-         aDrifpdRkpLG+8RCUDsGP8a3JurjkXzvmsSLLCQg=
-Date:   Wed, 19 Apr 2023 15:17:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Conor.Dooley@microchip.com
-Cc:     stable@vger.kernel.org, hi@alyssa.is, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.2 000/138] 6.2.12-rc2 review
-Message-ID: <2023041957-sector-purposely-859f@gregkh>
-References: <20230419093655.693770727@linuxfoundation.org>
- <b6e0cc8b-eb4b-4906-9697-a1dab4741745@microchip.com>
+        Wed, 19 Apr 2023 09:18:26 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95327146F1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:18:24 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 13:18:22 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681910303;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lG275QBRVJan002C8Xh0HeJNh0LuXsL25ySfhtwE1d4=;
+        b=z4G35qYfijIAxaECBNy8UR/c1SSKfMThywbgqhhaB3vJpEV8nEIVLt3umusjewBTZochjF
+        IEhlwtP5sIM7IqA9BPrf/oCYuRe4Oid3oee/dh7opv4JZU3FUe0hycG3L7kSqibDU++X8f
+        s01oJREvZCHWDLDoY8yi+LivbmtM2061qXZC6qsENVlgrcB35IsNFXiDWKcbrVJGN+nLwp
+        dvAD//eFSHarlQ6ch7JDtuLBoOTmvYHr/FRMERJlPrLxNCIwqwUyaylxY8YWbZnxNsVX3c
+        EfRJxD4v+Qy1VuDtY/wqaiRhG/sflcYctDXGSdyNZsiHvvsMSo7Tc4tSTaY8VQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681910303;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lG275QBRVJan002C8Xh0HeJNh0LuXsL25ySfhtwE1d4=;
+        b=O/CBhoqR6UeuJulkMbofUrYh1TXVdeeDcp/bQDFI+wOwHJ1uo34WONFMo/L6Cq2xb9Gad4
+        tD90fQaVYbh+uyAg==
+From:   "irqchip-bot for Alain Volmat" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] irqchip/st: Remove stih415/stih416 and
+ stid127 platforms support
+Cc:     Alain Volmat <avolmat@me.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20230416190501.18737-1-avolmat@me.com>
+References: <20230416190501.18737-1-avolmat@me.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b6e0cc8b-eb4b-4906-9697-a1dab4741745@microchip.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <168191030239.404.849191030846628178.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 12:26:26PM +0000, Conor.Dooley@microchip.com wrote:
-> On 19/04/2023 10:40, Greg Kroah-Hartman wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > This is the start of the stable review cycle for the 6.2.12 release.
-> > There are 138 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Fri, 21 Apr 2023 09:36:26 +0000.
-> > Anything received after that time might be too late.
-> > 
-> > The whole patch series can be found in one patch at:
-> >          https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.12-rc2.gz
-> > or in the git tree and branch at:
-> >          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> > and the diffstat can be found below.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> 
-> > Alyssa Ross <hi@alyssa.is>
-> >      purgatory: fix disabling debug info
-> > 
-> > Heiko Stuebner <heiko.stuebner@vrull.eu>
-> >      RISC-V: add infrastructure to allow different str* implementations
-> 
-> Lore is ~dead for me right now, but there should be a custom backport of
-> Alyssa's commit, submitted by her, here:
-> https://lore.kernel.org/all/20230417134044.1821014-1-hi@alyssa.is/
-> 
-> Perhaps the reason is just the quantity of email, but that was
-> submitted against the "fail" email (and within a few hours), so why
-> was another commit pulled back instead of using what she provided?
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Ok, now both dropped, this got confusing fast.
+Commit-ID:     0989ffb31cff794506f5d3dd109574ddbb9b983a
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/0989ffb31cff794506f5d3dd109574ddbb9b983a
+Author:        Alain Volmat <avolmat@me.com>
+AuthorDate:    Sun, 16 Apr 2023 21:05:01 +02:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Wed, 19 Apr 2023 14:08:52 +01:00
 
-> > Alexandre Ghiti <alexghiti@rivosinc.com>
-> >      riscv: Do not set initial_boot_params to the linear address of the dtb
-> 
-> Same as 6.1.y, Alex said he'll provide a backport for the whole
-> series, so just drop this here too please.
+irqchip/st: Remove stih415/stih416 and stid127 platforms support
 
-Ok, will drop it from this tree too.
+Remove support for the already no more supported stih415 and stih416
+platforms.  Remove as well the stid127 platform which never made it
+up to the kernel.
 
-thanks for the quick review.
+Signed-off-by: Alain Volmat <avolmat@me.com>
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20230416190501.18737-1-avolmat@me.com
+---
+ drivers/irqchip/irq-st.c | 15 ---------------
+ 1 file changed, 15 deletions(-)
 
-greg k-h
+diff --git a/drivers/irqchip/irq-st.c b/drivers/irqchip/irq-st.c
+index 1b83512..819a122 100644
+--- a/drivers/irqchip/irq-st.c
++++ b/drivers/irqchip/irq-st.c
+@@ -15,10 +15,7 @@
+ #include <linux/regmap.h>
+ #include <linux/slab.h>
+ 
+-#define STIH415_SYSCFG_642		0x0a8
+-#define STIH416_SYSCFG_7543		0x87c
+ #define STIH407_SYSCFG_5102		0x198
+-#define STID127_SYSCFG_734		0x088
+ 
+ #define ST_A9_IRQ_MASK			0x001FFFFF
+ #define ST_A9_IRQ_MAX_CHANS		2
+@@ -45,21 +42,9 @@ struct st_irq_syscfg {
+ 
+ static const struct of_device_id st_irq_syscfg_match[] = {
+ 	{
+-		.compatible = "st,stih415-irq-syscfg",
+-		.data = (void *)STIH415_SYSCFG_642,
+-	},
+-	{
+-		.compatible = "st,stih416-irq-syscfg",
+-		.data = (void *)STIH416_SYSCFG_7543,
+-	},
+-	{
+ 		.compatible = "st,stih407-irq-syscfg",
+ 		.data = (void *)STIH407_SYSCFG_5102,
+ 	},
+-	{
+-		.compatible = "st,stid127-irq-syscfg",
+-		.data = (void *)STID127_SYSCFG_734,
+-	},
+ 	{}
+ };
+ 
