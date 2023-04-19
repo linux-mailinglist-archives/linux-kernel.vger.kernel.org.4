@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031CC6E837F
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC5286E837E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbjDSVUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 17:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
+        id S232712AbjDSVU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 17:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232748AbjDSVT4 (ORCPT
+        with ESMTP id S232716AbjDSVTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 17:19:56 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6CDA27E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:19:29 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id sz19so1753280ejc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:19:29 -0700 (PDT)
+        Wed, 19 Apr 2023 17:19:55 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE939773
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:19:28 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id c9so1777614ejz.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:19:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681939166; x=1684531166;
+        d=linaro.org; s=google; t=1681939168; x=1684531168;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AbreylAZiZx0MR8q7RqMTF0y34SxdXJDIuOtW2itW1w=;
-        b=cj6BH1lUn66fVNPgS4eB3Mg232JxY99ElnAGz4/ljGeKP+D8VPU4/8iFHgC3YVtIOt
-         T26O/d/dwRpO0HArH2HbToPJ9IOc+PZnm6dDGugmqserxvLkU+/7sBOkNHXlWbMmMPEz
-         8KwD44+3bo0EooBBu0tfc3vYBdTNt01tkgQ8wVQq/Yz5CQ/O4Pcseh+PUYzaI0vb1qo9
-         RMe5gLjOk/4TCE89fWY9TJ1yOdPJ1gEpaLN96s85+/BcfiCNO5gov19e07ok2IGN0a07
-         eqXIN1B4KLr71W1pzkz5eamtwBUmXJ0L29JATNwSP3kx608hRXCD9cQqYt5A81PL1I54
-         gr4g==
+        bh=MV3WWTI6GB2UlbmqWPXHYuAERKFaJ5yLwZ7zQAEmSCc=;
+        b=QxlvU7YjTqZ8QW0ZMYPidvVtlc+7O6BYyB2BdqZZD1mix5htxage567JHDqbj9qMP+
+         3UQb6/Y/Ef0SScm48Xw2nfs65zIXEJK38yBnEvUTZyHSsO6lopAc8D459ftN32D4p6eB
+         B1qOyipY1j3KwxvTq3t/VXn7Dv3LAjLr+ZcRkn3eIsXUNutZuAYIa8i1OsGzfqcuUCtj
+         Zj/BSkuHjQ2kfx9fSy2/r2EDoY4W0E/UUXirHS+KYiYLMdZb/Td/B5+k4tcVcrvXp5rg
+         VbLT0C+RCIC55uQPIuji9EtHGuKE0+UfVrjm6AZK8zkUM/CAPWsN/WHcg/tTbp/UPbK8
+         2wvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681939166; x=1684531166;
+        d=1e100.net; s=20221208; t=1681939168; x=1684531168;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AbreylAZiZx0MR8q7RqMTF0y34SxdXJDIuOtW2itW1w=;
-        b=lita9NTXgdnjaTpb1KvTKgm9FKsXiMFFefvXFju/uCm8FasuvfsprgXtNsASf4NHyf
-         Slg2vJq7TOSUJMINekUpCvP3X6vn+QiDIRS8YAn8PhSjD1934Ks2X0/RXkhOnx72b8hk
-         xaub3B4zs0khK2Bt4KMLqINh8oN0fBIQqLwEpBsImlqmauKjfU+VnedD6Z0j7YXvvJOi
-         c09XONuI3kkFuAkqzKdA1xnfVNWIlIvvcw1sRnG9KiF5HC+5C1T3Nqei+QvMzsuhMh5w
-         mCER2T8Wt+STRrtMrKcEvs944OEvCb4nCWRyGmAHNf0fV6PcdxbACbd9HR/jW3A3j9DP
-         5SJg==
-X-Gm-Message-State: AAQBX9eoohfq0QaHqEwBuaOslTyOW7QMj7fbOCDc9kpu8UBgzIg48d6x
-        gp0orY4qbOL1BbLbsG99bBCESg==
-X-Google-Smtp-Source: AKy350aNR3xVlVQs2+sqhApRA2xgROk+MQy/CH8WB3kmlSSVTDbvRBfIJB3owaakGaOj2lB01VOZZg==
-X-Received: by 2002:a17:906:c787:b0:931:624b:680c with SMTP id cw7-20020a170906c78700b00931624b680cmr14043844ejb.29.1681939166704;
-        Wed, 19 Apr 2023 14:19:26 -0700 (PDT)
+        bh=MV3WWTI6GB2UlbmqWPXHYuAERKFaJ5yLwZ7zQAEmSCc=;
+        b=fiGte8+LWKaoBCnzcIlGi3ytw4UEHrhfq95TqabAjLNYVEIHNsS8kWg0OZ/dl57AiR
+         fiY4/CM0MEZdaLOPYxvx1g4ASUAMioNiXsv/VcXtqR+MZRyXBtO4xlry/bwI9aCJdWUU
+         HLY4+5Z+I7xaYGU7uRjqCk8HYQYVI6KsvwbxF/yS/nu4EDqEIdtkmMl9moAnS8Y6/Rnd
+         fH1s78JTmXC5dCzqOg+a8yyxAX94uamcX9W6XcLh0UvZ2UGg3Bjq0vZH+xtBWIQUTl6/
+         ubwy0RmVid1DIcxCTDJOgaVpoIGZ+q3/97faCEh1Aynd1F+pOGYLTt+F9A/deeB/xlvz
+         TNkA==
+X-Gm-Message-State: AAQBX9dj9scsu2x9inUPSPg3hbKhNoly8TURBe5tU4qcm8ZFfOyAE2Md
+        t9u8Y4NgrPeO1KwhblTPYs+n/w==
+X-Google-Smtp-Source: AKy350Yu+/VW8kcGPFu+/SVJmKIcHBwblGAu941DbwWayz8Fd8HeeRYZBIXGajjbluqejjup52JZpw==
+X-Received: by 2002:a17:906:a84:b0:94f:62a2:d1ab with SMTP id y4-20020a1709060a8400b0094f62a2d1abmr12495900ejf.63.1681939168162;
+        Wed, 19 Apr 2023 14:19:28 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:976c:1d6c:6ed0:8935])
-        by smtp.gmail.com with ESMTPSA id a12-20020a17090682cc00b0094f109a5b3asm7092739ejy.135.2023.04.19.14.19.25
+        by smtp.gmail.com with ESMTPSA id a12-20020a17090682cc00b0094f109a5b3asm7092739ejy.135.2023.04.19.14.19.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 14:19:26 -0700 (PDT)
+        Wed, 19 Apr 2023 14:19:27 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -77,9 +77,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 17/18] arm64: dts: qcom: sm8550: correct pinctrl unit address
-Date:   Wed, 19 Apr 2023 23:18:55 +0200
-Message-Id: <20230419211856.79332-17-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 18/18] arm64: dts: qcom: sdm845-polaris: add missing touchscreen child node reg
+Date:   Wed, 19 Apr 2023 23:18:56 +0200
+Message-Id: <20230419211856.79332-18-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230419211856.79332-1-krzysztof.kozlowski@linaro.org>
 References: <20230419211856.79332-1-krzysztof.kozlowski@linaro.org>
@@ -95,29 +95,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Match unit-address to reg entry to fix dtbs W=1 warnings:
+Add missing reg property to touchscreen child node to fix dtbs W=1 warnings:
 
-  Warning (simple_bus_reg): /soc@0/pinctrl@f000000: simple-bus unit address format error, expected "f100000"
+  Warning (unit_address_vs_reg): /soc@0/geniqup@ac0000/i2c@a98000/touchscreen@20/rmi4-f12@12: node has a unit name, but no reg or ranges property
 
-Fixes: ffc50b2d3828 ("arm64: dts: qcom: Add base SM8550 dtsi")
+Fixes: be497abe19bf ("arm64: dts: qcom: Add support for Xiaomi Mi Mix2s")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8550.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-index 90d2b7057b75..eef46045df93 100644
---- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-@@ -2883,7 +2883,7 @@ spmi_bus: spmi@c400000 {
- 			#interrupt-cells = <4>;
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+index 8ae0ffccaab2..576f0421824f 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+@@ -483,6 +483,7 @@ rmi4-f01@1 {
  		};
  
--		tlmm: pinctrl@f000000 {
-+		tlmm: pinctrl@f100000 {
- 			compatible = "qcom,sm8550-tlmm";
- 			reg = <0 0x0f100000 0 0x300000>;
- 			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+ 		rmi4-f12@12 {
++			reg = <0x12>;
+ 			syna,rezero-wait-ms = <0xc8>;
+ 			syna,clip-x-high = <0x438>;
+ 			syna,clip-y-high = <0x870>;
 -- 
 2.34.1
 
