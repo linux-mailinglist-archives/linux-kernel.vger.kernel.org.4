@@ -2,119 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D71A6E83E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 281126E83E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 23:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbjDSVl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 17:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S229957AbjDSVmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 17:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjDSVlu (ORCPT
+        with ESMTP id S229700AbjDSVmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 17:41:50 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5467126AC;
-        Wed, 19 Apr 2023 14:41:49 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B751B21C2059;
-        Wed, 19 Apr 2023 14:41:48 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B751B21C2059
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1681940508;
-        bh=IXjbGEskcNTff4+aJt5LnXLwyuaiOG5Sy+TvmAmP5hs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bJWkt+4FpnNq6+JLhnjsXDtJlA0zm0JkaqCOonqtFKcGZIYkgg0C8SxZ5tcEjfr0L
-         V4Dd419sNbn43J6DhSBZC0vHhJSwfFACAxI/OWHRHTeoixg2aE8X3Gp5SDuA4li4u5
-         4FzMs6X6Ae+YS7FeVgLyDr6UUEYL9hx2eO/e203s=
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org,
-        dcook@linux.microsoft.com, alanau@linux.microsoft.com
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: [PATCH 2/2] tracing: Fix print_fields() for __dyn_loc/__rel_loc
-Date:   Wed, 19 Apr 2023 14:41:40 -0700
-Message-Id: <20230419214140.4158-3-beaub@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230419214140.4158-1-beaub@linux.microsoft.com>
-References: <20230419214140.4158-1-beaub@linux.microsoft.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 19 Apr 2023 17:42:51 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F3A1725
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:42:50 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id j6-20020a255506000000b00b8ef3da4acfso732277ybb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 14:42:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681940569; x=1684532569;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QFk3NDBSTwsf46CD7CCGYv7KNF2ituHS8Syu4/I42IA=;
+        b=TPgvQQOkU7C2IRDFXO2Tvb+o3vbeurUDCo89PNRoJ/gyh72TudRR0kGvTkOq3PQm9A
+         Ob9WhzlHTolqp5jZXt4a7hkm94lP1ZCmFvJmcvt0kY8bRusXEIX9d/5yzrY+einBMbmu
+         92fYGg1HYNxxfshZOhEhN/kxGSvu8t1iieJ++fQnHirs2D5ZapN169j9F0FF4vJurc77
+         5NPUxkVYTs79DNn7fuH8OI08RQmVHO2aqIy3o2jRaxrJMleK7GILIwGDxYHkvAIFavIQ
+         RAQGVO8Z2wvdu/ZAFyfPskTFnsip01GZabhZBk30P09egUdANl1+rCu+MUaYKcBjyNUL
+         SBLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681940569; x=1684532569;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QFk3NDBSTwsf46CD7CCGYv7KNF2ituHS8Syu4/I42IA=;
+        b=Js6YhdBy7E+oJT1Uxhij/RuXpOApdJdEaVEYHk4a7l5YHtRFLV5NVoEILRCcU6h2GI
+         CDDy0tlgmy3msS/0rtZjw892knPosVuve+4eONH0eNh6FvrtABz5M7KdfVHebngEApGl
+         zXbBoEu0R4imIURpKGU4S09ejrTz3KlDGS3ZOLBoUgzQ2VUsU62i3XYPYrDJQiSeT6Qz
+         c1B7ibcpv8suLuqJY5h002wTirNDnR9dggD62z+pPlSjuh6Qn96cjmyjuFUyR6iXZCKG
+         jeWLCKe3hZxp7UjnTJ/4nbJg4+u7NAsnVIWaNLr2qnle6kvGdCjVc6zuI6NyQgb8iwLl
+         G2Aw==
+X-Gm-Message-State: AAQBX9eeJGmkWdHlHv4rC36LwDGfh3Xq4/IUyV/p69NDvnYdoZdWgyAP
+        v+zu8Pi45cHgZ9qZ1C+MrfE66C59YMyhSpVS4bu4HOYAcd5QPlZDbXt5+xacn0PsA3OQ/QDEe90
+        z/mXMx0u5CdfuiwbhQsMrHnrtEzBiGPP6zcvE9LZuO8bfJBoYybTOR5dKq31Wfv0yvA+S5Oou
+X-Google-Smtp-Source: AKy350YVZv81Nrxp+WJlpAyKa/Em9olmxGhYDjV93fytvetbi9F+mIB8l59ihAsXgroqIA9LNGe7HP0GcMTu
+X-Received: from uluru3.svl.corp.google.com ([2620:15c:2d4:203:393f:d33d:fa63:7e9])
+ (user=eranian job=sendgmr) by 2002:a81:4426:0:b0:54f:ae82:3f92 with SMTP id
+ r38-20020a814426000000b0054fae823f92mr2823318ywa.2.1681940569271; Wed, 19 Apr
+ 2023 14:42:49 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 14:42:41 -0700
+Message-Id: <20230419214241.2310385-1-eranian@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Subject: [PATCH] perf/x86/intel/uncore: add events for Intel SPR IMC PMU
+From:   Stephane Eranian <eranian@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     peterz@infradead.org, kan.liang@intel.com, ak@linux.intel.com,
+        namhyung@kernel.org, irogers@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both print_fields() and print_array() do not handle if dynamic data ends
-at the last byte of the payload for both __dyn_loc and __rel_loc field
-types. For __rel_loc, the offset was off by 4 bytes, leading to
-incorrect strings and data being printed out. In print_array() the
-buffer pos was missed from being advanced, which results in the first
-payload byte being used as the offset base instead of the field offset.
+Add missing clockticks and cas_count_* events for Intel SapphireRapids IMC
+PMU. These events are useful to measure memory bandwidth.
 
-Advance __rel_loc offset by 4 to ensure correct offset and advance pos
-to the field offset to ensure correct data is displayed when printing
-arrays. Change >= to > when checking if data is in-bounds, since it's
-valid for dynamic data to include the last byte of the payload.
-
-Example outputs for event format:
-        field:unsigned short common_type;       offset:0;       size:2; signed:0;
-        field:unsigned char common_flags;       offset:2;       size:1; signed:0;
-        field:unsigned char common_preempt_count;       offset:3;       size:1; signed:0;
-        field:int common_pid;   offset:4;       size:4; signed:1;
-
-        field:__rel_loc char text[];  offset:8;      size:4; signed:1;
-
-Output before:
-tp_rel_loc: text=<OVERFLOW>
-
-Output after:
-tp_rel_loc: text=Test
-
-Fixes: 80a76994b2d8 ("tracing: Add "fields" option to show raw trace event fields")
-Reported-by: Doug Cook <dcook@linux.microsoft.com>
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+Signed-off-by: Stephane Eranian <eranian@google.com>
 ---
- kernel/trace/trace_output.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ arch/x86/events/intel/uncore_snbep.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index 780c6971c944..952cc8aa8e59 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -819,13 +819,15 @@ static void print_array(struct trace_iterator *iter, void *pos,
- 	len = *(int *)pos >> 16;
+diff --git a/arch/x86/events/intel/uncore_snbep.c b/arch/x86/events/intel/uncore_snbep.c
+index 7d1199554fe3..fa9b209a11fa 100644
+--- a/arch/x86/events/intel/uncore_snbep.c
++++ b/arch/x86/events/intel/uncore_snbep.c
+@@ -6068,6 +6068,17 @@ static struct intel_uncore_ops spr_uncore_mmio_ops = {
+ 	.read_counter		= uncore_mmio_read_counter,
+ };
  
- 	if (field)
--		offset += field->offset;
-+		offset += field->offset + sizeof(int);
- 
--	if (offset + len >= iter->ent_size) {
-+	if (offset + len > iter->ent_size) {
- 		trace_seq_puts(&iter->seq, "<OVERFLOW>");
- 		return;
- 	}
- 
-+	pos = (void *)iter->ent + offset;
++static struct uncore_event_desc spr_uncore_imc_events[] = {
++	INTEL_UNCORE_EVENT_DESC(clockticks,      "event=0x01,umask=0x00"),
++	INTEL_UNCORE_EVENT_DESC(cas_count_read,  "event=0x05,umask=0xcf"),
++	INTEL_UNCORE_EVENT_DESC(cas_count_read.scale, "6.103515625e-5"),
++	INTEL_UNCORE_EVENT_DESC(cas_count_read.unit, "MiB"),
++	INTEL_UNCORE_EVENT_DESC(cas_count_write, "event=0x05,umask=0xf0"),
++	INTEL_UNCORE_EVENT_DESC(cas_count_write.scale, "6.103515625e-5"),
++	INTEL_UNCORE_EVENT_DESC(cas_count_write.unit, "MiB"),
++	{ /* end: all zeroes */ },
++};
 +
- 	for (i = 0; i < len; i++, pos++) {
- 		if (i)
- 			trace_seq_putc(&iter->seq, ',');
-@@ -861,9 +863,9 @@ static void print_fields(struct trace_iterator *iter, struct trace_event_call *c
- 			len = *(int *)pos >> 16;
+ static struct intel_uncore_type spr_uncore_imc = {
+ 	SPR_UNCORE_COMMON_FORMAT(),
+ 	.name			= "imc",
+@@ -6075,6 +6086,7 @@ static struct intel_uncore_type spr_uncore_imc = {
+ 	.fixed_ctr		= SNR_IMC_MMIO_PMON_FIXED_CTR,
+ 	.fixed_ctl		= SNR_IMC_MMIO_PMON_FIXED_CTL,
+ 	.ops			= &spr_uncore_mmio_ops,
++	.event_descs		= spr_uncore_imc_events,
+ };
  
- 			if (field->filter_type == FILTER_RDYN_STRING)
--				offset += field->offset;
-+				offset += field->offset + sizeof(int);
- 
--			if (offset + len >= iter->ent_size) {
-+			if (offset + len > iter->ent_size) {
- 				trace_seq_puts(&iter->seq, "<OVERFLOW>");
- 				break;
- 			}
+ static void spr_uncore_pci_enable_event(struct intel_uncore_box *box,
 -- 
-2.25.1
+2.40.0.634.g4ca3ef3211-goog
 
