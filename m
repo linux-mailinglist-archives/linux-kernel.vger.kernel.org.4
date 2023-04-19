@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08626E7166
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3B36E7167
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbjDSDET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 23:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
+        id S231538AbjDSDE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 23:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbjDSDEP (ORCPT
+        with ESMTP id S231393AbjDSDEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 23:04:15 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654051999;
-        Tue, 18 Apr 2023 20:04:12 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6a5f765d595so881801a34.0;
-        Tue, 18 Apr 2023 20:04:12 -0700 (PDT)
+        Tue, 18 Apr 2023 23:04:20 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9CCDA;
+        Tue, 18 Apr 2023 20:04:18 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-38e0a003abdso938935b6e.3;
+        Tue, 18 Apr 2023 20:04:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681873451; x=1684465451;
+        d=gmail.com; s=20221208; t=1681873458; x=1684465458;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vqy9obDZIsKYRaRdBaeKmhCuZAq4kt0Nx5h/9mD9nOE=;
-        b=A64I/55zfIX2eYL+tHsfpsyxyfgA2xV5F3MS0SNYQswNukj4eB6KIIlmgLRfpcAqU9
-         pR7BuUAgrPi44s5prY4B4GzdMpWASzgt2JzlE0suzXJtxqjwesWGcQdy8oTB0BG+uGBg
-         jxB8F/ss4HIxsiYf8jhyP0jbY3FL/Ovynxka2eXx5KZggmGXr77mhxUv/jMl52FRWO8P
-         esSVv+kauIhzSA/V3sPnW9wABzFQHh5DhRa8x61okbcHMm89ewhC8O4COCJfONREw/CI
-         I2cpqev2uPqgFeQzXmXSo6C9gBZyE6x66oXlT5fyI7TsTrRMQLd9+LxUWjJICRY7Zkoa
-         dg2A==
+        bh=BZz6i90ANSJNgGgyhyyDzRsyGMboVoftdzyUn+nlq38=;
+        b=f1Ju3t7tMOnR01DfyqMznkIKJVQ0iTwOqES2zUGkyyOdIsYbY1wU/rNCN76G6sh8cj
+         XUdolT6KDcC1fL+mM+f55MW1PTfIWVHP0asirXp0i//JnmMiicUMNgQ4EtCxVRXus5t3
+         kBwiCIyBMXpEvao3Gg2qztOANNJ0hvPW0oOTXbDVTz6AACvap3SCaEitTVmmnimRA7Ep
+         iqkFwe6DfReOwdV+ctY5rW5C3Jw3pwBTahptLcwcibjGf1KhP7M6SXnqV8U5Xxd6JU6K
+         ZtX7lsgLv1haHU9tT0HDQJ9cqB2wZfcDHJF0+ZhMcbCk14UsdaWvguqKwTj8tOeCmYxd
+         68ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681873451; x=1684465451;
+        d=1e100.net; s=20221208; t=1681873458; x=1684465458;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vqy9obDZIsKYRaRdBaeKmhCuZAq4kt0Nx5h/9mD9nOE=;
-        b=K9BJvsTokXuFzzqPNmvSmNKrgJ6A76NM8vS4h3kEeRZbOM3N8KmHqgD4mFIoxJNw+x
-         IHQy0xIfwwtgqpHy3/34vDOdpKSdPcMro98HX6dVW0uUPG/G/bx917FCFSsJLGe5d4Ek
-         RgccERxRlgayLVuplSdMbwf1z0t7I+yzUv01qXmrIiOUotSZhVN/CCQGbx0uX4c4lQ6M
-         oDKT8vLcvf2BMmbO/SwvffNzOhLOJ4lT02orKORttWyvIOWwgOWjcWD6KYmUAK9IP+tm
-         h64AfzIVp+Y2bm9fL1yWJrXhuPfqtvqXUnjQUt+T/bn2m+yPKVq+COdAPUdzlaNu8eHL
-         O9Qw==
-X-Gm-Message-State: AAQBX9d9rt215JX4m6ogMSzPlbA9tDzXKOV5eCoWdcUm/Cvu20eHabzV
-        lmVUK6faoXViYnoaebZz6vDU/l+Et2E=
-X-Google-Smtp-Source: AKy350YFiI0NAWpwFzIrAkC63w04jgUXNL65RJ+sEzA6dY6uIMTvDW8Is0ssPCsKpreiaWSlI48ExQ==
-X-Received: by 2002:a05:6830:4da:b0:6a5:f6f6:4ebf with SMTP id s26-20020a05683004da00b006a5f6f64ebfmr2356875otd.37.1681873451795;
-        Tue, 18 Apr 2023 20:04:11 -0700 (PDT)
+        bh=BZz6i90ANSJNgGgyhyyDzRsyGMboVoftdzyUn+nlq38=;
+        b=ix7OJ/8dWQQs3CfH8mJHptYSJt2dIX9bzClqJhpzfcWGXPDEEnMfanjBUgkwcz22qS
+         c08Gv5eumkztxWbFcmVTznhDAGOFBNWCsRAK0VcVRME5zynF6Ek+satHi8nk+fAcWGBq
+         bXFUXeW4329mu7xfeWnQFSzhIGdghRRl3ZvicmTr6jmw4mTEeUnr1ikAhf2dO0U2QQqs
+         9dWElJ4PwXvI2bOW9s0VKv8YfYer7ZUWq3Uz/JJoMip9NjWDgK65sj26HLaPL0A78fv2
+         Tfrx4RL0uixMAiav2dcYGnP92mf3XZQ01THuJDoGv3JshCt3jdN/R9lr5GDq7+78LKsT
+         /2VQ==
+X-Gm-Message-State: AAQBX9cil8pIet+svnw1gqKnzGis+mshHaYNctNaXW1v+Ut9kyKIe35G
+        76o+CMq+rPP+EU4H/n6HzW0=
+X-Google-Smtp-Source: AKy350YIz34xLTEyr0mRlCYOMVaBn45XWhTy9z47u+61z8vbKc8AvNm/axZZabVX4nZ/QjP+YZgneA==
+X-Received: by 2002:a54:4386:0:b0:38b:e6:3d95 with SMTP id u6-20020a544386000000b0038b00e63d95mr2002371oiv.40.1681873457848;
+        Tue, 18 Apr 2023 20:04:17 -0700 (PDT)
 Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id v16-20020a05683011d000b0069457b86060sm6391395otq.47.2023.04.18.20.04.08
+        by smtp.gmail.com with ESMTPSA id bo34-20020a05680822a200b0038e29fb9ac9sm1533969oib.44.2023.04.18.20.04.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 20:04:11 -0700 (PDT)
-Message-ID: <d96b061f-737c-5f8c-0856-47faa3852074@gmail.com>
-Date:   Tue, 18 Apr 2023 23:51:34 -0300
+        Tue, 18 Apr 2023 20:04:17 -0700 (PDT)
+Message-ID: <1a52e123-3cda-83cb-64ee-580b306badb7@gmail.com>
+Date:   Tue, 18 Apr 2023 23:51:52 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 1/3] rust: alloc: clarify what is the upstream version
+Subject: Re: [PATCH 2/3] rust: arc: fix intra-doc link in `Arc<T>::init`
 Content-Language: en-US
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -70,9 +70,9 @@ Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev
 References: <20230418214347.324156-1-ojeda@kernel.org>
- <20230418214347.324156-2-ojeda@kernel.org>
+ <20230418214347.324156-3-ojeda@kernel.org>
 From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230418214347.324156-2-ojeda@kernel.org>
+In-Reply-To: <20230418214347.324156-3-ojeda@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,30 +86,36 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 4/18/23 18:43, Miguel Ojeda wrote:
-> It may be unclear for readers which upstream Rust version these files
-> are based on. They may be unaware that they are intended to match the
-> minimum (and only, so far) supported version of Rust in the kernel.
+> `Arc<T>::init` refers to `Arc<T>::pin_init` via an intra-doc link
+> using the text `pin_init`, rather than more explicitly, which makes
+> `rustdoc` point it to the `pin_init!` macro instead.
 > 
-> Thus clarify it.
+> This is required for the compiler upgrade since the newer `rustdoc`
+> would trigger the `broken_intra_doc_links` lint [1], but in this case
+> the macro was not the intended target to begin with, and so the actual
+> fix is to make it point to the right place, regardless of the upgrade.
 > 
+> Thus make it more explicit.
+> 
+> Fixes: 92c4a1e7e81c ("rust: init/sync: add `InPlaceInit` trait to pin-initialize smart pointers")
+> Link: https://github.com/rust-lang/rust/issues/106142 [1]
 > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 > ---
->  rust/alloc/README.md | 3 +++
->  1 file changed, 3 insertions(+)
+>  rust/kernel/sync/arc.rs | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/rust/alloc/README.md b/rust/alloc/README.md
-> index c89c753720b5..eb6f22e94ebf 100644
-> --- a/rust/alloc/README.md
-> +++ b/rust/alloc/README.md
-> @@ -10,6 +10,9 @@ upstream. In general, only additions should be performed (e.g. new
->  methods). Eventually, changes should make it into upstream so that,
->  at some point, this fork can be dropped from the kernel tree.
+> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> index e6d206242465..1b0734fdf6a7 100644
+> --- a/rust/kernel/sync/arc.rs
+> +++ b/rust/kernel/sync/arc.rs
+> @@ -185,7 +185,7 @@ impl<T> Arc<T> {
 >  
-> +The Rust upstream version on top of which these files are based matches
-> +the output of `scripts/min-tool-version.sh rustc`.
-> +
->  
->  ## Rationale
->  
+>      /// Use the given initializer to in-place initialize a `T`.
+>      ///
+> -    /// This is equivalent to [`pin_init`], since an [`Arc`] is always pinned.
+> +    /// This is equivalent to [`Arc<T>::pin_init`], since an [`Arc`] is always pinned.
+>      #[inline]
+>      pub fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
+>      where
 
 Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
