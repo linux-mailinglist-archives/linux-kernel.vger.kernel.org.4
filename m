@@ -2,99 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67476E799C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA746E7997
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbjDSMWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
+        id S232417AbjDSMWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233252AbjDSMW1 (ORCPT
+        with ESMTP id S233269AbjDSMWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:22:27 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D69E173B;
-        Wed, 19 Apr 2023 05:22:23 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id n17so12541377pln.8;
-        Wed, 19 Apr 2023 05:22:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681906943; x=1684498943;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cvi/8BFVMUmJHt4WjuHDaXoszJBRcvvbnSWyynNb4dw=;
-        b=M3A9a6WtOWXdYHHcfybW8ymSEnpEjD5R0HfAB1fZbrJ4eb18z3BbaIQkiZch+E3XFN
-         gtImBttegWoB8LCoLFNJDhiiSl267YU1V1Nsc33I4Y18p03z0gGfjf/VdKUhfjZcBXD5
-         aq+woQSFxs2Vu2JdQq610eO1TMJ0DviQoiqjfPoAGc/JAkBZ7fiCJzgpbt/FhH5BE7Zm
-         0vjqLsxUHKPd4lYUtp5GXOSKExiXmujz3dv9bAp68j4aoXlww1GZg/PJ3faT06bwcuTO
-         4QQaNsK1vvXfQuNxUKLhbD5rkeXzfHeIk527XpKrudr38a8q5hrfpyRQWEWtLb0bfx1u
-         1w9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681906943; x=1684498943;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Cvi/8BFVMUmJHt4WjuHDaXoszJBRcvvbnSWyynNb4dw=;
-        b=dEL2psCi52nerBPpJYJmIxPgx4rE5Yxnrg5tG/AJ3kCpo6QcLIvlAl4Qh1n/O4ovt9
-         yKThd1Cx0Ae/te8Bnkd4XqAe3E/DkA6tEhs7tC3tuNhjN48zvS/ajx87dI/H4aNVPfyA
-         Jtdg9UzInBsY4/ZbO/e6OBQ7P2FkVNZRM1spev9goItJg0WXf5zblHh/jog3ftH+wgvm
-         NltPyCTgp/TbHPKgd+aGZjpBc9mFMtfa1cl1u14B91ZPj35pYmJsXF8DSw4fkW4fydAx
-         6RSeuCPzrxkwHtN65SWU9lb67PIoNCNEHu/9+CpW8u/f9CdHgr8I7L2+EQU1D0x7MEmp
-         H51Q==
-X-Gm-Message-State: AAQBX9c4EgsfXqzZqB08brvB89AOzmR2lw54/nYnoldFZW3jJHFme5yB
-        wtszhiHzQYdlkzoG+nEz+zs=
-X-Google-Smtp-Source: AKy350YunIiQ3rSxoOx6P/gwromJ6KqxNFKy+BHVTeuXJi6xVHlbz9D1gBHrAJqbGAdA5qNa2rmVAg==
-X-Received: by 2002:a05:6a20:3d1a:b0:ee:7694:f069 with SMTP id y26-20020a056a203d1a00b000ee7694f069mr3643470pzi.41.1681906942789;
-        Wed, 19 Apr 2023 05:22:22 -0700 (PDT)
-Received: from hackyzh-virtual-machine.localdomain ([112.64.53.154])
-        by smtp.gmail.com with ESMTPSA id ft2-20020a17090b0f8200b002471f34d5ddsm1279106pjb.55.2023.04.19.05.22.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 05:22:22 -0700 (PDT)
-From:   hackyzh002 <hackyzh002@gmail.com>
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, sumit.semwal@linaro.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, hackyzh002 <hackyzh002@gmail.com>
-Subject: [PATCH V3 1/2] drm/radeon: Fix integer overflow in radeon_cs_parser_init
-Date:   Wed, 19 Apr 2023 20:20:58 +0800
-Message-Id: <20230419122058.3420-1-hackyzh002@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 19 Apr 2023 08:22:05 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116E8AF16;
+        Wed, 19 Apr 2023 05:22:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=3727NmUMcKOHnmbIl6QjHpZThXQiWOr0LA3853eLbMg=; b=3T/f3TbTMdCCzOrAy1sR3I9Kc2
+        iqMNzM2wINtFVJNS0zpfAQ4CErijw2EarjY/Yjat2KYowuB1YVh+09gJbHkivukwc05RFrVW34wnP
+        yEL0SYDO0t4D9AkEOirxtCSZ3tCrcbQrDRTCStdxCLArR6nV/FnBZANc8pE+1vKILJDs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pp6oo-00Ah50-L1; Wed, 19 Apr 2023 14:21:50 +0200
+Date:   Wed, 19 Apr 2023 14:21:50 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH v7 00/16] net: Add basic LED support for
+ switch/phy
+Message-ID: <0501856b-2db7-4a7d-803d-ba18682d6a6c@lunn.ch>
+References: <20230417151738.19426-1-ansuelsmth@gmail.com>
+ <20230418212746.7db8096e@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418212746.7db8096e@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The type of size is unsigned, if size is 0x40000000, there will be an
-integer overflow, size will be zero after size *= sizeof(uint32_t),
-will cause uninitialized memory to be referenced later
+> IIRC we were supposed to take these via netdev with acks from Pavel/Lee.
+> So we need acks on patches 4/5/16 ? If there is a repost, could you
+> take out the arch/arm patches? They should not go via netdev, we'll try
+> to filter them out when applying but mistakes happen.
 
-Signed-off-by: hackyzh002 <hackyzh002@gmail.com>
----
- drivers/gpu/drm/radeon/radeon_cs.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Ah, mute point now, the whole patchset has been merged.
 
-diff --git a/drivers/gpu/drm/radeon/radeon_cs.c b/drivers/gpu/drm/radeon/radeon_cs.c
-index 46a27ebf4..a6700d727 100644
---- a/drivers/gpu/drm/radeon/radeon_cs.c
-+++ b/drivers/gpu/drm/radeon/radeon_cs.c
-@@ -270,7 +270,8 @@ int radeon_cs_parser_init(struct radeon_cs_parser *p, void *data)
- {
- 	struct drm_radeon_cs *cs = data;
- 	uint64_t *chunk_array_ptr;
--	unsigned size, i;
-+	u64 size;
-+	unsigned i;
- 	u32 ring = RADEON_CS_RING_GFX;
- 	s32 priority = 0;
- 
--- 
-2.34.1
-
+    Andrew
