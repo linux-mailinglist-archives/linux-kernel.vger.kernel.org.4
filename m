@@ -2,191 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75686E754A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F2A6E7546
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232470AbjDSIdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
+        id S232532AbjDSIda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbjDSIdk (ORCPT
+        with ESMTP id S232288AbjDSId3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:33:40 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74AA5FFB
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:33:37 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230419083336epoutp03105d4e31f46dc62e8051780324782192~XSPgRppdx0417104171epoutp038
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:33:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230419083336epoutp03105d4e31f46dc62e8051780324782192~XSPgRppdx0417104171epoutp038
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1681893216;
-        bh=XHsuNadn/iE+cawL88J/SImnpBIjMhhL21nKEUAkdKw=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=DH7uRPtjdVX/AivSySeK1cxSyw5mFnrPpCEwzR0sY0an+k8CfzrDaY4T546eHT2zZ
-         nX0gM+hNPFCsO0gF1DTtCvc+79PfC4a4fyNhYqFWG2UjreLZ7uBfLnrOsem99yic0n
-         4y03EwsK1J9WD1JkUQdPaIs1cFNToBjx+tKXdZ0o=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20230419083335epcas2p3133e8d63f365867470d38694ee548943~XSPf4lDkH2053320533epcas2p3H;
-        Wed, 19 Apr 2023 08:33:35 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.99]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Q1YwH2Tpdz4x9Q7; Wed, 19 Apr
-        2023 08:33:35 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        07.BA.09650.F57AF346; Wed, 19 Apr 2023 17:33:35 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230419083334epcas2p14d892bba96a6df17cc32c703c4bd88cf~XSPfHb4zD0854008540epcas2p17;
-        Wed, 19 Apr 2023 08:33:34 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230419083334epsmtrp2ec035a3e0fcd7ddb304f03a1fe73b89f~XSPfGp4Lc1076410764epsmtrp2U;
-        Wed, 19 Apr 2023 08:33:34 +0000 (GMT)
-X-AuditID: b6c32a48-5dcdca80000025b2-c0-643fa75f1f35
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5D.44.08279.E57AF346; Wed, 19 Apr 2023 17:33:34 +0900 (KST)
-Received: from [10.229.8.168] (unknown [10.229.8.168]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230419083334epsmtip1427e90ec286d845a0cffd3bb2ac6aa2c~XSPe55g2e0549305493epsmtip1F;
-        Wed, 19 Apr 2023 08:33:34 +0000 (GMT)
-Message-ID: <e29c3c88-e487-75da-662b-6720a1ef1dc6@samsung.com>
-Date:   Wed, 19 Apr 2023 17:31:10 +0900
+        Wed, 19 Apr 2023 04:33:29 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82CFCE
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:33:26 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id l13so6882016uan.10
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681893205; x=1684485205;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TFh8cKtmQeLzdNqi85aci1KA8iIgD65gwTL6N4mvUb4=;
+        b=bQfRm00TH335URMWMoIjUAnRVREHVpYBP5fzrRr2WpfOwN1TgW1GKkHzAMlacfepea
+         SCBUZRbUt587K6Vtuz5woZ6IKg0vEyy0mT7SmCTjNkdwKQb33cE5FQsv4hQv8WO7M65s
+         XOtV8Lj0kFMVi3yNlEhGHuzXrwgYuHQmWhyud8dckS+lNdzpTe5aAAp94YcJzA6LCoeA
+         oXFA56Qwo+PmpNv2trpwRsM/1wEISKkFIvkofQL/QkLGU6uUpgge9Uajz7kbsBg6Kc+/
+         VgqlAQHRU9B/5J7t7C0haLx8PXj6qmh0EBW/0UKPiodL5A+k1FrySaqprMviSljrLQ3O
+         q2Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681893205; x=1684485205;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TFh8cKtmQeLzdNqi85aci1KA8iIgD65gwTL6N4mvUb4=;
+        b=IJuhKMUCk2yy2DtAV/MNsYpIUS1tASYVynMzeMOpuIdWHmHWk0IHgg3gCgmAQcBGjg
+         dcW6O2+DMlZX5qdo1i6w8w410kSpAuRUSfQ67XbvaJWIxuxb4TwwhIrZxs2Mx5y3i2O1
+         6qOviqSHWId2vJxoNRUo3Lh2YfirRbz8oSgVqDwOg5xmWb/yG29kUEmLsPQtXibsl93M
+         PGLV6jscs/xvP39m4H7bYkRhqY51HSB4wdYPDMqynok2un7FkrtjYL6OdLYUFTWUqWxr
+         TWpqpeTbfRydp+ORhVB0hcxaEGuhb6JJoxNJ26TXkcxtqSOultX05XEOcrP0P0CxH2zS
+         Y2DQ==
+X-Gm-Message-State: AAQBX9e5g3EezLaN7pujScgPZ1r8MI3n1cZ4htxdktlyWJgOQAt8lC76
+        FXjpqCFc90yA3XV2XLtFH+gULj9KOsh+k/xR3Yzzww==
+X-Google-Smtp-Source: AKy350aCAj0CmufVadvfZKn2S5DZRP2Jm81ER6UwRvOh7xB9fgGw8ImZRwGXf0ybp4mARVbrEA1jcZXOXojFkttjavs=
+X-Received: by 2002:a1f:5c43:0:b0:440:3629:846 with SMTP id
+ q64-20020a1f5c43000000b0044036290846mr7225925vkb.2.1681893205569; Wed, 19 Apr
+ 2023 01:33:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/4] spi: s3c64xx: changed to PIO mode if there is no
- DMA
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-From:   Jaewon Kim <jaewon02.kim@samsung.com>
-In-Reply-To: <41ebe41f-d773-7cc3-dcad-8574c858645e@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMJsWRmVeSWpSXmKPExsWy7bCmmW78cvsUgz8XBC0ezNvGZrH4x3Mm
-        i6kPn7BZXN6vbbH39VZ2i02Pr7FaXN41h81ixvl9TBaNH2+yO3B6XF/yidlj06pONo871/aw
-        eWxeUu/Rt2UVo8fnTXIBbFHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJ
-        uam2Si4+AbpumTlANykplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCswL9IoTc4tL
-        89L18lJLrAwNDIxMgQoTsjM2bXjPXtAuUHFw8lbGBsYbPF2MnBwSAiYSH+90MoHYQgI7GCV6
-        b4p3MXIB2Z8YJf7vmMwO4XxjlPg3fyc7TMflKzfYIBJ7GSUWbZnCCuG8ZpSYe2IW0CwODl4B
-        O4lnJ6RBGlgEVCUmHn/AAmLzCghKnJz5BMwWFYiWWLxvCpgtLBAkseTffbAzmAXEJW49mc8E
-        MlNEYDGjRN/jT2DbmAU2MkpsbpoKdgabgLbE9/WLWUGWcQItu3IiBqJZXmL72znMIPUSAks5
-        JHqm9bFBnO0i0d7zDsoWlnh1fAvUO1ISn9/thYpnS7RP/8MKYVdIXNwwGypuLDHrWTsjyC5m
-        AU2J9bv0QUwJAWWJI7dYINbySXQc/ssOEeaV6GgTgmhUk7g/9RzUEBmJSUdWMkHYHhJXOrYx
-        T2BUnIUUKrOQfD8LyTOzEPYuYGRZxSiWWlCcm55abFRgAo/r5PzcTYzg1KrlsYNx9tsPeocY
-        mTgYDzFKcDArifCecbVKEeJNSaysSi3Kjy8qzUktPsRoCoybicxSosn5wOSeVxJvaGJpYGJm
-        ZmhuZGpgriTO+7FDOUVIID2xJDU7NbUgtQimj4mDU6qByb4zy2/lCuEEGbXVfyZNf+uzM0/2
-        1Ou382on+rseVcxVXMseMFlG5NzsoKQonqt/FCZm+4TlPzs83ZN/y4kPxt/YZWrP7L577d6D
-        tb+vXXwo/f4/Z4KJb3HWX5FnrtKSe5Pfcjzt5rqwunV9pt7Heo3bF3PqM1NaxRwNU/Zrnjtm
-        smPDzZD5EwqDDgY2N6gVHfm7cMG0reueb7jz117Oer/JjefWAht/1v7wMfQ1MZFVEf31quqp
-        nd221Vpis5iWcLa+nd7RyxTOxqNe6fxiE1/LM7ezMaIq2+wj1Fae4zxyaOauwLl3eRR1+dZx
-        8quy994o3Motws36ymGxSVxayEV55aUv5cQ8Fy+Yx9dhoMRSnJFoqMVcVJwIAPFIeLA2BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphkeLIzCtJLcpLzFFi42LZdlhJTjduuX2Kwf9mI4sH87axWSz+8ZzJ
-        YurDJ2wWl/drW+x9vZXdYtPja6wWl3fNYbOYcX4fk0Xjx5vsDpwe15d8YvbYtKqTzePOtT1s
-        HpuX1Hv0bVnF6PF5k1wAWxSXTUpqTmZZapG+XQJXxqYN79kL2gUqDk7eytjAeIOni5GTQ0LA
-        ROLylRtsXYxcHEICuxkl7m6+xQSRkJFY/qyPDcIWlrjfcoQVouglo8SE9d0sXYwcHLwCdhLP
-        TkiD1LAIqEpMPP6ABcTmFRCUODnzCZgtKhAtcWP5N7CZwgJBEkv+3QezmQXEJW49mc8EMlNE
-        YDGjRMelt+wgDrPARkaJldfXM4NUCQn8ZJSYdT8IxGYT0Jb4vn4xK8hiTqDFV07EQAwyk+ja
-        2sUIYctLbH87h3kCo9AsJHfMQrJvFpKWWUhaFjCyrGKUTC0ozk3PLTYsMMxLLdcrTswtLs1L
-        10vOz93ECI4oLc0djNtXfdA7xMjEwXiIUYKDWUmE94yrVYoQb0piZVVqUX58UWlOavEhRmkO
-        FiVx3gtdJ+OFBNITS1KzU1MLUotgskwcnFINTM7HLV4LNP8ISzzxlb/jVmb8O4UpRnJTT+Ra
-        h4bwb/ows+C/m2TbMw6+tbND1LYs0rxi36/mu+63m3a6wIrqT+Lv+U5u49iZ5Z1q138p+hWD
-        TnDHmhbJsrjYf5d/v7p8Iit8furz4zarih7uNpn4ep69bbesfseK6uPbP13hm/oyKrqGt3Kv
-        xNz6pIUZRc28n2Sc5pwo+2Jsd9dC94upZ69Y+/I2ee/Dkt3Ms+e2pH2s6NoRu69PZqbUT/fo
-        VXMfczT8ERdnetDOkbN4o7GSwqozJm7nzAu97U2PHirpyXBePGuBFMf/FJmwpd55yZ0nppas
-        bstYmjJrgfVEtW2sb1qZlKv9o/beNg3ylrJQYinOSDTUYi4qTgQAxa0jGxcDAAA=
-X-CMS-MailID: 20230419083334epcas2p14d892bba96a6df17cc32c703c4bd88cf
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230419062755epcas2p1370c1ca60d88d6b114a7c7c1de3f15c0
-References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
-        <CGME20230419062755epcas2p1370c1ca60d88d6b114a7c7c1de3f15c0@epcas2p1.samsung.com>
-        <20230419060639.38853-2-jaewon02.kim@samsung.com>
-        <41ebe41f-d773-7cc3-dcad-8574c858645e@linaro.org>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230418120258.713853188@linuxfoundation.org>
+In-Reply-To: <20230418120258.713853188@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 19 Apr 2023 14:03:14 +0530
+Message-ID: <CA+G9fYtQZpMB=uuEj9QFVXRp-JteNLd2N7ezpbfOP_ee080DaQ@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/57] 4.19.281-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        LTP List <ltp@lists.linux.it>, chrubis <chrubis@suse.cz>,
+        Petr Vorel <pvorel@suse.cz>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 23. 4. 19. 17:03, Krzysztof Kozlowski wrote:
-> On 19/04/2023 08:06, Jaewon Kim wrote:
->> Polling mode supported with qurik if there was no DMA in the SOC.
-> typo: quirk
-> You missed verb in your first part of sentence. I don't understand it.
-
-Sorry, I change this sentence like below.
-
-Polling mode supported as a quirk for SOCs without DMA.
-
+On Tue, 18 Apr 2023 at 17:55, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
->> However, there are cased where we cannot or do not want to use DMA.
->> To support this case, if DMA is not set, it is switched to polling mode.
->>
->> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
->> ---
->>   drivers/spi/spi-s3c64xx.c                 | 8 ++++++--
->>   include/linux/platform_data/spi-s3c64xx.h | 1 +
->>   2 files changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
->> index 71d324ec9a70..273aa02322d9 100644
->> --- a/drivers/spi/spi-s3c64xx.c
->> +++ b/drivers/spi/spi-s3c64xx.c
->> @@ -19,7 +19,6 @@
->>   #include <linux/platform_data/spi-s3c64xx.h>
->>   
->>   #define MAX_SPI_PORTS		12
->> -#define S3C64XX_SPI_QUIRK_POLL		(1 << 0)
->>   #define S3C64XX_SPI_QUIRK_CS_AUTO	(1 << 1)
->>   #define AUTOSUSPEND_TIMEOUT	2000
->>   
->> @@ -116,7 +115,7 @@
->>   #define S3C64XX_SPI_TRAILCNT		S3C64XX_SPI_MAX_TRAILCNT
->>   
->>   #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
->> -#define is_polling(x)	(x->port_conf->quirks & S3C64XX_SPI_QUIRK_POLL)
->> +#define is_polling(x)	(x->cntrlr_info->polling)
->>   
->>   #define RXBUSY    (1<<2)
->>   #define TXBUSY    (1<<3)
->> @@ -1067,6 +1066,11 @@ static struct s3c64xx_spi_info *s3c64xx_spi_parse_dt(struct device *dev)
->>   		sci->num_cs = temp;
->>   	}
->>   
->> +	if (!of_find_property(dev->of_node, "dmas", NULL)) {
->> +		dev_warn(dev, "cannot find DMA, changed to PIO mode\n");
-> You said it is desired option, so should not be a warning. I would make
-> it debug at most.
+> This is the start of the stable review cycle for the 4.19.281 release.
+> There are 57 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-Okay, I will change dev_warn() to dev_dbg().
+> Responses should be made by Thu, 20 Apr 2023 12:02:44 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.281-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+
+Recently we have upgraded the LTP test suite version and started noticing
+these test failures on 4.19 and 4.14 only on arm64.
+
+Need to investigate test case issues or kernel issues.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+NOTE:
+creat09.c:73: TINFO: User nobody: uid = 65534, gid = 65534
+creat09.c:75: TINFO: Found unused GID 11: SUCCESS (0)
+creat09.c:120: TINFO: File created with umask(0)
+creat09.c:106: TPASS: mntpoint/testdir/creat.tmp: Owned by correct group
+creat09.c:112: TPASS: mntpoint/testdir/creat.tmp: Setgid bit not set
+creat09.c:106: TPASS: mntpoint/testdir/open.tmp: Owned by correct group
+creat09.c:112: TPASS: mntpoint/testdir/open.tmp: Setgid bit not set
+creat09.c:120: TINFO: File created with umask(S_IXGRP)
+creat09.c:106: TPASS: mntpoint/testdir/creat.tmp: Owned by correct group
+creat09.c:110: TFAIL: mntpoint/testdir/creat.tmp: Setgid bit is set
+creat09.c:106: TPASS: mntpoint/testdir/open.tmp: Owned by correct group
+creat09.c:110: TFAIL: mntpoint/testdir/open.tmp: Setgid bit is set
+
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19.279-143-gcc0a9b81697f/testrun/16319970/suite/ltp-syscalls/test/creat09/log
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19.279-143-gcc0a9b81697f/testrun/16319970/suite/ltp-syscalls/test/creat09/history/
 
 
->> +		sci->polling = 1;
->
->
-> Best regards,
-> Krzysztof
->
->
+## Build
+* kernel: 4.19.281-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: cc0a9b81697f7222c51d17365c5960680ba00260
+* git describe: v4.19.279-143-gcc0a9b81697f
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19.279-143-gcc0a9b81697f
 
-Thanks
+## Test Regressions (compared to v4.19.279-85-ge4a87ad39c98)
 
-Jaewon Kim
+* qemu-arm64, ltp-cve
+  - cve-2018-13405 ( creat09 )
 
+* qemu-arm64, ltp-syscalls
+  - creat09
+
+## Metric Regressions (compared to v4.19.279-85-ge4a87ad39c98)
+
+## Test Fixes (compared to v4.19.279-85-ge4a87ad39c98)
+
+## Metric Fixes (compared to v4.19.279-85-ge4a87ad39c98)
+
+## Test result summary
+total: 96758, pass: 71960, fail: 3568, skip: 21047, xfail: 183
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 108 total, 107 passed, 1 failed
+* arm64: 34 total, 33 passed, 1 failed
+* i386: 20 total, 19 passed, 1 failed
+* mips: 22 total, 22 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 24 total, 24 passed, 0 failed
+* s390: 6 total, 6 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 28 total, 27 passed, 1 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
