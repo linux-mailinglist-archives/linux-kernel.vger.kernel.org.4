@@ -2,212 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079CF6E73E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA6D6E73E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbjDSHW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 03:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
+        id S232194AbjDSHWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 03:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbjDSHWx (ORCPT
+        with ESMTP id S231238AbjDSHWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 03:22:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6015247
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:22:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681888923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FCCYf58WbiV7ZwiVXeHUCjynN8kwG+K1Gw0EryKxlNA=;
-        b=WfZehMATuXWzT50T29C0tmnzTsKu7KR9G3mnYIFMnGdtyH+uOzG/C3pXO6D2930usow23Q
-        qSF23Crhzyq99ffbiElroWCgYYf2Xi1DPIcnQ137831DPgCVjSvHenkdYcAf1AjLOGlGSo
-        kH4aGAQgciTQazD9gIAfKrWQ5Ni8jNs=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-496-S_4x5xmwNNerxEPXImfMFQ-1; Wed, 19 Apr 2023 03:22:01 -0400
-X-MC-Unique: S_4x5xmwNNerxEPXImfMFQ-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f173bd0fc9so12184965e9.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:22:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681888920; x=1684480920;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FCCYf58WbiV7ZwiVXeHUCjynN8kwG+K1Gw0EryKxlNA=;
-        b=cyiK29rUXH3e7kVgueA4xcvQRr4FygHRcxxwxTHxCAWZCt8Qy0ZtBBB6/+TYF+sdeC
-         HTrVOc75RC2d5nrZ4DpIukVGJ7bb0iejzlqiF347JL8f8Li1EzWUnFmjTesqeODfP9jz
-         MZ74h21Pc2+GFV66mtkeZw/Zw0ZkZs6PMJEJ5w8F+uDrCpIEaf35tgwejL5rk0tTlhtX
-         z+3E7N6l/ce8HVrrTGMhmWBpkF7JgXF30c1F37XyHUj9uC80bie5dokeDBCXtxAlNPn4
-         dwDP8QshOrChstulHKfe9o9jdhexssLAlrC++1of5MAw5z6NSODDG6Fya5wd0PBHayS6
-         eLGQ==
-X-Gm-Message-State: AAQBX9eFzoT7FDRvHXPnqUW+2u1V22I9KbEfiXcBKIUwX2vOMafa+nAS
-        7TPOLRyi66Er0j9/d9zn/dOI8GlGMgvdG96UV6p2khr83NJFBtiYaofgsDNyG8Bc7pH5wJWQepu
-        FEFgaT1IMyyzYXUBcJY11ZesO
-X-Received: by 2002:adf:ea4f:0:b0:2da:2aa0:13e8 with SMTP id j15-20020adfea4f000000b002da2aa013e8mr3873867wrn.26.1681888920569;
-        Wed, 19 Apr 2023 00:22:00 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aNwuzmpbvYRPHoSltgT3RyKQDrpmpgLNn+Tljmbr7T+NCiG+eylILlLmRgC0uK/hpojLTqCA==
-X-Received: by 2002:adf:ea4f:0:b0:2da:2aa0:13e8 with SMTP id j15-20020adfea4f000000b002da2aa013e8mr3873828wrn.26.1681888920083;
-        Wed, 19 Apr 2023 00:22:00 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70b:7b00:7c52:a5fa:8004:96fd? (p200300cbc70b7b007c52a5fa800496fd.dip0.t-ipconnect.de. [2003:cb:c70b:7b00:7c52:a5fa:8004:96fd])
-        by smtp.gmail.com with ESMTPSA id s9-20020a5d6a89000000b002cf1c435afcsm15031069wru.11.2023.04.19.00.21.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 00:21:59 -0700 (PDT)
-Message-ID: <5869f50f-0858-ab0c-9049-4345abcf5641@redhat.com>
-Date:   Wed, 19 Apr 2023 09:21:58 +0200
+        Wed, 19 Apr 2023 03:22:41 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D58740F0;
+        Wed, 19 Apr 2023 00:22:38 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5ae81a.dynamic.kabel-deutschland.de [95.90.232.26])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 1A23461E4052B;
+        Wed, 19 Apr 2023 09:22:37 +0200 (CEST)
+Message-ID: <a26a1b41-dd6b-4b01-696e-79e195787958@molgen.mpg.de>
+Date:   Wed, 19 Apr 2023 09:22:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        tabba@google.com, Michael Roth <michael.roth@amd.com>,
-        wei.w.wang@intel.com, Mike Rapoport <rppt@kernel.org>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <ZD1oevE8iHsi66T2@google.com>
- <658018f9-581c-7786-795a-85227c712be0@redhat.com>
- <ZD12htq6dWg0tg2e@google.com>
- <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
- <ZD2bBB00eKP6F8kz@google.com>
- <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
- <ZD86E23gyzF6Q7AF@google.com>
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3] Bluetooth: btusb: Add WCN6855 devcoredump support
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
- KVM: mm: fd-based approach for supporting KVM)
-In-Reply-To: <ZD86E23gyzF6Q7AF@google.com>
+To:     Tim Jiang <quic_tjiang@quicinc.com>
+Cc:     marcel@holtmann.org, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        quic_bgodavar@quicinc.com, quic_hemantg@quicinc.com,
+        mka@chromium.org
+References: <20230419033805.27356-1-quic_tjiang@quicinc.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230419033805.27356-1-quic_tjiang@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.04.23 02:47, Sean Christopherson wrote:
-> On Tue, Apr 18, 2023, David Hildenbrand wrote:
->> On 17.04.23 21:16, Sean Christopherson wrote:
->>> Hidden/Concealed/etc - Too close to secretmem, suffers the "hidden from whom" problem,
->>> and depending on the use case, the memory may not actually be concealed from the
->>> user that controls the VMM.
->>>
->>> Restricted - "rmem" collides with "reserved memory" in code.
->>>
->>> Guarded - Conflicts with s390's "guarded storage", has the "from whom" problem.
->>>
->>> Inaccessible - Many of the same problems as "hidden".
->>>
->>> Unmappable - Doesn't cover things like read/write, and is wrong in the sense that
->>> the memory is still mappable, just not via mmap().
->>>
->>> Secured - I'm not getting anywhere near this one :-)
->>
->> The think about "secretmem" that I kind-of like (a little) is that it
->> explains what it's used for: storing secrets. We don't call it "unmapped"
->> memory because we unmap it from the directmap or "unpinnable" memory or
->> "inaccessible" memory ... or even "restricted" because it has restrictions
->> ... how the secrets are protected is kind of an implementation detail.
->>
->> So instead of describing *why*/*how* restrictedmem is the weird kid
->> (restricted/guarded/hidden/restricted/inaccessible/ ...), maybe rather
->> describe what it's used for?
->>
->> I know, I know, "there are other use cases where it will be used outside of
->> VM context". I really don't care.
+Dear Tim,
+
+
+Than you for the patch.
+
+Am 19.04.23 um 05:38 schrieb Tim Jiang:
+> WCN6855 will report memdump via ACL data or HCI event when
+> it get crashed, so we collect memdump to debug firmware.
+
+s/when it get crashed/when it crashes/
+
+Please give an example, how to collect the memdump, and maybe even how 
+to force a crash.
+
+Please amend the commit message to document the specification/datasheet 
+name and revision.
+
+Is WCN6855 the only device supporting this, or could other devices be 
+easily added?
+
+> Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
+> ---
+>   drivers/bluetooth/btusb.c | 222 ++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 222 insertions(+)
 > 
-> Heh, we originally proposed F_SEAL_GUEST, but that was also sub-optimal[1] ;-)
-> 
->> "memfd_vm" / "vm_mem" would be sooo (feel free to add some more o's here)
->> much easier to get. It's a special fd to be used to back VM memory. Depending
->> on the VM type (encrypted/protected/whatever), restrictions might apply (not
->> able to mmap, not able to read/write ...). For example, there really is no
->> need to disallow mmap/read/write when using that memory to back a simple VM
->> where all we want to do is avoid user-space page tables.
-> 
-> In seriousness, I do agree with Jason's very explicit objection[2] against naming
-> a non-KVM uAPI "guest", or any variation thereof.
+> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+> index 2303b0a66323..f045bbb0ee09 100644
+> --- a/drivers/bluetooth/btusb.c
+> +++ b/drivers/bluetooth/btusb.c
+> @@ -733,6 +733,16 @@ static const struct dmi_system_id btusb_needs_reset_resume_table[] = {
+>   	{}
+>   };
+>   
+> +struct qca_dump_info {
+> +	/* fields for dump collection */
+> +	u16 id_vendor;
+> +	u16 id_product;
+> +	u32 fw_version;
+> +	u32 controller_id;
+> +	u32 ram_dump_size;
 
-While I agree, it's all better than the naming we use right now ...
+I’d add the unit to the variable name.
+
+> +	u16 ram_dump_seqno;
+> +};
+> +
+>   #define BTUSB_MAX_ISOC_FRAMES	10
+>   
+>   #define BTUSB_INTR_RUNNING	0
+> @@ -752,6 +762,7 @@ static const struct dmi_system_id btusb_needs_reset_resume_table[] = {
+>   #define BTUSB_WAKEUP_AUTOSUSPEND	14
+>   #define BTUSB_USE_ALT3_FOR_WBS	15
+>   #define BTUSB_ALT6_CONTINUOUS_TX	16
+> +#define BTUSB_HW_SSR_ACTIVE	17
+>   
+>   struct btusb_data {
+>   	struct hci_dev       *hdev;
+> @@ -814,6 +825,8 @@ struct btusb_data {
+>   
+>   	int oob_wake_irq;   /* irq for out-of-band wake-on-bt */
+>   	unsigned cmd_timeout_cnt;
+> +
+> +	struct qca_dump_info qca_dump;
+>   };
+>   
+>   static void btusb_reset(struct hci_dev *hdev)
+> @@ -904,6 +917,11 @@ static void btusb_qca_cmd_timeout(struct hci_dev *hdev)
+>   	struct btusb_data *data = hci_get_drvdata(hdev);
+>   	struct gpio_desc *reset_gpio = data->reset_gpio;
+>   
+> +	if (test_bit(BTUSB_HW_SSR_ACTIVE, &data->flags)) {
+> +		bt_dev_info(hdev, "Ramdump in progress, defer cmd_timeout");
+> +		return;
+> +	}
+> +
+>   	if (++data->cmd_timeout_cnt < 5)
+>   		return;
+>   
+> @@ -3294,6 +3312,202 @@ static int btusb_set_bdaddr_wcn6855(struct hci_dev *hdev,
+>   	return 0;
+>   }
+>   
+> +#define QCA_MEMDUMP_ACL_HANDLE 0x2EDD
+> +#define QCA_MEMDUMP_SIZE_MAX  0x100000
+> +#define QCA_MEMDUMP_VSE_CLASS 0x01
+> +#define QCA_MEMDUMP_MSG_TYPE 0x08
+> +#define QCA_MEMDUMP_PKT_SIZE 248
+> +#define QCA_LAST_SEQUENCE_NUM 0xffff
+> +
+> +struct qca_dump_hdr {
+> +	u8 vse_class;
+> +	u8 msg_type;
+> +	__le16 seqno;
+> +	u8 reserved;
+> +	union {
+> +		u8 data[0];
+> +		struct {
+> +			__le32 ram_dump_size;
+> +			u8 data0[0];
+> +		} __packed;
+> +	};
+> +} __packed;
+> +
+> +
+> +static void btusb_dump_hdr_qca(struct hci_dev *hdev, struct sk_buff *skb)
+> +{
+> +	char buf[128];
+> +	struct btusb_data *btdata = hci_get_drvdata(hdev);
+> +
+> +	snprintf(buf, sizeof(buf), "Controller Name: 0x%x\n",
+> +			btdata->qca_dump.controller_id);
+> +	skb_put_data(skb, buf, strlen(buf));
+> +
+> +	snprintf(buf, sizeof(buf), "Firmware Version: 0x%x\n",
+> +			btdata->qca_dump.fw_version);
+> +	skb_put_data(skb, buf, strlen(buf));
+> +
+> +	snprintf(buf, sizeof(buf), "Driver: %s\nVendor: qca\n",
+> +			btusb_driver.name);
+> +	skb_put_data(skb, buf, strlen(buf));
+> +
+> +	snprintf(buf, sizeof(buf), "VID: 0x%x\nPID:0x%x\n",
+> +			btdata->qca_dump.id_vendor, btdata->qca_dump.id_product);
+> +	skb_put_data(skb, buf, strlen(buf));
+> +
+> +	snprintf(buf, sizeof(buf), "Lmp Subversion: 0x%x\n",
+> +			hdev->lmp_subver);
+> +	skb_put_data(skb, buf, strlen(buf));
+> +}
+> +
+> +static void btusb_coredump_qca(struct hci_dev *hdev)
+> +{
+> +	static const u8 param[] = { 0x26 };
+> +	struct sk_buff *skb;
+> +
+> +	skb = __hci_cmd_sync(hdev, 0xfc0c, 1, param, HCI_CMD_TIMEOUT);
+> +	if (IS_ERR(skb))
+> +		bt_dev_err(hdev, "%s: triggle crash failed (%ld)", __func__, PTR_ERR(skb));
+
+What does “triggle” mean?
+
+> +	kfree_skb(skb);
+> +}
+> +
+> +/*
+> + * ==0: not a dump pkt.
+> + * < 0: fails to handle a dump pkt
+> + * > 0: otherwise.
+> + */
+> +static int handle_dump_pkt_qca(struct hci_dev *hdev, struct sk_buff *skb)
+> +{
+> +	int ret = 1;
+> +	u8 pkt_type;
+> +	u8 *sk_ptr;
+> +	unsigned int sk_len;
+> +	u16 seqno;
+> +	u32 dump_size;
+> +
+> +	struct hci_event_hdr *event_hdr;
+> +	struct hci_acl_hdr *acl_hdr;
+> +	struct qca_dump_hdr *dump_hdr;
+> +	struct btusb_data *btdata = hci_get_drvdata(hdev);
+> +	struct usb_device *udev = btdata->udev;
+> +
+> +	pkt_type = hci_skb_pkt_type(skb);
+> +	sk_ptr = skb->data;
+> +	sk_len = skb->len;
+> +
+> +	if (pkt_type == HCI_ACLDATA_PKT) {
+> +		acl_hdr = hci_acl_hdr(skb);
+> +		if (le16_to_cpu(acl_hdr->handle) != QCA_MEMDUMP_ACL_HANDLE)
+> +			return 0;
+> +		sk_ptr += HCI_ACL_HDR_SIZE;
+> +		sk_len -= HCI_ACL_HDR_SIZE;
+> +		event_hdr = (struct hci_event_hdr *)sk_ptr;
+> +	} else {
+> +		event_hdr = hci_event_hdr(skb);
+> +	}
+> +
+> +	if ((event_hdr->evt != HCI_VENDOR_PKT)
+> +		|| (event_hdr->plen != (sk_len - HCI_EVENT_HDR_SIZE)))
+> +		return 0;
+
+Indentation/alignment of the second and third line (it’s the same) looks 
+confusing, as it’s not clear, what is the body.
+
+> +
+> +	sk_ptr += HCI_EVENT_HDR_SIZE;
+> +	sk_len -= HCI_EVENT_HDR_SIZE;
+> +
+> +	dump_hdr = (struct qca_dump_hdr *)sk_ptr;
+> +	if ((sk_len < offsetof(struct qca_dump_hdr, data))
+> +		|| (dump_hdr->vse_class != QCA_MEMDUMP_VSE_CLASS)
+> +	    || (dump_hdr->msg_type != QCA_MEMDUMP_MSG_TYPE))
+
+The coding style is off.
+
+> +		return 0;
+> +
+> +	/*it is dump pkt now*/
+
+Please add spaces, and elaborate. I do not understant the comment.
+
+> +	seqno = le16_to_cpu(dump_hdr->seqno);
+> +	if (seqno == 0) {
+> +		set_bit(BTUSB_HW_SSR_ACTIVE, &btdata->flags);
+> +		dump_size = le32_to_cpu(dump_hdr->ram_dump_size);
+> +		if (!dump_size || (dump_size > QCA_MEMDUMP_SIZE_MAX)) {
+> +			ret = -EILSEQ;
+> +			bt_dev_err(hdev, "Invalid memdump size(%u)",
+> +				   dump_size);
+> +			goto out;
+> +		}
+> +
+> +		ret = hci_devcd_init(hdev, dump_size);
+> +		if (ret < 0) {
+> +			bt_dev_err(hdev, "memdump init error(%d)", ret);
+
+I’d add spaces before the (.
+
+> +			goto out;
+> +		}
+> +
+> +		btdata->qca_dump.ram_dump_size = dump_size;
+> +		btdata->qca_dump.ram_dump_seqno = 0;
+> +		sk_ptr += offsetof(struct qca_dump_hdr, data0);
+> +		sk_len -= offsetof(struct qca_dump_hdr, data0);
+> +
+> +		usb_disable_autosuspend(udev);
+> +		bt_dev_info(hdev, "%s memdump size(%u)\n",
+> +			    (pkt_type == HCI_ACLDATA_PKT) ? "ACL" : "event",
+> +			    dump_size);
+> +	} else {
+> +		sk_ptr += offsetof(struct qca_dump_hdr, data);
+> +		sk_len -= offsetof(struct qca_dump_hdr, data);
+> +	}
+> +
+> +	if (!btdata->qca_dump.ram_dump_size) {
+> +		ret = -EINVAL;
+> +		bt_dev_err(hdev, "memdump is not active");
+
+What is the heuristics behind that? Setting `ram_dump_size` to zero 
+disables the feature? Where is this documented?
+
+> +		goto out;
+> +	}
+> +
+> +	if ((seqno > btdata->qca_dump.ram_dump_seqno + 1) && (seqno != QCA_LAST_SEQUENCE_NUM)) {
+> +		dump_size = QCA_MEMDUMP_PKT_SIZE * (seqno - btdata->qca_dump.ram_dump_seqno - 1);
+> +		hci_devcd_append_pattern(hdev, 0x0, dump_size);
+> +		bt_dev_err(hdev,
+> +			   "expected memdump seqno(%u) is not received(%u)\n",
+
+I’d add spaces before the ( – also in other places.
 
 
-Let me throw "tee_mem" / "memfd_tee" into the picture. That could 
-eventually catch what we want to have.
+Kind regards,
 
-Or "coco_mem" / "memfd_coco".
-
-Of course, both expect that people know the terminology (just like what 
-"vm" stands for), but it's IMHO significantly better than 
-restricted/guarded/opaque/whatsoever.
-
-Again, expresses what it's used for, not why it behaves in weird ways.
+Paul
 
 
-> 
-> An alternative that we haven't considered since the very early days is making the
-> uAPI a KVM ioctl() instead of a memfd() flag or dedicated syscall.  Looking at the
-> code for "pure shim" implementation[3], that's actually not that crazy of an idea.
-
-Yes.
-
-> 
-> I don't know that I love the idea of burying this in KVM, but there are benefits
-> to coupling restrictedmem to KVM (aside from getting out from behind this bikeshed
-> that I created).
-
-Yes, it's all better than jumping through hoops to come up with a bad 
-name like "restrictedmem".
-
-> 
-> The big benefit is that the layer of indirection goes away.  That simplifies things
-> like enhancing restrictedmem to allow host userspace access for debug purposes,
-> batching TLB flushes if a PUNCH_HOLE spans multiple memslots, enforcing exclusive
-> access, likely the whole "share with a device" story if/when we get there, etc.
-> 
-> The obvious downsides are that (a) maintenance falls under the KVM umbrella, but
-> that's likely to be true in practice regardless of where the code lands, and
-
-Yes.
-
-> (b) if another use case comes along, e.g. the Gunyah hypervisor[4][5], we risk
-> someone reinventing a similar solution.
-
-I agree. But if it's as simple as providing an ioctl for that hypervisor 
-that simply wires up the existing implementation, it's not too bad.
-
-> 
-> If we can get Gunyah on board and they don't need substantial changes to the
-> restrictedmem implementation, then I'm all for continuing on the path we're on.
-> But if Gunyah wants to do their own thing, and the lightweight shim approach is
-> viable, then it's awfully tempting to put this all behind a KVM ioctl().
-
-Right. Or we still succeed in finding a name that's not as bad as what 
-we had so far.
-
--- 
-Thanks,
-
-David / dhildenb
-
+> +			   btdata->qca_dump.ram_dump_seqno, seqno);
+> +		btdata->qca_dump.ram_dump_seqno = seqno;
+> +		kfree_skb(skb);
+> +		return ret;
+> +	}
+> +
+> +	skb_pull(skb, skb->len - sk_len);
+> +	hci_devcd_append(hdev, skb);
+> +	btdata->qca_dump.ram_dump_seqno++;
+> +	if (seqno == QCA_LAST_SEQUENCE_NUM) {
+> +		bt_dev_info(hdev,
+> +				"memdump done: pkts(%u), total(%u)\n",
+> +				btdata->qca_dump.ram_dump_seqno, btdata->qca_dump.ram_dump_size);
+> +
+> +		hci_devcd_complete(hdev);
+> +		goto out;
+> +	}
+> +	return ret;
+> +
+> +out:
+> +	if (btdata->qca_dump.ram_dump_size)
+> +		usb_enable_autosuspend(udev);
+> +	btdata->qca_dump.ram_dump_size = 0;
+> +	btdata->qca_dump.ram_dump_seqno = 0;
+> +	clear_bit(BTUSB_HW_SSR_ACTIVE, &btdata->flags);
+> +
+> +	if (ret < 0)
+> +		kfree_skb(skb);
+> +	return ret;
+> +}
+> +
+> +static int btusb_recv_acl_qca(struct hci_dev *hdev, struct sk_buff *skb)
+> +{
+> +	if (handle_dump_pkt_qca(hdev, skb))
+> +		return 0;
+> +	return hci_recv_frame(hdev, skb);
+> +}
+> +
+> +static int btusb_recv_evt_qca(struct hci_dev *hdev, struct sk_buff *skb)
+> +{
+> +	if (handle_dump_pkt_qca(hdev, skb))
+> +		return 0;
+> +	return hci_recv_frame(hdev, skb);
+> +}
+> +
+> +
+>   #define QCA_DFU_PACKET_LEN	4096
+>   
+>   #define QCA_GET_TARGET_VERSION	0x09
+> @@ -3628,6 +3842,9 @@ static int btusb_setup_qca(struct hci_dev *hdev)
+>   	if (err < 0)
+>   		return err;
+>   
+> +	btdata->qca_dump.fw_version = le32_to_cpu(ver.patch_version);
+> +	btdata->qca_dump.controller_id = le32_to_cpu(ver.rom_version);
+> +
+>   	if (!(status & QCA_SYSCFG_UPDATED)) {
+>   		err = btusb_setup_qca_load_nvm(hdev, &ver, info);
+>   		if (err < 0)
+> @@ -4117,6 +4334,11 @@ static int btusb_probe(struct usb_interface *intf,
+>   	}
+>   
+>   	if (id->driver_info & BTUSB_QCA_WCN6855) {
+> +		data->qca_dump.id_vendor = id->idVendor;
+> +		data->qca_dump.id_product = id->idProduct;
+> +		data->recv_event = btusb_recv_evt_qca;
+> +		data->recv_acl = btusb_recv_acl_qca;
+> +		hci_devcd_register(hdev, btusb_coredump_qca, btusb_dump_hdr_qca, NULL);
+>   		data->setup_on_usb = btusb_setup_qca;
+>   		hdev->shutdown = btusb_shutdown_qca;
+>   		hdev->set_bdaddr = btusb_set_bdaddr_wcn6855;
