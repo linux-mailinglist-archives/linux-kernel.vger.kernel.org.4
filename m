@@ -2,133 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A076E8272
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3ABD6E8277
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbjDSUPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 16:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
+        id S231542AbjDSUS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 16:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjDSUPx (ORCPT
+        with ESMTP id S231292AbjDSUSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 16:15:53 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C69124
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:15:52 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-5180ad24653so35776a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:15:52 -0700 (PDT)
+        Wed, 19 Apr 2023 16:18:25 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9325587
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:18:23 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id dx24so1213729ejb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:18:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681935351; x=1684527351;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1681935502; x=1684527502;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uEZv1+Sjy8aPaSMjtOnGV5vUYFV+uw4lXf3C6WgeEKE=;
-        b=kqmbcIMcU4sefLMfBO5v9IBowedzR2UPkBRN2Gq1QQgY4Y/4fl2cWlTgxRnT3tn90r
-         Hk70xLyL/z9yAbzvABd8SjQeVaX23dgCpELjiH4Bpwh+zTOAKdhHR2+BRXe48JsUmv3D
-         Phs/qFbZDTIG2/TpbtXAsxTbJ12fcLZTusv6B4dKMhI0CaLjKYdlR4N/Dy+JphMT8M2/
-         ZW0DToCtqFmCpq2BDM2pwjxeidP2NslWcUpx/idDtTJx3yn8L2HnRHDdEEwcc73vE0TW
-         KXxw8Z9EIdKr492C9nRvzfKxfcF71FqMNunb3J9asiO6L7WjQFXwxi/F6y+tr+/+J6LZ
-         AGhg==
+        bh=6pbzo4OluoRMXV+MR3P7u+CXjqXd/it4CqxiYCU0P9A=;
+        b=btV0gK2VFbXrK3woTgBAayGrxear9h3tidO6nMICtFU+IhyWrj/M/Jh7hjisWBc1Zx
+         XKY66a2n6iL+1jau2DCE8eAZrBI239NA+MIQyKnF5cgpnHfIXJeXiDSw4Al9tbxJUmtj
+         mzWnMSQawuJ368G4GLTCYa2HLPWrmBSeLdIf6T+0OWLmKgOz9gU10KXgC/3kGal6DDHG
+         WNCCA9EOovlQDyu2ALQe1gFLx56qgtAWAl1Dm0E3Iy9YKxj8n2pox7xJ3igCpK5qVf2E
+         xUJFLdKuUkHOpIuPZDo5a//c7BTTtV1ZS098nYzt262A6vjsL3lOaGKKliz/aKNRVukd
+         D8mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681935351; x=1684527351;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1681935502; x=1684527502;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uEZv1+Sjy8aPaSMjtOnGV5vUYFV+uw4lXf3C6WgeEKE=;
-        b=U2ICKZ+Ag7vHVcqNuPiB7foFyAiwJZOAKORMdWFzQjb3oQNODIsf3X9XctJ1cSwMwU
-         Kz/Xs8FcDRQgn9thU2NIN9Hw26MuoQjgSr416Zu0YC/shVt5T23JyusVGXtwB1zlBpNE
-         i2pXNY3bnwXSXzj/vnOU/9e4rpulGqQnNobEdNRi3kcSakNRmR6QCecvYEpcM1jLxnqG
-         nLuuCvSzqjPqcUfJg14Vzt1w68uxLYk4CzEsTOjnoEOoQCP4dGIZ/eSOZKSQYOdakUuG
-         HW50QD/nzTeEqyHG8WQqTamfWbOPsWmLTReBlmXdOtupfAQpmZsu6AINY4GhpF/jyx54
-         dlJg==
-X-Gm-Message-State: AAQBX9dZT1cRjsJ3g9eWA1xR1vWt5KcX9NXhgWb9ZhUuO87fUNkGs8pp
-        X9oV0r1c/FGD86u4BcBcGXaAcA==
-X-Google-Smtp-Source: AKy350YabKeWFagAMyyryCcLxhkrECa4iIsx2RGdrmHhx+B7W3FNw6MnNvf/b3L2CGRQg/VOxFkOVg==
-X-Received: by 2002:a17:902:e751:b0:1a6:3ba2:c896 with SMTP id p17-20020a170902e75100b001a63ba2c896mr23159358plf.3.1681935351470;
-        Wed, 19 Apr 2023 13:15:51 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id b5-20020a170902bd4500b001a19cf1b37esm11831037plx.40.2023.04.19.13.15.50
+        bh=6pbzo4OluoRMXV+MR3P7u+CXjqXd/it4CqxiYCU0P9A=;
+        b=ZjXJeO1BlbAtvpzcAQBApgBKr4w8J5xTbgcQS5kFU6e9NAam280ox/Vc6y1GiSGAIE
+         x7o+Tw5ggTTmWyWtv0DG2V4sc381mvFEpaBolee/K9dQHiA6TRskvXZG8NkkSEMVuSht
+         C3SNq6LVj/HsMUFXc/gOnAKRoBcYJH+okxIHhPjCEvKuQxosY7o3d+NRS/ncke14+pOF
+         xZYrht8kmbIyA2MJytTgxC0RoffUQEVdjo6HjWIbmxRahuZ2bntmLTXbIH9SmllUe0gC
+         D1Psrgq5cptrC8dFv8q2ipz/fvkj+YGIGLhXifGSrjTG6BZHz82b0KxlX+GE/BSUs0P3
+         pO8Q==
+X-Gm-Message-State: AAQBX9eizJry+OTq/1Mtvl5yE3k1luyisehFpiTfAN5qCCKWP7/y1qw/
+        lI0QhdedRZ4Yz2H5qjMMs2TWUw==
+X-Google-Smtp-Source: AKy350aPYDtN4ck6FY3wvdtXBvqts4HMhVtEKMJkuZRG6iceMxMu0/SFu7q2kDFyXRuOy1kw1nJLJg==
+X-Received: by 2002:a17:906:3790:b0:94a:845c:3529 with SMTP id n16-20020a170906379000b0094a845c3529mr14378455ejc.9.1681935501841;
+        Wed, 19 Apr 2023 13:18:21 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:976c:1d6c:6ed0:8935? ([2a02:810d:15c0:828:976c:1d6c:6ed0:8935])
+        by smtp.gmail.com with ESMTPSA id fl3-20020a1709072a8300b0094f396c7a7asm6052425ejc.214.2023.04.19.13.18.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 13:15:51 -0700 (PDT)
-Message-ID: <567b593e-2ad0-9bec-4e6f-4bbb3301524c@kernel.dk>
-Date:   Wed, 19 Apr 2023 14:15:49 -0600
+        Wed, 19 Apr 2023 13:18:21 -0700 (PDT)
+Message-ID: <6c4dadfb-b92f-3e95-1d56-de033d560eba@linaro.org>
+Date:   Wed, 19 Apr 2023 22:18:20 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
- pin_user_pages()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/2 v2] dt-bindings: watchdog: marvell octeonTX2 GTI
+ system watchdog driver
 Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org
-References: <cover.1681831798.git.lstoakes@gmail.com>
- <956f4fc2204f23e4c00e9602ded80cb4e7b5df9b.1681831798.git.lstoakes@gmail.com>
- <936e8f52-00be-6721-cb3e-42338f2ecc2f@kernel.dk>
- <c2e22383-43ee-5cf0-9dc7-7cd05d01ecfb@kernel.dk>
- <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
- <69f48cc6-8fc6-0c49-5a79-6c7d248e4ad5@kernel.dk>
- <bec03e0f-a0f9-43c3-870b-be406ca848b9@lucifer.local>
- <8af483d2-0d3d-5ece-fb1d-a3654411752b@kernel.dk>
- <d601ca0c-d9b8-4e5d-a047-98f2d1c65eb9@lucifer.local>
- <ZEAxhHx/4Ql6AMt2@casper.infradead.org> <ZEAx90C2lDMJIux1@nvidia.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ZEAx90C2lDMJIux1@nvidia.com>
+To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com
+References: <20230419120635.3736-1-bbhushan2@marvell.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230419120635.3736-1-bbhushan2@marvell.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 12:24?PM, Jason Gunthorpe wrote:
-> On Wed, Apr 19, 2023 at 07:23:00PM +0100, Matthew Wilcox wrote:
->> On Wed, Apr 19, 2023 at 07:18:26PM +0100, Lorenzo Stoakes wrote:
->>> So even if I did the FOLL_ALLOW_BROKEN_FILE_MAPPING patch series first, I
->>> would still need to come along and delete a bunch of your code
->>> afterwards. And unfortunately Pavel's recent change which insists on not
->>> having different vm_file's across VMAs for the buffer would have to be
->>> reverted so I expect it might not be entirely without discussion.
->>
->> I don't even understand why Pavel wanted to make this change.  The
->> commit log really doesn't say.
->>
->> commit edd478269640
->> Author: Pavel Begunkov <asml.silence@gmail.com>
->> Date:   Wed Feb 22 14:36:48 2023 +0000
->>
->>     io_uring/rsrc: disallow multi-source reg buffers
->>
->>     If two or more mappings go back to back to each other they can be passed
->>     into io_uring to be registered as a single registered buffer. That would
->>     even work if mappings came from different sources, e.g. it's possible to
->>     mix in this way anon pages and pages from shmem or hugetlb. That is not
->>     a problem but it'd rather be less prone if we forbid such mixing.
->>
->>     Cc: <stable@vger.kernel.org>
->>     Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->>     Signed-off-by: Jens Axboe <axboe@kernel.dk>
->>
->> It even says "That is not a problem"!  So why was this patch merged
->> if it's not fixing a problem?
->>
->> It's now standing in the way of an actual cleanup.  So why don't we
->> revert it?  There must be more to it than this ...
+On 19/04/2023 14:06, Bharat Bhushan wrote:
+> Add binding documentation for the Marvell octeonTX2
+> GTI system watchdog driver.
 > 
-> https://lore.kernel.org/all/61ded378-51a8-1dcb-b631-fda1903248a9@gmail.com/
+> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+> ---
+> v2:
+>  - compatible changed from marvell-octeontx2-wdt to marvell,octeontx2-wdt
+>  - corrected type atchdog to watchdog 
+>  - Replaced hardcoding to use IRQ_TYPE_EDGE_RISING flag
+> 
+>  .../watchdog/marvell,octeontx2-wdt.yaml       | 46 +++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+> new file mode 100644
+> index 000000000000..96a979c4082d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/marvell,octeontx2-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell OcteonTX2 GTI system watchdog
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +maintainers:
+> +  - Bharat Bhushan <bbhushan2@marvell.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: marvell,octeontx2-wdt
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        watchdog@802000040000 {
+> +          compatible = "marvell,octeontx2-wdt";
 
-Let's just kill that patch that, I can add a revert for 6.4. I had
-forgotten about that patch and guess I didn't realize that most of the
-issue do in fact just stem from that.
+Mixed indentation. Use 4 spaces for entire DTS example (or 2 spaces, but
+4 is preferred).
 
--- 
-Jens Axboe
+Best regards,
+Krzysztof
 
