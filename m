@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1DB6E7DEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E496E7DEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbjDSPOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S233725AbjDSPOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 11:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233406AbjDSPNy (ORCPT
+        with ESMTP id S232017AbjDSPNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Apr 2023 11:13:54 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17AA729C;
-        Wed, 19 Apr 2023 08:13:38 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-187b70ab997so10211995fac.0;
-        Wed, 19 Apr 2023 08:13:38 -0700 (PDT)
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125917680;
+        Wed, 19 Apr 2023 08:13:40 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6a5f03551fdso1482914a34.0;
+        Wed, 19 Apr 2023 08:13:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681917218; x=1684509218;
+        d=gmail.com; s=20221208; t=1681917219; x=1684509219;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=G/FySMZ1uaVdn8hFfxX28jYQ0M86DV2vxrNs25qfErk=;
-        b=Ilulsaod4TMX3YMP4wpY7omTVUjUeYjGLUW3Irg+4t6uHJ/yNZJnJB0eIRgHQBTYuo
-         GKtZVt/jWnlG2hFAvBuYgyXctPOXYA4/vtecuA6UBTug8imRT1h8sy9+z/wLMMUHvjQ7
-         Rg9PwgujZND5BN3QfnFzBpmTB7HoLZTUj9zjb/FHN4sAoPj2IUFSQli272qOnd0NUMPE
-         O31Ru7pE4koqg/kvVScHOiyxvakGWMKil0EaB0gt8DUi8vgWRKDgfCbmQSb+iydq3Y1Z
-         5nO5NV830svhbLOWFO9IKxD2twVIsOmTonBD+BqVi3kzwQg1/YHULto/m0gKwxoICpBE
-         bbZg==
+        bh=7EkWErFrWVVVguCZXrs5/K/s3WGppdVFRB9CPm2mWr4=;
+        b=FO3OuJIGLQrMA/LoQxR+43iT8BQ70ilkBDHd+gEJMY2wIae6xF4YZMaYrB9+dYJcp5
+         9dfXFA/zkc93FQoy4fMIOLUNSABMqSvt8M0o3i5iGPIw4f2eKQBo32hY2damV7Xc27hM
+         U0PIrTNnGk0g0EhjPw5bDPZpaqlmSHj7oonFTUh9hWqblND1eJVXTXvWSDMCVRZWGxbI
+         LzXgsejetE6J9LhJ+8MJ+DTRQILGCxCJbcRul9HShm89mNl0KYn5aJYxYKXTLX3jmdwy
+         rdwHMwdZXXWrpRqIoPkppksLrthNbBKzocYcZqU5kUqx7MSz8LsqgNKb9GC5KRzKOP6E
+         jF1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681917218; x=1684509218;
+        d=1e100.net; s=20221208; t=1681917219; x=1684509219;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=G/FySMZ1uaVdn8hFfxX28jYQ0M86DV2vxrNs25qfErk=;
-        b=dmV1gGIXa0TJ6jtFtC1Iw9SoVROuYeVj/F+dM9WFZHsuwiIpsf47i2wl0ittKyaCsN
-         igJryLFle9BBVbCCVMJNwaj9gzrahY631o9Uoog1KTt4uaHLx6obMW9x/RTC5H092B14
-         xtwH01KsS+UiINgcM9AyvLgwB2s3OzzRdESSJobuFDF8LdSVb3mw1E3FglFYirEMaReF
-         +j8ud5JlrVk6aTM07Qqyh+gvq/Whs17oHCt66bXPyWrjY++19bhyX5BfuNewzP7Egfi9
-         GWhyyrhlZWEwVu9CcJNcuJJYF+oIedjqdvYBPtVcoDdoZJOIdThTx+53Honh9/Q4oXa0
-         gPBQ==
-X-Gm-Message-State: AAQBX9e/ezcKsLaKzohWosDUioWwJFjN6Q1jtq0RJ85rFzHkkmCGS6YV
-        lWcEzqvlBX0ymyfFhRqYox6O2908KvY=
-X-Google-Smtp-Source: AKy350aaQ+ft90amOKqRo5jFZCK+VW45yMtdEMp/yiW6CiteOM5ZJFIa/WELR0OnWuI8XP7B42+k2A==
-X-Received: by 2002:a9d:7a8f:0:b0:690:a6b3:a2f6 with SMTP id l15-20020a9d7a8f000000b00690a6b3a2f6mr93970otn.0.1681917218193;
-        Wed, 19 Apr 2023 08:13:38 -0700 (PDT)
+        bh=7EkWErFrWVVVguCZXrs5/K/s3WGppdVFRB9CPm2mWr4=;
+        b=ihPk/Cr1AVIJrHfx9zxfYwjHK82UcRUQalT5e/0mYOYBDqZPsXOOauBHjMKCzmp9ol
+         tIvEfpp+49B19CBt4SHmB5M3IaW6SS0Z5mkCcEw4TPSfK1x3/rRp+lRhW3yKok6jZORp
+         N2OKMhMpksdoqYp5mikWG3yaRuaQLCHysz8Nnf6qHTa0nv6hp1u6cOJJY6KWbhDaxK3e
+         pF5p1eaOnJrpzFIf9078mflP70n3NOE8nWBArqtGWHV6MqH5Y4z0olWBgpkvKzeQ8mON
+         /f95JlMUx6+9FnrxtzyxZgENyEep2BvLy2I2OphsxSvcsvqquVTMqePzrEqTbVPArNFZ
+         pKvA==
+X-Gm-Message-State: AAQBX9eOoMyxUUVs+w+FvSIAynnLloYPV+E65NYRFgzYipsf5RqijRlM
+        IGVUdW7Vbi3atErKKMRMLAe7Z24Xgbg=
+X-Google-Smtp-Source: AKy350bUiewnLNzlexxoQ8kMiRm0j8obytrzPgBPYc0Gcvss5+OdZxDYvWAD9YW9i5XzSVx+TfUoPg==
+X-Received: by 2002:a05:6830:13c7:b0:6a4:32e7:e559 with SMTP id e7-20020a05683013c700b006a432e7e559mr2960359otq.33.1681917219391;
+        Wed, 19 Apr 2023 08:13:39 -0700 (PDT)
 Received: from grumpy-VECTOR.hsd1.tx.comcast.net ([2601:2c3:480:7390:e175:6963:338:7453])
-        by smtp.gmail.com with ESMTPSA id f17-20020a056830205100b00690e990e61asm4308842otp.14.2023.04.19.08.13.37
+        by smtp.gmail.com with ESMTPSA id f17-20020a056830205100b00690e990e61asm4308842otp.14.2023.04.19.08.13.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 08:13:37 -0700 (PDT)
+        Wed, 19 Apr 2023 08:13:39 -0700 (PDT)
 From:   Jorge Lopez <jorgealtxwork@gmail.com>
 X-Google-Original-From: Jorge Lopez <jorge.lopez2@hp.com>
 To:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v10 11/14] HP BIOSCFG driver  - spmobj-attributes
-Date:   Wed, 19 Apr 2023 10:13:18 -0500
-Message-Id: <20230419151321.6167-12-jorge.lopez2@hp.com>
+Subject: [PATCH v10 12/14] HP BIOSCFG driver  - surestart-attributes
+Date:   Wed, 19 Apr 2023 10:13:19 -0500
+Message-Id: <20230419151321.6167-13-jorge.lopez2@hp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230419151321.6167-1-jorge.lopez2@hp.com>
 References: <20230419151321.6167-1-jorge.lopez2@hp.com>
@@ -116,299 +116,103 @@ Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
 ---
 Based on the latest platform-drivers-x86.git/for-next
 ---
- .../x86/hp/hp-bioscfg/spmobj-attributes.c     | 405 ++++++++++++++++++
- 1 file changed, 405 insertions(+)
- create mode 100644 drivers/platform/x86/hp/hp-bioscfg/spmobj-attributes.c
+ .../x86/hp/hp-bioscfg/surestart-attributes.c  | 130 ++++++++++++++++++
+ 1 file changed, 130 insertions(+)
+ create mode 100644 drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
 
-diff --git a/drivers/platform/x86/hp/hp-bioscfg/spmobj-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/spmobj-attributes.c
+diff --git a/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
 new file mode 100644
-index 000000000000..df8e71d2eb64
+index 000000000000..43bd405403e9
 --- /dev/null
-+++ b/drivers/platform/x86/hp/hp-bioscfg/spmobj-attributes.c
-@@ -0,0 +1,405 @@
++++ b/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
+@@ -0,0 +1,130 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Functions corresponding to secure platform management object type
-+ * attributes under BIOS PASSWORD for use with hp-bioscfg driver
++ * Functions corresponding to sure start object type attributes under
++ * BIOS for use with hp-bioscfg driver
 + *
 + *  Copyright (c) 2022 HP Development Company, L.P.
 + */
 +
 +#include "bioscfg.h"
++#include <asm-generic/posix_types.h>
 +
-+
-+static const char * const spm_state_types[] = {
-+	"not provisioned",
-+	"provisioned",
-+	"provisioning in progress"
-+};
-+
-+static const char * const spm_mechanism_types[] = {
-+	"not provision",
-+	"signing-key",
-+	"endorsement-key"
-+};
-+
-+
-+int check_spm_is_enabled(void)
-+{
-+	/* do we need to check the admin password is also configured */
-+	return bioscfg_drv.spm_data.is_enabled;
-+}
++#define LOG_MAX_ENTRIES	254
++#define LOG_ENTRY_SIZE		16
 +
 +/*
-+ * calculate_security_buffer() - determines size of security buffer
-+ * for authentication scheme
-+ *
-+ * @authentication: the authentication content
-+ *
-+ * Currently only supported type is Admin password
++ * audit_log_entry_count_show - Reports the number of
++ *				existing audit log entries available
++ *				to be read
 + */
-+size_t calculate_security_buffer(const char *authentication)
-+{
-+	int size;
-+
-+	if (authentication != NULL && strlen(authentication) > 0) {
-+
-+		size = (sizeof(u16) + (strlen(authentication) * sizeof(u16)));
-+		if (strncmp(authentication, BEAM_PREFIX, strlen(BEAM_PREFIX)) != 0)
-+			size += (strlen(UTF_PREFIX) * sizeof(u16));
-+
-+		return size;
-+	}
-+
-+	size  = sizeof(u16) * 2;
-+	return size;
-+}
-+
-+/*
-+ * populate_security_buffer() - builds a security buffer for
-+ * authentication scheme
-+ *
-+ * @buffer: the buffer to populate
-+ * @authentication: the authentication content
-+ *
-+ * Currently only supported type is PLAIN TEXT
-+ */
-+void populate_security_buffer(u16 *buffer, const char *authentication)
-+{
-+	u16 *auth = buffer;
-+	char *strprefix = NULL;
-+
-+	if (strncmp(authentication, BEAM_PREFIX, strlen(BEAM_PREFIX)) == 0) {
-+		/*
-+		 * BEAM_PREFIX is append to buffer when a signature
-+		 * is provided and Sure Admin is enabled in BIOS
-+		 */
-+		// BEAM_PREFIX found, convert part to unicode
-+		auth = ascii_to_utf16_unicode(auth, authentication);
-+	} else {
-+		/*
-+		 * UTF-16 prefix is append to the * buffer when a BIOS
-+		 * admin password is configured in BIOS
-+		 */
-+
-+		// append UTF_PREFIX to part and then convert it to unicode
-+		strprefix = kasprintf(GFP_KERNEL, "%s%s", UTF_PREFIX,
-+				      authentication);
-+		if (!strprefix)
-+			goto out_buffer;
-+
-+		auth = ascii_to_utf16_unicode(auth, strprefix);
-+	}
-+out_buffer:
-+
-+	kfree(strprefix);
-+}
-+
-+ssize_t update_spm_state(void)
++static ssize_t audit_log_entry_count_show(struct kobject *kobj,
++					  struct kobj_attribute *attr, char *buf)
 +{
 +	int ret;
-+	struct secureplatform_provisioning_data *data = NULL;
++	u32 count = 0;
 +
-+	data = kmalloc(sizeof(struct secureplatform_provisioning_data),
-+		       GFP_KERNEL);
-+	if (!data) {
-+		ret = -ENOMEM;
-+		goto state_exit;
-+	}
++	ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG_COUNT,
++				   HPWMI_SURESTART,
++				   &count, 1, sizeof(count));
 +
-+	ret = hp_wmi_perform_query(HPWMI_SECUREPLATFORM_GET_STATE,
-+				   HPWMI_SECUREPLATFORM, data, 0,
-+				   sizeof(*data));
 +	if (ret < 0)
-+		goto state_exit;
++		return ret;
 +
-+	bioscfg_drv.spm_data.mechanism = data->state;
-+	if (bioscfg_drv.spm_data.mechanism)
-+		bioscfg_drv.spm_data.is_enabled = 1;
-+
-+state_exit:
-+	kfree(data);
-+
-+	return ret;
-+}
-+
-+ssize_t statusbin(struct kobject *kobj,
-+		  struct kobj_attribute *attr, char *buf)
-+{
-+	int ret = hp_wmi_perform_query(HPWMI_SECUREPLATFORM_GET_STATE,
-+				       HPWMI_SECUREPLATFORM, buf, 0,
-+				       sizeof(struct secureplatform_provisioning_data));
-+
-+	return ret ? -ENODEV : sizeof(struct secureplatform_provisioning_data);
++	return sysfs_emit(buf, "%d,%d,%d\n", count, LOG_ENTRY_SIZE,
++			  LOG_MAX_ENTRIES);
 +}
 +
 +/*
-+ * status_show - Reads SPM status
++ * audit_log_entries_show() - Return all entries found in log file
 + */
-+ssize_t status_show(struct kobject *kobj, struct kobj_attribute
-+		    *attr, char *buf)
++static ssize_t audit_log_entries_show(struct kobject *kobj,
++				      struct kobj_attribute *attr, char *buf)
 +{
-+	int ret, i;
-+	struct secureplatform_provisioning_data *data = NULL;
++	int ret;
++	int i;
++	u32 count = 0;
 +
-+	data = kmalloc(sizeof(struct secureplatform_provisioning_data),
-+		       GFP_KERNEL);
-+	if (!data) {
-+		ret = -ENOMEM;
-+		goto status_exit;
-+	}
-+
-+	ret = statusbin(kobj, attr, (char *)data);
-+	if (ret < 0)
-+		goto status_exit;
-+
-+	sysfs_emit(buf, "%s{\n", buf);
-+	sysfs_emit(buf, "%s\t\"State\": \"%s\",\n", buf,
-+		   spm_state_types[data->state]);
-+	sysfs_emit(buf, "%s\t\"Version\": \"%d.%d\",\n", buf, data->version[0],
-+		   data->version[1]);
++	// Get the number of event logs
++	ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG_COUNT,
++				   HPWMI_SURESTART,
++				   &count, 1, sizeof(count));
 +
 +	/*
-+	 * state == 0 means secure platform management
-+	 * feature is not configured in BIOS.
++	 * The show() api will not work if the audit logs ever go
++	 *  beyond 4KB
 +	 */
-+	if (data->state == 0)
-+		goto status_exit;
++	if (count * LOG_ENTRY_SIZE > PAGE_SIZE)
++		return -EFAULT;
 +
-+	sysfs_emit(buf, "%s\t\"Nonce\": %d,\n", buf, data->nonce);
-+	sysfs_emit(buf, "%s\t\"FeaturesInUse\": %d,\n", buf, data->features);
-+	sysfs_emit(buf, "%s\t\"EndorsementKeyMod\": \"", buf);
++	if (ret < 0)
++		return ret;
 +
-+	for (i = 255; i >= 0; i--)
-+		sysfs_emit(buf, "%s %u", buf, data->kek_mod[i]);
++	/*
++	 * We are guaranteed the buffer is 4KB so today all the event
++	 * logs will fit
++	 */
 +
-+	sysfs_emit(buf, "%s \",\n", buf);
-+	sysfs_emit(buf, "%s\t\"SigningKeyMod\": \"", buf);
++	for (i = 0; ((i < count) & (ret >= 0)); i++) {
++		*buf = (i + 1);
++		ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG,
++					   HPWMI_SURESTART,
++					   buf, 1, 128);
++		if (ret >= 0)
++			buf += LOG_ENTRY_SIZE;
++	}
 +
-+	for (i = 255; i >= 0; i--)
-+		sysfs_emit(buf, "%s %u", buf, data->sk_mod[i]);
-+
-+	/* Return buf contents */
-+
-+	sysfs_emit(buf, "%s \"\n", buf);
-+	sysfs_emit(buf, "%s}\n", buf);
-+
-+status_exit:
-+	kfree(data);
-+
-+	return strnlen(buf, PAGE_SIZE);
++	return (count * LOG_ENTRY_SIZE);
 +}
 +
-+struct kobj_attribute password_spm_status = __ATTR_RO(status);
++static struct kobj_attribute sure_start_audit_log_entry_count = __ATTR_RO(audit_log_entry_count);
++struct kobj_attribute sure_start_audit_log_entries = __ATTR_RO(audit_log_entries);
 +
-+ATTRIBUTE_SPM_N_PROPERTY_SHOW(is_enabled, spm);
-+static struct kobj_attribute password_spm_is_key_enabled = __ATTR_RO(is_enabled);
-+
-+
-+static ssize_t key_mechanism_show(struct kobject *kobj, struct kobj_attribute *attr,
-+				  char *buf)
++static ssize_t type_show(struct kobject *kobj, struct kobj_attribute *attr,
++			 char *buf)
 +{
-+	return sysfs_emit(buf, "%s\n",
-+			  spm_mechanism_types[bioscfg_drv.spm_data.mechanism]);
++	return sysfs_emit(buf, "sure-start\n");
 +}
-+static struct kobj_attribute password_spm_key_mechanism = __ATTR_RO(key_mechanism);
-+
-+static ssize_t sk_store(struct kobject *kobj,
-+			struct kobj_attribute *attr,
-+			const char *buf, size_t count)
-+{
-+	int ret;
-+	int length;
-+
-+	length = count;
-+	if (buf[length-1] == '\n')
-+		length--;
-+
-+	/* allocate space and copy current signing key */
-+	bioscfg_drv.spm_data.signing_key = kmalloc(length, GFP_KERNEL);
-+	if (!bioscfg_drv.spm_data.signing_key) {
-+		ret = -ENOMEM;
-+		goto exit_sk;
-+	}
-+
-+	memcpy(bioscfg_drv.spm_data.signing_key, buf, length);
-+	bioscfg_drv.spm_data.signing_key[length] = '\0';
-+
-+	/* submit signing key payload */
-+	ret = hp_wmi_perform_query(HPWMI_SECUREPLATFORM_SET_SK,
-+				   HPWMI_SECUREPLATFORM,
-+				   (void *)bioscfg_drv.spm_data.signing_key,
-+				   length, 0);
-+
-+	if (!ret) {
-+		bioscfg_drv.spm_data.mechanism = SIGNING_KEY;
-+		bioscfg_drv.pending_reboot = true;
-+	}
-+
-+exit_sk:
-+	kfree(bioscfg_drv.spm_data.signing_key);
-+	bioscfg_drv.spm_data.signing_key = NULL;
-+
-+	return ret ? ret : count;
-+}
-+
-+static struct kobj_attribute password_spm_signing_key = __ATTR_WO(sk);
-+
-+static ssize_t kek_store(struct kobject *kobj,
-+			 struct kobj_attribute *attr,
-+			 const char *buf, size_t count)
-+{
-+	int ret;
-+	int length;
-+
-+	length = count;
-+	if (buf[length-1] == '\n')
-+		length--;
-+
-+	/* allocate space and copy current signing key */
-+	bioscfg_drv.spm_data.endorsement_key = kmalloc(length, GFP_KERNEL);
-+	if (!bioscfg_drv.spm_data.endorsement_key) {
-+		ret = -ENOMEM;
-+		goto exit_kek;
-+	}
-+
-+	memcpy(bioscfg_drv.spm_data.endorsement_key, buf, length);
-+	bioscfg_drv.spm_data.endorsement_key[length] = '\0';
-+
-+	ret = hp_wmi_perform_query(HPWMI_SECUREPLATFORM_SET_KEK,
-+				   HPWMI_SECUREPLATFORM,
-+				   (void *)bioscfg_drv.spm_data.endorsement_key,
-+				   count, 0);
-+
-+	if (!ret) {
-+		bioscfg_drv.spm_data.mechanism = ENDORSEMENT_KEY;
-+		bioscfg_drv.pending_reboot = true;
-+	}
-+
-+exit_kek:
-+	kfree(bioscfg_drv.spm_data.endorsement_key);
-+	bioscfg_drv.spm_data.endorsement_key = NULL;
-+
-+	return ret ? ret : count;
-+}
-+static struct kobj_attribute password_spm_endorsement_key = __ATTR_WO(kek);
++static struct kobj_attribute sure_start_type = __ATTR_RO(type);
 +
 +static ssize_t display_name_language_code_show(struct kobject *kobj,
 +					       struct kobj_attribute *attr,
@@ -417,119 +221,40 @@ index 000000000000..df8e71d2eb64
 +	return sysfs_emit(buf, "%s\n", LANG_CODE_STR);
 +}
 +
-+static struct kobj_attribute password_spm_display_langcode =
-+	__ATTR_RO(display_name_language_code);
++static struct kobj_attribute sure_start_display_langcode =
++		__ATTR_RO(display_name_language_code);
 +
 +
 +static ssize_t display_name_show(struct kobject *kobj,
 +				 struct kobj_attribute *attr, char *buf)
 +{
-+	return sysfs_emit(buf, "%s\n", SPM_STR_DESC);
++	return sysfs_emit(buf, "%s\n", SURE_START_DESC);
 +}
-+static struct kobj_attribute password_spm_display_name = __ATTR_RO(display_name);
++static struct kobj_attribute sure_start_display_name = __ATTR_RO(display_name);
 +
-+static ssize_t type_show(struct kobject *kobj, struct kobj_attribute *attr,
-+			 char *buf)
-+{
-+	return sysfs_emit(buf, "secure-platform-management\n");
-+}
-+static struct kobj_attribute password_spm_type = __ATTR_RO(type);
-+
-+static ssize_t role_show(struct kobject *kobj, struct kobj_attribute *attr,
-+			 char *buf)
-+{
-+	return sysfs_emit(buf, "%s\n", BIOS_SPM);
-+}
-+static struct kobj_attribute password_spm_role = __ATTR_RO(role);
-+
-+static ssize_t auth_token_store(struct kobject *kobj,
-+				struct kobj_attribute *attr,
-+				const char *buf, size_t count)
-+{
-+	int ret = 0;
-+	int length;
-+
-+	length = count;
-+	if (buf[length-1] == '\n')
-+		length--;
-+
-+	/* allocate space and copy current auth token */
-+	bioscfg_drv.spm_data.auth_token = kmalloc(count, GFP_KERNEL);
-+	if (!bioscfg_drv.spm_data.auth_token) {
-+		ret = -ENOMEM;
-+		goto exit_token;
-+	}
-+
-+	memcpy(bioscfg_drv.spm_data.auth_token, buf, count);
-+	bioscfg_drv.spm_data.auth_token[length] = '\0';
-+	return count;
-+
-+
-+exit_token:
-+	kfree(bioscfg_drv.spm_data.auth_token);
-+	bioscfg_drv.spm_data.auth_token = NULL;
-+
-+	return ret;
-+
-+}
-+static struct kobj_attribute password_spm_auth_token = __ATTR_WO(auth_token);
-+
-+static struct attribute *secure_platform_attrs[] = {
-+	&password_spm_display_name.attr,
-+	&password_spm_display_langcode.attr,
-+	&password_spm_is_key_enabled.attr,
-+	&password_spm_signing_key.attr,
-+	&password_spm_endorsement_key.attr,
-+	&password_spm_key_mechanism.attr,
-+	&password_spm_status.attr,
-+	&password_spm_type.attr,
-+	&password_spm_role.attr,
-+	&password_spm_auth_token.attr,
-+	NULL,
++static struct attribute *sure_start_attrs[] = {
++	&sure_start_display_name.attr,
++	&sure_start_display_langcode.attr,
++	&sure_start_audit_log_entry_count.attr,
++	&sure_start_audit_log_entries.attr,
++	&sure_start_type.attr,
++	NULL
 +};
 +
-+static const struct attribute_group secure_platform_attr_group = {
-+	.attrs = secure_platform_attrs,
++static const struct attribute_group sure_start_attr_group = {
++	.attrs = sure_start_attrs,
 +};
 +
-+void exit_secure_platform_attributes(void)
++void exit_sure_start_attributes(void)
 +{
-+	/* remove secure platform sysfs entry and free key data*/
-+
-+	kfree(bioscfg_drv.spm_data.endorsement_key);
-+	bioscfg_drv.spm_data.endorsement_key = NULL;
-+
-+	kfree(bioscfg_drv.spm_data.signing_key);
-+	bioscfg_drv.spm_data.signing_key = NULL;
-+
-+	kfree(bioscfg_drv.spm_data.auth_token);
-+	bioscfg_drv.spm_data.auth_token = NULL;
-+
-+	if (bioscfg_drv.spm_data.attr_name_kobj)
-+		sysfs_remove_group(bioscfg_drv.spm_data.attr_name_kobj,
-+				   &secure_platform_attr_group);
++	sysfs_remove_group(bioscfg_drv.sure_start_attr_kobj,
++			   &sure_start_attr_group);
 +}
 +
-+int populate_secure_platform_data(struct kobject *attr_name_kobj)
++int populate_sure_start_data(struct kobject *attr_name_kobj)
 +{
-+	/* Populate data for Secure Platform Management */
-+	bioscfg_drv.spm_data.attr_name_kobj = attr_name_kobj;
-+
-+	strscpy(bioscfg_drv.spm_data.attribute_name, SPM_STR,
-+		sizeof(bioscfg_drv.spm_data.attribute_name));
-+	strscpy(bioscfg_drv.spm_data.display_name, SPM_STR_DESC,
-+		sizeof(bioscfg_drv.spm_data.display_name));
-+
-+	bioscfg_drv.spm_data.is_enabled = 0;
-+	bioscfg_drv.spm_data.mechanism = 0;
-+	bioscfg_drv.pending_reboot = false;
-+	update_spm_state();
-+
-+	bioscfg_drv.spm_data.endorsement_key = NULL;
-+	bioscfg_drv.spm_data.signing_key = NULL;
-+	bioscfg_drv.spm_data.auth_token = NULL;
-+
-+	return sysfs_create_group(attr_name_kobj, &secure_platform_attr_group);
++	bioscfg_drv.sure_start_attr_kobj = attr_name_kobj;
++	return sysfs_create_group(attr_name_kobj, &sure_start_attr_group);
 +}
 -- 
 2.34.1
