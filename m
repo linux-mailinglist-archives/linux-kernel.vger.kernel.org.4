@@ -2,93 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557226E72A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 211F76E72A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjDSFmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 01:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
+        id S231516AbjDSFmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 01:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjDSFmb (ORCPT
+        with ESMTP id S229633AbjDSFmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 01:42:31 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16E440E7
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:42:25 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTP id 33J5ed12070031;
-        Wed, 19 Apr 2023 13:40:39 +0800 (+08)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Wed, 19 Apr 2023 13:40:39 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <ke.wang@unisoc.com>
-Subject: [PATCH] mm: skip CMA pages when they are not available
-Date:   Wed, 19 Apr 2023 13:40:24 +0800
-Message-ID: <1681882824-17532-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Wed, 19 Apr 2023 01:42:07 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1352E5BBA;
+        Tue, 18 Apr 2023 22:42:06 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id BA56A3F558;
+        Wed, 19 Apr 2023 05:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1681882924;
+        bh=PHWY28RNZSnXh8z/q/7yzDlNLTSA9IeiJKkegwI+W08=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=MdKGfLFOnFVyo/Dj7l9ISKdYE/IimL4e4v6AYgRbqyu01AbRoZzBapHGYYQMyfubT
+         HnFihMEnWwp9vYdULWi31OupXtV6jzhOonYY+mqvtU1doz9eIky3jSpAE147n/MJVA
+         56dCnxSsS4giqNbC9aYIGameWLlseO6E5UrIZMWmsustB3OTB7ol7idK379crbnd5R
+         P/iPmBZXWn74+X6589ncL4pp6efw3Vjshw0gTtBDlx9SnzHc82PqmbNVjYndcYCNoa
+         y9ch3jl09QudmRXWX8yYo9DFaTXSBtLxqEuBvLEtykfmlQ/dXJwX58dbcuJX3Fx55q
+         UhTQOBZoKdS0A==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     acelan.kao@canonical.com,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: core: Avoid doing rescan on suspended device
+Date:   Wed, 19 Apr 2023 13:41:12 +0800
+Message-Id: <20230419054112.269734-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 33J5ed12070031
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+During system resume, if an EH is schduled after ATA host is resumed
+(i.e. ATA_PFLAG_PM_PENDING cleared), but before the disk device is
+resumed, the device_lock hold by scsi_rescan_device() is never released
+so the dpm_resume() of the disk is blocked forerver.
 
-It is wasting of effort to reclaim CMA pages if they are not availabe
-for current context during direct reclaim. Skip them when under corresponding
-circumstance.
+That's because scsi_attach_vpd() is expecting the disk device is in
+operational state, as it doesn't work on suspended device.
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+To avoid such deadlock, avoid doing rescan if the disk is still
+suspended so the resume process of the disk device can proceed.
+
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
- mm/vmscan.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/scsi/scsi_scan.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index bd6637f..04424d9 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -2225,10 +2225,16 @@ static unsigned long isolate_lru_folios(unsigned long nr_to_scan,
- 	unsigned long nr_skipped[MAX_NR_ZONES] = { 0, };
- 	unsigned long skipped = 0;
- 	unsigned long scan, total_scan, nr_pages;
-+	bool cma_cap = true;
-+	struct page *page;
- 	LIST_HEAD(folios_skipped);
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index d217be323cc6..36680cb1535b 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -1621,6 +1621,9 @@ void scsi_rescan_device(struct device *dev)
+ {
+ 	struct scsi_device *sdev = to_scsi_device(dev);
  
- 	total_scan = 0;
- 	scan = 0;
-+	if ((IS_ENABLED(CONFIG_CMA)) && !current_is_kswapd()
-+		&& (gfp_migratetype(sc->gfp_mask) != MIGRATE_MOVABLE))
-+		cma_cap = false;
++	if (dev->power.is_prepared)
++		return;
 +
- 	while (scan < nr_to_scan && !list_empty(src)) {
- 		struct list_head *move_to = src;
- 		struct folio *folio;
-@@ -2239,7 +2245,10 @@ static unsigned long isolate_lru_folios(unsigned long nr_to_scan,
- 		nr_pages = folio_nr_pages(folio);
- 		total_scan += nr_pages;
+ 	device_lock(dev);
  
--		if (folio_zonenum(folio) > sc->reclaim_idx) {
-+		page = &folio->page;
-+
-+		if (folio_zonenum(folio) > sc->reclaim_idx ||
-+			(get_pageblock_migratetype(page) == MIGRATE_CMA && !cma_cap)) {
- 			nr_skipped[folio_zonenum(folio)] += nr_pages;
- 			move_to = &folios_skipped;
- 			goto move;
+ 	scsi_attach_vpd(sdev);
 -- 
-1.9.1
+2.34.1
 
