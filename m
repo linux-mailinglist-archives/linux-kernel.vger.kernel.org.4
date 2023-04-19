@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1015B6E71F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1F86E71FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 05:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbjDSD5H convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 23:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
+        id S230153AbjDSD5W convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 18 Apr 2023 23:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbjDSD4z (ORCPT
+        with ESMTP id S231963AbjDSD44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 23:56:55 -0400
+        Tue, 18 Apr 2023 23:56:56 -0400
 Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0715FD1;
-        Tue, 18 Apr 2023 20:56:53 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D5A5FC4;
+        Tue, 18 Apr 2023 20:56:54 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 3EF1524E2AF;
-        Wed, 19 Apr 2023 11:56:52 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 19 Apr
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 014A524E2B4;
+        Wed, 19 Apr 2023 11:56:53 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 19 Apr
  2023 11:56:52 +0800
 Received: from ubuntu.localdomain (113.72.144.253) by EXMBX162.cuchost.com
  (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 19 Apr
- 2023 11:56:50 +0800
+ 2023 11:56:51 +0800
 From:   Changhuang Liang <changhuang.liang@starfivetech.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -39,9 +39,9 @@ CC:     Walker Chen <walker.chen@starfivetech.com>,
         Hal Feng <hal.feng@starfivetech.com>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>
-Subject: [RESEND v2 3/6] soc: starfive: Modify ioremap to regmap
-Date:   Tue, 18 Apr 2023 20:56:43 -0700
-Message-ID: <20230419035646.43702-4-changhuang.liang@starfivetech.com>
+Subject: [RESEND v2 4/6] soc: starfive: Extract JH7110 pmu private operations
+Date:   Tue, 18 Apr 2023 20:56:44 -0700
+Message-ID: <20230419035646.43702-5-changhuang.liang@starfivetech.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230419035646.43702-1-changhuang.liang@starfivetech.com>
 References: <20230419035646.43702-1-changhuang.liang@starfivetech.com>
@@ -61,147 +61,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modify ioremap to regmap which can be compatible with the syscon
-interface, such as:
-struct regmap *syscon_node_to_regmap(struct device_node *np)
-Convenient introduction of syscon operation.
+Move JH7110 private operation into private data of compatible.
+Convenient to expand different compatible.
 
 Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
 ---
- drivers/soc/starfive/jh71xx_pmu.c | 43 +++++++++++++++++--------------
- 1 file changed, 23 insertions(+), 20 deletions(-)
+ drivers/soc/starfive/jh71xx_pmu.c | 98 +++++++++++++++++++++----------
+ 1 file changed, 67 insertions(+), 31 deletions(-)
 
 diff --git a/drivers/soc/starfive/jh71xx_pmu.c b/drivers/soc/starfive/jh71xx_pmu.c
-index 7d5f50d71c0d..306218c83691 100644
+index 306218c83691..bb44cc93e822 100644
 --- a/drivers/soc/starfive/jh71xx_pmu.c
 +++ b/drivers/soc/starfive/jh71xx_pmu.c
-@@ -6,13 +6,13 @@
-  */
+@@ -51,9 +51,17 @@ struct jh71xx_domain_info {
+ 	u8 bit;
+ };
  
- #include <linux/interrupt.h>
--#include <linux/io.h>
--#include <linux/iopoll.h>
-+#include <linux/mfd/syscon.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
-+#include <linux/regmap.h>
- #include <dt-bindings/power/starfive,jh7110-pmu.h>
++struct jh71xx_pmu;
++struct jh71xx_pmu_dev;
++
+ struct jh71xx_pmu_match_data {
+ 	const struct jh71xx_domain_info *domain_info;
+ 	int num_domains;
++	unsigned int pmu_status;
++	int (*pmu_parse_dt)(struct platform_device *pdev,
++			    struct jh71xx_pmu *pmu);
++	int (*pmu_set_state)(struct jh71xx_pmu_dev *pmd,
++			     u32 mask, bool on);
+ };
  
- /* register offset */
-@@ -59,7 +59,7 @@ struct jh71xx_pmu_match_data {
  struct jh71xx_pmu {
- 	struct device *dev;
- 	const struct jh71xx_pmu_match_data *match_data;
--	void __iomem *base;
-+	struct regmap *base;
- 	struct generic_pm_domain **genpd;
- 	struct genpd_onecell_data genpd_data;
- 	int irq;
-@@ -75,11 +75,14 @@ struct jh71xx_pmu_dev {
- static int jh71xx_pmu_get_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool *is_on)
- {
- 	struct jh71xx_pmu *pmu = pmd->pmu;
-+	unsigned int val;
- 
+@@ -80,14 +88,14 @@ static int jh71xx_pmu_get_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool *is_o
  	if (!mask)
  		return -EINVAL;
  
--	*is_on = readl(pmu->base + JH71XX_PMU_CURR_POWER_MODE) & mask;
-+	regmap_read(pmu->base, JH71XX_PMU_CURR_POWER_MODE, &val);
-+
-+	*is_on = val & mask;
+-	regmap_read(pmu->base, JH71XX_PMU_CURR_POWER_MODE, &val);
++	regmap_read(pmu->base, pmu->match_data->pmu_status, &val);
+ 
+ 	*is_on = val & mask;
  
  	return 0;
  }
-@@ -130,7 +133,7 @@ static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
- 		encourage_hi = JH71XX_PMU_SW_ENCOURAGE_DIS_HI;
- 	}
  
--	writel(mask, pmu->base + mode);
-+	regmap_write(pmu->base, mode, mask);
+-static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
++static int jh7110_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
+ {
+ 	struct jh71xx_pmu *pmu = pmd->pmu;
+ 	unsigned long flags;
+@@ -95,22 +103,8 @@ static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
+ 	u32 mode;
+ 	u32 encourage_lo;
+ 	u32 encourage_hi;
+-	bool is_on;
+ 	int ret;
+ 
+-	ret = jh71xx_pmu_get_state(pmd, mask, &is_on);
+-	if (ret) {
+-		dev_dbg(pmu->dev, "unable to get current state for %s\n",
+-			pmd->genpd.name);
+-		return ret;
+-	}
+-
+-	if (is_on == on) {
+-		dev_dbg(pmu->dev, "pm domain [%s] is already %sable status.\n",
+-			pmd->genpd.name, on ? "en" : "dis");
+-		return 0;
+-	}
+-
+ 	spin_lock_irqsave(&pmu->lock, flags);
  
  	/*
- 	 * 2.Write SW encourage command sequence to the Software Encourage Reg (offset 0x44)
-@@ -140,21 +143,21 @@ static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
- 	 *   Then write the lower bits of the command sequence, followed by the upper
- 	 *   bits. The sequence differs between powering on & off a domain.
- 	 */
--	writel(JH71XX_PMU_SW_ENCOURAGE_ON, pmu->base + JH71XX_PMU_SW_ENCOURAGE);
--	writel(encourage_lo, pmu->base + JH71XX_PMU_SW_ENCOURAGE);
--	writel(encourage_hi, pmu->base + JH71XX_PMU_SW_ENCOURAGE);
-+	regmap_write(pmu->base, JH71XX_PMU_SW_ENCOURAGE, JH71XX_PMU_SW_ENCOURAGE_ON);
-+	regmap_write(pmu->base, JH71XX_PMU_SW_ENCOURAGE, encourage_lo);
-+	regmap_write(pmu->base, JH71XX_PMU_SW_ENCOURAGE, encourage_hi);
- 
- 	spin_unlock_irqrestore(&pmu->lock, flags);
- 
- 	/* Wait for the power domain bit to be enabled / disabled */
- 	if (on) {
--		ret = readl_poll_timeout_atomic(pmu->base + JH71XX_PMU_CURR_POWER_MODE,
--						val, val & mask,
--						1, JH71XX_PMU_TIMEOUT_US);
-+		ret = regmap_read_poll_timeout_atomic(pmu->base, JH71XX_PMU_CURR_POWER_MODE,
-+						      val, val & mask,
-+						      1, JH71XX_PMU_TIMEOUT_US);
- 	} else {
--		ret = readl_poll_timeout_atomic(pmu->base + JH71XX_PMU_CURR_POWER_MODE,
--						val, !(val & mask),
--						1, JH71XX_PMU_TIMEOUT_US);
-+		ret = regmap_read_poll_timeout_atomic(pmu->base, JH71XX_PMU_CURR_POWER_MODE,
-+						      val, !(val & mask),
-+						      1, JH71XX_PMU_TIMEOUT_US);
- 	}
- 
- 	if (ret) {
-@@ -190,14 +193,14 @@ static void jh71xx_pmu_int_enable(struct jh71xx_pmu *pmu, u32 mask, bool enable)
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&pmu->lock, flags);
--	val = readl(pmu->base + JH71XX_PMU_TIMER_INT_MASK);
-+	regmap_read(pmu->base, JH71XX_PMU_TIMER_INT_MASK, &val);
- 
- 	if (enable)
- 		val &= ~mask;
- 	else
- 		val |= mask;
- 
--	writel(val, pmu->base + JH71XX_PMU_TIMER_INT_MASK);
-+	regmap_write(pmu->base, JH71XX_PMU_TIMER_INT_MASK, val);
- 	spin_unlock_irqrestore(&pmu->lock, flags);
+@@ -169,6 +163,29 @@ static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
+ 	return 0;
  }
  
-@@ -206,7 +209,7 @@ static irqreturn_t jh71xx_pmu_interrupt(int irq, void *data)
- 	struct jh71xx_pmu *pmu = data;
- 	u32 val;
- 
--	val = readl(pmu->base + JH71XX_PMU_INT_STATUS);
-+	regmap_read(pmu->base, JH71XX_PMU_INT_STATUS, &val);
- 
- 	if (val & JH71XX_PMU_INT_SEQ_DONE)
- 		dev_dbg(pmu->dev, "sequence done.\n");
-@@ -220,8 +223,8 @@ static irqreturn_t jh71xx_pmu_interrupt(int irq, void *data)
- 		dev_err(pmu->dev, "p-channel fail event.\n");
- 
- 	/* clear interrupts */
--	writel(val, pmu->base + JH71XX_PMU_INT_STATUS);
--	writel(val, pmu->base + JH71XX_PMU_EVENT_STATUS);
-+	regmap_write(pmu->base, JH71XX_PMU_INT_STATUS, val);
-+	regmap_write(pmu->base, JH71XX_PMU_EVENT_STATUS, val);
- 
++static int jh71xx_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
++{
++	struct jh71xx_pmu *pmu = pmd->pmu;
++	const struct jh71xx_pmu_match_data *match_data = pmu->match_data;
++	bool is_on;
++	int ret;
++
++	ret = jh71xx_pmu_get_state(pmd, mask, &is_on);
++	if (ret) {
++		dev_dbg(pmu->dev, "unable to get current state for %s\n",
++			pmd->genpd.name);
++		return ret;
++	}
++
++	if (is_on == on) {
++		dev_dbg(pmu->dev, "pm domain [%s] is already %sable status.\n",
++			pmd->genpd.name, on ? "en" : "dis");
++		return 0;
++	}
++
++	return match_data->pmu_set_state(pmd, mask, on);
++}
++
+ static int jh71xx_pmu_on(struct generic_pm_domain *genpd)
+ {
+ 	struct jh71xx_pmu_dev *pmd = container_of(genpd,
+@@ -229,6 +246,30 @@ static irqreturn_t jh71xx_pmu_interrupt(int irq, void *data)
  	return IRQ_HANDLED;
  }
-@@ -271,7 +274,7 @@ static int jh71xx_pmu_probe(struct platform_device *pdev)
+ 
++static int jh7110_pmu_parse_dt(struct platform_device *pdev, struct jh71xx_pmu *pmu)
++{
++	struct device *dev = &pdev->dev;
++	struct device_node *np = dev->of_node;
++	int ret;
++
++	pmu->base = device_node_to_regmap(np);
++	if (IS_ERR(pmu->base))
++		return PTR_ERR(pmu->base);
++
++	pmu->irq = platform_get_irq(pdev, 0);
++	if (pmu->irq < 0)
++		return pmu->irq;
++
++	ret = devm_request_irq(dev, pmu->irq, jh71xx_pmu_interrupt,
++			       0, pdev->name, pmu);
++	if (ret)
++		dev_err(dev, "failed to request irq\n");
++
++	jh71xx_pmu_int_enable(pmu, JH71XX_PMU_INT_ALL_MASK & ~JH71XX_PMU_INT_PCH_FAIL, true);
++
++	return 0;
++}
++
+ static int jh71xx_pmu_init_domain(struct jh71xx_pmu *pmu, int index)
+ {
+ 	struct jh71xx_pmu_dev *pmd;
+@@ -274,23 +315,18 @@ static int jh71xx_pmu_probe(struct platform_device *pdev)
  	if (!pmu)
  		return -ENOMEM;
  
--	pmu->base = devm_platform_ioremap_resource(pdev, 0);
-+	pmu->base = device_node_to_regmap(np);
- 	if (IS_ERR(pmu->base))
- 		return PTR_ERR(pmu->base);
+-	pmu->base = device_node_to_regmap(np);
+-	if (IS_ERR(pmu->base))
+-		return PTR_ERR(pmu->base);
+-
+-	pmu->irq = platform_get_irq(pdev, 0);
+-	if (pmu->irq < 0)
+-		return pmu->irq;
+-
+-	ret = devm_request_irq(dev, pmu->irq, jh71xx_pmu_interrupt,
+-			       0, pdev->name, pmu);
+-	if (ret)
+-		dev_err(dev, "failed to request irq\n");
++	spin_lock_init(&pmu->lock);
  
+ 	match_data = of_device_get_match_data(dev);
+ 	if (!match_data)
+ 		return -EINVAL;
+ 
++	ret = match_data->pmu_parse_dt(pdev, pmu);
++	if (ret) {
++		dev_err(dev, "failed to parse dt\n");
++		return ret;
++	}
++
+ 	pmu->genpd = devm_kcalloc(dev, match_data->num_domains,
+ 				  sizeof(struct generic_pm_domain *),
+ 				  GFP_KERNEL);
+@@ -310,9 +346,6 @@ static int jh71xx_pmu_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	spin_lock_init(&pmu->lock);
+-	jh71xx_pmu_int_enable(pmu, JH71XX_PMU_INT_ALL_MASK & ~JH71XX_PMU_INT_PCH_FAIL, true);
+-
+ 	ret = of_genpd_add_provider_onecell(np, &pmu->genpd_data);
+ 	if (ret) {
+ 		dev_err(dev, "failed to register genpd driver: %d\n", ret);
+@@ -360,6 +393,9 @@ static const struct jh71xx_domain_info jh7110_power_domains[] = {
+ static const struct jh71xx_pmu_match_data jh7110_pmu = {
+ 	.num_domains = ARRAY_SIZE(jh7110_power_domains),
+ 	.domain_info = jh7110_power_domains,
++	.pmu_status = JH71XX_PMU_CURR_POWER_MODE,
++	.pmu_parse_dt = jh7110_pmu_parse_dt,
++	.pmu_set_state = jh7110_pmu_set_state,
+ };
+ 
+ static const struct of_device_id jh71xx_pmu_of_match[] = {
 -- 
 2.25.1
 
