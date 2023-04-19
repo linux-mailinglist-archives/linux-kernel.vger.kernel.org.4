@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10476E7C4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2A76E7C57
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbjDSOWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 10:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
+        id S229843AbjDSOW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 10:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232877AbjDSOWZ (ORCPT
+        with ESMTP id S232940AbjDSOWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 10:22:25 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE545BB0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:22:21 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-51b603bb360so1480146a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:22:21 -0700 (PDT)
+        Wed, 19 Apr 2023 10:22:44 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD5130E0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:22:39 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id kx14so8307168pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:22:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1681914141; x=1684506141;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681914159; x=1684506159;
+        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5AZVoE4cKl5QalUTwIQY3oWUmaoZBRuHIhA+cy8XC/s=;
-        b=Uf44G7eShP45n3mvQsLaHp0FYljwSoqFn6ycGUo7jd19P0ovDq0zYsO0ygVV7IKtio
-         62GMonB9A3vjZu1wyukptFhBL0UVngK7V1lKn91S6YHJ9GKWhxd2JJSCkJgX/wqWtIWq
-         vdMtgwI9BniFnWkT/DM8X4F7S0AoBst+qlNVr7aMrthHGVnBzZ8mHmYnMX/BvLizCfaf
-         Op6DDgLsT2wxXL+ei+EhK2jh9XRwQejhOSQ3f/JkW3Zr2x0MF7G9eAHbJ/+1yNMXNskk
-         Sv/hclJBzlFlROh6qKbo40F7WQvNJ2OONsVjtIzOodYF+GmVl0Ubw7jvMEEarc5i+L2h
-         Pq0w==
+        bh=Waf+QACGwPaX1ZCD7e4w4TBQTFocG4VaRO3bMuKWQeY=;
+        b=l6v7+ZM9QWue1cFyKkTewWsi9T3Z7Jx3gSzVSOBLDFH7L4SiXnvU7N+svVhQ48RDF3
+         KmVwYId81LSUiIhUMIqTQ/54QklERHf+CNKdlYQMEGoMgGbFNXvYbFe+MOlqCG8C6HrS
+         n0s/5RcK378D2IyRgvlLOgnX8KrTffkRrXMsICFF4YKNSarGEJkTLV0tYEfNkSfimdnF
+         ZGifCAmLa7zB3qzElf7Stg+u7TqUKiQpP4/kM8EbD8NvS1VN4QUm8DLJnuBljnFyOngm
+         qMojS00yepGhR+ndQauGQQeWO9ouylc+YUD8KxaUznghP9lrKzYxVyBWa0Jw82o/ZtZy
+         Phew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681914141; x=1684506141;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5AZVoE4cKl5QalUTwIQY3oWUmaoZBRuHIhA+cy8XC/s=;
-        b=b5IEiy4wdyz7NhxmHGOdHCyep0PLoPWRxs+3RFLlmsZkVb4JE6mIQ93BUa3WcTuoxo
-         EV6+S4g/TIB6ChV2jZDf8d0WyQTjZrNdtRA5NW5Vb769xdF/ZQ6vRQ9Yvy6OXlY5uR9K
-         pB7/lO+EkLADQoIEBB4Ft+igeApm6AfO9p1EM3VjI7fS/wfOSF6BJsu7pM2qTYaqNGfw
-         WdbeapmOb5izt2QpyyeUshPYDQC8/g3MlZ2mf62ovqnh7fyj2HJZaHCtzlqLMyvAHMEc
-         qvUIvrE4XH14wLr9BYGCBt+Uk060Y0Dm0Yo7SzdT6DhLoqlrHulhdC0drv9XjAD8FSta
-         UleA==
-X-Gm-Message-State: AAQBX9eg+FLYPkms5LhTjlBN1b4FZ0u+rfI1H98I/iUY8m8aUNDSXp4t
-        IS5kB94vgPg1uSoqtgWV4Ludhg==
-X-Google-Smtp-Source: AKy350ZTJwE2aWSzstOmJ0YW285PJ4i358w4phfkGLXLXpb0SQnSrIkea7QeQB4AECwuoTp9GpufSA==
-X-Received: by 2002:a17:90a:f196:b0:236:73d5:82cf with SMTP id bv22-20020a17090af19600b0023673d582cfmr3147217pjb.9.1681914141039;
-        Wed, 19 Apr 2023 07:22:21 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681914159; x=1684506159;
+        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Waf+QACGwPaX1ZCD7e4w4TBQTFocG4VaRO3bMuKWQeY=;
+        b=Dal0ArLSHRHbLE9RRU49HPpgOE1lnDCFSrmVMpuYJphroVe6Jxkk+IJ+WxCOaXK3Oy
+         OkzVtNv1prg0pfaMRw5PPGHdkJWqVIUhj0sKh9nI/tBlSsAtaJVWfPNdK6disrV80bSh
+         rh/zsCohoNIwF4bPOUWhspJk4/zqStmhXJcf0kQsgxUtkYQ62c72lGlfDVb6bv+5WEdN
+         kZImeImcLexxae2MtjV3kb5ayNjrUur5rbfP2ScVtsfmWtK8RjV595mTuExSzD15daqH
+         qE95EpalsNfVGwxZioTVv696+lBLVeAnW3fEsumUq4G2jLinrQ+N2+5dOp9t3t3DKx9x
+         i6lg==
+X-Gm-Message-State: AAQBX9eKO7rXLtWSMK67IOfRpwG1j7gTSE6taaMm3r34BUC/9+kRTjXR
+        UEEYMuENsTY19RtZ2coT9VBmPtJsnAOPWyXEK4s=
+X-Google-Smtp-Source: AKy350aPnlfvP4qUDvfv5/vOO3cn2Bw34qPnDNeOqdEF3EgYhvkEXRXInv8IlMOb7I6WoLdjYIoKBg==
+X-Received: by 2002:a05:6a21:6d87:b0:f0:2c96:1c6c with SMTP id wl7-20020a056a216d8700b000f02c961c6cmr2519297pzb.25.1681914158966;
+        Wed, 19 Apr 2023 07:22:38 -0700 (PDT)
 Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id x1-20020a1709029a4100b001a687c505e9sm11329933plv.237.2023.04.19.07.22.20
+        by smtp.gmail.com with ESMTPSA id u35-20020a632363000000b0051b36aee4f6sm10483297pgm.83.2023.04.19.07.22.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 07:22:20 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 07:22:20 -0700 (PDT)
-X-Google-Original-Date: Wed, 19 Apr 2023 07:22:13 PDT (-0700)
-Subject:     Re: [PATCH v4 0/9] RISC-V KVM virtualize AIA CSRs
-In-Reply-To: <20230404153452.2405681-1-apatel@ventanamicro.com>
-CC:     pbonzini@redhat.com, atishp@atishpatra.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        ajones@ventanamicro.com, anup@brainfault.org, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, apatel@ventanamicro.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     apatel@ventanamicro.com
-Message-ID: <mhng-72b96cbf-6edd-4b37-9549-200e2a3cb35d@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Wed, 19 Apr 2023 07:22:38 -0700 (PDT)
+In-Reply-To: <20230323123924.3032174-1-suagrfillet@gmail.com>
+References: <20230323123924.3032174-1-suagrfillet@gmail.com>
+Subject: Re: [PATCH V2] riscv: export cpu/freq invariant to scheduler
+Message-Id: <168191414576.1929.17819502904863461212.b4-ty@rivosinc.com>
+Date:   Wed, 19 Apr 2023 07:22:25 -0700
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-901c5
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Song Shuai <suagrfillet@gmail.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -74,73 +74,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Apr 2023 08:34:43 PDT (-0700), apatel@ventanamicro.com wrote:
-> The RISC-V AIA specification is now frozen as-per the RISC-V international
-> process. The latest frozen specifcation can be found at:
-> https://github.com/riscv/riscv-aia/releases/download/1.0-RC3/riscv-interrupts-1.0-RC3.pdf
->
-> This series implements first phase of AIA virtualization which targets
-> virtualizing AIA CSRs. This also provides a foundation for the second
-> phase of AIA virtualization which will target in-kernel AIA irqchip
-> (including both IMSIC and APLIC).
->
-> The first two patches are shared with the "Linux RISC-V AIA Support"
-> series which adds AIA driver support.
->
-> To test this series, use AIA drivers from the "Linux RISC-V AIA Support"
-> series and use KVMTOOL from the riscv_aia_v1 branch at:
-> https://github.com/avpatel/kvmtool.git
->
-> These patches can also be found in the riscv_kvm_aia_csr_v4 branch at:
-> https://github.com/avpatel/linux.git
->
-> Based-on: 20230401112730.2105240-1-apatel@ventanamicro.com
-> (https://lore.kernel.org/lkml/20230401112730.2105240-1-apatel@ventanamicro.com/)
->
-> Based-on: 20230403121527.2286489-1-apatel@ventanamicro.com
-> (https://lore.kernel.org/lkml/20230403121527.2286489-1-apatel@ventanamicro.com/)
->
-> Changes since v3:
->  - Split PATCH7 into two patches
->  - Addressed comments in PATCH7, PATCH8 and PATCH9
->
-> Changes since v2:
->  - Rebased on Linux-6.3-rc5
->  - Split PATCH5 into two separate patches as suggested by Atish.
->
-> Changes since v1:
->  - Addressed from Drew and Conor in PATCH1
->  - Use alphabetical ordering for SMAIA and SSAIA enum in PATCH2
->  - Use GENMASK() in PATCH3
->
-> Anup Patel (9):
->   RISC-V: Add AIA related CSR defines
->   RISC-V: Detect AIA CSRs from ISA string
->   RISC-V: KVM: Drop the _MASK suffix from hgatp.VMID mask defines
->   RISC-V: KVM: Initial skeletal support for AIA
->   RISC-V: KVM: Implement subtype for CSR ONE_REG interface
->   RISC-V: KVM: Add ONE_REG interface for AIA CSRs
->   RISC-V: KVM: Use bitmap for irqs_pending and irqs_pending_mask
->   RISC-V: KVM: Virtualize per-HART AIA CSRs
->   RISC-V: KVM: Implement guest external interrupt line management
->
->  arch/riscv/include/asm/csr.h      | 107 ++++-
->  arch/riscv/include/asm/hwcap.h    |   8 +
->  arch/riscv/include/asm/kvm_aia.h  | 137 +++++++
->  arch/riscv/include/asm/kvm_host.h |  14 +-
->  arch/riscv/include/uapi/asm/kvm.h |  18 +-
->  arch/riscv/kernel/cpu.c           |   2 +
->  arch/riscv/kernel/cpufeature.c    |   2 +
->  arch/riscv/kvm/Makefile           |   1 +
->  arch/riscv/kvm/aia.c              | 627 ++++++++++++++++++++++++++++++
->  arch/riscv/kvm/main.c             |  23 +-
->  arch/riscv/kvm/mmu.c              |   3 +-
->  arch/riscv/kvm/vcpu.c             | 190 +++++++--
->  arch/riscv/kvm/vcpu_insn.c        |   1 +
->  arch/riscv/kvm/vm.c               |   4 +
->  arch/riscv/kvm/vmid.c             |   4 +-
->  15 files changed, 1083 insertions(+), 58 deletions(-)
->  create mode 100644 arch/riscv/include/asm/kvm_aia.h
->  create mode 100644 arch/riscv/kvm/aia.c
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+On Thu, 23 Mar 2023 20:39:24 +0800, Song Shuai wrote:
+> RISC-V now manages CPU topology using arch_topology which provides
+> CPU capacity and frequency related interfaces to access the cpu/freq
+> invariant in possible heterogeneous or DVFS-enabled platforms.
+> 
+> Here adds topology.h file to export the arch_topology interfaces for
+> replacing the scheduler's constant-based cpu/freq invariant accounting.
+> 
+> [...]
+
+Applied, thanks!
+
+[1/1] riscv: export cpu/freq invariant to scheduler
+      https://git.kernel.org/palmer/c/c4b52d8b6c1d
+
+Best regards,
+-- 
+Palmer Dabbelt <palmer@rivosinc.com>
+
