@@ -2,291 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1D66E85D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 01:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 127AA6E85D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 01:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjDSXWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 19:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45404 "EHLO
+        id S232007AbjDSXW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 19:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjDSXWS (ORCPT
+        with ESMTP id S231401AbjDSXWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 19:22:18 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF33E5E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 16:22:11 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-2472a3bfd23so216366a91.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 16:22:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google; t=1681946531; x=1684538531;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=En09xFPrxukQPGMrtSxoWS7NIY2dUf28Hw9SmizN5E8=;
-        b=gS2MMLbFXaic3E2igi5ue9CWwyEXnWQRGzKJ5oiJ2o2NNz/2gbNDIkxOI4YfEhZ0sV
-         +Wi7JatdplmXdoabzjUOh2fazYKcndAZgN+dlrK95xWPAaotKWUHY9ehrqMgTIA0Wh1t
-         ByBEmI0ASVpSTgXq8dXOaktN4gtTDYkpn2gmo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681946531; x=1684538531;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=En09xFPrxukQPGMrtSxoWS7NIY2dUf28Hw9SmizN5E8=;
-        b=Zg2pRZow6bZ6DV51Yq+gxCBqJJQCAO7BCD0lC0qSbXcAYetPUiLzhksjxk61ds564I
-         xBj4rY4SdaGV8SITQty3C1Q9Xb0l0SIamEKxQY8KzM+i9A83OUZ4I7d2WABwkuxXXDgo
-         Xwo65ptrlAapsW+fDmUWdYLZWDyFG5lhqiKgPiYWm+gR57O/YwLk9yZ7N9bayrobiPuW
-         DLNkCZXmBJRM8Pteu27buw+RfYIzisj9gooFrbmD07fzpHJaAGQslrUOEwvN4iyMAhoA
-         zoHW+KQjEaxoazVUZoWInzbWCZuq5ubCqHVADrnyW5bSN0go1B08rzo5KoFFDxVDdp9L
-         2NVg==
-X-Gm-Message-State: AAQBX9fUUiDF/u4Ta1RpQ2HehkvYb5StDjGdIw2hcbVCrgbko2+EE2pV
-        relCthnOTYm+qloOGXaiu5RZESnld/xV2e+5D6bX
-X-Google-Smtp-Source: AKy350aChvSnivLcUF7wRVT9Tts2Lp5tgA2pMNS5kQFeqIKwNTpjWzEMnaCkhSSO++g8H5/BvYo3D96AB1h1z09XTJw=
-X-Received: by 2002:a17:90b:4c8e:b0:23f:9448:89c2 with SMTP id
- my14-20020a17090b4c8e00b0023f944889c2mr4380591pjb.7.1681946530740; Wed, 19
- Apr 2023 16:22:10 -0700 (PDT)
+        Wed, 19 Apr 2023 19:22:55 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0061BEB;
+        Wed, 19 Apr 2023 16:22:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YuhLmzIfwDGp4icDxWzgbe6hQzPdcJ4kBBZmaHLl0l2VHQB8+IT+mUGeWQe8poth9C8GrI+BxD6t0jzthi6H2qgvzZjQw1nWVM4AXq6XLREVhZjruYJkMFK9lGyxEoXKnYKVBcdaU0Z8cqhX47FLgb0Lz6yQLUt91tkSIiSpaUigX/qpCzdNBWHyS5OKsa+Sd99F8RhdV/3Gp7aedFV6larhHpEmWJP+LR2ImnfuO90v4UgOfYdCI2U03hxuPs+JtQvv4IW9GTHEIIJD5FLSmKgYAD2G3JgGzqAD6A0j3B//cr2vJIDJTDAf9EFW/EMqH7zRP2J5UCL+a7LOCo/33g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=slZXqGzJlShmAnoEIUCE114mQvSY9X6mN2q7cAXLnKI=;
+ b=XVH4Je9Xcs7MJFBhxvpzTs4zLJZC4LFGrsXCHIO+g8FQq9H8wuz1Yrq6XNTz8jK8tGpekN7QcUlMT76NpCvO81ZDORzhbOVc3zEY7Ca6DWrCUd9sGw0fNhdwZt5haij+jJHD2P3o0bLBWrF7znVVQdlJoOpjiXTwjvfHK0iy25Zzl7RYfGMfAkzb3HSbtDcm29hrQSN01jRMskJXjFieFRW45bTMh3HXZhkyXER/cFAar6eaQXNbppN4NY9OU/ArSTdHFfC6e0LNcGvuRZi+jRt9toglvd/Wd4gTIRv38Fg/WaZuW4phg+Pi0DBgU2BR9ljdr6v+YHgPf560b/DseQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=slZXqGzJlShmAnoEIUCE114mQvSY9X6mN2q7cAXLnKI=;
+ b=iHjSAIkh+/rVXvB2ZtvG9YeRSPhJhMgeYfkzI47u4n9nPqgYtV0InI2MCETeiGhM2WAz8ug99C8nbb/0OLD1yt/Hn8fkWp+lHApncrK0t2SPNtJpWT4UFtrxBBd202fiPkZQ8k2r58Y9+T8sJkMOrkj8PMSVULbVPGOeL11HNhzp+J6IsQisjwT7nBCmourLeSDSEnRmF4znnjZPVcp1qkQzS7w03TYXJr3C/+JCTmxQ2k+TFlOiaxQnVYnt1xllzRZxD/g1Qb0akOwDxcW6AopT5ZAK7n4pTxvfH5w0tFT023vMys/c/yY3f077xAHwEAHoaKaNOkgUVkTTFErclg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by LV2PR12MB6013.namprd12.prod.outlook.com (2603:10b6:408:171::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Wed, 19 Apr
+ 2023 23:22:52 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6319.020; Wed, 19 Apr 2023
+ 23:22:52 +0000
+Date:   Wed, 19 Apr 2023 20:22:51 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org
+Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
+ pin_user_pages()
+Message-ID: <ZEB3y0V2GSDcUMc2@nvidia.com>
+References: <c2e22383-43ee-5cf0-9dc7-7cd05d01ecfb@kernel.dk>
+ <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
+ <69f48cc6-8fc6-0c49-5a79-6c7d248e4ad5@kernel.dk>
+ <bec03e0f-a0f9-43c3-870b-be406ca848b9@lucifer.local>
+ <8af483d2-0d3d-5ece-fb1d-a3654411752b@kernel.dk>
+ <d601ca0c-d9b8-4e5d-a047-98f2d1c65eb9@lucifer.local>
+ <ZEAxhHx/4Ql6AMt2@casper.infradead.org>
+ <ZEAx90C2lDMJIux1@nvidia.com>
+ <ZEA0dbV+qIBSD0mG@casper.infradead.org>
+ <8bf0df41-27ef-4305-b424-e43045a6d68d@lucifer.local>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8bf0df41-27ef-4305-b424-e43045a6d68d@lucifer.local>
+X-ClientProxiedBy: BL0PR1501CA0014.namprd15.prod.outlook.com
+ (2603:10b6:207:17::27) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-References: <20230413161725.195417-1-alexghiti@rivosinc.com>
- <CAOnJCU+72PV1=o1c_TpogkmBT36278BneVWEMr1=tqX0CZi+ag@mail.gmail.com>
- <aadca595b4a24e36932ba41e61f4e263@AcuMS.aculab.com> <CAOnJCUJ7mY+fh9VqE4dRntnVAEAc26=NnOCPUqkXk6ky__cUZQ@mail.gmail.com>
- <CAP-5=fUYJEecmhQVuvbM4ZoDP_Hj=2RKOgR4cKepU072Uy3xyw@mail.gmail.com>
- <CAOnJCULJfSN79MzAwhCrbVzG1rYyrPB3OraFmoZFBxuRCwq01w@mail.gmail.com>
- <CAHVXubjhORBEDok_Zhq5p_Yv4Ty4Hct84dWJZXzo48+40N=CGg@mail.gmail.com> <CAP-5=fX6kaZt68UbMMZzW-zs0RyRWoOS-Tq5NwekWj8k9Shx6g@mail.gmail.com>
-In-Reply-To: <CAP-5=fX6kaZt68UbMMZzW-zs0RyRWoOS-Tq5NwekWj8k9Shx6g@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 20 Apr 2023 04:51:58 +0530
-Message-ID: <CAOnJCU+5EQp-AqrwJpBo6ZPWfybwaGyD3zcC0YrCAsSY4=fqdw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] riscv: Allow userspace to directly access perf counters
-To:     Ian Rogers <irogers@google.com>
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        paranlee <p4ranlee@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|LV2PR12MB6013:EE_
+X-MS-Office365-Filtering-Correlation-Id: c8260e13-3f4c-4599-3274-08db412cff40
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Uo0AxY8Dqitxq6p450pXha2r8bOs9C5fgsxsxLQUOHyLxleB9e51l+2py1YXac5PJEsRdSH1mrAYQJxoBRAI5vAWlTnYqdXHcv3+4GMIIeXdMdpsfw4nu8CP/pp+VwfmAk/zo4MkmGSg7Ei9FnHbxZbv8JzNIoytu3mrcMu9C5DCHGvL83F8n3ScDS7PGhTIXg7FlFXzY0FotdPPRQAaJiEBwaGC50467A/yuA1ruFw/IPF+yCRrRmm30rUTliRw59dGKcWT9cF0Aw3z1BgVF8soRVUqhKcDlIcpzCjXe8lPOKzIh2RCkxYNYJj6bcfGjPPbQwM8RDYUUNx6VPfY1CxKxbpQaPSHPzz+RqPgi2EhUboXX9V+aAvP39UK5WBNfZJQrrUNv/Jkr3FY3kGoLLZcLUdnHqI8sBE0Ld03BZUh/IWMQ6iY0cKOsaVaD3xb23e8V5ajcPqykUCazGj39On7MqUtFWg3z26NGe5JjBBV9yr03z86ZDmDn1GuzOQFdtMDit0Fn2itsYc5IEQc6/Xko3srVYDCp6pY5yMkTwLQDyjypOni3sAjdsCGsvMd
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(376002)(366004)(136003)(451199021)(26005)(316002)(41300700001)(6916009)(54906003)(6512007)(4326008)(66946007)(66476007)(66556008)(8676002)(6486002)(478600001)(86362001)(5660300002)(8936002)(2906002)(36756003)(38100700002)(2616005)(6506007)(186003)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KVNv3jt4ov+W13oja7EPxfCLGAQoRr6BIUaWNjwHSrX83o2Oz+zVvLT6aTjV?=
+ =?us-ascii?Q?IqUNqKZCA+QkJeV8eGBw5VPLc5v981CRqa6dcvbHdQTfc2QvtlWF1yWZxO/J?=
+ =?us-ascii?Q?IsTifW/Gk5GUaqBX5ijo6NRPJSRJqrCagLkyeLx+v5+kfwr5qt1M8M20b+ZQ?=
+ =?us-ascii?Q?0FFmOEyp0xf5C4iBFVEqlRofKiUS4Zz0AA4pgIk93Jatmc0atUNndi2Kpsu3?=
+ =?us-ascii?Q?xH8siN6OGSJm1WHnbo+umTmIiYORwclkCH998natXr6fzTolSwWHSUuK8vT8?=
+ =?us-ascii?Q?Kbz8GfI7yWEM8OSFY+Ei3/Sbqhz6z6dg97rr+8Qp+aTiagnfy46JzsHcpmJV?=
+ =?us-ascii?Q?2NeNWr5hnirEE9WWkPl6WgsCc+PeRsS8KKVVTbEoovsO4Je4PHjY+mkS6yc2?=
+ =?us-ascii?Q?InDVfepw7EE0deSX75O6Q2zvHTa0nrEHxEd2qEZJMAgGOgPah/ZW7L/cwhms?=
+ =?us-ascii?Q?2a6juOmhSYeHNcxTX9OtYu43MXQpWHrimMzsMLTpQino0mumaQPs7i+fHmjX?=
+ =?us-ascii?Q?h7W2F2cj9CvAGXOn4xFNp84V02NkMHKT+kTWL9TlLB4QecnjdXDpFwdcvyd4?=
+ =?us-ascii?Q?Pi3HEMWrbvbIzaAe3QcnFUbFYFJji5uevH3Ivpd5x5GATMmJ9WQV/MtaBDTg?=
+ =?us-ascii?Q?yFBpQkB8L0BoNi2ccoyM3QCpD2AToqx0HCEnV7jffF9MlTtRCH+nqGkZbuFp?=
+ =?us-ascii?Q?bEWK9zpxoA5HjVQtTeCNHyUrt6a8DOCvKufgqLaPqzcsnHfuppnECDDaJXdP?=
+ =?us-ascii?Q?EocUajZq7xZjnVq0L8j+F9DbW+F2Xj46aW/Wn2YvdnT/suFbapdEegJ4nQ5m?=
+ =?us-ascii?Q?j9xfcyWXU7bo6dQLKMYka7/3vfXJl6yubU1dv6+6Ak/Rb2Mu/ZWkQ/xh27X+?=
+ =?us-ascii?Q?lkEhILSaIl9fpKAcjorwWzRwYGYykZsCh5t4JmvkkZIjM7Zx7NQn2WBicQoR?=
+ =?us-ascii?Q?/uRBqWl9qUUwPTNpdrUQnikpMBK0fuMiCFsxoMOOeGqUfGQN1jCfB8HUtXJs?=
+ =?us-ascii?Q?PZwf3dt655FM38RHnP0Ao3mRaSlvpnioVByoGw3TAbL+p4imLO4cmj+Tno20?=
+ =?us-ascii?Q?oOgZdnjcWgecG4FMsSWVUcnui/i1N4p3odlbeLVDNFa8FGWo6OU16bQm/Bd0?=
+ =?us-ascii?Q?XjURdDMGN33de9wibGhZSf28luanwXG3sJh4uZLqsRxQJxJKcnXKhwXzh+/c?=
+ =?us-ascii?Q?MkBTIO1WQpBw52VFCPSCn8tIve4+Lmtqm0GgAyaXiek0EkX0WcAxgLQ0m+NS?=
+ =?us-ascii?Q?sKSQ5limKmJlTTTHSmFBRcjK1lqHSL1dC2wh100vmsvCT9uFHMqhBzwwSIBD?=
+ =?us-ascii?Q?/fckz6ivgQzdaZbOUGpMnSpE7bMKvT/CwHc1P3seN3jL/ETFJV+5lYr/D9pu?=
+ =?us-ascii?Q?Yqi+kYNRUg9OrOSjO3TGNdP8qn9NTjrdn+cUejiO9M/TRZwJzpM2bZH9Ft+a?=
+ =?us-ascii?Q?gRsw6gE+KfFPoY5sDDyhrqIksxrlEvMyhIlQ+OZEOOsTMcVcDDiZJMNAuTwx?=
+ =?us-ascii?Q?z0SJJflh8bFyEX7LFOWkcYSuKogABljB+ygw9626Dd0nwzTxtaOCTT8oKGUB?=
+ =?us-ascii?Q?sCe8sDCx9u/TP3Tf5jVRZXYaYVBBfUNBYPkjmE96?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8260e13-3f4c-4599-3274-08db412cff40
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 23:22:52.1549
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XpuHD8UYzLJKdjeLUB3ZXKhAvoP93b1OtddJMXalqJNH+H9x58iSM6Q2B6oSrZwd
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB6013
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 11:13=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
-ote:
->
-> On Wed, Apr 19, 2023 at 2:21=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosi=
-nc.com> wrote:
-> >
-> > Hi Ian,
-> >
-> > On Tue, Apr 18, 2023 at 10:30=E2=80=AFPM Atish Patra <atishp@atishpatra=
-.org> wrote:
-> > >
-> > > On Tue, Apr 18, 2023 at 11:46=E2=80=AFPM Ian Rogers <irogers@google.c=
-om> wrote:
-> > > >
-> > > > On Tue, Apr 18, 2023 at 9:43=E2=80=AFAM Atish Patra <atishp@atishpa=
-tra.org> wrote:
-> > > > >
-> > > > > On Fri, Apr 14, 2023 at 2:40=E2=80=AFAM David Laight <David.Laigh=
-t@aculab.com> wrote:
-> > > > > >
-> > > > > > From: Atish Patra
-> > > > > > > Sent: 13 April 2023 20:18
-> > > > > > >
-> > > > > > > On Thu, Apr 13, 2023 at 9:47=E2=80=AFPM Alexandre Ghiti <alex=
-ghiti@rivosinc.com> wrote:
-> > > > > > > >
-> > > > > > > > riscv used to allow direct access to cycle/time/instret cou=
-nters,
-> > > > > > > > bypassing the perf framework, this patchset intends to allo=
-w the user to
-> > > > > > > > mmap any counter when accessed through perf. But we can't b=
-reak the
-> > > > > > > > existing behaviour so we introduce a sysctl perf_user_acces=
-s like arm64
-> > > > > > > > does, which defaults to the legacy mode described above.
-> > > > > > > >
-> > > > > > >
-> > > > > > > It would be good provide additional direction for user space =
-packages:
-> > > > > > >
-> > > > > > > The legacy behavior is supported for now in order to avoid br=
-eaking
-> > > > > > > existing software.
-> > > > > > > However, reading counters directly without perf interaction m=
-ay
-> > > > > > > provide incorrect values which
-> > > > > > > the userspace software must avoid. We are hoping that the use=
-r space
-> > > > > > > packages which
-> > > > > > > read the cycle/instret directly, will move to the proper inte=
-rface
-> > > > > > > eventually if they actually need it.
-> > > > > > > Most of the users are supposed to read "time" instead of "cyc=
-le" if
-> > > > > > > they intend to read timestamps.
-> > > > > >
-> > > > > > If you are trying to measure the performance of short code
-> > > > > > fragments then you need pretty much raw access directly to
-> > > > > > the cycle/clock count register.
-> > > > > >
-> > > > > > I've done this on x86 to compare the actual cycle times
-> > > > > > of different implementations of the IP checksum loop
-> > > > > > (and compare them to the theoretical limit).
-> > > > > > The perf framework just added far too much latency,
-> > > > > > only directly reading the cpu registers gave anything
-> > > > > > like reliable (and consistent) answers.
-> > > > > >
-> > > > >
-> > > > > This series allows direct access to the counters once configured
-> > > > > through the perf.
-> > > > > Earlier the cycle/instret counters are directly exposed to the
-> > > > > userspace without kernel/perf frameworking knowing
-> > > > > when/which user space application is reading it. That has securit=
-y implications.
-> > > > >
-> > > > > With this series applied, the user space application just needs t=
-o
-> > > > > configure the event (cycle/instret) through perf syscall.
-> > > > > Once configured, the userspace application can find out the count=
-er
-> > > > > information from the mmap & directly
-> > > > > read the counter. There is no latency while reading the counters.
-> > > > >
-> > > > > This mechanism allows stop/clear the counters when the requesting=
- task
-> > > > > is not running. It also takes care of context switching
-> > > > > which may result in invalid values as you mentioned below. This i=
-s
-> > > > > nothing new and all other arch (x86, ARM64) allow user space
-> > > > > counter read through the same mechanism.
-> > > > >
-> > > > > Here is the relevant upstream discussion:
-> > > > > https://lore.kernel.org/lkml/Y7wLa7I2hlz3rKw%2F@hirez.programming=
-.kicks-ass.net/T/
-> > > > >
-> > > > > ARM64:
-> > > > > https://docs.kernel.org/arm64/perf.html?highlight=3Dperf_user_acc=
-ess#perf-userspace-pmu-hardware-counter-access
-> > > > >
-> > > > > example usage in x86:
-> > > > > https://github.com/andikleen/pmu-tools/blob/master/jevents/rdpmc.=
-c
-> > > >
-> > > > The canonical implementation of this should be:
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
-tree/tools/lib/perf/mmap.c#n400
-> > >
-> > > Thanks for sharing the libperf implementation.
-> > >
-> > > > which is updated in these patches but the tests are not:
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
-tree/tools/perf/tests/mmap-basic.c#n287
-> > > > Which appears to be an oversight. The tests display some difference=
-s
-> > >
-> > > Yes. It's an oversight. We should make sure that perf mmap tests pass
-> > > for RISC-V as well.
-> >
-> > Yes, that's an oversight, I had a local test adapted from this one but
-> > forgot to update it afterwards, I'll do that in the next version.
-> >
-> > Thanks for your quick feedbacks and sorry for being late,
-> >
-> > Alex
->
-> Thanks Alex, there was an equally likely chance that I wasn't
-> understanding things :-) Is there any information on RISC-V PMU
-> testing? I know ParanLee is interested. It'd be awesome to have
+On Wed, Apr 19, 2023 at 07:45:06PM +0100, Lorenzo Stoakes wrote:
 
-Are you looking for something specific to RISC-V general or perf on RISC-V?
-All the RISC-V PMU patches have been upstream for a while (both in the
-Qemu & Linux kernel).
-Perf should work out-of-the box when you boot the latest kernel in the
-latest version of the Qemu.
+> For example, imagine if a user (yes it'd be weird) mlock'd some pages in a
+> buffer and not others, then we'd break their use case. Also (perhaps?) more
+> feasibly, a user might mix hugetlb and anon pages. So I think that'd be too
+> restrictive here.
 
-Initial KVM[1] patches support got merged during the last merge
-window. It doesn't support
-event sampling yet. We are working on that.
+Yeah, I agree we should not add a broad single-vma restriction to
+GUP. It turns any split of a VMA into a potentially uABI breaking
+change and we just don't need that headache in the mm..
 
-[1] https://lore.kernel.org/lkml/20230207095529.1787260-1-atishp@rivosinc.c=
-om/
+> I do like the idea of a FOLL_SINGLE_VMA for other use cases though, the
+> majority of which want one and one page only. Perhaps worth taking the
+> helper added in this series (get_user_page_vma_remote() from [1]) and
+> replacing it with an a full GUP function which has an interface explicitly
+> for this common single page/vma case.
 
-> something say on:
-> https://perf.wiki.kernel.org/index.php/Main_Page
-> on how to run tests, perhaps on QEMU or known to work boards. We can
-> also just drop a link on there if there is information. We can also
-> add the RISC-V PMU information to the links here:
-> https://perf.wiki.kernel.org/index.php/Useful_Links
->
+Like I showed in another thread a function signature that can only do
+one page and also returns the VMA would force it to be used properly
+and we don't need a FOLL flag.
 
-I did not see any arch specific information there. Let us know what
-would be good to
-add there and we would be happy to add.
-
-> Thanks,
-> Ian
->
-> >
-> > >
-> > >
-> > > > between x86 and aarch64 that have assumed userspace hardware counte=
-r
-> > > > access, and everything else that it is assumed don't.
-> > > >
-> > > > Thanks,
-> > > > Ian
-> > > >
-> > > > > > Clearly process switches (especially cpu migrations) cause
-> > > > > > problems, but they are obviously invalid values and can
-> > > > > > be ignored.
-> > > > > >
-> > > > > > So while a lot of uses may be 'happy' with the values the
-> > > > > > perf framework gives, sometimes you do need to directly
-> > > > > > read the relevant registers.
-> > > > > >
-> > > > > >         David
-> > > > > >
-> > > > > > -
-> > > > > > Registered Address Lakeside, Bramley Road, Mount Farm, Milton K=
-eynes, MK1 1PT, UK
-> > > > > > Registration No: 1397386 (Wales)
-> > > > >
-> > > > >
-> > > > >
-> > > > > --
-> > > > > Regards,
-> > > > > Atish
-> > >
-> > >
-> > >
-> > > --
-> > > Regards,
-> > > Atish
-
-
-
---=20
-Regards,
-Atish
+Jason
