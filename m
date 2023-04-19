@@ -2,138 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922EA6E740B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C176E740F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbjDSHbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 03:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
+        id S231128AbjDSHdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 03:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbjDSHbR (ORCPT
+        with ESMTP id S232001AbjDSHdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 03:31:17 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CB046B4;
-        Wed, 19 Apr 2023 00:31:16 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id D22A65C00E9;
-        Wed, 19 Apr 2023 03:31:13 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 19 Apr 2023 03:31:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1681889473; x=1681975873; bh=Ec
-        4Ecq7H4INlX/3HvS/3quM8Fg2PkdC80uzcjyfYOJI=; b=VCrvrExRrgs5WTxoZZ
-        b6o/Wn2xY9uJ3qgnfSXPHzVACCJFSvPUT43RJKboctcCzfUNkn7ogvkr3elFgR/M
-        27VCCKLYRMGJVjesdnqXOwG2mKT832b4mUV5B1yip1QgIGOXbSdVRlXfrVnZccOw
-        fr2r14Q+bm9TIv7qW02iL3XQJ3n3UYsoeIDU8vmboqRUY2lsgR5loRzRYpsePbqd
-        nge+onwZXU23O/r7jHcJLdPA7WLVY44GczoWuEV6ydDj1vYIGLQ37RhJKlR1vgBZ
-        vMJoUaF5k0kQK2fmgPVfy30/qOO4HfoQs/MReHs5M0mSxznrdoHJaHC760rSVOQR
-        QyYA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681889473; x=1681975873; bh=Ec4Ecq7H4INlX
-        /3HvS/3quM8Fg2PkdC80uzcjyfYOJI=; b=eDxpRvKP0y6qok6rzsgrcxDtk+GQR
-        TeXy/o7hCOxk0uNMbc6fzVQStfx4nLMCkWQ0yg7XRBbSGOhaCDTfkYeHgzfFReRu
-        YPteXgf/lUZQtJp9EZ01EfE4OMbg47vvuxNAYHJIjFxwKMgmanr8WXC2Kbj8qiXz
-        mgK9LOvLf+eiMq/72zW+jwlZ3Ifn70I0+3RwgjHlG8vypIkUHIa8iJZ+2xPSyYO2
-        cORgp4wXKBmhCWniyA2nbxGa8NE8SnzNvy5Pbqq02Bo6alUiUPpW04wILREz7vke
-        bp2jt+PyCi1Rrf3JyscVvv/Iqwq3TamOEC7wPo/mjsSInowRzLSUmkkYQ==
-X-ME-Sender: <xms:wZg_ZKK7RGecFL3GExmwiIm6Lbli87fWw2G6KWBniHgKX_jiYuh4aA>
-    <xme:wZg_ZCKMJXYshqb4GuqM3Mz6NUxZ2Ymt6BpUnClRvB_VqAmSssPN9P3bCXQwWRQeT
-    gOpxs4WOu1WYpLhRSg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdelledguddvgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:wZg_ZKuOm6wxINAVt4yFGBHqv3B_xo0u20VVwglKwHTj1qxUyh2REQ>
-    <xmx:wZg_ZPbM8FQbKIH_sk0XL6z_staU5GJAPYoj5BOzthGSM01yoyoF0Q>
-    <xmx:wZg_ZBYNuAUN-42j8eiCykeAILB1jjTKPF8i8OPJWe0cYjwQgvMoFg>
-    <xmx:wZg_ZHARBlYD2gjZbKDzIbN2uSn5eFYBnsjVQL5_7EhMfS0rs5FLKA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 698B9B60086; Wed, 19 Apr 2023 03:31:13 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
-Mime-Version: 1.0
-Message-Id: <50844899-b047-42fd-807a-db7136e5e590@app.fastmail.com>
-In-Reply-To: <f1456dd7-5dcf-d91a-459c-65efca4a3444@quicinc.com>
-References: <cover.1681829664.git.quic_schowdhu@quicinc.com>
- <e4f41fa61d9dd66f68bbd7650c6fbf96810c3569.1681829664.git.quic_schowdhu@quicinc.com>
- <2023041833-alienate-trash-f4da@gregkh>
- <f1456dd7-5dcf-d91a-459c-65efca4a3444@quicinc.com>
-Date:   Wed, 19 Apr 2023 09:30:52 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Souradeep Chowdhury" <quic_schowdhu@quicinc.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     "Andy Gross" <agross@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>, "Alex Elder" <elder@ieee.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        "Sibi Sankar" <quic_sibis@quicinc.com>,
-        "Rajendra Nayak" <quic_rjendra@quicinc.com>
-Subject: Re: [PATCH V22 2/3] misc: dcc: Add driver support for Data Capture and Compare
- unit(DCC)
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 19 Apr 2023 03:33:15 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF77661BE
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:33:13 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-2fe3fb8e2f7so501267f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:33:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681889592; x=1684481592;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MfCQxeXH44txeLYfAR63mxbUPTOmZEEOWcD5Gxh9IXU=;
+        b=smdxdk7t2jmP9sljnoleeuMnuYo7h8ompBMv1/GpjvOul4Sym81MnGLrcOTm8a6LTj
+         yLTn6aMCSlQUdEYsVs9413kORKxK/sKQK5LaG8NNjTbCD8YMDBXj6vFFZVAaRIeoJYoY
+         N/o7kgFPeLvQVWGWJqGSckItHwmN1kjkMM6ffIl2O6/w4i9NDXh0jCN0e+x3SysYrTsP
+         mKe9gwNaGeEuvqhquVsiqAQgwzoaZMB7vqaVeg055tD1gTa7MouVPKgtblKcSYj/APwp
+         ptNTIyG6XvcH0Kz3e5dlhfNOq0OHo0YCDOGEaNhIHzRfFyqlXgTvsZQDaS1qQXqNqFhe
+         r7kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681889592; x=1684481592;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MfCQxeXH44txeLYfAR63mxbUPTOmZEEOWcD5Gxh9IXU=;
+        b=gJADTuXPDN4eQKEFOc1gK+rzsDMcYXtarBZw3rbXJmh8H+gl9V2cSLsV/7FMy2HmFV
+         bsvkYv+Ih4ATLah9F0PpaNrfbb+NVNg1akkib9jaK02OaSvmgLYVPBcB3k/AdrdeQGsW
+         KxlicVIxEmfA9LX+irGAGdxh/Wyrg3IaNRB7aH5IY2NxtC5tCo7HIKfeRIaYJLoWuXQu
+         OF1c6zhO1RGiT/Ii1D4RnNt1SxoQjeXSIL5xXiUl7ZGQNMVUMDm80mWcWkjM+sqAbnqY
+         pNZG5PxMkZpyN6XELvArHKuZ5P9tw42UgvOVE5l7b+Y1Ys3yXSVm73odjTZfxsCSgQwD
+         v7ww==
+X-Gm-Message-State: AAQBX9fFwcHXrGjKX8gVGM8IiKWWNA5DQ3zraLMfr07mikUUx/TwsWVR
+        MNoqeTPwE0Hm/T9Z31wb573JaA==
+X-Google-Smtp-Source: AKy350Y6fkmsUz9/iCx6NSfuOLJOUsVGfZcsVc4Ij7DNyNaugEStDn+dBRhpqmOMD1+pyvi5+vn8hA==
+X-Received: by 2002:a5d:4011:0:b0:2f4:f727:14b9 with SMTP id n17-20020a5d4011000000b002f4f72714b9mr3358907wrp.43.1681889592227;
+        Wed, 19 Apr 2023 00:33:12 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id m25-20020a056000181900b002f90a75b843sm9684787wrh.117.2023.04.19.00.33.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 00:33:11 -0700 (PDT)
+Message-ID: <125cfb20-271f-9746-9bd3-eb3637a6648d@linaro.org>
+Date:   Wed, 19 Apr 2023 09:33:08 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 0/2] MediaTek AUXADC thermal: urgent fixes
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, rafael@kernel.org
+Cc:     amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        aouledameur@baylibre.com, bchihi@baylibre.com,
+        daniel@makrotopia.org, ye.xingchen@zte.com.cn, hsinyi@chromium.org,
+        michael.kao@mediatek.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230419061146.22246-1-angelogioacchino.delregno@collabora.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230419061146.22246-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023, at 09:00, Souradeep Chowdhury wrote:
-> On 4/18/2023 9:15 PM, Greg Kroah-Hartman wrote:
->> 
->>> The following is the justification of using debugfs interface over the
->>> other alternatives like sysfs/ioctls
->>>
->>> i) As can be seen from the debugfs attribute descriptions, some of the
->>> debugfs attribute files here contains multiple arguments which needs to
->>> be accepted from the user. This goes against the design style of sysfs.
->>>
->>> ii) The user input patterns have been made simple and convenient in this
->>> case with the use of debugfs interface as user doesn't need to shuffle
->>> between different files to execute one instruction as was the case on
->>> using other alternatives.
->> 
->> Why do you have debugfs and also a misc device?  How are they related?
->> Why both?  Why not just one?  What userspace tools are going to use
->> either of these interfaces and where are they published to show how this
->> all was tested?
->
-> DCC has two fundamental steps of usage:-
->
-> 1.Configuring the register addresses on the dcc_sram which is done by 
-> user through the debugfs interface. For example:-
->
-> echo R 0x10c004 > /sys/kernel/debug/dcc/../3/config
->
-> Here we are configuring the register addresses for list 3, the 'R'
-> indicates a read operation, so this register value will be read
-> in case of a software trigger or kernel panic/watchdog bite and
-> dumped into the dcc_sram.
+On 19/04/2023 08:11, AngeloGioacchino Del Regno wrote:
+> The AUXADC thermal driver unfortunately has issues with a fixed wait
+> at probe, as this is not only SoC dependent, but actually depends on
+> the board (and even aging...): for example, that works fine on the
+> Chromebook that I have here in my hands but not for the ones in our lab.
+> 
+> Some machines are working fine with that 30ms delay at probe, but some
+> others are not, hence I started digging in downstream sources here and
+> there, and found that there actually is a valid temperature range for
+> at least auxadc-thermal *v1* and can be actually found in multiple
+> downstream kernels for MT8173 and MT6795.
+> 
+> As for v2 and v3 thermal IP, I'm sure that the v1 range works fine but
+> I've "left room" for adding specific ranges for them later: this fix
+> is urgent, as many MT8173 and MT8183 Chromebooks are failing tests in
+> KernelCI due to thermal shutdown during boot.
+> 
+> For the KernelCI logs, you can look at [1] for 8173, [2] for 8183.
+> 
+> [1]: https://storage.kernelci.org/next/master/next-20230405/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/igt-kms-mediatek-mt8173-elm-hana.html
+> [2]: https://storage.kernelci.org/next/master/next-20230405/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/cros-ec-mt8183-kukui-jacuzzi-juniper-sku16.html
+> 
 
-Can you describe why the register location needs to be
-runtime configurable? I would have expected this type of setting
-to be part of the devicetree, which already describes other
-parts that interact with sram devices.
+Applied, thanks
 
-How does a user ensure that the address they configure does
-not overlap with some other use of the sram?
 
-    Arnd
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
