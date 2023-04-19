@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239956E8597
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 01:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077596E859B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 01:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233881AbjDSXAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 19:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
+        id S233897AbjDSXA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 19:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233866AbjDSXA3 (ORCPT
+        with ESMTP id S233034AbjDSXAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 19:00:29 -0400
+        Wed, 19 Apr 2023 19:00:31 -0400
 Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759044692;
-        Wed, 19 Apr 2023 16:00:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1FAA241;
+        Wed, 19 Apr 2023 16:00:08 -0700 (PDT)
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33JMxExG122553;
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33JMxEFb122551;
         Wed, 19 Apr 2023 17:59:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1681945154;
-        bh=wJnUXZwwWLVUVOcKM6zhDwYXuhQdZx9PP4y7mpc00gU=;
+        bh=KQfC6g6eG+IGrvLtbPy7UBPhed7DV196990RsAdlm2o=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=SJzNFdEwkBYqRCyG2RrkDBUJopybVm1knJeFiaE5j7p/q3E4WCRPIlfF3KgYXu5TU
-         MGqHcdG7UQM9ViVIVT+K6HfTSB4eRif3ePrhzyS/FJrVI3XFeGwmwDmLDQl3OQhSVL
-         C6o1L9BzGB3QROAkgaJxUKIgQiD35+Yr+8DMVzWU=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33JMxE6v119678
+        b=icaCNq+LOqzjvzNeBaKAPb2ysMQmOB4t1Jwz27lpL/M/M8WDN176uNcCWRM35ZMi9
+         bxpgievhKixWTWqI518AA03PbD8KWoze5NKlvk/m6mAbfm+hwM0OME9o4LS1w4/f0N
+         WEUg1vdJDfcdwwc5TpZbTvSdXf56dwhvvG4Ty8n8=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33JMxErn119677
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Wed, 19 Apr 2023 17:59:14 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
  Apr 2023 17:59:14 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
  Frontend Transport; Wed, 19 Apr 2023 17:59:14 -0500
 Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33JMxECX015542;
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33JMxEap058352;
         Wed, 19 Apr 2023 17:59:14 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -48,9 +48,9 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>,
         Jan Kiszka <jan.kiszka@siemens.com>
-Subject: [PATCH 4/7] arm64: dts: ti: k3-am654-base-board: Add missing PMIC
-Date:   Wed, 19 Apr 2023 17:59:10 -0500
-Message-ID: <20230419225913.663448-5-nm@ti.com>
+Subject: [PATCH 5/7] arm64: dts: ti: k3-am654-base-board: Add board detect eeprom
+Date:   Wed, 19 Apr 2023 17:59:11 -0500
+Message-ID: <20230419225913.663448-6-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230419225913.663448-1-nm@ti.com>
 References: <20230419225913.663448-1-nm@ti.com>
@@ -68,37 +68,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing vdd_mpu PMIC.
+Enable AT24CM01 on the base board using the corresponding compatible.
 
 Signed-off-by: Nishanth Menon <nm@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-am654-base-board.dts | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ arch/arm64/boot/dts/ti/k3-am654-base-board.dts | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/ti/k3-am654-base-board.dts b/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-index 83467adc017d..640910e2280f 100644
+index 640910e2280f..c10266077f53 100644
 --- a/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
 +++ b/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-@@ -337,6 +337,19 @@ &wkup_i2c0 {
+@@ -337,6 +337,12 @@ &wkup_i2c0 {
  	pinctrl-0 = <&wkup_i2c0_pins_default>;
  	clock-frequency = <400000>;
  
-+	vdd_mpu: regulator@60 {
-+		compatible = "ti,tps62363";
-+		reg = <0x60>;
-+		regulator-name = "VDD_MPU";
-+		regulator-min-microvolt = <500000>;
-+		regulator-max-microvolt = <1770000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+		ti,vsel0-state-high;
-+		ti,vsel1-state-high;
-+		ti,enable-vout-discharge;
++	eeprom@50 {
++		/* AT24CM01 */
++		compatible = "atmel,24c1024";
++		reg = <0x50>;
 +	};
 +
- 	pca9554: gpio@39 {
- 		compatible = "nxp,pca9554";
- 		reg = <0x39>;
+ 	vdd_mpu: regulator@60 {
+ 		compatible = "ti,tps62363";
+ 		reg = <0x60>;
 -- 
 2.40.0
 
