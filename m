@@ -2,148 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF746E82B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F67D6E82B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbjDSU25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 16:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
+        id S231793AbjDSU3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 16:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbjDSU2x (ORCPT
+        with ESMTP id S229544AbjDSU2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 16:28:53 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2081.outbound.protection.outlook.com [40.107.237.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691A22685;
-        Wed, 19 Apr 2023 13:28:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AQDquMuJZ8nPN06FVxbRdm380giPwXHXMjUB479yH5qjfUHPM7zFISNTgabIv1LhovcfFq83NFWQ9dvkhBUjkrEgQ5V64GIdmmWRWl/QPpCxWyqqg1omXME78kRQy48hj842CjXswqoqoKO/u1JiNPQP2n68edD/dJUgJKygluAUixAcqv/1/U9SXyL7caEZjptzvSlGEko52yXpU0telQSF4BMEx5KSL2XnzEPL6/DlvrLGPrkRU8srjunSCwnX3/nkYmKdA75raygx4B5EHy0QNDxElH2CrJbqQ6Gpc9x+WhBemxGSSMLmOrTF4gV9b1uqVqa+9ByLQZirsHFAWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/GgM0xtrChp/eSAPoUXAd84+SLRPmq+TsEVO4tF7UTc=;
- b=eUY88/vCOSxVfIzc60z7ExgGEjgbVe+pRKaHq+OaiYYu2NgM0LYHP7llS9hjtixO11PeazTaoDAFQjmteU7T3AGafHjOjiHfRSg/QDwZ39cqc9LZtM1uiHtN/Y5+DQ4mgkChquqO2Q/PMQXMrvMVXTy3Rt8ihy2L9wayhVcJ+WU2C5qKoE2RChLaicRMmKckhsNr6xWSLj8Bdyk9LXCAdimwym0U0Xth4sq75zrNuSPsSB2vlvu2c4cGLHBbt8nVsJCQgX/9CJxkjKQzS4RrgCCIfF3JtRkA1cg+l8vbBDvwjm1y3ZMNFef0aGHpbAKDvmX0BTIwIcwX/bLHzhWj4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/GgM0xtrChp/eSAPoUXAd84+SLRPmq+TsEVO4tF7UTc=;
- b=BOn5N2dJCnVQ4nHgrb4KQpPGuY7qNsu0Qk+EiOdK1wUuklJ99chY7TcCSYa2krZkjn7ksKyAmY5bgrLP0CZyiw1IcWdBVfr7WnBfpmxnPaIlipEu4WM08P+ggRhUkyZeHRN+JE+ULKJ/mHh2qXhKl0fvnMdTUFlbOMpKKCdSciIZ9kBdzZaamkyl+cFRDvT4CINaLn+FwAPSxSDcIJPTYeyxqmsZbyrvR2YBLZyosnCNdBASqEFtyi9PIG0DBEuQPZn1AipLR6vOa1DV0Z8zLX9rsE4BHJ/kQehGFxe5OvYRPe1iu3bsbNzkSY8X33LVZQ8gpaireyqteYTMD3kbAg==
-Received: from BN0PR10CA0004.namprd10.prod.outlook.com (2603:10b6:408:143::18)
- by SA1PR12MB5657.namprd12.prod.outlook.com (2603:10b6:806:234::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Wed, 19 Apr
- 2023 20:28:35 +0000
-Received: from BL02EPF000145BB.namprd05.prod.outlook.com
- (2603:10b6:408:143:cafe::9e) by BN0PR10CA0004.outlook.office365.com
- (2603:10b6:408:143::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22 via Frontend
- Transport; Wed, 19 Apr 2023 20:28:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BL02EPF000145BB.mail.protection.outlook.com (10.167.241.211) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6319.14 via Frontend Transport; Wed, 19 Apr 2023 20:28:35 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 19 Apr 2023
- 13:28:25 -0700
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Wed, 19 Apr 2023 13:28:24 -0700
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Wed, 19 Apr 2023 13:28:24 -0700
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 6.1 000/129] 6.1.25-rc3 review
-In-Reply-To: <20230419132048.193275637@linuxfoundation.org>
-References: <20230419132048.193275637@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Wed, 19 Apr 2023 16:28:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA41B7D9A;
+        Wed, 19 Apr 2023 13:28:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34D3463875;
+        Wed, 19 Apr 2023 20:28:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 290CEC433EF;
+        Wed, 19 Apr 2023 20:28:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681936124;
+        bh=MSsSheeg5fGf437QacQci3glGSqLc1kiU4gOJI2sAtI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wnoj4+N+sye7VKuYWb7LXqDKB+f0FwQCzzCzrOUGmB6Xi8SNq199ziBXI4sCahXKh
+         63ErzGOvZ/BwAUvBQqd6UEOHUXzGWAclaAkTxaLNJdIV2Th3229JTc5QQ3y7BdjueY
+         XuT4CW5cE23vEGu9Q4nsEdqkHd4r4ue82QAFD5Gvl8zTusx9qNmYRoe4C/kpLEUtnh
+         CEl9L/bMnYJNq7c8556C2pnQmenllgBcaPHFPxeCf2p2Fwr8Rz5ePdBBP87T8vGJ5v
+         4hmJgZCSO526xn9PvcVv72mddSAW0PLAun0W/KVdtZon1/uNk363lj4z+vru8bTCKX
+         BO4fFk6oXiKVw==
+Date:   Wed, 19 Apr 2023 13:28:42 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Daejun Park <daejun7.park@samsung.com>
+Cc:     "chao@kernel.org" <chao@kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        Seokhwan Kim <sukka.kim@samsung.com>,
+        beomsu kim <beomsu7.kim@samsung.com>,
+        Yonggil Song <yonggil.song@samsung.com>
+Subject: Re: [PATCH] f2fs: add async reset zone command support
+Message-ID: <ZEBO+qOLXbnYusw5@google.com>
+References: <CGME20230414025921epcms2p5736ebf6a215201e0c2a2c1a3f73ee06a@epcms2p5>
+ <20230414025921epcms2p5736ebf6a215201e0c2a2c1a3f73ee06a@epcms2p5>
 MIME-Version: 1.0
-Message-ID: <a1b757b7-8489-4872-a13b-b39e2175ba9b@drhqmail202.nvidia.com>
-Date:   Wed, 19 Apr 2023 13:28:24 -0700
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000145BB:EE_|SA1PR12MB5657:EE_
-X-MS-Office365-Filtering-Correlation-Id: cc4f9127-bbfb-48c9-3141-08db4114a6dd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RcqRXjLqZguRt5xqdHkokT//P/5PCRM+RUXiIZk+eUicAMyPi4Wd2dw2G/8dbnK/Rc741xFWQNr/Oi9emxYJmZHDGVoPqN1srbIlQiAL0OrJXidH2YqgSBfsUMwdBQdWbfa/aKO6rbAvoR1RogFXO56ki3itFRs5UkpFxqqyAxNgX/lTNDyybk1ajSEY1XEDsOFg//k74gW79YtOPjfsV0zDWK+AB/A37pK8w3CzxckqiYY8mDixocCGQgEr/DxDQZkj1sY7+XirFMyN7FFWcKUx2WGqCkTr+s814JJ8akb4DeyJF05yL59MYbNQ+ITwfStcU9FqMBRK7D8VO+YTk1NaB6FZtBBqkahPZsd+XeuR4B43xUmENWHNmwYf1OUb4EcrqFSkXQcGpMghQpmyD3oHeDjLd1lBslaIViCMvLu32/UfTkswOTxxmgmKHa8/CbJykk0AP/9Yd5R3SBLcGmxoTbge/bgkMEhkl5RD/xMNu7ZFAc7BggHmokYWLFBccxR57fP+GHb+c20TL3DdVbRyqnMDGz/IiQZkMj3cHAuxh5xLF4mFutBzdQ97RDkpmx1FRqNt88xFppnzvssUWdJILYSxjKLkEyoKzPiXLaLX/b60e9jR8Tmt3Rx3yQuW/7grOgvr3MIYqc48HnwvonGtRSJ1mHHW+dESUMm2SEDuI5wxw8/U/QZ1ouS4r0Cfw6LmBM71O2X5Jxa+vZ3ys4IeymWsMAtgMPHQANIc4Y73bH2KSOy5nvT0TvPbkS5EcZvFIe7xD1TVv+PtK3WT88sE+Ef11WcwxhJpN6QRgEk=
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(39860400002)(376002)(451199021)(40470700004)(36840700001)(46966006)(5660300002)(966005)(40460700003)(82740400003)(2906002)(4326008)(70206006)(70586007)(6916009)(7416002)(86362001)(8936002)(41300700001)(316002)(7636003)(356005)(82310400005)(8676002)(31696002)(478600001)(40480700001)(54906003)(26005)(31686004)(336012)(426003)(36860700001)(47076005)(186003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2023 20:28:35.5847
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc4f9127-bbfb-48c9-3141-08db4114a6dd
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000145BB.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB5657
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230414025921epcms2p5736ebf6a215201e0c2a2c1a3f73ee06a@epcms2p5>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Apr 2023 15:21:54 +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.25 release.
-> There are 129 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 04/14, Daejun Park wrote:
+> This patch enables submit reset zone command asynchornously. It helps
+> decrease average latency of write IOs in high utilization scenario by
+> faster checkpointing.
 > 
-> Responses should be made by Fri, 21 Apr 2023 13:20:20 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Daejun Park <daejun7.park@samsung.com>
+> ---
+>  Documentation/filesystems/f2fs.rst |  4 ++
+>  fs/f2fs/f2fs.h                     |  1 +
+>  fs/f2fs/segment.c                  | 92 +++++++++++++++++++++++++++++-
+>  fs/f2fs/super.c                    |  8 +++
+>  include/trace/events/f2fs.h        | 18 +++++-
+>  5 files changed, 119 insertions(+), 4 deletions(-)
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.25-rc3.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> diff --git a/Documentation/filesystems/f2fs.rst b/Documentation/filesystems/f2fs.rst
+> index 2055e72871fe..4cfabf831a79 100644
+> --- a/Documentation/filesystems/f2fs.rst
+> +++ b/Documentation/filesystems/f2fs.rst
+> @@ -342,6 +342,10 @@ discard_unit=%s		 Control discard unit, the argument can be "block", "segment"
+>  			 default, it is helpful for large sized SMR or ZNS devices to
+>  			 reduce memory cost by getting rid of fs metadata supports small
+>  			 discard.
+> +async_reset_zone         Enable the RESET WRITE POINTER command to be submitted asynchronously.
+> +                         With this option, the RESET WRITE POINTER command can be processed by
+> +                         the discard thread like a discard command. It can reduce checkpoint
+> +                         latency by asynchronously checking for completion of the RESET WRITE POINTER command.
 
-All tests passing for Tegra ...
+Do we need to set this by default instead of mount option?
 
-Test results for stable-v6.1:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    130 tests:	130 pass, 0 fail
+>  memory=%s		 Control memory mode. This supports "normal" and "low" modes.
+>  			 "low" mode is introduced to support low memory devices.
+>  			 Because of the nature of low memory devices, in this mode, f2fs
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 4e2596dacbf1..021e55c5d1a8 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -167,6 +167,7 @@ struct f2fs_mount_info {
+>  					 * be aligned to this unit: block,
+>  					 * segment or section
+>  					 */
+> +	bool async_zone_reset;          /* async zone reset */
+>  	struct fscrypt_dummy_policy dummy_enc_policy; /* test dummy encryption */
+>  	block_t unusable_cap_perc;	/* percentage for cap */
+>  	block_t unusable_cap;		/* Amount of space allowed to be
+> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> index 45128694eefa..60cfe97c9dbd 100644
+> --- a/fs/f2fs/segment.c
+> +++ b/fs/f2fs/segment.c
+> @@ -1189,6 +1189,46 @@ static void __init_discard_policy(struct f2fs_sb_info *sbi,
+>  static void __update_discard_tree_range(struct f2fs_sb_info *sbi,
+>  				struct block_device *bdev, block_t lstart,
+>  				block_t start, block_t len);
+> +
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +static int __submit_zone_reset_cmd(struct f2fs_sb_info *sbi,
+> +				   struct discard_cmd *dc, blk_opf_t flag,
+> +				   struct list_head *wait_list,
+> +				   unsigned int *issued)
+> +{
+> +	struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
+> +	struct block_device *bdev = dc->bdev;
+> +	struct bio *bio = bio_alloc(bdev, 0, REQ_OP_ZONE_RESET | flag, GFP_NOFS);
+> +	unsigned long flags;
+> +
+> +	trace_f2fs_issue_reset_zone(bdev, SECTOR_FROM_BLOCK(dc->di.start));
+> +
+> +	spin_lock_irqsave(&dc->lock, flags);
+> +	dc->state = D_SUBMIT;
+> +	dc->bio_ref++;
+> +	spin_unlock_irqrestore(&dc->lock, flags);
+> +
+> +	if (issued)
+> +		(*issued)++;
+> +
+> +	atomic_inc(&dcc->queued_discard);
+> +	dc->queued++;
+> +	list_move_tail(&dc->list, wait_list);
+> +
+> +	/* sanity check on discard range */
+> +	__check_sit_bitmap(sbi, dc->di.lstart, dc->di.lstart + dc->di.len);
+> +
+> +	bio->bi_iter.bi_sector = SECTOR_FROM_BLOCK(dc->di.start);
+> +	bio->bi_private = dc;
+> +	bio->bi_end_io = f2fs_submit_discard_endio;
+> +	submit_bio(bio);
+> +
+> +	atomic_inc(&dcc->issued_discard);
+> +
+> +	return 0;
+> +}
+> +#endif
+> +
+>  /* this function is copied from blkdev_issue_discard from block/blk-lib.c */
+>  static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
+>  				struct discard_policy *dpolicy,
+> @@ -1210,6 +1250,11 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
+>  	if (is_sbi_flag_set(sbi, SBI_NEED_FSCK))
+>  		return 0;
+>  
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +	if (f2fs_sb_has_blkzoned(sbi) && bdev_is_zoned(bdev))
+> +		return __submit_zone_reset_cmd(sbi, dc, flag, wait_list, issued);
+> +#endif
+> +
+>  	trace_f2fs_issue_discard(bdev, dc->di.start, dc->di.len);
+>  
+>  	lstart = dc->di.lstart;
+> @@ -1454,21 +1499,42 @@ static void __update_discard_tree_range(struct f2fs_sb_info *sbi,
+>  	}
+>  }
+>  
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +static void __queue_zone_reset_cmd(struct f2fs_sb_info *sbi,
+> +		struct block_device *bdev, block_t blkstart, block_t blklen)
+> +{
+> +	block_t lblkstart = blkstart;
+> +
+> +	if (f2fs_is_multi_device(sbi)) {
+> +		int devi = f2fs_target_device_index(sbi, blkstart);
+> +
+> +		blkstart -= FDEV(devi).start_blk;
+> +	}
+> +
+> +	trace_f2fs_queue_reset_zone(bdev, blkstart);
+> +
+> +	mutex_lock(&SM_I(sbi)->dcc_info->cmd_lock);
+> +	__insert_discard_cmd(sbi, bdev, lblkstart, blkstart, blklen);
+> +	mutex_unlock(&SM_I(sbi)->dcc_info->cmd_lock);
+> +}
+> +#endif
+> +
+>  static void __queue_discard_cmd(struct f2fs_sb_info *sbi,
+>  		struct block_device *bdev, block_t blkstart, block_t blklen)
+>  {
+>  	block_t lblkstart = blkstart;
+>  
+> +	trace_f2fs_queue_discard(bdev, blkstart, blklen);
+> +
+>  	if (!f2fs_bdev_support_discard(bdev))
+>  		return;
+>  
+> -	trace_f2fs_queue_discard(bdev, blkstart, blklen);
+> -
+>  	if (f2fs_is_multi_device(sbi)) {
+>  		int devi = f2fs_target_device_index(sbi, blkstart);
+>  
+>  		blkstart -= FDEV(devi).start_blk;
+>  	}
+> +
+>  	mutex_lock(&SM_I(sbi)->dcc_info->cmd_lock);
+>  	__update_discard_tree_range(sbi, bdev, lblkstart, blkstart, blklen);
+>  	mutex_unlock(&SM_I(sbi)->dcc_info->cmd_lock);
+> @@ -1719,7 +1785,22 @@ static void f2fs_wait_discard_bio(struct f2fs_sb_info *sbi, block_t blkaddr)
+>  	dc = __lookup_discard_cmd(sbi, blkaddr);
+>  	if (dc) {
+>  		if (dc->state == D_PREP) {
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +			if (f2fs_sb_has_blkzoned(sbi) &&
+> +			    bdev_is_zoned(dc->bdev)) {
+> +				struct discard_policy dpolicy;
+> +				/* force submit zone reset */
+> +				__init_discard_policy(sbi, &dpolicy,
+> +						      DPOLICY_FORCE, 1);
+> +				__submit_discard_cmd(sbi, &dpolicy, dc, NULL);
+> +				dc->ref++;
+> +				need_wait = true;
+> +			} else {
+> +				__punch_discard_cmd(sbi, dc, blkaddr);
 
-Linux version:	6.1.25-rc3-g45df5d9a8cbd
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
+Can be consolidated in both cases below.
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+> +			}
+> +#else
+>  			__punch_discard_cmd(sbi, dc, blkaddr);
+> +#endif
+>  		} else {
+>  			dc->ref++;
+>  			need_wait = true;
+> @@ -1869,6 +1950,13 @@ static int __f2fs_issue_discard_zone(struct f2fs_sb_info *sbi,
+>  				 blkstart, blklen);
+>  			return -EIO;
+>  		}
+> +
+> +		if (likely(!is_sbi_flag_set(sbi, SBI_POR_DOING)) &&
+> +			   F2FS_OPTION(sbi).async_zone_reset) {
+> +			__queue_zone_reset_cmd(sbi, bdev, lblkstart, blklen);
+> +			return 0;
+> +		}
 
-Jon
+Can make a sigle case above and below, if we set this by default.
+
+> +
+>  		trace_f2fs_issue_reset_zone(bdev, blkstart);
+>  		return blkdev_zone_mgmt(bdev, REQ_OP_ZONE_RESET,
+>  					sector, nr_sects, GFP_NOFS);
+> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> index 7d0202f7b317..48198112cbbc 100644
+> --- a/fs/f2fs/super.c
+> +++ b/fs/f2fs/super.c
+> @@ -162,6 +162,7 @@ enum {
+>  	Opt_gc_merge,
+>  	Opt_nogc_merge,
+>  	Opt_discard_unit,
+> +	Opt_async_zone_reset,
+>  	Opt_memory_mode,
+>  	Opt_age_extent_cache,
+>  	Opt_err,
+> @@ -241,6 +242,7 @@ static match_table_t f2fs_tokens = {
+>  	{Opt_gc_merge, "gc_merge"},
+>  	{Opt_nogc_merge, "nogc_merge"},
+>  	{Opt_discard_unit, "discard_unit=%s"},
+> +	{Opt_async_zone_reset, "async_zone_reset"},
+>  	{Opt_memory_mode, "memory=%s"},
+>  	{Opt_age_extent_cache, "age_extent_cache"},
+>  	{Opt_err, NULL},
+> @@ -1249,6 +1251,9 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+>  			}
+>  			kfree(name);
+>  			break;
+> +		case Opt_async_zone_reset:
+> +			F2FS_OPTION(sbi).async_zone_reset = true;
+> +			break;
+>  		case Opt_memory_mode:
+>  			name = match_strdup(&args[0]);
+>  			if (!name)
+> @@ -2047,6 +2052,9 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
+>  	if (test_opt(sbi, ATGC))
+>  		seq_puts(seq, ",atgc");
+>  
+> +	if (F2FS_OPTION(sbi).async_zone_reset)
+> +		seq_puts(seq, ",async_zone_reset");
+> +
+>  	if (F2FS_OPTION(sbi).memory_mode == MEMORY_MODE_NORMAL)
+>  		seq_printf(seq, ",memory=%s", "normal");
+>  	else if (F2FS_OPTION(sbi).memory_mode == MEMORY_MODE_LOW)
+> diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
+> index 99cbc5949e3c..ee1477de8324 100644
+> --- a/include/trace/events/f2fs.h
+> +++ b/include/trace/events/f2fs.h
+> @@ -1512,7 +1512,7 @@ DEFINE_EVENT(f2fs_discard, f2fs_remove_discard,
+>  	TP_ARGS(dev, blkstart, blklen)
+>  );
+>  
+> -TRACE_EVENT(f2fs_issue_reset_zone,
+> +DECLARE_EVENT_CLASS(f2fs_reset_zone,
+>  
+>  	TP_PROTO(struct block_device *dev, block_t blkstart),
+>  
+> @@ -1528,11 +1528,25 @@ TRACE_EVENT(f2fs_issue_reset_zone,
+>  		__entry->blkstart = blkstart;
+>  	),
+>  
+> -	TP_printk("dev = (%d,%d), reset zone at block = 0x%llx",
+> +	TP_printk("dev = (%d,%d), zone at block = 0x%llx",
+>  		show_dev(__entry->dev),
+>  		(unsigned long long)__entry->blkstart)
+>  );
+>  
+> +DEFINE_EVENT(f2fs_reset_zone, f2fs_queue_reset_zone,
+> +
+> +	TP_PROTO(struct block_device *dev, block_t blkstart),
+> +
+> +	TP_ARGS(dev, blkstart)
+> +);
+> +
+> +DEFINE_EVENT(f2fs_reset_zone, f2fs_issue_reset_zone,
+> +
+> +	TP_PROTO(struct block_device *dev, block_t blkstart),
+> +
+> +	TP_ARGS(dev, blkstart)
+> +);
+> +
+>  TRACE_EVENT(f2fs_issue_flush,
+>  
+>  	TP_PROTO(struct block_device *dev, unsigned int nobarrier,
+> -- 
+> 2.25.1
