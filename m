@@ -2,231 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4176E73D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8016E73D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 09:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbjDSHSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 03:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43302 "EHLO
+        id S231963AbjDSHSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 03:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbjDSHSg (ORCPT
+        with ESMTP id S231786AbjDSHSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 03:18:36 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF63E93C7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:18:11 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id o11so12121214ybk.11
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:18:11 -0700 (PDT)
+        Wed, 19 Apr 2023 03:18:11 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E6D2D71
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:17:57 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id fw30so26378554ejc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 00:17:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dneg.com; s=google; t=1681888690; x=1684480690;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+FaMupUOtZXVRvIYAidVKZ4twQNYjfgdR23Ua0bUiJ0=;
-        b=KVfpy2S4mkCqQtMG1jmfBuRBogqjuMtLsB14DifrJrwBzDtRsnbHdatJY107IcP1n7
-         Korb0wMeiBpbZfZjeWHzSstBZEOfHkS4Y8ikEjAYDoPhk1Hv3Q2TKpYWpns2+ZabzHnG
-         Xe2lwiMO6ej1m18jTOTfGT6Yzq30YMU2LX9bi4I0fj4/3r9Z+ZasuYvT6VgvkA6jjm5t
-         +qMsGFrCpmai9sVrvFJWzxXfClPitd5lhbdgGo+olT8B0Bi2tHpLbMK+XtwPK6+WtIJg
-         pGRRaoHy7N3XWpyPKSv/61wARHmPGFbSgnIGjxXrXNLpp0CbK4jUu/UzUPk2Kop4rQwJ
-         2/og==
+        d=ionos.com; s=google; t=1681888670; x=1684480670;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fFvKyaHMANQ4s9e2g5olWLh3w6JZhJRx0VG71h2yN1M=;
+        b=O3GeSm8ppsQyRnsOXpkqBXhHcWwQRioQbUhPgtXiEYbj+MPlq4oBACsFpJYFBLphf9
+         7q+/NRdnImD2kwNkcJtz0Jsmw1iT0FW0KEqmU4QNBYNBM7pDzg3B0HKYxTp6JUDCfWs5
+         xAdvthiq+axqqmaGzAwkgvZyYqy8Vx7BhCJ6zUtoMGQjtcbUepPdcaGuOK/1bCX+kQr4
+         si4PDExpkx56TaGPnXgzNUI6o/WJuZqTW1hZyYOHaKsTDiqFFO1rknVnt+nO7n1I5Rt7
+         Et4Z66zWaSP+TtEaQtvc2wfEf13lRocc7GqgpG2YwOLU7+gOFGYIlhuMghr98BLiPn2W
+         1Fiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681888690; x=1684480690;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+FaMupUOtZXVRvIYAidVKZ4twQNYjfgdR23Ua0bUiJ0=;
-        b=TZmIhegKOkKvC8/QiNgZAKtBnsDU5W/07Q05YCvLJZGTCj/xYVwKqohqKIFgeiRe5s
-         xElG7l+de27IP7kpS531AVx76fLvA7/AT5RNLsryDWDdn8mcbqz4OfFo3E/1Ava7ymAq
-         hcCGonsHhnLtZXnnGfHCqbJVkbhCeFFLUaJ5vSeUxg+Rkc9dQSivOb7+8BQjZcomGau8
-         W0fLnMOIi1IdE8/Fco0OkdwP6KGLsT3cPACtQhhxCNXwwGR4y1Wwk9x8ARWGPWoGrDe+
-         TW1d10imjBX5jinSRQqRkBnLVZAusBEwaQkDmtdsCNiDg29S5qlxZHHGoQ5A7vmKh2l2
-         cJ5w==
-X-Gm-Message-State: AAQBX9daVC4zA5TNmPBCGdZWwYKVTqL3vn1vAeKd6bAEyKg+GHMYe02u
-        BWNGJtrj1pwtqp3F226Dqmkqq3oy+mPubTW2UsEuRg==
-X-Google-Smtp-Source: AKy350bMJoTdh5eOXV/7UpTp2rMOgWZVxTHtVIrifzZ987IpHuosbz0IMYULRlRuLOTEbKUJleub4fuueAvkL5YpkXA=
-X-Received: by 2002:a25:588b:0:b0:b8f:3b82:bf9c with SMTP id
- m133-20020a25588b000000b00b8f3b82bf9cmr20330471ybb.41.1681888689816; Wed, 19
- Apr 2023 00:18:09 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681888670; x=1684480670;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fFvKyaHMANQ4s9e2g5olWLh3w6JZhJRx0VG71h2yN1M=;
+        b=Rl/zqhKAmBrtTBJMEqOk7lK4mbqhwiAjs59hSHZhRBuFXYfMX4JGnkZKpgCKQtaG51
+         kMRi18zFzMPsab7IF89wYXhK63p2Dh+9erXZQWBKtmOw7pZCP2lC8dMqk0wQDU1/6LAB
+         OMOvbKA9Ujm9RCBH3N9W+UiiKwjen142IO0lbh4Dd3d5EhvUH3sas6/JoNPEOU6laoBF
+         PPLvOE9SaxDMEK6NDboT0H/H3ef5UOe7pRJoV3vCTYRPE+GBtpNRvweU665uJ6u5RRWI
+         GnTxPl49xDDGvrX1iyMXJZ+HXDTlJyBC0aTKIxJpQuYrhOrfo4ivYaqvsGzVKqskQ/8w
+         yXKg==
+X-Gm-Message-State: AAQBX9doYV5Hw01LS6fxYy3tM9TAMmsyULQmI9eD/BemUtyD8dTDly24
+        w4txBGCve+3Q1NmpMNsyQkZ8g02v4gw149cS/nL7Q+zFCJYMlaNa
+X-Google-Smtp-Source: AKy350aDC7yrMRJ+cEZ8JXpk6kYAS92X8XeuuaXzNIJm753wMdv6xhPjYK2LugTiNGMZJQPIHTQMiAhtCewrAeZ9e8o=
+X-Received: by 2002:a17:906:490b:b0:94e:ee60:ee61 with SMTP id
+ b11-20020a170906490b00b0094eee60ee61mr5717725ejq.7.1681888669644; Wed, 19 Apr
+ 2023 00:17:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230411030248.53356-1-chengen.du@canonical.com>
-In-Reply-To: <20230411030248.53356-1-chengen.du@canonical.com>
-From:   Daire Byrne <daire@dneg.com>
-Date:   Wed, 19 Apr 2023 08:17:32 +0100
-Message-ID: <CAPt2mGNqqDeRMeCSVh6oX_=nS0UcGCfhBfVcuaVG9HpdwVSzVg@mail.gmail.com>
-Subject: Re: [PATCH] NFS: Add mount option 'nofasc'
-To:     Chengen Du <chengen.du@canonical.com>
-Cc:     trond.myklebust@hammerspace.com, anna@kernel.org,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230418190101.696345-1-pranavpp@google.com> <20230418190101.696345-2-pranavpp@google.com>
+In-Reply-To: <20230418190101.696345-2-pranavpp@google.com>
+From:   Jinpu Wang <jinpu.wang@ionos.com>
+Date:   Wed, 19 Apr 2023 09:17:38 +0200
+Message-ID: <CAMGffEmyVPFr5LGR4DsF4SAvuYyA=s4Y3kZdzrxHePtbNF7xzw@mail.gmail.com>
+Subject: Re: [PATCH 1/6] scsi: pm80xx: Log some HW events by default
+To:     Pranav Prasad <pranavpp@google.com>
+Cc:     Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akshat Jain <akshatzen@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just to say, I am personally for this or some other way to opt out of
-the increased ACCESS calls on select servers (e.g. ones with high
-latency or with lots of multi user logins).
-
-I see it as similar to "actimeo" and "nocto" options in allowing users
-to reduce "correctness" at their own risk if it helps with their
-workloads and they deem the risk worth it.
-
-I am currently reverting the original patches in our kernel for our
-nfs re-exporting workloads.
-
-Daire
-
-
-On Tue, 11 Apr 2023 at 04:03, Chengen Du <chengen.du@canonical.com> wrote:
+On Tue, Apr 18, 2023 at 9:01=E2=80=AFPM Pranav Prasad <pranavpp@google.com>=
+ wrote:
 >
-> This mount option is used to skip clearing the file access cache
-> upon login. Some users or applications switch to other privileged
-> users via commands such as 'su' to operate on NFS-mounted folders.
-> In such cases, the privileged user's login time will be renewed,
-> and NFS ACCESS operations will need to be re-sent, potentially
-> leading to performance degradation.
-> In some production environments where the access cache can be
-> trusted due to stable group membership, this option could be
-> particularly useful.
+> From: Akshat Jain <akshatzen@google.com>
 >
-> Signed-off-by: Chengen Du <chengen.du@canonical.com>
+> Log the following hw_event logs under EVENT log severity
+> to help debug disk issues:
+>   HW_EVENT_LINK_ERR_INVALID_DWORD
+>   HW_EVENT_LINK_ERR_DISPARITY_ERROR
+>   HW_EVENT_LINK_ERR_CODE_VIOLATION
+>   HW_EVENT_LINK_ERR_LOSS_OF_DWORD_SYNCH
+>   HW_EVENT_LINK_ERR_PHY_RESET_FAILED
+>   HW_EVENT_INBOUND_CRC_ERROR
+>   HW_EVENT_PHY_ERROR
+>   HW_EVENT_SAS_PHY_UP
+>   HW_EVENT_SATA_PHY_UP
+>   HW_EVENT_SATA_SPINUP_HOLD
+>   HW_EVENT_PHY_DOWN
+>   HW_EVENT_PORT_INVALID
+>   HW_EVENT_MALFUNCTION
+>   HW_EVENT_PORT_RESET_TIMER_TMO
+>   HW_EVENT_PORT_RECOVERY_TIMER_TMO
+>   HW_EVENT_HARD_RESET_RECEIVED
+>   HW_EVENT_ID_FRAME_TIMEOUT
+>   HW_EVENT_PORT_RECOVER
+>
+> Signed-off-by: Akshat Jain <akshatzen@google.com>
+> Signed-off-by: Pranav Prasad <pranavpp@google.com>
+Acked-by: Jack Wang <jinpu.wang@ionos.com>
 > ---
->  fs/nfs/dir.c              | 21 ++++++++++++---------
->  fs/nfs/fs_context.c       |  8 ++++++++
->  fs/nfs/super.c            |  1 +
->  include/linux/nfs_fs_sb.h |  1 +
->  4 files changed, 22 insertions(+), 9 deletions(-)
+>  drivers/scsi/pm8001/pm8001_init.c |  3 +-
+>  drivers/scsi/pm8001/pm8001_sas.h  |  1 +
+>  drivers/scsi/pm8001/pm80xx_hwi.c  | 72 ++++++++++++++++++++-----------
+>  3 files changed, 50 insertions(+), 26 deletions(-)
 >
-> diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
-> index 6fbcbb8d6587..9a6d86e2044e 100644
-> --- a/fs/nfs/dir.c
-> +++ b/fs/nfs/dir.c
-> @@ -2953,12 +2953,14 @@ static struct nfs_access_entry *nfs_access_search_rbtree(struct inode *inode, co
->         return NULL;
->  }
+> diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm80=
+01_init.c
+> index 7e589fe3e010..d8dc629c0efb 100644
+> --- a/drivers/scsi/pm8001/pm8001_init.c
+> +++ b/drivers/scsi/pm8001/pm8001_init.c
+> @@ -43,7 +43,8 @@
+>  #include "pm8001_chips.h"
+>  #include "pm80xx_hwi.h"
 >
-> -static u64 nfs_access_login_time(const struct task_struct *task,
-> -                                const struct cred *cred)
-> +static inline
-> +bool nfs_check_access_stale(const struct task_struct *task,
-> +                           const struct cred *cred,
-> +                           const struct nfs_access_entry *cache)
->  {
->         const struct task_struct *parent;
->         const struct cred *pcred;
-> -       u64 ret;
-> +       u64 login_time;
+> -static ulong logging_level =3D PM8001_FAIL_LOGGING | PM8001_IOERR_LOGGIN=
+G;
+> +static ulong logging_level =3D PM8001_FAIL_LOGGING | PM8001_IOERR_LOGGIN=
+G |
+> +                                                        PM8001_EVENT_LOG=
+GING;
+>  module_param(logging_level, ulong, 0644);
+>  MODULE_PARM_DESC(logging_level, " bits for enabling logging info.");
 >
->         rcu_read_lock();
->         for (;;) {
-> @@ -2968,15 +2970,15 @@ static u64 nfs_access_login_time(const struct task_struct *task,
->                         break;
->                 task = parent;
->         }
-> -       ret = task->start_time;
-> +       login_time = task->start_time;
->         rcu_read_unlock();
-> -       return ret;
-> +
-> +       return ((s64)(login_time - cache->timestamp) > 0);
->  }
+> diff --git a/drivers/scsi/pm8001/pm8001_sas.h b/drivers/scsi/pm8001/pm800=
+1_sas.h
+> index dc1f4d958e03..953572fc0d9e 100644
+> --- a/drivers/scsi/pm8001/pm8001_sas.h
+> +++ b/drivers/scsi/pm8001/pm8001_sas.h
+> @@ -71,6 +71,7 @@
+>  #define PM8001_DEV_LOGGING     0x80 /* development message logging */
+>  #define PM8001_DEVIO_LOGGING   0x100 /* development io message logging *=
+/
+>  #define PM8001_IOERR_LOGGING   0x200 /* development io err message loggi=
+ng */
+> +#define PM8001_EVENT_LOGGING   0x400 /* HW event logging */
 >
->  static int nfs_access_get_cached_locked(struct inode *inode, const struct cred *cred, u32 *mask, bool may_block)
->  {
->         struct nfs_inode *nfsi = NFS_I(inode);
-> -       u64 login_time = nfs_access_login_time(current, cred);
->         struct nfs_access_entry *cache;
->         bool retry = true;
->         int err;
-> @@ -3005,7 +3007,8 @@ static int nfs_access_get_cached_locked(struct inode *inode, const struct cred *
->                 retry = false;
->         }
->         err = -ENOENT;
-> -       if ((s64)(login_time - cache->timestamp) > 0)
-> +       if (!(NFS_SERVER(inode)->flags & NFS_MOUNT_NOFASC) &&
-> +           nfs_check_access_stale(current, cred, cache))
->                 goto out;
->         *mask = cache->mask;
->         list_move_tail(&cache->lru, &nfsi->access_cache_entry_lru);
-> @@ -3025,7 +3028,6 @@ static int nfs_access_get_cached_rcu(struct inode *inode, const struct cred *cre
->          * but do it without locking.
->          */
->         struct nfs_inode *nfsi = NFS_I(inode);
-> -       u64 login_time = nfs_access_login_time(current, cred);
->         struct nfs_access_entry *cache;
->         int err = -ECHILD;
->         struct list_head *lh;
-> @@ -3040,7 +3042,8 @@ static int nfs_access_get_cached_rcu(struct inode *inode, const struct cred *cre
->                 cache = NULL;
->         if (cache == NULL)
->                 goto out;
-> -       if ((s64)(login_time - cache->timestamp) > 0)
-> +       if (!(NFS_SERVER(inode)->flags & NFS_MOUNT_NOFASC) &&
-> +           nfs_check_access_stale(current, cred, cache))
->                 goto out;
->         if (nfs_check_cache_invalid(inode, NFS_INO_INVALID_ACCESS))
->                 goto out;
-> diff --git a/fs/nfs/fs_context.c b/fs/nfs/fs_context.c
-> index 9bcd53d5c7d4..5cd9b2882c79 100644
-> --- a/fs/nfs/fs_context.c
-> +++ b/fs/nfs/fs_context.c
-> @@ -88,6 +88,7 @@ enum nfs_param {
->         Opt_vers,
->         Opt_wsize,
->         Opt_write,
-> +       Opt_fasc,
->  };
+>  #define pm8001_info(HBA, fmt, ...)                                     \
+>         pr_info("%s:: %s %d: " fmt,                                     \
+> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80x=
+x_hwi.c
+> index 9584cadc4201..ce6a442d2418 100644
+> --- a/drivers/scsi/pm8001/pm80xx_hwi.c
+> +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+> @@ -3425,26 +3425,31 @@ static int mpi_hw_event(struct pm8001_hba_info *p=
+m8001_ha, void *piomb)
+>         switch (eventType) {
 >
->  enum {
-> @@ -194,6 +195,7 @@ static const struct fs_parameter_spec nfs_fs_parameters[] = {
->         fsparam_string("vers",          Opt_vers),
->         fsparam_enum  ("write",         Opt_write, nfs_param_enums_write),
->         fsparam_u32   ("wsize",         Opt_wsize),
-> +       fsparam_flag_no("fasc",         Opt_fasc),
->         {}
->  };
->
-> @@ -861,6 +863,12 @@ static int nfs_fs_context_parse_param(struct fs_context *fc,
->         case Opt_sloppy:
->                 ctx->sloppy = true;
+>         case HW_EVENT_SAS_PHY_UP:
+> -               pm8001_dbg(pm8001_ha, MSG, "HW_EVENT_PHY_START_STATUS\n")=
+;
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_SAS_PHY_UP phyid:%#x\n", phy_id);
+>                 hw_event_sas_phy_up(pm8001_ha, piomb);
 >                 break;
-> +       case Opt_fasc:
-> +               if (result.negated)
-> +                       ctx->flags |= NFS_MOUNT_NOFASC;
-> +               else
-> +                       ctx->flags &= ~NFS_MOUNT_NOFASC;
-> +               break;
->         }
->
->         return 0;
-> diff --git a/fs/nfs/super.c b/fs/nfs/super.c
-> index 05ae23657527..059513d403f8 100644
-> --- a/fs/nfs/super.c
-> +++ b/fs/nfs/super.c
-> @@ -444,6 +444,7 @@ static void nfs_show_mount_options(struct seq_file *m, struct nfs_server *nfss,
->                 { NFS_MOUNT_NORDIRPLUS, ",nordirplus", "" },
->                 { NFS_MOUNT_UNSHARED, ",nosharecache", "" },
->                 { NFS_MOUNT_NORESVPORT, ",noresvport", "" },
-> +               { NFS_MOUNT_NOFASC, ",nofasc", "" },
->                 { 0, NULL, NULL }
->         };
->         const struct proc_nfs_info *nfs_infop;
-> diff --git a/include/linux/nfs_fs_sb.h b/include/linux/nfs_fs_sb.h
-> index ea2f7e6b1b0b..a39ae1bd2217 100644
-> --- a/include/linux/nfs_fs_sb.h
-> +++ b/include/linux/nfs_fs_sb.h
-> @@ -153,6 +153,7 @@ struct nfs_server {
->  #define NFS_MOUNT_WRITE_EAGER          0x01000000
->  #define NFS_MOUNT_WRITE_WAIT           0x02000000
->  #define NFS_MOUNT_TRUNK_DISCOVERY      0x04000000
-> +#define NFS_MOUNT_NOFASC               0x08000000
->
->         unsigned int            fattr_valid;    /* Valid attributes */
->         unsigned int            caps;           /* server capabilities */
+>         case HW_EVENT_SATA_PHY_UP:
+> -               pm8001_dbg(pm8001_ha, MSG, "HW_EVENT_SATA_PHY_UP\n");
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_SATA_PHY_UP phyid:%#x\n", phy_id);
+>                 hw_event_sata_phy_up(pm8001_ha, piomb);
+>                 break;
+>         case HW_EVENT_SATA_SPINUP_HOLD:
+> -               pm8001_dbg(pm8001_ha, MSG, "HW_EVENT_SATA_SPINUP_HOLD\n")=
+;
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_SATA_SPINUP_HOLD phyid:%#x\n", phy_i=
+d);
+>                 sas_notify_phy_event(&phy->sas_phy, PHYE_SPINUP_HOLD,
+>                         GFP_ATOMIC);
+>                 break;
+>         case HW_EVENT_PHY_DOWN:
+> -               pm8001_dbg(pm8001_ha, MSG, "HW_EVENT_PHY_DOWN\n");
+> +               pm8001_dbg(pm8001_ha, EVENT, "HW_EVENT_PHY_DOWN phyid:%#x=
+\n",
+> +                          phy_id);
+>                 hw_event_phy_down(pm8001_ha, piomb);
+>                 phy->phy_attached =3D 0;
+>                 phy->phy_state =3D PHY_LINK_DISABLE;
+>                 break;
+>         case HW_EVENT_PORT_INVALID:
+> -               pm8001_dbg(pm8001_ha, MSG, "HW_EVENT_PORT_INVALID\n");
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_PORT_INVALID phyid:%#x\n", phy_id);
+>                 sas_phy_disconnected(sas_phy);
+>                 phy->phy_attached =3D 0;
+>                 sas_notify_port_event(sas_phy, PORTE_LINK_RESET_ERR,
+> @@ -3463,7 +3468,8 @@ static int mpi_hw_event(struct pm8001_hba_info *pm8=
+001_ha, void *piomb)
+>                         GFP_ATOMIC);
+>                 break;
+>         case HW_EVENT_PHY_ERROR:
+> -               pm8001_dbg(pm8001_ha, MSG, "HW_EVENT_PHY_ERROR\n");
+> +               pm8001_dbg(pm8001_ha, EVENT, "HW_EVENT_PHY_ERROR phyid:%#=
+x\n",
+> +                          phy_id);
+>                 sas_phy_disconnected(&phy->sas_phy);
+>                 phy->phy_attached =3D 0;
+>                 sas_notify_phy_event(&phy->sas_phy, PHYE_OOB_ERROR, GFP_A=
+TOMIC);
+> @@ -3477,34 +3483,39 @@ static int mpi_hw_event(struct pm8001_hba_info *p=
+m8001_ha, void *piomb)
+>                         GFP_ATOMIC);
+>                 break;
+>         case HW_EVENT_LINK_ERR_INVALID_DWORD:
+> -               pm8001_dbg(pm8001_ha, MSG,
+> -                          "HW_EVENT_LINK_ERR_INVALID_DWORD\n");
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_LINK_ERR_INVALID_DWORD phyid:%#x\n",
+> +                          phy_id);
+>                 pm80xx_hw_event_ack_req(pm8001_ha, 0,
+>                         HW_EVENT_LINK_ERR_INVALID_DWORD, port_id, phy_id,=
+ 0, 0);
+>                 break;
+>         case HW_EVENT_LINK_ERR_DISPARITY_ERROR:
+> -               pm8001_dbg(pm8001_ha, MSG,
+> -                          "HW_EVENT_LINK_ERR_DISPARITY_ERROR\n");
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_LINK_ERR_DISPARITY_ERROR phyid:%#x\n=
+",
+> +                          phy_id);
+>                 pm80xx_hw_event_ack_req(pm8001_ha, 0,
+>                         HW_EVENT_LINK_ERR_DISPARITY_ERROR,
+>                         port_id, phy_id, 0, 0);
+>                 break;
+>         case HW_EVENT_LINK_ERR_CODE_VIOLATION:
+> -               pm8001_dbg(pm8001_ha, MSG,
+> -                          "HW_EVENT_LINK_ERR_CODE_VIOLATION\n");
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_LINK_ERR_CODE_VIOLATION phyid:%#x\n"=
+,
+> +                          phy_id);
+>                 pm80xx_hw_event_ack_req(pm8001_ha, 0,
+>                         HW_EVENT_LINK_ERR_CODE_VIOLATION,
+>                         port_id, phy_id, 0, 0);
+>                 break;
+>         case HW_EVENT_LINK_ERR_LOSS_OF_DWORD_SYNCH:
+> -               pm8001_dbg(pm8001_ha, MSG,
+> -                          "HW_EVENT_LINK_ERR_LOSS_OF_DWORD_SYNCH\n");
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_LINK_ERR_LOSS_OF_DWORD_SYNCH phyid:%=
+#x\n",
+> +                          phy_id);
+>                 pm80xx_hw_event_ack_req(pm8001_ha, 0,
+>                         HW_EVENT_LINK_ERR_LOSS_OF_DWORD_SYNCH,
+>                         port_id, phy_id, 0, 0);
+>                 break;
+>         case HW_EVENT_MALFUNCTION:
+> -               pm8001_dbg(pm8001_ha, MSG, "HW_EVENT_MALFUNCTION\n");
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_MALFUNCTION phyid:%#x\n", phy_id);
+>                 break;
+>         case HW_EVENT_BROADCAST_SES:
+>                 pm8001_dbg(pm8001_ha, MSG, "HW_EVENT_BROADCAST_SES\n");
+> @@ -3515,25 +3526,29 @@ static int mpi_hw_event(struct pm8001_hba_info *p=
+m8001_ha, void *piomb)
+>                         GFP_ATOMIC);
+>                 break;
+>         case HW_EVENT_INBOUND_CRC_ERROR:
+> -               pm8001_dbg(pm8001_ha, MSG, "HW_EVENT_INBOUND_CRC_ERROR\n"=
+);
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_INBOUND_CRC_ERROR phyid:%#x\n", phy_=
+id);
+>                 pm80xx_hw_event_ack_req(pm8001_ha, 0,
+>                         HW_EVENT_INBOUND_CRC_ERROR,
+>                         port_id, phy_id, 0, 0);
+>                 break;
+>         case HW_EVENT_HARD_RESET_RECEIVED:
+> -               pm8001_dbg(pm8001_ha, MSG, "HW_EVENT_HARD_RESET_RECEIVED\=
+n");
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_HARD_RESET_RECEIVED phyid:%#x\n", ph=
+y_id);
+>                 sas_notify_port_event(sas_phy, PORTE_HARD_RESET, GFP_ATOM=
+IC);
+>                 break;
+>         case HW_EVENT_ID_FRAME_TIMEOUT:
+> -               pm8001_dbg(pm8001_ha, MSG, "HW_EVENT_ID_FRAME_TIMEOUT\n")=
+;
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_ID_FRAME_TIMEOUT phyid:%#x\n", phy_i=
+d);
+>                 sas_phy_disconnected(sas_phy);
+>                 phy->phy_attached =3D 0;
+>                 sas_notify_port_event(sas_phy, PORTE_LINK_RESET_ERR,
+>                         GFP_ATOMIC);
+>                 break;
+>         case HW_EVENT_LINK_ERR_PHY_RESET_FAILED:
+> -               pm8001_dbg(pm8001_ha, MSG,
+> -                          "HW_EVENT_LINK_ERR_PHY_RESET_FAILED\n");
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_LINK_ERR_PHY_RESET_FAILED phyid:%#x\=
+n",
+> +                          phy_id);
+>                 pm80xx_hw_event_ack_req(pm8001_ha, 0,
+>                         HW_EVENT_LINK_ERR_PHY_RESET_FAILED,
+>                         port_id, phy_id, 0, 0);
+> @@ -3543,7 +3558,9 @@ static int mpi_hw_event(struct pm8001_hba_info *pm8=
+001_ha, void *piomb)
+>                         GFP_ATOMIC);
+>                 break;
+>         case HW_EVENT_PORT_RESET_TIMER_TMO:
+> -               pm8001_dbg(pm8001_ha, MSG, "HW_EVENT_PORT_RESET_TIMER_TMO=
+\n");
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_PORT_RESET_TIMER_TMO phyid:%#x\n",
+> +                          phy_id);
+>                 if (!pm8001_ha->phy[phy_id].reset_completion) {
+>                         pm80xx_hw_event_ack_req(pm8001_ha, 0, HW_EVENT_PH=
+Y_DOWN,
+>                                 port_id, phy_id, 0, 0);
+> @@ -3560,8 +3577,9 @@ static int mpi_hw_event(struct pm8001_hba_info *pm8=
+001_ha, void *piomb)
+>                 }
+>                 break;
+>         case HW_EVENT_PORT_RECOVERY_TIMER_TMO:
+> -               pm8001_dbg(pm8001_ha, MSG,
+> -                          "HW_EVENT_PORT_RECOVERY_TIMER_TMO\n");
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_PORT_RECOVERY_TIMER_TMO phyid:%#x\n"=
+,
+> +                          phy_id);
+>                 pm80xx_hw_event_ack_req(pm8001_ha, 0,
+>                         HW_EVENT_PORT_RECOVERY_TIMER_TMO,
+>                         port_id, phy_id, 0, 0);
+> @@ -3575,11 +3593,15 @@ static int mpi_hw_event(struct pm8001_hba_info *p=
+m8001_ha, void *piomb)
+>                 }
+>                 break;
+>         case HW_EVENT_PORT_RECOVER:
+> -               pm8001_dbg(pm8001_ha, MSG, "HW_EVENT_PORT_RECOVER\n");
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_PORT_RECOVER phyid:%#x port_id:%#x\n=
+",
+> +                          phy_id, port_id);
+>                 hw_event_port_recover(pm8001_ha, piomb);
+>                 break;
+>         case HW_EVENT_PORT_RESET_COMPLETE:
+> -               pm8001_dbg(pm8001_ha, MSG, "HW_EVENT_PORT_RESET_COMPLETE\=
+n");
+> +               pm8001_dbg(pm8001_ha, EVENT,
+> +                          "HW_EVENT_PORT_RESET_COMPLETE phyid:%#x port_i=
+d:%#x\n",
+> +                          phy_id, port_id);
+>                 if (pm8001_ha->phy[phy_id].reset_completion) {
+>                         pm8001_ha->phy[phy_id].port_reset_status =3D
+>                                         PORT_RESET_SUCCESS;
 > --
-> 2.37.2
+> 2.40.0.634.g4ca3ef3211-goog
 >
