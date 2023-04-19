@@ -2,145 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D156E7FDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F806E7FDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233688AbjDSQmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 12:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S232586AbjDSQo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 12:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233384AbjDSQmV (ORCPT
+        with ESMTP id S230522AbjDSQoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 12:42:21 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4FD7AB9
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:42:19 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-63b875d0027so16847b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:42:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681922539; x=1684514539;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RxLjpyfcWNtlWOdh1ySH+g8hP125zqr+2pf1QMqfd8s=;
-        b=N23iIdeE3sO2uNX5THDu5Gry3LExo49/uDjzBM6b1AVEh/6nFahJ/kqhfY5yWCQsuz
-         44My5Ywz3SK0v1I69W6BaEE9El0SR6dv+4gkZ9DEciy0lShfozzh/q0Ofq4La/cCfJbd
-         hnv7Mw2F4Viu+fOXN+r/mFZj07Jae9aysr9vXW3heRV6OgMkuMtXnJNOkYdWq/90IzRA
-         Ntt/sdo16L3wcv4nPThKdagjTY54125CV9whX0uqZN0/wB4/qG5smC09cukmglJtLqvU
-         tu5RuxAmbYQZK8YLBwcLH2EoKRcZsbFCNuYeVRTAliEhrUYvEq42WCqlchFLU6AX9bsW
-         UCNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681922539; x=1684514539;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RxLjpyfcWNtlWOdh1ySH+g8hP125zqr+2pf1QMqfd8s=;
-        b=QU6HBAVlaRv2PbpvvPavgJWMIcwWwVp8NNqmHpm0tuD3sv6+zvSQBA5D88fw9Y8GLp
-         JgPxfrMh6fDpe1SsoC01YHJS84zZxZNn1Em2qTkjVcFgQgIC/Pxo6PudDG96jYXxtCsH
-         UvkxVPFSkRs/Oyo5yytFdMdAIXbScQs1/ZY69sBJbvRBR1ucS7TBjKVVs3kt4sfVtw90
-         3pcW2wHJXoR7MpJ5IgcHkUqCLpf/RagTp3ZsUcm+XBKe9F4t369RZzZsY0cSrlf1GsMU
-         xbIeJEnU0PSmVQkmE9B6xWxYeOcWelrFqJv9516QrNvua9fEi6BQYvPa0HOiXmsCw9v8
-         SriQ==
-X-Gm-Message-State: AAQBX9fPUxYpN/bgRiDETAtdyt3kDGBsMVoKT95HREvi+LO71xoCUBVF
-        XeZwc3hDSHgJgUwWVjX5WZiG6WeSRwBLIs1QmTY=
-X-Google-Smtp-Source: AKy350YsLJcgKXLSYcTK4M0eUET8e8S84/nLjBZ7/eTNMzty54gG8MA8d/Evst6SrrCrHkVKGziX5g==
-X-Received: by 2002:a05:6a00:4106:b0:635:4f6:2f38 with SMTP id bu6-20020a056a00410600b0063504f62f38mr18799098pfb.2.1681922538763;
-        Wed, 19 Apr 2023 09:42:18 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id g12-20020a62e30c000000b0063d2bb0d107sm4683674pfh.64.2023.04.19.09.42.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 09:42:18 -0700 (PDT)
-Message-ID: <868ceaa3-4854-345f-900e-52a79b924aa6@kernel.dk>
-Date:   Wed, 19 Apr 2023 10:42:17 -0600
+        Wed, 19 Apr 2023 12:44:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D87BB
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:44:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9825640DF
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 16:44:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00256C433D2;
+        Wed, 19 Apr 2023 16:44:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681922693;
+        bh=H0AAYLCGw3D1xIThJOvHWSbllE3+q0cBwJKUNOtqOik=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rDK0T5Lk6twf+NjxuUroLIFf7NYvgHHpF1XMSq3Kga5ZoppzAe0sqQPTo5leiW8uT
+         DFCrPR4BkzGFBg2DzBEkVRQh8ORkBe6yIBCMA1poR8nziYthdHpTjJ8h+7HSLfvtkb
+         T1SXJOy4VRJOIw7XJ9rotkB/+Vi7DQDCtEPCkaRfvFwz/OtzBoPwVVSjuU1/Qv4Eb+
+         wFXdOHxu3BWHEsB2vIRSB6O8b2p7Wmp5KirOO3Oz/4/543UDNWGhPNR0xwYto5Kw5E
+         MM/KYzazCH9EO54GKstI44WaxoK9RrwDUBOHiEH/w8pz9I4KofQcN+6+rYpPlnJWmv
+         yo7XeS+4HmUBA==
+Date:   Wed, 19 Apr 2023 09:44:51 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86-ml <x86@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] x86/urgent for v6.3-rc7
+Message-ID: <20230419164451.2vtnawrvbhajrb2g@treble>
+References: <20230416122913.GCZDvqGVe9TPa5LPRm@fat_crate.local>
+ <CAHk-=wjOZgMu2VYBHMt-yFvurAqWsxLG8wh59km=B245CXRKxA@mail.gmail.com>
+ <20230417090412.GAZD0LjH5ZIaGUdoHH@fat_crate.local>
+ <20230418012435.fhjxd6moaz6tmnep@treble>
+ <20230419155900.GCZEAPxNiOUP31q+/H@fat_crate.local>
+ <ed6bfa1a-7e82-8273-ee7f-0e8097397724@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] eventfd: support delayed wakeup for non-semaphore eventfd
- to reduce cpu utilization
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Wen Yang <wenyang.linux@foxmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>, Dylan Yudaken <dylany@fb.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Paolo Bonzini <pbonzini@redhat.com>, Fu Wei <wefu@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <tencent_AF886EF226FD9F39D28FE4D9A94A95FA2605@qq.com>
- <817984a2-570c-cb23-4121-0d75005ebd4d@kernel.dk>
- <tencent_9D8583482619D25B9953FCA89E69AA92A909@qq.com>
- <7dded5a8-32c1-e994-52a0-ce32011d5e6b@kernel.dk>
- <20230419-blinzeln-sortieren-343826ee30ce@brauner>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230419-blinzeln-sortieren-343826ee30ce@brauner>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ed6bfa1a-7e82-8273-ee7f-0e8097397724@suse.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 3:12?AM, Christian Brauner wrote:
-> On Tue, Apr 18, 2023 at 08:15:03PM -0600, Jens Axboe wrote:
->> On 4/17/23 10:32?AM, Wen Yang wrote:
->>>
->>> ? 2023/4/17 22:38, Jens Axboe ??:
->>>> On 4/16/23 5:31?AM, wenyang.linux@foxmail.com wrote:
->>>>> From: Wen Yang <wenyang.linux@foxmail.com>
->>>>>
->>>>> For the NON SEMAPHORE eventfd, if it's counter has a nonzero value,
->>>>> then a read(2) returns 8 bytes containing that value, and the counter's
->>>>> value is reset to zero. Therefore, in the NON SEMAPHORE scenario,
->>>>> N event_writes vs ONE event_read is possible.
->>>>>
->>>>> However, the current implementation wakes up the read thread immediately
->>>>> in eventfd_write so that the cpu utilization increases unnecessarily.
->>>>>
->>>>> By adding a configurable delay after eventfd_write, these unnecessary
->>>>> wakeup operations are avoided, thereby reducing cpu utilization.
->>>> What's the real world use case of this, and what would the expected
->>>> delay be there? With using a delayed work item for this, there's
->>>> certainly a pretty wide grey zone in terms of delay where this would
->>>> perform considerably worse than not doing any delayed wakeups at all.
->>>
->>>
->>> Thanks for your comments.
->>>
->>> We have found that the CPU usage of the message middleware is high in
->>> our environment, because sensor messages from MCU are very frequent
->>> and constantly reported, possibly several hundred thousand times per
->>> second. As a result, the message receiving thread is frequently
->>> awakened to process short messages.
->>>
->>> The following is the simplified test code:
->>> https://github.com/w-simon/tests/blob/master/src/test.c
->>>
->>> And the test code in this patch is further simplified.
->>>
->>> Finally, only a configuration item has been added here, allowing users
->>> to make more choices.
->>
->> I think you'd have a higher chance of getting this in if the delay
->> setting was per eventfd context, rather than a global thing.
-> 
-> That patch seems really weird. Is that an established paradigm to
-> address problems like this through a configured wakeup delay? Because
-> naively this looks like a pretty brutal hack.
+On Wed, Apr 19, 2023 at 06:03:53PM +0200, Juergen Gross wrote:
+> > However, the only call site is in apic_intr_mode_init() which itself is
+> > __init. So yeah, strictly speaking nothing wrong.
+> > 
+> > *IF* something calls it later, when __init is gone, then boom.
+> > 
+> > Dunno, maybe
+> > 
+> > a) track call sites too but maybe expensive and too much
 
-It is odd, and it is a brutal hack. My worries were outlined in an
-earlier reply, there's quite a big gap where no delay would be better
-and the delay approach would be miserable because it'd cause extra
-latency and extra context switches. It'd be much cleaner if you KNEW
-there'd be more events coming, as you could then get rid of that delayed
-work item completely. And I suspect, if this patch makes sense, that
-it'd be better to have a number+time limit as well and if you hit the
-event number count that you'd notify inline and put some smarts in the
-delayed work handling to just not do anything if nothing is pending.
+That would indeed be a lot harder to do.
+
+> > or
+> > 
+> > b) make those warnings debug messages in case someone wants to run objtool
+> > in debug mode, feels really bored and wants to fix potential issues.
+
+Possibly, though I suspect nobody's ever going to be that bored ;-)
+
+> > Or someone has a better idea.
+> > 
+> > > Anyway, this is kind of experimental.  If any of these warnings don't
+> > > turn out to be useful I could drop some or all them.
+> > 
+> > Right, I can certainly see potential and as said, since we're already
+> > doing objtool massaging of object files, thought this should be pretty
+> > easy to do. As you've shown. ;-)
+> 
+> What about splitting the function vectors into __init and non-init parts?
+> 
+> This would solve above problem automatically, as a non-init function couldn't
+> deref the __init part of x86_platform.
+
+Right, if we moved the __init parts of x86_platform out into a separate
+struct x86_platform_init which is __initdata, that would solve this
+particular issue rather cleanly.
+
+Though, more generally, if we make the rule that non-init data can't
+contain references to init data, that would be a much bigger patch set.
+
+Which might end up being the reasonable thing to do, but before deciding
+whether enforcing such a rule would be worth it, we might want to look
+more deeply at the warnings to figure out what percentage of those (if
+any) could be real bugs.
 
 -- 
-Jens Axboe
-
+Josh
