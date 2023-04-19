@@ -2,176 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB9F6E7CF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03BC6E7D00
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233299AbjDSOit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 10:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
+        id S233309AbjDSOjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 10:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233282AbjDSOip (ORCPT
+        with ESMTP id S231795AbjDSOji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 10:38:45 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A078A69
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:38:40 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id u13so31970416ybu.5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:38:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1681915120; x=1684507120;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fWZiMALMH89i7PDBcLl9ZeqJbldqh6JjZ32NtRW6De4=;
-        b=LQN4aCOqoHQ5A0XxtIiHiweiMtxVPWBLvrXNdIl/cTWwf0SCEDWxa5DtjLN5b0TV0b
-         pqweuMH6UWw3sANhI2F9HIF3EqYZivxt5L57nmH365GJ9Ngtnjy/C+cfy3U/9cc/ej0d
-         lK0TAHQT1xBmSO80pIojRmzPa6Iaxsctu0wnpC9zX8wIpZM0lGsIx+qkSxsHf5YnVw/3
-         kNdwdnoEy9auCi7Ib1PuezR6J2Djb7+mawoXuzRMjRfLTELeh0o7Rawec08WY7tiXPV7
-         Io7koP2QS0TNmmsZ4i4wnYWbZ7Nda5sOYWMm+mtC0yVEQKAydo6G019+TMJVpgAgt+9E
-         xctQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681915120; x=1684507120;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fWZiMALMH89i7PDBcLl9ZeqJbldqh6JjZ32NtRW6De4=;
-        b=mHVXU4zBLJXa1i4qYmJlkXFP2PDhfvOoYGJGPthCoUhVzEB1qWpZAZUnxbThdurgfR
-         dKt9WFvMKKXAMMEJgARR+m2J870EksvMU70cCizk9bBHxfBG4/EP6n5k2l623OT/mWVn
-         ubafAIwqbBtCKbUXRDA88Nv/vIcd18HHtpXjoGchWmhY2s3d1JQDCEtHJwzi3OmgRfEG
-         vVoM38Q1UErfMvJdOW2kC0yubgeUyAdFc3rBOh62Et0+4YHrwKfRFGdobmcnbZR+phuz
-         nSQEsBdLuvbU+0Fp9kcIDtWFyKqOz0pNXGrrNVaPE8DRumlzzJH7dwm8ZM1HCS04nv2i
-         SGxQ==
-X-Gm-Message-State: AAQBX9c6l8KlUN+sKOBNJSXraxbtW83v+BP+auaUepnrUHYS06P7mexk
-        t2Ub7m/vYOXxGiSM6XrNr4vLF9VSfHcn/QQmDjkg
-X-Google-Smtp-Source: AKy350Z4qMNIiRgB/vcByC5+mNU91yN6YSfmxnRnim0l4y4Smf7s0LYagf+ZnWYtLR5cTFGYaT3phWDJ7z6zjqPa6EI=
-X-Received: by 2002:a25:aea2:0:b0:b8f:523f:3d02 with SMTP id
- b34-20020a25aea2000000b00b8f523f3d02mr21147135ybj.21.1681915119903; Wed, 19
- Apr 2023 07:38:39 -0700 (PDT)
+        Wed, 19 Apr 2023 10:39:38 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427776E80;
+        Wed, 19 Apr 2023 07:39:17 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33JEd2EH125730;
+        Wed, 19 Apr 2023 09:39:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681915142;
+        bh=D0p2krU/Tl2rjp8hr8uRJrf8+8CgtChn0G/J3nT/yQM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=gz9AU5f5ncVZgWLxhSr/1uWh8c2nRAJMhBew64+M3tfqIrjq9KjavCdTIooME9T8O
+         e0+YD2GhRMNQqhx2POXM0OlhcYKJrNXZtFs9aBg/YJQV8vpG4ZsKljCynhVuO2Pf0Y
+         liRD456sLBi/CcKgAQ4isyx3qW01l/yadsWbxnzM=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33JEd13j000691
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 19 Apr 2023 09:39:01 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 19
+ Apr 2023 09:39:01 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 19 Apr 2023 09:39:01 -0500
+Received: from [128.247.81.102] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33JEd16r028564;
+        Wed, 19 Apr 2023 09:39:01 -0500
+Message-ID: <5d81aeb6-2b52-5807-5b42-daa87767144f@ti.com>
+Date:   Wed, 19 Apr 2023 09:38:58 -0500
 MIME-Version: 1.0
-References: <20230418210230.3495922-1-longman@redhat.com> <20230418141852.75e551e57e97f4b522957c5c@linux-foundation.org>
- <6c3c68b1-c4d4-dd82-58e8-f7013fb6c8e5@redhat.com> <cffc7454-614-1939-f235-7b139dc46b41@google.com>
- <22aee5ea-dd6b-ac2b-0b28-a25ee6602b48@redhat.com> <ZD9e7A4gaZ6qkGhy@casper.infradead.org>
-In-Reply-To: <ZD9e7A4gaZ6qkGhy@casper.infradead.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 19 Apr 2023 10:38:29 -0400
-Message-ID: <CAHC9VhTcVzth0N+tTj_HHCPfHnp+-MfWkj+Ft2Uk4xMncDL9HA@mail.gmail.com>
-Subject: Re: [PATCH] mm/mmap: Map MAP_STACK to VM_STACK
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Waiman Long <longman@redhat.com>, Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Joe Mario <jmario@redhat.com>,
-        Barry Marson <bmarson@redhat.com>,
-        Rafael Aquini <aquini@redhat.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH 5/5] can: m_can: Add hrtimer to generate software
+ interrupt
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Davis <afd@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Schuyler Patton <spatton@ti.com>
+References: <20230413223051.24455-1-jm@ti.com>
+ <20230413223051.24455-6-jm@ti.com>
+ <20230414-bounding-guidance-262dffacd05c-mkl@pengutronix.de>
+ <4a6c66eb-2ccf-fc42-a6fc-9f411861fcef@hartkopp.net>
+ <20230416-failing-washbasin-e4fa5caea267-mkl@pengutronix.de>
+ <f58e8dce-898c-8797-5293-1001c9a75381@hartkopp.net>
+ <20230417-taking-relieving-f2c8532864c0-mkl@pengutronix.de>
+ <25806ec7-64c5-3421-aea1-c0d431e3f27f@hartkopp.net>
+ <20230417-unsafe-porridge-0b712d137530-mkl@pengutronix.de>
+ <5ece3561-4690-a721-aa83-adf80d0be9f5@ti.com>
+ <20230419-trimmer-fasting-928868e8cb81-mkl@pengutronix.de>
+Content-Language: en-US
+From:   "Mendez, Judith" <jm@ti.com>
+In-Reply-To: <20230419-trimmer-fasting-928868e8cb81-mkl@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 11:24=E2=80=AFPM Matthew Wilcox <willy@infradead.or=
-g> wrote:
-> On Tue, Apr 18, 2023 at 09:45:34PM -0400, Waiman Long wrote:
-> > On 4/18/23 21:36, Hugh Dickins wrote:
-> > > On Tue, 18 Apr 2023, Waiman Long wrote:
-> > > > On 4/18/23 17:18, Andrew Morton wrote:
-> > > > > On Tue, 18 Apr 2023 17:02:30 -0400 Waiman Long <longman@redhat.co=
-m> wrote:
-> > > > >
-> > > > > > One of the flags of mmap(2) is MAP_STACK to request a memory se=
-gment
-> > > > > > suitable for a process or thread stack. The kernel currently ig=
-nores
-> > > > > > this flags. Glibc uses MAP_STACK when mmapping a thread stack. =
-However,
-> > > > > > selinux has an execstack check in selinux_file_mprotect() which=
- disallows
-> > > > > > a stack VMA to be made executable.
-> > > > > >
-> > > > > > Since MAP_STACK is a noop, it is possible for a stack VMA to be=
- merged
-> > > > > > with an adjacent anonymous VMA. With that merging, using mprote=
-ct(2)
-> > > > > > to change a part of the merged anonymous VMA to make it executa=
-ble may
-> > > > > > fail. This can lead to sporadic failure of applications that ne=
-ed to
-> > > > > > make those changes.
-> > > > > "Sporadic failure of applications" sounds quite serious.  Can you
-> > > > > provide more details?
-> > > > The problem boils down to the fact that it is possible for user cod=
-e to mmap a
-> > > > region of memory and then for the kernel to merge the VMA for that =
-memory with
-> > > > the VMA for one of the application's thread stacks. This is causing=
- random
-> > > > SEGVs with one of our large customer application.
-> > > >
-> > > > At a high level, this is what's happening:
-> > > >
-> > > >   1) App runs creating lots of threads.
-> > > >   2) It mmap's 256K pages of anonymous memory.
-> > > >   3) It writes executable code to that memory.
-> > > >   4) It calls mprotect() with PROT_EXEC on that memory so
-> > > >      it can subsequently execute the code.
-> > > >
-> > > > The above mprotect() will fail if the mmap'd region's VMA gets merg=
-ed with the
-> > > > VMA for one of the thread stacks.  That's because the default RHEL =
-SELinux
-> > > > policy is to not allow executable stacks.
-> > > Then wouldn't the bug be at the SELinux end?  VMAs may have been merg=
-ed
-> > > already, but the mprotect() with PROT_EXEC of the good non-stack rang=
-e
-> > > will then split that area off from the stack again - maybe the SELinu=
-x
-> > > check does not understand that must happen?
-> >
-> > The SELinux check is done per VMA, not a region within a VMA. After VMA
-> > merging, SELinux is probably not able to determine which part of a VMA =
-is a
-> > stack unless we keep that information somewhere and provide an API for
-> > SELinux to query. That can be quite a lot of work. So the easiest way t=
-o
-> > prevent this problem is to avoid merging a stack VMA with a regular
-> > anonymous VMA.
->
-> To paraphrase you, "Yes, SELinux is buggy, but we don't want to fix it".
->
-> Cc'ing the SELinux people so it can be fixed properly.
+Hello Marc,
 
-SELinux needs some way to determine what memory region is currently
-being used by an application's stacks.  The current logic can be found
-in selinux_file_mprotect(), the relevant snippet is below:
+On 4/19/2023 1:13 AM, Marc Kleine-Budde wrote:
+> On 18.04.2023 15:59:57, Mendez, Judith wrote:
+>>>>>>>> The "shortest" 11 bit CAN ID CAN frame is a Classical CAN frame with DLC = 0
+>>>>>>>> and 1 Mbit/s (arbitration) bitrate. This should be 48 bits @1Mbit => ~50
+>>>>>>>> usecs
+>>>>>>>>
+>>>>>>>> So it should be something about
+>>>>>>>>
+>>>>>>>>         50 usecs * (FIFO queue len - 2)
+>>>>>>>
+>>>>>>> Where does the "2" come from?
+>>>>>>
+>>>>>> I thought about handling the FIFO earlier than it gets completely "full".
+>>>>>>
+>>>>>> The fetching routine would need some time too and the hrtimer could also
+>>>>>> jitter to some extend.
+>>>>>
+>>>>> I was assuming something like this.
+>>>>>
+>>>>> I would argue that the polling time should be:
+>>>>>
+>>>>>        50 µs * FIFO length - IRQ overhead.
+>>>>>
+>>>>> The max IRQ overhead depends on your SoC and kernel configuration.
+>>>>
+>>>> I just tried an educated guess to prevent the FIFO to be filled up
+>>>> completely. How can you estimate the "IRQ overhead"? And how do you catch
+>>>> the CAN frames that are received while the IRQ is handled?
+>>>
+>>> We're talking about polling, better call it "overhead" or "latency from
+>>> timer expiration until FIFO has at least one frame room". This value
+>>> depends on your system.
+>>>
+>>> It depends on many, many factors, SoC, Kernel configuration (preempt RT,
+>>> powersaving, frequency scaling, system load. In your example it's 100
+>>> µs. I wanted to say there's an overhead (or latency) and we need enough
+>>> space in the FIFO, to cover it.
+>>>
+>>
+>> I am not sure how to estimate IRQ overhead, but FIFO length should be 64
+>> elements.
+> 
+> Ok
+> 
+>> 50 us * 62 is about 3.1 ms and we are using 1 ms timer polling interval.
+> 
+> Sounds good.
+> 
+>> Running a few benchmarks showed that using 0.5 ms timer polling interval
+>> starts to take a toll on CPU load, that is why I chose 1 ms polling
+>> interval.
+> 
+> However in the code you use 5 ms.
 
-int selinux_file_mprotect(struct vm_area_struct *vma, ...)
-{
-  ...
-  } else if (!vma->vm_file &&
-    ((vma->vm_start <=3D vma->vm_mm->start_stack &&
-      vma->vm_end >=3D vma->vm_mm->start_stack) ||
-    vma_is_stack_for_current(vma))) {
-      rc =3D avc_has_perm(&selinux_state,
-                        sid, sid, SECCLASS_PROCESS,
-                        PROCESS__EXECSTACK, NULL);
- }
-  ...
-}
+Yes, it was a mistake, will send out a respin with the correct value, 
+thanks.
 
-If someone has a better, more foolproof way to determine an
-application's stack please let us know, or better yet submit a patch
-:)
-
---=20
-paul-moore.com
+regards,
+Judith
