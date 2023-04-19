@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C456E7D33
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B056E7D2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 16:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233439AbjDSOmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 10:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
+        id S233463AbjDSOmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 10:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233353AbjDSOmD (ORCPT
+        with ESMTP id S233364AbjDSOmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 10:42:03 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E660B44B3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:41:58 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f182d74658so1661795e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:41:58 -0700 (PDT)
+        Wed, 19 Apr 2023 10:42:04 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9669744B9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:41:59 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f178da21b5so11849895e9.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 07:41:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=freebox-fr.20221208.gappssmtp.com; s=20221208; t=1681915317; x=1684507317;
+        d=freebox-fr.20221208.gappssmtp.com; s=20221208; t=1681915318; x=1684507318;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QOtCCZEZcabVSo6ibhq9qM6H/gWQgiZ4yShGSbi2dIs=;
-        b=v73jw3xqTQUVgXczV6VibuF8JzrL/ShtyFABv3vUyAsKXR6lZdiQZIIbGMj/at/OEP
-         x4xU7JXIVke63B3ABGTzR88C8KQpod/Vy/NaBJAclm36oD/wlZU1cKjcliDclaFbcyyx
-         rUgh/oDxSKnA6LKj+kCiKHiszLMXshysRzYgO7zUCTlNae5lL+EoWfPOsfvh3X+S/iJp
-         t3gRoKVaic1EQGuC1uMFLANOPfJSz93tUHWO3Vfx9YBY3RGqPNG1hf1HRuWdxiBErnBx
-         Mh4bHZWqfnk7is2rQuReq+WWLJvb4f1l2J+fw47Xs4MOk+2X4PUWrjobxCkahDE9c8nU
-         MLjQ==
+        bh=836GTkcDRi2+2z0HJ4qWmHnCerN9xvuUtbFVbOWzfY0=;
+        b=baHQi3d04LBNOBuAxmRa8A+HZi0CSATDXEXKALd54qg51/ZMXTqiy/deoAlkXb3Ns9
+         T+7hwNDw6PJ6AJioYgA3neZjGdb0E+DSnI4WFeL19+FqCrQ2TFEdzEpMqcf9Zuh0+Olb
+         bR6FK5w/+QNuNiosi3B6uEqaev9iIsq+N7brfgCjDtj7AK2Q8QDjIPOGPmWzeiFwc1PL
+         wBpJqQpYCc1V8qtcAfOEnji2mEh9INPZjNEhYmM/fB3Cix1AhN6yPCbxq7ApO1j04GFt
+         rLJrMHNshKmCbGx/jQfiDwTnDNcHtLBcmqDnULs9eYjA6+JImyz4vaF+Mqnn7ApLKuOS
+         qoog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681915317; x=1684507317;
+        d=1e100.net; s=20221208; t=1681915318; x=1684507318;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QOtCCZEZcabVSo6ibhq9qM6H/gWQgiZ4yShGSbi2dIs=;
-        b=UHh9uTX71rJuYu/lU0rNaikOg5MNGqPJJkOXsqvKh3fDYMtY7sRkOJSTJkM1C/Cy/p
-         gJukFK12/rqRr8dFijyrZJh02Xq5/zo+3dwIYunionq9Bat6hf8g1PjFdxYgf/QgZwVj
-         TAwhokSHi3CvsIuwJIz0zUO+tMAE20bi3xX7JxI4YhRLZ0ZaBcxZhdzyF9/RoFdSAeyp
-         pmBKp1bU2OSiLoAnexoNXP7SCBOE+PYXEglrT6z+Izdg6qazTkEtPFIrvBadEGqif9TV
-         oYGj1MGUNw2h5/TRPyHtKnsajlQ62K3G/Mx4TUS/53NlQGYg8c3H0/VR7i+D4MWkHAzF
-         Z9MQ==
-X-Gm-Message-State: AAQBX9fA8V5W32SXWuSnD/jOQd+VSsC1mKFrEJLlUcZv+JVZs/TMf291
-        Y8a8c2j2xckh/4n+pNS1Od5t
-X-Google-Smtp-Source: AKy350Z4jFNf20Hlc2GWv28CTXaygiHWdHklMvv/5X5zjnBS4ogAsyzgZ1W89NxiPUYqbOGQz9cXEg==
-X-Received: by 2002:adf:f010:0:b0:2fa:6929:eb81 with SMTP id j16-20020adff010000000b002fa6929eb81mr4309583wro.31.1681915317445;
+        bh=836GTkcDRi2+2z0HJ4qWmHnCerN9xvuUtbFVbOWzfY0=;
+        b=OYeS9aBZi0Op7GbbNwp7nem+Ie1q+4UqFrUYwN92r4WCysXWG6n2IbMVeFzQ2neb1R
+         52p/wvl6Nmwt3aNxITOF3POzxYNHX3t8CSFfpmcWeX5OeQn3SsTQcfRQch5RMAXXaCcF
+         sdsPWyifjxPiJvI/nUBH8dqQ3kU7YoMG/oZRj44OnRjRWgpd5SS+fxdbr5m0B4dGUn/N
+         lphXDeCdDmz9bFebS10b0bhpd+xLV09jO3G7s+0hn6oyHup/3XKYNww1Kkwueccx/tkZ
+         9xsD4+CopLfsQKBMJOz70vdxkrF+VyayQQBx7MzRfrde7/wBAx70m2I1VDKll4F4dpmo
+         SrrA==
+X-Gm-Message-State: AAQBX9fUupmheoVMktki7BnVv6scG4VaDYWgHgmhKV8md1QsZ6nv/qKZ
+        T52gmbk1dB4nJ54Yx6O6ISHD
+X-Google-Smtp-Source: AKy350Z3Xuz9WufoZqxCoYxbq0Xd6W5KfFcqPnl3JWZpyOuA2xlpK+wbnSrbTuHAqTHqR57P3f6p4g==
+X-Received: by 2002:a05:6000:c8:b0:2f8:e652:dc04 with SMTP id q8-20020a05600000c800b002f8e652dc04mr4711567wrx.45.1681915317898;
         Wed, 19 Apr 2023 07:41:57 -0700 (PDT)
 Received: from [127.0.1.1] (freebox.vlq16.iliad.fr. [213.36.7.13])
         by smtp.gmail.com with ESMTPSA id m22-20020a7bcb96000000b003f17131952fsm2388519wmi.29.2023.04.19.07.41.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 19 Apr 2023 07:41:57 -0700 (PDT)
 From:   Arnaud Vrac <avrac@freebox.fr>
-Date:   Wed, 19 Apr 2023 16:41:09 +0200
-Subject: [PATCH 02/11] drm/msm/dpu: use the actual lm maximum width instead
- of a hardcoded value
+Date:   Wed, 19 Apr 2023 16:41:10 +0200
+Subject: [PATCH 03/11] drm/msm/dpu: use hsync/vsync polarity set by the
+ encoder
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230419-dpu-tweaks-v1-2-d1bac46db075@freebox.fr>
+Message-Id: <20230419-dpu-tweaks-v1-3-d1bac46db075@freebox.fr>
 References: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
 In-Reply-To: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
 To:     Rob Clark <robdclark@gmail.com>,
@@ -69,20 +69,20 @@ Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Arnaud Vrac <avrac@freebox.fr>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1453; i=avrac@freebox.fr;
- h=from:subject:message-id; bh=F1W/wchYMCu2VjLqHH6U+LrWUMc7lJp207y9YaxngyM=;
- b=owEBbQKS/ZANAwAIAXED/9m7NDSrAcsmYgBkP/2YRHSjxXabDh0Gu+NKzHbr/LV2esVhNCjWe
- gUDIZ3V20WJAjMEAAEIAB0WIQSUwb/ndwkXHdZ/QQZxA//ZuzQ0qwUCZD/9mAAKCRBxA//ZuzQ0
- q9tYD/9LxTx1cpzUZKY3M7CrNX2Jf6IGVMYxyJqcOvjHmPaMEElWxCjSZ2oY2ZbE+F1S6z5JPsq
- P9UgmupIvqwIEvcsVnhcvW1wXyfcPH8xyZ8kRhW4LQIfS3VW/ySRdNndBtPtjVVRFJzvOiZHDVd
- MWcdkols1Sb8bAPlDeuXffjYMWYkzgqcDzJk7Iq5FerkvkQt91s18X7Mht3pKgvlak4SdMYXKpc
- kE5ULRYhNvt8XbKAUPTDDLMZo4XrsGo+fua4M8AXfPp0du/QMqlP7SxL6NadQfsINl5RuQUlmyq
- 0lf64+UUU2Als0GNKEvEAmy4sv8iQBv0rru0jzDW5jlw/aarbONgpxYDcIcQHoesDAOTa4WA6dO
- OiDqWXskg/QCG7LYfo9JSg0S9ohG6dC+sE+bypkM+TqNLcobWOVObLs6dYOhMBGhxD0SW0HCLC5
- hIjiQVeoupzgYXhjJeLJjEZtiwsTx0OPxXL67WzZ4Tfs7UzTOi0XVVqa4kl3K8xXp3Ybj3xCPPf
- Q+ToaLhrxKsyuA8VeXC2yCWM7d5o5tfG6oohLDoqeXB2Jd5nj8Oo8jWeoUDUfG+bGliN+CXIkF1
- XM2LKRVo2Hl1KwyNWNHGUsnlUE7mPmB2QoZREpw7VhwsTDdvAWMpV3ZKTJkXkuH6Ir/ouEFm/oE
- 3txKrd1uS68t15g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2002; i=avrac@freebox.fr;
+ h=from:subject:message-id; bh=xpOaiqpNNEOLuHJaoCWSS7YKv71vYiVAS0+zh3bWo5U=;
+ b=owEBbQKS/ZANAwAIAXED/9m7NDSrAcsmYgBkP/2aYvMBvH6zGssGiiSjbchn7LFtzFExHjPPk
+ Uu7xG862vKJAjMEAAEIAB0WIQSUwb/ndwkXHdZ/QQZxA//ZuzQ0qwUCZD/9mgAKCRBxA//ZuzQ0
+ qwsqD/42uGbh/PrZu04lyUsR5hVCa7Xmdo0LCCazacHEC/BYFFlGvWNkhc7PsrezO3YdP7YUkAV
+ odihBbhCD/J0kexfj085S9cV1BHejLPWRGLDXOkPAaHolB8DRGM7GfBKbLkvaQE6di3lIA6lJDa
+ M/27C2U9iKWSa8VxVhARC5feO5zeTnJJ2khmElSSMb+ycMbEX9a4N+nRvfKN9eSW65dqzzOWR15
+ Ti9QXnMq/8FsyVWim/cQvMa8pcZAd9bQvuiJveRI4qoUuil0WTmIFhrwGs+J5PSG0j85xi2LAhu
+ UdgEhL4yD8b/DavQRt8bE8JCT8TlSkCv0hLJGBtmHhxKVHqLZVDpO7Xbq8JnX4hVAWQDEVFFOeb
+ aU3vXMTGEpZ2/g11Bvn3aKpqdgeOXCeuvWHaBPK5K/gx3MuE/kRlhEhl30NFeQH6jyNbkNyy0xZ
+ q9sGqtnNHTLzsWoxxgc16ztUfL9hpLW51GsWAR1vSqcNEfYNnZjBEeaFb5uFlouYRWNFZxuayDJ
+ r4PfnBf6O1hgZ63ok55tnZAmvqXF7/mxr91e5diSyx4BTnlxuW0joKDZh11kkLcGacGdj431Tdw
+ AxpGO6avO+otXYsvvZ0/H7YXwSJhlklY5/f+UMZSM6udGdxoqGVGdCpwjc3NKdsTtHizBlKtDvj
+ 9F8RSxj5MR9u+LA==
 X-Developer-Key: i=avrac@freebox.fr; a=openpgp;
  fpr=6225092072BB58E3CEEC091E75392A176D952DB4
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -95,45 +95,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This avoids using two LMs instead of one when the display width is lower
-than the maximum supported value. For example on MSM8996/MSM8998, the
-actual maxwidth is 2560, so we would use two LMs for 1280x720 or
-1920x1080 resolutions, while one is enough.
+Do not override the hsync/vsync polarity passed by the encoder when
+setting up intf timings. The same logic was used in both the encoder and
+intf code to set the DP and DSI polarities, so those interfaces are not
+impacted. However for HDMI, the polarities were overriden to static
+values based on the vertical resolution, instead of using the actual
+mode polarities.
 
 Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index 1dc5dbe585723..dd2914726c4f6 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -53,8 +53,6 @@
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+index 84ee2efa9c664..9f05417eb1213 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+@@ -104,7 +104,7 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+ 	u32 active_h_start, active_h_end;
+ 	u32 active_v_start, active_v_end;
+ 	u32 active_hctl, display_hctl, hsync_ctl;
+-	u32 polarity_ctl, den_polarity, hsync_polarity, vsync_polarity;
++	u32 polarity_ctl, den_polarity;
+ 	u32 panel_format;
+ 	u32 intf_cfg, intf_cfg2 = 0;
+ 	u32 display_data_hctl = 0, active_data_hctl = 0;
+@@ -191,19 +191,9 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+ 	}
  
- #define IDLE_SHORT_TIMEOUT	1
+ 	den_polarity = 0;
+-	if (ctx->cap->type == INTF_HDMI) {
+-		hsync_polarity = p->yres >= 720 ? 0 : 1;
+-		vsync_polarity = p->yres >= 720 ? 0 : 1;
+-	} else if (ctx->cap->type == INTF_DP) {
+-		hsync_polarity = p->hsync_polarity;
+-		vsync_polarity = p->vsync_polarity;
+-	} else {
+-		hsync_polarity = 0;
+-		vsync_polarity = 0;
+-	}
+ 	polarity_ctl = (den_polarity << 2) | /*  DEN Polarity  */
+-		(vsync_polarity << 1) | /* VSYNC Polarity */
+-		(hsync_polarity << 0);  /* HSYNC Polarity */
++		(p->vsync_polarity << 1) | /* VSYNC Polarity */
++		(p->hsync_polarity << 0);  /* HSYNC Polarity */
  
--#define MAX_HDISPLAY_SPLIT 1080
--
- /* timeout in frames waiting for frame done */
- #define DPU_ENCODER_FRAME_DONE_TIMEOUT_FRAMES 5
- 
-@@ -568,10 +566,12 @@ static struct msm_display_topology dpu_encoder_get_topology(
- 	 */
- 	if (intf_count == 2)
- 		topology.num_lm = 2;
--	else if (!dpu_kms->catalog->caps->has_3d_merge)
--		topology.num_lm = 1;
-+	else if (dpu_kms->catalog->caps->has_3d_merge &&
-+		 dpu_kms->catalog->mixer_count > 0 &&
-+		 mode->hdisplay > dpu_kms->catalog->mixer[0].sblk->maxwidth)
-+		topology.num_lm = 2;
- 	else
--		topology.num_lm = (mode->hdisplay > MAX_HDISPLAY_SPLIT) ? 2 : 1;
-+		topology.num_lm = 1;
- 
- 	if (crtc_state->ctm)
- 		topology.num_dspp = topology.num_lm;
+ 	if (!DPU_FORMAT_IS_YUV(fmt))
+ 		panel_format = (fmt->bits[C0_G_Y] |
 
 -- 
 2.40.0
