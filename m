@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FCC6E8495
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7CD6E8497
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbjDSWS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 18:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
+        id S231768AbjDSWTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 18:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbjDSWSV (ORCPT
+        with ESMTP id S231503AbjDSWS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 18:18:21 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BAC61B9
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:05 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a6f0d8cdfeso4498975ad.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:05 -0700 (PDT)
+        Wed, 19 Apr 2023 18:18:27 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072EF8692
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:07 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-63b4dfead1bso375908b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:18:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942676; x=1684534676;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942678; x=1684534678;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aZA9SkX62fIMzNEcuGtwzVe8Up8R4eolVQO1cYHyNXI=;
-        b=pr/kZUHrkhLnktVNRdfz4ij02MTZd+B9h2TaIJSMbt3NVujPvaiFp7Ik4rbkspQ4Mw
-         yuGTwtHLYNepi572aUMJZXGKBGxqqLOoQQAVLkJQE8EutQeaNnEXjp7ozMrwLpK3F/bd
-         Ea/tWnKPdLgS76oaBzGp+E0BB9Obb3YUpFKxXwNOfadBL+8Y1NryGBq3tL1grWdeANk4
-         WZM2Z6J10fv3mT8jXclG/Jc0tJeziAmqwuD529CbKYuuh+zFcMDe14NqalRMWLaTiCrI
-         zVE7Fohp3aDpbBaOaQnfhoMTTf4olrAvxRsbHG36Vnwm4rXJhTcr8zeKFydq/GZ4e/40
-         +9lg==
+        bh=LUld/G/1WeH25lUdXRYxnjPYZXeYYgEcmI7A3/bRIcw=;
+        b=3BXkkvcr1OqHpZ/1lavYXP7tve2GxDnWf4O2fWPOiSdbOWRF8chSO/YIyqpEuxWDXh
+         BJ7QFDeoj+Jn0Arzj7+Z5YjQU574gbvT6cAETsRRSqDeVkx/Ylx7RmGaHK6RFXNh6Eit
+         fV0M97Hugr5QTbW1u6+18YRRaKIRIagsziaBLExN4bCT6bnocXCkvHc2Ew+80dXvoOZo
+         BF8+iOJKnVBNIx5dtVYx6vnMu5+ZMBbkouCan/31RqRplh6dabd1rARUBLlSsQGaKiSb
+         4trlbYIIc+EnwzxQuThX6PKBOpT5C2rO+n2a+7R9hS1L0V6qAuL49rS0jBoNV5zJv4h3
+         Joww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681942676; x=1684534676;
+        d=1e100.net; s=20221208; t=1681942678; x=1684534678;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aZA9SkX62fIMzNEcuGtwzVe8Up8R4eolVQO1cYHyNXI=;
-        b=O+IQxkLoqNEqy0pDIkIluxgF7AlA+lqR0fipu4qZ0dKCBZxv4TM9l1TYKv/aCeNOp6
-         bAimV14fHadlHaXAL01bCH3zsEn8WIuKQ8VUXS/cCnpjn8c1RICEeOWV7C4legUZg1Jo
-         LngteRCkDrV4jfREHJz/+R7bt7U4ATupc1MeAfK0XZWhYw+iRKnwSWKXCz2XzqM+Iijr
-         AcPKQEu2qOHnqD0dRgvWa9whPDSYC+2fuNCcB3nnKcRS0BmR5bXkuEQWTTOPdCIArdd0
-         vY51Fo/baevjyOb0YYxKwn8YCUw6L2IaiwHokdDEMyDBkcXtwpZQ5Q2UebdCCQOlKo+5
-         2fTQ==
-X-Gm-Message-State: AAQBX9d7HI5iW9g8cWHHdirPcYcVlvIVl4tTQXxQIKhy3I1shtOQOWk7
-        m2bnWiDcwgP8ajhP48XOg4ulRBDCXfgAbjwG30E=
-X-Google-Smtp-Source: AKy350aluUR1rPQXEDjya7qc0cousjv7HzRiR+wEHDbTSJe3tj7Btum5nXicmgptUoZ7hSCP4qqeQg==
-X-Received: by 2002:a17:902:c40d:b0:1a8:1cbb:4f76 with SMTP id k13-20020a170902c40d00b001a81cbb4f76mr4908149plk.28.1681942676188;
-        Wed, 19 Apr 2023 15:17:56 -0700 (PDT)
+        bh=LUld/G/1WeH25lUdXRYxnjPYZXeYYgEcmI7A3/bRIcw=;
+        b=O77oSfaw5mjmnc9IG3wI5UxE6QdVZkmtKDyum6q4shv4to01aXTo6HuWi+o5HCWZX8
+         KepBP45vyXgRyDMJH2Mk/rjCa+s+uwc/TqKzXunBGaehuOKpL5bQiMlKk/kwU9GwODza
+         Udaa7TdAoiTNyfFQdUMDh/p47TVgBUoK2fDNE9VzA4bW4bFwSAJnK6qTrkoNir06j3it
+         M6s6PUdRMMcYATyLprrC+MDYiW2w7ip7V3VR8Kxn5Qydj3uBznSSGvpsPl306oa82PdQ
+         r61/sPn3ZJxHZaMnppdMC5gGXpvmO4ixxtg6IpkhzP2q4pJ4Rr/4QOPGEfWHrecxHx6Q
+         me3A==
+X-Gm-Message-State: AAQBX9fEgDzGzRpuQJ9sXfobcMX4l8e/VR6tTtPK7aXMdQ/ZQBySpFgh
+        2SmqyjpophtHMPLzM8njIO/5qfj1uvIefMGGBPA=
+X-Google-Smtp-Source: AKy350bb7O7vRNJqV0slEkpJiEEitj66qfL0H4rvbzo6EDHZOM2g1chblrb/iCkgTowCPCRsrQSCkw==
+X-Received: by 2002:a17:902:eb8d:b0:19c:f476:4793 with SMTP id q13-20020a170902eb8d00b0019cf4764793mr5940941plg.51.1681942678346;
+        Wed, 19 Apr 2023 15:17:58 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.17.54
+        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.17.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 15:17:55 -0700 (PDT)
+        Wed, 19 Apr 2023 15:17:58 -0700 (PDT)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Atish Patra <atishp@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
@@ -76,9 +76,9 @@ Cc:     Atish Patra <atishp@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Rajnesh Kanwal <rkanwal@rivosinc.com>,
         Uladzislau Rezki <urezki@gmail.com>
-Subject: [RFC 12/48] RISC-V: KVM: Exit to the user space for trap redirection
-Date:   Wed, 19 Apr 2023 15:16:40 -0700
-Message-Id: <20230419221716.3603068-13-atishp@rivosinc.com>
+Subject: [RFC 13/48] RISC-V: KVM: Return early for gstage modifications
+Date:   Wed, 19 Apr 2023 15:16:41 -0700
+Message-Id: <20230419221716.3603068-14-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230419221716.3603068-1-atishp@rivosinc.com>
 References: <20230419221716.3603068-1-atishp@rivosinc.com>
@@ -86,126 +86,117 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the trap redirection to the guest happens in the
-following cases.
-
-1. Illegal instruction trap
-2. Virtual instruction trap
-3. Unsuccesfull unpriv read
-
-Allowing host to cause traps in the TVM directly is problematic.
-TSM doesn't support trap redirection yet. Ideally, the host should not end
-up in one of these situations where it has to redirect the trap. If it
-happens, exit to the userspace with error as it can't forward the trap to
-the TVM.
-
-If there is any usecasse arises in the future, it has to be co-ordinated
-through TSM.
+The gstage entries for CoVE VM is managed by the TSM. Return
+early for any gstage pte modification operations.
 
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/kvm/vcpu_exit.c |  9 ++++++++-
- arch/riscv/kvm/vcpu_insn.c | 17 +++++++++++++++++
- 2 files changed, 25 insertions(+), 1 deletion(-)
+ arch/riscv/kvm/mmu.c | 28 ++++++++++++++++++++++++----
+ 1 file changed, 24 insertions(+), 4 deletions(-)
 
-diff --git a/arch/riscv/kvm/vcpu_exit.c b/arch/riscv/kvm/vcpu_exit.c
-index 4ea101a..0d0c895 100644
---- a/arch/riscv/kvm/vcpu_exit.c
-+++ b/arch/riscv/kvm/vcpu_exit.c
-@@ -9,6 +9,7 @@
+diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+index 6b037f7..9693897 100644
+--- a/arch/riscv/kvm/mmu.c
++++ b/arch/riscv/kvm/mmu.c
+@@ -16,6 +16,9 @@
  #include <linux/kvm_host.h>
- #include <asm/csr.h>
- #include <asm/insn-def.h>
+ #include <linux/sched/signal.h>
+ #include <asm/kvm_nacl.h>
++#include <asm/csr.h>
++#include <asm/kvm_host.h>
 +#include <asm/kvm_cove.h>
+ #include <asm/page.h>
+ #include <asm/pgtable.h>
  
- static int gstage_page_fault(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 			     struct kvm_cpu_trap *trap)
-@@ -135,8 +136,14 @@ unsigned long kvm_riscv_vcpu_unpriv_read(struct kvm_vcpu *vcpu,
- void kvm_riscv_vcpu_trap_redirect(struct kvm_vcpu *vcpu,
- 				  struct kvm_cpu_trap *trap)
- {
--	unsigned long vsstatus = csr_read(CSR_VSSTATUS);
-+	unsigned long vsstatus;
+@@ -356,6 +359,11 @@ int kvm_riscv_gstage_ioremap(struct kvm *kvm, gpa_t gpa,
+ 		.gfp_zero = __GFP_ZERO,
+ 	};
  
-+	if (is_cove_vcpu(vcpu)) {
-+		kvm_err("RISC-V KVM do not support redirect to CoVE guest yet\n");
-+		return;
++	if (is_cove_vm(kvm)) {
++		kvm_debug("%s: KVM doesn't support ioremap for TVM io regions\n", __func__);
++		return -EPERM;
 +	}
 +
-+	vsstatus = csr_read(CSR_VSSTATUS);
- 	/* Change Guest SSTATUS.SPP bit */
- 	vsstatus &= ~SR_SPP;
- 	if (vcpu->arch.guest_context.sstatus & SR_SPP)
-diff --git a/arch/riscv/kvm/vcpu_insn.c b/arch/riscv/kvm/vcpu_insn.c
-index 7a6abed..331489f 100644
---- a/arch/riscv/kvm/vcpu_insn.c
-+++ b/arch/riscv/kvm/vcpu_insn.c
-@@ -6,6 +6,7 @@
+ 	end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
+ 	pfn = __phys_to_pfn(hpa);
  
- #include <linux/bitops.h>
- #include <linux/kvm_host.h>
-+#include <asm/kvm_cove.h>
+@@ -385,6 +393,10 @@ int kvm_riscv_gstage_ioremap(struct kvm *kvm, gpa_t gpa,
  
- #define INSN_OPCODE_MASK	0x007c
- #define INSN_OPCODE_SHIFT	2
-@@ -153,6 +154,10 @@ static int truly_illegal_insn(struct kvm_vcpu *vcpu, struct kvm_run *run,
+ void kvm_riscv_gstage_iounmap(struct kvm *kvm, gpa_t gpa, unsigned long size)
  {
- 	struct kvm_cpu_trap utrap = { 0 };
- 
-+	/* The host can not redirect any illegal instruction trap to TVM */
-+	if (unlikely(is_cove_vcpu(vcpu)))
-+		return -EPERM;
++	/* KVM doesn't map any IO region in gstage for TVM */
++	if (is_cove_vm(kvm))
++		return;
 +
- 	/* Redirect trap to Guest VCPU */
- 	utrap.sepc = vcpu->arch.guest_context.sepc;
- 	utrap.scause = EXC_INST_ILLEGAL;
-@@ -169,6 +174,10 @@ static int truly_virtual_insn(struct kvm_vcpu *vcpu, struct kvm_run *run,
+ 	spin_lock(&kvm->mmu_lock);
+ 	gstage_unmap_range(kvm, gpa, size, false);
+ 	spin_unlock(&kvm->mmu_lock);
+@@ -431,6 +443,10 @@ void kvm_arch_flush_shadow_memslot(struct kvm *kvm,
+ 	gpa_t gpa = slot->base_gfn << PAGE_SHIFT;
+ 	phys_addr_t size = slot->npages << PAGE_SHIFT;
+ 
++	/* No need to unmap gstage as it is managed by TSM */
++	if (is_cove_vm(kvm))
++		return;
++
+ 	spin_lock(&kvm->mmu_lock);
+ 	gstage_unmap_range(kvm, gpa, size, false);
+ 	spin_unlock(&kvm->mmu_lock);
+@@ -547,7 +563,7 @@ int kvm_arch_prepare_memory_region(struct kvm *kvm,
+ 
+ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
  {
- 	struct kvm_cpu_trap utrap = { 0 };
+-	if (!kvm->arch.pgd)
++	if (!kvm->arch.pgd || is_cove_vm(kvm))
+ 		return false;
  
-+	/* The host can not redirect any virtual instruction trap to TVM */
-+	if (unlikely(is_cove_vcpu(vcpu)))
-+		return -EPERM;
+ 	gstage_unmap_range(kvm, range->start << PAGE_SHIFT,
+@@ -561,7 +577,7 @@ bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ 	int ret;
+ 	kvm_pfn_t pfn = pte_pfn(range->pte);
+ 
+-	if (!kvm->arch.pgd)
++	if (!kvm->arch.pgd || is_cove_vm(kvm))
+ 		return false;
+ 
+ 	WARN_ON(range->end - range->start != 1);
+@@ -582,7 +598,7 @@ bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ 	u32 ptep_level = 0;
+ 	u64 size = (range->end - range->start) << PAGE_SHIFT;
+ 
+-	if (!kvm->arch.pgd)
++	if (!kvm->arch.pgd || is_cove_vm(kvm))
+ 		return false;
+ 
+ 	WARN_ON(size != PAGE_SIZE && size != PMD_SIZE && size != PUD_SIZE);
+@@ -600,7 +616,7 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ 	u32 ptep_level = 0;
+ 	u64 size = (range->end - range->start) << PAGE_SHIFT;
+ 
+-	if (!kvm->arch.pgd)
++	if (!kvm->arch.pgd || is_cove_vm(kvm))
+ 		return false;
+ 
+ 	WARN_ON(size != PAGE_SIZE && size != PMD_SIZE && size != PUD_SIZE);
+@@ -737,6 +753,10 @@ void kvm_riscv_gstage_free_pgd(struct kvm *kvm)
+ {
+ 	void *pgd = NULL;
+ 
++	/* PGD is mapped in TSM */
++	if (is_cove_vm(kvm))
++		return;
 +
- 	/* Redirect trap to Guest VCPU */
- 	utrap.sepc = vcpu->arch.guest_context.sepc;
- 	utrap.scause = EXC_VIRTUAL_INST_FAULT;
-@@ -417,6 +426,10 @@ int kvm_riscv_vcpu_virtual_insn(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 	if (unlikely(INSN_IS_16BIT(insn))) {
- 		if (insn == 0) {
- 			ct = &vcpu->arch.guest_context;
-+
-+			if (unlikely(is_cove_vcpu(vcpu)))
-+				return -EPERM;
-+
- 			insn = kvm_riscv_vcpu_unpriv_read(vcpu, true,
- 							  ct->sepc,
- 							  &utrap);
-@@ -469,6 +482,8 @@ int kvm_riscv_vcpu_mmio_load(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 		insn = htinst | INSN_16BIT_MASK;
- 		insn_len = (htinst & BIT(1)) ? INSN_LEN(insn) : 2;
- 	} else {
-+		if (unlikely(is_cove_vcpu(vcpu)))
-+			return -EFAULT;
- 		/*
- 		 * Bit[0] == 0 implies trapped instruction value is
- 		 * zero or special value.
-@@ -595,6 +610,8 @@ int kvm_riscv_vcpu_mmio_store(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 		insn = htinst | INSN_16BIT_MASK;
- 		insn_len = (htinst & BIT(1)) ? INSN_LEN(insn) : 2;
- 	} else {
-+		if (unlikely(is_cove_vcpu(vcpu)))
-+			return -EFAULT;
- 		/*
- 		 * Bit[0] == 0 implies trapped instruction value is
- 		 * zero or special value.
+ 	spin_lock(&kvm->mmu_lock);
+ 	if (kvm->arch.pgd) {
+ 		gstage_unmap_range(kvm, 0UL, gstage_gpa_size, false);
 -- 
 2.25.1
 
