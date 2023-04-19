@@ -2,136 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7276E70F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 329106E70FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 04:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbjDSCIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 22:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
+        id S231797AbjDSCKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 22:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjDSCIS (ORCPT
+        with ESMTP id S231362AbjDSCKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 22:08:18 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A02658E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 19:08:16 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id gb12so28841043qtb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 19:08:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1681870096; x=1684462096;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2i54J70P7BHws90mr0mZ0tSyG0lrFeeDQmHC/zLnk6E=;
-        b=F+uP6RWjfrt7M5J+rVPxz+azqdWmSkNnUt8Rc9nzB0D8OBAvY2zC5YzLZHbP6CtrY0
-         RI9UnC3Lsq9zr+GA+CXa5zK7tOxIGBhdMz8fCEj3WKIUL03JByPY1frjAXAaFa6sxi+q
-         id4d3K1qRZHwO0m+JIjLX3DD4OcA+c0gp85eXj7oZeOEt2oeWNUQALi5aubsk1PTA0A4
-         ywgK1FqREJm6t49JtmuZj1id4MS8kGBV7sdu62dPyWyWfVi0Q/M485OauQB2R4VVORzZ
-         iAVBS/z37wTW5nXHsWqvtlX+NTDGe9LQED2QiIRCPqvA6WOfW4bLej0F1I2QtRaIFUOp
-         KisQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681870096; x=1684462096;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2i54J70P7BHws90mr0mZ0tSyG0lrFeeDQmHC/zLnk6E=;
-        b=Dt+xnGXILXDh20/vFyx+Hzh9XSjAhP6PXEbyJXr0W3VhinuT7l7CmSJx1g4hWWbADA
-         zfg/97nN7oc+8TSo7+zeOdJ3vC1/kOkyPE7/LvWINvArSOr7rivtml/0GKDS5cygnnI9
-         w8ehJ9ER5UONk5H7A7kldmwlEnrxAPllOa3hvpy0cz/8Bsj9ODlTTPoBGTi56Muom1oc
-         RbsUh28AklCKOnAlAotVPkt3NpmrJnoRcKGCOiWhcX23XpjqIcBtnRSqJtMAzBkRFJyT
-         IuJOVuOOtYdSTn95YRz26v/cKwt5/T64Yx52JbDr5PRoeK3pBx9XzJYnfVpAHeMFNHl0
-         xKnw==
-X-Gm-Message-State: AAQBX9flslPaZIvwn00/kVZl08/L4sMFHPvrUZKWkorzl627pfB/iJdH
-        4ulnZXjeLBLeUX2PAcmz/PX64g==
-X-Google-Smtp-Source: AKy350Zb5g9QoBeP8dMxH/J5F1Lj3IrlRKoEL6OoEmZjYedwJVSJCUuA3wb1faeRrAklioPZUgmo3w==
-X-Received: by 2002:a05:622a:1010:b0:3e6:55b2:35e with SMTP id d16-20020a05622a101000b003e655b2035emr4017850qte.26.1681870095830;
-        Tue, 18 Apr 2023 19:08:15 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:e646])
-        by smtp.gmail.com with ESMTPSA id v9-20020a05620a0a8900b0074abe1e1457sm4333376qkg.76.2023.04.18.19.08.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 19:08:15 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 22:08:14 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 00/26] mm: reliable huge page allocator
-Message-ID: <20230419020814.GA272256@cmpxchg.org>
-References: <20230418191313.268131-1-hannes@cmpxchg.org>
- <20230418235402.lq7mxrrre2kl6vsf@box.shutemov.name>
+        Tue, 18 Apr 2023 22:10:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6C56583;
+        Tue, 18 Apr 2023 19:10:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9F9663A14;
+        Wed, 19 Apr 2023 02:10:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27FA1C4339E;
+        Wed, 19 Apr 2023 02:10:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681870248;
+        bh=GYHhiCs3TCFO1Q2756iuxoVYD2YOA1/S/6qXx4tlCRA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HSEdJXSazY14OL8Cl+nDEnJWvE2k29E5+QeKe+3HZah00pvxiA708sXGELdsIvxpU
+         FCZDSEy2MbnH2nJW+TklX1ErsHuvwbkXmr+U8YgsdNThBwCkwZgeRLEBbbfFVOFAp5
+         uDTaFV1NCZBZoz9MVK31gU5Oo1T5a+L3c4yvhuaZbyVvbGBFywfkmI8/vmCYVa2Cxv
+         5Apvo+v30RzOcVJ5WxNDR4kz3WQvOIcVuBHuO4aXpkDfD27nTs5JdtFWej4t+F+Ew3
+         61clJT8eIV0weQhVjI9f3oxtjyr32/FSlvbw325X90XE1kpB1kVndc4GL6xNpu1faH
+         0iPrQKJNvjxXA==
+Received: by mail-ej1-f42.google.com with SMTP id a5so21377256ejb.6;
+        Tue, 18 Apr 2023 19:10:48 -0700 (PDT)
+X-Gm-Message-State: AAQBX9dWU4SnnREIHMNL9IXH3Z+noH6x+K+f9yEnXxMVjzDrZrShOpDm
+        fn2BrPAKJBFJ8S2B5yRGq1npzlMJBURTrTweOUs=
+X-Google-Smtp-Source: AKy350Yux5eICBg4RaYzzxhXfc38uxr70BMG8PNiecifdwORaLcP13Iwrh9nDaXKtSF4lrUvpBOeBkB9D2J1jtVDDJ8=
+X-Received: by 2002:a17:906:5e12:b0:92d:878e:8566 with SMTP id
+ n18-20020a1709065e1200b0092d878e8566mr6392709eju.10.1681870246325; Tue, 18
+ Apr 2023 19:10:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418235402.lq7mxrrre2kl6vsf@box.shutemov.name>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230417095950.875228-1-zhaotianrui@loongson.cn> <20230417095950.875228-30-zhaotianrui@loongson.cn>
+In-Reply-To: <20230417095950.875228-30-zhaotianrui@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 19 Apr 2023 10:10:33 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5nxRLzLn65OEnPQJi6CQtFhQOYNZjEE9ZoouM8Ug5hOw@mail.gmail.com>
+Message-ID: <CAAhV-H5nxRLzLn65OEnPQJi6CQtFhQOYNZjEE9ZoouM8Ug5hOw@mail.gmail.com>
+Subject: Re: [PATCH v7 29/30] LoongArch: KVM: Enable kvm config and add the makefile
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
+        Xi Ruoyao <xry111@xry111.site>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kirill, thanks for taking a look so quickly.
+Hi, Tianrui,
 
-On Wed, Apr 19, 2023 at 02:54:02AM +0300, Kirill A. Shutemov wrote:
-> On Tue, Apr 18, 2023 at 03:12:47PM -0400, Johannes Weiner wrote:
-> > This series proposes to make THP allocations reliable by enforcing
-> > pageblock hygiene, and aligning the allocator, reclaim and compaction
-> > on the pageblock as the base unit for managing free memory. All orders
-> > up to and including the pageblock are made first-class requests that
-> > (outside of OOM situations) are expected to succeed without
-> > exceptional investment by the allocating thread.
-> > 
-> > A neutral pageblock type is introduced, MIGRATE_FREE. The first
-> > allocation to be placed into such a block claims it exclusively for
-> > the allocation's migratetype. Fallbacks from a different type are no
-> > longer allowed, and the block is "kept open" for more allocations of
-> > the same type to ensure tight grouping. A pageblock becomes neutral
-> > again only once all its pages have been freed.
-> 
-> Sounds like this will cause earlier OOM, no?
-> 
-> I guess with 2M pageblock on 64G server it shouldn't matter much. But how
-> about smaller machines?
+On Mon, Apr 17, 2023 at 6:00=E2=80=AFPM Tianrui Zhao <zhaotianrui@loongson.=
+cn> wrote:
+>
+> Enable loongarch kvm config and add the makefile to support build kvm
+> module.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202304131526.iXfLaVZc-lkp@int=
+el.com/
+> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+> ---
+>  arch/loongarch/Kbuild                      |  1 +
+>  arch/loongarch/Kconfig                     |  2 ++
+>  arch/loongarch/configs/loongson3_defconfig |  2 ++
+>  arch/loongarch/kvm/Kconfig                 | 38 ++++++++++++++++++++++
+>  arch/loongarch/kvm/Makefile                | 22 +++++++++++++
+>  5 files changed, 65 insertions(+)
+>  create mode 100644 arch/loongarch/kvm/Kconfig
+>  create mode 100644 arch/loongarch/kvm/Makefile
+>
+> diff --git a/arch/loongarch/Kbuild b/arch/loongarch/Kbuild
+> index b01f5cdb27e0..40be8a1696f9 100644
+> --- a/arch/loongarch/Kbuild
+> +++ b/arch/loongarch/Kbuild
+> @@ -2,6 +2,7 @@ obj-y +=3D kernel/
+>  obj-y +=3D mm/
+>  obj-y +=3D net/
+>  obj-y +=3D vdso/
+> +obj-y +=3D kvm/
+>
+>  # for cleaning
+>  subdir- +=3D boot
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 7fd51257e0ed..f9beeb2e0cc9 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -148,6 +148,7 @@ config LOONGARCH
+>         select USE_PERCPU_NUMA_NODE_ID
+>         select USER_STACKTRACE_SUPPORT
+>         select ZONE_DMA32
+> +       select HAVE_KVM
+Use alpha-betical order, please.
 
-Yes, it's a tradeoff.
-
-It's not really possible to reduce external fragmentation and increase
-contiguity, without also increasing the risk of internal fragmentation
-to some extent. The tradeoff is slighly less but overall faster memory.
-
-A 2M block size *seems* reasonable for most current setups. It's
-actually still somewhat on the lower side, if you consider that we had
-4k blocks when memory was a few megabytes. (4k pages for 4M RAM is the
-same ratio as 2M pages for 2G RAM. My phone has 8G and my desktop 32G.
-64G is unusually small for a datacenter server.)
-
-I wouldn't be opposed to sticking this behind a separate config option
-if there are setups that WOULD want to keep the current best-effort
-compaction without the block hygiene. But obviously, from a
-maintenance POV life would be much easier if we didn't have to.
-
-FWIF, I have been doing tests in an environment constrained to 2G and
-haven't had any issues with premature OOMs. But I'm happy to test
-other situations and workloads that might be of interest to people.
-
-> > Reclaim and compaction are changed from partial block reclaim to
-> > producing whole neutral page blocks.
-> 
-> How does it affect allocation latencies? I see direct compact stall grew
-> substantially. Hm?
-
-Good question.
-
-There are 260 more compact stalls but also 1,734 more successful THP
-allocations. And 1,433 fewer allocation stalls. There seems to be much
-less direct work performed per successful allocation.
-
-But of course, that's not the whole story. Let me trace the actual
-latencies.
-
-Thanks for your thoughts!
-Johannes
+Huacai
+>
+>  config 32BIT
+>         bool
+> @@ -588,3 +589,4 @@ source "drivers/acpi/Kconfig"
+>  endmenu
+>
+>  source "drivers/firmware/Kconfig"
+> +source "arch/loongarch/kvm/Kconfig"
+> diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/=
+configs/loongson3_defconfig
+> index e18213f01cc4..c99520374aef 100644
+> --- a/arch/loongarch/configs/loongson3_defconfig
+> +++ b/arch/loongarch/configs/loongson3_defconfig
+> @@ -63,6 +63,8 @@ CONFIG_EFI_ZBOOT=3Dy
+>  CONFIG_EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER=3Dy
+>  CONFIG_EFI_CAPSULE_LOADER=3Dm
+>  CONFIG_EFI_TEST=3Dm
+> +CONFIG_VIRTUALIZATION=3Dy
+> +CONFIG_KVM=3Dm
+>  CONFIG_MODULES=3Dy
+>  CONFIG_MODULE_FORCE_LOAD=3Dy
+>  CONFIG_MODULE_UNLOAD=3Dy
+> diff --git a/arch/loongarch/kvm/Kconfig b/arch/loongarch/kvm/Kconfig
+> new file mode 100644
+> index 000000000000..8a999b4c0232
+> --- /dev/null
+> +++ b/arch/loongarch/kvm/Kconfig
+> @@ -0,0 +1,38 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# KVM configuration
+> +#
+> +
+> +source "virt/kvm/Kconfig"
+> +
+> +menuconfig VIRTUALIZATION
+> +       bool "Virtualization"
+> +       help
+> +         Say Y here to get to see options for using your Linux host to r=
+un
+> +         other operating systems inside virtual machines (guests).
+> +         This option alone does not add any kernel code.
+> +
+> +         If you say N, all options in this submenu will be skipped and
+> +         disabled.
+> +
+> +if VIRTUALIZATION
+> +
+> +config KVM
+> +       tristate "Kernel-based Virtual Machine (KVM) support"
+> +       depends on HAVE_KVM
+> +       select MMU_NOTIFIER
+> +       select ANON_INODES
+> +       select PREEMPT_NOTIFIERS
+> +       select KVM_MMIO
+> +       select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+> +       select HAVE_KVM_VCPU_ASYNC_IOCTL
+> +       select HAVE_KVM_EVENTFD
+> +       select SRCU
+> +       help
+> +         Support hosting virtualized guest machines using hardware
+> +         virtualization extensions. You will need a fairly processor
+> +         equipped with virtualization extensions.
+> +
+> +         If unsure, say N.
+> +
+> +endif # VIRTUALIZATION
+> diff --git a/arch/loongarch/kvm/Makefile b/arch/loongarch/kvm/Makefile
+> new file mode 100644
+> index 000000000000..2335e873a6ef
+> --- /dev/null
+> +++ b/arch/loongarch/kvm/Makefile
+> @@ -0,0 +1,22 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Makefile for LOONGARCH KVM support
+> +#
+> +
+> +ccflags-y +=3D -I $(srctree)/$(src)
+> +
+> +include $(srctree)/virt/kvm/Makefile.kvm
+> +
+> +obj-$(CONFIG_KVM) +=3D kvm.o
+> +
+> +kvm-y +=3D main.o
+> +kvm-y +=3D vm.o
+> +kvm-y +=3D vmid.o
+> +kvm-y +=3D tlb.o
+> +kvm-y +=3D mmu.o
+> +kvm-y +=3D vcpu.o
+> +kvm-y +=3D exit.o
+> +kvm-y +=3D interrupt.o
+> +kvm-y +=3D timer.o
+> +kvm-y +=3D switch.o
+> +kvm-y +=3D csr_ops.o
+> --
+> 2.31.1
+>
