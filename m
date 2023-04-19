@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B15AD6E79FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 311816E79FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 14:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232988AbjDSMuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 08:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
+        id S233163AbjDSMu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 08:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbjDSMuv (ORCPT
+        with ESMTP id S232869AbjDSMux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:50:51 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EB96EAD
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:50:41 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54fde069e4aso133812847b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:50:41 -0700 (PDT)
+        Wed, 19 Apr 2023 08:50:53 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1657695
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:50:44 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id l124-20020a252582000000b00b8f5572bcdaso15868733ybl.13
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:50:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681908640; x=1684500640;
+        d=google.com; s=20221208; t=1681908643; x=1684500643;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M55eRuHQJrupxqsaP770qxmiyWjSxTprBCDKIWruVU8=;
-        b=LXjy63dN+KA/a+ihM+Hvrk/noXBuUo93Q35thIox5tSdDL2o71/NMZqFSYRW0EBM4P
-         EFX9I9zPzMnxSNaBMaLHxoq+qKvEcsWsmeEXD3h2XX8VP1TN70UUtZrcF025i79nZDqa
-         VYi1WpoKBj5pu+akQ/sWrJLnII87r+R3KLUmrXRQRQY92oMrME3VBmxN7sElDqCBoWrx
-         lXo+oopgXDC+bwQHMXVYMf3RRHvxlbwsNLPAsX5CrT4gmHs2cj/cjZhAZINSVAWMoNCH
-         n+pDViYF29j82CWSRE3IgGrfv302KxrSw7qSMoOyeUOz03lZl110Yp6DcbGXZyKaYWi0
-         XLZg==
+        bh=2VyinE+DDb/Q7Dr6L/ZifSAtwYa3P2xEDwWdnlneadk=;
+        b=svjbIScMa28a4IqxeHSqZo7K9kjy2RdzU5ujfVKTAYQVvPZ9WYuAEpj3wnPqI9Srys
+         YkqpOPCSqFQqVkLJ9eb8xlsqXM3qc5Y3GY8rGcXXHjyO+VxGuahJadcWV0aAnz9N1XtA
+         6PuDQdV6eyq1DjZqy62QFRJ1pu+RAQqjQF73JkhPovFBaVddJ3wf9r5hVxvICinyyUnV
+         9fpEHLxOWGIWVueEQRRKTp6F/M2zYS96qDGPYYezWJv0X8fwiZcWnhyyBkjCTYXogWPM
+         SbXnWPh7SNOpOEN8qXdsDUIkMlXCOzSuFO2IYKtgtIndj19fiZrVvfDRog2H/uBBzOkw
+         WejA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681908640; x=1684500640;
+        d=1e100.net; s=20221208; t=1681908643; x=1684500643;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M55eRuHQJrupxqsaP770qxmiyWjSxTprBCDKIWruVU8=;
-        b=IrvAPAUWWjfKV2APoqSn9/F+gIDeCIR3qKbb4e07tPYzvZeEdZrq9e1A//r8ue0P8a
-         kpa1oKGQ1N4yWVa/bW98gxZWfnRJo3dRpAhyM9HZSBB8rrc5QeUYiCLEZJEwxMH4gld/
-         FhAJT1Zz8Qbfp5OH1UjJQGaULcpMlxn7ccWTqVMWZutJf2ZRdyPOGCujWj5w70BAJSFq
-         N1NhIagVcMveGmq7OyoyUaYRektHbUpcuV2pD8/auCuByJlyfNUu3lmDBZ6qexEIBs+T
-         WmZWHxf6ZEKD8DZFMUSEhePcxfK10jx/zeft3h1j4W8PGmK8UC0/WmoDjogizPryeLhr
-         JjdA==
-X-Gm-Message-State: AAQBX9e8vaVuvay+Lj8zQ/RvRCcGUg1kk37x7GBu0OKBppwnij0SYRbd
-        D1pxbbIT06v8m5dtDosqqfla2D7seuN+D/j3Pg==
-X-Google-Smtp-Source: AKy350bHCu6N/9gE0Xr0AQjCLyCYOOOEiAnM+qBQM/oKHnm8lOsLRsxUyXnZgd1futy7TWNiA6JxT/4GV9CrMcsl6A==
+        bh=2VyinE+DDb/Q7Dr6L/ZifSAtwYa3P2xEDwWdnlneadk=;
+        b=C1PGVzwwgpav7/+df+D8A/VnOOEkqr9GaC0/gQqskEkhBNXDjuwa8e+J8779PPqk4S
+         BuY7j/tWcNSbpfjX3Ab7UN5SgIsmOmcxYTnQiC3BIZlEbDrBFGLPxRewC+XT3AXqhclb
+         XzBAZ/AV1w1n1U32p/ojwRDIyxEcApns2fWHn4w+vny9L8f0UbcQtGCx7MPyg3nsN0yu
+         v5+Pm1ufRyRNmh91ElmUoe5m8nas7Ih3IVPG8gtlk4KLWi8nh3gzyubDvPsOaTb3DH1T
+         KUWSzem4CTCNEop2jbykt7KMppSc8J032E0saXkkNij3CCyrc+rDPikCEQESpA63tdXO
+         b2NA==
+X-Gm-Message-State: AAQBX9fTiQrkKIzR4DQGhnEq7vFoSPQvM6efmVqQp1CJjHqwX+qhvngR
+        RbPHA5GbkKCPJnKNqVUiiKIys6bwFJwde01UqA==
+X-Google-Smtp-Source: AKy350ah+3rcWggCw0Iac5AVviXz9FaXW80vFYRnXbjCS4N8chgJDgp6D08LYnwHnek2bboP9DUm5T4VgBShDZbFBg==
 X-Received: from peternewman0.zrh.corp.google.com ([2a00:79e0:9d:6:b36e:a25e:826d:b66a])
- (user=peternewman job=sendgmr) by 2002:a25:c245:0:b0:997:c919:4484 with SMTP
- id s66-20020a25c245000000b00997c9194484mr11392762ybf.6.1681908640818; Wed, 19
- Apr 2023 05:50:40 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 14:50:13 +0200
+ (user=peternewman job=sendgmr) by 2002:a25:d1cc:0:b0:b95:65ad:4399 with SMTP
+ id i195-20020a25d1cc000000b00b9565ad4399mr2913072ybg.8.1681908643819; Wed, 19
+ Apr 2023 05:50:43 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 14:50:14 +0200
 In-Reply-To: <20230419125015.693566-1-peternewman@google.com>
 Mime-Version: 1.0
 References: <20230419125015.693566-1-peternewman@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230419125015.693566-2-peternewman@google.com>
-Subject: [PATCH v6 1/3] x86/resctrl: Factor rdtgroup lock for multi-file ops
+Message-ID: <20230419125015.693566-3-peternewman@google.com>
+Subject: [PATCH v6 2/3] x86/resctrl: Implement rename op for mon groups
 From:   Peter Newman <peternewman@google.com>
 To:     fenghua.yu@intel.com, reinette.chatre@intel.com
 Cc:     Babu.Moger@amd.com, bp@alien8.de, dave.hansen@linux.intel.com,
@@ -72,81 +72,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rdtgroup_kn_lock_live() can only release a kernfs reference for a single
-file before waiting on the rdtgroup_mutex, limiting its usefulness for
-operations on multiple files, such as rename.
+To change the resources allocated to a large group of tasks, such as an
+application container, a container manager must write all of the tasks'
+IDs into the tasks file interface of the new control group. This is
+challenging when the container's task list is always changing.
 
-Factor the work needed to respectively break and unbreak active
-protection on an individual file into rdtgroup_kn_{get,put}().
+In addition, if the container manager is using monitoring groups to
+separately track the bandwidth of containers assigned to the same
+control group, when moving a container, it must first move the
+container's tasks to the default monitoring group of the new control
+group before it can move these tasks into the container's replacement
+monitoring group under the destination control group. This is
+undesirable because it makes bandwidth usage during the move
+unattributable to the correct tasks and resets monitoring event counters
+and cache usage information for the group.
 
-No functional change.
+Implement the rename operation only for resctrlfs monitor groups to
+enable users to move a monitoring group from one control group to
+another. This effects a change in resources allocated to all the tasks
+in the monitoring group while otherwise leaving the monitoring data
+intact.
 
 Signed-off-by: Peter Newman <peternewman@google.com>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 35 ++++++++++++++++----------
- 1 file changed, 22 insertions(+), 13 deletions(-)
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 128 +++++++++++++++++++++++++
+ 1 file changed, 128 insertions(+)
 
 diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index 6ad33f355861..51b869149e76 100644
+index 51b869149e76..6a301233b9ef 100644
 --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
 +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -2301,6 +2301,26 @@ static struct rdtgroup *kernfs_to_rdtgroup(struct kernfs_node *kn)
- 	}
+@@ -3514,6 +3514,133 @@ static int rdtgroup_rmdir(struct kernfs_node *kn)
+ 	return ret;
  }
  
-+static void rdtgroup_kn_get(struct rdtgroup *rdtgrp, struct kernfs_node *kn)
++/**
++ * mongrp_reparent() - replace parent CTRL_MON group of a MON group
++ * @rdtgrp:		the MON group whose parent should be replaced
++ * @new_prdtgrp:	replacement parent CTRL_MON group for @rdtgrp
++ * @cpus:		cpumask provided by the caller for use during this call
++ *
++ * Replaces the parent CTRL_MON group for a MON group, resulting in all member
++ * tasks' CLOSID immediately changing to that of the new parent group.
++ * Monitoring data for the group is unaffected by this operation.
++ */
++static void mongrp_reparent(struct rdtgroup *rdtgrp,
++			    struct rdtgroup *new_prdtgrp,
++			    cpumask_var_t cpus)
 +{
-+	atomic_inc(&rdtgrp->waitcount);
-+	kernfs_break_active_protection(kn);
++	struct rdtgroup *prdtgrp = rdtgrp->mon.parent;
++
++	WARN_ON(rdtgrp->type != RDTMON_GROUP);
++	WARN_ON(new_prdtgrp->type != RDTCTRL_GROUP);
++
++	/* Nothing to do when simply renaming a MON group. */
++	if (prdtgrp == new_prdtgrp)
++		return;
++
++	WARN_ON(list_empty(&prdtgrp->mon.crdtgrp_list));
++	list_move_tail(&rdtgrp->mon.crdtgrp_list,
++		       &new_prdtgrp->mon.crdtgrp_list);
++
++	rdtgrp->mon.parent = new_prdtgrp;
++	rdtgrp->closid = new_prdtgrp->closid;
++
++	/* Propagate updated closid to all tasks in this group. */
++	rdt_move_group_tasks(rdtgrp, rdtgrp, cpus);
++
++	update_closid_rmid(cpus, NULL);
 +}
 +
-+static void rdtgroup_kn_put(struct rdtgroup *rdtgrp, struct kernfs_node *kn)
++static int rdtgroup_rename(struct kernfs_node *kn,
++			   struct kernfs_node *new_parent, const char *new_name)
 +{
-+	if (atomic_dec_and_test(&rdtgrp->waitcount) &&
-+	    (rdtgrp->flags & RDT_DELETED)) {
-+		if (rdtgrp->mode == RDT_MODE_PSEUDO_LOCKSETUP ||
-+		    rdtgrp->mode == RDT_MODE_PSEUDO_LOCKED)
-+			rdtgroup_pseudo_lock_remove(rdtgrp);
-+		kernfs_unbreak_active_protection(kn);
-+		rdtgroup_remove(rdtgrp);
-+	} else {
-+		kernfs_unbreak_active_protection(kn);
-+	}
-+}
++	struct rdtgroup *new_prdtgrp;
++	struct rdtgroup *rdtgrp;
++	cpumask_var_t tmpmask;
++	int ret;
 +
- struct rdtgroup *rdtgroup_kn_lock_live(struct kernfs_node *kn)
- {
- 	struct rdtgroup *rdtgrp = kernfs_to_rdtgroup(kn);
-@@ -2308,8 +2328,7 @@ struct rdtgroup *rdtgroup_kn_lock_live(struct kernfs_node *kn)
- 	if (!rdtgrp)
- 		return NULL;
- 
--	atomic_inc(&rdtgrp->waitcount);
--	kernfs_break_active_protection(kn);
++	rdtgrp = kernfs_to_rdtgroup(kn);
++	new_prdtgrp = kernfs_to_rdtgroup(new_parent);
++	if (!rdtgrp || !new_prdtgrp)
++		return -ENOENT;
++
++	/* Release both kernfs active_refs before obtaining rdtgroup mutex. */
 +	rdtgroup_kn_get(rdtgrp, kn);
- 
- 	mutex_lock(&rdtgroup_mutex);
- 
-@@ -2328,17 +2347,7 @@ void rdtgroup_kn_unlock(struct kernfs_node *kn)
- 		return;
- 
- 	mutex_unlock(&rdtgroup_mutex);
--
--	if (atomic_dec_and_test(&rdtgrp->waitcount) &&
--	    (rdtgrp->flags & RDT_DELETED)) {
--		if (rdtgrp->mode == RDT_MODE_PSEUDO_LOCKSETUP ||
--		    rdtgrp->mode == RDT_MODE_PSEUDO_LOCKED)
--			rdtgroup_pseudo_lock_remove(rdtgrp);
--		kernfs_unbreak_active_protection(kn);
--		rdtgroup_remove(rdtgrp);
--	} else {
--		kernfs_unbreak_active_protection(kn);
--	}
++	rdtgroup_kn_get(new_prdtgrp, new_parent);
++
++	mutex_lock(&rdtgroup_mutex);
++
++	rdt_last_cmd_clear();
++
++	/*
++	 * Don't allow kernfs_to_rdtgroup() to return a parent rdtgroup if
++	 * either kernfs_node is a file.
++	 */
++	if (kernfs_type(kn) != KERNFS_DIR ||
++	    kernfs_type(new_parent) != KERNFS_DIR) {
++		rdt_last_cmd_puts("Source and destination must be directories");
++		ret = -EPERM;
++		goto out;
++	}
++
++	if ((rdtgrp->flags & RDT_DELETED) || (new_prdtgrp->flags & RDT_DELETED)) {
++		ret = -ENOENT;
++		goto out;
++	}
++
++	if (rdtgrp->type != RDTMON_GROUP || !kn->parent ||
++	    !is_mon_groups(kn->parent, kn->name)) {
++		rdt_last_cmd_puts("Source must be a MON group\n");
++		ret = -EPERM;
++		goto out;
++	}
++
++	if (!is_mon_groups(new_parent, new_name)) {
++		rdt_last_cmd_puts("Destination must be a mon_groups subdirectory\n");
++		ret = -EPERM;
++		goto out;
++	}
++
++	/*
++	 * If the MON group is monitoring CPUs, the CPUs must be assigned to the
++	 * current parent CTRL_MON group and therefore cannot be assigned to
++	 * the new parent, making the move illegal.
++	 */
++	if (!cpumask_empty(&rdtgrp->cpu_mask) &&
++	    rdtgrp->mon.parent != new_prdtgrp) {
++		rdt_last_cmd_puts("Cannot move a MON group that monitors CPUs\n");
++		ret = -EPERM;
++		goto out;
++	}
++
++	/*
++	 * Allocate the cpumask for use in mongrp_reparent() to avoid the
++	 * possibility of failing to allocate it after kernfs_rename() has
++	 * succeeded.
++	 */
++	if (!zalloc_cpumask_var(&tmpmask, GFP_KERNEL)) {
++		ret = -ENOMEM;
++		goto out;
++	}
++
++	/*
++	 * Perform all input validation and allocations needed to ensure
++	 * mongrp_reparent() will succeed before calling kernfs_rename(),
++	 * otherwise it would be necessary to revert this call if
++	 * mongrp_reparent() failed.
++	 */
++	ret = kernfs_rename(kn, new_parent, new_name);
++	if (!ret)
++		mongrp_reparent(rdtgrp, new_prdtgrp, tmpmask);
++
++	free_cpumask_var(tmpmask);
++
++out:
++	mutex_unlock(&rdtgroup_mutex);
 +	rdtgroup_kn_put(rdtgrp, kn);
- }
++	rdtgroup_kn_put(new_prdtgrp, new_parent);
++	return ret;
++}
++
+ static int rdtgroup_show_options(struct seq_file *seq, struct kernfs_root *kf)
+ {
+ 	if (resctrl_arch_get_cdp_enabled(RDT_RESOURCE_L3))
+@@ -3531,6 +3658,7 @@ static int rdtgroup_show_options(struct seq_file *seq, struct kernfs_root *kf)
+ static struct kernfs_syscall_ops rdtgroup_kf_syscall_ops = {
+ 	.mkdir		= rdtgroup_mkdir,
+ 	.rmdir		= rdtgroup_rmdir,
++	.rename		= rdtgroup_rename,
+ 	.show_options	= rdtgroup_show_options,
+ };
  
- static int mkdir_mondata_all(struct kernfs_node *parent_kn,
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
