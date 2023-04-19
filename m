@@ -2,113 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E07756E74A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BEA6E749F
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbjDSIG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48552 "EHLO
+        id S231651AbjDSIGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbjDSIGX (ORCPT
+        with ESMTP id S230340AbjDSIF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:06:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BC719BF
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:05:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681891537;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eaSWM1p/1F2OsyeRmKVT5vjHT5ufcFeSlZRPaUZrx54=;
-        b=Vfi/q66K4+Wx0IPUmOwKmiQUQJo/UV45kuYkWSaBIcZZaow+42QIRek3h1m2CGrrc2HR2B
-        aK4OUe6gDpGT21UkGmdtGPDZO0q0aoWjYqFFT11vnUh3XcGmxYmpddSr1/T0w8iVvDH6iF
-        CFOcoUG5bhzS8b++Dc/off3s2MFC0nA=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-356-MsAvmCrsPmmNyzUtzi58Yg-1; Wed, 19 Apr 2023 04:05:35 -0400
-X-MC-Unique: MsAvmCrsPmmNyzUtzi58Yg-1
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-2449eceadbfso3575021a91.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:05:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681891535; x=1684483535;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eaSWM1p/1F2OsyeRmKVT5vjHT5ufcFeSlZRPaUZrx54=;
-        b=LFF8dz7WNzCCU/QrS7aBwX6olAEyrdSBCmKH39PSORZMchP/skPPNmBEci7rNWXWHB
-         uPt37mHlxRvsWLQ/47dyO7hcASgzY6RFL/uyn7ivxa5pF0axdAl9pSuniFq+KzdxmGa3
-         kJaolgFGRDP5mWui1UcNfsdDa0JBZr46Q4lxHgafO3FCYiGJW46pP5JhPN+7q2rNO9aT
-         eL3BqU/PsFgpK/QyPHwxS/YteJJqtsoDIKW3s3udbIq6MiS2gxETJPy3+a3+UFJmNLJz
-         HOxQMBWsQuGvBTx6CPW7UteUxW+KuGMhK76YmJvgyKPjqCAbpjfgD6ru4ZaiOKUR1mqL
-         GLCA==
-X-Gm-Message-State: AAQBX9e61kADpOZfHRHYSnEWzPHqg10OYu/Kfhrz5NBV1KP+owK6Pcx8
-        bL1Dqal1ZcHN/Tzo5CZhpvg+Ac8gYrxHSMnRAjV0qK6n9QoA9ubXaQyPyBs9KkomEAsWFTHf7jK
-        UGpWY0h5MA+AIbP6DSVSuPj9TYGV11esNOu3tVYva
-X-Received: by 2002:a17:90a:fe86:b0:233:f393:f6cd with SMTP id co6-20020a17090afe8600b00233f393f6cdmr2240620pjb.5.1681891534859;
-        Wed, 19 Apr 2023 01:05:34 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Zc6e9mxsrb5Vm/dQ5S7WTiVHDZ6r+CiglqnHJTOYDcdSZpa33HrUd9uLCOAU+gvh4WW/4NBNRuoAd+QSrZ0AU=
-X-Received: by 2002:a17:90a:fe86:b0:233:f393:f6cd with SMTP id
- co6-20020a17090afe8600b00233f393f6cdmr2240601pjb.5.1681891534406; Wed, 19 Apr
- 2023 01:05:34 -0700 (PDT)
+        Wed, 19 Apr 2023 04:05:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36D94C3D;
+        Wed, 19 Apr 2023 01:05:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 704F163C3A;
+        Wed, 19 Apr 2023 08:05:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45613C433EF;
+        Wed, 19 Apr 2023 08:05:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681891557;
+        bh=Pmk67VN1KWoYfHH9fjaJIYCfiu0cDeym63+mdBdupLc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cCJZZmOedUDG1K/cSy1AWLOZeG4g9dchhxqqkUkLKke4h6X0efXb0JLcMFgGQK9zj
+         xKj301TGX6JOGQc3d3XNmbncOaA7zMl+Z1FFtJcg7PtcSxYNTfJvWN5saXSatOw8L0
+         cQaFFeJwyy3gDVP3FYSSjx+q8L5UtpQdpeyZEgLNNKYwuSy3rerveY7+2HF8zIzMPQ
+         J/OBwTuhZdHrBhHodhIlGMNelE3DvXcxH0YXX0zhqEABM49kL/uh1tZRMuwBij2Uc3
+         gBm6UJD7dfx/MPmcoEFeSaynqzxz4AK39dodj08oVE443cpy+92Ys6i0SyJV3s75J6
+         ayjuFUiWwO6cQ==
+Date:   Wed, 19 Apr 2023 10:05:54 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Rob Herring <robh@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v10 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link
+ III Deserializer
+Message-ID: <ZD+g4j7jEg2AETNe@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>, Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Rob Herring <robh@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
+ <20230222132907.594690-6-tomi.valkeinen@ideasonboard.com>
+ <ZD6VwpRya6SGBAt5@shikoro>
+ <20230419091336.4e10ba65@booty>
 MIME-Version: 1.0
-References: <20230419072736.172593-2-haifeng.xu@shopee.com>
-In-Reply-To: <20230419072736.172593-2-haifeng.xu@shopee.com>
-From:   Miklos Szeredi <mszeredi@redhat.com>
-Date:   Wed, 19 Apr 2023 10:05:23 +0200
-Message-ID: <CAOssrKfCiByavRNekRUOCv==AEvWAO6B6=tAASyYdvWj9XRhBw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] vfs: clean up d_backing_inode() function
-To:     Haifeng Xu <haifeng.xu@shopee.com>
-Cc:     viro@zeniv.linux.org.uk, bigeasy@linutronix.de, mcgrof@kernel.org,
-        xiubli@redhat.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5uh5ZyA4HcdyiNVD"
+Content-Disposition: inline
+In-Reply-To: <20230419091336.4e10ba65@booty>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we are touching that function, I'd just get rid of it completely
-(s/d_backing_inode/d_inode/).
 
-Thanks,
-Miklos
+--5uh5ZyA4HcdyiNVD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 19, 2023 at 9:27=E2=80=AFAM Haifeng Xu <haifeng.xu@shopee.com> =
-wrote:
->
-> Using an extra variable to record the inode is unnecessary, return it
-> directly.
->
-> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
-> ---
->  include/linux/dcache.h | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/include/linux/dcache.h b/include/linux/dcache.h
-> index 13023c7211d6..97324b6434e5 100644
-> --- a/include/linux/dcache.h
-> +++ b/include/linux/dcache.h
-> @@ -540,9 +540,7 @@ static inline struct inode *d_inode_rcu(const struct =
-dentry *dentry)
->   */
->  static inline struct inode *d_backing_inode(const struct dentry *upper)
->  {
-> -       struct inode *inode =3D upper->d_inode;
-> -
-> -       return inode;
-> +       return upper->d_inode;
->  }
->
->  /**
-> --
-> 2.25.1
->
 
+> > Why is "i2c-alias-pool" in the drivers binding and not a regular i2c
+> > binding? Same question for the implementation of the alias-pool
+> > handling. Shouldn't this be in the i2c-atr library? I'd think managing
+> > the list of aliases would look all the same in the drivers otherwise?
+>=20
+> I think that this _was_ the plan, as it looks obviously cleaner, but
+> then we agreed that we should remove the pool entirely, so I didn't
+> bother moving it.
+
+Ah, you mean we agreed on that at the Plumbers BoF? I think we can
+conclude this is obsolete meanwhile. GMSL encodes the target addresses
+in DT. Rob is also fine with the binding here to encode the pool in DT.
+Let's follow that road, I'd say.
+
+
+--5uh5ZyA4HcdyiNVD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ/oN8ACgkQFA3kzBSg
+KbYOVQ//SvRa7pFpZDsYmp4BoiKZFaS1vYbwJiVFgXLFu7s+LqMkohp0KNgRl+YK
+VIhqZcpIR7gp52ikHDp0BinRmDoKLp2j1sAmiPzQJHKOHMWfErdDpzAybKAV/1HW
+0GXCzZeDwOnURHFO8WRwqBn2LFa6HLO1F3Rnp7apuvbqb3JaKDvRdXWpIFsRgITF
+73hVZKOm8bIn8cc3NRAJr6n2PIQVoLOmvcO/WZQIY2ZJZabcB7Z8LAYexHb4OPJp
+qG+IN4JPqhWyKelvbDKIuvpmiNtRmO3RMczBa4MSNSipTpeRYjtJCJXJW8Gvewe8
+dpqU2/1RfTH+vAo0XJ6tI7UPgmb6g1EE9d/lFRQC+t1gKFQzGtIoa+ay9okQUzln
+MZJAOxu2o64uE5mA6HXFpTemhb/7H31kSxKxu1neKMCsY/7o9CRWxMlEe5s/FBmR
+1ieHG7udVNqD+/z5HyiaLOEpdhcqeqEkTTdgEIjeQBEwlkFM1gT5da7sUoLNUy/e
+N0ZvHG9SAejFX9hw6gtv702mUczNQHGCBp/joWRNqU+/dOSSBwYYc+mmISSSj4rh
+MvxoL4dBcn81ZFIScL9RlG4UxmwdYJ0O0CFgLaO9hcosLk0kBUmWO7UlrgD9WWzu
+I7dNoWqXkoPDorW0pimTPu45z5GdZu2T+p93+0cB/xO8GlYvwyo=
+=FA+C
+-----END PGP SIGNATURE-----
+
+--5uh5ZyA4HcdyiNVD--
