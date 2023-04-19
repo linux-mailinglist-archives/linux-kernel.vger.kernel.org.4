@@ -2,104 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FF76E7018
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 01:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F076E7024
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 02:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjDRXyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Apr 2023 19:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57700 "EHLO
+        id S231140AbjDSABO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Apr 2023 20:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231423AbjDRXyg (ORCPT
+        with ESMTP id S229750AbjDSABL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Apr 2023 19:54:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E8D93C7;
-        Tue, 18 Apr 2023 16:54:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36D6C60F40;
-        Tue, 18 Apr 2023 23:54:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C107C433A0;
-        Tue, 18 Apr 2023 23:54:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681862070;
-        bh=Hrd+BNjFqHGurELBooQNeXrU6jy+H2YofJkCRAdEr88=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DY4UxslVrS6DGCIKSNzrKxGqV6zpRp6YF1kt/ChfHqYr659zNA7OQ9oBYZbUD3iDi
-         wG8zZ4v9agbA4cz1vzhlU5ju0ZudCGUTUk1st/oF74RbUcL8bB+QtQktW5r9dmS5LC
-         YwuI0ZeR9fIUy64FbOW06TBq4sQwGfCSSXknVi4ENrKvmrS0eqfsAZDTzUaw/dp4l1
-         PkDA6j272nQc//MMFJs9hcFOjRefF6hIj9VIthrn2om/MN3fAaAfJX6gsmiMZ8cgux
-         SSjZgCx6MxiL/8FM+jXRqMkxHKArndXw7qmn1ZI65D1TutEAKbMNq0SMA+kmfwIhb+
-         W2CVpNonSYfaw==
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-54c12009c30so586836247b3.9;
-        Tue, 18 Apr 2023 16:54:30 -0700 (PDT)
-X-Gm-Message-State: AAQBX9dKvoc84iZpVBM6bHaU7YHqGvUEU+chIXfM+nt6HbFUpPa7SODK
-        ltMlfvmfzX0AIaFzIY2ssrARQBigscdLQdxnVA==
-X-Google-Smtp-Source: AKy350Y084U1nwyKppbXIlL2RS/Z6Hww1cnVbHVDZ+rXFFjHyB6vawS8i6+IJtgSejhuf7P6xMbQltLxdQsq9hhBFGA=
-X-Received: by 2002:a0d:ca43:0:b0:552:a30e:c180 with SMTP id
- m64-20020a0dca43000000b00552a30ec180mr1638536ywd.25.1681862069580; Tue, 18
- Apr 2023 16:54:29 -0700 (PDT)
+        Tue, 18 Apr 2023 20:01:11 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9834C19
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 17:01:10 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id AF40C5C00D2;
+        Tue, 18 Apr 2023 20:01:08 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 18 Apr 2023 20:01:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1681862468; x=
+        1681948868; bh=4BY3h0MGaISpFWebjCDo3oYbjhhLl06wlbW9MqKaQ+I=; b=b
+        PS3JOUG6PWlj4rTL+8d3Y1eeFgiJM/NumqMiUfkkz8LYzBMPDiSaumIlC+HbySSN
+        VdbpxgkzLfmpM64sQRXMP+CvEqgIzQghURRT++1sgrUMgo8Wj5nYIUt1Z3WpJjdY
+        sWo65qybnZQqrHVjqhjgRMy+upDtiGdh1yGqbHAsoCBgEMGHCyvBuNg4qI23Kypw
+        rKlbhYjnYrMmA9fC7upfbbzeLXHp/Vkt3jsNfb3WRNnqfAZB/DEN7MIK6zw7Avco
+        /Eg13RFDcn4MGhI9DL6Wo/6V7L/MCZun80N9apTHZkCtzLHtvm5WCXY/Zn+RhO/r
+        wX69+3GefZfoz/0Ng4lOA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681862468; x=1681948868; bh=4BY3h0MGaISpF
+        WebjCDo3oYbjhhLl06wlbW9MqKaQ+I=; b=eOD9667srpbMck5IHRIPvPaNPQjG/
+        jFPAms1rHRc+Et4Bg5FVmoD8Inv9hNdpsLfmNurCEnOZ4I6Y0M/iykivnw2STt2G
+        /MzIlgO9RjYCNWq5hTOjh6FO67niHjkGYJdlHToQLBUg0ygy7vn6D7FMAxZxXsAK
+        VUDgYu8fcCtJUzlKRsx1ZiOrcbRVY/kxCgEGQmwZ/pwgulhKEsoe00ofeRWm0zxN
+        XGlilfxFHQDl8t04jcfATOYXAOAQRX9C7wzPT36cZ9w9kL7j8z7EXhqIuSmMyzEB
+        02yJ2/wB6WhcWQzbWYqE4T41mLggAx8ujhOuESaj92pgw8ldoJ45p4Lbg==
+X-ME-Sender: <xms:Qy8_ZMGz-rbF4u1OAWXriDRTfkrzsue1botgxrUMwiuvNSiLz_R--w>
+    <xme:Qy8_ZFULIIL9Hkj-FtFfzQWnJRBlGBDeBn6eXt0yzGTUpoNUlt1rMK7uAPrgSBXiu
+    nhxJ3KC75Zq9xIA7yk>
+X-ME-Received: <xmr:Qy8_ZGKJj1HXBk0SF09GF06gyzy2jonsqZC78pav5GAe0PuO0GDu_zPoRnodTryfSy91QA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdelledgfedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:Qy8_ZOH2xpbsafMDQQxtU7nyg5MRtle_mh61xDfPHNNihExMprdPQA>
+    <xmx:Qy8_ZCUINeYXFu7viWlZZEfzwfGBn5qs-9lIn-wRpUI3tnBFlr5X5Q>
+    <xmx:Qy8_ZBNS6ML0vh4zzOfzHmRP0ZWjbumymC7hu3im44rPrSLFOS1uQg>
+    <xmx:RC8_ZEKL8OmuWEIQsvIa03ZEOYRHuWGlBq8aUIgI0B0rDbkO50kYbQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 18 Apr 2023 20:01:07 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 8ED3810C351; Wed, 19 Apr 2023 03:01:05 +0300 (+03)
+Date:   Wed, 19 Apr 2023 03:01:05 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 03/26] mm: make pageblock_order 2M per default
+Message-ID: <20230419000105.matz43p6ihrqmado@box.shutemov.name>
+References: <20230418191313.268131-1-hannes@cmpxchg.org>
+ <20230418191313.268131-4-hannes@cmpxchg.org>
 MIME-Version: 1.0
-References: <20230129-ov2685-improvements-v4-0-e71985c5c848@z3ntu.xyz> <20230129-ov2685-improvements-v4-2-e71985c5c848@z3ntu.xyz>
-In-Reply-To: <20230129-ov2685-improvements-v4-2-e71985c5c848@z3ntu.xyz>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 18 Apr 2023 18:54:18 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLB37Y-V-8uWPdnc_YaActtQUhJArv50Rz8K_CF5cbNhw@mail.gmail.com>
-Message-ID: <CAL_JsqLB37Y-V-8uWPdnc_YaActtQUhJArv50Rz8K_CF5cbNhw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] media: dt-bindings: ov2685: convert to dtschema
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418191313.268131-4-hannes@cmpxchg.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 12:58=E2=80=AFPM Luca Weiss <luca@z3ntu.xyz> wrote:
->
-> Convert the text-based dt-bindings to yaml.
->
-> Changes from original txt:
-> * Take wording for various properties from other yaml bindings, this
->   removes e.g. volt amount from schema since it isn't really relevant
->   and the datasheet is a better source.
-> * Don't make reset-gpios a required property since it can be tied to
->   DOVDD instead.
->
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+On Tue, Apr 18, 2023 at 03:12:50PM -0400, Johannes Weiner wrote:
+> pageblock_order can be of various sizes, depending on configuration,
+> but the default is MAX_ORDER-1.
+
+Note that MAX_ORDER got redefined in -mm tree recently.
+
+> Given 4k pages, that comes out to
+> 4M. This is a large chunk for the allocator/reclaim/compaction to try
+> to keep grouped per migratetype. It's also unnecessary as the majority
+> of higher order allocations - THP and slab - are smaller than that.
+
+This seems way to x86-specific. Other arches have larger THP sizes. I
+believe 16M is common.
+
+Maybe define it as min(MAX_ORDER, PMD_ORDER)?
+
+> Before subsequent patches increase the effort that goes into
+> maintaining migratetype isolation, it's important to first set the
+> defrag block size to what's likely to have common consumers.
+> 
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 > ---
->  .../devicetree/bindings/media/i2c/ov2685.txt       |  41 ---------
->  .../devicetree/bindings/media/i2c/ovti,ov2685.yaml | 101 +++++++++++++++=
-++++++
->  MAINTAINERS                                        |   1 +
->  3 files changed, 102 insertions(+), 41 deletions(-)
+>  include/linux/pageblock-flags.h | 4 ++--
+>  mm/page_alloc.c                 | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/pageblock-flags.h b/include/linux/pageblock-flags.h
+> index 5f1ae07d724b..05b6811f8cee 100644
+> --- a/include/linux/pageblock-flags.h
+> +++ b/include/linux/pageblock-flags.h
+> @@ -47,8 +47,8 @@ extern unsigned int pageblock_order;
+>  
+>  #else /* CONFIG_HUGETLB_PAGE */
+>  
+> -/* If huge pages are not used, group by MAX_ORDER_NR_PAGES */
+> -#define pageblock_order		(MAX_ORDER-1)
+> +/* Manage fragmentation at the 2M level */
+> +#define pageblock_order		ilog2(2U << (20 - PAGE_SHIFT))
+>  
+>  #endif /* CONFIG_HUGETLB_PAGE */
+>  
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index ac03571e0532..5e04a69f6a26 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -7634,7 +7634,7 @@ static inline void setup_usemap(struct zone *zone) {}
+>  /* Initialise the number of pages represented by NR_PAGEBLOCK_BITS */
+>  void __init set_pageblock_order(void)
+>  {
+> -	unsigned int order = MAX_ORDER - 1;
+> +	unsigned int order = ilog2(2U << (20 - PAGE_SHIFT));
+>  
+>  	/* Check that pageblock_nr_pages has not already been setup */
+>  	if (pageblock_order)
+> -- 
+> 2.39.2
+> 
+> 
 
-Now warning in linux-next:
-
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/media/rockchi=
-p-isp1.example.dtb:
-camera@3c: port:endpoint:data-lanes: [[1]] is too short
-        From schema:
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/media/i2c/ovt=
-i,ov2685.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/media/i2c/ovt=
-i,ov2685.example.dtb:
-camera-sensor@3c: port:endpoint:data-lanes: [[1]] is too short
-        From schema:
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/media/i2c/ovt=
-i,ov2685.yaml
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
