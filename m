@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7D46E7357
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A5D6E7363
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 08:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbjDSGdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 02:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
+        id S231605AbjDSGgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 02:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbjDSGdh (ORCPT
+        with ESMTP id S231600AbjDSGgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 02:33:37 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103373A91
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:33:35 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33J3RJOg029283;
-        Wed, 19 Apr 2023 08:33:21 +0200
+        Wed, 19 Apr 2023 02:36:48 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF1355B5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 23:36:06 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33J3RSJs001612;
+        Wed, 19 Apr 2023 08:35:39 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=selector1;
- bh=a0RVjPGvpysGmWlyXSCna47YoJUj9XxG6nPGImDZEYA=;
- b=VmAmt6magGC8NPXgyiA5BUEjHaYu3egaY58FimfZUpadFCe9cJGOaVaWeknsSLRgdKNr
- 2FjP0/4azw5TZM8uG3S/bI1p5NulakcqIBmuoX+DRsztabZjODf68hspAtL6YEUcU+Qm
- 51g8QIAgZHAhjjFcGTUgVFwg7z3oEUmH2bhfQKHoDO0Gs1oiaHSdL0YMzJcxjcnbiVkW
- HfFdbMsotkIFJq64ANCtBWrw1u/JDwTUoWZTy20Xu0Y/Ku8kZnPrTGAvRDjZYF2lOfyN
- GLNzHEafNZM+RsRsVeEw5/10ADT0ugxboH33L1xMKVeHxl/bfPTwsEzAtX5y1qXcCcS3 rg== 
+ bh=nfvufc35zjDb7jJXYkjh00hZeWTjRTL12FY73FXZ6ks=;
+ b=jggeKV14ZhJD+/ZL160DP8FmVWuWcTTAifvo1kyBZ8YkMaiA8MCp/JzLd+UhnoeZYESA
+ hxZ4F4THJkjCba8O6KvCTIBu0pStwl3Fq9JjIOlXXTAAS3enym4+PvXXPeiTRCQ1m4ln
+ yd+j9jLTtbWOupegZmgRgXCFSUHifVeGgFgKX7f1Lr4AaRHB5cVWF7y1S5nUlezLWfV4
+ CPHgPW2oYygd3muaADJszhhAcNPzTvJiTWrAV1VniFTMJATdH45L4ppL//nUGhG4kv+Z
+ D23NtopzCoI+k8QthtVC4LPwCxrXw3iXeWw89OV/0TGRsRMu8ehqmaESBjUhIX3NsIwu Cg== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3q1qf7f6ax-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3q1rq2e5an-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 08:33:21 +0200
+        Wed, 19 Apr 2023 08:35:39 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 52197100034;
-        Wed, 19 Apr 2023 08:33:21 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7362F100034;
+        Wed, 19 Apr 2023 08:34:01 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3629720FA4B;
-        Wed, 19 Apr 2023 08:33:21 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6887620FA4B;
+        Wed, 19 Apr 2023 08:34:01 +0200 (CEST)
 Received: from [10.201.21.26] (10.201.21.26) by SHFDAG1NODE1.st.com
  (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 19 Apr
- 2023 08:33:20 +0200
-Message-ID: <c8c9a22f-3b35-9c4e-21bd-b9695866be32@foss.st.com>
-Date:   Wed, 19 Apr 2023 08:33:20 +0200
+ 2023 08:34:00 +0200
+Message-ID: <2f1c0da9-1f98-9cfc-b4e6-ba254aa2b30d@foss.st.com>
+Date:   Wed, 19 Apr 2023 08:33:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH] MAINTAINERS: Update Alain Volmat's email address for
- drm/sti
+Subject: Re: [PATCH] irqchip/st: remove stih415/stih416 and stid127 platforms
+ support
 Content-Language: en-US
-To:     Alain Volmat <avolmat@me.com>, <philippe.cornu@foss.st.com>,
-        <arnd@arnd.de>
-CC:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230416202747.62479-1-avolmat@me.com>
+To:     Alain Volmat <avolmat@me.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+References: <20230416190501.18737-1-avolmat@me.com>
 From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <20230416202747.62479-1-avolmat@me.com>
+In-Reply-To: <20230416190501.18737-1-avolmat@me.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.201.21.26]
@@ -75,28 +76,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Alain
 
-On 4/16/23 22:27, Alain Volmat wrote:
-> Update my email address for maintainer of the STi DRM driver.
+On 4/16/23 21:05, Alain Volmat wrote:
+> Remove support for the already no more supported stih415 and stih416
+> platforms.  Remove as well the stid127 platform which never made it
+> up to the kernel.
 > 
 > Signed-off-by: Alain Volmat <avolmat@me.com>
 > ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Patch previously sent via serie: https://lore.kernel.org/all/20230209091659.1409-4-avolmat@me.com/
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 0e64787aace8..3cec7ad72389 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6952,7 +6952,7 @@ F:	Documentation/devicetree/bindings/display/rockchip/
->  F:	drivers/gpu/drm/rockchip/
+>  drivers/irqchip/irq-st.c | 15 ---------------
+>  1 file changed, 15 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-st.c b/drivers/irqchip/irq-st.c
+> index 1b83512b29c6..819a12297b58 100644
+> --- a/drivers/irqchip/irq-st.c
+> +++ b/drivers/irqchip/irq-st.c
+> @@ -15,10 +15,7 @@
+>  #include <linux/regmap.h>
+>  #include <linux/slab.h>
 >  
->  DRM DRIVERS FOR STI
-> -M:	Alain Volmat <alain.volmat@foss.st.com>
-> +M:	Alain Volmat <avolmat@me.com>
->  L:	dri-devel@lists.freedesktop.org
->  S:	Maintained
->  T:	git git://anongit.freedesktop.org/drm/drm-misc
-
+> -#define STIH415_SYSCFG_642		0x0a8
+> -#define STIH416_SYSCFG_7543		0x87c
+>  #define STIH407_SYSCFG_5102		0x198
+> -#define STID127_SYSCFG_734		0x088
+>  
+>  #define ST_A9_IRQ_MASK			0x001FFFFF
+>  #define ST_A9_IRQ_MAX_CHANS		2
+> @@ -44,22 +41,10 @@ struct st_irq_syscfg {
+>  };
+>  
+>  static const struct of_device_id st_irq_syscfg_match[] = {
+> -	{
+> -		.compatible = "st,stih415-irq-syscfg",
+> -		.data = (void *)STIH415_SYSCFG_642,
+> -	},
+> -	{
+> -		.compatible = "st,stih416-irq-syscfg",
+> -		.data = (void *)STIH416_SYSCFG_7543,
+> -	},
+>  	{
+>  		.compatible = "st,stih407-irq-syscfg",
+>  		.data = (void *)STIH407_SYSCFG_5102,
+>  	},
+> -	{
+> -		.compatible = "st,stid127-irq-syscfg",
+> -		.data = (void *)STID127_SYSCFG_734,
+> -	},
+>  	{}
+>  };
+>  
 Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
 Thanks
