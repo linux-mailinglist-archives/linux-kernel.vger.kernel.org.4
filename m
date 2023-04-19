@@ -2,189 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A796E8142
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619286E8145
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 20:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjDSS36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 14:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        id S230052AbjDSSa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 14:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjDSS34 (ORCPT
+        with ESMTP id S229632AbjDSSa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 14:29:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4862D70;
-        Wed, 19 Apr 2023 11:29:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA5BF63999;
-        Wed, 19 Apr 2023 18:29:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 526D2C433D2;
-        Wed, 19 Apr 2023 18:29:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681928994;
-        bh=vMXfRaz6Lvtcg+eyS+REMKN/wpTcy7NYyfkAUOR0zJg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MjGLzzXjq3WtVQOhNBbkXl6tYCYtPzO7X4nxU4kRLw1P2i7DNLZMHGATgULoqm3nh
-         w39+dRh5X6znik+W2DQw3jNpX9NOmBuh2kcSemVX0FQgnpmtDPVuLBRrVuUMr1L2rp
-         rVz9e09h+sUvI8vvmV31wNWfqW7ZhNW8ruqcw9VqsjB8s9x2+tq7qWqNxcfXgo2D6e
-         RRQ3yOAnfaoMuIKJ1CvsjXCZ1Oq6i50w2SC1KazzvkRHIEG9QXLP/guBTV56kmY1m+
-         IPktL+tnHi8Q3VgoSq5K8yId0fDO/QIJ8EmFHNc+YKV5kcd4ieOj7xvv8bY7Ei4ri8
-         PYOONAfsqpnbg==
-Date:   Wed, 19 Apr 2023 19:29:48 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, vkoul@kernel.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [RESEND v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
-Message-ID: <20230419-labored-camper-644d51a7ca96@spud>
-References: <20230419035646.43702-1-changhuang.liang@starfivetech.com>
- <20230419035646.43702-2-changhuang.liang@starfivetech.com>
+        Wed, 19 Apr 2023 14:30:26 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 576B844AE;
+        Wed, 19 Apr 2023 11:30:23 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:38904.1890619074
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id E6CE6102AED;
+        Thu, 20 Apr 2023 02:30:18 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 009c50c0d4b44fce9c934c2466f12ece for tzimmermann@suse.de;
+        Thu, 20 Apr 2023 02:30:21 CST
+X-Transaction-ID: 009c50c0d4b44fce9c934c2466f12ece
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <867ab1ec-4ef9-3d91-2bfb-528cf304513a@189.cn>
+Date:   Thu, 20 Apr 2023 02:30:17 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="WQONS9/NxbuziPoO"
-Content-Disposition: inline
-In-Reply-To: <20230419035646.43702-2-changhuang.liang@starfivetech.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3] drm/fbdev-generic: prohibit potential out-of-bounds
+ access
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>, Li Yi <liyi@loongson.cn>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230417113219.1354078-1-suijingfeng@loongson.cn>
+ <ZD5Vgx9Txaiz7Bun@phenom.ffwll.local>
+ <139c9398-488d-df19-9ae2-2b4b47ef64f4@189.cn>
+ <86a8b262-cbf2-b75f-9972-491f557edf74@189.cn>
+ <CAKMK7uE-azFT02Sp2FDfMGTc57eYJEn8iM8Wk1mt5ucPs1qM-w@mail.gmail.com>
+ <59dff860-9d1f-ec66-cd87-28693aa1fad2@suse.de>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <59dff860-9d1f-ec66-cd87-28693aa1fad2@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---WQONS9/NxbuziPoO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2023/4/19 23:46, Thomas Zimmermann wrote:
+> Hi
+>
+> Am 19.04.23 um 17:09 schrieb Daniel Vetter:
+>> On Tue, 18 Apr 2023 at 20:16, Sui Jingfeng <15330273260@189.cn> wrote:
+>>>
+>>> Hi,
+>>>
+>>> On 2023/4/19 01:52, Sui Jingfeng wrote:
+>>>> Hi,
+>>>>
+>>>> On 2023/4/18 16:32, Daniel Vetter wrote:
+>>>>> On Mon, Apr 17, 2023 at 07:32:19PM +0800, Sui Jingfeng wrote:
+>>>>>> The fbdev test of IGT may write after EOF, which lead to 
+>>>>>> out-of-bound
+>>>>>> access for the drm drivers using fbdev-generic. For example, on a 
+>>>>>> x86
+>>>>>> + aspeed bmc card platform, with a 1680x1050 resolution display,
+>>>>>> running
+>>>>>> fbdev test if IGT will cause the linux kernel hang with the 
+>>>>>> following
+>>>>>> call trace:
+>>>>>>
+>>>>>>     Oops: 0000 [#1] PREEMPT SMP PTI
+>>>>>>     [IGT] fbdev: starting subtest eof
+>>>>>>     Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
+>>>>>>     [IGT] fbdev: starting subtest nullptr
+>>>>>>
+>>>>>>     RIP: 0010:memcpy_erms+0xa/0x20
+>>>>>>     RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
+>>>>>>     RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 
+>>>>>> 00000000000014c0
+>>>>>>     RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: 
+>>>>>> ffffa17d4eb80000
+>>>>>>     RBP: ffffa17d40167e20 R08: 0000000000000000 R09: 
+>>>>>> ffff89522ecff8c0
+>>>>>>     R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: 
+>>>>>> ffffa17d4eb7fa80
+>>>>>>     R13: 0000000000001a40 R14: 000000000000041a R15: 
+>>>>>> ffffa17d40167e30
+>>>>>>     FS:  0000000000000000(0000) GS:ffff895257380000(0000)
+>>>>>> knlGS:0000000000000000
+>>>>>>     CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>>>>     CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 
+>>>>>> 00000000001706e0
+>>>>>>     Call Trace:
+>>>>>>      <TASK>
+>>>>>>      ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 
+>>>>>> [drm_kms_helper]
+>>>>>>      drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
+>>>>>>      process_one_work+0x21f/0x430
+>>>>>>      worker_thread+0x4e/0x3c0
+>>>>>>      ? __pfx_worker_thread+0x10/0x10
+>>>>>>      kthread+0xf4/0x120
+>>>>>>      ? __pfx_kthread+0x10/0x10
+>>>>>>      ret_from_fork+0x2c/0x50
+>>>>>>      </TASK>
+>>>>>>     CR2: ffffa17d40e0b000
+>>>>>>     ---[ end trace 0000000000000000 ]---
+>>>>>>
+>>>>>> The direct reason is that damage rectange computed by
+>>>>>> drm_fb_helper_memory_range_to_clip() does not guaranteed to be
+>>>>>> in-bound.
+>>>>>> It is already results in workaround code populate to elsewhere. 
+>>>>>> Another
+>>>>>> reason is that exposing a larger buffer size than the actual needed
+>>>>>> help
+>>>>>> to trigger this bug intrinsic in 
+>>>>>> drm_fb_helper_memory_range_to_clip().
+>>>>>>
+>>>>>> Others fbdev emulation solutions write to the GEM buffer 
+>>>>>> directly, they
+>>>>>> won't reproduce this bug because the .fb_dirty function callback 
+>>>>>> do not
+>>>>>> being hooked, so no chance is given to
+>>>>>> drm_fb_helper_memory_range_to_clip()
+>>>>>> to generate a out-of-bound when drm_fb_helper_sys_write() is called.
+>>>>>>
+>>>>>> This patch break the trigger condition of this bug by shrinking the
+>>>>>> shadow
+>>>>>> buffer size to sizes->surface_height * buffer->fb->pitches[0].
+>>>>>>
+>>>>>> Fixes: '8fbc9af55de0 ("drm/fbdev-generic: Set screen size to size of
+>>>>>> GEM
+>>>>>> buffer")'
+>>>>>>
+>>>>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>>>>>> ---
+>>>>>>    drivers/gpu/drm/drm_fbdev_generic.c | 2 +-
+>>>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>>> b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>>> index 8e5148bf40bb..b057cfbba938 100644
+>>>>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>>> @@ -94,7 +94,7 @@ static int
+>>>>>> drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper *fb_helper,
+>>>>>>        fb_helper->buffer = buffer;
+>>>>>>        fb_helper->fb = buffer->fb;
+>>>>>>    -    screen_size = buffer->gem->size;
+>>>>>> +    screen_size = sizes->surface_height * buffer->fb->pitches[0];
+>>>>> So I read core some more and stumbled over 
+>>>>> drm_fb_helper_deferred_io().
+>>>>> Which has all the code and comments about this, including limiting.
+>>>>>
+>>>>> I think it would be clearer if we fix the issue there, instead of
+>>>>> passing
+>>>>> limits around in obscure places that then again get broken?
+>>>>
+>>>> No, it is more obscure doing that way...
+>>>>
+>>>>
+>>>> As the size of the shadow screen buffer will be exposed to userspace.
+>>>>
+>>>> The size 'helper->fb->height * helper->fb->pitches[0]' is a
+>>>> exactly(best) fit,
+>>>>
+>>>> You are guaranteed to waste at lease one byte by increasing one byte,
+>>>>
+>>>> and can not store all pixels by decreasing one byte (In the case where
+>>>> `helper->fb->pitches[0] = helper->fb->width * 4`).
+>>>>
+>>>> It implicitly tell the userspace do not go beyond that boundary.
+>>>>
+>>>> although userspace program can still choose to write  after EOF,
+>>>>
+>>>> But it is for test purpose, to test the kernel if it can return a
+>>>> -EFBIG or not.
+>>>>
+>>>>> The thing is,
+>>>>> Thomas both authored the limit checks in 
+>>>>> drm_fb_helper_deferred_io() and
+>>>>> the patch which broken them again, so clearly this isn't very
+>>>>> obvious. I'm
+>>>>> thinking of something like this:
+>>>>>
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/drm_fb_helper.c
+>>>>> b/drivers/gpu/drm/drm_fb_helper.c
+>>>>> index ef4eb8b12766..726dab67c359 100644
+>>>>> --- a/drivers/gpu/drm/drm_fb_helper.c
+>>>>> +++ b/drivers/gpu/drm/drm_fb_helper.c
+>>>>> @@ -697,10 +697,7 @@ void drm_fb_helper_deferred_io(struct fb_info
+>>>>> *info, struct list_head *pagerefli
+>>>>>         * of the screen and account for non-existing scanlines. 
+>>>>> Hence,
+>>>>>         * keep the covered memory area within the screen buffer.
+>>>>>         */
+>>>>> -    if (info->screen_size)
+>>>>> -        total_size = info->screen_size;
+>>>>> -    else
+>>>>> -        total_size = info->fix.smem_len;
+>>>>> +    total_size = helper->fb->height * helper->fb->pitches[0];
+>>>>
+>>>> This is just to mitigate the mistakes already has been made,
+>>>>
+>>>> because it  do not do a good splitting between the *clip* part and the
+>>>> *damage update* part.
+>>>>
+>>>> An ideal clipping do not obscure its updating backend with a
+>>>> out-of-bound damage rectangle.
+>>>>
+>>>> Why did the drm_fb_helper_memory_range_to_clip() can not do a good job
+>>>> in all case
+>>>>
+>>>> to pass its backend a always meaningful damage rect ?
+>>>>
+>>>>>        max_off = min(max_off, total_size);
+>>>>>          if (min_off < max_off) {
+>>>>>
+>>>>>
+>>>>> I think that would make it utmost clear on what we're doing and why.
+>>>>> Otherwise we're just going to re-create the same bug again, like 
+>>>>> we've
+>>>>> done already :-)
+>>>>
+>>>> No, we create no bugs, we fix one.
+>>>>
+>>>> Thanks.
+>>>>
+>>> But honestly I do not have strong feel toward this, I just type what 
+>>> I'm
+>>> understand without seeing you resend a V3.
+>>>
+>>> It's OK in overall,  I will help to test this tomorrow.  :-)
+>>
+>> Apologies for making you jump around all the time and doing different
+>> versions of the same bugfix :-/
+>>
+>> I think this one here is ok to merge, I just thought when looking at
+>> the history that we revert the exact patch without any other changes
+>> or comments, and usually that means someone will come up with the same
+>> cleanup idea again, and then we'll have a bug again. So maybe a
+>> comment or a WARN_ON or something else would be good.
+>>
+>> I guess we could also do your patch, but put a WARN_ON that the
+>> computed total_size is never bigger than the drm_fb size into
+>> drm_fb_helper_deferred_io()? That would also make sure that this bug
+>> doesn't get resurrected again.
+>
+> We'd have to put this test into drm_fbdev_generic.c. Otherwise we'll 
+> break i915, which also uses deferred I/O, but without shadow 
+> buffering.. Maybe test in drm_fbdev_generic_helper_fb_dirty() if the 
+> clip rectangle extends the framebuffer size.
+>
+Yeah, i915 carve out part of system ram as video memory,  it is also 
+called stolen memory.
 
-Hey Changhuang, DT/PHY folks,
+I just learned it recently from i915 related document.
 
-On Tue, Apr 18, 2023 at 08:56:41PM -0700, Changhuang Liang wrote:
-> Add AON PMU for StarFive JH7110 SoC, it can be used to turn on/off DPHY
-> rx/tx power switch, and it don't need the properties of reg and
-> interrupts.
 
-Putting this here since the DT guys are more likely to see it this way..
-Given how the implementation of the code driving this new
-power-controller and the code driving the existing one are rather
-different (you've basically re-written the entire driver in this series),
-should the dphy driver implement its own power-controller?
+But from what I'm understanding, It's still RAM in its nature, just 
+reserved by firmware.
 
-I know originally Changuang had tried something along those lines:
-https://lore.kernel.org/linux-riscv/5dc4ddc2-9d15-ebb2-38bc-8a544ca67e0d@st=
-arfivetech.com/
+Its bandwidth is extremely high, why not write to the GEM buffer directly?
 
-I see that that was shut down pretty much, partly due to the
-non-standard property, hence this series adding the dphy power domain to
-the existing driver.
+why deferred I/O pay off?
 
-If it was done by looking up the pmu with a
-of_find_compatible_node(NULL, "power-controller", "starfive,jh7110-aon-pmu")
-type thing, would that make sense? Although, maybe that is not a
-question for you, and this series may actually have been better entirely
-bundled with the dphy series so the whole thing can be reviewed as a
-unit. I've added=20
 
-IOW, don't change this patch, or the dts patch, but move all of the
-code back into the phy driver..
-
-Sorry for not asking this sooner Changhuang,
-Conor.
-
-(hopefully this didn't get sent twice, mutt complained of a bad email
-addr during sending the first time)
-
->=20
-> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
-> ---
->  .../bindings/power/starfive,jh7110-pmu.yaml       | 15 +++++++++++++--
->  include/dt-bindings/power/starfive,jh7110-pmu.h   |  3 +++
->  2 files changed, 16 insertions(+), 2 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/power/starfive,jh7110-pmu.=
-yaml b/Documentation/devicetree/bindings/power/starfive,jh7110-pmu.yaml
-> index 98eb8b4110e7..c50507c38e14 100644
-> --- a/Documentation/devicetree/bindings/power/starfive,jh7110-pmu.yaml
-> +++ b/Documentation/devicetree/bindings/power/starfive,jh7110-pmu.yaml
-> @@ -8,6 +8,7 @@ title: StarFive JH7110 Power Management Unit
-> =20
->  maintainers:
->    - Walker Chen <walker.chen@starfivetech.com>
-> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
-> =20
->  description: |
->    StarFive JH7110 SoC includes support for multiple power domains which =
-can be
-> @@ -17,6 +18,7 @@ properties:
->    compatible:
->      enum:
->        - starfive,jh7110-pmu
-> +      - starfive,jh7110-aon-pmu
-> =20
->    reg:
->      maxItems: 1
-> @@ -29,10 +31,19 @@ properties:
-> =20
->  required:
->    - compatible
-> -  - reg
-> -  - interrupts
->    - "#power-domain-cells"
-> =20
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: starfive,jh7110-pmu
-> +    then:
-> +      required:
-> +        - reg
-> +        - interrupts
-> +
->  additionalProperties: false
-> =20
->  examples:
-> diff --git a/include/dt-bindings/power/starfive,jh7110-pmu.h b/include/dt=
--bindings/power/starfive,jh7110-pmu.h
-> index 132bfe401fc8..0bfd6700c144 100644
-> --- a/include/dt-bindings/power/starfive,jh7110-pmu.h
-> +++ b/include/dt-bindings/power/starfive,jh7110-pmu.h
-> @@ -14,4 +14,7 @@
->  #define JH7110_PD_ISP		5
->  #define JH7110_PD_VENC		6
-> =20
-> +#define JH7110_PD_DPHY_TX	0
-> +#define JH7110_PD_DPHY_RX	1
-> +
->  #endif
-> --=20
-> 2.25.1
->=20
-
---WQONS9/NxbuziPoO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEAzHAAKCRB4tDGHoIJi
-0u+LAQDoC/J42sKvykFP5qu+R/A4l+E/risoiAZPqG87amq8hAEAu8g9zCq2G8zr
-mxK73nG/PSMv3yXlgoY53l0N+kWSgw8=
-=pKPl
------END PGP SIGNATURE-----
-
---WQONS9/NxbuziPoO--
+> Best regards
+> Thomas
+>
+>> -Daniel
+>
