@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6297A6E8481
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884BF6E8483
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 00:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjDSWR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 18:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41200 "EHLO
+        id S229721AbjDSWSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 18:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjDSWRk (ORCPT
+        with ESMTP id S231347AbjDSWRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 18:17:40 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C821718
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:17:39 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-524b02cc166so64221a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:17:39 -0700 (PDT)
+        Wed, 19 Apr 2023 18:17:47 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E994C06
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:17:41 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52091c58109so248384a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 15:17:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942658; x=1684534658;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1681942660; x=1684534660;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ur77tHINwX+qbUdlSGnRNMwUnwDaAVVcewhgSBhFUx0=;
-        b=c18b6HjhB6xZTijYQX2nimbdoBlIXr9qBNm2sHraX79sumJ2mnHyyAF4iUwGRyqfEL
-         BhG5ZneVkTF9bRo5tCCiGvsNVcpWUKCNmPy0vd1ZqJvuNoQxq1qR6f9cnB7vi+C19Hpt
-         5xUpfFR1k+6B8FbGHFbFXaZtvW/H2sqgRRevhtG9hluShqAQzpot/WQd/qsXuDNgOnpx
-         pk3tmGjn1iUOEgqZ0Ek3rQdbQ5Ky98ttJ9TAom0YVfPe7HTavUoUAmMw/LDuEdRosyc4
-         CHRnQ9rCEYyXJCmVNUHBEGkpIQ2ljog3inmdpJcdTAOUNGgtwJP32aGziItUDdOFTV+8
-         kKew==
+        bh=YhmpWINWx68bxRl5iJymJMR8koMWZ3k0vMo650bJZTU=;
+        b=ub984HbNYnZCS4cYMVeGAOsRXSkOK2FPD4icQUHZlHix4aKpIqyXeuVfQOuD1xHj9v
+         vsKnnlhxdpBXKMy0/ROqMjpZOfEnWXQbDuHp5T383/Vm/+FQmuzlPZpnUGhvlMFFe7rt
+         8HkCX+VPliU1MmnP1Ss2H9IInj7b1S/ZGGfNasP3k5lYx2EUDdBQbfa+gCsPCMfJr4EM
+         doY/zh1GbMfgfCGSFTcIGG6F7Q7zICkSwwBAXaUPKIzJ8MoIZKG1DSX+I00o1o0F5UZi
+         WiH33xlJMuVTKRgbJ22ofZQJq8VWsCC+jXY14LMcf4NAwgljQxOy08LcxeWTlGXumKfv
+         zGJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681942658; x=1684534658;
+        d=1e100.net; s=20221208; t=1681942660; x=1684534660;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ur77tHINwX+qbUdlSGnRNMwUnwDaAVVcewhgSBhFUx0=;
-        b=fLMJ2VtdZliSRcJ4JmEFRare4caZIk5hSSto2Evw/0ZbLPXL7Da8iyHG4fsqO6OzkQ
-         3Da4immakuz1Ee5JO2ASqqh1Qy4iUD9b8HR700H7AhObf16GOsONzULnQybAzFgwLyoQ
-         6kxw4ZEUG8HYqySAIT20K7L4D0niAsZWf0k/BsZ0IQomhWhbfxhFiuPA7EO/xCCuEb39
-         gdQWXcPIqqf2zIOhwpj33Li4g0Yi3PpUtO86fYmz4TB3kq7uTVlWi2QqfcZazlana83D
-         US9iAkunXCHFwCW8sFNJCLB0TfDzQZpd6G7ucs8qfUYBsrH1xs/mv0z0kv0zNy35y3ga
-         wpvw==
-X-Gm-Message-State: AAQBX9dpS0gaVQ+IEjdAg3AO000k6RvWE5BAjbaFNqrj42N0yICPjFmQ
-        VQEUruW6hq7+DF5xH5DpHgQVnW8ptufUoEYYq8Q=
-X-Google-Smtp-Source: AKy350ZqgGYrfhLdHBkYHvd+cLv1LSY5KY8FQdwstau4aKvHx0NnJWKbJ8fq3mAaGG3s8B2dSOXS2Q==
-X-Received: by 2002:a17:903:1210:b0:1a6:4a64:4d27 with SMTP id l16-20020a170903121000b001a64a644d27mr7782580plh.40.1681942658444;
-        Wed, 19 Apr 2023 15:17:38 -0700 (PDT)
+        bh=YhmpWINWx68bxRl5iJymJMR8koMWZ3k0vMo650bJZTU=;
+        b=AqC5ig8I/M8A1ppZkvP5Xvo/Vv+DdhmTySG/J7vcYukAWJqu/VkAYMZ/o5UZi03iop
+         LTrKgv5llHDanUCG9aISnRdHri1bwM3+QTXO6uwWlVy59Srhs7O10euqBVFRUs2IWYgI
+         M2Zxk+CoNYeZYtJYrgyqgY4pzUPveUvpNzlyMixBoQFSOYz22uLJn+tHPPPuNv8vHNAp
+         dGReS2Y4nGnMep6MZFgOeCaXWTXPh4Bv2NdHo3GsCLveZDFkPQQbvdNtBlrQpmlL8Zi7
+         sGw3EbdAnVpH1UmE/1m06BtLOxTTjR1deHNty6KzGefhheGRK6Ib2P4KRcx4cAxLAJg6
+         Vacw==
+X-Gm-Message-State: AAQBX9ehIm53tdnZpXalxn83eGZ9Pq6cQ+g/7pwZe6j9FWGsv+nAkGH7
+        sTlS2z9rbTUBysb1mkRVtB5OC8FoatvXHb8zjy0=
+X-Google-Smtp-Source: AKy350b9J0w/WoMpaq+FxHZfAsQ/ItbJjVOrBVDU6LQmeWRXpZ0GrubHeMgcOdfazZVEwzQcIEKGsA==
+X-Received: by 2002:a17:90a:f696:b0:246:a782:d94 with SMTP id cl22-20020a17090af69600b00246a7820d94mr4315223pjb.7.1681942660612;
+        Wed, 19 Apr 2023 15:17:40 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.17.36
+        by smtp.gmail.com with ESMTPSA id jn11-20020a170903050b00b00196807b5189sm11619190plb.292.2023.04.19.15.17.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 15:17:38 -0700 (PDT)
+        Wed, 19 Apr 2023 15:17:40 -0700 (PDT)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Atish Patra <atishp@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
@@ -76,9 +76,9 @@ Cc:     Atish Patra <atishp@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Rajnesh Kanwal <rkanwal@rivosinc.com>,
         Uladzislau Rezki <urezki@gmail.com>
-Subject: [RFC 04/48] RISC-V: KVM: Add a helper function to get pgd size
-Date:   Wed, 19 Apr 2023 15:16:32 -0700
-Message-Id: <20230419221716.3603068-5-atishp@rivosinc.com>
+Subject: [RFC 05/48] RISC-V: Add COVH SBI extensions definitions
+Date:   Wed, 19 Apr 2023 15:16:33 -0700
+Message-Id: <20230419221716.3603068-6-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230419221716.3603068-1-atishp@rivosinc.com>
 References: <20230419221716.3603068-1-atishp@rivosinc.com>
@@ -94,41 +94,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The cove support will require to find out the pgd size to be used for
-the gstage page table directory. Export the value via an additional
-helper.
+RISC-V Confidential Virtualization Extension(COVE) specification defines
+following 3 SBI extensions.
+
+COVH (Host side interface)
+COVG (Guest side interface)
+COVI (Interrupt management interface)
+
+Few acronyms introduced in this patch:
+
+TSM - TEE Security Manager
+TVM - TEE VM
+
+This patch adds the definitions for COVH extension only.
 
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/include/asm/kvm_host.h | 1 +
- arch/riscv/kvm/mmu.c              | 5 +++++
- 2 files changed, 6 insertions(+)
+ arch/riscv/include/asm/sbi.h | 61 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-index 8714325..63c46af 100644
---- a/arch/riscv/include/asm/kvm_host.h
-+++ b/arch/riscv/include/asm/kvm_host.h
-@@ -313,6 +313,7 @@ void kvm_riscv_gstage_update_hgatp(struct kvm_vcpu *vcpu);
- void __init kvm_riscv_gstage_mode_detect(void);
- unsigned long __init kvm_riscv_gstage_mode(void);
- int kvm_riscv_gstage_gpa_bits(void);
-+unsigned long kvm_riscv_gstage_pgd_size(void);
+diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+index 62d00c7..c5a5526 100644
+--- a/arch/riscv/include/asm/sbi.h
++++ b/arch/riscv/include/asm/sbi.h
+@@ -32,6 +32,7 @@ enum sbi_ext_id {
+ 	SBI_EXT_PMU = 0x504D55,
+ 	SBI_EXT_DBCN = 0x4442434E,
+ 	SBI_EXT_NACL = 0x4E41434C,
++	SBI_EXT_COVH = 0x434F5648,
  
- void __init kvm_riscv_gstage_vmid_detect(void);
- unsigned long kvm_riscv_gstage_vmid_bits(void);
-diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-index f0fff56..6b037f7 100644
---- a/arch/riscv/kvm/mmu.c
-+++ b/arch/riscv/kvm/mmu.c
-@@ -797,3 +797,8 @@ int kvm_riscv_gstage_gpa_bits(void)
- {
- 	return gstage_gpa_bits;
- }
+ 	/* Experimentals extensions must lie within this range */
+ 	SBI_EXT_EXPERIMENTAL_START = 0x08000000,
+@@ -348,6 +349,66 @@ enum sbi_ext_nacl_feature {
+ #define SBI_NACL_SHMEM_SRET_X(__i)		((__riscv_xlen / 8) * (__i))
+ #define SBI_NACL_SHMEM_SRET_X_LAST		31
+ 
++/* SBI COVH extension data structures */
++enum sbi_ext_covh_fid {
++	SBI_EXT_COVH_TSM_GET_INFO = 0,
++	SBI_EXT_COVH_TSM_CONVERT_PAGES,
++	SBI_EXT_COVH_TSM_RECLAIM_PAGES,
++	SBI_EXT_COVH_TSM_INITIATE_FENCE,
++	SBI_EXT_COVH_TSM_LOCAL_FENCE,
++	SBI_EXT_COVH_CREATE_TVM,
++	SBI_EXT_COVH_FINALIZE_TVM,
++	SBI_EXT_COVH_DESTROY_TVM,
++	SBI_EXT_COVH_TVM_ADD_MEMORY_REGION,
++	SBI_EXT_COVH_TVM_ADD_PGT_PAGES,
++	SBI_EXT_COVH_TVM_ADD_MEASURED_PAGES,
++	SBI_EXT_COVH_TVM_ADD_ZERO_PAGES,
++	SBI_EXT_COVH_TVM_ADD_SHARED_PAGES,
++	SBI_EXT_COVH_TVM_CREATE_VCPU,
++	SBI_EXT_COVH_TVM_VCPU_RUN,
++	SBI_EXT_COVH_TVM_INITIATE_FENCE,
++};
 +
-+unsigned long kvm_riscv_gstage_pgd_size(void)
-+{
-+	return gstage_pgd_size;
-+}
++enum sbi_cove_page_type {
++	SBI_COVE_PAGE_4K,
++	SBI_COVE_PAGE_2MB,
++	SBI_COVE_PAGE_1GB,
++	SBI_COVE_PAGE_512GB,
++};
++
++enum sbi_cove_tsm_state {
++	/* TSM has not been loaded yet */
++	TSM_NOT_LOADED,
++	/* TSM has been loaded but not initialized yet */
++	TSM_LOADED,
++	/* TSM has been initialized and ready to run */
++	TSM_READY,
++};
++
++struct sbi_cove_tsm_info {
++	/* Current state of the TSM */
++	enum sbi_cove_tsm_state tstate;
++
++	/* Version of the loaded TSM */
++	uint32_t version;
++
++	/* Number of 4K pages required per TVM */
++	unsigned long tvm_pages_needed;
++
++	/* Maximum VCPUs supported per TVM */
++	unsigned long tvm_max_vcpus;
++
++	/* Number of 4K pages each vcpu per TVM */
++	unsigned long tvcpu_pages_needed;
++};
++
++struct sbi_cove_tvm_create_params {
++	/* Root page directory for TVM's page table management */
++	unsigned long tvm_page_directory_addr;
++	/* Confidential memory address used to store TVM state information. Must be page aligned */
++	unsigned long tvm_state_addr;
++};
++
+ #define SBI_SPEC_VERSION_DEFAULT	0x1
+ #define SBI_SPEC_VERSION_MAJOR_SHIFT	24
+ #define SBI_SPEC_VERSION_MAJOR_MASK	0x7f
 -- 
 2.25.1
 
