@@ -2,162 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C156E7739
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B666E7742
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbjDSKJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 06:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
+        id S232539AbjDSKQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 06:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbjDSKJ2 (ORCPT
+        with ESMTP id S231618AbjDSKQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 06:09:28 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3164161B3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:09:22 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33JA89Nm027920;
-        Wed, 19 Apr 2023 10:09:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=LLS0pJQeMDVHzZ1pRWUSOdu0Lny2cku9AQMDCdPgS80=;
- b=YjIYzAQS6Jes7zHiobkm7f/dYzVDn5LRG4gkCpXAlJd+LuZ0mByLo13dCIPS+jGWxXpL
- VkR8+q6eedwoTYpro46uoGA67y5eyExS+Kzg/nxUxFODMEk5RxFxE3qXeCDTwm0yihhN
- wmGG0vY9IGXzNHL9bGvHs602LYP+aUhG+Ifaag5eGfXd4uH856v+NxSbxTqgB9iO9j5n
- +O5Qz3VcEfflBgUGmrBy7agGJ4vK98CyyuZystIbm9FC12obdK705HqD6HTHZOl9KDW7
- 8UebpjXTs6kvNOvD10QGcKBcEpSleyQUh1qfMpi2lMKgRAA2xAwlh8FLIqFCjfJM6Rek ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q28tyse7c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 10:09:07 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33JA7JJS033082;
-        Wed, 19 Apr 2023 10:09:07 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q28tyse35-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 10:09:06 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33J3PLsR012853;
-        Wed, 19 Apr 2023 10:09:01 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3pyk6fj600-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 10:09:01 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33JA8xMd17564182
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Apr 2023 10:08:59 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7C2FD20040;
-        Wed, 19 Apr 2023 10:08:59 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2700F2004D;
-        Wed, 19 Apr 2023 10:08:56 +0000 (GMT)
-Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.42.198])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed, 19 Apr 2023 10:08:55 +0000 (GMT)
-Date:   Wed, 19 Apr 2023 15:38:52 +0530
-From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: PPC: BOOK3S: book3s_hv_nested.c: improve branch
- prediction for k.alloc
-Message-ID: <ZD+9tHrOWs7SbG1H@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-References: <20230407093147.3646597-1-kconsul@linux.vnet.ibm.com>
- <ZDAeuL2fz1aEW6rz@debian.me>
- <ZDA+WdiqB2931xHB@google.com>
- <ZDTpGsT15s0iOrTJ@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
- <873557j59d.fsf@mpe.ellerman.id.au>
- <ZDZX7cAa5uKwfJOd@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+        Wed, 19 Apr 2023 06:16:44 -0400
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566E5449D
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:16:43 -0700 (PDT)
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-32aff21222eso43763155ab.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:16:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681899402; x=1684491402;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lHjfQRfXbjdHN3NrBo1io8SY3+2TWu2ff8M792CObcc=;
+        b=XZdCc9yFAKRL3iD6aDBOx/xMVzLampR0r6uhkAaVr6/FfY28Kvcy/GVX9ukiP+GRy5
+         iZWFpFwoACDYTGgvH0osvUBr0WqKhgDWiddcEkrfKKiVeGz0vvvQnwbioLurPiQpZk9U
+         Q5tuB5YgE8IhARGUOPk6neztae2B9Jhj7HxrPUpKnYCPQUCykjMf90Ma1D3UCRH8njSW
+         Jpeytb4UTHySAezvUB7+XB+YP2dLKjmeY+MuxOwODGWflCTQWWPGer0DUrTsXBtSr+pA
+         BM3Zx32EWj5EOSPML/6533Xdqqqeka4P0YMwkXd3LohMk5v6E/vn1fDb9LdSC5gEp6p0
+         ZuxQ==
+X-Gm-Message-State: AAQBX9dITGIghusezBnvxvM3iQv1Xvsgy3fLSzyDZzI7uWkICnR5n4Po
+        HIFAzwZWBkKE6YthW0rJK2uZDTkXMF+lXZqTHvrsm4Nv5qed
+X-Google-Smtp-Source: AKy350aVck6E004kOFNJwGkuHTlYaLDG6WD9XBP8Yly2G+nSNeCt6nhF79T17FQO1m70rA6dp2uoLCbWQ96YSF4gk1jCjg2938m9
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZDZX7cAa5uKwfJOd@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 0U7ujuPgU23qZF-R5pKz9gWorDsokjz_
-X-Proofpoint-GUID: Q1BU1_1VGTq-ou__BIWOXY4rwf-DWC6M
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-19_05,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 bulkscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
- mlxlogscore=999 clxscore=1015 priorityscore=1501 mlxscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304190085
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:106:b0:325:a8e7:126c with SMTP id
+ t6-20020a056e02010600b00325a8e7126cmr10031345ilm.0.1681899402649; Wed, 19 Apr
+ 2023 03:16:42 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 03:16:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000716a3705f9adb8ee@google.com>
+Subject: [syzbot] [usb?] WARNING in usbtmc_ioctl/usb_submit_urb (2)
+From:   syzbot <syzbot+ce77725b89b7bd52425c@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-12 12:34:13, Kautuk Consul wrote:
-> Hi,
-> 
-> On 2023-04-11 16:35:10, Michael Ellerman wrote:
-> > Kautuk Consul <kconsul@linux.vnet.ibm.com> writes:
-> > > On 2023-04-07 09:01:29, Sean Christopherson wrote:
-> > >> On Fri, Apr 07, 2023, Bagas Sanjaya wrote:
-> > >> > On Fri, Apr 07, 2023 at 05:31:47AM -0400, Kautuk Consul wrote:
-> > >> > > I used the unlikely() macro on the return values of the k.alloc
-> > >> > > calls and found that it changes the code generation a bit.
-> > >> > > Optimize all return paths of k.alloc calls by improving
-> > >> > > branch prediction on return value of k.alloc.
-> > >> 
-> > >> Nit, this is improving code generation, not branch prediction.
-> > > Sorry my mistake.
-> > >> 
-> > >> > What about below?
-> > >> > 
-> > >> > "Improve branch prediction on kmalloc() and kzalloc() call by using
-> > >> > unlikely() macro to optimize their return paths."
-> > >> 
-> > >> Another nit, using unlikely() doesn't necessarily provide a measurable optimization.
-> > >> As above, it does often improve code generation for the happy path, but that doesn't
-> > >> always equate to improved performance, e.g. if the CPU can easily predict the branch
-> > >> and/or there is no impact on the cache footprint.
-> > 
-> > > I see. I will submit a v2 of the patch with a better and more accurate
-> > > description. Does anyone else have any comments before I do so ?
-> >  
-> > In general I think unlikely should be saved for cases where either the
-> > compiler is generating terrible code, or the likelyness of the condition
-> > might be surprising to a human reader.
-> > 
-> > eg. if you had some code that does a NULL check and it's *expected* that
-> > the value is NULL, then wrapping that check in likely() actually adds
-> > information for a human reader.
-> >     
-> > Also please don't use unlikely in init paths or other cold paths, it
-> > clutters the code (only slightly but a little) and that's not worth the
-> > possible tiny benefit for code that only runs once or infrequently.
-> > 
-> > I would expect the compilers to do the right thing in all
-> > these cases without the unlikely. But if you can demonstrate that they
-> > meaningfully improve the code generation with a before/after
-> > dissassembly then I'd be interested.
-> Just FYI, the last email by kautuk.consul.80@gmail.com was by me.
-> That last email contains a diff file attachment which compares 2 files:
-> before my changes and after my changes.
-> This diff file shows a lot of changes in code generation. Im assuming
-> all those changes are made by the compiler towards optimizing all return
-> paths to k.alloc calls.
-> Kindly review and comment.
-Any comments on the numerous code generation changes as shown by the
-files I attached to this mail chain ? Sorry I don't have concrete
-figures of any type to prove that this leads to any measurable performance
-improvements. I am just assuming that the compiler's modified code
-generation (due to the use of the unlikely macro) would be optimal.
+Hello,
 
-Thanks.
-> > cheers
+syzbot found the following issue on:
+
+HEAD commit:    95abc817ab3a Merge tag 'acpi-6.3-rc7' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=137cee2bc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c21559e740385326
+dashboard link: https://syzkaller.appspot.com/bug?extid=ce77725b89b7bd52425c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4eed56ed732d/disk-95abc817.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e3d153beec24/vmlinux-95abc817.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/61c1a80c61a8/bzImage-95abc817.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ce77725b89b7bd52425c@syzkaller.appspotmail.com
+
+WARNING: CPU: 0 PID: 23804 at drivers/usb/core/urb.c:411 usb_submit_urb+0x14a7/0x1880 drivers/usb/core/urb.c:411
+Modules linked in:
+CPU: 0 PID: 23804 Comm: syz-executor.1 Not tainted 6.3.0-rc6-syzkaller-00168-g95abc817ab3a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+RIP: 0010:usb_submit_urb+0x14a7/0x1880 drivers/usb/core/urb.c:411
+Code: 7c 24 40 e8 eb 8e 64 fb 48 8b 7c 24 40 e8 31 cd f2 fe 45 89 e8 44 89 f1 4c 89 e2 48 89 c6 48 c7 c7 60 39 fb 8a e8 19 04 2d fb <0f> 0b e9 9f ee ff ff e8 bd 8e 64 fb 0f b6 1d b6 82 43 08 31 ff 41
+RSP: 0018:ffffc90007e97b00 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff88807bff7058 RCX: ffffc900042b3000
+RDX: 0000000000040000 RSI: ffffffff814b6237 RDI: 0000000000000001
+RBP: ffff88807ebb10f0 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff88802bd88410
+R13: 0000000000000080 R14: 0000000080006f80 R15: ffff88802a7c7200
+FS:  00007f2f0b7e3700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f0eb75831b8 CR3: 000000002255b000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ usb_start_wait_urb+0x101/0x4b0 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x320/0x4a0 drivers/usb/core/message.c:153
+ usbtmc_ioctl_request drivers/usb/class/usbtmc.c:1954 [inline]
+ usbtmc_ioctl+0x1b3d/0x2840 drivers/usb/class/usbtmc.c:2097
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f2f0aa8c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f2f0b7e3168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f2f0ababf80 RCX: 00007f2f0aa8c169
+RDX: 0000000020000040 RSI: 00000000c0105b08 RDI: 0000000000000004
+RBP: 00007f2f0aae7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f2f0accfb1f R14: 00007f2f0b7e3300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
