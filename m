@@ -2,137 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733EF6E78EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755AE6E78E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 13:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232844AbjDSLrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 07:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42108 "EHLO
+        id S231524AbjDSLrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 07:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjDSLrR (ORCPT
+        with ESMTP id S231560AbjDSLrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 07:47:17 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7B54C22;
-        Wed, 19 Apr 2023 04:47:15 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id dd8so19810868qvb.13;
-        Wed, 19 Apr 2023 04:47:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681904834; x=1684496834;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nyDadJE1NbgjC8wC5oHDlohplbMrXbFJOr8OYm4fr0g=;
-        b=RzsTjKIWM6yKFuZODaI9MT7527b8MzXaBq+WUh30FXCvOUVRowFcFr90uQ+y0SB5Ha
-         Nbs44J8KP09W+ZINagNZPy7o7Wp+Bybwo6jXkNE+8esZ6aq01Lt2/wNs1PNPptjooC0F
-         6LNfgb+yv9sSw3vdkTTHRBVvhOt0+PRPRrPSA5C5Q5e4vGu432K3UgFP2PFFrfakG2pi
-         d/tSEjGL/Bq33rdcWVK9vOo0wD7B8JCfXSdijc/6guL11ssJFTWUxMd648Ee3ejvixQS
-         Xh2TzVTxSdZZQn78hRPTmuxx3GZEhU38U6bO0liS+d+BMX1hd/y2l4UwN8+cvtqS+lZY
-         zD5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681904834; x=1684496834;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nyDadJE1NbgjC8wC5oHDlohplbMrXbFJOr8OYm4fr0g=;
-        b=Dpo/tFKDVCx2y2Aj2NTJhMs+QQm4Xf4gJEh0rNdz9UYErL0J/XuMIAepKhyDPcRVT3
-         fbajH0uAFsLn2W6Vk/M2bGrayUNZS59nVvpwTzjUbHW31mI5/6SXXBvcQWJdO93KSjp5
-         HqfPP5pSeG5vPotieWzFZuym9AXZ0PdMFWXsGiXCKrI5aSJk9AWlOGzuqM38h4Dlhwxn
-         bL/biawgdpDIGPOgiYAoTH7IZjEXiaaLM2HDC8df1DsuTAQFrb2LoqJpaAjRqkIo+bcO
-         hc5uCvYXymZd6CJT/P33J92m1f9jbtn6UW6bCKYoh87Y45mmLBYDkqc3hF7/ldWUpJXz
-         D+vA==
-X-Gm-Message-State: AAQBX9dO+JQ7j0FAn9LNbny1jwquAEWHDj1A+eLrjLppR2RqChC7NZqf
-        Deaeiij7mcDEdk9GryhQy+UZYxGNWFv0hXM5q9o=
-X-Google-Smtp-Source: AKy350alDLnATEjliOOTmkIQ3+3cIHSnEkNtmVKehwKlEUoOwVP1HXCWzUwHYwRbame9IrQOAbt6wQ543n2m2VHD8z0=
-X-Received: by 2002:a05:6214:2348:b0:5f1:6892:7437 with SMTP id
- hu8-20020a056214234800b005f168927437mr4619986qvb.26.1681904834432; Wed, 19
- Apr 2023 04:47:14 -0700 (PDT)
+        Wed, 19 Apr 2023 07:47:07 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA264C22;
+        Wed, 19 Apr 2023 04:47:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681904824; x=1713440824;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=iZ9zP/czoiwzuGqd+7mx8aaZzCqymmjJky/8w2YBO04=;
+  b=GgvKPk+mwm7KiUFEw7XrE0YujxMqz2by6rrkwi2/ApqTB/p18T46wKRJ
+   W/WNg6ntzZAhQJzxBVzIuwvLUsOxVlJGb+6+7AbelE2kGUCQ3tNbKxGum
+   HOLFAGxB1sQFVCJZ42a1peO/SvIjL4Mp0ENv8ZEL3UISiUrs0f1WprJD/
+   fSBDkFrnntw5waSZytW3iPJEYkEYRj7ODfmpvi6qHXToUAx24nhiIJqDj
+   FDoKqtdfj90NqM8Q0cZpN2o5mGQnQa2+oZ+Fa1d1MNQp23N3Afl/cU4Xt
+   cLMw97VDIE9bdf/Yo1De6FiL89pzIODT2kHDoeTVpueiONq3F6sqY728j
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="325759615"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="325759615"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 04:47:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="721902168"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="721902168"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 19 Apr 2023 04:47:00 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pp6H5-002DIC-0p;
+        Wed, 19 Apr 2023 14:46:59 +0300
+Date:   Wed, 19 Apr 2023 14:46:58 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dinh Nguyen <dinh.nguyen@linux.intel.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        dinguyen@kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, jdelvare@suse.com
+Subject: Re: [PATCH 3/5] hwmon: (socfpga) Add hardware monitoring support on
+ SoCFPGA platforms
+Message-ID: <ZD/UsuzhZmK3AFJn@smile.fi.intel.com>
+References: <20230410153314.27127-1-dinh.nguyen@linux.intel.com>
+ <20230410153314.27127-3-dinh.nguyen@linux.intel.com>
+ <09730359-8731-e21e-3335-bf60ba7f1280@roeck-us.net>
+ <a3e966f8-8e9d-7081-1665-9d2e87acb310@linux.intel.com>
+ <8d158880-1e6a-5fdd-dae7-a7647794eb60@roeck-us.net>
+ <a1a34c32-dbd4-7a77-ab7e-5e34af85900f@linux.intel.com>
 MIME-Version: 1.0
-References: <20230417154737.12740-1-laoar.shao@gmail.com> <20230417154737.12740-6-laoar.shao@gmail.com>
- <20230417201457.c43xfcukjzm4u6vx@dhcp-172-26-102-232.dhcp.thefacebook.com>
- <CALOAHbC4Bz_VX52zmv=sScBf0hzscMAC4+EwMCpnd1BcaSVJSw@mail.gmail.com> <CAADnVQJw9BCK2itE5bZWdQYz7D-8KdcH96E885zUakEDAOrC+Q@mail.gmail.com>
-In-Reply-To: <CAADnVQJw9BCK2itE5bZWdQYz7D-8KdcH96E885zUakEDAOrC+Q@mail.gmail.com>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Wed, 19 Apr 2023 19:46:38 +0800
-Message-ID: <CALOAHbCtPR26it_Wdk7T_TETMTh2se6rgEbL_KC5XKtzvObjiA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 5/6] bpf: Improve tracing recursion prevention mechanism
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        bpf <bpf@vger.kernel.org>, linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a1a34c32-dbd4-7a77-ab7e-5e34af85900f@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 11:38=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Apr 17, 2023 at 6:49=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com=
-> wrote:
-> >
-> > On Tue, Apr 18, 2023 at 4:15=E2=80=AFAM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Mon, Apr 17, 2023 at 03:47:36PM +0000, Yafang Shao wrote:
-> > > > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> > > > index f61d513..3df39a5 100644
-> > > > --- a/kernel/bpf/trampoline.c
-> > > > +++ b/kernel/bpf/trampoline.c
-> > > > @@ -842,15 +842,21 @@ static __always_inline u64 notrace bpf_prog_s=
-tart_time(void)
-> > > >  static u64 notrace __bpf_prog_enter_recur(struct bpf_prog *prog, s=
-truct bpf_tramp_run_ctx *run_ctx)
-> > > >       __acquires(RCU)
-> > > >  {
-> > > > -     rcu_read_lock();
-> > > > -     migrate_disable();
-> > > > -
-> > > > -     run_ctx->saved_run_ctx =3D bpf_set_run_ctx(&run_ctx->run_ctx)=
-;
-> > > > +     int bit;
-> > > >
-> > > > -     if (unlikely(this_cpu_inc_return(*(prog->active)) !=3D 1)) {
-> > > > +     rcu_read_lock();
-> > > > +     bit =3D test_recursion_try_acquire(_THIS_IP_, _RET_IP_);
-> > >
-> > > and bpf will prevent ftrace to run and vice versa.
-> > > Not a good idea.
-> > >
-> > > One bpf prog will prevent different bpf prog to run since they share =
-current task.
-> > > Not a good idea either.
-> >
-> > That shouldn't happen. test_recursion_try_acquire() uses a
-> > per-task_struct value. One single task_struct can't run in parallel,
-> > right?
-> > Note that the bpf program running in softirq or irq context won't be
-> > prevented by it.
-> > IIUC, the bpf program should run in serial in one single task, right?
-> > That said, one bpf program can only run after another bpf program
-> > finished in the same task?
->
-> bpf progs can nest in the same task.
+On Tue, Apr 18, 2023 at 12:29:40PM -0500, Dinh Nguyen wrote:
+> On 4/17/2023 4:51 PM, Guenter Roeck wrote:
+> > On 4/17/23 13:55, Dinh Nguyen wrote:
 
-Do you mean the tail_call ?
+...
 
---=20
-Regards
-Yafang
+> > ... and this contradict each other. If bit 31 indicates an error,
+> > this can not be a signed 32-bit value.
+> > 
+> You're right! I've re-read the spec and should have the the code look for
+> the specific error values:
+> 
+> 0x80000000 - inactive
+> 0x80000001 - old value
+> 0x80000002 - invalid channel
+> 0x80000003 -  corrupted.
+
+No, they are not hex. Probably you need to define an error space with it, but
+at least just use signed _decimal_ values.
+
+Instead of BIT(31) this should go as
+
+#define ..._ERR_BASE   INT_MIN // or equivalent if the type is not int
+#define ..._ERR_MAX ... // or whatever name is better
+
+Then in your code
+
+	if (value >= _ERR_MAX)
+		return 0;
+
+	err = _ERR_MAX - value;
+	switch (err) {
+		...
+	}
+
+P.S. I asked during internal review if the values are bit fielded when errors.
+AFAIU that time they are, now it seems different.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
