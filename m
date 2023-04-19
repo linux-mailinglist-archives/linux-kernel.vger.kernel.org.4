@@ -2,63 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CB66E74B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E266E74B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbjDSILL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
+        id S232288AbjDSILn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbjDSILI (ORCPT
+        with ESMTP id S232243AbjDSILj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:11:08 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BD7A5F0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:11:02 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 403FB660324C;
-        Wed, 19 Apr 2023 09:11:00 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681891861;
-        bh=N9N5Z5PUO2VBsvggGI6LzSyVWaQ71ALkM8ielchtweQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oe0VZA1rILmQ75rbPrJ+2gbcSIw4gNsBHM7Cw4E4GeHiEjkksuUYU5keH3A3B8p4x
-         zy4l6tqfIgoE8mwzTQye/Lh6zZV36EPcYjX5RMORPVh1NBJou8L7NOO4jUGBzQ+pDu
-         hzbzTCbOHRHHoapv6JY0Zw2Czdc0QBGFRYNrvbsfnJN62hOeOvdDKmMkvpvMLmyiX8
-         EEmht/5D3QSyrQwTpjgeXVAcl2SjN8jGEZYIqB0/gOMYeTfGMHV4EpTUniSDZ5RlvM
-         /nMo77nkSmvPqG3tx84BEuHIFIhmKHCHKgG1wZ7uoe/7MJlTPscfES/YzaW8hjQYKd
-         PIP6FyBICkujQ==
-Message-ID: <3dac0be8-6a49-43db-da65-e99d2e9719e6@collabora.com>
-Date:   Wed, 19 Apr 2023 10:10:58 +0200
+        Wed, 19 Apr 2023 04:11:39 -0400
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAC33ABB
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:11:37 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 08:11:26 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=protonmail; t=1681891895; x=1682151095;
+        bh=TMt+77U6FMfxb/S+sxZ8N7thoPZfss9+P904a/37zKk=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=GukhTUGJlvryxqN+JZUCkUt0q+wzArbN8QesEafh5xbGBYMsOKC5vunPvDYkrcAFg
+         mfOSPFIznXzu9ViuerNuNtZwbEPg/u4F7kEwtNcLTWkYEVlRGcOoP096ci23kTJ0Bq
+         klNFwoyiMRWG8q1pw5k5+z1NHTVCbYDLvRcyGGXPYQm5tVWrr/v7yk3fy3lVBWHOjl
+         iIJCVMkTpYQQKpwK15UwKWglgtPhMfqqBYHzxaQT6aqN+yTbRt39yfF6l/8Z086h/d
+         LI9F5cS56y5UGCOp8BqhFiYehhM5LAMicqlapvWUgktc57t6rFfgp1UG22Mn9aRMMS
+         JcIY3i9W89Pbw==
+To:     Miguel Ojeda <ojeda@kernel.org>
+From:   Benno Lossin <benno.lossin@proton.me>
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Josh Stone <jistone@redhat.com>,
+        William Brown <william.brown@suse.com>,
+        Georgy Yakovlev <gyakovlev@gentoo.org>,
+        Jan Alexander Steffens <jan.steffens@gmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: Re: [PATCH 2/3] rust: arc: fix intra-doc link in `Arc<T>::init`
+Message-ID: <ra8UTkN3PNi-lqfaOWeTlwkVExN4D5jrsxPcSCWFBqNmbTRXpuHgzELMb_PsmowHFuS_1SEPQa9GMCAK_6D0tRH41Khw6Tb72Nv0baVFjEM=@proton.me>
+In-Reply-To: <20230418214347.324156-3-ojeda@kernel.org>
+References: <20230418214347.324156-1-ojeda@kernel.org> <20230418214347.324156-3-ojeda@kernel.org>
+Feedback-ID: 71780778:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH linux-next v3 4/4] clocksource/drivers/timer-mediatek:
- Make timer-mediatek become loadable module
-To:     walter.chang@mediatek.com,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        John Stultz <jstultz@google.com>
-Cc:     wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
-        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230419074910.10809-1-walter.chang@mediatek.com>
- <20230419074910.10809-5-walter.chang@mediatek.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230419074910.10809-5-walter.chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,136 +58,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 19/04/23 09:49, walter.chang@mediatek.com ha scritto:
-> From: Chun-Hung Wu <chun-hung.wu@mediatek.com>
-> 
-> Make the timer-mediatek driver which can register
-> an always-on timer as tick_broadcast_device on
-> MediaTek SoCs become loadable module in GKI.
-> 
-> Tested-by: Walter Chang <walter.chang@mediatek.com>
-> Signed-off-by: Chun-Hung Wu <chun-hung.wu@mediatek.com>
+On 18.04.23 23:43, Miguel Ojeda wrote:
+> `Arc<T>::init` refers to `Arc<T>::pin_init` via an intra-doc link
+> using the text `pin_init`, rather than more explicitly, which makes
+> `rustdoc` point it to the `pin_init!` macro instead.
+>=20
+> This is required for the compiler upgrade since the newer `rustdoc`
+> would trigger the `broken_intra_doc_links` lint [1], but in this case
+> the macro was not the intended target to begin with, and so the actual
+> fix is to make it point to the right place, regardless of the upgrade.
+>=20
+> Thus make it more explicit.
+>=20
+> Fixes: 92c4a1e7e81c ("rust: init/sync: add `InPlaceInit` trait to pin-ini=
+tialize smart pointers")
+> Link: https://github.com/rust-lang/rust/issues/106142 [1]
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-I think I typoed your email when sending the example patch for the
-conversion to platform_device. Check [1], it may be better to just
-iterate through that? (please ignore the pure_initcall() part, that's
-a mistake, it's never gonna happen as it automatically becomes a
-module_init() call).
-
-It depends on what maintainers think about that clocksource.h addition,
-the patch got zero comments, so if you're interested in that perhaps we
-can explicitly ask what would be the best option between yours and mine;
-that addition is done only to avoid the big ifdef party that this patch
-proposes and makes things a bit shorter if this timer modularization
-goes on with more drivers, but I don't have strong opinions anyway.
-
-In the meanwhile, just to eventually speed up integrating this, or the
-other patch - I'll still give you a review of this one.
-
-[1]: 
-https://patchwork.kernel.org/project/linux-mediatek/patch/20230309132119.175650-1-angelogioacchino.delregno@collabora.com/
+Reviewed-by: Benno Lossin <benno.lossin@proton.me>
 
 > ---
->   drivers/clocksource/Kconfig          |  2 +-
->   drivers/clocksource/timer-mediatek.c | 39 ++++++++++++++++++++++++++++
->   2 files changed, 40 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-> index 526382dc7482..a7413ad7b6ad 100644
-> --- a/drivers/clocksource/Kconfig
-> +++ b/drivers/clocksource/Kconfig
-> @@ -472,7 +472,7 @@ config SYS_SUPPORTS_SH_CMT
->   	bool
->   
->   config MTK_TIMER
-> -	bool "Mediatek timer driver" if COMPILE_TEST
-> +	tristate "Mediatek timer driver"
-
-While at it, you could also fix the text, Mediatek -> MediaTek
-
->   	depends on HAS_IOMEM
->   	select TIMER_OF
->   	select CLKSRC_MMIO
-> diff --git a/drivers/clocksource/timer-mediatek.c b/drivers/clocksource/timer-mediatek.c
-> index 7bcb4a3f26fb..3448848682c0 100644
-> --- a/drivers/clocksource/timer-mediatek.c
-> +++ b/drivers/clocksource/timer-mediatek.c
-> @@ -13,6 +13,9 @@
->   #include <linux/clocksource.h>
->   #include <linux/interrupt.h>
->   #include <linux/irqreturn.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
->   #include <linux/sched_clock.h>
->   #include <linux/slab.h>
->   #include "timer-of.h"
-> @@ -337,5 +340,41 @@ static int __init mtk_gpt_init(struct device_node *node)
->   
->   	return 0;
->   }
-> +
-> +#ifdef MODULE
-
-#ifndef MODULE
-... two lines...
-#else
-... a bunch of lines ...
-#endif
-
-looks more readable. I'd go with that.
-
-> +static int mtk_timer_probe(struct platform_device *pdev)
-> +{
-> +	int (*timer_init)(struct device_node *node);
-> +	struct device_node *np = pdev->dev.of_node;
-> +
-> +	timer_init = of_device_get_match_data(&pdev->dev);
-> +	return timer_init(np);
-> +}
-> +
-> +static const struct of_device_id mtk_timer_match_table[] = {
-> +	{
-> +		.compatible = "mediatek,mt6577-timer",
-> +		.data = mtk_gpt_init,
-
-Fits in one line!
-
-> +	},
-> +	{
-> +		.compatible = "mediatek,mt6765-timer",
-> +		.data = mtk_syst_init,
-
-ditto.
-
-> +	},
-> +	{}
-
-Always end with { /* sentinel */ }
-
-> +};
-> +
-> +static struct platform_driver mtk_timer_driver = {
-> +	.probe = mtk_timer_probe,
-> +	.driver = {
-> +		.name = "mtk-timer",
-
-"mediatek-timer" looks nicer :-)
-
-> +		.of_match_table = mtk_timer_match_table,
-> +	},
-> +};
-> +module_platform_driver(mtk_timer_driver);
-> +
-> +MODULE_DESCRIPTION("MediaTek Module Timer driver");
-
-"MediaTek Timer driver" is enough, "Module" gets misleading if this gets compiled
-as built in platform driver (instead of built in timer_of).
-
-> +MODULE_LICENSE("GPL v2");
-> +#else
->   TIMER_OF_DECLARE(mtk_mt6577, "mediatek,mt6577-timer", mtk_gpt_init);
->   TIMER_OF_DECLARE(mtk_mt6765, "mediatek,mt6765-timer", mtk_syst_init);
-> +#endif
-
-
+>   rust/kernel/sync/arc.rs | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> index e6d206242465..1b0734fdf6a7 100644
+> --- a/rust/kernel/sync/arc.rs
+> +++ b/rust/kernel/sync/arc.rs
+> @@ -185,7 +185,7 @@ impl<T> Arc<T> {
+>=20
+>       /// Use the given initializer to in-place initialize a `T`.
+>       ///
+> -    /// This is equivalent to [`pin_init`], since an [`Arc`] is always p=
+inned.
+> +    /// This is equivalent to [`Arc<T>::pin_init`], since an [`Arc`] is =
+always pinned.
+>       #[inline]
+>       pub fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
+>       where
+> --
+> 2.40.0
+>
