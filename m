@@ -2,123 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DB16E7A6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37ADB6E7A76
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233387AbjDSNPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 09:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
+        id S233401AbjDSNRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 09:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233378AbjDSNPw (ORCPT
+        with ESMTP id S233378AbjDSNRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 09:15:52 -0400
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B741D13C34;
-        Wed, 19 Apr 2023 06:15:50 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-2f94fe993edso476860f8f.1;
-        Wed, 19 Apr 2023 06:15:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681910149; x=1684502149;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZIgRlyZSNH/SNYRlepaN+njO6QBAl9chuqcWN0oyisY=;
-        b=SkshjrmWssSuD2f1iITqPrqGqeOomeCw9+gjW0AxlIkPPRu4jJvkBMx3kdlpxe7QpE
-         Th0ZaHMHVMIQ//fe56jEkOCwc8zBRAnQa075vEUx91qZUII1phQ8QY9xJ57hbf3mq7HV
-         Gdbm8q2yedSrYtpUT5KCe783hnTJmPu5WFGFYAV8V791r4F2rgORI0OuaY8ax4dQgRSw
-         Yjw+Qu+qJ2A3QyetTB9ePKMRe0GoafYeAB83CznLRqpq/wVQm0s4XavIgAgfMfny/wNy
-         Z1ctPvdWUQZtDTnMYL/mMPwfl6qbS3nnpnKcY8H5cavNVt0jwKTc4zwc3VPs8OT6wGbi
-         H8UQ==
-X-Gm-Message-State: AAQBX9eoc1dROPyotTOLbzPAO3GRMdP+WaTpm8Get4ld9XW9DgCJAZvo
-        hzxf+SJk5/GM9kgKqDyUUPVV5w0NM4E=
-X-Google-Smtp-Source: AKy350aM3txglqO3IBUp/d4qIVyIrEs8rob4csV9yafFShyvmuXFrJJ0427NCQSlvWFhFQKDFVdKKg==
-X-Received: by 2002:a5d:548e:0:b0:2c7:1c72:699f with SMTP id h14-20020a5d548e000000b002c71c72699fmr11405069wrv.4.1681910149047;
-        Wed, 19 Apr 2023 06:15:49 -0700 (PDT)
-Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id q4-20020adff944000000b002fda1b12a0bsm4211767wrr.2.2023.04.19.06.15.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 06:15:48 -0700 (PDT)
-Message-ID: <6a5feb66-632f-b843-c04d-e0aaa2d51415@grimberg.me>
-Date:   Wed, 19 Apr 2023 16:15:47 +0300
+        Wed, 19 Apr 2023 09:17:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6ED614472;
+        Wed, 19 Apr 2023 06:17:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 647ED63EF8;
+        Wed, 19 Apr 2023 13:17:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FAF6C433EF;
+        Wed, 19 Apr 2023 13:17:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681910235;
+        bh=iE7BNBBGCWRG/2DR7rqlRVpNkn0RTXZ5B8iTUcViCog=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zX7S8a/WgHEoKpcRqqD6SDeDIrdWec864eScvaqoe3B4l5rzaOPva3GpR+tItx9Db
+         pycPlfBlZB1rV6iU/axHMsT2835GsNywfyoZifIOZtiOnvrDp+GikxLn30HdeoXYbi
+         aDrifpdRkpLG+8RCUDsGP8a3JurjkXzvmsSLLCQg=
+Date:   Wed, 19 Apr 2023 15:17:13 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Conor.Dooley@microchip.com
+Cc:     stable@vger.kernel.org, hi@alyssa.is, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 000/138] 6.2.12-rc2 review
+Message-ID: <2023041957-sector-purposely-859f@gregkh>
+References: <20230419093655.693770727@linuxfoundation.org>
+ <b6e0cc8b-eb4b-4906-9697-a1dab4741745@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC v1 0/1] nvme testsuite runtime optimization
-Content-Language: en-US
-To:     Daniel Wagner <dwagner@suse.de>
-Cc:     Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>
-References: <20230419085643.25714-1-dwagner@suse.de>
- <f0d2ddd5-37d6-8fba-a5e3-965fb9f41474@nvidia.com>
- <9a1f1709-baaf-5661-2cbf-c34e2da9e42e@grimberg.me>
- <zlavgcdalmmtabiabu76m4s3oo5hyaehckmwcxvqrnu3j6q6xo@5ke6gv5h3j7i>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <zlavgcdalmmtabiabu76m4s3oo5hyaehckmwcxvqrnu3j6q6xo@5ke6gv5h3j7i>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6e0cc8b-eb4b-4906-9697-a1dab4741745@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 19, 2023 at 12:26:26PM +0000, Conor.Dooley@microchip.com wrote:
+> On 19/04/2023 10:40, Greg Kroah-Hartman wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > This is the start of the stable review cycle for the 6.2.12 release.
+> > There are 138 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Fri, 21 Apr 2023 09:36:26 +0000.
+> > Anything received after that time might be too late.
+> > 
+> > The whole patch series can be found in one patch at:
+> >          https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.12-rc2.gz
+> > or in the git tree and branch at:
+> >          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> > and the diffstat can be found below.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> 
+> 
+> > Alyssa Ross <hi@alyssa.is>
+> >      purgatory: fix disabling debug info
+> > 
+> > Heiko Stuebner <heiko.stuebner@vrull.eu>
+> >      RISC-V: add infrastructure to allow different str* implementations
+> 
+> Lore is ~dead for me right now, but there should be a custom backport of
+> Alyssa's commit, submitted by her, here:
+> https://lore.kernel.org/all/20230417134044.1821014-1-hi@alyssa.is/
+> 
+> Perhaps the reason is just the quantity of email, but that was
+> submitted against the "fail" email (and within a few hours), so why
+> was another commit pulled back instead of using what she provided?
 
->>>> While testing the fc transport I got a bit tired of wait for the I/O jobs to
->>>> finish. Thus here some runtime optimization.
->>>>
->>>> With a small/slow VM I got following values:
->>>>
->>>> with 'optimizations'
->>>>      loop:
->>>>        real    4m43.981s
->>>>        user    0m17.754s
->>>>        sys     2m6.249s
->>
->> How come loop is doubling the time with this patch?
->> ratio is not the same before and after.
-> 
-> first run was with loop, second one with rdma:
-> 
-> nvme/002 (create many subsystems and test discovery)         [not run]
->      runtime  82.089s  ...
->      nvme_trtype=rdma is not supported in this test
-> 
-> nvme/016 (create/delete many NVMeOF block device-backed ns and test discovery) [not run]
->      runtime  39.948s  ...
->      nvme_trtype=rdma is not supported in this test
-> nvme/017 (create/delete many file-ns and test discovery)     [not run]
->      runtime  40.237s  ...
-> 
-> nvme/047 (test different queue types for fabric transports)  [passed]
->      runtime    ...  13.580s
-> nvme/048 (Test queue count changes on reconnect)             [passed]
->      runtime    ...  6.287s
-> 
-> 82 + 40 + 40 - 14 - 6 = 142. So loop runs additional tests. Hmm, though my
-> optimization didn't work there...
+Ok, now both dropped, this got confusing fast.
 
-How come loop is 4m+ while the others are 2m+ when before all
-were the same timeframe more or less?
-
+> > Alexandre Ghiti <alexghiti@rivosinc.com>
+> >      riscv: Do not set initial_boot_params to the linear address of the dtb
 > 
->>> Those jobs are meant to be run for at least 1G to establish
->>> confidence on the data set and the system under test since SSDs
->>> are in TBs nowadays and we don't even get anywhere close to that,
->>> with your suggestion we are going even lower ...
->>
->> Where does the 1G boundary coming from?
-> 
-> No idea, it just the existing hard coded values. I guess it might be from
-> efa06fcf3c83 ("loop: test partition scanning") which was the first real test
-> case (according the logs).
+> Same as 6.1.y, Alex said he'll provide a backport for the whole
+> series, so just drop this here too please.
 
-Was asking Chaitanya why is 1G considered sufficient vs. other sizes?
-Why not 10G? Why not 100M?
+Ok, will drop it from this tree too.
+
+thanks for the quick review.
+
+greg k-h
