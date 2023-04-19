@@ -2,100 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E266E74B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44636E74B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 10:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232288AbjDSILn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 04:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
+        id S232277AbjDSILk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 04:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbjDSILj (ORCPT
+        with ESMTP id S232097AbjDSILi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:11:39 -0400
-Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAC33ABB
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 01:11:37 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 08:11:26 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1681891895; x=1682151095;
-        bh=TMt+77U6FMfxb/S+sxZ8N7thoPZfss9+P904a/37zKk=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=GukhTUGJlvryxqN+JZUCkUt0q+wzArbN8QesEafh5xbGBYMsOKC5vunPvDYkrcAFg
-         mfOSPFIznXzu9ViuerNuNtZwbEPg/u4F7kEwtNcLTWkYEVlRGcOoP096ci23kTJ0Bq
-         klNFwoyiMRWG8q1pw5k5+z1NHTVCbYDLvRcyGGXPYQm5tVWrr/v7yk3fy3lVBWHOjl
-         iIJCVMkTpYQQKpwK15UwKWglgtPhMfqqBYHzxaQT6aqN+yTbRt39yfF6l/8Z086h/d
-         LI9F5cS56y5UGCOp8BqhFiYehhM5LAMicqlapvWUgktc57t6rFfgp1UG22Mn9aRMMS
-         JcIY3i9W89Pbw==
-To:     Miguel Ojeda <ojeda@kernel.org>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Josh Stone <jistone@redhat.com>,
-        William Brown <william.brown@suse.com>,
-        Georgy Yakovlev <gyakovlev@gentoo.org>,
-        Jan Alexander Steffens <jan.steffens@gmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH 2/3] rust: arc: fix intra-doc link in `Arc<T>::init`
-Message-ID: <ra8UTkN3PNi-lqfaOWeTlwkVExN4D5jrsxPcSCWFBqNmbTRXpuHgzELMb_PsmowHFuS_1SEPQa9GMCAK_6D0tRH41Khw6Tb72Nv0baVFjEM=@proton.me>
-In-Reply-To: <20230418214347.324156-3-ojeda@kernel.org>
-References: <20230418214347.324156-1-ojeda@kernel.org> <20230418214347.324156-3-ojeda@kernel.org>
-Feedback-ID: 71780778:user:proton
+        Wed, 19 Apr 2023 04:11:38 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE48A10C6;
+        Wed, 19 Apr 2023 01:11:36 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1a814fe0ddeso7569615ad.2;
+        Wed, 19 Apr 2023 01:11:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681891896; x=1684483896;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Yl4uAwWa39pOxQAlHQJyprHiogKr6ebOfSFDzFtU5is=;
+        b=Nc1IJpv2Pmd+JcVQ3KKskMqBJfGqbmWCfPR7P/D8B3BQYRgvsyIh/sgHyp1EDQA9/7
+         ylYnxLTZPZT3fVTBDLchT5+m/KlLlobZo70mlzCAKRQJ56u39cqXA0H7u0UTzJLVX0IX
+         Ivak4YtM0OouFbdrihMEMlP4kC3q4brpE6H9QN/SapFH4Ulp1dpKIz5SasB0RbGMZsCE
+         Vtbu83V4703GSe0Wjx0fvOFyT2qcPvnnLYgaiNf7bBO1lAIMV2kow3jr1yYtP6swrAy8
+         ce16ZH348k2NNuqoa4FNv/Qyk2VvJNk2cTYdbLFRgRN6UfVmOoonodO6hzDzOchEvx/e
+         6BIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681891896; x=1684483896;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yl4uAwWa39pOxQAlHQJyprHiogKr6ebOfSFDzFtU5is=;
+        b=Qz0KANVPpMrQ4+hOAPO3geOj+BC9a9yTBQ0R0UEvApS9F9lq7VTKbtvAlsxVCCzbVY
+         mocNUJm50iSCFJAQwwmbZN9plv9QYNgg4+PQlu6JT7IiEWXKMNCywZoIXyBtEnxxDMiY
+         dTTlBB3UspUC716xZ/9FKAyPbR4FeJCguo9233XAef8mzighQ1pi+RAZ8+q/SMcSFuEz
+         R+ceLDfFruWOb98ubw9oeUWcE9fHYqzO4iMCDuk/ah/a0W6yoBaEL5qNIihyOluqnFVe
+         xir6jv2/V+hxjnfmUBAattLRWA8goPRswth9eTZJIR4AJyC/fhc/OaSv5WNwB/ZSI7e6
+         lJ9A==
+X-Gm-Message-State: AAQBX9eUWdMxIKk/IceCKmX3/xRtYYhU4f4quVtcVekjXB73YgbsJ0np
+        CobZp4iwGU7zFjD6K3FOCkbwhskq1Gw=
+X-Google-Smtp-Source: AKy350agtmcoveHHtLRKiYiSljQJi3z/72Dzx+y9vn6FF+kB8WGHgzus0bFr50zIbxe2ajqcee0M0Q==
+X-Received: by 2002:a17:902:f54a:b0:1a6:523c:8589 with SMTP id h10-20020a170902f54a00b001a6523c8589mr5171217plf.5.1681891895989;
+        Wed, 19 Apr 2023 01:11:35 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a7-20020a170902ecc700b0019719f752c5sm10819070plh.59.2023.04.19.01.11.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 01:11:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f10dd20e-6dce-490a-f3fb-fdf79e83bc1d@roeck-us.net>
+Date:   Wed, 19 Apr 2023 01:11:32 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230419072156.965447596@linuxfoundation.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 5.15 00/88] 5.15.108-rc2 review
+In-Reply-To: <20230419072156.965447596@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.04.23 23:43, Miguel Ojeda wrote:
-> `Arc<T>::init` refers to `Arc<T>::pin_init` via an intra-doc link
-> using the text `pin_init`, rather than more explicitly, which makes
-> `rustdoc` point it to the `pin_init!` macro instead.
->=20
-> This is required for the compiler upgrade since the newer `rustdoc`
-> would trigger the `broken_intra_doc_links` lint [1], but in this case
-> the macro was not the intended target to begin with, and so the actual
-> fix is to make it point to the right place, regardless of the upgrade.
->=20
-> Thus make it more explicit.
->=20
-> Fixes: 92c4a1e7e81c ("rust: init/sync: add `InPlaceInit` trait to pin-ini=
-tialize smart pointers")
-> Link: https://github.com/rust-lang/rust/issues/106142 [1]
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+On 4/19/23 00:23, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.108 release.
+> There are 88 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 21 Apr 2023 07:21:37 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.108-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
+> -------------
+> Pseudo-Shortlog of commits:
+> 
+...
+> Alexandre Ghiti <alexghiti@rivosinc.com>
+>      riscv: Do not set initial_boot_params to the linear address of the dtb
+> 
 
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+As expected, a quick test shows that this patch still results in immediate
+riscv32/64 crashes.
 
-> ---
->   rust/kernel/sync/arc.rs | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> index e6d206242465..1b0734fdf6a7 100644
-> --- a/rust/kernel/sync/arc.rs
-> +++ b/rust/kernel/sync/arc.rs
-> @@ -185,7 +185,7 @@ impl<T> Arc<T> {
->=20
->       /// Use the given initializer to in-place initialize a `T`.
->       ///
-> -    /// This is equivalent to [`pin_init`], since an [`Arc`] is always p=
-inned.
-> +    /// This is equivalent to [`Arc<T>::pin_init`], since an [`Arc`] is =
-always pinned.
->       #[inline]
->       pub fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
->       where
-> --
-> 2.40.0
->
+[    0.000000] random: crng init done
+[    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
+[    0.000000] Machine model: riscv-virtio,qemu
+[    0.000000] earlycon: uart8250 at MMIO 0x0000000010000000 (options '115200')
+[    0.000000] printk: bootconsole [uart8250] enabled
+[    0.000000] efi: UEFI not found.
+[    0.000000] Unable to handle kernel paging request at virtual address 0000000040000001
+[    0.000000] Oops [#1]
+[    0.000000] Modules linked in:
+[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.15.108-rc2-00089-g6405847d6038 #1
+[    0.000000] Hardware name: riscv-virtio,qemu (DT)
+[    0.000000] epc : fdt_check_header+0x6/0x1fc
+[    0.000000]  ra : __unflatten_device_tree+0x32/0x10a
+[    0.000000] epc : ffffffff804a76e2 ra : ffffffff80723c22 sp : ffffffff81403eb0
+[    0.000000]  gp : ffffffff815c6408 tp : ffffffff81411280 t0 : ffffffcefefff000
+[    0.000000]  t1 : 000000009ffff000 t2 : 0000000000000004 s0 : ffffffff81403ec0
+[    0.000000]  s1 : 0000000040000088 a0 : 0000000040000000 a1 : 0000000000000000
+[    0.000000]  a2 : ffffffff815cadd0 a3 : ffffffff80a26fbe a4 : 0000000000000000
+[    0.000000]  a5 : 0000000000000000 a6 : 0000000000001000 a7 : 0000000000000048
+[    0.000000]  s2 : 0000000040000000 s3 : ffffffff815cadd0 s4 : 0000000000000000
+[    0.000000]  s5 : ffffffff80a26fbe s6 : 0000000000000000 s7 : 000000000000007f
+[    0.000000]  s8 : 0000000080019038 s9 : 000000008003d6a8 s10: 0000000000000000
+[    0.000000]  s11: 0000000000000000 t3 : ffffffff80c191e8 t4 : ffffffff80c191e8
+[    0.000000]  t5 : ffffffff80c191e8 t6 : ffffffff80c19200
+[    0.000000] status: 0000000200000100 badaddr: 0000000040000001 cause: 000000000000000d
+[    0.000000] [<ffffffff804a76e2>] fdt_check_header+0x6/0x1fc
+[    0.000000] ---[ end trace 2baf78845f288dac ]---
+
+Guenter
+
