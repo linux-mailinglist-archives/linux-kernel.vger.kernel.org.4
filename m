@@ -2,108 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB576E7725
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BE16E7720
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 12:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbjDSKGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 06:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
+        id S232699AbjDSKFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 06:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232963AbjDSKGG (ORCPT
+        with ESMTP id S232816AbjDSKFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 06:06:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DB913C10;
-        Wed, 19 Apr 2023 03:05:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DC97634D8;
-        Wed, 19 Apr 2023 10:05:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87EA5C433EF;
-        Wed, 19 Apr 2023 10:05:54 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [GIT PULL] LoongArch fixes for v6.3-final
-Date:   Wed, 19 Apr 2023 18:05:17 +0800
-Message-Id: <20230419100517.3647508-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
+        Wed, 19 Apr 2023 06:05:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AE1EA5CE
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 03:05:49 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA6BB106F;
+        Wed, 19 Apr 2023 03:06:32 -0700 (PDT)
+Received: from [10.57.20.93] (unknown [10.57.20.93])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 777643F6C4;
+        Wed, 19 Apr 2023 03:05:47 -0700 (PDT)
+Message-ID: <12a775f5-a4fe-6a61-c187-fb3afa0ab6e2@arm.com>
+Date:   Wed, 19 Apr 2023 11:05:45 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] drm/scheduler: set entity to NULL in
+ drm_sched_entity_pop_job()
+Content-Language: en-GB
+From:   Steven Price <steven.price@arm.com>
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Danilo Krummrich <dakr@redhat.com>, luben.tuikov@amd.com,
+        airlied@gmail.com, daniel@ffwll.ch, christian.koenig@amd.com
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230418100453.4433-1-dakr@redhat.com>
+ <ddaf4984-6f5a-404c-df9d-537245e99420@arm.com>
+ <04f039ac71f3c0685a849b492478d18ec6ea4d11.camel@pengutronix.de>
+ <dcd957cf-8e26-11f1-2ac1-0fdd8541eed3@arm.com>
+In-Reply-To: <dcd957cf-8e26-11f1-2ac1-0fdd8541eed3@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 6a8f57ae2eb07ab39a6f0ccad60c760743051026:
+On 19/04/2023 10:53, Steven Price wrote:
+> On 19/04/2023 10:44, Lucas Stach wrote:
+>> Hi Steven,
+>>
+>> Am Mittwoch, dem 19.04.2023 um 10:39 +0100 schrieb Steven Price:
+>>> On 18/04/2023 11:04, Danilo Krummrich wrote:
+>>>> It already happend a few times that patches slipped through which
+>>>> implemented access to an entity through a job that was already removed
+>>>> from the entities queue. Since jobs and entities might have different
+>>>> lifecycles, this can potentially cause UAF bugs.
+>>>>
+>>>> In order to make it obvious that a jobs entity pointer shouldn't be
+>>>> accessed after drm_sched_entity_pop_job() was called successfully, set
+>>>> the jobs entity pointer to NULL once the job is removed from the entity
+>>>> queue.
+>>>>
+>>>> Moreover, debugging a potential NULL pointer dereference is way easier
+>>>> than potentially corrupted memory through a UAF.
+>>>>
+>>>> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+>>>
+>>> This triggers a splat for me (with Panfrost driver), the cause of which
+>>> is the following code in drm_sched_get_cleanup_job():
+>>>
+>>> 	if (job) {
+>>> 		job->entity->elapsed_ns += ktime_to_ns(
+>>> 			ktime_sub(job->s_fence->finished.timestamp,
+>>> 				  job->s_fence->scheduled.timestamp));
+>>> 	}
+>>>
+>>> which indeed is accessing entity after the job has been returned from
+>>> drm_sched_entity_pop_job(). And obviously job->entity is a NULL pointer
+>>> with this patch.
+>>>
+>>> I'm afraid I don't fully understand the lifecycle so I'm not sure if
+>>> this is simply exposing an existing bug in drm_sched_get_cleanup_job()
+>>> or if this commit needs to be reverted.
+>>>
+>> Not sure which tree you are on. The offending commit has been reverted
+>> in 6.3-rc5.
+> 
+> This is in drm-misc-next - I'm not sure which "offending commit" you are
+> referring to. I'm referring to:
+> 
+> 96c7c2f4d5bd ("drm/scheduler: set entity to NULL in
+> drm_sched_entity_pop_job()")
+> 
+> which was merged yesterday to drm-misc-next (and is currently the top
+> commit).
+> 
+> Is there another commit which has been reverted elsewhere which is
+> conflicting?
 
-  Linux 6.3-rc7 (2023-04-16 15:23:53 -0700)
+Answering my own question, the conflicting commit is:
 
-are available in the Git repository at:
+baad10973fdb ("Revert "drm/scheduler: track GPU active time per entity"")
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.3-1
+But that commit isn't (yet) in drm-misc-next. Which unfortunately means
+drm-misc-next is broken until a back-merge happens.
 
-for you to fetch changes up to b5533e990dd1de5872a34cba2f4f7f508c9b2ec3:
+Steve
 
-  tools/loongarch: Use __SIZEOF_LONG__ to define __BITS_PER_LONG (2023-04-19 12:07:34 +0800)
-
-----------------------------------------------------------------
-LoongArch fixes for v6.3-final
-
-Some bug fixes, some build fixes, a comment fix and a trivial cleanup.
-----------------------------------------------------------------
-Enze Li (1):
-      LoongArch: Replace hard-coded values in comments with VALEN
-
-Huacai Chen (6):
-      LoongArch: Make WriteCombine configurable for ioremap()
-      LoongArch: Fix probing of the CRC32 feature
-      LoongArch: Fix build error if CONFIG_SUSPEND is not set
-      LoongArch: Enable PG when wakeup from suspend
-      LoongArch: Mark 3 symbol exports as non-GPL
-      LoongArch: module: set section addresses to 0x0
-
-Qing Zhang (3):
-      LoongArch: Fix _CONST64_(x) as unsigned
-      LoongArch: Adjust user_watch_state for explicit alignment
-      LoongArch: Adjust user_regset_copyin parameter to the correct offset
-
-Tiezhu Yang (3):
-      LoongArch: Check unwind_error() in arch_stack_walk()
-      LoongArch: Clean up plat_swiotlb_setup() related code
-      tools/loongarch: Use __SIZEOF_LONG__ to define __BITS_PER_LONG
-
- Documentation/admin-guide/kernel-parameters.rst    |  1 +
- Documentation/admin-guide/kernel-parameters.txt    |  6 ++++
- arch/loongarch/Kconfig                             | 16 +++++++++
- arch/loongarch/include/asm/acpi.h                  |  3 ++
- arch/loongarch/include/asm/addrspace.h             |  4 +--
- arch/loongarch/include/asm/bootinfo.h              |  1 -
- arch/loongarch/include/asm/cpu-features.h          |  1 +
- arch/loongarch/include/asm/cpu.h                   | 40 ++++++++++++----------
- arch/loongarch/include/asm/io.h                    |  4 ++-
- arch/loongarch/include/asm/loongarch.h             |  6 ++--
- arch/loongarch/include/asm/module.lds.h            |  8 ++---
- arch/loongarch/include/uapi/asm/ptrace.h           |  3 +-
- arch/loongarch/kernel/cpu-probe.c                  |  9 +++--
- arch/loongarch/kernel/proc.c                       |  1 +
- arch/loongarch/kernel/ptrace.c                     | 25 +++++++++-----
- arch/loongarch/kernel/setup.c                      | 25 ++++++++++++--
- arch/loongarch/kernel/stacktrace.c                 |  2 +-
- arch/loongarch/kernel/unwind.c                     |  1 +
- arch/loongarch/kernel/unwind_prologue.c            |  4 ++-
- arch/loongarch/mm/init.c                           |  4 +--
- arch/loongarch/power/suspend_asm.S                 |  4 +++
- .../arch/loongarch/include/uapi/asm/bitsperlong.h  |  2 +-
- 22 files changed, 121 insertions(+), 49 deletions(-)
