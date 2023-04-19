@@ -2,234 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA73C6E7A7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539486E7A81
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 15:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233419AbjDSNUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 09:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
+        id S233425AbjDSNVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 09:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbjDSNUq (ORCPT
+        with ESMTP id S233409AbjDSNVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 09:20:46 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953921447C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:20:44 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id fy21so38625252ejb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 06:20:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google; t=1681910443; x=1684502443;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9BOf4Zg0kdc2uD8MLclq66ftf4z+xtdTTtzT11zmAto=;
-        b=Bx4lVV0tvF3WZNIAelGjK2Fe+WI2d9jhv4hTkmv62eBzI9a/2SAR4dqgAn5V4KHmWy
-         tUe1yBOyBENkTO1ZJZE/Wqsakw2MvM+nvhJx0OKc4NWLjxNQYJ2InIMWkPIRjXBDuKkz
-         e6EtIOKn0RZ4GgricZEiFYzN4TFvkJxAFNgYkngh7m2IHhPgvCGc7ei4bWF/AvddiQ32
-         99C+cJGLz/OzXEm81i4oDmgjV5e4TJKDXvxRTaN8E6jgSJiVRvtY8u/HD63urcp3w15o
-         fNb42RRJXzlSYFcydYXJ2Hipv8L6jXYh73Y2dtvayKBmKN2+3VtDMAr2WVx6sKXBx7+r
-         twfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681910443; x=1684502443;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9BOf4Zg0kdc2uD8MLclq66ftf4z+xtdTTtzT11zmAto=;
-        b=O+kdNOIEgT83n4f2ISQ4j/yJBzhLAvBe5HDsgtGskzaKMuUZYlZGl8ysJ6qbugHNUY
-         iiaOGj3nvel8k6ROSTKxCy/AsR4orlLwLw4zw7JDVoncbUM4eq2j1mfT4OvgHb+BNSZK
-         u4yits51eGmjAwmKrFn0JRm9rmkODWE/vKDuswus7NBdKdouLaU/m+knyu77YHkEidRy
-         P9+D6X/Buu+Go6Zt4nnCl4QNqY6N+xuynfdiNTMPQBlv4PNK4xDke+avHiF7N+4Yyj25
-         1zmnv5kqMtTwiJUlYzUmywVQbZ9Iwnu8rlxk4cv9WU7+R9+NTGUWvZFZ+FmmZDiyMOiY
-         jaIg==
-X-Gm-Message-State: AAQBX9f3ov/qGayxhz5uWu5158gkHWhhY4Mu6pMn8LOSo9WSV1XTc/I1
-        lQNa2pbOhmVwa4ljrjPFjv97m8Ww09UM4gdDvOK8MQ==
-X-Google-Smtp-Source: AKy350ZS/VAoCFqSysya9w50kf/t7vPS6iqTROEf96vSkCdYeDzCfqM9kpC+uErEFHpSWSXH+eYquB5PBONij/tPjVw=
-X-Received: by 2002:a17:906:8448:b0:94f:2d5e:1909 with SMTP id
- e8-20020a170906844800b0094f2d5e1909mr5449280ejy.7.1681910443027; Wed, 19 Apr
- 2023 06:20:43 -0700 (PDT)
+        Wed, 19 Apr 2023 09:21:09 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12B615464;
+        Wed, 19 Apr 2023 06:21:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681910462; x=1713446462;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=dwsCK/g+yR3m/NRJzizD8LYI/UOtsmhYlgVedbUwfzc=;
+  b=gDvIf1JW1D+Bi5t8rXt/sX9f/iktC/Q7YcKNCqLc41uqmuP7TcWIpdUR
+   7aqmhemVaKfsFUMyyEYi9WHX2Tczo+TmRoyUlj1XDxfd9odUd3wJ/hGfD
+   luOHOne9kUAb8GgIDU5m9qeyRkvWIgEmayG0rB9+aQ8S43DWGxASA29iw
+   YzgQQYyPfR1P0gpZ9NErhdw7OPKEgWRatp4O0czJUGT/wyT5QreQu1Hbl
+   /quDoSuJyVWmSbp2OmAGp7Bopz1b+inWMCzWEdMKIz0Bmgw3dr1oKituC
+   rdtYqWcIq+ZuxKsYBdf2DcNWV8lQp+lwKzO4E+QS9fSuoCFH9BcUfy/E7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="345445495"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="345445495"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 06:21:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="802916016"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="802916016"
+Received: from hbourgeo-mobl2.ger.corp.intel.com ([10.249.34.207])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 06:20:53 -0700
+Date:   Wed, 19 Apr 2023 16:20:50 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Babu Moger <babu.moger@amd.com>
+cc:     corbet@lwn.net, Reinette Chatre <reinette.chatre@intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
+        quic_neeraju@quicinc.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
+        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        jmattson@google.com, daniel.sneddon@linux.intel.com,
+        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        bagasdotme@gmail.com, eranian@google.com,
+        christophe.leroy@csgroup.eu, pawan.kumar.gupta@linux.intel.com,
+        jarkko@kernel.org, adrian.hunter@intel.com, quic_jiles@quicinc.com,
+        peternewman@google.com
+Subject: Re: [PATCH v4 7/7] x86/resctrl: Add debug files when mounted with
+ debug option
+In-Reply-To: <168177451010.1758847.568218491528297451.stgit@bmoger-ubuntu>
+Message-ID: <56497126-8f60-e590-bb13-b3739114375@linux.intel.com>
+References: <168177435378.1758847.8317743523931859131.stgit@bmoger-ubuntu> <168177451010.1758847.568218491528297451.stgit@bmoger-ubuntu>
 MIME-Version: 1.0
-References: <85323eb2-cfc7-d1b8-3a75-3fa63dde29db@fujitsu.com>
- <20230411122651.GV182481@unreal> <aa43746f-77f9-8592-5370-2a5042506ee5@fujitsu.com>
- <8fe62e38-e43d-3d6c-624f-1c8ce5859788@linux.dev> <f85cdaaa-b1d6-bc89-e963-8b611ae3667d@fujitsu.com>
- <20230413132418.GR17993@unreal> <4d1cacbf-f9b2-07c7-75bf-61f34abc1841@linux.dev>
- <7656e04c-1adc-6621-0e45-e2b282e6c143@fujitsu.com> <20230417180452.GG15386@unreal>
- <0985e0a9-fe19-1c07-0da7-48ec88eb77c6@fujitsu.com> <20230418075706.GB9740@unreal>
- <65860af3-7d48-5a26-f916-50450633a893@fujitsu.com>
-In-Reply-To: <65860af3-7d48-5a26-f916-50450633a893@fujitsu.com>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Wed, 19 Apr 2023 15:20:32 +0200
-Message-ID: <CAMGffEkyNnSXDfwuzCQ_ERZ-53OnoJ7gOF4eL1MAPYc74V43iQ@mail.gmail.com>
-Subject: Re: [PATCH for-next 2/3] RDMA/rtrs: Fix rxe_dealloc_pd warning
-To:     "Zhijian Li (Fujitsu)" <lizhijian@fujitsu.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Zhu Yanjun <yanjun.zhu@linux.dev>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        "haris.iqbal@ionos.com" <haris.iqbal@ionos.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 11:53=E2=80=AFAM Zhijian Li (Fujitsu)
-<lizhijian@fujitsu.com> wrote:
->
-> Leon, Guoqing
->
->
-> On 18/04/2023 15:57, Leon Romanovsky wrote:
-> >>>> Currently, without this patch:
-> >>>> 1. PD and clt_path->s.dev are shared among connections.
-> >>>> 2. every con[n]'s cleanup phase will call destroy_con_cq_qp()
-> >>>> 3. clt_path->s.dev will be always decreased in destroy_con_cq_qp(), =
-and when
-> >>>>       clt_path->s.dev become zero, it will destroy PD.
-> >>>> 4. when con[1] failed to create, con[1] will not take clt_path->s.de=
-v, but it try to decreased clt_path->s.dev <<< it's wrong to do that.
-> >>> So please fix it by making sure that failure to create con[1] will
-> >>> release resources which were allocated. If con[1] didn't increase
-> >>> s.dev_ref, it shouldn't decrease it either.
-> >> You are right, the current patch did exactly that.
-> >> It introduced a con owning flag 'has_dev' to indicate whether this con=
- has taken s.dev.
-> >> so that its cleanup phase will only decrease its s.dev properly.
-> > The has_dev is a workaround and not a solution. In proper error unwind
-> > sequence, you won't need extra flag.
-> >
-> > Thanks
-> >
->
-> how about below changes
->
-> commit 61dba725384e226d472b8142d70d40d4103df87a
-> Author: Li Zhijian <lizhijian@fujitsu.com>
-> Date:   Wed Apr 19 17:42:26 2023 +0800
->
->      RDMA/rtrs: Fix rxe_dealloc_pd warning
->
->      con[0] always sets s.dev to 1, correspondingly, we should let it to
->      release the last dev.
->
->      Previously,
->      1. PD and clt_path->s.dev are shared among connections.
->      2. every con[n]'s cleanup phase will call destroy_con_cq_qp()
->      3. clt_path->s.dev will be always decreased in destroy_con_cq_qp(), =
-and when
->         clt_path->s.dev become zero, it will destroy PD.
->      4. when con[1] failed to create, con[1] will not take clt_path->s.de=
-v,
->         but it try to decreased clt_path->s.dev <<< it's wrong to do that=
-.
->
->      The warning occurs when destroying PD whose reference count is not z=
-ero.
->      Precodition: clt_path->s.con_num is 2.
->      So 2 cm connection will be created as below:
->      CPU0                                              CPU1
->      init_conns {                              |
->        create_cm() // a. con[0] created        |
->                                                |  a'. rtrs_clt_rdma_cm_ha=
-ndler() {
->                                                |    rtrs_rdma_addr_resolv=
-ed()
->                                                |      create_con_cq_qp(co=
-n); << con[0]
->                                                |  }
->                                                | in this moment, refcnt o=
-f PD was increased to 2+
->                                                |
->        create_cm() // b. cid =3D 1, failed       |
->          destroy_con_cq_qp()                   |
->            rtrs_ib_dev_put()                   |
->              dev_free()                        |
->                ib_dealloc_pd(dev->ib_pd) << PD |
->                 is destroyed, but refcnt is    |
->                 still greater than 0           |
->      }
->
-> diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/=
-ulp/rtrs/rtrs-clt.c
-> index 80abf45a197a..1eb652dedca3 100644
-> --- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> +++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> @@ -1743,6 +1743,15 @@ static void destroy_con_cq_qp(struct rtrs_clt_con =
-*con)
->                  con->rsp_ius =3D NULL;
->                  con->queue_num =3D 0;
->          }
+On Mon, 17 Apr 2023, Babu Moger wrote:
+
+> Add the debug files to the resctrl hierarchy.
+> 
+> Signed-off-by: Babu Moger <babu.moger@amd.com>
+> ---
+>  arch/x86/kernel/cpu/resctrl/internal.h |    1 +
+>  arch/x86/kernel/cpu/resctrl/rdtgroup.c |   54 +++++++++++++++++++++++++++++++-
+>  2 files changed, 54 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
+> index 1eac07ebc31b..855109abb480 100644
+> --- a/arch/x86/kernel/cpu/resctrl/internal.h
+> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
+> @@ -288,6 +288,7 @@ struct rdtgroup {
+>  #define RFTYPE_TOP			BIT(4)
+>  #define RFTYPE_RES_CACHE		BIT(5)
+>  #define RFTYPE_RES_MB			BIT(6)
+> +#define RFTYPE_DEBUG			BIT(7)
+>  #define RFTYPE_CTRL_INFO		(RFTYPE_INFO | RFTYPE_CTRL)
+>  #define RFTYPE_MON_INFO			(RFTYPE_INFO | RFTYPE_MON)
+>  #define RFTYPE_TOP_INFO			(RFTYPE_INFO | RFTYPE_TOP)
+> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> index 15ded0dd5b09..1ec4359348c2 100644
+> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> @@ -1880,6 +1880,7 @@ static struct rftype res_common_files[] = {
+>  		.mode		= 0444,
+>  		.kf_ops		= &rdtgroup_kf_single_ops,
+>  		.seq_show	= rdtgroup_rmid_show,
+> +		.fflags		= RFTYPE_BASE | RFTYPE_DEBUG,
+>  	},
+>  	{
+>  		.name		= "schemata",
+> @@ -1909,6 +1910,7 @@ static struct rftype res_common_files[] = {
+>  		.mode		= 0444,
+>  		.kf_ops		= &rdtgroup_kf_single_ops,
+>  		.seq_show	= rdtgroup_closid_show,
+> +		.fflags		= RFTYPE_CTRL_BASE | RFTYPE_DEBUG,
+>  	},
+>  
+>  };
+> @@ -2420,6 +2422,49 @@ static int mkdir_mondata_all(struct kernfs_node *parent_kn,
+>  			     struct rdtgroup *prgrp,
+>  			     struct kernfs_node **mon_data_kn);
+>  
+> +static void resctrl_add_debug_files(void)
+> +{
+> +	struct rftype *rfts, *rft;
+> +	int len;
 > +
-> +       /*
-> +        * Every con will try to decreased s.dev_ref, but we should
-> +        * reserve the last s.dev_ref for con[0]. In case con[1+]'s
-> +        * cleanup phase call rtrs_ib_dev_put(clt_path->s.dev) early.
-> +        */
-> +       if (con->c.cid !=3D 0 && clt_path->s.dev_ref =3D=3D 1)
-> +               return;
+> +	rfts = res_common_files;
+> +	len = ARRAY_SIZE(res_common_files);
 > +
->          if (clt_path->s.dev_ref && !--clt_path->s.dev_ref) {
->                  rtrs_ib_dev_put(clt_path->s.dev);
->                  clt_path->s.dev =3D NULL;
+> +	lockdep_assert_held(&rdtgroup_mutex);
+> +
+> +	for (rft = rfts; rft < rfts + len; rft++) {
+> +		if (rft->fflags & RFTYPE_DEBUG) {
+> +			rft->fflags &= ~RFTYPE_DEBUG;
 
-I run a regression test in our test env, it triggers a warning on
+I don't fully follow why you need to play with ->fflags like this.
 
-1681                 if (WARN_ON(clt_path->s.dev))
+Is it for the ->fflags test in rdtgroup_add_files()? Can't you just do 
+some extra masking there for RFTYPE_DEBUG based on resctrl_debug which 
+you already keep?
 
-[ 1333.042633] ------------[ cut here ]------------
-[ 1333.042650] WARNING: CPU: 8 PID: 559 at
-/root/kernel-test/ibnbd2/rtrs/rtrs-clt.c:1681
-rtrs_clt_rdma_cm_handler+0x864/0x8a0 [rtrs_client]
-[ 1333.042651] Modules linked in: loop rnbd_client(O) rtrs_client(O)
-rtrs_core(O) kvm_amd kvm input_leds led_class irqbypass crc32_pclmul
-aesni_intel sp5100_tco evdev libaes watchdog sg k10temp crypto_simd
-fam15h_power ipmi_si serio_raw cryptd ipmi_devintf glue_helper
-ipmi_msghandler acpi_cpufreq button ib_ipoib ib_umad null_blk brd
-rdma_cm iw_cm ib_cm ip_tables x_tables autofs4 raid10 raid456
-async_raid6_recov async_memcpy async_pq async_xor async_tx xor
-raid6_pq libcrc32c raid1 raid0 linear mlx4_ib md_mod ib_uverbs ib_core
-sd_mod t10_pi crc_t10dif crct10dif_generic ahci libahci
-crct10dif_pclmul crct10dif_common crc32c_intel igb libata usb_storage
-psmouse i2c_piix4 i2c_algo_bit mlx4_core dca scsi_mod i2c_core ptp
-pps_core
-[ 1333.042737] CPU: 8 PID: 559 Comm: kworker/u128:1 Tainted: G
-  O      5.10.136-pserver-develop-5.10 #257
-[ 1333.042738] Hardware name: Supermicro H8QG6/H8QG6, BIOS 3.00       09/04=
-/2012
-[ 1333.042752] Workqueue: rdma_cm cma_work_handler [rdma_cm]
-[ 1333.042758] RIP: 0010:rtrs_clt_rdma_cm_handler+0x864/0x8a0 [rtrs_client]
-[ 1333.042761] Code: ff bb ea ff ff ff e8 db a5 24 fc 49 8d b4 24 10
-01 00 00 89 da 48 c7 c7 40 93 5b c0 e8 4b 47 21 fc 4d 8b 65 00 e9 15
-fe ff ff <0f> 0b 4c 89 ff bb ea ff ff ff e8 ad a5 24 fc eb d0 0f 0b 4c
-89 ff
-[ 1333.042763] RSP: 0018:ffffaff68e57bdb0 EFLAGS: 00010286
-[ 1333.042765] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff9eddc00=
-51420
-[ 1333.042767] RDX: ffff9ee4ef716e40 RSI: ffff9f14ea288f30 RDI: ffff9eddc88=
-db240
-[ 1333.042768] RBP: ffffaff68e57be50 R08: 0000000000000000 R09: 006d635f616=
-d6472
-[ 1333.042769] R10: ffffaff68e57be68 R11: 0000000000000000 R12: ffff9edde13=
-88000
-[ 1333.042771] R13: ffff9eddc88db200 R14: ffff9edde1388000 R15: ffff9eddc88=
-db240
-[ 1333.042773] FS:  0000000000000000(0000) GS:ffff9eecc7c00000(0000)
-knlGS:0000000000000000
-[ 1333.042774] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 1333.042776] CR2: 00007f0ac4ed4004 CR3: 0000002b5040a000 CR4: 00000000000=
-406e0
-[ 1333.042777] Call Trace:
-[ 1333.042790]  ? newidle_balance+0x25e/0x3c0
-[ 1333.042795]  ? psi_group_change+0x43/0x230
-[ 1333.042801]  ? cma_cm_event_handler+0x23/0xb0 [rdma_cm]
-[ 1333.042807]  cma_cm_event_handler+0x23/0xb0 [rdma_cm]
-[ 1333.042814]  cma_work_handler+0x5a/0xb0 [rdma_cm]
-[ 1333.042819]  process_one_work+0x1f3/0x390
-[ 1333.042822]  worker_thread+0x2d/0x3c0
+> +			rdtgroup_add_file(rdtgroup_default.kn, rft);
+> +		}
+> +	}
+> +
+> +	kernfs_activate(rdtgroup_default.kn);
+> +}
+> +
+> +static void resctrl_remove_debug_files(void)
+> +{
+> +	struct rftype *rfts, *rft;
+> +	int len;
+> +
+> +	rfts = res_common_files;
+> +	len = ARRAY_SIZE(res_common_files);
+> +
+> +	lockdep_assert_held(&rdtgroup_mutex);
+> +
+> +	for (rft = rfts; rft < rfts + len; rft++) {
+> +		if (!strcmp(rft->name, "mon_hw_id")) {
+> +			rft->fflags |= RFTYPE_DEBUG;
+> +			kernfs_remove_by_name(rdtgroup_default.kn, rft->name);
+> +		} else if (!strcmp(rft->name, "ctrl_hw_id")) {
+> +			rft->fflags |= RFTYPE_DEBUG;
+> +			kernfs_remove_by_name(rdtgroup_default.kn, rft->name);
+> +		}
+> +	}
+> +
+> +	kernfs_activate(rdtgroup_default.kn);
+> +}
+> +
+>  static int rdt_enable_ctx(struct rdt_fs_context *ctx)
+>  {
+>  	int ret = 0;
+> @@ -2433,8 +2478,10 @@ static int rdt_enable_ctx(struct rdt_fs_context *ctx)
+>  	if (!ret && ctx->enable_mba_mbps)
+>  		ret = set_mba_sc(true);
+>  
+> -	if (!ret && ctx->enable_debug)
+> +	if (!ret && ctx->enable_debug) {
+>  		resctrl_debug = true;
+> +		resctrl_add_debug_files();
+> +	}
+>  
+>  	return ret;
+>  }
+> @@ -2851,6 +2898,11 @@ static void rdt_kill_sb(struct super_block *sb)
+>  
+>  	set_mba_sc(false);
+>  
+> +	if (resctrl_debug) {
+> +		resctrl_remove_debug_files();
+> +		resctrl_debug = false;
+
+Logically, this false assignment belongs to the earlier patch.
+
+-- 
+ i.
