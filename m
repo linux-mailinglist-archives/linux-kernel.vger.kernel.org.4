@@ -2,95 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2CA6E72AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087966E72AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 07:48:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbjDSFpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 01:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
+        id S229978AbjDSFsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 01:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjDSFpX (ORCPT
+        with ESMTP id S229633AbjDSFsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 01:45:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB7B2118
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:45:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A30D63B0F
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 05:45:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA0E0C433EF;
-        Wed, 19 Apr 2023 05:45:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681883120;
-        bh=rHIVwcWlnAi6I7EkL3r3k1a15viUoZ98G0Ds8/Yst4M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H/BGdcSYEk2ZQ32pQ/0W1uRry9lv83+rgnE4uGpjyOtQqRFDNUni+12kavXJZm2No
-         NRSeFPNyOaiol6RH221aAeH0iJ7QLpGF282uUoj1w6ZESa0iGmg61OKWt37WA6h2/P
-         3uAY8LG6/vzl6VbVkSGZTHmZkTIsOffKc3D4w/e9jysM530tYnCBj/EMyo4p1rc2Kx
-         eCpBKX7SsQ+yDJE3ON1iwcBGWo30qaD7n1lfrZPW85hzpGUH7meWLVGjQH2KdlOdF3
-         /UiVSEa2frokvmHdbWV+y0PTiQ89/vjtpefaqFOl+dxdb7BIrFF4QqPynZlk3oHO0u
-         iP8KnCri24PZA==
-Date:   Wed, 19 Apr 2023 07:45:16 +0200
-From:   Simon Horman <horms@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] soc: ti: pruss: Avoid cast to incompatible function type
-Message-ID: <ZD9/7Oed8Rujjj/0@kernel.org>
-References: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
- <CAKwvOdnj7rNeh0YeX2NPcbkoJBnRwXb9Dt0SF9mHaMKYVLjCjw@mail.gmail.com>
+        Wed, 19 Apr 2023 01:48:38 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF53C59F5
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:48:36 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54f6a796bd0so371911547b3.12
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Apr 2023 22:48:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681883316; x=1684475316;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K4bx1lrPt7EkQTFUhn+tnnmLkUflOfyoDdf2Nh8k7go=;
+        b=NDSSkGY3R//+h2GDgeukfHv1wKB990ASuIBacYtJi7akdl78oBCgfqzUJSPDugRLP0
+         0SwZh70QC4aV55zP/QS7QkjuUt+R/ftbL/uF2Uvid7vhacEKXQFCH6wEhHW4boT5OtuW
+         xD0WPLgd7ZlmSDufqrlyOgVVME77octjjqZX44WnJ24tKUDAT4uSYHEYsYF6PNvjv6BR
+         4auPLOMSJpbnUiMUvuFrdPMwEvIgY/oTN0QZGZlEg6K1s/BwCpDpANXd1ujfq7E9ajb5
+         9KwkFc7neUNclkx4vZ19h+J+5kQrwLtE5HtAYjkm34KK9f1bk5DV4YiDkvODL8yig6/h
+         LN2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681883316; x=1684475316;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K4bx1lrPt7EkQTFUhn+tnnmLkUflOfyoDdf2Nh8k7go=;
+        b=dmQJ14d+DAz72RNqb9xI/mQuiEYIE6H3mRpAxP3NkRYJKS+PLMuoQynxZK4XHGE9NX
+         gcmurizEQGisMIG7in8uCp4Y8savkNHsagdCFQ5s3F6WTIEeMQ3PMcellYrVodSyvDl1
+         4NGI7dg+/oF7inYK4ZuqZenrO6bL/Dn0Z/f9NPv1ia9X38AOw7l7F/WRjaJjjC127kPI
+         Zjz1DDarjLrzHqEYwf7OXUKG3woFmWdZOTKC6NGr3udcg+GfWwYlMjp+hNOv7SdrVlFW
+         2uqieNDS5tpieZkqzbxzKqb1J82hsFLnGqBLydusQEFZwI050tEg8ZfYLYugPg2qNiOH
+         YXRA==
+X-Gm-Message-State: AAQBX9fnhlvOtDFh4fJRshSMWSdr+QlkMQDyAiFKr0q+agah+UDH/Moz
+        Flaxk1iP4etigsLuKCQUYSDDhHfTujn2pVHBFnbGjw==
+X-Google-Smtp-Source: AKy350bhgIZfl+76ufNilmmY2MnTYA9MZXAIWAcOr78M6MH58CYU9cGj3mCALecz83+OYF4IuRIUELBQPUaCYMkEDnc=
+X-Received: by 2002:a0d:eb08:0:b0:555:d266:acc5 with SMTP id
+ u8-20020a0deb08000000b00555d266acc5mr678715ywe.29.1681883315944; Tue, 18 Apr
+ 2023 22:48:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdnj7rNeh0YeX2NPcbkoJBnRwXb9Dt0SF9mHaMKYVLjCjw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230418052902.1336866-1-joychakr@google.com> <20230418052902.1336866-5-joychakr@google.com>
+ <ZD5JC7BdN1usn6Kd@smile.fi.intel.com>
+In-Reply-To: <ZD5JC7BdN1usn6Kd@smile.fi.intel.com>
+From:   Joy Chakraborty <joychakr@google.com>
+Date:   Wed, 19 Apr 2023 11:18:25 +0530
+Message-ID: <CAOSNQF2sXHFCx9ZfrtfmxHfKrAE0XGP8SRvW6wyYco+FKSPmDw@mail.gmail.com>
+Subject: Re: [PATCH v7 4/5] spi: dw: Add DMA address widths capability check
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com,
+        rohitner@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 11:44:28AM -0700, Nick Desaulniers wrote:
-> On Tue, Apr 18, 2023 at 4:41 AM Simon Horman <horms@kernel.org> wrote:
+On Tue, Apr 18, 2023 at 1:08=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@intel.com> wrote:
+>
+> On Tue, Apr 18, 2023 at 05:29:01AM +0000, Joy Chakraborty wrote:
+> > Store address width capabilities of DMA controller during init and chec=
+k
+> > the same per transfer to make sure the bits/word requirement can be met=
+.
 > >
-> > Rather than casting clk_unregister_mux to an incompatible function
-> > type provide a trivial wrapper with the correct signature for the
-> > use-case.
-> >
-> > Reported by clang-16 with W=1:
-> >
-> >  drivers/soc/ti/pruss.c:158:38: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-> >          ret = devm_add_action_or_reset(dev, (void(*)(void *))clk_unregister_mux,
-> >
-> > No functional change intended.
-> > Compile tested only.
-> 
-> Thanks for the patch!
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
-> Here's some more suspects to look at, if you have cycles:
-> drivers/base/devres.c:734:int __devm_add_action(struct device *dev,
-> void (*action)(void *), void *data, const char *name)
-> drivers/i2c/busses/i2c-mchp-pci1xxxx.c:1159: ret =
-> devm_add_action(dev, (void (*)(void *))pci1xxxx_i2c_shutdown, i2c);
-> drivers/soc/ti/pruss.c:96: ret = devm_add_action_or_reset(dev,
-> (void(*)(void *))clk_unregister_mux,
-> drivers/mmc/host/meson-mx-sdhc-mmc.c:791: ret =
-> devm_add_action_or_reset(dev, (void(*)(void *))mmc_free_host,
-> drivers/pci/controller/pcie-microchip-host.c:866:
-> devm_add_action_or_reset(dev, (void (*) (void
-> *))clk_disable_unprepare,
+> > Current DW DMA driver requires both tx and rx channel to be configured
+> > and functional hence a subset of both tx and rx channel address width
+> > capability is checked with the width requirement(n_bytes) for a
+> > transfer.
+>
+> ...
+>
+> > +     /*
+> > +      * Assuming both channels belong to the same DMA controller hence=
+ the
+> > +      * address width capabilities most likely would be the same.
+> > +      */
+>
+> I had a small comment on this In v6 thread.
 
-Thanks, I will take a look as a background task.
-Let me know if there is any urgency on your side.
+Sure,
 
-...
+Your comment in V6 thread:
+"
+I would add something to explain the side of these address width, like
+
+         * Assuming both channels belong to the same DMA controller hence
+         * the peripheral side address width capabilities most likely would
+         * be the same.
+"
+
+I do not think the address width capabilities are dependent on the
+side of generation like memory or peripheral. From what I understand,
+address width capabilities are solely dependent on the transaction
+generation capability of the DMA controller towards the system bus.
+What we intend to highlight here is the assumption that both tx and rx
+channel would belong to the same DMA controller hence the transaction
+generation capabilities would be the same both for read and write
+(e.g. if the DMA controller is able to generate 32 bit sized reads
+then it should also be able to generate 32 bit sized writes).
+With this assumption we are doing a bitwise and of both tx and rx capabilit=
+ies.
+
+Please let me know if you think otherwise.
+
+Thanks
+Joy
+
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
