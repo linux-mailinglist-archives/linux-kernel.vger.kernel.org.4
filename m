@@ -2,176 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C47F6E8264
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 010C86E8266
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231485AbjDSUJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 16:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
+        id S231625AbjDSUKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 16:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbjDSUJr (ORCPT
+        with ESMTP id S231500AbjDSUKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 16:09:47 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E06B524B
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:09:45 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-506b2a08877so279543a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 13:09:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681934984; x=1684526984;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xw+KJbFyACMkRJGroXOI3BeGOTCCUWrYEe/1oBLkoRQ=;
-        b=zxLiR99eSsw7BjcTYQ5S8E/CLIhKw3VB5JtlrC3z5U9ubcd67bhgmEL6qhgyiYHXnN
-         1FKFTMdCsvP8cWawQqMJH8WcsJXs7jKvHzVzsgZjss3z7mRJuhEnp2MklmWlA5gMjRXG
-         mAUhXVOcM/JlvX7vsTfyiWiz3Rmwe3D+OhArJEsHNLImFAO2I3OTIlHXI/TCRRyyhFR7
-         fgT92UqMmmJC/mx078VhIgAqtju+3rvlsQx52kdYVGRerlNjhFJv2cUxNcROuWBOjM+a
-         eR1UeOFNXCkXI1ObwK1mMXi0GZI7DEGzgsoWiT7tdYkbkrHnV27T/TMX25BRd/GWv2DD
-         1tug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681934984; x=1684526984;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xw+KJbFyACMkRJGroXOI3BeGOTCCUWrYEe/1oBLkoRQ=;
-        b=iEGSidzrKK/3gOEmOi7NsRfp3j4fhlKbrhh3SCjqx6e+alUtj8dGSjuEGr20KjwwDj
-         2/ubPuYbSyPBIssUgCCoXG72dFg615//HUrJGgofBPOouI+8cqHEWmopujT4MNtCLqOO
-         ickEr9OF0uDZzSJMch9dEy45MFJ5HUX3v5phh80JdJ+so6D/epcvg66euDFCeUmcJZil
-         LZXz14vOuc2MzHVGlHv4ZeNRWDzjdlquVnKZZ2jJ75/9vXPa7z8jloWXdwf+3eChlZX4
-         gFcBexcQzq4XJF34c+HbsqRYgSVEYdKYsyER3Vv/ZcvZff4IcBigsnoHtfAOPaAknS3B
-         MsDg==
-X-Gm-Message-State: AAQBX9fdcagTX9NGcFn97rIKvk/WseprETINKGei6UJna4XlmaKcArOK
-        RXjHZ6kbD6cLNoYehkExy+O3Ug==
-X-Google-Smtp-Source: AKy350a3Apxx+KuNFbakTzHCxKVnVUVMPDVeV2R93lEsA74lMQBPm+5IF/g1O8tqNFYYN6/peDtnqw==
-X-Received: by 2002:a05:6402:650:b0:504:b313:5898 with SMTP id u16-20020a056402065000b00504b3135898mr7270539edx.27.1681934983797;
-        Wed, 19 Apr 2023 13:09:43 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:976c:1d6c:6ed0:8935? ([2a02:810d:15c0:828:976c:1d6c:6ed0:8935])
-        by smtp.gmail.com with ESMTPSA id i10-20020aa7dd0a000000b0050685927971sm6858485edv.30.2023.04.19.13.09.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 13:09:43 -0700 (PDT)
-Message-ID: <f9b62f48-5c8b-2674-313d-4552c61c4302@linaro.org>
-Date:   Wed, 19 Apr 2023 22:09:42 +0200
+        Wed, 19 Apr 2023 16:10:51 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790D14C33;
+        Wed, 19 Apr 2023 13:10:49 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:199e::580])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7137B6603247;
+        Wed, 19 Apr 2023 21:10:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681935048;
+        bh=p6Bh6e7Qjn7BRm0mOG9dNdfJlWO9r4yzoXFJ/eJ0NLA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=StBvdoqAOlrplsSJyWzXdLylHd8PoDk0WZX0t7NOZfSaPPlvSygbXsF/lg2S+aCUl
+         EjZRlkrCSC5KYrsaH/StH7w0yFe1Ixcjrpq62C52CQ5VeJtlJT/Pa28mv4Idy45jt1
+         ySjCHuTDKukocIt+tMOF+6QYcGeVRpihONrUFnLGbVVQGM0d7dnsUFPFXfnzypCGKz
+         cHD40EKWsTuDuNqLRKq3zjobxJh3Gu6Qr6zmJwMFcmviN+rYmCiAIHgpt9e87AGahn
+         a9EPRJ+4vQZdzBysAvWRYmm3ByeJefq+O2NwlXX8q+m6F1bZY687sIlULnvti/645f
+         ifTx9G6gq8BBw==
+Message-ID: <511c900070050a5cac317279ee4208cdc1d8d1af.camel@collabora.com>
+Subject: Re: [PATCH] media: uapi: HEVC: Add num_delta_pocs_of_ref_rps_idx
+ field
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Date:   Wed, 19 Apr 2023 16:10:38 -0400
+In-Reply-To: <20230418160717.743517-1-benjamin.gaignard@collabora.com>
+References: <20230418160717.743517-1-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V3 1/2] dt-bindings: interrupt-controller: Add Loongson
- EIOINTC
-Content-Language: en-US
-To:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-References: <cover.1681887790.git.zhoubinbin@loongson.cn>
- <3b9c4f05eaf14bc3b16aebec3ff84c8a2d52c4a5.1681887790.git.zhoubinbin@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3b9c4f05eaf14bc3b16aebec3ff84c8a2d52c4a5.1681887790.git.zhoubinbin@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2023 09:17, Binbin Zhou wrote:
-> Add Loongson Extended I/O Interrupt controller binding with DT schema
-> format using json-schema.
-> 
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+Le mardi 18 avril 2023 =C3=A0 18:07 +0200, Benjamin Gaignard a =C3=A9crit=
+=C2=A0:
+> Some drivers firmwares parse by themselves slice header and need
+> num_delta_pocs_of_ref_rps_idx value to parse slice header
+> short_term_ref_pic_set().
+> Use one of the 4 reserved bytes to store this value without
+> changing the v4l2_ctrl_hevc_decode_params structure size and padding.
+>=20
+> This value also exist in DXVA API.
+>=20
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>=20
+
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+
+For the info, this is in preparation for MTK VCODEC HEVC driver. It makes o=
+ur
+API (hopefully) on par with DXVA, which has always been the goal, we simply
+missed it during review.
+
+regards,
+Nicolas
+
 > ---
->  .../loongson,eiointc.yaml                     | 74 +++++++++++++++++++
->  1 file changed, 74 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-> new file mode 100644
-> index 000000000000..4ab4efb061e1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-> @@ -0,0 +1,74 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interrupt-controller/loongson,eiointc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson Extended I/O Interrupt Controller
-> +
-> +maintainers:
-> +  - Binbin Zhou <zhoubinbin@loongson.cn>
-> +
-> +description: |
-> +  This interrupt controller is found on the Loongson-3 family chips and
-> +  Loongson-2K series chips and is used to distribute interrupts directly to
-> +  individual cores without forwarding them through the HT's interrupt line.
-> +
-> +allOf:
-> +  - $ref: /schemas/interrupt-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - loongson,ls2k0500-eiointc
-> +      - loongson,ls2k2000-eiointc
-> +
-> +  reg:
-> +    items:
-> +      - description: Interrupt enable registers
-> +      - description: Interrupt status registers
-> +      - description: Interrupt clear registers
-> +      - description: Interrupt routing configuration registers
-> +
-> +  reg-names:
-> +    items:
-> +      - const: enable
-> +      - const: status
-> +      - const: clear
-> +      - const: route
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupt-controller: true
-> +
-> +  '#interrupt-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-controller
-> +  - '#interrupt-cells'
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    eiointc: interrupt-controller@1fe11600 {
-> +      compatible = "loongson,ls2k0500-eiointc";
-> +      reg = <0x1fe11600 0x10>,
-> +            <0x1fe11700 0x10>,
-> +            <0x1fe11800 0x10>,
-> +            <0x1fe114c0 0x4>;
-
-Binding is OK, but are you sure you want to split the address space like
-this? It looks like two address spaces (enable+clear+status should be
-one). Are you sure this is correct?
-
-Best regards,
-Krzysztof
+>  .../userspace-api/media/v4l/ext-ctrls-codec-stateless.rst  | 7 +++++++
+>  include/uapi/linux/v4l2-controls.h                         | 6 +++++-
+>  2 files changed, 12 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-statel=
+ess.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.r=
+st
+> index 3d8411acd5b8..92ce3e126929 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
+> @@ -2923,6 +2923,13 @@ This structure contains all loop filter related pa=
+rameters. See sections
+>        - ``poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+>        - PocLtCurr as described in section 8.3.2 "Decoding process for re=
+ference
+>          picture set": provides the index of the long term references in =
+DPB array.
+> +    * - __u8
+> +      - ``num_delta_pocs_of_ref_rps_idx``
+> +      - When the short_term_ref_pic_set_sps_flag in the slice header is =
+equal to 0,
+> +        it is the same than derived value NumDeltaPocs[RefRpsIdx]. It ca=
+n be used to parse
+> +        the RPS data in slice headers instead of skipping it with @short=
+_term_ref_pic_set_size.
+> +        When the value of short_term_ref_pic_set_sps_flag in the slice h=
+eader is
+> +        equal to 1, num_delta_pocs_of_ref_rps_idx shall be set to 0.
+>      * - struct :c:type:`v4l2_hevc_dpb_entry`
+>        - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+>        - The decoded picture buffer, for meta-data about reference frames=
+.
+> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2=
+-controls.h
+> index 5e80daa4ffe0..7bf59a87a1bf 100644
+> --- a/include/uapi/linux/v4l2-controls.h
+> +++ b/include/uapi/linux/v4l2-controls.h
+> @@ -2385,6 +2385,9 @@ struct v4l2_ctrl_hevc_slice_params {
+>   * @poc_st_curr_after: provides the index of the short term after refere=
+nces
+>   *		       in DPB array
+>   * @poc_lt_curr: provides the index of the long term references in DPB a=
+rray
+> + * @num_delta_pocs_of_ref_rps_idx: same as the derived value NumDeltaPoc=
+s[RefRpsIdx],
+> + *				   can be used to parse the RPS data in slice headers
+> + *				   instead of skipping it with @short_term_ref_pic_set_size.
+>   * @reserved: padding field. Should be zeroed by applications.
+>   * @dpb: the decoded picture buffer, for meta-data about reference frame=
+s
+>   * @flags: see V4L2_HEVC_DECODE_PARAM_FLAG_{}
+> @@ -2400,7 +2403,8 @@ struct v4l2_ctrl_hevc_decode_params {
+>  	__u8	poc_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>  	__u8	poc_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>  	__u8	poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+> -	__u8	reserved[4];
+> +	__u8	num_delta_pocs_of_ref_rps_idx;
+> +	__u8	reserved[3];
+>  	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>  	__u64	flags;
+>  };
 
