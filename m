@@ -2,106 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632266E7F00
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 17:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B2C6E7F0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 18:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233746AbjDSP7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 11:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
+        id S229833AbjDSQBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 12:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjDSP7J (ORCPT
+        with ESMTP id S231584AbjDSQBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:59:09 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A833A19A6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:59:08 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-24b3451b2fcso137723a91.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 08:59:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1681919948; x=1684511948;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AVtjPMREOOUQQbJrVJ+PVQx4OKxpFf/ZUEP61+e+1gQ=;
-        b=frYwdCwa+a/xzkbnVucoLlipi8ogEmqZ1qhEAg5zGCAQKrQTu1+DqFZRxnWj0pmuBe
-         vNEUyLRxzAchIdqSpVtXOZkJ8lOjJzLbes7827PH6Y1lnvYTaGbAQAedWGOjbyBL4SZw
-         dIdAGbt9VCLb5MfB/LgIGiKfZBvabTkYrw8r3YfoaGY9WTUz3J7ZgZWq8KuJUYtrMGDP
-         xTet/YdBWXQ5LLvyIroS0hsICAVEt9ZF07DLvdKFCq8K7PoktQZzEKVpjrEkYblFWcDT
-         bbUI2DI5Q1WludkRgqqFbZT6CmdyneApjgf/cVP5AC5x+KwMsxRp6zjZSe4yl7Nyx6pk
-         6MqQ==
+        Wed, 19 Apr 2023 12:01:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5634E3593
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:00:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681920031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+sZluiJicHRPmewxL0TuLmGz2UnSlgfjskB8rwD+xpo=;
+        b=Py8piR7ikcFXgUmxz8GNLXEMGMMPJmvWFWkdrp+NuXH0771ODYNvmB85PgZ8I0vo0ALM/G
+        d1ao4h8vbkmoZMj4EqIgOrhYKzjMtQOUJgLf0WFS9d8bEc/6/ZqSsNynI90Qn9FkOmPxE7
+        p2Iwzi8pHax5ne2RLJiknWDnGbYH0d8=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-663-xEKMImL4MVSEhklFeLe41w-1; Wed, 19 Apr 2023 12:00:29 -0400
+X-MC-Unique: xEKMImL4MVSEhklFeLe41w-1
+Received: by mail-qv1-f71.google.com with SMTP id a9-20020a0ccdc9000000b005df3eac4c0bso74328qvn.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 09:00:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681919948; x=1684511948;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AVtjPMREOOUQQbJrVJ+PVQx4OKxpFf/ZUEP61+e+1gQ=;
-        b=dAMblwFOQF902vZ+dd9xIuTsLrZpMuJLoTtt1VVVFwFZezsZy4IISmX1orxPTxNeJE
-         iVobtnnXAWjE6ETuQPVZmJ5MSVMCiURjYhn+nYT5hSs+su/Gze8jDSPXXV9gXi/SxFTt
-         kdNa6o5dGAmYQmyZEdj7yDUPoqr6x4uLBZaDHY+Yu+tHn8d+1kNr2TtFwfCXu+rzTZwn
-         AG9A8DR/QLYwulA41ClGT3saRaEpY7L0c42ymfOQwvE2Na9deISwZB63b4Z19x7JxKhh
-         Z745jWFBZ3uplLLJv6nZAQEiuerK7h75DsZQY6J7lpIiBoT6Mw1aPLgQkVTXBFd8iV0f
-         gAZw==
-X-Gm-Message-State: AAQBX9cWhBifdu38LyZBfySmH92UaT+FzcQbgm4dtGKVL0AZwX6jji66
-        kL2BvvFG2LlUAk4q6C9guY5TyQ==
-X-Google-Smtp-Source: AKy350Z2QE182sNm3aUj8RGCOEigVzYtoSb+0d9wOzIYohC9AAOYJzzfsi7c8UvRD0MGHAA7O2OL5w==
-X-Received: by 2002:a17:90a:930b:b0:24b:2e6a:24ed with SMTP id p11-20020a17090a930b00b0024b2e6a24edmr1085199pjo.37.1681919943842;
-        Wed, 19 Apr 2023 08:59:03 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id l9-20020a17090a49c900b002353082958csm1570643pjm.10.2023.04.19.08.59.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 08:59:03 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 08:59:03 -0700 (PDT)
-X-Google-Original-Date: Wed, 19 Apr 2023 08:57:41 PDT (-0700)
-Subject:     Re: [PATCH v8 0/7] Add non-coherent DMA support for AX45MP
-In-Reply-To: <ZDzs3eYIKPFcv0HQ@infradead.org>
-CC:     Conor Dooley <conor@kernel.org>, prabhakar.csengg@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        geert+renesas@glider.be, heiko@sntech.de, guoren@kernel.org,
-        ajones@ventanamicro.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, samuel@sholland.org,
-        linux-riscv@lists.infradead.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        biju.das.jz@bp.renesas.com, prabhakar.mahadev-lad.rj@bp.renesas.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Message-ID: <mhng-e296c86c-71b1-46f8-88c6-16eda3590a3d@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        d=1e100.net; s=20221208; t=1681920029; x=1684512029;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+sZluiJicHRPmewxL0TuLmGz2UnSlgfjskB8rwD+xpo=;
+        b=j1633AY8X/hgQo4A05sT48ZPsc/Md8155ZYiKjH28fpC01vDis/gIWPZiVpGKOxjsB
+         4Z0/fiFukjJm9q6gYczmvbpoBPdJT5NeVZqctTsAh17ZRlEljfSHiIuMeDiTPCaIhW2i
+         UCTjkNSWyu6sV7VfUdKS2KylZ3bV8wmfdHwIXLqDmsmUkoUYUptyeEnAeqQJsnaBh1WR
+         o1AnoraZ09cXh+1Wr+ZSJHsPbOqqFYmiDueJRTJFY/LIuUiq0utRU4eNoqsxFlW+hVv9
+         L4X3U5vekQf4KvHXecvggpo7/NoG5+hwyMLT+7dv4V0QnA3m5ea7vi4cHJYijloqGT6O
+         q2Iw==
+X-Gm-Message-State: AAQBX9e4LJn3JPpZI//ANaBDsnlNsPENy9euElW1imdwF3Gf7Rv+2I1F
+        A4M+6BxN/XgdF3xyaek7l/YNnZ+BDZTtY8xDnq5xfBS/0xaejA+iLfNZPxnirq4hKi5UAA9HqS4
+        usZLG4qDbg9wcKV4kAnnDIrjF
+X-Received: by 2002:a05:622a:1787:b0:3ef:3b04:b8d8 with SMTP id s7-20020a05622a178700b003ef3b04b8d8mr6864767qtk.0.1681920029402;
+        Wed, 19 Apr 2023 09:00:29 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZYUF3kcHxcm6ckUgKE4jJPmLKrZgKfEBTezTAcSg78TFUYNH1zoGoLr0UVt3eFwnqd/vm0zw==
+X-Received: by 2002:a05:622a:1787:b0:3ef:3b04:b8d8 with SMTP id s7-20020a05622a178700b003ef3b04b8d8mr6864705qtk.0.1681920028817;
+        Wed, 19 Apr 2023 09:00:28 -0700 (PDT)
+Received: from [192.168.1.86] (pool-173-76-171-62.bstnma.fios.verizon.net. [173.76.171.62])
+        by smtp.gmail.com with ESMTPSA id d9-20020ac81189000000b003eb136bec50sm4108983qtj.66.2023.04.19.09.00.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 09:00:27 -0700 (PDT)
+Message-ID: <10e453df-6911-e40d-8758-66caf9c59dbe@redhat.com>
+Date:   Wed, 19 Apr 2023 12:00:26 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] mm/mmap: Map MAP_STACK to VM_STACK
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>,
+        Waiman Long <longman@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Barry Marson <bmarson@redhat.com>,
+        Rafael Aquini <aquini@redhat.com>
+References: <20230418210230.3495922-1-longman@redhat.com>
+ <20230418141852.75e551e57e97f4b522957c5c@linux-foundation.org>
+ <6c3c68b1-c4d4-dd82-58e8-f7013fb6c8e5@redhat.com>
+ <ZD9kKTsPVlzlEZLp@casper.infradead.org>
+ <9f92d530-1cfc-6e50-a717-321ac64ed1c2@redhat.com>
+ <ZEAEDqVhS0qz6Wx1@casper.infradead.org>
+From:   Joe Mario <jmario@redhat.com>
+In-Reply-To: <ZEAEDqVhS0qz6Wx1@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 16 Apr 2023 23:53:17 PDT (-0700), Christoph Hellwig wrote:
-> On Wed, Apr 12, 2023 at 09:32:30PM +0100, Conor Dooley wrote:
->> On Wed, Apr 12, 2023 at 12:08:53PM +0100, Prabhakar wrote:
->>
->> > Note,
->> > - This series requires testing on Cores with zicbom and T-Head SoCs
->>
->> As I said last time, I dunno what actual Zicbom stuff exists, other than
->> perhaps the Ventana lads having something. I did some tyre kicking on my
->> D1 and it was fine, although nothing has actually changed materially for
->> either of them with this series in v8..
->
-> And as saying before, there is absolutely no reason to add non-standard
-> non-coherent DMA support and let this cancer creep.  If you want Linux
-> support implement Zicbom, be that in hardware or the SBI.
 
-IMO we should just take the support in Linux: trying to hide stuff behind the
-SBI leads to more more headaches than it's worth, we end up with a bunch of
-broken firmware to try and work around.  We've already got a mess here because
-of the D1 support, we might as well just live with it.
 
-In practice there's just going to be a ton of mess in arch/riscv, as the ISA
-has been missing many core features for many years and hardware vendors are
-allowed to do whatever they want.  That's obviously a huge headache, but I
-think there's nothing we can really do about it.
+On 4/19/23 11:09 AM, Matthew Wilcox wrote:
+> On Wed, Apr 19, 2023 at 11:07:04AM -0400, Waiman Long wrote:
+>> On 4/18/23 23:46, Matthew Wilcox wrote:
+>>> On Tue, Apr 18, 2023 at 09:16:37PM -0400, Waiman Long wrote:
+>>>>   1) App runs creating lots of threads.
+>>>>   2) It mmap's 256K pages of anonymous memory.
+>>>>   3) It writes executable code to that memory.
+>>>>   4) It calls mprotect() with PROT_EXEC on that memory so
+>>>>      it can subsequently execute the code.
+>>>>
+>>>> The above mprotect() will fail if the mmap'd region's VMA gets merged with
+>>>> the VMA for one of the thread stacks.  That's because the default RHEL
+>>>> SELinux policy is to not allow executable stacks.
+>>> By the way, this is a daft policy.  The policy you really want is
+>>> EXEC|WRITE is not allowed.  A non-writable stack is useless, so it's
+>>> actually a superset of your current policy.  Forbidding _simultaneous_
+>>> write and executable is just good programming.  This way, you don't need
+>>> to care about the underlying VMA's current permissions, you just need
+>>> to do:
+>>>
+>>> 	if ((prot & (PROT_EXEC|PROT_WRITE)) == (PROT_EXEC|PROT_WRITE))
+>>> 		return -EACCESS;
+>>
+>> I am not totally sure if the application changes the VMA to read-only first.
+>> Even if it does that, it highlights another possible issue when an anonymous
+>> VMA is merged with a stack VMA. Either the mprotect() to write-protect the
+>> VMA will fail or the application will segfault if it writes stuff to the
+>> stack. This particular issue is not related to SELinux. It provides another
+>> good idea why we should avoid merging stack VMA to anonymous VMA.
+> 
+> mprotect will split the VMA into two VMAs, one that is
+> PROT_READ|PROT_WRITE and one the is PROT_READ|PROT_EXEC.
+> 
+
+But in this case, the latter still has PROT_WRITE.  
+
+This was reported by a large data analytics customer.  They started getting infrequent random crashes in code they haven't touched in 10 years.
+
+One of the threads in their program mmaps a large region using PROT_READ|PROT_WRITE, and that region just happens to be merged with the thread's stack.
+
+Then they copy a small snipit of code to a location somewhere within that mapped region. For the one page that contains that code, they mprotect it to PROT_READ|PROT_WRITE|PROT_EXEC.  I recall they're still reading and writing data elsewhere on that page.
+
+Joe
+
+
+
+
+  
+
