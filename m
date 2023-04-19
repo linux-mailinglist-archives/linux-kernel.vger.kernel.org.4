@@ -2,396 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C568C6E82BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07256E82CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Apr 2023 22:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjDSUcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 16:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        id S232123AbjDSUfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 16:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjDSUcI (ORCPT
+        with ESMTP id S231448AbjDSUfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 16:32:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2665A4ED8;
-        Wed, 19 Apr 2023 13:32:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5FC563B6C;
-        Wed, 19 Apr 2023 20:32:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB7BC433EF;
-        Wed, 19 Apr 2023 20:32:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681936325;
-        bh=1MUVPNOqDmEmgYS55br1aD1rbtdRNm6Y8eqO2wGJ12o=;
+        Wed, 19 Apr 2023 16:35:06 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11066C6;
+        Wed, 19 Apr 2023 13:34:57 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.49.46]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MUooJ-1pgful15gf-00Qlit; Wed, 19 Apr 2023 22:34:10 +0200
+Received: from localhost.fjasle.eu (kirkenes.fjasle.eu [10.10.0.5])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by leknes.fjasle.eu (Postfix) with ESMTPS id A6B463C07B;
+        Wed, 19 Apr 2023 22:34:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1681936448; bh=YkA4NcXrkdd0OkODIlV5G9ug+bsZe9MhoIlc5nED5rk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ksFquHrAkzmVfOUbIDCzT7zd039sPCdMf6cIXGHQ8ArsqfJW+s9EnqZ8hs1+nflH4
-         UT9oftVNdPzTqhhALfhHAj5q/SWWFDZALQhGgeIsFWAHEnQrnbZDxPdxbJHQp2hkZO
-         OhCWLkgF+DehIljd7+4ZckE+z7dEE1aYeLnA7o5wF3J2uedf/ZKeEr2ndtlnWWKIhs
-         3mHzzopuPfA1a9lIgu0vDUyGgRiNatyjvKYIXpwyrjdYb3CqPrpkUCpRfhiaKsgf5G
-         CX1vbdgtKfOrjuAGvAvUGmkzCujDH32b2jf3ZafjbjVPq5YehdLq1gy6nkCypxbWZm
-         v3uBm4v13q+Kw==
-Date:   Wed, 19 Apr 2023 13:32:03 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Chao Yu <chao@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] f2fs: refactor struct iostat_lat_info
-Message-ID: <ZEBPwz4fJATKs22g@google.com>
-References: <20230407174609.4939-1-frank.li@vivo.com>
+        b=uIcmC9pN6SCv+nCtLMrAMcB0GSDJnEkTXINFW2AMNcD7E46v/RG293Pi/ciLrUUUC
+         MVGAgxfSJVTXZC4nDhjMdRxtHXwq7H9MHj4Zi8QBdjcaa2qPVn4Snu/BQ8GUXst4MF
+         hLcRUhxBZ3Vi4AH+qbDnYKMaY7TyyPzQffpsGMG8=
+Received: by localhost.fjasle.eu (Postfix, from userid 1000)
+        id 7A3DE18F; Wed, 19 Apr 2023 22:34:05 +0200 (CEST)
+Date:   Wed, 19 Apr 2023 22:34:05 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ben Hutchings <ben@decadent.org.uk>,
+        Bastian Germann <bage@linutronix.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH 2/2] kbuild: deb-pkg: add KDEB_SOURCE_COMPRESS to specify
+ compression type
+Message-ID: <ZEBQPeihAuP4jVYG@bergen.fjasle.eu>
+References: <20230417142548.249610-1-masahiroy@kernel.org>
+ <20230417142548.249610-2-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="HyQzxj++cA25Ar3N"
 Content-Disposition: inline
-In-Reply-To: <20230407174609.4939-1-frank.li@vivo.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230417142548.249610-2-masahiroy@kernel.org>
+X-Operating-System: Debian GNU/Linux 12.0
+Jabber-ID: nicolas@jabber.no
+X-Provags-ID: V03:K1:U78Hhvo2xZN7B0h6JeNLjkRqjER+ud1QCkdbEZJIXDwHdN3KspC
+ TTi4lDg2LaN7ScUubl2yNumrlHnUSQ5PHQ4c12mHuhlWcMsQGHbco5XFHWDFenoWWU41W3Y
+ 0BSQTBaRegYvU7vRv6xK3zTJujHJHzHmPAFuAGV+icZW7zL1ZNYhucSKcdANKl31TagPdAI
+ xzuVfMzP6I0hvFUb6FX5Q==
+UI-OutboundReport: notjunk:1;M01:P0:VGyK6Rl0AWI=;BpDtxDzV/FiyjEraW7LpP2folhN
+ yNlZHPch6CV8+INmEvtALCB619QuM6zza6ox9AsUDAKXYKLPes7vrn3yD+ytdJXbu/R4WD4E/
+ VzsA+FEcBB5BlcmrFWDQeyILo/p/b7QBlSxrOZvSF42sMC0FpNyYJ2Vw02ZSTtwnt82Icsczm
+ vICm1qafW71fUSpu73HnhXFtq45hJ14B1Sth4RmsSZtRyYVsqwMiuQMg0mMPwPou7vl9D7Ta+
+ U1gJlR8ICcPn0DnqC2N1QF3rDw1JDsVZLzO3shOHO1eBrXf67nDYLXb+uPLjVwSTOImJinwfn
+ DONE33ODIfIoFq3AfGFQ1Impao8f6nNJLrAsPhdQjR4J+lIXXDXEdUpKQOWxYIUeberYMoVjB
+ gm4gviYSLHvhdHSm43BA6K7AplGVVRxjlXTiYMu2qaNNA/nWNK01+sMAemRtasjyFBLJOwoJc
+ VOI+KjKtN+oGCywkRmhmd6IQPxUAPZgHFzryZjkxBYcOoIoWz6JzjEeDITbxvrLEgs64t/O+W
+ dsaHaHMHNIOpRMSwkZEJ24Oy+XOyYOK2BAF1BWEYKoMAKwv0SbYw1IdXPjARYW78+/H97w3gB
+ RELUd3O1AjTqoIuZuRf17C55cRfSI2MeS1Ge7kXJ0xEF1/fYue2BDRkln2X0sonZwbRHOYRjn
+ YJttakZJrV/qcy4n6jpqGV8mK5UmUSlcibDydzXMXQ==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/08, Yangtao Li wrote:
-> The current code uses a mixture of MAX_IO_TYPE and NR_PAGE_TYPE
-> to form lat_type, and uses a two-dimensional array to store data.
-> NR_PAGE_TYPE is 3, which is unreasonable for a discard with a
-> PAGE_TYPE of 1. So this patch changes the array to a 1D array and
-> does some cleanup.
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+
+--HyQzxj++cA25Ar3N
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon 17 Apr 2023 23:25:48 GMT, Masahiro Yamada wrote:
+> Add KDEB_SOURCE_COMPRESS to specify the compression for the orig and
+> debian tarballs. (The existing KDEB_COMPRESS is used to specify the
+> compression for binary packages.)
+
+Sounds to me, that it would make sense to sum-up some documentation for=20
+kbuild Debian package configuration.
+
+> Supported algorithms are gzip, bzip2, lzma, and xz, all of which are
+> supported by dpkg-source.
+>=20
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
->  fs/f2fs/data.c              |  2 +-
->  fs/f2fs/iostat.c            | 79 +++++++++++++++++++++----------------
->  fs/f2fs/iostat.h            | 49 +++++++++++------------
->  include/trace/events/f2fs.h | 56 +++++++++++++-------------
->  4 files changed, 97 insertions(+), 89 deletions(-)
-> 
-> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-> index e975f9c702ab..38cab984496f 100644
-> --- a/fs/f2fs/data.c
-> +++ b/fs/f2fs/data.c
-> @@ -2311,7 +2311,7 @@ int f2fs_read_multi_pages(struct compress_ctx *cc, struct bio **bio_ret,
->  		if (bio_add_page(bio, page, blocksize, 0) < blocksize)
->  			goto submit_and_realloc;
->  
-> -		ctx = get_post_read_ctx(bio);
-> +		ctx = iostat_get_bio_private(bio);
+>=20
+>  scripts/Makefile.package | 31 +++++++++++++++++++++++--------
+>  1 file changed, 23 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+> index d8a36304b26e..ce3d8b4e9cb0 100644
+> --- a/scripts/Makefile.package
+> +++ b/scripts/Makefile.package
+> @@ -41,19 +41,25 @@ check-git:
+>  		false; \
+>  	fi
+> =20
+> -git-config-tar.gz  =3D -c tar.tar.gz.command=3D"$(KGZIP)"
+> -git-config-tar.bz2 =3D -c tar.tar.bz2.command=3D"$(KBZIP2)"
+> -git-config-tar.xz  =3D -c tar.tar.xz.command=3D"$(XZ)"
+> -git-config-tar.zst =3D -c tar.tar.zst.command=3D"$(ZSTD)"
+> +git-config-tar.gz   =3D -c tar.tar.gz.command=3D"$(KGZIP)"
+> +git-config-tar.bz2  =3D -c tar.tar.bz2.command=3D"$(KBZIP2)"
+> +git-config-tar.lzma =3D -c tar.tar.lzma.command=3D"$(LZMA)"
+> +git-config-tar.xz   =3D -c tar.tar.xz.command=3D"$(XZ)"
+> +git-config-tar.zst  =3D -c tar.tar.zst.command=3D"$(ZSTD)"
+> =20
+>  quiet_cmd_archive =3D ARCHIVE $@
+>        cmd_archive =3D git -C $(srctree) $(git-config-tar$(suffix $@)) ar=
+chive \
+>                      --output=3D$$(realpath $@) --prefix=3D$(basename $@)=
+/ $(archive-args)
+> =20
+> +suffix-gzip  :=3D .gz
+> +suffix-bzip2 :=3D .bz2
+> +suffix-lzma  :=3D .lzma
+> +suffix-xz    :=3D .xz
+> +
+>  # Linux source tarball
+>  # ----------------------------------------------------------------------=
+-----
+> =20
+> -linux-tarballs :=3D $(addprefix linux, .tar.gz)
+> +linux-tarballs :=3D $(addprefix linux, .tar.gz .tar.bz2 .tar.lzma .tar.x=
+z)
+> =20
+>  targets +=3D $(linux-tarballs)
+>  $(linux-tarballs): archive-args =3D $$(cat $<)
+> @@ -88,6 +94,15 @@ binrpm-pkg:
+>  # deb-pkg srcdeb-pkg bindeb-pkg
+>  # ----------------------------------------------------------------------=
+-----
+> =20
+> +KDEB_SOURCE_COMPRESS ?=3D gzip
 
-This ctx is not used for iostat.
+According to dpkg-source(1), xz is the default compression for deb=20
+source format >=3D 2.  Shouldn't we use xz here by default as well?
 
->  		ctx->enabled_steps |= STEP_DECOMPRESS;
->  		refcount_inc(&dic->refcnt);
->  
-> diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
-> index 3d5bfb1ad585..5d496d5b70d3 100644
-> --- a/fs/f2fs/iostat.c
-> +++ b/fs/f2fs/iostat.c
-> @@ -86,23 +86,21 @@ int __maybe_unused iostat_info_seq_show(struct seq_file *seq, void *offset)
->  
->  static inline void __record_iostat_latency(struct f2fs_sb_info *sbi)
->  {
-> -	int io, idx;
-> -	struct f2fs_iostat_latency iostat_lat[MAX_IO_TYPE][NR_PAGE_TYPE];
-> +	struct f2fs_iostat_latency iostat_lat[MAX_LAT_TYPE];
->  	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
-> +	unsigned int lat_type;
->  	unsigned long flags;
->  
->  	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
-> -	for (idx = 0; idx < MAX_IO_TYPE; idx++) {
-> -		for (io = 0; io < NR_PAGE_TYPE; io++) {
-> -			iostat_lat[idx][io].peak_lat =
-> -			   jiffies_to_msecs(io_lat->peak_lat[idx][io]);
-> -			iostat_lat[idx][io].cnt = io_lat->bio_cnt[idx][io];
-> -			iostat_lat[idx][io].avg_lat = iostat_lat[idx][io].cnt ?
-> -			   jiffies_to_msecs(io_lat->sum_lat[idx][io]) / iostat_lat[idx][io].cnt : 0;
-> -			io_lat->sum_lat[idx][io] = 0;
-> -			io_lat->peak_lat[idx][io] = 0;
-> -			io_lat->bio_cnt[idx][io] = 0;
-> -		}
-> +	for (lat_type = 0; lat_type < MAX_LAT_TYPE; lat_type++) {
-> +		iostat_lat[lat_type].peak_lat =
-> +		   jiffies_to_msecs(io_lat->peak_lat[lat_type]);
-> +		iostat_lat[lat_type].cnt = io_lat->bio_cnt[lat_type];
-> +		iostat_lat[lat_type].avg_lat = iostat_lat[lat_type].cnt ?
-> +		   jiffies_to_msecs(io_lat->sum_lat[lat_type]) / iostat_lat[lat_type].cnt : 0;
-> +		io_lat->sum_lat[lat_type] = 0;
-> +		io_lat->peak_lat[lat_type] = 0;
-> +		io_lat->bio_cnt[lat_type] = 0;
->  	}
->  	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
->  
-> @@ -208,62 +206,73 @@ void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *inode,
->  	f2fs_record_iostat(sbi);
->  }
->  
-> -static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx,
-> -				enum iostat_lat_type lat_type)
-> +static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx)
->  {
-> -	unsigned long ts_diff;
-> -	unsigned int page_type = iostat_ctx->type;
->  	struct f2fs_sb_info *sbi = iostat_ctx->sbi;
->  	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
-> +	unsigned int lat_type = iostat_ctx->lat_type;
-> +	unsigned long ts_diff;
->  	unsigned long flags;
->  
->  	if (!sbi->iostat_enable)
->  		return;
->  
-> -	ts_diff = jiffies - iostat_ctx->submit_ts;
-> -	if (page_type == META_FLUSH) {
-> -		page_type = META;
-> -	} else if (page_type >= NR_PAGE_TYPE) {
-> -		f2fs_warn(sbi, "%s: %d over NR_PAGE_TYPE", __func__, page_type);
-> +	if (lat_type >= MAX_LAT_TYPE) {
-> +		f2fs_warn(sbi, "%s: %d over MAX_LAT_TYPE", __func__, lat_type);
->  		return;
->  	}
-> +	ts_diff = jiffies - iostat_ctx->submit_ts;
->  
->  	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
-> -	io_lat->sum_lat[lat_type][page_type] += ts_diff;
-> -	io_lat->bio_cnt[lat_type][page_type]++;
-> -	if (ts_diff > io_lat->peak_lat[lat_type][page_type])
-> -		io_lat->peak_lat[lat_type][page_type] = ts_diff;
-> +	io_lat->sum_lat[lat_type] += ts_diff;
-> +	io_lat->bio_cnt[lat_type]++;
-> +	if (ts_diff > io_lat->peak_lat[lat_type])
-> +		io_lat->peak_lat[lat_type] = ts_diff;
->  	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
->  }
->  
->  void iostat_update_and_unbind_ctx(struct bio *bio)
-> +{
-> +	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+
+Thanks and kind regards,
+Nicolas
+
+
 > +
-> +	if (op_is_write(bio_op(bio)))
-> +		bio->bi_private = iostat_ctx->sbi;
-> +	else
-> +		bio->bi_private = iostat_ctx->iostat_private;
+> +PHONY +=3D linux.tar.unsupported_deb_compress
+> +linux.tar.unsupported_deb_compress:
+> +	@echo "error: $(KDEB_SOURCE_COMPRESS): unsupported debian source compre=
+ssion" >&2
+> +	@false
 > +
-> +	__update_iostat_latency(iostat_ctx);
-> +	mempool_free(iostat_ctx, bio_iostat_ctx_pool);
-> +}
+> +debian-orig-suffix :=3D $(if $(filter gzip bzip2 lzma xz, $(KDEB_SOURCE_=
+COMPRESS)),$(suffix-$(KDEB_SOURCE_COMPRESS)),.unsupported_deb_compress)
 > +
-> +void iostat_update_submit_ctx(struct bio *bio, enum page_type type)
->  {
->  	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
->  	enum iostat_lat_type lat_type;
->  
-> +	iostat_ctx->submit_ts = jiffies;
-> +
->  	if (op_is_write(bio_op(bio))) {
->  		lat_type = bio->bi_opf & REQ_SYNC ?
-> -				WRITE_SYNC_IO : WRITE_ASYNC_IO;
-> -		bio->bi_private = iostat_ctx->sbi;
-> +				WRITE_SYNC_DATA_LAT : WRITE_ASYNC_DATA_LAT;
-> +		lat_type = (enum iostat_lat_type)(lat_type + type);
->  	} else {
-> -		lat_type = READ_IO;
-> -		bio->bi_private = iostat_ctx->post_read_ctx;
-> +		lat_type = READ_DATA_LAT;
-> +		lat_type = (enum iostat_lat_type)(lat_type + type);
->  	}
->  
-> -	__update_iostat_latency(iostat_ctx, lat_type);
-> -	mempool_free(iostat_ctx, bio_iostat_ctx_pool);
-> +	iostat_ctx->lat_type = lat_type;
->  }
->  
->  void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
-> -		struct bio *bio, struct bio_post_read_ctx *ctx)
-> +		struct bio *bio, void *private)
->  {
->  	struct bio_iostat_ctx *iostat_ctx;
->  	/* Due to the mempool, this never fails. */
->  	iostat_ctx = mempool_alloc(bio_iostat_ctx_pool, GFP_NOFS);
->  	iostat_ctx->sbi = sbi;
->  	iostat_ctx->submit_ts = 0;
-> -	iostat_ctx->type = 0;
-> -	iostat_ctx->post_read_ctx = ctx;
-> +	iostat_ctx->lat_type = 0;
-> +	iostat_ctx->iostat_private = private;
->  	bio->bi_private = iostat_ctx;
->  }
->  
-> diff --git a/fs/f2fs/iostat.h b/fs/f2fs/iostat.h
-> index eb99d05cf272..67b468691498 100644
-> --- a/fs/f2fs/iostat.h
-> +++ b/fs/f2fs/iostat.h
-> @@ -6,17 +6,24 @@
->  #ifndef __F2FS_IOSTAT_H__
->  #define __F2FS_IOSTAT_H__
->  
-> +#ifdef CONFIG_F2FS_IOSTAT
-> +
->  struct bio_post_read_ctx;
->  
->  enum iostat_lat_type {
-> -	READ_IO = 0,
-> -	WRITE_SYNC_IO,
-> -	WRITE_ASYNC_IO,
-> -	MAX_IO_TYPE,
-> +	READ_DATA_LAT = 0,
-> +	READ_NODE_LAT,
-> +	READ_META_LAT,
-> +	WRITE_SYNC_DATA_LAT,
-> +	WRITE_SYNC_NODE_LAT,
-> +	WRITE_SYNC_META_LAT,
-> +	WRITE_ASYNC_DATA_LAT,
-> +	WRITE_ASYNC_NODE_LAT,
-> +	WRITE_ASYNC_META_LAT,
-> +	DISCARD_LAT,
-> +	MAX_LAT_TYPE,
->  };
->  
-> -#ifdef CONFIG_F2FS_IOSTAT
-> -
->  #define NUM_PREALLOC_IOSTAT_CTXS	128
->  #define DEFAULT_IOSTAT_PERIOD_MS	3000
->  #define MIN_IOSTAT_PERIOD_MS		100
-> @@ -24,9 +31,9 @@ enum iostat_lat_type {
->  #define MAX_IOSTAT_PERIOD_MS		8640000
->  
->  struct iostat_lat_info {
-> -	unsigned long sum_lat[MAX_IO_TYPE][NR_PAGE_TYPE];	/* sum of io latencies */
-> -	unsigned long peak_lat[MAX_IO_TYPE][NR_PAGE_TYPE];	/* peak io latency */
-> -	unsigned int bio_cnt[MAX_IO_TYPE][NR_PAGE_TYPE];	/* bio count */
-> +	unsigned long sum_lat[MAX_LAT_TYPE];	/* sum of io latencies */
-> +	unsigned long peak_lat[MAX_LAT_TYPE];	/* peak io latency */
-> +	unsigned int bio_cnt[MAX_LAT_TYPE];	/* bio count */
->  };
->  
->  extern int __maybe_unused iostat_info_seq_show(struct seq_file *seq,
-> @@ -38,29 +45,21 @@ extern void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *inode,
->  struct bio_iostat_ctx {
->  	struct f2fs_sb_info *sbi;
->  	unsigned long submit_ts;
-> -	enum page_type type;
-> -	struct bio_post_read_ctx *post_read_ctx;
-> +	enum iostat_lat_type lat_type;
-> +	void *iostat_private;
->  };
->  
-> -static inline void iostat_update_submit_ctx(struct bio *bio,
-> -			enum page_type type)
-> -{
-> -	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
-> -
-> -	iostat_ctx->submit_ts = jiffies;
-> -	iostat_ctx->type = type;
-> -}
-> -
-> -static inline struct bio_post_read_ctx *get_post_read_ctx(struct bio *bio)
-> +static inline struct bio_post_read_ctx *iostat_get_bio_private(struct bio *bio)
->  {
->  	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
->  
-> -	return iostat_ctx->post_read_ctx;
-> +	return iostat_ctx->iostat_private;
->  }
->  
-> +extern void iostat_update_submit_ctx(struct bio *bio, enum page_type type);
->  extern void iostat_update_and_unbind_ctx(struct bio *bio);
->  extern void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
-> -		struct bio *bio, struct bio_post_read_ctx *ctx);
-> +		struct bio *bio, void *private);
->  extern int f2fs_init_iostat_processing(void);
->  extern void f2fs_destroy_iostat_processing(void);
->  extern int f2fs_init_iostat(struct f2fs_sb_info *sbi);
-> @@ -70,10 +69,10 @@ static inline void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *in
->  		enum iostat_type type, unsigned long long io_bytes) {}
->  static inline void iostat_update_and_unbind_ctx(struct bio *bio) {}
->  static inline void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
-> -		struct bio *bio, struct bio_post_read_ctx *ctx) {}
-> +		struct bio *bio, void *private) {}
->  static inline void iostat_update_submit_ctx(struct bio *bio,
->  		enum page_type type) {}
-> -static inline struct bio_post_read_ctx *get_post_read_ctx(struct bio *bio)
-> +static inline struct bio_post_read_ctx *iostat_get_bio_private(struct bio *bio)
->  {
->  	return bio->bi_private;
->  }
-> diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
-> index 99cbc5949e3c..040a430e1199 100644
-> --- a/include/trace/events/f2fs.h
-> +++ b/include/trace/events/f2fs.h
-> @@ -2045,7 +2045,7 @@ struct f2fs_iostat_latency {
->  
->  TRACE_EVENT(f2fs_iostat_latency,
->  
-> -	TP_PROTO(struct f2fs_sb_info *sbi, struct f2fs_iostat_latency (*iostat_lat)[NR_PAGE_TYPE]),
-> +	TP_PROTO(struct f2fs_sb_info *sbi, struct f2fs_iostat_latency *iostat_lat),
->  
->  	TP_ARGS(sbi, iostat_lat),
->  
-> @@ -2082,33 +2082,33 @@ TRACE_EVENT(f2fs_iostat_latency,
->  
->  	TP_fast_assign(
->  		__entry->dev		= sbi->sb->s_dev;
-> -		__entry->d_rd_peak	= iostat_lat[READ_IO][DATA].peak_lat;
-> -		__entry->d_rd_avg	= iostat_lat[READ_IO][DATA].avg_lat;
-> -		__entry->d_rd_cnt	= iostat_lat[READ_IO][DATA].cnt;
-> -		__entry->n_rd_peak	= iostat_lat[READ_IO][NODE].peak_lat;
-> -		__entry->n_rd_avg	= iostat_lat[READ_IO][NODE].avg_lat;
-> -		__entry->n_rd_cnt	= iostat_lat[READ_IO][NODE].cnt;
-> -		__entry->m_rd_peak	= iostat_lat[READ_IO][META].peak_lat;
-> -		__entry->m_rd_avg	= iostat_lat[READ_IO][META].avg_lat;
-> -		__entry->m_rd_cnt	= iostat_lat[READ_IO][META].cnt;
-> -		__entry->d_wr_s_peak	= iostat_lat[WRITE_SYNC_IO][DATA].peak_lat;
-> -		__entry->d_wr_s_avg	= iostat_lat[WRITE_SYNC_IO][DATA].avg_lat;
-> -		__entry->d_wr_s_cnt	= iostat_lat[WRITE_SYNC_IO][DATA].cnt;
-> -		__entry->n_wr_s_peak	= iostat_lat[WRITE_SYNC_IO][NODE].peak_lat;
-> -		__entry->n_wr_s_avg	= iostat_lat[WRITE_SYNC_IO][NODE].avg_lat;
-> -		__entry->n_wr_s_cnt	= iostat_lat[WRITE_SYNC_IO][NODE].cnt;
-> -		__entry->m_wr_s_peak	= iostat_lat[WRITE_SYNC_IO][META].peak_lat;
-> -		__entry->m_wr_s_avg	= iostat_lat[WRITE_SYNC_IO][META].avg_lat;
-> -		__entry->m_wr_s_cnt	= iostat_lat[WRITE_SYNC_IO][META].cnt;
-> -		__entry->d_wr_as_peak	= iostat_lat[WRITE_ASYNC_IO][DATA].peak_lat;
-> -		__entry->d_wr_as_avg	= iostat_lat[WRITE_ASYNC_IO][DATA].avg_lat;
-> -		__entry->d_wr_as_cnt	= iostat_lat[WRITE_ASYNC_IO][DATA].cnt;
-> -		__entry->n_wr_as_peak	= iostat_lat[WRITE_ASYNC_IO][NODE].peak_lat;
-> -		__entry->n_wr_as_avg	= iostat_lat[WRITE_ASYNC_IO][NODE].avg_lat;
-> -		__entry->n_wr_as_cnt	= iostat_lat[WRITE_ASYNC_IO][NODE].cnt;
-> -		__entry->m_wr_as_peak	= iostat_lat[WRITE_ASYNC_IO][META].peak_lat;
-> -		__entry->m_wr_as_avg	= iostat_lat[WRITE_ASYNC_IO][META].avg_lat;
-> -		__entry->m_wr_as_cnt	= iostat_lat[WRITE_ASYNC_IO][META].cnt;
-> +		__entry->d_rd_peak	= iostat_lat[READ_DATA_LAT].peak_lat;
-> +		__entry->d_rd_avg	= iostat_lat[READ_DATA_LAT].avg_lat;
-> +		__entry->d_rd_cnt	= iostat_lat[READ_DATA_LAT].cnt;
-> +		__entry->n_rd_peak	= iostat_lat[READ_NODE_LAT].peak_lat;
-> +		__entry->n_rd_avg	= iostat_lat[READ_NODE_LAT].avg_lat;
-> +		__entry->n_rd_cnt	= iostat_lat[READ_NODE_LAT].cnt;
-> +		__entry->m_rd_peak	= iostat_lat[READ_META_LAT].peak_lat;
-> +		__entry->m_rd_avg	= iostat_lat[READ_META_LAT].avg_lat;
-> +		__entry->m_rd_cnt	= iostat_lat[READ_META_LAT].cnt;
-> +		__entry->d_wr_s_peak	= iostat_lat[WRITE_SYNC_DATA_LAT].peak_lat;
-> +		__entry->d_wr_s_avg	= iostat_lat[WRITE_SYNC_DATA_LAT].avg_lat;
-> +		__entry->d_wr_s_cnt	= iostat_lat[WRITE_SYNC_DATA_LAT].cnt;
-> +		__entry->n_wr_s_peak	= iostat_lat[WRITE_SYNC_NODE_LAT].peak_lat;
-> +		__entry->n_wr_s_avg	= iostat_lat[WRITE_SYNC_NODE_LAT].avg_lat;
-> +		__entry->n_wr_s_cnt	= iostat_lat[WRITE_SYNC_NODE_LAT].cnt;
-> +		__entry->m_wr_s_peak	= iostat_lat[WRITE_SYNC_META_LAT].peak_lat;
-> +		__entry->m_wr_s_avg	= iostat_lat[WRITE_SYNC_META_LAT].avg_lat;
-> +		__entry->m_wr_s_cnt	= iostat_lat[WRITE_SYNC_META_LAT].cnt;
-> +		__entry->d_wr_as_peak	= iostat_lat[WRITE_ASYNC_DATA_LAT].peak_lat;
-> +		__entry->d_wr_as_avg	= iostat_lat[WRITE_ASYNC_DATA_LAT].avg_lat;
-> +		__entry->d_wr_as_cnt	= iostat_lat[WRITE_ASYNC_DATA_LAT].cnt;
-> +		__entry->n_wr_as_peak	= iostat_lat[WRITE_ASYNC_NODE_LAT].peak_lat;
-> +		__entry->n_wr_as_avg	= iostat_lat[WRITE_ASYNC_NODE_LAT].avg_lat;
-> +		__entry->n_wr_as_cnt	= iostat_lat[WRITE_ASYNC_NODE_LAT].cnt;
-> +		__entry->m_wr_as_peak	= iostat_lat[WRITE_ASYNC_META_LAT].peak_lat;
-> +		__entry->m_wr_as_avg	= iostat_lat[WRITE_ASYNC_META_LAT].avg_lat;
-> +		__entry->m_wr_as_cnt	= iostat_lat[WRITE_ASYNC_META_LAT].cnt;
->  	),
->  
->  	TP_printk("dev = (%d,%d), "
-> -- 
-> 2.35.1
+>  quiet_cmd_debianize =3D GEN     $@
+>        cmd_debianize =3D $(srctree)/scripts/package/mkdebian $(mkdebian-o=
+pts)
+> =20
+> @@ -97,9 +112,9 @@ debian: FORCE
+>  PHONY +=3D debian-orig
+>  debian-orig: private source =3D $(shell dpkg-parsechangelog -S Source)
+>  debian-orig: private version =3D $(shell dpkg-parsechangelog -S Version =
+| sed 's/-[^-]*$$//')
+> -debian-orig: private orig-name =3D $(source)_$(version).orig.tar.gz
+> +debian-orig: private orig-name =3D $(source)_$(version).orig.tar$(debian=
+-orig-suffix)
+>  debian-orig: mkdebian-opts =3D --need-source
+> -debian-orig: linux.tar.gz debian
+> +debian-orig: linux.tar$(debian-orig-suffix) debian
+>  	$(Q)if [ "$(df  --output=3Dtarget .. 2>/dev/null)" =3D "$(df --output=
+=3Dtarget $< 2>/dev/null)" ]; then \
+>  		ln -f $< ../$(orig-name); \
+>  	else \
+> @@ -120,7 +135,7 @@ deb-pkg srcdeb-pkg bindeb-pkg:
+>  	+$(strip dpkg-buildpackage \
+>  	--build=3D$(build-type) --no-pre-clean --unsigned-changes \
+>  	$(if $(findstring source, $(build-type)), \
+> -		--unsigned-source) \
+> +		--unsigned-source --compression=3D$(KDEB_SOURCE_COMPRESS)) \
+>  	$(if $(findstring binary, $(build-type)), \
+>  		-r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch), \
+>  		--no-check-builddeps) \
+> --=20
+> 2.37.2
+
+--HyQzxj++cA25Ar3N
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmRAUDcACgkQB1IKcBYm
+EmmHAg//fySSyhaK3yzETEWLD/WEpYeb19+TzFeI/YAmGq721mmyqQY5HFaNdrRv
+6hPPf/HxoMOccU7ylMCwZ/ATR3GyPTnm3uZHRGPYzSM/5YI+J5+MZitEhWDV7abo
+M3huByuPev6ROb7y+MhkT5mqeOjFUftskWieTAixPkZy7qeuds6UOXKN6tDul4ew
+0BpnG5EAT3tR0i8lygTa99avxx8hb7A1B1ZUJeCiZKv5eLUaYDfkK+B9E/0aDN1X
+8LDZKLkKh6vkuIrWcSIjvr0x8u3rDlVHA4v0trbIlFIpO4uiT1BuDmZflvbm0Ge+
+4ITlc/oYkUbDQXr1erB3oj14G7lGms967FLBjpcD33+CsIu2m6+wMZlOqSOoZc2o
+7P/CtIvfcr9vpmiwUWG1X2rWs525ZQwFcOih//3WRAMFlrBAoohwZQV6iSKug+sX
+zX5gxOcHtseYQcS1X00QqomJahXuhaY3BGo23rZtgfzNubtugp/8LIxoRY9b6bUK
+LTtauIYGiQ07WvFS5cpj+x3EY8SvWps49k89O8g2iJkx72htx9Yxo4+yMoW0bfjP
+L4QokfsswB32HRcPoFWNrga9zovgFRHpFB3cCTtRzT0gqyXw/iW6qxL+65QOxgky
+tsMVCmY5cQfDY4sVM+k9srl08isQXBRU/lglJ+TlSQs8CDpKdjA=
+=LErR
+-----END PGP SIGNATURE-----
+
+--HyQzxj++cA25Ar3N--
