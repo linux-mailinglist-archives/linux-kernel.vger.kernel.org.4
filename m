@@ -2,63 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472876E9507
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD966E950B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbjDTMtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
+        id S231876AbjDTMuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjDTMtC (ORCPT
+        with ESMTP id S231233AbjDTMt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:49:02 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171F7A7;
-        Thu, 20 Apr 2023 05:49:01 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-38e12d973bfso534127b6e.0;
-        Thu, 20 Apr 2023 05:49:01 -0700 (PDT)
+        Thu, 20 Apr 2023 08:49:59 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AEB10F5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:49:58 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a5so6111890ejb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:49:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681994997; x=1684586997;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=86inLg404iy6XZr71SasfCq+JcTZG2gc/SGQxXWY/6o=;
+        b=ewdl5zIzTb8Mb0OWtnf8fTIKE8H0qqG6mX9jAgtmwfdnUfORpwAQluc2xLkCrrbD6I
+         z+xRcFlNRGEYEQ5IuiTscCoq/5gl88w/CRG+eBGnkMaZOoibewDxQkXy2VVRTbzlaBKq
+         MUaQjvweyhGGi6IvJVOO3j3olh9q8tAh15GRlSNPiZKhwH0vqvLmqk3FFbLUJkX5loUB
+         aRhfZNeA3aOK0vushyxTKhGd2VZHLGuKOwWBVf+/N0fYOJ4y0AAGCM2KxDJ5gVFnC2gp
+         iHOmsM5nbquivT3o43u/ZgDhncRWA4bE6ezOoaOrxJJljYYaQRbckSkwhXfYRCx9OiUf
+         O4tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681994940; x=1684586940;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EEUOOi7Fz+VazakHzsq9RZGvdzOdQ6E4gugoOE3P2nw=;
-        b=InBQMckw8D/MwC+lsyg/dukc3SRlMLJhj1J4qrqpCGrvmlDKyDKX7wBiegdwugkL4/
-         yunw3a5YtGZ3G/QMl3eZZesS7muuI47GepWYDq9pq/XBi8xQ2oF45h6Web0+sGse8+wY
-         L+hIAuIKc0T1yty46CdF8Owg2XJ2W9Q9URnHrCaYWfI5Jje6ZTbj6D6Y+efHOhGJpm3R
-         tHDlCfmviDEMdMQ4+zzzLgFc3k6fUiIgcemzqp1bdIMgZp5NxT79vC5FoEaMxOdC7FsS
-         Dx+a1ftv3G+geOV/tvv/lo/0tA7kExUpEAe7z6wNHHuccoiRRp8jeUc84QrFE5xU4vsH
-         68jg==
-X-Gm-Message-State: AAQBX9ci5Z/67vngx+Zkmi4Aya+uA8P++ju2EvStbnw+tlgObpTrsmx6
-        byoloM1QkiWIlIJgz1oW2Q==
-X-Google-Smtp-Source: AKy350bWxrvtN/1/bQ50uazmYuUpvfPgWUTslz3PKt1Rtz9FumSlaqHN7alJxrCzhHswsY+F5q7tBg==
-X-Received: by 2002:aca:be55:0:b0:38e:295e:82ef with SMTP id o82-20020acabe55000000b0038e295e82efmr691968oif.17.1681994940297;
-        Thu, 20 Apr 2023 05:49:00 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n9-20020acabd09000000b0038c06ae307asm518381oif.52.2023.04.20.05.48.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 05:48:59 -0700 (PDT)
-Received: (nullmailer pid 2649879 invoked by uid 1000);
-        Thu, 20 Apr 2023 12:48:58 -0000
-Date:   Thu, 20 Apr 2023 07:48:58 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     David Yang <mmyangfl@gmail.com>
-Cc:     linux-crypto@vger.kernel.org, Weili Qian <qianweili@huawei.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] crypto: hisilicon/trng - add support for HiSTB TRNG
-Message-ID: <20230420124858.GA2645094-robh@kernel.org>
-References: <20230401164448.1393336-1-mmyangfl@gmail.com>
+        d=1e100.net; s=20221208; t=1681994997; x=1684586997;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=86inLg404iy6XZr71SasfCq+JcTZG2gc/SGQxXWY/6o=;
+        b=UZYfN2WH+WD4K3G1oAtOHKueG5zllYzdcXJ2MtQerRMo0Er1ZHNaykv5pHmbC+ww3D
+         kKchP+rfHGZEpBaZ3JwK4/qbNuuiuQDoKRLMB91cr9N/1EXSQSqV0RCi9QhXx5tdhvlI
+         lUZZpTAsDP4YBjS4Pu+ylwZPnf+vkn2lfBeRRh0WpkM0bfRQR/9Fr7GVC9uftOm69SzI
+         uvQdcUdiTxOmjnmJEZbMfrmiCwOPxM/q/wYCSJQGBW4YY+AXg1t9GgaRPU7guGZP6qLu
+         ZqTjhAYmKtd1bHzqNmfKG0z1ph33u5/dytzUTy4R8rlJHjisF65AQ0923c95mkY8lkpw
+         Gf2g==
+X-Gm-Message-State: AAQBX9dyyphAeb4uLaMdp5kfbffitKKiD+lwy4YxKdvx3KltOKOZV0Fr
+        WqtyV7f8WeMPBnhp2Ii60uQ+jQ==
+X-Google-Smtp-Source: AKy350Yx+YoxEu26bUs+n4hWzHl2DS/ZsBBqF9kIcEeumzVXzc+55WJ2bfeR5ZuzHO7Iv3lxtaHQqw==
+X-Received: by 2002:a17:906:53d2:b0:930:b130:b7b with SMTP id p18-20020a17090653d200b00930b1300b7bmr1640306ejo.6.1681994996750;
+        Thu, 20 Apr 2023 05:49:56 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:bcb8:77e6:8f45:4771? ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
+        by smtp.gmail.com with ESMTPSA id o9-20020a170906774900b0094f8ec35070sm697649ejn.113.2023.04.20.05.49.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 05:49:56 -0700 (PDT)
+Message-ID: <daa2de06-9906-cc4c-600e-9f16351d7d43@linaro.org>
+Date:   Thu, 20 Apr 2023 14:49:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230401164448.1393336-1-mmyangfl@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] ARM: dts: qcom: ipq4019: fix broken NAND controller
+ properties override
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+References: <20230420072811.36947-1-krzysztof.kozlowski@linaro.org>
+ <ab7c0eab-4b80-2186-de92-dea3df58c298@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ab7c0eab-4b80-2186-de92-dea3df58c298@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,91 +83,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 02, 2023 at 12:44:40AM +0800, David Yang wrote:
-> HiSTB TRNG are found on some HiSilicon STB SoCs.
+On 20/04/2023 12:42, Konrad Dybcio wrote:
 > 
-> Signed-off-by: David Yang <mmyangfl@gmail.com>
-> ---
-> v2: fix typo
-> v3: add option for post process depth, adjust timeout
-> v4: do not case to __iomem, as requested
-> v5: do not use rng->priv at all
->  drivers/crypto/hisilicon/Kconfig         |   7 +
->  drivers/crypto/hisilicon/Makefile        |   2 +-
->  drivers/crypto/hisilicon/trng/Makefile   |   3 +
->  drivers/crypto/hisilicon/trng/trng-stb.c | 176 +++++++++++++++++++++++
->  4 files changed, 187 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/crypto/hisilicon/trng/trng-stb.c
 > 
-> diff --git a/drivers/crypto/hisilicon/Kconfig b/drivers/crypto/hisilicon/Kconfig
-> index 4137a8bf131f..e8690c223584 100644
-> --- a/drivers/crypto/hisilicon/Kconfig
-> +++ b/drivers/crypto/hisilicon/Kconfig
-> @@ -82,3 +82,10 @@ config CRYPTO_DEV_HISI_TRNG
->  	select CRYPTO_RNG
->  	help
->  	  Support for HiSilicon TRNG Driver.
-> +
-> +config CRYPTO_DEV_HISTB_TRNG
-> +	tristate "Support for HiSTB TRNG Driver"
-> +	depends on ARCH_HISI || COMPILE_TEST
-> +	select HW_RANDOM
-> +	help
-> +	  Support for HiSTB TRNG Driver.
-> diff --git a/drivers/crypto/hisilicon/Makefile b/drivers/crypto/hisilicon/Makefile
-> index 8595a5a5d228..fc51e0edec69 100644
-> --- a/drivers/crypto/hisilicon/Makefile
-> +++ b/drivers/crypto/hisilicon/Makefile
-> @@ -5,4 +5,4 @@ obj-$(CONFIG_CRYPTO_DEV_HISI_SEC2) += sec2/
->  obj-$(CONFIG_CRYPTO_DEV_HISI_QM) += hisi_qm.o
->  hisi_qm-objs = qm.o sgl.o debugfs.o
->  obj-$(CONFIG_CRYPTO_DEV_HISI_ZIP) += zip/
-> -obj-$(CONFIG_CRYPTO_DEV_HISI_TRNG) += trng/
-> +obj-y += trng/
-> diff --git a/drivers/crypto/hisilicon/trng/Makefile b/drivers/crypto/hisilicon/trng/Makefile
-> index d909079f351c..cf20b057c66b 100644
-> --- a/drivers/crypto/hisilicon/trng/Makefile
-> +++ b/drivers/crypto/hisilicon/trng/Makefile
-> @@ -1,2 +1,5 @@
->  obj-$(CONFIG_CRYPTO_DEV_HISI_TRNG) += hisi-trng-v2.o
->  hisi-trng-v2-objs = trng.o
-> +
-> +obj-$(CONFIG_CRYPTO_DEV_HISTB_TRNG) += histb-trng.o
-> +histb-trng-objs += trng-stb.o
-> diff --git a/drivers/crypto/hisilicon/trng/trng-stb.c b/drivers/crypto/hisilicon/trng/trng-stb.c
-> new file mode 100644
-> index 000000000000..29200a7d3d81
-> --- /dev/null
-> +++ b/drivers/crypto/hisilicon/trng/trng-stb.c
-> @@ -0,0 +1,176 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-> +/*
-> + * Device driver for True RNG in HiSTB SoCs
-> + *
-> + * Copyright (c) 2023 David Yang
-> + */
-> +
-> +#include <crypto/internal/rng.h>
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/hw_random.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/of_device.h>
+> On 20.04.2023 09:28, Krzysztof Kozlowski wrote:
+>> After renaming NAND controller node name from "qpic-nand" to
+>> "nand-controller", the board DTS/DTSI also have to be updated:
+>>
+>>   Warning (unit_address_vs_reg): /soc/qpic-nand@79b0000: node has a unit name, but no reg or ranges property
+>>
+>> Cc: <stable@vger.kernel.org>
+> Cc: <stable@vger.kernel.org> # 5.12
+> 
+> (g show 9e1e00f18afc:Makefile | head, rounded up to first release)
 
-You don't need anything from this header...
+You do not have to do this. The Fixes tag defines backporting.
 
-You need platform_device.h and mod_devicetable.h
+Best regards,
+Krzysztof
 
-[...]
-
-
-> +static const struct of_device_id histb_trng_of_match[] = {
-> +	{ .compatible = "hisilicon,histb-trng", },
-
-This binding isn't documented. Please submit a schema.
-
-Rob
