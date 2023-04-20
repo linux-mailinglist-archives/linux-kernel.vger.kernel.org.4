@@ -2,114 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3CD6E9883
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A476E9885
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbjDTPkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 11:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
+        id S232014AbjDTPkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 11:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbjDTPka (ORCPT
+        with ESMTP id S231997AbjDTPkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 11:40:30 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97192117;
-        Thu, 20 Apr 2023 08:40:29 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4629F5C00D3;
-        Thu, 20 Apr 2023 11:40:27 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 20 Apr 2023 11:40:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1682005227; x=1682091627; bh=Al
-        qUOfOa2kHr8oGUuOGFh2LpW6TOvsZBDKrnI2S7ANc=; b=KkG7wLMbnLTcOvv++O
-        4+CR2me9Eu8v2wfJUPP+1bru53dYLbRbtlcFS16z8V1D4y8z3jRREt3VRUk4HGzp
-        MJE7IVsJJGGhTpyskgVRab2Ux0dkRZCMxVxIbZCJ+TogQhZKp8kXFkZIRRbq/58I
-        I/vSXIs+ENkzjNQK8K2+Dj/Ji1TNVwqpcydGkiITWeBbWfOQqD2pHYuocZRF+0lG
-        CeJZeyuV31DxYTAokjeXfGE7bu/dusnorIgZuSsctEXTETvhTYQVTp3xhqNbF80g
-        xATk/d9J37pOuSCD37RS21tUt/txAjJia2MGAs219wP6MeznEBqhcnvQtO7QPtQt
-        rTiQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1682005227; x=1682091627; bh=AlqUOfOa2kHr8
-        oGUuOGFh2LpW6TOvsZBDKrnI2S7ANc=; b=NXXxKdYpel3XATPdMjcy2LOplqU5/
-        sZHpAx0lc1joZfRni6Q7XUmYH6Vagz6LCYUwI7k7cHiAzJOQn5pfa8yN8X2N62TE
-        N7s7nOpDlB51fPCK5xZMZh5vwO8wcLCndwl9kBG9lClK4vkN2IiT1iHaMWdPDzH7
-        +77UL4QDYn10CvGp6bAzjRUT8xrePhKEQrjDWWrdTPoJ1Rpzy0trhvc8aSuTnl3Y
-        /ViHxA6ai6Z2rxxdkhRYLLvKsZ33UinIcC8k0c0AotgT0py4gI0mJsOO7veNtOxy
-        5OMqiCbeR/+WRuoKPATikUFaBHONs1uT1aU0z+RD0D3UgIyX4lUqo3tHQ==
-X-ME-Sender: <xms:6lxBZOguJGkVspDGQGA9QHVFRkxt4TN0azq9Q7QFrya4E3NAXtftVA>
-    <xme:6lxBZPCEYvzYrqqXSXypO8PV4zyV8V5SxJvNCzRKzyBf9XuuZKokrpR7CgM6Q4LBb
-    hmwLb1CeFjBS1EnMRg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtvddgkeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:6lxBZGGSAp5YfCqfIBVUEnNEl2nDn-QwR4mtl4XdQaDhWgNDxMN4lQ>
-    <xmx:6lxBZHTl6uq07VtdGUt1AGK1xNAsd0yk7k2KkokzKZ2p_PgRJGaIHg>
-    <xmx:6lxBZLyuXWvldqMV3-LxhfztxS46KyJKO9iTcj7Uf4DKslfaQM7Iiw>
-    <xmx:61xBZCwrNwknFVp09McHL9-TW3RMMCtmTj_XZ0PmAJhVrEPCY4AKJg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CC6F5B60089; Thu, 20 Apr 2023 11:40:26 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
-Mime-Version: 1.0
-Message-Id: <73674ffd-3231-4ca8-af65-3ec621de5072@app.fastmail.com>
-In-Reply-To: <2e7f5511-08e2-4ee0-ab3f-481ba6724824@lunn.ch>
-References: <202303241935.xRMa6mc6-lkp@intel.com>
- <f16fb810-f70d-40ac-8e9d-2ada008c446d@app.fastmail.com>
- <758fff85-aefc-4e0a-97b1-fe7179fafac6@lunn.ch>
- <91c716f0-bf7f-4fdf-8cb7-83f1bdc0cbd4@app.fastmail.com>
- <2e7f5511-08e2-4ee0-ab3f-481ba6724824@lunn.ch>
-Date:   Thu, 20 Apr 2023 17:39:56 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Andrew Lunn" <andrew@lunn.ch>
-Cc:     "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev,
-        "Christian Marangi" <ansuelsmth@gmail.com>,
-        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>
-Subject: Re: [lunn:v6.3-rc2-net-next-phy-leds 5/15] ld.lld: error: undefined symbol:
- devm_mdiobus_alloc_size
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 20 Apr 2023 11:40:35 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF8D9F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:40:33 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-507bdc5ca2aso1075219a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:40:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682005232; x=1684597232;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ng/7l5VlfjgvLBZOn+6emtZItxRcIQQXLL+YWHzwDfU=;
+        b=QW3lu605jBMYSJRbLYIrS9IzJPjwoSJYKeCmncGY76yReh8FCCYyyql0pg9Ivr+ZkL
+         937r9nGPBp8Fu/WKnoeGWLfok6zvZIZEir4Qs7el9vKsNfFPi2v9OG5JVM2k0KROyz/r
+         bESc9mUVByXgcnV3eawwGu56f9WmN5pPd8JdFliTkT/7vXTN7FdN6wCu0iFzo+Ij98nF
+         3LL/ZDek2x2U7WKhRHMbeMWe2GF7sS84jYezdtFY3kICzZQNSNtaRHGH9LGBSg14lv2u
+         zyYcK27ckWHD3FZHIGg4EqYgxYCVumo5G6cFggF5QWERTL2DldXp1a7aYCvSuGOA7mn1
+         Hy2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682005232; x=1684597232;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ng/7l5VlfjgvLBZOn+6emtZItxRcIQQXLL+YWHzwDfU=;
+        b=FlGIBtQkqDnFu8cJf54hz9+ocnawF8jjcJO3vov1M3a8H/5+O6CQPsdD6gf/eZ9c1/
+         iLCkDzaVLtubKMUy0snRqu9jwVYBpFDt/P5UH6c+7jZdHT+GarpXKQBU/OcpRD8ziE1n
+         ufWbRDPfnliNbRCUpQUbV/mAqVu6501pE6Y6hAdzer8LK/iqNJfDegAFL7RuadfsgJFI
+         1Jkzu17rvU23CA0hUywtcGqkjqIZs6pO/sDubC9Qcm1ZECbsgucwGSrkW5OnvBT6g1H/
+         Oi7a4IKynFcVY9nLVzkv7Qem6OhcWyyxukvI2kfhMIvLJL2zWCwwP3HxyGWg034nHois
+         a9BA==
+X-Gm-Message-State: AAQBX9deih0s9+k58StPaZOLlQHhITKgABbkTfjQgtE+4sOffy6IgV1B
+        x31C/LKqUGah8ria21V8KjsTrQ==
+X-Google-Smtp-Source: AKy350atlvDRHpkArIMuqphydgSZ7Ju+vCaZdY3O2gF6jFZEWQy94BQRkh+vgJkjYC/ybSM9WBzcvg==
+X-Received: by 2002:aa7:cb01:0:b0:506:a2bb:fc43 with SMTP id s1-20020aa7cb01000000b00506a2bbfc43mr2043394edt.15.1682005232101;
+        Thu, 20 Apr 2023 08:40:32 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:bcb8:77e6:8f45:4771? ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
+        by smtp.gmail.com with ESMTPSA id g18-20020a056402181200b004c2158e87e6sm853513edy.97.2023.04.20.08.40.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 08:40:31 -0700 (PDT)
+Message-ID: <087ba4df-7575-acce-309a-efb5115a987d@linaro.org>
+Date:   Thu, 20 Apr 2023 17:40:30 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/4] spi: s3c64xx: changed to PIO mode if there is no
+ DMA
+Content-Language: en-US
+To:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
+References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
+ <CGME20230419062755epcas2p1370c1ca60d88d6b114a7c7c1de3f15c0@epcas2p1.samsung.com>
+ <20230419060639.38853-2-jaewon02.kim@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230419060639.38853-2-jaewon02.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023, at 17:26, Andrew Lunn wrote:
->> I think the best way is to drop your MDIO_DEVRES patch and instead
->> apply mine (or some variation of that) from
->> 
->> https://lore.kernel.org/lkml/20230420084624.3005701-1-arnd@kernel.org/
->> 
->> Once any missing or recursive dependencies are handled, the devres
->> problem should be fixed as well. I have completed around 150
->> randconfig builds with that patch and have not seen any further
->> problems.
->
-> Is this on top of my patch? Or does it require mine is reverted?  I
-> can send a revert if it is needed.
+On 19/04/2023 08:06, Jaewon Kim wrote:
+> Polling mode supported with qurik if there was no DMA in the SOC.
+> However, there are cased where we cannot or do not want to use DMA.
+> To support this case, if DMA is not set, it is switched to polling mode.
+> 
 
-The two are independent. I think your patch does nothing once
-mine is applied, since the indirect 'select MDIO_DEVRES' will
-work again. Reverting it might help avoid some confusion though.
+(...)
 
-     Arnd
+>  #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
+> -#define is_polling(x)	(x->port_conf->quirks & S3C64XX_SPI_QUIRK_POLL)
+> +#define is_polling(x)	(x->cntrlr_info->polling)
+>  
+>  #define RXBUSY    (1<<2)
+>  #define TXBUSY    (1<<3)
+> @@ -1067,6 +1066,11 @@ static struct s3c64xx_spi_info *s3c64xx_spi_parse_dt(struct device *dev)
+>  		sci->num_cs = temp;
+>  	}
+>  
+> +	if (!of_find_property(dev->of_node, "dmas", NULL)) {
+
+of_property_present()
+
+
+Best regards,
+Krzysztof
+
