@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AE26E9E95
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 00:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3FE06E9E99
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 00:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232924AbjDTWHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 18:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
+        id S233016AbjDTWHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 18:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232873AbjDTWGv (ORCPT
+        with ESMTP id S229736AbjDTWG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 18:06:51 -0400
+        Thu, 20 Apr 2023 18:06:56 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9363C270C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 15:06:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49F340CA
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 15:06:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682028409; x=1713564409;
+  t=1682028410; x=1713564410;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=snGRPrZmk44dmEkOaizzRRz9f19/ahGzyDW4YNPDoy4=;
-  b=Ad8T2j2NRVzZJ4nxk2QZ3RrW0ESgxe/hBRCZwi0NGAucyLN4r30qUYp/
-   VjSpc4+/5siiKcxA1KityOcfUMwTdn0u0Uij/rG2OlkRX86NzWoZSpcn/
-   V0JsKbxpWkZIlEyEfU+ixQ5D1xTEsIqx9dIs+YQp0AEJeiVtsjxMeL9Aw
-   yAAiR0lwYfHX2cucZtpfiYQeqfvQdk7ZeodnIOtfu2fWVWSc6kDwGOP6D
-   aJ0arnx+eD7fAhOMzv9Dc/dHBuKKNgzzNMT4wr9t81IPkRno4hqYami0S
-   H3ofb3IZ8tz5RLsNW5UEUMGMcQdfR/DGlYS/ducGs7tMw6DWXsbR7yFwz
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="348650938"
+  bh=vE1A0+aVMvRyEXkILJnKwNrogCJkhjI/aeL766efMHE=;
+  b=IlRVFUrAp+S/rdewxqmrObH5a42HGCBtWPIDhywjtnryRmEUZ/cAqQuZ
+   /bl6EYoN8goW8ijyVS3l8UCZ6uJSoBMOBdBO8ph1Fmx6NLA74LymmN6LJ
+   9hVXhUy/k2mmE+GU4LsMKEV1B0H4DUYOMlh++FD/S64U615WGuBwOzU8Q
+   zHxdEqA+W1Hk7/IE2NR3xYCxP6aOrQLTv50kkAuB7d9Zc4q/zHYm02L7U
+   enIerfkRkG0ggySKYKahMCKV+hkpH5hhfXdfwLQlyKDXNXJDxZBlTxx1H
+   Tr0hbQiCJudYK8MDXdjaQAZM7cxwn3Fzh/o6aCw/J0PE7rHDyLSWUPiCR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="348650948"
 X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="348650938"
+   d="scan'208";a="348650948"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 15:06:45 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 15:06:47 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="724583766"
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="724583770"
 X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="724583766"
+   d="scan'208";a="724583770"
 Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
   by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 15:06:45 -0700
 From:   Tony Luck <tony.luck@intel.com>
@@ -52,9 +52,9 @@ To:     Fenghua Yu <fenghua.yu@intel.com>,
         Babu Moger <babu.moger@amd.com>
 Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
         Tony Luck <tony.luck@intel.com>
-Subject: [RFC PATCH 5/7] x86/resctrl: Enhance driver registration to hook into schemata files
-Date:   Thu, 20 Apr 2023 15:06:34 -0700
-Message-Id: <20230420220636.53527-6-tony.luck@intel.com>
+Subject: [RFC PATCH 6/7] x86/resctrl: Allow a device to override an existing schemata entry
+Date:   Thu, 20 Apr 2023 15:06:35 -0700
+Message-Id: <20230420220636.53527-7-tony.luck@intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230420220636.53527-1-tony.luck@intel.com>
 References: <20230420220636.53527-1-tony.luck@intel.com>
@@ -70,169 +70,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new configuration type "DRIVER" for lines in the schemata files
-with a show() and update() callback functions to the driver to maintain
-these lines.
+Remove that entry from the resctrl_schema_all list when driver
+is loaded. Put it back again when driver is unloaded.
 
 Signed-off-by: Tony Luck <tony.luck@intel.com>
 ---
- include/linux/resctrl.h                   |  6 ++++++
- arch/x86/kernel/cpu/resctrl/ctrlmondata.c | 17 ++++++++++++++---
- arch/x86/kernel/cpu/resctrl/rdtgroup.c    | 16 ++++++++++++++++
- 3 files changed, 36 insertions(+), 3 deletions(-)
+ include/linux/resctrl.h                |  4 ++++
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 19 +++++++++++++++++++
+ 2 files changed, 23 insertions(+)
 
 diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
-index 8668480cea51..691805214f41 100644
+index 691805214f41..246644f53bde 100644
 --- a/include/linux/resctrl.h
 +++ b/include/linux/resctrl.h
-@@ -23,11 +23,13 @@ int proc_resctrl_show(struct seq_file *m,
-  * @CDP_NONE:	No prioritisation, both code and data are controlled or monitored.
-  * @CDP_CODE:	Configuration applies to instruction fetches.
-  * @CDP_DATA:	Configuration applies to reads and writes.
-+ * @DRIVER:	Resource managed by driver.
-  */
- enum resctrl_conf_type {
- 	CDP_NONE,
- 	CDP_CODE,
- 	CDP_DATA,
-+	DRIVER,
- };
- 
- #define CDP_NUM_TYPES	(CDP_DATA + 1)
-@@ -201,6 +203,8 @@ struct resctrl_schema {
- 	char				name[8];
- 	enum resctrl_conf_type		conf_type;
- 	struct rdt_resource		*res;
-+	void				(*show)(struct seq_file *s, int closid);
-+	int				(*update)(char *s, int closid);
- 	u32				num_closid;
- };
- 
-@@ -218,6 +222,7 @@ struct resctrl_fileinfo {
-  * @infofiles:	Array of files to create under infodir.
+@@ -223,6 +223,8 @@ struct resctrl_fileinfo {
   * @rmdir:	Callback when a resctrl directory is removed.
   * @ctrlfiles:	Array of files to create in ctrlmon directories.
-+ * @schema:	Driver supplied to manage a line in schemata file.
+  * @schema:	Driver supplied to manage a line in schemata file.
++ * @schema_override: Name of resource in schemata to override.
++ * @save_schema: List to save overridden schema while driver loaded
   */
  struct resctrl_driver {
  	struct list_head	list;
-@@ -226,6 +231,7 @@ struct resctrl_driver {
- 	struct resctrl_fileinfo	*infofiles;
+@@ -232,6 +234,8 @@ struct resctrl_driver {
  	int			(*rmdir)(int oclos, int ormid, int nclos, int nrmid);
  	struct resctrl_fileinfo	*ctrlfiles;
-+	struct resctrl_schema	schema;
+ 	struct resctrl_schema	schema;
++	char			*schema_override;
++	struct list_head	save_schema;
  };
  
  int resctrl_register_driver(struct resctrl_driver *d);
-diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-index b44c487727d4..7a59d6eab576 100644
---- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-+++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-@@ -356,8 +356,12 @@ static int rdtgroup_parse_resource(char *resname, char *tok,
- 	struct resctrl_schema *s;
- 
- 	list_for_each_entry(s, &resctrl_schema_all, list) {
--		if (!strcmp(resname, s->name) && rdtgrp->closid < s->num_closid)
--			return parse_line(tok, s, rdtgrp);
-+		if (!strcmp(resname, s->name) && rdtgrp->closid < s->num_closid) {
-+			if (s->conf_type == DRIVER)
-+				return s->update(tok, rdtgrp->closid);
-+			else
-+				return parse_line(tok, s, rdtgrp);
-+		}
- 	}
- 	rdt_last_cmd_printf("Unknown or unsupported resource name '%s'\n", resname);
- 	return -EINVAL;
-@@ -419,10 +423,11 @@ ssize_t rdtgroup_schemata_write(struct kernfs_open_file *of,
- 		r = s->res;
- 
- 		/*
-+		 * Resources controlled by a driver are updated by that driver.
- 		 * Writes to mba_sc resources update the software controller,
- 		 * not the control MSR.
- 		 */
--		if (is_mba_sc(r))
-+		if (s->conf_type == DRIVER || is_mba_sc(r))
- 			continue;
- 
- 		ret = resctrl_arch_update_domains(r, rdtgrp->closid);
-@@ -464,6 +469,12 @@ static void show_doms(struct seq_file *s, struct resctrl_schema *schema, int clo
- 	u32 ctrl_val;
- 
- 	seq_printf(s, "%*s:", max_name_width, schema->name);
-+
-+	if (schema->conf_type == DRIVER) {
-+		schema->show(s, closid);
-+		return;
-+	}
-+
- 	list_for_each_entry(dom, &r->domains, list) {
- 		if (sep)
- 			seq_puts(s, ";");
 diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index e2fdd5819336..cc2292a7435b 100644
+index cc2292a7435b..4fc12ad56843 100644
 --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
 +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -2043,6 +2043,8 @@ static int rdtgroup_create_info_dir(struct kernfs_node *parent_kn)
- 
- 	/* loop over enabled controls, these are all alloc_capable */
- 	list_for_each_entry(s, &resctrl_schema_all, list) {
-+		if (s->conf_type == DRIVER)
-+			continue;
- 		r = s->res;
- 		fflags =  r->fflags | RF_CTRL_INFO;
- 		ret = rdtgroup_mkdir_info_resdir(s, s->name, fflags);
-@@ -2390,6 +2392,9 @@ static int schemata_list_add(struct rdt_resource *r, enum resctrl_conf_type type
- 	case CDP_NONE:
- 		suffix = "";
- 		break;
-+	case DRIVER:
-+		kfree(s);
-+		return -EINVAL;
+@@ -2547,6 +2547,19 @@ static void rdtgroup_update_ctrl_dir(struct resctrl_fileinfo *files, bool add)
  	}
+ }
  
- 	ret = snprintf(s->name, sizeof(s->name), "%s%s", r->name, suffix);
-@@ -2567,6 +2572,9 @@ int resctrl_register_driver(struct resctrl_driver *d)
- 	mutex_lock(&rdtgroup_mutex);
- 	list_add(&d->list, &drivers);
++static void driver_override(struct resctrl_driver *d)
++{
++	struct resctrl_schema *rs;
++
++	list_for_each_entry(rs, &resctrl_schema_all, list) {
++		if (strncmp(d->schema_override, rs->name, sizeof(rs->name)))
++			continue;
++		INIT_LIST_HEAD(&d->save_schema);
++		list_move(&rs->list, &d->save_schema);
++		break;
++	}
++}
++
+ static void driver_up(struct resctrl_driver *d)
+ {
+ 	if (d->mount)
+@@ -2575,6 +2588,9 @@ int resctrl_register_driver(struct resctrl_driver *d)
+ 	if (d->schema.name[0])
+ 		list_add(&d->schema.list, &resctrl_schema_all);
  
-+	if (d->schema.name[0])
-+		list_add(&d->schema.list, &resctrl_schema_all);
++	if (d->schema_override)
++		driver_override(d);
 +
  	if (resctrl_is_mounted)
  		driver_up(d);
  	mutex_unlock(&rdtgroup_mutex);
-@@ -2578,8 +2586,12 @@ EXPORT_SYMBOL_GPL(resctrl_register_driver);
- void resctrl_unregister_driver(struct resctrl_driver *d)
- {
- 	mutex_lock(&rdtgroup_mutex);
-+
- 	list_del(&d->list);
+@@ -2592,6 +2608,9 @@ void resctrl_unregister_driver(struct resctrl_driver *d)
+ 	if (d->schema.name[0])
+ 		list_del(&d->schema.list);
  
-+	if (d->schema.name[0])
-+		list_del(&d->schema.list);
++	if (d->schema_override && !list_empty(&d->save_schema))
++		list_move(d->save_schema.next, &resctrl_schema_all);
 +
  	if (resctrl_is_mounted)
  		driver_down(d);
  	mutex_unlock(&rdtgroup_mutex);
-@@ -2591,6 +2603,8 @@ static void schemata_list_destroy(void)
- 	struct resctrl_schema *s, *tmp;
- 
- 	list_for_each_entry_safe(s, tmp, &resctrl_schema_all, list) {
-+		if (s->conf_type == DRIVER)
-+			continue;
- 		list_del(&s->list);
- 		kfree(s);
- 	}
-@@ -3285,6 +3299,8 @@ static int rdtgroup_init_alloc(struct rdtgroup *rdtgrp)
- 	rdt_staged_configs_clear();
- 
- 	list_for_each_entry(s, &resctrl_schema_all, list) {
-+		if (s->conf_type == DRIVER)
-+			continue;
- 		r = s->res;
- 		if (r->rid == RDT_RESOURCE_MBA ||
- 		    r->rid == RDT_RESOURCE_SMBA) {
 -- 
 2.39.2
 
