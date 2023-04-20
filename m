@@ -2,222 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063466E95F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF15E6E961B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjDTNjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 09:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        id S231556AbjDTNnr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Apr 2023 09:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbjDTNi5 (ORCPT
+        with ESMTP id S231234AbjDTNno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:38:57 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B4B72BC
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:38:39 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id eo4-20020a05600c82c400b003f05a99a841so1140190wmb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:38:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1681997917; x=1684589917;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=I86fOqTdPfylzaIxvA3BjzzASE44ZIcFNmmTwZZqPrw=;
-        b=TlCEO14jZWY4AhJUFom4csBWhQmTYU8Kgq+FbMoRKNvw1syInfxOscG1p95qoAH8pm
-         OCrpzM3BvwU4Zzwg/+OQuA+lkvnQW/5H4QynQogsvGQ80HPCcMsdFapGhhhX/W80t/ii
-         m5gGWy6ovvfY/yrtl6uLlNISwcqeo2zfWvXKRMfm/suHtL0jy12eLF0iM7mkckaAkJEZ
-         w49kRPX8FIaMfq0rV0crVoKP4Ut1CgklBYgxe4cDgsj41LnXakimps81C+RR5z21pqkq
-         FvpnWXNAFTQgRLObovCErEBBGl+jF1zR73ZgVuRh4Mbypr+XrWpOW42zzT9TLXahtWdn
-         GGsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681997917; x=1684589917;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I86fOqTdPfylzaIxvA3BjzzASE44ZIcFNmmTwZZqPrw=;
-        b=KPbr4kpNQlkl96uExQjQzJxOza5qhHYEvTHr/gLcLmVcDxRpEmbl9iLSeuEcx9mk47
-         hF9vT2N5wwn/tgmDGzHrxGPLuNor0s6nqqYnT4fqfbHDkJxB1VAPVaZh7qizQLSZMQzl
-         xWqf02nC/Q/SYhE5BD5+P0r0lYA0lS49gRJY1/DyDCe5MtNxS6+NvbezpQ1lPd2p5YEQ
-         BRlkonc5cy7ysi2PxFsfEbGScEl/Pr9C0ziqJNzvnf55K8t78CAA7eNl9N4lM/MjIZwE
-         UcQ/TG7xpy9VYQ20Pz5YRUP63AeLNUMfSBKLDqddo0kzH5Ews2L8LdZg5zDgVBp9VpJ1
-         qYtg==
-X-Gm-Message-State: AAQBX9dGgRTd+JdbTGRp9kVBIZ6pjkZgAtymA1M3+b4nxE1dckSIYJZc
-        4fV5GtZOuHj0d6EU/+vY9KzS+g==
-X-Google-Smtp-Source: AKy350Y906zKhghL9lKc4oQbHZfo/lfR3EoSEnNJnhvp6BnIKQ80hBoi+rX5/wdCg9ez86meuTS8Gw==
-X-Received: by 2002:a7b:cb1a:0:b0:3eb:29fe:f922 with SMTP id u26-20020a7bcb1a000000b003eb29fef922mr1273375wmj.29.1681997917596;
-        Thu, 20 Apr 2023 06:38:37 -0700 (PDT)
-Received: from airbuntu (host109-154-46-114.range109-154.btcentralplus.com. [109.154.46.114])
-        by smtp.gmail.com with ESMTPSA id o3-20020a05600c378300b003ef5f77901dsm2012888wmr.45.2023.04.20.06.38.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 06:38:37 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 14:38:32 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     David Dai <davidai@google.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Qais Yousef <qyousef@google.com>,
-        Quentin Perret <qperret@google.com>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1] sched/uclamp: Introduce
- SCHED_FLAG_RESET_UCLAMP_ON_FORK flag
-Message-ID: <20230420133832.nmaojwd4oxc3io5f@airbuntu>
-References: <20230416213406.2966521-1-davidai@google.com>
- <20230419175414.ycnlaperdkjxgypx@airbuntu>
- <CAGETcx8tnPgL0ekMKHvAs30NwsEzWZuCoF_BgUyMk7iJPuSGhw@mail.gmail.com>
+        Thu, 20 Apr 2023 09:43:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684925BA1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:43:36 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1ppUYu-0001Bj-Uu; Thu, 20 Apr 2023 15:43:01 +0200
+Message-ID: <19d2c40180d0b9176e17aa6e91c1e7f36f77f626.camel@pengutronix.de>
+Subject: Re: [PATCH 1/6] drm: bridge: samsung-dsim: Support multi-lane
+ calculations
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        aford@beaconembedded.com,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Fabio Estevam <festevam@gmail.com>, m.szyprowski@samsung.com,
+        marex@denx.de, Robert Foss <rfoss@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Inki Dae <inki.dae@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Date:   Thu, 20 Apr 2023 15:42:57 +0200
+In-Reply-To: <CAHCN7x+bZHZHxYk=qC3QFS07kLO85w_rj1tOuX1Y3fJXekmvMQ@mail.gmail.com>
+References: <20230415104104.5537-1-aford173@gmail.com>
+         <3e47f0d1017fe4c9f71a5de65f32c6ba1662efe2.camel@pengutronix.de>
+         <CAHCN7xL4+9NogrnXA1PEWorwY7JpSGBozDtHT83JvzjfinmS+A@mail.gmail.com>
+         <CAHCN7xK8K+DsNAFTVAezwJQzZ7RCDb2CjCBZ8dNb=S8d1BmtMA@mail.gmail.com>
+         <f42a2a11c1a2df4d773b61a449e8f4d5a9a010d1.camel@pengutronix.de>
+         <CAHCN7x+bZHZHxYk=qC3QFS07kLO85w_rj1tOuX1Y3fJXekmvMQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGETcx8tnPgL0ekMKHvAs30NwsEzWZuCoF_BgUyMk7iJPuSGhw@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/19/23 15:49, Saravana Kannan wrote:
-> On Wed, Apr 19, 2023 at 10:54 AM Qais Yousef <qyousef@layalina.io> wrote:
-> >
-> > Hi David!
-> >
-> > On 04/16/23 14:34, David Dai wrote:
-> > > A userspace service may manage uclamp dynamically for individual tasks and
-> > > a child task will unintentionally inherit a pesudo-random uclamp setting.
-> > > This could result in the child task being stuck with a static uclamp value
-> > > that results in poor performance or poor power.
-> > >
-> > > Using SCHED_FLAG_RESET_ON_FORK is too coarse for this usecase and will
-> > > reset other useful scheduler attributes. Adding a
-> > > SCHED_FLAG_RESET_UCLAMP_ON_FORK will allow userspace to have finer control
-> > > over scheduler attributes of child processes.
-> >
-> > Thanks a lot for the patch. This has a been a known limitation for a while but
-> > didn't manage to find the time to push anything yet.
-> >
-> > ADPF (Android Dynamic Performance Framework) exposes APIs to manage performance
-> > for a set of pids [1]. Only these tasks belong to the session and any forked
-> > tasked is expected to have its uclamp values reset. But as you pointed out, the
-> > current RESET_ON_FORK resets everything, but we don't want that as these
-> > attributes don't belong to ADPF to decide whether they should be reset too or
-> > not. And not resetting them means we can end up with tasks inheriting random
-> > uclamp values unintentionally. We can't tell these tasks not to fork anything.
-> > If the forked tasks are expected to be part of the session, then their pids
-> > must be added explicitly.
-> >
-> > [1] https://developer.android.com/reference/android/os/PerformanceHintManager#createHintSession(int%5B%5D,%20long)
-> >
-> > >
-> > > Cc: Qais Yousef <qyousef@google.com>
-> > > Cc: Quentin Perret <qperret@google.com>
-> > > Cc: Saravana Kannan <saravanak@google.com>
-> > > Signed-off-by: David Dai <davidai@google.com>
-> > > ---
-> > >  include/linux/sched.h            | 3 +++
-> > >  include/uapi/linux/sched.h       | 4 +++-
-> > >  kernel/sched/core.c              | 6 +++++-
-> > >  tools/include/uapi/linux/sched.h | 4 +++-
-> > >  4 files changed, 14 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/include/linux/sched.h b/include/linux/sched.h
-> > > index 63d242164b1a..b1676b9381f9 100644
-> > > --- a/include/linux/sched.h
-> > > +++ b/include/linux/sched.h
-> > > @@ -885,6 +885,9 @@ struct task_struct {
-> > >       unsigned                        sched_reset_on_fork:1;
-> >
-> > nit: can't we convert to a flag and re-use?
-> >
-> > >       unsigned                        sched_contributes_to_load:1;
-> > >       unsigned                        sched_migrated:1;
-> > > +#ifdef CONFIG_UCLAMP_TASK
-> > > +     unsigned                        sched_reset_uclamp_on_fork:1;
-> > > +#endif
-> > >
-> > >       /* Force alignment to the next boundary: */
-> > >       unsigned                        :0;
-> > > diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
-> > > index 3bac0a8ceab2..7515106e1f1a 100644
-> > > --- a/include/uapi/linux/sched.h
-> > > +++ b/include/uapi/linux/sched.h
-> > > @@ -132,12 +132,14 @@ struct clone_args {
-> > >  #define SCHED_FLAG_KEEP_PARAMS               0x10
-> > >  #define SCHED_FLAG_UTIL_CLAMP_MIN    0x20
-> > >  #define SCHED_FLAG_UTIL_CLAMP_MAX    0x40
-> > > +#define SCHED_FLAG_RESET_UCLAMP_ON_FORK      0x80
-> > >
-> > >  #define SCHED_FLAG_KEEP_ALL  (SCHED_FLAG_KEEP_POLICY | \
-> > >                                SCHED_FLAG_KEEP_PARAMS)
-> > >
-> > >  #define SCHED_FLAG_UTIL_CLAMP        (SCHED_FLAG_UTIL_CLAMP_MIN | \
-> > > -                              SCHED_FLAG_UTIL_CLAMP_MAX)
-> > > +                              SCHED_FLAG_UTIL_CLAMP_MAX | \
-> > > +                              SCHED_FLAG_RESET_UCLAMP_ON_FORK)
-> >
-> > I was considering to have something a bit more generic that allows selecting
-> > which attributes to reset.
-> >
-> > For example a syscall with SCHED_FLAG_RESET_ON_FORK_SEL combined with
-> > SCHED_FLAG_UCLAMP_MIN/MAX will only reset those. This should make it extensible
-> > if we have other similar use cases in the future. The downside it *might*
-> > require to be done in a separate syscall to the one that sets these parameter.
-> > But it should be done once.
+Am Donnerstag, dem 20.04.2023 um 08:24 -0500 schrieb Adam Ford:
+> On Thu, Apr 20, 2023 at 8:06 AM Lucas Stach <l.stach@pengutronix.de> wrote:
+> > 
+> > Hi Adam,
+> > 
+> > Am Mittwoch, dem 19.04.2023 um 05:47 -0500 schrieb Adam Ford:
+> > > On Mon, Apr 17, 2023 at 6:55 AM Adam Ford <aford173@gmail.com> wrote:
+> > > > 
+> > > > On Mon, Apr 17, 2023 at 3:43 AM Lucas Stach <l.stach@pengutronix.de> wrote:
+> > > > > 
+> > > > > Hi Adam,
+> > > > > 
+> > > > > Am Samstag, dem 15.04.2023 um 05:40 -0500 schrieb Adam Ford:
+> > > > > > If there is more than one lane, the HFP, HBP, and HSA is calculated in
+> > > > > > bytes/pixel, then they are divided amongst the different lanes with some
+> > > > > > additional overhead. This is necessary to achieve higher resolutions while
+> > > > > > keeping the pixel clocks lower as the number of lanes increase.
+> > > > > > 
+> > > > > 
+> > > > > In the testing I did to come up with my patch "drm: bridge: samsung-
+> > > > > dsim: fix blanking packet size calculation" the number of lanes didn't
+> > > > > make any difference. My testing might be flawed, as I could only
+> > > > > measure the blanking after translation from MIPI DSI to DPI, so I'm
+> > > > > interested to know what others did here. How did you validate the
+> > > > > blanking with your patch? Would you have a chance to test my patch and
+> > > > > see if it works or breaks in your setup?
+> > > 
+> > > Lucas,
+> > > 
+> > > I tried your patch instead of mine.  Yours is dependent on the
+> > > hs_clock being always set to the burst clock which is configured by
+> > > the device tree.  I unrolled a bit of my stuff and replaced it with
+> > > yours.  It worked at 1080p, but when I tried a few other resolutions,
+> > > they did not work.  I assume it's because the DSI clock is fixed and
+> > > not changing based on the pixel clock.  In the version I did, I only
+> > > did that math when the lanes were > 1. In your patch, you divide by 8,
+> > > and in mine, I fetch the bits-per-pixel (which is 8) and I divide by
+> > > that just in case the bpp ever changes from 8.  Overall,  I think our
+> > > patches basically do the same thing.
+> > 
+> > The calculations in your and my patch are quite different. I'm not
+> > taking into account the number of lanes or the MIPI format. I'm basing
 > 
-> In addition to the downside you mentioned, I'm not a huge fan of this
-> suggestion since the meaning of the SCHED_FLAG_RESET_ON_FORK_SEL flag
-> changes based on what other flags or attrs are set. I'd rather we have
-> explicit flags.
-
-The concern is that these flags are limited resources. latency_nice hopefully
-is coming and I don't see uclamp is an exception to warrant its own unique
-reset flag. Do you think we should never ever face similar exception again?
-
+> I was looking more at the division by 8 and the overhead correction of 6.
+> This number 6 also appears in the NXP downstream kernel [1].  I know
+> Marek V had some concerns about that.
 > 
-> SCHED_FLAG_RESET_ON_FORK_SEL makes it harder to maintain the userspace
-> code/makes it easy to accidentally introduce bugs. For example, a
-> syscall could be setting UCLAMP_MIN and RESET_ON_FORK_SEL. Someone
-> else might come and change the call to also set a nice value but not
-> remember to split it up into two calls. Whereas with an explicit flag
-> like David's proposal, we won't hit such an issue.
+Yea, I don't fully remember the details about the overhead. Need to
+page that back in. The division by 8 in my patch is just to get from
+the bit to a byte clock, nothing to do with the MIPI format bits per
+channel or something like that.
 
-I think this mode of failure exists today and not new. You'll have to remember
-to set the right flag to keep policy etc otherwise you can end up with
-accidental effect.
+> > the blanking size purely on the ratio between MIPI DSI byte clock and
+> > the DPI interface clock. It's quite counter-intuitive that the host
+> > would scale the blanking to the number of lanes automatically, but
+> > still require the MIPI packet offset removed, but that's what my
+> > measurements showed to produce the correct blanking after translation
+> > to DPI by the TC358767 bridge chip.
+> 
+> How many lanes is your DSI interface using?
+> 
+When I did the measurements to come up with the patch, I varied the
+number of lanes between 1 and 4. Different number of lanes didn't make
+a difference. In fact trying to compensate for the number of lanes when
+calculating the blanking size to program into the controller lead to
+wildly wrong blanking on the DPI side of the external bridge.
 
-That was the first suggestion comes to mind, it could be done another ways
-I suppose.
+> > 
+> > If you dynamically scale the HS clock, then you would need to input the
+> > real used HS clock to the calculation in my patch, instead of the fixed
+> > burst mode rate.
+> 
+> I think what you're saying makes sense.
+> 
+> The code I originally modeled this from was from the NXP downstream
+> kernel where they define the calculation as being in words [2]. I am
+> not saying the NXP code is perfect, but the NXP code works.  With this
+> series, my monitors are able to sync a bunch of different resolutions
+> from 1080p down to 640x480 and a bunch in between with various refresh
+> rates too. That was the goal of this series.
+> 
+> Instead of just using your patch as-is, I will adapt yours to use the
+> scaled clock to see how it behaves and get back to you.
+> 
 
-> Also, we'll need to have separate flags internally to track what needs
-> to be reset on fork vs not. So we really aren't saving anything by
-> adding RESET_ON_FORK_SEL.
+Thanks, that would be very much appreciated.
 
-I don't get you here. Do you mean in kernel or userspace we'll have to track?
-I persume the former. It's just setting a flag in reset_on_fork variable.
-I don't see the problem.
+I also don't assert that my calculation is perfect, as I also don't
+have any more information and needed to resort to observing the
+blanking after translation by the external bridge, so I hope we could
+get some better understanding of how things really work by checking
+what works for both our systems.
 
-If preserving the flag space is not a concern, then yeah potentially this is
-okay. Though in principle I think it doesn't make sense to continue to add new
-flag for every potential similar exception. History tends to repeat itself.
-I'm okay with keeping it simple if the maintainers don't share the concern
-about the flag space.
+>   I have
+> finished reworking the dynamic DPHY settings, and I've fixed up making
+> the PLL device tree optional. If your patch works, I'll drop my
+> calculation and just build off what you have to use the scaled HS
+> clock when I submit the V2 and I'll make sure I CC you.
+> 
+Thanks, I'm open to re-do my measurements with your new patches.
 
-user_check_sched_setscheduler() prevents none privileged users from clearing
-reset_on_fork. Shouldn't we do the same?
+Regards,
+Lucas
 
-Also we should make sure to clear it after the fork. Like is done for
-reset_on_fork.
+> adam
+> 
+> [1] - https://github.com/nxp-imx/linux-imx/blob/lf-6.1.y/drivers/gpu/drm/bridge/sec-dsim.c#L270
+> [2] - https://github.com/nxp-imx/linux-imx/blob/lf-6.1.y/drivers/gpu/drm/bridge/sec-dsim.c#L914
+> 
+> > 
+> > Regards,
+> > Lucas
 
-
-Cheers
-
---
-Qais Yousef
