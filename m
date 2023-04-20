@@ -2,158 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17CA96E8B7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FB86E8B80
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234001AbjDTHfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 03:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
+        id S234120AbjDTHfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 03:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjDTHfG (ORCPT
+        with ESMTP id S234108AbjDTHff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 03:35:06 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C2D171D;
-        Thu, 20 Apr 2023 00:35:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=bmCNDzRqnetTThtNn45EdJrGEksHkN6LZbrUWx81YgI=;
-        t=1681976105; x=1683185705; b=nZipGgyVYLIa9Rt88ffGo7a4HJjvprVJacX20BAWJ8CFouE
-        /VN8yMJi3kTLv1k3k1nv0yo1q/ieHWSAp8ZOY8WZuTVBJMbE+7GOTGv5YNi7lMVpEWq8Nui8g7VXv
-        evoEBclZ4XhZfnbLpvwt6k7kaHGT/vMSZfxhlQB66KiVHIYivpxoIH0Bmx5ZmPMDd2jWKT1OoVU5c
-        k14+JJ6lPTvS7kBkUhk756zo1AfvEjblRMNEMH+xUOVSVifQLnJrFwCpN+CzmFwijapcf6zGurm8Z
-        2pjeWUrcxfO/R41PNvufk1AOpNFcQuqO0Wjkuze+u+916fv4KcUZrUJrXCHc5q2w==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <benjamin@sipsolutions.net>)
-        id 1ppOoj-003NNF-0J;
-        Thu, 20 Apr 2023 09:34:57 +0200
-Message-ID: <2a5a079404f9ed3082d09a78f270db54a36d93ba.camel@sipsolutions.net>
-Subject: Re: [PATCH v2 1/3] kunit: Always run cleanup from a test kthread
-From:   Benjamin Berg <benjamin@sipsolutions.net>
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Rae Moar <rmoar@google.com>,
-        Daniel Latypov <dlatypov@google.com>
-Cc:     maxime@cerno.tech, Stephen Boyd <sboyd@kernel.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sadiya Kazi <sadiyakazi@google.com>
-Date:   Thu, 20 Apr 2023 09:34:54 +0200
-In-Reply-To: <20230419085426.1671703-1-davidgow@google.com>
-References: <20230419085426.1671703-1-davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 20 Apr 2023 03:35:35 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C0B35AA
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:35:34 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54f6a796bd0so28566167b3.12
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681976133; x=1684568133;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oRrgwJWD+8vJRxL9WL2rW+4K8XNxrX77Zqnik++vJco=;
+        b=V9ZZeQCguzR5s2+a6zt5ViV/VcZ+MawMWiQ9nWrHrmXXlj9v/UaQS/O6PJRaT1tsOf
+         h5tuQEjKStlQgMKhkXFOOcFmS8B21iMRc/pb0uRoREw//QmWb6GXKizIyZkwfuZuGyvc
+         nRnyrpjDyZwNDguS9iq6WQnUktSEpOTpCGJrLDrolPM6fgKork4xnuTa9B2uFi9C0zcw
+         SB6x5/FLx4hgdeIH4iav6r2eq1lLbS9I+A0sikp4EO7/1dkNPVS4XMM5Q+cbDY+g+lEF
+         vG4BJH/hcBbMb1ApWBnTaaxzurUWTCqxIik+LXS0lzoFMzLweYAM3YZjRvawKEuA4FsE
+         rRsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681976133; x=1684568133;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oRrgwJWD+8vJRxL9WL2rW+4K8XNxrX77Zqnik++vJco=;
+        b=WUjjAQFroYKF2oUomtKqSmdNU8TG/JDANTuCuV2rUfJmy9EiepQYcyHdlM3kJmLkx+
+         TFL/BKodsBt+PcYEc8KFCHJKAxRCeDHFn1HnA+Jwn+/juiwrpfgPPule+8rkjNeG4H0N
+         AsCB/9mT/yxK6g4Eh7nZ73Kvc1C6KT12RGxu7ZT98vIXsRix+wGrSMs+QIBKmAuCRmIr
+         MmNBFWyn0WE3RxHjgY6WFY5QVrCH71hCFWCPAg2OUiIxSckqHMWFRNGx26QASEE0T4i6
+         tsjjx4E5hM/i9fP44DcWbddXcll1zjGKBLurcaIL1+qCNtIQLwn7Y/dnsIy3ZJ9e/m+D
+         77FQ==
+X-Gm-Message-State: AAQBX9dAQRMuI/Re1pMWgEZ/otPATJmm3BuMxuWNLnxRYyjOg4vvbuPU
+        +CrRVMLRoqEb8MRi5wzMX3cs0OsX0RmCy393XPClbQ==
+X-Google-Smtp-Source: AKy350YaQVz1wjGKUyNZHlXqYFpw2kdjS+Sgqe2y5mQGrXyThLkKM3iPTeHdsD8UdaeJzMrBxzAyirCqaJIDymtnh3A=
+X-Received: by 2002:a81:61c4:0:b0:555:dc97:8e76 with SMTP id
+ v187-20020a8161c4000000b00555dc978e76mr172577ywb.44.1681976133614; Thu, 20
+ Apr 2023 00:35:33 -0700 (PDT)
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+References: <20230416131632.31673-1-aweber.kernel@gmail.com> <20230416131632.31673-3-aweber.kernel@gmail.com>
+In-Reply-To: <20230416131632.31673-3-aweber.kernel@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 20 Apr 2023 09:35:22 +0200
+Message-ID: <CACRpkdaTmHASz25uzDoeZBG2=e7XRLK67DENfAtCbaFp+AYnYA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] drm/panel: Add Samsung S6D7AA0 panel controller driver
+To:     Artur Weber <aweber.kernel@gmail.com>
+Cc:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgRGF2aWQsCgpPbiBXZWQsIDIwMjMtMDQtMTkgYXQgMTY6NTQgKzA4MDAsIERhdmlkIEdvdyB3
-cm90ZToKPiBLVW5pdCB0ZXN0cyBydW4gaW4gYSBrdGhyZWFkLCB3aXRoIHRoZSBjdXJyZW50LT5r
-dW5pdF90ZXN0IHBvaW50ZXIgc2V0Cj4gdG8gdGhlIHRlc3QncyBjb250ZXh0LiBUaGlzIGFsbG93
-cyB0aGUga3VuaXRfZ2V0X2N1cnJlbnRfdGVzdCgpIGFuZAo+IGt1bml0X2ZhaWxfY3VycmVudF90
-ZXN0KCkgbWFjcm9zIHRvIHdvcmsuIE5vcm1hbGx5LCB0aGlzIHBvaW50ZXIgaXMKPiBzdGlsbCB2
-YWxpZCBkdXJpbmcgdGVzdCBzaHV0ZG93biAoaS5lLiwgdGhlIHN1aXRlLT5leGl0IGZ1bmN0aW9u
-LCBhbmQKPiBhbnkgcmVzb3VyY2UgY2xlYW51cCkuIEhvd2V2ZXIsIGlmIHRoZSB0ZXN0IGhhcyBl
-eGl0ZWQgZWFybHkgKGUuZy4sIGR1ZQo+IHRvIGEgZmFpbGVkIGFzc2VydGlvbiksIHRoZSBjbGVh
-bnVwIGlzIGRvbmUgaW4gdGhlIHBhcmVudCBLVW5pdCB0aHJlYWQsCj4gd2hpY2ggZG9lcyBub3Qg
-aGF2ZSBhbiBhY3RpdmUgY29udGV4dC4KPiAKPiBJbnN0ZWFkLCBpbiB0aGUgZXZlbnQgdGVzdCB0
-ZXJtaW5hdGVzIGVhcmx5LCBydW4gdGhlIHRlc3QgZXhpdCBhbmQKPiBjbGVhbnVwIGZyb20gYSBu
-ZXcgJ2NsZWFudXAnIGt0aHJlYWQsIHdoaWNoIHNldHMgY3VycmVudC0+a3VuaXRfdGVzdCwKPiBh
-bmQgYmV0dGVyIGlzb2xhdGVzIHRoZSByZXN0IG9mIEtVbml0IGZyb20gaXNzdWVzIHdoaWNoIGFy
-aXNlIGluIHRlc3QKPiBjbGVhbnVwLgo+IAo+IElmIGEgdGVzdCBjbGVhbnVwIGZ1bmN0aW9uIGl0
-c2VsZiBhYm9ydHMgKGUuZy4sIGR1ZSB0byBhbiBhc3NlcnRpb24KPiBmYWlsaW5nKSwgdGhlcmUg
-d2lsbCBiZSBubyBmdXJ0aGVyIGF0dGVtcHRzIHRvIGNsZWFuIHVwOiBhbiBlcnJvciB3aWxsCj4g
-YmUgbG9nZ2VkIGFuZCB0aGUgdGVzdCBmYWlsZWQuCj4gCj4gVGhpcyBzaG91bGQgYWxzbyBtYWtl
-IGl0IGVhc2llciB0byBnZXQgYWNjZXNzIHRvIHRoZSBLVW5pdCBjb250ZXh0LAo+IHBhcnRpY3Vs
-YXJseSBmcm9tIHdpdGhpbiByZXNvdXJjZSBjbGVhbnVwIGZ1bmN0aW9ucywgd2hpY2ggbWF5LCBm
-b3IKPiBleGFtcGxlLCBuZWVkIGFjY2VzcyB0byBkYXRhIGluIHRlc3QtPnByaXYuCj4gCj4gU2ln
-bmVkLW9mZi1ieTogRGF2aWQgR293IDxkYXZpZGdvd0Bnb29nbGUuY29tPgo+IC0tLQo+IFRoaXMg
-aXMgYW4gdXBkYXRlZCB2ZXJzaW9uIG9mIC8gcmVwbGFjZW1lbnQgb2YgImt1bml0OiBTZXQgdGhl
-IGN1cnJlbnQKPiBLVW5pdCBjb250ZXh0IHdoZW4gY2xlYW5pbmcgdXAiLCB3aGljaCBpbnN0ZWFk
-IGNyZWF0ZXMgYSBuZXcga3RocmVhZAo+IGZvciBjbGVhbnVwIHRhc2tzIGlmIHRoZSBvcmlnaW5h
-bCB0ZXN0IGt0aHJlYWQgaXMgYWJvcnRlZC4gVGhpcyBwcm90ZWN0cwo+IHVzIGZyb20gZmFpbGVk
-IGFzc2VydGlvbnMgZHVyaW5nIGNsZWFudXAsIGlmIHRoZSB0ZXN0IGV4aXRlZCBlYXJseS4KPiAK
-PiBDaGFuZ2VzIHNpbmNlIHYxOgo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LWtzZWxm
-dGVzdC8yMDIzMDQxNTA5MTQwMS42ODEzOTUtMS1kYXZpZGdvd0Bnb29nbGUuY29tLwo+IC0gTW92
-ZSBjbGVhbnVwIGV4ZWN1dGlvbiB0byBhbm90aGVyIGt0aHJlYWQKPiDCoCAtIChUaGFua3MsIEJl
-bmphbWluLCBmb3IgcG9pbnRpbmcgb3V0IHRoZSBhc3NlcnRpb24gaXNzdWVzKQoKTmljZSwgSSB0
-aGluayB0aGlzIGlzIGxvb2tpbmcgcHJvbWlzaW5nLiBBZnRlciB0aGlua2luZyBhYm91dCBpdCBh
-IGJpdCwKbWF5YmUgb25lIHRoaW5nIHRvIGltcHJvdmUgaXMgdG8gYWx3YXlzIHN0YXJ0IHRoZSBu
-ZXcgY2xlYW51cCBrdGhyZWFkCmZyb20ga3VuaXRfcnVuX2Nhc2VfY2F0Y2hfZXJyb3JzLgoKVGhh
-dCB3YXkgdGhlcmUgaXMgb25seSBvbmUgY29kZXBhdGguIEJ1dCwgbW9yZSBpbXBvcnRhbnRseSwg
-aXQgbWVhbnMgaWYKdGhlIGNsZWFudXAgZmFpbHMgdGhlIGZpcnN0IHRpbWUsIHdlIGRvIG5vdCBy
-aXNrIHJ1bm5pbmcgaXQgYSBzZWNvbmQKdGltZSBhbmQgd2UgZ2V0IHNsaWdodGx5IG5pY2VyIGVy
-cm9yIHJlcG9ydGluZy4gTm90IHRoYXQgdGhpcyBoYXBwZW5pbmcKd291bGQgYmUgYSBiaWcgaXNz
-dWUuCgpCZW5qYW1pbgoKCj4gLS0tCj4gwqBsaWIva3VuaXQvdGVzdC5jIHwgNTQgKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tCj4gwqAxIGZpbGUgY2hhbmdl
-ZCwgNTIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvbGli
-L2t1bml0L3Rlc3QuYyBiL2xpYi9rdW5pdC90ZXN0LmMKPiBpbmRleCBlMjkxMGIyNjExMTIuLmNh
-ZWFlMGRmZDgyYiAxMDA2NDQKPiAtLS0gYS9saWIva3VuaXQvdGVzdC5jCj4gKysrIGIvbGliL2t1
-bml0L3Rlc3QuYwo+IEBAIC00MjMsOCArNDIzLDUxIEBAIHN0YXRpYyB2b2lkIGt1bml0X3RyeV9y
-dW5fY2FzZSh2b2lkICpkYXRhKQo+IMKgwqDCoMKgwqDCoMKgwqBrdW5pdF9ydW5fY2FzZV9jbGVh
-bnVwKHRlc3QsIHN1aXRlKTsKPiDCoH0KPiDCoAo+ICtzdGF0aWMgdm9pZCBrdW5pdF90cnlfcnVu
-X2Nhc2VfY2xlYW51cCh2b2lkICpkYXRhKQo+ICt7Cj4gK8KgwqDCoMKgwqDCoMKgc3RydWN0IGt1
-bml0X3RyeV9jYXRjaF9jb250ZXh0ICpjdHggPSBkYXRhOwo+ICvCoMKgwqDCoMKgwqDCoHN0cnVj
-dCBrdW5pdCAqdGVzdCA9IGN0eC0+dGVzdDsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qga3VuaXRf
-c3VpdGUgKnN1aXRlID0gY3R4LT5zdWl0ZTsKPiArCj4gK8KgwqDCoMKgwqDCoMKgY3VycmVudC0+
-a3VuaXRfdGVzdCA9IHRlc3Q7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGt1bml0X3J1bl9jYXNlX2Ns
-ZWFudXAodGVzdCwgc3VpdGUpOwo+ICt9Cj4gKwo+ICtzdGF0aWMgdm9pZCBrdW5pdF9jYXRjaF9y
-dW5fY2FzZV9jbGVhbnVwKHZvaWQgKmRhdGEpCj4gK3sKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qg
-a3VuaXRfdHJ5X2NhdGNoX2NvbnRleHQgKmN0eCA9IGRhdGE7Cj4gK8KgwqDCoMKgwqDCoMKgc3Ry
-dWN0IGt1bml0ICp0ZXN0ID0gY3R4LT50ZXN0Owo+ICvCoMKgwqDCoMKgwqDCoGludCB0cnlfZXhp
-dF9jb2RlID0ga3VuaXRfdHJ5X2NhdGNoX2dldF9yZXN1bHQoJnRlc3QtPnRyeV9jYXRjaCk7Cj4g
-Kwo+ICvCoMKgwqDCoMKgwqDCoC8qIEl0IGlzIGFsd2F5cyBhIGZhaWx1cmUgaWYgY2xlYW51cCBh
-Ym9ydHMuICovCj4gK8KgwqDCoMKgwqDCoMKga3VuaXRfc2V0X2ZhaWx1cmUodGVzdCk7Cj4gKwo+
-ICvCoMKgwqDCoMKgwqDCoGlmICh0cnlfZXhpdF9jb2RlKSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoC8qCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIFRlc3Qg
-Y2FzZSBjb3VsZCBub3QgZmluaXNoLCB3ZSBoYXZlIG5vIGlkZWEgd2hhdCBzdGF0ZSBpdCBpcwo+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBpbiwgc28gZG9uJ3QgZG8gY2xlYW4g
-dXAuCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqLwo+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqBpZiAodHJ5X2V4aXRfY29kZSA9PSAtRVRJTUVET1VUKSB7Cj4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBrdW5pdF9lcnIodGVz
-dCwgInRlc3QgY2FzZSBjbGVhbnVwIHRpbWVkIG91dFxuIik7Cj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoC8qCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIFVua25v
-d24gaW50ZXJuYWwgZXJyb3Igb2NjdXJyZWQgcHJldmVudGluZyB0ZXN0IGNhc2UgZnJvbQo+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBydW5uaW5nLCBzbyB0aGVyZSBpcyBub3Ro
-aW5nIHRvIGNsZWFuIHVwLgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfSBlbHNlIHsKPiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGt1bml0X2Vycih0ZXN0LCAiaW50ZXJuYWwg
-ZXJyb3Igb2NjdXJyZWQgZHVyaW5nIHRlc3QgY2FzZSBjbGVhbnVwOiAlZFxuIiwKPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCB0cnlfZXhpdF9jb2RlKTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfQo+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm47Cj4gK8KgwqDCoMKgwqDCoMKgfQo+
-ICsKPiArwqDCoMKgwqDCoMKgwqBrdW5pdF9lcnIodGVzdCwgInRlc3QgYWJvcnRlZCBkdXJpbmcg
-Y2xlYW51cC4gY29udGludWluZyB3aXRob3V0IGNsZWFuaW5nIHVwXG4iKTsKPiArfQo+ICsKPiAr
-Cj4gwqBzdGF0aWMgdm9pZCBrdW5pdF9jYXRjaF9ydW5fY2FzZSh2b2lkICpkYXRhKQo+IMKgewo+
-ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBrdW5pdF90cnlfY2F0Y2ggY2xlYW51cDsKPiDCoMKgwqDC
-oMKgwqDCoMKgc3RydWN0IGt1bml0X3RyeV9jYXRjaF9jb250ZXh0ICpjdHggPSBkYXRhOwo+IMKg
-wqDCoMKgwqDCoMKgwqBzdHJ1Y3Qga3VuaXQgKnRlc3QgPSBjdHgtPnRlc3Q7Cj4gwqDCoMKgwqDC
-oMKgwqDCoHN0cnVjdCBrdW5pdF9zdWl0ZSAqc3VpdGUgPSBjdHgtPnN1aXRlOwo+IEBAIC00NTEs
-OSArNDk0LDE2IEBAIHN0YXRpYyB2b2lkIGt1bml0X2NhdGNoX3J1bl9jYXNlKHZvaWQgKmRhdGEp
-Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgLyoKPiDCoMKgwqDCoMKgwqDCoMKgICogVGVzdCBjYXNl
-IHdhcyBydW4sIGJ1dCBhYm9ydGVkLiBJdCBpcyB0aGUgdGVzdCBjYXNlJ3MgYnVzaW5lc3MgYXMg
-dG8KPiAtwqDCoMKgwqDCoMKgwqAgKiB3aGV0aGVyIGl0IGZhaWxlZCBvciBub3QsIHdlIGp1c3Qg
-bmVlZCB0byBjbGVhbiB1cC4KPiArwqDCoMKgwqDCoMKgwqAgKiB3aGV0aGVyIGl0IGZhaWxlZCBv
-ciBub3QsIHdlIGp1c3QgbmVlZCB0byBjbGVhbiB1cC4gRG8gdGhpcyBpbiBhIG5ldwo+ICvCoMKg
-wqDCoMKgwqDCoCAqIHRyeSAvIGNhdGNoIGNvbnRleHQsIGluIGNhc2UgaXQgYXNzZXJ0cywgdG9v
-Lgo+IMKgwqDCoMKgwqDCoMKgwqAgKi8KPiAtwqDCoMKgwqDCoMKgwqBrdW5pdF9ydW5fY2FzZV9j
-bGVhbnVwKHRlc3QsIHN1aXRlKTsKPiArwqDCoMKgwqDCoMKgwqBrdW5pdF90cnlfY2F0Y2hfaW5p
-dCgmY2xlYW51cCwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHRlc3QsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCBrdW5pdF90cnlfcnVuX2Nhc2VfY2xlYW51cCwKPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGt1bml0X2Nh
-dGNoX3J1bl9jYXNlX2NsZWFudXApOwo+ICvCoMKgwqDCoMKgwqDCoGN0eC0+dGVzdCA9IHRlc3Q7
-Cj4gK8KgwqDCoMKgwqDCoMKgY3R4LT5zdWl0ZSA9IHN1aXRlOwo+ICvCoMKgwqDCoMKgwqDCoGt1
-bml0X3RyeV9jYXRjaF9ydW4oJmNsZWFudXAsIGN0eCk7Cj4gwqB9Cj4gwqAKPiDCoC8qCgo=
+Hi Artur,
 
+thanks for your patch!
+
+On Sun, Apr 16, 2023 at 3:16=E2=80=AFPM Artur Weber <aweber.kernel@gmail.co=
+m> wrote:
+
+> Initial driver for S6D7AA0-controlled panels, currently only for the
+> LSL080AL02 panel used in the Samsung Galaxy Tab 3 8.0 family of tablets.
+>
+> It should be possible to extend this driver to work with other panels
+> using this IC.
+>
+> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+> ---
+> Changed in v2:
+>  - Removed unused panel_name property from desc struct
+
+Overall this driver looks very good. I could merge it once the DT bindings
+are ACKed by the DT maintainers and some minor stuff fixed.
+
+Some comments below:
+
+> +/* Manufacturer command set */
+> +#define CMD_BL_CTL             0xc3
+> +#define CMD_OTP_RELOAD         0xd0
+> +#define CMD_PASSWD1            0xf0
+> +#define CMD_PASSWD2            0xf1
+> +#define CMD_PASSWD3            0xfc
+
+Some drivers prefix these commands with "MCS" such as
+MCS_BL_CTL.
+
+MCS =3D Manufacturer Command Set (I think)
+
+Some just name the identifers after the panel such as
+s6d27a1 which has S6D27A1_RESCTL etc.
+
+CMD seems a bit general to me and may be mistaken for
+the actual DCS commands.
+
+> +struct s6d7aa0 {
+> +       struct drm_panel panel;
+> +       struct mipi_dsi_device *dsi;
+> +       struct gpio_desc *reset_gpio;
+> +       struct regulator *enable_supply;
+> +       const struct s6d7aa0_panel_desc *desc;
+> +       bool prepared;
+
+Skip this state variable, the core keeps track of whether the
+panel is enabled or not.
+
+> +static void s6d7aa0_reset(struct s6d7aa0 *ctx)
+> +{
+> +       gpiod_set_value_cansleep(ctx->reset_gpio, 0);
+> +       msleep(50);
+
+This first de-assertion is unnecessary isn't it?
+
+The reset line will just be asserted longer if it is already asserted.
+
+> +       gpiod_set_value_cansleep(ctx->reset_gpio, 1);
+> +       msleep(50);
+> +       gpiod_set_value_cansleep(ctx->reset_gpio, 0);
+> +       msleep(50);
+> +}
+
+(...)
+
+> +static int s6d7aa0_on(struct s6d7aa0 *ctx)
+> +{
+> +       struct mipi_dsi_device *dsi =3D ctx->dsi;
+> +       struct device *dev =3D &dsi->dev;
+> +       int ret;
+> +
+> +       dsi->mode_flags |=3D MIPI_DSI_MODE_LPM;
+
+(...)
+
+> +static int s6d7aa0_off(struct s6d7aa0 *ctx)
+> +{
+> +       struct mipi_dsi_device *dsi =3D ctx->dsi;
+> +       struct device *dev =3D &dsi->dev;
+> +       int ret;
+> +
+> +       dsi->mode_flags &=3D ~MIPI_DSI_MODE_LPM;
+
+I haven't seen this mode flag MIPI_DSI_MODE_LPM set and
+masked in other DSI panel drivers! Is this something we should
+fix everywhere then? Or even something the core should be
+doing?
+
+Yours,
+Linus Walleij
