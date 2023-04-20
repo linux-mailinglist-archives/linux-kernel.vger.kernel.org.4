@@ -2,162 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E173D6E9BE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2676E9BE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231770AbjDTSr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 14:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
+        id S230364AbjDTSti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 14:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbjDTSrY (ORCPT
+        with ESMTP id S230010AbjDTSth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 14:47:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E55C30C5;
-        Thu, 20 Apr 2023 11:47:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 251D664B47;
-        Thu, 20 Apr 2023 18:47:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA34C433D2;
-        Thu, 20 Apr 2023 18:47:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682016442;
-        bh=gIDrAb2DLZxHW/UfFYvFg8ZkNoELTe4cNyI1YhHhsUc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qc+6ooEQtzPf4HhwXsVsY5wZMyL8TlT4I4maWGru69JSD+ChHQZATlXR2f+XdVQan
-         eobkKFtfxAgi/DnoXUt3pRJerjXWRpc3k2jC2jhV6Kn9Ka757+APzQAuikfZC13LYM
-         zmPdSARFhZC4GX8iKVUTb6ILSy1f/psLW3JeOElO0+c6aBQH1xHYfXIkriUegRURXd
-         6gGkNZfw9f2k0oIQauZteFrauOYWiS1oVzkpQXjKi7jsU0mv9qNce1GdPdBaVXeZc+
-         FCvPX5O/9imZKrZInVHCejqUYHTUdKtIYYRKQy4yrptyeYSpou9z8R1f8/nbSo8hWV
-         njLrbmk4WGM7Q==
-Date:   Thu, 20 Apr 2023 20:47:16 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Rob Herring <robh@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v10 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link
- III Deserializer
-Message-ID: <ZEGItAqsvNGQm1l+@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>, Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Rob Herring <robh@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
- <20230222132907.594690-6-tomi.valkeinen@ideasonboard.com>
- <ZD6VwpRya6SGBAt5@shikoro>
- <b85a2198-dffd-6c1e-53ea-61bc4d14ce2a@ideasonboard.com>
+        Thu, 20 Apr 2023 14:49:37 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DE1268A;
+        Thu, 20 Apr 2023 11:49:35 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-51b5490c6f0so1237020a12.0;
+        Thu, 20 Apr 2023 11:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682016575; x=1684608575;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FJJOeT8ibD8iyZ5GUD24l83wUeVOqbznkJco2Atseh0=;
+        b=n/vcoDimgaMEp2z2kZkP2MIcN844TzzESZTRSnlrKXpYerPJ33WE0ZYXP9GnrIg0Yl
+         KDC4stSBEv5aDKgLWp+jlnXYmGRKb1xNNNqqHgRjOWCdw5ROVyBtDKoX6AKRv6dXhu30
+         uzaiOROHSIwweFxdZe4RqDMXJQ1yaedK5K497UydEv1IH3aOiqdk+9oc5eRHL9gEWEZX
+         JcI692HsrA5Ty8I6gye3Y55lU9UHcyEqKEL+Kgqpv9LBtY86oSy+tRSbbwrSZtmR615U
+         z4Sku0pcYP8xDpR1ZKrNCWvvZXeEXLVJt2VzYD5pF6XH2XU72xT9dgMdzeMGUTHCjNM5
+         tn/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682016575; x=1684608575;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FJJOeT8ibD8iyZ5GUD24l83wUeVOqbznkJco2Atseh0=;
+        b=HhPT/d6ZvB5aVF4tUtZ7dS9yuXeL1i8CBGjPr1fgErrPZBuqhet+qtPAAbPLz85B3p
+         cVQpkm9sdRhw3+OHmZDBgIV/O1OejJJTd4qnoAmen5NPPmnlxFBLctmSkPQD5FYA6KaO
+         b3I0MlszukuxtpV6ESEhmW+hKGjhDlCxT5V87aNWzPRa/RxZ0lXFsg5t8+zS/0Z6X3HK
+         6txL1bpbC5XtV0HSSR9vAWpiqvYm16EkUiBPXHGytP8gb2sOqsJkJDBKDvb6Qv3HPXu8
+         56C6iHS8Clx8S04bosv07LyWt82kLS4f0Z3BRzDTHsa5qO7RBonsccX0coD6EpUaxlLd
+         KLSg==
+X-Gm-Message-State: AAQBX9eCYrjZoVKyiiYqLWeJNOtYkB2nI4mAcBNgwtwl4wPk4kTUNR0s
+        4iBWx93+1YhB9AuX2UVy6IU9mpGPH+A=
+X-Google-Smtp-Source: AKy350YTeB0qGP2vkm4k9QkfXw2nkCtEgcin24AWXmNiFgubN4bzizaUbG1Q3L0l/2HAU3bD5NyYHw==
+X-Received: by 2002:a17:902:d2cb:b0:19d:611:2815 with SMTP id n11-20020a170902d2cb00b0019d06112815mr2802582plc.42.1682016575109;
+        Thu, 20 Apr 2023 11:49:35 -0700 (PDT)
+Received: from MacBook-Pro-6.local ([2620:10d:c090:500::5:cf1d])
+        by smtp.gmail.com with ESMTPSA id s13-20020a170902a50d00b001a64ce7b18dsm1456565plq.165.2023.04.20.11.49.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 11:49:34 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 11:49:32 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
+Subject: Re: [PATCH v5 2/9] tracing/probes: Add fprobe events for tracing
+ function entry and exit.
+Message-ID: <20230420184932.pgv5wiqqt4fzswdk@MacBook-Pro-6.local>
+References: <168198993129.1795549.8306571027057356176.stgit@mhiramat.roam.corp.google.com>
+ <168198995084.1795549.16754963116067902376.stgit@mhiramat.roam.corp.google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DLSvPqhBVl0l+K0b"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b85a2198-dffd-6c1e-53ea-61bc4d14ce2a@ideasonboard.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <168198995084.1795549.16754963116067902376.stgit@mhiramat.roam.corp.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 20, 2023 at 08:25:50PM +0900, Masami Hiramatsu (Google) wrote:
+> +static int fentry_perf_func(struct trace_fprobe *tf, unsigned long entry_ip,
+> +			    struct pt_regs *regs)
+> +{
+> +	struct trace_event_call *call = trace_probe_event_call(&tf->tp);
+> +	struct fentry_trace_entry_head *entry;
+> +	struct hlist_head *head;
+> +	int size, __size, dsize;
+> +	int rctx;
+> +
+> +	if (bpf_prog_array_valid(call)) {
+> +		unsigned long orig_ip = instruction_pointer(regs);
+> +		int ret;
+> +
+> +		ret = trace_call_bpf(call, regs);
 
---DLSvPqhBVl0l+K0b
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please do not call bpf from fprobe.
+There is no use case for it.
 
-Hi Tomi,
+> +
+> +		/*
+> +		 * We need to check and see if we modified the pc of the
+> +		 * pt_regs, and if so return 1 so that we don't do the
+> +		 * single stepping.
+> +		 */
+> +		if (orig_ip != instruction_pointer(regs))
+> +			return 1;
+> +		if (!ret)
+> +			return 0;
+> +	}
+> +
+> +	head = this_cpu_ptr(call->perf_events);
+> +	if (hlist_empty(head))
+> +		return 0;
+> +
+> +	dsize = __get_data_size(&tf->tp, regs);
+> +	__size = sizeof(*entry) + tf->tp.size + dsize;
+> +	size = ALIGN(__size + sizeof(u32), sizeof(u64));
+> +	size -= sizeof(u32);
+> +
+> +	entry = perf_trace_buf_alloc(size, NULL, &rctx);
+> +	if (!entry)
+> +		return 0;
+> +
+> +	entry->ip = entry_ip;
+> +	memset(&entry[1], 0, dsize);
+> +	store_trace_args(&entry[1], &tf->tp, regs, sizeof(*entry), dsize);
+> +	perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
+> +			      head, NULL);
+> +	return 0;
+> +}
+> +NOKPROBE_SYMBOL(fentry_perf_func);
+> +
+> +static void
+> +fexit_perf_func(struct trace_fprobe *tf, unsigned long entry_ip,
+> +		unsigned long ret_ip, struct pt_regs *regs)
+> +{
+> +	struct trace_event_call *call = trace_probe_event_call(&tf->tp);
+> +	struct fexit_trace_entry_head *entry;
+> +	struct hlist_head *head;
+> +	int size, __size, dsize;
+> +	int rctx;
+> +
+> +	if (bpf_prog_array_valid(call) && !trace_call_bpf(call, regs))
+> +		return;
 
-> How does this sound:
->=20
-> - If "i2c-alias-pool" is present in the DT data of the device passed to
-> i2c_atr_new(), i2c_atr_new() will parse the property. i2c-atr.c will expo=
-rt
-> functions to get a new alias and to release a previously reserved alias. =
-The
-> driver can use those functions in attach/detach_client() callbacks. In ot=
-her
-> words, the alias pool management wouldn't be fully automatic inside the
-> i2c-atr, but it would provide helpers for the driver to do the common wor=
-k.
->=20
-> - If "i2c-alias-pool" is not present, i2c-atr.c will behave as it does no=
-w,
-> and expects the driver to manage the aliases.
-
-So, how does a driver manage the aliases without a pool of available
-addresses? I can't imagine another way right now.
-
-In general, your above proposal sounds good to me. With my lack of
-imagination regarding a different alias handling, I could also see that
-i2c-atr already provides the alias to the attach callback. But if you
-teach me another way of alias handling, then I could agree that your
-proposal makes sense as is.
-
-And yes, the "i2c-alias-pool" is definately optional.
-
-Happy hacking,
-
-   Wolfram
-
-
---DLSvPqhBVl0l+K0b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRBiLAACgkQFA3kzBSg
-KbYJ1A/7BDFTBE8y9ItDYSASswnWFWHIO5wp/eXJwlpgBYacveFxf/APz0H9A34I
-BKLFU2j5vsI4sPZgaJRo9rsju5/wEQlokVgMcOaFXEeiNf6LJ2CtVUrVa7TaBTkX
-zb8eMQ5EmPQwX9d4/XJ/Jc8bPGiLMhQ0SrNW21g3ZVA++ZFzrRqAZQDicPAuT3c8
-li159KDrPg4X5bhIAfOf2zgqr+1eBFQdlY11zDZ5bMBSbJHUb4vjX2Zogtzl7Xx/
-8CziRiUJmSiNtSUTpBACic4X8rbU/rCn5lgr+811389JvnOPZtcmfg1fLqL4Wj9i
-29Wxyc0+mGs8Hg74aDuAn6kpeT7VLzLUuH2EhcrpqY4B8lP2pCKQmMnVt0ZXrdBc
-J24ia/JEQ7+Ua3lqFn4pni7Pk34/juwq0LS2hqF9vKM2r5Z4/KZ5izZxxyU9c3Xe
-FWSRP8xWwA+H7ewtmFPrcGVRV9EVrZj/twpJn8KxvvFdFqJjHYdCUIkkcpuFN3MF
-yo0qVBp4aOvyQkzn+eyRNvFXkL0xGYJxeU1OouuUDMM3k75hUflAN9JUZfrTaMNP
-RPFhsTBcEgELPM7LLJqV9UqSsG/oAbC1eFV9fMoGRzcWNrd21XDb/TfPz11uGM6v
-R0a8dVjmmZU9OJMOcYYp9HebKFHBJrTQZoNE1syC7Kxj6+lg1xc=
-=qWqp
------END PGP SIGNATURE-----
-
---DLSvPqhBVl0l+K0b--
+Same here.
+These two parts look like copy-paste from kprobes.
+I suspect this code wasn't tested at all.
