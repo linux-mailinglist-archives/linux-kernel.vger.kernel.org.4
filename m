@@ -2,231 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8C16E9F3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 00:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FFB6E9F45
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 00:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbjDTWp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 18:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
+        id S232939AbjDTWsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 18:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjDTWpy (ORCPT
+        with ESMTP id S232715AbjDTWsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 18:45:54 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B503B2108;
-        Thu, 20 Apr 2023 15:45:53 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6a5ebf9f432so1182647a34.3;
-        Thu, 20 Apr 2023 15:45:53 -0700 (PDT)
+        Thu, 20 Apr 2023 18:48:41 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AC030C5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 15:48:38 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2a8eb8db083so8769451fa.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 15:48:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682030753; x=1684622753;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ms8WTRrTIiZDn9EMilCFm14ULPFWlrgqpalZ3v8kKro=;
-        b=lcaHjXnFK1gH4Lht3tokfR/hYsnt3eLEGiU/nhXTd1/aB+O/ZPM+0C2qnLPxic3UL5
-         aU4WeiiYpvVznDZzT6XmNOI0FAxhIpv3lSvhEJnnQmEck0PRBXtTXFZQSXuEPF31vl1g
-         We6ivA+T06unmpc1Mp2vQsdSRiuYsZ7dIpkGywIYbGHq4NbIswCmWZJaBNxNZl+sRv+q
-         jKB2/Jk4Vj8B+AJ8JfUZ+AY/tyYHRUAjc87MyNw3RpH0bVvIWO8xNqGFRBVtIJHe54BJ
-         Fn+ndsHBbmE2/8MSHxDELR2+mDQea71NaqUL/3NMWVsbHaa06PA5RD+Ce17GTd4+1a+q
-         +Tkg==
+        d=linaro.org; s=google; t=1682030916; x=1684622916;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OT5WZ08VNtUtLHtcMiXuOAYEaQFUqHpCX5ruqt3/PvM=;
+        b=rDBYvtpSO6edxKR3K159Zkg/aGFx+DdAxA8wu2ckvYW1hiOw/oRAC1OBoLADpuJu9E
+         Thu9jzhy1d5t5rWOoCvfoqYlZdsnqtxFdVJBpgUoRHSWT+JfGeWNOwJNIxAe5dGvLX0D
+         fR/fxlY+DE0SojixEL5t/0ODuoGS8OeyJAgo1wwiQQFLE5bn2/U0ZLrI/FyN2JAiom6+
+         wbfCU3uskl/F5oddtRf2YkCUiUhSOSW8fzXiEWPN1T90kwD2yp346GHNQhOUZOqqgzfr
+         /eh19Vpli6A6QVyzwhyY8zFNIalIAUMofKsXTRBlC/Fb3o4ujiHRZoV3S7Sidh2r3wdS
+         thNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682030753; x=1684622753;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ms8WTRrTIiZDn9EMilCFm14ULPFWlrgqpalZ3v8kKro=;
-        b=h13aJMBpjLkB7/MaCwZLTmhN0m+QRWFPwO4x/Er+87px3EZprQMnUD+coDTX4NbI4o
-         Q9cdTDOX+rVGpEGUoFus+pYGFJc32Am8hrIwvYf+RU4+ALL85+ey+wX6O4YvIZy7rB41
-         nl8nZ9sfZN6QFnICfXAMBUdjtPtoet0v2228dlGOrcCPOTcABbVsmDvfhDHW93IbGYA6
-         ULAIS5gEHHGbU0xjBSHQ6+rwrKuE8WK9Hu0gwOADc2UIrlO6cL7cvs3GVF8Gc4hTnilR
-         l5pchsyXgX9O05VqtmH7KLCJ6mu/Jm3PV15b514TgcYNV6govxRzWatlv9pAOkugeBB/
-         vdEg==
-X-Gm-Message-State: AAQBX9cUkaplPE4xIsAvupZflVv0qmlarFma2f4jYwm5UbffjGoyhflA
-        OytB2E7igI6h0ihj9p1vRWY=
-X-Google-Smtp-Source: AKy350b+d0WOX8mZcpTg3/D5U3ttg+iCDc383Oefl7kYog0+MxydJj3EjdyjXMQAxQW/EgLQnJ7zhQ==
-X-Received: by 2002:a05:6870:b601:b0:187:8dc4:9c03 with SMTP id cm1-20020a056870b60100b001878dc49c03mr2311529oab.56.1682030752927;
-        Thu, 20 Apr 2023 15:45:52 -0700 (PDT)
-Received: from localhost ([216.228.117.191])
-        by smtp.gmail.com with ESMTPSA id q1-20020a056870e88100b001727d67f2dbsm1223442oan.40.2023.04.20.15.45.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 15:45:52 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 15:45:49 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Tariq Toukan <ttoukan.linux@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Pawel Chmielewski <pawel.chmielewski@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Barry Song <baohua@kernel.org>
-Subject: Re: [PATCH v2 4/8] net: mlx5: switch comp_irqs_request() to using
- for_each_numa_cpu
-Message-ID: <ZEHAkGEP/k9m7lKW@yury-ThinkPad>
-References: <20230420051946.7463-1-yury.norov@gmail.com>
- <20230420051946.7463-5-yury.norov@gmail.com>
- <6b3f92e7-e54c-bb7d-2d72-1a0875989d4a@gmail.com>
+        d=1e100.net; s=20221208; t=1682030916; x=1684622916;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OT5WZ08VNtUtLHtcMiXuOAYEaQFUqHpCX5ruqt3/PvM=;
+        b=JyrdJOeMQXsCM4+/uaoR792bDjl9aKm9Evz/OTa/FTUmoERQuf/NSPxZuYj8UEWQly
+         btPIjBfbybPYXKnw22doGgF+e4lDihP/s59xufPwVBvT4nVileuVrMPuz4yhdqsI6uiE
+         pfPCOFgkP/ipVWYGe7BmbYADrRwYFd8Sfnwc6/d/gMKpH9ilQdfkeN55+6tr1V0gj+1o
+         SyMV4WvfcvGPTgXRPgWDOJ0URcbGvxZMqJ06hr/uaaoSQMVBxDiDzzu1Wqvr0aq/QZh7
+         YVhjwqHtR34arMN4hKs+1fxlP7yhBSIlRy8TWv5J//YeJjMAnZ2qMZ6J3JlMukz0b8ud
+         2Hhw==
+X-Gm-Message-State: AAQBX9d+9olNP89sAu8eB2DjlF+pBTZrwXR1owVx2fkTNunQykz4zsyx
+        d/aKilodkHauaAHoXlcSe8hn1w==
+X-Google-Smtp-Source: AKy350bTu9A1WqHwP4h3sfp/ETvJAJ41cHHQ3gE7Dnv7dEN0/PJK2wgxIXkJ0/NNcMgbxyfmPkizWQ==
+X-Received: by 2002:a2e:9cc6:0:b0:2a8:a59f:ca21 with SMTP id g6-20020a2e9cc6000000b002a8a59fca21mr72914ljj.37.1682030916300;
+        Thu, 20 Apr 2023 15:48:36 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id g15-20020a2e938f000000b002a8aadcf15bsm403112ljh.120.2023.04.20.15.48.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 15:48:35 -0700 (PDT)
+Message-ID: <a275e2bb-61b6-7eb4-9d3b-1b36f9c1539a@linaro.org>
+Date:   Fri, 21 Apr 2023 01:48:35 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6b3f92e7-e54c-bb7d-2d72-1a0875989d4a@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 09/13] drm/msm/dpu: Add SM6375 support
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev
+References: <20230411-topic-straitlagoon_mdss-v2-0-5def73f50980@linaro.org>
+ <20230411-topic-straitlagoon_mdss-v2-9-5def73f50980@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230411-topic-straitlagoon_mdss-v2-9-5def73f50980@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 11:27:26AM +0300, Tariq Toukan wrote:
-> I like this clean API.
-
-Thanks :)
- 
-> nit:
-> Previously cpu_online_mask was used here. Is this change intentional?
-> We can fix it in a followup patch if this is the only comment on the series.
+On 21/04/2023 01:31, Konrad Dybcio wrote:
+> Add basic SM6375 support to the DPU1 driver to enable display output.
 > 
-> Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h |   5 -
+>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h | 152 +++++++++++++++++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  14 ++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   1 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   1 +
+>   5 files changed, 168 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h
+> index 687a508cbaa6..d46b43964be6 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h
+> @@ -126,11 +126,6 @@ static const struct dpu_vbif_cfg sm6350_vbif[] = {
+>   	},
+>   };
+>   
+> -static const struct dpu_qos_lut_entry sm6350_qos_linear_macrotile[] = {
+> -	{.fl = 0, .lut = 0x0011223344556677 },
+> -	{.fl = 0, .lut = 0x0011223445566777 },
+> -};
+> -
 
-The only CPUs listed in the sched_domains_numa_masks are 'available',
-i.e. online CPUs. The for_each_numa_cpu() ANDs user-provided cpumask
-with a map associate to the hop, and that means that if we AND with
-possible mask, we'll eventually walk online CPUs only.
+Probably this should be squashed into the patch 7.
 
-To make sure, I experimented with the modified test:
+>   static const struct dpu_perf_cfg sm6350_perf_data = {
+>   	.max_bw_low = 4200000,
+>   	.max_bw_high = 5100000,
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
+> new file mode 100644
+> index 000000000000..19ca0051e072
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
+> @@ -0,0 +1,152 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights reserved.
+> + * Copyright (c) 2015-2018, 2020 The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2023, Linaro Limited
+> + */
+> +
+> +#ifndef _DPU_6_9_SM6375_H
+> +#define _DPU_6_9_SM6375_H
+> +
+> +static const struct dpu_caps sm6375_dpu_caps = {
+> +	.max_mixer_width = 2048,
 
-diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index 6becb044a66f..c8d557731080 100644
---- a/lib/test_bitmap.c
-+++ b/lib/test_bitmap.c
-@@ -760,8 +760,13 @@ static void __init test_for_each_numa(void)
-                unsigned int hop, c = 0;
+DEFAULT_DPU_LINE_WIDTH,
 
-                rcu_read_lock();
--               for_each_numa_cpu(cpu, hop, node, cpu_online_mask)
-+               pr_err("Node %d:\t", node);
-+               for_each_numa_cpu(cpu, hop, node, cpu_possible_mask) {
-                        expect_eq_uint(cpumask_local_spread(c++, node), cpu);
-+                       pr_cont("%3d", cpu);
-+
-+               }
-+               pr_err("\n");
-                rcu_read_unlock();
-        }
- }
+> +	.max_mixer_blendstages = 0x4,
+> +	.qseed_type = DPU_SSPP_SCALER_QSEED4,
+> +	.has_dim_layer = true,
+> +	.has_idle_pc = true,
+> +	.max_linewidth = 2160,
+> +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
+> +};
+> +
+> +static const struct dpu_ubwc_cfg sm6375_ubwc_cfg = {
+> +	.ubwc_version = DPU_HW_UBWC_VER_20,
+> +	.ubwc_swizzle = 6,
+> +	.highest_bank_bit = 1,
+> +};
+> +
+> +static const struct dpu_mdp_cfg sm6375_mdp[] = {
+> +	{
+> +	.name = "top_0", .id = MDP_TOP,
+> +	.base = 0x0, .len = 0x494,
+> +	.features = 0,
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0 },
+> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = { .reg_off = 0x2ac, .bit_off = 8 },
+> +	},
+> +};
+> +
+> +static const struct dpu_ctl_cfg sm6375_ctl[] = {
+> +	{
+> +	.name = "ctl_0", .id = CTL_0,
+> +	.base = 0x1000, .len = 0x1dc,
+> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
+> +	},
+> +};
+> +
+> +static const struct dpu_sspp_cfg sm6375_sspp[] = {
+> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, 0x1f8, VIG_SC7180_MASK,
+> +		 sm6115_vig_sblk_0, 0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000, 0x1f8, DMA_SDM845_MASK,
+> +		 sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> +};
+> +
+> +static const struct dpu_lm_cfg sm6375_lm[] = {
+> +	LM_BLK("lm_0", LM_0, 0x44000, MIXER_QCM2290_MASK,
+> +		&sm6375_lm_sblk, PINGPONG_0, 0, DSPP_0),
+> +};
+> +
+> +static const struct dpu_dspp_cfg sm6375_dspp[] = {
+> +	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
+> +		 &sm8150_dspp_sblk),
+> +};
+> +
+> +static const struct dpu_pingpong_cfg sm6375_pp[] = {
+> +	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
+> +	       DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+> +	       -1),
+> +};
+> +
+> +static const struct dpu_intf_cfg sm6375_intf[] = {
+> +	INTF_BLK("intf_0", INTF_0, 0x00000, 0x2c0, INTF_NONE, 0, 0, 0, 0, 0),
+> +	INTF_BLK_DSI_TE("intf_1", INTF_1, 0x6a800, 0x2c0, INTF_DSI, 0, 24, INTF_SC7280_MASK,
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 26),
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 27),
+> +			DPU_IRQ_IDX(MDP_INTF1_TEAR_INTR, 2)),
+> +};
+> +
+> +static const struct dpu_vbif_cfg sm6375_vbif[] = {
+> +	{
+> +	.name = "vbif_0", .id = VBIF_RT,
+> +	.base = 0, .len = 0x2008,
+> +	.features = BIT(DPU_VBIF_QOS_REMAP),
+> +	.xin_halt_timeout = 0x4000,
+> +	.qos_rp_remap_size = 0x40,
+> +	.qos_rt_tbl = {
+> +		.npriority_lvl = ARRAY_SIZE(sdm845_rt_pri_lvl),
+> +		.priority_lvl = sdm845_rt_pri_lvl,
+> +		},
+> +	.qos_nrt_tbl = {
+> +		.npriority_lvl = ARRAY_SIZE(sdm845_nrt_pri_lvl),
+> +		.priority_lvl = sdm845_nrt_pri_lvl,
+> +		},
+> +	.memtype_count = 14,
+> +	.memtype = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+> +	},
+> +};
+> +
+> +static const struct dpu_perf_cfg sm6375_perf_data = {
+> +	.max_bw_low = 5200000,
+> +	.max_bw_high = 6200000,
+> +	.min_core_ib = 2500000,
+> +	.min_llcc_ib = 0, /* No LLCC on this SoC */
+> +	.min_dram_ib = 1600000,
+> +	.min_prefill_lines = 24,
+> +	/* TODO: confirm danger_lut_tbl */
+> +	.danger_lut_tbl = {0xffff, 0xffff, 0x0, 0x0, 0xffff},
+> +	.qos_lut_tbl = {
+> +		{.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
+> +		.entries = sm6350_qos_linear_macrotile
+> +		},
+> +		{.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
+> +		.entries = sm6350_qos_linear_macrotile
+> +		},
+> +		{.nentry = ARRAY_SIZE(sc7180_qos_nrt),
+> +		.entries = sc7180_qos_nrt
+> +		},
+> +	},
+> +	.cdp_cfg = {
+> +		{.rd_enable = 1, .wr_enable = 1},
+> +		{.rd_enable = 1, .wr_enable = 0}
+> +	},
+> +	.clk_inefficiency_factor = 105,
+> +	.bw_inefficiency_factor = 120,
+> +};
+> +
+> +const struct dpu_mdss_cfg dpu_sm6375_cfg = {
+> +	.caps = &sm6375_dpu_caps,
+> +	.ubwc = &sm6375_ubwc_cfg,
+> +	.mdp_count = ARRAY_SIZE(sm6375_mdp),
+> +	.mdp = sm6375_mdp,
+> +	.ctl_count = ARRAY_SIZE(sm6375_ctl),
+> +	.ctl = sm6375_ctl,
+> +	.sspp_count = ARRAY_SIZE(sm6375_sspp),
+> +	.sspp = sm6375_sspp,
+> +	.mixer_count = ARRAY_SIZE(sm6375_lm),
+> +	.mixer = sm6375_lm,
+> +	.dspp_count = ARRAY_SIZE(sm6375_dspp),
+> +	.dspp = sm6375_dspp,
+> +	.pingpong_count = ARRAY_SIZE(sm6375_pp),
+> +	.pingpong = sm6375_pp,
+> +	.intf_count = ARRAY_SIZE(sm6375_intf),
+> +	.intf = sm6375_intf,
+> +	.vbif_count = ARRAY_SIZE(sm6375_vbif),
+> +	.vbif = sm6375_vbif,
+> +	.perf = &sm6375_perf_data,
+> +	.mdss_irqs = BIT(MDP_SSPP_TOP0_INTR) | \
+> +		     BIT(MDP_SSPP_TOP0_INTR2) | \
+> +		     BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> +		     BIT(MDP_INTF0_INTR) | \
+> +		     BIT(MDP_INTF1_INTR)
+> +};
+> +
+> +#endif
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index 52750b592b36..29516273dd6b 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -440,6 +440,14 @@ static const struct dpu_lm_sub_blks sc7180_lm_sblk = {
+>   	},
+>   };
+>   
+> +static const struct dpu_lm_sub_blks sm6375_lm_sblk = {
 
-This is the NUMA topology of my test machine after the boot:
+Same as qcm2290
 
-    root@debian:~# numactl -H
-    available: 4 nodes (0-3)
-    node 0 cpus: 0 1 2 3
-    node 0 size: 1861 MB
-    node 0 free: 1792 MB
-    node 1 cpus: 4 5
-    node 1 size: 1914 MB
-    node 1 free: 1823 MB
-    node 2 cpus: 6 7
-    node 2 size: 1967 MB
-    node 2 free: 1915 MB
-    node 3 cpus: 8 9 10 11 12 13 14 15
-    node 3 size: 7862 MB
-    node 3 free: 7259 MB
-    node distances:
-    node   0   1   2   3
-      0:  10  50  30  70
-      1:  50  10  70  30
-      2:  30  70  10  50
-      3:  70  30  50  10
+> +	.maxwidth = 2048,
 
-And this is what test prints:
+DEFAULT_DPU_LINE_WIDTH,
 
-     root@debian:~# insmod test_bitmap.ko
-     test_bitmap: loaded.
-     test_bitmap: parselist: 14: input is '0-2047:128/256' OK, Time: 472
-     test_bitmap: bitmap_print_to_pagebuf: input is '0-32767
-     ', Time: 2665
-     test_bitmap: Node 0:	  0  1  2  3  6  7  4  5  8  9 10 11 12 13 14 15
-     test_bitmap:
-     test_bitmap: Node 1:	  4  5  8  9 10 11 12 13 14 15  0  1  2  3  6  7
-     test_bitmap:
-     test_bitmap: Node 2:	  6  7  0  1  2  3  8  9 10 11 12 13 14 15  4  5
-     test_bitmap:
-     test_bitmap: Node 3:	  8  9 10 11 12 13 14 15  4  5  6  7  0  1  2  3
-     test_bitmap:
-     test_bitmap: all 6614 tests passed
+> +	.maxblendstages = 4, /* excluding base layer */
+> +	.blendstage_base = { /* offsets relative to mixer base */
+> +		0x20, 0x38, 0x50, 0x68
+> +	},
+> +};
+> +
+>   /* QCM2290 */
+>   
+>   static const struct dpu_lm_sub_blks qcm2290_lm_sblk = {
+> @@ -751,6 +759,11 @@ static const struct dpu_qos_lut_entry sc7180_qos_linear[] = {
+>   	{.fl = 0, .lut = 0x0011222222335777},
+>   };
+>   
+> +static const struct dpu_qos_lut_entry sm6350_qos_linear_macrotile[] = {
+> +	{.fl = 0, .lut = 0x0011223344556677 },
+> +	{.fl = 0, .lut = 0x0011223445566777 },
+> +};
+> +
+>   static const struct dpu_qos_lut_entry sm8150_qos_linear[] = {
+>   	{.fl = 0, .lut = 0x0011222222223357 },
+>   };
+> @@ -808,6 +821,7 @@ static const struct dpu_qos_lut_entry sc7180_qos_nrt[] = {
+>   #include "catalog/dpu_6_3_sm6115.h"
+>   #include "catalog/dpu_6_4_sm6350.h"
+>   #include "catalog/dpu_6_5_qcm2290.h"
+> +#include "catalog/dpu_6_9_sm6375.h"
+>   
+>   #include "catalog/dpu_7_0_sm8350.h"
+>   #include "catalog/dpu_7_2_sc7280.h"
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index f9611bd75e02..b4f193037869 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -884,6 +884,7 @@ extern const struct dpu_mdss_cfg dpu_sc7180_cfg;
+>   extern const struct dpu_mdss_cfg dpu_sm6115_cfg;
+>   extern const struct dpu_mdss_cfg dpu_sm6350_cfg;
+>   extern const struct dpu_mdss_cfg dpu_qcm2290_cfg;
+> +extern const struct dpu_mdss_cfg dpu_sm6375_cfg;
+>   extern const struct dpu_mdss_cfg dpu_sm8350_cfg;
+>   extern const struct dpu_mdss_cfg dpu_sc7280_cfg;
+>   extern const struct dpu_mdss_cfg dpu_sc8280xp_cfg;
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index 46be7ad8d615..980c3c8f8269 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -1287,6 +1287,7 @@ static const struct of_device_id dpu_dt_match[] = {
+>   	{ .compatible = "qcom,sc8280xp-dpu", .data = &dpu_sc8280xp_cfg, },
+>   	{ .compatible = "qcom,sm6115-dpu", .data = &dpu_sm6115_cfg, },
+>   	{ .compatible = "qcom,sm6350-dpu", .data = &dpu_sm6350_cfg, },
+> +	{ .compatible = "qcom,sm6375-dpu", .data = &dpu_sm6375_cfg, },
+>   	{ .compatible = "qcom,sm8150-dpu", .data = &dpu_sm8150_cfg, },
+>   	{ .compatible = "qcom,sm8250-dpu", .data = &dpu_sm8250_cfg, },
+>   	{ .compatible = "qcom,sm8350-dpu", .data = &dpu_sm8350_cfg, },
+> 
 
-Now, disable a couple of CPUs:
+-- 
+With best wishes
+Dmitry
 
-     root@debian:~# chcpu -d 1-2
-     smpboot: CPU 1 is now offline
-     CPU 1 disabled
-     smpboot: CPU 2 is now offline
-     CPU 2 disabled
-
-And try again:
-
-     root@debian:~# rmmod test_bitmap
-     rmmod: ERROR: ../libkmod/libkmod[  320.275904] test_bitmap: unloaded.
-     root@debian:~# numactl -H
-     available: 4 nodes (0-3)
-     node 0 cpus: 0 3
-     node 0 size: 1861 MB
-     node 0 free: 1792 MB
-     node 1 cpus: 4 5
-     node 1 size: 1914 MB
-     node 1 free: 1823 MB
-     node 2 cpus: 6 7
-     node 2 size: 1967 MB
-     node 2 free: 1915 MB
-     node 3 cpus: 8 9 10 11 12 13 14 15
-     node 3 size: 7862 MB
-     node 3 free: 7259 MB
-     node distances:
-     node   0   1   2   3
-       0:  10  50  30  70
-       1:  50  10  70  30
-       2:  30  70  10  50
-       3:  70  30  50  10
-     root@debian:~# insmod test_bitmap.ko
-     test_bitmap: loaded.
-     test_bitmap: parselist: 14: input is '0-2047:128/256' OK, Time: 491
-     test_bitmap: bitmap_print_to_pagebuf: input is '0-32767
-     ', Time: 2174
-     test_bitmap: Node 0:	  0  3  6  7  4  5  8  9 10 11 12 13 14 15
-     test_bitmap:
-     test_bitmap: Node 1:	  4  5  8  9 10 11 12 13 14 15  0  3  6  7
-     test_bitmap:
-     test_bitmap: Node 2:	  6  7  0  3  8  9 10 11 12 13 14 15  4  5
-     test_bitmap:
-     test_bitmap: Node 3:	  8  9 10 11 12 13 14 15  4  5  6  7  0  3
-     test_bitmap:
-     test_bitmap: all 6606 tests passed
-
-I used cpu_possible_mask because I wanted to keep the patch
-consistent: before we traversed NUMA hop masks, now we traverse the
-same hop masks AND user-provided mask, so the latter should include
-all possible CPUs.
-
-If you think it's better to have cpu_online_mask in the driver, let's
-make it in a separate patch?
-
-Thanks,
-Yury
