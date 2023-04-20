@@ -2,138 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2AA6E8740
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F3D6E8744
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbjDTBMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 21:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
+        id S232746AbjDTBMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 21:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232931AbjDTBMD (ORCPT
+        with ESMTP id S231681AbjDTBMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 21:12:03 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A0D4C13
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:11:59 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id l31-20020a05600c1d1f00b003f1718d89b2so2345093wms.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:11:59 -0700 (PDT)
+        Wed, 19 Apr 2023 21:12:39 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950D044AC
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:12:31 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id z38so961093ljq.12
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:12:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681953118; x=1684545118;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=22Jgp2NNHKhZ/txW70k+3rxBOHsE9mfQXDpWkcdvQ1A=;
-        b=3qFjTJuB0QEcNjYY9SNTfPND8ZW629fUAbmssX9cWFjL67ZJNCdv+vg7bPuxf9Z09+
-         E8rAF9D/kq8hebxc+KAzheuGKASqLQVKzzPxyt7ydbQ5Q6ujuJV9Jd3/6r9H0pwB0UjQ
-         Un34UzFEorIGPEXZcrMznDVEdhNwr/BjBA98axOxehPASFa5Rvf9SIcPGSOIV0Yw1ISJ
-         TPkLrvabDwJAUfIayVzLhJAsrSkvqLPUXp/5Omlb//KoUTN7wunAlX3wYnXCpR2BJ5Of
-         Kn//oqn70IdV/4fNJ4MJFixnCA2M8+WPbe30jogsknU9YI4vtiU7b+c1Un9uJYjiZnoR
-         1X6A==
+        d=linaro.org; s=google; t=1681953149; x=1684545149;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=21nptXt3cg+q1Dc02GTtpl0ccYXLvq/yqLo2KDOgpRw=;
+        b=fxkJnyU8icPIp/1qZzwMsW4MAEuaR6QIt7EytgE1TnnVWnDpUJ0PgBlPXKAm+cOBgf
+         3GQPMpv71Q6pQBakCcemnzr7qLRagEBIA22W9DVCQMa62vwLf+hgaOV/7anvdrw+SKaw
+         iLXGJsZyPZ+NPp4lApFtLxZhB2ibaxq2EvcNOY5H2O3HA8KsGpRq5jwDc+fC/iuMEne/
+         WUnrsRrMFSphEu2RWxa8k7fH3eXutm4Kuudd8fLaAnEGtydGCtjf8ym3LgrX6cVxfsKX
+         B/lPpxI0Ox6B8xv3ekLlr3ZHFCOJ5PeBoaU6VzSFLikDWcbYtEVWafmGq1zRfQKJaBW9
+         98Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681953118; x=1684545118;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=22Jgp2NNHKhZ/txW70k+3rxBOHsE9mfQXDpWkcdvQ1A=;
-        b=ZdUWtauu+9RR3GnMvIZez7ekWRy33F7QGccBvyK4W2r9VW9+cu2MrSf38IvfS2VPdi
-         Ql3uaD/oOC9HIzq8OqL/2jAXrNkbBBPZSn0Wd3TlD628pX9UgIHPntJ3Lm4h6oN+OtRS
-         RSaTC8nhlcM10N/rQ0N2YOL9Lk52o5qrTYEZ+CJbpKXbFBb/v5lBl4u6WiqzAck4b7U0
-         HW4KGFP+SV3oiqMHERkhjr6+Q1ay7P3JCa13xpNski58xZLFXQ8BkLdBD5y2bEKohAA+
-         0RK9AkyW7++FO5kAhBvV49ovM1wJy5kWK3zQfUs1yxktEXB+RzBa6qOQP9qOjJOfHg/L
-         5DOQ==
-X-Gm-Message-State: AAQBX9f4gl8TIdaPw8fIN7x/hlw1n0cRHCP6nwmojFh2bbEOk82vFH72
-        lfu3l7w34rTeONFJj6f+eRIGm/FL3C2e2e/x8JmuWw==
-X-Google-Smtp-Source: AKy350b7viMm1uEj5omqxonCorlqcxfd1m9G20DZYWLd4GiX8Ii8uT0q0iIsxaJ2W54O2USAaUOUOgRK79fl5NKTnFs=
-X-Received: by 2002:a05:600c:2305:b0:3f1:728a:1881 with SMTP id
- 5-20020a05600c230500b003f1728a1881mr9505707wmo.31.1681953117561; Wed, 19 Apr
- 2023 18:11:57 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681953149; x=1684545149;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=21nptXt3cg+q1Dc02GTtpl0ccYXLvq/yqLo2KDOgpRw=;
+        b=f3zMmNgluTM1LRT7W3m+s69LxiXT3r+tqwkVR7AQEXCdRwVaKvrmAxUTRMhBXibyVg
+         YewIrXYXkpkgGEFIQiIaN4SOOyNW5K4dWiHRVo2scCszSsy3VL64+9K8o7eRauHFPGCZ
+         shAMaLvFFvFKbJLsbm1ituibx1B5luARGg0D3ekPTA14Z9liSTjTIqQ2HkR2M8TTa58N
+         9l4sy97/ySTuyVtM/kpKkwvadjtHy31Js15QDA+caCqVAHWCZecbLdwiLANX87SmEprX
+         9c5TAM9RxJ9/af/YfGd/CuHxPPFnx3CriU17Yz9BSFIyoaChPTpXTuNffPeoxa3gTwFv
+         cgqQ==
+X-Gm-Message-State: AAQBX9cZrSXKJ0P9xpRyx4JLfPMeJxjJuJZBKVxQzmhBEob9cTkmhEo/
+        /Y8UZ5Uvqb3Z73FYQvYf/6b5FA==
+X-Google-Smtp-Source: AKy350bhbY3KYzfzX6sqiAFhHWulaltqj9jFwTi0Bp7JHJbhJdLwQ3z61rWtdQrTn2JY3Vh6XjqsRg==
+X-Received: by 2002:a2e:834c:0:b0:29b:6ead:6d92 with SMTP id l12-20020a2e834c000000b0029b6ead6d92mr2381880ljh.23.1681953149392;
+        Wed, 19 Apr 2023 18:12:29 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id a21-20020a05651c011500b002a8bc2fb3cesm27546ljb.115.2023.04.19.18.12.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 18:12:28 -0700 (PDT)
+Message-ID: <8b3d3379-1217-9f48-b761-06bf13169d0f@linaro.org>
+Date:   Thu, 20 Apr 2023 04:12:28 +0300
 MIME-Version: 1.0
-References: <20230416213406.2966521-1-davidai@google.com> <d83950c4-7458-aeea-f341-327c163704a8@arm.com>
-In-Reply-To: <d83950c4-7458-aeea-f341-327c163704a8@arm.com>
-From:   David Dai <davidai@google.com>
-Date:   Wed, 19 Apr 2023 18:11:46 -0700
-Message-ID: <CABN1KC+_HDi_i2zzpZVbqiUP5-QB9YrE5wzLqr==_wOemaCXzA@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] sched/uclamp: Introduce SCHED_FLAG_RESET_UCLAMP_ON_FORK
- flag
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Qais Yousef <qyousef@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [Freedreno] [PATCH v2 15/17] drm/msm/dpu: Merge setup_- and
+ enable_tearcheck pingpong callbacks
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Rajesh Yadav <ryadav@codeaurora.org>,
+        Jeykumar Sankaran <jsanka@codeaurora.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Chandan Uddaraju <chandanu@codeaurora.org>
+Cc:     Archit Taneja <architt@codeaurora.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        freedreno@lists.freedesktop.org,
+        Sravanthi Kollukuduru <skolluku@codeaurora.org>
+References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
+ <20230411-dpu-intf-te-v2-15-ef76c877eb97@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230411-dpu-intf-te-v2-15-ef76c877eb97@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 10:18=E2=80=AFPM Dietmar Eggemann
-<dietmar.eggemann@arm.com> wrote:
->
+On 17/04/2023 23:21, Marijn Suijten wrote:
+> These functions are always called consecutively and are best bundled
+> together for simplicity, especially when the same structure of callbacks
+> will be replicated later on the interface block for INTF TE support.
+> The enable_tearcheck(false) case is now replaced with a more obvious
+> disable_tearcheck(), encapsulating the original register write with 0.
+> 
+> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c | 10 ++++------
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c      | 10 ++++++----
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h      | 11 +++++------
+>   3 files changed, 15 insertions(+), 16 deletions(-)
+> 
 
-Hi Dietmar, thanks for your time,
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-> On 16/04/2023 23:34, David Dai wrote:
-> > A userspace service may manage uclamp dynamically for individual tasks =
-and
-> > a child task will unintentionally inherit a pesudo-random uclamp settin=
-g.
-> > This could result in the child task being stuck with a static uclamp va=
-lue
->
-> Could you explain this with a little bit more detail? Why isn't the
-> child task also managed by the userspace service?
+-- 
+With best wishes
+Dmitry
 
-See Qais=E2=80=99 reply that contains more detail on how it=E2=80=99s being=
- used in
-Android. In general, if a dynamic userspace service will adjust uclamp
-on the fly for a given task, but has no knowledge or control over if
-or when a task forks. Depending on the timing of the fork, a child
-task may inherit a very large or a small uclamp_min or uclamp_max
-value. The intent of this patch is to provide more flexibility to the
-uclamp APIs such that child tasks do not get stuck with a poor uclamp
-value when spawned while retaining other sched attributes. When
-RESET_ON_FORK is set on the parent task, it will reset uclamp values
-for the child but also reset other sched attributes as well.
-
->
-> The child task will only make a difference if it's on the rq.
->
-> Does this issue happen with uclamp mainline or only with Android's
-> slightly different version (max- vs. sum aggregation)?
-
-I=E2=80=99m using the version of uclamp that=E2=80=99s in Linus=E2=80=99 tr=
-ee. How uclamp is
-aggregated is unrelated to the problem I=E2=80=99m trying to solve with thi=
-s
-patch. Which is to extend the uclamp APIs to have finer control for
-the uclamp inheritance of child tasks.
-
-Thanks,
-David
-
->
-> > that results in poor performance or poor power.
-> >
-> > Using SCHED_FLAG_RESET_ON_FORK is too coarse for this usecase and will
-> > reset other useful scheduler attributes. Adding a
-> > SCHED_FLAG_RESET_UCLAMP_ON_FORK will allow userspace to have finer cont=
-rol
-> > over scheduler attributes of child processes.
->
-> [...]
->
