@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CC96E9066
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DDA6E9067
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbjDTKhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        id S233949AbjDTKhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234676AbjDTKgM (ORCPT
+        with ESMTP id S234870AbjDTKgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:36:12 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2D97A87
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:33:44 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4ec817060cdso451659e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:33:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681986823; x=1684578823;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Km7fYpP6TW/v//SsQT00GnyneejX9uUDDOVhZE5n5xI=;
-        b=omq6USS+6wPohpA8a0n0uXqurlRJCRBlTGmxbfed9VYsZHD6xxp8Z7lnZYfHm7JF1I
-         Ugpb+KXIro1kjq1OfPs/dZ6amfgct3ZJMGypRTpYuXvYKpOIUql260eVCSIMUrd5WgjY
-         +GpYIVfVvePMUmhYkvkT1o0AGpbnHfyTNjN1ZFAiNSBto9kJZJW3xqHauaSmXBWxOxlo
-         rINiyoQlHMS/gGmDujvisgk8WaJgXNBaKbfyRczEyQWAOV7mmXi7kLfxPt5NCz2a8A6d
-         zoE+048Nw6BlGD5ThUmW0JyZND4vPI5ZFOpBhYp+4uCOfMUTcCFM6P7YFbN2ZP+Y9nF3
-         thDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681986823; x=1684578823;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Km7fYpP6TW/v//SsQT00GnyneejX9uUDDOVhZE5n5xI=;
-        b=Q16rIa7ezPxoSd0Y+A1ctft+ahl3BlXGAst9Gx0b4H92JJV+QE4XUHSSJeaaMH0vt+
-         LPKytkU0jpLjcBXE8/tzErG+hGM/hw4IH6OtxZILesUQt6jxZ3KIuQkk3RCdvk/L6H0U
-         svy46s9E5bST0b6Cx6oTEnrjBowaFWfyxc751qhS8sIu+qJVJTp39E9wO7C9LFXleZkA
-         YNXkCUFetswvPGq+9R1m9uU3uUABICeBtfcIm2NGrbxfJqlQKH9UDySr/MJ4ffwFT72Y
-         9CkE6zLdWlTs9UJODcPXRnA4Uq8GTk9U5NcudnK1hDFjgvRJFSM9qzvm6q0aiBO/SRN5
-         H7tg==
-X-Gm-Message-State: AAQBX9fNaJ+zFx4oTlcfzs6GOF6hkiYx/QhSuBWJVMbCsvD8Xor+037G
-        t8c0aknXzCcmp8GwI3QOuTDLdw==
-X-Google-Smtp-Source: AKy350bbg9I6ZBPxb4VonvL9ujTQrhDttBE9Pxlis6/qvpG/a5zlxV4mrfqhjY4IdvKCqIzishwMyQ==
-X-Received: by 2002:ac2:5444:0:b0:4eb:2529:cbb2 with SMTP id d4-20020ac25444000000b004eb2529cbb2mr445613lfn.49.1681986822894;
-        Thu, 20 Apr 2023 03:33:42 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id n1-20020a2e8781000000b002a7e9e4e9dcsm190172lji.114.2023.04.20.03.33.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 03:33:42 -0700 (PDT)
-Message-ID: <2c4d7635-4b59-fcbd-133e-984205379e11@linaro.org>
-Date:   Thu, 20 Apr 2023 13:33:41 +0300
+        Thu, 20 Apr 2023 06:36:50 -0400
+Received: from mail.nic.cz (mail.nic.cz [IPv6:2001:1488:800:400::400])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0657699
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:33:55 -0700 (PDT)
+Received: from kandell (unknown [172.20.6.87])
+        by mail.nic.cz (Postfix) with ESMTPS id 2D2591C1824;
+        Thu, 20 Apr 2023 12:33:51 +0200 (CEST)
+Authentication-Results: mail.nic.cz;
+        none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nic.cz; s=default;
+        t=1681986832; bh=ygF+dVEaVaGGwTtV9K6yEQ6mivTLTGTWi1vN1UuuX3s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From:Reply-To:
+         Subject:To:Cc;
+        b=K1KqBMaKDhpif6xfLQ7/SKwI22uLKNLwMckN7JLfBCrxOBxdzuO5VIT+s/bxSAfxV
+         AgYYrY17mtGCU81oI0/4sZbab8u3fQqaysE5Zmrd8r7A2PFCq3KCd44TnPd9x7umJ4
+         E13xA7nsPA4lyBz2jIkJLQpHvnn2/7pDx7DjpjV4=
+Date:   Thu, 20 Apr 2023 12:33:51 +0200
+From:   Marek =?utf-8?B?QmVow7pu?= <marek.behun@nic.cz>
+To:     yunchuan <yunchuan@nfschina.com>
+Cc:     kabel@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] firmware:Remove unnecessary (void*) conversions
+Message-ID: <20230420103351.cyzbtwjhojkeqak5@kandell>
+References: <20230420073751.1031944-1-yunchuan@nfschina.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 2/2] clk: qcom: Introduce SM8350 VIDEOCC
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230413-topic-lahaina_vidcc-v3-0-0e404765f945@linaro.org>
- <20230413-topic-lahaina_vidcc-v3-2-0e404765f945@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230413-topic-lahaina_vidcc-v3-2-0e404765f945@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420073751.1031944-1-yunchuan@nfschina.com>
+X-Virus-Scanned: clamav-milter 0.103.7 at mail
+X-Virus-Status: Clean
+X-Rspamd-Server: mail
+X-Rspamd-Queue-Id: 2D2591C1824
+X-Spamd-Bar: /
+X-Spamd-Result: default: False [0.53 / 20.00];
+        R_MIXED_CHARSET(0.63)[subject];
+        MIME_GOOD(-0.10)[text/plain];
+        FROM_HAS_DN(0.00)[];
+        WHITELISTED_IP(0.00)[172.20.6.87];
+        FROM_EQ_ENVFROM(0.00)[];
+        MIME_TRACE(0.00)[0:+];
+        ARC_NA(0.00)[]
+X-Rspamd-Pre-Result: action=no action;
+        module=multimap;
+        Matched map: WHITELISTED_IP
+X-Rspamd-Action: no action
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2023 15:53, Konrad Dybcio wrote:
-> Add support for the Video Clock Controller found on the SM8350 SoC.
+This makes sense, but the commit title should be
+  firmware: turris-mox-rwtm: drop unnecessary (void *) conversion
+
+On Thu, Apr 20, 2023 at 03:37:51PM +0800, yunchuan wrote:
+> Pointer variables of void * type do not require type cast.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Signed-off-by: yunchuan <yunchuan@nfschina.com>
 > ---
->   drivers/clk/qcom/Kconfig          |   9 +
->   drivers/clk/qcom/Makefile         |   1 +
->   drivers/clk/qcom/videocc-sm8350.c | 552 ++++++++++++++++++++++++++++++++++++++
->   3 files changed, 562 insertions(+)
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
--- 
-With best wishes
-Dmitry
-
+>  drivers/firmware/turris-mox-rwtm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/firmware/turris-mox-rwtm.c b/drivers/firmware/turris-mox-rwtm.c
+> index 6ea5789a89e2..af2fa620e6bc 100644
+> --- a/drivers/firmware/turris-mox-rwtm.c
+> +++ b/drivers/firmware/turris-mox-rwtm.c
+> @@ -283,7 +283,7 @@ static int check_get_random_support(struct mox_rwtm *rwtm)
+>  
+>  static int mox_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+>  {
+> -	struct mox_rwtm *rwtm = (struct mox_rwtm *) rng->priv;
+> +	struct mox_rwtm *rwtm = rng->priv;
+>  	struct armada_37xx_rwtm_tx_msg msg;
+>  	int ret;
+>  
+> -- 
+> 2.30.2
+> 
