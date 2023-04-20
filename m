@@ -2,136 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A74D6E8781
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECDB6E8788
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbjDTBgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 21:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
+        id S229991AbjDTBjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 21:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjDTBgT (ORCPT
+        with ESMTP id S231502AbjDTBjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 21:36:19 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A70530D3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:36:18 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id r9so1029356ljp.9
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681954576; x=1684546576;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hT/95VjOVyKO2T89/0I5XEoyuSp1YYge4tfF3uB8zg0=;
-        b=aQmh+2X+m1r5KN/IFBsO7Dh4brwJDxvSv03WBhSjp5FcgMBhIdC2TZAZofOewtHBaG
-         rod4IkuKDY4gR6vWu09pf5B9gV3+HLlo7DVvXnXNInqNdMBhGGqSloP685b2BP2Q1ZP+
-         JQDNmMFBzqUlVUx5Mbvn0+3yQDVmI6O6izzuK/RvkGKJNbDFKJ8GQ0OXspdBEVrzQ1Hu
-         4ENw5p2v47DmlStJxwWB999K8MIQnzxB79wpsft/VOYKnWsXmbNcSYxd9vjlwznd+LeR
-         4d8a7/7jKNcTMfPxN8QrCMZiWhP+qZcVYyu4C/pPmWRhdL4QKePzBcP6AxFY/ki42l6F
-         dreg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681954576; x=1684546576;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hT/95VjOVyKO2T89/0I5XEoyuSp1YYge4tfF3uB8zg0=;
-        b=S8WZSaMi/GqwerO2CS8IfF1yaFWyx8FC0h3s6XRh6+PnA41+SKifXFxusjuqx5by3d
-         m3QkyZU1h8aSAfkdj6CKDvEM4Et29DuiTR5ffjnJd8OnlIxU/ZjxEJEnPIAAGatzL/iP
-         lCXnzyoqItqaVPIg68elLwkV2qeaEgo0WnpsUoMR6lyRAp/UrNeGX2og/NU8ZYQ1Y2R7
-         Pp2gs49NAgODNM1F4J2/Tckm/G4EeBnCtmuXu9M1yGXeJbkJMkRml995JEwta809/2uv
-         FFJizFKQAcjlEFAqiNkL3F1pkYTHtdqnvIS1IsWW7976+RAfj3o902mOBfkGjIc10K2L
-         twCg==
-X-Gm-Message-State: AAQBX9fBEcYu5UFJ4/DNAB9FbGaVON+SGWibfc38d/5wpwmMZv+017xE
-        PXroif9Tj3m6IcMehnwgD6OTow==
-X-Google-Smtp-Source: AKy350YiZKM6D3SyMMYJ7buEtOzY/rVkSbU/XM10s6fY0nV5WmwAeAeJO6Jk0/pLS6YLUe6bZ8ECFw==
-X-Received: by 2002:a2e:9b17:0:b0:2a7:81fb:6e6f with SMTP id u23-20020a2e9b17000000b002a781fb6e6fmr2552660lji.10.1681954576436;
-        Wed, 19 Apr 2023 18:36:16 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id x23-20020a2e7c17000000b002a5f554d263sm35310ljc.46.2023.04.19.18.36.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 18:36:16 -0700 (PDT)
-Message-ID: <2dff9d62-cffe-c66f-9e50-3ecd64e44d37@linaro.org>
-Date:   Thu, 20 Apr 2023 03:36:14 +0200
+        Wed, 19 Apr 2023 21:39:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7F11FD2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:38:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681954713;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a63ioWmSEQcCVuRqAWGqTU3u5G3EheQoi5818CFmA4k=;
+        b=e5+kDr8WHqrOyr2n7erxsAnHa9cKpcaDV2YWaHy4owYI1NmMXPPZSFdxYaW0W3+Tr0u8Um
+        0aahElsmxshEKSVvS8mF+cfpMal38/ZngzNp2QzVnKIxw1Ld67D5Cg4bGxlwl51/NhPAOF
+        S58jf9WnogeUdrw0CJjFZ/SPrO1hT5s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-501-UkGJrcLzPcCV3v0BY02N5w-1; Wed, 19 Apr 2023 21:38:30 -0400
+X-MC-Unique: UkGJrcLzPcCV3v0BY02N5w-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 854F985A5A3;
+        Thu, 20 Apr 2023 01:38:29 +0000 (UTC)
+Received: from ovpn-8-16.pek2.redhat.com (ovpn-8-16.pek2.redhat.com [10.72.8.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B849C492B05;
+        Thu, 20 Apr 2023 01:38:21 +0000 (UTC)
+Date:   Thu, 20 Apr 2023 09:38:16 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Bernd Schubert <bschubert@ddn.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Amir Goldstein <amir73il@gmail.com>, ming.lei@redhat.com
+Subject: Re: [PATCH V6 00/17] io_uring/ublk: add generic IORING_OP_FUSED_CMD
+Message-ID: <ZECXiJ5aO/7tLshr@ovpn-8-16.pek2.redhat.com>
+References: <20230330113630.1388860-1-ming.lei@redhat.com>
+ <78fe6617-2f5e-3e8e-d853-6dc8ffb5f82c@ddn.com>
+ <ZD9JI/JlwrzXQPZ7@ovpn-8-18.pek2.redhat.com>
+ <b6188050-1b12-703c-57e8-67fd27adb85c@ddn.com>
+ <ZD/ONON4AzwvtlLB@ovpn-8-18.pek2.redhat.com>
+ <6ed5c6f4-6abe-3eff-5a36-b1478a830c49@ddn.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 0/2] DPU1 GC1.8 wiring-up
-Content-Language: en-US
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230420-topic-dpu_gc-v1-0-d9d1a5e40917@linaro.org>
- <5b133c55-e4f5-bfd2-b542-a7d44313c038@linaro.org>
- <c0e0a55a-cc37-fe8a-8d8a-5fe257f99b9a@linaro.org>
- <3f3b3637-ed85-09a1-22b7-3ccd4bc929bb@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <3f3b3637-ed85-09a1-22b7-3ccd4bc929bb@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6ed5c6f4-6abe-3eff-5a36-b1478a830c49@ddn.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 19, 2023 at 03:42:40PM +0000, Bernd Schubert wrote:
+> On 4/19/23 13:19, Ming Lei wrote:
+> > On Wed, Apr 19, 2023 at 09:56:43AM +0000, Bernd Schubert wrote:
+> >> On 4/19/23 03:51, Ming Lei wrote:
+> >>> On Tue, Apr 18, 2023 at 07:38:03PM +0000, Bernd Schubert wrote:
+> >>>> On 3/30/23 13:36, Ming Lei wrote:
+> >>>> [...]
+> >>>>> V6:
+> >>>>> 	- re-design fused command, and make it more generic, moving sharing buffer
+> >>>>> 	as one plugin of fused command, so in future we can implement more plugins
+> >>>>> 	- document potential other use cases of fused command
+> >>>>> 	- drop support for builtin secondary sqe in SQE128, so all secondary
+> >>>>> 	  requests has standalone SQE
+> >>>>> 	- make fused command as one feature
+> >>>>> 	- cleanup & improve naming
+> >>>>
+> >>>> Hi Ming, et al.,
+> >>>>
+> >>>> I started to wonder if fused SQE could be extended to combine multiple
+> >>>> syscalls, for example open/read/close.  Which would be another solution
+> >>>> for the readfile syscall Miklos had proposed some time ago.
+> >>>>
+> >>>> https://lore.kernel.org/lkml/CAJfpegusi8BjWFzEi05926d4RsEQvPnRW-w7My=ibBHQ8NgCuw@mail.gmail.com/
+> >>>>
+> >>>> If fused SQEs could be extended, I think it would be quite helpful for
+> >>>> many other patterns. Another similar examples would open/write/close,
+> >>>> but ideal would be also to allow to have it more complex like
+> >>>> "open/write/sync_file_range/close" - open/write/close might be the
+> >>>> fastest and could possibly return before sync_file_range. Use case for
+> >>>> the latter would be a file server that wants to give notifications to
+> >>>> client when pages have been written out.
+> >>>
+> >>> The above pattern needn't fused command, and it can be done by plain
+> >>> SQEs chain, follows the usage:
+> >>>
+> >>> 1) suppose you get one command from /dev/fuse, then FUSE daemon
+> >>> needs to handle the command as open/write/sync/close
+> >>> 2) get sqe1, prepare it for open syscall, mark it as IOSQE_IO_LINK;
+> >>> 3) get sqe2, prepare it for write syscall, mark it as IOSQE_IO_LINK;
+> >>> 4) get sqe3, prepare it for sync file range syscall, mark it as IOSQE_IO_LINK;
+> >>> 5) get sqe4, prepare it for close syscall
+> >>> 6) io_uring_enter();	//for submit and get events
+> >>
+> >> Oh, I was not aware that IOSQE_IO_LINK could pass the result of open
+> >> down to the others. Hmm, the example I find for open is
+> >> io_uring_prep_openat_direct in test_open_fixed(). It probably gets off
+> >> topic here, but one needs to have ring prepared with
+> >> io_uring_register_files_sparse, then manually manages available indexes
+> >> and can then link commands? Interesting!
+> > 
+> > Yeah,  see test/fixed-reuse.c of liburing
+> > 
+> >>
+> >>>
+> >>> Then all the four OPs are done one by one by io_uring internal
+> >>> machinery, and you can choose to get successful CQE for each OP.
+> >>>
+> >>> Is the above what you want to do?
+> >>>
+> >>> The fused command proposal is actually for zero copy(but not limited to zc).
+> >>
+> >> Yeah, I had just thought that IORING_OP_FUSED_CMD could be modified to
+> >> support generic passing, as it kind of hands data (buffers) from one sqe
+> >> to the other. I.e. instead of buffers it would have passed the fd, but
+> >> if this is already possible - no need to make IORING_OP_FUSED_CMD more
+> >> complex.man
+> > 
+> > The way of passing FD introduces other cost, read op running into async,
+> > and adding it into global table, which introduces runtime cost.
+> 
+> Hmm, question from my side is why it needs to be in the global table, 
+> when it could be just passed to the linked or fused sqe?
 
+Any data which crosses OPs need be registered to somewhere, such as
+fixed buffer, fixed FD, here global meant context wide, and it is actually from
+OP/SQE viewpoint.
 
-On 20.04.2023 03:28, Abhinav Kumar wrote:
-> 
-> 
-> On 4/19/2023 6:26 PM, Konrad Dybcio wrote:
->>
->>
->> On 20.04.2023 03:25, Dmitry Baryshkov wrote:
->>> On 20/04/2023 04:14, Konrad Dybcio wrote:
->>>> Almost all SoCs from SDM845 to SM8550 inclusive feature a GC1.8
->>>> dspp sub-block in addition to PCCv4. The other block differ a bit
->>>> more, but none of them are supported upstream.
->>>>
->>>> This series adds configures the GCv1.8 on all the relevant SoCs.
->>>
->>> Does this mean that we will see gamma_lut support soon?
->> No promises, my plate is not even full, it's beyond overflowing! :P
->>
->> Konrad
-> 
-> So I think I wrote about this before during the catalog rework/fixes that the gc registers are not written to / programmed.
-> 
-> If thats not done, is there any benefit to this series?
-Completeness and preparation for the code itself, if nothing else?
+Fused command actually is one whole command logically, even though it
+may includes multiple SQEs. Then registration as context wide isn't
+needn't(since it is known buffer sharing isn't context wide, and just
+among several IOs), meantime dependency is avoided, so link isn't needed.
 
-Konrad
+This way helps performance a lot, such as, in test on ublk/loop over tmpfs,
+iops drops to 1/2 with registration in 4k rand io, but fused command actually
+improves iops a bit, baseline is current in-tree ublk driver/ublksrv.
+
 > 
->>>
->>>>
->>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>> ---
->>>> Konrad Dybcio (2):
->>>>         drm/msm/dpu1: Rename sm8150_dspp_blk to sdm845_dspp_blk
->>>>         drm/msm/dpu1: Enable GCv1.8 on many SoCs
->>>>
->>>>    drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h   | 16 ++++++++--------
->>>>    drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h   | 16 ++++++++--------
->>>>    drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h   |  4 ++--
->>>>    drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h  |  4 ++--
->>>>    drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h   | 16 ++++++++--------
->>>>    drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h | 16 ++++++++--------
->>>>    drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h   | 16 ++++++++--------
->>>>    drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h   | 16 ++++++++--------
->>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c           |  4 +++-
->>>>    9 files changed, 55 insertions(+), 53 deletions(-)
->>>> ---
->>>> base-commit: 3cdbc01c40e34c57697f8934f2727a88551696be
->>>> change-id: 20230420-topic-dpu_gc-6901f75768db
->>>>
->>>> Best regards,
->>>
+> > 
+> > That is the reason why fused command is designed in the following way:
+> > 
+> > - link can be avoided, so OPs needn't to be run in async
+> > - no need to add buffer into global table
+> > 
+> > Cause it is really in fast io path.
+> > 
+> >>
+> >>>
+> >>> If the above write OP need to write to file with in-kernel buffer
+> >>> of /dev/fuse directly, you can get one sqe0 and prepare it for primary command
+> >>> before 1), and set sqe2->addr to offet of the buffer in 3).
+> >>>
+> >>> However, fused command is usually used in the following way, such as FUSE daemon
+> >>> gets one READ request from /dev/fuse, FUSE userspace can handle the READ request
+> >>> as io_uring fused command:
+> >>>
+> >>> 1) get sqe0 and prepare it for primary command, in which you need to
+> >>> provide info for retrieving kernel buffer/pages of this READ request
+> >>>
+> >>> 2) suppose this READ request needs to be handled by translating it to
+> >>> READs to two files/devices, considering it as one mirror:
+> >>>
+> >>> - get sqe1, prepare it for read from file1, and set sqe->addr to offset
+> >>>     of the buffer in 1), set sqe->len as length for read; this READ OP
+> >>>     uses the kernel buffer in 1) directly
+> >>>
+> >>> - get sqe2, prepare it for read from file2, and set sqe->addr to offset
+> >>>     of buffer in 1), set sqe->len as length for read;  this READ OP
+> >>>     uses the kernel buffer in 1) directly
+> >>>
+> >>> 3) submit the three sqe by io_uring_enter()
+> >>>
+> >>> sqe1 and sqe2 can be submitted concurrently or be issued one by one
+> >>> in order, fused command supports both, and depends on user requirement.
+> >>> But io_uring linked OPs is usually slower.
+> >>>
+> >>> Also file1/file2 needs to be opened beforehand in this example, and FD is
+> >>> passed to sqe1/sqe2, another choice is to use fixed File; Also you can
+> >>> add the open/close() OPs into above steps, which need these open/close/READ
+> >>> to be linked in order, usually slower tnan non-linked OPs.
+> >>
+> >>
+> >> Yes thanks, I'm going to prepare this in an branch, otherwise current
+> >> fuse-uring would have a ZC regression (although my target ddn projects
+> >> cannot make use of it, as we need access to the buffer for checksums, etc).
+> > 
+> > storage has similar use case too, such as encrypt, nvme tcp data digest,
+> > ..., if the checksum/encrypt approach is standard, maybe one new OP or
+> > syscall can be added for doing that on kernel buffer directly.
+> 
+> I very much see the use case for FUSED_CMD for overlay or simple network 
+> sockets. Now in the HPC world one typically uses IB  RDMA and if that 
+> fails for some reasons (like connection down), tcp or other interfaces 
+> as fallback. And there is sending the right part of the buffer to the 
+> right server and erasure coding involved - it gets complex and I don't 
+> think there is a way for us without a buffer copy.
+
+As I mentioned, it(checksum, encrypt, ...) becomes one generic issue if
+the zero copy approach is accepted, meantime the problem itself is well-defined,
+so I don't worry no solution can be figured out.
+
+Meantime big memory copy does consume both cpu and memory bandwidth a
+lot, and 64k/512k ublk io has shown this big difference wrt. copy vs.
+zero copy.
+
+Thanks,
+Ming
+
