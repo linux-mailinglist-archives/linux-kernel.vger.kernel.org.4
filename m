@@ -2,103 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD966E950B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490206E950E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231876AbjDTMuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
+        id S231233AbjDTMvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbjDTMt7 (ORCPT
+        with ESMTP id S230471AbjDTMvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:49:59 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AEB10F5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:49:58 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a5so6111890ejb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681994997; x=1684586997;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=86inLg404iy6XZr71SasfCq+JcTZG2gc/SGQxXWY/6o=;
-        b=ewdl5zIzTb8Mb0OWtnf8fTIKE8H0qqG6mX9jAgtmwfdnUfORpwAQluc2xLkCrrbD6I
-         z+xRcFlNRGEYEQ5IuiTscCoq/5gl88w/CRG+eBGnkMaZOoibewDxQkXy2VVRTbzlaBKq
-         MUaQjvweyhGGi6IvJVOO3j3olh9q8tAh15GRlSNPiZKhwH0vqvLmqk3FFbLUJkX5loUB
-         aRhfZNeA3aOK0vushyxTKhGd2VZHLGuKOwWBVf+/N0fYOJ4y0AAGCM2KxDJ5gVFnC2gp
-         iHOmsM5nbquivT3o43u/ZgDhncRWA4bE6ezOoaOrxJJljYYaQRbckSkwhXfYRCx9OiUf
-         O4tg==
+        Thu, 20 Apr 2023 08:51:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BCAEC
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:50:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681995045;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=xsQvRozmWeIRuvplx2jp/MlGECW+YgJPFwvCRk8nfu8=;
+        b=NFhKj0axLm9cUTttTu+n4hwa2zr9cj9X2Yc1NlTuA2H1rzHU7K5ecKLqd5ceoGYqOtl8iq
+        ALFn3FskuQH8Cq7IDrGQFx+1flVmioPhnwNzQzIIQOFmlygs/cuyD7tqPAX2+VIshSO/77
+        wmOxlSZTn/NGo9OmAtRYVxyhO4trkyU=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-371-u-pQQXQdNxKiXHkHc6E9Tg-1; Thu, 20 Apr 2023 08:50:44 -0400
+X-MC-Unique: u-pQQXQdNxKiXHkHc6E9Tg-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-74de74a90e7so92536385a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:50:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681994997; x=1684586997;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=86inLg404iy6XZr71SasfCq+JcTZG2gc/SGQxXWY/6o=;
-        b=UZYfN2WH+WD4K3G1oAtOHKueG5zllYzdcXJ2MtQerRMo0Er1ZHNaykv5pHmbC+ww3D
-         kKchP+rfHGZEpBaZ3JwK4/qbNuuiuQDoKRLMB91cr9N/1EXSQSqV0RCi9QhXx5tdhvlI
-         lUZZpTAsDP4YBjS4Pu+ylwZPnf+vkn2lfBeRRh0WpkM0bfRQR/9Fr7GVC9uftOm69SzI
-         uvQdcUdiTxOmjnmJEZbMfrmiCwOPxM/q/wYCSJQGBW4YY+AXg1t9GgaRPU7guGZP6qLu
-         ZqTjhAYmKtd1bHzqNmfKG0z1ph33u5/dytzUTy4R8rlJHjisF65AQ0923c95mkY8lkpw
-         Gf2g==
-X-Gm-Message-State: AAQBX9dyyphAeb4uLaMdp5kfbffitKKiD+lwy4YxKdvx3KltOKOZV0Fr
-        WqtyV7f8WeMPBnhp2Ii60uQ+jQ==
-X-Google-Smtp-Source: AKy350Yx+YoxEu26bUs+n4hWzHl2DS/ZsBBqF9kIcEeumzVXzc+55WJ2bfeR5ZuzHO7Iv3lxtaHQqw==
-X-Received: by 2002:a17:906:53d2:b0:930:b130:b7b with SMTP id p18-20020a17090653d200b00930b1300b7bmr1640306ejo.6.1681994996750;
-        Thu, 20 Apr 2023 05:49:56 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bcb8:77e6:8f45:4771? ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
-        by smtp.gmail.com with ESMTPSA id o9-20020a170906774900b0094f8ec35070sm697649ejn.113.2023.04.20.05.49.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 05:49:56 -0700 (PDT)
-Message-ID: <daa2de06-9906-cc4c-600e-9f16351d7d43@linaro.org>
-Date:   Thu, 20 Apr 2023 14:49:55 +0200
+        d=1e100.net; s=20221208; t=1681995044; x=1684587044;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xsQvRozmWeIRuvplx2jp/MlGECW+YgJPFwvCRk8nfu8=;
+        b=Enw4AljQ3BAhxO/0BgxVL6SkUk/umtJFbsai994oslr5QleO92btevkKs6e60fWEo7
+         1zNUneDtUL5DnUD7yxfRIRW3kKvtH7KST+mnWr8jMdu53XiKAOPhDUNKRL3Lpr0OOpwV
+         +n7fDrmi10Kf4U0kdpiz28/Qpb/5yf/nok7xJROa9kNDvLphZr85yfFIe4WG25Y2CgFH
+         rp4rZ++pfJTkP3WnZxdO4F5o4O8kJkA45u/EVG74+uvz7pXDtgkoKJyNv9iAA3yx4sQj
+         nJ29/V1nw9Bt4ziftxl7N056JvEKPEomjCHnWWNKrqpU3KvN8jIqhi+8wYuMLFM/b5OV
+         wqyg==
+X-Gm-Message-State: AAQBX9dTGljv2FvTYCZM47uY4mQbkz/Jq/bUzefpigwspDmOkWzTHYhc
+        W1CLJlqlHWUuHiGr/kOQ1Iw8PDOFP3zDHF21Dib0akQuRzVR+dUn34jRdtvhb0TnFCzegRXv2gY
+        S43eTvoZdL+IuD3BL2zc2vXKJoN+T0eQH
+X-Received: by 2002:ac8:5f49:0:b0:3e4:903:4edf with SMTP id y9-20020ac85f49000000b003e409034edfmr2115983qta.28.1681995044044;
+        Thu, 20 Apr 2023 05:50:44 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Zn5JjxfeNmN+oopT6R4QxoWNRkSkOdM8ztyXAXN/ssVJaVH1kKT7/bxxMUsLpD6hBvIPWCMQ==
+X-Received: by 2002:ac8:5f49:0:b0:3e4:903:4edf with SMTP id y9-20020ac85f49000000b003e409034edfmr2115947qta.28.1681995043783;
+        Thu, 20 Apr 2023 05:50:43 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id z26-20020ac87cba000000b003eb136bec50sm453716qtv.66.2023.04.20.05.50.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 05:50:43 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     brking@us.ibm.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        john.g.garry@oracle.com, dlemoal@kernel.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] scsi: ipr: remove several unused variables
+Date:   Thu, 20 Apr 2023 08:50:35 -0400
+Message-Id: <20230420125035.3888188-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] ARM: dts: qcom: ipq4019: fix broken NAND controller
- properties override
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-References: <20230420072811.36947-1-krzysztof.kozlowski@linaro.org>
- <ab7c0eab-4b80-2186-de92-dea3df58c298@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ab7c0eab-4b80-2186-de92-dea3df58c298@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/2023 12:42, Konrad Dybcio wrote:
-> 
-> 
-> On 20.04.2023 09:28, Krzysztof Kozlowski wrote:
->> After renaming NAND controller node name from "qpic-nand" to
->> "nand-controller", the board DTS/DTSI also have to be updated:
->>
->>   Warning (unit_address_vs_reg): /soc/qpic-nand@79b0000: node has a unit name, but no reg or ranges property
->>
->> Cc: <stable@vger.kernel.org>
-> Cc: <stable@vger.kernel.org> # 5.12
-> 
-> (g show 9e1e00f18afc:Makefile | head, rounded up to first release)
+gcc with W=1 reports
+drivers/scsi/ipr.c: In function ‘ipr_init_res_entry’:
+drivers/scsi/ipr.c:1104:22: error: variable ‘proto’
+  set but not used [-Werror=unused-but-set-variable]
+ 1104 |         unsigned int proto;
+      |                      ^~~~~
+drivers/scsi/ipr.c: In function ‘ipr_update_res_entry’:
+drivers/scsi/ipr.c:1261:22: error: variable ‘proto’
+  set but not used [-Werror=unused-but-set-variable]
+ 1261 |         unsigned int proto;
+      |                      ^~~~~
+drivers/scsi/ipr.c: In function ‘ipr_change_queue_depth’:
+drivers/scsi/ipr.c:4417:36: error: variable ‘res’
+  set but not used [-Werror=unused-but-set-variable]
+ 4417 |         struct ipr_resource_entry *res;
+      |                                    ^~~
 
-You do not have to do this. The Fixes tag defines backporting.
+These variables are not used, so remove them.
+The lock around res is not needed so remove that.
+Which makes ioa_cfg and lock_flags unneeded so remove them.
 
-Best regards,
-Krzysztof
+Fixes: 65a15d6560df ("scsi: ipr: Remove SATA support")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/scsi/ipr.c | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
+index d81189ba8773..4e13797b2a4a 100644
+--- a/drivers/scsi/ipr.c
++++ b/drivers/scsi/ipr.c
+@@ -1101,7 +1101,6 @@ static void ipr_init_res_entry(struct ipr_resource_entry *res,
+ 			       struct ipr_config_table_entry_wrapper *cfgtew)
+ {
+ 	int found = 0;
+-	unsigned int proto;
+ 	struct ipr_ioa_cfg *ioa_cfg = res->ioa_cfg;
+ 	struct ipr_resource_entry *gscsi_res = NULL;
+ 
+@@ -1114,7 +1113,6 @@ static void ipr_init_res_entry(struct ipr_resource_entry *res,
+ 	res->sdev = NULL;
+ 
+ 	if (ioa_cfg->sis64) {
+-		proto = cfgtew->u.cfgte64->proto;
+ 		res->flags = be16_to_cpu(cfgtew->u.cfgte64->flags);
+ 		res->res_flags = be16_to_cpu(cfgtew->u.cfgte64->res_flags);
+ 		res->qmodel = IPR_QUEUEING_MODEL64(res);
+@@ -1160,7 +1158,6 @@ static void ipr_init_res_entry(struct ipr_resource_entry *res,
+ 			set_bit(res->target, ioa_cfg->target_ids);
+ 		}
+ 	} else {
+-		proto = cfgtew->u.cfgte->proto;
+ 		res->qmodel = IPR_QUEUEING_MODEL(res);
+ 		res->flags = cfgtew->u.cfgte->flags;
+ 		if (res->flags & IPR_IS_IOA_RESOURCE)
+@@ -1258,7 +1255,6 @@ static void ipr_update_res_entry(struct ipr_resource_entry *res,
+ 				 struct ipr_config_table_entry_wrapper *cfgtew)
+ {
+ 	char buffer[IPR_MAX_RES_PATH_LENGTH];
+-	unsigned int proto;
+ 	int new_path = 0;
+ 
+ 	if (res->ioa_cfg->sis64) {
+@@ -1270,7 +1266,6 @@ static void ipr_update_res_entry(struct ipr_resource_entry *res,
+ 			sizeof(struct ipr_std_inq_data));
+ 
+ 		res->qmodel = IPR_QUEUEING_MODEL64(res);
+-		proto = cfgtew->u.cfgte64->proto;
+ 		res->res_handle = cfgtew->u.cfgte64->res_handle;
+ 		res->dev_id = cfgtew->u.cfgte64->dev_id;
+ 
+@@ -1299,7 +1294,6 @@ static void ipr_update_res_entry(struct ipr_resource_entry *res,
+ 			sizeof(struct ipr_std_inq_data));
+ 
+ 		res->qmodel = IPR_QUEUEING_MODEL(res);
+-		proto = cfgtew->u.cfgte->proto;
+ 		res->res_handle = cfgtew->u.cfgte->res_handle;
+ 	}
+ }
+@@ -4413,14 +4407,6 @@ static int ipr_free_dump(struct ipr_ioa_cfg *ioa_cfg) { return 0; };
+  **/
+ static int ipr_change_queue_depth(struct scsi_device *sdev, int qdepth)
+ {
+-	struct ipr_ioa_cfg *ioa_cfg = (struct ipr_ioa_cfg *)sdev->host->hostdata;
+-	struct ipr_resource_entry *res;
+-	unsigned long lock_flags = 0;
+-
+-	spin_lock_irqsave(ioa_cfg->host->host_lock, lock_flags);
+-	res = (struct ipr_resource_entry *)sdev->hostdata;
+-	spin_unlock_irqrestore(ioa_cfg->host->host_lock, lock_flags);
+-
+ 	scsi_change_queue_depth(sdev, qdepth);
+ 	return sdev->queue_depth;
+ }
+-- 
+2.27.0
 
