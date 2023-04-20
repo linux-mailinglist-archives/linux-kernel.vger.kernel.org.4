@@ -2,55 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9AC6E9A41
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21426E9A40
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjDTRFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 13:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
+        id S231164AbjDTRFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 13:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbjDTRFE (ORCPT
+        with ESMTP id S231372AbjDTRFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 13:05:04 -0400
+        Thu, 20 Apr 2023 13:05:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CF9D2;
-        Thu, 20 Apr 2023 10:05:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2DEE50
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:05:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE45F60EDF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28B4864AE2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 17:05:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1DE2C433A0;
         Thu, 20 Apr 2023 17:05:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6DACC433D2;
-        Thu, 20 Apr 2023 17:04:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682010301;
-        bh=l1TvL8OQdBavurwxDnbzlunPMrvFhKPpWvlZWHCIJ1I=;
+        s=k20201202; t=1682010303;
+        bh=r2eeQ0iXJ7ydhiOTGTE/GvYZEnWak6zfob+C7cJ437E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I+QMus2rDlnVPcrRRoWKNDM+23YVIIkNirhXKyPWUiSxOiyWJjMr08ficsZIv1zYE
-         yf7aeyhUZ4g+W8Fcnjy10lKAp88V8ZefY9TJnqRzm9VEAYesehjYylC7bLq+fHzRct
-         x4DlX0ehxz50yhw0AZVg5s6wSCF2drrVPqX9WP5BEZvbjuVOpXXJcXrk3DZmS/NmrC
-         1jufINtZhfAAudfIP2VlqulP0U6Mw8nnMcTxv+AbP+hKiOcu5kLObQro7mddVCVGG4
-         1b21tflgrhXmwaA4h3Lusm3HmuylI1IzVOmJXkBrAyNcuzSItdU8aWcdz+BNsDcUWa
-         UgbnI4W2CPQrQ==
+        b=TfwBrO2q65C1eHTXV61cIp+2gCUDaNTYjaefe5ZlK43MNJTNn2QhvXosXRSQDXKvl
+         44tTliWSTD04CErcAswnGbaj8TP1m90CGal6nnJ2NTglMORS6Z9i2VtffJ31e5ozwL
+         mkwpj5AYKb4E/IpQw21iOit2kyeQdnsCiKTdTV4IurRsRWjKgZmnTced7HKTJvv4Ae
+         k1OXunaTz2jTHeMpwbtZlST4rjX+yw2irETHgmhe08apfNGJf17MRT24FTn8ObbXoL
+         ZkBL3cUoFFfxSY5iDALaaIdadWUUOtxwegLYrZzwhwDU9R8lCzIPH1vjqdPqr/a+1s
+         8AdnkcueFWDag==
 From:   Will Deacon <will@kernel.org>
-To:     Dan Carpenter <dan.carpenter@linaro.org>,
-        James Morse <james.morse@arm.com>
-Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>,
-        Kristina Martsenko <kristina.martsenko@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Liu Song <liusong@linux.alibaba.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        D Scott Phillips <scott@os.amperecomputing.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] arm64: delete dead code in this_cpu_set_vectors()
-Date:   Thu, 20 Apr 2023 18:04:52 +0100
-Message-Id: <168198389444.147011.7790274772825720678.b4-ty@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Simon Horman <horms@kernel.org>
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, Baoquan He <bhe@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kexec@lists.infradead.org,
+        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Subject: Re: [PATCH] arm64: kexec: include reboot.h
+Date:   Thu, 20 Apr 2023 18:04:53 +0100
+Message-Id: <168198392367.147167.8214312015996528355.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <73859c9e-dea0-4764-bf01-7ae694fa2e37@kili.mountain>
-References: <73859c9e-dea0-4764-bf01-7ae694fa2e37@kili.mountain>
+In-Reply-To: <20230418-arm64-kexec-include-reboot-v1-1-8453fd4fb3fb@kernel.org>
+References: <20230418-arm64-kexec-include-reboot-v1-1-8453fd4fb3fb@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -64,18 +58,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Apr 2023 10:58:43 +0300, Dan Carpenter wrote:
-> The "slot" variable is an enum, and in this context it is an unsigned
-> int.  So the type means it can never be negative and also we never pass
-> invalid data to this function.  If something did pass invalid data then
-> this check would be insufficient protection.
+On Tue, 18 Apr 2023 13:54:00 +0200, Simon Horman wrote:
+> Include reboot.h in machine_kexec.c for declaration of
+> machine_crash_shutdown.
 > 
+> gcc-12 with W=1 reports:
 > 
+>  arch/arm64/kernel/machine_kexec.c:257:6: warning: no previous prototype for 'machine_crash_shutdown' [-Wmissing-prototypes]
+>    257 | void machine_crash_shutdown(struct pt_regs *regs)
+> 
+> [...]
 
 Applied to arm64 (for-next/misc), thanks!
 
-[1/1] arm64: delete dead code in this_cpu_set_vectors()
-      https://git.kernel.org/arm64/c/460e70e2dc9a
+[1/1] arm64: kexec: include reboot.h
+      https://git.kernel.org/arm64/c/b7b4ce84c830
 
 Cheers,
 -- 
