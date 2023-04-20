@@ -2,493 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC3A6E8BE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4886E8BE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234152AbjDTHzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 03:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
+        id S234271AbjDTHzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 03:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234207AbjDTHyw (ORCPT
+        with ESMTP id S234293AbjDTHy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 03:54:52 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A572D4C26
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:54:25 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230420075324epoutp018a4178cdd9a682b29d481959c40b942f~XlVsqUNnR1354913549epoutp01k
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:53:24 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230420075324epoutp018a4178cdd9a682b29d481959c40b942f~XlVsqUNnR1354913549epoutp01k
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1681977204;
-        bh=u/he+tnT0S3DzCzQsDeYtXW936+iPDollN9ZkSpsd1k=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=gfqeQMAub17DjsgBSwgz+FojWX9dybSRDGqIDc2bNoUMFL7SA5wxCX5EhBy3+pf1q
-         AH8tPsyzsEy+L+rsJjo0LGUd6sMtqsBEZX0SxU3C1OHO7S8ACjzD6V8RAb7BFVxcVz
-         Hlxb7jQ8UNJh81rDVwFjb5NrDzsVGDS5JBo70HRI=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230420075323epcas2p44f3203170f313178323b59fe344ebcfa~XlVsDs5NN3125231252epcas2p4G;
-        Thu, 20 Apr 2023 07:53:23 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.97]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Q28zR33Nbz4x9QG; Thu, 20 Apr
-        2023 07:53:23 +0000 (GMT)
-X-AuditID: b6c32a48-023fa700000025b2-15-6440ef7394db
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C9.FD.09650.37FE0446; Thu, 20 Apr 2023 16:53:23 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE:(2) [PATCH] f2fs: add async reset zone command support
-Reply-To: daejun7.park@samsung.com
-Sender: Daejun Park <daejun7.park@samsung.com>
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        Daejun Park <daejun7.park@samsung.com>
-CC:     "chao@kernel.org" <chao@kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Thu, 20 Apr 2023 03:54:58 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2070.outbound.protection.outlook.com [40.107.6.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB78E2710;
+        Thu, 20 Apr 2023 00:54:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GuQnRpYG9OHggigYROKT2fM+mFcxirECu5fpDaO2cZGzRCAcjENo15DH4zupuSQjHbgYrtW2kpI8OWnByAkbsPuYr2A+5FrbBLPb10HTKRACFM6uo8MMR3Vl1cSzBpvDLmqQRX7+7xKcq/jvZ+c16mU9bgQ4RD+sHz/Ym/JjmtJsLq8fNtJuThAts8PBJAcTl9Px2RaNrWXT0BVIabqBMLZjt/ZzOebYGWy1+v6PiDA2plsy8fZvgs+tJYa5gTe5vOEP3cf3IIi6r0lkrV3xZkXyOr3kS9WcmAzSkufhA2Bjkep3GKs0mDRU3X6rD02sdcmXg7jx2tfgOKpbTNcFdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y2GpTgs2bxwtpph/Z5vXW6DDYRIOjDvi4nNY/Ms9G6U=;
+ b=f64SfdY0XPti2Ue/B4TR04jgIDFemxjayc4MFkhU3F87qKyRj9MNh6475civlI6UHPSqYBFo7Kk5frpfTApxCY7m26B+5KzP2JOA2uTzPnCHnR4Pywy5O2d2MS0pR7nfb1xO5BuActxnKT62YhOkvL4svhQ7nyyfYGATSwKyo57o+EbGj0GuPLMHf3AqhEYYzBtV6RXq5Vv67aX8fwazN4B9cBgH7Z+JG525X8AvIhcf5c6guWnb5TCW++LS9gV4+ka6IGmtrtgfdvOLaZ1xY3f3WHqC6P1z1otGIaZQHvFkx3QbGp+snhA+G6Jy7YlUtIhCYhOY9N4GGZapIllxsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y2GpTgs2bxwtpph/Z5vXW6DDYRIOjDvi4nNY/Ms9G6U=;
+ b=KGUSjG5H0HsE3X6IdMzm/iA+wErg8/2WlFrYzsWCfcYvV8P4CBLF8sOt+uSy4zXf0X1uinEuk+AKrgsBcoVHHi4q23t8lXD0k09CjMs2/mJvMavoQnozpKNsFqc3DtWlpNlKG9pfyb7mCC8rcNJ4WNgzJmSXd0JW1K0eM6UTywU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AS8PR04MB7672.eurprd04.prod.outlook.com (2603:10a6:20b:23e::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Thu, 20 Apr
+ 2023 07:54:20 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::b999:f2c6:a8cc:7b4]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::b999:f2c6:a8cc:7b4%5]) with mapi id 15.20.6298.045; Thu, 20 Apr 2023
+ 07:54:19 +0000
+Message-ID: <fcfd3b04-ce51-af95-5d94-cc244d75727f@oss.nxp.com>
+Date:   Thu, 20 Apr 2023 15:54:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 2/2] input: imx_sc_key: add wakeup support
+To:     Ulf Hansson <ulf.hansson@linaro.org>, Peng Fan <peng.fan@nxp.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        Seokhwan Kim <sukka.kim@samsung.com>,
-        beomsu kim <beomsu7.kim@samsung.com>,
-        Yonggil Song <yonggil.song@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <ZEBO+qOLXbnYusw5@google.com>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230420075222epcms2p2a0a00e26b5c70d90950eed750822e5fc@epcms2p2>
-Date:   Thu, 20 Apr 2023 16:52:22 +0900
-X-CMS-MailID: 20230420075222epcms2p2a0a00e26b5c70d90950eed750822e5fc
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDJsWRmVeSWpSXmKPExsWy7bCmqW7xe4cUg/kvxCwuzPvIbHF66lkm
-        iycH2hktXh7StFj1INziyfpZzBYL25awWFxa5G5xedccNosj68+yWCxermaxr+MBk8WqjrmM
-        FlPPH2Fy4PNo2XeL3WPTqk42j90LPjN5LO6bzOrRt2UVo8fnTXIBbFHZNhmpiSmpRQqpecn5
-        KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+AbpumTlApyoplCXmlAKFAhKLi5X07WyK
-        8ktLUhUy8otLbJVSC1JyCswL9IoTc4tL89L18lJLrAwNDIxMgQoTsjN6pn1hKrj3iLHiw5Lt
-        rA2Mm+8wdjFyckgImEi0X9zE3sXIxSEksINR4ujXmyxdjBwcvAKCEn93CIPUCAs4SXQtvsMK
-        YgsJKEmsvziLHSKuJ3Hr4RqwOWwCOhLTT9wHi4sI+Ei86FzLDDKTWWA/i8Ts18tYIZbxSsxo
-        f8oCYUtLbF++FayZU0BLYsuG+UwQcQ2JH8t6mSFsUYmbq9+yw9jvj82HOlpEovXeWagaQYkH
-        P3dDxSUlbs/dBFWfL/H/ynIou0Zi24F5ULa+xLWOjWA38Ar4Siyb9gasl0VAVeLq2UtQt7lI
-        LN8+FeweZgFtiWULXzODwoRZQFNi/S59EFNCQFniyC0WiAo+iY7Df9lhPmzY+Bsre8e8J1Af
-        qkms+7meaQKj8ixEQM9CsmsWwq4FjMyrGMVSC4pz01OLjQpM4LGbnJ+7iRGcbLU8djDOfvtB
-        7xAjEwfjIUYJDmYlEd4zrlYpQrwpiZVVqUX58UWlOanFhxhNgb6cyCwlmpwPTPd5JfGGJpYG
-        JmZmhuZGpgbmSuK8HzuUU4QE0hNLUrNTUwtSi2D6mDg4pRqY8iy+uax7y9SsfZDzQPyrTqcz
-        PDWL/ZctdIkWmWDCHr42jcFUvaxP8Ppb9QMqr9Mf9UWbG0iKb9P/ffqhicHFrgLn096reg79
-        +smb01T1M4u/dEoIg3yVYG7js/P88e//mQdYhxipv+G4JLeTf2nTNiEtvkk/m1S0axt3+yb4
-        vbrW8LI5tPjBtZsa+Sstv07d1O3zwmaZ2uUIW+OmqPR071oHL5sImU+GPIHpu//rKTxv2FeX
-        cj/HivPFfet1q40/xH2fM2Mue2FU3IXvewQ2bV7cGTs31bT92+UsltBVs62fyb72X+geL/9i
-        P9P01bWbDY52fXrK8GtWiqbUdoXXFUzuP1n75yVW7J+W/FqJpTgj0VCLuag4EQCpXhFcPwQA
-        AA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230414025921epcms2p5736ebf6a215201e0c2a2c1a3f73ee06a
-References: <ZEBO+qOLXbnYusw5@google.com>
-        <20230414025921epcms2p5736ebf6a215201e0c2a2c1a3f73ee06a@epcms2p5>
-        <CGME20230414025921epcms2p5736ebf6a215201e0c2a2c1a3f73ee06a@epcms2p2>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>
+References: <20230323093141.4070840-1-peng.fan@oss.nxp.com>
+ <20230323093141.4070840-2-peng.fan@oss.nxp.com> <ZDN00vwyCOzFrDYt@google.com>
+ <DU0PR04MB94172C2BBB554E472576B2BA889B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <DU0PR04MB9417185EB8243ED2D60A6E43889B9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <CAPDyKFruZOP65k0SEEmCGtopp8ywJA92ChGZs2ZR=nVxqUC0OQ@mail.gmail.com>
+From:   Peng Fan <peng.fan@oss.nxp.com>
+In-Reply-To: <CAPDyKFruZOP65k0SEEmCGtopp8ywJA92ChGZs2ZR=nVxqUC0OQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SGBP274CA0014.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::26)
+ To DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AS8PR04MB7672:EE_
+X-MS-Office365-Filtering-Correlation-Id: 28106c7e-61af-4721-94c3-08db4174725d
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: n4ZS767jC+vx+f3T5OKpTLwMIaqrmtvAcpSgIQstk3I9gTS8cYIzdAZL/PwQyXUJbMdeUZghyhrT281h7Qwd0aKiols5pZRiyDP7haqkmJ0weCExaxfQd1Qg7tw16gfIy8S1+fPhHLuhkzpL6LvpR3SxXpU7fHmSKrDT2+nu1oRrtSldZWLtbDovEOvWwuUpPTQhWKz5lyP9zDu85E6vOaI7FdKWWdajoBH9Gs8ijqbTRCaDxgtTX9I9VIAcK0lEyPFBqN0NkxOaKNGkYDlNBETu9tY3GWC27Ky5YuOEk/5iYvXXOezwfeJ3NjYALyD838U6QLh1XJgJYwJ6F40BVPHAfCVKp6C2NGnA0FMfqPbzOsPay9mbIa/rxsihu+qVR2XxTzYiELozBkm/YIlVELdljrbHBxJyFUeVf7VaGNJYGjfU+KaDxuaelVz+cog+xI69mDDWzC1Q5FgRWwAmlqG4fFHkRD7IaXLdhjth5VJa/HwHmFFxXjcI2VvAj63Xl8zqLVnzgjwuiRsm0WR+rj22pzbSp6gMYBtPjNZ8RTPy+9UuvjQ5ek1ZqO6hrTlvfusM+1wm6AcO4lw2NchA8ZIKMR8cOyGgc06il4c0BtbKS20tTH9nQZXGDq2w2cErZTHGVTiyyO0eKICCj96xSA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(136003)(366004)(39860400002)(451199021)(31686004)(44832011)(2906002)(5660300002)(83380400001)(8936002)(8676002)(41300700001)(7416002)(6666004)(478600001)(6486002)(316002)(66476007)(66946007)(66556008)(110136005)(54906003)(38100700002)(31696002)(86362001)(53546011)(186003)(6512007)(26005)(6506007)(2616005)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SXp6L3Y4cEROZzBFRW9IRmE1R05NSWxONmk4R3BONUNKMFBvS2tucEVEaEFu?=
+ =?utf-8?B?MnpZWFZuaUlmSGs0SGFzeWd2bER4MjBWQ0VpQ3VVSTVXMVJyL1V1amZxL2RU?=
+ =?utf-8?B?UkU2U0VQNjFMcytuRGx2T2xPZThRQnRmWXNISEtZSGhIai9Kd1VVeWRacVU0?=
+ =?utf-8?B?YU90M2M5ZnlpSjhvM0puT0ZIN3UwU29IKzFQWXJmdWw1cU8xYlFKY2gxb3h6?=
+ =?utf-8?B?UDZSMUdKMldZVWNCbkFPTnlOdHBLUlpuc2tpUlF4RHFWZFEweTM0WkxDRHJu?=
+ =?utf-8?B?NDdFS2o2SFlUbkZMbEgxcllBSTNMd0lBWGl5WjdHdkY2clYySGNmc0g3ejYr?=
+ =?utf-8?B?R2dvamFTQlN5MER3Y0RuZ3pmU3pYd2swY0RKUlk3QmV0WnZ0ZTRGMVhyWjZw?=
+ =?utf-8?B?eVVtaDlpaGJzUEpneTl1SEMzcTdtTklDZ2U0aE5nSUNVaDVoVkZnQ3ZHUWl3?=
+ =?utf-8?B?Wk9pak5BMmljVXJyUlViSjRiL2NpMWFBWnh0MWpWV25pNEJaSURrWjlHbmdn?=
+ =?utf-8?B?NEVydkprMGVEZjFnU0F2REFRbG4vTFBUdnIxRWd4dzA1YWx0MUpoRFVCanRm?=
+ =?utf-8?B?emxxcGlsQVY4ZXMrRXM2UWJLWkxXemo0aEg5WC9aRnZFaEhlSU5lM0VJVTZi?=
+ =?utf-8?B?OG1xb0FEeHlHWjROaUtJejg4b3ErZkEydlhoMFdqaGNHT0JSWGlkSW5xWS9j?=
+ =?utf-8?B?aUJzeFZpUENTV3NJSlVzc1gxNytFdmZrL25kT2hzeldEM0IxMlpIQlZlRS9I?=
+ =?utf-8?B?cXlSdEwwejQyalpyczFUMFNPdUpFcXU2ZUM5bzlUb1pENHM4NlZ3QUtYODFS?=
+ =?utf-8?B?NTBWdS9ocEJGZFpCU0ZNVmFrUlVIM0gzMGJZYXdybi8zSExkOVNJOU1xQ3VI?=
+ =?utf-8?B?b0dxU25RTjFXa0FpSjJnalBzVDlrMUZNMVRLdHlCYUtRVVJydzlBdzlMb0cz?=
+ =?utf-8?B?cXZOWjl3S21FMzVCeXNlSmZyQUg0QURQWlpjVmRZSkR2MXBrdUo5WFYzK0pz?=
+ =?utf-8?B?dmx2WERjOHBkSXJCU08yaEsyQzRlQTYwc2FMQWdiOWpBVmtIbGhKTjc4M3Ns?=
+ =?utf-8?B?cm9mQkoyazUvdi9BUHZGVjQ2WmE5TW9JeURLeDkxc3pzS0pvK1lRUzlxcUg4?=
+ =?utf-8?B?NWNoNEQzWDgyM1BmQnYvektud21JN0F0SllvakVBYk9qNW9MQWt0TGFEU0FX?=
+ =?utf-8?B?VEdYNVhlWnBYcWlWam9CUGdtc0VWYnhkYXZURDJIYjhOcjIvWW9GYkwwVWxz?=
+ =?utf-8?B?TlRvWWhyWEIwOVVVaml6V0sray9MZ1N2SXcxR1RQWW9NeWpNYTlRQ0Y0c2Fq?=
+ =?utf-8?B?a3JjdnFTV25rdytpK3RJaWordDQwMVpHZzJNZEd3Zlo2YktEcThhazNJbUFP?=
+ =?utf-8?B?czlJQkNISkR0VzJJVlRKZVJnNFJQdVkyZlM2WUVpV2dnZHEwRFdMS0dDNy9H?=
+ =?utf-8?B?bUNEOTRHKzNxbUdwenNXejBLUFd4M3VueWpLMGc1eTNpSFN2MDFHQWNKamtF?=
+ =?utf-8?B?TlExOHFmMDB3cExnRzlnMUFoRUtUNFpEY3BIaENmbWV5UktLTk9uSDIybmxI?=
+ =?utf-8?B?UG8xdWx1czdleTFjL0E0YmR6Y2NxTXBkZXBkczZ4bThPMnpJRkZZcTNLcklh?=
+ =?utf-8?B?dEFSSko3RTRkRFhEN1kvN3p6UkdBczJHL0FmYWt4bFRMQzVMa2lCbHhPbjI3?=
+ =?utf-8?B?L1IxakdmMERSbEhWeUVKbVFIYmhZOVdxd2R4WDFQQ3YvUjExSFZhVys1VU1y?=
+ =?utf-8?B?RnUwUmtRbnI0WTBmV3owMjRyckJPekx3b2kxTnQwb3BlYmhJVXNiRXRYeFZP?=
+ =?utf-8?B?ZjhOOE1IV2Uvei9yalJPVnN1NHI4YzhwQkpTa29MQUxRVk9LSnRjUGd3ZEVh?=
+ =?utf-8?B?dE11QXp5OHhiNk1tN1lESllsMVcxL2huTlZnanBBR0dpN3RwcUk4SHdNUFhj?=
+ =?utf-8?B?SUUrRUwvRkw2aFUyQklOY0RxSTZZN21qVTJsMFF3NkN3Y1dDT3hLeThma25o?=
+ =?utf-8?B?UXNUbXpBZWM1NUlMTmM3MTY3T2ZkZlNBVDR3SlJsK1VGSmgzeVNlRlpFd2Rh?=
+ =?utf-8?B?WC9OamNpWnhuQ25rOVo3MzlBakYyR3ZuR0MwWU56V0RaZXVUKzlmZGNDeVJB?=
+ =?utf-8?Q?PXkoEURyADFeB1Mm3UpllumV3?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28106c7e-61af-4721-94c3-08db4174725d
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 07:54:19.7832
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6Hru37FxY3A4gfe2s2VPyFCfvkwVB0C5YBOTKRKvfehI+Dza9NSCZF1xO5LiCfWvtALFIOBNS0ukLfD6lQmwTg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7672
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeageuk,
+Dmitry,Ulf
 
-Thanks for helpful review.
+On 4/18/2023 4:32 PM, Ulf Hansson wrote:
+> On Wed, 12 Apr 2023 at 17:58, Peng Fan <peng.fan@nxp.com> wrote:
+>>
+>> +Ulf
+>>
+>>> Subject: RE: [PATCH 2/2] input: imx_sc_key: add wakeup support
+>>>
+>>>> Subject: Re: [PATCH 2/2] input: imx_sc_key: add wakeup support
+>>>>
+>>>> On Thu, Mar 23, 2023 at 05:31:41PM +0800, Peng Fan (OSS) wrote:
+>>>>> From: Peng Fan <peng.fan@nxp.com>
+>>>>>
+>>>>> Add support for waking up from system wide suspend.
+>>>>>
+>>>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>>>>> ---
+>>>>>   drivers/input/keyboard/imx_sc_key.c | 2 ++
+>>>>>   1 file changed, 2 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/input/keyboard/imx_sc_key.c
+>>>> b/drivers/input/keyboard/imx_sc_key.c
+>>>>> index d18839f1f4f6..234f23cf9990 100644
+>>>>> --- a/drivers/input/keyboard/imx_sc_key.c
+>>>>> +++ b/drivers/input/keyboard/imx_sc_key.c
+>>>>> @@ -151,6 +151,8 @@ static int imx_sc_key_probe(struct
+>>>> platform_device *pdev)
+>>>>>    priv->input = input;
+>>>>>    platform_set_drvdata(pdev, priv);
+>>>>>
+>>>>> + device_init_wakeup(&pdev->dev,
+>>>> device_property_read_bool(&pdev->dev, "wakeup-source"));
+>>>>> +
+>>>>
+>>>> I wonder - could we move this to the device core?
+>>>
+>>> I see lots device drivers parse wakeup-source, so I also follow That. Not sure
+>>> whether could move this feature to device core, but anyway I could give a
+>>> try.
+>>
+>> Do you think it is feasible to move device_init_wakeup into device core
+>> part?
+> 
+> Not sure it would really improve things that much. Subsystems/drivers
+> need to make additional configurations based upon whether this DT
+> property is set anyway.
+> 
+> Perhaps an option is to make this a part of the common input subsystem
+> helper functions instead? Other subsystems do this, but I am not sure
+> how feasible that would be in the input case.
 
->=20
-> On 04/14, Daejun Park wrote:
-> > This patch enables submit reset zone command asynchornously. It helps
-> > decrease average latency of write IOs in high utilization scenario by
-> > faster checkpointing.
-> >=20
-> > Signed-off-by: Daejun Park <daejun7.park=40samsung.com>
-> > ---
-> > =C2=A0Documentation/filesystems/f2fs.rst=20=7C=20=C2=A04=20++=0D=0A>=20=
->=20=C2=A0fs/f2fs/f2fs.h=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=7C=20=C2=A01=20+=0D=0A>=20>=20=
-=C2=A0fs/f2fs/segment.c=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=7C=2092=20+++++++++++++++++++++++++++++-=0D=
-=0A>=20>=20=C2=A0fs/f2fs/super.c=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=7C=20=C2=A08=20+++=0D=0A>=
-=20>=20=C2=A0include/trace/events/f2fs.h=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=7C=2018=20+++++-=0D=0A>=20>=20=C2=A05=20files=20changed,=20119=20insert=
-ions(+),=204=20deletions(-)=0D=0A>=20>=20=0D=0A>=20>=20diff=20--git=20a/Doc=
-umentation/filesystems/f2fs.rst=20b/Documentation/filesystems/f2fs.rst=0D=
-=0A>=20>=20index=202055e72871fe..4cfabf831a79=20100644=0D=0A>=20>=20---=20a=
-/Documentation/filesystems/f2fs.rst=0D=0A>=20>=20+++=20b/Documentation/file=
-systems/f2fs.rst=0D=0A>=20>=20=40=40=20-342,6=20+342,10=20=40=40=20discard_=
-unit=3D%s=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20Control=20discard=20unit,=20the=20argument=20can=20be=20=22block=
-=22,=20=22segment=22=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20default,=20it=20is=20helpful=20for=20large=20sized=20SMR=20or=20ZNS=20de=
-vices=20to=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20reduce=20=
-memory=20cost=20by=20getting=20rid=20of=20fs=20metadata=20supports=20small=
-=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20discard.=0D=0A>=20=
->=20+async_reset_zone=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20Enable=20the=20=
-RESET=20WRITE=20POINTER=20command=20to=20be=20submitted=20asynchronously.=
-=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20With=20this=20option,=20=
-the=20RESET=20WRITE=20POINTER=20command=20can=20be=20processed=20by=0D=0A>=
-=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20the=20discard=20thread=20like=
-=20a=20discard=20command.=20It=20can=20reduce=20checkpoint=0D=0A>=20>=20+=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20latency=20by=20asynchronously=20checkin=
-g=20for=20completion=20of=20the=20RESET=20WRITE=20POINTER=20command.=0D=0A>=
-=20=0D=0A>=20Do=20we=20need=20to=20set=20this=20by=20default=20instead=20of=
-=20mount=20option?=0D=0A=0D=0AI=20think=20it=20is=20good=20idea.=20I=20will=
-=20make=20this=20feature=20by=20default.=0D=0A=0D=0A>=20=0D=0A>=20>=20=C2=
-=A0memory=3D%s=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20Control=20memory=20mode.=20This=20supports=20=22normal=22=20=
-and=20=22low=22=20modes.=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=22low=22=20mode=20is=20introduced=20to=20support=20low=20memory=20de=
-vices.=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20Because=20of=
-=20the=20nature=20of=20low=20memory=20devices,=20in=20this=20mode,=20f2fs=
-=0D=0A>=20>=20diff=20--git=20a/fs/f2fs/f2fs.h=20b/fs/f2fs/f2fs.h=0D=0A>=20>=
-=20index=204e2596dacbf1..021e55c5d1a8=20100644=0D=0A>=20>=20---=20a/fs/f2fs=
-/f2fs.h=0D=0A>=20>=20+++=20b/fs/f2fs/f2fs.h=0D=0A>=20>=20=40=40=20-167,6=20=
-+167,7=20=40=40=20struct=20f2fs_mount_info=20=7B=0D=0A>=20>=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20*=20be=20aligned=20to=20this=20unit:=20block,=0D=
-=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20*=20segment=20or=20secti=
-on=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20*/=0D=0A>=20>=20+=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0bool=20async_zone_reset;=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0/*=20async=20zone=20reset=20*/=0D=0A>=20>=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0struct=20fscrypt_dummy_policy=20d=
-ummy_enc_policy;=20/*=20test=20dummy=20encryption=20*/=0D=0A>=20>=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0block_t=20unusable_cap_perc;=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0/*=20percentage=20for=20cap=20*/=0D=0A>=20>=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0block_t=20unusable_cap;=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0/*=20Amount=
-=20of=20space=20allowed=20to=20be=0D=0A>=20>=20diff=20--git=20a/fs/f2fs/seg=
-ment.c=20b/fs/f2fs/segment.c=0D=0A>=20>=20index=2045128694eefa..60cfe97c9db=
-d=20100644=0D=0A>=20>=20---=20a/fs/f2fs/segment.c=0D=0A>=20>=20+++=20b/fs/f=
-2fs/segment.c=0D=0A>=20>=20=40=40=20-1189,6=20+1189,46=20=40=40=20static=20=
-void=20__init_discard_policy(struct=20f2fs_sb_info=20*sbi,=0D=0A>=20>=20=C2=
-=A0static=20void=20__update_discard_tree_range(struct=20f2fs_sb_info=20*sbi=
-,=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0struct=20block_device=20*bdev,=20block_t=20lstart,=0D=0A>=20=
->=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0block_t=20start,=20block_t=20len);=0D=0A>=20>=20+=0D=0A>=20>=20+=23if=
-def=20CONFIG_BLK_DEV_ZONED=0D=0A>=20>=20+static=20int=20__submit_zone_reset=
-_cmd(struct=20f2fs_sb_info=20*sbi,=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20struct=20discard_c=
-md=20*dc,=20blk_opf_t=20flag,=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20struct=20list_head=20*wa=
-it_list,=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20unsigned=20int=20*issued)=0D=0A>=20>=20+=7B=
-=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0struct=20discard_cmd_con=
-trol=20*dcc=20=3D=20SM_I(sbi)->dcc_info;=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0struct=20block_device=20*bdev=20=3D=20dc->bdev;=0D=0A>=20=
->=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0struct=20bio=20*bio=20=3D=20bio_al=
-loc(bdev,=200,=20REQ_OP_ZONE_RESET=20=7C=20flag,=20GFP_NOFS);=0D=0A>=20>=20=
-+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0unsigned=20long=20flags;=0D=0A>=20>=20=
-+=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0trace_f2fs_issue_reset_=
-zone(bdev,=20SECTOR_FROM_BLOCK(dc->di.start));=0D=0A>=20>=20+=0D=0A>=20>=20=
-+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0spin_lock_irqsave(&dc->lock,=20flags);=
-=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0dc->state=20=3D=20D_SUBM=
-IT;=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0dc->bio_ref++;=0D=0A>=
-=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0spin_unlock_irqrestore(&dc->loc=
-k,=20flags);=0D=0A>=20>=20+=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0if=20(issued)=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0(*issued)++;=0D=0A>=20>=20+=0D=0A>=20>=20+=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0atomic_inc(&dcc->queued_discard);=0D=0A>=
-=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0dc->queued++;=0D=0A>=20>=20+=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0list_move_tail(&dc->list,=20wait_list);=0D=
-=0A>=20>=20+=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0/*=20sanity=
-=20check=20on=20discard=20range=20*/=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0__check_sit_bitmap(sbi,=20dc->di.lstart,=20dc->di.lstart=20+=20=
-dc->di.len);=0D=0A>=20>=20+=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0bio->bi_iter.bi_sector=20=3D=20SECTOR_FROM_BLOCK(dc->di.start);=0D=0A>=
-=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0bio->bi_private=20=3D=20dc;=0D=
-=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0bio->bi_end_io=20=3D=20f2fs=
-_submit_discard_endio;=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0su=
-bmit_bio(bio);=0D=0A>=20>=20+=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0atomic_inc(&dcc->issued_discard);=0D=0A>=20>=20+=0D=0A>=20>=20+=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0return=200;=0D=0A>=20>=20+=7D=0D=0A>=20>=20+=
-=23endif=0D=0A>=20>=20+=0D=0A>=20>=20=C2=A0/*=20this=20function=20is=20copi=
-ed=20from=20blkdev_issue_discard=20from=20block/blk-lib.c=20*/=0D=0A>=20>=
-=20=C2=A0static=20int=20__submit_discard_cmd(struct=20f2fs_sb_info=20*sbi,=
-=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0struct=20discard_policy=20*dpolicy,=0D=0A>=20>=20=40=40=20-1=
-210,6=20+1250,11=20=40=40=20static=20int=20__submit_discard_cmd(struct=20f2=
-fs_sb_info=20*sbi,=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0i=
-f=20(is_sbi_flag_set(sbi,=20SBI_NEED_FSCK))=0D=0A>=20>=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0return=200;=0D=
-=0A>=20>=20=C2=A0=0D=0A>=20>=20+=23ifdef=20CONFIG_BLK_DEV_ZONED=0D=0A>=20>=
-=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0if=20(f2fs_sb_has_blkzoned(sbi)=20&=
-&=20bdev_is_zoned(bdev))=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0return=20__submit_zone_reset_cmd(sbi,=
-=20dc,=20flag,=20wait_list,=20issued);=0D=0A>=20>=20+=23endif=0D=0A>=20>=20=
-+=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0trace_f2fs_issue_d=
-iscard(bdev,=20dc->di.start,=20dc->di.len);=0D=0A>=20>=20=C2=A0=0D=0A>=20>=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0lstart=20=3D=20dc->di.lstart;=
-=0D=0A>=20>=20=40=40=20-1454,21=20+1499,42=20=40=40=20static=20void=20__upd=
-ate_discard_tree_range(struct=20f2fs_sb_info=20*sbi,=0D=0A>=20>=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=7D=0D=0A>=20>=20=C2=A0=7D=0D=0A>=20>=20=
-=C2=A0=0D=0A>=20>=20+=23ifdef=20CONFIG_BLK_DEV_ZONED=0D=0A>=20>=20+static=
-=20void=20__queue_zone_reset_cmd(struct=20f2fs_sb_info=20*sbi,=0D=0A>=20>=
-=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0struct=20block_device=20*bdev,=20block_t=20blkstart,=20block_t=20blklen)=
-=0D=0A>=20>=20+=7B=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0block_=
-t=20lblkstart=20=3D=20blkstart;=0D=0A>=20>=20+=0D=0A>=20>=20+=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0if=20(f2fs_is_multi_device(sbi))=20=7B=0D=0A>=20>=
-=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0int=20devi=20=3D=20f2fs_target_device_index(sbi,=20blkstart);=0D=0A>=20>=
-=20+=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0blkstart=20-=3D=20FDEV(devi).start_blk;=0D=0A>=20>=20+=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=7D=0D=0A>=20>=20+=0D=0A>=20>=20+=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0trace_f2fs_queue_reset_zone(bdev,=20blkstart);=
-=0D=0A>=20>=20+=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0mutex_loc=
-k(&SM_I(sbi)->dcc_info->cmd_lock);=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0__insert_discard_cmd(sbi,=20bdev,=20lblkstart,=20blkstart,=20bl=
-klen);=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0mutex_unlock(&SM_I=
-(sbi)->dcc_info->cmd_lock);=0D=0A>=20>=20+=7D=0D=0A>=20>=20+=23endif=0D=0A>=
-=20>=20+=0D=0A>=20>=20=C2=A0static=20void=20__queue_discard_cmd(struct=20f2=
-fs_sb_info=20*sbi,=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0struct=20block_device=20*bdev,=20block_=
-t=20blkstart,=20block_t=20blklen)=0D=0A>=20>=20=C2=A0=7B=0D=0A>=20>=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0block_t=20lblkstart=20=3D=20blkstart=
-;=0D=0A>=20>=20=C2=A0=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0tra=
-ce_f2fs_queue_discard(bdev,=20blkstart,=20blklen);=0D=0A>=20>=20+=0D=0A>=20=
->=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0if=20(=21f2fs_bdev_support_di=
-scard(bdev))=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0return;=0D=0A>=20>=20=C2=A0=0D=0A>=20>=20-=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0trace_f2fs_queue_discard(bdev,=20blkstart,=
-=20blklen);=0D=0A>=20>=20-=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0if=20(f2fs_is_multi_device(sbi))=20=7B=0D=0A>=20>=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0int=20dev=
-i=20=3D=20f2fs_target_device_index(sbi,=20blkstart);=0D=0A>=20>=20=C2=A0=0D=
-=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0blkstart=20-=3D=20FDEV(devi).start_blk;=0D=0A>=20>=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=7D=0D=0A>=20>=20+=0D=0A>=20>=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0mutex_lock(&SM_I(sbi)->dcc_info->cmd_lo=
-ck);=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0__update_discar=
-d_tree_range(sbi,=20bdev,=20lblkstart,=20blkstart,=20blklen);=0D=0A>=20>=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0mutex_unlock(&SM_I(sbi)->dcc_info=
-->cmd_lock);=0D=0A>=20>=20=40=40=20-1719,7=20+1785,22=20=40=40=20static=20v=
-oid=20f2fs_wait_discard_bio(struct=20f2fs_sb_info=20*sbi,=20block_t=20blkad=
-dr)=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0dc=20=3D=20__loo=
-kup_discard_cmd(sbi,=20blkaddr);=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0if=20(dc)=20=7B=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0if=20(dc->state=20=3D=3D=20=
-D_PREP)=20=7B=0D=0A>=20>=20+=23ifdef=20CONFIG_BLK_DEV_ZONED=0D=0A>=20>=20+=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0if=20(f2fs_sb_has_blkzoned(sbi)=20&&=0D=0A=
->=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0bdev_is_zoned(d=
-c->bdev))=20=7B=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0struct=20discard_policy=20dpolicy;=0D=0A>=20>=20+=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0/*=20f=
-orce=20submit=20zone=20reset=20*/=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0__init_discard_policy(sbi,=20&dpo=
-licy,=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0DPOLICY_FORCE,=201);=0D=0A>=20>=20+=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0__subm=
-it_discard_cmd(sbi,=20&dpolicy,=20dc,=20NULL);=0D=0A>=20>=20+=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0dc->ref++;=0D=0A>=
-=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0need_wait=20=3D=20true;=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=7D=20else=20=7B=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0__punch_discard_cmd(sbi,=20dc,=20blkaddr);=0D=0A=
->=20=0D=0A>=20Can=20be=20consolidated=20in=20both=20cases=20below.=0D=0A=0D=
-=0AHow=20do=20you=20think=20this=20modification=20as=20below.=0D=0A=0D=0A=
-=20=20=20=20=20=20=20=20if=20(dc)=20=7B=0D=0A=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20if=20(dc->state=20=3D=3D=20D_PREP)=20=7B=0D=0A=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20if=20(f2fs_s=
-b_has_blkzoned(sbi)=20&&=0D=0A=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20bdev_is_zoned(dc->bdev))=20=7B=0D=0A=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20struct=20discard_policy=20dpolicy;=0D=0A=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20/*=20force=20submit=20zone=20reset=20*/=0D=0A=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-__init_discard_policy(sbi,=20&dpolicy,=0D=0A=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20DPOLICY_FORCE,=201=
-);=0D=0A=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20__submit_discard_cmd(sbi,=20&dpolicy,=20dc,=
-=20NULL);=0D=0A=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20dc->ref++;=0D=0A=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-need_wait=20=3D=20true;=0D=0A=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=7D=20else=20=7B=0D=0A=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20__p=
-unch_discard_cmd(sbi,=20dc,=20blkaddr);=0D=0A=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=7D=0D=0A=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=7D=20else=20=7B=0D=0A=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20dc->ref++;=0D=0A=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20need_wait=20=3D=
-=20true;=0D=0A=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=7D=0D=0A=20=
-=20=20=20=20=20=20=20=7D=0D=0A=0D=0A>=20=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=7D=0D=0A>=20>=20+=23else=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0__punch_discard_cmd(sbi,=20dc,=20blkaddr);=0D=0A>=20>=20+=
-=23endif=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=7D=20else=20=7B=0D=0A>=20>=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0dc->ref++;=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0need_wait=20=3D=20true;=0D=0A>=20>=20=40=40=20-1869,6=20+1950,13=
-=20=40=40=20static=20int=20__f2fs_issue_discard_zone(struct=20f2fs_sb_info=
-=20*sbi,=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20blkstart,=20blklen);=0D=0A>=20>=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0return=20-EIO;=0D=0A>=20>=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=7D=0D=0A>=20>=
-=20+=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0if=20(likely(=21is_sbi_flag_set(sbi,=20SBI_POR_DOING))=20=
-&&=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20F2FS_OPTION(=
-sbi).async_zone_reset)=20=7B=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0__queue_zone_reset_cmd(sbi,=20bdev,=20lblkstart,=20blklen);=0D=0A>=20>=
-=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0return=200;=0D=0A>=20>=20+=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=7D=0D=0A>=
-=20=0D=0A>=20Can=20make=20a=20sigle=20case=20above=20and=20below,=20if=20we=
-=20set=20this=20by=20default.=0D=0A=0D=0AI=20can=20remove=20=22F2FS_OPTION(=
-sbi).async_zone_reset=22,=20but=20I=20think=20the=20checking=0D=0A=20=22SBI=
-_POR_DOING=22=20statement=20can=20not=20be=20removed.=20Because=20check_zon=
-e_write_pointer()=0D=0A=20and=20fix_curseg_write_pointer()=20use=20this=20_=
-_f2fs_issue_discard_zone()=20for=20sending=0D=0A=20reset=20write=20pointer=
-=20command=20synchronously.=0D=0A=0D=0A>=20>=20+=0D=0A>=20>=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0trace_f2f=
-s_issue_reset_zone(bdev,=20blkstart);=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0return=20blkdev_zone_=
-mgmt(bdev,=20REQ_OP_ZONE_RESET,=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0sector,=20nr_sects,=20GFP_NOFS);=0D=0A>=20>=20diff=20--git=20a/fs/f2f=
-s/super.c=20b/fs/f2fs/super.c=0D=0A>=20>=20index=207d0202f7b317..48198112cb=
-bc=20100644=0D=0A>=20>=20---=20a/fs/f2fs/super.c=0D=0A>=20>=20+++=20b/fs/f2=
-fs/super.c=0D=0A>=20>=20=40=40=20-162,6=20+162,7=20=40=40=20enum=20=7B=0D=
-=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0Opt_gc_merge,=0D=0A>=
-=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0Opt_nogc_merge,=0D=0A>=20>=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0Opt_discard_unit,=0D=0A>=20>=
-=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0Opt_async_zone_reset,=0D=0A>=20>=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0Opt_memory_mode,=0D=0A>=20>=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0Opt_age_extent_cache,=0D=0A>=20>=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0Opt_err,=0D=0A>=20>=20=40=40=20-2=
-41,6=20+242,7=20=40=40=20static=20match_table_t=20f2fs_tokens=20=3D=20=7B=
-=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=7BOpt_gc_merge,=20=
-=22gc_merge=22=7D,=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=7BOpt_nogc_merge,=20=22nogc_merge=22=7D,=0D=0A>=20>=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=7BOpt_discard_unit,=20=22discard_unit=3D%s=22=7D,=
-=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=7BOpt_async_zone_reset,=
-=20=22async_zone_reset=22=7D,=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=7BOpt_memory_mode,=20=22memory=3D%s=22=7D,=0D=0A>=20>=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=7BOpt_age_extent_cache,=20=22age_exten=
-t_cache=22=7D,=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=7BOp=
-t_err,=20NULL=7D,=0D=0A>=20>=20=40=40=20-1249,6=20+1251,9=20=40=40=20static=
-=20int=20parse_options(struct=20super_block=20*sb,=20char=20*options,=20boo=
-l=20is_remount)=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=7D=0D=
-=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0kfree(name);=0D=0A>=20>=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0break;=0D=0A>=20>=20+=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0case=20Opt_asyn=
-c_zone_reset:=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0F2FS_OPTION(=
-sbi).async_zone_reset=20=3D=20true;=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0break;=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0case=20Opt_memory_mode:=0D=0A>=20>=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0name=20=3D=20match_strdup(&args=5B0=5D)=
-;=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0if=20(=21name)=0D=0A>=
-=20>=20=40=40=20-2047,6=20+2052,9=20=40=40=20static=20int=20f2fs_show_optio=
-ns(struct=20seq_file=20*seq,=20struct=20dentry=20*root)=0D=0A>=20>=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0if=20(test_opt(sbi,=20ATGC))=0D=0A>=20>=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0seq_puts(seq,=20=22,atgc=22);=0D=0A>=20>=20=C2=A0=0D=0A>=20>=20+=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0if=20(F2FS_OPTION(sbi).async_zone_reset)=
-=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0seq_puts(seq,=20=22,async_zone_reset=22);=0D=0A>=20>=20+=0D=0A>=
-=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0if=20(F2FS_OPTION(sbi).mem=
-ory_mode=20=3D=3D=20MEMORY_MODE_NORMAL)=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0seq_printf(seq,=20=
-=22,memory=3D%s=22,=20=22normal=22);=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0else=20if=20(F2FS_OPTION(sbi).memory_mode=20=3D=3D=20MEMO=
-RY_MODE_LOW)=0D=0A>=20>=20diff=20--git=20a/include/trace/events/f2fs.h=20b/=
-include/trace/events/f2fs.h=0D=0A>=20>=20index=2099cbc5949e3c..ee1477de8324=
-=20100644=0D=0A>=20>=20---=20a/include/trace/events/f2fs.h=0D=0A>=20>=20+++=
-=20b/include/trace/events/f2fs.h=0D=0A>=20>=20=40=40=20-1512,7=20+1512,7=20=
-=40=40=20DEFINE_EVENT(f2fs_discard,=20f2fs_remove_discard,=0D=0A>=20>=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0TP_ARGS(dev,=20blkstart,=20blklen)=
-=0D=0A>=20>=20=C2=A0);=0D=0A>=20>=20=C2=A0=0D=0A>=20>=20-TRACE_EVENT(f2fs_i=
-ssue_reset_zone,=0D=0A>=20>=20+DECLARE_EVENT_CLASS(f2fs_reset_zone,=0D=0A>=
-=20>=20=C2=A0=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0TP_PRO=
-TO(struct=20block_device=20*dev,=20block_t=20blkstart),=0D=0A>=20>=20=C2=A0=
-=0D=0A>=20>=20=40=40=20-1528,11=20+1528,25=20=40=40=20TRACE_EVENT(f2fs_issu=
-e_reset_zone,=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0__entry->blkstart=20=3D=20blkstart;=0D=0A>=20=
->=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0),=0D=0A>=20>=20=C2=A0=0D=0A>=
-=20>=20-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0TP_printk(=22dev=20=3D=20(%d,%d=
-),=20reset=20zone=20at=20block=20=3D=200x%llx=22,=0D=0A>=20>=20+=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0TP_printk(=22dev=20=3D=20(%d,%d),=20zone=20at=20=
-block=20=3D=200x%llx=22,=0D=0A>=20>=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0show_dev(__entry->dev),=0D=0A>=20=
->=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0(unsigned=20long=20long)__entry->blkstart)=0D=0A>=20>=20=C2=A0);=
-=0D=0A>=20>=20=C2=A0=0D=0A>=20>=20+DEFINE_EVENT(f2fs_reset_zone,=20f2fs_que=
-ue_reset_zone,=0D=0A>=20>=20+=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0TP_PROTO(struct=20block_device=20*dev,=20block_t=20blkstart),=0D=0A>=
-=20>=20+=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0TP_ARGS(dev,=20b=
-lkstart)=0D=0A>=20>=20+);=0D=0A>=20>=20+=0D=0A>=20>=20+DEFINE_EVENT(f2fs_re=
-set_zone,=20f2fs_issue_reset_zone,=0D=0A>=20>=20+=0D=0A>=20>=20+=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0TP_PROTO(struct=20block_device=20*dev,=20block_t=
-=20blkstart),=0D=0A>=20>=20+=0D=0A>=20>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0TP_ARGS(dev,=20blkstart)=0D=0A>=20>=20+);=0D=0A>=20>=20+=0D=0A>=20>=
-=20=C2=A0TRACE_EVENT(f2fs_issue_flush,=0D=0A>=20>=20=C2=A0=0D=0A>=20>=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0TP_PROTO(struct=20block_device=20*de=
-v,=20unsigned=20int=20nobarrier,=0D=0A>=20>=20--=20=0D=0A>=20>=202.25.1=0D=
-=0A>=20=0D=0A=0D=0AThanks,=0D=0ADaejun
+How do you think of below patch?
+
+diff --git a/drivers/input/input.c b/drivers/input/input.c
+index 37e876d45eb9..a98a9f37e1f5 100644
+--- a/drivers/input/input.c
++++ b/drivers/input/input.c
+@@ -2402,6 +2402,10 @@ int input_register_device(struct input_dev *dev)
+                         __func__, dev_name(&dev->dev));
+                 devres_add(dev->dev.parent, devres);
+         }
++
++       if (device_property_read_bool(input->dev.parent, "wakeup-source"))
++               device_init_wakeup(&pdev->dev, true);
++
+         return 0;
+
+  err_device_del:
+
+Thanks,
+Peng.
+
+> 
+> Kind regards
+> Uffe
