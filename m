@@ -2,172 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B634F6E8B5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795706E8B5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234073AbjDTHZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 03:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
+        id S233821AbjDTH0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 03:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233900AbjDTHZb (ORCPT
+        with ESMTP id S233449AbjDTH0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 03:25:31 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC974202
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:25:24 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id j15so1537915ybl.10
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:25:24 -0700 (PDT)
+        Thu, 20 Apr 2023 03:26:38 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2CDC6
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:26:37 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a5so4219393ejb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:26:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681975523; x=1684567523;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ERsJwuwDQ6SVjU0MR5m9JPv2pqx4rYcUt/3psL5LrgA=;
-        b=U7kLwZNgdjebq1O5di24D5Cliz+GZK2R8zcQkTHmYOcnsKXp1gigSNxA7FLgI010nf
-         zEgBNmJ2k3wgOM9elGo84dI2yTGZE3fXz1VSshK5K/w2x2oK7eeHcFytHLauA1siSdhc
-         k156j17d9KW1WeJ/otsxYB7dzRLnQ5QIpmnGJRg99HZ5P0eBiye4OS0XektyKwArVQ3I
-         EnnPtLuyKzcgwI1xvYs2aK/cSUoshX8SlONsEF9nrrYd255XPAYBEN3v736vwTGAWxH9
-         uMXtGlz6JR+V7xeW9sJHxXjNfQ1nixcq/KB9JQYnaGj655vXcY2crRyF0ND0mBPLj0an
-         wmEQ==
+        d=freebox-fr.20221208.gappssmtp.com; s=20221208; t=1681975596; x=1684567596;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LaCVvuCh0ifaod/8Osz9wRqo6LYk9iFhMUaDZ5ywzU4=;
+        b=HSxwHGoFkt1pfTNx3P/aMn78Qft/H5J/iUpd5Dtt67Q3lLbJ2cqELZ280B8RVP9ZI6
+         3YEMJHi59bhftwaSq+SH/3AXJhaP72uPkdWkxKcscMJxNwhsArxyCQV7s5V83hTyicNF
+         nfjlFpvVTHCEdsqLwdIe8aEJFzXtSrtI/GvaNr8cKS6z9VHGyaaq4Dns5byfIuQr3B/g
+         QY46hQIq0uY417faOyPO4xbA9sv6kwLDQzVR6AVEpIOMOkDjU2X38NFzBnTFtIBRCzsn
+         J8DeyanOx0w8Wa8rRbKW0DbN7Z7jtmPwVRGE8siIG3mhgk7dzNOISL3OOSA5cpmjtj3d
+         ZFMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681975523; x=1684567523;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ERsJwuwDQ6SVjU0MR5m9JPv2pqx4rYcUt/3psL5LrgA=;
-        b=G7SHZwm5M35pnxHyLutjuf4+eJxgQcLQXZ/p2yjQ+3O2zq6zT/DqTeyoXxMwrHGwXx
-         dr9wq3MszWjOgIkz+yGVqdbYEOCIO7DC2zNw60AvkUll7X3lrCKcpV5o9qPHi8fePT/J
-         woUKE2Dm1kfCZjKdB/oON9IQGWg9dhjKe5mdtk0bXn2YogQCmGMT8TjyAFX/FITeJ/f0
-         pNnJsn642qfsBAptKRiTcz1fQpnHcdJkHypGLu6Mijq4ftcnwvnE8xoodV7s0NP+ik/A
-         PI9FZjOEvRk7t0g+oKnp0KY+6xFqKPveF7gF99sQfk2qJTEqbj1X0uBRJjnlTIu1CrtM
-         FWkA==
-X-Gm-Message-State: AAQBX9eUn5nP8BadXR0vdYDc0Xq0GHKTzIYkjHjy0Ow75QzL6URGADi0
-        OrTmEqUicQ/AoaTrSzgywR7SiI1B4w+9Chkx3esVTw==
-X-Google-Smtp-Source: AKy350ZndkyUco4MtIW6I5lKRKDuIoUa1LN66ZiqtPbfwdQC0S5Eeiuxb0UY7Elqz+Aq8zDfjICweFEyPtNOnlom2JE=
-X-Received: by 2002:a25:d147:0:b0:b8f:610b:e6b8 with SMTP id
- i68-20020a25d147000000b00b8f610be6b8mr449038ybg.9.1681975523417; Thu, 20 Apr
- 2023 00:25:23 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681975596; x=1684567596;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LaCVvuCh0ifaod/8Osz9wRqo6LYk9iFhMUaDZ5ywzU4=;
+        b=IP0azk2DStbn26poagxni3v841/eTYnDBuhyz5ILGnDNnp4OYGQN25k/aUHZbRXofv
+         N01SjvkXFKzgTZR6tnwHUjiDFhLRpn5WklAyPzOIwqpIK0zomi4xiiRxen4nTaeIy0AI
+         HC+Nujl5w7umEmVXwXES3X9dqmRDqQ19lpeWwgGeCbP4X9goY2llHeCj5vr9F2o3VB93
+         ujwtSkpmHHHjZk5AdUZzxjkuNNIt5oCSTlxBvsZ3TXdle9a7mVl0fS/i5qauwMnsFInp
+         iwcaym4Dgl7wC9gOPmirqbG+bMkDVyfJ+ZFTKcvRjm6NjL3TORq4+T/iXonACfx7vDwr
+         4xPQ==
+X-Gm-Message-State: AAQBX9fWyKfUamxclX3iJGf4tMlhz83YLb0xCqp0M2yn9sV2htmWVdbk
+        G369sEqb9mXpzesqZRmDSpaX2WMhI/HvGHexJFGW
+X-Google-Smtp-Source: AKy350b+6jWk+FNIWk6cavQH152CzIc90gdPX+pCwubbVAUdMA3XRND8Zrw5SaaDEkP1wAvzR+tWGB6OxqTQhZLcC8g=
+X-Received: by 2002:a17:906:4b17:b0:94a:4c68:c1aa with SMTP id
+ y23-20020a1709064b1700b0094a4c68c1aamr241124eju.7.1681975595637; Thu, 20 Apr
+ 2023 00:26:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <168191307928.6696.11689169705819224951.stgit@91.116.238.104.host.secureserver.net>
-In-Reply-To: <168191307928.6696.11689169705819224951.stgit@91.116.238.104.host.secureserver.net>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 20 Apr 2023 15:25:11 +0800
-Message-ID: <CABVgOSmH=SgtJy1U5tfLwYjWW32WheuzB1F+XJRzD9qtR+bseg@mail.gmail.com>
-Subject: Re: [PATCH RESEND] .gitignore: Do not ignore .kunitconfig files
-To:     Chuck Lever <cel@kernel.org>
-Cc:     masahiroy@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000009cf98205f9bf715c"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
+ <20230419-dpu-tweaks-v1-4-d1bac46db075@freebox.fr> <74c59560-8a79-150f-0c1e-13f22eb35cb2@linaro.org>
+In-Reply-To: <74c59560-8a79-150f-0c1e-13f22eb35cb2@linaro.org>
+From:   Arnaud Vrac <avrac@freebox.fr>
+Date:   Thu, 20 Apr 2023 09:26:24 +0200
+Message-ID: <CAG9NU6_Ua_XLa+c=_93fs5chzQTyPf11W4F87UYbny1k-feoJw@mail.gmail.com>
+Subject: Re: [PATCH 04/11] drm/msm/dpu: allow using lm mixer base stage
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000009cf98205f9bf715c
-Content-Type: text/plain; charset="UTF-8"
-
-On Wed, 19 Apr 2023 at 22:05, Chuck Lever <cel@kernel.org> wrote:
+Le jeu. 20 avr. 2023 =C3=A0 00:43, Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> a =C3=A9crit :
 >
-> From: Chuck Lever <chuck.lever@oracle.com>
+> On 19/04/2023 17:41, Arnaud Vrac wrote:
+> > The dpu backend already handles applying alpha to the base stage, so we
+> > can use it to render the bottom plane in all cases. This allows mixing
+> > one additional plane with the hardware mixer.
+> >
+> > Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
 >
-> Circumvent the .gitignore wildcard to avoid warnings about ignored
-> .kunitconfig files. As far as I can tell, the warnings are harmless
-> and these files are not actually ignored.
+> This might require additional changes. First, for the STAGE_BASE pipe
+> in the source split mode (iow using two LMs) should programmed with
+> respect to the right LM's x offset (rather than usual left top-left LM).
+> See  mdss_mdp_pipe_position_update().
+
+Ok, I did test with 2 LMs and it seems to be working, I'll investigate.
+
 >
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202304142337.jc4oUrov-lkp@intel.com/
-> Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
-> ---
+> Also this might need some interaction with CTL_MIXER_BORDER_OUT being
+> set or not. If I remember correctly, if there bottom plane is not
+> fullscreen or if there are no planes at all, we should set
+> CTL_MIXER_BORDER_OUT (which takes STAGE_BASE) and start assigning them
+> from STAGE0. If not, we can use STAGE_BASE.
 
-Thanks very much.
+I also tested with both fullscreen and non-fullscreen primary plane,
+and no plane. I'll check this.
 
-We have an equivalent patch already staged in the kselftest/kunit for 6.3:
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit&id=cb8865fd865f5b2f656d0d91f3b0146ef1acb10d
-
-Cheers,
--- David
-
---0000000000009cf98205f9bf715c
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
-bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
-TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
-TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
-CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
-El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
-A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
-MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
-MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
-MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
-BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
-Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
-l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
-pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
-6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
-+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
-BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
-S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
-bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
-ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
-q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
-hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAHHLXCbS0CYcocWQtL1
-FY8wDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
-c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMzAxMjkw
-NjQ2MThaFw0yMzA3MjgwNjQ2MThaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
-b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC+31G8qfgjYj6KzASqulKfP5LGLw1o
-hZ6j8Uv9o+fA+zL+2wOPYHLNIb6jyAS16+FwevgTr7d9QynTPBiCGE9Wb/i2ob9aBcupQVtBjlJZ
-I6qUXdVBlo5zsORdNV7/XEqlpu+X5MK5gNHlWhe8gNpAhADSib2H4rjBvFF2yi9BHBAYZU95f0IN
-cSS0WDNSSCktPaXtAGsI3tslroyjFYUluwGklmQms/tV8f/52zc7A5lzX+hxnnJdsRgirJRI9Sb6
-Uypzk06KLxOO2Pg9SFn6MwbAO6LuInpokhxcULUz3g/CMQBmEMSEzPPnfDIAqwDI0Kqh0NAin+V4
-fQxJfDCZAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
-DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFJyglaiY
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB3
-SP+ljw9MWT32d1hmf/5lq+1oog+rYx8f/t0MK2JNtjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA0MjAwNzI1MjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAAELFTojslYMjAVxDI+N+
-rrINz3Xv7mbiaLEvtJ88q5KpTSL0WtYnZjdpzKKEIAfkiT2qGm3VU8cq5vSpyGGf1yLn2nRCCif6
-IiMBr7tGqXylq4sFk9YOoZBFq1FZ691o+ef3+DUuwVSanGTCBFkxey0fPRZLkGwHOW+j8HGIiXJF
-aBoMCNhIAkgr5ZnvuS1Ym+t11dyYIctg0W18QAJjr+0HpfatOzRH2r5IfrqZD7cRcAh+0fBEJBKd
-c236bCEj98ZfGtFu1g5bkJI5KKlUxLF0hW8ggyS6lW/zsK5kWZvsKx2KkDV2PHKD5ShKq2VBhQRw
-DFqeeWoLJUBoxRpy4w==
---0000000000009cf98205f9bf715c--
+>
+> > ---
+> >   drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/dr=
+m/msm/disp/dpu1/dpu_plane.c
+> > index 14b5cfe306113..148921ed62f85 100644
+> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+> > @@ -881,7 +881,7 @@ static int dpu_plane_atomic_check(struct drm_plane =
+*plane,
+> >       r_pipe->multirect_mode =3D DPU_SSPP_MULTIRECT_NONE;
+> >       r_pipe->sspp =3D NULL;
+> >
+> > -     pstate->stage =3D DPU_STAGE_0 + pstate->base.normalized_zpos;
+> > +     pstate->stage =3D DPU_STAGE_BASE + pstate->base.normalized_zpos;
+> >       if (pstate->stage >=3D pdpu->catalog->caps->max_mixer_blendstages=
+) {
+> >               DPU_ERROR("> %d plane stages assigned\n",
+> >                         pdpu->catalog->caps->max_mixer_blendstages - DP=
+U_STAGE_0);
+> >
+>
+> --
+> With best wishes
+> Dmitry
+>
