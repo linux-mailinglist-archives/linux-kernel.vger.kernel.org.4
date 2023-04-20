@@ -2,94 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A5B6E9724
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 977CA6E9727
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbjDTOcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 10:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
+        id S231719AbjDTOcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 10:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjDTOcS (ORCPT
+        with ESMTP id S231690AbjDTOci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 10:32:18 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0485A3A8B
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:32:18 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54fba72c1adso22970817b3.18
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:32:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682001137; x=1684593137;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OMUOq6c0G5jqjvPVW9GFl6gJV//Ori6RU3kW+vvc3us=;
-        b=sPIsPblMaqSS5oOmy6m8Fm+K8b7DBq1F0Z9mwCm0F0kJS9M5VWCzEjvQESI1yLYRwb
-         gGtmWVaZ/4ZupaxdZURG9VmXx0AX+jA0ZikF0ChQ8b475ASbEKYjlj0VHrBRHQy2xxvb
-         rOvxz1u2FrCgG6XoyLs+bHpZfi8fzvJ5UQiHuYpYQMPEPkLsUSXJuR1KoGDYki3I7RvW
-         FDsOUnVnzi/WgrHRWZeDYOml8rWtTbVAkf8VjBezp1UHfQ4qSQFJkWrXNBWbDd1GFXLH
-         l55Gu+YEzTFjcQolNT3lw9a29TWvtrinpmh/6ht37Ntyww3xbjB507TN7zVWZeUIbp1i
-         IpPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682001137; x=1684593137;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OMUOq6c0G5jqjvPVW9GFl6gJV//Ori6RU3kW+vvc3us=;
-        b=hH5RAeF7AodBryxoXzj3uM78Z2ShXgBly3nC2bBqEFjXzb/pTIycqdWCTYB+rJcrTf
-         0dKE0/VqqlLtUDcYEaycvfhtJ6wOUgpBr3598eSiv4XIyOTe54W3MHqFaA0Q+javYW+4
-         a8Ksm/1jAtF+5k4+4aaI6mNGVW4AijoQ52QF14RM+ZFh9lamp+XVzrGx9HSC5auAlyL7
-         1ClC/kZrjv27RckON9GRRGp8zII2OI9nUUgdBrTxr3ccDb5Fq05+HretnhRmzz8jdLRi
-         eNP2hevjnq8rl8asE2OgZqkcQcmfh8jfOq76fD+POQ8vFGXA7gXHhJ4/cj9kKFU69h1h
-         DlaQ==
-X-Gm-Message-State: AAQBX9f9U8fA38FyhmVkrM8pJ05KnF+dzfmF7y9XVu9CpgSi3kTykqwX
-        AG7tz/2872FHIf+oOLoz0CR6Y8r8vB4=
-X-Google-Smtp-Source: AKy350bwVF+ij/6vzk6Xo1YQlvq1IiNxEYNULh5XKnF+s57nZ8BzKbXXMFeaNKA4txq91Yz77KqQF+drZ/0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a0d:ec08:0:b0:54f:a60c:12eb with SMTP id
- q8-20020a0dec08000000b0054fa60c12ebmr765146ywn.1.1682001137266; Thu, 20 Apr
- 2023 07:32:17 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 07:32:15 -0700
-In-Reply-To: <6a0cde0a-e1a4-9119-75fd-12b7c921b5f2@amd.com>
-Mime-Version: 1.0
-References: <20230411125718.2297768-1-aik@amd.com> <6a0cde0a-e1a4-9119-75fd-12b7c921b5f2@amd.com>
-Message-ID: <ZEFM735qNFOCGbnL@google.com>
-Subject: Re: [PATCH kernel v5 0/6] KVM: SEV: Enable AMD SEV-ES DebugSwap
-From:   Sean Christopherson <seanjc@google.com>
-To:     Alexey Kardashevskiy <aik@amd.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Pankaj Gupta <pankaj.gupta@amd.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Santosh Shukla <santosh.shukla@amd.com>,
-        Carlos Bilbao <carlos.bilbao@amd.com>,
-        Borislav Petkov <bp@alien8.de>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 20 Apr 2023 10:32:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC914203;
+        Thu, 20 Apr 2023 07:32:32 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E063E6603265;
+        Thu, 20 Apr 2023 15:32:30 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682001151;
+        bh=+TVWRubMAjRGPp7QPq7BCPc3y2bv7sKk2mvQp0XR9e4=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=DwKLq+3Ti4XpC+rjzkMoBCLlra80K/O3SeBpLyKMv9BjhtKOQI/v3FpKbuBdArkUV
+         cEcJB9MxeHYiFZB/N2BxWCjYo0MxFw8mmnYCJ7B8rZbZ1VXlh/9ltVWT8ogR6rDkWb
+         idFuTKbS8PxEY9IVyrYxYjTp9Mj+5jCulTz2arWXFIczoaUJMYqAH7Y4akXMXSG1P+
+         Buz6Vtq2FgEYcZ5ChfS62icntVGqOTI4OXNVjbnR7P6/K08VPPycXhAVUWeYtNrs+y
+         hT5c8SoYM6lMxwNdcnTqlrdAT9mNhF1SiSOaN8pGHNvKzphLgfiubSUDUKh7yhKkQy
+         7kK1Og/YmAM2g==
+Message-ID: <99c2ec7c-bff2-fa50-f267-d5ca383bd5ca@collabora.com>
+Date:   Thu, 20 Apr 2023 16:32:27 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 2/2] pwm: mediatek: Add support for MT7981
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>, linux-pwm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        John Crispin <john@phrozen.org>
+References: <cover.1681992038.git.daniel@makrotopia.org>
+ <7c6e31c844642c199f223f4229a04a37b57a34f3.1681992038.git.daniel@makrotopia.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <7c6e31c844642c199f223f4229a04a37b57a34f3.1681992038.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023, Alexey Kardashevskiy wrote:
-> On 11/4/23 22:57, Alexey Kardashevskiy wrote:
-> > This is to use another AMD SEV-ES hardware assisted register swap,
-> > more detail in 5/6. In the process it's been suggested to fix other
-> > things, here is the attempt, with the great help of amders.
-> > 
-> > The previous conversation is here:
-> > https://lore.kernel.org/r/20230203051459.1354589-1-aik@amd.com
-> > 
-> > This is based on sha1
-> > f91f9332d782 Ingo Molnar "Merge branch into tip/master: 'x86/tdx'".
-> > 
-> > Please comment. Thanks.
+Il 20/04/23 14:36, Daniel Golle ha scritto:
+> The PWM unit on MT7981 uses different register offsets than previous
+> MediaTek PWM units. Add support for these new offsets and add support
+> for PWM on MT7981 which has 3 PWM channels, one of them is typically
+> used for a temperature controlled fan.
 > 
-> Ping?
-> Or should I relax until the end of the nearest merge window (May 6th-ish)?
-> :) Thanks,
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 
-Sorry, the answer is "relax".  I'm likely going to be offline for a few days in
-early May, so it might be more like May 15th until you hear from me, but this is
-on my todo list.
+The implementation is good now; there's only one nitpick: you're reordering
+the platform data entries and I agree about doing that, as they should be
+alphabetically sorted, but you didn't mention that in the commit message.
+
+Please send a v3 that mentions that you're also reordering.
+
+"...while at it, also reorder..."
+
+After which:
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
