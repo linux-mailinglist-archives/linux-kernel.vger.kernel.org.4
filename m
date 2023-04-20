@@ -2,50 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C44F6E8FD4
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0A46E8FDD
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234576AbjDTKRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
+        id S234742AbjDTKSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234539AbjDTKQi (ORCPT
+        with ESMTP id S234317AbjDTKRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:16:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7396EA5;
-        Thu, 20 Apr 2023 03:15:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92709646EA;
-        Thu, 20 Apr 2023 10:14:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A68BBC433D2;
-        Thu, 20 Apr 2023 10:14:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681985699;
-        bh=Dht1VDndpJ9CVznJlmqNT0nK2LqIk10aXDzqxZ5D5U8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lfs5EuEpbHLAZutfEYw9KRWGb3FPgXikzd+1xkVJGINzfQy1KoBWYnpgmv1IGWtUF
-         8n7kdxWiHzaeTnHYmzIHvmOW/lrwiHLKdCeo4dpOWmtzHezBSh9e9zGlnoKCFXwWz0
-         y78v7uY0Zs6pa+1SCJFfwH1m6v8sPLm/2vay6UhA=
-Date:   Thu, 20 Apr 2023 12:14:56 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tonywwang@zhaoxin.com,
-        weitaowang@zhaoxin.com
-Subject: Re: [PATCH 0/3] Fix some issues of xHCI for zhaoxin
-Message-ID: <ZEEQoHY12zfLM7Yd@kroah.com>
-References: <20230420172130.375819-1-WeitaoWang-oc@zhaoxin.com>
- <ZEEF9E4Mmeg5hRWu@kroah.com>
- <b65291ea-acca-7cd4-b5f5-f5bb46e679b4@zhaoxin.com>
+        Thu, 20 Apr 2023 06:17:39 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349D1469B
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:16:24 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50674656309so672658a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:16:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681985782; x=1684577782;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4BKaB6wmdSC39nGuq4uVk57d3AR6NoTUK0psnv39YEI=;
+        b=Y0mOhXZTuZ4nez1P8JdLmChICVL4d7Or6M64/LwQUOcN0zHXwwCzyywmyjVJQAd9+q
+         myAr0408kLXfNmkXbD4i/RWKw8/Me0snlbCFKbxRK8NIvwx0PZGC1xfUUeFUZ/jqfAVk
+         0J3ptix/C21PHgzNRaDoM5+rAMeYGc6CTV+UiZBKboppIgnHkgxfvYTlrC1nfXzRaQ7i
+         jW1JHRt7NARXOXvTk+ny+M4JDpJFet4B35ePM+X6SF9WpP/lNy13GVhqkfMa7RHAfPWx
+         YUHuvrfj/aoyu/45D8OVWxnIBF9VJsoqGLEaPe4nRRfj99qxJVWgZIOzwcWk66lLVv8C
+         7vAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681985782; x=1684577782;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4BKaB6wmdSC39nGuq4uVk57d3AR6NoTUK0psnv39YEI=;
+        b=BTqycqCirQjayLu1hXHWVgf0qxnlWNAjvG6f4jJTnrb/jkjBYmOpw6BzqKUHlZe+M5
+         PktBKAVZ8scKDq22YvFMYE3nO7gR0DTi/qUH01u+853IDHuaktpPj8tbKmxmwfHdB2p5
+         dPNjmWGHibMmJroClchdBvnGdyPLwSc3ZMl10ZnUYHkkV9MOY08fsD/TferOiqNxp1f4
+         pJZ0x5riwPFBwsgtLuVsJoieaCe97xxa0+75Ya/82nrhr8MBbC9tmbT0vxZcNW5hwIw4
+         WG9LooZZ5zhJduSCTdjMvO/VgCjtlojqcYCxqELuDVsOjkqI3p20J8x3zoY6Y1V4EidV
+         S/mg==
+X-Gm-Message-State: AAQBX9d3YQOAagv6h+NP3qEvZFLjQ3JzgX2FbImGVpKGRVKUJ0T5ENCI
+        PX3u6uQp6LWxijktJ8Tx7RShSLGo0glJGwCZYBaG6g==
+X-Google-Smtp-Source: AKy350bcrkmc6o+TztYUElI7htTmgFNkAH4v60w5elbqDvjghZiRFJts/+OXkM9ieyGeYORp6EoZ5g==
+X-Received: by 2002:a05:6402:48e:b0:506:bc26:d6a9 with SMTP id k14-20020a056402048e00b00506bc26d6a9mr1563945edv.8.1681985782601;
+        Thu, 20 Apr 2023 03:16:22 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
+        by smtp.gmail.com with ESMTPSA id l22-20020aa7c3d6000000b00506be898998sm588954edr.29.2023.04.20.03.16.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 03:16:22 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Patrick Lai <quic_plai@quicinc.com>
+Subject: [PATCH 0/6] ASoC/soundwire: qcom: correctly probe devices after link init
+Date:   Thu, 20 Apr 2023 12:16:11 +0200
+Message-Id: <20230420101617.142225-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b65291ea-acca-7cd4-b5f5-f5bb46e679b4@zhaoxin.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,41 +80,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 02:08:14AM +0800, WeitaoWang-oc@zhaoxin.com wrote:
-> On 2023/4/20 17:29, Greg KH wrote:
-> > On Fri, Apr 21, 2023 at 01:21:27AM +0800, Weitao Wang wrote:
-> > > Fix some issues of xHCI for zhaoxin.
-> > > 
-> > > Weitao Wang (3):
-> > >    xhci: Add a quirk for zhaoxin xhci to fix issues.
-> > >    xhci: Add zhaoxin xHCI U1/U2 feature support
-> > >    xhci: Show zhaoxin xHCI root hub speed correctly
-> > > 
-> > >   drivers/usb/host/xhci-pci.c |  5 ++++
-> > >   drivers/usb/host/xhci.c     | 49 +++++++++++++++++++++++++++++++++++--
-> > >   drivers/usb/host/xhci.h     |  1 +
-> > >   3 files changed, 53 insertions(+), 2 deletions(-)
-> > > 
-> > > -- 
-> > > 2.32.0
-> > > 
-> > 
-> > Do these replace:
-> > https://lore.kernel.org/r/20230420093603.3344-1-WeitaoWang-oc@zhaoxin.com
-> > or are they on top of them?
-> > 
-> 
-> This [patch 2/3] and [patch 3/3] share a xhci quirk flag XHCI_ZHAOXIN_HOST,
-> So I put these independent functional patch in this set group.
-> Above url and below url are independent xHCI patch for zhaoxin.
-> Is it more suitable to put all the patch for zhaoxin xhci in one group?
-> I Hope to receive your guidance. Thanks!
-> 
-> https://lore.kernel.org/all/20230420104826.4727-1-WeitaoWang-oc@zhaoxin.com/
+Hi,
 
-Please resend them all as a patch series so we know what we are supposed
-to be reviewing and accepting.  Otherwise it's quite confusing.
+Dependencies
+============
+1. ASoC codec: changes are independent, however they should rather come the same
+   cycle as Soundwire changes, to avoid new warning and small delay.
 
-thanks,
+2. Soundwire: changes (context) depend on:
+   https://lore.kernel.org/r/20230209131336.18252-3-srinivas.kandagatla@linaro.org
+   https://lore.kernel.org/all/20230418095447.577001-1-krzysztof.kozlowski@linaro.org/
 
-greg k-h
+Problems solved
+===============
+Soundwire devices are supposed to be kept in reset state (powered off)
+till their probe() or component bind() callbacks.  However if they are
+already powered on, then they might enumerate before the master
+initializes bus in qcom_swrm_init() leading to occasional errors like:
+
+  qcom-soundwire 6d30000.soundwire-controller: Qualcomm Soundwire controller v2.0.0 Registered
+  wcd938x_codec audio-codec: bound sdw:0:0217:010d:00:4 (ops wcd938x_sdw_component_ops)
+  wcd938x_codec audio-codec: bound sdw:0:0217:010d:00:3 (ops wcd938x_sdw_component_ops)
+  qcom-soundwire 6ad0000.soundwire-controller: swrm_wait_for_wr_fifo_avail err write overflow
+
+The problem primarily lies in Qualcomm Soundwire controller probe() sequence:
+1. request_threaded_irq()
+2. sdw_bus_master_add() - which will cause probe() and component bind()
+   of Soundwire devices, e.g. WCD938x codec drivers.  Device drivers
+   might already start accessing their registers.
+3. qcom_swrm_init() - which initializes the link/bus and enables
+   interrupts.
+
+Any access to device registers at (2) above, will fail because link/bus
+is not yet initialized.
+
+Cc: Patrick Lai <quic_plai@quicinc.com>
+
+Best regards,
+Krzysztof
+
+Dmitry Torokhov (1):
+  ASoC: wcd938x: switch to using gpiod API
+
+Krzysztof Kozlowski (5):
+  ASoC: codecs: wcd938x: Keep device in reset till bind
+  ASoC: codecs: wcd938x: Check for enumeration before using TX device
+  soundwire: qcom: drop unused struct qcom_swrm_ctrl members
+  soudnwire: master: protect concurrecnt check for bus->md
+  soundwire: qcom: do not probe devices before bus/link init
+
+ drivers/soundwire/master.c |  7 ++-
+ drivers/soundwire/qcom.c   | 92 +++++++++++++++++++++++++++++---------
+ sound/soc/codecs/wcd938x.c | 44 +++++++++++-------
+ 3 files changed, 107 insertions(+), 36 deletions(-)
+
+-- 
+2.34.1
+
