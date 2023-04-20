@@ -2,139 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D676E9B0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8EFC6E9B0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbjDTRoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 13:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46204 "EHLO
+        id S231687AbjDTRot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 13:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbjDTRn7 (ORCPT
+        with ESMTP id S229481AbjDTRor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 13:43:59 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A017D4ED2;
-        Thu, 20 Apr 2023 10:43:38 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33KHY3AJ013300;
-        Thu, 20 Apr 2023 17:43:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to : sender :
- content-transfer-encoding : mime-version; s=pp1;
- bh=ohRA5xQp84/7gj+nbFshkI9cTNC4RTACQM3OzbAEp9c=;
- b=Fg4/YPDPBOfxG+kvhkJClgRThWL6dI71nSBt7+dUYctIdBwwqR0z4+O9OWJyfFsaTc86
- CWuN4sx4g44oIB0dw/Kb8wo7vuWRYCmLgBFe/U/BAYdyKNski/IN4PpExHH1QUURf1Mg
- yhmJjDPlUSE1rR8Q0yXFzm/5AOpe+fz1qHxXxzFsRym9k9wDSbgVE/6KHWI9ubWoxSQm
- wZOpfcFPz18MZabh+Zr1QLBARvkdNxgm73bj0njFkpRCRgBN8UDSoW5iN+gbLrVs0w9N
- e8cUfjMih7mvoKaH8TQflaLQEz3Z5cD6TpInUpzy8RCQOfHKeB5Y230k0YJg3hADMgde Tg== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q39wfrj8n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Apr 2023 17:43:27 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33K1MQVd017940;
-        Thu, 20 Apr 2023 17:43:26 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3pykj6jxym-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Apr 2023 17:43:25 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33KHhMjl66191780
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Apr 2023 17:43:22 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1A80A2004D;
-        Thu, 20 Apr 2023 17:43:22 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0638020043;
-        Thu, 20 Apr 2023 17:43:22 +0000 (GMT)
-Received: from t480-pf1aa2c2 (unknown [9.171.85.7])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Thu, 20 Apr 2023 17:43:21 +0000 (GMT)
-Received: from bblock by t480-pf1aa2c2 with local (Exim 4.96)
-        (envelope-from <bblock@linux.ibm.com>)
-        id 1ppYJV-004RkS-1g;
-        Thu, 20 Apr 2023 19:43:21 +0200
-Date:   Thu, 20 Apr 2023 17:43:21 +0000
-From:   Benjamin Block <bblock@linux.ibm.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        acelan.kao@canonical.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: core: Avoid doing rescan on suspended device
-Message-ID: <20230420174321.GA123094@t480-pf1aa2c2>
-References: <20230419054112.269734-1-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <20230419054112.269734-1-kai.heng.feng@canonical.com>
-Sender: Benjamin Block <bblock@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FiuplC5Y8z5W0DKhabnZidjDFNIZ9op2
-X-Proofpoint-ORIG-GUID: FiuplC5Y8z5W0DKhabnZidjDFNIZ9op2
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 20 Apr 2023 13:44:47 -0400
+Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5453E133;
+        Thu, 20 Apr 2023 10:44:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1682012678;
+        bh=8Z9tCQrE4IZ72nzfVNAMoGMKCT3xO74OPin8ygG6pIA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=xNbPuIB9sLG0YJREqQTbUKXwuFi/u+hqaPRmje1xAiL39CPg3wL6bkHthgcwPAD0g
+         Ivt2t483c/xjBzT/Ak+3ZEk1f9unsjJmIi5wF7YG0NWw0dRx+NFh5GHmVeTx5KZzJf
+         erIv7qQSKTx4o2WDfikC8hMdI/09mJ/3wPC7GXds=
+Received: from [172.31.255.72] ([116.236.146.234])
+        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
+        id B23390B6; Fri, 21 Apr 2023 01:44:35 +0800
+X-QQ-mid: xmsmtpt1682012675tpqexjue7
+Message-ID: <tencent_31DEA62F31CFF96D3ED356F1508707594C0A@qq.com>
+X-QQ-XMAILINFO: OKKHiI6c9SH3XK2ZbEjTQ9bEnhxrsMrydezzJEFx+hnTkisG+lwe3A0n1DcDma
+         HTiYw0z2yK24gTEbt+IH/9b7urHKJuApXRzmGpNveZ4dJXtlvy37ze3tG0WDakcWkTviY1iRd+Lc
+         +5OUi1c8OjrTHuzAe+QObESnDDejeA6FV4c4JgbCpsbj7lVGK/J9S/KU44b8is+UXS5VbD0R3i5D
+         x4AoWGAAxHIP6RxaquqYTLhSIlq0rkflTpMqb9Tx/Vxk3uMptwsS4K0X1/EOx3eDiBh7A9FZAk8a
+         0QjRvQW3i7AwgadA8ldLITHNKQEU9dIpq3BPY/0Sl5iaLX213eS06A+PKEdRnPa1YNCJg3io9nMf
+         aaVNrb/f7ds90wT2fEGK4zrLjMDhzmDNhdjADiVYV/uJE0/16Gm+sjjHR6iwG/gG1yT1yvgWOMv7
+         V4VNnr9ggGqrdqZubJ0HBI7H6Z4UqXHzOvu5/IH1WfDOAH8Ca6ckCRsxHv0cgGP/gw67ueND7F2e
+         eZEhB/pUQ4l2qk0DgDMAneKbtG5CasVzt1FBhoqa3izWLhe+BKrsuVyZmNy1ah2gUDBiC5aFt6W/
+         q0HcAGwC0cfoa2LdWyJanKrFmzmFe6B14CGo+5SdgZUDqzfkTc7IpbPFctzHpNwlV2JP9/mgMGul
+         89UhZCpt8BnyDurPuZTrhM6ESPpaSRAiQJwvCbwC4yyVsEqCPaocnvpzwwEv01T9DCwwK6q0Vkmo
+         6wYMpPd+1MsEBDB7Hf+guNs4g+/r5J6dkt0xSieKlz8UMfk/gKPp+gzc5FT8/jlddHO8ZFUaMxkg
+         lWgE9+MU4RCKnPcPa1kIgE8qFioP7PW81CunJuMOVXPhp77N4hGu/s3jEzUCjZbwYKPH3Jh+ReHh
+         r5oVk7K4/K41D0K2FX7xF68ERD5LaEcr/cklwvOb3Hq3vqYO7q+H2lSZX5R/4WjHu03SYgVCQPUI
+         nbmraS81l7JpKw9HmF6ivrMyB9ASR2DsFOO3nC7Ok=
+X-OQ-MSGID: <45756597-a0eb-79f1-0706-1c2bf7e08d19@foxmail.com>
+Date:   Fri, 21 Apr 2023 01:44:35 +0800
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-20_13,2023-04-20_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- impostorscore=0 clxscore=1011 malwarescore=0 lowpriorityscore=0
- bulkscore=0 mlxscore=0 phishscore=0 priorityscore=1501 adultscore=0
- mlxlogscore=737 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304200147
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH] eventfd: support delayed wakeup for non-semaphore eventfd
+ to reduce cpu utilization
+To:     Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>, Dylan Yudaken <dylany@fb.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Paolo Bonzini <pbonzini@redhat.com>, Fu Wei <wefu@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <tencent_AF886EF226FD9F39D28FE4D9A94A95FA2605@qq.com>
+ <817984a2-570c-cb23-4121-0d75005ebd4d@kernel.dk>
+ <tencent_9D8583482619D25B9953FCA89E69AA92A909@qq.com>
+ <7dded5a8-32c1-e994-52a0-ce32011d5e6b@kernel.dk>
+ <20230419-blinzeln-sortieren-343826ee30ce@brauner>
+ <868ceaa3-4854-345f-900e-52a79b924aa6@kernel.dk>
+From:   Wen Yang <wenyang.linux@foxmail.com>
+In-Reply-To: <868ceaa3-4854-345f-900e-52a79b924aa6@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 01:41:12PM +0800, Kai-Heng Feng wrote:
-> During system resume, if an EH is schduled after ATA host is resumed
-> (i.e. ATA_PFLAG_PM_PENDING cleared), but before the disk device is
-> resumed, the device_lock hold by scsi_rescan_device() is never released
-> so the dpm_resume() of the disk is blocked forerver.
-> 
-> That's because scsi_attach_vpd() is expecting the disk device is in
-> operational state, as it doesn't work on suspended device.
-> 
-> To avoid such deadlock, avoid doing rescan if the disk is still
-> suspended so the resume process of the disk device can proceed.
 
-I'm no expert on suspend/resume, but wouldn't you then potentially miss
-changes that have been done to the LUN during suspend?
+åœ¨ 2023/4/20 00:42, Jens Axboe å†™é“:
+> On 4/19/23 3:12?AM, Christian Brauner wrote:
+>> On Tue, Apr 18, 2023 at 08:15:03PM -0600, Jens Axboe wrote:
+>>> On 4/17/23 10:32?AM, Wen Yang wrote:
+>>>> ? 2023/4/17 22:38, Jens Axboe ??:
+>>>>> On 4/16/23 5:31?AM, wenyang.linux@foxmail.com wrote:
+>>>>>> From: Wen Yang <wenyang.linux@foxmail.com>
+>>>>>>
+>>>>>> For the NON SEMAPHORE eventfd, if it's counter has a nonzero value,
+>>>>>> then a read(2) returns 8 bytes containing that value, and the counter's
+>>>>>> value is reset to zero. Therefore, in the NON SEMAPHORE scenario,
+>>>>>> N event_writes vs ONE event_read is possible.
+>>>>>>
+>>>>>> However, the current implementation wakes up the read thread immediately
+>>>>>> in eventfd_write so that the cpu utilization increases unnecessarily.
+>>>>>>
+>>>>>> By adding a configurable delay after eventfd_write, these unnecessary
+>>>>>> wakeup operations are avoided, thereby reducing cpu utilization.
+>>>>> What's the real world use case of this, and what would the expected
+>>>>> delay be there? With using a delayed work item for this, there's
+>>>>> certainly a pretty wide grey zone in terms of delay where this would
+>>>>> perform considerably worse than not doing any delayed wakeups at all.
+>>>>
+>>>> Thanks for your comments.
+>>>>
+>>>> We have found that the CPU usage of the message middleware is high in
+>>>> our environment, because sensor messages from MCU are very frequent
+>>>> and constantly reported, possibly several hundred thousand times per
+>>>> second. As a result, the message receiving thread is frequently
+>>>> awakened to process short messages.
+>>>>
+>>>> The following is the simplified test code:
+>>>> https://github.com/w-simon/tests/blob/master/src/test.c
+>>>>
+>>>> And the test code in this patch is further simplified.
+>>>>
+>>>> Finally, only a configuration item has been added here, allowing users
+>>>> to make more choices.
+>>> I think you'd have a higher chance of getting this in if the delay
+>>> setting was per eventfd context, rather than a global thing.
+>> That patch seems really weird. Is that an established paradigm to
+>> address problems like this through a configured wakeup delay? Because
+>> naively this looks like a pretty brutal hack.
+> It is odd, and it is a brutal hack. My worries were outlined in an
+> earlier reply, there's quite a big gap where no delay would be better
+> and the delay approach would be miserable because it'd cause extra
+> latency and extra context switches. It'd be much cleaner if you KNEW
+> there'd be more events coming, as you could then get rid of that delayed
+> work item completely. And I suspect, if this patch makes sense, that
+> it'd be better to have a number+time limit as well and if you hit the
+> event number count that you'd notify inline and put some smarts in the
+> delayed work handling to just not do anything if nothing is pending.
 
-What takes care of updating the VPDs, scsi-disk re-evaluation and such
-in this case, when you block it initially during wakeup?
+Thank you very much for your suggestion.
 
-> 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/scsi/scsi_scan.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-> index d217be323cc6..36680cb1535b 100644
-> --- a/drivers/scsi/scsi_scan.c
-> +++ b/drivers/scsi/scsi_scan.c
-> @@ -1621,6 +1621,9 @@ void scsi_rescan_device(struct device *dev)
->  {
->  	struct scsi_device *sdev = to_scsi_device(dev);
->  
-> +	if (dev->power.is_prepared)
-> +		return;
-> +
->  	device_lock(dev);
->  
->  	scsi_attach_vpd(sdev);
-> -- 
-> 2.34.1
-> 
+We will improve the implementation according to your suggestion and send 
+the v2 later.
 
--- 
-Best Regards, Benjamin Block        /        Linux on IBM Z Kernel Development
-IBM Deutschland Research & Development GmbH    /   https://www.ibm.com/privacy
-Vors. Aufs.-R.: Gregor Pillen         /         Geschäftsführung: David Faller
-Sitz der Ges.: Böblingen     /    Registergericht: AmtsG Stuttgart, HRB 243294
+
+--
+
+Best wishes,
+
+Wen
+
+
