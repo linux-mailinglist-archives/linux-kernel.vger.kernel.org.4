@@ -2,112 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA436E9DF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3AC6E9DF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbjDTVfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 17:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52184 "EHLO
+        id S232569AbjDTVgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 17:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbjDTVfS (ORCPT
+        with ESMTP id S229523AbjDTVgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 17:35:18 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181074EFE
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 14:35:12 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-555e853d3c5so1372917b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 14:35:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682026511; x=1684618511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kAtKlPyaz0Y+z5eMdqbBW5ll6BSj5ZVTotD7NM9VGk0=;
-        b=Dy3leCS5rDy01cDHqMD4Uj1hUhy6eZr8hxZCg+4JrB81Bu7FSbg7cw5+7E2asxryLO
-         V+UZC9+sn3C4Xmd/QVPOwIipIqNaX9fYU7jH6LEYiVqr2VOiPljubc8E/b7X2lSvp2S5
-         HGnmY8inJmS0E26WdHgi4/OJqihy97eQD+xGXk10/t/SYsF/1tb1I9zduDYIodDhmOoG
-         EcIPDVIiG0U7u2hegtpBScFG/9kZEawylL5mqZqz05AMjz6GdWUTFSvugSu5glBq3fPg
-         VAlSJrj5qm7BStvLTnVeNh/qdZnljEcex9g1uAQdb9Vf3mbM/GaJ0a0NOBOWATrd9X6C
-         Uyjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682026511; x=1684618511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kAtKlPyaz0Y+z5eMdqbBW5ll6BSj5ZVTotD7NM9VGk0=;
-        b=KHmnwjw1vKqjP1FLB4JVxAEJuIWJlTnNZHmxgvKHD4q9CzaBWPlV5zpk/vifPE7Xa4
-         jtjmhwkAc5D5XFLGHH2vOVkI4mAkS7RLcS7XUGAgKX0NGQGHHdJH60aDjM7s6NvEFPQe
-         01HiusvRU6E5lCT7MyTdG1L9fyXt/ON1GqOOniMuxg+v2HuKvBX21e7qdEhhiBIS4bvd
-         XphSoCe/MaZ9gh2Yg7pGCCQHac6YphukMT1voGXBrTnAAosvD9TOi+bN73jk6xs73e0s
-         SztkTPWnTQK0KwxDbyfQy4wgIhAu46YhDHmzL9t7qsg1/xpiIeadmlsNrdUWvjZQSB+5
-         wm3A==
-X-Gm-Message-State: AAQBX9cwuGTeszWuQsrhfFiYJJ8M0UcIyfDyVRwdSUfJ29dJa33rbghP
-        FrQ9BU5y/I/1Z0xupChZWylS5aJMGd9mSyKRn+arww==
-X-Google-Smtp-Source: AKy350ZGWOD0etCrOpfPd0P/3YE+0h12xfhLtjMUG/x+xKcQBPBvMpR1EZqIo26T/6Qc7ObkPpIB8pMP/nCcrWWUb+A=
-X-Received: by 2002:a25:5387:0:b0:b95:2132:7252 with SMTP id
- h129-20020a255387000000b00b9521327252mr316633ybb.57.1682026511106; Thu, 20
- Apr 2023 14:35:11 -0700 (PDT)
+        Thu, 20 Apr 2023 17:36:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4883F30D2;
+        Thu, 20 Apr 2023 14:36:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4CA464C19;
+        Thu, 20 Apr 2023 21:36:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B2BC433D2;
+        Thu, 20 Apr 2023 21:36:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682026577;
+        bh=N4kO0Ct/LnSLCi9T11XBZTUArgxHgmHTQU2AiDujI3o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OWspLkkmDbLi4PsR/Dq2qnHLUx/tAWfx2lQH1hjad2NuBrOmm4jEe42bR3Wkn4yAH
+         BygNnJjNdNPaHCAI0k94PE7RTWBk51F4r6/w9dHyL8xSlisABkbBqRjHx15Zz06Rxk
+         VA87KAdEenumsUT3r2NhZQ74OgcWzT2kUzapy0XB3WLCHMENFIdga15OCS1nSA0gIJ
+         uJAhWD8R/e9L2XJzZMz0uf0hpN0ymnMPQ2Di3/Yn8Wln8zUpbcixQPsuxCHDm7XYh/
+         par1g0B7aoCZrH/KxWy93rgcnxN29UWfyvEZdBqjs9hiDzqx5AcnBgau3rBfZ1vlZl
+         h0Yxemfd2B0DQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Iuliana Prodan <iuliana.prodan@nxp.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Markus Elfring <Markus.Elfring@web.de>,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] remoteproc: imx_dsp_rproc: use modern pm_ops
+Date:   Thu, 20 Apr 2023 23:36:04 +0200
+Message-Id: <20230420213610.2219080-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <ZEGh4mliGHvyWIvo@google.com>
-In-Reply-To: <ZEGh4mliGHvyWIvo@google.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 20 Apr 2023 14:35:00 -0700
-Message-ID: <CAJuCfpEGBquOjEBFD87DEHqWc0TZ8TkLHRh6RAjR=1wFPbMNHw@mail.gmail.com>
-Subject: Re: Using page-fault handler in binder
-To:     Carlos Llamas <cmllamas@google.com>
-Cc:     linux-mm@kvack.org, tkjos@google.com, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 1:34=E2=80=AFPM Carlos Llamas <cmllamas@google.com>=
- wrote:
->
-> Hi,
->
-> I'm trying to remove the current page handling in binder and switch to
-> using ->fault() and other mm/ infrastructure. See, we currently allocate
-> and insert pages manually into vmas, so dropping this boilerplate code
-> seems like a great idea to me. Before starting on this though, I could
-> use some pointers on some of the implementation details.
->
-> In binder the messages are not buffered. What happens is that a server
-> task mmaps a region and then allows clients to write their user data
-> directly into this _remote_ vma. This is currently achieved by caching
-> pointers to every page allocated in the server's region.
->
-> Instead of caching page pointers, I believe binder could make use of
-> get_user_pages_remote() and trigger a page fault as needed. Basically,
-> implement something similar to access_remote_vm() but that instead does
-> a copy_from_user(). However, I don't see many in-tree users of these
-> routines, so I wonder if I'm overlooking something in this approach?
+From: Arnd Bergmann <arnd@arndb.de>
 
-Sounds doable but there might be GUP details I'm missing...
+Without CONFIG_PM, the driver warns about unused functions:
 
->
-> One more reason for the page caching in binder is being able to free
-> pages from the shrinker's callback. Unused pages are added to an LRU
-> list and we manually zap/free them when they are reclaimed. It is not
-> evident to me how can binder mark a range within the vma region as
-> reclaimable?
+drivers/remoteproc/imx_dsp_rproc.c:1210:12: error: 'imx_dsp_runtime_suspend' defined but not used [-Werror=unused-function]
+ 1210 | static int imx_dsp_runtime_suspend(struct device *dev)
+      |            ^~~~~~~~~~~~~~~~~~~~~~~
+drivers/remoteproc/imx_dsp_rproc.c:1178:12: error: 'imx_dsp_runtime_resume' defined but not used [-Werror=unused-function]
+ 1178 | static int imx_dsp_runtime_resume(struct device *dev)
+      |            ^~~~~~~~~~~~~~~~~~~~~~
 
-I think you would have to release the individual pages using
-put_page(). Also note that get_user_pages_remote() is being
-deprecated, see:
-https://elixir.bootlin.com/linux/latest/source/mm/gup.c#L2171
+Change the old SET_SYSTEM_SLEEP_PM_OPS()/SET_RUNTIME_PM_OPS()
+helpers to their modern replacements that avoid the warning,
+and remove the now unnecessary __maybe_unused annotations
+on the other PM helper functions.
 
->
-> Any pointers are appreciated!
->
-> --
-> Carlos Llamas
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/remoteproc/imx_dsp_rproc.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
+index cab06dbf37fb..2d75dea43f20 100644
+--- a/drivers/remoteproc/imx_dsp_rproc.c
++++ b/drivers/remoteproc/imx_dsp_rproc.c
+@@ -1243,7 +1243,7 @@ static void imx_dsp_load_firmware(const struct firmware *fw, void *context)
+ 	release_firmware(fw);
+ }
+ 
+-static __maybe_unused int imx_dsp_suspend(struct device *dev)
++static int imx_dsp_suspend(struct device *dev)
+ {
+ 	struct rproc *rproc = dev_get_drvdata(dev);
+ 	struct imx_dsp_rproc *priv = rproc->priv;
+@@ -1278,7 +1278,7 @@ static __maybe_unused int imx_dsp_suspend(struct device *dev)
+ 	return pm_runtime_force_suspend(dev);
+ }
+ 
+-static __maybe_unused int imx_dsp_resume(struct device *dev)
++static int imx_dsp_resume(struct device *dev)
+ {
+ 	struct rproc *rproc = dev_get_drvdata(dev);
+ 	int ret = 0;
+@@ -1312,9 +1312,8 @@ static __maybe_unused int imx_dsp_resume(struct device *dev)
+ }
+ 
+ static const struct dev_pm_ops imx_dsp_rproc_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(imx_dsp_suspend, imx_dsp_resume)
+-	SET_RUNTIME_PM_OPS(imx_dsp_runtime_suspend,
+-			   imx_dsp_runtime_resume, NULL)
++	SYSTEM_SLEEP_PM_OPS(imx_dsp_suspend, imx_dsp_resume)
++	RUNTIME_PM_OPS(imx_dsp_runtime_suspend, imx_dsp_runtime_resume, NULL)
+ };
+ 
+ static const struct of_device_id imx_dsp_rproc_of_match[] = {
+@@ -1332,7 +1331,7 @@ static struct platform_driver imx_dsp_rproc_driver = {
+ 	.driver = {
+ 		.name = "imx-dsp-rproc",
+ 		.of_match_table = imx_dsp_rproc_of_match,
+-		.pm = &imx_dsp_rproc_pm_ops,
++		.pm = pm_ptr(&imx_dsp_rproc_pm_ops),
+ 	},
+ };
+ module_platform_driver(imx_dsp_rproc_driver);
+-- 
+2.39.2
+
