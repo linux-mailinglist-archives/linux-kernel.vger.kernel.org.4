@@ -2,61 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44EA6E9C1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A54B16E9C23
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjDTSyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 14:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
+        id S231470AbjDTS4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 14:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231638AbjDTSyD (ORCPT
+        with ESMTP id S231806AbjDTSzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 14:54:03 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CB155AF
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:53:33 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3ef34c49cb9so893121cf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:53:33 -0700 (PDT)
+        Thu, 20 Apr 2023 14:55:54 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94352705
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:55:52 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-3e0965f70ecso895951cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:55:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682016812; x=1684608812;
+        d=google.com; s=20221208; t=1682016952; x=1684608952;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4sYlJSAfMy5ZKFxBnqgIBVbqBgUxlBgjbZy6mx61ZB0=;
-        b=wPs26Moc03UYXJfZwMIlURgsn2RCjMAbb7a+Kr6qiZim9sSPBSM+ZdRg4TYPr4vYxC
-         QmCGtQFf+XPuri/obaV1duh6RAYA1qF/ZHAWZew0TZE7gE7UZb675H1CuZBgHJZA9Ze3
-         JQDW57Ph2p1gegrBk5yb+/Cugi0waHR4zf/tF/KJuRI6aDUUzOySpS2PNB/mXKSyqIaj
-         D6omDunMmwh7KE2tnbKxW3RSmLqgYQtibyeHI+ZrrYfdfCGk4cwgkrE06btrC9PAEVdR
-         Ph0y7LUZGeuxMPJOCKnLmZqnjGOPUXbAkl8GvlEHQuAkYggnt45ueFJhkm469/iP9wO1
-         wwEA==
+        bh=hbCxu47aXqOZFjOgElAuAaCkhQzE3b3RJfWYjmehSCc=;
+        b=oa5zJsQrq+PRcAacYKvPmJFEiT892k3KGbGwJQk5suWva6mPaVh1qqAA8IzY+Jj/hD
+         VFBYO4okZJxeVSzysh4ToRnXR/6o5DYUVATkBJfNde9WKEOtWJJ8yy7sY1xXBfZGEY3q
+         xOZ0jkjwyMWdnarfIh0L8R4nUzdGSyWIKSazjknGk1r11LI/2RO684ecfw7UrQTVXs/M
+         GzaTUPkrFcjqNquKq6y2UAqISLWfsxVd028RdcSxBegIpsM6e0JAtRgxUzO7FY9aKxf+
+         Lt1hLlXFBFqgRdkJ2/8j3ivRECJ5MYEvxha3Z2O262UcpC3xjQwUKeyV2yCazEbahUJf
+         4cIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682016812; x=1684608812;
+        d=1e100.net; s=20221208; t=1682016952; x=1684608952;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4sYlJSAfMy5ZKFxBnqgIBVbqBgUxlBgjbZy6mx61ZB0=;
-        b=NL1leC+875nsf5Kg3h6Go6QBBBXLLmSbsAxFw3WMyyJzogg1HjtAHirYfyepsRktqn
-         xw78XG5xJemdK8/AYyQt4Pbgh8TPK21b0dlmgIz7t5vZ0ZQ12VjNQ2kXIvs7oBVfwze9
-         AXcqpC/1GO7REXGfOrX0G/E52VNi5dd8rddvTodZJHqV09Ysbo2sNEMJRKCYhyk3EF/e
-         TBbee6BLqnVmPFEhXjwN90yH+5CNAn4rM+59SZiDobFXDAMzjvrIgbAqYsAMdzrOUMn6
-         oT2omPsJyczrDSsJida5Koa/JZK/NPbryj8pMTO30SR0oSZRP2h/XcqBUNDTD4xveZAR
-         2paA==
-X-Gm-Message-State: AAQBX9fe+2DOl5pK4gscBIK9vwZ/jJN7bBTTOYy3U3d7vOEOlROZ/YOP
-        1F/pSB/cQmlxKCoBbFUE2KwjPnH47fXuHVpFC2svPA==
-X-Google-Smtp-Source: AKy350ZUv2Xw4EFjMQ3KO6rvuBHNKuGSX7X3hNqVdy6HeEhjaawEFI6dET+AMFaOtrBZGB3lve7sVEWIENM6k4qSjCs=
+        bh=hbCxu47aXqOZFjOgElAuAaCkhQzE3b3RJfWYjmehSCc=;
+        b=G6lSAAY9710jtuFB3f/pPuAYxs26gaUT8DRTngaZJNve39Q2XlFrVD03HweE4E+dWa
+         cpvHLUI2hRUvGR0ppjz1xNtQYo/5AUMAN/+MAsS2jqSucdnX4BpR9raJScMsKPI/WPDf
+         71zJBRIYEKyhZWDeKXyia1Dc8hqsgNoYAecrm9jKIyens1vzdp9HLG41JFHFTiUaDBQm
+         YZLxiIUYRK3C/B5LvFoKtCH9n6oE1AXzQayLgHlJk77NcjtzRc7gzWJZ3O+2sJaiC1ey
+         0MOJp71lRcPrwd9NBnzoNK9tHEHW6hwTZleZBJBZ+4TjNoEMcNQzSMjwjOYVRi4V39Rz
+         Fe8A==
+X-Gm-Message-State: AAQBX9efP+D4jgDU86ABUKTlFsxaB5pM+QEXM1X0/BHwrkGZEgo+6v6I
+        +TKX8O8q0PntLjxq+/8l+55+J5+GxoMfJE7uYStOyw==
+X-Google-Smtp-Source: AKy350YQ85co+lRTcuWRO1Vltk6Lkvqveeyi1jPBPoTaqbL7736XRkZW9Hessn4M1C1JBov0tCRU8RrPiXoZoB3KNYs=
 X-Received: by 2002:ac8:5b10:0:b0:3ef:343b:fe7e with SMTP id
- m16-20020ac85b10000000b003ef343bfe7emr59146qtw.2.1682016812108; Thu, 20 Apr
- 2023 11:53:32 -0700 (PDT)
+ m16-20020ac85b10000000b003ef343bfe7emr60397qtw.2.1682016952049; Thu, 20 Apr
+ 2023 11:55:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230403220337.443510-1-yosryahmed@google.com> <20230403220337.443510-2-yosryahmed@google.com>
-In-Reply-To: <20230403220337.443510-2-yosryahmed@google.com>
+References: <20230403220337.443510-1-yosryahmed@google.com> <20230403220337.443510-3-yosryahmed@google.com>
+In-Reply-To: <20230403220337.443510-3-yosryahmed@google.com>
 From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 20 Apr 2023 11:53:21 -0700
-Message-ID: <CALvZod5h5G9YNu8d9fAOL5eXie5iM3urw9QgD=vucBdCMAQnxA@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable RFC 1/5] writeback: move wb_over_bg_thresh()
- call outside lock section
-To:     Yosry Ahmed <yosryahmed@google.com>, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@kernel.dk>
+Date:   Thu, 20 Apr 2023 11:55:40 -0700
+Message-ID: <CALvZod5mxE8RAtCEZkaq2fce-Od5MZtyPppn-ns0XzXHMcFm9g@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable RFC 2/5] memcg: flush stats non-atomically in mem_cgroup_wb_stats()
+To:     Yosry Ahmed <yosryahmed@google.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Christian Brauner <brauner@kernel.org>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -79,93 +77,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Jens & Jan
-
-The patch looks good but it would be nice to pass this patch through
-the eyes of experts of this area.
-
 On Mon, Apr 3, 2023 at 3:03=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com> =
 wrote:
 >
-> wb_over_bg_thresh() calls mem_cgroup_wb_stats() which invokes an rstat
-> flush, which can be expensive on large systems. Currently,
-> wb_writeback() calls wb_over_bg_thresh() within a lock section, so we
-> have to make the rstat flush atomically. On systems with a lot of
-> cpus/cgroups, this can cause us to disable irqs for a long time,
-> potentially causing problems.
->
-> Move the call to wb_over_bg_thresh() outside the lock section in
-> preparation to make the rstat flush in mem_cgroup_wb_stats() non-atomic.
-> The list_empty(&wb->work_list) should be okay outside the lock section
-> of wb->list_lock as it is protected by a separate lock (wb->work_lock),
-> and wb_over_bg_thresh() doesn't seem like it is modifying any of the b_*
-> lists the wb->list_lock is protecting. Also, the loop seems to be
-> already releasing and reacquring the lock, so this refactoring looks
-> safe.
+> The previous patch moved the wb_over_bg_thresh()->mem_cgroup_wb_stats()
+> code path in wb_writeback() outside the lock section. We no longer need
+> to flush the stats atomically. Flush the stats non-atomically.
 >
 > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> ---
->  fs/fs-writeback.c | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
->
-> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-> index 195dc23e0d831..012357bc8daa3 100644
-> --- a/fs/fs-writeback.c
-> +++ b/fs/fs-writeback.c
-> @@ -2021,7 +2021,6 @@ static long wb_writeback(struct bdi_writeback *wb,
->         struct blk_plug plug;
->
->         blk_start_plug(&plug);
-> -       spin_lock(&wb->list_lock);
->         for (;;) {
->                 /*
->                  * Stop writeback when nr_pages has been consumed
-> @@ -2046,6 +2045,9 @@ static long wb_writeback(struct bdi_writeback *wb,
->                 if (work->for_background && !wb_over_bg_thresh(wb))
->                         break;
->
-> +
-> +               spin_lock(&wb->list_lock);
-> +
->                 /*
->                  * Kupdate and background works are special and we want t=
-o
->                  * include all inodes that need writing. Livelock avoidan=
-ce is
-> @@ -2075,13 +2077,19 @@ static long wb_writeback(struct bdi_writeback *wb=
-,
->                  * mean the overall work is done. So we keep looping as l=
-ong
->                  * as made some progress on cleaning pages or inodes.
->                  */
-> -               if (progress)
-> +               if (progress) {
-> +                       spin_unlock(&wb->list_lock);
->                         continue;
-> +               }
-> +
->                 /*
->                  * No more inodes for IO, bail
->                  */
-> -               if (list_empty(&wb->b_more_io))
-> +               if (list_empty(&wb->b_more_io)) {
-> +                       spin_unlock(&wb->list_lock);
->                         break;
-> +               }
-> +
->                 /*
->                  * Nothing written. Wait for some inode to
->                  * become available for writeback. Otherwise
-> @@ -2093,9 +2101,7 @@ static long wb_writeback(struct bdi_writeback *wb,
->                 spin_unlock(&wb->list_lock);
->                 /* This function drops i_lock... */
->                 inode_sleep_on_writeback(inode);
-> -               spin_lock(&wb->list_lock);
->         }
-> -       spin_unlock(&wb->list_lock);
->         blk_finish_plug(&plug);
->
->         return nr_pages - work->nr_pages;
-> --
-> 2.40.0.348.gf938b09366-goog
->
+
+Acked-by: Shakeel Butt <shakeelb@google.com>
