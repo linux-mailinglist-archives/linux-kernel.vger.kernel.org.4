@@ -2,308 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360906E8FD5
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C44F6E8FD4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234138AbjDTKRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59244 "EHLO
+        id S234576AbjDTKRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233949AbjDTKQt (ORCPT
+        with ESMTP id S234539AbjDTKQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:16:49 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49C501FF2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:15:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3BB8F1480;
-        Thu, 20 Apr 2023 03:15:33 -0700 (PDT)
-Received: from [192.168.1.3] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 325C23F587;
-        Thu, 20 Apr 2023 03:14:48 -0700 (PDT)
-Message-ID: <c64df0c7-1117-19ff-e94a-41b07a78c496@arm.com>
-Date:   Thu, 20 Apr 2023 11:14:47 +0100
+        Thu, 20 Apr 2023 06:16:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7396EA5;
+        Thu, 20 Apr 2023 03:15:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92709646EA;
+        Thu, 20 Apr 2023 10:14:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A68BBC433D2;
+        Thu, 20 Apr 2023 10:14:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681985699;
+        bh=Dht1VDndpJ9CVznJlmqNT0nK2LqIk10aXDzqxZ5D5U8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Lfs5EuEpbHLAZutfEYw9KRWGb3FPgXikzd+1xkVJGINzfQy1KoBWYnpgmv1IGWtUF
+         8n7kdxWiHzaeTnHYmzIHvmOW/lrwiHLKdCeo4dpOWmtzHezBSh9e9zGlnoKCFXwWz0
+         y78v7uY0Zs6pa+1SCJFfwH1m6v8sPLm/2vay6UhA=
+Date:   Thu, 20 Apr 2023 12:14:56 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tonywwang@zhaoxin.com,
+        weitaowang@zhaoxin.com
+Subject: Re: [PATCH 0/3] Fix some issues of xHCI for zhaoxin
+Message-ID: <ZEEQoHY12zfLM7Yd@kroah.com>
+References: <20230420172130.375819-1-WeitaoWang-oc@zhaoxin.com>
+ <ZEEF9E4Mmeg5hRWu@kroah.com>
+ <b65291ea-acca-7cd4-b5f5-f5bb46e679b4@zhaoxin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] perf cs-etm: Add support for coresight trace for any
- range of CPUs
-Content-Language: en-US
-From:   James Clark <james.clark@arm.com>
-To:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-Cc:     mathieu.poirier@linaro.org, acme@kernel.org,
-        darren@os.amperecomputing.com, scott@os.amperecomputing.com,
-        scclevenger@os.amperecomputing.com, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        mike.leach@linaro.org
-References: <20230419172101.78638-1-gankulkarni@os.amperecomputing.com>
- <d758c5e2-aa32-d829-35ee-a685bdb56f75@arm.com>
-In-Reply-To: <d758c5e2-aa32-d829-35ee-a685bdb56f75@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b65291ea-acca-7cd4-b5f5-f5bb46e679b4@zhaoxin.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 20/04/2023 10:43, James Clark wrote:
+On Fri, Apr 21, 2023 at 02:08:14AM +0800, WeitaoWang-oc@zhaoxin.com wrote:
+> On 2023/4/20 17:29, Greg KH wrote:
+> > On Fri, Apr 21, 2023 at 01:21:27AM +0800, Weitao Wang wrote:
+> > > Fix some issues of xHCI for zhaoxin.
+> > > 
+> > > Weitao Wang (3):
+> > >    xhci: Add a quirk for zhaoxin xhci to fix issues.
+> > >    xhci: Add zhaoxin xHCI U1/U2 feature support
+> > >    xhci: Show zhaoxin xHCI root hub speed correctly
+> > > 
+> > >   drivers/usb/host/xhci-pci.c |  5 ++++
+> > >   drivers/usb/host/xhci.c     | 49 +++++++++++++++++++++++++++++++++++--
+> > >   drivers/usb/host/xhci.h     |  1 +
+> > >   3 files changed, 53 insertions(+), 2 deletions(-)
+> > > 
+> > > -- 
+> > > 2.32.0
+> > > 
+> > 
+> > Do these replace:
+> > https://lore.kernel.org/r/20230420093603.3344-1-WeitaoWang-oc@zhaoxin.com
+> > or are they on top of them?
+> > 
 > 
+> This [patch 2/3] and [patch 3/3] share a xhci quirk flag XHCI_ZHAOXIN_HOST,
+> So I put these independent functional patch in this set group.
+> Above url and below url are independent xHCI patch for zhaoxin.
+> Is it more suitable to put all the patch for zhaoxin xhci in one group?
+> I Hope to receive your guidance. Thanks!
 > 
-> On 19/04/2023 18:21, Ganapatrao Kulkarni wrote:
->> The current implementation supports coresight trace for a range of
->> CPUs, if the first CPU is CPU0.
->>
->> Adding changes to enable coresight trace for any range of CPUs by
->> decoding the first CPU also from the header.
->> Later, first CPU id is used instead of CPU0 across the decoder functions.
->>
->> Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
->> ---
->>  .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  4 +-
->>  .../perf/util/cs-etm-decoder/cs-etm-decoder.h |  3 +-
->>  tools/perf/util/cs-etm.c                      | 62 ++++++++++++-------
->>  3 files changed, 42 insertions(+), 27 deletions(-)
->>
->> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
->> index 82a27ab90c8b..41ab299b643b 100644
->> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
->> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
->> @@ -724,7 +724,7 @@ cs_etm_decoder__create_etm_decoder(struct cs_etm_decoder_params *d_params,
->>  }
->>  
->>  struct cs_etm_decoder *
->> -cs_etm_decoder__new(int decoders, struct cs_etm_decoder_params *d_params,
->> +cs_etm_decoder__new(int first_decoder, int decoders, struct cs_etm_decoder_params *d_params,
->>  		    struct cs_etm_trace_params t_params[])
->>  {
->>  	struct cs_etm_decoder *decoder;
->> @@ -769,7 +769,7 @@ cs_etm_decoder__new(int decoders, struct cs_etm_decoder_params *d_params,
->>  	/* init raw frame logging if required */
->>  	cs_etm_decoder__init_raw_frame_logging(d_params, decoder);
->>  
->> -	for (i = 0; i < decoders; i++) {
->> +	for (i = first_decoder; i < decoders; i++) {
->>  		ret = cs_etm_decoder__create_etm_decoder(d_params,
->>  							 &t_params[i],
->>  							 decoder);
->> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
->> index 92a855fbe5b8..b06193fc75b4 100644
->> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
->> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
->> @@ -90,7 +90,8 @@ int cs_etm_decoder__process_data_block(struct cs_etm_decoder *decoder,
->>  				       size_t len, size_t *consumed);
->>  
->>  struct cs_etm_decoder *
->> -cs_etm_decoder__new(int num_cpu,
->> +cs_etm_decoder__new(int first_decoder,
->> +		    int decoders,
->>  		    struct cs_etm_decoder_params *d_params,
->>  		    struct cs_etm_trace_params t_params[]);
->>  
->> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
->> index 94e2d02009eb..2619513ae088 100644
->> --- a/tools/perf/util/cs-etm.c
->> +++ b/tools/perf/util/cs-etm.c
->> @@ -55,6 +55,8 @@ struct cs_etm_auxtrace {
->>  	u8 has_virtual_ts; /* Virtual/Kernel timestamps in the trace. */
->>  
->>  	int num_cpu;
->> +	int first_cpu;
->> +	int last_cpu;
->>  	u64 latest_kernel_timestamp;
->>  	u32 auxtrace_type;
->>  	u64 branches_sample_type;
->> @@ -638,14 +640,13 @@ static void cs_etm__set_trace_param_ete(struct cs_etm_trace_params *t_params,
->>  }
->>  
->>  static int cs_etm__init_trace_params(struct cs_etm_trace_params *t_params,
->> -				     struct cs_etm_auxtrace *etm,
->> -				     int decoders)
->> +				     struct cs_etm_auxtrace *etm)
->>  {
->>  	int i;
->>  	u32 etmidr;
->>  	u64 architecture;
->>  
->> -	for (i = 0; i < decoders; i++) {
->> +	for (i = etm->first_cpu; i < etm->last_cpu; i++) {
->>  		architecture = etm->metadata[i][CS_ETM_MAGIC];
->>  
->>  		switch (architecture) {
->> @@ -817,7 +818,7 @@ static void cs_etm__free(struct perf_session *session)
->>  	/* Then the RB tree itself */
->>  	intlist__delete(traceid_list);
->>  
->> -	for (i = 0; i < aux->num_cpu; i++)
->> +	for (i = aux->first_cpu; i < aux->last_cpu; i++)
->>  		zfree(&aux->metadata[i]);
->>  
->>  	thread__zput(aux->unknown_thread);
->> @@ -921,7 +922,8 @@ static struct cs_etm_queue *cs_etm__alloc_queue(struct cs_etm_auxtrace *etm,
->>  	 * Each queue can only contain data from one CPU when unformatted, so only one decoder is
->>  	 * needed.
->>  	 */
->> -	int decoders = formatted ? etm->num_cpu : 1;
->> +	int first_decoder = formatted ? etm->first_cpu : 0;
->> +	int decoders = first_decoder + (formatted ? etm->num_cpu : 1);
->>  
->>  	etmq = zalloc(sizeof(*etmq));
->>  	if (!etmq)
->> @@ -937,7 +939,7 @@ static struct cs_etm_queue *cs_etm__alloc_queue(struct cs_etm_auxtrace *etm,
->>  	if (!t_params)
->>  		goto out_free;
->>  
->> -	if (cs_etm__init_trace_params(t_params, etm, decoders))
->> +	if (cs_etm__init_trace_params(t_params, etm))
->>  		goto out_free;
->>  
->>  	/* Set decoder parameters to decode trace packets */
->> @@ -947,8 +949,7 @@ static struct cs_etm_queue *cs_etm__alloc_queue(struct cs_etm_auxtrace *etm,
->>  					formatted))
->>  		goto out_free;
->>  
->> -	etmq->decoder = cs_etm_decoder__new(decoders, &d_params,
->> -					    t_params);
->> +	etmq->decoder = cs_etm_decoder__new(first_decoder, decoders, &d_params, t_params);
->>  
->>  	if (!etmq->decoder)
->>  		goto out_free;
->> @@ -2959,11 +2960,11 @@ static int cs_etm__queue_aux_records(struct perf_session *session)
->>   * Loop through the ETMs and complain if we find at least one where ts_source != 1 (virtual
->>   * timestamps).
->>   */
->> -static bool cs_etm__has_virtual_ts(u64 **metadata, int num_cpu)
->> +static bool cs_etm__has_virtual_ts(u64 **metadata, struct cs_etm_auxtrace *etm)
->>  {
->>  	int j;
->>  
->> -	for (j = 0; j < num_cpu; j++) {
->> +	for (j = etm->first_cpu; j < etm->last_cpu; j++) {
->>  		switch (metadata[j][CS_ETM_MAGIC]) {
->>  		case __perf_cs_etmv4_magic:
->>  			if (HAS_PARAM(j, ETMV4, TS_SOURCE) || metadata[j][CS_ETMV4_TS_SOURCE] != 1)
->> @@ -2982,13 +2983,14 @@ static bool cs_etm__has_virtual_ts(u64 **metadata, int num_cpu)
->>  }
->>  
->>  /* map trace ids to correct metadata block, from information in metadata */
->> -static int cs_etm__map_trace_ids_metadata(int num_cpu, u64 **metadata)
->> +static int cs_etm__map_trace_ids_metadata(struct cs_etm_auxtrace *etm)
->>  {
->>  	u64 cs_etm_magic;
->> +	u64 **metadata = etm->metadata;
->>  	u8 trace_chan_id;
->>  	int i, err;
->>  
->> -	for (i = 0; i < num_cpu; i++) {
->> +	for (i = etm->first_cpu; i < etm->last_cpu; i++) {
->>  		cs_etm_magic = metadata[i][CS_ETM_MAGIC];
->>  		switch (cs_etm_magic) {
->>  		case __perf_cs_etmv3_magic:
->> @@ -3015,12 +3017,13 @@ static int cs_etm__map_trace_ids_metadata(int num_cpu, u64 **metadata)
->>   * If we found AUX_HW_ID packets, then set any metadata marked as unused to the
->>   * unused value to reduce the number of unneeded decoders created.
->>   */
->> -static int cs_etm__clear_unused_trace_ids_metadata(int num_cpu, u64 **metadata)
->> +static int cs_etm__clear_unused_trace_ids_metadata(struct cs_etm_auxtrace *etm)
->>  {
->>  	u64 cs_etm_magic;
->> +	u64 **metadata = etm->metadata;
->>  	int i;
->>  
->> -	for (i = 0; i < num_cpu; i++) {
->> +	for (i = etm->first_cpu; i < etm->last_cpu; i++) {
->>  		cs_etm_magic = metadata[i][CS_ETM_MAGIC];
->>  		switch (cs_etm_magic) {
->>  		case __perf_cs_etmv3_magic:
->> @@ -3049,7 +3052,7 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
->>  	int event_header_size = sizeof(struct perf_event_header);
->>  	int total_size = auxtrace_info->header.size;
->>  	int priv_size = 0;
->> -	int num_cpu;
->> +	int num_cpu, first_cpu = 0, last_cpu;
->>  	int err = 0;
->>  	int aux_hw_id_found;
->>  	int i, j;
->> @@ -3068,22 +3071,31 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
->>  	/* First the global part */
->>  	ptr = (u64 *) auxtrace_info->priv;
->>  	num_cpu = ptr[CS_PMU_TYPE_CPUS] & 0xffffffff;
->> -	metadata = zalloc(sizeof(*metadata) * num_cpu);
->> +
->> +	/* Start parsing after the common part of the header */
->> +	i = CS_HEADER_VERSION_MAX;
->> +
->> +	/*Get CPU id of first event */
->> +	first_cpu = ptr[i + CS_ETM_CPU];
->> +	last_cpu = first_cpu + num_cpu;
->> +
->> +	if (first_cpu > cpu__max_cpu().cpu ||
->> +			last_cpu > cpu__max_cpu().cpu)
->> +		return -EINVAL;
->> +
->> +	metadata = zalloc(sizeof(*metadata) * last_cpu);
-> 
-> Hi Ganapatrao,
-> 
-> I think I see what the problem is, but I'm wondering if a better fix
-> would be to further decouple the CPU ID from the index in the array.
-> 
-> With your change it's not clear what happens with sparse recordings, for
-> example 'perf record -e cs_etm// -C 1,3,5'. And it seems like there is
-> some wastage in the zalloc here for example if only CPU 256 is traced
-> then we'd still make 256 decoders but 255 of them would be unused?
-> 
-> I tried to test sparse recordings, but your change doesn't apply to the
-> latest coresight/next branch. I did notice that 'perf report -D' doesn't
-> work with them on coresight/next (it just quits), but I couldn't see if
-> that's fixed with your change.
-> 
-> Would a better fix not be to keep the metadata loops from 0-N and
-> instead save the CPU ID in cs_etm_decoder_params or the decoder. That
-> way it would support both sparse and not starting from 0 cases? I think
-> the code would be better if it's worded like "i < recorded_cpus" rather
-> than "i < cpu" to make it clear that i isn't actually the CPU ID it's
-> just an index.
-> 
-> Also a new test for this scenario would probably be a good idea.
-> 
-> Thanks
-> James
-> 
+> https://lore.kernel.org/all/20230420104826.4727-1-WeitaoWang-oc@zhaoxin.com/
 
-BTW for the test, I'm currently working on something where I've added
-something like this to test_arm_coresight.sh:
+Please resend them all as a patch series so we know what we are supposed
+to be reviewing and accepting.  Otherwise it's quite confusing.
 
+thanks,
 
-  arm_cs_etm_basic_test() {
-	echo "Recording trace with $@"
-	perf record -o ${perfdata} "$@" -- ls > /dev/null 2>&1
-
-	perf_script_branch_samples ls &&
-	perf_report_branch_samples ls &&
-	perf_report_instruction_samples ls
-
-	err=$?
-	arm_cs_report "CoreSight basic testing with %@" $err
-  }
-
-  # Test all combinations of per-thread, system-wide and normal mode with
-  # and without timestamps
-  arm_cs_etm_basic_test -e cs_etm/timestamp=0/ --per-thread
-  arm_cs_etm_basic_test -e cs_etm/timestamp=1/ --per-thread
-  arm_cs_etm_basic_test -e cs_etm/timestamp=0/ -a
-  arm_cs_etm_basic_test -e cs_etm/timestamp=1/ -a
-  arm_cs_etm_basic_test -e cs_etm/timestamp=0/
-  arm_cs_etm_basic_test -e cs_etm/timestamp=1/
-
-I think you should be able to add this to cover your cases as well:
-
-  # Test non-zero indexed and sparse CPU lists
-  arm_cs_etm_basic_test -e cs_etm// -C 1,2
-  arm_cs_etm_basic_test -e cs_etm// -C 0,2
+greg k-h
