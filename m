@@ -2,262 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93CAA6E9DA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EEF6E9DA8
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbjDTVE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 17:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
+        id S232360AbjDTVHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 17:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbjDTVEW (ORCPT
+        with ESMTP id S232050AbjDTVG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 17:04:22 -0400
-Received: from smtprelay06.ispgateway.de (smtprelay06.ispgateway.de [80.67.18.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BB544AF;
-        Thu, 20 Apr 2023 14:04:11 -0700 (PDT)
-Received: from [92.206.161.29] (helo=note-book.lan)
-        by smtprelay06.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <git@apitzsch.eu>)
-        id 1ppbRm-0006yb-L2; Thu, 20 Apr 2023 23:04:06 +0200
-From:   =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
-Date:   Thu, 20 Apr 2023 23:03:51 +0200
-Subject: [PATCH RESEND v2 2/2] Input: atmel_mxt_ts - support capacitive
- keys
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230407-atmel_keys-v2-2-e7b016886109@apitzsch.eu>
-References: <20230407-atmel_keys-v2-0-e7b016886109@apitzsch.eu>
-In-Reply-To: <20230407-atmel_keys-v2-0-e7b016886109@apitzsch.eu>
-To:     Nick Dyer <nick@shmanahar.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        Thu, 20 Apr 2023 17:06:56 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B269D4220;
+        Thu, 20 Apr 2023 14:06:55 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1ppbUP-0002gY-0C;
+        Thu, 20 Apr 2023 23:06:49 +0200
+Date:   Thu, 20 Apr 2023 22:06:42 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
-X-Mailer: b4 0.12.2
-X-Df-Sender: YW5kcmVAYXBpdHpzY2guZXU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH net-next] net: mtk_eth_soc: mediatek: fix ppe flow accounting
+ for v1 hardware
+Message-ID: <d8474a95a528a4bec5121252205d179f357c7124.1682024624.git.daniel@makrotopia.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for touch keys found in some Atmel touch controller
-configurations.
+From: Felix Fietkau <nbd@nbd.name>
 
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: André Apitzsch <git@apitzsch.eu>
+Older chips (like MT7622) use a different bit in ib2 to enable hardware
+counter support. Add macros for both and select the appropriate bit.
+
+Fixes: 3fbe4d8c0e53 ("net: ethernet: mtk_eth_soc: ppe: add support for flow accounting")
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 ---
- drivers/input/touchscreen/atmel_mxt_ts.c | 85 ++++++++++++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
+ drivers/net/ethernet/mediatek/mtk_ppe.c | 10 ++++++++--
+ drivers/net/ethernet/mediatek/mtk_ppe.h |  3 ++-
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/input/touchscreen/atmel_mxt_ts.c b/drivers/input/touchscreen/atmel_mxt_ts.c
-index 996bf434e1cb..eb368dd1abf0 100644
---- a/drivers/input/touchscreen/atmel_mxt_ts.c
-+++ b/drivers/input/touchscreen/atmel_mxt_ts.c
-@@ -55,6 +55,7 @@
- #define MXT_TOUCH_KEYARRAY_T15		15
- #define MXT_TOUCH_PROXIMITY_T23		23
- #define MXT_TOUCH_PROXKEY_T52		52
-+#define MXT_TOUCH_PTC_KEYS_T97		97
- #define MXT_PROCI_GRIPFACE_T20		20
- #define MXT_PROCG_NOISE_T22		22
- #define MXT_PROCI_ONETOUCH_T24		24
-@@ -326,9 +327,13 @@ struct mxt_data {
- 	u16 T71_address;
- 	u8 T9_reportid_min;
- 	u8 T9_reportid_max;
-+	u8 T15_reportid_min;
-+	u8 T15_reportid_max;
- 	u16 T18_address;
- 	u8 T19_reportid;
- 	u16 T44_address;
-+	u8 T97_reportid_min;
-+	u8 T97_reportid_max;
- 	u8 T100_reportid_min;
- 	u8 T100_reportid_max;
+diff --git a/drivers/net/ethernet/mediatek/mtk_ppe.c b/drivers/net/ethernet/mediatek/mtk_ppe.c
+index dd9581334b054..9129821f3ab8f 100644
+--- a/drivers/net/ethernet/mediatek/mtk_ppe.c
++++ b/drivers/net/ethernet/mediatek/mtk_ppe.c
+@@ -601,6 +601,7 @@ __mtk_foe_entry_commit(struct mtk_ppe *ppe, struct mtk_foe_entry *entry,
+ 	struct mtk_eth *eth = ppe->eth;
+ 	u16 timestamp = mtk_eth_timestamp(eth);
+ 	struct mtk_foe_entry *hwe;
++	u32 val;
  
-@@ -344,6 +349,9 @@ struct mxt_data {
- 	u32 *t19_keymap;
- 	unsigned int t19_num_keys;
+ 	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
+ 		entry->ib1 &= ~MTK_FOE_IB1_BIND_TIMESTAMP_V2;
+@@ -617,8 +618,13 @@ __mtk_foe_entry_commit(struct mtk_ppe *ppe, struct mtk_foe_entry *entry,
+ 	wmb();
+ 	hwe->ib1 = entry->ib1;
  
-+	u32 *t15_keymap;
-+	unsigned int t15_num_keys;
-+
- 	enum mxt_suspend_mode suspend_mode;
- 
- 	u32 wakeup_method;
-@@ -375,6 +383,7 @@ static bool mxt_object_readable(unsigned int type)
- 	case MXT_TOUCH_KEYARRAY_T15:
- 	case MXT_TOUCH_PROXIMITY_T23:
- 	case MXT_TOUCH_PROXKEY_T52:
-+	case MXT_TOUCH_PTC_KEYS_T97:
- 	case MXT_TOUCH_MULTITOUCHSCREEN_T100:
- 	case MXT_PROCI_GRIPFACE_T20:
- 	case MXT_PROCG_NOISE_T22:
-@@ -891,6 +900,25 @@ static void mxt_proc_t9_message(struct mxt_data *data, u8 *message)
- 	data->update_input = true;
- }
- 
-+static void mxt_proc_t15_messages(struct mxt_data *data, u8 *message)
-+{
-+	struct input_dev *input_dev = data->input_dev;
-+	unsigned long keystates = get_unaligned_le32(&message[2]);
-+	int key;
-+
-+	for (key = 0; key < data->t15_num_keys; key++) {
-+		input_report_key(input_dev, data->t15_keymap[key],
-+			!!(keystates & BIT(key)));
+-	if (ppe->accounting)
+-		*mtk_foe_entry_ib2(eth, hwe) |= MTK_FOE_IB2_MIB_CNT;
++	if (ppe->accounting) {
++		if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
++			val = MTK_FOE_IB2_MIB_CNT_V2;
++		else
++			val = MTK_FOE_IB2_MIB_CNT;
++		*mtk_foe_entry_ib2(eth, hwe) |= val;
 +	}
-+
-+	data->update_input = true;
-+}
-+
-+static void mxt_proc_t97_messages(struct mxt_data *data, u8 *message)
-+{
-+	mxt_proc_t15_messages(data, message);
-+}
-+
- static void mxt_proc_t100_message(struct mxt_data *data, u8 *message)
- {
- 	struct device *dev = &data->client->dev;
-@@ -1017,6 +1045,12 @@ static int mxt_proc_message(struct mxt_data *data, u8 *message)
- 	} else if (report_id >= data->T9_reportid_min &&
- 		   report_id <= data->T9_reportid_max) {
- 		mxt_proc_t9_message(data, message);
-+	} else if (report_id >= data->T15_reportid_min &&
-+		   report_id <= data->T15_reportid_max) {
-+		mxt_proc_t15_messages(data, message);
-+	} else if (report_id >= data->T97_reportid_min &&
-+		   report_id <= data->T97_reportid_max) {
-+		mxt_proc_t97_messages(data, message);
- 	} else if (report_id >= data->T100_reportid_min &&
- 		   report_id <= data->T100_reportid_max) {
- 		mxt_proc_t100_message(data, message);
-@@ -1689,9 +1723,13 @@ static void mxt_free_object_table(struct mxt_data *data)
- 	data->T71_address = 0;
- 	data->T9_reportid_min = 0;
- 	data->T9_reportid_max = 0;
-+	data->T15_reportid_min = 0;
-+	data->T15_reportid_max = 0;
- 	data->T18_address = 0;
- 	data->T19_reportid = 0;
- 	data->T44_address = 0;
-+	data->T97_reportid_min = 0;
-+	data->T97_reportid_max = 0;
- 	data->T100_reportid_min = 0;
- 	data->T100_reportid_max = 0;
- 	data->max_reportid = 0;
-@@ -1764,6 +1802,10 @@ static int mxt_parse_object_table(struct mxt_data *data,
- 						object->num_report_ids - 1;
- 			data->num_touchids = object->num_report_ids;
- 			break;
-+		case MXT_TOUCH_KEYARRAY_T15:
-+			data->T15_reportid_min = min_id;
-+			data->T15_reportid_max = max_id;
-+			break;
- 		case MXT_SPT_COMMSCONFIG_T18:
- 			data->T18_address = object->start_address;
- 			break;
-@@ -1773,6 +1815,10 @@ static int mxt_parse_object_table(struct mxt_data *data,
- 		case MXT_SPT_GPIOPWM_T19:
- 			data->T19_reportid = min_id;
- 			break;
-+		case MXT_TOUCH_PTC_KEYS_T97:
-+			data->T97_reportid_min = min_id;
-+			data->T97_reportid_max = max_id;
-+			break;
- 		case MXT_TOUCH_MULTITOUCHSCREEN_T100:
- 			data->multitouch = MXT_TOUCH_MULTITOUCHSCREEN_T100;
- 			data->T100_reportid_min = min_id;
-@@ -2050,6 +2096,7 @@ static int mxt_initialize_input_device(struct mxt_data *data)
- 	int error;
- 	unsigned int num_mt_slots;
- 	unsigned int mt_flags = 0;
-+	int i;
  
- 	switch (data->multitouch) {
- 	case MXT_TOUCH_MULTI_T9:
-@@ -2095,6 +2142,10 @@ static int mxt_initialize_input_device(struct mxt_data *data)
- 	input_dev->open = mxt_input_open;
- 	input_dev->close = mxt_input_close;
+ 	dma_wmb();
  
-+	input_dev->keycode = data->t15_keymap;
-+	input_dev->keycodemax = data->t15_num_keys;
-+	input_dev->keycodesize = sizeof(data->t15_keymap[0]);
-+
- 	input_set_capability(input_dev, EV_KEY, BTN_TOUCH);
+diff --git a/drivers/net/ethernet/mediatek/mtk_ppe.h b/drivers/net/ethernet/mediatek/mtk_ppe.h
+index e1aab2e8e2629..e51de31a52ec6 100644
+--- a/drivers/net/ethernet/mediatek/mtk_ppe.h
++++ b/drivers/net/ethernet/mediatek/mtk_ppe.h
+@@ -55,9 +55,10 @@ enum {
+ #define MTK_FOE_IB2_PSE_QOS		BIT(4)
+ #define MTK_FOE_IB2_DEST_PORT		GENMASK(7, 5)
+ #define MTK_FOE_IB2_MULTICAST		BIT(8)
++#define MTK_FOE_IB2_MIB_CNT		BIT(10)
  
- 	/* For single touch */
-@@ -2162,6 +2213,12 @@ static int mxt_initialize_input_device(struct mxt_data *data)
- 				     0, 255, 0, 0);
- 	}
+ #define MTK_FOE_IB2_WDMA_QID2		GENMASK(13, 12)
+-#define MTK_FOE_IB2_MIB_CNT		BIT(15)
++#define MTK_FOE_IB2_MIB_CNT_V2		BIT(15)
+ #define MTK_FOE_IB2_WDMA_DEVIDX		BIT(16)
+ #define MTK_FOE_IB2_WDMA_WINFO		BIT(17)
  
-+	/* For T15 and T97 Key Array */
-+	if (data->T15_reportid_min || data->T97_reportid_min) {
-+		for (i = 0; i < data->t15_num_keys; i++)
-+			input_set_capability(input_dev, EV_KEY, data->t15_keymap[i]);
-+	}
-+
- 	input_set_drvdata(input_dev, data);
- 
- 	error = input_register_device(input_dev);
-@@ -3080,8 +3137,10 @@ static void mxt_input_close(struct input_dev *dev)
- static int mxt_parse_device_properties(struct mxt_data *data)
- {
- 	static const char keymap_property[] = "linux,gpio-keymap";
-+	static const char buttons_property[] = "linux,keycodes";
- 	struct device *dev = &data->client->dev;
- 	u32 *keymap;
-+	u32 *buttonmap;
- 	int n_keys;
- 	int error;
- 
-@@ -3111,6 +3170,32 @@ static int mxt_parse_device_properties(struct mxt_data *data)
- 		data->t19_num_keys = n_keys;
- 	}
- 
-+	if (device_property_present(dev, buttons_property)) {
-+		n_keys = device_property_count_u32(dev, buttons_property);
-+		if (n_keys <= 0) {
-+			error = n_keys < 0 ? n_keys : -EINVAL;
-+			dev_err(dev, "invalid/malformed '%s' property: %d\n",
-+				buttons_property, error);
-+			return error;
-+		}
-+
-+		buttonmap = devm_kmalloc_array(dev, n_keys, sizeof(*buttonmap),
-+					       GFP_KERNEL);
-+		if (!buttonmap)
-+			return -ENOMEM;
-+
-+		error = device_property_read_u32_array(dev, buttons_property,
-+						       buttonmap, n_keys);
-+		if (error) {
-+			dev_err(dev, "failed to parse '%s' property: %d\n",
-+				buttons_property, error);
-+			return error;
-+		}
-+
-+		data->t15_keymap = buttonmap;
-+		data->t15_num_keys = n_keys;
-+	}
-+
- 	return 0;
- }
- 
-
 -- 
 2.40.0
 
