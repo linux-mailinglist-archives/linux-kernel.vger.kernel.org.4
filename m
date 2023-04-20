@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770516E957B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A461A6E958A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbjDTNNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 09:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
+        id S231552AbjDTNNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 09:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjDTNM5 (ORCPT
+        with ESMTP id S230477AbjDTNN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:12:57 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE9710D2;
-        Thu, 20 Apr 2023 06:12:55 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2a8bdcf87f4so4754211fa.2;
-        Thu, 20 Apr 2023 06:12:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681996374; x=1684588374;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D2zHLuZQqv995ZnaTJ8GLCbIdGNJLSCJHtTeZLLgszs=;
-        b=rcxPnJyw2eJcMgMizZ9JkG80D9A7zgP84qNx43gP76d52MreGttItft3Exv84l+om1
-         XrLk8CGQgZoOlnESaD9zaL87N/BDb+vepvaeX8VY2bh/EPAfx8pxOW9tOtqCjg0f4jRt
-         fzacQUaiE7zMRYpjSY1RqYuuwTo4FPooWwNCn+gGNaonBe6dVuNAotpMroAohlt3dfgK
-         2UlXM+BFTPAH2vJZHOMcnudQzATLkwwujqBF1yXHXKdJncq/nJT2C+/AZbBFhF7WzVMD
-         TZTWiuN+8tM6gR3MN17vXl6TwIaMdnBlhGK9rHjIoVS/xhQqF1nymbBDD18NhnF/WBhk
-         jfjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681996374; x=1684588374;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D2zHLuZQqv995ZnaTJ8GLCbIdGNJLSCJHtTeZLLgszs=;
-        b=L0o7UQ7i0LoXD0FlOKbNmdePcNIciZVllDxKBuMc+buOFUFhTqgRZMSQLBhu/xT71Z
-         bU/L6JmakiCGCv7PU7Pqsn2MrFPjR4yhtdcfw0eZISDTgV/6g7ngpsyPe9pDHT2Dj78S
-         ikaWB4vOnzwUqrwVH8QI3Rtl/GGXoBCeFJoXHmaOVaefDGt718X0rAMtUXPtAwUr5qS9
-         SugxKh81MvrboRI3bY32xsYdzQnXKtOnZqkqsQg1Fl/ipaJQR8jAGqeXnOMOr9mD2a28
-         aZ72h3lCjBt0tUanqYMd7vvzc5R4h8yX+6Aob9P3udxHxLDBYfXoYggmMHYNWtXIcHiE
-         K0ug==
-X-Gm-Message-State: AAQBX9f0GjjEbFQdDCxbGxFzBz78YybrqI51diYF4BUlg57sG6jxQ3P8
-        m1lkM8dWeEHvTX4FFL5NSkM9AlQ1qoQwyFhcSI8=
-X-Google-Smtp-Source: AKy350ZutqwJZvzTeNbJ2LJiZaQbkLDXCebqvFCuOgRt0LR5RBao08S9wHcKpEySpbV/IEqglu7EifuEI24NJ+6eWns=
-X-Received: by 2002:ac2:43a9:0:b0:4db:5133:59a6 with SMTP id
- t9-20020ac243a9000000b004db513359a6mr368815lfl.13.1681996373645; Thu, 20 Apr
- 2023 06:12:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230418214347.324156-1-ojeda@kernel.org>
-In-Reply-To: <20230418214347.324156-1-ojeda@kernel.org>
-From:   Ariel Miculas <ariel.miculas@gmail.com>
-Date:   Thu, 20 Apr 2023 16:12:42 +0300
-Message-ID: <CAPDJoNsG1E25yYM+L_H21vVCt-5S16etx3KMxx8ySZtWMQt4FQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Rust 1.68.2 upgrade
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Josh Stone <jistone@redhat.com>,
-        William Brown <william.brown@suse.com>,
-        Georgy Yakovlev <gyakovlev@gentoo.org>,
-        Jan Alexander Steffens <jan.steffens@gmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Thu, 20 Apr 2023 09:13:28 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C779510D2;
+        Thu, 20 Apr 2023 06:13:26 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33KAojq8008756;
+        Thu, 20 Apr 2023 13:13:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=vBAYLqsA8WAZJPKBw43y4LR0EoTqn8Mb69DmXULEdgw=;
+ b=QntS+Cb0U6FyBetpLNG6E3asfhZ4Gk0makPvb+jhkXv4ZYtzU2hCXCA6mcTLBsiFJqUr
+ TUbqvZ3y03lWuDLtSZxzBrcucBSz8zwfVh8ly9gvYXtFdh5cE90MzX3XLcuubORNKSbj
+ ZxYCJzdIuCWSsAUtg0zeyCHrfk1hETz4JkkHLLuxsCch+EV0gWeV9Wbt/p3lRwoq5C82
+ qzAJb/BhGfxyBzldu+88jXGPqoGYhTFZY4/bi2rGKb6ighlIwpEK2z54TBn/pYTwUJpU
+ 1B0Knl4QI+nsaSz+Jfd0UgvYLRpNdbCTzobQIXsZ+S5KY9P9UHHfX0xaZe1XRjqxMSVQ 9g== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q2xuhs2yt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Apr 2023 13:13:23 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 33KDDI7g012041;
+        Thu, 20 Apr 2023 13:13:18 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3pyn0kkgpn-1;
+        Thu, 20 Apr 2023 13:13:18 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33KDDItC012036;
+        Thu, 20 Apr 2023 13:13:18 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 33KDDITF012035;
+        Thu, 20 Apr 2023 13:13:18 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id C26FF47A4; Thu, 20 Apr 2023 18:43:17 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org, quic_vtanuku@quicinc.com,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [PATCH v4 0/5] spi: Add DMA mode support to spi-qcom-qspi
+Date:   Thu, 20 Apr 2023 18:43:09 +0530
+Message-Id: <1681996394-13099-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 1KU1PZ87wOuYX2M1TLsXaFogAJE9qhtF
+X-Proofpoint-GUID: 1KU1PZ87wOuYX2M1TLsXaFogAJE9qhtF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-20_09,2023-04-20_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ phishscore=0 spamscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ malwarescore=0 suspectscore=0 adultscore=0 priorityscore=1501
+ mlxlogscore=365 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304200107
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,67 +82,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I've applied the patch series, upgraded rustc and built the kernel:
+There are large number of QSPI irqs that fire during boot/init and later
+on every suspend/resume.
+This could be made faster by doing DMA instead of PIO.
+Below is comparison for number of interrupts raised in 2 scenarios...
+Boot up and stabilise
+Suspend/Resume
 
-$ rustup override set $(scripts/min-tool-version.sh rustc)
-$ rustup component add rust-src # Rust standard library source
-$ cargo install --locked --version $(scripts/min-tool-version.sh
-bindgen) bindgen
-$ make LLVM=3D1 rustavailable
-$ grep  RUSTC_VERSION .config
-CONFIG_RUSTC_VERSION_TEXT=3D"rustc 1.68.2 (9eb3afe9e 2023-03-27)"
-$ make LLVM=3D1 -j$(nproc)
+Sequence   PIO    DMA
+=======================
+Boot-up    69088  19284
+S/R        5066   3430
 
-Then I ran the kernel in qemu-system-x86_64, inserted the
-rust_minimal.ko kernel module and checked that it behaves as expected.
+Speed test results...
+spi-nor read times in sec after 2 min uptime
+============================================
+PIO - Iterations-1000, min=3.18, max=3.74, avg=3.53
+DMA - Iterations-1000, min=1.21, max=2.28, avg=1.79
 
-Tested-by: Ariel Miculas <amiculas@cisco.com>
+spi-nor write times in sec after 2 min uptime
+=============================================
+PIO - Iterations-1000, min=3.20, max=8.24, avg=3.58
+DMA - Iterations-1000, min=1.25, max=5.13, avg=1.82
 
-Cheers,
-Ariel
+Further testing performed...
+a) multiple entries in sgt (simulated by max_dma_len = 1024)
+b) fallback to pio (simulated by dma setup failure)
 
-On Wed, Apr 19, 2023 at 12:48=E2=80=AFAM Miguel Ojeda <ojeda@kernel.org> wr=
-ote:
->
-> This is the first upgrade to the Rust toolchain since the initial Rust
-> merge, from 1.62.0 to 1.68.2 (i.e. the latest).
->
-> Please see the last patch message for a long explanation of the upgrade,
-> the policy for future upgrades and some indications on how to easily
-> review this.
->
-> The series is based on `rust-next`.
->
-> Miguel Ojeda (3):
->   rust: alloc: clarify what is the upstream version
->   rust: arc: fix intra-doc link in `Arc<T>::init`
->   rust: upgrade to Rust 1.68.2
->
->  Documentation/process/changes.rst |   2 +-
->  rust/alloc/README.md              |   3 +
->  rust/alloc/alloc.rs               |  55 ++--
->  rust/alloc/boxed.rs               | 446 ++++++++++++++++++++++++++--
->  rust/alloc/collections/mod.rs     |   5 +-
->  rust/alloc/lib.rs                 |  71 +++--
->  rust/alloc/raw_vec.rs             |  16 +-
->  rust/alloc/slice.rs               | 447 ++++------------------------
->  rust/alloc/vec/drain.rs           |  81 +++++-
->  rust/alloc/vec/drain_filter.rs    |  60 +++-
->  rust/alloc/vec/into_iter.rs       | 125 ++++++--
->  rust/alloc/vec/is_zero.rs         |  96 ++++++-
->  rust/alloc/vec/mod.rs             | 464 +++++++++++++++++++++++-------
->  rust/alloc/vec/set_len_on_drop.rs |   5 +
->  rust/alloc/vec/spec_extend.rs     |  63 +---
->  rust/bindings/lib.rs              |   1 -
->  rust/kernel/build_assert.rs       |   2 +
->  rust/kernel/init.rs               |   5 +
->  rust/kernel/lib.rs                |   4 -
->  rust/kernel/std_vendor.rs         |   2 +
->  rust/kernel/sync/arc.rs           |   2 +-
->  scripts/Makefile.build            |   2 +-
->  scripts/min-tool-version.sh       |   2 +-
->  23 files changed, 1278 insertions(+), 681 deletions(-)
->
-> --
-> 2.40.0
->
+Vijaya Krishna Nivarthi (5):
+  spi: dt-bindings: qcom,spi-qcom-qspi: Add iommus
+  arm64: dts: qcom: sc7180: Add stream-id of qspi to iommus
+  arm64: dts: qcom: sc7280: Add stream-id of qspi to iommus
+  arm64: dts: qcom: sdm845: Add stream-id of qspi to iommus
+  spi: spi-qcom-qspi: Add DMA mode support
+---
+v3 -> v4:
+- Dropped unaligned dma buffer handling
+- Added sdm845, sc7180 dtsis to the series
+
+v2 -> v3:
+- Modified commit messages
+- Made a change to driver based on re-review
+
+v1 -> v2:
+- Added documentation file to the series
+- Made changes to driver based on HPG re-review
+---
+ .../bindings/spi/qcom,spi-qcom-qspi.yaml           |   3 +
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               |   1 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |   1 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |   1 +
+ drivers/spi/spi-qcom-qspi.c                        | 292 +++++++++++++++++++--
+ 5 files changed, 271 insertions(+), 27 deletions(-)
+
+-- 
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
+
