@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBEBC6E8BB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0166B6E8BB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234163AbjDTHtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 03:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
+        id S234175AbjDTHty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 03:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234199AbjDTHtW (ORCPT
+        with ESMTP id S234158AbjDTHte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 03:49:22 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D448B55A7;
-        Thu, 20 Apr 2023 00:48:57 -0700 (PDT)
+        Thu, 20 Apr 2023 03:49:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7447C49D8;
+        Thu, 20 Apr 2023 00:49:10 -0700 (PDT)
 Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F2EB6660311B;
-        Thu, 20 Apr 2023 08:48:54 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 812006603252;
+        Thu, 20 Apr 2023 08:49:07 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1681976936;
-        bh=q/T+S1bwrZ8o94aycK/2PfZNJaHcIv45Y3u+/vXMKSA=;
+        s=mail; t=1681976948;
+        bh=fwkEFvjFI9M/qNVO7oX0GNG46rcGi5Q53SoytDo3kZQ=;
         h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=NTstDRLzipoBttKLma1LlQydVGCERpmwgpEw2ivN6TOBOtMzh+sXnF1THCpdBpKyI
-         giNTw8+nqekIQGeRt/cc82H8ySDeb3AGxtrQfgQx1bqaS7cX+AItXFjhQWNUzxV17f
-         pmRa+0lGWSLe3Y/4OiJttZMd1sJr4TZ28iDpKtgE+kASw06jSr150QVxusYnNxO6cF
-         LB2MT5fP7KvFlGIyr58rqOF1KLRhnbarYjqzcToIhbwYNeEPIe2QIakcV2c67KXCMV
-         zvbgUNFcr0ZjY9LZRmNjhFdZK579Zvn7NflBiHMRwfK6I0f6JIFcQmOCBLFcF31eJi
-         h1DeJMxIq5Jbg==
-Message-ID: <38b13535-a2e1-d415-951b-72e76548dd22@collabora.com>
-Date:   Thu, 20 Apr 2023 09:48:52 +0200
+        b=KHRaMYAJBjuqAHeMeSy2b48PQrnYGlGUsPajsTCyZrGaHK7V1276awj76Do/4xUbC
+         uIZnXNnhJp6l8bRdcEd7lrfDHx6rMxMPIyGaasAWA23k6jmG+fYl3QPIM5YSw9iAmF
+         Cn24ogp51uRAhxUvCeaOL9ZlbeRfcDKloaPW88bRl2J3cQbWvVEL+GsSSUxDhD/cOp
+         aALLyv6cyBUMf+AZ4F5RzLkyQT38lrRELa9cw3fRksjqTzdgrbUmZQPRTrnmkGQxJx
+         5/P0D8mx3o/WD2ylxA3H3n/QWbHLoh1lH5tN/bO3ZVlpgaUzQu20FKuNJtAZtmJQU4
+         EbOHXPoPvBRGw==
+Message-ID: <938fa4d2-e021-58cf-afc9-61d934bfe812@collabora.com>
+Date:   Thu, 20 Apr 2023 09:49:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH 07/18] arm64: dts: qcom: msm8976: correct MMC unit address
+Subject: Re: [PATCH 10/18] arm64: dts: qcom: sdm630: correct camss unit
+ address
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -64,10 +65,10 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230419211856.79332-1-krzysztof.kozlowski@linaro.org>
- <20230419211856.79332-7-krzysztof.kozlowski@linaro.org>
+ <20230419211856.79332-10-krzysztof.kozlowski@linaro.org>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230419211856.79332-7-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230419211856.79332-10-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,11 +84,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Il 19/04/23 23:18, Krzysztof Kozlowski ha scritto:
 > Match unit-address to reg entry to fix dtbs W=1 warnings:
 > 
->    Warning (simple_bus_reg): /soc@0/mmc@7824000: simple-bus unit address format error, expected "7824900"
->    Warning (simple_bus_reg): /soc@0/mmc@7864000: simple-bus unit address format error, expected "7864900"
->    Warning (simple_bus_reg): /soc@0/mmc@7a24000: simple-bus unit address format error, expected "7a24900"
+>    Warning (simple_bus_reg): /soc/camss@ca00000: simple-bus unit address format error, expected "ca00020"
 > 
-> Fixes: 0484d3ce0902 ("arm64: dts: qcom: Add DTS for MSM8976 and MSM8956 SoCs")
+> Fixes: f3d5d3cc6971 ("arm64: dts: qcom: sdm630: Configure the camera subsystem")
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
