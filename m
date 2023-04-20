@@ -2,91 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAFB6E8E18
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8BE66E8E1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbjDTJbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 05:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
+        id S234183AbjDTJcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 05:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234099AbjDTJa5 (ORCPT
+        with ESMTP id S234039AbjDTJcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 05:30:57 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2E1270E
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:30:54 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f0a0c4e505so3351635e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:30:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681983053; x=1684575053;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZJasTvAcPZpWbq9JNTQ2VqxZ4zHS2XJZmrHpLxOmkQc=;
-        b=jIfusFf2HqrSTuL87+CELYhCA+JFUVc4Czwt2r16AzzEc7P8GfXDV+vvK2mpSP3/xH
-         C0viR/hEHXg/PmqCg55y93ADyYqpXowJ19lFcWIHt/P3VgrszLZE+RBEhEtyQLtnkQUz
-         uRZlZz1oqZmUBHaazs7cz/4NcukPD4cftlCwE2nF45/8v9oR/JBxawlyEpZtlPLOT+9g
-         taXkXivEPJ9+voOintsMKe+04Zwio6DrM1nozjqJvpRp0GuUH/D+rlr9+tEB+Enrl7Gz
-         77jRvOpPtmnNhG9arQDQIDgl5oLb3JGTvVTRoYvgZi8o8fGDtidS4aCuey6XNyMbegU5
-         xk1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681983053; x=1684575053;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZJasTvAcPZpWbq9JNTQ2VqxZ4zHS2XJZmrHpLxOmkQc=;
-        b=kfEaBYsEvMUtGAVXhVHMIVkkWxm/KJzRz+y+YIn2AwtdS8rvOa0cAfc5NDyWKcz2J3
-         hKhRz8b8bEAFfnjzM0VI8wNwjwSp7lQBeW5LuYJPEB1iBbLGlodGqMfpgQA6vLP0wQQx
-         IrV4OJS3ow+sp5E57wtQ6f+Qg21zmpKDzg7X5ZcVfJ4rQvnpaLwPvuooAI1QCXfgM43p
-         aQ8ll+x+Q+xg/MCLF6O0dmECr3UK7+7o5FAZJHVhSq78sBxUpJ4qedrxF2JEpWSbDTNC
-         p97kNPbOaydnAcQd+HGxBLO3uiZkM8ozpk21gon0CD4lQOzlCBJgn40HYGXV/PYQLUuV
-         nQzA==
-X-Gm-Message-State: AAQBX9cEwo0QtWa8Bu01b9Hoh1WCg0Yf7jEarWpHH0pRIi/Mi0wbtXzs
-        AvIsMvs4NEQ8WDdc3vcbjm9nOkiyJKQJVG6f+IY=
-X-Google-Smtp-Source: AKy350Z6A2EaVwWFJQRezHo7tTFtyB+KRDV/NyuM7EHBwxbwKzGciwnvTAcBAS+l4KmQZJze3Qsdag==
-X-Received: by 2002:a5d:484b:0:b0:2f2:a6e0:b2c with SMTP id n11-20020a5d484b000000b002f2a6e00b2cmr918515wrs.7.1681983053126;
-        Thu, 20 Apr 2023 02:30:53 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id e29-20020a5d595d000000b002fddcb73162sm1447889wri.71.2023.04.20.02.30.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 02:30:52 -0700 (PDT)
-Message-ID: <978f953c-4c00-6cfb-0955-b13114936541@linaro.org>
-Date:   Thu, 20 Apr 2023 10:30:51 +0100
+        Thu, 20 Apr 2023 05:32:00 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C780EC;
+        Thu, 20 Apr 2023 02:31:55 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:56974.1250087080
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 4E51C1002B4;
+        Thu, 20 Apr 2023 17:31:51 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id db2361bde83742feb3b08477f980b596 for geert@linux-m68k.org;
+        Thu, 20 Apr 2023 17:31:54 CST
+X-Transaction-ID: db2361bde83742feb3b08477f980b596
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <3e80d3b3-6c9a-33e6-a768-645be1c68404@189.cn>
+Date:   Thu, 20 Apr 2023 17:31:51 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] media: dt-bindings: qcom: camss: correct unit address
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v5] drm/fbdev-generic: prohibit potential out-of-bounds
+ access
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Del Regno <angelogioacchino.delregno@somainline.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230420072442.36308-1-krzysztof.kozlowski@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230420072442.36308-1-krzysztof.kozlowski@linaro.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230420030500.1578756-1-suijingfeng@loongson.cn>
+ <CAMuHMdUZoBZEM73fo8-PitSae8wgv-m6sez3nA8J3RFMAtOyOQ@mail.gmail.com>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <CAMuHMdUZoBZEM73fo8-PitSae8wgv-m6sez3nA8J3RFMAtOyOQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/2023 08:24, Krzysztof Kozlowski wrote:
-> Match unit-address to first reg entry.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi,
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+On 2023/4/20 17:04, Geert Uytterhoeven wrote:
+> Hi Sui,
+>
+> On Thu, Apr 20, 2023 at 5:09 AM Sui Jingfeng <suijingfeng@loongson.cn> wrote:
+>> The fbdev test of IGT may write after EOF, which lead to out-of-bound
+>> access for drm drivers hire fbdev-generic. For example, run fbdev test
+>> on a x86+ast2400 platform, with 1680x1050 resolution, will cause the
+>> linux kernel hang with the following call trace:
+>>
+>>    Oops: 0000 [#1] PREEMPT SMP PTI
+>>    [IGT] fbdev: starting subtest eof
+>>    Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
+>>    [IGT] fbdev: starting subtest nullptr
+>>
+>>    RIP: 0010:memcpy_erms+0xa/0x20
+>>    RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
+>>    RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
+>>    RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
+>>    RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
+>>    R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
+>>    R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
+>>    FS:  0000000000000000(0000) GS:ffff895257380000(0000) knlGS:0000000000000000
+>>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>    CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
+>>    Call Trace:
+>>     <TASK>
+>>     ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
+>>     drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
+>>     process_one_work+0x21f/0x430
+>>     worker_thread+0x4e/0x3c0
+>>     ? __pfx_worker_thread+0x10/0x10
+>>     kthread+0xf4/0x120
+>>     ? __pfx_kthread+0x10/0x10
+>>     ret_from_fork+0x2c/0x50
+>>     </TASK>
+>>    CR2: ffffa17d40e0b000
+>>    ---[ end trace 0000000000000000 ]---
+>>
+>> The is because damage rectangles computed by
+>> drm_fb_helper_memory_range_to_clip() function does not guaranteed to be
+>> bound in the screen's active display area. Possible reasons are:
+>>
+>> 1) Buffers are allocated in the granularity of page size, for mmap system
+>>     call support. The shadow screen buffer consumed by fbdev emulation may
+>>     also choosed be page size aligned.
+>>
+>> 2) The DIV_ROUND_UP() used in drm_fb_helper_memory_range_to_clip()
+>>     will introduce off-by-one error.
+>>
+>> For example, on a 16KB page size system, in order to store a 1920x1080
+>> XRGB framebuffer, we need allocate 507 pages. Unfortunately, the size
+>> 1920*1080*4 can not be divided exactly by 16KB.
+>>
+>>   1920 * 1080 * 4 = 8294400 bytes
+>>   506 * 16 * 1024 = 8290304 bytes
+>>   507 * 16 * 1024 = 8306688 bytes
+>>
+>>   line_length = 1920*4 = 7680 bytes
+>>
+>>   507 * 16 * 1024 / 7680 = 1081.6
+>>
+>>   off / line_length = 507 * 16 * 1024 / 7680 = 1081
+>>   DIV_ROUND_UP(507 * 16 * 1024, 7680) will yeild 1082
+>>
+>> memcpy_toio() typically issue the copy line by line, when copy the last
+>> line, out-of-bound access will be happen. Because:
+>>
+>>   1082 * line_length = 1082 * 7680 = 8309760, and 8309760 > 8306688
+>>
+>> Note that userspace may stil write to the invisiable area if a larger
+>> buffer than width x stride is exposed. But it is not a big issue as
+>> long as there still have memory resolve the access if not drafting so
+>> far.
+>>
+>>   - Also limit the y1 (Daniel)
+>>   - keep fix patch it to minimal (Daniel)
+>>   - screen_size is page size aligned because of it need mmap (Thomas)
+>>   - Adding fixes tag (Thomas)
+>>
+>> Fixes: aa15c677cc34 ("drm/fb-helper: Fix vertical damage clipping")
+>>
+>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+>> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Thanks for the update!  This v5 is completely different from the v3
+> I tested before, so keeping my Tested-by is not really appropriate...
+Indeed, I will be carefully next time.
+> I have retested fbtest with shmob-drm on Armadillo-800-EVA
+> (800x480@RG16, i.e. 187.5 pages), and fortunately this version still
+> works fine, so
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Thanks a lot.
+> Gr{oetje,eeting}s,
+>
+>                          Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                  -- Linus Torvalds
