@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF4F6E8E35
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1FB6E8E3A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234273AbjDTJgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 05:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
+        id S234362AbjDTJg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 05:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234046AbjDTJgV (ORCPT
+        with ESMTP id S234281AbjDTJgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 05:36:21 -0400
+        Thu, 20 Apr 2023 05:36:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0283583
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:36:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F7846AF
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:36:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E193E6467C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 09:36:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F5EDC4339B;
-        Thu, 20 Apr 2023 09:36:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 317A96424D
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 09:36:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAE97C4339C;
+        Thu, 20 Apr 2023 09:36:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681983363;
-        bh=DwRmO6sLd6DSu4XerymlPu6AGVA9EjZmTO/MB0fPMzU=;
+        s=k20201202; t=1681983364;
+        bh=LXMqm3TC5OJnmpftw2vrGio9Z7V7lnJWwoP/cnd93A0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IT9A8vuPndkw9kqw/yd9xu45HHRuiDK2r/m6ljSIn9evAp/QD5iM4wTwAbdDn4WuY
-         SKYEF75LKDxZj6pV9i0sVFa9z5m3Z6lUWEY5NWPozipbFU6vMEZ+u2cqXH5F3hS9uC
-         GB770KTeptnPe1jyrPfwdtwASqmQWE9yKp32IJModz01SOy8VzztkTsKTyrgZQF1So
-         wPCQv6XC+ljESk33rBTReGg+vBUn1ucyihFmfP81Os+xvfcLwD4RgGkK885c+7KgsY
-         yp8/06uNcRpEChwQJGCZXw7OVsRvOXFBSHMBT2ps6lJdMdgeKRmXgyC4biJ1LQ55yc
-         gER/Wu2voExyg==
+        b=nfNDss0cD+pqEvuFUewry+SFcpqcBhpg+iwHuOqpTPJP86oB/VFpRQiEJbVdywQx2
+         vJFgFl1rX4M3HYNrV+wtRV/MwzK21dCtVipw73uIJLaUW6GwBtNgS2r/sH9RpGXQ+j
+         vV1IRfIlhRsP34PmHYbV4XRt0g+uDezBX/iIFsyVPqC9IHlaFUYxnPM4xZHS+p/khq
+         OP8T66Ruk+9uqve6qtSIE/77d334qoSLS5bmXg5n77+5JMGFRbuPd42iJqb3deNOgu
+         62ETQjujmZnlvK/7FFN94UG3gHPbSgO7Vt8kYdycH0jt1o42kM6yuRAr5qAcd8Rg3o
+         Zoay4PG97KWBA==
 From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
         "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Subject: [PATCH 2/4] tty: vt: simplify some cases in tioclinux()
-Date:   Thu, 20 Apr 2023 11:35:57 +0200
-Message-Id: <20230420093559.13200-2-jirislaby@kernel.org>
+Subject: [PATCH 3/4] tty: vt: distribute EXPORT_SYMBOL()
+Date:   Thu, 20 Apr 2023 11:35:58 +0200
+Message-Id: <20230420093559.13200-3-jirislaby@kernel.org>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230420093559.13200-1-jirislaby@kernel.org>
 References: <20230420093559.13200-1-jirislaby@kernel.org>
@@ -54,124 +54,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to set "ret" variable and break. We can simply return
-from the cases. This makes the code much easier to follow, as many else
-branches are redundant.
+There is a list of EXPORT_SYMBOL()s at the end of the file. Put them all
+by their definition. This is how we usually do that.
+
+give_up_console() lost its VT_SINGLE_DRIVER local ifndef protection as
+that whole code is under this check.
 
 Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
 ---
- drivers/tty/vt/vt.c | 62 +++++++++++++++++++--------------------------
- 1 file changed, 26 insertions(+), 36 deletions(-)
+ drivers/tty/vt/vt.c | 34 ++++++++++++++--------------------
+ 1 file changed, 14 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index 2dffee1e114a..f44d5b8a102c 100644
+index f44d5b8a102c..c4d333277ef7 100644
 --- a/drivers/tty/vt/vt.c
 +++ b/drivers/tty/vt/vt.c
-@@ -3145,12 +3145,10 @@ int tioclinux(struct tty_struct *tty, unsigned long arg)
+@@ -135,6 +135,7 @@ const struct consw *conswitchp;
+ #define DEFAULT_CURSOR_BLINK_MS	200
  
- 	switch (type) {
- 	case TIOCL_SETSEL:
--		ret = set_selection_user((struct tiocl_selection
-+		return set_selection_user((struct tiocl_selection
- 					 __user *)(p+1), tty);
--		break;
- 	case TIOCL_PASTESEL:
--		ret = paste_selection(tty);
--		break;
-+		return paste_selection(tty);
- 	case TIOCL_UNBLANKSCREEN:
- 		console_lock();
- 		unblank_screen();
-@@ -3169,14 +3167,12 @@ int tioclinux(struct tty_struct *tty, unsigned long arg)
- 		 * this.
- 		 */
- 		data = vt_get_shift_state();
--		ret = put_user(data, p);
--		break;
-+		return put_user(data, p);
- 	case TIOCL_GETMOUSEREPORTING:
- 		console_lock();	/* May be overkill */
- 		data = mouse_reporting();
- 		console_unlock();
--		ret = put_user(data, p);
--		break;
-+		return put_user(data, p);
- 	case TIOCL_SETVESABLANK:
- 		console_lock();
- 		ret = set_vesa_blanking(p);
-@@ -3184,38 +3180,34 @@ int tioclinux(struct tty_struct *tty, unsigned long arg)
- 		break;
- 	case TIOCL_GETKMSGREDIRECT:
- 		data = vt_get_kmsg_redirect();
--		ret = put_user(data, p);
--		break;
-+		return put_user(data, p);
- 	case TIOCL_SETKMSGREDIRECT:
--		if (!capable(CAP_SYS_ADMIN)) {
--			ret = -EPERM;
--		} else {
--			if (get_user(data, p+1))
--				ret = -EFAULT;
--			else
--				vt_kmsg_redirect(data);
--		}
-+		if (!capable(CAP_SYS_ADMIN))
-+			return -EPERM;
+ struct vc vc_cons [MAX_NR_CONSOLES];
++EXPORT_SYMBOL(vc_cons);
+ 
+ #ifndef VT_SINGLE_DRIVER
+ static const struct consw *con_driver_map[MAX_NR_CONSOLES];
+@@ -162,6 +163,7 @@ int default_utf8 = true;
+ module_param(default_utf8, int, S_IRUGO | S_IWUSR);
+ int global_cursor_default = -1;
+ module_param(global_cursor_default, int, S_IRUGO | S_IWUSR);
++EXPORT_SYMBOL(global_cursor_default);
+ 
+ static int cur_default = CUR_UNDERLINE;
+ module_param(cur_default, int, S_IRUGO | S_IWUSR);
+@@ -174,6 +176,7 @@ static int ignore_poke;
+ 
+ int do_poke_blanked_console;
+ int console_blanked;
++EXPORT_SYMBOL(console_blanked);
+ 
+ static int vesa_blank_mode; /* 0:none 1:suspendV 2:suspendH 3:powerdown */
+ static int vesa_off_interval;
+@@ -190,8 +193,10 @@ static DECLARE_WORK(con_driver_unregister_work, con_driver_unregister_callback);
+  * saved_* variants are for save/restore around kernel debugger enter/leave
+  */
+ int fg_console;
++EXPORT_SYMBOL(fg_console);
+ int last_console;
+ int want_console = -1;
 +
-+		if (get_user(data, p+1))
-+			return -EFAULT;
-+
-+		vt_kmsg_redirect(data);
-+
- 		break;
- 	case TIOCL_GETFGCONSOLE:
- 		/*
- 		 * No locking needed as this is a transiently correct return
- 		 * anyway if the caller hasn't disabled switching.
- 		 */
--		ret = fg_console;
--		break;
-+		return fg_console;
- 	case TIOCL_SCROLLCONSOLE:
--		if (get_user(lines, (s32 __user *)(p+4))) {
--			ret = -EFAULT;
--		} else {
--			/*
--			 * Needs the console lock here. Note that lots of other
--			 * calls need fixing before the lock is actually useful!
--			 */
--			console_lock();
--			scrollfront(vc_cons[fg_console].d, lines);
--			console_unlock();
--			ret = 0;
--		}
-+		if (get_user(lines, (s32 __user *)(p+4)))
-+			return -EFAULT;
-+
-+		/*
-+		 * Needs the console lock here. Note that lots of other calls
-+		 * need fixing before the lock is actually useful!
-+		 */
-+		console_lock();
-+		scrollfront(vc_cons[fg_console].d, lines);
-+		console_unlock();
- 		break;
- 	case TIOCL_BLANKSCREEN:	/* until explicitly unblanked, not only poked */
- 		console_lock();
-@@ -3224,11 +3216,9 @@ int tioclinux(struct tty_struct *tty, unsigned long arg)
- 		console_unlock();
- 		break;
- 	case TIOCL_BLANKEDSCREEN:
--		ret = console_blanked;
--		break;
-+		return console_blanked;
- 	default:
--		ret = -EINVAL;
--		break;
-+		return -EINVAL;
+ static int saved_fg_console;
+ static int saved_last_console;
+ static int saved_want_console;
+@@ -223,6 +228,7 @@ static int scrollback_delta;
+  * the console on our behalf.
+  */
+ int (*console_blank_hook)(int);
++EXPORT_SYMBOL(console_blank_hook);
+ 
+ static DEFINE_TIMER(console_timer, blank_screen_t);
+ static int blank_state;
+@@ -639,6 +645,7 @@ void update_region(struct vc_data *vc, unsigned long start, int count)
+ 		set_cursor(vc);
  	}
+ }
++EXPORT_SYMBOL(update_region);
  
- 	return ret;
+ /* Structure of attributes is hardware-dependent */
+ 
+@@ -984,6 +991,7 @@ void redraw_screen(struct vc_data *vc, int is_switch)
+ 		notify_update(vc);
+ 	}
+ }
++EXPORT_SYMBOL(redraw_screen);
+ 
+ /*
+  *	Allocation, freeing and resizing of VTs.
+@@ -1305,6 +1313,7 @@ int vc_resize(struct vc_data *vc, unsigned int cols, unsigned int rows)
+ {
+ 	return vc_do_resize(vc->port.tty, vc, cols, rows);
+ }
++EXPORT_SYMBOL(vc_resize);
+ 
+ /**
+  *	vt_resize		-	resize a VT
+@@ -1368,6 +1377,7 @@ enum { EPecma = 0, EPdec, EPeq, EPgt, EPlt};
+ 
+ const unsigned char color_table[] = { 0, 4, 2, 6, 1, 5, 3, 7,
+ 				       8,12,10,14, 9,13,11,15 };
++EXPORT_SYMBOL(color_table);
+ 
+ /* the default colour table, for VGA+ colour systems */
+ unsigned char default_red[] = {
+@@ -1375,18 +1385,21 @@ unsigned char default_red[] = {
+ 	0x55, 0xff, 0x55, 0xff, 0x55, 0xff, 0x55, 0xff
+ };
+ module_param_array(default_red, byte, NULL, S_IRUGO | S_IWUSR);
++EXPORT_SYMBOL(default_red);
+ 
+ unsigned char default_grn[] = {
+ 	0x00, 0x00, 0xaa, 0x55, 0x00, 0x00, 0xaa, 0xaa,
+ 	0x55, 0x55, 0xff, 0xff, 0x55, 0x55, 0xff, 0xff
+ };
+ module_param_array(default_grn, byte, NULL, S_IRUGO | S_IWUSR);
++EXPORT_SYMBOL(default_grn);
+ 
+ unsigned char default_blu[] = {
+ 	0x00, 0x00, 0x00, 0x00, 0xaa, 0xaa, 0xaa, 0xaa,
+ 	0x55, 0x55, 0x55, 0x55, 0xff, 0xff, 0xff, 0xff
+ };
+ module_param_array(default_blu, byte, NULL, S_IRUGO | S_IWUSR);
++EXPORT_SYMBOL(default_blu);
+ 
+ /*
+  * gotoxy() must verify all boundaries, because the arguments
+@@ -4227,6 +4240,7 @@ void give_up_console(const struct consw *csw)
+ 	do_unregister_con_driver(csw);
+ 	console_unlock();
+ }
++EXPORT_SYMBOL(give_up_console);
+ 
+ static int __init vtconsole_class_init(void)
+ {
+@@ -4783,23 +4797,3 @@ void vc_scrolldelta_helper(struct vc_data *c, int lines,
+ 	c->vc_visible_origin = ubase + (from + from_off) % wrap;
+ }
+ EXPORT_SYMBOL_GPL(vc_scrolldelta_helper);
+-
+-/*
+- *	Visible symbols for modules
+- */
+-
+-EXPORT_SYMBOL(color_table);
+-EXPORT_SYMBOL(default_red);
+-EXPORT_SYMBOL(default_grn);
+-EXPORT_SYMBOL(default_blu);
+-EXPORT_SYMBOL(update_region);
+-EXPORT_SYMBOL(redraw_screen);
+-EXPORT_SYMBOL(vc_resize);
+-EXPORT_SYMBOL(fg_console);
+-EXPORT_SYMBOL(console_blank_hook);
+-EXPORT_SYMBOL(console_blanked);
+-EXPORT_SYMBOL(vc_cons);
+-EXPORT_SYMBOL(global_cursor_default);
+-#ifndef VT_SINGLE_DRIVER
+-EXPORT_SYMBOL(give_up_console);
+-#endif
 -- 
 2.40.0
 
