@@ -2,108 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB036E9EA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 00:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777786E9EAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 00:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232933AbjDTWQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 18:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43790 "EHLO
+        id S232983AbjDTWR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 18:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbjDTWQB (ORCPT
+        with ESMTP id S231394AbjDTWRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 18:16:01 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6B0EB;
-        Thu, 20 Apr 2023 15:16:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682028960; x=1713564960;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IS7ZXuBIDcdEHWCz73K8Pgp/gskIbDBObXQBP3E1Hs8=;
-  b=LCGkVQR+vY0wm6YguB8KSpPq1Q6tjr/ZtgQ2hj28Ijqm9VHh4fzbN8As
-   NsVdY/baZlD6Hw8Hfqzx6ugN+VC083moBTUKxCDW/p6YefT7fP03auiam
-   KOEgj7PfJU6ylf+6IwntSD0nFpW5/LdvJ0lGsL+4oOPDWFWdywpyvFhlH
-   e4acXtuKQTBu5X0lqHECiBZyrmIcTtuzczR80gxfz6EgW6/pqtykQ6ebd
-   fHNlBTldcNscfic8Wo7kVg3Bq0ejbveAO7v4Y9kz51h+77eXpraRQl5K8
-   uHkeSReC/p1LvG+KH9R+JfdzccSWCZl8S9wQ4/gilb4yCkeZ6r52eZpwB
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="373781270"
-X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="373781270"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 15:16:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="756693577"
-X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="756693577"
-Received: from ashleyst-mobl1.amr.corp.intel.com (HELO [10.209.71.65]) ([10.209.71.65])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 15:15:58 -0700
-Message-ID: <69ba1760-a079-fd8f-b079-fcb01e3eedec@intel.com>
-Date:   Thu, 20 Apr 2023 15:15:58 -0700
+        Thu, 20 Apr 2023 18:17:55 -0400
+Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5A02689;
+        Thu, 20 Apr 2023 15:17:54 -0700 (PDT)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+        t=1682029072; bh=E54QoxkAa+Pj7RKVni728J5N8i4GxDR5LFh2/Yh/N0Y=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=VkcPOMxBDenERilgPM+aJWWZv54NkMI7SGAbLL6/wRdd99Zp2qNjuhDs35gGFZ1q9
+         lLzZ9f2wH2eru/gNTjJspSDQJMC0EjxxNVVToDZF175vxSghkTrgq+n+8Fp7hOTG0i
+         BMxeC+w5ll1LRD9818aetZmnDWQIC8a9FKUBktgdvA+kLTcrxxnZTMhrQh3VSKTzVS
+         L/vqpaFHSL6EmQcqzY9lw86XWsG+P1vdS6RHrj/cqAi/Y/KvH6FgZYgoeQ8jmQkh5x
+         k6LinnufXcGVXQrhjVPixXQdyh6FZijx7Fu3omUaIcgrUIT/Gp3M9iPOzYBrXFwBt5
+         wofdlmCWKJ0nw==
+To:     Peter Seiderer <ps.report@gmx.net>, linux-wireless@vger.kernel.org
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sujith Manoharan <c_manoha@qca.qualcomm.com>,
+        "John W . Linville" <linville@tuxdriver.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gregg Wonderly <greggwonderly@seqtechllc.com>,
+        Peter Seiderer <ps.report@gmx.net>
+Subject: Re: [PATCH v1] wifi: ath9k: fix AR9003 mac hardware hang check
+ register offset calculation
+In-Reply-To: <20230420204316.30475-1-ps.report@gmx.net>
+References: <20230420204316.30475-1-ps.report@gmx.net>
+Date:   Fri, 21 Apr 2023 00:17:52 +0200
+X-Clacks-Overhead: GNU Terry Pratchett
+Message-ID: <87wn26ryen.fsf@toke.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC 45/48] RISC-V: ioremap: Implement for arch specific ioremap
- hooks
-Content-Language: en-US
-To:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org
-Cc:     Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
-        abrestic@rivosinc.com, Samuel Ortiz <sameo@rivosinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Uladzislau Rezki <urezki@gmail.com>
-References: <20230419221716.3603068-1-atishp@rivosinc.com>
- <20230419221716.3603068-46-atishp@rivosinc.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230419221716.3603068-46-atishp@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 15:17, Atish Patra wrote:
-> The guests running in CoVE must notify the host about its mmio regions
-> so that host can enable mmio emulation.
+Peter Seiderer <ps.report@gmx.net> writes:
 
-This one doesn't make a lot of sense to me.
+> Fix ath9k_hw_verify_hang()/ar9003_hw_detect_mac_hang() register offset
+> calculation (do not overflow the shift for the second register/queues
+> above five, use the register layout described in the comments above
+> ath9k_hw_verify_hang() instead).
+>
+> Fixes: 222e04830ff0 ("ath9k: Fix MAC HW hang check for AR9003")
+>
+> Reported-by: Gregg Wonderly <greggwonderly@seqtechllc.com>
+> Link: https://lore.kernel.org/linux-wireless/E3A9C354-0CB7-420C-ADEF-F017=
+7FB722F4@seqtechllc.com/
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-The guest and host must agree about the guest's physical layout up
-front.  In general, the host gets to dictate that layout.  It tells the
-guest, up front, what is present in the guest physical address space.
+Thanks for writing up the patch!
 
-This callback appears to say to the host:
-
-	Hey, I (the guest) am treating this guest physical area as MMIO.
-
-But the host and guest have to agree _somewhere_ what the MMIO is used
-for, not just that it is being used as MMIO.
-
-
+Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>
