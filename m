@@ -2,167 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFEE6E9967
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 859F76E9970
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234275AbjDTQVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 12:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41016 "EHLO
+        id S229769AbjDTQXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 12:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbjDTQVR (ORCPT
+        with ESMTP id S232983AbjDTQXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 12:21:17 -0400
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7791040D4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 09:20:30 -0700 (PDT)
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-74da25049e0so80052385a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 09:20:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682007629; x=1684599629;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Thu, 20 Apr 2023 12:23:16 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DEB1BFD
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 09:23:07 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1a9290a6f96so153895ad.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 09:23:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682007786; x=1684599786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mi8BRALKHs7eage0Q9/aKDKQbgLFo1rksVSh6HXojUM=;
-        b=ARLheDYENN4CNUATEdaaRopSWP1gSVGeR4xPIG4rMxB1ZdmG8xlBYxSBUNPTKhze4A
-         UyEtRaXoUlUR+rCoJEGydKdeI7cSahXb41t+1hGit6HWN3eUUoCg7MnaU+AFILmgju8e
-         1EnQNFFGpSVZGAQOtR+cEr5a+mUf4D1mCf3uhOHjzGpTh0ygh/qtx/vOcLu3GrVLv4kG
-         Kbu8cLi+E5D3L4x2YoxFLR0Mn8sA5VantevE1uCc57TB+p/BsIt7Gfn9luJaJL1BuC/e
-         cPgYEA7aS9xg4mPe5Pt5CV8iztcsj+7wQogPmFMyETG77nRAQbINHizHzqMiOcWi6qQj
-         XFUg==
-X-Gm-Message-State: AAQBX9fkecxIRFO/4jZ/EzbKEt62Sk2kuuJw1b8L5uvHYY+fR3HnkLTl
-        qKZcyEYoq6hsS2z1suAaJuxe
-X-Google-Smtp-Source: AKy350ZdxFbx3P6KW7oGgzZkOdBts5SMHV3jmQ7iV4w8PdU+G+NU8GyRCb0ZtSnye0JdmMgLiXUHqw==
-X-Received: by 2002:a05:6214:1c4e:b0:5f0:23be:a301 with SMTP id if14-20020a0562141c4e00b005f023bea301mr2999579qvb.5.1682007629560;
-        Thu, 20 Apr 2023 09:20:29 -0700 (PDT)
-Received: from localhost ([37.19.196.135])
-        by smtp.gmail.com with ESMTPSA id b17-20020a05620a271100b0074e034915d4sm539562qkp.73.2023.04.20.09.20.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 09:20:28 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 12:20:27 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Daniil Lunev <dlunev@google.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [PATCH v5-fix 1/5] block: Don't invalidate pagecache for invalid
- falloc modes
-Message-ID: <ZEFmS9h81Wwlv9+/@redhat.com>
-References: <20230420004850.297045-2-sarthakkukreti@chromium.org>
- <20230420014734.302304-1-sarthakkukreti@chromium.org>
+        bh=Ks1pj/8VEbhe1cDxED1IfhUi5j9EFf/8larL9jb+Yu0=;
+        b=NN/vZs/zkWFh62Q8qiR0pKgIuQ3kxw/NBTdO0DHUcPYdfAM0NvmP1lf/TWJZ33YaSh
+         r7bYjYPp+d1Z1ekPWdh3zcNgTeEI3BRYSjSjNeIey6NyJE4HCbpNZGz0sVu/pskNxoFy
+         DvD19Y0FcR3IIB264LTl4dVMO2aGgJssTdZln+HA70hADRMBngfHgywNWg0bDFMIbEm5
+         szitXZSETCsjXEQgwqecX+0TXkIF41F0WEIiPLkRaa3tzTaptoTV0wGg3tkLH6ET2pNu
+         hPEZAYwVCEyweYiLFf0xqT7UDHRn87IsDEH1Ww1G1tEkVjmQqtj8PtQatVj5ltD+Ltj1
+         BDmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682007786; x=1684599786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ks1pj/8VEbhe1cDxED1IfhUi5j9EFf/8larL9jb+Yu0=;
+        b=ibA2gTmTysL/XDOF0vHduT1sKjgexbJhsyI6L2GIlMD28/YokyDsOOJFbu9bWgEiHw
+         9npMQJQ6UxW6+caPFgrfaBcXviIFsw0r4EznByyTOdpFjg2rei2tweuH3sxb/aqEfqGE
+         6qq95NlqxQtVV+MaP0fLaFfF3hapT8Yz6lgbTyPjG/CJ1BJXsrKn6aOqlmWoInvDGEqH
+         ebrJuNEIcJTaw9SiT1jJJwETV8lrstoZfNFADomB7VwFvaO4bW/32SrbDx5H//EmVD+O
+         oXMc6cscihO/TMI9oWKiwaut2UFVAWqlqOMyyb/+xMcDCmm0nQt0s4ff6lR1GQHtggZn
+         4vyA==
+X-Gm-Message-State: AAQBX9eVx8nQvFR1mL8ZMX5UATF0h8LIBJnswOpRWT98j/mSX6ECOnwE
+        WXGuXnCVA0F4o0+ObwAYfTahG0mTM7MVfUfS8D25tw==
+X-Google-Smtp-Source: AKy350bghINCvW24JqQLKQpbapa1G/OxuUoCO3z4/qjrZH4gB3rVgn9UpQYjwlT+CGt0VTJqjwUbk9GH4hgG6O19LBg=
+X-Received: by 2002:a17:902:9a42:b0:1a1:e93c:8932 with SMTP id
+ x2-20020a1709029a4200b001a1e93c8932mr252612plv.15.1682007786361; Thu, 20 Apr
+ 2023 09:23:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420014734.302304-1-sarthakkukreti@chromium.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230416213406.2966521-1-davidai@google.com> <d83950c4-7458-aeea-f341-327c163704a8@arm.com>
+ <CABN1KC+_HDi_i2zzpZVbqiUP5-QB9YrE5wzLqr==_wOemaCXzA@mail.gmail.com> <bf8f21be-7249-fc27-9704-211d0f5a12b1@arm.com>
+In-Reply-To: <bf8f21be-7249-fc27-9704-211d0f5a12b1@arm.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 20 Apr 2023 09:22:27 -0700
+Message-ID: <CAGETcx9RGnW_Bq49yVogFo3Eys4UczmXP-6bkZh1q=u+M-_bDg@mail.gmail.com>
+Subject: Re: [RFC PATCH v1] sched/uclamp: Introduce SCHED_FLAG_RESET_UCLAMP_ON_FORK
+ flag
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     David Dai <davidai@google.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Qais Yousef <qyousef@google.com>,
+        Quentin Perret <qperret@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19 2023 at  9:47P -0400,
-Sarthak Kukreti <sarthakkukreti@chromium.org> wrote:
+On Thu, Apr 20, 2023 at 2:37=E2=80=AFAM Dietmar Eggemann
+<dietmar.eggemann@arm.com> wrote:
+>
+> On 20/04/2023 03:11, David Dai wrote:
+> > On Tue, Apr 18, 2023 at 10:18=E2=80=AFPM Dietmar Eggemann
+> > <dietmar.eggemann@arm.com> wrote:
+> >>
+> >
+> > Hi Dietmar, thanks for your time,
+> >
+> >> On 16/04/2023 23:34, David Dai wrote:
+> >>> A userspace service may manage uclamp dynamically for individual task=
+s and
+> >>> a child task will unintentionally inherit a pesudo-random uclamp sett=
+ing.
+> >>> This could result in the child task being stuck with a static uclamp =
+value
+> >>
+> >> Could you explain this with a little bit more detail? Why isn't the
+> >> child task also managed by the userspace service?
+> >
+> > See Qais=E2=80=99 reply that contains more detail on how it=E2=80=99s b=
+eing used in
+> > Android. In general, if a dynamic userspace service will adjust uclamp
+> > on the fly for a given task, but has no knowledge or control over if
+> > or when a task forks. Depending on the timing of the fork, a child
+> > task may inherit a very large or a small uclamp_min or uclamp_max
+> > value. The intent of this patch is to provide more flexibility to the
+> > uclamp APIs such that child tasks do not get stuck with a poor uclamp
+> > value when spawned while retaining other sched attributes. When
+> > RESET_ON_FORK is set on the parent task, it will reset uclamp values
+> > for the child but also reset other sched attributes as well.
+>
+> OK, in this case, why not just change behavior and always reset the
+> uclamp values at fork?
 
-> Only call truncate_bdev_range() if the fallocate mode is
-> supported. This fixes a bug where data in the pagecache
-> could be invalidated if the fallocate() was called on the
-> block device with an invalid mode.
-> 
-> Fixes: 25f4c41415e5 ("block: implement (some of) fallocate for block devices")
+Personally, I'd have preferred uclamp was never inherited in the first
+place, but wouldn't that be considered as breaking UAPI if we change
+it now?
 
-You should add:
+-Saravana
 
-Cc: stable@vger.kernel.org
-Reported-by: Darrick J. Wong <djwong@kernel.org>
-
-> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> ---
->  block/fops.c | 37 ++++++++++++++++++++++++-------------
->  1 file changed, 24 insertions(+), 13 deletions(-)
-> 
-> diff --git a/block/fops.c b/block/fops.c
-> index d2e6be4e3d1c..d359254c645d 100644
-> --- a/block/fops.c
-> +++ b/block/fops.c
-> @@ -648,26 +648,37 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
->  
->  	filemap_invalidate_lock(inode->i_mapping);
->  
-> -	/* Invalidate the page cache, including dirty pages. */
-> -	error = truncate_bdev_range(bdev, file->f_mode, start, end);
-> -	if (error)
-> -		goto fail;
-> -
-
-You remove the only user of the 'fail' label.  But I think it'd be
-cleaner to keep using it below (reduces indentation churn too).
-
-> +	/*
-> +	 * Invalidate the page cache, including dirty pages, for valid
-> +	 * de-allocate mode calls to fallocate().
-> +	 */
->  	switch (mode) {
->  	case FALLOC_FL_ZERO_RANGE:
->  	case FALLOC_FL_ZERO_RANGE | FALLOC_FL_KEEP_SIZE:
-> -		error = blkdev_issue_zeroout(bdev, start >> SECTOR_SHIFT,
-> -					     len >> SECTOR_SHIFT, GFP_KERNEL,
-> -					     BLKDEV_ZERO_NOUNMAP);
-> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
-> +		if (!error)
-> +			error = blkdev_issue_zeroout(bdev,
-> +						     start >> SECTOR_SHIFT,
-> +						     len >> SECTOR_SHIFT,
-> +						     GFP_KERNEL,
-> +						     BLKDEV_ZERO_NOUNMAP);
->  		break;
-
-
-So:
-
-		error = truncate_bdev_range(bdev, file->f_mode, start, end);
-		if (error)
-		        goto fail;
-		...
-
-
->  	case FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE:
-> -		error = blkdev_issue_zeroout(bdev, start >> SECTOR_SHIFT,
-> -					     len >> SECTOR_SHIFT, GFP_KERNEL,
-> -					     BLKDEV_ZERO_NOFALLBACK);
-> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
-> +		if (!error)
-> +			error = blkdev_issue_zeroout(bdev,
-> +						     start >> SECTOR_SHIFT,
-> +						     len >> SECTOR_SHIFT,
-> +						     GFP_KERNEL,
-> +						     BLKDEV_ZERO_NOFALLBACK);
->  		break;
-
-Same.
-
->  	case FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE | FALLOC_FL_NO_HIDE_STALE:
-> -		error = blkdev_issue_discard(bdev, start >> SECTOR_SHIFT,
-> -					     len >> SECTOR_SHIFT, GFP_KERNEL);
-> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
-> +		if (!error)
-> +			error = blkdev_issue_discard(bdev,
-> +						     start >> SECTOR_SHIFT,
-> +						     len >> SECTOR_SHIFT,
-> +						     GFP_KERNEL);
->  		break;
-
-Same.
+> Do we anticipate a use-case in which uclamp inheritance would be required=
+?
+>
+> Let's not over-complicate the sched_[sg]etattr() unnecessarily.
+>
+> [...]
+>
+> >> Does this issue happen with uclamp mainline or only with Android's
+> >> slightly different version (max- vs. sum aggregation)?
+> >
+> > I=E2=80=99m using the version of uclamp that=E2=80=99s in Linus=E2=80=
+=99 tree. How uclamp is
+> > aggregated is unrelated to the problem I=E2=80=99m trying to solve with=
+ this
+> > patch. Which is to extend the uclamp APIs to have finer control for
+> > the uclamp inheritance of child tasks.
+>
+> OK, I see.
