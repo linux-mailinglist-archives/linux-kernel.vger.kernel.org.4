@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 026F76E9E98
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 00:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AE26E9E95
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 00:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbjDTWHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 18:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
+        id S232924AbjDTWHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 18:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232862AbjDTWGu (ORCPT
+        with ESMTP id S232873AbjDTWGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 18:06:50 -0400
+        Thu, 20 Apr 2023 18:06:51 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5284935AA
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9363C270C
         for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 15:06:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1682028409; x=1713564409;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=oyN/jlwNsbSH8AgIgVgPY6yTXuGt35RnjrIqFZ99+pY=;
-  b=F0SR9pxxZufNPjK5UzsNZiGYStvN1cdS6uHsS1y8HXNnlo2YLXZhp4Ej
-   vhdPCFBDwUs/97wiSjdZTHPEx1rDx3P3WtfU+/H9t6wsCdd8gXcMNdPDX
-   FPz+xf1OyurP7LwbTqA6kY0+tErmInngzZ/29IKMm6PYNAdtURowvBZ1n
-   hw0dYCSN2v6AoYRjCvBJoELlzL7aMKn6RerdoqDTAgO027KMqnFO/Ae9y
-   YE+CXDHmQGQ11R7OcxJtgNXqbKsrRJTIENpEWCGDCFf9txUKtV3LUWUkz
-   gq6tVDXDNcoCoTvJ1pYbPVynnGGvGvxT+8dgrOcnqAI8QkW72OkaGliv6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="348650928"
+  bh=snGRPrZmk44dmEkOaizzRRz9f19/ahGzyDW4YNPDoy4=;
+  b=Ad8T2j2NRVzZJ4nxk2QZ3RrW0ESgxe/hBRCZwi0NGAucyLN4r30qUYp/
+   VjSpc4+/5siiKcxA1KityOcfUMwTdn0u0Uij/rG2OlkRX86NzWoZSpcn/
+   V0JsKbxpWkZIlEyEfU+ixQ5D1xTEsIqx9dIs+YQp0AEJeiVtsjxMeL9Aw
+   yAAiR0lwYfHX2cucZtpfiYQeqfvQdk7ZeodnIOtfu2fWVWSc6kDwGOP6D
+   aJ0arnx+eD7fAhOMzv9Dc/dHBuKKNgzzNMT4wr9t81IPkRno4hqYami0S
+   H3ofb3IZ8tz5RLsNW5UEUMGMcQdfR/DGlYS/ducGs7tMw6DWXsbR7yFwz
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="348650938"
 X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="348650928"
+   d="scan'208";a="348650938"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 15:06:45 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="724583761"
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="724583766"
 X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="724583761"
+   d="scan'208";a="724583766"
 Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
   by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 15:06:45 -0700
 From:   Tony Luck <tony.luck@intel.com>
@@ -52,9 +52,9 @@ To:     Fenghua Yu <fenghua.yu@intel.com>,
         Babu Moger <babu.moger@amd.com>
 Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
         Tony Luck <tony.luck@intel.com>
-Subject: [RFC PATCH 4/7] x86/resctrl: Add capability to driver registration to create control files
-Date:   Thu, 20 Apr 2023 15:06:33 -0700
-Message-Id: <20230420220636.53527-5-tony.luck@intel.com>
+Subject: [RFC PATCH 5/7] x86/resctrl: Enhance driver registration to hook into schemata files
+Date:   Thu, 20 Apr 2023 15:06:34 -0700
+Message-Id: <20230420220636.53527-6-tony.luck@intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230420220636.53527-1-tony.luck@intel.com>
 References: <20230420220636.53527-1-tony.luck@intel.com>
@@ -70,165 +70,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a control file to each ctrlmon directory. Hook into the mkdir()
-functions to add the control file to any new directories that are
-created.
+Add a new configuration type "DRIVER" for lines in the schemata files
+with a show() and update() callback functions to the driver to maintain
+these lines.
 
 Signed-off-by: Tony Luck <tony.luck@intel.com>
 ---
- include/linux/resctrl.h                |  2 +
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 70 ++++++++++++++++++++++++++
- 2 files changed, 72 insertions(+)
+ include/linux/resctrl.h                   |  6 ++++++
+ arch/x86/kernel/cpu/resctrl/ctrlmondata.c | 17 ++++++++++++++---
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c    | 16 ++++++++++++++++
+ 3 files changed, 36 insertions(+), 3 deletions(-)
 
 diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
-index 44dd811cb552..8668480cea51 100644
+index 8668480cea51..691805214f41 100644
 --- a/include/linux/resctrl.h
 +++ b/include/linux/resctrl.h
-@@ -217,6 +217,7 @@ struct resctrl_fileinfo {
-  * @infodir:	Name of directory to create in resctrl/info.
+@@ -23,11 +23,13 @@ int proc_resctrl_show(struct seq_file *m,
+  * @CDP_NONE:	No prioritisation, both code and data are controlled or monitored.
+  * @CDP_CODE:	Configuration applies to instruction fetches.
+  * @CDP_DATA:	Configuration applies to reads and writes.
++ * @DRIVER:	Resource managed by driver.
+  */
+ enum resctrl_conf_type {
+ 	CDP_NONE,
+ 	CDP_CODE,
+ 	CDP_DATA,
++	DRIVER,
+ };
+ 
+ #define CDP_NUM_TYPES	(CDP_DATA + 1)
+@@ -201,6 +203,8 @@ struct resctrl_schema {
+ 	char				name[8];
+ 	enum resctrl_conf_type		conf_type;
+ 	struct rdt_resource		*res;
++	void				(*show)(struct seq_file *s, int closid);
++	int				(*update)(char *s, int closid);
+ 	u32				num_closid;
+ };
+ 
+@@ -218,6 +222,7 @@ struct resctrl_fileinfo {
   * @infofiles:	Array of files to create under infodir.
   * @rmdir:	Callback when a resctrl directory is removed.
-+ * @ctrlfiles:	Array of files to create in ctrlmon directories.
+  * @ctrlfiles:	Array of files to create in ctrlmon directories.
++ * @schema:	Driver supplied to manage a line in schemata file.
   */
  struct resctrl_driver {
  	struct list_head	list;
-@@ -224,6 +225,7 @@ struct resctrl_driver {
- 	char			*infodir;
+@@ -226,6 +231,7 @@ struct resctrl_driver {
  	struct resctrl_fileinfo	*infofiles;
  	int			(*rmdir)(int oclos, int ormid, int nclos, int nrmid);
-+	struct resctrl_fileinfo	*ctrlfiles;
+ 	struct resctrl_fileinfo	*ctrlfiles;
++	struct resctrl_schema	schema;
  };
  
  int resctrl_register_driver(struct resctrl_driver *d);
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index 8ca3b17bd671..e2fdd5819336 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -2466,6 +2466,18 @@ static int addfiles(struct kernfs_node *parent, struct resctrl_fileinfo *files,
- 	return 0;
- }
+diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+index b44c487727d4..7a59d6eab576 100644
+--- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
++++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+@@ -356,8 +356,12 @@ static int rdtgroup_parse_resource(char *resname, char *tok,
+ 	struct resctrl_schema *s;
  
-+static void rmfiles(struct kernfs_node *parent, struct resctrl_fileinfo *files)
-+{
-+	struct resctrl_fileinfo *f;
-+	struct kernfs_node *kn;
-+
-+	for (f = files; f->name; f++) {
-+		kn = kernfs_find_and_get_ns(parent, f->name, NULL);
-+		if (kn)
-+			kernfs_remove(kn);
-+	}
-+}
-+
- /*
-  * Add or remove a directory from the resctrl/info directory
-  */
-@@ -2495,12 +2507,49 @@ static int rdtgroup_update_info_dir(char *name, struct resctrl_fileinfo *files)
- 	return ret;
- }
- 
-+/*
-+ * Create/remove a new control file in all current and future control and
-+ * monitor groups.
-+ */
-+static void rdtgroup_update_ctrl_dir(struct resctrl_fileinfo *files, bool add)
-+{
-+	struct rdtgroup *rdtgrp;
-+
-+	if (!add) {
-+		list_for_each_entry(rdtgrp, &rdt_all_groups, rdtgroup_list) {
-+			struct rdtgroup *crg;
-+
-+			rmfiles(rdtgrp->kn, files);
-+
-+			list_for_each_entry(crg, &rdtgrp->mon.crdtgrp_list, mon.crdtgrp_list) {
-+				rmfiles(crg->kn, files);
-+			}
+ 	list_for_each_entry(s, &resctrl_schema_all, list) {
+-		if (!strcmp(resname, s->name) && rdtgrp->closid < s->num_closid)
+-			return parse_line(tok, s, rdtgrp);
++		if (!strcmp(resname, s->name) && rdtgrp->closid < s->num_closid) {
++			if (s->conf_type == DRIVER)
++				return s->update(tok, rdtgrp->closid);
++			else
++				return parse_line(tok, s, rdtgrp);
 +		}
+ 	}
+ 	rdt_last_cmd_printf("Unknown or unsupported resource name '%s'\n", resname);
+ 	return -EINVAL;
+@@ -419,10 +423,11 @@ ssize_t rdtgroup_schemata_write(struct kernfs_open_file *of,
+ 		r = s->res;
+ 
+ 		/*
++		 * Resources controlled by a driver are updated by that driver.
+ 		 * Writes to mba_sc resources update the software controller,
+ 		 * not the control MSR.
+ 		 */
+-		if (is_mba_sc(r))
++		if (s->conf_type == DRIVER || is_mba_sc(r))
+ 			continue;
+ 
+ 		ret = resctrl_arch_update_domains(r, rdtgrp->closid);
+@@ -464,6 +469,12 @@ static void show_doms(struct seq_file *s, struct resctrl_schema *schema, int clo
+ 	u32 ctrl_val;
+ 
+ 	seq_printf(s, "%*s:", max_name_width, schema->name);
 +
++	if (schema->conf_type == DRIVER) {
++		schema->show(s, closid);
 +		return;
 +	}
 +
-+	list_for_each_entry(rdtgrp, &rdt_all_groups, rdtgroup_list) {
-+		unsigned long priv = (rdtgrp->closid << 16) | rdtgrp->mon.rmid;
-+		struct rdtgroup *crg;
-+
-+		addfiles(rdtgrp->kn, files, F_PRIV | F_ACTIVATE, (void *)priv);
-+
-+		list_for_each_entry(crg, &rdtgrp->mon.crdtgrp_list, mon.crdtgrp_list) {
-+			priv = (crg->closid << 16) | crg->mon.rmid;
-+			addfiles(crg->kn, files, F_PRIV | F_ACTIVATE, (void *)priv);
-+		}
-+	}
-+}
-+
- static void driver_up(struct resctrl_driver *d)
- {
- 	if (d->mount)
- 		d->mount(true);
- 	if (d->infodir)
- 		rdtgroup_update_info_dir(d->infodir, d->infofiles);
-+	if (d->ctrlfiles)
-+		rdtgroup_update_ctrl_dir(d->ctrlfiles, true);
- }
+ 	list_for_each_entry(dom, &r->domains, list) {
+ 		if (sep)
+ 			seq_puts(s, ";");
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index e2fdd5819336..cc2292a7435b 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -2043,6 +2043,8 @@ static int rdtgroup_create_info_dir(struct kernfs_node *parent_kn)
  
- static void driver_down(struct resctrl_driver *d)
-@@ -2509,6 +2558,8 @@ static void driver_down(struct resctrl_driver *d)
- 		d->mount(false);
- 	if (d->infodir)
- 		rdtgroup_update_info_dir(d->infodir, NULL);
-+	if (d->ctrlfiles)
-+		rdtgroup_update_ctrl_dir(d->ctrlfiles, false);
- }
- 
- int resctrl_register_driver(struct resctrl_driver *d)
-@@ -3375,6 +3426,7 @@ static int rdtgroup_mkdir_mon(struct kernfs_node *parent_kn,
- 			      const char *name, umode_t mode)
- {
- 	struct rdtgroup *rdtgrp, *prgrp;
-+	struct resctrl_driver *d;
- 	int ret;
- 
- 	ret = mkdir_rdt_prepare(parent_kn, name, mode, RDTMON_GROUP, &rdtgrp);
-@@ -3384,6 +3436,14 @@ static int rdtgroup_mkdir_mon(struct kernfs_node *parent_kn,
- 	prgrp = rdtgrp->mon.parent;
- 	rdtgrp->closid = prgrp->closid;
- 
-+	list_for_each_entry(d, &drivers, list) {
-+		unsigned long priv = (rdtgrp->closid << 16) | rdtgrp->mon.rmid;
-+
-+		if (!d->ctrlfiles)
+ 	/* loop over enabled controls, these are all alloc_capable */
+ 	list_for_each_entry(s, &resctrl_schema_all, list) {
++		if (s->conf_type == DRIVER)
 +			continue;
-+		addfiles(rdtgrp->kn, d->ctrlfiles, F_PRIV | F_ACTIVATE, (void *)priv);
-+	}
+ 		r = s->res;
+ 		fflags =  r->fflags | RF_CTRL_INFO;
+ 		ret = rdtgroup_mkdir_info_resdir(s, s->name, fflags);
+@@ -2390,6 +2392,9 @@ static int schemata_list_add(struct rdt_resource *r, enum resctrl_conf_type type
+ 	case CDP_NONE:
+ 		suffix = "";
+ 		break;
++	case DRIVER:
++		kfree(s);
++		return -EINVAL;
+ 	}
+ 
+ 	ret = snprintf(s->name, sizeof(s->name), "%s%s", r->name, suffix);
+@@ -2567,6 +2572,9 @@ int resctrl_register_driver(struct resctrl_driver *d)
+ 	mutex_lock(&rdtgroup_mutex);
+ 	list_add(&d->list, &drivers);
+ 
++	if (d->schema.name[0])
++		list_add(&d->schema.list, &resctrl_schema_all);
 +
- 	/*
- 	 * Add the rdtgrp to the list of rdtgrps the parent
- 	 * ctrl_mon group has to track.
-@@ -3401,6 +3461,7 @@ static int rdtgroup_mkdir_mon(struct kernfs_node *parent_kn,
- static int rdtgroup_mkdir_ctrl_mon(struct kernfs_node *parent_kn,
- 				   const char *name, umode_t mode)
+ 	if (resctrl_is_mounted)
+ 		driver_up(d);
+ 	mutex_unlock(&rdtgroup_mutex);
+@@ -2578,8 +2586,12 @@ EXPORT_SYMBOL_GPL(resctrl_register_driver);
+ void resctrl_unregister_driver(struct resctrl_driver *d)
  {
-+	struct resctrl_driver *d;
- 	struct rdtgroup *rdtgrp;
- 	struct kernfs_node *kn;
- 	u32 closid;
-@@ -3426,6 +3487,15 @@ static int rdtgroup_mkdir_ctrl_mon(struct kernfs_node *parent_kn,
- 
- 	list_add(&rdtgrp->rdtgroup_list, &rdt_all_groups);
- 
-+	list_for_each_entry(d, &drivers, list) {
-+		unsigned long priv = (rdtgrp->closid << 16) | rdtgrp->mon.rmid;
+ 	mutex_lock(&rdtgroup_mutex);
 +
-+		if (!d->ctrlfiles)
+ 	list_del(&d->list);
+ 
++	if (d->schema.name[0])
++		list_del(&d->schema.list);
++
+ 	if (resctrl_is_mounted)
+ 		driver_down(d);
+ 	mutex_unlock(&rdtgroup_mutex);
+@@ -2591,6 +2603,8 @@ static void schemata_list_destroy(void)
+ 	struct resctrl_schema *s, *tmp;
+ 
+ 	list_for_each_entry_safe(s, tmp, &resctrl_schema_all, list) {
++		if (s->conf_type == DRIVER)
 +			continue;
-+
-+		addfiles(kn, d->ctrlfiles, F_PRIV | F_ACTIVATE, (void *)priv);
-+	}
-+
- 	if (rdt_mon_capable) {
- 		/*
- 		 * Create an empty mon_groups directory to hold the subset
+ 		list_del(&s->list);
+ 		kfree(s);
+ 	}
+@@ -3285,6 +3299,8 @@ static int rdtgroup_init_alloc(struct rdtgroup *rdtgrp)
+ 	rdt_staged_configs_clear();
+ 
+ 	list_for_each_entry(s, &resctrl_schema_all, list) {
++		if (s->conf_type == DRIVER)
++			continue;
+ 		r = s->res;
+ 		if (r->rid == RDT_RESOURCE_MBA ||
+ 		    r->rid == RDT_RESOURCE_SMBA) {
 -- 
 2.39.2
 
