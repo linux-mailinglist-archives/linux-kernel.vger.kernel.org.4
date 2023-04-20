@@ -2,76 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C42E6E8B6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BBC6E8B69
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234090AbjDTH2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 03:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
+        id S234005AbjDTH1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 03:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234087AbjDTH2Q (ORCPT
+        with ESMTP id S234079AbjDTH1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 03:28:16 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100644200
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:27:27 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-517c840f181so405680a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:27:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681975646; x=1684567646;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KY6KaCFZ5vdzzIXTUyV6D8NEGya8RvpCjdxKUFkIlbo=;
-        b=JdpK091tQZhcpVQCrGmT53jyzk0tdpPMrMjsOt2nhOO6VvJm4CHj6b3MGcEtFPjrmj
-         jRNPw5HUcEZWIJGHvsLxe344JI6DV18Gtby29KPcbI49o3qCSmqB71Eg+4RPCbqs4iPm
-         v3YHKLR5mv2ycE2z5Uzvthf87ASaR/OaOaKaMkZbPpGN/o1brGSdxKSc6IochSv6/AbZ
-         gDpcAdKFTBC8fGCg660IDSJI/tyA2ywbL5RjXTgpq/uufdxPrCODT/WuDOdKNukitBLv
-         z7znofi2TQ82y2kjpWhFiI7HRNVKU1n6s9umJI6PADeGkDWPZdOKeULaonHTZo5nIUD8
-         LGig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681975646; x=1684567646;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KY6KaCFZ5vdzzIXTUyV6D8NEGya8RvpCjdxKUFkIlbo=;
-        b=i8xxWQRoViIuL6LLk/rf/2cMAMEeniyDP0bJGJjF65+Smom3KIGXF4U6rpIEXhKzMd
-         4izODaH/UL2p7MsuISD+BBqxjYEMm0149Tw7knNLaHW1ARf1aTbLxaXkg+63sGF2HruY
-         X5XT3niBvAxNCzfdwEN53fpKOYKZbWY35B78DTX+RoJca4gOqAAwbfDjMkTi8YrrjdfF
-         njVx5Tngb1OHR0lCe1r30WX1g+FO2MjlmIjApokhY9ksitMgOLVWYoiMrJBWNV0q0vMt
-         Q0FeluEFjpGMSQP93PB0/mUb2yDvpfElFYqJTUw1GNOFvXuew3B6viPXHLwL8r3ZHtzn
-         XRdA==
-X-Gm-Message-State: AAQBX9eKGGLE/OGygchu3aQpvCFmWUI22DTJbNcXVy2q6GzsOjQJ7j+B
-        OX7tFxO/IpRZAHCfabtlC7KjgA==
-X-Google-Smtp-Source: AKy350Zh/YeQnWj7L0LszMWL1n63Iez1x6ZInscmr5n73w2GM1PRAMnrQpIboMm8xj558lZf9TY4Gg==
-X-Received: by 2002:a17:90a:d381:b0:249:7958:ea36 with SMTP id q1-20020a17090ad38100b002497958ea36mr847077pju.19.1681975646451;
-        Thu, 20 Apr 2023 00:27:26 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.238])
-        by smtp.gmail.com with ESMTPSA id y18-20020a17090ad71200b0023440af7aafsm612160pju.9.2023.04.20.00.27.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 00:27:26 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
-        zhoufeng.zf@bytedance.com
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add testcase for bpf_task_under_cgroup
-Date:   Thu, 20 Apr 2023 15:26:57 +0800
-Message-Id: <20230420072657.80324-3-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20230420072657.80324-1-zhoufeng.zf@bytedance.com>
-References: <20230420072657.80324-1-zhoufeng.zf@bytedance.com>
+        Thu, 20 Apr 2023 03:27:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE83140E7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:27:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C60C6457C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:27:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA04C4339C;
+        Thu, 20 Apr 2023 07:27:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681975647;
+        bh=nLYlbVPXbkQhw3xO61r9sU3kjNoF334X7TCrjFKx+Ic=;
+        h=From:To:Cc:Subject:Date:From;
+        b=H2f/Nisjpr3Ya3m04NmdNRvLgEo1wi+RMZtxzNBDYfQHKsS4QL61ETxstUmVTDIvn
+         eB2R/Ilsu10ZSAQGkyXlyNFes+sa04HQFi3bZp6ZjBtMI88duJu8zVXfmNDT+2qhoV
+         mseL4rGIEHcQi0+g78hukGb1oK3OhfQAqsG40OaoGYwKaWK3K6+ArUZxmoKtBltj2g
+         HcGwZT9IdoM+I9GbiI7jXl4Ywc0f/9E6xQMBdtxM5pAoLih/WClrBrRggFlNFhhNh5
+         HRWZyYbZLBz2bCew5ylfsXC9zHmtVxYCwq2vsgIEmSk6eo0bsI+YAJNQxw0kODNkYF
+         Oiph0sthEdf7g==
+From:   Lee Jones <lee@kernel.org>
+To:     lee@kernel.org, jassisinghbrar@gmail.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] mailbox: mailbox-test: Explicitly include header for spinlock support
+Date:   Thu, 20 Apr 2023 08:27:17 +0100
+Message-ID: <20230420072718.881079-1-lee@kernel.org>
+X-Mailer: git-send-email 2.40.0.396.gfff15efe05-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,119 +51,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+Presently the support appears to be implied.
 
-test_progs:
-Tests new ebpf helpers bpf_task_under_cgroup.
-
-The bpf program saves the pid which call the getuid syscall within a
-given cgroup to a map to the remote_pid, which is convenient for the
-user-mode program to verify the test correctness.
-
-The user-mode program creates its own mount namespace, and mounts the
-cgroupsv2 hierarchy in there, call the getuid syscall, then check if
-remote_pid and local_pid are equal.
-
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+Signed-off-by: Lee Jones <lee@kernel.org>
 ---
- .../bpf/prog_tests/task_under_cgroup.c        | 49 +++++++++++++++++++
- .../bpf/progs/test_task_under_cgroup.c        | 31 ++++++++++++
- 2 files changed, 80 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
+ drivers/mailbox/mailbox-test.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-new file mode 100644
-index 000000000000..4dd704b11a95
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Bytedance */
-+
-+#include <test_progs.h>
-+#include "test_task_under_cgroup.skel.h"
-+
-+#define FOO	"/foo"
-+
-+void test_task_under_cgroup(void)
-+{
-+	struct test_task_under_cgroup *skel;
-+	int ret, foo = -1, idx = 0;
-+
-+	skel = test_task_under_cgroup__open();
-+	if (!ASSERT_OK_PTR(skel, "test_task_under_cgroup__open"))
-+		return;
-+
-+	skel->rodata->local_pid = getpid();
-+
-+	ret = test_task_under_cgroup__load(skel);
-+	if (!ASSERT_OK(ret, "test_task_under_cgroup__load"))
-+		goto cleanup;
-+
-+	ret = test_task_under_cgroup__attach(skel);
-+	if (!ASSERT_OK(ret, "test_task_under_cgroup__attach"))
-+		goto cleanup;
-+
-+	foo = test__join_cgroup(FOO);
-+	if (!ASSERT_OK(foo < 0, "cgroup_join_foo"))
-+		goto cleanup;
-+
-+	ret = bpf_map_update_elem(bpf_map__fd(skel->maps.cgroup_map), &idx,
-+				  &foo, BPF_ANY);
-+	if (!ASSERT_OK(ret < 0, "cgroup_map update"))
-+		goto cleanup;
-+
-+	syscall(__NR_getuid);
-+
-+	test_task_under_cgroup__detach(skel);
-+
-+	ASSERT_EQ(skel->bss->remote_pid, skel->rodata->local_pid,
-+		  "test task_under_cgroup");
-+
-+cleanup:
-+	if (foo)
-+		close(foo);
-+
-+	test_task_under_cgroup__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-new file mode 100644
-index 000000000000..0f3d53f636de
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-@@ -0,0 +1,31 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Bytedance */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+const volatile int local_pid;
-+int remote_pid;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_CGROUP_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} cgroup_map SEC(".maps");
-+
-+SEC("tp/syscalls/sys_enter_getuid")
-+int sysenter_getuid(const void *ctx)
-+{
-+	if (local_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	if (!bpf_task_under_cgroup(&cgroup_map, bpf_get_current_task_btf(), 0))
-+		return 0;
-+
-+	remote_pid = local_pid;
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+diff --git a/drivers/mailbox/mailbox-test.c b/drivers/mailbox/mailbox-test.c
+index 4555d678fadda..51e62817f2438 100644
+--- a/drivers/mailbox/mailbox-test.c
++++ b/drivers/mailbox/mailbox-test.c
+@@ -16,6 +16,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/poll.h>
+ #include <linux/slab.h>
++#include <linux/spinlock.h>
+ #include <linux/uaccess.h>
+ #include <linux/sched/signal.h>
+ 
 -- 
-2.20.1
+2.40.0.396.gfff15efe05-goog
 
