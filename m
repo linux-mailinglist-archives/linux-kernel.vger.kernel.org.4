@@ -2,127 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECEE6E9CCF
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F646E9CD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbjDTUCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 16:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S231663AbjDTUC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 16:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231663AbjDTUCB (ORCPT
+        with ESMTP id S229811AbjDTUCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 16:02:01 -0400
-Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0433E59EF;
-        Thu, 20 Apr 2023 13:01:50 -0700 (PDT)
-Received: by soltyk.jannau.net (Postfix, from userid 1000)
-        id 1096426FC6D; Thu, 20 Apr 2023 22:01:49 +0200 (CEST)
-Date:   Thu, 20 Apr 2023 22:01:49 +0200
-From:   Janne Grunau <j@jannau.net>
-To:     Zongmin Zhou <zhouzongmin@kylinos.cn>
-Cc:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
-        neil.armstrong@linaro.org, tony.luck@intel.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, gpiccoli@igalia.com,
-        linux-hardening@vger.kernel.org, laurentiu.palcu@oss.nxp.com,
-        dmitry.baryshkov@linaro.org
-Subject: Re: [PATCH] drm/probe_helper: fix the warning reported when calling
- drm_kms_helper_poll_disable during suspend
-Message-ID: <20230420200148.GD3280@jannau.net>
-References: <20230328023129.3596968-1-zhouzongmin@kylinos.cn>
+        Thu, 20 Apr 2023 16:02:55 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149E1B2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:02:54 -0700 (PDT)
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E10784427C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 20:02:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1682020971;
+        bh=me8sddkqoHhu+o5UNk1o5ZrBbxC2BLK+Qjl7lsAFmIU=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=Fe4WNe9yJI+lM6JLXnuV28PpWe4sTNd8JDYPJHOEbksZ6hIfiaUUGMSuDi0swDsW3
+         G6wxunKSAeuf5pKqJZDFN6GPFxAMVF/csG7R53LJMJU3thZu1+QUmLJYKFFHoGs/zU
+         NIsI96DF/I9J/7e2VumPpImR5e3YpAu/L2+cHzr76WuuH2Xp4FweRZLwrQgkErov6v
+         0SQ1CFJERIlxXbLtZaeZUNOmulxj+eXgX4oxOFeM6BQbL6TlEEJlVgyMdCs5cPkTrU
+         B2UrRHllgw64pxBkV/07bhyuAzq5UW7rXNOsPTe/MGGluMhwnwRIIWaFQibjcyXej0
+         3Ia3vHZtOGkzg==
+Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2a8bca8b2efso3684401fa.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:02:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682020969; x=1684612969;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=me8sddkqoHhu+o5UNk1o5ZrBbxC2BLK+Qjl7lsAFmIU=;
+        b=DgaDLb6DjGeaoX94W9dc6AL36VIx1/ychiAEE/SqXiFv0rv6SnEq/Xt6CSM//RyPKi
+         V+g/ZJCQHTQlCyJPcF6b52YQkJ0htOeGW8V1Mqsht14CLIMYxhZcHvFVGnpgbNyy2sGq
+         ziZsSVvqF/W95bWfQzThBlLgICzsIKiPu0KvjtP19/8SP8gpCNzE/pD7xLbmaW/8uawP
+         hqquf68yNrvv+5lAfUNWoLYihElQjoiuHueqY/fO9CYVwmum7rBIUvxk7zNyPBJHtJTI
+         XD2FfnaI5CuiB3JeyDsX9AEK0qcDCWwLmMfszSn2ODTCtprLhlf/KxatkCaewGjIFeVZ
+         ke9A==
+X-Gm-Message-State: AAQBX9exGVclJeMTwuKONseUoF5poive+TLdE70Tv8SxlZYJotpn3qCW
+        UDWHOQgmTRNAWZ4myssFlrAWfpW/G+Fd8pJgZDrnLdcMRbYoKmhllGJ8L1xnxHpaLtWyk89VJOp
+        b6KlCkhuxKFme+Iqetq8uP8DEZfzn00yKFbuR6sT7xQ==
+X-Received: by 2002:a2e:3019:0:b0:2a8:b2e5:4f65 with SMTP id w25-20020a2e3019000000b002a8b2e54f65mr30953ljw.14.1682020968898;
+        Thu, 20 Apr 2023 13:02:48 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bXpwHlruy+jf2ptQ1Zd/wR8j5qrYfqh/7n1iiCVd2ep1fw4ngmPsqejAh0saIE98fHvnXdew==
+X-Received: by 2002:a2e:3019:0:b0:2a8:b2e5:4f65 with SMTP id w25-20020a2e3019000000b002a8b2e54f65mr30918ljw.14.1682020968577;
+        Thu, 20 Apr 2023 13:02:48 -0700 (PDT)
+Received: from localhost (uk.sesame.canonical.com. [185.125.190.60])
+        by smtp.gmail.com with ESMTPSA id e2-20020a2e9302000000b002aa399f6ec5sm72602ljh.132.2023.04.20.13.02.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 13:02:48 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 22:02:47 +0200
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        joshdon@google.com, brho@google.com, pjt@google.com,
+        derkling@google.com, haoluo@google.com, dvernet@meta.com,
+        dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@meta.com, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH 24/32] sched_ext: Add cgroup support
+Message-ID: <ZEGaZ+lQL7pHpmY5@righiandr-XPS-13-7390>
+References: <20230317213333.2174969-1-tj@kernel.org>
+ <20230317213333.2174969-25-tj@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230328023129.3596968-1-zhouzongmin@kylinos.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230317213333.2174969-25-tj@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-28 10:31:29 +0800, Zongmin Zhou wrote:
-> When drivers call drm_kms_helper_poll_disable from
-> their device suspend implementation without enabled output polling before,
-> following warning will be reported,due to work->func not be initialized:
+On Fri, Mar 17, 2023 at 11:33:25AM -1000, Tejun Heo wrote:
+...
+> +/**
+> + * scx_bpf_task_cgroup - Return the sched cgroup of a task
+> + * @p: task of interest
+> + *
+> + * @p->sched_task_group->css.cgroup represents the cgroup @p is associated with
+> + * from the scheduler's POV. SCX operations should use this function to
+> + * determine @p's current cgroup as, unlike following @p->cgroups,
+> + * @p->sched_task_group is protected by @p's rq lock and thus atomic w.r.t. all
+> + * rq-locked operations. Can be called on the parameter tasks of rq-locked
+> + * operations. The restriction guarantees that @p's rq is locked by the caller.
+> + */
+> +struct cgroup *scx_bpf_task_cgroup(struct task_struct *p)
+> +{
+> +	struct task_group *tg = p->sched_task_group;
+> +	struct cgroup *cgrp = &cgrp_dfl_root.cgrp;
+> +
+> +	if (!scx_kf_allowed_on_arg_tasks(__SCX_KF_RQ_LOCKED, p))
+> +		goto out;
+> +
+> +	/*
+> +	 * A task_group may either be a cgroup or an autogroup. In the latter
+> +	 * case, @tg->css.cgroup is %NULL. A task_group can't become the other
+> +	 * kind once created.
+> +	 */
+> +	if (tg && tg->css.cgroup)
+> +		cgrp = tg->css.cgroup;
+> +	else
+> +		cgrp = &cgrp_dfl_root.cgrp;
+> +out:
+> +	cgroup_get(cgrp);
+> +	return cgrp;
+> +}
 
-we see the same warning with the wpork in progress kms driver for apple 
-silicon SoCs. The connectors do not need to polled so the driver never 
-calls drm_kms_helper_poll_init().
- 
-> [   55.141361] WARNING: CPU: 3 PID: 372 at kernel/workqueue.c:3066 __flush_work+0x22f/0x240
-> [   55.141382] Modules linked in: nls_iso8859_1 snd_hda_codec_generic ledtrig_audio snd_hda_intel snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_codec snd_hda_core snd_hwdep snd_pcm snd_seq_midi snd_seq_midi_event snd_rawmidi snd_seq intel_rapl_msr intel_rapl_common bochs drm_vram_helper drm_ttm_helper snd_seq_device nfit ttm crct10dif_pclmul snd_timer ghash_clmulni_intel binfmt_misc sha512_ssse3 aesni_intel drm_kms_helper joydev input_leds syscopyarea crypto_simd snd cryptd sysfillrect sysimgblt mac_hid serio_raw soundcore qemu_fw_cfg sch_fq_codel msr parport_pc ppdev lp parport drm ramoops reed_solomon pstore_blk pstore_zone efi_pstore virtio_rng ip_tables x_tables autofs4 hid_generic usbhid hid ahci virtio_net i2c_i801 crc32_pclmul psmouse virtio_scsi libahci i2c_smbus lpc_ich xhci_pci net_failover virtio_blk xhci_pci_renesas failover
-> [   55.141430] CPU: 3 PID: 372 Comm: kworker/u16:9 Not tainted 6.2.0-rc6+ #16
-> [   55.141433] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org 04/01/2014
-> [   55.141435] Workqueue: events_unbound async_run_entry_fn
-> [   55.141441] RIP: 0010:__flush_work+0x22f/0x240
-> [   55.141444] Code: 8b 43 28 48 8b 53 30 89 c1 e9 f9 fe ff ff 4c 89 f7 e8 b5 95 d9 00 e8 00 53 08 00 45 31 ff e9 11 ff ff ff 0f 0b e9 0a ff ff ff <0f> 0b 45 31 ff e9 00 ff ff ff e8 e2 54 d8 00 66 90 90 90 90 90 90
-> [   55.141446] RSP: 0018:ff59221940833c18 EFLAGS: 00010246
-> [   55.141449] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffff9b72bcbe
-> [   55.141450] RDX: 0000000000000001 RSI: 0000000000000001 RDI: ff3ea01e4265e330
-> [   55.141451] RBP: ff59221940833c90 R08: 0000000000000000 R09: 8080808080808080
-> [   55.141453] R10: ff3ea01e42b3caf4 R11: 000000000000000f R12: ff3ea01e4265e330
-> [   55.141454] R13: 0000000000000001 R14: ff3ea01e505e5e80 R15: 0000000000000001
-> [   55.141455] FS:  0000000000000000(0000) GS:ff3ea01fb7cc0000(0000) knlGS:0000000000000000
-> [   55.141456] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   55.141458] CR2: 0000563543ad1546 CR3: 000000010ee82005 CR4: 0000000000771ee0
-> [   55.141464] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [   55.141465] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [   55.141466] PKRU: 55555554
-> [   55.141467] Call Trace:
-> [   55.141469]  <TASK>
-> [   55.141472]  ? pcie_wait_cmd+0xdf/0x220
-> [   55.141478]  ? mptcp_seq_show+0xe0/0x180
-> [   55.141484]  __cancel_work_timer+0x124/0x1b0
-> [   55.141487]  cancel_delayed_work_sync+0x17/0x20
-> [   55.141490]  drm_kms_helper_poll_disable+0x26/0x40 [drm_kms_helper]
-> [   55.141516]  drm_mode_config_helper_suspend+0x25/0x90 [drm_kms_helper]
-> [   55.141531]  ? __pm_runtime_resume+0x64/0x90
-> [   55.141536]  bochs_pm_suspend+0x16/0x20 [bochs]
-> [   55.141540]  pci_pm_suspend+0x8b/0x1b0
-> [   55.141545]  ? __pfx_pci_pm_suspend+0x10/0x10
-> [   55.141547]  dpm_run_callback+0x4c/0x160
-> [   55.141550]  __device_suspend+0x14c/0x4c0
-> [   55.141553]  async_suspend+0x24/0xa0
-> [   55.141555]  async_run_entry_fn+0x34/0x120
-> [   55.141557]  process_one_work+0x21a/0x3f0
-> [   55.141560]  worker_thread+0x4e/0x3c0
-> [   55.141563]  ? __pfx_worker_thread+0x10/0x10
-> [   55.141565]  kthread+0xf2/0x120
-> [   55.141568]  ? __pfx_kthread+0x10/0x10
-> [   55.141570]  ret_from_fork+0x29/0x50
-> [   55.141575]  </TASK>
-> [   55.141575] ---[ end trace 0000000000000000 ]---
-> 
-> Fixes: a4e771729a51 ("drm/probe_helper: sort out poll_running vs poll_enabled")
-> Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
-> ---
->  drivers/gpu/drm/drm_probe_helper.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
-> index 8127be134c39..ac72b18e2257 100644
-> --- a/drivers/gpu/drm/drm_probe_helper.c
-> +++ b/drivers/gpu/drm/drm_probe_helper.c
-> @@ -855,7 +855,8 @@ void drm_kms_helper_poll_disable(struct drm_device *dev)
->  	if (dev->mode_config.poll_running)
->  		drm_kms_helper_disable_hpd(dev);
->  
-> -	cancel_delayed_work_sync(&dev->mode_config.output_poll_work);
-> +	if (dev->mode_config.poll_enabled)
-> +		cancel_delayed_work_sync(&dev->mode_config.output_poll_work);
+^ #ifdef CONFIG_CGROUP_SCHED, otherwise we may get build errors, like:
 
-Checking for dev->mode_config.poll_enabled at the start of the function 
-and return early if it is not true looks more in style with the rest of 
-drm_probe_helper.c.
+kernel/sched/ext.c:4251:34: error: 'struct task_struct' has no member named 'sched_task_group'
 
-No difference functionally of course. Tested with the apple kms driver.
+> +
+>  BTF_SET8_START(scx_kfunc_ids_any)
+>  BTF_ID_FLAGS(func, scx_bpf_kick_cpu)
+>  BTF_ID_FLAGS(func, scx_bpf_dsq_nr_queued)
+> @@ -3431,6 +3803,7 @@ BTF_ID_FLAGS(func, scx_bpf_error_bstr, KF_TRUSTED_ARGS)
+>  BTF_ID_FLAGS(func, scx_bpf_destroy_dsq)
+>  BTF_ID_FLAGS(func, scx_bpf_task_running, KF_RCU)
+>  BTF_ID_FLAGS(func, scx_bpf_task_cpu, KF_RCU)
+> +BTF_ID_FLAGS(func, scx_bpf_task_cgroup, KF_RCU | KF_ACQUIRE)
 
-Reviewed-by: Janne Grunau <j@jannau.net>
+Ditto.
 
-ciao
-Janne
+-Andrea
