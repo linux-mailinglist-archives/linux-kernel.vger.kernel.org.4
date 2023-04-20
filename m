@@ -2,65 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A24256E9872
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AEAB6E9878
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231928AbjDTPgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 11:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37102 "EHLO
+        id S231826AbjDTPhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 11:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjDTPgt (ORCPT
+        with ESMTP id S229933AbjDTPhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 11:36:49 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1575581;
-        Thu, 20 Apr 2023 08:36:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682005007; x=1713541007;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iO/i2tt5DEzt8gruW8+zs93sVMgkJU4X3e0uYovtxx8=;
-  b=Xcmt9R/LozyKo+AlCCS4SPBwcVfJgdODNuBGbRQSpqvqUnbK3sDI3WWI
-   Ai9hQm5jAvuUV2y3tE+tkWgpzj8oh8jaE5qTq8qItSuygO3ur+XtgZCyi
-   Pk71I+UdVneHTCpxXlD4D6ZGboWGAahcA9V5GMYvnzTvu63eq6ITxudyW
-   oWQUfYN6nfA+u8pFno9gA26F7D9haAaM4rkPcD6cmSL8H8+RUCOEK6iHD
-   z8r/+l/H6W+NV/yuJTfHjNZ7YZI+nY5/GP/kKR3+zH2xNq458Aw/vOLqv
-   nSsX+C06jjP1Ux5uqJ9VKQtCex5+fu7ZuFC0nIXEb5M6DKuANcbyNfVlc
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="348533242"
-X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="348533242"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 08:36:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="756537428"
-X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="756537428"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Apr 2023 08:36:44 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ppWKx-000fuA-2b;
-        Thu, 20 Apr 2023 15:36:43 +0000
-Date:   Thu, 20 Apr 2023 23:35:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
-        Song Liu <song@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Daniil Tatianin <d-tatianin@yandex-team.ru>,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] md/md-multipath: guard against a possible NULL
- dereference
-Message-ID: <202304202346.fddWOoq1-lkp@intel.com>
-References: <20230420071851.326726-1-d-tatianin@yandex-team.ru>
+        Thu, 20 Apr 2023 11:37:53 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682F51991
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:37:52 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id ud9so7320717ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682005071; x=1684597071;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ApdTWhhkzb3N6QPss2Yi29YN1Urm38DCu4SfJzo1FQI=;
+        b=OI42D9V5yNMUvJYFnh5KZP3SfORv1nitueVJtSxwirYdvprgf4mHQfP3mWi6vxh8p7
+         jc6n1kvmWxPVFwZUqRp9zkDTthsv49ZKHfZE/ajqeT7rNcDTJAWlG+uuomQ7XWcc9IEu
+         69qmu/jgVP6qiE5E3U94y9VwfIpZmJ60lzZY/OZVUS1Q356VSOoWf0b0gvlLb0willLI
+         +AuwkAWPd6MndKUf7NdsTNatgvsFQTn65fKFAybNM+2k41KxAP4lQl0bC1wvVHpfgAXI
+         ssT8Bo0cqfePRtiDhsfpi/7am7YKWYfLUrq9/stle7KV6a9R+vVpQxY+glFEPtTnfT0U
+         Cbog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682005071; x=1684597071;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ApdTWhhkzb3N6QPss2Yi29YN1Urm38DCu4SfJzo1FQI=;
+        b=SQWasKDUSbRfgolAfSBkWU+hTno4ofVci0sSktyp77PyB+q0MWr7vrNZWZbnV4y2rb
+         xUIb1JgCQA7ZzwoaWvhG1PO9FCmfxp6xc2im76OSAwEtajjLLnEmm0qRFiuZrqeC37ow
+         Vi3N/dFGFyEgyAseAQVXeUGjaNyvKCmW0E3IkU6CCFTquzGxO7M8vRb1H2GRzfq8Omai
+         RmfElQgYp+0JYcJ+C8sO+eRuID9kud+Zs5JCgQARXZcuSc+df2I0X3z9GtFXCY6VjpE1
+         4O9vhLsBqscnvL4Vv74KQsmSOE7Q9C+iQXl5gb4qkfYsXIHzWQRoBDmoAlFcE+Fy8l89
+         asiA==
+X-Gm-Message-State: AAQBX9fsGJTO7jWRf++ap8snCJlZSatFkwRcrcDCkKppCOqH/H5lZD0C
+        zyklSs5TCYS09O8lH0jWmdLJuQ==
+X-Google-Smtp-Source: AKy350bolQ8RHPDEoxQ2ZB1HmmT5FLmSChLbyJX+YfSROWHK0HuITUZs/iOaI9q4WjxA9H8o4aXbrA==
+X-Received: by 2002:a17:906:a258:b0:947:4828:4399 with SMTP id bi24-20020a170906a25800b0094748284399mr1991837ejb.12.1682005070813;
+        Thu, 20 Apr 2023 08:37:50 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:bcb8:77e6:8f45:4771? ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
+        by smtp.gmail.com with ESMTPSA id g25-20020a170906349900b0095336e8e012sm865381ejb.176.2023.04.20.08.37.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 08:37:50 -0700 (PDT)
+Message-ID: <1da788fd-03df-1704-187e-0045876f2605@linaro.org>
+Date:   Thu, 20 Apr 2023 17:37:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420071851.326726-1-d-tatianin@yandex-team.ru>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 4/4] spi: s3c64xx: support interrupt based pio mode
+Content-Language: en-US
+To:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
+References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
+ <CGME20230419062755epcas2p43a1127f4bb28cf1cf3f42e5d3cc597cd@epcas2p4.samsung.com>
+ <20230419060639.38853-5-jaewon02.kim@samsung.com>
+ <88e74f8f-feee-159a-3048-736a5ffc13cd@linaro.org>
+ <af95919d-f422-feec-b58d-a9b8c54af6d8@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <af95919d-f422-feec-b58d-a9b8c54af6d8@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,88 +82,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniil,
+On 19/04/2023 11:45, Jaewon Kim wrote:
+>>>   static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
+>>> -				struct spi_transfer *xfer)
+>>> +				struct spi_transfer *xfer, int use_irq)
+>>>   {
+>>>   	void __iomem *regs = sdd->regs;
+>>>   	unsigned long val;
+>>> +	unsigned long time;
+>>>   	u32 status;
+>>>   	int loops;
+>>>   	u32 cpy_len;
+>>> @@ -563,17 +568,24 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
+>>>   	int ms;
+>>>   	u32 tx_time;
+>>>   
+>>> -	/* sleep during signal transfer time */
+>>> -	status = readl(regs + S3C64XX_SPI_STATUS);
+>>> -	if (RX_FIFO_LVL(status, sdd) < xfer->len) {
+>>> -		tx_time = (xfer->len * 8 * 1000 * 1000) / sdd->cur_speed;
+>>> -		usleep_range(tx_time / 2, tx_time);
+>>> -	}
+>> You just added this code. Adding and immediately removing it, suggests
+>> this should be one patch.
+>>
+> This code has been moved, not removed.
 
-kernel test robot noticed the following build errors:
+Move consists of remove and add. Add it in correct place since beginning.
 
-[auto build test ERROR on song-md/md-next]
-[also build test ERROR on linus/master v6.3-rc7 next-20230419]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Best regards,
+Krzysztof
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniil-Tatianin/md-md-multipath-guard-against-a-possible-NULL-dereference/20230420-152235
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git md-next
-patch link:    https://lore.kernel.org/r/20230420071851.326726-1-d-tatianin%40yandex-team.ru
-patch subject: [PATCH] md/md-multipath: guard against a possible NULL dereference
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230420/202304202346.fddWOoq1-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3b0e378bb2e165f35044ecb535fb1ed973ea392e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniil-Tatianin/md-md-multipath-guard-against-a-possible-NULL-dereference/20230420-152235
-        git checkout 3b0e378bb2e165f35044ecb535fb1ed973ea392e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304202346.fddWOoq1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/md/md-multipath.c: In function 'multipath_make_request':
->> drivers/md/md-multipath.c:111:14: error: 'map_bh' undeclared (first use in this function); did you mean 'mp_bh'?
-     111 |         if (!map_bh)
-         |              ^~~~~~
-         |              mp_bh
-   drivers/md/md-multipath.c:111:14: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +111 drivers/md/md-multipath.c
-
-    99	
-   100	static bool multipath_make_request(struct mddev *mddev, struct bio * bio)
-   101	{
-   102		struct mpconf *conf = mddev->private;
-   103		struct multipath_bh * mp_bh;
-   104		struct multipath_info *multipath;
-   105	
-   106		if (unlikely(bio->bi_opf & REQ_PREFLUSH)
-   107		    && md_flush_request(mddev, bio))
-   108			return true;
-   109	
-   110		mp_bh = mempool_alloc(&conf->pool, GFP_NOIO);
- > 111		if (!map_bh)
-   112			return false;
-   113	
-   114		mp_bh->master_bio = bio;
-   115		mp_bh->mddev = mddev;
-   116	
-   117		mp_bh->path = multipath_map(conf);
-   118		if (mp_bh->path < 0) {
-   119			bio_io_error(bio);
-   120			mempool_free(mp_bh, &conf->pool);
-   121			return true;
-   122		}
-   123		multipath = conf->multipaths + mp_bh->path;
-   124	
-   125		bio_init_clone(multipath->rdev->bdev, &mp_bh->bio, bio, GFP_NOIO);
-   126	
-   127		mp_bh->bio.bi_iter.bi_sector += multipath->rdev->data_offset;
-   128		mp_bh->bio.bi_opf |= REQ_FAILFAST_TRANSPORT;
-   129		mp_bh->bio.bi_end_io = multipath_end_request;
-   130		mp_bh->bio.bi_private = mp_bh;
-   131		mddev_check_write_zeroes(mddev, &mp_bh->bio);
-   132		submit_bio_noacct(&mp_bh->bio);
-   133		return true;
-   134	}
-   135	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
