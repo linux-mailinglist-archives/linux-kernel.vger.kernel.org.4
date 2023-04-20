@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB2F6E988E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A866E9893
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231656AbjDTPll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 11:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
+        id S232187AbjDTPmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 11:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbjDTPli (ORCPT
+        with ESMTP id S231808AbjDTPmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 11:41:38 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DF14EED
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:41:21 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f17b967bfbso22575415e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:41:21 -0700 (PDT)
+        Thu, 20 Apr 2023 11:42:06 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6565FD8
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:42:03 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id fy21so7305331ejb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:42:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682005280; x=1684597280;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pMTCI9kAG7wRhQ4LO+BFtd8OeJXKh9I5SStps/c37Rw=;
-        b=PsOyPWDCsi920bN8Udf6m0hFPjcB7Hp3uhPoxvdq/n0L8GKwzbRaBjT67AFSTy8etY
-         dSxDU4PLWYFfVwc3MwyUS1a6Op5jKszILgf4c140Cp1OuLCCUyTe6ZZ40QvUyn7ldb82
-         07T1NhScT3g4Kf+6DbgUKy4gdirJpfjjuzaFjxwlFSETLG7ebv7t/9zlAv4SXQ2tpcLs
-         rvl+vle9tOoZVlmgyhCdItgQAW9LV2W8H5AIWyDj5lUM22E7iPfIENAJJoibq2yuvvyT
-         +dx61Ogx3NogDVkYbVskFRw1Bu/2nsIV56zRNYtRrf8l0a1U6Xe4mp4s7WGBk+dJnaqD
-         qnxQ==
+        d=linaro.org; s=google; t=1682005322; x=1684597322;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KnJpp8n/D0kUuMw5srBtiHxWnY5agaKj5jAEcqN8M30=;
+        b=d7l1XYePBoWBNgg+K9TiUXnEeE1sNHrY5RlzHQid8iJYdL41erTXfy7aPeIm4TeOFX
+         9RkBJBANWPmKeZXEJLBg22JkFYJPaK2qH+GnUQ9KUKjHJ2TJ1IkVkIZ21Tn6lb7Hz0vB
+         HhtpVKng1rKja4iFnwW7odp1E5EHbCV47OLlPiTmNLHMRrbLzepCvMgM1ETRgmvqdZpU
+         fNV/PuLVsgBerGE6ikKNNXeCBrxwuu+MLin13ualf7pm82WlE5pJWO9ggd850PQohLcg
+         wZI9SAHcXop2U2VXX5C9CDNsquagEwYH+zZ5yrNyh2nVC0XTnut3uvHr2sGgkwNL/+a9
+         bNgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682005280; x=1684597280;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pMTCI9kAG7wRhQ4LO+BFtd8OeJXKh9I5SStps/c37Rw=;
-        b=DTnDdoqgVquEwKZTlRfKgFfZGNcgU3xxUjoXquzsyV4OwznP3/HzSFDGfxn06mjkkg
-         C6hnf+W37OPByjoQJBCVclk+foPlWJ32jpLofItkjT/CmsNZHHZ+r71nwCsqCl1Jk/zs
-         6b/22WR2SsBf/waxQOgQbl9hTfdcvboV+PDD5iPSzwEtCXv2jRTMph/7eFUEb1OTaN7A
-         Y3LN4gqA+2HiTGxcqjZocVp+i+zOi60cR6gK5ePp0hH839aWqi/jH5Xoi4aaQUjAgNOk
-         5igJnPVfLwzwAdA6uMd2VSKFz8GFJQ88pv9ya7yiTdhmmegrEBq+v1DFughM0q9/DgHR
-         3/hA==
-X-Gm-Message-State: AAQBX9e0tPwciTNTqvrGJe+kHLYZr2bVddA8JrDJdWuwByN214NNkoV9
-        QUDY4gh7GztTwecM/OR8d2mohe2yU3woBUHon6YjMQ==
-X-Google-Smtp-Source: AKy350Zm2fmnU/Ys/3X2CzEj8wVPLTgQsWnV/f20jBKDfIONBHIbCzhsBE/x/IkJXuZKQzVRBRgr21q2SXkmBujHd1Q=
-X-Received: by 2002:a05:6000:1181:b0:2fc:3596:7392 with SMTP id
- g1-20020a056000118100b002fc35967392mr1580931wrx.24.1682005280020; Thu, 20 Apr
- 2023 08:41:20 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682005322; x=1684597322;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KnJpp8n/D0kUuMw5srBtiHxWnY5agaKj5jAEcqN8M30=;
+        b=XhqxsIEEQ9vc5D2F6Qsquvl6WOdlInG66dRWfbIS9kMpAordOEYrMbvdlKl3trzt5A
+         r4ZKO2AONUQOMEu1g/0xsmfOaGFxRizMGjsnV2ogEdjvoVVbRWwfTxKE+Lt4+mOt2hQa
+         5U7j5qqLEMuu8bSW5L02+kFjYDitmwcJA0a6rq8PlXlMSk5trpXP4iJ+IOKSiMt2x+PR
+         M/r9T9EVDPHFQL7CCKK9uwRwwE381Ci9NFE1rIHh7wJo9ByIHuCfNA/MqzCXBtMOCdAU
+         v4EYR8kXGYX3DaCwM9UCLv/ShYCwoqG2P1304kjUlRpAMPZbKns5aZkytATzfYVrnmQR
+         0AJQ==
+X-Gm-Message-State: AAQBX9eLAKkxgqIixe92h64jWQ/Us/cH1CVM/bESWUtxS89ymbJkw4TW
+        I+AnAbvVCmlIpzAvHkZO+g6I2g==
+X-Google-Smtp-Source: AKy350aUUUuiHPcRVrmXlKjxRMAKQP2h9+Dfv/GAZvKgaHmZyTTXiJnohkiGrcI/uqV5UoEmIm3qzQ==
+X-Received: by 2002:a17:906:5281:b0:956:f636:cc93 with SMTP id c1-20020a170906528100b00956f636cc93mr878092ejm.15.1682005322054;
+        Thu, 20 Apr 2023 08:42:02 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:bcb8:77e6:8f45:4771? ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
+        by smtp.gmail.com with ESMTPSA id x16-20020a170906805000b00953285b937asm842463ejw.189.2023.04.20.08.42.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 08:42:01 -0700 (PDT)
+Message-ID: <0d096ba8-1bb2-249e-153f-eb430a9f5e8e@linaro.org>
+Date:   Thu, 20 Apr 2023 17:42:00 +0200
 MIME-Version: 1.0
-References: <1681971690-28858-1-git-send-email-quic_sarannya@quicinc.com>
-In-Reply-To: <1681971690-28858-1-git-send-email-quic_sarannya@quicinc.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Thu, 20 Apr 2023 09:41:09 -0600
-Message-ID: <CANLsYky00+sD-MsGK40E79xe8v8vtxji8O0LdgEOHYTF5PPpZA@mail.gmail.com>
-Subject: Re: [PATCH V6 0/3] rpmsg signaling/flowcontrol patches
-To:     Sarannya S <quic_sarannya@quicinc.com>
-Cc:     quic_bjorande@quicinc.com, arnaud.pouliquen@foss.st.com,
-        swboyd@chromium.org, quic_clew@quicinc.com,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: arm: sunxi: add ICnova A20 ADB4006
+ binding
+Content-Language: en-US
+To:     Ludwig Kormann <ludwig.kormann@in-circuit.de>, samuel@sholland.org,
+        jernej.skrabec@gmail.com, wens@csie.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andre.przywara@arm.com
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230420102409.1394618-1-ludwig.kormann@in-circuit.de>
+ <20230420102409.1394618-2-ludwig.kormann@in-circuit.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230420102409.1394618-2-ludwig.kormann@in-circuit.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,37 +79,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Apr 2023 at 00:22, Sarannya S <quic_sarannya@quicinc.com> wrote:
->
-> Added new IOCTLS- RPMSG_GET_OUTGOING_FLOWCONTROL and RPMSG_SET_INCOMING_FLOWCONTROL
-> to get/set the rpmsg char device's flow control signal.
-> Updated the cmd name 'RPM_CMD_SIGNALS' to 'GLINK_CMD_SIGNALS'.
-> Changed 'remote_flow' to bool type, and updated it's evaluation.
-> Updated evaluation of 'set' in rpmsg_char as 'set = !!arg'.
-> Add destination address of endpoint as parameter in rpmsg_set_flow_control.
-> Addressed review comments to change variable names/descriptions.
->
-> Chris Lew (2):
->   rpmsg: glink: Add support to handle signals command
->   rpmsg: char: Add RPMSG GET/SET FLOWCONTROL IOCTL support
->
-> Deepak Kumar Singh (1):
->   rpmsg: core: Add signal API support
->
->  drivers/rpmsg/qcom_glink_native.c | 64 +++++++++++++++++++++++++++++++++++++++
->  drivers/rpmsg/rpmsg_char.c        | 49 ++++++++++++++++++++++++++----
->  drivers/rpmsg/rpmsg_core.c        | 21 +++++++++++++
->  drivers/rpmsg/rpmsg_internal.h    |  2 ++
->  include/linux/rpmsg.h             | 15 +++++++++
->  include/uapi/linux/rpmsg.h        | 11 ++++++-
->  6 files changed, 155 insertions(+), 7 deletions(-)
->
+On 20/04/2023 12:24, Ludwig Kormann wrote:
+> Document board compatible names for In-Circuit ICnova A20 ADB4006
+> development board.
+> 
+> Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+> Signed-off-by: Ludwig Kormann <ludwig.kormann@in-circuit.de>
+> ---
 
-It is not possible to follow what is happening with this patchset.
-Please send a proper V7 that takes into account the comments that were
-received _and_ a summary of what changed between the revisions.
 
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
->
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
