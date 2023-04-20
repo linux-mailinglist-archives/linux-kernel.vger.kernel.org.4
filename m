@@ -2,120 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FA26E9087
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C5E6E9089
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbjDTKmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51648 "EHLO
+        id S234985AbjDTKmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234630AbjDTKmX (ORCPT
+        with ESMTP id S234916AbjDTKm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:42:23 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE9C4C31
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:41:19 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2a8a6602171so4198001fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:41:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681987278; x=1684579278;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yYJib+KQpRN6Chzv9c6xYxJsgyv5cT5aVycO+xQckao=;
-        b=VBUTkbmrolkfG2HfEcgTK0vDuXwjt6JD29+KkTRVwL/3szw1ASTwqK1tfPffuYb3Ji
-         4K4Ijw7CasoMUf2pLiGr35Pi2Fq+YlI1U9gBRhSYZU/n9WO/Dlnn/Iot3GjzKtMNKJSX
-         IGhL2vLPMC8YaqZrO9s5cF94R+Lk9D/kQS0YfhA5o+++uBY3xX3AY/BXKZJqBDZQ8N2W
-         UJKvF9GQOlRcofDCf8qU5zmjTINV78rsbZPBgktwrn6hqTJrpuAENz8nQCZSmzSqGjXi
-         eiPxN7VA1HwSY4kRvGLYqn/85LfagJEtte9GsiNFUYkUOjimR4Plwydj9uxVJA0yQo+t
-         6kvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681987278; x=1684579278;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yYJib+KQpRN6Chzv9c6xYxJsgyv5cT5aVycO+xQckao=;
-        b=l8ndGtUslqFulhW/QtmIhBd9HOEs15tZXcwkWbmdEUyDdw3wbCQb3QOXJCiC1hN5q0
-         yIZVSt0Qhu7sLgZTlxK2k3nj+iwuxbuz+dHaat4e2unIkiPK4aMqFuZPSFS4eO/F2BqI
-         LUOuYhUh5dmvj/HFKKpG+JBsJDmR4V2pzbcYjXVyyyw2nFFmurKrvNU8FXfsv1JMyy0l
-         SMn1iYVWAscfzPZ8HCU7pVNy6d8PpcIwSW2j/S4XQj04E32r9HEVGGURhdHOctWlBGnl
-         Xe/aozhYPqy59JUnP8yZUBsBPEFxwczdQaivtNZbX3NrGqe9dlyNK4tSv88gueAvz6jJ
-         k0Fw==
-X-Gm-Message-State: AAQBX9eaG+eplh/a56feFJw/p4TLPWF0rmZUD2fhdp00TAk/TAsF2XAd
-        4bZ3J4rx1+iyVgONxpmV5ZjueA==
-X-Google-Smtp-Source: AKy350bflVL4FNLvEiOCx3SDmmD4O9EV3jKBx3p9B/hdDwhOXn3V1VVtrkWhvhhaPJtrfxeCjcsQ4A==
-X-Received: by 2002:ac2:5550:0:b0:4db:4fe8:fd0f with SMTP id l16-20020ac25550000000b004db4fe8fd0fmr302284lfk.25.1681987278035;
-        Thu, 20 Apr 2023 03:41:18 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id e13-20020ac2546d000000b004b567e1f8e5sm174205lfn.125.2023.04.20.03.41.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 03:41:17 -0700 (PDT)
-Message-ID: <2549bb8a-c64f-ee23-307a-1e39a86d9814@linaro.org>
-Date:   Thu, 20 Apr 2023 12:41:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: correct unit address
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        Thu, 20 Apr 2023 06:42:28 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85B535B1;
+        Thu, 20 Apr 2023 03:41:31 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-172-149.tukw.qwest.net [174.21.172.149])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 4A381218;
+        Thu, 20 Apr 2023 03:41:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1681987291;
+        bh=f9ffG5vWNAAbE4hPrsuUtVJ8N7z1fDEHnFJSi3q7da0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LIg0kgLbi9KGz3X9zys2Ipug8r4gGEeF0Z+5uGtOMt+bFeEBE0YK2RPlD2Lq3X48x
+         hi9Wkx2OvAFUYJhfeFX0kcFInEO7fmKcAkcRgaxmpRsWhiP1Q5wIIOqXxxL2BY3bnm
+         ZgSnnL8GkTcoPvsdnu46wfOeDYOnG7C24sqbzkYc=
+Date:   Thu, 20 Apr 2023 03:41:30 -0700
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230420072429.36255-1-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230420072429.36255-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: regulator: Add dt property
+Message-ID: <048bf9f4-92ee-4aca-a46f-dbe512129ffe@hatter.bewilderbeest.net>
+References: <20230418145051.4192963-1-Naresh.Solanki@9elements.com>
+ <0da2b301-8780-48c0-a5dc-326474011e8d@hatter.bewilderbeest.net>
+ <9f425205-c395-648a-3f42-a776c7580a8f@9elements.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9f425205-c395-648a-3f42-a776c7580a8f@9elements.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 20, 2023 at 01:22:30AM PDT, Naresh Solanki wrote:
+>Hi Zev,
+>
+>On 20-04-2023 05:31 am, Zev Weiss wrote:
+>>On Tue, Apr 18, 2023 at 07:50:50AM PDT, Naresh Solanki wrote:
+>>>Add DT property regulator-supplies.
+>>>This enables us to couple one or more regulator output to gether. This
+>>>is use in case of Single connector having 2 or more supplies.
+>>>
+>>>Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>>---
+>>>.../bindings/regulator/regulator-output.yaml         | 12 +++++++++---
+>>>1 file changed, 9 insertions(+), 3 deletions(-)
+>>>
+>>>diff --git 
+>>>a/Documentation/devicetree/bindings/regulator/regulator-output.yaml 
+>>>b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+>>>index 078b37a1a71a..17f683d3c1f3 100644
+>>>--- a/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+>>>+++ b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+>>>@@ -21,13 +21,19 @@ properties:
+>>>  compatible:
+>>>    const: regulator-output
+>>>
+>>>-  vout-supply:
+>>>+  regulator-supplies:
+>>>    description:
+>>>-      Phandle of the regulator supplying the output.
+>>>+      Specifies the name of the output supply provided by the regulator.
+>>>+      Defaults to "vout".
+>>>+    default: "vout"
+>>>+
+>>
+>>Was this meant to be specified as a string-array to allow providing 
+>>multiple names?
+>Yes. This is string-array.
 
+Okay -- in that case I think it should include
 
-On 20.04.2023 09:24, Krzysztof Kozlowski wrote:
-> Match unit-address to first reg entry.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+   $ref: /schemas/types.yaml#/definitions/string-array
 
-Konrad
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> index b6452ed78802..d9aa54c11663 100644
-> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> @@ -328,7 +328,7 @@ examples:
->    - |
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->      // Example 1 (new calbiration data: for pre v1 IP):
-> -    thermal-sensor@900000 {
-> +    thermal-sensor@4a9000 {
->          compatible = "qcom,msm8916-tsens", "qcom,tsens-v0_1";
->          reg = <0x4a9000 0x1000>, /* TM */
->                <0x4a8000 0x1000>; /* SROT */
-> @@ -358,7 +358,7 @@ examples:
->    - |
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->      // Example 1 (legacy: for pre v1 IP):
-> -    tsens1: thermal-sensor@900000 {
-> +    tsens1: thermal-sensor@4a9000 {
->             compatible = "qcom,msm8916-tsens", "qcom,tsens-v0_1";
->             reg = <0x4a9000 0x1000>, /* TM */
->                   <0x4a8000 0x1000>; /* SROT */
+>>
+>>>+patternProperties:
+>>>+  ".*-supply":
+>>>+    description:
+>>>+      Specified the phandle for various supplies
+>>>
+>>>required:
+>>>  - compatible
+>>>-  - vout-supply
+>>>
+>>>additionalProperties: false
+>>>
+>>>
+>>
+>>I think it would be nice to also update the examples to show what a 
+>>multi-supply instance would look like.
+>Ack. Will do that.
+>>
+>>A slightly more descriptive subject line would also be good -- "Add 
+>>dt property" is a bit vague.
+>Suggestion ?
+>How about like 'Allow multiple supplies' or 'Add support for multiple 
+>supplies'
+
+Sure, both of those sound fine to me.
+
+>>
+>>>base-commit: c55470f8b0616b0adb758077dbae9b19c5aac005
+>>>-- 
+>>>2.39.1
+>>>
+>Regards,
+>Naresh
