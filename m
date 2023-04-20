@@ -2,94 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187D76E88F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 06:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD1D6E86CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 02:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbjDTEFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 00:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
+        id S231610AbjDTAsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 20:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjDTEFj (ORCPT
+        with ESMTP id S230157AbjDTAsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 00:05:39 -0400
-Received: from mail.heimpalkorhaz.hu (mail.heimpalkorhaz.hu [193.224.51.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD0CE5F
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 21:05:37 -0700 (PDT)
-Received: from mail.heimpalkorhaz.hu (localhost [127.0.0.1])
-        (Authenticated sender: lmateisz@heimpalkorhaz.hu)
-        by mail.heimpalkorhaz.hu (Postfix) with ESMTPA id C677A384A6E170;
-        Thu, 20 Apr 2023 02:47:34 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.heimpalkorhaz.hu C677A384A6E170
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heimpalkorhaz.hu;
-        s=default; t=1681951655;
-        bh=N2nogFpnFRpTs3l8UZP2CK/VUvCWLBZJbdzLcnyb9VM=;
-        h=Date:From:To:Subject:Reply-To:From;
-        b=rlJmMyAdmqOgGrdr5YNocOUKgYCs9gUPo9nxmz4Df4H3CEqzarK9iCD8kzDGEB85c
-         HuJLldXh4cqZFD5BR6UI0VeUXv2vPudMdkQWO4EGwgSvNbKyIrjc0NbRdl75cPXLKN
-         1tr3KxnRIDIasF0fB418PGmFizsgPfZq7CW2kfe2+bKQjQerMq6LOxdYc5tcT13mgO
-         2Rke/itmFOutqd07zvJ9LJsNPIirrkJgD5qEtjvTGzSrzlA+EMl62dpkh9DWQFROdJ
-         QJkyqS9a3/KSW5tGzARB7NPJQjyFxdbh06LGknw16KEANLXxrQ6BZa8ozRR1IYh7XK
-         KtyASOc3Bww4g==
+        Wed, 19 Apr 2023 20:48:01 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D592D66
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 17:48:00 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id k15so991805ljq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 17:48:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681951679; x=1684543679;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YiCUqcs8l7xs68tLNiwLGoxcdTG7gnnvZNDM/XdASOU=;
+        b=PoyvA1eEAYWocdqr2obXGcJHE+fvbQjI0qCQ7kJZHpUGLDtxBgt98xhAYPL2szwO71
+         UOoAmVBnhNqIQnsZwO9xV0V0wO7ZcQh+usaHyIbf9mnTonhpcbyrSkFbp+fgK/IYb76M
+         AS1oS4Iq6LoFjjExYSAQ3TEkvYyfXp1y2oq0D2c8+LcH1/TLMIAoLMecGCRJ4KxNA04D
+         SKazSnLDFhVs+8294KibSTVfoUma0Wt8z3VAJnBRbQPU8uqiOwE7BJtyKhL+yUkTHYRL
+         7jzrsIqVdUJTpBub1MLIhf3+b46rMhmLNT74cDulD6097QE3r9o9Br1Z1Y0EYdkGUcbN
+         HYHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681951679; x=1684543679;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YiCUqcs8l7xs68tLNiwLGoxcdTG7gnnvZNDM/XdASOU=;
+        b=BF7w0T66MAInMbWPrwLtyFZWQQlEuOLDZn6yKJ4WOf+ujS//6LWXVKpD7YqtnmKPS5
+         LDOwmehfB53mp6Vb5jg97pnJLlXUtt3uME8T7dWSZopcqKkwb4G0TQIMzPKPilw/x60f
+         2sgNSnLHWjHm+kvnkbWu7+ItmUa6fnaqY9JP09gdpEA43Z1EbN74x0QHiKRraPDUoyTI
+         LyyUqjgVCy3Ql2nc4EtbKvUlwZ6YMskpOGyUqFLjFnO+nP6IuNZ4bSlcROUhTIyHdq1B
+         3o3gI94H7Bi0btfL8PI2YaqmOBRDs4xAJiRmw/Bh95MB+n2Y1YyeKkJ653jbHmB1wq3B
+         +Yng==
+X-Gm-Message-State: AAQBX9diArrFExRVAieSnxbOn8vHR3P24kegXy05ocqB+kyYuH0mg6jd
+        9CUMSpuV/0cQ7VnHDzbBvGH3pQ==
+X-Google-Smtp-Source: AKy350Y2g0JyuJdB83x5keVTBl+YazhmfiYEa4/oZG/Tc6iQyRwmtDas24d7wHonjcUHxtv75FKVsw==
+X-Received: by 2002:a2e:9917:0:b0:2a8:c1bf:5ce2 with SMTP id v23-20020a2e9917000000b002a8c1bf5ce2mr2169890lji.7.1681951678855;
+        Wed, 19 Apr 2023 17:47:58 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id y14-20020a2e320e000000b00295da33c42dsm17379ljy.15.2023.04.19.17.47.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 17:47:58 -0700 (PDT)
+Message-ID: <f9e8a86f-3c69-4fda-01b9-2d4cd261bee8@linaro.org>
+Date:   Thu, 20 Apr 2023 03:47:57 +0300
 MIME-Version: 1.0
-Date:   Thu, 20 Apr 2023 02:47:34 +0200
-From:   MK <mk@heimpalkorhaz.hu>
-To:     undisclosed-recipients:;
-Subject: re:admirer
-Reply-To: marion.k07081@gmail.com
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <aa642085c459dec4c9f9f5cc2b8de265@heimpalkorhaz.hu>
-X-Sender: mk@heimpalkorhaz.hu
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 07/17] drm/msm/dpu: Sort INTF registers numerically
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Rajesh Yadav <ryadav@codeaurora.org>,
+        Jeykumar Sankaran <jsanka@codeaurora.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Chandan Uddaraju <chandanu@codeaurora.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Archit Taneja <architt@codeaurora.org>,
+        Sravanthi Kollukuduru <skolluku@codeaurora.org>
+References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
+ <20230411-dpu-intf-te-v2-7-ef76c877eb97@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230411-dpu-intf-te-v2-7-ef76c877eb97@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [5.31 / 20.00];
-        R_UNDISC_RCPT(3.00)[];
-        FORGED_RECIPIENTS(2.00)[m:,s:rh@valueformation.com,s:faithlu@valueline.net,s:johnb@valueshield.net,s:liam.bonfield@valutrades.com,s:pallen@valwood.org,s:jkaat@valyou.net,s:donjorg@valyousat.net,s:ranahs@valyousat.net,s:a.evans@vam.ac.uk,s:g.decruz@vam.ac.uk,s:press.office@vam.ac.uk,s:info@van-ravenstein.nl,s:comercial@vanbet.ro,s:office@vanbet.ro,s:chee.lim@vanderbilt.edu,s:michelle.ardisson@vanderbilt.edu,s:paavo@vanemuine.ee,s:john_gilmore@vanguard.com,s:redak@vanidad.es,s:moda@vanidad.net,s:info@vanilin.hu,s:dan@vannorth.com,s:anne.kroger@vantaa.fi,s:kirjaamo@vantaa.fi,s:loviisa.kaartokallio@vantaa.fi,s:marko.raina@vantaa.fi,s:matti.jaaskivi@vantaa.fi,s:paivi.sihvo@vantaa.fi,s:timo.juurikkala@vantaa.fi,s:anssi.aura@vantaanvihreat.fi,s:eve.ramo@vantaanvihreat.fi,s:minna.kuusela@vantaanvihreat.fi,s:sirpa.pajunen@vantaanvihreat.fi,s:sveta.silvennoinen@vantaanvihreat.fi,s:jgormley@vantageenergyconsulting.com,s:wendy.harper@vantagepnt.com,s:soren.jansson@vap.se,s:ecp@vaquerogroup.com,
- s:varazstorony@varazstorony.hu,s:vdrink@vardadrink.hu,s:info@vardalinzer.hu,s:info@vargatanya.hu,s:fenyvesi.aniko@variens.hu,s:gmankin@varietylease.com,s:maritta@varikset.fi,s:arajanlat@varioszer.hu,s:foepitesz@varoshaza.vac.hu,s:mokanszky.alpolgarmester@varoshaza.vac.hu,s:polgarmester@varoshaza.vac.hu,s:szerkesztoseg@varoskalauz-nyd.hu,s:kozteriovoda@varoskozpontiovoda.hu,s:varoskut@varoskut.hu,s:fallos@vartech.hu,s:linda.purina@vas.gov.lv,s:international@vasasok.hu,s:mikko.koikkalainen@vasemmistoliitto.fi,s:ingo@vasex.hu,s:allas@vasipari.hu,s:krenner@vasiviz.hu,s:sandor.hajas@vaslokft.hu,s:lbrawley@vassar.edu,s:tapio.hayhtio@vasso.fi,s:tapio.salo@vastaanotto.inet.fi,s:bfsoucc@vastbb.net,s:dvnadmin@vastbb.net,s:kandolin@vastbb.net,s:info@vastuzep.hu,s:tours@vaticantoursinc.com,s:jaimala@vatsalya.org,s:mdr@vaughnelectric.com,s:solja@vauvakuvaamo.fi,s:ilang@vax.mtak.hu,s:joev@vazquezcc.com,s:cse-ki-bor@vazsonykom.hu,s:kocsisszilvia@vazsonykom.hu,s:magnus.aspegren@vbm.se,s:john.nelson
- @vbrick.com,s:bayofplenty@vcc.org.nz,s:johnd@vccp.com,s:registrar@vci.ie,s:jbrown@vcomsolutions.com,s:edward.hutcbinson@vcrizon.net,s:doba.zsolt@vcsm.hu,s:bob.anderson@vcsu.edu,s:sebastian.delbrueck@vdivde-it.de,s:kiss.bela@vdsz.hu,s:pecs@vdszsz.hu,s:rick@vecentral.com,s:jkelly@veci.com,s:d_spelich@vecohio.com,s:janki.gyula@vectrasoft.hu,s:patrick@vedanamedia.com,s:teddi@vedur.is,s:joe.noonan@vee24.com,s:jpeeler@veeco.com,s:gerigan@vega.unitbv.ro,s:toocseg@vega.unitbv.ro,s:lina@vegele.lt,s:olah.gyongyi@vegyepszer.hu];
-        FAKE_REPLY(1.00)[];
-        GENERIC_REPUTATION(-0.59)[-0.58807342704111];
-        MIME_GOOD(-0.10)[text/plain];
-        BAYES_SPAM(0.00)[20.09%];
-        FROM_EQ_ENVFROM(0.00)[];
-        MIME_TRACE(0.00)[0:+];
-        RCVD_COUNT_ZERO(0.00)[0];
-        TO_DN_ALL(0.00)[];
-        REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-        MID_RHS_MATCH_FROM(0.00)[];
-        FROM_HAS_DN(0.00)[];
-        RCPT_COUNT_ONE(0.00)[1];
-        FREEMAIL_ENVRCPT(0.00)[verizon.net,videotron.ca,vip.163.com,virgilio.it,virgin.net,visto.com,wanadoo.es,wanadoo.fr];
-        FREEMAIL_REPLYTO(0.00)[gmail.com];
-        HAS_REPLYTO(0.00)[marion.k07081@gmail.com]
-X-Rspamd-Queue-Id: C677A384A6E170
-X-Rspamd-Server: mail.heimpalkorhaz.hu
-X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello dear,
+On 17/04/2023 23:21, Marijn Suijten wrote:
+> A bunch of registers were appended at the end in e.g. 91143873a05d
+> ("drm/msm/dpu: Add MISR register support for interface") rather than
+> being inserted in a place that maintains numerical sorting.  Restore
+> that.
 
-Did you receive my previous email? I'm sorry I'm writing again.
+Assuming that = "sort order":
 
-Am sorry to bother you, but I am single and lonely and in need of a 
-caring, loving, and romantic companion.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-I am a secret admirer and would like to explore the opportunity to learn 
-more about each other.
+If I don't forget, I'll fix it when applying.
 
-Hopefully, it will be the beginning of long-term communication between 
-the both of us.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c | 12 +++++++-----
+>   1 file changed, 7 insertions(+), 5 deletions(-)
 
-Please let me know what you think, will be glad to hear from you again.
 
-Hugs and kisses,
-Secret admirer
+
+-- 
+With best wishes
+Dmitry
+
