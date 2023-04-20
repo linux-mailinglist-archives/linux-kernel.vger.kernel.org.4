@@ -2,456 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47CEF6E8D02
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6374B6E8D06
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234371AbjDTImn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
+        id S234491AbjDTIoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233977AbjDTIml (ORCPT
+        with ESMTP id S233977AbjDTIol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:42:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0506B2D56
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:42:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EBC461668
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:42:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 931EDC433EF;
-        Thu, 20 Apr 2023 08:42:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681980158;
-        bh=TGUIuM6UYEGkI/PsNG/5IICWpy0Axy+7GJGCyE5WVCo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Gb49nhJPCXINu4bte3qTsO1T/lxbR+VyDXdAQ4UJDZ3H/VzNtmMOZJcZfV6p9oEt6
-         iaDVhPRgWu+X3aKs6HWxf+32LwAeemMKsvoA5pKQQMNc+l/smVd4g7xUD3kVJAMcEO
-         6ADSlG2jFOIoz5odDEYNNI7YegOXNXqBcDoKtYeIN11+Ucq8Nj3t+CtF4Fny4e8/Rh
-         BgwmEi30joyTZhOv0xO/Dhv/zFN+FUr9KKnE3v4UqRSPwX5S7/kawRr14/gFBJToF1
-         e3EGnou3zh4X61UWq3KI1un5uWHlvX/5GlWp1ldu1Uv/85sposOOJm8+TewRTehl7k
-         r4vKaB0PtiVMg==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH v9] f2fs: support errors=remount-ro|continue|panic mountoption
-Date:   Thu, 20 Apr 2023 16:42:22 +0800
-Message-Id: <20230420084222.2170462-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+        Thu, 20 Apr 2023 04:44:41 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2121.outbound.protection.outlook.com [40.107.255.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5292D56;
+        Thu, 20 Apr 2023 01:43:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ROhxDDm+pzc2AVMYoUsiWUyO9WK027heKsRmQGVvcWCbO8qxGUZK/f0pgNSPuTzXGDNAIPYs0vGuq7dDw99XnpKrIT5WIL6g87+L1cfXosKbbWoK3Nt0HzEW3I+wD9VvNQr1LdrUjiVLQqpRfg2oBIGiQcKU+lLZaGCkE+v3CTX/vEU58N+mCNL47bDF1uHpvvwtraIkP6e1W2R5+E/3Qr2Y2AmbgBKDyJ7IED+RkNqwwOEgmrG8YyuaYF02xyDUL6kD2U3qC6YBU1KQYvXzMS0+DjfOGnlHdXCa7p5Ggn43Rs+3gZKaMekly/5veacSaNHBTLVokXoekS65dkXh8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CghG2Slv8gmivGg+Io3vlsM0D6+rRhOth2U7N343ePU=;
+ b=XwDq/tLS5pR2Ec5542Vbh1/98fEwBwI82dcNgRQJRkkxYbM2/zFOtLBFRYnpU/Do/QgVDJUmBFfVsnt6hO45VRKDclB8wZnMPN8AmGuCbhRzpwuuxOBVp0GfFAcfBhwYfEBtHn2NqPWVndABw2YJH0hN6vm4oUIud+HH9c/hXPbf5O8SkewkGz0QFUzAufdarbUvOnn1p3QTMtMMfn5jVLCrgtvEKizY0a8v6ILZAa6mBnlcEtgEd4m9LnIFlKru+BPBkYvSNI+D61el+axBuqCX8Mv3Yk881bi8G0qhhKJxvg6q5/itfJtSWh+sjHFFLaBQxHYEXfyG3x625H+CAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
+ dkim=pass header.d=amlogic.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amlogic.com;
+Received: from SEZPR03MB7033.apcprd03.prod.outlook.com (2603:1096:101:e2::14)
+ by PSAPR03MB5639.apcprd03.prod.outlook.com (2603:1096:301:66::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Thu, 20 Apr
+ 2023 08:43:52 +0000
+Received: from SEZPR03MB7033.apcprd03.prod.outlook.com
+ ([fe80::9d77:7adc:25da:b086]) by SEZPR03MB7033.apcprd03.prod.outlook.com
+ ([fe80::9d77:7adc:25da:b086%3]) with mapi id 15.20.6319.022; Thu, 20 Apr 2023
+ 08:43:51 +0000
+Message-ID: <1c7322c9-8d2d-1cd1-95dc-dd9ec861981f@amlogic.com>
+Date:   Thu, 20 Apr 2023 16:43:40 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH 1/2] arm64: amlogic: add new ARCH_AMLIPC for IPC SoC
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     =Xianwei Zhao <xianwei.zhao@amlogic.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20230419073834.972273-1-xianwei.zhao@amlogic.com>
+ <20230419073834.972273-2-xianwei.zhao@amlogic.com>
+ <20230419131416.cns3xvkbzjeyrnux@CAB-WSD-L081021>
+ <661cea17-a4dd-75d1-6a7e-16efa5aea52b@linaro.org>
+ <20230419160405.d7qfir3nv6tlxx2a@CAB-WSD-L081021>
+ <427e79ef-156d-027e-9296-6f4e6513a04d@linaro.org>
+ <20230419170043.auzfa32weevmrt4e@CAB-WSD-L081021>
+Content-Language: en-US
+From:   Kelvin Zhang <kelvin.zhang@amlogic.com>
+In-Reply-To: <20230419170043.auzfa32weevmrt4e@CAB-WSD-L081021>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SG2PR06CA0203.apcprd06.prod.outlook.com (2603:1096:4:1::35)
+ To SEZPR03MB7033.apcprd03.prod.outlook.com (2603:1096:101:e2::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR03MB7033:EE_|PSAPR03MB5639:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2ec77e24-939d-4a79-6aef-08db417b5cc0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HFpQ3Gdl6y63zDvKo0onDEaOvFmqdZLiVoPsuf/X4Ld1VIY8ymngAptDhHmkhKCkrjryKoQsV8KJSIgnT7ZZ47m543p0d6FnMHhKGYr3BgwMHxMmGVyfx9Xe/tx1NvApaUspeZeVYQ1iTzjX6ANhKFxuenZZYWJ3i9Citrl6pxmSfC2gB5Lb52Xb5T+MCQWWpFnQC4IdFZi8SOW9ahoMx6GHe8E1Y4hltTVqfucXO48Pq1PGCc41pKeMzaOFNIA/vmTatG2ypH1A2gFHbobZLEyabGTIoZUK7nosYCAzN1gyFFMPDSQccrBml7ePjn+X6D869h7cVHCyQhezdr0vkpcOIN3Aq47prurj6x2mbSK7lqZLPXKUF881XC31qZuuo13w8uIt9PYf/NRL1WIIYlipfeNbzIwwh8PvpPrhrXzmUHKPR12467Upfdv/iBH9HB44X3WkL5NAuOVh/XWM/4YRJEQ9u7YMsf7/LqHqaz+5CX20Iez/WyOW7yjRPmTxANX5LyaVcDvxlNmlRFHQAALEb/dVL7foEFmZ6TGFUK1tJko/gRNkBUKkpN55mH/RXAu2391RSvsToVJgtyxpOrSsbWSlBjk5gG9qkipPMQqo8ZByfVIa1z5D7oSZvqTR8XfQfb7A/Bml/FPWbBl5Aw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR03MB7033.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39850400004)(396003)(346002)(366004)(376002)(136003)(451199021)(31696002)(2906002)(86362001)(36756003)(31686004)(6486002)(6666004)(53546011)(186003)(2616005)(6506007)(6512007)(26005)(966005)(478600001)(66476007)(4326008)(66556008)(66946007)(41300700001)(38100700002)(7416002)(110136005)(316002)(54906003)(44832011)(8936002)(5660300002)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U3RRaXlHZ2RVcjlXMFJ5dDdVQWxndDJBeHlzenY5d0lsTGdXbXZjR09uc3Rx?=
+ =?utf-8?B?K3JvYkMrcjNFMVBxZkx5UlF6Q1dTd3FRSlhDdTQwaFVkangyeXRReE9MN0tE?=
+ =?utf-8?B?TDZjZGRndHBrbFBXOVpnRkZ4NTM1SE5iZjcwMnM1dEE5Zm5OQnVKWEtjcjJy?=
+ =?utf-8?B?d0RESmNBa0Nzdk5pdDhkdWJjbW9pbnhCMXdYM3k5S2FRQnRJY0ZqSlBYR05k?=
+ =?utf-8?B?YWZxQXVYVW54MHF2Qms1WmtQRjZ2NUpSdUhTc0ZUb21RSVdSQklFZFJIOCtF?=
+ =?utf-8?B?dDRJVFVCUGpUajNBMHUyVERpeDhCbkV0RTdRdDB0OWc3eDdsVDlFRjlma050?=
+ =?utf-8?B?T2F6Mm02YkVhdmpvVmtlL2Y1VHkrUVVjcThKaHEyLzNIRVlYUlpEMWt4T2M0?=
+ =?utf-8?B?T3MzZUVFUm4xZWVFMHNwYU9HamVEY0dLQzZCNi81NkkzZ2IrK1djUlEybzlU?=
+ =?utf-8?B?WmliRmRkWlV0ZnJBekhVd3JKY0gvQVlKQmprTUluUWtqM0Q5VFZJQ0lyZzJI?=
+ =?utf-8?B?bzI5ZUx1bHlBNE5vWjUwVlpzVmRtdDJhc01HdERhUXFEWmxkZm5qNlhibFZT?=
+ =?utf-8?B?cG5Qd1BUN0Y5MVRpUVhwejREazJVMlFOVTdHTzZPQXZCUzFpNFVPbDBqb3Y5?=
+ =?utf-8?B?NktXNG5kRjFzOXJvdUN3QWhLMlhWZStGRXVXUXVzTm1aZGQwM0MzNWdoY1Jm?=
+ =?utf-8?B?QUtPSjZpT1lOSHBBcXBlMWlnQzVZU1NWZE1hZHd1V3M4WW9wNnNERkMydkNr?=
+ =?utf-8?B?TUMwZTN2bE9KekZYZVlURGxPNmZ4WjM3bThXTmo0d0JjQTZxTXZpb25SY1lG?=
+ =?utf-8?B?ZWtVL003T1FvUnd3cEtMWTZrOHBWa0FJNTlkOXBJeWV6bytQaFcyamU0MXNI?=
+ =?utf-8?B?NjFiN2x1V00yTWUwOGNpbEE0eEo5NDFwY3NldjFUbEd6QnNrRjV6S0gyeDFw?=
+ =?utf-8?B?VGpRRVNUUEdWYmdYVkt4WG1PZnQzaDZZWWNRVVZCeWpaVldReFRxS2NXdThq?=
+ =?utf-8?B?V3NyVlBxM0JsTXNSUGdaNWpqUnIydlBROHJKRExWM1JBRkRCejdSdW8wWHdZ?=
+ =?utf-8?B?OVIvMStjUnhjQ0YwVm9oRkFDNmYxdUZoOG51aFpzMGlENkYyNU1NSUMvYzBS?=
+ =?utf-8?B?MDl1TnN6TnRjVmRYZTRlc3c4NDNpUWRxdTVlNUcrSzYzeENIS042aCs4a3Fq?=
+ =?utf-8?B?RWF2MHo3RHo3M0JTa0FoSVdpL2JXc2UzNzN5ZDNiRG42YXQ1NDlESi9rTDk5?=
+ =?utf-8?B?bkNwb2RKcUY3Qk41aThUYXJRM1c3RmQ3QzliT011OFE1WGVpSTRhNHppdThq?=
+ =?utf-8?B?QzFaYTBxcXE0MmRxTG91VC9WdEdwVnF4MVRKOUNqbVppai91N2xUdEpsbjJY?=
+ =?utf-8?B?cDFHOTc3aHBuRGRiZjNQa1V0MDlYOHFXd2RHaU1NQi9iK3dXeXdjZUdJRXI2?=
+ =?utf-8?B?M1IzempWaUZINHduWVIrT0NKanVBZVRzSFdmalhZb2dyalRXMTVBVmlxZTNR?=
+ =?utf-8?B?ak9zVlEzQkt5ZkhHMjJJZGJJd01RRnBSdk5YWGtsOXh5WmhKeFFRRFFHRUNR?=
+ =?utf-8?B?NHVkaEVlVmU3L2pJWmJzTXB2ZkVTTDVGL3dDalU0Qnl4MWRVd1psY2c4bnpq?=
+ =?utf-8?B?WXJSSzBJMEwxTmVFa2NYcDBZWUc0cTN1Ty9jZldLVHdmVUlhRVhYcjcrOGRK?=
+ =?utf-8?B?dlh0aDdKMldxdXZiQ0VxSlZRMEtyZnIvUmhlb2lIRmpqbjJiVWpoRFhwaHFp?=
+ =?utf-8?B?SkV5MVFvd2YxR1grSDg5VXh4b3lHRHI3WHZZcXJWanYvSEpUQzlxOTdpQ0Nn?=
+ =?utf-8?B?aTF0a1ZkTjhBdGl2N1VjOVpnTlZEUSt2Z1NTWk16TFp3VW0rRjE5TGRzYUZr?=
+ =?utf-8?B?QmFRSjZKV0tvRCs5aVlYcThLM0ZydTdOZEhMMytGN2FkdkJiYXVya01QQ0Rv?=
+ =?utf-8?B?MUM1alBuVFJxTEFpM251UVJqT216Q3RlRnlidW1ZNnNwQ2pLeGpaVVNnS21T?=
+ =?utf-8?B?M1M1Rm5NQWZOT0RQOWI0UWNYdnhvWi9scDJ1S1F2NVFzbHk4U1pYc1EzZkg2?=
+ =?utf-8?B?YWRZcDVBQ3grMTgwbnNDMlVMVGlCNFUvQy9ibmd3QU13ZXZaRWRTcm9adkY1?=
+ =?utf-8?B?U2pyZ3UrdzVzL3R1aHhwNGdCaXJIWHZTWGVsWHU0R1BaeFFpT3ZxcnJVVlNr?=
+ =?utf-8?B?M2c9PQ==?=
+X-OriginatorOrg: amlogic.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2ec77e24-939d-4a79-6aef-08db417b5cc0
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR03MB7033.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 08:43:50.8772
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eHr6qSiiHLHHSV/lbw5SaBcz7H8E/sLZl2qQrw4lVeonYPI8kyltG9EfS6sJWB7XznERgDUPOTBRnl793nC9NSofjgGcIBmo6xZSatSlnow=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR03MB5639
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch supports errors=remount-ro|continue|panic mount option,
-by default it uses "continue" mode.
-
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
-Signed-off-by: Chao Yu <chao@kernel.org>
----
-v9:
-- use continue mode by default.
- Documentation/filesystems/f2fs.rst |   5 ++
- fs/f2fs/checkpoint.c               |   7 +-
- fs/f2fs/f2fs.h                     |  20 ++++-
- fs/f2fs/file.c                     |   5 --
- fs/f2fs/gc.c                       |   2 +-
- fs/f2fs/super.c                    | 134 ++++++++++++++++++++++++++---
- 6 files changed, 149 insertions(+), 24 deletions(-)
-
-diff --git a/Documentation/filesystems/f2fs.rst b/Documentation/filesystems/f2fs.rst
-index c57745375edb..ce0963ba255b 100644
---- a/Documentation/filesystems/f2fs.rst
-+++ b/Documentation/filesystems/f2fs.rst
-@@ -351,6 +351,11 @@ age_extent_cache	 Enable an age extent cache based on rb-tree. It records
- 			 data block update frequency of the extent per inode, in
- 			 order to provide better temperature hints for data block
- 			 allocation.
-+errors=%s		 Specify f2fs behavior on critical errors. This supports modes:
-+			 "panic", "continue" and "remount-ro", respectively, trigger
-+			 panic immediately, continue without doing anything, and remount
-+			 the partition in read-only mode. By default it uses "continue"
-+			 mode.
- ======================== ============================================================
- 
- Debugfs Entries
-diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-index 64b3860f50ee..8fd3b7f9fb88 100644
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -30,12 +30,9 @@ void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io,
- 						unsigned char reason)
- {
- 	f2fs_build_fault_attr(sbi, 0, 0);
--	set_ckpt_flags(sbi, CP_ERROR_FLAG);
--	if (!end_io) {
-+	if (!end_io)
- 		f2fs_flush_merged_writes(sbi);
--
--		f2fs_handle_stop(sbi, reason);
--	}
-+	f2fs_handle_critical_error(sbi, reason, end_io);
- }
- 
- /*
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 6cae94d51821..8af5dd774f5b 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -162,6 +162,7 @@ struct f2fs_mount_info {
- 	int fs_mode;			/* fs mode: LFS or ADAPTIVE */
- 	int bggc_mode;			/* bggc mode: off, on or sync */
- 	int memory_mode;		/* memory mode */
-+	int errors;			/* errors parameter */
- 	int discard_unit;		/*
- 					 * discard command's offset/size should
- 					 * be aligned to this unit: block,
-@@ -1370,6 +1371,12 @@ enum {
- 	MEMORY_MODE_LOW,	/* memory mode for low memry devices */
- };
- 
-+enum errors_option {
-+	MOUNT_ERRORS_READONLY,	/* remount fs ro on errors */
-+	MOUNT_ERRORS_CONTINUE,	/* continue on errors */
-+	MOUNT_ERRORS_PANIC,	/* panic on errors */
-+};
-+
- static inline int f2fs_test_bit(unsigned int nr, char *addr);
- static inline void f2fs_set_bit(unsigned int nr, char *addr);
- static inline void f2fs_clear_bit(unsigned int nr, char *addr);
-@@ -1722,8 +1729,14 @@ struct f2fs_sb_info {
- 
- 	struct workqueue_struct *post_read_wq;	/* post read workqueue */
- 
--	unsigned char errors[MAX_F2FS_ERRORS];	/* error flags */
--	spinlock_t error_lock;			/* protect errors array */
-+	/*
-+	 * If we are in irq context, let's update error information into
-+	 * on-disk superblock in the work.
-+	 */
-+	struct work_struct s_error_work;
-+	unsigned char errors[MAX_F2FS_ERRORS];		/* error flags */
-+	unsigned char stop_reason[MAX_STOP_REASON];	/* stop reason */
-+	spinlock_t error_lock;			/* protect errors/stop_reason array */
- 	bool error_dirty;			/* errors of sb is dirty */
- 
- 	struct kmem_cache *inline_xattr_slab;	/* inline xattr entry */
-@@ -3529,8 +3542,9 @@ int f2fs_enable_quota_files(struct f2fs_sb_info *sbi, bool rdonly);
- int f2fs_quota_sync(struct super_block *sb, int type);
- loff_t max_file_blocks(struct inode *inode);
- void f2fs_quota_off_umount(struct super_block *sb);
--void f2fs_handle_stop(struct f2fs_sb_info *sbi, unsigned char reason);
- void f2fs_save_errors(struct f2fs_sb_info *sbi, unsigned char flag);
-+void f2fs_handle_critical_error(struct f2fs_sb_info *sbi, unsigned char reason,
-+							bool irq_context);
- void f2fs_handle_error(struct f2fs_sb_info *sbi, unsigned char error);
- int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover);
- int f2fs_sync_fs(struct super_block *sb, int sync);
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 720be239955d..1b8d63d062b9 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -2225,7 +2225,6 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
- 				ret = 0;
- 				f2fs_stop_checkpoint(sbi, false,
- 						STOP_CP_REASON_SHUTDOWN);
--				set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
- 				trace_f2fs_shutdown(sbi, in, ret);
- 			}
- 			return ret;
-@@ -2238,7 +2237,6 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
- 		if (ret)
- 			goto out;
- 		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
--		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
- 		thaw_bdev(sb->s_bdev);
- 		break;
- 	case F2FS_GOING_DOWN_METASYNC:
-@@ -2247,16 +2245,13 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
- 		if (ret)
- 			goto out;
- 		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
--		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
- 		break;
- 	case F2FS_GOING_DOWN_NOSYNC:
- 		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
--		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
- 		break;
- 	case F2FS_GOING_DOWN_METAFLUSH:
- 		f2fs_sync_meta_pages(sbi, META, LONG_MAX, FS_META_IO);
- 		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
--		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
- 		break;
- 	case F2FS_GOING_DOWN_NEED_FSCK:
- 		set_sbi_flag(sbi, SBI_NEED_FSCK);
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index a6a0dc471b74..351a472933c9 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -59,7 +59,7 @@ static int gc_thread_func(void *data)
- 		if (gc_th->gc_wake)
- 			gc_th->gc_wake = false;
- 
--		if (try_to_freeze()) {
-+		if (try_to_freeze() || f2fs_readonly(sbi->sb)) {
- 			stat_other_skip_bggc_count(sbi);
- 			continue;
- 		}
-diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-index 4e53b1100b84..6193fa8f6ed0 100644
---- a/fs/f2fs/super.c
-+++ b/fs/f2fs/super.c
-@@ -164,6 +164,7 @@ enum {
- 	Opt_discard_unit,
- 	Opt_memory_mode,
- 	Opt_age_extent_cache,
-+	Opt_errors,
- 	Opt_err,
- };
- 
-@@ -243,6 +244,7 @@ static match_table_t f2fs_tokens = {
- 	{Opt_discard_unit, "discard_unit=%s"},
- 	{Opt_memory_mode, "memory=%s"},
- 	{Opt_age_extent_cache, "age_extent_cache"},
-+	{Opt_errors, "errors=%s"},
- 	{Opt_err, NULL},
- };
- 
-@@ -1268,6 +1270,25 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
- 		case Opt_age_extent_cache:
- 			set_opt(sbi, AGE_EXTENT_CACHE);
- 			break;
-+		case Opt_errors:
-+			name = match_strdup(&args[0]);
-+			if (!name)
-+				return -ENOMEM;
-+			if (!strcmp(name, "remount-ro")) {
-+				F2FS_OPTION(sbi).errors =
-+						MOUNT_ERRORS_READONLY;
-+			} else if (!strcmp(name, "continue")) {
-+				F2FS_OPTION(sbi).errors =
-+						MOUNT_ERRORS_CONTINUE;
-+			} else if (!strcmp(name, "panic")) {
-+				F2FS_OPTION(sbi).errors =
-+						MOUNT_ERRORS_PANIC;
-+			} else {
-+				kfree(name);
-+				return -EINVAL;
-+			}
-+			kfree(name);
-+			break;
- 		default:
- 			f2fs_err(sbi, "Unrecognized mount option \"%s\" or missing value",
- 				 p);
-@@ -1622,6 +1643,9 @@ static void f2fs_put_super(struct super_block *sb)
- 	f2fs_destroy_node_manager(sbi);
- 	f2fs_destroy_segment_manager(sbi);
- 
-+	/* flush s_error_work before sbi destroy */
-+	flush_work(&sbi->s_error_work);
-+
- 	f2fs_destroy_post_read_wq(sbi);
- 
- 	kvfree(sbi->ckpt);
-@@ -2052,6 +2076,13 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
- 	else if (F2FS_OPTION(sbi).memory_mode == MEMORY_MODE_LOW)
- 		seq_printf(seq, ",memory=%s", "low");
- 
-+	if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_READONLY)
-+		seq_printf(seq, ",errors=%s", "remount-ro");
-+	else if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_CONTINUE)
-+		seq_printf(seq, ",errors=%s", "continue");
-+	else if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_PANIC)
-+		seq_printf(seq, ",errors=%s", "panic");
-+
- 	return 0;
- }
- 
-@@ -2080,6 +2111,7 @@ static void default_options(struct f2fs_sb_info *sbi)
- 	}
- 	F2FS_OPTION(sbi).bggc_mode = BGGC_MODE_ON;
- 	F2FS_OPTION(sbi).memory_mode = MEMORY_MODE_NORMAL;
-+	F2FS_OPTION(sbi).errors = MOUNT_ERRORS_CONTINUE;
- 
- 	sbi->sb->s_flags &= ~SB_INLINECRYPT;
- 
-@@ -2281,6 +2313,9 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
- 	if (err)
- 		goto restore_opts;
- 
-+	/* flush outstanding errors before changing fs state */
-+	flush_work(&sbi->s_error_work);
-+
- 	/*
- 	 * Previous and new state of filesystem is RO,
- 	 * so skip checking GC and FLUSH_MERGE conditions.
-@@ -3930,45 +3965,60 @@ int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover)
- 	return err;
- }
- 
--void f2fs_handle_stop(struct f2fs_sb_info *sbi, unsigned char reason)
-+static void save_stop_reason(struct f2fs_sb_info *sbi, unsigned char reason)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&sbi->error_lock, flags);
-+	if (sbi->stop_reason[reason] < GENMASK(BITS_PER_BYTE - 1, 0))
-+		sbi->stop_reason[reason]++;
-+	spin_unlock_irqrestore(&sbi->error_lock, flags);
-+}
-+
-+static void f2fs_record_stop_reason(struct f2fs_sb_info *sbi)
- {
- 	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
-+	unsigned long flags;
- 	int err;
- 
- 	f2fs_down_write(&sbi->sb_lock);
- 
--	if (raw_super->s_stop_reason[reason] < GENMASK(BITS_PER_BYTE - 1, 0))
--		raw_super->s_stop_reason[reason]++;
-+	spin_lock_irqsave(&sbi->error_lock, flags);
-+	memcpy(raw_super->s_stop_reason, sbi->stop_reason, MAX_STOP_REASON);
-+	spin_unlock_irqrestore(&sbi->error_lock, flags);
- 
- 	err = f2fs_commit_super(sbi, false);
--	if (err)
--		f2fs_err(sbi, "f2fs_commit_super fails to record reason:%u err:%d",
--								reason, err);
-+
- 	f2fs_up_write(&sbi->sb_lock);
-+	if (err)
-+		f2fs_err(sbi, "f2fs_commit_super fails to record err:%d", err);
- }
- 
- void f2fs_save_errors(struct f2fs_sb_info *sbi, unsigned char flag)
- {
--	spin_lock(&sbi->error_lock);
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&sbi->error_lock, flags);
- 	if (!test_bit(flag, (unsigned long *)sbi->errors)) {
- 		set_bit(flag, (unsigned long *)sbi->errors);
- 		sbi->error_dirty = true;
- 	}
--	spin_unlock(&sbi->error_lock);
-+	spin_unlock_irqrestore(&sbi->error_lock, flags);
- }
- 
- static bool f2fs_update_errors(struct f2fs_sb_info *sbi)
- {
-+	unsigned long flags;
- 	bool need_update = false;
- 
--	spin_lock(&sbi->error_lock);
-+	spin_lock_irqsave(&sbi->error_lock, flags);
- 	if (sbi->error_dirty) {
- 		memcpy(F2FS_RAW_SUPER(sbi)->s_errors, sbi->errors,
- 							MAX_F2FS_ERRORS);
- 		sbi->error_dirty = false;
- 		need_update = true;
- 	}
--	spin_unlock(&sbi->error_lock);
-+	spin_unlock_irqrestore(&sbi->error_lock, flags);
- 
- 	return need_update;
- }
-@@ -3992,6 +4042,66 @@ void f2fs_handle_error(struct f2fs_sb_info *sbi, unsigned char error)
- 	f2fs_up_write(&sbi->sb_lock);
- }
- 
-+static bool system_going_down(void)
-+{
-+	return system_state == SYSTEM_HALT || system_state == SYSTEM_POWER_OFF
-+		|| system_state == SYSTEM_RESTART;
-+}
-+
-+void f2fs_handle_critical_error(struct f2fs_sb_info *sbi, unsigned char reason,
-+							bool irq_context)
-+{
-+	struct super_block *sb = sbi->sb;
-+	bool shutdown = reason == STOP_CP_REASON_SHUTDOWN;
-+	bool continue_fs = !shutdown &&
-+			F2FS_OPTION(sbi).errors == MOUNT_ERRORS_CONTINUE;
-+
-+	set_ckpt_flags(sbi, CP_ERROR_FLAG);
-+
-+	if (!f2fs_hw_is_readonly(sbi)) {
-+		save_stop_reason(sbi, reason);
-+
-+		if (irq_context && !shutdown)
-+			schedule_work(&sbi->s_error_work);
-+		else
-+			f2fs_record_stop_reason(sbi);
-+	}
-+
-+	/*
-+	 * We force ERRORS_RO behavior when system is rebooting. Otherwise we
-+	 * could panic during 'reboot -f' as the underlying device got already
-+	 * disabled.
-+	 */
-+	if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_PANIC &&
-+				!shutdown && !system_going_down() &&
-+				!is_sbi_flag_set(sbi, SBI_IS_SHUTDOWN))
-+		panic("F2FS-fs (device %s): panic forced after error\n",
-+							sb->s_id);
-+
-+	if (shutdown)
-+		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
-+
-+	/* continue filesystem operators if errors=continue */
-+	if (continue_fs || f2fs_readonly(sb))
-+		return;
-+
-+	f2fs_warn(sbi, "Remounting filesystem read-only");
-+	/*
-+	 * Make sure updated value of ->s_mount_flags will be visible before
-+	 * ->s_flags update
-+	 */
-+	smp_wmb();
-+	sb->s_flags |= SB_RDONLY;
-+}
-+
-+static void f2fs_record_error_work(struct work_struct *work)
-+{
-+	struct f2fs_sb_info *sbi = container_of(work,
-+					struct f2fs_sb_info, s_error_work);
-+
-+	f2fs_record_stop_reason(sbi);
-+}
-+
- static int f2fs_scan_devices(struct f2fs_sb_info *sbi)
- {
- 	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
-@@ -4222,7 +4332,9 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
- 	sb->s_fs_info = sbi;
- 	sbi->raw_super = raw_super;
- 
-+	INIT_WORK(&sbi->s_error_work, f2fs_record_error_work);
- 	memcpy(sbi->errors, raw_super->s_errors, MAX_F2FS_ERRORS);
-+	memcpy(sbi->stop_reason, raw_super->s_stop_reason, MAX_STOP_REASON);
- 
- 	/* precompute checksum seed for metadata */
- 	if (f2fs_sb_has_inode_chksum(sbi))
-@@ -4619,6 +4731,8 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
- 	f2fs_destroy_segment_manager(sbi);
- stop_ckpt_thread:
- 	f2fs_stop_ckpt_thread(sbi);
-+	/* flush s_error_work before sbi destroy */
-+	flush_work(&sbi->s_error_work);
- 	f2fs_destroy_post_read_wq(sbi);
- free_devices:
- 	destroy_device_list(sbi);
--- 
-2.25.1
-
+On 2023/4/20 01:00, Dmitry Rokosov wrote:
+> [ EXTERNAL EMAIL ]
+>
+> On Wed, Apr 19, 2023 at 06:25:07PM +0200, Neil Armstrong wrote:
+>> On 19/04/2023 18:04, Dmitry Rokosov wrote:
+>>> On Wed, Apr 19, 2023 at 03:43:12PM +0200, Neil Armstrong wrote:
+>>>> On 19/04/2023 15:14, Dmitry Rokosov wrote:
+>>>>> On Wed, Apr 19, 2023 at 03:38:33PM +0800, =Xianwei Zhao wrote:
+>>>>>> From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+>>>>>>
+>>>>>> The C series SoCs are designed for smart IP camera
+>>>>>> applications, which does not belong to Meson series.
+>>>>>> So, Add ARCH_AMLIPC for the new series.
+>>>>>>
+>>>>>> There are now multiple amlogic SoC seies supported, so group them under
+>>>>>> their own menu. we can easily add new platforms there in the future.
+>>>>>> Introduce ARCH_AMLOGIC to cover all Amlogic SoC series.
+>>>>>>
+>>>>>> No functional changes introduced.
+>>>>>>
+>>>>>> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+>>>>>> ---
+>>>>>>     arch/arm64/Kconfig.platforms | 12 ++++++++++++
+>>>>>>     arch/arm64/configs/defconfig |  2 ++
+>>>>>>     2 files changed, 14 insertions(+)
+>>>>>>
+>>>>>> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+>>>>>> index 89a0b13b058d..bfbc817eef8f 100644
+>>>>>> --- a/arch/arm64/Kconfig.platforms
+>>>>>> +++ b/arch/arm64/Kconfig.platforms
+>>>>>> @@ -162,12 +162,24 @@ config ARCH_MEDIATEK
+>>>>>>          This enables support for MediaTek MT27xx, MT65xx, MT76xx
+>>>>>>          & MT81xx ARMv8 SoCs
+>>>>>> +menuconfig ARCH_AMLOGIC
+>>>>>> +     bool "NXP SoC support"
+>>>>> NXP? Did you mean "Amlogic"?
+>>>>>
+>>>>>> +
+>>>>>> +if ARCH_AMLOGIC
+>>>>>> +
+>>>>>>     config ARCH_MESON
+>>>>>>        bool "Amlogic Platforms"
+>>>>>>        help
+>>>>>>          This enables support for the arm64 based Amlogic SoCs
+>>>>>>          such as the s905, S905X/D, S912, A113X/D or S905X/D2
+>>>>>> +config ARCH_AMLIPC
+>>>>> Do we really need a different ARCH for Amlogic IPC?
+>>>>> I can imagine that it's not the Meson architecture at all.
+>>>>> But maybe a better solution is just to rename ARCH_MESON to ARCH_AMLOGIC?
+>>>> It should be changed treewide, and is it worth it ?
+>>> As far as I understand, the A1 and S4 families are not fully compatible
+>>> with the Meson architecture, and we haven't provided additional ARCH_*
+>>> for them.
+>> The GXBB, GXL/GXM, G12A, G12B & SM1 are also not fully compatible,
+>> but they lie under the "MESON" umbrella which covers SoC since the
+>> Meson6 architecture. It's a facility to include/exclude Amlogic
+>> drivers/DT, nothing else.
+GXBB, GXL/GXM, G12A, G12B , SM1 and S4 belong to media box.
+So, "MESON" represents the media box series.
+Up to now, "MESON" works well for all existing chips except A1 and AXG.
+>> If you compare it to BCM or NXP, it's different situation, the
+>> different ARCH_* actually targets totally different SoCs from
+>> completely different Business Units or from companies acquisitions.
+Firstly, the new C series is totally different from previous MESON series.
+ From the perspective of application, the new C series is designed for 
+smart IP camera applications,
+while MESON series is designed for hybrid OTT/ IP Set Top Box  and 
+high-end media box applications.
+ From the perspective of architecture, the new C series integrates the 
+sensor interface, image signal processing unit, Dewarp, video encoder, 
+neural networking processing unit,
+which MESON series does not and will never have.
+Secondly, there are C1 and C2 besides C3.
+Moreover, more other series are on the way, such as T series.
+If we always stick to "MESON", people will get more and more confused.
+Therefore, I think it is the right time to add ARCH_AMLIPC.
+>> We should have named it ARCH_AMLOGIC since the beginning, but we
+>> can't change history.
+Shouldn't we deserve a chance to make it right?
+>>> In my opinion, it's a good time to split the Meson architecture into
+>>> proper subsets, or rename it treewide (maybe only config option
+>>> ARCH_MESON => ARCH_AMLOGIC).
+>> MESON is only a codename to differentiate from other SoC vendors
+>> because Amlogic used it as a codename for a long time.
+>> Compare this to Allwinner's "sunxi" or Qualcomm's "msm".
+>>
+>> This config has no functional mean, it's only a config namespace.
+>>
+>> Renaming it would need renaming it in all subsystems Kconfig/Makefiles
+>> and will certainly break builds with custom kernel configs
+>> in various publicly used builds like Armbian, meta-meson, LibreELEC,
+>> Debian, Suse, ...
+Let's get back to ARCH_AMLIPC.
+We just need to add ARCH_AMLIPC in the necessary subsystems 
+Kconfig/Makefile.
+This change will keep the existing MESON related code,  and will neither 
+involve renaming nor break any builds.
+>> So it's pointless to change, and even add a different one since
+>> it's not a family differentiator since the Kernel is modular
+>> and works around DT to determine which drivers to probe.
+Proper names play an important role in understanding the code, right?
+>> Neil
+>>
+> Thank you for the detailed explanation; it makes sense!
+> Actually, I disagree with creating a separate ARCH without first reworking
+> all of its subsets - that's why I started this discussion.
+> Now, I see that you share my perspective and believe that C3
+> should be added to the ARCH_MESON subset, so I have no objections.
+>
+> [...]
+>
+> --
+> Thank you,
+> Dmitry
+>
+> _______________________________________________
+> linux-amlogic mailing list
+> linux-amlogic@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-amlogic
