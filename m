@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BBE6E9159
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3816E915D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235175AbjDTK7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
+        id S234957AbjDTLAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 07:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235199AbjDTK7Z (ORCPT
+        with ESMTP id S235232AbjDTK7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:59:25 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2763C902D
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:56:54 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id h8so2324378ljf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:56:54 -0700 (PDT)
+        Thu, 20 Apr 2023 06:59:35 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E51BBB92
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:57:00 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2a8bca69e8bso4135851fa.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:57:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681988211; x=1684580211;
+        d=linaro.org; s=google; t=1681988218; x=1684580218;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bvpe3R+29oL0L28vY5LD7eClw24OPj+V9LPwrg2dXOI=;
-        b=ZjHpc4hMWzdfkz2hMx35Yf9+jjkA4E8hYqB6A2Ln1TDdH4RRtG91gd4VLVvyCCY75U
-         sn7PNjSilWnq2QFhsxEoRxRpF0Lm5FVb4ICDUMWNHXB1fHTfzYHivpoRHPv+/AjPdtce
-         srVioag+LVPE9Wwx2w6uZfvf1bbZgT23oe2zmBAJ+kBWX/Kt9VZlVQoCgBRUBJ75PyzA
-         lQUO046X4Ej5KlLBSiYrtUysDGyY7Vyx/x2eiPvVcaGuuxQNI/J9uQphfuOQXcGwj3Y8
-         ElzZURyDBPVMWVzGSHr/p7NQGfgvHZK0ZKBNCNdy8PDjMBL38/mV+tjobxNKBnkzbYmS
-         c/CA==
+        bh=ewXgvjZPyKJ1n9zRzGA+zaxH8tx/0y3F71LiiYkR2ak=;
+        b=svru7IbwP6ExPzDgfv843KSwDqykuPfskwv51l5aXc28Yn0wLbbGYRt1/NrJhVNo9p
+         3wlQTGapLh4laFO1ud6TnELrE6tVv4ARuY9bhLjPj46AyrzjZF5nvQ90grV4cplkH6yr
+         RlVPw1CiKdiEeCTTUyDrIe8HRVtgisyRDAULEjvGow6Qg2G+9SUm7yUFezZeudK4YSF5
+         sTevhHGCuE+dxPA0gQ1PxW/G/Am682OdBtocCIfhQ24snlqmv+GuJoDiEzoLnKDzIydp
+         Kq6j8Jr2W/t2rpMGFd0lDTsnexFkk1w5N18pF8UzGMkcajhHkNULjsIbxHXW4llUnAIq
+         238w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681988211; x=1684580211;
+        d=1e100.net; s=20221208; t=1681988218; x=1684580218;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bvpe3R+29oL0L28vY5LD7eClw24OPj+V9LPwrg2dXOI=;
-        b=Ap2sC0YV302MRTIKwGb02e30gz/1lUYHSTCvESjJxLAkgLObzIUJIoMNTOTd+puGBJ
-         Y22il6SKWBkkPRi7EGE9KM4EAk5wr9+2tdjeMOULbveu4CHPUFYrGhlJfxsqE7XJ/0Sf
-         MsnBymhSxT3qUQfGEMXQkVzCBWIeUReNshffytDOhI3+ar5SySKCRrt7ZSGTE3tSNiuE
-         prosQUI9L0g9YVU1Jo09vBV1PiFwwTiD5N/OyV1aw26BPwKsuSBJaQDNWtVwWzaPKb+h
-         32GSX7hCrlk3rdRnJYNIYZ9WH1yFj34K49VjJIeyr3jPiC8IbqBQowc4kfZpN8atizHo
-         0c3Q==
-X-Gm-Message-State: AAQBX9dmNM8y/RDfiymhSYMPf3zc/IITqX3X3jxZ9oW3ADae81ji4Bon
-        PhUk5FSzxBrhx2aMSBJErCGNPw==
-X-Google-Smtp-Source: AKy350b7WGDKwsmJQEuXvAwMw3qik2GTjVrgxQijKkl5bPwvgHR0KqkNNxg40hiyoyW4SM7trZZ0AA==
-X-Received: by 2002:a2e:9d56:0:b0:2a7:7734:c4b3 with SMTP id y22-20020a2e9d56000000b002a77734c4b3mr228406ljj.4.1681988210785;
-        Thu, 20 Apr 2023 03:56:50 -0700 (PDT)
+        bh=ewXgvjZPyKJ1n9zRzGA+zaxH8tx/0y3F71LiiYkR2ak=;
+        b=TZn576xjp/m4ugnR5oB0SobBO6rSX1/Bsl5kZfNkVF3DsDr47k8D3AddyLTMm9+6JQ
+         s16/IMSmZR0lM0rpcCC2S6xWIUVc3ISOQgg+r0ssVQhgUT3DHCHwk700LdNp/v90GMSr
+         hB5wgr+AAVPf/QTDbMu5cWQl5fFi4BEuBg0eBhamMz110f4RIwTrFrABnCg7wlAs+jc5
+         6v1P99nmqfzN5rmOvKkal12q07PmtAEz3nF8JPPxuh/7TCB51FBSToBID1OAHM17d4it
+         +0rNsy2j0SlfOBG/tN5KRaVNkjdOMiGvJ/qN7gpHw3QB2NmenQ433Fhs7HGtQhcfNdfQ
+         HtxQ==
+X-Gm-Message-State: AAQBX9e9Wz3W865kq0TGJI63Y44BueOllwzFnM1Qtxt4+H10EbRF92Qj
+        qqyOd6jbOdmNlnaUb88qKzDFjg==
+X-Google-Smtp-Source: AKy350aZEBUcNWwWy8BRAL2PcQovivMdG+ijcjU9vEvc3OrpwMqNonvwDYisKpMubQQS4ikCM6fVPA==
+X-Received: by 2002:ac2:5d25:0:b0:4b3:d6e1:26bb with SMTP id i5-20020ac25d25000000b004b3d6e126bbmr303602lfb.29.1681988217863;
+        Thu, 20 Apr 2023 03:56:57 -0700 (PDT)
 Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id 5-20020ac25685000000b004ec7c0f2178sm179939lfr.63.2023.04.20.03.56.48
+        by smtp.gmail.com with ESMTPSA id o6-20020a05651238a600b004db3e2d3efesm178171lft.204.2023.04.20.03.56.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 03:56:50 -0700 (PDT)
-Message-ID: <618ab118-a9b8-3b6d-66ff-8e7aed88f06a@linaro.org>
-Date:   Thu, 20 Apr 2023 12:56:48 +0200
+        Thu, 20 Apr 2023 03:56:57 -0700 (PDT)
+Message-ID: <9c2e19a7-9483-c321-a455-f019080b3f8c@linaro.org>
+Date:   Thu, 20 Apr 2023 12:56:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH 17/18] arm64: dts: qcom: sm8550: correct pinctrl unit
- address
+Subject: Re: [PATCH 18/18] arm64: dts: qcom: sdm845-polaris: add missing
+ touchscreen child node reg
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -84,9 +84,9 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230419211856.79332-1-krzysztof.kozlowski@linaro.org>
- <20230419211856.79332-17-krzysztof.kozlowski@linaro.org>
+ <20230419211856.79332-18-krzysztof.kozlowski@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230419211856.79332-17-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230419211856.79332-18-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -102,29 +102,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 19.04.2023 23:18, Krzysztof Kozlowski wrote:
-> Match unit-address to reg entry to fix dtbs W=1 warnings:
+> Add missing reg property to touchscreen child node to fix dtbs W=1 warnings:
 > 
->   Warning (simple_bus_reg): /soc@0/pinctrl@f000000: simple-bus unit address format error, expected "f100000"
+>   Warning (unit_address_vs_reg): /soc@0/geniqup@ac0000/i2c@a98000/touchscreen@20/rmi4-f12@12: node has a unit name, but no reg or ranges property
 > 
-> Fixes: ffc50b2d3828 ("arm64: dts: qcom: Add base SM8550 dtsi")
+> Fixes: be497abe19bf ("arm64: dts: qcom: Add support for Xiaomi Mi Mix2s")
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->  arch/arm64/boot/dts/qcom/sm8550.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> index 90d2b7057b75..eef46045df93 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> @@ -2883,7 +2883,7 @@ spmi_bus: spmi@c400000 {
->  			#interrupt-cells = <4>;
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+> index 8ae0ffccaab2..576f0421824f 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+> @@ -483,6 +483,7 @@ rmi4-f01@1 {
 >  		};
 >  
-> -		tlmm: pinctrl@f000000 {
-> +		tlmm: pinctrl@f100000 {
->  			compatible = "qcom,sm8550-tlmm";
->  			reg = <0 0x0f100000 0 0x300000>;
->  			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+>  		rmi4-f12@12 {
+> +			reg = <0x12>;
+>  			syna,rezero-wait-ms = <0xc8>;
+>  			syna,clip-x-high = <0x438>;
+>  			syna,clip-y-high = <0x870>;
