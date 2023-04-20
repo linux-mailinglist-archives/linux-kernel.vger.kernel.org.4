@@ -2,83 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311156E8D23
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E696E8D22
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234528AbjDTItU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
+        id S234517AbjDTItB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234523AbjDTIsY (ORCPT
+        with ESMTP id S234055AbjDTIsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:48:24 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A12468A
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:48:11 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33K8lbDT097439;
-        Thu, 20 Apr 2023 03:47:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681980457;
-        bh=4JXCnX7/6ZI1mB75DWzDR8k021aCvnf/x0gwmwCaIzo=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=xQxGzwzZQXzuHcrJoKhGCCO4R3EP7I08FTCTfs9H/XVv9UiPbu6mf0t5lTX5npEhV
-         4IdoY6+ZhXatryNqvIaDNX6jwqLdSMv6RU5PO5z2Mea8sndo0VSKe5FOb5wxWft0uH
-         gIfvF5jcU+O+KDblsa3SHt7eJ50zeqxCbI2+0s80=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33K8lbNb000678
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 20 Apr 2023 03:47:37 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 20
- Apr 2023 03:47:36 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 20 Apr 2023 03:47:36 -0500
-Received: from [10.249.48.175] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33K8laas013782;
-        Thu, 20 Apr 2023 03:47:36 -0500
-Message-ID: <f4514baa-d92d-c421-b13a-b30c7023108e@ti.com>
-Date:   Thu, 20 Apr 2023 03:47:36 -0500
+        Thu, 20 Apr 2023 04:48:07 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB11D4695
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:47:52 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id j15so1642447ybl.10
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:47:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681980472; x=1684572472;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T5oAqCslyeZbhwZTq6RFTTQ4PQFGAxsJkatHKOyp9J0=;
+        b=bxyEIQuckrZovTT6ZFDvK22g7vQcjK9MDIwUGnHTk7f1r03inGlP8Hg9uKZa89pY2F
+         B3CdN9Si8aiLyM5WkeIVd0OS07FeUt/8E9sp7wOC4wSLOOgSLMRu620yYy+6ouQkBHHU
+         OrRntp7qLe1qDjiVgICBWJqoGb24YPjPlc4oXe6bqvwmnzFg63ZMtNQDai3YN0ouObvz
+         DtgFueQzO3xaAVO8HU5DHmuGly+qIhBGxBt8k6nddjhT4RXBfuAErQ07j5zQuzK/w1Pr
+         eyw7x9OYffXFfglyZ1E3bla8PnYZVQpnFyc/5NbE27VDNtomqydwHgJ7tFs+QXm7X/EA
+         m4aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681980472; x=1684572472;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T5oAqCslyeZbhwZTq6RFTTQ4PQFGAxsJkatHKOyp9J0=;
+        b=VUap/YwHFaV9H5+C+44EL1Wz5C44Fsj8aGQO0434+mY4T6el6yR+wcjJQEBKrgnjQN
+         W4MydeFOGBNIPoI4i+1ows+ueHRMLijhqWCTMy+tj3ak3x1Uqd7jtEo/PvKSSey7me6M
+         sC2VioEz1DW5WZiF/c9jRBK2+YG61f0GPXmAXhfD9b9RIQBPwjy1Srh2sx+7cuBDGWr9
+         dYzWB2XO5zctjck57qulioUm5VPtw8Bgh9kzYOH0vpsNfiSJmuVxhelSQOsz8HthKYmC
+         dH0T4uMjfaEhM1mzenhB1WHV+sdUW3ngVuZez6ZgrjTsVux9COxQjPeybskhAggvAYw4
+         R4rA==
+X-Gm-Message-State: AAQBX9c83bhqpQ0xrX48rA0TlaLpPUhhcm+VfmvhPq55iqyxODn0li1I
+        3Sw5gnyA+a3UCzODm+39Z+rVnPFwftaHmtOWUgTC+A==
+X-Google-Smtp-Source: AKy350Yj07sfBe+SClXcBzSUONtgncb/id4YtuYg1fsL8LaTx7utG5puu9AQK1O//i8VSR4O9bit6lJq4Bxk2wl2vpY=
+X-Received: by 2002:a25:d181:0:b0:b79:6c89:86c0 with SMTP id
+ i123-20020a25d181000000b00b796c8986c0mr662624ybg.42.1681980471793; Thu, 20
+ Apr 2023 01:47:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/2] arm64: defconfig: enable TI K3 R5 and DSP remote proc
- drivers
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <quic_bjorande@quicinc.com>, <arnd@arndb.de>, <treding@nvidia.com>,
-        <dmitry.baryshkov@linaro.org>, <nfraprado@collabora.com>,
-        <broonie@kernel.org>, <rafal@milecki.pl>
-References: <20230419113958.17141-1-hnagalla@ti.com>
- <20230419113958.17141-3-hnagalla@ti.com>
- <70b6f997-d420-0e59-0be5-6ae9db7aed66@linaro.org>
- <ae49267f-4534-e489-4bb7-946944a9a04c@ti.com>
- <9a2ed4b6-13b7-9e65-263c-d2b08e11da00@linaro.org>
-Content-Language: en-US
-From:   Hari Nagalla <hnagalla@ti.com>
-In-Reply-To: <9a2ed4b6-13b7-9e65-263c-d2b08e11da00@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
+ <20230419-dpu-tweaks-v1-7-d1bac46db075@freebox.fr> <405ff057-e4da-3f2f-b860-ce2eeacaab94@linaro.org>
+ <CAG9NU68aLLZ0KGNmsirzm5RtGw6CC_i=+kTwyfhy+bjSkRTO4Q@mail.gmail.com>
+In-Reply-To: <CAG9NU68aLLZ0KGNmsirzm5RtGw6CC_i=+kTwyfhy+bjSkRTO4Q@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 20 Apr 2023 11:47:40 +0300
+Message-ID: <CAA8EJppa86WWE0tkUaFG4JpfKwr9husvgHWkCVjRbWiF=Ei7aQ@mail.gmail.com>
+Subject: Re: [PATCH 07/11] drm/msm/dpu: add sspp cursor blocks to msm8998 hw catalog
+To:     Arnaud Vrac <avrac@freebox.fr>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/23 07:46, Krzysztof Kozlowski wrote:
-> Yeah, but why? This is simple defconfig change, just enabling drivers
-> for same platform. With such arguments are we going to enable all
-> drivers everywhere one-by-one?
-Ok. will coalesce both patches and resubmit.
+On Thu, 20 Apr 2023 at 10:06, Arnaud Vrac <avrac@freebox.fr> wrote:
+>
+> Le jeu. 20 avr. 2023 =C3=A0 01:10, Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> a =C3=A9crit :
+> >
+> > On 19/04/2023 17:41, Arnaud Vrac wrote:
+> > > Now that cursor sspp blocks can be used for cursor planes, enable the=
+m
+> > > on msm8998. The dma sspp blocks that were assigned to cursor planes c=
+an
+> > > now be used for overlay planes instead.
+> >
+> > While the change is correct, there is more about it. Composers, using
+> > universal planes, will see this plane too. They have no obligations to
+> > use it only for the cursor. At the minimum could you please extend the
+> > plane_atomic_check to check for the plane dimensions for the CURSOR pip=
+es?
+>
+> Hum, I had assumed the generic atomic checks would already do this,
 
-Thanks
+Atomic will have these checks for the legacy cursor API (using the
+mode_config.cursor_width/cursor_height that you have added). But I
+don't think there is a generic API for telling the core 'this plane is
+slightly limited'.
+
+Fortunately, once the virtual planes land and are taught about the
+SSPP_CURSOR peculiarities, it should not matter, since the driver will
+know that it should not select these pipes in the inappropriate cases.
+
+> but it's not the case. I'll add the check when the pipe is of type
+> SSPP_CURSOR in another patch coming before, thanks.
+>
+> >
+> > For this change:
+> >
+> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >
+> > >
+> > > Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
+> > > ---
+> > >   .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    |  8 +++--
+> > >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     | 34 +++++++++++=
++++++++++++
+> > >   2 files changed, 40 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h =
+b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> > > index b07e8a9941f79..7de393b0f91d7 100644
+> > > --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> > > +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> > > @@ -90,10 +90,14 @@ static const struct dpu_sspp_cfg msm8998_sspp[] =
+=3D {
+> > >               sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0)=
+,
+> > >       SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000, 0x1ac, DMA_MSM8998_MASK,
+> > >               sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1)=
+,
+> > > -     SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000, 0x1ac, DMA_CURSOR_MSM89=
+98_MASK,
+> > > +     SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000, 0x1ac, DMA_MSM8998_MASK=
+,
+> > >               sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA2)=
+,
+> > > -     SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000, 0x1ac, DMA_CURSOR_MSM89=
+98_MASK,
+> > > +     SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000, 0x1ac, DMA_MSM8998_MASK=
+,
+> > >               sdm845_dma_sblk_3, 13, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA3=
+),
+> > > +     SSPP_BLK("sspp_12", SSPP_CURSOR0, 0x34000, 0x1ac, DMA_CURSOR_MS=
+M8998_MASK,
+> > > +             msm8998_cursor_sblk_0, 2, SSPP_TYPE_CURSOR, DPU_CLK_CTR=
+L_CURSOR0),
+> > > +     SSPP_BLK("sspp_13", SSPP_CURSOR1, 0x36000, 0x1ac, DMA_CURSOR_MS=
+M8998_MASK,
+> > > +             msm8998_cursor_sblk_1, 10, SSPP_TYPE_CURSOR, DPU_CLK_CT=
+RL_CURSOR1),
+> > >   };
+> > >
+> > >   static const struct dpu_lm_cfg msm8998_lm[] =3D {
+> > > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers=
+/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> > > index 8d5d782a43398..f34fa704936bc 100644
+> > > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> > > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> > > @@ -242,6 +242,22 @@ static const uint32_t wb2_formats[] =3D {
+> > >       DRM_FORMAT_XBGR4444,
+> > >   };
+> > >
+> > > +static const uint32_t cursor_formats[] =3D {
+> > > +     DRM_FORMAT_ARGB8888,
+> > > +     DRM_FORMAT_ABGR8888,
+> > > +     DRM_FORMAT_RGBA8888,
+> > > +     DRM_FORMAT_BGRA8888,
+> > > +     DRM_FORMAT_XRGB8888,
+> > > +     DRM_FORMAT_ARGB1555,
+> > > +     DRM_FORMAT_ABGR1555,
+> > > +     DRM_FORMAT_RGBA5551,
+> > > +     DRM_FORMAT_BGRA5551,
+> > > +     DRM_FORMAT_ARGB4444,
+> > > +     DRM_FORMAT_ABGR4444,
+> > > +     DRM_FORMAT_RGBA4444,
+> > > +     DRM_FORMAT_BGRA4444,
+> > > +};
+> > > +
+> > >   /*************************************************************
+> > >    * SSPP sub blocks config
+> > >    *************************************************************/
+> > > @@ -300,6 +316,19 @@ static const uint32_t wb2_formats[] =3D {
+> > >       .virt_num_formats =3D ARRAY_SIZE(plane_formats), \
+> > >       }
+> > >
+> > > +#define _CURSOR_SBLK(num) \
+> > > +     { \
+> > > +     .maxdwnscale =3D SSPP_UNITY_SCALE, \
+> > > +     .maxupscale =3D SSPP_UNITY_SCALE, \
+> > > +     .smart_dma_priority =3D 0, \
+> > > +     .src_blk =3D {.name =3D STRCAT("sspp_src_", num), \
+> > > +             .id =3D DPU_SSPP_SRC, .base =3D 0x00, .len =3D 0x150,},=
+ \
+> > > +     .format_list =3D cursor_formats, \
+> > > +     .num_formats =3D ARRAY_SIZE(cursor_formats), \
+> > > +     .virt_format_list =3D cursor_formats, \
+> > > +     .virt_num_formats =3D ARRAY_SIZE(cursor_formats), \
+> > > +     }
+> > > +
+> > >   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_0 =3D
+> > >                               _VIG_SBLK("0", 0, DPU_SSPP_SCALER_QSEED=
+3);
+> > >   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_1 =3D
+> > > @@ -309,6 +338,11 @@ static const struct dpu_sspp_sub_blks msm8998_vi=
+g_sblk_2 =3D
+> > >   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_3 =3D
+> > >                               _VIG_SBLK("3", 0, DPU_SSPP_SCALER_QSEED=
+3);
+> > >
+> > > +static const struct dpu_sspp_sub_blks msm8998_cursor_sblk_0 =3D
+> > > +                             _CURSOR_SBLK("12");
+> > > +static const struct dpu_sspp_sub_blks msm8998_cursor_sblk_1 =3D
+> > > +                             _CURSOR_SBLK("13");
+> > > +
+> > >   static const struct dpu_rotation_cfg dpu_rot_sc7280_cfg_v2 =3D {
+> > >       .rot_maxheight =3D 1088,
+> > >       .rot_num_formats =3D ARRAY_SIZE(rotation_v2_formats),
+> > >
+> >
+> > --
+> > With best wishes
+> > Dmitry
+> >
+
+
+
+--=20
+With best wishes
+Dmitry
