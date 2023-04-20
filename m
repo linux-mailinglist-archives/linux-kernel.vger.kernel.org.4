@@ -2,132 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EEB6E9676
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321CF6E9674
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbjDTN77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 09:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
+        id S231176AbjDTN7w convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Apr 2023 09:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbjDTN75 (ORCPT
+        with ESMTP id S231777AbjDTN7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:59:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACE710DC
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:59:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681999146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=m4/JuEsZscBS1QEjsB4TfQCsUwFo0JrhZtOzYqZKIzY=;
-        b=FkDwRI9riU3gqUI/siICUB8tBA0mcKXRPB7GVCSqGoawFBG29zFUKPmjst1bWX21GYlza1
-        pbJ71+H4pqCJrb5izMl2C759pIxfra6ywDd1c2UqzkLQo4mHmOhSmSSIHtBlIDG7Jg55+P
-        yrr+wgzvWH7vhy1Q1ON3A/bqGrtQc9o=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-355-83Iu-T3COqKq_lrNkVWCCg-1; Thu, 20 Apr 2023 09:59:05 -0400
-X-MC-Unique: 83Iu-T3COqKq_lrNkVWCCg-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-74e04fcc695so58177585a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:59:05 -0700 (PDT)
+        Thu, 20 Apr 2023 09:59:48 -0400
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA1610F1;
+        Thu, 20 Apr 2023 06:59:47 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-54fe3cd445aso42781797b3.5;
+        Thu, 20 Apr 2023 06:59:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681999145; x=1684591145;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m4/JuEsZscBS1QEjsB4TfQCsUwFo0JrhZtOzYqZKIzY=;
-        b=WxxfgUNXNrbSfJUXVNFkcl23IGG1EtvhrYteXl1Eq6ACgXsEovCirxoYJ7CTDP6S+G
-         5MP/xVE8yv8ND08QtfKbSs9/uQfDQhSFkoVkhOlMRSkPhV2j0itimQ8LUI242MQrT+ym
-         Mp1FdNLh+UJLpC0nBvZUnmgMK12HYg4sqCgS7GMPtWKFfisZlZtTqdeF5JgswNqlSqmI
-         ++tFIPcgzUw69vzmPlFush+Eg4H76vgHFCgS7qnXsV/KaTeIcOC0xGnTw5eEQqrdpS8z
-         3RzorbjTXcj46XSbELdvJpZGsDxNhcrXkPJZNb+N2lr2YegVW0BTwHmjAEbEDrBXE2oe
-         /cpA==
-X-Gm-Message-State: AAQBX9e4zKViCaSB1GN1JqscsU0ezcgNc/Vv4OXzGsu9VykP5vGIeZXT
-        KAox4A6ZhDRKS0Zr8NBTvbr1E9K4u/TnwJNEAtvte7YrBAye74RkAIIXilHtdZ5iydoGpYGKYdh
-        XuGXE1UFrYuyvuXMDT8FIWsU4
-X-Received: by 2002:a05:622a:18a9:b0:3e6:35ec:8a9f with SMTP id v41-20020a05622a18a900b003e635ec8a9fmr2276770qtc.59.1681999145134;
-        Thu, 20 Apr 2023 06:59:05 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZWmwkSKjotOboNJvMVMnZ/90aKxEW+jnR3KliISrG82OxoHSKFPujRz0mheXYNaiH8sWDnrA==
-X-Received: by 2002:a05:622a:18a9:b0:3e6:35ec:8a9f with SMTP id v41-20020a05622a18a900b003e635ec8a9fmr2276737qtc.59.1681999144890;
-        Thu, 20 Apr 2023 06:59:04 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id z42-20020a05620a262a00b00745f3200f54sm430905qko.112.2023.04.20.06.59.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 06:59:04 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, Alvin.Lee2@amd.com, Jun.Lei@amd.com,
-        qingqing.zhuo@amd.com, Max.Tseng@amd.com, Josip.Pavic@amd.com,
-        Eric.Yang2@amd.com, aurabindo.pillai@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/amd/display: return status of dmub_srv_get_fw_boot_status
-Date:   Thu, 20 Apr 2023 09:59:01 -0400
-Message-Id: <20230420135901.3889747-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        d=1e100.net; s=20221208; t=1681999186; x=1684591186;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SVfYoaULgv71tF/zxD/TKaMAx1hJmnu6fpoGpjXYABs=;
+        b=UF3MZhOmI1V8LjXRQcscOaZ6UpkRn9R0ePC16fXlYkNeydb5gg6DmxdAXZsxRVvzFx
+         e59I6yAhxBbOfzmmMuwIzVg7hu3ACoy8+qPSTwTdQx/210YgOb6hK0kDbQS/fuzwEk1T
+         vD/+flk0LznIJ3FgzftlftcFpKsGBmbhnB/jat29ePtgcToAG6if1iguJ2d9KngFixwG
+         fWWWiGm4eOTKkQ21oSi4k62n3ddsxb/n679wHpe1Sj8U+tS7PY9z4D7NGs7YU90oeY55
+         juyE4V/aen1UhcXS63QBSs6pLW7FWwarvUIdrC27eHRQEMumse1tA4gsawiFKq3oL/uu
+         mA2g==
+X-Gm-Message-State: AAQBX9eCkC0p9qDh2E2GHOw74PcbneIXJDgBc95SkSSAVas82+TxLR4o
+        X97ro80/qo5RZsT/nJYEUCcbp/Zh1Cs57GeR
+X-Google-Smtp-Source: AKy350ZkLcyg8YRsi9IZkdbzNs/GkKHEDKF30awE7txdZaJav7sTd7K3UOdpn0Xt13SPNrpxK/zQWA==
+X-Received: by 2002:a81:6d54:0:b0:541:9ac1:f5a9 with SMTP id i81-20020a816d54000000b005419ac1f5a9mr879372ywc.2.1681999186714;
+        Thu, 20 Apr 2023 06:59:46 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id s126-20020a815e84000000b00545a08184cesm349163ywb.94.2023.04.20.06.59.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 06:59:46 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-555e170df98so41909687b3.10;
+        Thu, 20 Apr 2023 06:59:46 -0700 (PDT)
+X-Received: by 2002:a0d:d68f:0:b0:541:6d79:9291 with SMTP id
+ y137-20020a0dd68f000000b005416d799291mr791288ywd.43.1681999186107; Thu, 20
+ Apr 2023 06:59:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230419130234.44321-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230419130234.44321-1-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 20 Apr 2023 15:59:34 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWWBnEcdZzn-cPNo8iMLgQHxmXp+B6PJBQH5FvLSPXayQ@mail.gmail.com>
+Message-ID: <CAMuHMdWWBnEcdZzn-cPNo8iMLgQHxmXp+B6PJBQH5FvLSPXayQ@mail.gmail.com>
+Subject: Re: [PATCH v4] memory: renesas-rpc-if: Fix PHYCNT.STRTIM setting
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Cong Dang <cong.dang.xn@renesas.com>,
+        Hai Pham <hai.pham.ud@renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-gcc with W=1 reports
-drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:
-  In function ‘dc_dmub_srv_optimized_init_done’:
-drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:184:26:
-  error: variable ‘dmub’ set but not used [-Werror=unused-but-set-variable]
-  184 |         struct dmub_srv *dmub;
-      |                          ^~~~
+On Wed, Apr 19, 2023 at 3:02 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> According to the datasheets, the Strobe Timing Adjustment bit (STRTIM)
+> setting is different on R-Car SoCs, i.e.
+>
+> R-Car M3 ES1.*  : STRTIM[2:0] is set to 0x6
+> other R-Car Gen3: STRTIM[2:0] is set to 0x7
+> other R-Car Gen4: STRTIM[3:0] is set to 0xf
+>
+> To fix this issue, a DT match data was added to specify the setting
+> for special use cases.
+>
+> Signed-off-by: Cong Dang <cong.dang.xn@renesas.com>
+> Signed-off-by: Hai Pham  <hai.pham.ud@renesas.com>
+> [wsa: rebased, restructured, added Gen4 support]
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>
+> Change since v3:
+> * rebased to latest changes in the driver
+>
+> The previous version was already reviewed by Geert and tested by
+> Prabhakar. Since the rebase for v4 was not super trivial, I decided to
+> drop the tags. It would be great if you could have another look. Thank
+> you already. Happy hacking!
 
-The return status is never set.
-It looks like a call to dmub_srv_get_fw_boot_status is missing.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Fixes: 499e4b1c722e ("drm/amd/display: add mechanism to skip DCN init")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+Gr{oetje,eeting}s,
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-index d15ec32243e2..36d936ab4300 100644
---- a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-+++ b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-@@ -182,14 +182,23 @@ bool dc_dmub_srv_cmd_run_list(struct dc_dmub_srv *dc_dmub_srv, unsigned int coun
- bool dc_dmub_srv_optimized_init_done(struct dc_dmub_srv *dc_dmub_srv)
- {
- 	struct dmub_srv *dmub;
--	union dmub_fw_boot_status status;
-+	struct dc_context *dc_ctx;
-+	union dmub_fw_boot_status boot_status;
-+	enum dmub_status status;
- 
- 	if (!dc_dmub_srv || !dc_dmub_srv->dmub)
- 		return false;
- 
- 	dmub = dc_dmub_srv->dmub;
-+	dc_ctx = dc_dmub_srv->ctx;
-+
-+	status = dmub_srv_get_fw_boot_status(dmub, &boot_status);
-+	if (status != DMUB_STATUS_OK) {
-+		DC_ERROR("Error querying DMUB boot status: error=%d\n", status);
-+		return false;
-+	}
- 
--	return status.bits.optimized_init_done;
-+	return boot_status.bits.optimized_init_done;
- }
- 
- bool dc_dmub_srv_notify_stream_mask(struct dc_dmub_srv *dc_dmub_srv,
+                        Geert
+
 -- 
-2.27.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
