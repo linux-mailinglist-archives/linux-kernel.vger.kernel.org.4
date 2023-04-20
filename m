@@ -2,95 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9B96E8936
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 06:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481986E8945
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 06:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbjDTEky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 00:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
+        id S231232AbjDTEqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 00:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233549AbjDTEkk (ORCPT
+        with ESMTP id S229646AbjDTEqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 00:40:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FC255B7;
-        Wed, 19 Apr 2023 21:40:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC97664282;
-        Thu, 20 Apr 2023 04:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 32964C433EF;
-        Thu, 20 Apr 2023 04:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681965620;
-        bh=EVkDgFk+gzSXEfIGqXu2Mh/eirZ1Wt0Isn7WHGFVFuU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Czp+7piA4XvkVhNtzE3DC9SmfDkRbyliWCJstJuwIu6+QPeMdT4EaoIXps1wR0Ozz
-         mV0X1Ljm2Kf/hABKCRYyLzyfDjGAYlscEAdVyae+aeeAUMNNK057YroNeALfKvtFal
-         7Hsn2fqgF8gKhsmEaz84mA6RqFcxOdfAbUEtZ98yzZKUw+f0xb+JJkt/OHO6mqI558
-         XRGLDYmV/4RIV+EmFss6xR+Qk101MvMu5MYC+NPv2169IFcyo6uD7IWKZEbTldardp
-         4v0iHUmiDKryZG9111fmtq1QundV4a07FCvbGPxugWrxOURvjEq/n+dWADgSEDduaN
-         MYYsZEyaYmPXQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 13AECC395C8;
-        Thu, 20 Apr 2023 04:40:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 20 Apr 2023 00:46:32 -0400
+Received: from qproxy4-pub.mail.unifiedlayer.com (qproxy4-pub.mail.unifiedlayer.com [66.147.248.250])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E843340CD
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 21:46:31 -0700 (PDT)
+Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
+        by qproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id 3138A802F55C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 04:46:27 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id DDDA510047E1E
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 04:46:25 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id pMBdpuPoaNX2apMBdpWhEo; Thu, 20 Apr 2023 04:46:25 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=6440c3a1
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=dKHAf1wccvYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=CBPAlmTFKGQ3O7cSYHUmcQog7eBbDFMHufWxFLb1jx4=; b=f3yYzc/ipDBEPjrIYvXTkdtB/j
+        B4uGtojgluRb4iPE6oTcZTCapLXpT8Nhwab1c4eR0uD5fLo/32dNfoVEjMspB4doXSBEfaCXbCBe1
+        igwW5YLDj5tE8K6E89nr+vl3W81mJnQiLYu257nma3wcn5QiZQ5UsrT6vReyWS9kqaJKcnaBIh7Wj
+        8MDlhoy16d595Mz40M4jgFafzCY+M2MZulq2IJGNXSmgZQGLBpQyrKdXNbIqI4Vjb9se0vyhT8Gyr
+        o2GCvvoWoeEKreGMDxgJwNwzOwo1AhA0+qNNLF366qvF1PhpEenPGkoJNuRup8CivMNAqecAC5iJR
+        Vie1QITA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:35564 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1ppMBc-004BrN-Rz;
+        Wed, 19 Apr 2023 22:46:24 -0600
+Subject: Re: [PATCH 5.15 00/84] 5.15.108-rc4 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230419132034.475843587@linuxfoundation.org>
+In-Reply-To: <20230419132034.475843587@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <c5c2e7e8-33fb-1957-4fac-334c548e4a99@w6rz.net>
+Date:   Wed, 19 Apr 2023 21:46:22 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/2] Access variable length array relaxed for
- integer type
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168196562006.24751.2408162871776218216.git-patchwork-notify@kernel.org>
-Date:   Thu, 20 Apr 2023 04:40:20 +0000
-References: <20230420032735.27760-1-zhoufeng.zf@bytedance.com>
-In-Reply-To: <20230420032735.27760-1-zhoufeng.zf@bytedance.com>
-To:     Feng zhou <zhoufeng.zf@bytedance.com>
-Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, yangzhenze@bytedance.com,
-        wangdongdong.6@bytedance.com, zhouchengming@bytedance.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1ppMBc-004BrN-Rz
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:35564
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 4/19/23 6:22 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.108 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 21 Apr 2023 13:20:15 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.108-rc4.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-On Thu, 20 Apr 2023 11:27:33 +0800 you wrote:
-> From: Feng Zhou <zhoufeng.zf@bytedance.com>
-> 
-> Add support for integer type of accessing variable length array.
-> Add a selftest to check it.
-> 
-> Feng Zhou (2):
->   bpf: support access variable length array of integer type
->   selftests/bpf: Add test to access integer type of variable array
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v2,1/2] bpf: support access variable length array of integer type
-    https://git.kernel.org/bpf/bpf-next/c/2569c7b8726f
-  - [bpf-next,v2,2/2] selftests/bpf: Add test to access integer type of variable array
-    https://git.kernel.org/bpf/bpf-next/c/5ff54dedf35b
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Tested-by: Ron Economos <re@w6rz.net>
 
