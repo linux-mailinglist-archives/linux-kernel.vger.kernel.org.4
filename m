@@ -2,75 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8EFC6E9B0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33AE6E9B13
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjDTRot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 13:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S231709AbjDTRrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 13:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDTRor (ORCPT
+        with ESMTP id S231128AbjDTRrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 13:44:47 -0400
-Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5453E133;
-        Thu, 20 Apr 2023 10:44:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1682012678;
-        bh=8Z9tCQrE4IZ72nzfVNAMoGMKCT3xO74OPin8ygG6pIA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=xNbPuIB9sLG0YJREqQTbUKXwuFi/u+hqaPRmje1xAiL39CPg3wL6bkHthgcwPAD0g
-         Ivt2t483c/xjBzT/Ak+3ZEk1f9unsjJmIi5wF7YG0NWw0dRx+NFh5GHmVeTx5KZzJf
-         erIv7qQSKTx4o2WDfikC8hMdI/09mJ/3wPC7GXds=
-Received: from [172.31.255.72] ([116.236.146.234])
-        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
-        id B23390B6; Fri, 21 Apr 2023 01:44:35 +0800
-X-QQ-mid: xmsmtpt1682012675tpqexjue7
-Message-ID: <tencent_31DEA62F31CFF96D3ED356F1508707594C0A@qq.com>
-X-QQ-XMAILINFO: OKKHiI6c9SH3XK2ZbEjTQ9bEnhxrsMrydezzJEFx+hnTkisG+lwe3A0n1DcDma
-         HTiYw0z2yK24gTEbt+IH/9b7urHKJuApXRzmGpNveZ4dJXtlvy37ze3tG0WDakcWkTviY1iRd+Lc
-         +5OUi1c8OjrTHuzAe+QObESnDDejeA6FV4c4JgbCpsbj7lVGK/J9S/KU44b8is+UXS5VbD0R3i5D
-         x4AoWGAAxHIP6RxaquqYTLhSIlq0rkflTpMqb9Tx/Vxk3uMptwsS4K0X1/EOx3eDiBh7A9FZAk8a
-         0QjRvQW3i7AwgadA8ldLITHNKQEU9dIpq3BPY/0Sl5iaLX213eS06A+PKEdRnPa1YNCJg3io9nMf
-         aaVNrb/f7ds90wT2fEGK4zrLjMDhzmDNhdjADiVYV/uJE0/16Gm+sjjHR6iwG/gG1yT1yvgWOMv7
-         V4VNnr9ggGqrdqZubJ0HBI7H6Z4UqXHzOvu5/IH1WfDOAH8Ca6ckCRsxHv0cgGP/gw67ueND7F2e
-         eZEhB/pUQ4l2qk0DgDMAneKbtG5CasVzt1FBhoqa3izWLhe+BKrsuVyZmNy1ah2gUDBiC5aFt6W/
-         q0HcAGwC0cfoa2LdWyJanKrFmzmFe6B14CGo+5SdgZUDqzfkTc7IpbPFctzHpNwlV2JP9/mgMGul
-         89UhZCpt8BnyDurPuZTrhM6ESPpaSRAiQJwvCbwC4yyVsEqCPaocnvpzwwEv01T9DCwwK6q0Vkmo
-         6wYMpPd+1MsEBDB7Hf+guNs4g+/r5J6dkt0xSieKlz8UMfk/gKPp+gzc5FT8/jlddHO8ZFUaMxkg
-         lWgE9+MU4RCKnPcPa1kIgE8qFioP7PW81CunJuMOVXPhp77N4hGu/s3jEzUCjZbwYKPH3Jh+ReHh
-         r5oVk7K4/K41D0K2FX7xF68ERD5LaEcr/cklwvOb3Hq3vqYO7q+H2lSZX5R/4WjHu03SYgVCQPUI
-         nbmraS81l7JpKw9HmF6ivrMyB9ASR2DsFOO3nC7Ok=
-X-OQ-MSGID: <45756597-a0eb-79f1-0706-1c2bf7e08d19@foxmail.com>
-Date:   Fri, 21 Apr 2023 01:44:35 +0800
+        Thu, 20 Apr 2023 13:47:42 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FE5171D;
+        Thu, 20 Apr 2023 10:47:41 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33KHPhYA026906;
+        Thu, 20 Apr 2023 17:47:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=piDta8ozlQhR0tbwvrizGAOrMkZ4zCOT5GG5tQ4IryM=;
+ b=RG8lxROtvWoKGcOy6wldR45CLf3DQ6sNtih8ALGCJNV19NJlhaBP13VKpLNypldhXI/D
+ 75h1VmE42LJmF34CSnhTLSrMQaewtgtBLbaiL+gW0L/mH6AH3f6x7Hni9tFvFJv6CGcy
+ dLW9m4U1hCDWgXZDumYH8iHoDCkt/bmH6IMlszme5bVDrPr/1IsTstvFWS2E1BtL9551
+ e2o61P8p47MRseC1+EGNugz7tNM5Mb5rZsSys5x8oJQxqcUWZx5BnJhWI6m4kOB05s0Q
+ tel/snsMvmu3M77/IP/IV+Jcyu5vTGpUNOlvo2r4/i533OfS6NCMlJ2PeOvtqZ7Vn5TY Tw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q2p7atsdw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Apr 2023 17:47:36 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33KHlZSw030194
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Apr 2023 17:47:35 GMT
+Received: from [10.71.111.18] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 20 Apr
+ 2023 10:47:34 -0700
+Message-ID: <905b4150-6e15-4172-10cf-19aa0ebf817c@quicinc.com>
+Date:   Thu, 20 Apr 2023 10:47:34 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH] eventfd: support delayed wakeup for non-semaphore eventfd
- to reduce cpu utilization
-To:     Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>, Dylan Yudaken <dylany@fb.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Paolo Bonzini <pbonzini@redhat.com>, Fu Wei <wefu@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <tencent_AF886EF226FD9F39D28FE4D9A94A95FA2605@qq.com>
- <817984a2-570c-cb23-4121-0d75005ebd4d@kernel.dk>
- <tencent_9D8583482619D25B9953FCA89E69AA92A909@qq.com>
- <7dded5a8-32c1-e994-52a0-ce32011d5e6b@kernel.dk>
- <20230419-blinzeln-sortieren-343826ee30ce@brauner>
- <868ceaa3-4854-345f-900e-52a79b924aa6@kernel.dk>
-From:   Wen Yang <wenyang.linux@foxmail.com>
-In-Reply-To: <868ceaa3-4854-345f-900e-52a79b924aa6@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [Freedreno] [PATCH 02/11] drm/msm/dpu: use the actual lm maximum
+ width instead of a hardcoded value
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Arnaud Vrac <avrac@freebox.fr>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+References: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
+ <20230419-dpu-tweaks-v1-2-d1bac46db075@freebox.fr>
+ <6e807c05-a990-5692-3f84-2e4153c8c278@linaro.org>
+From:   Jeykumar Sankaran <quic_jeykumar@quicinc.com>
+In-Reply-To: <6e807c05-a990-5692-3f84-2e4153c8c278@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: d5jpEChOYoNeyqH1Qdl_jE4iPKnTc2Ua
+X-Proofpoint-ORIG-GUID: d5jpEChOYoNeyqH1Qdl_jE4iPKnTc2Ua
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-20_13,2023-04-20_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
+ lowpriorityscore=0 spamscore=0 bulkscore=0 malwarescore=0 adultscore=0
+ phishscore=0 mlxscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=901
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304200148
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,69 +88,58 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2023/4/20 00:42, Jens Axboe 写道:
-> On 4/19/23 3:12?AM, Christian Brauner wrote:
->> On Tue, Apr 18, 2023 at 08:15:03PM -0600, Jens Axboe wrote:
->>> On 4/17/23 10:32?AM, Wen Yang wrote:
->>>> ? 2023/4/17 22:38, Jens Axboe ??:
->>>>> On 4/16/23 5:31?AM, wenyang.linux@foxmail.com wrote:
->>>>>> From: Wen Yang <wenyang.linux@foxmail.com>
->>>>>>
->>>>>> For the NON SEMAPHORE eventfd, if it's counter has a nonzero value,
->>>>>> then a read(2) returns 8 bytes containing that value, and the counter's
->>>>>> value is reset to zero. Therefore, in the NON SEMAPHORE scenario,
->>>>>> N event_writes vs ONE event_read is possible.
->>>>>>
->>>>>> However, the current implementation wakes up the read thread immediately
->>>>>> in eventfd_write so that the cpu utilization increases unnecessarily.
->>>>>>
->>>>>> By adding a configurable delay after eventfd_write, these unnecessary
->>>>>> wakeup operations are avoided, thereby reducing cpu utilization.
->>>>> What's the real world use case of this, and what would the expected
->>>>> delay be there? With using a delayed work item for this, there's
->>>>> certainly a pretty wide grey zone in terms of delay where this would
->>>>> perform considerably worse than not doing any delayed wakeups at all.
->>>>
->>>> Thanks for your comments.
->>>>
->>>> We have found that the CPU usage of the message middleware is high in
->>>> our environment, because sensor messages from MCU are very frequent
->>>> and constantly reported, possibly several hundred thousand times per
->>>> second. As a result, the message receiving thread is frequently
->>>> awakened to process short messages.
->>>>
->>>> The following is the simplified test code:
->>>> https://github.com/w-simon/tests/blob/master/src/test.c
->>>>
->>>> And the test code in this patch is further simplified.
->>>>
->>>> Finally, only a configuration item has been added here, allowing users
->>>> to make more choices.
->>> I think you'd have a higher chance of getting this in if the delay
->>> setting was per eventfd context, rather than a global thing.
->> That patch seems really weird. Is that an established paradigm to
->> address problems like this through a configured wakeup delay? Because
->> naively this looks like a pretty brutal hack.
-> It is odd, and it is a brutal hack. My worries were outlined in an
-> earlier reply, there's quite a big gap where no delay would be better
-> and the delay approach would be miserable because it'd cause extra
-> latency and extra context switches. It'd be much cleaner if you KNEW
-> there'd be more events coming, as you could then get rid of that delayed
-> work item completely. And I suspect, if this patch makes sense, that
-> it'd be better to have a number+time limit as well and if you hit the
-> event number count that you'd notify inline and put some smarts in the
-> delayed work handling to just not do anything if nothing is pending.
 
-Thank you very much for your suggestion.
+On 4/19/2023 3:23 PM, Dmitry Baryshkov wrote:
+> On 19/04/2023 17:41, Arnaud Vrac wrote:
+>> This avoids using two LMs instead of one when the display width is lower
+>> than the maximum supported value. For example on MSM8996/MSM8998, the
+>> actual maxwidth is 2560, so we would use two LMs for 1280x720 or
+>> 1920x1080 resolutions, while one is enough.
+>>
+>> Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
+> 
+> While this looks correct (and following what we have in 4.4), later 
+> vendor kernels specify the topology explicitly. Probably we should check 
+> this with the hw guys, because it might be the following case: even 
+> though a single LM can supply the mode, it will spend more power 
+> compared to two LMs.
+> 
+> 
+Yes. 2 LM split will allow the HW to run in lower mdp core clock. Can 
+you maintain the split_threshold in the hw catalog until per mode 
+topology is available?
 
-We will improve the implementation according to your suggestion and send 
-the v2 later.
-
-
---
-
-Best wishes,
-
-Wen
-
-
+Jeykumar S
+>> ---
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 10 +++++-----
+>>   1 file changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c 
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> index 1dc5dbe585723..dd2914726c4f6 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> @@ -53,8 +53,6 @@
+>>   #define IDLE_SHORT_TIMEOUT    1
+>> -#define MAX_HDISPLAY_SPLIT 1080
+>> -
+>>   /* timeout in frames waiting for frame done */
+>>   #define DPU_ENCODER_FRAME_DONE_TIMEOUT_FRAMES 5
+>> @@ -568,10 +566,12 @@ static struct msm_display_topology 
+>> dpu_encoder_get_topology(
+>>        */
+>>       if (intf_count == 2)
+>>           topology.num_lm = 2;
+>> -    else if (!dpu_kms->catalog->caps->has_3d_merge)
+>> -        topology.num_lm = 1;
+>> +    else if (dpu_kms->catalog->caps->has_3d_merge &&
+>> +         dpu_kms->catalog->mixer_count > 0 &&
+>> +         mode->hdisplay > dpu_kms->catalog->mixer[0].sblk->maxwidth)
+>> +        topology.num_lm = 2;
+>>       else
+>> -        topology.num_lm = (mode->hdisplay > MAX_HDISPLAY_SPLIT) ? 2 : 1;
+>> +        topology.num_lm = 1;
+>>       if (crtc_state->ctm)
+>>           topology.num_dspp = topology.num_lm;
+>>
+> 
