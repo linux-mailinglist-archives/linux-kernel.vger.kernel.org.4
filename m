@@ -2,111 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF02E6E9C2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7466EAACA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 14:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbjDTS6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 14:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
+        id S232227AbjDUMsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Apr 2023 08:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjDTS6s (ORCPT
+        with ESMTP id S231203AbjDUMst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 14:58:48 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DC218D;
-        Thu, 20 Apr 2023 11:58:48 -0700 (PDT)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33KIlbA6031252;
-        Thu, 20 Apr 2023 18:58:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=QWNb0g0AsBar2IhuOc3a3AQN67E5s8QGdktcb2USMek=;
- b=YXU2MBDnaTaACfsrXWmqxvVdVsjG+HSYHoMhVpaWBeO1qowekW9YHF161Y1ASydocIHC
- QXDrUd1g1/bqqrCOJU7oVl3NVhNQQZy6Erngzbt7rYnkCbRO+3YOlrKeFMq/aqvxnEah
- vmG7nyXxHDtVsaiX/q9/gGs5mnC8DiMfI3jXUFQLC/YtwhKgPzNqhqgqcnkbQRDUvFYi
- vkc+FzpifcnAzYwgHP9lbYOgGmxCOv/Am4m2JCTWKBDjvYHcGD3PWYK4CDw5kW3syxj4
- L8vkjGE6tWsF1CwuXPrN6HxuGu/3VqLinK3X2Xpa8vzbrFtVoqPZQMpQhiS7NwgQLI0h 8A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q3ayygax6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Apr 2023 18:58:38 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33KIrtae026867;
-        Thu, 20 Apr 2023 18:58:37 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q3ayygawj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Apr 2023 18:58:37 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33KG4F5a013985;
-        Thu, 20 Apr 2023 18:58:36 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3pykj7n1k8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Apr 2023 18:58:36 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33KIwZla8127094
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Apr 2023 18:58:35 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1AD6F5805F;
-        Thu, 20 Apr 2023 18:58:35 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4C6E85805D;
-        Thu, 20 Apr 2023 18:58:34 +0000 (GMT)
-Received: from [9.163.17.132] (unknown [9.163.17.132])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 20 Apr 2023 18:58:34 +0000 (GMT)
-Message-ID: <f4c397ef-937d-8731-35a4-28ea60551d4f@linux.vnet.ibm.com>
-Date:   Thu, 20 Apr 2023 13:58:33 -0500
+        Fri, 21 Apr 2023 08:48:49 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53134902A;
+        Fri, 21 Apr 2023 05:48:48 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f173af665fso11452895e9.3;
+        Fri, 21 Apr 2023 05:48:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682081326; x=1684673326;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=0O+iUnFkEom6gWK+MZ7+krylv44gTYWpzuzr1YmZHYY=;
+        b=XbqPjf2hmUz3tttYoPife86Z4NYJQh7rUanb9wsFr3mJgRoPFmmZ3ZjuF8KLxzhaA7
+         kIOY4QobLWZ+CrQQICGrDe9nPjxCWA1hfrZSQ+6539+L3ykVFRMa+3vOFAREDpOT2dEs
+         FEOYH7yMAxquLao3sl4lSAwVMds2ps1mCDe27lLDccH25X9LCJEK+z7h4ghIm62QtAwp
+         5TVIZKZXDtp0EcQhfCgf1CO0u79fdHhBc/1NCSR4t6SnPDvdqL4zzkrafZtVx1pQ2jJy
+         zf4Qm9FQxIc6umFm70UjFTjdoPGZbc0flkhdeMJqByUoPdEbf7tkmbpLUibGs6VZkN2H
+         jq1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682081326; x=1684673326;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0O+iUnFkEom6gWK+MZ7+krylv44gTYWpzuzr1YmZHYY=;
+        b=dsVrgoRKXDTY1N5Flk0oHl6pp3VBeVozu3xuOCd/rQj81wKo4NJLeGyGlSHVlPwIen
+         jFiHF6dEM3pV+9+rhNoHLUhCjqU1nqK46KtVjnRybszDrD84daQxHENe3rer9kO0lcH+
+         h57teSljhRZjjGZrjlvJS4PL6Cb5/kGZP379swcDbUXq6rWRviyhXUYk8XUXqr48OMnv
+         KLAybCG3k5yaIpZeMbxSbDQ9PydRqWxIogWmHYf/kVAx9LzogCxqwvpAMMvGhPL3Cwze
+         yHgyi2667UnmNWBSeAh3kLv/KW6L+yiuKgG8cuMSC26CfExpBXEY39JTvzEaM3O81oXV
+         5HRw==
+X-Gm-Message-State: AAQBX9cnZNg3U/QovXwHuoN6LrIduhCcTxJlszOlcRNG2mAMhum+4hwS
+        sH9Y5fZ1mZT4lPVpfLRCOAc=
+X-Google-Smtp-Source: AKy350bbT1UTOdfcr+z4QH2/5ooCvQCHZBjvMfLLdOWALxCP/rzvVj/j6U8JDNwnfqs4k+coXDmtxA==
+X-Received: by 2002:a5d:6407:0:b0:2fe:fde1:23a2 with SMTP id z7-20020a5d6407000000b002fefde123a2mr4383699wru.50.1682081326367;
+        Fri, 21 Apr 2023 05:48:46 -0700 (PDT)
+Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
+        by smtp.gmail.com with ESMTPSA id k6-20020a5d5246000000b002e71156b0fcsm4405414wrc.6.2023.04.21.05.48.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 05:48:45 -0700 (PDT)
+Message-ID: <6442862d.5d0a0220.d3240.3544@mx.google.com>
+X-Google-Original-Message-ID: <ZEGLmbgDwhfZaQc2@Ansuel-xps.>
+Date:   Thu, 20 Apr 2023 20:59:37 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: dsa: qca8k: fix LEDS_CLASS dependency
+References: <20230420213639.2243388-1-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] scsi: ipr: remove several unused variables
-To:     Tom Rix <trix@redhat.com>, brking@us.ibm.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, john.g.garry@oracle.com,
-        dlemoal@kernel.org
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230420125035.3888188-1-trix@redhat.com>
-Content-Language: en-US
-From:   Brian King <brking@linux.vnet.ibm.com>
-In-Reply-To: <20230420125035.3888188-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Z68SMVE2clDG24_p0dwsZXevS0ew8SSz
-X-Proofpoint-ORIG-GUID: JJvbQy8spWqYVcuIe6lQs6xykbO7ZPPN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-20_15,2023-04-20_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 clxscore=1011 suspectscore=0 malwarescore=0 mlxscore=0
- priorityscore=1501 mlxlogscore=954 adultscore=0 bulkscore=0
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304200154
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420213639.2243388-1-arnd@kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Brian King <brking@linux.vnet.ibm.com>
+On Thu, Apr 20, 2023 at 11:36:31PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> With LEDS_CLASS=m, a built-in qca8k driver fails to link:
+> 
+> arm-linux-gnueabi-ld: drivers/net/dsa/qca/qca8k-leds.o: in function `qca8k_setup_led_ctrl':
+> qca8k-leds.c:(.text+0x1ea): undefined reference to `devm_led_classdev_register_ext'
+> 
+> Change the dependency to avoid the broken configuration.
+> 
+> Fixes: 1e264f9d2918 ("net: dsa: qca8k: add LEDs basic support")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Thanks for submitting this.
-
-Martin - this should address the compile bot warnings that had been reported.
-
-Thanks,
-
-Brian
+Reviewed-by: Christian Marangi <ansuelsmth@gmail.com>
 
 -- 
-Brian King
-Power Linux I/O
-IBM Linux Technology Center
-
-
+	Ansuel
