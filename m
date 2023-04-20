@@ -2,53 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A496E87AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7248E6E87B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbjDTBuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 21:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
+        id S231347AbjDTB7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 21:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232274AbjDTBu0 (ORCPT
+        with ESMTP id S230081AbjDTB7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 21:50:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925624C20;
-        Wed, 19 Apr 2023 18:50:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 19 Apr 2023 21:59:21 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5895170A;
+        Wed, 19 Apr 2023 18:59:19 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F2A66445C;
-        Thu, 20 Apr 2023 01:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 75F64C4339C;
-        Thu, 20 Apr 2023 01:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681955419;
-        bh=kFVavdxI+2ZOP1oeQy5/e4zp+JhWYB1Hgfo/bbpmcPM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=sUt7VIJzcL09UoYyigcSuIcq/1/J2O3f4jPQPXJ4qStVYtRpXzz8QciC6z2mFeY8w
-         uDlExF0JZcJNa8loxqMoHgKpfIV4MqfhZn/gR3byXxeLmvUbDIQcQqSLMkYkLksByc
-         PcUK7RPWUTiclPVzXFATjBMw7Mi3ginOaAip8yI174z2+okyXgiOL2r464x2Obj4nj
-         KWKAZ8avwaZ7aXgouUerCH2Ll8Ki/XFtzaxZF/6N1qBnSojFadMPYCGbAHH2jB51C1
-         Qzx7iW+Mp7CQJhXeR/AQ90IfI+W988q6j+m/5inFs8s41KqduEU4W5t4+7zBglQnbi
-         QrmvvfoeyI+Hg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 59E36C561EE;
-        Thu, 20 Apr 2023 01:50:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 916A741ABE;
+        Thu, 20 Apr 2023 01:59:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1681955958;
+        bh=uRHcymisTbjiBf6eWzZPbcaSHTQevSe81zNyL32cDvU=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=krhyCaDJJrOGxSCNeq+hJJTpAxyQFFwUMA2ajAcje1eWMWOYGhKUx8gX0DFmexjgQ
+         eu+Ev/aQ722WUrCSYAWPcJmMDQT2X4LivX+s29pQ3+B9iHmVTAOae+vSMdna+auxxk
+         8JoqAKfLAzo0U47lVkqVO4coAIC9iLP1+2tvGKhZzkiyEhsnzlGIAjeSQ1CsCBFIYZ
+         1RRzty+DF0uQxrcNatimBPx6ZOCbUxgjMSG2KmDV6w48G/C0zWLHRLkzwmHKsfidYl
+         yCxpIPknuP76Kjy5xnZmJbIZ/tTNVMd1zzFvWTddHNCRdT0L22eFHwE+vpZPJ7ctkQ
+         BTdaSqoDLunxw==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     bhelgaas@google.com
+Cc:     mika.westerberg@linux.intel.com, koba.ko@canonical.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/4] PCI: Keep AER status in pci_restore_state()
+Date:   Thu, 20 Apr 2023 09:58:27 +0800
+Message-Id: <20230420015830.309845-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: micrel: Update the list of supported phys
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168195541936.13596.611503428417262220.git-patchwork-notify@kernel.org>
-Date:   Thu, 20 Apr 2023 01:50:19 +0000
-References: <20230418124713.2221451-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20230418124713.2221451-1-horatiu.vultur@microchip.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,28 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+When AER is using the same IRQ as PME, AER interrupt is treated as a
+wakeup event and it can disrupt system suspend process.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+If that happens, the system will report it's woken up by PME IRQ without
+indicating any AER error since AER status is cleared on resume.
 
-On Tue, 18 Apr 2023 14:47:13 +0200 you wrote:
-> At the beginning of the file micrel.c there is list of supported PHYs.
-> Extend this list with the following PHYs lan8841, lan8814 and lan8804,
-> as these PHYs were added but the list was not updated.
-> 
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> ---
->  drivers/net/phy/micrel.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+So keep the AER status so users can know the system is woken up by AER
+instead of PME.
 
-Here is the summary with links:
-  - [net-next] net: micrel: Update the list of supported phys
-    https://git.kernel.org/netdev/net-next/c/3e9c0700bf42
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+v2:
+ - New patch.
 
-You are awesome, thank you!
+ drivers/pci/pci.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 7a67611dc5f4..71aead00fc20 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -1778,7 +1778,6 @@ void pci_restore_state(struct pci_dev *dev)
+ 	pci_restore_dpc_state(dev);
+ 	pci_restore_ptm_state(dev);
+ 
+-	pci_aer_clear_status(dev);
+ 	pci_restore_aer_state(dev);
+ 
+ 	pci_restore_config_space(dev);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
