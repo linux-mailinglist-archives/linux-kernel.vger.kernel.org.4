@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0748F6E9C6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7246E9C71
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbjDTTYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 15:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        id S231838AbjDTTYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 15:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjDTTYO (ORCPT
+        with ESMTP id S230190AbjDTTYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 15:24:14 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C916196
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:24:13 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9554ad3721so876684276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:24:13 -0700 (PDT)
+        Thu, 20 Apr 2023 15:24:37 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4FE2D6A
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:24:32 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-2f40b891420so865294f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:24:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682018650; x=1684610650;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5CitpErBCs21ceUt0nwXbHOId6v4Tpo7P8KbpX2/VYY=;
-        b=dKoTmw8B/k+mmMMG9RDuav358rjii0q6dltc22DHfrbV0jCG+nu7tk1bFkyl166V4D
-         oYanohNCAHc1XK3P6MhnqaK7QXxPty2ALB3fuOb1AnjvQKjCnJmQdsPZXaKiWdTVF+GH
-         lrC8f4HYnkWXaGwRwfWcZwFwy78UzlRMURSP0=
+        d=9elements.com; s=google; t=1682018670; x=1684610670;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5qbGFeXrDs3WrhBf+lvrgBNLjjhcPXH+cPYhZsQiewQ=;
+        b=Ac93lBa/9BLRzbTUcFMyNcv0LR2mn86n/7LatpQPOmPnIeoIVS8CMN5ZA4Iiz1PkjZ
+         k7LurRp9dERgJMIKohVtx2XFerLcvtT5P7XychnJe/uyHOW8OrpB7+9bv/UK5bKJsF0R
+         8CjUlmeFciVl84uA73WfydbjH1kKJ6p2QhMpxSsY9X8httdTo+kuoT3F34O/gbd3J1/b
+         077FldUCsxn9J1s8HoAg8seAPzexZiBy28xqZ3yjUUW1/C12KIvwV4n3MdTbIN8QT2RJ
+         04ifTJHe+F9y0D7nmU85oTFm+xDCXZgLwp1/3w2zWMhr6zsf5tna9dhewowre5/cX4R4
+         DX5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682018650; x=1684610650;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5CitpErBCs21ceUt0nwXbHOId6v4Tpo7P8KbpX2/VYY=;
-        b=acwjAxFWcMrMJ8ka2uB0U0SoRWYu13d5KnMO6HGTjxrWn4zIfLzBVig/umQuRbxCq0
-         MKo+62SvesFRFyu+zg71GdMf558kCFRArbmROLYl7VObtCDzSHxHLHMQ7GO3kK2Q3HCr
-         ESgBZmJiDjxGtrZCUaRmaO1pfi8Rh4NKrfF9WpiyGFPMy4IPAFVnxnRmRBWSB7Xyosob
-         CyD+9hjqWtTdCqLp/Ruu6FNZ/ZFwwQuwW0Vk/hL11oRru4M9WOOo14rOK5Fk/61z6Hhn
-         +grH4VvKSUVeSP46PNkodZCrsEDDL72EL05zXaa/2WRQLCuxoAEmXeFCRjJ7kDVVrjeJ
-         W7Bg==
-X-Gm-Message-State: AAQBX9e+qSHAhnOthQcgUwSFLply7uGaljGC3cJhmUqTaayKgGVpKlwW
-        ArYZZAH43pGxwvaH2FSBWOrX0aW+XLFvh21nzx8=
-X-Google-Smtp-Source: AKy350YAX1DDOjCfi/gvQgS32brNoX520gCJihD5PfFakpc+5LEEIUGiW8uOYHKlvAB5BoTC8/mFtA==
-X-Received: by 2002:a25:3d8:0:b0:b8f:6b8:4b83 with SMTP id 207-20020a2503d8000000b00b8f06b84b83mr16355ybd.49.1682018650436;
-        Thu, 20 Apr 2023 12:24:10 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id i17-20020a056902069100b00b7767ca747csm470341ybt.25.2023.04.20.12.24.09
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 12:24:09 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-b8ed0d0a33dso870095276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:24:09 -0700 (PDT)
-X-Received: by 2002:a25:cb96:0:b0:b98:6352:be17 with SMTP id
- b144-20020a25cb96000000b00b986352be17mr119011ybg.0.1682018648700; Thu, 20 Apr
- 2023 12:24:08 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682018670; x=1684610670;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5qbGFeXrDs3WrhBf+lvrgBNLjjhcPXH+cPYhZsQiewQ=;
+        b=fXiLLNzF6baI/tT+QfslOD4dXpSC+mhlWyCGFZtO51vXpfAj1pmmSHPFhdFK2u1pgU
+         AXqfEI2AtBU54eCDaNihSlAx2vXgdNePV5lsddHYfoNCbCOlt+W61h9o8nSHszD3wqC9
+         fT4RH5MAwlwalxJQABMwn9/fIDudcjXRj82/LzdSm12gV/xoFJ8zmOiqBN/MhXNFrCfw
+         LzFDXoIc702CkIju2j5j8JON/JPMRjGV61t6CD1Do7+1F+KajZoGNa3gwzJOWT057U50
+         JprvftzgA1kckT/6yKZaADxx/DKbFT6Sc0gLjbpY35QaeIhv19Ra2TyyWHPwZhrPKE7H
+         crVQ==
+X-Gm-Message-State: AAQBX9dSsxxh6+26UEZEmHkZcH6NIr1akyp/Ik2mYGwc9tTP4H1C7QD+
+        SIabwcW5oY5mPz4KpUce/aD1RwxP62prDdvG7Dxf0A==
+X-Google-Smtp-Source: AKy350YFXEqpYPMnNXKVKG8zJoE9qjBhRYvK5gdYrbXLZB4JxciYLP00LR0MySN3gmTFbydhvWggBA==
+X-Received: by 2002:a05:6000:1c9:b0:2fb:ad8:288f with SMTP id t9-20020a05600001c900b002fb0ad8288fmr2015321wrx.11.1682018670573;
+        Thu, 20 Apr 2023 12:24:30 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id u3-20020a7bcb03000000b003f16f3cc9fcsm2825651wmj.9.2023.04.20.12.24.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 12:24:30 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     zev@bewilderbeest.net, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Naresh Solanki <Naresh.Solanki@9elements.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: regulator: Add support for multiple supplies
+Date:   Thu, 20 Apr 2023 21:24:01 +0200
+Message-Id: <20230420192402.3695265-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230408082014.235425-1-nikita@trvn.ru> <CAD=FV=XEQS9MB4e52B4yLjiP8ksYmeos_emiH4=-adCOwzfGUA@mail.gmail.com>
- <905403377ec62914a2fbe21a6b4a6c8e@trvn.ru> <CAD=FV=X_NUNXgY-9p6CUvNwYte+aPjjZPLV4oZRXR5zdEn0Kjg@mail.gmail.com>
-In-Reply-To: <CAD=FV=X_NUNXgY-9p6CUvNwYte+aPjjZPLV4oZRXR5zdEn0Kjg@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 20 Apr 2023 12:23:56 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=V3+i51BQ3pE60-e=wU0ehTFx6C6qU7-7ghbyvon7=pCQ@mail.gmail.com>
-Message-ID: <CAD=FV=V3+i51BQ3pE60-e=wU0ehTFx6C6qU7-7ghbyvon7=pCQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: Implement wait_hpd_asserted
-To:     Nikita Travkin <nikita@trvn.ru>
-Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        rfoss@kernel.org, airlied@gmail.com, daniel@ffwll.ch,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,139 +73,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Add optional DT property 'regulator-supplies' to handle connectors with
+multiple supplies.
+If this property is present, it will determine all regulator supplies.
+Otherwise, the 'vout' supply will be used as a fallback.
 
-On Thu, Apr 13, 2023 at 12:10=E2=80=AFPM Doug Anderson <dianders@chromium.o=
-rg> wrote:
->
-> Hi,
->
-> On Wed, Apr 12, 2023 at 9:19=E2=80=AFPM Nikita Travkin <nikita@trvn.ru> w=
-rote:
-> >
-> > Doug Anderson =D0=BF=D0=B8=D1=81=D0=B0=D0=BB(=D0=B0) 13.04.2023 01:22:
-> > > Hi,
-> > >
-> > > On Sat, Apr 8, 2023 at 1:20=E2=80=AFAM Nikita Travkin <nikita@trvn.ru=
-> wrote:
-> > >>
-> > >> This bridge doesn't actually implement HPD due to it being way too s=
-low
-> > >> but instead expects the panel driver to wait enough to assume HPD is
-> > >> asserted. However some panels (such as the generic 'edp-panel') expe=
-ct
-> > >> the bridge to deal with the delay and pass maximum delay to the aux
-> > >> instead.
-> > >>
-> > >> In order to support such panels, add a dummy implementation of wait
-> > >> that would just sleep the maximum delay and assume no failure has
-> > >> happened.
-> > >>
-> > >> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-> > >> ---
-> > >> This was suggested in [1] to make sure DT users can be semantically
-> > >> correct (not adding no-hpd when the line is actually there) while
-> > >> still using a hard delay to be faster than waiting the long debounce
-> > >> time.
-> > >>
-> > >> [1] - https://lore.kernel.org/all/CAD=3DFV=3DVR7sKsquE25eF7joc7gPApu=
--vqwduZzjE=3DwFCoXjMYnQ@mail.gmail.com/
-> > >> ---
-> > >>  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 19 +++++++++++++++++++
-> > >>  1 file changed, 19 insertions(+)
-> > >>
-> > >> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm=
-/bridge/ti-sn65dsi86.c
-> > >> index 7a748785c545..260cad1fd1da 100644
-> > >> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> > >> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> > >> @@ -618,6 +618,24 @@ static ssize_t ti_sn_aux_transfer(struct drm_dp=
-_aux *aux,
-> > >>         return len;
-> > >>  }
-> > >>
-> > >> +static int ti_sn_aux_wait_hpd_asserted(struct drm_dp_aux *aux, unsi=
-gned long wait_us)
-> > >> +{
-> > >> +       /*
-> > >> +        * The HPD in this chip is a bit useless (See comment in
-> > >> +        * ti_sn65dsi86_enable_comms) so if our driver is expected t=
-o wait
-> > >> +        * for HPD, we just assume it's asserted after the wait_us d=
-elay.
-> > >> +        *
-> > >> +        * In case we are asked to wait forever (wait_us=3D0) take c=
-onservative
-> > >> +        * 500ms delay.
-> > >> +        */
-> > >> +       if (wait_us =3D=3D 0)
-> > >> +               wait_us =3D 500000;
-> > >> +
-> > >> +       usleep_range(wait_us, wait_us + 1000);
-> > >> +
-> > >> +       return 0;
-> > >> +}
-> > >> +
-> > >>  static int ti_sn_aux_probe(struct auxiliary_device *adev,
-> > >>                            const struct auxiliary_device_id *id)
-> > >>  {
-> > >> @@ -627,6 +645,7 @@ static int ti_sn_aux_probe(struct auxiliary_devi=
-ce *adev,
-> > >>         pdata->aux.name =3D "ti-sn65dsi86-aux";
-> > >>         pdata->aux.dev =3D &adev->dev;
-> > >>         pdata->aux.transfer =3D ti_sn_aux_transfer;
-> > >> +       pdata->aux.wait_hpd_asserted =3D ti_sn_aux_wait_hpd_asserted=
-;
-> > >
-> > > This looks reasonable to me, but I think you only want this
-> > > implementation if the "no-hpd" property _isn't_ present. In other
-> > > words:
-> > >
-> > > if (!of_property_read_bool(np, "no-hpd"))
-> > >   pdata->aux.wait_hpd_asserted =3D ti_sn_aux_wait_hpd_asserted;
-> > >
-> > > Essentially:
-> > >
-> > > * If "no-hpd" is present in ti-sn65dsi86 then we'll assume that HPD i=
-s
-> > > handled by the panel driver via a GPIO or a "no-hpd" there (which wil=
-l
-> > > cause the panel driver to wait the maximum duration).
-> > >
-> > > * If "no-hpd" isn't present in ti-sn65dsi86 then HPD is actually
-> > > hooked up and thus the panel driver _won't_ handle it.
-> > >
-> > > Does that seem right? Presumably this should be explained by comments=
-.
-> > >
-> >
-> > This does sound reasonable indeed, I didn't think to add it
-> > conditionally because, looking at the current users of
-> > wait_hpd_asserted, they will first try the "no-hpd" paths
-> > and will only call the bridge when they think it's on the
-> > bridge to wait.
-> >
-> > Thus, if DT is modeled properly - Panel has no-hpd or a gpio,
-> > wait_hpd_asserted will never be called anyway. Other bridges
-> > seem to also unconditionally enable the method.
-> >
-> > For this to be a trouble, a panel driver has to be "broken"
-> > with some form of calling wait_hpd_asserted despite knowing
-> > the HPD line is not hooked up...
-> >
-> > So I feel like guarding the wait_hpd_asserted for no-hpd
-> > users should not actually change much, but if you think
-> > I should add the check anyway, please let me know.
->
-> Ah, true, it shouldn't actually matter. I guess I still like it
-> slightly better with the extra check but not enough that I'll insist
-> on it. Thus:
->
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
->
-> I can commit this to drm-misc-next, but I'll plan to wait ~1 week to
-> see if anyone else has any comments about it.
+This change improves support for connector like PCIe connectors on
+mainboards that can be powered by 12V and 3.3V supplies.
 
-Landed to drm-misc-next:
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+...
+Change in V2:
+- Added example
+- Update property type & description.
+- Improve commit message
+---
+ .../bindings/regulator/regulator-output.yaml  | 21 ++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
 
-34c1aeb579dd drm/bridge: ti-sn65dsi86: Implement wait_hpd_asserted
+diff --git a/Documentation/devicetree/bindings/regulator/regulator-output.yaml b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+index 078b37a1a71a..a9dce26991ff 100644
+--- a/Documentation/devicetree/bindings/regulator/regulator-output.yaml
++++ b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+@@ -21,13 +21,22 @@ properties:
+   compatible:
+     const: regulator-output
+ 
+-  vout-supply:
++  regulator-supplies:
++    $ref: /schemas/types.yaml#/definitions/string-array
+     description:
+-      Phandle of the regulator supplying the output.
++      Optional property that specifies supply names provided by
++      the regulator. Defaults to "vout" if not specified. The
++      array contains a list of supply names.
++      Each supply name corresponds to a phandle in the
++      patternProperties.
++
++patternProperties:
++  ".*-supply":
++    description:
++      Specifies the phandle for various supplies
+ 
+ required:
+   - compatible
+-  - vout-supply
+ 
+ additionalProperties: false
+ 
+@@ -37,3 +46,9 @@ examples:
+           compatible = "regulator-output";
+           vout-supply = <&output_reg>;
+       };
++      out2 {
++          compatible = "regulator-output";
++          regulator-supplies = "sw0", "sw1";
++          sw0-supply = <&out2_sw0>;
++          sw1-supply = <&out2_sw1>;
++      };
+
+base-commit: 43c75e470e5b56a992acb08474810e6822f0989c
+-- 
+2.39.1
+
