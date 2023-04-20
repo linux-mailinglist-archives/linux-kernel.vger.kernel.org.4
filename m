@@ -2,134 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2986E8A8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 08:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9C36E8A91
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 08:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbjDTGj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 02:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44662 "EHLO
+        id S233801AbjDTGlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 02:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDTGj4 (ORCPT
+        with ESMTP id S233469AbjDTGlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 02:39:56 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D87173D
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 23:39:55 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id dm2so3938768ejc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 23:39:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681972794; x=1684564794;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=09ttSX06oRnzdKuIS/gGoRYpeZHjJP0fBn470Dk7WKI=;
-        b=URWU27nUi+ZC6PB9IGlaVPdy66qcZNwDyXZODbLFMW9ULtG9fJMMIFDbY+OvgoPv4A
-         ryc9Xq3iCtuM5W2ZwzT/A4NMakbPix8/BnO5jkfuXajSfeUv5/50FSqQl1OCUJbMN8Hb
-         ZTtILOkysGMYmRV/oglIMpCdIFALBiOr8NmLqRx1SZY8MzJC9j3CnIlcyoerHOodyC/i
-         RW8fZpd+db3NtCbzNZ9e6nHo2NlsBQo5jC9DVpIXUnCRDJItfP+9ZmglFiZAd1Du5vqh
-         cA4pX/3gOcZXOgT8zs8hTVgcsyEQCO3n1r2nBkPvgFEaSLThEqkJsnxmRcnT76PsDyn7
-         ppkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681972794; x=1684564794;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=09ttSX06oRnzdKuIS/gGoRYpeZHjJP0fBn470Dk7WKI=;
-        b=IinuvQXG/4htwzkGPgBCKxRDckkQ0mAWpouFeexR7UJWawouTwWBQ0ta5s1NhQpeZn
-         2iJ7h6mrZEDrwPTxy/iOEauVGeI2SMhaEEG6bIEmdyYWREweUQN+SRuorhmj7CVTC64h
-         O6SlTbvZpsuXy/Xak8GXnQfY5niXXx/LnYUOo0Zge6hLFuiZFzQ+OZChmMgrxwDZR5IK
-         6JECp81VNPTIk7T10abpTHuuP8Er5GjGjJnUnIODC/sr69mOZGZ2vBu1aXrbs6emF//9
-         w40Cu+u4s6fo/cBRXadU+T98YkMarvYDCb2NX+5QaLr9tKVMnbQLd6BzeVZd6dWNABNI
-         HRIw==
-X-Gm-Message-State: AAQBX9flZrDjM10HhW8sEAjoesU2y4zDQBQpRi3MxTL28gQA951/DAlh
-        Ue646jFXXNUHxdO/6GxFwqJIkCFzVTTWexjZNjA=
-X-Google-Smtp-Source: AKy350ZkLDotsvIhgpna4rpgWf6PRs40yDHyvyI6+vxisGvd4RPTAiGxuYFT59fY2iNTCY8YFEdEUrrKB2KS+xAJfyU=
-X-Received: by 2002:a17:906:b104:b0:8f4:ec13:d599 with SMTP id
- u4-20020a170906b10400b008f4ec13d599mr615337ejy.27.1681972794084; Wed, 19 Apr
- 2023 23:39:54 -0700 (PDT)
+        Thu, 20 Apr 2023 02:41:42 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50869F;
+        Wed, 19 Apr 2023 23:41:41 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33K5ORex029612;
+        Thu, 20 Apr 2023 06:41:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=MkwLPhcXNE7rKgBs4lGpG3L+FtxzGE6kaVUZYN01psA=;
+ b=b03E0RQIc5eDMnAeYdTzoH7UtHSXzGIZelGy8K8OH/Nh3fRrRzIqk4RqyRrlbJgiBtBq
+ i1In4SDG1+/l8RMldRaZzNYmYnz0UP14N9MYKysHBbyWfSM6znMUalg3r3NEj7dMpUXD
+ XgzbjFYndgKAZcbOkY+a4DldjUrN1dqPKeXdvf3S7tY6C2hPxJEdkXDc2DnFtP7Up68v
+ DEN+BKzeeaQsfTRwwaM6STCq6OcVoLCfXvqLIljx50RUq3shh5UpFKWdvTPDD1Qa966o
+ zA8vVUleyA6AojacSK5f1gK/wssCVWj1fiD0pinOEvCNICSxsVmya7SfD80jv49RkYPA gw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q2nn817hw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Apr 2023 06:41:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33K6fWTf031983
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Apr 2023 06:41:32 GMT
+Received: from [10.216.56.220] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 19 Apr
+ 2023 23:41:27 -0700
+Message-ID: <647f915e-b08a-1bc9-2082-70140521a644@quicinc.com>
+Date:   Thu, 20 Apr 2023 12:11:22 +0530
 MIME-Version: 1.0
-Sender: mrselisabeth73peter@gmail.com
-Received: by 2002:a05:7412:cf11:b0:c7:220c:a1ec with HTTP; Wed, 19 Apr 2023
- 23:39:53 -0700 (PDT)
-From:   "Mrs. Lenny Tatiana" <mrslenytati44@gmail.com>
-Date:   Thu, 20 Apr 2023 08:39:53 +0200
-X-Google-Sender-Auth: lpIcCTGzLt2EZwTOa4XT5a1BEr4
-Message-ID: <CAHZyUcjp2xptW_zrmVopf5KzDnE+xEWwNF8320UEz5Od+tjYxA@mail.gmail.com>
-Subject: Greetings dear friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.7 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,HK_SCAM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
-        RISK_FREE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ autolearn=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 2/3] cpuidle: psci: Move enabling OSI mode after power
+ domains creation
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     <andersson@kernel.org>, <dianders@chromium.org>,
+        <swboyd@chromium.org>, <wingers@google.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <sudeep.holla@arm.com>,
+        <jwerner@chromium.org>, <quic_lsrao@quicinc.com>,
+        <quic_rjendra@quicinc.com>
+References: <20230414055502.23920-1-quic_mkshah@quicinc.com>
+ <20230414055502.23920-3-quic_mkshah@quicinc.com>
+ <CAPDyKFo5UhOca-DvOKOZWcBrcK8ONdSO8-M=8fE6kkwkPuoCww@mail.gmail.com>
+Content-Language: en-US
+From:   "Maulik Shah (mkshah)" <quic_mkshah@quicinc.com>
+In-Reply-To: <CAPDyKFo5UhOca-DvOKOZWcBrcK8ONdSO8-M=8fE6kkwkPuoCww@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: jI25yhL8WYhwE9m6jERkG-YkoLoZfoSm
+X-Proofpoint-GUID: jI25yhL8WYhwE9m6jERkG-YkoLoZfoSm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-20_03,2023-04-18_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ spamscore=0 impostorscore=0 clxscore=1015 phishscore=0 mlxlogscore=886
+ bulkscore=0 priorityscore=1501 adultscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304200053
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:634 listed in]
-        [list.dnswl.org]
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrslenytati44[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  2.0 HK_SCAM No description available.
-        *  0.6 URG_BIZ Contains urgent matter
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 RISK_FREE No risk!
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  3.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings dear friend,
+Hi Ulf,
 
-Calvary Greetings in the name of the LORD Almighty and Our LORD JESUS
-CHRIST the giver of every good thing. Good day and compliments of the
-seasons, i know this letter will definitely come to you as a huge
-surprise, but I implore you to take the time to go through it
-carefully as the decision you make will go off a long way to determine
-my future and continued existence. I am Mrs. Lenny Tatiana aging widow
-of
-57 years old suffering from long time illness.I have some funds I
-inherited from my late husband, the sum of (19.2Million Dollars) and I
-needed a very honest and God fearing who can withdraw this money then
-use the funds for Charity works. I WISH TO GIVE THIS FUNDS TO YOU FOR
-CHARITY WORKS. I found your email address from the internet after
-honest prayers to the LORD to bring me a helper and i decided to
-contact you if you may be willing and interested to handle these trust
-funds in good faith before anything happens to me.
+On 4/18/2023 1:42 PM, Ulf Hansson wrote:
+> O
+>
+>          /* Bail out if not using the hierarchical CPU topology. */
+>          if (!pd_count)
+> -               goto no_pd;
+> +               goto remove_pd;
+> We should return 0 here instead, right?
+right. will fix in next revision.
+>>          /* Link genpd masters/subdomains to model the CPU topology. */
+>>          ret = dt_idle_pd_init_topology(np);
+>>          if (ret)
+>> -               goto remove_pd;
+>> +               goto remove_pd_topology;
+> This looks wrong to me. Shouldn't we continue to goto the "remove_pd"
+> label for this error path?
+We should need to remove already added subdomains via 
+of_genpd_add_subdomain() if one of them fails.
+So this look ok to me.
+>
+>> +
+>> +       /* let's try to enable OSI. */
+>> +       ret = psci_set_osi_mode(use_osi);
+>> +       if (ret)
+>> +               goto remove_pd_topology;
+>>
+>>          pr_info("Initialized CPU PM domain topology using %s mode\n",
+>>                  use_osi ? "OSI" : "PC");
+>>          return 0;
+>>
+>> -put_node:
+>> -       of_node_put(node);
+>> +remove_pd_topology:
+>> +       dt_idle_pd_remove_topology(np);
+>>   remove_pd:
+>>          psci_pd_remove();
+>> +put_node:
+>> +       of_node_put(node);
+> This of_node_put() should only be called if we break the
+> "for_each_child_of_node" loop above because of an error, I think.
+> Perhaps it's cleaner to just move this within the loop?
+yes will move inside loop.
 
-I accept this decision because I do not have any child who will
-inherit this money after I die. I want your urgent reply to me so that
-I will give you the deposit receipt which the SECURITY COMPANY issued
-to me as next of kin for immediate transfer of the money to your
-account in your country, to start the good work of God, I want you to
-use the 25/percent of the total amount to help yourself in doing the
-project. I am desperately in keen need of assistance and I have
-summoned up courage to contact you for this task, you must not fail me
-and the millions of the poor people in our todays WORLD. This is no
-stolen money and there are no dangers involved,100% RISK FREE with
-full legal proof. Please if you would be able to use the funds for the
-Charity works kindly let me know immediately.I will appreciate your
-utmost confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish.
-
-Please kindly respond quickly for further details.
-
-Warmest Regards,
-Mrs. Lenny Tatiana
+Thanks,
+Maulik
