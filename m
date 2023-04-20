@@ -2,88 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA5D6E8C46
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A886E9940
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234074AbjDTIJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S232541AbjDTQLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 12:11:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234179AbjDTIJh (ORCPT
+        with ESMTP id S230483AbjDTQK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:09:37 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADA644AE;
-        Thu, 20 Apr 2023 01:09:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681978173; x=1713514173;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=8ddX+VmcWmMACs+SZZN/sWFDmJ8vp2NZ3Kdawxtx/cs=;
-  b=RFspTM0jluEokWIBuYUG/HAJHJi6k7eyt+wfm8MnyNz3V5eGfHimoIBS
-   Bf+Tm9C2C8jZIVRaBD9JwU6sIphEPD+jqP9frk4qUpP1n4RnXCR3SKwNJ
-   GREwXCK4dl/oFE4qOJWgLXj/stn03TZk9BExA4K8hZcVvxuPM6LvFXwNL
-   lpBa0x2Bi+ro3Pc7s1cU1i4mvoHd2MgDzxRK5v2bsX6ozO3hBdeMTE8IV
-   FIZ7EwpfD7dD//ffaM6cQzBq9lIUMRsKU0Mgwg9QjHJWZLMMbEBjROfL1
-   LILHpLrWt5D/IlALBd0WrhxO2v4PmQI7/m4lSpNYeKeU+77vssft2ASVi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="344422775"
-X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="344422775"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 01:09:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="803266837"
-X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="803266837"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga002.fm.intel.com with ESMTP; 20 Apr 2023 01:09:29 -0700
-Date:   Fri, 21 Apr 2023 00:10:00 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russ Weight <russell.h.weight@intel.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] mfd: intel-m10-bmc: Move m10bmc_sys_read() away
- from header
-Message-ID: <ZEFj2ImqK7Uk3E/p@yilunxu-OptiPlex-7050>
-References: <20230417092653.16487-1-ilpo.jarvinen@linux.intel.com>
- <20230417092653.16487-4-ilpo.jarvinen@linux.intel.com>
+        Thu, 20 Apr 2023 12:10:59 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053292729;
+        Thu, 20 Apr 2023 09:10:57 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 66ED71C000B;
+        Thu, 20 Apr 2023 16:10:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1682007056;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=FwglzcQP0CkzkE+ONlTYCufahA4ItXFZzINpHTeBwiw=;
+        b=CQ6nKLNhY5qKk4EBh3H8G2v0BS1b/0sdzyGTGSlWS+Xu0MZhDyWxpjp8IQ91m3+aeg+FCZ
+        0Csx9E+6LCzVOy9v7NXvobvULebrNEDT/8RyNeN2GYu+yEVh1WYJsfK+t5AriMiwHWeiS2
+        BV99WQWHGoDBrbzFLYoNIhRIDAaUjlOmn10fMlFDaBHdR0dRl4t8svpOZlnUvHSLFlvIsq
+        sB1M8qmeH3lNylJW3cmJgSfIDbg25eI3JtvtRhEVfbhAIrJE47ScJqGlsjy5wTMIlvoTgB
+        PyXPG3yVr2vXGAj+Fzg/RPjeXuHkddncZh99GTAmlZPc1UW1jLtuBfFpEn7TGQ==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v2 0/3] Add the Renesas X9250 potentiometers IIO support
+Date:   Thu, 20 Apr 2023 18:10:49 +0200
+Message-Id: <20230420161052.270366-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230417092653.16487-4-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-17 at 12:26:52 +0300, Ilpo Järvinen wrote:
-> Move m10bmc_sys_read() out from the header to prepare it for adding
-> more code into the function which would make it too large to be a
-> static inline any more.
-> 
-> While at it, replace the vague wording in function comment with more
-> precise statements.
-> 
-> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> Acked-by: Guenter Roeck <linux@roeck-us.net> # For hwmon
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Hi,
 
-Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+The Renesas X9250 integrated four digitally controlled potentiometers.
+On each potentiometer, the X9250T has a 100 kOhms total resistance and
+the X9250U has a 50 kOhms total resistance.
 
-> ---
->  drivers/hwmon/intel-m10-bmc-hwmon.c |  1 +
->  drivers/mfd/intel-m10-bmc-core.c    | 14 ++++++++++++++
->  include/linux/mfd/intel-m10-bmc.h   | 17 +----------------
->  3 files changed, 16 insertions(+), 16 deletions(-)
+Compare to the previous iteration
+  https://lore.kernel.org/linux-kernel/20230420121320.252884-1-herve.codina@bootlin.com/
+This v2 series uses a define for the X9250 ID value.
+
+Best regards,
+Herve Codina
+
+Changes v1 -> v2
+  - Patch 1
+    No changes
+
+  - Patch 2
+    Use a define for the 0x50 value used multiple times.
+
+  - Patch 3
+    No changes
+
+Herve Codina (3):
+  dt-bindings: iio: potentiometer: Add the Renesas X9250 potentiometers
+  iio: potentiometer: Add support for the Renesas X9250 potentiometers
+  MAINTAINERS: add the Renesas X9250 driver entry
+
+ .../iio/potentiometer/renesas,x9250.yaml      |  56 +++++
+ MAINTAINERS                                   |   7 +
+ drivers/iio/potentiometer/Kconfig             |  10 +
+ drivers/iio/potentiometer/Makefile            |   1 +
+ drivers/iio/potentiometer/x9250.c             | 234 ++++++++++++++++++
+ 5 files changed, 308 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/potentiometer/renesas,x9250.yaml
+ create mode 100644 drivers/iio/potentiometer/x9250.c
+
+-- 
+2.39.2
+
