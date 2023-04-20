@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FF06E8B95
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6146E8B3A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233971AbjDTHoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 03:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
+        id S234000AbjDTHPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 03:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjDTHoK (ORCPT
+        with ESMTP id S233877AbjDTHPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 03:44:10 -0400
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FE940F5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:44:08 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VgY3EAD_1681976643;
-Received: from 30.240.106.197(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VgY3EAD_1681976643)
-          by smtp.aliyun-inc.com;
-          Thu, 20 Apr 2023 15:44:05 +0800
-Message-ID: <97e79078-69e8-e387-9e77-a4d741eace4e@linux.alibaba.com>
-Date:   Thu, 20 Apr 2023 15:44:03 +0800
+        Thu, 20 Apr 2023 03:15:40 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B1A3A9B
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:15:39 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q28656ZlHzsRPb;
+        Thu, 20 Apr 2023 15:14:05 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 20 Apr
+ 2023 15:15:36 +0800
+From:   Zeng Heng <zengheng4@huawei.com>
+To:     <almaz.alexandrovich@paragon-software.com>
+CC:     <weiyongjun1@huawei.com>, <xiexiuqi@huawei.com>,
+        <ntfs3@lists.linux.dev>, <liwei391@huawei.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] fs/ntfs3: fix panic about slab-out-of-bounds caused by ntfs_list_ea()
+Date:   Thu, 20 Apr 2023 15:46:22 +0800
+Message-ID: <20230420074622.210011-1-zengheng4@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH] mm,unmap: avoid flushing TLB in batch if PTE is
- inaccessible
-To:     Huang Ying <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel test robot <yujie.liu@intel.com>,
-        Nadav Amit <namit@vmware.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Hugh Dickins <hughd@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>
-References: <20230410075224.827740-1-ying.huang@intel.com>
-From:   haoxin <xhao@linux.alibaba.com>
-In-Reply-To: <20230410075224.827740-1-ying.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Here is a BUG report about linux-6.1 from syzbot, but it still remains
+within upstream:
 
-在 2023/4/10 下午3:52, Huang Ying 写道:
-> 0Day/LKP reported a performance regression for commit
-> 7e12beb8ca2a ("migrate_pages: batch flushing TLB"). In the commit, the
-> TLB flushing during page migration is batched.  So, in
-> try_to_migrate_one(), ptep_clear_flush() is replaced with
-> set_tlb_ubc_flush_pending().  In further investigation, it is found
-> that the TLB flushing can be avoided in ptep_clear_flush() if the PTE
-> is inaccessible.  In fact, we can optimize in similar way for the
-> batched TLB flushing too to improve the performance.
->
-> So in this patch, we check pte_accessible() before
-> set_tlb_ubc_flush_pending() in try_to_unmap/migrate_one().  Tests show
-> that the benchmark score of the anon-cow-rand-mt test case of
-> vm-scalability test suite can improve up to 2.1% with the patch on a
-> Intel server machine.  The TLB flushing IPI can reduce up to 44.3%.
->
-> Link: https://lore.kernel.org/oe-lkp/202303192325.ecbaf968-yujie.liu@intel.com
-> Link: https://lore.kernel.org/oe-lkp/ab92aaddf1b52ede15e2c608696c36765a2602c1.camel@intel.com/
-> Fixes: 7e12beb8ca2a ("migrate_pages: batch flushing TLB")
-> Reported-by: kernel test robot <yujie.liu@intel.com>
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Cc: Nadav Amit <namit@vmware.com>
-> Cc: Mel Gorman <mgorman@techsingularity.net>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Cc: David Hildenbrand <david@redhat.com>
-> ---
->   mm/rmap.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/mm/rmap.c b/mm/rmap.c
-> index 8632e02661ac..3c7c43642d7c 100644
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@ -1582,7 +1582,8 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
->   				 */
->   				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
->   
-> -				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-> +				if (pte_accessible(mm, pteval))
-> +					set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
->   			} else {
->   				pteval = ptep_clear_flush(vma, address, pvmw.pte);
->   			}
-> @@ -1963,7 +1964,8 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
->   				 */
->   				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
->   
-> -				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-> +				if (pte_accessible(mm, pteval))
-> +					set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
+BUG: KASAN: slab-out-of-bounds in ntfs_list_ea fs/ntfs3/xattr.c:191 [inline]
+BUG: KASAN: slab-out-of-bounds in ntfs_listxattr+0x401/0x570 fs/ntfs3/xattr.c:710
+Read of size 1 at addr ffff888021acaf3d by task syz-executor128/3632
 
-Just a advice, can you put pte_accessible() into 
-set_tlb_ubc_flush_pendin(), just like ptep_clear_flush(); so that we no 
-need to add  if (pte_accessible()) in per place
+Call Trace:
+ kasan_report+0x139/0x170 mm/kasan/report.c:495
+ ntfs_list_ea fs/ntfs3/xattr.c:191 [inline]
+ ntfs_listxattr+0x401/0x570 fs/ntfs3/xattr.c:710
+ vfs_listxattr fs/xattr.c:457 [inline]
+ listxattr+0x293/0x2d0 fs/xattr.c:804
+ path_listxattr fs/xattr.c:828 [inline]
+ __do_sys_llistxattr fs/xattr.c:846 [inline]
 
-where call set_tlb_ubc_flush_pending();
+Before derefering field members of `ea` in unpacked_ea_size(), we need to
+check whether the EA_FULL struct is located in access validate range.
 
->   			} else {
->   				pteval = ptep_clear_flush(vma, address, pvmw.pte);
->   			}
+Similarly, when derefering `ea->name` field member, we need to check
+whethe the ea->name is located in access validate range, too.
+
+Fixes: be71b5cba2e6 ("fs/ntfs3: Add attrib operations")
+Reported-by: syzbot+9fcea5ef6dc4dc72d334@syzkaller.appspotmail.com
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+---
+ fs/ntfs3/xattr.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
+index ff64302e87e5..27eb30453b9f 100644
+--- a/fs/ntfs3/xattr.c
++++ b/fs/ntfs3/xattr.c
+@@ -210,11 +210,15 @@ static ssize_t ntfs_list_ea(struct ntfs_inode *ni, char *buffer,
+ 	size = le32_to_cpu(info->size);
+ 
+ 	/* Enumerate all xattrs. */
+-	for (ret = 0, off = 0; off < size; off += ea_size) {
++	for (ret = 0, off = 0; off + sizeof(struct EA_FULL) < size; off += ea_size) {
+ 		ea = Add2Ptr(ea_all, off);
+ 		ea_size = unpacked_ea_size(ea);
+ 
+ 		if (buffer) {
++			/* Check if we can use field ea->name */
++			if (off + ea_size > size)
++				break;
++
+ 			if (ret + ea->name_len + 1 > bytes_per_buffer) {
+ 				err = -ERANGE;
+ 				goto out;
+-- 
+2.25.1
+
