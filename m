@@ -2,110 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326A16E9038
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D92A6E903D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233977AbjDTK3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
+        id S234581AbjDTKcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234803AbjDTK3Y (ORCPT
+        with ESMTP id S234519AbjDTKb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:29:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799D75581;
-        Thu, 20 Apr 2023 03:27:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 103C66131A;
-        Thu, 20 Apr 2023 10:27:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87138C433EF;
-        Thu, 20 Apr 2023 10:27:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681986428;
-        bh=QDYCFRnWH/Js9cZOwtaV9JCmqosAqmE5uYC3yyCCcc4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UxRUuUxn+AbkEVvPQ8poUQ/HGoTo4+OTMh/WJNPZtI8kJofNIZCU8QSVxVMRMRVxx
-         vKgcA0fa+zy7ffzRRFBUwXE9z7RIZpJns5cEVdModUjZXxbFqR+rR/mF60YaNZBEVs
-         UOCrj1h4G/GQeWjqKAVzkmMfwlvuvt/gu5tEFCmsFNqXfPLk29pKvGPlrcr1484K77
-         jiHWCUZwpgZGm2qQQjl87v8QvvBlkypm+V4B4lgpVvBsrP+91gcgQYJsJB1cLiYbk6
-         DNymI0nLa4W+N+P/phNIHwcT5EwDaJVqFeMbwOug1VA6jJKUCC/gwixZyFI8BTbJ3W
-         IMb14VRpbmnYw==
-Date:   Thu, 20 Apr 2023 11:27:03 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Maarten Zanders <maarten.zanders@mind.be>,
-        Pavel Machek <pavel@ucw.cz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v7 1/2] dt-bindings: leds-lp55xx: add ti,charge-pump-mode
-Message-ID: <20230420102703.GH9904@google.com>
-References: <20230407102324.42604-1-maarten.zanders@mind.be>
- <20230407102324.42604-2-maarten.zanders@mind.be>
- <20230411132204.GA2918042-robh@kernel.org>
+        Thu, 20 Apr 2023 06:31:29 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67460268A;
+        Thu, 20 Apr 2023 03:29:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1681986541; x=1713522541;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PxxF+ybrqPaMA+5/3lIm0KfonobVUIOCFzFZF6VC8s4=;
+  b=sTF+OV/hKGRWtan4VU324dX6U+waQMcMNgEhiWfZs3ZAybiJ5tBTt3ue
+   Kx9UV4YCN8Qf2BO5y85dyYuM/9s/pUFr/Mc6Rb0sc1fcnH5VnUAo8BgET
+   i+XeBwVpZsxq+4kjeUtjXiySF3t4hrZY3isTeyNnjFOR8kOZ4cAmelYpZ
+   rHDzt96FhO3GgVqsp/8HSvt8chjEEFL8Rl48nFGa9MLQEDH6HmaLRoWml
+   EBtKVywvkN8bsfpqxgOAmoSzqJSvti0yutKRRJauV3VsRT3nuzdTdJ3aF
+   sJo0z+x8UFU3a/Q3EcF0n668YslRKSWR1EjJWiubF7pNVxGGKj8C8VqTZ
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,212,1677567600"; 
+   d="asc'?scan'208";a="148053676"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Apr 2023 03:28:44 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 20 Apr 2023 03:28:43 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 20 Apr 2023 03:28:40 -0700
+Date:   Thu, 20 Apr 2023 11:28:24 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Nylon Chen <nylon.chen@sifive.com>
+CC:     <aou@eecs.berkeley.edu>, <conor@kernel.org>,
+        <emil.renner.berthing@canonical.com>, <geert+renesas@glider.be>,
+        <heiko@sntech.de>, <krzysztof.kozlowski+dt@linaro.org>,
+        <palmer@dabbelt.com>, <paul.walmsley@sifive.com>,
+        <robh+dt@kernel.org>, <thierry.reding@gmail.com>,
+        <u.kleine-koenig@pengutronix.de>, <devicetree@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <nylon7717@gmail.com>,
+        <zong.li@sifive.com>, <greentime.hu@sifive.com>,
+        <vincent.chen@sifive.com>
+Subject: Re: [PATCH v3 2/2] pwm: sifive: change the PWM controlled LED
+ algorithm
+Message-ID: <20230420-pension-threaten-bc9a549465ab@wendy>
+References: <20230420093457.18936-1-nylon.chen@sifive.com>
+ <20230420093457.18936-3-nylon.chen@sifive.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="221CyLf96APVzjPW"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230411132204.GA2918042-robh@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230420093457.18936-3-nylon.chen@sifive.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Apr 2023, Rob Herring wrote:
+--221CyLf96APVzjPW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On Fri, Apr 07, 2023 at 12:23:23PM +0200, Maarten Zanders wrote:
-> > Add a binding to configure the internal charge pump for lp55xx.
-> > 
-> > Signed-off-by: Maarten Zanders <maarten.zanders@mind.be>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > ---
-> > 
-> > Notes:
-> >     v1: implement as bool to disable charge pump
-> >     v2: rewrite to use string configuration, supporting all modes
-> >     v3: simplification by replacing string option by u8 constant,
-> >         removing previous Reviewed-by tags as it's a complete
-> >         rewrite of the patch.
-> >     v4: added notes
-> >     v5: dual license, change property type to u32
-> >     v6: change license type for leds-lp-55xx.h to preferred tag
-> > 
-> >  .../devicetree/bindings/leds/leds-lp55xx.yaml          |  8 ++++++++
-> >  include/dt-bindings/leds/leds-lp55xx.h                 | 10 ++++++++++
-> >  2 files changed, 18 insertions(+)
-> >  create mode 100644 include/dt-bindings/leds/leds-lp55xx.h
-> > 
-> > diff --git a/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml b/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
-> > index ae607911f1db..ede9cb9ca175 100644
-> > --- a/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
-> > +++ b/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
-> > @@ -66,6 +66,12 @@ properties:
-> >    '#size-cells':
-> >      const: 0
-> >  
-> > +  ti,charge-pump-mode:
-> > +    description:
-> > +      Set the operating mode of the internal charge pump as defined in
-> > +      <dt-bindings/leds/leds-lp55xx.h>. Defaults to auto.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> 
-> Needs constraints:
-> 
-> default: 3  # Auto
-> maximum: 3
+On Thu, Apr 20, 2023 at 05:34:57PM +0800, Nylon Chen wrote:
+> The `frac` variable represents the pulse inactive time, and the result of
+> this algorithm is the pulse active time. Therefore, we must reverse the
+> result.
+>=20
+> The reference is SiFive FU740-C000 Manual[0]
+>=20
+> Link: https://sifive.cdn.prismic.io/sifive/1a82e600-1f93-4f41-b2d8-86ed8b=
+16acba_fu740-c000-manual-v1p6.pdf [0]
+>=20
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Once this has been fixed, I'll apply both.
+Hmm, I don't recall reviewing or acking this patch. I do recalling doing
+it for 1/2 though:
+https://lore.kernel.org/linux-pwm/Y9len4GinXQ101xr@spud/
 
--- 
-Lee Jones [李琼斯]
+Please remove these from your next submission, I don't have any knowledge
+of this driver nor do I maintain it, thanks.
+
+> Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
+> Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
+
+This SoB is new too AFAICT and looks a bit odd.
+Should there be a Co-developed-by for Vincent?
+
+Thanks,
+Conor.
+
+--221CyLf96APVzjPW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEETyAAKCRB4tDGHoIJi
+0twCAQD+D5uuZoL6Zj8V7Jd9fPKoYRdogs5ET3HIn+Gcls1UdQEAzjD2zPc7ebgY
+pOORg2ws5wOTXnrM95U5x6F9kWjMzws=
+=E5F/
+-----END PGP SIGNATURE-----
+
+--221CyLf96APVzjPW--
