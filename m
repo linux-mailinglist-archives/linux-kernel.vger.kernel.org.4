@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79DC6E9118
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C89E6E9120
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235104AbjDTKyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
+        id S235152AbjDTKyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235074AbjDTKx7 (ORCPT
+        with ESMTP id S235030AbjDTKyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:53:59 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE3F1719
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:51:33 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2a8c51ba511so3870211fa.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:51:33 -0700 (PDT)
+        Thu, 20 Apr 2023 06:54:35 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5230658B
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:52:15 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2a8c30ac7e3so4011621fa.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:52:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681987876; x=1684579876;
+        d=linaro.org; s=google; t=1681987923; x=1684579923;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5EIxJH2yrLBRrFwXgWbwZYnw9Goigez16D5eZr76hWs=;
-        b=WuRVK8evm0fEryO9tqGyYRLjGFn7Olze/Cz2LbtDVh1N6K32SZMUc8k3HPz3U5eRyI
-         G/tpDvTjtF8OhFfo07be4CUd6O0dgWnNSs4m7dpJU3NhiwB9/UBCWHcqEkFT0kU6mgq/
-         QObw2Z61Wj0lmUFhSI3VLfRW8RR4lLxZPAn6JKYZNGJmE+lVxJ9lGQvoJomuzQLJacg/
-         mVMa9xjanSVyAxdS0FwCeOTNW7PC79b/K49aaloI/2e+G+puDpX9iIeRAKrAdyAqzZtV
-         HIb8EVzZ2x9mqvMtN6BuftOGpHH18DBxKBUHWtM+LpJN454VfyG0hDsKms0PnYKjBjpR
-         l4RA==
+        bh=/vyyE/47mJulpJLu8DqqFKha4qSGs/Z9UKpwUHI8gTY=;
+        b=TK/ktyymdcTw4seyT+uhNJDv2JjGGagkYptn2JnRXT1InQ5XlwEG/josDDGOn6duIj
+         XQI8SSg4fGNX3WAx5y7BwaPQDiMJpnN9rM384I8kDxVoPa5yy2hEwX6YXrlAsO5kdGun
+         +pv+6AnapTlJfd/OZtaYQYsKXtTQ0yQ3/WF9OmXVPyhBu6T3yBxXW094ED6d7RUPy/mo
+         sDbP5JB2ETHe7PKWosLdLhI3bFup2isndGoEsqvC/iVVTGajO5E06iIAgetcPaaUpf2b
+         M+Kz9rHI8jPPO2wMQRLYbR6DLcBlbdcarHs3RWXERo3PdCaGb/d3mSvDVHAXgVi2EnDQ
+         iNog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681987876; x=1684579876;
+        d=1e100.net; s=20221208; t=1681987923; x=1684579923;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5EIxJH2yrLBRrFwXgWbwZYnw9Goigez16D5eZr76hWs=;
-        b=fwkmhv8hzrD95aiHMzYnQfBO4R/f6JbRJ80IT6UsUg2N/OWq8KbGf0Vbu7vJpFH7UB
-         Y8UjmzMxL2dcnkdQagpveCS//c8CYr4tasFDx1GeD4o5Y/H3f0y8IYd1UfIOI9yAhpL/
-         9oXOFY/YzFSR0BU8skOVFWrlv/pilu6BTiCtkjHM4ADizCTNTki4Nw6Ub9mW2LJd1WUn
-         8AEOEhspueZij9G1N/YUwsgmewH4nDa6h/gNQkhC+Vr+OqlGweyMddtCtG3otPQVfIvz
-         1kOq+d4L1Bx/LyDTYMzl2SgIFY0F0rHZ3rZBx2wflSHvgTR/uG0cbZzMo1t4jhF0Rkiq
-         hKdA==
-X-Gm-Message-State: AAQBX9eDjG4z/WSLE0KDPrXzFqkMYpqGJlGgOZhIvIBf8v+5pmHnZI3m
-        wDpK6abHVcayoMtGmi4iWtdJEKJTnVnMgBFHtfg=
-X-Google-Smtp-Source: AKy350YoN/3dzemidDrvN0eNtWUZw1nWFrfv1fLiYAAidH5xw4/qgloWCgQgMhKs7N9BTE54tqzwvQ==
-X-Received: by 2002:a05:6512:11d2:b0:4e8:5e39:6238 with SMTP id h18-20020a05651211d200b004e85e396238mr355519lfr.42.1681987876564;
-        Thu, 20 Apr 2023 03:51:16 -0700 (PDT)
+        bh=/vyyE/47mJulpJLu8DqqFKha4qSGs/Z9UKpwUHI8gTY=;
+        b=YQEC61+O4jGyeAVQ1KWCyoI8WW4MHIUSe9O/M2Z6uW5Tgq9Xv4GYJuu/tQ/cG0JfFC
+         wZvYvVW4rSq4PWcUDsc83uioUzxlVLcG91kuGsURT/k7umxf06WH7v2XwUohwMkvYJ08
+         d76xFcOXW74ZMz/WbH2FuoIPsli7WD66gNzJD/xxs9RAQRWEJh8geOogtZ8GAxttlz8O
+         dvt0pWqMxOy9/RsyBJbyHZIHxF1KMMX1fTHL2GxQxOhciuC7SdwOd0q0+up+ZeK9v/4f
+         DYfv8aTRZADSbW7yCFImFaM4zq3GwStishOi9NgS2qDVce0LvGTyR2rIHeuLNWxC8po9
+         3qDw==
+X-Gm-Message-State: AAQBX9dMlY+a/SlJNuvX995RubkvUEclWoM1ApTQdrT3/ql/SJaXMRfz
+        +ybgESKvaXf99kgIYstwc3T+8g==
+X-Google-Smtp-Source: AKy350ZWf+fEzly9izyar1voGeWVVk6oVKSW54et+TXegMZ84W0NyO/qIJE0TQ976ECkyUD4vIjNWQ==
+X-Received: by 2002:ac2:5611:0:b0:4e8:3fc7:9483 with SMTP id v17-20020ac25611000000b004e83fc79483mr394970lfd.23.1681987923457;
+        Thu, 20 Apr 2023 03:52:03 -0700 (PDT)
 Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id x6-20020a19f606000000b004eaf41933a4sm177831lfe.59.2023.04.20.03.51.14
+        by smtp.gmail.com with ESMTPSA id l13-20020ac24a8d000000b004eb3b6acfe6sm175113lfp.213.2023.04.20.03.52.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 03:51:16 -0700 (PDT)
-Message-ID: <ee727e03-4cfc-e4b5-7909-07b579dd5dc0@linaro.org>
-Date:   Thu, 20 Apr 2023 12:51:13 +0200
+        Thu, 20 Apr 2023 03:52:03 -0700 (PDT)
+Message-ID: <b037a41c-c8d4-d1a1-ede1-00b938d4a902@linaro.org>
+Date:   Thu, 20 Apr 2023 12:52:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH 01/18] arm64: dts: qcom: ipq6018: correct qrng unit
+Subject: Re: [PATCH 02/18] arm64: dts: qcom: msm8916: correct camss unit
  address
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
@@ -84,8 +84,9 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230419211856.79332-1-krzysztof.kozlowski@linaro.org>
+ <20230419211856.79332-2-krzysztof.kozlowski@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230419211856.79332-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230419211856.79332-2-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -103,27 +104,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 19.04.2023 23:18, Krzysztof Kozlowski wrote:
 > Match unit-address to reg entry to fix dtbs W=1 warnings:
 > 
->   Warning (simple_bus_reg): /soc/qrng@e1000: simple-bus unit address format error, expected "e3000"
+>   Warning (simple_bus_reg): /soc@0/camss@1b00000: simple-bus unit address format error, expected "1b0ac00"
 > 
-> Fixes: 5bf635621245 ("arm64: dts: ipq6018: Add a few device nodes")
+> Fixes: 58f479f90a7c ("arm64: dts: qcom: msm8916: Add CAMSS support")
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->  arch/arm64/boot/dts/qcom/ipq6018.dtsi | 2 +-
+>  arch/arm64/boot/dts/qcom/msm8916.dtsi | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> index 54af7cb3c7a8..992e8ed64617 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> @@ -302,7 +302,7 @@ mdio: mdio@90000 {
->  			status = "disabled";
+> diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+> index 834e0b66b7f2..894a99431158 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+> @@ -1162,7 +1162,7 @@ dsi_phy0: phy@1a98300 {
+>  			};
 >  		};
 >  
-> -		prng: qrng@e1000 {
-> +		prng: qrng@e3000 {
->  			compatible = "qcom,prng-ee";
->  			reg = <0x0 0x000e3000 0x0 0x1000>;
->  			clocks = <&gcc GCC_PRNG_AHB_CLK>;
+> -		camss: camss@1b00000 {
+> +		camss: camss@1b0ac00 {
+>  			compatible = "qcom,msm8916-camss";
+>  			reg = <0x01b0ac00 0x200>,
+>  				<0x01b00030 0x4>,
