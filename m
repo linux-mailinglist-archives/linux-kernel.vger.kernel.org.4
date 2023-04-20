@@ -2,107 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F0A6E9AF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2746E9B01
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbjDTRk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 13:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
+        id S231666AbjDTRmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 13:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbjDTRkz (ORCPT
+        with ESMTP id S231648AbjDTRmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 13:40:55 -0400
-Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A303133
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:40:51 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Q2Q1C69WSzMqQVD;
-        Thu, 20 Apr 2023 19:40:47 +0200 (CEST)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Q2Q196HmLzMppF8;
-        Thu, 20 Apr 2023 19:40:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1682012447;
-        bh=C42CG0yEhZ3//t6vNF4EAp/UK1VoZRlM/xbyZMTq9sw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ww1/qKoHdAKBnghB3zJAndSHHtlhWFME+1v84JiiUfZsB7CaOOqVsLbd0uITMgTCt
-         VvjQ/4XR7CHTonbqvGTXfTB8WETF74lCX0tx9l329juYD85bDx6iqcoL0DbZoes+0b
-         o+4McyPqybIf2i8Shqgmo4gSkoEP6pUNjKaAPGJU=
-Message-ID: <a4dc7c12-b485-2eb2-add5-4f7a387a50fa@digikod.net>
-Date:   Thu, 20 Apr 2023 19:40:44 +0200
+        Thu, 20 Apr 2023 13:42:13 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6203170C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:42:10 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-94eff00bcdaso97967466b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:42:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682012529; x=1684604529;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jOShlAmW5KtWyt18VPabl3AojpTzB/52zpa39oAofYI=;
+        b=YmddgtRtW8ICTes0+dab7w6Oem6Kx16VyROeBvQ/nYxGBP5/ZMHSlacbBwi0Ijvq0Z
+         HBwAMMZMA69v0M6/JecoGitZ1Z+oEhnr95tNJhaUhyTkNIF355Sm7sagw0sExkPzRaWQ
+         YaW0R2WKdh8uu6dv0MaNqSyH0IBqw4UGq2EDA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682012529; x=1684604529;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jOShlAmW5KtWyt18VPabl3AojpTzB/52zpa39oAofYI=;
+        b=Y87AAKjaaet6jqnG5huW6P5OvETVRMrNT+1QRzCYxJmEiIVXGd/WnlesWq6gdx+OsC
+         LGl7T8xYPoVqTFS81+UQ+G0JQhkEVt79TUH0GHRrw/w+c1VO06JOrBbPQqH7LV38f5se
+         VGGDnGwW8f+fdmFg/HoWs+Vrp2zPAgD7y1LfW9UnO8odMHGCBd5SUD3EbfcpVMS9CU8L
+         Hsz4HxokISWpX334/BL6H1IgRWqYfuV7kise2p11+kYFi8jhcBI/wgMBNTOjzN3SKTaZ
+         GDkNa/EZeS+qTrYjuvb72Xice6taK961Bj4wl1KiptrQnTnV9AlHgHFBbxqDc7LvDEw9
+         cKpQ==
+X-Gm-Message-State: AAQBX9fTeLn5dnzZ4M3WvxhBND1tyV5gkxLvoKJUSdUiw7V++ofocxnK
+        ypuzLqdvU5jbDs5G8Ky5SuI8US6OEE2oS0+UAqiaqQ==
+X-Google-Smtp-Source: AKy350auT20t6FOb+4AgjUmWFcoyThBQnArWZX8Nl6LqCPFqucTjIuxXlPmzUnAM2Xrg1Nu+DICIWX/ywGGGDp/EAL0=
+X-Received: by 2002:a05:6402:7d8:b0:502:2265:8428 with SMTP id
+ u24-20020a05640207d800b0050222658428mr2195635edy.38.1682012529194; Thu, 20
+ Apr 2023 10:42:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH -next v2 0/6] landlock: add chmod and chown support
-Content-Language: en-US
-To:     xiujianfeng <xiujianfeng@huawei.com>, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
-        corbet@lwn.net
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, roberto.sassu@huawei.com,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-References: <20220827111215.131442-1-xiujianfeng@huawei.com>
- <d55baf4d-01d3-e4d7-e07f-9658d1606a8c@huawei.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <d55baf4d-01d3-e4d7-e07f-9658d1606a8c@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230414000219.92640-1-sarthakkukreti@chromium.org>
+ <20230418221207.244685-1-sarthakkukreti@chromium.org> <20230418221207.244685-2-sarthakkukreti@chromium.org>
+ <b74cc3d8-bfde-8375-3b19-24ea13eb1196@acm.org>
+In-Reply-To: <b74cc3d8-bfde-8375-3b19-24ea13eb1196@acm.org>
+From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
+Date:   Thu, 20 Apr 2023 10:41:57 -0700
+Message-ID: <CAG9=OMOfpJHB3HbjK46_bh_P6b4vdSfBt1Q39ukuKhZzyscnow@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] block: Introduce provisioning primitives
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Brian Foster <bfoster@redhat.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>,
+        Daniil Lunev <dlunev@google.com>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dropped in v5.
 
-On 18/04/2023 12:53, xiujianfeng wrote:
-> Hi Mickael,
-> 
-> Sorry about the long silence on this work, As we known this work depends
-> on another work about changing argument from struct dentry to struct
-> path for some attr/xattr related lsm hooks, I'm stuck with this thing,
-> because IMA/EVM is a special security module which is not LSM-based
-> currently, and severely coupled with the file system. so I am waiting
-> for Roberto Sassu' work (Move IMA and EVM to the LSM infrastructure) to
-> be ready, I think it can make my work more easy. you can find
-> Roberto'work here,
-> https://lwn.net/ml/linux-kernel/20230303181842.1087717-1-roberto.sassu@huaweicloud.com/
-> 
-> Any good idea are welcome, thanks.
+Thanks!
+Sarthak
 
-Thanks for the update Xiu.
-
-Which part would be needed from Roberto's patch series?
-
-
-> 
-> 
-> On 2022/8/27 19:12, Xiu Jianfeng wrote:
->> v2:
->>   * abstract walk_to_visible_parent() helper
->>   * chmod and chown rights only take affect on directory's context
->>   * add testcase for fchmodat/lchown/fchownat
->>   * fix other review issues
->>
->> Xiu Jianfeng (6):
->>    landlock: expand access_mask_t to u32 type
->>    landlock: abstract walk_to_visible_parent() helper
->>    landlock: add chmod and chown support
->>    landlock/selftests: add selftests for chmod and chown
->>    landlock/samples: add chmod and chown support
->>    landlock: update chmod and chown support in document
->>
->>   Documentation/userspace-api/landlock.rst     |   9 +-
->>   include/uapi/linux/landlock.h                |  10 +-
->>   samples/landlock/sandboxer.c                 |  13 +-
->>   security/landlock/fs.c                       | 110 ++++++--
->>   security/landlock/limits.h                   |   2 +-
->>   security/landlock/ruleset.h                  |   2 +-
->>   security/landlock/syscalls.c                 |   2 +-
->>   tools/testing/selftests/landlock/base_test.c |   2 +-
->>   tools/testing/selftests/landlock/fs_test.c   | 267 ++++++++++++++++++-
->>   9 files changed, 386 insertions(+), 31 deletions(-)
->>
+On Tue, Apr 18, 2023 at 3:43=E2=80=AFPM Bart Van Assche <bvanassche@acm.org=
+> wrote:
+>
+> On 4/18/23 15:12, Sarthak Kukreti wrote:
+> >       /* Fail if we don't recognize the flags. */
+> > -     if (mode & ~BLKDEV_FALLOC_FL_SUPPORTED)
+> > +     if (mode !=3D 0 && mode & ~BLKDEV_FALLOC_FL_SUPPORTED)
+> >               return -EOPNOTSUPP;
+>
+> Is this change necessary? Doesn't (mode & ~BLKDEV_FALLOC_FL_SUPPORTED)
+> !=3D 0 imply that mode !=3D 0?
+>
+> Thanks,
+>
+> Bart.
+>
