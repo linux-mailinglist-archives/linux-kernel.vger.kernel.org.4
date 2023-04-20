@@ -2,111 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C34776E8C41
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5FD6E8C4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234343AbjDTIJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
+        id S233900AbjDTIK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234337AbjDTIJN (ORCPT
+        with ESMTP id S233817AbjDTIK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:09:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DF9FC;
-        Thu, 20 Apr 2023 01:09:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2746C645AB;
-        Thu, 20 Apr 2023 08:09:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 911D1C433EF;
-        Thu, 20 Apr 2023 08:09:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681978147;
-        bh=ImzOYmQ4yUAimeoREYTG/Ic4X9E0mCDibkc7vPhya5g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Gm2KDvefKPiwYxUSqqIQl5ioJOzO0AcVRlCaKwSP1rY1ZyadRI8dF/Ce3WkKJQRSs
-         Sc5BXlTLKFHYQwrzFGZOKgV2aR12u/kZ4Dw9hUXt8WZ8IAZh+a33VypEYXIwETMJT4
-         RtiSofNBctrEcmE2qu2FroRvVRTLpqw8hK4BzQmQ=
-Date:   Thu, 20 Apr 2023 10:08:59 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Frank Wang <frank.wang@rock-chips.com>, linux@roeck-us.net,
-        heiko@sntech.de, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        huangtao@rock-chips.com, william.wu@rock-chips.com,
-        jianwei.zheng@rock-chips.com, yubing.zhang@rock-chips.com,
-        wmc@rock-chips.com
-Subject: Re: [PATCH v2] usb: typec: tcpm: fix multiple times discover svids
- error
-Message-ID: <ZEDzGydXbbpekeaB@kroah.com>
-References: <20230316081149.24519-1-frank.wang@rock-chips.com>
- <ZBROkdOFAP4GPPU6@kuha.fi.intel.com>
+        Thu, 20 Apr 2023 04:10:27 -0400
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2A61700
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:10:23 -0700 (PDT)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 33K7rRRH055548;
+        Thu, 20 Apr 2023 15:53:27 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 20 Apr
+ 2023 16:09:49 +0800
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+To:     <airlied@redhat.com>, <tzimmermann@suse.de>
+CC:     <airlied@gmail.com>, <daniel@ffwll.ch>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] drm/ast: Fix ARM compatibility
+Date:   Thu, 20 Apr 2023 16:09:47 +0800
+Message-ID: <20230420080947.27226-1-jammy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBROkdOFAP4GPPU6@kuha.fi.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 33K7rRRH055548
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 01:27:13PM +0200, Heikki Krogerus wrote:
-> On Thu, Mar 16, 2023 at 04:11:49PM +0800, Frank Wang wrote:
-> > PD3.0 Spec 6.4.4.3.2 say that only Responder supports 12 or more SVIDs,
-> > the Discover SVIDs Command Shall be executed multiple times until a
-> > Discover SVIDs VDO is returned ending either with a SVID value of
-> > 0x0000 in the last part of the last VDO or with a VDO containing two
-> > SVIDs with values of 0x0000.
-> > 
-> > In the current implementation, if the last VDO does not find that the
-> > Discover SVIDs Command would be executed multiple times even if the
-> > Responder SVIDs are less than 12, and we found some odd dockers just
-> > meet this case. So fix it.
-> > 
-> > Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
-> > ---
-> >  drivers/usb/typec/tcpm/tcpm.c | 16 +++++++++++++++-
-> >  1 file changed, 15 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> > index 66de02a56f512..a3ae2c79f3540 100644
-> > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > @@ -1515,7 +1515,21 @@ static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt)
-> >  		pmdata->svids[pmdata->nsvids++] = svid;
-> >  		tcpm_log(port, "SVID %d: 0x%x", pmdata->nsvids, svid);
-> >  	}
-> > -	return true;
-> > +
-> > +	/*
-> > +	 * PD3.0 Spec 6.4.4.3.2: The SVIDs are returned 2 per VDO (see Table
-> > +	 * 6-43), and can be returned maximum 6 VDOs per response (see Figure
-> > +	 * 6-19). If the Respondersupports 12 or more SVID then the Discover
-> > +	 * SVIDs Command Shall be executed multiple times until a Discover
-> > +	 * SVIDs VDO is returned ending either with a SVID value of 0x0000 in
-> > +	 * the last part of the last VDO or with a VDO containing two SVIDs
-> > +	 * with values of 0x0000.
-> > +	 *
-> > +	 * However, some odd dockers support SVIDs less than 12 but without
-> > +	 * 0x0000 in the last VDO, so we need to break the Discover SVIDs
-> > +	 * request and return false here.
-> > +	 */
-> > +	return cnt == 7;
-> >  abort:
-> >  	tcpm_log(port, "SVID_DISCOVERY_MAX(%d) too low!", SVID_DISCOVERY_MAX);
-> >  	return false;
-> 
-> This is OK by men, but let's wait for Guenter.
+ARM architecture only has 'memory', so all devices are accessed by
+MMIO if possible.
 
-What ever happened to this patch?
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+---
+ v2 changes:
+  - Use MMIO after AST2500 which enable MMIO by default.
+---
+ drivers/gpu/drm/ast/ast_main.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-thanks,
+diff --git a/drivers/gpu/drm/ast/ast_main.c b/drivers/gpu/drm/ast/ast_main.c
+index f83ce77127cb..d384e810fa4d 100644
+--- a/drivers/gpu/drm/ast/ast_main.c
++++ b/drivers/gpu/drm/ast/ast_main.c
+@@ -425,11 +425,12 @@ struct ast_private *ast_device_create(const struct drm_driver *drv,
+ 		return ERR_PTR(-EIO);
+ 
+ 	/*
+-	 * If we don't have IO space at all, use MMIO now and
+-	 * assume the chip has MMIO enabled by default (rev 0x20
+-	 * and higher).
++	 * After AST2500, MMIO is enabled by default, and it should be adapted
++	 * to be compatible with Arm.
+ 	 */
+-	if (!(pci_resource_flags(pdev, 2) & IORESOURCE_IO)) {
++	if (pdev->revision >= 0x40) {
++		ast->ioregs = ast->regs + AST_IO_MM_OFFSET;
++	} else if (!(pci_resource_flags(pdev, 2) & IORESOURCE_IO)) {
+ 		drm_info(dev, "platform has no IO space, trying MMIO\n");
+ 		ast->ioregs = ast->regs + AST_IO_MM_OFFSET;
+ 	}
 
-greg k-h
+base-commit: e62252bc55b6d4eddc6c2bdbf95a448180d6a08d
+-- 
+2.25.1
+
