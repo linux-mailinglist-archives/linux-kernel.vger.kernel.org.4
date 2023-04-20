@@ -2,82 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 500A26E9670
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90EEB6E9676
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231767AbjDTN6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 09:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
+        id S231773AbjDTN77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 09:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbjDTN6D (ORCPT
+        with ESMTP id S231732AbjDTN75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:58:03 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40198558E;
-        Thu, 20 Apr 2023 06:58:01 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id m39-20020a05600c3b2700b003f170e75bd3so3482250wms.1;
-        Thu, 20 Apr 2023 06:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681999079; x=1684591079;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oEmb+1bwuYnnNU5r4quSTraRp3g5AOWVk+rl/hJBlk8=;
-        b=BnxS83v9fLmQmx2NeV6rGv+8NbAQfyda+oSLfNV+sRgnQaNRUr24+dwvGImmpimdmN
-         NcchPObPAIQtXFE8RJmtBQ1x1VE0OgZVYPg+847d2Rl7HVEhqxb2UlVJU1hb3iSm6+36
-         6wqHmiedOJiTkilo9GF7wxFz776sv/SE2eCD9VhyJgo1dWvrSM0PcTAB1rzw7dIO9FVG
-         HNDpKpzdIShyAXHx4toc7S6LUHsc1gY2c8alIO/ESIFbSQKLno0Q4D2ABkP/3MPEwT4K
-         U4X5R23aA8JU3Ajkmbj7segCEpfPzom0ThjYOWQlzWVpc7a+IYfEohAlVeo+8a5LsPDQ
-         CLmg==
+        Thu, 20 Apr 2023 09:59:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACE710DC
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:59:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681999146;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=m4/JuEsZscBS1QEjsB4TfQCsUwFo0JrhZtOzYqZKIzY=;
+        b=FkDwRI9riU3gqUI/siICUB8tBA0mcKXRPB7GVCSqGoawFBG29zFUKPmjst1bWX21GYlza1
+        pbJ71+H4pqCJrb5izMl2C759pIxfra6ywDd1c2UqzkLQo4mHmOhSmSSIHtBlIDG7Jg55+P
+        yrr+wgzvWH7vhy1Q1ON3A/bqGrtQc9o=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-355-83Iu-T3COqKq_lrNkVWCCg-1; Thu, 20 Apr 2023 09:59:05 -0400
+X-MC-Unique: 83Iu-T3COqKq_lrNkVWCCg-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-74e04fcc695so58177585a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:59:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681999079; x=1684591079;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oEmb+1bwuYnnNU5r4quSTraRp3g5AOWVk+rl/hJBlk8=;
-        b=i9msxFtFPWaBXuccaXzYXFe1xfBpoYBmIfOwa2rn6LiV4SAMBZw3mW6k/hjr6waI58
-         IBfTg/YF9eh3BQhAcz/7s7yxllssy+SuGM8CoNCwv4JOK7TZRovC5D1PkoL/QNAawhAd
-         UhX1Q6vRUH/BEq2PJGvD8hQRPfUHKBufc6YI8+CLn5R7UB3JlP0Xj1LV0eN8gDBI0Yt3
-         3EcVRFKxe9yaLXGAkcj2znxDbaiWssOYNQ8tplzlufW2S0agwFOMkSgaoPsLIm+fX+Nh
-         FhxrDAOpYT3HjYl34zLsICW02qGvqIOrAdC8Er0vL0TVRDJvUqKHj8+MSMvKeZH4ENPT
-         LQKQ==
-X-Gm-Message-State: AAQBX9fN9eA2ytfUjzvdkZNG0O2J07pjrRJDHRqRYhLIFshHB4a+kJY1
-        /GM3y29jD/y0WUV2gqdPHUE=
-X-Google-Smtp-Source: AKy350be+T3njI9C+iVjqfH2dZsecnvHqaLzbCqm2MFL62XeCONJvIni1XXzLmfMDsWfS4VDtcyP6Q==
-X-Received: by 2002:a05:600c:2101:b0:3f1:7c38:719b with SMTP id u1-20020a05600c210100b003f17c38719bmr1528648wml.3.1681999079211;
-        Thu, 20 Apr 2023 06:57:59 -0700 (PDT)
-Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
-        by smtp.gmail.com with ESMTPSA id m6-20020adfdc46000000b002d45575643esm2047200wrj.43.2023.04.20.06.57.58
+        d=1e100.net; s=20221208; t=1681999145; x=1684591145;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m4/JuEsZscBS1QEjsB4TfQCsUwFo0JrhZtOzYqZKIzY=;
+        b=WxxfgUNXNrbSfJUXVNFkcl23IGG1EtvhrYteXl1Eq6ACgXsEovCirxoYJ7CTDP6S+G
+         5MP/xVE8yv8ND08QtfKbSs9/uQfDQhSFkoVkhOlMRSkPhV2j0itimQ8LUI242MQrT+ym
+         Mp1FdNLh+UJLpC0nBvZUnmgMK12HYg4sqCgS7GMPtWKFfisZlZtTqdeF5JgswNqlSqmI
+         ++tFIPcgzUw69vzmPlFush+Eg4H76vgHFCgS7qnXsV/KaTeIcOC0xGnTw5eEQqrdpS8z
+         3RzorbjTXcj46XSbELdvJpZGsDxNhcrXkPJZNb+N2lr2YegVW0BTwHmjAEbEDrBXE2oe
+         /cpA==
+X-Gm-Message-State: AAQBX9e4zKViCaSB1GN1JqscsU0ezcgNc/Vv4OXzGsu9VykP5vGIeZXT
+        KAox4A6ZhDRKS0Zr8NBTvbr1E9K4u/TnwJNEAtvte7YrBAye74RkAIIXilHtdZ5iydoGpYGKYdh
+        XuGXE1UFrYuyvuXMDT8FIWsU4
+X-Received: by 2002:a05:622a:18a9:b0:3e6:35ec:8a9f with SMTP id v41-20020a05622a18a900b003e635ec8a9fmr2276770qtc.59.1681999145134;
+        Thu, 20 Apr 2023 06:59:05 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZWmwkSKjotOboNJvMVMnZ/90aKxEW+jnR3KliISrG82OxoHSKFPujRz0mheXYNaiH8sWDnrA==
+X-Received: by 2002:a05:622a:18a9:b0:3e6:35ec:8a9f with SMTP id v41-20020a05622a18a900b003e635ec8a9fmr2276737qtc.59.1681999144890;
+        Thu, 20 Apr 2023 06:59:04 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id z42-20020a05620a262a00b00745f3200f54sm430905qko.112.2023.04.20.06.59.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 06:57:58 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 14:57:57 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org
-Subject: Re: [PATCH v4 4/6] io_uring: rsrc: avoid use of vmas parameter in
- pin_user_pages()
-Message-ID: <5ead8d8c-6f47-4db1-b1da-ffaaee4be255@lucifer.local>
-References: <f82b9025-a586-44c7-9941-8140c04a4ccc@lucifer.local>
- <69f48cc6-8fc6-0c49-5a79-6c7d248e4ad5@kernel.dk>
- <bec03e0f-a0f9-43c3-870b-be406ca848b9@lucifer.local>
- <8af483d2-0d3d-5ece-fb1d-a3654411752b@kernel.dk>
- <d601ca0c-d9b8-4e5d-a047-98f2d1c65eb9@lucifer.local>
- <ZEAxhHx/4Ql6AMt2@casper.infradead.org>
- <ZEAx90C2lDMJIux1@nvidia.com>
- <ZEA0dbV+qIBSD0mG@casper.infradead.org>
- <8bf0df41-27ef-4305-b424-e43045a6d68d@lucifer.local>
- <ZEB3y0V2GSDcUMc2@nvidia.com>
+        Thu, 20 Apr 2023 06:59:04 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, Alvin.Lee2@amd.com, Jun.Lei@amd.com,
+        qingqing.zhuo@amd.com, Max.Tseng@amd.com, Josip.Pavic@amd.com,
+        Eric.Yang2@amd.com, aurabindo.pillai@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amd/display: return status of dmub_srv_get_fw_boot_status
+Date:   Thu, 20 Apr 2023 09:59:01 -0400
+Message-Id: <20230420135901.3889747-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEB3y0V2GSDcUMc2@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,33 +81,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 08:22:51PM -0300, Jason Gunthorpe wrote:
-> On Wed, Apr 19, 2023 at 07:45:06PM +0100, Lorenzo Stoakes wrote:
->
-> > For example, imagine if a user (yes it'd be weird) mlock'd some pages in a
-> > buffer and not others, then we'd break their use case. Also (perhaps?) more
-> > feasibly, a user might mix hugetlb and anon pages. So I think that'd be too
-> > restrictive here.
->
-> Yeah, I agree we should not add a broad single-vma restriction to
-> GUP. It turns any split of a VMA into a potentially uABI breaking
-> change and we just don't need that headache in the mm..
->
-> > I do like the idea of a FOLL_SINGLE_VMA for other use cases though, the
-> > majority of which want one and one page only. Perhaps worth taking the
-> > helper added in this series (get_user_page_vma_remote() from [1]) and
-> > replacing it with an a full GUP function which has an interface explicitly
-> > for this common single page/vma case.
->
-> Like I showed in another thread a function signature that can only do
-> one page and also returns the VMA would force it to be used properly
-> and we don't need a FOLL flag.
->
+gcc with W=1 reports
+drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:
+  In function ‘dc_dmub_srv_optimized_init_done’:
+drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:184:26:
+  error: variable ‘dmub’ set but not used [-Werror=unused-but-set-variable]
+  184 |         struct dmub_srv *dmub;
+      |                          ^~~~
 
-Indeed the latest spin of the series uses this. The point is by doing so we
-can use per-VMA locks for a common case, I was thinking perhaps as a
-separate function call (or perhaps just reusing the wrapper).
+The return status is never set.
+It looks like a call to dmub_srv_get_fw_boot_status is missing.
 
-This would be entirely separate to all the other work.
+Fixes: 499e4b1c722e ("drm/amd/display: add mechanism to skip DCN init")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-> Jason
+diff --git a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
+index d15ec32243e2..36d936ab4300 100644
+--- a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
++++ b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
+@@ -182,14 +182,23 @@ bool dc_dmub_srv_cmd_run_list(struct dc_dmub_srv *dc_dmub_srv, unsigned int coun
+ bool dc_dmub_srv_optimized_init_done(struct dc_dmub_srv *dc_dmub_srv)
+ {
+ 	struct dmub_srv *dmub;
+-	union dmub_fw_boot_status status;
++	struct dc_context *dc_ctx;
++	union dmub_fw_boot_status boot_status;
++	enum dmub_status status;
+ 
+ 	if (!dc_dmub_srv || !dc_dmub_srv->dmub)
+ 		return false;
+ 
+ 	dmub = dc_dmub_srv->dmub;
++	dc_ctx = dc_dmub_srv->ctx;
++
++	status = dmub_srv_get_fw_boot_status(dmub, &boot_status);
++	if (status != DMUB_STATUS_OK) {
++		DC_ERROR("Error querying DMUB boot status: error=%d\n", status);
++		return false;
++	}
+ 
+-	return status.bits.optimized_init_done;
++	return boot_status.bits.optimized_init_done;
+ }
+ 
+ bool dc_dmub_srv_notify_stream_mask(struct dc_dmub_srv *dc_dmub_srv,
+-- 
+2.27.0
+
