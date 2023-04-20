@@ -2,66 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC936E8E92
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E936E8E95
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234462AbjDTJt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 05:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34116 "EHLO
+        id S234178AbjDTJtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 05:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234050AbjDTJtF (ORCPT
+        with ESMTP id S234017AbjDTJtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 05:49:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9006EBA;
-        Thu, 20 Apr 2023 02:47:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C80DD646CB;
-        Thu, 20 Apr 2023 09:47:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E13C3C433D2;
-        Thu, 20 Apr 2023 09:47:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681984043;
-        bh=gyILmvU2KKxp0Zf9YYHxuLE8FyhQPxnbzPdT5lOTpPU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m3M3YLJ/1X2XgHGJ0lF47se2C5zNkrXwK8/E5Rk1BDqO70ZFcBgOOGiV8eM7iodPG
-         cg7WwiDtxLe2pLd2aEBAsCduQko+pW3wFnUVy4PNAGuRfvPNgiZPqiLdMjgZIk1XcA
-         RzHhGk5qnKyJ2w0FQFm98v/L569Rx8klrCzbK7QA=
-Date:   Thu, 20 Apr 2023 11:47:20 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Allen Webb <allenwebb@google.com>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        mcgrof@kernel.org, christophe.leroy@csgroup.eu,
-        nick.alcock@oracle.com
-Subject: Re: [PATCH v10 05/11] modpost: Track module name for built-in modules
-Message-ID: <ZEEKKIPvDkbiG6-S@kroah.com>
-References: <20221219204619.2205248-1-allenwebb@google.com>
- <20230406190030.968972-1-allenwebb@google.com>
- <20230406190030.968972-6-allenwebb@google.com>
+        Thu, 20 Apr 2023 05:49:14 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A2676B6
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:47:53 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94f910ea993so46078866b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=futuring-girl-com.20221208.gappssmtp.com; s=20221208; t=1681984071; x=1684576071;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EFE0QM7mSwfIIi0n4ixG0nvgw+870vPhmGd/YMAgiNg=;
+        b=rh+4cQ02gYMRNIgC1lR9QsAyv/SgDTgHZGUqIKcQvtHspBSCCoxvYwMMuTV+RTg1Z3
+         lq0OFXnAXGb4tVZ+moBCuAzSUtxkKbE+QEBDUqLyULbVAJqIJCAxzT2YC8U9LbKxfFe0
+         dedlkwoH0h1uKPPwUChjqQyCaqoCJbH1TexskaT87M6M73ov0cbVWjNd4NAi7pmK9bw1
+         U1YVZ+0G3zT5mMbAOBj2ON+3F3AU2Pq70xvy/1eJdQF+0hr6lMDmHd21Q0cPBnLH0rqF
+         s2Km9WyYl33+yBXqI4+Q2e2gp0cVK858s2M6E9x7mDAGA5HxuvYWXrprAYvGlneK2ylc
+         MBOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681984071; x=1684576071;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EFE0QM7mSwfIIi0n4ixG0nvgw+870vPhmGd/YMAgiNg=;
+        b=MIZiKXz1+kqzboBIyqKovThbOSaztedXY1b+IkvxZYLqdD0Kogf6KvFyYx7gGv8kW2
+         6Zn4qiQ272wFxP7Rk11KL+Wss/ndBk3puQRq4S9FRO9SJht9xKX3QnKJ1FR2jJ6Q9gQ9
+         jNvAeeBzjXuh9w5PoGVj64o55ovgoa9ClQM0E5kAOwTazDwxCHa6NV7wuxOfDkocpHWI
+         6pMgTDfVoQT2jzg1XX8HlMyXADMQoZeBN8sJgsut9VWGJJiKTsD+uSzjoyOqxC9NbYUa
+         BskA2eGci/paqu7ZOCcpsDCFXNJmXdcOShaRRH5or+a6kY383boMG+/VYhK2A5/tJ2/6
+         LT0w==
+X-Gm-Message-State: AAQBX9cCRaSB/E/ZpdfntNuCHvPvCLfuCV4G50QZqcNa+dLJGN7Ic45d
+        4MS8E1c4Gt2hEufROIulBus/063ygce412C5UZ70+g==
+X-Google-Smtp-Source: AKy350YJvNpW5QSC7jTldr8UPGORonfYjgpgwfmUvDNR1qGS6/mJylOeB7ZbcRaO/Vws6EHNhgjJMWngKccFh2NZors=
+X-Received: by 2002:aa7:d686:0:b0:506:a44c:47e3 with SMTP id
+ d6-20020aa7d686000000b00506a44c47e3mr1057724edr.16.1681984071407; Thu, 20 Apr
+ 2023 02:47:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406190030.968972-6-allenwebb@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230419132048.193275637@linuxfoundation.org>
+In-Reply-To: <20230419132048.193275637@linuxfoundation.org>
+From:   ogasawara takeshi <takeshi.ogasawara@futuring-girl.com>
+Date:   Thu, 20 Apr 2023 18:47:40 +0900
+Message-ID: <CAKL4bV6ebwfU120c4DxQ230_kggtO6KxruAuTO07xMfVXTA71w@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/129] 6.1.25-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 02:00:24PM -0500, Allen Webb wrote:
-> Keep track of the module name when processing match table symbols.
+Hi Greg
 
-This describes _what_ you are doing here, but no explanation for _why_
-you want to do this.
+On Wed, Apr 19, 2023 at 10:22=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.25 release.
+> There are 129 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 21 Apr 2023 13:20:20 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.25-rc3.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-thanks,
+6.1.25-rc3 tested.
 
-greg k-h
+x86_64
+
+Build successfully completed.
+Boot successfully completed.
+No dmesg regressions.
+Video output normal.
+Sound output normal.
+
+Lenovo ThinkPad X1 Carbon Gen10(Intel i7-1260P, arch linux)
+
+Thanks
+
+Tested-by: Takeshi Ogasawara <takeshi.ogasawara@futuring-girl.com>
