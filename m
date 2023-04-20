@@ -2,193 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9B66E9543
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E6C6E9544
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbjDTNB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 09:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
+        id S230463AbjDTNBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 09:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbjDTNBY (ORCPT
+        with ESMTP id S230424AbjDTNBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:01:24 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3117A9B;
-        Thu, 20 Apr 2023 06:00:58 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54fb615ac3dso40498997b3.2;
-        Thu, 20 Apr 2023 06:00:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681995658; x=1684587658;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cOz2vJX6O8WYQA+86dOvET6FW/q2m4As7J1doBwYieQ=;
-        b=SFRtVWPbBXUIMuQ5P64CLBS539wch2e8cP9vsCUiPg+MkKM1b6+nHJeIRma1Q6nfuK
-         2Xkt9YhXhCLJJDY4Eoj+HOSRlAOi29R+7GNtTRQCr3rFvzIYFrhx+tN6A5ZJAoKEVNt/
-         dIkO8/SDhE2/lJXuibw7QLyOZr6gn3O/YEZWSYPJLs/Sr6VIcUskUVRD4N1SsU88+i3c
-         x/R6malWXYad5p55JNi/JMAm/sKSADuSZz9GhivHU1NIf/Ozptz6YpIjuysVjzULsfsj
-         cFZ1oD6bSFQON9lmQnOkarivg3aQZT7ejPxI8tF/48fBVWJKbcshoVRRuctm1+Pk23Ud
-         QIBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681995658; x=1684587658;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cOz2vJX6O8WYQA+86dOvET6FW/q2m4As7J1doBwYieQ=;
-        b=K7GJ+/ZbxVdD6BYEsEznRoGDvP4YwN94wcFwIA1FWRjnm0PBTD4hpwXZuZazCW8gsC
-         g/ymRW9AWfpaSD6J1sbUqD0JZ7vKYRZTv09krRxR5TxUHmunaFYOJ+zAB8wbDWmtV2j9
-         +xNWi9uROBaep8F10Imnlf93MoOK8YnAjNArs3xgt4gBuh204u+hfNqldjxOVPgI+eeV
-         7he0LF4ssXLrOIwKBpKuehgWdXvP2plAv+72f6lGzlMQTwtIZ+10TpBuGfXL1ONufoU9
-         77oK/+bOnxLyRQX+snvuwHtzBTmhOdpXFYE7lxzsf0nhx+CTifS2HenlmbJD8R0X6VZY
-         H41Q==
-X-Gm-Message-State: AAQBX9cmc7MimmaYOQbcPuJWxHpFNUNMAgDjIh6hbFauNUQPeG+f9imQ
-        MfMTRvcYFQrXchJTHZjxHcJFeJuotseAfibim2s=
-X-Google-Smtp-Source: AKy350ZkKzpMEQFQALpd3cUpdAhLhNufP4l2LeGvrYz2hiijurncKr1W1aLvwH6jsswb6m6sGIjecPmAmxB6QTrh0pk=
-X-Received: by 2002:a0d:e0c1:0:b0:54c:1405:2ce with SMTP id
- j184-20020a0de0c1000000b0054c140502cemr712660ywe.49.1681995657810; Thu, 20
- Apr 2023 06:00:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1681887790.git.zhoubinbin@loongson.cn> <3b9c4f05eaf14bc3b16aebec3ff84c8a2d52c4a5.1681887790.git.zhoubinbin@loongson.cn>
- <f9b62f48-5c8b-2674-313d-4552c61c4302@linaro.org>
-In-Reply-To: <f9b62f48-5c8b-2674-313d-4552c61c4302@linaro.org>
-From:   Binbin Zhou <zhoubb.aaron@gmail.com>
-Date:   Thu, 20 Apr 2023 21:00:42 +0800
-Message-ID: <CAMpQs4JjHvVOzQz-1Y-q9ut6tWUpakrHeozuwPg0dzoDcUFEGA@mail.gmail.com>
-Subject: Re: [PATCH V3 1/2] dt-bindings: interrupt-controller: Add Loongson EIOINTC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thu, 20 Apr 2023 09:01:49 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74458659C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:01:22 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B1CEA1EC06C2;
+        Thu, 20 Apr 2023 15:01:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1681995677;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QjWL/zhXWpEzlbncFEwoeOSesexCvyPfRE2spJ0wCgE=;
+        b=j6TvHP3b2qkVisBAfO5iruIsC0kUlasyxImTHLUykYHcXnIU7jwH8pgb3JKkwDWWtIjz1M
+        ABEvL43pn/d9jC3qLwFu87PGkHOYHLALR3Poy3i/M6hfjxx/yECYks+H2GbAPnCbWTMNgg
+        kJKsTa9UOBmY+mKQKPQmntvCqPM42HE=
+Date:   Thu, 20 Apr 2023 15:01:13 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: Re: [PATCH v5 11/15] x86/mtrr: construct a memory map with cache
+ modes
+Message-ID: <20230420130113.GCZEE3mfOTxcDn6e3/@fat_crate.local>
+References: <20230401063652.23522-1-jgross@suse.com>
+ <20230401063652.23522-12-jgross@suse.com>
+ <20230420121551.GMZEEs9wkUrvX05nQr@fat_crate.local>
+ <d164d84b-6773-36e3-1136-672072e9233d@suse.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d164d84b-6773-36e3-1136-672072e9233d@suse.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 4:09=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 19/04/2023 09:17, Binbin Zhou wrote:
-> > Add Loongson Extended I/O Interrupt controller binding with DT schema
-> > format using json-schema.
-> >
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > ---
-> >  .../loongson,eiointc.yaml                     | 74 +++++++++++++++++++
-> >  1 file changed, 74 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/interrupt-control=
-ler/loongson,eiointc.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/loo=
-ngson,eiointc.yaml b/Documentation/devicetree/bindings/interrupt-controller=
-/loongson,eiointc.yaml
-> > new file mode 100644
-> > index 000000000000..4ab4efb061e1
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,e=
-iointc.yaml
-> > @@ -0,0 +1,74 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/interrupt-controller/loongson,eioin=
-tc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Loongson Extended I/O Interrupt Controller
-> > +
-> > +maintainers:
-> > +  - Binbin Zhou <zhoubinbin@loongson.cn>
-> > +
-> > +description: |
-> > +  This interrupt controller is found on the Loongson-3 family chips an=
-d
-> > +  Loongson-2K series chips and is used to distribute interrupts direct=
-ly to
-> > +  individual cores without forwarding them through the HT's interrupt =
-line.
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/interrupt-controller.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - loongson,ls2k0500-eiointc
-> > +      - loongson,ls2k2000-eiointc
-> > +
-> > +  reg:
-> > +    items:
-> > +      - description: Interrupt enable registers
-> > +      - description: Interrupt status registers
-> > +      - description: Interrupt clear registers
-> > +      - description: Interrupt routing configuration registers
-> > +
-> > +  reg-names:
-> > +    items:
-> > +      - const: enable
-> > +      - const: status
-> > +      - const: clear
-> > +      - const: route
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  interrupt-controller: true
-> > +
-> > +  '#interrupt-cells':
-> > +    const: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - interrupt-controller
-> > +  - '#interrupt-cells'
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    eiointc: interrupt-controller@1fe11600 {
-> > +      compatible =3D "loongson,ls2k0500-eiointc";
-> > +      reg =3D <0x1fe11600 0x10>,
-> > +            <0x1fe11700 0x10>,
-> > +            <0x1fe11800 0x10>,
-> > +            <0x1fe114c0 0x4>;
->
-> Binding is OK, but are you sure you want to split the address space like
-> this? It looks like two address spaces (enable+clear+status should be
-> one). Are you sure this is correct?
->
-Hi Krzysztof:
+On Thu, Apr 20, 2023 at 02:30:09PM +0200, Juergen Gross wrote:
+> OTOH the additional compare to 0 has costs, too, and this cost is spent for
+> ALL calls
 
-These registers are all in the range of chip configuration registers,
-in the case of LS2K0500, which has a base address of 0x1fe10000.
-However, the individual register addresses are not contiguous with
-each other, and most are distributed across modules, so I feel that
-they should be listed in detail as they are used.
+I'll take the cost of a single
 
-Thanks.
-Binbin
+	cmpl    %edi, %edx
 
-> Best regards,
-> Krzysztof
->
->
+for a handful of entries any day of the week.
+
+> while the zero size call is a rather rare case.
+
+$ grep "memmove size" /tmp/mtrr.txt
+memmove size 0
+memmove size 0
+memmove size 0
+memmove size 0
+memmove size 0
+memmove size 0
+memmove size 0
+memmove size 0
+memmove size 0
+memmove size 0
+memmove size 0
+
+for - I admit a largely contrived map - but 5 entries only:
+
+Current map:
+0: start: 0x0000000000000000, end: 0x0000000000100000, type: 0x0
+1: start: 0x0000000100000000, end: 0x0000000820000000, type: 0x6
+2: start: 0x000050d70000c000, end: 0x000062a60000c000, type: 0x4
+3: start: 0x000062a60000c000, end: 0x0001d6d200001000, type: 0x0
+4: start: 0x0001d6d200001000, end: 0x0001dd8100001000, type: 0x6
+
+> Regarding "cache_map + idx + 1 is not valid": the standard clearly points
+> out that a call with size 0 is valid and won't copy anything
+
+That's not what I meant. Please read again what I said:
+
+"I wouldn't want it getting prefetched from %rsi in the hw when there's
+no reason for it".
+
+IOW, I don't want to put invalid values in hw registers if I can. Think
+hw mitigations and *very* hungry prefetchers.
+
+> > Current map:
+> > 0: start: 0x0000000000000000, end: 0x0000000000100000, type: 0x0
+> > 1: start: 0x0000000100000000, end: 0x0000000820000000, type: 0x6
+> > 2: start: 0x000002f10000c000, end: 0x000003bf0000c000, type: 0x2
+> > 3: start: 0x000003bf0000c000, end: 0x00019fc000001000, type: 0x0
+> > 4: start: 0x00019fc000001000, end: 0x0001df2d00001000, type: 0x2
+> 
+> The map would reflect hardware behavior. Type 0 wins in case of overlapping
+> MTRRs.
+
+Type 0 is MTRR_TYPE_UNCACHABLE, 1 is MTRR_TYPE_WRCOMB.
+
+"Uncacheable (UC)—Reads from, and writes to, UC memory are not cacheable. Reads from UC
+memory cannot be speculative. Write-combining to UC memory is not
+allowed."
+
+That last sentence.
+
+So if you have conflicting regions and one is WC but then something is
+expecting it to be UC and that something doesn't want for it to
+*especially* to be WC because it should not combine writes to it, then
+that clearly is a misconfiguration, I'd say.
+
+> Now this is another requirement, right? Today's MTRR code wouldn't scream
+> either.
+
+So are we fixing this right or only a little?
+
+> At least we don't correct such mistakes today. Do you think we should change
+> that?
+
+I'm thinking considering how often we've seen all those error messages
+from mtrr_state_warn(), we should at least warn when we encounter
+inconsistencies.
+
+This won't help with released BIOSes but it will help when they do new
+BIOS verification and see those messages. People do use Linux for that
+a lot and then they'll definitely look and address them.
+
+And this is a pretty good goal to have, IMO.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
