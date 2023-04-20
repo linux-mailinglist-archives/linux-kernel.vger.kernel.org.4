@@ -2,57 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66176E965F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 285D56E9667
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbjDTNyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 09:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
+        id S231705AbjDTN5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 09:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbjDTNyd (ORCPT
+        with ESMTP id S229958AbjDTN5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:54:33 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2B149DE
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:54:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1681998868;
-        bh=rwRmM182sXNTsr0ux7x6RIMVFw6JsvFJTo2rNUdgULw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TOS7Tusj4vsdteE3MVM3OI5Tph7UQUIi+f2A626dVVCWrpP7ZApXjQxn98mrw2QZk
-         Kf6ZEW6ZzkxReQm/DfpvEygqYdY0ArpEcLYzc4bwKEG5L/cZAS4g7ALgNbseZ44ASm
-         Y4MLNKq2Mrq6L6GeURg7QALudQPllE1jSGyTEeGUGpVoOXmv9c048mCHMgY8bcA/PN
-         GYMGsiYeEHSMTyzwxwUTiqr+hBKN47R/pXM40MB2xtNFdUZn4fc3x7wqREhRwnB/bz
-         kVsqSpdHaH1Y1+tRe7TcQNydQTV20Ll+DX6Agn+qJKmVj+mKrp4jAcTKPQk2irP89b
-         N4KXnE2oyp5Vg==
-Received: from [172.16.0.91] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Q2K04519Vzw2t;
-        Thu, 20 Apr 2023 09:54:28 -0400 (EDT)
-Message-ID: <7a0c1db1-103d-d518-ed96-1584a28fbf32@efficios.com>
-Date:   Thu, 20 Apr 2023 09:54:29 -0400
+        Thu, 20 Apr 2023 09:57:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5244BCD;
+        Thu, 20 Apr 2023 06:57:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2365649A3;
+        Thu, 20 Apr 2023 13:57:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56297C433A0;
+        Thu, 20 Apr 2023 13:57:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681999030;
+        bh=0zCwOIJjuwPEopLOkv2gjEtdTnJPz6ssKDGCCwQhU8g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FkX4a8xw4SGooMCjJhrqAQ1XxCcmjghTkpnhr3ZV5Q+0YtQfewfGUd2FI60cvGJ7l
+         JCz6IcjJuHVgfNZsWFaHYnDqTJvFwwt3y8lNkKk1Az/9gxQm0qtlL5lD3QAcZnGIWM
+         kkeL63q0KLPR+Af3fFs8pbv2araD+LvPTfArllNYUer6IMJauywB1cKF29vOzoVSLC
+         /sQVNPZ2cTjFO3jpRsi+Py7aSDtuCXi8ymhHXZtjBeE+6g2v9b90glyfvBiKxi7Cyu
+         Lw1ixTcTbfHgjPXUXAMjZhzYb75B6ROATeg52RJbt2igYPg51PYVCoVxcD6Cj4BJlf
+         PYKOQ7wO7LsgA==
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-552ae3e2cbeso41300677b3.13;
+        Thu, 20 Apr 2023 06:57:10 -0700 (PDT)
+X-Gm-Message-State: AAQBX9d3J1CfkxsWCjsa6F8dtYJZbrxf4AQCGBGcQxXEMlKhVnfxe9OV
+        u45mCP/YC7geY/uXGydnwEYl8tbGReaLSGspgw==
+X-Google-Smtp-Source: AKy350b0EqY4vhYLM3Yu6RfypWd2ClReF0KNDJmoDx8Ai5GbIHiIDuMWlydPYzKEm+zXXno3ro+KJWmUskeluYv56o4=
+X-Received: by 2002:a0d:d886:0:b0:54f:b874:116f with SMTP id
+ a128-20020a0dd886000000b0054fb874116fmr925830ywe.7.1681999029396; Thu, 20 Apr
+ 2023 06:57:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH v9 2/2] sched: Fix performance regression introduced
- by mm_cid
-Content-Language: en-US
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Olivier Dion <odion@efficios.com>,
-        michael.christie@oracle.com
-References: <20230419155012.63901-1-mathieu.desnoyers@efficios.com>
- <20230419155012.63901-2-mathieu.desnoyers@efficios.com>
- <20230420095610.GA153295@ziqianlu-desk2>
- <c01ddfc5-9410-14e1-55f7-c24f44447f8a@efficios.com>
- <20230420125048.GA154262@ziqianlu-desk2>
- <721f4b8b-c238-53b1-9085-a9dae6a961e1@efficios.com>
- <20230420133519.GA154479@ziqianlu-desk2>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230420133519.GA154479@ziqianlu-desk2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
+References: <20230319150141.67824-1-robh@kernel.org> <20230319150141.67824-2-robh@kernel.org>
+ <20230418175000.GLZD7YSNkIKk8ltGIw@fat_crate.local> <20230419184547.GA4013083-robh@kernel.org>
+ <20230419185535.GGZEA5J2ZVxsv5AlBM@fat_crate.local>
+In-Reply-To: <20230419185535.GGZEA5J2ZVxsv5AlBM@fat_crate.local>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 20 Apr 2023 08:56:58 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+ruP1cCvcVgG+DLcxZEVAPn2orCtvOrZ9gmEmBqX8jtw@mail.gmail.com>
+Message-ID: <CAL_Jsq+ruP1cCvcVgG+DLcxZEVAPn2orCtvOrZ9gmEmBqX8jtw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] edac: cpc925: Use of_get_cpu_hwid() to read CPU node 'reg'
+To:     Borislav Petkov <bp@alien8.de>, Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,96 +68,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-20 09:35, Aaron Lu wrote:
-[...]
->>>>
->>>> Then we clearly have another member of mm_struct on the same cache line as
->>>> pcpu_cid which is bouncing all over the place and causing false-sharing. Any
->>>> idea which field(s) are causing this ?
->>>
->>> That's my first reaction too but as I said in an earlier reply:
->>> https://lore.kernel.org/lkml/20230419080606.GA4247@ziqianlu-desk2/
->>> I've tried to place pcpu_cid into a dedicate cacheline with no other
->>> fields sharing a cacheline with it in mm_struct but it didn't help...
->>
->> I see two possible culprits there:
->>
->> 1) The mm_struct pcpu_cid field is suffering from false-sharing. I would be
->>     interested to look at your attempt to move it to a separate cache line to
->>     try to figure out what is going on.
-> 
-> Brain damaged...my mistake, I only made sure its following fields not
-> share the same cacheline but forgot to exclude its preceding fields and
-> turned out it's one(some?) of the preceeding fields that caused false
-> sharing. When I did:
-> 
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 5eab61156f0e..a6f9d815991c 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -606,6 +606,7 @@ struct mm_struct {
->                   */
->                  atomic_t mm_count;
->   #ifdef CONFIG_SCHED_MM_CID
-> +               CACHELINE_PADDING(_pad1_);
->                  /**
->                   * @pcpu_cid: Per-cpu current cid.
->                   *
-> mm_cid_get() dropped to 0.0x% when running hackbench :-)
++Arnd, Michael E
 
-Now we are talking! :)
+On Wed, Apr 19, 2023 at 1:55=E2=80=AFPM Borislav Petkov <bp@alien8.de> wrot=
+e:
+>
+> On Wed, Apr 19, 2023 at 01:45:47PM -0500, Rob Herring wrote:
+> > I'd rather not export of_get_cpu_hwid() which is otherwise only used in
+> > arch code. I think I'll rewrite this in terms of for_each_possible_cpu(=
+)
+> > and topology_core_id(). Though that would make a UP build not enable
+> > core 1, but that seems undesirable anyways.
+>
+> TBH I'm not sure this driver is even worth any effort besides simply
+> deleting it. I see one commit which reads like someone was really using
+> it:
+>
+> ce395088832b ("cpc925_edac: Support single-processor configurations")
+>
+> but that one is from 2011 and since then it has received only API
+> modifications/cleanups.
+>
+> But if I delete it, someone might crawl out of the woodwork and say it
+> is still used...
 
-> 
-> sched_mm_cid_migrate_to() is about 4% with most cycles spent on
-> accessing mm->mm_users:
-> 
->         │     dst_cid = READ_ONCE(dst_pcpu_cid->cid);
->    0.03 │       mov     0x8(%r12),%r15d
->         │     if (!mm_cid_is_unset(dst_cid) &&
->    0.07 │       cmp     $0xffffffff,%r15d
->         │     ↓ je      87
->         │     arch_atomic_read():
->         │     {
->         │     /*
->         │     * Note for KASAN: we deliberately don't use READ_ONCE_NOCHECK() here,
->         │     * it's non-inlined function that increases binary size and stack usage.
->         │     */
->         │     return __READ_ONCE((v)->counter);
->   76.13 │       mov     0x54(%r13),%eax
->         │     sched_mm_cid_migrate_to():
->         │       cmp     %eax,0x410(%rdx)
->   21.71 │     ↓ jle     1d8
->         │     atomic_read(&mm->mm_users) >= t->nr_cpus_allowed)
-> 
-> With this info, it should be mm_users that caused false sharing for
-> pcpu_cid previously. Looks like mm_users is bouncing.
+Yeah, I came to that conclusion as well. It's only used by "maple"
+(aka PPC970FX Evaluation Board) as the kernel has to instantiate this
+device (rather than DT). Seems like a 20 year old eval board is
+unlikely to have any users, so perhaps the whole platform could be
+removed.
 
-I suspect that the culprit here is mm_count rather than mm_users. 
-mm_users just happens to share the same cache line as mm_count.
-
-mm_count is incremented/decremented with mmgrab()/mmdrop() during
-context switch.
-
-This is likely causing other issues, for instance, the
-membarrier_state field is AFAIR read-mostly, used for 
-membarrier_mm_sync_core_before_usermode() to issue core
-sync before every return to usermode if needed.
-
-Other things like mm_struct pgd pointer appear to be likely
-read-mostly variables.
-
-I suspect it's mm_count which should be moved to its own cache line
-to eliminate false-sharing with all the other read-mostly fields
-of mm_struct.
-
-Thoughts ?
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Rob
