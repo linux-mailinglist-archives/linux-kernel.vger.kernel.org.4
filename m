@@ -2,244 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B3F6E9040
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788D06E9041
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234757AbjDTKcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
+        id S234663AbjDTKcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234229AbjDTKbo (ORCPT
+        with ESMTP id S234617AbjDTKcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:31:44 -0400
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C06659D
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:29:21 -0700 (PDT)
-Received: by mail-ua1-x932.google.com with SMTP id a1e0cc1a2514c-771dc034dfaso120719241.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:29:21 -0700 (PDT)
+        Thu, 20 Apr 2023 06:32:03 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0365B95
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:29:36 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id xi5so5081943ejb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:29:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681986559; x=1684578559;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+yoFhtYReLRyKxkqbyv29o5oc/zCEFAU+pzBC0jHw8c=;
-        b=sogqy1KdR0kOC1RtT2z+6Z9jSXFdwwlaoSCRR3R452OGSRwFomkHDfgqQVNb8TUJ0l
-         i9wshDSta8TI2/M0Up9nKSDr1kMDjD5UOAt17pe+yhqi0nSSQXZhnsREBj06fgML9xNU
-         r6Z9mnCSv888TUjdbzsv4qcARCMkkLHj7ibLwdKiICgag5H+n2mglzT+hu/Hb+FqcwT0
-         O6nixEvxVh3EYsecSE7le3gEO2Rw2dw7yQbrVpfh60wLkmd2/RPvjs9r/8W2EEEBfQwS
-         Se3irOZO7fAVoq5xind1Ft5EclZZdwo3eAk2MjIEITm2TjXKmjy/fVYnlU7BsKhsBGZU
-         48pg==
+        d=gmail.com; s=20221208; t=1681986574; x=1684578574;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Id43mOP6UK9z4gfdr/ZZwWU9QENxw9x0rDYGZW5vVuU=;
+        b=pbekppmVxmjFbdkMB81jqn2ywgoC4t2mJ0TW8mezUFQpZEOEQU8mR+2I0axBcQ77gX
+         KblBXWBaSVX4CDVvFVv0abtn/NnXbluBWebIx6occ9gE/ittrMwM/LJg75PisRt+bXNa
+         151qo+latkFkQ4FZkHekMP04c1iizem+Sd7MZZ9ayztfECmxowiUH9fljAGqioCArAA2
+         JtXN6vYm3M1s8K3Jr3NzjXntC3gaSGPNjCALY4aFATsmTwwYPnImXL1DQhnNc2sL9zFY
+         rcAkfNMJPWjSSRAe2S033wWlFH9o2sHnBL+j8h77cOyP3/AXq7hFFUn2L9K++FK/TABS
+         cJyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681986559; x=1684578559;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+yoFhtYReLRyKxkqbyv29o5oc/zCEFAU+pzBC0jHw8c=;
-        b=JPJNsY8MB5ja8/aUe1Lr5ey0v+vGCKPTVkQ0beJ3v+cnxQKLrb7W0E/84OcvQbPSTg
-         iVZfY8g9X00DGd/lsATG7y0co3Bo1ygEP6CBTVwd8WdqKi74xjqfcN08VvjTOjJ0CkNG
-         mKx5OUKbBZ7EruAWOHuK8Vkwm5O8CLA4zeShZIO/aL1uCxxUxTtEBgEQGke6oZvhziBA
-         WSwa4mL/4UByMfYj7l3u5c4TKftq0effuFVivgpDqlNEoU6ZglAOAvZAnRJAT8yqlbkN
-         1p8kAD9s9c13Xtk+YhBEs3eVudtuYYaCffZKXRLevqsUsH5hrKQ5DY6XqZK3nkLaYVDY
-         HVAQ==
-X-Gm-Message-State: AAQBX9c6XgiaCXw1aueyQKKw0ftaxLwFss+6smEGGLS570Bb9SW3Kdo/
-        FGGLH1hO1PGIgYoeDNn0Hznn1rpiwfwtyVHySorAFnv3DMUFLBWgzSg=
-X-Google-Smtp-Source: AKy350aH2Je7qoipZNoyKO5+fwXqf6r5UwLhNebUF5NinNiDbUoCeDAPQWN0NhEL1cxyo6DqNzLeQ4KfAREKbDcAAHQ=
-X-Received: by 2002:a67:fa0c:0:b0:42e:cfbe:c19e with SMTP id
- i12-20020a67fa0c000000b0042ecfbec19emr626839vsq.27.1681986559227; Thu, 20 Apr
- 2023 03:29:19 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681986574; x=1684578574;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Id43mOP6UK9z4gfdr/ZZwWU9QENxw9x0rDYGZW5vVuU=;
+        b=Vjh9XQmvcc5RCtL96WOiicqZHFs3Gz6nlVt3neYcVB57EdYwA3+r8sprJE3rHKoNOn
+         9hvONU/tfyY33UpQNDRb/NlAXO9nUcFFfdxME6Di55m7d8uBLeizbTNkBHF8WrH4/qoz
+         KQdJeI6NS1Pc8IsYKoBEkPLV0q1G8ZlMkgDYh/6SKbSG92OoDkYWuC8ig783Og5BBQkL
+         Jb7jN5oxjo1RFFtOOv4E00Jul+4Er8rWIAIbdKagwaLjQfbSBnFudHiLmdxErMRDPyOf
+         ohMcPHGrjHKWlEXV4J+rUQ8Mg3jNgITIIGBZ/Y6RrjGRpr4CTK0HSNSDE3ZB6GsilLse
+         THKA==
+X-Gm-Message-State: AAQBX9eevra7uAHLeh/hBlX/EIDXobK1/jYlRINcKFclxvuL1sPNj5WJ
+        c+sKbFseSEhFUcYd9o+XxaPDN01L8HRnNjPt
+X-Google-Smtp-Source: AKy350ZdM4uwy/5s0/ZvWNEIBCgDs+vY1VoMGcDKQFKRfp0R+ssQ3s0Q+7tEv3dDIIb3e0r2zY4aKA==
+X-Received: by 2002:a17:907:7786:b0:921:da99:f39c with SMTP id ky6-20020a170907778600b00921da99f39cmr1253002ejc.12.1681986573364;
+        Thu, 20 Apr 2023 03:29:33 -0700 (PDT)
+Received: from [127.0.1.1] ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id d21-20020a17090694d500b0094efe88a037sm584512ejy.9.2023.04.20.03.29.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 03:29:33 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+Subject: [PATCH RFC 0/2] regulator: dynamic voltage monitoring support
+Date:   Thu, 20 Apr 2023 12:29:19 +0200
+Message-Id: <20230419-dynamic-vmon-v1-0-f48b7438e891@skidata.com>
 MIME-Version: 1.0
-References: <20230419132034.475843587@linuxfoundation.org>
-In-Reply-To: <20230419132034.475843587@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 20 Apr 2023 15:59:08 +0530
-Message-ID: <CA+G9fYuy8Juuz_6bsoB+Dn=aSbwgVqAxLNkw6Q4CkF5CQ7t_2Q@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/84] 5.15.108-rc4 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAP8TQWQC/x2NQQrCQAwAv1JyNrCthVavgg/wKj2ku9HmsKkkU
+ pTSv7v1OAzDrOBswg7nagXjRVxmLVAfKogT6ZNRUmFoQnMMbX3C9FXKEnHJsyKHPhEFih0lKMl
+ IzjgaaZz2KJO/2XbxMn7I5/+5w+16gWHbfsDbU6l8AAAA
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, support.opensource@diasemi.com
+Cc:     DLG-Adam.Ward.opensource@dm.renesas.com,
+        linux-kernel@vger.kernel.org,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Benjamin Bara <benjamin.bara@skidata.com>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Apr 2023 at 18:52, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.108 release.
-> There are 84 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 21 Apr 2023 13:20:15 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.108-rc4.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi!
 
+This series targets the "automatic" state handling of voltage monitors
+when the state of the monitored regulator is changed. This is e.g.
+necessary for the da9063, which reaches an invalid state (!PWR_OK) if
+the voltage monitor is not disabled before the regulator is disabled.
+The problem could also be tackled inside of the driver's "state change
+ops" (.enable(), .disable(), ...) but I thought it might be a good idea
+to have a "common framework" independent of the driver's implementation.
+Not sure if a good idea, therefore RFC.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+For now, 1/2 implements so-called "monitoring constraints", but for now
+only for under- and overvoltage monitoring. 
+2/2 depends on [1], which implements (static) voltage monitoring for the
+da9063. It shows a basic example how to use these constraints.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+What's not targeted (for now) are possibly required delay times between
+monitor state change and regulator state change. For the da9063, these
+are not required but I can imagine there are other regulators where they
+might be needed?
 
-## Build
-* kernel: 5.15.108-rc4
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: df26c2ac7edab467aaa49544362100c86ab2759d
-* git describe: v5.15.105-273-gdf26c2ac7eda
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.105-273-gdf26c2ac7eda
+Possible next step:
+"regulators-{uv,ov}-{warn,error,protection}-enable" dt property on chip
+level, with either 1 or 0, to en-/disable the dynamic voltage monitoring
+for every regulator of the chip. This would require the regulator's
+set_{over,under}_voltage_protection() to work with limit = 1.
 
-## Test Regressions (compared to v5.15.105-194-g415a9d81c640)
+Thanks & best regards,
+Benjamin
 
-## Metric Regressions (compared to v5.15.105-194-g415a9d81c640)
+[1] https://lore.kernel.org/all/20230403-da9063-disable-unused-v3-0-cc4dc698864c@skidata.com/
 
-## Test Fixes (compared to v5.15.105-194-g415a9d81c640)
+---
+Benjamin Bara (2):
+      regulator: introduce regulator monitoring constraints
+      regulator: da9063: disable monitoring while regulator is off
 
-## Metric Fixes (compared to v5.15.105-194-g415a9d81c640)
+ drivers/regulator/core.c             | 155 +++++++++++++++++++++++++++++++----
+ drivers/regulator/da9063-regulator.c |  17 +++-
+ include/linux/regulator/machine.h    |  34 ++++++++
+ 3 files changed, 190 insertions(+), 16 deletions(-)
+---
+base-commit: 6a8f57ae2eb07ab39a6f0ccad60c760743051026
+change-id: 20230419-dynamic-vmon-e08daa0ac7ad
 
-## Test result summary
-total: 132220, pass: 105848, fail: 4053, skip: 22081, xfail: 238
+Best regards,
+-- 
+Benjamin Bara <benjamin.bara@skidata.com>
 
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 115 total, 114 passed, 1 failed
-* arm64: 43 total, 41 passed, 2 failed
-* i386: 33 total, 30 passed, 3 failed
-* mips: 27 total, 26 passed, 1 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 27 total, 26 passed, 1 failed
-* riscv: 11 total, 11 passed, 0 failed
-* s390: 12 total, 11 passed, 1 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 36 total, 34 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-n[
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
