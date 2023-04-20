@@ -2,275 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1636E9C5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1BF6E9C60
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbjDTTRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 15:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        id S231963AbjDTTSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 15:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjDTTRQ (ORCPT
+        with ESMTP id S229468AbjDTTSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 15:17:16 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2052.outbound.protection.outlook.com [40.107.94.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27674103;
-        Thu, 20 Apr 2023 12:17:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bmi35y5xQi2OwHvHrvJ7IjegvoS2IgyC8xJayxTHYyAFTIFgNKNX2Z0rWjo3itcq2uC+54VY2k/UlV3UptaMVmEWCvpX3sIFZXwahyGIcM1JGi2DnF5isg4wbkX0qTA7WuLYJBFHa9q2RAXzXjzOy58GJ5WTMq7eMxstOuhh6Io1JFq7GC83kf392Jl9zTdS6OEbpB+wej831nRLK7TsB8g2D7YhmwY/QHszH4M3W3D6oRjU/D1MzEfs8wLCkNwvfPOwTYS9i51mN10Up5yXn4HRitkvaTdLh+PY0JiQ0nPte7zutRBC/Pn1K2BMzmuhWeNTlJA3oo/qUp7eLKM0Eg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7Q2Yb/b9wn8pnrZAmTupTzd+Bi0gUhNvhdkRj5poiNQ=;
- b=YlkoavgWvZfQ0YeaBZ19wREDd5bQMnFAIhG2V/K2vLq0SF5bFPKLYn5y6mH1rIp3U54Sdt4OHYOuRTVE9XQkJEp17Y/uhQKgU/LW+U8wo36UwfTFs4CDQxZ4bFOf/iOlLL9emYijbR7cQNw3xKG2yM9WbIfZamVGjh2hCYSpd6dg9pG+g4bLaVBiylmWTQu7HTnkkFO1NDBq4Rc3Ryc4G0NoHwR9VBL9FRAiyUJUKFblMlMTYxdDnW//JS3E7rLIZceAdTjJimPs5UrjXyMf7UvAjK8BcNt2Q5uNt5y+/qghmtHvWNkWAnRsTRIDDbhsyyrhTYxDWStOdbmnftaVtQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7Q2Yb/b9wn8pnrZAmTupTzd+Bi0gUhNvhdkRj5poiNQ=;
- b=qIt8gckrADSejnnd/T5HyXWnQyHMJMOgI7/m+RBtAP+1Z46SiSlnyZlmEqHErTG7d8PBK9e4b6gBlNLTjavPnFAyTU5D3vChG/tw3VK6fKXGDk9kyhgFho+br684ViyzspYl3uuu5Sdm4qOCdS15TkTWaGfD3XOK4Lg5tcUdod8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by LV2PR12MB5919.namprd12.prod.outlook.com (2603:10b6:408:173::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.20; Thu, 20 Apr
- 2023 19:17:10 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::ea32:baf8:cc85:9648]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::ea32:baf8:cc85:9648%7]) with mapi id 15.20.6319.022; Thu, 20 Apr 2023
- 19:17:09 +0000
-Message-ID: <2a296473-3abb-a1d0-93c6-42b074ca9f7f@amd.com>
-Date:   Thu, 20 Apr 2023 14:17:06 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 02/10] crypto: ccp: Add support for displaying PSP
- firmware versions
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        John Allen <john.allen@amd.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-References: <20230420163140.14940-1-mario.limonciello@amd.com>
- <20230420163140.14940-3-mario.limonciello@amd.com>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20230420163140.14940-3-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA1P222CA0121.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:3c5::9) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+        Thu, 20 Apr 2023 15:18:22 -0400
+Received: from mx4.veeam.com (mx4.veeam.com [104.41.138.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280622717;
+        Thu, 20 Apr 2023 12:18:20 -0700 (PDT)
+Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx4.veeam.com (Postfix) with ESMTPS id D6D3D5EC2C;
+        Thu, 20 Apr 2023 22:18:17 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
+        s=mx4-2022; t=1682018298;
+        bh=vsr/Ac17+CKt1Rl6NRF3sVIwqaOJqgYSiqwTXnsdphI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
+        b=KHMUcCZPq5iG48/N9iQw1JOODCqqqu8sWQJ1VwWH1mTWSXRYUsDz+iHmQVY/7kWeK
+         eiQTGcC9rk0wHByjmQmgVXZVVUnlwlBrPQFJZKoqq9/+GILi3lHpd0GC1DsoGyWFpP
+         IXDgZOwan8Q+1tpTpV7T7TQ4/XbphuEjpSrLicR7aNPRxd527/CSG3vyv36DdPd5mp
+         kpR9sk2z/w7FGSAQ/hJu31/0NgGytQQlAPnvJ8sSaondl7jOoq4pdtzYTvOJTkdqP2
+         O3a7hPVC2jGtSHoDqF43RPokohbcgzAf+Mvy0OA8te7XNcxbIxqIvxl/R6pQ2jhn+g
+         DJNaW4XLo8Vnw==
+Received: from [172.24.10.107] (172.24.10.107) by prgmbx01.amust.local
+ (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 20 Apr
+ 2023 21:18:10 +0200
+Content-Type: multipart/mixed;
+        boundary="------------HHEWogh5LchE01j4khkGxhzV"
+Message-ID: <b6516901-b7ba-cde9-644c-84dfdef012ad@veeam.com>
+Date:   Thu, 20 Apr 2023 21:17:58 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|LV2PR12MB5919:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3d7e86e8-1b8e-4196-2a49-08db41d3d677
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V3vXEjPftjTQz0SujCOho6onQ9hA42pnc36iZ2yn2hnh2hfp4hrxsFtNtR88RqoQvqyLvuTFm+NvyLzaJz9g7p36CWH12wUmXhbVrXE0t9qaLUIVJo6TU2NIEVJ6Y/FwO7L5WhfLTK/VGSZYKBUVYkrOL4/60YjBQoVruMX8SxXnO4Ln9nTypx/5te3jf3uc4CJaEnJuk/17Glx2VxV0+LLXt7Ughb1TkXYaww17JwnNDT0U3Jmp3uGYZAPQvmi4DhxU7ybTVbwsnLT1ETFPDbZLP7KpMZEax3H5UgOCxGyOKtb1/6xwK46DLH0NdAjk/CSR+qqrRwU/QaBEEMAA6HIJmb2/AASF7ya8wNbw5A2vYv6+JJ9vduHUIzTGwpzPlJetIgUDM9tPfxyFdacILIMPXmyuIGEaTIN+MBr0aNJ9LkQI9mfysWR4qOh7ZPjGFqTCAfGuKeJ/GqEd9e6Ah4hh894eV5XSotRkt3aMXrcRe/0v43MFG25GA4x214jx2Liex6AF5esz26HUP5EMw4JQvZM9QVTdLl0BB1WFFsILsrvawjjsPFJgO9Hur7/06ZjjI53Mtlr/3MU67TDJbmMvd2KQrJFvqnNoW9U2aNPj4eiMDUVrb5exrihh18OwEFYdSeQWqm4VOcjd933nQQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(366004)(346002)(376002)(396003)(451199021)(38100700002)(8936002)(8676002)(41300700001)(5660300002)(4326008)(31686004)(6636002)(316002)(66476007)(66556008)(110136005)(83380400001)(66946007)(2616005)(2906002)(36756003)(186003)(6486002)(6666004)(478600001)(26005)(86362001)(53546011)(31696002)(6506007)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VVdKRGRzaFNyZUcreXpFTVIydk1QQ1lJcXczK3J3Q1BVU3NBYXJEdi9lVnh4?=
- =?utf-8?B?MFltMWpxaVM2Wk45KzA4Yi9Ud1Z1bStjSDZLVWpURHFnMXJqRkVDQzI5blpF?=
- =?utf-8?B?TTdiOFp4ZlFoUUtXOGJmY0VVV3JWdVpaT214WUVSUDlHMVRzbXFEZUdNVmZJ?=
- =?utf-8?B?UytyMWlPcTBHckFDMzhVcWsrTDFRRGRYNXJ2NTJxeEJsRXMzUERjdmtzeCsw?=
- =?utf-8?B?SVFFc3VjQTg1Zzh2QU1Vc3RvS3NDVVFyNWpMR0dLUmlxNjlPT0o0NTlmdGxP?=
- =?utf-8?B?WXcxUXA5YzBvOWEzY0pPbnh4TDBLWVRDU2UvSDdISWloRTVhUXhHeVZYdkZP?=
- =?utf-8?B?b1hOSFlUS2Fodzd2THVBYjVzRVA4djJCRUJPL2pQWlhtQ3JZQnR6dFB4VFJq?=
- =?utf-8?B?dlNFbnZidnJhM0RaRWxmb1E1MzM1TEw0c205Y1pBZ0RiaUFBMDI2ald2STM2?=
- =?utf-8?B?TTZ0WUVyQnJVc3pzRDVoc3FqSERKMzVBY2poZk5OUmxpeXo4dVVpR1RyYlFB?=
- =?utf-8?B?bTdjeGQzRjdYSGhNWDdjcXE2YnRzbmtRdTB5aDVGSGlRdTZOODUzblVrMVVx?=
- =?utf-8?B?cTA2RzNhZ1lVa2R5alc4OE9zVmFWbXYwNDVzV1NLcEhERW5odzhQZGxJWnFU?=
- =?utf-8?B?c0M1cnhwWFB3MTNER09sVEMrNjNKSWxreUI3QmNoMk80WC9keERySHhwZkR4?=
- =?utf-8?B?R0FIS0lrMndHbmxPclM2ZlRQeVVHTnhLeHNxVjlOenFwTDA4UkFoRHVLYXQz?=
- =?utf-8?B?Y0pKUU9XR1lvYmtyV3NpdFJTcnpTNHQ2QlU4MDduOGhvWEtWd2gwdk96c2Ev?=
- =?utf-8?B?TXFtdWVWTEF2VG40V3VRS0NLQ0FGd2p5S2VKTEUyN0lMZFpwSjd6bWNSV3Fy?=
- =?utf-8?B?aFRlaHMwQm1JcGxmK3JXdGZ4cmpTLy80Z2dXQWp1RWpndGc4dHpaN0krKzZI?=
- =?utf-8?B?b0x2MmpSZFZaWmpUeUMvWUFyemErcVMyQ3RoUDk2Q2g0eUhmaTFjdHpGR0RG?=
- =?utf-8?B?cnhWWnMzMUhyb29HdlFYRVI0K1RsWkRzdWZrVVFrYkdYRms4VDg2WkduZy9J?=
- =?utf-8?B?Z3NsTWQ4Vitidkt0K2dlT2M0ZCsvaGN1ODJWdVBvTWJ2OUJMcDBNN2pQRUZ5?=
- =?utf-8?B?ZVpkdk9XMUJ1MkZZK3o3YTN2MEVVWVJwSXNYeVpJK3BPQThWeTV4Yi9pRnRN?=
- =?utf-8?B?SzNyT3UvVVBvYzRXQkdPRkdpMTRWZkJPc0lJL3EyTC94V1JIRitWUzZUNTRj?=
- =?utf-8?B?Q2Y3M05OK2syNEVXNE9QYzBvdllVUE1sa09kN29Kenhock02MkErdzh5SkEx?=
- =?utf-8?B?aVB2eVQ1VkdVQ1c2ZUNpeG1JQVlyZGkySXh6aVAzU24vU0UzN0xzUWdYVmRu?=
- =?utf-8?B?VVp1blp4Z2JYQVU5Z1Boc2IrUjhsZWVJcFI2VEt4VlNBcEs3SFBpdE5MVXEx?=
- =?utf-8?B?ZUM2ZjdIU0VUa0FWQmtES3BOMUdHc004NWJEamEreGpOVjlHczhSZTBzNmkw?=
- =?utf-8?B?eWc0UFR3V0YzWFdpU2ZsQ3RDaE5QTjJ6dVp2Mk9EaDl2R2Z1SWZYUTFhTzNt?=
- =?utf-8?B?WkRNc1JTc2lyVit4Uk4rbjRqV1pwNm8wNTFhcUVyaC95WkZIQlk2Z2FnUHVB?=
- =?utf-8?B?anBxMTczYldCT0NzK3pucmFMNzJnV1N6NndFWERobFRpeVMyMitDSGIxMW1N?=
- =?utf-8?B?Z0JYaTF2Y2lnbGJCKzIxL2RqRXVkY3dQRVZpVE9QSVE1THFlb04yS1NMcnJ6?=
- =?utf-8?B?c3FFMkFQUENNQlRQeEludXNJeGZmYVNMUDYxQmN4UkpzUTlkM0VyT0QxN1Jr?=
- =?utf-8?B?MDYxUFczN0N4dzNORUFOUHVIdHBFSERra3BCODF5clNxYlViRTZ4TE5MdE54?=
- =?utf-8?B?M21JWWt6RzdrcFpOeSsvV1BJZC9LQm9zT1Npd1ZDcVJrNUJLV2dQeVgwOFk3?=
- =?utf-8?B?UlJwYjM1S1REbzROSWpyb0tCRE1FVW9PcUdiT3pxV3lqazBkcXpmU0lRSU5u?=
- =?utf-8?B?d3VZYmw3NldaSTNDLzZHRWg4UjJSelhaUDlwREhPVzBWbUQ3U3VBUEhBNnB4?=
- =?utf-8?B?MXZmdzZlQkZYYyszV2x3bHR6UENHam5VODZraDArUzR6cEpmR2YwZVBQQ2Ja?=
- =?utf-8?Q?9xEAYuYuyBshq7j9iWZ2DoBNl?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d7e86e8-1b8e-4196-2a49-08db41d3d677
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 19:17:09.7334
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vQNkkMY7/vm6lLhMvSxIGHDUsjQqRXOD7eQjl3hCTKSvB/roEDNRGaB9TvACOAbn6ljmsHan6JzNjVSi3yKqAg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5919
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 03/11] documentation: Block Devices Snapshots Module
+Content-Language: en-US
+To:     Donald Buczek <buczek@molgen.mpg.de>, <axboe@kernel.dk>,
+        <hch@infradead.org>, <corbet@lwn.net>, <snitzer@kernel.org>
+CC:     <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
+        <willy@infradead.org>, <kch@nvidia.com>,
+        <martin.petersen@oracle.com>, <vkoul@kernel.org>,
+        <ming.lei@redhat.com>, <gregkh@linuxfoundation.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+References: <20230404140835.25166-1-sergei.shtepa@veeam.com>
+ <20230404140835.25166-4-sergei.shtepa@veeam.com>
+ <cb0cc2f1-48cb-8b15-35af-33a31ccc922c@molgen.mpg.de>
+ <86068780-bab3-2fc2-3f6f-1868be119b38@veeam.com>
+ <a1854604-cec1-abd5-1d49-6cf6a19ee7a1@veeam.com>
+ <1dc227d0-9528-9b77-63ff-b49b0579caa1@molgen.mpg.de>
+ <c05fd3e7-5610-4f63-9012-df1b808d9536@veeam.com>
+ <955ede49-bb69-2ab2-d256-a329fe1b728c@molgen.mpg.de>
+ <3b589d44-3fbd-1f4f-8efb-9b334c26a20f@molgen.mpg.de>
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+In-Reply-To: <3b589d44-3fbd-1f4f-8efb-9b334c26a20f@molgen.mpg.de>
+X-Originating-IP: [172.24.10.107]
+X-ClientProxiedBy: atlmbx02.amust.local (172.18.32.172) To
+ prgmbx01.amust.local (172.24.128.102)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2924031554677167
+X-Veeam-MMEX: True
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/20/23 11:31, Mario Limonciello wrote:
-> As it's not always obvious what PSP bootloader or TEE version are
-> present in OEM systems, add the ability to get this information from
-> sysfs for supported platforms.
+--------------HHEWogh5LchE01j4khkGxhzV
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+
+
+
+On 4/20/23 16:44, Donald Buczek wrote:
+> Subject:
+> Re: [PATCH v3 03/11] documentation: Block Devices Snapshots Module
+> From:
+> Donald Buczek <buczek@molgen.mpg.de>
+> Date:
+> 4/20/23, 16:44
 > 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->   Documentation/ABI/testing/sysfs-driver-ccp | 18 +++++++
->   drivers/crypto/ccp/sp-dev.h                |  2 +
->   drivers/crypto/ccp/sp-pci.c                | 58 ++++++++++++++++++++++
->   3 files changed, 78 insertions(+)
+> To:
+> Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk, hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
+> CC:
+> viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org, kch@nvidia.com, martin.petersen@oracle.com, vkoul@kernel.org, ming.lei@redhat.com, gregkh@linuxfoundation.org, linux-block@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-ccp b/Documentation/ABI/testing/sysfs-driver-ccp
-> index 7aded9b75553..ee6b787eee7a 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-ccp
-> +++ b/Documentation/ABI/testing/sysfs-driver-ccp
-> @@ -85,3 +85,21 @@ Description:
->   		Possible values:
->   		0: Not enforced
->   		1: Enforced
-> +
-> +What:		/sys/bus/pci/devices/<BDF>/bootloader_version
-> +Date:		June 2023
-> +KernelVersion:	6.4
-> +Contact:	mario.limonciello@amd.com
-> +Description:
-> +		The /sys/bus/pci/devices/<BDF>/bootloader_version
-> +		file reports the firmware version of the AMD AGESA
-> +		bootloader.
-> +
-> +What:		/sys/bus/pci/devices/<BDF>/tee_version
-> +Date:		June 2023
-> +KernelVersion:	6.4
-> +Contact:	mario.limonciello@amd.com
-> +Description:
-> +		The /sys/bus/pci/devices/<BDF>/tee_version
-> +		file reports the firmware version of the AMD Trusted
-> +		Execution Environment (TEE).
-> diff --git a/drivers/crypto/ccp/sp-dev.h b/drivers/crypto/ccp/sp-dev.h
-> index 1253a0217985..76c32ee6bd65 100644
-> --- a/drivers/crypto/ccp/sp-dev.h
-> +++ b/drivers/crypto/ccp/sp-dev.h
-> @@ -51,6 +51,7 @@ struct tee_vdata {
->   	const unsigned int cmdbuff_addr_hi_reg;
->   	const unsigned int ring_wptr_reg;
->   	const unsigned int ring_rptr_reg;
-> +	const unsigned int info_reg;
->   };
->   
->   struct platform_access_vdata {
-> @@ -69,6 +70,7 @@ struct psp_vdata {
->   	const unsigned int feature_reg;
->   	const unsigned int inten_reg;
->   	const unsigned int intsts_reg;
-> +	const unsigned int bootloader_info_reg;
->   };
->   
->   /* Structure to hold SP device data */
-> diff --git a/drivers/crypto/ccp/sp-pci.c b/drivers/crypto/ccp/sp-pci.c
-> index 85e3dc8853e2..4d729aa1b260 100644
-> --- a/drivers/crypto/ccp/sp-pci.c
-> +++ b/drivers/crypto/ccp/sp-pci.c
-> @@ -8,6 +8,7 @@
->    * Author: Gary R Hook <gary.hook@amd.com>
->    */
->   
-> +#include <linux/bitfield.h>
->   #include <linux/module.h>
->   #include <linux/kernel.h>
->   #include <linux/device.h>
-> @@ -88,8 +89,65 @@ static struct attribute_group psp_security_attr_group = {
->   	.is_visible = psp_security_is_visible,
->   };
->   
-> +#define version_attribute_show(name, _offset)					\
-> +static ssize_t name##_show(struct device *d, struct device_attribute *attr,	\
-> +			   char *buf)						\
-> +{										\
-> +	struct sp_device *sp = dev_get_drvdata(d);				\
-> +	struct psp_device *psp = sp->psp_data;					\
-> +	unsigned int val = ioread32(psp->io_regs + _offset);			\
-> +	return sysfs_emit(buf, "%02lx.%02lx.%02lx.%02lx\n",			\
-> +			  FIELD_GET(GENMASK(31, 24), val),			\
-> +			  FIELD_GET(GENMASK(23, 16), val),			\
-> +			  FIELD_GET(GENMASK(15, 8), val),			\
-> +			  FIELD_GET(GENMASK(7, 0), val));			\
-> +}
-> +
-> +version_attribute_show(bootloader_version, psp->vdata->bootloader_info_reg)
-> +static DEVICE_ATTR_RO(bootloader_version);
-> +version_attribute_show(tee_version, psp->vdata->tee->info_reg)
-> +static DEVICE_ATTR_RO(tee_version);
-> +
-> +static struct attribute *psp_firmware_attrs[] = {
-> +	&dev_attr_bootloader_version.attr,
-> +	&dev_attr_tee_version.attr,
-> +	NULL,
-> +};
-> +
-> +static umode_t psp_firmware_is_visible(struct kobject *kobj, struct attribute *attr, int idx)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct sp_device *sp = dev_get_drvdata(dev);
-> +	struct psp_device *psp = sp->psp_data;
-> +	unsigned int val = 0xffffffff;
-> +
-> +	if (!psp)
-> +		return 0;
-> +
-> +	if (attr == &dev_attr_bootloader_version.attr &&
-> +	    psp->vdata->bootloader_info_reg)
-> +		val = ioread32(psp->io_regs + psp->vdata->bootloader_info_reg);
-> +
-> +	if (attr == &dev_attr_tee_version.attr &&
-> +	    psp->capability & PSP_CAPABILITY_TEE &&
-> +	    psp->vdata->tee->info_reg)
-> +		val = ioread32(psp->io_regs + psp->vdata->tee->info_reg);
-> +
-> +
+> 
+> On 4/19/23 21:42, Donald Buczek wrote:
+>> Dear Sergei,
+>>
+>> On 4/19/23 15:05, Sergei Shtepa wrote:
+>>> [...]
+>>>
+>>> Patches in attach and https://nam10.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FSergeiShtepa%2Flinux%2Ftree%2Fblksnap-master&data=05%7C01%7Csergei.shtepa%40veeam.com%7Cccc78e2cdf7845c6c0cd08db41add281%7Cba07baab431b49edadd7cbc3542f5140%7C1%7C0%7C638175987085694967%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=RdrWqUwvk7gjfSRYvrPfz2E0%2BIOY6IQxK4xvpzJqcnk%3D&reserved=0
+>>
+>> Thanks. I can confirm that this fixes the reported problem and I no longer can trigger the UAF. 😄
+>>
+>> Tested-Bny: Donald Buczek <buczek@molgen.mpg.de>
+>>
+>> Maybe you can add me to the cc list for v4 as I'm not subscribed to the lists.
+> 
+> 
+> Sorry, found another one. Reproducer:
+> 
+> =====
+> #! /bin/bash
+> set -xe
+> modprobe blksnap
+> test -e /scratch/local/test.dat || fallocate -l 1G /scratch/local/test.dat
+> s=$(blksnap snapshot_create -d /dev/vdb)
+> blksnap snapshot_appendstorage -i $s -f /scratch/local/test.dat
+> blksnap snapshot_take -i $s
+> s2=$(blksnap snapshot_create -d /dev/vdb)
+> blksnap snapshot_destroy -i $s2
+> blksnap snapshot_destroy -i $s
+> =====
+> 
+> 
+> [20382.402921] blksnap-snapshot: Snapshot ff1c54f1-3e8c-4c99-bb26-35e82dc1c9fa was created
+> [20382.535933] blksnap-image: Create snapshot image device for original device [253:16]
+> [20382.542405] blksnap-snapshot: Snapshot ff1c54f1-3e8c-4c99-bb26-35e82dc1c9fa was taken successfully
+> [20382.572564] blksnap-snapshot: Snapshot 4b2d571d-9a24-419d-96c2-8d64a07c4966 was created
+> [20382.600521] blksnap-snapshot: Destroy snapshot 4b2d571d-9a24-419d-96c2-8d64a07c4966
+> [20382.602373] blksnap-snapshot: Release snapshot 4b2d571d-9a24-419d-96c2-8d64a07c4966
+> [20382.722137] blksnap-snapshot: Destroy snapshot ff1c54f1-3e8c-4c99-bb26-35e82dc1c9fa
+> [20382.724033] blksnap-snapshot: Release snapshot ff1c54f1-3e8c-4c99-bb26-35e82dc1c9fa
+> [20382.725850] ==================================================================
+> [20382.727641] BUG: KASAN: wild-memory-access in snapshot_free+0x73/0x170 [blksnap]
+> [20382.729326] Write of size 8 at addr dead000000000108 by task blksnap/8297
+> ...
 
-Extra blank line.
+Great! Thanks.
 
-Also, add a comment about how the PSP security policy might block access 
-to these areas resulting in reading all f's, so this hides the sysfs 
-attribute in that case.
+There is no protection against re-adding a block device to the snapshot.
+I'll take care of it.
 
-Thanks,
-Tom
+And small update. I have made a correction to the bio allocation algorithm
+for saving and loading chunks. Please, see attach and commit.
+Link: https://github.com/SergeiShtepa/linux/commit/2628dd193fd3d563d26d5ccc82d35b2e11bbda38
+But cases of large chunks or very large disks have not yet been covered
+by tests, yet. 
 
-> +	if (val != 0xffffffff)
-> +		return 0444;
-> +
-> +	return 0;
-> +}
-> +
-> +static struct attribute_group psp_firmware_attr_group = {
-> +	.attrs = psp_firmware_attrs,
-> +	.is_visible = psp_firmware_is_visible,
-> +};
-> +
->   static const struct attribute_group *psp_groups[] = {
->   	&psp_security_attr_group,
-> +	&psp_firmware_attr_group,
->   	NULL,
->   };
->   
+I also had concerns that the snapshot writing algorithm was not working
+correctly. But the concerns were in vain. The new test is working.
+Link: https://github.com/veeam/blksnap/blob/stable-v2.0/tests/6000-snapimage_write.sh
+
+--------------HHEWogh5LchE01j4khkGxhzV
+Content-Type: text/x-patch; charset="UTF-8";
+	name="fix_page_inx_increment.patch"
+Content-Disposition: attachment; filename="fix_page_inx_increment.patch"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvYmxvY2svYmxrc25hcC9jaHVuay5jIGIvZHJpdmVycy9i
+bG9jay9ibGtzbmFwL2NodW5rLmMKaW5kZXggNzMxMTNjNzE0YWMxLi4wNmZkZDZjOTBlMGEg
+MTAwNjQ0Ci0tLSBhL2RyaXZlcnMvYmxvY2svYmxrc25hcC9jaHVuay5jCisrKyBiL2RyaXZl
+cnMvYmxvY2svYmxrc25hcC9jaHVuay5jCkBAIC0yODMsMjUgKzI4MywyNiBAQCB2b2lkIGNo
+dW5rX3N0b3JlKHN0cnVjdCBjaHVuayAqY2h1bmspCiAJYmlvX3NldF9mbGFnKGJpbywgQklP
+X0ZJTFRFUkVEKTsKIAogCXdoaWxlIChjb3VudCkgeworCQlzdHJ1Y3QgYmlvICpuZXh0Owog
+CQlzZWN0b3JfdCBwb3J0aW9uID0gbWluX3Qoc2VjdG9yX3QsIGNvdW50LCBQQUdFX1NFQ1RP
+UlMpOwogCQl1bnNpZ25lZCBpbnQgYnl0ZXMgPSBwb3J0aW9uIDw8IFNFQ1RPUl9TSElGVDsK
+IAogCQlpZiAoYmlvX2FkZF9wYWdlKGJpbywgY2h1bmstPmRpZmZfYnVmZmVyLT5wYWdlc1tw
+YWdlX2lkeF0sCi0JCQkJIGJ5dGVzLCAwKSAhPSBieXRlcykgewotCQkJc3RydWN0IGJpbyAq
+bmV4dDsKKwkJCQkgYnl0ZXMsIDApID09IGJ5dGVzKSB7CisJCQlwYWdlX2lkeCsrOworCQkJ
+Y291bnQgLT0gcG9ydGlvbjsKKwkJCWNvbnRpbnVlOworCQl9CiAKLQkJCW5leHQgPSBiaW9f
+YWxsb2NfYmlvc2V0KGJkZXYsCi0JCQkJCWNhbGNfbWF4X3ZlY3MoY291bnQpLAorCQkvKiBD
+cmVhdGUgbmV4dCBiaW8gKi8KKwkJbmV4dCA9IGJpb19hbGxvY19iaW9zZXQoYmRldiwgY2Fs
+Y19tYXhfdmVjcyhjb3VudCksCiAJCQkJCVJFUV9PUF9XUklURSB8IFJFUV9TWU5DIHwgUkVR
+X0ZVQSwKIAkJCQkJR0ZQX05PSU8sICZjaHVua19pb19iaW9zZXQpOwotCQkJbmV4dC0+Ymlf
+aXRlci5iaV9zZWN0b3IgPSBiaW9fZW5kX3NlY3RvcihiaW8pOwotCQkJYmlvX3NldF9mbGFn
+KG5leHQsIEJJT19GSUxURVJFRCk7Ci0JCQliaW9fY2hhaW4oYmlvLCBuZXh0KTsKLQkJCXN1
+Ym1pdF9iaW9fbm9hY2N0KGJpbyk7Ci0JCQliaW8gPSBuZXh0OwotCQl9Ci0JCXBhZ2VfaWR4
+Kys7Ci0JCWNvdW50IC09IHBvcnRpb247CisJCW5leHQtPmJpX2l0ZXIuYmlfc2VjdG9yID0g
+YmlvX2VuZF9zZWN0b3IoYmlvKTsKKwkJYmlvX3NldF9mbGFnKG5leHQsIEJJT19GSUxURVJF
+RCk7CisJCWJpb19jaGFpbihiaW8sIG5leHQpOworCQlzdWJtaXRfYmlvX25vYWNjdChiaW8p
+OworCQliaW8gPSBuZXh0OwogCX0KIAogCWNiaW8gPSBjb250YWluZXJfb2YoYmlvLCBzdHJ1
+Y3QgY2h1bmtfYmlvLCBiaW8pOwpAQCAtMzQyLDI0ICszNDMsMjYgQEAgc3RhdGljIHN0cnVj
+dCBiaW8gKl9fY2h1bmtfbG9hZChzdHJ1Y3QgY2h1bmsgKmNodW5rKQogCWJpb19zZXRfZmxh
+ZyhiaW8sIEJJT19GSUxURVJFRCk7CiAKIAl3aGlsZSAoY291bnQpIHsKKwkJc3RydWN0IGJp
+byAqbmV4dDsKIAkJc2VjdG9yX3QgcG9ydGlvbiA9IG1pbl90KHNlY3Rvcl90LCBjb3VudCwg
+UEFHRV9TRUNUT1JTKTsKIAkJdW5zaWduZWQgaW50IGJ5dGVzID0gcG9ydGlvbiA8PCBTRUNU
+T1JfU0hJRlQ7CiAKIAkJaWYgKGJpb19hZGRfcGFnZShiaW8sIGNodW5rLT5kaWZmX2J1ZmZl
+ci0+cGFnZXNbcGFnZV9pZHhdLAotCQkJCSBieXRlcywgMCkgIT0gYnl0ZXMpIHsKLQkJCXN0
+cnVjdCBiaW8gKm5leHQ7Ci0KLQkJCW5leHQgPSBiaW9fYWxsb2NfYmlvc2V0KGJkZXYsIGNh
+bGNfbWF4X3ZlY3MoY291bnQpLAotCQkJCQkJUkVRX09QX1JFQUQsIEdGUF9OT0lPLAotCQkJ
+CQkJJmNodW5rX2lvX2Jpb3NldCk7Ci0JCQluZXh0LT5iaV9pdGVyLmJpX3NlY3RvciA9IGJp
+b19lbmRfc2VjdG9yKGJpbyk7Ci0JCQliaW9fc2V0X2ZsYWcobmV4dCwgQklPX0ZJTFRFUkVE
+KTsKLQkJCWJpb19jaGFpbihiaW8sIG5leHQpOwotCQkJc3VibWl0X2Jpb19ub2FjY3QoYmlv
+KTsKLQkJCWJpbyA9IG5leHQ7CisJCQkJIGJ5dGVzLCAwKSA9PSBieXRlcykgeworCQkJcGFn
+ZV9pZHgrKzsKKwkJCWNvdW50IC09IHBvcnRpb247CisJCQljb250aW51ZTsKIAkJfQotCQlw
+YWdlX2lkeCsrOwotCQljb3VudCAtPSBwb3J0aW9uOworCisJCS8qIENyZWF0ZSBuZXh0IGJp
+byAqLworCQluZXh0ID0gYmlvX2FsbG9jX2Jpb3NldChiZGV2LCBjYWxjX21heF92ZWNzKGNv
+dW50KSwKKwkJCQkJUkVRX09QX1JFQUQsIEdGUF9OT0lPLAorCQkJCQkmY2h1bmtfaW9fYmlv
+c2V0KTsKKwkJbmV4dC0+YmlfaXRlci5iaV9zZWN0b3IgPSBiaW9fZW5kX3NlY3RvcihiaW8p
+OworCQliaW9fc2V0X2ZsYWcobmV4dCwgQklPX0ZJTFRFUkVEKTsKKwkJYmlvX2NoYWluKGJp
+bywgbmV4dCk7CisJCXN1Ym1pdF9iaW9fbm9hY2N0KGJpbyk7CisJCWJpbyA9IG5leHQ7CiAJ
+fQogCXJldHVybiBiaW87CiB9Cg==
+
+--------------HHEWogh5LchE01j4khkGxhzV--
