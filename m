@@ -2,128 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3816E915D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47DB56E915F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234957AbjDTLAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 07:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
+        id S235206AbjDTLAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 07:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235232AbjDTK7f (ORCPT
+        with ESMTP id S235191AbjDTLAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:59:35 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E51BBB92
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:57:00 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2a8bca69e8bso4135851fa.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681988218; x=1684580218;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ewXgvjZPyKJ1n9zRzGA+zaxH8tx/0y3F71LiiYkR2ak=;
-        b=svru7IbwP6ExPzDgfv843KSwDqykuPfskwv51l5aXc28Yn0wLbbGYRt1/NrJhVNo9p
-         3wlQTGapLh4laFO1ud6TnELrE6tVv4ARuY9bhLjPj46AyrzjZF5nvQ90grV4cplkH6yr
-         RlVPw1CiKdiEeCTTUyDrIe8HRVtgisyRDAULEjvGow6Qg2G+9SUm7yUFezZeudK4YSF5
-         sTevhHGCuE+dxPA0gQ1PxW/G/Am682OdBtocCIfhQ24snlqmv+GuJoDiEzoLnKDzIydp
-         Kq6j8Jr2W/t2rpMGFd0lDTsnexFkk1w5N18pF8UzGMkcajhHkNULjsIbxHXW4llUnAIq
-         238w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681988218; x=1684580218;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ewXgvjZPyKJ1n9zRzGA+zaxH8tx/0y3F71LiiYkR2ak=;
-        b=TZn576xjp/m4ugnR5oB0SobBO6rSX1/Bsl5kZfNkVF3DsDr47k8D3AddyLTMm9+6JQ
-         s16/IMSmZR0lM0rpcCC2S6xWIUVc3ISOQgg+r0ssVQhgUT3DHCHwk700LdNp/v90GMSr
-         hB5wgr+AAVPf/QTDbMu5cWQl5fFi4BEuBg0eBhamMz110f4RIwTrFrABnCg7wlAs+jc5
-         6v1P99nmqfzN5rmOvKkal12q07PmtAEz3nF8JPPxuh/7TCB51FBSToBID1OAHM17d4it
-         +0rNsy2j0SlfOBG/tN5KRaVNkjdOMiGvJ/qN7gpHw3QB2NmenQ433Fhs7HGtQhcfNdfQ
-         HtxQ==
-X-Gm-Message-State: AAQBX9e9Wz3W865kq0TGJI63Y44BueOllwzFnM1Qtxt4+H10EbRF92Qj
-        qqyOd6jbOdmNlnaUb88qKzDFjg==
-X-Google-Smtp-Source: AKy350aZEBUcNWwWy8BRAL2PcQovivMdG+ijcjU9vEvc3OrpwMqNonvwDYisKpMubQQS4ikCM6fVPA==
-X-Received: by 2002:ac2:5d25:0:b0:4b3:d6e1:26bb with SMTP id i5-20020ac25d25000000b004b3d6e126bbmr303602lfb.29.1681988217863;
-        Thu, 20 Apr 2023 03:56:57 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id o6-20020a05651238a600b004db3e2d3efesm178171lft.204.2023.04.20.03.56.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 03:56:57 -0700 (PDT)
-Message-ID: <9c2e19a7-9483-c321-a455-f019080b3f8c@linaro.org>
-Date:   Thu, 20 Apr 2023 12:56:55 +0200
+        Thu, 20 Apr 2023 07:00:22 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A051A27B
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:57:48 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-172-149.tukw.qwest.net [174.21.172.149])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 21341218;
+        Thu, 20 Apr 2023 03:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1681988263;
+        bh=wsomWTcCMu3ALXnRMg6XVHMmUqvddNPX7XTHuapB+3g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=irovzlIm/EwzV1wbS+yJcrt9Eu/8UNPSf+2vFkDGpzoNQOso/RqWKaweqgGbLVoli
+         nSa1l/hmm09HsSmwXi2siUEnIhAEXAtw/YVuLzAM7iSnNjUh9w99NXabf8vIbr2fK9
+         Po3WP7zMGYesFiSK/BEBxhvkuf6SyHZlywKsQIoY=
+Date:   Thu, 20 Apr 2023 03:57:41 -0700
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] regulator: userspace-consumer: Multiple regulators
+Message-ID: <0e8f4068-70c2-4609-961e-34b5ef9d0113@hatter.bewilderbeest.net>
+References: <20230418145051.4192963-1-Naresh.Solanki@9elements.com>
+ <20230418145051.4192963-2-Naresh.Solanki@9elements.com>
+ <afdd0170-8b14-451f-96a7-2b5656fa0dd7@hatter.bewilderbeest.net>
+ <ba8663c2-b9e6-e999-9324-af8499179464@9elements.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 18/18] arm64: dts: qcom: sdm845-polaris: add missing
- touchscreen child node reg
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        "Ivan T. Ivanov" <ivan.ivanov@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Molly Sophia <mollysophia379@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230419211856.79332-1-krzysztof.kozlowski@linaro.org>
- <20230419211856.79332-18-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230419211856.79332-18-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ba8663c2-b9e6-e999-9324-af8499179464@9elements.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 20, 2023 at 01:46:14AM PDT, Naresh Solanki wrote:
+>Hi Zev,
+>
+>On 20-04-2023 05:32 am, Zev Weiss wrote:
+>>On Tue, Apr 18, 2023 at 07:50:51AM PDT, Naresh Solanki wrote:
+>>>Use property regulator-supplies to determine all regulator
+>>>supplies.
+>>>This is useful in case of a connector having 2 or more supplies.
+>>>Example: PCIe connector on mainboard can be powered by 12V & 3.3V
+>>>suplies.
+>>>
+>>>Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>>---
+>>>drivers/regulator/userspace-consumer.c | 19 +++++++++++++++----
+>>>1 file changed, 15 insertions(+), 4 deletions(-)
+>>>
+>>>diff --git a/drivers/regulator/userspace-consumer.c 
+>>>b/drivers/regulator/userspace-consumer.c
+>>>index 97f075ed68c9..0bb49547b926 100644
+>>>--- a/drivers/regulator/userspace-consumer.c
+>>>+++ b/drivers/regulator/userspace-consumer.c
+>>>@@ -120,7 +120,10 @@ static int 
+>>>regulator_userspace_consumer_probe(struct platform_device *pdev)
+>>>    struct regulator_userspace_consumer_data tmpdata;
+>>>    struct regulator_userspace_consumer_data *pdata;
+>>>    struct userspace_consumer_data *drvdata;
+>>>-    int ret;
+>>>+    struct device_node *np = pdev->dev.of_node;
+>>>+    struct property *prop;
+>>>+    const char *supply;
+>>>+    int ret, count = 0;
+>>>
+>>>    pdata = dev_get_platdata(&pdev->dev);
+>>>    if (!pdata) {
+>>>@@ -131,11 +134,19 @@ static int 
+>>>regulator_userspace_consumer_probe(struct platform_device *pdev)
+>>>        memset(pdata, 0, sizeof(*pdata));
+>>>
+>>>        pdata->no_autoswitch = true;
+>>>-        pdata->num_supplies = 1;
+>>>-        pdata->supplies = devm_kzalloc(&pdev->dev, 
+>>>sizeof(*pdata->supplies), GFP_KERNEL);
+>>>+        pdata->num_supplies = of_property_count_strings(np, 
+>>>"regulator-supplies");
+>>>+        if (pdata->num_supplies < 0) {
+>>>+            dev_err(&pdev->dev, "could not parse property 
+>>>regulator-supplies");
+>>>+            return -EINVAL;
+>>>+        }
+>>>+        pdata->supplies = devm_kzalloc(&pdev->dev,
+>>>+                           sizeof(*pdata->supplies) * 
+>>>pdata->num_supplies,
+>>>+                           GFP_KERNEL);
+>>
+>>AFAICT this doesn't appear to implement the "vout" default specified 
+>>in the dt-binding patch?
+>The "regulator-supplies" property will hold the default value of 
+>"vout" unless specified otherwise. As a result, the string enumeration 
+>retrieves the value of "vout" by default, and the "vout-supply" 
+>property is utilized for the regulator.
+>
 
+With the disclaimer that I'm not a DT expert, that's not my 
+understanding of how DT works.  I don't think the 'default' value 
+specified in the binding forces the fdt to always include that value if 
+it's not present in the dts (since I'm pretty sure dtc doesn't even look 
+at the binding to know that a default exists when compiling the dts); 
+rather, it's information meant to be used by the software implementing 
+support for that device (e.g. a driver for it) about what value to 
+assume if the property isn't present in the fdt.
 
-On 19.04.2023 23:18, Krzysztof Kozlowski wrote:
-> Add missing reg property to touchscreen child node to fix dtbs W=1 warnings:
-> 
->   Warning (unit_address_vs_reg): /soc@0/geniqup@ac0000/i2c@a98000/touchscreen@20/rmi4-f12@12: node has a unit name, but no reg or ranges property
-> 
-> Fixes: be497abe19bf ("arm64: dts: qcom: Add support for Xiaomi Mi Mix2s")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>
+>>Also, since the core of the userspace-consumer driver itself already 
+>>supports multiple regulators, it might be nice for the subject line 
+>>to mention DT supplies or something a bit more specifically.
+>Sure. How about 'Support multiple supplies' ?
 
-Konrad
->  arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-> index 8ae0ffccaab2..576f0421824f 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-> @@ -483,6 +483,7 @@ rmi4-f01@1 {
->  		};
->  
->  		rmi4-f12@12 {
-> +			reg = <0x12>;
->  			syna,rezero-wait-ms = <0xc8>;
->  			syna,clip-x-high = <0x438>;
->  			syna,clip-y-high = <0x870>;
+I meant that it should explicitly mention "DT" (or perhaps "OF").  The 
+driver's structure has supported multiple supplies since it was first 
+introduced in 2009, so "Support multiple supplies" sounds like this 
+commit is adding functionality that was already there.  What this patch 
+is doing is connecting that existing support to the OF support logic so 
+that it can be used in a device-tree context.
+
+>>
+>>>        if (!pdata->supplies)
+>>>            return -ENOMEM;
+>>>-        pdata->supplies[0].supply = "vout";
+>>>+
+>>>+        of_property_for_each_string(np, "regulator-supplies", 
+>>>prop, supply)
+>>>+            pdata->supplies[count++].supply = supply;
+>>>    }
+>>>
+>>>    if (pdata->num_supplies < 1) {
+>>>-- 
+>>>2.39.1
+>>>
+>>>
+>Regards,
+>Naresh
