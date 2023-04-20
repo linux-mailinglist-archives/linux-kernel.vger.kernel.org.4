@@ -2,141 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B866E90B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FAE76E90A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234170AbjDTKqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        id S234970AbjDTKps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233846AbjDTKpi (ORCPT
+        with ESMTP id S229984AbjDTKpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:45:38 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B525FE9;
-        Thu, 20 Apr 2023 03:44:52 -0700 (PDT)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33K9OBMs020332;
-        Thu, 20 Apr 2023 10:44:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=JiP4gaodXYE5HqdkzObSDp1lyfjXWhoq3PMYmdlsmkI=;
- b=UBmdFr4z5vi+OCGrGzJRjVwynCNjsEGshJFbizog0JX6dFd5v2HW268zR2hdJBQPzpvp
- ufTkv58EVnf+uOpHegmGYYQAzjMsGBkagych/iPTha7NP0hhb74J7KA0qGxfesXj5QkJ
- 4TRMC0gfKBJHThcQ9Tx010WFKYjiaHeoBG4ObjtTDh+iPEDJ6Jw/ft1L7rtE37UoXnQc
- bAdTfvZ0ys4BPwWfpevCR+Qv2n5/AKgyVg9651yvrobAyWQzOr3eu+TPpVFeLVCau3xZ
- 3jC5J/CXudsZ6QttEToqLklqNaf7/kMVX+V/rg6Aa7LWC54aCx8RpSXaSSOscsWZZfGu 1A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q32qvtpwk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Apr 2023 10:44:07 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33KAW1vP031769;
-        Thu, 20 Apr 2023 10:44:06 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q32qvtpve-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Apr 2023 10:44:06 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33K97YPM010080;
-        Thu, 20 Apr 2023 10:44:04 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3pykj7krdf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Apr 2023 10:44:04 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33KAi3SO12452206
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Apr 2023 10:44:03 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 25B0158045;
-        Thu, 20 Apr 2023 10:44:03 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DC4F958052;
-        Thu, 20 Apr 2023 10:44:00 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.163.16.65])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 20 Apr 2023 10:44:00 +0000 (GMT)
-Message-ID: <97849695ef53ab3186e59d8a2c6b74812f13ee19.camel@linux.ibm.com>
-Subject: Re: [PATCH] Smack modifications for: security: Allow all LSMs to
- provide xattrs for inode_init_security hook
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
-Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Mengchi Cheng <mengcc@amazon.com>, miklos@szeredi.hu,
-        linux-unionfs@vger.kernel.org, kamatam@amazon.com,
-        yoonjaeh@amazon.com
-Date:   Thu, 20 Apr 2023 06:44:00 -0400
-In-Reply-To: <a98ddf946c474a3500bdcd72766c6cb0043278ff.camel@huaweicloud.com>
-References: <c7f38789-fe47-8289-e73a-4d07fbaf791d@schaufler-ca.com>
-         <20230411172337.340518-1-roberto.sassu@huaweicloud.com>
-         <2dc6486f-ce9b-f171-14fe-48a90386e1b7@schaufler-ca.com>
-         <8e7705972a0f306922d8bc4893cf940e319abb19.camel@huaweicloud.com>
-         <72b46d0f-75c7-ac18-4984-2bf1d6dad352@schaufler-ca.com>
-         <82ee6ddf66bb34470aa7b591df4d70783fdb2422.camel@huaweicloud.com>
-         <91f05dc4-a4b7-b40a-ba1a-0ccc489c84b2@schaufler-ca.com>
-         <5c50d98f1e5745c88270ae4ad3de6d9a803db4c6.camel@huaweicloud.com>
-         <48c6073f-59b0-f5d1-532e-fe4b912b939d@schaufler-ca.com>
-         <0fccab67e496f10f4ee7bf2220e70a655013935f.camel@huaweicloud.com>
-         <c16dd895-f488-241d-0be8-e56e5f0c1adb@schaufler-ca.com>
-         <a98ddf946c474a3500bdcd72766c6cb0043278ff.camel@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Thu, 20 Apr 2023 06:45:23 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776BF35B1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:44:29 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id c3so2246936ljf.7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:44:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681987461; x=1684579461;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yRo5EUj7RXDMPXAd2VISgzld0n3oUPRdqArKtRXy7jY=;
+        b=YePFAKMnJUPeNP514dvoBGsDyc/nfA98OSGHAwSpWD0yA/eQs6VlQvp8qTvsCRP6/Y
+         tno75QyOr7aDkcuiTd9Vikrd3Pfep8f8uEvtTXiSXkGtOxygLMR4krvosuo9iyOnz083
+         mZlIeLAkCkwxOXo5LGXXN+sZZgNOFrceCgClJUz2f19uLw4MpoAFqJqskWp948pk5RAI
+         SYX3ihC8GHMCH66peQkmmesx4ohziGhGySEk8ZGwmwBJvdQXydjYA4WkPahQLMawMP1B
+         swPcUCoQM1+7wVZH4YDoLngL0ggMXVG5HrovHAnTzR73WeWpO7ST1CdE9DemCNAfpkOL
+         wdRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681987461; x=1684579461;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yRo5EUj7RXDMPXAd2VISgzld0n3oUPRdqArKtRXy7jY=;
+        b=go57WtGt3sQ+oTvggTn29TErcVSaEdtNqpz4W59R99k+BQVWaSy5oQtnJxz0YOZruC
+         r2zfeJkjm9JFexrSm4rywjFy/wKzAlwZJztm4qPnl8EC23VjmsT82+LKidA2vVEwzI5L
+         otY83uArU+dK6299Y6Cx93qsjmvGsSg2Dplt0dGn8UaqnfwZ/ab92QxU2JAeRAxmcVFT
+         kMKisjfcYqvkpiUzUrzwMa1A82DIlBKxoZOyb7YQWqCNpS4DYDY/xV2JekCMw1Agi9qm
+         5NYdwAfA8B7rcOpGjD4T1bGtNofvUPwTSsybUbar3o+zpBMkxDYqLKnXYMy9d5SfCzx7
+         KjWQ==
+X-Gm-Message-State: AAQBX9dOeoS57jyP5tUNGekxB5VSpFVRSx7JABb+zEOMzirwOI4c2HEo
+        y+UHl1uxOqQaAsQB+gLU6L6ooA==
+X-Google-Smtp-Source: AKy350Znt+H7xc3cDL3BB02Y2LM6YwPgPYKG8lF/R5zcI5/lMvPx7RsgSX6YQxOi1cJe0n4y1rQt0A==
+X-Received: by 2002:a2e:9d43:0:b0:2a8:d0f0:584e with SMTP id y3-20020a2e9d43000000b002a8d0f0584emr282413ljj.16.1681987460846;
+        Thu, 20 Apr 2023 03:44:20 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id w8-20020ac25d48000000b004eedb66983csm153561lfd.273.2023.04.20.03.44.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 03:44:20 -0700 (PDT)
+Message-ID: <f00114c5-488f-3cbe-ad8b-f8f8cb35361e@linaro.org>
+Date:   Thu, 20 Apr 2023 12:44:19 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 1/7] arm64: dts: qcom: ipq6018: add unit address to soc
+ node
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230420063610.11068-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230420063610.11068-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: YMT3HG0ZS9vIkqH-n2uqmA3l0ZvnTJcF
-X-Proofpoint-ORIG-GUID: HmNKNdJGFNLBRcpC25uuB5H0hmVx9xdl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-20_06,2023-04-20_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=860
- clxscore=1011 bulkscore=0 impostorscore=0 adultscore=0 suspectscore=0
- priorityscore=1501 malwarescore=0 mlxscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304200085
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-04-20 at 10:50 +0200, Roberto Sassu wrote:
-> > 
-> > It's possible. It's been a long time since I've looked at this.
-> > I'm tempted to take a change to make overlayfs work upstream and
-> > then worry about the ima changes. There seems to be a lot more
-> > going on with the ima changes than is obvious from what's in the
-> > Smack code.
 
-It doesn't sound like the patch set introduces the overlayfs bug.
 
-The security_inode_init_security() change to initialize multiple LSMs
-and IMA xattrs and include them in the EVM hmac calculation is straight
-forward.
-
-In addition, the patch set creates the infrastructure for allowing
-multiple per LSM xattrs, as requested, to be initialized in
-security_inode_init_security() and included in the EVM hmac.
-
-Mimi
-
-> We could also set only SMACK64 in smack_inode_init_security(), and move
-> SMACKTRANSMUTE64 later, when we figure out how to fix the case of
-> overlayfs.
+On 20.04.2023 08:36, Krzysztof Kozlowski wrote:
+> "soc" node is supposed to have unit address:
 > 
-> IMA and EVM would work in both cases.
+>   Warning (unit_address_vs_reg): /soc: node has a reg or ranges property, but no unit name
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
+Konrad
+>  arch/arm64/boot/dts/qcom/ipq6018.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> index 8ec9e282b412..e4267a6ec9a5 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> @@ -198,7 +198,7 @@ smem {
+>  		hwlocks = <&tcsr_mutex 0>;
+>  	};
+>  
+> -	soc: soc {
+> +	soc: soc@0 {
+>  		#address-cells = <2>;
+>  		#size-cells = <2>;
+>  		ranges = <0 0 0 0 0x0 0xffffffff>;
