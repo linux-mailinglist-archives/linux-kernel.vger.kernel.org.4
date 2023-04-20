@@ -2,95 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576236E9D4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA67F6E9D4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbjDTUfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 16:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53758 "EHLO
+        id S232025AbjDTUhD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Apr 2023 16:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232447AbjDTUe5 (ORCPT
+        with ESMTP id S231166AbjDTUhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 16:34:57 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22591FE4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:34:56 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b52ad6311so1871465b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:34:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682022896; x=1684614896;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g58JHmfwpqb+kdcyIIUKCcsoNGL22q/TQUafEKPouFM=;
-        b=yM/rfgIiL7qa/r6FEiXZ+DundVuYdHeDTmEggRdeVlHfdLlrzG2d03dBP4XcGkWtW8
-         m8Jnf9vlrMgwUwy4aswpamun8XbcX75TKbAESP0T1R0lEL+JfSqXvqobQXIk9UV2uecB
-         tauWrgVucEt4cA+QbsMaABdvDWf24twVrg1mCGmeKPjHTd37DzqIBYiU1V/FSDFjq5mq
-         sN3dH0H55SQMzfZHNaXD3T6xP5ZvPpyS7IS1PGF9LyZ1K/Kxewb70TNbfqHw49H152Wn
-         AiGtVpXgSb5rg5Nq4YWD7M9/bHiUKRthkUQUOAmMvT8HV4owNMuVhQUQYjgo3WWWr+hp
-         IPLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682022896; x=1684614896;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g58JHmfwpqb+kdcyIIUKCcsoNGL22q/TQUafEKPouFM=;
-        b=W0racczh1Q6CvCrpmPvOjzk4tFoBELL1EEy2lGu5fLTYXJumqDJzTn1G+BPxii7RPz
-         AM3wcowDAOGPoGNmCLG4abJPBHuB+sHdj3SRtuhJzUMng71PbWz3VWebAKYc0avgVYD2
-         dvv3bMBaE1ASgO4EyfeRh03em9g5CdbCMqEHJNTmYqy8S8t0bizE+LmItN4Qe3Eh78k1
-         NzB5FDf/8nMKQlE7C8bVomf/UNmr2b9/9XQlKeqsBH6oAkXaGShwBRuNtBRKUYTgAKpM
-         6Iuthck92PYbJRuKLOPKPHuyele/MQJCNTH7fNGkRVsQ4KPfU8A5XEbN/pk3vsncUuaI
-         KDIw==
-X-Gm-Message-State: AAQBX9c4M6qLkIz8ro5FmHyDmrZ4JGgoeBczkNw8mRBoHYC+EAfbJXAt
-        ur0rMicH2zAQaUsD6uIR/x1FKQ==
-X-Google-Smtp-Source: AKy350Z4E4ZbTxyicE8TdX2kjDVkcL7PKYR9XpKyGdNFQfEdAoO/0RfXn8bHfgfIvn3rur5vk1QN6g==
-X-Received: by 2002:a05:6a00:138a:b0:63d:3a18:49ed with SMTP id t10-20020a056a00138a00b0063d3a1849edmr3458395pfg.15.1682022895937;
-        Thu, 20 Apr 2023 13:34:55 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id g9-20020a056a0023c900b00594235980e4sm1628138pfc.181.2023.04.20.13.34.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 13:34:55 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 13:34:51 -0700
-From:   David Matlack <dmatlack@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH] KVM: x86: Preserve TDP MMU roots until they are
- explicitly invalidated
-Message-ID: <ZEGh6zrhJX/SN9jp@google.com>
-References: <20230413231251.1481410-1-seanjc@google.com>
+        Thu, 20 Apr 2023 16:37:01 -0400
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8BF1FFB
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:36:59 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 29B8F63CC190;
+        Thu, 20 Apr 2023 22:36:57 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id NbvsokkF7ZlM; Thu, 20 Apr 2023 22:36:56 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 0B8976418F2B;
+        Thu, 20 Apr 2023 22:36:56 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id DRD9jo1tEAsD; Thu, 20 Apr 2023 22:36:55 +0200 (CEST)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id E189363CC190;
+        Thu, 20 Apr 2023 22:36:55 +0200 (CEST)
+Date:   Thu, 20 Apr 2023 22:36:55 +0200 (CEST)
+From:   Richard Weinberger <richard@nod.at>
+To:     Yu Hao <yhao016@ucr.edu>
+Cc:     chengzhihao1 <chengzhihao1@huawei.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <412779912.228444.1682023015809.JavaMail.zimbra@nod.at>
+In-Reply-To: <CA+UBctA4fSbSdooQ9q9fwNuaHb_PnkfFuqJ7Q5vii-3-uCiUjw@mail.gmail.com>
+References: <CA+UBctD_w=75wChmePZHp7KsBSNPWYGDBtzHPRPPtaFoqhGvXA@mail.gmail.com> <CA+UBctDsHRpkLG5ppdiuV8Msn4Dx-ZJ2xDrxfa48VMb7ZE+xBA@mail.gmail.com> <687864524.118195.1681799447034.JavaMail.zimbra@nod.at> <ff419c45-7d76-0219-a598-f6f4d081e29c@huawei.com> <CA+UBctBVHouL-3rM3zKYLpk01fXFvCpBnU7EpSRVdGW7cEjcJQ@mail.gmail.com> <977347543.226888.1682011999468.JavaMail.zimbra@nod.at> <CA+UBctA4fSbSdooQ9q9fwNuaHb_PnkfFuqJ7Q5vii-3-uCiUjw@mail.gmail.com>
+Subject: Re: BUG: divide error in ubi_attach_mtd_dev
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230413231251.1481410-1-seanjc@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
+Thread-Topic: divide error in ubi_attach_mtd_dev
+Thread-Index: f8YvMDTSYLQx33FOZb2oMatq86v3fQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 04:12:51PM -0700, Sean Christopherson wrote:
-> Preserve TDP MMU roots until they are explicitly invalidated by gifting
-> the TDP MMU itself a reference to a root when it is allocated.  Keeping a
-> reference in the TDP MMU fixes a flaw where the TDP MMU exhibits terrible
-> performance, and can potentially even soft-hang a vCPU, if a vCPU
-> frequently unloads its roots, e.g. when KVM is emulating SMI+RSM.
+----- Ursprüngliche Mail -----
+>> Can you please share the qemu command line?
+> qemu-system-x86_64 -m 2G -smp 2 -kernel
+> /home/test/Workspace/SyzGen/linux-distro/linux-6.2-debug/arch/x86/boot/bzImage
+> -append “console=ttyS0 root=/dev/sda net.ifnames=0” -hda
+> /home/test/Workspace/SyzGen/linux-distro/image/stretch.img -chardev
+> socket,id=SOCKSYZ,server=on,nowait,host=localhost,port=54640 -mon
+> chardev=SOCKSYZ,mode=control -device virtio-rng-pci -device
+> e1000,netdev=net0 -netdev
+> user,id=net0,restrict=on,hostfwd=tcp:127.0.0.1:11760-:22 -display none
+> -serial stdio -cpu host,migratable=off -no-reboot -name VM -snapshot
+> -enable-kvm
 > 
-[...]
+>> Within Linux you can query /proc/mtd or /sys/class/mtd/
+>> to get infos about the MTD in question.
+>>
 > 
-> Reported-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-> Link: https://lore.kernel.org/all/959c5bce-beb5-b463-7158-33fc4a4f910c@linux.microsoft.com
-> Link: https://lkml.kernel.org/r/20220209170020.1775368-1-pbonzini%40redhat.com
-> Link: https://lore.kernel.org/all/20230322013731.102955-1-minipli@grsecurity.net
-> Cc: David Matlack <dmatlack@google.com>
-> Cc: Ben Gardon <bgardon@google.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Thanks for the hints. We find that this is a “mtdram test device”.
+> 
+> root@syzkaller:~# cat /proc/mtd
+> dev:    size   erasesize  name
+> mtd0: 00020000 00001000 “mtdram test device”
 
-Reviewed-by: David Matlack <dmatlack@google.com>
+Hmm, mtdram should be fine, erasesize is not zero.
+
+Thanks,
+//richard
