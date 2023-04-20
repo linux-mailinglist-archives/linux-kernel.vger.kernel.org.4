@@ -2,126 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB4C6E906E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22CC96E9066
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234894AbjDTKij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S231921AbjDTKhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234937AbjDTKiO (ORCPT
+        with ESMTP id S234676AbjDTKgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:38:14 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8F14C08
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:35:33 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681986931;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I1WwqJbjdqbVTI8TYWB0whF/15cU3RjutF8ccNUpsmg=;
-        b=pSxQZAqnSvsSgu+wbVW0ZoGHxgE0aUCza+aRw+bvqvk9oHwn4mqoDwGVj1LZAB7dpzMTHz
-        bB52ANyQ8VvRmUvaQs36/tUg7lKToAX3qbxvxICNiSB77tZIJEqMg1lGHSXspTqhZdW5nN
-        90pApwix/qUupUwDxa3WYbqNwhFwjqZFfdceUjqC5Pi7ZskWtP9cdBEkCp4dhDdcTxN0/r
-        P88DcdYRxyBqd9yri977YNFONa/4iOMk47cyawXGdU+ht3N8EWF0Kw2nVrvT4DHZrYPSHq
-        /3nlJDP+9F8xGTvBO8y67EzMgvcuqEAbVLZ06uNZycPcrD4PyjR5JwPClulahg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681986931;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I1WwqJbjdqbVTI8TYWB0whF/15cU3RjutF8ccNUpsmg=;
-        b=r/Xalzos+G1Ip59iGysXHnsyWVtkesjJFsFVC7yUbtZAl9aOwRLm3QvrY58tq3pcB6i324
-        IX3JqTqmbSusjbAQ==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: port lock: was: Re: [PATCH printk v1 11/18] printk: nobkl:
- Introduce printer threads
-In-Reply-To: <ZEEMJxobFe_UZ8gV@alley>
-References: <20230302195618.156940-1-john.ogness@linutronix.de>
- <20230302195618.156940-12-john.ogness@linutronix.de>
- <ZC6U/CZCNmgnTpI4@alley> <ZEEMJxobFe_UZ8gV@alley>
-Date:   Thu, 20 Apr 2023 12:39:31 +0206
-Message-ID: <87zg72vo5g.fsf@jogness.linutronix.de>
+        Thu, 20 Apr 2023 06:36:12 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2D97A87
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:33:44 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4ec817060cdso451659e87.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:33:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681986823; x=1684578823;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Km7fYpP6TW/v//SsQT00GnyneejX9uUDDOVhZE5n5xI=;
+        b=omq6USS+6wPohpA8a0n0uXqurlRJCRBlTGmxbfed9VYsZHD6xxp8Z7lnZYfHm7JF1I
+         Ugpb+KXIro1kjq1OfPs/dZ6amfgct3ZJMGypRTpYuXvYKpOIUql260eVCSIMUrd5WgjY
+         +GpYIVfVvePMUmhYkvkT1o0AGpbnHfyTNjN1ZFAiNSBto9kJZJW3xqHauaSmXBWxOxlo
+         rINiyoQlHMS/gGmDujvisgk8WaJgXNBaKbfyRczEyQWAOV7mmXi7kLfxPt5NCz2a8A6d
+         zoE+048Nw6BlGD5ThUmW0JyZND4vPI5ZFOpBhYp+4uCOfMUTcCFM6P7YFbN2ZP+Y9nF3
+         thDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681986823; x=1684578823;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Km7fYpP6TW/v//SsQT00GnyneejX9uUDDOVhZE5n5xI=;
+        b=Q16rIa7ezPxoSd0Y+A1ctft+ahl3BlXGAst9Gx0b4H92JJV+QE4XUHSSJeaaMH0vt+
+         LPKytkU0jpLjcBXE8/tzErG+hGM/hw4IH6OtxZILesUQt6jxZ3KIuQkk3RCdvk/L6H0U
+         svy46s9E5bST0b6Cx6oTEnrjBowaFWfyxc751qhS8sIu+qJVJTp39E9wO7C9LFXleZkA
+         YNXkCUFetswvPGq+9R1m9uU3uUABICeBtfcIm2NGrbxfJqlQKH9UDySr/MJ4ffwFT72Y
+         9CkE6zLdWlTs9UJODcPXRnA4Uq8GTk9U5NcudnK1hDFjgvRJFSM9qzvm6q0aiBO/SRN5
+         H7tg==
+X-Gm-Message-State: AAQBX9fNaJ+zFx4oTlcfzs6GOF6hkiYx/QhSuBWJVMbCsvD8Xor+037G
+        t8c0aknXzCcmp8GwI3QOuTDLdw==
+X-Google-Smtp-Source: AKy350bbg9I6ZBPxb4VonvL9ujTQrhDttBE9Pxlis6/qvpG/a5zlxV4mrfqhjY4IdvKCqIzishwMyQ==
+X-Received: by 2002:ac2:5444:0:b0:4eb:2529:cbb2 with SMTP id d4-20020ac25444000000b004eb2529cbb2mr445613lfn.49.1681986822894;
+        Thu, 20 Apr 2023 03:33:42 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id n1-20020a2e8781000000b002a7e9e4e9dcsm190172lji.114.2023.04.20.03.33.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 03:33:42 -0700 (PDT)
+Message-ID: <2c4d7635-4b59-fcbd-133e-984205379e11@linaro.org>
+Date:   Thu, 20 Apr 2023 13:33:41 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 2/2] clk: qcom: Introduce SM8350 VIDEOCC
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Taniya Das <tdas@codeaurora.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230413-topic-lahaina_vidcc-v3-0-0e404765f945@linaro.org>
+ <20230413-topic-lahaina_vidcc-v3-2-0e404765f945@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230413-topic-lahaina_vidcc-v3-2-0e404765f945@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-20, Petr Mladek <pmladek@suse.com> wrote:
->> OK, let's first define what the two locks are supposed to synchronize.
->> My understanding is that this patchset uses them the following way:
->> 
->>     + The new lock (atomic_state) is used to serialize emiting
->>       messages between different write contexts. It replaces
->>       the functionality of console_lock.
+On 19/04/2023 15:53, Konrad Dybcio wrote:
+> Add support for the Video Clock Controller found on the SM8350 SoC.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/clk/qcom/Kconfig          |   9 +
+>   drivers/clk/qcom/Makefile         |   1 +
+>   drivers/clk/qcom/videocc-sm8350.c | 552 ++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 562 insertions(+)
 
-It replaces the functionality of console_lock, but operates at a finer
-level. It is serializing all access to the hardware registers involved
-in outputting. For the 8250 driver, this is the IER register.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
->>       It is a per-console sleeping lock, allows voluntary and has
->>       hand-over using priorities and spinning with a timeout.
+-- 
+With best wishes
+Dmitry
 
-It is not a sleeping lock. It is used as a trylock or spinning with
-timeout. It has the special feature that it can be handed over to or
-stolen by another context with a higher ownership priority.
-
->>     + The port_lock is used to synchronize various operations
->>       of the console driver/device, like probe, init, exit,
->>       configuration update.
->> 
->>       It is typically a per-console driver/device spin lock.
->> 
->> 
->> I guess that we would want to keep both locks:
-
-I agree because the port_lock has a much larger scope and is fully
-preemptible under PREEMPT_RT.
-
-> I forgot to check how these two locks are supposed to be used
-> in write_atomic().
->
-> It seems that cons_atomic_flush_con() takes only the new lock
-> (atomic_state) and ignores the port_lock(). It should be safe
-> against write_kthread(). But it is not safe against other
-> operations with the console device that are synchronized
-> only by the port_lock().
-
-Yes, it is because the console drivers will also take the atomic_state
-lock when needed. You can see this in the POC patch I posted [0].
-
-For example, a new function serial8250_enter_unsafe() is used by the
-serial drivers to mark the beginning of an unsafe section. To use this
-function, the port_lock must be held. This function additionally takes
-the atomic_state lock. Then the driver is allowed to touch hardware
-registers related to outputting (IER).
-
-But typically the driver will use a new higher level function, for
-example serial8250_in_IER(), which will enter unsafe, read the register,
-and exit unsafe. This provides the necessary synchronization against
-write_atomic() (for the 8250 driver).
-
-Please also remember that hostile takeovers of drivers in unsafe
-sections are done as a last resort in panic, after all other nbcon
-consoles have safely flushed their buffers. So we should not spend too
-many brain cycles on "what if the atomic_state lock is stolen while in
-an unsafe section" questions. The answer is: then you are in "hope and
-pray" mode.
-
-John
-
-[0] https://lore.kernel.org/lkml/877cv1geo4.fsf@jogness.linutronix.de
