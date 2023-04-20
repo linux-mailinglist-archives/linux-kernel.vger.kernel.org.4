@@ -2,114 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7A76E8CDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83CD96E8CDB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234403AbjDTIeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
+        id S234448AbjDTIeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234342AbjDTIeC (ORCPT
+        with ESMTP id S234333AbjDTIeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 20 Apr 2023 04:34:02 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E5044B9
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:33:59 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTP id 33K8XHKT064222;
-        Thu, 20 Apr 2023 16:33:17 +0800 (+08)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Thu, 20 Apr 2023 16:33:13 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <ke.wang@unisoc.com>
-Subject: [PATCHv2] mm: skip CMA pages when they are not available
-Date:   Thu, 20 Apr 2023 16:32:57 +0800
-Message-ID: <1681979577-11360-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDEA649FF;
+        Thu, 20 Apr 2023 01:34:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69ADE64604;
+        Thu, 20 Apr 2023 08:34:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CC7CC433D2;
+        Thu, 20 Apr 2023 08:33:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681979639;
+        bh=p68YF0iYq39u8mcdb3L4PElD/b/BAr1fk8jEY+LKNmA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q3jLy97NWxsjnm7tzijQqGdWwjoWjWEWXhQHVCKCO/TQpjkSg6xTh0ivIJ1B0Cq6Z
+         VeBxDNSNQVI+9HYXp1/sslS8ZdFYK9B3o1Pt/1DFNgX5MDyiKYJLKM36uDW4cZPFO7
+         UAHnm9Z0SiJD9DGz6HiaLpZHyh/+pSYvijQkPnbVddCn1k/Ej3pwXn2lzt2i8Ph9l1
+         VBWNi6n9GwTzT2cKEQC4jZLp5C+aYUtNtCslWBIiuij8AQbKe9bgNB91qih/nRM2lx
+         dpoRLMKo1KlqxylmoqdEKNUY/rLY5BrqPh90UaQM2lx2RsP2phAYp4UYsPcwtaQXjS
+         oKk6wVpnTytgg==
+Date:   Thu, 20 Apr 2023 14:03:45 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: qcom: ipq4019: fix broken NAND controller
+ properties override
+Message-ID: <20230420083345.GC6308@thinkpad>
+References: <20230420072811.36947-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 33K8XHKT064222
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230420072811.36947-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+On Thu, Apr 20, 2023 at 09:28:11AM +0200, Krzysztof Kozlowski wrote:
+> After renaming NAND controller node name from "qpic-nand" to
+> "nand-controller", the board DTS/DTSI also have to be updated:
+> 
+>   Warning (unit_address_vs_reg): /soc/qpic-nand@79b0000: node has a unit name, but no reg or ranges property
+> 
+> Cc: <stable@vger.kernel.org>
+> Fixes: 9e1e00f18afc ("ARM: dts: qcom: Fix node name for NAND controller node")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-This patch fixes unproductive reclaiming of CMA pages by skipping them when they
-are not available for current context. It is arise from bellowing OOM issue, which
-caused by large proportion of MIGRATE_CMA pages among free pages. There has been
-commit(168676649) to fix it by trying CMA pages first instead of fallback in
-rmqueue. I would like to propose another one from reclaiming perspective.
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 
-04166 < 4> [   36.172486] [03-19 10:05:52.172] ActivityManager: page allocation failure: order:0, mode:0xc00(GFP_NOIO), nodemask=(null),cpuset=foreground,mems_allowed=0
-0419C < 4> [   36.189447] [03-19 10:05:52.189] DMA32: 0*4kB 447*8kB (C) 217*16kB (C) 124*32kB (C) 136*64kB (C) 70*128kB (C) 22*256kB (C) 3*512kB (C) 0*1024kB 0*2048kB 0*4096kB = 35848kB
-0419D < 4> [   36.193125] [03-19 10:05:52.193] Normal: 231*4kB (UMEH) 49*8kB (MEH) 14*16kB (H) 13*32kB (H) 8*64kB (H) 2*128kB (H) 0*256kB 1*512kB (H) 0*1024kB 0*2048kB 0*4096kB = 3236kB
-	......
-041EA < 4> [   36.234447] [03-19 10:05:52.234] SLUB: Unable to allocate memory on node -1, gfp=0xa20(GFP_ATOMIC)
-041EB < 4> [   36.234455] [03-19 10:05:52.234] cache: ext4_io_end, object size: 64, buffer size: 64, default order: 0, min order: 0
-041EC < 4> [   36.234459] [03-19 10:05:52.234] node 0: slabs: 53,objs: 3392, free: 0
+- Mani
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
-v2: update commit message and fix build error when CONFIG_CMA is not set
----
----
- mm/vmscan.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+> ---
+>  arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dts |  8 ++++----
+>  arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi   | 10 +++++-----
+>  arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1.dtsi   | 12 ++++++------
+>  3 files changed, 15 insertions(+), 15 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dts b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dts
+> index 79b0c6318e52..0993f840d1fc 100644
+> --- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dts
+> +++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dts
+> @@ -11,9 +11,9 @@ soc {
+>  		dma-controller@7984000 {
+>  			status = "okay";
+>  		};
+> -
+> -		qpic-nand@79b0000 {
+> -			status = "okay";
+> -		};
+>  	};
+>  };
+> +
+> +&nand {
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
+> index a63b3778636d..468ebc40d2ad 100644
+> --- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
+> @@ -102,10 +102,10 @@ pci@40000000 {
+>  			status = "okay";
+>  			perst-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
+>  		};
+> -
+> -		qpic-nand@79b0000 {
+> -			pinctrl-0 = <&nand_pins>;
+> -			pinctrl-names = "default";
+> -		};
+>  	};
+>  };
+> +
+> +&nand {
+> +	pinctrl-0 = <&nand_pins>;
+> +	pinctrl-names = "default";
+> +};
+> diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1.dtsi b/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1.dtsi
+> index 0107f552f520..7ef635997efa 100644
+> --- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1.dtsi
+> @@ -65,11 +65,11 @@ i2c@78b7000 { /* BLSP1 QUP2 */
+>  		dma-controller@7984000 {
+>  			status = "okay";
+>  		};
+> -
+> -		qpic-nand@79b0000 {
+> -			pinctrl-0 = <&nand_pins>;
+> -			pinctrl-names = "default";
+> -			status = "okay";
+> -		};
+>  	};
+>  };
+> +
+> +&nand {
+> +	pinctrl-0 = <&nand_pins>;
+> +	pinctrl-names = "default";
+> +	status = "okay";
+> +};
+> -- 
+> 2.34.1
+> 
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index bd6637f..19fb445 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -2225,10 +2225,16 @@ static unsigned long isolate_lru_folios(unsigned long nr_to_scan,
- 	unsigned long nr_skipped[MAX_NR_ZONES] = { 0, };
- 	unsigned long skipped = 0;
- 	unsigned long scan, total_scan, nr_pages;
-+	bool cma_cap = true;
-+	struct page *page;
- 	LIST_HEAD(folios_skipped);
- 
- 	total_scan = 0;
- 	scan = 0;
-+	if ((IS_ENABLED(CONFIG_CMA)) && !current_is_kswapd()
-+		&& (gfp_migratetype(sc->gfp_mask) != MIGRATE_MOVABLE))
-+		cma_cap = false;
-+
- 	while (scan < nr_to_scan && !list_empty(src)) {
- 		struct list_head *move_to = src;
- 		struct folio *folio;
-@@ -2239,12 +2245,17 @@ static unsigned long isolate_lru_folios(unsigned long nr_to_scan,
- 		nr_pages = folio_nr_pages(folio);
- 		total_scan += nr_pages;
- 
--		if (folio_zonenum(folio) > sc->reclaim_idx) {
-+		page = &folio->page;
-+
-+		if ((folio_zonenum(folio) > sc->reclaim_idx)
-+#ifdef CONFIG_CMA
-+			|| (get_pageblock_migratetype(page) == MIGRATE_CMA && !cma_cap)
-+#endif
-+		) {
- 			nr_skipped[folio_zonenum(folio)] += nr_pages;
- 			move_to = &folios_skipped;
- 			goto move;
- 		}
--
- 		/*
- 		 * Do not count skipped folios because that makes the function
- 		 * return with no isolated folios if the LRU mostly contains
 -- 
-1.9.1
-
+மணிவண்ணன் சதாசிவம்
