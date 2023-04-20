@@ -2,158 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 954DA6E8CBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F716E8CBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234124AbjDTI1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
+        id S234057AbjDTI2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233926AbjDTI1e (ORCPT
+        with ESMTP id S233691AbjDTI2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:27:34 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F463AAF;
-        Thu, 20 Apr 2023 01:27:33 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-2eed43bfa4bso354946f8f.2;
-        Thu, 20 Apr 2023 01:27:33 -0700 (PDT)
+        Thu, 20 Apr 2023 04:28:23 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F343AA4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:28:22 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-63b620188aeso986848b3a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:28:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681979252; x=1684571252;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jlo4F4g3+lV8QJ0E+q6K5kxPhHFeMG0/1IdnsG1CVbs=;
-        b=RbUI3J9JbEu22j/FdIjKbLPtmcuoTQxJBMnXpKoaSO0yIjKk58x3ylfFnfNcdaFc1b
-         9uwrAPpCw2XsgjMyjg/Jkp3MKX7JGfQW56x88Zt+J382I8+eFDgAQbiC4kRNu//pck1G
-         QTlUoX2bkyZysOPs7OROcNq7K0Qx/A6MSJ4KMVWqbfeitH02J1mxSs9hCuWa0thnb8zv
-         kLXsBb43WnESrXHV5w0npPFdRm530YH2nKHDEaS6hnt4ilxntplGTUo2Ecpp5l/R7tjl
-         4hXb1gb3Fu3JjXhUWIjO/KkNxCXnioduQmI1Xq2KmqsBlTizzx9ZuYVnU5aF5l3DK8Og
-         4F5g==
+        d=linaro.org; s=google; t=1681979301; x=1684571301;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zMHkc4ddxtiZDR/vOhmkpTYUjNc5FBHmkFEOL3O5eEI=;
+        b=nY87j4ncBYV8Afs/V05HISSZlKNEMmYjThXCGm+F6KttBojRYQ5N5hQdAsjE1vBrc8
+         TGCt2pgjC8AXgYN62q8Dl4spXMAvwsYeklhz6EIP3kLFlZSjWECd6LX8Z7aIv9Yc3Ah8
+         ueiZwqaAFjLjT/Gk9a/0K0cItsTmGBsF768/AW7fPJsic0xufVWg5A7leHR7+QKdCTeL
+         RzhWetGOAZK0qrq8qQD3SDqOYq+KBVqKtq6eYMSH8JNF/LKC9QjPB7lsSCE94hkLjNyI
+         5tWfcUtlNbN0y+0HjFb6a9f+YE9SDAOJo+7RaFPBcj+FrsAawSqShedRhiEYQBPsg84b
+         dpUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681979252; x=1684571252;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1681979301; x=1684571301;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jlo4F4g3+lV8QJ0E+q6K5kxPhHFeMG0/1IdnsG1CVbs=;
-        b=TzYDh/HoxZwVpNIMUCUgVcaSkCwF+0M46ttbQuG5gcbgdE1mfVhNiMexPOdhZSC+w3
-         iCiPuN4+y9CeHpS0d6HGItTLkSSv38B0erqZ+F7Ajhz8hH7U1GRHP2KIk9dAaG/3Uv8m
-         QfIzmAHnZYvEx8tkGE+1Acx1tUw/h4ZiStTHQnFWNxtf/zPX45erZ4HSUXnL8cUKwXgW
-         RUE1WCGfxHtqTMtZhKXqZQQpw7ek2zPVCB3FY1voOCt7xZWXiEeVr4lieY/f+KMlJs+C
-         OSFtXEI/6CrvxueKPsJ2rKAGEGppcWBPhcAebdI0ocEETGOIwzDMZrkbprZGEK1DiJ5/
-         BYAQ==
-X-Gm-Message-State: AAQBX9eLc4EUHeMfMVb79WQ8Wuu5TdA/YJxHX1J26pNiNwQGyOngYm6z
-        uL91Yq3v55+tWkoS0HPqi8E=
-X-Google-Smtp-Source: AKy350a0fvCr5yXGh2DWTwSBE5pka+2OSnlP/XdSkIuHFdS2h/tPJ2+Cco6gw1wD04pg2RwRJr9HOA==
-X-Received: by 2002:adf:f14c:0:b0:2ff:f37:9d1a with SMTP id y12-20020adff14c000000b002ff0f379d1amr613807wro.62.1681979251597;
-        Thu, 20 Apr 2023 01:27:31 -0700 (PDT)
-Received: from [192.168.0.103] ([77.124.103.108])
-        by smtp.gmail.com with ESMTPSA id f3-20020adfdb43000000b002efb2d861dasm1294605wrj.77.2023.04.20.01.27.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 01:27:31 -0700 (PDT)
-Message-ID: <6b3f92e7-e54c-bb7d-2d72-1a0875989d4a@gmail.com>
-Date:   Thu, 20 Apr 2023 11:27:26 +0300
+        bh=zMHkc4ddxtiZDR/vOhmkpTYUjNc5FBHmkFEOL3O5eEI=;
+        b=kAIwB76fMv3FZbAIFdX+U84BdqN2TNEZjbPj9YGIUFn4yuTP81uq0/bfflp8/kO2Jl
+         LNx5vxDcd5lJmcs0QlmWzGfYk2YISspFfU/KlpuTj9jZQkU17M54gejjCUYI98igKiGL
+         b+8T3LIhlJopDit5TkiKoABAlxeYd0Fh4KvvIspbbcro+5nryRcB9c2NByyz6sL+9M63
+         y/Ri/U0suXZokuJyt/akVozfwmGxUvtxJdcZ06moZJQ9Yl8RfrFpIFrpPP+M+ljvSpWm
+         w8mO09Dy1AKSJAUlzdiBEwQ+G7yRG8NUBNf2dp2y2PZyi3t4hUXXZE2rCLj0II1Q3jBp
+         uNDA==
+X-Gm-Message-State: AAQBX9c4R9EQ84EVG9X4Y6aDYNYmadOrJgUWTy4nGaeaeh7fwTf9mbGI
+        8XC4b5tcfUFg+QAFrTPpF5cy
+X-Google-Smtp-Source: AKy350YfTe+XSl06gctWCjJwT+JzE2EjX7cwndeGei8fwbiqk9lB3+gCjl3ILwy6bQ1KDlmAM2Lplw==
+X-Received: by 2002:a05:6a20:734c:b0:ec:9d9c:4a05 with SMTP id v12-20020a056a20734c00b000ec9d9c4a05mr1371094pzc.13.1681979301536;
+        Thu, 20 Apr 2023 01:28:21 -0700 (PDT)
+Received: from thinkpad ([117.207.29.62])
+        by smtp.gmail.com with ESMTPSA id m24-20020a62a218000000b0063d5fa9fb66sm712056pff.49.2023.04.20.01.28.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 01:28:21 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 13:58:11 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH RFT v2 01/14] dt-bindings: clock: qcom,rpmcc: Add a way
+ to enable unused clock cleanup
+Message-ID: <20230420082811.GA6308@thinkpad>
+References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
+ <20230303-topic-rpmcc_sleep-v2-1-ae80a325fe94@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 4/8] net: mlx5: switch comp_irqs_request() to using
- for_each_numa_cpu
-Content-Language: en-US
-To:     Yury Norov <yury.norov@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saeed Mahameed <saeedm@nvidia.com>,
-        Pawel Chmielewski <pawel.chmielewski@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Barry Song <baohua@kernel.org>
-References: <20230420051946.7463-1-yury.norov@gmail.com>
- <20230420051946.7463-5-yury.norov@gmail.com>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20230420051946.7463-5-yury.norov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230303-topic-rpmcc_sleep-v2-1-ae80a325fe94@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 20/04/2023 8:19, Yury Norov wrote:
-> for_each_numa_cpu() is a more straightforward alternative to
-> for_each_numa_hop_mask() + for_each_cpu_andnot().
+On Wed, Mar 08, 2023 at 10:35:17PM +0100, Konrad Dybcio wrote:
+> Disabling RPMCC clocks can be a bit touchy. If we can't guarantee all
+> (or at least most) of the oneline peripherals ask the interconnect
+> framework to keep their buses online and guarantee enough bandwidth,
+> we're relying on bootloader defaults to keep the said buses alive through
+> RPM requests and rate setting on RPM clocks.
 > 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> Without that in place, the RPM clocks are never enabled in the CCF, which
+> qualifies them to be cleaned up, since - as far as Linux is concerned -
+> nobody's using them and they're just wasting power. Doing so will end
+> tragically, as within miliseconds we'll get *some* access attempt on an
+> unlocked bus which will cause a platform crash.
+> 
+> On the other hand, if we want to save power and put well-supported
+> platforms to sleep, we should be shutting off at least some of these
+> clocks (this time with a clear distinction of which ones are *actually*
+> not in use, coming from the interconnect driver).
+> 
+> To differentiate between these two cases while not breaking older DTs,
+> introduce an opt-in property to correctly mark RPM clocks as enabled
+> after handoff (the initial max freq vote) and hence qualify them for the
+> common unused clock cleanup.
+> 
+
+My 2 cents here...
+
+First, this property doesn't belong in DT at all as it is OS specific handling.
+This leaves us with the option of using a cmdline or module params for rmpcc.
+But we already have one (clk_ignore_unused), so the platforms making use of old
+DTB's should use that instead.
+
+And that get's rid of the debate that when you start disabling rpmcc clocks, old
+platforms will break. I don't see a valid point to keep the old platforms alive
+since their DTB (firmware) is broken already. So either they have to fix the DTB
+or use a cmdline option.
+
+- Mani
+
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->   drivers/net/ethernet/mellanox/mlx5/core/eq.c | 16 +++++-----------
->   1 file changed, 5 insertions(+), 11 deletions(-)
+>  Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/eq.c b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
-> index 38b32e98f3bd..80368952e9b1 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/eq.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
-> @@ -817,12 +817,10 @@ static void comp_irqs_release(struct mlx5_core_dev *dev)
->   static int comp_irqs_request(struct mlx5_core_dev *dev)
->   {
->   	struct mlx5_eq_table *table = dev->priv.eq_table;
-> -	const struct cpumask *prev = cpu_none_mask;
-> -	const struct cpumask *mask;
->   	int ncomp_eqs = table->num_comp_eqs;
->   	u16 *cpus;
->   	int ret;
-> -	int cpu;
-> +	int cpu, hop;
->   	int i;
->   
->   	ncomp_eqs = table->num_comp_eqs;
-> @@ -844,15 +842,11 @@ static int comp_irqs_request(struct mlx5_core_dev *dev)
->   
->   	i = 0;
->   	rcu_read_lock();
-> -	for_each_numa_hop_mask(mask, dev->priv.numa_node) {
-> -		for_each_cpu_andnot(cpu, mask, prev) {
-> -			cpus[i] = cpu;
-> -			if (++i == ncomp_eqs)
-> -				goto spread_done;
-> -		}
-> -		prev = mask;
-> +	for_each_numa_cpu(cpu, hop, dev->priv.numa_node, cpu_possible_mask) {
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml b/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml
+> index 2a95bf8664f9..386153f61971 100644
+> --- a/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml
+> +++ b/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml
+> @@ -58,6 +58,12 @@ properties:
+>      minItems: 1
+>      maxItems: 2
+>  
+> +  qcom,clk-disable-unused:
+> +    type: boolean
+> +    description:
+> +      Indicates whether unused RPM clocks can be shut down with the common
+> +      unused clock cleanup. Requires a functional interconnect driver.
+> +
+>  required:
+>    - compatible
+>    - '#clock-cells'
+> 
+> -- 
+> 2.39.2
+> 
 
-I like this clean API.
-
-nit:
-Previously cpu_online_mask was used here. Is this change intentional?
-We can fix it in a followup patch if this is the only comment on the series.
-
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-
-> +		cpus[i] = cpu;
-> +		if (++i == ncomp_eqs)
-> +			break;
->   	}
-> -spread_done:
->   	rcu_read_unlock();
->   	ret = mlx5_irqs_request_vectors(dev, cpus, ncomp_eqs, table->comp_irqs);
->   	kfree(cpus);
-
+-- 
+மணிவண்ணன் சதாசிவம்
