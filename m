@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93EC26E948B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0AA6E9492
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbjDTMfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        id S231752AbjDTMgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjDTMfr (ORCPT
+        with ESMTP id S231715AbjDTMgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:35:47 -0400
+        Thu, 20 Apr 2023 08:36:03 -0400
 Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349B344BE;
-        Thu, 20 Apr 2023 05:35:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B356EB9;
+        Thu, 20 Apr 2023 05:35:58 -0700 (PDT)
 Received: from local
         by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
          (Exim 4.96)
         (envelope-from <daniel@makrotopia.org>)
-        id 1ppTVW-0005Um-1n;
-        Thu, 20 Apr 2023 14:35:26 +0200
-Date:   Thu, 20 Apr 2023 13:35:20 +0100
+        id 1ppTW0-0005Vz-2e;
+        Thu, 20 Apr 2023 14:35:56 +0200
+Date:   Thu, 20 Apr 2023 13:35:51 +0100
 From:   Daniel Golle <daniel@makrotopia.org>
 To:     devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
         linux-mediatek@lists.infradead.org,
@@ -35,11 +35,14 @@ To:     devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
         John Crispin <john@phrozen.org>
-Subject: [PATCH v2 0/2] Support PWM on MediaTek MT7981
-Message-ID: <cover.1681992038.git.daniel@makrotopia.org>
+Subject: [PATCH v2 1/2] dt-bindings: pwm: mediatek: Add mediatek,mt7981
+ compatible
+Message-ID: <2662c29ec80458852bb8c9041656bca46e2662dd.1681992038.git.daniel@makrotopia.org>
+References: <cover.1681992038.git.daniel@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1681992038.git.daniel@makrotopia.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -49,22 +52,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for PWM on the MediaTek MT7981 to pwm-mediatek.c as well
-as new mediatek,mt7981-pwm compatible string to the existing bindings.
+Add compatible string for the PWM unit found of the MediaTek MT7981 SoC.
+This is in preparation to adding support in the pwm-mediatek.c driver.
 
-Changes since v1:
- * use pointer to reg_offset instead of u8 reg_ver and if-else
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+No changes since v1.
 
-Daniel Golle (2):
-  dt-bindings: pwm: mediatek: Add mediatek,mt7981 compatible
-  pwm: mediatek: Add support for MT7981
+ Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../bindings/pwm/mediatek,mt2712-pwm.yaml     |  1 +
- drivers/pwm/pwm-mediatek.c                    | 39 +++++++++++++++----
- 2 files changed, 32 insertions(+), 8 deletions(-)
-
-
-base-commit: 3cdbc01c40e34c57697f8934f2727a88551696be
+diff --git a/Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml b/Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml
+index 8e176ba7a525f..0fbe8a6469eb2 100644
+--- a/Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml
++++ b/Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml
+@@ -22,6 +22,7 @@ properties:
+           - mediatek,mt7623-pwm
+           - mediatek,mt7628-pwm
+           - mediatek,mt7629-pwm
++          - mediatek,mt7981-pwm
+           - mediatek,mt7986-pwm
+           - mediatek,mt8183-pwm
+           - mediatek,mt8365-pwm
 -- 
 2.40.0
 
