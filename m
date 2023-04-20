@@ -2,190 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF616E975E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54BD76E9769
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbjDTOlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 10:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
+        id S232263AbjDTOnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 10:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232222AbjDTOlJ (ORCPT
+        with ESMTP id S231394AbjDTOnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 10:41:09 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FC12709
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:41:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1682001666;
-        bh=aX3QHlLhwlOuT8ILYxc/AT/1EhCKwbhaHkbg85dPvZs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AIplAi/tnmoNG7JvbiYE0dhJsYG0q5gisipURrJJUQVHdA0rMgOa6J5o4LEnCRPeX
-         X/EslNAzi7SixJNWQIScIL6ZKQOEkTrs85cNcmQGbyjtxTi1LUmvXjWFDd8AJ6mUP5
-         lDDRUtmPdrU9ARuMLjSFutrGtSoaQGyjdmW5MR65CbKlqGUDPxKqatY/Jr1Nvn7uxw
-         t6YlqDZDUDcQlTgaiTP6odYgpr80e60DZpCifPp+WrkpxGInN0+GwTsS5sFFWaRTcV
-         LzPihP2tu5xYu7Zi2eTYIBN2fv+XiKtUi0fzfs4D6/o//MI7k4XysTJgG5lGovT5NK
-         kT1cj+c1ZI8Kw==
-Received: from [172.16.0.91] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Q2L1t38XvzwKJ;
-        Thu, 20 Apr 2023 10:41:06 -0400 (EDT)
-Message-ID: <d5c394f8-5833-6e5c-2155-6160415cfd92@efficios.com>
-Date:   Thu, 20 Apr 2023 10:41:07 -0400
+        Thu, 20 Apr 2023 10:43:06 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2135.outbound.protection.outlook.com [40.107.92.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1173D40C0;
+        Thu, 20 Apr 2023 07:43:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hgACX7DVKvsnP4GDZcxRRsWyQC68Z9fuL/qCcTXNFdjekvtwhQUcILZN3xkoWhnlUt93CEVdwoBiLQijJkG2716D4LL8LsMTjZzvq1Z7wuqDrhrZv6ayg5JJef8pPRL3gqpYfBOtkqD1E5HjbRS8VkTtLUIBdih2Y64VdF9uLZPub7lbR5xHQHSDuVUjvi+2EA/a9jxOi35fFpxOg8nnAxsZWGKN/raPcVFDUtAx4TUiwnwfVc7MABRZjLYPCD1kFwBDt54uRu5XSkTUFVDWb/k8KcS6W3IzHrgztW/yyizisBU/D3ZG816/NkuWJ7U6BPWtFWSdL0ZXSQ9VpM3D3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6Jc7EbFD8MBeACeRUgQ0HsastDgnPUKlgLvCa/0Gq8k=;
+ b=QCXKfm2zmSEDwlGKmcBsmX0JcC7KhWgi3QM3+SkFithVyiqRMy39gWsUqtQRdd3J9XSTkqc9AlLD+HueZdetgu3qCREgX7T/i6roabgM/bj5meR1og/qEjTVpdnYhmEjcGhBEDQgEN2Z/at9mf5qkeuib5o9s3F04Jia7oWEvC/NVAt1mz5xzHjaaDimvXKPx6JyqMssNNaRKOrI+WcqYG3mGEP8d5VmymMBFcqpk8qD25oi7g7C6A2fElIUYvMtah7NR6HpEa46izn5mppZy2u2Op0KjyyrKk2OwSzjs7A703PZUbmH5ufX3qxgB0tcMbqXAkIpNFKc1n+Kk9bDcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6Jc7EbFD8MBeACeRUgQ0HsastDgnPUKlgLvCa/0Gq8k=;
+ b=i+4Rwv3KQ5+U5RX0EcbUgX/QEArQGmkUAku+SFP14KLCXc2L3H8aPuwcTv/gMs0j7PJZnQsvj7NWgWQrt+7EZ1AWJ36l6/FgTNrpvdVPK3MxoukJE8okdbBo4YE4pZ0vTFoPngOxIKVo5OA8cuD/m8Jj0VAZuDF1//saLt7PxT4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CH2PR13MB4410.namprd13.prod.outlook.com (2603:10b6:610:64::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Thu, 20 Apr
+ 2023 14:43:00 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%4]) with mapi id 15.20.6319.022; Thu, 20 Apr 2023
+ 14:43:00 +0000
+Date:   Thu, 20 Apr 2023 16:42:52 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Michal Kubecek <mkubecek@suse.cz>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Danielle Ratson <danieller@nvidia.com>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Aaron Conole <aconole@redhat.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 3/9] net: enetc: only commit preemptible TCs
+ to hardware when MM TX is active
+Message-ID: <ZEFPbNCNDWy0c8eK@corigine.com>
+References: <20230418111459.811553-1-vladimir.oltean@nxp.com>
+ <20230418111459.811553-4-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418111459.811553-4-vladimir.oltean@nxp.com>
+X-ClientProxiedBy: AM9P195CA0018.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21f::23) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH v9 2/2] sched: Fix performance regression introduced
- by mm_cid
-Content-Language: en-US
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Olivier Dion <odion@efficios.com>,
-        michael.christie@oracle.com
-References: <20230419155012.63901-1-mathieu.desnoyers@efficios.com>
- <20230419155012.63901-2-mathieu.desnoyers@efficios.com>
- <20230420095610.GA153295@ziqianlu-desk2>
- <c01ddfc5-9410-14e1-55f7-c24f44447f8a@efficios.com>
- <20230420125048.GA154262@ziqianlu-desk2>
- <721f4b8b-c238-53b1-9085-a9dae6a961e1@efficios.com>
- <20230420133519.GA154479@ziqianlu-desk2>
- <7a0c1db1-103d-d518-ed96-1584a28fbf32@efficios.com>
- <20230420141852.GA154815@ziqianlu-desk2>
- <20230420143910.GB154815@ziqianlu-desk2>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230420143910.GB154815@ziqianlu-desk2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB4410:EE_
+X-MS-Office365-Filtering-Correlation-Id: 83a748a0-7ae7-4991-cce9-08db41ad89da
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pgUA8lutEQa+uvOIe+22nfZJC/rfeBr+Tu/w4Pw9XBxHZZuQ8MwAaZuoxxzF565N8/QgKofiKCMHCrSJGYRVjk68i0c53AnLSiURsyJDj1tc0WSlAufKEcaMXGa3iUt9IA8y6RldFlaf2GVSPCjLAt0RUjF75InAITb7AB+4IF9BAOYW+z7EdmEDnYusmfv0k9rziST6yfLGc5DY3Q1JSJpyNjSOpOe444mv2Z0sGkCqi2n1OsQ/SNy/rkBL1cXcI8J7sSFuYk+QVZ339HuT9bhMri7epeHAZL2xz4TLLfGFCOZiJRGBXCDuDSnmcMFYDyoyaSjZ6JDCLoADbFHppuYfjDTpDOtEuJJlSxyHA9K+18O/PZr+R5ot07kns3xJ/7ePJOg4Tl5H3jcp1zrWNEE1g2/SYYHIIzUTa54crV+5xUqwvf2p7L3fAmQSWqzF0DfDfW+A+udCJyZm57r4m0xrRhfsuLYmYkePzVkiN53ApTk4mT3SFu0ay92aHbovS2XHtj7KWO8h2DuGRGC1xVsYGjs+7c30krt/wr9vUPhJk5ANklhqlnvG00ifBpx2
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(396003)(366004)(136003)(39840400004)(451199021)(8676002)(86362001)(8936002)(44832011)(7416002)(5660300002)(83380400001)(38100700002)(186003)(66476007)(66556008)(6506007)(478600001)(6916009)(66946007)(4326008)(6512007)(54906003)(6486002)(2616005)(36756003)(6666004)(2906002)(316002)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XFiAvAusw2Y4CqdKvJHnggsu4ToHB1YhzY1IsyrTW5AgPdNjjIh1/S72X+rh?=
+ =?us-ascii?Q?mKw7X2qlvVF/OULMKOwThgrkjnO5O3n5xS6D/yxY1BsyNp47e62KeHLtJM+d?=
+ =?us-ascii?Q?aBsNRefZ+03aJlBmqWjQY1IiJwz8A1uCzCba1NSlK4MA3ak6fPHK/nIKvtqO?=
+ =?us-ascii?Q?vspWuaXs6Ufbmyv90JlyR84Ra3eQ+lJYUSnA1Rg6ZlOsOcDqJTR3ZD4KTtNF?=
+ =?us-ascii?Q?Sz6ydkpAKOu6ONZLntpp+27PjOvoN0w3/6rI8KW6Ad5YRZuQXdtad9iDgwSc?=
+ =?us-ascii?Q?HGiv5J6XVxq99NvCvujjlwQRNfbjn1y6oIVVwSfHV5YTiqIEsMLPYbdTS2zq?=
+ =?us-ascii?Q?SuV+KUb7YLrb97e5qjgGhmQtlXPxJEjGf1vxPqywIrRjdV5udXrL5ofarYUq?=
+ =?us-ascii?Q?mDS5aVPxw4Ks4U6qBxpqnjSWhcFCW/hreUu1IgfpFMZXNu3/V3KwFQ3E0jzU?=
+ =?us-ascii?Q?oLts7r2OyHnEb6Q3i4fN3RYNGRA/7jNrp4B73khOe3chtpwUh7Ndh+bUVRtT?=
+ =?us-ascii?Q?VcIej4/O4jGN+XXT46xZJAeLHbrqTC6t0C8KyDpYPYDsnYBfmffxSwvxPovt?=
+ =?us-ascii?Q?gRbgDorvIQuz7cp1EMbDwwPGIGvIyovZunWKWMcy1MaInesioneC6Bbv1j1W?=
+ =?us-ascii?Q?oVwMZutbvTUkNKEfW8sZwZhgtmwGZEj3ND+EC97FslM7fSpznsKT02CCzi4f?=
+ =?us-ascii?Q?zsRoCgsJ1J00NtpBTgEhm0xRH3gYSFiUHuxxhlwOVv8CQLvPQTTPSndGHiI1?=
+ =?us-ascii?Q?uS5Z7mPS6IsoNmHw+mVEKAaqFPKJHnn5XMdSTkgy+MIM4BlePlfo8X5GnPMR?=
+ =?us-ascii?Q?xhS7UMNynyyLHLZ3HwoppRWlqZ0ParBjNfMNxsmfaQbf97XZatvWXa8z0D4p?=
+ =?us-ascii?Q?DwYJWrXtgFAvppLlxVSr3JE8BxzBrUHV4GFY6Xk3Y8Vc9aA18LhKs4+7o5uD?=
+ =?us-ascii?Q?4NyBxmNGTxac+jLGNWs3FrDWo80ZFAvWhJfc+/IAWKRbJYkNzRh/RA7xjVQ5?=
+ =?us-ascii?Q?ZNnmznFY7hHWII9L2AWgNcXMhS4o4fbe0xgHfex2w06fWPl7HhFGlVMCM+1f?=
+ =?us-ascii?Q?4sMd3pF43wUfojVOanmX2xYEDiUc/Eu+1asmcaMNyEx9QSJQsObQvw88dry4?=
+ =?us-ascii?Q?NCagDD22AC0xkM5+v+31cxY543piD9Dy3KQHGInevnEbl3MSdZDtXQOGBgoS?=
+ =?us-ascii?Q?Xxs6mWObMxMh7fXJliQE9u9Z8VHfX8/aeIJC9prtDWhR9W76rfQkR4U8SKxe?=
+ =?us-ascii?Q?9dW2kCvkBZz48jfKnmhBEql3Rx/5CDkRrJwg9hQ5NhAJW6Wxa5fzHIWBs51J?=
+ =?us-ascii?Q?/zTLkrXB83ZkMMg1uCFvJg1zVQ91V07Gbj3543SCytJ9pC0v+Av8br2Sb7up?=
+ =?us-ascii?Q?a9yyGLdcjaKWtbmARbywpGdcQ/wX1lVxx2nX/VvA4CYfUnZsWuZFgOW6jist?=
+ =?us-ascii?Q?jYP40OyLb0u9eLmzs4U0ACdQlFZ5uvo6NtTQp20A0xLGuX7Mf4RkyWiSmGPH?=
+ =?us-ascii?Q?NL4DbAtxlANoLTTDXLqGA7JBXwtJqHGD6I6PIeSX+m/Nrqo3TBbBMlx+ZZDE?=
+ =?us-ascii?Q?1VX8qKv4vnuqxFZAda+ampwDAAyHrsYpt4dlqmY7EKCw0wN6X3T/26v3p6Xn?=
+ =?us-ascii?Q?9qw+XTYfeGaq8jDEV5M/oWqkr5ta8BsgMneHnPMlr8AxSG+4WmUGP1xs6aI+?=
+ =?us-ascii?Q?gy22JA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83a748a0-7ae7-4991-cce9-08db41ad89da
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 14:43:00.3678
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hwgXh9IrVupIWUBd6tTblgbS+Hv8r74vqGnWc/FAwQrmesfpZ0KT9gDP+fShy9wrEgsTK7B0m3w6h7FMPxSAuatWyFboHxOIKBrNk6TspOs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB4410
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-20 10:39, Aaron Lu wrote:
-> On Thu, Apr 20, 2023 at 10:18:52PM +0800, Aaron Lu wrote:
->> On Thu, Apr 20, 2023 at 09:54:29AM -0400, Mathieu Desnoyers wrote:
->>> On 2023-04-20 09:35, Aaron Lu wrote:
->>> [...]
->>>>>>>
->>>>>>> Then we clearly have another member of mm_struct on the same cache line as
->>>>>>> pcpu_cid which is bouncing all over the place and causing false-sharing. Any
->>>>>>> idea which field(s) are causing this ?
->>>>>>
->>>>>> That's my first reaction too but as I said in an earlier reply:
->>>>>> https://lore.kernel.org/lkml/20230419080606.GA4247@ziqianlu-desk2/
->>>>>> I've tried to place pcpu_cid into a dedicate cacheline with no other
->>>>>> fields sharing a cacheline with it in mm_struct but it didn't help...
->>>>>
->>>>> I see two possible culprits there:
->>>>>
->>>>> 1) The mm_struct pcpu_cid field is suffering from false-sharing. I would be
->>>>>      interested to look at your attempt to move it to a separate cache line to
->>>>>      try to figure out what is going on.
->>>>
->>>> Brain damaged...my mistake, I only made sure its following fields not
->>>> share the same cacheline but forgot to exclude its preceding fields and
->>>> turned out it's one(some?) of the preceeding fields that caused false
->>>> sharing. When I did:
->>>>
->>>> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
->>>> index 5eab61156f0e..a6f9d815991c 100644
->>>> --- a/include/linux/mm_types.h
->>>> +++ b/include/linux/mm_types.h
->>>> @@ -606,6 +606,7 @@ struct mm_struct {
->>>>                    */
->>>>                   atomic_t mm_count;
->>>>    #ifdef CONFIG_SCHED_MM_CID
->>>> +               CACHELINE_PADDING(_pad1_);
->>>>                   /**
->>>>                    * @pcpu_cid: Per-cpu current cid.
->>>>                    *
->>>> mm_cid_get() dropped to 0.0x% when running hackbench :-)
->>>
->>> Now we are talking! :)
->>>
->>>>
->>>> sched_mm_cid_migrate_to() is about 4% with most cycles spent on
->>>> accessing mm->mm_users:
->>>>
->>>>          │     dst_cid = READ_ONCE(dst_pcpu_cid->cid);
->>>>     0.03 │       mov     0x8(%r12),%r15d
->>>>          │     if (!mm_cid_is_unset(dst_cid) &&
->>>>     0.07 │       cmp     $0xffffffff,%r15d
->>>>          │     ↓ je      87
->>>>          │     arch_atomic_read():
->>>>          │     {
->>>>          │     /*
->>>>          │     * Note for KASAN: we deliberately don't use READ_ONCE_NOCHECK() here,
->>>>          │     * it's non-inlined function that increases binary size and stack usage.
->>>>          │     */
->>>>          │     return __READ_ONCE((v)->counter);
->>>>    76.13 │       mov     0x54(%r13),%eax
->>>>          │     sched_mm_cid_migrate_to():
->>>>          │       cmp     %eax,0x410(%rdx)
->>>>    21.71 │     ↓ jle     1d8
->>>>          │     atomic_read(&mm->mm_users) >= t->nr_cpus_allowed)
->>>>
->>>> With this info, it should be mm_users that caused false sharing for
->>>> pcpu_cid previously. Looks like mm_users is bouncing.
->>>
->>> I suspect that the culprit here is mm_count rather than mm_users. mm_users
->>> just happens to share the same cache line as mm_count.
->>>
->>> mm_count is incremented/decremented with mmgrab()/mmdrop() during
->>> context switch.
->>>
->>> This is likely causing other issues, for instance, the
->>> membarrier_state field is AFAIR read-mostly, used for
->>> membarrier_mm_sync_core_before_usermode() to issue core
->>> sync before every return to usermode if needed.
->>>
->>> Other things like mm_struct pgd pointer appear to be likely
->>> read-mostly variables.
->>>
->>> I suspect it's mm_count which should be moved to its own cache line
->>> to eliminate false-sharing with all the other read-mostly fields
->>> of mm_struct.
->>>
->>> Thoughts ?
->>
->> Makes sesne, I was wondering where the write side of mm_user is. Let me
->> see how that goes by placing mm_count aside from other read mostly fields.
+On Tue, Apr 18, 2023 at 02:14:53PM +0300, Vladimir Oltean wrote:
+> This was left as TODO in commit 01e23b2b3bad ("net: enetc: add support
+> for preemptible traffic classes") since it's relatively complicated.
 > 
-> With the following naive padding for mm_count:
+> Where this makes a difference is with a configuration as follows:
 > 
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 5eab61156f0e..866696e2d83e 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -604,7 +604,9 @@ struct mm_struct {
->                   * Use mmgrab()/mmdrop() to modify. When this drops to 0, the
->                   * &struct mm_struct is freed.
->                   */
-> +               CACHELINE_PADDING(_pad1_);
->                  atomic_t mm_count;
-> +               CACHELINE_PADDING(_pad2_);
->   #ifdef CONFIG_SCHED_MM_CID
->                  /**
->                   * @pcpu_cid: Per-cpu current cid.
+> ethtool --set-mm eno0 pmac-enabled on tx-enabled on verify-enabled on
 > 
-> mm_cid_get() is about 0.1% and sched_mm_cid_migrate_to() is about 0.2%
-> for hackbench on SPR :-)
+> Preemptible packets should only be sent when the MAC Merge TX direction
+> becomes active (i.o.w. when the verification process succeeds, aka when
+> the link partner confirms it can process preemptible traffic). But the
+> tc qdisc with the preemptible traffic classes is offloaded completely
+> asynchronously w.r.t. the MM becoming active.
+> 
+> The ENETC manual does suggest that this should be handled in the driver:
+> "On startup, software should wait for the verification process to
+> complete (MMCSR[VSTS]=011) before initiating traffic".
+> 
+> Adding the necessary logic allows future selftests to uphold the claim
+> that an inactive or disabled MAC Merge layer should never send data
+> packets through the pMAC.
+> 
+> This change moves enetc_set_ptcfpr() from enetc.c to enetc_ethtool.c,
+> where its only caller is now - enetc_mm_commit_preemptible_tcs().
+> 
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Allright, then our work is done here. I'm popping the champagne.
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-I'm doing some more testing on v10 which includes a fix for the
-time-snapshot wrong runqueue, and I'll post it today.
+>  int enetc_qos_query_caps(struct net_device *ndev, void *type_data);
+> diff --git a/drivers/net/ethernet/freescale/enetc/enetc_ethtool.c b/drivers/net/ethernet/freescale/enetc/enetc_ethtool.c
+> index deb674752851..838a92131963 100644
+> --- a/drivers/net/ethernet/freescale/enetc/enetc_ethtool.c
+> +++ b/drivers/net/ethernet/freescale/enetc/enetc_ethtool.c
+> @@ -991,6 +991,64 @@ static int enetc_get_mm(struct net_device *ndev, struct ethtool_mm_state *state)
+>  	return 0;
+>  }
+>  
+> +static int enetc_mm_wait_tx_active(struct enetc_hw *hw, int verify_time)
+> +{
+> +	int timeout = verify_time * USEC_PER_MSEC * ENETC_MM_VERIFY_RETRIES;
+> +	u32 val;
+> +
+> +	/* This will time out after the standard value of 3 verification
+> +	 * attempts. To not sleep forever, it relies on a non-zero verify_time,
+> +	 * guarantee which is provided by the ethtool nlattr policy.
+> +	 */
+> +	return read_poll_timeout(enetc_port_rd, val,
+> +				 ENETC_MMCSR_GET_VSTS(val) == 3,
 
-Thanks a lot for your help ! :-)
+nit: 3 is doing a lot of work here.
+     As a follow-up, perhaps it could become part of an enum?
 
-Mathieu
+> +				 ENETC_MM_VERIFY_SLEEP_US, timeout,
+> +				 true, hw, ENETC_MMCSR);
+> +}
 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+...
