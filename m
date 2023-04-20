@@ -2,593 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 267516E9138
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2805E6E9130
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235179AbjDTK5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
+        id S235166AbjDTK4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235141AbjDTK4e (ORCPT
+        with ESMTP id S235046AbjDTK4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:56:34 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3539030;
-        Thu, 20 Apr 2023 03:54:05 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33KArnA63025459, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33KArnA63025459
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 20 Apr 2023 18:53:49 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 20 Apr 2023 18:53:49 +0800
-Received: from localhost.localdomain (172.21.132.192) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 20 Apr 2023 18:53:48 +0800
-From:   <hildawu@realtek.com>
-To:     <marcel@holtmann.org>
-CC:     <johan.hedberg@gmail.com>, <luiz.dentz@gmail.com>,
-        <linux-bluetooth@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mmandlik@google.com>, <apusaka@chromium.org>,
-        <yinghsu@chromium.org>, <alex_lu@realsil.com.cn>,
-        <max.chou@realtek.com>, <kidman@realtek.com>
-Subject: [PATCH v3] Bluetooth: btrtl: Add Realtek devcoredump support
-Date:   Thu, 20 Apr 2023 18:53:43 +0800
-Message-ID: <20230420105343.2014-1-hildawu@realtek.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 20 Apr 2023 06:56:23 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0B27EFD
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:53:51 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id h8so2315209ljf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:53:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681988029; x=1684580029;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/KWtiOadKm31udPtrGqFq8660qOr84LPtnmKc14NtBA=;
+        b=mtOATLjKbDerd9lr/WUPQ05n1/eLFjSDoV8UHqzoNp/WZKF4p9p0tgu1G2XfvUo+yl
+         k2pde1U63/6hcwchd/rbFzLzoRP1tEb5NGRdDIj5G+GdLMfPOMENKDRwxCYJFaPDkqlX
+         sZPGBlYLvDgaZGyNQpZ3G1HvTnmD4b7cpFoBnjGttRPHtbPvBWmqaoo4h70szu4uWn+1
+         eYzIpWjLNdp1ztE71QU/e8EZa8vHCNxIr2/kV+aMyFG1+PxhCmrzAIzcIlXiyMaLIq1x
+         JMCo/XlOKcg7mCrVToIsaapCSbypeiY7dALz+Qbl1Eug413EYzgcxg9WQbfXNMuazV5c
+         bFpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681988029; x=1684580029;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/KWtiOadKm31udPtrGqFq8660qOr84LPtnmKc14NtBA=;
+        b=keBz6LwZpU9woMJ/JHuc5P38wZKl1jWSGTdiMh6VX/yf6+YF76lQfoG/e6qcKLhpC4
+         4sNtxK4hPYikSNq1ke4bDSMX2sPXe/IrFp2uSwFGQHl0FnTJOSJ8NVMDfqaIc1X2PLs+
+         PWBmgtKnFMXEHr3NGvmxOpc/xuaR0kyiS2CpEHr5Nx52V5QvXk7a5wqSXGfv+eX240MK
+         eR+5inzmDeDg2TnnW2goq9iOKz4r0J0I9DZtJYHa0ucCeAjT2l2oK0HYheACtcmBws4R
+         5J+ZTnAiz4QZg2oARQfaZLtxRP8sLy3+64MdsG7RKnJ07lLXqR67mA/qk1nB5CN+TbWN
+         mW0Q==
+X-Gm-Message-State: AAQBX9cMZPUMmW4DD4wshKl/3S3d81YLG9O0V5kBLOEgz8JQFgK5GrbJ
+        see9sgSK21317FzIDVgvGPvXgw==
+X-Google-Smtp-Source: AKy350bNfrhhECRZJdQ+hKuLJ3ObTNr5cC8NpBQ8Zk8aM7ZzqRUHBhcBm8XXL/AkNIaIQk5Jy3tGIg==
+X-Received: by 2002:a2e:9698:0:b0:2a8:c4d0:b135 with SMTP id q24-20020a2e9698000000b002a8c4d0b135mr374241lji.49.1681988028756;
+        Thu, 20 Apr 2023 03:53:48 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id u17-20020a056512095100b004ec88128dc4sm179139lft.68.2023.04.20.03.53.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 03:53:48 -0700 (PDT)
+Message-ID: <ad92241e-e517-0220-b506-a907a3fbcc8d@linaro.org>
+Date:   Thu, 20 Apr 2023 12:53:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.21.132.192]
-X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 07/18] arm64: dts: qcom: msm8976: correct MMC unit address
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        "Ivan T. Ivanov" <ivan.ivanov@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Molly Sophia <mollysophia379@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230419211856.79332-1-krzysztof.kozlowski@linaro.org>
+ <20230419211856.79332-7-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230419211856.79332-7-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hilda Wu <hildawu@realtek.com>
 
-Catch debug exception from controller and driver, and trigger a
-devcoredump using hci devcoredump APIs. The debug exception data
-will be parsed in userspace.
 
-Signed-off-by: Alex Lu <alex_lu@realsil.com.cn>
-Signed-off-by: Hilda Wu <hildawu@realtek.com>
----
-Changes in v3:
- - Rebase, fixed merge confilt
+On 19.04.2023 23:18, Krzysztof Kozlowski wrote:
+> Match unit-address to reg entry to fix dtbs W=1 warnings:
+> 
+>   Warning (simple_bus_reg): /soc@0/mmc@7824000: simple-bus unit address format error, expected "7824900"
+>   Warning (simple_bus_reg): /soc@0/mmc@7864000: simple-bus unit address format error, expected "7864900"
+>   Warning (simple_bus_reg): /soc@0/mmc@7a24000: simple-bus unit address format error, expected "7a24900"
+> 
+> Fixes: 0484d3ce0902 ("arm64: dts: qcom: Add DTS for MSM8976 and MSM8956 SoCs")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Changes in v2:
- - According to devcoredump API revision, modified related part.
----
----
- drivers/bluetooth/btrtl.c | 145 +++++++++++++++++++++++++++++++-------
- drivers/bluetooth/btrtl.h |   6 ++
- drivers/bluetooth/btusb.c |  74 +++++++++++++++++++
- 3 files changed, 198 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
-index 2915c82d719d..ffb94d6481e2 100644
---- a/drivers/bluetooth/btrtl.c
-+++ b/drivers/bluetooth/btrtl.c
-@@ -32,6 +32,8 @@
- #define RTL_ROM_LMP_8851B	0x8851
- #define RTL_CONFIG_MAGIC	0x8723ab55
- 
-+#define RTL_VSC_OP_COREDUMP	0xfcff
-+
- #define IC_MATCH_FL_LMPSUBV	(1 << 0)
- #define IC_MATCH_FL_HCIREV	(1 << 1)
- #define IC_MATCH_FL_HCIVER	(1 << 2)
-@@ -81,6 +83,7 @@ struct id_table {
- 	bool has_msft_ext;
- 	char *fw_name;
- 	char *cfg_name;
-+	char *hw_info;
- };
- 
- struct btrtl_device_info {
-@@ -102,21 +105,24 @@ static const struct id_table ic_id_table[] = {
- 	  .config_needed = false,
- 	  .has_rom_version = false,
- 	  .fw_name = "rtl_bt/rtl8723a_fw.bin",
--	  .cfg_name = NULL },
-+	  .cfg_name = NULL,
-+	  .hw_info = "rtl8723au" },
- 
- 	/* 8723BS */
- 	{ IC_INFO(RTL_ROM_LMP_8723B, 0xb, 0x6, HCI_UART),
- 	  .config_needed = true,
- 	  .has_rom_version = true,
- 	  .fw_name  = "rtl_bt/rtl8723bs_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8723bs_config" },
-+	  .cfg_name = "rtl_bt/rtl8723bs_config",
-+	  .hw_info  = "rtl8723bs" },
- 
- 	/* 8723B */
- 	{ IC_INFO(RTL_ROM_LMP_8723B, 0xb, 0x6, HCI_USB),
- 	  .config_needed = false,
- 	  .has_rom_version = true,
- 	  .fw_name  = "rtl_bt/rtl8723b_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8723b_config" },
-+	  .cfg_name = "rtl_bt/rtl8723b_config",
-+	  .hw_info  = "rtl8723bu" },
- 
- 	/* 8723CS-CG */
- 	{ .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-@@ -127,7 +133,8 @@ static const struct id_table ic_id_table[] = {
- 	  .config_needed = true,
- 	  .has_rom_version = true,
- 	  .fw_name  = "rtl_bt/rtl8723cs_cg_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8723cs_cg_config" },
-+	  .cfg_name = "rtl_bt/rtl8723cs_cg_config",
-+	  .hw_info  = "rtl8723cs-cg" },
- 
- 	/* 8723CS-VF */
- 	{ .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-@@ -138,7 +145,8 @@ static const struct id_table ic_id_table[] = {
- 	  .config_needed = true,
- 	  .has_rom_version = true,
- 	  .fw_name  = "rtl_bt/rtl8723cs_vf_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8723cs_vf_config" },
-+	  .cfg_name = "rtl_bt/rtl8723cs_vf_config",
-+	  .hw_info  = "rtl8723cs-vf" },
- 
- 	/* 8723CS-XX */
- 	{ .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-@@ -149,28 +157,32 @@ static const struct id_table ic_id_table[] = {
- 	  .config_needed = true,
- 	  .has_rom_version = true,
- 	  .fw_name  = "rtl_bt/rtl8723cs_xx_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8723cs_xx_config" },
-+	  .cfg_name = "rtl_bt/rtl8723cs_xx_config",
-+	  .hw_info  = "rtl8723cs" },
- 
- 	/* 8723D */
- 	{ IC_INFO(RTL_ROM_LMP_8723B, 0xd, 0x8, HCI_USB),
- 	  .config_needed = true,
- 	  .has_rom_version = true,
- 	  .fw_name  = "rtl_bt/rtl8723d_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8723d_config" },
-+	  .cfg_name = "rtl_bt/rtl8723d_config",
-+	  .hw_info  = "rtl8723du" },
- 
- 	/* 8723DS */
- 	{ IC_INFO(RTL_ROM_LMP_8723B, 0xd, 0x8, HCI_UART),
- 	  .config_needed = true,
- 	  .has_rom_version = true,
- 	  .fw_name  = "rtl_bt/rtl8723ds_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8723ds_config" },
-+	  .cfg_name = "rtl_bt/rtl8723ds_config",
-+	  .hw_info  = "rtl8723ds" },
- 
- 	/* 8821A */
- 	{ IC_INFO(RTL_ROM_LMP_8821A, 0xa, 0x6, HCI_USB),
- 	  .config_needed = false,
- 	  .has_rom_version = true,
- 	  .fw_name  = "rtl_bt/rtl8821a_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8821a_config" },
-+	  .cfg_name = "rtl_bt/rtl8821a_config",
-+	  .hw_info  = "rtl8821au" },
- 
- 	/* 8821C */
- 	{ IC_INFO(RTL_ROM_LMP_8821A, 0xc, 0x8, HCI_USB),
-@@ -178,7 +190,8 @@ static const struct id_table ic_id_table[] = {
- 	  .has_rom_version = true,
- 	  .has_msft_ext = true,
- 	  .fw_name  = "rtl_bt/rtl8821c_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8821c_config" },
-+	  .cfg_name = "rtl_bt/rtl8821c_config",
-+	  .hw_info  = "rtl8821cu" },
- 
- 	/* 8821CS */
- 	{ IC_INFO(RTL_ROM_LMP_8821A, 0xc, 0x8, HCI_UART),
-@@ -186,14 +199,16 @@ static const struct id_table ic_id_table[] = {
- 	  .has_rom_version = true,
- 	  .has_msft_ext = true,
- 	  .fw_name  = "rtl_bt/rtl8821cs_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8821cs_config" },
-+	  .cfg_name = "rtl_bt/rtl8821cs_config",
-+	  .hw_info  = "rtl8821cs" },
- 
- 	/* 8761A */
- 	{ IC_INFO(RTL_ROM_LMP_8761A, 0xa, 0x6, HCI_USB),
- 	  .config_needed = false,
- 	  .has_rom_version = true,
- 	  .fw_name  = "rtl_bt/rtl8761a_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8761a_config" },
-+	  .cfg_name = "rtl_bt/rtl8761a_config",
-+	  .hw_info  = "rtl8761au" },
- 
- 	/* 8761B */
- 	{ IC_INFO(RTL_ROM_LMP_8761A, 0xb, 0xa, HCI_UART),
-@@ -201,14 +216,16 @@ static const struct id_table ic_id_table[] = {
- 	  .has_rom_version = true,
- 	  .has_msft_ext = true,
- 	  .fw_name  = "rtl_bt/rtl8761b_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8761b_config" },
-+	  .cfg_name = "rtl_bt/rtl8761b_config",
-+	  .hw_info  = "rtl8761btv" },
- 
- 	/* 8761BU */
- 	{ IC_INFO(RTL_ROM_LMP_8761A, 0xb, 0xa, HCI_USB),
- 	  .config_needed = false,
- 	  .has_rom_version = true,
- 	  .fw_name  = "rtl_bt/rtl8761bu_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8761bu_config" },
-+	  .cfg_name = "rtl_bt/rtl8761bu_config",
-+	  .hw_info  = "rtl8761bu" },
- 
- 	/* 8822C with UART interface */
- 	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0x8, HCI_UART),
-@@ -216,7 +233,8 @@ static const struct id_table ic_id_table[] = {
- 	  .has_rom_version = true,
- 	  .has_msft_ext = true,
- 	  .fw_name  = "rtl_bt/rtl8822cs_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8822cs_config" },
-+	  .cfg_name = "rtl_bt/rtl8822cs_config",
-+	  .hw_info  = "rtl8822cs" },
- 
- 	/* 8822C with UART interface */
- 	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0xa, HCI_UART),
-@@ -224,7 +242,8 @@ static const struct id_table ic_id_table[] = {
- 	  .has_rom_version = true,
- 	  .has_msft_ext = true,
- 	  .fw_name  = "rtl_bt/rtl8822cs_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8822cs_config" },
-+	  .cfg_name = "rtl_bt/rtl8822cs_config",
-+	  .hw_info  = "rtl8822cs" },
- 
- 	/* 8822C with USB interface */
- 	{ IC_INFO(RTL_ROM_LMP_8822B, 0xc, 0xa, HCI_USB),
-@@ -232,7 +251,8 @@ static const struct id_table ic_id_table[] = {
- 	  .has_rom_version = true,
- 	  .has_msft_ext = true,
- 	  .fw_name  = "rtl_bt/rtl8822cu_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8822cu_config" },
-+	  .cfg_name = "rtl_bt/rtl8822cu_config",
-+	  .hw_info  = "rtl8822cu" },
- 
- 	/* 8822B */
- 	{ IC_INFO(RTL_ROM_LMP_8822B, 0xb, 0x7, HCI_USB),
-@@ -240,7 +260,8 @@ static const struct id_table ic_id_table[] = {
- 	  .has_rom_version = true,
- 	  .has_msft_ext = true,
- 	  .fw_name  = "rtl_bt/rtl8822b_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8822b_config" },
-+	  .cfg_name = "rtl_bt/rtl8822b_config",
-+	  .hw_info  = "rtl8822bu" },
- 
- 	/* 8852A */
- 	{ IC_INFO(RTL_ROM_LMP_8852A, 0xa, 0xb, HCI_USB),
-@@ -248,7 +269,8 @@ static const struct id_table ic_id_table[] = {
- 	  .has_rom_version = true,
- 	  .has_msft_ext = true,
- 	  .fw_name  = "rtl_bt/rtl8852au_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8852au_config" },
-+	  .cfg_name = "rtl_bt/rtl8852au_config",
-+	  .hw_info  = "rtl8852au" },
- 
- 	/* 8852B with UART interface */
- 	{ IC_INFO(RTL_ROM_LMP_8852A, 0xb, 0xb, HCI_UART),
-@@ -256,7 +278,8 @@ static const struct id_table ic_id_table[] = {
- 	  .has_rom_version = true,
- 	  .has_msft_ext = true,
- 	  .fw_name  = "rtl_bt/rtl8852bs_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8852bs_config" },
-+	  .cfg_name = "rtl_bt/rtl8852bs_config",
-+	  .hw_info  = "rtl8852bs" },
- 
- 	/* 8852B */
- 	{ IC_INFO(RTL_ROM_LMP_8852A, 0xb, 0xb, HCI_USB),
-@@ -264,7 +287,8 @@ static const struct id_table ic_id_table[] = {
- 	  .has_rom_version = true,
- 	  .has_msft_ext = true,
- 	  .fw_name  = "rtl_bt/rtl8852bu_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8852bu_config" },
-+	  .cfg_name = "rtl_bt/rtl8852bu_config",
-+	  .hw_info  = "rtl8852bu" },
- 
- 	/* 8852C */
- 	{ IC_INFO(RTL_ROM_LMP_8852A, 0xc, 0xc, HCI_USB),
-@@ -272,7 +296,8 @@ static const struct id_table ic_id_table[] = {
- 	  .has_rom_version = true,
- 	  .has_msft_ext = true,
- 	  .fw_name  = "rtl_bt/rtl8852cu_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8852cu_config" },
-+	  .cfg_name = "rtl_bt/rtl8852cu_config",
-+	  .hw_info  = "rtl8852cu" },
- 
- 	/* 8851B */
- 	{ IC_INFO(RTL_ROM_LMP_8851B, 0xb, 0xc, HCI_USB),
-@@ -280,9 +305,16 @@ static const struct id_table ic_id_table[] = {
- 	  .has_rom_version = true,
- 	  .has_msft_ext = false,
- 	  .fw_name  = "rtl_bt/rtl8851bu_fw.bin",
--	  .cfg_name = "rtl_bt/rtl8851bu_config" },
-+	  .cfg_name = "rtl_bt/rtl8851bu_config",
-+	  .hw_info  = "rtl8851bu" },
- 	};
- 
-+static struct {
-+	const char *driver_name;
-+	char *controller;
-+	u32  fw_version;
-+} coredump_info;
-+
- static const struct id_table *btrtl_match_ic(u16 lmp_subver, u16 hci_rev,
- 					     u8 hci_ver, u8 hci_bus,
- 					     u8 chip_type)
-@@ -707,6 +739,7 @@ static int rtlbt_parse_firmware(struct hci_dev *hdev,
- 	num_patches = le16_to_cpu(epatch_info->num_patches);
- 	BT_DBG("fw_version=%x, num_patches=%d",
- 	       le32_to_cpu(epatch_info->fw_version), num_patches);
-+	coredump_info.fw_version = le32_to_cpu(epatch_info->fw_version);
- 
- 	/* After the rtl_epatch_header there is a funky patch metadata section.
- 	 * Assuming 2 patches, the layout is:
-@@ -903,6 +936,50 @@ static int btrtl_setup_rtl8723b(struct hci_dev *hdev,
- 	return ret;
- }
- 
-+static void btrtl_coredump(struct hci_dev *hdev)
-+{
-+	static const u8 param[] = { 0x00, 0x00 };
-+
-+	__hci_cmd_send(hdev, RTL_VSC_OP_COREDUMP, sizeof(param), param);
-+}
-+
-+static void btrtl_dmp_hdr(struct hci_dev *hdev, struct sk_buff *skb)
-+{
-+	char buf[80];
-+
-+	if (coredump_info.controller)
-+		snprintf(buf, sizeof(buf), "Controller Name: %s\n",
-+			 coredump_info.controller);
-+	else
-+		snprintf(buf, sizeof(buf), "Controller Name: Unknown\n");
-+	skb_put_data(skb, buf, strlen(buf));
-+
-+	snprintf(buf, sizeof(buf), "Firmware Version: 0x%X\n",
-+		 coredump_info.fw_version);
-+	skb_put_data(skb, buf, strlen(buf));
-+
-+	snprintf(buf, sizeof(buf), "Driver: %s\n", coredump_info.driver_name);
-+	skb_put_data(skb, buf, strlen(buf));
-+
-+	snprintf(buf, sizeof(buf), "Vendor: Realtek\n");
-+	skb_put_data(skb, buf, strlen(buf));
-+}
-+
-+static int btrtl_register_devcoredump_support(struct hci_dev *hdev)
-+{
-+	int err;
-+
-+	err = hci_devcd_register(hdev, btrtl_coredump, btrtl_dmp_hdr, NULL);
-+
-+	return err;
-+}
-+
-+void btrtl_set_driver_name(struct hci_dev *hdev, const char *driver_name)
-+{
-+	coredump_info.driver_name = driver_name;
-+}
-+EXPORT_SYMBOL_GPL(btrtl_set_driver_name);
-+
- static bool rtl_has_chip_type(u16 lmp_subver)
- {
- 	switch (lmp_subver) {
-@@ -1113,6 +1190,9 @@ struct btrtl_device_info *btrtl_initialize(struct hci_dev *hdev,
- 	if (btrtl_dev->ic_info->has_msft_ext)
- 		hci_set_msft_opcode(hdev, 0xFCF0);
- 
-+	if (btrtl_dev->ic_info)
-+		coredump_info.controller = btrtl_dev->ic_info->hw_info;
-+
- 	return btrtl_dev;
- 
- err_free:
-@@ -1125,6 +1205,8 @@ EXPORT_SYMBOL_GPL(btrtl_initialize);
- int btrtl_download_firmware(struct hci_dev *hdev,
- 			    struct btrtl_device_info *btrtl_dev)
- {
-+	int err = 0;
-+
- 	/* Match a set of subver values that correspond to stock firmware,
- 	 * which is not compatible with standard btusb.
- 	 * If matched, upload an alternative firmware that does conform to
-@@ -1133,12 +1215,14 @@ int btrtl_download_firmware(struct hci_dev *hdev,
- 	 */
- 	if (!btrtl_dev->ic_info) {
- 		rtl_dev_info(hdev, "assuming no firmware upload needed");
--		return 0;
-+		err = 0;
-+		goto done;
- 	}
- 
- 	switch (btrtl_dev->ic_info->lmp_subver) {
- 	case RTL_ROM_LMP_8723A:
--		return btrtl_setup_rtl8723a(hdev, btrtl_dev);
-+		err = btrtl_setup_rtl8723a(hdev, btrtl_dev);
-+		break;
- 	case RTL_ROM_LMP_8723B:
- 	case RTL_ROM_LMP_8821A:
- 	case RTL_ROM_LMP_8761A:
-@@ -1146,11 +1230,18 @@ int btrtl_download_firmware(struct hci_dev *hdev,
- 	case RTL_ROM_LMP_8852A:
- 	case RTL_ROM_LMP_8703B:
- 	case RTL_ROM_LMP_8851B:
--		return btrtl_setup_rtl8723b(hdev, btrtl_dev);
-+		err = btrtl_setup_rtl8723b(hdev, btrtl_dev);
-+		break;
- 	default:
- 		rtl_dev_info(hdev, "assuming no firmware upload needed");
--		return 0;
-+		break;
- 	}
-+
-+done:
-+	if (!err)
-+		err = btrtl_register_devcoredump_support(hdev);
-+
-+	return err;
- }
- EXPORT_SYMBOL_GPL(btrtl_download_firmware);
- 
-diff --git a/drivers/bluetooth/btrtl.h b/drivers/bluetooth/btrtl.h
-index adb4c2c9abc5..fe2888c2d175 100644
---- a/drivers/bluetooth/btrtl.h
-+++ b/drivers/bluetooth/btrtl.h
-@@ -139,6 +139,7 @@ int btrtl_get_uart_settings(struct hci_dev *hdev,
- 			    struct btrtl_device_info *btrtl_dev,
- 			    unsigned int *controller_baudrate,
- 			    u32 *device_baudrate, bool *flow_control);
-+void btrtl_set_driver_name(struct hci_dev *hdev, const char *driver_name);
- 
- #else
- 
-@@ -182,4 +183,9 @@ static inline int btrtl_get_uart_settings(struct hci_dev *hdev,
- 	return -ENOENT;
- }
- 
-+static inline void btrtl_set_driver_name(struct hci_dev *hdev, const char *driver_name)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
- #endif
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 3aa189b1986d..5fa90347a4e1 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -869,10 +869,49 @@ static void btusb_intel_cmd_timeout(struct hci_dev *hdev)
- 	gpiod_set_value_cansleep(reset_gpio, 0);
- }
- 
-+#define RTK_DEVCOREDUMP_CODE_MEMDUMP		0x01
-+#define RTK_DEVCOREDUMP_CODE_HW_ERR		0x02
-+#define RTK_DEVCOREDUMP_CODE_CMD_TIMEOUT	0x03
-+
-+#define RTK_SUB_EVENT_CODE_COREDUMP		0x34
-+
-+struct rtk_dev_coredump_hdr {
-+	u8 type;
-+	u8 code;
-+	u8 reserved[2];
-+} __packed;
-+
-+static inline void btusb_rtl_alloc_devcoredump(struct hci_dev *hdev,
-+		struct rtk_dev_coredump_hdr *hdr, u8 *buf, u32 len)
-+{
-+	struct sk_buff *skb;
-+
-+	skb = alloc_skb(len + sizeof(*hdr), GFP_ATOMIC);
-+	if (!skb)
-+		return;
-+
-+	skb_put_data(skb, hdr, sizeof(*hdr));
-+	if (len)
-+		skb_put_data(skb, buf, len);
-+
-+	if (!hci_devcd_init(hdev, skb->len)) {
-+		hci_devcd_append(hdev, skb);
-+		hci_devcd_complete(hdev);
-+	} else {
-+		bt_dev_err(hdev, "RTL: Failed to generate devcoredump");
-+		kfree_skb(skb);
-+	}
-+}
-+
- static void btusb_rtl_cmd_timeout(struct hci_dev *hdev)
- {
- 	struct btusb_data *data = hci_get_drvdata(hdev);
- 	struct gpio_desc *reset_gpio = data->reset_gpio;
-+	struct rtk_dev_coredump_hdr hdr = {
-+		.type = RTK_DEVCOREDUMP_CODE_CMD_TIMEOUT,
-+	};
-+
-+	btusb_rtl_alloc_devcoredump(hdev, &hdr, NULL, 0);
- 
- 	if (++data->cmd_timeout_cnt < 5)
- 		return;
-@@ -899,6 +938,18 @@ static void btusb_rtl_cmd_timeout(struct hci_dev *hdev)
- 	gpiod_set_value_cansleep(reset_gpio, 0);
- }
- 
-+static void btusb_rtl_hw_error(struct hci_dev *hdev, u8 code)
-+{
-+	struct rtk_dev_coredump_hdr hdr = {
-+		.type = RTK_DEVCOREDUMP_CODE_HW_ERR,
-+		.code = code,
-+	};
-+
-+	bt_dev_info(hdev, "RTL: hw err, trigger devcoredump");
-+
-+	btusb_rtl_alloc_devcoredump(hdev, &hdr, NULL, 0);
-+}
-+
- static void btusb_qca_cmd_timeout(struct hci_dev *hdev)
- {
- 	struct btusb_data *data = hci_get_drvdata(hdev);
-@@ -2539,6 +2590,25 @@ static int btusb_setup_realtek(struct hci_dev *hdev)
- 	return ret;
- }
- 
-+static int btusb_recv_event_realtek(struct hci_dev *hdev, struct sk_buff *skb)
-+{
-+	if (skb->data[0] == HCI_VENDOR_PKT && skb->data[2] == RTK_SUB_EVENT_CODE_COREDUMP) {
-+		struct rtk_dev_coredump_hdr hdr = {
-+			.code = RTK_DEVCOREDUMP_CODE_MEMDUMP,
-+		};
-+
-+		bt_dev_info(hdev, "RTL: received coredump vendor evt, len %u",
-+			skb->len);
-+
-+		btusb_rtl_alloc_devcoredump(hdev, &hdr, skb->data, skb->len);
-+		kfree_skb(skb);
-+
-+		return 0;
-+	}
-+
-+	return hci_recv_frame(hdev, skb);
-+}
-+
- /* UHW CR mapping */
- #define MTK_BT_MISC		0x70002510
- #define MTK_BT_SUBSYS_RST	0x70002610
-@@ -3978,6 +4048,8 @@ static int btusb_probe(struct usb_interface *intf,
- 	} else if (id->driver_info & BTUSB_REALTEK) {
- 		/* Allocate extra space for Realtek device */
- 		priv_size += sizeof(struct btrealtek_data);
-+
-+		data->recv_event = btusb_recv_event_realtek;
- 	}
- 
- 	data->recv_acl = hci_recv_frame;
-@@ -4136,9 +4208,11 @@ static int btusb_probe(struct usb_interface *intf,
- 
- 	if (IS_ENABLED(CONFIG_BT_HCIBTUSB_RTL) &&
- 	    (id->driver_info & BTUSB_REALTEK)) {
-+		btrtl_set_driver_name(hdev, btusb_driver.name);
- 		hdev->setup = btusb_setup_realtek;
- 		hdev->shutdown = btrtl_shutdown_realtek;
- 		hdev->cmd_timeout = btusb_rtl_cmd_timeout;
-+		hdev->hw_error = btusb_rtl_hw_error;
- 
- 		/* Realtek devices need to set remote wakeup on auto-suspend */
- 		set_bit(BTUSB_WAKEUP_AUTOSUSPEND, &data->flags);
--- 
-2.17.1
-
+Konrad
+>  arch/arm64/boot/dts/qcom/msm8976.dtsi | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8976.dtsi b/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> index f47fb8ea71e2..753b9a2105ed 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> @@ -822,7 +822,7 @@ spmi_bus: spmi@200f000 {
+>  			#interrupt-cells = <4>;
+>  		};
+>  
+> -		sdhc_1: mmc@7824000 {
+> +		sdhc_1: mmc@7824900 {
+>  			compatible = "qcom,msm8976-sdhci", "qcom,sdhci-msm-v4";
+>  			reg = <0x07824900 0x500>, <0x07824000 0x800>;
+>  			reg-names = "hc", "core";
+> @@ -838,7 +838,7 @@ sdhc_1: mmc@7824000 {
+>  			status = "disabled";
+>  		};
+>  
+> -		sdhc_2: mmc@7864000 {
+> +		sdhc_2: mmc@7864900 {
+>  			compatible = "qcom,msm8976-sdhci", "qcom,sdhci-msm-v4";
+>  			reg = <0x07864900 0x11c>, <0x07864000 0x800>;
+>  			reg-names = "hc", "core";
+> @@ -957,7 +957,7 @@ otg: usb@78db000 {
+>  			#reset-cells = <1>;
+>  		};
+>  
+> -		sdhc_3: mmc@7a24000 {
+> +		sdhc_3: mmc@7a24900 {
+>  			compatible = "qcom,msm8976-sdhci", "qcom,sdhci-msm-v4";
+>  			reg = <0x07a24900 0x11c>, <0x07a24000 0x800>;
+>  			reg-names = "hc", "core";
