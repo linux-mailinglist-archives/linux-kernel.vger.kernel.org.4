@@ -2,103 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5636E8CAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954DA6E8CBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234361AbjDTIYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
+        id S234124AbjDTI1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234431AbjDTIYi (ORCPT
+        with ESMTP id S233926AbjDTI1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:24:38 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9A340C6;
-        Thu, 20 Apr 2023 01:24:16 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A8DA1218E9;
-        Thu, 20 Apr 2023 08:24:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681979055; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QiP5e/+4S7KnMOT6XDJPynS4EU6xSJzZUOwhN1ceQZ4=;
-        b=Ka0LrcOK1yn6kwCoYM3XsQIK3ZxWeM/e5JNhtgI0SFtoekmncvrSclbNcgq/12E5RNfh1B
-        tKSbwcPVGtT2/YC5w4McbNVc7dh9FfvwOH8tot50WNK+ZaF895gnFjMRlXXnj5hsiArUo6
-        6uoNtinW8lqu1FVp2C/SaiZWbIwF/AM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681979055;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QiP5e/+4S7KnMOT6XDJPynS4EU6xSJzZUOwhN1ceQZ4=;
-        b=6zrfcF8lR9nuEfShfTTEJY9Eum3YmV16Vcd4njIN65Y9hLrVFotV6yrzuvZesxoabLhKWx
-        vYy9P6qmJcw26SBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 99D2F1333C;
-        Thu, 20 Apr 2023 08:24:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xKWCJa/2QGSZbAAAMHmgww
-        (envelope-from <dwagner@suse.de>); Thu, 20 Apr 2023 08:24:15 +0000
-Date:   Thu, 20 Apr 2023 10:24:15 +0200
-From:   Daniel Wagner <dwagner@suse.de>
-To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Cc:     Sagi Grimberg <sagi@grimberg.me>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>
-Subject: Re: [RFC v1 0/1] nvme testsuite runtime optimization
-Message-ID: <qflkb4gu5lz5wx2oka5ceclj7ez5ic5oyofd3tzyjapjyrorlk@e7kkpa6bxwun>
-References: <20230419085643.25714-1-dwagner@suse.de>
- <f0d2ddd5-37d6-8fba-a5e3-965fb9f41474@nvidia.com>
- <9a1f1709-baaf-5661-2cbf-c34e2da9e42e@grimberg.me>
- <27235520-2e63-2891-fd0a-ff758f18032e@nvidia.com>
+        Thu, 20 Apr 2023 04:27:34 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F463AAF;
+        Thu, 20 Apr 2023 01:27:33 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-2eed43bfa4bso354946f8f.2;
+        Thu, 20 Apr 2023 01:27:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681979252; x=1684571252;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jlo4F4g3+lV8QJ0E+q6K5kxPhHFeMG0/1IdnsG1CVbs=;
+        b=RbUI3J9JbEu22j/FdIjKbLPtmcuoTQxJBMnXpKoaSO0yIjKk58x3ylfFnfNcdaFc1b
+         9uwrAPpCw2XsgjMyjg/Jkp3MKX7JGfQW56x88Zt+J382I8+eFDgAQbiC4kRNu//pck1G
+         QTlUoX2bkyZysOPs7OROcNq7K0Qx/A6MSJ4KMVWqbfeitH02J1mxSs9hCuWa0thnb8zv
+         kLXsBb43WnESrXHV5w0npPFdRm530YH2nKHDEaS6hnt4ilxntplGTUo2Ecpp5l/R7tjl
+         4hXb1gb3Fu3JjXhUWIjO/KkNxCXnioduQmI1Xq2KmqsBlTizzx9ZuYVnU5aF5l3DK8Og
+         4F5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681979252; x=1684571252;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jlo4F4g3+lV8QJ0E+q6K5kxPhHFeMG0/1IdnsG1CVbs=;
+        b=TzYDh/HoxZwVpNIMUCUgVcaSkCwF+0M46ttbQuG5gcbgdE1mfVhNiMexPOdhZSC+w3
+         iCiPuN4+y9CeHpS0d6HGItTLkSSv38B0erqZ+F7Ajhz8hH7U1GRHP2KIk9dAaG/3Uv8m
+         QfIzmAHnZYvEx8tkGE+1Acx1tUw/h4ZiStTHQnFWNxtf/zPX45erZ4HSUXnL8cUKwXgW
+         RUE1WCGfxHtqTMtZhKXqZQQpw7ek2zPVCB3FY1voOCt7xZWXiEeVr4lieY/f+KMlJs+C
+         OSFtXEI/6CrvxueKPsJ2rKAGEGppcWBPhcAebdI0ocEETGOIwzDMZrkbprZGEK1DiJ5/
+         BYAQ==
+X-Gm-Message-State: AAQBX9eLc4EUHeMfMVb79WQ8Wuu5TdA/YJxHX1J26pNiNwQGyOngYm6z
+        uL91Yq3v55+tWkoS0HPqi8E=
+X-Google-Smtp-Source: AKy350a0fvCr5yXGh2DWTwSBE5pka+2OSnlP/XdSkIuHFdS2h/tPJ2+Cco6gw1wD04pg2RwRJr9HOA==
+X-Received: by 2002:adf:f14c:0:b0:2ff:f37:9d1a with SMTP id y12-20020adff14c000000b002ff0f379d1amr613807wro.62.1681979251597;
+        Thu, 20 Apr 2023 01:27:31 -0700 (PDT)
+Received: from [192.168.0.103] ([77.124.103.108])
+        by smtp.gmail.com with ESMTPSA id f3-20020adfdb43000000b002efb2d861dasm1294605wrj.77.2023.04.20.01.27.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 01:27:31 -0700 (PDT)
+Message-ID: <6b3f92e7-e54c-bb7d-2d72-1a0875989d4a@gmail.com>
+Date:   Thu, 20 Apr 2023 11:27:26 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <27235520-2e63-2891-fd0a-ff758f18032e@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 4/8] net: mlx5: switch comp_irqs_request() to using
+ for_each_numa_cpu
+Content-Language: en-US
+To:     Yury Norov <yury.norov@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        Pawel Chmielewski <pawel.chmielewski@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Barry Song <baohua@kernel.org>
+References: <20230420051946.7463-1-yury.norov@gmail.com>
+ <20230420051946.7463-5-yury.norov@gmail.com>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <20230420051946.7463-5-yury.norov@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 09:11:33PM +0000, Chaitanya Kulkarni wrote:
-> >> Those jobs are meant to be run for at least 1G to establish
-> >> confidence on the data set and the system under test since SSDs
-> >> are in TBs nowadays and we don't even get anywhere close to that,
-> >> with your suggestion we are going even lower ...
-> >
-> > Where does the 1G boundary coming from?
-> >
->
-> I wrote these testcases 3 times, initially they were the part of
-> nvme-cli tests7-8 years ago, then nvmftests 7-6 years ago, then they
-> moved to blktests.
-> 
-> In that time some of the testcases would not fail on with small size
-> such as less than 512MB especially with verification but they were
-> in the errors with 1G Hence I kept to be 1G.
-> 
-> Now I don't remember why I didn't use bigger size than 1G
-> should have documented that somewhere ...
 
-Can you remember why you chosed to set the image size to 1G and the io size for
-fio to 950m in nvme/012 and nvme/013?
 
-I am testing various image sizes and found that small images e.g in the range of
-[4..64]m are passing fine but larger ones like [512-...]M do not (no space
-left). Note I've added a calc function which does image size - 1M to leave some
-room left.
+On 20/04/2023 8:19, Yury Norov wrote:
+> for_each_numa_cpu() is a more straightforward alternative to
+> for_each_numa_hop_mask() + for_each_cpu_andnot().
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>   drivers/net/ethernet/mellanox/mlx5/core/eq.c | 16 +++++-----------
+>   1 file changed, 5 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/eq.c b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
+> index 38b32e98f3bd..80368952e9b1 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/eq.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
+> @@ -817,12 +817,10 @@ static void comp_irqs_release(struct mlx5_core_dev *dev)
+>   static int comp_irqs_request(struct mlx5_core_dev *dev)
+>   {
+>   	struct mlx5_eq_table *table = dev->priv.eq_table;
+> -	const struct cpumask *prev = cpu_none_mask;
+> -	const struct cpumask *mask;
+>   	int ncomp_eqs = table->num_comp_eqs;
+>   	u16 *cpus;
+>   	int ret;
+> -	int cpu;
+> +	int cpu, hop;
+>   	int i;
+>   
+>   	ncomp_eqs = table->num_comp_eqs;
+> @@ -844,15 +842,11 @@ static int comp_irqs_request(struct mlx5_core_dev *dev)
+>   
+>   	i = 0;
+>   	rcu_read_lock();
+> -	for_each_numa_hop_mask(mask, dev->priv.numa_node) {
+> -		for_each_cpu_andnot(cpu, mask, prev) {
+> -			cpus[i] = cpu;
+> -			if (++i == ncomp_eqs)
+> -				goto spread_done;
+> -		}
+> -		prev = mask;
+> +	for_each_numa_cpu(cpu, hop, dev->priv.numa_node, cpu_possible_mask) {
+
+I like this clean API.
+
+nit:
+Previously cpu_online_mask was used here. Is this change intentional?
+We can fix it in a followup patch if this is the only comment on the series.
+
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+
+> +		cpus[i] = cpu;
+> +		if (++i == ncomp_eqs)
+> +			break;
+>   	}
+> -spread_done:
+>   	rcu_read_unlock();
+>   	ret = mlx5_irqs_request_vectors(dev, cpus, ncomp_eqs, table->comp_irqs);
+>   	kfree(cpus);
+
