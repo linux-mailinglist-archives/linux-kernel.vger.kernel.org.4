@@ -2,67 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052096E95E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CCA6E95EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbjDTNeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 09:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
+        id S231384AbjDTNe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 09:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjDTNeV (ORCPT
+        with ESMTP id S231311AbjDTNeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:34:21 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B3B49E5;
-        Thu, 20 Apr 2023 06:34:19 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4edbd6cc46bso570065e87.2;
-        Thu, 20 Apr 2023 06:34:19 -0700 (PDT)
+        Thu, 20 Apr 2023 09:34:24 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B4946B2;
+        Thu, 20 Apr 2023 06:34:22 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33K80Q25024590;
+        Thu, 20 Apr 2023 13:34:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=/2pU+Mjx/eBHFI+Ocgv5dApy4c7xbvi83CIcgbZ+0ug=;
+ b=Enebl3pIUrCu8b3W8hhboMpTS4eo+8VdeMea3XA3rlVIofjaq78z8A2LDthlkwSPjV32
+ hOjJSPrg0kmkB+M8NYC/7Q+59eLU5Z7qyY0VRpaTJdcLg6ov+zzh2TWTAINpEeEbJNi7
+ 63lArTbRB5QW3I+xtoib1YU0LqyeLn4nkCld14xi6VE6OVcjHhs8dCwWoUnINaMOyC3K
+ CbTgXQRPL0EtePFeW91Ftjs4Q50nPJ1Ch0ujIFrDecCSuUs1eSH3xO7zN0ey3JCiAdly
+ A4BbWJLM+Y6yVkYGTNWjeCGUgNbJZxOjDvF8zEA34Wi/JxTKcJ8SVNjrS1cBbmzGx1x7 GQ== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pyktatspr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Apr 2023 13:34:13 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33KCkm8D037046;
+        Thu, 20 Apr 2023 13:34:11 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2105.outbound.protection.outlook.com [104.47.70.105])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pyjcea8vv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Apr 2023 13:34:11 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qhf36ch6rFPCK5ofNQR35wMC5HW7YY67v5COGXzAZGY7OkIg3MLK8ZMQfuNoIEmx1r1hB4JIJn6WeulByjLKR59iNModFrBdOxIRDBmkJuyeQJUGvVHEI2xgysmv2L3+5aD8qk/IekUV/wy+BrlVaa6ENHkQXEKn6X5pZHl1RadEmXyWOx2adnG4hl6pW3b4dyneanGVxYg6MRQ63LuqhLs81XCOp5QxesfLRTppDrm9VxYL4c9FRcvmR9hKGEhyx5abKDGXTDlG2lA9HJvzw1uBHfQzIlm7ofoKtyNDXBQZQotutza1TldrNO+c9a2+wSCk9Nr+unAuQSS7b86dUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/2pU+Mjx/eBHFI+Ocgv5dApy4c7xbvi83CIcgbZ+0ug=;
+ b=c+E6Y7kAiDW8GNoY1uT3ojhQDZKjn8ub32HaHJcaXmCpzoYzpfw/3F+IOhpHCI2TwuA31iQqsSneWy/iuzTgzCT/W76Had1iBXLHsKX2A90CC3ZUeevEpaq6fH1eWMmvK0jWcnafP5BQnGuqyvvSoX3nEYf2EMs1S08ZcLF54O3jFoEJbXafXVuRCo/TS9xGu9ENjMzWYcyW4DR8qQFsw2ChOiZBYTv8RMjaTLGIFjwKY008aW2CkMuSHi7WEDcH52ddx+HayB6b7EirRfdOGkV3uUSh6xEieUkC8zruAxlCcsJXEntFepmwqvxykdBFQvkpayUBc/hhYgEsSx+JEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681997658; x=1684589658;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JBx+eefuD3mlwASOnAXXaphvTZnbQD+D9i1G2I4aLj8=;
-        b=qmB7IgRNrOg7Yiy3/TCCuLJTdZB4SeCbSJttL+VR1cUJ04+ObsDD9YNoCesG+AnTHJ
-         aTeVhRRCY5DH9nEbVtHUHA46SG7WHzuheX2uLfll+cHdp7LAjEqFRzwamv7j4ZRlpYWo
-         LEWj3a6svuA2UrbTejkMtUNjhba6LI+KwaWc5ejbGx99wt79qmebAVLxUZp0cn6zBI/d
-         r+iWKXXsu5bcz9v81h5zaXe2/YBUu1c/lwRSqIOnlFrtvbsetPjfOWpUPQm8WBbBU2Rd
-         dJoZoLwtjUfqSjMspUZ7yJoKBkIURWO4PLxVccPS+Xc8LISsIDwtU5IcglUK/Ea+MJas
-         QJNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681997658; x=1684589658;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JBx+eefuD3mlwASOnAXXaphvTZnbQD+D9i1G2I4aLj8=;
-        b=ZcYF8PawvgjFBcyNRs/pzUw7fCV8eEtpAvB2BBTEWBpVogYbq8lzMSkoomZcD2MPDQ
-         5lQ1sJ3M3gjt9KU/0HiAQd9sz4nQSeluDF2g5H11/pQHVAl/juWXXi1+YqwoUuaiisn/
-         36fKYiSDCIRbuEV1eg1PuDHTCoWa8q7839+RZxv3ncbKb9Hsag0IizvZaqTrgW3KJmGU
-         3vzSn1IVjn9PGFFrhIgj78RtQxSZhIfVQHXl/YBHAAEHsfEiEggLcm/46ikT0BtV13l7
-         dEnS/SC40Ri2zFb7NTJq03EWEBsKoMGtx/GZUX44qqxVsMMWedUAsv3OVSw2K6cyRKBF
-         5Hwg==
-X-Gm-Message-State: AAQBX9esOAAyxs0xcUFyD6H1Uz5gk2jBZfrvOTSIcyY5Cx82U9xrKprq
-        85sK84/vsJ7H3zjrbFPT3m8JsUmyo2l0x64yiY5ffD+S
-X-Google-Smtp-Source: AKy350btAzYnXLlPTv04Y7unRU8YAvfOdqZn0Lxv4Zt4Os2OAzHN86GYf4hNuxyadHt2aEVCWzfucLKCiIJ2BZ7vVzA=
-X-Received: by 2002:a19:ee0e:0:b0:4ea:e799:59f7 with SMTP id
- g14-20020a19ee0e000000b004eae79959f7mr393073lfb.2.1681997657435; Thu, 20 Apr
- 2023 06:34:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230419151321.6167-14-jorge.lopez2@hp.com> <202304200914.VfJcRutc-lkp@intel.com>
-In-Reply-To: <202304200914.VfJcRutc-lkp@intel.com>
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-Date:   Thu, 20 Apr 2023 08:33:54 -0500
-Message-ID: <CAOOmCE_+UL31C50Md-eV5H76jy2Ta1q1xB7b=QqdNU95Q4y6fw@mail.gmail.com>
-Subject: Re: [PATCH v10 13/14] HP BIOSCFG driver - Makefile
-To:     kernel test robot <lkp@intel.com>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas@t-8ch.de,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/2pU+Mjx/eBHFI+Ocgv5dApy4c7xbvi83CIcgbZ+0ug=;
+ b=i6Jb09P+KkNimt+aUT2SV12iFIQceMwAW8PgJIfsMUWs0pdXHqSAB6Q7nRqXPblvm/fWZH1ZpwBVTNqD4805Pfg1aW2feKaGKbppviz5LT2269wT10AfxYAG+spO9g/0fdlm/GEtwxgPQUi7XjtIh8s6j1ITwxm149q3r3sbEvY=
+Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
+ by SJ2PR10MB7557.namprd10.prod.outlook.com (2603:10b6:a03:538::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Thu, 20 Apr
+ 2023 13:34:09 +0000
+Received: from BN0PR10MB5128.namprd10.prod.outlook.com
+ ([fe80::ecbd:fc46:2528:36db]) by BN0PR10MB5128.namprd10.prod.outlook.com
+ ([fe80::ecbd:fc46:2528:36db%6]) with mapi id 15.20.6319.022; Thu, 20 Apr 2023
+ 13:34:09 +0000
+From:   Chuck Lever III <chuck.lever@oracle.com>
+To:     David Gow <davidgow@google.com>, Jakub Kicinski <kuba@kernel.org>
+CC:     Chuck Lever <cel@kernel.org>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH RESEND] .gitignore: Do not ignore .kunitconfig files
+Thread-Topic: [PATCH RESEND] .gitignore: Do not ignore .kunitconfig files
+Thread-Index: AQHZcsgLgDo41T00xkCS6kRmtJgMq68zzOuAgABnC4A=
+Date:   Thu, 20 Apr 2023 13:34:09 +0000
+Message-ID: <A921F514-1167-4C67-A52C-D49EDCE6F6B8@oracle.com>
+References: <168191307928.6696.11689169705819224951.stgit@91.116.238.104.host.secureserver.net>
+ <CABVgOSmH=SgtJy1U5tfLwYjWW32WheuzB1F+XJRzD9qtR+bseg@mail.gmail.com>
+In-Reply-To: <CABVgOSmH=SgtJy1U5tfLwYjWW32WheuzB1F+XJRzD9qtR+bseg@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3731.500.231)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN0PR10MB5128:EE_|SJ2PR10MB7557:EE_
+x-ms-office365-filtering-correlation-id: 0afdd4fd-1608-4939-53e1-08db41a3ebe9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xKII7RtU5Zb5jIdVsEIvnvx16n4v8FQ4m1eUTj5xZ/q6IG8VeAt157HrSSOoT+SWlO8Y85iudvyFbFD5miJtAWfQ1wXsxX3D8w3bYuYsvrAUOgXKzNEGAtkbcXLnOKx/IrUC6SSjjxyt+qkozqMowl5AUn+qZuaFjaGzmy4YyBq6kW5Jl/B7aPw5aq+FDjxisXSFAXtQPrLbfCBHn1Ta7NFxAORITjUvUEi2XBZrP3t06k59HBfTOGxaPrRKb4PBV0CD9j7dN+tm2Ovp6NjDgcSuVQnMRH1crYckmRhXAML6q5fLzpWbjB8mDLumU8dz9GpuaYV88M9vzmyf4bMZgl5XlDDZfKhd1Zu086cbwziLhdnac0RDiJZ1zaUuzD6KnHVh2oXVCjA/H/EQVHW2D13XPv8DrMYlJ+8ZSCeRXhuCka0YEqwH89E34BEHAC7P8xTzMi2L57Ig8N2CzoRd0MwWdkzvJfxfzUGSoXzsxYAzmbnRs6SBrzjXjdMWp/NEtz5soX5TxOlzYFDhXbQo12tdehUvcy9V+PFq573KZpnPJDEOlyy4+9V1LLvCx25xQAn1R5eO6KUYLyBXFnZuvg7GXm4mDfMbBZ7mYlwpE7srXKgClWDpEH0o4AvXSraUptCiXsTHfrvLfZSuaRBE3jpTQKm+rkUWl92hOi5WI9nQDrakMmkOF9BDF5BJIYG3DL37lFnYjmruEkJxuYgcCw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(346002)(396003)(136003)(39860400002)(451199021)(83380400001)(110136005)(86362001)(33656002)(2616005)(53546011)(6506007)(26005)(6512007)(36756003)(966005)(478600001)(6486002)(54906003)(71200400001)(4326008)(66556008)(66476007)(66946007)(41300700001)(38070700005)(316002)(76116006)(8936002)(122000001)(38100700002)(66446008)(64756008)(8676002)(91956017)(186003)(2906002)(4744005)(5660300002)(142923001)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wK3IxPq9X0fvWM9Z+dBlSEt/hGWwdtFYtmdps3yRJfDZBMI780cC4uF3Jhvl?=
+ =?us-ascii?Q?WNerh9QhFbQWVyco69wDzL3nu0jA+q9fRxjiK03aNXMFxp7DH8PyWxdSCSjm?=
+ =?us-ascii?Q?hxxLIRLKy0jIp10NJS/PwwrqbyOpA9U53UpqRAWEMdcsbSUpRzapTCjEJ1c5?=
+ =?us-ascii?Q?SmYXdPAL+9F0iVzz9HiHd3B3sJ8/M2hJnmrp2j0HGywT+W70L6YiLkfupxVs?=
+ =?us-ascii?Q?TkTlgRqw/VgbZJPxtYOurzdHnqPGSevoBK2dAhA12hbcMypzEGHiZln7oWli?=
+ =?us-ascii?Q?UGNZvtxxE5KT9jalsXxlxg+ZEp//WJbm4zWJz9bNhLyuEfbRVJfV9aFjwj94?=
+ =?us-ascii?Q?/qUsMvTKbpYv25w7o8S7lnBcAdoWZWlVlW04RHJ7i31IqQPOrnIRZo19TwxL?=
+ =?us-ascii?Q?bwLaiyETSLmOrsMb/KZ2IsHi+1rco1NO7in+D0pH7MNfKFMWxujbNg9ZDTYK?=
+ =?us-ascii?Q?7SubVZv20EV0yJ66zYUmSF18kJxEeGnfpnQglsk6eaWe8JZIby8L1jE6DQyw?=
+ =?us-ascii?Q?Sp0LQPCrN8GzzcGMpel9AOQ3m1CLPqEJtVTdlR0K+fXqMEaPiTooEQPrXD5g?=
+ =?us-ascii?Q?uTToFyZ1m5PZspLOnV0ILfBQcAG4YYGn5+GZMQQwt/JK/xP4dazaocHaoHNq?=
+ =?us-ascii?Q?jvbZ79s046qh/BQ+5sg3cH0l/GC4pqIWfW7OBcxs4y6K3AL60EqOOWggx242?=
+ =?us-ascii?Q?PHIzD8K6duGa73kFh1l/DPnmUVp73b2ZNkC++UJcFj9ZCEXHeLQetCWEQo7J?=
+ =?us-ascii?Q?lCIBqdeo2NVsQU6ZJQAO8lBYTok1TxlmDsO9e28t4cCPz2soL1bPzshIJspr?=
+ =?us-ascii?Q?2DrRoozvvK2mq4t7YXuANr3rA695CDIyKACDd7w7bu03vem28WOQhDSGRE2r?=
+ =?us-ascii?Q?uqKaD+H0HAjgXHWWjmningxThETMRfdZF28xSN1YEZmTspWVbA4bJ7plyvlw?=
+ =?us-ascii?Q?RCCdgrSs3QmdTiwZqblD4i1szDQyX90x3Q3x00OFuuFWFR315Cb/n1LHxsxA?=
+ =?us-ascii?Q?pT9OJaQ+qnT2AmHr2drEPe8qXZVMvboVK+C60t5HcgR6/NW1TjK/tWasLb7k?=
+ =?us-ascii?Q?jQGF41hSq0J6Vb+F9bAbt0gFg0h0g44Hkn7MLD5aSOzO0N93owZlY4RajIE6?=
+ =?us-ascii?Q?7MK8NkTePeGw0xqWtwMZ4D3iXxgJsEG9QT86n6FrBohB+gCfHm+bW8hiUeKe?=
+ =?us-ascii?Q?EWGIT2Nsq9SWfJGLfhPWWbvzZqTyhBfnwFF7YS439arrYjgw3CnMpHF1+nw8?=
+ =?us-ascii?Q?B2RCVmuvx69r1whBScnQWJwQGK2nluz4QuwjzWAJiJSnXdlFFU9kCkBII1ov?=
+ =?us-ascii?Q?YTgI3ps1nhi97uAfYZkRF19eMowAjSBiSAeK0s+ukxW5OtsfE5Ypgy7bKAIL?=
+ =?us-ascii?Q?4gPU00XecaAf2/xD6YgCYm1FIpJf+ghAWCLEM/McdSIdAt5qOlyYyBlA/CA0?=
+ =?us-ascii?Q?cqgTswEM+TKSWUjd12B7iBNe856hOL5t5FF4czlsZV0iEEHMaGZUVagpc3Gr?=
+ =?us-ascii?Q?JQCOpTPX/YABcrVWyucvAq3clDznrmjtyFW1msx9PXoIfD/Lgi/uwQg5C3EM?=
+ =?us-ascii?Q?GUXbmrDj2cC0ryS7P8snhufSM0jsPgS0VC3xBkDphR7SMinlLbhuISH3sqmL?=
+ =?us-ascii?Q?ig=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <C7A90D2A90EAF04696C9420DF5199B7A@namprd10.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+MIME-Version: 1.0
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: tLihX/d6AuOWHa5Zyf/suKg/xm260e/ORS9wboi5bu22GBMN2wlLlnXtwzxw04+cPAOf6DU4SUT8paTkweaMM5DcvfTpMevKQ7hTWze/1ceZDhFHh8NPhOLrcsijvUhJo/FHCctThNY2RKg/dkThYunUVRb3k/DT3fVEcySYneRpsSfYX5stDbrhBxq3TVr4MnFGPPnWsD2joEMf6Xijg1sQfzq/5kzGP6+d20KrdsN+1y93P/IkCGIQPPkt/9n0ndJ89KxSaIZbm2aI8SaGX6PINaoSWqRsMWmaC4aetAHj2Sz1Ty6nyO/cUAo+R8WUZtANFVlgBTCwgz8HxopE3tQI4XosJyz41jNQcy6p9dgd0DKvk3UBlvNSC2mgaqCFiEwN4QdI08N9iMA+GSjeOBmTccLCQWGIZy7lpIShimto+1hDZBL+FQ37E4I5MOiNCSeZwpKNH41908cPL5lXQwwspiG92O/Gby2QE9B7sNullwgQGjUh1sU9bZ4CvqJ1Dnr0YplpZLzy15vajO83IWAY7k+RkCcZYNC/rLzTXiXFyIUBv3raFNJB6JCLsxtVJl3s0LZtfwAOPLUrv2j4GdGpavUhxCmpsLFvOjrfXe20vYZvSwFGQXYyW+GpC3jwozBjmGOoBKmiGD12Cd4CglmDL1hzZ+56LbiQY8f4lF+bWjpfRNuv1IBq810HZOTWyI3Z+eM1t8RoRcinKqDOZH96fDLWDSbbtCk8GvHgzJeoF0oC1/OxhMuqmvX/lOJIpv4rcsFCKilqSun3951btSsvdV+/PwkdxGH+zIBH8Zr8KljytIZy3jFKJf7+W9aX
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0afdd4fd-1608-4939-53e1-08db41a3ebe9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Apr 2023 13:34:09.5913
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6XEA8OrweY9KDjfdGsFNoXdtTYOWQqkIk65bHDNEgbeMuCEdHXns9eXM4Tb83p8ahlHuSYUYGM3Ljz2TjQ9prA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR10MB7557
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-20_08,2023-04-20_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 bulkscore=0
+ mlxscore=0 mlxlogscore=799 adultscore=0 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304200111
+X-Proofpoint-ORIG-GUID: HE5Ba1b0Epr6--b1RSYG82fYVLJ8UpAk
+X-Proofpoint-GUID: HE5Ba1b0Epr6--b1RSYG82fYVLJ8UpAk
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,243 +154,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you.  I will address those issues.
 
-Regards,
 
-Jorge
+> On Apr 20, 2023, at 3:25 AM, David Gow <davidgow@google.com> wrote:
+>=20
+> On Wed, 19 Apr 2023 at 22:05, Chuck Lever <cel@kernel.org> wrote:
+>>=20
+>> From: Chuck Lever <chuck.lever@oracle.com>
+>>=20
+>> Circumvent the .gitignore wildcard to avoid warnings about ignored
+>> .kunitconfig files. As far as I can tell, the warnings are harmless
+>> and these files are not actually ignored.
+>>=20
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Link: https://lore.kernel.org/oe-kbuild-all/202304142337.jc4oUrov-lkp@in=
+tel.com/
+>> Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+>> ---
+>=20
+> Thanks very much.
+>=20
+> We have an equivalent patch already staged in the kselftest/kunit for 6.3=
+:
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git=
+/commit/?h=3Dkunit&id=3Dcb8865fd865f5b2f656d0d91f3b0146ef1acb10d
 
-On Wed, Apr 19, 2023 at 8:45=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Jorge,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on linus/master]
-> [also build test WARNING on v6.3-rc7 next-20230419]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jorge-Lopez/HP-BIO=
-SCFG-driver-Documentation/20230419-231828
-> patch link:    https://lore.kernel.org/r/20230419151321.6167-14-jorge.lop=
-ez2%40hp.com
-> patch subject: [PATCH v10 13/14] HP BIOSCFG driver  - Makefile
-> config: i386-randconfig-a015-20230417 (https://download.01.org/0day-ci/ar=
-chive/20230420/202304200914.VfJcRutc-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c=
-006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/cfbebfbd4ed15793f=
-ab894715bfd74387adcf4f1
->         git remote add linux-review https://github.com/intel-lab-lkp/linu=
-x
->         git fetch --no-tags linux-review Jorge-Lopez/HP-BIOSCFG-driver-Do=
-cumentation/20230419-231828
->         git checkout cfbebfbd4ed15793fab894715bfd74387adcf4f1
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Di386 olddefconfig
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash drivers/platform/x86/hp/hp=
--bioscfg/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202304200914.VfJcRutc-lkp@i=
-ntel.com/
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c:141:2: warni=
-ng: variable 'id' is used uninitialized whenever 'if' condition is true [-W=
-sometimes-uninitialized]
->            if (!buf_cp) {
->            ^~~~~~~~~~~~
->    include/linux/compiler.h:56:28: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_=
-var'
->    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __=
-trace_if_value(cond))
->                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~
->    drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c:169:18: note=
-: uninitialized use occurs here
->            clear_passwords(id);
->                            ^~
->    drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c:141:2: note:=
- remove the 'if' if its condition is always false
->            if (!buf_cp) {
->            ^~~~~~~~~~~~~~
->    include/linux/compiler.h:56:23: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                          ^
->    drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c:138:8: note:=
- initialize the variable 'id' to silence this warning
->            int id, ret =3D -EIO;
->                  ^
->                   =3D 0
->    1 warning generated.
-> --
-> >> drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:76:2: warning:=
- variable 'ret' is used uninitialized whenever 'if' condition is true [-Wso=
-metimes-uninitialized]
->            if (!start)
->            ^~~~~~~~~~~
->    include/linux/compiler.h:56:28: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_=
-var'
->    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __=
-trace_if_value(cond))
->                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:87:9: note: un=
-initialized use occurs here
->            return ret;
->                   ^~~
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:76:2: note: re=
-move the 'if' if its condition is always false
->            if (!start)
->            ^~~~~~~~~~~
->    include/linux/compiler.h:56:23: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                          ^
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:72:2: warning:=
- variable 'ret' is used uninitialized whenever 'if' condition is true [-Wso=
-metimes-uninitialized]
->            if (!start)
->            ^~~~~~~~~~~
->    include/linux/compiler.h:56:28: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_=
-var'
->    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __=
-trace_if_value(cond))
->                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:87:9: note: un=
-initialized use occurs here
->            return ret;
->                   ^~~
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:72:2: note: re=
-move the 'if' if its condition is always false
->            if (!start)
->            ^~~~~~~~~~~
->    include/linux/compiler.h:56:23: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                          ^
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:43:2: warning:=
- variable 'ret' is used uninitialized whenever 'if' condition is true [-Wso=
-metimes-uninitialized]
->            if (instance < 0)
->            ^~~~~~~~~~~~~~~~~
->    include/linux/compiler.h:56:28: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_=
-var'
->    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __=
-trace_if_value(cond))
->                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:87:9: note: un=
-initialized use occurs here
->            return ret;
->                   ^~~
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:43:2: note: re=
-move the 'if' if its condition is always false
->            if (instance < 0)
->            ^~~~~~~~~~~~~~~~~
->    include/linux/compiler.h:56:23: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                          ^
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:30:9: note: in=
-itialize the variable 'ret' to silence this warning
->            int ret;
->                   ^
->                    =3D 0
->    3 warnings generated.
->
->
-> vim +141 drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c
->
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  132
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  133  static ssize_t new_password_s=
-tore(struct kobject *kobj,
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  134                               =
- struct kobj_attribute *attr,
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  135                               =
- const char *buf, size_t count)
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  136  {
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  137      char *p, *buf_cp =3D NULL=
-;
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  138      int id, ret =3D -EIO;
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  139
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  140      buf_cp =3D kstrdup(buf, G=
-FP_KERNEL);
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19 @141      if (!buf_cp) {
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  142              ret =3D -ENOMEM;
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  143              goto exit_passwor=
-d;
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  144      }
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  145
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  146      p =3D memchr(buf_cp, '\n'=
-, count);
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  147
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  148      if (p !=3D NULL)
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  149              *p =3D '\0';
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  150
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  151      id =3D get_password_insta=
-nce_id(kobj);
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  152
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  153      if (id >=3D 0)
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  154              ret =3D validate_=
-password_input(id, buf_cp);
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  155
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  156      if (!ret)
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  157              strscpy(bioscfg_d=
-rv.password_data[id].new_password,
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  158                      buf_cp,
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  159                      sizeof(bi=
-oscfg_drv.password_data[id].new_password));
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  160
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  161      if (!ret)
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  162              ret =3D hp_set_at=
-tribute(kobj->name, buf_cp);
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  163
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  164  exit_password:
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  165      /*
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  166       * Regardless of the resu=
-lts both new and current passwords
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  167       * will be set to zero an=
-d avoid security issues
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  168       */
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  169      clear_passwords(id);
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  170
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  171      kfree(buf_cp);
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  172      return ret ? ret : count;
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  173  }
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  174
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+Most excellent.
+
+Yesterday, Jakub accepted my patch in net-next as part of
+a series that also adds additional Kunit tests. My patch
+can be dropped or reverted to avoid a merge conflict.
+
+
+--
+Chuck Lever
+
+
