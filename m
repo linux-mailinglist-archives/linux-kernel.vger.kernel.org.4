@@ -2,82 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D636E9932
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECB16E9935
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231951AbjDTQIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 12:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
+        id S232023AbjDTQJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 12:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbjDTQIT (ORCPT
+        with ESMTP id S231559AbjDTQJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 12:08:19 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFCA2729;
-        Thu, 20 Apr 2023 09:08:18 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 73433732;
-        Thu, 20 Apr 2023 16:08:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 73433732
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1682006898; bh=B3Xqo3nWn5ee6tZS82P0hkeSI480N7hQKWDJUqhNn0E=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=MznbQH7U3J3DGvT8DMFedy7ylTzOHNUG3405M3EIM+5/Fs4tt/CNSjsziptvUuLNX
-         uhcVWNTPAyVXbBSH/4Y28lnWrXzW69FECfBMbXZencwYKaiwQenmPpGn+M6OBm9W31
-         fbRCZGbs2C1IMc2DhN5i1V9upC/gHpwIV1YRZSD0rmOgIW6FL7U8JXGA0jp+7C/Al1
-         wRA/R3krtTdnt4T93PGDs8jUjApGF7V8JGbPR+lema37O/hPDz+2WJkka+NDEfwJ0w
-         2lu5FcN8dGK9iIk0bwHPeSsNTzXa1MxYZcGO0dUfPCashPcghcsNxBMud34a0Q8Zpa
-         GXtBTQsgyEYdw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-doc@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH] docs: kmemleak: adjust to config renaming
-In-Reply-To: <20230414061241.12754-1-lukas.bulwahn@gmail.com>
-References: <20230414061241.12754-1-lukas.bulwahn@gmail.com>
-Date:   Thu, 20 Apr 2023 10:08:17 -0600
-Message-ID: <87bkjitu32.fsf@meer.lwn.net>
+        Thu, 20 Apr 2023 12:09:08 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAC63A8D;
+        Thu, 20 Apr 2023 09:09:07 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-187af4a5437so759346fac.0;
+        Thu, 20 Apr 2023 09:09:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682006946; x=1684598946;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IkJ757D7Ayc3x5jwYsxuxnxkjlFuulWAJkfbWRzIMQM=;
+        b=L+Q/Z9F5Lr72WUhZmeCPJxNdm7GRBO/cumSnJwXXos3DO+1tPW8yh/cyarmkxblbW4
+         YQNBb/wLauxOPzR2zdxt8/X4bJN1/Q9CMtKffc2oxLpo5LjUqicZ0RPLHrfoK8N76MFc
+         xTe8URzoX/HzzhRM2MOW2+sFNULa3C8YwSq0SJYPSPQBwWK0SF6NR20Y3yJ5wSsiITnN
+         zysMzQDsUjHcxt2Ox1IEI5/uVMy5EBURrGzoK/CT8bBvRnJ8nSuno4JlhjZSpECWJ4rO
+         ddLyMd6nChVKV9gHH73jcn94RwYdBA8OPEv+fxhUWis36bkwm8iEF34Drzor3+Kl8n+i
+         1MQQ==
+X-Gm-Message-State: AAQBX9c+YT2vI8JdYMNywKfYyu9IvYBnvKY+rg4oLJEKwWSAAZO7Rif2
+        BYrxJqqCDB9VlxNKChY3mQ==
+X-Google-Smtp-Source: AKy350aeJxflQzYgaqEyeXyK2zF5CseRY9f1WBxfwgvnpr5+Az0JWEfKsadnsXHRkEEvplIekIvQ9A==
+X-Received: by 2002:a05:6870:ec91:b0:180:5c1f:5446 with SMTP id eo17-20020a056870ec9100b001805c1f5446mr1426888oab.50.1682006946545;
+        Thu, 20 Apr 2023 09:09:06 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m21-20020a056870a41500b0018459cc0f52sm870775oal.24.2023.04.20.09.09.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 09:09:06 -0700 (PDT)
+Received: (nullmailer pid 2960072 invoked by uid 1000);
+        Thu, 20 Apr 2023 16:09:05 -0000
+Date:   Thu, 20 Apr 2023 11:09:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH] dt-bindings: display: panel: add common definition of
+ ports
+Message-ID: <20230420160905.GA2952736-robh@kernel.org>
+References: <20230416153929.356330-1-krzysztof.kozlowski@linaro.org>
+ <20230418222613.GA2408838-robh@kernel.org>
+ <77d94fe0-75d2-8f64-19c6-fc19438ba71a@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <77d94fe0-75d2-8f64-19c6-fc19438ba71a@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lukas Bulwahn <lukas.bulwahn@gmail.com> writes:
+On Wed, Apr 19, 2023 at 10:56:55AM +0200, Krzysztof Kozlowski wrote:
+> On 19/04/2023 00:26, Rob Herring wrote:
+> > On Sun, Apr 16, 2023 at 05:39:29PM +0200, Krzysztof Kozlowski wrote:
+> >> Few panel bindings for dual-link connections just type "ports: true",
+> >> which does not enforce any type.  Add common definition of ports, so the
+> >> type will be fixed.
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>
+> >> ---
+> >>
+> >> Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+> >> ---
+> >>  .../bindings/display/panel/panel-common.yaml     | 16 ++++++++++++++++
+> >>  1 file changed, 16 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/display/panel/panel-common.yaml b/Documentation/devicetree/bindings/display/panel/panel-common.yaml
+> >> index 5b38dc89cb21..ad62d34e6fa3 100644
+> >> --- a/Documentation/devicetree/bindings/display/panel/panel-common.yaml
+> >> +++ b/Documentation/devicetree/bindings/display/panel/panel-common.yaml
+> >> @@ -70,6 +70,16 @@ properties:
+> >>    port:
+> >>      $ref: /schemas/graph.yaml#/properties/port
+> >>  
+> >> +  # For dual-link connections
+> >> +  ports:
+> >> +    $ref: /schemas/graph.yaml#/properties/ports
+> >> +    patternProperties:
+> >> +      "^port@[0-9a-f]+$":
+> >> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > 
+> > This allows any undocumented property.
+> 
+> Yes, which I hope the device schema (using this panel-common) will
+> narrow with additionalProperties: false.
+> 
+> I can make it explicit: additionalProperties: true.
+> 
+> Otherwise, how do I allow custom properties like:
+> Documentation/devicetree/bindings/display/panel/advantech,idk-2121wr.yaml
+> 
+> > 
+> >> +
+> >> +    required:
+> >> +      - port@0
+> >> +
+> > 
+> > I don't think this should be added here because users must define what 
+> > each port is. With it here, we're going to validate the nodes twice as 
+> > well. Same can be said for 'port' though. It can't be extended though.
+> 
+> So you propose to drop entire "ports" here and expect every panel schema
+> to define it instead?
 
-> Commit c87db8ca0902 ("kmemleak-test: fix kmemleak_test.c build logic")
-> essentially renames the config DEBUG_KMEMLEAK_TEST to SAMPLE_KMEMLEAK, but
-> misses to adjust the documentation.
->
-> Adjust kmemleak documentation to this config renaming.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  Documentation/dev-tools/kmemleak.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/dev-tools/kmemleak.rst b/Documentation/dev-tools/kmemleak.rst
-> index 5483fd39ef29..2cb00b53339f 100644
-> --- a/Documentation/dev-tools/kmemleak.rst
-> +++ b/Documentation/dev-tools/kmemleak.rst
-> @@ -227,7 +227,7 @@ Testing with kmemleak-test
->  --------------------------
->  
->  To check if you have all set up to use kmemleak, you can use the kmemleak-test
-> -module, a module that deliberately leaks memory. Set CONFIG_DEBUG_KMEMLEAK_TEST
-> +module, a module that deliberately leaks memory. Set CONFIG_SAMPLE_KMEMLEAK
->  as module (it can't be used as built-in) and boot the kernel with kmemleak
+Only those with more than 1 port or extra port/endpoint properties. If 
+neither of those are true, then they can use just 'port'. Otherwise, 
+all those panel bindings already have to define the port nodes already.
 
-Applied, thanks.
-
-jon
+Rob
