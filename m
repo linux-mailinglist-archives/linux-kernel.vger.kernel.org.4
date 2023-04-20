@@ -2,143 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A4E6E90F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE2C6E90EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235027AbjDTKtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33466 "EHLO
+        id S234503AbjDTKtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234540AbjDTKsf (ORCPT
+        with ESMTP id S234676AbjDTKsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:48:35 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974BE10EA;
-        Thu, 20 Apr 2023 03:47:01 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id 41be03b00d2f7-5144a9c11c7so835695a12.2;
-        Thu, 20 Apr 2023 03:47:01 -0700 (PDT)
+        Thu, 20 Apr 2023 06:48:13 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7BC93D5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:46:51 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2a8aea0c7dcso3808361fa.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:46:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681987619; x=1684579619;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fUsKL4hqeOrADLXVSzAKCm9V00hdTaU+8spEB1aYNQY=;
-        b=XwOj6TyipWhhJdAB/ZOgsH+8NkWNHP9eop/f1eQlml/0xc71YH8eJGrLygEzTd9ECL
-         keYbS0+HlxqcLXMjXaOR9Z3Hl1CeU5/pLmBQ/EzVtnfppCWcRK4YogbQ6deH1DSen2sV
-         Mlxu7ov93Wj0KZ5ZRy3WaY8enAZrb1A8C/33Sn6oOVYdbAzQgYzdvQDDMDMJmKXaYbKK
-         hSdNVHvVyNfa3Gpl7OHpDSLxEuGu7CBu2cw6JuS8DfqUf/1tL5d/5LtDYxr/Sw7U0rNd
-         DcMRhwq1zCKdubu8rnzugBJIqls8P7zkxv8eTup0v/x2huQERG2UVCtnl6CaPt9w/ilU
-         IoGQ==
+        d=linaro.org; s=google; t=1681987608; x=1684579608;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iep7/xE+gJ5/a5+wqfQTrPkvE8qVynHVQIC8DVLeC9Y=;
+        b=pPAhAYrPsjoObGLSXgVWFClu5ALl895r9YusyXjqzuu9dOdvOjd03KeN+CHp52Zs8f
+         G+dJ4UkETlljzPP1XvX92jukvJZqJU0zpP605DIFvo1P8Fn6XVPnOIyMfcxzk+Q4V9on
+         nIjpd1fgf2L8VoyIIppy8bdzvaUwf0HSKjuZNMuH8BUWz2zp9yuvVcL7xT0QqKxnMGh3
+         TzTvaX7yClz9R128KD8QIXeRSc2GEnOas2fcEtM5OklbBwwtSD2iLdXZhVypjYBLGgOI
+         YzbhJvPMCGYaMqCWBNLCDQbaLgVIGia3g1wXOlzK5UQtyxe6TQ/LRQWBQwrj436J1EEA
+         PX8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681987619; x=1684579619;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fUsKL4hqeOrADLXVSzAKCm9V00hdTaU+8spEB1aYNQY=;
-        b=PqXrqwd7UYdU1ecQQ1QlV3+V+b6lpwfBlg16/6xYaTL5C128rm3fH5Y2RfM1P516Hu
-         +wutCwdwPVQ3nnO61ywcOg1f245NgVhxUGrNzonnUm35vnzSZnPC/yMO0Hqi9LxOYUbQ
-         ExrhrSFOf0aR5gAUeAmZGt5hJcWcHnVEqoWGONAHyBBerwCHtGzY/TAU6jTONq9ZhcD7
-         2iKsE3hPoBZiEmUfKYVkWR0koBUrSUolCbHzaXvhDr50J3vBc+uR47fGuo/+J6DOUcQA
-         pSidfIYWjVjN3dwdd6MXZEVwxWYARsK6G1QADH5QRvoQFTwWFPnppa2ZS6gW23NnpdCk
-         dK2A==
-X-Gm-Message-State: AAQBX9ekZzkVqnFGPV/+JMBnJuzCkR6fHq60qxuZkb3d6XeBMbpgJSiN
-        9JnHWMzO6bqNrWOaN1R2V0g497/dz6hZL+a0
-X-Google-Smtp-Source: AKy350aI2hqildqUB6LxE9IbVKgqCR4ALns3I3izkecaOeS3k/gPSceIf14vciqRl46CPQ7yhdCZhg==
-X-Received: by 2002:a17:90b:1bc8:b0:249:897b:fac with SMTP id oa8-20020a17090b1bc800b00249897b0facmr1154624pjb.39.1681987618824;
-        Thu, 20 Apr 2023 03:46:58 -0700 (PDT)
-Received: from CLOUDLIANG-MB2.tencent.com ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id ju18-20020a170903429200b001a526805b86sm923735plb.191.2023.04.20.03.46.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 03:46:58 -0700 (PDT)
-From:   Jinrong Liang <ljr.kernel@gmail.com>
-X-Google-Original-From: Jinrong Liang <ljrcore@126.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Aaron Lewis <aaronlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jinrong Liang <cloudliang@tencent.com>,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/7] KVM: selftests: Test pmu event filter with incompatible kvm_pmu_event_filter
-Date:   Thu, 20 Apr 2023 18:46:22 +0800
-Message-Id: <20230420104622.12504-8-ljrcore@126.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230420104622.12504-1-ljrcore@126.com>
-References: <20230420104622.12504-1-ljrcore@126.com>
+        d=1e100.net; s=20221208; t=1681987608; x=1684579608;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iep7/xE+gJ5/a5+wqfQTrPkvE8qVynHVQIC8DVLeC9Y=;
+        b=TEBEnjvzWFkkyVf344nLMIWhjlNDB9/PWkqr2Mn/gn08pCpmUTetVFqQyC4zJNZRtc
+         G/V8RSdeoNkaCcHaQ2lpNwQ/PBZ3FJ/hMnh456n6MWtXrRhWyryICZ5E9mca8QGm0DoK
+         iKPGe8BIriIc1DqoJiWiY453EQ86cCyOmTtcjEBBpvJ9J3p991kPRunrG4sO3rb9BC2T
+         zMo5o3SLOGsgVc/PDUh0rT39V2cRegWpGWuMbhwX0H3YBSz4JtdHV2UpaIdn+FYgi+5A
+         jxmoxRXhWfNUKn13ZOSGFqiOPfRBy7uiCwgaYjyfKdpEn7CEmfHEQe+Dj4xBvfixlmhC
+         5Ifw==
+X-Gm-Message-State: AAQBX9fuofptuz5gz7p3LZ1ynvrgQKhgPZDRZJTlgL7KArPLOtZjnUzx
+        bNIsoVcwLBkJanYBkKsbNIXXZw==
+X-Google-Smtp-Source: AKy350arSbY0SEXSii248y1vwLv+UCD6rWyTNQacHSu8SnbTtOUQPUvymv+aI8RMqOLM6s6P/Os73A==
+X-Received: by 2002:ac2:4e72:0:b0:4de:7a23:23e2 with SMTP id y18-20020ac24e72000000b004de7a2323e2mr284361lfs.21.1681987608266;
+        Thu, 20 Apr 2023 03:46:48 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id u17-20020a056512095100b004ec88128dc4sm177307lft.68.2023.04.20.03.46.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 03:46:47 -0700 (PDT)
+Message-ID: <98d8fb6c-5e64-43be-17d5-ae37db69201b@linaro.org>
+Date:   Thu, 20 Apr 2023 12:46:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 04/10] ARM: dts: qcom: ipq8064: drop leading 0 from
+ unit-address
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230420075053.41976-1-krzysztof.kozlowski@linaro.org>
+ <20230420075053.41976-4-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230420075053.41976-4-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinrong Liang <cloudliang@tencent.com>
 
-From: Jinrong Liang <cloudliang@tencent.com>
 
-Add test to verify the behavior of the pmu event filter when an
-incomplete kvm_pmu_event_filter structure is used. By running the
-test, we can ensure that the pmu event filter correctly handles
-incomplete structures and does not allow events to be counted when
-they should not be.
+On 20.04.2023 09:50, Krzysztof Kozlowski wrote:
+> Unit-address should not start with 0:
+> 
+>   Warning (simple_bus_reg): /soc/syscon@03000000: simple-bus unit address format error, expected "3000000"
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
----
- .../kvm/x86_64/pmu_event_filter_test.c        | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+>  arch/arm/boot/dts/qcom-ipq8064.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> index 621edf508a88..182018d79a7b 100644
+> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> @@ -609,7 +609,7 @@ saw1: regulator@2099000 {
+>  			regulator;
+>  		};
+>  
+> -		nss_common: syscon@03000000 {
+> +		nss_common: syscon@3000000 {
+>  			compatible = "syscon";
+>  			reg = <0x03000000 0x0000FFFF>;
+some random uppercase hex, if you'd like to clean that up too!
 
-diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-index 9be4c6f8fb7e..a6b6e0d086ae 100644
---- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-@@ -881,6 +881,24 @@ static bool fixed_ctr_is_allowed(uint8_t idx, uint32_t action, uint32_t bitmap)
- 		(action == KVM_PMU_EVENT_DENY && !(bitmap & BIT_ULL(idx)));
- }
- 
-+struct incompatible_pmu_event_filter {
-+	__u32 action;
-+	__u32 nevents;
-+	__u32 fixed_counter_bitmap;
-+};
-+
-+static uint64_t test_incompatible_filter(struct kvm_vcpu *vcpu, uint32_t action,
-+					 uint32_t bitmap)
-+{
-+	struct incompatible_pmu_event_filter err_f;
-+
-+	err_f.action = action;
-+	err_f.fixed_counter_bitmap = bitmap;
-+	ioctl((vcpu->vm)->fd, KVM_SET_PMU_EVENT_FILTER, &err_f.action);
-+
-+	return run_vcpu_to_sync(vcpu);
-+}
-+
- static void test_fixed_ctr_action_and_bitmap(struct kvm_vcpu *vcpu,
- 					     uint8_t fixed_ctr_idx,
- 					     uint8_t max_fixed_num)
-@@ -918,6 +936,11 @@ static void test_fixed_ctr_action_and_bitmap(struct kvm_vcpu *vcpu,
- 
- 			TEST_ASSERT(expected == !!count,
- 				    "Fixed event filter does not work as expected.");
-+
-+			/* Test incompatible event filter works as expected. */
-+			count = test_incompatible_filter(vcpu, actions[i], bitmap);
-+			TEST_ASSERT(expected == !!count,
-+				    "Incompatible filter does not work as expected.");
- 		}
- 	}
- }
--- 
-2.31.1
+Konrad
 
+>  		};
