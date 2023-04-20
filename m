@@ -2,54 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC476E94C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3C86E94C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234224AbjDTMlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
+        id S234818AbjDTMmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232770AbjDTMl2 (ORCPT
+        with ESMTP id S234544AbjDTMlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:41:28 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F57461B4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:41:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1681994464;
-        bh=CFhS3Ksa+9qxFtaXWWkLkLlUyHN4H12BVfLXvB/9zRc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VyvLyTvIE/P4FQ4zp+Iaf+VyRwSRkWfg2/Lsr/KriU1wzvbRuyks3Gx5olp1kjPwL
-         YPHS+VYsdfUnEZy8cTE8LPpAKfIvqJt0INivYodbLl5QdBK/xUWQroIlZCwEgxZK+O
-         DyN7BSlN2Oflin0Y3rNQ9YBTf1FB8BqQ8FaVPs+HnvltRVDSbCG6vmhU8TnEDbMb/Y
-         xXvc0vbgBpHQG2aKl5laC/BhaEAcdy4EzW5NGAO3vHQcFUcVVmffttpFCJvyfaHw6+
-         71YfiT4Pvq3lJZVdd5kwJM1JPLNeZo3R79RM4C1cY03h2krwvUo3HPxbLt/HNWthBR
-         bZO3FCa+BUkRQ==
-Received: from [172.16.0.91] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Q2HMN3Ks1zw7T;
-        Thu, 20 Apr 2023 08:41:04 -0400 (EDT)
-Message-ID: <c01ddfc5-9410-14e1-55f7-c24f44447f8a@efficios.com>
-Date:   Thu, 20 Apr 2023 08:41:05 -0400
+        Thu, 20 Apr 2023 08:41:53 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC537297
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:41:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681994504; x=1713530504;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dPK9C4cA46M8v+fFqyqYv0YSi+hmzXBNJ3JzGRiRy40=;
+  b=Ce4pLGmrUQpG90fpG4joqbGTsoiYAw/F3nHzrB8pkob5PfoowpYKS/0Z
+   EWjJ/Mjsn/PMbfuEIfuGlwHfjE/g/6oO0hGIis55C6yPJr9uWOOqBgV+6
+   xLI48w2uBy83vGJKpzUZtorBk73kK6fAUDrjJDoZpu61GKYxIlWnM0AIn
+   uC2fat24ADPCRB5vMXvKVo0VIUecS3JKaGV2Sm9c0cirMpF3KSOtbq92f
+   Yaae+UayxjKcLijNuEL3rehayeZtpj95cx41svubSqapyXMIYIFVdEny3
+   Qnxa6Jw5PtiR1W8DNcoKViV86B25/yJLaNY8lsmo58C53+JNGVW/bO/Hw
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="343196436"
+X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
+   d="scan'208";a="343196436"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 05:41:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="685333486"
+X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
+   d="scan'208";a="685333486"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 20 Apr 2023 05:41:41 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppTbY-000fpm-31;
+        Thu, 20 Apr 2023 12:41:40 +0000
+Date:   Thu, 20 Apr 2023 20:41:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: [tip:timers/core 13/13] kernel/time/posix-cpu-timers.c:1310:23:
+ error: member reference type 'struct k_itimer *' is a pointer; did you mean
+ to use '->'?
+Message-ID: <202304202022.rfhhidYd-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH v9 2/2] sched: Fix performance regression introduced
- by mm_cid
-Content-Language: en-US
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Olivier Dion <odion@efficios.com>,
-        michael.christie@oracle.com
-References: <20230419155012.63901-1-mathieu.desnoyers@efficios.com>
- <20230419155012.63901-2-mathieu.desnoyers@efficios.com>
- <20230420095610.GA153295@ziqianlu-desk2>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230420095610.GA153295@ziqianlu-desk2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,131 +65,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-20 05:56, Aaron Lu wrote:
-> On Wed, Apr 19, 2023 at 11:50:12AM -0400, Mathieu Desnoyers wrote:
->> Introduce per-mm/cpu current concurrency id (mm_cid) to fix a PostgreSQL
->> sysbench regression reported by Aaron Lu.
-> 
-> mm_cid_get() dropped to 5.x% after I disable CONFIG_DEBUG_PREEMPT, using
-> __this_cpu_X() doesn't help, I suppose that is because __this_cpu_X()
-> still needs to fetch mm->pcpu_cid.
-> 
-> Annotate mm_cid_get():
-> 
->         │     static inline int mm_cid_get(struct mm_struct *mm)
->         │     {
->    0.05 │       push   %rbp
->    0.02 │       mov    %rsp,%rbp
->         │       push   %r15
->         │       push   %r14
->         │       push   %r13
->         │       push   %r12
->         │       push   %rbx
->    0.02 │       sub    $0x10,%rsp
->         │     struct mm_cid __percpu *pcpu_cid = mm->pcpu_cid;
->   71.30 │       mov    0x60(%rdi),%r12
->         │     struct cpumask *cpumask;
->         │     int cid;
->         │
->         │     lockdep_assert_rq_held(rq);
->         │     cpumask = mm_cidmask(mm);
->         │     cid = __this_cpu_read(pcpu_cid->cid);
->   28.44 │       mov    %gs:0x8(%r12),%edx
->         │     if (mm_cid_is_valid(cid)) {
-> 
-> 
-> sched_mm_cid_migrate_to() is 4.x% and its annotation :
-> 
->         │     dst_pcpu_cid = per_cpu_ptr(mm->pcpu_cid, cpu_of(dst_rq));
->         │       mov     -0x30(%rbp),%rax
->   54.53 │       mov     0x60(%r13),%rbx
->   19.61 │       movslq  0xaf0(%rax),%r15
-> 
-> The reason why accessing mm->pcpu_cid is so costly is still a myth to
-> me...
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
+head:   2aaae4bf41b101f7e58e8b06778b1cd9a1dddf94
+commit: 2aaae4bf41b101f7e58e8b06778b1cd9a1dddf94 [13/13] posix-cpu-timers: Implement the missing timer_wait_running callback
+config: s390-randconfig-r002-20230418 (https://download.01.org/0day-ci/archive/20230420/202304202022.rfhhidYd-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=2aaae4bf41b101f7e58e8b06778b1cd9a1dddf94
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip timers/core
+        git checkout 2aaae4bf41b101f7e58e8b06778b1cd9a1dddf94
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/time/
 
-Then we clearly have another member of mm_struct on the same cache line 
-as pcpu_cid which is bouncing all over the place and causing 
-false-sharing. Any idea which field(s) are causing this ?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304202022.rfhhidYd-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/time/posix-cpu-timers.c:14:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from kernel/time/posix-cpu-timers.c:14:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from kernel/time/posix-cpu-timers.c:14:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> kernel/time/posix-cpu-timers.c:1310:23: error: member reference type 'struct k_itimer *' is a pointer; did you mean to use '->'?
+           spin_unlock_irq(&timr.it_lock);
+                            ~~~~^
+                                ->
+   kernel/time/posix-cpu-timers.c:1312:21: error: member reference type 'struct k_itimer *' is a pointer; did you mean to use '->'?
+           spin_lock_irq(&timr.it_lock);
+                          ~~~~^
+                              ->
+   12 warnings and 2 errors generated.
 
 
-> 
-> BTW, I used below diff to mitigate the incorrect rq lock issue I
-> described in my reply to v8:
+vim +1310 kernel/time/posix-cpu-timers.c
 
-Yes, I'll do something similar in my next version, thanks ! I'll also 
-drop my patch 1/2 from my patchset because clearly I was looking in the 
-wrong place.
-
-Thanks,
-
-Mathieu
-
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index c6e2dd8f4ee3..f16418731866 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -11662,7 +11662,7 @@ void sched_mm_cid_migrate_to(struct rq *dst_rq, struct task_struct *t)
->   		return;
->   	}
->   	/* Move src_cid to dst cpu. */
-> -	mm_cid_snapshot_time(mm);
-> +	mm_cid_snapshot_time(mm, cpu_of(dst_rq));
->   	WRITE_ONCE(dst_pcpu_cid->cid, src_cid);
->   }
->   
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index d1d470441422..8b6a0c8ed3d1 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -3348,12 +3348,13 @@ static inline int __mm_cid_try_get(struct mm_struct *mm)
->    * Save a snapshot of the current runqueue time of this cpu
->    * with the per-cpu cid value, allowing to estimate how recently it was used.
->    */
-> -static inline void mm_cid_snapshot_time(struct mm_struct *mm)
-> +static inline void mm_cid_snapshot_time(struct mm_struct *mm, int cpu)
->   {
-> -	struct rq *rq = this_rq();
-> +	struct mm_cid *pcpu_cid = per_cpu_ptr(mm->pcpu_cid, cpu);
-> +	struct rq *rq = cpu_rq(cpu);
->   
->   	lockdep_assert_rq_held(rq);
-> -	__this_cpu_write(mm->pcpu_cid->time, rq->clock);
-> +	WRITE_ONCE(pcpu_cid->time, rq->clock);
->   }
->   
->   static inline int __mm_cid_get(struct mm_struct *mm)
-> @@ -3404,7 +3405,7 @@ static inline int __mm_cid_get(struct mm_struct *mm)
->   unlock:
->   	raw_spin_unlock(&cid_lock);
->   end:
-> -	mm_cid_snapshot_time(mm);
-> +	mm_cid_snapshot_time(mm, raw_smp_processor_id());
->   	return cid;
->   }
->   
-> @@ -3419,7 +3420,7 @@ static inline int mm_cid_get(struct mm_struct *mm)
->   	cpumask = mm_cidmask(mm);
->   	cid = __this_cpu_read(pcpu_cid->cid);
->   	if (mm_cid_is_valid(cid)) {
-> -		mm_cid_snapshot_time(mm);
-> +		mm_cid_snapshot_time(mm, raw_smp_processor_id());
->   		return cid;
->   	}
->   	if (mm_cid_is_lazy_put(cid)) {
-> @@ -3467,7 +3468,7 @@ static inline void switch_mm_cid(struct task_struct *prev,
->   		 */
->   	}
->   	if (prev->mm_cid_active) {
-> -		mm_cid_snapshot_time(prev->mm);
-> +		mm_cid_snapshot_time(prev->mm, raw_smp_processor_id());
->   		mm_cid_put_lazy(prev);
->   		prev->mm_cid = -1;
->   	}
+  1307	
+  1308	static void posix_cpu_timer_wait_running_nsleep(struct k_itimer *timr)
+  1309	{
+> 1310		spin_unlock_irq(&timr.it_lock);
+  1311		cpu_relax();
+  1312		spin_lock_irq(&timr.it_lock);
+  1313	}
+  1314	
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
