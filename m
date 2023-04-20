@@ -2,152 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753086E87F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 04:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A33E6E87F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 04:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232854AbjDTCYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 22:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35926 "EHLO
+        id S232679AbjDTCZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 22:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjDTCYS (ORCPT
+        with ESMTP id S229767AbjDTCZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 22:24:18 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9A6448A;
-        Wed, 19 Apr 2023 19:24:14 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b62d2f729so476437b3a.1;
-        Wed, 19 Apr 2023 19:24:14 -0700 (PDT)
+        Wed, 19 Apr 2023 22:25:34 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CCD448A
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 19:25:30 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a66e7a52d3so5367655ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 19:25:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681957454; x=1684549454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=shopee.com; s=shopee.com; t=1681957530; x=1684549530;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5hCnIiv0UZoUyqA3j7om4LR5r+3eUZFma/siIy2qvxI=;
-        b=aHY0KqzYmBUMNi2SicP8NE4mewVj4KbcqsIdBEOZnX3xv6AbcZVdLJaMN/46ZG2byr
-         rBxvGegBdnF3Blj7IULlxmIG7Vc3WSEf6BxpnZwgTSwm5BKMmNTladesWKF27zZEbwa1
-         2/069yWBd3mg4yjNl+d9e9NWhFp+40oZgCrJat2dufA7loHBzTGP7MZEEccaSghk9UNB
-         QdRJWyYbYJMp0DMsz6nPSJSA6qCJqVd/sd/tHuSTY6mh0fdNp7D77VyWAz3HdyDGpgw/
-         MVZJFN+jnIfr2ZMz23p3AofUQ3GIbgveA3oSWQVTDDG8Ucl0RVwh3QnYcf1cgW4/5zAf
-         pf4g==
+        bh=qmy+jBwJo69IAuqlIjVIi7s1lnogGEvDlj2OElYYveU=;
+        b=M4E2eRRF3SMb7pNc58yrI6ZJ2rONGD8LHiNjS2WcfpEjOxouvSautngPJHn4Q9+6f1
+         JnkRQJS5gv2RGYk40S0fEyjdbjDCTxSZsr9ehB+YBHhHtsJWrZMWG/QuHqXtcolnoHhC
+         pC2h53mJ2j0O7SpwGrT1Wp/b8uYz+tfHZo5zTTlY0EzVsJjI0ffCrhGLW260n18h6fBS
+         abb1rxQZs1lf9i0d/HU87A9qghYSv21nOPiX/yb8491iKBMAoi/yIOKe0KIpHOdJsSF8
+         tVyW+MAtzIXZAtwDRe+tXWubEgxnq1WIiqn2uOniSRtj4BWDQQo+W/FXUW0UkRDVC8tV
+         l/2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681957454; x=1684549454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5hCnIiv0UZoUyqA3j7om4LR5r+3eUZFma/siIy2qvxI=;
-        b=GVf+oQFaY6dVbZ6G6pD54B55hRS7qyPREg6bf/4taRGUeIKE2VVsAGu0nnDNZkgrrD
-         aAGzDOBizcdvazbaqx6bHVCGEK7183HWvboM1vDZ/5Wl5TwrcLQ2QqzGci4v0zb19n7E
-         fWDQMbMay/QGK/YrzlOdSOWh9+KGJb2L06+XyFfkNVNOOQyVDHx0ZIy2x+X/oZHJGk9z
-         IPhmbXv66BPXPoLL1h4BsvEz7ioV03usk3hwAx1Y1FhD2oWXauUlye7o6arn2foK7bLR
-         NidWL0yI3g1OFhETNY0s103nuuxjmwSFLprj2IUaRAiCk+wiWhccCia7W7bSXPcdSMGq
-         6tag==
-X-Gm-Message-State: AAQBX9dsk+sISvE+Fu/LrzhqmqTYGs2EdGXpabgI6ITqa/JznjH2hmf1
-        zwHx7tWKYPhto3eSkkna+ZBzJIR7bIEXLZv4n7I=
-X-Google-Smtp-Source: AKy350ZadxRbNfm3xfOR9s+wQOjZ3vM83wayISANsNazFfeiI4PtzsEAeWCrcjhACnyQu547bwbY7U3jZ3QonfXSGK4=
-X-Received: by 2002:a17:90a:ad90:b0:247:bd63:c3af with SMTP id
- s16-20020a17090aad9000b00247bd63c3afmr181414pjq.8.1681957453496; Wed, 19 Apr
- 2023 19:24:13 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681957530; x=1684549530;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qmy+jBwJo69IAuqlIjVIi7s1lnogGEvDlj2OElYYveU=;
+        b=Xw6FeySCccbpigLc3Xpyk0hjEzEJNf67lN8upjuHH/Rg9K7fQ2fg2X9RF8JCkJAfDq
+         yxGHhN9TKZxixMdTPCwH4F5PQ0vfgJnlIM/AvD3pzlq1xuJkygv2nVLlpNPlMcXUVQf9
+         S5Mb3XtMh86t3tpSu5aVmVvVE/RjZxZbV6D80gFDQiQOqp+gyDgN39VvHgqf/Hcvtadt
+         Cj6M7UGXLXQ+sEC4HnP2yqywpBFKOhYdjpU6t5xDMW93sb2vs9pXud0btfDcyxxWQpEG
+         pabR5kDVnqrxxDYKysJQU0yXN42+45SgN3veYlO8vrLZTwzlNsKtxvEZPcK4p5k//YuW
+         QdKg==
+X-Gm-Message-State: AAQBX9dN4DGq2Xlw1wf9fkzEEusPbmYefmMTYcg1Osge6Zk2pohjORgy
+        Byfih91RGq2eGasjCaMYSnmYlg==
+X-Google-Smtp-Source: AKy350ZpZrm9aGRn3Ysob9PqD+nra+TtZ6/sQUy6vavIQAgKouSQzwxJznARhZ08enJkxSjofM0qIQ==
+X-Received: by 2002:a17:902:f312:b0:19e:b6b0:6b3 with SMTP id c18-20020a170902f31200b0019eb6b006b3mr6410637ple.15.1681957530268;
+        Wed, 19 Apr 2023 19:25:30 -0700 (PDT)
+Received: from [10.54.24.141] ([143.92.118.3])
+        by smtp.gmail.com with ESMTPSA id j12-20020a170902690c00b001a6a6169d45sm116749plk.168.2023.04.19.19.25.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 19:25:29 -0700 (PDT)
+Message-ID: <9fb84281-19ce-8a39-b87b-fcadf9d265d1@shopee.com>
+Date:   Thu, 20 Apr 2023 10:25:25 +0800
 MIME-Version: 1.0
-References: <20230415104104.5537-1-aford173@gmail.com> <20230415104104.5537-5-aford173@gmail.com>
- <807aa6c6-bbea-abcc-172d-17e22d1a3988@denx.de> <CAHCN7x+NUnMtLbj_7A_uqxPsi5NXRXsPFwDnn=sf1bgm-Q-BsQ@mail.gmail.com>
- <88e53197-2819-c068-eba6-a218a19d8d15@denx.de> <CAHCN7xLbbyTaN43pJe3NMdupoGb5vC3yXc_vBn6+CRChWCt92A@mail.gmail.com>
- <ac7ce475-23dd-4d9d-afd1-ad139496a510@denx.de>
-In-Reply-To: <ac7ce475-23dd-4d9d-afd1-ad139496a510@denx.de>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Wed, 19 Apr 2023 21:24:02 -0500
-Message-ID: <CAHCN7xKZnHGkErwpT-zXR6P-nMxBbg4OVNSr1An2vBaTpOsuqA@mail.gmail.com>
-Subject: Re: [PATCH 5/6] drm: bridge: samsung-dsim: Support non-burst mode
-To:     Marek Vasut <marex@denx.de>
-Cc:     dri-devel@lists.freedesktop.org, m.szyprowski@samsung.com,
-        aford@beaconembedded.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH] mm, vmpressure: remove redundant check in vmpressure()
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     mhocko@suse.com, hannes@cmpxchg.org, roman.gushchin@linux.dev,
+        shakeelb@google.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230419092007.186938-1-haifeng.xu@shopee.com>
+ <20230419130311.587b7273eca2512c07b32bd0@linux-foundation.org>
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+In-Reply-To: <20230419130311.587b7273eca2512c07b32bd0@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 6:23=E2=80=AFPM Marek Vasut <marex@denx.de> wrote:
->
-> On 4/18/23 00:24, Adam Ford wrote:
-> > On Mon, Apr 17, 2023 at 3:08=E2=80=AFPM Marek Vasut <marex@denx.de> wro=
-te:
-> >>
-> >> On 4/17/23 13:57, Adam Ford wrote:
-> >>> On Sun, Apr 16, 2023 at 5:13=E2=80=AFPM Marek Vasut <marex@denx.de> w=
-rote:
-> >>>>
-> >>>> On 4/15/23 12:41, Adam Ford wrote:
-> >>>>> The high-speed clock is hard-coded to the burst-clock
-> >>>>> frequency specified in the device tree.  However, when
-> >>>>> using devices like certain bridge chips without burst mode
-> >>>>> and varying resolutions and refresh rates, it may be
-> >>>>> necessary to set the high-speed clock dynamically based
-> >>>>> on the desired pixel clock for the connected device.
-> >>>>
-> >>>> The link rate negotiation should happen internally between the neare=
-st
-> >>>> bridge and DSIM, so please add that to DRM core instead of hacking
-> >>>> around it by tweaking the HS clock again.
-> >>>
-> >>> I thought you tried to add something like this before and had some re=
-sistance.
-> >>
-> >> Yes, all my attempts were rejected by a single reviewer. I suspended m=
-y
-> >> efforts in that area for now.
-> >>
-> >>> The Pixel clock is set by the bridge already without any new code
-> >>> added to the DRM core..  I am just reading that value that's there,
-> >>> and setting the clock accordingly.  I don't see how this is a hack.
-> >>
-> >> Assume you have a DSI-to-HDMI bridge attached to your DSIM bridge, it
-> >> operates in non-burst mode, like ADV7533 . How would you configure the
-> >
-> > I have an ADV7535
-> >
-> >> HS clock rate for such a bridge in DT ? (hint: you cannot, because the
-> >> required clock comes from the EDID, which may not be available just ye=
-t)
-> >
-> > The whole idea is that you wouldn't want to or need to configure the
-> > clock speed in the device tree because it comes from the
-> > EDID->bridge->DSI.
-> >
-> > I've tested this configuration on imx8mm, imx8mn, and imx8mp and I can
-> > change the resolution and refresh rate on the fly and the DSI will
-> > automatically readjust accordingly.   If you fixed the clock in the
-> > device tree, you wouldn't be able to do that, and that was the point
-> > of this patch.
->
-> Uh, I retract my comment, I was clearly confused here and we're talking
-> about the same thing.
 
-I'm working on a V2 for this series.  Are you OK with this if I update
-the commit message a bit to make it more clear?
 
-adam
+On 2023/4/20 04:03, Andrew Morton wrote:
+> On Wed, 19 Apr 2023 09:20:07 +0000 Haifeng Xu <haifeng.xu@shopee.com> wrote:
+> 
+>> There are three places, vmpressure_prio(), shrink_node_memcgs() and
+>> shrink_node(), which invoke vmpressure(). But only shrink_node_memcgs()
+>> sets tree to false and the memcg used in it is not NULL, so we don't
+>> check it again in vmpressure().
+>>
+>> ...
+>>
+>> --- a/mm/vmpressure.c
+>> +++ b/mm/vmpressure.c
+>> @@ -284,7 +284,7 @@ void vmpressure(gfp_t gfp, struct mem_cgroup *memcg, bool tree,
+>>  		enum vmpressure_levels level;
+>>  
+>>  		/* For now, no users for root-level efficiency */
+>> -		if (!memcg || mem_cgroup_is_root(memcg))
+>> +		if (mem_cgroup_is_root(memcg))
+>>  			return;
+>>  
+>>  		spin_lock(&vmpr->sr_lock);
+> 
+> try_to_free_pages()->
+>   do_try_to_free_pages()->
+>     vmpressure_prio()-> 
+>       vmpressure()->
+>         crash
+> 
+> what am I missing here?
+> 
+> 
+
+vmpressure_prio() set tree to true, so the crash won't happen.
+
+> It does appear that vmpressure() could be simplified with
+> 
+> 	if (!memcg)
+> 		memcg = root_mem_cgroup;
+> 
+> so the test you identified goes away and the memcg_to_vmpressure() call
+> becomes simpler.  But that's such a small change it doesn't seem worth
+> the effort.
+
+memcg_to_vmpressure() has taken this case that the memcg is NULL into account and 
+we do not need to change it.
+
+The test I identified is in the branch that the tree is set to false. In this branch,
+memcg can never be NULL because only shrink_node_memcgs() will step into it.
