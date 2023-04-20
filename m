@@ -2,100 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE4A6E9E29
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739606E93FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232813AbjDTVyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 17:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
+        id S234848AbjDTMOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbjDTVy2 (ORCPT
+        with ESMTP id S234800AbjDTMO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 17:54:28 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7871C5FCD;
-        Thu, 20 Apr 2023 14:54:15 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f18123d9f6so7510775e9.0;
-        Thu, 20 Apr 2023 14:54:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682027654; x=1684619654;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ggoiuYDGVHOJoDD7tvjEcAbvbz7tn3leV5QHJEbfn1g=;
-        b=iMeISl8K+VZoGclhUVPpOIpilYNz8C3ApXwTpyEARL9A2XRDDX43zMMELs8WZlblUd
-         HQuCnDMz5XNz9PEH7fV+hVuJjYR7MXm9s4fyyECxaOMAg7FldS3S0NIYiBhXBNoEVSMN
-         mDIN7gsqeh5T3pexxyXnc/1MJnc93kg2E6UOnDWt4SEbl9LWqgANi61b7UzBOEIE2uwp
-         Gv8hAcjAD6cr3t+v79MGyVKNF2Y1csxSy0hEIdvMwoIs6chcO4zBmQFgCxZeRxtIlyMp
-         bmLuw4A4x9uCPzvgG+rSeF3Vgxx7SMjCCBbA8xez04/g7tablzI5jK5Ce4MwdG6tdReN
-         kxqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682027654; x=1684619654;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ggoiuYDGVHOJoDD7tvjEcAbvbz7tn3leV5QHJEbfn1g=;
-        b=A2lpVQwjzN9zzfhNVTwpiT1/QkRMDd5FMTG2EFD3jUHcfkX5WJiCT1MA4+upgWUf/g
-         9fzeo9DCyBg20PrjEtu5/iTScnVAhU4ZBSIVq26OY6WiPgOpM29/a9kdbkbu3b8faOGZ
-         KdUzN6ffR0c9tRjaMiM1InuBwezFbTm3yYp9SCa7dD+HXsZEL9kYt95vTQgVX+wUhVu6
-         99up9EtwcaGHeb0A9o2zguM2QtGCMSnWzoCmaRx+AhBVSpoA7kmCqNOsR99j9ov7Q58p
-         JSSkE14gkdfdWAkYt9fnLKzFw/z5hxvLRK6XxzeaTGs67CAbZeKzJ3dvOil3LaRujQ4M
-         AzGw==
-X-Gm-Message-State: AAQBX9chNDuMBIqrwr2bNgL89snsQhiu5LHR83dpGzTIqkkYENtlA1i1
-        hByjw1cJpLUCKLvsxH/AVjo=
-X-Google-Smtp-Source: AKy350bC0BUeb/cTv5JM0LvDfl2jp90QrC26SaXcRQBVMSSVUYg21MGBTzfaFWPkMzrKWwWC4jSgMA==
-X-Received: by 2002:a7b:c356:0:b0:3f1:6f4a:a3ad with SMTP id l22-20020a7bc356000000b003f16f4aa3admr264117wmj.2.1682027653658;
-        Thu, 20 Apr 2023 14:54:13 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.gmail.com with ESMTPSA id iw18-20020a05600c54d200b003f174cafcdasm6454001wmb.7.2023.04.20.14.54.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 14:54:13 -0700 (PDT)
-Message-ID: <6441b485.050a0220.30245.0b80@mx.google.com>
-X-Google-Original-Message-ID: <ZEEsgxcLN80qrjse@Ansuel-xps.>
-Date:   Thu, 20 Apr 2023 14:13:55 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: dsa: qca8k: fix LEDS_CLASS dependency
-References: <20230420213639.2243388-1-arnd@kernel.org>
+        Thu, 20 Apr 2023 08:14:28 -0400
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EEB55B4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:14:17 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 12:14:05 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1681992852; x=1682252052;
+        bh=6HI9Qpf9JvUgsdsugSwS3c85xCsDCf6u50n2x19sraE=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=kCAIXBwKkjOHkHJlq7Tr9HMaNEzDeFiigD8664y/+xYRIJL52h7bL8zrU0A4ZvPAs
+         sJPH7eq5XV/sXC6l7ZhlCUeJfCg/f3UNV0XIKrHVYZpAo6AdmoMIG/d6zIqeMaGtAh
+         pT8AJ9NezEutaeKe/BOUsgZbdP3bF9E0HtNUwRVPLfhL9zHjmDKp0FroiwVWK8kKm4
+         9zc3i8Vj7rs6vS7kxqI3P2XuavW88od4alo7wfEHto8o5mXhTFezvffC07DPo+GMn+
+         i1i82YZqNTOo67Bz3E4mYVZkDw8pP/h33/sjSPw11ibv+dWoAbEX9WaN3YyHCB8WW9
+         bw8FV4nq01Qlw==
+To:     Miguel Ojeda <ojeda@kernel.org>
+From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Josh Stone <jistone@redhat.com>,
+        William Brown <william.brown@suse.com>,
+        Georgy Yakovlev <gyakovlev@gentoo.org>,
+        Jan Alexander Steffens <jan.steffens@gmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: Re: [PATCH 1/3] rust: alloc: clarify what is the upstream version
+Message-ID: <xpeiYudZe3PTRA9hBOt1xOt0lnD4q-fRlnSG1swbdtX23aZ2aFZNNrPlGNSJfWFbKv0soUz1m6rDJMj2vXWnJbu_oox_hwLOhbWEAsDldUs=@protonmail.com>
+In-Reply-To: <20230418214347.324156-2-ojeda@kernel.org>
+References: <20230418214347.324156-1-ojeda@kernel.org> <20230418214347.324156-2-ojeda@kernel.org>
+Feedback-ID: 27884398:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420213639.2243388-1-arnd@kernel.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 11:36:31PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> With LEDS_CLASS=m, a built-in qca8k driver fails to link:
-> 
-> arm-linux-gnueabi-ld: drivers/net/dsa/qca/qca8k-leds.o: in function `qca8k_setup_led_ctrl':
-> qca8k-leds.c:(.text+0x1ea): undefined reference to `devm_led_classdev_register_ext'
-> 
-> Change the dependency to avoid the broken configuration.
-> 
-> Fixes: 1e264f9d2918 ("net: dsa: qca8k: add LEDs basic support")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Tuesday, April 18th, 2023 at 23:43, Miguel Ojeda <ojeda@kernel.org> wrot=
+e:
 
-Thanks a lot for the fix and sorry for the mess...
-LED_CLASS and PHY releated were really hell also for some reason this
-didn't got flagged in month of this series.
+> It may be unclear for readers which upstream Rust version these files
+> are based on. They may be unaware that they are intended to match the
+> minimum (and only, so far) supported version of Rust in the kernel.
+>=20
+> Thus clarify it.
+>=20
+> Signed-off-by: Miguel Ojeda ojeda@kernel.org
 
-Again thanks for handling this!
+Reviewed-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
 
--- 
-	Ansuel
+>=20
+> ---
+>  rust/alloc/README.md | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/rust/alloc/README.md b/rust/alloc/README.md
+> index c89c753720b5..eb6f22e94ebf 100644
+> --- a/rust/alloc/README.md
+> +++ b/rust/alloc/README.md
+> @@ -10,6 +10,9 @@ upstream. In general, only additions should be performe=
+d (e.g. new
+>  methods). Eventually, changes should make it into upstream so that,
+>  at some point, this fork can be dropped from the kernel tree.
+>=20
+> +The Rust upstream version on top of which these files are based matches
+> +the output of `scripts/min-tool-version.sh rustc`.
+> +
+>=20
+>  ## Rationale
+>=20
+> --
+> 2.40.0
