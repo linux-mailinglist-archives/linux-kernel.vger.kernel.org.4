@@ -2,232 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECDB6E8788
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E866E878A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjDTBjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 21:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
+        id S231331AbjDTBkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 21:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbjDTBjT (ORCPT
+        with ESMTP id S229629AbjDTBkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 21:39:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7F11FD2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:38:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681954713;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a63ioWmSEQcCVuRqAWGqTU3u5G3EheQoi5818CFmA4k=;
-        b=e5+kDr8WHqrOyr2n7erxsAnHa9cKpcaDV2YWaHy4owYI1NmMXPPZSFdxYaW0W3+Tr0u8Um
-        0aahElsmxshEKSVvS8mF+cfpMal38/ZngzNp2QzVnKIxw1Ld67D5Cg4bGxlwl51/NhPAOF
-        S58jf9WnogeUdrw0CJjFZ/SPrO1hT5s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-501-UkGJrcLzPcCV3v0BY02N5w-1; Wed, 19 Apr 2023 21:38:30 -0400
-X-MC-Unique: UkGJrcLzPcCV3v0BY02N5w-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 854F985A5A3;
-        Thu, 20 Apr 2023 01:38:29 +0000 (UTC)
-Received: from ovpn-8-16.pek2.redhat.com (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B849C492B05;
-        Thu, 20 Apr 2023 01:38:21 +0000 (UTC)
-Date:   Thu, 20 Apr 2023 09:38:16 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Bernd Schubert <bschubert@ddn.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Amir Goldstein <amir73il@gmail.com>, ming.lei@redhat.com
-Subject: Re: [PATCH V6 00/17] io_uring/ublk: add generic IORING_OP_FUSED_CMD
-Message-ID: <ZECXiJ5aO/7tLshr@ovpn-8-16.pek2.redhat.com>
-References: <20230330113630.1388860-1-ming.lei@redhat.com>
- <78fe6617-2f5e-3e8e-d853-6dc8ffb5f82c@ddn.com>
- <ZD9JI/JlwrzXQPZ7@ovpn-8-18.pek2.redhat.com>
- <b6188050-1b12-703c-57e8-67fd27adb85c@ddn.com>
- <ZD/ONON4AzwvtlLB@ovpn-8-18.pek2.redhat.com>
- <6ed5c6f4-6abe-3eff-5a36-b1478a830c49@ddn.com>
+        Wed, 19 Apr 2023 21:40:15 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473131BF0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:40:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681954814; x=1713490814;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=G1DkaHEZt8/FNUw8vlJ9t05zmgqwE4zlsOzsNff0UvY=;
+  b=F2UEoHcIXGR88fy8ArMPmtgzvnGc5d9sOpaheVH5AWhUA6i5Hq1ln0y0
+   D/+UNcM1kHk+46i0VXOvvGJHGdb7vHTHKfOm8lFtZujM5zdWliB7Cs5sF
+   JlyX71P96h9F4jtO+pgsX2pMyJeQP3s/ljtqx8L3j7XZmL2UEtIa7Wdy0
+   Tg4QPKk1prEi9eIDxI7rn/l9u74Bi7knbAkldbThqBTD48bjcizFmqOju
+   AXDFHtibUQeDq10sK3Qm6LXLnFnM1NuvAv+kwAJksMV6ELe5UmIPBampI
+   vqigER6d2NnL4WrqAXZfF/D96diThvEiMLMKldXDB66O3ujxsEKtj4tQp
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="334425788"
+X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
+   d="scan'208";a="334425788"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 18:40:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="669184169"
+X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
+   d="scan'208";a="669184169"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 18:40:11 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhao <yuzhao@google.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: Re: [RFC PATCH] migrate_pages: Never block waiting for the page lock
+References: <20230413182313.RFC.1.Ia86ccac02a303154a0b8bc60567e7a95d34c96d3@changeid>
+        <87v8hz17o9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <CAD=FV=XPBaGGLJVG9UGoJss6EU5=esqyt=aWsp2nOm2YcVOc8g@mail.gmail.com>
+        <87ildvwbr5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <CAD=FV=WCWWuGO7D9X6By-fQ0ZB63iDsAvcPwza-F6tbA-Z_M6w@mail.gmail.com>
+        <87edohvpzk.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <CAD=FV=V1SAufJUT-d5praYszUN1ssdT61WS7iB-c62R4M6Lsmw@mail.gmail.com>
+        <87wn28u2wy.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <CAD=FV=XBjG85VAKqAmffBnWH+-zcY2JJ_MoGuPev4r3xjn=B-Q@mail.gmail.com>
+Date:   Thu, 20 Apr 2023 09:39:02 +0800
+In-Reply-To: <CAD=FV=XBjG85VAKqAmffBnWH+-zcY2JJ_MoGuPev4r3xjn=B-Q@mail.gmail.com>
+        (Doug Anderson's message of "Wed, 19 Apr 2023 12:30:55 -0700")
+Message-ID: <87h6tbtjrd.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6ed5c6f4-6abe-3eff-5a36-b1478a830c49@ddn.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 03:42:40PM +0000, Bernd Schubert wrote:
-> On 4/19/23 13:19, Ming Lei wrote:
-> > On Wed, Apr 19, 2023 at 09:56:43AM +0000, Bernd Schubert wrote:
-> >> On 4/19/23 03:51, Ming Lei wrote:
-> >>> On Tue, Apr 18, 2023 at 07:38:03PM +0000, Bernd Schubert wrote:
-> >>>> On 3/30/23 13:36, Ming Lei wrote:
-> >>>> [...]
-> >>>>> V6:
-> >>>>> 	- re-design fused command, and make it more generic, moving sharing buffer
-> >>>>> 	as one plugin of fused command, so in future we can implement more plugins
-> >>>>> 	- document potential other use cases of fused command
-> >>>>> 	- drop support for builtin secondary sqe in SQE128, so all secondary
-> >>>>> 	  requests has standalone SQE
-> >>>>> 	- make fused command as one feature
-> >>>>> 	- cleanup & improve naming
-> >>>>
-> >>>> Hi Ming, et al.,
-> >>>>
-> >>>> I started to wonder if fused SQE could be extended to combine multiple
-> >>>> syscalls, for example open/read/close.  Which would be another solution
-> >>>> for the readfile syscall Miklos had proposed some time ago.
-> >>>>
-> >>>> https://lore.kernel.org/lkml/CAJfpegusi8BjWFzEi05926d4RsEQvPnRW-w7My=ibBHQ8NgCuw@mail.gmail.com/
-> >>>>
-> >>>> If fused SQEs could be extended, I think it would be quite helpful for
-> >>>> many other patterns. Another similar examples would open/write/close,
-> >>>> but ideal would be also to allow to have it more complex like
-> >>>> "open/write/sync_file_range/close" - open/write/close might be the
-> >>>> fastest and could possibly return before sync_file_range. Use case for
-> >>>> the latter would be a file server that wants to give notifications to
-> >>>> client when pages have been written out.
-> >>>
-> >>> The above pattern needn't fused command, and it can be done by plain
-> >>> SQEs chain, follows the usage:
-> >>>
-> >>> 1) suppose you get one command from /dev/fuse, then FUSE daemon
-> >>> needs to handle the command as open/write/sync/close
-> >>> 2) get sqe1, prepare it for open syscall, mark it as IOSQE_IO_LINK;
-> >>> 3) get sqe2, prepare it for write syscall, mark it as IOSQE_IO_LINK;
-> >>> 4) get sqe3, prepare it for sync file range syscall, mark it as IOSQE_IO_LINK;
-> >>> 5) get sqe4, prepare it for close syscall
-> >>> 6) io_uring_enter();	//for submit and get events
-> >>
-> >> Oh, I was not aware that IOSQE_IO_LINK could pass the result of open
-> >> down to the others. Hmm, the example I find for open is
-> >> io_uring_prep_openat_direct in test_open_fixed(). It probably gets off
-> >> topic here, but one needs to have ring prepared with
-> >> io_uring_register_files_sparse, then manually manages available indexes
-> >> and can then link commands? Interesting!
-> > 
-> > Yeah,  see test/fixed-reuse.c of liburing
-> > 
-> >>
-> >>>
-> >>> Then all the four OPs are done one by one by io_uring internal
-> >>> machinery, and you can choose to get successful CQE for each OP.
-> >>>
-> >>> Is the above what you want to do?
-> >>>
-> >>> The fused command proposal is actually for zero copy(but not limited to zc).
-> >>
-> >> Yeah, I had just thought that IORING_OP_FUSED_CMD could be modified to
-> >> support generic passing, as it kind of hands data (buffers) from one sqe
-> >> to the other. I.e. instead of buffers it would have passed the fd, but
-> >> if this is already possible - no need to make IORING_OP_FUSED_CMD more
-> >> complex.man
-> > 
-> > The way of passing FD introduces other cost, read op running into async,
-> > and adding it into global table, which introduces runtime cost.
-> 
-> Hmm, question from my side is why it needs to be in the global table, 
-> when it could be just passed to the linked or fused sqe?
+Doug Anderson <dianders@chromium.org> writes:
 
-Any data which crosses OPs need be registered to somewhere, such as
-fixed buffer, fixed FD, here global meant context wide, and it is actually from
-OP/SQE viewpoint.
+> Hi,
+>
+> On Tue, Apr 18, 2023 at 5:34=E2=80=AFPM Huang, Ying <ying.huang@intel.com=
+> wrote:
+>>
+>> >> >> >> TBH, the test case is too extreme for me.
+>> >> >> >
+>> >> >> > That's fair. That being said, I guess the point I was trying to =
+make
+>> >> >> > is that waiting for this lock could take an unbounded amount of =
+time.
+>> >> >> > Other parts of the system sometimes hold a page lock and then do=
+ a
+>> >> >> > blocking operation. At least in the case of kcompactd there are =
+better
+>> >> >> > uses of its time than waiting for any given page.
+>> >> >> >
+>> >> >> >> And, we have multiple "sync" mode to deal with latency requirem=
+ent, for
+>> >> >> >> example, we use MIGRATE_SYNC_LIGHT for compaction to avoid too =
+long
+>> >> >> >> latency.  If you have latency requirement for some users, you m=
+ay
+>> >> >> >> consider to add new "sync" mode.
+>> >> >> >
+>> >> >> > Sure. kcompactd_do_work() is currently using MIGRATE_SYNC_LIGHT.=
+ I
+>> >> >> > guess my first thought would be to avoid adding a new mode and m=
+ake
+>> >> >> > MIGRATE_SYNC_LIGHT not block here. Then anyone that truly needs =
+to
+>> >> >> > wait for all the pages to be migrated can use the heavier sync m=
+odes.
+>> >> >> > It seems to me like the current users of MIGRATE_SYNC_LIGHT woul=
+d not
+>> >> >> > want to block for an unbounded amount of time here. What do you =
+think?
+>> >> >>
+>> >> >> It appears that you can just use MIGRATE_ASYNC if you think the co=
+rrect
+>> >> >> behavior is "NOT block at all".  I found that there are more
+>> >> >> fine-grained controls on this in compaction code, please take a lo=
+ok at
+>> >> >> "enum compact_priority" and its comments.
+>> >> >
+>> >> > Actually, the more I think about it the more I think the right answ=
+er
+>> >> > is to keep kcompactd as using MIGRATE_SYNC_LIGHT and make
+>> >> > MIGRATE_SYNC_LIGHT not block on the folio lock.
+>> >>
+>> >> Then, what is the difference between MIGRATE_SYNC_LIGHT and
+>> >> MIGRATE_ASYNC?
+>> >
+>> > Aren't there still some differences even if we remove blocking this
+>> > one lock? ...or maybe your point is that maybe the other differences
+>> > have similar properties?
+>>
+>> Sorry for confusing words.  Here, I asked you to list the implementation
+>> difference between MIGRATE_ASYNC and MIGRATE_SYNC_LIGHT after your
+>> proposed changes.  Which are waited in MIGRATE_SYNC_LIGHT but not in
+>> MIGRATE_ASYNC?
+>
+> Ah, got it! It's not always the easiest to follow all the code paths,
+> but let's see what I can find.
+>
+> I guess to start with, though, I will assert that someone seems to
+> have believed that there was an important difference between
+> MIGRATE_ASYNC and MIGRATE_SYNC_LIGHT besides waiting on the lock in
+> migrate_folio_unmapt() since (as I found in my previous digging) the
+> "direct reclaim" path never grabs this lock but explicitly sometimes
+> chooses MIGRATE_ASYNC some times and MIGRATE_SYNC_LIGHT other times.
+>
+> OK, so looking at mainline Linux and comparing differences in behavior
+> between SYNC_LIGHT and ASYNC and thoughts about which one should be
+> used for kcompactd. Note that I won't go _too_ deep into all the
+> differences...
+>
+> --
+>
+> In nfs.c:
+>
+> 1. We will wait for the fscache if SYNC_LIGHT but not ASYNC. No idea
+> what would be the most ideal for calls from kcompactd.
 
-Fused command actually is one whole command logically, even though it
-may includes multiple SQEs. Then registration as context wide isn't
-needn't(since it is known buffer sharing isn't context wide, and just
-among several IOs), meantime dependency is avoided, so link isn't needed.
+This appears like something like disk writing.
 
-This way helps performance a lot, such as, in test on ublk/loop over tmpfs,
-iops drops to 1/2 with registration in 4k rand io, but fused command actually
-improves iops a bit, baseline is current in-tree ublk driver/ublksrv.
+> In compaction.c:
+>
+> 2. We will update the non-async "compact_cached_migrate_pfn" for
+> SYNC_LIGHT but not ASYNC since we keep track of sync and async
+> progress separately.
+>
+> 3. compact_lock_irqsave() note contentions for ASYNC but not
+> SYNC_LIGHT and cause an earlier abort. Seems like kcompactd would want
+> the SYNC_LIGHT behavior since this isn't about things indefinitely
+> blocking.
+>
+> 4. isolate_migratepages_block() will bail if too_many_isolated() for
+> ASYNC but not SYNC_LIGHT. My hunch is that kcompactd wants the
+> SYNC_LIGHT behavior for kcompact.
+>
+> 5. If in direct compaction, isolate_migratepages_block() sets
+> "skip_on_failure" for ASYNC but not SYNC_LIGHT. My hunch is that
+> kcompactd wants the SYNC_LIGHT behavior for kcompact.
+>
+> 6. suitable_migration_source() considers more things suitable
+> migration sources when SYNC_LIGHT but not (ASYNC+direct_compaction).
+> Doesn't matter since kcompactd isn't direct compaction and non-direct
+> compaction is the same.
+>
+> 7. fast_isolate_around() does less scanning when SYNC_LIGHT but not
+> (ASYNC+direct_compaction). Again, it doesn't matter for kcompactd.
+>
+> 8. isolate_freepages() uses a different stride with SYNC_LIGHT vs.
+> ASYNC. My hunch is that kcompactd wants the SYNC_LIGHT behavior for
+> kcompact.
+>
+> In migrate.c:
+>
+> 9. buffer_migrate_lock_buffers() will block waiting to lock buffers
+> with SYNC_LIGHT but not ASYNC. I don't know for sure, but this feels
+> like something we _wouldn't_ want to block on in kcompactd and instead
+> should look for easier pickings.
 
-> 
-> > 
-> > That is the reason why fused command is designed in the following way:
-> > 
-> > - link can be avoided, so OPs needn't to be run in async
-> > - no need to add buffer into global table
-> > 
-> > Cause it is really in fast io path.
-> > 
-> >>
-> >>>
-> >>> If the above write OP need to write to file with in-kernel buffer
-> >>> of /dev/fuse directly, you can get one sqe0 and prepare it for primary command
-> >>> before 1), and set sqe2->addr to offet of the buffer in 3).
-> >>>
-> >>> However, fused command is usually used in the following way, such as FUSE daemon
-> >>> gets one READ request from /dev/fuse, FUSE userspace can handle the READ request
-> >>> as io_uring fused command:
-> >>>
-> >>> 1) get sqe0 and prepare it for primary command, in which you need to
-> >>> provide info for retrieving kernel buffer/pages of this READ request
-> >>>
-> >>> 2) suppose this READ request needs to be handled by translating it to
-> >>> READs to two files/devices, considering it as one mirror:
-> >>>
-> >>> - get sqe1, prepare it for read from file1, and set sqe->addr to offset
-> >>>     of the buffer in 1), set sqe->len as length for read; this READ OP
-> >>>     uses the kernel buffer in 1) directly
-> >>>
-> >>> - get sqe2, prepare it for read from file2, and set sqe->addr to offset
-> >>>     of buffer in 1), set sqe->len as length for read;  this READ OP
-> >>>     uses the kernel buffer in 1) directly
-> >>>
-> >>> 3) submit the three sqe by io_uring_enter()
-> >>>
-> >>> sqe1 and sqe2 can be submitted concurrently or be issued one by one
-> >>> in order, fused command supports both, and depends on user requirement.
-> >>> But io_uring linked OPs is usually slower.
-> >>>
-> >>> Also file1/file2 needs to be opened beforehand in this example, and FD is
-> >>> passed to sqe1/sqe2, another choice is to use fixed File; Also you can
-> >>> add the open/close() OPs into above steps, which need these open/close/READ
-> >>> to be linked in order, usually slower tnan non-linked OPs.
-> >>
-> >>
-> >> Yes thanks, I'm going to prepare this in an branch, otherwise current
-> >> fuse-uring would have a ZC regression (although my target ddn projects
-> >> cannot make use of it, as we need access to the buffer for checksums, etc).
-> > 
-> > storage has similar use case too, such as encrypt, nvme tcp data digest,
-> > ..., if the checksum/encrypt approach is standard, maybe one new OP or
-> > syscall can be added for doing that on kernel buffer directly.
-> 
-> I very much see the use case for FUSED_CMD for overlay or simple network 
-> sockets. Now in the HPC world one typically uses IB  RDMA and if that 
-> fails for some reasons (like connection down), tcp or other interfaces 
-> as fallback. And there is sending the right part of the buffer to the 
-> right server and erasure coding involved - it gets complex and I don't 
-> think there is a way for us without a buffer copy.
+IIUC, this is similar as page lock.
 
-As I mentioned, it(checksum, encrypt, ...) becomes one generic issue if
-the zero copy approach is accepted, meantime the problem itself is well-defined,
-so I don't worry no solution can be figured out.
+> 10. migrate_folio_unmap() has the case we've already talked about
+>
+> 11. migrate_folio_unmap() does batch flushes for async because it
+> doesn't need to worry about a class of deadlock. Somewhat recent code
+> actually ends up running this code first even for sync modes to get
+> the batch.
+>
+> 12. We'll retry a few more times for SYNC_LIGHT than ASYNC. Seems like
+> the more retries won't really hurt for kcompactd.
+>
+> --
+>
+> So from looking at all the above, I'll say that kcompactd should stick
+> with SYNC_LIGHT and we should fix #10. In other words, like my
+> original patch except that we keep blocking on the lock in the full
+> SYNC modes.
+>
+> It's possible that we should also change case #9 I listed above. Do
+> you know if locking buffers is likely to block on something as slow as
+> page reading/writing?
 
-Meantime big memory copy does consume both cpu and memory bandwidth a
-lot, and 64k/512k ublk io has shown this big difference wrt. copy vs.
-zero copy.
+IIUC, this is related to page reading/writing.  Buffer head is used by
+ext2/4 to read/write.
 
-Thanks,
-Ming
+Thank you very much for your research.  It looks like ASYNC isn't
+appropriate for kcompactd.
 
+From the comments of SYNC_LIGHT,
+
+ * MIGRATE_SYNC_LIGHT in the current implementation means to allow blocking
+ *	on most operations but not ->writepage as the potential stall time
+ *	is too significant
+
+To make SYNC_LIGHT block on less operations than before, I guess that
+you need to prove the stall time can be long with the operation with
+not-so-extreme test cases.
+
+Best Regards,
+Huang, Ying
