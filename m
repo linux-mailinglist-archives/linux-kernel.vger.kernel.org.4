@@ -2,105 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36546E989E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DAE6E98A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231786AbjDTPo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 11:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
+        id S232029AbjDTPoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 11:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjDTPoZ (ORCPT
+        with ESMTP id S231808AbjDTPo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 11:44:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25933E6A
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:44:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85F5E1480;
-        Thu, 20 Apr 2023 08:45:07 -0700 (PDT)
-Received: from [192.168.1.3] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5D8F83F6C4;
-        Thu, 20 Apr 2023 08:44:22 -0700 (PDT)
-Message-ID: <53132776-c998-a24f-a811-d8fb2e5e6535@arm.com>
+        Thu, 20 Apr 2023 11:44:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F253BE2;
+        Thu, 20 Apr 2023 08:44:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90A3E61CB7;
+        Thu, 20 Apr 2023 15:44:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 466DFC433EF;
+        Thu, 20 Apr 2023 15:44:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682005465;
+        bh=lh/LmfIpTSoN042UO3oJTYSQL5UfCtQrgcjvVbGTpgg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mE8Q1vSwlxWnJXtBou9K80p7v7d/WPJOQtMZF8vwl2Ys/hagRYrPVxT8NOYmlfmpu
+         o/SN4mSYDK1LKfKw07z9j2EBsk3neMHHbHHnEEBcwqt/GYjfnlQePnaCZjWdNhJPFN
+         fI6yGcd5grJY6NmQgbgmc2PkY8gqyF/k2OsyTeUGKi4Mw5WhhkJaKMQMkadHirQpvr
+         1iL/B03GK5nS90JyTQNSPZ1q2PYY4mThoTN+1gI/Ef/O4jCKsOmBb4pBq/q9zN5M4R
+         xJhrukvGXawjQCgqqHPXXGeWEuOUmCGqVrwdHhAFb9xju3AOexsMHHQF51rk2VmIxi
+         Xv/70G21pyflA==
+From:   broonie@kernel.org
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Apr 20
 Date:   Thu, 20 Apr 2023 16:44:21 +0100
+Message-Id: <20230420154421.108252-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] perf cs-etm: Add support for coresight trace for any
- range of CPUs
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-Cc:     mathieu.poirier@linaro.org, acme@kernel.org,
-        darren@os.amperecomputing.com, scott@os.amperecomputing.com,
-        scclevenger@os.amperecomputing.com, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        mike.leach@linaro.org
-References: <20230419172101.78638-1-gankulkarni@os.amperecomputing.com>
- <d758c5e2-aa32-d829-35ee-a685bdb56f75@arm.com>
- <84eb3363-2ef8-d3f1-4613-805959dbf334@os.amperecomputing.com>
- <91ba66e7-737f-6526-a703-a755e114f9d4@arm.com>
- <dea08376-e66b-bacc-7673-c79fe2a8f889@os.amperecomputing.com>
- <902dea0e-456b-d763-fdb5-a520ea3d7536@arm.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <902dea0e-456b-d763-fdb5-a520ea3d7536@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all,
 
+Changes since 20230419:
 
-On 20/04/2023 14:03, Suzuki K Poulose wrote:
-> On 20/04/2023 13:37, Ganapatrao Kulkarni wrote:
->>
->>
->> On 20-04-2023 06:00 pm, James Clark wrote:
->>>
->>>
->>> On 20/04/2023 12:47, Ganapatrao Kulkarni wrote:
->>>>
-> 
-> ...
-> 
->>>> My patch is rebased on 6.3-RC7 codebase with Mike's 3 perf patches
->>>> related to dynamic id [1] support(queued for 6.4).
->>>>
->>>> "perf report -D" works for me.
->>>
->>> I was referring to sparse CPU lists, which I think you mentioned above
->>> doesn't work even with this patch.
->>>
->>>>
->>>> [1] https://www.spinics.net/lists/linux-perf-users/msg27452.html
->>>>
->>>
->>> It should be based on the next branch here:
->>> git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git
->>
->> OK.
-> 
-> It need not be. Since this patch is purely perf tools patch and has
-> nothing to do with the kernel drivers, it should be beased on whatever
-> the tip of the perf tool tree is. Otherwise we risk rebasing to that
-> eventually.
-> 
-> Cheers
-> Suzuki
-> 
+The ieee1394 tree was added.
 
-Good point, sorry for the confusion!
+The risc-v tree gained a conflict against the risc-v-fixes tree.
 
-I wonder if we could have some kind of new staging branch that has both
-up to date perf and coresight changes at the same time? Either that
-would make things like this easier, or more complicated. I'm not sure.
+Non-merge commits (relative to Linus' tree): 12050
+ 12264 files changed, 800775 insertions(+), 414066 deletions(-)
 
-I suppose I can DIY it quite easily but then everyone would have to as well.
+----------------------------------------------------------------------------
 
-James
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There is also the merge.log file in the Next
+directory.  Between each merge, the tree was built with a ppc64_defconfig
+for powerpc, an allmodconfig for x86_64, a multi_v7_defconfig for arm
+and a native build of tools/perf. After the final fixups (if any), I do
+an x86_64 modules_install followed by builds for x86_64 allnoconfig,
+powerpc allnoconfig (32 and 64 bit), ppc44x_defconfig, allyesconfig
+and pseries_le_defconfig and i386, arm64, s390, sparc and sparc64
+defconfig and htmldocs. And finally, a simple boot test of the powerpc
+pseries_le_defconfig kernel in qemu (with and without kvm enabled).
+
+Below is a summary of the state of the merge.
+
+I am currently merging 358 trees (counting Linus' and 102 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.
