@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A8D6E9B41
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D35C6E9B42
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbjDTSH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 14:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        id S231793AbjDTSIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 14:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbjDTSHy (ORCPT
+        with ESMTP id S231292AbjDTSHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 20 Apr 2023 14:07:54 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B202715
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71903AA4
         for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:07:53 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id sz19so8399151ejc.2
+Received: by mail-ej1-x62e.google.com with SMTP id b16so8376827ejz.3
         for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:07:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682014071; x=1684606071;
+        d=linaro.org; s=google; t=1682014072; x=1684606072;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=k5QpXIUjiGt8O1aDcypmRfE3dageaJXgmexjKRVJdM0=;
-        b=O5uQMrhSanICTTZEs+i2ZJsufAVa38dgmhpsJy0s5Q0x6Hlu/gXz3EPp9Ec1cTy94g
-         xk1NRs/c3jBVWOnuNzdehyL5ubI3Dvi6kvBUYBi3uNj+tni6LGmDwhGsRhIbW3kZGb3p
-         WQP8kReyfYg/+G1szyQ2KThDnNYPWH1qsisEsSPviZlr5DAAOEjh3CAMOHsjIC4qMdYr
-         W9PAPpYgZWt9kOKVYw7On1IDjyUtz+u1TICtfBjR569LhIhVN9ez0r0bHnMw/oonV1f2
-         8GaLl+5xCBSbdZP/ur2ngYe9UxnAoTrvyC9LDahXyVCtQT+KwuNli3HO1HMCG7n7c0oq
-         xIFQ==
+        bh=Zkvq8PLrKRAViicQL2lp06qamZMGFRuRLh5USoc58vw=;
+        b=JaTTF2w2Psv6RPFeqUB56LHAC2C7PSqi/9UvCGBsarZT60O63zt4XJy3cv8zLIqXs8
+         W1kATanqEfuq0YD0dEgT1Py2DoE6MMAIAdUmkI8xH30qeaIQlLJmuafKfacUKWGHJ6WN
+         ilje8homFQdJjJspGnVFSIfwI6X7s9Bq6XAnlE0W25mpyE32Q0YOrLl8p8w2ulGO+E3m
+         Azlv51Vlr3qnZizlqm5NIb2gORq5Oxeihw2UaY6/Ww0J60lkqVHjwAx47kI20pUppNri
+         RD12G8F2v3SyF1IB+fSe9D5pCEsOBJxSRLm1QSQEok6fWj++4fAQyPognMXc5pOe+jXZ
+         0/3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682014071; x=1684606071;
+        d=1e100.net; s=20221208; t=1682014072; x=1684606072;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=k5QpXIUjiGt8O1aDcypmRfE3dageaJXgmexjKRVJdM0=;
-        b=Liwp4QBvCHG3BvmNlXW6pgexDaVhFTRBEQcMTKAsIzh8e49sCNwWUge4YqH9tCrBqB
-         29Tgz+mGzA+iE61uG2p3K5TqI4VRn25NZo/IcgWjJJF0iz8RigQ42jLlHCIWXkkm//3r
-         d5OBGXN9cTFzjkb13D1Nehr9eNPX6XMFQ3JDzCm5DWQf5IK+bRJu0g6O4b/ROx5W+ctc
-         LNPnuYXGehg177V+0NnY0P5/KhVdny2JmFYSBiFQoArucH1D6TpdkrBeWHrAa83Nut7v
-         M22UFlDKYE5D7V2aXIoIQIZxBroQCOvdjp/bD7BJBlzUtuMBToZekMkBc/jdhRF/ihgq
-         /vWw==
-X-Gm-Message-State: AAQBX9fadpIVhIem314fQLX1vGilfXvOpAcL7kL2WETWaOTTuJIuf0mo
-        3b48F/9XBakC4prv2TeWTj7jYw==
-X-Google-Smtp-Source: AKy350aHBADzNl7XDxI41B/F1AleE7huvsUg8f/rtQIdgyc4pT6XwwsvsmNAbuJDBUz6L6Kv+QsSuw==
-X-Received: by 2002:a17:906:1985:b0:930:3916:df17 with SMTP id g5-20020a170906198500b009303916df17mr2610386ejd.0.1682014070819;
-        Thu, 20 Apr 2023 11:07:50 -0700 (PDT)
+        bh=Zkvq8PLrKRAViicQL2lp06qamZMGFRuRLh5USoc58vw=;
+        b=MxdfzvfBqmxfcgqZvCQ2287Yfc7jdQJ2SLc3b4e5fu1wZlxcNHRmQWkBrfrvhuY4z4
+         5hExWvbmJj5g78MLt+6C7bHMWNSsdFRLMXA9aNkNiF4oeSDa0VPLxUYHTdciC+MDuFGT
+         LUaTQwRhe6WxpqdhdlKe5pdiOgMVGg038DrGsqZ7TXpBlut0Yvo2nCVq0h39SeyLPiRa
+         QqYogknHO0EXVHpG/ULOilp4J4SNGdSs1l6dQhF8n4LjmssNfBFXzn2ilGJRfGGXqxab
+         Azv3Bp0rqVTQvkDPBql4S5upH/oFyE43hz4fOoFSn6VvRAMtgOOC5NEBoH7voCw5CBBH
+         zi6g==
+X-Gm-Message-State: AAQBX9cIDlEBlu5gbQRdVrQWlTKeNEBHnSmSvYqme1SiKqkj8Xzy+hVs
+        zm5J6Btw1y9KxLgrF3Cv+lyZGg==
+X-Google-Smtp-Source: AKy350Y3G94dHrpQ7lRUrqLh6jPIr5AKQCaReTuIIg889Xx8yRrthyxCehrwzYFs713o3YB5i1suKQ==
+X-Received: by 2002:a17:906:e082:b0:953:4987:4b8 with SMTP id gh2-20020a170906e08200b00953498704b8mr2233004ejb.47.1682014071871;
+        Thu, 20 Apr 2023 11:07:51 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
-        by smtp.gmail.com with ESMTPSA id v8-20020a17090610c800b0093313f4fc3csm984778ejv.70.2023.04.20.11.07.49
+        by smtp.gmail.com with ESMTPSA id v8-20020a17090610c800b0093313f4fc3csm984778ejv.70.2023.04.20.11.07.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 11:07:50 -0700 (PDT)
+        Thu, 20 Apr 2023 11:07:51 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/3] arm64: dts: qcom: msm8994: fix duplicated @6c00000 reserved memory
-Date:   Thu, 20 Apr 2023 20:07:45 +0200
-Message-Id: <20230420180746.860934-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 3/3] arm64: dts: qcom: msm8992-libra: drop duplicated reserved memory
+Date:   Thu, 20 Apr 2023 20:07:46 +0200
+Message-Id: <20230420180746.860934-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230420180746.860934-1-krzysztof.kozlowski@linaro.org>
 References: <20230420180746.860934-1-krzysztof.kozlowski@linaro.org>
@@ -77,55 +77,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reserved memory @6c00000 is defined in MSM8994 DTSI and few boards:
+There are two entries for similar reserved memory: qseecom@cb400000 and
+audio@cb400000.  Keep the qseecom as it is longer.
 
-  Warning (unique_unit_address_if_enabled): /reserved-memory/reserved@6c00000: duplicate unit-address (also used in node /reserved-memory/hole2@6c00000)
-  Warning (unique_unit_address_if_enabled): /reserved-memory/reserved@6c00000: duplicate unit-address (also used in node /reserved-memory/memory@6c00000)
+  Warning (unique_unit_address_if_enabled): /reserved-memory/audio@cb400000: duplicate unit-address (also used in node /reserved-memory/qseecom@cb400000)
 
+Fixes: 69876bc6fd4d ("arm64: dts: qcom: msm8992-libra: Fix the memory map")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 ---
- arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts        | 1 +
- arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi | 1 +
- arch/arm64/boot/dts/qcom/msm8994.dtsi                    | 2 +-
- 3 files changed, 3 insertions(+), 1 deletion(-)
+
+Maybe the original intention was to use different address for audio res.
+memory?
+---
+ arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts | 5 -----
+ 1 file changed, 5 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-index fcca1ba94da6..501e05efbef4 100644
+index 501e05efbef4..133f9c2540bc 100644
 --- a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
 +++ b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-@@ -15,6 +15,7 @@
- /delete-node/ &audio_mem;
- /delete-node/ &mpss_mem;
- /delete-node/ &peripheral_region;
-+/delete-node/ &res_hyp_mem;
- /delete-node/ &rmtfs_mem;
- 
- / {
-diff --git a/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi b/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
-index 2861bcdf87b7..cbc84459a5ae 100644
---- a/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
-@@ -23,6 +23,7 @@
- /delete-node/ &mba_mem;
- /delete-node/ &mpss_mem;
- /delete-node/ &peripheral_region;
-+/delete-node/ &res_hyp_mem;
- /delete-node/ &rmtfs_mem;
- /delete-node/ &smem_mem;
- 
-diff --git a/arch/arm64/boot/dts/qcom/msm8994.dtsi b/arch/arm64/boot/dts/qcom/msm8994.dtsi
-index 5a7923d7c62a..405778d92b43 100644
---- a/arch/arm64/boot/dts/qcom/msm8994.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8994.dtsi
-@@ -231,7 +231,7 @@ adsp_mem: memory@c9400000 {
- 			no-map;
+@@ -110,11 +110,6 @@ rmtfs_mem: rmtfs@ca100000 {
+ 			qcom,client-id = <1>;
  		};
  
--		reserved@6c00000 {
-+		res_hyp_mem: reserved@6c00000 {
- 			reg = <0 0x06c00000 0 0x400000>;
- 			no-map;
- 		};
+-		audio_mem: audio@cb400000 {
+-			reg = <0 0xcb000000 0 0x400000>;
+-			no-mem;
+-		};
+-
+ 		qseecom_mem: qseecom@cb400000 {
+ 			reg = <0 0xcb400000 0 0x1c00000>;
+ 			no-mem;
 -- 
 2.34.1
 
