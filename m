@@ -2,118 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F1E6E9889
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB2F6E988E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbjDTPkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 11:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
+        id S231656AbjDTPll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 11:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232109AbjDTPkn (ORCPT
+        with ESMTP id S231817AbjDTPli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 11:40:43 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DA61991;
-        Thu, 20 Apr 2023 08:40:40 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id F146C732;
-        Thu, 20 Apr 2023 15:40:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net F146C732
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1682005240; bh=UF61JW6oRtLJIYx10KbxIyUy5rSXTyyXgGlY7V2DrHg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Qcb4dlTc5ho5ToPMXUQ80Nry1hsqMBl2qEbaTo4ZKLPU3xmAuicagZzKzCd+LxXaj
-         jxZ0adq+YtQ6huKRsNejlznrRbNlCMNy8ZqBQruRdYn/G79kOgt9bjdwaEZM8thry5
-         c4GRXrjPaShA+V7Mr3otYovIIStDnFB+mqFGLFdiBT3aYlSDzu0UFL8cr0PbWzDc/Z
-         iLddw/ryvzvL5VchGaN3+8ymqcXzJNXmDA7CHhyV0/roHnxHGUCHQmCUlGBPmHpeGZ
-         nO9/C2KW+UZQy8v7stRhB0Q+zePmY7CnNITn4qLN53b0CpDXrsWNHcFU49jq55WNNS
-         yCfVXzeQCQSHA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Zipeng Zhang <zhangzipeng0@foxmail.com>
-Cc:     ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
-        boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
-        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        masahiroy@kernel.org, codeagain@codeagain.dev,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
-        Zipeng Zhang <zhangzipeng0@foxmail.com>
-Subject: Re: [PATCH] Documentation/process/changes: Escape --options to fix
- Sphinx output
-In-Reply-To: <87sfcuu0fm.fsf@meer.lwn.net>
-References: <tencent_CB1A298D31FD221496FF657CD7EF406E6605@qq.com>
- <87sfcuu0fm.fsf@meer.lwn.net>
-Date:   Thu, 20 Apr 2023 09:40:39 -0600
-Message-ID: <87o7nitvd4.fsf@meer.lwn.net>
+        Thu, 20 Apr 2023 11:41:38 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DF14EED
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:41:21 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f17b967bfbso22575415e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:41:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682005280; x=1684597280;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pMTCI9kAG7wRhQ4LO+BFtd8OeJXKh9I5SStps/c37Rw=;
+        b=PsOyPWDCsi920bN8Udf6m0hFPjcB7Hp3uhPoxvdq/n0L8GKwzbRaBjT67AFSTy8etY
+         dSxDU4PLWYFfVwc3MwyUS1a6Op5jKszILgf4c140Cp1OuLCCUyTe6ZZ40QvUyn7ldb82
+         07T1NhScT3g4Kf+6DbgUKy4gdirJpfjjuzaFjxwlFSETLG7ebv7t/9zlAv4SXQ2tpcLs
+         rvl+vle9tOoZVlmgyhCdItgQAW9LV2W8H5AIWyDj5lUM22E7iPfIENAJJoibq2yuvvyT
+         +dx61Ogx3NogDVkYbVskFRw1Bu/2nsIV56zRNYtRrf8l0a1U6Xe4mp4s7WGBk+dJnaqD
+         qnxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682005280; x=1684597280;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pMTCI9kAG7wRhQ4LO+BFtd8OeJXKh9I5SStps/c37Rw=;
+        b=DTnDdoqgVquEwKZTlRfKgFfZGNcgU3xxUjoXquzsyV4OwznP3/HzSFDGfxn06mjkkg
+         C6hnf+W37OPByjoQJBCVclk+foPlWJ32jpLofItkjT/CmsNZHHZ+r71nwCsqCl1Jk/zs
+         6b/22WR2SsBf/waxQOgQbl9hTfdcvboV+PDD5iPSzwEtCXv2jRTMph/7eFUEb1OTaN7A
+         Y3LN4gqA+2HiTGxcqjZocVp+i+zOi60cR6gK5ePp0hH839aWqi/jH5Xoi4aaQUjAgNOk
+         5igJnPVfLwzwAdA6uMd2VSKFz8GFJQ88pv9ya7yiTdhmmegrEBq+v1DFughM0q9/DgHR
+         3/hA==
+X-Gm-Message-State: AAQBX9e0tPwciTNTqvrGJe+kHLYZr2bVddA8JrDJdWuwByN214NNkoV9
+        QUDY4gh7GztTwecM/OR8d2mohe2yU3woBUHon6YjMQ==
+X-Google-Smtp-Source: AKy350Zm2fmnU/Ys/3X2CzEj8wVPLTgQsWnV/f20jBKDfIONBHIbCzhsBE/x/IkJXuZKQzVRBRgr21q2SXkmBujHd1Q=
+X-Received: by 2002:a05:6000:1181:b0:2fc:3596:7392 with SMTP id
+ g1-20020a056000118100b002fc35967392mr1580931wrx.24.1682005280020; Thu, 20 Apr
+ 2023 08:41:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <1681971690-28858-1-git-send-email-quic_sarannya@quicinc.com>
+In-Reply-To: <1681971690-28858-1-git-send-email-quic_sarannya@quicinc.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Thu, 20 Apr 2023 09:41:09 -0600
+Message-ID: <CANLsYky00+sD-MsGK40E79xe8v8vtxji8O0LdgEOHYTF5PPpZA@mail.gmail.com>
+Subject: Re: [PATCH V6 0/3] rpmsg signaling/flowcontrol patches
+To:     Sarannya S <quic_sarannya@quicinc.com>
+Cc:     quic_bjorande@quicinc.com, arnaud.pouliquen@foss.st.com,
+        swboyd@chromium.org, quic_clew@quicinc.com,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jonathan Corbet <corbet@lwn.net> writes:
+On Thu, 20 Apr 2023 at 00:22, Sarannya S <quic_sarannya@quicinc.com> wrote:
+>
+> Added new IOCTLS- RPMSG_GET_OUTGOING_FLOWCONTROL and RPMSG_SET_INCOMING_FLOWCONTROL
+> to get/set the rpmsg char device's flow control signal.
+> Updated the cmd name 'RPM_CMD_SIGNALS' to 'GLINK_CMD_SIGNALS'.
+> Changed 'remote_flow' to bool type, and updated it's evaluation.
+> Updated evaluation of 'set' in rpmsg_char as 'set = !!arg'.
+> Add destination address of endpoint as parameter in rpmsg_set_flow_control.
+> Addressed review comments to change variable names/descriptions.
+>
+> Chris Lew (2):
+>   rpmsg: glink: Add support to handle signals command
+>   rpmsg: char: Add RPMSG GET/SET FLOWCONTROL IOCTL support
+>
+> Deepak Kumar Singh (1):
+>   rpmsg: core: Add signal API support
+>
+>  drivers/rpmsg/qcom_glink_native.c | 64 +++++++++++++++++++++++++++++++++++++++
+>  drivers/rpmsg/rpmsg_char.c        | 49 ++++++++++++++++++++++++++----
+>  drivers/rpmsg/rpmsg_core.c        | 21 +++++++++++++
+>  drivers/rpmsg/rpmsg_internal.h    |  2 ++
+>  include/linux/rpmsg.h             | 15 +++++++++
+>  include/uapi/linux/rpmsg.h        | 11 ++++++-
+>  6 files changed, 155 insertions(+), 7 deletions(-)
+>
 
-> The right solution, if it is possible, is to convince Sphinx to stop
-> messing with "--" altogether.  Substituting em-dashes is of limited
-> cosmetic value and, I think, is something we could do without.
+It is not possible to follow what is happening with this patchset.
+Please send a proper V7 that takes into account the comments that were
+received _and_ a summary of what changed between the revisions.
 
-Ah ... I get it now.  We *did* disable this once by disabling the
-"html_use_smartypants" option in conf.py.  The Sphinx folks changed the
-name of that option in the 1.6.6 release, though, silently turning that
-behavior back on.  It only took us five years to notice...  I think I'll
-just drop the attached patch into docs-next.
-
-Thanks for bringing this up!
-
-jon
-
-------------8<-----------------
-From 995addeb4ab2a2c4beaf8b90a4dc8c1d64735d29 Mon Sep 17 00:00:00 2001
-From: Jonathan Corbet <corbet@lwn.net>
-Date: Thu, 20 Apr 2023 09:34:35 -0600
-Subject: [PATCH] docs: turn off "smart quotes" in the HTML build
-
-We have long disabled the "html_use_smartypants" option to prevent Sphinx
-from mangling "--" sequences (among others).  Unfortunately, Sphinx changed
-that option to "smartquotes" in the 1.6.6 release, and seemingly didn't see
-fit to warn about the use of the obsolete option, resulting in the
-aforementioned mangling returning.  Disable this behavior again and hope
-that the option name stays stable for a while.
-
-Reported-by: Zipeng Zhang <zhangzipeng0@foxmail.com>
-Link: https://lore.kernel.org/lkml/tencent_CB1A298D31FD221496FF657CD7EF406E=
-6605@qq.com
-Signed-off-by: Jonathan Corbet <corbet@lwn.net>
----
- Documentation/conf.py | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/conf.py b/Documentation/conf.py
-index db16814f182f..3d1f74f76e64 100644
---- a/Documentation/conf.py
-+++ b/Documentation/conf.py
-@@ -343,9 +343,10 @@ sys.stderr.write("Using %s theme\n" % html_theme)
- # so a file named "default.css" will overwrite the builtin "default.css".
- html_static_path =3D ['sphinx-static']
-=20
--# If true, SmartyPants will be used to convert quotes and dashes to
--# typographically correct entities.
--html_use_smartypants =3D False
-+# If true, Docutils "smart quotes will be used to convert quotes and dashes
-+# to typographically correct entities.  This will convert "--" to "=E2=80=
-=94",
-+# which is not always what we want, so disable it.
-+smartquotes =3D False
-=20
- # Custom sidebar templates, maps document names to template names.
- # Note that the RTD theme ignores this
---=20
-2.40.0
-
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>
