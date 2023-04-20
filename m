@@ -2,134 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECB16E9935
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F506E8C3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbjDTQJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 12:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
+        id S234334AbjDTIIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbjDTQJI (ORCPT
+        with ESMTP id S234042AbjDTIIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 12:09:08 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAC63A8D;
-        Thu, 20 Apr 2023 09:09:07 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-187af4a5437so759346fac.0;
-        Thu, 20 Apr 2023 09:09:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682006946; x=1684598946;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IkJ757D7Ayc3x5jwYsxuxnxkjlFuulWAJkfbWRzIMQM=;
-        b=L+Q/Z9F5Lr72WUhZmeCPJxNdm7GRBO/cumSnJwXXos3DO+1tPW8yh/cyarmkxblbW4
-         YQNBb/wLauxOPzR2zdxt8/X4bJN1/Q9CMtKffc2oxLpo5LjUqicZ0RPLHrfoK8N76MFc
-         xTe8URzoX/HzzhRM2MOW2+sFNULa3C8YwSq0SJYPSPQBwWK0SF6NR20Y3yJ5wSsiITnN
-         zysMzQDsUjHcxt2Ox1IEI5/uVMy5EBURrGzoK/CT8bBvRnJ8nSuno4JlhjZSpECWJ4rO
-         ddLyMd6nChVKV9gHH73jcn94RwYdBA8OPEv+fxhUWis36bkwm8iEF34Drzor3+Kl8n+i
-         1MQQ==
-X-Gm-Message-State: AAQBX9c+YT2vI8JdYMNywKfYyu9IvYBnvKY+rg4oLJEKwWSAAZO7Rif2
-        BYrxJqqCDB9VlxNKChY3mQ==
-X-Google-Smtp-Source: AKy350aeJxflQzYgaqEyeXyK2zF5CseRY9f1WBxfwgvnpr5+Az0JWEfKsadnsXHRkEEvplIekIvQ9A==
-X-Received: by 2002:a05:6870:ec91:b0:180:5c1f:5446 with SMTP id eo17-20020a056870ec9100b001805c1f5446mr1426888oab.50.1682006946545;
-        Thu, 20 Apr 2023 09:09:06 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m21-20020a056870a41500b0018459cc0f52sm870775oal.24.2023.04.20.09.09.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 09:09:06 -0700 (PDT)
-Received: (nullmailer pid 2960072 invoked by uid 1000);
-        Thu, 20 Apr 2023 16:09:05 -0000
-Date:   Thu, 20 Apr 2023 11:09:05 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH] dt-bindings: display: panel: add common definition of
- ports
-Message-ID: <20230420160905.GA2952736-robh@kernel.org>
-References: <20230416153929.356330-1-krzysztof.kozlowski@linaro.org>
- <20230418222613.GA2408838-robh@kernel.org>
- <77d94fe0-75d2-8f64-19c6-fc19438ba71a@linaro.org>
+        Thu, 20 Apr 2023 04:08:48 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7276E10FA;
+        Thu, 20 Apr 2023 01:08:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681978125; x=1713514125;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=zJvun7RpBFxuzLECfz2qxFMSQrcTU4dMCJpc6Mn8Qsg=;
+  b=VSINmG1SshZHO7G4uutjNb7njjul6IC+eSzPctbWtC8+3XGuMXzdgjQw
+   Q+70k0HClvBIMRtKuggaGXygE/CU3DN+unC4X2eK8Ml3XW5wlPzs0XKhl
+   qVbn6y+l6VklyNGLKZD89Hru6EM50lts5a8NTWIzr9jWsS9Y6s9XGT0fJ
+   OhuDfh+6M2boQuJxuvN1f1nArSTG8oRQjWlIGrSpJ5xYgRD7bzSg5tYmO
+   L7ih21y2UjloQoVMphjRjY/asCACEdJ+mXQ7Dql2RNr45s1V58pD++S2B
+   vVsHDFtqMoqATWVdLL6cIcoPQK7PtcQ3ivqA2ua6KJFtjk0CxUSpzER4i
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="344422575"
+X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
+   d="scan'208";a="344422575"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 01:08:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="781157973"
+X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
+   d="scan'208";a="781157973"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Apr 2023 01:08:42 -0700
+Date:   Fri, 21 Apr 2023 00:09:13 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russ Weight <russell.h.weight@intel.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] mfd: intel-m10-bmc: Create
+ m10bmc_sys_update_bits()
+Message-ID: <ZEFjqZdXDYRJdXgp@yilunxu-OptiPlex-7050>
+References: <20230417092653.16487-1-ilpo.jarvinen@linux.intel.com>
+ <20230417092653.16487-3-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <77d94fe0-75d2-8f64-19c6-fc19438ba71a@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230417092653.16487-3-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 10:56:55AM +0200, Krzysztof Kozlowski wrote:
-> On 19/04/2023 00:26, Rob Herring wrote:
-> > On Sun, Apr 16, 2023 at 05:39:29PM +0200, Krzysztof Kozlowski wrote:
-> >> Few panel bindings for dual-link connections just type "ports: true",
-> >> which does not enforce any type.  Add common definition of ports, so the
-> >> type will be fixed.
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>
-> >> ---
-> >>
-> >> Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
-> >> ---
-> >>  .../bindings/display/panel/panel-common.yaml     | 16 ++++++++++++++++
-> >>  1 file changed, 16 insertions(+)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/display/panel/panel-common.yaml b/Documentation/devicetree/bindings/display/panel/panel-common.yaml
-> >> index 5b38dc89cb21..ad62d34e6fa3 100644
-> >> --- a/Documentation/devicetree/bindings/display/panel/panel-common.yaml
-> >> +++ b/Documentation/devicetree/bindings/display/panel/panel-common.yaml
-> >> @@ -70,6 +70,16 @@ properties:
-> >>    port:
-> >>      $ref: /schemas/graph.yaml#/properties/port
-> >>  
-> >> +  # For dual-link connections
-> >> +  ports:
-> >> +    $ref: /schemas/graph.yaml#/properties/ports
-> >> +    patternProperties:
-> >> +      "^port@[0-9a-f]+$":
-> >> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > 
-> > This allows any undocumented property.
+On 2023-04-17 at 12:26:51 +0300, Ilpo Järvinen wrote:
+> Wrap regmap_update_bits() with m10bmc_sys_update_bits() in order to be
+> able to add additional checks into it.
 > 
-> Yes, which I hope the device schema (using this panel-common) will
-> narrow with additionalProperties: false.
-> 
-> I can make it explicit: additionalProperties: true.
-> 
-> Otherwise, how do I allow custom properties like:
-> Documentation/devicetree/bindings/display/panel/advantech,idk-2121wr.yaml
-> 
-> > 
-> >> +
-> >> +    required:
-> >> +      - port@0
-> >> +
-> > 
-> > I don't think this should be added here because users must define what 
-> > each port is. With it here, we're going to validate the nodes twice as 
-> > well. Same can be said for 'port' though. It can't be extended though.
-> 
-> So you propose to drop entire "ports" here and expect every panel schema
-> to define it instead?
+> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-Only those with more than 1 port or extra port/endpoint properties. If 
-neither of those are true, then they can use just 'port'. Otherwise, 
-all those panel bindings already have to define the port nodes already.
+Reviewed-by: Xu Yilun <yilun.xu@intel.com>
 
-Rob
+> ---
+>  drivers/fpga/intel-m10-bmc-sec-update.c | 30 ++++++++++++-------------
+>  drivers/mfd/intel-m10-bmc-core.c        |  9 ++++++++
+>  include/linux/mfd/intel-m10-bmc.h       |  4 ++++
+>  3 files changed, 27 insertions(+), 16 deletions(-)
