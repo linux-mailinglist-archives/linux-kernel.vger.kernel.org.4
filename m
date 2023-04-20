@@ -2,94 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3636E9952
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAFEE6E9967
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233343AbjDTQQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 12:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
+        id S234275AbjDTQVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 12:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbjDTQP6 (ORCPT
+        with ESMTP id S231803AbjDTQVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 12:15:58 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD703596;
-        Thu, 20 Apr 2023 09:15:57 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 4038C2AE;
-        Thu, 20 Apr 2023 16:15:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 4038C2AE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1682007357; bh=dIoh7Uzva2QsUh5vyGcccNj94Y882Db73hATcucqawE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=VANjqdpHV1W5XdXIB/wV+x8VC4ql3kGUs/Per8arX/UNuGOuxeKFb/7Av0anFrvms
-         k2opc6Z1dgRJBQh0L+vo4aO3IZ6rk1D1BicOJephalElMdkwyzKggqcxWNqG4OVJLo
-         KloTTSAaHOH4IGy3uYVMjyqnHdaIJTj7zO3MOaqMsisjTVETjJkOO66AcYdmNbZn3D
-         xcJNJf0KQeN4YWpLFn2TkGN+FDvBF6CFmG6Ph9Y320FpFKBVDL1z2sFaliP6/C7v4y
-         FTZSDSMqKbWjWmDM4+nEUU8ASgxHKz0/vH/CfYklDAAipUkksA5j/Ri8cMe226p3TD
-         Mktp/fj4YA+LA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Brian Masney <bmasney@redhat.com>, sboyd@kernel.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mturquette@baylibre.com, linux-doc@vger.kernel.org
-Subject: Re: [PATCH] docs: clk: add documentation to log which clocks have
- been disabled
-In-Reply-To: <20230411192153.289688-1-bmasney@redhat.com>
-References: <20230411192153.289688-1-bmasney@redhat.com>
-Date:   Thu, 20 Apr 2023 10:15:56 -0600
-Message-ID: <87y1mmsf5v.fsf@meer.lwn.net>
+        Thu, 20 Apr 2023 12:21:17 -0400
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7791040D4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 09:20:30 -0700 (PDT)
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-74da25049e0so80052385a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 09:20:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682007629; x=1684599629;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mi8BRALKHs7eage0Q9/aKDKQbgLFo1rksVSh6HXojUM=;
+        b=ARLheDYENN4CNUATEdaaRopSWP1gSVGeR4xPIG4rMxB1ZdmG8xlBYxSBUNPTKhze4A
+         UyEtRaXoUlUR+rCoJEGydKdeI7cSahXb41t+1hGit6HWN3eUUoCg7MnaU+AFILmgju8e
+         1EnQNFFGpSVZGAQOtR+cEr5a+mUf4D1mCf3uhOHjzGpTh0ygh/qtx/vOcLu3GrVLv4kG
+         Kbu8cLi+E5D3L4x2YoxFLR0Mn8sA5VantevE1uCc57TB+p/BsIt7Gfn9luJaJL1BuC/e
+         cPgYEA7aS9xg4mPe5Pt5CV8iztcsj+7wQogPmFMyETG77nRAQbINHizHzqMiOcWi6qQj
+         XFUg==
+X-Gm-Message-State: AAQBX9fkecxIRFO/4jZ/EzbKEt62Sk2kuuJw1b8L5uvHYY+fR3HnkLTl
+        qKZcyEYoq6hsS2z1suAaJuxe
+X-Google-Smtp-Source: AKy350ZdxFbx3P6KW7oGgzZkOdBts5SMHV3jmQ7iV4w8PdU+G+NU8GyRCb0ZtSnye0JdmMgLiXUHqw==
+X-Received: by 2002:a05:6214:1c4e:b0:5f0:23be:a301 with SMTP id if14-20020a0562141c4e00b005f023bea301mr2999579qvb.5.1682007629560;
+        Thu, 20 Apr 2023 09:20:29 -0700 (PDT)
+Received: from localhost ([37.19.196.135])
+        by smtp.gmail.com with ESMTPSA id b17-20020a05620a271100b0074e034915d4sm539562qkp.73.2023.04.20.09.20.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 09:20:28 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 12:20:27 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Daniil Lunev <dlunev@google.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v5-fix 1/5] block: Don't invalidate pagecache for invalid
+ falloc modes
+Message-ID: <ZEFmS9h81Wwlv9+/@redhat.com>
+References: <20230420004850.297045-2-sarthakkukreti@chromium.org>
+ <20230420014734.302304-1-sarthakkukreti@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420014734.302304-1-sarthakkukreti@chromium.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Brian Masney <bmasney@redhat.com> writes:
+On Wed, Apr 19 2023 at  9:47P -0400,
+Sarthak Kukreti <sarthakkukreti@chromium.org> wrote:
 
-> The existing clk documentation has a section that talks about the
-> clk_ignore_unused kernel parameter. Add additional documentation that
-> describes how to log which clocks the kernel disables on bootup. This
-> will log messages like the following to the console on bootup:
->
->     [    1.268115] clk: Disabling unused clocks
->     [    1.272167] clk_disable: gcc_usb_clkref_en
->     [    1.276389] clk_disable: gcc_usb30_sec_sleep_clk
->     [    1.281131] clk_disable: gcc_usb30_prim_sleep_clk
->     ...
->
-> Signed-off-by: Brian Masney <bmasney@redhat.com>
+> Only call truncate_bdev_range() if the fallocate mode is
+> supported. This fixes a bug where data in the pagecache
+> could be invalidated if the fallocate() was called on the
+> block device with an invalid mode.
+> 
+> Fixes: 25f4c41415e5 ("block: implement (some of) fallocate for block devices")
+
+You should add:
+
+Cc: stable@vger.kernel.org
+Reported-by: Darrick J. Wong <djwong@kernel.org>
+
+> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
 > ---
->  Documentation/driver-api/clk.rst | 5 +++++
->  1 file changed, 5 insertions(+)
-
-I've applied this, but...
-
-> diff --git a/Documentation/driver-api/clk.rst b/Documentation/driver-api/clk.rst
-> index 3cad45d14187..2199c0042e75 100644
-> --- a/Documentation/driver-api/clk.rst
-> +++ b/Documentation/driver-api/clk.rst
-> @@ -258,6 +258,11 @@ clocks properly but rely on them being on from the bootloader, bypassing
->  the disabling means that the driver will remain functional while the issues
->  are sorted out.
+>  block/fops.c | 37 ++++++++++++++++++++++++-------------
+>  1 file changed, 24 insertions(+), 13 deletions(-)
+> 
+> diff --git a/block/fops.c b/block/fops.c
+> index d2e6be4e3d1c..d359254c645d 100644
+> --- a/block/fops.c
+> +++ b/block/fops.c
+> @@ -648,26 +648,37 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
 >  
-> +You can see which clocks have been disabled by booting your kernel with these
-> +parameters:
+>  	filemap_invalidate_lock(inode->i_mapping);
+>  
+> -	/* Invalidate the page cache, including dirty pages. */
+> -	error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> -	if (error)
+> -		goto fail;
+> -
 
-...I took the liberty of making that "parameters::" so that the options
-would be formatted as a literal block.
+You remove the only user of the 'fail' label.  But I think it'd be
+cleaner to keep using it below (reduces indentation churn too).
 
-> + tp_printk trace_event=clk:clk_disable
-> +
->  To bypass this disabling, include "clk_ignore_unused" in the bootargs to the
->  kernel.
+> +	/*
+> +	 * Invalidate the page cache, including dirty pages, for valid
+> +	 * de-allocate mode calls to fallocate().
+> +	 */
+>  	switch (mode) {
+>  	case FALLOC_FL_ZERO_RANGE:
+>  	case FALLOC_FL_ZERO_RANGE | FALLOC_FL_KEEP_SIZE:
+> -		error = blkdev_issue_zeroout(bdev, start >> SECTOR_SHIFT,
+> -					     len >> SECTOR_SHIFT, GFP_KERNEL,
+> -					     BLKDEV_ZERO_NOUNMAP);
+> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> +		if (!error)
+> +			error = blkdev_issue_zeroout(bdev,
+> +						     start >> SECTOR_SHIFT,
+> +						     len >> SECTOR_SHIFT,
+> +						     GFP_KERNEL,
+> +						     BLKDEV_ZERO_NOUNMAP);
+>  		break;
 
-Thanks,
 
-jon
+So:
+
+		error = truncate_bdev_range(bdev, file->f_mode, start, end);
+		if (error)
+		        goto fail;
+		...
+
+
+>  	case FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE:
+> -		error = blkdev_issue_zeroout(bdev, start >> SECTOR_SHIFT,
+> -					     len >> SECTOR_SHIFT, GFP_KERNEL,
+> -					     BLKDEV_ZERO_NOFALLBACK);
+> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> +		if (!error)
+> +			error = blkdev_issue_zeroout(bdev,
+> +						     start >> SECTOR_SHIFT,
+> +						     len >> SECTOR_SHIFT,
+> +						     GFP_KERNEL,
+> +						     BLKDEV_ZERO_NOFALLBACK);
+>  		break;
+
+Same.
+
+>  	case FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE | FALLOC_FL_NO_HIDE_STALE:
+> -		error = blkdev_issue_discard(bdev, start >> SECTOR_SHIFT,
+> -					     len >> SECTOR_SHIFT, GFP_KERNEL);
+> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> +		if (!error)
+> +			error = blkdev_issue_discard(bdev,
+> +						     start >> SECTOR_SHIFT,
+> +						     len >> SECTOR_SHIFT,
+> +						     GFP_KERNEL);
+>  		break;
+
+Same.
