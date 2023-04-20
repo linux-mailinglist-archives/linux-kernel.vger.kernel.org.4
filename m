@@ -2,101 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FA96E95D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34A26E95E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjDTN0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 09:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
+        id S231360AbjDTN3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 09:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjDTN0v (ORCPT
+        with ESMTP id S229821AbjDTN3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:26:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABF244AE;
-        Thu, 20 Apr 2023 06:26:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BF9E64966;
-        Thu, 20 Apr 2023 13:26:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A31FC433D2;
-        Thu, 20 Apr 2023 13:26:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681997209;
-        bh=J2vGlh/VykjbR4ar6yZ60zUmjSqs5dIfxT2XqOgmb0s=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=XJsjnsjLmrzX9PZPSw4dXgT6h9MXEvf1rkEHzf+WBpGKa++ZrCrwduhTkaiI9g47c
-         BEUjlsszMZ521coYouUMxTE3L75W+coMcf0i9/FdmP0diA+Hje7UjwjX/9PTeuTxZ6
-         ikhZGdZ4Cw2UItyzyN4e8gE6pnUMtjLpaPJCaXi6Kw86fuoxVScOwVRxGiMHil21b9
-         g1qgANtP6zV+GRotTiKQuakwecDt13UBSbDl8m4LHXvT4KMAhFhf1yo6j+KfwunD39
-         ZeIdgdCkhjJ1EYn49OPFS+0VLq1wMXVPhx56ZNiLqV9fpKQVZH0nR+R5uuVbRlnl5q
-         +vEC7EUFNi2lw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Dhruva Gole <d-gole@ti.com>
-Cc:     Vaishnav Achath <vaishnav.a@ti.com>, Vignesh <vigneshr@ti.com>,
-        Apurva Nandan <a-nandan@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-In-Reply-To: <20230420054257.925092-1-d-gole@ti.com>
-References: <20230420054257.925092-1-d-gole@ti.com>
-Subject: Re: [PATCH V3] spi: cadence-quadspi: use macro
- DEFINE_SIMPLE_DEV_PM_OPS
-Message-Id: <168199720703.80523.4875780053049670259.b4-ty@kernel.org>
-Date:   Thu, 20 Apr 2023 14:26:47 +0100
+        Thu, 20 Apr 2023 09:29:25 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5834680
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:29:24 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681997361;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uyb1MZ7NuV5vu+8jhZvnRspPxQmVwaXDLnhGv/qVF04=;
+        b=HKVhhOIR1g0IW4CyBfC5Twn3/c4N2HxrfQRgHRGs0FqB9OT1g/2YQEFlRgyub85ZDCDVCQ
+        V5DMLIDPsyxYyOT0cm5iv+dpe6tpAiiu39nyz6R8wGTvno/uh75Q4oKV3M151bMh/mL7cl
+        elLLtPe1AJWg8dq1QZc6o/jIDvcB3cpPQ2uaAEfWqScGqClffy0o1BM9jCZ5xTxirCku4F
+        xwrFbVEuefcipb+r0zfQvDstNP95Sg2c9wY2PaLlzytftK+S+ITvsaUtQT1fxph3EpGBcW
+        1MzN/VzO8AGqrizlggwyjhYdoa4e6kn32QW+h89rjcA8ajWPdK4igikYIfspoQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681997361;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uyb1MZ7NuV5vu+8jhZvnRspPxQmVwaXDLnhGv/qVF04=;
+        b=VEdHKK5Jr71Yq5zTcRjYeq1o0iMLHHUuDuLgCUgf2ZTwMthegftELuhV67RnNnlb1QaOAe
+        hwLOrZBJoBwzhOAw==
+To:     Chris Down <chris@chrisdown.name>, linux-kernel@vger.kernel.org
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
+Subject: Re: [PATCH v4 1/2] printk: Do not delay messages which aren't
+ solicited by any console
+In-Reply-To: <43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris@chrisdown.name>
+References: <cover.1681994220.git.chris@chrisdown.name>
+ <43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris@chrisdown.name>
+Date:   Thu, 20 Apr 2023 15:33:22 +0206
+Message-ID: <87wn26vg3p.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00e42
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Apr 2023 11:12:57 +0530, Dhruva Gole wrote:
-> Using this macro makes the code more readable.
-> It also inits the members of dev_pm_ops in the following manner
-> without us explicitly needing to:
-> 
-> .suspend = cqspi_suspend, \
-> .resume = cqspi_resume, \
-> .freeze = cqspi_suspend, \
-> .thaw = cqspi_resume, \
-> .poweroff = cqspi_suspend, \
-> .restore = cqspi_resume
-> 
-> [...]
+On 2023-04-20, Chris Down <chris@chrisdown.name> wrote:
+> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+> index fd0c9f913940..06f16a5f1516 100644
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -1289,15 +1289,13 @@ static int __init boot_delay_setup(char *str)
+>  }
+>  early_param("boot_delay", boot_delay_setup);
+>  
+> -static void boot_delay_msec(int level)
+> +static void boot_delay_msec(void)
+>  {
+>  	unsigned long long k;
+>  	unsigned long timeout;
+>  
+>  	if ((boot_delay == 0 || system_state >= SYSTEM_RUNNING)
 
-Applied to
+            ^----- you will need to remove this paren as well
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> -		|| suppress_message_printing(level)) {
+>  		return;
+> -	}
 
-Thanks!
-
-[1/1] spi: cadence-quadspi: use macro DEFINE_SIMPLE_DEV_PM_OPS
-      commit: be3206e8906e7a93df673ab2e96d69304a008edc
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+John Ogness
