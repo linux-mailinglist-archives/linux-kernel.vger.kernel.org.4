@@ -2,112 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B9C6E88E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 05:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3D46E88E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 05:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbjDTDwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 23:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
+        id S230326AbjDTD5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 23:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjDTDwK (ORCPT
+        with ESMTP id S231232AbjDTD5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 23:52:10 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E121110F;
-        Wed, 19 Apr 2023 20:52:07 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-63b5c48ea09so537700b3a.1;
-        Wed, 19 Apr 2023 20:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681962727; x=1684554727;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w1FVwpm//7EWGjghRNYvD8w7GqajWducsGw/6kvzTVA=;
-        b=BzQ1UtsxhBck6ucDpFGCJgIgDed9yrUMGTI9yMsZiIKN7Vy22W/aKPhYjdhXuYs9ZV
-         ERDP3B8Spk55sx6apOu3z9zfoFeEoSxZ/K87wGy7amdIRGQy9UMt3gYo6ugOVc7PR87n
-         HZx8QSTKCO5phk/nTCvf5ICcffV8es5BhHMA/Ay4Pz5d/ME4LI+CMTdjPPXmNLVmczwl
-         rvAobjeoZOXlZKy10tWcXG9XmEdoO6ClEA6o1JWnoVJB8SIU/NGOwydiymVMfrA/3xCb
-         9aM1WHabVGQ2Vm7HNbDRSE/Jya7zvJfydwg0865KjrIMIyKP5L/TR/K1kwd7K+tszXvz
-         woIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681962727; x=1684554727;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w1FVwpm//7EWGjghRNYvD8w7GqajWducsGw/6kvzTVA=;
-        b=G6r+FlidmvH9W9kupnV7Ih3e2YvCM8PeVOf9azEDHlPMSHM2Ld9RPQQKW5dbPGQsjl
-         TsqyAcZbWl2jqc0hW4hOqDEh6Eapqk8hnw6ByH631XlWDrPa2rvmbtqIIeOlEJjeIck+
-         r9DlWl6kNPHo7J6f4EvUYYcXgm2M2FJOdRQJpn0zoQ6q45v1XoIwpfSGXjxv+6Jamjcq
-         t9/v41qLRwOH4Aon+4MRlgmm7ZTly5ESsZvaquXHhwNSYuSmWvgPT0XttRl/ZfVzaUHt
-         Ir4ZEwDJQOJzqy39LurdH1M+8U9zQV23wnGtC5/L5PTFhLrIcKJeWvJTXKysCd9Dukgk
-         NgUg==
-X-Gm-Message-State: AAQBX9eycItMJd7aiP/sBWKyDNR4IJHuJwND+jV/4cT85F2L8GwIpSox
-        WxsRHyxjLakj7mqJgFeOC2o=
-X-Google-Smtp-Source: AKy350ZSZhLNPS4nORKG8s7eLG/Lj92AeETj3ZRbNRnBnge97bQWaxx+5yNBqgizAaNq9zC2vlzJ2w==
-X-Received: by 2002:a05:6a00:1356:b0:63b:594f:bd1b with SMTP id k22-20020a056a00135600b0063b594fbd1bmr7594108pfu.3.1681962727289;
-        Wed, 19 Apr 2023 20:52:07 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-6.three.co.id. [180.214.233.6])
-        by smtp.gmail.com with ESMTPSA id x35-20020a056a0018a300b0063b6cccd5dfsm136556pfh.195.2023.04.19.20.52.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 20:52:06 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 6905C106852; Thu, 20 Apr 2023 10:52:03 +0700 (WIB)
-Date:   Thu, 20 Apr 2023 10:52:02 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.2 000/135] 6.2.12-rc3 review
-Message-ID: <ZEC24ukqNNbLaywF@debian.me>
-References: <20230419132054.228391649@linuxfoundation.org>
+        Wed, 19 Apr 2023 23:57:19 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BD511D;
+        Wed, 19 Apr 2023 20:57:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681963037; x=1713499037;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dv8Sq13xaCMnIsK0VNgPAd8PR+UU69iWhtLhEZQF1kw=;
+  b=av8TfpiETPLHAA7OhiLU/JUYcOjatWDwFSgjNDY+4pIrc/2zVq9igHr+
+   YGpcT8gUJGTejnJLKRFLkXdcQ1CfBsKRLbo8bnLitPtCsefBcsIV4wejT
+   NB50EHsmACGMzD6e4DQ/VPVl5Vrb63Fr4MMoueNhhysw+VSeL0oauLgTn
+   swPYEvVlp/B7OT/GH/2sMp8o5rtO0hgg4okuKPxiQPO5EuViiCsADJjyz
+   xqN9ugw7LH9KNGO7sHemkds3JNQpgDnucaqLH7oId300yUVj+AdZI2fdn
+   6KxEW3xKZz7z7oY4qJ59f9aYZ2qHV6eSRR1R/pslWOQNiEoRBUoRIUEw9
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="410861235"
+X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
+   d="scan'208";a="410861235"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 20:57:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="835556212"
+X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
+   d="scan'208";a="835556212"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 19 Apr 2023 20:57:15 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppLQ2-000fRO-1F;
+        Thu, 20 Apr 2023 03:57:14 +0000
+Date:   Thu, 20 Apr 2023 11:57:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jorge Lopez <jorgealtxwork@gmail.com>, hdegoede@redhat.com,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas@t-8ch.de
+Cc:     oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v10 13/14] HP BIOSCFG driver  - Makefile
+Message-ID: <202304201100.r6QLG0Fc-lkp@intel.com>
+References: <20230419151321.6167-14-jorge.lopez2@hp.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wwtHWNsJSpGMTGlt"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230419132054.228391649@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230419151321.6167-14-jorge.lopez2@hp.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jorge,
 
---wwtHWNsJSpGMTGlt
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build warnings:
 
-On Wed, Apr 19, 2023 at 03:22:02PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.12 release.
-> There are 135 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.3-rc7 next-20230419]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+url:    https://github.com/intel-lab-lkp/linux/commits/Jorge-Lopez/HP-BIOSCFG-driver-Documentation/20230419-231828
+patch link:    https://lore.kernel.org/r/20230419151321.6167-14-jorge.lopez2%40hp.com
+patch subject: [PATCH v10 13/14] HP BIOSCFG driver  - Makefile
+config: i386-randconfig-s002-20230417 (https://download.01.org/0day-ci/archive/20230420/202304201100.r6QLG0Fc-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/cfbebfbd4ed15793fab894715bfd74387adcf4f1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jorge-Lopez/HP-BIOSCFG-driver-Documentation/20230419-231828
+        git checkout cfbebfbd4ed15793fab894715bfd74387adcf4f1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 olddefconfig
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/x86/hp/hp-bioscfg/
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304201100.r6QLG0Fc-lkp@intel.com/
 
---=20
-An old man doll... just what I always wanted! - Clara
+sparse warnings: (new ones prefixed by >>)
+>> drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c:80:23: sparse: sparse: symbol 'sure_start_audit_log_entries' was not declared. Should it be static?
+--
+>> drivers/platform/x86/hp/hp-bioscfg/spmobj-attributes.c:191:23: sparse: sparse: symbol 'password_spm_status' was not declared. Should it be static?
 
---wwtHWNsJSpGMTGlt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZEC23QAKCRD2uYlJVVFO
-o7FNAPsFeZ9Tzof2z+T5F2RsXY77z631QwX1ummWyk4TIGqutwD8DmzwgJHqST1I
-MKKVpx1LRKdaDp5bi3nZrfn8YdVdFQo=
-=l0Q5
------END PGP SIGNATURE-----
-
---wwtHWNsJSpGMTGlt--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
