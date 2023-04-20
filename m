@@ -2,98 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A46C6E9AF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F0A6E9AF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbjDTRk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 13:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
+        id S231601AbjDTRk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 13:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbjDTRkX (ORCPT
+        with ESMTP id S231567AbjDTRkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 13:40:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE9E93;
-        Thu, 20 Apr 2023 10:40:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 987F364AFF;
-        Thu, 20 Apr 2023 17:40:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F125BC433EF;
-        Thu, 20 Apr 2023 17:40:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682012422;
-        bh=xx+vnuJ8fbBXHjt5KUhqykE72X3YbB4D+HrbBLN/fp0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=swcqEAzzNfF4PbGtLC+Y1g8NIPrhqMOJudKRPHs5s2Csb72NKfNl3YFeGxGY/Zjug
-         mgDaBG1UiPHXP5gDhO5hZyyePMOqFVTrVQVAZtyXaaTobM+RSFX9sZMGuEAZzBK3/v
-         1jzJz7qSpleZTattS492X+EGgmP5uB7+UQs0GORMgqN2ZnP9tvicgu0W49TS9ELd5P
-         2SVRXYj2Ocu9C0rFm5WXUA+bzPprIweNTq5un4A4W8wRDrlJ7n41p+gmAmClYNyHiN
-         lPlV+xhImalzbHl1zYFi22w5s33BGoaaTU+sICbNfEDgu6SSxslrYCsLHK3zP0tG6F
-         msYaLIlP1PKhg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2810E270E2;
-        Thu, 20 Apr 2023 17:40:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 20 Apr 2023 13:40:55 -0400
+Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A303133
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:40:51 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Q2Q1C69WSzMqQVD;
+        Thu, 20 Apr 2023 19:40:47 +0200 (CEST)
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Q2Q196HmLzMppF8;
+        Thu, 20 Apr 2023 19:40:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1682012447;
+        bh=C42CG0yEhZ3//t6vNF4EAp/UK1VoZRlM/xbyZMTq9sw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ww1/qKoHdAKBnghB3zJAndSHHtlhWFME+1v84JiiUfZsB7CaOOqVsLbd0uITMgTCt
+         VvjQ/4XR7CHTonbqvGTXfTB8WETF74lCX0tx9l329juYD85bDx6iqcoL0DbZoes+0b
+         o+4McyPqybIf2i8Shqgmo4gSkoEP6pUNjKaAPGJU=
+Message-ID: <a4dc7c12-b485-2eb2-add5-4f7a387a50fa@digikod.net>
+Date:   Thu, 20 Apr 2023 19:40:44 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v9 0/6] Introduce 64b relocatable kernel
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <168201242185.9373.5416270250289201005.git-patchwork-notify@kernel.org>
-Date:   Thu, 20 Apr 2023 17:40:21 +0000
-References: <20230329045329.64565-1-alexghiti@rivosinc.com>
-In-Reply-To: <20230329045329.64565-1-alexghiti@rivosinc.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, ndesaulniers@google.com,
-        bjorn@kernel.org, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: 
+Subject: Re: [PATCH -next v2 0/6] landlock: add chmod and chown support
+Content-Language: en-US
+To:     xiujianfeng <xiujianfeng@huawei.com>, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
+        corbet@lwn.net
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, roberto.sassu@huawei.com,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+References: <20220827111215.131442-1-xiujianfeng@huawei.com>
+ <d55baf4d-01d3-e4d7-e07f-9658d1606a8c@huawei.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <d55baf4d-01d3-e4d7-e07f-9658d1606a8c@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This series was applied to riscv/linux.git (for-next)
-by Palmer Dabbelt <palmer@rivosinc.com>:
-
-On Wed, 29 Mar 2023 06:53:23 +0200 you wrote:
-> After multiple attempts, this patchset is now based on the fact that the
-> 64b kernel mapping was moved outside the linear mapping.
+On 18/04/2023 12:53, xiujianfeng wrote:
+> Hi Mickael,
 > 
-> The first patch allows to build relocatable kernels but is not selected
-> by default. That patch is a requirement for KASLR.
-> The second and third patches take advantage of an already existing powerpc
-> script that checks relocations at compile-time, and uses it for riscv.
+> Sorry about the long silence on this work, As we known this work depends
+> on another work about changing argument from struct dentry to struct
+> path for some attr/xattr related lsm hooks, I'm stuck with this thing,
+> because IMA/EVM is a special security module which is not LSM-based
+> currently, and severely coupled with the file system. so I am waiting
+> for Roberto Sassu' work (Move IMA and EVM to the LSM infrastructure) to
+> be ready, I think it can make my work more easy. you can find
+> Roberto'work here,
+> https://lwn.net/ml/linux-kernel/20230303181842.1087717-1-roberto.sassu@huaweicloud.com/
 > 
-> [...]
+> Any good idea are welcome, thanks.
 
-Here is the summary with links:
-  - [v9,1/6] riscv: Prepare EFI header for relocatable kernels
-    https://git.kernel.org/riscv/c/55de1e4ad43b
-  - [v9,2/6] riscv: Move .rela.dyn outside of init to avoid empty relocations
-    https://git.kernel.org/riscv/c/69a90d2fe107
-  - [v9,3/6] riscv: Introduce CONFIG_RELOCATABLE
-    https://git.kernel.org/riscv/c/39b33072941f
-  - [v9,4/6] powerpc: Move script to check relocations at compile time in scripts/
-    https://git.kernel.org/riscv/c/47981b5cc687
-  - [v9,5/6] riscv: Check relocations at compile time
-    https://git.kernel.org/riscv/c/c2dea0bc5339
-  - [v9,6/6] riscv: Use --emit-relocs in order to move .rela.dyn in init
-    https://git.kernel.org/riscv/c/559d1e45a16d
+Thanks for the update Xiu.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Which part would be needed from Roberto's patch series?
 
 
+> 
+> 
+> On 2022/8/27 19:12, Xiu Jianfeng wrote:
+>> v2:
+>>   * abstract walk_to_visible_parent() helper
+>>   * chmod and chown rights only take affect on directory's context
+>>   * add testcase for fchmodat/lchown/fchownat
+>>   * fix other review issues
+>>
+>> Xiu Jianfeng (6):
+>>    landlock: expand access_mask_t to u32 type
+>>    landlock: abstract walk_to_visible_parent() helper
+>>    landlock: add chmod and chown support
+>>    landlock/selftests: add selftests for chmod and chown
+>>    landlock/samples: add chmod and chown support
+>>    landlock: update chmod and chown support in document
+>>
+>>   Documentation/userspace-api/landlock.rst     |   9 +-
+>>   include/uapi/linux/landlock.h                |  10 +-
+>>   samples/landlock/sandboxer.c                 |  13 +-
+>>   security/landlock/fs.c                       | 110 ++++++--
+>>   security/landlock/limits.h                   |   2 +-
+>>   security/landlock/ruleset.h                  |   2 +-
+>>   security/landlock/syscalls.c                 |   2 +-
+>>   tools/testing/selftests/landlock/base_test.c |   2 +-
+>>   tools/testing/selftests/landlock/fs_test.c   | 267 ++++++++++++++++++-
+>>   9 files changed, 386 insertions(+), 31 deletions(-)
+>>
