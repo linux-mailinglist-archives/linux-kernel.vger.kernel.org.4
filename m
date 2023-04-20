@@ -2,127 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 090EB6E942B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC2B6E942E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234883AbjDTMWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
+        id S234826AbjDTMXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234329AbjDTMWV (ORCPT
+        with ESMTP id S233945AbjDTMXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:22:21 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7364A1BF4;
-        Thu, 20 Apr 2023 05:22:20 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id D55065C01A9;
-        Thu, 20 Apr 2023 08:22:19 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 20 Apr 2023 08:22:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1681993339; x=1682079739; bh=sZ
-        ONUP6h+SJJnBCxfgbuzzXtSUZFZ3CJUwyCTkmq7Xg=; b=UXWrJ2EEvSiy24KMbi
-        fOpjxO35+cBmgDE7F6QvpjvJAcc23bJlf2c6pqZRu5zeqK/HhqTkzQ+AbklUI5r1
-        vV4RktufQbcODh2x1HBkLgxMMrQGKIKQAw8/PMXttqcziirs1IJenx5RmmTFrAMl
-        /8Y45X2c1rk1vHeLI0bgaxK/bHqFaL6fTf6EA6BNC1vlPOcyrNaRpdCfYl4AUcLb
-        uXhKGvOFaUZyhA57UzjmEoBCxxyncuaERsVmjWAbCYJjm6hDOaWQjNb2cK3Nnk6a
-        pZIAguRdayXwLnrrMIf8uZasj/QpiZ0pMq2GgHa8ap55jaPF4G0DAXX1tX/z7wO2
-        QKXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681993339; x=1682079739; bh=sZONUP6h+SJJn
-        BCxfgbuzzXtSUZFZ3CJUwyCTkmq7Xg=; b=Hf7YZCJ1hzUf+3hn6Y3OxxyMZgL8i
-        PN/hgEMQ5V0XaWicdiNtSvmHWbgNanzjnZ+YZ5arE5hBWFFYPyGfSVFckEA3wa0U
-        y7U6nsAR5/qkpd6sZFRm1CIy1ubMvDFjqQWsbA3AJVbBpB8Y0EFIrTJtH1UAhhMB
-        kOMfeDIlbqXzEzGjZxVd8/xuJ9X13FEjEHB8dj84RQ6GL+IY5Zfd6O1oRgAnNYRX
-        uSA/bjY0JIjxLpWqg4Pk13mLPaK5OX0NXk3YfsaGKetfAhBTeEY8fTxgQucu17rt
-        xejm00Egbcf/Ymh/+Jj1/ngFyhUpbyU0E9FoLcz3HBDBbJPRmWWaiyYHQ==
-X-ME-Sender: <xms:ey5BZI7NI8R3UM7swGYU65cfll0oLLl7jJkR3kQPgqZSjCKfqgDT4g>
-    <xme:ey5BZJ41ypjuCPWmB-_ULfXWacdRdJfku9BgPPhlIC7U76U5Lu0Cu77YjPm9YEh4E
-    dd-9LrkRSzT6-bHDqs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtvddghedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dunecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:ey5BZHcgTSP7afLL2Ly7HJa4kgBCh5FOot5NhfcpWOpNEaavFDFsJA>
-    <xmx:ey5BZNIombeMEXIsHXza8yedFKUPJgDUrLZp30tcja3zOvsg158BXA>
-    <xmx:ey5BZMLRvsDvBxiF3PAoHk_uIaZscCP7T6FX8JZoVJ5JqBzfN2LA0g>
-    <xmx:ey5BZKwd9vOyIog2uaUSb4za4BGatTv8tQEB_Re3wJ6lH5JCurK72g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 06C07B60086; Thu, 20 Apr 2023 08:22:18 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
-Mime-Version: 1.0
-Message-Id: <747af785-963b-45e5-9d7b-d361951ea3fc@app.fastmail.com>
-In-Reply-To: <CA+G9fYsdMioe4+DEgeh38aTeaY3YaN_s_c0GFjPHhuPWfxyetA@mail.gmail.com>
-References: <CA+G9fYsdMioe4+DEgeh38aTeaY3YaN_s_c0GFjPHhuPWfxyetA@mail.gmail.com>
-Date:   Thu, 20 Apr 2023 14:21:58 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>
-Cc:     "Rob Herring" <robh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Andrew Donnellan" <ajd@linux.ibm.com>,
-        "Anders Roxell" <anders.roxell@linaro.org>
-Subject: Re: next: powerpc: gpio_mdio.c:(.text+0x13c): undefined reference to
- `__of_mdiobus_register'
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 20 Apr 2023 08:23:38 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814A38F;
+        Thu, 20 Apr 2023 05:23:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681993417; x=1713529417;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Yv4blA62X3WJ+SUshSA+UbW4er8IVJsm5Rvo7sAhWrI=;
+  b=QwZluq1PuHKpO7oy5GEgKJmW8xVowWqnJXkFU9zqMG2Lb9ql09Pp6UJ2
+   1nKYjJVfx4X8bimqnsI7AHiMRvGdu8a/AHmvVya4rpK9CXT5npPOpAvFY
+   Cmc1U50JyWPHMfbdpykEOhnchKQUZkX0HdJfxk0WUr/fKHQNrv4bLlOVO
+   SxXlp9PyCYK8FS9sITxMHY3D3/tu+dPFO3y3m8GRa0U1cXetGDLssOVCl
+   cWDqi3UWYvf5r59Zk12OJxcK6mIR0bxjCvoewvmOPrWCEMVEHnT9K+w3c
+   oU0Bp5tj4l6BF8CNbOjgtZI2ZI931OS66QLC9PA9Cx9rQ2zjyZj/De4Yj
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="334550439"
+X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
+   d="scan'208";a="334550439"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 05:23:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="803323357"
+X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
+   d="scan'208";a="803323357"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga002.fm.intel.com with ESMTP; 20 Apr 2023 05:23:36 -0700
+Received: from [10.255.228.114] (kliang2-mobl1.ccr.corp.intel.com [10.255.228.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 27332580BBE;
+        Thu, 20 Apr 2023 05:22:57 -0700 (PDT)
+Message-ID: <2b4f404c-24bf-a57a-1335-ae2fed18ddbb@linux.intel.com>
+Date:   Thu, 20 Apr 2023 08:22:56 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] perf stat: Introduce skippable evsels
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ian Rogers <irogers@google.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Yasin, Ahmad" <ahmad.yasin@intel.com>,
+        "Taylor, Perry" <perry.taylor@intel.com>,
+        "Alt, Samantha" <samantha.alt@intel.com>,
+        "Biggers, Caleb" <caleb.biggers@intel.com>,
+        "Wang, Weilin" <weilin.wang@intel.com>,
+        Edward <edward.baker@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CAP-5=fXCmKAUn24r0YYHaO63mabZCXae-hAT2WCtk+YYmvS9xg@mail.gmail.com>
+ <99150cb1-fe50-97cf-ad80-cceb9194eb9a@linux.intel.com>
+ <CAP-5=fXZSACj=kGM5t3pBHkQ-W1i0eJayAQ77_ToEp4zXWzJnw@mail.gmail.com>
+ <ea899096-0599-f2a0-04a3-d90a3aa7d45d@linux.intel.com>
+ <CAP-5=fVVFjKgUGV8zVurd99BOhASQ9mMaZqOyw13PYLhZWpsOA@mail.gmail.com>
+ <CAP-5=fW_JwabjEUqSLaJn+tuHXLoyRWqJVVCh_z1dhXJ6On=MQ@mail.gmail.com>
+ <84b19053-2e9f-5251-6816-26d2475894c0@linux.intel.com>
+ <CAP-5=fWJKmo4eLKe9+=3pKGe7g+xfA+YxOz7AOgqLfcRNzNaLw@mail.gmail.com>
+ <201a2ad6-3fb4-4b2a-d8a4-34d924e680c3@linux.intel.com>
+ <CAP-5=fVWN5=URg0Og7KW7f7L4LSw6D8ghOKjP7La=0c+MkXFCg@mail.gmail.com>
+ <ZEEjJVTIcXvsV4Fh@kernel.org>
+Content-Language: en-US
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <ZEEjJVTIcXvsV4Fh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023, at 12:57, Naresh Kamboju wrote:
-> Following build failures noticed on Linux next-20230419 for powerpc.
->
-> Regressions found on powerpc:
->  - build/gcc-8-defconfig
->  - build/clang-16-defconfig
->  - build/gcc-12-defconfig
->  - build/clang-nightly-defconfig
->
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> Build log:
-> --------
-> powerpc64le-linux-gnu-ld: arch/powerpc/platforms/pasemi/gpio_mdio.o:
-> in function `gpio_mdio_probe':
-> gpio_mdio.c:(.text+0x13c): undefined reference to `__of_mdiobus_register'
-> powerpc64le-linux-gnu-ld: drivers/net/phy/phy_device.o: in function `phy_probe':
-> phy_device.c:(.text+0x56ac): undefined reference to
-> `devm_led_classdev_register_ext'
-> powerpc64le-linux-gnu-ld: drivers/net/ethernet/pasemi/pasemi_mac.o: in
-> function `pasemi_mac_open':
-> pasemi_mac.c:(.text+0x19ac): undefined reference to `of_phy_connect'
-> make[2]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 1
 
-Same bug as the other one:
 
-https://lore.kernel.org/all/20230420084624.3005701-1-arnd@kernel.org/
+On 2023-04-20 7:33 a.m., Arnaldo Carvalho de Melo wrote:
+> Em Wed, Apr 19, 2023 at 09:51:20AM -0700, Ian Rogers escreveu:
+>> On Wed, Apr 19, 2023 at 7:16 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
+>>> For ADL/RPL platforms
+>>> - Segmentation fault which I just found this morning.
+>>> # ./perf stat true
+>>> Segmentation fault (core dumped)
+>  
+>> This may also stem from the reference count checking work that Arnaldo
+>> is currently merging. It is hard to test hybrid because it uses
+>> non-generic code paths.
+> 
+> Hey, could you please try this under gdb and provide a backtrace? 
 
-      Arnd
+Here is the backtrace.
+
+#0  get_group_fd (thread=0, cpu_map_idx=<optimized out>,
+evsel=0x555556015af0) at util/evsel.c:1722
+#1  evsel__open_cpu (evsel=<optimized out>, cpus=<optimized out>,
+threads=<optimized out>,
+    start_cpu_map_idx=<optimized out>, end_cpu_map_idx=<optimized out>)
+at util/evsel.c:2105
+#2  0x000055555561dd9e in __run_perf_stat (run_idx=<optimized out>,
+argv=0x7fffffffe1d0, argc=1)
+    at builtin-stat.c:734
+#3  run_perf_stat (run_idx=<optimized out>, argv=0x7fffffffe1d0, argc=1)
+at builtin-stat.c:949
+#4  cmd_stat (argc=1, argv=0x7fffffffe1d0) at builtin-stat.c:2537
+#5  0x00005555556b56a0 in run_builtin (p=p@entry=0x555555f84450
+<commands+336>, argc=argc@entry=2,
+    argv=argv@entry=0x7fffffffe1d0) at perf.c:323
+#6  0x00005555555fe2d9 in handle_internal_command (argv=0x7fffffffe1d0,
+argc=2) at perf.c:377
+#7  run_argv (argv=<synthetic pointer>, argcp=<synthetic pointer>) at
+perf.c:421
+#8  main (argc=2, argv=0x7fffffffe1d0) at perf.c:537
+
+Thanks,
+Kan
+
+> It may
+> indeed be related to this refcount checking work, there was a bug fixed
+> by the ARM guys for cs-etm and I combed thru and fixed some other use
+> before check for NULL cases, maybe one more slipped up.
+> 
+> Here I couldn't reproduce, but I don't have a Intel hybrid system, will
+> check with an ARM, but unsure if it will exercise the same code paths...
+> 
+> - Arnaldo
