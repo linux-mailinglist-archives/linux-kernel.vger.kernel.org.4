@@ -2,160 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7703D6E9858
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A24256E9872
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbjDTPc4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Apr 2023 11:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35458 "EHLO
+        id S231928AbjDTPgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 11:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjDTPcy (ORCPT
+        with ESMTP id S229498AbjDTPgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 11:32:54 -0400
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DABB1736;
-        Thu, 20 Apr 2023 08:32:53 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-94ea38c90ccso26376966b.1;
-        Thu, 20 Apr 2023 08:32:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682004771; x=1684596771;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mrbfS9qzAxsg7Mxmkhy5II3bga2P8KO4swtn5KuXyG0=;
-        b=TlMP3bcXxxzTa1z+DfVAg1mqaQr7IS1hhd6hY9R6Vy2ecHTFd32yH+uhtupfN24fVn
-         SBxV4gatEkhNO/kWqDBwBBS5AECalqhyjxqxinbNab1d6R0aKuxWOsSr6Y1zIzndxzAM
-         ckypduQxnjB1r4esT2fFjpONh1VvuVziKOsXL2/zlApaUZPAKobEz95wo9NvhKVPPhW6
-         XodA/CR9tyMFw3NDbV2LCnwtH43+E/orf9bL3NQyl4rdgDm/XHgs4ybNQ5PE8zFP+1y1
-         VVXIWFnkmIqwP0IA5NgVJsfe6ZZ/dqzHuQZfF8Xgqo58wY5a876zlDrcBByr3hptBJmG
-         7G1Q==
-X-Gm-Message-State: AAQBX9eLrqcieB1LMurVwLKOObbk5Wu9CB9fO8TNikKDimnTJznkoFNM
-        ko1K5lJCR0TdVrmqNxNmwKJ/1WHkLNvJdp7CRq0=
-X-Google-Smtp-Source: AKy350Yp5p3Ap4k0cXbpLtdUdBH0oPAfDQGOUBN5Ag0FOx1IxezOJl4tNjCHJh/vRgVV5aucOQ/D3YCwgLgctxjR6+Q=
-X-Received: by 2002:a17:906:54d:b0:94e:dbce:69fe with SMTP id
- k13-20020a170906054d00b0094edbce69femr1914715eja.2.1682004771101; Thu, 20 Apr
- 2023 08:32:51 -0700 (PDT)
+        Thu, 20 Apr 2023 11:36:49 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1575581;
+        Thu, 20 Apr 2023 08:36:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682005007; x=1713541007;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iO/i2tt5DEzt8gruW8+zs93sVMgkJU4X3e0uYovtxx8=;
+  b=Xcmt9R/LozyKo+AlCCS4SPBwcVfJgdODNuBGbRQSpqvqUnbK3sDI3WWI
+   Ai9hQm5jAvuUV2y3tE+tkWgpzj8oh8jaE5qTq8qItSuygO3ur+XtgZCyi
+   Pk71I+UdVneHTCpxXlD4D6ZGboWGAahcA9V5GMYvnzTvu63eq6ITxudyW
+   oWQUfYN6nfA+u8pFno9gA26F7D9haAaM4rkPcD6cmSL8H8+RUCOEK6iHD
+   z8r/+l/H6W+NV/yuJTfHjNZ7YZI+nY5/GP/kKR3+zH2xNq458Aw/vOLqv
+   nSsX+C06jjP1Ux5uqJ9VKQtCex5+fu7ZuFC0nIXEb5M6DKuANcbyNfVlc
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="348533242"
+X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
+   d="scan'208";a="348533242"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 08:36:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="756537428"
+X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
+   d="scan'208";a="756537428"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 20 Apr 2023 08:36:44 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppWKx-000fuA-2b;
+        Thu, 20 Apr 2023 15:36:43 +0000
+Date:   Thu, 20 Apr 2023 23:35:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
+        Song Liu <song@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Daniil Tatianin <d-tatianin@yandex-team.ru>,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] md/md-multipath: guard against a possible NULL
+ dereference
+Message-ID: <202304202346.fddWOoq1-lkp@intel.com>
+References: <20230420071851.326726-1-d-tatianin@yandex-team.ru>
 MIME-Version: 1.0
-References: <ZDawIXBd7gcA8DCk@smile.fi.intel.com> <20230419193432.GA220432@bhelgaas>
-In-Reply-To: <20230419193432.GA220432@bhelgaas>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 20 Apr 2023 17:32:39 +0200
-Message-ID: <CAJZ5v0ir_SQgs=4_tdjbdrF0vnM5=6dQKw-Y=LxTyCAW2kZuhQ@mail.gmail.com>
-Subject: Re: [BUG] net, pci: 6.3-rc1-4 hangs during boot on PowerEdge R620
- with igb
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Donald Hunter <donald.hunter@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, netdev@vger.kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420071851.326726-1-d-tatianin@yandex-team.ru>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 9:34 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Wed, Apr 12, 2023 at 04:20:33PM +0300, Andy Shevchenko wrote:
-> > On Tue, Apr 11, 2023 at 02:02:03PM -0500, Rob Herring wrote:
-> > > On Tue, Apr 11, 2023 at 7:53 AM Donald Hunter <donald.hunter@gmail.com> wrote:
-> > > > Bjorn Helgaas <helgaas@kernel.org> writes:
-> > > > > On Mon, Apr 10, 2023 at 04:10:54PM +0100, Donald Hunter wrote:
-> > > > >> On Sun, 2 Apr 2023 at 23:55, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > >> > On Sat, Apr 01, 2023 at 01:52:25PM +0100, Donald Hunter wrote:
-> > > > >> > > On Fri, 31 Mar 2023 at 20:42, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > >> > > >
-> > > > >> > > > I assume this igb NIC (07:00.0) must be built-in (not a plug-in card)
-> > > > >> > > > because it apparently has an ACPI firmware node, and there's something
-> > > > >> > > > we don't expect about its status?
-> > > > >> > >
-> > > > >> > > Yes they are built-in, to my knowledge.
-> > > > >> > >
-> > > > >> > > > Hopefully Rob will look at this.  If I were looking, I would be
-> > > > >> > > > interested in acpidump to see what's in the DSDT.
-> > > > >> > >
-> > > > >> > > I can get an acpidump. Is there a preferred way to share the files, or just
-> > > > >> > > an email attachment?
-> > > > >> >
-> > > > >> > I think by default acpidump produces ASCII that can be directly
-> > > > >> > included in email.  http://vger.kernel.org/majordomo-info.html says
-> > > > >> > 100K is the limit for vger mailing lists.  Or you could open a report
-> > > > >> > at https://bugzilla.kernel.org and attach it there, maybe along with a
-> > > > >> > complete dmesg log and "sudo lspci -vv" output.
-> > > > >>
-> > > > >> Apologies for the delay, I was unable to access the machine while travelling.
-> > > > >>
-> > > > >> https://bugzilla.kernel.org/show_bug.cgi?id=217317
-> > > > >
-> > > > > Thanks for that!  Can you boot a kernel with 6fffbc7ae137 reverted
-> > > > > with this in the kernel parameters:
-> > > > >
-> > > > >   dyndbg="file drivers/acpi/* +p"
-> > > > >
-> > > > > and collect the entire dmesg log?
-> > > >
-> > > > Added to the bugzilla report.
-> > >
-> > > Rafael, Andy, Any ideas why fwnode_device_is_available() would return
-> > > false for a built-in PCI device with a ACPI device entry? The only
-> > > thing I see in the log is it looks like the parent PCI bridge/bus
-> > > doesn't have ACPI device entry (based on "[    0.913389] pci_bus
-> > > 0000:07: No ACPI support"). For DT, if the parent doesn't have a node,
-> > > then the child can't. Not sure on ACPI.
-> >
-> > Thanks for the Cc'ing. I haven't checked anything yet, but from the above it
-> > sounds like a BIOS issue. If PCI has no ACPI companion tree, then why the heck
-> > one of the devices has the entry? I'm not even sure this is allowed by ACPI
-> > specification, but as I said, I just solely used the above mail.
->
-> ACPI r6.5, sec 6.3.7, about _STA says:
->
->   - Bit [0] - Set if the device is present.
->   - Bit [1] - Set if the device is enabled and decoding its resources.
->   - Bit [3] - Set if the device is functioning properly (cleared if
->     device failed its diagnostics).
->
->   ...
->
->   If a device is present on an enumerable bus, then _STA must not
->   return 0. In that case, bit[0] must be set and if the status of the
->   device can be determined through a bus-specific enumeration and
->   discovery mechanism, it must be reflected by the values of bit[1]
->   and bit[3], even though the OSPM is not required to take them into
->   account.
->
-> Since PCI *is* an enumerable bus, I don't think we can use _STA to
-> decide whether a PCI device is present.
+Hi Daniil,
 
-You are right, _STA can't be used for that.
+kernel test robot noticed the following build errors:
 
-> We can use _STA to decide whether a host bridge is present, of course,
-> but that doesn't help here because the host bridge in question is
-> PNP0A08:00 that leads to [bus 00-3d], and it is present.
->
-> I don't know exactly what path led to the igb issue, but I don't think
-> we need to figure that out.  I think we just need to avoid the use of
-> _STA in fwnode_device_is_available().
+[auto build test ERROR on song-md/md-next]
+[also build test ERROR on linus/master v6.3-rc7 next-20230419]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I agree.  It is incorrect.
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniil-Tatianin/md-md-multipath-guard-against-a-possible-NULL-dereference/20230420-152235
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git md-next
+patch link:    https://lore.kernel.org/r/20230420071851.326726-1-d-tatianin%40yandex-team.ru
+patch subject: [PATCH] md/md-multipath: guard against a possible NULL dereference
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230420/202304202346.fddWOoq1-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3b0e378bb2e165f35044ecb535fb1ed973ea392e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniil-Tatianin/md-md-multipath-guard-against-a-possible-NULL-dereference/20230420-152235
+        git checkout 3b0e378bb2e165f35044ecb535fb1ed973ea392e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/
 
-> 6fffbc7ae137 ("PCI: Honor firmware's device disabled status") appeared
-> in v6.3-rc1, so I think we need to revert or fix it before v6.3, which
-> will probably be tagged Sunday (and I'll be on vacation
-> Friday-Monday).
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304202346.fddWOoq1-lkp@intel.com/
 
-Yes, please revert this one ASAP.
+All errors (new ones prefixed by >>):
 
-Cheers,
-Rafael
+   drivers/md/md-multipath.c: In function 'multipath_make_request':
+>> drivers/md/md-multipath.c:111:14: error: 'map_bh' undeclared (first use in this function); did you mean 'mp_bh'?
+     111 |         if (!map_bh)
+         |              ^~~~~~
+         |              mp_bh
+   drivers/md/md-multipath.c:111:14: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +111 drivers/md/md-multipath.c
+
+    99	
+   100	static bool multipath_make_request(struct mddev *mddev, struct bio * bio)
+   101	{
+   102		struct mpconf *conf = mddev->private;
+   103		struct multipath_bh * mp_bh;
+   104		struct multipath_info *multipath;
+   105	
+   106		if (unlikely(bio->bi_opf & REQ_PREFLUSH)
+   107		    && md_flush_request(mddev, bio))
+   108			return true;
+   109	
+   110		mp_bh = mempool_alloc(&conf->pool, GFP_NOIO);
+ > 111		if (!map_bh)
+   112			return false;
+   113	
+   114		mp_bh->master_bio = bio;
+   115		mp_bh->mddev = mddev;
+   116	
+   117		mp_bh->path = multipath_map(conf);
+   118		if (mp_bh->path < 0) {
+   119			bio_io_error(bio);
+   120			mempool_free(mp_bh, &conf->pool);
+   121			return true;
+   122		}
+   123		multipath = conf->multipaths + mp_bh->path;
+   124	
+   125		bio_init_clone(multipath->rdev->bdev, &mp_bh->bio, bio, GFP_NOIO);
+   126	
+   127		mp_bh->bio.bi_iter.bi_sector += multipath->rdev->data_offset;
+   128		mp_bh->bio.bi_opf |= REQ_FAILFAST_TRANSPORT;
+   129		mp_bh->bio.bi_end_io = multipath_end_request;
+   130		mp_bh->bio.bi_private = mp_bh;
+   131		mddev_check_write_zeroes(mddev, &mp_bh->bio);
+   132		submit_bio_noacct(&mp_bh->bio);
+   133		return true;
+   134	}
+   135	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
