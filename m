@@ -2,80 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5526E86F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 02:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4CD6E86F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 02:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232756AbjDTAth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 20:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
+        id S230310AbjDTAu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 20:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbjDTAtU (ORCPT
+        with ESMTP id S232628AbjDTAuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 20:49:20 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5354465AA
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 17:49:08 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1a814fe0ddeso6178495ad.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 17:49:08 -0700 (PDT)
+        Wed, 19 Apr 2023 20:50:12 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767A05FE9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 17:49:34 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id h4so1013284ljb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 17:49:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681951747; x=1684543747;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DJ+yGPB/3GoY7peOyZ+CblNlWIiKQ+IujQrkD9HaThI=;
-        b=AsGCK3PzHl4ubqG8b7iSl3UlUgSVpLYZQgbDseTH2tZlTDUqkO4l23lNAdsx0+zFBl
-         XwpiVdhhEvmYimfYnxFgH/cAs2UjaXqmDCjBdZnGaXZudoEwPrhFzpNgc+BLEZDu89Yb
-         NSm8rBdMG1jTuscW2lrhVq9EyU8Ei5cNDuVdo=
+        d=linaro.org; s=google; t=1681951771; x=1684543771;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nBTNgbwSnEqrTM/8Zo3F3tUjXoH2/yS/Mjd7eOQXnxA=;
+        b=d4mVL2ra6uk1DxPznvuIlP+NohLtEcADu43dZmKn68AbF9I1zDQUZtYdsL9Ka0fhK3
+         yBoz6Y7I3MnVwjpbhFc9Th4t+ZXspnyWt7Lc6y12HI5yaJ6oqi4MJEWpl1d7uYP8stbM
+         LNKY3VIrY9nuQjCTDZIOnB5RGi61FRnWR7cQ4mUK/Zf7IQ/ucseIb93BUhbJqZoJKQ/m
+         z7tRSVl+KOi6Rk5qzuPo+pDa1Dr99MX2uMLjhsgfGnfHbDtTrro1EULq4qpm9VahfKvA
+         VpcozY7D8YtZNPLSSDC+bUNOOjPLdDTCgCy4RrCInmG9axwD2Gd/JZj5qr3K9X17LUen
+         jbhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681951747; x=1684543747;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DJ+yGPB/3GoY7peOyZ+CblNlWIiKQ+IujQrkD9HaThI=;
-        b=Uw4HHWrpFMQ4KnIUSpZktjcQuSqPpOFutqWX0sQmt4e3cyZU0ncdnytn+RHf1zCT6g
-         grD7VoH3yWESckGLYZLg2V4cSITfA7khmAjeCqvKplW++oNxli4IxKiRbuxcmEbeGnZ3
-         0GIHwGMGAHIkafXLCxmBC6uIpTed1HBdaOUlf59DAWpB0prJis2h/iOPQC1FzTn1GFUj
-         GigwjZqgETThOPGKKz4E+xI0SqlCUfOPXI7/qw9jIE5Ix6S4lZq/w9m8rNqcmOwoWX46
-         Lgh6pCX9M9PSBK6dC3RzNocvP5drZxNzxgIjluFFvkI/u50UjCOf3gFSs2voDZQeRafW
-         ueZw==
-X-Gm-Message-State: AAQBX9fmTrYUOo7vr8jkYFJ6Ra3JnE4SOm1IFygs5YCvtHxEUP4MG49B
-        JXpPPZ+6mhTPmEY/Wopxb2c77w==
-X-Google-Smtp-Source: AKy350aGYAY9EuWC+snwEDPRTdaLAmDmSJ1/7+Wp2Iq2qareE0BBMHYD3hQa0gQtEfvf6Zqtorcqng==
-X-Received: by 2002:a17:902:d482:b0:1a6:9d98:e720 with SMTP id c2-20020a170902d48200b001a69d98e720mr8237297plg.3.1681951747164;
-        Wed, 19 Apr 2023 17:49:07 -0700 (PDT)
-Received: from sarthakkukreti-glaptop.corp.google.com ([2620:15c:9d:200:5113:a333:10ce:e2d])
-        by smtp.gmail.com with ESMTPSA id io18-20020a17090312d200b001a65575c13asm74323plb.48.2023.04.19.17.49.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 17:49:06 -0700 (PDT)
-From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
-To:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        Daniil Lunev <dlunev@google.com>,
-        "Darrick J. Wong" <djwong@kernel.org>
-Subject: [PATCH v5 5/5] loop: Add support for provision requests
-Date:   Wed, 19 Apr 2023 17:48:50 -0700
-Message-ID: <20230420004850.297045-6-sarthakkukreti@chromium.org>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-In-Reply-To: <20230420004850.297045-1-sarthakkukreti@chromium.org>
-References: <20230414000219.92640-1-sarthakkukreti@chromium.org>
- <20230420004850.297045-1-sarthakkukreti@chromium.org>
+        d=1e100.net; s=20221208; t=1681951771; x=1684543771;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nBTNgbwSnEqrTM/8Zo3F3tUjXoH2/yS/Mjd7eOQXnxA=;
+        b=OcRMczysmgOKmZPQn2t/AiV8J/UEaFNt3P+T0EF3sFr6u7RkgC81RBrb4yMZSAp2im
+         A/ulMD0qRaQSS2L0xYJ8jZqvAHcxVFP8pv1eqYA5mJkrzWlcR1eWFZUMIo0YD7+X6BUz
+         F65wGEVcr8mRYwKqWLh9nRgoDJAQKjtGM2wMEV3wWUo3aZNnbhF+Ijc+hBAq/Mo4M/bd
+         3A61HqrRL1CmJ8dvZIGDz8Ohia3owp7zQS/9SyiZ+Ydy1DVez1xlKyG9cgQ4zJjvyoh3
+         ZNISEK/0hZdYExTKnJVKtRzfdvyN/dqHZ7+qIqa7HRlSwv2BNIZY15tROtMnYtoK2tXZ
+         G2dA==
+X-Gm-Message-State: AAQBX9cBuPEx2VrywZ2WKDNwH8tCbK3f5wTw4JQTRmF+2HB73DymkMxu
+        0UaGloW9RGonkMCA9M/zxx0Wfg==
+X-Google-Smtp-Source: AKy350a58zmn+YohNF/dZT6zaO4ejf273w1HbL0Zriw2gCHMn/70LvEy/Q0m9ouzpmYgb6kSJCE2QA==
+X-Received: by 2002:a2e:6e0f:0:b0:2a8:bd3a:d418 with SMTP id j15-20020a2e6e0f000000b002a8bd3ad418mr2264178ljc.52.1681951771044;
+        Wed, 19 Apr 2023 17:49:31 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id w4-20020a2e9584000000b002a8bae7f9e8sm17599ljh.129.2023.04.19.17.49.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 17:49:30 -0700 (PDT)
+Message-ID: <c4344301-2c89-3b8b-2a5c-e6523f078fd9@linaro.org>
+Date:   Thu, 20 Apr 2023 03:49:29 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 09/17] drm/msm/dpu: Move autorefresh disable from CMD
+ encoder to pingpong
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Rajesh Yadav <ryadav@codeaurora.org>,
+        Jeykumar Sankaran <jsanka@codeaurora.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Chandan Uddaraju <chandanu@codeaurora.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Archit Taneja <architt@codeaurora.org>,
+        Sravanthi Kollukuduru <skolluku@codeaurora.org>
+References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
+ <20230411-dpu-intf-te-v2-9-ef76c877eb97@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230411-dpu-intf-te-v2-9-ef76c877eb97@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,107 +99,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for provision requests to loopback devices.
-Loop devices will configure provision support based on
-whether the underlying block device/file can support
-the provision request and upon receiving a provision bio,
-will map it to the backing device/storage. For loop devices
-over files, a REQ_OP_PROVISION request will translate to
-an fallocate mode 0 call on the backing file.
+On 17/04/2023 23:21, Marijn Suijten wrote:
+> This autorefresh disable logic in the physical command-mode encoder
+> consumes three callbacks to the pingpong block, and will explode in
+> unnecessary complexity when the same callbacks need to be called on the
+> interface block instead to accommodate INTF TE support.  To clean this
+> up, move the logic into the pingpong block under a disable_autorefresh
+> callback, replacing the aforementioned three get_autorefresh,
+> setup_autorefresh and get_vsync_info callbacks.
+> 
+> The same logic will have to be replicated to the interface block when it
+> receives INTF TE support, but it is less complex than constantly
+> switching on a "has_intf_te" boolean to choose a callback.
+> 
+> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c   | 60 ++--------------------
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    | 47 +++++++++++++++--
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h    | 25 ++-------
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h            |  4 ++
+>   4 files changed, 57 insertions(+), 79 deletions(-)
 
-Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
----
- drivers/block/loop.c | 42 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index bc31bb7072a2..13c4b4f8b9c1 100644
---- a/drivers/block/loop.c
-+++ b/drivers/block/loop.c
-@@ -327,6 +327,24 @@ static int lo_fallocate(struct loop_device *lo, struct request *rq, loff_t pos,
- 	return ret;
- }
- 
-+static int lo_req_provision(struct loop_device *lo, struct request *rq, loff_t pos)
-+{
-+	struct file *file = lo->lo_backing_file;
-+	struct request_queue *q = lo->lo_queue;
-+	int ret;
-+
-+	if (!q->limits.max_provision_sectors) {
-+		ret = -EOPNOTSUPP;
-+		goto out;
-+	}
-+
-+	ret = file->f_op->fallocate(file, 0, pos, blk_rq_bytes(rq));
-+	if (unlikely(ret && ret != -EINVAL && ret != -EOPNOTSUPP))
-+		ret = -EIO;
-+ out:
-+	return ret;
-+}
-+
- static int lo_req_flush(struct loop_device *lo, struct request *rq)
- {
- 	int ret = vfs_fsync(lo->lo_backing_file, 0);
-@@ -488,6 +506,8 @@ static int do_req_filebacked(struct loop_device *lo, struct request *rq)
- 				FALLOC_FL_PUNCH_HOLE);
- 	case REQ_OP_DISCARD:
- 		return lo_fallocate(lo, rq, pos, FALLOC_FL_PUNCH_HOLE);
-+	case REQ_OP_PROVISION:
-+		return lo_req_provision(lo, rq, pos);
- 	case REQ_OP_WRITE:
- 		if (cmd->use_aio)
- 			return lo_rw_aio(lo, cmd, pos, ITER_SOURCE);
-@@ -754,6 +774,25 @@ static void loop_sysfs_exit(struct loop_device *lo)
- 				   &loop_attribute_group);
- }
- 
-+static void loop_config_provision(struct loop_device *lo)
-+{
-+	struct file *file = lo->lo_backing_file;
-+	struct inode *inode = file->f_mapping->host;
-+
-+	/*
-+	 * If the backing device is a block device, mirror its provisioning
-+	 * capability.
-+	 */
-+	if (S_ISBLK(inode->i_mode)) {
-+		blk_queue_max_provision_sectors(lo->lo_queue,
-+			bdev_max_provision_sectors(I_BDEV(inode)));
-+	} else if (file->f_op->fallocate) {
-+		blk_queue_max_provision_sectors(lo->lo_queue, UINT_MAX >> 9);
-+	} else {
-+		blk_queue_max_provision_sectors(lo->lo_queue, 0);
-+	}
-+}
-+
- static void loop_config_discard(struct loop_device *lo)
- {
- 	struct file *file = lo->lo_backing_file;
-@@ -1092,6 +1131,7 @@ static int loop_configure(struct loop_device *lo, fmode_t mode,
- 	blk_queue_io_min(lo->lo_queue, bsize);
- 
- 	loop_config_discard(lo);
-+	loop_config_provision(lo);
- 	loop_update_rotational(lo);
- 	loop_update_dio(lo);
- 	loop_sysfs_init(lo);
-@@ -1304,6 +1344,7 @@ loop_set_status(struct loop_device *lo, const struct loop_info64 *info)
- 	}
- 
- 	loop_config_discard(lo);
-+	loop_config_provision(lo);
- 
- 	/* update dio if lo_offset or transfer is changed */
- 	__loop_update_dio(lo, lo->use_dio);
-@@ -1830,6 +1871,7 @@ static blk_status_t loop_queue_rq(struct blk_mq_hw_ctx *hctx,
- 	case REQ_OP_FLUSH:
- 	case REQ_OP_DISCARD:
- 	case REQ_OP_WRITE_ZEROES:
-+	case REQ_OP_PROVISION:
- 		cmd->use_aio = false;
- 		break;
- 	default:
 -- 
-2.40.0.634.g4ca3ef3211-goog
+With best wishes
+Dmitry
 
