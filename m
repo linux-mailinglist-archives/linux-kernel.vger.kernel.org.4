@@ -2,161 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD8B6E9B70
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 269306E9B75
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbjDTSRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 14:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
+        id S231441AbjDTSTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 14:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjDTSR3 (ORCPT
+        with ESMTP id S229543AbjDTSTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 14:17:29 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4125D4210
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:17:28 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-94a342f15e4so87223866b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:17:28 -0700 (PDT)
+        Thu, 20 Apr 2023 14:19:40 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558AE2736;
+        Thu, 20 Apr 2023 11:19:39 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a667067275so12572855ad.1;
+        Thu, 20 Apr 2023 11:19:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682014646; x=1684606646;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NzocEjSvrz85xEKE5MWcbLv/boctI2KKwjYq7LHKyz4=;
-        b=S2ctvNqMIvOioIiHZwWJbdVQexXnEJfkUsuEM04PMllQQAq/sE8IIOM0eDrdZYpgEJ
-         xYvvOg1SKcnNSA1ne7Anfer1mqpLaVnAcBhSp+ghH7N/HQ8XDHIwRGXapE+PvHn+SSWd
-         4oiG653PvBxwj57BngCB9Qxok+vr5fsaip9T4=
+        d=gmail.com; s=20221208; t=1682014779; x=1684606779;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M7m896v0zwclnMzE5M32YGgcorfSqd9qtXANPeD/BFc=;
+        b=EKZvXX4qyof85ohLLAM5XOERZrpcAuvSepl8jPQj89JQnPoSBqtiUH4jqb7JZM7fZD
+         0civ84sZ/NmZG1iKoJVlVTw2vqfKIEV8sawSg7c86w27iZSS9qrOQRrja9a9oke80Blx
+         MqdNhUJMGCU/MvsriLgCm5AUPugCkmxFsysaRm6EdWRcAa/g47WF9nc5ykOYMvKw6vY9
+         wyAlCnn5PoHo5lqOnf+8AagDwFN+zC7dn3Fxc9rU6OzN5zc9tsOSQvQqIHgahjZxfCrm
+         2r9C2gA3NILtzH/0+J3VtL41AsFOvi551NgCuX63BF1Bz6KQJ7L9RiLNMJnGajFRYpch
+         9l6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682014646; x=1684606646;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NzocEjSvrz85xEKE5MWcbLv/boctI2KKwjYq7LHKyz4=;
-        b=EQGBKBokporwXq7wcAYS9hYJToUTWwOM7ajOXmIpgXwqEk0NnVzrf0ipX+PbKpsiBh
-         OZ6tKfLuBEtNe8W5JwJopgevzRImzpwxTHchpvhu99lUoU4S+3Oyia9jphMYEJpxbZfs
-         rwsv4rRKv8vBifs6XcJSv1Oo8FPOX5cjn8j7nHO2kKxbSz0+zXWiEVDQv/kIBrkEJgMZ
-         8MnSgYlmuulv4vd/2qYnDLe5OfCX01CFvmDeStTdsUKbBnr3sG/uOLa3ANGzNhPY2Cgo
-         ng7FmU6atGx51Ydz7SQ9zutvimFeMb7S9pL4T+dMsJtb2v7GXM8FLEGdRIsWyE0kizNH
-         Y5VA==
-X-Gm-Message-State: AAQBX9dpdCH8UcJKtMJbK35piOIuXAL/1uCxVFkmukyVWtdZ7cW3QZrJ
-        E7w6uqhYEFVj+rOl3Kou5DFWeHMrOg8198YlcNUV0A==
-X-Google-Smtp-Source: AKy350bUbgX+6BAetL35DQRlN+iICSaVw+B/jOXdxmTlFH/Y/a2lnx/qR3DkR104XRtbf49FVqzsbMMtZaekb6roEd8=
-X-Received: by 2002:aa7:c592:0:b0:508:3f08:ea0f with SMTP id
- g18-20020aa7c592000000b005083f08ea0fmr2514672edq.28.1682014646672; Thu, 20
- Apr 2023 11:17:26 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682014779; x=1684606779;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M7m896v0zwclnMzE5M32YGgcorfSqd9qtXANPeD/BFc=;
+        b=CJKcfIaqAZierY2wyY2tHzTeyKaFgQHcPSUi7y2Xipigb/u//JGY+olakKJiCDKSq3
+         X+073CczelAfabxfSok94OTjyJYCN57Wj+kLK+gJuANp8JpuKXRuNsXJb0MR/2WOnhNk
+         k52sHGfsAGHXCZy6+vK4Xw9A0bcPNXb98nQDxWY7S0dFH6Yz9oNMSBKHLuyEYjD8WRYP
+         AQgIqHO2Ti7wjdNH1iuexKxXebgBj7AHiXsuaWhDFgdX64kC3RP1DRSlFF1uRzhrO4+p
+         mhemNwQrNYN4IjrGOn+QekFtwC9DnoXuJ6RiZwfV7bcUcRJ2QB+zBKVH+wf2otxXFOP8
+         KPOQ==
+X-Gm-Message-State: AAQBX9d5tppCOdu4COV4SziW4San/TXqSX1728VDOg00x6SDZpzIIEIt
+        Quhkfcb+40XgqJFr4w2jpKK8Esb/z4I=
+X-Google-Smtp-Source: AKy350YbizgwIxj66WbsohtGqdUE092BhFj/u0NcCBirM0AovG5ih/cigIPbpby5y4HLhgcFKqJvDg==
+X-Received: by 2002:a17:903:244f:b0:1a8:16d2:a867 with SMTP id l15-20020a170903244f00b001a816d2a867mr3002668pls.62.1682014778706;
+        Thu, 20 Apr 2023 11:19:38 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y11-20020a170902b48b00b001a63ba28053sm1453017plr.68.2023.04.20.11.19.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 11:19:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 20 Apr 2023 11:19:36 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     =?utf-8?B?VG9tw6HFoQ==?= Pecka <tomas.pecka@cesnet.cz>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan =?iso-8859-1?Q?Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Subject: Re: [PATCH 1/1] hwmon: (pmbus/fsp-3y) Fix functionality bitmask in
+ FSP-3Y YM-2151E
+Message-ID: <1eb61572-591b-44ac-8415-7f18875202f7@roeck-us.net>
+References: <20230420171939.212040-1-tomas.pecka@cesnet.cz>
 MIME-Version: 1.0
-References: <ZEFmS9h81Wwlv9+/@redhat.com> <20230420172807.323150-1-sarthakkukreti@chromium.org>
-In-Reply-To: <20230420172807.323150-1-sarthakkukreti@chromium.org>
-From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
-Date:   Thu, 20 Apr 2023 11:17:15 -0700
-Message-ID: <CAG9=OMO7LtYRMurR4t4P5Tcb00-ob21eg4jm0aUXry2mcgOMfw@mail.gmail.com>
-Subject: Re: [PATCH v5-fix 1/5] block: Don't invalidate pagecache for invalid
- falloc modes
-To:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Brian Foster <bfoster@redhat.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        Daniil Lunev <dlunev@google.com>,
-        "Darrick J. Wong" <djwong@kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230420171939.212040-1-tomas.pecka@cesnet.cz>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch had a slight typo; fixed in the most recent patch.
+On Thu, Apr 20, 2023 at 07:19:39PM +0200, Tomáš Pecka wrote:
+> The bit flags in pmbus_driver_info functionality for YM-2151E chip were
+> joined with a comma operator instead of a bitwise OR. This means that
+> the last constant PMBUS_HAVE_IIN was not OR-ed with the other
+> PM_BUS_HAVE_* constants for this page but it initialized the next element
+> of the func array (which was not accessed from anywhere because of the
+> number of pages).
+> 
+> However, there is no need for setting PMBUS_HAVE_IIN in the 5Vsb page
+> because this command does not seem to be paged. Obviously, the device
+> only has one IIN sensor, so it doesn't make sense to query it again from
+> the second page.
+> 
+> Fixes: 1734b4135a62 ("hwmon: Add driver for fsp-3y PSUs and PDUs")
+> Co-developed-by: Jan Kundrát <jan.kundrat@cesnet.cz>
+> Signed-off-by: Jan Kundrát <jan.kundrat@cesnet.cz>
 
-- Sarthak
+FWIW, adding both Co-developed-by: and Signed-off-by: tags doesn't
+make sense since Signed-off-by: implies Co-developed-by:.
+I'll drop the first tag.
 
-On Thu, Apr 20, 2023 at 10:28=E2=80=AFAM Sarthak Kukreti
-<sarthakkukreti@chromium.org> wrote:
->
-> Only call truncate_bdev_range() if the fallocate mode is
-> supported. This fixes a bug where data in the pagecache
-> could be invalidated if the fallocate() was called on the
-> block device with an invalid mode.
->
-> Fixes: 25f4c41415e5 ("block: implement (some of) fallocate for block devi=
-ces")
-> Cc: stable@vger.kernel.org
-> Reported-by: Darrick J. Wong <djwong@kernel.org>
-> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> Signed-off-by: Tomáš Pecka <tomas.pecka@cesnet.cz>
+
+Applied.
+
+Thanks,
+Guenter
+
 > ---
->  block/fops.c | 21 ++++++++++++++++-----
->  1 file changed, 16 insertions(+), 5 deletions(-)
->
-> diff --git a/block/fops.c b/block/fops.c
-> index d2e6be4e3d1c..20b1eddcbe25 100644
-> --- a/block/fops.c
-> +++ b/block/fops.c
-> @@ -648,24 +648,35 @@ static long blkdev_fallocate(struct file *file, int=
- mode, loff_t start,
->
->         filemap_invalidate_lock(inode->i_mapping);
->
-> -       /* Invalidate the page cache, including dirty pages. */
-> -       error =3D truncate_bdev_range(bdev, file->f_mode, start, end);
-> -       if (error)
-> -               goto fail;
-> -
-> +       /*
-> +        * Invalidate the page cache, including dirty pages, for valid
-> +        * de-allocate mode calls to fallocate().
-> +        */
->         switch (mode) {
->         case FALLOC_FL_ZERO_RANGE:
->         case FALLOC_FL_ZERO_RANGE | FALLOC_FL_KEEP_SIZE:
-> +               error =3D truncate_bdev_range(bdev, file->f_mode, start, =
-end);
-> +               if (error)
-> +                       goto fail;
-> +
->                 error =3D blkdev_issue_zeroout(bdev, start >> SECTOR_SHIF=
-T,
->                                              len >> SECTOR_SHIFT, GFP_KER=
-NEL,
->                                              BLKDEV_ZERO_NOUNMAP);
->                 break;
->         case FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE:
-> +               error =3D truncate_bdev_range(bdev, file->f_mode, start, =
-end);
-> +               if (error)
-> +                       goto fail;
-> +
->                 error =3D blkdev_issue_zeroout(bdev, start >> SECTOR_SHIF=
-T,
->                                              len >> SECTOR_SHIFT, GFP_KER=
-NEL,
->                                              BLKDEV_ZERO_NOFALLBACK);
->                 break;
->         case FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE | FALLOC_FL_NO_HI=
-DE_STALE:
-> +               error =3D truncate_bdev_range(bdev, file->f_mode, start, =
-end);
-> +               if (!error)
-> +                       goto fail;
-> +
->                 error =3D blkdev_issue_discard(bdev, start >> SECTOR_SHIF=
-T,
->                                              len >> SECTOR_SHIFT, GFP_KER=
-NEL);
->                 break;
-> --
-> 2.40.0.396.gfff15efe05-goog
->
+>  drivers/hwmon/pmbus/fsp-3y.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/fsp-3y.c b/drivers/hwmon/pmbus/fsp-3y.c
+> index aec294cc72d1..c7469d2cdedc 100644
+> --- a/drivers/hwmon/pmbus/fsp-3y.c
+> +++ b/drivers/hwmon/pmbus/fsp-3y.c
+> @@ -180,7 +180,6 @@ static struct pmbus_driver_info fsp3y_info[] = {
+>  			PMBUS_HAVE_FAN12,
+>  		.func[YM2151_PAGE_5VSB_LOG] =
+>  			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT,
+> -			PMBUS_HAVE_IIN,
+>  		.read_word_data = fsp3y_read_word_data,
+>  		.read_byte_data = fsp3y_read_byte_data,
+>  	},
