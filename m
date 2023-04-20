@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B17E6E9D10
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:23:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7585C6E9D1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbjDTUXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 16:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
+        id S232560AbjDTUY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 16:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbjDTUWz (ORCPT
+        with ESMTP id S232389AbjDTUYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 16:22:55 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDEB5FEF;
-        Thu, 20 Apr 2023 13:22:41 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5067736607fso1439219a12.0;
-        Thu, 20 Apr 2023 13:22:41 -0700 (PDT)
+        Thu, 20 Apr 2023 16:24:00 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E23E6A5A;
+        Thu, 20 Apr 2023 13:22:55 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-504fce3d7fbso1227893a12.2;
+        Thu, 20 Apr 2023 13:22:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682022161; x=1684614161;
+        d=gmail.com; s=20221208; t=1682022174; x=1684614174;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4bgsJpUillj+ROOKmPY+NOq2XaUUvqxBoyDP1agT4DQ=;
-        b=YtkWBNnB3M22bp632yPBmyBZ8ObuUXnqtx5L2PgdHXqVJcTmVn6Pk1faAyc/5UqgSB
-         HDPZTeaZHsljSaVKqdezbLhSEPj4Ptit4xZtgHDx5UTcSNkEEmN78iT9abgfCGrWi84X
-         rDEJnaVlH3T00FVnkhLOFaH2d+x7q4rbCCKk4oUZLZ32rT/6xHYoRPwHomM6A7pU/eOL
-         XycwV877HEBH9CLl/iJ4Vplw0jb7rrjBpbQ092zU2RcTuwEAOkniRK5gmPq+sFaaiMKl
-         1b94tZEishb4yOnFiV3ua4SAFKZ1jHXvOAhJyzJ+ErEtO/5jLxea71hrq8QIJqn1Rp6u
-         hIDg==
+        bh=ToW9WThq3gLLkyGYDWNM0Zjw078yICy28mQ0vlGolbc=;
+        b=kekTDG5zu5+LQUfyi5YaXVoJcTUmGezCgKPoLb1Yc//Buh1Xnomhold4ilgf9Ri+PQ
+         GmgUAb1+a7rOirzyaWB3iW3V3UIbzsfoooes47E2pOcCbpVewwOBFk57eAgaqN6MUJQD
+         pwxn8UHVL6SmmMvrHgI6w+juOOkNHblyDMzHFcpNRb6wTu0PpEF3Qi2u+BvkNAN2A0dC
+         +NfpRDPl1Kx+SCjbThTdSNnsNc4NFa1303Cbvs8sbeG+jZrLQEe2B40GC706ecNVFiUi
+         1ekixAZiyLsWmoQIuOHw3BApnD1K9nFWSXvQLhkl9JlsrwGipaIYCo+X8NkxKTsfwVYw
+         1BLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682022161; x=1684614161;
+        d=1e100.net; s=20221208; t=1682022174; x=1684614174;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4bgsJpUillj+ROOKmPY+NOq2XaUUvqxBoyDP1agT4DQ=;
-        b=b8f9ySY6ASMl0GTiEiq8WAX0VwowOwqLDof6d7D6CFwKPv6ISM/oCG/3MWmsPY5kRq
-         RZ45BsShKxrtw/56EVXEh+Q/Mm4CZEEeQ+WC0BY1u5dfS1nGzIYiz3ImYh57E3HJij+/
-         fbu9Gisn+AzonEEyKgf3bj+hT0xv554Q1tH3jQUb0IrZ1EHO4ggyVz11bc/K3POaFFe4
-         EXEKaOramX8Ds4FDx3RPy5Ug9IIO1eDN2c5Yk/fCmBKrnGj9/fYhIxUP/Ivb7lXUPUTl
-         WEdruoqtiQAhxRQ7w/FuDGEdOuZxaAmBuRs2D+ZM6zxcPK4RaPxruWKyiQdQJ3Ov+9Db
-         zaCw==
-X-Gm-Message-State: AAQBX9cemywB6G16tka3ASQ7l7Pg4b2rLBvtBAaR4CnUS/UE5HPk42Gp
-        JujDYcX3LsPnm/g3k02CKd4=
-X-Google-Smtp-Source: AKy350YmBe7XClGbCcc8CSEbLYZrZBQl0NmE5zhEHGzF2/EXUL9s4PHqz5HNKb4Fsa17wWnp4xs3cg==
-X-Received: by 2002:a17:906:2ca:b0:953:4987:4b8 with SMTP id 10-20020a17090602ca00b00953498704b8mr129005ejk.47.1682022160854;
-        Thu, 20 Apr 2023 13:22:40 -0700 (PDT)
+        bh=ToW9WThq3gLLkyGYDWNM0Zjw078yICy28mQ0vlGolbc=;
+        b=X2SH0OkcWtRfVzVfPft1aktVfqcUC6tXW/V14EYFIaxWPk1jfsdL3N1HgPl6GIAQO7
+         nx6q4HmeICCWWtiRprJzVfhPLxjA5zIaQ9RfwcosKYd4UYJdYTUxzrJGHSjntocMgfHl
+         AGPkGakPP5Qm77gF7GGZiOpbHrrGJziIoemsDc20Htqw13MOoCVnaodL05vv2nvFIz20
+         ohcTLhhRneGfrvMFkTxYPiwLk6q2ys8cI5pw8KbLHCyBukG3qtVoiA0/mgMK3cLiytqK
+         ob8XWcKMMUKji//h4OjOePFwC6QaiNfVe5p5MVhHABhx+Qc9UKrBa768me3BMay/trlJ
+         SuYQ==
+X-Gm-Message-State: AAQBX9ezx2Eu3NJAot4aiSdqYqi6qfsVa92a2XmOPebTU6HLFzEQICSb
+        9moFA6vg+4X8V+pZo6utnZE=
+X-Google-Smtp-Source: AKy350ZyHfdQLTBeCHtNOVW5xKm3ksc5nbZN4FT57eA0ImqLCLzhQQYOMc7cvCdFC1Jy7+eX4hi2wg==
+X-Received: by 2002:a17:907:2ad1:b0:94a:937a:58f1 with SMTP id fm17-20020a1709072ad100b0094a937a58f1mr216807ejc.1.1682022173921;
+        Thu, 20 Apr 2023 13:22:53 -0700 (PDT)
 Received: from carbian.fritz.box ([2a02:8109:aa3f:ead8::d7e8])
-        by smtp.gmail.com with ESMTPSA id q14-20020a17090676ce00b00932ba722482sm1136881ejn.149.2023.04.20.13.22.40
+        by smtp.gmail.com with ESMTPSA id q14-20020a17090676ce00b00932ba722482sm1136881ejn.149.2023.04.20.13.22.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 13:22:40 -0700 (PDT)
+        Thu, 20 Apr 2023 13:22:53 -0700 (PDT)
 From:   Mehdi Djait <mehdi.djait.k@gmail.com>
 To:     jic23@kernel.org, mazziesaccount@gmail.com
 Cc:     krzysztof.kozlowski+dt@linaro.org,
         andriy.shevchenko@linux.intel.com, linux-iio@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Mehdi Djait <mehdi.djait.k@gmail.com>
-Subject: [PATCH v2 4/5] iio: accel: kionix-kx022a: Add a function to retrieve number of bytes in buffer
-Date:   Thu, 20 Apr 2023 22:22:04 +0200
-Message-Id: <2c5d71e37fc7e000091189b3c5d66ede1a6015d2.1682019544.git.mehdi.djait.k@gmail.com>
+Subject: [PATCH v2 5/5] iio: accel: Add support for Kionix/ROHM KX132-1211 accelerometer
+Date:   Thu, 20 Apr 2023 22:22:05 +0200
+Message-Id: <cef09595632a40eff8a0864fea2e0eb6653930a5.1682019544.git.mehdi.djait.k@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1682019544.git.mehdi.djait.k@gmail.com>
 References: <cover.1682019544.git.mehdi.djait.k@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -74,91 +75,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since Kionix accelerometers use various numbers of bits to report data, a
-device-specific function is required.
-Move the driver's private data to the header file to support the new function.
-Make the allocation of the "buffer" array in the fifo_flush function dynamic
-and more generic.
+Kionix KX132-1211 is a tri-axis 16-bit accelerometer that can support
+ranges from ±2G to ±16G, digital output through I²C/SPI.
+Add support for basic accelerometer features such as reading acceleration
+via IIO using raw reads, triggered buffer (data-ready), or the WMI IRQ.
 
 Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
 ---
 v2:
-- separated this change from the chip_info introduction and made it a patch in v2 
-- changed the function from generic implementation for to device-specific one
-- removed blank lines pointed out by checkpatch
-- changed the allocation of the "buffer" array in __kx022a_fifo_flush
+- mentioned the kx132-1211 in the Kconfig
+- added a kx132-specific get_fifo_bytes function
+- changed the device name from "kx132" to "kx132-1211"
 
- drivers/iio/accel/kionix-kx022a.c | 72 +++++++++++++------------------
- drivers/iio/accel/kionix-kx022a.h | 37 ++++++++++++++++
- 2 files changed, 66 insertions(+), 43 deletions(-)
+ drivers/iio/accel/Kconfig             |   8 +-
+ drivers/iio/accel/kionix-kx022a-i2c.c |   2 +
+ drivers/iio/accel/kionix-kx022a-spi.c |   2 +
+ drivers/iio/accel/kionix-kx022a.c     | 145 ++++++++++++++++++++++++++
+ drivers/iio/accel/kionix-kx022a.h     |  52 +++++++++
+ 5 files changed, 205 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/iio/accel/Kconfig b/drivers/iio/accel/Kconfig
+index b6b45d359f28..d8cc6e6f2bb9 100644
+--- a/drivers/iio/accel/Kconfig
++++ b/drivers/iio/accel/Kconfig
+@@ -418,8 +418,8 @@ config IIO_KX022A_SPI
+ 	select IIO_KX022A
+ 	select REGMAP_SPI
+ 	help
+-	  Enable support for the Kionix KX022A digital tri-axis
+-	  accelerometer connected to I2C interface.
++	  Enable support for the Kionix KX022A, KX132-1211 digital tri-axis
++	  accelerometers connected to SPI interface.
+ 
+ config IIO_KX022A_I2C
+ 	tristate "Kionix KX022A tri-axis digital accelerometer I2C interface"
+@@ -427,8 +427,8 @@ config IIO_KX022A_I2C
+ 	select IIO_KX022A
+ 	select REGMAP_I2C
+ 	help
+-	  Enable support for the Kionix KX022A digital tri-axis
+-	  accelerometer connected to I2C interface.
++	  Enable support for the Kionix KX022A, KX132-1211 digital tri-axis
++	  accelerometers connected to I2C interface.
+ 
+ config KXSD9
+ 	tristate "Kionix KXSD9 Accelerometer Driver"
+diff --git a/drivers/iio/accel/kionix-kx022a-i2c.c b/drivers/iio/accel/kionix-kx022a-i2c.c
+index ce299d0446f7..4ea28d2482ec 100644
+--- a/drivers/iio/accel/kionix-kx022a-i2c.c
++++ b/drivers/iio/accel/kionix-kx022a-i2c.c
+@@ -39,12 +39,14 @@ static int kx022a_i2c_probe(struct i2c_client *i2c)
+ 
+ static const struct i2c_device_id kx022a_i2c_id[] = {
+ 	{ .name = "kx022a", .driver_data = (kernel_ulong_t)&kx022a_chip_info },
++	{ .name = "kx132-1211", .driver_data = (kernel_ulong_t)&kx132_chip_info },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, kx022a_i2c_id);
+ 
+ static const struct of_device_id kx022a_of_match[] = {
+ 	{ .compatible = "kionix,kx022a", .data = &kx022a_chip_info },
++	{ .compatible = "kionix,kx132-1211", .data = &kx132_chip_info },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, kx022a_of_match);
+diff --git a/drivers/iio/accel/kionix-kx022a-spi.c b/drivers/iio/accel/kionix-kx022a-spi.c
+index 7bc81588e40e..8441d1444b9d 100644
+--- a/drivers/iio/accel/kionix-kx022a-spi.c
++++ b/drivers/iio/accel/kionix-kx022a-spi.c
+@@ -39,12 +39,14 @@ static int kx022a_spi_probe(struct spi_device *spi)
+ 
+ static const struct spi_device_id kx022a_spi_id[] = {
+ 	{ .name = "kx022a", .driver_data = (kernel_ulong_t)&kx022a_chip_info },
++	{ .name = "kx132-1211", .driver_data = (kernel_ulong_t)&kx132_chip_info },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(spi, kx022a_spi_id);
+ 
+ static const struct of_device_id kx022a_of_match[] = {
+ 	{ .compatible = "kionix,kx022a", .data = &kx022a_chip_info },
++	{ .compatible = "kionix,kx132-1211", .data = &kx132_chip_info },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, kx022a_of_match);
 diff --git a/drivers/iio/accel/kionix-kx022a.c b/drivers/iio/accel/kionix-kx022a.c
-index 7f9a2c29790b..1c81ea1657b9 100644
+index 1c81ea1657b9..f058e266d189 100644
 --- a/drivers/iio/accel/kionix-kx022a.c
 +++ b/drivers/iio/accel/kionix-kx022a.c
-@@ -150,36 +150,6 @@ static const struct regmap_config kx022a_regmap_config = {
+@@ -150,6 +150,99 @@ static const struct regmap_config kx022a_regmap_config = {
  	.cache_type = REGCACHE_RBTREE,
  };
  
--struct kx022a_data {
--	struct regmap *regmap;
--	struct iio_trigger *trig;
--	struct device *dev;
--	struct iio_mount_matrix orientation;
--	int64_t timestamp, old_timestamp;
--
--	int irq;
--	int inc_reg;
--	int ien_reg;
--
--	unsigned int state;
--	unsigned int odr_ns;
--
--	bool trigger_enabled;
--	/*
--	 * Prevent toggling the sensor stby/active state (PC1 bit) in the
--	 * middle of a configuration, or when the fifo is enabled. Also,
--	 * protect the data stored/retrieved from this structure from
--	 * concurrent accesses.
--	 */
--	struct mutex mutex;
--	u8 watermark;
--
--	/* 3 x 16bit accel data + timestamp */
--	__le16 buffer[8] __aligned(IIO_DMA_MINALIGN);
--	struct {
--		__le16 channels[3];
--		s64 ts __aligned(8);
--	} scan;
++/* Regmap configs kx132 */
++static const struct regmap_range kx132_volatile_ranges[] = {
++	{
++		.range_min = KX132_REG_XADP_L,
++		.range_max = KX132_REG_COTR,
++	}, {
++		.range_min = KX132_REG_TSCP,
++		.range_max = KX132_REG_INT_REL,
++	}, {
++		/* The reset bit will be cleared by sensor */
++		.range_min = KX132_REG_CNTL2,
++		.range_max = KX132_REG_CNTL2,
++	}, {
++		.range_min = KX132_REG_BUF_STATUS_1,
++		.range_max = KX132_REG_BUF_READ,
++	},
++};
++
++static const struct regmap_access_table kx132_volatile_regs = {
++	.yes_ranges = &kx132_volatile_ranges[0],
++	.n_yes_ranges = ARRAY_SIZE(kx132_volatile_ranges),
++};
++
++static const struct regmap_range kx132_precious_ranges[] = {
++	{
++		.range_min = KX132_REG_INT_REL,
++		.range_max = KX132_REG_INT_REL,
++	},
++};
++
++static const struct regmap_access_table kx132_precious_regs = {
++	.yes_ranges = &kx132_precious_ranges[0],
++	.n_yes_ranges = ARRAY_SIZE(kx132_precious_ranges),
++};
++
++static const struct regmap_range kx132_read_only_ranges[] = {
++	{
++		.range_min = KX132_REG_XADP_L,
++		.range_max = KX132_REG_INT_REL,
++	}, {
++		.range_min = KX132_REG_BUF_STATUS_1,
++		.range_max = KX132_REG_BUF_STATUS_2,
++	}, {
++		.range_min = KX132_REG_BUF_READ,
++		.range_max = KX132_REG_BUF_READ,
++	},
++};
++
++static const struct regmap_access_table kx132_ro_regs = {
++	.no_ranges = &kx132_read_only_ranges[0],
++	.n_no_ranges = ARRAY_SIZE(kx132_read_only_ranges),
++};
++
++static const struct regmap_range kx132_write_only_ranges[] = {
++	{
++		.range_min = KX132_REG_MAN_WAKE,
++		.range_max = KX132_REG_MAN_WAKE,
++	}, {
++		.range_min = KX132_REG_SELF_TEST,
++		.range_max = KX132_REG_SELF_TEST,
++	}, {
++		.range_min = KX132_REG_BUF_CLEAR,
++		.range_max = KX132_REG_BUF_CLEAR,
++	},
++};
++
++static const struct regmap_access_table kx132_wo_regs = {
++	.no_ranges = &kx132_write_only_ranges[0],
++	.n_no_ranges = ARRAY_SIZE(kx132_write_only_ranges),
++};
++
++static const struct regmap_range kx132_noinc_read_ranges[] = {
++	{
++		.range_min = KX132_REG_BUF_READ,
++		.range_max = KX132_REG_BUF_READ,
++	},
++};
++
++static const struct regmap_access_table kx132_nir_regs = {
++	.yes_ranges = &kx132_noinc_read_ranges[0],
++	.n_yes_ranges = ARRAY_SIZE(kx132_noinc_read_ranges),
++};
++
++static const struct regmap_config kx132_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.volatile_table = &kx132_volatile_regs,
++	.rd_table = &kx132_wo_regs,
++	.wr_table = &kx132_ro_regs,
++	.rd_noinc_table = &kx132_nir_regs,
++	.precious_table = &kx132_precious_regs,
++	.max_register = KX132_MAX_REGISTER,
++	.cache_type = REGCACHE_RBTREE,
  };
  
  static const struct iio_mount_matrix *
-@@ -340,7 +310,6 @@ static int kx022a_turn_on_off_unlocked(struct kx022a_data *data, bool on)
- 		dev_err(data->dev, "Turn %s fail %d\n", str_on_off(on), ret);
+@@ -206,6 +299,13 @@ static const struct iio_chan_spec kx022a_channels[] = {
+ 	IIO_CHAN_SOFT_TIMESTAMP(3),
+ };
  
- 	return ret;
--
++static const struct iio_chan_spec kx132_channels[] = {
++	KX022A_ACCEL_CHAN(X, KX132_REG_XOUT_L, 0),
++	KX022A_ACCEL_CHAN(Y, KX132_REG_YOUT_L, 1),
++	KX022A_ACCEL_CHAN(Z, KX132_REG_ZOUT_L, 2),
++	IIO_CHAN_SOFT_TIMESTAMP(3),
++};
++
+ /*
+  * The sensor HW can support ODR up to 1600 Hz, which is beyond what most of the
+  * Linux CPUs can handle without dropping samples. Also, the low power mode is
+@@ -582,6 +682,25 @@ static int kx022a_get_fifo_bytes(struct kx022a_data *data)
+ 	return fifo_bytes;
  }
  
- static int kx022a_turn_off_lock(struct kx022a_data *data)
-@@ -595,34 +564,50 @@ static int kx022a_drop_fifo_contents(struct kx022a_data *data)
- 	return regmap_write(data->regmap, data->chip_info->buf_clear, 0x0);
- }
- 
-+static int kx022a_get_fifo_bytes(struct kx022a_data *data)
++static int kx132_get_fifo_bytes(struct kx022a_data *data)
 +{
 +	struct device *dev = regmap_get_device(data->regmap);
++	__le16 buf_status;
 +	int ret, fifo_bytes;
 +
-+	ret = regmap_read(data->regmap, KX022A_REG_BUF_STATUS_1, &fifo_bytes);
++	ret = regmap_bulk_read(data->regmap, data->chip_info->buf_status1,
++			       &buf_status, sizeof(buf_status));
 +	if (ret) {
 +		dev_err(dev, "Error reading buffer status\n");
 +		return ret;
 +	}
 +
-+	/* Let's not overflow if we for some reason get bogus value from i2c */
-+	if (fifo_bytes == KX022A_FIFO_FULL_VALUE)
-+		fifo_bytes = KX022A_FIFO_MAX_BYTES;
++	buf_status &= data->chip_info->buf_smp_lvl_mask;
++	fifo_bytes = le16_to_cpu(buf_status);
 +
 +	return fifo_bytes;
 +}
@@ -166,136 +302,108 @@ index 7f9a2c29790b..1c81ea1657b9 100644
  static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned int samples,
  			       bool irq)
  {
- 	struct kx022a_data *data = iio_priv(idev);
--	struct device *dev = regmap_get_device(data->regmap);
--	__le16 buffer[KX022A_FIFO_LENGTH * 3];
-+	__le16 *buffer;
- 	uint64_t sample_period;
- 	int count, fifo_bytes;
- 	bool renable = false;
- 	int64_t tstamp;
- 	int ret, i;
- 
--	ret = regmap_read(data->regmap, KX022A_REG_BUF_STATUS_1, &fifo_bytes);
--	if (ret) {
--		dev_err(dev, "Error reading buffer status\n");
--		return ret;
--	}
-+	/* 3 axis, 2 bytes of data for each of the axis */
-+	buffer = kmalloc(data->chip_info->fifo_length * 6, GFP_KERNEL);
-+	if (!buffer)
-+		return -ENOMEM;
- 
--	/* Let's not overflow if we for some reason get bogus value from i2c */
--	if (fifo_bytes == KX022A_FIFO_FULL_VALUE)
--		fifo_bytes = KX022A_FIFO_MAX_BYTES;
-+	fifo_bytes = data->chip_info->get_fifo_bytes(data);
- 
- 	if (fifo_bytes % KX022A_FIFO_SAMPLES_SIZE_BYTES)
- 		dev_warn(data->dev, "Bad FIFO alignment. Data may be corrupt\n");
- 
- 	count = fifo_bytes / KX022A_FIFO_SAMPLES_SIZE_BYTES;
--	if (!count)
-+	if (!count) {
-+		kfree(buffer);
- 		return 0;
-+	}
- 
- 	/*
- 	 * If we are being called from IRQ handler we know the stored timestamp
-@@ -704,6 +689,7 @@ static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned int samples,
- 	if (renable)
- 		enable_irq(data->irq);
- 
-+	kfree(buffer);
- 	return ret;
- }
- 
-@@ -1016,6 +1002,7 @@ const struct kx022a_chip_info kx022a_chip_info = {
- 	.inc5		  = KX022A_REG_INC5,
- 	.inc6		  = KX022A_REG_INC6,
- 	.xout_l		  = KX022A_REG_XOUT_L,
-+	.get_fifo_bytes	  = kx022a_get_fifo_bytes,
+@@ -1006,6 +1125,32 @@ const struct kx022a_chip_info kx022a_chip_info = {
  };
  EXPORT_SYMBOL_NS_GPL(kx022a_chip_info, IIO_KX022A);
  
-@@ -1143,7 +1130,6 @@ int kx022a_probe_internal(struct device *dev, const struct kx022a_chip_info *chi
- 	if (ret)
- 		return dev_err_probe(data->dev, ret, "Could not request IRQ\n");
- 
--
- 	ret = devm_iio_trigger_register(dev, indio_trig);
- 	if (ret)
- 		return dev_err_probe(data->dev, ret,
++const struct kx022a_chip_info kx132_chip_info = {
++	.name		  = "kx132-1211",
++	.regmap_config	  = &kx132_regmap_config,
++	.channels	  = kx132_channels,
++	.num_channels	  = ARRAY_SIZE(kx132_channels),
++	.fifo_length	  = KX132_FIFO_LENGTH,
++	.who		  = KX132_REG_WHO,
++	.id		  = KX132_ID,
++	.cntl		  = KX132_REG_CNTL,
++	.cntl2		  = KX132_REG_CNTL2,
++	.odcntl		  = KX132_REG_ODCNTL,
++	.buf_cntl1	  = KX132_REG_BUF_CNTL1,
++	.buf_cntl2	  = KX132_REG_BUF_CNTL2,
++	.buf_clear	  = KX132_REG_BUF_CLEAR,
++	.buf_status1	  = KX132_REG_BUF_STATUS_1,
++	.buf_smp_lvl_mask = KX132_MASK_BUF_SMP_LVL,
++	.buf_read	  = KX132_REG_BUF_READ,
++	.inc1		  = KX132_REG_INC1,
++	.inc4		  = KX132_REG_INC4,
++	.inc5		  = KX132_REG_INC5,
++	.inc6		  = KX132_REG_INC6,
++	.xout_l		  = KX132_REG_XOUT_L,
++	.get_fifo_bytes	  = kx132_get_fifo_bytes,
++};
++EXPORT_SYMBOL_NS_GPL(kx132_chip_info, IIO_KX022A);
++
+ int kx022a_probe_internal(struct device *dev, const struct kx022a_chip_info *chip_info)
+ {
+ 	static const char * const regulator_names[] = {"io-vdd", "vdd"};
 diff --git a/drivers/iio/accel/kionix-kx022a.h b/drivers/iio/accel/kionix-kx022a.h
-index 3c31e7d88f78..43e32e688258 100644
+index 43e32e688258..c79d9895921e 100644
 --- a/drivers/iio/accel/kionix-kx022a.h
 +++ b/drivers/iio/accel/kionix-kx022a.h
-@@ -11,6 +11,8 @@
- #include <linux/bits.h>
- #include <linux/regmap.h>
+@@ -76,6 +76,57 @@
+ #define KX022A_REG_SELF_TEST	0x60
+ #define KX022A_MAX_REGISTER	0x60
  
-+#include <linux/iio/iio.h>
++#define KX132_REG_WHO		0x13
++#define KX132_ID		0x3d
 +
- #define KX022A_REG_WHO		0x0f
- #define KX022A_ID		0xc8
- 
-@@ -76,6 +78,39 @@
- 
++#define KX132_FIFO_LENGTH	86
++
++#define KX132_REG_CNTL		0x1b
++#define KX132_REG_CNTL2		0x1c
++#define KX132_MASK_RES		BIT(6)
++#define KX132_GSEL_2		0x0
++#define KX132_GSEL_4		BIT(3)
++#define KX132_GSEL_8		BIT(4)
++#define KX132_GSEL_16		GENMASK(4, 3)
++
++#define KX132_REG_INS2		0x17
++#define KX132_MASK_INS2_WMI	BIT(5)
++
++#define KX132_REG_XADP_L	0x02
++#define KX132_REG_XOUT_L	0x08
++#define KX132_REG_YOUT_L	0x0a
++#define KX132_REG_ZOUT_L	0x0c
++#define KX132_REG_COTR		0x12
++#define KX132_REG_TSCP		0x14
++#define KX132_REG_INT_REL	0x1a
++
++#define KX132_REG_ODCNTL	0x21
++
++#define KX132_REG_BTS_WUF_TH	0x4a
++#define KX132_REG_MAN_WAKE	0x4d
++
++#define KX132_REG_BUF_CNTL1	0x5e
++#define KX132_REG_BUF_CNTL2	0x5f
++#define KX132_REG_BUF_STATUS_1	0x60
++#define KX132_REG_BUF_STATUS_2	0x61
++#define KX132_MASK_BUF_SMP_LVL	GENMASK(9, 0)
++#define KX132_REG_BUF_CLEAR	0x62
++#define KX132_REG_BUF_READ	0x63
++#define KX132_ODR_SHIFT		3
++#define KX132_FIFO_MAX_WMI_TH	86
++
++#define KX132_REG_INC1		0x22
++#define KX132_REG_INC5		0x26
++#define KX132_REG_INC6		0x27
++#define KX132_IPOL_LOW		0
++#define KX132_IPOL_HIGH		KX022A_MASK_IPOL
++#define KX132_ITYP_PULSE	KX022A_MASK_ITYP
++
++#define KX132_REG_INC4		0x25
++
++#define KX132_REG_SELF_TEST	0x5d
++#define KX132_MAX_REGISTER	0x76
++
  struct device;
  
-+struct kx022a_data {
-+	const struct kx022a_chip_info *chip_info;
-+	struct regmap *regmap;
-+	struct iio_trigger *trig;
-+	struct device *dev;
-+	struct iio_mount_matrix orientation;
-+	int64_t timestamp, old_timestamp;
-+
-+	int irq;
-+	int inc_reg;
-+	int ien_reg;
-+
-+	unsigned int state;
-+	unsigned int odr_ns;
-+
-+	bool trigger_enabled;
-+	/*
-+	 * Prevent toggling the sensor stby/active state (PC1 bit) in the
-+	 * middle of a configuration, or when the fifo is enabled. Also,
-+	 * protect the data stored/retrieved from this structure from
-+	 * concurrent accesses.
-+	 */
-+	struct mutex mutex;
-+	u8 watermark;
-+
-+	/* 3 x 16bit accel data + timestamp */
-+	__le16 buffer[8] __aligned(IIO_DMA_MINALIGN);
-+	struct {
-+		__le16 channels[3];
-+		s64 ts __aligned(8);
-+	} scan;
-+};
-+
- /**
-  * struct kx022a_chip_info - Kionix accelerometer chip specific information
-  *
-@@ -100,6 +135,7 @@ struct device;
-  * @inc5:		interrupt control register 5
-  * @inc6:		interrupt control register 6
-  * @xout_l:		x-axis output least significant byte
-+ * @get_fifo_bytes:	function pointer to get number of bytes in the FIFO buffer
-  */
- struct kx022a_chip_info {
- 	const char *name;
-@@ -123,6 +159,7 @@ struct kx022a_chip_info {
- 	u8 inc5;
- 	u8 inc6;
- 	u8 xout_l;
-+	int (*get_fifo_bytes)(struct kx022a_data *);
- };
- 
+ struct kx022a_data {
+@@ -165,5 +216,6 @@ struct kx022a_chip_info {
  int kx022a_probe_internal(struct device *dev, const struct kx022a_chip_info *chip_info);
+ 
+ extern const struct kx022a_chip_info kx022a_chip_info;
++extern const struct kx022a_chip_info kx132_chip_info;
+ 
+ #endif
 -- 
 2.30.2
 
