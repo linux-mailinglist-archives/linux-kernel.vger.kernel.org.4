@@ -2,97 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A26B6E94A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FD26E94B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbjDTMiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
+        id S232034AbjDTMi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbjDTMiP (ORCPT
+        with ESMTP id S232022AbjDTMiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:38:15 -0400
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BAD65B5;
-        Thu, 20 Apr 2023 05:38:06 -0700 (PDT)
-Received: by mail-wm1-f41.google.com with SMTP id q5so1151712wmo.4;
-        Thu, 20 Apr 2023 05:38:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681994285; x=1684586285;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MN0ovZHpN8SCVLE+Wi4d2r6KhQWAauDovMf24m5eUIY=;
-        b=N74jg6edLWNWqRnRCTo+kiTTgaFV6STLW4THCDfIb5vJgiZ4bPV6EspPaYdrPQN94u
-         93M+wBajuMWkemQUkO9iL2ZMNyW/iFxR6g9OBvgqsb5xvVQqHVj+vKbWMF7VTBhUYWVy
-         TKK3v5rN2fbBEls40FQ4BwdmzC3+VF6exiDAxavGfqLZY8QFkxRDO6zk2w68PdMchXsR
-         G9WvqB3OO1yz8S3UQvH7hKV/2D8/PZdnhgWZZmVsxn6ohwcw7kkXrgZdx6CbRh6Q0mAR
-         FM1XjAfvdMfyvHypYtgHF7Gsap1apY4uRfkf3s/hmazgPMCDwyHMk/Y4Ho2lm2crepgf
-         ZOAQ==
-X-Gm-Message-State: AAQBX9dZRAOP2vE2GUBwLFtPjqrAsrJJpjVfhExyLD4VEjsodf7J0H1p
-        dF1mgYVpBEInWzTlortlNHk=
-X-Google-Smtp-Source: AKy350bQ9708hbMQVHk61xT3LFrYNHvJx32Hxxd71tA4xcWwGK3ktp6cb2BZ2HZNpKUoffYiRNK5uQ==
-X-Received: by 2002:a1c:f202:0:b0:3ed:f5b5:37fc with SMTP id s2-20020a1cf202000000b003edf5b537fcmr1132978wmc.1.1681994284901;
-        Thu, 20 Apr 2023 05:38:04 -0700 (PDT)
-Received: from gmail.com (fwdproxy-cln-014.fbsv.net. [2a03:2880:31ff:e::face:b00c])
-        by smtp.gmail.com with ESMTPSA id m36-20020a05600c3b2400b003edc4788fa0sm5413733wms.2.2023.04.20.05.38.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 05:38:04 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 05:38:02 -0700
-From:   Breno Leitao <leitao@debian.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-        asml.silence@gmail.com, axboe@kernel.dk, leit@fb.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        sagi@grimberg.me, kbusch@kernel.org, ming.lei@redhat.com
-Subject: Re: [PATCH 1/2] io_uring: Pass whole sqe to commands
-Message-ID: <ZEEyKolzQgfkEOwv@gmail.com>
-References: <20230419102930.2979231-1-leitao@debian.org>
- <20230419102930.2979231-2-leitao@debian.org>
- <20230420045712.GA4239@lst.de>
- <ZEEwHk32Y8IcT20n@gmail.com>
- <20230420123139.GA32030@lst.de>
+        Thu, 20 Apr 2023 08:38:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7286E659C;
+        Thu, 20 Apr 2023 05:38:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1086A6492B;
+        Thu, 20 Apr 2023 12:38:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FEDBC433EF;
+        Thu, 20 Apr 2023 12:38:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681994324;
+        bh=nfJH/+e/lzF8OUfdswNN7jypUAc6X6n5NbRH8m2Wyzg=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=RidI+JGvvBt+q2AnYq9/4G/nYPDXpf/m0Y+F7zVsAm9ue8xpJvzhc1MYZQSWvYeTr
+         RMWKANWUCJsJwy6pcOr4v21gDYliVJT6+QXSlIoLzBscO1XLfWbuBAqDyX23S4Hdm5
+         e23VG35DyPF9r2GrAXsfd0vAfCnQ7sRhNZ4NrqDjZXbQHBS4+rHv06FdC/eJ8t5Hsj
+         93pzlvmeyjtpZBGeQT1IVF0pVeA1rXuZt8Li5xvqEqkoIkzmIE362a0VE4QWSW31M2
+         D2E+E/+UEwbRuy+agAqswXBUNrHe472n7t4bQdklEI4QHvEuudIQ/5sXBXz8S6DCae
+         GxRayFYgJ4rHQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420123139.GA32030@lst.de>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: wifi: airo: remove ISA_DMA_API dependency
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230417205131.1560074-1-arnd@kernel.org>
+References: <20230417205131.1560074-1-arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <168199432066.31131.2024979256921490085.kvalo@kernel.org>
+Date:   Thu, 20 Apr 2023 12:38:42 +0000 (UTC)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 02:31:39PM +0200, Christoph Hellwig wrote:
-> On Thu, Apr 20, 2023 at 05:29:18AM -0700, Breno Leitao wrote:
-> > > > -	cmd_size = uring_cmd_pdu_size(req->ctx->flags & IORING_SETUP_SQE128);
-> > > > +	if (req->ctx->flags & IORING_SETUP_SQE128)
-> > > > +		size <<= 1;
-> > > 
-> > > 
-> > > Why does this stop using uring_cmd_pdu_size()?
-> > 
-> > Before, only the cmd payload (sqe->cmd) was being copied to the async
-> > structure. We are copying over the whole sqe now, since we can use SQE
-> > fields inside the ioctl callbacks (instead of only cmd fields). So, the
-> > copy now is 64 bytes for single SQE or 128 for double SQEs.
+Arnd Bergmann <arnd@kernel.org> wrote:
+
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> That's the point of this series and I get it.  But why do we remove
-> the nice and self-documenting helper that returns once or twice
-> the sizeof of the SQE structure and instead add a magic open coded
-> left shift?
+> This driver does not actually use the ISA DMA API, it is purely
+> PIO based, so remove the dependency.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-uring_cmd_pdu_size() returns the size of the payload, not the size of
-the SQE structure. Basically it returns 16 bytes or single SQE or 80
-for double SQE.
+Patch applied to wireless-next.git, thanks.
 
-Since we are not coping the payload anymore, this is not necessary. Now
-we are copying 64 bytes for the single SQE or 128 bytes for double SQE.
+09be55585d27 wifi: airo: remove ISA_DMA_API dependency
 
-Do you prefer I create a helper that returns the SQE size, instead of
-doing the left shift?
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20230417205131.1560074-1-arnd@kernel.org/
 
-Thank you!
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
