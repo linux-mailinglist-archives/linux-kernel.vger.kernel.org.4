@@ -2,127 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B966E8C8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D08E6E8C8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234390AbjDTIUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S234393AbjDTIUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233958AbjDTIUE (ORCPT
+        with ESMTP id S233947AbjDTIU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:20:04 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4CB35B1;
-        Thu, 20 Apr 2023 01:20:03 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id d9443c01a7336-1a686260adcso9452195ad.0;
-        Thu, 20 Apr 2023 01:20:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681978803; x=1684570803;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=50LQK5tmVS4ocKInYwi3ul8CsPS2duQjgndHkjAqgs8=;
-        b=b8UWrtSE8d2gqNUM2H1uHk0ortZx/sPCi0GIgOnwb707NJgWvxYj2zXg98MvjfsgvK
-         Z56vAWe2BOIorML3bVHV0psPwQ23v+9blH9HWKN1FSXMvB3bf2Ix8TEiQvZM9QK1NgcH
-         73L+WZyy1rHGXeD0B5048otp+o9agwOvnDjCPoLqK+Q/nnPuJDwAFRmFYSzre+miVdML
-         l4q2MUTaDU3Zpm9W+l4znRjfq0AnFV/exlYutGBmLSNOGUfmIpemh72QtylzELDDrXQQ
-         32O8Fh1Z5AoccqRP+cc/17OeWNzqExfvYKI0XPZNZqKeejI4ANXPiWt56+Q9jISSPshr
-         DM8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681978803; x=1684570803;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=50LQK5tmVS4ocKInYwi3ul8CsPS2duQjgndHkjAqgs8=;
-        b=KXL7b9qc8WyFxKRNXllrETwpyZAtVKd5a8X18eXUEsBbjVx3GObzxYCzZUWSsuw5Xr
-         dE4hOREvwuWVN7qNXndRHCEkN08mJdLZPlj22Lan/hW4UFWLJ66sqtu6Sw7VXaGqPorp
-         Vq2RUCew/ROjZbyc5OYgxNJXnXlT+76hUrZGeyDUhyV6/RyvsBD0w2ud4iE3+AsltwsH
-         hMxQUccvjfsb7TFklyuvmysR1fTwHTCJ8Ulm4IkoLeMRYvaZysMh9gl+hpGq4zbVOfv5
-         QMoQjMQavl4JPDIQmKYBnVgA9I7lAxMRrNbMOV89/Zjrp9liSegMg3VvncyHGwaOAtDm
-         MSnA==
-X-Gm-Message-State: AAQBX9dSV8TMFBYUVVWCW/yOe7qZN+vtpVkZ1BBH6YyXpGDTgWENi8+P
-        76Srqrm50A21yi9Zsil1G+c=
-X-Google-Smtp-Source: AKy350aybx0ziA66zSViUCxz9E9+apBFLxepV9bFNMgfHksbNe6Qc8KN82NS86sC6uCUzn/e316oPQ==
-X-Received: by 2002:a17:903:2442:b0:19f:188c:3e34 with SMTP id l2-20020a170903244200b0019f188c3e34mr808450pls.53.1681978802743;
-        Thu, 20 Apr 2023 01:20:02 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id t5-20020a170902a5c500b001a4fecf79e4sm680471plq.49.2023.04.20.01.20.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 01:20:02 -0700 (PDT)
-From:   korantwork@gmail.com
-To:     helgaas@kernel.org, nirmal.patel@linux.intel.com,
-        kbusch@kernel.org, jonathan.derrick@linux.dev,
-        lpieralisi@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xinghui Li <korantli@tencent.com>,
-        Dan Carpenter <error27@gmail.com>
-Subject: [PATCH] PCI: vmd: Fix two issues reported by Smatch
-Date:   Thu, 20 Apr 2023 16:19:57 +0800
-Message-Id: <20230420081957.1440423-1-korantwork@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 20 Apr 2023 04:20:29 -0400
+Received: from forwardcorp1c.mail.yandex.net (forwardcorp1c.mail.yandex.net [178.154.239.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B791635BB;
+        Thu, 20 Apr 2023 01:20:26 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net (mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:3612:0:640:a8a8:0])
+        by forwardcorp1c.mail.yandex.net (Yandex) with ESMTP id 3AB675FA6A;
+        Thu, 20 Apr 2023 11:20:22 +0300 (MSK)
+Received: from d-tatianin-nix.yandex-team.ru (unknown [2a02:6b8:b081:b409::1:14])
+        by mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id GKZned0OrSw0-ZMtL3jQ8;
+        Thu, 20 Apr 2023 11:20:21 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
+        t=1681978821; bh=9mp+pNldrwYKUsap4NBAwMn7ODY5PLISjDiGq37dX08=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=p+8OjW/Pwu2PIc8vaB50z4dLDff5X4bJ9YWx+S/Hjm711tgn+trXbY+HJlz7JU9Cg
+         o8PzFCM3KY5rPAft0+3aELGcw8lmuNvEgDFIixh0+gCVVTIVM0ztQOyiiqq2aI1eLB
+         4g0XxHDpCXk2kT/4eAepg1G5ZnrbOJfBK8Fithak=
+Authentication-Results: mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
+From:   Daniil Tatianin <d-tatianin@yandex-team.ru>
+To:     Ariel Elior <aelior@marvell.com>
+Cc:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
+        Manish Chopra <manishc@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yuval Mintz <Yuval.Mintz@qlogic.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net] qed/qed_sriov: propagate errors from qed_init_run in enable_vf_access
+Date:   Thu, 20 Apr 2023 11:20:16 +0300
+Message-Id: <20230420082016.335314-1-d-tatianin@yandex-team.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xinghui Li <korantli@tencent.com>
+The return value was silently ignored, and not propagated to the caller.
 
-There is one uninitialized symbol error reported by smatch:
-"drivers/pci/controller/vmd.c:931 vmd_enable_domain()
-error: uninitialized symbol 'ret'."
+Found by Linux Verification Center (linuxtesting.org) with the SVACE
+static analysis tool.
 
-Fix it by assigning ret with pci_reset_bus return.
-
-And one inconsistent indenting warning:
-"drivers/pci/controller/vmd.c:1058 vmd_resume()
-warn: inconsistent indenting"
-
-Fix it by formating its indenting.
-
-Fixes: 0a584655ef89 ("PCI: vmd: Fix secondary bus reset for Intel bridges")
-Fixes: d899aa668498 ("PCI: vmd: Disable MSI remapping after suspend")
-Reported-by: Dan Carpenter <error27@gmail.com>
-Signed-off-by: Xinghui Li <korantli@tencent.com>
+Fixes: 1408cc1fa48c ("qed: Introduce VFs")
+Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
 ---
- drivers/pci/controller/vmd.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+I'm not familiar enough with the code to know if there's anything we
+have to undo here in case qed_init_run returns an error. Any additional
+comments are appreciated.
+---
+ drivers/net/ethernet/qlogic/qed/qed_sriov.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index 7e1fd959e00d..0a7c1fdfeec0 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -943,7 +943,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- 		if (!list_empty(&child->devices)) {
- 			dev = list_first_entry(&child->devices,
- 					       struct pci_dev, bus_list);
--			if (pci_reset_bus(dev))
-+			ret = pci_reset_bus(dev);
-+			if (ret)
- 				pci_warn(dev, "can't reset device: %d\n", ret);
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_sriov.c b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
+index fa167b1aa019..5244d7208eb4 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_sriov.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
+@@ -814,7 +814,7 @@ static int qed_iov_enable_vf_access(struct qed_hwfn *p_hwfn,
+ 	SET_FIELD(igu_vf_conf, IGU_VF_CONF_PARENT, p_hwfn->rel_pf_id);
+ 	STORE_RT_REG(p_hwfn, IGU_REG_VF_CONFIGURATION_RT_OFFSET, igu_vf_conf);
  
- 			break;
-@@ -1084,10 +1085,10 @@ static int vmd_resume(struct device *dev)
- 	struct vmd_dev *vmd = pci_get_drvdata(pdev);
- 	int err, i;
+-	qed_init_run(p_hwfn, p_ptt, PHASE_VF, vf->abs_vf_id,
++	rc = qed_init_run(p_hwfn, p_ptt, PHASE_VF, vf->abs_vf_id,
+ 		     p_hwfn->hw_info.hw_mode);
  
--       if (vmd->irq_domain)
--               vmd_set_msi_remapping(vmd, true);
--       else
--               vmd_set_msi_remapping(vmd, false);
-+	if (vmd->irq_domain)
-+		vmd_set_msi_remapping(vmd, true);
-+	else
-+		vmd_set_msi_remapping(vmd, false);
- 
- 	for (i = 0; i < vmd->msix_count; i++) {
- 		err = devm_request_irq(dev, vmd->irqs[i].virq,
+ 	/* unpretend */
 -- 
-2.31.1
+2.25.1
 
