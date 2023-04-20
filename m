@@ -2,81 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C02866E8D5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 963956E8D64
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234482AbjDTI5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S234236AbjDTJA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 05:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234055AbjDTI4i (ORCPT
+        with ESMTP id S234400AbjDTI7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:56:38 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFBC5B9A;
-        Thu, 20 Apr 2023 01:54:40 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id l31-20020a05600c1d1f00b003f1718d89b2so2729256wms.0;
-        Thu, 20 Apr 2023 01:54:40 -0700 (PDT)
+        Thu, 20 Apr 2023 04:59:47 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00DC4C1F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:56:06 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id l15so1940979ljq.8
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:56:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681980879; x=1684572879;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/1nmSJoHao2Xv1R5LLZFmg+3N6nON3bsre5f7/ykalM=;
-        b=ljIHPQzFFyGCCB+FF8NH25LiqxPEUydxxqg1xk+LKKlyGT4Ud2+0oMPplY5MeneGsk
-         f5OezBCDawk+vMjooGD9xhaT6nRmOkckJ5JvF0kzGrgAF0TCrCNdORM8bcNXbTBAjVcZ
-         vPo9cOulmWmC5CX01K3EXm4JLtj0SFYaiWvV3dVb6ddJrM6kCmnJHu/4x1c3VvXl/SEm
-         WMdCMl/VnDL8pNxY8t6UC8QCqZCJKqzDx2YdFXpSGcbCBAdGHf2zgDWSyqvO8SYLId9u
-         Hnc0FIa0dUKQACQitFKjDEg8F7SLsnL9CtLR4pDOoMy1tXUTrzu/I05hjCf30jLC8QVt
-         ClaQ==
+        d=gmail.com; s=20221208; t=1681980963; x=1684572963;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IDoRV5tcV4ZLbo8bWLcQ8xGavuIx9pc5Dsyn6+Jg8jU=;
+        b=Z9Au6FhL2zZcCfxk3Vg49XyZaJhsV+1G6HIC1zZ6IXs5r9e8qePR4i4vUBD5nWSR3x
+         wtflzNMT2axG6I+DhEBb+ca3Wkn1CwQQFINDeXmvcnLZ/Yxpr+PWRbruJ6bXipij6Xj7
+         /XLYETFSUpYxKt6/1YfjnAuq8HfaN9nILBy3BIddpubClCiQahXXsGKouIuMVbSE+krZ
+         7NOnqSNCfkuVGFR3CwG4gB7GyfT1euYaa5X+Bfy6WZ1PYUh2RqI0s6Nzg/uatkO3VsfK
+         oOW/JhhBpp9T3WJPGTtH80AVpnkGeselgRIci254i1RRDLj3qicDwGEt6M9BYq97nYBk
+         r30Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681980879; x=1684572879;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/1nmSJoHao2Xv1R5LLZFmg+3N6nON3bsre5f7/ykalM=;
-        b=Z8sJCC+Gbj7cK2Gewrl6sIjyKGBiTzdS5BLiYNHR8Y1/s4JI+n1Ngu3dJvKsMgaj1J
-         YI5H7iU7qpntf7xeo/HvmySbdU7mVZ7b30Jgk4FfE5Q2QV//e7rDN7KKOoBZ33BQHvyg
-         7SdbdzZZfZzKlHsi/NSNj8Pi7+19/3PM+zKajOc0/pmS5WYbBTqn4Urcl5i2bhViJK5I
-         MXOUWzaIXdJo9ukTzudiQJ6xY6IEsEFntdFAcQWl3AmjVoSGzctMRtGQznyjczQCAqGo
-         IxGASXDH3bOFp90I/MbVKgjKApZafVvSHjau3Lxk3c2S4656VkpKUT3S3FuQP0EFxMrp
-         Mvvw==
-X-Gm-Message-State: AAQBX9e9jh9IU0UdcMshtsR+ZtiRQzcGlP4cnq42R+7vJjbdjTCJDCCa
-        YpCNE9lfgG8i7QyoMu46624=
-X-Google-Smtp-Source: AKy350ZV27kPTUXFD0SUn95Kojy7v+U1CO3Ru4rd5bSoHUPQF0mBJTsTaFjwtiB4bcjKWdbqooEcEw==
-X-Received: by 2002:a05:600c:ac6:b0:3f0:9cc6:daf0 with SMTP id c6-20020a05600c0ac600b003f09cc6daf0mr763257wmr.27.1681980878656;
-        Thu, 20 Apr 2023 01:54:38 -0700 (PDT)
-Received: from [192.168.0.103] ([77.124.103.108])
-        by smtp.gmail.com with ESMTPSA id g10-20020a7bc4ca000000b003f171234a08sm1360668wmk.20.2023.04.20.01.54.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 01:54:38 -0700 (PDT)
-Message-ID: <a42a2dc4-bcbc-7a19-b036-8722606a5eaf@gmail.com>
-Date:   Thu, 20 Apr 2023 11:54:34 +0300
+        d=1e100.net; s=20221208; t=1681980963; x=1684572963;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IDoRV5tcV4ZLbo8bWLcQ8xGavuIx9pc5Dsyn6+Jg8jU=;
+        b=Kg6/6nuUJPFTeyWkJIGiv+NbPkJLjSIDYlDaS5g4FIC+aQuIGI0M2fSaiEM1nFR3pi
+         zuDLKX9pfH2ljrhRR8UFnEiOhnBX3d+XyEVN+MniwkZ+0oWGqCnTrQ0rHnsLsCDWR+/3
+         EQBDHxcFroVi1VGesfkQdnMyZc9ipFfHWmOLTqmfhP1qWi8/exb3Sm2mwVX8Z9zpEiOA
+         qmb+8ilaOgskwLQs+Qtx2L/sM0Ugc+DKfaW0alVPTmkdgveRsLUArd/h96/Z/hks1RPi
+         LziuiLrwZXAtzjXHhJ2CpIwAzT4dOSVatvJurBwieoCS5SEiDGEuaY/iG+VBlpH+AxAn
+         qc7g==
+X-Gm-Message-State: AAQBX9cGM/9rbV+v1U3yi8I68TOzm2BNZ+HwozmtU/SYz/YdI5R4n55e
+        fWQid5i0hg8SohEt4EgSFaDypZF8fQiqm/M1vwD4rRYq
+X-Google-Smtp-Source: AKy350Y592dYlVHKp5FQfJ0AtiEMF9NldYZPYTj5qdStROYO2WVptcRlnvulWQNPF0lTh87Xg2gvJRog6FD0xAuddDA=
+X-Received: by 2002:a2e:721a:0:b0:2a8:c513:7577 with SMTP id
+ n26-20020a2e721a000000b002a8c5137577mr182705ljc.51.1681980963361; Thu, 20 Apr
+ 2023 01:56:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 3/3] kbuild: do not create intermediate *.tar for tar
- packages
-Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Nicolas Schier <nicolas@fjasle.eu>, dalevi@nvidia.com,
-        Gal Pressman <gal@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>
-References: <20230407101629.1298051-1-masahiroy@kernel.org>
- <20230407101629.1298051-3-masahiroy@kernel.org>
- <20230407181223.GD1018455@dev-arch.thelio-3990X>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20230407181223.GD1018455@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+References: <1681979577-11360-1-git-send-email-zhaoyang.huang@unisoc.com>
+In-Reply-To: <1681979577-11360-1-git-send-email-zhaoyang.huang@unisoc.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Thu, 20 Apr 2023 16:55:41 +0800
+Message-ID: <CAGWkznGBEi8q5v_xE2K2p0+JOPo2JV_nvB-_0K3Sy6B2sTaJXA@mail.gmail.com>
+Subject: Re: [PATCHv2] mm: skip CMA pages when they are not available
+To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,68 +69,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch could be more helpful when large cma reserved areas reside
+in a single zone(etc. 500MB among a 2GB zone), where a lot of CMA
+pages spread in LRU allocated by fallback of GFP_MOVABLE allocation.
 
-
-On 07/04/2023 21:12, Nathan Chancellor wrote:
-> On Fri, Apr 07, 2023 at 07:16:29PM +0900, Masahiro Yamada wrote:
->> Commit 05e96e96a315 ("kbuild: use git-archive for source package
->> creation") split the compression as a separate step to factor out
->> the common build rules.
->>
->> With the previous commit, we got back to the situation where
->> compressed source tarballs are created by a single rule.
->> There is no reason to keep the separate compression rules.
->>
->> Generate the comressed tar packages directly.
->>
->> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> 
-
-Hi,
-
-We started seeing the failure below in rc7.
-We narrowed it down to your patches:
-
-3c65a2704cdd kbuild: do not create intermediate *.tar for tar packages
-f8d94++c4e403c kbuild: do not create intermediate *.tar for source tarballs
-f6d8283549bc kbuild: merge cmd_archive_linux and cmd_archive_perf
-aa7d233f45b4 kbuild: give up untracked files for source package builds
-
-Can you please take a look and advise?
-
-Regards,
-Tariq
-
-[root@c-237-113-200-203 linux]# make -j24 rpm-pkg
-sh ./scripts/package/mkspec >./kernel.spec
-rpmbuild  --target x86_64-linux -bs kernel.spec \
---define='_smp_mflags %{nil}' --define='_sourcedir rpmbuild/SOURCES' 
---define='_srcrpmdir .'
-Building target platforms: x86_64-linux
-Building for target x86_64-linux
-Wrote: ./kernel-6.3.0_rc7+-1.src.rpm
-rpmbuild  --target x86_64-linux -rb kernel-6.3.0_rc7+-1.src.rpm \
---define='_smp_mflags %{nil}'
-Installing kernel-6.3.0_rc7+-1.src.rpm
-Building target platforms: x86_64-linux
-Building for target x86_64-linux
-Executing(%prep): /bin/sh -e /var/tmp/rpm-tmp.yDFEga
-+ umask 022
-+ cd /root/rpmbuild/BUILD
-+ cd /root/rpmbuild/BUILD
-+ rm -rf linux
-+ /usr/bin/gzip -dc /root/rpmbuild/SOURCES/linux.tar.gz
-+ /usr/bin/tar -xof -
-+ STATUS=0
-+ '[' 0 -ne 0 ']'
-+ cd linux
-/var/tmp/rpm-tmp.yDFEga: line 37: cd: linux: No such file or directory
-error: Bad exit status from /var/tmp/rpm-tmp.yDFEga (%prep)
-
-
-RPM build errors:
-     Bad exit status from /var/tmp/rpm-tmp.yDFEga (%prep)
-make[1]: *** [scripts/Makefile.package:69: rpm-pkg] Error 1
-make: *** [Makefile:1656: rpm-pkg] Error 2
+On Thu, Apr 20, 2023 at 4:33=E2=80=AFPM zhaoyang.huang
+<zhaoyang.huang@unisoc.com> wrote:
+>
+> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+>
+> This patch fixes unproductive reclaiming of CMA pages by skipping them wh=
+en they
+> are not available for current context. It is arise from bellowing OOM iss=
+ue, which
+> caused by large proportion of MIGRATE_CMA pages among free pages. There h=
+as been
+> commit(168676649) to fix it by trying CMA pages first instead of fallback=
+ in
+> rmqueue. I would like to propose another one from reclaiming perspective.
+>
+> 04166 < 4> [   36.172486] [03-19 10:05:52.172] ActivityManager: page allo=
+cation failure: order:0, mode:0xc00(GFP_NOIO), nodemask=3D(null),cpuset=3Df=
+oreground,mems_allowed=3D0
+> 0419C < 4> [   36.189447] [03-19 10:05:52.189] DMA32: 0*4kB 447*8kB (C) 2=
+17*16kB (C) 124*32kB (C) 136*64kB (C) 70*128kB (C) 22*256kB (C) 3*512kB (C)=
+ 0*1024kB 0*2048kB 0*4096kB =3D 35848kB
+> 0419D < 4> [   36.193125] [03-19 10:05:52.193] Normal: 231*4kB (UMEH) 49*=
+8kB (MEH) 14*16kB (H) 13*32kB (H) 8*64kB (H) 2*128kB (H) 0*256kB 1*512kB (H=
+) 0*1024kB 0*2048kB 0*4096kB =3D 3236kB
+>         ......
+> 041EA < 4> [   36.234447] [03-19 10:05:52.234] SLUB: Unable to allocate m=
+emory on node -1, gfp=3D0xa20(GFP_ATOMIC)
+> 041EB < 4> [   36.234455] [03-19 10:05:52.234] cache: ext4_io_end, object=
+ size: 64, buffer size: 64, default order: 0, min order: 0
+> 041EC < 4> [   36.234459] [03-19 10:05:52.234] node 0: slabs: 53,objs: 33=
+92, free: 0
+>
+> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> ---
+> v2: update commit message and fix build error when CONFIG_CMA is not set
+> ---
+> ---
+>  mm/vmscan.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index bd6637f..19fb445 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -2225,10 +2225,16 @@ static unsigned long isolate_lru_folios(unsigned =
+long nr_to_scan,
+>         unsigned long nr_skipped[MAX_NR_ZONES] =3D { 0, };
+>         unsigned long skipped =3D 0;
+>         unsigned long scan, total_scan, nr_pages;
+> +       bool cma_cap =3D true;
+> +       struct page *page;
+>         LIST_HEAD(folios_skipped);
+>
+>         total_scan =3D 0;
+>         scan =3D 0;
+> +       if ((IS_ENABLED(CONFIG_CMA)) && !current_is_kswapd()
+> +               && (gfp_migratetype(sc->gfp_mask) !=3D MIGRATE_MOVABLE))
+> +               cma_cap =3D false;
+> +
+>         while (scan < nr_to_scan && !list_empty(src)) {
+>                 struct list_head *move_to =3D src;
+>                 struct folio *folio;
+> @@ -2239,12 +2245,17 @@ static unsigned long isolate_lru_folios(unsigned =
+long nr_to_scan,
+>                 nr_pages =3D folio_nr_pages(folio);
+>                 total_scan +=3D nr_pages;
+>
+> -               if (folio_zonenum(folio) > sc->reclaim_idx) {
+> +               page =3D &folio->page;
+> +
+> +               if ((folio_zonenum(folio) > sc->reclaim_idx)
+> +#ifdef CONFIG_CMA
+> +                       || (get_pageblock_migratetype(page) =3D=3D MIGRAT=
+E_CMA && !cma_cap)
+> +#endif
+> +               ) {
+>                         nr_skipped[folio_zonenum(folio)] +=3D nr_pages;
+>                         move_to =3D &folios_skipped;
+>                         goto move;
+>                 }
+> -
+>                 /*
+>                  * Do not count skipped folios because that makes the fun=
+ction
+>                  * return with no isolated folios if the LRU mostly conta=
+ins
+> --
+> 1.9.1
+>
