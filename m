@@ -2,78 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C373F6E8B43
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82DD6E8B46
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234015AbjDTHVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 03:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
+        id S234029AbjDTHVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 03:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjDTHVF (ORCPT
+        with ESMTP id S233814AbjDTHVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 03:21:05 -0400
-X-Greylist: delayed 120 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Apr 2023 00:21:01 PDT
-Received: from forwardcorp1c.mail.yandex.net (forwardcorp1c.mail.yandex.net [178.154.239.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93B51713;
-        Thu, 20 Apr 2023 00:21:01 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-corp-main-62.myt.yp-c.yandex.net (mail-nwsmtp-smtp-corp-main-62.myt.yp-c.yandex.net [IPv6:2a02:6b8:c00:2582:0:640:9a17:0])
-        by forwardcorp1c.mail.yandex.net (Yandex) with ESMTP id 0DD515FCA9;
-        Thu, 20 Apr 2023 10:18:57 +0300 (MSK)
-Received: from d-tatianin-nix.yandex-team.ru (unknown [2a02:6b8:b081:b409::1:14])
-        by mail-nwsmtp-smtp-corp-main-62.myt.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id qIYucs0OrW20-wj8KMKWB;
-        Thu, 20 Apr 2023 10:18:56 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1681975136; bh=BinArMeIu3kbYSgmasOaJJzxzXIJu8lCXv0hNRpOuZc=;
-        h=Message-Id:Date:Cc:Subject:To:From;
-        b=fcf275M+qVSkY2y//2FVVk8kqqNNjQ2q56qyuWLI8+Yz6wZZB3p77kiwAUBESsWjc
-         p/rB38rQVlhRaTTD/FtJdd8uFRAgr+BEu0cWG64dqTSt5Zkl5d0pl2SOdm8JV5wnaE
-         plPQkVf7JEQsGIG87KvmDx2UHBsD4wI/RbuGLveQ=
-Authentication-Results: mail-nwsmtp-smtp-corp-main-62.myt.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-From:   Daniil Tatianin <d-tatianin@yandex-team.ru>
-To:     Song Liu <song@kernel.org>
-Cc:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] md/md-multipath: guard against a possible NULL dereference
-Date:   Thu, 20 Apr 2023 10:18:51 +0300
-Message-Id: <20230420071851.326726-1-d-tatianin@yandex-team.ru>
-X-Mailer: git-send-email 2.25.1
+        Thu, 20 Apr 2023 03:21:40 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9073ABD
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:21:39 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-555e170df98so28584857b3.10
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:21:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681975299; x=1684567299;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oLbT5hVhYcV02p3hHaLqxtmtmMCjvhRv1rYkWERXbeU=;
+        b=QTGK+dypK6k2S08JVTdVcQRTWk6/eAHMseMqP91CuXmixFJWePFEeMJTR1JKJl3tJ6
+         Xaas7YsA+R/QNyA4Au7Y8APlHjS6HsFTAHr6FHEWnnNzWQKFg08OU/v49w+DjubKMxq/
+         aQRVPhrmsASYTDubT11E6/dIq2FMLNHZmdCrAJr3wvIFPemb5VSgBtkDhEWPk/Vlp6Eq
+         6un9yjjDJB3ST83t8czmvJy5WrMFspT816Hg8d7nUv8sZV8FU32xaoGsE5LdLcgioPoe
+         ICmLHfEXxdmuOzbDAElK0PewT0pLo39klytZTkbOJo1nU6XDeihrs+UJeuRG4B+y1Ia5
+         vlEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681975299; x=1684567299;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oLbT5hVhYcV02p3hHaLqxtmtmMCjvhRv1rYkWERXbeU=;
+        b=V662a2KfY4Dx8EsiA5iIPckawDmHbi9+KDAuqv8oxHPNH8H6guuN75Fe5DmX3vd5zS
+         k28BcG6NVsPL7064jjPicF9M5ahXZ8l2O9Dr5oRRyIeksCoIOnaNGvGSjaH1IEWq3Sfr
+         r0+ZNfO60fTNTaYGS4BqOjx4JHGp7NUq07KHhw5FoSpzI1vYZ1WREfOeSLwoBYDFQ1vE
+         LwaLIj5ZNTtRJsMC2jjkaNHhRH46vjRzBDol48a01sgtDkFZauRyOTIxbRp5TpZclJgn
+         Yxe0JGwuX3H0EiOJM/EVJT6utg1+siySO40x9Xs3CqRBaRdZgo6nnnGicYquX2UcTFzX
+         k+Ig==
+X-Gm-Message-State: AAQBX9cooffo5PXjGb4I8gXCbkh7DDqhTPxcdTAXOywkzeE+IRNwSh0S
+        jzjKehSlVwN3Hoyda56WlfSyILmdTT4CZfttmQ2X5Q==
+X-Google-Smtp-Source: AKy350blgwHrEXE1ikzHbGGCBYjw9RVxglmRRKRDHlD7rvl6NARuY+TiiVgY2n0UW18b27VzRbT9IE9XH88uAfbAHfc=
+X-Received: by 2002:a81:4f89:0:b0:54f:9b17:c7db with SMTP id
+ d131-20020a814f89000000b0054f9b17c7dbmr160494ywb.10.1681975298893; Thu, 20
+ Apr 2023 00:21:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230416131632.31673-1-aweber.kernel@gmail.com> <20230416131632.31673-2-aweber.kernel@gmail.com>
+In-Reply-To: <20230416131632.31673-2-aweber.kernel@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 20 Apr 2023 09:21:27 +0200
+Message-ID: <CACRpkdYhPSK40QOcsMry8yvKy_iP7cyX-=sHOw-N50N+q1qqrw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: display: panel: Add Samsung S6D7AA0
+ LCD panel controller
+To:     Artur Weber <aweber.kernel@gmail.com>
+Cc:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mempool_alloc might fail to allocate a slot, in which case we will end
-up dereferencing a NULL mp_bh pointer.
+Hi Artur,
 
-Found by Linux Verification Center (linuxtesting.org) with the SVACE
-static analysis tool.
+thanks for your patch!
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
----
- drivers/md/md-multipath.c | 2 ++
- 1 file changed, 2 insertions(+)
+On Sun, Apr 16, 2023 at 3:16=E2=80=AFPM Artur Weber <aweber.kernel@gmail.co=
+m> wrote:
 
-diff --git a/drivers/md/md-multipath.c b/drivers/md/md-multipath.c
-index 66edf5e72bd6..861c70e49bcc 100644
---- a/drivers/md/md-multipath.c
-+++ b/drivers/md/md-multipath.c
-@@ -108,6 +108,8 @@ static bool multipath_make_request(struct mddev *mddev, struct bio * bio)
- 		return true;
- 
- 	mp_bh = mempool_alloc(&conf->pool, GFP_NOIO);
-+	if (!map_bh)
-+		return false;
- 
- 	mp_bh->master_bio = bio;
- 	mp_bh->mddev = mddev;
--- 
-2.25.1
+> Add bindings for the S6D7AA0 LCD panel controller, including the
+> S6D7AA0-LSL080AL02 panel used in the Samsung Galaxy Tab 3 8.0 family
+> of tablets.
+>
+> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+(...)
 
+> +  reset-gpios: true
+(...)
+> +            reset-gpios =3D <&gpf0 4 GPIO_ACTIVE_LOW>;
+
+Since reset-gpios is always active low, add a description: to reset-gpios
+saying that it should nominally be tagged GPIO_ACTIVE_LOW.
+
+Yours.
+Linus Walleij
