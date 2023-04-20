@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35846E9A15
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2CA76E9A10
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbjDTQz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 12:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
+        id S231225AbjDTQ4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 12:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjDTQza (ORCPT
+        with ESMTP id S230364AbjDTQza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 20 Apr 2023 12:55:30 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E04469E;
-        Thu, 20 Apr 2023 09:55:11 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-187d9c205e9so710720fac.3;
-        Thu, 20 Apr 2023 09:55:11 -0700 (PDT)
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33424C0A;
+        Thu, 20 Apr 2023 09:55:12 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id 5614622812f47-38be107e467so366903b6e.2;
+        Thu, 20 Apr 2023 09:55:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682009711; x=1684601711;
+        d=gmail.com; s=20221208; t=1682009712; x=1684601712;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Obe2vSVBXXici55JN5j0R09I4VIG8/7jWFwQnKEIzYc=;
-        b=n32strS6mhAujrsaY1EeHfNtd2VqSI80/VYG4II3M82SRNe1Wkhpgd4nDvj+sjkfor
-         +NAn5dXEnYZ4NncIRN8XNIMrhrBc+7BoVGFmMyhzQcxC85Zhw4+ZNcblIHSuvMrEGpFu
-         rQR/LYGjt16Frd9+GInBz38LIdzl7IACGnGJKc9llUopKSlelisu++0u7hXtChNBFCHQ
-         3hBI4qovSs3qvb/HZ9OQOSWdq95oDUtnlc0vzxyyvR++iN50vaseDqnrPVv5qoxeIrb8
-         6yTEw33XtwOAQDTMKKgOO6NU2fUFoXEPduZjeTuY1m3KvlC0uA0T9oOZgp6VnfhEBFcV
-         JusQ==
+        bh=ERiuGLSSLt14Zm3/7WEsnxh0ydwhBcPd1KCXT7ReQ90=;
+        b=DjBAOGFRa7uMiMhUhFUB8PPl8ch/83lLQzh/4ecUdFZlljeiCD9XUzsv++VDNrX4D8
+         oGQrdJdYTgzo7lmIAQhX3vFm/UT/O/96jU44MtiD+EXEzdUrmpjgS+qP7WO//S7BaII8
+         95e4bc2yzzMM4hVztyQvzkTUZWIxuq1a0qCXR8QoUUA/4bZZEOYbfht4SznSg+XoddzM
+         HfnmrwWbVcuLa1Q8scoPqwDv4DBtidZfnqlQVg7dv3CTH6UEiorvDtQjJBnCUey1lDZe
+         auH74v6n2sqUZhdwFHt6iTchCmF0hTbKVfvtCJ9SFgtY9v3/DIBTahXIl7D9sa1QMsjS
+         1VxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682009711; x=1684601711;
+        d=1e100.net; s=20221208; t=1682009712; x=1684601712;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Obe2vSVBXXici55JN5j0R09I4VIG8/7jWFwQnKEIzYc=;
-        b=Ipv9aiy+z47P+PJvueRGX2y6FX1gOGA8s8rWLOavHaD2VlENVRwyZaEmsEpABP2nG6
-         oMGLYr+0NiAr1G6ifHfqPuac8PAVXO5Y2cQ5q2ZHCMxVLrdPgHrEmpB1FK4j0rN7BS1D
-         rDqpHuSxqD8qEie+sg7Yx4sGausqVeWuNYwSTD6N1PYqhpqWBj/S+1iQyDdnFI9Kbmkv
-         bEyU/H4iqP1HXcj0lvaAcJIdybfA2PBcHUBV11za2onDmImz65sRV6vA/tRvuup2hCD0
-         ZbxQ22LMivHLfqx1iIoyn3VKBbnlL3MSM7AGzwqm+1k5p1UnUI6YBxG3DaRN0ziMkSpG
-         ju8g==
-X-Gm-Message-State: AAQBX9eEWyyow6ujmJCf0cMj+ehQp/QVqZZB2t7aOF/+LCL21JMEWEK7
-        cyksbWvqNxgBXybzxtFlR4SKGXAqmcI=
-X-Google-Smtp-Source: AKy350bImdjl+jIQnSG93LBi6Y2oiNc6MtUjjKPQ6gJJ738vcugTOzT9YS3EOcXJfANg/8cg5+bGvQ==
-X-Received: by 2002:a05:6871:54c:b0:184:95:b822 with SMTP id t12-20020a056871054c00b001840095b822mr1593875oal.25.1682009711013;
+        bh=ERiuGLSSLt14Zm3/7WEsnxh0ydwhBcPd1KCXT7ReQ90=;
+        b=cqCaAVgDzP+aBsGSOzJCDJrHB2mymb2A1uF+oiyjPe/70/rgfF1OJvfy7kuQgWVACx
+         5zdjUv8gV+F8rSv0dfGm8rm1jenpVxaY+8jfW1e4r8b7QZp/vE/NiX/0hn5jyNH/31su
+         2tK6rVQVEkE4RoZe9mbKrmR6hQZfUqKeu1TjKOdY6JXKygYbHbv01qtCvVBVzx+L4Bws
+         HkSx1MxjA3+/EG0Gi4nnHO/4yrUF9gn3X/v/LpdzGZuS/xA2mb/ar2Y9m0LmgBujVhHB
+         3KEu/PcN0AuydQvhUdB5fB6K6BTawQw9pykfpxu3olXEBCep9g0sKeBK+EOYyiZHm9Zl
+         M+bQ==
+X-Gm-Message-State: AAQBX9eBBF/ApIBCDXkTnUlG7wuMWlt6HrtLdXG0/9uzHN37XQvTE1wT
+        Sfyzk57KfnDePYYTDalo0qDdmz6XmPw=
+X-Google-Smtp-Source: AKy350aoddBkpZ+/HbSqG5gtSmwAvwFJiWs+U53YeExoxdWXSankEjLSBlGr0GmjcQpCeJx5Nid5wg==
+X-Received: by 2002:a05:6808:130e:b0:386:f961:4287 with SMTP id y14-20020a056808130e00b00386f9614287mr1446590oiv.18.1682009711982;
         Thu, 20 Apr 2023 09:55:11 -0700 (PDT)
 Received: from grumpy-VECTOR.hsd1.tx.comcast.net ([2601:2c3:480:7390:d090:9746:e449:eb46])
-        by smtp.gmail.com with ESMTPSA id s129-20020a4a5187000000b005252e5b6604sm791913ooa.36.2023.04.20.09.55.09
+        by smtp.gmail.com with ESMTPSA id s129-20020a4a5187000000b005252e5b6604sm791913ooa.36.2023.04.20.09.55.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 09:55:10 -0700 (PDT)
+        Thu, 20 Apr 2023 09:55:11 -0700 (PDT)
 From:   Jorge Lopez <jorgealtxwork@gmail.com>
 X-Google-Original-From: Jorge Lopez <jorge.lopez2@hp.com>
 To:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v11 12/14] HP BIOSCFG driver - surestart-attributes
-Date:   Thu, 20 Apr 2023 11:54:52 -0500
-Message-Id: <20230420165454.9517-13-jorge.lopez2@hp.com>
+Subject: [PATCH v11 13/14] HP BIOSCFG driver  - Makefile
+Date:   Thu, 20 Apr 2023 11:54:53 -0500
+Message-Id: <20230420165454.9517-14-jorge.lopez2@hp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230420165454.9517-1-jorge.lopez2@hp.com>
 References: <20230420165454.9517-1-jorge.lopez2@hp.com>
@@ -116,146 +116,65 @@ Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
 ---
 Based on the latest platform-drivers-x86.git/for-next
 ---
- .../x86/hp/hp-bioscfg/surestart-attributes.c  | 130 ++++++++++++++++++
- 1 file changed, 130 insertions(+)
- create mode 100644 drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
+ drivers/platform/x86/hp/Kconfig             | 16 ++++++++++++++++
+ drivers/platform/x86/hp/Makefile            |  1 +
+ drivers/platform/x86/hp/hp-bioscfg/Makefile | 13 +++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 drivers/platform/x86/hp/hp-bioscfg/Makefile
 
-diff --git a/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
+diff --git a/drivers/platform/x86/hp/Kconfig b/drivers/platform/x86/hp/Kconfig
+index ae165955311c..7fef4f12e498 100644
+--- a/drivers/platform/x86/hp/Kconfig
++++ b/drivers/platform/x86/hp/Kconfig
+@@ -60,4 +60,20 @@ config TC1100_WMI
+ 	  This is a driver for the WMI extensions (wireless and bluetooth power
+ 	  control) of the HP Compaq TC1100 tablet.
+ 
++config HP_BIOSCFG
++	tristate "HP BIOS Configuration Driver"
++	default m
++	depends on ACPI_WMI
++	select NLS
++	select FW_ATTR_CLASS
++	help
++	  This driver enables administrators to securely manage BIOS settings
++	  using digital certificates and public-key cryptography that eliminate
++	  the need for passwords for both remote and local management. It supports
++	  changing BIOS settings on many HP machines from 2018 and newer without
++	  the use of any additional software.
++
++	  To compile this driver as a module, choose M here: the module will
++	  be called hp-bioscfg.
++
+ endif # X86_PLATFORM_DRIVERS_HP
+diff --git a/drivers/platform/x86/hp/Makefile b/drivers/platform/x86/hp/Makefile
+index db1eed4cd7c7..e4f908a61acf 100644
+--- a/drivers/platform/x86/hp/Makefile
++++ b/drivers/platform/x86/hp/Makefile
+@@ -8,3 +8,4 @@
+ obj-$(CONFIG_HP_ACCEL)		+= hp_accel.o
+ obj-$(CONFIG_HP_WMI)		+= hp-wmi.o
+ obj-$(CONFIG_TC1100_WMI)	+= tc1100-wmi.o
++obj-$(CONFIG_HP_BIOSCFG)	+= hp-bioscfg/
+diff --git a/drivers/platform/x86/hp/hp-bioscfg/Makefile b/drivers/platform/x86/hp/hp-bioscfg/Makefile
 new file mode 100644
-index 000000000000..72952758ffe3
+index 000000000000..529eba6fa47f
 --- /dev/null
-+++ b/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
-@@ -0,0 +1,130 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Functions corresponding to sure start object type attributes under
-+ * BIOS for use with hp-bioscfg driver
-+ *
-+ *  Copyright (c) 2022 HP Development Company, L.P.
-+ */
++++ b/drivers/platform/x86/hp/hp-bioscfg/Makefile
+@@ -0,0 +1,13 @@
++obj-$(CONFIG_HP_BIOSCFG) := hp-bioscfg.o
 +
-+#include "bioscfg.h"
-+#include <asm-generic/posix_types.h>
++hp-bioscfg-objs := bioscfg.o	\
++	enum-attributes.o	\
++	int-attributes.o	\
++	string-attributes.o	\
++	passwdobj-attributes.o	\
++	biosattr-interface.o	\
++	passwdattr-interface.o	\
++	ordered-attributes.o	\
++	surestart-attributes.o	\
++	spmobj-attributes.o
 +
-+#define LOG_MAX_ENTRIES		254
-+#define LOG_ENTRY_SIZE		16
-+
-+/*
-+ * audit_log_entry_count_show - Reports the number of
-+ *				existing audit log entries available
-+ *				to be read
-+ */
-+static ssize_t audit_log_entry_count_show(struct kobject *kobj,
-+					  struct kobj_attribute *attr, char *buf)
-+{
-+	int ret;
-+	u32 count = 0;
-+
-+	ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG_COUNT,
-+				   HPWMI_SURESTART,
-+				   &count, 1, sizeof(count));
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%d,%d,%d\n", count, LOG_ENTRY_SIZE,
-+			  LOG_MAX_ENTRIES);
-+}
-+
-+/*
-+ * audit_log_entries_show() - Return all entries found in log file
-+ */
-+static ssize_t audit_log_entries_show(struct kobject *kobj,
-+				      struct kobj_attribute *attr, char *buf)
-+{
-+	int ret;
-+	int i;
-+	u32 count = 0;
-+
-+	// Get the number of event logs
-+	ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG_COUNT,
-+				   HPWMI_SURESTART,
-+				   &count, 1, sizeof(count));
-+
-+	/*
-+	 * The show() api will not work if the audit logs ever go
-+	 *  beyond 4KB
-+	 */
-+	if (count * LOG_ENTRY_SIZE > PAGE_SIZE)
-+		return -EFAULT;
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	/*
-+	 * We are guaranteed the buffer is 4KB so today all the event
-+	 * logs will fit
-+	 */
-+
-+	for (i = 0; ((i < count) & (ret >= 0)); i++) {
-+		*buf = (i + 1);
-+		ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG,
-+					   HPWMI_SURESTART,
-+					   buf, 1, 128);
-+		if (ret >= 0)
-+			buf += LOG_ENTRY_SIZE;
-+	}
-+
-+	return (count * LOG_ENTRY_SIZE);
-+}
-+
-+static struct kobj_attribute sure_start_audit_log_entry_count = __ATTR_RO(audit_log_entry_count);
-+static struct kobj_attribute sure_start_audit_log_entries = __ATTR_RO(audit_log_entries);
-+
-+static ssize_t type_show(struct kobject *kobj, struct kobj_attribute *attr,
-+			 char *buf)
-+{
-+	return sysfs_emit(buf, "sure-start\n");
-+}
-+static struct kobj_attribute sure_start_type = __ATTR_RO(type);
-+
-+static ssize_t display_name_language_code_show(struct kobject *kobj,
-+					       struct kobj_attribute *attr,
-+					       char *buf)
-+{
-+	return sysfs_emit(buf, "%s\n", LANG_CODE_STR);
-+}
-+
-+static struct kobj_attribute sure_start_display_langcode =
-+		__ATTR_RO(display_name_language_code);
-+
-+
-+static ssize_t display_name_show(struct kobject *kobj,
-+				 struct kobj_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%s\n", SURE_START_DESC);
-+}
-+static struct kobj_attribute sure_start_display_name = __ATTR_RO(display_name);
-+
-+static struct attribute *sure_start_attrs[] = {
-+	&sure_start_display_name.attr,
-+	&sure_start_display_langcode.attr,
-+	&sure_start_audit_log_entry_count.attr,
-+	&sure_start_audit_log_entries.attr,
-+	&sure_start_type.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group sure_start_attr_group = {
-+	.attrs = sure_start_attrs,
-+};
-+
-+void exit_sure_start_attributes(void)
-+{
-+	sysfs_remove_group(bioscfg_drv.sure_start_attr_kobj,
-+			   &sure_start_attr_group);
-+}
-+
-+int populate_sure_start_data(struct kobject *attr_name_kobj)
-+{
-+	bioscfg_drv.sure_start_attr_kobj = attr_name_kobj;
-+	return sysfs_create_group(attr_name_kobj, &sure_start_attr_group);
-+}
 -- 
 2.34.1
 
