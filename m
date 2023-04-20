@@ -2,243 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1156E8EDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9F86E8EEA
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234125AbjDTKFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
+        id S234435AbjDTKF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233922AbjDTKFW (ORCPT
+        with ESMTP id S234419AbjDTKFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:05:22 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BD6F40C2;
-        Thu, 20 Apr 2023 03:05:07 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:58704.127461854
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 8EEF5100248;
-        Thu, 20 Apr 2023 18:04:58 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id a07a507ef7554813b62a31b8f0f84c39 for tzimmermann@suse.de;
-        Thu, 20 Apr 2023 18:05:05 CST
-X-Transaction-ID: a07a507ef7554813b62a31b8f0f84c39
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <4a0fdbe0-cd4f-9c87-f73a-6d27f5c497bb@189.cn>
-Date:   Thu, 20 Apr 2023 18:04:57 +0800
+        Thu, 20 Apr 2023 06:05:31 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A8C35B3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:05:13 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4ec9ccab8bbso423266e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:05:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681985112; x=1684577112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4RJXgo9mbZocth7W+W/DHGi5VI0a91D1/aaXffY9umQ=;
+        b=lqclOq7xlrh4i4oA0IR5rQP1xWRPVMmSK35utJZQag/nwUvQGNv6FiEPXi+2jROtAt
+         7lPtJwxfypHnbq18+ge0VMtkmmMjBfOJ710f6BF2zNhq9xMB5kZc04aShJyf/ZU92qgF
+         bWaxly6/XjxNzqmxDrlb1vcFfBZZKLblurYJ2BglxXkP20VGGOVs9vcZ+SzfJOUSuDUr
+         maRUNdq2FBC5lJxWzZyRNPBlNUa/qaK6vsnz7QG4TGTD2b+y58v8n0ZDILRjbVc/Ms0r
+         /8p5nNrcEeSaXQya0jGVsIyfdizF1Sto3MEohQp5IgPON2PIypCcUNryED+QDBpZZB6F
+         7v+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681985112; x=1684577112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4RJXgo9mbZocth7W+W/DHGi5VI0a91D1/aaXffY9umQ=;
+        b=Dt6XIuSN4Z7pD2S7qBcQ5KDGzWi0yFIyw9HyArSl2D8rK5Tfh/Jt4taAfZe5Co2Mty
+         pwdYJgjM79lthWXuTxXKoIoaVqc7h6uLudg0pBoRTyiJZfGlDLqZp0InYuWM7d7p8odx
+         B1kTqkICrQBr9lOUM/pH42YIo2os9U9g4xwWbomSoWODMfTBtYVPgRCPneXZM/O+9SJp
+         TpB5frGhMQEzRrEe6GCiuAl+oKKcM54ddFdwx7g9iw01IUiobxFBUnNGmds4hVyxlP4H
+         xlctLQJNmlscOFLZiOWpo8fT0PH7y2B5AF2b0hSI3WjGZkw46l5Jnfx0YqJ5mvpgwV/a
+         UPiQ==
+X-Gm-Message-State: AAQBX9frFG0ROtg836UQd2l+/GkDI2CQ7qotXR8ZSWqYizS4ZDa2vZnU
+        oCgsGNfFWZ1WeXY2BNN/c9HgbQ==
+X-Google-Smtp-Source: AKy350a39HBh7R9jgbfr/UIn1pZgwf56M1oanLrDl7HkbyiiLwbA6+p08jkzA66//nGGXiIVdLaZhg==
+X-Received: by 2002:a19:c508:0:b0:4db:4530:2b2d with SMTP id w8-20020a19c508000000b004db45302b2dmr273139lfe.49.1681985112150;
+        Thu, 20 Apr 2023 03:05:12 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id r24-20020a2e9958000000b002a7af83ca1csm182840ljj.21.2023.04.20.03.05.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 03:05:11 -0700 (PDT)
+Message-ID: <aa547a69-e1d8-1349-bd8c-9265275bb7f1@linaro.org>
+Date:   Thu, 20 Apr 2023 13:05:11 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5] drm/fbdev-generic: prohibit potential out-of-bounds
- access
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Li Yi <liyi@loongson.cn>, Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     loongson-kernel@lists.loongnix.cn, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230420030500.1578756-1-suijingfeng@loongson.cn>
- <8ec3734b-4bc2-ad8f-fc17-3002f22d1fc9@suse.de>
- <12c8efaa-7266-5436-dc53-009a0d23b53f@suse.de>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <12c8efaa-7266-5436-dc53-009a0d23b53f@suse.de>
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/4] clk: qcom: rpmh: Add RPMH clocks support for SDX75
+Content-Language: en-GB
+To:     Taniya Das <quic_tdas@quicinc.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     quic_skakitap@quicinc.com, Imran Shaik <quic_imrashai@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_rohiagar@quicinc.com, netdev@vger.kernel.org
+References: <20230419133013.2563-1-quic_tdas@quicinc.com>
+ <20230419133013.2563-4-quic_tdas@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230419133013.2563-4-quic_tdas@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On 19/04/2023 16:30, Taniya Das wrote:
+> From: Imran Shaik <quic_imrashai@quicinc.com>
+> 
+> Add support for RPMH clocks for SDX75 platform.
+> 
+> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> ---
+>   drivers/clk/qcom/clk-rpmh.c | 19 +++++++++++++++++++
+>   1 file changed, 19 insertions(+)
 
-On 2023/4/20 15:07, Thomas Zimmermann wrote:
-> Hi
->
-> Am 20.04.23 um 09:04 schrieb Thomas Zimmermann:
->> Hi,
->>
->> this patch looks to me good and I'd like to merge it, if no one objects.
->
-> Rereading it, I might have been too eager. What happened to the 
-> setting of screen_size = buffer->gem->size ?  It is not relevant?
->
-Short answer is that it is not relevant.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-As long as the computed damage rectangle is sane, it's OK to allocate a 
-bit more than needed.
+-- 
+With best wishes
+Dmitry
 
-I think it's turn out to be *correct*, if not extremely.
-
-Because it is page size aligned,  writing to invisible area for some 
-case is not a serve issue.
-
-It also guarantee that the size of shadow screen buffer is exactly the 
-same size with its GEM counterpart.
-
-
-Otherwise I have to answer the question
-
-What will happen if the 'screen_size' is not page_size aligned and mmap 
-will mapping in the granularity of pages ?
-
-
-I see efifb also align the buffer going to be mapped with page size.
-
-
-> Best regards
-> Thomas
->
->>
->> In the near future, after i915 has switched to struct drm_client, I 
->> intend to move DRM's deferred-I/O helpers into fbdev-generic and 
->> i915. Those are the two users, but they are fairly different. They 
->> can then both have something tailored towards their needs.
->>
->> Best regards
->> Thomas
->>
->> Am 20.04.23 um 05:05 schrieb Sui Jingfeng:
->>> The fbdev test of IGT may write after EOF, which lead to out-of-bound
->>> access for drm drivers hire fbdev-generic. For example, run fbdev test
->>> on a x86+ast2400 platform, with 1680x1050 resolution, will cause the
->>> linux kernel hang with the following call trace:
->>>
->>>    Oops: 0000 [#1] PREEMPT SMP PTI
->>>    [IGT] fbdev: starting subtest eof
->>>    Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
->>>    [IGT] fbdev: starting subtest nullptr
->>>
->>>    RIP: 0010:memcpy_erms+0xa/0x20
->>>    RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
->>>    RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
->>>    RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
->>>    RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
->>>    R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
->>>    R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
->>>    FS:  0000000000000000(0000) GS:ffff895257380000(0000) 
->>> knlGS:0000000000000000
->>>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>    CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
->>>    Call Trace:
->>>     <TASK>
->>>     ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
->>>     drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
->>>     process_one_work+0x21f/0x430
->>>     worker_thread+0x4e/0x3c0
->>>     ? __pfx_worker_thread+0x10/0x10
->>>     kthread+0xf4/0x120
->>>     ? __pfx_kthread+0x10/0x10
->>>     ret_from_fork+0x2c/0x50
->>>     </TASK>
->>>    CR2: ffffa17d40e0b000
->>>    ---[ end trace 0000000000000000 ]---
->>>
->>> The is because damage rectangles computed by
->>> drm_fb_helper_memory_range_to_clip() function does not guaranteed to be
->>> bound in the screen's active display area. Possible reasons are:
->>>
->>> 1) Buffers are allocated in the granularity of page size, for mmap 
->>> system
->>>     call support. The shadow screen buffer consumed by fbdev 
->>> emulation may
->>>     also choosed be page size aligned.
->>>
->>> 2) The DIV_ROUND_UP() used in drm_fb_helper_memory_range_to_clip()
->>>     will introduce off-by-one error.
->>>
->>> For example, on a 16KB page size system, in order to store a 1920x1080
->>> XRGB framebuffer, we need allocate 507 pages. Unfortunately, the size
->>> 1920*1080*4 can not be divided exactly by 16KB.
->>>
->>>   1920 * 1080 * 4 = 8294400 bytes
->>>   506 * 16 * 1024 = 8290304 bytes
->>>   507 * 16 * 1024 = 8306688 bytes
->>>
->>>   line_length = 1920*4 = 7680 bytes
->>>
->>>   507 * 16 * 1024 / 7680 = 1081.6
->>>
->>>   off / line_length = 507 * 16 * 1024 / 7680 = 1081
->>>   DIV_ROUND_UP(507 * 16 * 1024, 7680) will yeild 1082
->>>
->>> memcpy_toio() typically issue the copy line by line, when copy the last
->>> line, out-of-bound access will be happen. Because:
->>>
->>>   1082 * line_length = 1082 * 7680 = 8309760, and 8309760 > 8306688
->>>
->>> Note that userspace may stil write to the invisiable area if a larger
->>> buffer than width x stride is exposed. But it is not a big issue as
->>> long as there still have memory resolve the access if not drafting so
->>> far.
->>>
->>>   - Also limit the y1 (Daniel)
->>>   - keep fix patch it to minimal (Daniel)
->>>   - screen_size is page size aligned because of it need mmap (Thomas)
->>>   - Adding fixes tag (Thomas)
->>>
->>> Fixes: aa15c677cc34 ("drm/fb-helper: Fix vertical damage clipping")
->>>
->>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->>> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
->>> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
->>> Link: 
->>> https://lore.kernel.org/dri-devel/ad44df29-3241-0d9e-e708-b0338bf3c623@189.cn/
->>> ---
->>>   drivers/gpu/drm/drm_fb_helper.c | 16 ++++++++++++----
->>>   1 file changed, 12 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/drm_fb_helper.c 
->>> b/drivers/gpu/drm/drm_fb_helper.c
->>> index 64458982be40..6bb1b8b27d7a 100644
->>> --- a/drivers/gpu/drm/drm_fb_helper.c
->>> +++ b/drivers/gpu/drm/drm_fb_helper.c
->>> @@ -641,19 +641,27 @@ static void drm_fb_helper_damage(struct 
->>> drm_fb_helper *helper, u32 x, u32 y,
->>>   static void drm_fb_helper_memory_range_to_clip(struct fb_info 
->>> *info, off_t off, size_t len,
->>>                              struct drm_rect *clip)
->>>   {
->>> +    u32 line_length = info->fix.line_length;
->>> +    u32 fb_height = info->var.yres;
->>>       off_t end = off + len;
->>>       u32 x1 = 0;
->>> -    u32 y1 = off / info->fix.line_length;
->>> +    u32 y1 = off / line_length;
->>>       u32 x2 = info->var.xres;
->>> -    u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
->>> +    u32 y2 = DIV_ROUND_UP(end, line_length);
->>> +
->>> +    /* Don't allow any of them beyond the bottom bound of display 
->>> area */
->>> +    if (y1 > fb_height)
->>> +        y1 = fb_height;
->>> +    if (y2 > fb_height)
->>> +        y2 = fb_height;
->>>       if ((y2 - y1) == 1) {
->>>           /*
->>>            * We've only written to a single scanline. Try to reduce
->>>            * the number of horizontal pixels that need an update.
->>>            */
->>> -        off_t bit_off = (off % info->fix.line_length) * 8;
->>> -        off_t bit_end = (end % info->fix.line_length) * 8;
->>> +        off_t bit_off = (off % line_length) * 8;
->>> +        off_t bit_end = (end % line_length) * 8;
->>>           x1 = bit_off / info->var.bits_per_pixel;
->>>           x2 = DIV_ROUND_UP(bit_end, info->var.bits_per_pixel);
->>
->
