@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 038D16E8852
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 04:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F2B6E8854
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 05:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232047AbjDTC6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 22:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52970 "EHLO
+        id S233705AbjDTDAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 23:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbjDTC6v (ORCPT
+        with ESMTP id S233065AbjDTC77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 22:58:51 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05D41FD2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 19:58:49 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-2fa36231b1cso141110f8f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 19:58:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681959528; x=1684551528;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OVjQAYMnHOmsA2ZnYL2we7i3OnaLo+6zRvLr1nG8cvg=;
-        b=C3nZK6lBvrBsAWe3g7iFQxWdpjPpUKbugFb19PLZ01MPYnU1x4uiRjnRbJ/BXesO02
-         OTsNQWk2199hVB9rBMd+SioihUEZCat5++PFP/TcQGLXjt2VcXCmNZBHyAF6IfsAwuei
-         TpJ2s5sh4cZfmexnSVVkV8rwUPIdwtZ4l+TarpUOqreTxPElw6kQ155MmDg/zxuknaCC
-         9eobY14B7ahGcBJQooIjiUUKGEu6rZ22HE84E1+OxDJbEVldCb+yqDFhvdOmnaeR4r2w
-         CxtqlOX7TS5Q6WzaoDVtTzrOt91XuJCVIP/dFCSnrJv62/8rigkdgcQG35xtCuMpo1bk
-         /0bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681959528; x=1684551528;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OVjQAYMnHOmsA2ZnYL2we7i3OnaLo+6zRvLr1nG8cvg=;
-        b=dgJUYLICdLOX2W3fKHPYKvtUMSVBhQczwIG3lOPBush7HZ6zThFmHa6c9YSDtX8OEU
-         Dyo/ADzowSq+XMxl7MGeKJbDBuZjT6vyAh2obDwu4gy4ReoPHiw7nNiung2OAudrEsFl
-         JyzO65LtNZd8+6fpLKmKBlaQM2K6aoUI5D9BWxzWTfV2cQuAFQwonmUV2Dbvdn+NZi7s
-         ks1XteLMZGNU7S1/iC/sIvUNrTt85mL67aUJoef5/d2qlAY7p/dPpsGV2aE9WvquZdj/
-         rcDCLgHyxBty0eqMVYjD6JqUKSamFV2+mc646ELFFHLRBpri80tB3MU6CfgoDSSb16BJ
-         LoKw==
-X-Gm-Message-State: AAQBX9f04dNwB3deSD/H5dgk1/dggWgD4x9K4fE/a6IUzw6wONOzk8KF
-        seJmkSMAE2xD8J3HL6kuSFEghzAk83g=
-X-Google-Smtp-Source: AKy350Z1OMiViaqL7ISzsDbGiWUDodQLsNYWYt6ibcqHh2Q3oXvuapDGaB5/23VI51h0q7xk9Y+81Q==
-X-Received: by 2002:a5d:6a11:0:b0:2cb:2775:6e6 with SMTP id m17-20020a5d6a11000000b002cb277506e6mr6224033wru.45.1681959528362;
-        Wed, 19 Apr 2023 19:58:48 -0700 (PDT)
-Received: from ?IPV6:2001:8a0:6cc5:7e01:9a40:bbff:fe12:c8fd? ([2001:8a0:6cc5:7e01:9a40:bbff:fe12:c8fd])
-        by smtp.gmail.com with ESMTPSA id z26-20020a7bc7da000000b003ef5bb63f13sm3825601wmk.10.2023.04.19.19.58.47
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 19:58:48 -0700 (PDT)
-Message-ID: <8de1912e-8009-3c85-ece5-7ca7f03be42a@gmail.com>
-Date:   Thu, 20 Apr 2023 03:58:47 +0100
+        Wed, 19 Apr 2023 22:59:59 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BF11FE5;
+        Wed, 19 Apr 2023 19:59:57 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Q22Rq2rsnz8xC7;
+        Thu, 20 Apr 2023 10:59:03 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 20 Apr 2023 10:59:54 +0800
+Message-ID: <6dc1b117-020e-be9e-7e5e-a349ffb7d00a@huawei.com>
+Date:   Thu, 20 Apr 2023 10:59:54 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2] mm: hwpoison: coredump: support recovery from
+ dump_user_range()
 Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-From:   =?UTF-8?Q?Andr=c3=a9_Coelho?= <andrealbergaria@gmail.com>
-Subject: strings
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     Jane Chu <jane.chu@oracle.com>,
+        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>, Thomas Gleixner <tglx@linutronix.de>
+CC:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Jens Axboe <axboe@kernel.dk>
+References: <20230417045323.11054-1-wangkefeng.wang@huawei.com>
+ <20230418031243.GA2845864@hori.linux.bs1.fc.nec.co.jp>
+ <54d761bb-1bcc-21a2-6b53-9d797a3c076b@huawei.com>
+ <20230419072557.GA2926483@hori.linux.bs1.fc.nec.co.jp>
+ <9fa67780-c48f-4675-731b-4e9a25cd29a0@huawei.com>
+ <7d0c38a9-ed2a-a221-0c67-4a2f3945d48b@oracle.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <7d0c38a9-ed2a-a221-0c67-4a2f3945d48b@oracle.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,13 +65,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-greeting...if youre interessed in string algorihtm check
-
-https://andrealbergaria.github.io/
 
 
-thanks in advnace
+On 2023/4/20 10:03, Jane Chu wrote:
+> 
+> On 4/19/2023 5:03 AM, Kefeng Wang wrote:
+>>
+>>
+>> On 2023/4/19 15:25, HORIGUCHI NAOYA(堀口 直也) wrote:
+>>> On Tue, Apr 18, 2023 at 05:45:06PM +0800, Kefeng Wang wrote:
+>>>>
+>>>>
+...
+>>>>>> @@ -371,6 +372,14 @@ size_t _copy_mc_to_iter(const void *addr, 
+>>>>>> size_t bytes, struct iov_iter *i)
+>>>>>>    EXPORT_SYMBOL_GPL(_copy_mc_to_iter);
+>>>>>>    #endif /* CONFIG_ARCH_HAS_COPY_MC */
+>>>>>> +static void *memcpy_from_iter(struct iov_iter *i, void *to, const 
+>>>>>> void *from,
+>>>>>> +                 size_t size)
+>>>>>> +{
+>>>>>> +    if (iov_iter_is_copy_mc(i))
+>>>>>> +        return (void *)copy_mc_to_kernel(to, from, size);
+>>>>>
+>>>>> Is it helpful to call memory_failure_queue() if copy_mc_to_kernel() 
+>>>>> fails
+>>>>> due to a memory error?
+>>>>
+>>>> For dump_user_range(), the task is dying, if copy incomplete size, the
+>>>> coredump will fail and task will exit, also memory_failure will
+>>>> be called by kill_me_maybe(),
+>>>>
+>>>>   CPU: 0 PID: 1418 Comm: test Tainted: G   M               6.3.0-rc5 
+>>>> #29
+>>>>   Call Trace:
+>>>>    <TASK>
+>>>>    dump_stack_lvl+0x37/0x50
+>>>>    memory_failure+0x51/0x970
+>>>>    kill_me_maybe+0x5b/0xc0
+>>>>    task_work_run+0x5a/0x90
+>>>>    exit_to_user_mode_prepare+0x194/0x1a0
+>>>>    irqentry_exit_to_user_mode+0x9/0x30
+>>>>    noist_exc_machine_check+0x40/0x80
+>>>>    asm_exc_machine_check+0x33/0x40
+>>>
+>>> Is this call trace printed out when copy_mc_to_kernel() failed by 
+>>> finding
+>>> a memory error (or in some testcase using error injection)?
+>>
+>> I add dump_stack() into memory_failure() to check whether the poisoned
+>> memory is called or not, and the call trace shows it do call
+>> memory_failure()， but I get confused when do the test.
+>>
+>>> In my understanding, an MCE should not be triggered when MC-safe copy 
+>>> tries
+>>> to access to a memory error.  So I feel that we might be talking about
+>>> different scenarios.
+>>>
+>>> When I questioned previously, I thought about the following scenario:
+>>>
+>>>    - a process terminates abnormally for any reason like segmentation 
+>>> fault,
+>>>    - then, kernel tries to create a coredump,
+>>>    - during this, the copying routine accesses to corrupted page to 
+>>> read.
+>>>
+>> Yes, we tested like your described,
+>>
+>> 1) inject memory error into a process
+>> 2) send a SIGABT/SIGBUS to process to trigger the coredump
+>>
+>> Without patch, the system panic, and with patch only process exits.
+>>
+>>> In this case the corrupted page should not be handled by 
+>>> memory_failure()
+>>> yet (because otherwise properly handled hwpoisoned page should be 
+>>> ignored
+>>> by coredump process).  The coredump process would exit with failure with
+>>> your patch, but then, the corrupted page is still left unhandled and can
+>>> be reused, so any other thread can easily access to it again.
+>>
+>> As shown above, the corrupted page will be handled by 
+>> memory_failure(), but what I'm wondering,
+>> 1) memory_failure() is not always called
+>> 2) look at the above call trace, it looks like from asynchronous
+>>     interrupt, not from synchronous exception, right?
+>>
+>>>
+>>> You can find a few other places (like __wp_page_copy_user and 
+>>> ksm_might_need_to_copy)
+>>> to call memory_failure_queue() to cope with such unhandled error pages.
+>>> So does memcpy_from_iter() do the same?
+>>
+>> I add some debug print in do_machine_check() on x86:
+>>
+>> 1) COW,
+>>    m.kflags: MCE_IN_KERNEL_RECOV
+>>    fixup_type: EX_TYPE_DEFAULT_MCE_SAFE
+>>
+>>    CPU: 11 PID: 2038 Comm: einj_mem_uc
+>>    Call Trace:
+>>     <#MC>
+>>     dump_stack_lvl+0x37/0x50
+>>     do_machine_check+0x7ad/0x840
+>>     exc_machine_check+0x5a/0x90
+>>     asm_exc_machine_check+0x1e/0x40
+>>    RIP: 0010:copy_mc_fragile+0x35/0x62
+>>
+>>    if (m.kflags & MCE_IN_KERNEL_RECOV) {
+>>            if (!fixup_exception(regs, X86_TRAP_MC, 0, 0))
+>>                    mce_panic("Failed kernel mode recovery", &m, msg);
+>>    }
+>>
+>>    if (m.kflags & MCE_IN_KERNEL_COPYIN)
+>>            queue_task_work(&m, msg, kill_me_never);
+>>
+>> There is no memory_failure() called when
+>> EX_TYPE_DEFAULT_MCE_SAFE, also EX_TYPE_FAULT_MCE_SAFE too,
+>> so we manually add a memory_failure_queue() to handle with
+>> the poisoned page.
+>>
+>> 2） Coredump,  nothing print about m.kflags and fixup_type,
+>> with above check, add a memory_failure_queue() or memory_failure() seems
+>> to be needed for memcpy_from_iter(), but it is totally different from
+>> the COW scenario
+>>
+>>
+>> Another question, other copy_mc_to_kernel() callers, eg,
+>> nvdimm/dm-writecache/dax, there are not call memory_failure_queue(),
+>> should they need a memory_failure_queue(), if so, why not add it into
+>> do_machine_check() ?
+> 
+
+What I mean is that EX_TYPE_DEFAULT_MCE_SAFE/EX_TYPE_FAULT_MCE_SAFE
+is designed to identify fixups which allow in kernel #MC recovery,
+that is, the caller of copy_mc_to_kernel() must know the source
+is a user address, so we could add a MCE_IN_KERNEL_COPYIN fro
+the MCE_SAFE type.
+
+diff --git a/arch/x86/kernel/cpu/mce/severity.c 
+b/arch/x86/kernel/cpu/mce/severity.c
+index c4477162c07d..63e94484c5d6 100644
+--- a/arch/x86/kernel/cpu/mce/severity.c
++++ b/arch/x86/kernel/cpu/mce/severity.c
+@@ -293,12 +293,11 @@ static noinstr int error_context(struct mce *m, 
+struct pt_regs *regs)
+         case EX_TYPE_COPY:
+                 if (!copy_user)
+                         return IN_KERNEL;
+-               m->kflags |= MCE_IN_KERNEL_COPYIN;
+                 fallthrough;
+
+         case EX_TYPE_FAULT_MCE_SAFE:
+         case EX_TYPE_DEFAULT_MCE_SAFE:
+-               m->kflags |= MCE_IN_KERNEL_RECOV;
++               m->kflags |= MCE_IN_KERNEL_RECOV | MCE_IN_KERNEL_COPYIN;
+                 return IN_KERNEL_RECOV;
+
+         default:
+
+then we could drop memory_failure_queue(pfn, flags) from cow/ksm copy, 
+or every Machine Check safe memory copy will need a memory_failure_xx() 
+call.
+
++Thomas，who add the two types, could you share some comments about 
+this,thanks.
+
+> In the dax case, if the source address is poisoned, and we do follow up 
+> with memory_failure_queue(pfn, flags), what should the value of the 
+> 'flags' be ?
 
 
-andre
+I think flags = 0 is enough to for all copy_mc_xxx to isolate the 
+poisoned page.
 
+Thanks.
