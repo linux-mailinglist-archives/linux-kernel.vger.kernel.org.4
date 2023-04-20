@@ -2,294 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3866D6E8D3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 229A06E8D53
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234257AbjDTIyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46906 "EHLO
+        id S234011AbjDTIzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234101AbjDTIxe (ORCPT
+        with ESMTP id S233832AbjDTIyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:53:34 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7B044B0;
-        Thu, 20 Apr 2023 01:51:43 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id A82DF24E248;
-        Thu, 20 Apr 2023 16:51:40 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 20 Apr
- 2023 16:51:40 +0800
-Received: from [192.168.60.111] (180.164.60.184) by EXMBX073.cuchost.com
- (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 20 Apr
- 2023 16:51:39 +0800
-Message-ID: <bf265594-3bd1-eba5-7a4a-910e331dcca8@starfivetech.com>
-Date:   Thu, 20 Apr 2023 16:51:39 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 6/8] media: dt-bindings: Add bindings for JH7110 Camera
- Subsystem
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        "Todor Tomov" <todor.too@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Ezequiel Garcia" <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <changhuang.liang@starfivetech.com>
-References: <20230413035541.62129-1-jack.zhu@starfivetech.com>
- <20230413035541.62129-7-jack.zhu@starfivetech.com>
- <20230419061540.GB11679@pendragon.ideasonboard.com>
-From:   Jack Zhu <jack.zhu@starfivetech.com>
-In-Reply-To: <20230419061540.GB11679@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [180.164.60.184]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX073.cuchost.com
- (172.16.6.83)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 20 Apr 2023 04:54:14 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EE940EE;
+        Thu, 20 Apr 2023 01:52:22 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0DB755C015E;
+        Thu, 20 Apr 2023 04:52:20 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 20 Apr 2023 04:52:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1681980740; x=1682067140; bh=q5
+        mxBDhqof2rSAXuDpt7RtRTf5pystlJ8ajZQHMW6yI=; b=nRmTNulWfXtLThuiCz
+        Rm/70Zqjci6zWwWiqnXTOnvsI45xw/aQ5daC63+jt5aS3Rtaftn7zIvrnJzongR6
+        LQ2+PCsuMmGEmQJREWQhkK4ZqlhJWruBLATxFk60fy8JDVGnOYwz40u62YgbOXoV
+        Skitk3wAuAmcrB4P7rEjaw7rQx77vZH7tiwodhigCif2gz8UlGyCiA1sgbfs24YY
+        q7FxV3yPiFbwdeV13+DA2SreM5rrfJ1/QLJSzqATXQggDGvp6XJmOJd81Zmk9zmC
+        JMVbVLWiGnsesQRD8ihBvasIRBP3XXQD6VXLz783qdQ0FDw1PAWGAWERwqtrwDgr
+        lKjw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681980740; x=1682067140; bh=q5mxBDhqof2rS
+        AXuDpt7RtRTf5pystlJ8ajZQHMW6yI=; b=J60jxsmJM2OrbfaCfqOlbPUNPMK82
+        U/eBAT0eCuaZ2cC2Wn0t9BWWw0dNP83IjyUpwsCMhNT4z1HRF1CyK2/TdcrZnjSJ
+        4byybbl25/Df+QJU6hSfPbbrV4VCfkR8XXthoFP8Np8P+MhxB1ZnGBnPYcGZkyLu
+        OyI4l+Z72PeUOrd0FXuaNuF+KAwewlrAKmSsU7nn1c20rpDP8VJ3LcCS5NC2BZUe
+        1Gp9yap1oST/nYuMIakXx6VQHsDjk9zDwtN26VwWUsrGYPQL9Ms/aQ6XEmkhFExt
+        A4DHaCKOKRN9/IkJLvVqaU17JU/9DTkJVuqTmrCWG4JOsbKuOuPEdA7fw==
+X-ME-Sender: <xms:Q_1AZKmt-4f5f205DB_xXtbNfNJFBW1ismKZIxbuA4mDXnDmq55Ohw>
+    <xme:Q_1AZB3j8PHXnOnSIeT-3RKizcLL9GbIXBzfWu4UPF8kd23vSHj4YqcfQ1o5jlpxK
+    NUshHXYhY5-PXxGzpo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtvddgtdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Q_1AZIoZueuvwntS_f9RAgDDIPY3R0SKhXQq_-ehmdjefr9gMmR7tQ>
+    <xmx:Q_1AZOlH3Sb5CNO-e_5xxDtA4yHZgasujBBDlVeKXPEicGVSeio7Pw>
+    <xmx:Q_1AZI244u9QV9m-j6ZC8QJz_8gDo3mVP1C_t3jAiIEw3cKSNZwAHQ>
+    <xmx:RP1AZOw0aKt8xWq1d6aJHRUw6BWvYtbbXV1dVuHkG75MUuGqydd_fw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 86365B60086; Thu, 20 Apr 2023 04:52:19 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
+Mime-Version: 1.0
+Message-Id: <b1d02aee-17cb-4461-8f02-b5bd513790ae@app.fastmail.com>
+In-Reply-To: <9975669b-27bf-6903-f908-184946960c25@gmail.com>
+References: <20230418114730.3674657-1-arnd@kernel.org>
+ <20230418114730.3674657-2-arnd@kernel.org>
+ <9975669b-27bf-6903-f908-184946960c25@gmail.com>
+Date:   Thu, 20 Apr 2023 10:51:58 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Tariq Toukan" <ttoukan.linux@gmail.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Yishai Hadas" <yishaih@nvidia.com>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        "Leon Romanovsky" <leon@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH 2/2] net/mlx4: avoid overloading user/kernel pointers
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 19, 2023, at 09:09, Tariq Toukan wrote:
+> On 18/04/2023 14:47, Arnd Bergmann wrote:
+>
+> Now we should maintain the values of the two pointers before any call. 
+> I'm not sure this is less error-prune. One can mistakenly update 
+> kbuf_addr for example without nullifying ubuf_addr.
 
+That would cause a compiler warning about the uninitialized variable.
 
-On 2023/4/19 14:15, Laurent Pinchart wrote:
-> Hi Jack,
-> 
-> Thank you for the patch.
-> 
-> On Thu, Apr 13, 2023 at 11:55:39AM +0800, Jack Zhu wrote:
->> Add the bindings documentation for Starfive JH7110 Camera Subsystem
->> which is used for handing image sensor data.
->> 
->> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
->> ---
->>  .../bindings/media/starfive,jh7110-camss.yaml | 164 ++++++++++++++++++
->>  MAINTAINERS                                   |   7 +
->>  2 files changed, 171 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
->> new file mode 100644
->> index 000000000000..4cd144f1b845
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
->> @@ -0,0 +1,164 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/media/starfive,jh7110-camss.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Starfive SoC CAMSS ISP
->> +
->> +maintainers:
->> +  - Jack Zhu <jack.zhu@starfivetech.com>
->> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
->> +
->> +description:
->> +  The Starfive CAMSS ISP is a Camera interface for Starfive JH7110 SoC. It
->> +  consists of a VIN controller (Video In Controller, a top-level control until)
->> +  and an ISP.
->> +
->> +properties:
->> +  compatible:
->> +    const: starfive,jh7110-camss
->> +
->> +  reg:
->> +    maxItems: 2
->> +
->> +  reg-names:
->> +    items:
->> +      - const: syscon
->> +      - const: isp
->> +
->> +  clocks:
->> +    maxItems: 7
->> +
->> +  clock-names:
->> +    items:
->> +      - const: apb_func
->> +      - const: wrapper_clk_c
->> +      - const: dvp_inv
->> +      - const: axiwr
->> +      - const: mipi_rx0_pxl
->> +      - const: ispcore_2x
->> +      - const: isp_axi
->> +
->> +  resets:
->> +    maxItems: 6
->> +
->> +  reset-names:
->> +    items:
->> +      - const: wrapper_p
->> +      - const: wrapper_c
->> +      - const: axird
->> +      - const: axiwr
->> +      - const: isp_top_n
->> +      - const: isp_top_axi
->> +
->> +  power-domains:
->> +    items:
->> +      - description: JH7110 ISP Power Domain Switch Controller.
->> +
->> +  interrupts:
->> +    maxItems: 4
->> +
->> +  ports:
->> +    $ref: /schemas/graph.yaml#/properties/ports
->> +
->> +    properties:
->> +      port@0:
->> +        $ref: /schemas/graph.yaml#/$defs/port-base
->> +        unevaluatedProperties: false
->> +        description: Input port for receiving DVP data.
->> +
->> +        properties:
->> +          endpoint:
->> +            $ref: video-interfaces.yaml#
->> +            unevaluatedProperties: false
->> +
->> +            properties:
->> +              bus-width:
->> +                const: 8
->> +
->> +              data-shift:
->> +                const: 2
-> 
-> As far as I can tell, those two properties are not handled by the
-> driver. I assume this is because the driver doesn't support the DVP
-> input yet. That's fine, but it makes it a bit hard to review the device
-> tree. Could you provide some information about the DVP hardware
-> interface ? Does it support both BT.656 and sync signals, or just sync
-> signals ? Are the polarities of the clock and h/v sync controllable ?
-> Is the parallel input bus 8-bit wide or are other options supported ?
-> And finally, what are you modelling with data-shift: 2 ?
-> 
+> Also, I'm not a big fan of passing two pointers when exactly one of them 
+> is effectively used.
+> We can think maybe of passing a union of both types, and a boolean 
+> indicating which pointer type is to be used.
 
-Hello Laurent,
+This is basically what you have today. I've dropped this patch from
+my randconfig tree and will ignore the problem.
 
-The DVP hardware supports BT.656 and sync signals, can control the
-polarities of h/v sync, supports 8/10/12 bit wide, and data-shift: 2 is
-line 9-2.
-
-Jack
-
->> +
->> +      port@1:
->> +        $ref: /schemas/graph.yaml#/properties/port
->> +        description: Input port for receiving CSI data.
->> +
->> +    required:
->> +      - port@0
->> +      - port@1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - reg-names
->> +  - clocks
->> +  - clock-names
->> +  - resets
->> +  - reset-names
->> +  - power-domains
->> +  - interrupts
->> +  - ports
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    isp@19840000 {
->> +        compatible = "starfive,jh7110-camss";
->> +        reg = <0x19840000 0x10000>,
->> +              <0x19870000 0x30000>;
->> +        reg-names = "syscon", "isp";
->> +        clocks = <&ispcrg 0>,
->> +                 <&ispcrg 13>,
->> +                 <&ispcrg 2>,
->> +                 <&ispcrg 12>,
->> +                 <&ispcrg 1>,
->> +                 <&syscrg 51>,
->> +                 <&syscrg 52>;
->> +        clock-names = "apb_func",
->> +                      "wrapper_clk_c",
->> +                      "dvp_inv",
->> +                      "axiwr",
->> +                      "mipi_rx0_pxl",
->> +                      "ispcore_2x",
->> +                      "isp_axi";
->> +        resets = <&ispcrg 0>,
->> +                 <&ispcrg 1>,
->> +                 <&ispcrg 10>,
->> +                 <&ispcrg 11>,
->> +                 <&syscrg 41>,
->> +                 <&syscrg 42>;
->> +        reset-names = "wrapper_p",
->> +                      "wrapper_c",
->> +                      "axird",
->> +                      "axiwr",
->> +                      "isp_top_n",
->> +                      "isp_top_axi";
->> +        power-domains = <&pwrc 5>;
->> +        interrupts = <92>, <87>, <88>, <90>;
->> +
->> +        ports {
->> +            #address-cells = <1>;
->> +            #size-cells = <0>;
->> +            port@0 {
->> +                reg = <0>;
->> +                vin_from_sc2235: endpoint {
->> +                    remote-endpoint = <&sc2235_to_vin>;
->> +                    bus-width = <8>;
->> +                    data-shift = <2>;
->> +                    hsync-active = <1>;
->> +                    vsync-active = <0>;
->> +                    pclk-sample = <1>;
->> +                };
->> +            };
->> +
->> +            port@1 {
->> +                reg = <1>;
->> +                vin_from_csi2rx: endpoint {
->> +                    remote-endpoint = <&csi2rx_to_vin>;
->> +                };
->> +            };
->> +        };
->> +    };
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index bbb8b5c0187b..b8c76b0d7eb3 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19909,6 +19909,13 @@ M:	Ion Badulescu <ionut@badula.org>
->>  S:	Odd Fixes
->>  F:	drivers/net/ethernet/adaptec/starfire*
->>  
->> +STARFIVE CAMERA SUBSYSTEM DRIVER
->> +M:	Jack Zhu <jack.zhu@starfivetech.com>
->> +M:	Changhuang Liang <changhuang.liang@starfivetech.com>
->> +L:	linux-media@vger.kernel.org
->> +S:	Maintained
->> +F:	Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
->> +
->>  STARFIVE DEVICETREES
->>  M:	Emil Renner Berthing <kernel@esmil.dk>
->>  S:	Maintained
-> 
+    Arnd
