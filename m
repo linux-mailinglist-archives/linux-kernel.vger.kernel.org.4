@@ -2,164 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E3E6E9B77
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D706E9B7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbjDTSUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 14:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
+        id S230037AbjDTSVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 14:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbjDTSUK (ORCPT
+        with ESMTP id S229563AbjDTSVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 14:20:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5D62736;
-        Thu, 20 Apr 2023 11:20:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9998264B32;
-        Thu, 20 Apr 2023 18:20:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E45C433EF;
-        Thu, 20 Apr 2023 18:20:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682014808;
-        bh=5XFSKTlGWTxFI19rXXuk4sccUdqF5R5vVCMDRvNeE6Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hXSDni+ML7e8GD4VMSSG+NtvkzA74GSINSfWtjPOPnQw86s+isW8m3D3WHXZS8hNw
-         V3485du/yMFHVrV16n53j595kRPpyA2Sm9yjxJ017TbTlzG75lyFUmeoEZJ81YYCOe
-         LMyzVbSYp7Llyw9Wd5UZcJAu0oFZv2OOO5QtnEpHSyixKFiQeQ62s5jywBoSy2VTj7
-         GEOWYPmkZ+QayKydWFMs1Ty3lyZNUvoZZvsL+XDqA9CnDdC8CkrtjAH98yEwndS/vO
-         26Dg3zeRSL6VSjWN3H1w+/IsYp39ysZduFBm3+Wml+vdJevJH5pO8uX2jaTNwKFNra
-         7LrsxWiLa9NXw==
-Date:   Thu, 20 Apr 2023 19:19:59 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Patrick Lai <quic_plai@quicinc.com>
-Subject: Re: [PATCH 1/6] ASoC: wcd938x: switch to using gpiod API
-Message-ID: <a1d797bc-609c-4cb5-a531-9f840f3cf2b7@sirena.org.uk>
-References: <20230420101617.142225-1-krzysztof.kozlowski@linaro.org>
- <20230420101617.142225-2-krzysztof.kozlowski@linaro.org>
- <6b355201-a957-4fca-a513-d5fa0742fb40@sirena.org.uk>
- <fe6202ee-2552-8b5c-c2d5-f2f7042b901d@linaro.org>
- <d746ee5f-283d-44ce-b72c-18c8955d38b1@sirena.org.uk>
- <3eb0cbb4-f6d9-db8a-031e-92627e70f41e@linaro.org>
- <9942c3a9-51d1-4161-8871-f6ec696cb4db@sirena.org.uk>
- <94bbd608-a90b-605d-a61c-6d6769b60445@linaro.org>
+        Thu, 20 Apr 2023 14:21:13 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552EB2736
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:21:12 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6a60460a23dso1072676a34.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1682014871; x=1684606871;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=l8aVj5sgReWVnhyaJ2DUsoH6IQ6uZim3OtgpbE5sEkw=;
+        b=BWwDVjWMd2BipQFjAhTnRYDBN6FvvvN8guK4EtPUMIOijijbNcRlW/2YAnFzhHRIx1
+         dylrJi4rqfKLIY/8BlpTj/ch7gaWj32/Ah9q5j+mrKpc75cznRoPMqkEJBQe+LwpinPH
+         ypN6BtUIPbXfS+n6+ctmzjh/5UXbhcvK8q5Ve3XDbqIjGPFIyPyXxQYwQWUdZcTkFdmS
+         I2lPCqO1Gy3JLmPvRv79rn/3FOb6mUtb83g/80cZSFFvZhB+/Q3QBbY/eUhuWn7b0UfG
+         kVzeTjy3fxX6fIaG6OvSKOQZ3vsn1Bx1IJBtA92DOIozsAPjGKNaSg7un/YRrd8XuSW9
+         RLuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682014871; x=1684606871;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l8aVj5sgReWVnhyaJ2DUsoH6IQ6uZim3OtgpbE5sEkw=;
+        b=HHSwIHtPhQN3yYmDfUUxXLPo21Suha2NjfHMLvrq2yyEsegX/Ic9wpXKvEuL1mh+ux
+         4kYKCj6MnRDPKoO51h7RDWtxzhiXvgE+3d2OxrzmkGh4mDgcKyJ36nqfBK6hIv9u8PFr
+         XvehiMNgzhWpaRQeQXBCOUHRSljaJ5oLwfBUoDMsLfWKVL8VUG1XtbC3/MwbeUgP/Y4u
+         V6HmfxYSlBLftWlYxQaqGZXs99ippzVAzzsD3NeGivr5nKyI3ZE7d47tYGzf35QYrzA+
+         qJYeonK6M2KS2XzjTuXu8usqnJRpmI4iB3WyxVmp7tER5ucuj3vVGHFEN2lmuwkEvkxf
+         l4pw==
+X-Gm-Message-State: AAQBX9cH8TNqS0xW8SBeFIIBBZQaxBlNt88An3TPfxg6p1FDCC6rv0bp
+        +aLpZLG+YdioVediL2fzxpp2tg==
+X-Google-Smtp-Source: AKy350a4fxn4lwi7pJPT7kHlmDB/6gMxEkSsVX78x89Y3lGiQGmuWjbSnKwTDM0NLHsZSFOvm8E4fQ==
+X-Received: by 2002:a9d:798a:0:b0:6a5:faad:b812 with SMTP id h10-20020a9d798a000000b006a5faadb812mr1299608otm.7.1682014871696;
+        Thu, 20 Apr 2023 11:21:11 -0700 (PDT)
+Received: from ?IPV6:2804:14d:5c5e:44fb:7668:3bb3:e9e3:6d75? ([2804:14d:5c5e:44fb:7668:3bb3:e9e3:6d75])
+        by smtp.gmail.com with ESMTPSA id s7-20020a056830148700b006a44d90de05sm939837otq.69.2023.04.20.11.21.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 11:21:11 -0700 (PDT)
+Message-ID: <77920a21-96ab-54e5-db3d-5083a11d5691@mojatatu.com>
+Date:   Thu, 20 Apr 2023 15:21:06 -0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="E1XQasTOF4jMIEw6"
-Content-Disposition: inline
-In-Reply-To: <94bbd608-a90b-605d-a61c-6d6769b60445@linaro.org>
-X-Cookie: Above all else -- sky.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH net] net/sched: cls_api: Initialize miss_cookie_node when
+ action miss is not used
+Content-Language: en-US
+To:     Ivan Vecera <ivecera@redhat.com>, netdev@vger.kernel.org
+Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Paul Blakey <paulb@nvidia.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230420175952.1114302-1-ivecera@redhat.com>
+From:   Pedro Tammela <pctammela@mojatatu.com>
+In-Reply-To: <20230420175952.1114302-1-ivecera@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 20/04/2023 14:59, Ivan Vecera wrote:
+> Function tcf_exts_init_ex() sets exts->miss_cookie_node ptr only
+> when use_action_miss is true so it assumes in other case that
+> the field is set to NULL by the caller. If not then the field
+> contains garbage and subsequent tcf_exts_destroy() call results
+> in a crash.
+> Initialize .miss_cookie_node pointer to NULL when use_action_miss
+> parameter is false to avoid this potential scenario.
+> 
+> Fixes: 80cd22c35c90 ("net/sched: cls_api: Support hardware miss to tc action")
+> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+> ---
+>   net/sched/cls_api.c | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+> index 35785a36c80298..8bc5b9d6a2916e 100644
+> --- a/net/sched/cls_api.c
+> +++ b/net/sched/cls_api.c
+> @@ -3224,8 +3224,12 @@ int tcf_exts_init_ex(struct tcf_exts *exts, struct net *net, int action,
+>   	exts->action = action;
+>   	exts->police = police;
+>   
+> -	if (!use_action_miss)
+> +	if (!use_action_miss) {
+> +#ifdef CONFIG_NET_CLS_ACT
+> +		exts->miss_cookie_node = NULL;
+> +#endif
+>   		return 0;
+> +	}
+>   
+>   	err = tcf_exts_miss_cookie_base_alloc(exts, tp, handle);
+>   	if (err)
 
---E1XQasTOF4jMIEw6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The problem described here also happens in the case some error happens 
+if the action array allocation fails and before the 'miss_cookie_node' 
+assignment inside 'tcf_exts_miss_cookie_base_alloc()'.
 
-On Thu, Apr 20, 2023 at 07:51:27PM +0200, Krzysztof Kozlowski wrote:
-> On 20/04/2023 18:28, Mark Brown wrote:
-> > On Thu, Apr 20, 2023 at 04:16:59PM +0200, Krzysztof Kozlowski wrote:
+Seems like a better way to solve this issue is to just:
+diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+index 35785a36c802..3c3629c9e7b6 100644
+--- a/net/sched/cls_api.c
++++ b/net/sched/cls_api.c
+@@ -3211,6 +3211,7 @@ int tcf_exts_init_ex(struct tcf_exts *exts, struct 
+net *net, int action,
+  #ifdef CONFIG_NET_CLS_ACT
+         exts->type = 0;
+         exts->nr_actions = 0;
++       exts->miss_cookie_node = NULL;
+         /* Note: we do not own yet a reference on net.
+          * This reference might be taken later from tcf_exts_get_net().
+          */
 
-> >> Life of downstream. We all know the drill: merge your DTS or suffer. T=
-he
-
-> > No, the DT is supposed to be an ABI. =20
-
-> No, the DT bindings are the ABI. We are supposed not to break
-> user-space, but out-of-tree users of drivers are not ABI by itself.
-> Bindings are. If out-of-tree users make mistakes in their DTS and do not
-> want to upstream it, it's their choice but it does not come for free.
-
-This is absolutely not the case, users should be able to ship DTs
-without upstreaming them and run multiple operating systems on top of a
-single DT - ideally boards would ship with DTs in firmware and people
-would be able to install generic OSs onto them with just off the shelf
-install media.  This is even a thing that people have actually done,
-both non-FDT systems like SPARC and the PowerPC systems from Apple and a
-few FDT ones like Synquacer.
-
-The enormous costs of DT would hardly be worth it if it were purely an
-in tree thing.
-
-> > The point in having a domain
-> > specific language with a compiler is to allow device trees to be
-> > distributed independently of the kernel.
-
-> When it is written incorrectly - wrong flag used for GPIO - there is no
-> requirement to support it.
-
-If it worked was it ever really wrong (and note that the bindings may
-not always be super clear...)?  While there is a point at which things
-never worked, can be fixed and we don't need to care about it or where
-we know the userbase well enough to know there won't be any issue those
-shouldn't be the default and should generally be avoided.  Where there
-is a good reason to break compatibility it should be something we're
-actively deciding to do for a clear reason having considered the
-tradeoffs, not something that gets done on a whim without even
-mentioning it.
-
-> > It's not just this individual transition, it's the whole thing with
-> > encoding the polarity of the signal at all - it's a layer of abstraction
-> > that feels like it introduces at least as many problems as it solves,
-> > and requiring configuration on every single system integration doesn't
-> > feel like the right choice in general.
-
-> Choosing appropriate flag for GPIO in DTS is not difficult. It was
-> skipped because we rarely cared in the drivers, but it should have been
-> chosen correctly. The same about interrupt flags. We had many DTS for
-> many times marking all possible interrupts as IRQ_TYPE_NONE. Did it
-> matter for many drivers and setups? No, was perfectly "fine". Is it
-> correct from DTS point of view. Also no.
-
-There's no natural definition of "correct" here though - it's just
-picking something in a binding.  If someone for example flips the label
-on a signal from reset to enable (perhaps during review) that ends up
-changing active high to active low, and really I'm not sure how much
-we're really winning compared to just having code in the end consumer
-which just directly says what value it wants the physical signal to
-have.
-
-My point is not that we haven't defined things such that the user has to
-specify if something is active high or active low, it's that it feels
-like it's more trouble han it's worth.
-
---E1XQasTOF4jMIEw6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRBgk8ACgkQJNaLcl1U
-h9B+Pgf+MdIbsZc3MSRgo0sDGINgmk7ZlFCYK9G4DzJWb/KN/hDgJqXx/d0NKSEB
-css44uv8VRbuEEGyVKvHcqkMyfjkof3REX6VXP05Z9EXJdnGCycYb5A6tynYHrlj
-/nYsDcTZUuUNsY+AOJHQ6941BJWKeR6YhBsY7bNQZdq1HCz7BkY88RoTBDlBrzPd
-jBX+Uxa1DBDdMvvsKDvsFde4948YwlvgQEQI63afOucmG4Apl+FWEb3jNaMDzwEA
-yX0CC5YxrshNo2KrIz3uVy/YapOh/MWGo5siOyu6M5RJqXo4KMhSCH5cVXcGXB3h
-UnSazFtwtnMjuBq0MpY7eaJd8bo1kw==
-=HNVO
------END PGP SIGNATURE-----
-
---E1XQasTOF4jMIEw6--
