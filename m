@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B356E9636
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1506E9637
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjDTNrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 09:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
+        id S231636AbjDTNrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 09:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbjDTNrk (ORCPT
+        with ESMTP id S229980AbjDTNro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:47:40 -0400
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F3E3A86;
-        Thu, 20 Apr 2023 06:47:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=wQ76rbsj87dJylzlZ6ZEzCin2KuP+RmRwobL0Htj8Wo=; b=ifAGo/6tGAxv+/wl5x/GoOOafq
-        g8M/AD55WXDDk0PZfNlAmDvXN6rUIpEv3PbAq26Y8HTDWCfa2yZ0p/VSxcxY2IrpjzSgMS5VfOqz5
-        mvMMx5RXIbQyg9N3I5RTarZqg+085plynvM4GzDSpewvRE/q1WNe6Kv1IeDwjK4c5XNvrueuiacHI
-        wghtynBifX8V5qn6Dzdxk3W3UhiJ4MhgX47CgXD6E3a+HBRNJbmKnVV8vhAY9hA8IdqGxC1uKLN3r
-        qa6f3DPH2u+gpGl7vzu9jrnSXC0VK9Yn3/m6uCr/WmGsWQbyBhjXPzw4c0i1LCG0h7rXcUmIq8F88
-        i0viJ5hA==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lars@metafoo.de>)
-        id 1ppUdM-0002nT-6X; Thu, 20 Apr 2023 15:47:36 +0200
-Received: from [136.25.87.181] (helo=[192.168.86.26])
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1ppUdL-000U3R-NG; Thu, 20 Apr 2023 15:47:35 +0200
-Message-ID: <85e214c8-b639-5197-70a1-7279f9418f66@metafoo.de>
-Date:   Thu, 20 Apr 2023 06:47:32 -0700
+        Thu, 20 Apr 2023 09:47:44 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E172526E
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:47:43 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f1763ee8f8so4937045e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:47:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google; t=1681998462; x=1684590462;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CUEr5pvi6aP9/pHr4WA22mUOJfxMrKdK+Iv0AA04kEA=;
+        b=DdqDcsj+sbUOnaBbPZHotN2/BdTlnygE8Gqu+wskzZkuDyh+QUg7LcqoFCYwDCwdL0
+         tVop6cvOF/Ak3KTbOpl9f7mapJdhYEKacyqeaAvURodMA945CDCcHUo4Vdu4bmDW0eg2
+         nYAWuaaAx981rqobMT3k0b3tqBUUrF8vqBucs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681998462; x=1684590462;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CUEr5pvi6aP9/pHr4WA22mUOJfxMrKdK+Iv0AA04kEA=;
+        b=cTlNI+MbFX20P4NlNKiSLAP5J2SPqJkszNuf+9euWcK+7arXWy9mK35SOo2k3FjKDr
+         nMDZLuuV9NTsz0lnylLGQxdCpC433SVoAbMNm3cWZGtUwdo3WznNcOJV+AHPiFaasOR9
+         xhcYRWTnU/UqVwKVQeBpAMLVOLfSUq3oW97Biw6XPfboqKixJ8N11UWXvithrdp03gbD
+         oNm49fqmIeScAOEoAr9JArGQ7hDwowlWwSATdr+xikX80Swb5I3XoKm0bhRiG63KdoVN
+         C5DY2MZ6mTGt7p6y2NOcdoZNO49rua5H4XGlHFHHWZY9CtFmFhOCBFBMKJu0b+DlJgDJ
+         I85g==
+X-Gm-Message-State: AAQBX9e+XS2k7wdfFmOyA7RkBff1Vjf8VBwAcSC76Xjy9sEtGbu1/nC5
+        remho9iJfxx7LAe4EZpSGBbHPw==
+X-Google-Smtp-Source: AKy350ZA/GTeMuAqQ3TeooIeV4RJVcPIe9yDiKtGHoGQfE++gIlJvnlG9w7Ws5R2MVmSX4MLWLwyqg==
+X-Received: by 2002:adf:f391:0:b0:2f6:ece3:76a with SMTP id m17-20020adff391000000b002f6ece3076amr1235914wro.8.1681998461708;
+        Thu, 20 Apr 2023 06:47:41 -0700 (PDT)
+Received: from localhost ([2a01:4b00:8432:8600:5ee4:2aff:fe50:f48d])
+        by smtp.gmail.com with ESMTPSA id g3-20020a5d5543000000b002fe254f6c33sm1984180wrw.92.2023.04.20.06.47.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 06:47:40 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 14:47:40 +0100
+From:   Chris Down <chris@chrisdown.name>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
+Subject: Re: [PATCH v4 1/2] printk: Do not delay messages which aren't
+ solicited by any console
+Message-ID: <ZEFCfJLteNo91n-f@chrisdown.name>
+References: <cover.1681994220.git.chris@chrisdown.name>
+ <43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris@chrisdown.name>
+ <87wn26vg3p.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/3] iio: potentiometer: Add support for the Renesas X9250
- potentiometers
-Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230420121320.252884-1-herve.codina@bootlin.com>
- <20230420121320.252884-3-herve.codina@bootlin.com>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-In-Reply-To: <20230420121320.252884-3-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26882/Thu Apr 20 09:26:46 2023)
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <87wn26vg3p.fsf@jogness.linutronix.de>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/20/23 05:13, Herve Codina wrote:
-> The Renesas X9250 integrates four digitally controlled potentiometers.
-> On each potentiometer, the X9250T has a 100 kOhms total resistance and
-> the X9250U has a 50 kOhms total resistance.
+John Ogness writes:
+>On 2023-04-20, Chris Down <chris@chrisdown.name> wrote:
+>> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+>> index fd0c9f913940..06f16a5f1516 100644
+>> --- a/kernel/printk/printk.c
+>> +++ b/kernel/printk/printk.c
+>> @@ -1289,15 +1289,13 @@ static int __init boot_delay_setup(char *str)
+>>  }
+>>  early_param("boot_delay", boot_delay_setup);
+>>
+>> -static void boot_delay_msec(int level)
+>> +static void boot_delay_msec(void)
+>>  {
+>>  	unsigned long long k;
+>>  	unsigned long timeout;
+>>
+>>  	if ((boot_delay == 0 || system_state >= SYSTEM_RUNNING)
 >
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+>            ^----- you will need to remove this paren as well
 
-Hi,
+That'll teach me to compile test without remembering it also needs 
+CONFIG_BOOT_PRINTK_DELAY=y :-) Thanks.
 
-Looks perfect! Just one small comment.
-
-> +static int x9250_write8(struct x9250 *x9250, u8 cmd, u8 val)
-> +{
-> +	struct spi_transfer xfer = {
-> +		.tx_buf = &x9250->spi_tx_buf,
-> +		.len = 3,
-> +	};
-> +	int ret;
-> +
-> +	BUILD_BUG_ON(sizeof(x9250->spi_tx_buf) < 3);
-> +
-> +	mutex_lock(&x9250->lock);
-> +
-> +	x9250->spi_tx_buf[0] = 0x50;
-The 0x50 shows up as a magic constant in multiple places, a define for 
-it would be nice.
-> +	x9250->spi_tx_buf[1] = cmd;
-> +	x9250->spi_tx_buf[2] = val;
-> +
-> +	ret = spi_sync_transfer(x9250->spi, &xfer, 1);
-> +
-> +	mutex_unlock(&x9250->lock);
-> +
-> +	return ret;
-> +}
+>
+>> -		|| suppress_message_printing(level)) {
+>>  		return;
+>> -	}
+>
+>John Ogness
