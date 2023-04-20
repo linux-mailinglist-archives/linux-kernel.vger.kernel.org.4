@@ -2,129 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF676E8AFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0B66E8B24
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233996AbjDTHMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 03:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
+        id S234025AbjDTHOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 03:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjDTHMs (ORCPT
+        with ESMTP id S234019AbjDTHOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 03:12:48 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1378426B3;
-        Thu, 20 Apr 2023 00:12:46 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33K48Xhr021482;
-        Thu, 20 Apr 2023 07:12:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=37XHkCZOOQ8eC/NsJV5nE4fRFYXWaAq93jLiXc8uf0I=;
- b=owKsn03JOuJ256QOS24SWhNwq+TgzPpo1N9NMghJ8g+Jr8dkGfMQygdtPr/iTnX6q8/i
- pyRTH1L328IO8259OdsQVTn70JovB7EXBWk6aYBLSQAshp22pUgSewMa6UdU3tfbuJ6I
- 88kbk9TT4oi3cc7c/3xQdbXhTD9TrSnSosLeEPwToIAcFcOHh4b4MW5aUEDdf9FUybN3
- fORmhwOtGZhWqEhyTzJVIkw8S8nS+ayJVERJGfsRMBQ7T3WzEXcp/9iBAYnSbqDpwX8F
- uRSt/ZrMDAjzfqUBvqxh5GvURUUpZmzXzbWgu8Gf9iVC403n6QUG1jKMoo6TrAvb87qI Qw== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q2p7as6qn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Apr 2023 07:12:43 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33K7Cg17012729
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Apr 2023 07:12:42 GMT
-Received: from [10.216.57.203] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 20 Apr
- 2023 00:12:38 -0700
-Message-ID: <52028f1a-e7f4-0ffe-e359-d95fbbc86cf0@quicinc.com>
-Date:   Thu, 20 Apr 2023 12:42:24 +0530
+        Thu, 20 Apr 2023 03:14:51 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BDA2D64;
+        Thu, 20 Apr 2023 00:14:50 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-244a5ccf13eso434720a91.2;
+        Thu, 20 Apr 2023 00:14:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681974890; x=1684566890;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WF5f/qiCq+I4QIB3+B0PWVUJeva+vS+YZGKI21h5n8k=;
+        b=CRJ77JW6KbBe8kyJ2xIA/OdIJCX3BWF9TdsDwiy7SfDkY6SC22GM9tjX9kSFCUf2PG
+         Cm7QQN3OvXy46uCogoH3DQ9IYUj9Z6Gp8FEXseIOhPUZZEHN8YPMQt38+szLvUrMf/zv
+         4v0baj1sUEMk4zvH6q+0RSl34iL34kaiR3o+wPXBlEAWw7CS4Msgf8p2VstQDj6oTBEf
+         vanha6XFl4XoY8P7s+9OOUhZn+wFtJfaoPZXJIUSWaNXAt9HrF8tu5iFZsDT/wE+Nz+c
+         yVG0IOSUhaZfoodkmL2g8iDZjDf7/ZihyJOBIKTYgZ3opePv0gQDwjm/VsdzuxVHrOFj
+         m1vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681974890; x=1684566890;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WF5f/qiCq+I4QIB3+B0PWVUJeva+vS+YZGKI21h5n8k=;
+        b=YIr13AcRP3TOu1U8aNVgDOI8DQdY4tcKbWFlGSRRzazpSSwiylZ+Q+xxVH6WGiuJ5X
+         7jQY9OwU7KMy4/E3GMfZbYY++VrEAjIRuFUs9J6tpU11nLLdz1GQjXnUqWDLAEwkySuq
+         6YIj8NJ/rNZTIQ19ojMHOacF0B9Gtq3lBbjSR9mLpP6j/yd3xf/+DDhErgQnildw6Oav
+         Wh2KiIIzkpv9d9iY4cca0Ls2gU3oFJ9wAmR4j5yJZots4GH7/O8I1EKZ5HXENS1VJp5o
+         Sog8RhCHIVCnU5pyok7t41Wg++WzOtNzYFAmBgEfDwLcPAz2EzFk+K8frQAtl7BRP5dZ
+         AeWg==
+X-Gm-Message-State: AAQBX9fBSM16mHBunuSEXkMTa93XBVG6OXplEtpIO/do3YovXzXNjKju
+        4injfwM8UeM6nvdPPqHRj6hWI6WbeWZORegPrQjmK2+LHSCl8xfN
+X-Google-Smtp-Source: AKy350bhhUfp7hBdz0g9NOIEyHF2MBw8P3pv/mgubG1I6uYlBfOdm5OAmrextNvzJbyRepJsONzc0j0oiGXG2HrwJG4=
+X-Received: by 2002:a17:90b:388f:b0:23d:1143:c664 with SMTP id
+ mu15-20020a17090b388f00b0023d1143c664mr743277pjb.31.1681974889887; Thu, 20
+ Apr 2023 00:14:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V6 0/3] rpmsg signaling/flowcontrol patches
-To:     Sarannya S <quic_sarannya@quicinc.com>,
-        <quic_bjorande@quicinc.com>, <arnaud.pouliquen@foss.st.com>,
-        <swboyd@chromium.org>, <quic_clew@quicinc.com>,
-        <mathieu.poirier@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>
-References: <1681971690-28858-1-git-send-email-quic_sarannya@quicinc.com>
-Content-Language: en-US
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <1681971690-28858-1-git-send-email-quic_sarannya@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: TOWT3vKEL1cs4b_NXUyknD8i0EvhrizE
-X-Proofpoint-ORIG-GUID: TOWT3vKEL1cs4b_NXUyknD8i0EvhrizE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-20_04,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
- lowpriorityscore=0 spamscore=0 bulkscore=0 malwarescore=0 adultscore=0
- phishscore=0 mlxscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=989
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304200058
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230419193513.708818-1-robh@kernel.org>
+In-Reply-To: <20230419193513.708818-1-robh@kernel.org>
+From:   Donald Hunter <donald.hunter@gmail.com>
+Date:   Thu, 20 Apr 2023 08:14:38 +0100
+Message-ID: <CAD4GDZziEXfeietHOwutUOj4h9-zgV_EfCZj+0x5KCOO23ZS9A@mail.gmail.com>
+Subject: Re: [PATCH] PCI: Restrict device disabled status check to DT
+To:     Rob Herring <robh@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 19 Apr 2023 at 20:45, Rob Herring <robh@kernel.org> wrote:
+>
+> Commit 6fffbc7ae137 ("PCI: Honor firmware's device disabled status")
+> checked the firmware device status for both DT and ACPI devices. That
+> caused a regression in some ACPI systems. The exact reason isn't clear.
+> It's possibly a firmware bug. For now, at least, refactor the check to
+> be for DT based systems only.
+>
+> Note that the original implementation leaked a refcount which is now
+> correctly handled.
+>
+> Fixes: 6fffbc7ae137 ("PCI: Honor firmware's device disabled status")
+> Link: https://lore.kernel.org/all/m2fs9lgndw.fsf@gmail.com/
+> Reported-by: Donald Hunter <donald.hunter@gmail.com>
+> Cc: Binbin Zhou <zhoubinbin@loongson.cn>
+> Cc: Liu Peibao <liupeibao@loongson.cn>
+> Cc: Huacai Chen <chenhuacai@loongson.cn>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
+Tested-by: Donald Hunter <donald.hunter@gmail.com>
 
-On 4/20/2023 11:51 AM, Sarannya S wrote:
-> Added new IOCTLS- RPMSG_GET_OUTGOING_FLOWCONTROL and RPMSG_SET_INCOMING_FLOWCONTROL
-> to get/set the rpmsg char device's flow control signal.
-> Updated the cmd name 'RPM_CMD_SIGNALS' to 'GLINK_CMD_SIGNALS'.
-> Changed 'remote_flow' to bool type, and updated it's evaluation.
-> Updated evaluation of 'set' in rpmsg_char as 'set = !!arg'.
-> Add destination address of endpoint as parameter in rpmsg_set_flow_control.
-> Addressed review comments to change variable names/descriptions.
+Thanks!
 
-Something to notice, you are not changing the version number as you have 
-sent v6 here again.
-
-Also maintain the changes happened from the last patch series properly.
-Like
-
-Changes in v6:
-  - ..
-  - ..
-
-Change in v5: (a lore kernel link will be helpful here for reviewer to 
-remind the conversation happened during last review)
-  - ..
-  - ..
-
-
-
---Mukesh
-
-> 
-> Chris Lew (2):
->    rpmsg: glink: Add support to handle signals command
->    rpmsg: char: Add RPMSG GET/SET FLOWCONTROL IOCTL support
-> 
-> Deepak Kumar Singh (1):
->    rpmsg: core: Add signal API support
-> 
->   drivers/rpmsg/qcom_glink_native.c | 64 +++++++++++++++++++++++++++++++++++++++
->   drivers/rpmsg/rpmsg_char.c        | 49 ++++++++++++++++++++++++++----
->   drivers/rpmsg/rpmsg_core.c        | 21 +++++++++++++
->   drivers/rpmsg/rpmsg_internal.h    |  2 ++
->   include/linux/rpmsg.h             | 15 +++++++++
->   include/uapi/linux/rpmsg.h        | 11 ++++++-
->   6 files changed, 155 insertions(+), 7 deletions(-)
-> 
+> ---
+>  drivers/pci/of.c    | 30 ++++++++++++++++++++++++------
+>  drivers/pci/pci.h   |  4 ++--
+>  drivers/pci/probe.c |  8 ++++----
+>  3 files changed, 30 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> index 196834ed44fe..4c2ef2e28fb5 100644
+> --- a/drivers/pci/of.c
+> +++ b/drivers/pci/of.c
+> @@ -16,14 +16,32 @@
+>  #include "pci.h"
+>
+>  #ifdef CONFIG_PCI
+> -void pci_set_of_node(struct pci_dev *dev)
+> +/**
+> + * pci_set_of_node - Find and set device's DT device_node
+> + * @dev: the PCI device structure to fill
+> + *
+> + * Returns 0 on success with of_node set or when no device is described in the
+> + * DT. Returns -ENODEV if the device is present, but disabled in the DT.
+> + */
+> +int pci_set_of_node(struct pci_dev *dev)
+>  {
+> +       struct device_node *node;
+> +
+>         if (!dev->bus->dev.of_node)
+> -               return;
+> -       dev->dev.of_node = of_pci_find_child_device(dev->bus->dev.of_node,
+> -                                                   dev->devfn);
+> -       if (dev->dev.of_node)
+> -               dev->dev.fwnode = &dev->dev.of_node->fwnode;
+> +               return 0;
+> +
+> +       node = of_pci_find_child_device(dev->bus->dev.of_node, dev->devfn);
+> +       if (!node)
+> +               return 0;
+> +
+> +       if (!of_device_is_available(node)) {
+> +               of_node_put(node);
+> +               return -ENODEV;
+> +       }
+> +
+> +       dev->dev.of_node = node;
+> +       dev->dev.fwnode = &node->fwnode;
+> +       return 0;
+>  }
+>
+>  void pci_release_of_node(struct pci_dev *dev)
+> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> index d2c08670a20e..2b48a0aa8008 100644
+> --- a/drivers/pci/pci.h
+> +++ b/drivers/pci/pci.h
+> @@ -624,7 +624,7 @@ int of_pci_get_max_link_speed(struct device_node *node);
+>  u32 of_pci_get_slot_power_limit(struct device_node *node,
+>                                 u8 *slot_power_limit_value,
+>                                 u8 *slot_power_limit_scale);
+> -void pci_set_of_node(struct pci_dev *dev);
+> +int pci_set_of_node(struct pci_dev *dev);
+>  void pci_release_of_node(struct pci_dev *dev);
+>  void pci_set_bus_of_node(struct pci_bus *bus);
+>  void pci_release_bus_of_node(struct pci_bus *bus);
+> @@ -662,7 +662,7 @@ of_pci_get_slot_power_limit(struct device_node *node,
+>         return 0;
+>  }
+>
+> -static inline void pci_set_of_node(struct pci_dev *dev) { }
+> +static inline int pci_set_of_node(struct pci_dev *dev) { return 0; }
+>  static inline void pci_release_of_node(struct pci_dev *dev) { }
+>  static inline void pci_set_bus_of_node(struct pci_bus *bus) { }
+>  static inline void pci_release_bus_of_node(struct pci_bus *bus) { }
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index a3f68b6ba6ac..f96fa83f2627 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -1826,7 +1826,7 @@ int pci_setup_device(struct pci_dev *dev)
+>         u32 class;
+>         u16 cmd;
+>         u8 hdr_type;
+> -       int pos = 0;
+> +       int err, pos = 0;
+>         struct pci_bus_region region;
+>         struct resource *res;
+>
+> @@ -1840,10 +1840,10 @@ int pci_setup_device(struct pci_dev *dev)
+>         dev->error_state = pci_channel_io_normal;
+>         set_pcie_port_type(dev);
+>
+> -       pci_set_of_node(dev);
+> +       err = pci_set_of_node(dev);
+> +       if (err)
+> +               return err;
+>         pci_set_acpi_fwnode(dev);
+> -       if (dev->dev.fwnode && !fwnode_device_is_available(dev->dev.fwnode))
+> -               return -ENODEV;
+>
+>         pci_dev_assign_slot(dev);
+>
+> --
+> 2.39.2
+>
