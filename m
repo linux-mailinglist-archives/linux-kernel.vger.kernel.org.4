@@ -2,147 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E516E9CAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6652C6E9CB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232132AbjDTTtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 15:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
+        id S232145AbjDTTv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 15:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbjDTTtl (ORCPT
+        with ESMTP id S229978AbjDTTv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 15:49:41 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49B65259
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:49:39 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-51b6d0b9430so1088936a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:49:39 -0700 (PDT)
+        Thu, 20 Apr 2023 15:51:26 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C961649FA
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:51:24 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4ec81773cf7so799159e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:51:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682020179; x=1684612179;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9UtIV1rNad+J3zNsKedH1zIW6ZGZZJZBqOnwneD7uhk=;
-        b=USPH5vqFJff9A1Oux9rh+4fIhd2akT+l2CVCPVya7BR8ATdGcYQJ30iedgbwQwhrwM
-         Dy2n0hD2K/9hF7IuePSh2ZNH8q0uCzE+cKoLXpwzOxYP8J7cCQD1fL7wPuO3GsOVzWKF
-         ysapgyhSVbgAUWR3VO7GI7WPEzEP8nAUDZkUrkqcQzYClSWkN9wXCDiNZzHqxiApod1U
-         dI8OuOXA0qMeIhWG3W+gAK060cJorOhGUaxwVAWjV6DjiioAu0ml9L3ODLgR7cGZNEiV
-         Ffd5G7V5LrhPq3UVBiMh7OmutIZAL9SIL6wyEH39YUlY4MobnrJzPdf77Da7rfv4o8E/
-         6n0w==
+        d=linaro.org; s=google; t=1682020283; x=1684612283;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/a0xpbCUh8XvBFyvG3Vr8vwGN+W0r6uMQEO9ehg+QV4=;
+        b=zBr3TpHqf1AS9j2rsa0zNinD/3EVDw8o66VhW6Cs1x9gQZOqenezbfaXcgGGI+wHd9
+         7E2v5qh2QaItjfhTeNhXKUB9yuikZWqg9lrIiTaWWO86IteWxF7PKcSxKhhgpe7hlzIv
+         +Ra8UnT08hKJttPIuAkoOFBSBg1+jkqWVeS9dOiQhpUAwB7+kA5rmprYuoaXUuKRGJva
+         c/CscWhbir1fbJ8aTrJiFgOGZ9nVf2IFVk3Mg8GiDVk3wL0v4e6NHF04VJ8vZm8Ss/BG
+         xPn6mh1eNYUmkFAh1ek0NJ7HQdzf9PHSYa1Yxh/g9At0nlp991N6Z7gaGb3Eu6HoGeer
+         x+Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682020179; x=1684612179;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9UtIV1rNad+J3zNsKedH1zIW6ZGZZJZBqOnwneD7uhk=;
-        b=F80JmJmbMRNczC7zqI2sLc/mrVM3b3tpTo40LiRK2XqHx2F/GOUL5EZgQ0OV35iQnE
-         gBLHKFqiSrpqmsaC2ZD+tS3OwP3KPGj5oG3p8/yexEkQLCksRkN3tgxG7E8myBeyBGZP
-         4FBkIvarjY5HFHaYV1CAy5FcsqjefmvYNFuw1u2X+CTDgw1q4agvD059d3Muf4tISdaM
-         zwEJNBD/ZaU1CSVpQ6OWehcih9/mgAU9a3snvfJvyhmy9a38advAeFWiXq0kt9F94CH7
-         LA9DllyrJ+BDP2B2nabsvEraZlTW6AUf/DywRTENb0rA94HvmCuuzfy3uMn6T2AM0/3y
-         GGBg==
-X-Gm-Message-State: AAQBX9cY8GIvRjPLUhqiFBzPkrUr5X67hyKPZrbv+l/IugWq3lP3zopU
-        4viy+Y2w2lUDc4lcWacbWTozZg0xJO3SS3A0kws=
-X-Google-Smtp-Source: AKy350b0kirUfjsxMugPMVjEp8DXcYkAaH0bwjlPrCUmR6CEf9zui9W0nRlSZFo0ZIo5fFxgbUJ8dg==
-X-Received: by 2002:a17:90a:6486:b0:247:abb6:1528 with SMTP id h6-20020a17090a648600b00247abb61528mr2653185pjj.2.1682020179089;
-        Thu, 20 Apr 2023 12:49:39 -0700 (PDT)
-Received: from evan.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id jn14-20020a170903050e00b0019d1f42b00csm1514395plb.17.2023.04.20.12.49.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 12:49:38 -0700 (PDT)
-From:   Evan Green <evan@rivosinc.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Evan Green <evan@rivosinc.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH] RISC-V: hwprobe: Remove __init on probe_vendor_features()
-Date:   Thu, 20 Apr 2023 12:49:34 -0700
-Message-Id: <20230420194934.1871356-1-evan@rivosinc.com>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20221208; t=1682020283; x=1684612283;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/a0xpbCUh8XvBFyvG3Vr8vwGN+W0r6uMQEO9ehg+QV4=;
+        b=aXBRRwSOIDNgc4JAXo4cazMZxGxbCTcDW/GjEg0oRljrm/IdMh3pNnPR3sf6IPCHg6
+         AVK3u/SomtuMy+ZzMdUgvek8Mn1uT0jyRoPrFZC6KRSt+YQ/U4Z6LjPLczNrP1xKRhMH
+         51q9k73HQJ6Egqe++CQcqLf18kSi5xuuVahe7p1m1kdOY13d8esbuOsKBiU40wx1093I
+         HzFFRKYzMs8DMqFWfMZaV3TvGVVaK7NjMH41jGWvYmjBVAw7VtDBNGH6ZV37TEYAxkHe
+         wjYxOOHgK6VdKs8Nce+xnPcP6BzsH4somtG4femBvr5yeOkyqKLbUN8mIaDtUy6PJyiZ
+         Rrlw==
+X-Gm-Message-State: AAQBX9fDbL2SezdhCPm4VzjQTaTjlZ5BqzQHf+3UDwk3QvssBrDIbqTS
+        WeNgFXK0w3YrM1T3rqq2IMAfPg==
+X-Google-Smtp-Source: AKy350bJOaN/yiqVcikZK2R1lIXdVY7PZHt7PQe9jzpzreObSOXLbS7TfSQAXyaEMHcVORKfBHdasQ==
+X-Received: by 2002:a05:6512:61:b0:4ef:5a59:12f6 with SMTP id i1-20020a056512006100b004ef5a5912f6mr17552lfo.16.1682020283052;
+        Thu, 20 Apr 2023 12:51:23 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id l13-20020ac24a8d000000b004eb3b6acfe6sm311735lfp.213.2023.04.20.12.51.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 12:51:22 -0700 (PDT)
+Message-ID: <0f469b3c-5f0f-e027-8a9f-d1233169c04a@linaro.org>
+Date:   Thu, 20 Apr 2023 22:51:22 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/2] DPU1 GC1.8 wiring-up
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230420-topic-dpu_gc-v1-0-d9d1a5e40917@linaro.org>
+ <5b133c55-e4f5-bfd2-b542-a7d44313c038@linaro.org>
+ <c0e0a55a-cc37-fe8a-8d8a-5fe257f99b9a@linaro.org>
+ <3f3b3637-ed85-09a1-22b7-3ccd4bc929bb@quicinc.com>
+ <2dff9d62-cffe-c66f-9e50-3ecd64e44d37@linaro.org>
+ <6a335df7-ff0b-098a-feec-45714159df04@linaro.org>
+ <b134d09c-55fa-7879-80ff-900e39c20c3d@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <b134d09c-55fa-7879-80ff-900e39c20c3d@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-probe_vendor_features() is now called from smp_callin(), which is not
-__init code and runs during cpu hotplug events. Remove the
-__init_or_module decoration from it and the functions it calls to avoid
-walking into outer space.
+On 20/04/2023 22:47, Abhinav Kumar wrote:
+> 
+> 
+> On 4/20/2023 11:01 AM, Dmitry Baryshkov wrote:
+>> On 20/04/2023 04:36, Konrad Dybcio wrote:
+>>>
+>>>
+>>> On 20.04.2023 03:28, Abhinav Kumar wrote:
+>>>>
+>>>>
+>>>> On 4/19/2023 6:26 PM, Konrad Dybcio wrote:
+>>>>>
+>>>>>
+>>>>> On 20.04.2023 03:25, Dmitry Baryshkov wrote:
+>>>>>> On 20/04/2023 04:14, Konrad Dybcio wrote:
+>>>>>>> Almost all SoCs from SDM845 to SM8550 inclusive feature a GC1.8
+>>>>>>> dspp sub-block in addition to PCCv4. The other block differ a bit
+>>>>>>> more, but none of them are supported upstream.
+>>>>>>>
+>>>>>>> This series adds configures the GCv1.8 on all the relevant SoCs.
+>>>>>>
+>>>>>> Does this mean that we will see gamma_lut support soon?
+>>>>> No promises, my plate is not even full, it's beyond overflowing! :P
+>>>>>
+>>>>> Konrad
+>>>>
+>>>> So I think I wrote about this before during the catalog rework/fixes 
+>>>> that the gc registers are not written to / programmed.
+>>>>
+>>>> If thats not done, is there any benefit to this series?
+>>> Completeness and preparation for the code itself, if nothing else?
+>>
+>> The usual problem is that if something is not put to use, it quickly 
+>> rots or becomes misused for newer platforms. We have seen this with 
+>> the some of DPU features.
+>>
+>> In case of GC (and the freshly defined DPU_DSPP_IGC, but not used) we 
+>> have three options:
+>> - drop the unused GC from msm8998_sblk.
+>> - keep things as is, single unused GC entry
+>> - fill all the sblk with the correct information in hope that it stays 
+>> correct
+>>
+>> Each of these options has its own drawbacks. I have slight bias 
+>> towards the last option, to have the information in place (as long as 
+>> it is accurate).
+>>
+> 
+> My vote is for (1) . Today, GC is unused and from the discussion here, 
+> there is no concrete plan to add it. If we keep extending an unused 
+> bitmask for all the chipsets including the ones which will get added in 
+> the future in the hope that someday the feature comes, it doesnt sound 
+> like a good idea.
+> 
+> I would rather do (1), if someone has time.
 
-Fixes: 62a31d6e38bd ("RISC-V: hwprobe: Support probing of misaligned access performance")
+Agree, this was the second item on my preference list. Could you please 
+send this oneliner?
 
-Signed-off-by: Evan Green <evan@rivosinc.com>
----
+> OR lets stay at (2) till 
+> someone does (1).
+> 
+> When someone implements GC, we can re-use this patch and that time keep 
+> konrad's author rights or co-developed by.
+> 
+> 
 
- arch/riscv/errata/thead/errata.c     | 6 +++---
- arch/riscv/include/asm/alternative.h | 2 +-
- arch/riscv/kernel/alternative.c      | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-index 1036b8f933ec..a86c4facc2a6 100644
---- a/arch/riscv/errata/thead/errata.c
-+++ b/arch/riscv/errata/thead/errata.c
-@@ -118,9 +118,9 @@ void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct al
- 		local_flush_icache_all();
- }
- 
--void __init_or_module thead_feature_probe_func(unsigned int cpu,
--					       unsigned long archid,
--					       unsigned long impid)
-+void thead_feature_probe_func(unsigned int cpu,
-+			      unsigned long archid,
-+			      unsigned long impid)
- {
- 	if ((archid == 0) && (impid == 0))
- 		per_cpu(misaligned_access_speed, cpu) = RISCV_HWPROBE_MISALIGNED_FAST;
-diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
-index a8f5cf6694a1..6a41537826a7 100644
---- a/arch/riscv/include/asm/alternative.h
-+++ b/arch/riscv/include/asm/alternative.h
-@@ -30,7 +30,7 @@
- #define ALT_OLD_PTR(a)			__ALT_PTR(a, old_offset)
- #define ALT_ALT_PTR(a)			__ALT_PTR(a, alt_offset)
- 
--void __init probe_vendor_features(unsigned int cpu);
-+void probe_vendor_features(unsigned int cpu);
- void __init apply_boot_alternatives(void);
- void __init apply_early_boot_alternatives(void);
- void apply_module_alternatives(void *start, size_t length);
-diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
-index fc65c9293ac5..6b75788c18e6 100644
---- a/arch/riscv/kernel/alternative.c
-+++ b/arch/riscv/kernel/alternative.c
-@@ -31,7 +31,7 @@ struct cpu_manufacturer_info_t {
- 				   unsigned long impid);
- };
- 
--static void __init_or_module riscv_fill_cpu_mfr_info(struct cpu_manufacturer_info_t *cpu_mfr_info)
-+static void riscv_fill_cpu_mfr_info(struct cpu_manufacturer_info_t *cpu_mfr_info)
- {
- #ifdef CONFIG_RISCV_M_MODE
- 	cpu_mfr_info->vendor_id = csr_read(CSR_MVENDORID);
-@@ -144,7 +144,7 @@ void riscv_alternative_fix_offsets(void *alt_ptr, unsigned int len,
- }
- 
- /* Called on each CPU as it starts */
--void __init_or_module probe_vendor_features(unsigned int cpu)
-+void probe_vendor_features(unsigned int cpu)
- {
- 	struct cpu_manufacturer_info_t cpu_mfr_info;
- 
 -- 
-2.25.1
+With best wishes
+Dmitry
 
