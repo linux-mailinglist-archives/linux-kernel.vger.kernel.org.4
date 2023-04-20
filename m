@@ -2,266 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4031F6E8872
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 05:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE586E8894
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 05:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbjDTDMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 23:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57330 "EHLO
+        id S231889AbjDTDXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 23:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233174AbjDTDMk (ORCPT
+        with ESMTP id S229547AbjDTDX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 23:12:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF382103
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 20:11:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681960318;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WJkzeJvwCETUjWcwNy+63mU9+yCXou1XIKFoGxVIfQ0=;
-        b=UzlpK56KozcxWUUR2VWbvemwuxkAcB4A5hqCA2PpI1Bsfv4Mjg344YOqjN4stmrqvKoVsq
-        PHlVHUgOkiZdJXdF8d+wbQeep+78LVaIo8p2LLxqiIkRhAP/GNXtYVLLa/irVKOKBjWCaU
-        dbnFddmUOBSsbR0q6C5EwEDsz/DeIa8=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-204-AH6bzaKFM2eK5ZznJ8_Mwg-1; Wed, 19 Apr 2023 23:11:57 -0400
-X-MC-Unique: AH6bzaKFM2eK5ZznJ8_Mwg-1
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1a6820f90c6so3849435ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 20:11:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681960316; x=1684552316;
+        Wed, 19 Apr 2023 23:23:29 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E7D40CF;
+        Wed, 19 Apr 2023 20:23:26 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3ef112cac17so884561cf.0;
+        Wed, 19 Apr 2023 20:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681961006; x=1684553006;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WJkzeJvwCETUjWcwNy+63mU9+yCXou1XIKFoGxVIfQ0=;
-        b=UsuLTPsjD29IGTmG/0T8lQ6Ykhv5FyI4ZYwPKx85xDY/WbfriC44yO/DZqQEttBkHO
-         HDi2MiY0lKOr15MzSlQHmKTImm/7/KqlpaiKI4dYP7kWfbaWRbvrCU5GiYIPIwXXrNlY
-         FZE4Nh3IYEAUYP+ZjeBE8RX3skNXROJP7pwbnh2gktLuEZzoE4+Ca8tqT3j1Slj+12mO
-         snmcDZuxCjg8xf1SCO/qghws650U6ZSIz0HWRs70/ZhoLH8wVlLNvy+j7vC49AOPqwld
-         UoHrGEfkFcxxnOxfVw1MzSbpFdc7TGTJzLzXjbCtv8KPV5GyhTJK8mgMA3g4entZKw6F
-         FmiA==
-X-Gm-Message-State: AAQBX9fzqHo3yweCo1/1sGxusDC9sxA1lzXqhpB4BUh9+lJF/lDLRQK6
-        tO0IH1pa2WpCyukRMytsTtDp1m11CbD0qsIsPxusQ/UUhA04ezKH7yqO9cyPLRTZoY8h6dde0ms
-        hGulBaAvrVwoakbM56inhaBKR
-X-Received: by 2002:a17:902:e0cc:b0:19e:dc0e:1269 with SMTP id e12-20020a170902e0cc00b0019edc0e1269mr76460pla.7.1681960316375;
-        Wed, 19 Apr 2023 20:11:56 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ax8FFXo3OHHtKHTICA0kOA/Q49kpcfJ7vYva+HjvLXcSzVkRLCzrjx53STrgpygHaJ1jeLfg==
-X-Received: by 2002:a17:902:e0cc:b0:19e:dc0e:1269 with SMTP id e12-20020a170902e0cc00b0019edc0e1269mr76444pla.7.1681960316010;
-        Wed, 19 Apr 2023 20:11:56 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id a13-20020a1709027d8d00b001a647709860sm153930plm.157.2023.04.19.20.11.55
+        bh=adX5pTpCGut2wVqn2rN7BfLycw+2K2wX215Yvm2Skj0=;
+        b=kN5PYjRolVrzo8OdzXjG2rOObhk9NXqlw5+diqgNyC2lFH+mHjybp2OrGa8qxslDst
+         DS6tzZKsYIX5JPMeMRj5vjJqmGTs5k1w6JyB6k+F6baS1FdhHaEs5Qm47/kAH9y6GL2z
+         CCjDdQvrrz7iH1bKXrbaj95wakTU1WL6x3HjKOrDmTkRvsUhU9c2KQjWe8yBpt+Dut8p
+         0noJ6Y3HC8HmyWAEF8wQuuMvYAiRpOGFoFJ+sJ1zsQmY5Fk1GBLChxhLWF8YcUz7S5wL
+         /HijpkFN/AxMBFCbKacgAXlmHb5sH1iTP2t9xSKHKuSNNXAbJJqMylw/FiHN3IzrAURw
+         9EiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681961006; x=1684553006;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=adX5pTpCGut2wVqn2rN7BfLycw+2K2wX215Yvm2Skj0=;
+        b=kjza6qSLNZXtXY/jWfsrTWwkvMx6j/kXI+u9EITXbA4u4yTbSZv1W+qkNoP7tMNKsi
+         yigBn+m3jZfkikkLEkCENEbjF6OFU7xTz4xB7kpyvET20tys/sJ0SH1ox42rZcqEAykq
+         am0KqdElrFra/5IeDg0mQnswxgQIoAAndOGLosCBUqe29pauWClHB+NxtHDwoHG+LvLD
+         VEe/9TRF9Gvka0AZJuRxbmLwtJ22qt+SMXQJj+Q50NJxhEKUZAHgaQXh21ztwFeuALUz
+         M1Sg4TQvRfBCeJFgpFdbhNbcxtvcOH5x6jNsZQmzlWp1z36nCD4UK9jy30nW0tBOpaVK
+         wMCQ==
+X-Gm-Message-State: AAQBX9fd2OlqVH74uqHxArNmIhSH7LxfQ0NIw2ASMqWlAE1a8jlH2YEi
+        ZPU57l+d6sM39+82ul1GpKc=
+X-Google-Smtp-Source: AKy350aWroSwDmcbYQlKlOqteeglmMI/KFEwoMZCeXscp4drJ7QNHYwvApYy9mDszjXeHjptfUZPGQ==
+X-Received: by 2002:ac8:5f86:0:b0:3e6:3ba9:3c8d with SMTP id j6-20020ac85f86000000b003e63ba93c8dmr1285459qta.13.1681961005879;
+        Wed, 19 Apr 2023 20:23:25 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id m8-20020ac84448000000b003ec47cc3613sm199905qtn.85.2023.04.19.20.23.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 20:11:55 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 20:11:54 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
-        jgg@ziepe.ca, jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [Patch V9 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <enfduqgdgrdpfw73suydlbmu3mopk545vwrpoat2chkop375np@o3fxh5k7wc76>
-References: <20230325183409.7695-1-kyarlagadda@nvidia.com>
- <20230325183409.7695-3-kyarlagadda@nvidia.com>
- <a6jhf7wghnos6yjvgt3rbudhwsx4r4r7kurm35euofz3mjwmdu@74z44ohjgmre>
+        Wed, 19 Apr 2023 20:23:25 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailauth.nyi.internal (Postfix) with ESMTP id B79EA27C0054;
+        Wed, 19 Apr 2023 23:23:24 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Wed, 19 Apr 2023 23:23:24 -0400
+X-ME-Sender: <xms:LLBAZFPRcqepmUcS0jeaIyNE4UVu1tikgQGj8zb1cuFW_X0x5Mwawg>
+    <xme:LLBAZH_Oba4SUNRw87mNp4PpuxE0Mjx76Khqh4JNNnb6LakV8KsrFYigzOK3oqgtt
+    KJJ0vuHHaGz5_QXuQ>
+X-ME-Received: <xmr:LLBAZEReu2KuDj8YdVPSkyuiopHjytxBHMnarLKxRdgvUWXOSMHP3avW3Vn4aA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtuddgjedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:LLBAZBunC4RgYkjvCJm8TfMS5nZZdXIvMpE-agTozO6MvBi0AmOCdA>
+    <xmx:LLBAZNcsQGQ3MLPiJP4ZtGzcP1GUvrAKg4g4VgNSejSSm_m5AM7r2A>
+    <xmx:LLBAZN3dtqCXWKUqBbSf-sUZZey272HecYmAHvxlBFI_wM0c57-GOw>
+    <xmx:LLBAZL18FVj0cmNgxoJvYsYBxzGLkJa6YQn1-Yo-AD_h22GMclj1PA>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 19 Apr 2023 23:23:23 -0400 (EDT)
+Date:   Wed, 19 Apr 2023 20:23:01 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Josh Stone <jistone@redhat.com>,
+        William Brown <william.brown@suse.com>,
+        Georgy Yakovlev <gyakovlev@gentoo.org>,
+        Jan Alexander Steffens <jan.steffens@gmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: Re: [PATCH 0/3] Rust 1.68.2 upgrade
+Message-ID: <ZECwFUyUt77E/5MO@boqun-archlinux>
+References: <20230418214347.324156-1-ojeda@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a6jhf7wghnos6yjvgt3rbudhwsx4r4r7kurm35euofz3mjwmdu@74z44ohjgmre>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230418214347.324156-1-ojeda@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 07:32:40PM -0700, Jerry Snitselaar wrote:
-> On Sun, Mar 26, 2023 at 12:04:08AM +0530, Krishna Yarlagadda wrote:
-> > TPM devices may insert wait state on last clock cycle of ADDR phase.
-> > For SPI controllers that support full-duplex transfers, this can be
-> > detected using software by reading the MISO line. For SPI controllers
-> > that only support half-duplex transfers, such as the Tegra QSPI, it is
-> > not possible to detect the wait signal from software. The QSPI
-> > controller in Tegra234 and Tegra241 implement hardware detection of the
-> > wait signal which can be enabled in the controller for TPM devices.
-> > 
-> > The current TPM TIS driver only supports software detection of the wait
-> > signal. To support SPI controllers that use hardware to detect the wait
-> > signal, add the function tpm_tis_spi_hw_flow_transfer() and move the
-> > existing code for software based detection into a function called
-> > tpm_tis_spi_sw_flow_transfer(). SPI controllers that only support
-> > half-duplex transfers will always call tpm_tis_spi_hw_flow_transfer()
-> > because they cannot support software based detection. The bit
-> > SPI_TPM_HW_FLOW is set to indicate to the SPI controller that hardware
-> > detection is required and it is the responsibility of the SPI controller
-> > driver to determine if this is supported or not.
-> > 
-> > For hardware flow control, CMD-ADDR-DATA messages are combined into a
-> > single message where as for software flow control exiting method of
-> > CMD-ADDR in a message and DATA in another is followed.
-> > 
-> > Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> > ---
-> >  drivers/char/tpm/tpm_tis_spi_main.c | 91 ++++++++++++++++++++++++++++-
-> >  1 file changed, 89 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-> > index a0963a3e92bd..db9afd0b83da 100644
-> > --- a/drivers/char/tpm/tpm_tis_spi_main.c
-> > +++ b/drivers/char/tpm/tpm_tis_spi_main.c
-> > @@ -71,8 +71,74 @@ static int tpm_tis_spi_flow_control(struct tpm_tis_spi_phy *phy,
-> >  	return 0;
-> >  }
-> >  
-> > -int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> > -			 u8 *in, const u8 *out)
-> > +/*
-> > + * Half duplex controller with support for TPM wait state detection like
-> > + * Tegra QSPI need CMD, ADDR & DATA sent in single message to manage HW flow
-> > + * control. Each phase sent in different transfer for controller to idenity
-> > + * phase.
-> > + */
-> > +static int tpm_tis_spi_transfer_half(struct tpm_tis_data *data,	u32 addr,
-> > +				     u16 len, u8 *in, const u8 *out)
-> > +{
-> > +	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> > +	struct spi_transfer spi_xfer[3];
-> > +	struct spi_message m;
-> > +	u8 transfer_len;
-> > +	int ret;
-> > +
-> > +	while (len) {
-> > +		transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
-> > +
-> > +		spi_message_init(&m);
-> > +		phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
-> > +		phy->iobuf[1] = 0xd4;
-> > +		phy->iobuf[2] = addr >> 8;
-> > +		phy->iobuf[3] = addr;
+On Tue, Apr 18, 2023 at 11:43:44PM +0200, Miguel Ojeda wrote:
+> This is the first upgrade to the Rust toolchain since the initial Rust
+> merge, from 1.62.0 to 1.68.2 (i.e. the latest).
 > 
-> I haven't looked at much TPM code in the past couple of years, but
-> perhaps some defines instead of magic numbers here? 0x80 is the rw bit,
-> and 0xd4 the transaction offset?
+> Please see the last patch message for a long explanation of the upgrade,
+> the policy for future upgrades and some indications on how to easily
+> review this.
 > 
-> > +
-> > +		memset(&spi_xfer, 0, sizeof(spi_xfer));
-> > +
-> > +		spi_xfer[0].tx_buf = phy->iobuf;
-> > +		spi_xfer[0].len = 1;
-> > +		spi_message_add_tail(&spi_xfer[0], &m);
-> > +
-> > +		spi_xfer[1].tx_buf = phy->iobuf + 1;
-> > +		spi_xfer[1].len = 3;
-> > +		spi_message_add_tail(&spi_xfer[1], &m);
-> > +
-> > +		if (out) {
-> > +			spi_xfer[2].tx_buf = &phy->iobuf[4];
-> > +			spi_xfer[2].rx_buf = NULL;
-> > +			memcpy(&phy->iobuf[4], out, transfer_len);
-> > +			out += transfer_len;
-> > +		}
-> > +
-> > +		if (in) {
-> > +			spi_xfer[2].tx_buf = NULL;
-> > +			spi_xfer[2].rx_buf = &phy->iobuf[4];
-> > +		}
-> > +
-> > +		spi_xfer[2].len = transfer_len;
-> > +		spi_message_add_tail(&spi_xfer[2], &m);
-> > +
-> > +		reinit_completion(&phy->ready);
-> > +
-> > +		ret = spi_sync_locked(phy->spi_device, &m);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +
-> > +		if (in) {
-> > +			memcpy(in, &phy->iobuf[4], transfer_len);
-> > +			in += transfer_len;
-> > +		}
-> > +
-> > +		len -= transfer_len;
-> > +	}
-> > +
-> > +	return ret;
-> > +}
+> The series is based on `rust-next`.
 > 
-> Does tpm_tis_spi_transfer_half not need to lock the bus?  The doc comments for spi_sync_locked
-> state:
-> 
->  This call should be used by drivers that require exclusive access to the
->  SPI bus. It has to be preceded by a spi_bus_lock call. The SPI bus must
->  be released by a spi_bus_unlock call when the exclusive access is over.
-> 
-> If that isn't the case should it be using spi_sync instead of spi_sync_locked?
-> 
-> Regards,
-> Jerry
 
-b4 mbox -c to the rescue. I found the earlier discussion with Mark about
-the lock, so I guess the question is just should this call spi_sync
-instead of spi_sync_locked then?
+Works on my machine ;-)
 
-The magic numbers is a minor nit, and can probably be cleaned up
-separately since the full duplex code was already doing the same
-thing. The only other nit is just the older tcg spec being referenced
-in patch 1.
+Tested-by: Boqun Feng <boqun.feng@gmail.com>
 
 Regards,
-Jerry
+Boqun
 
+> Miguel Ojeda (3):
+>   rust: alloc: clarify what is the upstream version
+>   rust: arc: fix intra-doc link in `Arc<T>::init`
+>   rust: upgrade to Rust 1.68.2
 > 
-> > +
-> > +static int tpm_tis_spi_transfer_full(struct tpm_tis_data *data, u32 addr,
-> > +				     u16 len, u8 *in, const u8 *out)
-> >  {
-> >  	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> >  	int ret = 0;
-> > @@ -140,6 +206,24 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> >  	return ret;
-> >  }
-> >  
-> > +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> > +			 u8 *in, const u8 *out)
-> > +{
-> > +	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> > +	struct spi_controller *ctlr = phy->spi_device->controller;
-> > +
-> > +	/*
-> > +	 * TPM flow control over SPI requires full duplex support.
-> > +	 * Send entire message to a half duplex controller to handle
-> > +	 * wait polling in controller.
-> > +	 * Set TPM HW flow control flag..
-> > +	 */
-> > +	if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX)
-> > +		return tpm_tis_spi_transfer_half(data, addr, len, in, out);
-> > +	else
-> > +		return tpm_tis_spi_transfer_full(data, addr, len, in, out);
-> > +}
-> > +
-> >  static int tpm_tis_spi_read_bytes(struct tpm_tis_data *data, u32 addr,
-> >  				  u16 len, u8 *result, enum tpm_tis_io_mode io_mode)
-> >  {
-> > @@ -181,6 +265,9 @@ static int tpm_tis_spi_probe(struct spi_device *dev)
-> >  
-> >  	phy->flow_control = tpm_tis_spi_flow_control;
-> >  
-> > +	if (dev->controller->flags & SPI_CONTROLLER_HALF_DUPLEX)
-> > +		dev->mode |= SPI_TPM_HW_FLOW;
-> > +
-> >  	/* If the SPI device has an IRQ then use that */
-> >  	if (dev->irq > 0)
-> >  		irq = dev->irq;
-> > -- 
-> > 2.17.1
-> > 
+>  Documentation/process/changes.rst |   2 +-
+>  rust/alloc/README.md              |   3 +
+>  rust/alloc/alloc.rs               |  55 ++--
+>  rust/alloc/boxed.rs               | 446 ++++++++++++++++++++++++++--
+>  rust/alloc/collections/mod.rs     |   5 +-
+>  rust/alloc/lib.rs                 |  71 +++--
+>  rust/alloc/raw_vec.rs             |  16 +-
+>  rust/alloc/slice.rs               | 447 ++++------------------------
+>  rust/alloc/vec/drain.rs           |  81 +++++-
+>  rust/alloc/vec/drain_filter.rs    |  60 +++-
+>  rust/alloc/vec/into_iter.rs       | 125 ++++++--
+>  rust/alloc/vec/is_zero.rs         |  96 ++++++-
+>  rust/alloc/vec/mod.rs             | 464 +++++++++++++++++++++++-------
+>  rust/alloc/vec/set_len_on_drop.rs |   5 +
+>  rust/alloc/vec/spec_extend.rs     |  63 +---
+>  rust/bindings/lib.rs              |   1 -
+>  rust/kernel/build_assert.rs       |   2 +
+>  rust/kernel/init.rs               |   5 +
+>  rust/kernel/lib.rs                |   4 -
+>  rust/kernel/std_vendor.rs         |   2 +
+>  rust/kernel/sync/arc.rs           |   2 +-
+>  scripts/Makefile.build            |   2 +-
+>  scripts/min-tool-version.sh       |   2 +-
+>  23 files changed, 1278 insertions(+), 681 deletions(-)
 > 
-
+> -- 
+> 2.40.0
+> 
