@@ -2,50 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89D66E8B67
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3049E6E8B68
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234100AbjDTH1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 03:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40750 "EHLO
+        id S234093AbjDTH1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 03:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234057AbjDTH1d (ORCPT
+        with ESMTP id S234080AbjDTH1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 20 Apr 2023 03:27:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31BE4C2C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:27:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DE9A6457F
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:27:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D19C433D2;
-        Thu, 20 Apr 2023 07:27:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681975648;
-        bh=NVw8V8F7KES4FsBHfm//e0CtYsLVO0znyJS14sgnyN8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ECiwGlrQdrSz0avemQU/m0qoDlDxy+0EDhluEGE4U5+f8VFgGPXxTPQ9fsaPnh5Qq
-         YXoTUohfMfHSIbq49y/apjDO8Mns3HOlCguGPX6xxhBqogH+NBQHsBHlI34jac+M1W
-         yUMM6kTbGUxPOrbm0qr71ZLBRssYgGgMOkInoJi9ByTTYEvWkEfPBR+/uO/LJRtr3b
-         wWzZngO4EfzN3MUyuAaWDmFODfJKCN/pyCKJzYoZPqiV4wUiTEuRPrwAIqdxuPGWP5
-         iJaNz6DVSWJlB+oWPSLB4jVDm6+iHHjZz0MBQRR/ozWpl//UkU3qbsLLeeMXq+VI6t
-         frTbh3VSLcIEA==
-From:   Lee Jones <lee@kernel.org>
-To:     lee@kernel.org, jassisinghbrar@gmail.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] mailbox: mailbox-test: Fix potential double-free in mbox_test_message_write()
-Date:   Thu, 20 Apr 2023 08:27:18 +0100
-Message-ID: <20230420072718.881079-2-lee@kernel.org>
-X-Mailer: git-send-email 2.40.0.396.gfff15efe05-goog
-In-Reply-To: <20230420072718.881079-1-lee@kernel.org>
-References: <20230420072718.881079-1-lee@kernel.org>
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF1A35259;
+        Thu, 20 Apr 2023 00:27:27 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8CxC9pd6UBkqV4fAA--.55212S3;
+        Thu, 20 Apr 2023 15:27:25 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx37Nc6UBkOMkwAA--.547S3;
+        Thu, 20 Apr 2023 15:27:25 +0800 (CST)
+Subject: Re: [PATCH v8 2/2] spi: loongson: add bus driver for the loongson spi
+ controller
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230419062202.28749-1-zhuyinbo@loongson.cn>
+ <20230419062202.28749-3-zhuyinbo@loongson.cn>
+ <c24f8a28-23d4-46e3-8ff2-4b6f4e39b493@sirena.org.uk>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <718b9d6b-bef3-a344-dce2-1086dad23b29@loongson.cn>
+Date:   Thu, 20 Apr 2023 15:27:24 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <c24f8a28-23d4-46e3-8ff2-4b6f4e39b493@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-CM-TRANSID: AQAAf8Bx37Nc6UBkOMkwAA--.547S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxJr1rKF1rWrykCr1xWF47XFb_yoW8Cw45pa
+        nYyw1Ygrs3Jr48urn8KrZ5JF1vyryfJanrXFWSvw4jg3sxur1fX345KF93Gw4ayF1xAr17
+        ZFWY9w4DCFn5uw7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b4xFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84
+        ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF
+        6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14
+        v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY
+        64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7
+        Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
+        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
+        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+        kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07Uio7NUUUUU=
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,127 +70,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a user can make copy_from_user() fail, there is a potential for
-UAF/DF due to a lack of locking around the allocation, use and freeing
-of the data buffers.
 
-This issue is not theoretical.  I managed to author a POC for it:
 
-    BUG: KASAN: double-free in kfree+0x5c/0xac
-    Free of addr ffff29280be5de00 by task poc/356
-    CPU: 1 PID: 356 Comm: poc Not tainted 6.1.0-00001-g961aa6552c04-dirty #20
-    Hardware name: linux,dummy-virt (DT)
-    Call trace:
-     dump_backtrace.part.0+0xe0/0xf0
-     show_stack+0x18/0x40
-     dump_stack_lvl+0x64/0x80
-     print_report+0x188/0x48c
-     kasan_report_invalid_free+0xa0/0xc0
-     ____kasan_slab_free+0x174/0x1b0
-     __kasan_slab_free+0x18/0x24
-     __kmem_cache_free+0x130/0x2e0
-     kfree+0x5c/0xac
-     mbox_test_message_write+0x208/0x29c
-     full_proxy_write+0x90/0xf0
-     vfs_write+0x154/0x440
-     ksys_write+0xcc/0x180
-     __arm64_sys_write+0x44/0x60
-     invoke_syscall+0x60/0x190
-     el0_svc_common.constprop.0+0x7c/0x160
-     do_el0_svc+0x40/0xf0
-     el0_svc+0x2c/0x6c
-     el0t_64_sync_handler+0xf4/0x120
-     el0t_64_sync+0x18c/0x190
+在 2023/4/19 下午8:36, Mark Brown 写道:
+> On Wed, Apr 19, 2023 at 02:22:02PM +0800, Yinbo Zhu wrote:
+> 
+>> +       clk = devm_clk_get(dev, NULL);
+>> +       if (!IS_ERR(clk))
+>> +               spi->clk_rate = clk_get_rate(clk);
+> 
+> I notice we never actually enable this clock.  I guess it's some system
+> clock which is needed for basic system functionality which is always on
+> and we just need the rate but it looks a bit off.
+The 2k1000 SoC's spi clock was used boot clock, which boot clock
+was gain from system clock(ref clk) that by division and dobuling.
 
-    Allocated by task 356:
-     kasan_save_stack+0x3c/0x70
-     kasan_set_track+0x2c/0x40
-     kasan_save_alloc_info+0x24/0x34
-     __kasan_kmalloc+0xb8/0xc0
-     kmalloc_trace+0x58/0x70
-     mbox_test_message_write+0x6c/0x29c
-     full_proxy_write+0x90/0xf0
-     vfs_write+0x154/0x440
-     ksys_write+0xcc/0x180
-     __arm64_sys_write+0x44/0x60
-     invoke_syscall+0x60/0x190
-     el0_svc_common.constprop.0+0x7c/0x160
-     do_el0_svc+0x40/0xf0
-     el0_svc+0x2c/0x6c
-     el0t_64_sync_handler+0xf4/0x120
-     el0t_64_sync+0x18c/0x190
+Currently, the spi clock was enabled in firmware, so driver doesn't need
+to enable it.
+> 
+>> +static int __maybe_unused loongson_spi_suspend(struct device *dev)
+>> +{
+>> +	struct loongson_spi *loongson_spi;
+>> +	struct spi_master *master;
+>> +
+>> +	master = dev_get_drvdata(dev);
+>> +	loongson_spi = spi_master_get_devdata(master);
+>> +
+>> +	loongson_spi->spcr = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
+>> +	loongson_spi->sper = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPER_REG);
+>> +	loongson_spi->spsr = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPSR_REG);
+>> +	loongson_spi->para = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_PARA_REG);
+>> +	loongson_spi->sfcs = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SFCS_REG);
+>> +	loongson_spi->timi = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_TIMI_REG);
+>> +
+>> +	spi_master_suspend(master);
+> 
+> This saves the register state before suspending at the SPI level but
+> that means that if there were any transfers in progress then the
+> register state might be changed by the active transfers after we've
+> saved the state, meaning we might restore a state for an active
+> transfer.  The spi_master_suspend() should go first, then save the
+> register state.  The resume is OK, it's just the suspend.
 
-    Freed by task 357:
-     kasan_save_stack+0x3c/0x70
-     kasan_set_track+0x2c/0x40
-     kasan_save_free_info+0x38/0x5c
-     ____kasan_slab_free+0x13c/0x1b0
-     __kasan_slab_free+0x18/0x24
-     __kmem_cache_free+0x130/0x2e0
-     kfree+0x5c/0xac
-     mbox_test_message_write+0x208/0x29c
-     full_proxy_write+0x90/0xf0
-     vfs_write+0x154/0x440
-     ksys_write+0xcc/0x180
-     __arm64_sys_write+0x44/0x60
-     invoke_syscall+0x60/0x190
-     el0_svc_common.constprop.0+0x7c/0x160
-     do_el0_svc+0x40/0xf0
-     el0_svc+0x2c/0x6c
-     el0t_64_sync_handler+0xf4/0x120
-     el0t_64_sync+0x18c/0x190
+okay, I got it.
 
-Signed-off-by: Lee Jones <lee@kernel.org>
----
- drivers/mailbox/mailbox-test.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/mailbox/mailbox-test.c b/drivers/mailbox/mailbox-test.c
-index 51e62817f2438..c4a705c303314 100644
---- a/drivers/mailbox/mailbox-test.c
-+++ b/drivers/mailbox/mailbox-test.c
-@@ -12,6 +12,7 @@
- #include <linux/kernel.h>
- #include <linux/mailbox_client.h>
- #include <linux/module.h>
-+#include <linux/mutex.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/poll.h>
-@@ -39,6 +40,7 @@ struct mbox_test_device {
- 	char			*signal;
- 	char			*message;
- 	spinlock_t		lock;
-+	struct mutex		mutex;
- 	wait_queue_head_t	waitq;
- 	struct fasync_struct	*async_queue;
- 	struct dentry		*root_debugfs_dir;
-@@ -111,6 +113,8 @@ static ssize_t mbox_test_message_write(struct file *filp,
- 		return -EINVAL;
- 	}
- 
-+	mutex_lock(&tdev->mutex);
-+
- 	tdev->message = kzalloc(MBOX_MAX_MSG_LEN, GFP_KERNEL);
- 	if (!tdev->message)
- 		return -ENOMEM;
-@@ -145,6 +149,8 @@ static ssize_t mbox_test_message_write(struct file *filp,
- 	kfree(tdev->message);
- 	tdev->signal = NULL;
- 
-+	mutex_unlock(&tdev->mutex);
-+
- 	return ret < 0 ? ret : count;
- }
- 
-@@ -393,6 +399,7 @@ static int mbox_test_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, tdev);
- 
- 	spin_lock_init(&tdev->lock);
-+	mutex_init(&tdev->mutex);
- 
- 	if (tdev->rx_channel) {
- 		tdev->rx_buffer = devm_kzalloc(&pdev->dev,
--- 
-2.40.0.396.gfff15efe05-goog
+Thanks.
+> 
 
