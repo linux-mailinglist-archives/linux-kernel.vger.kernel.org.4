@@ -2,69 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5F46E8D72
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 054286E8D74
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234383AbjDTJDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 05:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
+        id S234389AbjDTJD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 05:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234219AbjDTJC4 (ORCPT
+        with ESMTP id S232546AbjDTJDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 05:02:56 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6F365BF
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:57:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 20 Apr 2023 05:03:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071629ED8
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:58:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B235F1FDB3;
-        Thu, 20 Apr 2023 08:57:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681981060; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kc+idYJYpxh1ZMa1V5YjWqbC7KDsYG40oEExYHDrWNE=;
-        b=iRGABP1FQvtKD37NoylsYr11L7RTy1s2zoPXD9mRqQEh6qEM/goUCtLksAlucf5zjV+GWs
-        4PUDn1uNBc8Ghaf6kdVDf+8HZd3WLdmHDxbsnGEc7jqXyr0Usdo8W5Mqd91NR4Acr0WwU2
-        d0CC2oKCltOxTssLeZhNzF5OmEICNVU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681981060;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kc+idYJYpxh1ZMa1V5YjWqbC7KDsYG40oEExYHDrWNE=;
-        b=eVdVPn+6HePaNKr/G0+TXnZjXOvUKUbvJgcYd8XenZ/LBfcKg8L/Og1Dw1nQBd1UX61ti0
-        OJMC3rUmxGb2QdDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 90DBB13584;
-        Thu, 20 Apr 2023 08:57:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 4RJiIoT+QGQzfwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 20 Apr 2023 08:57:40 +0000
-Message-ID: <61edb9d3-11f5-42de-633d-6e6253ce021f@suse.de>
-Date:   Thu, 20 Apr 2023 10:57:40 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6570960DC4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:58:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83BA0C433EF;
+        Thu, 20 Apr 2023 08:57:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681981080;
+        bh=KW/cOzzz0VeUWtRrIVVV/Jvq1YUVpWtNqR0e3LlJHpU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=b2myTk6B5eriGxsU6/qGzfQumjVeH2e3afVEFIWlU8rfbkviTzxfnFOTr+a1fbLh8
+         zWtjEyNyqdlnbur6mK5cefIAqwk90StKTjTec61TpMor9Xap1uHWxS5W/22bMVHn0E
+         My3fk/2N/ilyUoS/47lxI5LJL1h7Eta0vkO6AfnQ4lkq2Q9eTOrCYGHKLzLSFZNVyu
+         1xuwf6mcGZ9ndyzuAsgC19Sx5DCwNqszhddBEK3f1ncrVhlmhT46kWXt+KaEpWmrXJ
+         bP7Ht/9+Q95uQ9N8JkGbnU8WreQSsdGYAEM2bxB6u7NFj6zniS8LX9vFSh/FnHBWD8
+         lgMm12YTBcYCw==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Hugh Dickins <hughd@google.com>
+Cc:     Christian Brauner <brauner@kernel.org>, akpm@linux-foundation.org,
+        willy@infradead.org, linux-mm@kvack.org, p.raghav@samsung.com,
+        da.gomez@samsung.com, a.manzanares@samsung.com, dave@stgolabs.net,
+        yosryahmed@google.com, keescook@chromium.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] shmem: restrict noswap option to initial user namespace
+Date:   Thu, 20 Apr 2023 10:57:43 +0200
+Message-Id: <20230420-faxen-advokat-40abb4c1a152@brauner>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <ZD8Q2SzVr3xDmCgY@bombadil.infradead.org>
+References: <ZD8Q2SzVr3xDmCgY@bombadil.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] drm/ast: Fix ARM compatibility
-Content-Language: en-US
-To:     Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com
-Cc:     airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230420080947.27226-1-jammy_huang@aspeedtech.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230420080947.27226-1-jammy_huang@aspeedtech.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------S9VScJM8Q7xs00Ki6xKISzXB"
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=973; i=brauner@kernel.org; h=from:subject:message-id; bh=KW/cOzzz0VeUWtRrIVVV/Jvq1YUVpWtNqR0e3LlJHpU=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQ4/CtY+P1BygbWTxsmz2v3mbW68tTFF9vkznTv/rC0+Fq8 kMSC6R2lLAxiXAyyYoosDu0m4XLLeSo2G2VqwMxhZQIZwsDFKQATOdTB8D8nUVBgesz9L2museLMgc rL8zcymz6qnLdhWmCKaJrYpHcMv5h3cMz02syXubEt6dTWisvnC8/H9OUImU3acTB4f4qbJB8A
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,80 +60,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------S9VScJM8Q7xs00Ki6xKISzXB
-Content-Type: multipart/mixed; boundary="------------fv9yA3eZgk43qsZFOFTijQYs";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com
-Cc: airlied@gmail.com, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org
-Message-ID: <61edb9d3-11f5-42de-633d-6e6253ce021f@suse.de>
-Subject: Re: [PATCH v2] drm/ast: Fix ARM compatibility
-References: <20230420080947.27226-1-jammy_huang@aspeedtech.com>
-In-Reply-To: <20230420080947.27226-1-jammy_huang@aspeedtech.com>
+Prevent tmpfs instances mounted in an unprivileged namespaces from
+evading accounting of locked memory by using the "noswap" mount option.
 
---------------fv9yA3eZgk43qsZFOFTijQYs
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Reported-by: Hugh Dickins <hughd@google.com>
+Link: https://lore.kernel.org/lkml/79eae9fe-7818-a65c-89c6-138b55d609a@google.com
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+ mm/shmem.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-SGkNCg0KQW0gMjAuMDQuMjMgdW0gMTA6MDkgc2NocmllYiBKYW1teSBIdWFuZzoNCj4gQVJN
-IGFyY2hpdGVjdHVyZSBvbmx5IGhhcyAnbWVtb3J5Jywgc28gYWxsIGRldmljZXMgYXJlIGFj
-Y2Vzc2VkIGJ5DQo+IE1NSU8gaWYgcG9zc2libGUuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBK
-YW1teSBIdWFuZyA8amFtbXlfaHVhbmdAYXNwZWVkdGVjaC5jb20+DQo+IC0tLQ0KPiAgIHYy
-IGNoYW5nZXM6DQo+ICAgIC0gVXNlIE1NSU8gYWZ0ZXIgQVNUMjUwMCB3aGljaCBlbmFibGUg
-TU1JTyBieSBkZWZhdWx0Lg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9t
-YWluLmMgfCA5ICsrKysrLS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMo
-KyksIDQgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJt
-L2FzdC9hc3RfbWFpbi5jIGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbWFpbi5jDQo+IGlu
-ZGV4IGY4M2NlNzcxMjdjYi4uZDM4NGU4MTBmYTRkIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJz
-L2dwdS9kcm0vYXN0L2FzdF9tYWluLmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2FzdC9h
-c3RfbWFpbi5jDQo+IEBAIC00MjUsMTEgKzQyNSwxMiBAQCBzdHJ1Y3QgYXN0X3ByaXZhdGUg
-KmFzdF9kZXZpY2VfY3JlYXRlKGNvbnN0IHN0cnVjdCBkcm1fZHJpdmVyICpkcnYsDQo+ICAg
-CQlyZXR1cm4gRVJSX1BUUigtRUlPKTsNCj4gICANCj4gICAJLyoNCj4gLQkgKiBJZiB3ZSBk
-b24ndCBoYXZlIElPIHNwYWNlIGF0IGFsbCwgdXNlIE1NSU8gbm93IGFuZA0KPiAtCSAqIGFz
-c3VtZSB0aGUgY2hpcCBoYXMgTU1JTyBlbmFibGVkIGJ5IGRlZmF1bHQgKHJldiAweDIwDQo+
-IC0JICogYW5kIGhpZ2hlcikuDQo+ICsJICogQWZ0ZXIgQVNUMjUwMCwgTU1JTyBpcyBlbmFi
-bGVkIGJ5IGRlZmF1bHQsIGFuZCBpdCBzaG91bGQgYmUgYWRhcHRlZA0KDQpCeSAnYWRhcHRl
-ZCcsIHlvdSBtZWFuICdhZG9wdGVkJz8NCg0KQXBhcnQgZnJvbSB0aGF0Og0KDQpSZXZpZXdl
-ZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQoNCkkgYWxz
-byByYW4gdGhpcyBwYXRjaCBvbiBhbiBBU1QyMTAwLCB3aGljaCBzdGlsbCB3b3JrcyBhcyBi
-ZWZvcmUuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gKwkgKiB0byBiZSBjb21wYXRp
-YmxlIHdpdGggQXJtLg0KPiAgIAkgKi8NCj4gLQlpZiAoIShwY2lfcmVzb3VyY2VfZmxhZ3Mo
-cGRldiwgMikgJiBJT1JFU09VUkNFX0lPKSkgew0KPiArCWlmIChwZGV2LT5yZXZpc2lvbiA+
-PSAweDQwKSB7DQo+ICsJCWFzdC0+aW9yZWdzID0gYXN0LT5yZWdzICsgQVNUX0lPX01NX09G
-RlNFVDsNCj4gKwl9IGVsc2UgaWYgKCEocGNpX3Jlc291cmNlX2ZsYWdzKHBkZXYsIDIpICYg
-SU9SRVNPVVJDRV9JTykpIHsNCj4gICAJCWRybV9pbmZvKGRldiwgInBsYXRmb3JtIGhhcyBu
-byBJTyBzcGFjZSwgdHJ5aW5nIE1NSU9cbiIpOw0KPiAgIAkJYXN0LT5pb3JlZ3MgPSBhc3Qt
-PnJlZ3MgKyBBU1RfSU9fTU1fT0ZGU0VUOw0KPiAgIAl9DQo+IA0KPiBiYXNlLWNvbW1pdDog
-ZTYyMjUyYmM1NWI2ZDRlZGRjNmMyYmRiZjk1YTQ0ODE4MGQ2YTA4ZA0KDQotLSANClRob21h
-cyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJl
-IFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVl
-cm5iZXJnLCBHZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBN
-Y0RvbmFsZCwgQm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 787e83791eb5..21ce9b26bb4d 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -3571,6 +3571,10 @@ static int shmem_parse_one(struct fs_context *fc, struct fs_parameter *param)
+ 		ctx->seen |= SHMEM_SEEN_INUMS;
+ 		break;
+ 	case Opt_noswap:
++		if ((fc->user_ns != &init_user_ns) || !capable(CAP_SYS_ADMIN)) {
++			return invalfc(fc,
++				       "Turning off swap in unprivileged tmpfs mounts unsupported");
++		}
+ 		ctx->noswap = true;
+ 		ctx->seen |= SHMEM_SEEN_NOSWAP;
+ 		break;
+-- 
+2.34.1
 
-
---------------fv9yA3eZgk43qsZFOFTijQYs--
-
---------------S9VScJM8Q7xs00Ki6xKISzXB
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRA/oQFAwAAAAAACgkQlh/E3EQov+Aa
-2BAAzyUjiH1jxWXsdgutB91vAJgJAdM+6GojPBWVEDud6kGZKhUrN1mCAdeyW8pByqpOQUDQGkWR
-SR3GAqeQfIYqcCyCHQ4+KJMKAlaUgVmuDWZr9ZSeqhhNfbZlfuHzNggRpSlhBBV4VEDt2r01nbah
-K4u05H47FtltsYApQgtLsiyRDtb+0HkOMvfHU97r4U/GB3amFSrQnZ9jW99bx56BlhdCkiawTmkP
-1P17dMJRXHC7WW99V/xOANDrLrWYcukAbtpWcvTXtr5exfT2DOOovCQQDAzOhDTy7ctaCiXIVSHz
-FKlIljjrA7Z52pMntkFKWLKrT0NJhDbF9Oxz8hBt9mLcH9BJM78TnvXZ3f+NBSPzfIUJQK6ttwzF
-6KHjeALPEiDNWDhGqjDHSBGcJReFB+DaPYl7axSqslXK8VnmN4FCqJyoyGmekrZZjBUyVs5AKGWq
-wpVmwrzkAC+zCDauQaO0dclvob17keovTgfQkRRJL1j1TvHK43eTWyzH1n0b8E7eJV5SpLJ9MiM6
-1AK1Z0vcGmmSXVxH7SAkivAoLnQDydBalE8WP5+WyDmcUGZp04juUzUj+3fkoeKTI+hnyljosWBk
-H1K4UNkEipd6CwOLxDZE8D+z3BrbwMhdjAHMMCWzHN3Uj/OfeqeFZhReEXjZ/6G8PdrLxJQBtJ1w
-s3c=
-=Ze+j
------END PGP SIGNATURE-----
-
---------------S9VScJM8Q7xs00Ki6xKISzXB--
