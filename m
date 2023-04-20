@@ -2,122 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002B16E8AA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 08:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 004AB6E8AA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 08:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233871AbjDTGsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 02:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48344 "EHLO
+        id S233806AbjDTGu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 02:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjDTGsE (ORCPT
+        with ESMTP id S231426AbjDTGu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 02:48:04 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16081FE4
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 23:48:03 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3ee6c339cceso188465e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 23:48:03 -0700 (PDT)
+        Thu, 20 Apr 2023 02:50:56 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609D21FE4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 23:50:55 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id dx24so3928540ejb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 23:50:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681973282; x=1684565282;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mSkCvBXXQn0Pz9mV1Ds+4r3rrylnLRXP3iAno+fbDFI=;
-        b=hm71xhFNJdX2UoGBsWYmPq/qdIqZt1Wax24efwoGvt8IiADj4r2nkQ8QD1RxRk2M0Y
-         oUxwE8n5yGYRwkgbEfPxCnHh7SQ25L4xi6jiQDEP+oDAcuEdejiiFCUwhXDjWZLwGcNX
-         3cz3D/mwHZqEACYf/P6y3TbV7t1QbE5Vl+PqRfcKld3WupvdyreNCPYJVxiskdqDl2b4
-         5tm15LEC4Eat+UKBR2wB69zij2rd85NAGbMX+gnau59HF/xUIrM3N1AF/k2x2fGeQ+yI
-         7P+RKcER36CH9trJT4KR73dMjHeE0QbuVX5NgS6Vv220RJpmWuEjonOaN/ITGGB7dEdL
-         Je4A==
+        d=linaro.org; s=google; t=1681973454; x=1684565454;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BZBSMQktnT3sOUJ8njJfewAafajqx7+l0kvMw5MkbYc=;
+        b=RMcG5R9F0ItlJ2Yrczy/iqBbaS7ytas5ZRJiSKNtI4UK6iwyRLAn0or2Q0pP6C2CNl
+         ln3RBOH7cZEvk7Pw6R28HEyxmkCbiozpSGCm9onw3qNuKpcsHPe+0OA1cCCaqIqnxsSJ
+         d3YXZMS1gIHJX+FZP50Y7AjaEgYa2FOix869bNkLGaQJPuCNomaoIl9Rj95El9kEH9Iv
+         7TCqNlEmrkSRXfhY3Q0Vf1yGfn7blmeG/oFfpRDQ03o5A3XRvFWqBP/LM94Q4znn8TQi
+         kGU6vd43n8wdFdavuEASTVuLLDJsQWcyu2Iv2hwa3kD/hMyXoyHr1RwfMAnjacMzdjbw
+         OpcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681973282; x=1684565282;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mSkCvBXXQn0Pz9mV1Ds+4r3rrylnLRXP3iAno+fbDFI=;
-        b=cc1IXYFhFMFeA0gpZxnKWJd4Y5PD9sfYwg9n5Cc9vIJYAjJf401MT/2DuMzlo/WfOT
-         7vg9vitTPiR/i6bHJboBv5Hmpo3XRek7RlgwQS5L16IFZ+6sTuYagPZAupI7fRYOr6MZ
-         A4kHu56CTsAGdgaGvfAJK9HEWuJTpXvbeS0AwHoHIo1E06oOfXnnYYtYTySL6ggSm+/i
-         JKFsYmT6sicuLLvvi9owJsE3QhHu22nc2t2IkkCVe0FfeOVq1wRw+svLxsgtaldIHh/a
-         ozzH9oynjV4CBdtcrqDFih6JaK2q9mydamtpBbp8FLPKTRqbD/CX6Gzf5ccpkGSuYmhC
-         SKPw==
-X-Gm-Message-State: AAQBX9dUiuFBa70MBlqJePM0zTu0unl+m2Dr3Yp9e+XHcKpH3oSHgndI
-        xtkX6q3gXRdLbClRAbQb5BnXLwgyq1PVp3+fBELVgGoPExxD3r/u0QQwSQ==
-X-Google-Smtp-Source: AKy350awe0Q0VQ3MkUL4nCZSzp9UwMk5ieIQqMsMbpKlKWIGeopxh9G+woDkgBSOMtvDvry2ruDqF1hCZXkBkRqLY2A=
-X-Received: by 2002:a05:600c:314c:b0:3f1:7490:e5a4 with SMTP id
- h12-20020a05600c314c00b003f17490e5a4mr133669wmo.6.1681973282115; Wed, 19 Apr
- 2023 23:48:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681973454; x=1684565454;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BZBSMQktnT3sOUJ8njJfewAafajqx7+l0kvMw5MkbYc=;
+        b=OKhj3rNJfbEvT/NL5aBfy/6udEOoBs277WTlPifGWQ5eqOQ5vM0zDD9E2nyyiEfseS
+         j9LU6WJczTfa21+fZSa5EeQ5lUm0LOaOiBriyKIxBHCiRsY3JGoI0vAc6W/zsIKodyh5
+         1ftFz/nFeVN4DiVg1EBnQJOtx/C/PAsmrhr0YZN4jAZ+8WF8zFMlwFQq7GZiyY1tlx0p
+         5jc/0j5Hsg2ZM2UfJrvZDGxNuFGkJZT3+sWOr6hFKJHnpb8qfuOBR/2soQjZf7ZiZxSy
+         x7HwAKJrnb7+zjU2zJ7Q84M6YGM7zutCE7TTKc0JAAeBJucRv0KvE0DJHYNVayzOHdLR
+         TY2A==
+X-Gm-Message-State: AAQBX9eiO4d4S1olSA0CL6g67bHvRFBizOEEPDfGD5be4HAGAWy7xwbx
+        dD8JsOXz+t/SAR97CtEjrevn8w==
+X-Google-Smtp-Source: AKy350aUCP1fGimAyu+iszpo1b0WXJNidAqhDBXkSrvxhoJ10XZCYH/yQsD7vyt04SPPV+9V+qCh/A==
+X-Received: by 2002:a17:906:57c9:b0:93d:ae74:fa9e with SMTP id u9-20020a17090657c900b0093dae74fa9emr498351ejr.7.1681973453837;
+        Wed, 19 Apr 2023 23:50:53 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
+        by smtp.gmail.com with ESMTPSA id lh21-20020a170906f8d500b0094eeab34ad5sm360048ejb.124.2023.04.19.23.50.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 23:50:53 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Xu Yang <xu.yang_2@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: usb: ci-hdrc-usb2: allow multiple PHYs
+Date:   Thu, 20 Apr 2023 08:50:51 +0200
+Message-Id: <20230420065051.22994-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230418120305.520719816@linuxfoundation.org> <CA+G9fYs9sHnfhn4hSFP=AmOfgj-zvoK9vmBejRvzKPj4uXx+VA@mail.gmail.com>
- <bd46521c-a167-2872-fecb-2b0f32855a24@oracle.com> <20230418165105.q5s77yew2imkamsb@oracle.com>
- <ZD9rfsteIrXIwezR@debian.me> <CAOUHufa9-AKwwx7oVpQkV355TTmVSfi8roBKEsRjRNbeuGUkbw@mail.gmail.com>
- <20230419150923.s5vbpsjqq3hlcl7k@oracle.com>
-In-Reply-To: <20230419150923.s5vbpsjqq3hlcl7k@oracle.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 20 Apr 2023 00:47:15 -0600
-Message-ID: <CAOUHufaks2jcHSJbPj-zLrc=6FPjh7oB4ZCf8C3x_8=OMQEwKg@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/91] 5.15.108-rc1 review
-To:     Tom Saeger <tom.saeger@oracle.com>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 9:09=E2=80=AFAM Tom Saeger <tom.saeger@oracle.com> =
-wrote:
->
-> On Tue, Apr 18, 2023 at 10:56:22PM -0600, Yu Zhao wrote:
-> > On Tue, Apr 18, 2023 at 10:18=E2=80=AFPM Bagas Sanjaya <bagasdotme@gmai=
-l.com> wrote:
-> > >
-> > > On Tue, Apr 18, 2023 at 10:51:05AM -0600, Tom Saeger wrote:
-> > > > > Tom Saeger identified that the below commit moves it out of ifdef=
-.
-> > > > >
-> > > > > commit 354ed597442952fb680c9cafc7e4eb8a76f9514c
-> > > > > Author: Yu Zhao <yuzhao@google.com>
-> > > > > Date:   Sun Sep 18 02:00:07 2022 -0600
-> > > > >
-> > > > >     mm: multi-gen LRU: kill switch
-> > > > >
-> > > > FWIW - partially backporting (location of cgroup_mutex extern) from=
-:
-> > > > 354ed5974429 ("mm: multi-gen LRU: kill switch")
-> > > >
-> > > > fixes x86_64 build for me.
-> > > >
-> > > > Regards,
-> > > >
-> > > > --Tom
-> > > >
-> > > > diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-> >
-> > ...
-> >
-> > > Yu, would you like to provide formal backport?
->
-> Nah - an easier fix was suggested by Waiman (remove the lockdep_assert_he=
-ld line) and confirmed here:
->
-> https://lore.kernel.org/stable/20230418192807.n3hggjak25tnat7i@oracle.com=
-/
->
-> >
-> > Are you suggesting backporting the entire MGLRU patchset (>30 patches)?
-> >
-> > I do have the backport ready for 5.15 and multiple distros have taken
-> > it.
->
-> However, I am interested in testing 5.15 backport of MGLRU.
-> Where might I find that?
+Qualcomm MSM8974 comes with USB HS phy in two variants, although final
+DTS chooses only one.  Allow such combination in the ChipIdea USB2
+bindings and also disallow any other properties in the ulpi node.
 
-git://github.com/yuzhaogoogle/linux mglru-5.15
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+---
+
+DTS will be fixed separately.
+---
+ Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+index e5e4dbc5a7a0..b26d26c2b023 100644
+--- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
++++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+@@ -322,8 +322,9 @@ properties:
+ 
+   ulpi:
+     type: object
+-    properties:
+-      phy:
++    additionalProperties: false
++    patternProperties:
++      "^phy(-[0-9])?$":
+         description: The phy child node for Qcom chips.
+         type: object
+         $ref: /schemas/phy/qcom,usb-hs-phy.yaml
+-- 
+2.34.1
+
