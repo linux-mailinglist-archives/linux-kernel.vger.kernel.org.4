@@ -2,408 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0C06E9DBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6836E9DBE
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbjDTVQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 17:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
+        id S232674AbjDTVQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 17:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjDTVQX (ORCPT
+        with ESMTP id S232021AbjDTVQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 17:16:23 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCD644AF
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 14:16:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682025381; x=1713561381;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hYpkRR7qjNMuDk8Btri941D0ibXh/QBz3FY7G8jh/ug=;
-  b=aQ5fy7TSgE8LKixuAUN4QABfw7y4JbnxgVnDtssK7tjE6IHtE8DwKqQ9
-   Gc+mygy7ZfI3jGK5p62jQLANuh6b9UKOzYHQBT2k2MU9uNWX0XiMKBHtn
-   MtXQZJYV1V4Dun6DyPJed+wKBDwHNHvDYO8qrz/gF5QCpreo1HQg6K4dg
-   g4cSRulWGrQQ10DTgO1hNL+Lx8rdPdOf6zQLLZOycPyhhPuf2Dbsd66My
-   EGGXT5XX3QOuQ5Hqmu1J4Y+MvpJa4GvDyQOZKFdQFGj4Ja+EuNGcyEAu0
-   3C/0AYPJ6ElWY9AjQL9f5Q7c41wGK0eUIXETZskBwjnlOZ5RiF1VtEodZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="432131262"
-X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="432131262"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 14:16:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="761345430"
-X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="761345430"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga004.fm.intel.com with ESMTP; 20 Apr 2023 14:16:20 -0700
-Received: from [10.255.228.114] (kliang2-mobl1.ccr.corp.intel.com [10.255.228.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id E5312580CB8;
-        Thu, 20 Apr 2023 14:16:19 -0700 (PDT)
-Message-ID: <7de5c749-5960-2fa1-d48a-be360b08d5e1@linux.intel.com>
-Date:   Thu, 20 Apr 2023 17:16:18 -0400
+        Thu, 20 Apr 2023 17:16:36 -0400
+Received: from sonic303-21.consmr.mail.ir2.yahoo.com (sonic303-21.consmr.mail.ir2.yahoo.com [77.238.178.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A885FEA
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 14:16:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1682025392; bh=2cXD0H+8C9TOtE0twf5ja4IdtSpWhQNZkSsdMMaF/VM=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=OjucL3hrhsflPim8zDNL4lf0T/RsaUHpe6vPDRY5WHffHd6aSpqTTWxkZxITfvNCG0TKyrtGnrJ3pYFTffv365B/Qys04SYqdLIBtBTdAkvMFFoBf+n3LMhINkPZ5eX173GsM95slPOwbquDf1H0XWQuxcObzt5Gpu7QFj9B+lYKAW9LtENAGlCfVCSAgv0tmkhtMxEP7wdR1drgvUjNysT5wE/Zmu5V0g2SSZrP8iyp3a/cS4A8IX3ubwK0QvjksYrEDe0MNyxNlQ1FlysoS4f1OP1QHGozKGNbSCHoqqFYYxo8mQzoHTWczCgiKgxnUaajVtCoZRFgKg1lrCsmig==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1682025392; bh=HH7xdCwOqAI5AFLL3G6I8A7z31zNEqVCCfdhdFiTqZu=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=WcYHuItzaBR1AGDmSm/ptmUdyou3mb+HfNsbtvKkJLmwJP2HcXVhk73T6+DREEgRi8/Bo81FnWl+EaFxsAngSw+BBSg19L0vtc4SI5W4t6mWzd8MqL/5hx24UgrUmq3M4eZ9vsXBnlKV/g4WUjHROqq39GP9AZkCbuqAsS2BLAh9e0/9LNqYLVQSVkCWNsWpcim0//TPx0B7wKIhDTJzZ2m5qLeT+Zkdqjxh1CkXVBRE2CkTKaq0wZnQiX+H4gZxT5b/oE3hCoy/SlfyAO/uUAVBLwc7D5R79mMsk3lEANTM+xTXZ5d6ZZ1NhbzOOotAC6k7mOp00w2RLw+7qzSzLg==
+X-YMail-OSG: qoECEQ8VM1lXh.TorHFnYRdwnJ81IpfmNe_v9Ur1yauaTEoKvXltaIyhD89XHhU
+ GKFHpbcMOX8KCZ31bumc7TU2ndZI_L_zWasrJMLEIdf5N5obvAtVTJlTZe1MVdNnAJgp4BiufGSs
+ FZKf3QdOSMUJtLn95UT7jSzjZvk0W0t33E4oO_qIvsVvDmq_3TrRNQmGvQpB5UifT2JElP.X3rpx
+ 2wOsBFFGs.AUWsMGyX0lBFFzdcORln6qzuI3U_eRJcEg25KhdWXg5jFV0hEtt97zemQx9JcbQ9AX
+ z2bXNpEQ1fUWf0YcLCG1p49N_5nULlKhMZM9CMs497zJZombO7c4JYjIx.enVAPB1X2zAKEFscFD
+ AkaZXQ4E0SYqp04rdqshzbbBi0IFSjUdc6sumTG6OtuqSYZ3.iy9L4zIL4_7yuIOE1fw.LEl9DIf
+ 0NtANVk1ul9Pc9lcQMBGFEsN8IZL3iQN5Xb5WVGeYkj7nCrKrMD5vPvfLufEAbtT8tdCYg1M3sjF
+ FgJxPgawictFqgCwQX5diKmUNe5w5iS6H5_RU64mTP4Mtg5j7ao_1.WIydY5WId_0TkZCx9yFPuX
+ m6BLBJ_Th3wVrEK1xClA58KbAKEeIv.MV8gYzYWRCZXh7iO0sgQ725.unebLCzs2yhHus52DI5.h
+ XHy37PqG8vQa_5UWSUkqhUyYLXjWCGBRIBZ4gCw4v9scGLLjdrG1leK91pWtXXTpKeyEpSzNMcOa
+ Tw9RJc0Ua7Thd9eHNMJyyFdF6.cY3.VMrdt01avFPpdPO3dhwhEpgWJSkzhXFuLOB3ApDkf2m8kv
+ zOCMtS8BJK1s.KxOt6Zu8NCSzY1sJbLE1qb04qA2tGZXWAMX.pKPni8QWPc4IX1s3okR9hcLfMcU
+ mrS6vUuYpGKy5gaORbeQ3C1fHKaJme.apHsIFARcEd.BwzX5kaqAvddDGlv0xbta8d17EqBzgXlm
+ hiq6MQHpLF5e3JmSGBjHBY.aCdook6JB7NMr5YlUf1Wl5AeKtCgXedqT81xhWmFt9t2NIHOSVhKx
+ yTUmoRE.4iD_jbBE0_A2mItLlicOzizSpqnNDnHAZBaIMOxLVs3fUXr06ogXrg.mH9K8gEd1e6Dw
+ FxfqP14LMCXZ.EOoUnSudg0jre5uD1FxcCv12sKBB4nWnkUgE9b0G1Gqsj8u1I1cWDtfM0O6bYpM
+ FiAxqmA2PAcPt2XHrWIWvO3LzpDMbRyitnUqci7Y4wm70TyWT73ZaaNfntG3x9TmI5.z_ArAzXO4
+ rk5IdZECpqtX9p52NlvNYsmz0845LJFry4FyfrkhgnNh5Sx8vW0QnyVIsZ22is6rLOe7GpeW30VF
+ 54Ae6m0HUY_ezbFc_a6SxbmxFDRZbitgrv30SlAQF21SzexgJEZDjOAx0ScXR.KF.m__t7e9Jk5.
+ fTZ3CDNbhIHjBY.6HZXNLWt4D9tjP9HepnhqGNrqoHNZ84bHF9UAe54vMeqjv2QfB6zCW626jjf1
+ 7JL4KdNU2CKQHE.k5V9nHN.INXD_y2AAiReBVLQtG2DPwRY7X.5NUxn4pRVMmlK1OnWcARMnZmXu
+ fPnzOCh8u4znxMPkyBBMjAjiGLD7EOk3k6iE8.AbbtGHsttvD8UIWykLrh2nePEvf21yPUuL_TiW
+ oZB9byKtcKE44kUXHvpmoadZBXh7I2siPjcs9sBFfJBJRgD0VLn787qXA4.SnuD..XojJZMHVZ6f
+ i2jB07Q0pFzG9mD0nHss_3j5dT.D3iGl5P5oqfjkANk1XLom96aGeXDxC9qInmo27HQxK.3vsgYn
+ qeZNlf.MMiV5JypxHjrFAheUJvzwIxKxUxkanBA6mTDktgjw97AHWZDSnL20c38lZVCOduLLm6Je
+ eDJmX8zw.2di3LK1WTf3z4E9tfmU07jSBeOb9X54fr2Id.Wv6RGRmAQcJXbhTe1yjXHtveHSP2B4
+ qrf6d1nTlAGnYtL3v.ME8ZtjwQwANV_wp6LLfrAsHruS437i843Vr.Mpxl4TnJfpOIPpuihf348n
+ cYVNlyHaESdBpMqUxNtGICJNW9vka8rJjKwfIOEg.XwYNNRYEOx8bRsXKjSOSWBM9o07Gi0R3Aox
+ xRDmpMl6timkIHrhfXlRie1nw8mwTrbr1lgYPLzpcCHX9ksdpIrI2u7xhWOaqc_gI1PupskF0zz7
+ RElXhkKFGmrvKxDROPZoLr7iewHMDcSbKfX1_rKDHqIBUygP6sFnmnPImDbZgipALz_ZwNimPDb.
+ N3XuunSzmc3.DzjwcqYqSJv1oifhaR6VZZSpwR.enLqmQHtZjje7SWq55zoYaWq8lEpy8Eqglrgd
+ JafHZEt43jPpmhEObNowP1aueOqVwadw-
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: 0d8dffc6-73dc-4a25-936a-6821c4513787
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.ir2.yahoo.com with HTTP; Thu, 20 Apr 2023 21:16:32 +0000
+Received: by hermes--production-ir2-74cd8fc864-jl5bm (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a7d5ee9a0540dd2923f65aa81657ee83;
+          Thu, 20 Apr 2023 21:16:28 +0000 (UTC)
+Message-ID: <662eeda8-8605-4124-75d3-9df6bd81bcb7@rocketmail.com>
+Date:   Thu, 20 Apr 2023 23:16:26 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/1] perf evsel: Introduce evsel__name_is() method to
- check if the evsel name is equal to a given string
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 9/9] dt-bindings: Add documentation for rt5033 mfd,
+ regulator and charger
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <cover.1681646904.git.jahau@rocketmail.com>
+ <9275af790e6e21b5cf661a2444effe4caf2be02e.1681646904.git.jahau@rocketmail.com>
+ <CACRpkdZEtG=OjTECDO=SvFk89MqL10sKKMOABPEs-xxYv1hmqw@mail.gmail.com>
+ <CACRpkdaRkJ-JVNqAOQLuOgDztDfUP7DBQU9QP7AMbnK=eN2HWQ@mail.gmail.com>
 Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-References: <ZEGLM8VehJbS0gP2@kernel.org> <ZEGOJuJd4uLS2392@kernel.org>
- <ZEGSU5DrAODcLmc3@kernel.org>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <ZEGSU5DrAODcLmc3@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Jakob Hauser <jahau@rocketmail.com>
+In-Reply-To: <CACRpkdaRkJ-JVNqAOQLuOgDztDfUP7DBQU9QP7AMbnK=eN2HWQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+X-Mailer: WebService/1.1.21365 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-04-20 3:28 p.m., Arnaldo Carvalho de Melo wrote:
-> Em Thu, Apr 20, 2023 at 04:10:30PM -0300, Arnaldo Carvalho de Melo escreveu:
->> Em Thu, Apr 20, 2023 at 03:57:55PM -0300, Arnaldo Carvalho de Melo escreveu:
->>> This makes the logic a bit clear by avoiding the !strcmp() pattern and
->>> also a way to intercept the pointer if we need to do extra validation on
->>> it or to do lazy setting of evsel->name via evsel__name(evsel).
->>
->> + this, looking if there are others...
-> 
-> Somehow the first message didn't go thru, so below is the combined
-> patch, this is an effort to avoid accessing evsel->name directly as the
-> preferred way to get an evsel name is evsel__name(), so looking for
-> direct access and providing accessors that avoid that.
-
-One more
-
-diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-index 2260e27adf44..3a960a3f6962 100644
---- a/tools/perf/util/evlist.c
-+++ b/tools/perf/util/evlist.c
-@@ -467,7 +467,7 @@ static int evsel__strcmp(struct evsel *pos, char
-*evsel_name)
- 		return 0;
- 	if (evsel__is_dummy_event(pos))
- 		return 1;
--	return strcmp(pos->name, evsel_name);
-+	return !evsel__name_is(pos, evsel_name);
- }
-
- static int evlist__is_enabled(struct evlist *evlist)
-
-
-> 
-> - Arnaldo
-> 
-> From e60455d6a4e35ba0c376966443294586a1adc3ec Mon Sep 17 00:00:00 2001
-> From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Date: Thu, 20 Apr 2023 15:54:11 -0300
-> Subject: [PATCH 1/1] perf evsel: Introduce evsel__name_is() method to check if
->  the evsel name is equal to a given string
-> 
-> This makes the logic a bit clear by avoiding the !strcmp() pattern and
-> also a way to intercept the pointer if we need to do extra validation on
-> it or to do lazy setting of evsel->name via evsel__name(evsel).
-> 
-> Cc: Adrian Hunter <adrian.hunter@intel.com>
-> Cc: Ian Rogers <irogers@google.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: "Liang, Kan" <kan.liang@linux.intel.com>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Link: https://lore.kernel.org/lkml/ZEGLM8VehJbS0gP2@kernel.org
-> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-
-With the above one,
-
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-
-Thanks,
-Kan
-> ---
->  tools/perf/arch/arm64/util/kvm-stat.c   |  4 ++--
->  tools/perf/arch/powerpc/util/kvm-stat.c |  4 ++--
->  tools/perf/arch/x86/util/kvm-stat.c     |  8 ++++----
->  tools/perf/builtin-kvm.c                |  6 +++---
->  tools/perf/builtin-stat.c               |  2 +-
->  tools/perf/tests/expand-cgroup.c        |  2 +-
->  tools/perf/tests/parse-events.c         | 12 ++++++------
->  tools/perf/tests/parse-metric.c         |  2 +-
->  tools/perf/tests/pmu-events.c           |  2 +-
->  tools/perf/util/evsel.c                 |  7 ++++++-
->  tools/perf/util/evsel.h                 |  1 +
->  11 files changed, 28 insertions(+), 22 deletions(-)
-> 
-> diff --git a/tools/perf/arch/arm64/util/kvm-stat.c b/tools/perf/arch/arm64/util/kvm-stat.c
-> index 72ca9bb45804d109..6611aa21cba957d9 100644
-> --- a/tools/perf/arch/arm64/util/kvm-stat.c
-> +++ b/tools/perf/arch/arm64/util/kvm-stat.c
-> @@ -44,14 +44,14 @@ static bool event_begin(struct evsel *evsel,
->  			struct perf_sample *sample __maybe_unused,
->  			struct event_key *key __maybe_unused)
->  {
-> -	return !strcmp(evsel->name, kvm_entry_trace);
-> +	return evsel__name_is(evsel, kvm_entry_trace);
->  }
->  
->  static bool event_end(struct evsel *evsel,
->  		      struct perf_sample *sample,
->  		      struct event_key *key)
->  {
-> -	if (!strcmp(evsel->name, kvm_exit_trace)) {
-> +	if (evsel__name_is(evsel, kvm_exit_trace)) {
->  		event_get_key(evsel, sample, key);
->  		return true;
->  	}
-> diff --git a/tools/perf/arch/powerpc/util/kvm-stat.c b/tools/perf/arch/powerpc/util/kvm-stat.c
-> index d04a08c9fd19c58c..ea1220d66b6758b2 100644
-> --- a/tools/perf/arch/powerpc/util/kvm-stat.c
-> +++ b/tools/perf/arch/powerpc/util/kvm-stat.c
-> @@ -60,13 +60,13 @@ static bool hcall_event_end(struct evsel *evsel,
->  			    struct perf_sample *sample __maybe_unused,
->  			    struct event_key *key __maybe_unused)
->  {
-> -	return (!strcmp(evsel->name, kvm_events_tp[3]));
-> +	return (evsel__name_is(evsel, kvm_events_tp[3]));
->  }
->  
->  static bool hcall_event_begin(struct evsel *evsel,
->  			      struct perf_sample *sample, struct event_key *key)
->  {
-> -	if (!strcmp(evsel->name, kvm_events_tp[2])) {
-> +	if (evsel__name_is(evsel, kvm_events_tp[2])) {
->  		hcall_event_get_key(evsel, sample, key);
->  		return true;
->  	}
-> diff --git a/tools/perf/arch/x86/util/kvm-stat.c b/tools/perf/arch/x86/util/kvm-stat.c
-> index ef513def03bac71c..424716518b755915 100644
-> --- a/tools/perf/arch/x86/util/kvm-stat.c
-> +++ b/tools/perf/arch/x86/util/kvm-stat.c
-> @@ -46,7 +46,7 @@ static bool mmio_event_begin(struct evsel *evsel,
->  		return true;
->  
->  	/* MMIO write begin event in kernel. */
-> -	if (!strcmp(evsel->name, "kvm:kvm_mmio") &&
-> +	if (evsel__name_is(evsel, "kvm:kvm_mmio") &&
->  	    evsel__intval(evsel, sample, "type") == KVM_TRACE_MMIO_WRITE) {
->  		mmio_event_get_key(evsel, sample, key);
->  		return true;
-> @@ -63,7 +63,7 @@ static bool mmio_event_end(struct evsel *evsel, struct perf_sample *sample,
->  		return true;
->  
->  	/* MMIO read end event in kernel.*/
-> -	if (!strcmp(evsel->name, "kvm:kvm_mmio") &&
-> +	if (evsel__name_is(evsel, "kvm:kvm_mmio") &&
->  	    evsel__intval(evsel, sample, "type") == KVM_TRACE_MMIO_READ) {
->  		mmio_event_get_key(evsel, sample, key);
->  		return true;
-> @@ -101,7 +101,7 @@ static bool ioport_event_begin(struct evsel *evsel,
->  			       struct perf_sample *sample,
->  			       struct event_key *key)
->  {
-> -	if (!strcmp(evsel->name, "kvm:kvm_pio")) {
-> +	if (evsel__name_is(evsel, "kvm:kvm_pio")) {
->  		ioport_event_get_key(evsel, sample, key);
->  		return true;
->  	}
-> @@ -145,7 +145,7 @@ static bool msr_event_begin(struct evsel *evsel,
->  			       struct perf_sample *sample,
->  			       struct event_key *key)
->  {
-> -	if (!strcmp(evsel->name, "kvm:kvm_msr")) {
-> +	if (evsel__name_is(evsel, "kvm:kvm_msr")) {
->  		msr_event_get_key(evsel, sample, key);
->  		return true;
->  	}
-> diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
-> index 747d19336340f28f..71165036e4cac89b 100644
-> --- a/tools/perf/builtin-kvm.c
-> +++ b/tools/perf/builtin-kvm.c
-> @@ -625,7 +625,7 @@ void exit_event_get_key(struct evsel *evsel,
->  
->  bool kvm_exit_event(struct evsel *evsel)
->  {
-> -	return !strcmp(evsel->name, kvm_exit_trace);
-> +	return evsel__name_is(evsel, kvm_exit_trace);
->  }
->  
->  bool exit_event_begin(struct evsel *evsel,
-> @@ -641,7 +641,7 @@ bool exit_event_begin(struct evsel *evsel,
->  
->  bool kvm_entry_event(struct evsel *evsel)
->  {
-> -	return !strcmp(evsel->name, kvm_entry_trace);
-> +	return evsel__name_is(evsel, kvm_entry_trace);
->  }
->  
->  bool exit_event_end(struct evsel *evsel,
-> @@ -878,7 +878,7 @@ static bool is_child_event(struct perf_kvm_stat *kvm,
->  		return false;
->  
->  	for (; child_ops->name; child_ops++) {
-> -		if (!strcmp(evsel->name, child_ops->name)) {
-> +		if (evsel__name_is(evsel, child_ops->name)) {
->  			child_ops->get_key(evsel, sample, key);
->  			return true;
->  		}
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index d3cbee7460fcc48e..efda63f6bf329b51 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -2170,7 +2170,7 @@ static void setup_system_wide(int forks)
->  
->  		evlist__for_each_entry(evsel_list, counter) {
->  			if (!counter->core.requires_cpu &&
-> -			    strcmp(counter->name, "duration_time")) {
-> +			    !evsel__name_is(counter, "duration_time")) {
->  				return;
->  			}
->  		}
-> diff --git a/tools/perf/tests/expand-cgroup.c b/tools/perf/tests/expand-cgroup.c
-> index ec340880a848d907..9c1a1f18db750607 100644
-> --- a/tools/perf/tests/expand-cgroup.c
-> +++ b/tools/perf/tests/expand-cgroup.c
-> @@ -61,7 +61,7 @@ static int test_expand_events(struct evlist *evlist,
->  
->  	i = 0;
->  	evlist__for_each_entry(evlist, evsel) {
-> -		if (strcmp(evsel->name, ev_name[i % nr_events])) {
-> +		if (!evsel__name_is(evsel, ev_name[i % nr_events])) {
->  			pr_debug("event name doesn't match:\n");
->  			pr_debug("  evsel[%d]: %s\n  expected: %s\n",
->  				 i, evsel->name, ev_name[i % nr_events]);
-> diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
-> index 6eb1400443adddee..8068cfd89b84f723 100644
-> --- a/tools/perf/tests/parse-events.c
-> +++ b/tools/perf/tests/parse-events.c
-> @@ -1401,7 +1401,7 @@ static int test__checkevent_config_symbol(struct evlist *evlist)
->  {
->  	struct evsel *evsel = evlist__first(evlist);
->  
-> -	TEST_ASSERT_VAL("wrong name setting", strcmp(evsel->name, "insn") == 0);
-> +	TEST_ASSERT_VAL("wrong name setting", evsel__name_is(evsel, "insn"));
->  	return TEST_OK;
->  }
->  
-> @@ -1409,7 +1409,7 @@ static int test__checkevent_config_raw(struct evlist *evlist)
->  {
->  	struct evsel *evsel = evlist__first(evlist);
->  
-> -	TEST_ASSERT_VAL("wrong name setting", strcmp(evsel->name, "rawpmu") == 0);
-> +	TEST_ASSERT_VAL("wrong name setting", evsel__name_is(evsel, "rawpmu"));
->  	return TEST_OK;
->  }
->  
-> @@ -1417,7 +1417,7 @@ static int test__checkevent_config_num(struct evlist *evlist)
->  {
->  	struct evsel *evsel = evlist__first(evlist);
->  
-> -	TEST_ASSERT_VAL("wrong name setting", strcmp(evsel->name, "numpmu") == 0);
-> +	TEST_ASSERT_VAL("wrong name setting", evsel__name_is(evsel, "numpmu"));
->  	return TEST_OK;
->  }
->  
-> @@ -1425,7 +1425,7 @@ static int test__checkevent_config_cache(struct evlist *evlist)
->  {
->  	struct evsel *evsel = evlist__first(evlist);
->  
-> -	TEST_ASSERT_VAL("wrong name setting", strcmp(evsel->name, "cachepmu") == 0);
-> +	TEST_ASSERT_VAL("wrong name setting", evsel__name_is(evsel, "cachepmu"));
->  	return TEST_OK;
->  }
->  
-> @@ -1438,7 +1438,7 @@ static int test__intel_pt(struct evlist *evlist)
->  {
->  	struct evsel *evsel = evlist__first(evlist);
->  
-> -	TEST_ASSERT_VAL("wrong name setting", strcmp(evsel->name, "intel_pt//u") == 0);
-> +	TEST_ASSERT_VAL("wrong name setting", evsel__name_is(evsel, "intel_pt//u"));
->  	return TEST_OK;
->  }
->  
-> @@ -1446,7 +1446,7 @@ static int test__checkevent_complex_name(struct evlist *evlist)
->  {
->  	struct evsel *evsel = evlist__first(evlist);
->  
-> -	TEST_ASSERT_VAL("wrong complex name parsing", strcmp(evsel->name, "COMPLEX_CYCLES_NAME:orig=cycles,desc=chip-clock-ticks") == 0);
-> +	TEST_ASSERT_VAL("wrong complex name parsing", evsel__name_is(evsel, "COMPLEX_CYCLES_NAME:orig=cycles,desc=chip-clock-ticks"));
->  	return TEST_OK;
->  }
->  
-> diff --git a/tools/perf/tests/parse-metric.c b/tools/perf/tests/parse-metric.c
-> index c43b056f9fa395f4..1185b79e6274886e 100644
-> --- a/tools/perf/tests/parse-metric.c
-> +++ b/tools/perf/tests/parse-metric.c
-> @@ -39,7 +39,7 @@ static void load_runtime_stat(struct evlist *evlist, struct value *vals)
->  	evlist__for_each_entry(evlist, evsel) {
->  		count = find_value(evsel->name, vals);
->  		evsel->stats->aggr->counts.val = count;
-> -		if (!strcmp(evsel->name, "duration_time"))
-> +		if (evsel__name_is(evsel, "duration_time"))
->  			update_stats(&walltime_nsecs_stats, count);
->  	}
->  }
-> diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
-> index 7f8e864525271483..1dff863b9711cf6d 100644
-> --- a/tools/perf/tests/pmu-events.c
-> +++ b/tools/perf/tests/pmu-events.c
-> @@ -866,7 +866,7 @@ static int test__parsing_callback(const struct pmu_metric *pm,
->  	evlist__alloc_aggr_stats(evlist, 1);
->  	evlist__for_each_entry(evlist, evsel) {
->  		evsel->stats->aggr->counts.val = k;
-> -		if (!strcmp(evsel->name, "duration_time"))
-> +		if (evsel__name_is(evsel, "duration_time"))
->  			update_stats(&walltime_nsecs_stats, k);
->  		k++;
->  	}
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index a85a987128aad281..81b854650160c2b0 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -821,6 +821,11 @@ const char *evsel__name(struct evsel *evsel)
->  	return "unknown";
->  }
->  
-> +bool evsel__name_is(struct evsel *evsel, const char *name)
-> +{
-> +	return !strcmp(evsel->name, name);
-> +}
-> +
->  const char *evsel__group_pmu_name(const struct evsel *evsel)
->  {
->  	const struct evsel *leader;
-> @@ -1146,7 +1151,7 @@ static void evsel__set_default_freq_period(struct record_opts *opts,
->  
->  static bool evsel__is_offcpu_event(struct evsel *evsel)
->  {
-> -	return evsel__is_bpf_output(evsel) && !strcmp(evsel->name, OFFCPU_EVENT);
-> +	return evsel__is_bpf_output(evsel) && evsel__name_is(evsel, OFFCPU_EVENT);
->  }
->  
->  /*
-> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-> index 68072ec655ce9fff..1e5d640e4a9bd0f1 100644
-> --- a/tools/perf/util/evsel.h
-> +++ b/tools/perf/util/evsel.h
-> @@ -282,6 +282,7 @@ int arch_evsel__hw_name(struct evsel *evsel, char *bf, size_t size);
->  
->  int __evsel__hw_cache_type_op_res_name(u8 type, u8 op, u8 result, char *bf, size_t size);
->  const char *evsel__name(struct evsel *evsel);
-> +bool evsel__name_is(struct evsel *evsel, const char *name);
->  const char *evsel__group_pmu_name(const struct evsel *evsel);
->  const char *evsel__metric_id(const struct evsel *evsel);
->  
+SGkgTGludXMhDQoNCk9uIDIwLjA0LjIzIDEwOjAzLCBMaW51cyBXYWxsZWlqIHdyb3RlOg0K
+PiBPbiBUaHUsIEFwciAyMCwgMjAyMyBhdCA5OjU54oCvQU0gTGludXMgV2FsbGVpaiA8bGlu
+dXMud2FsbGVpakBsaW5hcm8ub3JnPiB3cm90ZToNCj4+DQo+PiBIaSBKYWtvYiwNCj4+DQo+
+PiB0aGFua3MgZm9yIHlvdXIgcGF0Y2ghDQo+Pg0KPj4gVGhlIGZvbGxvd2luZyBjYXVnaHQg
+bXkgZXllOg0KPj4NCj4+IE9uIFN1biwgQXByIDE2LCAyMDIzIGF0IDI6NTDigK9QTSBKYWtv
+YiBIYXVzZXIgPGphaGF1QHJvY2tldG1haWwuY29tPiB3cm90ZToNCj4+DQo+Pj4gQWRkIGRl
+dmljZSB0cmVlIGJpbmRpbmcgZG9jdW1lbnRhdGlvbiBmb3IgcnQ1MDMzIG11bHRpZnVuY3Rp
+b24gZGV2aWNlLCB2b2x0YWdlDQo+Pj4gcmVndWxhdG9yIGFuZCBiYXR0ZXJ5IGNoYXJnZXIu
+DQo+Pj4NCj4+PiBDYzogQmVvbWhvIFNlbyA8YmVvbWhvLnNlb0BzYW1zdW5nLmNvbT4NCj4+
+PiBDYzogQ2hhbndvbyBDaG9pIDxjdzAwLmNob2lAc2Ftc3VuZy5jb20+DQo+Pj4gU2lnbmVk
+LW9mZi1ieTogSmFrb2IgSGF1c2VyIDxqYWhhdUByb2NrZXRtYWlsLmNvbT4NCj4+PiAtLS0N
+Cj4+PiBUaGUgcGF0Y2ggaXMgYmFzZWQgb24gbGludXgtbmV4dCAodGFnICJuZXh0LTIwMjMw
+NDEzIikuDQo+PiAoLi4uKQ0KPj4+IC0tLSAvZGV2L251bGwNCj4+PiArKysgYi9Eb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcG93ZXIvc3VwcGx5L3JpY2h0ZWsscnQ1MDMz
+LWNoYXJnZXIueWFtbA0KPj4gKC4uLikNCj4+PiArICByaWNodGVrLHByZS1taWNyb2FtcDoN
+Cj4+PiArICAgIGRlc2NyaXB0aW9uOg0KPj4+ICsgICAgICBDdXJyZW50IG9mIHByZS1jaGFy
+Z2UgbW9kZS4gVGhlIHByZS1jaGFyZ2UgY3VycmVudCBsZXZlbHMgYXJlIDM1MCBtQSB0bw0K
+Pj4+ICsgICAgICA2NTAgbUEgcHJvZ3JhbW1lZCBieSBJMkMgcGVyIDEwMCBtQS4NCj4+PiAr
+ICAgIG1heEl0ZW1zOiAxDQo+Pj4gKw0KPj4+ICsgIHJpY2h0ZWssZmFzdC1taWNyb2FtcDoN
+Cj4+PiArICAgIGRlc2NyaXB0aW9uOg0KPj4+ICsgICAgICBDdXJyZW50IG9mIGZhc3QtY2hh
+cmdlIG1vZGUuIFRoZSBmYXN0LWNoYXJnZSBjdXJyZW50IGxldmVscyBhcmUgNzAwIG1BDQo+
+Pj4gKyAgICAgIHRvIDIwMDAgbUEgcHJvZ3JhbW1lZCBieSBJMkMgcGVyIDEwMCBtQS4NCj4+
+PiArICAgIG1heEl0ZW1zOiAxDQo+Pj4gKw0KPj4+ICsgIHJpY2h0ZWssZW9jLW1pY3JvYW1w
+Og0KPj4+ICsgICAgZGVzY3JpcHRpb246DQo+Pj4gKyAgICAgIFRoaXMgcHJvcGVydHkgaXMg
+ZW5kIG9mIGNoYXJnZSBjdXJyZW50LiBJdHMgbGV2ZWwgcmFuZ2VzIGZyb20gMTUwIG1BIHRv
+DQo+Pj4gKyAgICAgIDYwMCBtQS4gQmV0d2VlbiAxNTAgbUEgYW5kIDMwMCBtQSBpbiA1MCBt
+QSBzdGVwcywgYmV0d2VlbiAzMDAgbUEgYW5kIDYwMCBtQQ0KPj4+ICsgICAgICBpbiAxMDAg
+bUEgc3RlcHMuDQo+Pj4gKyAgICBtYXhJdGVtczogMQ0KPj4+ICsNCj4+PiArICByaWNodGVr
+LHByZS10aHJlc2hvbGQtbWljcm92b2x0Og0KPj4+ICsgICAgZGVzY3JpcHRpb246DQo+Pj4g
+KyAgICAgIFZvbHRhZ2Ugb2YgcHJlLWNoYXJnZSBtb2RlLiBJZiB0aGUgYmF0dGVyeSB2b2x0
+YWdlIGlzIGJlbG93IHRoZSBwcmUtY2hhcmdlDQo+Pj4gKyAgICAgIHRocmVzaG9sZCB2b2x0
+YWdlLCB0aGUgY2hhcmdlciBpcyBpbiBwcmUtY2hhcmdlIG1vZGUgd2l0aCBwcmUtY2hhcmdl
+IGN1cnJlbnQuDQo+Pj4gKyAgICAgIEl0cyBsZXZlbHMgYXJlIDIuMyBWIHRvIDMuOCBWIHBy
+b2dyYW1tZWQgYnkgSTJDIHBlciAwLjEgVi4NCj4+PiArICAgIG1heEl0ZW1zOiAxDQo+Pj4g
+Kw0KPj4+ICsgIHJpY2h0ZWssY29uc3QtbWljcm92b2x0Og0KPj4+ICsgICAgZGVzY3JpcHRp
+b246DQo+Pj4gKyAgICAgIEJhdHRlcnkgcmVndWxhdGlvbiB2b2x0YWdlIG9mIGNvbnN0YW50
+IHZvbHRhZ2UgbW9kZS4gVGhpcyB2b2x0YWdlIGxldmVscyBmcm9tDQo+Pj4gKyAgICAgIDMu
+NjUgViB0byA0LjQgViBieSBJMkMgcGVyIDAuMDI1IFYuDQo+Pj4gKyAgICBtYXhJdGVtczog
+MQ0KPj4NCj4+IFRoZXNlIGFyZSB2ZXJ5IGdlbmVyaWMgY3VycmVudHMgYW5kIHZvbHRhZ2Vz
+LCBhbmQgdGhlaXIgdXNhZ2UgaXMgd2VsbCBrbm93bg0KPj4gYW5kIGdlbmVyaWMuIFNvIHRo
+ZXkgc2hvdWxkIG5vdCBiZSBwcmVmaXhlZCAicmljaHRlaywiLg0KPj4NCj4+IFVzZSB0aGUg
+cHJvcGVydGllcyBhbHJlYWR5IGRlZmluZWQgaW4NCj4+IERvY3VtZW50YXRpb24vZGV2aWNl
+dHJlZS9iaW5kaW5ncy9wb3dlci9zdXBwbHkvYmF0dGVyeS55YW1sDQo+PiBmb3IgdGhlc2U6
+DQo+Pg0KPj4gcHJlY2hhcmdlLWN1cnJlbnQtbWljcm9hbXANCj4+IGNvbnN0YW50LWNoYXJn
+ZS1jdXJyZW50LW1heC1taWNyb2FtcA0KPj4gY2hhcmdlLXRlcm0tY3VycmVudC1taWNyb2Ft
+cA0KPj4gcHJlY2hhcmdlLXVwcGVyLWxpbWl0LW1pY3Jvdm9sdA0KPj4gY29uc3RhbnQtY2hh
+cmdlLXZvbHRhZ2UtbWF4LW1pY3Jvdm9sdA0KPj4NCj4+IFBsZWFzZSBkb3VibGUtY2hlY2ss
+IEkgdGhpbmsgdGhvc2UgYXJlIHRoZSBvbmVzIHlvdSBuZWVkLg0KPj4NCj4+IFBlcmhhcHMg
+aXQgaXMgcG9zc2libGUgdG8ganVzdCAkcmVmIHRoZXNlIHByb3BlcnRpZXMgZGlyZWN0bHkg
+YW5kIGFkZA0KPj4gdGhlIGFkZGl0aW9uYWwgcmVzdHJpY3Rpb25zIG9uIHRvcC4NCj4gDQo+
+IE9uIHNlY29uZCB0aG91Z2h0LCB0aGVzZSBhcmUgcmVhbGx5IHdlaXJkIHByb3BlcnRpZXMg
+dG8gaGF2ZSBvbiB0aGUNCj4gKmNoYXJnZXIqIGlzbid0IGl0Pw0KPiANCj4gSXQgaXMgcmVh
+bGx5ICpiYXR0ZXJ5KiByZXN0cmljdGlvbnMuDQo+IA0KPiBBIGNoYXJnZXIgY2FuIGNoYXJn
+ZSBtYW55IGRpZmZlcmVudCBiYXR0ZXJpZXMgd2l0aCBkaWZmZXJlbnQgQ0MvQ1YNCj4gc2V0
+dGluZ3MuDQo+IA0KPiBJIHRoaW5rIHlvdXIgY2hhcmdlciBzaG91bGQgY29udGFpbiBhIHBo
+YW5kbGUgdG8gYSBiYXR0ZXJ5IGFuZCB0aGUgYmF0dGVyeQ0KPiBub2RlIHNob3VsZCBjb250
+YWluIHRoZXNlIGxpbWl0cy4NCj4gDQo+ICAgIG1vbml0b3JlZC1iYXR0ZXJ5Og0KPiAgICAg
+ICRyZWY6IC9zY2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3BoYW5kbGUNCj4gICAg
+ICBkZXNjcmlwdGlvbjogcGhhbmRsZSB0byBiYXR0ZXJ5IG5vZGUNCj4gDQo+IFRoZW4geW91
+IGNhbiBqdXN0IHVzZSB0aGUgc3RhbmRhcmQgYmF0dGVyeSBiaW5kaW5ncyBmb3IgdGhlc2Ug
+cHJvcGVydGllcw0KPiBvbiB0aGUgYmF0dGVyeS4NCj4gDQo+IFNlZSBmb3IgZXhhbXBsZToN
+Cj4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Bvd2VyL3N1cHBseS9zdGVy
+aWNzc29uLGFiODUwMC1jaGFyZ2VyLnlhbWwNCj4gDQo+IFRoZXJlIHdpbGwgYmUgZHJpdmVy
+IGNoYW5nZXMgbmVlZGVkIHRvbywgYnV0IHRoaXMgd2lsbCBiZSB3YXkgY2xlYW5lci4NCj4g
+DQo+IFlvdXJzLA0KPiBMaW51cyBXYWxsZWlqDQoNClRoZXNlIGFyZSBpbnRlcmVzdGluZyBo
+aW50cyENCg0KSSB3YXMgZmlyc3QgYSBiaXQgY29uZnVzZWQgYnkgdGhlIHRlcm0gImJhdHRl
+cnkiLiBJIGFzc29jaWF0ZWQgdGhhdCB0ZXJtIA0Kd2l0aCB0aGUgZHJpdmVyICJydDUwMzMt
+YmF0dGVyeSIuIEJ1dCBJIHRoaW5rIHRoYXQgdGhvdWdodCB3YXMgd3JvbmcuIA0KVGhlIGRy
+aXZlciAicnQ1MDMzLWJhdHRlcnkiIGlzIGp1c3QgdGhlIGZ1ZWwgZ2F1Z2UuDQoNCkhhcmR3
+YXJlLXdpc2UsIHRoZSBtZmQgKGluY2wuIGNoYXJnZXIpIGFuZCBmdWVsIGdhdWdlIGFyZSBv
+biBkaWZmZXJlbnQgDQpJMkMgbGluZXMuIFRoZXJlZm9yZSwgdGhlIGRpZmZlcmVudCBkcml2
+ZXJzIGFjY2VzcyBkaWZmZXJlbnQgcmVnaXN0ZXJzLg0KDQpDaGFyZ2VyIHJlZ2lzdGVyczoN
+Cmh0dHBzOi8vZ2l0aHViLmNvbS90b3J2YWxkcy9saW51eC9ibG9iL3Y2LjMtcmM3L2luY2x1
+ZGUvbGludXgvbWZkL3J0NTAzMy1wcml2YXRlLmgjTDEzLUwyMw0KDQpGdWVsIGdhdWdlIHJl
+Z2lzdGVyczoNCmh0dHBzOi8vZ2l0aHViLmNvbS90b3J2YWxkcy9saW51eC9ibG9iL3Y2LjMt
+cmM3L2luY2x1ZGUvbGludXgvbWZkL3J0NTAzMy1wcml2YXRlLmgjTDIxNS1MMjQzDQoNClRo
+ZSB0aGluZ3MgYmVpbmcgc2V0IG9yIHJlYWQgaW4gdGhvc2UgcmVnaXN0ZXJzIGtpbmQgb2Yg
+ZGV0ZXJtaW5lIHdoaWNoIA0KdGhpbmdzIGFyZSBkb25lIGluIHdoaWNoIGRyaXZlci4NCg0K
+VGhlIHByb3BlcnRpZXMgd2UgdGFsayBhYm91dCBoZXJlIGFyZSB0aGUgc2V0dGluZ3MgZm9y
+IHRoZSBjaGFyZ2VyLiBUaGV5IA0KdGVsbCB0aGUgY2hhcmdlciBob3cgaXQgc2hvdWxkIGJl
+aGF2ZS4gSXQgbWFrZXMgc2Vuc2UgdG8gcHJvY2VzcyB0aG9zZSANCnNldHRpbmdzIHdpdGhp
+biB0aGUgY2hhcmdlciBkcml2ZXIuIFRoZSBmdWVsIGdhdWdlLCBvbiB0aGUgb3RoZXIgaGFu
+ZCwgDQpyZXR1cm5zIGluZm9ybWF0aW9uIGxpa2UgYWN0dWFsIHZvbHRhZ2UgYW5kIHBlcmNl
+bnRhZ2UuDQoNClRoZSBvbmx5IHRoaW5nIHRoYXQgc2VlbXMgbm90IHBsYWNlZCB3ZWxsIGlz
+IHRoZSAic3RhdHVzIiBwcm9wZXJ0eSBsaWtlIA0KY2hhcmdpbmcvZGlzY2hhcmdpbmcvbm90
+LWNoYXJnaW5nL2V0Yy4gQXQgUlQ1MDMzIHRoaXMgaW5mb3JtYXRpb24gaXMgDQp3aXRoaW4g
+dGhlIGNoYXJnZXIgcmVnaXN0ZXIuIFVzZXJzcGFjZSBsYXllciAiVVBvd2VyIiBleHBlY3Rz
+IHRoaXMgZnJvbSANCnRoZSAiYmF0dGVyeSIgZGV2aWNlLiBQYXRjaCA4IG9mIHRoaXMgc2Vy
+aWVzIHYyIGNhcnJpZXMgdGhhdCBwcm9wZXJ0eSANCmZyb20gdGhlIGNoYXJnZXIgb3ZlciB0
+byB0aGUgZnVlbCBnYXVnZS4gVGhvdWdoIHRoaXMgaXMgYSBiaXQgb2YgYSANCnF1aXJrLiBB
+bmQgaXQgY3JlYXRlcyBkZXBlbmRlbmNpZXMgYmV0d2VlbiB0d28gZHJpdmVycyB3aGljaCBh
+Y3R1YWxseSANCndvdWxkIGJlIGluZGVwZW5kZW50IGZyb20gZWFjaCBvdGhlci4NCg0KLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQoNCkJhY2sgdG8gdGhlIHRvcGljLiBX
+aGVuIHdlIHRhbGsgYWJvdXQgImJhdHRlcnkiIGhlcmUsIGl0IHNlZW1zIHRvIG1lIA0KdGhh
+dCBpdCdzIGFib3V0IHRoZSByZXByZXNlbnRhdGlvbiBpbiB0aGUgZGV2aWNldHJlZS4NCg0K
+Q3VycmVudGx5IGl0IGlzOg0KDQogICAgIHBtaWNAMzQgew0KICAgICAgICAgY29tcGF0aWJs
+ZSA9ICJyaWNodGVrLHJ0NTAzMyI7DQogICAgICAgICAuLi4uDQogICAgICAgICBjaGFyZ2Vy
+IHsNCiAgICAgICAgICAgICBjb21wYXRpYmxlID0gInJpY2h0ZWsscnQ1MDMzLWNoYXJnZXIi
+Ow0KICAgICAgICAgICAgIHJpY2h0ZWsscHJlLW1pY3JvYW1wID0gPDQ1MDAwMD47DQogICAg
+ICAgICAgICAgcmljaHRlayxmYXN0LW1pY3JvYW1wID0gPDEwMDAwMDA+Ow0KICAgICAgICAg
+ICAgIHJpY2h0ZWssZW9jLW1pY3JvYW1wID0gPDE1MDAwMD47DQogICAgICAgICAgICAgcmlj
+aHRlayxwcmUtdGhyZXNob2xkLW1pY3Jvdm9sdCA9IDwzNTAwMDAwPjsNCiAgICAgICAgICAg
+ICByaWNodGVrLGNvbnN0LW1pY3Jvdm9sdCA9IDw0MzUwMDAwPjsNCiAgICAgICAgICAgICBl
+eHRjb24gPSA8Jm11aWM+Ow0KICAgICAgICAgfTsNCiAgICAgfTsNCg0KQWNjb3JkaW5nIHRv
+IHlvdXIgcmVtYXJrcywgdGhlIHByb3BlcnRpZXMgY291bGQgYmUgIm91dHNvdXJjZWQiIGlu
+dG8gYQ0KYmF0dGVyeSBub2RlLiAoQnR3LiBJIGhhdmUgZG91YmxlLWNoZWNrZWQgdGhlIHBy
+b3BlcnR5IG5hbWVzLikNCg0KICAgICBiYXR0ZXJ5OiBiYXR0ZXJ5IHsNCiAgICAgICAgIGNv
+bXBhdGlibGUgPSAic2ltcGxlLWJhdHRlcnkiOw0KICAgICAgICAgcHJlY2hhcmdlLWN1cnJl
+bnQtbWljcm9hbXAgPSA8NDUwMDAwPjsNCiAgICAgICAgIGNvbnN0YW50LWNoYXJnZS1jdXJy
+ZW50LW1heC1taWNyb2FtcCA9IDwxMDAwMDAwPjsNCiAgICAgICAgIGNoYXJnZS10ZXJtLWN1
+cnJlbnQtbWljcm9hbXAgPSA8MTUwMDAwPjsNCiAgICAgICAgIHByZWNoYXJnZS11cHBlci1s
+aW1pdC1taWNyb3ZvbHQgPSA8MzUwMDAwMD47DQogICAgICAgICBjb25zdGFudC1jaGFyZ2Ut
+dm9sdGFnZS1tYXgtbWljcm92b2x0ID0gPDQzNTAwMDA+Ow0KICAgICB9Ow0KDQogICAgIHBt
+aWNAMzQgew0KICAgICAgICAgY29tcGF0aWJsZSA9ICJyaWNodGVrLHJ0NTAzMyI7DQogICAg
+ICAgICAuLi4uDQogICAgICAgICBjaGFyZ2VyIHsNCiAgICAgICAgICAgICBjb21wYXRpYmxl
+ID0gInJpY2h0ZWsscnQ1MDMzLWNoYXJnZXIiOw0KICAgICAgICAgICAgIG1vbml0b3JlZC1i
+YXR0ZXJ5ID0gPCZiYXR0ZXJ5PjsNCiAgICAgICAgICAgICBleHRjb24gPSA8Jm11aWM+Ow0K
+ICAgICAgICAgfTsNCiAgICAgfTsNCg0KUGVyc29uYWxseSBJIHdvdWxkIGNob29zZSB0aGUg
+Y3VycmVudCBpbXBsZW1lbnRhdGlvbiBmb3IgdHdvIHJlYXNvbnMgDQoocG9zc2libHkgd2Vh
+ayBvbmVzKToNCg0KMSkgVGhlIG9yaWdpbmFsIGF1dGhvciBvZiB0aGUgZHJpdmVyIGFuZCBk
+b2N1bWVudGF0aW9uIGlzIEJlb21obyBTZW8uIEkgDQp0cmllZCB0byBwcmVzZXJ2ZSB0aGUg
+b3JpZ2luYWwgc3RydWN0dXJlIGFzIGZhciBhcyBwb3NzaWJsZS4gVGhpcyBpcyANCnByb2Jh
+Ymx5IHJhdGhlciBhIHF1ZXN0aW9uIG9mIGVkaXRpbmcgdGhhbiBhIHRlY2huaWNhbCBvbmUu
+DQoNCjIpIEF0IGxlYXN0IGluIG15IG1pbmQgaXQncyBzdGlsbCB0aGUgc2V0dXAgZm9yIHRo
+ZSBjaGFyZ2VyLiBJdCBzZXRzIHVwIA0KYSB0aGUgY2hhcmdpbmcgYmVoYXZpb3Igb2YgYSBj
+ZXJ0YWluIGNvbnN1bWVyIGRldmljZS4gQW5kIHRoZSBjaG9pY2Ugb2YgDQp0aGVpciB2YWx1
+ZXMgaXMgbGltaXRlZCB0byB0aGUgaGFyZHdhcmUgb2YgdGhlIGNoYXJnZXIuIEFjY29yZGlu
+Z2x5IHRoZSANCmR0LWJpbmRpbmdzIHdvdWxkIHNheSB3aGF0IHRoZSBjaGFyZ2VyIGhhcmR3
+YXJlIGlzIGNhcGFibGUgdG8gZG8uIA0KVGhlcmVmb3JlIEknZCBzYXkgaXQncyByZWFzb25h
+YmxlIHRvIGhhdmUgdGhvc2UgdmFsdWVzIGluIHRoZSBjaGFyZ2VyIA0Kbm9kZSBhbmQgdXNl
+IHZlbmRvciBwcm9wZXJ0aWVzLg0KDQpJIGFncmVlIHRvIHlvdSB0aGF0IGFjdHVhbGx5IHRo
+ZSBwaHlzaWNhbCBiYXR0ZXJ5IGlzIGRldGVybWluaW5nIGhvdyANCnRoZXNlIHZhbHVlcyBz
+aG91bGQgYmUgc2V0LiBJbiB0aGUgZW5kLCBhcyBmYXIgYXMgSSBjYW4gc2VlLCBpdCBpcyBh
+IA0KcmVwcmVzZW50YXRpb24gdGhpbmcgaW4gdGhlIGRldmljZXRyZWUuIEF0IGxlYXN0IGlu
+IG91ciBjYXNlIGhlcmUuDQoNCk5vdCBzdXJlIGhvdyB0byBwcm9jZWVkIGhlcmUuIEkgd291
+bGQgc3RpY2sgdG8gdGhlIGN1cnJlbnQgDQppbXBsZW1lbnRhdGlvbi4gSWYgc29tZW9uZSBz
+dHJvbmdseSBwcmVmZXJzIHRoZSAiYmF0dGVyeSIgcmVwcmVzZW50YXRpb24gDQpzdHlsZSwg
+SSdtIG9wZW4gdG8gc3dpdGNoIHRvIHRoaXMuDQoNCkhvd2V2ZXIsIEknbSBub3Qgc3VyZSBo
+b3cgdGhlIGR0LWJpbmRpbmdzIHdvdWxkIGxvb2sgbGlrZSBpbiB0aGF0IGNhc2UuIA0KVGhv
+c2UgYmF0dGVyeSBwcm9wZXJ0aWVzIHdvdWxkIG5vdCBiZSBwYXJ0IG9mIHRoZSBSVDUwMzMg
+bm9kZSwgdGh1cyB0aGV5IA0KYmFzaWNhbGx5IHdvdWxkIG5vdCBiZSBwYXJ0IG9mIHRoZSBS
+VDUwMzMgZG9jdW1lbnRhdGlvbi4gQWdhaW4gSSB0aGluayANCml0IG1ha2VzIHNlbnNlIHRv
+IGhhbmRsZSB0aG9zZSBwcm9wZXJ0aWVzIHdpdGhpbiB0aGUgY2hhcmdlciBub2RlIGFzIA0K
+ImNoYXJnZXIgc2V0dGluZ3MiIHByb3BlcnRpZXMuDQoNCktpbmQgcmVnYXJkcywNCkpha29i
+DQo=
