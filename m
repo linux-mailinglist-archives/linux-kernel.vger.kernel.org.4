@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B686A6E8FED
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51AD56E8FF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234794AbjDTKSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59244 "EHLO
+        id S234669AbjDTKTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjDTKRt (ORCPT
+        with ESMTP id S234776AbjDTKTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:17:49 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F19C421F
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:16:40 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id ada2fe7eead31-42e58fcbfb4so46808137.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:16:40 -0700 (PDT)
+        Thu, 20 Apr 2023 06:19:17 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A71E5FEE
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:18:10 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-2f939bea9ebso431368f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:18:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681985799; x=1684577799;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+Oe9nNp1PNC9itpMYnM9q0LI6ruH3RY1gwVYjWL8WjY=;
-        b=nm8nZXAQ5Ng8QZ2DON8y8jfYYIw7wz7tHREzrfhxJa4UqxY1cCpQXmdX2W18pvJgJ8
-         b5onsl68oW8mn8LWjTOOmMrHKEgwrczBoA0oZ1A5EZWKwAXR5SG3ljydvOZgkQIe20Vp
-         ZOEaTIpeDhvbhHKYReFCdKXFQtWc2+H4MArzYtM5C/tE6Q+l5f97N0MR7EIP6OiUw03H
-         JOFpkJlPMQhmEjxV2KKVP95IXvtMHes0gR5OR6nj706ENRcg1C2IsqGgWeQlP2n+JdTW
-         EBhZFs79EGafNbayJZ+wxlWwA+hMg0ZT8gmKu9A1vAsbZTYcNY5JY1woGup6eKgTDUX6
-         +mOw==
+        d=linaro.org; s=google; t=1681985889; x=1684577889;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pw9A5+zsiMect2+0K0DcF9fBy0AzZZUeAaf+XrZGrao=;
+        b=afy9EH6s0rirq7SWDYgJL6ui/k2P9RqWy9PbaDYLOo1XZtV1GwOZ5hsqOcX8Jjj+s3
+         I6B9XMrvxHZ7q/Hj4mqiA7aU2GFfJphWAJrcGR470JSGI8mcQvX5b5RPjOjBmY8nPcK3
+         hYWoc+AOheBDuCSiD2hZRVKQVk+AAa+p2w+qc4ctGyHYKSQtpTz280CCiNTTC6kqKT6Q
+         0Zt/XXkganHv//YTDvErdJMcPv70hgvzmrwxyr7UHgaN46Ki9PiaPPuN/f5IBdo9ovgN
+         7tAQn2xVjknqRH9dV9q+6M7CZDLxq1HFMbfRcrlrkOy3Mr6blSpgAnT3X//GUKC6nyJg
+         IfLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681985799; x=1684577799;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+Oe9nNp1PNC9itpMYnM9q0LI6ruH3RY1gwVYjWL8WjY=;
-        b=LbU+W2Dpjl9Mldi6owmoDJlam2zjT/FGSCiSgbejaB+27iAnhBZvdGFlP4DkjCEkCx
-         hIY9daylXZ5nA+McQlYleEbNi8JoT1UrU5MMURjjAC006SB5nw4Bdt7ALhAqtG7+hOzE
-         gQ2hhrJi6Ua3LZzdemWA8Q0NL/x3MNCBTxtbamYWeNrVIxP4uKjXZFjcbhJk4vxsPbmG
-         t1HjJfSUwk5gpfe8fOv/ZUGH7Q1pUFz4Y48q9RjY9SECzZjfLPR3LdjvLrdc1eUk2odd
-         +lqQFX3ISxiOF5H1Y3MaAQPaWdrQv5bTvwFY7Zz/YUwuB48SBwq7RkXJ0kH1ke/EnaIt
-         d8WA==
-X-Gm-Message-State: AAQBX9dGr7D7J+p7FeMxEVtkA64NUTq/pP10oNDF/u5G93GaUYcPpyUl
-        qJFIJ5ANZ4NeHB/XsHY7hrGlTWQ8oShSlHEYLzRbbP5YEm98vFyGg9s=
-X-Google-Smtp-Source: AKy350YEEon9wAWEMoJgiPOVsj2z9xphpqdpgfOobKCaAPJv+/irhx+a9rrWFdvz7UTvMPsRzTj1AEh8PIDT+lPhDL0=
-X-Received: by 2002:a05:6102:210:b0:42f:f08b:6f64 with SMTP id
- z16-20020a056102021000b0042ff08b6f64mr571195vsp.21.1681985799586; Thu, 20 Apr
- 2023 03:16:39 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681985889; x=1684577889;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pw9A5+zsiMect2+0K0DcF9fBy0AzZZUeAaf+XrZGrao=;
+        b=XBP3JiqJqut2rKj5eJEhyN1NDDwqRrEytrbRUvric77d1jFAlUkxxIGCBhq2O4qNDn
+         EjWb2nUJ6JOihI7lmq+2TaObEz9/yfeNJ8snUBhHiG19/TN55ingFaWmqrApjPdgKW0s
+         12Mk9aKliSvhOp0YXMZow1+zmhlEN1XEBirC9a3m0TkNsXdyrhFuRG+nVvhFNBCH8hj3
+         w82IrNCcGSDIOUTBODrigsIVZ+0mBRTNZ+/VDFLq3m1eJ8+JETXkZ72FaHxX1PJ0hC/5
+         0G7+hpy0x9tWwQYhrWlE1nLLoD3nlbONSso6RIFdnmjE0FpRMCVQJ6Wi4bWbZJdoXXXG
+         MSHA==
+X-Gm-Message-State: AAQBX9cxltJnD0FZMKrBT7hnE4Y8S8AjY2qwCew5UoZIVWHQqP2Loqeo
+        GZqjgmwsOSXquzkydrXxtvKFFw==
+X-Google-Smtp-Source: AKy350aJN3ko2EWo+eWfwj+J89HRyw/epA6v2yJ4NbXNS8KwuC16UQVRPDOQLerGiLr2myJzPATEWg==
+X-Received: by 2002:adf:efca:0:b0:2f5:5538:2589 with SMTP id i10-20020adfefca000000b002f555382589mr962090wrp.31.1681985889335;
+        Thu, 20 Apr 2023 03:18:09 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id w23-20020a05600c099700b003f17af4c4e0sm4925611wmp.9.2023.04.20.03.18.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 03:18:08 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 13:18:05 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev, Sumit Gupta <sumitg@nvidia.com>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Thierry Reding <treding@nvidia.com>
+Subject: drivers/soc/tegra/cbb/tegra-cbb.c:96 tegra_cbb_err_debugfs_init()
+ warn: passing zero to 'PTR_ERR'
+Message-ID: <531e22c6-39e8-4a39-a190-c752c4d146be@kili.mountain>
 MIME-Version: 1.0
-References: <20230419132054.228391649@linuxfoundation.org>
-In-Reply-To: <20230419132054.228391649@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 20 Apr 2023 15:46:28 +0530
-Message-ID: <CA+G9fYtrFAgA7shAMpegsoyO2f9KVnpj28aepurx9UzYRBoH9A@mail.gmail.com>
-Subject: Re: [PATCH 6.2 000/135] 6.2.12-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,177 +69,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Apr 2023 at 18:52, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.2.12 release.
-> There are 135 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 21 Apr 2023 13:20:25 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.2.12-rc3.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.2.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   cb0856346a60fe3eb837ba5e73588a41f81ac05f
+commit: b7134422146692e096e807751656fc58ee1a717d soc/tegra: cbb: Add CBB 1.0 driver for Tegra194
+config: arm64-randconfig-m041-20230419 (https://download.01.org/0day-ci/archive/20230420/202304201719.AnFYgA2p-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202304201719.AnFYgA2p-lkp@intel.com/
 
+smatch warnings:
+drivers/soc/tegra/cbb/tegra-cbb.c:96 tegra_cbb_err_debugfs_init() warn: passing zero to 'PTR_ERR'
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+vim +/PTR_ERR +96 drivers/soc/tegra/cbb/tegra-cbb.c
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+b7134422146692 Sumit Gupta 2022-05-12   88  static int tegra_cbb_err_debugfs_init(struct tegra_cbb *cbb)
+b7134422146692 Sumit Gupta 2022-05-12   89  {
+b7134422146692 Sumit Gupta 2022-05-12   90  	static struct dentry *root;
+b7134422146692 Sumit Gupta 2022-05-12   91  
+b7134422146692 Sumit Gupta 2022-05-12   92  	if (!root) {
+b7134422146692 Sumit Gupta 2022-05-12   93  		root = debugfs_create_file("tegra_cbb_err", 0444, NULL, cbb, &tegra_cbb_err_fops);
+b7134422146692 Sumit Gupta 2022-05-12   94  		if (IS_ERR_OR_NULL(root)) {
+b7134422146692 Sumit Gupta 2022-05-12   95  			pr_err("%s(): could not create debugfs node\n", __func__);
+b7134422146692 Sumit Gupta 2022-05-12  @96  			return PTR_ERR(root);
+b7134422146692 Sumit Gupta 2022-05-12   97  		}
+b7134422146692 Sumit Gupta 2022-05-12   98  	}
+b7134422146692 Sumit Gupta 2022-05-12   99  
+b7134422146692 Sumit Gupta 2022-05-12  100  	return 0;
 
-## Build
-* kernel: 6.2.12-rc3
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.2.y
-* git commit: 7507bdf58f79a562e3d8c98e1f3c9790f419f5c8
-* git describe: v6.2.9-497-g7507bdf58f79
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.2.y/build/v6.2.9=
--497-g7507bdf58f79
+Debugfs stopped returning NULL years ago.  Debugfs is weird, it's not
+supposed to be checked for errors.  So the correct way to write this
+is:
 
-## Test Regressions (compared to v6.2.9-361-g5f50ce97de71)
+static void tegra_cbb_err_debugfs_init(struct tegra_cbb *cbb)
+{
+	static struct dentry *root;
 
-## Metric Regressions (compared to v6.2.9-361-g5f50ce97de71)
+	if (!root)
+		root = debugfs_create_file("tegra_cbb_err", 0444, NULL, cbb, &tegra_cbb_err_fops);
+}
 
-## Test Fixes (compared to v6.2.9-361-g5f50ce97de71)
+regards,
+dan carpenter
 
-## Metric Fixes (compared to v6.2.9-361-g5f50ce97de71)
+b7134422146692 Sumit Gupta 2022-05-12  101  }
 
-## Test result summary
-total: 185548, pass: 158561, fail: 4041, skip: 22637, xfail: 309
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
 
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 145 total, 142 passed, 3 failed
-* arm64: 54 total, 53 passed, 1 failed
-* i386: 41 total, 38 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 36 passed, 2 failed
-* riscv: 26 total, 25 passed, 1 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 7 passed, 1 failed
-* x86_64: 46 total, 46 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-vm
-* kselftest-watchdog
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
