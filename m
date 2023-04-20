@@ -2,113 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE2C6E90EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2C76E90F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234503AbjDTKtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
+        id S234965AbjDTKuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234676AbjDTKsN (ORCPT
+        with ESMTP id S235189AbjDTKuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:48:13 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7BC93D5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:46:51 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2a8aea0c7dcso3808361fa.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:46:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681987608; x=1684579608;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iep7/xE+gJ5/a5+wqfQTrPkvE8qVynHVQIC8DVLeC9Y=;
-        b=pPAhAYrPsjoObGLSXgVWFClu5ALl895r9YusyXjqzuu9dOdvOjd03KeN+CHp52Zs8f
-         G+dJ4UkETlljzPP1XvX92jukvJZqJU0zpP605DIFvo1P8Fn6XVPnOIyMfcxzk+Q4V9on
-         nIjpd1fgf2L8VoyIIppy8bdzvaUwf0HSKjuZNMuH8BUWz2zp9yuvVcL7xT0QqKxnMGh3
-         TzTvaX7yClz9R128KD8QIXeRSc2GEnOas2fcEtM5OklbBwwtSD2iLdXZhVypjYBLGgOI
-         YzbhJvPMCGYaMqCWBNLCDQbaLgVIGia3g1wXOlzK5UQtyxe6TQ/LRQWBQwrj436J1EEA
-         PX8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681987608; x=1684579608;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iep7/xE+gJ5/a5+wqfQTrPkvE8qVynHVQIC8DVLeC9Y=;
-        b=TEBEnjvzWFkkyVf344nLMIWhjlNDB9/PWkqr2Mn/gn08pCpmUTetVFqQyC4zJNZRtc
-         G/V8RSdeoNkaCcHaQ2lpNwQ/PBZ3FJ/hMnh456n6MWtXrRhWyryICZ5E9mca8QGm0DoK
-         iKPGe8BIriIc1DqoJiWiY453EQ86cCyOmTtcjEBBpvJ9J3p991kPRunrG4sO3rb9BC2T
-         zMo5o3SLOGsgVc/PDUh0rT39V2cRegWpGWuMbhwX0H3YBSz4JtdHV2UpaIdn+FYgi+5A
-         jxmoxRXhWfNUKn13ZOSGFqiOPfRBy7uiCwgaYjyfKdpEn7CEmfHEQe+Dj4xBvfixlmhC
-         5Ifw==
-X-Gm-Message-State: AAQBX9fuofptuz5gz7p3LZ1ynvrgQKhgPZDRZJTlgL7KArPLOtZjnUzx
-        bNIsoVcwLBkJanYBkKsbNIXXZw==
-X-Google-Smtp-Source: AKy350arSbY0SEXSii248y1vwLv+UCD6rWyTNQacHSu8SnbTtOUQPUvymv+aI8RMqOLM6s6P/Os73A==
-X-Received: by 2002:ac2:4e72:0:b0:4de:7a23:23e2 with SMTP id y18-20020ac24e72000000b004de7a2323e2mr284361lfs.21.1681987608266;
-        Thu, 20 Apr 2023 03:46:48 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id u17-20020a056512095100b004ec88128dc4sm177307lft.68.2023.04.20.03.46.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 03:46:47 -0700 (PDT)
-Message-ID: <98d8fb6c-5e64-43be-17d5-ae37db69201b@linaro.org>
-Date:   Thu, 20 Apr 2023 12:46:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 04/10] ARM: dts: qcom: ipq8064: drop leading 0 from
- unit-address
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Thu, 20 Apr 2023 06:50:01 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BDA83C4;
+        Thu, 20 Apr 2023 03:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681987680; x=1713523680;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NHQvgp+/Rj8vc4D0tZlxdL5eAw2LMvWlJhM14S82Uw0=;
+  b=IioCUVijN2Q4+VClO06J/q0+p8Bwgw3hVaCf2qewDXg5uo/h3QdwpekI
+   WtwVGOa+k42r1EplrhJpL+JjqhTWM//IXobZH3QzdyVds3gxSu9/j/Y3A
+   4NBuUgRdZqy2zK0Cwz3uTB6UStUqhfMDS1s3+WqNozsZb9o+7uSv+szqU
+   ZHBR/27aWl388l4MOGkuTiGKoS7mBQWUBhwWrkf5t6B0iPCXBoor/3dLY
+   B9Uu3DuIvUOeo9CWjkbxeiVSnU2EJBu4GnFHeegf9vaXBqRSWHsW5Dbns
+   TiUMoMZRzfhKiPt4mmEcWwSQyM3U7ZvNXof9US8T7ZCphpCJr+CQc5Two
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="325307189"
+X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
+   d="scan'208";a="325307189"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 03:47:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="866204834"
+X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
+   d="scan'208";a="866204834"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 20 Apr 2023 03:47:35 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id BAB6421E7; Thu, 20 Apr 2023 13:47:40 +0300 (EEST)
+Date:   Thu, 20 Apr 2023 13:47:40 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     bhelgaas@google.com, koba.ko@canonical.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230420075053.41976-1-krzysztof.kozlowski@linaro.org>
- <20230420075053.41976-4-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230420075053.41976-4-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 2/4] PCI/AER: Factor out interrput toggling into
+ helpers
+Message-ID: <20230420104740.GL66750@black.fi.intel.com>
+References: <20230420015830.309845-1-kai.heng.feng@canonical.com>
+ <20230420015830.309845-2-kai.heng.feng@canonical.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230420015830.309845-2-kai.heng.feng@canonical.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Typo in $subject:
 
+ interrput -> interrupt
 
-On 20.04.2023 09:50, Krzysztof Kozlowski wrote:
-> Unit-address should not start with 0:
+On Thu, Apr 20, 2023 at 09:58:28AM +0800, Kai-Heng Feng wrote:
+> There are many places that enable and disable AER interrput, so move
+> them into helpers.
 > 
->   Warning (simple_bus_reg): /soc/syscon@03000000: simple-bus unit address format error, expected "3000000"
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
->  arch/arm/boot/dts/qcom-ipq8064.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> v2:
+>  - New patch.
 > 
-> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> index 621edf508a88..182018d79a7b 100644
-> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> @@ -609,7 +609,7 @@ saw1: regulator@2099000 {
->  			regulator;
->  		};
+>  drivers/pci/pcie/aer.c | 45 +++++++++++++++++++++++++-----------------
+>  1 file changed, 27 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> index f6c24ded134c..1420e1f27105 100644
+> --- a/drivers/pci/pcie/aer.c
+> +++ b/drivers/pci/pcie/aer.c
+> @@ -1227,6 +1227,28 @@ static irqreturn_t aer_irq(int irq, void *context)
+>  	return IRQ_WAKE_THREAD;
+>  }
 >  
-> -		nss_common: syscon@03000000 {
-> +		nss_common: syscon@3000000 {
->  			compatible = "syscon";
->  			reg = <0x03000000 0x0000FFFF>;
-some random uppercase hex, if you'd like to clean that up too!
-
-Konrad
-
->  		};
+> +static void aer_enable_irq(struct pci_dev *pdev)
+> +{
+> +	int aer = pdev->aer_cap;
+> +	u32 reg32;
+> +
+> +	/* Enable Root Port's interrupt in response to error messages */
+> +	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, &reg32);
+> +	reg32 |= ROOT_PORT_INTR_ON_MESG_MASK;
+> +	pci_write_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, reg32);
+> +}
+> +
+> +static void aer_disable_irq(struct pci_dev *pdev)
+> +{
+> +	int aer = pdev->aer_cap;
+> +	u32 reg32;
+> +
+> +	/* Disable Root's interrupt in response to error messages */
+> +	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, &reg32);
+> +	reg32 &= ~ROOT_PORT_INTR_ON_MESG_MASK;
+> +	pci_write_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, reg32);
+> +}
+> +
+>  /**
+>   * aer_enable_rootport - enable Root Port's interrupts when receiving messages
+>   * @rpc: pointer to a Root Port data structure
+> @@ -1256,10 +1278,7 @@ static void aer_enable_rootport(struct aer_rpc *rpc)
+>  	pci_read_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, &reg32);
+>  	pci_write_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, reg32);
+>  
+> -	/* Enable Root Port's interrupt in response to error messages */
+> -	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, &reg32);
+> -	reg32 |= ROOT_PORT_INTR_ON_MESG_MASK;
+> -	pci_write_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, reg32);
+> +	aer_enable_irq(pdev);
+>  }
+>  
+>  /**
+> @@ -1274,10 +1293,7 @@ static void aer_disable_rootport(struct aer_rpc *rpc)
+>  	int aer = pdev->aer_cap;
+>  	u32 reg32;
+>  
+> -	/* Disable Root's interrupt in response to error messages */
+> -	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, &reg32);
+> -	reg32 &= ~ROOT_PORT_INTR_ON_MESG_MASK;
+> -	pci_write_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, reg32);
+> +	aer_disable_irq(pdev);
+>  
+>  	/* Clear Root's error status reg */
+>  	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_STATUS, &reg32);
+> @@ -1372,12 +1388,8 @@ static pci_ers_result_t aer_root_reset(struct pci_dev *dev)
+>  	 */
+>  	aer = root ? root->aer_cap : 0;
+>  
+> -	if ((host->native_aer || pcie_ports_native) && aer) {
+> -		/* Disable Root's interrupt in response to error messages */
+> -		pci_read_config_dword(root, aer + PCI_ERR_ROOT_COMMAND, &reg32);
+> -		reg32 &= ~ROOT_PORT_INTR_ON_MESG_MASK;
+> -		pci_write_config_dword(root, aer + PCI_ERR_ROOT_COMMAND, reg32);
+> -	}
+> +	if ((host->native_aer || pcie_ports_native) && aer)
+> +		aer_disable_irq(root);
+>  
+>  	if (type == PCI_EXP_TYPE_RC_EC || type == PCI_EXP_TYPE_RC_END) {
+>  		rc = pcie_reset_flr(dev, PCI_RESET_DO_RESET);
+> @@ -1396,10 +1408,7 @@ static pci_ers_result_t aer_root_reset(struct pci_dev *dev)
+>  		pci_read_config_dword(root, aer + PCI_ERR_ROOT_STATUS, &reg32);
+>  		pci_write_config_dword(root, aer + PCI_ERR_ROOT_STATUS, reg32);
+>  
+> -		/* Enable Root Port's interrupt in response to error messages */
+> -		pci_read_config_dword(root, aer + PCI_ERR_ROOT_COMMAND, &reg32);
+> -		reg32 |= ROOT_PORT_INTR_ON_MESG_MASK;
+> -		pci_write_config_dword(root, aer + PCI_ERR_ROOT_COMMAND, reg32);
+> +		aer_enable_irq(root);
+>  	}
+>  
+>  	return rc ? PCI_ERS_RESULT_DISCONNECT : PCI_ERS_RESULT_RECOVERED;
+> -- 
+> 2.34.1
