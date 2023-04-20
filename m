@@ -2,108 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A476E9885
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F1E6E9889
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbjDTPkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 11:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
+        id S231856AbjDTPkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 11:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbjDTPkf (ORCPT
+        with ESMTP id S232109AbjDTPkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 11:40:35 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF8D9F
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:40:33 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-507bdc5ca2aso1075219a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:40:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682005232; x=1684597232;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ng/7l5VlfjgvLBZOn+6emtZItxRcIQQXLL+YWHzwDfU=;
-        b=QW3lu605jBMYSJRbLYIrS9IzJPjwoSJYKeCmncGY76yReh8FCCYyyql0pg9Ivr+ZkL
-         937r9nGPBp8Fu/WKnoeGWLfok6zvZIZEir4Qs7el9vKsNfFPi2v9OG5JVM2k0KROyz/r
-         bESc9mUVByXgcnV3eawwGu56f9WmN5pPd8JdFliTkT/7vXTN7FdN6wCu0iFzo+Ij98nF
-         3LL/ZDek2x2U7WKhRHMbeMWe2GF7sS84jYezdtFY3kICzZQNSNtaRHGH9LGBSg14lv2u
-         zyYcK27ckWHD3FZHIGg4EqYgxYCVumo5G6cFggF5QWERTL2DldXp1a7aYCvSuGOA7mn1
-         Hy2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682005232; x=1684597232;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ng/7l5VlfjgvLBZOn+6emtZItxRcIQQXLL+YWHzwDfU=;
-        b=FlGIBtQkqDnFu8cJf54hz9+ocnawF8jjcJO3vov1M3a8H/5+O6CQPsdD6gf/eZ9c1/
-         iLCkDzaVLtubKMUy0snRqu9jwVYBpFDt/P5UH6c+7jZdHT+GarpXKQBU/OcpRD8ziE1n
-         ufWbRDPfnliNbRCUpQUbV/mAqVu6501pE6Y6hAdzer8LK/iqNJfDegAFL7RuadfsgJFI
-         1Jkzu17rvU23CA0hUywtcGqkjqIZs6pO/sDubC9Qcm1ZECbsgucwGSrkW5OnvBT6g1H/
-         Oi7a4IKynFcVY9nLVzkv7Qem6OhcWyyxukvI2kfhMIvLJL2zWCwwP3HxyGWg034nHois
-         a9BA==
-X-Gm-Message-State: AAQBX9deih0s9+k58StPaZOLlQHhITKgABbkTfjQgtE+4sOffy6IgV1B
-        x31C/LKqUGah8ria21V8KjsTrQ==
-X-Google-Smtp-Source: AKy350atlvDRHpkArIMuqphydgSZ7Ju+vCaZdY3O2gF6jFZEWQy94BQRkh+vgJkjYC/ybSM9WBzcvg==
-X-Received: by 2002:aa7:cb01:0:b0:506:a2bb:fc43 with SMTP id s1-20020aa7cb01000000b00506a2bbfc43mr2043394edt.15.1682005232101;
-        Thu, 20 Apr 2023 08:40:32 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bcb8:77e6:8f45:4771? ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
-        by smtp.gmail.com with ESMTPSA id g18-20020a056402181200b004c2158e87e6sm853513edy.97.2023.04.20.08.40.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 08:40:31 -0700 (PDT)
-Message-ID: <087ba4df-7575-acce-309a-efb5115a987d@linaro.org>
-Date:   Thu, 20 Apr 2023 17:40:30 +0200
+        Thu, 20 Apr 2023 11:40:43 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DA61991;
+        Thu, 20 Apr 2023 08:40:40 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id F146C732;
+        Thu, 20 Apr 2023 15:40:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net F146C732
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1682005240; bh=UF61JW6oRtLJIYx10KbxIyUy5rSXTyyXgGlY7V2DrHg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Qcb4dlTc5ho5ToPMXUQ80Nry1hsqMBl2qEbaTo4ZKLPU3xmAuicagZzKzCd+LxXaj
+         jxZ0adq+YtQ6huKRsNejlznrRbNlCMNy8ZqBQruRdYn/G79kOgt9bjdwaEZM8thry5
+         c4GRXrjPaShA+V7Mr3otYovIIStDnFB+mqFGLFdiBT3aYlSDzu0UFL8cr0PbWzDc/Z
+         iLddw/ryvzvL5VchGaN3+8ymqcXzJNXmDA7CHhyV0/roHnxHGUCHQmCUlGBPmHpeGZ
+         nO9/C2KW+UZQy8v7stRhB0Q+zePmY7CnNITn4qLN53b0CpDXrsWNHcFU49jq55WNNS
+         yCfVXzeQCQSHA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Zipeng Zhang <zhangzipeng0@foxmail.com>
+Cc:     ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
+        boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
+        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        masahiroy@kernel.org, codeagain@codeagain.dev,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
+        Zipeng Zhang <zhangzipeng0@foxmail.com>
+Subject: Re: [PATCH] Documentation/process/changes: Escape --options to fix
+ Sphinx output
+In-Reply-To: <87sfcuu0fm.fsf@meer.lwn.net>
+References: <tencent_CB1A298D31FD221496FF657CD7EF406E6605@qq.com>
+ <87sfcuu0fm.fsf@meer.lwn.net>
+Date:   Thu, 20 Apr 2023 09:40:39 -0600
+Message-ID: <87o7nitvd4.fsf@meer.lwn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/4] spi: s3c64xx: changed to PIO mode if there is no
- DMA
-Content-Language: en-US
-To:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Mark Brown <broonie@kernel.org>, Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>
-References: <20230419060639.38853-1-jaewon02.kim@samsung.com>
- <CGME20230419062755epcas2p1370c1ca60d88d6b114a7c7c1de3f15c0@epcas2p1.samsung.com>
- <20230419060639.38853-2-jaewon02.kim@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230419060639.38853-2-jaewon02.kim@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2023 08:06, Jaewon Kim wrote:
-> Polling mode supported with qurik if there was no DMA in the SOC.
-> However, there are cased where we cannot or do not want to use DMA.
-> To support this case, if DMA is not set, it is switched to polling mode.
-> 
+Jonathan Corbet <corbet@lwn.net> writes:
 
-(...)
+> The right solution, if it is possible, is to convince Sphinx to stop
+> messing with "--" altogether.  Substituting em-dashes is of limited
+> cosmetic value and, I think, is something we could do without.
 
->  #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
-> -#define is_polling(x)	(x->port_conf->quirks & S3C64XX_SPI_QUIRK_POLL)
-> +#define is_polling(x)	(x->cntrlr_info->polling)
->  
->  #define RXBUSY    (1<<2)
->  #define TXBUSY    (1<<3)
-> @@ -1067,6 +1066,11 @@ static struct s3c64xx_spi_info *s3c64xx_spi_parse_dt(struct device *dev)
->  		sci->num_cs = temp;
->  	}
->  
-> +	if (!of_find_property(dev->of_node, "dmas", NULL)) {
+Ah ... I get it now.  We *did* disable this once by disabling the
+"html_use_smartypants" option in conf.py.  The Sphinx folks changed the
+name of that option in the 1.6.6 release, though, silently turning that
+behavior back on.  It only took us five years to notice...  I think I'll
+just drop the attached patch into docs-next.
 
-of_property_present()
+Thanks for bringing this up!
 
+jon
 
-Best regards,
-Krzysztof
+------------8<-----------------
+From 995addeb4ab2a2c4beaf8b90a4dc8c1d64735d29 Mon Sep 17 00:00:00 2001
+From: Jonathan Corbet <corbet@lwn.net>
+Date: Thu, 20 Apr 2023 09:34:35 -0600
+Subject: [PATCH] docs: turn off "smart quotes" in the HTML build
+
+We have long disabled the "html_use_smartypants" option to prevent Sphinx
+from mangling "--" sequences (among others).  Unfortunately, Sphinx changed
+that option to "smartquotes" in the 1.6.6 release, and seemingly didn't see
+fit to warn about the use of the obsolete option, resulting in the
+aforementioned mangling returning.  Disable this behavior again and hope
+that the option name stays stable for a while.
+
+Reported-by: Zipeng Zhang <zhangzipeng0@foxmail.com>
+Link: https://lore.kernel.org/lkml/tencent_CB1A298D31FD221496FF657CD7EF406E=
+6605@qq.com
+Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+---
+ Documentation/conf.py | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/conf.py b/Documentation/conf.py
+index db16814f182f..3d1f74f76e64 100644
+--- a/Documentation/conf.py
++++ b/Documentation/conf.py
+@@ -343,9 +343,10 @@ sys.stderr.write("Using %s theme\n" % html_theme)
+ # so a file named "default.css" will overwrite the builtin "default.css".
+ html_static_path =3D ['sphinx-static']
+=20
+-# If true, SmartyPants will be used to convert quotes and dashes to
+-# typographically correct entities.
+-html_use_smartypants =3D False
++# If true, Docutils "smart quotes will be used to convert quotes and dashes
++# to typographically correct entities.  This will convert "--" to "=E2=80=
+=94",
++# which is not always what we want, so disable it.
++smartquotes =3D False
+=20
+ # Custom sidebar templates, maps document names to template names.
+ # Note that the RTD theme ignores this
+--=20
+2.40.0
 
