@@ -2,106 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3D46E88E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 05:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7E46E88EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 06:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjDTD5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 23:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
+        id S232177AbjDTEAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 00:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjDTD5T (ORCPT
+        with ESMTP id S229646AbjDTEAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 23:57:19 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BD511D;
-        Wed, 19 Apr 2023 20:57:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681963037; x=1713499037;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dv8Sq13xaCMnIsK0VNgPAd8PR+UU69iWhtLhEZQF1kw=;
-  b=av8TfpiETPLHAA7OhiLU/JUYcOjatWDwFSgjNDY+4pIrc/2zVq9igHr+
-   YGpcT8gUJGTejnJLKRFLkXdcQ1CfBsKRLbo8bnLitPtCsefBcsIV4wejT
-   NB50EHsmACGMzD6e4DQ/VPVl5Vrb63Fr4MMoueNhhysw+VSeL0oauLgTn
-   swPYEvVlp/B7OT/GH/2sMp8o5rtO0hgg4okuKPxiQPO5EuViiCsADJjyz
-   xqN9ugw7LH9KNGO7sHemkds3JNQpgDnucaqLH7oId300yUVj+AdZI2fdn
-   6KxEW3xKZz7z7oY4qJ59f9aYZ2qHV6eSRR1R/pslWOQNiEoRBUoRIUEw9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="410861235"
-X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
-   d="scan'208";a="410861235"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 20:57:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="835556212"
-X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
-   d="scan'208";a="835556212"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Apr 2023 20:57:15 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ppLQ2-000fRO-1F;
-        Thu, 20 Apr 2023 03:57:14 +0000
-Date:   Thu, 20 Apr 2023 11:57:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jorge Lopez <jorgealtxwork@gmail.com>, hdegoede@redhat.com,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thomas@t-8ch.de
-Cc:     oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v10 13/14] HP BIOSCFG driver  - Makefile
-Message-ID: <202304201100.r6QLG0Fc-lkp@intel.com>
-References: <20230419151321.6167-14-jorge.lopez2@hp.com>
+        Thu, 20 Apr 2023 00:00:43 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2175311D
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 21:00:42 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.101.197.31])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 217653F316;
+        Thu, 20 Apr 2023 04:00:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1681963238;
+        bh=6psH63ArG4D9FynqWeATpwYr+6b6TwPtAyy9U4Y/MVc=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=nJosSvyiADnqBSsZ0RcHN9j6XHf49O7SLqyYxQAn287DJHDHIRJyrSA8UFpwqGIXF
+         hFppOPz/9RWkPLQRdXv1YhDhwCoEYeUpHgnqeRiXorNb4dICR7oZg5gvlY0eGaJkj+
+         37wlplSSachkmZwKOto+tTXfIOeZ8GKkiFtuc0Y44SWPJ8ICUejRWt5Fg1VF034S4X
+         u51OMv790rw4axbOiMdfh+eimgGrJqLe2mpzrWkTTgY3w96cgHaSms85c+JC5YNu5F
+         +NN5UstTGEQzKEvw6MAtKzCl5LSjWTgarXqRsd4Xo6jfAXkg82wB/QVjtMhCC/zE7S
+         hB+UHTJUmfjug==
+From:   Andy Chi <andy.chi@canonical.com>
+Cc:     andy.chi@canonical.com, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Tim Crawford <tcrawford@system76.com>,
+        Meng Tang <tangmeng@uniontech.com>,
+        Philipp Jungkamp <p.jungkamp@gmx.net>,
+        =?UTF-8?q?Kacper=20Michaj=C5=82ow?= <kasper93@gmail.com>,
+        Gabriele Mazzotta <gabriele.mzt@gmail.com>,
+        Yuchi Yang <yangyuchi66@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ALSA: hda/realtek: fix mute/micmute LEDs for a HP ProBook
+Date:   Thu, 20 Apr 2023 11:59:41 +0800
+Message-Id: <20230420035942.66817-1-andy.chi@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419151321.6167-14-jorge.lopez2@hp.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jorge,
+There is a HP ProBook 455 G10 which using ALC236 codec and need the
+ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF quirk to make mute LED and
+micmute LED work.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Andy Chi <andy.chi@canonical.com>
+---
+ sound/pci/hda/patch_realtek.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.3-rc7 next-20230419]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jorge-Lopez/HP-BIOSCFG-driver-Documentation/20230419-231828
-patch link:    https://lore.kernel.org/r/20230419151321.6167-14-jorge.lopez2%40hp.com
-patch subject: [PATCH v10 13/14] HP BIOSCFG driver  - Makefile
-config: i386-randconfig-s002-20230417 (https://download.01.org/0day-ci/archive/20230420/202304201100.r6QLG0Fc-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/cfbebfbd4ed15793fab894715bfd74387adcf4f1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jorge-Lopez/HP-BIOSCFG-driver-Documentation/20230419-231828
-        git checkout cfbebfbd4ed15793fab894715bfd74387adcf4f1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 olddefconfig
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/x86/hp/hp-bioscfg/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304201100.r6QLG0Fc-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c:80:23: sparse: sparse: symbol 'sure_start_audit_log_entries' was not declared. Should it be static?
---
->> drivers/platform/x86/hp/hp-bioscfg/spmobj-attributes.c:191:23: sparse: sparse: symbol 'password_spm_status' was not declared. Should it be static?
-
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 6a6c72b5ea26..f70d6a33421d 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9468,6 +9468,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x103c, 0x8b47, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b5d, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b5e, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
++	SND_PCI_QUIRK(0x103c, 0x8b65, "HP ProBook 455 15.6 inch G10 Notebook PC", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b66, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b7a, "HP", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b7d, "HP", ALC236_FIXUP_HP_GPIO_LED),
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
