@@ -2,150 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55BA6E9695
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F696E96A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbjDTOEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 10:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
+        id S231858AbjDTOG1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Apr 2023 10:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbjDTOE2 (ORCPT
+        with ESMTP id S229960AbjDTOGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 10:04:28 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2104.outbound.protection.outlook.com [40.107.94.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CEE211C;
-        Thu, 20 Apr 2023 07:04:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YAQfcAJefXDzZ6yqbDKfQZWVPV/MdaOdgyslpQPNTm2xaHP8ZMy9b1Sspxzkf0r2aj9ehAQksBJA1xR/RzKBxYaU/ZjGvwkqhGHfzqEAccAOMs9+QyYz3la/gQL5cHZ/7oWCMYfUY0B/yQfNzNJHgRQs7nLSO/mO/1SLmrS3nKM9TXWMBkOkCNzd0Kpxv4NbHoAvzc5lrCT6+sD0gsZlt+aHDdEyhLANSdwyQf3fLSh11Yz2QlbCTPjIlgrY3t9qrVTUH2W5r4t/ML2nXB4G1VqH9k/FhOsldbpHM8FpEkEBqOzkIgGT0LTYtBzdHPIKUOX85yWzgzQfBaehvQ5e0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jY/SDGCpXtlD1vs7nPm+ueQ+Mg9JgCSz56hAObbyr0s=;
- b=Chm1pwE7q5D6jsyMZ5xC2WuLo8lEkIoXEUhHBMReoyPX2CnYaUgVvHMosxhWEgLpeIEbW4bMyr2bMf/g4PmNspdn3lXbv+vz92bZ1eALSRkfbc9jzAoIBxGKl/jiQ8aRVJ/gU3C94WDjKrsAKwrCJOAnEoS5ldtIy+YjfPLTPLQeiUQZkF4yrZXtSV0BQUKbpzx5Nq6QDb8hKBUHOyVIc4kYFqH7ZJLoEiHvl1fTS9qg4c47QriObTD/LbnU6O7st0byXGhAPWcKBd8ha2jt6mwT1pVi+XU6loUHbpbQrZ2xXeNN/JoGrmapzwSF3w95dOyjlXdb1paPDRQ70NAmBg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jY/SDGCpXtlD1vs7nPm+ueQ+Mg9JgCSz56hAObbyr0s=;
- b=RS5iVIorYxE8CSXz7ynUXwgl/u07nc4XmMOb3RDqxTcI6uLZkx4fD2BBv/HGpXsySoapCsXwVSYETrqlDJlBPAcgaPBaJK5C+dXoOBsaiIR7/GZ+wOfNBPioyAkMC8rysIFvQ94P3KKLHzvwJRFOhFYuy68yANTxUyQGGKsNG8Y=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SJ2PR13MB6071.namprd13.prod.outlook.com (2603:10b6:a03:4f4::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Thu, 20 Apr
- 2023 14:04:22 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%4]) with mapi id 15.20.6319.022; Thu, 20 Apr 2023
- 14:04:22 +0000
-Date:   Thu, 20 Apr 2023 16:04:14 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Manikanta Pubbisetty <quic_mpubbise@quicinc.com>,
-        Wen Gong <quic_wgong@quicinc.com>,
-        Baochen Qiang <quic_bqiang@quicinc.com>,
-        Sowmiya Sree Elavalagan <quic_ssreeela@quicinc.com>,
-        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ath12k@lists.infradead.org
-Subject: Re: [PATCH] wireless: ath: work around false-positive
- stringop-overread warning
-Message-ID: <ZEFGXruk/Onq92IW@corigine.com>
-References: <20230417205447.1800912-1-arnd@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230417205447.1800912-1-arnd@kernel.org>
-X-ClientProxiedBy: AM0PR10CA0126.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:e6::43) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Thu, 20 Apr 2023 10:06:23 -0400
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADE71BE3;
+        Thu, 20 Apr 2023 07:06:21 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-506bcf9aa50so255456a12.1;
+        Thu, 20 Apr 2023 07:06:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681999579; x=1684591579;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Jgg7OX/T96wNa/Haq/69/L0IA2HKROIWIem4E4UL828=;
+        b=gLnSZXFo6V2i+tP664G3D1rrx6DXVFhongEIx0E40q+L/9ua5eluS8xX+X4mvFsJuU
+         dHn9l7OaFiWlknnh7Agw5bUOSGGC/MCzIM0F5fZePcbeflSxmJeQfpB7jc+DsiZ5rrZl
+         KKZgYijjfmNWI4OXqdtCyIeReoYO9ijIsFeCfuaq8ApIPzFwSikwTDWUMVkjb8t7SKGg
+         4pRILbNUFWTHqlqLxSvpPn1r/106xPES0xOHOx1um8QwyplamCJoIRlZ/eQfWEPCOCy2
+         o2VAH+EAY3j3SGNfS0vJFbUgKKtk7iL2S/oHNbo+7V5P4WKh39TNXjkfm7mxAatIAe9b
+         XIhQ==
+X-Gm-Message-State: AAQBX9cPIAgeewwa8FeMB+1AvuALSuPUQ1SiGORgu/w+WqduEjWBLwga
+        SvXlLSTqXJ4E87TWgmV1BJhfGFNMKf8g6U7P46ZTUK9t
+X-Google-Smtp-Source: AKy350Y9l+3RrBgnRt/ZsV97ky+Whhpraic1B8yk+LoKwK10xK2yro9LelhgWAoWXJW7Fm9Jt9OAbZ7Gg74wD/zZwus=
+X-Received: by 2002:a17:906:35d1:b0:94f:4ec3:f0f5 with SMTP id
+ p17-20020a17090635d100b0094f4ec3f0f5mr1583546ejb.4.1681999579416; Thu, 20 Apr
+ 2023 07:06:19 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ2PR13MB6071:EE_
-X-MS-Office365-Filtering-Correlation-Id: dd21cd40-274c-4fd8-67a0-08db41a823f8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: e45VBvl9cwrcDG3KJAFJttOc0oynwxI11EtTiEMBPQMcw/BzIIz85oSokgWsYBg7rnD7riHgfbx8/AZZbw/0v37HThDuht2PnyjzyGaHQD4JUyOecgK9vZHs/u1I1VcXnvnoRNxwkxvTwtsXgrRNyc6dhESLbs3mU9fek7Pu8rblfM18+4YF5Lw0YXwUZuje7xPMkUM/ilMHbFuTFAdlFCMIxcVBXVaCxfDA99vdcNDtuJRiJh/SlH09pkGRIZ9ZkRfbrTRsOVasjWT0/HQPWSMhSi+ESSu29rOgXo45V9C2NoPNZrtjKZB46Ee96CqNGi0J58gLYSPSz8qQbzgEwejsJchhOyN5SFNJGXEx5MMxkukgdQevFfBO+5lXMrWbvoEjoeVLieQ4z3iBUFchgy0GrXbFB5L2VWF5Naj7UvDKs28YvnK2iP58oQc2jmRxhR2dewdN/5sFerDoVEplX6GJthyfCkC7TUo+F31R8ApMvum7ZVXgi2yKk0IPzbb8g3TbZO7owsspM8TPaLhMoi71V4OvKLVa/ZDMz/+uqs4CucmsSw8jT1YuFFnOyKe1S+Z7WBUhiza8v1pRUXR/M0+vwHSg0FrK/CFug/SikqE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(366004)(39840400004)(396003)(451199021)(8936002)(8676002)(6666004)(7416002)(36756003)(2616005)(6486002)(5660300002)(6506007)(6512007)(41300700001)(186003)(44832011)(83380400001)(2906002)(4744005)(38100700002)(54906003)(66946007)(66556008)(66476007)(4326008)(6916009)(316002)(478600001)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jv1KCjHfP8D0CLOzr74PShLBXndU2j4C1z+M3JOe1Oh1T8oXD7lszrSiDQHM?=
- =?us-ascii?Q?im6IYWb3qnIh8T8rIenXxRdkzt1MDcuKndRvYbJB93tY8s3EN4wl99umiDQ9?=
- =?us-ascii?Q?P3UHr1eDVEBwFFCGwhDsh+h5Ls8fTjeX0y/1hRDoukSqln2ygAHsyBGDS75k?=
- =?us-ascii?Q?RV9nyZMEJAj5d/eTdFmzUx5sfpIyErMD6CkJzwGGpsScw9Xf94lIeo9Gy6BL?=
- =?us-ascii?Q?crFMVpzwTCMczZNtycQXqs863gybNyhwNNVz57EPeOedW5+tPbUkFQsWDxj4?=
- =?us-ascii?Q?AP30+YG7miMXtiO/Y3CXyz9zcBs5YrFG+vXnzZSYTV8VIh2Al8XiZeg56HBM?=
- =?us-ascii?Q?/on/RI36b6eOdqIC38spnmkMfiBlp5G6CyLOoBX4J7qqyOJyHV2mNYeq4xFJ?=
- =?us-ascii?Q?u/reKKhYj8gJhY4zfEjRHiQv+9eQcIbo1BrLqIK0iKoNrzi/AUc863GKOzv3?=
- =?us-ascii?Q?l5SKMDgog7dgvtiwDmJ8n3snWNF5tATjMdYrqP3Ti2hAPRKVOHnQkboTy/Pc?=
- =?us-ascii?Q?+2/xCfrkuLcQFYmz55Tk7FmFzRzC9b/zA/LInt7HTcbfBIZ++YDnGiQnZuTM?=
- =?us-ascii?Q?GmX4t+dTX8wv5ZYjP6ROFhSXjDOw8R3y6xLyUfIH03LtnxaTACdwHoOF3+Du?=
- =?us-ascii?Q?dYty8bfspnNSRe+UXPiIY1Gko3ZH7wOrzEWzQWM+6s20JzNFv9E8FbHBELIH?=
- =?us-ascii?Q?mwJb8ZvjO8sq60l14/QerM5paqbrQkmc3h7ZpL/X66JQXPNiPclpcEPH8iQP?=
- =?us-ascii?Q?H5Pt5Y0PoAaqpFPeJSzc//CNlZSLdxwao+UsPzq/DIKwdCl08ZUPAKBo0y50?=
- =?us-ascii?Q?IbTkzoyekZZ3bH4KBXTvunSzkkZAhUUKfpKB7n0lBkPq21B51TvTCHUZzEge?=
- =?us-ascii?Q?VDtekEo0dmuNvMG2gSxZJZrc+eamwgz4vtrCd6E7V1/SzzCLaxvgyzpr/Mg7?=
- =?us-ascii?Q?S6NHI8IDpskBqAqEEr2aPqxTaps+PcDhYimy90TnB2l0/TE0vfZIX82b9fZa?=
- =?us-ascii?Q?gAzWKSk/AJJM2G9s+rWN+x242Jt0qIdD+ZsHngkHHQQ1v6lw4QZ9pSLPJ7wQ?=
- =?us-ascii?Q?KnZ0t/iTWC+wwr65FLRHleXxO0aXVCUN+NG7E95dWv0uSY6p1q3HViUpuRF1?=
- =?us-ascii?Q?b06Wvs8t1M92a8wDmkuxdsF3m0Py+8phtKrvI/FEK642xAr7GxEBES3lCG7B?=
- =?us-ascii?Q?BTVrNT3CWS11rOnkp2T+4mUlAK24VvRANwg5Hv7SFgKj3w6HfsJmU2kj2rLa?=
- =?us-ascii?Q?uLwuuvuhP/IO6hTI31AICnm8MUhNvdrQ29Z+dELh5Y/mM0ypjaXzOCKQDgf+?=
- =?us-ascii?Q?xdkIX2hUs4FxLln/FjJ5dVMlSKMUtIb+ALAh+MCr9uu45SWsw0NtybpRKlTL?=
- =?us-ascii?Q?Km0vMcGElWIqmIcjm73FJIg4M937/I4OdBzvkE3RkByIMT3l/IxqCJx5avzM?=
- =?us-ascii?Q?cjqsubXZm2VtgzRr7rqAtwJLTPlLK2+FBaAGN/RWzHoFnR6i0cPiuGNvjGKE?=
- =?us-ascii?Q?yKOsySZK7r4t++ggqUDPNY2FqrJK1D2gYfVxhaJ0EGhpSGKren/cCP2O+cq7?=
- =?us-ascii?Q?jn5nt4PHNuSssa/Ou40iKCIhDcQ/zyvoLmgDyK2qv0amkj1U6oDaIjTA8gTg?=
- =?us-ascii?Q?cNjxTHT9PLqH7OI8j+Snap75RNt9bnleWsH5N27rbDN5FKbSrlcyzKtR1GqT?=
- =?us-ascii?Q?oj0Waw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd21cd40-274c-4fd8-67a0-08db41a823f8
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 14:04:21.9045
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: A06hm64zU5cor6diqG4/6VH/x0DXienby69zdgG49M8JHUH0vXQnIa5MQeYCvR146ztAg3qequ49Bahoo90u9trvMC9lGJxe32xcMj0fgr4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR13MB6071
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230419164127.3773278-1-linux@roeck-us.net>
+In-Reply-To: <20230419164127.3773278-1-linux@roeck-us.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 20 Apr 2023 16:06:08 +0200
+Message-ID: <CAJZ5v0gmDgb+VFwZecbKrbiBejAvODT38Ws=B_wGEGeBHTGR+Q@mail.gmail.com>
+Subject: Re: [PATCH] device property: make device_property functions take
+ const device *
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 10:54:20PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> In a rare arm64 randconfig build, I got multiple warnings for ath11k
-> and ath12k:
-> 
-> In function 'ath11k_peer_assoc_h_ht',
->     inlined from 'ath11k_peer_assoc_prepare' at drivers/net/wireless/ath/ath11k/mac.c:2665:2:
-> drivers/net/wireless/ath/ath11k/mac.c:1709:13: error: 'ath11k_peer_assoc_h_ht_masked' reading 10 bytes from a region of size 0 [-Werror=stringop-overread]
->  1709 |         if (ath11k_peer_assoc_h_ht_masked(ht_mcs_mask))
->       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> This happens whenever gcc-13 fails to inline one of the functions
-> that take a fixed-length array argument but gets passed a pointer.
-> 
-> Change these functions to all take a regular pointer argument
-> instead.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Wed, Apr 19, 2023 at 6:41 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> device_property functions do not modify the device pointer passed to them.
+> The underlying of_device and fwnode_ functions actually already take
+> const * arguments. Mark the parameter constant to simplify conversion
+> from of_property to device_property functions, and to let the calling code
+> use const device pointers where possible.
+>
+> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-Note: I was not able to reproduce the problem described above.
+> ---
+> Found by Chris when trying to convert a driver from of_property_ to
+> device_property_ functions. I don't really see a reason why the device
+> parameter to device_property functions should not be const.
+> Please let me know if I am missing sonething.
+>
+>  drivers/base/property.c  | 16 ++++++++--------
+>  include/linux/property.h | 36 ++++++++++++++++++------------------
+>  2 files changed, 26 insertions(+), 26 deletions(-)
+>
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index 083a95791d3b..21d7a5d13e05 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -38,7 +38,7 @@ EXPORT_SYMBOL_GPL(__dev_fwnode_const);
+>   *
+>   * Check if property @propname is present in the device firmware description.
+>   */
+> -bool device_property_present(struct device *dev, const char *propname)
+> +bool device_property_present(const struct device *dev, const char *propname)
+>  {
+>         return fwnode_property_present(dev_fwnode(dev), propname);
+>  }
+> @@ -86,7 +86,7 @@ EXPORT_SYMBOL_GPL(fwnode_property_present);
+>   *        %-EOVERFLOW if the size of the property is not as expected.
+>   *        %-ENXIO if no suitable firmware interface is present.
+>   */
+> -int device_property_read_u8_array(struct device *dev, const char *propname,
+> +int device_property_read_u8_array(const struct device *dev, const char *propname,
+>                                   u8 *val, size_t nval)
+>  {
+>         return fwnode_property_read_u8_array(dev_fwnode(dev), propname, val, nval);
+> @@ -114,7 +114,7 @@ EXPORT_SYMBOL_GPL(device_property_read_u8_array);
+>   *        %-EOVERFLOW if the size of the property is not as expected.
+>   *        %-ENXIO if no suitable firmware interface is present.
+>   */
+> -int device_property_read_u16_array(struct device *dev, const char *propname,
+> +int device_property_read_u16_array(const struct device *dev, const char *propname,
+>                                    u16 *val, size_t nval)
+>  {
+>         return fwnode_property_read_u16_array(dev_fwnode(dev), propname, val, nval);
+> @@ -142,7 +142,7 @@ EXPORT_SYMBOL_GPL(device_property_read_u16_array);
+>   *        %-EOVERFLOW if the size of the property is not as expected.
+>   *        %-ENXIO if no suitable firmware interface is present.
+>   */
+> -int device_property_read_u32_array(struct device *dev, const char *propname,
+> +int device_property_read_u32_array(const struct device *dev, const char *propname,
+>                                    u32 *val, size_t nval)
+>  {
+>         return fwnode_property_read_u32_array(dev_fwnode(dev), propname, val, nval);
+> @@ -170,7 +170,7 @@ EXPORT_SYMBOL_GPL(device_property_read_u32_array);
+>   *        %-EOVERFLOW if the size of the property is not as expected.
+>   *        %-ENXIO if no suitable firmware interface is present.
+>   */
+> -int device_property_read_u64_array(struct device *dev, const char *propname,
+> +int device_property_read_u64_array(const struct device *dev, const char *propname,
+>                                    u64 *val, size_t nval)
+>  {
+>         return fwnode_property_read_u64_array(dev_fwnode(dev), propname, val, nval);
+> @@ -198,7 +198,7 @@ EXPORT_SYMBOL_GPL(device_property_read_u64_array);
+>   *        %-EOVERFLOW if the size of the property is not as expected.
+>   *        %-ENXIO if no suitable firmware interface is present.
+>   */
+> -int device_property_read_string_array(struct device *dev, const char *propname,
+> +int device_property_read_string_array(const struct device *dev, const char *propname,
+>                                       const char **val, size_t nval)
+>  {
+>         return fwnode_property_read_string_array(dev_fwnode(dev), propname, val, nval);
+> @@ -220,7 +220,7 @@ EXPORT_SYMBOL_GPL(device_property_read_string_array);
+>   *        %-EPROTO or %-EILSEQ if the property type is not a string.
+>   *        %-ENXIO if no suitable firmware interface is present.
+>   */
+> -int device_property_read_string(struct device *dev, const char *propname,
+> +int device_property_read_string(const struct device *dev, const char *propname,
+>                                 const char **val)
+>  {
+>         return fwnode_property_read_string(dev_fwnode(dev), propname, val);
+> @@ -242,7 +242,7 @@ EXPORT_SYMBOL_GPL(device_property_read_string);
+>   *        %-EPROTO if the property is not an array of strings,
+>   *        %-ENXIO if no suitable firmware interface is present.
+>   */
+> -int device_property_match_string(struct device *dev, const char *propname,
+> +int device_property_match_string(const struct device *dev, const char *propname,
+>                                  const char *string)
+>  {
+>         return fwnode_property_match_string(dev_fwnode(dev), propname, string);
+> diff --git a/include/linux/property.h b/include/linux/property.h
+> index 0a29db15ff34..66fe73ee430d 100644
+> --- a/include/linux/property.h
+> +++ b/include/linux/property.h
+> @@ -40,20 +40,20 @@ struct fwnode_handle *__dev_fwnode(struct device *dev);
+>                  const struct device *: __dev_fwnode_const,     \
+>                  struct device *: __dev_fwnode)(dev)
+>
+> -bool device_property_present(struct device *dev, const char *propname);
+> -int device_property_read_u8_array(struct device *dev, const char *propname,
+> +bool device_property_present(const struct device *dev, const char *propname);
+> +int device_property_read_u8_array(const struct device *dev, const char *propname,
+>                                   u8 *val, size_t nval);
+> -int device_property_read_u16_array(struct device *dev, const char *propname,
+> +int device_property_read_u16_array(const struct device *dev, const char *propname,
+>                                    u16 *val, size_t nval);
+> -int device_property_read_u32_array(struct device *dev, const char *propname,
+> +int device_property_read_u32_array(const struct device *dev, const char *propname,
+>                                    u32 *val, size_t nval);
+> -int device_property_read_u64_array(struct device *dev, const char *propname,
+> +int device_property_read_u64_array(const struct device *dev, const char *propname,
+>                                    u64 *val, size_t nval);
+> -int device_property_read_string_array(struct device *dev, const char *propname,
+> +int device_property_read_string_array(const struct device *dev, const char *propname,
+>                                       const char **val, size_t nval);
+> -int device_property_read_string(struct device *dev, const char *propname,
+> +int device_property_read_string(const struct device *dev, const char *propname,
+>                                 const char **val);
+> -int device_property_match_string(struct device *dev,
+> +int device_property_match_string(const struct device *dev,
+>                                  const char *propname, const char *string);
+>
+>  bool fwnode_property_present(const struct fwnode_handle *fwnode,
+> @@ -143,57 +143,57 @@ int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name);
+>
+>  unsigned int device_get_child_node_count(const struct device *dev);
+>
+> -static inline bool device_property_read_bool(struct device *dev,
+> +static inline bool device_property_read_bool(const struct device *dev,
+>                                              const char *propname)
+>  {
+>         return device_property_present(dev, propname);
+>  }
+>
+> -static inline int device_property_read_u8(struct device *dev,
+> +static inline int device_property_read_u8(const struct device *dev,
+>                                           const char *propname, u8 *val)
+>  {
+>         return device_property_read_u8_array(dev, propname, val, 1);
+>  }
+>
+> -static inline int device_property_read_u16(struct device *dev,
+> +static inline int device_property_read_u16(const struct device *dev,
+>                                            const char *propname, u16 *val)
+>  {
+>         return device_property_read_u16_array(dev, propname, val, 1);
+>  }
+>
+> -static inline int device_property_read_u32(struct device *dev,
+> +static inline int device_property_read_u32(const struct device *dev,
+>                                            const char *propname, u32 *val)
+>  {
+>         return device_property_read_u32_array(dev, propname, val, 1);
+>  }
+>
+> -static inline int device_property_read_u64(struct device *dev,
+> +static inline int device_property_read_u64(const struct device *dev,
+>                                            const char *propname, u64 *val)
+>  {
+>         return device_property_read_u64_array(dev, propname, val, 1);
+>  }
+>
+> -static inline int device_property_count_u8(struct device *dev, const char *propname)
+> +static inline int device_property_count_u8(const struct device *dev, const char *propname)
+>  {
+>         return device_property_read_u8_array(dev, propname, NULL, 0);
+>  }
+>
+> -static inline int device_property_count_u16(struct device *dev, const char *propname)
+> +static inline int device_property_count_u16(const struct device *dev, const char *propname)
+>  {
+>         return device_property_read_u16_array(dev, propname, NULL, 0);
+>  }
+>
+> -static inline int device_property_count_u32(struct device *dev, const char *propname)
+> +static inline int device_property_count_u32(const struct device *dev, const char *propname)
+>  {
+>         return device_property_read_u32_array(dev, propname, NULL, 0);
+>  }
+>
+> -static inline int device_property_count_u64(struct device *dev, const char *propname)
+> +static inline int device_property_count_u64(const struct device *dev, const char *propname)
+>  {
+>         return device_property_read_u64_array(dev, propname, NULL, 0);
+>  }
+>
+> -static inline int device_property_string_array_count(struct device *dev,
+> +static inline int device_property_string_array_count(const struct device *dev,
+>                                                      const char *propname)
+>  {
+>         return device_property_read_string_array(dev, propname, NULL, 0);
+> --
+> 2.39.2
+>
