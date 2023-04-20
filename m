@@ -2,121 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CADB6E96EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B646E96F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbjDTOWD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Apr 2023 10:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
+        id S231871AbjDTOWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 10:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbjDTOV7 (ORCPT
+        with ESMTP id S231611AbjDTOWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 10:21:59 -0400
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C4A61A8;
-        Thu, 20 Apr 2023 07:21:51 -0700 (PDT)
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-4eed6ddcae1so2800703e87.0;
-        Thu, 20 Apr 2023 07:21:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682000509; x=1684592509;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v+ntSNli+3961rRN83tx2G/slCSVpZgHaGQlcoQLCYo=;
-        b=lQvPNWJmGGwtMzjPUGq/4D0NzJtsxs6Pmk/NIU6HT6cP5prFQk+0PiqYI0SDNO/8GU
-         OJa5elomqh75sR3QgAzuxcoCl+bCo1yCYn6yZJzx20VNceAu9s9SvLMT36sdmxv+7M1p
-         zgDtPgEn/DdSBoQ6DenjHIpj4QrbHOEyX3aSid3M8gPt0Jx4+O48mWuDTETlD396jNQh
-         AflQnksst//wO3VUBJesN1GJ5BiTWFtc3pCK6IRYXvKPfDSh0jHiR/HOz067iP/LbRj5
-         HmhiCosLrVCMwqdrtBlt6ZEM/NbM9xYVLaSL4gyoq3H+1Fmp29JI8Yg/3UINB7ygYRug
-         8UOA==
-X-Gm-Message-State: AAQBX9eOYiWkaHiVliFZ+0HeZ21fW2RDilChL4akrb5Mt2g4ihznOi58
-        XUeElFiUtWfkTOxJuGoV7Bc9INOrsZf3FL2A
-X-Google-Smtp-Source: AKy350brUzgFmXIzx22PvebSV88Jle3hfk/pWR/BkKBIgc6ZulxhVjTAOzLVBj8BYjLfG32uEjm7Uw==
-X-Received: by 2002:a05:6512:3b9e:b0:4eb:2b62:134f with SMTP id g30-20020a0565123b9e00b004eb2b62134fmr1909742lfv.16.1682000508927;
-        Thu, 20 Apr 2023 07:21:48 -0700 (PDT)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
-        by smtp.gmail.com with ESMTPSA id q13-20020ac25a0d000000b004ec4f3810dcsm231860lfn.109.2023.04.20.07.21.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 07:21:47 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-4eed6ddcae1so2800576e87.0;
-        Thu, 20 Apr 2023 07:21:47 -0700 (PDT)
-X-Received: by 2002:ac2:5339:0:b0:4ed:d542:6f65 with SMTP id
- f25-20020ac25339000000b004edd5426f65mr515553lfh.5.1682000507607; Thu, 20 Apr
- 2023 07:21:47 -0700 (PDT)
+        Thu, 20 Apr 2023 10:22:19 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2134.outbound.protection.outlook.com [40.107.243.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4236E85;
+        Thu, 20 Apr 2023 07:22:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HsCmlycP1MvRV/BO76AcV+I/nRR+tNCdiDFLxTjTJVGpw+PbPUnIf3enWnOoRZCWHSiJDsIv1RQmR15XQJgjuOTQjb9ZIrVfiaSxTi3qWRANVhDyi1P8rSzkzlBiARVJoiRsch2sPf2fshvJvRSXMRCnCqYbGTtEKDBNr4GnvEH/VkFeSNhPdCt9n1clsZ5SFtFgzN2beVsS1cS+gtu95vXUsIoLNUwPd+8j3TqmSkTuRYZRVYukrZAnUvVMH/IAESPSHElFeIriXT52E+yDUZDGJK6DqekpeuR63xuExbK2vtF0DTBuWNLWwznSzClkQDhUQOk6jGqXzO8nJsS+0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BgqWZG+BmwJFGn5gIY3b38YI+L5/T4tJ+w7VejOFtz8=;
+ b=a5EntRxAfUu2OlGVZsMAHCAB9b4z0o04DUCxmrFMXzxqJufXSwJTq3nsGy7HYWh9IBenBUAf6HzG64eRjZWLvmSH+MzXHiuYoq0fxOpgGlhgoOOWzw7odZCJfD8ouUmbgv6CAiFZq1fKWdx+F27EQHOYL8X7fH9mDMRBaZ3ejVpzn2y+5Qkie4XmJLUHpx2BQVPLr0TFeLHZOrhC/7Lkj5IHvAxc1ymX6gA2OhIMzFFlBeTJcftdIbOVdc4ibquWiRWf1ikyNZH7buyCGDd1IuXC2sT9Vf9XlABlZoU0sHRjz4FXRmB5Kl9WJDkRHkIql+Olh8VFjUSxX8CHXwwukQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BgqWZG+BmwJFGn5gIY3b38YI+L5/T4tJ+w7VejOFtz8=;
+ b=DxtiKK6ompLqJOVnSg/iWKEj+3wR/LquoYCocpQrUlaRcv08iQFXeAsammdQIW5VvTxoSMNnl/Kj3jDt0Eg3rUZe/kKk4HdFwPmmNxlR6wDwWO6gyPdyMB7Ut8KovzY96vG8Wzm62jN1QIUplq2XUtOi9fsZO37bEzuwIBhJDrE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SA0PR13MB4013.namprd13.prod.outlook.com (2603:10b6:806:97::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Thu, 20 Apr
+ 2023 14:22:13 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%4]) with mapi id 15.20.6319.022; Thu, 20 Apr 2023
+ 14:22:12 +0000
+Date:   Thu, 20 Apr 2023 16:22:04 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Michal Kubecek <mkubecek@suse.cz>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Danielle Ratson <danieller@nvidia.com>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Aaron Conole <aconole@redhat.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 1/9] net: enetc: fix MAC Merge layer
+ remaining enabled until a link down event
+Message-ID: <ZEFKjPR/VL6llxDm@corigine.com>
+References: <20230418111459.811553-1-vladimir.oltean@nxp.com>
+ <20230418111459.811553-2-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418111459.811553-2-vladimir.oltean@nxp.com>
+X-ClientProxiedBy: AS4P251CA0006.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d2::15) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-References: <20230420030500.1578756-1-suijingfeng@loongson.cn>
- <8ec3734b-4bc2-ad8f-fc17-3002f22d1fc9@suse.de> <12c8efaa-7266-5436-dc53-009a0d23b53f@suse.de>
- <4a0fdbe0-cd4f-9c87-f73a-6d27f5c497bb@189.cn> <f541018f-bb7f-ac58-bbb8-797069e49c3f@suse.de>
- <CAMuHMdVGtvgcQuTR9bfMh1cM86TYXSByxJzW5eJtF9A0ZLRF3w@mail.gmail.com> <3d455074-bd51-51a0-7692-a0b4ca961355@suse.de>
-In-Reply-To: <3d455074-bd51-51a0-7692-a0b4ca961355@suse.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 20 Apr 2023 16:21:33 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXHMeiaew7wbj-aNL0oZ=X3gfoSBkMYAbbdyfe6bVZcfQ@mail.gmail.com>
-Message-ID: <CAMuHMdXHMeiaew7wbj-aNL0oZ=X3gfoSBkMYAbbdyfe6bVZcfQ@mail.gmail.com>
-Subject: Re: [PATCH v5] drm/fbdev-generic: prohibit potential out-of-bounds access
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-fbdev@vger.kernel.org, Li Yi <liyi@loongson.cn>,
-        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
-        Sui Jingfeng <15330273260@189.cn>,
-        loongson-kernel@lists.loongnix.cn, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA0PR13MB4013:EE_
+X-MS-Office365-Filtering-Correlation-Id: 45db850b-b8c6-48bd-06b7-08db41aaa21f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6MUeSKXbJuHEgGWZz9RTkXtY37MEeJq/bmLikNKgbFI9J8nOaLlEiKuUhTmIgnIJ0HUpP6GNgljAjgtY2Ehm2EQzY1U6QXb3R/L7iTiGRLa/Q5DuyROy/+c0UlpY1yBZuWLGQchEGpGAOmjSoo9DL9cNVz6EV4cV+PpT8KV/JG+mKLD4Cv0NF37tmjSQKY1xthpyyUlxYrR7zP4LS96LTjDQOixWbk8GhVQqQfibGLQ7aRPhzpBqYItIzSbClInsQue9nvLdVPhPU73he/feQ60YWXIo0pT6G2Cp2hi3rHXxXE0AGju1ScZMGBiB3BSCmGLUof5//F0baxkY86b04lbyRA5ydkK3FIzZ++ZBX7DPgQ3ipDGNR6byOXsSSwRAA8Dr5VrGOeeWkJpgKVwUMlpii0x1TeCizXTYEi4m1GzKqSgwvFDPq7TPBTIiWOv1yaF124oT4amlFUErHX5l0ujzvvYebhSrqgFsJgH942AawQwsNaXDf3NiVN2Un0rk37HsSkwlvVmo2pyax3pampIQxNh0/0ryFUW3wtJmPEcxxEa+hKAoQKin2ju3szRl
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(396003)(346002)(376002)(39840400004)(451199021)(8936002)(8676002)(5660300002)(316002)(41300700001)(6916009)(4326008)(66476007)(38100700002)(86362001)(44832011)(7416002)(2906002)(6512007)(6506007)(6486002)(2616005)(83380400001)(186003)(36756003)(66946007)(66556008)(478600001)(6666004)(54906003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3SyoeeVYJI1ZhIE8+ZVjcaEN6sF40pILaIUE7hImTR9xCOJ5BMJ3bey2/MtH?=
+ =?us-ascii?Q?71s9h41T0tY4PxuOAyfCattkO9znvYVhvD+YHZxHvdoOooelT10FYkfyU7fG?=
+ =?us-ascii?Q?JTtrJipEbWoUfcUeuSQfrLKvlSvlaVnEmEgOcIZzWRh5wW/9IEQoTzBWAqvX?=
+ =?us-ascii?Q?AKSlW7lfrBvEfbKDbJWTVSsxytJMC8vn2cKwSWyS7mvfeADKClDXI2qMyNpq?=
+ =?us-ascii?Q?tOG2hTOA56WipGeNbwbyu0ehhf1cj6TmHG/qXCju/P3Z4tEoJXq9JwjsBYnG?=
+ =?us-ascii?Q?EawLXnHs+4r1hMOl+KNM8CULIqQN6SNFXwSbFJNSC5Ep5tUKgH/d6Q77aVkU?=
+ =?us-ascii?Q?slhCbAbBBEWsCqqqutkVNu5Ea/toZTun9SC/EBhs9WHKDuklpnKthuer+C0M?=
+ =?us-ascii?Q?2/ZVHI8Ht/11B95IInBQ5y2T28hWip8A2uqtby0y5/LZBB6Px4YYvbFCaGHD?=
+ =?us-ascii?Q?4L8RhrZnN2mMFfgY24bIyOcNW0+KHyILIpDi1pA6zry0OZj6IVLSZ+qPE7kA?=
+ =?us-ascii?Q?AINepPwvaPcEUMeuDvaHpaSquBR/jBB4t+yE74q+etfvf/85efsZUjrdf7rh?=
+ =?us-ascii?Q?5WikouVl0jZiTK+SeDxJcb7IRvXln8RN86kPzV0ZHbNAMKlKB+vH7BoluDbY?=
+ =?us-ascii?Q?gZoxoGBmEflVqyFaIHBxI0b1M2CF78PlJ9aZNCVVvTZ/gmop/c+0bTxCNlzS?=
+ =?us-ascii?Q?pboASWKAroapiX2lVopLZu/gEkjuG8l63Nmw+0HQoikLcqcgVAyM9txNEHi0?=
+ =?us-ascii?Q?DfDAL7ZVmIz1SkkWJ9MoXUQtBnjn7JvRyKJ/YtXp90GtTe4cAB3+do6XEAmf?=
+ =?us-ascii?Q?SzVXEq2S1I5JjIU0qIxf7mu5o6VJvZ/yVz0QD7Nr5IMBlpCWrhX6GF/+ZyRH?=
+ =?us-ascii?Q?6KMQAEo/FVCxUnaS5ABbWsq/fvh7737GC4BGclRrOL1IJB/G3Fpo8rrVUbFK?=
+ =?us-ascii?Q?3ZTsudO+gNxa0B6SwhFwnMu2RPBsmqloCFpi2TC20BhjdQxtN/V5kKz0q2wU?=
+ =?us-ascii?Q?HH7ADYeyEFGP3yyydK+VqtAtN4sWFYNP6sEl28DDn8ln+/3et7UVmOjK7YwI?=
+ =?us-ascii?Q?I3NCk9aBv47Y7Co3KmuQL26zMRI9hI9cjcgOuYBow6CxYymdwJU9e8fh/b2e?=
+ =?us-ascii?Q?Z4UlISkPpO391k1Tut4aFFavcbiv9vEYVsE19S+656pnA409gDPiGfxOpNBA?=
+ =?us-ascii?Q?U0PeBQj2d+MmtqhRoVXbc+TCadM02P66ZKDKapzAj8TSXPWv4uP8mcPyTktl?=
+ =?us-ascii?Q?W+VEa+K0TUucpldpsceSrkOYjHOfBLMKS/REGD855nNVYLupHnMngtgSK/iA?=
+ =?us-ascii?Q?iF7+RUTM4CO9UsZYApjKD67CBfaCXOWZ8/JU1U/hW8tRC+/VgOA40rdoicwP?=
+ =?us-ascii?Q?hODX9alE4wuOuFYbBcdl0tHWtk0sBueDG0zIl5Xhq/5Kd2KA80GlOvyil8yW?=
+ =?us-ascii?Q?QJubfFX5T+1Cja2Ngcf1+iiJKycRK0qWkIqBTgTNL2QBFVPp/B/XvBpVVwqM?=
+ =?us-ascii?Q?w5sNghUZAmbIZfjIyLmI6wq6Sr7oUH+JbaO8dCz5bb4GAxsI1Z2RJtyKUevH?=
+ =?us-ascii?Q?OYUlvhnjMW7QCGVnp4ymtmQBUSz3fByDGCyfToNAxer+MysBmP/PnwlpowXk?=
+ =?us-ascii?Q?0aqLvevE+8U7rYDPlknWqeVolU+03cBHefqmrwh6LtXQ0Wz6VMNN85NsSZSk?=
+ =?us-ascii?Q?BVfo5A=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45db850b-b8c6-48bd-06b7-08db41aaa21f
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 14:22:12.6047
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aKUOkmStlFC5czVABmkXY0z2UIgwOa0imQ5+xfm3co8BqzZRSlLgkUlLhi/jHYZpl99qie3AEcDkocurZ29lBQY9oD14SgiNBFN43AkdjKY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR13MB4013
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Tue, Apr 18, 2023 at 02:14:51PM +0300, Vladimir Oltean wrote:
+> Current enetc_set_mm() is designed to set the priv->active_offloads bit
+> ENETC_F_QBU for enetc_mm_link_state_update() to act on, but if the link
+> is already up, it modifies the ENETC_MMCSR_ME ("Merge Enable") bit
+> directly.
+> 
+> The problem is that it only *sets* ENETC_MMCSR_ME if the link is up, it
+> doesn't *clear* it if needed. So subsequent enetc_get_mm() calls still
+> see tx-enabled as true, up until a link down event, which is when
+> enetc_mm_link_state_update() will get called.
+> 
+> This is not a functional issue as far as I can assess. It has only come
+> up because I'd like to uphold a simple API rule in core ethtool code:
+> the pMAC cannot be disabled if TX is going to be enabled. Currently,
+> the fact that TX remains enabled for longer than expected (after the
+> enetc_set_mm() call that disables it) is going to violate that rule,
+> which is how it was caught.
+> 
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-On Thu, Apr 20, 2023 at 2:59 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Am 20.04.23 um 14:25 schrieb Geert Uytterhoeven:
-> > On Thu, Apr 20, 2023 at 1:10 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> >> Am 20.04.23 um 12:04 schrieb Sui Jingfeng:
-> >>> What will happen if the 'screen_size' is not page_size aligned and mmap
-> >>> will mapping in the granularity of pages ?
-> >>
-> >> You need to map at page granularity. If screen_size is not page-size
-> >> aligned, there's this trailing buffer that is accessible, but cannot be
-> >> displayed. But userspace has no direct way of knowing that, so let's
-> >> ignore that problem for now.
-> >
-> > Userspace can know, if fb_fix_screeninfo.smem_{start,len} match
-> > the actual offset and size.
->
-> Can you elaborate? How can userspace detect/compute the actually usable
-> space?
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-By looking at fb_fix_screeninfo.smem_{start,len}, which are the (physical)
-address and length of the frame buffer.
+> ---
+> v1->v2: none
+> 
+>  drivers/net/ethernet/freescale/enetc/enetc_ethtool.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/freescale/enetc/enetc_ethtool.c b/drivers/net/ethernet/freescale/enetc/enetc_ethtool.c
+> index 838750a03cf6..ee1ea71fe79e 100644
+> --- a/drivers/net/ethernet/freescale/enetc/enetc_ethtool.c
+> +++ b/drivers/net/ethernet/freescale/enetc/enetc_ethtool.c
+> @@ -1041,10 +1041,13 @@ static int enetc_set_mm(struct net_device *ndev, struct ethtool_mm_cfg *cfg,
+>  	else
+>  		priv->active_offloads &= ~ENETC_F_QBU;
+>  
+> -	/* If link is up, enable MAC Merge right away */
+> -	if (!!(priv->active_offloads & ENETC_F_QBU) &&
+> -	    !(val & ENETC_MMCSR_LINK_FAIL))
+> -		val |= ENETC_MMCSR_ME;
+> +	/* If link is up, enable/disable MAC Merge right away */
+> +	if (!(val & ENETC_MMCSR_LINK_FAIL)) {
+> +		if (!!(priv->active_offloads & ENETC_F_QBU))
 
->  From grep'ing fbdev drivers, smem_len appears to be a multiple of the
-> pagesize. (?) screen_size is not exported and line_length in the fixed
->
-> portion. Or can line_length change between modes? In that case it should
-> be (yres_virtual * line_length), right?
+nit: The !!() seems unnecessary,
+     I wonder if it can be written in a simpler way as:
 
-smem_{start,len} are not guaranteed to be page-aligned.
-Fbtest[1] and Xorg should handle that fine.
+		if (priv->active_offloads & ENETC_F_QBU)
 
-line_length can change between modes.  It's part of fb_fix_screeninfo,
-because it's fixed in the sense that it depends on the video mode, and
-the user cannot specify its value.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/fbtest.git/tree/fb.c#n199
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> +			val |= ENETC_MMCSR_ME;
+> +		else
+> +			val &= ~ENETC_MMCSR_ME;
+> +	}
+>  
+>  	val &= ~ENETC_MMCSR_VT_MASK;
+>  	val |= ENETC_MMCSR_VT(cfg->verify_time);
+> -- 
+> 2.34.1
+> 
