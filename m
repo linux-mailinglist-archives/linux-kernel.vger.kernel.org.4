@@ -2,158 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D136E959E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF4E6E95AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjDTNQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 09:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
+        id S230029AbjDTNUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 09:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjDTNP5 (ORCPT
+        with ESMTP id S229671AbjDTNUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:15:57 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B46187;
-        Thu, 20 Apr 2023 06:15:54 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 74178E0010;
-        Thu, 20 Apr 2023 13:15:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1681996553;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mf7ZEqMnInD6phgYGwpuLntMIV868d1BcFV7kNAFuVc=;
-        b=A8w0OSj2lidc4EuDhnUnEMUC/NHZfLwRyj7eA83lolXTf53qJbKyic8Yv3rhKMDygbl4WF
-        p2NJfK5N8QMejhgYTeOaP9QkzIpKaE5e6wtIXh1IzSYpnzgc4BtYax6no3RFnFSwbE4vus
-        cJ+fsUcBVh5iUVLa2LUm1700tpoQG/jVKLuoBOIJYCT/GCSE+KM3HDFpdrMq9OAVAb6CnQ
-        wcvK+YSh0O2bNi3fdKIWQIEFg1svQ/TlXw8nas68tktzXO1FYFqyXPjKEab0QM3SZTpSYq
-        N+COI7tYKW1xpDCbCMnQCFr8Q75SwTIfIT/vRGSaoSbenxXe87w98XQGwrQ0Ww==
-Date:   Thu, 20 Apr 2023 15:15:51 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v6 3/7] mfd: Add support for the Lantiq PEF2256 framer
-Message-ID: <20230420151551.78c1288b@bootlin.com>
-In-Reply-To: <20230420123946.GB996918@google.com>
-References: <20230417171601.74656-1-herve.codina@bootlin.com>
-        <20230417171601.74656-4-herve.codina@bootlin.com>
-        <20230420123946.GB996918@google.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Thu, 20 Apr 2023 09:20:07 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A49730EE;
+        Thu, 20 Apr 2023 06:20:06 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-54fc337a650so41181157b3.4;
+        Thu, 20 Apr 2023 06:20:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681996805; x=1684588805;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GNWH6oFsPxt4uPBf5ZSd4rkNU90YfqXsmZC9RT6Nk4w=;
+        b=iBt7XnIlW5ja5FIDgbzbXy90Z5dz+WEqL1GT5rddfr4IDXDBglyDQqL4MB3d5wV79O
+         72WaiSC031h4s62DtdESzUHchGzdGsLEEZB3gkKiHP4P4QE6zXkkNfBsK/y91Wg1j6We
+         p7AIjuCPht+pvxNVK++2byKRkYY48tFcv2pbfG0lW6jCN+vV6VtQiwt7sYxpRxr1N3BI
+         Lvv4EeickuOUPtUEQb0T1dkxPCFzPtUueuiozLiIPscAtaIuop9+mk/+qln+j5blJS6R
+         SCq13GOqi/uUtHoAw40p4I8fQE8DVKqpzbdWYqn4U+Qn77EhdAzZOvoGgHmLRHQBHDux
+         MLjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681996805; x=1684588805;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GNWH6oFsPxt4uPBf5ZSd4rkNU90YfqXsmZC9RT6Nk4w=;
+        b=jH4cGy9iKZ+6Z/DHsBK1Afqp/Bdlrf4bzk6yGUov1XkXUyFivqaS4VG4Qz5g+qwAll
+         4BkpnLO2bD1npx5wQldPY44zA67tJybDtUYZ7rNEJ8ADSHnBbkOvYcfqi6aFrBdK6zDc
+         p2Av8u5MF3slIyk76RNegF6lrfIXoEheFsRcnN3nQPnihPzNTOP4ZxFrWPI+OVmwy9RP
+         s1Ip97NlBuKnz0rUvjgCW3pTTJsGEN1RFZAENwa1GDbo4G08Bl9Ce+VAczXhAGbwtjf+
+         Ptac5B1Rir245i8AwcLi+dbAy6aCqfaQQVM15vhxGXaxS6nOdmUPCRuIB15kOVpY+hpn
+         XYeg==
+X-Gm-Message-State: AAQBX9fFWVTqRk6cszy20dl6bNLFE1f/AjTxC3eQbkxo77MMAWpd4oCi
+        N9BkrJ1BzpLrwEBQFYPXB8b2kqvDvywLw8rFoT8=
+X-Google-Smtp-Source: AKy350Yna17ciObxlr7T445+ng1yrw5kvVgZMoxKaKzazogoVuc+cNXRmbuMczDLtoYwXPnB4yL2NRiFKi3fLM1VgfE=
+X-Received: by 2002:a0d:df50:0:b0:54f:a5ed:1978 with SMTP id
+ i77-20020a0ddf50000000b0054fa5ed1978mr754804ywe.38.1681996805473; Thu, 20 Apr
+ 2023 06:20:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230418214347.324156-1-ojeda@kernel.org> <CAPDJoNsG1E25yYM+L_H21vVCt-5S16etx3KMxx8ySZtWMQt4FQ@mail.gmail.com>
+In-Reply-To: <CAPDJoNsG1E25yYM+L_H21vVCt-5S16etx3KMxx8ySZtWMQt4FQ@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 20 Apr 2023 15:19:54 +0200
+Message-ID: <CANiq72mtb9V+1a7nPEHBCeg_fob4rpPTWJZjdahnGL2Mg3uoUA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Rust 1.68.2 upgrade
+To:     Ariel Miculas <ariel.miculas@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Josh Stone <jistone@redhat.com>,
+        William Brown <william.brown@suse.com>,
+        Georgy Yakovlev <gyakovlev@gentoo.org>,
+        Jan Alexander Steffens <jan.steffens@gmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Apr 2023 13:39:46 +0100
-Lee Jones <lee@kernel.org> wrote:
+On Thu, Apr 20, 2023 at 3:13=E2=80=AFPM Ariel Miculas <ariel.miculas@gmail.=
+com> wrote:
+>
+> $ make LLVM=3D1 rustavailable
 
-> On Mon, 17 Apr 2023, Herve Codina wrote:
-> 
-> > The Lantiq PEF2256 is a framer and line interface component designed to
-> > fulfill all required interfacing between an analog E1/T1/J1 line and the
-> > digital PCM system highway/H.100 bus.
-> > 
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > ---
-> >  drivers/mfd/Kconfig         |  16 +
-> >  drivers/mfd/Makefile        |   1 +
-> >  drivers/mfd/pef2256-regs.h  | 250 ++++++++++
-> >  drivers/mfd/pef2256.c       | 950 ++++++++++++++++++++++++++++++++++++  
-> 
-> 95% of this driver needs to be moved somewhere else.
-> 
-> What is a Framer?  Perhaps sound/ is a good candidate?
+Since you showed the output of the other commands, did this one show
+"Rust is available!"? I guess so -- I imagine you edited the commands
+for the email, e.g. the config changed too.
 
-The pef2256 framer is a device that transfers data to/from a TDM (time-slots
-data) from/to quite old telecommunication lines (E1 in my case).
-Several subsystem can set/get data to/from the TDM. Each device using their
-own time-slots set.
+That is fine, as long as it works as expected :) Thanks a lot for testing!
 
-On my use-case, I have some audio consumer and a not yet upstreamed HDLC
-consumer. Both of them uses the framer to know the E1 link state.
-The framer needs to be initialized 'globally' and not by a specific consumer
-as several consumers can use the framer.
-
-> 
-> >  include/linux/mfd/pef2256.h |  52 ++
-> >  5 files changed, 1269 insertions(+)
-> >  create mode 100644 drivers/mfd/pef2256-regs.h
-> >  create mode 100644 drivers/mfd/pef2256.c
-> >  create mode 100644 include/linux/mfd/pef2256.h  
-> 
-> [...]
-> 
-> > +static int pef2256_add_audio_devices(struct pef2256 *pef2256)
-> > +{
-> > +	const char *compatible = "lantiq,pef2256-codec";
-> > +	struct mfd_cell *audio_devs;
-> > +	struct device_node *np;
-> > +	unsigned int count = 0;
-> > +	unsigned int i;
-> > +	int ret;
-> > +
-> > +	for_each_available_child_of_node(pef2256->dev->of_node, np) {
-> > +		if (of_device_is_compatible(np, compatible))
-> > +			count++;
-> > +	}  
-> 
-> Converting Device Tree nodes into MFD cells to register with the
-> Platform Device API is not a reasonable use-case of MFD.
-> 
-> Have the CODEC driver match on "lantiq,pef2256-codec" and let it
-> instantiate itself.
-
-As the framer is going to used by several subsystem, I cannot instantiate
-it in the specific ASoC subsystem.
-
-> 
-> Your first version using of_platform_populate() was closer to the mark.
-
-The issue was that I need MFD cells for the pinctrl part.
-
-> 
-> > +	if (!count)
-> > +		return 0;
-> > +
-> > +	audio_devs = kcalloc(count, sizeof(*audio_devs), GFP_KERNEL);
-> > +	if (!audio_devs)
-> > +		return -ENOMEM;
-> > +
-> > +	for (i = 0; i < count; i++) {
-> > +		(audio_devs + i)->name = "lantiq-pef2256-codec";
-> > +		(audio_devs + i)->of_compatible = compatible;
-> > +		(audio_devs + i)->id = i;
-> > +	}
-> > +
-> > +	ret = mfd_add_devices(pef2256->dev, 0, audio_devs, count, NULL, 0, NULL);
-> > +	kfree(audio_devs);
-> > +	return ret;
-> > +}  
-> 
-
-Best regards,
-Hervé
-
--- 
-Hervé Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Cheers,
+Miguel
