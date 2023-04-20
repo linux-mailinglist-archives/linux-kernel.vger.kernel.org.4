@@ -2,115 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0EA6E98FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E61216E9901
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232685AbjDTQBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 12:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54892 "EHLO
+        id S233213AbjDTQCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 12:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232605AbjDTQBb (ORCPT
+        with ESMTP id S232671AbjDTQCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 12:01:31 -0400
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE928110;
-        Thu, 20 Apr 2023 09:01:30 -0700 (PDT)
-Received: by mail-oo1-f44.google.com with SMTP id c17-20020a4aa4d1000000b005418821052aso783375oom.6;
-        Thu, 20 Apr 2023 09:01:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682006490; x=1684598490;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mIpdpe/NpR/Ih+cQndC/G+rH56/6XJaiFLeSU8K5oA0=;
-        b=WijXUS6T6QWuDPimJfAW988Zx7ImcnbTa7nQW0fqT57JquB7KfWSN9F82unEbyd4Bl
-         qM7+Vag7UXbuiTg8k62pqMkygod26HcHvCGelhL59AcH5yZXAuD7wgSFktvrw1SYEbKD
-         p32FIUkSGUHXFFiqkfROs3JcK7tiQQxULGANkn0+d78/NVlZduLAsTtfL+nUmLVyJSRS
-         RE8ThYit8mhFqYLXdmII1r6S0rI+6hQ7kB+0SPl9Qo1w74fLiXo2BGoSd+YeUlOs6Gkv
-         9aAZ02X1vGCEpEaPDlYTKdQVcBqhPG4M8M/z0LY/g6hNoKp8iV/QQHNaDeWT9jU5kwhg
-         vzBg==
-X-Gm-Message-State: AAQBX9fmjKMBo+bX6s7x2+b823EXKaGtO90ZeF37RszS1jfYYBq7nWP7
-        +lZX2HO5mBqOWiqFWfBYVg==
-X-Google-Smtp-Source: AKy350bt+0X2w1Rb34a72ni3IOj9CQFLCcOcDdhi78zN3O8KOC08bs/0RKiA7zeCHsbuuGFdNtrbGw==
-X-Received: by 2002:a4a:95af:0:b0:546:1d7b:20be with SMTP id o44-20020a4a95af000000b005461d7b20bemr765333ooi.7.1682006489810;
-        Thu, 20 Apr 2023 09:01:29 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v12-20020a4aad8c000000b0054542d3219asm748526oom.11.2023.04.20.09.01.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 09:01:29 -0700 (PDT)
-Received: (nullmailer pid 2950580 invoked by uid 1000);
-        Thu, 20 Apr 2023 16:01:28 -0000
-Date:   Thu, 20 Apr 2023 11:01:28 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH 1/3] dt-bindings: nvmem: brcm,nvram: add
- #nvmem-cell-cells for MACs
-Message-ID: <20230420160128.GA2945386-robh@kernel.org>
-References: <20230406110804.12024-1-zajec5@gmail.com>
+        Thu, 20 Apr 2023 12:02:18 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4C2110;
+        Thu, 20 Apr 2023 09:02:15 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33KG2Ab9077822;
+        Thu, 20 Apr 2023 11:02:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682006530;
+        bh=32rTaG1sMuRUvRiLcC0IxZFq/Gj51HyH/Fwu02QIUCE=;
+        h=From:To:CC:Subject:Date;
+        b=qBEqdpU1cnTmsVzSP2waazDdib0k6TIuueTGleriAzdaHyZxroCedIYWpS9YNUjEC
+         F2h+dirVAncewIF4pRfl2dPn9mEYN5X1RAx7Qi4azXhz5TWNsqxabIEwywJ1AcBGRw
+         z3sBFEFHyZ8hCvNM+E+R2yBuSlw1lsPTJTJjMq2A=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33KG2Aip074012
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 20 Apr 2023 11:02:10 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 20
+ Apr 2023 11:02:10 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 20 Apr 2023 11:02:09 -0500
+Received: from ula0226330.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33KG29Xn031429;
+        Thu, 20 Apr 2023 11:02:09 -0500
+From:   Andrew Davis <afd@ti.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Davis <afd@ti.com>
+Subject: [PATCH v2] serial: 8250_exar: Add support for USR298x PCI Modems
+Date:   Thu, 20 Apr 2023 11:02:09 -0500
+Message-ID: <20230420160209.28221-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230406110804.12024-1-zajec5@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 01:08:02PM +0200, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> Broadcom's NVRAM contains MACs for Ethernet interfaces. Those MACs are
-> usually base addresses that are also used for calculating other MACs.
-> 
-> For example if a router vendor decided to use gmac0 it most likely
-> programmed NVRAM of each unit with a proper "et0macaddr" value. That is
-> a base.
-> 
-> Ethernet interface is usually connected to switch port. Switch usually
-> includes few LAN ports and a WAN port. MAC of WAN port gets calculated
-> as relative address to the interface one. Offset varies depending on
-> device model.
-> 
-> Wireless MACs may also need to be calculated using relevant offsets.
-> 
-> To support all those scenarios let MAC NVMEM cells be referenced with an
-> index specifying MAC offset.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
->  .../devicetree/bindings/nvmem/brcm,nvram.yaml        | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-> index 36def7128fca..a921e05cc544 100644
-> --- a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-> @@ -36,14 +36,26 @@ properties:
->    et0macaddr:
->      type: object
->      description: First Ethernet interface's MAC address
-> +    properties:
-> +      "#nvmem-cell-cells":
-> +        description: The first argument is a MAC address offset.
-> +        const: 1
+Possibly the last PCI controller-based (i.e. not a soft/winmodem)
+dial-up modem one can still buy.
 
-Not a new issue, but these nodes are missing 'additionalProperties: 
-false'. Can you add that. With that,
+Looks to have a stock XR17C154 PCI UART chip for communication, but for
+some reason when provisioning the PCI IDs they swapped the vendor and
+subvendor IDs. Otherwise this card would have worked out of the box.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Searching online, some folks seem to not have this issue and others do,
+so it is possible only some batches of cards have this error.
+
+Create a new macro to handle the switched IDs and add support here.
+
+Signed-off-by: Andrew Davis <afd@ti.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+
+Changes from v1:
+ - Removed first patch in series, will convert these all later
+ - Add Reviewed-by tag
+
+ drivers/tty/serial/8250/8250_exar.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
+index 64770c62bbec5..b406cba10b0eb 100644
+--- a/drivers/tty/serial/8250/8250_exar.c
++++ b/drivers/tty/serial/8250/8250_exar.c
+@@ -40,9 +40,13 @@
+ #define PCI_DEVICE_ID_COMMTECH_4224PCIE		0x0020
+ #define PCI_DEVICE_ID_COMMTECH_4228PCIE		0x0021
+ #define PCI_DEVICE_ID_COMMTECH_4222PCIE		0x0022
++
+ #define PCI_DEVICE_ID_EXAR_XR17V4358		0x4358
+ #define PCI_DEVICE_ID_EXAR_XR17V8358		0x8358
+ 
++#define PCI_SUBDEVICE_ID_USR_2980		0x0128
++#define PCI_SUBDEVICE_ID_USR_2981		0x0129
++
+ #define PCI_DEVICE_ID_SEALEVEL_710xC		0x1001
+ #define PCI_DEVICE_ID_SEALEVEL_720xC		0x1002
+ #define PCI_DEVICE_ID_SEALEVEL_740xC		0x1004
+@@ -829,6 +833,15 @@ static const struct exar8250_board pbn_exar_XR17V8358 = {
+ 		(kernel_ulong_t)&bd			\
+ 	}
+ 
++#define USR_DEVICE(devid, sdevid, bd) {			\
++	PCI_DEVICE_SUB(					\
++		PCI_VENDOR_ID_USR,			\
++		PCI_DEVICE_ID_EXAR_##devid,		\
++		PCI_VENDOR_ID_EXAR,			\
++		PCI_SUBDEVICE_ID_USR_##sdevid), 0, 0,	\
++		(kernel_ulong_t)&bd			\
++	}
++
+ static const struct pci_device_id exar_pci_tbl[] = {
+ 	EXAR_DEVICE(ACCESSIO, COM_2S, pbn_exar_XR17C15x),
+ 	EXAR_DEVICE(ACCESSIO, COM_4S, pbn_exar_XR17C15x),
+@@ -853,6 +866,10 @@ static const struct pci_device_id exar_pci_tbl[] = {
+ 
+ 	IBM_DEVICE(XR17C152, SATURN_SERIAL_ONE_PORT, pbn_exar_ibm_saturn),
+ 
++	/* USRobotics USR298x-OEM PCI Modems */
++	USR_DEVICE(XR17C152, 2980, pbn_exar_XR17C15x),
++	USR_DEVICE(XR17C152, 2981, pbn_exar_XR17C15x),
++
+ 	/* Exar Corp. XR17C15[248] Dual/Quad/Octal UART */
+ 	EXAR_DEVICE(EXAR, XR17C152, pbn_exar_XR17C15x),
+ 	EXAR_DEVICE(EXAR, XR17C154, pbn_exar_XR17C15x),
+-- 
+2.39.2
 
