@@ -2,181 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1D26E941E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 090EB6E942B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234857AbjDTMUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        id S234883AbjDTMWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234983AbjDTMUA (ORCPT
+        with ESMTP id S234329AbjDTMWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:20:00 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2D74C37;
-        Thu, 20 Apr 2023 05:19:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1C4F121993;
-        Thu, 20 Apr 2023 12:19:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681993198; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MNJO5JoHwcnmeI96izM3wTCc2c/oK0ZQQpslc8KNUY4=;
-        b=X2AUvC96elh9w3oozO6fynVGk3y9mb1fGJq3wLjSZq8RqmdVn2UQazZ+PDR9dLW+rnlMC4
-        gluAcr61PYQW3hkGA1zC/lxD1umDzx9Z8/MG3ilKzrI5Qf4lAUdF4nTxWnCRsY5uEQ8Vo8
-        wvKkpN83RQh27+QXcr2qWKHAZYFIJ6A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681993198;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MNJO5JoHwcnmeI96izM3wTCc2c/oK0ZQQpslc8KNUY4=;
-        b=5AZo+lE3S+ru1WgSGPGPNioKJfH0ySi0avfXvp1uce1zYQm/eI5p30nTuen3R5QtUvVXuo
-        7UltgL2p509r8MDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 097931333C;
-        Thu, 20 Apr 2023 12:19:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id uVsAAu4tQWTncwAAMHmgww
-        (envelope-from <hare@suse.de>); Thu, 20 Apr 2023 12:19:58 +0000
-Message-ID: <a826abe1-332f-22db-982c-ecec67a40585@suse.de>
-Date:   Thu, 20 Apr 2023 14:19:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] mm/filemap: allocate folios according to the blocksize
-Content-Language: en-US
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mcgrof@kernel.org, SSDR Gost Dev <gost.dev@samsung.com>
-References: <CGME20230414134914eucas1p1f0b08409dce8bc946057d0a4fa7f1601@eucas1p1.samsung.com>
- <20230414134908.103932-1-hare@suse.de>
- <2466fa23-a817-1dee-b89f-fcbeaca94a9e@samsung.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <2466fa23-a817-1dee-b89f-fcbeaca94a9e@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 20 Apr 2023 08:22:21 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7364A1BF4;
+        Thu, 20 Apr 2023 05:22:20 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id D55065C01A9;
+        Thu, 20 Apr 2023 08:22:19 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 20 Apr 2023 08:22:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1681993339; x=1682079739; bh=sZ
+        ONUP6h+SJJnBCxfgbuzzXtSUZFZ3CJUwyCTkmq7Xg=; b=UXWrJ2EEvSiy24KMbi
+        fOpjxO35+cBmgDE7F6QvpjvJAcc23bJlf2c6pqZRu5zeqK/HhqTkzQ+AbklUI5r1
+        vV4RktufQbcODh2x1HBkLgxMMrQGKIKQAw8/PMXttqcziirs1IJenx5RmmTFrAMl
+        /8Y45X2c1rk1vHeLI0bgaxK/bHqFaL6fTf6EA6BNC1vlPOcyrNaRpdCfYl4AUcLb
+        uXhKGvOFaUZyhA57UzjmEoBCxxyncuaERsVmjWAbCYJjm6hDOaWQjNb2cK3Nnk6a
+        pZIAguRdayXwLnrrMIf8uZasj/QpiZ0pMq2GgHa8ap55jaPF4G0DAXX1tX/z7wO2
+        QKXA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681993339; x=1682079739; bh=sZONUP6h+SJJn
+        BCxfgbuzzXtSUZFZ3CJUwyCTkmq7Xg=; b=Hf7YZCJ1hzUf+3hn6Y3OxxyMZgL8i
+        PN/hgEMQ5V0XaWicdiNtSvmHWbgNanzjnZ+YZ5arE5hBWFFYPyGfSVFckEA3wa0U
+        y7U6nsAR5/qkpd6sZFRm1CIy1ubMvDFjqQWsbA3AJVbBpB8Y0EFIrTJtH1UAhhMB
+        kOMfeDIlbqXzEzGjZxVd8/xuJ9X13FEjEHB8dj84RQ6GL+IY5Zfd6O1oRgAnNYRX
+        uSA/bjY0JIjxLpWqg4Pk13mLPaK5OX0NXk3YfsaGKetfAhBTeEY8fTxgQucu17rt
+        xejm00Egbcf/Ymh/+Jj1/ngFyhUpbyU0E9FoLcz3HBDBbJPRmWWaiyYHQ==
+X-ME-Sender: <xms:ey5BZI7NI8R3UM7swGYU65cfll0oLLl7jJkR3kQPgqZSjCKfqgDT4g>
+    <xme:ey5BZJ41ypjuCPWmB-_ULfXWacdRdJfku9BgPPhlIC7U76U5Lu0Cu77YjPm9YEh4E
+    dd-9LrkRSzT6-bHDqs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtvddghedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dunecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:ey5BZHcgTSP7afLL2Ly7HJa4kgBCh5FOot5NhfcpWOpNEaavFDFsJA>
+    <xmx:ey5BZNIombeMEXIsHXza8yedFKUPJgDUrLZp30tcja3zOvsg158BXA>
+    <xmx:ey5BZMLRvsDvBxiF3PAoHk_uIaZscCP7T6FX8JZoVJ5JqBzfN2LA0g>
+    <xmx:ey5BZKwd9vOyIog2uaUSb4za4BGatTv8tQEB_Re3wJ6lH5JCurK72g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 06C07B60086; Thu, 20 Apr 2023 08:22:18 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
+Mime-Version: 1.0
+Message-Id: <747af785-963b-45e5-9d7b-d361951ea3fc@app.fastmail.com>
+In-Reply-To: <CA+G9fYsdMioe4+DEgeh38aTeaY3YaN_s_c0GFjPHhuPWfxyetA@mail.gmail.com>
+References: <CA+G9fYsdMioe4+DEgeh38aTeaY3YaN_s_c0GFjPHhuPWfxyetA@mail.gmail.com>
+Date:   Thu, 20 Apr 2023 14:21:58 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>
+Cc:     "Rob Herring" <robh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Andrew Donnellan" <ajd@linux.ibm.com>,
+        "Anders Roxell" <anders.roxell@linaro.org>
+Subject: Re: next: powerpc: gpio_mdio.c:(.text+0x13c): undefined reference to
+ `__of_mdiobus_register'
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/20/23 14:05, Pankaj Raghav wrote:
-> To keep this thread alive and get some direction on the next steps, I made some changes
-> with which I am able to do **buffered reads** with fio on brd with logical block size > 4k.
-> 
-> Along with your patches (this patch and the brd patches), I added the following diff:
-> 
-> diff --git a/fs/mpage.c b/fs/mpage.c
-> index 242e213ee064..2e0c066d72d3 100644
-> --- a/fs/mpage.c
-> +++ b/fs/mpage.c
-> @@ -161,7 +161,7 @@ static struct bio *do_mpage_readpage(struct mpage_readpage_args *args)
->          struct folio *folio = args->folio;
->          struct inode *inode = folio->mapping->host;
->          const unsigned blkbits = inode->i_blkbits;
-> -       const unsigned blocks_per_page = PAGE_SIZE >> blkbits;
-> +       const unsigned blocks_per_page = folio_size(folio) >> blkbits;
->          const unsigned blocksize = 1 << blkbits;
->          struct buffer_head *map_bh = &args->map_bh;
->          sector_t block_in_file;
-> diff --git a/mm/readahead.c b/mm/readahead.c
-> index 47afbca1d122..2e42b5127f4c 100644
-> --- a/mm/readahead.c
-> +++ b/mm/readahead.c
-> @@ -210,7 +210,7 @@ void page_cache_ra_unbounded(struct readahead_control *ractl,
->          unsigned long index = readahead_index(ractl);
->          gfp_t gfp_mask = readahead_gfp_mask(mapping);
->          unsigned long i;
-> -
-> +       int order = 0;
->          /*
->           * Partway through the readahead operation, we will have added
->           * locked pages to the page cache, but will not yet have submitted
-> @@ -223,6 +223,9 @@ void page_cache_ra_unbounded(struct readahead_control *ractl,
->           */
->          unsigned int nofs = memalloc_nofs_save();
-> 
-> +       if (mapping->host->i_blkbits > PAGE_SHIFT)
-> +               order = mapping->host->i_blkbits - PAGE_SHIFT;
-> +
->          filemap_invalidate_lock_shared(mapping);
->          /*
->           * Preallocate as many pages as we will need.
-> @@ -245,7 +248,7 @@ void page_cache_ra_unbounded(struct readahead_control *ractl,
->                          continue;
->                  }
-> 
-> -               folio = filemap_alloc_folio(gfp_mask, 0);
-> +               folio = filemap_alloc_folio(gfp_mask, order);
->                  if (!folio)
->                          break;
->                  if (filemap_add_folio(mapping, folio, index + i,
-> @@ -259,7 +262,7 @@ void page_cache_ra_unbounded(struct readahead_control *ractl,
->                  if (i == nr_to_read - lookahead_size)
->                          folio_set_readahead(folio);
->                  ractl->_workingset |= folio_test_workingset(folio);
-> -               ractl->_nr_pages++;
-> +               ractl->_nr_pages += folio_nr_pages(folio);
->          }
-> 
-> 
-> And with that (drum roll):
-> 
-> root@debian:~# cat /sys/block/ram0/queue/logical_block_size
-> 8192
-> root@debian:~# fio -bs=8k -iodepth=8 -rw=read -ioengine=io_uring -size=200M -name=io_uring_1
-> -filename=/dev/ram0
-> io_uring_1: (g=0): rw=read, bs=(R) 8192B-8192B, (W) 8192B-8192B, (T) 8192B-8192B, ioengine=io_uring,
-> iodepth=8
-> fio-3.33
-> Starting 1 process
-> 
-> io_uring_1: (groupid=0, jobs=1): err= 0: pid=450: Thu Apr 20 11:34:10 2023
->    read: IOPS=94.8k, BW=741MiB/s (777MB/s)(40.0MiB/54msec)
-> 
-> <snip>
-> 
-> Run status group 0 (all jobs):
->     READ: bw=741MiB/s (777MB/s), 741MiB/s-741MiB/s (777MB/s-777MB/s), io=40.0MiB (41.9MB), run=54-54msec
-> 
-> Disk stats (read/write):
->    ram0: ios=0/0, merge=0/0, ticks=0/0, in_queue=0, util=0.00%
-> 
-> 
-> **Questions on the future work**:
-> 
-> As willy pointed out, we have to do this `order = mapping->host->i_blkbits - PAGE_SHIFT` in
-> many places. Should we pursue something that willy suggested: encapsulating order in the
-> mapping->flags as a next step?[1]
-> 
-> 
-> [1] https://lore.kernel.org/lkml/ZDty+PQfHkrGBojn@casper.infradead.org/
+On Thu, Apr 20, 2023, at 12:57, Naresh Kamboju wrote:
+> Following build failures noticed on Linux next-20230419 for powerpc.
+>
+> Regressions found on powerpc:
+>  - build/gcc-8-defconfig
+>  - build/clang-16-defconfig
+>  - build/gcc-12-defconfig
+>  - build/clang-nightly-defconfig
+>
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> Build log:
+> --------
+> powerpc64le-linux-gnu-ld: arch/powerpc/platforms/pasemi/gpio_mdio.o:
+> in function `gpio_mdio_probe':
+> gpio_mdio.c:(.text+0x13c): undefined reference to `__of_mdiobus_register'
+> powerpc64le-linux-gnu-ld: drivers/net/phy/phy_device.o: in function `phy_probe':
+> phy_device.c:(.text+0x56ac): undefined reference to
+> `devm_led_classdev_register_ext'
+> powerpc64le-linux-gnu-ld: drivers/net/ethernet/pasemi/pasemi_mac.o: in
+> function `pasemi_mac_open':
+> pasemi_mac.c:(.text+0x19ac): undefined reference to `of_phy_connect'
+> make[2]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 1
 
-Well ... really, not sure.
-Yes, continue updating buffer_heads would be a logical thing as it could 
-be done incrementally.
+Same bug as the other one:
 
-But really, the end-goal should be to move away from buffer_heads for fs 
-and mm usage. So I wonder if we shouldn't rather look in that direction..
+https://lore.kernel.org/all/20230420084624.3005701-1-arnd@kernel.org/
 
-Cheers,
-
-Hannes
-
+      Arnd
