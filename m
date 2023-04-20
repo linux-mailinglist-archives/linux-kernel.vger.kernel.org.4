@@ -2,78 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BD96E947F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 294016E947B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234990AbjDTMd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S234411AbjDTMdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234936AbjDTMdQ (ORCPT
+        with ESMTP id S233000AbjDTMdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:33:16 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732E83C30;
-        Thu, 20 Apr 2023 05:32:58 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-18665c1776dso615787fac.2;
-        Thu, 20 Apr 2023 05:32:58 -0700 (PDT)
+        Thu, 20 Apr 2023 08:33:14 -0400
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267831FD2;
+        Thu, 20 Apr 2023 05:32:57 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6a5febde157so325814a34.3;
+        Thu, 20 Apr 2023 05:32:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681993977; x=1684585977;
+        d=1e100.net; s=20221208; t=1681993976; x=1684585976;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=n7z0JmwHaex/uFH0ZYyDvToigtvE+3W/gbf5o0Is7Ho=;
-        b=OBkMo2LkzLoVM5h8kQpDEMcnrNY7rC2mn3o58ExbDs9bg55LcP6Pef7/HOnmjZ3AcD
-         BkbbQ62RF3hfEbaTI7iTo/rKh6rlRZDFZkWVBlx7ppw0Ar255LmUZO/JWC7rwmzH/zeF
-         9/qFWhNaixRJIQIM1NwZVicrTLR5R8wHn5MZMqMBfPr8AKWZiFfHUm3BtlcNYpnPCS/s
-         SYhyj66KETnJE9Powihy6xmsavVkx0FSOuJtyarZVYMLKB9bRDSRXw9sTQjhgO4hjI6J
-         FGuusluvyG54NbCOKNR9Ltov8RjYURSC5KKT6r/YoqOSqa92mfYUX8gTZ7fe30JKLzv9
-         hfhA==
-X-Gm-Message-State: AAQBX9cov7AAV7QllXKJFkO56Y2eDFUM/fzIeHwaNusuNPJnK5TtaT8W
-        8fg06uUe2bgGQzoazJITDziaWzfO5g==
-X-Google-Smtp-Source: AKy350Y107Wu1RAl2s+KH7dc+aZ13lz9F0Ey0F68DyRy1iyrsdRSN2Bux4WCxJa0ZbDCN1BlqkUgiw==
-X-Received: by 2002:a05:6871:707:b0:188:5:bc87 with SMTP id f7-20020a056871070700b001880005bc87mr1163265oap.6.1681993977566;
-        Thu, 20 Apr 2023 05:32:57 -0700 (PDT)
+        bh=tMwSPKQCjaI+s6rgmrEgsLCZjsqIZCT4Ezs2S+deB98=;
+        b=AVzFbTxfXT6m+ICvWBNmzeWRlDjEKmeRAFm2huww9Dz8bJXs2ZTNqcaxKTMHxGlTdY
+         CSUW4d7hVwQs41pZGQKVqY/nS3GZiCryK7WhpIkOACBw93fCqxjeHYG2wasbMrgNxgJS
+         +CBPkRQd6hq/eUEK+88/G+jv4gfsLsTkP45YoYzKtpK0awqCglfA+ubvtqCjAwQQhZn5
+         0ESdpeAMl17MqKZkQ4aTG+wsACDd1qj/DLIQvII9vq8I3xpeBRWMWQME0LOEsApjOI/m
+         iBb2+N0e7dckCYVUCEKpaO/7v9jUWVBSEGQO56td0IPxRwpAP7P6I7deGtWSSZcwy1iz
+         BeZw==
+X-Gm-Message-State: AAQBX9cKD4L9FLI1dnyMBDE5r7pU+/VQSBRGVW/A195oevZIOczGkiqM
+        XXNPcur2iWhLj46GxsKrVQ==
+X-Google-Smtp-Source: AKy350YSGHZoEpx8/m/b2yMMUz7U5VCKfW6SofU/pYibL7OdS2HPNJjWi1oKmkk22+MMy/jv5K3amw==
+X-Received: by 2002:a9d:65d0:0:b0:69c:8354:c5de with SMTP id z16-20020a9d65d0000000b0069c8354c5demr652098oth.2.1681993976169;
+        Thu, 20 Apr 2023 05:32:56 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e21-20020a056830201500b0069f8ff38bcbsm662919otp.16.2023.04.20.05.32.56
+        by smtp.gmail.com with ESMTPSA id z13-20020a9d62cd000000b006a2cc609ddasm681829otk.2.2023.04.20.05.32.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 05:32:57 -0700 (PDT)
-Received: (nullmailer pid 2632253 invoked by uid 1000);
+        Thu, 20 Apr 2023 05:32:55 -0700 (PDT)
+Received: (nullmailer pid 2632250 invoked by uid 1000);
         Thu, 20 Apr 2023 12:32:54 -0000
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Minda Chen <minda.chen@starfivetech.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Mason Huo <mason.huo@starfivetech.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        Peter Chen <peter.chen@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-In-Reply-To: <20230420110052.3182-6-minda.chen@starfivetech.com>
-References: <20230420110052.3182-1-minda.chen@starfivetech.com>
- <20230420110052.3182-6-minda.chen@starfivetech.com>
-Message-Id: <168199392033.2631023.325205203535545069.robh@kernel.org>
-Subject: Re: [PATCH v5 5/7] dt-bindings: usb: Add StarFive JH7110 USB
- controller
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
+Cc:     linux-gpio@vger.kernel.org, richardcochran@gmail.com,
+        manivannan.sadhasivam@linaro.org, andersson@kernel.org,
+        linux-arm-msm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org, agross@kernel.org, netdev@vger.kernel.org
+In-Reply-To: <1681966915-15720-2-git-send-email-quic_rohiagar@quicinc.com>
+References: <1681966915-15720-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1681966915-15720-2-git-send-email-quic_rohiagar@quicinc.com>
+Message-Id: <168199391964.2630980.4927574228536419171.robh@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: qcom: Add SDX75 pinctrl
+ devicetree compatible
 Date:   Thu, 20 Apr 2023 07:32:54 -0500
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,31 +70,39 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 20 Apr 2023 19:00:50 +0800, Minda Chen wrote:
-> StarFive JH7110 platforms USB have a wrapper module around
-> the Cadence USBSS-DRD controller. Add binding information doc
-> for that.
+On Thu, 20 Apr 2023 10:31:54 +0530, Rohit Agarwal wrote:
+> Add device tree binding Documentation details for Qualcomm SDX75
+> pinctrl driver.
 > 
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> Reviewed-by: Peter Chen <peter.chen@kernel.org>
-> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
 > ---
->  .../bindings/usb/starfive,jh7110-usb.yaml     | 131 ++++++++++++++++++
->  1 file changed, 131 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
+>  .../bindings/pinctrl/qcom,sdx75-tlmm.yaml          | 195 +++++++++++++++++++++
+>  1 file changed, 195 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml:73:9: [warning] too many spaces after hyphen (hyphens)
+./Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml:50:13: [error] empty value in block mapping (empty-values)
+./Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml:84:52: [warning] too few spaces after comma (commas)
 
 dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml: 'patternPropetries' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'not', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+./Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/bindings/pinctrl/qcom,sdx75-tlmm.yaml
+./Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/pinctrl/qcom,sdx75-tlmm.yaml#
+Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.example.dts:32.13-36: ERROR (duplicate_property_names): /example-0/pinctrl@03000000:#interrupt-cells: Duplicate property name
+ERROR: Input tree has errors, aborting (use -f to force output)
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.example.dtb] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1512: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230420110052.3182-6-minda.chen@starfivetech.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1681966915-15720-2-git-send-email-quic_rohiagar@quicinc.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
