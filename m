@@ -2,218 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4DF6E89B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 07:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF576E89BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 07:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233753AbjDTFtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 01:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
+        id S233774AbjDTFu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 01:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjDTFtl (ORCPT
+        with ESMTP id S229447AbjDTFuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 01:49:41 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7393AAC;
-        Wed, 19 Apr 2023 22:49:40 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33K5maaM012000;
-        Wed, 19 Apr 2023 22:49:34 -0700
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3q2917xf04-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 22:49:33 -0700
-Received: from m0045851.ppops.net (m0045851.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33K5m5pE010356;
-        Wed, 19 Apr 2023 22:49:33 -0700
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2170.outbound.protection.outlook.com [104.47.56.170])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3q2917xeyx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 22:49:33 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O1mlt6P0b9oPLgUef1MzC1iQS+99Y/Z+f9ViGOxJCp6ojpzgYOyknJ8B9Dt+UlWpeGSjcoi8Jk4j/Ehl+eKTFOfk5QCqrgMqIRm1qytrAnixHceWjJkh7TBZYT+mVkZsm8SIcJ08d/WHQDvD1XSVj7eLeAZB9nYzg95lfZ5wPIPCjk44MZ+TuXISrMO7oTsN3QhW6I5fDGey1Bcbq05iwvYws5SXc1jLLVskcRNUyAub/p4EF8m1htTokxBir+tyfPbriRAC0WH5X8IDcvEavcQs1dsfwnACRBFA0i7Ssx1GcASCRQsri9k3xm9j4313cyZ7P+KIKjPe9XAoW65tNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5MR8CWfnR38z00Eoqyu4cpAYRrErqiOkZqOU3CWJg3o=;
- b=GpGef2lVAT6BrwjMuxCgPfQ0cn1r9ceY/fQQ+fVxO2kIoOoBVib4j1tjlGdqUN2rQg2PRIs/F2ebhgH4lmmnWKGxSQ1qNQz3dq7EogUTFrUr3ZGKx+WDQHAiJWCmVjxiGabm0qjikbAhqANNManofpiobDqEosr5xzm/S37AP1Csw2qsL/uECk3jQgw64t5mJrCJ37u4jW2ZH4KecOf9FrM78MPq85bYSt96195+h/z7xTFPMaW9Ipeh6elRK9fOC8sAGsWY0OCb7hZcaGpQWmRmA7QmpXefKgMYZbOBghHQr75Aa7dQfWakwXpUTjP2wCslyEsdSORF2jKpWImymA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5MR8CWfnR38z00Eoqyu4cpAYRrErqiOkZqOU3CWJg3o=;
- b=GISJKQgZvlhCdPZywN9qsnx181Rz8l9TkdpJx8gDP49t9piTs1sMMnUuUpyh5oR2Gu+6s4ETRNoZZ+qAh8IPliY6ZLedTrWZ2Yegfh31pedStK2OD3mpjJDFKCfC/5xa/witoEXmQk8cpnwj6EQVIvIx36VsKtMf24mUKx0KUjY=
-Received: from CO6PR18MB4419.namprd18.prod.outlook.com (2603:10b6:5:35a::11)
- by DM5PR18MB1595.namprd18.prod.outlook.com (2603:10b6:3:14d::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Thu, 20 Apr
- 2023 05:49:30 +0000
-Received: from CO6PR18MB4419.namprd18.prod.outlook.com
- ([fe80::8f16:bff7:799d:e8d0]) by CO6PR18MB4419.namprd18.prod.outlook.com
- ([fe80::8f16:bff7:799d:e8d0%4]) with mapi id 15.20.6319.021; Thu, 20 Apr 2023
- 05:49:29 +0000
-From:   Manish Rangankar <mrangankar@marvell.com>
-To:     Zheng Wang <zyytlz.wz@163.com>, Nilesh Javali <njavali@marvell.com>
-CC:     GR-QLogic-Storage-Upstream <GR-QLogic-Storage-Upstream@marvell.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hackerzheng666@gmail.com" <hackerzheng666@gmail.com>,
-        "1395428693sheep@gmail.com" <1395428693sheep@gmail.com>,
-        "alex000young@gmail.com" <alex000young@gmail.com>
-Subject: RE: [EXT] [PATCH v2] scsi: qedi: Fix use after free bug in
- qedi_remove due to race  condition
-Thread-Topic: [EXT] [PATCH v2] scsi: qedi: Fix use after free bug in
- qedi_remove due to race  condition
-Thread-Index: AQHZbbjd2eaWF3ZdnUqFhm7W7Lj1qq8zvBYw
-Date:   Thu, 20 Apr 2023 05:49:29 +0000
-Message-ID: <CO6PR18MB44192610DCB3FB2975FDF253D8639@CO6PR18MB4419.namprd18.prod.outlook.com>
-References: <20230413033422.28003-1-zyytlz.wz@163.com>
-In-Reply-To: <20230413033422.28003-1-zyytlz.wz@163.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CO6PR18MB4419:EE_|DM5PR18MB1595:EE_
-x-ms-office365-filtering-correlation-id: 62003d16-be0c-4917-3e43-08db41630229
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QJcDJc0I2T2HcN1kdEj9tRe26+Dgv4jzqG+N9Bxs5XKrpzGUkxEKVPdMgWVrMKD7I+ydIKaWIlC0ZDFGT0yo+hfdCIa+0dGBTBkfkJ72yX8S8N4hFcW2x3jN7uYfMHgyuAfD5RWUYYaheyv2MkxsFUh4EkiPvyXylsAZRqHcUoiWJJrNYp2Gfx8fwW95WJSU5IJa6+xGhKuU2I+58x2eopqYxAXpTujobXcKE9oB200JycUh53GDsKNvJ/AlPKIWnk0YXIXz7g/PDUJX7qZX2eBufgOoF2+AiBttcoBiCQ1rwT1jDyizHRHBlAcT7Z2AoqABgkTPM7I/T6GKE3VZXq+Gq7XNIaVNxweAMG16Q/Il26OdG9R8tl07o6DQDX5hZpXriA47/QE8KuTmZKlirO0C0Fq1wNcrK5k9FCyagEaUzWEt0IMJqFXxP5kgfjaKqzipNgNwHFhGJFiv+ICiIdSKRgZz5WZ7eezfujyJVNjW8tPDZOhJnD/ANGzsfcLV5C/muMQV6h00uQjgrDetEMo7bfR1c4ltQmrWcj5iEx+RTqqJJ8Y2JzSwndzWH2GqtWyh8y8vKd+ZwL2WSvhXkql6l09B03zIKiXRPTt8s99H5mzUTVWvyxtA+e291qAS
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR18MB4419.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(136003)(396003)(39860400002)(451199021)(6506007)(26005)(186003)(9686003)(316002)(53546011)(55016003)(8676002)(8936002)(38070700005)(86362001)(52536014)(5660300002)(478600001)(66946007)(54906003)(110136005)(76116006)(83380400001)(41300700001)(2906002)(33656002)(122000001)(6636002)(7696005)(4326008)(38100700002)(66556008)(64756008)(71200400001)(66446008)(66476007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1dq3D3xlHrWfRM6vsud42qqMpOZEdWgpxwOywGVXyS+sVp2VcYgK/bYRLhYA?=
- =?us-ascii?Q?w++uNZ9J3n7bxy+aGXzDWgJinKq+EPh9FcxilcfcVGU5EUHOnWCeBJxGeGOu?=
- =?us-ascii?Q?2gcZjTCioPsom4YJEcqGkn4ClmbcMRR5aqCPNG43pBMEvLfynaY1ciOHbF0K?=
- =?us-ascii?Q?6/H8GaecnOvP71IAK78qzDhJchSIcMi9uQX+kj4IlRzPRwBT/R2ZLULbDiwY?=
- =?us-ascii?Q?5bIOj1KVK47TW7Pq7GX2DZ64QYfWibMMaom9WnQU1KyGNxPWmPLbwXmYWjUX?=
- =?us-ascii?Q?TH2dfts+JAOMsFjkoQdm8V2w/NvSYYnANRdY6mjVazxs1NcAZEIezPy7HsoN?=
- =?us-ascii?Q?hYyUB19YfDDXVyR38Y4h7qat2vbZQOfrBOIf99u3PI1aUWseZUC3LIKTqSXF?=
- =?us-ascii?Q?e07T52edW2Gfz7jBQFxnx5KZLStRJPuzF4f4eMdRttp1a4znUKGkYBNm4cmm?=
- =?us-ascii?Q?PwV5tdnNEWEqMfducT+qdPODPrlQhDhbmd1F4MNpH1YQ2nHbi9pzKaVFlIk7?=
- =?us-ascii?Q?EvIfPj2F8QBQsfE/nAspqlE/4keLp7xax3SFlZg/Hp3L86uUAEon3kAhavlm?=
- =?us-ascii?Q?6SxZkS/Kieq1UPlcmVS9GlBIHSvjMGjquV9y7IKv6/LIrztls0jrWoIsX1/X?=
- =?us-ascii?Q?K9+PKkiZHY9QXKp2ehfkLtkBSYGf8vsJAYlm0sJffF2px2CAVnn1AeuSWNIL?=
- =?us-ascii?Q?GXBnZi0rr1FaD94VIYZgD+q0c4zlvfeup6BCL+TavSYBwZ1o8B8S6eU68SKm?=
- =?us-ascii?Q?EyzzgXtm7QJ7VW2F2B0RR2m2PFw7NqUqLF8ba9TDniUR2dSvZ9xec0cEbw3d?=
- =?us-ascii?Q?vLclWmQpj9S09piHeKdL3hiBjO/V0SkkRt/qo+0MCaa5X0XQQZTrLjyd+Xer?=
- =?us-ascii?Q?kcUjv+Vw/gixO1AWiRyB3Pral/r4DUrtsWE1TcUOaRdP9G1vrpZ5mkUqHxgU?=
- =?us-ascii?Q?01Gw4H140c0SCQPcWdWD/K8lqmPXMiNnXbSohJ4bGohZRGnlxogJkgvZlUPb?=
- =?us-ascii?Q?0mx3zjRLa8BDtPGkrBQO8rj4P1RHE9bxD/7ieR/9Fwt5auS9BaeBr6HPxu6E?=
- =?us-ascii?Q?CkgWASR44pPUDI1/1N/UEzJ+slLlBuEJ/85b3cRQkheCIhq4K6WRh2iB1Pl9?=
- =?us-ascii?Q?gLZPsRpLumxaPmo2u5TDwRLuPMJ1eOiiH5h9MnKznnxfIGt5xfheBatW1/Mq?=
- =?us-ascii?Q?HQQvLm/ayMjC61VpA4UPDJNMCilOUcEAM93ouBCT4YScuBLYWuEO9vkNoun6?=
- =?us-ascii?Q?G9v38XFWEBzi45mIHclhCd890u74siBi1B0NtdFlp5phcuRZEpYnJpNGcWnd?=
- =?us-ascii?Q?9yL8hJoM7236wRnL7ejTWNdUBvDg9J3SFo4Pv9LOsj8Iw7YWwujsWeU05HZo?=
- =?us-ascii?Q?uZa3aWvMQ9HEwAvGS2y6k+kv4y5YB9lOulh5TT4emV2tpqfv0Kuuz5RXeepq?=
- =?us-ascii?Q?cUqc/hUVKZKFmg/ZZBAp/fwEO4q9EzrXU0dhUmYIWHzIj84qmh1DzEZKQzcM?=
- =?us-ascii?Q?uAc2xzrHyPKLpo3rTFhF/KRcezYZdobMMOmtqP2OlUUO209aaTSK9e5QC7Q+?=
- =?us-ascii?Q?j21y8TZFNQhoG61S2LA2GDSSO7AG8Xiws5ZJvPUD?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 20 Apr 2023 01:50:25 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CF53AAC
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 22:50:22 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33K5o4Rr064066;
+        Thu, 20 Apr 2023 00:50:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681969804;
+        bh=/RtS1OSSqfE7MKMq9mwU/Yg+d2QJHbYSzq86zRaow9I=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=eUzGQt5pSZTCP4bDTlA1julcLc0mofA0tPf3psfVja05Q1cve7GIuHqPY/GVkWg9v
+         QBHMqQ/neJ1MvgoLgA8SEJOYfepPEFjC+np+i7LVBQZO9BOmSBMsn0PAdxCS3huYsm
+         G2rbXmb3CzxGLslxlMAq7z/dBcgn8WnIwx2kMd4Y=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33K5o4Z8130720
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 20 Apr 2023 00:50:04 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 20
+ Apr 2023 00:50:03 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 20 Apr 2023 00:50:03 -0500
+Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33K5o0q6019850;
+        Thu, 20 Apr 2023 00:50:00 -0500
+Message-ID: <f6c92e55-93f5-e5c6-e5ca-4c24fd59f245@ti.com>
+Date:   Thu, 20 Apr 2023 11:19:59 +0530
 MIME-Version: 1.0
-X-OriginatorOrg: marvell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR18MB4419.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62003d16-be0c-4917-3e43-08db41630229
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Apr 2023 05:49:29.6556
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Q9J4DENbqTRksiSf5x58fcjxsl7Dqzp9bzbiM59GEJJZtZ1MUAmD3wkt9GPYl/PCvD1YZuzEhAHbd8eU46ytaA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR18MB1595
-X-Proofpoint-GUID: IpAYdaDP35cwwLZuN3Vd5QsJfokocYzk
-X-Proofpoint-ORIG-GUID: L6_1AiHUrDWyQ6WDR9uQacA0jkm_6cuK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-20_02,2023-04-18_01,2023-02-09_01
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] soc: ti: pruss: Avoid cast to incompatible function type
+Content-Language: en-US
+To:     Simon Horman <horms@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>
+CC:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <llvm@lists.linux.dev>
+References: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Zheng Wang <zyytlz.wz@163.com>
-> Sent: Thursday, April 13, 2023 9:04 AM
-> To: Nilesh Javali <njavali@marvell.com>
-> Cc: Manish Rangankar <mrangankar@marvell.com>; GR-QLogic-Storage-
-> Upstream <GR-QLogic-Storage-Upstream@marvell.com>;
-> jejb@linux.ibm.com; martin.petersen@oracle.com; linux-
-> scsi@vger.kernel.org; linux-kernel@vger.kernel.org;
-> hackerzheng666@gmail.com; 1395428693sheep@gmail.com;
-> alex000young@gmail.com; Zheng Wang <zyytlz.wz@163.com>
-> Subject: [EXT] [PATCH v2] scsi: qedi: Fix use after free bug in qedi_remo=
-ve
-> due to race condition
->=20
-> External Email
->=20
-> ----------------------------------------------------------------------
-> In qedi_probe, it calls __qedi_probe, which bound &qedi->recovery_work
-> with qedi_recovery_handler and bound &qedi->board_disable_work with
-> qedi_board_disable_work.
->=20
-> When it calls qedi_schedule_recovery_handler, it will finally call
-> schedule_delayed_work to start the work.
->=20
-> When we call qedi_remove to remove the driver, there may be a sequence
-> as follows:
->=20
-> Fix it by finishing the work before cleanup in qedi_remove.
->=20
-> CPU0                  CPU1
->=20
->                      |qedi_recovery_handler
-> qedi_remove          |
->   __qedi_remove      |
-> iscsi_host_free      |
-> scsi_host_put        |
-> //free shost         |
->                      |iscsi_host_for_each_session
->                      |//use qedi->shost
->=20
-> Fixes: 4b1068f5d74b ("scsi: qedi: Add MFW error recovery process")
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+On 18/04/23 17:11, Simon Horman wrote:
+> Rather than casting clk_unregister_mux to an incompatible function
+> type provide a trivial wrapper with the correct signature for the
+> use-case.
+> 
+> Reported by clang-16 with W=1:
+> 
+>  drivers/soc/ti/pruss.c:158:38: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>          ret = devm_add_action_or_reset(dev, (void(*)(void *))clk_unregister_mux,
+> 
+> No functional change intended.
+> Compile tested only.
+> 
+> Signed-off-by: Simon Horman <horms@kernel.org>
 > ---
-> v2:
-> - remove unnecessary comment suggested by Mike Christie and cancel the
-> work after qedi_ops->stop and qedi_ops->ll2->stop which ensure there is n=
-o
-> more work suggested by Manish Rangankar
-> ---
->  drivers/scsi/qedi/qedi_main.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/drivers/scsi/qedi/qedi_main.c b/drivers/scsi/qedi/qedi_main.=
-c
-> index f2ee49756df8..45d359554182 100644
-> --- a/drivers/scsi/qedi/qedi_main.c
-> +++ b/drivers/scsi/qedi/qedi_main.c
-> @@ -2450,6 +2450,9 @@ static void __qedi_remove(struct pci_dev *pdev,
-> int mode)
->  		qedi_ops->ll2->stop(qedi->cdev);
->  	}
->=20
-> +	cancel_delayed_work_sync(&qedi->recovery_work);
-> +	cancel_delayed_work_sync(&qedi->board_disable_work);
+>  drivers/soc/ti/pruss.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+> index 6882c86b3ce5..e68441bd7b30 100644
+> --- a/drivers/soc/ti/pruss.c
+> +++ b/drivers/soc/ti/pruss.c
+> @@ -38,6 +38,11 @@ static void pruss_of_free_clk_provider(void *data)
+>  	of_node_put(clk_mux_np);
+>  }
+>  
+> +static void pruss_clk_unregister_mux(void *data)
+> +{
+> +	clk_unregister_mux(data);
+> +}
 > +
->  	qedi_free_iscsi_pf_param(qedi);
->=20
->  	rval =3D qedi_ops->common->update_drv_state(qedi->cdev, false);
-> --
-> 2.25.1
+>  static int pruss_clk_mux_setup(struct pruss *pruss, struct clk *clk_mux,
+>  			       char *mux_name, struct device_node *clks_np)
+>  {
+> @@ -93,8 +98,7 @@ static int pruss_clk_mux_setup(struct pruss *pruss, struct clk *clk_mux,
+>  		goto put_clk_mux_np;
+>  	}
+>  
+> -	ret = devm_add_action_or_reset(dev, (void(*)(void *))clk_unregister_mux,
+> -				       clk_mux);
+> +	ret = devm_add_action_or_reset(dev, pruss_clk_unregister_mux, clk_mux);
+>  	if (ret) {
+>  		dev_err(dev, "failed to add clkmux unregister action %d", ret);
+>  		goto put_clk_mux_np;
+> 
+> 
+> From mboxrd@z Thu Jan  1 00:00:00 1970
+> Return-Path: <linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org>
+> X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+> 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
+> Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+> 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+> 	(No client certificate requested)
+> 	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91400C77B78
+> 	for <linux-arm-kernel@archiver.kernel.org>; Tue, 18 Apr 2023 11:42:44 +0000 (UTC)
+> DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+> 	d=lists.infradead.org; s=bombadil.20210309; h=Sender:
+> 	Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:
+> 	List-Archive:List-Unsubscribe:List-Id:Cc:To:Message-Id:MIME-Version:Subject:
+> 	Date:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+> 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+> 	List-Owner; bh=+CAO6uf34Wr1geK3ZRBtb0JAI43xTLZvVoAx3bYFR8o=; b=cuIUNZeFjlNWar
+> 	n1qXrpSC2BWjTp1I6lb3nOHEvktz/aw4F5DEvvoNHxGvFGjKOkNVCOZ8kbNaPmbgN+kTATZka4FkF
+> 	qQ/sW/CVCX/kWrwG1Wp/Q0rQfY1gO9+SaQEKNFvIM/RKK/G/9IP0kk2vQDjozKlCG52ka8uzTU5/Y
+> 	mv5rKIYXf6KAsCH8KNxykQvIo5vCnaRzOIh/DGnFsuCdD0ShIuf1ymQBmFmg6rpXtTNBaiEU9asnR
+> 	JbTngu0Ike23z2CkRSjpjDU7yULHoaUcp0FELF8NnkX5bbbKsPpjww949637SS7v9pEs11L7pNeDi
+> 	lW4G7+LEEpL2z2yRkAPQ==;
+> Received: from localhost ([::1] helo=bombadil.infradead.org)
+> 	by bombadil.infradead.org with esmtp (Exim 4.96 #2 (Red Hat Linux))
+> 	id 1pojif-001zZA-2v;
+> 	Tue, 18 Apr 2023 11:41:57 +0000
+> Received: from dfw.source.kernel.org ([139.178.84.217])
+> 	by bombadil.infradead.org with esmtps (Exim 4.96 #2 (Red Hat Linux))
+> 	id 1pojid-001zYi-0s
+> 	for linux-arm-kernel@lists.infradead.org;
+> 	Tue, 18 Apr 2023 11:41:56 +0000
+> Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+> 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+> 	(No client certificate requested)
+> 	by dfw.source.kernel.org (Postfix) with ESMTPS id B371562AB8;
+> 	Tue, 18 Apr 2023 11:41:54 +0000 (UTC)
+> Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82D70C433EF;
+> 	Tue, 18 Apr 2023 11:41:52 +0000 (UTC)
+> DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+> 	s=k20201202; t=1681818114;
+> 	bh=HDO76kSQTCd/EdXhW03QxEZMNUJlfvxdzP1GEo8IYVg=;
+> 	h=From:Date:Subject:To:Cc:From;
+> 	b=JZMzw7vBy3kF7tUHrf3heWahdw/+GlTfSbSfX4l8BXBY+xlpkYbzXBZF6yUtnZ6ei
+> 	 X9heGXlXJ7Qjq+ln6+s1947UlK8OkkZ8GO5SvG5L6ek9ceYzedjuzvPZfxymikoQY+
+> 	 e3xN7D2jgVVu7zVcX2rgraJ86iVq7G62fX9TnTnZ3cy6CQpj1mkPaQSTd0FJ09djlq
+> 	 Ott8fvgXVB18h1Z2jWGiQOs3a4y7x0d+smz5RcKCOs2Qm6EWCicR19vJHHrpjqh3Yd
+> 	 Wycn9PVVKILWspPmYdQLWAj2UTH539mJEdC3MrBHQG5XKAoYZ45uelHZwLuE+fL9gI
+> 	 hj7mkdKhM7mmg==
+> From: Simon Horman <horms@kernel.org>
+> Date: Tue, 18 Apr 2023 13:41:48 +0200
+> Subject: [PATCH] soc: ti: pruss: Avoid cast to incompatible function type
+> MIME-Version: 1.0
+> Message-Id: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
+> X-B4-Tracking: v=1; b=H4sIAPuBPmQC/x2N0QqDMAwAf0XyvICtE8d+ZeyhjekMlk4SHAPx3
+>  xf2eAfHHWCswgb37gDlj5i8m0O4dEBLai9GmZ0h9nHor+GGm+5mSHVFyljGkOfINA1jAU9yMsa
+>  sqdHiUdtrdbkpF/n+H4/nef4A+lxSD3MAAAA=
+> To: Nishanth Menon <nm@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>, 
+>  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+>  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+>  llvm@lists.linux.dev, Simon Horman <horms@kernel.org>
+> X-Mailer: b4 0.12.2
+> X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+> X-CRM114-CacheID: sfid-20230418_044155_365668_53307A20 
+> X-CRM114-Status: GOOD (  11.38  )
+> X-BeenThere: linux-arm-kernel@lists.infradead.org
+> X-Mailman-Version: 2.1.34
+> Precedence: list
+> List-Id: <linux-arm-kernel.lists.infradead.org>
+> List-Unsubscribe: <http://lists.infradead.org/mailman/options/linux-arm-kernel>,
+>  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=unsubscribe>
+> List-Archive: <http://lists.infradead.org/pipermail/linux-arm-kernel/>
+> List-Post: <mailto:linux-arm-kernel@lists.infradead.org>
+> List-Help: <mailto:linux-arm-kernel-request@lists.infradead.org?subject=help>
+> List-Subscribe: <http://lists.infradead.org/mailman/listinfo/linux-arm-kernel>,
+>  <mailto:linux-arm-kernel-request@lists.infradead.org?subject=subscribe>
+> Content-Type: text/plain; charset="us-ascii"
+> Content-Transfer-Encoding: 7bit
+> Sender: "linux-arm-kernel" <linux-arm-kernel-bounces@lists.infradead.org>
+> Errors-To: linux-arm-kernel-bounces+linux-arm-kernel=archiver.kernel.org@lists.infradead.org
+> 
+> Rather than casting clk_unregister_mux to an incompatible function
+> type provide a trivial wrapper with the correct signature for the
+> use-case.
+> 
+> Reported by clang-16 with W=1:
+> 
+>  drivers/soc/ti/pruss.c:158:38: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>          ret = devm_add_action_or_reset(dev, (void(*)(void *))clk_unregister_mux,
+> 
+> No functional change intended.
+> Compile tested only.
+> 
+> Signed-off-by: Simon Horman <horms@kernel.org>
 
-Thanks,
+Reviewed-by: MD Danish Anwar <danishanwar@ti.com>
 
-Acked-by: Manish Rangankar <mrangankar@marvell.com>
+> ---
+>  drivers/soc/ti/pruss.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+> index 6882c86b3ce5..e68441bd7b30 100644
+> --- a/drivers/soc/ti/pruss.c
+> +++ b/drivers/soc/ti/pruss.c
+> @@ -38,6 +38,11 @@ static void pruss_of_free_clk_provider(void *data)
+>  	of_node_put(clk_mux_np);
+>  }
+>  
+> +static void pruss_clk_unregister_mux(void *data)
+> +{
+> +	clk_unregister_mux(data);
+> +}
+> +
+>  static int pruss_clk_mux_setup(struct pruss *pruss, struct clk *clk_mux,
+>  			       char *mux_name, struct device_node *clks_np)
+>  {
+> @@ -93,8 +98,7 @@ static int pruss_clk_mux_setup(struct pruss *pruss, struct clk *clk_mux,
+>  		goto put_clk_mux_np;
+>  	}
+>  
+> -	ret = devm_add_action_or_reset(dev, (void(*)(void *))clk_unregister_mux,
+> -				       clk_mux);
+> +	ret = devm_add_action_or_reset(dev, pruss_clk_unregister_mux, clk_mux);
+>  	if (ret) {
+>  		dev_err(dev, "failed to add clkmux unregister action %d", ret);
+>  		goto put_clk_mux_np;
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
 
+-- 
+Thanks and Regards,
+Danish.
