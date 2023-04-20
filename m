@@ -2,137 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C90C6E9427
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6C86E9D0A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234873AbjDTMVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
+        id S232097AbjDTUWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 16:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234827AbjDTMVr (ORCPT
+        with ESMTP id S231376AbjDTUWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:21:47 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C095585
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:21:45 -0700 (PDT)
-X-ASG-Debug-ID: 1681993302-1eb14e63872ee80001-xx1T2L
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id D4fzVGZ12vQXLpQS (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 20 Apr 2023 20:21:42 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
- 2023 20:21:42 +0800
-Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
- 2023 20:21:41 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Message-ID: <f0f0d62d-edde-547d-5d6e-a02e2f8e8648@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.21
-Date:   Fri, 21 Apr 2023 04:21:40 +0800
+        Thu, 20 Apr 2023 16:22:30 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283092710;
+        Thu, 20 Apr 2023 13:22:28 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5067736607fso1438901a12.0;
+        Thu, 20 Apr 2023 13:22:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682022146; x=1684614146;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sTqcl8tf1Ibk/nidmtYiKCPg/Dv/QDDdm5Do4ksXgmE=;
+        b=e5JdzK+uVlykkjsw0sYtxL0aC1cV6RY1Vn2duFaQaaWI2FKvtS7GmYb+e2VZzFwLyZ
+         w2owUIACpZ0/UmGn7N7Czn8W3DqhOB9lFHE/uqPrtTVuvxoy/EuEmPY3qS1gvGZ/MqNO
+         K8aeQcXkrLVeb9IWwr0PS3rlGjBrT2D4ZUnRHUK6fWg8UcAAArl8SfEOn1Xqoju5BeUX
+         LAmowv/k/ZLk1Ub9M9FAUggouYV5FXLpKCz96bmEb5l0DP3ddlkt1+tDMpFbnhZbj49q
+         SwCrVEF1O1rYeO8O7vuzm/fE15pep1zWScwwf4ayHhvncl7NnoVcCjva9AqVsaUj/PtU
+         narA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682022146; x=1684614146;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sTqcl8tf1Ibk/nidmtYiKCPg/Dv/QDDdm5Do4ksXgmE=;
+        b=EsK7svh2W/9KKgHinT99EwLkBW1IzDTdhXkfTtxszKAeIP4pEqU3269bKBa8a4xzNa
+         80LISFFMC5l7m8pPIdrrJRb7ROyxkb8YupM91QPs83O9ytt+1vmsle0m/o3tvTSC9YAv
+         AB99q8MGstm3z3w/zlrcqgtv9SnTc9nexgwe4U4dyko5mArmfq7IMnjFje1V8VQcx6Ce
+         bAJf3i8KPUIXYVOLK7iQdxmpf9s95ACDp3qVxLHmHUxVF9W/oxeQDVwl0NYrfFLN9dsw
+         rwVf2zgpscV0FLj/zYhqNXdOFYo05kQhvg23TiQ++Ee+aFHCjPhRudxXEpIizvE2c+AE
+         l/7Q==
+X-Gm-Message-State: AAQBX9durcSX2Mh0E5gseeMP4AC2lqiHJFQ0GRbs61p92r1H0XVcrDk2
+        3ZwPvPyMySyrNK5dZLTTFmnGi91UTiQ=
+X-Google-Smtp-Source: AKy350ZtokotMDwsNUXxLbr/Zp4Ij+ARXhgNqXt/M3SnLX4kgIEkcbTl8S7TxxT3Q34DNX9NGwMGFA==
+X-Received: by 2002:a17:907:c30b:b0:93d:ae74:fa9e with SMTP id tl11-20020a170907c30b00b0093dae74fa9emr226363ejc.7.1682022146502;
+        Thu, 20 Apr 2023 13:22:26 -0700 (PDT)
+Received: from carbian.fritz.box ([2a02:8109:aa3f:ead8::d7e8])
+        by smtp.gmail.com with ESMTPSA id q14-20020a17090676ce00b00932ba722482sm1136881ejn.149.2023.04.20.13.22.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 13:22:25 -0700 (PDT)
+From:   Mehdi Djait <mehdi.djait.k@gmail.com>
+To:     jic23@kernel.org, mazziesaccount@gmail.com
+Cc:     krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Mehdi Djait <mehdi.djait.k@gmail.com>
+Subject: [PATCH v2 0/5] iio: accel: Add support for Kionix/ROHM KX132-1211 accelerometer 
+Date:   Thu, 20 Apr 2023 22:22:00 +0200
+Message-Id: <cover.1682019544.git.mehdi.djait.k@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/3] xhci: Add zhaoxin xHCI U1/U2 feature support
-Content-Language: en-US
-X-ASG-Orig-Subj: Re: [PATCH 2/3] xhci: Add zhaoxin xHCI U1/U2 feature support
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
-References: <20230420172130.375819-1-WeitaoWang-oc@zhaoxin.com>
- <20230420172130.375819-3-WeitaoWang-oc@zhaoxin.com>
- <c853436a-85c7-d0f8-0990-bc64977cbd47@gmail.com>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-In-Reply-To: <c853436a-85c7-d0f8-0990-bc64977cbd47@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.29.8.21]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1681993302
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1867
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107677
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/20 17:39, Sergei Shtylyov wrote:
-> On 4/20/23 8:21 PM, Weitao Wang wrote:
-> 
->> Add U1/U2 feature support of xHCI for zhaoxin.
->>
->> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-> [...]
-> 
->> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
->> index 6307bae9cddf..730c0f68518d 100644
->> --- a/drivers/usb/host/xhci.c
->> +++ b/drivers/usb/host/xhci.c
-> [...]
->> @@ -4938,6 +4938,27 @@ static int xhci_update_timeout_for_interface(struct xhci_hcd *xhci,
->>   	return 0;
->>   }
->>   
->> +static int xhci_check_zhaoxin_tier_policy(struct usb_device *udev,
->> +		enum usb3_link_state state)
->> +{
->> +	struct usb_device *parent;
->> +	unsigned int num_hubs;
->> +
->> +	/* Don't enable U1/U2 if the device is on an external hub. */
->> +	for (parent = udev->parent, num_hubs = 0; parent->parent;
->> +			parent = parent->parent)
->> +		num_hubs++;
->> +
->> +	if (num_hubs < 1)
->> +		return 0;
->> +
->> +	dev_dbg(&udev->dev, "Disabling U1/U2 link state for device"
->> +			" below external hub.\n");
->> +	dev_dbg(&udev->dev, "Plug device into root hub "
->> +			"to decrease power consumption.\n");
-> 
->     Please don't break up the message strings.
+Hello everyone,
 
-Thanks for your advice, and I will merge this message in next patch version.
-> [...]
->> @@ -4965,6 +4986,8 @@ static int xhci_check_tier_policy(struct xhci_hcd *xhci,
->>   {
->>   	if (xhci->quirks & XHCI_INTEL_HOST)
->>   		return xhci_check_intel_tier_policy(udev, state);
->> +	else if (xhci->quirks & XHCI_ZHAOXIN_HOST)
-> 
->     *else* not needed after *return*.
-This function need a "int" type return value. If remove "else" branch,
-vendor other than intel and zhaoxin will not get a return value.
+Second version for adding support for the kx132-1211 accelerometer
 
-Best Regards,
-Weitao
+KX132 accelerometer is a sensor which:
+	- supports G-ranges of (+/-) 2, 4, 8, and 16G
+	- can be connected to I2C or SPI
+	- has internal HW FIFO buffer
+	- supports various ODRs (output data rates)
 
->> +		return xhci_check_zhaoxin_tier_policy(udev, state);
->>   	else
->>   		return 0;
->>   }
-> 
-> MBR, Sergey
-> .
+The KX132 accelerometer is very similair to the KX022A. 
+One key difference is number of bits to report the number of data bytes that 
+have been stored in the buffer: 8 bits for KX022A vs 10 bits for
+KX132-1211.
+
+Changes in v2:
+- added a new patch for warning when the device_id match fails in the
+  probe function
+- added a new patch for the function that retrieves the number of bytes
+  in the buffer
+- added a change to the Kconfig file in the patch adding the support
+  for the kx132-1211
+- various fixes and modifications listed under each patch
+
+Mehdi Djait (5):
+  dt-bindings: iio: Add KX132-1211 accelerometer
+  iio: accel: kionix-kx022a: Warn on failed matches and assume
+    compatibility
+  iio: accel: kionix-kx022a: Refactor driver and add chip_info structure
+  iio: accel: kionix-kx022a: Add a function to retrieve number of bytes
+    in buffer
+  iio: accel: Add support for Kionix/ROHM KX132-1211 accelerometer
+
+ .../bindings/iio/accel/kionix,kx022a.yaml     |  12 +-
+ drivers/iio/accel/Kconfig                     |   8 +-
+ drivers/iio/accel/kionix-kx022a-i2c.c         |  22 +-
+ drivers/iio/accel/kionix-kx022a-spi.c         |  23 +-
+ drivers/iio/accel/kionix-kx022a.c             | 325 +++++++++++++-----
+ drivers/iio/accel/kionix-kx022a.h             | 143 +++++++-
+ 6 files changed, 426 insertions(+), 107 deletions(-)
+
+-- 
+2.30.2
+
