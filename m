@@ -2,71 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F43F6E9164
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D026E9167
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 13:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234840AbjDTLBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 07:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
+        id S235243AbjDTLCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 07:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235257AbjDTLAx (ORCPT
+        with ESMTP id S235249AbjDTLBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 07:00:53 -0400
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FC0A5E4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:58:30 -0700 (PDT)
-Received: by mail-ua1-x92a.google.com with SMTP id p12so1805546uak.13
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:58:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681988287; x=1684580287;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OlkpqVPsMGBCHCwPiGXeltlqZgDhFYvIj0YwaJwjXcY=;
-        b=SV6NOe5HXGojj8j858toAmnSCAUSPE+WaKKDGb4VN2CvbQQri0Qft/DJ2/u6BcgzIJ
-         FP9KTi9YL+RDIsLWGjjdaTD+mwNxmS81RD6Kv75eL8QiZqvJ5D/5HnBNXxAXTWpzmD5c
-         ByPMIyHMuAyJ2PH12t3+7r60A68vWdORNBRVkrNLSL1KjQ+L2dlt8PJyFucLhPNQ8EWe
-         tL49nbKGktraXetVBfH1pqPCuS3fH/RauI+qN7JXAzO9XPUTml6aFgFtHD3g0hwqhatJ
-         dvV4v0hO76lzr9KdIbk6DYwHAn2C52Ms8rtGrYA0V4HoCzc5ZL4rLxX9rgRVERyISyUq
-         /CKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681988287; x=1684580287;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OlkpqVPsMGBCHCwPiGXeltlqZgDhFYvIj0YwaJwjXcY=;
-        b=OOaAZmpTCbEdC/6NMROTeth4fky5vVxkmmNGt33ktAYJe17ZgTHODG1NCKfMjHjcG7
-         vxDcDd0VSpouJr9nastfZk/Myga+HvSP7zQlR3F2wqQgUmGD68ZMzzIqluZttV5WYsvD
-         XJ5TqXALjynRWnO+4twOmjT+PCJITgKvTd4bM5mFW8z1XaWArj0uQ9zSdDSAeFfLHJMc
-         LhwSXrxPBpq7Gi2PxVfH8IgeO0qC5+oL57sXuM81ZVnB4On7Y210d14TG8cKLRXI5yFt
-         RBzQ//xG/csvurZ7VLS+3vzQWKRxPa2vrLW/Wy9gulUKHS0VfUFyMq09GnYmPI4DBFsv
-         nwAg==
-X-Gm-Message-State: AAQBX9cvJaYkG3diWUdIj6zNidX8Ijyyhjhhe/CZU6QekBBVDo6fDU3T
-        lSFo+yrjbeG1FyRGEzBLDQqD8svTifbo7VUlDk1P/Q==
-X-Google-Smtp-Source: AKy350b7fx0YW1+BNZLLBmYhRSGLKi7LfzgDknAEsvAl3PAP80GeDmOlnQyMN2RGFNnwI0N5D1wvi1oRdNQ/BUlwORQ=
-X-Received: by 2002:a1f:4114:0:b0:443:e263:2dff with SMTP id
- o20-20020a1f4114000000b00443e2632dffmr377711vka.7.1681988287392; Thu, 20 Apr
- 2023 03:58:07 -0700 (PDT)
+        Thu, 20 Apr 2023 07:01:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAFB8698;
+        Thu, 20 Apr 2023 03:59:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 801F3647B0;
+        Thu, 20 Apr 2023 10:59:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 957A1C433EF;
+        Thu, 20 Apr 2023 10:59:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681988344;
+        bh=38GdaOC/ZdsLruczbK6dZAmJPEO/Z19GwYh7RGf94T8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r5eHJyx34GhxJIkKbtNxdWPJ2p5RIfjz09FFsSdtJKyiVigc2w3W5wZOwvfHvbNFi
+         ARMirrK+wJL2QxB9j3J3fG6rXY1L0vhbdKkMW8gJNIYZEmFfU+cAWs7UwgUy2I8Gga
+         UUkrKuqtRbOsyrT/dNZ9sWtO2jw6qB2Ia4k46QbOyDl1cGrwI27KHCi6GUv3LHafpy
+         neDIDEjfMBHLcDHb7MJrAtvVAhCliPvqVr7gf3gwBdloF1zMyRWNZfrYqzWueRilxP
+         K76hMiIHBdHBAzEADc42uBZDTySZkx5TSpfxzO85A48g4yTIEUu+S3h+IDG6tXIQJM
+         uedDm6N7VQckQ==
+Date:   Thu, 20 Apr 2023 11:58:59 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Benjamin Bara <bbara93@gmail.com>
+Cc:     Support Opensource <support.opensource@diasemi.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steve Twiss <stwiss.opensource@diasemi.com>,
+        DLG-Adam.Thomson.Opensource@dm.renesas.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Benjamin Bara <benjamin.bara@skidata.com>
+Subject: Re: [PATCH v3 3/3] dt-bindings: mfd: dlg,da9063: document voltage
+ monitoring
+Message-ID: <20230420105859.GL9904@google.com>
+References: <20230403-da9063-disable-unused-v3-0-cc4dc698864c@skidata.com>
+ <20230403-da9063-disable-unused-v3-3-cc4dc698864c@skidata.com>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 20 Apr 2023 16:27:56 +0530
-Message-ID: <CA+G9fYsdMioe4+DEgeh38aTeaY3YaN_s_c0GFjPHhuPWfxyetA@mail.gmail.com>
-Subject: next: powerpc: gpio_mdio.c:(.text+0x13c): undefined reference to `__of_mdiobus_register'
-To:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        ajd@linux.ibm.com, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230403-da9063-disable-unused-v3-3-cc4dc698864c@skidata.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,48 +65,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following build failures noticed on Linux next-20230419 for powerpc.
+On Wed, 05 Apr 2023, Benjamin Bara wrote:
 
-Regressions found on powerpc:
- - build/gcc-8-defconfig
- - build/clang-16-defconfig
- - build/gcc-12-defconfig
- - build/clang-nightly-defconfig
+> From: Benjamin Bara <benjamin.bara@skidata.com>
+> 
+> Document that the da9063 only provides under- *and* over-voltage
+> monitoring in one, and therefore requires both to be configured with the
+> same severity and value. Add an example for clarification.
+> 
+> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/dlg,da9063.yaml | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
 
+Applied, thanks
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Build log:
---------
-powerpc64le-linux-gnu-ld: arch/powerpc/platforms/pasemi/gpio_mdio.o:
-in function `gpio_mdio_probe':
-gpio_mdio.c:(.text+0x13c): undefined reference to `__of_mdiobus_register'
-powerpc64le-linux-gnu-ld: drivers/net/phy/phy_device.o: in function `phy_probe':
-phy_device.c:(.text+0x56ac): undefined reference to
-`devm_led_classdev_register_ext'
-powerpc64le-linux-gnu-ld: drivers/net/ethernet/pasemi/pasemi_mac.o: in
-function `pasemi_mac_open':
-pasemi_mac.c:(.text+0x19ac): undefined reference to `of_phy_connect'
-make[2]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 1
-
-Build details:
----------
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230419/testrun/16369015/suite/build/test/gcc-12-defconfig/details/
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230419/testrun/16369015/suite/build/test/gcc-12-defconfig/log
-
-
-Steps to reproduce:
-------------
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-
-tuxmake --runtime podman --target-arch powerpc --toolchain gcc-12
---kconfig defconfig
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+Lee Jones [李琼斯]
