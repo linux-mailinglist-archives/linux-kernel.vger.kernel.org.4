@@ -2,269 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3AB6E97F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7BD6E9801
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233987AbjDTPFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 11:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
+        id S233958AbjDTPF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 11:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbjDTPFT (ORCPT
+        with ESMTP id S233807AbjDTPF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 11:05:19 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0574C2B;
-        Thu, 20 Apr 2023 08:05:15 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Q2LTN4k98z17KMf;
-        Thu, 20 Apr 2023 23:01:28 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 20 Apr 2023 23:05:12 +0800
-Message-ID: <9a9876a2-a2fd-40d9-b215-3e6c8207e711@huawei.com>
-Date:   Thu, 20 Apr 2023 23:05:12 +0800
+        Thu, 20 Apr 2023 11:05:57 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214AF4EC4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:05:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oQkWp9N6HE3LxHxHGVq8WKI0wtaShJbXheOXQps3zYQ=; b=rX0HjSlJl2ElvLcW4kaL1LglSh
+        UUNk8zy0+CQa4EOizZc28q8l9QKzIKCj4mnWzL1CM63Xb0Mkshi5fZsd2nqsz2rxDNfK675Y2me0P
+        LDUI1DRKqbQi5dbJAH3y7R4DhQmDfYbbY40/wN+//6Ncwapm8fWErHxCFnghsptCEKVlHRJPtY/xc
+        PNKDk6eV/gV4xJv4kIfUMqHoMrol+vjQ8eu6d+f6EfKMG8JRHQu1o7/czVrZT4WVGpqvvzDoM2CDb
+        loZA8ta1ULJIv2a/gwy69py1tITocpDGI4ssKymTvK/7jZqHABxWSSyLCN1636TmDnyxuF9iMnFRW
+        +vPTkBnQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1ppVqt-003oOQ-0J;
+        Thu, 20 Apr 2023 15:05:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AFF31300244;
+        Thu, 20 Apr 2023 17:05:37 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 938622417A098; Thu, 20 Apr 2023 17:05:37 +0200 (CEST)
+Date:   Thu, 20 Apr 2023 17:05:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chris Mason <clm@meta.com>
+Cc:     David Vernet <void@manifault.com>, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        gautham.shenoy@amd.com
+Subject: Re: schbench v1.0
+Message-ID: <20230420150537.GC4253@hirez.programming.kicks-ass.net>
+References: <bc85a40c-1ea0-9b57-6ba3-b920c436a02c@meta.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2] mm: hwpoison: coredump: support recovery from
- dump_user_range()
-Content-Language: en-US
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Jane Chu <jane.chu@oracle.com>,
-        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>, Thomas Gleixner <tglx@linutronix.de>
-CC:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Jens Axboe <axboe@kernel.dk>
-References: <20230417045323.11054-1-wangkefeng.wang@huawei.com>
- <20230418031243.GA2845864@hori.linux.bs1.fc.nec.co.jp>
- <54d761bb-1bcc-21a2-6b53-9d797a3c076b@huawei.com>
- <20230419072557.GA2926483@hori.linux.bs1.fc.nec.co.jp>
- <9fa67780-c48f-4675-731b-4e9a25cd29a0@huawei.com>
- <7d0c38a9-ed2a-a221-0c67-4a2f3945d48b@oracle.com>
- <6dc1b117-020e-be9e-7e5e-a349ffb7d00a@huawei.com>
-In-Reply-To: <6dc1b117-020e-be9e-7e5e-a349ffb7d00a@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bc85a40c-1ea0-9b57-6ba3-b920c436a02c@meta.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 17, 2023 at 10:10:25AM +0200, Chris Mason wrote:
 
-
-On 2023/4/20 10:59, Kefeng Wang wrote:
+> F128 N10                EEVDF    Linus
+> Wakeup  (usec): 99.0th: 755      1,266
+> Request (usec): 99.0th: 25,632   22,304
+> RPS    (count): 50.0th: 4,280    4,376
 > 
-> 
-> On 2023/4/20 10:03, Jane Chu wrote:
->>
->> On 4/19/2023 5:03 AM, Kefeng Wang wrote:
->>>
->>>
->>> On 2023/4/19 15:25, HORIGUCHI NAOYA(堀口 直也) wrote:
->>>> On Tue, Apr 18, 2023 at 05:45:06PM +0800, Kefeng Wang wrote:
->>>>>
->>>>>
-> ...
->>>>>>> @@ -371,6 +372,14 @@ size_t _copy_mc_to_iter(const void *addr, 
->>>>>>> size_t bytes, struct iov_iter *i)
->>>>>>>    EXPORT_SYMBOL_GPL(_copy_mc_to_iter);
->>>>>>>    #endif /* CONFIG_ARCH_HAS_COPY_MC */
->>>>>>> +static void *memcpy_from_iter(struct iov_iter *i, void *to, 
->>>>>>> const void *from,
->>>>>>> +                 size_t size)
->>>>>>> +{
->>>>>>> +    if (iov_iter_is_copy_mc(i))
->>>>>>> +        return (void *)copy_mc_to_kernel(to, from, size);
->>>>>>
->>>>>> Is it helpful to call memory_failure_queue() if 
->>>>>> copy_mc_to_kernel() fails
->>>>>> due to a memory error?
->>>>>
->>>>> For dump_user_range(), the task is dying, if copy incomplete size, the
->>>>> coredump will fail and task will exit, also memory_failure will
->>>>> be called by kill_me_maybe(),
->>>>>
->>>>>   CPU: 0 PID: 1418 Comm: test Tainted: G   M               
->>>>> 6.3.0-rc5 #29
->>>>>   Call Trace:
->>>>>    <TASK>
->>>>>    dump_stack_lvl+0x37/0x50
->>>>>    memory_failure+0x51/0x970
->>>>>    kill_me_maybe+0x5b/0xc0
->>>>>    task_work_run+0x5a/0x90
->>>>>    exit_to_user_mode_prepare+0x194/0x1a0
->>>>>    irqentry_exit_to_user_mode+0x9/0x30
->>>>>    noist_exc_machine_check+0x40/0x80
->>>>>    asm_exc_machine_check+0x33/0x40
->>>>
->>>> Is this call trace printed out when copy_mc_to_kernel() failed by 
->>>> finding
->>>> a memory error (or in some testcase using error injection)?
->>>
->>> I add dump_stack() into memory_failure() to check whether the poisoned
->>> memory is called or not, and the call trace shows it do call
->>> memory_failure()， but I get confused when do the test.
->>>
->>>> In my understanding, an MCE should not be triggered when MC-safe 
->>>> copy tries
->>>> to access to a memory error.  So I feel that we might be talking about
->>>> different scenarios.
->>>>
->>>> When I questioned previously, I thought about the following scenario:
->>>>
->>>>    - a process terminates abnormally for any reason like 
->>>> segmentation fault,
->>>>    - then, kernel tries to create a coredump,
->>>>    - during this, the copying routine accesses to corrupted page to 
->>>> read.
->>>>
->>> Yes, we tested like your described,
->>>
->>> 1) inject memory error into a process
->>> 2) send a SIGABT/SIGBUS to process to trigger the coredump
->>>
->>> Without patch, the system panic, and with patch only process exits.
->>>
->>>> In this case the corrupted page should not be handled by 
->>>> memory_failure()
->>>> yet (because otherwise properly handled hwpoisoned page should be 
->>>> ignored
->>>> by coredump process).  The coredump process would exit with failure 
->>>> with
->>>> your patch, but then, the corrupted page is still left unhandled and 
->>>> can
->>>> be reused, so any other thread can easily access to it again.
->>>
->>> As shown above, the corrupted page will be handled by 
->>> memory_failure(), but what I'm wondering,
->>> 1) memory_failure() is not always called
->>> 2) look at the above call trace, it looks like from asynchronous
->>>     interrupt, not from synchronous exception, right?
->>>
->>>>
->>>> You can find a few other places (like __wp_page_copy_user and 
->>>> ksm_might_need_to_copy)
->>>> to call memory_failure_queue() to cope with such unhandled error pages.
->>>> So does memcpy_from_iter() do the same?
->>>
->>> I add some debug print in do_machine_check() on x86:
->>>
->>> 1) COW,
->>>    m.kflags: MCE_IN_KERNEL_RECOV
->>>    fixup_type: EX_TYPE_DEFAULT_MCE_SAFE
->>>
->>>    CPU: 11 PID: 2038 Comm: einj_mem_uc
->>>    Call Trace:
->>>     <#MC>
->>>     dump_stack_lvl+0x37/0x50
->>>     do_machine_check+0x7ad/0x840
->>>     exc_machine_check+0x5a/0x90
->>>     asm_exc_machine_check+0x1e/0x40
->>>    RIP: 0010:copy_mc_fragile+0x35/0x62
->>>
->>>    if (m.kflags & MCE_IN_KERNEL_RECOV) {
->>>            if (!fixup_exception(regs, X86_TRAP_MC, 0, 0))
->>>                    mce_panic("Failed kernel mode recovery", &m, msg);
->>>    }
->>>
->>>    if (m.kflags & MCE_IN_KERNEL_COPYIN)
->>>            queue_task_work(&m, msg, kill_me_never);
->>>
->>> There is no memory_failure() called when
->>> EX_TYPE_DEFAULT_MCE_SAFE, also EX_TYPE_FAULT_MCE_SAFE too,
->>> so we manually add a memory_failure_queue() to handle with
->>> the poisoned page.
->>>
->>> 2） Coredump,  nothing print about m.kflags and fixup_type,
+> F128 N10 no-locking     EEVDF    Linus
+> Wakeup  (usec): 99.0th: 823      1,118
+> Request (usec): 99.0th: 17,184   14,192
+> RPS    (count): 50.0th: 4,440    4,456
 
-Sorry，I forget to set coredump file size :(
+With the below fixlet (against queue/sched/eevdf) on my measly IVB-EP
+(2*10*2):
 
-The coredump do trigger the do_machine_check() with same m.kflags and 
-fixup_type like cow
+./schbench -F128 -n10 -C
+
+Request Latencies percentiles (usec) runtime 30 (s) (153800 total samples)
+	  90.0th: 6376       (35699 samples)
+	* 99.0th: 6440       (9055 samples)
+	  99.9th: 7048       (1345 samples)
+
+CFS
+
+schbench -m2 -F128 -n10	-r90	OTHER	BATCH
+Wakeup  (usec): 99.0th:		6600	6328
+Request (usec): 99.0th:		35904	14640
+RPS    (count): 50.0th:		5368	6104
+
+EEVDF base_slice = 3000[us] (default)
+
+schbench -m2 -F128 -n10	-r90	OTHER	BATCH
+Wakeup  (usec): 99.0th:		3820	6968
+Request (usec): 99.0th:		30496	24608
+RPS    (count): 50.0th:		3836	5496
+
+EEVDF base_slice = 6440[us] (per the calibrate run)
+
+schbench -m2 -F128 -n10	-r90	OTHER	BATCH
+Wakeup  (usec): 99.0th:		9136	6232
+Request (usec): 99.0th:		21984	12944
+RPS    (count): 50.0th:		4968	6184
 
 
->>> with above check, add a memory_failure_queue() or memory_failure() seems
->>> to be needed for memcpy_from_iter(), but it is totally different from
->>> the COW scenario
->>>
+With base_slice >= request and BATCH (disables wakeup preemption), the
+EEVDF thing should turn into FIFO-queue, which is close to ideal for
+your workload.
 
-so the memcpy_from_iter() from coredump is same as cow scenario.
+For giggles:
 
->>>
->>> Another question, other copy_mc_to_kernel() callers, eg,
->>> nvdimm/dm-writecache/dax, there are not call memory_failure_queue(),
->>> should they need a memory_failure_queue(), if so, why not add it into
->>> do_machine_check() ?
->>
-> 
-> What I mean is that EX_TYPE_DEFAULT_MCE_SAFE/EX_TYPE_FAULT_MCE_SAFE
-> is designed to identify fixups which allow in kernel #MC recovery,
-> that is, the caller of copy_mc_to_kernel() must know the source
-> is a user address, so we could add a MCE_IN_KERNEL_COPYIN fro
-> the MCE_SAFE type.
+echo 6440000 > /debug/sched/base_slice_ns
+echo NO_PLACE_LAG > /debug/sched/features
+chrt -b 0 ./schbench -m2 -F128 -n10 -r90
 
-And I think we need the following change for MCE_SAFE copy to set
-MCE_IN_KERNEL_COPYIN.
+gets me:
 
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/severity.c 
-> b/arch/x86/kernel/cpu/mce/severity.c
-> index c4477162c07d..63e94484c5d6 100644
-> --- a/arch/x86/kernel/cpu/mce/severity.c
-> +++ b/arch/x86/kernel/cpu/mce/severity.c
-> @@ -293,12 +293,11 @@ static noinstr int error_context(struct mce *m, 
-> struct pt_regs *regs)
->          case EX_TYPE_COPY:
->                  if (!copy_user)
->                          return IN_KERNEL;
-> -               m->kflags |= MCE_IN_KERNEL_COPYIN;
->                  fallthrough;
-> 
->          case EX_TYPE_FAULT_MCE_SAFE:
->          case EX_TYPE_DEFAULT_MCE_SAFE:
-> -               m->kflags |= MCE_IN_KERNEL_RECOV;
-> +               m->kflags |= MCE_IN_KERNEL_RECOV | MCE_IN_KERNEL_COPYIN;
->                  return IN_KERNEL_RECOV;
-> 
->          default:
-> 
-> then we could drop memory_failure_queue(pfn, flags) from cow/ksm copy, 
-> or every Machine Check safe memory copy will need a memory_failure_xx() 
-> call.
+Wakeup Latencies percentiles (usec) runtime 90 (s) (526553 total samples)
+	  50.0th: 2084       (158080 samples)
+	  90.0th: 5320       (210675 samples)
+	* 99.0th: 6232       (47643 samples)
+	  99.9th: 6648       (4297 samples)
+	  min=1, max=13105
+Request Latencies percentiles (usec) runtime 90 (s) (526673 total samples)
+	  50.0th: 7544       (157171 samples)
+	  90.0th: 10992      (210461 samples)
+	* 99.0th: 12944      (48069 samples)
+	  99.9th: 15088      (3716 samples)
+	  min=3841, max=32882
+RPS percentiles (requests) runtime 90 (s) (9 total samples)
+	  20.0th: 6184       (9 samples)
+	* 50.0th: 6184       (0 samples)
+	  90.0th: 6184       (0 samples)
+	  min=6173, max=6180
+average rps: 6195.77
 
-which help use to kill unneeded memory_failure_queue() call, any comments?
+FWIW, your RPS stats are broken, note how all the buckets are over the
+max value and the average is too.
 
-> 
-> +Thomas，who add the two types, could you share some comments about 
-> this,thanks.
-> 
->> In the dax case, if the source address is poisoned, and we do follow 
->> up with memory_failure_queue(pfn, flags), what should the value of the 
->> 'flags' be ?
-> 
-
-With above diff change, we don't add a memory_failure_queue() into dax too.
-
-Thanks
-
-> 
-> I think flags = 0 is enough to for all copy_mc_xxx to isolate the 
-> poisoned page.
-> 
-> Thanks.
+---
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 050e98c97ba3..931102b00786 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -1071,6 +1071,8 @@ void set_latency_fair(struct sched_entity *se, int prio)
+ 	se->slice = div_u64(base << SCHED_FIXEDPOINT_SHIFT, weight);
+ }
+ 
++static void clear_buddies(struct cfs_rq *cfs_rq, struct sched_entity *se);
++
+ /*
+  * XXX: strictly: vd_i += N*r_i/w_i such that: vd_i > ve_i
+  * this is probably good enough.
+@@ -1084,6 +1086,14 @@ static void update_deadline(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ 	 * EEVDF: vd_i = ve_i + r_i / w_i
+ 	 */
+ 	se->deadline = se->vruntime + calc_delta_fair(se->slice, se);
++
++	/*
++	 * The task has consumed its request, reschedule.
++	 */
++	if (cfs_rq->nr_running > 1) {
++		resched_curr(rq_of(cfs_rq));
++		clear_buddies(cfs_rq, se);
++	}
+ }
+ 
+ #include "pelt.h"
+@@ -3636,6 +3646,13 @@ static void reweight_entity(struct cfs_rq *cfs_rq, struct sched_entity *se,
+ 		 * we need to scale se->vlag when w_i changes.
+ 		 */
+ 		se->vlag = div_s64(se->vlag * old_weight, weight);
++	} else {
++		/*
++		 * When the weight changes the virtual time slope changes and
++		 * we should adjust the virtual deadline. For now, punt and
++		 * simply reset.
++		 */
++		se->deadline = se->vruntime + calc_delta_fair(se->slice, se);
+ 	}
+ 
+ #ifdef CONFIG_SMP
+@@ -5225,22 +5256,6 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+ 		update_idle_cfs_rq_clock_pelt(cfs_rq);
+ }
+ 
+-/*
+- * Preempt the current task with a newly woken task if needed:
+- */
+-static void
+-check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+-{
+-	if (pick_eevdf(cfs_rq) != curr) {
+-		resched_curr(rq_of(cfs_rq));
+-		/*
+-		 * The current task ran long enough, ensure it doesn't get
+-		 * re-elected due to buddy favours.
+-		 */
+-		clear_buddies(cfs_rq, curr);
+-	}
+-}
+-
+ static void
+ set_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ {
+@@ -5353,9 +5384,6 @@ entity_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr, int queued)
+ 			hrtimer_active(&rq_of(cfs_rq)->hrtick_timer))
+ 		return;
+ #endif
+-
+-	if (cfs_rq->nr_running > 1)
+-		check_preempt_tick(cfs_rq, curr);
+ }
+ 
+ 
