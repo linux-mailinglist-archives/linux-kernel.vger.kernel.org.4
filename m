@@ -2,206 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3796E890D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 06:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC976E8915
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 06:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233011AbjDTEVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 00:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50494 "EHLO
+        id S233189AbjDTEZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 00:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjDTEVJ (ORCPT
+        with ESMTP id S230102AbjDTEZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 00:21:09 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C025B2D4A
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 21:21:07 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-52160b73bdfso405997a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 21:21:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681964467; x=1684556467;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ifhg/4wKiyjaXBSAZD8UD8hDN/wBg/sQQRUVu3etZ9U=;
-        b=TtlvBqWoc2jm36vCVOCH5P/7+aPiHvKY5fUkMmMVZLDOlb1oKJVyLbeL4Kk06vyQGI
-         r9wkAZRY0NiIkgMBhnPvYCiQQlzGt5E2zyAENCjvb5hTHTWF/iXVz5F+nzDEcn7xGegP
-         Zqaw7LFr+jKjChSXdom3OHQYKoHeUXGQWtR+qzkI1+QAHknV5IptncMaD9O+w2lximD9
-         QzPxFZqYK4plIElw/F5urQX4n3yPZ0xQsBsSHHtPwR3sJMLX/yZORSYsSl3lgTwrDLNa
-         QDW3/pFdH0VKYjKF3mhaMpdiFaPpssp0KTV7pZjPXVZUE3eS3gEgk5MbnQbeaK5Nc2w4
-         XBhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681964467; x=1684556467;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ifhg/4wKiyjaXBSAZD8UD8hDN/wBg/sQQRUVu3etZ9U=;
-        b=I1GvxzCPBllF0ZwH0+50p8B9p3/98N7qjs/Q59c4LGQVcWVrwrYOvNz3j9j+7bZ2cW
-         N2RhlSaDVZEGI61zPA/GFptPDawT956I9lH0x3ygvmtZBuC+ma6EsNasiiwIDVJcZSDs
-         gbAur2TeWE7ZPsRzS2g5fTa0T5ahyky8gNzIBi9PDdmLmTNiCYAAvbuLNDO5mdYaZeHU
-         HyeDY6xTgD0x5QFed7RiqN+w65trjStQY0s8nK2E0MlEFvtBwcHQbbZBF1CLuyvI8yiQ
-         lIWRmecWt7jxH5nfg+jTXe/6Qh/LUqpYGNHQqUs0Yll/wM12s00A0xeSl691n/MsSwJr
-         DVNw==
-X-Gm-Message-State: AAQBX9cPCQo7+Wi8epKROCSg0eU9cb04Gbl+mhsiK0NAF4j25/WFU7NQ
-        pXTYGPtpwtw47CMHY0kUOiAoi1AzOkayxzpE3N8=
-X-Google-Smtp-Source: AKy350YyORwot+Rvti/LnKfw18XvtNb12HK6l4jBCdFe36mk9B5f8g4bF230dGemqsCnHpYFsQQmNQ==
-X-Received: by 2002:a05:6a20:729a:b0:ef:ead5:6fdf with SMTP id o26-20020a056a20729a00b000efead56fdfmr386294pzk.33.1681964467173;
-        Wed, 19 Apr 2023 21:21:07 -0700 (PDT)
-Received: from [10.200.10.217] ([139.177.225.248])
-        by smtp.gmail.com with ESMTPSA id r78-20020a632b51000000b00520f316ebe3sm181883pgr.62.2023.04.19.21.21.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 21:21:06 -0700 (PDT)
-Message-ID: <2c4f6226-7ae1-a60b-e468-2142db64ea97@bytedance.com>
-Date:   Thu, 20 Apr 2023 12:21:01 +0800
+        Thu, 20 Apr 2023 00:25:08 -0400
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240DF3595
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 21:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1681964704;
+        bh=aEPfD0trpMn7W25y1e2mB2PhdQNis7pBZZFMp4rqK4A=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=QbiTd7RS0MITH1klrYTy2x7SHsCY8/Yw+Mew8fpbrlUrpVk6imGJyEUkoLsKgwRjz
+         eTXc6BTl4inoRsPLdWk4qwmCo5adgx793jbidRv6/cAFDbaD/4HplWRpaEZhXe4JeZ
+         Stdu5tGsxO8vXEs00/zikw95wDnlQCGcCSHGD9ag=
+Received: from [IPv6:240e:358:116f:3d00:dc73:854d:832e:2] (unknown [IPv6:240e:358:116f:3d00:dc73:854d:832e:2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 40B24663E3;
+        Thu, 20 Apr 2023 00:24:59 -0400 (EDT)
+Message-ID: <51051bd7e42378cdf465494389ab76a30ca3acf2.camel@xry111.site>
+Subject: Re: [PATCH 1/2] LoongArch: Add pad structure members for explicit
+ alignment
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Qing Zhang <zhangqing@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 20 Apr 2023 12:24:55 +0800
+In-Reply-To: <111c1e81-dfae-4388-9fc6-a3f247641398@loongson.cn>
+References: <20230418091348.9239-1-zhangqing@loongson.cn>
+         <a7fa32c3af68083855e7690f67824d060d5c6135.camel@xry111.site>
+         <899085c1-7a74-8bab-1429-1b6e9e4c2c30@xen0n.name>
+         <48bc7236-638d-9086-daaf-62eacea80dd2@xen0n.name>
+         <111c1e81-dfae-4388-9fc6-a3f247641398@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.0 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH 1/3] maple_tree: Make maple state reusable after
- mas_empty_area_rev()
-To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Peng Zhang <zhangpeng.00@bytedance.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230414145728.4067069-1-Liam.Howlett@oracle.com>
- <90fd5cfa-5ed9-495f-fdef-0130adaf591b@bytedance.com>
- <20230419225419.czzwbdgys367fax2@revolver>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <20230419225419.czzwbdgys367fax2@revolver>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2023-04-20 at 10:14 +0800, Qing Zhang wrote:
+> > > Ah right. This is UAPI so without *very* concrete and convicing reaso=
+n=20
+> > > why the change is not going to impact any potential users, it's gonna=
+=20
+> > > be a presumed NAK. In other words you must demonstrate (1) why it's=
+=20
+> > > absolutely necessary to make the change and (2) that it's impossible=
+=20
+> > > to impact anyone, before any such changes can even be considered.
+> > Please ignore all of this. The memory layout is actually the same after=
+=20
+> > the change due to the padding, I was somehow thinking in big-endian a=
+=20
+> > few hours ago.
 
-在 2023/4/20 06:54, Liam R. Howlett 写道:
-> * Peng Zhang <zhangpeng.00@bytedance.com> [230419 05:02]:
->> 在 2023/4/14 22:57, Liam R. Howlett 写道:
->>> Stop using maple state min/max for the range by passing through pointers
->>> for those values.  This will allow the maple state to be reused without
->>> resetting.
->>>
->>> Also add some logic to fail out early on searching with invalid
->>> arguments.
->>>
->>> Fixes: 54a611b60590 ("Maple Tree: add new data structure")
->>> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
->>> ---
->>>    lib/maple_tree.c | 27 +++++++++++++--------------
->>>    1 file changed, 13 insertions(+), 14 deletions(-)
->>>
->>> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
->>> index 4df6a0ce1c1b..ed350aa293b2 100644
->>> --- a/lib/maple_tree.c
->>> +++ b/lib/maple_tree.c
->>> @@ -4938,7 +4938,8 @@ static inline void *mas_prev_entry(struct ma_state *mas, unsigned long min)
->>>     * Return: True if found in a leaf, false otherwise.
->>>     *
->>>     */
->>> -static bool mas_rev_awalk(struct ma_state *mas, unsigned long size)
->>> +static bool mas_rev_awalk(struct ma_state *mas, unsigned long size,
->>> +		unsigned long *gap_min, unsigned long *gap_max)
->>>    {
->>>    	enum maple_type type = mte_node_type(mas->node);
->>>    	struct maple_node *node = mas_mn(mas);
->>> @@ -5003,8 +5004,8 @@ static bool mas_rev_awalk(struct ma_state *mas, unsigned long size)
->>>    	if (unlikely(ma_is_leaf(type))) {
->>>    		mas->offset = offset;
->>> -		mas->min = min;
->>> -		mas->max = min + gap - 1;
->>> +		*gap_min = min;
->>> +		*gap_max = min + gap - 1;
->>>    		return true;
->>>    	}
->>> @@ -5280,6 +5281,9 @@ int mas_empty_area(struct ma_state *mas, unsigned long min,
->>>    	unsigned long *pivots;
->>>    	enum maple_type mt;
->>> +	if (min >= max)
->> This can lead to errors, min == max is valid.
->> I think it's better to change it to this:
->> if (min > max || size == 0 || max - min < size - 1)
-> I am not sure what it means to search within a range of one.  I guess
-> you would expect it to just return that value if it's empty?
-Yes, if min==max, and the value pointed to by this index is empty,
-we should return it.
->
-> In any case, since we are dealing with pages of data for the VMAs,
-> having min == max really makes no sense, even with the subtraction of
-> one in the caller to reduce the max, the min and max should be at least
-> PAGE_SIZE - 1 apart here.
->
-> I think you are right, and I think this needs to be looked at for the
-> tree on its own, but I don't think it's a problem for the VMA user. I'll
-> write a testcase and ensure a search for a single entry in a single
-> entry window works separately.  Thanks for pointing this out.
-Yes, it's a problem with the tree itself.
->
->>> +		return -EINVAL;
->>> +
->>>    	if (mas_is_start(mas))
->>>    		mas_start(mas);
->>>    	else if (mas->offset >= 2)
->>> @@ -5334,6 +5338,9 @@ int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
->>>    {
->>>    	struct maple_enode *last = mas->node;
->>> +	if (min >= max)
->> ditto.
-> I'll do the search in both directions.
-Here is also the same problem with the tree itself as above.
-Maybe I didn't understand what you mean. I think the case of
-min==max should still be considered in mas_empty_area_rev(),
-because mas_empty_area_rev() is a separate interface.
->
->>> +		return -EINVAL;
->>> +
->>>    	if (mas_is_start(mas)) {
->>>    		mas_start(mas);
->>>    		mas->offset = mas_data_end(mas);
->>> @@ -5353,7 +5360,7 @@ int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
->>>    	mas->index = min;
->>>    	mas->last = max;
->>> -	while (!mas_rev_awalk(mas, size)) {
->>> +	while (!mas_rev_awalk(mas, size, &min, &max)) {
->>>    		if (last == mas->node) {
->>>    			if (!mas_rewind_node(mas))
->>>    				return -EBUSY;
->>> @@ -5368,17 +5375,9 @@ int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
->>>    	if (unlikely(mas->offset == MAPLE_NODE_SLOTS))
->>>    		return -EBUSY;
->>> -	/*
->>> -	 * mas_rev_awalk() has set mas->min and mas->max to the gap values.  If
->>> -	 * the maximum is outside the window we are searching, then use the last
->>> -	 * location in the search.
->>> -	 * mas->max and mas->min is the range of the gap.
->>> -	 * mas->index and mas->last are currently set to the search range.
->>> -	 */
->>> -
->>>    	/* Trim the upper limit to the max. */
->>> -	if (mas->max <= mas->last)
->>> -		mas->last = mas->max;
->>> +	if (max <= mas->last)
->>> +		mas->last = max;
->> We can get max as follows, without using pointers to track min, max in
->> mas_rev_awalk().
->>
->> mt = mte_node_type(mas->node); pivots = ma_pivots(mas_mn(mas), mt); max =
->> mas_logical_pivot(mas, pivots, mas->offset, mt);
-> Yes, but why would we do this?  We have done all this work already in
-> mas_rev_awalk(), and we have to do it there to get the offset in the
-> first place.
-Yes, both methods will work.
->
->> 	if (max < mas->last) /* The equal sign here can be removed */
-> Thanks.  I'll keep this in mind when I revisit the function.  I don't
-> want to re-spin the patch for this alone.
->
->> 		mas->last = max;
->>
->>>    	mas->index = mas->last - size + 1;
->>>    	return 0;
+No.  The problem is not related to big endian or little endian.=20
+Changing the type of this field *can* turn valid user code into
+undefined behavior.  `printf(PRIu16 "\n", ptr->dbg_info);` is an
+undefined behavior if ptr->dbg_info is a int16_t, because the standard
+says so, not because the machine may be big endian.
+
+It is a rare case where the ABI is backward-compatible but the API is
+incompatible.
+
+Why not just insert "int16_t pad1[3];" after dbg_info?
+
+> > (The commit message didn't help either, I think both=20
+> > Ruoyao and me got into the habitual thinking that changes like this are=
+=20
+> > most likely just churn without real benefits, after *not* seeing the
+> > rationale in the commit message which was kinda expected.)
+> > >=20
+>=20
+> This patch does not change the size of the structure. The structure
+> itself is implicitly aligned. We changed it to explicit alignment for
+> the convenience of hw_break_get/set (using membuf.left) to calculate the
+> offset and prevent breaks. Count overflow.
+>=20
+> With pad explicit alignment, after membuf_write(&to, &info,=20
+> sizeof(info)); to.left=3D200-8 bytes,
+> Thus,
+> membuf_store(&to, addr);
+> membuf_store(&to, mask);
+> membuf_store(&to, ctrl);
+> membuf_zero(&to, sizeof(u32));
+> After that, to.left is decremented by 24 bytes each time,
+> so the number of breakpoints will not overflow.
+>=20
+> The user support code has not been submitted to the upstream, so
+> the current uapi change has no effect.
+
+The problem is once we put a header into the UAPI directory and make a
+Linux kernel release, people may start to use it (maybe in a way we
+don't expected).
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
