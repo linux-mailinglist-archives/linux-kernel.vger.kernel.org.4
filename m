@@ -2,140 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02866E9A13
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F8F6E9A1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbjDTQ4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 12:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
+        id S231160AbjDTQ4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 12:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjDTQzb (ORCPT
+        with ESMTP id S231211AbjDTQ41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 12:55:31 -0400
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7603B5266;
-        Thu, 20 Apr 2023 09:55:14 -0700 (PDT)
-Received: by mail-oo1-xc29.google.com with SMTP id c17-20020a4aa4d1000000b005418821052aso831485oom.6;
-        Thu, 20 Apr 2023 09:55:14 -0700 (PDT)
+        Thu, 20 Apr 2023 12:56:27 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A9261BD
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 09:55:43 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f09b4a1527so8893655e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 09:55:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682009713; x=1684601713;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gpWRid5cmCr0SjsRhGTnuvLDk1kP0ktA07Mc2yuVwzg=;
-        b=hrCkm3v0lPvEh5WcfNQ8A72ib23453Pklu0dKzjJ6OPLQQZNE9m1/O3Ba9pyWgO8bh
-         AeEbyidca4tDwBPuhM9x46UHBhNmZgjN2cVb3Is7tup/xUO/4OLVcvr/cMP0n7rMOB8n
-         qV2EWIkBV+Ya4JsuaeQZR0UtRWd3nMZWcvnHrYPxD9Mw9QZzWL+0mY6CI8aUsRcO+qQT
-         9nYuw13C144FzmPSpKAOpY2/D6w4qBDQR6lyx2PwN/sFdexXNKbJLqHeIAAWYRXelr6w
-         cbTSwNgWrGfXXK5113BNEoTiI+OUmmqMJP+KYZqO0HiZVRoBcAPUimMSK7EkRxKybB4R
-         XYYw==
+        d=tessares.net; s=google; t=1682009737; x=1684601737;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8COwJogh85Ubwzwgh/WUbXgMHnHM+aYpGZRMSZHXeAE=;
+        b=7735fAM0RfQN/72GfpWio7Ue3N+D6rEkT9esXjhDRUXYjmeGqg74PICYX3rX5edhG6
+         WmBo3MGCtjXZgkPGCaXq70Fsef6i3PT6zXvrfxo3mLIwZiOoiTIvkIjKezb0OBwMDqY+
+         P0bNB3DG1DqdotBnpLPl+NgcqKm+C3rFCNQg4lEdzGp4xE3K1JgKZO1hnet7cPi2COxp
+         qqmTxX09a86em2tS6txiygizTsuyc5xUAF7L1BNKOJio1npYaZmDxFwYkJt0HQuDDfzh
+         +18tegTXmZKNEW+I1swyGmdBwdQ89UkMxUJW/Z0frhcI9rK1EPoGWHvUgGJbeMjOSNHu
+         840w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682009713; x=1684601713;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gpWRid5cmCr0SjsRhGTnuvLDk1kP0ktA07Mc2yuVwzg=;
-        b=fCJmWfaH3ZDXMIwTYJTMj3hQyzEm4AwVt7JceKtovv4NiHvSG8tYSbYa5rumIzt1uz
-         H6CuhSwg0aIFikto8Zu5MkVtrMdxj2zYlt/P16T5J9clbiFuROhZRyzz4h0ky1kDkwsU
-         KqEiKrtFuQx3qtr4kuUMhr3RKor5VqyeRTTn9/RiZ0AlLsk+SQVKf0g8A3RZrdd9H9rc
-         kk+RvkBA+3ZthrbwDFHOBYEwynhYzHvJEraRlbM2isS6jr0UuvkmedcPtHntgUsywqT5
-         Nu5r7juyB3/Lpy7aL8vb/68XlxdVxs6d4MNYyNFDF8jrMwkMXwLnCziw2yWTnANL4ck5
-         gxpA==
-X-Gm-Message-State: AAQBX9dGbWDGypDPwn6bUwZcsNQSkED8k5ctgsIi0qz8gSrg125LVYhg
-        bHCI0aonee1BsKQ6Enu6u6s=
-X-Google-Smtp-Source: AKy350Y1cDONqVLv8t632CLRxjrRwLeh1FZP4I/U+6wffWnW8ySXbVTBwC5DG//mLBp6F+wgFqEEAA==
-X-Received: by 2002:a4a:3315:0:b0:545:3076:9e6b with SMTP id q21-20020a4a3315000000b0054530769e6bmr1269076ooq.6.1682009712936;
-        Thu, 20 Apr 2023 09:55:12 -0700 (PDT)
-Received: from grumpy-VECTOR.hsd1.tx.comcast.net ([2601:2c3:480:7390:d090:9746:e449:eb46])
-        by smtp.gmail.com with ESMTPSA id s129-20020a4a5187000000b005252e5b6604sm791913ooa.36.2023.04.20.09.55.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 09:55:12 -0700 (PDT)
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-X-Google-Original-From: Jorge Lopez <jorge.lopez2@hp.com>
-To:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v11 14/14] HP BIOSCFG driver  - MAINTAINERS
-Date:   Thu, 20 Apr 2023 11:54:54 -0500
-Message-Id: <20230420165454.9517-15-jorge.lopez2@hp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230420165454.9517-1-jorge.lopez2@hp.com>
-References: <20230420165454.9517-1-jorge.lopez2@hp.com>
+        d=1e100.net; s=20221208; t=1682009737; x=1684601737;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8COwJogh85Ubwzwgh/WUbXgMHnHM+aYpGZRMSZHXeAE=;
+        b=d91xeziyfumH3WFVLPyAr3TN5cfFiT3Ohf+uHa6PVgrED3XAZwP1/Lv9Cvo+DhVanx
+         lrg0fx04vk/2yFfELIUCTNfOrQX6lObR87H0CI4Q2lfS7lgIWSJ/8DzoBbBW8cfWkP7D
+         N8/0WoWjjTLWFrLHucELpagHxNapb+3LHUk/xG2nUfOCrejXOHli5YOdJUlpnTj8wM5k
+         AN0CwSyzqQSq86FLpd4SfFeafddWxxj/IWQx+YZauMsZsCMxpGcNXojBgJAyOLvtt5F1
+         eEkK4bjYZ+sGLhvJcRdJl6Z2vw1YDFsa5A84O2QgkSMKvU9oKrzgso2pFkhtXjt/tj4b
+         9hrg==
+X-Gm-Message-State: AAQBX9fWGya2YSgAp9am59Fpf6rMLXLN9ebQHZ1i0Z++X9GK0CJiETRC
+        nkyezsiZxh9RCfqJEne8lRSTjQ==
+X-Google-Smtp-Source: AKy350bJXlirEoh+ll5SJQuNZFSA3O6ZxUYGjwRW+yp/nsQKRvbua1otjr+kqF67Yjclfcoa7H8/Mg==
+X-Received: by 2002:adf:ebc4:0:b0:2fe:c0ea:18ad with SMTP id v4-20020adfebc4000000b002fec0ea18admr1795221wrn.47.1682009737423;
+        Thu, 20 Apr 2023 09:55:37 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:2c80:31d2:9220:ee01? ([2a02:578:8593:1200:2c80:31d2:9220:ee01])
+        by smtp.gmail.com with ESMTPSA id w13-20020adff9cd000000b002cea9d931e6sm2386104wrr.78.2023.04.20.09.55.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 09:55:37 -0700 (PDT)
+Message-ID: <f251507a-517e-b703-aa1d-50f6b3de8c8d@tessares.net>
+Date:   Thu, 20 Apr 2023 18:55:29 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH LSM 0/2] security: SELinux/LSM label with MPTCP and accept
+Content-Language: en-GB
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ondrej Mosnacek <omosnace@redhat.com>, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+References: <20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-v1-0-9d4064cb0075@tessares.net>
+ <CAHC9VhR68fw+0oaenL08tRecLEC_oCdYcfGaN_m6PW3KZYtdTQ@mail.gmail.com>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <CAHC9VhR68fw+0oaenL08tRecLEC_oCdYcfGaN_m6PW3KZYtdTQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HP BIOS Configuration driver purpose is to provide a driver supporting
-the latest sysfs class firmware attributes framework allowing the user
-to change BIOS settings and security solutions on HP Inc.’s commercial
-notebooks.
+Hi Paul,
 
-Many features of HP Commercial notebooks can be managed using Windows
-Management Instrumentation (WMI). WMI is an implementation of Web-Based
-Enterprise Management (WBEM) that provides a standards-based interface
-for changing and monitoring system settings. HP BIOSCFG driver provides
-a native Linux solution and the exposed features facilitates the
-migration to Linux environments.
+On 19/04/2023 23:30, Paul Moore wrote:
+> On Wed, Apr 19, 2023 at 1:44 PM Matthieu Baerts
+> <matthieu.baerts@tessares.net> wrote:
+>>
+>> In [1], Ondrej Mosnacek explained they discovered the (userspace-facing)
+>> sockets returned by accept(2) when using MPTCP always end up with the
+>> label representing the kernel (typically system_u:system_r:kernel_t:s0),
+>> while it would make more sense to inherit the context from the parent
+>> socket (the one that is passed to accept(2)). Thanks to the
+>> participation of Paul Moore in the discussions, modifications on MPTCP
+>> side have started and the result is available here.
+>>
+>> Paolo Abeni worked hard to refactor the initialisation of the first
+>> subflow of a listen socket. The first subflow allocation is no longer
+>> done at the initialisation of the socket but later, when the connection
+>> request is received or when requested by the userspace. This was a
+>> prerequisite to proper support of SELinux/LSM labels with MPTCP and
+>> accept. The last batch containing the commit ddb1a072f858 ("mptcp: move
+>> first subflow allocation at mpc access time") [2] has been recently
+>> accepted and applied in netdev/net-next repo [3].
+>>
+>> This series of 2 patches is based on top of the lsm/next branch. Despite
+>> the fact they depend on commits that are in netdev/net-next repo to
+>> support the new feature, they can be applied in lsm/next without
+>> creating conflicts with net-next or causing build issues. These two
+>> patches on top of lsm/next still passes all the MPTCP-specific tests.
+>> The only thing is that the new feature only works properly with the
+>> patches that are on netdev/net-next. The tests with the new labels have
+>> been done on top of them.
+>>
+>> It then looks OK to us to send these patches for review on your side. We
+>> hope that's OK for you as well. If the patches look good to you and if
+>> you prefer, it is fine to apply these patches before or after having
+>> synced the lsm/next branch with Linus' tree when it will include the
+>> modifications from the netdev/net-next repo.
+>>
+>> Regarding the two patches, the first one introduces a new LSM hook
+>> called from MPTCP side when creating a new subflow socket. This hook
+>> allows the security module to relabel the subflow according to the owing
+>> process. The second one implements this new hook on the SELinux side.
+> 
+> Thank you so much for working on this, I really appreciate the help!
 
-The Linux security features to be provided in hp-bioscfg driver enables
-managing the BIOS settings and security solutions via sysfs, a virtual
-filesystem that can be used by user-mode applications. The new
-documentation cover HP-specific firmware sysfs attributes such Secure
-Platform Management and Sure Start. Each section provides security
-feature description and identifies sysfs directories and files exposed
-by the driver.
+Thank you for the review!
 
-Many HP Commercial notebooks include a feature called Secure Platform
-Management (SPM), which replaces older password-based BIOS settings
-management with public key cryptography. PC secure product management
-begins when a target system is provisioned with cryptographic keys
-that are used to ensure the integrity of communications between system
-management utilities and the BIOS.
+We are working on a v2 addressing your comments.
 
-HP Commercial notebooks have several BIOS settings that control its
-behaviour and capabilities, many of which are related to security.
-To prevent unauthorized changes to these settings, the system can
-be configured to use a cryptographic signature-based authorization
-string that the BIOS will use to verify authorization to modify the
-setting.
+Just one small detail regarding these comments: I hope you don't mind if
+we use "MPTCP socket" instead of "main MPTCP socket". Per connection,
+there is one MPTCP socket and possibly multiple subflow (TCP) sockets.
+There is then no concept of "main MPTCP socket".
 
-Linux Security components are under development and not published yet.
-The only linux component is the driver (hp bioscfg) at this time.
-Other published security components are under Windows.
+> As far as potential merge issues with netdev/net-next and lsm/next, I
+> think we'll be okay.  I have a general policy[1] of not accepting new
+> patchsets, unless critical bugfixes, past rc5/rc6 so this would be
+> merged into lsm/next *after* the current merge window closes and
+> presumably after the netdev/net-next branch finds its way into Linus'
+> tree.
+It makes sense, we understand. These two patches were ready for a bit of
+time but we wanted to send them only after the prerequisite commits
+applied in net-next first. But that got delayed because we had a couple
+of nasty issues with them :)
 
-Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
+We hope it will not be an issue for you to maintain them in your tree
+for a couple of months but we tried to minimised the modifications in
+MPTCP code. Do not hesitate to reach us if there are some issues with them!
 
----
-Based on the latest platform-drivers-x86.git/for-next
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0c9011f5fc17..7d1f261af539 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9367,6 +9367,12 @@ S:	Obsolete
- W:	http://w1.fi/hostap-driver.html
- F:	drivers/net/wireless/intersil/hostap/
- 
-+HP BIOSCFG DRIVER
-+M:	Jorge Lopez <jorge.lopez2@hp.com>
-+L:	platform-driver-x86@vger.kernel.org
-+S:	Maintained
-+F:	drivers/platform/x86/hp/hp-bioscfg/
-+
- HP COMPAQ TC1100 TABLET WMI EXTRAS DRIVER
- L:	platform-driver-x86@vger.kernel.org
- S:	Orphan
+Cheers,
+Matt
 -- 
-2.34.1
-
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
