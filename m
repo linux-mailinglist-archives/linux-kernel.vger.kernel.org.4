@@ -2,184 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330C26E9D20
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0628E6E9D22
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbjDTUZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 16:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
+        id S232576AbjDTUZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 16:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232516AbjDTUYr (ORCPT
+        with ESMTP id S232322AbjDTUZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 16:24:47 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D85D72BE
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:23:30 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94f6c285d92so118711366b.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:23:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682022209; x=1684614209;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RDPS2kJGA9qHFAhB01dB7yBOdSjj/en4thGsxxtxQ0Y=;
-        b=EGJMPcsyHoAX/3gJSN5xuzkkXvuy7iPOrcCdkFFe5y4qoCmbLuUudZ5/py08XvZhAD
-         dTESHFeDumQ2LmNnLOMS8aDauca5eoCn+hdL6UEhIyzkE1wwZHtB7EaW0ttXr/UB1/yo
-         30CiV9bU0Ied0qmn7FdLPavRsZfDwtu9FTDG/cSmGQASCWDb3iAhYHICJ3KKwcZYnQUf
-         LAFiq4XGTjTI7PcCQVTQHP286d/cKqQucx0gkmMRuQVaGQGuuLHbr6IW14F9/+HPpVwj
-         hPkuaDIbBkTtFGVKEB4DEGjLzorQM0fNJEw/yASZ3odr6htflmHhSoLYzmq/4N7BOWd7
-         dALg==
+        Thu, 20 Apr 2023 16:25:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3291372B7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:23:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682022199;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ghx4l8LuGC+KjjHmCk/oxHcr8JwHJVJzrTvXad1IGDQ=;
+        b=Lt4aUEb3cCGkyBDsRlKUztaLy0So3IYY1RaGhhtPWaWXG72fH6XP+m+rxsTb47SfSnQ89Z
+        qQ5mnReeD4HZvNkhAhKVYK3pzf1S/7nf93EOzYr9NU63TOLzwXmeRnNa/2v68tFIQdBe6z
+        7bwJ8BHVwysswkE0hXusx/2ypHNGzTM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-481-twvT4Ao1OXCPeAtTT2zedQ-1; Thu, 20 Apr 2023 16:23:18 -0400
+X-MC-Unique: twvT4Ao1OXCPeAtTT2zedQ-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f175ad3429so2315725e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:23:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682022209; x=1684614209;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RDPS2kJGA9qHFAhB01dB7yBOdSjj/en4thGsxxtxQ0Y=;
-        b=GBdSUY03WnMZGqgZZoftFcKAvDlEEY20yEecJ2uAFtLYO3hPIc4J5doembqVvybUzg
-         QIhc1Sk+nshq6wBNGwqq2eUYsie0QYpiZBcE/Pgrs5DLYYgDT6nuDyEkfSDW2caaaHlv
-         ld5ivvlN5GU+cT8yD/D2ZXUynY1MpZ8q1XqCD7NLk0lY6QMpbzWcqc5b6o6C2ko78HQf
-         b+UFiNDHpjLTFd/6La2/mjsvQq78peiLqiKeNZGN8HdQUPhGepKUofen1PUI8OIdXrEA
-         cOZyYpFUBiPVLYYp6a6LbQXtjqFBtbmnKwG3dictrLam4ZJoyyHvSKz8UVjeYu9SeSZP
-         LMUQ==
-X-Gm-Message-State: AAQBX9fBi9g2cY/Se80+evnxmbss+QGNV3jxDfwRyqCdWdZ1XDeqpgkT
-        Y6zFQmfIUkB84rQMMK2a67bik/sDyHsefIDqkKTITg==
-X-Google-Smtp-Source: AKy350Y6JgZn+n32RVYt90ndNBzxPcxioaUY46Yi32s9vSyYFUTnxZMryzRw8uFSHj66bl/ng+HSO9ExYjhITUUmcQ4=
-X-Received: by 2002:a17:907:50a1:b0:878:7c18:8fd9 with SMTP id
- fv33-20020a17090750a100b008787c188fd9mr149599ejc.44.1682022208633; Thu, 20
- Apr 2023 13:23:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230403220337.443510-1-yosryahmed@google.com>
- <20230403220337.443510-2-yosryahmed@google.com> <CALvZod5h5G9YNu8d9fAOL5eXie5iM3urw9QgD=vucBdCMAQnxA@mail.gmail.com>
-In-Reply-To: <CALvZod5h5G9YNu8d9fAOL5eXie5iM3urw9QgD=vucBdCMAQnxA@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 20 Apr 2023 13:22:52 -0700
-Message-ID: <CAJD7tkbd=CJjRWbPev-8aZm=mufE5Sp7u5AzPUUJTK9xL_yOgQ@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable RFC 1/5] writeback: move wb_over_bg_thresh()
- call outside lock section
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org
+        d=1e100.net; s=20221208; t=1682022197; x=1684614197;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ghx4l8LuGC+KjjHmCk/oxHcr8JwHJVJzrTvXad1IGDQ=;
+        b=Hygu1qzJxKT9av2WOL5cAlAISeGOs9FhJ1/S82hpAbSuHgqN0HJjFVy9ow7/2Jpl8q
+         RzK5e2MA8pzcVpsC6zIZ+j9HvmcbdSLTu5NTYRxg1B+xx0EuaRl3yW97iY5Do033K+Lf
+         NhgspTOGv5cz4gQHN0crNSR03EAlmicuaFH/oJRvhWMRqZg9PqujQK2lzswqJSd2pwt1
+         +59tORQsBSjokVfSEmE4xjZs1FlZR1XyEi07snoV3XrTJo0xnmMg50GA0f6DTYvmLxaH
+         QoRrLLvVWRsJjhPeG/kEFlQb2GR79Y2uvISa9ftxvepGtxr622yIUPyrflzaZn4Ec2zT
+         9tyA==
+X-Gm-Message-State: AAQBX9etwimyrYw+roeup2ZsIlpvQoOeCx5JWys8lr4BovVYaCsD/xUp
+        +h/GyRa4M6d9CaNpEvkf0GIofjn1ymDiS+hYulDg/ZekO4b5C53NJPhUqfzO/mVpeYdWCsaZ1mH
+        Pf8I/4aJFFfAy34sHziIzJ6OhO4mype0E
+X-Received: by 2002:a5d:6683:0:b0:2e4:c9ac:c491 with SMTP id l3-20020a5d6683000000b002e4c9acc491mr1948826wru.1.1682022196830;
+        Thu, 20 Apr 2023 13:23:16 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZRilyAe9v61SphJuWGUumuvxcT+gsNQFr5rvosSPjF9WH/DbaaocEkW93a9eSgTXGWoCCHAw==
+X-Received: by 2002:a5d:6683:0:b0:2e4:c9ac:c491 with SMTP id l3-20020a5d6683000000b002e4c9acc491mr1948817wru.1.1682022196477;
+        Thu, 20 Apr 2023 13:23:16 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-108-137.dyn.eolo.it. [146.241.108.137])
+        by smtp.gmail.com with ESMTPSA id q9-20020a1ce909000000b003f177c3672dsm6126552wmc.29.2023.04.20.13.23.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 13:23:15 -0700 (PDT)
+Message-ID: <98b96b354ef9e0b7cafb951b12988aee727807a3.camel@redhat.com>
+Subject: Re: [PATCH 0/3] softirq: uncontroversial change
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, peterz@infradead.org,
+        tglx@linutronix.de, jstultz@google.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 20 Apr 2023 22:23:14 +0200
+In-Reply-To: <CANn89iKQ2KR23Ln9FU5RCKH89KWCNcu9QWuVLB4CcEqgoH+iRQ@mail.gmail.com>
+References: <20221222221244.1290833-1-kuba@kernel.org>
+         <305d7742212cbe98621b16be782b0562f1012cb6.camel@redhat.com>
+         <CANn89iKQ2KR23Ln9FU5RCKH89KWCNcu9QWuVLB4CcEqgoH+iRQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 11:53=E2=80=AFAM Shakeel Butt <shakeelb@google.com>=
- wrote:
->
-> +Jens & Jan
->
-> The patch looks good but it would be nice to pass this patch through
-> the eyes of experts of this area.
+On Thu, 2023-04-20 at 19:41 +0200, Eric Dumazet wrote:
+> On Thu, Apr 20, 2023 at 7:24=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> w=
+rote:
+> > I would like to propose a revert of:
+> >=20
+> > 4cd13c21b207 softirq: Let ksoftirqd do its job
+> >=20
+> > the its follow-ups:
+> >=20
+> > 3c53776e29f8 Mark HI and TASKLET softirq synchronous
+> > 0f50524789fc softirq: Don't skip softirq execution when softirq thread =
+is parking
+> >=20
+> > The problem originally addressed by 4cd13c21b207 can now be tackled
+> > with the threaded napi, available since:
+> >=20
+> > 29863d41bb6e net: implement threaded-able napi poll loop support
+> >=20
+> > Reverting the mentioned commit should address the latency issues
+> > mentioned by Jakub - I verified it solves a somewhat related problem in
+> > my setup - and reduces the layering of heuristics in this area.
+> >=20
+> > A refactor introducing uniform overload detection and proper resource
+> > control will be better, but I admit it's beyond me and anyway it could
+> > still land afterwards.
+> >=20
+> > Any opinion more then welcome!
+>=20
+> Seems fine, but I think few things need to be fixed first in
+> napi_threaded_poll()
+> to enable some important features that are currently  in net_rx_action() =
+only.
 
-Thanks for taking a look and CC'ing folks. I will make sure to include
-them in the next rounds as well. FWIW, Jens & Jan did not show up when
-I ran scripts/get_maintainers.ph if I remember correctly.
+Thanks for the feedback.
 
->
-> On Mon, Apr 3, 2023 at 3:03=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com=
-> wrote:
-> >
-> > wb_over_bg_thresh() calls mem_cgroup_wb_stats() which invokes an rstat
-> > flush, which can be expensive on large systems. Currently,
-> > wb_writeback() calls wb_over_bg_thresh() within a lock section, so we
-> > have to make the rstat flush atomically. On systems with a lot of
-> > cpus/cgroups, this can cause us to disable irqs for a long time,
-> > potentially causing problems.
-> >
-> > Move the call to wb_over_bg_thresh() outside the lock section in
-> > preparation to make the rstat flush in mem_cgroup_wb_stats() non-atomic=
-.
-> > The list_empty(&wb->work_list) should be okay outside the lock section
-> > of wb->list_lock as it is protected by a separate lock (wb->work_lock),
-> > and wb_over_bg_thresh() doesn't seem like it is modifying any of the b_=
-*
-> > lists the wb->list_lock is protecting. Also, the loop seems to be
-> > already releasing and reacquring the lock, so this refactoring looks
-> > safe.
-> >
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > ---
-> >  fs/fs-writeback.c | 16 +++++++++++-----
-> >  1 file changed, 11 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-> > index 195dc23e0d831..012357bc8daa3 100644
-> > --- a/fs/fs-writeback.c
-> > +++ b/fs/fs-writeback.c
-> > @@ -2021,7 +2021,6 @@ static long wb_writeback(struct bdi_writeback *wb=
-,
-> >         struct blk_plug plug;
-> >
-> >         blk_start_plug(&plug);
-> > -       spin_lock(&wb->list_lock);
-> >         for (;;) {
-> >                 /*
-> >                  * Stop writeback when nr_pages has been consumed
-> > @@ -2046,6 +2045,9 @@ static long wb_writeback(struct bdi_writeback *wb=
-,
-> >                 if (work->for_background && !wb_over_bg_thresh(wb))
-> >                         break;
-> >
-> > +
-> > +               spin_lock(&wb->list_lock);
-> > +
-> >                 /*
-> >                  * Kupdate and background works are special and we want=
- to
-> >                  * include all inodes that need writing. Livelock avoid=
-ance is
-> > @@ -2075,13 +2077,19 @@ static long wb_writeback(struct bdi_writeback *=
-wb,
-> >                  * mean the overall work is done. So we keep looping as=
- long
-> >                  * as made some progress on cleaning pages or inodes.
-> >                  */
-> > -               if (progress)
-> > +               if (progress) {
-> > +                       spin_unlock(&wb->list_lock);
-> >                         continue;
-> > +               }
-> > +
-> >                 /*
-> >                  * No more inodes for IO, bail
-> >                  */
-> > -               if (list_empty(&wb->b_more_io))
-> > +               if (list_empty(&wb->b_more_io)) {
-> > +                       spin_unlock(&wb->list_lock);
-> >                         break;
-> > +               }
-> > +
-> >                 /*
-> >                  * Nothing written. Wait for some inode to
-> >                  * become available for writeback. Otherwise
-> > @@ -2093,9 +2101,7 @@ static long wb_writeback(struct bdi_writeback *wb=
-,
-> >                 spin_unlock(&wb->list_lock);
-> >                 /* This function drops i_lock... */
-> >                 inode_sleep_on_writeback(inode);
-> > -               spin_lock(&wb->list_lock);
-> >         }
-> > -       spin_unlock(&wb->list_lock);
-> >         blk_finish_plug(&plug);
-> >
-> >         return nr_pages - work->nr_pages;
-> > --
-> > 2.40.0.348.gf938b09366-goog
-> >
+I fear I'll miss some relevant bits.=C2=A0
+
+On top of my head I think about RPS and  skb_defer_free. Both should
+work even when napi threaded is enabled - with an additional softirq ;)
+Do you think we should be able to handle both inside the napi thread?
+Or do you refer to other features?
+
+Thanks!
+
+Paolo
+
