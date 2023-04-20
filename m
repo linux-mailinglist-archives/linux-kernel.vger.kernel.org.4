@@ -2,183 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40AE46E9A7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3846E9A7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjDTRRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 13:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
+        id S231248AbjDTRS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 13:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbjDTRRg (ORCPT
+        with ESMTP id S230235AbjDTRSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 13:17:36 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1BE3592
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:17:34 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-2f40b891420so772412f8f.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:17:34 -0700 (PDT)
+        Thu, 20 Apr 2023 13:18:11 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF675E5A;
+        Thu, 20 Apr 2023 10:18:09 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2a8b1b51dbdso6267581fa.0;
+        Thu, 20 Apr 2023 10:18:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1682011053; x=1684603053;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+nrvmT5OFHwrUqAXKS0/0TYRQBrcHO6JC66d8fanswI=;
-        b=j6tO4jp0xdrqmgQ1bZh0uIYvt+VU7nmbselWXWzhCAG2keXa2wYyDXA833zsdXXGYm
-         uM43dk+2T7psZL6i3mzw7/RqjSnaZ7Mn/TVT/OccjDcbrWg9DUmS6QdLcDZiHSm+vpw6
-         PqBRRoRHiL9K4sVOoszbD0jj/js0/K/xR8xmWyLBfqGcVbpiiWP4tzKkScIeNh9XDCEh
-         b/CNb7KZOj2x0jlDmdCVW9YaLcjGn7TLlo1cODhUADXSM/U0Cf+CSxl82YcsEMKt9MAr
-         W4a37xXtmIA3uQz7rPKx/P2Nwu/rYaZ7e5paqNIMoKpcYnDn8/A/qpFphzghANYIolQb
-         ShUA==
+        d=gmail.com; s=20221208; t=1682011088; x=1684603088;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6Gw0Rh9YeLkIBrYV42JC4HseprywVlHq2+xrB7m9pA8=;
+        b=kO+D3M7ki7+BNCt0V3PlR4PA+WFJvb+py5kD3kN046+eGMn7ksincJOjKdxhNkaKLu
+         K5JSI3+Fam1INeCMqJ7HoXnx7FsBUM/uqVIEPt+NJ2Ah29DsHxj7akVuGIGgqm2HNNqz
+         XE4mRkCpM6ldy7W2+LNFLXfr/Q5Yz0FyeVW+8UB+AlOekheSXwF4/eHAJ50v5DBXmON/
+         O1SBAfX6M78ft/YxLJUlvg/WEHD90GjLNtfGPLjaoqV7yRYlBtwTVrivxG9Vjxunp+fj
+         gg1HGb++l80V4Pnxx0J+nKI8Lm1xFXWwbuslohYIAdm5cenbSF7RU9oRTclk/pFLKVr9
+         fIlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682011053; x=1684603053;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682011088; x=1684603088;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+nrvmT5OFHwrUqAXKS0/0TYRQBrcHO6JC66d8fanswI=;
-        b=evSAlVVMixEveR/Mapz2zoC3SdZyKRWYV9yJn0YyV+bdOI7/z1ktPwcAeG36SA3iZA
-         VkjCOpcoaZuS8hQK6HTFMYSNZtzBZcvQLvsbMDIPbCy7a02Qro+EvFD8YMpXVO/dqgDf
-         g9rPZl9CsrZuCYouin5l0G6n2dOkvPovi7BH5kwVXn/utBj4nwPr7okxEaarWx9a6wjm
-         MeJHtg4EasYG4xz8aHKBEVbs24+Coze7Yh7AIqs+l6lYFEAMn3FcLT2+cR5GBIfxBDR4
-         mtF+atRrcv24+zYHtlgLWY8BNhPiSyAHllDH9cdVjlZdTFoKYAm4wVv4TjNOgmVZ/Th+
-         BdqQ==
-X-Gm-Message-State: AAQBX9e/p9b052UoF/6qvl6dySqUz10nuiFEdgbCe+VPL7CrjjDvhL0t
-        891GiDiFYj+/qmynZiIqsMtG7w==
-X-Google-Smtp-Source: AKy350YDPqDs+oNhq4+CzO2Ado1avKObxaMZvo+mr7qJp0MQdpGCb5Af8m8SdwPIdw95c0kV5psKeQ==
-X-Received: by 2002:adf:f88a:0:b0:2f2:79ce:4836 with SMTP id u10-20020adff88a000000b002f279ce4836mr2114862wrp.60.1682011053092;
-        Thu, 20 Apr 2023 10:17:33 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id h18-20020a5d6892000000b002f9bfac5baesm2450752wru.47.2023.04.20.10.17.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 10:17:32 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Thu, 20 Apr 2023 19:17:14 +0200
-Subject: [PATCH LSM v2 2/2] selinux: Implement mptcp_add_subflow hook
+        bh=6Gw0Rh9YeLkIBrYV42JC4HseprywVlHq2+xrB7m9pA8=;
+        b=UffBI1958LyTr8M8/ae5nb3CvseWMio9jET4bLNPjZMtzVu2BYYj2eSDUNh2RKAJJs
+         1CDiZj5z4ADpMuShv1voGmAgc1rv1fT6C/x5bZt/D610fy4/dLG7G/NRx7TG2nzeGT3E
+         hmCDVnMNWp2meJ9JYNfzLX/2LKrBQqd+rNipuO6I8YdDV/Z3EfYRC0P2xCr0m9bxJe91
+         y1YHEyQqO6cm4Ar62uUPbjkTlUF18kYZPM6ZMY+njKuOPPuR8QEwmBr32eFQHxArkYEG
+         G5WqV0/k9GGOLAZpUvhQ+fuo/IEoCvq+JwnTpNDDgqzq1HfBYLHDUNySS+6WLsnSNIKU
+         Ysuw==
+X-Gm-Message-State: AAQBX9cSZxkSvsPGO34gyRBvwYMFdvMzgb9PTk1myHuoQqkdaAiRLkxr
+        rmWV6eJvmr7sPSDsSIo6N19avxLJXmSn1zeD0vQ=
+X-Google-Smtp-Source: AKy350ZD5DNe1T8WEI38Kt9Tnq2EwrVj+Gfb5CSdkJxy0C+WHC4yighWj7jhjdgY87egOtj6fpCfLoz2IkXVyKJUas0=
+X-Received: by 2002:ac2:4908:0:b0:4db:1999:67a3 with SMTP id
+ n8-20020ac24908000000b004db199967a3mr588675lfi.13.1682011087869; Thu, 20 Apr
+ 2023 10:18:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-v2-2-e7a3c8c15676@tessares.net>
-References: <20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-v2-0-e7a3c8c15676@tessares.net>
-In-Reply-To: <20230419-upstream-lsm-next-20230419-mptcp-sublows-user-ctx-v2-0-e7a3c8c15676@tessares.net>
-To:     Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ondrej Mosnacek <omosnace@redhat.com>, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3129;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=WLhdu7VM8rRQHFyxZs5IsD7KrHV+7/B+Pjyz5LAXc28=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkQXOpmi1k2/KgRY8NOtTX9iCZ7MkaYNHhEgOGn
- ii8nlJrcKCJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZEFzqQAKCRD2t4JPQmmg
- czKpEADSd17bfsUVbQ+uwJhsBgw8gyj6F3CtxsSF5KcOpGnw3lyvx9DHDX3ZY0GpnEx6uEm8Hc3
- TNVAFrZsnmASC8q2zSQmdzynSgXyktDuWkGJvFyQupfT4LRGVgiSj7/j/d2l3X9xfjhRwROizxA
- KZ7ptNIATPin22KviVmh9csEgsLTEgHmazsEI88uXKHTiKYQik0xYGxhJSM+FnDF3MaPSKP5oIV
- dXtzacqLcPJvvLRnMXxmoYW/XtTSOB3S7cnknl/gP4Bzl4k6AsZsvyZJpQLBYIbY3kyK9CxKO/U
- trvZGfaJMCgOyAeLjJIoF1tPjwG92qQIG78maTIRG4G2WF1iVufCf0zPR/lpnNPYhbVtUS+a8Q7
- Pb1xpbh3+bJ4pJ2pMImtO6S+YClntJq2rgxJ23gnQXiRzJhUHUdPwZINwkbYBBN+dNcTvXmu752
- 6hp81pkoLZ9RP7vFt0I3fCH31NiTBsr3l8NOhpLlqXIQqpQIquubMPFVaIgvWlXLsANN4E1kLE5
- oRHd4w+ASJI9zkmMdhEbkmpptsmHNiCScdbWgePbEhV8ObL7Zh2IbDsx0Rd1YIKbZaZ3SPcB5kd
- CFve8+sUXHE394KCAMiiMogopfITRpL7JyGtny7xhDB/nU65Q/3IvEw8VhbGGLtBCxr4XAa/KWN
- YgTynBW3b4sRIgg==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+References: <20230418214347.324156-1-ojeda@kernel.org> <CAPDJoNsG1E25yYM+L_H21vVCt-5S16etx3KMxx8ySZtWMQt4FQ@mail.gmail.com>
+ <CANiq72mtb9V+1a7nPEHBCeg_fob4rpPTWJZjdahnGL2Mg3uoUA@mail.gmail.com>
+In-Reply-To: <CANiq72mtb9V+1a7nPEHBCeg_fob4rpPTWJZjdahnGL2Mg3uoUA@mail.gmail.com>
+From:   Ariel Miculas <ariel.miculas@gmail.com>
+Date:   Thu, 20 Apr 2023 20:17:56 +0300
+Message-ID: <CAPDJoNvGQBNN6X6fs26tjUy7LbpJjWwPvQuf=1+nSwj94aa6LA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Rust 1.68.2 upgrade
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Josh Stone <jistone@redhat.com>,
+        William Brown <william.brown@suse.com>,
+        Georgy Yakovlev <gyakovlev@gentoo.org>,
+        Jan Alexander Steffens <jan.steffens@gmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+Yes, I've edited the commands since I've run them out of order, let me
+include the output of commands and my general setup.
+Since I've already run these steps previously, most of the commands
+just say that it's already configured.
 
-Newly added subflows should inherit the LSM label from the associated
-MPTCP socket regardless of the current context.
+=E2=9D=AF rustup override set $(scripts/min-tool-version.sh rustc)
+info: using existing install for '1.68.2-x86_64-unknown-linux-gnu'
+info: override toolchain for '/home/amiculas/work/linux' set to
+'1.68.2-x86_64-unknown-linux-gnu'
 
-This patch implements the above copying sid and class from the MPTCP
-socket context, deleting the existing subflow label, if any, and then
-re-creating the correct one.
+  1.68.2-x86_64-unknown-linux-gnu unchanged - rustc 1.68.2 (9eb3afe9e
+2023-03-27)
 
-The new helper reuses the selinux_netlbl_sk_security_free() function,
-and the latter can end-up being called multiple times with the same
-argument; we additionally need to make it idempotent.
+=E2=9D=AF rustup override list
+/home/amiculas/work/linux                       1.68.2-x86_64-unknown-linux=
+-gnu
 
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
-v2:
- - Address Paul's comments:
-   - use "MPTCP socket" instead of "msk" in the commit message
-   - "updated" context instead of "current" one in the comment
----
- security/selinux/hooks.c    | 16 ++++++++++++++++
- security/selinux/netlabel.c |  8 ++++++--
- 2 files changed, 22 insertions(+), 2 deletions(-)
+=E2=9D=AF rustup component add rust-src
+info: component 'rust-src' is up to date
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 9a5bdfc21314..67e6cd18ad59 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -5476,6 +5476,21 @@ static void selinux_sctp_sk_clone(struct sctp_association *asoc, struct sock *sk
- 	selinux_netlbl_sctp_sk_clone(sk, newsk);
- }
- 
-+static int selinux_mptcp_add_subflow(struct sock *sk, struct sock *ssk)
-+{
-+	struct sk_security_struct *ssksec = ssk->sk_security;
-+	struct sk_security_struct *sksec = sk->sk_security;
-+
-+	ssksec->sclass = sksec->sclass;
-+	ssksec->sid = sksec->sid;
-+
-+	/* replace the existing subflow label deleting the existing one
-+	 * and re-recreating a new label using the updated context
-+	 */
-+	selinux_netlbl_sk_security_free(ssksec);
-+	return selinux_netlbl_socket_post_create(ssk, ssk->sk_family);
-+}
-+
- static int selinux_inet_conn_request(const struct sock *sk, struct sk_buff *skb,
- 				     struct request_sock *req)
- {
-@@ -7216,6 +7231,7 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
- 	LSM_HOOK_INIT(sctp_sk_clone, selinux_sctp_sk_clone),
- 	LSM_HOOK_INIT(sctp_bind_connect, selinux_sctp_bind_connect),
- 	LSM_HOOK_INIT(sctp_assoc_established, selinux_sctp_assoc_established),
-+	LSM_HOOK_INIT(mptcp_add_subflow, selinux_mptcp_add_subflow),
- 	LSM_HOOK_INIT(inet_conn_request, selinux_inet_conn_request),
- 	LSM_HOOK_INIT(inet_csk_clone, selinux_inet_csk_clone),
- 	LSM_HOOK_INIT(inet_conn_established, selinux_inet_conn_established),
-diff --git a/security/selinux/netlabel.c b/security/selinux/netlabel.c
-index 1321f15799e2..33187e38def7 100644
---- a/security/selinux/netlabel.c
-+++ b/security/selinux/netlabel.c
-@@ -155,8 +155,12 @@ void selinux_netlbl_err(struct sk_buff *skb, u16 family, int error, int gateway)
-  */
- void selinux_netlbl_sk_security_free(struct sk_security_struct *sksec)
- {
--	if (sksec->nlbl_secattr != NULL)
--		netlbl_secattr_free(sksec->nlbl_secattr);
-+	if (!sksec->nlbl_secattr)
-+		return;
-+
-+	netlbl_secattr_free(sksec->nlbl_secattr);
-+	sksec->nlbl_secattr = NULL;
-+	sksec->nlbl_state = NLBL_UNSET;
- }
- 
- /**
+=E2=9D=AF cargo install --locked --version $(scripts/min-tool-version.sh
+bindgen) bindgen
+     Ignored package `bindgen v0.56.0` is already installed, use
+--force to override
 
--- 
-2.39.2
+=E2=9D=AF  make LLVM=3D1 rustavailable
+Rust is available!
 
+=E2=9D=AE rg -i '[^a-zA-Z]rust' .config
+14:CONFIG_RUST_IS_AVAILABLE=3Dy
+279:CONFIG_RUST=3Dy
+280:CONFIG_RUSTC_VERSION_TEXT=3D"rustc 1.68.2 (9eb3afe9e 2023-03-27)"
+687:CONFIG_HAVE_RUST=3Dy
+5093:CONFIG_SAMPLES_RUST=3Dy
+5094:CONFIG_SAMPLE_RUST_MINIMAL=3Dm
+5095:CONFIG_SAMPLE_RUST_PRINT=3Dm
+5096:CONFIG_SAMPLE_RUST_HOSTPROGS=3Dy
+5185:# Rust hacking
+5187:# CONFIG_RUST_DEBUG_ASSERTIONS is not set
+5188:CONFIG_RUST_OVERFLOW_CHECKS=3Dy
+5189:# CONFIG_RUST_BUILD_ASSERT_ALLOW is not set
+5190:# end of Rust hacking
+
+=E2=9D=AF make LLVM=3D1 -j$(nproc)
+  DESCEND objtool
+  CALL    scripts/checksyscalls.sh
+make[3]: 'install_headers' is up to date.
+grep: warning: stray \ before #
+grep: warning: stray \ before #
+Kernel: arch/x86/boot/bzImage is ready  (#29)
+
+# I have some commits on top of the patchset, but they are only for
+setting up the kernel environment (an initramfs with busybox, running
+inside qemu)
+=E2=9D=AF git log --oneline
+03cad1754b24 (HEAD -> ariel-rust) Add lwnfs.ko kernel module to initramfs
+233183beae92 Insert rust_fs.ko module and mount a rustfs to /mnt
+a1de6ad1ec15 Add other rust samples to initramfs
+192ab4a5dd58 Mount /dev, /proc and insert the parrot.ko module
+05d7232d50cf enable kvm
+c2724fa122af Add scripts for running the kernel in qemu
+3f81af042dd2 (rust-next) rust: upgrade to Rust 1.68.2
+418e1087dce1 rust: arc: fix intra-doc link in `Arc<T>::init`
+ee16705fb79f rust: alloc: clarify what is the upstream version
+1944caa8e8dc (rust-for-linux/rust-next) rust: sync: add functions for
+initializing `UniqueArc<MaybeUninit<T>>`
+701608bd030a rust: sync: reduce stack usage of `UniqueArc::try_new_uninit`
+692e8935e23e rust: types: add `Opaque::ffi_init`
+
+=E2=9D=AF git --no-pager diff
+diff --git a/samples/rust/rust_minimal.rs b/samples/rust/rust_minimal.rs
+index dc05f4bbe27e..1ca75c85f161 100644
+--- a/samples/rust/rust_minimal.rs
++++ b/samples/rust/rust_minimal.rs
+@@ -19,6 +19,7 @@ struct RustMinimal {
+ impl kernel::Module for RustMinimal {
+     fn init(_module: &'static ThisModule) -> Result<Self> {
+         pr_info!("Rust minimal sample (init)\n");
++        pr_info!("Ariel was here");
+         pr_info!("Am I built-in? {}\n", !cfg!(MODULE));
+
+         let mut numbers =3D Vec::new();
+
+=E2=9D=AF cd linux-environment
+=E2=9D=AF ls
+busybox  Makefile  qemu-initramfs.desc  qemu-initramfs.img
+qemu-init.sh  run_qemu.sh
+
+=E2=9D=AF file busybox
+busybox: ELF 64-bit LSB executable, x86-64, version 1 (SYSV),
+statically linked, stripped
+
+=E2=9D=AF /usr/bin/cat Makefile
+.PHONY: all clean
+
+all: qemu-initramfs.img
+
+qemu-initramfs.img:
+        ../usr/gen_init_cpio qemu-initramfs.desc > qemu-initramfs.img
+
+clean:
+        rm qemu-initramfs.img
+
+run: qemu-initramfs.img
+        sudo ./run_qemu.sh
+
+=E2=9D=AF /usr/bin/cat qemu-init.sh
+#!/bin/sh
+
+busybox mount -t devtmpfs none /dev
+busybox mount -t proc none /proc
+busybox mount -t sysfs none /sys
+
+busybox insmod rust_minimal.ko
+busybox rmmod rust_minimal.ko
+busybox setsid sh -c 'exec sh -l </dev/ttyS0 >/dev/ttyS0 2>&1'
+
+=E2=9D=AF /usr/bin/cat qemu-initramfs.desc
+dir     /bin                                          0755 0 0
+dir     /sys                                          0755 0 0
+dir     /dev                                          0755 0 0
+dir     /proc                                         0755 0 0
+file    /bin/busybox  busybox                         0755 0 0
+slink   /bin/sh       /bin/busybox                    0755 0 0
+file    /init         qemu-init.sh                    0755 0 0
+
+file    /rust_minimal.ko            ../samples/rust/rust_minimal.ko
+        0755 0 0
+file    /rust_print.ko              ../samples/rust/rust_print.ko
+        0755 0 0
+
+=E2=9D=AF make
+../usr/gen_init_cpio qemu-initramfs.desc > qemu-initramfs.img
+
+=E2=9D=AF /usr/bin/cat run_qemu.sh
+sudo qemu-system-x86_64 \
+    -kernel ../arch/x86/boot/bzImage \
+    -initrd qemu-initramfs.img \
+    -M pc \
+    -m 4G \
+    -accel kvm \
+    -cpu host \
+    -smp $(nproc) \
+    -nographic \
+    -vga none \
+    -no-reboot \
+    -append 'console=3DttyS0'
+
+=E2=9D=AF ./run_qemu.sh
+[sudo] password for amiculas:
+SeaBIOS (version Arch Linux 1.16.2-1-1)
+
+
+iPXE (http://ipxe.org) 00:02.0 C000 PCI2.10 PnP PMM+BEFD31B0+BEF331B0 C000
+
+
+
+Booting from ROM..
+[    0.000000] Linux version 6.3.0-rc6-00039-g03cad1754b24-dirty
+(amiculas@archlinux-cisco) (clang version 15.0.7, LLD 15.0.7) #29 SMP
+PREEMPT_DYNAMIC Thu Apr 20 15:54:18 EEST 2023
+[    0.000000] Command line: console=3DttyS0
+...
+[    0.802414] Run /init as init process
+[    0.803185] busybox (89) used greatest stack depth: 13848 bytes left
+[    0.805450] rust_minimal: Rust minimal sample (init)
+[    0.805736] rust_minimal: Ariel was here
+[    0.805737] rust_minimal: Am I built-in? false
+[    0.806304] busybox (92) used greatest stack depth: 13696 bytes left
+[    0.806591] rust_minimal: My numbers are [72, 108, 200]
+[    0.807021] rust_minimal: Rust minimal sample (exit)
+
+Cheers,
+Ariel
+
+On Thu, Apr 20, 2023 at 4:20=E2=80=AFPM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Thu, Apr 20, 2023 at 3:13=E2=80=AFPM Ariel Miculas <ariel.miculas@gmai=
+l.com> wrote:
+> >
+> > $ make LLVM=3D1 rustavailable
+>
+> Since you showed the output of the other commands, did this one show
+> "Rust is available!"? I guess so -- I imagine you edited the commands
+> for the email, e.g. the config changed too.
+>
+> That is fine, as long as it works as expected :) Thanks a lot for testing=
+!
+>
+> Cheers,
+> Miguel
