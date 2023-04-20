@@ -2,83 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AAA86E8E4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8E96E8E4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234251AbjDTJhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 05:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
+        id S234463AbjDTJh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 05:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234224AbjDTJgp (ORCPT
+        with ESMTP id S234467AbjDTJg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 05:36:45 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA425260
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:36:27 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2a8ba693f69so3880131fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:36:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681983386; x=1684575386;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hfsZM67OXbAlzVD+uHneuvtJvIsoB/dlohyx55svOjw=;
-        b=mMrxmnCh6cK34iMsXHT6we3TE3HE2XWlq8fH3NKmU0GnJbuuDmkuKeN18CGlJCP2+G
-         GkWDOm6egtzIZD4q1hutug9vMuk9ScjgB/G6l5Idnsk3aAAhgYEh3KEs8avXsCB1WwPm
-         1Dy0IYNMwOZMlEDqWU2+Byj7r6VeeVqC/O9afOWGvSDQdHQfnRSIg3WkpYIDgHX4B40e
-         qsyr/l/Zur5+MXYi7ubHKJq4hQ+gh/IoBjMf+qVXzvqJkYkp3lFXGdmXcI8vz165n3di
-         +dZ/jID2kuWv15n82fKrgHWEEuD2yr23jpgpOyq+6V7CuG/5EK6Wp+TvyS9wCxGhITQr
-         Xx7Q==
+        Thu, 20 Apr 2023 05:36:56 -0400
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9676630F4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:36:42 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-760814f124fso134857639f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:36:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681983386; x=1684575386;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hfsZM67OXbAlzVD+uHneuvtJvIsoB/dlohyx55svOjw=;
-        b=j+F83XqyyMpybyRaZsxMXp0yI5a2JHmbLOP+1wD5RGszbHckRbRqrSZznXxtpC6ZQk
-         vLQX9fMMELSzoelCU4BeINw/322nl7sBqfinCYZ5xAnNxCNxTzRrrXkFop2oGUtUdnKa
-         scCY/ETE682XA+jp25XkYseAkIwbxc05x7UKLuxizcHdeZbKrDFg76tUbw19KiR66M/c
-         x/jOji+S7ideQVN/9zwbnc0PlzCUr3u5OPH7qpO1Y75VvTU4qdaE8l6nUT/Ri6GoFSyh
-         ItAvtADqBvAjOk4oOVzAKJEIAMH8DX1NjcxYsVu3jmC+jk0lh1ziVg6SyiLEgkeppU0G
-         Ck5w==
-X-Gm-Message-State: AAQBX9eyf/NqyKUyBWWTOXN+mT3YEV6/9icYntfnGmsAzMKQk3H5h4pc
-        85n08XFb/BWGO12STlCpHZOYSg==
-X-Google-Smtp-Source: AKy350ai9s+joKTQe7jfoz4hBNP9alfMfO6WPChONY+2B39f63l8Q02pLjKEKfzsAR5R+3/qer65/w==
-X-Received: by 2002:a05:6512:481:b0:4ed:c8ba:df9e with SMTP id v1-20020a056512048100b004edc8badf9emr305180lfq.63.1681983386212;
-        Thu, 20 Apr 2023 02:36:26 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id i20-20020ac25234000000b004eb07f5cde6sm155791lfl.297.2023.04.20.02.36.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 02:36:25 -0700 (PDT)
-Message-ID: <6175f709-8c88-6ec3-4c31-cac9f2440b52@linaro.org>
-Date:   Thu, 20 Apr 2023 11:36:24 +0200
+        d=1e100.net; s=20221208; t=1681983402; x=1684575402;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I7H2xOuyMfKKw8Cz3kgRz9OwKi3ZnzM005yfTOCX8Dc=;
+        b=clPwLEfkCYIqBWYGismjKHJp+nNkBFIidYTB4gYZDdaESo0ckmwdjTEBGRAuYKNvre
+         qr9YzyJvF0nQxpMb2BRXltAh0tmGlwybpfsVQdO8jATlNBJvhe2icfrqoi3IwyRrGxDm
+         4t/rGf4j6VdAjUpSF2HyMxohvOHs1y797rslBQoVwHAvNmEGsjnniq1MJxuxHTNFYGQn
+         YNr8erBKHRiGNAKLLYrDnMf6EfZO2kCe3b+7L6hfCmhOvxbZruJMYzF4p1wuKuLwmXSU
+         IwMJUXFUZkCD8y+Ns/EBT9wNnmYd6aBgt0meP2DP5T5tNz/ZCTjIswOipH8V+PFRRH4j
+         JOVg==
+X-Gm-Message-State: AAQBX9fhy+Q79Sv6J+kscHR3QdFYcGH/jEkq+EH0hJmr71yjxmKS/aYe
+        Fs7L6LmVOFHD/jit7UGAL5ZkP3RsOfhKoOFivp5fjFJpyXxs
+X-Google-Smtp-Source: AKy350bffhmeNWTFMGPSYlI5SDPCwW36yvX9w7ztHwAOf+XiOffwbJHw4LSGuDD/V6Z3u4Pls56qashA1AFFxL0GZMUdjMruIw7w
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH RFT v2 00/14] SMD RPMCC sleep preparations
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
- <66c41caf-bf21-61af-c6e4-52b34b69c1ce@linaro.org>
- <ZEDwLB3RwT6mHIu4@gerhold.net>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZEDwLB3RwT6mHIu4@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a5d:9f49:0:b0:760:ec21:a8ab with SMTP id
+ u9-20020a5d9f49000000b00760ec21a8abmr575074iot.0.1681983401920; Thu, 20 Apr
+ 2023 02:36:41 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 02:36:41 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000030932c05f9c1472f@google.com>
+Subject: [syzbot] [btrfs?] WARNING in btrfs_mark_ordered_io_finished
+From:   syzbot <syzbot+049b5ea03bae9d6acc9b@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,24 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    a7a55e27ad72 Merge tag 'i2c-for-6.3-rc7' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=104304fbc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=759d5e665e47a55
+dashboard link: https://syzkaller.appspot.com/bug?extid=049b5ea03bae9d6acc9b
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/89778cf51c73/disk-a7a55e27.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8d826c46f139/vmlinux-a7a55e27.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/fb0e22b4bb2a/bzImage-a7a55e27.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+049b5ea03bae9d6acc9b@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 1070 at fs/btrfs/ordered-data.c:388 btrfs_mark_ordered_io_finished+0x993/0xcf0
+Modules linked in:
+CPU: 1 PID: 1070 Comm: kworker/u4:5 Not tainted 6.3.0-rc6-syzkaller-00183-ga7a55e27ad72 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+Workqueue: events_unbound btrfs_async_reclaim_metadata_space
+RIP: 0010:btrfs_mark_ordered_io_finished+0x993/0xcf0 fs/btrfs/ordered-data.c:388
+Code: f8 ff ff e8 af 8a fe fd 48 c7 c7 80 45 2a 8b 48 c7 c6 e0 43 2a 8b ba 71 01 00 00 e8 c7 fe 10 07 e9 06 fd ff ff e8 8d 8a fe fd <0f> 0b 48 8b 84 24 a0 00 00 00 42 80 3c 28 00 4c 8b 7c 24 68 74 0a
+RSP: 0018:ffffc90005cfee98 EFLAGS: 00010093
+RAX: ffffffff838bec33 RBX: 00000000000ca000 RCX: ffff8880212a1d40
+RDX: 0000000000000000 RSI: 00000000000ca000 RDI: 0000000000085000
+RBP: fffffffffffbb000 R08: ffffffff838be9b7 R09: 0000000000000003
+R10: ffffffffffffffff R11: dffffc0000000001 R12: 1ffff110048753ad
+R13: dffffc0000000000 R14: 0000000000002000 R15: 00000000000ca000
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b32025000 CR3: 000000002ec18000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btrfs_run_delalloc_range+0xee2/0x11d0 fs/btrfs/inode.c:2258
+ writepage_delalloc+0x261/0x590 fs/btrfs/extent_io.c:1424
+ __extent_writepage+0x850/0x16d0 fs/btrfs/extent_io.c:1724
+ extent_write_cache_pages fs/btrfs/extent_io.c:2635 [inline]
+ extent_writepages+0xc31/0x1930 fs/btrfs/extent_io.c:2755
+ do_writepages+0x3a6/0x670 mm/page-writeback.c:2551
+ filemap_fdatawrite_wbc+0x125/0x180 mm/filemap.c:390
+ start_delalloc_inodes+0x7e1/0xcb0 fs/btrfs/inode.c:9287
+ btrfs_start_delalloc_roots+0x745/0xab0 fs/btrfs/inode.c:9366
+ shrink_delalloc fs/btrfs/space-info.c:611 [inline]
+ flush_space+0x61d/0xe30 fs/btrfs/space-info.c:719
+ btrfs_async_reclaim_metadata_space+0x29f/0x350 fs/btrfs/space-info.c:1066
+ process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2390
+ worker_thread+0xa63/0x1210 kernel/workqueue.c:2537
+ kthread+0x270/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
 
-On 20.04.2023 09:56, Stephan Gerhold wrote:
-> On Thu, Apr 20, 2023 at 03:50:16AM +0200, Konrad Dybcio wrote:
->> On 8.03.2023 22:35, Konrad Dybcio wrote:
->>> Keepalive clocks for other platforms were gathered by digging in old
->>> downstream kernels, please give them a test.
->> I have an implementation of rpmcc-within-icc ready(ish) locally. Turns out
->> some SoCs need a keepalive (19.2MHz, active-only) vote on clocks that
->> are NOT governed by interconnect.. So before we can disable clocks,
->> both will need to be implemented.. ugh... I was hoping we could avoid
->> having it in rpmcc..
->>
-> 
-> Can you give an example? Which clocks are affected on which SoC?
-msm8998/sdm660 and PNoC
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Konrad
-> 
-> Thanks,
-> Stephan
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
