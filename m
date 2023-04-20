@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0388A6E994C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3636E9952
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 18:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbjDTQNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 12:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38508 "EHLO
+        id S233343AbjDTQQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 12:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjDTQNe (ORCPT
+        with ESMTP id S231341AbjDTQP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 12:13:34 -0400
+        Thu, 20 Apr 2023 12:15:58 -0400
 Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C720FA3;
-        Thu, 20 Apr 2023 09:13:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD703596;
+        Thu, 20 Apr 2023 09:15:57 -0700 (PDT)
 Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 31A20732;
-        Thu, 20 Apr 2023 16:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 31A20732
+        by ms.lwn.net (Postfix) with ESMTPSA id 4038C2AE;
+        Thu, 20 Apr 2023 16:15:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 4038C2AE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1682007212; bh=ZYW+cTC3rQfV7FwGsuC36Jdv5I+7NAsg0phQ6uvJLR8=;
+        t=1682007357; bh=dIoh7Uzva2QsUh5vyGcccNj94Y882Db73hATcucqawE=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=VU7oWgA1UFqxKMKRmP61kWkHKQRzYJWgrDV9VYn8+3cdvDHkhVJ+HjKPBFPtO8w8K
-         AmEXm3Wd0ewZoBiN0fTAe+0pUAZhBs50XhU5fxoNNEUaQ8KT0lujiXYQi7855nL2lv
-         uR/IwEHSSNLFaUFpVsGBVeiY3UO4ItmLW5DrN6NZWMDT8JyiJK4kkwETr9sdm6+aBw
-         iH2TtuE/7bUjv6L6PoGqAUhPxALmy6dFKwSiMDV84YzOJ3A4mt6fPCJzDOsJjSDOIK
-         LHuES5efJmvFYgl5pZscOx2Py9mTUHIymGPsXKztCkmZXkMR8loQjCozSIa4dnv6aV
-         viu6Uk/QDqOLw==
+        b=VANjqdpHV1W5XdXIB/wV+x8VC4ql3kGUs/Per8arX/UNuGOuxeKFb/7Av0anFrvms
+         k2opc6Z1dgRJBQh0L+vo4aO3IZ6rk1D1BicOJephalElMdkwyzKggqcxWNqG4OVJLo
+         KloTTSAaHOH4IGy3uYVMjyqnHdaIJTj7zO3MOaqMsisjTVETjJkOO66AcYdmNbZn3D
+         xcJNJf0KQeN4YWpLFn2TkGN+FDvBF6CFmG6Ph9Y320FpFKBVDL1z2sFaliP6/C7v4y
+         FTZSDSMqKbWjWmDM4+nEUU8ASgxHKz0/vH/CfYklDAAipUkksA5j/Ri8cMe226p3TD
+         Mktp/fj4YA+LA==
 From:   Jonathan Corbet <corbet@lwn.net>
-To:     Lin Yu Chen <starpt.official@gmail.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, Lin Yu Chen <starpt.official@gmail.com>
-Subject: Re: [PATCH] docs: trace: Fix typo in ftrace.rst
-In-Reply-To: <20230412183739.89894-1-starpt.official@gmail.com>
-References: <20230412183739.89894-1-starpt.official@gmail.com>
-Date:   Thu, 20 Apr 2023 10:13:31 -0600
-Message-ID: <87354uttuc.fsf@meer.lwn.net>
+To:     Brian Masney <bmasney@redhat.com>, sboyd@kernel.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mturquette@baylibre.com, linux-doc@vger.kernel.org
+Subject: Re: [PATCH] docs: clk: add documentation to log which clocks have
+ been disabled
+In-Reply-To: <20230411192153.289688-1-bmasney@redhat.com>
+References: <20230411192153.289688-1-bmasney@redhat.com>
+Date:   Thu, 20 Apr 2023 10:15:56 -0600
+Message-ID: <87y1mmsf5v.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -51,30 +51,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lin Yu Chen <starpt.official@gmail.com> writes:
+Brian Masney <bmasney@redhat.com> writes:
 
-> There is a typo in the sentence "A kernel developer must be
-> conscience ...". The word conscience should be conscious.
-> This patch fixes it.
+> The existing clk documentation has a section that talks about the
+> clk_ignore_unused kernel parameter. Add additional documentation that
+> describes how to log which clocks the kernel disables on bootup. This
+> will log messages like the following to the console on bootup:
 >
-> Signed-off-by: Lin Yu Chen <starpt.official@gmail.com>
+>     [    1.268115] clk: Disabling unused clocks
+>     [    1.272167] clk_disable: gcc_usb_clkref_en
+>     [    1.276389] clk_disable: gcc_usb30_sec_sleep_clk
+>     [    1.281131] clk_disable: gcc_usb30_prim_sleep_clk
+>     ...
+>
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
 > ---
->  Documentation/trace/ftrace.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
-> index b927fb2b94dc..e8bca5fea7cc 100644
-> --- a/Documentation/trace/ftrace.rst
-> +++ b/Documentation/trace/ftrace.rst
-> @@ -3510,7 +3510,7 @@ directories, the rmdir will fail with EBUSY.
->  Stack trace
->  -----------
->  Since the kernel has a fixed sized stack, it is important not to
-> -waste it in functions. A kernel developer must be conscience of
-> +waste it in functions. A kernel developer must be conscious of
->  what they allocate on the stack. If they add too much, the system
->  can be in danger of a stack overflow, and corruption will occur,
+>  Documentation/driver-api/clk.rst | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-Applied, thanks.
+I've applied this, but...
+
+> diff --git a/Documentation/driver-api/clk.rst b/Documentation/driver-api/clk.rst
+> index 3cad45d14187..2199c0042e75 100644
+> --- a/Documentation/driver-api/clk.rst
+> +++ b/Documentation/driver-api/clk.rst
+> @@ -258,6 +258,11 @@ clocks properly but rely on them being on from the bootloader, bypassing
+>  the disabling means that the driver will remain functional while the issues
+>  are sorted out.
+>  
+> +You can see which clocks have been disabled by booting your kernel with these
+> +parameters:
+
+...I took the liberty of making that "parameters::" so that the options
+would be formatted as a literal block.
+
+> + tp_printk trace_event=clk:clk_disable
+> +
+>  To bypass this disabling, include "clk_ignore_unused" in the bootargs to the
+>  kernel.
+
+Thanks,
 
 jon
