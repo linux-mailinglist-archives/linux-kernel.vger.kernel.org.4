@@ -2,125 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89FBB6E970F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 972CF6E9714
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 16:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbjDTO2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 10:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
+        id S231757AbjDTO3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 10:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbjDTO2l (ORCPT
+        with ESMTP id S229709AbjDTO3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 10:28:41 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7E03C1D
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:28:40 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63d2ba63dddso936881b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:28:40 -0700 (PDT)
+        Thu, 20 Apr 2023 10:29:37 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FD730E8
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:29:36 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id dx24so6724630ejb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 07:29:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682000919; x=1684592919;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o7m2bRBkBOHO3zCQabT4s8eQkzxK25rqxMEQNCDCJG8=;
-        b=Mh7ls9BYeJd6nrKGSNzSZogVNxrX5/on1ypqp2ubGHF/qxAoWC5060Q0bXA4luZ9dT
-         0irDpJmeZA9zC6D/Q0JyJbkQv6VqQDX6o4aMEiTCEKxln1xAm8KV1AdaWcLbS/w0zd56
-         O4jqyRb5jvMae3hMb2FEmd+2RNaOBpDgSNNKdFXarFtvXQ02tHKmmS9bC7ZVXzJ262vx
-         4pslhf3Ws+9BRR+HrPt9eObkRHQWYpRgdGo/d2xhKy3ZR+CG3eoFSX0soW+RSEhlQXQg
-         mcimwNe4Wvkma2GCC3b33Y77q9S7q+O7lJFKgbEavCpNaHL3af2lYuhqIW5Alh/B4zSe
-         tKMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682000919; x=1684592919;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1682000974; x=1684592974;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=o7m2bRBkBOHO3zCQabT4s8eQkzxK25rqxMEQNCDCJG8=;
-        b=JqWmozG9RgMy/qik0NHgWU2KTeDqXvKNbQPMExJCmC2kmHhlH471N5oLa6z66nJTB/
-         2gY4rwtbb2TUN6JFMn4W6AJCkfhTDAJQaLSsKpX7b55/exXUSAxk+Z/Fl7oDkAyzdCaU
-         0U1DGIWXUBHp6w2NxDl0u9mrwGf1HnVZzGpRdFjsokR4VpbVEBBNvgvPAzR/P3BmqPKI
-         G2pRh2BrtEkmI/uiWgEpCVY9otZvmw6ScSvZP3VKlTo+f8/bbJdmQSDoJBtbmsQCy7HC
-         q034UAIglklxdKUf42IItKhKgAJcWtBHFICDDekrm7yQCXcwkCtJOSRahJUOshG3b4tb
-         X2Bg==
-X-Gm-Message-State: AAQBX9eH5tuJvG9VQRRtXtFVnsgS0wxT08Dv4y3Wd6UblsaDpEnCPJIb
-        v1bqXYRouUfASCafskq/i8uzAQ==
-X-Google-Smtp-Source: AKy350ZnONyViUMEkgdDfpEJ8bskAPktWtd/kGxfjEOb02PH45d5RTnaJpkDOKAn7IX/BeHvJOwU9g==
-X-Received: by 2002:a05:6a00:13aa:b0:637:f447:9916 with SMTP id t42-20020a056a0013aa00b00637f4479916mr1908138pfg.16.1682000919388;
-        Thu, 20 Apr 2023 07:28:39 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m8-20020a654388000000b0051303d3e3c5sm1212044pgp.42.2023.04.20.07.28.38
+        bh=rfCcV16gTVHrk1jOSyJnGJ7kV2rgJwjcCd2ItLoWL/M=;
+        b=ln0ji5CjVFHiN0s10aJtxtCVE0gJXh9xSx6glw2SV0KeDMAmrYkg3vlTipK0Rzav0a
+         uyR6sUC02/T0cZldCXhGyq8io+0wU6rhBzYnH13rfXaJUErYa1ZAZAfoGcxUc7jiA+W0
+         zRnek2TbzgLJdeRBAlB2UavkRp5nbNJBevcfAf2tlvFfeCp+Ty1CW3H8ZkAZC9B6ve8Y
+         jc839qPh9FhKUXNB/MElVO0gu85LyPGf/IOnNcK8LuzmepW0e7BSq4cXBQXzm7pil8bX
+         WiHUm9g8bnoPyG6XZIB4wMknnBVq7HPZBzrvS6Zjd9FmcqwGLb3Ex0eJgXW2bJaVTt+W
+         e6qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682000974; x=1684592974;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rfCcV16gTVHrk1jOSyJnGJ7kV2rgJwjcCd2ItLoWL/M=;
+        b=ay/wmvZj/kmcWB3GlN80ozHqpzCNZfOd8tw43hr8s/FnT1O9Jg33OTHUoc8Y/JonRp
+         A6WLLwn7tXboslSdSU0Vxt8fHefWW/oL/jVxO8fsH+49vbkYLAW8jAtuFPoz8wa4+Zcx
+         yVBqLOwqB8PiydY3IEEIm40SDL8a96mhDftDgnAgW11vc3FW582VimEoZvKV8XeSOitj
+         ZBrqtKlf774PykiMTTy64UkXc9vt6LUV4oVf4Gu7fJ0Crurwzqb5nojkKM3UgqWlnuuY
+         Sa//HBgVwccTUj/MwCWwMW52fg7yvdf8UImGYD/nbr7Hp+JpnZO7SlwFK71I6mKYQ64R
+         2Ruw==
+X-Gm-Message-State: AAQBX9ef6WsSKBzJwyGTl/8mTkj0PFE/TSGdmWlZES5miBqnHNd7kgnJ
+        qQAjWc2kf6RyDqYg1hniErE=
+X-Google-Smtp-Source: AKy350Ym6VgN7iFnbtZa++HNCUYXdDwB/7v+x/C6nG13kWRrpr1UrmkkQYzzcab6+6MgFC2goaPR1Q==
+X-Received: by 2002:a17:906:b088:b0:94f:8aff:c8b3 with SMTP id x8-20020a170906b08800b0094f8affc8b3mr1781982ejy.28.1682000974374;
+        Thu, 20 Apr 2023 07:29:34 -0700 (PDT)
+Received: from PCBABN.skidata.net ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id g10-20020a170906594a00b008cecb8f374asm814617ejr.0.2023.04.20.07.29.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 07:28:38 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 14:28:34 +0000
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Chuang Zhang <zhangchuang3@xiaomi.corp-partner.google.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, arve@android.com,
-        tkjos@android.com, maco@android.com, joel@joelfernandes.org,
-        brauner@kernel.org, surenb@google.com,
-        linux-kernel@vger.kernel.org,
-        Chuang Zhang <zhangchuang3@xiaomi.com>
-Subject: Re: [PATCH] Binder: Add timestamp and async from pid/tid to
- transaction record
-Message-ID: <ZEFMEsPIR3fl/SUV@google.com>
-References: <20230413104047.388861-1-zhangchuang3@xiaomi.corp-partner.google.com>
- <ZDm/pLQefIyTBAqb@google.com>
- <CAO+dPF9cb5tQzNkuO4hniTfWesACbr4z2YvT8XKj4afFgyYjjw@mail.gmail.com>
+        Thu, 20 Apr 2023 07:29:33 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+To:     mazziesaccount@gmail.com
+Cc:     DLG-Adam.Ward.opensource@dm.renesas.com, bbara93@gmail.com,
+        benjamin.bara@skidata.com, broonie@kernel.org, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, support.opensource@diasemi.com
+Subject: Re: [PATCH RFC 1/2] regulator: introduce regulator monitoring constraints
+Date:   Thu, 20 Apr 2023 16:29:24 +0200
+Message-Id: <20230420142924.541206-1-bbara93@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <ad59933d-714f-6444-b835-ecd9791934aa@gmail.com>
+References: <ad59933d-714f-6444-b835-ecd9791934aa@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAO+dPF9cb5tQzNkuO4hniTfWesACbr4z2YvT8XKj4afFgyYjjw@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 03:14:55PM +0800, Chuang Zhang wrote:
-> 
-> [chuang]  Android's ANR and Watchdog problems are often caused by calling
-> Binder's server interface and waiting synchronously for too long. In order
-> to
-> confirm this root-casue, we need to let system_server read the relevant
-> nodes
->  of binderfs to obtain the transmission when the above failure occurs
-> information,
-> including of course the time-consuming of the transmission.
-> He will help many Android application and system engineers to quickly
-> analyze related faults.
-> Because we need to obtain time-consuming information in real time when ANR
-> or Watchdog occurs, this happens more when consumers use it, and they
-> cannot effectively capture atrace, so Perfetto cannot be applied.
+Thanks for the feedback!
 
-Fair enough, this sounds good to me then.
+On Thu, 20 Apr 2023 at 13:33, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+> Hm. Is there a reason why we need to perform these checks for each of
+> the calls?
 
-> 
-> [chuang]As you can see below, in fact, we only need to print the PID and
-> TID
-> of "from" when printing binder transaction records in
-> print_binder_transaction_ilocked,
-> which can be printed correctly regardless of whether it is asynchronous or
-> synchronous.
-> It is just because the PID and TID of "from" can be obtained through
-> t->from in
-> synchronous mode, while t->from in asynchronous mode cannot be obtained
-> because it is not populated.
-> So can I directly add new variables from_pid and from_tid to record all
-> transmissions? Does it matter if the naming includes the pid? Greg has
-> expressed some concerns about this before .
+No, I guess there might be a more efficient way to set a bit somewhere
+during registration instead. But I thought it might be "clearer" to have
+it all in one function to clarify what is required that something
+actually happens.
 
-Right, lets populate t->from_pid and t->from_tid for all transactions
-and use those only in print_binder_transaction() instead of t->from.
-As Greg mentioned, please add these in a separate commit.
 
-About the namespaces, Greg's comments seem accurate. Binder is using the
-task->pid directly so the PIDs would not match those seen by the
-namespace. This points to a larger issue in binder as we log these
-"raw" pid values everywhere. I'll look further into this and come up
-with a binder global fix in a separate commit, so just ignore for now.
+> Also, could we just directly have function pointers to monitoring 
+> disabling which would be populated by the driver.
+> So, could we perhaps have function pointers for these in the ops
+> instead of flags? Core could then call these if set? Do you think that
+> would work?
 
-Thanks,
---
-Carlos Llamas
+One goal was to reuse the existing set_{under,over}_voltage_protection()
+methods for voltage monitoring. For me, disabling is basically the same
+as setting the limit to REGULATOR_NOTIF_LIMIT_DISABLE. Of course, we
+could also introduce new "disable_monitor_on_*()" ops, but I think it
+should do the same job as set_*_protection(disable_limits), and
+therefore only leads to duplicated code in every driver that wants to
+use "dynamic monitoring". Also, I think we might need at least 6 new ops
+methods to cover the different state changes, except if we do some kind
+of "old state -> new state" function to identify if turning off or on
+the monitor is required (which is basically now done in the core).
+I am not sure if it improves things, but I could modify the approach to
+be more "driver-centric". What do you think?
+
+
+> Or, do you think it would be worth making this a tiny bit more generic
+> by just doing some 'pre_enable' and 'post _disable' callbacks which
+> driver can populate? 
+
+To be honest, I am not sure. For the da9063, it might not be worth it.
+For others, it might simplify the usage of voltage monitoring and move
+the "mental complexity" of handling all the possible cases, where the
+voltage monitoring must be turned off, to the core.
+The driver must just set the monitoring constraints to "please turn off
+while the regulator is turned off, turn off while the voltage is changed
+and while the regulator is in STANDBY mode".
+
+For me, it would also be fine to let the core turn off voltage monitoring on
+all defined cases (while regulator is off, while voltage is changed, while in
+IDLE, STANDBY mode). The constraints would just let the driver decide more
+specifically when it is really necessary and skip the other cases.
+
+
+> I think that some PMICs I've seen had separate 'disable/enable all
+> monitors' bit which needed to be used when monitoring was
+> disabled/enabled due to an operation [voltage change/disable/enable].
+
+I think this case could be handled by my "possible next step" in a very
+simple way.
+
+
+> If we allowed driver to populate the disabling callbacks, then this
+> would support also those ICs which need to disable multiple monitors
+> for the duration of an operation (or do some other strange stuff)
+
+I think that these should also be handled in the case of
+set_*_protection(), but I am not 100% sure here.
+
+
+> It would also allow drivers to add delays to the function(s)
+> re-enabling of monitors when needed - at least the bd718x7 had to wait
+> for new voltage to stabilize prior re-enabling the monitors.
+
+Also not 100% sure about this one, but I think these cases could be
+covered by a mandatory regulator-*-ramp-delay, when necessary?
+
+I can provide a RFC v2 with the stuff handled from the driver instead.
+
+Thanks and best regards,
+Benjamin
