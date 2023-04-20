@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3049E6E8B68
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D900F6E8B73
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234093AbjDTH1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 03:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
+        id S234056AbjDTH2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 03:28:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234080AbjDTH1d (ORCPT
+        with ESMTP id S234081AbjDTH2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 03:27:33 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF1A35259;
-        Thu, 20 Apr 2023 00:27:27 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8CxC9pd6UBkqV4fAA--.55212S3;
-        Thu, 20 Apr 2023 15:27:25 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx37Nc6UBkOMkwAA--.547S3;
-        Thu, 20 Apr 2023 15:27:25 +0800 (CST)
-Subject: Re: [PATCH v8 2/2] spi: loongson: add bus driver for the loongson spi
- controller
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        Thu, 20 Apr 2023 03:28:52 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4962359FB
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:28:24 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id xi5so4083766ejb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:28:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681975693; x=1684567693;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5gylQokwHrbKYZEvA2K7+6XwCFe14DDzlgchEo04KvA=;
+        b=PutHU7bS6zImLQPyXAcvT5qTwrDitmhfAm5VM1+biikonfodBkAl+VjkfwYnfuDbnr
+         8DABuf5pRWz4qsEN5FJr/iEZW/KlsYhRmn7Apoj12ZPet64lIiCBhz8KDwA3PLzGuTwf
+         ZOtuwuGepUi9L22adCrN1IVo8Q4r5vfmiIb7RqpHG5yzZkc5LfDuqnwFpN8CeTOLP2pI
+         UdAzq7jL2e73KouKLIjISvE2g5W3gNBMKpN3LCCqnDuZ6np0h/opk1L2+gzWfegQJOvt
+         Ak3rVuqinaeEcG3E8tT6KeMnXd7bz2hZpwYPAr9bf6beTjSDMfsNTLEmYq65ikpAimQ1
+         xeFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681975693; x=1684567693;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5gylQokwHrbKYZEvA2K7+6XwCFe14DDzlgchEo04KvA=;
+        b=Gv63VTPboF6RaJStCKDOwhWNFlovrHdsWPPJtw8rEgcgTqlTMdBzYNC3Qtx/4x/5aC
+         xihmHoFqfprPOGBGq5g5f++NzAkieYcfbBjtUhLmyZbxWsOYtKJjer9bR+F0y7Q+PodA
+         dIhQr30fPZFBkzE5VrXnsROlIUEqy2ebX5VmPyDyBysa5UPd33Ul8z3FBAK6OhUNsXhK
+         JGc1FEACybDGS5JOk3whwo88Jpz8PZmxGffSH+sRX9cswvW2Y4FrUKYWlFV0P4vspNce
+         bo5zEGeR+kuLUvviVnvE8t01c4KOJ3yj9L6QXo0XrdAS1+DmUqLXifM0Qf6aYanbd8Zx
+         PFgg==
+X-Gm-Message-State: AAQBX9cq+UX10JAGiKfpKuWFWdxxNAa6ssBW2xCoOuk6enY1eEwkrvDV
+        tzTYSksN+12NCIIFvUseHpkgMg==
+X-Google-Smtp-Source: AKy350Z2Pe07K6VAQBdXbOWfVpcV85qsOc3+ruWuxMJ8aAHh/6Nhgchll3UoLIwNDYYAPVPdf4QCtg==
+X-Received: by 2002:a17:906:1055:b0:94f:6218:191e with SMTP id j21-20020a170906105500b0094f6218191emr517129ejj.20.1681975693177;
+        Thu, 20 Apr 2023 00:28:13 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
+        by smtp.gmail.com with ESMTPSA id oz5-20020a170906cd0500b0094f58a85bc5sm390396ejb.180.2023.04.20.00.28.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 00:28:12 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230419062202.28749-1-zhuyinbo@loongson.cn>
- <20230419062202.28749-3-zhuyinbo@loongson.cn>
- <c24f8a28-23d4-46e3-8ff2-4b6f4e39b493@sirena.org.uk>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <718b9d6b-bef3-a344-dce2-1086dad23b29@loongson.cn>
-Date:   Thu, 20 Apr 2023 15:27:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH] ARM: dts: qcom: ipq4019: fix broken NAND controller properties override
+Date:   Thu, 20 Apr 2023 09:28:11 +0200
+Message-Id: <20230420072811.36947-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <c24f8a28-23d4-46e3-8ff2-4b6f4e39b493@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bx37Nc6UBkOMkwAA--.547S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxJr1rKF1rWrykCr1xWF47XFb_yoW8Cw45pa
-        nYyw1Ygrs3Jr48urn8KrZ5JF1vyryfJanrXFWSvw4jg3sxur1fX345KF93Gw4ayF1xAr17
-        ZFWY9w4DCFn5uw7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b4xFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84
-        ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF
-        6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14
-        v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY
-        64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7
-        Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
-        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
-        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-        kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07Uio7NUUUUU=
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,50 +76,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+After renaming NAND controller node name from "qpic-nand" to
+"nand-controller", the board DTS/DTSI also have to be updated:
 
+  Warning (unit_address_vs_reg): /soc/qpic-nand@79b0000: node has a unit name, but no reg or ranges property
 
-在 2023/4/19 下午8:36, Mark Brown 写道:
-> On Wed, Apr 19, 2023 at 02:22:02PM +0800, Yinbo Zhu wrote:
-> 
->> +       clk = devm_clk_get(dev, NULL);
->> +       if (!IS_ERR(clk))
->> +               spi->clk_rate = clk_get_rate(clk);
-> 
-> I notice we never actually enable this clock.  I guess it's some system
-> clock which is needed for basic system functionality which is always on
-> and we just need the rate but it looks a bit off.
-The 2k1000 SoC's spi clock was used boot clock, which boot clock
-was gain from system clock(ref clk) that by division and dobuling.
+Cc: <stable@vger.kernel.org>
+Fixes: 9e1e00f18afc ("ARM: dts: qcom: Fix node name for NAND controller node")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dts |  8 ++++----
+ arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi   | 10 +++++-----
+ arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1.dtsi   | 12 ++++++------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-Currently, the spi clock was enabled in firmware, so driver doesn't need
-to enable it.
-> 
->> +static int __maybe_unused loongson_spi_suspend(struct device *dev)
->> +{
->> +	struct loongson_spi *loongson_spi;
->> +	struct spi_master *master;
->> +
->> +	master = dev_get_drvdata(dev);
->> +	loongson_spi = spi_master_get_devdata(master);
->> +
->> +	loongson_spi->spcr = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
->> +	loongson_spi->sper = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPER_REG);
->> +	loongson_spi->spsr = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPSR_REG);
->> +	loongson_spi->para = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_PARA_REG);
->> +	loongson_spi->sfcs = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SFCS_REG);
->> +	loongson_spi->timi = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_TIMI_REG);
->> +
->> +	spi_master_suspend(master);
-> 
-> This saves the register state before suspending at the SPI level but
-> that means that if there were any transfers in progress then the
-> register state might be changed by the active transfers after we've
-> saved the state, meaning we might restore a state for an active
-> transfer.  The spi_master_suspend() should go first, then save the
-> register state.  The resume is OK, it's just the suspend.
-
-okay, I got it.
-
-Thanks.
-> 
+diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dts b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dts
+index 79b0c6318e52..0993f840d1fc 100644
+--- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dts
++++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dts
+@@ -11,9 +11,9 @@ soc {
+ 		dma-controller@7984000 {
+ 			status = "okay";
+ 		};
+-
+-		qpic-nand@79b0000 {
+-			status = "okay";
+-		};
+ 	};
+ };
++
++&nand {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
+index a63b3778636d..468ebc40d2ad 100644
+--- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
+@@ -102,10 +102,10 @@ pci@40000000 {
+ 			status = "okay";
+ 			perst-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
+ 		};
+-
+-		qpic-nand@79b0000 {
+-			pinctrl-0 = <&nand_pins>;
+-			pinctrl-names = "default";
+-		};
+ 	};
+ };
++
++&nand {
++	pinctrl-0 = <&nand_pins>;
++	pinctrl-names = "default";
++};
+diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1.dtsi b/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1.dtsi
+index 0107f552f520..7ef635997efa 100644
+--- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1.dtsi
+@@ -65,11 +65,11 @@ i2c@78b7000 { /* BLSP1 QUP2 */
+ 		dma-controller@7984000 {
+ 			status = "okay";
+ 		};
+-
+-		qpic-nand@79b0000 {
+-			pinctrl-0 = <&nand_pins>;
+-			pinctrl-names = "default";
+-			status = "okay";
+-		};
+ 	};
+ };
++
++&nand {
++	pinctrl-0 = <&nand_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++};
+-- 
+2.34.1
 
