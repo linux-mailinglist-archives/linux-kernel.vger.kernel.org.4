@@ -2,106 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1506E9637
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7650A6E963B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbjDTNrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 09:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
+        id S230399AbjDTNtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 09:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbjDTNro (ORCPT
+        with ESMTP id S229980AbjDTNtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:47:44 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E172526E
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:47:43 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f1763ee8f8so4937045e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:47:43 -0700 (PDT)
+        Thu, 20 Apr 2023 09:49:08 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92E65245;
+        Thu, 20 Apr 2023 06:49:07 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-517c01edaaaso763408a12.3;
+        Thu, 20 Apr 2023 06:49:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1681998462; x=1684590462;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CUEr5pvi6aP9/pHr4WA22mUOJfxMrKdK+Iv0AA04kEA=;
-        b=DdqDcsj+sbUOnaBbPZHotN2/BdTlnygE8Gqu+wskzZkuDyh+QUg7LcqoFCYwDCwdL0
-         tVop6cvOF/Ak3KTbOpl9f7mapJdhYEKacyqeaAvURodMA945CDCcHUo4Vdu4bmDW0eg2
-         nYAWuaaAx981rqobMT3k0b3tqBUUrF8vqBucs=
+        d=gmail.com; s=20221208; t=1681998547; x=1684590547;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=wnjUcH5y1Pb8R4/f3gZ/CX/Eqa1ZM5qT0lnDQJSddVI=;
+        b=ppBsWpCXOkPI9VqP8f0CZnLVdZL6ouH7XsmTPYI2heigN9JKfbVzxPgw5dA17iUhDA
+         8g1djWzw5GXkFikwzYddWzDRYS9hDRMhWXqly6PRWF4z3cfzFTmpUFUm9aeQ1pRKAX0H
+         JRH/zWEA0R9MPsBUCdF0fGRZe4uRkQG0AIdoD1TfB7x4ufQ/sM0+TplNeWvfCBLdkcPy
+         TEvJfY3x8aHbyB4VEdJaCGy5p5PDua+7O0Psq/TmbZxgd0cuJs9fV0Ev42zNLYlzwz0Y
+         OqlkUjGi6YmUq9ily1EzjFuYrHYxusN8+X732ZCMRpQP3xE1QoJGSqN87RzJrgeAUYqM
+         PBCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681998462; x=1684590462;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CUEr5pvi6aP9/pHr4WA22mUOJfxMrKdK+Iv0AA04kEA=;
-        b=cTlNI+MbFX20P4NlNKiSLAP5J2SPqJkszNuf+9euWcK+7arXWy9mK35SOo2k3FjKDr
-         nMDZLuuV9NTsz0lnylLGQxdCpC433SVoAbMNm3cWZGtUwdo3WznNcOJV+AHPiFaasOR9
-         xhcYRWTnU/UqVwKVQeBpAMLVOLfSUq3oW97Biw6XPfboqKixJ8N11UWXvithrdp03gbD
-         oNm49fqmIeScAOEoAr9JArGQ7hDwowlWwSATdr+xikX80Swb5I3XoKm0bhRiG63KdoVN
-         C5DY2MZ6mTGt7p6y2NOcdoZNO49rua5H4XGlHFHHWZY9CtFmFhOCBFBMKJu0b+DlJgDJ
-         I85g==
-X-Gm-Message-State: AAQBX9e+XS2k7wdfFmOyA7RkBff1Vjf8VBwAcSC76Xjy9sEtGbu1/nC5
-        remho9iJfxx7LAe4EZpSGBbHPw==
-X-Google-Smtp-Source: AKy350ZA/GTeMuAqQ3TeooIeV4RJVcPIe9yDiKtGHoGQfE++gIlJvnlG9w7Ws5R2MVmSX4MLWLwyqg==
-X-Received: by 2002:adf:f391:0:b0:2f6:ece3:76a with SMTP id m17-20020adff391000000b002f6ece3076amr1235914wro.8.1681998461708;
-        Thu, 20 Apr 2023 06:47:41 -0700 (PDT)
-Received: from localhost ([2a01:4b00:8432:8600:5ee4:2aff:fe50:f48d])
-        by smtp.gmail.com with ESMTPSA id g3-20020a5d5543000000b002fe254f6c33sm1984180wrw.92.2023.04.20.06.47.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 06:47:40 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 14:47:40 +0100
-From:   Chris Down <chris@chrisdown.name>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
-Subject: Re: [PATCH v4 1/2] printk: Do not delay messages which aren't
- solicited by any console
-Message-ID: <ZEFCfJLteNo91n-f@chrisdown.name>
-References: <cover.1681994220.git.chris@chrisdown.name>
- <43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris@chrisdown.name>
- <87wn26vg3p.fsf@jogness.linutronix.de>
+        d=1e100.net; s=20221208; t=1681998547; x=1684590547;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wnjUcH5y1Pb8R4/f3gZ/CX/Eqa1ZM5qT0lnDQJSddVI=;
+        b=B9acNGAC3OwyKHL0pUArS2bAfO3+nGqJ4C8aQ8o82f6d8fZOJ3OYBcf3GAN6QELiXT
+         vo44ZlONmZOQjwymiSLSqG/B4UX3jfnfbuh6XGtSLOilgKuCHtavlfZKQA3Wo3Nkc8Tn
+         fL9r1j4lIn9amvp0IuFJUi+AmY5omGQkoLhQgfE3z112lMFiqPmN7EWsc5boJM+rGwnR
+         m8hVV7rAGk8pEpnVsxVG0pF9Yves7w2ZCffOfhUV5XqN747RdnQlNYgZgWblnQWq4Bw0
+         Jul5d0BK/RbrjTum8r2WYdMc+AG9Z0pYfVXpNWIhJ6+ZM8k2cRZnbMnjTmeboXVYD4IY
+         W/4w==
+X-Gm-Message-State: AAQBX9e22gcIotmxZNKbqJqLtPnGyGZC+QVRPWV5/hczS2ALxGerygys
+        cMHMpUeue537FAQl75L96o10HT8l5vM=
+X-Google-Smtp-Source: AKy350b4gVTrT0jdEJyTAOLAle1O9HpAQ2FZJ2O2eMbVOAtJVpzK7840rFjgpPtYWntiYEt7eg6fFg==
+X-Received: by 2002:a17:90b:3904:b0:246:ee10:cb5d with SMTP id ob4-20020a17090b390400b00246ee10cb5dmr1795004pjb.14.1681998547069;
+        Thu, 20 Apr 2023 06:49:07 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l5-20020a17090a598500b00247a2498075sm1188313pji.48.2023.04.20.06.49.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 06:49:06 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <dff23f7b-86a4-6984-5ce0-70aa6dbfad8e@roeck-us.net>
+Date:   Thu, 20 Apr 2023 06:49:03 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <87wn26vg3p.fsf@jogness.linutronix.de>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] usb: typec: tcpm: fix multiple times discover svids
+ error
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Frank Wang <frank.wang@rock-chips.com>, heiko@sntech.de,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
+        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
+        yubing.zhang@rock-chips.com, wmc@rock-chips.com
+References: <20230316081149.24519-1-frank.wang@rock-chips.com>
+ <ZBROkdOFAP4GPPU6@kuha.fi.intel.com> <ZEDzGydXbbpekeaB@kroah.com>
+Content-Language: en-US
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <ZEDzGydXbbpekeaB@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-John Ogness writes:
->On 2023-04-20, Chris Down <chris@chrisdown.name> wrote:
->> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
->> index fd0c9f913940..06f16a5f1516 100644
->> --- a/kernel/printk/printk.c
->> +++ b/kernel/printk/printk.c
->> @@ -1289,15 +1289,13 @@ static int __init boot_delay_setup(char *str)
->>  }
->>  early_param("boot_delay", boot_delay_setup);
+On 4/20/23 01:08, Greg KH wrote:
+> On Fri, Mar 17, 2023 at 01:27:13PM +0200, Heikki Krogerus wrote:
+>> On Thu, Mar 16, 2023 at 04:11:49PM +0800, Frank Wang wrote:
+>>> PD3.0 Spec 6.4.4.3.2 say that only Responder supports 12 or more SVIDs,
+>>> the Discover SVIDs Command Shall be executed multiple times until a
+>>> Discover SVIDs VDO is returned ending either with a SVID value of
+>>> 0x0000 in the last part of the last VDO or with a VDO containing two
+>>> SVIDs with values of 0x0000.
+>>>
+>>> In the current implementation, if the last VDO does not find that the
+>>> Discover SVIDs Command would be executed multiple times even if the
+>>> Responder SVIDs are less than 12, and we found some odd dockers just
+>>> meet this case. So fix it.
+>>>
+>>> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+>>> ---
+>>>   drivers/usb/typec/tcpm/tcpm.c | 16 +++++++++++++++-
+>>>   1 file changed, 15 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+>>> index 66de02a56f512..a3ae2c79f3540 100644
+>>> --- a/drivers/usb/typec/tcpm/tcpm.c
+>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+>>> @@ -1515,7 +1515,21 @@ static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt)
+>>>   		pmdata->svids[pmdata->nsvids++] = svid;
+>>>   		tcpm_log(port, "SVID %d: 0x%x", pmdata->nsvids, svid);
+>>>   	}
+>>> -	return true;
+>>> +
+>>> +	/*
+>>> +	 * PD3.0 Spec 6.4.4.3.2: The SVIDs are returned 2 per VDO (see Table
+>>> +	 * 6-43), and can be returned maximum 6 VDOs per response (see Figure
+>>> +	 * 6-19). If the Respondersupports 12 or more SVID then the Discover
+>>> +	 * SVIDs Command Shall be executed multiple times until a Discover
+>>> +	 * SVIDs VDO is returned ending either with a SVID value of 0x0000 in
+>>> +	 * the last part of the last VDO or with a VDO containing two SVIDs
+>>> +	 * with values of 0x0000.
+>>> +	 *
+>>> +	 * However, some odd dockers support SVIDs less than 12 but without
+>>> +	 * 0x0000 in the last VDO, so we need to break the Discover SVIDs
+>>> +	 * request and return false here.
+>>> +	 */
+>>> +	return cnt == 7;
+>>>   abort:
+>>>   	tcpm_log(port, "SVID_DISCOVERY_MAX(%d) too low!", SVID_DISCOVERY_MAX);
+>>>   	return false;
 >>
->> -static void boot_delay_msec(int level)
->> +static void boot_delay_msec(void)
->>  {
->>  	unsigned long long k;
->>  	unsigned long timeout;
->>
->>  	if ((boot_delay == 0 || system_state >= SYSTEM_RUNNING)
->
->            ^----- you will need to remove this paren as well
+>> This is OK by men, but let's wait for Guenter.
+> 
+> What ever happened to this patch?
+> 
 
-That'll teach me to compile test without remembering it also needs 
-CONFIG_BOOT_PRINTK_DELAY=y :-) Thanks.
+It got lost in space.
 
->
->> -		|| suppress_message_printing(level)) {
->>  		return;
->> -	}
->
->John Ogness
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
+
