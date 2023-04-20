@@ -2,85 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5FD6E8C4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D0E6E8C53
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 10:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233900AbjDTIK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 04:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
+        id S234350AbjDTILF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 04:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233817AbjDTIK1 (ORCPT
+        with ESMTP id S231458AbjDTILD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:10:27 -0400
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2A61700
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:10:23 -0700 (PDT)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 33K7rRRH055548;
-        Thu, 20 Apr 2023 15:53:27 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 20 Apr
- 2023 16:09:49 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <airlied@redhat.com>, <tzimmermann@suse.de>
-CC:     <airlied@gmail.com>, <daniel@ffwll.ch>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] drm/ast: Fix ARM compatibility
-Date:   Thu, 20 Apr 2023 16:09:47 +0800
-Message-ID: <20230420080947.27226-1-jammy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 20 Apr 2023 04:11:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2D2173A;
+        Thu, 20 Apr 2023 01:11:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94573645CB;
+        Thu, 20 Apr 2023 08:11:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3371AC433D2;
+        Thu, 20 Apr 2023 08:11:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1681978262;
+        bh=cRkJJtkBCNc6QMnaPnruYpRLA9mN0/qvOe5piHP2PL0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KwyuRbNTuY014OIygJWopqNWMjjzNCDieFS4GhXJ2NSLsERU+0C9VWL2CWYisnvjb
+         R0Djg8vlgNA6K+bSAsN1QAztj87ny2HdQkF3o14W2QbblQUdKKMV0sFP3AIACuKpOh
+         n1c8YZX7x9fW2TdV06CoYnVQo8Rr6CKHZjLrBx68=
+Date:   Thu, 20 Apr 2023 10:10:58 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        Xu Yang <xu.yang_2@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, Jun Li <jun.li@nxp.com>
+Subject: Re: [PATCH V7 10/10] ARM64: dts: imx7ulp: update usb compatible
+Message-ID: <ZEDzkhtUiUxQ0V4d@kroah.com>
+References: <20230322052504.2629429-1-peng.fan@oss.nxp.com>
+ <20230322052504.2629429-11-peng.fan@oss.nxp.com>
+ <20230405130649.GA11367@dragon>
+ <DU0PR04MB94178755C624BCBE25D8073C88919@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <20230406014013.GJ11367@dragon>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 33K7rRRH055548
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406014013.GJ11367@dragon>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ARM architecture only has 'memory', so all devices are accessed by
-MMIO if possible.
+On Thu, Apr 06, 2023 at 09:40:13AM +0800, Shawn Guo wrote:
+> On Thu, Apr 06, 2023 at 01:18:43AM +0000, Peng Fan wrote:
+> > Hi Shawn,
+> > 
+> > > Subject: Re: [PATCH V7 10/10] ARM64: dts: imx7ulp: update usb compatible
+> > > 
+> > > On Wed, Mar 22, 2023 at 01:25:04PM +0800, Peng Fan (OSS) wrote:
+> > > > From: Peng Fan <peng.fan@nxp.com>
+> > > >
+> > > > Per binding doc, update the compatible
+> > > >
+> > > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > > 
+> > > ARM: dts: imx7ulp: ...
+> > > 
+> > > Fixed it up and applied all DTS patches.
+> > [Peng Fan] 
+> > 
+> > Thanks for the fix. But I think Greg already applied the patchset.
+> 
+> Okay, I will drop them from my tree, but ...
+> 
+> Greg,
+> 
+> May I suggest a couple of things on the future process?
+> 
+> - Could you leave i.MX DTS patches to me, so that we can avoid potential
+>   merge conflicts?
 
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
----
- v2 changes:
-  - Use MMIO after AST2500 which enable MMIO by default.
----
- drivers/gpu/drm/ast/ast_main.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+How am I supposed to know this?  Our tools take the whole patch series,
+not individual ones.  If someone wants patches to go through different
+trees, then they need to submit them as different patch series,
+otherwise it makes no sense.
 
-diff --git a/drivers/gpu/drm/ast/ast_main.c b/drivers/gpu/drm/ast/ast_main.c
-index f83ce77127cb..d384e810fa4d 100644
---- a/drivers/gpu/drm/ast/ast_main.c
-+++ b/drivers/gpu/drm/ast/ast_main.c
-@@ -425,11 +425,12 @@ struct ast_private *ast_device_create(const struct drm_driver *drv,
- 		return ERR_PTR(-EIO);
- 
- 	/*
--	 * If we don't have IO space at all, use MMIO now and
--	 * assume the chip has MMIO enabled by default (rev 0x20
--	 * and higher).
-+	 * After AST2500, MMIO is enabled by default, and it should be adapted
-+	 * to be compatible with Arm.
- 	 */
--	if (!(pci_resource_flags(pdev, 2) & IORESOURCE_IO)) {
-+	if (pdev->revision >= 0x40) {
-+		ast->ioregs = ast->regs + AST_IO_MM_OFFSET;
-+	} else if (!(pci_resource_flags(pdev, 2) & IORESOURCE_IO)) {
- 		drm_info(dev, "platform has no IO space, trying MMIO\n");
- 		ast->ioregs = ast->regs + AST_IO_MM_OFFSET;
- 	}
+> - Would you update your patch robot to reply the applying message to all
+>   recipients, so that everyone knows the status?
 
-base-commit: e62252bc55b6d4eddc6c2bdbf95a448180d6a08d
--- 
-2.25.1
+Can't really do that, it only responds to those that are on the patch
+signed-off-by list itself, as the other cc: metadata is gone after the
+patch is applied.
 
+thanks,
+
+greg k-h
