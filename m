@@ -2,171 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC666E87A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD486E87A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbjDTBty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 21:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49850 "EHLO
+        id S232329AbjDTBu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 21:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbjDTBtw (ORCPT
+        with ESMTP id S232256AbjDTBu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 21:49:52 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2045.outbound.protection.outlook.com [40.107.243.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9598B10C;
-        Wed, 19 Apr 2023 18:49:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FLUYJatsQStxawJjzhHZqu/IUmrYle/WpcFHETrx41tuOCyHHJ+FMVR3zmr7h/9rnzCnPznKMk0iJxoP3FHzdNT5RXCT2zwo0mSM2N5pTgp0PznyGo07iIQ3bbtaVW615lBTn8El+CdqqVp6DBETzcbAGa8iUC1h5GLKyN2v076AVtyKsi6GzjoR5Rr+qHWoRsTeurRo6cL/lHEjo+l/sjNYe0SXnhqMDeW8W1ATfA3LeW/h91wB3RovqQKJQDgRLVgeaYc58rrRHRS8LQd+IBgSxVmkusHlHL+LS2bSLiuW3B/9LPyY2/b1UGzIkequfdtqCTzO4g6BaxTQZUSFeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z8GE0NtX2mA7BDLgPedM7Jm9iPYnFruR6R93/x92opI=;
- b=KmoD2el1YT+ISk4Hc87AdRdWk1do57JVKjCjVRS9uC8hIB7JkiiQ9Mcosbq/tMbz9a2sqU1HyWvMzdfxnIAmqR26HsUqhYfOKld5JKSLe9hK6q3qlNWAd25+P3+rxxGGYiateBVzqH1KSKzTy0AHmRJaB2n6eVBcNWFMIohrVDbHq54BK6Z+KXULtYpj8hqkGc6N10bQAUhnvcOuKWD/29V0eAyvjYFjuUbeVWkkPrn8BI0wTF1ZigQ2KTWZkPw/7sreEz5ZovU8cDbYcmyV+Pu0XdUd3e4deR9pDBsf/4anfmlkLChk0th5nYDDC5KQ4BPXNxW4atWH0KebZu1pcA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z8GE0NtX2mA7BDLgPedM7Jm9iPYnFruR6R93/x92opI=;
- b=WnMnD7kmAB8AaTTbWxgkb9QCAcqJcHMD2utrsS/X8MzbeF+6DL2BCTov6uDmvuEzVMccwZBXQCmCrOQMkAH46hu7xwZre5ljHIiVYxSBqpLQJ37DjfTgrlajR27Ml9kJaTLBR98Alp0YUYAZHUqWsUz2JXvR5WAd2EhSl6dPKFg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB2843.namprd12.prod.outlook.com (2603:10b6:5:48::24) by
- DM6PR12MB4545.namprd12.prod.outlook.com (2603:10b6:5:2a3::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6319.22; Thu, 20 Apr 2023 01:49:48 +0000
-Received: from DM6PR12MB2843.namprd12.prod.outlook.com
- ([fe80::863a:5f29:1e76:db60]) by DM6PR12MB2843.namprd12.prod.outlook.com
- ([fe80::863a:5f29:1e76:db60%7]) with mapi id 15.20.6298.045; Thu, 20 Apr 2023
- 01:49:48 +0000
-Message-ID: <6a0cde0a-e1a4-9119-75fd-12b7c921b5f2@amd.com>
-Date:   Thu, 20 Apr 2023 11:49:32 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [PATCH kernel v5 0/6] KVM: SEV: Enable AMD SEV-ES DebugSwap
-Content-Language: en-US
-To:     kvm@vger.kernel.org
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Pankaj Gupta <pankaj.gupta@amd.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Santosh Shukla <santosh.shukla@amd.com>,
-        Carlos Bilbao <carlos.bilbao@amd.com>,
-        Borislav Petkov <bp@alien8.de>
-References: <20230411125718.2297768-1-aik@amd.com>
-From:   Alexey Kardashevskiy <aik@amd.com>
-In-Reply-To: <20230411125718.2297768-1-aik@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SY6PR01CA0116.ausprd01.prod.outlook.com
- (2603:10c6:10:1b8::12) To DM6PR12MB2843.namprd12.prod.outlook.com
- (2603:10b6:5:48::24)
+        Wed, 19 Apr 2023 21:50:26 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A1349FF
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:50:20 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4edcdfa8638so243310e87.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:50:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681955418; x=1684547418;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nizPB57M3kviIBPTCEgCjkwcM2uwJN4yH7DbrqfjL/U=;
+        b=ijQFQOl0D+QxNYBLRsK03sCXvJSoXgkQ1tUoaxJ05thU2CniCDwmoENBu7lAqIOemt
+         9YrZQ1wxTOAqcrtydHSRhMzT9DozrQz9PnEF0lis0N7rI62uSCRqghv+Zwrle9os8HAN
+         gulc/qnPAky5h3942ws0EVPI4lF88ABikgUsbx1du9dmIIm1QH463wt9nvl7EOcSUu2y
+         pLezI17uxqXEUa5kRlmt+zUyf9BeG2e+E9GifCyK1IU+sl0+vRaD9tuOksNSwpl3oFFQ
+         Fp2DLHNRg1fp07/nPoC+prTmzfrdrNI75sUpODnTM2fjIYommNuGaebDkP9f/zInnXja
+         VdPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681955418; x=1684547418;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nizPB57M3kviIBPTCEgCjkwcM2uwJN4yH7DbrqfjL/U=;
+        b=ISqLO75qEofbgvRTEQCGmIlhrd4pOG0SM2q14/P7tBuBE0wGOv5518X6/bSdb5Dfhv
+         1u6uVJMkjbr8WiM9+rWFEa+hzjpKCerwElwRg7qVMeGQDo/tR5/cpBf/NQMaimzabcCM
+         2EvvcCaBYptmNbCM6Y5IjYhiqmUhfwH1MamGzGDWNLB1JtkJ06b9lASLuaHdJguMcACC
+         u+yFXzx5mbZz9SHXa2F9VwTtyscV9nLX7x7DQlUv+vMxkSdcwIQ4RuslTkZYlvYkbHq3
+         ilETbHsrNK44DJvigfzOvb0gMQRYdB6QjJ5x6fGxKdNOoK3FX982/KgwsQH/jQEScc6X
+         1n0Q==
+X-Gm-Message-State: AAQBX9cENkVLcULKXvaXhTr/ZHly0+AwpEHhrXlCJrIWHG3aQPgnAGIa
+        VV1e5Dz9WxGwAN/Q1DKzQejX+Q==
+X-Google-Smtp-Source: AKy350ZBHPNjSoDhsEErAWQW3i0ayKz28VoblspqqpkAPk69WKIMkGhhqmI1kaVf9dno1FI7mXTyGA==
+X-Received: by 2002:ac2:4c1a:0:b0:4eb:1606:48db with SMTP id t26-20020ac24c1a000000b004eb160648dbmr4418362lfq.22.1681955418544;
+        Wed, 19 Apr 2023 18:50:18 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id v20-20020ac25614000000b004edd4566110sm58915lfd.286.2023.04.19.18.50.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 18:50:18 -0700 (PDT)
+Message-ID: <66c41caf-bf21-61af-c6e4-52b34b69c1ce@linaro.org>
+Date:   Thu, 20 Apr 2023 03:50:16 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2843:EE_|DM6PR12MB4545:EE_
-X-MS-Office365-Filtering-Correlation-Id: b6148c90-927c-4ed8-7dfc-08db41418597
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sXCDYbGCUiwEbDsHnupZR3YG3P3ObvxVer9fTzMScBaYO1m80BixBkQEtJOOgzyl5SklGpmWhmyEirbcrg2n//AFnydyDxZSMuiawYBowxn1Y63SKayd8/VTxwydujMz7UOWxF1httknotd2scmb+Cn8UP+fygRe9Ob1kncfn/C6cDt+711gkAPSncN9rzN8x8gAv7RRDohuSDyaXwr/ym9l7iMHPdyDtIGv0fFZMhGFa2vDY8QyecxLGfR8CRm4zpm99PwgbAZDvww331LS98rcOtvZ3n/aSVsENM2kf19Xckkp5NYL63xrjo+yjozsUjIJDhN1jhmZHXSFQiD0QBV1hxmsqBTWk/ENz6AyBMFHDqjzFXE2zXf+WDlc/QWThZt94tKEPEDu9QAn++N94tHfvmaEIB+VzQLPjAdThpUKMgQYowToQjfZi6vbTfonzmwyS+q6DYWtDhG5xJ/2JKjghCYG9fzfHaayGa3rE0ND/NW82ufBSCH4bZM65FoW4k6llU7Mf3i8sURSVZ1DbyGHzewenI7jiT9G6aNfo9I82jD7Y4JHSYYzVH03rA5UObOvOO7m/GVhel7ZwP1Zz9QMX4CsA6KpxP9Ack68J4vczqqVzpTXIT8bTb8w1XcJqLILpT0O3CoxfyfV1IybzQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2843.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(366004)(136003)(396003)(346002)(451199021)(31686004)(186003)(6506007)(26005)(53546011)(6512007)(6666004)(6486002)(31696002)(36756003)(83380400001)(2906002)(316002)(2616005)(4326008)(5660300002)(41300700001)(66946007)(8676002)(8936002)(66556008)(6916009)(66476007)(966005)(38100700002)(54906003)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RlJycHd1R091RjRTTnBidXZuelNrUk1EVWFMMnA3RWhLTGdoeFVuSzFjdWE5?=
- =?utf-8?B?cEhsWnNrOG10NngxWjhhOGNaR0NYVTVNLzc3MlZyd1Z1UjlGTE1NcDZqc3g0?=
- =?utf-8?B?Ry9EcCtrUHM1RXhyMEc2VkltTG84OEhkQzNJaGc5eWVPNmxaSHFTZDQ0cGIw?=
- =?utf-8?B?UWcwMXMzdWIvV2IvdTJ6dEI1T3Bnc1dybUNCUTFtQTI4QWIxaXJnVUNTa3VH?=
- =?utf-8?B?MTcvZ0M3WEhTS1NmYjZmNGNvMDZJM050dFNxY3FiNHQ5OWFQdnVGSmVUYVdw?=
- =?utf-8?B?bXpQNjk5ZDhzSWxHdWd2RmRZTEdGYVlnNVFvSEJFVnFEMFZMTDBrMWpObnl5?=
- =?utf-8?B?KzBXYjRmWThlajJDLzJOcGZTMW42cHVkbmhBRVJZdUdvTlU0ZGU2cXZKbklO?=
- =?utf-8?B?QVMrcFdoVlNrc1RoV2RDOVJKZVBUWTVBRXd4N2dhcWpObXJoNUo0dEExNVZr?=
- =?utf-8?B?K0w1N2k0NjZlR08wTnZmT3BBbTZ2UFdQYUtHNW1MMXhvUTV0QzBkaHpmWTNl?=
- =?utf-8?B?dTNjV1ZTTzhqd3BWakpoQ0tDZzZ4Vm9sZkY2RDh2WFNtUUxBeFNvcFdIS2dK?=
- =?utf-8?B?ZDYwNm5ZakF5ZWxBOUd2VHY0Nmd4akJoblhZSTdaZjlmYTlNK1JwTmkxdnR3?=
- =?utf-8?B?VEJpVUt5M0JYZ3Y5M1JEZGJMUHpDRDZZVGIvUFMraTl5Y3VNdGdxN3hWRUlx?=
- =?utf-8?B?WHQ0YUtyWU5pZUFlTzZJRDZNbm9FU3JySzNxL0hNSllGNGF2YVBDREtPK1Qw?=
- =?utf-8?B?M0FZN0dmUGFiN2prTDVCYXlOWjBvYUxuNkFHUWdTOFlRc2Rzd2IrN1hPUXVm?=
- =?utf-8?B?bzJwc1gvUkdBNjlLSHhFTG9RWlJlQmtaeHJOSmdZaWVDK3BKa0JwVEZkc2Jk?=
- =?utf-8?B?VytrR1BPZks2a0dWQVRsdkpCU3Raa0ZpZDRWdDMyWnEycldxZis1NWhXNWNW?=
- =?utf-8?B?M2lQMGV2ZDRxa0g1V0VoSmJzVXk4UThFWEZQVVBSQk5tUTIzYitodDNhcERU?=
- =?utf-8?B?dEROWU5CaE80WTNPNDlWY0NXSnE1bisxY1JDZzRuY3Y0VHJySGlvUVJtVUps?=
- =?utf-8?B?MHRETlZXNzB2Y0kydkZvc3VvaTNDZmo5SXQwcGNPTElzdXJ0ZHV4azR4TlVw?=
- =?utf-8?B?SGJkVkRFRWJHcUhTZXIyQk50UGJsTThBaUowVnhIdWs3Z011dzQ4VFJ2Rnpk?=
- =?utf-8?B?bEdMUjZnbFVPbExBb0xyTGFsOHNkN2dlM0pvUkpjaml1ekhqZWNqbi9ERmoy?=
- =?utf-8?B?NE5TMVZDc2VXRmpkZFRQL0l4bEhqTWUyWDNJY0JoUmpCc3V5OGJnU0FYdE53?=
- =?utf-8?B?WStwa0xQRURLbEJDemd3aEVMN1pabDVTYmJzZWhoMGxNQ0Y1dHlsb0J5M0xv?=
- =?utf-8?B?Q1NmTU52OUFoaEYwdkEvNWFZZmZYZ1ROYXp5QkVlS1NzU2U4T1V5bEY1bThC?=
- =?utf-8?B?Vld1MUNPRWR2dklkTjNEOURkaVBUYkVTeXhhMm9oNE0zNW80MEc0YTVCMzBx?=
- =?utf-8?B?MVR5eTg4dXV1dGJLenFIZEQ0VCt4bVhJQlpEY2IxMzM2WVZrTmRVRTlkNjZt?=
- =?utf-8?B?ZkRuc3ViYTBHM0FqZGRzY1d4a1lVUDdRejZ2eTcxUG5IY1NSVFM1LzU2QVNt?=
- =?utf-8?B?NkUwcW0zMHg1bGNuMFhiaVZ4ZHJ0SlFjWUFDOHpVaURhUXJWVk5yRlJUdDIx?=
- =?utf-8?B?TTA3VHlrWW9XUkZXYllna2VIbFFSeFd3U0VmTDRvTWluS1hqUEQySmpBR0to?=
- =?utf-8?B?T3FtZFpRYXlQT2l5Zm9yZEoyWnJHOXJPRE9DTldkbmJoM3ZYY0RQdTFiY241?=
- =?utf-8?B?MkZzZEdpLzdBSExBWlQ2bkxwVWJIaTNrNDdja0xXOEpsSUFSSHdOQmhaNkhU?=
- =?utf-8?B?aUYwS05VTHQ4aEY4cXV1aXZBbG1Qc2NuMmlkWGk5WElVRjlzQllCaUVCQWZ4?=
- =?utf-8?B?SmlETzhwWCtMazNhWWZCakpZZlpsQlVTOFdlRHpaaURBWW9yemxIR21kcngv?=
- =?utf-8?B?NGhuVVp3aFJqRXd2b0xGL0txNEJEL1E2QUUyQ2pNbXV6NHJLU3QwKzJEQ3F4?=
- =?utf-8?B?S2p1c0tGM2lSVGpOWVRvUkpMN1pneVBwNGs3ZFEzdkJ3R0RsZzI5SHExNklO?=
- =?utf-8?Q?vD31tkKGEQJgqXUkO2Pma05ln?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6148c90-927c-4ed8-7dfc-08db41418597
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2843.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 01:49:47.7997
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: f8xFtBXf7/CnjsSWEUx2psd1NIA/D8pOvRCdWcuuWNsW3BW49ujP3z73ZP0ZbzbAKLJJWNk7XD7HTZt0xKaE2w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4545
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH RFT v2 00/14] SMD RPMCC sleep preparations
+Content-Language: en-US
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/4/23 22:57, Alexey Kardashevskiy wrote:
-> This is to use another AMD SEV-ES hardware assisted register swap,
-> more detail in 5/6. In the process it's been suggested to fix other
-> things, here is the attempt, with the great help of amders.
-> 
-> The previous conversation is here:
-> https://lore.kernel.org/r/20230203051459.1354589-1-aik@amd.com
-> 
-> This is based on sha1
-> f91f9332d782 Ingo Molnar "Merge branch into tip/master: 'x86/tdx'".
-> 
-> Please comment. Thanks.
-
-Ping?
-Or should I relax until the end of the nearest merge window (May 
-6th-ish)? :) Thanks,
 
 
+On 8.03.2023 22:35, Konrad Dybcio wrote:
+> v1 -> v2:
+> - Use CLK_IS_CRITICAL instead of leaving a clk enable vote, expand macros
+>   to do so
+> - Fix the keepalive clocks for 8998 & 660 (CNoC -> PNoC, it was
+>   confusingly named cnoc_periph downstream)
+> - Introduce .determinte_rate to ensure we don't set keepalive clocks'
+>   rates below 19.2 MHz
+> - Add a (!conditional!) way to test the ultimate goal of all these changes
+>   by essentially enabling unused clk cleanup through a dt property (for
+>   legacy reasons)
 > 
+> v2 was tested on:
 > 
-> Alexey Kardashevskiy (6):
->    KVM: SEV: move set_dr_intercepts/clr_dr_intercepts from the header
->    KVM: SEV: Move SEV's GP_VECTOR intercept setup to SEV
->    KVM: SEV-ES: explicitly disable debug
->    KVM: SVM/SEV/SEV-ES: Rework intercepts
->    KVM: SEV: Enable data breakpoints in SEV-ES
->    x86/sev: Do not handle #VC for DR7 read/write
+> - MSM8996 Sony Kagura (can disable unused)
+> - MSM8998 Sony Maple (can disable unused with OOT icc)
+> - SM6375 Sony PDX225 (can disable unused with OOT icc)
 > 
->   arch/x86/include/asm/cpufeatures.h |  1 +
->   arch/x86/include/asm/svm.h         |  1 +
->   arch/x86/kvm/svm/svm.h             | 42 ---------------
->   arch/x86/boot/compressed/sev.c     |  2 +-
->   arch/x86/kernel/sev.c              |  6 +++
->   arch/x86/kvm/svm/sev.c             | 54 +++++++++++++++++++-
->   arch/x86/kvm/svm/svm.c             | 48 +++++++++++++++--
->   7 files changed, 105 insertions(+), 49 deletions(-)
+> v1: https://lore.kernel.org/r/20230303-topic-rpmcc_sleep-v1-0-d9cfaf9b27a7@linaro.org
 > 
+> This series brings support for a couple of things necessary for the full
+> system idle on SMD RPM SoCs, namely unused clk shutdown and keepalive
+> votes (permanent active votes that are required on certain clocks for the
+> platform to function).
+> 
+> Tested on MSM8996 and SM6375, does not seem to introduce any additional
+> regressions.
+> 
+> Keepalive clocks for other platforms were gathered by digging in old
+> downstream kernels, please give them a test.
+I have an implementation of rpmcc-within-icc ready(ish) locally. Turns out
+some SoCs need a keepalive (19.2MHz, active-only) vote on clocks that
+are NOT governed by interconnect.. So before we can disable clocks,
+both will need to be implemented.. ugh... I was hoping we could avoid
+having it in rpmcc..
 
--- 
-Alexey
-
+Konrad
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+> Konrad Dybcio (11):
+>       dt-bindings: clock: qcom,rpmcc: Add a way to enable unused clock cleanup
+>       clk: qcom: smd-rpm_ Make __DEFINE_CLK_SMD_RPM_BRANCH_PREFIX accept flags
+>       clk: qcom: smd-rpm: Make DEFINE_CLK_SMD_RPM_BRANCH_A accept flags
+>       clk: qcom: smd-rpm: Make BI_TCXO_AO critical
+>       clk: qcom: smd-rpm: Make __DEFINE_CLK_SMD_RPM_PREFIX accept flags
+>       clk: qcom: smd-rpm: Separate out a macro for defining an AO clock
+>       clk: qcom: smd-rpm: Add support for keepalive votes
+>       clk: qcom: smd-rpm: Introduce DEFINE_CLK_SMD_RPM_BUS_KEEPALIVE
+>       clk: qcom: smd-rpm: Hook up PCNoC_0 keep_alive
+>       clk: qcom: smd-rpm: Hook up CNoC_1 and SNoC_2 keep_alive
+>       arm64: dts: qcom: msm8996: Enable rpmcc unused clk disablement
+> 
+> Shawn Guo (3):
+>       clk: qcom: smd-rpm: Add .is_enabled hook
+>       clk: qcom: smd-rpm: Add .is_prepared hook
+>       clk: qcom: smd-rpm: Mark clock enabled in clk_smd_rpm_handoff()
+> 
+>  .../devicetree/bindings/clock/qcom,rpmcc.yaml      |   6 +
+>  arch/arm64/boot/dts/qcom/msm8996.dtsi              |   1 +
+>  drivers/clk/qcom/clk-smd-rpm.c                     | 133 +++++++++++++++------
+>  3 files changed, 106 insertions(+), 34 deletions(-)
+> ---
+> base-commit: fc31900c948610e7b5c2f15fb7795832c8325327
+> change-id: 20230303-topic-rpmcc_sleep-d67aad9f3012
+> 
+> Best regards,
