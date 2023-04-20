@@ -2,53 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CDD46E8EA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9006E8EA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbjDTJv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 05:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
+        id S234248AbjDTJyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 05:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232154AbjDTJvh (ORCPT
+        with ESMTP id S234219AbjDTJyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 05:51:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747D21702;
-        Thu, 20 Apr 2023 02:51:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12521646C6;
-        Thu, 20 Apr 2023 09:51:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02CF8C4339B;
-        Thu, 20 Apr 2023 09:51:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681984294;
-        bh=jkY+rGqHlMnzIdFBaCebm4CNdrtL6O0UZs+Roo/GN9o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=njNaV26PJ7a0WsEnB0JXZEeOkmLaNdWsszrFFWO6Vyg2TRF3CwMJ1Ey9kmmbXAdJS
-         PvFtQK25J2dcPT7LXOL5zRr02CivQzGxRkzmc/FTQPibaZnGDWLcfA5J5UDnvMAbHg
-         xfaCC8bN9zl0UDjw1qnM6gN7TR6Zna4pnQVfYSRM=
-Date:   Thu, 20 Apr 2023 11:51:32 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Allen Webb <allenwebb@google.com>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        mcgrof@kernel.org, christophe.leroy@csgroup.eu,
-        nick.alcock@oracle.com
-Subject: Re: [PATCH v10 11/11] Documentation: add USB authorization document
- to driver-api
-Message-ID: <ZEELJP_shBUF8tbu@kroah.com>
-References: <20221219204619.2205248-1-allenwebb@google.com>
- <20230406190030.968972-1-allenwebb@google.com>
- <20230406190030.968972-12-allenwebb@google.com>
+        Thu, 20 Apr 2023 05:54:07 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCCB26B3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:54:01 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4ec816c9d03so436395e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:54:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681984440; x=1684576440;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mGGvYz0vqZ33n+fo0Tr5AwZsVe0Xqlv0TtcIG/mEdRM=;
+        b=FOLFkVdZ0v44OL6a8anDA51YEWjj1ueQkF6fXUjxy9/2GrffrqyIQV4jqMAU1uWkRr
+         IWmpPCKlgCSgBGZMOJk6lL+d19uqtXDYozyUl9ylDc0qsVqkyUc8vgPHwgBhis+sblZr
+         6CYCqqz9RHKsO8DpEvpLTEilZK5we08WkBhros9yXgygNmPXxqYgjjCmolN1dxR7GvcJ
+         Lh8WHR6ozwt7UrrvN5dPMdMc+JRM7zwSWRJkrbmE1ZQT2D+UvPnfylsDYrlF/kJMe7Da
+         AYtlBZ9czPCkn8xBazSzW6BKVro0eq8UvzoZOy5DTGeA2gHGeTsVxt9tua8feP17iUUP
+         TBLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681984440; x=1684576440;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mGGvYz0vqZ33n+fo0Tr5AwZsVe0Xqlv0TtcIG/mEdRM=;
+        b=PPC7EU5Z3DnUu1nBoBk7OVdsQhGoZ63ALs8zWsErSwF81jFRaDe4PIudOTil28Zn7W
+         z3tdEYCWmPlWmtMK4LhZ7dLE/yC7nVZ+8OoIrOqQv9PB5MFG4kWOFesJRTp2eYbbat8c
+         CL3w4WpUSZCSuXQFxGjl4JK5e0AtIBayadXrfknnmyoOsZAKQ9evOGlEGOcXWjomS0hv
+         hDYeYTDGN0fqZYEJpZYC547nOg8lfAwtLFHZSJREAW1RyMeU6nqDXu2aKQelG9Fcy/UP
+         rFTSOHlgqXLBd75By+BXD4KcYRCqf8a1rIBuMBuJ/izGprDRGDDV6U/IEflom/K5vOxa
+         BzYA==
+X-Gm-Message-State: AAQBX9denlNPl+M2TqlygVomAss7rcxSetdJYLBuHNbhB1l7AAYa31SE
+        NsQmky2pTj2tQNZOkehTIxZaNg==
+X-Google-Smtp-Source: AKy350Y7UIxnxGPQnkZd6F1ty5wN9QW7ABmp+6yZagCX0dwlMCfwws+fXNS7jbCUDatA5h7CGh55LA==
+X-Received: by 2002:ac2:4a8c:0:b0:4ee:e0c7:435f with SMTP id l12-20020ac24a8c000000b004eee0c7435fmr116894lfp.61.1681984440112;
+        Thu, 20 Apr 2023 02:54:00 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id v28-20020ac2559c000000b004edc608d86bsm162230lfg.104.2023.04.20.02.53.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 02:53:59 -0700 (PDT)
+Message-ID: <bcbda796-908a-43d5-0744-c03656fda47b@linaro.org>
+Date:   Thu, 20 Apr 2023 12:53:58 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406190030.968972-12-allenwebb@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 04/11] drm/msm/dpu: allow using lm mixer base stage
+Content-Language: en-GB
+To:     Arnaud Vrac <avrac@freebox.fr>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
+ <20230419-dpu-tweaks-v1-4-d1bac46db075@freebox.fr>
+ <74c59560-8a79-150f-0c1e-13f22eb35cb2@linaro.org>
+ <CAG9NU6_Ua_XLa+c=_93fs5chzQTyPf11W4F87UYbny1k-feoJw@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <CAG9NU6_Ua_XLa+c=_93fs5chzQTyPf11W4F87UYbny1k-feoJw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,102 +82,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 02:00:30PM -0500, Allen Webb wrote:
-> There is a user-facing USB authorization document, but it is midding
-> details a driver should have developer, so add them in a new document.
-
-I'm sorry, but I can not parse this sentence :(
-
-Can you rephrase it?
-
-> Signed-off-by: Allen Webb <allenwebb@google.com>
-> ---
->  .../driver-api/usb/authorization.rst          | 71 +++++++++++++++++++
->  Documentation/driver-api/usb/index.rst        |  1 +
->  2 files changed, 72 insertions(+)
->  create mode 100644 Documentation/driver-api/usb/authorization.rst
+On 20/04/2023 10:26, Arnaud Vrac wrote:
+> Le jeu. 20 avr. 2023 à 00:43, Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> a écrit :
+>>
+>> On 19/04/2023 17:41, Arnaud Vrac wrote:
+>>> The dpu backend already handles applying alpha to the base stage, so we
+>>> can use it to render the bottom plane in all cases. This allows mixing
+>>> one additional plane with the hardware mixer.
+>>>
+>>> Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
+>>
+>> This might require additional changes. First, for the STAGE_BASE pipe
+>> in the source split mode (iow using two LMs) should programmed with
+>> respect to the right LM's x offset (rather than usual left top-left LM).
+>> See  mdss_mdp_pipe_position_update().
 > 
-> diff --git a/Documentation/driver-api/usb/authorization.rst b/Documentation/driver-api/usb/authorization.rst
-> new file mode 100644
-> index 000000000000..383dcc037a15
-> --- /dev/null
-> +++ b/Documentation/driver-api/usb/authorization.rst
-> @@ -0,0 +1,71 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +====================
-> +Device Authorization
-> +====================
-> +
-> +This document is intended for driver developers. See
-> +Documentation/usb/authorization.rst if you are looking for how to use
-> +USB authorization.
-> +
-> +Authorization provides userspace a way to allow or block configuring
-> +devices early during enumeration before any modules are probed for the
-> +device. While it is possible to block a device by not loading the
-> +required modules, this also prevents other devices from using the
-> +module as well. For example someone might have an unattended computer
-> +downloading installation media to a USB drive. Presumably this computer
-> +would be locked to make it more difficult for a bad actor to access the
-> +computer. Since USB storage devices are not needed to interact with the
-> +lock screen, the authorized_default sysfs attribute can be set to not
-> +authorize new USB devices by default. A userspace tool like USBGuard
-> +can then vet the devices. Mice, keyboards, etc can be allowed by
-> +writing to their authorized sysfs attribute so that the lock screen can
-> +still be used (this important in cases like suspend+resume or docks)
-> +while other devices can be blocked as long as the lock screen is shown.
-> +
-> +Sysfs Attributes
-> +================
-> +
-> +Userspace can control USB device authorization through the
-> +authorized_default and authorized sysfs attributes.
-> +
-> +authorized_default
-> +------------------
-> +
-> +Defined in ``drivers/usb/core/hcd.c``
-> +
-> +The authorized_default sysfs attribute is only present for host
-> +controllers. It determines the initial state of the authorized sysfs
-> +attribute of USB devices newly connected to the corresponding host
-> +controller. It can take on the following values:
-> +
-> ++---------------------------------------------------+
-> +| Value | Behavior                                  |
-> ++=======+===========================================+
-> +|    -1 | Authorize all devices except wireless USB |
-> ++-------+-------------------------------------------+
-> +|     0 | Do not authorize new devices              |
-> ++-------+-------------------------------------------+
-> +|     1 | Authorize new devices                     |
-> ++-------+-------------------------------------------+
-> +|     2 | Authorize new internal devices only       |
-> ++---------------------------------------------------+
-> +
-> +Note that firmware platform code determines if a device is internal or
-> +not and this is reported as the connect_type sysfs attribute of the USB
-> +port. This is currently supported by ACPI, but device tree still needs
-> +an implementation. Authorizing new internal devices only can be useful
-> +to work around issues with devices that misbehave if there are delays
-> +in probing their module.
-> +
-> +authorized
-> +----------
-> +
-> +Defined in ``drivers/usb/core/sysfs.c``
-> +
-> +Every USB device has an authorized sysfs attribute which can take the
-> +values 0 and 1. When authorized is 0, the device still is present in
-> +sysfs, but none of its interfaces can be associated with drivers and
-> +modules will not be probed. When authorized is 1 (or set to one) a
-> +configuration is chosen for the device and its interfaces are
-> +registered allowing drivers to bind to them.
+> Ok, I did test with 2 LMs and it seems to be working, I'll investigate.
 
-Why would a driver author care about any of this?  It's all user-facing,
-so shouldn't it go into the other document?
+The only reference I have here is the fbdev driver, see [1]. The newer 
+SDE driver doesn't handle STAGE_BASE vs STAGE0 (and DPU inherited that 
+design). Maybe this got fixed in hw at some point.
 
-thanks,
+[1] 
+https://git.codelinaro.org/clo/la/kernel/msm-4.19/-/blob/LE.UM.4.4.1.r2-17500-QRB5165.0/drivers/video/fbdev/msm/mdss_mdp_pipe.c#L1789
 
-greg k-h
+I think, it only concerns the src_split + multirect cases, where the 
+rectangle base point is on the right LM.
+
+> 
+>>
+>> Also this might need some interaction with CTL_MIXER_BORDER_OUT being
+>> set or not. If I remember correctly, if there bottom plane is not
+>> fullscreen or if there are no planes at all, we should set
+>> CTL_MIXER_BORDER_OUT (which takes STAGE_BASE) and start assigning them
+>> from STAGE0. If not, we can use STAGE_BASE.
+> 
+> I also tested with both fullscreen and non-fullscreen primary plane,
+> and no plane. I'll check this.
+
+Yes, the DPU driver always enables the MIXER_BORDER_OUT.
+
+> 
+>>
+>>> ---
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+>>> index 14b5cfe306113..148921ed62f85 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+>>> @@ -881,7 +881,7 @@ static int dpu_plane_atomic_check(struct drm_plane *plane,
+>>>        r_pipe->multirect_mode = DPU_SSPP_MULTIRECT_NONE;
+>>>        r_pipe->sspp = NULL;
+>>>
+>>> -     pstate->stage = DPU_STAGE_0 + pstate->base.normalized_zpos;
+>>> +     pstate->stage = DPU_STAGE_BASE + pstate->base.normalized_zpos;
+>>>        if (pstate->stage >= pdpu->catalog->caps->max_mixer_blendstages) {
+>>>                DPU_ERROR("> %d plane stages assigned\n",
+>>>                          pdpu->catalog->caps->max_mixer_blendstages - DPU_STAGE_0);
+>>>
+>>
+>> --
+>> With best wishes
+>> Dmitry
+>>
+
+-- 
+With best wishes
+Dmitry
+
