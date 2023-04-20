@@ -2,103 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 983E46E9A5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B0C6E8DC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjDTRIj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Apr 2023 13:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        id S233796AbjDTJPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 05:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjDTRIh (ORCPT
+        with ESMTP id S229913AbjDTJPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 13:08:37 -0400
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED99210F;
-        Thu, 20 Apr 2023 10:08:34 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-94f59fbe2cbso29311866b.1;
-        Thu, 20 Apr 2023 10:08:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682010513; x=1684602513;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BuRONv8seiZYRHKVDXe/quu6lUAwCL/qK3jfgqGF4GY=;
-        b=WcuplgFsu5AGUrCigusfsZULy4wg63JOMGDQHQHKBeFpqd1Vrxen6jWcrQCmWQKm6U
-         TLjLcOOxrjMsvzU5rIAvp+YOBxfC8+Oq2EU6W544IJLDAuNB2iKGTCBiuiXB/zLybNDN
-         FOhrdCxTEWHsTiprONvbU/66NuFMxDprUIwIRd2cVjrpeWzEAcrP0xvYNd2GKJhpT167
-         nKgZxpwpMJJwtJewkn7zMx94xE3b9UEK1PThnirqsB7sJahaXzzoQfkq4M30rkvv/XU9
-         tOi934fqMzGllqjf+nIRIFBMRdw7bTg5/We5giUZXeFa4dXGqkLe+L0W6dx+BUdLW0EP
-         CXmg==
-X-Gm-Message-State: AAQBX9cLIYHiope2dbqn63LrFdN3vkSzfIzjJAWO35DBT2JtT/EGuGrb
-        0fxGgSi4B90zsjz4MLnu8RZh+LCXzGPv/XlG/Ew=
-X-Google-Smtp-Source: AKy350a3R0mZC2e6WMfLZ1aKIbwnAdPJZzuO1Lv9M3Qn3e5ge3cus6J/R8KP0F4hPmE01C8rkUeIHCSEvpzQMW99mfo=
-X-Received: by 2002:a17:907:37c:b0:94e:8b6c:462c with SMTP id
- rs28-20020a170907037c00b0094e8b6c462cmr2155391ejb.2.1682010513297; Thu, 20
- Apr 2023 10:08:33 -0700 (PDT)
+        Thu, 20 Apr 2023 05:15:14 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D72499
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:15:12 -0700 (PDT)
+X-ASG-Debug-ID: 1681982107-1eb14e63892d9e0001-xx1T2L
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id FzLFaZOkexQJqRZs (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 20 Apr 2023 17:15:07 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
+ (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
+ 2023 17:15:07 +0800
+Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 20 Apr
+ 2023 17:15:06 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Message-ID: <6a43e6aa-5609-ecd5-b040-010763a686ee@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.21
+Date:   Fri, 21 Apr 2023 01:14:46 +0800
 MIME-Version: 1.0
-References: <20230417152708.3599-1-mario.limonciello@amd.com>
-In-Reply-To: <20230417152708.3599-1-mario.limonciello@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 20 Apr 2023 19:08:22 +0200
-Message-ID: <CAJZ5v0hBVosNmxN-KFZ0N=syNWNsQKtPOxYbNFy1bjRO2tP05Q@mail.gmail.com>
-Subject: Re: [PATCH v10 0/4] Add vendor agnostic mechanism to report hardware sleep
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Box David E <david.e.box@intel.com>, jstultz@google.com,
-        pavel@ucw.cz, svenva@chromium.org,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        rrangel@chromium.org, Jain Rajat <rajatja@google.com>,
-        hdegoede@redhat.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: =?UTF-8?Q?Re=3a_=5bPATCH=5d_UHCI=ef=bc=9aadjust_zhaoxin_UHCI_contro?=
+ =?UTF-8?Q?llers_OverCurrent_bit_value?=
+Content-Language: en-US
+X-ASG-Orig-Subj: =?UTF-8?Q?Re=3a_=5bPATCH=5d_UHCI=ef=bc=9aadjust_zhaoxin_UHCI_contro?=
+ =?UTF-8?Q?llers_OverCurrent_bit_value?=
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <stern@rowland.harvard.edu>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <tonywwang@zhaoxin.com>,
+        <weitaowang@zhaoxin.com>
+References: <20230420111445.5028-1-WeitaoWang-oc@zhaoxin.com>
+ <ZEDyWC7GsbcEn7UK@kroah.com>
+From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <ZEDyWC7GsbcEn7UK@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
+X-Barracuda-Start-Time: 1681982107
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 1883
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: 1.09
+X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.107671
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+        3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 5:27 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> An important part of validating that s0ix worked properly is to check how
-> much of a cycle was spent in a hardware sleep state.
->
-> The reporting of hardware sleep is a mix of kernel messages and sysfs
-> files that vary from vendor to vendor. Collecting this information
-> requires extra information on the kernel command line or fetching from
-> debugfs.
->
-> To make this information more readily accessible introduce a new file in
-> suspend_stats that drivers can report into during their resume routine.
->
-> Userspace can fetch this information and compare it against the duration
-> of the cycle to allow determining residency percentages and flagging
-> problems.
->
-> v9->v10:
->  * Add tags
->  * Rebase on linux-pm/bleeding-edge as it will apply through this tree
->
-> Mario Limonciello (4):
->   PM: Add sysfs files to represent time spent in hardware sleep state
->   platform/x86/amd: pmc: Report duration of time in hw sleep state
->   platform/x86/intel/pmc: core: Always capture counters on suspend
->   platform/x86/intel/pmc: core: Report duration of time in HW sleep
->     state
->
->  Documentation/ABI/testing/sysfs-power | 29 +++++++++++++
->  drivers/platform/x86/amd/pmc.c        |  6 +--
->  drivers/platform/x86/intel/pmc/core.c | 17 ++++----
->  drivers/platform/x86/intel/pmc/core.h |  4 +-
->  include/linux/suspend.h               |  8 ++++
->  kernel/power/main.c                   | 59 +++++++++++++++++++++------
->  6 files changed, 98 insertions(+), 25 deletions(-)
->
+On 2023/4/20 16:05, Greg KH wrote:
+> On Thu, Apr 20, 2023 at 07:14:45PM +0800, Weitao Wang wrote:
+>> Over Current condition is not standardized in the UHCI spec.
+>> Zhaoxin UHCI controllers report OverCurrent bit active off.
+>> Intel controllers report it active on, so we'll adjust the bit value.
+>>
+>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+> 
+> Note, your Subject: line has odd characters in it, can you rewrite it to
+> just use ascii?  I think it's the '：' character which should be ':',
+> right?Yes,you are right. it's my typo mistake. I'll rewrite this patch. Thanks!
 
-Whole series applied as 6.4-rc1 material, thanks!
+>> ---
+>>   drivers/usb/host/uhci-pci.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/usb/host/uhci-pci.c b/drivers/usb/host/uhci-pci.c
+>> index 3592f757fe05..177e3c2aa287 100644
+>> --- a/drivers/usb/host/uhci-pci.c
+>> +++ b/drivers/usb/host/uhci-pci.c
+>> @@ -126,6 +126,10 @@ static int uhci_pci_init(struct usb_hcd *hcd)
+>>   	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_VIA)
+>>   		uhci->oc_low = 1;
+>>   
+>> +	/* ZHAOXIN controllers report OverCurrent bit active off. */
+>> +	if (to_pci_dev(uhci_dev(uhci))->vendor == PCI_VENDOR_ID_ZHAOXIN)
+>> +		uhci->oc_low = 1;
+>> +
+> 
+> This should also go to the stable kernels, right?
+> 
+> But a new UHCI controller?  And this affects all of them? 
+All UHCI controller of zhaoxin have this issue, And Hope this
+patch go to stable kernel.Could I resubmit this patch with
+modify subject typo mistake?
+
+> Intel an issue here (as you mention in the changelog text)?
+> 
+I got this info from uhci driver comments in function uhci_pci_init.
+
+"Intel controllers report the OverCurrent bit active on.
+VIA controllers report it active off, so we'll adjust the
+bit value.  (It's not standardized in the UHCI spec.)"
+
+Best Regards,
+weitao
+
+> thanks,
+> 
+> greg k-h
+> .
