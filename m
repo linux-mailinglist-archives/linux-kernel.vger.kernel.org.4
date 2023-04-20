@@ -2,243 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA18B6E980D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D2A6E9826
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 17:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbjDTPKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 11:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
+        id S229729AbjDTPRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 11:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjDTPKH (ORCPT
+        with ESMTP id S230089AbjDTPRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 11:10:07 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4943B59F0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:10:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9CC4821987;
-        Thu, 20 Apr 2023 15:10:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1682003404; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KnDtPCkhzAtrpuMmA9PLsaQrJM4GdslHHPGUkrSuOZs=;
-        b=KBKE5X8yZUUU7BSDp6Ju8Lt7qF0Zy89T1IKfG88aNUhTeamQc3Zw5o28A+UFi10Zld/wXb
-        827IGDalevvQ8z2X2MnmHWwYaadRI9ecFecMq0oMwEsD/CzDoMnHiw2JiW2bgF/lXc+TBo
-        xVDQ6Lma6llFIAySJomekl6wVO79sps=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5D40C1333C;
-        Thu, 20 Apr 2023 15:10:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YGznFMxVQWQfUgAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 20 Apr 2023 15:10:04 +0000
-Message-ID: <bb77023b-8dd0-0551-5c16-92f184568161@suse.com>
-Date:   Thu, 20 Apr 2023 17:10:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Kelley <mikelley@microsoft.com>
-References: <20230401063652.23522-1-jgross@suse.com>
- <20230401063652.23522-12-jgross@suse.com>
- <20230420121551.GMZEEs9wkUrvX05nQr@fat_crate.local>
- <d164d84b-6773-36e3-1136-672072e9233d@suse.com>
- <20230420130113.GCZEE3mfOTxcDn6e3/@fat_crate.local>
- <681c5d8e-0e42-07e1-f91c-7696a2360f1c@suse.com>
- <20230420145451.GFZEFSO6VmvXdK/qi9@fat_crate.local>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH v5 11/15] x86/mtrr: construct a memory map with cache
- modes
-In-Reply-To: <20230420145451.GFZEFSO6VmvXdK/qi9@fat_crate.local>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------TJ3jm9EE0tXubMfaCynt0Bto"
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 20 Apr 2023 11:17:33 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5F71721
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:17:31 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-63b5e149dc2so835662b3a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 08:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682003851; x=1684595851;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Fvh5Bs16xnW1weT2SPid3PSg+u8/Q14PbTNxokyuWo=;
+        b=0Lwk6zvT1sdE3h8JzGU30U5B2GAF3IGSbkbBGobwWjNzCZvLtIOzkNc+aveiepxTAs
+         WaAK/i7YbEhDG2NDLUpNX6THYw8haqXyojuWZ4wmeO7iGc3cq8HwF3oUxq8Ol92O1z2T
+         hi4MCRBBTGq2u6EMEsQiLxQDCm+QEsU263UVSRUL2PE43LmOVPxu0eFMHRPbEkDg4TfT
+         uobdLbwf2YItMZtIgpTxQ2rIfnYXNx+lpmvnNGMtHXSo0bDbtU6H888CU9MzugYu3YZg
+         DWMBre8DaUAzW3gfyRElbNJemM8dx6YakEoK9mD3yLdn1MRKe/fRStX26QgHS1FoeyUV
+         uNxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682003851; x=1684595851;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Fvh5Bs16xnW1weT2SPid3PSg+u8/Q14PbTNxokyuWo=;
+        b=UHxh1AIG6Qmw102HQxGqiLhILr9NJsqBvFMn0O/g7Z9EqOYEDlODFW6+i1FL2E05RD
+         iot+ip2kYmjgkxriAy6UdhNZI8N85wWR+FRxS8StWZMvus97lwDvOa43lUCyGgV2Cfax
+         295B1i/Pkw3poFGWg+42HjrxvL7EzrHV9Opd1F4T9uNDKpI9Z7oVAgEoqk/otewkurNx
+         Ki8hxb/64Da9zoKIkVcBCCwAwcK5rJsVZyvq/vv3ogPirRMssLef9WxjL8vfY0FG+BaF
+         xEskidExBo+ezrL+D76tlbb0evTM7/Kibd0zIHdQkw2pQFQaTjUlZOAYy/GPwvG1HKcm
+         e37A==
+X-Gm-Message-State: AAQBX9eXYS9QDWXz5eVaw5hqntsqVKK0QsKWOO0ro4ym7gBb6SrYTCPS
+        9caD6OmYaQi4ziEg0HRbQMeiTyuw+Lk=
+X-Google-Smtp-Source: AKy350ZBzilYp4PKzE37W4X5nKyyeFADvasG2SeZc5SDTlWjPiAdZDU+NJV1a/nzmUjYdsysw7dwNLoKUeU=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:50d:b0:1a6:3fb2:f52d with SMTP id
+ jn13-20020a170903050d00b001a63fb2f52dmr618731plb.3.1682003850946; Thu, 20 Apr
+ 2023 08:17:30 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 08:17:29 -0700
+In-Reply-To: <20230419221716.3603068-11-atishp@rivosinc.com>
+Mime-Version: 1.0
+References: <20230419221716.3603068-1-atishp@rivosinc.com> <20230419221716.3603068-11-atishp@rivosinc.com>
+Message-ID: <ZEFXiXu+0XLSdRkQ@google.com>
+Subject: Re: [RFC 10/48] RISC-V: KVM: Implement static memory region measurement
+From:   Sean Christopherson <seanjc@google.com>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org, Alexandre Ghiti <alex@ghiti.fr>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        "=?iso-8859-1?Q?Bj=F6rn_T=F6pel?=" <bjorn@rivosinc.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
+        abrestic@rivosinc.com, Samuel Ortiz <sameo@rivosinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rajnesh Kanwal <rkanwal@rivosinc.com>,
+        Uladzislau Rezki <urezki@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------TJ3jm9EE0tXubMfaCynt0Bto
-Content-Type: multipart/mixed; boundary="------------W2n06D8KYSGJqBmAT4asbjTU";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Michael Kelley <mikelley@microsoft.com>
-Message-ID: <bb77023b-8dd0-0551-5c16-92f184568161@suse.com>
-Subject: Re: [PATCH v5 11/15] x86/mtrr: construct a memory map with cache
- modes
-References: <20230401063652.23522-1-jgross@suse.com>
- <20230401063652.23522-12-jgross@suse.com>
- <20230420121551.GMZEEs9wkUrvX05nQr@fat_crate.local>
- <d164d84b-6773-36e3-1136-672072e9233d@suse.com>
- <20230420130113.GCZEE3mfOTxcDn6e3/@fat_crate.local>
- <681c5d8e-0e42-07e1-f91c-7696a2360f1c@suse.com>
- <20230420145451.GFZEFSO6VmvXdK/qi9@fat_crate.local>
-In-Reply-To: <20230420145451.GFZEFSO6VmvXdK/qi9@fat_crate.local>
+On Wed, Apr 19, 2023, Atish Patra wrote:
+> +int kvm_riscv_cove_vm_measure_pages(struct kvm *kvm, struct kvm_riscv_cove_measure_region *mr)
+> +{
+> +	struct kvm_cove_tvm_context *tvmc = kvm->arch.tvmc;
+> +	int rc = 0, idx, num_pages;
+> +	struct kvm_riscv_cove_mem_region *conf;
+> +	struct page *pinned_page, *conf_page;
+> +	struct kvm_riscv_cove_page *cpage;
+> +
+> +	if (!tvmc)
+> +		return -EFAULT;
+> +
+> +	if (tvmc->finalized_done) {
+> +		kvm_err("measured_mr pages can not be added after finalize\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	num_pages = bytes_to_pages(mr->size);
+> +	conf = &tvmc->confidential_region;
+> +
+> +	if (!IS_ALIGNED(mr->userspace_addr, PAGE_SIZE) ||
+> +	    !IS_ALIGNED(mr->gpa, PAGE_SIZE) || !mr->size ||
+> +	    !cove_is_within_region(conf->gpa, conf->npages << PAGE_SHIFT, mr->gpa, mr->size))
+> +		return -EINVAL;
+> +
+> +	idx = srcu_read_lock(&kvm->srcu);
+> +
+> +	/*TODO: Iterate one page at a time as pinning multiple pages fail with unmapped panic
+> +	 * with a virtual address range belonging to vmalloc region for some reason.
 
---------------W2n06D8KYSGJqBmAT4asbjTU
-Content-Type: multipart/mixed; boundary="------------aPM5volxTsHyDfKEuz0jgAtA"
+I've no idea what code you had, but I suspect the fact that vmalloc'd memory isn't
+guaranteed to be physically contiguous is relevant to the panic.
 
---------------aPM5volxTsHyDfKEuz0jgAtA
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> +	 */
+> +	while (num_pages) {
+> +		if (signal_pending(current)) {
+> +			rc = -ERESTARTSYS;
+> +			break;
+> +		}
+> +
+> +		if (need_resched())
+> +			cond_resched();
+> +
+> +		rc = get_user_pages_fast(mr->userspace_addr, 1, 0, &pinned_page);
+> +		if (rc < 0) {
+> +			kvm_err("Pinning the userpsace addr %lx failed\n", mr->userspace_addr);
+> +			break;
+> +		}
+> +
+> +		/* Enough pages are not available to be pinned */
+> +		if (rc != 1) {
+> +			rc = -ENOMEM;
+> +			break;
+> +		}
+> +		conf_page = alloc_page(GFP_KERNEL | __GFP_ZERO);
+> +		if (!conf_page) {
+> +			rc = -ENOMEM;
+> +			break;
+> +		}
+> +
+> +		rc = cove_convert_pages(page_to_phys(conf_page), 1, true);
+> +		if (rc)
+> +			break;
+> +
+> +		/*TODO: Support other pages sizes */
+> +		rc = sbi_covh_add_measured_pages(tvmc->tvm_guest_id, page_to_phys(pinned_page),
+> +						 page_to_phys(conf_page), SBI_COVE_PAGE_4K,
+> +						 1, mr->gpa);
+> +		if (rc)
+> +			break;
+> +
+> +		/* Unpin the page now */
+> +		put_page(pinned_page);
+> +
+> +		cpage = kmalloc(sizeof(*cpage), GFP_KERNEL_ACCOUNT);
+> +		if (!cpage) {
+> +			rc = -ENOMEM;
+> +			break;
+> +		}
+> +
+> +		cpage->page = conf_page;
+> +		cpage->npages = 1;
+> +		cpage->gpa = mr->gpa;
+> +		cpage->hva = mr->userspace_addr;
 
-T24gMjAuMDQuMjMgMTY6NTQsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVGh1LCBB
-cHIgMjAsIDIwMjMgYXQgMDM6NTc6NDNQTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
-Cj4+IFNvIHlvdSBhcmUgc3VnZ2VzdGluZyB0aGF0IHByZWZldGNoaW5nIGNhbiBoYXBwZW4g
-YWNyb3NzIG9uZSB3cm9uZyBzcGVjdWxhdGVkDQo+PiBicmFuY2gsIGJ1dCBub3QgYWNyb3Nz
-IHR3byBvZiB0aGVtPyBBbmQgeW91IGFyZSBub3Qgd29ycnlpbmcgYWJvdXQgcHJlZmV0Y2hl
-cw0KPj4gcGFzdCB0aGUgZW5kIG9mIGEgY29weSB3aXRoIHNpemUgPiAwPw0KPiANCj4gTWF5
-YmUgaXQgd2lsbCwgbWF5YmUgaXQgd29uJ3QuDQo+IA0KPiBJIGFtIHdvcnJpZWQgYWJvdXQg
-Y2FsbGluZyBhIGZ1bmN0aW9uIHVubmVjZXNzYXJpbHkuIEknbSB3b3JyaWVkIGFib3V0DQo+
-IGNhbGxpbmcgdGhlIGFzbSB2ZXJzaW9uIF9fbWVtbW92ZSgpIHdpdGggemVybyBsZW5ndGgg
-dW5uZWNlc3NhcmlseS4gSSdtDQo+IHdvcnJpZWQgYWJvdXQgZXhlY3V0aW5nIHRoZSByZXR1
-cm4gdGh1bmsgdW5uZWNlc3NhcmlseToNCj4gDQo+IGZmZmZmZmZmODEwNGM3NDk6ICAgICAg
-IDQ4IDgzIGM0IDI4ICAgICAgICAgICAgIGFkZCAgICAkMHgyOCwlcnNwDQo+IGZmZmZmZmZm
-ODEwNGM3NGQ6ICAgICAgIGU5IDcyIDJhIDliIDAwICAgICAgICAgIGptcCAgICBmZmZmZmZm
-ZjgxOWZmMWM0IDxfX3g4Nl9yZXR1cm5fdGh1bms+DQo+IGZmZmZmZmZmODEwNGM3NTI6ICAg
-ICAgIDMxIGMwICAgICAgICAgICAgICAgICAgIHhvciAgICAlZWF4LCVlYXgNCj4gZmZmZmZm
-ZmY4MTA0Yzc1NDogICAgICAgZTkgNmIgMmEgOWIgMDAgICAgICAgICAgam1wICAgIGZmZmZm
-ZmZmODE5ZmYxYzQgPF9feDg2X3JldHVybl90aHVuaz4NCj4gZmZmZmZmZmY4MTA0Yzc1OTog
-ICAgICAgMGYgMWYgODAgMDAgMDAgMDAgMDAgICAgbm9wbCAgIDB4MCglcmF4KQ0KPiANCj4g
-SnVzdCBzYXkgdGhhdCB5b3UgZG9uJ3Qgd2FudCB0byBkbyB0aGlzIHNpbXBsZSBjaGVjayBh
-bmQgSSB3aWxsIGRvIGl0DQo+IG15c2VsZiBiZWNhdXNlIEknbSB0aXJlZCBvZiBkZWJhdGlu
-Zy4NCg0KSSBqdXN0IHdhbnQgdG8gbWFrZSBzdXJlIHRvIHVuZGVyc3RhbmQgeW91ciBjb25j
-ZXJucyBhbmQgdGhhdCB0aGUgcmVhc29uaW5nDQppcyBzYW5lLg0KDQpZb3Ugc2VlbSB0byBm
-ZWVsIHJhdGhlciBzdHJvbmcgaGVyZSwgc28gSSdsbCBhZGQgdGhlIHRlc3QuDQoNCj4gDQo+
-PiAiSWYgdHdvIG9yIG1vcmUgdmFyaWFibGUgbWVtb3J5IHJhbmdlcyBtYXRjaCBhbmQgb25l
-IG9mIHRoZSBtZW1vcnkgdHlwZXMgaXMgVUMsDQo+PiB0aGUgVUMgbWVtb3J5IHR5cGUgdXNl
-ZC4iDQo+Pg0KPj4gU28gdGVjaG5pY2FsbHkgbm8gcHJvYmxlbSwgYXBhcnQgZnJvbSBsb3dl
-ciBwZXJmb3JtYW5jZS4NCj4gDQo+IEhvdyBkbyB5b3UgY29tZSBmcm9tICJXcml0ZS1jb21i
-aW5pbmcgdG8gVUMgbWVtb3J5IGlzIG5vdCBhbGxvd2VkIiB0bw0KPiAibG93ZXIgcGVyZm9y
-bWFuY2UiPw0KPiANCj4gTm90IGFsbG93ZWQgaXMgbm90IGFsbG93ZWQuIEdlZXouDQoNClll
-cy4gQW5kIHVzaW5nIFVDIGluc3RlYWQgb2YgV0MgdXN1YWxseSBtZWFucyBsb3dlciBwZXJm
-b3JtYW5jZSBvZiB3cml0ZXMuDQoNCj4+IFdvdWxkIHlvdSBiZSBmaW5lIHdpdGggYWRkaW5n
-IHRoYXQgYXMgYW4gYWRkaXRpb25hbCBwYXRjaD8NCj4+DQo+PiBJIGJlbGlldmUgaWYgd2Ug
-cmVhbGx5IHdhbnQgdGhhdCwgdGhlbiB3ZSBzaG91bGQgYmUgYWJsZSB0byBkaXNhYmxlIHN1
-Y2ggYQ0KPj4gY2xlYW51cC4gU28gaXQgc2hvdWxkIGJlIGFuIGFkZC1vbiBhbnl3YXkuDQo+
-IA0KPiBTdXJlLCB3aGF0ZXZlci4NCg0KT2theSwgdGhhbmtzLg0KDQpJIHRoaW5rIHRoaXMg
-d2lsbCBuZWVkIGFub3RoZXIgZmluYWwgbG9vcCBvdmVyIHRoZSBNVFJScyB0byBjaGVjayBh
-Z2FpbnN0IHRoZQ0KY29uc3RydWN0ZWQgbWFwIGlmIGEgTVRSUiBpcyBjb21wbGV0ZWx5IHVz
-ZWxlc3MuDQoNCkFub3RoZXIgcXVlc3Rpb246IGluIGNhc2Ugd2UgZGV0ZWN0IHN1Y2ggYSBo
-aWRkZW4gTVRSUiwgc2hvdWxkIGl0IGJlIGRpc2FibGVkDQppbiBvcmRlciB0byBoYXZlIG1v
-cmUgTVRSUnMgYXZhaWxhYmxlIGZvciBydW4tdGltZSBhZGRpbmc/DQoNCj4gDQo+PiBJJ20g
-bm90IGFnYWluc3QgYWRkaW5nIHN1Y2ggYWRkaXRpb25hbCBjaGVja3MuIEkgd291bGRuJ3Qg
-bGlrZSB0byBmb3JjZSB0aGVtDQo+PiBpbnRvIHRoaXMgc2VyaWVzIHJpZ2h0IG5vdywgYmVj
-YXVzZSB3ZSBuZWVkIHRoaXMgc2VyaWVzIGZvciBIeXBlci1WIGlzb2xhdGVkDQo+PiBndWVz
-dCBzdXBwb3J0Lg0KPiANCj4gV2Ugd2lsbCBhZGQgdGhpcyBzZXJpZXMgd2hlbiB0aGV5J3Jl
-IHJlYWR5LiBJZiBIeXBlci1WIG5lZWRzIHRoZW0NCj4gaW1tZWRpYXRlbHkgdGhleSBjYW4g
-dGFrZSB3aGF0ZXZlciB0aGV5IHdhbnQgYW5kIGRvIHdoYXRldmVyIHRoZXkgd2FudC4NCj4g
-DQo+IE9yIHlvdSBjYW4gZG8gYSBzaW1wbGVyIGZpeCBmb3IgSHlwZXItViB0aGF0IGdvZXMg
-YmVmb3JlIHRoaXMsIGlmIHlvdQ0KPiB3YW50IHRvIGFkZHJlc3MgSHlwZXItVi4NCj4gDQo+
-PiBKdXN0IHRvIHNheSBpdCBleHBsaWNpdGx5OiB5b3UgYXJlIGNvbmNlcm5lZCBmb3IgdGhl
-IGNhc2UgdGhhdCBhIGNvbXBsZXRlDQo+PiBNVFJSIGlzIGhpZGRlbiBiZW5lYXRoIGFub3Ro
-ZXIgb25lIChlLmcuIGEgbGFyZ2UgVUMgTVRSUiBoaWRpbmcgYSBzbWFsbGVyDQo+PiBNVFJS
-IHdpdGggYW5vdGhlciB0eXBlLCBvciBhIHZhcmlhYmxlIE1UUlIgYmVpbmcgaGlkZGVuIGJ5
-IGZpeGVkIE1UUlJzKT8NCj4gDQo+IEkgYW0gY29uY2VybmVkIGFib3V0IGNhdGNoaW5nIGFu
-eSBhbmQgYWxsIGluY29uc2lzdGVuY2llcyB3aXRoIHRoZSBNVFJScw0KPiBhbmQgY2F0Y2hp
-bmcgdGhlbSByaWdodC4gSWYgd2UncmUgZ29pbmcgdG8gc3BlbmQgYWxsIHRoaXMgdGltZSBv
-biB0aGlzLA0KPiB0aGVuIGxldCdzIGRvIGl0IHJpZ2h0LCBvbmNlIGFuZCBmb3IgYWxsIGFu
-ZCBkbyBpdCBpbiBhIG1hbm5lciB0aGF0IGNhbg0KPiBiZSBpbXByb3ZlZCBpbiB0aGUgZnV0
-dXJlLg0KDQpPa2F5Lg0KDQoNCkp1ZXJnZW4NCg0K
---------------aPM5volxTsHyDfKEuz0jgAtA
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Snapshotting the userspace address for the _source_ page can't possibly be useful.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+> +		cpage->is_mapped = true;
+> +		INIT_LIST_HEAD(&cpage->link);
+> +		list_add(&cpage->link, &tvmc->measured_pages);
+> +
+> +		mr->userspace_addr += PAGE_SIZE;
+> +		mr->gpa += PAGE_SIZE;
+> +		num_pages--;
+> +		conf_page = NULL;
+> +
+> +		continue;
+> +	}
+> +	srcu_read_unlock(&kvm->srcu, idx);
+> +
+> +	if (rc < 0) {
+> +		/* We don't to need unpin pages as it is allocated by the hypervisor itself */
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+This comment makes no sense.  The above code is doing all of the allocation and
+pinning, which strongly suggests that KVM is the hypervisor.  But this comment
+implies that KVM is not the hypervisor.
 
---------------aPM5volxTsHyDfKEuz0jgAtA--
+And "pinned_page" is cleared unpinned in the loop after the page is added+measured,
+which looks to be the same model as TDX where "pinned_page" is the source and
+"conf_page" is gifted to the hypervisor.  But on failure, e.g. when allocating
+"conf_page", that reference is not put.
 
---------------W2n06D8KYSGJqBmAT4asbjTU--
+> +		cove_delete_page_list(kvm, &tvmc->measured_pages, false);
+> +		/* Free the last allocated page for which conversion/measurement failed */
+> +		kfree(conf_page);
 
---------------TJ3jm9EE0tXubMfaCynt0Bto
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmRBVcsFAwAAAAAACgkQsN6d1ii/Ey8I
-xgf/TvfsCiDsNOWU2D71vjeM1mVjtkgVr2Dt1J/2mgfVQmVemoGXrkDsktA9XsAumrpvtk8GtN2O
-hIrE8W9GoKVUAF2mS0YyyGxDcwxLSnZmt33emK7G1+3T1NNWWQ6DSreoVXzUDGLUHHzc5X8gHt3m
-pX8etbuYp7F25JIJj8CGaghycG2Yxr8Hr3i4QxhKcnZ01tptEQnwQV1fqQsUMb0PZFHUcrLhWO1z
-shDF8nJDLBzkMwNYdt70fT5KWokTe+CGVXh4w84Gpse+wx1OzA2eroyjhkYh6QssyGuLtJbaLs6z
-/zeDXxESK4+oM/zjFpLgxHQqUMXX8TQsQRY9IbabAw==
-=n0WK
------END PGP SIGNATURE-----
-
---------------TJ3jm9EE0tXubMfaCynt0Bto--
+Assuming my guesses about how the architecture works are correct, this is broken
+if sbi_covh_add_measured_pages() fails.  The page has already been gifted to the
+TSM by cove_convert_pages(), but there is no call to sbi_covh_tsm_reclaim_pages(),
+which I'm guessing is necesary to transition the page back to a state where it can
+be safely used by the host.
