@@ -2,65 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285D56E9667
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65C76E966B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 15:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbjDTN5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 09:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
+        id S229958AbjDTN5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 09:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjDTN5M (ORCPT
+        with ESMTP id S231720AbjDTN5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 09:57:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5244BCD;
-        Thu, 20 Apr 2023 06:57:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2365649A3;
-        Thu, 20 Apr 2023 13:57:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56297C433A0;
-        Thu, 20 Apr 2023 13:57:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681999030;
-        bh=0zCwOIJjuwPEopLOkv2gjEtdTnJPz6ssKDGCCwQhU8g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FkX4a8xw4SGooMCjJhrqAQ1XxCcmjghTkpnhr3ZV5Q+0YtQfewfGUd2FI60cvGJ7l
-         JCz6IcjJuHVgfNZsWFaHYnDqTJvFwwt3y8lNkKk1Az/9gxQm0qtlL5lD3QAcZnGIWM
-         kkeL63q0KLPR+Af3fFs8pbv2araD+LvPTfArllNYUer6IMJauywB1cKF29vOzoVSLC
-         /sQVNPZ2cTjFO3jpRsi+Py7aSDtuCXi8ymhHXZtjBeE+6g2v9b90glyfvBiKxi7Cyu
-         Lw1ixTcTbfHgjPXUXAMjZhzYb75B6ROATeg52RJbt2igYPg51PYVCoVxcD6Cj4BJlf
-         PYKOQ7wO7LsgA==
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-552ae3e2cbeso41300677b3.13;
-        Thu, 20 Apr 2023 06:57:10 -0700 (PDT)
-X-Gm-Message-State: AAQBX9d3J1CfkxsWCjsa6F8dtYJZbrxf4AQCGBGcQxXEMlKhVnfxe9OV
-        u45mCP/YC7geY/uXGydnwEYl8tbGReaLSGspgw==
-X-Google-Smtp-Source: AKy350b0EqY4vhYLM3Yu6RfypWd2ClReF0KNDJmoDx8Ai5GbIHiIDuMWlydPYzKEm+zXXno3ro+KJWmUskeluYv56o4=
-X-Received: by 2002:a0d:d886:0:b0:54f:b874:116f with SMTP id
- a128-20020a0dd886000000b0054fb874116fmr925830ywe.7.1681999029396; Thu, 20 Apr
- 2023 06:57:09 -0700 (PDT)
+        Thu, 20 Apr 2023 09:57:17 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AA62680
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:57:15 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id h2so2817624ljh.13
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 06:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681999034; x=1684591034;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TP4lhXyKE5KTAkDMfdfy/BJbT2e3OFVGbEmy4BDp5gk=;
+        b=rC9/9IWUTmoWs2lMq4duP5f2Q5wO1ZSMqOxyQXiWG7Odjz8ix31G2JT83QqwLLjbXK
+         8atUiWASwss3zkgbMYud0bUjTN6ic89Gn0oM6AsaPra73UmyDa878XmQkO9/kZt8p7ZO
+         7FPsoO8u3JdgF+ibY5MToJGd/Xw6ovJOow8Ayxco4sdpGsg1iwqKCFJLnwL8Ntc6XyWj
+         //hFspMHTwZWQUloofdjCBtyYad4x0XFlxS5xRAZb9m9513VBYMLbdBd8KW0cIL1oDCN
+         GOkOPQzm9FobHEfRfe3C3XxuwK2yvjLbsCwsl9SouLhEuZZtlZ3JZCuCz28SM7OPESdb
+         2Y3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681999034; x=1684591034;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TP4lhXyKE5KTAkDMfdfy/BJbT2e3OFVGbEmy4BDp5gk=;
+        b=D9r3ltHAkWo4sovNvXhtysBCrndTubJNAA3rPYyUm7KA3AcX35E0HRwGMB3fEYeDXm
+         lxTfEwvlNjqpC1CiJrDmZQiNixGvdipmKeHYPyi/diMUf1weLYiAsNcaDpfles4jA2Rm
+         HXZDbAQk2H2qr1lomE9NcC44vv3E30zRfh3sMjKKcMzaSvwJNbJ1IgJVZ7yUphZdTYl0
+         iKT3Qz2OnIhvY3sRs5mvzMqwF544TLjNcq0LV/aUBK91dpJNkypgKF3CZvdVhnsFlM/T
+         0j7BbfB3rI9UJoZmA4T+JWqWj/FYlpCz04/RQYsl8WiqlEIviCxsol09UxjN/NFoNBp2
+         gk9Q==
+X-Gm-Message-State: AAQBX9exxVmSnsTpYNP9BQWnepB4Wln5nE609/xZ2ivkylTgh8zefc+B
+        Z6rkNDcrgaRmbJX8gp3NlOBY5g==
+X-Google-Smtp-Source: AKy350bbrInQ8vcLAPDSHDfaUIBSaDalxHrdj5/uZoDKMnjxN0/nbHGpvT3D1EyWxc5tincgNn5nyg==
+X-Received: by 2002:a2e:9d83:0:b0:2a8:bd47:caf7 with SMTP id c3-20020a2e9d83000000b002a8bd47caf7mr448315ljj.7.1681999034024;
+        Thu, 20 Apr 2023 06:57:14 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id x23-20020a2e7c17000000b002a5f554d263sm250062ljc.46.2023.04.20.06.57.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 06:57:13 -0700 (PDT)
+Message-ID: <6d109e03-0a1a-fa3c-b1d4-7b64367fcc41@linaro.org>
+Date:   Thu, 20 Apr 2023 16:57:12 +0300
 MIME-Version: 1.0
-References: <20230319150141.67824-1-robh@kernel.org> <20230319150141.67824-2-robh@kernel.org>
- <20230418175000.GLZD7YSNkIKk8ltGIw@fat_crate.local> <20230419184547.GA4013083-robh@kernel.org>
- <20230419185535.GGZEA5J2ZVxsv5AlBM@fat_crate.local>
-In-Reply-To: <20230419185535.GGZEA5J2ZVxsv5AlBM@fat_crate.local>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 20 Apr 2023 08:56:58 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+ruP1cCvcVgG+DLcxZEVAPn2orCtvOrZ9gmEmBqX8jtw@mail.gmail.com>
-Message-ID: <CAL_Jsq+ruP1cCvcVgG+DLcxZEVAPn2orCtvOrZ9gmEmBqX8jtw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] edac: cpc925: Use of_get_cpu_hwid() to read CPU node 'reg'
-To:     Borislav Petkov <bp@alien8.de>, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] dt-bindings: display/msm: dsi-controller-main: Document
+ qcom,master-dsi and qcom,sync-dual-dsi
+Content-Language: en-GB
+To:     Jianhua Lu <lujianhua000@gmail.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230411143149.16742-1-lujianhua000@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230411143149.16742-1-lujianhua000@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,34 +85,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Arnd, Michael E
+On 11/04/2023 17:31, Jianhua Lu wrote:
+> This fixes warning:
+>    sm8250-xiaomi-elish-csot.dtb: dsi@ae94000: Unevaluated properties are not allowed ('qcom,master-dsi', 'qcom,sync-dual-dsi' were unexpected)
+> 
+> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+> ---
+>   .../bindings/display/msm/dsi-controller-main.yaml    | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
 
-On Wed, Apr 19, 2023 at 1:55=E2=80=AFPM Borislav Petkov <bp@alien8.de> wrot=
-e:
->
-> On Wed, Apr 19, 2023 at 01:45:47PM -0500, Rob Herring wrote:
-> > I'd rather not export of_get_cpu_hwid() which is otherwise only used in
-> > arch code. I think I'll rewrite this in terms of for_each_possible_cpu(=
-)
-> > and topology_core_id(). Though that would make a UP build not enable
-> > core 1, but that seems undesirable anyways.
->
-> TBH I'm not sure this driver is even worth any effort besides simply
-> deleting it. I see one commit which reads like someone was really using
-> it:
->
-> ce395088832b ("cpc925_edac: Support single-processor configurations")
->
-> but that one is from 2011 and since then it has received only API
-> modifications/cleanups.
->
-> But if I delete it, someone might crawl out of the woodwork and say it
-> is still used...
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Yeah, I came to that conclusion as well. It's only used by "maple"
-(aka PPC970FX Evaluation Board) as the kernel has to instantiate this
-device (rather than DT). Seems like a 20 year old eval board is
-unlikely to have any users, so perhaps the whole platform could be
-removed.
+-- 
+With best wishes
+Dmitry
 
-Rob
