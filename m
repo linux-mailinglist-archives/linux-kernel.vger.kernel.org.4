@@ -2,117 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275986E93D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085E36E93ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234671AbjDTMLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
+        id S234614AbjDTMNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234580AbjDTMLK (ORCPT
+        with ESMTP id S234002AbjDTMN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:11:10 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B629A59F9
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:11:02 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-74dd7f52f18so153047685a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:11:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681992662; x=1684584662;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q1LxyGqG5WL9KaWkh2+hx1G34IN6yuPWN+Fhp92J1jU=;
-        b=cTJefAavuwEJMjxkP+0FJDK3FU5t0pFA/baHq7/CmHy65JmN7YNzl9jvNl5LvW3L4x
-         OQdTQ26zgzvvHsB+MZi8aOpANQpN3DtBE1EuVo68DnYjkp9fUlROl3FCbLedV6R3FRFp
-         NlX83jBxJnLmpsCkSgrApq8ib+WNe5GoHNlZ2BSjkR++2eWWrUlws0tfNEWn79TyXDsQ
-         ovHsNFOtSlEUNCklfiIftrxzbIwByHeI7vlTqJLSyHhT0We5KeQGQKYQiiDWghEXsa/p
-         mEGLNeF/Cw4UyKjErsrje0/sybjqovhKCszdLDltHj3SGkoqxDvAfCvB49zrrEJYrQZO
-         YgrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681992662; x=1684584662;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Q1LxyGqG5WL9KaWkh2+hx1G34IN6yuPWN+Fhp92J1jU=;
-        b=f8a7oM5f/qL4qfgVzEK2Clre0XHbxOkgLnC0SubXPuDZjJaFmRJe8BnqSz4U2l65aL
-         zWRxqVGst9qjdE66m3r9YXVpdd3UN/2NB73QMGCdADH3NGb5TlvviCMncXY4aGsvzoGk
-         SE/sbW5mA+3pwJeFkvuD6CiVvi4wy4N70mZi7gVmRteUWryo2tlb/Ef7gWn23Uqgfdzz
-         OFmmVRMi02Mjx6gBqSQjehkQ4suHNJvOeCnPJzsD+CZT/Y5GX4Aj1vzZWjFgB5BJYDAH
-         buxcwnGfVC42NxNCRosYX/LQiVrjYnvt3yRAST0lWR6HvVjc134BinxXQoEHwRaxzWKs
-         +usw==
-X-Gm-Message-State: AAQBX9dj/tF6AiwEcbXo8bZOn1daDX0TWkE50VPila0HH3vn1BifRnIz
-        NFdjk1c+5ItwsZz27gBA0A==
-X-Google-Smtp-Source: AKy350aU+AhiGvWT2mOUumNh9NQQKESPC9pzdG1xi3NmMoT7bYT1AMbxetODVE0RwWxqXoOIEYgjpA==
-X-Received: by 2002:a05:622a:1a18:b0:3ef:3008:bf with SMTP id f24-20020a05622a1a1800b003ef300800bfmr1925477qtb.9.1681992661750;
-        Thu, 20 Apr 2023 05:11:01 -0700 (PDT)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id z28-20020ac87cbc000000b003e388264753sm435619qtv.65.2023.04.20.05.11.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 05:11:00 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:12f9:9c2e:cc67:fe3b])
-        by serve.minyard.net (Postfix) with ESMTPSA id A196B180044;
-        Thu, 20 Apr 2023 12:10:59 +0000 (UTC)
-Date:   Thu, 20 Apr 2023 07:10:58 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Andrew Jeffery <andrew@aj.id.au>,
-        Govert Overgaauw <govert.overgaauw@prodrive-technologies.com>
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Openipmi-developer] [PATCH] ipmi: ipmi-bmc: Improve errno
- returned to userspace
-Message-ID: <ZEEr0r/6/lLiwlsy@minyard.net>
-Reply-To: minyard@acm.org
-References: <20230419150032.3483229-1-govert.overgaauw@prodrive-technologies.com>
+        Thu, 20 Apr 2023 08:13:27 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F04F5BBC;
+        Thu, 20 Apr 2023 05:12:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1681992772; x=1713528772;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NRLHbDsBJVpzWvjpCk2Jx+iKC43ICF+rlOYgCNSiUaM=;
+  b=EboPsy9/3OWENkYyNUxLFr7Ly5iy7lIDdf5tH07BtCDnsy9I6jWMbqYL
+   k25QuZi7xYrSbqgM5EzJzGcHWYe9agJGZsaiQOXvVxm8BxKSP/hm8WXXR
+   ebNCmBy0H4GbXx0xyyjKTxLj+URRr6RzFltay/1MczLkgXoNLUeBrqh3c
+   ADNtSACbOzU+EKsfdxjrfj4ihPBT7g+DTJ2dCqIhkAguXojkBxF39hlM8
+   ZlLAF599nUufvRRt9khKlXAVrZmPMFd3XDvbxHs+6/YLc7Kz7SVhn/iiu
+   2x0cZlwzPc0QzzWf7SqnBG/a5IObEx767ez+6cEFLBcPRjVpb2RMAfp83
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,212,1677567600"; 
+   d="scan'208";a="209953526"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Apr 2023 05:12:08 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 20 Apr 2023 05:12:08 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Thu, 20 Apr 2023 05:12:03 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <richardcochran@gmail.com>,
+        <UNGLinuxDriver@microchip.com>, <maciej.fijalkowski@intel.com>,
+        <alexandr.lobakin@intel.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next] net: lan966x: Don't use xdp_frame when action is XDP_TX
+Date:   Thu, 20 Apr 2023 14:11:52 +0200
+Message-ID: <20230420121152.2737625-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419150032.3483229-1-govert.overgaauw@prodrive-technologies.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew, what do you think?
+When the action of an xdp program was XDP_TX, lan966x was creating
+a xdp_frame and use this one to send the frame back. But it is also
+possible to send back the frame without needing a xdp_frame, because
+it possible to send it back using the page.
+And then once the frame is transmitted is possible to use directly
+page_pool_recycle_direct as lan966x is using page pools.
+This would save some CPU usage on this path.
 
--corey
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ .../ethernet/microchip/lan966x/lan966x_fdma.c | 35 +++++++++++--------
+ .../ethernet/microchip/lan966x/lan966x_main.h |  2 ++
+ .../ethernet/microchip/lan966x/lan966x_xdp.c  | 11 +++---
+ 3 files changed, 27 insertions(+), 21 deletions(-)
 
-On Wed, Apr 19, 2023 at 05:00:32PM +0200, Govert Overgaauw via Openipmi-developer wrote:
-> While the KCS driver is not in KCS_PHASE_WAIT_READ state it returns
-> -EINVAL to userspace on a write call. change this to -EAGAIN to indicate
-> that the error is related to the state and not the argument.
-> 
-> Signed-off-by: Govert Overgaauw <govert.overgaauw@prodrive-technologies.com>
-> ---
->  drivers/char/ipmi/kcs_bmc_cdev_ipmi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c b/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
-> index cf670e891966..4c7400faf333 100644
-> --- a/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
-> +++ b/drivers/char/ipmi/kcs_bmc_cdev_ipmi.c
-> @@ -405,7 +405,7 @@ static ssize_t kcs_bmc_ipmi_write(struct file *filp, const char __user *buf,
->  		kcs_bmc_write_data(priv->client.dev, priv->data_out[0]);
->  		ret = count;
->  	} else {
-> -		ret = -EINVAL;
-> +		ret = -EAGAIN;
->  	}
->  	spin_unlock_irq(&priv->lock);
->  
-> -- 
-> 2.30.2
-> 
-> 
-> 
-> _______________________________________________
-> Openipmi-developer mailing list
-> Openipmi-developer@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/openipmi-developer
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+index 2ed76bb61a731..7947259e67e4e 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+@@ -390,6 +390,7 @@ static void lan966x_fdma_stop_netdev(struct lan966x *lan966x)
+ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
+ {
+ 	struct lan966x_tx *tx = &lan966x->tx;
++	struct lan966x_rx *rx = &lan966x->rx;
+ 	struct lan966x_tx_dcb_buf *dcb_buf;
+ 	struct xdp_frame_bulk bq;
+ 	struct lan966x_db *db;
+@@ -432,7 +433,8 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
+ 			if (dcb_buf->xdp_ndo)
+ 				xdp_return_frame_bulk(dcb_buf->data.xdpf, &bq);
+ 			else
+-				xdp_return_frame_rx_napi(dcb_buf->data.xdpf);
++				page_pool_recycle_direct(rx->page_pool,
++							 dcb_buf->data.page);
+ 		}
+ 
+ 		clear = true;
+@@ -702,6 +704,7 @@ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
+ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+ 			   struct xdp_frame *xdpf,
+ 			   struct page *page,
++			   u32 len,
+ 			   bool dma_map)
+ {
+ 	struct lan966x *lan966x = port->lan966x;
+@@ -722,6 +725,15 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+ 		goto out;
+ 	}
+ 
++	/* Fill up the buffer */
++	next_dcb_buf = &tx->dcbs_buf[next_to_use];
++	next_dcb_buf->use_skb = false;
++	next_dcb_buf->xdp_ndo = dma_map;
++	next_dcb_buf->len = len + IFH_LEN_BYTES;
++	next_dcb_buf->used = true;
++	next_dcb_buf->ptp = false;
++	next_dcb_buf->dev = port->dev;
++
+ 	/* Generate new IFH */
+ 	if (dma_map) {
+ 		if (xdpf->headroom < IFH_LEN_BYTES) {
+@@ -736,16 +748,18 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+ 
+ 		dma_addr = dma_map_single(lan966x->dev,
+ 					  xdpf->data - IFH_LEN_BYTES,
+-					  xdpf->len + IFH_LEN_BYTES,
++					  len + IFH_LEN_BYTES,
+ 					  DMA_TO_DEVICE);
+ 		if (dma_mapping_error(lan966x->dev, dma_addr)) {
+ 			ret = NETDEV_TX_OK;
+ 			goto out;
+ 		}
+ 
++		next_dcb_buf->data.xdpf = xdpf;
++
+ 		/* Setup next dcb */
+ 		lan966x_fdma_tx_setup_dcb(tx, next_to_use,
+-					  xdpf->len + IFH_LEN_BYTES,
++					  len + IFH_LEN_BYTES,
+ 					  dma_addr);
+ 	} else {
+ 		ifh = page_address(page) + XDP_PACKET_HEADROOM;
+@@ -756,25 +770,18 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+ 		dma_addr = page_pool_get_dma_addr(page);
+ 		dma_sync_single_for_device(lan966x->dev,
+ 					   dma_addr + XDP_PACKET_HEADROOM,
+-					   xdpf->len + IFH_LEN_BYTES,
++					   len + IFH_LEN_BYTES,
+ 					   DMA_TO_DEVICE);
+ 
++		next_dcb_buf->data.page = page;
++
+ 		/* Setup next dcb */
+ 		lan966x_fdma_tx_setup_dcb(tx, next_to_use,
+-					  xdpf->len + IFH_LEN_BYTES,
++					  len + IFH_LEN_BYTES,
+ 					  dma_addr + XDP_PACKET_HEADROOM);
+ 	}
+ 
+-	/* Fill up the buffer */
+-	next_dcb_buf = &tx->dcbs_buf[next_to_use];
+-	next_dcb_buf->use_skb = false;
+-	next_dcb_buf->data.xdpf = xdpf;
+-	next_dcb_buf->xdp_ndo = dma_map;
+-	next_dcb_buf->len = xdpf->len + IFH_LEN_BYTES;
+ 	next_dcb_buf->dma_addr = dma_addr;
+-	next_dcb_buf->used = true;
+-	next_dcb_buf->ptp = false;
+-	next_dcb_buf->dev = port->dev;
+ 
+ 	/* Start the transmission */
+ 	lan966x_fdma_tx_start(tx, next_to_use);
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+index 851afb0166b19..59da35a2c93d4 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+@@ -243,6 +243,7 @@ struct lan966x_tx_dcb_buf {
+ 	union {
+ 		struct sk_buff *skb;
+ 		struct xdp_frame *xdpf;
++		struct page *page;
+ 	} data;
+ 	u32 len;
+ 	u32 used : 1;
+@@ -544,6 +545,7 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev);
+ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
+ 			   struct xdp_frame *frame,
+ 			   struct page *page,
++			   u32 len,
+ 			   bool dma_map);
+ int lan966x_fdma_change_mtu(struct lan966x *lan966x);
+ void lan966x_fdma_netdev_init(struct lan966x *lan966x, struct net_device *dev);
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+index 2e6f486ec67d7..a8ad1f4e431cb 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+@@ -62,7 +62,7 @@ int lan966x_xdp_xmit(struct net_device *dev,
+ 		struct xdp_frame *xdpf = frames[i];
+ 		int err;
+ 
+-		err = lan966x_fdma_xmit_xdpf(port, xdpf, NULL, true);
++		err = lan966x_fdma_xmit_xdpf(port, xdpf, NULL, xdpf->len, true);
+ 		if (err)
+ 			break;
+ 
+@@ -76,7 +76,6 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
+ {
+ 	struct bpf_prog *xdp_prog = port->xdp_prog;
+ 	struct lan966x *lan966x = port->lan966x;
+-	struct xdp_frame *xdpf;
+ 	struct xdp_buff xdp;
+ 	u32 act;
+ 
+@@ -90,11 +89,9 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
+ 	case XDP_PASS:
+ 		return FDMA_PASS;
+ 	case XDP_TX:
+-		xdpf = xdp_convert_buff_to_frame(&xdp);
+-		if (!xdpf)
+-			return FDMA_DROP;
+-
+-		return lan966x_fdma_xmit_xdpf(port, xdpf, page, false) ?
++		return lan966x_fdma_xmit_xdpf(port, NULL, page,
++					      data_len - IFH_LEN_BYTES,
++					      false) ?
+ 		       FDMA_DROP : FDMA_TX;
+ 	case XDP_REDIRECT:
+ 		if (xdp_do_redirect(port->dev, &xdp, xdp_prog))
+-- 
+2.38.0
+
