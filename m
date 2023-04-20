@@ -2,216 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66DF16E9DEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E973E6E9DEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbjDTVbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 17:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
+        id S232422AbjDTVe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 17:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjDTVbh (ORCPT
+        with ESMTP id S229523AbjDTVe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 17:31:37 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06115123;
-        Thu, 20 Apr 2023 14:31:36 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 707A632003D3;
-        Thu, 20 Apr 2023 17:31:34 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 20 Apr 2023 17:31:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1682026294; x=1682112694; bh=ZX
-        YrfI6mL8GAp9EePATK2aQWfA9YdeSnO3RSGAF64I4=; b=p8kEYQdx9RWw5rbetM
-        QyZ1FZuFi9mZ/hL9rpsNZhtwVtWiQlqd2jNOUHyIRq24ktiOuzUhQ/QJ4YYedAdW
-        cGDPAjNoc9efPMk8bdUt/8v1jcb8E3yNnjdpIfWgX0zUXpUQTMMYftmmpnZh+Cpb
-        GVye3SaWnQnY3HL1SvsPrMbKZSB4R9wHW70wPuAmnLWIdEQDSfzbUWDDVengPffQ
-        BiOx8ImhbByAQMh26rb9QvC67Dyb4iRYeh6NS/KgE/d0cPK0sEjn/Emhyo73svIe
-        nTGibaGugyIm8q6wLeGoKQ45B9ezLiBYZlbNN9k4l7MN6thnGUhzzefdivaCM3cO
-        Wf6g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1682026294; x=1682112694; bh=ZXYrfI6mL8GAp
-        9EePATK2aQWfA9YdeSnO3RSGAF64I4=; b=YSOcMtrQLX9Uap02KYGPHEXxUuMKz
-        Y5uL3pEhH8KdyD6yP47dcwEk2g1xf/4GSynj16hZEkQgrFiGQSYUfrm9UQtknvRh
-        UUQiEOUJ9aojuTPRrI7Nr23u+2ZvTsNcnglQOnOmGsR1RZ2u0rlYaAiAzWG4vo1P
-        lu3Y7f6e32DAJk9azAbkL7Pcgylc/Q+ZxVrozAXAJQ80aDrI8dVjAjcn5sT0b+0C
-        ptBfugWmwWV9WmP4Zg4UIb1W/fSObY0kYX2dIFLN8Z5qvQDDpb783c9X1kXLXi5W
-        FBBFHNd0UtvQEc73TTSHlY7a/dvbGIvIviPpyeISL6ozanF0aWvML17iA==
-X-ME-Sender: <xms:Na9BZBMrerlL3zVQPovB7hkWQOaOjAoMmc3QDKwEZqUwwKbsx67MFw>
-    <xme:Na9BZD-FMTMz80yiL85fc7KAU_weWtBw4KXH4G_LY4j7lfhFhB82424JwC9MoHtIK
-    exi3oXr1HXxPagX7cU>
-X-ME-Received: <xmr:Na9BZASuQLn9DtTJJYq5RVypM8jMroUXrviI6jGzsGLQ6PfOeJV1znnFFULHVvCxFVPiXMklsQPnWwpu3i4tO7L-M_H4ShnQFJSlS-SW5f6D>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtvddgudeiudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpehffgfhvfevufffjgfkgggtsehttdertddtredtnecuhfhrohhmpefuthgv
-    fhgrnhcutfhovghstghhuceoshhhrhesuggvvhhkvghrnhgvlhdrihhoqeenucggtffrrg
-    htthgvrhhnpeevlefggffhheduiedtheejveehtdfhtedvhfeludetvdegieekgeeggfdu
-    geeutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hshhhrseguvghvkhgvrhhnvghlrdhioh
-X-ME-Proxy: <xmx:Na9BZNsbdSXyrV0NR-fz_nry8RGYAP3fPf3qOjxnXECX39bAK_D3kw>
-    <xmx:Na9BZJdiC_5jGvC7np9Zp9Du2-uHwaEKHvO0fpO_hd_--EJPVkY8WA>
-    <xmx:Na9BZJ1Ah7vK7MyacPNBhESHx0xkms6XmKSBQzNKi1jnBDrwv-C5TQ>
-    <xmx:Nq9BZE0xPLVk7qkq-z0ZxhiwSi5gxZ17xGN3hpWTez--JRLE3h5Sew>
-Feedback-ID: i84614614:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 20 Apr 2023 17:31:31 -0400 (EDT)
-References: <20230418051342.1919757-1-shr@devkernel.io>
- <20230418152849.505124-1-david@redhat.com>
- <20230418152849.505124-3-david@redhat.com>
-User-agent: mu4e 1.10.1; emacs 28.2.50
-From:   Stefan Roesch <shr@devkernel.io>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Rik van Riel <riel@surriel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v1 2/3] selftests/ksm: ksm_functional_tests: add prctl
- unmerge test
-Date:   Thu, 20 Apr 2023 14:30:57 -0700
-In-reply-to: <20230418152849.505124-3-david@redhat.com>
-Message-ID: <qvqwmt32i6kt.fsf@devbig1114.prn1.facebook.com>
+        Thu, 20 Apr 2023 17:34:58 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F001630D2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 14:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682026496; x=1713562496;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gxVLo03rQJYTrAXt611bWrhvxkoEHkkz2K8KQ/s2Pos=;
+  b=YQvk+HB3CJLnAbQwDrDvZ3oGel0HT25fsMQEbkkKWBIPYkac7vcao5SI
+   7CUNaQyJO/SP8YB2E1j1fVTKwTIW9vqv9tWWpqfqfoWLgWX/baP0t+26p
+   eImYpoJL+jCBh1plgGYPk9uMiZ8RomhNEffIHsmQUPCdH7SL419gakULv
+   UcZNiUFTvbLhtD4ynETbOdIYJiqVKcc6Zn0wUvcguctTNSpj3pl4L/Ueo
+   fEvA4Vt3fKcElR9JAd77fd3yhwOjknwUGLWUBD8CruczISFwwI9WxhCu1
+   vDuEZ3WDYuD7MLP8ZRiWijKbZuXAlhoPiq1WrJGLyMqDb3aDTqnN9hneP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="326183095"
+X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
+   d="scan'208";a="326183095"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 14:34:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="835928095"
+X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
+   d="scan'208";a="835928095"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Apr 2023 14:34:55 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ppbva-000g7o-31;
+        Thu, 20 Apr 2023 21:34:54 +0000
+Date:   Fri, 21 Apr 2023 05:33:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: arch/arm/mach-sa1100/jornada720_ssp.c:24: warning: expecting
+ prototype for arch/arm/mac(). Prototype was for DEFINE_SPINLOCK() instead
+Message-ID: <202304210535.tWby3jWF-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Arnd,
 
-David Hildenbrand <david@redhat.com> writes:
+First bad commit (maybe != root cause):
 
-> Let's test whether setting PR_SET_MEMORY_MERGE to 0 after setting it to
-> 1 will unmerge pages, similar to how setting MADV_UNMERGEABLE after setting
-> MADV_MERGEABLE would.
->
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->  .../selftests/mm/ksm_functional_tests.c       | 46 ++++++++++++++++---
->  1 file changed, 40 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-> index 7bc9fc17c9f0..26853badae70 100644
-> --- a/tools/testing/selftests/mm/ksm_functional_tests.c
-> +++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-> @@ -91,9 +91,10 @@ static int ksm_merge(void)
->  	return 0;
->  }
->
-> -static char *mmap_and_merge_range(char val, unsigned long size)
-> +static char *mmap_and_merge_range(char val, unsigned long size, bool use_prctl)
->  {
->  	char *map;
-> +	int ret;
->
->  	map = mmap(NULL, size, PROT_READ|PROT_WRITE,
->  		   MAP_PRIVATE|MAP_ANON, -1, 0);
-> @@ -110,7 +111,17 @@ static char *mmap_and_merge_range(char val, unsigned long size)
->
->  	/* Make sure each page contains the same values to merge them. */
->  	memset(map, val, size);
-> -	if (madvise(map, size, MADV_MERGEABLE)) {
-> +
-> +	if (use_prctl) {
-> +		ret = prctl(PR_SET_MEMORY_MERGE, 1, 0, 0, 0);
-> +		if (ret < 0 && errno == EINVAL) {
-> +			ksft_test_result_skip("PR_SET_MEMORY_MERGE not supported\n");
-> +			goto unmap;
-> +		} else if (ret) {
-> +			ksft_test_result_fail("PR_SET_MEMORY_MERGE=1 failed\n");
-> +			goto unmap;
-> +		}
-> +	} else if (madvise(map, size, MADV_MERGEABLE)) {
->  		ksft_test_result_fail("MADV_MERGEABLE failed\n");
->  		goto unmap;
->  	}
-> @@ -133,7 +144,7 @@ static void test_unmerge(void)
->
->  	ksft_print_msg("[RUN] %s\n", __func__);
->
-> -	map = mmap_and_merge_range(0xcf, size);
-> +	map = mmap_and_merge_range(0xcf, size, false);
->  	if (map == MAP_FAILED)
->  		return;
->
-> @@ -155,7 +166,7 @@ static void test_unmerge_discarded(void)
->
->  	ksft_print_msg("[RUN] %s\n", __func__);
->
-> -	map = mmap_and_merge_range(0xcf, size);
-> +	map = mmap_and_merge_range(0xcf, size, false);
->  	if (map == MAP_FAILED)
->  		return;
->
-> @@ -187,7 +198,7 @@ static void test_unmerge_uffd_wp(void)
->
->  	ksft_print_msg("[RUN] %s\n", __func__);
->
-> -	map = mmap_and_merge_range(0xcf, size);
-> +	map = mmap_and_merge_range(0xcf, size, false);
->  	if (map == MAP_FAILED)
->  		return;
->
-> @@ -323,9 +334,31 @@ static void test_prctl_fork(void)
->  	ksft_test_result_pass("PR_SET_MEMORY_MERGE value is inherited\n");
->  }
->
-> +static void test_prctl_unmerge(void)
-> +{
-> +	const unsigned int size = 2 * MiB;
-> +	char *map;
-> +
-> +	ksft_print_msg("[RUN] %s\n", __func__);
-> +
-> +	map = mmap_and_merge_range(0xcf, size, true);
-> +	if (map == MAP_FAILED)
-> +		return;
-> +
-> +	if (prctl(PR_SET_MEMORY_MERGE, 0, 0, 0, 0)) {
-> +		ksft_test_result_fail("PR_SET_MEMORY_MERGE=0 failed\n");
-> +		goto unmap;
-> +	}
-> +
-> +	ksft_test_result(!range_maps_duplicates(map, size),
-> +			 "Pages were unmerged\n");
-> +unmap:
-> +	munmap(map, size);
-> +}
-> +
->  int main(int argc, char **argv)
->  {
-> -	unsigned int tests = 4;
-> +	unsigned int tests = 5;
->  	int err;
->
->  #ifdef __NR_userfaultfd
-> @@ -355,6 +388,7 @@ int main(int argc, char **argv)
->
->  	test_prctl();
->  	test_prctl_fork();
-> +	test_prctl_unmerge();
->
->  	err = ksft_get_fail_cnt();
->  	if (err)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   cb0856346a60fe3eb837ba5e73588a41f81ac05f
+commit: 8faf91c48ca20c714e0dd8cc5f510e3819852912 ARM: sa1100: un-deprecate jornada720
+date:   3 months ago
+config: arm-jornada720_defconfig (https://download.01.org/0day-ci/archive/20230421/202304210535.tWby3jWF-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8faf91c48ca20c714e0dd8cc5f510e3819852912
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8faf91c48ca20c714e0dd8cc5f510e3819852912
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Acked-by: Stefan Roesch <shr@devkernel.io>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304210535.tWby3jWF-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   arch/arm/mach-sa1100/jornada720_ssp.c:24: warning: Function parameter or member 'jornada_ssp_lock' not described in 'DEFINE_SPINLOCK'
+>> arch/arm/mach-sa1100/jornada720_ssp.c:24: warning: expecting prototype for arch/arm/mac(). Prototype was for DEFINE_SPINLOCK() instead
+   arch/arm/mach-sa1100/jornada720_ssp.c:34: warning: Function parameter or member 'byte' not described in 'jornada_ssp_reverse'
+   arch/arm/mach-sa1100/jornada720_ssp.c:57: warning: Function parameter or member 'byte' not described in 'jornada_ssp_byte'
+   arch/arm/mach-sa1100/jornada720_ssp.c:85: warning: Function parameter or member 'byte' not described in 'jornada_ssp_inout'
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SA1100_SSP
+   Depends on [n]: ARCH_SA1100 [=y] && UNUSED_BOARD_FILES [=n]
+   Selected by [y]:
+   - SA1100_JORNADA720_SSP [=y] && ARCH_SA1100 [=y] && SA1100_JORNADA720 [=y]
+
+
+vim +24 arch/arm/mach-sa1100/jornada720_ssp.c
+
+69ebb22277a53f Kristoffer Ericson 2007-07-20  23  
+69ebb22277a53f Kristoffer Ericson 2007-07-20 @24  static DEFINE_SPINLOCK(jornada_ssp_lock);
+69ebb22277a53f Kristoffer Ericson 2007-07-20  25  static unsigned long jornada_ssp_flags;
+69ebb22277a53f Kristoffer Ericson 2007-07-20  26  
+
+:::::: The code at line 24 was first introduced by commit
+:::::: 69ebb22277a53f612ccd632ceb73ed87c9093412 [ARM] 4506/1: HP Jornada 7XX: Addition of SSP Platform Driver
+
+:::::: TO: Kristoffer Ericson <Kristoffer_e1@hotmail.com>
+:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
