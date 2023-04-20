@@ -2,333 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8916E9456
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8670C6E9457
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231920AbjDTMb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
+        id S231972AbjDTMbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjDTMbZ (ORCPT
+        with ESMTP id S233953AbjDTMbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:31:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C69E6A49
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:31:02 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78DC61480;
-        Thu, 20 Apr 2023 05:31:45 -0700 (PDT)
-Received: from [192.168.1.3] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 359263F587;
-        Thu, 20 Apr 2023 05:31:00 -0700 (PDT)
-Message-ID: <91ba66e7-737f-6526-a703-a755e114f9d4@arm.com>
-Date:   Thu, 20 Apr 2023 13:30:59 +0100
+        Thu, 20 Apr 2023 08:31:37 -0400
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6395FD5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:31:24 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 12:31:15 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1681993880; x=1682253080;
+        bh=FCkFAbulFGI3Yeay24LtaHM+84J2hy00PW8s2beY1+4=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=MjgeugQg+13JYK+iNQZj/VWwPd5j7KpF0adnh5wyJgfHZbx763uLQ8Y0OcjsWu6ea
+         MwhOjm1u2w6xucVMB8Scyb7PHC5RP7iHZAb8XtoyIQsNXJdvCvmNAik+R6fqO+8eSA
+         +WtjhuXC44ko8llcV2PounBroYAQrETWNSq0uMW1bO3wN6GaEjGq7yURZyAkGXdicx
+         kp+d8nBDr9WvlAEB5ddyUXPpuYJG+4TFONgGe2oFF6cFqfoYpB+zrF9tijehxXn4Xw
+         dpx6D6O2ob7X3F+5fei7Rq1Ro/vwj5X/WZS/fcr5O3ZYCpY/UcMjbv52tq4MNRfHro
+         S4I+l5Hyf2SsA==
+To:     Miguel Ojeda <ojeda@kernel.org>
+From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Josh Stone <jistone@redhat.com>,
+        William Brown <william.brown@suse.com>,
+        Georgy Yakovlev <gyakovlev@gentoo.org>,
+        Jan Alexander Steffens <jan.steffens@gmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: Re: [PATCH 3/3] rust: upgrade to Rust 1.68.2
+Message-ID: <0B5taLitZ7KSXZe80LMMwnD0i2dJBwv9KRbM4uwj-DscFSwNEpb3Z1Q-ojqizlBcK_m2carSDL9uPrrJdDkn_BAG04UUl8uM_SpGy_wPnw4=@protonmail.com>
+In-Reply-To: <20230418214347.324156-4-ojeda@kernel.org>
+References: <20230418214347.324156-1-ojeda@kernel.org> <20230418214347.324156-4-ojeda@kernel.org>
+Feedback-ID: 27884398:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] perf cs-etm: Add support for coresight trace for any
- range of CPUs
-Content-Language: en-US
-To:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-Cc:     mathieu.poirier@linaro.org, acme@kernel.org,
-        darren@os.amperecomputing.com, scott@os.amperecomputing.com,
-        scclevenger@os.amperecomputing.com, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        mike.leach@linaro.org, suzuki.poulose@arm.com
-References: <20230419172101.78638-1-gankulkarni@os.amperecomputing.com>
- <d758c5e2-aa32-d829-35ee-a685bdb56f75@arm.com>
- <84eb3363-2ef8-d3f1-4613-805959dbf334@os.amperecomputing.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <84eb3363-2ef8-d3f1-4613-805959dbf334@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tuesday, April 18th, 2023 at 23:43, Miguel Ojeda <ojeda@kernel.org> wrot=
+e:
 
+> This is the first upgrade to the Rust toolchain since the initial Rust
+> merge, from 1.62.0 to 1.68.2 (i.e. the latest).
+>=20
+> # Context
+>=20
+> The kernel currently supports only a single Rust version [1] (rather
+> than a minimum) given our usage of some "unstable" Rust features [2]
+> which do not promise backwards compatibility.
+>=20
+> The goal is to reach a point where we can declare a minimum version for
+> the toolchain. For instance, by waiting for some of the features to be
+> stabilized. Therefore, the first minimum Rust version that the kernel
+> will support is "in the future".
+>=20
+> # Upgrade policy
+>=20
+> Given we will eventually need to reach that minimum version, it would be
+> ideal to upgrade the compiler from time to time to be as close as
+> possible to that goal and find any issues sooner. In the extreme, we
+> could upgrade as soon as a new Rust release is out. Of course, upgrading
+> so often is in stark contrast to what one normally would need for GCC
+> and LLVM, especially given the release schedule: 6 weeks for Rust vs.
+> half a year for LLVM and a year for GCC.
+>=20
+> Having said that, there is no particular advantage to updating slowly
+> either: kernel developers in "stable" distributions are unlikely to be
+> able to use their distribution-provided Rust toolchain for the kernel
+> anyway [3]. Instead, by routinely upgrading to the latest instead,
+> kernel developers using Linux distributions that track the latest Rust
+> release may be able to use those rather than Rust-provided ones,
+> especially if their package manager allows to pin / hold back /
+> downgrade the version for some days during windows where the version may
+> not match. For instance, Arch, Fedora, Gentoo and openSUSE all provide
+> and track the latest version of Rust as they get released every 6 weeks.
+>=20
+> Then, when the minimum version is reached, we will stop upgrading and
+> decide how wide the window of support will be. For instance, a year of
+> Rust versions. We will probably want to start small, and then widen it
+> over time, just like the kernel did originally for LLVM, see commit
+> 3519c4d6e08e ("Documentation: add minimum clang/llvm version").
+>=20
+> # Unstable features stabilized
+>=20
+> This upgrade allows us to remove the following unstable features since
+> they were stabilized:
+>=20
+>   - `feature(explicit_generic_args_with_impl_trait)` (1.63).
+>   - `feature(core_ffi_c)` (1.64).
+>   - `feature(generic_associated_types)` (1.65).
+>   - `feature(const_ptr_offset_from)` (1.65, *).
+>   - `feature(bench_black_box)` (1.66, *).
+>   - `feature(pin_macro)` (1.68).
+>=20
+> The ones marked with `*` apply only to our old `rust` branch, not
+> mainline yet, i.e. only for code that we may potentially upstream.
+>=20
+> With this patch applied, the only unstable feature allowed to be used
+> outside the `kernel` crate is `new_uninit`, though other code to be
+> upstreamed may increase the list.
+>=20
+> Please see [2] for details.
+>=20
+> # Other required changes
+>=20
+> Since 1.63, `rustdoc` triggers the `broken_intra_doc_links` lint for
+> links pointing to exported (`#[macro_export]`) `macro_rules`. An issue
+> was opened upstream [4], but it turns out it is intended behavior. For
+> the moment, just add an explicit reference for each link. Later we can
+> revisit this if `rustdoc` removes the compatibility measure.
+>=20
+> Nevertheless, this was helpful to discover a link that was pointing to
+> the wrong place unintentionally. Since that one was actually wrong, it
+> is fixed in a previous commit independently.
+>=20
+> Another change was the addition of `cfg(no_rc)` and `cfg(no_sync)` in
+> upstream [5], thus remove our original changes for that.
+>=20
+> Similarly, upstream now tests that it compiles successfully with
+> `#[cfg(not(no_global_oom_handling))]` [6], which allow us to get rid
+> of some changes, such as an `#[allow(dead_code)]`.
+>=20
+> In addition, remove another `#[allow(dead_code)]` due to new uses
+> within the standard library.
+>=20
+> Finally, add `try_extend_trusted` and move the code in `spec_extend.rs`
+> since upstream moved it for the infallible version.
+>=20
+> # `alloc` upgrade and reviewing
+>=20
+> There are a large amount of changes, but the vast majority of them are
+> due to our `alloc` fork being upgraded at once.
+>=20
+> There are two kinds of changes to be aware of: the ones coming from
+> upstream, which we should follow as closely as possible, and the updates
+> needed in our added fallible APIs to keep them matching the newer
+> infallible APIs coming from upstream.
+>=20
+> Instead of taking a look at the diff of this patch, an alternative
+> approach is reviewing a diff of the changes between upstream `alloc` and
+> the kernel's. This allows to easily inspect the kernel additions only,
+> especially to check if the fallible methods we already have still match
+> the infallible ones in the new version coming from upstream.
+>=20
+> Another approach is reviewing the changes introduced in the additions in
+> the kernel fork between the two versions. This is useful to spot
+> potentially unintended changes to our additions.
+>=20
+> To apply these approaches, one may follow steps similar to the following
+> to generate a pair of patches that show the differences between upstream
+> Rust and the kernel (for the subset of `alloc` we use) before and after
+> applying this patch:
+>=20
+>     # Get the difference with respect to the old version.
+>     git -C rust checkout $(linux/scripts/min-tool-version.sh rustc)
+>     git -C linux ls-tree -r --name-only HEAD -- rust/alloc |
+>         cut -d/ -f3- |
+>         grep -Fv README.md |
+>         xargs -IPATH cp rust/library/alloc/src/PATH linux/rust/alloc/PATH
+>     git -C linux diff --patch-with-stat --summary -R > old.patch
+>     git -C linux restore rust/alloc
+>=20
+>     # Apply this patch.
+>     git -C linux am rust-upgrade.patch
+>=20
+>     # Get the difference with respect to the new version.
+>     git -C rust checkout $(linux/scripts/min-tool-version.sh rustc)
+>     git -C linux ls-tree -r --name-only HEAD -- rust/alloc |
+>         cut -d/ -f3- |
+>         grep -Fv README.md |
+>         xargs -IPATH cp rust/library/alloc/src/PATH linux/rust/alloc/PATH
+>     git -C linux diff --patch-with-stat --summary -R > new.patch
+>     git -C linux restore rust/alloc
+>=20
+> Now one may check the `new.patch` to take a look at the additions (first
+> approach) or at the difference between those two patches (second
+> approach). For the latter, a side-by-side tool is recommended.
+>=20
+> Link: https://rust-for-linux.com/rust-version-policy [1]
+> Link: https://github.com/Rust-for-Linux/linux/issues/2 [2]
+> Link: https://lore.kernel.org/rust-for-linux/CANiq72mT3bVDKdHgaea-6WiZazd=
+8Mvurqmqegbe5JZxVyLR8Yg@mail.gmail.com/ [3]
+> Link: https://github.com/rust-lang/rust/issues/106142 [4]
+> Link: https://github.com/rust-lang/rust/pull/89891 [5]
+> Link: https://github.com/rust-lang/rust/pull/98652 [6]
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-On 20/04/2023 12:47, Ganapatrao Kulkarni wrote:
-> 
-> Hi James,
-> 
-> On 20-04-2023 03:13 pm, James Clark wrote:
->>
->>
->> On 19/04/2023 18:21, Ganapatrao Kulkarni wrote:
->>> The current implementation supports coresight trace for a range of
->>> CPUs, if the first CPU is CPU0.
->>>
->>> Adding changes to enable coresight trace for any range of CPUs by
->>> decoding the first CPU also from the header.
->>> Later, first CPU id is used instead of CPU0 across the decoder
->>> functions.
->>>
->>> Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
->>> ---
->>>   .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  4 +-
->>>   .../perf/util/cs-etm-decoder/cs-etm-decoder.h |  3 +-
->>>   tools/perf/util/cs-etm.c                      | 62 ++++++++++++-------
->>>   3 files changed, 42 insertions(+), 27 deletions(-)
->>>
->>> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
->>> b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
->>> index 82a27ab90c8b..41ab299b643b 100644
->>> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
->>> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
->>> @@ -724,7 +724,7 @@ cs_etm_decoder__create_etm_decoder(struct
->>> cs_etm_decoder_params *d_params,
->>>   }
->>>     struct cs_etm_decoder *
->>> -cs_etm_decoder__new(int decoders, struct cs_etm_decoder_params
->>> *d_params,
->>> +cs_etm_decoder__new(int first_decoder, int decoders, struct
->>> cs_etm_decoder_params *d_params,
->>>               struct cs_etm_trace_params t_params[])
->>>   {
->>>       struct cs_etm_decoder *decoder;
->>> @@ -769,7 +769,7 @@ cs_etm_decoder__new(int decoders, struct
->>> cs_etm_decoder_params *d_params,
->>>       /* init raw frame logging if required */
->>>       cs_etm_decoder__init_raw_frame_logging(d_params, decoder);
->>>   -    for (i = 0; i < decoders; i++) {
->>> +    for (i = first_decoder; i < decoders; i++) {
->>>           ret = cs_etm_decoder__create_etm_decoder(d_params,
->>>                                &t_params[i],
->>>                                decoder);
->>> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
->>> b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
->>> index 92a855fbe5b8..b06193fc75b4 100644
->>> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
->>> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
->>> @@ -90,7 +90,8 @@ int cs_etm_decoder__process_data_block(struct
->>> cs_etm_decoder *decoder,
->>>                          size_t len, size_t *consumed);
->>>     struct cs_etm_decoder *
->>> -cs_etm_decoder__new(int num_cpu,
->>> +cs_etm_decoder__new(int first_decoder,
->>> +            int decoders,
->>>               struct cs_etm_decoder_params *d_params,
->>>               struct cs_etm_trace_params t_params[]);
->>>   diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
->>> index 94e2d02009eb..2619513ae088 100644
->>> --- a/tools/perf/util/cs-etm.c
->>> +++ b/tools/perf/util/cs-etm.c
->>> @@ -55,6 +55,8 @@ struct cs_etm_auxtrace {
->>>       u8 has_virtual_ts; /* Virtual/Kernel timestamps in the trace. */
->>>         int num_cpu;
->>> +    int first_cpu;
->>> +    int last_cpu;
->>>       u64 latest_kernel_timestamp;
->>>       u32 auxtrace_type;
->>>       u64 branches_sample_type;
->>> @@ -638,14 +640,13 @@ static void cs_etm__set_trace_param_ete(struct
->>> cs_etm_trace_params *t_params,
->>>   }
->>>     static int cs_etm__init_trace_params(struct cs_etm_trace_params
->>> *t_params,
->>> -                     struct cs_etm_auxtrace *etm,
->>> -                     int decoders)
->>> +                     struct cs_etm_auxtrace *etm)
->>>   {
->>>       int i;
->>>       u32 etmidr;
->>>       u64 architecture;
->>>   -    for (i = 0; i < decoders; i++) {
->>> +    for (i = etm->first_cpu; i < etm->last_cpu; i++) {
->>>           architecture = etm->metadata[i][CS_ETM_MAGIC];
->>>             switch (architecture) {
->>> @@ -817,7 +818,7 @@ static void cs_etm__free(struct perf_session
->>> *session)
->>>       /* Then the RB tree itself */
->>>       intlist__delete(traceid_list);
->>>   -    for (i = 0; i < aux->num_cpu; i++)
->>> +    for (i = aux->first_cpu; i < aux->last_cpu; i++)
->>>           zfree(&aux->metadata[i]);
->>>         thread__zput(aux->unknown_thread);
->>> @@ -921,7 +922,8 @@ static struct cs_etm_queue
->>> *cs_etm__alloc_queue(struct cs_etm_auxtrace *etm,
->>>        * Each queue can only contain data from one CPU when
->>> unformatted, so only one decoder is
->>>        * needed.
->>>        */
->>> -    int decoders = formatted ? etm->num_cpu : 1;
->>> +    int first_decoder = formatted ? etm->first_cpu : 0;
->>> +    int decoders = first_decoder + (formatted ? etm->num_cpu : 1);
->>>         etmq = zalloc(sizeof(*etmq));
->>>       if (!etmq)
->>> @@ -937,7 +939,7 @@ static struct cs_etm_queue
->>> *cs_etm__alloc_queue(struct cs_etm_auxtrace *etm,
->>>       if (!t_params)
->>>           goto out_free;
->>>   -    if (cs_etm__init_trace_params(t_params, etm, decoders))
->>> +    if (cs_etm__init_trace_params(t_params, etm))
->>>           goto out_free;
->>>         /* Set decoder parameters to decode trace packets */
->>> @@ -947,8 +949,7 @@ static struct cs_etm_queue
->>> *cs_etm__alloc_queue(struct cs_etm_auxtrace *etm,
->>>                       formatted))
->>>           goto out_free;
->>>   -    etmq->decoder = cs_etm_decoder__new(decoders, &d_params,
->>> -                        t_params);
->>> +    etmq->decoder = cs_etm_decoder__new(first_decoder, decoders,
->>> &d_params, t_params);
->>>         if (!etmq->decoder)
->>>           goto out_free;
->>> @@ -2959,11 +2960,11 @@ static int cs_etm__queue_aux_records(struct
->>> perf_session *session)
->>>    * Loop through the ETMs and complain if we find at least one where
->>> ts_source != 1 (virtual
->>>    * timestamps).
->>>    */
->>> -static bool cs_etm__has_virtual_ts(u64 **metadata, int num_cpu)
->>> +static bool cs_etm__has_virtual_ts(u64 **metadata, struct
->>> cs_etm_auxtrace *etm)
->>>   {
->>>       int j;
->>>   -    for (j = 0; j < num_cpu; j++) {
->>> +    for (j = etm->first_cpu; j < etm->last_cpu; j++) {
->>>           switch (metadata[j][CS_ETM_MAGIC]) {
->>>           case __perf_cs_etmv4_magic:
->>>               if (HAS_PARAM(j, ETMV4, TS_SOURCE) ||
->>> metadata[j][CS_ETMV4_TS_SOURCE] != 1)
->>> @@ -2982,13 +2983,14 @@ static bool cs_etm__has_virtual_ts(u64
->>> **metadata, int num_cpu)
->>>   }
->>>     /* map trace ids to correct metadata block, from information in
->>> metadata */
->>> -static int cs_etm__map_trace_ids_metadata(int num_cpu, u64 **metadata)
->>> +static int cs_etm__map_trace_ids_metadata(struct cs_etm_auxtrace *etm)
->>>   {
->>>       u64 cs_etm_magic;
->>> +    u64 **metadata = etm->metadata;
->>>       u8 trace_chan_id;
->>>       int i, err;
->>>   -    for (i = 0; i < num_cpu; i++) {
->>> +    for (i = etm->first_cpu; i < etm->last_cpu; i++) {
->>>           cs_etm_magic = metadata[i][CS_ETM_MAGIC];
->>>           switch (cs_etm_magic) {
->>>           case __perf_cs_etmv3_magic:
->>> @@ -3015,12 +3017,13 @@ static int cs_etm__map_trace_ids_metadata(int
->>> num_cpu, u64 **metadata)
->>>    * If we found AUX_HW_ID packets, then set any metadata marked as
->>> unused to the
->>>    * unused value to reduce the number of unneeded decoders created.
->>>    */
->>> -static int cs_etm__clear_unused_trace_ids_metadata(int num_cpu, u64
->>> **metadata)
->>> +static int cs_etm__clear_unused_trace_ids_metadata(struct
->>> cs_etm_auxtrace *etm)
->>>   {
->>>       u64 cs_etm_magic;
->>> +    u64 **metadata = etm->metadata;
->>>       int i;
->>>   -    for (i = 0; i < num_cpu; i++) {
->>> +    for (i = etm->first_cpu; i < etm->last_cpu; i++) {
->>>           cs_etm_magic = metadata[i][CS_ETM_MAGIC];
->>>           switch (cs_etm_magic) {
->>>           case __perf_cs_etmv3_magic:
->>> @@ -3049,7 +3052,7 @@ int cs_etm__process_auxtrace_info_full(union
->>> perf_event *event,
->>>       int event_header_size = sizeof(struct perf_event_header);
->>>       int total_size = auxtrace_info->header.size;
->>>       int priv_size = 0;
->>> -    int num_cpu;
->>> +    int num_cpu, first_cpu = 0, last_cpu;
->>>       int err = 0;
->>>       int aux_hw_id_found;
->>>       int i, j;
->>> @@ -3068,22 +3071,31 @@ int cs_etm__process_auxtrace_info_full(union
->>> perf_event *event,
->>>       /* First the global part */
->>>       ptr = (u64 *) auxtrace_info->priv;
->>>       num_cpu = ptr[CS_PMU_TYPE_CPUS] & 0xffffffff;
->>> -    metadata = zalloc(sizeof(*metadata) * num_cpu);
->>> +
->>> +    /* Start parsing after the common part of the header */
->>> +    i = CS_HEADER_VERSION_MAX;
->>> +
->>> +    /*Get CPU id of first event */
->>> +    first_cpu = ptr[i + CS_ETM_CPU];
->>> +    last_cpu = first_cpu + num_cpu;
->>> +
->>> +    if (first_cpu > cpu__max_cpu().cpu ||
->>> +            last_cpu > cpu__max_cpu().cpu)
->>> +        return -EINVAL;
->>> +
->>> +    metadata = zalloc(sizeof(*metadata) * last_cpu);
->>
->> Hi Ganapatrao,
->>
->> I think I see what the problem is, but I'm wondering if a better fix
->> would be to further decouple the CPU ID from the index in the array.
->>
->> With your change it's not clear what happens with sparse recordings, for
->> example 'perf record -e cs_etm// -C 1,3,5'. And it seems like there is
-> 
-> This patch fixes for any range of CPUs.
-> Record with sparse list of CPUs will not work with current code still.
-> 
+Reviewed-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
 
-Is there a major issue that means sparse can't be done? I'm thinking it
-would be best to fix both issues with one change while we understand
-this part rather than a half fix that might have do be completely
-re-understood and re-done later anyway. Unless there is some big blocker
-but I can't see it?
-
->> some wastage in the zalloc here for example if only CPU 256 is traced
->> then we'd still make 256 decoders but 255 of them would be unused?
->>
->> I tried to test sparse recordings, but your change doesn't apply to the
->> latest coresight/next branch. I did notice that 'perf report -D' doesn't
->> work with them on coresight/next (it just quits), but I couldn't see if
->> that's fixed with your change.
-> 
-> My patch is rebased on 6.3-RC7 codebase with Mike's 3 perf patches
-> related to dynamic id [1] support(queued for 6.4).
-> 
-> "perf report -D" works for me.
-
-I was referring to sparse CPU lists, which I think you mentioned above
-doesn't work even with this patch.
-
-> 
-> [1] https://www.spinics.net/lists/linux-perf-users/msg27452.html
-> 
-
-It should be based on the next branch here:
-git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git
-
->>
->> Would a better fix not be to keep the metadata loops from 0-N and
->> instead save the CPU ID in cs_etm_decoder_params or the decoder. That
->> way it would support both sparse and not starting from 0 cases? I think
-> 
-> Yep, I though this initially, it got complicated due to for more
-> for-loops. I will try again and post V2.
-> 
-
-I can't imagine it would need any extra for loops off the top of my
-head. Just saving the CPU ID in a few structs and using it wherever it's
-needed instead of the loop index. I imagine most of the loops would
-actually stay the same rather than be changed like you have in V1.
-
->> the code would be better if it's worded like "i < recorded_cpus" rather
->> than "i < cpu" to make it clear that i isn't actually the CPU ID it's
->> just an index.
-> 
-> Yes, makes sense to call it "recorded_cpus".
-> 
->>
->> Also a new test for this scenario would probably be a good idea.
->>
->> Thanks
->> James
->>
-> Thanks,
-> Ganapat
+> ---
+>  Documentation/process/changes.rst |   2 +-
+>  rust/alloc/alloc.rs               |  55 ++--
+>  rust/alloc/boxed.rs               | 446 ++++++++++++++++++++++++++--
+>  rust/alloc/collections/mod.rs     |   5 +-
+>  rust/alloc/lib.rs                 |  71 +++--
+>  rust/alloc/raw_vec.rs             |  16 +-
+>  rust/alloc/slice.rs               | 447 ++++------------------------
+>  rust/alloc/vec/drain.rs           |  81 +++++-
+>  rust/alloc/vec/drain_filter.rs    |  60 +++-
+>  rust/alloc/vec/into_iter.rs       | 125 ++++++--
+>  rust/alloc/vec/is_zero.rs         |  96 ++++++-
+>  rust/alloc/vec/mod.rs             | 464 +++++++++++++++++++++++-------
+>  rust/alloc/vec/set_len_on_drop.rs |   5 +
+>  rust/alloc/vec/spec_extend.rs     |  63 +---
+>  rust/bindings/lib.rs              |   1 -
+>  rust/kernel/build_assert.rs       |   2 +
+>  rust/kernel/init.rs               |   5 +
+>  rust/kernel/lib.rs                |   4 -
+>  rust/kernel/std_vendor.rs         |   2 +
+>  scripts/Makefile.build            |   2 +-
+>  scripts/min-tool-version.sh       |   2 +-
+>  21 files changed, 1274 insertions(+), 680 deletions(-)
