@@ -2,119 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D92A6E903D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B3F6E9040
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 12:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234581AbjDTKcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 06:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
+        id S234757AbjDTKcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 06:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234519AbjDTKb3 (ORCPT
+        with ESMTP id S234229AbjDTKbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 06:31:29 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67460268A;
-        Thu, 20 Apr 2023 03:29:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1681986541; x=1713522541;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PxxF+ybrqPaMA+5/3lIm0KfonobVUIOCFzFZF6VC8s4=;
-  b=sTF+OV/hKGRWtan4VU324dX6U+waQMcMNgEhiWfZs3ZAybiJ5tBTt3ue
-   Kx9UV4YCN8Qf2BO5y85dyYuM/9s/pUFr/Mc6Rb0sc1fcnH5VnUAo8BgET
-   i+XeBwVpZsxq+4kjeUtjXiySF3t4hrZY3isTeyNnjFOR8kOZ4cAmelYpZ
-   rHDzt96FhO3GgVqsp/8HSvt8chjEEFL8Rl48nFGa9MLQEDH6HmaLRoWml
-   EBtKVywvkN8bsfpqxgOAmoSzqJSvti0yutKRRJauV3VsRT3nuzdTdJ3aF
-   sJo0z+x8UFU3a/Q3EcF0n668YslRKSWR1EjJWiubF7pNVxGGKj8C8VqTZ
-   g==;
-X-IronPort-AV: E=Sophos;i="5.99,212,1677567600"; 
-   d="asc'?scan'208";a="148053676"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Apr 2023 03:28:44 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 20 Apr 2023 03:28:43 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 20 Apr 2023 03:28:40 -0700
-Date:   Thu, 20 Apr 2023 11:28:24 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Nylon Chen <nylon.chen@sifive.com>
-CC:     <aou@eecs.berkeley.edu>, <conor@kernel.org>,
-        <emil.renner.berthing@canonical.com>, <geert+renesas@glider.be>,
-        <heiko@sntech.de>, <krzysztof.kozlowski+dt@linaro.org>,
-        <palmer@dabbelt.com>, <paul.walmsley@sifive.com>,
-        <robh+dt@kernel.org>, <thierry.reding@gmail.com>,
-        <u.kleine-koenig@pengutronix.de>, <devicetree@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <nylon7717@gmail.com>,
-        <zong.li@sifive.com>, <greentime.hu@sifive.com>,
-        <vincent.chen@sifive.com>
-Subject: Re: [PATCH v3 2/2] pwm: sifive: change the PWM controlled LED
- algorithm
-Message-ID: <20230420-pension-threaten-bc9a549465ab@wendy>
-References: <20230420093457.18936-1-nylon.chen@sifive.com>
- <20230420093457.18936-3-nylon.chen@sifive.com>
+        Thu, 20 Apr 2023 06:31:44 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C06659D
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:29:21 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id a1e0cc1a2514c-771dc034dfaso120719241.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 03:29:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681986559; x=1684578559;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+yoFhtYReLRyKxkqbyv29o5oc/zCEFAU+pzBC0jHw8c=;
+        b=sogqy1KdR0kOC1RtT2z+6Z9jSXFdwwlaoSCRR3R452OGSRwFomkHDfgqQVNb8TUJ0l
+         i9wshDSta8TI2/M0Up9nKSDr1kMDjD5UOAt17pe+yhqi0nSSQXZhnsREBj06fgML9xNU
+         r6Z9mnCSv888TUjdbzsv4qcARCMkkLHj7ibLwdKiICgag5H+n2mglzT+hu/Hb+FqcwT0
+         O6nixEvxVh3EYsecSE7le3gEO2Rw2dw7yQbrVpfh60wLkmd2/RPvjs9r/8W2EEEBfQwS
+         Se3irOZO7fAVoq5xind1Ft5EclZZdwo3eAk2MjIEITm2TjXKmjy/fVYnlU7BsKhsBGZU
+         48pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681986559; x=1684578559;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+yoFhtYReLRyKxkqbyv29o5oc/zCEFAU+pzBC0jHw8c=;
+        b=JPJNsY8MB5ja8/aUe1Lr5ey0v+vGCKPTVkQ0beJ3v+cnxQKLrb7W0E/84OcvQbPSTg
+         iVZfY8g9X00DGd/lsATG7y0co3Bo1ygEP6CBTVwd8WdqKi74xjqfcN08VvjTOjJ0CkNG
+         mKx5OUKbBZ7EruAWOHuK8Vkwm5O8CLA4zeShZIO/aL1uCxxUxTtEBgEQGke6oZvhziBA
+         WSwa4mL/4UByMfYj7l3u5c4TKftq0effuFVivgpDqlNEoU6ZglAOAvZAnRJAT8yqlbkN
+         1p8kAD9s9c13Xtk+YhBEs3eVudtuYYaCffZKXRLevqsUsH5hrKQ5DY6XqZK3nkLaYVDY
+         HVAQ==
+X-Gm-Message-State: AAQBX9c6XgiaCXw1aueyQKKw0ftaxLwFss+6smEGGLS570Bb9SW3Kdo/
+        FGGLH1hO1PGIgYoeDNn0Hznn1rpiwfwtyVHySorAFnv3DMUFLBWgzSg=
+X-Google-Smtp-Source: AKy350aH2Je7qoipZNoyKO5+fwXqf6r5UwLhNebUF5NinNiDbUoCeDAPQWN0NhEL1cxyo6DqNzLeQ4KfAREKbDcAAHQ=
+X-Received: by 2002:a67:fa0c:0:b0:42e:cfbe:c19e with SMTP id
+ i12-20020a67fa0c000000b0042ecfbec19emr626839vsq.27.1681986559227; Thu, 20 Apr
+ 2023 03:29:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="221CyLf96APVzjPW"
-Content-Disposition: inline
-In-Reply-To: <20230420093457.18936-3-nylon.chen@sifive.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230419132034.475843587@linuxfoundation.org>
+In-Reply-To: <20230419132034.475843587@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 20 Apr 2023 15:59:08 +0530
+Message-ID: <CA+G9fYuy8Juuz_6bsoB+Dn=aSbwgVqAxLNkw6Q4CkF5CQ7t_2Q@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/84] 5.15.108-rc4 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---221CyLf96APVzjPW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, 19 Apr 2023 at 18:52, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.108 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 21 Apr 2023 13:20:15 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.108-rc4.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On Thu, Apr 20, 2023 at 05:34:57PM +0800, Nylon Chen wrote:
-> The `frac` variable represents the pulse inactive time, and the result of
-> this algorithm is the pulse active time. Therefore, we must reverse the
-> result.
->=20
-> The reference is SiFive FU740-C000 Manual[0]
->=20
-> Link: https://sifive.cdn.prismic.io/sifive/1a82e600-1f93-4f41-b2d8-86ed8b=
-16acba_fu740-c000-manual-v1p6.pdf [0]
->=20
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Hmm, I don't recall reviewing or acking this patch. I do recalling doing
-it for 1/2 though:
-https://lore.kernel.org/linux-pwm/Y9len4GinXQ101xr@spud/
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Please remove these from your next submission, I don't have any knowledge
-of this driver nor do I maintain it, thanks.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
-> Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
+## Build
+* kernel: 5.15.108-rc4
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: df26c2ac7edab467aaa49544362100c86ab2759d
+* git describe: v5.15.105-273-gdf26c2ac7eda
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.105-273-gdf26c2ac7eda
 
-This SoB is new too AFAICT and looks a bit odd.
-Should there be a Co-developed-by for Vincent?
+## Test Regressions (compared to v5.15.105-194-g415a9d81c640)
 
-Thanks,
-Conor.
+## Metric Regressions (compared to v5.15.105-194-g415a9d81c640)
 
---221CyLf96APVzjPW
-Content-Type: application/pgp-signature; name="signature.asc"
+## Test Fixes (compared to v5.15.105-194-g415a9d81c640)
 
------BEGIN PGP SIGNATURE-----
+## Metric Fixes (compared to v5.15.105-194-g415a9d81c640)
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEETyAAKCRB4tDGHoIJi
-0twCAQD+D5uuZoL6Zj8V7Jd9fPKoYRdogs5ET3HIn+Gcls1UdQEAzjD2zPc7ebgY
-pOORg2ws5wOTXnrM95U5x6F9kWjMzws=
-=E5F/
------END PGP SIGNATURE-----
+## Test result summary
+total: 132220, pass: 105848, fail: 4053, skip: 22081, xfail: 238
 
---221CyLf96APVzjPW--
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 115 total, 114 passed, 1 failed
+* arm64: 43 total, 41 passed, 2 failed
+* i386: 33 total, 30 passed, 3 failed
+* mips: 27 total, 26 passed, 1 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 27 total, 26 passed, 1 failed
+* riscv: 11 total, 11 passed, 0 failed
+* s390: 12 total, 11 passed, 1 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 36 total, 34 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-n[
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
