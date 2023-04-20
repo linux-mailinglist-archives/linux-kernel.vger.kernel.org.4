@@ -2,94 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21F56E9D63
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52436E9D68
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbjDTUoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 16:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
+        id S232397AbjDTUqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 16:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232395AbjDTUoR (ORCPT
+        with ESMTP id S231534AbjDTUqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 16:44:17 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9617A35A3;
-        Thu, 20 Apr 2023 13:44:15 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6a5f1503886so544979a34.2;
-        Thu, 20 Apr 2023 13:44:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682023455; x=1684615455;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XdeZ8xzgVHosFDJ9K3Fl96nM7x/G+I3DI1EVKMB5/cI=;
-        b=SRVQIT5ZdzinBXJ0Z+dqRD64un+w4n0qvmQOpjQ4Sq5Rs6C7W5wddwI/kBB7Ma2/Bx
-         YHb9SmPeisaHAF1PBSdTEqMKLD5yqWBpGSTzblwYjzco830jY0feEXIfaVAJYc6VjLFk
-         n7JJV9P++xdsqMlHuIhWCQy3HpyQ7DVeB2whuvoaSpJsggtuvj1tzGz6ui4oM8ocvEEI
-         c5nwq/whf/iCNibZT+kSscIYSmLYytqT5tqY4u7xT21FOcCVJ08p+CufUTSVYrL/+/OQ
-         9AscmzQVS7sC7y6LcuFBiFHVkht7imiOnI7PHmkBsQKWpwZKrY2NfmVRqD9Lz6XndGEr
-         8svQ==
-X-Gm-Message-State: AAQBX9fHCkVsOHEWI9Wha/HTPiDwHyyL8Ihcg9uXnBJG7wk7geec4pam
-        kSfd9I1cvjLTidQz/GH5gw==
-X-Google-Smtp-Source: AKy350aEuuhzmBltlqVshkcKGlza/qYtsoMU4SNFpJGHeliRLT5wVxIePHagH1cABEcZFMnqjpbW7A==
-X-Received: by 2002:a05:6870:e749:b0:17a:aeff:5228 with SMTP id t9-20020a056870e74900b0017aaeff5228mr2130851oak.47.1682023454819;
-        Thu, 20 Apr 2023 13:44:14 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g11-20020a9d618b000000b006a3f4c6f138sm1091275otk.36.2023.04.20.13.44.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 13:44:14 -0700 (PDT)
-Received: (nullmailer pid 3467149 invoked by uid 1000);
-        Thu, 20 Apr 2023 20:44:13 -0000
-Date:   Thu, 20 Apr 2023 15:44:13 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: arm/soc: mediatek: Drop unneeded quotes
-Message-ID: <168202340162.3466084.977084044786860402.robh@kernel.org>
-References: <20230322173501.3970991-1-robh@kernel.org>
+        Thu, 20 Apr 2023 16:46:03 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C035359F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 13:46:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=X3b9GsUwpYKeLaZJwp+ULnsmb0Ew2c/ag5wOzD9xBGg=; b=Wo4KnFsSV8NVDRCCzIgaO+7YMZ
+        TGeVoZzbcIPCV4AudQ4WRzuGLJrfTiIHzkzxV6h2qeIc9DXLjd2avvvY4f2AfYZWzNuID0Mro9Snx
+        lehRE3YZAqgwn4PtI+lmt73C+AcDqau6nBiPNVnUgx7T4WNcQOsPtbv4uQ32rjTA0y03QifZGTp5i
+        QjoSq+/k6YQOXCdbYyiEcxWI/Ddr1sGn1VTwucrRmNgBfnUXCFbm79fQBZn+LlPpNRm7rY9RvJdfE
+        b8fZXpM+SX+sj60tYm69TW8ltqbcKRcrHKU65FAVRCCmnYqMzc0GRQ3QNuOMfFjijuX7eme9kdUYx
+        7+/2oQ3g==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1ppbA1-00AxLY-1t;
+        Thu, 20 Apr 2023 20:45:45 +0000
+Date:   Thu, 20 Apr 2023 21:45:45 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Haifeng Xu <haifeng.xu@shopee.com>
+Cc:     mszeredi@redhat.com, bigeasy@linutronix.de, mcgrof@kernel.org,
+        xiubli@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] vfs: clean up d_backing_inode() function
+Message-ID: <20230420204545.GN3390869@ZenIV>
+References: <CAOssrKfCiByavRNekRUOCv==AEvWAO6B6=tAASyYdvWj9XRhBw@mail.gmail.com>
+ <20230419104704.243950-1-haifeng.xu@shopee.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230322173501.3970991-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230419104704.243950-1-haifeng.xu@shopee.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Wed, 22 Mar 2023 12:34:59 -0500, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
+On Wed, Apr 19, 2023 at 10:47:04AM +0000, Haifeng Xu wrote:
+> d_backing_inode() does the same thing with d_inode(), so using
+> d_inode() to get the inode of dentry instead of d_backing_inode().
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml   | 4 ++--
->  .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml      | 4 ++--
->  .../bindings/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml    | 4 ++--
->  .../devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml | 4 ++--
->  .../bindings/arm/mediatek/mediatek,mt7986-wed-pcie.yaml       | 4 ++--
->  .../bindings/arm/mediatek/mediatek,mt8186-clock.yaml          | 4 ++--
->  .../bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml      | 4 ++--
->  .../bindings/arm/mediatek/mediatek,mt8192-clock.yaml          | 4 ++--
->  .../bindings/arm/mediatek/mediatek,mt8192-sys-clock.yaml      | 4 ++--
->  .../bindings/arm/mediatek/mediatek,mt8195-clock.yaml          | 4 ++--
->  .../bindings/arm/mediatek/mediatek,mt8195-sys-clock.yaml      | 4 ++--
->  .../devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml    | 4 ++--
->  Documentation/devicetree/bindings/soc/mediatek/devapc.yaml    | 4 ++--
->  13 files changed, 26 insertions(+), 26 deletions(-)
-> 
+> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+> Suggested-by: Miklos Szeredi <mszeredi@redhat.com>
 
-Applied, thanks!
+Fine by me, but generally that kind of search-and-replace is
+better done differently:
 
+1) patch replacing the definition of d_backing_inode() with
+#define d_backing_inode d_inode
+
+2) mail to Linus, asking to do mechanical search-and-replace
+just prior to -rc1; see e.g. 7c0f6ba682b9 for example of
+that being done.  In this case the script would be
+sed -i -e "s/\<d_backing_inode\>/d_inode/g" $(git grep -l -w "d_backing_inode")
+sed -i -e "/#define d_inode d_inode/d" include/linux/dentry.h
