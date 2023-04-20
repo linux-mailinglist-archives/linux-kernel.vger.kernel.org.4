@@ -2,154 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 750746E9AB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1D16E9AB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 19:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbjDTR1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 13:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
+        id S231526AbjDTR14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 13:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDTR1s (ORCPT
+        with ESMTP id S230495AbjDTR1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 13:27:48 -0400
-Received: from mx6.ucr.edu (unknown [138.23.62.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15EFE57
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:27:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
-  t=1682011667; x=1713547667;
-  h=mime-version:references:in-reply-to:from:date:message-id:
-   subject:to:cc:content-transfer-encoding;
-  bh=m0FRJv82Zu1t4DuQsvNt8pTR3GIZGjnpBIZPnMMIx84=;
-  b=oz7MF/u4ax3z3vKqb5AIF75LQ8ozNO43fGi5lJ0oZMdmVvRJiYOLEPA5
-   +hfZgIlHOMdKe3UUzqj2KbwzpYhDScaEyD70YFg+6uFBZOkwcXSY216e9
-   RYFhpetOpccbgNkApuFJky8YB0G+v++IySfXhIiA1TAGnBemoBnFic+ag
-   58sfgJz4/HQBIcMBaSPHF4ZeKYBsx7LL/TLTxVhnag/7G6utr1Kcabp7C
-   MzK4OwzxZ0W5KdJckYAc2nagBdvrjE1vRtatLj48zEgOvdZ+j0/qkjl8f
-   YVmJvgmfUICe3/oTlW2TbsBZsnzbsUeUNumRFyNn1EM782IZ0Ho7OxyyR
-   A==;
-Received: from mail-wr1-f71.google.com ([209.85.221.71])
-  by smtpmx6.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Apr 2023 10:27:46 -0700
-Received: by mail-wr1-f71.google.com with SMTP id j16-20020adfa550000000b002fee71f4a42so188687wrb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:27:45 -0700 (PDT)
+        Thu, 20 Apr 2023 13:27:52 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D430549C7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:27:47 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-95316faa3a8so97039666b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 10:27:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ucr.edu; s=rmail; t=1682011663; x=1684603663;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=prvqaHMzKrn9ZWtMPIRK+7YzVsgpCm9+YP37nwvlG5A=;
-        b=d7/Jv556EmH3rd6PUv3RPTf3yuNhvrJJt4q3g/YdqN9fLQo0X7DMY/d3JPgA0GOVMq
-         fANtzSR05UqLofG2RfR4fzlLZ+OwDH3odceGC/K57pTWH5/V3t+XjMyEj/f7YyCbXSjm
-         xrOWHPR4Zca3cSFnSSUam4ahzA5gIwwu0m3ww=
+        d=linaro.org; s=google; t=1682011666; x=1684603666;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qs3hS1zEcbd6LvW4gA839iJscm7oDwTflWd6VJTMIkA=;
+        b=LQ92EKM0FhI2a7WhS8KC2S2HlkKIfkw4TWDVyq4861pzjOA3488Sb2Jm9+FJFTSDfd
+         vO4WIDkoHElxe4j9hWc4dgkfd0wocJjCUoH8KLEZdL64v+BAxCo6SQZURV4Xx1STy7Wz
+         VkOYdPU54A0vrdCRPzGP6/ZVCVc4VV4O2dRhOxe46kd3JLC8Io5w1UcqgRUhOpA9JHJD
+         tYDLXvpnCCtEuJK/kz935CIr6N+r90q2bO0DG1oDrHYhffo53xdtbHHAp4f/tXgZlFnn
+         QxqA3UFM1nVZf2abwDMejQ/G0xeSA95ZRG6N9NpcvziK/H9r9EJzR9MUZylimVb5X5SV
+         C9Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682011663; x=1684603663;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=prvqaHMzKrn9ZWtMPIRK+7YzVsgpCm9+YP37nwvlG5A=;
-        b=JEOWmwCLQD9+w2HNqSATdTdftsjC+juA/rOZVQ2W6bU4fOFCNATaPzu2WUzn7hYckG
-         yn0XtYj/QD1U705VCDdGHHEH71cdx2eiSe+SrmU3l+wW2j0NkOIHLzdI6A3Q3ERVBG9E
-         KLdCf62GxE0VJuEDSY3HIDMdGU7W0BIeXF+TIUIL5MVsDiOueR0jub8FV6kWMIqWpv3X
-         UPzKj1nbZQ2T2AVL2ZorhVpwQrwiZmT1v9UC5kE4Aa9S6n5n6zPj68cYbo1RZXcG2fL2
-         9Y3GKn6KIjkB03qqgWISmNGnwnQ9nsjXK7UTlpI6qgtR9Zp33EbOZEGC4ODsGVpowas3
-         Fa2Q==
-X-Gm-Message-State: AAQBX9f+ivfVvDHbvfyLEMwBgO9AClOV6jyn8MJkdXVIW/P1xRXvMN2l
-        0tIFjDi5b6AiI4E09I3CcH99c7kVNIKAYuhrmVcUGf16kzoWETrOZdOUKuDlbbbJwXujai5LmIV
-        UcdIe/TXtAGMCzyD70/pWWuilgiea5vdMgu8Mripg5g==
-X-Received: by 2002:a05:600c:288:b0:3f1:75c5:bd56 with SMTP id 8-20020a05600c028800b003f175c5bd56mr2085093wmk.8.1682011663486;
-        Thu, 20 Apr 2023 10:27:43 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZBaqyafrj2kes9Nec8JC/21lZni+HBdg86ODg3DHsVpIWmSpqTEZeXvOZepxdLJoIx2dtZq8drz44GlnaEZ9c=
-X-Received: by 2002:a05:600c:288:b0:3f1:75c5:bd56 with SMTP id
- 8-20020a05600c028800b003f175c5bd56mr2085079wmk.8.1682011663141; Thu, 20 Apr
- 2023 10:27:43 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682011666; x=1684603666;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qs3hS1zEcbd6LvW4gA839iJscm7oDwTflWd6VJTMIkA=;
+        b=I9XYCZegxO0hRs3tlncjRiWBNgNyJK2xSMjcnhoDGwuIRsdftr7g7Kivlm8QlAoDQB
+         O1lNAblqy9ZLRcBxxmRUyZt3Rf4x6ld5BB/+pZyTJSRz1cZByNaNzGOCnEF94rmIMSub
+         VnYv0H2NuRAKcQ0RT7DdqnXhVZezTt+47RDBjV5PIfyjAeteUm60NH+Kp1j8yyZi1GbN
+         BPBANmclUUpXGjJ4HjjGVFFLED2A47DDy1SZGlX+WrCLg9TezO1hyc1s58O9Wu8rRBCh
+         zvfag8n5zXYowQlZXIbtAhu6oPYF9SUIGzTx05Z1JOKZoG+EP3yJdJCY/FhDlUuDlKsA
+         iatw==
+X-Gm-Message-State: AAQBX9eSbksiI3fFwlzNn+4iMjhSDU7VkIXKGYlEq0vbZmqlshx1Jsag
+        hR5PwXo8E30ayJYzR+bH2cAtwQ==
+X-Google-Smtp-Source: AKy350YOpwmLNpt73flS8U2L5sl5fGklkf6iG6tZDTuKotTJFGawChDefw8Dm8dZ67D8xoCc5A+Ozw==
+X-Received: by 2002:a50:fa89:0:b0:4fa:b302:84d4 with SMTP id w9-20020a50fa89000000b004fab30284d4mr2418861edr.13.1682011666275;
+        Thu, 20 Apr 2023 10:27:46 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:bcb8:77e6:8f45:4771? ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
+        by smtp.gmail.com with ESMTPSA id y10-20020aa7d50a000000b00506a5606343sm963515edq.14.2023.04.20.10.27.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 10:27:45 -0700 (PDT)
+Message-ID: <beaec77b-9a61-6afd-59fa-fa726cae7a54@linaro.org>
+Date:   Thu, 20 Apr 2023 19:27:44 +0200
 MIME-Version: 1.0
-References: <CA+UBctD_w=75wChmePZHp7KsBSNPWYGDBtzHPRPPtaFoqhGvXA@mail.gmail.com>
- <CA+UBctDsHRpkLG5ppdiuV8Msn4Dx-ZJ2xDrxfa48VMb7ZE+xBA@mail.gmail.com>
- <687864524.118195.1681799447034.JavaMail.zimbra@nod.at> <ff419c45-7d76-0219-a598-f6f4d081e29c@huawei.com>
-In-Reply-To: <ff419c45-7d76-0219-a598-f6f4d081e29c@huawei.com>
-From:   Yu Hao <yhao016@ucr.edu>
-Date:   Thu, 20 Apr 2023 10:27:32 -0700
-Message-ID: <CA+UBctBVHouL-3rM3zKYLpk01fXFvCpBnU7EpSRVdGW7cEjcJQ@mail.gmail.com>
-Subject: Re: BUG: divide error in ubi_attach_mtd_dev
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 5/6] soudnwire: master: protect concurrecnt check for
+ bus->md
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     Patrick Lai <quic_plai@quicinc.com>
+References: <20230420101617.142225-1-krzysztof.kozlowski@linaro.org>
+ <20230420101617.142225-6-krzysztof.kozlowski@linaro.org>
+ <7ee41bcb-8656-49ec-40b6-15072c080d08@linux.intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7ee41bcb-8656-49ec-40b6-15072c080d08@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 20/04/2023 18:42, Pierre-Louis Bossart wrote:
+> typos in commit title...
+> 
+> On 4/20/23 05:16, Krzysztof Kozlowski wrote:
+>> The Soundwire master controllers might want to check for bus->md
+> 
+> Apologies for being pedantic but 'manager' and 'controller' are
+> different concepts in SoundWire, see DisCo spec.
+> It's not a 1:1 mapping, a controller can rely on M managers
 
-On Wed, Apr 19, 2023 at 9:49=E2=80=AFPM Zhihao Cheng <chengzhihao1@huawei.c=
-om> wrote:
->
-> Hi
-> > Yu Hao,
-> >
-> > ----- Urspr=C3=BCngliche Mail -----
-> >> Von: "Yu Hao" <yhao016@ucr.edu>
-> >>> ubi: mtd0 is already attached to ubi0
-> >>> ubi7: attaching mtd147
-> >>> divide error: 0000 [#1] PREEMPT SMP KASAN
-> >>> CPU: 0 PID: 20023 Comm: syz-executor.0 Not tainted 6.2.0 #6
-> >>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> >>> 1.13.0-1ubuntu1.1 04/01/2014
-> >>> RIP: 0010:mtd_div_by_eb include/linux/mtd/mtd.h:580 [inline]
-> >>> RIP: 0010:io_init drivers/mtd/ubi/build.c:620 [inline]
-> >>> RIP: 0010:ubi_attach_mtd_dev+0x77f/0x2fe0 drivers/mtd/ubi/build.c:955
-> >>> Code: fc ff df 48 c1 ea 03 0f b6 14 02 4c 89 f0 83 e0 07 83 c0 03 38
-> >>> d0 7c 08 84 d2 0f 85 1f 25 00 00 41 8b 4c 24 10 48 89 d8 31 d2 <48> f=
-7
-> >>> f1 48 89 c3 e8 b6 f3 1b fc 48 8d 85 40 17 00 00 48 89 c2 48
-> >>> RSP: 0018:ffffc9000be0fd30 EFLAGS: 00010246
-> >>> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> >>> RDX: 0000000000000000 RSI: ffff888047a49d40 RDI: 0000000000000002
-> >>> RBP: ffff888024e1c000 R08: 0000000000000016 R09: fffff520017c1f47
-> >>> R10: ffffc9000be0fa37 R11: fffff520017c1f46 R12: ffff88806545a000
-> >>> R13: 0000000000000000 R14: ffff88806545a010 R15: 0000000000000007
-> >>> FS:  00007fd45e85c700(0000) GS:ffff88802ca00000(0000) knlGS:000000000=
-0000000
-> >>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >>> CR2: 00007f64aeef53a4 CR3: 000000004f39a000 CR4: 0000000000350ef0
-> >>> Call Trace:
-> >>>   <TASK>
-> >>>   ctrl_cdev_ioctl+0x303/0x3a0 drivers/mtd/ubi/cdev.c:1043
-> >
-> > What kind of MTD you attaching?
-> > Has it erasesize 0?
-> >
->
-> Yes, I agree with Richard's point, I guess UBI got an mtd device with
-> zero erasesize.
->
+I wrote master, not manager. For the Qualcomm case one controller is one
+master, but in general I try to avoid the master/slave terminology.
 
-The kernel is in qemu. We find that the `mtd` is from
-`mtd =3D get_mtd_device(NULL, req.mtd_num);` in function `ctrl_cdev_ioctl`.
- And we are still trying to figure out what MTD is.
+> 
+>> initialization to avoid race between early interrupt and finish of
+>> sdw_bus_master_add()/sdw_master_device_add().  Such early interrupt can
+>> happen if Soundwire devices are not powered off during their probe.
+>>
+>> Add a store release barrier, so the Soundwire controllers can safely
+>> check it in concurrent (e.g. in interrupt) way.
+> 
+> Can you elaborate on the race condition? I am not following what breaks,
+> and what entity generates the 'early interrupt'.
 
->
->   568 static inline uint32_t mtd_div_by_eb(uint64_t sz, struct mtd_info
-> *mtd)
->   569 {
->   570         if (mtd->erasesize_shift)       // erasesize_shift is 0
->   571                 return sz >> mtd->erasesize_shift;
->   572         do_div(sz, mtd->erasesize);    // erasesize is 0 too
->   573         return sz;
->   574 }
->
-> Yu Hao, how do you find the problem, by syzkaller? Can you provide the
-> reproducing program or reproducing log?
+The condition is explained in next patch. If you think it's better, I
+can squash it with next.
 
-We find this by syzkaller with customized syscall descriptions.
-There is not any reproducing program now.
+If the condition is still not clear, drop a note in next patch, so I
+will elaborate there.
+
+> 
+> I am specifically concerned about adding this in common code without any
+> matching smp_load_acquire() - which is only added in the following patch
+> for the Qualcomm manager only, but not added for Intel/AMD managers. Is
+> this not a problem?
+
+Shouldn't be. The barrier just won't be effective for these drivers, but
+that should not be a problem, because I also did not add to these
+checking bus->md in a concurrent path.
+
+Basically the barrier here is necessary because I want to check bus->md
+in Qualcomm master interrupt handler.
+
+Best regards,
+Krzysztof
+
