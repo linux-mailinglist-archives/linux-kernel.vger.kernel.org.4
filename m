@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3616E8B6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B77306E8B62
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 09:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234065AbjDTH2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 03:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40290 "EHLO
+        id S231750AbjDTH1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 03:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234082AbjDTH15 (ORCPT
+        with ESMTP id S233997AbjDTH1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 03:27:57 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504C135AF
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:27:11 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1a6bc48aec8so6580905ad.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:27:11 -0700 (PDT)
+        Thu, 20 Apr 2023 03:27:21 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA5626AD
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:27:19 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so630847a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 00:27:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681975631; x=1684567631;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hg5G5o39i/mOMMBB9sZHDlNqgHJXvtHyvxUr2dJ6THE=;
-        b=kH4OTVJnseH6q7Pe1OOos6zPSHDAj2tZ3qazT0bYMqWKsaGrGzoVXAs3l/JAw+j1uX
-         BXCMEQb6ZcsuZ3SVhgAScqbhp0DJlBdJO8HBkB0E+llRcaSBO0Os/+DSrtH3J0oUSNcY
-         hae3WB91GwxFXIIvhDunREC36+rEKUAaCp36mnpohuHY1u+KW2U9FzpIXSs5wXp39BQ1
-         6TA0plyxWwwY0ADUdpTefB6sKA2APq+b1MZxAwbklNl2gWCQUlOtlgz3V7B0Yx4iJNGl
-         pjWTq1UvjsNAsXD66F9eEMQPuhP7xgOsZ6wiF+iSqJrg+wxvZ6hvVOPvUMqmc8gdoqZl
-         ++cw==
+        d=bytedance.com; s=google; t=1681975638; x=1684567638;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6AGDNBCroQ67ha7RBjKHaMJL6Jfwc8C2hS0pEsm+v2A=;
+        b=OpSJ3fP8ohLBcF5v5MU5Rjik38xw5j2zLix4CDhL8qi3Fcc9Lp3haSVTs4u/Qi4Zsl
+         hgjdGVRaLRxpOzn+r5mH/4godg3oJwPY6ozMKTjkZ41kbNqzaAfp1Zl+F+YhY8bPWjlg
+         IhUf5LhT0ruVsyMuCH6Nvg8VIKPKH7wNGdopgQzjUUocPrFrUd74+kbaC/kobzz4T9OS
+         b/CX5e0gDKgOrga5AFlkMu22zwDCComdkjGEGcDpdHYBGsP8QWNgqEFaDW9OelrTTpjN
+         9VbL9NNmfrMEwf9PBx0G+xAqirzA6ynLKLX/zO7M/jbl/VshrsjaAX/qD10YYqLj33LA
+         iHKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681975631; x=1684567631;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hg5G5o39i/mOMMBB9sZHDlNqgHJXvtHyvxUr2dJ6THE=;
-        b=HgNRpWYIOtYjuGBO7iVUnS5I9SlLTHHQ8Nsxz8u8KsD8EXKJrG2L3G0lE1GqFEDTbi
-         v5dmViH9A+VCs2XoqGoHYzRZN7DnSJ4o71xyllf6WtG+V7EvbIo1rVI9LDN/zYbJN1Oa
-         ScDR/wrZNTknimLxDAUlEtryaMn/o+ZwofiFB17V+BnboRKyLPoGri8YJKrkVjjrh/hq
-         cjeXIR+PrtKlKm2e5xHRGKOngUpz8LimIdlhRFU1yVcd7kwsdL+Vr9qMpIw/9b/pWLlP
-         iMCRF8ZsUA0TxMaqHCWpydLSTq3GHpj49uSZ21ZwCrnHLuAZqXFeTY0WqPXlbGs2mBrM
-         4mmQ==
-X-Gm-Message-State: AAQBX9fdGzdk2CQ0uw+OUIiABDP2oQNluwaQoGMlyfe3KUlTbL75RII1
-        GQ5B/MgJO/gTTQi3cKtgCVWCfg==
-X-Google-Smtp-Source: AKy350ZJIw4S2jRf7AWkGYprd3RLjOgFmimEdu2sssZcSsBy7YV14EYvdTzo91BU7GQ4xQK0LTxMDg==
-X-Received: by 2002:a17:903:2444:b0:19e:6cb9:4c8f with SMTP id l4-20020a170903244400b0019e6cb94c8fmr814495pls.41.1681975630719;
-        Thu, 20 Apr 2023 00:27:10 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681975638; x=1684567638;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6AGDNBCroQ67ha7RBjKHaMJL6Jfwc8C2hS0pEsm+v2A=;
+        b=Xqli6NuJJpRTggFYJkmrkYIB0MQWeqwB1Gb+CaRA1eWXmjF/+LwflrYavPEy8nJM1t
+         YpFmni4/pJ3Upq4Ow2NQTQBTagW0R5LWDJ6EvzT8aQ6SOOuredHnOR9twvkDSIWjsmLz
+         cGa2En6V4yWhfMT4rMV43cpuxAK3EX1CNDs/MD9phUsXKB3XOi0HkMRNtFD4jPZ8mXft
+         7/wIsGRZK1KPjePvj+j1w08yioz+LShVNKH0LZgbPJmtpfHsOcVC2uReF3Ot+R+eMUW3
+         jBQY/D6Osb6Tf3nfahhDj6TK+K18LINPD95SIgm4ggbK1aSrQyzL4lF++bvC7/BeH4DM
+         vx/A==
+X-Gm-Message-State: AAQBX9fuweAgefmEH27omzq6s9JJwbzr1vpsBrh7I71mMYOvM8KK5wEq
+        9H9U4ZKYHmCMj1XrGBljjobzww==
+X-Google-Smtp-Source: AKy350ZFPlMmLIgo3dxD8Pjx/iOi0QJD5dfUllNmEoK8su1FQZkDUKeJ8zu4ovXLU4A8WJNAFZUQsA==
+X-Received: by 2002:a17:90a:2cc1:b0:247:48a1:3fb2 with SMTP id n59-20020a17090a2cc100b0024748a13fb2mr826552pjd.19.1681975638511;
+        Thu, 20 Apr 2023 00:27:18 -0700 (PDT)
 Received: from C02F52LSML85.bytedance.net ([139.177.225.238])
-        by smtp.gmail.com with ESMTPSA id y18-20020a17090ad71200b0023440af7aafsm612160pju.9.2023.04.20.00.27.02
+        by smtp.gmail.com with ESMTPSA id y18-20020a17090ad71200b0023440af7aafsm612160pju.9.2023.04.20.00.27.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 00:27:10 -0700 (PDT)
+        Thu, 20 Apr 2023 00:27:18 -0700 (PDT)
 From:   Feng zhou <zhoufeng.zf@bytedance.com>
 To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
         andrii@kernel.org, song@kernel.org, yhs@fb.com,
@@ -60,15 +61,17 @@ Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
         zhoufeng.zf@bytedance.com
-Subject: [PATCH bpf-next 0/2] Introduce a new bpf helper of bpf_task_under_cgroup
-Date:   Thu, 20 Apr 2023 15:26:55 +0800
-Message-Id: <20230420072657.80324-1-zhoufeng.zf@bytedance.com>
+Subject: [PATCH bpf-next 1/2] bpf: Add bpf_task_under_cgroup helper
+Date:   Thu, 20 Apr 2023 15:26:56 +0800
+Message-Id: <20230420072657.80324-2-zhoufeng.zf@bytedance.com>
 X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+In-Reply-To: <20230420072657.80324-1-zhoufeng.zf@bytedance.com>
+References: <20230420072657.80324-1-zhoufeng.zf@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,23 +81,154 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-Trace sched related functions, such as enqueue_task_fair, it is necessary to
-specify a task instead of the current task which within a given cgroup to a map.
+This adds a bpf helper that's similar to the
+bpf_current_task_under_cgroup. The difference is that it is a
+designated task.
 
-Feng Zhou (2):
-  bpf: Add bpf_task_under_cgroup helper
-  selftests/bpf: Add testcase for bpf_task_under_cgroup
+When hook sched related functions, sometimes it is necessary to
+specify a task instead of the current task.
 
- include/uapi/linux/bpf.h                      | 13 +++++
- kernel/bpf/verifier.c                         |  4 +-
- kernel/trace/bpf_trace.c                      | 31 ++++++++++++
- tools/include/uapi/linux/bpf.h                | 13 +++++
- .../bpf/prog_tests/task_under_cgroup.c        | 49 +++++++++++++++++++
- .../bpf/progs/test_task_under_cgroup.c        | 31 ++++++++++++
- 6 files changed, 140 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
+Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+---
+ include/uapi/linux/bpf.h       | 13 +++++++++++++
+ kernel/bpf/verifier.c          |  4 +++-
+ kernel/trace/bpf_trace.c       | 31 +++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h | 13 +++++++++++++
+ 4 files changed, 60 insertions(+), 1 deletion(-)
 
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 4b20a7269bee..3d31ddb39e10 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5550,6 +5550,18 @@ union bpf_attr {
+  *		0 on success.
+  *
+  *		**-ENOENT** if the bpf_local_storage cannot be found.
++ *
++ * long bpf_task_under_cgroup(struct bpf_map *map, struct task_struct *task, u32 index)
++ *	Description
++ *		Check whether the probe is being run is the context of a given
++ *		subset of the cgroup2 hierarchy. The cgroup2 to test is held by
++ *		*map* of type **BPF_MAP_TYPE_CGROUP_ARRAY**, at *index*.
++ *	Return
++ *		The return value depends on the result of the test, and can be:
++ *
++ *		* 1, if assigned task belongs to the cgroup2.
++ *		* 0, if assigned task does not belong to the cgroup2.
++ *		* A negative error code, if an error occurred.
+  */
+ #define ___BPF_FUNC_MAPPER(FN, ctx...)			\
+ 	FN(unspec, 0, ##ctx)				\
+@@ -5764,6 +5776,7 @@ union bpf_attr {
+ 	FN(user_ringbuf_drain, 209, ##ctx)		\
+ 	FN(cgrp_storage_get, 210, ##ctx)		\
+ 	FN(cgrp_storage_delete, 211, ##ctx)		\
++	FN(task_under_cgroup, 212, ##ctx)		\
+ 	/* */
+ 
+ /* backwards-compatibility macros for users of __BPF_FUNC_MAPPER that don't
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1e05355facdc..1e2c3c3e8d5f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7771,7 +7771,8 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
+ 		break;
+ 	case BPF_MAP_TYPE_CGROUP_ARRAY:
+ 		if (func_id != BPF_FUNC_skb_under_cgroup &&
+-		    func_id != BPF_FUNC_current_task_under_cgroup)
++		    func_id != BPF_FUNC_current_task_under_cgroup &&
++		    func_id != BPF_FUNC_task_under_cgroup)
+ 			goto error;
+ 		break;
+ 	case BPF_MAP_TYPE_CGROUP_STORAGE:
+@@ -7902,6 +7903,7 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
+ 			goto error;
+ 		break;
+ 	case BPF_FUNC_current_task_under_cgroup:
++	case BPF_FUNC_task_under_cgroup:
+ 	case BPF_FUNC_skb_under_cgroup:
+ 		if (map->map_type != BPF_MAP_TYPE_CGROUP_ARRAY)
+ 			goto error;
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index bcf91bc7bf71..b02a04768824 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -814,6 +814,35 @@ static const struct bpf_func_proto bpf_current_task_under_cgroup_proto = {
+ 	.arg2_type      = ARG_ANYTHING,
+ };
+ 
++BPF_CALL_3(bpf_task_under_cgroup, struct bpf_map *, map, struct task_struct *,
++	   task, u32, idx)
++{
++	struct bpf_array *array = container_of(map, struct bpf_array, map);
++	struct cgroup *cgrp;
++
++	if (unlikely(!task))
++		return -ENOENT;
++
++	if (unlikely(idx >= array->map.max_entries))
++		return -E2BIG;
++
++	cgrp = READ_ONCE(array->ptrs[idx]);
++	if (unlikely(!cgrp))
++		return -EAGAIN;
++
++	return task_under_cgroup_hierarchy(task, cgrp);
++}
++
++static const struct bpf_func_proto bpf_task_under_cgroup_proto = {
++	.func           = bpf_task_under_cgroup,
++	.gpl_only       = false,
++	.ret_type       = RET_INTEGER,
++	.arg1_type      = ARG_CONST_MAP_PTR,
++	.arg2_type	= ARG_PTR_TO_BTF_ID,
++	.arg2_btf_id	= &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
++	.arg3_type      = ARG_ANYTHING,
++};
++
+ struct send_signal_irq_work {
+ 	struct irq_work irq_work;
+ 	struct task_struct *task;
+@@ -1510,6 +1539,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_find_vma_proto;
+ 	case BPF_FUNC_trace_vprintk:
+ 		return bpf_get_trace_vprintk_proto();
++	case BPF_FUNC_task_under_cgroup:
++		return &bpf_task_under_cgroup_proto;
+ 	default:
+ 		return bpf_base_func_proto(func_id);
+ 	}
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 4b20a7269bee..3d31ddb39e10 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5550,6 +5550,18 @@ union bpf_attr {
+  *		0 on success.
+  *
+  *		**-ENOENT** if the bpf_local_storage cannot be found.
++ *
++ * long bpf_task_under_cgroup(struct bpf_map *map, struct task_struct *task, u32 index)
++ *	Description
++ *		Check whether the probe is being run is the context of a given
++ *		subset of the cgroup2 hierarchy. The cgroup2 to test is held by
++ *		*map* of type **BPF_MAP_TYPE_CGROUP_ARRAY**, at *index*.
++ *	Return
++ *		The return value depends on the result of the test, and can be:
++ *
++ *		* 1, if assigned task belongs to the cgroup2.
++ *		* 0, if assigned task does not belong to the cgroup2.
++ *		* A negative error code, if an error occurred.
+  */
+ #define ___BPF_FUNC_MAPPER(FN, ctx...)			\
+ 	FN(unspec, 0, ##ctx)				\
+@@ -5764,6 +5776,7 @@ union bpf_attr {
+ 	FN(user_ringbuf_drain, 209, ##ctx)		\
+ 	FN(cgrp_storage_get, 210, ##ctx)		\
+ 	FN(cgrp_storage_delete, 211, ##ctx)		\
++	FN(task_under_cgroup, 212, ##ctx)		\
+ 	/* */
+ 
+ /* backwards-compatibility macros for users of __BPF_FUNC_MAPPER that don't
 -- 
 2.20.1
 
