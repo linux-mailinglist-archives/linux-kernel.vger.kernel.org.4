@@ -2,160 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9975F6E9512
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC0D6E9517
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 14:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbjDTMwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 08:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
+        id S230364AbjDTMxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 08:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjDTMwT (ORCPT
+        with ESMTP id S229568AbjDTMxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:52:19 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8446E91;
-        Thu, 20 Apr 2023 05:52:06 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2974640006;
-        Thu, 20 Apr 2023 12:52:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1681995124;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JSvkVShDg2ogaaxh+qhZHwOBGnoML0lh9gLtFf0aYJY=;
-        b=K3NraIj0bS9d2Ti9kkDjrdUnGd5Vvl/H4l2VnJrcbWQBF35iNR1tne4vvmzKC50ehtfOnv
-        Lsy5pl7nk09AurzhQFsU/l069qzTDJVv5jyfQJqHeMcT+TgmkBZWzIg6BJ+95OLkQ8eC8F
-        c4aFDnEtkuZvSztyCp/ifxAvgEDsxyMo4GYY4WxZO7Zv9hpU4dREDRkwnaC9z58aGPEMBe
-        FKzuNaLV9K3xz7EUhO7l3wBEIzrMBkFPTns6DknzBLDw/XaGvLcEL1QddQoT3OdDYRAD5G
-        YVY7RN4OH1eEvWC/b70AG4MHSqBbmTAeZ26WA59htBOYIJH3BTyXA7ZofApklQ==
-Date:   Thu, 20 Apr 2023 14:52:02 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v6 2/7] mfd: core: Ensure disabled devices are skiped
- without aborting
-Message-ID: <20230420145202.4e21b51d@bootlin.com>
-In-Reply-To: <20230420122955.GA996918@google.com>
-References: <20230417171601.74656-1-herve.codina@bootlin.com>
-        <20230417171601.74656-3-herve.codina@bootlin.com>
-        <20230420122955.GA996918@google.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Thu, 20 Apr 2023 08:53:32 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3582D78
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:53:31 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id kt6so6351716ejb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 05:53:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681995209; x=1684587209;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yt/93M/ZglXCV5CdFMYaJPyFKnZmjhNWMeYNcvDG6Tw=;
+        b=XhOmjAMRB2e+Qpr3a2unzCwIqWMnXTkLGkgmKSw0hT4kQEfDAet5siIZR0pugqzn9Y
+         p1zlW4+hyVgl63cWo2i5zfeDSm4OyqyDZI8+8nvNTH4ki+i1v7Hit3PwFF68gMQ/Bp6Q
+         W6M8y8rHBoJ1zuHn6DGIvus71YqoGkZjQKlBGpJiIuAmZuvTRoPiGn/yUlCJ+N4S7Ym7
+         0X9qIfP7+lDXnOsN1GIPkoSK1Yu916xun5VnAStqybqXSrULVUNHAWnmlw7shqbwYdR3
+         gc8ErvbBsLRStDmaBQ2jWcKKKUWqR/PHTybAZv9X8KgDfPMB5h7rKDt5V6+dCE4vefHJ
+         qmpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681995209; x=1684587209;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yt/93M/ZglXCV5CdFMYaJPyFKnZmjhNWMeYNcvDG6Tw=;
+        b=cOxW77MpHMtC1Pydb2tJVb1eW8NU2C3DAVs2kQ6AxMGccovMPX/M/AzVCJXKN332N5
+         ZkpTSolVosQoejK2GwKh3DTj3j+tAQ/Mjlc/aB99wB1n6cSrfAVoVPRdBF+zUuD/dUR2
+         M43O8M2qYXZW3YyOA6s8IrbTRMo3SjrjYB8XCAms5TR5P/oei6bkW7AVjHqx5u51s1Q+
+         cVJA3AqcuFUWy5Evjmms8A5oa2hWwoDfWbczZhVDlwILghCy0+d7kZ5QmNPvHF90Swx2
+         Vnrg2eIqbdpZp94MwVHWhjS4EaKVqAP821t3Re/VkZC4nz0EgIfwUc+113jUJEW13GHf
+         nRCw==
+X-Gm-Message-State: AAQBX9c89xgOTsglgLBy5TG9eCCY40/vYk9AkHoZxpKgICAEbSeQqYTE
+        hggInFiJQaPKbtH+VO/3aA0+kg==
+X-Google-Smtp-Source: AKy350baSjVgWRqOUGHMeVmFH80WRC9SRLw80YwzKRtI2kUKPfO5wRzIp1r9y3oLBMp/xs3FAmWLIQ==
+X-Received: by 2002:a17:906:7308:b0:932:7f5c:4bb2 with SMTP id di8-20020a170906730800b009327f5c4bb2mr1613373ejc.75.1681995209486;
+        Thu, 20 Apr 2023 05:53:29 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:bcb8:77e6:8f45:4771? ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
+        by smtp.gmail.com with ESMTPSA id d16-20020a1709063ed000b0094f499257f7sm695940ejj.151.2023.04.20.05.53.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 05:53:29 -0700 (PDT)
+Message-ID: <fab4f22e-cb22-6ad4-6e14-19c1e80c11be@linaro.org>
+Date:   Thu, 20 Apr 2023 14:53:28 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/1] arm: dts: sunxi: Add ICnova A20 ADB4006 board
+ support
+Content-Language: en-US
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Ludwig Kormann <ludwig.kormann@in-circuit.de>, samuel@sholland.org,
+        jernej.skrabec@gmail.com, wens@csie.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230419121229.1384024-1-ludwig.kormann@in-circuit.de>
+ <b84537c0-cb58-621a-2b6d-3bbaac5091de@linaro.org>
+ <20230420095315.5aaab9eb@donnerap.cambridge.arm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230420095315.5aaab9eb@donnerap.cambridge.arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Apr 2023 13:29:55 +0100
-Lee Jones <lee@kernel.org> wrote:
+On 20/04/2023 10:53, Andre Przywara wrote:
+>> Bindings are always separate patches. checkpatch did not complain?
+>>
+>>>  arch/arm/boot/dts/Makefile                    |   1 +
+>>>  .../boot/dts/sun7i-a20-icnova-a20-adb4006.dts | 137 ++++++++++++++++++
+>>>  arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi   |  63 ++++++++
+>>>  4 files changed, 207 insertions(+)
+>>>  create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
+>>>  create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
+>>> index 013821f4a7b8..12f0c236f17b 100644
+>>> --- a/Documentation/devicetree/bindings/arm/sunxi.yaml
+>>> +++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
+>>> @@ -305,6 +305,12 @@ properties:
+>>>            - const: allwinner,i12-tvbox
+>>>            - const: allwinner,sun7i-a20
+>>>  
+>>> +      - description: ICNova A20 ADB4006
+>>> +        items:
+>>> +          - const: incircuit,icnova-a20-adb4006
+>>> +          - const: incircuit,icnova-a20
+>>> +          - const: allwinner,sun7i-a20
+>>> +
+>>>        - description: ICNova A20 SWAC
+>>>          items:
+>>>            - const: incircuit,icnova-a20-swac
+>>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+>>> index 3cc32722c394..b6b408417261 100644
+>>> --- a/arch/arm/boot/dts/Makefile
+>>> +++ b/arch/arm/boot/dts/Makefile
+>>> @@ -1321,6 +1321,7 @@ dtb-$(CONFIG_MACH_SUN7I) += \
+>>>  	sun7i-a20-hummingbird.dtb \
+>>>  	sun7i-a20-itead-ibox.dtb \
+>>>  	sun7i-a20-i12-tvbox.dtb \
+>>> +	sun7i-a20-icnova-a20-adb4006.dtb \
+>>>  	sun7i-a20-icnova-swac.dtb \
+>>>  	sun7i-a20-lamobo-r1.dtb \
+>>>  	sun7i-a20-linutronix-testbox-v2.dtb \
+>>> diff --git a/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts b/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
+>>> new file mode 100644
+>>> index 000000000000..c1606c085e4e
+>>> --- /dev/null
+>>> +++ b/arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
+>>> @@ -0,0 +1,137 @@
+>>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)  
+>>
+>> Unusual license. Are you sure you are ok with GPLv5.0?
+> 
+> Is it really unusual? This is literally the most commonly used dual license
+> for DTs, grep counts 252 users in arm and 573 users in arm64.
+> 
 
-> On Mon, 17 Apr 2023, Herve Codina wrote:
-> 
-> > The loop searching for a matching device based on its compatible
-> > string is aborted when a matching disabled device is found.
-> > This abort avoid to add devices as soon as one disabled device
-> > is found.
-> > 
-> > Continue searching for an other device instead of aborting on the
-> > first disabled one fixes the issue.
-> > 
-> > Fixes: 22380b65dc70 ("mfd: mfd-core: Ensure disabled devices are ignored without error")
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > ---
-> >  drivers/mfd/mfd-core.c | 18 +++++++++++++-----
-> >  1 file changed, 13 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/mfd/mfd-core.c b/drivers/mfd/mfd-core.c
-> > index 16d1861e9682..7c47b50b358d 100644
-> > --- a/drivers/mfd/mfd-core.c
-> > +++ b/drivers/mfd/mfd-core.c
-> > @@ -176,6 +176,7 @@ static int mfd_add_device(struct device *parent, int id,
-> >  	struct platform_device *pdev;
-> >  	struct device_node *np = NULL;
-> >  	struct mfd_of_node_entry *of_entry, *tmp;
-> > +	bool not_available;
-> >  	int ret = -ENOMEM;
-> >  	int platform_id;
-> >  	int r;
-> > @@ -211,13 +212,13 @@ static int mfd_add_device(struct device *parent, int id,
-> >  		goto fail_res;
-> >  
-> >  	if (IS_ENABLED(CONFIG_OF) && parent->of_node && cell->of_compatible) {
-> > +		not_available = false;  
-> 
-> Why not do:
-> 
-> 		bool disabled = false;
-> 
-> ... here instead?
+No, the most commonly used is GPL-2.0 (optionally OR MIT/BSD). GPLv3 and
+later appear, but it is actually weird to use it for kernel DTS where in
+general we said no to GPLv3.
 
-Yes, I can change to 'disabled'.
-
-> 
-> >  		for_each_child_of_node(parent->of_node, np) {
-> >  			if (of_device_is_compatible(np, cell->of_compatible)) {
-> > -				/* Ignore 'disabled' devices error free */
-> > +				/* Skip 'disabled' devices */
-> >  				if (!of_device_is_available(np)) {
-> > -					of_node_put(np);  
-> 
-> Why are you removing the put?
-
-The of_node_put() is done internally by for_each_child_of_node() calling
-of_get_next_child().
-As the for_each_child_of_node() loop is not break, the of_node_put() must
-not be called here as it will be called by of_get_next_child().
-
-> 
-> > -					ret = 0;
-> > -					goto fail_alias;
-> > +					not_available = true;
-> > +					continue;
-> >  				}
-> >  
-> >  				ret = mfd_match_of_node_to_dev(pdev, np, cell);
-> > @@ -227,10 +228,17 @@ static int mfd_add_device(struct device *parent, int id,
-> >  				if (ret)
-> >  					goto fail_alias;
-> >  
-> > -				break;
-> > +				goto match;
-> >  			}
-> >  		}
-> >  
-> > +		if (not_available) {
-> > +			/* Ignore 'disabled' devices error free */
-> > +			ret = 0;
-> > +			goto fail_alias;
-> > +		}
-> > +
-> > +match:
-> >  		if (!pdev->dev.of_node)
-> >  			pr_warn("%s: Failed to locate of_node [id: %d]\n",
-> >  				cell->name, platform_id);
-> > -- 
-> > 2.39.2
-> >   
-> 
+And my question is not the only one... just grep from responses from
+other maintainers.
 
 Best regards,
-Hervé
+Krzysztof
 
