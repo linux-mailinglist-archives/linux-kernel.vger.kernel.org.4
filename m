@@ -2,59 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3AC6E9DF4
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 279316E9DF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 23:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbjDTVgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 17:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
+        id S232607AbjDTVgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 17:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjDTVgT (ORCPT
+        with ESMTP id S231728AbjDTVgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 17:36:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4883F30D2;
-        Thu, 20 Apr 2023 14:36:18 -0700 (PDT)
+        Thu, 20 Apr 2023 17:36:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46C630D2;
+        Thu, 20 Apr 2023 14:36:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4CA464C19;
-        Thu, 20 Apr 2023 21:36:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B2BC433D2;
-        Thu, 20 Apr 2023 21:36:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FEF164C0F;
+        Thu, 20 Apr 2023 21:36:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E847C433D2;
+        Thu, 20 Apr 2023 21:36:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682026577;
-        bh=N4kO0Ct/LnSLCi9T11XBZTUArgxHgmHTQU2AiDujI3o=;
+        s=k20201202; t=1682026604;
+        bh=Z8PCVb43VPYumi49oswxlbKcQT64xKfIJwE1ERJqy3E=;
         h=From:To:Cc:Subject:Date:From;
-        b=OWspLkkmDbLi4PsR/Dq2qnHLUx/tAWfx2lQH1hjad2NuBrOmm4jEe42bR3Wkn4yAH
-         BygNnJjNdNPaHCAI0k94PE7RTWBk51F4r6/w9dHyL8xSlisABkbBqRjHx15Zz06Rxk
-         VA87KAdEenumsUT3r2NhZQ74OgcWzT2kUzapy0XB3WLCHMENFIdga15OCS1nSA0gIJ
-         uJAhWD8R/e9L2XJzZMz0uf0hpN0ymnMPQ2Di3/Yn8Wln8zUpbcixQPsuxCHDm7XYh/
-         par1g0B7aoCZrH/KxWy93rgcnxN29UWfyvEZdBqjs9hiDzqx5AcnBgau3rBfZ1vlZl
-         h0Yxemfd2B0DQ==
+        b=pzg1ftMPa8YHaOG0kF2gofVqmQEfLbiqFO2EKPfC+6IduvV1lxpsVJRUUCSLQfSUu
+         6RWi+xZHCBtqyMZbfUYQsVBjt0oKJ1EEjSGMpDTlUFv58XiZ02YaDAbziXtePijID2
+         PIsDVh9cmkxuo9UEjeNZ/zjfCPjpCAByHVxjqnSczE9zOzxF2eBVN7KmmnsuDZSYRR
+         Z01vnDe6IPqPV65CrgNs8vZEyk5hULT3UqlJIGs/QHlT0yAOny/vHIeH3l3KKr3oU3
+         TuCH6nqhtlh7mdynoy9YfrUwgrzcDlikKQYxe+L6GRm8o7b5eACRbuOdaY5FO5GOve
+         MM9U1SePfql4Q==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Iuliana Prodan <iuliana.prodan@nxp.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Markus Elfring <Markus.Elfring@web.de>,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] remoteproc: imx_dsp_rproc: use modern pm_ops
-Date:   Thu, 20 Apr 2023 23:36:04 +0200
-Message-Id: <20230420213610.2219080-1-arnd@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: dsa: qca8k: fix LEDS_CLASS dependency
+Date:   Thu, 20 Apr 2023 23:36:31 +0200
+Message-Id: <20230420213639.2243388-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,68 +61,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Without CONFIG_PM, the driver warns about unused functions:
+With LEDS_CLASS=m, a built-in qca8k driver fails to link:
 
-drivers/remoteproc/imx_dsp_rproc.c:1210:12: error: 'imx_dsp_runtime_suspend' defined but not used [-Werror=unused-function]
- 1210 | static int imx_dsp_runtime_suspend(struct device *dev)
-      |            ^~~~~~~~~~~~~~~~~~~~~~~
-drivers/remoteproc/imx_dsp_rproc.c:1178:12: error: 'imx_dsp_runtime_resume' defined but not used [-Werror=unused-function]
- 1178 | static int imx_dsp_runtime_resume(struct device *dev)
-      |            ^~~~~~~~~~~~~~~~~~~~~~
+arm-linux-gnueabi-ld: drivers/net/dsa/qca/qca8k-leds.o: in function `qca8k_setup_led_ctrl':
+qca8k-leds.c:(.text+0x1ea): undefined reference to `devm_led_classdev_register_ext'
 
-Change the old SET_SYSTEM_SLEEP_PM_OPS()/SET_RUNTIME_PM_OPS()
-helpers to their modern replacements that avoid the warning,
-and remove the now unnecessary __maybe_unused annotations
-on the other PM helper functions.
+Change the dependency to avoid the broken configuration.
 
+Fixes: 1e264f9d2918 ("net: dsa: qca8k: add LEDs basic support")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/remoteproc/imx_dsp_rproc.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/net/dsa/qca/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
-index cab06dbf37fb..2d75dea43f20 100644
---- a/drivers/remoteproc/imx_dsp_rproc.c
-+++ b/drivers/remoteproc/imx_dsp_rproc.c
-@@ -1243,7 +1243,7 @@ static void imx_dsp_load_firmware(const struct firmware *fw, void *context)
- 	release_firmware(fw);
- }
- 
--static __maybe_unused int imx_dsp_suspend(struct device *dev)
-+static int imx_dsp_suspend(struct device *dev)
- {
- 	struct rproc *rproc = dev_get_drvdata(dev);
- 	struct imx_dsp_rproc *priv = rproc->priv;
-@@ -1278,7 +1278,7 @@ static __maybe_unused int imx_dsp_suspend(struct device *dev)
- 	return pm_runtime_force_suspend(dev);
- }
- 
--static __maybe_unused int imx_dsp_resume(struct device *dev)
-+static int imx_dsp_resume(struct device *dev)
- {
- 	struct rproc *rproc = dev_get_drvdata(dev);
- 	int ret = 0;
-@@ -1312,9 +1312,8 @@ static __maybe_unused int imx_dsp_resume(struct device *dev)
- }
- 
- static const struct dev_pm_ops imx_dsp_rproc_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(imx_dsp_suspend, imx_dsp_resume)
--	SET_RUNTIME_PM_OPS(imx_dsp_runtime_suspend,
--			   imx_dsp_runtime_resume, NULL)
-+	SYSTEM_SLEEP_PM_OPS(imx_dsp_suspend, imx_dsp_resume)
-+	RUNTIME_PM_OPS(imx_dsp_runtime_suspend, imx_dsp_runtime_resume, NULL)
- };
- 
- static const struct of_device_id imx_dsp_rproc_of_match[] = {
-@@ -1332,7 +1331,7 @@ static struct platform_driver imx_dsp_rproc_driver = {
- 	.driver = {
- 		.name = "imx-dsp-rproc",
- 		.of_match_table = imx_dsp_rproc_of_match,
--		.pm = &imx_dsp_rproc_pm_ops,
-+		.pm = pm_ptr(&imx_dsp_rproc_pm_ops),
- 	},
- };
- module_platform_driver(imx_dsp_rproc_driver);
+diff --git a/drivers/net/dsa/qca/Kconfig b/drivers/net/dsa/qca/Kconfig
+index 7a86d6d6a246..4347b42c50fd 100644
+--- a/drivers/net/dsa/qca/Kconfig
++++ b/drivers/net/dsa/qca/Kconfig
+@@ -19,7 +19,7 @@ config NET_DSA_QCA8K
+ config NET_DSA_QCA8K_LEDS_SUPPORT
+ 	bool "Qualcomm Atheros QCA8K Ethernet switch family LEDs support"
+ 	depends on NET_DSA_QCA8K
+-	depends on LEDS_CLASS
++	depends on LEDS_CLASS=y || LEDS_CLASS=NET_DSA_QCA8K
+ 	help
+ 	  This enabled support for LEDs present on the Qualcomm Atheros
+ 	  QCA8K Ethernet switch chips.
 -- 
 2.39.2
 
