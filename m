@@ -2,272 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABEB6E8723
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407A26E8734
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 03:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbjDTBDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 21:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
+        id S232186AbjDTBKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 21:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjDTBDg (ORCPT
+        with ESMTP id S232901AbjDTBKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 21:03:36 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8E040FE
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:03:34 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id x34so1050098ljq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681952613; x=1684544613;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7aCv74B3cNb0viwbpKPsfEJjDZJ94Wj3iKPoHbjjBlk=;
-        b=UzmUMX4lufzGlw94H22bMOnEzQ+Pc4HpyME05BOZlH6z0yg0L7dHDCB33ukzrv+yHf
-         ztPiXygnvXfHCFqaVVlbXFbFeCdViuqasKHsry9GTgYDARwexN8iotOpnRx8dKLCnlD8
-         +qnVMaLLVgvKNvNKWmQ2z86Oj67NqhkE2J3ofdloiEiGwx1Oaopj89c5naKTFXzkbZ5I
-         hmMEVuyCWtC4wVESySB37cDmIWR/nXZ15LJM4ZerM9S7ribRkY8qtHBLV5PmGtBAwsut
-         288x3kWPZ2tuU+BNHa9xJX6roujSTUevOYbeJUcxmipV5B17wI4NGW/ly6i8PB8SByy6
-         rNdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681952613; x=1684544613;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7aCv74B3cNb0viwbpKPsfEJjDZJ94Wj3iKPoHbjjBlk=;
-        b=LmKkNT75uS1DAjuMvGDWS5pBIoOqznlvCXf4f5fDAz9ooPE9Uuqey105uZCLZnzyaf
-         7dogodnN6QhgM7M7rR+qtyn5WnN0XeOM+DnhiYsjuEEiFVCTwaSvG1L76a+EPaOwK5dS
-         YWhe/3DDcIhm3/hdkgSnP1HAxvi/isXW822LuH3nnEIAXfYIB+6mOtShvW8aoM5XAoXC
-         /YKpAMtDMe67v9bjHEgBwCM1eJc4gmZm+Acm9KdnECS70NUROwQYP/cPAKR438hI6DXu
-         i+XjJOejZpV5YPueQbf+lcF6/SICgLK9KtAagZlbVPmM4bYwnzr8CkyuXU9r2qcQkpDS
-         3qfA==
-X-Gm-Message-State: AAQBX9fytJSe4aobUzfYgFZhxB324tsl4izfPbJCmr6BuspKe6E9K8zB
-        Ml2zZpy23+TvKk4pBroqArzACg==
-X-Google-Smtp-Source: AKy350ad9OwjYHZIaWMY5CqNO/tmTJ7XReuKP+O7HWWbCmvE4uFFufK+aOnI2I3ZQbq3z8wMRYwfPw==
-X-Received: by 2002:a2e:3c0b:0:b0:2a9:e6fd:e39 with SMTP id j11-20020a2e3c0b000000b002a9e6fd0e39mr1217428lja.26.1681952612682;
-        Wed, 19 Apr 2023 18:03:32 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id c15-20020a2e680f000000b00295a583a20bsm24714lja.74.2023.04.19.18.03.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 18:03:32 -0700 (PDT)
-Message-ID: <3d1b08f0-adf9-8815-46f7-c31b54a7140c@linaro.org>
-Date:   Thu, 20 Apr 2023 04:03:31 +0300
+        Wed, 19 Apr 2023 21:10:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1219F4C20
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 18:10:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C5B963C20
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 01:10:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE53C433D2;
+        Thu, 20 Apr 2023 01:10:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681953039;
+        bh=XfrLsPfs0KQwHZJqNqn6efmesm8mlbE6vACTnNWtOgM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=elY/kyd13xjzyhWaWquwxahkNqhy48aCcbaM6sIOKm3kFOZU5GFcx6r56ZJoQ/Nvk
+         nxTQHusgFdx29JSaN22An5is6wDMUGewztWDPdiLyG4cObmDdmm2u/CZdopS7pSyVi
+         xQwOf6/Ptkq6hxX5UGqJbsRA1eF9ODlLsHkGJI/Xv0842AoteHo5OD2hlcq/n6pA0X
+         htPS4U+TGFCHkPRznbPGj0HflhCLNFyGgOJXkFu2VbWsRMRjZ3fm5iNNQzA/B+hl5l
+         7AVlznonVtqYCwnC+9bS6ZMJQXsl7AvQYy7EDaoVd7VgyrxRVo0Sy8ceZ5ZON0FJSR
+         71ISHukzxPWtA==
+Message-ID: <0d53c53a-ebbd-292d-8c61-154cc98c5498@kernel.org>
+Date:   Thu, 20 Apr 2023 09:10:35 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 11/17] drm/msm/dpu: Disable MDP vsync source selection
- on DPU 5.0.0 and above
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Rajesh Yadav <ryadav@codeaurora.org>,
-        Jeykumar Sankaran <jsanka@codeaurora.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Chandan Uddaraju <chandanu@codeaurora.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Archit Taneja <architt@codeaurora.org>,
-        Sravanthi Kollukuduru <skolluku@codeaurora.org>
-References: <20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org>
- <20230411-dpu-intf-te-v2-11-ef76c877eb97@somainline.org>
- <20fab838-e05b-163d-aa72-bd8235df9f2c@linaro.org>
- <38030486-f08a-33e6-f8d1-3f4de379a75b@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <38030486-f08a-33e6-f8d1-3f4de379a75b@linaro.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [f2fs-dev] [PATCH 1/1] f2fs: allocate trace path buffer from
+ names_cache
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     wubo.oduw@gmail.com, linux-kernel@vger.kernel.org,
+        Wu Bo <bo.wu@vivo.com>, linux-f2fs-devel@lists.sourceforge.net
+References: <20230414104308.6591-1-bo.wu@vivo.com>
+ <e2ec7e19-634c-a065-fe7a-b052d02d4752@kernel.org>
+ <ZD7AJT7ZYPji8TWk@google.com>
+ <91a05857-c916-cae5-d61d-bbec6f1ae052@kernel.org>
+ <ZEAwcaVlYq+PNwEK@google.com> <ZEBE2iT/fKhnhrhg@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <ZEBE2iT/fKhnhrhg@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/2023 04:01, Konrad Dybcio wrote:
+On 2023/4/20 3:45, Jaegeuk Kim wrote:
+> On 04/19, Jaegeuk Kim wrote:
+>> On 04/19, Chao Yu wrote:
+>>> On 2023/4/19 0:07, Jaegeuk Kim wrote:
+>>>> On 04/18, Chao Yu wrote:
+>>>>> On 2023/4/14 18:43, Wu Bo wrote:
+>>>>>> It would be better to use the dedicated slab to store path.
+>>>>>>
+>>>>>> Signed-off-by: Wu Bo <bo.wu@vivo.com>
+>>>>>> ---
+>>>>>>     fs/f2fs/file.c | 4 ++--
+>>>>>>     1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>>
+>>>>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+>>>>>> index 15dabeac4690..27137873958f 100644
+>>>>>> --- a/fs/f2fs/file.c
+>>>>>> +++ b/fs/f2fs/file.c
+>>>>>> @@ -4361,7 +4361,7 @@ static void f2fs_trace_rw_file_path(struct kiocb *iocb, size_t count, int rw)
+>>>>>>     	struct inode *inode = file_inode(iocb->ki_filp);
+>>>>>>     	char *buf, *path;
+>>>>>> -	buf = f2fs_kmalloc(F2FS_I_SB(inode), PATH_MAX, GFP_KERNEL);
+>>>>>> +	buf = __getname();
+>>>>>
+>>>>> How about:
+>>>>>
+>>>>> buf = f2fs_kmem_cache_alloc(names_cachep, GFP_KERNEL, NULL, F2FS_I_SB(inode));
+>>>>
+>>>> This looks like a hack using names_cachep?
+>>>
+>>> names_cachep was exported in fs.h.
+>>
+>> I think that's for __getname() in general, which doesn't indicate you can hack.
+>> No one is using like that.
+>>
+>> $ grep names_cachep fs/* -R
+>> fs/dcache.c:struct kmem_cache *names_cachep __read_mostly;
+>> fs/dcache.c:EXPORT_SYMBOL(names_cachep);
+>> fs/dcache.c:	names_cachep = kmem_cache_create_usercopy("names_cache", PATH_MAX, 0,
+>>
+>> $ grep __getname fs/* -R
+>> fs/ceph/mds_client.c:	path = __getname();
+>> fs/cifs/cifsproto.h:	return __getname();
+>> fs/dcache.c:/* SLAB cache for __getname() consumers */
+>> fs/d_path.c:	char *page = __getname();
+>> fs/exfat/dir.c:	nb->lfn = __getname();
+>> fs/f2fs/file.c:	buf = __getname();
+>> fs/fat/dir.c:		*unicode = __getname();
+>> fs/fat/namei_vfat.c:	uname = __getname();
+>> fs/hostfs/hostfs_kern.c:	char *name = __getname();
+>> fs/namei.c:	result = __getname();
+>> fs/namei.c:	result = __getname();
+>> fs/ntfs3/dir.c:	name = __getname();
+>> fs/ntfs3/xattr.c:	buf = __getname();
+>> fs/ntfs3/inode.c:	new_de = __getname();
+>> fs/ntfs3/inode.c:	de = __getname();
+>> fs/ntfs3/inode.c:	de = __getname();
+>> fs/ntfs3/namei.c:	struct cpu_str *uni = __getname();
+>> fs/ntfs3/namei.c:	de = __getname();
+>> fs/ntfs3/namei.c:	struct cpu_str *uni = __getname();
+>> fs/ntfs3/namei.c:	uni = __getname();
+>> fs/ntfs3/namei.c:	uni1 = __getname();
+>> fs/vboxsf/utils.c: * Returns a shfl_string allocated through __getname (must be freed using
+>> fs/vboxsf/utils.c:	buf = __getname();
+>> fs/vboxsf/utils.c:		shfl_path = __getname();
+>>
+>>>
+>>>> Using f2fs_kmem_cache_alloc is able to inject malloc error.
+>>>> But here is a trace event, is it ok to inject error in a trace path?
+>>>
+>>> Yes, the fail path handling is very simple, so it's fine to leave it
+>>> as it is.
+>>>
+>>> Reviewed-by: Chao Yu <chao@kernel.org>
+>>
+>> What is this for?
+
+Oh, I mean I'm okay w/ original patch, because f2fs_trace_rw_file_path()
+doesn't have complicated error handling.
+
+>>
 > 
-> 
-> On 20.04.2023 03:00, Dmitry Baryshkov wrote:
->> On 17/04/2023 23:21, Marijn Suijten wrote:
->>> Since hardware revision 5.0.0 the TE configuration moved out of the
->>> PINGPONG block into the INTF block, including vsync source selection
->>> that was previously part of MDP top.  Writing to the MDP_VSYNC_SEL
->>> register has no effect anymore and is omitted downstream via the
->>> DPU/SDE_MDP_VSYNC_SEL feature flag.  This flag is only added to INTF
->>> blocks used by hardware prior to 5.0.0.
->>>
->>> The code that writes to these registers in the INTF block will follow in
->>> subsequent patches.
->>>
->>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
->>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>> ---
->>>    .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    |  2 +-
->>>    .../gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h |  2 +-
->>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  3 ++
->>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c         | 52 +++++++++++++++-------
->>>    4 files changed, 41 insertions(+), 18 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->>> index b7845591c384..6906f8046b9e 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->>> @@ -30,7 +30,7 @@ static const struct dpu_mdp_cfg msm8998_mdp[] = {
->>>        {
->>>        .name = "top_0", .id = MDP_TOP,
->>>        .base = 0x0, .len = 0x458,
->>> -    .features = 0,
->>> +    .features = BIT(DPU_MDP_VSYNC_SEL),
->>>        .clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0 },
->>>        .clk_ctrls[DPU_CLK_CTRL_VIG1] = { .reg_off = 0x2b4, .bit_off = 0 },
->>>        .clk_ctrls[DPU_CLK_CTRL_VIG2] = { .reg_off = 0x2bc, .bit_off = 0 },
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
->>> index 5b9b3b99f1b5..14ce397800d5 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
->>> @@ -30,7 +30,7 @@ static const struct dpu_mdp_cfg sdm845_mdp[] = {
->>>        {
->>>        .name = "top_0", .id = MDP_TOP,
->>>        .base = 0x0, .len = 0x45c,
->>> -    .features = BIT(DPU_MDP_AUDIO_SELECT),
->>> +    .features = BIT(DPU_MDP_AUDIO_SELECT) | BIT(DPU_MDP_VSYNC_SEL),
->>>        .clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0 },
->>>        .clk_ctrls[DPU_CLK_CTRL_VIG1] = { .reg_off = 0x2b4, .bit_off = 0 },
->>>        .clk_ctrls[DPU_CLK_CTRL_VIG2] = { .reg_off = 0x2bc, .bit_off = 0 },
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> index 71584cd56fd7..599e177b89dd 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> @@ -48,6 +48,8 @@ enum {
->>>     * @DPU_MDP_UBWC_1_5,      Universal Bandwidth compression version 1.5
->>>     * @DPU_MDP_PERIPH_0_REMOVED Indicates that access to periph top0 block results
->>>     *               in a failure
->>> + * @DPU_MDP_VSYNC_SEL      Enables vsync source selection via MDP_VSYNC_SEL register
->>> + *                         (moved into INTF block since DPU 5.0.0)
->>>     * @DPU_MDP_MAX            Maximum value
->>>       */
->>> @@ -59,6 +61,7 @@ enum {
->>>        DPU_MDP_UBWC_1_5,
->>>        DPU_MDP_AUDIO_SELECT,
->>>        DPU_MDP_PERIPH_0_REMOVED,
->>> +    DPU_MDP_VSYNC_SEL,
->>>        DPU_MDP_MAX
->>>    };
->>>    diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
->>> index 2bb02e17ee52..9ea15a647a66 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
->>> @@ -126,28 +126,16 @@ static void dpu_hw_get_danger_status(struct dpu_hw_mdp *mdp,
->>>        status->sspp[SSPP_CURSOR1] = (value >> 26) & 0x3;
->>>    }
->>>    -static void dpu_hw_setup_vsync_source(struct dpu_hw_mdp *mdp,
->>> +static void dpu_hw_setup_vsync_source_v1(struct dpu_hw_mdp *mdp,
->>>            struct dpu_vsync_source_cfg *cfg)
->>
->> In my opinion _v1 is not really descriptive here. Could you please rename it to dpu_hw_setup_vsync_source_no_vsync_sel() ?
-> v1 refers to the CTL rev 100 a.k.a 1.0.0 a.k.a 1, but that's not
-> yet very well formulated upstream.. if we even need it..
+> If we want to keep the error injection, how about this?
 
-Yeah, but this mdp_top, not the ctl. And for CTL I'd probably rename _v1 
-to _active to follow actual feature name.
+Both original patch or below patch w/ fault injection is fine to me.
+
+Free feel to add rvb tag of me. :)
+
+Thanks,
 
 > 
-> Konrad
->>
->> Or maybe rename dpu_hw_setup_vsync_source() to dpu_hw_setup_vsync_source_vsync_sel() and drop _v1 from this function.
->>
->> Up to you.
->>
->>
->>>    {
->>>        struct dpu_hw_blk_reg_map *c;
->>> -    u32 reg, wd_load_value, wd_ctl, wd_ctl2, i;
->>> -    static const u32 pp_offset[PINGPONG_MAX] = {0xC, 0x8, 0x4, 0x13, 0x18};
->>> +    u32 reg, wd_load_value, wd_ctl, wd_ctl2;
->>>    -    if (!mdp || !cfg || (cfg->pp_count > ARRAY_SIZE(cfg->ppnumber)))
->>> +    if (!mdp || !cfg)
->>>            return;
->>>          c = &mdp->hw;
->>> -    reg = DPU_REG_READ(c, MDP_VSYNC_SEL);
->>> -    for (i = 0; i < cfg->pp_count; i++) {
->>> -        int pp_idx = cfg->ppnumber[i] - PINGPONG_0;
->>> -
->>> -        if (pp_idx >= ARRAY_SIZE(pp_offset))
->>> -            continue;
->>> -
->>> -        reg &= ~(0xf << pp_offset[pp_idx]);
->>> -        reg |= (cfg->vsync_source & 0xf) << pp_offset[pp_idx];
->>> -    }
->>> -    DPU_REG_WRITE(c, MDP_VSYNC_SEL, reg);
->>>          if (cfg->vsync_source >= DPU_VSYNC_SOURCE_WD_TIMER_4 &&
->>>                cfg->vsync_source <= DPU_VSYNC_SOURCE_WD_TIMER_0) {
->>> @@ -194,6 +182,33 @@ static void dpu_hw_setup_vsync_source(struct dpu_hw_mdp *mdp,
->>>        }
->>>    }
->>>    +static void dpu_hw_setup_vsync_source(struct dpu_hw_mdp *mdp,
->>> +        struct dpu_vsync_source_cfg *cfg)
->>> +{
->>> +    struct dpu_hw_blk_reg_map *c;
->>> +    u32 reg, i;
->>> +    static const u32 pp_offset[PINGPONG_MAX] = {0xC, 0x8, 0x4, 0x13, 0x18};
->>> +
->>> +    if (!mdp || !cfg || (cfg->pp_count > ARRAY_SIZE(cfg->ppnumber)))
->>> +        return;
->>> +
->>> +    c = &mdp->hw;
->>> +
->>> +    reg = DPU_REG_READ(c, MDP_VSYNC_SEL);
->>> +    for (i = 0; i < cfg->pp_count; i++) {
->>> +        int pp_idx = cfg->ppnumber[i] - PINGPONG_0;
->>> +
->>> +        if (pp_idx >= ARRAY_SIZE(pp_offset))
->>> +            continue;
->>> +
->>> +        reg &= ~(0xf << pp_offset[pp_idx]);
->>> +        reg |= (cfg->vsync_source & 0xf) << pp_offset[pp_idx];
->>> +    }
->>> +    DPU_REG_WRITE(c, MDP_VSYNC_SEL, reg);
->>> +
->>> +    dpu_hw_setup_vsync_source_v1(mdp, cfg);
->>> +}
->>> +
->>>    static void dpu_hw_get_safe_status(struct dpu_hw_mdp *mdp,
->>>            struct dpu_danger_safe_status *status)
->>>    {
->>> @@ -241,7 +256,12 @@ static void _setup_mdp_ops(struct dpu_hw_mdp_ops *ops,
->>>        ops->setup_split_pipe = dpu_hw_setup_split_pipe;
->>>        ops->setup_clk_force_ctrl = dpu_hw_setup_clk_force_ctrl;
->>>        ops->get_danger_status = dpu_hw_get_danger_status;
->>> -    ops->setup_vsync_source = dpu_hw_setup_vsync_source;
->>> +
->>> +    if (cap & BIT(DPU_MDP_VSYNC_SEL))
->>> +        ops->setup_vsync_source = dpu_hw_setup_vsync_source;
->>> +    else
->>> +        ops->setup_vsync_source = dpu_hw_setup_vsync_source_v1;
->>> +
->>>        ops->get_safe_status = dpu_hw_get_safe_status;
->>>          if (cap & BIT(DPU_MDP_AUDIO_SELECT))
->>>
->>
-
--- 
-With best wishes
-Dmitry
-
+> Signed-off-by: Wu Bo <bo.wu@vivo.com>
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> ---
+>   fs/f2fs/f2fs.h | 13 +++++++++++++
+>   fs/f2fs/file.c |  4 ++--
+>   2 files changed, 15 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 6cae94d51821..d87044516fe9 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -3347,6 +3347,19 @@ static inline void *f2fs_kmalloc(struct f2fs_sb_info *sbi,
+>   	return kmalloc(size, flags);
+>   }
+>   
+> +static inline void *f2fs_getname(struct f2fs_sb_info *sbi)
+> +{
+> +	if (time_to_inject(sbi, FAULT_KMALLOC))
+> +		return NULL;
+> +
+> +	return __getname();
+> +}
+> +
+> +static inline void f2fs_putname(char *buf)
+> +{
+> +	__putname(buf);
+> +}
+> +
+>   static inline void *f2fs_kzalloc(struct f2fs_sb_info *sbi,
+>   					size_t size, gfp_t flags)
+>   {
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index 1b4411271f54..5ac53d2627d2 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -4372,7 +4372,7 @@ static void f2fs_trace_rw_file_path(struct kiocb *iocb, size_t count, int rw)
+>   	struct inode *inode = file_inode(iocb->ki_filp);
+>   	char *buf, *path;
+>   
+> -	buf = f2fs_kmalloc(F2FS_I_SB(inode), PATH_MAX, GFP_KERNEL);
+> +	buf = f2fs_getname(F2FS_I_SB(inode));
+>   	if (!buf)
+>   		return;
+>   	path = dentry_path_raw(file_dentry(iocb->ki_filp), buf, PATH_MAX);
+> @@ -4385,7 +4385,7 @@ static void f2fs_trace_rw_file_path(struct kiocb *iocb, size_t count, int rw)
+>   		trace_f2fs_dataread_start(inode, iocb->ki_pos, count,
+>   				current->pid, path, current->comm);
+>   free_buf:
+> -	kfree(buf);
+> +	f2fs_putname(buf);
+>   }
+>   
+>   static ssize_t f2fs_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
