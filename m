@@ -2,285 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934CC6E8E5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5ED06E8EA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 11:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234490AbjDTJlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 05:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
+        id S234141AbjDTJxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 05:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234435AbjDTJkr (ORCPT
+        with ESMTP id S234231AbjDTJxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 05:40:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFF85FEE
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 02:38:51 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ppQjR-0008Cs-Mx; Thu, 20 Apr 2023 11:37:37 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A56391B3CD6;
-        Thu, 20 Apr 2023 09:37:35 +0000 (UTC)
-Date:   Thu, 20 Apr 2023 11:37:35 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Judith Mendez <jm@ti.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/4] can: m_can: Add hrtimer to generate software
- interrupt
-Message-ID: <20230420-unlikable-overstep-6ad655c5bbdc-mkl@pengutronix.de>
-References: <20230419223323.20384-1-jm@ti.com>
- <20230419223323.20384-2-jm@ti.com>
+        Thu, 20 Apr 2023 05:53:25 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076B52717;
+        Thu, 20 Apr 2023 02:53:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1681983530; bh=+IEVt5W9F0gjxAaC4CllqBec7+yRAyjXDwEBBi0y8+M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=usEAZtEEU3n9mOTxx+ZUxBLWk99loHpiSBTFL9yhxw3KE9eW12LIzdg4670yCPuS1
+         /52r1KjVe0+VITEjluDv8S7y8cExxm7e/cXx6BGMGxySXgX7SMOxrE/bCHaT15dBbi
+         KK92eCmk6846WYZGlroUmJ//Rf5dxGPUFvZzn0uc=
+Received: from [100.100.33.167] (unknown [220.248.53.61])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 01FA2600D4;
+        Thu, 20 Apr 2023 17:38:49 +0800 (CST)
+Message-ID: <2e8d357d-e006-bda8-3711-dcbafbd4c53e@xen0n.name>
+Date:   Thu, 20 Apr 2023 17:38:49 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ikdkjwlh4qdhgblk"
-Content-Disposition: inline
-In-Reply-To: <20230419223323.20384-2-jm@ti.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH 0/2] LoongArch: Make bounds-checking instructions useful
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@kernel.org>, Xi Ruoyao <xry111@xry111.site>
+Cc:     loongarch@lists.linux.dev, WANG Xuerui <git@xen0n.name>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230416173326.3995295-1-kernel@xen0n.name>
+ <e593541e7995cc46359da3dd4eb3a69094e969e2.camel@xry111.site>
+ <6ca642a9-62a6-00e5-39ac-f14ef36f6bdb@xen0n.name>
+ <f54abfae989023fcfdabb4e9800a66847c357b85.camel@xry111.site>
+ <CAAhV-H7zTjSsz=e+0r-9Z0KOF-Gxr-chXnVgWo+4eNA1ptWw1g@mail.gmail.com>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <CAAhV-H7zTjSsz=e+0r-9Z0KOF-Gxr-chXnVgWo+4eNA1ptWw1g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023/4/20 16:36, Huacai Chen wrote:
+> Hi, Xuerui,
+> 
+> I hope V2 can be applied cleanly without the patch series "LoongArch:
+> Better backtraces", thanks.
 
---ikdkjwlh4qdhgblk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I believe it's already the case (just try; I've moved the BADV printing 
+for BCE into the better backtraces series before sending this).
 
-On 19.04.2023 17:33:20, Judith Mendez wrote:
-> Add an hrtimer to MCAN struct. Each MCAN will have its own
-> hrtimer instantiated if there is no hardware interrupt found.
->=20
-> The hrtimer will generate a software interrupt every 1 ms. In
-> hrtimer callback, we check if there is a transaction pending by
-> reading a register, then process by calling the isr if there is.
->=20
-> Signed-off-by: Judith Mendez <jm@ti.com>
-> ---
->  drivers/net/can/m_can/m_can.c          | 30 ++++++++++++++++++++++++--
->  drivers/net/can/m_can/m_can.h          |  3 +++
->  drivers/net/can/m_can/m_can_platform.c | 13 +++++++++--
->  3 files changed, 42 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> index a5003435802b..8784bdea300a 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -23,6 +23,7 @@
->  #include <linux/pinctrl/consumer.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
-> +#include <linux/hrtimer.h>
-> =20
->  #include "m_can.h"
-> =20
-> @@ -1587,6 +1588,11 @@ static int m_can_close(struct net_device *dev)
->  	if (!cdev->is_peripheral)
->  		napi_disable(&cdev->napi);
-> =20
-> +	if (dev->irq < 0) {
-> +		dev_dbg(cdev->dev, "Disabling the hrtimer\n");
-> +		hrtimer_cancel(&cdev->hrtimer);
-> +	}
-> +
->  	m_can_stop(dev);
->  	m_can_clk_stop(cdev);
->  	free_irq(dev->irq, dev);
-> @@ -1793,6 +1799,18 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff=
- *skb,
->  	return NETDEV_TX_OK;
->  }
-> =20
-> +enum hrtimer_restart hrtimer_callback(struct hrtimer *timer)
-> +{
-> +	struct m_can_classdev *cdev =3D
-> +		container_of(timer, struct m_can_classdev, hrtimer);
-> +
-> +	m_can_isr(0, cdev->net);
-> +
-> +	hrtimer_forward_now(timer, ms_to_ktime(1));
-> +
-> +	return HRTIMER_RESTART;
-> +}
-> +
->  static int m_can_open(struct net_device *dev)
->  {
->  	struct m_can_classdev *cdev =3D netdev_priv(dev);
-> @@ -1827,13 +1845,21 @@ static int m_can_open(struct net_device *dev)
->  		}
-> =20
->  		INIT_WORK(&cdev->tx_work, m_can_tx_work_queue);
-> -
->  		err =3D request_threaded_irq(dev->irq, NULL, m_can_isr,
->  					   IRQF_ONESHOT,
->  					   dev->name, dev);
-> +
+I'm only waiting for comments from the other UAPI maintainers on the CC 
+list.
 
-nitpick:
-Please remove these 2 newline changes.
+-- 
+WANG "xen0n" Xuerui
 
->  	} else {
-> -		err =3D request_irq(dev->irq, m_can_isr, IRQF_SHARED, dev->name,
-> +		if (dev->irq > 0)	{
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
-Please follow the kernel coding style and use a space not a tab after
-the closing ")" of the "if".
-
-> +			err =3D request_irq(dev->irq, m_can_isr, IRQF_SHARED, dev->name,
->  				  dev);
-> +		}
-> +
-> +		else	{
-
-Please use kernel coding style: "} else {"
-
-> +			dev_dbg(cdev->dev, "Enabling the hrtimer\n");
-> +			cdev->hrtimer.function =3D &hrtimer_callback;
-> +			hrtimer_start(&cdev->hrtimer, ns_to_ktime(0), HRTIMER_MODE_REL_PINNED=
-);
-> +		}
-
-I think there's no need to have nested else branches, what about this
-approach?
-
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -1831,9 +1831,11 @@ static int m_can_open(struct net_device *dev)
-                 err =3D request_threaded_irq(dev->irq, NULL, m_can_isr,
-                                            IRQF_ONESHOT,
-                                            dev->name, dev);
--        } else {
-+        } else if (dev->irq) {
-                 err =3D request_irq(dev->irq, m_can_isr, IRQF_SHARED, dev-=
->name,
-                                   dev);
-+        } else {
-+                // polling
-         }
-=20
-         if (err < 0) {
-
->  	}
-> =20
->  	if (err < 0) {
-> diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-> index a839dc71dc9b..ed046d77fdb9 100644
-> --- a/drivers/net/can/m_can/m_can.h
-> +++ b/drivers/net/can/m_can/m_can.h
-> @@ -28,6 +28,7 @@
->  #include <linux/pm_runtime.h>
->  #include <linux/slab.h>
->  #include <linux/uaccess.h>
-> +#include <linux/hrtimer.h>
-> =20
->  /* m_can lec values */
->  enum m_can_lec_type {
-> @@ -93,6 +94,8 @@ struct m_can_classdev {
->  	int is_peripheral;
-> =20
->  	struct mram_cfg mcfg[MRAM_CFG_NUM];
-> +
-> +	struct hrtimer hrtimer;
->  };
-> =20
->  struct m_can_classdev *m_can_class_allocate_dev(struct device *dev, int =
-sizeof_priv);
-> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_c=
-an/m_can_platform.c
-> index 9c1dcf838006..7540db74b7d0 100644
-> --- a/drivers/net/can/m_can/m_can_platform.c
-> +++ b/drivers/net/can/m_can/m_can_platform.c
-> @@ -7,6 +7,7 @@
-> =20
->  #include <linux/phy/phy.h>
->  #include <linux/platform_device.h>
-> +#include <linux/hrtimer.h>
-> =20
->  #include "m_can.h"
-> =20
-> @@ -98,8 +99,16 @@ static int m_can_plat_probe(struct platform_device *pd=
-ev)
->  	addr =3D devm_platform_ioremap_resource_byname(pdev, "m_can");
->  	irq =3D platform_get_irq_byname(pdev, "int0");
->  	if (IS_ERR(addr) || irq < 0) {
-> -		ret =3D -EINVAL;
-> -		goto probe_fail;
-> +		if (irq =3D=3D -EPROBE_DEFER) {
-> +			ret =3D -EPROBE_DEFER;
-> +			goto probe_fail;
-> +		}
-> +		if (IS_ERR(addr)) {
-> +			ret =3D PTR_ERR(addr);
-> +			goto probe_fail;
-> +		}
-> +		dev_dbg(mcan_class->dev, "Failed to get irq, initialize hrtimer\n");
-> +		hrtimer_init(&mcan_class->hrtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_P=
-INNED);
-
-Looks better. Please remove the outer "if (IS_ERR(addr) || irq < 0)" and
-move the error checking directly after "addr =3D devm_platform_ioremap_reso=
-urce_byname()".
-
-What do you think about introducing the "poll-interval" property and
-only enable polling if it is set?
-
->  	}
-> =20
->  	/* message ram could be shared */
-> --=20
-> 2.17.1
->=20
->
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---ikdkjwlh4qdhgblk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRBB9wACgkQvlAcSiqK
-BOg0zgf8CBj+E5MKzrz5bNRXj0BWuK0IdUDA6yeaHlfkfp2NkkBFuJt+CkVPvX0y
-e+kKRBxqpIlZ+fPxzMVqyP0AuGHn4+9wtfMngfEvtTi/BlhuBkQMRQYVTPcUEjwI
-bNggMFPpIj0Re1c15cICUOBFLlmTUvpD5mC08LprvOtLKF78R336dOwVkrM+gNjF
-ke3ickmvQjQFlS370Ge6YeABRISdipavv7e0xvoWt613yTCnXShppLIGfQm7d6rF
-Cs7GTVwYLEmtepUK2GwjKrKLRF4N6CfHezmTq/Y7e0ztnEUeE4IOqicFxoLaAsRj
-++iDnGMinJGDZXBdwVY5EKos9lehIQ==
-=9hcv
------END PGP SIGNATURE-----
-
---ikdkjwlh4qdhgblk--
