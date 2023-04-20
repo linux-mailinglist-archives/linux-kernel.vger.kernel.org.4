@@ -2,240 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB496E9E81
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 00:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F46D6E9E88
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Apr 2023 00:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232829AbjDTWBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 18:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
+        id S232812AbjDTWEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 18:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjDTWB2 (ORCPT
+        with ESMTP id S229820AbjDTWET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 18:01:28 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006141FE9
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 15:01:26 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-51b0f9d7d70so1529540a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 15:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682028086; x=1684620086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m2Ev3XkqPH6pBRfYHzJ+uQ7XVHtYSI/8IWEmQRBv/YI=;
-        b=XccRPyOwGtCXf7M5O+HNfS7PIZwaQD/v87OkbY9kPKXbSXCwAHUwb77DmpKXQM0oF7
-         R0iGe67jW+b5DNWOVTJNemJXy3OKOX6KdYoUmETuzx9PGEbJFJQ2pUniMRMuVPMdDiGU
-         /5tCrXANgIgLRaYyadJDbdo+RbIOZFK426WywYo54ew0ofNLXcABU5+/CMzqIREzPHeY
-         nozuQwG7Zt6NpmqIblntxNB1TQq9MjpSBvyrh0FYtiq26IkPB90nc3IN0Z5SPpjDuFAg
-         Uf2dafkB6vN/Ipj35Qgs/T7S7nQT6pBp/glwP+uShCgN0NssPyN9BTUsrhgWhmezZtGB
-         kVTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682028086; x=1684620086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m2Ev3XkqPH6pBRfYHzJ+uQ7XVHtYSI/8IWEmQRBv/YI=;
-        b=EYkfflrBR7cTZdmzIKCEl2PAuBH6kkmErnOgOBsV69Qugzixie3qsP7CuffMIbD3qJ
-         K5wjk1Dha36jpUzTBXMzTLp6zPWkZJM8arsPfWH/6QWB2tUsgpA0Tj9NZeqZvY6iXK3K
-         ahiFSNgH0SEdhtzlSiH3lFywFoUwT5Z7UXWJ5KNeOF7PYYzZFu/PcoiKANPdB7XrBNLd
-         /SGJgLrb/QmGmjaypaVnYojOTGHzltMVTToMVyoooqpNnJWYY6lT553eE7bPYPjNDNlb
-         8VUudLz4URbgmHbs9BmKoVFbM0Tl636gXC0jIJ3GbYqvXrcXpi+GgqKTG3jvbgEUKTUQ
-         Du6w==
-X-Gm-Message-State: AAQBX9eWBGYuRI8WorCoRAf6rxlVaOA+2QViYQVYPNO/hqed2lw91xG6
-        R2oSqwhy8i2EZuobHuXRXJVjD9yj8/hNTF2bboXzrw==
-X-Google-Smtp-Source: AKy350ZODjmhBgPpSK9yTOVPr1QR4R227MhIwe3aNJJTXaij0JPaPQ4lg0m0d3q6HUIib6fUODiqrkndxcAY/A+hkAo=
-X-Received: by 2002:a17:90a:5509:b0:247:a272:71d1 with SMTP id
- b9-20020a17090a550900b00247a27271d1mr3035541pji.7.1682028086370; Thu, 20 Apr
- 2023 15:01:26 -0700 (PDT)
+        Thu, 20 Apr 2023 18:04:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAB6270C;
+        Thu, 20 Apr 2023 15:04:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7948364C33;
+        Thu, 20 Apr 2023 22:04:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C0AAC433EF;
+        Thu, 20 Apr 2023 22:04:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682028256;
+        bh=rD9VMfKEJUFC4BYnTD9baNPUr4s7JyEl0ztF0Di7OKw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=EPQM4RDE1vMmsg7wiEkmGqzvCIyrImc5T/Bq/lqdOuEdICx6O4ap+Ub/FsyWPaHl7
+         nXwQO/Qdxv8dnF4h8A2ap5SSbWNe7H8hOm0z32DRkhmePr7VeEB2LaSoWHvv1nWXRl
+         hI2P+e3jctlTnnOx/kH02gPjWp7wHKr4a5OoCBTrAJM8GEawx2cK86+cd0uAA+4gCF
+         Mcg7cPFrfnSVSxCuS97zKToBgg2ZtXbqevEgc7mxdOxgLyGvBQxl0QkB+z9WdZhfE9
+         3v2CeZ7jEXj5t3DH5eBmA7wA6cblDyn0kjKoPN9RjOHd5GWSbCf0RsJ6Ezrq+yfbou
+         tY8F5n76uF5zQ==
+Message-ID: <6b7c1f22-2d97-bda9-affd-2e3a7a1d42ed@kernel.org>
+Date:   Fri, 21 Apr 2023 07:04:14 +0900
 MIME-Version: 1.0
-References: <20230419221716.3603068-1-atishp@rivosinc.com> <20230419221716.3603068-2-atishp@rivosinc.com>
- <b58eadb7-c80c-42fe-b803-09f2f466c0bd@lucifer.local>
-In-Reply-To: <b58eadb7-c80c-42fe-b803-09f2f466c0bd@lucifer.local>
-From:   Atish Kumar Patra <atishp@rivosinc.com>
-Date:   Fri, 21 Apr 2023 03:31:15 +0530
-Message-ID: <CAHBxVyE3G975UZBhcSsJN1bUFGtnRLSuY=OLMreu5orgc2zKQw@mail.gmail.com>
-Subject: Re: [RFC 01/48] mm/vmalloc: Introduce arch hooks to notify
- ioremap/unmap changes
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
-        abrestic@rivosinc.com, Samuel Ortiz <sameo@rivosinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Uladzislau Rezki <urezki@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] PCI: Add ASPEED vendor ID
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DRM DRIVER FOR AST SERVER GRAPHICS CHIPS" 
+        <dri-devel@lists.freedesktop.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Patrick McLean <chutzpah@gentoo.org>, linux-ide@vger.kernel.org
+References: <20230420191036.GA315493@bhelgaas>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20230420191036.GA315493@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 1:12=E2=80=AFAM Lorenzo Stoakes <lstoakes@gmail.com=
-> wrote:
->
-> I'm a vmalloc reviewer too now -next/mm-unstable get_maintainer.pl should=
- say
-> so, but forgivable because perhaps you ran against another tree but FYI f=
-or
-> future I'd appreciate a cc- :)
->
+On 4/21/23 04:10, Bjorn Helgaas wrote:
+> [+cc Damien, linux-ide]
+> 
+> On Thu, Apr 20, 2023 at 09:08:48AM +0200, Thomas Zimmermann wrote:
+>> Am 19.04.23 um 20:37 schrieb Bjorn Helgaas:
+>>> On Wed, Apr 19, 2023 at 09:00:15AM +0200, Thomas Zimmermann wrote:
+>>>> Am 19.04.23 um 00:57 schrieb Patrick McLean:
+>>>>> Currently the ASPEED PCI vendor ID is defined in
+>>>>> drivers/gpu/drm/ast/ast_drv.c, move that to include/linux/pci_ids.h
+>>>>> with all the rest of the PCI vendor ID definitions. Rename the definition
+>>>>> to follow the format that the other definitions follow.
+>>>>
+>>>> Thanks a lot. Can you please also move and rename the PCI device ids? [1]
+>>>
+>>> Generally we move things to pci_ids.h only when they are shared
+>>> between multiple drivers.  This is mostly to make backports easier.
+>>>
+>>> PCI_VENDOR_ID_ASPEED is (or will be) used in both ast_drv.c and
+>>> libata-core.c, so it qualifies.
+>>>
+>>> It doesn't look like PCI_CHIP_AST2000 and PCI_CHIP_AST2100 would
+>>> qualify since they're only used in ast_drv.c and ast_main.c, which are
+>>> part of the same driver.
+>>
+>> Ok, I see. Can I take the patch into DRM trees?
+> 
+> The first time around I got two patches [2].  This time I only got
+> this patch, but IIUC there are still two patches in play here:
+> 
+>   - This one, which moves PCI_VENDOR_ID_ASPEED to pci_ids.h, and
+>   - The libata-core one that adds a use in ata_dev_config_ncq()
+> 
+> Those should go together via the same tree.  I supplied my ack to
+> indicate that I'm not going to merge anything myself, and I expect
+> whoever merges the libata patch to also merge this one.
+> 
+> If for some reason the libata-core patch doesn't happen, then this
+> patch shouldn't happen either, because there would no longer be any
+> sharing between drivers that would justify a pci_ids.h addition.
 
-Ahh. Thanks for pointing that out. I see the patch for that now
-https://lkml.org/lkml/2023/3/21/1084
+I can take both patches through the libata tree but there were comments on the
+second patch for libata and I have not seen these addressed yet (I did not get a
+v2). And in the meantime, it seems that the PCI ID patch was reworked as a
+single patch... Not sure what's happening here.
 
-This series is based on 6.3-rc4. That's probably why get_maintainer.pl
-did not pick it up.
-I will make sure it includes you in the future revisions.
 
-> On Wed, Apr 19, 2023 at 03:16:29PM -0700, Atish Patra wrote:
-> > From: Rajnesh Kanwal <rkanwal@rivosinc.com>
-> >
-> > In virtualization, the guest may need notify the host about the ioremap
-> > regions. This is a common usecase in confidential computing where the
-> > host only provides MMIO emulation for the regions specified by the gues=
-t.
-> >
-> > Add a pair if arch specific callbacks to track the ioremapped regions.
->
-> Nit: typo if -> of.
->
-
-Fixed. Thanks.
-
-> >
-> > This patch is based on pkvm patches. A generic arch config can be added
-> > similar to pkvm if this is going to be the final solution. The device
-> > authorization/filtering approach is very different from this and we
-> > may prefer that one as it provides more flexibility in terms of which
-> > devices are allowed for the confidential guests.
->
-> So it's an RFC that assumes existing patches are already applied or do yo=
-u mean
-> something else here? What do I need to do to get to a vmalloc.c with your=
- patch
-> applied?
->
-> I guess this is pretty nitty since your changes are small here but be goo=
-d to
-> know!
->
-
-Here is a bit more context: This patch is inspired from Marc's pkvm patch[1=
-]
-
-We haven't seen a revised version of that series. Thus, we are not
-sure if this is what will be the final solution for pKVM.
-The alternative solution is the guest device filtering approach. We
-are also tracking that which introduces a new set of functions
-(ioremap_hardned)[1] for authorized devices allowed for. That series
-doesn't require any changes to the vmalloc.c and this
-patch can be dropped.
-
-As the TDX implementation is not ready yet, we chose to go this way to
-get the ball rolling for implementing confidential computing
-in RISC-V. Our plan is to align with the solution that the upstream
-community finally agrees upon.
-
-[1] https://lore.kernel.org/kvm/20211007143852.pyae42sbovi4vk23@gator/t/#mc=
-3480e2a1d69f91999aae11004941dbdfbbdd600
-[2] https://github.com/intel/tdx/commit/d8bb168e10d1ba534cb83260d9a8a3c5b26=
-9eb50
-
-> >
-> > Signed-off-by: Rajnesh Kanwal <rkanwal@rivosinc.com>
-> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> > ---
-> >  mm/vmalloc.c | 16 ++++++++++++++++
-> >  1 file changed, 16 insertions(+)
-> >
-> > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> > index bef6cf2..023630e 100644
-> > --- a/mm/vmalloc.c
-> > +++ b/mm/vmalloc.c
-> > @@ -304,6 +304,14 @@ static int vmap_range_noflush(unsigned long addr, =
-unsigned long end,
-> >       return err;
-> >  }
-> >
-> > +__weak void ioremap_phys_range_hook(phys_addr_t phys_addr, size_t size=
-, pgprot_t prot)
-> > +{
-> > +}
-> > +
-> > +__weak void iounmap_phys_range_hook(phys_addr_t phys_addr, size_t size=
-)
-> > +{
-> > +}
-> > +
->
-> I'm not sure if this is for efficiency by using a weak reference, however=
-, and
-> perhaps a nit, but I'd prefer an arch_*() that's defined in a header some=
-where,
-> as it does hide the call paths quite effectively.
->
-
-Sure. Will do that.
-
-> >  int ioremap_page_range(unsigned long addr, unsigned long end,
-> >               phys_addr_t phys_addr, pgprot_t prot)
-> >  {
-> > @@ -315,6 +323,10 @@ int ioremap_page_range(unsigned long addr, unsigne=
-d long end,
-> >       if (!err)
-> >               kmsan_ioremap_page_range(addr, end, phys_addr, prot,
-> >                                        ioremap_max_page_shift);
-> > +
-> > +     if (!err)
-> > +             ioremap_phys_range_hook(phys_addr, end - addr, prot);
-> > +
-> >       return err;
-> >  }
-> >
-> > @@ -2772,6 +2784,10 @@ void vunmap(const void *addr)
-> >                               addr);
-> >               return;
-> >       }
-> > +
-> > +     if (vm->flags & VM_IOREMAP)
-> > +             iounmap_phys_range_hook(vm->phys_addr, get_vm_area_size(v=
-m));
-> > +
->
-> There are places other than ioremap_page_range() that can set VM_IOREMAP,
-> e.g. vmap_pfn(), so this may trigger with addresses other than those spec=
-ified
-> in the original hook. Is this intended?
->
-
-Thanks for pointing that out. Yeah. That is not intentional.
-
-> >       kfree(vm);
-> >  }
-> >  EXPORT_SYMBOL(vunmap);
-> > --
-> > 2.25.1
-> >
