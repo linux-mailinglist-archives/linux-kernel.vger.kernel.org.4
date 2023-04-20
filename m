@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D746E8846
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 04:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC416E8848
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 04:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232762AbjDTCt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Apr 2023 22:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
+        id S232853AbjDTCuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Apr 2023 22:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjDTCtZ (ORCPT
+        with ESMTP id S231334AbjDTCuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Apr 2023 22:49:25 -0400
-Received: from out-17.mta1.migadu.com (out-17.mta1.migadu.com [95.215.58.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93C510E0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Apr 2023 19:49:16 -0700 (PDT)
+        Wed, 19 Apr 2023 22:50:21 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79966E4E;
+        Wed, 19 Apr 2023 19:50:18 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (133-32-181-51.west.xps.vectant.ne.jp [133.32.181.51])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 798519DE;
+        Thu, 20 Apr 2023 04:50:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1681959009;
+        bh=VF5BpzwMqipQvUKFfTdRglNdS4KAtWm3Mr2wpxbCRlw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gu1Q2+AvO0JSWBeCUsbZ0jjrymYoJLMig7tu52kkmN/UcI6JOO+k53jXYz0F0y2BX
+         JIz/DI6NmcVCBnoOjS7aY5v8K30VRZGXj41hjHqm35zYB/spWzPso4O01WyJQPMiAW
+         YdrUI3EnsyF0DO//DxXnE6WxNf2ftFb0d7NedoLc=
+Date:   Thu, 20 Apr 2023 05:50:27 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Dmitry Perchanov <dmitry.perchanov@intel.com>
+Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
+        linux-kernel@vger.kernel.org, evgeni.raikhel@intel.com,
+        demisrael@gmail.com
+Subject: Re: [PATCH] uvc: Intel PID enabling UVC Metadata attributes
+Message-ID: <20230420025027.GC631@pendragon.ideasonboard.com>
+References: <9001ccdec3e3234253cf2f93ea39745ed6f525f1.camel@intel.com>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1681958955;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WA6UVK8dj8ldPfIV6BLeh8Vlm+ePhRuqvYfYMkiPMtU=;
-        b=IJoj2c66qQk0/sYbblqDvvKQuDn9sR4DCai/lySCGbLZPoWyGmiFefLjWtkd4FWX0OI+Go
-        byo2+QMSBf3x1U/JVWt4W2AvD6Cyf01dieW0MaAKseWf+6YxvZtI/uU4Pvd3tjJc4rYTm1
-        VwCF8nSZwi/8K7M7IprGNu/YopYtdLg=
-Date:   Thu, 20 Apr 2023 02:49:12 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   "Yajun Deng" <yajun.deng@linux.dev>
-Message-ID: <38876115ff2bd4756eca5d8d8f93a48e@linux.dev>
-Subject: Re: [PATCH] net: sched: print jiffies when transmit queue time
- out
-To:     "Eric Dumazet" <edumazet@google.com>
-Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <CANn89iJeiEk_Rcoh0odfjK2ocP23HQfOPDhJJ7p_=Q--A2jHJg@mail.gmail.com>
-References: <CANn89iJeiEk_Rcoh0odfjK2ocP23HQfOPDhJJ7p_=Q--A2jHJg@mail.gmail.com>
- <20230419115632.738730-1-yajun.deng@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9001ccdec3e3234253cf2f93ea39745ed6f525f1.camel@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,20 +47,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-April 19, 2023 8:02 PM, "Eric Dumazet" <edumazet@google.com> wrote:=0A=0A=
-> On Wed, Apr 19, 2023 at 1:56 PM Yajun Deng <yajun.deng@linux.dev> wrote=
-:=0A> =0A>> Although there is watchdog_timeo to let users know when the t=
-ransmit queue=0A>> begin stall, but dev_watchdog() is called with an inte=
-rval. The jiffies=0A>> will always be greater than watchdog_timeo.=0A>> =
-=0A>> To let users know the exact time the stall started, print jiffies w=
-hen=0A>> the transmit queue time out.=0A>> =0A>> Signed-off-by: Yajun Den=
-g <yajun.deng@linux.dev>=0A>> ---=0A>> =0A>> atomic_long_inc(&txq->trans_=
-timeout);=0A>> break;=0A>> }=0A>> @@ -522,8 +522,9 @@ static void dev_wat=
-chdog(struct timer_list *t)=0A>> =0A>> if (unlikely(some_queue_timedout))=
- {=0A>> trace_net_dev_xmit_timeout(dev, i);=0A>> - WARN_ONCE(1, KERN_INFO=
- "NETDEV WATCHDOG: %s (%s): transmit queue %u timed out\n",=0A>> - dev->n=
-ame, netdev_drivername(dev), i);=0A>> + WARN_ONCE(1, KERN_INFO "NETDEV WA=
-TCHDOG: %s (%s): \=0A>> + transmit queue %u timed out %lu jiffies\n",=0A>=
-> + dev->name, netdev_drivername(dev), i, some_queue_timedout);=0A> =0A> =
-If we really want this, I suggest we export a time in ms units, using=0A>=
- jiffies_to_msecs()=0A=0AOK.
+Hi Dmitry,
+
+Thank you for the patch.
+
+On Sun, Jan 29, 2023 at 03:43:38PM +0200, Dmitry Perchanov wrote:
+> Intel RealSense UVC cameras Metadata support.
+
+The subject line should start with "media: uvcvideo:".
+
+Both the subject line and the body of the commit message should use the
+imperative mood. For instance,
+
+media: uvcvideo: Enable Intel RealSense metadata for 8 new devices
+
+Intel RealSense UVC cameras produce metadata in a vendor-specific format
+that is already supported by the uvcvideo driver. Enable handling of
+this metadata for 8 additional RealSense devices.
+
+> Co-developed-by: Yu MENG <yu1.meng@intel.com>
+> Co-developed-by: Evgeni Raikhel <evgeni.raikhel@intel.com>
+> Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
+> ---
+>  drivers/media/usb/uvc/uvc_driver.c | 72 ++++++++++++++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index e4bcb5011360..955f67d9a993 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -3000,6 +3000,78 @@ static const struct usb_device_id uvc_ids[] = {
+>  	  .bInterfaceSubClass	= 1,
+>  	  .bInterfaceProtocol	= 0,
+>  	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> +	/* Intel D410/ASR depth camera */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x8086,
+> +	  .idProduct		= 0x0ad2,
+
+Please keep entries sorted by vendor and product ID in this list. The
+first four entries from this patch should go before 8086:0b03 that is
+already in the driver.
+
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= 0,
+> +	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> +	/* Intel D415/ASRC depth camera */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x8086,
+> +	  .idProduct		= 0x0ad3,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= 0,
+> +	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> +	/* Intel D430/AWG depth camera */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x8086,
+> +	  .idProduct		= 0x0ad4,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= 0,
+> +	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> +	/* Intel Fallback USB2 Descriptor */
+
+According to the descriptors you've provided (thank you for that), this
+camera is named "Depth Camera 430". How does it differ from the 0ad4
+device which you also name 430 right above ?
+
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x8086,
+> +	  .idProduct		= 0x0ad6,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= 0,
+> +	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> +	/* Intel D435/AWGC depth camera */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x8086,
+> +	  .idProduct		= 0x0b07,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= 0,
+> +	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> +	/* Intel D435i depth camera */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x8086,
+> +	  .idProduct		= 0x0b3a,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= 0,
+> +	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> +	/* Intel D405 Depth Camera */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x8086,
+> +	  .idProduct		= 0x0b5b,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= 0,
+> +	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> +	/* Intel D455 Depth Camera */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x8086,
+> +	  .idProduct		= 0x0b5c,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= 0,
+> +	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
+>  	/* Generic USB Video Class */
+>  	{ USB_INTERFACE_INFO(USB_CLASS_VIDEO, 1, UVC_PC_PROTOCOL_UNDEFINED) },
+>  	{ USB_INTERFACE_INFO(USB_CLASS_VIDEO, 1, UVC_PC_PROTOCOL_15) },
+
+-- 
+Regards,
+
+Laurent Pinchart
