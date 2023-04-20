@@ -2,104 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521836E9B59
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B586E9B5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 20:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbjDTSM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 14:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
+        id S231284AbjDTSOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 14:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjDTSM6 (ORCPT
+        with ESMTP id S229644AbjDTSOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 14:12:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF1E3A90;
-        Thu, 20 Apr 2023 11:12:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D9C264B1A;
-        Thu, 20 Apr 2023 18:12:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1E57C433EF;
-        Thu, 20 Apr 2023 18:12:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682014376;
-        bh=kSvkn/SMAUuZevGgkbpWRmpLNf69JWrO4HhG5l/4Agk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iahBDf7ycPKPY4r29MIYUpHmLKJ1iqx/zYUO/mIDTMbXuScnzk5Z6b4aFpzUA662a
-         +mDeAIIx2q3lcV0EDdZybGO0Shy83bIu98ETLr0BZBSs96A5vgrfvpqXgxVfiy7tBU
-         WxqTsvmXj/psTjENshC0xfrIhC+O6OnRMOCNvDwAK0EeRnztYs0Wjp7C3o6LsTpeu8
-         /1gSRmRbJ1382oXGbxbeANDMzZhFgn4wvfmgQmJkadgH42iS6fP5ofccByaLBscELx
-         mVEjhXfsLNrr1cNgOndb+7WealwP85YQjQkuqBuYNl1daC4p2VytwScD5FRj9F9doC
-         o9kwsM8ahdT6g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 1378D403B5; Thu, 20 Apr 2023 15:12:53 -0300 (-03)
-Date:   Thu, 20 Apr 2023 15:12:52 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] libperf rc_check: Enable implicitly with sanitizers
-Message-ID: <ZEGApFbdz44z9GeX@kernel.org>
-References: <20230420171812.561603-1-irogers@google.com>
+        Thu, 20 Apr 2023 14:14:19 -0400
+Received: from mx2.ucr.edu (mx2.ucr.edu [138.23.62.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079F43A88
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
+  t=1682014459; x=1713550459;
+  h=mime-version:references:in-reply-to:from:date:message-id:
+   subject:to:cc:content-transfer-encoding;
+  bh=79JZ1qAUMj74S4vtYkiWAHFaJpvNq+/BvXOjD8KVs9Q=;
+  b=UrwVP+13PtACvfHB3bG+wtdibLKH3OF+WpFbkS66alLsxnEsSe6QVqfH
+   PN6slEIqrSIdJavmmsSJGaLpVm0y77YV8n4LY4xxdgO7yVVfWWMGb3nEE
+   1EMOIZemqMANtfUu9p6y5+gMLKFac17dhhTpP7AzrWg8LIjiF/CKcGXSO
+   ijcCMKSDAotY0ztA8MJGLxEx2x/QJRctJWRdevFgjYRt3keO+KwUNASlJ
+   sdM3FxU6s6IBIyG9OqsF/6i5VTY58fkVx/19ZArA58MxM09Wqn6CiPhoE
+   tc3+EQ0q6bUwkl4SRBXOOzlqoUuvwVx2w2gVXeOOlfCXwlInwlsARQrOH
+   w==;
+Received: from mail-wm1-f69.google.com ([209.85.128.69])
+  by smtp2.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Apr 2023 11:14:18 -0700
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f09b608285so3533465e9.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 11:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ucr.edu; s=rmail; t=1682014455; x=1684606455;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zoh9pDOCC4j4Hix+3gCXWVwjTru62KcX/tiREVIZHqM=;
+        b=ap/xHYoQHs5URJuEagPQs3GrVM1cojbDATba7591kOmeHpwB/ZomsYg/3s/2BRMmAx
+         FTtOFTR/i3H/cC32FgLVHZSMwiJ5rJDfEhGJ+gjo5FGj0dOIATJpftrWIzppT7eRDL2s
+         BEtboSEQQb40mc6yAbt3/Ow2wDyo24cZJYTuI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682014455; x=1684606455;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Zoh9pDOCC4j4Hix+3gCXWVwjTru62KcX/tiREVIZHqM=;
+        b=FaK6O5zXq28O/T+FNXgoFDLwQLWU+tba0aspLDGVmd5cac+vtqJaVePx8PXDUiWYA7
+         7g2nMBjq+OuP4FSoX5UlIONGdLpchvtuW9k6uUcOIKvmt4AboE3R5xMiM+Jh6e8fw8jv
+         xTqEH7o6WoNo2LRgky/7Czw1a6vmrT4beJfhHpIlIsJ8LnR+R2IMOZCOQ3h/Q26VAS20
+         WOf7WHQmr8rUYOviHKvz+lQKmz7nN1c9T+KlZbEfhdylyeJWJu0IBzjqpZ/Da6AmmeSC
+         Xq7A03SgUXiHGbowjZfrXS0u41NfXblRAwuWCOfH8kWtgsTGT1uFSmKBXOwy+KIIajHi
+         Umjw==
+X-Gm-Message-State: AAQBX9cbsf1T6sOrygT7LY/e1GpFyDool3VKEqpjNhFSBptUOWqBS5IZ
+        8eVDJKFtOPUS343q5H8HVna3oDwbqE0y6AwS18ZvL+14qMyv+3oAHSi3efMb2FbpQq34MqwQpIO
+        9WgFX+Hk3orlmMjNr6HzpdgBaXXlgrv4ogD/MvdWUxF1BkFHLPMh5
+X-Received: by 2002:a5d:4d06:0:b0:2e5:d4f4:c43b with SMTP id z6-20020a5d4d06000000b002e5d4f4c43bmr2135447wrt.55.1682014455357;
+        Thu, 20 Apr 2023 11:14:15 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bjMEn8mTBrM4XBI0Hr4pmayMt8MRCBDNv/WV/6weTMr0N6o8ABfndJycYj2gF1L50oyOih62bdISX69ZmrlTk=
+X-Received: by 2002:a5d:4d06:0:b0:2e5:d4f4:c43b with SMTP id
+ z6-20020a5d4d06000000b002e5d4f4c43bmr2135437wrt.55.1682014455063; Thu, 20 Apr
+ 2023 11:14:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420171812.561603-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+UBctD_w=75wChmePZHp7KsBSNPWYGDBtzHPRPPtaFoqhGvXA@mail.gmail.com>
+ <CA+UBctDsHRpkLG5ppdiuV8Msn4Dx-ZJ2xDrxfa48VMb7ZE+xBA@mail.gmail.com>
+ <687864524.118195.1681799447034.JavaMail.zimbra@nod.at> <ff419c45-7d76-0219-a598-f6f4d081e29c@huawei.com>
+ <CA+UBctBVHouL-3rM3zKYLpk01fXFvCpBnU7EpSRVdGW7cEjcJQ@mail.gmail.com> <977347543.226888.1682011999468.JavaMail.zimbra@nod.at>
+In-Reply-To: <977347543.226888.1682011999468.JavaMail.zimbra@nod.at>
+From:   Yu Hao <yhao016@ucr.edu>
+Date:   Thu, 20 Apr 2023 11:14:04 -0700
+Message-ID: <CA+UBctA4fSbSdooQ9q9fwNuaHb_PnkfFuqJ7Q5vii-3-uCiUjw@mail.gmail.com>
+Subject: Re: BUG: divide error in ubi_attach_mtd_dev
+To:     Richard Weinberger <richard@nod.at>
+Cc:     chengzhihao1 <chengzhihao1@huawei.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Apr 20, 2023 at 10:18:12AM -0700, Ian Rogers escreveu:
-> If using leak sanitizer then implicitly enable reference count
-> checking.
+On Thu, Apr 20, 2023 at 10:33=E2=80=AFAM Richard Weinberger <richard@nod.at=
+> wrote:
+>
+> ----- Urspr=C3=BCngliche Mail -----
+> > The kernel is in qemu. We find that the `mtd` is from
+> > `mtd =3D get_mtd_device(NULL, req.mtd_num);` in function `ctrl_cdev_ioc=
+tl`.
+> > And we are still trying to figure out what MTD is.
+>
+> Can you please share the qemu command line?
+>
 
-Thanks, applied.
+qemu-system-x86_64 -m 2G -smp 2 -kernel
+/home/test/Workspace/SyzGen/linux-distro/linux-6.2-debug/arch/x86/boot/bzIm=
+age
+-append =E2=80=9Cconsole=3DttyS0 root=3D/dev/sda net.ifnames=3D0=E2=80=9D -=
+hda
+/home/test/Workspace/SyzGen/linux-distro/image/stretch.img -chardev
+socket,id=3DSOCKSYZ,server=3Don,nowait,host=3Dlocalhost,port=3D54640 -mon
+chardev=3DSOCKSYZ,mode=3Dcontrol -device virtio-rng-pci -device
+e1000,netdev=3Dnet0 -netdev
+user,id=3Dnet0,restrict=3Don,hostfwd=3Dtcp:127.0.0.1:11760-:22 -display non=
+e
+-serial stdio -cpu host,migratable=3Doff -no-reboot -name VM -snapshot
+-enable-kvm
 
-- Arnaldo
+> Within Linux you can query /proc/mtd or /sys/class/mtd/
+> to get infos about the MTD in question.
+>
 
- 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/lib/perf/include/internal/rc_check.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/tools/lib/perf/include/internal/rc_check.h b/tools/lib/perf/include/internal/rc_check.h
-> index c0626d8beb59..d5d771ccdc7b 100644
-> --- a/tools/lib/perf/include/internal/rc_check.h
-> +++ b/tools/lib/perf/include/internal/rc_check.h
-> @@ -5,6 +5,14 @@
->  #include <stdlib.h>
->  #include <linux/zalloc.h>
->  
-> +/*
-> + * Enable reference count checking implicitly with leak checking, which is
-> + * integrated into address sanitizer.
-> + */
-> +#if defined(LEAK_SANITIZER) || defined(ADDRESS_SANITIZER)
-> +#define REFCNT_CHECKING 1
-> +#endif
-> +
->  /*
->   * Shared reference count checking macros.
->   *
-> -- 
-> 2.40.0.634.g4ca3ef3211-goog
-> 
+Thanks for the hints. We find that this is a =E2=80=9Cmtdram test device=E2=
+=80=9D.
 
--- 
+root@syzkaller:~# cat /proc/mtd
+dev:    size   erasesize  name
+mtd0: 00020000 00001000 =E2=80=9Cmtdram test device=E2=80=9D
 
-- Arnaldo
+> Thanks,
+> //richard
+>
