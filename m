@@ -2,131 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F54D6E9CBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CEE6E9CC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 21:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbjDTT42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 15:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        id S232013AbjDTT6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 15:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbjDTT41 (ORCPT
+        with ESMTP id S229963AbjDTT6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 15:56:27 -0400
-Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [5.144.164.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1230C55A8
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Apr 2023 12:56:24 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 57249205AB;
-        Thu, 20 Apr 2023 21:56:23 +0200 (CEST)
-Date:   Thu, 20 Apr 2023 21:56:22 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Thu, 20 Apr 2023 15:58:51 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9C5B2;
+        Thu, 20 Apr 2023 12:58:50 -0700 (PDT)
+Received: from localhost ([185.104.138.31]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MkYHO-1qbKQp06ZS-00m0Ex; Thu, 20 Apr 2023 21:58:33 +0200
+Date:   Thu, 20 Apr 2023 21:58:26 +0200
+From:   Andreas Klinger <ak@it-klinger.de>
+To:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] DPU1 GC1.8 wiring-up
-Message-ID: <57pxyxwluu33z4lpij5gx7biwfo5pbhdalhhxflw7esi5n3vts@qhjb7ldnz3wb>
-References: <20230420-topic-dpu_gc-v1-0-d9d1a5e40917@linaro.org>
- <5b133c55-e4f5-bfd2-b542-a7d44313c038@linaro.org>
- <c0e0a55a-cc37-fe8a-8d8a-5fe257f99b9a@linaro.org>
- <3f3b3637-ed85-09a1-22b7-3ccd4bc929bb@quicinc.com>
- <2dff9d62-cffe-c66f-9e50-3ecd64e44d37@linaro.org>
- <6a335df7-ff0b-098a-feec-45714159df04@linaro.org>
- <b134d09c-55fa-7879-80ff-900e39c20c3d@quicinc.com>
- <0f469b3c-5f0f-e027-8a9f-d1233169c04a@linaro.org>
+Subject: [PATCH v3 0/3] Support Honeywell mprls0025pa pressure sensor
+Message-ID: <ZEGZYiS0znC2/fZC@arbad>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0f469b3c-5f0f-e027-8a9f-d1233169c04a@linaro.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:0RdDq5hj+rqhLGKh3tScDOe0f+IURDleBqsVJ0ab2ideUlEI6Ic
+ OzpRtBvPTED7+CeoMPkq2WtVvrbft4aX8KXSFdcWfX0QAyeH3jU15F2LuaRHBPmK/wtYSBn
+ DcphjEQ8M7pvhLOOjFbXq5rAhtNzoqeXDemo+OZ93fbSDAl8EXiCsl5jTqm+JOT/Mn+/5XA
+ okOX6BdaNmgObNvJNp+RA==
+UI-OutboundReport: notjunk:1;M01:P0:LtZiKkPcRTs=;0XaQIH/BrbVYWKmEVh9gBx8maiw
+ JHslhfOZLfaQNYe2vcmDr8+6J8UhMik4GKiA9c9HEzpAZsgpwNQqebEhg2ZldfwliiArvxsX4
+ 8W9G8Il9tBE72+I2GlTTtoTCObvN9opoQKG1YL3gWpu4mF95qbNt3Y5Oo5IM3dYJfG5Pa7PZo
+ y5SEadTwEfJA5NG5Iq0/aZbeZqeMMG5KEuv0WLuKEJ6JVyLdZjg4BvtjgNJNeN7A9vOnMz8SR
+ Wfrk4kakAm7YoKG60Obz3n+DPhWRh0bG52xS3r+m/H9eNAO7AsyG1XyFyxGx+7UIDsWBH3ZE6
+ h083E1qgeLzS3hWS5rmitiRYj4J0mJMk2+KmSs0JMb8w+dvJhrV+21yHktfKBze7Hi/lNm28i
+ DMR0flpoumfpXsywGxZ0HBg3OoBpwO0q1v+hp2v4Pw45SKpBLm28c2jFHWK+VAO0elgN/tpIB
+ CUsWQXr5kRSVbzKLYRlln/DxlxLUY1tbMwuD6v0X9lo40MnX8eY1zvcpjBwdnVpF/PyNgxBo4
+ S0fIEHDsPY3XQ/Ea9onJLxnC9k9K22dIFqetu4pCrDjFys/YtuKaGX11DR1OJ+5KhYSztIqrO
+ wBC+PE7z7XYP9HAhVCO488fqhW6gVyYY6SO2h9P7p533pFK4UDyG/G4+HwcW33mzn2On6GASW
+ uD615gQB2dQxrPiw1xlQF5/isErTlpc9bPBeKll0fw==
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-20 22:51:22, Dmitry Baryshkov wrote:
-> On 20/04/2023 22:47, Abhinav Kumar wrote:
-> > 
-> > 
-> > On 4/20/2023 11:01 AM, Dmitry Baryshkov wrote:
-> >> On 20/04/2023 04:36, Konrad Dybcio wrote:
-> >>>
-> >>>
-> >>> On 20.04.2023 03:28, Abhinav Kumar wrote:
-> >>>>
-> >>>>
-> >>>> On 4/19/2023 6:26 PM, Konrad Dybcio wrote:
-> >>>>>
-> >>>>>
-> >>>>> On 20.04.2023 03:25, Dmitry Baryshkov wrote:
-> >>>>>> On 20/04/2023 04:14, Konrad Dybcio wrote:
-> >>>>>>> Almost all SoCs from SDM845 to SM8550 inclusive feature a GC1.8
-> >>>>>>> dspp sub-block in addition to PCCv4. The other block differ a bit
-> >>>>>>> more, but none of them are supported upstream.
-> >>>>>>>
-> >>>>>>> This series adds configures the GCv1.8 on all the relevant SoCs.
-> >>>>>>
-> >>>>>> Does this mean that we will see gamma_lut support soon?
-> >>>>> No promises, my plate is not even full, it's beyond overflowing! :P
-> >>>>>
-> >>>>> Konrad
-> >>>>
-> >>>> So I think I wrote about this before during the catalog rework/fixes 
-> >>>> that the gc registers are not written to / programmed.
-> >>>>
-> >>>> If thats not done, is there any benefit to this series?
-> >>> Completeness and preparation for the code itself, if nothing else?
-> >>
-> >> The usual problem is that if something is not put to use, it quickly 
-> >> rots or becomes misused for newer platforms. We have seen this with 
-> >> the some of DPU features.
-> >>
-> >> In case of GC (and the freshly defined DPU_DSPP_IGC, but not used) we 
-> >> have three options:
-> >> - drop the unused GC from msm8998_sblk.
-> >> - keep things as is, single unused GC entry
-> >> - fill all the sblk with the correct information in hope that it stays 
-> >> correct
-> >>
-> >> Each of these options has its own drawbacks. I have slight bias 
-> >> towards the last option, to have the information in place (as long as 
-> >> it is accurate).
-> >>
-> > 
-> > My vote is for (1) . Today, GC is unused and from the discussion here, 
-> > there is no concrete plan to add it. If we keep extending an unused 
-> > bitmask for all the chipsets including the ones which will get added in 
-> > the future in the hope that someday the feature comes, it doesnt sound 
-> > like a good idea.
-> > 
-> > I would rather do (1), if someone has time.
-> 
-> Agree, this was the second item on my preference list. Could you please 
-> send this oneliner?
+Support Honeywell mprls0025pa pressure sensor.
 
-Nit (to make sure we're on the same thought here): I think it's a
-3-liner: remove it from DSPP_MSM8998_MASK as well as msm8998_dspp_sblk.
+This patch series adds support for Honeywell mprls0025pa pressure sensor series.
+There are a variety of sensors with different pressure ranges supported.
 
-> > OR lets stay at (2) till 
-> > someone does (1).
+Changes in v3:
+- Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
+  - fix errors while doing dt_binding_check
+  - add vdd-supply
+- Patch 2: "iio: pressure: Honeywell mpr pressure sensor"
+  - change to _RAW interface
+  - add transfer function
+  - add regulator
+  - move to device_property_xxx functions
+  - many more changes from the feedbacks
+- Patch 3: "MAINTAINERS: Add Honeywell mpr sensor"
+  - change file names
 
-I'm personally okay leaving it in place too, with an eye on implementing
-this, IGC, and other blocks at some point if there's a use for it via
-standard DRM properties.
+Changes in v2:
+- Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
+  - change the global sensor decription of mpr to the specific sensor
+    mprls0025pa
+  - change compatible string
+  - rename the file to honeywell,mprls0025pa.yaml
+  - honeywell,pmin-pascal and honeywell,pmax-pascal: add unit pascal to property
+    names 
+  - add new property honeywell,transfer-function
+- Patch 2: "iio: pressure: Honeywell mpr pressure sensor"
+  - no change so far
+  - will be changed and send out as new version when the dt definition is
+    settled down
+- Patch 3: "MAINTAINERS: Add Honeywell mpr sensor"
+  - no change so far
 
-> > When someone implements GC, we can re-use this patch and that time keep 
-> > konrad's author rights or co-developed by.
+Andreas Klinger (3):
+  dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor
+  iio: pressure: Honeywell mpr pressure sensor
+  MAINTAINERS: Add Honeywell mpr sensor
 
-Good to at least know all these SoCs have the same offset and revision.
+ .../iio/pressure/honeywell,mprls0025pa.yaml   |  98 ++++
+ MAINTAINERS                                   |   7 +
+ drivers/iio/pressure/Kconfig                  |  12 +
+ drivers/iio/pressure/Makefile                 |   1 +
+ drivers/iio/pressure/mprls0025pa.c            | 429 ++++++++++++++++++
+ 5 files changed, 547 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
+ create mode 100644 drivers/iio/pressure/mprls0025pa.c
 
-- Marijn
+
+base-commit: e0ee50101346ca9cef52da75e3fb4380c27c042a
+-- 
+2.30.2
