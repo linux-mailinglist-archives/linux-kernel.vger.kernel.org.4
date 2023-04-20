@@ -2,79 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8739B6E9D3F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A3E6E9D43
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Apr 2023 22:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232367AbjDTUai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Apr 2023 16:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
+        id S231403AbjDTUdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Apr 2023 16:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232829AbjDTUaC (ORCPT
+        with ESMTP id S229833AbjDTUdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Apr 2023 16:30:02 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1F77EC2;
-        Thu, 20 Apr 2023 13:29:02 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-187ec6a5504so973745fac.2;
-        Thu, 20 Apr 2023 13:29:02 -0700 (PDT)
+        Thu, 20 Apr 2023 16:33:53 -0400
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD941738;
+        Thu, 20 Apr 2023 13:33:51 -0700 (PDT)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1a6715ee82fso16703505ad.1;
+        Thu, 20 Apr 2023 13:33:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682022536; x=1684614536;
+        d=1e100.net; s=20221208; t=1682022831; x=1684614831;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=T+n+UehpmOijcFs37eU9VlhyyKc5NwCU3d7QfPvG7ns=;
-        b=Wz/kd1KXtKCVfD2sahZyaVBAYwXdjFYY8cA6HodnQ9qWeCYPFxE4iBfdTmqPT9dT5Q
-         g/8mMc+SwROstWFYfuPCZDKaMmAsuGv+q8I7BecWGP/h8OTtp9r2ZPI0iBuafkwIMDoG
-         bq5OSYK9OpMZZQrqiu8+aKSDhxqukrcMMvQ+Q6FC2jok9kDrgvzWXJFn9JuTrGfzg8i4
-         R4fgj0rBRiwzrrN2sVluq/9iVofBea0wg5QIrcYrb0kcQqIVyxBQQptkRuCLOWgvG5F2
-         /r27kFM0Jejs3CU60yLoHmN3hTUJq3Bvlh00YIEvg0XTEoF/ALL3izFBpOTLIJtbWXiL
-         ljdQ==
-X-Gm-Message-State: AAQBX9c5GbCKWg8Z6etAal6ARiQME2qz+EM5vRXCryNzqMyfRhEQWyW5
-        LTKcoQkCaKqgVi8CEb2xxcdOAN7WMw==
-X-Google-Smtp-Source: AKy350a1bcr41LwfVfG6qIlFziv9ccAqjhBow6+UsPDOWyfId1lmx58YpQaFBNHuf1gAjD6+FSB4SA==
-X-Received: by 2002:a05:6870:61cb:b0:188:fb2:c208 with SMTP id b11-20020a05687061cb00b001880fb2c208mr2056820oah.11.1682022535860;
-        Thu, 20 Apr 2023 13:28:55 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w22-20020a056870a2d600b00172428894e0sm1113473oak.28.2023.04.20.13.28.55
+        bh=cMKNwiENu0Z8d5m2/6B+XlbjR/1zkHhIGQjvkFugIEk=;
+        b=OiOwlrv4H76cE3UuHcMFFwnFhTfl3nlg8Zct4wGRNNC4IJD6U9y+tl9FPQ0MShDL5X
+         +fuzhvgpwpYul5RjG8cZybi5c4GRonhPpi3wan1ej81JOMjaoQ6PxjP77jZWr6cFTqAh
+         KBl4fuYVQAR7FucGswSMxSZ+jT8FtXZlj/MQALB1BTDWJSkPuUi2tEWwnB8gfXjGcq7Q
+         EJMYIvDnl7wZrEOCEBupGLpaOP24iTsEPUL8W5HteIzfe4+g9z0l85PP0yJ4K3wEDF4V
+         eqJz/0y8wVTSTRd1CZjQ2mdTu7hUBVyaai1a8lPi2+UFrcdfMSFSVm2xhkT+ukc2+zhm
+         kHZw==
+X-Gm-Message-State: AAQBX9dznKReP1XhldhTwm8ITCK3+Raq2qQcvJkLTJplvTgM/PvZ/YnQ
+        C45KpWSG2XtSjrm+SXkpnbHqYomlB5E=
+X-Google-Smtp-Source: AKy350YUsTXF1Cor9m/QsEgEiYsl3EPk0yikcUcopSiNllUcBRnS/xbmevNlqzlczSsWmYEZtFe2Zw==
+X-Received: by 2002:a17:902:e742:b0:1a9:1b4:9fd5 with SMTP id p2-20020a170902e74200b001a901b49fd5mr3131677plf.68.1682022831328;
+        Thu, 20 Apr 2023 13:33:51 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
+        by smtp.gmail.com with ESMTPSA id jl16-20020a170903135000b001a216d44440sm1505655plb.200.2023.04.20.13.33.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 13:28:55 -0700 (PDT)
-Received: (nullmailer pid 3448770 invoked by uid 1000);
-        Thu, 20 Apr 2023 20:28:54 -0000
-Date:   Thu, 20 Apr 2023 15:28:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH] dt-bindings: i2c: samsung: Fix 'deprecated' value
-Message-ID: <168202243267.3446630.2282935889963812276.robh@kernel.org>
-References: <20230418150643.1529895-1-robh@kernel.org>
+        Thu, 20 Apr 2023 13:33:50 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 20:33:49 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Long Li <longli@microsoft.com>
+Cc:     "longli@linuxonhyperv.com" <longli@linuxonhyperv.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v3] Drivers: hv: move panic report code from vmbus to hv
+ early init code
+Message-ID: <ZEGhrfLBeuZK8Cwu@liuwe-devbox-debian-v2>
+References: <1681960046-9502-1-git-send-email-longli@linuxonhyperv.com>
+ <PH7PR21MB32635E38640C3719638A7185CE639@PH7PR21MB3263.namprd21.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230418150643.1529895-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <PH7PR21MB32635E38640C3719638A7185CE639@PH7PR21MB3263.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Tue, 18 Apr 2023 10:06:42 -0500, Rob Herring wrote:
-> 'deprecated' is a boolean type which should have a value of 'false' rather
-> than 'yes'.
+On Thu, Apr 20, 2023 at 08:22:40PM +0000, Long Li wrote:
+> > Subject: [PATCH v3] Drivers: hv: move panic report code from vmbus to hv
+> > early init code
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/i2c/samsung,s3c2410-i2c.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Hi Wei,
+> 
+> Please discard this patch. It seems there are some other changes not in linux-next.
 > 
 
-Fixed the commit message and applied.
+linux-next was stale due the breakage this and some other patch
+introduced. :-)
 
+> I'm rebasing to hyperv-next and will send an updated version.
+> 
+> Long
